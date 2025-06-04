@@ -1,0 +1,20 @@
+.container {
+    isolation: isolate;
+}
+
+.scroller {
+    scrollbar-width: none;
+    isolation: isolate;
+  
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
+  
+.row {
+    overflow-x: auto;
+}
+  
+.column {
+    overflow-y: auto;
+}
