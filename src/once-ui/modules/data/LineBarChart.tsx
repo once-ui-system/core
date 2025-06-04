@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { isWithinInterval, parseISO } from "date-fns";
 import { formatDate } from "./utils/formatDate";
 import {
@@ -18,7 +18,7 @@ import { Column, Row, DateRange } from "../../components";
 import {
   LinearGradient,
   ChartHeader,
-  Tooltip,
+  DataTooltip,
   Legend,
   ChartStatus,
   ChartProps,
@@ -26,8 +26,8 @@ import {
   ChartStyles,
   barWidth,
   curveType,
-  useDataTheme,
 } from ".";
+import { useDataTheme } from "../../context/DataThemeProvider";
 
 interface LineBarChartProps extends ChartProps {
   barWidth?: barWidth;
@@ -259,7 +259,7 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                   strokeWidth: 1,
                 }}
                 content={(props) => (
-                  <Tooltip
+                  <DataTooltip
                     {...props}
                     variant={variant as ChartStyles}
                     date={date}

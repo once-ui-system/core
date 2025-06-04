@@ -18,14 +18,14 @@ import { getDistributedColor } from "./utils/colorDistribution";
 import {
   ChartProps,
   LinearGradient,
-  Tooltip,
+  DataTooltip,
   Legend,
   ChartStyles,
   ChartStatus,
   ChartHeader,
   barWidth,
-  useDataTheme,
 } from ".";
+import { useDataTheme } from "../../context/DataThemeProvider";
 
 interface BarChartProps extends ChartProps {
   barWidth?: barWidth;
@@ -244,7 +244,7 @@ const BarChart: React.FC<BarChartProps> = ({
               <RechartsTooltip
                 cursor={{ fill: hover ? "var(--neutral-alpha-weak)" : "var(--static-transparent)" }}
                 content={(props) => (
-                  <Tooltip {...props} date={date} variant={variant as ChartStyles} />
+                  <DataTooltip {...props} date={date} variant={variant as ChartStyles} />
                 )}
               />
               <defs>

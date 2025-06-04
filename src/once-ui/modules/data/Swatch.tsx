@@ -3,7 +3,7 @@
 import React from "react";
 import { Row } from "../../components";
 import { RadiusSize, SpacingToken } from "../../types";
-import { useDataTheme } from ".";
+import { useDataTheme } from "../../context";
 import { ChartStyles } from "./interfaces";
 
 export interface SwatchProps {

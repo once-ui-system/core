@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { useDataTheme } from ".";
+import { useDataTheme } from "../../context/DataThemeProvider";
 import { ChartStyles } from "./interfaces";
 
 interface GradientStop {

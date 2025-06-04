@@ -15,7 +15,6 @@ export function useOgData(url: string | null, customFetchUrl?: string) {
   useEffect(() => {
     const fetchOgData = async () => {
       try {
-        // Use the custom fetch URL if provided, otherwise use the default API route
         const fetchUrl = customFetchUrl 
           ? `${customFetchUrl}?url=${encodeURIComponent(url!)}` 
           : `/api/og/fetch?url=${encodeURIComponent(url!)}`;

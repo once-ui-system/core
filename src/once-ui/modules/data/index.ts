@@ -8,7 +8,6 @@ export * from "./LineBarChart";
 export * from "./ChartHeader";
 export * from "./ChartStatus";
 export * from "./Gradient";
-export * from "./Tooltip";
+export * from "./DataTooltip";
 export * from "./Legend";
 export * from "./Swatch";
-export * from "./DataThemeProvider";

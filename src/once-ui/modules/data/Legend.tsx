@@ -2,7 +2,8 @@
 
 import React from "react";
 import { Row, Text } from "../../components";
-import { useDataTheme, Swatch } from ".";
+import { Swatch } from ".";
+import { useDataTheme } from "../../context/DataThemeProvider";
 import { ChartStyles } from "./interfaces";
 
 interface LegendProps {

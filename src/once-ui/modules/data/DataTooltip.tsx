@@ -38,23 +38,23 @@ const ValueWithAnimation: React.FC<{ value: number }> = ({ value }) => {
   );
 };
 
-interface TooltipProps {
+interface DataTooltipProps {
   active?: boolean;
   payload?: any[];
   label?: string;
   dataKey?: string;
-  tooltip?: React.ReactNode;
+  DataTooltip?: React.ReactNode;
   date?: DateConfig;
   colors?: boolean;
   variant?: ChartStyles;
 }
 
-const Tooltip: React.FC<TooltipProps> = ({
+const DataTooltip: React.FC<DataTooltipProps> = ({
   active,
   payload,
   label,
   dataKey = "name",
-  tooltip,
+  DataTooltip,
   date = { format: "MMM d" },
   colors = true,
   variant = "gradient",
@@ -91,7 +91,7 @@ const Tooltip: React.FC<TooltipProps> = ({
             <Row vertical="center" gap="8">
               {colors && <Swatch color={entry.stroke || entry.color} size="s" variant={variant} />}
               <Text onBackground="neutral-weak" variant="label-default-s">
-                {tooltip && index === 0 ? tooltip : entry.name}
+                {DataTooltip && index === 0 ? DataTooltip : entry.name}
               </Text>
             </Row>
             <Text onBackground="neutral-strong" variant="label-default-s">
@@ -108,5 +108,5 @@ const Tooltip: React.FC<TooltipProps> = ({
   );
 };
 
-export { Tooltip };
-export type { TooltipProps };
+export { DataTooltip };
+export type { DataTooltipProps };

@@ -15,11 +15,11 @@ import {
   ChartStyles,
   ChartStatus,
   RadialGradient,
-  Tooltip,
+  DataTooltip,
   Legend,
   ChartHeader,
-  useDataTheme,
 } from ".";
+import { useDataTheme } from "../../context/DataThemeProvider";
 import { getDistributedColor } from "./utils/colorDistribution";
 import { schemes } from "@/once-ui/types";
 
@@ -269,7 +269,7 @@ export const PieChart: React.FC<PieChartProps> = ({
                     props.payload[0].color = color;
                   }
                   return (
-                    <Tooltip
+                    <DataTooltip
                       {...props}
                       label={undefined}
                       date={date}

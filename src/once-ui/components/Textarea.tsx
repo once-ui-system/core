@@ -11,7 +11,7 @@ import React, {
 import classNames from "classnames";
 import { Flex, Text } from ".";
 import styles from "./Input.module.scss";
-import useDebounce from "../hooks/useDebounce";
+import { useDebounce } from "../hooks/useDebounce";
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   id: string;

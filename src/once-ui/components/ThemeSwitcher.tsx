@@ -1,7 +1,8 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Row, useTheme, IconButton } from ".";
+import { Row, IconButton } from ".";
+import { useTheme } from "../context";
 
 const ThemeSwitcher = forwardRef<HTMLDivElement, React.ComponentProps<typeof Row>>((flex, ref) => {
   const { theme, setTheme } = useTheme();

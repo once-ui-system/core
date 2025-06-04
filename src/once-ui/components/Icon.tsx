@@ -3,7 +3,8 @@
 import React, { forwardRef, useState, useEffect, ReactNode } from "react";
 import classNames from "classnames";
 import { IconType } from "react-icons";
-import { iconLibrary, IconName } from "../icons";
+import { IconName } from "../icons";
+import { useIcons } from "../context/IconProvider";
 import { ColorScheme, ColorWeight } from "../types";
 import { Flex, Tooltip } from ".";
 import styles from "./Icon.module.scss";
@@ -53,7 +54,8 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
       return () => clearTimeout(timer);
     }, [isHover]);
 
-    const IconComponent: IconType | undefined = iconLibrary[name];
+    const { icons } = useIcons();
+    const IconComponent: IconType | undefined = icons[name];
 
     if (!IconComponent) {
       console.warn(`Icon "${name}" does not exist in the library.`);

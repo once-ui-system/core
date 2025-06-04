@@ -17,17 +17,17 @@ import { Column, Row, DateRange } from "../../components";
 import {
   LinearGradient,
   ChartHeader,
-  Tooltip,
+  DataTooltip,
   Legend,
   SeriesConfig,
   ChartProps,
   ChartStatus,
   ChartStyles,
   curveType,
-  useDataTheme,
 } from ".";
 import { schemes } from "../../types";
 import { getDistributedColor } from "./utils/colorDistribution";
+import { useDataTheme } from "../../context/DataThemeProvider";
 
 interface LineChartProps extends ChartProps {
   curve?: curveType;
@@ -262,7 +262,7 @@ const LineChart: React.FC<LineChartProps> = ({
                   strokeWidth: 1,
                 }}
                 content={(props) => (
-                  <Tooltip {...props} variant={variant as ChartStyles} date={date} />
+                  <DataTooltip {...props} variant={variant as ChartStyles} date={date} />
                 )}
               />
               {autoSeries.map(({ key, color }, index) => {
