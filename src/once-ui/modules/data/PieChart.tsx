@@ -9,8 +9,11 @@ import {
   ResponsiveContainer as RechartsResponsiveContainer,
   Legend as RechartsLegend,
 } from "recharts";
-import { Column, Row, DateRange } from "../../components";
 import {
+  schemes,
+  Column,
+  Row,
+  DateRange,
   ChartProps,
   ChartStyles,
   ChartStatus,
@@ -18,10 +21,10 @@ import {
   DataTooltip,
   Legend,
   ChartHeader,
-} from ".";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
+  useDataTheme
+} from "../../";
+
 import { getDistributedColor } from "./utils/colorDistribution";
-import { schemes } from "@/once-ui/types";
 
 interface PieChartProps extends ChartProps {
   "data-viz-style"?: string;

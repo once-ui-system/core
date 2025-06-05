@@ -1,6 +1,5 @@
-import { DateRange } from "@/once-ui/components";
-import { Flex } from "../../components";
-import { TShirtSizes } from "@/once-ui/types";
+import { Flex, DateRange } from "../../components";
+import { TShirtSizes } from "../../types";
 import { CurveType } from "recharts/types/shape/Curve";
 
 type ChartStyles = "flat" | "gradient" | "outline";

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Icon, Column, Flex, Option, Accordion, ElementType, Text } from "@/once-ui/components";
+import { Icon, Column, Flex, Option, Accordion, ElementType, Text } from "../../";
 
 interface MenuLink {
   label: React.ReactNode;

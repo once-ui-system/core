@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback, useMemo, ReactNode } from "react";
-import { Flex, Text, Icon, Column, Input, Option, Row } from "@/once-ui/components";
+import { Flex, Text, Icon, Column, Input, Option, Row } from "../../";
 import { createPortal } from "react-dom";
 import { useRouter, usePathname } from "next/navigation";
 import styles from "./Kbar.module.scss";

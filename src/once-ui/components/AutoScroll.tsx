@@ -1,6 +1,6 @@
 "use client";
 
-import { Row } from "@/once-ui/components";
+import { Row } from ".";
 import styles from "./AutoScroll.module.scss";
 import React, { forwardRef } from "react";
 

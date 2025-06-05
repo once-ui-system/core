@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect, ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { Flex, Row, Column, Text, Icon, ToggleButton } from "@/once-ui/components";
+import { Flex, Row, Column, Text, Icon, ToggleButton } from "../../";
 import styles from "./MegaMenu.module.scss";
 
 export interface MenuLink {

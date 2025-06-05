@@ -9,6 +9,11 @@ export { MegaMenu } from "./navigation/MegaMenu";
 export { MobileMegaMenu } from "./navigation/MobileMegaMenu";
 export { Kbar } from "./navigation/Kbar";
 
+export { ChartHeader } from "./data/ChartHeader";
+export { ChartStatus } from "./data/ChartStatus";
+export type { ChartProps, ChartStyles } from "./data/interfaces";
+export { LinearGradient } from "./data/Gradient";
+export { RadialGradient } from "./data/Gradient";
 export { BarChart } from "./data/BarChart";
 export { LineChart } from "./data/LineChart";
 export { PieChart } from "./data/PieChart";

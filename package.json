@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "Once UI for Next.js NPM package",
   "keywords": ["once-ui", "react", "nextjs", "scss", "design system", "design framework", "nextjs design system"],
   "author": "Once UI",
@@ -15,6 +15,8 @@
     "./types": "./dist/types/index.js",
     "./interfaces": "./dist/interfaces/index.js",
     "./styles": "./dist/styles/index.js",
+    "./styles/*.scss": "./dist/styles/*.scss",
+    "./tokens/*.scss": "./dist/tokens/*.scss",
     "./utils": "./dist/utils/index.js",
     "./hooks": "./dist/hooks/index.js"
   },
