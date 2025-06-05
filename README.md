@@ -1,9 +1,16 @@
-# Once UI for Next.js
+# once-ui package
 
 A design system for indie builders who move fast and break limits without neglecting quality. Once UI combines the simplicity of low-code with the power of code: write 70% less compared to shadcn + tailwind.
 
+## Installation
 
-![Once UI](public/images/og/home.jpg)
+```bash
+npm install once-ui
+# or
+yarn add once-ui
+# or
+pnpm add once-ui
+```
 
 ## Features
 
@@ -13,15 +20,6 @@ Start building your Next.js app in minutes.
 * **Components**: Access advanced components with simple APIs.
 * **Data-viz**: Add responsive charts with a few lines of code.
 * **SEO**: Use our SEO components to simplify meta and schema setup.
-* **PRO**: Launch ready-made apps without minimal coding with Once UI Pro.
-
-[Get Once UI Pro](https://once-ui.com/pricing)
-
-## Demo
-
-Check the [starter demo app](https://demo.once-ui.com).
-
-![Once UI](public/images/demo.jpg)
 
 ## Documentation
 
@@ -41,15 +39,7 @@ Learn how to build with Once UI at [docs.once-ui.com](https://docs.once-ui.com/o
 
 [Once UI for Figma](https://once-ui.com/figma) (PRO): Design and prototype entire products from scratch in hours.
 
-## Get started
 
-Clone the starter template from GitHub:
-```bash
-git clone https://github.com/once-ui-system/nextjs-starter.git
-```
-
-Deploy to Vercel with a single click:
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fonce-ui-system%2Fnextjs-starter&redirect-url=https%3A%2F%2Fonce-ui.com%2F)
 
 ## Creators
 
@@ -65,7 +55,7 @@ Connect with us!
 
 Join the [Design Engineers Club](https://discord.com/invite/5EyAQ4eNdS) on Discord to connect with us and share your projects.
 
-Found a bug? Report it [here](https://github.com/once-ui-system/nextjs-starter/issues/new?labels=bug&template=bug_report.md). Got a feature request? Submit it [here](https://github.com/once-ui-system/nextjs-starter/issues/new?labels=feature%20request&template=feature_request.md).
+Found a bug? Report it [here](https://github.com/once-ui-system/once-ui/issues/new?labels=bug&template=bug_report.md). Got a feature request? Submit it [here](https://github.com/once-ui-system/once-ui/issues/new?labels=feature%20request&template=feature_request.md).
 
 ## Sponsors
 

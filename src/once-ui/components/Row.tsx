@@ -3,7 +3,7 @@
 import { forwardRef } from "react";
 import { Flex } from ".";
 
-interface RowProps extends React.ComponentProps<typeof Flex> {
+export interface RowProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
 }
 

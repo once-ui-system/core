@@ -1,0 +1,38 @@
+# Source files
+src/
+public/
+
+# Development files
+.next/
+node_modules/
+.git/
+.github/
+.vscode/
+.idea/
+
+# Config files
+.eslintrc
+.prettierrc
+next.config.js
+tsconfig.json
+tsconfig.build.json
+biome.json
+
+# Scripts
+scripts/
+
+# Misc
+*.log
+.DS_Store
+.env*
+!.env.example
+
+# Test files
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Documentation
+docs/

@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useEffect, useState, useRef, useCallback } from "react";
 import { Column, Flex, Row, SmartLink, Text } from "@/once-ui/components";
-import { useHeadingLinks } from "@/once-ui/hooks/generateHeadingLinks";
+import { useHeadingLinks } from "@/once-ui/hooks/useHeadingLinks";
 
 interface props extends React.ComponentProps<typeof Flex> {}
 

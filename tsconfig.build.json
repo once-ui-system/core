@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmit": false,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "jsx": "react-jsx"
+  },
+  "include": ["src/once-ui/**/*.ts", "src/once-ui/**/*.tsx"],
+  "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx", "**/*.stories.tsx", "dist"]
+}
