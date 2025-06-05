@@ -1,15 +1,15 @@
-# once-ui package
+# Once UI
 
 A design system for indie builders who move fast and break limits without neglecting quality. Once UI combines the simplicity of low-code with the power of code: write 70% less compared to shadcn + tailwind.
 
 ## Installation
 
 ```bash
-npm install once-ui
+npm install @once-ui-system/core
 # or
-yarn add once-ui
+yarn add @once-ui-system/core
 # or
-pnpm add once-ui
+pnpm add @once-ui-system/core
 ```
 
 ## Features

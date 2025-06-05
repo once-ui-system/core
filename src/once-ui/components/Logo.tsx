@@ -3,7 +3,6 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import classNames from "classnames";
-import styles from "./Logo.module.scss";
 import { SpacingToken } from "../types";
 import { Flex } from ".";
 
@@ -19,20 +18,16 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   className?: string;
   size?: "xs" | "s" | "m" | "l" | "xl";
   style?: React.CSSProperties;
-  wordmark?: boolean;
-  icon?: boolean;
-  iconSrc?: string;
-  wordmarkSrc?: string;
+  icon?: string;
+  wordmark?: string;
   href?: string;
 }
 
 const Logo: React.FC<LogoProps> = ({
   size = "m",
-  wordmark = true,
-  icon = true,
   href,
-  iconSrc,
-  wordmarkSrc,
+  icon,
+  wordmark,
   className,
   style,
   ...props
@@ -47,15 +42,7 @@ const Logo: React.FC<LogoProps> = ({
 
   const content = (
     <>
-      {icon && !iconSrc && (
-        <div
-          style={{
-            height: `var(--static-space-${sizeMap[size]})`,
-          }}
-          className={styles.icon}
-        />
-      )}
-      {iconSrc && (
+      {icon && (
         // @ts-ignore
         <img
           style={{
@@ -63,18 +50,10 @@ const Logo: React.FC<LogoProps> = ({
             width: "auto",
           }}
           alt="Trademark"
-          src={iconSrc}
+          src={icon}
         />
       )}
-      {wordmark && !wordmarkSrc && (
-        <div
-          style={{
-            height: `var(--static-space-${sizeMap[size]})`,
-          }}
-          className={styles.type}
-        />
-      )}
-      {wordmarkSrc && (
+      {wordmark && (
         // @ts-ignore
         <img
           style={{
@@ -82,7 +61,7 @@ const Logo: React.FC<LogoProps> = ({
             width: "auto",
           }}
           alt="Trademark"
-          src={wordmarkSrc}
+          src={wordmark}
         />
       )}
     </>

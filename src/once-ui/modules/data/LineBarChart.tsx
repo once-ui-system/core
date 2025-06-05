@@ -27,7 +27,7 @@ import {
   barWidth,
   curveType,
 } from ".";
-import { useDataTheme } from "../../context/DataThemeProvider";
+import { useDataTheme } from "../../contexts/DataThemeProvider";
 
 interface LineBarChartProps extends ChartProps {
   barWidth?: barWidth;

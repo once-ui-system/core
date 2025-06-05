@@ -3,7 +3,7 @@
 import React from "react";
 import { Row, Text } from "../../components";
 import { Swatch } from ".";
-import { useDataTheme } from "../../context/DataThemeProvider";
+import { useDataTheme } from "../../contexts/DataThemeProvider";
 import { ChartStyles } from "./interfaces";
 
 interface LegendProps {

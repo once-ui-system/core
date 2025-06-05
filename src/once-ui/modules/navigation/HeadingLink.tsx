@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Heading, Flex, IconButton } from "../../components";
-import { useToast } from "../../context";
+import { useToast } from "../../contexts";
 
 import styles from "./HeadingLink.module.scss";
 

@@ -19,7 +19,7 @@ import {
   Legend,
   ChartHeader,
 } from ".";
-import { useDataTheme } from "../../context/DataThemeProvider";
+import { useDataTheme } from "../../contexts/DataThemeProvider";
 import { getDistributedColor } from "./utils/colorDistribution";
 import { schemes } from "@/once-ui/types";
 

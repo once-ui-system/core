@@ -4,7 +4,7 @@ import React, { forwardRef, useState, useEffect, ReactNode } from "react";
 import classNames from "classnames";
 import { IconType } from "react-icons";
 import { IconName } from "../icons";
-import { useIcons } from "../context/IconProvider";
+import { useIcons } from "../contexts/IconProvider";
 import { ColorScheme, ColorWeight } from "../types";
 import { Flex, Tooltip } from ".";
 import styles from "./Icon.module.scss";

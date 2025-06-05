@@ -1,9 +1,9 @@
-# Usage Examples for once-ui
+# Usage Examples for @once-ui-system/core
 
-## Basic Component Usage
+## Using Components
 
 ```jsx
-import { Button, Card, Heading } from 'once-ui';
+import { Button, Card, Heading } from '@once-ui-system/core';
 
 export default function MyComponent() {
   return (
@@ -15,40 +15,10 @@ export default function MyComponent() {
 }
 ```
 
-## Using the Icon System
-
-The Once UI library implements a flexible icon provider system that works with Next.js server components:
-
-```tsx
-// In your layout or parent component
-import { IconProvider } from 'once-ui';
-
-export default function Layout({ children }) {
-  return (
-    <IconProvider iconConfig={{
-      chevronLeft: "PiArrowLeft"
-    }}>
-      {children}
-    </IconProvider>
-  );
-}
-```
-
-```tsx
-// In your component
-import { Icon } from 'once-ui';
-
-export default function MyComponent() {
-  return (
-    <Icon name="loading" size="m" />
-  );
-}
-```
-
 ## Using Hooks
 
 ```jsx
-import { useDebounce } from 'once-ui';
+import { Input, useDebounce } from '@once-ui-system/core';
 
 export default function SearchComponent() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -57,7 +27,7 @@ export default function SearchComponent() {
   // Use debouncedSearchTerm for API calls
   
   return (
-    <input 
+    <Input 
       type="text" 
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
@@ -70,7 +40,7 @@ export default function SearchComponent() {
 ## Using Utilities
 
 ```jsx
-import { dev } from 'once-ui';
+import { Button, dev } from '@once-ui-system/core';
 
 export default function MyComponent() {
   const handleClick = () => {
@@ -79,7 +49,7 @@ export default function MyComponent() {
   };
   
   return (
-    <button onClick={handleClick}>Click Me</button>
+    <Button onClick={handleClick}>Click Me</Button>
   );
 }
 ```

@@ -25,7 +25,7 @@ import {
   ChartHeader,
   barWidth,
 } from ".";
-import { useDataTheme } from "../../context/DataThemeProvider";
+import { useDataTheme } from "../../contexts/DataThemeProvider";
 
 interface BarChartProps extends ChartProps {
   barWidth?: barWidth;

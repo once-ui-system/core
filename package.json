@@ -1,7 +1,7 @@
 {
-  "name": "once-ui",
+  "name": "@once-ui-system/core",
   "version": "1.0.0",
-  "description": "NPM package of Once UI for Next.js",
+  "description": "Once UI for Next.js NPM package",
   "keywords": ["once-ui", "react", "nextjs", "scss", "design system", "design framework", "nextjs design system"],
   "author": "Once UI",
   "license": "MIT",
@@ -9,7 +9,7 @@
   "exports": {
     ".": "./dist/index.js",
     "./components": "./dist/components/index.js",
-    "./context": "./dist/context/index.js",
+    "./contexts": "./dist/contexts/index.js",
     "./modules": "./dist/modules/index.js",
     "./icons": "./dist/icons/index.js",
     "./types": "./dist/types/index.js",

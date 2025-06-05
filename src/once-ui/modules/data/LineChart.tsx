@@ -27,7 +27,7 @@ import {
 } from ".";
 import { schemes } from "../../types";
 import { getDistributedColor } from "./utils/colorDistribution";
-import { useDataTheme } from "../../context/DataThemeProvider";
+import { useDataTheme } from "../../contexts/DataThemeProvider";
 
 interface LineChartProps extends ChartProps {
   curve?: curveType;

@@ -29,9 +29,6 @@
 }
 
 [data-theme="dark"] {
-    --icon: url('/trademark/icon-dark.svg');
-    --type: url('/trademark/type-dark.svg');
-    
     --page-background:              var(--neutral-background-weak);
     --backdrop:                     var(--static-black-medium);
 
@@ -227,10 +224,6 @@
 }
 
 [data-theme="light"] {
-    /* Move all CSS variable declarations above nested rules */
-    --icon: url('/trademark/icon-light.svg');
-    --type: url('/trademark/type-light.svg');
-
     --page-background:              var(--neutral-background-weak);
     --backdrop:                     var(--static-white-medium);
 

@@ -2,9 +2,9 @@
 
 import { forwardRef, useState, useEffect } from "react";
 import { Flex, Text, SegmentedControl, IconButton, Scroller, Column } from ".";
-import { useTheme } from "../context/ThemeProvider";
-import { BorderStyle, BrandColor, NeutralColor, ScalingSize, SolidStyle, SolidType, SurfaceStyle, TransitionStyle, useStyle } from "../context/ThemeProvider";
-import { ChartStyle, useDataTheme } from "../context/DataThemeProvider";
+import { useTheme } from "../contexts/ThemeProvider";
+import { BorderStyle, BrandColor, NeutralColor, ScalingSize, SolidStyle, SolidType, SurfaceStyle, TransitionStyle, useStyle } from "../contexts/ThemeProvider";
+import { ChartStyle, useDataTheme } from "../contexts/DataThemeProvider";
 import styles from "./StylePanel.module.scss";
 import classNames from "classnames";
 import { schemes } from "../types";

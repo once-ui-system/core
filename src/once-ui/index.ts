@@ -1,5 +1,5 @@
 export * from "./components";
-export * from "./context";
+export * from "./contexts";
 export * from "./modules";
 export * from "./icons";
 export * from "./types";

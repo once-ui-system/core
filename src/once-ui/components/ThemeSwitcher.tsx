@@ -2,7 +2,7 @@
 
 import React, { forwardRef } from "react";
 import { Row, IconButton } from ".";
-import { useTheme } from "../context";
+import { useTheme } from "../contexts";
 
 const ThemeSwitcher = forwardRef<HTMLDivElement, React.ComponentProps<typeof Row>>((flex, ref) => {
   const { theme, setTheme } = useTheme();
