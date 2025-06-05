@@ -2,19 +2,32 @@
 
 import React, { useState, useEffect, useRef, ReactNode } from "react";
 
-import "./CodeHighlight.css";
-import "./LineNumber.css";
+// We'll import CSS files dynamically on the client side
+const loadCssFiles = () => {
+  if (typeof window !== 'undefined') {
+    import("./CodeHighlight.css");
+    import("./LineNumber.css");
+  }
+};
+
 import styles from "./CodeBlock.module.scss";
 
 import { Flex, Button, IconButton, Scroller, Row, StyleOverlay } from "../../components";
 
 import Prism from "prismjs";
-import "prismjs/plugins/line-highlight/prism-line-highlight";
-import "prismjs/plugins/line-numbers/prism-line-numbers";
-import "prismjs/components/prism-jsx";
-import "prismjs/components/prism-css";
-import "prismjs/components/prism-typescript";
-import "prismjs/components/prism-tsx";
+
+// We'll load these dynamically on the client side only
+const loadPrismDependencies = () => {
+  if (typeof window !== 'undefined') {
+    // Only import these on the client side
+    import("prismjs/plugins/line-highlight/prism-line-highlight");
+    import("prismjs/plugins/line-numbers/prism-line-numbers");
+    import("prismjs/components/prism-jsx");
+    import("prismjs/components/prism-css");
+    import("prismjs/components/prism-typescript");
+    import("prismjs/components/prism-tsx");
+  }
+};
 import classNames from "classnames";
 import { SpacingToken } from "../../types";
 
@@ -72,6 +85,10 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   };
 
   useEffect(() => {
+    // Load Prism dependencies and CSS files when the component mounts
+    loadPrismDependencies();
+    loadCssFiles();
+    
     if (codeRef.current && codes.length > 0) {
       Prism.highlightAll();
     }

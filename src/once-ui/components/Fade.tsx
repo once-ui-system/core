@@ -1,5 +1,3 @@
-"use client";
-
 import React, { forwardRef, ReactNode } from "react";
 import styles from "./Fade.module.scss";
 

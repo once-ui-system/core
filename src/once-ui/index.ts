@@ -4,6 +4,5 @@ export * from "./modules";
 export * from "./icons";
 export * from "./types";
 export * from "./interfaces";
-export * from "./styles";
 export * from "./utils";
 export * from "./hooks";

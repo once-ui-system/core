@@ -1,3 +1,5 @@
+@use "../styles/breakpoints.scss" as breakpoints;
+
 .columns-1 {
   grid-template-columns: 1fr;
 }
@@ -46,7 +48,7 @@
   grid-template-columns: repeat(12, 1fr);
 }
 
-@media (--m) {
+@include breakpoints.m {
   .tablet-columns-1 {
       grid-template-columns: 1fr;
   }
@@ -96,7 +98,7 @@
   }
 }
 
-@media (--s) {
+@include breakpoints.s {
   .mobile-columns-1 {
       grid-template-columns: 1fr;
   }

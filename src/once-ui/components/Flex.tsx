@@ -1,5 +1,3 @@
-"use client";
-
 import classNames from "classnames";
 import { CSSProperties, forwardRef } from "react";
 

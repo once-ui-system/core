@@ -1,3 +1,5 @@
+@use "../styles/breakpoints.scss" as breakpoints;
+
 .overlay {
     opacity: 0;
     visibility: hidden;
@@ -20,7 +22,7 @@
         visibility: visible;
     }
 
-    @media (--m) {
+    @include breakpoints.m {
         position: fixed;
         bottom: var(--static-space-8);
         left: var(--static-space-8);

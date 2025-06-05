@@ -1,5 +1,3 @@
-"use client";
-
 import React, { forwardRef, ReactNode } from "react";
 import classNames from "classnames";
 

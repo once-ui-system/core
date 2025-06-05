@@ -1,24 +1,62 @@
 {
   "name": "@once-ui-system/core",
-  "version": "1.0.2",
+  "version": "1.0.8",
   "description": "Once UI for Next.js NPM package",
-  "keywords": ["once-ui", "react", "nextjs", "scss", "design system", "design framework", "nextjs design system"],
+  "keywords": [
+    "once-ui",
+    "react",
+    "nextjs",
+    "scss",
+    "design system",
+    "design framework",
+    "nextjs design system"
+  ],
   "author": "Once UI",
   "license": "MIT",
   "main": "dist/index.js",
   "exports": {
-    ".": "./dist/index.js",
-    "./components": "./dist/components/index.js",
-    "./contexts": "./dist/contexts/index.js",
-    "./modules": "./dist/modules/index.js",
-    "./icons": "./dist/icons/index.js",
-    "./types": "./dist/types/index.js",
-    "./interfaces": "./dist/interfaces/index.js",
-    "./styles": "./dist/styles/index.js",
-    "./styles/*.scss": "./dist/styles/*.scss",
-    "./tokens/*.scss": "./dist/tokens/*.scss",
-    "./utils": "./dist/utils/index.js",
-    "./hooks": "./dist/hooks/index.js"
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./components": {
+      "import": "./dist/components/index.js",
+      "require": "./dist/components/index.js"
+    },
+    "./components/*": {
+      "import": "./dist/components/*.js",
+      "require": "./dist/components/*.js"
+    },
+    "./contexts": {
+      "import": "./dist/contexts/index.js",
+      "require": "./dist/contexts/index.js"
+    },
+    "./modules": {
+      "import": "./dist/modules/index.js",
+      "require": "./dist/modules/index.js"
+    },
+    "./icons": {
+      "import": "./dist/icons/index.js",
+      "require": "./dist/icons/index.js"
+    },
+    "./types": {
+      "import": "./dist/types/index.js",
+      "require": "./dist/types/index.js"
+    },
+    "./interfaces": {
+      "import": "./dist/interfaces/index.js",
+      "require": "./dist/interfaces/index.js"
+    },
+    "./css/styles.css": "./dist/css/styles.css",
+    "./css/tokens.css": "./dist/css/tokens.css",
+    "./utils": {
+      "import": "./dist/utils/index.js",
+      "require": "./dist/utils/index.js"
+    },
+    "./hooks": {
+      "import": "./dist/hooks/index.js",
+      "require": "./dist/hooks/index.js"
+    }
   },
   "scripts": {
     "dev": "next dev --turbopack",
@@ -28,7 +66,8 @@
     "biome-write": "npx @biomejs/biome format --write .",
     "lint": "next lint",
     "clean": "rimraf dist",
-    "build:package": "npm run clean && tsc --project tsconfig.build.json && npm run copy-files",
+    "build:css": "sass src/once-ui/styles/index.scss:dist/css/styles.css src/once-ui/tokens/index.scss:dist/css/tokens.css --style=compressed",
+    "build:package": "npm run clean && tsc --project tsconfig.build.json && npm run copy-files && npm run build:css",
     "copy-files": "node scripts/copy-files.js",
     "prepare": "npm run build:package"
   },
@@ -38,8 +77,6 @@
     "compressorjs": "^1.2.1",
     "date-fns": "^4.1.0",
     "next": "15.2.3",
-    "postcss": "^8.4.39",
-    "postcss-preset-env": "^9.5.15",
     "prismjs": "^1.30.0",
     "react": "19.0.0",
     "react-dom": "19.0.0",
@@ -50,13 +87,10 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@csstools/postcss-global-data": "^2.1.1",
     "@types/node": "20.17.23",
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.2",
-    "postcss-custom-media": "^10.0.7",
-    "postcss-flexbugs-fixes": "^5.0.2",
-    "rimraf": "^5.0.5",
+    "rimraf": "^5.0.10",
     "typescript": "5.8.2"
   },
   "overrides": {

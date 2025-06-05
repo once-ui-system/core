@@ -1,5 +1,3 @@
-"use client";
-
 import { Row } from ".";
 import styles from "./AutoScroll.module.scss";
 import React, { forwardRef } from "react";

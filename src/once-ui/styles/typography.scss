@@ -1,3 +1,5 @@
+@use "../styles/breakpoints.scss" as breakpoints;
+
 html {
     font-size:   var(--font-scaling-desktop);
     font-family: var(--font-family-body);
@@ -5,13 +7,13 @@ html {
     color: var(--neutral-on-background-strong);
 }
 
-@media (--m) {
+@include breakpoints.m {
     html {
         font-size: var(--font-scaling-tablet);
     }
 }
 
-@media (--s) {
+@include breakpoints.s {
     html {
         font-size: var(--font-scaling-mobile);
     }

@@ -29,6 +29,32 @@ Learn how to build with Once UI at [docs.once-ui.com](https://docs.once-ui.com/o
 
 [Magic Portfolio](https://once-ui.com/products/magic-portfolio): Our free portfolio starter used and loved by thousands of creatives. Simple, customizable, responsive.
 
+## Styling
+
+Once UI provides two options for styling your components:
+
+### Option 1: Pre-compiled CSS (Recommended)
+
+```jsx
+// Import the pre-compiled CSS files
+import '@once-ui-system/core/css/styles.css';
+import '@once-ui-system/core/css/tokens.css';
+```
+
+### Option 2: SCSS (Advanced)
+
+If you need more customization, you can import the SCSS files directly. Note that this requires configuring your bundler to handle SCSS imports from node_modules:
+
+```jsx
+// In a JavaScript/TypeScript file (requires bundler configuration)
+import '@once-ui-system/core/styles/index.scss';
+import '@once-ui-system/core/tokens/index.scss';
+
+// Or in an SCSS file
+@use '~@once-ui-system/core/styles/index.scss';
+@use '~@once-ui-system/core/tokens/index.scss';
+```
+
 [Magic Store](https://once-ui.com/products/magic-store) (PRO): Our premium ecommerce storefront that lets you launch your merch store in minutes. Payment, production and shipping managed by Fourthwall.
 
 [Magic Docs](https://once-ui.com/products/magic-docs) (PRO): Our premium documentation generator. Just add your MDX files and let Magic Docs handle the rest.
