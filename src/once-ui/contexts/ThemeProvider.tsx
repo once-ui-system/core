@@ -130,12 +130,36 @@ export function ThemeProvider({
   transition,
   scaling
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(initialTheme);
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">("dark");
+  // Try to get the initial theme from localStorage if available on client side
+  const getInitialTheme = (): Theme => {
+    if (typeof window !== 'undefined') {
+      // Check both possible localStorage keys for theme
+      const savedTheme = localStorage.getItem("theme") as Theme || localStorage.getItem("data-theme") as Theme;
+      return savedTheme || initialTheme;
+    }
+    return initialTheme;
+  };
+
+  // Try to get the initial resolved theme
+  const getInitialResolvedTheme = (): "light" | "dark" => {
+    if (typeof window !== 'undefined') {
+      const theme = getInitialTheme();
+      if (theme === "system") {
+        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      }
+      return theme as "light" | "dark";
+    }
+    // Default for server-side rendering
+    return "dark";
+  };
+
+  const [theme, setTheme] = useState<Theme>(getInitialTheme());
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(getInitialResolvedTheme());
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("data-theme") as Theme;
+    // Check both possible localStorage keys for theme
+    const savedTheme = localStorage.getItem("theme") as Theme || localStorage.getItem("data-theme") as Theme;
     if (savedTheme) {
       setTheme(savedTheme);
     } else if (initialTheme !== "system") {
@@ -148,16 +172,19 @@ export function ThemeProvider({
     if (!mounted) return;
 
     const updateResolvedTheme = () => {
+      let resolvedValue: "light" | "dark";
+      
       if (theme === "system") {
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+        resolvedValue = window.matchMedia("(prefers-color-scheme: dark)").matches
           ? "dark"
           : "light";
-        setResolvedTheme(systemTheme);
-        document.documentElement.setAttribute("data-theme", systemTheme);
+        setResolvedTheme(resolvedValue);
       } else {
-        setResolvedTheme(theme);
-        document.documentElement.setAttribute("data-theme", theme);
+        resolvedValue = theme as "light" | "dark";
+        setResolvedTheme(resolvedValue);
       }
+      
+      document.documentElement.setAttribute("data-theme", resolvedValue);
     };
 
     updateResolvedTheme();
@@ -204,6 +231,8 @@ export function ThemeProvider({
     theme,
     resolvedTheme,
     setTheme: (newTheme: Theme) => {
+      // Store theme in both keys for compatibility with the layout script
+      localStorage.setItem("theme", newTheme);
       localStorage.setItem("data-theme", newTheme);
       setTheme(newTheme);
     },

@@ -51,16 +51,18 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
   
   useEffect(() => {
     setMounted(true);
-    setBorderValue(styleContext.border);
-    setBrandValue(styleContext.brand);
-    setAccentValue(styleContext.accent);
-    setNeutralValue(styleContext.neutral);
-    setSurfaceValue(styleContext.surface);
-    setScalingValue(styleContext.scaling);
+    if (mounted) {
+      setBorderValue(styleContext.border);
+      setBrandValue(styleContext.brand);
+      setAccentValue(styleContext.accent);
+      setNeutralValue(styleContext.neutral);
+      setSurfaceValue(styleContext.surface);
+      setScalingValue(styleContext.scaling);
+      setTransitionValue(styleContext.transition);
+    }
+    // Chart mode is handled separately
     setChartModeValue(chart.mode);
-    setTransitionValue(styleContext.transition);
-    
-  }, [styleContext, chart.mode]);
+  }, [styleContext, chart.mode, mounted]);
 
   return (
     <Column fillWidth gap="16" ref={ref} {...rest}>
@@ -78,16 +80,19 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
               icon="computer"
               variant={theme === "system" ? "primary" : "tertiary"}
               onClick={() => setTheme("system")}
+              aria-label="System theme"
             />
             <IconButton
               icon="dark"
               variant={theme === "dark" ? "primary" : "tertiary"}
               onClick={() => setTheme("dark")}
+              aria-label="Dark theme"
             />
             <IconButton
               icon="light"
               variant={theme === "light" ? "primary" : "tertiary"}
               onClick={() => setTheme("light")}
+              aria-label="Light theme"
             />
           </Flex>
         </Flex>
