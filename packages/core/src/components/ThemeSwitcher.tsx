@@ -14,6 +14,13 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, React.ComponentProps<typeof Row
     setMounted(true);
   }, []);
 
+  // If not mounted yet, pre-render with a consistent state that won't cause hydration mismatch
+  // We'll use the actual theme value but won't show it as selected until mounted
+  const getVariant = (themeValue: string) => {
+    if (!mounted) return "tertiary";
+    return theme === themeValue ? "primary" : "tertiary";
+  };
+
   return (
     <Row
       data-border="rounded"
@@ -21,25 +28,29 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, React.ComponentProps<typeof Row
       gap="2"
       border="neutral-alpha-weak"
       radius="full"
+      suppressHydrationWarning
       {...flex}
     >
       <IconButton
         icon="computer"
-        variant={mounted && theme === "system" ? "primary" : "tertiary"}
+        variant={getVariant("system")}
         onClick={() => setTheme("system")}
         aria-label="System theme"
+        suppressHydrationWarning
       />
       <IconButton
         icon="dark"
-        variant={mounted && theme === "dark" ? "primary" : "tertiary"}
+        variant={getVariant("dark")}
         onClick={() => setTheme("dark")}
         aria-label="Dark theme"
+        suppressHydrationWarning
       />
       <IconButton
         icon="light"
-        variant={mounted && theme === "light" ? "primary" : "tertiary"}
+        variant={getVariant("light")}
         onClick={() => setTheme("light")}
         aria-label="Light theme"
+        suppressHydrationWarning
       />
     </Row>
   );

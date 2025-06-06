@@ -1,10 +1,10 @@
 "use client";
 
+import { Schemes } from "@/types";
 import { createContext, useContext, useEffect, useState } from "react";
 
 export type Theme = "dark" | "light" | "system";
 export type NeutralColor = "sand" | "gray" | "slate";
-export type BrandColor = "blue" | "indigo" | "violet" | "magenta" | "pink" | "red" | "orange" | "yellow" | "moss" | "green" | "emerald" | "aqua" | "cyan";
 export type SolidType = "color" | "contrast" | "inverse";
 export type SolidStyle = "flat" | "plastic";
 export type BorderStyle = "rounded" | "playful" | "conservative";
@@ -16,8 +16,8 @@ export type DataStyle = "categorical" | "divergent" | "sequential";
 interface StyleOptions {
   theme: Theme;
   neutral: NeutralColor;
-  brand: BrandColor;
-  accent: BrandColor;
+  brand: Schemes;
+  accent: Schemes;
   solid: SolidType;
   solidStyle: SolidStyle;
   border: BorderStyle;
@@ -40,8 +40,8 @@ type ThemeProviderProps = {
   children: React.ReactNode;
   initialTheme?: Theme;
   neutral?: NeutralColor;
-  brand?: BrandColor;
-  accent?: BrandColor;
+  brand?: Schemes;
+  accent?: Schemes;
   solid?: SolidType;
   solidStyle?: SolidStyle;
   border?: BorderStyle;
@@ -57,7 +57,7 @@ const initialThemeState: ThemeProviderState = {
 };
 
 const defaultStyleOptions: StyleOptions = {
-  theme: "dark",
+  theme: "system",
   neutral: "gray",
   brand: "blue",
   accent: "indigo",
@@ -103,9 +103,11 @@ function getStoredStyleValues() {
         } else if (camelKey === 'neutral') {
           storedStyle.neutral = value as NeutralColor;
         } else if (camelKey === 'brand') {
-          storedStyle.brand = value as BrandColor;
+          storedStyle.brand = value as Schemes;
         } else if (camelKey === 'accent') {
-          storedStyle.accent = value as BrandColor;
+          storedStyle.accent = value as Schemes;
+        } else if (camelKey === 'solid') {
+          storedStyle.solid = value as SolidType;
         }
       }
     });
@@ -130,27 +132,47 @@ export function ThemeProvider({
   transition,
   scaling
 }: ThemeProviderProps) {
-  // Try to get the initial theme from localStorage if available on client side
+  // Try to get the initial theme from localStorage or system preference
   const getInitialTheme = (): Theme => {
     if (typeof window !== 'undefined') {
-      // Check both possible localStorage keys for theme
-      const savedTheme = localStorage.getItem("theme") as Theme || localStorage.getItem("data-theme") as Theme;
-      return savedTheme || initialTheme;
+      const savedTheme = localStorage.getItem("data-theme") as Theme;
+      if (savedTheme) {
+        return savedTheme; // Can be 'system', 'light', or 'dark'
+      }
+      
+      // If no saved theme, check if the document already has a data-theme attribute set
+      const docTheme = document.documentElement.getAttribute("data-theme");
+      if (docTheme === "dark" || docTheme === "light") {
+        // Default to system if DOM has a theme but localStorage doesn't
+        return "system";
+      }
+      
+      return initialTheme;
     }
     return initialTheme;
   };
 
-  // Try to get the initial resolved theme
+  // Helper to resolve a theme to light/dark (never system)
+  const getResolvedThemeValue = (themeValue: Theme): "light" | "dark" => {
+    if (themeValue === "system") {
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    return themeValue as "light" | "dark";
+  };
+
+  // Get the initial resolved theme (always light or dark, never system)
   const getInitialResolvedTheme = (): "light" | "dark" => {
     if (typeof window !== 'undefined') {
-      const theme = getInitialTheme();
-      if (theme === "system") {
-        return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      // First check what's already in the DOM - the layout script should have set this correctly
+      const docTheme = document.documentElement.getAttribute("data-theme");
+      if (docTheme === "dark" || docTheme === "light") {
+        return docTheme as "light" | "dark";
       }
-      return theme as "light" | "dark";
+      
+      // Fallback to calculating it from the theme
+      return getResolvedThemeValue(getInitialTheme());
     }
-    // Default for server-side rendering
-    return "dark";
+    return "light"; // Default for SSR
   };
 
   const [theme, setTheme] = useState<Theme>(getInitialTheme());
@@ -158,47 +180,83 @@ export function ThemeProvider({
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // Check both possible localStorage keys for theme
-    const savedTheme = localStorage.getItem("theme") as Theme || localStorage.getItem("data-theme") as Theme;
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else if (initialTheme !== "system") {
-      setTheme(initialTheme);
+    // On mount, we want to respect what's already in the DOM
+    // The layout script has already set the correct data-theme attribute
+    // We just need to make sure our state matches what's in the DOM
+    
+    // First, check what's actually in the DOM
+    const docTheme = document.documentElement.getAttribute("data-theme");
+    
+    // Validate the DOM theme - it should NEVER be 'system'
+    if (docTheme === "system") {
+      // If somehow 'system' got into the DOM, fix it immediately
+      const resolvedValue = getResolvedThemeValue("system");
+      document.documentElement.setAttribute("data-theme", resolvedValue);
+      console.log(`Fixed invalid 'system' in DOM, set to ${resolvedValue}`);
     }
+    
+    // Then check if there's a saved theme preference
+    const savedTheme = localStorage.getItem("data-theme") as Theme;
+    
+    if (savedTheme) {
+      // Update our state to match the saved preference
+      setTheme(savedTheme);
+      
+      // Make sure our resolvedTheme state matches what's in the DOM
+      // The DOM should have a valid light/dark value at this point
+      const currentDocTheme = document.documentElement.getAttribute("data-theme");
+      if (currentDocTheme === "dark" || currentDocTheme === "light") {
+        setResolvedTheme(currentDocTheme as "light" | "dark");
+      } else {
+        // If DOM somehow doesn't have a valid theme, set it
+        const resolvedValue = getResolvedThemeValue(savedTheme);
+        document.documentElement.setAttribute("data-theme", resolvedValue);
+        setResolvedTheme(resolvedValue);
+      }
+    } else {
+      // If no saved theme, default to system and save it
+      localStorage.setItem("data-theme", "system");
+      setTheme("system");
+      
+      // Make sure the DOM has a valid light/dark value
+      const resolvedValue = getResolvedThemeValue("system");
+      document.documentElement.setAttribute("data-theme", resolvedValue);
+      setResolvedTheme(resolvedValue);
+    }
+    
+    // Log the current state for debugging
+    console.log(`ThemeProvider mounted: theme=${theme}, resolvedTheme=${resolvedTheme}, DOM data-theme=${document.documentElement.getAttribute("data-theme")}`);
     setMounted(true);
   }, [initialTheme]);
 
   useEffect(() => {
-    if (!mounted) return;
-
-    const updateResolvedTheme = () => {
-      let resolvedValue: "light" | "dark";
-      
-      if (theme === "system") {
-        resolvedValue = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light";
-        setResolvedTheme(resolvedValue);
-      } else {
-        resolvedValue = theme as "light" | "dark";
-        setResolvedTheme(resolvedValue);
-      }
-      
-      document.documentElement.setAttribute("data-theme", resolvedValue);
-    };
-
-    updateResolvedTheme();
-
+    if (theme !== "system") return;
+    
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleChange = () => {
-      if (theme === "system") {
-        updateResolvedTheme();
-      }
+      const resolvedValue = mediaQuery.matches ? "dark" : "light";
+      document.documentElement.setAttribute("data-theme", resolvedValue);
+      setResolvedTheme(resolvedValue);
+      console.log(`System theme changed to: ${resolvedValue}`);
     };
-
+    
     mediaQuery.addEventListener("change", handleChange);
     return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [theme, mounted]);
+  }, [theme]);
+  
+  useEffect(() => {
+    if (!mounted) {
+      setMounted(true);
+    }
+    
+    // Always ensure the DOM has the correct theme
+    const currentResolvedTheme = getResolvedThemeValue(theme);
+    if (document.documentElement.getAttribute("data-theme") !== currentResolvedTheme) {
+      document.documentElement.setAttribute("data-theme", currentResolvedTheme);
+    }
+    
+    console.log(`Theme updated: ${theme} (resolved: ${currentResolvedTheme})`);
+  }, [theme, mounted]); // Only depend on theme, not mounted
 
   const storedValues = typeof window !== 'undefined' ? getStoredStyleValues() : {};
   
@@ -227,14 +285,25 @@ export function ThemeProvider({
     }));
   }, [theme]);
 
+  // Effect to update the DOM whenever the theme changes
+  useEffect(() => {
+    // Always use the resolved theme (never 'system') for the DOM
+    const currentResolvedTheme = getResolvedThemeValue(theme);
+    document.documentElement.setAttribute("data-theme", currentResolvedTheme);
+    setResolvedTheme(currentResolvedTheme);
+  }, [theme]);
+
   const themeValue = {
     theme,
     resolvedTheme,
     setTheme: (newTheme: Theme) => {
-      // Store theme in both keys for compatibility with the layout script
-      localStorage.setItem("theme", newTheme);
+      // Store the raw theme (can be 'system', 'light', or 'dark')
       localStorage.setItem("data-theme", newTheme);
       setTheme(newTheme);
+      
+      // The effect above will handle updating the DOM with the resolved theme
+      const resolvedValue = getResolvedThemeValue(newTheme);
+      console.log(`Theme preference set to ${newTheme}, DOM attribute set to ${resolvedValue}`);
     },
   };
   

@@ -10,6 +10,6 @@
     "moduleResolution": "node",
     "jsx": "react-jsx"
   },
-  "include": ["src/once-ui/**/*.ts", "src/once-ui/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx", "**/*.stories.tsx", "dist"]
 }

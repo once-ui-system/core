@@ -12,7 +12,6 @@
 # next.js
 /.next/
 /out/
-.turbo
 
 # production
 /build

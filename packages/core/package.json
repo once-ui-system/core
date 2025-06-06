@@ -1,0 +1,101 @@
+{
+  "name": "@once-ui-system/core",
+  "version": "1.0.13",
+  "description": "Once UI for Next.js NPM package",
+  "keywords": [
+    "once-ui",
+    "react",
+    "nextjs",
+    "scss",
+    "design system",
+    "design framework",
+    "nextjs design system"
+  ],
+  "author": "Once UI",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./components": {
+      "import": "./dist/components/index.js",
+      "require": "./dist/components/index.js"
+    },
+    "./components/*": {
+      "import": "./dist/components/*.js",
+      "require": "./dist/components/*.js"
+    },
+    "./contexts": {
+      "import": "./dist/contexts/index.js",
+      "require": "./dist/contexts/index.js"
+    },
+    "./modules": {
+      "import": "./dist/modules/index.js",
+      "require": "./dist/modules/index.js"
+    },
+    "./icons": {
+      "import": "./dist/icons/index.js",
+      "require": "./dist/icons/index.js"
+    },
+    "./types": {
+      "import": "./dist/types/index.js",
+      "require": "./dist/types/index.js"
+    },
+    "./interfaces": {
+      "import": "./dist/interfaces/index.js",
+      "require": "./dist/interfaces/index.js"
+    },
+    "./css/styles.css": "./dist/css/styles.css",
+    "./css/tokens.css": "./dist/css/tokens.css",
+    "./utils": {
+      "import": "./dist/utils/index.js",
+      "require": "./dist/utils/index.js"
+    },
+    "./hooks": {
+      "import": "./dist/hooks/index.js",
+      "require": "./dist/hooks/index.js"
+    }
+  },
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "export": "next export",
+    "start": "next start",
+    "build": "npm run build:package",
+    "build:core": "pnpm build -F @once-ui-system/core",
+    "build:package": "npm run clean && tsc --project tsconfig.build.json && npm run copy-files && npm run build:css",
+    "build:css": "sass src/styles/index.scss:dist/css/styles.css src/tokens/index.scss:dist/css/tokens.css --style=compressed",
+    "copy-files": "node scripts/copy-files.js",
+    "clean": "rimraf dist",
+    "prepare": "npm run build:package",
+    "biome-write": "npx @biomejs/biome format --write .",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@floating-ui/react-dom": "^2.1.1",
+    "classnames": "^2.5.1",
+    "compressorjs": "^1.2.1",
+    "date-fns": "^4.1.0",
+    "next": "15.2.3",
+    "prismjs": "^1.30.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-icons": "^5.2.1",
+    "recharts": "^2.15.1",
+    "sass": "^1.77.6",
+    "sharp": "^0.33.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "20.17.23",
+    "@types/react": "19.0.1",
+    "@types/react-dom": "19.0.2",
+    "rimraf": "^5.0.10",
+    "typescript": "5.8.2"
+  },
+  "overrides": {
+    "@types/react": "19.0.1",
+    "@types/react-dom": "19.0.2"
+  }
+}

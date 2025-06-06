@@ -29,7 +29,7 @@ function copyDir(src, dest) {
 }
 
 // Copy all style files and other assets
-const srcDir = path.resolve(__dirname, '../src/once-ui');
+const srcDir = path.resolve(__dirname, '../src');
 const destDir = path.resolve(__dirname, '../dist');
 
 // Copy package.json with modifications

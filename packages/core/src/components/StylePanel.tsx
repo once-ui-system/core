@@ -3,11 +3,11 @@
 import { forwardRef, useState, useEffect } from "react";
 import { Flex, Text, SegmentedControl, IconButton, Scroller, Column } from ".";
 import { useTheme } from "../contexts/ThemeProvider";
-import { BorderStyle, BrandColor, NeutralColor, ScalingSize, SolidStyle, SolidType, SurfaceStyle, TransitionStyle, useStyle } from "../contexts/ThemeProvider";
+import { BorderStyle, NeutralColor, ScalingSize, SolidStyle, SolidType, SurfaceStyle, TransitionStyle, useStyle } from "../contexts/ThemeProvider";
 import { ChartStyle, useDataTheme } from "../contexts/DataThemeProvider";
 import styles from "./StylePanel.module.scss";
 import classNames from "classnames";
-import { schemes } from "../types";
+import { Schemes, schemes } from "../types";
 
 interface StylePanelProps extends React.ComponentProps<typeof Flex> {
   style?: React.CSSProperties;
@@ -29,8 +29,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
   
   const [mounted, setMounted] = useState(false);
   const [borderValue, setBorderValue] = useState<BorderStyle>("playful");
-  const [brandValue, setBrandValue] = useState<BrandColor>("blue");
-  const [accentValue, setAccentValue] = useState<BrandColor>("indigo");
+  const [brandValue, setBrandValue] = useState<Schemes>("blue");
+  const [accentValue, setAccentValue] = useState<Schemes>("indigo");
   const [neutralValue, setNeutralValue] = useState<NeutralColor>("gray");
   const [solidValue, setSolidValue] = useState<SolidType>("contrast");
   const [solidStyleValue, setSolidStyleValue] = useState<SolidStyle>("flat");
@@ -75,24 +75,27 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
       <Column fillWidth border="neutral-alpha-medium" radius="l-4">
         <Flex horizontal="space-between" vertical="center" fillWidth paddingX="24" paddingY="16">
           <Text variant="label-default-s">Theme</Text>
-          <Flex gap="2" border="neutral-alpha-weak" radius="full">
+          <Flex gap="2" border="neutral-alpha-weak" radius="full" suppressHydrationWarning>
             <IconButton
               icon="computer"
-              variant={theme === "system" ? "primary" : "tertiary"}
+              variant={mounted ? (theme === "system" ? "primary" : "tertiary") : "tertiary"}
               onClick={() => setTheme("system")}
               aria-label="System theme"
+              suppressHydrationWarning
             />
             <IconButton
               icon="dark"
-              variant={theme === "dark" ? "primary" : "tertiary"}
+              variant={mounted ? (theme === "dark" ? "primary" : "tertiary") : "tertiary"}
               onClick={() => setTheme("dark")}
               aria-label="Dark theme"
+              suppressHydrationWarning
             />
             <IconButton
               icon="light"
-              variant={theme === "light" ? "primary" : "tertiary"}
+              variant={mounted ? (theme === "light" ? "primary" : "tertiary") : "tertiary"}
               onClick={() => setTheme("light")}
               aria-label="Light theme"
+              suppressHydrationWarning
             />
           </Flex>
         </Flex>
@@ -151,8 +154,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 tabIndex={0}
                 className={classNames(styles.select, mounted && brandValue === color ? styles.selected : "")}
                 onClick={() => {
-                  styleContext.setStyle({ brand: color as BrandColor });
-                  setBrandValue(color as BrandColor);
+                  styleContext.setStyle({ brand: color as Schemes });
+                  setBrandValue(color as Schemes);
                 }}
               >
                 <IconButton variant="ghost" size="m">
@@ -184,8 +187,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 tabIndex={0}
                 className={classNames(styles.select, mounted && accentValue === color ? styles.selected : "")}
                 onClick={() => {
-                  styleContext.setStyle({ accent: color as BrandColor });
-                  setAccentValue(color as BrandColor);
+                  styleContext.setStyle({ accent: color as Schemes });
+                  setAccentValue(color as Schemes);
                 }}
               >
                 <IconButton variant="ghost" size="m">

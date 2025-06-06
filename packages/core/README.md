@@ -127,8 +127,6 @@ Prevent flash of unstyled content (FOUC) by adding the following script to the `
 
 ## Quick start
 
-[Once UI Starter](https://github.com/once-ui-system/starter): A simple Next.js starter project with the recommended setup for Once UI.
-
 [Magic Portfolio](https://once-ui.com/products/magic-portfolio): Our free portfolio starter used and loved by thousands of creatives. Simple, customizable, responsive.
 
 [Magic Store](https://once-ui.com/products/magic-store) (PRO): Our premium ecommerce storefront that lets you launch your merch store in minutes. Payment, production and shipping managed by Fourthwall.
