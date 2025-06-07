@@ -3,11 +3,15 @@
 import React, { useState, useEffect, useRef, ReactNode } from "react";
 
 // We'll import CSS files dynamically on the client side
-const loadCssFiles = () => {
+const loadCssFiles = async () => {
   if (typeof window !== 'undefined') {
-    import("./CodeHighlight.css");
-    import("./LineNumber.css");
+    await Promise.all([
+      import("./CodeHighlight.css"),
+      import("./LineNumber.css")
+    ]);
+    return true;
   }
+  return false;
 };
 
 import styles from "./CodeBlock.module.scss";
@@ -17,16 +21,20 @@ import { Flex, Button, IconButton, Scroller, Row, StyleOverlay } from "../../com
 import Prism from "prismjs";
 
 // We'll load these dynamically on the client side only
-const loadPrismDependencies = () => {
+const loadPrismDependencies = async () => {
   if (typeof window !== 'undefined') {
     // Only import these on the client side
-    import("prismjs/plugins/line-highlight/prism-line-highlight");
-    import("prismjs/plugins/line-numbers/prism-line-numbers");
-    import("prismjs/components/prism-jsx");
-    import("prismjs/components/prism-css");
-    import("prismjs/components/prism-typescript");
-    import("prismjs/components/prism-tsx");
+    await Promise.all([
+      import("prismjs/plugins/line-highlight/prism-line-highlight"),
+      import("prismjs/plugins/line-numbers/prism-line-numbers"),
+      import("prismjs/components/prism-jsx"),
+      import("prismjs/components/prism-css"),
+      import("prismjs/components/prism-typescript"),
+      import("prismjs/components/prism-tsx")
+    ]);
+    return true;
   }
+  return false;
 };
 import classNames from "classnames";
 import { SpacingToken } from "../../types";
@@ -77,6 +85,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const preRef = useRef<HTMLPreElement>(null);
   const [selectedInstance, setSelectedInstance] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [dependenciesLoaded, setDependenciesLoaded] = useState(false);
 
   const { code, language, label } = codes[selectedInstance] || {
     code: "",
@@ -84,15 +93,28 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     label: "Select code",
   };
 
+  // Load dependencies when component mounts
   useEffect(() => {
-    // Load Prism dependencies and CSS files when the component mounts
-    loadPrismDependencies();
-    loadCssFiles();
+    const loadDependencies = async () => {
+      await Promise.all([
+        loadPrismDependencies(),
+        loadCssFiles()
+      ]);
+      setDependenciesLoaded(true);
+    };
     
-    if (codeRef.current && codes.length > 0) {
-      Prism.highlightAll();
+    loadDependencies();
+  }, []);
+
+  // Apply highlighting when dependencies are loaded or code changes
+  useEffect(() => {
+    if (dependenciesLoaded && codeRef.current && codes.length > 0) {
+      // Use setTimeout to ensure DOM is fully updated
+      setTimeout(() => {
+        Prism.highlightAll();
+      }, 0);
     }
-  }, [code, codes.length]);
+  }, [dependenciesLoaded, code, codes.length]);
 
   useEffect(() => {
     if (isFullscreen) {
@@ -293,7 +315,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             </pre>
           </Flex>
           {compact && copyButton && (
-            <Flex position="absolute" right="8" top="8" className={styles.compactCopy} zIndex={1}>
+            <Flex position="absolute" right="4" top="4" className={styles.compactCopy} zIndex={1}>
               <IconButton
                 tooltip="Copy"
                 tooltipPosition="left"
