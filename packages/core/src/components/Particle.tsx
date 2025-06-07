@@ -6,7 +6,6 @@ import { DisplayProps } from "../interfaces";
 import { Flex } from ".";
 
 interface ParticleProps extends React.ComponentProps<typeof Flex> {
-  display?: boolean;
   density?: number;
   color?: string;
   size?: SpacingToken;
@@ -19,10 +18,9 @@ interface ParticleProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
 }
 
-export const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
+const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
   (
     {
-      display = true,
       density = 100,
       color = "brand-on-background-weak",
       size = "2",
@@ -48,8 +46,6 @@ export const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
     }, [forwardedRef]);
 
     useEffect(() => {
-      if (!display || !containerRef.current) return;
-
       const container = containerRef.current;
       const particles: HTMLElement[] = [];
       const particleTargets = new Map<HTMLElement, { x: number; y: number }>();
@@ -63,7 +59,8 @@ export const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
       const repulsionStrength = 0.15 * (speed || 1);
 
       const handleMouseMove = (e: MouseEvent) => {
-        const rect = container.getBoundingClientRect();
+        const rect = container?.getBoundingClientRect();
+        if (!rect) return;
         mousePosition = {
           x: ((e.clientX - rect.left) / rect.width) * 100,
           y: ((e.clientY - rect.top) / rect.height) * 100,
@@ -90,7 +87,7 @@ export const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
         initialPositions.set(particleEl, { x: initialX, y: initialY });
         particleTargets.set(particleEl, { x: initialX, y: initialY });
 
-        container.appendChild(particleEl);
+        container?.appendChild(particleEl);
         particles.push(particleEl);
         return particleEl;
       };
@@ -160,7 +157,6 @@ export const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
         });
       };
     }, [
-      display,
       color,
       size,
       speed,
@@ -174,9 +170,6 @@ export const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
     return (
       <Flex
         ref={containerRef}
-        position="absolute"
-        top="0"
-        left="0"
         fill
         pointerEvents="none"
         className={className}
@@ -190,3 +183,4 @@ export const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
 );
 
 Particle.displayName = "Particle";
+export { Particle };
