@@ -21,7 +21,6 @@ import {
   HiOutlineInformationCircle,
   HiOutlineExclamationTriangle,
   HiOutlineExclamationCircle,
-  HiOutlineCheckBadge,
   HiOutlineCheckCircle,
   HiOutlineXMark,
   HiOutlineUser,
@@ -30,6 +29,7 @@ import {
   HiOutlinePlus,
   HiOutlineCalendar,
   HiOutlineDocumentDuplicate,
+  HiOutlineCheck,
 } from "react-icons/hi2";
 
 export const iconLibrary: Record<string, IconType> = {
@@ -44,7 +44,7 @@ export const iconLibrary: Record<string, IconType> = {
   info: HiOutlineInformationCircle,
   warning: HiOutlineExclamationTriangle,
   danger: HiOutlineExclamationCircle,
-  checkbox: HiOutlineCheckBadge,
+  checkbox: HiOutlineCheck,
   check: HiOutlineCheckCircle,
   copy: HiOutlineDocumentDuplicate,
   eyeDropper: HiOutlineEyeDropper,
