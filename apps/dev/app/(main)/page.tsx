@@ -23,7 +23,7 @@ export default function Home() {
           vertical="center"
           gap="16"
         >
-          <Logo href="https://once-ui.com" size="xs" />
+          <Logo wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" size="xs" />
           <Line vert background="neutral-alpha-strong" />
           <Text marginX="4">
             <LetterFx trigger="instant">An ecosystem, not a UI kit</LetterFx>

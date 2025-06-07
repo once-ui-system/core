@@ -12,7 +12,7 @@ importers:
         specifier: ^1.12.0
         version: 1.13.4
 
-  apps/starter:
+  apps/dev:
     dependencies:
       '@once-ui-system/core':
         specifier: workspace:*

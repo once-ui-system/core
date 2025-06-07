@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "1.0.13",
+  "version": "1.0.14",
   "description": "Once UI for Next.js NPM package",
   "keywords": [
     "once-ui",
@@ -59,18 +59,16 @@
     }
   },
   "scripts": {
-    "dev": "next dev --turbopack",
-    "export": "next export",
-    "start": "next start",
-    "build": "npm run build:package",
-    "build:core": "pnpm build -F @once-ui-system/core",
-    "build:package": "npm run clean && tsc --project tsconfig.build.json && npm run copy-files && npm run build:css",
+    "build": "pnpm clean && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",
     "build:css": "sass src/styles/index.scss:dist/css/styles.css src/tokens/index.scss:dist/css/tokens.css --style=compressed",
     "copy-files": "node scripts/copy-files.js",
     "clean": "rimraf dist",
-    "prepare": "npm run build:package",
-    "biome-write": "npx @biomejs/biome format --write .",
-    "lint": "next lint"
+    "prepare": "pnpm build",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "typecheck": "tsc --noEmit",
+    "dev": "tsc --watch --preserveWatchOutput",
+    "prepack": "pnpm build"
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.1.1",

@@ -1,6 +1,6 @@
 {
-  "name": "@once-ui-system/starter",
-  "version": "1.0.0",
+  "name": "@once-ui-system/dev",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",

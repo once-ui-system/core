@@ -73,7 +73,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
         </Text>
       </Column>
       <Column fillWidth border="neutral-alpha-medium" radius="l-4">
-        <Flex horizontal="space-between" vertical="center" fillWidth paddingX="24" paddingY="16">
+        <Flex horizontal="space-between" vertical="center" fillWidth paddingX="24" paddingY="16" borderBottom="neutral-alpha-medium">
           <Text variant="label-default-s">Theme</Text>
           <Flex gap="2" border="neutral-alpha-weak" radius="full" suppressHydrationWarning>
             <IconButton
