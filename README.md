@@ -6,13 +6,13 @@ This monorepo hosts the official Once UI package and its internal development sa
 
 It includes:
 
-- `packages/core`: the published (@once-ui-system/core)[https://www.npmjs.com/package/@once-ui-system/core] package
+- `packages/core`: the published [@once-ui-system/core](https://www.npmjs.com/package/@once-ui-system/core) package
 - `apps/dev`: a local sandbox app wired via symlink for live development
 
 This setup is intended for contributors and maintainers.
 If you're building a real project, we recommend using:
 
-1. (Once UI Starter)[https://github.com/once-ui-system/starter]
+1. [Once UI Starter](https://github.com/once-ui-system/starter)
 2. or install via your package manager:
 
 ```bash
