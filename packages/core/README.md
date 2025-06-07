@@ -80,8 +80,7 @@ Prevent flash of unstyled content (FOUC) by adding the following script to the `
           try {
             const root = document.documentElement;
             
-            root.setAttribute('data-theme', 'dark');
-            
+            const defaultTheme = 'system';
             root.setAttribute('data-neutral', 'gray');
             root.setAttribute('data-brand', 'blue');
             root.setAttribute('data-accent', 'indigo');
@@ -93,28 +92,24 @@ Prevent flash of unstyled content (FOUC) by adding the following script to the `
             root.setAttribute('data-scaling', '100');
             root.setAttribute('data-viz-style', 'categorical');
             
-            const theme = localStorage.getItem('theme');
-            if (theme) {
-              if (theme === 'system') {
-                const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                root.setAttribute('data-theme', isDark ? 'dark' : 'light');
-              } else {
-                root.setAttribute('data-theme', theme);
+            const resolveTheme = (themeValue) => {
+              if (!themeValue || themeValue === 'system') {
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
               }
-            }
+              return themeValue;
+            };
             
-            const styleKeys = ['neutral', 'brand', 'accent', 'solid', 'solid-style', 'border', 'surface', 'transition', 'scaling'];
+            const theme = localStorage.getItem('data-theme');
+            const resolvedTheme = resolveTheme(theme);
+            root.setAttribute('data-theme', resolvedTheme);
+            
+            const styleKeys = ['neutral', 'brand', 'accent', 'solid', 'solid-style', 'viz-style', 'border', 'surface', 'transition', 'scaling'];
             styleKeys.forEach(key => {
               const value = localStorage.getItem('data-' + key);
               if (value) {
                 root.setAttribute('data-' + key, value);
               }
             });
-            
-            const dataViz = localStorage.getItem('data-viz-style');
-            if (dataViz) {
-              root.setAttribute('data-viz-style', dataViz);
-            }
           } catch (e) {
             document.documentElement.setAttribute('data-theme', 'dark');
           }

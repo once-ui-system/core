@@ -49,13 +49,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               (function() {
-                console.log('=== LAYOUT SCRIPT START ===');
-                console.log('Initial theme from localStorage:', localStorage.getItem('data-theme'));
-                console.log('Initial data-theme attribute:', document.documentElement.getAttribute('data-theme'));
                 try {
                   const root = document.documentElement;
                   
-                  // Set default values first
                   const defaultTheme = 'system';
                   root.setAttribute('data-neutral', 'gray');
                   root.setAttribute('data-brand', 'blue');
@@ -68,8 +64,6 @@ export default function RootLayout({
                   root.setAttribute('data-scaling', '100');
                   root.setAttribute('data-viz-style', 'categorical');
                   
-                  // CRITICAL: Ensure we NEVER set 'system' as a data-theme attribute
-                  // Always resolve system to light/dark before setting the attribute
                   const resolveTheme = (themeValue) => {
                     if (!themeValue || themeValue === 'system') {
                       return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
@@ -77,33 +71,17 @@ export default function RootLayout({
                     return themeValue;
                   };
                   
-                  // Handle theme preference
                   const theme = localStorage.getItem('data-theme');
-                  
-                  // Always set a valid theme attribute (never 'system')
                   const resolvedTheme = resolveTheme(theme);
                   root.setAttribute('data-theme', resolvedTheme);
                   
-                  // If no theme preference, save system as default
-                  if (!theme) {
-                    localStorage.setItem('data-theme', 'system');
-                    console.log('Layout script: saved system as default theme, DOM set to', resolvedTheme);
-                  } else {
-                    console.log('Layout script: theme preference is', theme, ', DOM set to', resolvedTheme);
-                  }
-                  
-                  const styleKeys = ['neutral', 'brand', 'accent', 'solid', 'solid-style', 'border', 'surface', 'transition', 'scaling'];
+                  const styleKeys = ['neutral', 'brand', 'accent', 'solid', 'solid-style', 'viz-style', 'border', 'surface', 'transition', 'scaling'];
                   styleKeys.forEach(key => {
                     const value = localStorage.getItem('data-' + key);
                     if (value) {
                       root.setAttribute('data-' + key, value);
                     }
                   });
-                  
-                  const dataViz = localStorage.getItem('data-viz-style');
-                  if (dataViz) {
-                    root.setAttribute('data-viz-style', dataViz);
-                  }
                 } catch (e) {
                   document.documentElement.setAttribute('data-theme', 'dark');
                 }

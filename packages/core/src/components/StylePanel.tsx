@@ -1,8 +1,7 @@
 "use client";
 
 import { forwardRef, useState, useEffect } from "react";
-import { Flex, Text, SegmentedControl, IconButton, Scroller, Column } from ".";
-import { useTheme } from "../contexts/ThemeProvider";
+import { Flex, Text, SegmentedControl, IconButton, Scroller, Column, ThemeSwitcher } from ".";
 import { BorderStyle, NeutralColor, ScalingSize, SolidStyle, SolidType, SurfaceStyle, TransitionStyle, useStyle } from "../contexts/ThemeProvider";
 import { ChartStyle, useDataTheme } from "../contexts/DataThemeProvider";
 import styles from "./StylePanel.module.scss";
@@ -24,7 +23,6 @@ const colorOptions = {
 
 const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref) => {
   const styleContext = useStyle();
-  const { theme, setTheme } = useTheme();
   const { chart, setChartOptions } = useDataTheme();
   
   const [mounted, setMounted] = useState(false);
@@ -75,29 +73,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
       <Column fillWidth border="neutral-alpha-medium" radius="l-4">
         <Flex horizontal="space-between" vertical="center" fillWidth paddingX="24" paddingY="16" borderBottom="neutral-alpha-medium">
           <Text variant="label-default-s">Theme</Text>
-          <Flex gap="2" border="neutral-alpha-weak" radius="full" suppressHydrationWarning>
-            <IconButton
-              icon="computer"
-              variant={mounted ? (theme === "system" ? "primary" : "tertiary") : "tertiary"}
-              onClick={() => setTheme("system")}
-              aria-label="System theme"
-              suppressHydrationWarning
-            />
-            <IconButton
-              icon="dark"
-              variant={mounted ? (theme === "dark" ? "primary" : "tertiary") : "tertiary"}
-              onClick={() => setTheme("dark")}
-              aria-label="Dark theme"
-              suppressHydrationWarning
-            />
-            <IconButton
-              icon="light"
-              variant={mounted ? (theme === "light" ? "primary" : "tertiary") : "tertiary"}
-              onClick={() => setTheme("light")}
-              aria-label="Light theme"
-              suppressHydrationWarning
-            />
-          </Flex>
+          <ThemeSwitcher/>
         </Flex>
         <Flex horizontal="space-between" vertical="center" fillWidth paddingX="24" paddingY="16">
           <Text variant="label-default-s">Shape</Text>

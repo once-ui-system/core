@@ -1,7 +1,8 @@
 "use client";
 
-import { Schemes } from "@/types";
-import { createContext, useContext, useEffect, useState } from "react";
+import { Schemes } from "../types";
+import { dev } from "../utils";
+import { createContext, useContext, useEffect, useState, useMemo, useCallback } from "react";
 
 export type Theme = "dark" | "light" | "system";
 export type NeutralColor = "sand" | "gray" | "slate";
@@ -38,7 +39,7 @@ type StyleProviderState = StyleOptions & {
 
 type ThemeProviderProps = {
   children: React.ReactNode;
-  initialTheme?: Theme;
+  theme?: Theme;
   neutral?: NeutralColor;
   brand?: Schemes;
   accent?: Schemes;
@@ -114,14 +115,37 @@ function getStoredStyleValues() {
     
     return storedStyle;
   } catch (e) {
-    console.error('Error reading stored style values:', e);
+    dev.error('Error reading stored style values:', e);
     return {};
   }
 }
 
+const getInitialTheme = (): Theme => {
+  if (typeof window === "undefined") return "system";
+
+  const savedTheme = localStorage.getItem("data-theme") as Theme | null;
+  if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
+    return savedTheme;
+  }
+  
+  const domTheme = document.documentElement.getAttribute("data-theme");
+  if (domTheme === "dark" || domTheme === "light") {
+    return "system";
+  }
+  
+  return "system";
+};
+
+const getInitialResolvedTheme = (): 'light' | 'dark' => {
+  if (typeof window === "undefined") return "dark";
+  
+  const domTheme = document.documentElement.getAttribute("data-theme");
+  return (domTheme === "dark" || domTheme === "light") ? domTheme as 'light' | 'dark' : "dark";
+};
+
 export function ThemeProvider({ 
   children, 
-  initialTheme = "system",
+  theme: propTheme = "system",
   neutral,
   brand,
   accent,
@@ -132,131 +156,76 @@ export function ThemeProvider({
   transition,
   scaling
 }: ThemeProviderProps) {
-  // Try to get the initial theme from localStorage or system preference
-  const getInitialTheme = (): Theme => {
-    if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem("data-theme") as Theme;
-      if (savedTheme) {
-        return savedTheme; // Can be 'system', 'light', or 'dark'
-      }
-      
-      // If no saved theme, check if the document already has a data-theme attribute set
-      const docTheme = document.documentElement.getAttribute("data-theme");
-      if (docTheme === "dark" || docTheme === "light") {
-        // Default to system if DOM has a theme but localStorage doesn't
-        return "system";
-      }
-      
-      return initialTheme;
-    }
-    return initialTheme;
-  };
-
-  // Helper to resolve a theme to light/dark (never system)
-  const getResolvedThemeValue = (themeValue: Theme): "light" | "dark" => {
-    if (themeValue === "system") {
-      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    }
-    return themeValue as "light" | "dark";
-  };
-
-  // Get the initial resolved theme (always light or dark, never system)
-  const getInitialResolvedTheme = (): "light" | "dark" => {
-    if (typeof window !== 'undefined') {
-      // First check what's already in the DOM - the layout script should have set this correctly
-      const docTheme = document.documentElement.getAttribute("data-theme");
-      if (docTheme === "dark" || docTheme === "light") {
-        return docTheme as "light" | "dark";
-      }
-      
-      // Fallback to calculating it from the theme
-      return getResolvedThemeValue(getInitialTheme());
-    }
-    return "light"; // Default for SSR
-  };
-
-  const [theme, setTheme] = useState<Theme>(getInitialTheme());
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(getInitialResolvedTheme());
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    // On mount, we want to respect what's already in the DOM
-    // The layout script has already set the correct data-theme attribute
-    // We just need to make sure our state matches what's in the DOM
-    
-    // First, check what's actually in the DOM
-    const docTheme = document.documentElement.getAttribute("data-theme");
-    
-    // Validate the DOM theme - it should NEVER be 'system'
-    if (docTheme === "system") {
-      // If somehow 'system' got into the DOM, fix it immediately
-      const resolvedValue = getResolvedThemeValue("system");
-      document.documentElement.setAttribute("data-theme", resolvedValue);
-      console.log(`Fixed invalid 'system' in DOM, set to ${resolvedValue}`);
-    }
-    
-    // Then check if there's a saved theme preference
-    const savedTheme = localStorage.getItem("data-theme") as Theme;
-    
-    if (savedTheme) {
-      // Update our state to match the saved preference
-      setTheme(savedTheme);
-      
-      // Make sure our resolvedTheme state matches what's in the DOM
-      // The DOM should have a valid light/dark value at this point
-      const currentDocTheme = document.documentElement.getAttribute("data-theme");
-      if (currentDocTheme === "dark" || currentDocTheme === "light") {
-        setResolvedTheme(currentDocTheme as "light" | "dark");
-      } else {
-        // If DOM somehow doesn't have a valid theme, set it
-        const resolvedValue = getResolvedThemeValue(savedTheme);
-        document.documentElement.setAttribute("data-theme", resolvedValue);
-        setResolvedTheme(resolvedValue);
-      }
-    } else {
-      // If no saved theme, default to system and save it
-      localStorage.setItem("data-theme", "system");
-      setTheme("system");
-      
-      // Make sure the DOM has a valid light/dark value
-      const resolvedValue = getResolvedThemeValue("system");
-      document.documentElement.setAttribute("data-theme", resolvedValue);
-      setResolvedTheme(resolvedValue);
-    }
-    
-    // Log the current state for debugging
-    console.log(`ThemeProvider mounted: theme=${theme}, resolvedTheme=${resolvedTheme}, DOM data-theme=${document.documentElement.getAttribute("data-theme")}`);
-    setMounted(true);
-  }, [initialTheme]);
-
-  useEffect(() => {
-    if (theme !== "system") return;
-    
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-    const handleChange = () => {
-      const resolvedValue = mediaQuery.matches ? "dark" : "light";
-      document.documentElement.setAttribute("data-theme", resolvedValue);
-      setResolvedTheme(resolvedValue);
-      console.log(`System theme changed to: ${resolvedValue}`);
-    };
-    
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [theme]);
+  // If propTheme is light/dark, use it directly (forced mode)
+  // Otherwise, use the stored preference from localStorage/DOM
+  const initialThemeValue = propTheme !== "system" ? propTheme : getInitialTheme();
   
+  // For resolvedTheme, if propTheme is light/dark, use that directly
+  // Otherwise, get from DOM
+  const initialResolvedValue = propTheme !== "system" ? propTheme : getInitialResolvedTheme();
+  
+  const [theme, setTheme] = useState<Theme>(initialThemeValue);
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(initialResolvedValue);
+
+  const getResolvedTheme = useCallback((t: Theme): 'light' | 'dark' => {
+    if (t === 'system') {
+      return typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches 
+        ? 'dark' 
+        : 'light';
+    }
+    return t;
+  }, []);
+
   useEffect(() => {
-    if (!mounted) {
-      setMounted(true);
-    }
+    if (typeof window === 'undefined') return;
     
-    // Always ensure the DOM has the correct theme
-    const currentResolvedTheme = getResolvedThemeValue(theme);
-    if (document.documentElement.getAttribute("data-theme") !== currentResolvedTheme) {
-      document.documentElement.setAttribute("data-theme", currentResolvedTheme);
+    // Only listen for system theme changes if:
+    // 1. Current theme is 'system' AND
+    // 2. propTheme is 'system' (not forcing light/dark)
+    if (theme === 'system' && propTheme === 'system') {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      
+      const handleChange = () => {
+        const newResolved = mediaQuery.matches ? 'dark' : 'light';
+        document.documentElement.setAttribute('data-theme', newResolved);
+        setResolvedTheme(newResolved);
+        dev.log(`System theme changed to: ${newResolved}`);
+      };
+      
+      mediaQuery.addEventListener('change', handleChange);
+      return () => mediaQuery.removeEventListener('change', handleChange);
     }
-    
-    console.log(`Theme updated: ${theme} (resolved: ${currentResolvedTheme})`);
-  }, [theme, mounted]); // Only depend on theme, not mounted
+  }, [theme, propTheme]);
+
+  const setThemeAndSave = useCallback((newTheme: Theme) => {
+    try {
+      // If propTheme is light/dark, we always use that for the DOM (forced mode)
+      const isForced = propTheme !== 'system';
+      const resolved = isForced ? propTheme : (newTheme === 'system'
+        ? window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        : newTheme);
+      
+      // Only update localStorage if not in forced mode
+      if (!isForced) {
+        if (newTheme === 'system') {
+          localStorage.removeItem('data-theme');
+        } else {
+          localStorage.setItem('data-theme', newTheme);
+        }
+      }
+      
+      // Always update React state
+      setTheme(newTheme);
+      setResolvedTheme(resolved);
+      
+      // Set the DOM attribute to the resolved theme
+      document.documentElement.setAttribute('data-theme', resolved);
+      
+      dev.log(`Theme set to ${newTheme} (resolved: ${resolved})`);
+    } catch (e) {
+      dev.error('Error setting theme:', e);
+    }
+  }, [propTheme]);
 
   const storedValues = typeof window !== 'undefined' ? getStoredStyleValues() : {};
   
@@ -285,26 +254,10 @@ export function ThemeProvider({
     }));
   }, [theme]);
 
-  // Effect to update the DOM whenever the theme changes
-  useEffect(() => {
-    // Always use the resolved theme (never 'system') for the DOM
-    const currentResolvedTheme = getResolvedThemeValue(theme);
-    document.documentElement.setAttribute("data-theme", currentResolvedTheme);
-    setResolvedTheme(currentResolvedTheme);
-  }, [theme]);
-
   const themeValue = {
     theme,
     resolvedTheme,
-    setTheme: (newTheme: Theme) => {
-      // Store the raw theme (can be 'system', 'light', or 'dark')
-      localStorage.setItem("data-theme", newTheme);
-      setTheme(newTheme);
-      
-      // The effect above will handle updating the DOM with the resolved theme
-      const resolvedValue = getResolvedThemeValue(newTheme);
-      console.log(`Theme preference set to ${newTheme}, DOM attribute set to ${resolvedValue}`);
-    },
+    setTheme: setThemeAndSave
   };
   
   const camelToKebab = (str: string): string => {
@@ -322,8 +275,20 @@ export function ThemeProvider({
       Object.entries(newStyle).forEach(([key, value]) => {
         if (value && key !== 'setStyle') {
           const attrName = `data-${camelToKebab(key)}`;
-          document.documentElement.setAttribute(attrName, value.toString());
-          localStorage.setItem(`data-${camelToKebab(key)}`, value.toString());
+          
+          if (key === 'theme') {
+            if (value === 'system') {
+              localStorage.removeItem('data-theme');
+              const resolvedValue = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+              document.documentElement.setAttribute(attrName, resolvedValue);
+            } else {
+              localStorage.setItem('data-theme', value.toString());
+              document.documentElement.setAttribute(attrName, value.toString());
+            }
+          } else {
+            document.documentElement.setAttribute(attrName, value.toString());
+            localStorage.setItem(`data-${camelToKebab(key)}`, value.toString());
+          }
         }
       });
     },
@@ -333,11 +298,23 @@ export function ThemeProvider({
     if (typeof window !== 'undefined') {
       Object.entries(style).forEach(([key, value]) => {
         if (value && key !== 'setStyle') {
-          document.documentElement.setAttribute(`data-${camelToKebab(key)}`, value.toString());
+          if (key === 'theme') {
+            // If propTheme is light/dark, always use that for the DOM (forced mode)
+            if (propTheme !== 'system') {
+              document.documentElement.setAttribute(`data-${camelToKebab(key)}`, propTheme);
+            } else if (value === 'system') {
+              const resolvedValue = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+              document.documentElement.setAttribute(`data-${camelToKebab(key)}`, resolvedValue);
+            } else {
+              document.documentElement.setAttribute(`data-${camelToKebab(key)}`, value.toString());
+            }
+          } else {
+            document.documentElement.setAttribute(`data-${camelToKebab(key)}`, value.toString());
+          }
         }
       });
     }
-  }, []);
+  }, [style, propTheme]);
 
   return (
     <ThemeProviderContext.Provider value={themeValue}>

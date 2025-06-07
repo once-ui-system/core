@@ -6,16 +6,12 @@ import { useTheme } from "../contexts";
 
 const ThemeSwitcher = forwardRef<HTMLDivElement, React.ComponentProps<typeof Row>>((flex, ref) => {
   const { theme, setTheme } = useTheme();
-  
-  // Ensure the component properly reflects the current theme
   const [mounted, setMounted] = React.useState(false);
   
   React.useEffect(() => {
     setMounted(true);
   }, []);
 
-  // If not mounted yet, pre-render with a consistent state that won't cause hydration mismatch
-  // We'll use the actual theme value but won't show it as selected until mounted
   const getVariant = (themeValue: string) => {
     if (!mounted) return "tertiary";
     return theme === themeValue ? "primary" : "tertiary";
