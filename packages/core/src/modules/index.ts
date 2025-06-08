@@ -11,7 +11,7 @@ export { Kbar } from "./navigation/Kbar";
 
 export { ChartHeader } from "./data/ChartHeader";
 export { ChartStatus } from "./data/ChartStatus";
-export type { ChartProps, ChartVariant } from "./data/interfaces";
+export type { ChartProps, ChartVariant, ChartMode } from "./data/interfaces";
 export { LinearGradient } from "./data/Gradient";
 export { RadialGradient } from "./data/Gradient";
 export { BarChart } from "./data/BarChart";
