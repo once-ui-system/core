@@ -5,7 +5,7 @@ import { Heading, Flex, IconButton } from "../../components";
 import { useToast } from "../../contexts";
 import styles from "./HeadingLink.module.scss";
 
-interface HeadingLinkProps extends React.ComponentProps<typeof Heading> {
+interface HeadingLinkProps extends React.ComponentProps<typeof Flex> {
   id: string;
   as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   children: React.ReactNode;
@@ -26,7 +26,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({
   as,
   children,
   style,
-  ...heading
+  ...flex
 }) => {
   const { addToast } = useToast();
 
@@ -61,8 +61,9 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({
       className={styles.control}
       vertical="center"
       gap="8"
+      {...flex}
     >
-      <Heading className={styles.text} id={id} variant={variant} as={as} {...heading}>
+      <Heading className={styles.text} id={id} variant={variant} as={as}>
         {children}
       </Heading>
       <IconButton
