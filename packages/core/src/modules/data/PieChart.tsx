@@ -52,8 +52,12 @@ export const PieChart: React.FC<PieChartProps> = ({
   "data-viz-style": dataViz,
   ...flex
 }) => {
-  const { chart } = useDataTheme();
-  const variant = variantProp || chart.variant;
+  const { 
+    variant: themeVariant, 
+    mode, 
+    height
+  } = useDataTheme();
+  const variant = variantProp || themeVariant;
   const legend = {
     display: legendProp.display !== undefined ? legendProp.display : true,
     position: legendProp.position || "bottom-center",
@@ -120,8 +124,8 @@ export const PieChart: React.FC<PieChartProps> = ({
   return (
     <Column
       fillWidth
-      height={chart.height}
-      data-viz-style={dataViz || chart.mode}
+      height={height}
+      data-viz-style={dataViz || mode}
       border={border}
       radius="l"
       {...flex}

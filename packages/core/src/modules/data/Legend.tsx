@@ -27,7 +27,7 @@ const Legend: React.FC<LegendProps> = ({
   position = "top-left",
   direction,
   colors,
-  variant = useDataTheme().chart.variant,
+  variant = useDataTheme().variant,
 }) => {
   if (!payload || !payload.length) {
     return null;

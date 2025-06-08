@@ -88,7 +88,7 @@ export const LinearGradient: React.FC<LinearGradientProps> = ({
   x2 = "0",
   y2 = "1",
   stops,
-  variant = useDataTheme().chart.variant,
+  variant = useDataTheme().variant,
 }) => {
   const gradientStops = stops || getStopsByVariant(variant as ChartStyles);
   return (
@@ -109,7 +109,7 @@ export const RadialGradient: React.FC<RadialGradientProps> = ({
   fx = "50%",
   fy = "50%",
   stops,
-  variant = useDataTheme().chart.variant,
+  variant = useDataTheme().variant,
 }) => {
   const gradientStops = stops || getStopsByVariant(variant as ChartStyles, true);
   return (

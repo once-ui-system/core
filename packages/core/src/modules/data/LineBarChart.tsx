@@ -52,8 +52,15 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
-  const { chart } = useDataTheme();
-  const variant = variantProp || chart.variant;
+  const { 
+    variant: themeVariant, 
+    mode, 
+    height, 
+    tick: { fill: tickFill, fontSize: tickFontSize },
+    axisLine: { stroke: axisLineStroke },
+    tickLine: tickLine
+  } = useDataTheme();
+  const variant = variantProp || themeVariant;
   const legend = {
     display: legendProp.display !== undefined ? legendProp.display : true,
     position: legendProp.position || "top-left",
@@ -133,7 +140,7 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   const chartId = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
 
   return (
-    <Column fillWidth height={chart.height} border={border} radius="l" data-viz-style={dataVizStyle || chart.mode} {...flex}>
+    <Column fillWidth height={height} border={border} radius="l" data-viz-style={dataVizStyle || mode} {...flex}>
       <ChartHeader
         title={title}
         description={description}
@@ -226,12 +233,12 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                 dataKey={xAxisKey}
                 hide={!(axis === "x" || axis === "both")}
                 axisLine={{
-                  stroke: chart.axisLine.stroke,
+                  stroke: axisLineStroke,
                 }}
-                tickLine={chart.tickLine}
+                tickLine={tickLine}
                 tick={{
-                  fill: chart.tick.fill,
-                  fontSize: chart.tick.fontSize,
+                  fill: tickFill,
+                  fontSize: tickFontSize,
                 }}
                 tickFormatter={(value) => {
                   const dataPoint = data.find((item) => item[xAxisKey] === value);
@@ -243,13 +250,13 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                   width={64}
                   padding={{ top: 40 }}
                   allowDataOverflow
-                  tickLine={chart.tickLine}
+                  tickLine={tickLine}
                   tick={{
-                    fill: chart.tick.fill,
-                    fontSize: chart.tick.fontSize,
+                    fill: tickFill,
+                    fontSize: tickFontSize,
                   }}
                   axisLine={{
-                    stroke: chart.axisLine.stroke,
+                    stroke: axisLineStroke,
                   }}
                 />
               )}
