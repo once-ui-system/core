@@ -106,13 +106,6 @@ function Table({ data, onRowClick, ...flex }: TableProps) {
       marginBottom="16"
       {...flex}
     >
-      <style jsx={true}>
-      {`
-        .hover-row:hover {
-          background-color: var(--neutral-alpha-weak);
-        }
-      `}
-    </style>
       <table
         className="fill-width surface-background"
         style={{ borderSpacing: 0, borderCollapse: "collapse", minWidth: "32rem" }}
