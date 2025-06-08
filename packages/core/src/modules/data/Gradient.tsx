@@ -2,12 +2,12 @@
 
 import React from "react";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
-import { ChartStyles } from "./interfaces";
+import { ChartVariant } from "./interfaces";
 
 interface GradientStop {
   offset: string;
   opacity: number;
-  variant?: ChartStyles;
+  variant?: ChartVariant;
 }
 
 interface LinearGradientProps {
@@ -18,7 +18,7 @@ interface LinearGradientProps {
   x2?: string;
   y2?: string;
   stops?: GradientStop[];
-  variant?: ChartStyles;
+  variant?: ChartVariant;
 }
 
 interface RadialGradientProps {
@@ -30,11 +30,11 @@ interface RadialGradientProps {
   fx?: string;
   fy?: string;
   stops?: GradientStop[];
-  variant?: ChartStyles;
+  variant?: ChartVariant;
 }
 
 const getStopsByVariant = (
-  variant: ChartStyles = "gradient",
+  variant: ChartVariant = "gradient",
   isRadial: boolean = false,
 ): GradientStop[] => {
   if (isRadial) {
@@ -90,7 +90,7 @@ export const LinearGradient: React.FC<LinearGradientProps> = ({
   stops,
   variant = useDataTheme().variant,
 }) => {
-  const gradientStops = stops || getStopsByVariant(variant as ChartStyles);
+  const gradientStops = stops || getStopsByVariant(variant as ChartVariant);
   return (
     <linearGradient id={id} x1={x1} y1={y1} x2={x2} y2={y2}>
       {gradientStops.map((stop, index) => (
@@ -111,7 +111,7 @@ export const RadialGradient: React.FC<RadialGradientProps> = ({
   stops,
   variant = useDataTheme().variant,
 }) => {
-  const gradientStops = stops || getStopsByVariant(variant as ChartStyles, true);
+  const gradientStops = stops || getStopsByVariant(variant as ChartVariant, true);
   return (
     <radialGradient id={id} cx={cx} cy={cy} r={r} fx={fx} fy={fy}>
       {gradientStops.map((stop, index) => (

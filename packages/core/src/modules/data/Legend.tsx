@@ -4,7 +4,7 @@ import React from "react";
 import { Row, Text } from "../../components";
 import { Swatch } from ".";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
-import { ChartStyles } from "./interfaces";
+import { ChartVariant } from "./interfaces";
 
 interface LegendProps {
   payload?: any[];
@@ -18,7 +18,7 @@ interface LegendProps {
     | "bottom-right"
     | "top-center"
     | "bottom-center";
-  variant?: ChartStyles;
+  variant?: ChartVariant;
 }
 
 const Legend: React.FC<LegendProps> = ({
@@ -108,7 +108,7 @@ const Legend: React.FC<LegendProps> = ({
         const color = colors && colors[index] ? colors[index] : entry.stroke || entry.color;
         return (
           <Row key={index} vertical="center" gap="8">
-            <Swatch color={color} size="m" variant={variant as ChartStyles} />
+            <Swatch color={color} size="m" variant={variant as ChartVariant} />
             <Text variant="label-default-s" wrap="nowrap">
               {entry.value}
             </Text>

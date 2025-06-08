@@ -1,13 +1,11 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-
-export type ChartVariant = "flat" | "gradient" | "outline";
-export type ChartStyle = "categorical" | "divergent" | "sequential";
+import { ChartMode, ChartVariant } from "../modules/data";
 
 interface ChartOptions {
   variant: ChartVariant;
-  mode: ChartStyle;
+  mode: ChartMode;
   height: number;
   axis: {
     stroke: string;
@@ -54,7 +52,7 @@ function getStoredChartOptions() {
     const dataVizMode = localStorage.getItem('data-viz-style');
     
     if (dataVizMode) {
-      return { mode: dataVizMode as ChartStyle };
+      return { mode: dataVizMode as ChartMode };
     }
     return {};
   } catch (e) {
@@ -101,7 +99,7 @@ export function DataThemeProvider({
     setMounted(true);
   }, []);
 
-  const applyDataVizAttribute = (mode: ChartStyle, saveToLocalStorage = false) => {
+  const applyDataVizAttribute = (mode: ChartMode, saveToLocalStorage = false) => {
     if (typeof document !== 'undefined') {
       if (document.documentElement.hasAttribute('data-data-viz')) {
         document.documentElement.removeAttribute('data-data-viz');

@@ -2,7 +2,8 @@ import { Flex, DateRange } from "../../components";
 import { TShirtSizes } from "../../types";
 import { CurveType } from "recharts/types/shape/Curve";
 
-type ChartStyles = "flat" | "gradient" | "outline";
+type ChartVariant = "flat" | "gradient" | "outline";
+type ChartMode = "categorical" | "divergent" | "sequential";
 type barWidth = TShirtSizes | "fill" | number;
 type curveType = CurveType;
 
@@ -54,7 +55,7 @@ interface ChartProps extends Omit<React.ComponentProps<typeof Flex>, "title" | "
   date?: DateConfig;
   emptyState?: React.ReactNode;
   axis?: "x" | "y" | "both" | "none";
-  variant?: ChartStyles;
+  variant?: ChartVariant;
   loading?: boolean;
 }
 
@@ -64,7 +65,8 @@ export type {
   DateConfig,
   PresetsConfig,
   ChartProps,
-  ChartStyles,
+  ChartVariant,
   barWidth,
   curveType,
+  ChartMode,
 };

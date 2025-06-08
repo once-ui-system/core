@@ -22,7 +22,7 @@ import {
   SeriesConfig,
   ChartProps,
   ChartStatus,
-  ChartStyles,
+  ChartVariant,
   curveType,
 } from ".";
 import { schemes } from "../../types";
@@ -169,7 +169,7 @@ const LineChart: React.FC<LineChartProps> = ({
                     <LinearGradient
                       key={`gradient-${chartId}-${index}`}
                       id={`barGradient${chartId}${index}`}
-                      variant={variant as ChartStyles}
+                      variant={variant as ChartVariant}
                       color={lineColor}
                     />
                   );
@@ -190,7 +190,7 @@ const LineChart: React.FC<LineChartProps> = ({
                         labels={axis}
                         position={legend.position}
                         direction={legend.direction}
-                        variant={variant as ChartStyles}
+                        variant={variant as ChartVariant}
                       />
                     );
                   }}
@@ -268,7 +268,7 @@ const LineChart: React.FC<LineChartProps> = ({
                   strokeWidth: 1,
                 }}
                 content={(props) => (
-                  <DataTooltip {...props} variant={variant as ChartStyles} date={date} />
+                  <DataTooltip {...props} variant={variant as ChartVariant} date={date} />
                 )}
               />
               {autoSeries.map(({ key, color }, index) => {

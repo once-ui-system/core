@@ -3,10 +3,11 @@
 import { forwardRef, useState, useEffect } from "react";
 import { Flex, Text, SegmentedControl, IconButton, Scroller, Column, ThemeSwitcher } from ".";
 import { BorderStyle, NeutralColor, ScalingSize, SolidStyle, SolidType, SurfaceStyle, TransitionStyle, useStyle } from "../contexts/ThemeProvider";
-import { ChartStyle, useDataTheme } from "../contexts/DataThemeProvider";
+import { useDataTheme } from "../contexts/DataThemeProvider";
 import styles from "./StylePanel.module.scss";
 import classNames from "classnames";
 import { Schemes, schemes } from "../types";
+import { ChartMode } from "@/modules/data";
 
 interface StylePanelProps extends React.ComponentProps<typeof Flex> {
   style?: React.CSSProperties;
@@ -34,7 +35,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
   const [solidStyleValue, setSolidStyleValue] = useState<SolidStyle>("flat");
   const [surfaceValue, setSurfaceValue] = useState<SurfaceStyle>("filled");
   const [scalingValue, setScalingValue] = useState<ScalingSize>("100");
-  const [chartModeValue, setChartModeValue] = useState<ChartStyle>("categorical");
+  const [chartModeValue, setChartModeValue] = useState<ChartMode>("categorical");
   const [transitionValue, setTransitionValue] = useState<TransitionStyle>("all");
   
   useEffect(() => {
@@ -452,8 +453,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
             maxWidth={22}
             minWidth={0}
             onToggle={(value) => {
-              setChartOptions({ mode: value as ChartStyle });
-              setChartModeValue(value as ChartStyle);
+              setChartOptions({ mode: value as ChartMode });
+              setChartModeValue(value as ChartMode);
             }}
             selected={mounted ? chartModeValue : undefined}
             defaultSelected="categorical"

@@ -4,7 +4,7 @@ import React, { useRef, useEffect } from "react";
 import { formatDate } from "./utils/formatDate";
 import { Column, Text, Row, LetterFx } from "../../components";
 import { Swatch } from "./Swatch";
-import { ChartStyles, DateConfig } from "./interfaces";
+import { ChartVariant, DateConfig } from "./interfaces";
 
 const ValueWithAnimation: React.FC<{ value: number }> = ({ value }) => {
   const prevValueRef = useRef<number | null>(null);
@@ -46,7 +46,7 @@ interface DataTooltipProps {
   DataTooltip?: React.ReactNode;
   date?: DateConfig;
   colors?: boolean;
-  variant?: ChartStyles;
+  variant?: ChartVariant;
 }
 
 const DataTooltip: React.FC<DataTooltipProps> = ({

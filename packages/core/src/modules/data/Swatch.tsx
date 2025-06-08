@@ -4,12 +4,12 @@ import React from "react";
 import { Row } from "../../components";
 import { RadiusSize, SpacingToken } from "../../types";
 import { useDataTheme } from "../../contexts";
-import { ChartStyles } from "./interfaces";
+import { ChartVariant } from "./interfaces";
 
 export interface SwatchProps {
   color: string;
   size?: "s" | "m";
-  variant?: ChartStyles;
+  variant?: ChartVariant;
 }
 
 export const Swatch: React.FC<SwatchProps> = ({ color, size = "m", variant = useDataTheme().variant }) => {

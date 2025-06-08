@@ -23,7 +23,7 @@ import {
   ChartStatus,
   ChartProps,
   SeriesConfig,
-  ChartStyles,
+  ChartVariant,
   barWidth,
   curveType,
 } from ".";
@@ -166,13 +166,13 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                 <LinearGradient
                   id={`barGradient${chartId}`}
                   color={finalBarColor}
-                  variant={variant as ChartStyles}
+                  variant={variant as ChartVariant}
                 />
 
                 <LinearGradient
                   id={`lineGradient${chartId}`}
                   color={finalLineColor}
-                  variant={variant as ChartStyles}
+                  variant={variant as ChartVariant}
                 />
               </defs>
               <RechartsCartesianGrid
@@ -184,7 +184,7 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                 <RechartsLegend
                   content={
                     <Legend
-                      variant={variant as ChartStyles}
+                      variant={variant as ChartVariant}
                       colors={[finalLineColor, finalBarColor]}
                       labels={axis}
                       position={legend.position}
@@ -267,7 +267,7 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                 content={(props) => (
                   <DataTooltip
                     {...props}
-                    variant={variant as ChartStyles}
+                    variant={variant as ChartVariant}
                     date={date}
                     dataKey={xAxisKey}
                   />

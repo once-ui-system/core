@@ -20,7 +20,7 @@ import {
   LinearGradient,
   DataTooltip,
   Legend,
-  ChartStyles,
+  ChartVariant,
   ChartStatus,
   ChartHeader,
   barWidth,
@@ -171,7 +171,7 @@ const BarChart: React.FC<BarChartProps> = ({
 
                     return (
                       <Legend
-                        variant={variant as ChartStyles}
+                        variant={variant as ChartVariant}
                         payload={customPayload}
                         labels={axis}
                         position={legend.position}
@@ -250,7 +250,7 @@ const BarChart: React.FC<BarChartProps> = ({
               <RechartsTooltip
                 cursor={{ fill: hover ? "var(--neutral-alpha-weak)" : "var(--static-transparent)" }}
                 content={(props) => (
-                  <DataTooltip {...props} date={date} variant={variant as ChartStyles} />
+                  <DataTooltip {...props} date={date} variant={variant as ChartVariant} />
                 )}
               />
               <defs>
@@ -259,7 +259,7 @@ const BarChart: React.FC<BarChartProps> = ({
                     key={`gradient-${chartId}-${index}`}
                     id={`barGradient${chartId}${index}`}
                     color={color}
-                    variant={variant as ChartStyles}
+                    variant={variant as ChartVariant}
                   />
                 ))}
               </defs>
