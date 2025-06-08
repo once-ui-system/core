@@ -207,7 +207,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                   <ToggleButton
                     className="mr-2"
                     weight="default"
-                    size="s"
                     selected={selectedInstance === index}
                     label={instance.label}
                     onClick={() => {
