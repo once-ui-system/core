@@ -23,7 +23,7 @@ const colorOptions = {
 
 const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref) => {
   const styleContext = useStyle();
-  const { chart, setChartOptions } = useDataTheme();
+  const { mode: chartMode, setChartOptions } = useDataTheme();
   
   const [mounted, setMounted] = useState(false);
   const [borderValue, setBorderValue] = useState<BorderStyle>("playful");
@@ -59,8 +59,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
       setTransitionValue(styleContext.transition);
     }
     // Chart mode is handled separately
-    setChartModeValue(chart.mode);
-  }, [styleContext, chart.mode, mounted]);
+    setChartModeValue(chartMode);
+  }, [styleContext, chartMode, mounted]);
 
   return (
     <Column fillWidth gap="16" ref={ref} {...rest}>
