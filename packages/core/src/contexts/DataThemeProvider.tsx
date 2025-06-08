@@ -9,37 +9,36 @@ interface ChartOptions {
   variant: ChartVariant;
   mode: ChartStyle;
   height: number;
-  axisLine: {
+  axis: {
     stroke: string;
   };
   tick: {
     fill: string;
     fontSize: number;
+    line: boolean;
   };
-  tickLine: boolean;
 }
 
 interface DataThemeState extends ChartOptions {
   setChartOptions: (options: Partial<ChartOptions>) => void;
 }
 
-interface DataThemeProviderProps {
+interface DataThemeProviderProps extends Partial<ChartOptions> {
   children: ReactNode;
-  initialChartOptions?: Partial<ChartOptions>;
 }
 
 const defaultChartOptions: ChartOptions = {
   variant: "gradient",
   mode: "categorical",
   height: 24,
-  axisLine: {
+  axis: {
     stroke: "var(--neutral-alpha-weak)",
   },
   tick: {
     fill: "var(--neutral-on-background-weak)",
     fontSize: 11,
+    line: false,
   },
-  tickLine: false,
 };
 
 const DataThemeContext = createContext<DataThemeState>({
@@ -66,16 +65,25 @@ function getStoredChartOptions() {
 
 export function DataThemeProvider({
   children,
-  initialChartOptions = {},
+  variant,
+  mode,
+  height,
+  axis,
+  tick,
+  ...rest
 }: DataThemeProviderProps) {
   const camelToKebab = (str: string): string => {
     return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
   };
 
-  // Initialize with defaults and provided initialChartOptions for server-side rendering
+  // Initialize with defaults and provided props for server-side rendering
   const [chartOptions, setChartOptionsState] = useState<ChartOptions>({
     ...defaultChartOptions,
-    ...initialChartOptions,
+    ...(variant ? { variant } : {}),
+    ...(mode ? { mode } : {}),
+    ...(height ? { height } : {}),
+    ...(axis ? { axis } : {}),
+    ...(tick ? { tick } : {}),
   });
   
   const [mounted, setMounted] = useState(false);

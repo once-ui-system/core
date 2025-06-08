@@ -54,9 +54,8 @@ const BarChart: React.FC<BarChartProps> = ({
     variant: themeVariant, 
     mode, 
     height, 
-    tick: { fill: tickFill, fontSize: tickFontSize },
-    axisLine: { stroke: axisLineStroke },
-    tickLine: tickLine,
+    tick: { fill: tickFill, fontSize: tickFontSize, line: tickLine },
+    axis: { stroke: axisLineStroke },
   } = useDataTheme();
   const variant = variantProp || themeVariant;
   const legend = {
