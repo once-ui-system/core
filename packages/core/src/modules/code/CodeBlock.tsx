@@ -184,7 +184,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       direction="column"
       vertical="center"
       fillWidth
-      minHeight={3}
+      minHeight={2.5}
       className={classNames(className, {
         [styles.fullscreen]: isFullscreen,
       })}
