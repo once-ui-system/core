@@ -16,7 +16,7 @@ const loadCssFiles = async () => {
 
 import styles from "./CodeBlock.module.scss";
 
-import { Flex, Button, IconButton, Scroller, Row, StyleOverlay } from "../../components";
+import { Flex, Button, IconButton, Scroller, Row, StyleOverlay, ToggleButton } from "../../components";
 
 import Prism from "prismjs";
 
@@ -43,10 +43,10 @@ type CodeInstance = {
   code: string | { content: string; error: string | null };
   language: string;
   label: string;
+  highlight?: string;
 };
 
 interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
-  highlight?: string;
   codeHeight?: number;
   fillHeight?: boolean;
   previewPadding?: SpacingToken;
@@ -61,10 +61,11 @@ interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   style?: React.CSSProperties;
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
+  highlight?: string;
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({
-  highlight,
+  highlight: deprecatedHighlight,
   codeHeight,
   fillHeight,
   previewPadding = "l",
@@ -87,13 +88,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [dependenciesLoaded, setDependenciesLoaded] = useState(false);
 
-  const { code, language, label } = codes[selectedInstance] || {
+  const { code, language, highlight } = codes[selectedInstance] || {
     code: "",
     language: "",
-    label: "Select code",
+    highlight: deprecatedHighlight,
   };
 
-  // Load dependencies when component mounts
   useEffect(() => {
     const loadDependencies = async () => {
       await Promise.all([
@@ -106,10 +106,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     loadDependencies();
   }, []);
 
-  // Apply highlighting when dependencies are loaded or code changes
   useEffect(() => {
     if (dependenciesLoaded && codeRef.current && codes.length > 0) {
-      // Use setTimeout to ensure DOM is fully updated
       setTimeout(() => {
         Prism.highlightAll();
       }, 0);
@@ -206,11 +204,11 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             <Scroller paddingX="4">
               {codes.map((instance, index) => (
                 <Row paddingY="4" paddingRight="2" key={index}>
-                  <Button
+                  <ToggleButton
                     className="mr-2"
                     weight="default"
                     size="s"
-                    variant={selectedInstance === index ? "secondary" : "tertiary"}
+                    selected={selectedInstance === index}
                     label={instance.label}
                     onClick={() => {
                       setSelectedInstance(index);
@@ -297,7 +295,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           <Flex overflowX="auto" fillWidth>
             <pre
               style={{ maxHeight: `${codeHeight}rem` }}
-              data-line={highlight}
+              data-line={highlight || deprecatedHighlight}
               ref={preRef}
               className={classNames(
                 lineNumbers ? styles.lineNumberPadding : styles.padding,
