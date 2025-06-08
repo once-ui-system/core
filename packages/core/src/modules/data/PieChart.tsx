@@ -15,7 +15,7 @@ import {
   Row,
   DateRange,
   ChartProps,
-  ChartStyles,
+  ChartVariant,
   ChartStatus,
   RadialGradient,
   DataTooltip,
@@ -163,7 +163,7 @@ export const PieChart: React.FC<PieChartProps> = ({
                     r="50%"
                     fx="50%"
                     fy="50%"
-                    variant={variant as ChartStyles}
+                    variant={variant as ChartVariant}
                   />
                   <rect
                     x="0"
@@ -212,7 +212,7 @@ export const PieChart: React.FC<PieChartProps> = ({
                   content={(props) => (
                     <Legend
                       {...props}
-                      variant={variant as ChartStyles}
+                      variant={variant as ChartVariant}
                       position={legend.position}
                       direction={legend.direction}
                       labels="none"
@@ -280,7 +280,7 @@ export const PieChart: React.FC<PieChartProps> = ({
                       {...props}
                       label={undefined}
                       date={date}
-                      variant={variant as ChartStyles}
+                      variant={variant as ChartVariant}
                     />
                   );
                 }}
