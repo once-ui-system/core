@@ -88,11 +88,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [dependenciesLoaded, setDependenciesLoaded] = useState(false);
 
-  const { code, language, highlight } = codes[selectedInstance] || {
+  const codeInstance = codes[selectedInstance] || {
     code: "",
     language: "",
-    highlight: deprecatedHighlight,
   };
+  const { code, language } = codeInstance;
+  const highlight = codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
 
   useEffect(() => {
     const loadDependencies = async () => {
