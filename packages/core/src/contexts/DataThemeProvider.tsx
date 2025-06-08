@@ -19,8 +19,7 @@ interface ChartOptions {
   tickLine: boolean;
 }
 
-interface DataThemeState {
-  chart: ChartOptions;
+interface DataThemeState extends ChartOptions {
   setChartOptions: (options: Partial<ChartOptions>) => void;
 }
 
@@ -44,7 +43,7 @@ const defaultChartOptions: ChartOptions = {
 };
 
 const DataThemeContext = createContext<DataThemeState>({
-  chart: defaultChartOptions,
+  ...defaultChartOptions,
   setChartOptions: () => null,
 });
 
@@ -114,22 +113,24 @@ export function DataThemeProvider({
     }
   }, [chartOptions.mode, mounted]);
 
+  const handleSetChartOptions = (newOptions: Partial<ChartOptions>) => {
+    setChartOptionsState(prevOptions => {
+      const updatedOptions = {
+        ...prevOptions,
+        ...newOptions,
+      };
+      
+      if (newOptions.mode && mounted && typeof window !== 'undefined') {
+        applyDataVizAttribute(newOptions.mode, true);
+      }
+      
+      return updatedOptions;
+    });
+  };
+
   const value: DataThemeState = {
-    chart: chartOptions,
-    setChartOptions: (newOptions: Partial<ChartOptions>) => {
-      setChartOptionsState(prevOptions => {
-        const updatedOptions = {
-          ...prevOptions,
-          ...newOptions,
-        };
-        
-        if (newOptions.mode && mounted && typeof window !== 'undefined') {
-          applyDataVizAttribute(newOptions.mode, true);
-        }
-        
-        return updatedOptions;
-      });
-    },
+    ...chartOptions,
+    setChartOptions: handleSetChartOptions,
   };
 
   return (
