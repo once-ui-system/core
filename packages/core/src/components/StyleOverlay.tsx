@@ -3,14 +3,16 @@
 import { forwardRef, useState } from "react";
 import { IconButton, StylePanel, Flex, Background } from ".";
 import styles from "./StyleOverlay.module.scss";
+import { DisplayProps } from "../interfaces";
 
 interface StyleOverlayProps extends React.ComponentProps<typeof Flex> {
   iconButtonProps?: Partial<React.ComponentProps<typeof IconButton>>;
   children: React.ReactNode;
+  zIndex?: DisplayProps["zIndex"];
 }
 
 const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
-  ({ iconButtonProps, children, ...rest }, ref) => {
+  ({ iconButtonProps, children, zIndex = 2, ...rest }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const togglePanel = () => {
@@ -18,7 +20,7 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
     };
 
     return (
-      <Flex ref={ref} position="static">
+      <Flex ref={ref} position="static" zIndex={zIndex}>
         {!isOpen && <Flex onClick={togglePanel}>{children}</Flex>}
         <Flex
           as="aside"

@@ -197,6 +197,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           zIndex={2}
           position="static"
           fillWidth
+          fitHeight
           horizontal="space-between"
           gap="16"
         >
@@ -289,6 +290,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         <Flex
           borderTop={!compact && preview ? "neutral-medium" : undefined}
           fillWidth
+          flex="1"
           fillHeight={fillHeight}
         >
           <Flex overflowX="auto" fillWidth>

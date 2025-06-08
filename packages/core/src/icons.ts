@@ -30,6 +30,8 @@ import {
   HiOutlineCalendar,
   HiOutlineDocumentDuplicate,
   HiOutlineCheck,
+  HiOutlineArrowsPointingIn,
+  HiOutlineArrowsPointingOut,
 } from "react-icons/hi2";
 
 export const iconLibrary: Record<string, IconType> = {
@@ -62,6 +64,8 @@ export const iconLibrary: Record<string, IconType> = {
   security: HiOutlineShieldCheck,
   sparkle: HiOutlineSparkles,
   computer: HiOutlineComputerDesktop,
+  minimize: HiOutlineArrowsPointingIn,
+  maximize: HiOutlineArrowsPointingOut,
 };
 
 export type IconLibrary = typeof iconLibrary;
