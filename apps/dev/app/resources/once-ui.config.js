@@ -5,7 +5,6 @@ const baseURL = "https://demo.once-ui.com";
 import { Geist } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
 
-// You can extend fonts by --font-secondary and --font-tertiary variables
 const heading = Geist({
   variable: "--font-heading",
   subsets: ["latin"],
