@@ -2,7 +2,7 @@
 
 html {
     font-size:   var(--font-scaling-desktop);
-    font-family: var(--font-family-body);
+    font-family: var(--font-body);
     font-weight: var(--font-weight-normal);
     color: var(--neutral-on-background-strong);
 }
@@ -32,7 +32,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .font-display {
-    font-family: var(--font-family-heading);
+    font-family: var(--font-heading);
 
     &.font-strong, & > .font-strong {
         font-weight: var(--font-weight-display-strong);
@@ -73,7 +73,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .font-heading {
-    font-family: var(--font-family-heading);
+    font-family: var(--font-heading);
 
     &.font-strong, & > .font-strong {
         font-weight: var(--font-weight-heading-strong);
@@ -110,7 +110,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .font-body {
-    font-family: var(--font-family-body);
+    font-family: var(--font-body);
 
     &.font-strong, & > .font-strong {
         font-weight: var(--font-weight-body-strong);
@@ -147,7 +147,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .font-label {
-    font-family: var(--font-family-label);
+    font-family: var(--font-label);
 
     &.font-strong, & > .font-strong {
         font-weight: var(--font-weight-label-strong);
@@ -174,7 +174,7 @@ h1, h2, h3, h4, h5, h6, p {
 }
 
 .font-code {
-    font-family: var(--font-family-code);
+    font-family: var(--font-code);
 
     &.font-strong, & > .font-strong {
         font-weight: var(--font-weight-code-strong);

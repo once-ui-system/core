@@ -30,9 +30,9 @@ export default function RootLayout({
       as="html"
       lang="en"
       className={classNames(
-        font.primary.variable,
-        font.secondary.variable,
-        font.tertiary.variable,
+        font.heading.variable,
+        font.body.variable,
+        font.label.variable,
         font.code.variable,
       )}
     >
