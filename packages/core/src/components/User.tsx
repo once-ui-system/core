@@ -3,7 +3,7 @@
 import React, { forwardRef } from "react";
 import classNames from "classnames";
 
-import { Flex, Text, Skeleton, Tag, TagProps, Avatar, AvatarProps } from ".";
+import { Flex, Text, Skeleton, Tag, TagProps, Avatar, AvatarProps, Column } from ".";
 
 interface UserProps {
   name?: string;
@@ -36,14 +36,14 @@ const User = forwardRef<HTMLDivElement, UserProps>(
         />
         {children}
         {name && (
-          <Flex direction="column" paddingLeft="4" paddingRight="12">
+          <Column paddingLeft="4" paddingRight="12">
             {loading ? (
               <Flex minWidth={6} paddingY="4">
                 <Skeleton width="xl" height="m" shape="line" aria-label="Loading name" />
               </Flex>
             ) : (
               <Flex gap="8" vertical="center">
-                <Text variant="heading-strong-xs" onBackground="neutral-strong">
+                <Text variant="label-default-m" onBackground="neutral-strong">
                   {name}
                 </Text>
                 {tagProps.label && (
@@ -62,7 +62,7 @@ const User = forwardRef<HTMLDivElement, UserProps>(
                 {subline}
               </Text>
             )}
-          </Flex>
+          </Column>
         )}
       </Flex>
     );
