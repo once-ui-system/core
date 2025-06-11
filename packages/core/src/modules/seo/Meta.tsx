@@ -43,8 +43,10 @@ export function generateMetadata({
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
 
   const ogImage = image
-    ? `${image.startsWith("/") ? image : `/${image}`}`
-    : `/og?title=${encodeURIComponent(title)}`;
+    ? image.startsWith('http')
+      ? image
+      : `${image.startsWith("/") ? '' : '/'}${image}`
+    : `/api/og/generate?title=${encodeURIComponent(title)}`;
 
   const url = canonical || `${normalizedBaseURL}${normalizedPath}`;
 
