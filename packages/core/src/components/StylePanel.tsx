@@ -17,9 +17,9 @@ interface StylePanelProps extends React.ComponentProps<typeof Flex> {
 const shapes = ["conservative", "playful", "rounded"];
 
 const colorOptions = {
-  brand: schemes,
-  accent: schemes,
-  neutral: ["sand", "gray", "slate"],
+  brand: [...schemes, "custom"],
+  accent: [...schemes, "custom"],
+  neutral: ["sand", "gray", "slate", "custom"],
 };
 
 const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref) => {
@@ -28,9 +28,9 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
   
   const [mounted, setMounted] = useState(false);
   const [borderValue, setBorderValue] = useState<BorderStyle>("playful");
-  const [brandValue, setBrandValue] = useState<Schemes>("blue");
-  const [accentValue, setAccentValue] = useState<Schemes>("indigo");
-  const [neutralValue, setNeutralValue] = useState<NeutralColor>("gray");
+  const [brandValue, setBrandValue] = useState<Schemes | "custom">("blue");
+  const [accentValue, setAccentValue] = useState<Schemes | "custom">("indigo");
+  const [neutralValue, setNeutralValue] = useState<NeutralColor | "custom">("gray");
   const [solidValue, setSolidValue] = useState<SolidType>("contrast");
   const [solidStyleValue, setSolidStyleValue] = useState<SolidStyle>("flat");
   const [surfaceValue, setSurfaceValue] = useState<SurfaceStyle>("filled");
