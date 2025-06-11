@@ -16,9 +16,9 @@ export type DataStyle = "categorical" | "divergent" | "sequential";
 
 interface StyleOptions {
   theme: Theme;
-  neutral: NeutralColor;
-  brand: Schemes;
-  accent: Schemes;
+  neutral: NeutralColor | "custom";
+  brand: Schemes | "custom";
+  accent: Schemes | "custom";
   solid: SolidType;
   solidStyle: SolidStyle;
   border: BorderStyle;
@@ -40,9 +40,9 @@ type StyleProviderState = StyleOptions & {
 type ThemeProviderProps = {
   children: React.ReactNode;
   theme?: Theme;
-  neutral?: NeutralColor;
-  brand?: Schemes;
-  accent?: Schemes;
+  neutral?: NeutralColor | "custom";
+  brand?: Schemes | "custom";
+  accent?: Schemes | "custom";
   solid?: SolidType;
   solidStyle?: SolidStyle;
   border?: BorderStyle;
