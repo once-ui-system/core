@@ -1,6 +1,6 @@
 "use client";
 
-import { Column, Media, Text, Row, Card } from ".";
+import { Column, Media, Text, Row, Card, Skeleton } from ".";
 import { useOgData } from "../hooks/useFetchOg";
 import { useMemo } from "react";
 
@@ -29,6 +29,7 @@ export interface OgDisplayOptions {
 
 interface OgCardProps extends React.ComponentProps<typeof Card> {
   url?: string;
+  sizes?: string;
   ogData?: Partial<OgData> | null;
   direction?: "column" | "row" | "column-reverse" | "row-reverse";
   display?: OgDisplayOptions;
@@ -88,10 +89,10 @@ const OgCard = ({
   ogData: providedOgData,
   direction = "column",
   display,
+  sizes = "320px",
   serviceConfig = {},
   ...card
 }: OgCardProps) => {
-  // Merge with defaults
   const displayOptions = {
     favicon: true,
     domain: true,
@@ -111,13 +112,13 @@ const OgCard = ({
     return data?.faviconUrl || getFaviconUrl(data?.url, serviceConfig.proxyFaviconUrl);
   }, [data?.faviconUrl, data?.url, serviceConfig.proxyFaviconUrl]);
 
-  if (!data || (!data.image && !data.title)) {
+  if (!loading && (!data || (!data.image && !data.title))) {
     return null;
   }
 
   return (
     <Card
-      href={data.url}
+      href={data?.url}
       direction={direction}
       fillWidth
       vertical={direction === "row" || direction === "row-reverse" ? "center" : undefined}
@@ -133,7 +134,7 @@ const OgCard = ({
           maxWidth={direction === "row" || direction === "row-reverse" ? 24 : undefined}
           loading={loading}
           radius="l"
-          sizes="320px"
+          sizes={sizes}
           aspectRatio="16/9"
           border="neutral-alpha-weak"
           src={proxiedImageUrl}
@@ -142,7 +143,7 @@ const OgCard = ({
       <Column fillWidth paddingX="12" paddingY="12" gap="8">
         {(displayOptions.favicon || displayOptions.domain) && (
           <Row fillWidth gap="8" vertical="center">
-            {displayOptions.favicon && (faviconUrl || loading) && (
+            {displayOptions.favicon && (
               <Media
                 aspectRatio="1/1"
                 src={faviconUrl}
@@ -154,21 +155,36 @@ const OgCard = ({
                 unoptimized={true}
               />
             )}
-            {displayOptions.domain && data.url && (
-              <Text variant="label-default-s" onBackground="neutral-weak">
-                {formatDisplayUrl(data.url)}
-              </Text>
+            {displayOptions.domain && (
+              loading ? (
+                <Skeleton shape="line" width="xs" height="xs" />
+              ) : data?.url && (
+                <Text variant="label-default-s" onBackground="neutral-weak">
+                  {formatDisplayUrl(data.url)}
+                </Text>
+              )
             )}
           </Row>
         )}
         <Column fillWidth gap="2">
-          {displayOptions.title && data.title && (
-            <Text variant="label-default-s">{data.title}</Text>
-          )}
-          {displayOptions.description && data.description && (
-            <Text variant="label-default-s" onBackground="neutral-weak">
-              {data.description}
+          {displayOptions.title && (loading ? (
+            <Skeleton shape="line" width="s" height="s" />
+          ) : data?.title && (
+            <Text variant="label-default-s">
+              {data.title}
             </Text>
+          ))}
+          {displayOptions.description && (
+            loading ? (
+              <Column fillWidth paddingY="8" gap="8">
+                <Skeleton shape="line" width="xl" height="xs" />
+                <Skeleton shape="line" width="l" height="xs" />
+              </Column>
+            ) : data?.description ? (
+              <Text variant="label-default-s" onBackground="neutral-weak">
+                {data.description}
+              </Text>
+            ) : null
           )}
         </Column>
       </Column>
