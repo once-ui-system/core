@@ -17,9 +17,9 @@ interface StylePanelProps extends React.ComponentProps<typeof Flex> {
 const shapes = ["conservative", "playful", "rounded"];
 
 const colorOptions = {
-  brand: [...schemes, "custom"],
-  accent: [...schemes, "custom"],
-  neutral: ["sand", "gray", "slate", "custom"],
+  brand: [...schemes],
+  accent: [...schemes],
+  neutral: ["sand", "gray", "slate"],
 };
 
 const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref) => {
