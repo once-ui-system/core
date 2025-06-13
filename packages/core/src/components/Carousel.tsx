@@ -102,7 +102,7 @@ const Carousel: React.FC<CarouselProps> = ({
   }
 
   return (
-    <Column fillWidth gap="12" {...rest}>
+    <Column fillWidth gap="12" {...rest} aspectRatio={undefined}>
       <RevealFx
         fillWidth
         trigger={isTransitioning}
