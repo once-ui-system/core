@@ -21,6 +21,8 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   icon?: string;
   wordmark?: string;
   href?: string;
+  dark?: boolean;
+  light?: boolean;
 }
 
 const Logo: React.FC<LogoProps> = ({
@@ -30,6 +32,8 @@ const Logo: React.FC<LogoProps> = ({
   wordmark,
   className,
   style,
+  dark,
+  light,
   ...props
 }) => {
   useEffect(() => {
@@ -69,7 +73,7 @@ const Logo: React.FC<LogoProps> = ({
 
   return href ? (
     <Link
-      className={classNames("radius-l", "display-flex", "fit-height", className)}
+      className={classNames("radius-l", "display-flex", "fit-height", dark ? "dark-flex" : "", light ? "light-flex" : "", className)}
       style={style}
       href={href}
       aria-label="Trademark"
@@ -80,6 +84,8 @@ const Logo: React.FC<LogoProps> = ({
   ) : (
     <Flex
       className={classNames(className)}
+      dark={dark}
+      light={light}
       radius="l"
       fitHeight
       style={style}
