@@ -162,7 +162,7 @@ const Carousel: React.FC<CarouselProps> = ({
             {items[activeIndex]?.slide}
           </Flex>
         )}
-        <Row className={styles.controls} position="absolute" top="0" left="0" fill horizontal="space-between">
+        <Row className={styles.controls} position="absolute" top="0" left="0" radius="l" overflow="hidden" fill horizontal="space-between">
           {activeIndex > 0 ? (
             <Row className={styles.left} cursor="interactive" maxWidth={12} fill vertical="center" onClick={handlePrevClick}>
               {controls && (
