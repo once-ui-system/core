@@ -1,0 +1,32 @@
+.controls {
+  &:hover, &:focus-within {
+    .fade {
+      opacity: 0.5;
+    }
+
+    .button {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+
+.fade, .button {
+  opacity: 0;
+}
+
+.button {
+  animation-delay: 0.2s;
+}
+
+.left {
+  .button {
+    transform: translateX(-1rem);
+  }
+}
+
+.right {
+  .button {
+    transform: translateX(1rem);
+  }
+}

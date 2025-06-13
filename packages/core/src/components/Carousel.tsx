@@ -1,27 +1,39 @@
 "use client";
 
-import { Flex, RevealFx, Scroller, Media } from ".";
-import { useEffect, useState, useRef } from "react";
+import { SpacingToken } from "@/types";
+import { Flex, RevealFx, Scroller, Media, Column, Row, IconButton, Fade } from ".";
+import { useEffect, useState, useRef, TouchEvent } from "react";
+import styles from "./Carousel.module.scss";
 
-interface Image {
-  src: string;
-  alt: string;
+interface CarouselItem {
+  slide: string | React.ReactNode;
+  alt?: string;
+}
+
+interface ThumbnailItem {
+  scaling?: number;
+  height?: SpacingToken | number;
+  sizes?: string;
 }
 
 interface CarouselProps extends React.ComponentProps<typeof Flex> {
-  images: Image[];
+  items: CarouselItem[];
+  controls?: boolean;
   indicator?: "line" | "thumbnail";
   aspectRatio?: string;
   sizes?: string;
   revealedByDefault?: boolean;
+  thumbnail?: ThumbnailItem;
 }
 
 const Carousel: React.FC<CarouselProps> = ({
-  images = [],
+  items = [],
+  controls = true,
   indicator = "line",
   aspectRatio = "16 / 9",
   sizes,
   revealedByDefault = false,
+  thumbnail = { scaling: 1, height: "80", sizes: "120px" },
   ...rest
 }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -29,17 +41,29 @@ const Carousel: React.FC<CarouselProps> = ({
   const [initialTransition, setInitialTransition] = useState(revealedByDefault);
   const nextImageRef = useRef<HTMLImageElement | null>(null);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const touchStartXRef = useRef<number | null>(null);
+  const touchEndXRef = useRef<number | null>(null);
 
   const preloadNextImage = (nextIndex: number) => {
-    if (nextIndex >= 0 && nextIndex < images.length) {
-      nextImageRef.current = new Image();
-      nextImageRef.current.src = images[nextIndex].src;
+    if (nextIndex >= 0 && nextIndex < items.length) {
+      const item = items[nextIndex];
+      if (typeof item.slide === 'string') {
+        nextImageRef.current = new Image();
+        nextImageRef.current.src = item.slide;
+      }
     }
   };
 
-  const handleImageClick = () => {
-    if (images.length > 1) {
-      const nextIndex = (activeIndex + 1) % images.length;
+  const handlePrevClick = () => {
+    if (items.length > 1 && activeIndex > 0) {
+      const prevIndex = activeIndex - 1;
+      handleControlClick(prevIndex);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (items.length > 1 && activeIndex < items.length - 1) {
+      const nextIndex = activeIndex + 1;
       handleControlClick(nextIndex);
     }
   };
@@ -73,40 +97,107 @@ const Carousel: React.FC<CarouselProps> = ({
     };
   }, [revealedByDefault, initialTransition]);
 
-  if (images.length === 0) {
+  if (items.length === 0) {
     return null;
   }
 
   return (
-    <Flex fillWidth gap="12" direction="column" {...rest}>
+    <Column fillWidth gap="12" {...rest}>
       <RevealFx
-        onClick={handleImageClick}
         fillWidth
         trigger={isTransitioning}
         translateY="16"
         aspectRatio={aspectRatio}
         speed="fast"
+        onTouchStart={(e: React.TouchEvent) => {
+          touchStartXRef.current = e.touches[0].clientX;
+        }}
+        onTouchEnd={(e: React.TouchEvent) => {
+          if (touchStartXRef.current === null) return;
+          
+          const touchEndX = e.changedTouches[0].clientX;
+          touchEndXRef.current = touchEndX;
+          
+          const diffX = touchStartXRef.current - touchEndX;
+          
+          // Detect swipe (more than 50px movement is considered a swipe)
+          if (Math.abs(diffX) > 50) {
+            if (diffX > 0) {
+              handleNextClick();
+            } else {
+              handlePrevClick();
+            }
+          }
+          
+          touchStartXRef.current = null;
+          touchEndXRef.current = null;
+        }}
       >
-        <Media
-          sizes={sizes}
-          priority
-          radius="l"
-          border="neutral-alpha-weak"
-          alt={images[activeIndex]?.alt}
-          aspectRatio={aspectRatio}
-          src={images[activeIndex]?.src}
-          style={{
-            ...(images.length > 1 && {
-              cursor: "pointer",
-            }),
-          }}
-        />
+        {typeof items[activeIndex]?.slide === 'string' ? (
+          <Media
+            sizes={sizes}
+            priority
+            radius="l"
+            border="neutral-alpha-weak"
+            overflow="hidden"
+            alt={items[activeIndex]?.alt || ''}
+            aspectRatio={aspectRatio}
+            src={items[activeIndex]?.slide as string}
+            style={{
+              ...(items.length > 1 && {
+              }),
+            }}
+          />
+        ) : (
+          <Flex 
+            radius="l"
+            overflow="hidden"
+            border="neutral-alpha-weak"
+            aspectRatio={aspectRatio}
+            style={{
+              ...(items.length > 1 && {
+              }),
+            }}
+          >
+            {items[activeIndex]?.slide}
+          </Flex>
+        )}
+        <Row className={styles.controls} position="absolute" top="0" left="0" fill horizontal="space-between">
+          {activeIndex > 0 ? (
+            <Row className={styles.left} cursor="interactive" maxWidth={12} fill vertical="center" onClick={handlePrevClick}>
+              {controls && (
+                <>
+                  <Fade hide="m" transition="micro-medium" className={styles.fade} position="absolute" left="0" top="0" to="right" fillHeight maxWidth={6}/>
+                  <Flex hide="m" transition="micro-medium" className={styles.button} marginLeft="m" radius="l" overflow="hidden" background="surface">
+                    <IconButton tabIndex={0} onClick={handlePrevClick} variant="secondary" icon="chevronLeft" />
+                  </Flex>
+                </>
+              )}
+            </Row>
+          ) : (
+            <Flex maxWidth={12}/>
+          )}
+          {activeIndex < items.length - 1 ? (
+            <Row className={styles.right} cursor="interactive" maxWidth={12} fill vertical="center" horizontal="end" onClick={handleNextClick}>
+              {controls && (
+                <>
+                  <Fade hide="m" transition="micro-medium" className={styles.fade} position="absolute" right="0" top="0" to="left" fillHeight maxWidth={6}/>
+                  <Flex hide="m" transition="micro-medium" className={styles.button} marginRight="m" radius="l" overflow="hidden" background="surface">
+                    <IconButton tabIndex={0} onClick={handleNextClick} variant="secondary" icon="chevronRight" />
+                  </Flex>
+                </>
+              )}
+            </Row>
+          ) : (
+            <Flex maxWidth={12}/>
+          )}
+        </Row>
       </RevealFx>
-      {images.length > 1 && (
+      {items.length > 1 && (
         <>
           {indicator === "line" ? (
             <Flex gap="4" paddingX="s" fillWidth horizontal="center">
-              {images.map((_, index) => (
+              {items.map((_, index) => (
                 <Flex
                   radius="full"
                   key={index}
@@ -121,40 +212,54 @@ const Carousel: React.FC<CarouselProps> = ({
                   cursor="interactive"
                   fillWidth
                   height="2"
-                ></Flex>
+                />
               ))}
             </Flex>
           ) : (
-            <Scroller fillWidth gap="4" onItemClick={handleControlClick}>
-              {images.map((image, index) => (
+            <Scroller gap="4" onItemClick={handleControlClick}>
+              {items.map((item, index) => (
                 <Flex
                   key={index}
                   style={{
-                    border: activeIndex === index ? "2px solid var(--brand-solid-strong)" : "none",
-                    borderRadius: "var(--radius-m-nest-4)",
-                    transition: "border 0.3s ease",
+                    border: activeIndex === index ? "2px solid var(--brand-solid-strong)" : "2px solid var(--static-transparent)",
                   }}
-                  cursor="interactive"
+                  radius="m-8"
                   padding="4"
-                  aspectRatio={aspectRatio}
-                  height="80"
+                  cursor="interactive"
+                  minHeight={thumbnail.height}
+                  maxHeight={thumbnail.height}
                 >
-                  <Media
-                    alt={image.alt}
-                    aspectRatio="1 / 1"
-                    sizes="120px"
-                    src={image.src}
-                    cursor="interactive"
-                    radius="m"
-                    transition="macro-medium"
-                  />
+                  {typeof item.slide === 'string' ? (
+                    <Media
+                      alt={item.alt || ''}
+                      aspectRatio={aspectRatio}
+                      sizes={thumbnail.sizes}
+                      src={item.slide}
+                      cursor="interactive"
+                      radius="m"
+                      transition="macro-medium"
+                    />
+                  ) : (
+                    <Flex
+                      aspectRatio={aspectRatio}
+                      cursor="interactive"
+                      radius="m"
+                      transition="macro-medium"
+                      overflow="hidden"
+                      fill
+                    >
+                      <Flex fill style={{ transform: `scale(${thumbnail.scaling})` }}>
+                        {item.slide}
+                      </Flex>
+                    </Flex>
+                  )}
                 </Flex>
               ))}
             </Scroller>
           )}
         </>
       )}
-    </Flex>
+    </Column>
   );
 };
 

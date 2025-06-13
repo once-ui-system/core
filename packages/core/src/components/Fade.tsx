@@ -3,6 +3,7 @@ import styles from "./Fade.module.scss";
 
 import { Flex } from ".";
 import { ColorScheme, ColorWeight, SpacingToken } from "../types";
+import classNames from "classnames";
 
 export type BaseColor =
   | `${ColorScheme}-${ColorWeight}`
@@ -36,6 +37,8 @@ const Fade = forwardRef<HTMLDivElement, FadeProps>(
       },
       blur = 0.5,
       children,
+      className,
+      style,
       ...rest
     },
     ref,
@@ -73,9 +76,10 @@ const Fade = forwardRef<HTMLDivElement, FadeProps>(
               backgroundSize: `100% 100%, var(--static-space-${pattern.size}) var(--static-space-${pattern.size})`,
               backdropFilter: `blur(${blur}rem)`,
             }),
+            ...style,
           } as React.CSSProperties
         }
-        className={styles.mask}
+        className={classNames(styles.mask, className)}
         {...rest}
       >
         {children}

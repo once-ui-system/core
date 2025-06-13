@@ -8,6 +8,8 @@ import {
   Line,
   LetterFx,
   StylePanel,
+  Carousel,
+  Media,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -48,6 +50,15 @@ export default function Home() {
         >
           Explore docs
         </Button>
+        <Carousel
+          indicator="thumbnail"
+          thumbnail={{ horizontal: "center" }}
+          items={[
+            { slide: <Media radius="l" src="/images/demo.jpg" /> },
+            { slide: <Column fill center background="neutral-medium">Any React node</Column> },
+            { slide: <Column fill center background="neutral-medium">Some other react node</Column> }
+          ]}
+        />
         <StylePanel/>
       </Column>
     </Column>
