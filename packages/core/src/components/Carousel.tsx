@@ -225,6 +225,7 @@ const Carousel: React.FC<CarouselProps> = ({
                   }}
                   radius="m-8"
                   padding="4"
+                  aspectRatio={aspectRatio}
                   cursor="interactive"
                   minHeight={thumbnail.height}
                   maxHeight={thumbnail.height}
