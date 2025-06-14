@@ -1,8 +1,8 @@
 :root {
     --font-heading: var(--font-heading);
-    --font-body: var(--font-body);
-    --font-label: var(--font-label);
-    --font-code: var(--font-code);
+    --font-body:    var(--font-body);
+    --font-label:   var(--font-label);
+    --font-code:    var(--font-code);
 
     --font-size-heading-multiplier:   1;
     --font-size-body-multiplier:      1;
@@ -12,10 +12,9 @@
     --line-height-body-multiplier:    1;
     --line-height-label-multiplier:   1;
 
-    /* FONT SCALING */
-    --font-scaling-desktop: 16px;
-    --font-scaling-tablet:  15px;
-    --font-scaling-mobile:  14px;
+    --font-scaling-desktop:  16px;
+    --font-scaling-tablet:   16px;
+    --font-scaling-mobile:   15px;
 
     --cursor-interactive:    pointer;
 
@@ -25,6 +24,86 @@
     --backdrop-filter:       none;
     --surface-border:        var(--static-transparent);
     --surface-background:    var(--neutral-background-medium);
+}
+
+[data-cursor-interactive="pointer"] {
+    --cursor-interactive: pointer;
+}
+
+[data-cursor-interactive="default"] {
+    --cursor-interactive: default;
+}
+
+[data-desktop-size="18"] {
+    --font-scaling-desktop: 18px;
+}
+
+[data-desktop-size="17"] {
+    --font-scaling-desktop: 17px;
+}
+
+[data-desktop-size="16"] {
+    --font-scaling-desktop: 16px;
+}
+
+[data-desktop-size="15"] {
+    --font-scaling-desktop: 15px;
+}
+
+[data-desktop-size="14"] {
+    --font-scaling-desktop: 14px;
+}
+
+[data-desktop-size="13"] {
+    --font-scaling-desktop: 13px;
+}
+
+[data-tablet-size="18"] {
+    --font-scaling-tablet: 18px;
+}
+
+[data-tablet-size="17"] {
+    --font-scaling-tablet: 17px;
+}
+
+[data-tablet-size="16"] {
+    --font-scaling-tablet: 16px;
+}
+
+[data-tablet-size="15"] {
+    --font-scaling-tablet: 15px;
+}
+
+[data-tablet-size="14"] {
+    --font-scaling-tablet: 14px;
+}
+
+[data-tablet-size="13"] {
+    --font-scaling-tablet: 13px;
+}
+
+[data-mobile-size="18"] {
+    --font-scaling-mobile: 18px;
+}
+
+[data-mobile-size="17"] {
+    --font-scaling-mobile: 17px;
+}
+
+[data-mobile-size="16"] {
+    --font-scaling-mobile: 16px;
+}
+
+[data-mobile-size="15"] {
+    --font-scaling-mobile: 15px;
+}
+
+[data-mobile-size="14"] {
+    --font-scaling-mobile: 14px;
+}
+
+[data-mobile-size="13"] {
+    --font-scaling-mobile: 13px;
 }
 
 [data-theme="dark"] {
