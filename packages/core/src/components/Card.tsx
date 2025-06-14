@@ -26,8 +26,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           (onClick || href) && "radius-l",
         )}
         href={href}
-        onClick={onClick ? onClick : () => {}}
-        role="button"
+        onClick={onClick && onClick}
+        role={onClick ? "button" : href ? "link" : "none"}
         ref={ref}
       >
         <Flex
@@ -38,7 +38,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           cursor="interactive"
           align="left"
           className={styles.card}
-          onClick={onClick}
+          onClick={onClick && onClick}
           {...rest}
           style={{
             ...style,
