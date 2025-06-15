@@ -10,10 +10,11 @@ interface CardProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
   href?: string;
   onClick?: () => void;
+  fillHeight?: boolean;
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ children, href, onClick, style, className, ...rest }, ref) => {
+  ({ children, href, onClick, style, className, fillHeight, ...rest }, ref) => {
     return (
       <ElementType
         tabIndex={onClick || href ? 0 : undefined}
@@ -21,6 +22,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           "reset-button-styles",
           "display-flex",
           "fill-width",
+          fillHeight ? "fill-height" : undefined,
           "min-width-0",
           (onClick || href) && "focus-ring",
           (onClick || href) && "radius-l",
