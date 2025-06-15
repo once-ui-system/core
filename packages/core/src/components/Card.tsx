@@ -16,7 +16,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ children, href, onClick, style, className, ...rest }, ref) => {
     return (
       <ElementType
-        tabIndex={0}
+        tabIndex={onClick || href ? 0 : undefined}
         className={classNames(
           "reset-button-styles",
           "display-flex",
