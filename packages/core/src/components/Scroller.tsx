@@ -4,12 +4,14 @@ import React, { useEffect, useRef, useState } from "react";
 import classNames from "classnames";
 import { Flex, IconButton, BaseColor, Fade } from ".";
 import styles from "./Scroller.module.scss";
+import { RadiusSize } from "@/types";
 
 interface ScrollerProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
   direction?: "row" | "column";
   fadeColor?: BaseColor;
   onItemClick?: (index: number) => void;
+  radius?: RadiusSize;
 }
 
 interface ScrollableChildProps {
@@ -21,6 +23,7 @@ const Scroller: React.FC<ScrollerProps> = ({
   children,
   direction = "row",
   fadeColor,
+  radius,
   className,
   style,
   onItemClick,
@@ -156,7 +159,7 @@ const Scroller: React.FC<ScrollerProps> = ({
       <Flex
         fillWidth
         zIndex={0}
-        radius="m"
+        radius={radius}
         direction={direction}
         className={classNames(styles.scroller, styles[direction])}
         ref={scrollerRef}
