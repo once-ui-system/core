@@ -20,7 +20,7 @@ import {
   autoUpdate,
   Placement,
 } from "@floating-ui/react-dom";
-import { Flex, Dropdown, Column } from ".";
+import { Flex, Dropdown, Column, Row } from ".";
 import styles from "./DropdownWrapper.module.scss";
 
 export interface DropdownWrapperProps {
@@ -61,6 +61,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     ref,
   ) => {
     const wrapperRef = useRef<HTMLDivElement>(null);
+    const triggerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const [mounted, setMounted] = useState(false);
     const [internalIsOpen, setInternalIsOpen] = useState(false);
@@ -80,13 +81,18 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     );
 
     // State to track if we're in a browser environment for portal rendering
-  const [isBrowser, setIsBrowser] = useState(false);
+    const [isBrowser, setIsBrowser] = useState(false);
 
-  useEffect(() => {
-    setIsBrowser(true);
-  }, []);
+    useEffect(() => {
+      setIsBrowser(true);
+    }, []);
 
-  const { x, y, strategy, refs, update } = useFloating({
+    // Store the reference element's width for fillWidth calculation
+    const [referenceWidth, setReferenceWidth] = useState<number | null>(null);
+
+    // We'll measure the width directly in the floating UI middleware
+
+    const { x, y, strategy, refs, update } = useFloating({
       placement: placement,
       open: isOpen,
       middleware: [
@@ -95,9 +101,17 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         shift(),
         size({
           apply({ availableWidth, availableHeight, elements }) {
+            // Get the width directly from the trigger element when needed
+            let width = "auto";
+            
+            if (fillWidth && triggerRef.current) {
+              const triggerWidth = triggerRef.current.getBoundingClientRect().width;
+              width = `${Math.max(triggerWidth, 200)}px`;
+            }
+
             Object.assign(elements.floating.style, {
-              width: fillWidth ? "100%" : "auto",
-              minWidth: minWidth ? `${minWidth}rem` : undefined,
+              width: width,
+              minWidth: minWidth ? `${minWidth}rem` : (fillWidth ? width : undefined),
               maxWidth: maxWidth ? `${maxWidth}rem` : `${availableWidth}px`,
               minHeight: `${Math.min(minHeight || 0)}px`,
               maxHeight: `${availableHeight}px`,
@@ -113,8 +127,13 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     useEffect(() => {
       if (wrapperRef.current) {
         refs.setReference(wrapperRef.current);
+
+        // Store the reference element's width for fillWidth calculation
+        if (fillWidth) {
+          setReferenceWidth(wrapperRef.current.getBoundingClientRect().width);
+        }
       }
-    }, [refs, mounted]);
+    }, [refs, mounted, fillWidth]);
 
     useEffect(() => {
       if (!mounted) {
@@ -124,6 +143,17 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     // Store the previously focused element to restore focus when dropdown closes
     const previouslyFocusedElement = useRef<Element | null>(null);
+
+    // Force update when dropdown opens
+    useEffect(() => {
+      if (isOpen && mounted) {
+        // Small delay to ensure DOM is ready
+        const timeoutId = setTimeout(() => {
+          update();
+        }, 0);
+        return () => clearTimeout(timeoutId);
+      }
+    }, [isOpen, mounted, update]);
 
     useEffect(() => {
       if (isOpen && mounted) {
@@ -178,7 +208,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         // Check if the click is inside the dropdown or the wrapper
         const isClickInDropdown = dropdownRef.current && dropdownRef.current.contains(event.target as Node);
         const isClickInWrapper = wrapperRef.current && wrapperRef.current.contains(event.target as Node);
-        
+
         // Only close if the click is outside both the dropdown and the wrapper
         if (!isClickInDropdown && !isClickInWrapper) {
           handleOpenChange(false);
@@ -193,7 +223,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         // Check if focus moved to the dropdown or stayed in the wrapper
         const isFocusInDropdown = dropdownRef.current && dropdownRef.current.contains(event.relatedTarget as Node);
         const isFocusInWrapper = wrapperRef.current && wrapperRef.current.contains(event.relatedTarget as Node);
-        
+
         // Only close if focus moved outside both the dropdown and the wrapper
         if (!isFocusInDropdown && !isFocusInWrapper) {
           handleOpenChange(false);
@@ -241,13 +271,13 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
             )
           ) as HTMLElement[];
-          
+
           if (focusableElements.length === 0) return;
-          
+
           // Get the first and last focusable elements
           const firstElement = focusableElements[0];
           const lastElement = focusableElements[focusableElements.length - 1];
-          
+
           // Handle tab and shift+tab to cycle through focusable elements
           if (e.shiftKey) { // Shift+Tab
             if (document.activeElement === firstElement) {
@@ -260,7 +290,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               firstElement.focus();
             }
           }
-          
+
           return;
         }
 
@@ -326,6 +356,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     return (
       <Column
         fillWidth={fillWidth}
+        fitWidth={!fillWidth}
         transition="macro-medium"
         style={{
           ...style,
@@ -344,7 +375,9 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
-        {trigger}
+        <Row ref={triggerRef} fillWidth={fillWidth} fitWidth={!fillWidth}>
+          {trigger}
+        </Row>
         {isOpen && dropdown && isBrowser && createPortal(
           <Flex
             zIndex={1}

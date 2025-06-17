@@ -29,6 +29,7 @@ interface SelectProps
   searchable?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  fillWidth?: boolean;
 }
 
 const Select = forwardRef<HTMLDivElement, SelectProps>(
@@ -44,6 +45,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       maxWidth,
       placement,
       className,
+      fillWidth,
       style,
       ...rest
     },
@@ -161,7 +163,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     return (
       <DropdownWrapper
-        fillWidth
+        fillWidth={fillWidth}
+        minWidth={minWidth}
+        maxWidth={maxWidth}
         ref={(node) => {
           selectRef.current = node;
           if (typeof ref === "function") ref(node);
@@ -170,7 +174,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         isOpen={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
         placement={placement}
-        minHeight={minHeight}
+        style={{
+          ...style
+        }}
         trigger={
           <Input
             {...rest}

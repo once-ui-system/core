@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   Heading,
   Text,
@@ -14,19 +14,36 @@ import {
   Carousel,
   Media,
   EmojiPicker,
+  EmojiPickerDropdown,
   Flex,
   OgCard,
   Icon,
-  EmojiPickerDropdown,
   Textarea,
   Row,
   IconButton,
+  Select,
+  Option,
+  DropdownWrapper,
 } from "@once-ui-system/core";
 
 export default function Home() {
   const [selectedEmoji, setSelectedEmoji] = React.useState<string>("");
   const [showEmojiPicker, setShowEmojiPicker] = React.useState<boolean>(false);
   const [dropdownEmoji, setDropdownEmoji] = React.useState<string>("");
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [comment, setComment] = useState("");
+  
+  // Custom dropdown state
+  const [isCustomDropdownOpen, setIsCustomDropdownOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
+  
+  // Options for the custom dropdown
+  const customOptions = [
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+    { label: "Option 3", value: "option3" },
+    { label: "Option 4", value: "option4" },
+  ];
 
   const handleEmojiSelect = (emoji: string) => {
     setSelectedEmoji(emoji);
@@ -143,6 +160,53 @@ export default function Home() {
                 </Row>
               }
             ><EmojiPickerDropdown onSelect={(emoji) => console.log(emoji)} trigger={<IconButton icon="smiley" size="m" variant="tertiary" />} /></Textarea>
+          </Column>
+          <Column fillWidth padding="16">
+            <Select
+              fillWidth
+              id="basic-select"
+              label="Choose a country"
+              value={selectedCountry}
+              onSelect={setSelectedCountry}
+              options={[
+                { label: "United States", value: "us" },
+                { label: "Canada", value: "ca" },
+                { label: "United Kingdom", value: "uk" },
+                { label: "Australia", value: "au" }
+              ]}
+            />
+          </Column>
+          
+          <Column fillWidth padding="16">
+            <Text marginBottom="8">Custom Dropdown Example</Text>
+            <DropdownWrapper
+              minWidth={12}
+              isOpen={isCustomDropdownOpen}
+              onOpenChange={setIsCustomDropdownOpen}
+              trigger={
+                <Button 
+                  variant="secondary" 
+                  suffixIcon="chevronDown"
+                >
+                  {selectedOption ? customOptions.find(opt => opt.value === selectedOption)?.label : "Select an option"}
+                </Button>
+              }
+              dropdown={
+                <Column padding="4" gap="2">
+                  {customOptions.map((option) => (
+                    <Option
+                      key={option.value}
+                      label={option.label}
+                      value={option.value}
+                      onClick={() => {
+                        setSelectedOption(option.value);
+                        setIsCustomDropdownOpen(false);
+                      }}
+                    />
+                  ))}
+                </Column>
+              }
+            />
           </Column>
         <OgCard 
           url="https://once-ui.com" 

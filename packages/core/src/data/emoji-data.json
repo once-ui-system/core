@@ -761,17 +761,6 @@
       ]
     },
     {
-      "char": "😲",
-      "description": "astonished face",
-      "aliases": [
-        "astonished"
-      ],
-      "tags": [
-        "amazed",
-        "gasp"
-      ]
-    },
-    {
       "char": "😳",
       "description": "flushed face",
       "aliases": [
@@ -3404,14 +3393,6 @@
       "tags": []
     },
     {
-      "char": "🤙",
-      "description": "call me hand",
-      "aliases": [
-        "call_me_hand"
-      ],
-      "tags": []
-    },
-    {
       "char": "👈",
       "description": "backhand index pointing left",
       "aliases": [
@@ -3620,14 +3601,6 @@
       "description": "mechanical leg",
       "aliases": [
         "mechanical_leg"
-      ],
-      "tags": []
-    },
-    {
-      "char": "🦵",
-      "description": "leg",
-      "aliases": [
-        "leg"
       ],
       "tags": []
     },
@@ -11336,6 +11309,17 @@
       ],
       "tags": [
         "trash"
+      ]
+    },
+    {
+      "char": "🔒",
+      "description": "locked",
+      "aliases": [
+        "lock"
+      ],
+      "tags": [
+        "security",
+        "private"
       ]
     },
     {
