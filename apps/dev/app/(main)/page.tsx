@@ -18,6 +18,9 @@ import {
   OgCard,
   Icon,
   EmojiPickerDropdown,
+  Textarea,
+  Row,
+  IconButton,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -120,6 +123,27 @@ export default function Home() {
             </Flex>
           </Column>
         </Column>
+        <Column gap="8" fillWidth>
+            <Textarea
+              id="comment-input"
+              placeholder="Add a comment..."
+              lines="auto"
+              hasSuffix={
+                <Row
+                  style={{ opacity: 1 }}
+                  transition="micro-medium">
+                  <IconButton
+                    style={{
+                      marginRight: "-0.25rem"
+                    }}
+                    icon="send"
+                    size="m"
+                    variant="primary" 
+                  />
+                </Row>
+              }
+            ><EmojiPickerDropdown onSelect={(emoji) => console.log(emoji)} trigger={<IconButton icon="smiley" size="m" variant="tertiary" />} /></Textarea>
+          </Column>
         <OgCard 
           url="https://once-ui.com" 
           serviceConfig={{

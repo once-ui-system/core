@@ -6294,6 +6294,16 @@
       ]
     },
     {
+      "char": "🪿",
+      "description": "goose",
+      "aliases": [
+        "goose"
+      ],
+      "tags": [
+        "honk"
+      ]
+    },
+    {
       "char": "🐸",
       "description": "frog",
       "aliases": [
@@ -11326,17 +11336,6 @@
       ],
       "tags": [
         "trash"
-      ]
-    },
-    {
-      "char": "🔒",
-      "description": "locked",
-      "aliases": [
-        "lock"
-      ],
-      "tags": [
-        "security",
-        "private"
       ]
     },
     {

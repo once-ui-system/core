@@ -10,6 +10,7 @@ import React, {
   useCallback,
   KeyboardEvent,
 } from "react";
+import { createPortal } from "react-dom";
 import {
   useFloating,
   shift,
@@ -19,7 +20,7 @@ import {
   autoUpdate,
   Placement,
 } from "@floating-ui/react-dom";
-import { Flex, Dropdown } from ".";
+import { Flex, Dropdown, Column } from ".";
 import styles from "./DropdownWrapper.module.scss";
 
 export interface DropdownWrapperProps {
@@ -78,7 +79,14 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       [onOpenChange, isControlled],
     );
 
-    const { x, y, strategy, refs, update } = useFloating({
+    // State to track if we're in a browser environment for portal rendering
+  const [isBrowser, setIsBrowser] = useState(false);
+
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
+
+  const { x, y, strategy, refs, update } = useFloating({
       placement: placement,
       open: isOpen,
       middleware: [
@@ -114,14 +122,30 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       }
     }, [mounted]);
 
+    // Store the previously focused element to restore focus when dropdown closes
+    const previouslyFocusedElement = useRef<Element | null>(null);
+
     useEffect(() => {
       if (isOpen && mounted) {
+        // Store the currently focused element before focusing the dropdown
+        previouslyFocusedElement.current = document.activeElement;
+
         requestAnimationFrame(() => {
           if (dropdownRef.current) {
             refs.setFloating(dropdownRef.current);
             update();
             // Reset focus index when opening
             setFocusedIndex(-1);
+
+            // Find all focusable elements in the dropdown
+            const focusableElements = dropdownRef.current.querySelectorAll(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+
+            // Focus the first focusable element
+            if (focusableElements.length > 0) {
+              (focusableElements[0] as HTMLElement).focus();
+            }
 
             // Set up initial keyboard navigation
             const optionElements = dropdownRef.current
@@ -143,27 +167,40 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             }
           }
         });
+      } else if (!isOpen && previouslyFocusedElement.current) {
+        // Restore focus when dropdown closes
+        (previouslyFocusedElement.current as HTMLElement).focus();
       }
     }, [isOpen, mounted, refs, update]);
 
     const handleClickOutside = useCallback(
       (event: MouseEvent) => {
-        if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        // Check if the click is inside the dropdown or the wrapper
+        const isClickInDropdown = dropdownRef.current && dropdownRef.current.contains(event.target as Node);
+        const isClickInWrapper = wrapperRef.current && wrapperRef.current.contains(event.target as Node);
+        
+        // Only close if the click is outside both the dropdown and the wrapper
+        if (!isClickInDropdown && !isClickInWrapper) {
           handleOpenChange(false);
           setFocusedIndex(-1);
         }
       },
-      [handleOpenChange, wrapperRef],
+      [handleOpenChange, wrapperRef, dropdownRef],
     );
 
     const handleFocusOut = useCallback(
       (event: FocusEvent) => {
-        if (wrapperRef.current && !wrapperRef.current.contains(event.relatedTarget as Node)) {
+        // Check if focus moved to the dropdown or stayed in the wrapper
+        const isFocusInDropdown = dropdownRef.current && dropdownRef.current.contains(event.relatedTarget as Node);
+        const isFocusInWrapper = wrapperRef.current && wrapperRef.current.contains(event.relatedTarget as Node);
+        
+        // Only close if focus moved outside both the dropdown and the wrapper
+        if (!isFocusInDropdown && !isFocusInWrapper) {
           handleOpenChange(false);
           setFocusedIndex(-1);
         }
       },
-      [handleOpenChange, wrapperRef],
+      [handleOpenChange, wrapperRef, dropdownRef],
     );
 
     useEffect(() => {
@@ -196,6 +233,37 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           return;
         }
 
+        // Handle tab key for focus trapping
+        if (e.key === "Tab" && dropdownRef.current) {
+          // Find all focusable elements in the dropdown
+          const focusableElements = Array.from(
+            dropdownRef.current.querySelectorAll(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            )
+          ) as HTMLElement[];
+          
+          if (focusableElements.length === 0) return;
+          
+          // Get the first and last focusable elements
+          const firstElement = focusableElements[0];
+          const lastElement = focusableElements[focusableElements.length - 1];
+          
+          // Handle tab and shift+tab to cycle through focusable elements
+          if (e.shiftKey) { // Shift+Tab
+            if (document.activeElement === firstElement) {
+              e.preventDefault();
+              lastElement.focus();
+            }
+          } else { // Tab
+            if (document.activeElement === lastElement) {
+              e.preventDefault();
+              firstElement.focus();
+            }
+          }
+          
+          return;
+        }
+
         if (e.key === "ArrowDown" || e.key === "ArrowUp") {
           e.preventDefault();
 
@@ -225,6 +293,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               (el as HTMLElement).classList.add("highlighted");
               // Scroll into view if needed
               (el as HTMLElement).scrollIntoView({ block: "nearest" });
+              // Focus the element
+              (el as HTMLElement).focus();
             } else {
               (el as HTMLElement).classList.remove("highlighted");
             }
@@ -254,16 +324,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     );
 
     return (
-      <Flex
+      <Column
         fillWidth={fillWidth}
-        direction="column"
         transition="macro-medium"
         style={{
-          ...(minHeight && isOpen
-            ? {
-                marginBottom: `${minHeight + 8}px`,
-              }
-            : {}),
           ...style,
         }}
         className={className}
@@ -273,15 +337,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             handleOpenChange(true);
             return;
           }
-
-          if (
-            closeAfterClick &&
-            dropdownRef.current &&
-            !dropdownRef.current.contains(e.target as Node)
-          ) {
-            handleOpenChange(false);
-            setFocusedIndex(-1);
-          }
         }}
         onKeyDown={handleKeyDown}
         tabIndex={-1}
@@ -290,7 +345,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         aria-expanded={isOpen}
       >
         {trigger}
-        {isOpen && dropdown && (
+        {isOpen && dropdown && isBrowser && createPortal(
           <Flex
             zIndex={1}
             className={styles.fadeIn}
@@ -302,6 +357,11 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               left: x ?? 0,
             }}
             role="listbox"
+            onKeyDown={handleKeyDown}
+            onClick={(e) => {
+              // Prevent clicks inside the dropdown from bubbling up
+              e.stopPropagation();
+            }}
           >
             <Dropdown
               minWidth={minWidth}
@@ -311,9 +371,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             >
               {dropdown}
             </Dropdown>
-          </Flex>
+          </Flex>,
+          document.body
         )}
-      </Flex>
+      </Column>
     );
   },
 );
