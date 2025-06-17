@@ -32,7 +32,10 @@ import {
   HiOutlineCheck,
   HiOutlineArrowsPointingIn,
   HiOutlineArrowsPointingOut,
+  HiOutlineFaceSmile,
 } from "react-icons/hi2";
+
+import { IoAtOutline, IoFastFoodOutline, IoFlagOutline, IoFootballOutline, IoGiftOutline, IoGlobeOutline, IoPawOutline } from "react-icons/io5";
 
 export const iconLibrary: Record<string, IconType> = {
   chevronUp: HiChevronUp,
@@ -66,6 +69,14 @@ export const iconLibrary: Record<string, IconType> = {
   computer: HiOutlineComputerDesktop,
   minimize: HiOutlineArrowsPointingIn,
   maximize: HiOutlineArrowsPointingOut,
+  smiley: HiOutlineFaceSmile,
+  paw: IoPawOutline,
+  food: IoFastFoodOutline,
+  ball: IoFootballOutline,
+  world: IoGlobeOutline,
+  gift: IoGiftOutline,
+  symbol: IoAtOutline,
+  flag: IoFlagOutline
 };
 
 export type IconLibrary = typeof iconLibrary;

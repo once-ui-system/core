@@ -4,11 +4,11 @@ import { Column, Media, Text, Row, Card, Skeleton } from ".";
 import { useOgData } from "../hooks/useFetchOg";
 import { useMemo } from "react";
 
-// Service configuration for OgCard
 export interface OgServiceConfig {
   proxyImageUrl?: (url: string) => string;
   proxyFaviconUrl?: (url: string) => string;
   fetchOgUrl?: string;
+  proxyOgUrl?: string;
 }
 
 export interface OgData {
@@ -36,9 +36,11 @@ interface OgCardProps extends React.ComponentProps<typeof Card> {
   serviceConfig?: OgServiceConfig;
 }
 
+// This function is now simplified since the main proxying happens in the useFetchOg hook
 const getProxiedImageUrl = (imageUrl: string | undefined, proxyFn?: (url: string) => string): string => {
   if (!imageUrl) return "";
 
+  // Local URLs don't need proxying
   if (imageUrl.startsWith("/")) {
     return imageUrl;
   }
@@ -101,15 +103,19 @@ const OgCard = ({
     image: true,
     ...display,
   };
-  const { ogData: fetchedOgData, loading } = useOgData(url || null, serviceConfig.fetchOgUrl);
+  const { ogData: fetchedOgData, loading } = useOgData(url || null, serviceConfig.fetchOgUrl, serviceConfig.proxyOgUrl);
   const data = providedOgData || fetchedOgData;
-
+  
+  // With our updated useOgData hook, images are already proxied through the API
+  // We only need additional proxying if a custom proxyImageUrl function is provided
   const proxiedImageUrl = useMemo(() => {
-    return getProxiedImageUrl(data?.image, serviceConfig.proxyImageUrl);
+    return data?.image ? (serviceConfig.proxyImageUrl 
+      ? serviceConfig.proxyImageUrl(data.image)
+      : data.image) : "";
   }, [data?.image, serviceConfig.proxyImageUrl]);
 
   const faviconUrl = useMemo(() => {
-    return data?.faviconUrl || getFaviconUrl(data?.url, serviceConfig.proxyFaviconUrl);
+    return data?.faviconUrl || (data?.url ? getFaviconUrl(data.url, serviceConfig.proxyFaviconUrl) : "");
   }, [data?.faviconUrl, data?.url, serviceConfig.proxyFaviconUrl]);
 
   if (!loading && (!data || (!data.image && !data.title))) {
@@ -152,7 +158,6 @@ const OgCard = ({
                 maxWidth="16"
                 radius="xs"
                 border="neutral-alpha-weak"
-                unoptimized={true}
               />
             )}
             {displayOptions.domain && (

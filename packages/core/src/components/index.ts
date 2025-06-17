@@ -24,6 +24,8 @@ export * from "./Dialog";
 export * from "./Dropdown";
 export * from "./DropdownWrapper";
 export * from "./ElementType";
+export * from "./EmojiPicker";
+export * from "./EmojiPickerDropdown";
 export * from "./Fade";
 export * from "./Feedback";
 export * from "./Flex";

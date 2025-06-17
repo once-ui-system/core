@@ -1,3 +1,6 @@
+"use client";
+
+import React from "react";
 import {
   Heading,
   Text,
@@ -10,9 +13,27 @@ import {
   StylePanel,
   Carousel,
   Media,
+  EmojiPicker,
+  Flex,
+  OgCard,
+  Icon,
+  EmojiPickerDropdown,
 } from "@once-ui-system/core";
 
 export default function Home() {
+  const [selectedEmoji, setSelectedEmoji] = React.useState<string>("");
+  const [showEmojiPicker, setShowEmojiPicker] = React.useState<boolean>(false);
+  const [dropdownEmoji, setDropdownEmoji] = React.useState<string>("");
+
+  const handleEmojiSelect = (emoji: string) => {
+    setSelectedEmoji(emoji);
+    setShowEmojiPicker(false);
+  };
+  
+  const handleDropdownEmojiSelect = (emoji: string) => {
+    setDropdownEmoji(emoji);
+  };
+
   return (
     <Column fill center padding="l">
       <Column maxWidth="s" horizontal="center" gap="l" align="center">
@@ -50,9 +71,64 @@ export default function Home() {
         >
           Explore docs
         </Button>
+        
+        {/* EmojiPicker Example */}
+        <Column gap="32" align="center" fillWidth>
+          <Column gap="16" align="center" fillWidth>
+            <Heading variant="heading-strong-l">Standard Emoji Picker</Heading>
+            <Flex gap="16" align="center">
+              <Button 
+                variant="secondary"
+                onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              >
+                {selectedEmoji ? selectedEmoji : "Pick Emoji"}
+              </Button>
+              {selectedEmoji && (
+                <Text variant="heading-default-xl">
+                  Selected: {selectedEmoji}
+                </Text>
+              )}
+            </Flex>
+            {showEmojiPicker && (
+              <EmojiPicker 
+                onSelect={handleEmojiSelect} 
+                onClose={() => setShowEmojiPicker(false)} 
+              />
+            )}
+          </Column>
+          
+          <Column gap="16" align="center" fillWidth>
+            <Heading variant="heading-strong-l">Emoji Picker Dropdown</Heading>
+            <Flex gap="16" align="center">
+              <EmojiPickerDropdown
+                trigger={
+                  <Button variant="secondary" tabIndex={0}>
+                    <Flex gap="8" align="center">
+                      {dropdownEmoji ? dropdownEmoji : <Icon name="smiley" />}
+                      <Text>Add Emoji</Text>
+                    </Flex>
+                  </Button>
+                }
+                onSelect={handleDropdownEmojiSelect}
+                placement="bottom-start"
+              />
+              {dropdownEmoji && (
+                <Text variant="heading-default-xl">
+                  Selected: {dropdownEmoji}
+                </Text>
+              )}
+            </Flex>
+          </Column>
+        </Column>
+        <OgCard 
+          url="https://once-ui.com" 
+          serviceConfig={{
+            fetchOgUrl: '/api/og/fetch',
+            proxyOgUrl: '/api/og/proxy'
+          }}
+        />
         <Carousel
           indicator="thumbnail"
-          thumbnail={{ horizontal: "center" }}
           items={[
             { slide: <Media radius="l" src="/images/demo.jpg" /> },
             { slide: <Column fill center background="neutral-medium">Any React node</Column> },

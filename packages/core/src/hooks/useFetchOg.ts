@@ -10,7 +10,7 @@ interface OgData {
   faviconUrl?: string;
 }
 
-export function useOgData(url: string | null, customFetchUrl?: string) {
+export function useOgData(url: string | null, customFetchUrl?: string, customProxyUrl?: string) {
   const [ogData, setOgData] = useState<Partial<OgData> | null>(null);
   const [loading, setLoading] = useState(!!url);
 
@@ -28,6 +28,20 @@ export function useOgData(url: string | null, customFetchUrl?: string) {
           throw new Error(data.message || data.error);
         }
 
+        if (data.image) {
+          try {
+            const imageUrl = new URL(data.image);
+            if (imageUrl.origin !== window.location.origin) {
+              const proxyUrl = customProxyUrl
+                ? `${customProxyUrl}?url=${encodeURIComponent(data.image)}`
+                : `/api/og/proxy?url=${encodeURIComponent(data.image)}`;
+              data.image = proxyUrl;
+            }
+          } catch (e) {
+            console.warn("Could not parse image URL for proxying:", e);
+          }
+        }
+
         setOgData(data);
       } catch (error) {
         console.error("Error fetching og data:", error);
@@ -43,12 +57,12 @@ export function useOgData(url: string | null, customFetchUrl?: string) {
       setLoading(false);
       setOgData(null);
     }
-  }, [url]);
+  }, [url, customFetchUrl, customProxyUrl]);
 
   return { ogData, loading };
 }
 
-export function useOgImage(url: string | null, customFetchUrl?: string) {
-  const { ogData, loading } = useOgData(url, customFetchUrl);
+export function useOgImage(url: string | null, customFetchUrl?: string, customProxyUrl?: string) {
+  const { ogData, loading } = useOgData(url, customFetchUrl, customProxyUrl);
   return { ogImage: ogData?.image || null, loading };
 }

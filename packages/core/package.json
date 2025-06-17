@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "1.2.9",
+  "version": "1.2.10",
   "description": "Once UI for Next.js NPM package",
   "keywords": [
     "once-ui",
@@ -59,7 +59,7 @@
     }
   },
   "scripts": {
-    "build": "pnpm clean && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",
+    "build": "pnpm clean && pnpm generate-emoji-data && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",
     "build:css": "sass src/styles/index.scss:dist/css/styles.css src/tokens/index.scss:dist/css/tokens.css --style=compressed",
     "copy-files": "node scripts/copy-files.js",
     "clean": "rimraf dist",
@@ -68,7 +68,8 @@
     "format": "biome format --write .",
     "typecheck": "tsc --noEmit",
     "dev": "tsc --watch --preserveWatchOutput",
-    "prepack": "pnpm build"
+    "prepack": "pnpm build",
+    "generate-emoji-data": "node scripts/generate-emoji-data.js"
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.1.1",

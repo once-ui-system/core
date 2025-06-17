@@ -32,19 +32,19 @@
   grid-template-columns: repeat(8, 1fr);
 }
 
-.columns-8 {
+.columns-9 {
   grid-template-columns: repeat(9, 1fr);
 }
 
-.columns-8 {
+.columns-10 {
   grid-template-columns: repeat(10, 1fr);
 }
 
-.columns-8 {
+.columns-11 {
   grid-template-columns: repeat(11, 1fr);
 }
 
-.columns-8 {
+.columns-12 {
   grid-template-columns: repeat(12, 1fr);
 }
 
@@ -81,19 +81,19 @@
       grid-template-columns: repeat(8, 1fr);
   }
 
-  .tablet-columns-8 {
+  .tablet-columns-9 {
       grid-template-columns: repeat(9, 1fr);
   }
 
-  .tablet-columns-8 {
+  .tablet-columns-10 {
       grid-template-columns: repeat(10, 1fr);
   }
 
-  .tablet-columns-8 {
+  .tablet-columns-11 {
       grid-template-columns: repeat(11, 1fr);
   }
 
-  .tablet-columns-8 {
+  .tablet-columns-12 {
       grid-template-columns: repeat(12, 1fr);
   }
 }
@@ -131,19 +131,19 @@
       grid-template-columns: repeat(8, 1fr);
   }
 
-  .mobile-columns-8 {
+  .mobile-columns-9 {
       grid-template-columns: repeat(9, 1fr);
   }
 
-  .mobile-columns-8 {
+  .mobile-columns-10 {
       grid-template-columns: repeat(10, 1fr);
   }
 
-  .mobile-columns-8 {
+  .mobile-columns-11 {
       grid-template-columns: repeat(11, 1fr);
   }
 
-  .mobile-columns-8 {
+  .mobile-columns-12 {
       grid-template-columns: repeat(12, 1fr);
   }
 }
