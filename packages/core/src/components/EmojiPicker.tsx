@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, KeyboardEvent } from "react";
+import { useState, useCallback, useRef, useEffect, KeyboardEvent, useId } from "react";
 import { SegmentedControl, ButtonOption, IconButton, Grid, Scroller, Flex, Text, Input, Icon, Column, Row } from ".";
 import { useDebounce } from "../hooks/useDebounce";
 
@@ -86,6 +86,7 @@ export interface EmojiPickerProps extends Omit<React.ComponentProps<typeof Flex>
 }
 
 const EmojiPicker = ({ onSelect, onClose, className, background, columns = "8", style, ...flex }: EmojiPickerProps) => {
+  const searchInputId = useId();
   const [inputValue, setInputValue] = useState("");
   const searchQuery = useDebounce(inputValue, 300);
   const [activeCategory, setActiveCategory] = useState("smileys");
@@ -205,7 +206,7 @@ const EmojiPicker = ({ onSelect, onClose, className, background, columns = "8", 
       {...flex}
     >
       <Input
-        id="emoji-search"
+        id={`emoji-search-${searchInputId}`}
         placeholder="Search emojis"
         value={inputValue}
         height="s"

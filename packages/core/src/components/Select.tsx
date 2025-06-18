@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, forwardRef, ReactNode } from "react";
+import React, { useState, useRef, useEffect, forwardRef, ReactNode, useId } from "react";
 import classNames from "classnames";
 import {
   DropdownWrapper,
@@ -58,6 +58,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       if (!options?.length || !value) return null;
       return options.findIndex((option) => option.value === value);
     });
+    const searchInputId = useId();
     const [searchQuery, setSearchQuery] = useState("");
     const selectRef = useRef<HTMLDivElement | null>(null);
     const clearButtonRef = useRef<HTMLButtonElement>(null);
@@ -209,7 +210,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                     marginLeft: "-1px",
                     width: "calc(100% + 2px)",
                   }}
-                  id="search"
+                  id={`select-search-${searchInputId}`}
                   placeholder="Search"
                   height="s"
                   radius="none"
