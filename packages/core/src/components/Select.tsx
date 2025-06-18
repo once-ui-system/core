@@ -46,7 +46,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       maxWidth,
       placement,
       className,
-      fillWidth,
+      fillWidth = true,
       style,
       ...rest
     },

@@ -194,6 +194,14 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
 
         event.stopPropagation();
 
+        // Check if the click target is inside a dropdown portal
+        const isInsideDropdownPortal = (event.target as Element)?.closest('.dropdown-portal') !== null;
+        
+        // If the click is inside a dropdown portal, don't close the dialog
+        if (isInsideDropdownPortal) {
+          return;
+        }
+
         if (!dialogRef.current?.contains(event.target as Node)) {
           if (stack || !base) {
             // Prevent default to avoid triggering any links behind the dialog
