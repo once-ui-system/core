@@ -159,6 +159,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       if (isOpen && mounted) {
         // Store the currently focused element before focusing the dropdown
         previouslyFocusedElement.current = document.activeElement;
+        
+        // Store current scroll position
+        const scrollX = window.scrollX;
+        const scrollY = window.scrollY;
 
         requestAnimationFrame(() => {
           if (dropdownRef.current) {
@@ -167,24 +171,22 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             // Reset focus index when opening
             setFocusedIndex(-1);
 
-            // Find all focusable elements in the dropdown
             const focusableElements = dropdownRef.current.querySelectorAll(
               'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
             );
 
-            // Focus the first focusable element
             if (focusableElements.length > 0) {
-              (focusableElements[0] as HTMLElement).focus();
+              (focusableElements[0] as HTMLElement).focus({ preventScroll: true });
+              
+              window.scrollTo(scrollX, scrollY);
             }
 
-            // Set up initial keyboard navigation
             const optionElements = dropdownRef.current
               ? Array.from(
                   dropdownRef.current.querySelectorAll('.option, [role="option"], [data-value]'),
                 )
               : [];
 
-            // If we have options, highlight the first one
             if (optionElements.length > 0) {
               setFocusedIndex(0);
               optionElements.forEach((el, i) => {
@@ -198,7 +200,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           }
         });
       } else if (!isOpen && previouslyFocusedElement.current) {
-        // Restore focus when dropdown closes
         (previouslyFocusedElement.current as HTMLElement).focus();
       }
     }, [isOpen, mounted, refs, update]);
@@ -381,7 +382,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         {isOpen && dropdown && isBrowser && createPortal(
           <Flex
             zIndex={1}
-            className={styles.fadeIn}
+            className={`${styles.fadeIn} dropdown-portal`}
             minWidth={minWidth}
             ref={dropdownRef}
             style={{
@@ -392,8 +393,16 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             role="listbox"
             onKeyDown={handleKeyDown}
             onClick={(e) => {
-              // Prevent clicks inside the dropdown from bubbling up
+              // Stop propagation for all clicks inside the dropdown
+              // This prevents the dropdown from closing when clicking on any element inside it
               e.stopPropagation();
+              e.nativeEvent.stopImmediatePropagation();
+            }}
+            onMouseDown={(e) => {
+              // Stop propagation for all mousedown events inside the dropdown
+              // This prevents the dropdown from losing focus when clicking inside it
+              e.stopPropagation();
+              e.preventDefault();
             }}
           >
             <Dropdown

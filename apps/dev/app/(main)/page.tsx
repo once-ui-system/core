@@ -162,25 +162,11 @@ export default function Home() {
             ><EmojiPickerDropdown onSelect={(emoji) => console.log(emoji)} trigger={<IconButton icon="smiley" size="m" variant="tertiary" />} /></Textarea>
           </Column>
           <Column fillWidth padding="16">
-            <Select
-              fillWidth
-              id="basic-select"
-              label="Choose a country"
-              value={selectedCountry}
-              onSelect={setSelectedCountry}
-              options={[
-                { label: "United States", value: "us" },
-                { label: "Canada", value: "ca" },
-                { label: "United Kingdom", value: "uk" },
-                { label: "Australia", value: "au" }
-              ]}
-            />
           </Column>
           
           <Column fillWidth padding="16">
             <Text marginBottom="8">Custom Dropdown Example</Text>
             <DropdownWrapper
-              minWidth={12}
               isOpen={isCustomDropdownOpen}
               onOpenChange={setIsCustomDropdownOpen}
               trigger={
@@ -208,6 +194,25 @@ export default function Home() {
               }
             />
           </Column>
+
+<Select
+  id="searchable-select"
+  fillWidth
+  label="Choose a country"
+  value={selectedCountry}
+  searchable
+  options={[
+    { label: "United States", value: "us" },
+    { label: "Canada", value: "ca" },
+    { label: "United Kingdom", value: "uk" },
+    { label: "Australia", value: "au" },
+    { label: "Germany", value: "de" },
+    { label: "France", value: "fr" },
+    { label: "Japan", value: "jp" },
+    { label: "Brazil", value: "br" }
+  ]}
+  onSelect={(value) => setSelectedCountry(value)}
+/>  
         <OgCard 
           url="https://once-ui.com" 
           serviceConfig={{

@@ -12,6 +12,7 @@ import {
   Option,
   OptionProps,
   DropdownWrapperProps,
+  Column,
 } from ".";
 import inputStyles from "./Input.module.scss";
 import { Placement } from "@floating-ui/react-dom";
@@ -52,7 +53,15 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(!!value);
+    const [isFilled, setIsFilled] = useState(false);
+    
+    const [internalValue, setInternalValue] = useState(value);
+    
+    useEffect(() => {
+      if (value !== undefined) {
+        setInternalValue(value);
+      }
+    }, [value]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [highlightedIndex, setHighlightedIndex] = useState<number | null>(() => {
       if (!options?.length || !value) return null;
@@ -65,6 +74,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     const handleFocus = () => {
       setIsFocused(true);
+      setIsDropdownOpen(true);
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -75,9 +85,17 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     };
 
     const handleSelect = (value: string) => {
+      setInternalValue(value);
+      
       if (onSelect) onSelect(value);
+      
       setIsDropdownOpen(false);
       setIsFilled(true);
+      
+      const index = options.findIndex(option => option.value === value);
+      if (index !== -1) {
+        setHighlightedIndex(index);
+      }
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -86,33 +104,28 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       switch (event.key) {
         case "Escape":
           setIsDropdownOpen(false);
+          // Keep focus on the input
+          event.currentTarget.focus();
           break;
         case "ArrowDown":
           if (!isDropdownOpen) {
             setIsDropdownOpen(true);
-            break;
           }
-          event.preventDefault();
-          setHighlightedIndex((prevIndex) => {
-            const newIndex =
-              prevIndex === null || prevIndex === options.length - 1 ? 0 : prevIndex + 1;
-            return newIndex;
-          });
           break;
 
         case "ArrowUp":
-          event.preventDefault();
-          setHighlightedIndex((prevIndex) => {
-            const newIndex =
-              prevIndex === null || prevIndex === 0 ? options.length - 1 : prevIndex - 1;
-            return newIndex;
-          });
+          if (!isDropdownOpen) {
+            setIsDropdownOpen(true);
+          }
           break;
 
         case "Enter":
           event.preventDefault();
-          if (highlightedIndex !== null && isDropdownOpen) {
-            handleSelect(options[highlightedIndex].value);
+          if (isDropdownOpen) {
+            if (highlightedIndex !== null) {
+              handleSelect(options[highlightedIndex].value);
+            }
+            setIsDropdownOpen(false);
           } else {
             setIsDropdownOpen(true);
           }
@@ -127,22 +140,42 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       e.preventDefault();
       e.stopPropagation();
       setSearchQuery("");
-      // Force focus back to the input after clearing
       const input = selectRef.current?.querySelector("input");
       if (input) {
         input.focus();
       }
     };
 
-    const selectedOption = options.find((opt) => opt.value === value);
+    const currentValue = value !== undefined ? value : internalValue;
+    const selectedOption = options.find((opt) => opt.value === currentValue) || null;
+    
+    useEffect(() => {
+      if (isDropdownOpen && searchable) {
+        const timeoutId = setTimeout(() => {
+          const searchInput = selectRef.current?.querySelector(`#select-search-${searchInputId}`);
+          if (searchInput instanceof HTMLInputElement) {
+            const scrollX = window.scrollX;
+            const scrollY = window.scrollY;
+            searchInput.focus();
+            window.scrollTo(scrollX, scrollY);
+          }
+        }, 50);
+        
+        return () => clearTimeout(timeoutId);
+      }
+    }, [isDropdownOpen, searchable, searchInputId]);
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
-        if (
-          selectRef.current &&
-          !selectRef.current.contains(event.target as Node) &&
-          !clearButtonRef.current?.contains(event.target as Node)
-        ) {
+        // Check if click is inside the select component or its dropdown portal
+        const isClickInsideSelect = selectRef.current && selectRef.current.contains(event.target as Node);
+        const isClickInsideClearButton = clearButtonRef.current && clearButtonRef.current.contains(event.target as Node);
+        
+        // Check if click is inside any dropdown portal in the document
+        // This handles clicks inside the dropdown that's rendered in the portal
+        const isClickInsideDropdownPortal = !!document.querySelector('.dropdown-portal')?.contains(event.target as Node);
+        
+        if (!isClickInsideSelect && !isClickInsideClearButton && !isClickInsideDropdownPortal) {
           setIsDropdownOpen(false);
         }
       };
@@ -186,8 +219,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
               ...style,
             }}
             cursor="interactive"
-            value={typeof selectedOption?.label === "string" ? selectedOption.label : ""}
+            value={selectedOption?.label ? String(selectedOption.label) : ""}
             onFocus={handleFocus}
+            onClick={() => setIsDropdownOpen(true)}
             onKeyDown={handleKeyDown}
             readOnly
             className={classNames("fill-width", {
@@ -200,41 +234,93 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           />
         }
         dropdown={
-          <>
+          <Column fillWidth padding="4">
             {searchable && (
-              <Flex fillWidth>
-                <Input
-                  data-scaling="90"
-                  style={{
-                    marginTop: "-1px",
-                    marginLeft: "-1px",
-                    width: "calc(100% + 2px)",
-                  }}
-                  id={`select-search-${searchInputId}`}
-                  placeholder="Search"
-                  height="s"
-                  radius="none"
-                  hasSuffix={
-                    searchQuery ? (
-                      <IconButton
-                        tooltip="Clear"
-                        tooltipPosition="left"
-                        icon="close"
-                        variant="ghost"
-                        size="s"
-                        onClick={handleClearSearch}
-                      />
-                    ) : undefined
+              <Input
+                data-scaling="90"
+                id={`select-search-${searchInputId}`}
+                placeholder="Search"
+                height="s"
+                hasSuffix={
+                  searchQuery ? (
+                    <IconButton
+                      tooltip="Clear"
+                      tooltipPosition="left"
+                      icon="close"
+                      variant="ghost"
+                      size="s"
+                      onClick={handleClearSearch}
+                    />
+                  ) : undefined
+                }
+                hasPrefix={<Icon name="search" size="xs" />}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  setIsDropdownOpen(true);
+                }}
+                onFocus={(e) => {
+                  e.stopPropagation();
+                  setIsDropdownOpen(true);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Escape") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsDropdownOpen(false);
+                    setSearchQuery("");
+                    const mainInput = selectRef.current?.querySelector("input:not([id^='select-search'])");
+                    if (mainInput instanceof HTMLInputElement) {
+                      mainInput.focus();
+                    }
+                  } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const filteredOptions = options.filter((option) =>
+                      option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+                    
+                    if (filteredOptions.length === 0) return;
+                    
+                    if (e.key === "ArrowDown") {
+                      setHighlightedIndex((prevIndex) => {
+                        const newIndex =
+                          prevIndex === null || prevIndex >= filteredOptions.length - 1 ? 0 : prevIndex + 1;
+                        return newIndex;
+                      });
+                    } else {
+                      setHighlightedIndex((prevIndex) => {
+                        const newIndex =
+                          prevIndex === null || prevIndex <= 0 ? filteredOptions.length - 1 : prevIndex - 1;
+                        return newIndex;
+                      });
+                    }
+                  } else if (e.key === "Enter" && highlightedIndex !== null) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const filteredOptions = options.filter((option) =>
+                      option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+                    );
+                    
+                    if (filteredOptions.length > 0 && highlightedIndex < filteredOptions.length) {
+                      handleSelect(filteredOptions[highlightedIndex].value);
+                    }
                   }
-                  hasPrefix={<Icon name="search" size="xs" />}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onClick={(e) => e.stopPropagation()}
-                  onBlur={handleBlur}
-                />
-              </Flex>
+                }}
+                onBlur={(e) => {
+                  const relatedTarget = e.relatedTarget as Node;
+                  const isClickInDropdown = selectRef.current && selectRef.current.contains(relatedTarget);
+                  if (!isClickInDropdown) {
+                    handleBlur(e);
+                  }
+                }}
+              />
             )}
-            <Flex fillWidth padding="4" direction="column" gap="2">
+            <Column fillWidth padding="4" gap="2">
               {options
                 .filter((option) =>
                   option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()),
@@ -246,6 +332,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                     onClick={() => {
                       option.onClick?.(option.value);
                       handleSelect(option.value);
+                      setIsDropdownOpen(false);
                     }}
                     selected={option.value === value}
                     highlighted={index === highlightedIndex}
@@ -256,12 +343,12 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                 options.filter((option) =>
                   option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()),
                 ).length === 0 && (
-                  <Flex fillWidth vertical="center" horizontal="center" paddingX="16" paddingY="32">
+                  <Flex fillWidth center paddingX="16" paddingY="32">
                     {emptyState}
                   </Flex>
                 )}
-            </Flex>
-          </>
+            </Column>
+          </Column>
         }
       />
     );

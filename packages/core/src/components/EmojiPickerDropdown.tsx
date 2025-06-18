@@ -20,6 +20,9 @@ const EmojiPickerDropdown: React.FC<EmojiPickerDropdownProps> = ({
 }) => {
   const handleEmojiSelect = (emoji: string) => {
     onSelect(emoji);
+    if (closeAfterClick) {
+      dropdownProps.onOpenChange?.(false);
+    }
   };
 
   return (
