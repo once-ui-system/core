@@ -761,17 +761,6 @@
       ]
     },
     {
-      "char": "😲",
-      "description": "astonished face",
-      "aliases": [
-        "astonished"
-      ],
-      "tags": [
-        "amazed",
-        "gasp"
-      ]
-    },
-    {
       "char": "😳",
       "description": "flushed face",
       "aliases": [
@@ -6291,6 +6280,16 @@
       ],
       "tags": [
         "fly"
+      ]
+    },
+    {
+      "char": "🪿",
+      "description": "goose",
+      "aliases": [
+        "goose"
+      ],
+      "tags": [
+        "honk"
       ]
     },
     {
@@ -15075,6 +15074,14 @@
       "description": "flag: Liechtenstein",
       "aliases": [
         "liechtenstein"
+      ],
+      "tags": []
+    },
+    {
+      "char": "🇱🇰",
+      "description": "flag: Sri Lanka",
+      "aliases": [
+        "sri_lanka"
       ],
       "tags": []
     },

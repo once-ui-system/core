@@ -200,7 +200,6 @@ export default function Home() {
   fillWidth
   label="Choose a country"
   value={selectedCountry}
-  searchable
   options={[
     { label: "United States", value: "us" },
     { label: "Canada", value: "ca" },

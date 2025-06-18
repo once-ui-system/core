@@ -73,6 +73,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     const clearButtonRef = useRef<HTMLButtonElement>(null);
 
     const handleFocus = () => {
+      if (justSelectedRef.current) {
+        justSelectedRef.current = false;
+        return;
+      }
       setIsFocused(true);
       setIsDropdownOpen(true);
     };
@@ -89,17 +93,36 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       
       if (onSelect) onSelect(value);
       
+      // Set flags to prevent reopening after selection
+      justSelectedRef.current = true;
+      skipNextFocusRef.current = true;
+      
+      // Close the dropdown and update state
       setIsDropdownOpen(false);
       setIsFilled(true);
+      setSearchQuery(""); // Clear search query when an option is selected
       
       const index = options.findIndex(option => option.value === value);
       if (index !== -1) {
         setHighlightedIndex(index);
       }
+
+      if (!searchable) {
+        const input = selectRef.current?.querySelector("input");
+        if (input instanceof HTMLInputElement) input.blur();
+      }
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (!isFocused && event.key !== "Enter") return;
+      if (justSelectedRef.current) {
+        justSelectedRef.current = false;
+        return;
+      }
+      
+      if (!isDropdownOpen && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
+        setIsDropdownOpen(true);
+        return;
+      }
 
       switch (event.key) {
         case "Escape":
@@ -107,15 +130,36 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           // Keep focus on the input
           event.currentTarget.focus();
           break;
-        case "ArrowDown":
-          if (!isDropdownOpen) {
-            setIsDropdownOpen(true);
-          }
-          break;
 
+        case "ArrowDown":
         case "ArrowUp":
+          event.preventDefault();
+          
+          // If dropdown is closed, just open it without navigating
           if (!isDropdownOpen) {
             setIsDropdownOpen(true);
+            return;
+          }
+          
+          // If dropdown is open, navigate through options
+          const filteredOptions = options.filter((option) =>
+            searchable ? option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true
+          );
+          
+          if (filteredOptions.length === 0) return;
+          
+          if (event.key === "ArrowDown") {
+            setHighlightedIndex((prevIndex) => {
+              const newIndex =
+                prevIndex === null || prevIndex >= filteredOptions.length - 1 ? 0 : prevIndex + 1;
+              return newIndex;
+            });
+          } else {
+            setHighlightedIndex((prevIndex) => {
+              const newIndex =
+                prevIndex === null || prevIndex <= 0 ? filteredOptions.length - 1 : prevIndex - 1;
+              return newIndex;
+            });
           }
           break;
 
@@ -123,7 +167,13 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           event.preventDefault();
           if (isDropdownOpen) {
             if (highlightedIndex !== null) {
-              handleSelect(options[highlightedIndex].value);
+              const filteredOptions = options.filter((option) =>
+                searchable ? option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true
+              );
+              
+              if (filteredOptions.length > 0 && highlightedIndex < filteredOptions.length) {
+                handleSelect(filteredOptions[highlightedIndex].value);
+              }
             }
             setIsDropdownOpen(false);
           } else {
@@ -149,9 +199,22 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     const currentValue = value !== undefined ? value : internalValue;
     const selectedOption = options.find((opt) => opt.value === currentValue) || null;
     
+    // Track if we just selected an option to prevent reopening
+    const justSelectedRef = useRef(false);
+    // Track if we should skip the next focus event
+    const skipNextFocusRef = useRef(false);
+    
     useEffect(() => {
-      if (isDropdownOpen && searchable) {
+      // Only focus the search input when the dropdown is first opened
+      // and we didn't just select an option
+      if (isDropdownOpen && searchable && !justSelectedRef.current) {
         const timeoutId = setTimeout(() => {
+          // Don't focus if we're skipping the next focus event
+          if (skipNextFocusRef.current) {
+            skipNextFocusRef.current = false;
+            return;
+          }
+          
           const searchInput = selectRef.current?.querySelector(`#select-search-${searchInputId}`);
           if (searchInput instanceof HTMLInputElement) {
             const scrollX = window.scrollX;
@@ -162,6 +225,12 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         }, 50);
         
         return () => clearTimeout(timeoutId);
+      }
+      
+      // Reset flags when dropdown closes
+      if (!isDropdownOpen) {
+        justSelectedRef.current = false;
+        skipNextFocusRef.current = false;
       }
     }, [isDropdownOpen, searchable, searchInputId]);
 
