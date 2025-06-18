@@ -109,8 +109,8 @@
     }
 
     &:disabled {
-        background-color: var(--neutral-solid-strong);
-        color: var(--neutral-on-solid-weak);
+        color: var(--neutral-on-background-weak);
+        cursor: not-allowed;
     }
 
     &:autofill, &:-webkit-autofill {
