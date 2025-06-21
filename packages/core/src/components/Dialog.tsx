@@ -189,22 +189,16 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
-        // Only handle left clicks (button 0), ignore right clicks
         if (event.button !== 0) return;
 
-        event.stopPropagation();
-
-        // Check if the click target is inside a dropdown portal
         const isInsideDropdownPortal = (event.target as Element)?.closest('.dropdown-portal') !== null;
         
-        // If the click is inside a dropdown portal, don't close the dialog
         if (isInsideDropdownPortal) {
           return;
         }
 
         if (!dialogRef.current?.contains(event.target as Node)) {
           if (stack || !base) {
-            // Prevent default to avoid triggering any links behind the dialog
             event.preventDefault();
             onClose();
           }
@@ -212,8 +206,12 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
       };
 
       if (isVisible) {
-        document.addEventListener("mousedown", handleClickOutside, { capture: true });
+        const timeoutId = setTimeout(() => {
+          document.addEventListener("mousedown", handleClickOutside, { capture: true });
+        }, 10);
+        
         return () => {
+          clearTimeout(timeoutId);
           document.removeEventListener("mousedown", handleClickOutside, { capture: true });
         };
       }

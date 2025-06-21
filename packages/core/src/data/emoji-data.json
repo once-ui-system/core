@@ -761,6 +761,17 @@
       ]
     },
     {
+      "char": "😲",
+      "description": "astonished face",
+      "aliases": [
+        "astonished"
+      ],
+      "tags": [
+        "amazed",
+        "gasp"
+      ]
+    },
+    {
       "char": "😳",
       "description": "flushed face",
       "aliases": [
@@ -6280,16 +6291,6 @@
       ],
       "tags": [
         "fly"
-      ]
-    },
-    {
-      "char": "🪿",
-      "description": "goose",
-      "aliases": [
-        "goose"
-      ],
-      "tags": [
-        "honk"
       ]
     },
     {

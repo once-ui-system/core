@@ -24,6 +24,7 @@ import {
   Select,
   Option,
   DropdownWrapper,
+  Dialog,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
   const [dropdownEmoji, setDropdownEmoji] = React.useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [comment, setComment] = useState("");
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   // Custom dropdown state
   const [isCustomDropdownOpen, setIsCustomDropdownOpen] = useState(false);
@@ -194,7 +196,33 @@ export default function Home() {
               }
             />
           </Column>
-
+          <Button
+            variant="secondary"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            Open Dialog
+          </Button>
+          <Select
+  id="searchable-select"
+  fillWidth
+  label="Choose a country"
+  value={selectedCountry}
+  options={[
+    { label: "United States", value: "us" },
+    { label: "Canada", value: "ca" },
+    { label: "United Kingdom", value: "uk" },
+    { label: "Australia", value: "au" },
+    { label: "Germany", value: "de" },
+    { label: "France", value: "fr" },
+    { label: "Japan", value: "jp" },
+    { label: "Brazil", value: "br" }
+  ]}
+  onSelect={(value) => setSelectedCountry(value)}
+/>  
+<Dialog
+isOpen={isDialogOpen}
+title="Select a country"
+onClose={() => setIsDialogOpen(false)}>
 <Select
   id="searchable-select"
   fillWidth
@@ -212,6 +240,7 @@ export default function Home() {
   ]}
   onSelect={(value) => setSelectedCountry(value)}
 />  
+</Dialog>
         <OgCard 
           url="https://once-ui.com" 
           serviceConfig={{
