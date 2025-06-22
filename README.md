@@ -12,7 +12,7 @@ It includes:
 This setup is intended for contributors and maintainers.
 If you're building a real project, we recommend using:
 
-1. [Once UI Starter](https://github.com/once-ui-system/starter)
+1. [Once UI Starter](https://github.com/once-ui-system/nextjs-starter)
 2. or install via your package manager:
 
 ```bash
