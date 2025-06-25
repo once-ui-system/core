@@ -9,6 +9,7 @@ interface ElementTypeProps {
   children: ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  type?: "button" | "submit" | "reset";
   [key: string]: any;
 }
 
@@ -55,6 +56,7 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
           className={className}
           onClick={onClick}
           style={style}
+          type={type}
           {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
         >
           {children}
