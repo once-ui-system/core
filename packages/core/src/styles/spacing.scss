@@ -76,200 +76,244 @@
 }
 
 .m-xs {
-    margin-bottom: var(--responsive-space-xs);
+    margin: var(--responsive-space-xs);
 }
 
 .m-s {
-    margin-bottom: var(--responsive-space-s);
+    margin: var(--responsive-space-s);
 }
 
 .m-m {
-    margin-bottom: var(--responsive-space-m);
+    margin: var(--responsive-space-m);
 }
 
 .m-l {
-    margin-bottom: var(--responsive-space-l);
+    margin: var(--responsive-space-l);
 }
 
 .m-xl {
-    margin-bottom: var(--responsive-space-xl);
+    margin: var(--responsive-space-xl);
 }
 
 /* X */
 .mx-0 {
-    margin: auto var(--static-space-0);
+    margin-left: var(--static-space-0);
+    margin-right: var(--static-space-0);
 }
 
 .mx-1 {
-    margin: auto var(--static-space-1);
+    margin-left: var(--static-space-1);
+    margin-right: var(--static-space-1);
 }
 
 .mx-2 {
-    margin: auto var(--static-space-2);
+    margin-left: var(--static-space-2);
+    margin-right: var(--static-space-2);
 }
 
 .mx-4 {
-    margin: auto var(--static-space-4);
+    margin-left: var(--static-space-4);
+    margin-right: var(--static-space-4);
 }
 
 .mx-8 {
-    margin: auto var(--static-space-8);
+    margin-left: var(--static-space-8);
+    margin-right: var(--static-space-8);
 }
 
 .mx-12 {
-    margin: auto var(--static-space-12);
+    margin-left: var(--static-space-12);
+    margin-right: var(--static-space-12);
 }
 
 .mx-16 {
-    margin: auto var(--static-space-16);
+    margin-left: var(--static-space-16);
+    margin-right: var(--static-space-16);
 }
 
 .mx-20 {
-    margin: auto var(--static-space-20);
+    margin-left: var(--static-space-20);
+    margin-right: var(--static-space-20);
 }
 
 .mx-24 {
-    margin: auto var(--static-space-24);
+    margin-left: var(--static-space-24);
+    margin-right: var(--static-space-24);
 }
 
 .mx-32 {
-    margin: auto var(--static-space-32);
+    margin-left: var(--static-space-32);
+    margin-right: var(--static-space-32);
 }
 
 .mx-40 {
-    margin: auto var(--static-space-40);
+    margin-left: var(--static-space-40);
+    margin-right: var(--static-space-40);
 }
 
 .mx-64 {
-    margin: auto var(--static-space-64);
+    margin-left: var(--static-space-64);
+    margin-right: var(--static-space-64);
 }
 
 .mx-80 {
-    margin: auto var(--static-space-80);
+    margin-left: var(--static-space-80);
+    margin-right: var(--static-space-80);
 }
 
 .mx-104 {
-    margin: auto var(--static-space-104);
+    margin-left: var(--static-space-104);
+    margin-right: var(--static-space-104);
 }
 
 .mx-128 {
-    margin: auto var(--static-space-128);
+    margin-left: var(--static-space-128);
+    margin-right: var(--static-space-128);
 }
 
 .mx-160 {
-    margin: auto var(--static-space-160);
+    margin-left: var(--static-space-160);
+    margin-right: var(--static-space-160);
 }
 
 .mx-xs {
-    margin-bottom: var(--responsive-space-xs);
+    margin-left: var(--responsive-space-xs);
+    margin-right: var(--responsive-space-xs);
 }
 
 .mx-s {
-    margin-bottom: var(--responsive-space-s);
+    margin-left: var(--responsive-space-s);
+    margin-right: var(--responsive-space-s);
 }
 
 .mx-m {
-    margin-bottom: var(--responsive-space-m);
+    margin-left: var(--responsive-space-m);
+    margin-right: var(--responsive-space-m);
 }
 
 .mx-l {
-    margin-bottom: var(--responsive-space-l);
+    margin-left: var(--responsive-space-l);
+    margin-right: var(--responsive-space-l);
 }
 
 .mx-xl {
-    margin-bottom: var(--responsive-space-xl);
+    margin-left: var(--responsive-space-xl);
+    margin-right: var(--responsive-space-xl);
 }
 
 /* Y */
 .my-0 {
-    margin: var(--static-space-0) auto;
+    margin-top: var(--static-space-0);
+    margin-bottom: var(--static-space-0);
 }
 
 .my-1 {
-    margin: var(--static-space-1) auto;
+    margin-top: var(--static-space-1);
+    margin-bottom: var(--static-space-1);
 }
 
 .my-2 {
-    margin: var(--static-space-2) auto;
+    margin-top: var(--static-space-2);
+    margin-bottom: var(--static-space-2);
 }
 
 .my-4 {
-    margin: var(--static-space-4) auto;
+    margin-top: var(--static-space-4);
+    margin-bottom: var(--static-space-4);
 }
 
 .my-8 {
-    margin: var(--static-space-8) auto;
+    margin-top: var(--static-space-8);
+    margin-bottom: var(--static-space-8);
 }
 
 .my-12 {
-    margin: var(--static-space-12) auto;
+    margin-top: var(--static-space-12);
+    margin-bottom: var(--static-space-12);
 }
 
 .my-16 {
-    margin: var(--static-space-16) auto;
+    margin-top: var(--static-space-16);
+    margin-bottom: var(--static-space-16);
 }
 
 .my-20 {
-    margin: var(--static-space-20) auto;
+    margin-top: var(--static-space-20);
+    margin-bottom: var(--static-space-20);
 }
 
 .my-24 {
-    margin: var(--static-space-24) auto;
+    margin-top: var(--static-space-24);
+    margin-bottom: var(--static-space-24);
 }
 
 .my-32 {
-    margin: var(--static-space-32) auto;
+    margin-top: var(--static-space-32);
+    margin-bottom: var(--static-space-32);
 }
 
 .my-40 {
-    margin: var(--static-space-40) auto;
+    margin-top: var(--static-space-40);
+    margin-bottom: var(--static-space-40);
 }
 
 .my-48 {
-    margin: var(--static-space-48) auto;
+    margin-top: var(--static-space-48);
+    margin-bottom: var(--static-space-48);
 }
 
 .my-56 {
-    margin: var(--static-space-56) auto;
+    margin-top: var(--static-space-56);
+    margin-bottom: var(--static-space-56);
 }
 
 .my-64 {
-    margin: var(--static-space-64) auto;
+    margin-top: var(--static-space-64);
+    margin-bottom: var(--static-space-64);
 }
 
 .my-80 {
-    margin: var(--static-space-80) auto;
+    margin-top: var(--static-space-80);
+    margin-bottom: var(--static-space-80);
 }
 
 .my-104 {
-    margin: var(--static-space-104) auto;
+    margin-top: var(--static-space-104);
+    margin-bottom: var(--static-space-104);
 }
 
 .my-128 {
-    margin: var(--static-space-128) auto;
+    margin-top: var(--static-space-128);
+    margin-bottom: var(--static-space-128);
 }
 
 .my-160 {
-    margin: var(--static-space-160) auto;
+    margin-top: var(--static-space-160);
+    margin-bottom: var(--static-space-160);
 }
 
 .my-xs {
+    margin-top: var(--responsive-space-xs);
     margin-bottom: var(--responsive-space-xs);
 }
 
 .my-s {
+    margin-top: var(--responsive-space-s);
     margin-bottom: var(--responsive-space-s);
 }
 
 .my-m {
+    margin-top: var(--responsive-space-m);
     margin-bottom: var(--responsive-space-m);
 }
 
 .my-l {
+    margin-top: var(--responsive-space-l);
     margin-bottom: var(--responsive-space-l);
 }
 
 .my-xl {
+    margin-top: var(--responsive-space-xl);
     margin-bottom: var(--responsive-space-xl);
 }
 
