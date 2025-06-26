@@ -25,6 +25,8 @@ import {
   Option,
   DropdownWrapper,
   Dialog,
+  AutoScroll,
+  User,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -161,10 +163,137 @@ export default function Home() {
                   />
                 </Row>
               }
-            ><EmojiPickerDropdown onSelect={(emoji) => console.log(emoji)} trigger={<IconButton icon="smiley" size="m" variant="tertiary" />} /></Textarea>
+            ><EmojiPickerDropdown onSelect={(emoji: string) => console.log(emoji)} trigger={<IconButton type="button" icon="smiley" size="m" variant="tertiary" />} /></Textarea>
           </Column>
           <Column fillWidth padding="16">
           </Column>
+
+          <IconButton
+          onClick={() => {
+            console.log("click");
+          }}
+          variant="ghost"
+          icon="eye"
+          size="s"
+          type="button"
+        />
+
+<AutoScroll reverse>
+          <IconButton icon="smiley" size="m" variant="tertiary" />
+          <IconButton icon="smiley" size="m" variant="tertiary" />
+          <IconButton icon="smiley" size="m" variant="tertiary" />
+          <IconButton icon="smiley" size="m" variant="tertiary" />
+          <IconButton icon="smiley" size="m" variant="tertiary" />
+          <IconButton icon="smiley" size="m" variant="tertiary" />
+        </AutoScroll>
+
+          <AutoScroll reverse>
+          <Column
+            background="surface"
+            radius="l"
+            border="neutral-medium"
+            vertical="space-between"
+            marginRight="12"
+            minWidth={20}
+            fillWidth
+          >
+            <Flex padding="32" fillWidth>
+              <Text wrap="balance" variant="heading-default-m">
+                1
+              </Text>
+            </Flex>
+            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
+              <User
+                  avatarProps={{ src: "" }}
+                  name="John Doe"
+                />
+            </Flex>
+          </Column>
+          <Column
+            background="surface"
+            radius="l"
+            border="neutral-medium"
+            vertical="space-between"
+            marginRight="12"
+            minWidth={20}
+            fillWidth
+          >
+            <Flex padding="32" fillWidth>
+              <Text wrap="balance" variant="heading-default-m">
+                2
+              </Text>
+            </Flex>
+            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
+              <User
+                  avatarProps={{ src: "" }}
+                  name="John Doe"
+                />
+            </Flex>
+          </Column>
+          <Column
+            background="surface"
+            radius="l"
+            border="neutral-medium"
+            vertical="space-between"
+            marginRight="12"
+            minWidth={20}
+            fillWidth
+          >
+            <Flex padding="32" fillWidth>
+              <Text wrap="balance" variant="heading-default-m">
+                3
+              </Text>
+            </Flex>
+            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
+              <User
+                  avatarProps={{ src: "" }}
+                  name="John Doe"
+                />
+            </Flex>
+          </Column>
+          <Column
+            background="surface"
+            radius="l"
+            border="neutral-medium"
+            vertical="space-between"
+            marginRight="12"
+            minWidth={20}
+            fillWidth
+          >
+            <Flex padding="32" fillWidth>
+              <Text wrap="balance" variant="heading-default-m">
+                4
+              </Text>
+            </Flex>
+            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
+              <User
+                  avatarProps={{ src: "" }}
+                  name="John Doe"
+                />
+            </Flex>
+          </Column>
+          <Column
+            background="surface"
+            radius="l"
+            border="neutral-medium"
+            vertical="space-between"
+            marginRight="12"
+            minWidth={20}
+            fillWidth
+          >
+            <Flex padding="32" fillWidth>
+              <Text wrap="balance" variant="heading-default-m">
+                5
+              </Text>
+            </Flex>
+            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
+              <User
+                  avatarProps={{ src: "" }}
+                  name="John Doe"
+                />
+            </Flex>
+          </Column>
+        </AutoScroll>
           
           <Column fillWidth padding="16">
             <Text marginBottom="8">Custom Dropdown Example</Text>
