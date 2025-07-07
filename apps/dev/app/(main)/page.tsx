@@ -27,6 +27,7 @@ import {
   Dialog,
   AutoScroll,
   User,
+  Table,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -74,6 +75,20 @@ export default function Home() {
             <LetterFx trigger="instant">An ecosystem, not a UI kit</LetterFx>
           </Text>
         </Badge>
+        <Table
+              background="brand-strong"
+              data={{
+    headers: [
+      { content: "Name", key: "name", sortable: true },
+      { content: "Role", key: "role", sortable: true },
+    ],
+    rows: [
+      ["Alice", "Engineer"],
+      ["Bob", "Designer"],
+      ["Carol", "Product"],
+    ],
+  }}
+/>
         <Heading variant="display-strong-xl" marginTop="24">
           Presence that doesn&apos;t beg for attention
         </Heading>

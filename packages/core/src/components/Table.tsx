@@ -101,13 +101,14 @@ function Table({ data, onRowClick, ...flex }: TableProps) {
       radius="l"
       overflowY="hidden"
       border="neutral-alpha-medium"
+      background="surface"
       overflowX="auto"
       marginTop="8"
       marginBottom="16"
       {...flex}
     >
       <table
-        className="fill-width surface-background"
+        className="fill-width"
         style={{ borderSpacing: 0, borderCollapse: "collapse", minWidth: "32rem" }}
       >
         <thead className="neutral-on-background-strong">
