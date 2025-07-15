@@ -28,6 +28,7 @@ import {
   AutoScroll,
   User,
   Table,
+  ContextMenu,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -75,6 +76,27 @@ export default function Home() {
             <LetterFx trigger="instant">An ecosystem, not a UI kit</LetterFx>
           </Text>
         </Badge>
+        <Logo icon="/trademarks/icon-dark.svg" wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" size="xs" brand={{copy: true, url: "https://once-ui.com"}} />
+        <ContextMenu
+          dropdown={
+            <>
+              <Option value="option1">Option 1</Option>
+              <Option value="option2">Option 2</Option>
+              <Option value="option3">Option 3</Option>
+              <Option value="option4">Option 4</Option>
+            </>
+          }
+          placement="bottom-start"
+        >
+          <Badge
+            textVariant="code-default-s"
+            border="neutral-alpha-medium"
+            onBackground="neutral-strong"
+            padding="s"
+          >
+            Right-click me to see the context menu
+          </Badge>
+        </ContextMenu>
         <Table
               background="brand-strong"
               data={{

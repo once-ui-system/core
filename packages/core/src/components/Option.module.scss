@@ -4,6 +4,7 @@
     &:hover, &:focus {
         background: var(--neutral-alpha-weak);
         border-color: var(--neutral-alpha-medium);
+        outline: none;
     }
     
     &.selected {

@@ -53,6 +53,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         onKeyDown={(e: KeyboardEvent<HTMLElement>) => {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
+            e.stopPropagation();
             onClick?.(value);
           }
         }}
