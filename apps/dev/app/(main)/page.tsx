@@ -28,6 +28,7 @@ import {
   AutoScroll,
   User,
   Table,
+  BlockQuote
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -401,6 +402,9 @@ onClose={() => setIsDialogOpen(false)}>
           ]}
         />
         <StylePanel/>
+        <BlockQuote className="p-32">
+          “The only way to do great work is to love what you do.” – Steve Jobs
+        </BlockQuote>
       </Column>
     </Column>
   );
