@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Heading,
   Text,
@@ -29,7 +29,8 @@ import {
   User,
   Table,
   ContextMenu,
-  BlockQuote
+  BlockQuote,
+  ProgressBar,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -39,11 +40,18 @@ export default function Home() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [comment, setComment] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  
+  const [value, setValue] = useState(30);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setValue(80);
+    }, 2000);
+  }, []);
+
   // Custom dropdown state
   const [isCustomDropdownOpen, setIsCustomDropdownOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
-  
+
   // Options for the custom dropdown
   const customOptions = [
     { label: "Option 1", value: "option1" },
@@ -56,7 +64,7 @@ export default function Home() {
     setSelectedEmoji(emoji);
     setShowEmojiPicker(false);
   };
-  
+
   const handleDropdownEmojiSelect = (emoji: string) => {
     setDropdownEmoji(emoji);
   };
@@ -71,13 +79,23 @@ export default function Home() {
           vertical="center"
           gap="16"
         >
-          <Logo wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" size="xs" />
+          <Logo
+            wordmark="/trademarks/type-dark.svg"
+            href="https://once-ui.com"
+            size="xs"
+          />
           <Line vert background="neutral-alpha-strong" />
           <Text marginX="4">
             <LetterFx trigger="instant">An ecosystem, not a UI kit</LetterFx>
           </Text>
         </Badge>
-        <Logo icon="/trademarks/icon-dark.svg" wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" size="xs" brand={{copy: true, url: "https://once-ui.com"}} />
+        <Logo
+          icon="/trademarks/icon-dark.svg"
+          wordmark="/trademarks/type-dark.svg"
+          href="https://once-ui.com"
+          size="xs"
+          brand={{ copy: true, url: "https://once-ui.com" }}
+        />
         <ContextMenu
           dropdown={
             <>
@@ -99,19 +117,19 @@ export default function Home() {
           </Badge>
         </ContextMenu>
         <Table
-              background="brand-strong"
-              data={{
-    headers: [
-      { content: "Name", key: "name", sortable: true },
-      { content: "Role", key: "role", sortable: true },
-    ],
-    rows: [
-      ["Alice", "Engineer"],
-      ["Bob", "Designer"],
-      ["Carol", "Product"],
-    ],
-  }}
-/>
+          background="brand-strong"
+          data={{
+            headers: [
+              { content: "Name", key: "name", sortable: true },
+              { content: "Role", key: "role", sortable: true },
+            ],
+            rows: [
+              ["Alice", "Engineer"],
+              ["Bob", "Designer"],
+              ["Carol", "Product"],
+            ],
+          }}
+        />
         <Heading variant="display-strong-xl" marginTop="24">
           Presence that doesn&apos;t beg for attention
         </Heading>
@@ -133,13 +151,13 @@ export default function Home() {
         >
           Explore docs
         </Button>
-        
+
         {/* EmojiPicker Example */}
         <Column gap="32" align="center" fillWidth>
           <Column gap="16" align="center" fillWidth>
             <Heading variant="heading-strong-l">Standard Emoji Picker</Heading>
             <Flex gap="16" align="center">
-              <Button 
+              <Button
                 variant="secondary"
                 onClick={() => setShowEmojiPicker(!showEmojiPicker)}
               >
@@ -152,13 +170,13 @@ export default function Home() {
               )}
             </Flex>
             {showEmojiPicker && (
-              <EmojiPicker 
-                onSelect={handleEmojiSelect} 
-                onClose={() => setShowEmojiPicker(false)} 
+              <EmojiPicker
+                onSelect={handleEmojiSelect}
+                onClose={() => setShowEmojiPicker(false)}
               />
             )}
           </Column>
-          
+
           <Column gap="16" align="center" fillWidth>
             <Heading variant="heading-strong-l">Emoji Picker Dropdown</Heading>
             <Flex gap="16" align="center">
@@ -183,30 +201,39 @@ export default function Home() {
           </Column>
         </Column>
         <Column gap="8" fillWidth>
-            <Textarea
-              id="comment-input"
-              placeholder="Add a comment..."
-              lines="auto"
-              hasSuffix={
-                <Row
-                  style={{ opacity: 1 }}
-                  transition="micro-medium">
-                  <IconButton
-                    style={{
-                      marginRight: "-0.25rem"
-                    }}
-                    icon="send"
-                    size="m"
-                    variant="primary" 
-                  />
-                </Row>
+          <Textarea
+            id="comment-input"
+            placeholder="Add a comment..."
+            lines="auto"
+            hasSuffix={
+              <Row style={{ opacity: 1 }} transition="micro-medium">
+                <IconButton
+                  style={{
+                    marginRight: "-0.25rem",
+                  }}
+                  icon="send"
+                  size="m"
+                  variant="primary"
+                />
+              </Row>
+            }
+          >
+            <EmojiPickerDropdown
+              onSelect={(emoji: string) => console.log(emoji)}
+              trigger={
+                <IconButton
+                  type="button"
+                  icon="smiley"
+                  size="m"
+                  variant="tertiary"
+                />
               }
-            ><EmojiPickerDropdown onSelect={(emoji: string) => console.log(emoji)} trigger={<IconButton type="button" icon="smiley" size="m" variant="tertiary" />} /></Textarea>
-          </Column>
-          <Column fillWidth padding="16">
-          </Column>
+            />
+          </Textarea>
+        </Column>
+        <Column fillWidth padding="16"></Column>
 
-          <IconButton
+        <IconButton
           onClick={() => {
             console.log("click");
           }}
@@ -216,7 +243,7 @@ export default function Home() {
           type="button"
         />
 
-<AutoScroll reverse>
+        <AutoScroll reverse>
           <IconButton icon="smiley" size="m" variant="tertiary" />
           <IconButton icon="smiley" size="m" variant="tertiary" />
           <IconButton icon="smiley" size="m" variant="tertiary" />
@@ -225,7 +252,7 @@ export default function Home() {
           <IconButton icon="smiley" size="m" variant="tertiary" />
         </AutoScroll>
 
-          <AutoScroll reverse>
+        <AutoScroll reverse>
           <Column
             background="surface"
             radius="l"
@@ -240,11 +267,13 @@ export default function Home() {
                 1
               </Text>
             </Flex>
-            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
-              <User
-                  avatarProps={{ src: "" }}
-                  name="John Doe"
-                />
+            <Flex
+              borderTop="neutral-medium"
+              fillWidth
+              paddingY="24"
+              paddingX="32"
+            >
+              <User avatarProps={{ src: "" }} name="John Doe" />
             </Flex>
           </Column>
           <Column
@@ -261,11 +290,13 @@ export default function Home() {
                 2
               </Text>
             </Flex>
-            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
-              <User
-                  avatarProps={{ src: "" }}
-                  name="John Doe"
-                />
+            <Flex
+              borderTop="neutral-medium"
+              fillWidth
+              paddingY="24"
+              paddingX="32"
+            >
+              <User avatarProps={{ src: "" }} name="John Doe" />
             </Flex>
           </Column>
           <Column
@@ -282,11 +313,13 @@ export default function Home() {
                 3
               </Text>
             </Flex>
-            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
-              <User
-                  avatarProps={{ src: "" }}
-                  name="John Doe"
-                />
+            <Flex
+              borderTop="neutral-medium"
+              fillWidth
+              paddingY="24"
+              paddingX="32"
+            >
+              <User avatarProps={{ src: "" }} name="John Doe" />
             </Flex>
           </Column>
           <Column
@@ -303,11 +336,13 @@ export default function Home() {
                 4
               </Text>
             </Flex>
-            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
-              <User
-                  avatarProps={{ src: "" }}
-                  name="John Doe"
-                />
+            <Flex
+              borderTop="neutral-medium"
+              fillWidth
+              paddingY="24"
+              paddingX="32"
+            >
+              <User avatarProps={{ src: "" }} name="John Doe" />
             </Flex>
           </Column>
           <Column
@@ -324,109 +359,122 @@ export default function Home() {
                 5
               </Text>
             </Flex>
-            <Flex borderTop="neutral-medium" fillWidth paddingY="24" paddingX="32">
-              <User
-                  avatarProps={{ src: "" }}
-                  name="John Doe"
-                />
+            <Flex
+              borderTop="neutral-medium"
+              fillWidth
+              paddingY="24"
+              paddingX="32"
+            >
+              <User avatarProps={{ src: "" }} name="John Doe" />
             </Flex>
           </Column>
         </AutoScroll>
-          
-          <Column fillWidth padding="16">
-            <Text marginBottom="8">Custom Dropdown Example</Text>
-            <DropdownWrapper
-              isOpen={isCustomDropdownOpen}
-              onOpenChange={setIsCustomDropdownOpen}
-              trigger={
-                <Button 
-                  variant="secondary" 
-                  suffixIcon="chevronDown"
-                >
-                  {selectedOption ? customOptions.find(opt => opt.value === selectedOption)?.label : "Select an option"}
-                </Button>
-              }
-              dropdown={
-                <Column padding="4" gap="2">
-                  {customOptions.map((option) => (
-                    <Option
-                      key={option.value}
-                      label={option.label}
-                      value={option.value}
-                      onClick={() => {
-                        setSelectedOption(option.value);
-                        setIsCustomDropdownOpen(false);
-                      }}
-                    />
-                  ))}
-                </Column>
-              }
-            />
-          </Column>
-          <Button
-            variant="secondary"
-            onClick={() => setIsDialogOpen(true)}
-          >
-            Open Dialog
-          </Button>
+
+        <Column fillWidth padding="16">
+          <Text marginBottom="8">Custom Dropdown Example</Text>
+          <DropdownWrapper
+            isOpen={isCustomDropdownOpen}
+            onOpenChange={setIsCustomDropdownOpen}
+            trigger={
+              <Button variant="secondary" suffixIcon="chevronDown">
+                {selectedOption
+                  ? customOptions.find((opt) => opt.value === selectedOption)
+                      ?.label
+                  : "Select an option"}
+              </Button>
+            }
+            dropdown={
+              <Column padding="4" gap="2">
+                {customOptions.map((option) => (
+                  <Option
+                    key={option.value}
+                    label={option.label}
+                    value={option.value}
+                    onClick={() => {
+                      setSelectedOption(option.value);
+                      setIsCustomDropdownOpen(false);
+                    }}
+                  />
+                ))}
+              </Column>
+            }
+          />
+        </Column>
+        <Button variant="secondary" onClick={() => setIsDialogOpen(true)}>
+          Open Dialog
+        </Button>
+        <Select
+          id="searchable-select"
+          fillWidth
+          label="Choose a country"
+          value={selectedCountry}
+          options={[
+            { label: "United States", value: "us" },
+            { label: "Canada", value: "ca" },
+            { label: "United Kingdom", value: "uk" },
+            { label: "Australia", value: "au" },
+            { label: "Germany", value: "de" },
+            { label: "France", value: "fr" },
+            { label: "Japan", value: "jp" },
+            { label: "Brazil", value: "br" },
+          ]}
+          onSelect={(value) => setSelectedCountry(value)}
+        />
+        <Dialog
+          isOpen={isDialogOpen}
+          title="Select a country"
+          onClose={() => setIsDialogOpen(false)}
+        >
           <Select
-  id="searchable-select"
-  fillWidth
-  label="Choose a country"
-  value={selectedCountry}
-  options={[
-    { label: "United States", value: "us" },
-    { label: "Canada", value: "ca" },
-    { label: "United Kingdom", value: "uk" },
-    { label: "Australia", value: "au" },
-    { label: "Germany", value: "de" },
-    { label: "France", value: "fr" },
-    { label: "Japan", value: "jp" },
-    { label: "Brazil", value: "br" }
-  ]}
-  onSelect={(value) => setSelectedCountry(value)}
-/>  
-<Dialog
-isOpen={isDialogOpen}
-title="Select a country"
-onClose={() => setIsDialogOpen(false)}>
-<Select
-  id="searchable-select"
-  fillWidth
-  label="Choose a country"
-  value={selectedCountry}
-  options={[
-    { label: "United States", value: "us" },
-    { label: "Canada", value: "ca" },
-    { label: "United Kingdom", value: "uk" },
-    { label: "Australia", value: "au" },
-    { label: "Germany", value: "de" },
-    { label: "France", value: "fr" },
-    { label: "Japan", value: "jp" },
-    { label: "Brazil", value: "br" }
-  ]}
-  onSelect={(value) => setSelectedCountry(value)}
-/>  
-</Dialog>
-        <OgCard 
-          url="https://once-ui.com" 
+            id="searchable-select"
+            fillWidth
+            label="Choose a country"
+            value={selectedCountry}
+            options={[
+              { label: "United States", value: "us" },
+              { label: "Canada", value: "ca" },
+              { label: "United Kingdom", value: "uk" },
+              { label: "Australia", value: "au" },
+              { label: "Germany", value: "de" },
+              { label: "France", value: "fr" },
+              { label: "Japan", value: "jp" },
+              { label: "Brazil", value: "br" },
+            ]}
+            onSelect={(value) => setSelectedCountry(value)}
+          />
+        </Dialog>
+        <OgCard
+          url="https://once-ui.com"
           serviceConfig={{
-            fetchOgUrl: '/api/og/fetch',
-            proxyOgUrl: '/api/og/proxy'
+            fetchOgUrl: "/api/og/fetch",
+            proxyOgUrl: "/api/og/proxy",
           }}
         />
         <Carousel
           indicator="thumbnail"
           items={[
             { slide: <Media radius="l" src="/images/demo.jpg" /> },
-            { slide: <Column fill center background="neutral-medium">Any React node</Column> },
-            { slide: <Column fill center background="neutral-medium">Some other react node</Column> }
+            {
+              slide: (
+                <Column fill center background="neutral-medium">
+                  Any React node
+                </Column>
+              ),
+            },
+            {
+              slide: (
+                <Column fill center background="neutral-medium">
+                  Some other react node
+                </Column>
+              ),
+            },
           ]}
         />
-        <StylePanel/>
+        <StylePanel />
         <BlockQuote>
           “The only way to do great work is to love what you do.” – Steve Jobs
         </BlockQuote>
+        <ProgressBar value={value} />
       </Column>
     </Column>
   );
