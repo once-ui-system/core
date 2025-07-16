@@ -9,7 +9,6 @@ import React, {
   KeyboardEvent,
   useCallback,
   useEffect,
-  CSSProperties,
 } from "react";
 import { Placement } from "@floating-ui/react-dom";
 import { createPortal } from "react-dom";
@@ -77,16 +76,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     useEffect(() => {
       setIsBrowser(true);
     }, []);
-    
-    // Calculate dropdown style based on cursor position
-    const getDropdownStyle = useCallback((): CSSProperties => {
-      return {
-        position: 'fixed',
-        top: contextPosition.y,
-        left: contextPosition.x,
-        zIndex: 9999,
-      };
-    }, [contextPosition]);
+
 
     const handleContextMenu = useCallback(
       (e: ReactMouseEvent) => {
@@ -285,12 +275,15 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       <Flex 
         ref={containerRef}
         onContextMenu={handleContextMenu}
-        className={`${styles.contextMenuContainer} ${className || ""}`}
+        className={className || ""}
         style={style}
       >
         {children}
         {isDropdownOpen && isBrowser && createPortal(
           <Flex
+            position="fixed"
+            zIndex={10}
+            tabIndex={0}
             ref={(node) => {
               dropdownRef.current = node;
               if (typeof ref === 'function') {
@@ -300,7 +293,10 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
               }
             }}
             className={styles.fadeIn}
-            style={getDropdownStyle()}
+            style={{
+              top: contextPosition.y,
+              left: contextPosition.x,
+            }}
             role="menu"
             onKeyDown={handleKeyDown}
             onClick={(e) => {
@@ -316,7 +312,6 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
                 }, 50);
               }
             }}
-            tabIndex={0}
           >        
             <Dropdown
               minWidth={minWidth}

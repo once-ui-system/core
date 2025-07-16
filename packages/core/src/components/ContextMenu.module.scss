@@ -9,11 +9,6 @@
   }
 }
 
-.contextMenuContainer {
-  position: relative;
-  display: inline-block;
-}
-
 .fadeIn {
   transform-origin: top left;
   animation: fadeIn var(--transition-duration-micro-medium) var(--transition-eased);
