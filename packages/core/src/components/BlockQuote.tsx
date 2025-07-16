@@ -1,8 +1,4 @@
-"use client";
-
-import React, { forwardRef } from "react";
-import classNames from "classnames";
-import styles from "./BlockQuote.module.scss";
+import { forwardRef } from "react";
 import { Flex } from ".";
 
 interface BlockQuoteProps extends React.ComponentProps<typeof Flex> {
@@ -17,8 +13,15 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
       <Flex
         ref={ref}
         as="blockquote"
+        radius="m"
+        border="brand-alpha-medium"
+        background="brand-alpha-weak"
+        borderStyle="dashed"
+        overflow="hidden"
+        onBackground="brand-medium"
+        fillWidth
         style={style}
-        className={classNames(styles.blockquote, className)}
+        className={className}
         {...rest}
       >
         {children}
