@@ -14,10 +14,13 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
         ref={ref}
         as="blockquote"
         radius="m"
+        margin="0"
         border="brand-alpha-medium"
         background="brand-alpha-weak"
         borderStyle="dashed"
         overflow="hidden"
+        paddingY="20"
+        paddingX="24"
         onBackground="brand-medium"
         fillWidth
         style={style}

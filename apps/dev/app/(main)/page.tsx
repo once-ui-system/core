@@ -424,7 +424,7 @@ onClose={() => setIsDialogOpen(false)}>
           ]}
         />
         <StylePanel/>
-        <BlockQuote className="p-32">
+        <BlockQuote>
           “The only way to do great work is to love what you do.” – Steve Jobs
         </BlockQuote>
       </Column>
