@@ -151,17 +151,19 @@ const Logo: React.FC<LogoProps> = ({
             />
           )}
         </Column>
-        <Line/>
-        <Column fillWidth padding="4">
-          {brand?.url && (
-            <Option 
-              value="brand-guidelines" 
-              label="Visit brand guidelines" 
-              hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="arrowUpRight" />}
-              href={brand.url}
-            />
-          )}
-        </Column>
+        {brand?.url && (
+          <>
+            <Line/>
+            <Column fillWidth padding="4">
+                <Option 
+                  value="brand-guidelines" 
+                  label="Visit brand guidelines" 
+                  hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="arrowUpRight" />}
+                  href={brand.url}
+                />
+            </Column>
+          </>
+        )}
       </Column>
     );
   };
