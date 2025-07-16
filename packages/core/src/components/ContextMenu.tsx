@@ -92,6 +92,24 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       [handleOpenChange],
     );
     
+    // Handle click events for MacBook support (Control+click)
+    const handleClick = useCallback(
+      (e: ReactMouseEvent) => {
+        // Check if it's a control+click (common right-click equivalent on Mac)
+        if (e.ctrlKey || e.metaKey) {
+          e.preventDefault();
+          e.stopPropagation();
+          
+          // Set the position to the mouse position
+          setContextPosition({ x: e.clientX, y: e.clientY });
+          
+          // Open the dropdown
+          handleOpenChange(true);
+        }
+      },
+      [handleOpenChange],
+    );
+    
     // Close dropdown when clicking outside
     useEffect(() => {
       const handleClickOutside = (e: MouseEvent) => {
@@ -275,6 +293,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       <Flex 
         ref={containerRef}
         onContextMenu={handleContextMenu}
+        onClick={handleClick}
         className={className || ""}
         style={style}
       >
