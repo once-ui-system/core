@@ -31,6 +31,7 @@ import {
   ContextMenu,
   BlockQuote,
   ProgressBar,
+  MultiSelect,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -69,9 +70,21 @@ export default function Home() {
     setDropdownEmoji(emoji);
   };
 
+  const [values, setValues] = useState([""]);
+  console.log(values);
   return (
     <Column fill center padding="l">
       <Column maxWidth="s" horizontal="center" gap="l" align="center">
+        <MultiSelect
+          options={[
+            { label: "United States", value: "us" },
+            { label: "Canada", value: "ca" },
+            { label: "United Kingdom", value: "uk" },
+            { label: "Australia", value: "au" },
+          ]}
+          values={values}
+          onValuesChange={setValues}
+        />
         <Badge
           textVariant="code-default-s"
           border="neutral-alpha-medium"
