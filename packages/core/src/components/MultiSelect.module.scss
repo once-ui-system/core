@@ -1,0 +1,23 @@
+.multiSelectContainer {
+  border: 1.5px solid var(--neutral-border-medium);
+  border-radius: var(--radius-s);
+  background: var(--surface-background);
+  min-height: 2.5rem;
+  width: 100%;
+  align-items: center;
+  padding: 0.15rem 0.5rem;
+}
+
+.multiSelectInput {
+  border: none;
+  outline: none;
+  flex: 1 0 120px;
+  min-width: 120px;
+  background: transparent;
+  color: var(--neutral-on-background-strong);
+  padding: 0.15rem 0;
+  margin-left: 0.15rem;
+}
+
+
+
