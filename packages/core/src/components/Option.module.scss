@@ -5,6 +5,11 @@
         background: var(--neutral-alpha-weak);
         border-color: var(--neutral-alpha-medium);
         outline: none;
+
+        &:disabled {
+            background: var(--neutral-alpha-weak);
+            color: var(--neutral-on-background-weak);
+        }
     }
     
     &.selected {
@@ -26,8 +31,14 @@
             border-color: var(--danger-border-strong);
         }
     }
-  }
+}
   
-  .focused {
+.focused {
     background: var(--neutral-background-strong);
-  }
+}
+
+.disabled {
+    background: var(--neutral-alpha-weak);
+    color: var(--neutral-on-background-weak);
+    border: none;
+}

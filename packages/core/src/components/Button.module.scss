@@ -15,11 +15,10 @@
 
     &:disabled {
         box-shadow: none;
-        background: var(--neutral-solid-weak);
-        color: var(--neutral-on-solid-weak);
-        border: none;
-        pointer-events: none;
         cursor: not-allowed;
+        background: var(--neutral-background-medium);
+        color: var(--neutral-on-background-weak);
+        border: 1px solid var(--neutral-alpha-weak);
     }
 }
 
@@ -33,6 +32,12 @@
 
     &:hover, &:focus {
         background: var(--brand-solid-strong);
+
+        &:disabled {
+            background: var(--neutral-background-medium);
+            color: var(--neutral-on-background-weak);
+            border: 1px solid var(--neutral-alpha-weak);
+        }
     }
 }
 
@@ -46,6 +51,12 @@
     &:hover, &:focus {
         background: var(--neutral-alpha-weak);
         border-color: var(--neutral-alpha-weak);
+
+        &:disabled {
+            background: var(--neutral-background-medium);
+            color: var(--neutral-on-background-weak);
+            border: 1px solid var(--neutral-alpha-weak);
+        }
     }
 }
 
@@ -56,11 +67,12 @@
 
     &:hover, &:focus {
         border: 1px solid var(--neutral-border-medium);
-    }
 
-    &:disabled {
-        background: var(--static-transparent);
-        color: var(--neutral-on-background-weak);
+        &:disabled {
+            background: var(--neutral-background-medium);
+            color: var(--neutral-on-background-weak);
+            border: 1px solid var(--neutral-alpha-weak);
+        }
     }
 }
 
@@ -71,6 +83,12 @@
 
     &:hover, &:focus {
         color: var(--neutral-on-background-strong);
+
+        &:disabled {
+            background: var(--neutral-background-medium);
+            color: var(--neutral-on-background-weak);
+            border: 1px solid var(--neutral-alpha-weak);
+        }
     }
 }
 
@@ -84,6 +102,12 @@
 
     &:hover, &:focus {
         background: var(--danger-solid-strong);
+
+        &:disabled {
+            background: var(--neutral-background-medium);
+            color: var(--neutral-on-background-weak);
+            border: 1px solid var(--neutral-alpha-weak);
+        }
     }
 }
 

@@ -2,7 +2,7 @@
 
 import React, { useState, forwardRef, useEffect } from "react";
 import classNames from "classnames";
-import { Flex, Text, Button, Grid, SegmentedControl, IconButton, RevealFx, NumberInput } from ".";
+import { ClickAway, Flex, Text, Button, Grid, SegmentedControl, IconButton, RevealFx, NumberInput, DropdownWrapper, Option, Column, Icon, Row, ArrowNavigation } from ".";
 import styles from "./DatePicker.module.scss";
 
 export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
@@ -19,6 +19,7 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
     minutes: number;
   };
   size?: "s" | "m" | "l";
+  isNested?: boolean;
   className?: string;
   style?: React.CSSProperties;
   currentMonth?: number;
@@ -44,6 +45,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       defaultDate,
       defaultTime,
       size = "m",
+      isNested = false,
       className,
       style,
       currentMonth: propCurrentMonth,
@@ -67,13 +69,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const [isPM, setIsPM] = useState(defaultTime?.hours ? defaultTime.hours >= 12 : false);
     const [isTimeSelector, setIsTimeSelector] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(true);
+    const [isMonthOpen, setIsMonthOpen] = useState(false);
+    const [isYearOpen, setIsYearOpen] = useState(false);
 
-    const [currentMonth, setCurrentMonth] = useState<number>(
-      value ? value.getMonth() : today.getMonth(),
-    );
-    const [currentYear, setCurrentYear] = useState<number>(
-      value ? value.getFullYear() : today.getFullYear(),
-    );
+    const [currentMonth, setCurrentMonth] = useState<number>(value ? value.getMonth() : today.getMonth());
+    const [currentYear, setCurrentYear] = useState<number>(value ? value.getFullYear() : today.getFullYear());
 
     useEffect(() => {
       if (typeof propCurrentMonth === "number") {
@@ -160,6 +160,41 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       }
     };
 
+    const handleMonthSelect = (monthIndex: number) => {
+      setCurrentMonth(monthIndex);
+    };
+
+    const handleYearSelect = (year: number) => {
+      setCurrentYear(year);
+    };
+
+    const generateYearOptions = () => {
+      const currentYearNum = new Date().getFullYear();
+      const minYear = minDate ? minDate.getFullYear() : currentYearNum - 10;
+      const maxYear = maxDate ? maxDate.getFullYear() : currentYearNum + 10;
+      
+      const years = [];
+      for (let i = minYear; i <= maxYear; i++) {
+        years.push(i);
+      }
+      return years;
+    };
+    
+    const isMonthDisabled = (monthIndex: number, year: number) => {
+      if (!minDate && !maxDate) return false;
+      
+      const startOfMonth = new Date(year, monthIndex, 1);
+      const endOfMonth = new Date(year, monthIndex + 1, 0); // Last day of month
+      
+      // If the entire month is before the minimum date
+      if (minDate && endOfMonth < minDate) return true;
+      
+      // If the entire month is after the maximum date
+      if (maxDate && startOfMonth > maxDate) return true;
+      
+      return false;
+    };
+
     const convert24to12 = (hour24: number) => {
       if (hour24 === 0) return 12;
       if (hour24 > 12) return hour24 - 12;
@@ -205,7 +240,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         const prevMonthDay = daysInPrevMonth - firstDay + i + 1;
         days.push(
           <Flex
-            paddingY="2"
             width={size === "s" ? "32" : size === "m" ? "40" : "48"}
             height={size === "s" ? "32" : size === "m" ? "40" : "48"}
             key={`prev-${currentYear}-${currentMonth}-${i}`}
@@ -243,38 +277,39 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         const isDisabled = (minDate && currentDate < minDate) || (maxDate && currentDate > maxDate);
 
         days.push(
-          <Flex paddingY="2" key={`day-${currentYear}-${currentMonth}-${day}`}>
-            <Flex
-              width={size === "s" ? "32" : size === "m" ? "40" : "48"}
-              height={size === "s" ? "32" : size === "m" ? "40" : "48"}
-              background={isInRange(currentDate) ? "neutral-alpha-weak" : undefined}
-              borderTop={isInRange(currentDate) ? "neutral-alpha-weak" : "transparent"}
-              borderBottom={isInRange(currentDate) ? "neutral-alpha-weak" : "transparent"}
-              leftRadius={isFirstInRange ? "m" : undefined}
-              rightRadius={isLastInRange ? "m" : undefined}
-            >
-              <Button
-                fillWidth
-                weight={isSelected ? "strong" : "default"}
-                variant={isSelected ? "primary" : "tertiary"}
-                size={size}
-                onClick={(e: React.MouseEvent) => {
-                  if (!isDisabled) {
-                    if (timePicker) {
-                      // Stop propagation to prevent DropdownWrapper from closing
-                      e.stopPropagation();
-                    }
-                    handleDateSelect(currentDate);
+          <Row
+            key={`day-${currentYear}-${currentMonth}-${day}`}
+            width={size === "s" ? "32" : size === "m" ? "40" : "48"}
+            height={size === "s" ? "32" : size === "m" ? "40" : "48"}
+            background={isInRange(currentDate) ? "neutral-alpha-weak" : undefined}
+            borderTop={isInRange(currentDate) ? "neutral-alpha-weak" : "transparent"}
+            borderBottom={isInRange(currentDate) ? "neutral-alpha-weak" : "transparent"}
+            leftRadius={isFirstInRange ? "m" : undefined}
+            rightRadius={isLastInRange ? "m" : undefined}
+          >
+            <Button
+              fillWidth
+              weight={isSelected ? "strong" : "default"}
+              variant={isSelected ? "primary" : "tertiary"}
+              tabIndex={-1}
+              size={size}
+              data-value={currentDate.toISOString()}
+              onClick={(e: React.MouseEvent) => {
+                if (!isDisabled) {
+                  if (timePicker) {
+                    // Stop propagation to prevent DropdownWrapper from closing
+                    e.stopPropagation();
                   }
-                }}
-                onMouseEnter={() => onHover?.(currentDate)}
-                onMouseLeave={() => onHover?.(null)}
-                disabled={isDisabled}
-              >
-                {day}
-              </Button>
-            </Flex>
-          </Flex>,
+                  handleDateSelect(currentDate);
+                }
+              }}
+              onMouseEnter={() => onHover?.(currentDate)}
+              onMouseLeave={() => onHover?.(null)}
+              disabled={isDisabled}
+            >
+              {day}
+            </Button>
+          </Row>,
         );
       }
 
@@ -282,7 +317,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
       for (let i = 1; i <= remainingDays; i++) {
         days.push(
-          <Flex
+          <Row
             marginTop="2"
             width={size === "s" ? "32" : size === "m" ? "40" : "48"}
             height={size === "s" ? "32" : size === "m" ? "40" : "48"}
@@ -298,7 +333,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             >
               {i}
             </Button>
-          </Flex>,
+          </Row>,
         );
       }
 
@@ -306,11 +341,22 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     };
 
     return (
-      <Flex
+      <Column
+        onClick={(event: any) => {
+          event.preventDefault();
+          event.stopPropagation();
+          
+          // Close any open nested dropdowns when clicking on the DatePicker background
+          if (isMonthOpen) {
+            setIsMonthOpen(false);
+          }
+          if (isYearOpen) {
+            setIsYearOpen(false);
+          }
+        }}
         ref={ref}
         className={classNames(styles.calendar, className)}
         style={style}
-        direction="column"
         fillWidth
         horizontal="center"
         gap={size}
@@ -318,7 +364,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       >
         <Flex fillWidth center>
           {isTimeSelector ? (
-            <Flex horizontal="center" fillWidth direction="column" gap="8">
+            <Column horizontal="center" fillWidth gap="8">
               <Text variant={`label-default-${size}`} onBackground="neutral-strong">
                 {monthNames[currentMonth]} {currentYear}
               </Text>
@@ -330,7 +376,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               >
                 Back to calendar
               </Text>
-            </Flex>
+            </Column>
           ) : (
             <>
               {previousMonth && (
@@ -345,17 +391,157 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   }}
                 />
               )}
-              <Flex fillWidth direction="column" horizontal="center" gap="8">
-                <Text variant={`body-default-${size}`} onBackground="neutral-strong">
-                  {monthNames[currentMonth]} {currentYear}
-                </Text>
+              <Column fillWidth horizontal="center" gap="8">
+                <Row gap="4" horizontal="center">
+                  <DropdownWrapper
+                    isNested={isNested}
+                    placement="bottom-start"
+                    isOpen={isMonthOpen}
+                    dropdownId="month-dropdown"
+                    onOpenChange={(open) => {
+                      setIsMonthOpen(open);
+                      // Update global tracking for keyboard navigation
+                      if (open) {
+                        // Set this as the last opened dropdown
+                        (window as any).lastOpenedDropdown = 'month-dropdown';
+                        console.log('Month dropdown opened');
+                      } else if ((window as any).lastOpenedDropdown === 'month-dropdown') {
+                        (window as any).lastOpenedDropdown = null;
+                        console.log('Month dropdown closed');
+                      }
+                    }}
+                    trigger={
+                      <Button
+                        onClick={(event: any) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          setIsMonthOpen(true);
+                          // Update global tracking
+                          (window as any).lastOpenedDropdown = 'month-dropdown';
+                          console.log('Month dropdown opened via trigger');
+                        }}
+                        variant="secondary"
+                        size="s"
+                      >
+                        <Row vertical="center" gap="4">
+                          {monthNames[currentMonth]}
+                          <Icon name="chevronDown" onBackground="neutral-weak" size="xs"/>
+                        </Row>
+                      </Button>
+                    }
+                    dropdown={
+                      <Column fillWidth gap="2" padding="4"
+                        onClick={(event: any) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }}>
+                        {monthNames.map((month, index) => {
+                          const monthDisabled = isMonthDisabled(index, currentYear);
+                          return (
+                            <Option
+                              key={month}
+                              value={index.toString()}
+                              disabled={monthDisabled}
+                              label={<Text color={monthDisabled ? "neutral-weak" : undefined}>{month}</Text>}
+                              selected={index === currentMonth}
+                              onClick={(value) => {
+                                if (!monthDisabled) {
+                                  handleMonthSelect(index);
+                                  setIsMonthOpen(false);
+                                  // Clear global tracking
+                                  (window as any).lastOpenedDropdown = null;
+                                }
+                              }}
+                            />
+                          );
+                        })}
+                      </Column>
+                    }
+                    data-dropdown-id="month-dropdown"
+                  />
+                  
+                  <DropdownWrapper
+                    navigationLayout="grid"
+                    optionsCount={generateYearOptions().length}
+                    columns={generateYearOptions().length < 6 ? 1 : 6}
+                    isNested={isNested}
+                    isOpen={isYearOpen}
+                    dropdownId="year-dropdown"
+                    onOpenChange={(open) => {
+                      setIsYearOpen(open);
+                      // Update global tracking for keyboard navigation
+                      if (open) {
+                        // Set this as the last opened dropdown
+                        (window as any).lastOpenedDropdown = 'year-dropdown';
+                        console.log('Year dropdown opened');
+                      } else if ((window as any).lastOpenedDropdown === 'year-dropdown') {
+                        (window as any).lastOpenedDropdown = null;
+                        console.log('Year dropdown closed');
+                      }
+                    }}
+                    placement="bottom-start"
+                    trigger={
+                      <Button
+                        variant="secondary"
+                        size="s"
+                        onClick={(event: any) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          setIsYearOpen(true);
+                          // Update global tracking
+                          (window as any).lastOpenedDropdown = 'year-dropdown';
+                          console.log('Year dropdown opened via trigger');
+                        }}
+                      >
+                        <Row vertical="center" gap="4">
+                          {currentYear.toString()}
+                          <Icon name="chevronDown" onBackground="neutral-weak" size="xs"/>
+                        </Row>
+                      </Button>
+                    }
+                    dropdown={
+                      <Grid columns={generateYearOptions().length < 6 ? "1" : 6}
+                        gap="2" padding="4"
+                        onClick={(event: any) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }}
+                      >
+                        {generateYearOptions().map((year) => {
+                          // Check if all months in this year are disabled
+                          const allMonthsDisabled = Array.from({ length: 12 }, (_, i) => i)
+                            .every(month => isMonthDisabled(month, year));
+                            
+                          return (
+                            <Option
+                              key={year}
+                              value={year.toString()}
+                              disabled={allMonthsDisabled}
+                              label={<Text color={allMonthsDisabled ? "neutral-weak" : undefined}>{year}</Text>}
+                              selected={year === currentYear}
+                              onClick={(value) => {
+                                if (!allMonthsDisabled) {
+                                  handleYearSelect(year);
+                                  setIsYearOpen(false);
+                                  // Clear global tracking
+                                  (window as any).lastOpenedDropdown = null;
+                                }
+                              }}
+                            />
+                          );
+                        })}
+                      </Grid>
+                    }
+                    data-dropdown-id="year-dropdown"
+                  />
+                </Row>
                 {timePicker && selectedTime && (
                   <Text variant="label-default-s" onBackground="neutral-weak">
                     {`${selectedTime.hours.toString().padStart(2, "0")}:${selectedTime.minutes.toString().padStart(2, "0")} ${isPM ? "PM" : "AM"}`}
                   </Text>
                 )}
-              </Flex>
-              {nextMonth && (
+              </Column>
+              {nextMonth &&  (
                 <IconButton
                   variant="tertiary"
                   size={size}
@@ -373,18 +559,15 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
         <RevealFx
           fillWidth
-          horizontal="center"
-          vertical="center"
+          center
           key={isTimeSelector ? "time" : "date"}
           trigger={isTransitioning}
           speed="fast"
         >
           {isTimeSelector ? (
-            <Flex
+            <Column
               maxWidth={24}
-              horizontal="center"
-              vertical="center"
-              direction="column"
+              center
               padding="32"
               gap="32"
             >
@@ -438,25 +621,52 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   aria-label="Minutes"
                 />
               </Flex>
-            </Flex>
+            </Column>
           ) : (
-            <Grid fitWidth columns="7">
-              {dayNames.map((day) => (
-                <Text
-                  marginBottom="16"
-                  key={day}
-                  variant="label-default-m"
-                  onBackground="neutral-medium"
-                  align="center"
-                >
-                  {day}
-                </Text>
-              ))}
-              {renderCalendarGrid()}
-            </Grid>
+            isMonthOpen || isYearOpen ? (
+              <Grid fitWidth columns="7" gap="2">
+                {dayNames.map((day) => (
+                  <Text
+                    marginBottom="16"
+                    key={day}
+                    variant="label-default-m"
+                    onBackground="neutral-medium"
+                    align="center"
+                  >
+                    {day}
+                  </Text>
+                ))}
+                {renderCalendarGrid()}
+              </Grid>
+            ) : (
+              <ArrowNavigation
+                layout="grid"
+                columns={7}
+                itemCount={7 * Math.ceil((new Date(currentYear, currentMonth + 1, 0).getDate() + new Date(currentYear, currentMonth, 1).getDay()) / 7)}
+                wrap
+                itemSelector='button:not([disabled])'
+                role="grid"
+                aria-label="Calendar"
+              >
+                <Grid fitWidth columns="7" gap="2">
+                  {dayNames.map((day) => (
+                    <Text
+                      marginBottom="16"
+                      key={day}
+                      variant="label-default-m"
+                      onBackground="neutral-medium"
+                      align="center"
+                    >
+                      {day}
+                    </Text>
+                  ))}
+                  {renderCalendarGrid()}
+                </Grid>
+              </ArrowNavigation>
+            )
           )}
         </RevealFx>
-      </Flex>
+      </Column>
     );
   },
 );

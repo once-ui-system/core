@@ -29,7 +29,10 @@ import {
   User,
   Table,
   ContextMenu,
-  BlockQuote
+  BlockQuote,
+  RevealFx,
+  DatePicker,
+  DateInput
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -37,7 +40,6 @@ export default function Home() {
   const [showEmojiPicker, setShowEmojiPicker] = React.useState<boolean>(false);
   const [dropdownEmoji, setDropdownEmoji] = React.useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [comment, setComment] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   // Custom dropdown state
@@ -64,6 +66,8 @@ export default function Home() {
   return (
     <Column fill center padding="l">
       <Column maxWidth="s" horizontal="center" gap="l" align="center">
+      <RevealFx fillWidth speed={500} direction="column" gap="l">
+        <Media aspectRatio="16/9" src="/images/demo.jpg" />
         <Badge
           textVariant="code-default-s"
           border="neutral-alpha-medium"
@@ -98,20 +102,48 @@ export default function Home() {
             Right-click me to see the context menu
           </Badge>
         </ContextMenu>
+        <Button type="button" disabled>asd</Button>
+        <Button type="button" variant="secondary" disabled>asd</Button>
+        <Button type="button" variant="tertiary" disabled>asd</Button>
+        <Button type="button" variant="danger" disabled>asd</Button>
+        </RevealFx>
+        <DatePicker id="date-input" minDate={new Date("1950-01-01")} maxDate={new Date()}/>
+        <DateInput id="date-input" placeholder="Date" minDate={new Date("1950-01-01")} maxDate={new Date()}/>
         <Table
-              background="brand-strong"
-              data={{
-    headers: [
-      { content: "Name", key: "name", sortable: true },
-      { content: "Role", key: "role", sortable: true },
-    ],
-    rows: [
-      ["Alice", "Engineer"],
-      ["Bob", "Designer"],
-      ["Carol", "Product"],
-    ],
-  }}
-/>
+          background="brand-strong"
+          data={{
+            headers: [
+              { content: "Name", key: "name", sortable: true },
+              { content: "Role", key: "role", sortable: true },
+            ],
+            rows: [
+              ["Alice", "Engineer"],
+              ["Bob", "Designer"],
+              ["Carol", "Product"],
+            ],
+          }}
+        />
+        <DropdownWrapper
+          closeAfterClick={false}
+          trigger={<Button>Open</Button>}
+          dropdown={
+          <Column fillWidth padding="4" gap="2" minWidth={10}>
+            <Option value="option1" label="Option 1"/>
+            <Option value="option2" label="Option 2"/>
+            <DropdownWrapper
+              fillWidth
+              placement="right-start"
+              trigger={
+                <Option value="option3" label="Option 3" hasSuffix={<Icon name="chevronRight" size="xs" onBackground="neutral-weak" />}/>
+              } dropdown={
+              <Column fillWidth padding="4" gap="2" minWidth={10}>
+                <Option value="option4" label="Option 4"/>
+                <Option value="option5" label="Option 5"/>
+              </Column>
+              }/>
+            <Option value="option6" label="Option 6"/>
+          </Column>
+        }/>
         <Heading variant="display-strong-xl" marginTop="24">
           Presence that doesn&apos;t beg for attention
         </Heading>
@@ -216,7 +248,7 @@ export default function Home() {
           type="button"
         />
 
-<AutoScroll reverse>
+        <AutoScroll reverse>
           <IconButton icon="smiley" size="m" variant="tertiary" />
           <IconButton icon="smiley" size="m" variant="tertiary" />
           <IconButton icon="smiley" size="m" variant="tertiary" />

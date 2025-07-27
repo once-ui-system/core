@@ -26,6 +26,7 @@ interface CommonProps {
   prefixIcon?: IconName;
   suffixIcon?: IconName;
   loading?: boolean;
+  disabled?: boolean;
   fillWidth?: boolean;
   horizontal?: "start" | "center" | "end" | "space-between";
   children?: ReactNode;
@@ -51,6 +52,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
       prefixIcon,
       suffixIcon,
       loading = false,
+      disabled = false,
       fillWidth = false,
       horizontal = "center",
       href,
@@ -70,6 +72,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
         id={id}
         href={href}
         ref={ref}
+        disabled={disabled}
         className={classNames(
           styles.button,
           styles[variant],
@@ -81,7 +84,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
               : `radius-${radiusSize}`,
           "text-decoration-none",
           "button",
-          "cursor-interactive",
+          disabled ? "cursor-not-allowed" : "cursor-interactive",
           {
             ["fill-width"]: fillWidth,
             ["fit-width"]: !fillWidth,

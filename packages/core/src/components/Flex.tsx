@@ -185,7 +185,7 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
           ? "g-vertical--1"
           : "g-horizontal--1"
         : gap && `g-${gap}`,
-      top && `top-${top}`,
+      top ? `top-${top}` : (position === "sticky" ? "top-0" : undefined),
       right && `right-${right}`,
       bottom && `bottom-${bottom}`,
       left && `left-${left}`,

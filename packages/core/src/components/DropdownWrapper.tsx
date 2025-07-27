@@ -9,6 +9,7 @@ import React, {
   useImperativeHandle,
   useCallback,
   KeyboardEvent,
+  FocusEvent,
 } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -20,8 +21,9 @@ import {
   autoUpdate,
   Placement,
 } from "@floating-ui/react-dom";
-import { Flex, Dropdown, Column, Row } from ".";
+import { Flex, Dropdown, Column, Row, FocusTrap, ArrowNavigation, ClickAway } from ".";
 import styles from "./DropdownWrapper.module.scss";
+import { NavigationLayout } from "../hooks/useArrowNavigation";
 
 export interface DropdownWrapperProps {
   fillWidth?: boolean;
@@ -36,9 +38,18 @@ export interface DropdownWrapperProps {
   className?: string;
   onSelect?: (value: string) => void;
   closeAfterClick?: boolean;
+  handleArrowNavigation?: boolean;
   isOpen?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
+  isNested?: boolean;
+  navigationLayout?: NavigationLayout;
+  columns?: number | string;
+  optionsCount?: number;
+  dropdownId?: string;
 }
+
+// Global state to track the last opened dropdown
+let dropdownCounter = 0;
 
 const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
   (
@@ -50,6 +61,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       onSelect,
       closeAfterClick = true,
       isOpen: controlledIsOpen,
+      handleArrowNavigation = true,
       onOpenChange,
       minWidth,
       maxWidth,
@@ -57,15 +69,24 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       placement = "bottom-start",
       className,
       style,
+      isNested = false,
+      navigationLayout: propNavigationLayout,
+      columns = 8,
+      optionsCount: propOptionsCount,
+      dropdownId: propDropdownId,
     },
-    ref,
+    ref
   ) => {
+    const [internalIsOpen, setInternalIsOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+    const [focusedIndex, setFocusedIndex] = useState(-1);
+    
+    // Use provided dropdownId or generate a unique ID for this dropdown
+    const dropdownId = useRef(propDropdownId || `dropdown-${dropdownCounter++}`);
+
     const wrapperRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
-    const dropdownRef = useRef<HTMLDivElement | null>(null);
-    const [mounted, setMounted] = useState(false);
-    const [internalIsOpen, setInternalIsOpen] = useState(false);
-    const [focusedIndex, setFocusedIndex] = useState(-1);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const isControlled = controlledIsOpen !== undefined;
     const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
@@ -75,9 +96,32 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         if (!isControlled) {
           setInternalIsOpen(newIsOpen);
         }
+        
+        if (newIsOpen) {
+          // Set this as the last opened dropdown using global variable
+          (window as any).lastOpenedDropdown = dropdownId.current;
+          console.log('Dropdown opened:', dropdownId.current, 'isNested:', isNested);
+          
+          // Focus the dropdown content when it opens
+          setTimeout(() => {
+            if (dropdownRef.current) {
+              const firstFocusableElement = dropdownRef.current.querySelector('[data-value], [role="option"], .option');
+              if (firstFocusableElement instanceof HTMLElement) {
+                firstFocusableElement.focus();
+              }
+            }
+          }, 0);
+        } else {
+          // Clear the last opened dropdown if this one is closing
+          if ((window as any).lastOpenedDropdown === dropdownId.current) {
+            (window as any).lastOpenedDropdown = null;
+            console.log('Last dropdown closed:', dropdownId.current);
+          }
+        }
+        
         onOpenChange?.(newIsOpen);
       },
-      [onOpenChange, isControlled],
+      [onOpenChange, isControlled, isNested],
     );
 
     // State to track if we're in a browser environment for portal rendering
@@ -178,7 +222,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             if (focusableElements.length > 0) {
               (focusableElements[0] as HTMLElement).focus({ preventScroll: true });
               
-              window.scrollTo(scrollX, scrollY);
+              // Ensure scroll position is maintained
+              setTimeout(() => window.scrollTo(scrollX, scrollY), 0);
             }
 
             const optionElements = dropdownRef.current
@@ -192,6 +237,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               optionElements.forEach((el, i) => {
                 if (i === 0) {
                   (el as HTMLElement).classList.add("highlighted");
+                  // Make sure the first option is visible
+                  (el as HTMLElement).scrollIntoView({ block: "nearest" });
                 } else {
                   (el as HTMLElement).classList.remove("highlighted");
                 }
@@ -200,23 +247,87 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           }
         });
       } else if (!isOpen && previouslyFocusedElement.current) {
-        (previouslyFocusedElement.current as HTMLElement).focus();
+        // Only try to focus if the element is still in the document
+        if (document.contains(previouslyFocusedElement.current)) {
+          (previouslyFocusedElement.current as HTMLElement).focus();
+        }
       }
     }, [isOpen, mounted, refs, update]);
 
     const handleClickOutside = useCallback(
       (event: MouseEvent) => {
+        console.log('handleClickOutside called!'); // Debug: Check if this function is called at all
+        
+        const target = event.target as HTMLElement;
+        
+        // Debug logging
+        console.log('Click detected:', {
+          target: target,
+          targetClasses: target.className,
+          targetDataRole: target.getAttribute('data-role'),
+          targetDataIsDropdown: target.getAttribute('data-is-dropdown'),
+          isInWrapper: wrapperRef.current?.contains(target),
+          isInDropdown: dropdownRef.current?.contains(target),
+          closestDropdownPortal: target.closest('.dropdown-portal'),
+          closestDropdownWrapper: target.closest('[data-role="dropdown-wrapper"]'),
+          closestDropdownTrigger: target.closest('.dropdown-trigger'),
+          dropdownRef: dropdownRef.current,
+          wrapperRef: wrapperRef.current,
+          targetParent: target.parentElement,
+          targetParentClasses: target.parentElement?.className
+        });
+        
         // Check if the click is inside the dropdown or the wrapper
-        const isClickInDropdown = dropdownRef.current && dropdownRef.current.contains(event.target as Node);
-        const isClickInWrapper = wrapperRef.current && wrapperRef.current.contains(event.target as Node);
+        const isClickInDropdown = dropdownRef.current && dropdownRef.current.contains(target);
+        const isClickInWrapper = wrapperRef.current && wrapperRef.current.contains(target);
+        
+        // Check if the click is on a dropdown trigger (for nested dropdowns)
+        const isClickOnDropdownTrigger = target.closest('.dropdown-trigger') !== null;
+        
+        // Check if the click is on the dropdown portal itself
+        const isClickOnDropdownPortal = target.closest('.dropdown-portal') !== null;
+        
+        // Check if the click is on any dropdown-related element
+        const isClickOnDropdownElement = target.closest('[data-role="dropdown-wrapper"]') !== null ||
+                                       target.closest('[data-role="dropdown-portal"]') !== null ||
+                                       target.closest('[data-is-dropdown="true"]') !== null;
 
         // Only close if the click is outside both the dropdown and the wrapper
-        if (!isClickInDropdown && !isClickInWrapper) {
+        // and not on a nested dropdown trigger or dropdown portal
+        if (!isClickInDropdown && !isClickInWrapper && !isClickOnDropdownTrigger && 
+            !isClickOnDropdownPortal && !isClickOnDropdownElement) {
+          console.log('Closing dropdown - click is outside');
           handleOpenChange(false);
           setFocusedIndex(-1);
+        } else {
+          console.log('Not closing dropdown - click is inside or on dropdown element');
+          
+          // If click is inside dropdown but not on an option, try to close nested dropdowns
+          if (isClickInDropdown || isClickOnDropdownPortal) {
+            console.log('Click is inside dropdown - trying to close nested dropdowns');
+            
+            // Try to close all other dropdown portals
+            const allPortals = document.querySelectorAll('[data-role="dropdown-portal"]');
+            console.log('Found dropdown portals with data-role:', allPortals.length);
+            
+            allPortals.forEach((portal, index) => {
+              if (portal !== dropdownRef.current) {
+                console.log(`Portal ${index}:`, portal);
+                // Try to find the dropdown wrapper that contains this portal
+                const wrapper = portal.closest('[data-role="dropdown-wrapper"]');
+                if (wrapper) {
+                  const trigger = wrapper.querySelector('.dropdown-trigger');
+                  if (trigger) {
+                    console.log('Clicking trigger to close portal dropdown');
+                    (trigger as HTMLElement).click();
+                  }
+                }
+              }
+            });
+          }
         }
       },
-      [handleOpenChange, wrapperRef, dropdownRef],
+      [handleOpenChange],
     );
 
     const handleFocusOut = useCallback(
@@ -231,21 +342,101 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           setFocusedIndex(-1);
         }
       },
-      [handleOpenChange, wrapperRef, dropdownRef],
+      [handleOpenChange],
     );
 
     useEffect(() => {
       const currentWrapperRef = wrapperRef.current;
 
-      document.addEventListener("mousedown", handleClickOutside);
-      currentWrapperRef?.addEventListener("focusout", handleFocusOut);
+      document.addEventListener("click", handleClickOutside);
+      currentWrapperRef?.addEventListener("focusout", handleFocusOut as unknown as EventListener);
+
+      // Listen for close-nested-dropdowns events if this is a nested dropdown
+      const handleCloseNestedDropdowns = () => {
+        console.log('Dropdown received close event:', { isNested, isOpen, wrapperRef: currentWrapperRef });
+        if (isNested && isOpen) {
+          console.log('Nested dropdown received close event');
+          handleOpenChange(false);
+          setFocusedIndex(-1);
+        }
+      };
+
+      document.addEventListener("close-nested-dropdowns", handleCloseNestedDropdowns);
 
       return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-        currentWrapperRef?.removeEventListener("focusout", handleFocusOut);
+        document.removeEventListener("click", handleClickOutside);
+        currentWrapperRef?.removeEventListener("focusout", handleFocusOut as unknown as EventListener);
+        document.removeEventListener("close-nested-dropdowns", handleCloseNestedDropdowns);
       };
-    }, [handleClickOutside, handleFocusOut]);
+    }, [handleClickOutside, handleFocusOut, isNested, isOpen, handleOpenChange]);
 
+    // Get options from the dropdown
+    const getOptions = useCallback(() => {
+      if (!dropdownRef.current) return [];
+      
+      return Array.from(
+        dropdownRef.current.querySelectorAll('.option, [role="option"], [data-value]')
+      ) as HTMLElement[];
+    }, []);
+    
+    // Determine the appropriate navigation layout
+    const determineNavigationLayout = useCallback((): NavigationLayout => {
+      // Use the prop if provided, otherwise default to column
+      if (propNavigationLayout) {
+        return propNavigationLayout;
+      }
+      // Default to column layout for most dropdowns
+      return 'column';
+    }, [propNavigationLayout]);
+    
+    const [navigationLayout, setNavigationLayout] = useState<NavigationLayout>(propNavigationLayout || 'column');
+    const [optionsCount, setOptionsCount] = useState(propOptionsCount || 0);
+    
+    // Update options count when dropdown opens or content changes
+    useEffect(() => {
+      if (isOpen) {
+        // If optionsCount is provided as a prop, use it
+        if (propOptionsCount !== undefined) {
+          setOptionsCount(propOptionsCount);
+        } else {
+          const options = getOptions();
+          setOptionsCount(options.length);
+        }
+        
+        // Try to determine the layout based on the dropdown content or props
+        setNavigationLayout(determineNavigationLayout());
+      }
+    }, [isOpen, getOptions, determineNavigationLayout, propOptionsCount]);
+    
+    // Handle option selection
+    const handleOptionSelect = useCallback(
+      (index: number) => {
+        const options = getOptions();
+        if (index >= 0 && index < options.length) {
+          options[index].click();
+          
+          if (closeAfterClick) {
+            handleOpenChange(false);
+            setFocusedIndex(-1);
+          }
+        }
+      },
+      [getOptions, closeAfterClick, handleOpenChange]
+    );
+    
+    // Handle focus change
+    const handleFocusChange = useCallback(
+      (index: number) => {
+        setFocusedIndex(index);
+        const options = getOptions();
+        if (index >= 0 && index < options.length) {
+          // Ensure the option is visible
+          options[index].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        }
+      },
+      [getOptions]
+    );
+    
     // Handle keyboard navigation
     const handleKeyDown = useCallback(
       (e: KeyboardEvent<HTMLDivElement>) => {
@@ -291,67 +482,14 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               firstElement.focus();
             }
           }
-
+          
           return;
         }
-
-        if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-          e.preventDefault();
-
-          // Find all Option components in the dropdown
-          // We need to look for the actual clickable elements inside the dropdown
-          const optionElements = dropdownRef.current
-            ? Array.from(
-                dropdownRef.current.querySelectorAll('.option, [role="option"], [data-value]'),
-              )
-            : [];
-
-          if (optionElements.length === 0) return;
-
-          let newIndex = focusedIndex;
-
-          if (e.key === "ArrowDown") {
-            newIndex = focusedIndex < optionElements.length - 1 ? focusedIndex + 1 : 0;
-          } else {
-            newIndex = focusedIndex > 0 ? focusedIndex - 1 : optionElements.length - 1;
-          }
-
-          setFocusedIndex(newIndex);
-
-          // Highlight the element visually
-          optionElements.forEach((el, i) => {
-            if (i === newIndex) {
-              (el as HTMLElement).classList.add("highlighted");
-              // Scroll into view if needed
-              (el as HTMLElement).scrollIntoView({ block: "nearest" });
-              // Focus the element
-              (el as HTMLElement).focus();
-            } else {
-              (el as HTMLElement).classList.remove("highlighted");
-            }
-          });
-        } else if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-
-          // Find all Option components
-          const optionElements = dropdownRef.current
-            ? Array.from(
-                dropdownRef.current.querySelectorAll('.option, [role="option"], [data-value]'),
-              )
-            : [];
-
-          // Click the focused option
-          if (focusedIndex >= 0 && focusedIndex < optionElements.length) {
-            (optionElements[focusedIndex] as HTMLElement).click();
-
-            if (closeAfterClick) {
-              handleOpenChange(false);
-              setFocusedIndex(-1);
-            }
-          }
-        }
+        
+        // Arrow key navigation will be handled by ArrowNavigation component
+        // Enter/Space key selection will be handled by ArrowNavigation component
       },
-      [isOpen, focusedIndex, handleOpenChange, closeAfterClick],
+      [isOpen, handleOpenChange],
     );
 
     return (
@@ -375,45 +513,149 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         role="button"
         aria-haspopup="listbox"
         aria-expanded={isOpen}
+        data-role="dropdown-wrapper"
       >
-        <Row ref={triggerRef} fillWidth={fillWidth} fitWidth={!fillWidth}>
+        <Row
+          ref={triggerRef}
+          fillWidth={fillWidth}
+          fitWidth={!fillWidth}
+          onClick={(e) => {
+            // If already open, close on trigger click
+            if (isOpen) {
+              handleOpenChange(false);
+              return;
+            }
+            handleOpenChange(true);
+          }}
+          onKeyDown={(e) => {
+            handleKeyDown(e);
+          }}
+          role="button"
+          tabIndex={isOpen ? -1 : 0}
+          data-is-dropdown="true"
+          aria-haspopup="true"
+          aria-expanded={isOpen}
+          className="dropdown-trigger"
+        >
           {trigger}
         </Row>
         {isOpen && dropdown && isBrowser && createPortal(
-          <Flex
-            zIndex={9}
-            className={`${styles.fadeIn} dropdown-portal`}
-            minWidth={minWidth}
-            ref={dropdownRef}
-            style={{
-              position: strategy,
-              top: y ?? 0,
-              left: x ?? 0,
-            }}
-            role="listbox"
-            onKeyDown={handleKeyDown}
-            onClick={(e) => {
-              // Stop propagation for all clicks inside the dropdown
-              // This prevents the dropdown from closing when clicking on any element inside it
-              e.stopPropagation();
-              e.nativeEvent.stopImmediatePropagation();
-            }}
-            onMouseDown={(e) => {
-              // Stop propagation for all mousedown events inside the dropdown
-              // This prevents the dropdown from losing focus when clicking inside it
-              e.stopPropagation();
-              e.preventDefault();
-            }}
+          <FocusTrap
+            active={isOpen}
+            onEscape={() => handleOpenChange(false)}
+            autoFocus
+            restoreFocus
           >
-            <Dropdown
-              minWidth={minWidth}
-              radius="l"
-              selectedOption={selectedOption}
-              onSelect={onSelect}
+            <ArrowNavigation
+              layout={navigationLayout}
+              itemCount={optionsCount}
+              columns={typeof columns === 'string' ? parseInt(columns, 10) || 8 : columns}
+              onSelect={handleOptionSelect}
+              onFocusChange={handleFocusChange}
+              wrap
+              autoFocus
+              initialFocusedIndex={focusedIndex}
+              itemSelector='.option, [role="option"], [data-value]'
+              role={navigationLayout === 'grid' ? 'grid' : 'listbox'}
+              aria-label="Dropdown options"
+              disabled={(window as any).lastOpenedDropdown !== dropdownId.current}
             >
-              {dropdown}
-            </Dropdown>
-          </Flex>,
+              <Flex
+                zIndex={9}
+                className={`${styles.fadeIn} dropdown-portal`}
+                minWidth={minWidth}
+                ref={dropdownRef}
+                style={{
+                  position: strategy,
+                  top: y ?? 0,
+                  left: x ?? 0,
+                }}
+                data-role="dropdown-portal"
+                data-is-dropdown="true"
+                data-dropdown-id={dropdownId.current}
+                data-is-active={(window as any).lastOpenedDropdown === dropdownId.current}
+                onKeyDown={(e) => {
+                  // Let FocusTrap handle Tab key
+                  // Let ArrowNavigation handle arrow keys
+                  if (e.key !== 'Tab' && 
+                      e.key !== 'ArrowUp' && 
+                      e.key !== 'ArrowDown' && 
+                      e.key !== 'ArrowLeft' && 
+                      e.key !== 'ArrowRight') {
+                    handleKeyDown(e);
+                  }
+                }}
+                onClick={(e) => {
+                  // Don't stop propagation - let the document listener handle click detection
+                  // The document listener will check if the click is inside the dropdown
+                  
+                  // Debug: Log what was clicked
+                  console.log('Flex onClick triggered:', {
+                    target: e.target,
+                    currentTarget: e.currentTarget,
+                    eventPhase: e.eventPhase,
+                    dropdownId: dropdownId.current,
+                    isActive: (window as any).lastOpenedDropdown === dropdownId.current
+                  });
+                }}
+                onMouseDown={(e) => {
+                  // Don't stop propagation - let the document listener handle it
+                  // Just prevent default to avoid any unwanted behavior
+                  e.preventDefault();
+                }}
+                onPointerDown={(e) => {
+                  // Also handle pointer events to ensure touch/pen interactions work correctly
+                  e.preventDefault();
+                }}
+                onTouchStart={(e) => {
+                  // Handle touch events as well
+                  e.preventDefault();
+                }}
+              >
+                <Dropdown
+                  minWidth={minWidth}
+                  radius="l"
+                  padding="0"
+                  selectedOption={selectedOption}
+                  onSelect={(value) => {
+                    onSelect?.(value);
+                    if (closeAfterClick) {
+                      handleOpenChange(false);
+                      setFocusedIndex(-1);
+                    }
+                  }}
+                >
+                  {React.Children.map(dropdown, (child) => {
+                    if (React.isValidElement(child)) {
+                      // Only add onClick handler to elements that have data-value or are interactive
+                      const childElement = child as React.ReactElement<any>;
+                      const hasDataValue = childElement.props['data-value'] || 
+                                         childElement.props.value ||
+                                         childElement.type === 'button' ||
+                                         childElement.props.role === 'option';
+                      
+                      if (hasDataValue) {
+                        // Cast the child element to any to avoid TypeScript errors with unknown props
+                        return React.cloneElement(childElement, {
+                          onClick: (val: string) => {
+                            onSelect?.(val);
+                            if (closeAfterClick) {
+                              handleOpenChange(false);
+                              setFocusedIndex(-1);
+                            }
+                          },
+                        });
+                      }
+                      // Return the child unchanged if it doesn't need an onClick handler
+                      return child;
+                    }
+                    return child;
+                  })}
+                </Dropdown>
+              </Flex>
+            </ArrowNavigation>
+          </FocusTrap>
+          ,
           document.body
         )}
       </Column>
