@@ -16,7 +16,6 @@ export * from "./CursorCard";
 export * from "./Column";
 export * from "./Checkbox";
 export * from "./Chip";
-export * from "./ClickAway";
 export * from "./ColorInput";
 export * from "./CompareImage";
 export * from "./ContextMenu";

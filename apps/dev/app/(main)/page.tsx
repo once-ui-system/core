@@ -32,7 +32,9 @@ import {
   BlockQuote,
   RevealFx,
   DatePicker,
-  DateInput
+  DateInput,
+  DateRangeInput,
+  DateRange
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -41,6 +43,14 @@ export default function Home() {
   const [dropdownEmoji, setDropdownEmoji] = React.useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dateRangeValue, setDateRangeValue] = useState<DateRange | null>(null);
+  
+  // DatePicker state to prevent unwanted scrolling
+  const [datePickerValue, setDatePickerValue] = useState(new Date());
+  
+  // Additional state for other DatePicker components
+  const [standaloneDatePickerValue, setStandaloneDatePickerValue] = useState<Date | undefined>();
+  const [dateInputValue, setDateInputValue] = useState<Date | undefined>();
   
   // Custom dropdown state
   const [isCustomDropdownOpen, setIsCustomDropdownOpen] = useState(false);
@@ -61,6 +71,10 @@ export default function Home() {
   
   const handleDropdownEmojiSelect = (emoji: string) => {
     setDropdownEmoji(emoji);
+  };
+
+  const handleDateRangeChange = (range: DateRange) => {
+    setDateRangeValue(range);
   };
 
   return (
@@ -107,8 +121,64 @@ export default function Home() {
         <Button type="button" variant="tertiary" disabled>asd</Button>
         <Button type="button" variant="danger" disabled>asd</Button>
         </RevealFx>
-        <DatePicker id="date-input" minDate={new Date("1950-01-01")} maxDate={new Date()}/>
-        <DateInput id="date-input" placeholder="Date" minDate={new Date("1950-01-01")} maxDate={new Date()}/>
+        <DatePicker 
+          id="date-input" 
+          value={standaloneDatePickerValue}
+          onChange={setStandaloneDatePickerValue}
+          minDate={new Date("1950-01-01")} 
+          maxDate={new Date()}
+        />
+        <DateInput 
+          id="date-input" 
+          placeholder="Date" 
+          value={dateInputValue}
+          onChange={setDateInputValue}
+          minDate={new Date("1950-01-01")} 
+          maxDate={new Date()}
+        />
+        
+        {/* Test DatePicker with selected date and time picker */}
+        <Column gap="16" fillWidth>
+          <Text variant="heading-strong-m">DatePicker Arrow Navigation Test</Text>
+          <Text variant="body-default-s" onBackground="neutral-weak">
+            Use arrow keys to navigate the calendar. The focus should start from the selected date.
+            Press Enter to select a date. The highlighting should match the selected date.
+          </Text>
+          <DatePicker 
+            value={datePickerValue} 
+            onChange={setDatePickerValue}
+            timePicker={true}
+            minDate={new Date("2020-01-01")} 
+            maxDate={new Date("2030-12-31")}
+            // no autoFocus prop here, should default to false
+          />
+        </Column>
+
+        <DateRangeInput
+          id="date-range-input"
+          placeholder="Select date range"
+          value={dateRangeValue || undefined}
+          onChange={setDateRangeValue}
+          startLabel="Start Date"
+          endLabel="End Date"
+        />
+        
+        {/* Test DateInput with time picker */}
+        <Column gap="16" fillWidth>
+          <Text variant="heading-strong-m">DateInput Arrow Navigation Test</Text>
+          <Text variant="body-default-s" onBackground="neutral-weak">
+            Click to open the date picker, then use arrow keys to navigate. Press Enter to select.
+            Close and re-open to test that the selected date remains highlighted.
+          </Text>
+          <DateInput 
+            id="date-input-test" 
+            placeholder="Select date and time" 
+            timePicker={true}
+            minDate={new Date("2020-01-01")} 
+            maxDate={new Date("2030-12-31")}
+            onChange={(date) => console.log('DateInput selected:', date)}
+          />
+        </Column>
         <Table
           background="brand-strong"
           data={{

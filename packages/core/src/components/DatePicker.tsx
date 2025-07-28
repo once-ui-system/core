@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, forwardRef, useEffect } from "react";
+import React, { useState, forwardRef, useEffect, useCallback } from "react";
 import classNames from "classnames";
-import { ClickAway, Flex, Text, Button, Grid, SegmentedControl, IconButton, RevealFx, NumberInput, DropdownWrapper, Option, Column, Icon, Row, ArrowNavigation } from ".";
+import { Flex, Text, Button, Grid, SegmentedControl, IconButton, RevealFx, NumberInput, DropdownWrapper, Option, Column, Icon, Row, ArrowNavigation } from ".";
 import styles from "./DatePicker.module.scss";
 
 export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
@@ -30,6 +30,8 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
     endDate?: Date;
   };
   onHover?: (date: Date | null) => void;
+  autoFocus?: boolean;
+  isOpen?: boolean;
 }
 
 const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
@@ -53,6 +55,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       onMonthChange,
       range,
       onHover,
+      autoFocus = false,
+      isOpen,
       ...rest
     },
     ref,
@@ -71,9 +75,52 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const [isTransitioning, setIsTransitioning] = useState(true);
     const [isMonthOpen, setIsMonthOpen] = useState(false);
     const [isYearOpen, setIsYearOpen] = useState(false);
+    const [isReady, setIsReady] = useState(false);
+    const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
 
     const [currentMonth, setCurrentMonth] = useState<number>(value ? value.getMonth() : today.getMonth());
     const [currentYear, setCurrentYear] = useState<number>(value ? value.getFullYear() : today.getFullYear());
+
+    // Calculate the initial focused index based on the selected date
+    const calculateInitialFocusedIndex = useCallback(() => {
+      if (!selectedDate || isTimeSelector) return 0;
+      
+      // Find the exact button that matches the selected date
+      const container = document.querySelector('[data-role="dropdown-portal"]') ||
+                      document.querySelector('[data-dropdown-id]') ||
+                      document.activeElement?.closest('[data-role="dropdown-portal"]') ||
+                      document.activeElement?.closest('[data-role="dropdown-wrapper"]') ||
+                      document.body;
+      
+      if (container) {
+        const enabledButtons = Array.from(container.querySelectorAll('button[data-value]:not([disabled])'));
+        const selectedButtonIndex = enabledButtons.findIndex(button => {
+          const buttonDate = new Date(button.getAttribute('data-value') || '');
+          return buttonDate.getTime() === selectedDate.getTime();
+        });
+        
+        if (selectedButtonIndex !== -1) {
+          return selectedButtonIndex;
+        }
+      }
+      
+      // Fallback to day-based calculation
+      const selectedDay = selectedDate.getDate();
+      const firstDayOfWeek = new Date(currentYear, currentMonth, 1).getDay();
+      const offset = firstDayOfWeek;
+      const dayIndex = offset + selectedDay - 1;
+      
+      return Math.max(0, dayIndex);
+    }, [selectedDate, isTimeSelector, currentMonth, currentYear]);
+
+    // Calculate the total number of days to display in the grid
+    const calculateTotalDays = () => {
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      
+      // Since we're only selecting enabled buttons (current month days),
+      // the total is just the number of days in the current month
+      return daysInMonth;
+    };
 
     useEffect(() => {
       if (typeof propCurrentMonth === "number") {
@@ -84,6 +131,36 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       }
     }, [propCurrentMonth, propCurrentYear]);
 
+    // Track if calendar is synced to selected value
+    const [isCalendarSynced, setIsCalendarSynced] = useState(false);
+
+    // Sync currentMonth/currentYear to value on mount and when value changes
+    useEffect(() => {
+      // Reset calendar sync to ensure proper re-sync
+      setIsCalendarSynced(false);
+      
+      if (value) {
+        setCurrentMonth(value.getMonth());
+        setCurrentYear(value.getFullYear());
+        // Small delay to ensure state updates are processed
+        const timer = setTimeout(() => {
+          setIsCalendarSynced(true);
+        }, 0);
+        return () => clearTimeout(timer);
+      } else {
+        setIsCalendarSynced(true);
+      }
+    }, [value]);
+
+    // Additional sync effect that runs when the component becomes ready
+    useEffect(() => {
+      if (isReady && value && !isCalendarSynced) {
+        setCurrentMonth(value.getMonth());
+        setCurrentYear(value.getFullYear());
+        setIsCalendarSynced(true);
+      }
+    }, [isReady, value, isCalendarSynced]);
+
     useEffect(() => {
       setSelectedDate(value);
       if (value) {
@@ -92,16 +169,56 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           minutes: value.getMinutes(),
         });
         setIsPM(value.getHours() >= 12);
+        
+        // Update current month/year to match the selected date
+        setCurrentMonth(value.getMonth());
+        setCurrentYear(value.getFullYear());
       }
     }, [value]);
 
     useEffect(() => {
       const timer = setTimeout(() => {
         setIsTransitioning(true);
+        setIsReady(true);
       }, 100);
 
       return () => clearTimeout(timer);
     }, []);
+
+    // Effect to ensure proper highlighting when component mounts or selected date changes
+    useEffect(() => {
+      if (selectedDate && !isTimeSelector && isReady) {
+        
+        // Only highlight if the current month/year matches the selected date's month/year
+        if (selectedDate.getMonth() === currentMonth && selectedDate.getFullYear() === currentYear) {
+          // Small delay to ensure the DOM is ready
+          const timer = setTimeout(() => {
+            const container = document.querySelector('[data-role="dropdown-portal"]') || 
+                            document.querySelector('[data-dropdown-id]') ||
+                            document.activeElement?.closest('[data-role="dropdown-portal"]') ||
+                            document.activeElement?.closest('[data-role="dropdown-wrapper"]') ||
+                            document.body; // Fallback for standalone DatePicker
+            if (container) {
+              // Find the selected date button and focus it
+              const enabledButtons = Array.from(container.querySelectorAll('button[data-value]:not([disabled])'));
+              
+              // Find the button that matches the selected date
+              const selectedButton = enabledButtons.find(button => {
+                const buttonDate = new Date(button.getAttribute('data-value') || '');
+                return buttonDate.getTime() === selectedDate.getTime();
+              });
+              
+              if (selectedButton) {
+                // Focus the button without scrolling
+                (selectedButton as HTMLElement).focus({ preventScroll: true });
+              }
+            }
+          }, 50);
+          
+          return () => clearTimeout(timer);
+        }
+      }
+    }, [selectedDate, isTimeSelector, isReady, currentMonth, currentYear, isOpen]);
 
     const monthNames = [
       "January",
@@ -260,14 +377,25 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
       // Current month's days
       for (let day = 1; day <= daysInMonth; day++) {
+        // Create date consistently - normalize to midnight in local timezone
         const currentDate = new Date(currentYear, currentMonth, day);
-        const isSelected =
-          (selectedDate?.getDate() === day &&
-            selectedDate?.getMonth() === currentMonth &&
-            selectedDate?.getFullYear() === currentYear) ||
-          (value instanceof Date && value.getTime() === currentDate.getTime()) ||
-          range?.startDate?.getTime() === currentDate.getTime() ||
-          range?.endDate?.getTime() === currentDate.getTime();
+        const normalizedCurrentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+        
+        const isSelected = selectedDate ? (
+          (selectedDate.getDate() === day &&
+            selectedDate.getMonth() === currentMonth &&
+            selectedDate.getFullYear() === currentYear) ||
+          (value instanceof Date && value.getTime() === normalizedCurrentDate.getTime()) ||
+          range?.startDate?.getTime() === normalizedCurrentDate.getTime() ||
+          range?.endDate?.getTime() === normalizedCurrentDate.getTime()
+        ) : false;
+
+        // Check if this date is being hovered
+        const isHovered = hoveredDate ? (
+          hoveredDate.getDate() === day &&
+          hoveredDate.getMonth() === currentMonth &&
+          hoveredDate.getFullYear() === currentYear
+        ) : false;
 
         const isFirstInRange =
           range?.startDate && currentDate.getTime() === range.startDate.getTime();
@@ -290,7 +418,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             <Button
               fillWidth
               weight={isSelected ? "strong" : "default"}
-              variant={isSelected ? "primary" : "tertiary"}
+              variant={isSelected ? "primary" : isHovered ? "secondary" : "tertiary"}
               tabIndex={-1}
               size={size}
               data-value={currentDate.toISOString()}
@@ -303,8 +431,14 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   handleDateSelect(currentDate);
                 }
               }}
-              onMouseEnter={() => onHover?.(currentDate)}
-              onMouseLeave={() => onHover?.(null)}
+              onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
+                onHover?.(currentDate);
+                setHoveredDate(currentDate);
+              }}
+              onMouseLeave={() => {
+                onHover?.(null);
+                setHoveredDate(null);
+              }}
               disabled={isDisabled}
             >
               {day}
@@ -368,14 +502,25 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               <Text variant={`label-default-${size}`} onBackground="neutral-strong">
                 {monthNames[currentMonth]} {currentYear}
               </Text>
-              <Text
-                className="cursor-interactive"
-                variant="label-default-s"
+              <Row
+                paddingX="2"
+                cursor="interactive"
+                textVariant="label-default-s"
+                radius="m"
                 onBackground="brand-weak"
+                tabIndex={0}
                 onClick={() => handleTimeToggle(false)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleTimeToggle(false);
+                  }
+                }}
+                role="button"
+                aria-label="Back to calendar"
               >
                 Back to calendar
-              </Text>
+              </Row>
             </Column>
           ) : (
             <>
@@ -404,10 +549,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       if (open) {
                         // Set this as the last opened dropdown
                         (window as any).lastOpenedDropdown = 'month-dropdown';
-                        console.log('Month dropdown opened');
                       } else if ((window as any).lastOpenedDropdown === 'month-dropdown') {
                         (window as any).lastOpenedDropdown = null;
-                        console.log('Month dropdown closed');
                       }
                     }}
                     trigger={
@@ -418,7 +561,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                           setIsMonthOpen(true);
                           // Update global tracking
                           (window as any).lastOpenedDropdown = 'month-dropdown';
-                          console.log('Month dropdown opened via trigger');
                         }}
                         variant="secondary"
                         size="s"
@@ -473,10 +615,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       if (open) {
                         // Set this as the last opened dropdown
                         (window as any).lastOpenedDropdown = 'year-dropdown';
-                        console.log('Year dropdown opened');
                       } else if ((window as any).lastOpenedDropdown === 'year-dropdown') {
                         (window as any).lastOpenedDropdown = null;
-                        console.log('Year dropdown closed');
                       }
                     }}
                     placement="bottom-start"
@@ -490,7 +630,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                           setIsYearOpen(true);
                           // Update global tracking
                           (window as any).lastOpenedDropdown = 'year-dropdown';
-                          console.log('Year dropdown opened via trigger');
                         }}
                       >
                         <Row vertical="center" gap="4">
@@ -562,7 +701,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           center
           key={isTimeSelector ? "time" : "date"}
           trigger={isTransitioning}
-          speed="fast"
+          speed={250}
         >
           {isTimeSelector ? (
             <Column
@@ -624,7 +763,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             </Column>
           ) : (
             isMonthOpen || isYearOpen ? (
-              <Grid fitWidth columns="7" gap="2">
+              <Grid fitWidth columns="7">
                 {dayNames.map((day) => (
                   <Text
                     marginBottom="16"
@@ -639,30 +778,55 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 {renderCalendarGrid()}
               </Grid>
             ) : (
-              <ArrowNavigation
-                layout="grid"
-                columns={7}
-                itemCount={7 * Math.ceil((new Date(currentYear, currentMonth + 1, 0).getDate() + new Date(currentYear, currentMonth, 1).getDay()) / 7)}
-                wrap
-                itemSelector='button:not([disabled])'
-                role="grid"
-                aria-label="Calendar"
-              >
-                <Grid fitWidth columns="7" gap="2">
-                  {dayNames.map((day) => (
-                    <Text
-                      marginBottom="16"
-                      key={day}
-                      variant="label-default-m"
-                      onBackground="neutral-medium"
-                      align="center"
-                    >
-                      {day}
-                    </Text>
-                  ))}
-                  {renderCalendarGrid()}
-                </Grid>
-              </ArrowNavigation>
+              isCalendarSynced && (
+                <ArrowNavigation
+                  layout="grid"
+                  columns={7}
+                  itemCount={calculateTotalDays()}
+                  initialFocusedIndex={isReady ? calculateInitialFocusedIndex() : 0}
+                  wrap
+                  itemSelector='button[data-value]:not([disabled])'
+                  role="grid"
+                  aria-label="Calendar"
+                  key={`calendar-${currentYear}-${currentMonth}-${selectedDate?.getTime() || 0}`}
+                  disableHighlighting={true}
+                  autoFocus={autoFocus}
+                  onSelect={(index) => {
+                    // Find the actual button element at this index and click it
+                    // Try multiple selectors for different scenarios (dropdown vs standalone)
+                    const container = document.querySelector('[data-role="dropdown-portal"]') || 
+                                   document.querySelector('[data-dropdown-id]') ||
+                                   document.activeElement?.closest('[data-role="dropdown-portal"]') ||
+                                   document.activeElement?.closest('[data-role="dropdown-wrapper"]') ||
+                                   document.body; // Fallback for standalone DatePicker
+                    if (container) {
+                      const buttons = Array.from(container.querySelectorAll('button[data-value]:not([disabled])'));
+                      if (buttons[index]) {
+                        (buttons[index] as HTMLElement).click();
+                      }
+                    }
+                  }}
+                  onFocusChange={(index) => {
+                    // Let React handle highlighting through props only
+                    // No DOM manipulation needed
+                  }}
+                >
+                  <Grid fitWidth columns="7">
+                    {dayNames.map((day) => (
+                      <Text
+                        marginBottom="16"
+                        key={day}
+                        variant="label-default-m"
+                        onBackground="neutral-medium"
+                        align="center"
+                      >
+                        {day}
+                      </Text>
+                    ))}
+                    {renderCalendarGrid()}
+                  </Grid>
+                </ArrowNavigation>
+              )
             )
           )}
         </RevealFx>

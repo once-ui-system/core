@@ -78,7 +78,7 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
         }}
         radius={"left"}
         id={id}
-        label={startLabel}
+        placeholder={startLabel}
         value={inputValue.startDate ?? ""}
         error={error}
         readOnly
@@ -92,7 +92,7 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
         }}
         radius={"right"}
         id={id}
-        label={endLabel}
+        placeholder={endLabel}
         value={inputValue.endDate ?? ""}
         error={error}
         readOnly

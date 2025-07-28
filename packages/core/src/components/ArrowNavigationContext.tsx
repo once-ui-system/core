@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useRef, ReactNode } from 'react';
+import React, { createContext, useContext, useRef, ReactNode, useEffect } from 'react';
 import { useArrowNavigation, ArrowNavigationOptions } from '../hooks/useArrowNavigation';
 import { FocusTrap } from './FocusTrap';
 
@@ -63,6 +63,19 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
     autoFocus,
     disabled,
   });
+
+  // Focus the container when autoFocus is enabled
+  useEffect(() => {
+    if (autoFocus && containerRef.current && !disabled) {
+      // Small delay to ensure the component is fully mounted
+      const timer = setTimeout(() => {
+        if (containerRef.current) {
+          containerRef.current.focus();
+        }
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [autoFocus, disabled]);
   
   // Determine the appropriate role based on layout if not provided
   const defaultRole = layout === 'grid' ? 'grid' : 'listbox';
@@ -72,11 +85,14 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
     <div
       ref={containerRef}
       className={className}
-      style={style}
-      onKeyDown={navigation.handleKeyDown}
+      style={{...style, outline: 'none'}}
+      onKeyDown={(e) => {
+        console.log('ArrowNavigation keydown:', e.key, 'autoFocus:', autoFocus, 'disabled:', disabled);
+        navigation.handleKeyDown(e);
+      }}
       role={role || defaultRole}
       aria-label={ariaLabel}
-      tabIndex={disabled ? undefined : -1}
+      tabIndex={-1}
     >
       {children}
     </div>

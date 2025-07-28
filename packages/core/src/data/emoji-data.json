@@ -13819,18 +13819,6 @@
   ],
   "flags": [
     {
-      "char": "🌍",
-      "description": "globe showing Europe-Africa",
-      "aliases": [
-        "earth_africa"
-      ],
-      "tags": [
-        "globe",
-        "world",
-        "international"
-      ]
-    },
-    {
       "char": "🌎",
       "description": "globe showing Americas",
       "aliases": [

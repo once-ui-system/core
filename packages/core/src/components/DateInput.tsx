@@ -90,12 +90,15 @@ export const DateInput: React.FC<DateInputProps> = ({
       }
       dropdown={
         <DatePicker
+          key={`datepicker-${isOpen ? 'open' : 'closed'}-${value?.getTime() || 0}`}
           padding="20"
           value={value} 
           onChange={handleDateChange} 
           timePicker={timePicker}
           minDate={minDate}
           maxDate={maxDate}
+          autoFocus={true}
+          isOpen={isOpen}
         />
       }
       fillWidth
@@ -105,6 +108,7 @@ export const DateInput: React.FC<DateInputProps> = ({
       className={className}
       closeAfterClick={!timePicker}
       style={{ ...style }}
+      handleArrowNavigation={false}
     />
   );
 };

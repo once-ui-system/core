@@ -14,6 +14,7 @@ export interface ArrowNavigationOptions {
   itemSelector?: string;
   autoFocus?: boolean;
   disabled?: boolean;
+  disableHighlighting?: boolean;
 }
 
 export const useArrowNavigation = ({
@@ -28,6 +29,7 @@ export const useArrowNavigation = ({
   itemSelector = '[role="option"], [data-value], button, [tabindex]:not([tabindex="-1"])',
   autoFocus = false,
   disabled = false,
+  disableHighlighting = false,
 }: ArrowNavigationOptions) => {
   const [focusedIndex, setFocusedIndex] = useState<number>(initialFocusedIndex);
   
@@ -58,11 +60,11 @@ export const useArrowNavigation = ({
                           items[focusedIndex].getAttribute('aria-disabled') === 'true';
         
         if (!isDisabled) {
-          // Focus the element
-          items[focusedIndex].focus({ preventScroll: false });
+          // Focus the element without scrolling
+          items[focusedIndex].focus({ preventScroll: true });
           
-          // Ensure it's visible
-          items[focusedIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+          // Don't call scrollIntoView to avoid unwanted scrolling
+          // items[focusedIndex].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
           
           // Call the focus change callback
           onFocusChange?.(focusedIndex);
@@ -122,6 +124,27 @@ export const useArrowNavigation = ({
     return currentIndex;
   }, [containerRef, itemSelector, itemCount, wrap]);
 
+  // Helper function to find the next enabled item from a specific index
+  const findEnabledItemFromIndex = useCallback((startIndex: number): number => {
+    if (!containerRef?.current) return startIndex;
+    
+    const items = Array.from(
+      containerRef.current.querySelectorAll(itemSelector)
+    ) as HTMLElement[];
+    
+    // First check the start index itself
+    if (startIndex < items.length) {
+      const isDisabled = items[startIndex].hasAttribute('disabled') || 
+                        items[startIndex].getAttribute('aria-disabled') === 'true';
+      if (!isDisabled) {
+        return startIndex;
+      }
+    }
+    
+    // If start index is disabled, find the next enabled item
+    return findNextEnabledItem(startIndex, 1);
+  }, [containerRef, itemSelector, findNextEnabledItem]);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLElement>) => {
       if (disabled || itemCount === 0) return;
@@ -149,13 +172,14 @@ export const useArrowNavigation = ({
             newIndex = findNextEnabledItem(focusedIndex, 1);
           } else if (layout === 'grid') {
             // Move down by the number of columns
-            let nextIndex = focusedIndex;
-            for (let i = 0; i < columns; i++) {
-              nextIndex = findNextEnabledItem(nextIndex, 1);
-              // If we wrapped around, stop
-              if (nextIndex < focusedIndex) break;
+            const nextIndex = focusedIndex + columns;
+            if (nextIndex < itemCount) {
+              newIndex = findEnabledItemFromIndex(nextIndex);
+            } else if (wrap) {
+              // Wrap to the beginning of the same column
+              const column = focusedIndex % columns;
+              newIndex = findEnabledItemFromIndex(column);
             }
-            newIndex = nextIndex;
           }
           break;
           
@@ -165,13 +189,16 @@ export const useArrowNavigation = ({
             newIndex = findNextEnabledItem(focusedIndex, -1);
           } else if (layout === 'grid') {
             // Move up by the number of columns
-            let nextIndex = focusedIndex;
-            for (let i = 0; i < columns; i++) {
-              nextIndex = findNextEnabledItem(nextIndex, -1);
-              // If we wrapped around, stop
-              if (nextIndex > focusedIndex) break;
+            const nextIndex = focusedIndex - columns;
+            if (nextIndex >= 0) {
+              newIndex = findEnabledItemFromIndex(nextIndex);
+            } else if (wrap) {
+              // Wrap to the end of the same column
+              const column = focusedIndex % columns;
+              const lastRow = Math.floor((itemCount - 1) / columns);
+              const targetIndex = lastRow * columns + column;
+              newIndex = findEnabledItemFromIndex(Math.min(targetIndex, itemCount - 1));
             }
-            newIndex = nextIndex;
           }
           break;
           
@@ -187,8 +214,10 @@ export const useArrowNavigation = ({
           
         case 'Enter':
         case ' ':
+          console.log('ArrowNavigation: Enter/Space pressed, focusedIndex:', focusedIndex, 'itemCount:', itemCount);
           if (focusedIndex >= 0 && focusedIndex < itemCount) {
             e.preventDefault();
+            console.log('ArrowNavigation: Calling onSelect with index:', focusedIndex);
             onSelect?.(focusedIndex);
           }
           break;
@@ -208,7 +237,7 @@ export const useArrowNavigation = ({
    * Apply highlighted state to elements
    */
   const applyHighlightedState = useCallback(() => {
-    if (!containerRef?.current) return;
+    if (!containerRef?.current || disableHighlighting) return;
     
     const items = Array.from(
       containerRef.current.querySelectorAll(itemSelector)
@@ -229,7 +258,7 @@ export const useArrowNavigation = ({
         item.setAttribute('aria-selected', 'false');
       }
     });
-  }, [containerRef, itemSelector, focusedIndex]);
+  }, [containerRef, itemSelector, focusedIndex, disableHighlighting]);
   
   // Apply highlighted state when focusedIndex changes
   useEffect(() => {
