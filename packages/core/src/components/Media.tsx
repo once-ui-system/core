@@ -1,9 +1,9 @@
 "use client";
 
-import React, { CSSProperties, useState, useRef, useEffect } from "react";
+import React, { CSSProperties, useState, useRef, useEffect, ReactNode } from "react";
 import Image from "next/image";
 
-import { Flex, Skeleton } from ".";
+import { Column, Flex, Row, Skeleton } from ".";
 
 export interface MediaProps extends React.ComponentProps<typeof Flex> {
   aspectRatio?: string;
@@ -16,9 +16,7 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   unoptimized?: boolean;
   sizes?: string;
   priority?: boolean;
-  l?: any;
-  m?: any;
-  s?: any;
+  caption?: ReactNode;
 }
 
 const Media: React.FC<MediaProps> = ({
@@ -32,9 +30,7 @@ const Media: React.FC<MediaProps> = ({
   unoptimized = false,
   priority,
   sizes = "100vw",
-  l,
-  m,
-  s,
+  caption,
   ...rest
 }) => {
   const [isEnlarged, setIsEnlarged] = useState(false);
@@ -120,7 +116,9 @@ const Media: React.FC<MediaProps> = ({
 
   return (
     <>
-      <Flex
+    <Column fillWidth>
+      <Column
+        as="figure"
         ref={imageRef}
         fillWidth
         overflow="hidden"
@@ -135,9 +133,6 @@ const Media: React.FC<MediaProps> = ({
           ...calculateTransform(),
         }}
         onClick={handleClick}
-        l={l}
-        m={m}
-        s={s}
         {...rest}
       >
         {loading && <Skeleton shape="block" />}
@@ -181,7 +176,13 @@ const Media: React.FC<MediaProps> = ({
             }}
           />
         )}
-      </Flex>
+      </Column>
+        {caption && (
+          <Row as="figcaption" fillWidth textVariant="label-default-s" onBackground="neutral-weak" paddingY="12" paddingX="24" horizontal="center" align="center">
+            {caption}
+          </Row>
+        )}
+      </Column>
 
       {isEnlarged && enlarge && (
         <Flex
