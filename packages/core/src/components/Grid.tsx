@@ -182,8 +182,8 @@ const Grid = forwardRef<HTMLDivElement, ComponentProps>(
       const element = elementRef.current;
       const width = window.innerWidth;
       
-      // Store base styles if not already stored
-      if (Object.keys(baseStyleRef.current).length === 0 && style) {
+      // Update base styles when style prop changes
+      if (style) {
         baseStyleRef.current = { ...style };
       }
       

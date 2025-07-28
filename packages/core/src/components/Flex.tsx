@@ -26,6 +26,8 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
     {
       as: Component = "div",
       inline,
+      hide,
+      show,
       dark,
       light,
       direction,
@@ -236,6 +238,8 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
       s?.direction && `s-flex-${s.direction}`,
       pointerEvents && `pointer-events-${pointerEvents}`,
       transition && `transition-${transition}`,
+      hide && "flex-hide",
+      show && "flex-show",
       l?.hide && "l-flex-hide",
       l?.show && "l-flex-show",
       m?.hide && "m-flex-hide",
@@ -344,8 +348,8 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
       const element = elementRef.current;
       const width = window.innerWidth;
       
-      // Store base styles if not already stored
-      if (Object.keys(baseStyleRef.current).length === 0 && style) {
+      // Update base styles when style prop changes
+      if (style) {
         baseStyleRef.current = { ...style };
       }
       
