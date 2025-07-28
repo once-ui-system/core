@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback, useMemo, ReactNode } from "react";
-import { Flex, Text, Icon, Column, Input, Option, Row } from "../../";
+import { Flex, Text, Icon, Column, Input, Option, Row, Kbd } from "../../";
 import { createPortal } from "react-dom";
 import { useRouter, usePathname } from "next/navigation";
 import styles from "./Kbar.module.scss";
@@ -16,10 +16,11 @@ export interface KbarItem {
   perform?: () => void;
   icon?: string;
   description?: ReactNode;
+  placeholder?: string;
 }
 
 const SectionHeader: React.FC<{ label: string }> = ({ label }) => (
-  <Flex
+  <Row
     paddingX="12"
     paddingBottom="8"
     paddingTop="12"
@@ -27,7 +28,7 @@ const SectionHeader: React.FC<{ label: string }> = ({ label }) => (
     onBackground="neutral-weak"
   >
     {label}
-  </Flex>
+  </Row>
 );
 
 interface KbarTriggerProps {
@@ -38,9 +39,9 @@ interface KbarTriggerProps {
 
 export const KbarTrigger: React.FC<KbarTriggerProps> = ({ onClick, children, ...rest }) => {
   return (
-    <Flex onClick={onClick} {...rest}>
+    <Row onClick={onClick} {...rest}>
       {children}
-    </Flex>
+    </Row>
   );
 };
 
@@ -48,9 +49,10 @@ interface KbarContentProps {
   isOpen: boolean;
   onClose: () => void;
   items: KbarItem[];
+  placeholder?: string;
 }
 
-export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items }) => {
+export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items, placeholder = "Search" }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -107,11 +109,12 @@ export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items
           ) : undefined,
           hasSuffix:
             item.shortcut && item.shortcut.length > 0 ? (
-              <Row gap="4">
+              <Row gap="2" style={{transform: "scale(0.9)", transformOrigin: "right"}}>
                 {item.shortcut.map((key, i) => (
-                  <Text key={i} variant="label-default-xs" onBackground="neutral-weak">
-                    {key}
-                  </Text>
+                  <Row gap="2" key={i}>
+                    <Kbd minWidth="24" style={{transform: "scale(0.8)"}}>{key}</Kbd>
+                    {i < item.shortcut.length - 1 && <Text onBackground="neutral-weak">+</Text>}
+                  </Row>
                 ))}
               </Row>
             ) : undefined,
@@ -284,7 +287,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items
 
   // Create portal for the kbar
   return (
-    <Flex
+    <Row
       position="fixed"
       top="0"
       left="0"
@@ -306,32 +309,26 @@ export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items
         fitHeight
         maxWidth="xs"
         background="surface"
-        radius="l"
+        radius="l-4"
         border="neutral-alpha-medium"
         overflow="hidden"
         shadow="l"
         className={`${styles.content} ${isClosing ? styles.closing : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <Flex fillWidth>
+        <Row fillWidth padding="8">
           <Input
             id="kbar-search"
-            placeholder="Search docs..."
+            placeholder={placeholder}
             value={searchQuery}
             onChange={handleSearchChange}
             onKeyDown={handleKeyDown}
             ref={inputRef}
-            hasPrefix={<Icon name="search" size="xs" />}
-            radius="none"
+            hasPrefix={<Icon marginLeft="4" onBackground="neutral-weak" name="search" size="xs" />}
             autoComplete="off"
-            style={{
-              marginTop: "-1px",
-              marginLeft: "-1px",
-              width: "calc(100% + 2px)",
-            }}
           />
-        </Flex>
-        <Column ref={scrollContainerRef} fillWidth padding="4" gap="2" overflowY="auto">
+        </Row>
+        <Column ref={scrollContainerRef} fillWidth padding="4" gap="2" overflowY="auto" radius="l" border="neutral-alpha-weak">
           {groupedItems.map((option, index) => {
             if (option.isCustom) {
               return <React.Fragment key={option.value}>{option.label}</React.Fragment>;
@@ -362,15 +359,22 @@ export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items
             );
           })}
           {searchQuery && filteredItems.length === 0 && (
-            <Flex fillWidth center paddingX="16" paddingY="64">
-              <Text variant="body-default-m" onBackground="neutral-weak">
+            <Flex fillWidth center paddingX="16" paddingY="64" textVariant="body-default-m" onBackground="neutral-weak">
                 No results found
-              </Text>
             </Flex>
           )}
         </Column>
+        <Row fillWidth paddingX="24" paddingY="8">
+          <Row style={{transform: "scale(0.8)", transformOrigin: "left"}} gap="8" onBackground="neutral-weak" textVariant="label-default-m" vertical="center">
+            <Kbd minWidth="20"><Row><Icon name="chevronUp" size="xs"/></Row></Kbd>
+            <Kbd minWidth="20"><Row><Icon name="chevronDown" size="xs"/></Row></Kbd>
+            <Text marginLeft="8" marginRight="24">Navigate</Text>
+            <Kbd minWidth="20"><Row><Icon name="enter" size="xs"/></Row></Kbd>
+            <Text marginLeft="8">Go to</Text>
+          </Row>
+        </Row>
       </Column>
-    </Flex>
+    </Row>
   );
 };
 

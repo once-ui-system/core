@@ -33,6 +33,7 @@ import {
   HiOutlineArrowsPointingIn,
   HiOutlineArrowsPointingOut,
   HiOutlineFaceSmile,
+  HiOutlineArrowTurnDownLeft,
 } from "react-icons/hi2";
 
 import { IoAtOutline, IoFastFoodOutline, IoFlagOutline, IoFootballOutline, IoGiftOutline, IoGlobeOutline, IoPawOutline } from "react-icons/io5";
@@ -78,7 +79,8 @@ export const iconLibrary: Record<string, IconType> = {
   gift: IoGiftOutline,
   symbol: IoAtOutline,
   flag: IoFlagOutline,
-  wordmark: LuTextCursorInput
+  wordmark: LuTextCursorInput,
+  enter: HiOutlineArrowTurnDownLeft
 };
 
 export type IconLibrary = typeof iconLibrary;
