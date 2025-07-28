@@ -199,7 +199,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           position="static"
           fillWidth
           fitHeight
-          horizontal="space-between"
+          horizontal="between"
           gap="16"
         >
           {codes.length > 1 ? (

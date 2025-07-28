@@ -16,6 +16,9 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   unoptimized?: boolean;
   sizes?: string;
   priority?: boolean;
+  l?: any;
+  m?: any;
+  s?: any;
 }
 
 const Media: React.FC<MediaProps> = ({
@@ -29,6 +32,9 @@ const Media: React.FC<MediaProps> = ({
   unoptimized = false,
   priority,
   sizes = "100vw",
+  l,
+  m,
+  s,
   ...rest
 }) => {
   const [isEnlarged, setIsEnlarged] = useState(false);
@@ -129,6 +135,9 @@ const Media: React.FC<MediaProps> = ({
           ...calculateTransform(),
         }}
         onClick={handleClick}
+        l={l}
+        m={m}
+        s={s}
         {...rest}
       >
         {loading && <Skeleton shape="block" />}

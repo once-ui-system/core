@@ -1,9 +1,10 @@
+"use client";
+
 import classNames from "classnames";
-import { CSSProperties, forwardRef } from "react";
+import { CSSProperties, forwardRef, useEffect, useRef, useCallback } from "react";
 
 import {
   CommonProps,
-  ConditionalProps,
   DisplayProps,
   FlexProps,
   SizeProps,
@@ -18,8 +19,7 @@ interface ComponentProps
     SizeProps,
     StyleProps,
     CommonProps,
-    DisplayProps,
-    ConditionalProps {}
+    DisplayProps {}
 
 const Flex = forwardRef<HTMLDivElement, ComponentProps>(
   (
@@ -29,8 +29,9 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
       dark,
       light,
       direction,
-      tabletDirection,
-      mobileDirection,
+      l,
+      m,
+      s,
       wrap = false,
       horizontal,
       vertical,
@@ -76,8 +77,6 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
       fillWidth = false,
       fillHeight = false,
       aspectRatio,
-      hide,
-      show,
       transition,
       background,
       solid,
@@ -112,6 +111,18 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
     },
     ref,
   ) => {
+    const elementRef = useRef<HTMLDivElement>(null);
+    const appliedResponsiveStyles = useRef<Set<string>>(new Set());
+    const baseStyleRef = useRef<CSSProperties>({});
+    
+    const combinedRef = (node: HTMLDivElement) => {
+      elementRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    };
     if (onBackground && onSolid) {
       console.warn(
         "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
@@ -166,6 +177,10 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
 
     const classes = classNames(
       inline ? "display-inline-flex" : "display-flex",
+      position && `position-${position}`,
+      l?.position && `l-position-${l.position}`,
+      m?.position && `m-position-${m.position}`,
+      s?.position && `s-position-${s.position}`,
       padding && `p-${padding}`,
       paddingLeft && `pl-${paddingLeft}`,
       paddingRight && `pr-${paddingRight}`,
@@ -216,12 +231,17 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
       bottomLeftRadius && `radius-${bottomLeftRadius}-bottom-left`,
       bottomRightRadius && `radius-${bottomRightRadius}-bottom-right`,
       direction && `flex-${direction}`,
-      tabletDirection && `m-flex-${tabletDirection}`,
-      mobileDirection && `s-flex-${mobileDirection}`,
+      l?.direction && `l-flex-${l.direction}`,
+      m?.direction && `m-flex-${m.direction}`,
+      s?.direction && `s-flex-${s.direction}`,
       pointerEvents && `pointer-events-${pointerEvents}`,
       transition && `transition-${transition}`,
-      hide && `${hide}-flex-hide`,
-      show && `${show}-flex-show`,
+      l?.hide && "l-flex-hide",
+      l?.show && "l-flex-show",
+      m?.hide && "m-flex-hide",
+      m?.show && "m-flex-show",
+      s?.hide && "s-flex-hide",
+      s?.show && "s-flex-show",
       opacity && `opacity-${opacity}`,
       wrap && "flex-wrap",
       overflow && `overflow-${overflow}`,
@@ -236,6 +256,30 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
         (direction === "row" || direction === "row-reverse" || direction === undefined
           ? `align-${vertical}`
           : `justify-${vertical}`),
+      l?.horizontal &&
+        (l?.direction === "row" || l?.direction === "row-reverse" || l?.direction === undefined
+          ? `l-justify-${l.horizontal}`
+          : `l-align-${l.horizontal}`),
+      l?.vertical &&
+        (l?.direction === "row" || l?.direction === "row-reverse" || l?.direction === undefined
+          ? `l-align-${l.vertical}`
+          : `l-justify-${l.vertical}`),
+      m?.horizontal &&
+        (m?.direction === "row" || m?.direction === "row-reverse" || m?.direction === undefined
+          ? `m-justify-${m.horizontal}`
+          : `m-align-${m.horizontal}`),
+      m?.vertical &&
+        (m?.direction === "row" || m?.direction === "row-reverse" || m?.direction === undefined
+          ? `m-align-${m.vertical}`
+          : `m-justify-${m.vertical}`),
+      s?.horizontal &&
+        (s?.direction === "row" || s?.direction === "row-reverse" || s?.direction === undefined
+          ? `s-justify-${s.horizontal}`
+          : `s-align-${s.horizontal}`),
+      s?.vertical &&
+        (s?.direction === "row" || s?.direction === "row-reverse" || s?.direction === undefined
+          ? `s-align-${s.vertical}`
+          : `s-justify-${s.vertical}`),
       center && "center",
       fit && "fit",
       fitWidth && "fit-width",
@@ -248,7 +292,6 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
       (fillWidth || maxWidth) && "fill-width",
       (fillHeight || maxHeight) && "fill-height",
       shadow && `shadow-${shadow}`,
-      position && `position-${position}`,
       zIndex && `z-index-${zIndex}`,
       textType && `font-${textType}`,
       cursor && `cursor-${cursor}`,
@@ -295,6 +338,69 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
       return undefined;
     };
 
+    const applyResponsiveStyles = useCallback(() => {
+      if (!elementRef.current) return;
+      
+      const element = elementRef.current;
+      const width = window.innerWidth;
+      
+      // Store base styles if not already stored
+      if (Object.keys(baseStyleRef.current).length === 0 && style) {
+        baseStyleRef.current = { ...style };
+      }
+      
+      // Determine which responsive props to apply based on breakpoint
+      let currentResponsiveProps: any = null;
+      if (width >= 1025 && l) {
+        currentResponsiveProps = l;
+      } else if (width >= 769 && width <= 1024 && m) {
+        currentResponsiveProps = m;
+      } else if (width <= 768 && s) {
+        currentResponsiveProps = s;
+      }
+      
+      // Clear only responsive styles, not base styles
+      appliedResponsiveStyles.current.forEach(key => {
+        (element.style as any)[key] = '';
+      });
+      appliedResponsiveStyles.current.clear();
+      
+      // Reapply base styles
+      if (baseStyleRef.current) {
+        Object.entries(baseStyleRef.current).forEach(([key, value]) => {
+          (element.style as any)[key] = value;
+        });
+      }
+      
+      // Apply new responsive styles if we have them for current breakpoint
+      if (currentResponsiveProps) {
+        if (currentResponsiveProps.style) {
+          Object.entries(currentResponsiveProps.style).forEach(([key, value]) => {
+            (element.style as any)[key] = value;
+            appliedResponsiveStyles.current.add(key);
+          });
+        }
+        if (currentResponsiveProps.aspectRatio) {
+          element.style.aspectRatio = currentResponsiveProps.aspectRatio;
+          appliedResponsiveStyles.current.add('aspect-ratio');
+        }
+      }
+    }, [l, m, s, style]);
+
+    useEffect(() => {
+      applyResponsiveStyles();
+      
+      const handleResize = () => {
+        applyResponsiveStyles();
+      };
+      
+      window.addEventListener('resize', handleResize);
+      
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, [applyResponsiveStyles]);
+
     const combinedStyle: CSSProperties = {
       maxWidth: parseDimension(maxWidth, "width"),
       minWidth: parseDimension(minWidth, "width"),
@@ -308,7 +414,7 @@ const Flex = forwardRef<HTMLDivElement, ComponentProps>(
     };
 
     return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...rest}>
+      <Component ref={combinedRef} className={classes} style={combinedStyle} {...rest}>
         {children}
       </Component>
     );

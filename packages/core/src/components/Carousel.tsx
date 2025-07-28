@@ -162,13 +162,13 @@ const Carousel: React.FC<CarouselProps> = ({
             {items[activeIndex]?.slide}
           </Flex>
         )}
-        <Row className={styles.controls} position="absolute" top="0" left="0" radius="l" overflow="hidden" fill horizontal="space-between">
+        <Row className={styles.controls} position="absolute" top="0" left="0" radius="l" overflow="hidden" fill horizontal="between">
           {activeIndex > 0 ? (
             <Row className={styles.left} cursor="interactive" maxWidth={12} fill vertical="center" onClick={handlePrevClick}>
               {controls && (
                 <>
-                  <Fade hide="m" transition="micro-medium" className={styles.fade} position="absolute" left="0" top="0" to="right" fillHeight maxWidth={6}/>
-                  <Flex hide="m" transition="micro-medium" className={styles.button} marginLeft="m" radius="l" overflow="hidden" background="surface">
+                  <Fade m={{hide: true}} transition="micro-medium" className={styles.fade} position="absolute" left="0" top="0" to="right" fillHeight maxWidth={6}/>
+                  <Flex m={{hide: true}} transition="micro-medium" className={styles.button} marginLeft="m" radius="l" overflow="hidden" background="surface">
                     <IconButton tabIndex={0} onClick={handlePrevClick} variant="secondary" icon="chevronLeft" />
                   </Flex>
                 </>
@@ -181,8 +181,8 @@ const Carousel: React.FC<CarouselProps> = ({
             <Row className={styles.right} cursor="interactive" maxWidth={12} fill vertical="center" horizontal="end" onClick={handleNextClick}>
               {controls && (
                 <>
-                  <Fade hide="m" transition="micro-medium" className={styles.fade} position="absolute" right="0" top="0" to="left" fillHeight maxWidth={6}/>
-                  <Flex hide="m" transition="micro-medium" className={styles.button} marginRight="m" radius="l" overflow="hidden" background="surface">
+                  <Fade m={{hide: true}} transition="micro-medium" className={styles.fade} position="absolute" right="0" top="0" to="left" fillHeight maxWidth={6}/>
+                  <Flex m={{hide: true}} transition="micro-medium" className={styles.button} marginRight="m" radius="l" overflow="hidden" background="surface">
                     <IconButton tabIndex={0} onClick={handleNextClick} variant="secondary" icon="chevronRight" />
                   </Flex>
                 </>

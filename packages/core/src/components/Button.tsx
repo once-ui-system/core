@@ -28,7 +28,7 @@ interface CommonProps {
   loading?: boolean;
   disabled?: boolean;
   fillWidth?: boolean;
-  horizontal?: "start" | "center" | "end" | "space-between";
+  horizontal?: "start" | "center" | "end" | "between";
   children?: ReactNode;
   href?: string;
   className?: string;

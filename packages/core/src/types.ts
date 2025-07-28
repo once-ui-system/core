@@ -84,7 +84,7 @@ export type TextSize = TShirtSizes;
 
 export type TextVariant = `${TextType}-${TextWeight}-${TextSize}`;
 
-export type gridColumns =
+export type gridSize =
   | "1"
   | "2"
   | "3"

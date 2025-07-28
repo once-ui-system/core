@@ -74,7 +74,7 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
           paddingY={size === "s" ? "8" : size === "m" ? "12" : "16"}
           paddingX={size === "s" ? "12" : size === "m" ? "16" : "20"}
           vertical="center"
-          horizontal="space-between"
+          horizontal="between"
           onClick={toggleAccordion}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {

@@ -58,7 +58,7 @@
         &:disabled {
             background: var(--neutral-background-medium);
             color: var(--neutral-on-background-weak);
-            border: 1px solid var(--static-transparent);
+            border: 1px solid var(--neutral-alpha-weak);
         }
     }
 }

@@ -3,7 +3,7 @@ import {
   ColorScheme,
   ColorWeight,
   flex,
-  gridColumns,
+  gridSize,
   opacity,
   RadiusNest,
   RadiusSize,
@@ -15,38 +15,65 @@ import {
   TextWeight,
 } from "./types";
 
+export interface ResponsiveProps extends HTMLAttributes<HTMLDivElement> {
+  top?: SpacingToken;
+  right?: SpacingToken;
+  bottom?: SpacingToken;
+  left?: SpacingToken;
+  hide?: boolean;
+  show?: boolean;
+  position?: CSSProperties["position"];
+  overflow?: CSSProperties["overflow"];
+  overflowX?: CSSProperties["overflowX"];
+  overflowY?: CSSProperties["overflowY"];
+  aspectRatio?: CSSProperties["aspectRatio"];
+  style?: CSSProperties;
+}
+
+export interface ResponsiveFlexProps extends ResponsiveProps {
+  horizontal?: FlexProps["horizontal"];
+  vertical?: FlexProps["vertical"];
+  center?: boolean;
+  direction?: "row" | "column" | "row-reverse" | "column-reverse";
+}
+
+export interface ResponsiveGridProps extends ResponsiveProps {
+  columns?: gridSize;
+  rows?: gridSize;
+}
+
 export interface GridProps extends HTMLAttributes<HTMLDivElement> {
-  columns?: gridColumns;
-  rows?: gridColumns;
-  tabletColumns?: gridColumns;
-  mobileColumns?: gridColumns;
-  tabletRows?: gridColumns;
-  mobileRows?: gridColumns;
+  columns?: gridSize;
+  rows?: gridSize;
+  l?: ResponsiveGridProps;
+  m?: ResponsiveGridProps;
+  s?: ResponsiveGridProps;
 }
 
 export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
   direction?: "row" | "column" | "row-reverse" | "column-reverse";
-  tabletDirection?: "row" | "column" | "row-reverse" | "column-reverse";
-  mobileDirection?: "row" | "column" | "row-reverse" | "column-reverse";
   horizontal?:
     | "start"
     | "center"
     | "end"
-    | "space-between"
-    | "space-around"
-    | "space-evenly"
+    | "between"
+    | "around"
+    | "even"
     | "stretch";
   vertical?:
     | "start"
     | "center"
     | "end"
-    | "space-between"
-    | "space-around"
-    | "space-evenly"
+    | "between"
+    | "around"
+    | "even"
     | "stretch";
   center?: boolean;
   wrap?: boolean;
   flex?: flex;
+  l?: ResponsiveFlexProps;
+  m?: ResponsiveFlexProps;
+  s?: ResponsiveFlexProps;
 }
 
 export interface TextProps<T extends ElementType = "span"> extends HTMLAttributes<T> {
@@ -149,14 +176,11 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   cursor?: CSSProperties["cursor"] | "interactive";
 }
 
-export interface ConditionalProps extends HTMLAttributes<HTMLDivElement> {
-  hide?: "s" | "m" | "l";
-  show?: "s" | "m" | "l";
-}
-
 export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
   inline?: boolean;
+  hide?: boolean;
+  show?: boolean;
   pointerEvents?: "none" | "all" | "auto";
   position?: CSSProperties["position"];
   overflow?: CSSProperties["overflow"];

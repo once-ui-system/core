@@ -85,9 +85,9 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
           </Text>
         </Row>
       )}
-      <Column fillWidth horizontal="space-between" paddingX="12" gap="4">
+      <Column fillWidth horizontal="between" paddingX="12" gap="4">
         {payload.map((entry: any, index: number) => (
-          <Row key={index} horizontal="space-between" fillWidth gap="16">
+          <Row key={index} horizontal="between" fillWidth gap="16">
             <Row vertical="center" gap="8">
               {colors && <Swatch color={entry.stroke || entry.color} size="s" variant={variant} />}
               <Text onBackground="neutral-weak" variant="label-default-s">

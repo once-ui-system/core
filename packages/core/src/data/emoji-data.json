@@ -5532,14 +5532,6 @@
       "tags": []
     },
     {
-      "char": "👨‍👩‍👧",
-      "description": "family: man, woman, girl",
-      "aliases": [
-        "family_man_woman_girl"
-      ],
-      "tags": []
-    },
-    {
       "char": "👨‍👨‍👦",
       "description": "family: man, man, boy",
       "aliases": [
@@ -13819,6 +13811,18 @@
   ],
   "flags": [
     {
+      "char": "🌍",
+      "description": "globe showing Europe-Africa",
+      "aliases": [
+        "earth_africa"
+      ],
+      "tags": [
+        "globe",
+        "world",
+        "international"
+      ]
+    },
+    {
       "char": "🌎",
       "description": "globe showing Americas",
       "aliases": [
@@ -14763,14 +14767,6 @@
       "description": "flag: Guam",
       "aliases": [
         "guam"
-      ],
-      "tags": []
-    },
-    {
-      "char": "🇬🇼",
-      "description": "flag: Guinea-Bissau",
-      "aliases": [
-        "guinea_bissau"
       ],
       "tags": []
     },

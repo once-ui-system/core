@@ -4,10 +4,6 @@
     display: flex;
 }
 
-.display-grid {
-    display: grid;
-}
-
 .display-inline-flex {
     display: inline-flex;
 }
@@ -29,91 +25,91 @@
 }
 
 .l-flex-show {
-    display: none !important;
+    display: none;
 }
 
 .m-flex-show {
-    display: none !important;
+    display: none;
 }
 
 .s-flex-show {
-    display: none !important;
+    display: none;
 }
 
 @include breakpoints.l {
     .l-flex-hide {
-        display: none !important;
+        display: none;
     }
 
     .l-flex-show {
-        display: flex !important;
+        display: flex;
     }
 
     .l-flex-column {
-        flex-direction: column !important;
+        flex-direction: column;
     }
 
     .l-flex-row {
-        flex-direction: row !important;
+        flex-direction: row;
     }
 
     .l-flex-column-reverse {
-        flex-direction: column-reverse !important;
+        flex-direction: column-reverse;
     }
     
     .l-flex-row-reverse {
-        flex-direction: row-reverse !important;
+        flex-direction: row-reverse;
     }
 }
 
 @include breakpoints.m {
     .m-flex-hide {
-        display: none !important;
+        display: none;
     }
 
     .m-flex-show {
-        display: flex !important;
+        display: flex;
     }
 
     .m-flex-column {
-        flex-direction: column !important;
+        flex-direction: column;
     }
 
     .m-flex-row {
-        flex-direction: row !important;
+        flex-direction: row;
     }
 
     .m-flex-column-reverse {
-        flex-direction: column-reverse !important;
+        flex-direction: column-reverse;
     }
     
     .m-flex-row-reverse {
-        flex-direction: row-reverse !important;
+        flex-direction: row-reverse;
     }
 }
 
 @include breakpoints.s {
     .s-flex-hide {
-        display: none !important;
+        display: none;
     }
 
     .s-flex-show {
-        display: flex !important;
+        display: flex;
     }
 
     .s-flex-column {
-        flex-direction: column !important;
+        flex-direction: column;
     }
 
     .s-flex-row {
-        flex-direction: row !important;
+        flex-direction: row;
     }
 
     .s-flex-column-reverse {
-        flex-direction: column-reverse !important;
+        flex-direction: column-reverse;
     }
     
     .s-flex-row-reverse {
-        flex-direction: row-reverse !important;
+        flex-direction: row-reverse;
     }
 }

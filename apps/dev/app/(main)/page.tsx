@@ -34,7 +34,8 @@ import {
   DatePicker,
   DateInput,
   DateRangeInput,
-  DateRange
+  DateRange,
+  Grid
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -79,9 +80,50 @@ export default function Home() {
 
   return (
     <Column fill center padding="l">
+      <Grid
+        zIndex={10} columns="4"
+        radius="xl"
+        style={{
+          backgroundColor: "var(--brand-background-medium)",
+        }}
+        m={{columns: "2"}}
+        s={{
+          position: "sticky",
+          top: "0",
+          style: {
+            backgroundColor: "var(--neutral-background-strong)"
+          }
+        }}
+        gap="l"
+        fillWidth>
+        <Column padding="l">
+          <Text>Hello</Text>
+        </Column>
+        <Column padding="l">
+          <Text>Hello</Text>
+        </Column>
+        <Column padding="l">
+          <Text>Hello</Text>
+        </Column>
+        <Column padding="l">
+          <Text>Hello</Text>
+        </Column>
+      </Grid>
+
+      <Row fillWidth horizontal="between" s={{direction: "column", horizontal: "end", vertical: "start", style: {backgroundColor: "red"}}}>
+        <Column fitWidth>
+          <Text>Hello 1</Text>
+        </Column>
+        <Column fitWidth>
+          <Text>Hello 2</Text>
+        </Column>
+        <Column fitWidth>
+          <Text>Hello 3</Text>
+        </Column>
+      </Row>
       <Column maxWidth="s" horizontal="center" gap="l" align="center">
       <RevealFx fillWidth speed={500} direction="column" gap="l">
-        <Media aspectRatio="16/9" src="/images/demo.jpg" />
+        <Media radius="xl" aspectRatio="16/9" src="/images/demo.jpg" s={{aspectRatio: "4/3"}} />
         <Badge
           textVariant="code-default-s"
           border="neutral-alpha-medium"
@@ -332,7 +374,7 @@ export default function Home() {
             background="surface"
             radius="l"
             border="neutral-medium"
-            vertical="space-between"
+            vertical="between"
             marginRight="12"
             minWidth={20}
             fillWidth
@@ -353,7 +395,7 @@ export default function Home() {
             background="surface"
             radius="l"
             border="neutral-medium"
-            vertical="space-between"
+            vertical="between"
             marginRight="12"
             minWidth={20}
             fillWidth
@@ -374,7 +416,7 @@ export default function Home() {
             background="surface"
             radius="l"
             border="neutral-medium"
-            vertical="space-between"
+            vertical="between"
             marginRight="12"
             minWidth={20}
             fillWidth
@@ -395,7 +437,7 @@ export default function Home() {
             background="surface"
             radius="l"
             border="neutral-medium"
-            vertical="space-between"
+            vertical="between"
             marginRight="12"
             minWidth={20}
             fillWidth
@@ -416,7 +458,7 @@ export default function Home() {
             background="surface"
             radius="l"
             border="neutral-medium"
-            vertical="space-between"
+            vertical="between"
             marginRight="12"
             minWidth={20}
             fillWidth

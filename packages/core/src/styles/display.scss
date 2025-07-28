@@ -1,3 +1,5 @@
+@use "../styles/breakpoints.scss" as breakpoints;
+
 .overflow-auto {
   overflow: auto;
 }
@@ -32,6 +34,120 @@
 
 .overflow-y-hidden{
   overflow-y: hidden;
+}
+
+@include breakpoints.l {
+  .l-overflow-auto {
+    overflow: auto;
+  }
+  
+  .l-overflow-x-scroll{
+    overflow-x: scroll;
+  }
+  
+  .l-overflow-x-auto {
+    overflow-x: auto;
+  }
+  
+  .l-overflow-y-auto{
+    overflow-y: auto;
+  }
+  
+  .l-overflow-y-scroll{
+    overflow-y: scroll;
+  }
+  
+  .l-overflow-hidden {
+    overflow: hidden;
+  }
+  
+  .l-overflow-scroll{
+    overflow: scroll;
+  }
+  
+  .l-overflow-x-hidden {
+    overflow-x: hidden;
+  }
+  
+  .l-overflow-y-hidden{
+    overflow-y: hidden;
+  }
+}
+
+@include breakpoints.m {
+  .m-overflow-auto {
+    overflow: auto;
+  }
+  
+  .m-overflow-x-scroll{
+    overflow-x: scroll;
+  }
+  
+  .m-overflow-x-auto {
+    overflow-x: auto;
+  }
+  
+  .m-overflow-y-auto{
+    overflow-y: auto;
+  }
+  
+  .m-overflow-y-scroll{
+    overflow-y: scroll;
+  }
+  
+  .m-overflow-hidden {
+    overflow: hidden;
+  }
+  
+  .m-overflow-scroll{
+    overflow: scroll;
+  }
+  
+  .m-overflow-x-hidden {
+    overflow-x: hidden;
+  }
+  
+  .m-overflow-y-hidden{
+    overflow-y: hidden;
+  }
+}
+
+@include breakpoints.s {
+  .s-overflow-auto {
+    overflow: auto;
+  }
+  
+  .s-overflow-x-scroll{
+    overflow-x: scroll;
+  }
+  
+  .s-overflow-x-auto {
+    overflow-x: auto;
+  }
+  
+  .s-overflow-y-auto{
+    overflow-y: auto;
+  }
+  
+  .s-overflow-y-scroll{
+    overflow-y: scroll;
+  }
+  
+  .s-overflow-hidden {
+    overflow: hidden;
+  }
+  
+  .s-overflow-scroll{
+    overflow: scroll;
+  }
+  
+  .s-overflow-x-hidden {
+    overflow-x: hidden;
+  }
+  
+  .s-overflow-y-hidden{
+    overflow-y: hidden;
+  }
 }
 
 .opacity-0 {
