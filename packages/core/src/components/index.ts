@@ -14,6 +14,7 @@ export * from "./Carousel";
 export * from "./Card";
 export * from "./CursorCard";
 export * from "./Cursor";
+export * from "./CountFx";
 export * from "./Column";
 export * from "./Checkbox";
 export * from "./Chip";

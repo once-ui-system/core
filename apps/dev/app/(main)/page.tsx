@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Heading,
   Text,
@@ -43,7 +43,10 @@ import {
   BarChart,
   CodeBlock,
   ListItem,
-  List
+  List,
+  ProgressBar,
+  LineChart,
+  CountFx
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -52,7 +55,13 @@ export default function Home() {
   const [dropdownEmoji, setDropdownEmoji] = React.useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dateRangeValue, setDateRangeValue] = useState<DateRange | null>(null);
+  const [dateRangeValue, setDateRangeValue] = useState<DateRange | null>(null);const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setValue(999);
+    }, 2000);
+  }, []);
   
   // DatePicker state to prevent unwanted scrolling
   const [datePickerValue, setDatePickerValue] = useState(new Date());
@@ -84,11 +93,12 @@ export default function Home() {
 
   return (
     <Column fill center padding="l" gap="l" maxWidth="m">
+      <CountFx variant="display-strong-xl" value={value} speed="fast" effect="wheel" duration={13000} easing="ease-out" />
+      <ProgressBar value={value} />
       <BarChart
         title="Daily Time Spent on Activities"
         axis="x"
         barWidth="xl"
-        error
         legend={{
           position: "bottom-center",
         }}
@@ -99,6 +109,24 @@ export default function Home() {
         ]}
         data={[
           { label: "Minutes per day", "Reading": 16, "Sports": 36, "Doomscrolling": 128 },
+        ]}
+      />
+      <LineChart
+        title="Cost of College vs. Income"
+        axis="x"
+        date={{
+          format: "yyyy"
+        }}
+        series={[
+          { key: "Median Household Income", color: "cyan" },
+          { key: "College Tuition", color: "magenta" }
+        ]}
+        data={[
+          { date: new Date("1980-01-01"), "Median Household Income": 22000, "College Tuition": 3000 },
+          { date: new Date("1990-01-01"), "Median Household Income": 30000, "College Tuition": 6000 },
+          { date: new Date("2000-01-01"), "Median Household Income": 42000, "College Tuition": 10000 },
+          { date: new Date("2010-01-01"), "Median Household Income": 49000, "College Tuition": 18000 },
+          { date: new Date("2020-01-01"), "Median Household Income": 53000, "College Tuition": 25000 },
         ]}
       />
       <CodeBlock

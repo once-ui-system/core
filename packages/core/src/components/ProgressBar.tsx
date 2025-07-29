@@ -2,17 +2,16 @@
 
 import React, { forwardRef } from "react";
 import classNames from "classnames";
-import { Flex } from ".";
+import { Column, CountFx, Flex, Text } from ".";
 import { StyleProps } from "@/interfaces";
 
-interface ProgressBarProps extends React.ComponentProps<"div"> {
+interface ProgressBarProps extends React.ComponentProps<typeof Flex> {
   value: number;
   min?: number;
   max?: number;
-  height?: number;
+  label?: boolean;
+  barBackground?: StyleProps["solid"];
   className?: string;
-  barBackground?: StyleProps["background"];
-  trackBackground?: StyleProps["background"];
   style?: React.CSSProperties;
 }
 
@@ -22,11 +21,10 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
       value,
       min = 0,
       max = 100,
-      height = 1,
+      label = true,
+      barBackground = "brand-strong",
       className,
       style,
-      barBackground = "brand-strong",
-      trackBackground = "brand-weak",
       ...rest
     },
     ref
@@ -36,30 +34,34 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
       Math.min(100, ((value - min) / (max - min)) * 100)
     );
     return (
-      <Flex
-        ref={ref}
-        className={classNames(className)}
-        background={trackBackground}
-        position="relative"
-        fillWidth
-        radius="m-4"
-        overflow="hidden"
-        height={height}
-        role="progressbar"
+      <Column
+        horizontal="center"
+        gap="16"
+        fillWidth ref={ref}
         style={style}
-        aria-valuenow={value}
-        aria-valuemin={min}
-        aria-valuemax={max}
-        {...rest}
-      >
+        className={classNames(className)}
+        {...rest}>
         <Flex
-          style={{ width: `${percent}%` }}
-          transition="micro-short"
-          fillHeight
-          background={barBackground}
-          radius="m-4"
-        />
-      </Flex>
+          background="neutral-medium"
+          border="neutral-alpha-weak"
+          fillWidth
+          radius="full"
+          overflow="hidden"
+          height="8"
+          role="progressbar"
+          aria-valuenow={value}
+          aria-valuemin={min}
+          aria-valuemax={max}
+        >
+          <Flex
+            style={{ width: `${percent}%`, transition: "width 1000ms ease-in-out" }}
+            fillHeight
+            solid={barBackground}
+            radius="full"
+          />
+        </Flex>
+        {label && <Text align="center"><CountFx value={value} speed={1000} duration={1000} easing="ease-in-out"/>%</Text>}
+      </Column>
     );
   }
 );
