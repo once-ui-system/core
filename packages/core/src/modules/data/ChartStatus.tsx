@@ -5,16 +5,20 @@ import { Column, Text, Spinner } from "../../components";
 
 export interface ChartStatusProps {
   loading?: boolean;
-  isEmpty?: boolean;
+  empty?: boolean;
+  error?: boolean;
   emptyState?: React.ReactNode;
+  errorState?: React.ReactNode;
 }
 
 export const ChartStatus: React.FC<ChartStatusProps> = ({
   loading = false,
-  isEmpty = false,
+  empty = false,
+  error = false,
   emptyState = "No data available for the selected period",
+  errorState = "An error occurred while fetching data",
 }) => {
-  if (!loading && !isEmpty) {
+  if (!loading && !empty && !error) {
     return null;
   }
 
@@ -23,9 +27,13 @@ export const ChartStatus: React.FC<ChartStatusProps> = ({
       {loading ? (
         <Spinner size="m" />
       ) : (
-        isEmpty && (
-          <Text variant="label-default-s" onBackground="neutral-weak">
+        empty ? (
+          <Text align="center" variant="label-default-s" onBackground="neutral-weak">
             {emptyState}
+          </Text>
+        ) : error && (
+          <Text align="center" variant="label-default-s" onBackground="danger-weak">
+            {errorState}
           </Text>
         )
       )}

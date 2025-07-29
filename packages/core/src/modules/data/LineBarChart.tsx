@@ -42,6 +42,8 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   series,
   date,
   emptyState,
+  errorState,
+  error = false,
   loading = false,
   legend: legendProp = {},
   axis = "both",
@@ -152,10 +154,12 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
       <Row fill>
         <ChartStatus
           loading={loading}
-          isEmpty={!filteredData || filteredData.length === 0}
+          empty={!filteredData || filteredData.length === 0}
           emptyState={emptyState}
+          error={error}
+          errorState={errorState}
         />
-        {!loading && filteredData && filteredData.length > 0 && (
+        {!loading && !error && filteredData && filteredData.length > 0 && (
           <RechartsResponsiveContainer width="100%" height="100%">
             <RechartsComposedChart
               data={filteredData}

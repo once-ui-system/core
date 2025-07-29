@@ -39,7 +39,8 @@ import {
   AccordionGroup,
   Accordion,
   Kbar,
-  Spinner
+  Spinner,
+  BarChart
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -84,8 +85,26 @@ export default function Home() {
 
   return (
     <Column fill center padding="l">
+      <BarChart
+        title="Daily Time Spent on Activities"
+        axis="x"
+        barWidth="xl"
+        error
+        legend={{
+          position: "bottom-center",
+        }}
+        series={[
+          { key: "Reading", color: "aqua" },
+          { key: "Sports", color: "yellow" },
+          { key: "Doomscrolling", color: "orange" }
+        ]}
+        data={[
+          { label: "Minutes per day", "Reading": 16, "Sports": 36, "Doomscrolling": 128 },
+        ]}
+      />
       <Grid
         maxWidth="s"
+        borderX="neutral-medium"
         cursor={<Spinner/>}
         zIndex={10} columns="4"
         radius="xl"
@@ -94,6 +113,7 @@ export default function Home() {
         }}
         m={{columns: "2"}}
         s={{
+          hide: true,
           position: "sticky",
           top: "0",
           style: {
