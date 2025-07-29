@@ -20,8 +20,8 @@ export interface ResponsiveProps extends HTMLAttributes<HTMLDivElement> {
   right?: SpacingToken;
   bottom?: SpacingToken;
   left?: SpacingToken;
-  hide?: boolean;
-  show?: boolean;
+  hide?: boolean | { s?: boolean; m?: boolean; l?: boolean };
+  show?: boolean | { s?: boolean; m?: boolean; l?: boolean };
   position?: CSSProperties["position"];
   overflow?: CSSProperties["overflow"];
   overflowX?: CSSProperties["overflowX"];
@@ -156,6 +156,16 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
     | `${ColorScheme}-alpha-${ColorWeight}`
     | "surface"
     | "transparent";
+  borderX?:
+    | `${ColorScheme}-${ColorWeight}`
+    | `${ColorScheme}-alpha-${ColorWeight}`
+    | "surface"
+    | "transparent";
+  borderY?:
+    | `${ColorScheme}-${ColorWeight}`
+    | `${ColorScheme}-alpha-${ColorWeight}`
+    | "surface"
+    | "transparent";
   border?:
     | `${ColorScheme}-${ColorWeight}`
     | `${ColorScheme}-alpha-${ColorWeight}`
@@ -179,8 +189,8 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
 export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
   inline?: boolean;
-  hide?: boolean;
-  show?: boolean;
+  hide?: boolean | { s?: boolean; m?: boolean; l?: boolean };
+  show?: boolean | { s?: boolean; m?: boolean; l?: boolean };
   pointerEvents?: "none" | "all" | "auto";
   position?: CSSProperties["position"];
   overflow?: CSSProperties["overflow"];

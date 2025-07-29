@@ -2,16 +2,18 @@
 
 import { forwardRef } from "react";
 import { ServerGrid, Cursor } from ".";
-import { GridProps, StyleProps } from "../interfaces";
+import { GridProps, StyleProps, DisplayProps } from "../interfaces";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
+import { useLayout } from "../contexts/LayoutContext";
 
-interface ClientGridProps extends GridProps, StyleProps {
+interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];
 }
 
 export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor, ...props }, ref) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const { currentBreakpoint } = useLayout();
   
   // Combine refs
   const combinedRef = (node: HTMLDivElement) => {
@@ -30,20 +32,19 @@ export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor,
     if (!elementRef.current) return;
     
     const element = elementRef.current;
-    const width = window.innerWidth;
     
     // Update base styles when style prop changes
     if (props.style) {
       baseStyleRef.current = { ...props.style };
     }
     
-    // Determine which responsive props to apply based on breakpoint
+    // Determine which responsive props to apply based on current breakpoint
     let currentResponsiveProps: any = null;
-    if (width <= 1440 && props.l) {
+    if (currentBreakpoint === 'l' && props.l) {
       currentResponsiveProps = props.l;
-    } else if (width <= 1024 && props.m) {
+    } else if (currentBreakpoint === 'm' && props.m) {
       currentResponsiveProps = props.m;
-    } else if (width <= 768 && props.s) {
+    } else if (currentBreakpoint === 's' && props.s) {
       currentResponsiveProps = props.s;
     }
     
@@ -73,20 +74,10 @@ export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor,
         appliedResponsiveStyles.current.add('aspect-ratio');
       }
     }
-  }, [props.l, props.m, props.s, props.style]);
+  }, [props.l, props.m, props.s, props.style, currentBreakpoint]);
 
   useEffect(() => {
     applyResponsiveStyles();
-    
-    const handleResize = () => {
-      applyResponsiveStyles();
-    };
-    
-    window.addEventListener('resize', handleResize);
-    
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
   }, [applyResponsiveStyles]);
 
   // Detect touch device
