@@ -35,7 +35,11 @@ import {
   DateInput,
   DateRangeInput,
   DateRange,
-  Grid
+  Grid,
+  AccordionGroup,
+  Accordion,
+  Kbar,
+  Spinner
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -81,6 +85,8 @@ export default function Home() {
   return (
     <Column fill center padding="l">
       <Grid
+        maxWidth="s"
+        cursor={<Spinner/>}
         zIndex={10} columns="4"
         radius="xl"
         style={{
@@ -110,6 +116,68 @@ export default function Home() {
         </Column>
       </Grid>
 
+      <Kbar
+        items={[
+          {
+            id: 'home',
+            name: 'Home',
+            section: 'Navigation',
+            shortcut: ['H'],
+            keywords: 'home main start',
+            href: '/',
+            icon: 'home'
+          },
+          {
+            id: 'docs',
+            name: 'Documentation',
+            section: 'Navigation',
+            shortcut: ['D', 'A'],
+            keywords: 'docs guide help',
+            href: '/docs',
+            icon: 'chevronRight'
+          }]}>
+          <Button prefixIcon="command">Search</Button>
+        </Kbar>
+
+      <Column fillWidth>
+        <Accordion title="Example" open>
+          <Text onBackground="neutral-weak">
+            Example content
+          </Text>
+        </Accordion>
+        <Accordion title="Example">
+          <Text onBackground="neutral-weak">
+            Example content
+          </Text>
+        </Accordion>
+      </Column>
+
+      <AccordionGroup
+        items={[
+          {
+            title: "First Item",
+            content:
+              <Text onBackground="neutral-weak">
+                Content for the first item
+              </Text>
+          },
+          {
+            title: "Second Item",
+            content:
+              <Text onBackground="neutral-weak">
+                Content for the second item
+              </Text>
+          },
+          {
+            title: "Third Item",
+            content:
+              <Text onBackground="neutral-weak">
+                Content for the third item
+              </Text>
+          }
+        ]}
+      />
+
       <Row fillWidth horizontal="between" s={{direction: "column", horizontal: "end", vertical: "start", style: {backgroundColor: "red"}}}>
         <Column fitWidth>
           <Text>Hello 1</Text>
@@ -123,7 +191,9 @@ export default function Home() {
       </Row>
       <Column maxWidth="s" horizontal="center" gap="l" align="center">
       <RevealFx fillWidth speed={500} direction="column" gap="l">
-        <Media radius="xl" aspectRatio="16/9" src="/images/demo.jpg" s={{aspectRatio: "4/3"}} />
+        <Media 
+          cursor={<Row fill center><Line width={100}/><Line position="absolute" vert height={100}/></Row>}
+          radius="xl" aspectRatio="16/9" src="/images/demo.jpg" s={{aspectRatio: "4/3"}} caption="This is a caption" />
         <Badge
           textVariant="code-default-s"
           border="neutral-alpha-medium"

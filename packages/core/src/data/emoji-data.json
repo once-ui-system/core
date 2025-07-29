@@ -5532,6 +5532,14 @@
       "tags": []
     },
     {
+      "char": "👨‍👩‍👧",
+      "description": "family: man, woman, girl",
+      "aliases": [
+        "family_man_woman_girl"
+      ],
+      "tags": []
+    },
+    {
       "char": "👨‍👨‍👦",
       "description": "family: man, man, boy",
       "aliases": [
@@ -14767,6 +14775,14 @@
       "description": "flag: Guam",
       "aliases": [
         "guam"
+      ],
+      "tags": []
+    },
+    {
+      "char": "🇬🇼",
+      "description": "flag: Guinea-Bissau",
+      "aliases": [
+        "guinea_bissau"
       ],
       "tags": []
     },

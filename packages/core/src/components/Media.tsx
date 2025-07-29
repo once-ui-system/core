@@ -123,6 +123,7 @@ const Media: React.FC<MediaProps> = ({
         fillWidth
         overflow="hidden"
         zIndex={0}
+        margin="0"
         cursor={enlarge ? "interactive" : ""}
         style={{
           outline: "none",

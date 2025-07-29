@@ -173,7 +173,7 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   bottomRightRadius?: RadiusSize;
   radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`;
   shadow?: ShadowSize;
-  cursor?: CSSProperties["cursor"] | "interactive";
+  cursor?: CSSProperties["cursor"] | "interactive" | ReactNode;
 }
 
 export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
