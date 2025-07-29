@@ -40,7 +40,10 @@ import {
   Accordion,
   Kbar,
   Spinner,
-  BarChart
+  BarChart,
+  CodeBlock,
+  ListItem,
+  List
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -79,12 +82,8 @@ export default function Home() {
     setDropdownEmoji(emoji);
   };
 
-  const handleDateRangeChange = (range: DateRange) => {
-    setDateRangeValue(range);
-  };
-
   return (
-    <Column fill center padding="l">
+    <Column fill center padding="l" gap="l" maxWidth="m">
       <BarChart
         title="Daily Time Spent on Activities"
         axis="x"
@@ -102,6 +101,47 @@ export default function Home() {
           { label: "Minutes per day", "Reading": 16, "Sports": 36, "Doomscrolling": 128 },
         ]}
       />
+      <CodeBlock
+        codes={[
+          {
+            code:
+      `function calculateTotal(items) {
+      let total = 0;
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        total += item.price * item.quantity;
+      }
+
+      return total;
+      }`,
+            language: "javascript",
+            highlight: "2,4-6",
+            label: "Highlight"
+          },
+          {
+            code:
+      `function calculateTotal(items) {
+      let total = 12321;
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        total += item.price * item.quantity;
+      }
+
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        total += item.price * item.quantity;
+      }
+
+      return total;
+      }`,
+            language: "javascript",
+            label: "Highlight 2"
+          }
+        ]}
+      />
+
       <Grid
         maxWidth="s"
         borderX="neutral-medium"
@@ -136,6 +176,19 @@ export default function Home() {
         </Column>
       </Grid>
 
+      <List as="ul" maxWidth="s" gap="8">
+        <ListItem>Hello this is a really long list item that should wrap around the container and not break the layout
+          <List as="ul" maxWidth="s">
+            <ListItem>
+              Hello this is a really long list item that should wrap around the container and not break the layout
+            </ListItem>
+          </List>
+        </ListItem>
+        <ListItem>Just another example of a really long list item that should wrap around the container and not break the layout</ListItem>
+        <ListItem>This is a short list item that should not wrap around the container and not break the layout</ListItem>
+        <ListItem>And another one that should wrap around the container and not break the layout</ListItem>
+      </List>
+
       <Kbar
         items={[
           {
@@ -155,9 +208,10 @@ export default function Home() {
             keywords: 'docs guide help',
             href: '/docs',
             icon: 'chevronRight'
-          }]}>
-          <Button prefixIcon="command">Search</Button>
-        </Kbar>
+          }]}
+        >
+        <Button prefixIcon="command">Search</Button>
+      </Kbar>
 
       <Column fillWidth>
         <Accordion title="Example" open>
@@ -643,11 +697,9 @@ onClose={() => setIsDialogOpen(false)}>
 />  
 </Dialog>
         <OgCard 
-          url="https://once-ui.com" 
-          serviceConfig={{
-            fetchOgUrl: '/api/og/fetch',
-            proxyOgUrl: '/api/og/proxy'
-          }}
+        favicon={false}
+          url="https://once-ui.com"
+          size="l"
         />
         <Carousel
           indicator="thumbnail"

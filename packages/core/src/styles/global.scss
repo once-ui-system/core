@@ -7,39 +7,6 @@ h1, h2, h3, h4, h5, h6 {
     scroll-margin-top: var(--static-space-80);
 }
 
-ul, ol {
-    margin: 0;
-    width: 100%;
-}
-
-ul {
-    padding: 0 0 0 var(--static-space-20);
-
-    li {
-        padding-left: var(--static-space-8);
-    }
-}
-
-ol {
-    padding: 0 0 0 var(--static-space-20);
-
-    li {
-        padding-left: var(--static-space-16);
-    }
-}
-
-li {
-    padding: 0;
-    line-height: 175%;
-    font-size: inherit;
-    color: inherit;
-    margin-bottom: var(--static-space-12);
-
-    &::marker {
-        color: var(--neutral-on-background-weak);
-    }
-}
-
 img {
     user-select: none;
 }
