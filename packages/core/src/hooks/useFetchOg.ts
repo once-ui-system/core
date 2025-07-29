@@ -22,6 +22,17 @@ export function useOgData(url: string | null, customFetchUrl?: string, customPro
           : `/api/og/fetch?url=${encodeURIComponent(url!)}`;
         
         const response = await fetch(fetchUrl);
+        
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new Error(`Expected JSON response, got ${contentType}`);
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const data = await response.json();
 
         if (data.error) {

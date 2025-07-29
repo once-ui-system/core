@@ -49,7 +49,9 @@ export type Schemes =
   | "aqua"
   | "cyan";
 
-export type TShirtSizes = "xs" | "s" | "m" | "l" | "xl";
+export type CondensedTShirtSizes = "s" | "m" | "l";
+
+export type TShirtSizes = CondensedTShirtSizes | "xs" | "xl";
 
 export type ResponsiveSpacingToken = TShirtSizes;
 

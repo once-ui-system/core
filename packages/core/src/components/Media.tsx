@@ -17,6 +17,7 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   sizes?: string;
   priority?: boolean;
   caption?: ReactNode;
+  fillWidth?: boolean;
 }
 
 const Media: React.FC<MediaProps> = ({
@@ -31,6 +32,7 @@ const Media: React.FC<MediaProps> = ({
   priority,
   sizes = "100vw",
   caption,
+  fillWidth = true,
   ...rest
 }) => {
   const [isEnlarged, setIsEnlarged] = useState(false);
@@ -116,9 +118,9 @@ const Media: React.FC<MediaProps> = ({
 
   return (
     <>
-    <Column fillWidth>
+    <Column fillWidth={fillWidth}>
       <Column
-        as="figure"
+        as={caption ? "figure" : undefined}
         ref={imageRef}
         fillWidth
         overflow="hidden"
