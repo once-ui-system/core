@@ -365,6 +365,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               fillWidth
               weight="default"
               variant="tertiary"
+              radius={firstDay === 1 ? undefined : i === 0 ? "left" : i === firstDay - 1 ? "right" : "none"}
               size={size}
               type="button"
               disabled
@@ -404,6 +405,48 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         // Check if the current date is out of the minDate and maxDate range
         const isDisabled = (minDate && currentDate < minDate) || (maxDate && currentDate > maxDate);
 
+        // Calculate border radius for disabled days
+        let disabledRadius: "left" | "right" | "none" | undefined = undefined;
+        if (isDisabled) {
+          // Find consecutive disabled days
+          let consecutiveDisabledStart = day;
+          let consecutiveDisabledEnd = day;
+          
+          // Look backwards for start of consecutive disabled days
+          while (consecutiveDisabledStart > 1) {
+            const prevDate = new Date(currentYear, currentMonth, consecutiveDisabledStart - 1);
+            const isPrevDisabled = (minDate && prevDate < minDate) || (maxDate && prevDate > maxDate);
+            if (isPrevDisabled) {
+              consecutiveDisabledStart--;
+            } else {
+              break;
+            }
+          }
+          
+          // Look forwards for end of consecutive disabled days
+          while (consecutiveDisabledEnd < daysInMonth) {
+            const nextDate = new Date(currentYear, currentMonth, consecutiveDisabledEnd + 1);
+            const isNextDisabled = (minDate && nextDate < minDate) || (maxDate && nextDate > maxDate);
+            if (isNextDisabled) {
+              consecutiveDisabledEnd++;
+            } else {
+              break;
+            }
+          }
+          
+          const totalConsecutiveDisabled = consecutiveDisabledEnd - consecutiveDisabledStart + 1;
+          
+          if (totalConsecutiveDisabled === 1) {
+            disabledRadius = undefined;
+          } else if (day === consecutiveDisabledStart) {
+            disabledRadius = "left";
+          } else if (day === consecutiveDisabledEnd) {
+            disabledRadius = "right";
+          } else {
+            disabledRadius = "none";
+          }
+        }
+
         days.push(
           <Row
             key={`day-${currentYear}-${currentMonth}-${day}`}
@@ -419,6 +462,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               fillWidth
               weight={isSelected ? "strong" : "default"}
               variant={isSelected ? "primary" : isHovered ? "secondary" : "tertiary"}
+              radius={disabledRadius}
               tabIndex={-1}
               size={size}
               data-value={currentDate.toISOString()}
@@ -461,6 +505,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               fillWidth
               weight="default"
               variant="tertiary"
+              radius={remainingDays === 1 ? undefined : i === 1 ? "left" : i === remainingDays ? "right" : "none"}
               size={size}
               type="button"
               disabled
