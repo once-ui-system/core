@@ -66,9 +66,8 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
               {typeof entry.value === "number" ? (
                 <CountFx
                   value={entry.value}
-                  speed="fast"
                   separator=","
-                  duration={500}
+                  speed={500}
                   easing="ease-in-out"
                 />
               ) : (

@@ -5,27 +5,26 @@ import { Row, Text } from ".";
 
 export interface CountFxProps extends React.ComponentProps<typeof Text> {
   value: number;
-  speed?: "slow" | "medium" | "fast" | number;
-  duration?: number;
+  speed?: number;
   easing?: "linear" | "ease-out" | "ease-in-out";
   format?: (value: number) => string;
   separator?: string;
-  effect?: "smooth" | "wheel";
+  effect?: "simple" | "wheel" | "smooth";
   children?: React.ReactNode;
 }
 
 const CountFx: React.FC<CountFxProps> = ({
   value,
-  speed = "medium",
-  duration = 1000,
+  speed = 1000,
   easing = "ease-out",
   format,
   separator,
-  effect = "smooth",
+  effect = "simple",
   children,
   ...text
 }) => {
   const [displayValue, setDisplayValue] = useState(value);
+  const [animationProgress, setAnimationProgress] = useState(1);
   const animationRef = useRef<number | undefined>(undefined);
   const previousValueRef = useRef<number>(value);
 
@@ -75,7 +74,7 @@ const CountFx: React.FC<CountFxProps> = ({
       for (let i = 0; i <= 9; i++) {
         const isActive = i === currentDigit;
         
-        // Calculate transition duration based on progress (slower as it approaches target)
+        // Calculate transition speed based on progress (slower as it approaches target)
         const transitionDuration = 0.1 + (digitProgress * 0.2); // 0.1s to 0.3s
         
         // Calculate position for wheel effect
@@ -131,6 +130,85 @@ const CountFx: React.FC<CountFxProps> = ({
     }).reverse();
   };
 
+  // Smooth animation: animate each digit independently from start to target
+  const renderSmoothDigits = (startValue: number, targetValue: number, progress: number) => {
+    const startStr = startValue.toString().padStart(targetValue.toString().length, '0');
+    const targetStr = targetValue.toString();
+    const maxLength = Math.max(startStr.length, targetStr.length);
+    
+    return Array.from({ length: maxLength }, (_, index) => {
+      const startDigit = parseInt(startStr[maxLength - 1 - index] || '0');
+      const targetDigit = parseInt(targetStr[maxLength - 1 - index] || '0');
+      
+      // Calculate the shortest path between digits (handles wrapping around 0-9)
+      let digitDifference = targetDigit - startDigit;
+      if (Math.abs(digitDifference) > 5) {
+        // Take the shorter path around the wheel
+        digitDifference = digitDifference > 0 ? digitDifference - 10 : digitDifference + 10;
+      }
+      
+      // Calculate the current digit position based on progress
+      const currentDigitPosition = startDigit + (digitDifference * progress);
+      
+      // Create wheel effect for this digit
+      const wheelDigits = [];
+      for (let i = 0; i <= 9; i++) {
+        // Calculate the position of each digit in the wheel
+        let position = 0;
+        
+        // Calculate the relative position of this digit to the current position
+        let relativePosition = i - currentDigitPosition;
+        
+        // Handle wrapping around the wheel
+        if (relativePosition > 5) relativePosition -= 10;
+        if (relativePosition < -5) relativePosition += 10;
+        
+        // Convert to percentage position
+        position = relativePosition * 200; // 200% for full wheel height
+        
+        wheelDigits.push(
+          <Row
+            center
+            position="absolute"
+            top="0"
+            left="0"
+            right="0"
+            bottom="0"
+            key={i}
+            style={{
+              height: '1em',
+              width: '100%',
+              transform: `translateY(${position}%)`,
+              transition: 'none', // No transition for smooth effect
+              pointerEvents: 'none',
+            }}
+          >
+            {i}
+          </Row>
+        );
+      }
+      
+      return (
+        <Row
+          align="center"
+          overflow="hidden"
+          inline
+          key={index}
+          style={{
+            height: '1em',
+            width: '0.8em',
+            marginLeft: '-0.125em',
+            marginRight: '-0.125em',
+            position: 'relative',
+            isolation: 'isolate',
+          }}
+        >
+          {wheelDigits}
+        </Row>
+      );
+    }).reverse();
+  };
+
   useEffect(() => {
     if (value === previousValueRef.current) return;
 
@@ -144,15 +222,20 @@ const CountFx: React.FC<CountFxProps> = ({
       if (!startTime) startTime = timestamp;
       
       const elapsed = timestamp - startTime;
-      const progress = Math.min(elapsed / duration, 1);
+      const progress = Math.min(elapsed / speed, 1);
       const easedProgress = getEasing(progress);
       
       if (effect === "wheel") {
         // For wheel animation, we animate each digit independently
         const currentValue = Math.floor(startValue + (difference * easedProgress));
         setDisplayValue(currentValue);
+      } else if (effect === "smooth") {
+        // For smooth animation, we track progress and animate digits independently
+        setAnimationProgress(easedProgress);
+        const currentValue = Math.floor(startValue + (difference * easedProgress));
+        setDisplayValue(currentValue);
       } else {
-        // Smooth animation
+        // Simple animation
         const currentValue = startValue + (difference * easedProgress);
         const currentStepValue = Math.floor(currentValue);
         setDisplayValue(currentStepValue);
@@ -162,6 +245,7 @@ const CountFx: React.FC<CountFxProps> = ({
         animationRef.current = requestAnimationFrame(animate);
       } else {
         setDisplayValue(endValue);
+        setAnimationProgress(1);
         previousValueRef.current = endValue;
       }
     };
@@ -177,7 +261,7 @@ const CountFx: React.FC<CountFxProps> = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [value, speed, duration, easing, effect]);
+  }, [value, speed, easing, effect]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -192,6 +276,15 @@ const CountFx: React.FC<CountFxProps> = ({
     return (
       <Text {...text} style={{ display: 'flex', alignItems: 'center', gap: '0.1em', ...text.style }}>
         {renderWheelDigits(displayValue, value)}
+        {children}
+      </Text>
+    );
+  }
+
+  if (effect === "smooth") {
+    return (
+      <Text {...text} style={{ display: 'flex', alignItems: 'center', gap: '0.1em', ...text.style }}>
+        {renderSmoothDigits(previousValueRef.current, value, animationProgress)}
         {children}
       </Text>
     );

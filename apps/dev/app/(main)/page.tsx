@@ -55,12 +55,18 @@ export default function Home() {
   const [dropdownEmoji, setDropdownEmoji] = React.useState<string>("");
   const [selectedCountry, setSelectedCountry] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dateRangeValue, setDateRangeValue] = useState<DateRange | null>(null);const [value, setValue] = useState(0);
+  const [dateRangeValue, setDateRangeValue] = useState<DateRange | null>(null);
+  const [value, setValue] = useState(9428);
+  const [value2, setValue2] = useState(0);
 
   useEffect(() => {
     setTimeout(() => {
-      setValue(999);
+      setValue(0);
     }, 2000);
+    
+    setTimeout(() => {
+      setValue2(9999);
+    }, 6000);
   }, []);
   
   // DatePicker state to prevent unwanted scrolling
@@ -93,7 +99,10 @@ export default function Home() {
 
   return (
     <Column fill center padding="l" gap="l" maxWidth="m">
-      <CountFx variant="display-strong-xl" value={value} speed="fast" effect="wheel" duration={13000} easing="ease-out" />
+      <CountFx variant="display-strong-xl" value={value} speed={13000} effect="wheel" easing="ease-out" />
+      <CountFx variant="display-strong-xl" value={value} speed={3000} effect="smooth" easing="ease-out" />
+      <CountFx variant="display-strong-xl" value={value} speed={3000} effect="simple" easing="ease-out" />
+      <CountFx variant="display-strong-xl" value={value2} speed={3000} effect="smooth" easing="ease-out" />
       <ProgressBar value={value} />
       <BarChart
         title="Daily Time Spent on Activities"
@@ -122,11 +131,11 @@ export default function Home() {
           { key: "College Tuition", color: "magenta" }
         ]}
         data={[
-          { date: new Date("1980-01-01"), "Median Household Income": 22000, "College Tuition": 3000 },
-          { date: new Date("1990-01-01"), "Median Household Income": 30000, "College Tuition": 6000 },
-          { date: new Date("2000-01-01"), "Median Household Income": 42000, "College Tuition": 10000 },
-          { date: new Date("2010-01-01"), "Median Household Income": 49000, "College Tuition": 18000 },
-          { date: new Date("2020-01-01"), "Median Household Income": 53000, "College Tuition": 25000 },
+          { date: new Date("1980-01-01"), "Median Household Income": 22340, "College Tuition": 3040 },
+          { date: new Date("1990-01-01"), "Median Household Income": 31056, "College Tuition": 6371 },
+          { date: new Date("2000-01-01"), "Median Household Income": 41824, "College Tuition": 13467 },
+          { date: new Date("2010-01-01"), "Median Household Income": 49341, "College Tuition": 18462 },
+          { date: new Date("2020-01-01"), "Median Household Income": 52357, "College Tuition": 25320 },
         ]}
       />
       <CodeBlock
