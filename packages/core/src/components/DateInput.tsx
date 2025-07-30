@@ -71,6 +71,10 @@ export const DateInput: React.FC<DateInputProps> = ({
     setIsOpen(true);
   }, []);
 
+  const handleInputFocus = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+
   return (
     <DropdownWrapper
       trigger={
@@ -84,7 +88,7 @@ export const DateInput: React.FC<DateInputProps> = ({
           value={inputValue}
           error={error}
           readOnly
-          onClick={handleInputClick}
+          onFocus={handleInputFocus}
           {...rest}
         />
       }
@@ -107,6 +111,7 @@ export const DateInput: React.FC<DateInputProps> = ({
       onOpenChange={setIsOpen}
       className={className}
       closeAfterClick={!timePicker}
+      disableTriggerClick={true}
       style={{ ...style }}
       handleArrowNavigation={false}
     />

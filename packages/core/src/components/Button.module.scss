@@ -13,10 +13,6 @@
         z-index: 1;
     }
 
-    &:focus {
-        outline: none;
-    }
-
     &:disabled {
         box-shadow: none;
         cursor: not-allowed;

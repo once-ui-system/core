@@ -59,7 +59,6 @@ export * from "./Logo";
 export * from "./LogoCloud";
 export * from "./Mask";
 export * from "./Media";
-export * from "./MultiSelect"
 export * from "./NavIcon";
 export * from "./NumberInput";
 export * from "./OgCard";

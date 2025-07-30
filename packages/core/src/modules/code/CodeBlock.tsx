@@ -16,7 +16,7 @@ const loadCssFiles = async () => {
 
 import styles from "./CodeBlock.module.scss";
 
-import { Flex, Button, IconButton, Scroller, Row, StyleOverlay, ToggleButton } from "../../components";
+import { Flex, IconButton, Scroller, Row, StyleOverlay, ToggleButton } from "../../components";
 
 import Prism from "prismjs";
 
@@ -278,6 +278,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           }}
           key={refreshKey}
           padding={previewPadding}
+          tabIndex={-1}
           fillHeight
           horizontal="center"
           overflowY="auto"
@@ -294,7 +295,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           flex="1"
           fillHeight={fillHeight}
         >
-          <Flex overflowX="auto" fillWidth>
+          <Flex overflowX="auto" fillWidth tabIndex={-1}>
             <pre
               style={{ maxHeight: `${codeHeight}rem` }}
               data-line={highlight || deprecatedHighlight}
@@ -309,7 +310,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               )}
               tabIndex={-1}
             >
-              <code ref={codeRef} className={classNames(styles.code, `language-${language}`)}>
+              <code tabIndex={-1} ref={codeRef} className={classNames(styles.code, `language-${language}`)}>
                 {typeof code === "string" ? code : code.content}
               </code>
             </pre>

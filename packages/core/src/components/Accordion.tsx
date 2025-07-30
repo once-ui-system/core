@@ -32,7 +32,7 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
       open = false,
       onToggle,
       iconRotation = 180,
-      radius,
+      radius = "m",
       icon = "chevronDown",
       size = "m",
       className,

@@ -80,8 +80,8 @@ const Carousel: React.FC<CarouselProps> = ({
         setTimeout(() => {
           setIsTransitioning(true);
           transitionTimeoutRef.current = undefined;
-        }, 300);
-      }, 800);
+        }, 150);
+      }, 400);
     }
   };
 
@@ -108,7 +108,7 @@ const Carousel: React.FC<CarouselProps> = ({
         trigger={isTransitioning}
         translateY="16"
         aspectRatio={aspectRatio}
-        speed="fast"
+        speed={400}
         onTouchStart={(e: React.TouchEvent) => {
           touchStartXRef.current = e.touches[0].clientX;
         }}

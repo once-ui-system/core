@@ -46,6 +46,7 @@ export interface DropdownWrapperProps {
   columns?: number | string;
   optionsCount?: number;
   dropdownId?: string;
+  disableTriggerClick?: boolean;
 }
 
 // Global state to track the last opened dropdown
@@ -74,6 +75,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       columns = 8,
       optionsCount: propOptionsCount,
       dropdownId: propDropdownId,
+      disableTriggerClick = false,
     },
     ref
   ) => {
@@ -101,15 +103,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           // Set this as the last opened dropdown using global variable
           (window as any).lastOpenedDropdown = dropdownId.current;
           
-          // Focus the dropdown content when it opens
-          setTimeout(() => {
-            if (dropdownRef.current) {
-              const firstFocusableElement = dropdownRef.current.querySelector('[data-value], [role="option"], .option');
-              if (firstFocusableElement instanceof HTMLElement) {
-                firstFocusableElement.focus();
-              }
-            }
-          }, 0);
+          // Don't automatically focus dropdown content - let natural tab order work
         } else {
           // Clear the last opened dropdown if this one is closing
           if ((window as any).lastOpenedDropdown === dropdownId.current) {
@@ -481,7 +475,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         }}
         className={className}
         ref={wrapperRef}
-        onClick={(e) => {
+        onClick={disableTriggerClick ? undefined : (e) => {
           if (!isOpen) {
             handleOpenChange(true);
             return;
@@ -498,7 +492,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           ref={triggerRef}
           fillWidth={fillWidth}
           fitWidth={!fillWidth}
-          onClick={(e) => {
+          onClick={disableTriggerClick ? undefined : (e) => {
             // If already open, close on trigger click
             if (isOpen) {
               handleOpenChange(false);
@@ -510,7 +504,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             handleKeyDown(e);
           }}
           role="button"
-          tabIndex={isOpen ? -1 : 0}
           data-is-dropdown="true"
           aria-haspopup="true"
           aria-expanded={isOpen}
@@ -651,19 +644,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                   if (e.key !== 'Tab') {
                     handleKeyDown(e);
                   }
-                }}
-                onClick={(e) => {
-                  // Don't stop propagation - let the document listener handle click detection
-                  // The document listener will check if the click is inside the dropdown
-                  
-                  // Debug: Log what was clicked
-                  console.log('Flex onClick triggered:', {
-                    target: e.target,
-                    currentTarget: e.currentTarget,
-                    eventPhase: e.eventPhase,
-                    dropdownId: dropdownId.current,
-                    isActive: (window as any).lastOpenedDropdown === dropdownId.current
-                  });
                 }}
                 onMouseDown={(e) => {
                   // Don't stop propagation - let the document listener handle it
