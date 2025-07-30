@@ -49,7 +49,6 @@ import {
   CountFx,
   Input,
   Feedback,
-  ServerLayoutWrapper,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -111,9 +110,7 @@ export default function Home() {
 
   return (
     <Column fill center padding="l" gap="l" maxWidth="m">
-      <ServerLayoutWrapper>
       <Flex hide m={{hide: false}}>hide by default, show on m</Flex>
-      </ServerLayoutWrapper>
       <Feedback icon title="Feedback" description="This is a feedback"></Feedback>
       <Select
         id="multiselect-example"
