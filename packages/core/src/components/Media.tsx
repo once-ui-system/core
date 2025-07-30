@@ -118,7 +118,7 @@ const Media: React.FC<MediaProps> = ({
 
   return (
     <>
-    <Column fillWidth={fillWidth} fillHeight={rest.fillHeight} fill={rest.fill} maxWidth={rest.maxWidth} position={rest.position} aspectRatio={aspectRatio}>
+    <Column fillWidth={fillWidth} fillHeight={rest.fillHeight} fill={rest.fill} maxWidth={rest.maxWidth} position={rest.position} aspectRatio={aspectRatio} dark={rest.dark} light={rest.light}>
       <Column
         as={caption ? "figure" : undefined}
         ref={imageRef}
