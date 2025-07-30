@@ -46,7 +46,9 @@ import {
   List,
   ProgressBar,
   LineChart,
-  CountFx
+  CountFx,
+  Input,
+  Feedback,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -78,7 +80,8 @@ export default function Home() {
   
   // Custom dropdown state
   const [isCustomDropdownOpen, setIsCustomDropdownOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedDropdownOption, setSelectedDropdownOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState<string[]>([]);
   
   // Options for the custom dropdown
   const customOptions = [
@@ -97,8 +100,31 @@ export default function Home() {
     setDropdownEmoji(emoji);
   };
 
+  const handleMultiSelectChange = (values: string | string[]) => {
+    if (Array.isArray(values)) {
+      setSelectedOption(values);
+    } else {
+      setSelectedOption([values]);
+    }
+  };
+
   return (
     <Column fill center padding="l" gap="l" maxWidth="m">
+      <Feedback icon title="Feedback" description="This is a feedback"></Feedback>
+      <Select
+        id="multiselect-example"
+        options={customOptions}
+        value={selectedOption}
+        onSelect={handleMultiSelectChange}
+        multiple
+        placeholder="Select multiple options"
+      />
+      <Input
+        id="shimmer"
+        value={selectedOption}
+        placeholder="Shimmer"
+        readOnly
+      />
       <CountFx variant="display-strong-xl" value={value} speed={13000} effect="wheel" easing="ease-out" />
       <CountFx variant="display-strong-xl" value={value} speed={3000} effect="smooth" easing="ease-out" />
       <CountFx variant="display-strong-xl" value={value} speed={3000} effect="simple" easing="ease-out" />
@@ -668,7 +694,7 @@ export default function Home() {
                   variant="secondary" 
                   suffixIcon="chevronDown"
                 >
-                  {selectedOption ? customOptions.find(opt => opt.value === selectedOption)?.label : "Select an option"}
+                  {selectedDropdownOption ? customOptions.find(opt => opt.value === selectedDropdownOption)?.label : "Select an option"}
                 </Button>
               }
               dropdown={
@@ -679,7 +705,7 @@ export default function Home() {
                       label={option.label}
                       value={option.value}
                       onClick={() => {
-                        setSelectedOption(option.value);
+                        setSelectedDropdownOption(option.value);
                         setIsCustomDropdownOpen(false);
                       }}
                     />
@@ -741,9 +767,11 @@ onClose={() => setIsDialogOpen(false)}>
         <Carousel
           indicator="thumbnail"
           items={[
-            { slide: <Media radius="l" src="/images/demo.jpg" /> },
-            { slide: <Column fill center background="neutral-medium">Any React node</Column> },
-            { slide: <Column fill center background="neutral-medium">Some other react node</Column> }
+            { slide: "/images/demo.jpg", alt: "demo" },
+            { slide: "/images/cover-01.jpg", alt: "Demo" },
+            { slide: "/images/cover-02.jpg", alt: "Demo" },
+            { slide: "/images/cover-03.jpg", alt: "Demo" },
+            { slide: "/images/cover-04.jpg", alt: "Demo" },
           ]}
         />
         <StylePanel/>

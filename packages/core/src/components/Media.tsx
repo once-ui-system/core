@@ -118,7 +118,7 @@ const Media: React.FC<MediaProps> = ({
 
   return (
     <>
-    <Column fillWidth={fillWidth}>
+    <Column fillWidth={fillWidth} position={rest.position} aspectRatio={aspectRatio}>
       <Column
         as={caption ? "figure" : undefined}
         ref={imageRef}
@@ -126,7 +126,7 @@ const Media: React.FC<MediaProps> = ({
         overflow="hidden"
         zIndex={0}
         margin="0"
-        cursor={enlarge ? "interactive" : ""}
+        cursor={enlarge ? "interactive" : undefined}
         style={{
           outline: "none",
           isolation: "isolate",

@@ -80,8 +80,8 @@ const Carousel: React.FC<CarouselProps> = ({
         setTimeout(() => {
           setIsTransitioning(true);
           transitionTimeoutRef.current = undefined;
-        }, 150);
-      }, 400);
+        }, 50);
+      }, 300);
     }
   };
 
@@ -106,9 +106,8 @@ const Carousel: React.FC<CarouselProps> = ({
       <RevealFx
         fillWidth
         trigger={isTransitioning}
-        translateY="16"
         aspectRatio={aspectRatio}
-        speed={400}
+        speed={300}
         onTouchStart={(e: React.TouchEvent) => {
           touchStartXRef.current = e.touches[0].clientX;
         }}
@@ -137,6 +136,7 @@ const Carousel: React.FC<CarouselProps> = ({
           <Media
             sizes={sizes}
             priority
+            fill
             radius="l"
             border="neutral-alpha-weak"
             overflow="hidden"
