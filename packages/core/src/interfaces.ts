@@ -20,8 +20,7 @@ export interface ResponsiveProps extends HTMLAttributes<HTMLDivElement> {
   right?: SpacingToken;
   bottom?: SpacingToken;
   left?: SpacingToken;
-  hide?: boolean | { s?: boolean; m?: boolean; l?: boolean };
-  show?: boolean | { s?: boolean; m?: boolean; l?: boolean };
+  hide?: boolean;
   position?: CSSProperties["position"];
   overflow?: CSSProperties["overflow"];
   overflowX?: CSSProperties["overflowX"];
@@ -189,8 +188,7 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
 export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
   as?: ElementType;
   inline?: boolean;
-  hide?: boolean | { s?: boolean; m?: boolean; l?: boolean };
-  show?: boolean | { s?: boolean; m?: boolean; l?: boolean };
+  hide?: boolean;
   pointerEvents?: "none" | "all" | "auto";
   position?: CSSProperties["position"];
   overflow?: CSSProperties["overflow"];
