@@ -31,7 +31,6 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       m,
       s,
       hide,
-      show,
       aspectRatio,
       align,
       textVariant,

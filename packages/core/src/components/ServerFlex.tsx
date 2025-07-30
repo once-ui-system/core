@@ -25,7 +25,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       as: Component = "div",
       inline,
       hide,
-      show,
       dark,
       light,
       direction,
