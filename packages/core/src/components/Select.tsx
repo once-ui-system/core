@@ -14,7 +14,6 @@ import {
   DropdownWrapperProps,
   Column,
   ArrowNavigation,
-  useArrowNavigationContext,
 } from ".";
 import inputStyles from "./Input.module.scss";
 import { Placement } from "@floating-ui/react-dom";
@@ -78,10 +77,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     const justSelectedRef = useRef(false);
 
     const handleFocus = () => {
-      if (justSelectedRef.current) {
-        justSelectedRef.current = false;
-        return;
-      }
+      // Allow reopening the dropdown even after selection
       setIsFocused(true);
       setIsDropdownOpen(true);
       // Set highlighted index to first option or current selection
@@ -293,10 +289,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                     hasPrefix={multiple 
                       ? Array.isArray(currentValue) && currentValue.includes(option.value)
                         ? <Icon name="check" size="xs" onBackground="neutral-weak" />
-                        : undefined
-                      : option.value === currentValue
-                        ? <Icon name="check" size="xs" onBackground="neutral-weak" />
-                        : undefined
+                        : Array.isArray(currentValue) && currentValue.length > 0 
+                          ? <Flex minWidth="20"/> 
+                          : undefined
+                      : undefined
                     }
                   />
                 ))}
