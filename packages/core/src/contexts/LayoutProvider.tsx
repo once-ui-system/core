@@ -4,9 +4,11 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 
 // Default breakpoints
 export const DEFAULT_BREAKPOINTS = {
+  xs: 480,  // Extra small (mobile small)
   s: 768,   // Small (mobile)
   m: 1024,  // Medium (tablet)
   l: 1440,  // Large (desktop)
+  xl: Infinity, // Above all breakpoints
 } as const;
 
 export type BreakpointKey = keyof typeof DEFAULT_BREAKPOINTS;
@@ -43,9 +45,11 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
 
   // Determine current breakpoint based on width
   const getCurrentBreakpoint = (width: number): BreakpointKey => {
+    if (width <= breakpoints.xs) return 'xs';
     if (width <= breakpoints.s) return 's';
     if (width <= breakpoints.m) return 'm';
-    return 'l';
+    if (width <= breakpoints.l) return 'l';
+    return 'xl';
   };
 
   // Check if current breakpoint matches the given key
