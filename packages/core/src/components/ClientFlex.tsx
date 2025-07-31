@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 import { ServerFlex, Cursor } from ".";
 import { FlexProps, StyleProps, DisplayProps } from "../interfaces";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
-import { useLayout } from "../contexts/LayoutContext";
+import { useLayout } from "..";
 
 interface ClientFlexProps extends FlexProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];

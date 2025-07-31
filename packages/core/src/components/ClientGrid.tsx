@@ -4,7 +4,7 @@ import { forwardRef } from "react";
 import { ServerGrid, Cursor } from ".";
 import { GridProps, StyleProps, DisplayProps } from "../interfaces";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
-import { useLayout } from "../contexts/LayoutContext";
+import { useLayout } from "..";
 
 interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];

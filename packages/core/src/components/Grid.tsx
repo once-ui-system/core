@@ -1,7 +1,7 @@
 import { forwardRef } from "react";
 import { ClientGrid, ServerGrid } from ".";
 import { GridProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps } from "../interfaces";
-import { useLayout } from "../contexts/LayoutContext";
+import { useLayout } from "../contexts";
 
 interface SmartGridProps extends GridProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps {}
 

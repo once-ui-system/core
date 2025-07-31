@@ -1,7 +1,7 @@
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
 import { ClientFlex, ServerFlex } from ".";
 import { FlexProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps } from "../interfaces";
-import { useLayout } from "../contexts/LayoutContext";
+import { useLayout } from "../contexts";
 
 interface SmartFlexProps extends FlexProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps {}
 
