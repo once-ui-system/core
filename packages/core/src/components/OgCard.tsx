@@ -155,7 +155,7 @@ const OgCard = ({
           src={proxiedImageUrl}
         />
       )}
-      <Column fillWidth paddingX={size === "s" ? "8" : size === "m" ? "12" : "32"} paddingY={size === "s" ? "8" : size === "m" ? "12" : "24"} gap={(size === "s" || size === "m") ? "8" : "20"}>
+      <Column fillWidth paddingX={size === "s" ? "12" : size === "m" ? "20" : "32"} paddingY={size === "s" ? "12" : size === "m" ? "16" : "24"} gap={(size === "s" || size === "m") ? "8" : "20"}>
         {resolvedFavicon !== null && (
           <Row fillWidth gap="8" vertical="center">
             <Media
