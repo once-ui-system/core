@@ -17,7 +17,13 @@ interface ComponentProps
     SizeProps,
     StyleProps,
     CommonProps,
-    DisplayProps {}
+    DisplayProps {
+      xl?: any;
+      l?: any;
+      m?: any;
+      s?: any;
+      xs?: any;
+    }
 
 const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
   (
@@ -28,9 +34,11 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       dark,
       light,
       direction,
+      xl,
       l,
       m,
       s,
+      xs,
       wrap = false,
       horizontal,
       vertical,

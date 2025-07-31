@@ -70,9 +70,11 @@ export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
   center?: boolean;
   wrap?: boolean;
   flex?: flex;
+  xl?: ResponsiveFlexProps;
   l?: ResponsiveFlexProps;
   m?: ResponsiveFlexProps;
   s?: ResponsiveFlexProps;
+  xs?: ResponsiveFlexProps;
 }
 
 export interface TextProps<T extends ElementType = "span"> extends HTMLAttributes<T> {

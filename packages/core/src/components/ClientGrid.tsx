@@ -8,9 +8,15 @@ import { useLayout } from "..";
 
 interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];
+  xl?: any;
+  l?: any;
+  m?: any;
+  s?: any;
+  xs?: any;
+  hide?: boolean;
 }
 
-export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor, ...props }, ref) => {
+export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const { currentBreakpoint } = useLayout();
@@ -40,12 +46,16 @@ export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor,
     
     // Determine which responsive props to apply based on current breakpoint
     let currentResponsiveProps: any = null;
-    if (currentBreakpoint === 'l' && props.l) {
-      currentResponsiveProps = props.l;
-    } else if (currentBreakpoint === 'm' && props.m) {
-      currentResponsiveProps = props.m;
-    } else if (currentBreakpoint === 's' && props.s) {
-      currentResponsiveProps = props.s;
+    if (currentBreakpoint === 'xl' && xl) {
+      currentResponsiveProps = xl;
+    } else if (currentBreakpoint === 'l' && l) {
+      currentResponsiveProps = l;
+    } else if (currentBreakpoint === 'm' && m) {
+      currentResponsiveProps = m;
+    } else if (currentBreakpoint === 's' && s) {
+      currentResponsiveProps = s;
+    } else if (currentBreakpoint === 'xs' && xs) {
+      currentResponsiveProps = xs;
     }
     
     // Clear only responsive styles, not base styles
@@ -74,7 +84,7 @@ export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor,
         appliedResponsiveStyles.current.add('aspect-ratio');
       }
     }
-  }, [props.l, props.m, props.s, props.style, currentBreakpoint]);
+  }, [xl, l, m, s, xs, props.style, currentBreakpoint]);
 
   useEffect(() => {
     applyResponsiveStyles();
@@ -102,11 +112,66 @@ export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor,
 
   // Determine if we should hide the default cursor
   const shouldHideCursor = typeof cursor === 'object' && cursor && !isTouchDevice;
+  
+  // Determine if we should apply the hide class based on current breakpoint
+  const shouldApplyHideClass = () => {
+    try {
+      const { currentBreakpoint } = useLayout();
+      
+      // Logic matching the shouldHide function in Grid component
+      if (currentBreakpoint === 'xl') {
+        if (xl?.hide !== undefined) return xl.hide === true;
+        return hide === true;
+      }
+      
+      if (currentBreakpoint === 'l') {
+        if (l?.hide !== undefined) return l.hide === true;
+        return hide === true;
+      }
+      
+      if (currentBreakpoint === 'm') {
+        if (m?.hide !== undefined) return m.hide === true;
+        if (l?.hide !== undefined) return l.hide === true;
+        if (xl?.hide !== undefined) return xl.hide === true;
+        return hide === true;
+      }
+      
+      if (currentBreakpoint === 's') {
+        if (s?.hide !== undefined) return s.hide === true;
+        if (m?.hide !== undefined) return m.hide === true;
+        if (l?.hide !== undefined) return l.hide === true;
+        if (xl?.hide !== undefined) return xl.hide === true;
+        return hide === true;
+      }
+      
+      if (currentBreakpoint === 'xs') {
+        if (xs?.hide !== undefined) return xs.hide === true;
+        if (s?.hide !== undefined) return s.hide === true;
+        if (m?.hide !== undefined) return m.hide === true;
+        if (l?.hide !== undefined) return l.hide === true;
+        if (xl?.hide !== undefined) return xl.hide === true;
+        return hide === true;
+      }
+      
+      return hide === true;
+    } catch {
+      return hide === true;
+    }
+  };
+  
+  // Apply hide class only if it should be hidden at current breakpoint
+  const effectiveHide = shouldApplyHideClass();
 
   return (
     <>
       <ServerGrid 
         {...props} 
+        xl={xl}
+        l={l}
+        m={m}
+        s={s}
+        xs={xs}
+        hide={effectiveHide}
         ref={combinedRef}
         style={{
           ...props.style,
@@ -121,4 +186,4 @@ export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor,
 });
 
 ClientGrid.displayName = "ClientGrid";
-export default ClientGrid; 
+export default ClientGrid;

@@ -110,7 +110,10 @@ export default function Home() {
 
   return (
     <Column fill center padding="l" gap="l" maxWidth="m">
+      <Flex hide l={{hide: false}}>hide by default, show on l</Flex>
       <Flex hide m={{hide: false}}>hide by default, show on m</Flex>
+      <Flex hide s={{hide: false}}>hide by default, show on s</Flex>
+      <Flex hide xs={{hide: false}}>hide by default, show on xs</Flex>
       <Feedback icon title="Feedback" description="This is a feedback"></Feedback>
       <Select
         id="multiselect-example"
@@ -316,7 +319,7 @@ export default function Home() {
         ]}
       />
 
-      <Row fillWidth horizontal="between" s={{direction: "column", horizontal: "end", vertical: "start", style: {backgroundColor: "red"}}}>
+      <Row fillWidth horizontal="between" xs={{direction: "column", horizontal: "end", vertical: "start", style: {backgroundColor: "red"}}}>
         <Column fitWidth>
           <Text>Hello 1</Text>
         </Column>

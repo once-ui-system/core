@@ -3,12 +3,18 @@ import { ClientGrid, ServerGrid } from ".";
 import { GridProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps } from "../interfaces";
 import { useLayout } from "../contexts";
 
-interface SmartGridProps extends GridProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps {}
+interface SmartGridProps extends GridProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps {
+  xl?: any;
+  l?: any;
+  m?: any;
+  s?: any;
+  xs?: any;
+}
 
-const Grid = forwardRef<HTMLDivElement, SmartGridProps>(({ cursor, l, m, s, style, hide, ...props }, ref) => {
+const Grid = forwardRef<HTMLDivElement, SmartGridProps>(({ cursor, xl, l, m, s, xs, style, hide, ...props }, ref) => {
   // Check if component should be hidden based on layout context
   const shouldHide = () => {
-    if (!hide && !l?.hide && !m?.hide && !s?.hide) return false;
+    if (!hide && !xl?.hide && !l?.hide && !m?.hide && !s?.hide && !xs?.hide) return false;
     
     try {
       const { isBreakpoint } = useLayout();

@@ -17,7 +17,13 @@ interface ComponentProps
     SizeProps,
     StyleProps,
     CommonProps,
-    DisplayProps {}
+    DisplayProps {
+      xl?: any;
+      l?: any;
+      m?: any;
+      s?: any;
+      xs?: any;
+    }
 
 const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
   (
@@ -27,9 +33,11 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       columns,
       gap,
       position = "relative",
+      xl,
       l,
       m,
       s,
+      xs,
       hide,
       aspectRatio,
       align,
