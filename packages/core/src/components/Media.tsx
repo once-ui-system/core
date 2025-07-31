@@ -18,6 +18,8 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   priority?: boolean;
   caption?: ReactNode;
   fillWidth?: boolean;
+  style?: CSSProperties;
+  className?: string;
 }
 
 const Media: React.FC<MediaProps> = ({
@@ -33,6 +35,8 @@ const Media: React.FC<MediaProps> = ({
   sizes = "100vw",
   caption,
   fillWidth = true,
+  style,
+  className,
   ...rest
 }) => {
   const [isEnlarged, setIsEnlarged] = useState(false);
@@ -134,8 +138,10 @@ const Media: React.FC<MediaProps> = ({
           aspectRatio,
           borderRadius: isEnlarged ? "0" : undefined,
           ...calculateTransform(),
+          ...style,
         }}
         onClick={handleClick}
+        className={className}
         {...rest}
       >
         {loading && <Skeleton shape="block" />}
