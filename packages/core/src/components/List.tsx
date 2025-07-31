@@ -1,6 +1,4 @@
 import React, { forwardRef } from "react";
-import classNames from "classnames";
-import styles from "./List.module.scss";
 import { Column } from ".";
 
 interface ListProps extends React.ComponentProps<typeof Column> {
@@ -12,22 +10,16 @@ interface ListProps extends React.ComponentProps<typeof Column> {
 
 const List = forwardRef<HTMLDivElement, ListProps>(
   ({ as = "ul", className, children, style, ...props }, ref) => {
-    const listClass = classNames(
-      styles.list,
-      as === "ul" ? styles.unordered : styles.ordered,
-      className
-    );
-
     if (as === "ol") {
       return (
-        <Column as="ol" ref={ref} className={listClass} style={style} {...props}>
+        <Column as="ol" fillWidth margin="0" paddingY="0" paddingRight="0" paddingLeft="20" ref={ref} className={className} style={style} {...props}>
           {children}
         </Column>
       );
     }
 
     return (
-      <Column as="ul" ref={ref} className={listClass} style={style} {...props}>
+      <Column as="ul" fillWidth margin="0" paddingY="0" paddingRight="0" paddingLeft="20" ref={ref} className={className} style={style} {...props}>
         {children}
       </Column>
     );

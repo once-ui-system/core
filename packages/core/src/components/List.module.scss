@@ -1,30 +1,5 @@
-.list {
-  margin: 0;
-  width: 100%;
-
-  &.unordered {
-    padding: 0 0 0 var(--static-space-20);
-
-    li {
-      padding-left: var(--static-space-8);
-    }
-  }
-
-  &.ordered {
-    padding: 0 0 0 var(--static-space-20);
-
-    li {
-      padding-left: var(--static-space-16);
-    }
-  }
-}
-
 .listItem {
-  padding: 0;
-  font-size: inherit;
-  color: inherit;
-
   &::marker {
     color: var(--neutral-on-background-weak);
   }
-} 
+}

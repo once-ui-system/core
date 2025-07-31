@@ -14,7 +14,7 @@ const ListItem = forwardRef<HTMLLIElement, ListItemProps>(
     const listItemClass = classNames(styles.listItem, className);
 
     return (
-      <Text as="li" className={listItemClass} style={style} {...props}>
+      <Text as="li" paddingY="0" paddingRight="0" paddingLeft="8" className={listItemClass} style={style} {...props}>
         {children}
       </Text>
     );
