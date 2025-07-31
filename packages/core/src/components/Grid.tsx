@@ -1,261 +1,72 @@
-import React, { CSSProperties, forwardRef } from "react";
-import classNames from "classnames";
+import { forwardRef } from "react";
+import { ClientGrid, ServerGrid } from ".";
+import { GridProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps } from "../interfaces";
+import { useLayout } from "../contexts/LayoutContext";
 
-import {
-  GridProps,
-  SpacingProps,
-  SizeProps,
-  StyleProps,
-  CommonProps,
-  DisplayProps,
-  ConditionalProps,
-} from "../interfaces";
-import { SpacingToken, ColorScheme, ColorWeight } from "../types";
+interface SmartGridProps extends GridProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps {}
 
-interface ComponentProps
-  extends GridProps,
-    SpacingProps,
-    SizeProps,
-    StyleProps,
-    CommonProps,
-    DisplayProps,
-    ConditionalProps {}
-
-const Grid = forwardRef<HTMLDivElement, ComponentProps>(
-  (
-    {
-      as: Component = "div",
-      inline,
-      columns,
-      gap,
-      position = "relative",
-      aspectRatio,
-      align,
-      textVariant,
-      textSize,
-      textWeight,
-      textType,
-      tabletColumns,
-      mobileColumns,
-      padding,
-      paddingLeft,
-      paddingRight,
-      paddingTop,
-      paddingBottom,
-      paddingX,
-      paddingY,
-      margin,
-      marginLeft,
-      marginRight,
-      marginTop,
-      marginBottom,
-      marginX,
-      marginY,
-      dark,
-      light,
-      width,
-      height,
-      maxWidth,
-      minWidth,
-      minHeight,
-      maxHeight,
-      top,
-      right,
-      bottom,
-      left,
-      fit,
-      fill,
-      fillWidth = false,
-      fillHeight = false,
-      fitWidth,
-      fitHeight,
-      hide,
-      show,
-      background,
-      solid,
-      opacity,
-      transition,
-      pointerEvents,
-      border,
-      borderTop,
-      borderRight,
-      borderBottom,
-      borderLeft,
-      borderStyle,
-      borderWidth,
-      radius,
-      topRadius,
-      rightRadius,
-      bottomRadius,
-      leftRadius,
-      topLeftRadius,
-      topRightRadius,
-      bottomLeftRadius,
-      bottomRightRadius,
-      overflow,
-      overflowX,
-      overflowY,
-      cursor,
-      zIndex,
-      shadow,
-      className,
-      style,
-      children,
-      ...rest
-    },
-    ref,
-  ) => {
-    const generateDynamicClass = (type: string, value: string | "-1" | undefined) => {
-      if (!value) return undefined;
-
-      if (value === "transparent") {
-        return `transparent-border`;
+const Grid = forwardRef<HTMLDivElement, SmartGridProps>(({ cursor, l, m, s, style, hide, ...props }, ref) => {
+  // Check if component should be hidden based on layout context
+  const shouldHide = () => {
+    if (!hide && !l?.hide && !m?.hide && !s?.hide) return false;
+    
+    try {
+      const { isBreakpoint } = useLayout();
+      const currentBreakpoint = isBreakpoint('s') ? 's' : isBreakpoint('m') ? 'm' : 'l';
+      
+      // Max-width CSS-like behavior: check from largest to smallest breakpoint
+      // The first hide=true we find applies to current breakpoint and all smaller breakpoints
+      
+      // Check large breakpoint first (applies to large and below)
+      if (l?.hide !== undefined && (currentBreakpoint === 'l' || currentBreakpoint === 'm' || currentBreakpoint === 's')) {
+        return l.hide;
       }
-
-      if (value === "surface" || value === "page" || value === "transparent") {
-        return `${value}-${type}`;
+      
+      // Check medium breakpoint (applies to medium and below)
+      if (m?.hide !== undefined && (currentBreakpoint === 'm' || currentBreakpoint === 's')) {
+        return m.hide;
       }
-
-      const parts = value.split("-");
-      if (parts.includes("alpha")) {
-        const [scheme, , weight] = parts;
-        return `${scheme}-${type}-alpha-${weight}`;
+      
+      // Check small breakpoint (applies to small only)
+      if (s?.hide !== undefined && currentBreakpoint === 's') {
+        return s.hide;
       }
+      
+      // If no responsive hide prop applies, use the default hide prop
+      return hide || false;
+    } catch {
+      // If LayoutProvider is not available, fall back to CSS classes
+      return false;
+    }
+  };
 
-      const [scheme, weight] = value.split("-") as [ColorScheme, ColorWeight];
-      return `${scheme}-${type}-${weight}`;
-    };
+  // Check if we need client-side functionality
+  const needsClientSide = () => {
+    // Custom cursor requires client-side
+    if (typeof cursor === 'object' && cursor) return true;
+    
+    // Responsive props require client-side
+    if (l || m || s) return true;
+    
+    // Dynamic styles require client-side
+    if (style && typeof style === 'object' && Object.keys(style as Record<string, any>).length > 0) return true;
+    
+    return false;
+  };
 
-    const parseDimension = (
-      value: number | SpacingToken | undefined,
-      type: "width" | "height",
-    ): string | undefined => {
-      if (value === undefined) return undefined;
-      if (typeof value === "number") return `${value}rem`;
-      if (
-        [
-          "0",
-          "1",
-          "2",
-          "4",
-          "8",
-          "12",
-          "16",
-          "20",
-          "24",
-          "32",
-          "40",
-          "48",
-          "56",
-          "64",
-          "80",
-          "104",
-          "128",
-          "160",
-        ].includes(value)
-      ) {
-        return `var(--static-space-${value})`;
-      }
-      if (["xs", "s", "m", "l", "xl"].includes(value)) {
-        return `var(--responsive-${type}-${value})`;
-      }
-      return undefined;
-    };
+  // If component should be hidden, don't render it
+  if (shouldHide()) {
+    return null;
+  }
 
-    const classes = classNames(
-      inline ? "display-inline-grid" : "display-grid",
-      fit && "fit",
-      fitWidth && "fit-width",
-      fitHeight && "fit-height",
-      fill && "fill",
-      (fillWidth || maxWidth) && "fill-width",
-      (fillHeight || maxHeight) && "fill-height",
-      columns && `columns-${columns}`,
-      tabletColumns && `tablet-columns-${tabletColumns}`,
-      mobileColumns && `mobile-columns-${mobileColumns}`,
-      overflow && `overflow-${overflow}`,
-      overflowX && `overflow-x-${overflowX}`,
-      overflowY && `overflow-y-${overflowY}`,
-      padding && `p-${padding}`,
-      paddingLeft && `pl-${paddingLeft}`,
-      paddingRight && `pr-${paddingRight}`,
-      paddingTop && `pt-${paddingTop}`,
-      paddingBottom && `pb-${paddingBottom}`,
-      paddingX && `px-${paddingX}`,
-      paddingY && `py-${paddingY}`,
-      margin && `m-${margin}`,
-      marginLeft && `ml-${marginLeft}`,
-      marginRight && `mr-${marginRight}`,
-      marginTop && `mt-${marginTop}`,
-      marginBottom && `mb-${marginBottom}`,
-      marginX && `mx-${marginX}`,
-      marginY && `my-${marginY}`,
-      gap && `g-${gap}`,
-      top && `top-${top}`,
-      right && `right-${right}`,
-      bottom && `bottom-${bottom}`,
-      left && `left-${left}`,
-      generateDynamicClass("background", background),
-      generateDynamicClass("solid", solid),
-      generateDynamicClass(
-        "border",
-        border || borderTop || borderRight || borderBottom || borderLeft,
-      ),
-      (border || borderTop || borderRight || borderBottom || borderLeft) &&
-        !borderStyle &&
-        "border-solid",
-      border && !borderWidth && `border-1`,
-      (borderTop || borderRight || borderBottom || borderLeft) && "border-reset",
-      borderTop && "border-top-1",
-      borderRight && "border-right-1",
-      borderBottom && "border-bottom-1",
-      borderLeft && "border-left-1",
-      borderWidth && `border-${borderWidth}`,
-      borderStyle && `border-${borderStyle}`,
-      radius === "full" ? "radius-full" : radius && `radius-${radius}`,
-      topRadius && `radius-${topRadius}-top`,
-      rightRadius && `radius-${rightRadius}-right`,
-      bottomRadius && `radius-${bottomRadius}-bottom`,
-      leftRadius && `radius-${leftRadius}-left`,
-      topLeftRadius && `radius-${topLeftRadius}-top-left`,
-      topRightRadius && `radius-${topRightRadius}-top-right`,
-      bottomLeftRadius && `radius-${bottomLeftRadius}-bottom-left`,
-      bottomRightRadius && `radius-${bottomRightRadius}-bottom-right`,
-      hide === "s" && `${hide}-grid-hide`,
-      show === "s" && `${show}-grid-show`,
-      pointerEvents && `pointer-events-${pointerEvents}`,
-      transition && `transition-${transition}`,
-      shadow && `shadow-${shadow}`,
-      position && `position-${position}`,
-      zIndex && `z-index-${zIndex}`,
-      textType && `font-${textType}`,
-      cursor && `cursor-${cursor}`,
-      dark && "dark-grid",
-      light && "light-grid",
-      className,
-    );
-
-    const combinedStyle: CSSProperties = {
-      maxWidth: parseDimension(maxWidth, "width"),
-      minWidth: parseDimension(minWidth, "width"),
-      minHeight: parseDimension(minHeight, "height"),
-      maxHeight: parseDimension(maxHeight, "height"),
-      width: parseDimension(width, "width"),
-      height: parseDimension(height, "height"),
-      aspectRatio: aspectRatio,
-      textAlign: align,
-      ...style,
-    };
-
-    return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...rest}>
-        {children}
-      </Component>
-    );
-  },
-);
+  // Use client component if any client-side functionality is needed
+  if (needsClientSide()) {
+    return <ClientGrid ref={ref} cursor={cursor} l={l} m={m} s={s} style={style} hide={hide} {...props} />;
+  }
+  
+  // Use server component for static content
+  return <ServerGrid ref={ref} cursor={cursor} hide={hide} {...props} />;
+});
 
 Grid.displayName = "Grid";
-
-export { Grid };
-export type { GridProps };
+export { Grid }; 

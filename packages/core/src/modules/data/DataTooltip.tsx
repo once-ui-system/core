@@ -1,42 +1,10 @@
 "use client";
 
-import React, { useRef, useEffect } from "react";
+import React from "react";
 import { formatDate } from "./utils/formatDate";
-import { Column, Text, Row, LetterFx } from "../../components";
+import { Column, Text, Row, CountFx } from "../../components";
 import { Swatch } from "./Swatch";
 import { ChartVariant, DateConfig } from "./interfaces";
-
-const ValueWithAnimation: React.FC<{ value: number }> = ({ value }) => {
-  const prevValueRef = useRef<number | null>(null);
-  const triggerRef = useRef<(() => void) | null>(null);
-  const initialRenderRef = useRef<boolean>(true);
-
-  useEffect(() => {
-    if (initialRenderRef.current) {
-      initialRenderRef.current = false;
-      prevValueRef.current = value;
-      return;
-    }
-
-    if (prevValueRef.current !== value && triggerRef.current) {
-      triggerRef.current();
-    }
-
-    prevValueRef.current = value;
-  }, [value]);
-
-  return (
-    <LetterFx
-      trigger="custom"
-      charset={["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]}
-      onTrigger={(triggerFn) => {
-        triggerRef.current = triggerFn;
-      }}
-    >
-      {value.toLocaleString()}
-    </LetterFx>
-  );
-};
 
 interface DataTooltipProps {
   active?: boolean;
@@ -85,9 +53,9 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
           </Text>
         </Row>
       )}
-      <Column fillWidth horizontal="space-between" paddingX="12" gap="4">
+      <Column fillWidth horizontal="between" paddingX="12" gap="4">
         {payload.map((entry: any, index: number) => (
-          <Row key={index} horizontal="space-between" fillWidth gap="16">
+          <Row key={index} horizontal="between" fillWidth gap="16">
             <Row vertical="center" gap="8">
               {colors && <Swatch color={entry.stroke || entry.color} size="s" variant={variant} />}
               <Text onBackground="neutral-weak" variant="label-default-s">
@@ -96,7 +64,12 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
             </Row>
             <Text onBackground="neutral-strong" variant="label-default-s">
               {typeof entry.value === "number" ? (
-                <ValueWithAnimation value={entry.value} />
+                <CountFx
+                  value={entry.value}
+                  separator=","
+                  speed={500}
+                  easing="ease-in-out"
+                />
               ) : (
                 entry.value
               )}

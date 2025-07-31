@@ -49,7 +49,7 @@ const MobileMegaMenu: React.FC<MobileMegaMenuProps> = ({ menuGroups, onClose, ..
                 fillWidth
                 paddingY="12"
                 paddingX="16"
-                horizontal="space-between"
+                horizontal="between"
                 vertical="center"
                 radius="l"
                 cursor="pointer"

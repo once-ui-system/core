@@ -41,6 +41,8 @@ export const PieChart: React.FC<PieChartProps> = ({
   series,
   date,
   emptyState,
+  errorState,
+  error = false,
   origo = { x: 50, y: 50 },
   loading = false,
   legend: legendProp = {},
@@ -142,10 +144,12 @@ export const PieChart: React.FC<PieChartProps> = ({
       <Row fill>
         <ChartStatus
           loading={loading}
-          isEmpty={!filteredData || filteredData.length === 0}
+          empty={!filteredData || filteredData.length === 0}
           emptyState={emptyState}
+          error={error}
+          errorState={errorState}
         />
-        {!loading && filteredData && filteredData.length > 0 && (
+        {!loading && !error && filteredData && filteredData.length > 0 && (
           <RechartsResponsiveContainer width="100%" height="100%">
             <RechartsPieChart>
               <defs>

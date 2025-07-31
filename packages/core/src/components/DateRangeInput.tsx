@@ -69,6 +69,10 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
     setIsOpen(true);
   }, []);
 
+  const handleInputFocus = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+
   const trigger = (
     <Row fillWidth horizontal="center" gap="-1">
       <Input
@@ -78,11 +82,11 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
         }}
         radius={"left"}
         id={id}
-        label={startLabel}
+        placeholder={startLabel}
         value={inputValue.startDate ?? ""}
         error={error}
         readOnly
-        onClick={handleInputClick}
+        onFocus={handleInputFocus}
         {...rest}
       />
       <Input
@@ -92,11 +96,11 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
         }}
         radius={"right"}
         id={id}
-        label={endLabel}
+        placeholder={endLabel}
         value={inputValue.endDate ?? ""}
         error={error}
         readOnly
-        onClick={handleInputClick}
+        onFocus={handleInputFocus}
         {...rest}
       />
     </Row>
@@ -116,6 +120,7 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
       dropdown={dropdown}
       isOpen={isOpen}
       closeAfterClick={false}
+      disableTriggerClick={true}
       className={className}
       style={{ ...style }}
       onOpenChange={setIsOpen}

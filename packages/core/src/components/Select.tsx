@@ -13,6 +13,7 @@ import {
   OptionProps,
   DropdownWrapperProps,
   Column,
+  ArrowNavigation,
 } from ".";
 import inputStyles from "./Input.module.scss";
 import { Placement } from "@floating-ui/react-dom";
@@ -23,14 +24,15 @@ interface SelectProps
   extends Omit<InputProps, "onSelect" | "value">,
     Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
   options: SelectOptionType[];
-  value?: string;
+  value?: string | string[];
   emptyState?: ReactNode;
-  onSelect?: (value: string) => void;
+  onSelect?: (value: any) => void;
   placement?: Placement;
   searchable?: boolean;
   className?: string;
   style?: React.CSSProperties;
   fillWidth?: boolean;
+  multiple?: boolean;
 }
 
 const Select = forwardRef<HTMLDivElement, SelectProps>(
@@ -48,6 +50,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       className,
       fillWidth = true,
       style,
+      multiple = false,
       ...rest
     },
     ref,
@@ -55,7 +58,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     const [isFocused, setIsFocused] = useState(false);
     const [isFilled, setIsFilled] = useState(false);
     
-    const [internalValue, setInternalValue] = useState(value);
+    const [internalValue, setInternalValue] = useState(multiple ? [] : value);
     
     useEffect(() => {
       if (value !== undefined) {
@@ -63,127 +66,56 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       }
     }, [value]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [highlightedIndex, setHighlightedIndex] = useState<number | null>(() => {
-      if (!options?.length || !value) return null;
-      return options.findIndex((option) => option.value === value);
-    });
     const searchInputId = useId();
     const [searchQuery, setSearchQuery] = useState("");
     const selectRef = useRef<HTMLDivElement | null>(null);
     const clearButtonRef = useRef<HTMLButtonElement>(null);
 
+    // Track if we should skip the next focus event
+    const skipNextFocusRef = useRef(false);
+    // Track if we just selected an option to prevent reopening
+    const justSelectedRef = useRef(false);
+
     const handleFocus = () => {
-      if (justSelectedRef.current) {
-        justSelectedRef.current = false;
-        return;
-      }
+      // Allow reopening the dropdown even after selection
       setIsFocused(true);
       setIsDropdownOpen(true);
+      // Set highlighted index to first option or current selection
+      const currentIndex = options.findIndex(option => 
+        multiple 
+          ? Array.isArray(currentValue) && currentValue.includes(option.value)
+          : option.value === currentValue
+      );
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+      // Don't close dropdown if focus is moving to an element within the select component
       if (selectRef.current && !selectRef.current.contains(event.relatedTarget as Node)) {
-        setIsFocused(false);
-        setIsDropdownOpen(false);
+        // Only close if we're not moving to the dropdown or its children
+        const isMovingToDropdown = event.relatedTarget && 
+          (event.relatedTarget as Element).closest('[data-dropdown]');
+        
+        if (!isMovingToDropdown) {
+          setIsFocused(false);
+          setIsDropdownOpen(false);
+        }
       }
     };
 
     const handleSelect = (value: string) => {
-      setInternalValue(value);
-      
-      if (onSelect) onSelect(value);
-      
-      // Set flags to prevent reopening after selection
+      if (multiple) {
+        const currentValues = Array.isArray(currentValue) ? currentValue : [];
+        const newValues = currentValues.includes(value)
+          ? currentValues.filter(v => v !== value)
+          : [...currentValues, value];
+        setInternalValue(newValues);
+        onSelect?.(newValues);
+      } else {
+        setInternalValue(value);
+        onSelect?.(value);
+        setIsDropdownOpen(false);
+      }
       justSelectedRef.current = true;
-      skipNextFocusRef.current = true;
-      
-      // Close the dropdown and update state
-      setIsDropdownOpen(false);
-      setIsFilled(true);
-      setSearchQuery(""); // Clear search query when an option is selected
-      
-      const index = options.findIndex(option => option.value === value);
-      if (index !== -1) {
-        setHighlightedIndex(index);
-      }
-
-      if (!searchable) {
-        const input = selectRef.current?.querySelector("input");
-        if (input instanceof HTMLInputElement) input.blur();
-      }
-    };
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-      if (justSelectedRef.current) {
-        justSelectedRef.current = false;
-        return;
-      }
-      
-      if (!isDropdownOpen && (event.key === "ArrowDown" || event.key === "ArrowUp")) {
-        setIsDropdownOpen(true);
-        return;
-      }
-
-      switch (event.key) {
-        case "Escape":
-          setIsDropdownOpen(false);
-          // Keep focus on the input
-          event.currentTarget.focus();
-          break;
-
-        case "ArrowDown":
-        case "ArrowUp":
-          event.preventDefault();
-          
-          // If dropdown is closed, just open it without navigating
-          if (!isDropdownOpen) {
-            setIsDropdownOpen(true);
-            return;
-          }
-          
-          // If dropdown is open, navigate through options
-          const filteredOptions = options.filter((option) =>
-            searchable ? option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true
-          );
-          
-          if (filteredOptions.length === 0) return;
-          
-          if (event.key === "ArrowDown") {
-            setHighlightedIndex((prevIndex) => {
-              const newIndex =
-                prevIndex === null || prevIndex >= filteredOptions.length - 1 ? 0 : prevIndex + 1;
-              return newIndex;
-            });
-          } else {
-            setHighlightedIndex((prevIndex) => {
-              const newIndex =
-                prevIndex === null || prevIndex <= 0 ? filteredOptions.length - 1 : prevIndex - 1;
-              return newIndex;
-            });
-          }
-          break;
-
-        case "Enter":
-          event.preventDefault();
-          if (isDropdownOpen) {
-            if (highlightedIndex !== null) {
-              const filteredOptions = options.filter((option) =>
-                searchable ? option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true
-              );
-              
-              if (filteredOptions.length > 0 && highlightedIndex < filteredOptions.length) {
-                handleSelect(filteredOptions[highlightedIndex].value);
-              }
-            }
-            setIsDropdownOpen(false);
-          } else {
-            setIsDropdownOpen(true);
-          }
-          break;
-
-        default:
-          break;
-      }
     };
 
     const handleClearSearch = (e: React.MouseEvent) => {
@@ -199,70 +131,42 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     const currentValue = value !== undefined ? value : internalValue;
     const selectedOption = options.find((opt) => opt.value === currentValue) || null;
     
-    // Track if we just selected an option to prevent reopening
-    const justSelectedRef = useRef(false);
-    // Track if we should skip the next focus event
-    const skipNextFocusRef = useRef(false);
-    
-    useEffect(() => {
-      // Only focus the search input when the dropdown is first opened
-      // and we didn't just select an option
-      if (isDropdownOpen && searchable && !justSelectedRef.current) {
-        const timeoutId = setTimeout(() => {
-          // Don't focus if we're skipping the next focus event
-          if (skipNextFocusRef.current) {
-            skipNextFocusRef.current = false;
-            return;
-          }
-          
-          const searchInput = selectRef.current?.querySelector(`#select-search-${searchInputId}`);
-          if (searchInput instanceof HTMLInputElement) {
-            const scrollX = window.scrollX;
-            const scrollY = window.scrollY;
-            searchInput.focus();
-            window.scrollTo(scrollX, scrollY);
-          }
-        }, 50);
-        
-        return () => clearTimeout(timeoutId);
+    // For multiple mode, get display text
+    const getDisplayText = () => {
+      if (multiple) {
+        const selectedValues = Array.isArray(currentValue) ? currentValue : [];
+        if (selectedValues.length === 0) return "";
+        if (selectedValues.length === 1) {
+          const option = options.find(opt => opt.value === selectedValues[0]);
+          return String(option?.label || selectedValues[0]);
+        }
+        return `${selectedValues.length} options selected`;
+      } else {
+        return selectedOption?.label ? String(selectedOption.label) : "";
       }
-      
-      // Reset flags when dropdown closes
-      if (!isDropdownOpen) {
-        justSelectedRef.current = false;
+    };
+
+    useEffect(() => {
+      if (isDropdownOpen) {
+        // Reset skip flag when dropdown opens
         skipNextFocusRef.current = false;
+        
+        // If searchable is true, focus the search input
+        if (searchable) {
+          setTimeout(() => {
+            const searchInput = selectRef.current?.querySelector(`#select-search-${searchInputId}`) as HTMLInputElement;
+            if (searchInput) {
+              searchInput.focus();
+            }
+          }, 0);
+        }
       }
     }, [isDropdownOpen, searchable, searchInputId]);
 
-    useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        // Check if click is inside the select component or its dropdown portal
-        const isClickInsideSelect = selectRef.current && selectRef.current.contains(event.target as Node);
-        const isClickInsideClearButton = clearButtonRef.current && clearButtonRef.current.contains(event.target as Node);
-        
-        // Check if click is inside any dropdown portal in the document
-        // This handles clicks inside the dropdown that's rendered in the portal
-        const isClickInsideDropdownPortal = !!document.querySelector('.dropdown-portal')?.contains(event.target as Node);
-        
-        if (!isClickInsideSelect && !isClickInsideClearButton && !isClickInsideDropdownPortal) {
-          setIsDropdownOpen(false);
-        }
-      };
-
-      const handleFocusOut = (event: FocusEvent) => {
-        if (event.target instanceof HTMLInputElement) {
-          handleBlur(event as unknown as React.FocusEvent<HTMLInputElement>);
-        }
-      };
-
-      document.addEventListener("mousedown", handleClickOutside);
-      document.addEventListener("focusout", handleFocusOut);
-
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-        document.removeEventListener("focusout", handleFocusOut);
-      };
-    }, []);
+    // Filter options based on search query
+    const filteredOptions = options.filter((option) =>
+      searchable ? option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true
+    );
 
     return (
       <DropdownWrapper
@@ -277,6 +181,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         isOpen={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
         placement={placement}
+        closeAfterClick={false}
+        disableTriggerClick={true}
         style={{
           ...style
         }}
@@ -288,10 +194,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
               ...style,
             }}
             cursor="interactive"
-            value={selectedOption?.label ? String(selectedOption.label) : ""}
+            value={getDisplayText()}
             onFocus={handleFocus}
-            onClick={() => setIsDropdownOpen(true)}
-            onKeyDown={handleKeyDown}
             readOnly
             className={classNames("fill-width", {
               [inputStyles.filled]: isFilled,
@@ -303,7 +207,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           />
         }
         dropdown={
-          <Column fillWidth padding="4">
+          <Column fillWidth padding="2" data-dropdown="true">
             {searchable && (
               <Input
                 data-scaling="90"
@@ -344,40 +248,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                     if (mainInput instanceof HTMLInputElement) {
                       mainInput.focus();
                     }
-                  } else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const filteredOptions = options.filter((option) =>
-                      option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-                    );
-                    
-                    if (filteredOptions.length === 0) return;
-                    
-                    if (e.key === "ArrowDown") {
-                      setHighlightedIndex((prevIndex) => {
-                        const newIndex =
-                          prevIndex === null || prevIndex >= filteredOptions.length - 1 ? 0 : prevIndex + 1;
-                        return newIndex;
-                      });
-                    } else {
-                      setHighlightedIndex((prevIndex) => {
-                        const newIndex =
-                          prevIndex === null || prevIndex <= 0 ? filteredOptions.length - 1 : prevIndex - 1;
-                        return newIndex;
-                      });
-                    }
-                  } else if (e.key === "Enter" && highlightedIndex !== null) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    const filteredOptions = options.filter((option) =>
-                      option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase())
-                    );
-                    
-                    if (filteredOptions.length > 0 && highlightedIndex < filteredOptions.length) {
-                      handleSelect(filteredOptions[highlightedIndex].value);
-                    }
                   }
                 }}
                 onBlur={(e) => {
@@ -389,12 +259,20 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                 }}
               />
             )}
-            <Column fillWidth padding="4" gap="2">
-              {options
-                .filter((option) =>
-                  option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()),
-                )
-                .map((option, index) => (
+            <ArrowNavigation
+              layout="column"
+              itemCount={filteredOptions.length}
+              onSelect={(index) => {
+                if (index >= 0 && index < filteredOptions.length) {
+                  handleSelect(filteredOptions[index].value);
+                }
+              }}
+              onEscape={() => setIsDropdownOpen(false)}
+              autoFocus={!searchable}
+              disabled={searchable}
+            >
+              <Column fillWidth padding="4" gap="2">
+                {filteredOptions.map((option, index) => (
                   <Option
                     key={option.value}
                     {...option}
@@ -403,20 +281,29 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                       handleSelect(option.value);
                       setIsDropdownOpen(false);
                     }}
-                    selected={option.value === value}
-                    highlighted={index === highlightedIndex}
+                    selected={multiple 
+                      ? Array.isArray(currentValue) && currentValue.includes(option.value)
+                      : option.value === currentValue
+                    }
                     tabIndex={-1}
+                    hasPrefix={multiple 
+                      ? Array.isArray(currentValue) && currentValue.includes(option.value)
+                        ? <Icon name="check" size="xs" onBackground="neutral-weak" />
+                        : Array.isArray(currentValue) && currentValue.length > 0 
+                          ? <Flex minWidth="20"/> 
+                          : undefined
+                      : undefined
+                    }
                   />
                 ))}
-              {searchQuery &&
-                options.filter((option) =>
-                  option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()),
-                ).length === 0 && (
-                  <Flex fillWidth center paddingX="16" paddingY="32">
-                    {emptyState}
-                  </Flex>
-                )}
-            </Column>
+                {searchQuery &&
+                  filteredOptions.length === 0 && (
+                    <Flex fillWidth center paddingX="16" paddingY="32">
+                      {emptyState}
+                    </Flex>
+                  )}
+              </Column>
+            </ArrowNavigation>
           </Column>
         }
       />

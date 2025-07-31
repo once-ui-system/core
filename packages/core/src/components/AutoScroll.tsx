@@ -226,7 +226,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
         >
           <Row 
             fitWidth 
-            horizontal="space-around" 
+            horizontal="around" 
             className={styles.marqueeContent}
             ref={contentRef}
             style={{ marginRight: gapStyle }}
@@ -235,7 +235,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
           </Row>
           <Row 
             fitWidth 
-            horizontal="space-around" 
+            horizontal="around" 
             className={styles.marqueeContent}
             style={{ marginRight: gapStyle }}
           >

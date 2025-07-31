@@ -55,7 +55,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
       <Flex
         gap="16"
         vertical="center"
-        horizontal={reverse ? "space-between" : undefined}
+        horizontal={reverse ? "between" : undefined}
         fillWidth={reverse}
         className={classNames(styles.container, className, {
           [styles.reverse]: reverse,

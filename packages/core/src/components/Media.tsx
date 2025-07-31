@@ -1,9 +1,9 @@
 "use client";
 
-import React, { CSSProperties, useState, useRef, useEffect } from "react";
+import React, { CSSProperties, useState, useRef, useEffect, ReactNode } from "react";
 import Image from "next/image";
 
-import { Flex, Skeleton } from ".";
+import { Column, Flex, Row, Skeleton } from ".";
 
 export interface MediaProps extends React.ComponentProps<typeof Flex> {
   aspectRatio?: string;
@@ -16,6 +16,8 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   unoptimized?: boolean;
   sizes?: string;
   priority?: boolean;
+  caption?: ReactNode;
+  fillWidth?: boolean;
 }
 
 const Media: React.FC<MediaProps> = ({
@@ -29,6 +31,8 @@ const Media: React.FC<MediaProps> = ({
   unoptimized = false,
   priority,
   sizes = "100vw",
+  caption,
+  fillWidth = true,
   ...rest
 }) => {
   const [isEnlarged, setIsEnlarged] = useState(false);
@@ -114,12 +118,15 @@ const Media: React.FC<MediaProps> = ({
 
   return (
     <>
-      <Flex
+    <Column fillWidth={fillWidth} fillHeight={rest.fillHeight} fill={rest.fill} maxWidth={rest.maxWidth} position={rest.position} aspectRatio={aspectRatio} dark={rest.dark} light={rest.light}>
+      <Column
+        as={caption ? "figure" : undefined}
         ref={imageRef}
         fillWidth
         overflow="hidden"
         zIndex={0}
-        cursor={enlarge ? "interactive" : ""}
+        margin="0"
+        cursor={enlarge ? "interactive" : undefined}
         style={{
           outline: "none",
           isolation: "isolate",
@@ -172,7 +179,13 @@ const Media: React.FC<MediaProps> = ({
             }}
           />
         )}
-      </Flex>
+      </Column>
+        {caption && (
+          <Row as="figcaption" fillWidth textVariant="label-default-s" onBackground="neutral-weak" paddingY="12" paddingX="24" horizontal="center" align="center">
+            {caption}
+          </Row>
+        )}
+      </Column>
 
       {isEnlarged && enlarge && (
         <Flex

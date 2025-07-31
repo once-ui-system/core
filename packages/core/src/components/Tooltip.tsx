@@ -16,7 +16,7 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   ({ label, prefixIcon, suffixIcon, className, style, ...flex }, ref) => {
     return (
       <Flex
-        hide="m"
+        m={{hide: true}}
         ref={ref}
         style={{
           whiteSpace: "nowrap",
