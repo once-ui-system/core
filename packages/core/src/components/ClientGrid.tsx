@@ -16,7 +16,7 @@ interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   hide?: boolean;
 }
 
-export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
+const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const { currentBreakpoint } = useLayout();
@@ -186,4 +186,4 @@ export const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor,
 });
 
 ClientGrid.displayName = "ClientGrid";
-export default ClientGrid;
+export { ClientGrid };

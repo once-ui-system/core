@@ -1,7 +1,8 @@
 import { forwardRef } from "react";
-import { ClientGrid, ServerGrid } from ".";
 import { GridProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps } from "../interfaces";
 import { useLayout } from "../contexts";
+import { ClientGrid } from "./ClientGrid";
+import { ServerGrid } from "./ServerGrid";
 
 interface SmartGridProps extends GridProps, StyleProps, SpacingProps, SizeProps, CommonProps, DisplayProps {
   xl?: any;
@@ -86,7 +87,7 @@ const Grid = forwardRef<HTMLDivElement, SmartGridProps>(({ cursor, xl, l, m, s, 
     if (typeof cursor === 'object' && cursor) return true;
     
     // Responsive props require client-side
-    if (l || m || s) return true;
+    if (xl || l || m || s || xs) return true;
     
     // Dynamic styles require client-side
     if (style && typeof style === 'object' && Object.keys(style as Record<string, any>).length > 0) return true;
@@ -101,7 +102,7 @@ const Grid = forwardRef<HTMLDivElement, SmartGridProps>(({ cursor, xl, l, m, s, 
 
   // Use client component if any client-side functionality is needed
   if (needsClientSide()) {
-    return <ClientGrid ref={ref} cursor={cursor} l={l} m={m} s={s} style={style} hide={hide} {...props} />;
+    return <ClientGrid ref={ref} cursor={cursor} xl={xl} l={l} m={m} s={s} xs={xs} style={style} hide={hide} {...props} />;
   }
   
   // Use server component for static content

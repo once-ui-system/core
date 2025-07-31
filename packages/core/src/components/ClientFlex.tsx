@@ -16,7 +16,7 @@ interface ClientFlexProps extends FlexProps, StyleProps, DisplayProps {
   hide?: boolean;
 }
 
-export const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
+const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const { currentBreakpoint } = useLayout();
@@ -186,4 +186,4 @@ export const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(({ cursor,
 });
 
 ClientFlex.displayName = "ClientFlex";
-export default ClientFlex; 
+export { ClientFlex };
