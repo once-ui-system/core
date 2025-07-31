@@ -161,6 +161,14 @@
   flex: 12;
 }
 
+.flex-hide {
+  display: none;
+}
+
+.flex-show {
+  display: flex;
+}
+
 @include breakpoints.l {
   .l-flex-hide {
       display: none;
