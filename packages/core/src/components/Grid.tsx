@@ -12,28 +12,62 @@ const Grid = forwardRef<HTMLDivElement, SmartGridProps>(({ cursor, l, m, s, styl
     
     try {
       const { isBreakpoint } = useLayout();
-      const currentBreakpoint = isBreakpoint('s') ? 's' : isBreakpoint('m') ? 'm' : 'l';
+      // Get the current breakpoint from the layout context
+      const currentBreakpoint = isBreakpoint('xs') ? 'xs' : 
+                               isBreakpoint('s') ? 's' : 
+                               isBreakpoint('m') ? 'm' : 
+                               isBreakpoint('l') ? 'l' : 'xl';
       
       // Max-width CSS-like behavior: check from largest to smallest breakpoint
-      // The first hide=true we find applies to current breakpoint and all smaller breakpoints
+      // Only apply hiding when hide is explicitly true
       
-      // Check large breakpoint first (applies to large and below)
-      if (l?.hide !== undefined && (currentBreakpoint === 'l' || currentBreakpoint === 'm' || currentBreakpoint === 's')) {
-        return l.hide;
+      // Check xl breakpoint
+      if (currentBreakpoint === 'xl') {
+        // For xl, we only apply the default hide prop
+        return hide === true;
       }
       
-      // Check medium breakpoint (applies to medium and below)
-      if (m?.hide !== undefined && (currentBreakpoint === 'm' || currentBreakpoint === 's')) {
-        return m.hide;
+      // Check large breakpoint
+      if (currentBreakpoint === 'l') {
+        // If l.hide is explicitly set, use that value
+        if (l?.hide !== undefined) return l.hide === true;
+        // Otherwise fall back to default hide prop
+        return hide === true;
       }
       
-      // Check small breakpoint (applies to small only)
-      if (s?.hide !== undefined && currentBreakpoint === 's') {
-        return s.hide;
+      // Check medium breakpoint
+      if (currentBreakpoint === 'm') {
+        // If m.hide is explicitly set, use that value
+        if (m?.hide !== undefined) return m.hide === true;
+        // Otherwise check if l.hide is set (cascading down)
+        if (l?.hide !== undefined) return l.hide === true;
+        // Finally fall back to default hide prop
+        return hide === true;
       }
       
-      // If no responsive hide prop applies, use the default hide prop
-      return hide || false;
+      // Check small breakpoint
+      if (currentBreakpoint === 's') {
+        // If s.hide is explicitly set, use that value
+        if (s?.hide !== undefined) return s.hide === true;
+        // Otherwise check if m.hide is set (cascading down)
+        if (m?.hide !== undefined) return m.hide === true;
+        // Otherwise check if l.hide is set (cascading down)
+        if (l?.hide !== undefined) return l.hide === true;
+        // Finally fall back to default hide prop
+        return hide === true;
+      }
+      
+      // Check xs breakpoint
+      if (currentBreakpoint === 'xs') {
+        // For xs, we cascade down from all larger breakpoints
+        if (s?.hide !== undefined) return s.hide === true;
+        if (m?.hide !== undefined) return m.hide === true;
+        if (l?.hide !== undefined) return l.hide === true;
+        return hide === true;
+      }
+      
+      // Default fallback
+      return hide === true;
     } catch {
       // If LayoutProvider is not available, fall back to CSS classes
       return false;
