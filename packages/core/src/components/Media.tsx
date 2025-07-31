@@ -122,76 +122,76 @@ const Media: React.FC<MediaProps> = ({
 
   return (
     <>
-    <Column fillWidth={fillWidth} fillHeight={rest.fillHeight} fill={rest.fill} maxWidth={rest.maxWidth} position={rest.position} aspectRatio={aspectRatio} dark={rest.dark} light={rest.light}>
-      <Column
-        as={caption ? "figure" : undefined}
-        ref={imageRef}
-        fillWidth
-        overflow="hidden"
-        zIndex={0}
-        margin="0"
-        cursor={enlarge ? "interactive" : undefined}
-        style={{
-          outline: "none",
-          isolation: "isolate",
-          height: aspectRatio ? "" : height ? `${height}rem` : "100%",
-          aspectRatio,
-          borderRadius: isEnlarged ? "0" : undefined,
-          ...calculateTransform(),
-          ...style,
-        }}
-        onClick={handleClick}
-        className={className}
-        {...rest}
-      >
-        {loading && <Skeleton shape="block" />}
-        {!loading && isVideo && (
-          <video
-            src={src}
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: objectFit,
-            }}
-          />
-        )}
-        {!loading && isYouTube && (
-          <iframe
-            width="100%"
-            height="100%"
-            src={getYouTubeEmbedUrl(src)}
-            frameBorder="0"
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{
-              objectFit: objectFit,
-            }}
-          />
-        )}
-        {!loading && !isVideo && !isYouTube && (
-          <Image
-            src={src}
-            alt={alt}
-            priority={priority}
-            sizes={sizes}
-            unoptimized={unoptimized}
-            fill
-            style={{
-              objectFit: objectFit,
-            }}
-          />
-        )}
-      </Column>
+      <>
+        <Column
+          as={caption ? "figure" : undefined}
+          ref={imageRef}
+          fillWidth
+          overflow="hidden"
+          zIndex={0}
+          margin="0"
+          cursor={enlarge ? "interactive" : undefined}
+          style={{
+            outline: "none",
+            isolation: "isolate",
+            height: aspectRatio ? "" : height ? `${height}rem` : "100%",
+            aspectRatio,
+            borderRadius: isEnlarged ? "0" : undefined,
+            ...calculateTransform(),
+            ...style,
+          }}
+          onClick={handleClick}
+          className={className}
+          {...rest}
+        >
+          {loading && <Skeleton shape="block" />}
+          {!loading && isVideo && (
+            <video
+              src={src}
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: objectFit,
+              }}
+            />
+          )}
+          {!loading && isYouTube && (
+            <iframe
+              width="100%"
+              height="100%"
+              src={getYouTubeEmbedUrl(src)}
+              frameBorder="0"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{
+                objectFit: objectFit,
+              }}
+            />
+          )}
+          {!loading && !isVideo && !isYouTube && (
+            <Image
+              src={src}
+              alt={alt}
+              priority={priority}
+              sizes={sizes}
+              unoptimized={unoptimized}
+              fill
+              style={{
+                objectFit: objectFit,
+              }}
+            />
+          )}
+        </Column>
         {caption && (
           <Row as="figcaption" fillWidth textVariant="label-default-s" onBackground="neutral-weak" paddingY="12" paddingX="24" horizontal="center" align="center">
             {caption}
           </Row>
         )}
-      </Column>
+      </>
 
       {isEnlarged && enlarge && (
         <Flex
