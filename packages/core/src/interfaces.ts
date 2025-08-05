@@ -173,7 +173,7 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
     | "surface"
     | "transparent";
   borderStyle?: "solid" | "dashed";
-  borderWidth?: 1 | 2;
+  borderWidth?: 1 | 2 | 4 | 6 | 8;
   topRadius?: RadiusSize;
   rightRadius?: RadiusSize;
   bottomRadius?: RadiusSize;
