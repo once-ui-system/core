@@ -19,6 +19,7 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   size?: "s" | "m" | "l";
   radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
   open?: boolean;
+  onToggle?: () => void;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -29,8 +30,9 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
       title,
       children,
       open = false,
+      onToggle,
       iconRotation = 180,
-      radius,
+      radius = "m",
       icon = "chevronDown",
       size = "m",
       className,
@@ -45,9 +47,18 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
       setIsOpen(open);
     }, [open]);
 
+    // Use controlled state when onToggle is provided, otherwise use internal state
+    const isAccordionOpen = onToggle ? open : isOpen;
+
     const toggleAccordion = useCallback(() => {
-      setIsOpen((prev) => !prev);
-    }, []);
+      if (onToggle) {
+        // If onToggle is provided, let the parent control the state
+        onToggle();
+      } else {
+        // Otherwise, manage state internally
+        setIsOpen((prev) => !prev);
+      }
+    }, [onToggle]);
 
     useImperativeHandle(
       ref,
@@ -69,12 +80,12 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
           tabIndex={0}
           className={classNames(styles.accordion, className)}
           style={style}
-          cursor="pointer"
+          cursor="interactive"
           transition="macro-medium"
           paddingY={size === "s" ? "8" : size === "m" ? "12" : "16"}
           paddingX={size === "s" ? "12" : size === "m" ? "16" : "20"}
           vertical="center"
-          horizontal="space-between"
+          horizontal="between"
           onClick={toggleAccordion}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -82,7 +93,7 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
               toggleAccordion();
             }
           }}
-          aria-expanded={isOpen}
+          aria-expanded={isAccordionOpen}
           aria-controls="accordion-content"
           radius={radius}
           role="button"
@@ -91,10 +102,10 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
           <Icon
             name={icon}
             size={size === "s" ? "xs" : "s"}
-            onBackground={isOpen ? "neutral-strong" : "neutral-weak"}
+            onBackground={isAccordionOpen ? "neutral-strong" : "neutral-weak"}
             style={{
               display: "flex",
-              transform: isOpen ? `rotate(${iconRotation}deg)` : "rotate(0deg)",
+              transform: isAccordionOpen ? `rotate(${iconRotation}deg)` : "rotate(0deg)",
               transition: "var(--transition-micro-medium)",
             }}
           />
@@ -102,12 +113,11 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
         <Grid
           id="accordion-content"
           fillWidth
+          transition="macro-medium"
           style={{
-            gridTemplateRows: isOpen ? "1fr" : "0fr",
-            transition:
-              "grid-template-rows var(--transition-duration-macro-medium) var(--transition-eased)",
+            gridTemplateRows: isAccordionOpen ? "1fr" : "0fr",
           }}
-          aria-hidden={!isOpen}
+          aria-hidden={!isAccordionOpen}
         >
           <Flex fillWidth minHeight={0} overflow="hidden">
             <Column

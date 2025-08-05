@@ -69,8 +69,7 @@ const fallbackEmojiData: EmojiData = {
 };
 
 import generatedEmojiData from '../data/emoji-data.json';
-import { StyleProps } from "@/interfaces";
-import { gridColumns } from "@/types";
+import { StyleProps, gridSize } from "../";
 
 const emojiData: EmojiData = Object.keys(generatedEmojiData).length > 0 
   ? generatedEmojiData as EmojiData 
@@ -81,7 +80,7 @@ export interface EmojiPickerProps extends Omit<React.ComponentProps<typeof Flex>
   onClose?: () => void;
   className?: string;
   background?: StyleProps["background"];
-  columns?: gridColumns;
+  columns?: gridSize;
   style?: React.CSSProperties;
 }
 

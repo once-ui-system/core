@@ -1,0 +1,5 @@
+.listItem {
+  &::marker {
+    color: var(--neutral-on-background-weak);
+  }
+}

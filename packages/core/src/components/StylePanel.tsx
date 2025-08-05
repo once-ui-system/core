@@ -72,11 +72,11 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
         </Text>
       </Column>
       <Column fillWidth border="neutral-alpha-medium" radius="l-4">
-        <Flex horizontal="space-between" vertical="center" fillWidth paddingX="24" paddingY="16" borderBottom="neutral-alpha-medium">
+        <Flex horizontal="between" vertical="center" fillWidth paddingX="24" paddingY="16" borderBottom="neutral-alpha-medium">
           <Text variant="label-default-s">Theme</Text>
           <ThemeSwitcher/>
         </Flex>
-        <Flex horizontal="space-between" vertical="center" fillWidth paddingX="24" paddingY="16">
+        <Flex horizontal="between" vertical="center" fillWidth paddingX="24" paddingY="16">
           <Text variant="label-default-s">Shape</Text>
           <Flex gap="4">
             {shapes.map((radius, index) => (
@@ -112,7 +112,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
       <Column fillWidth border="neutral-alpha-medium" radius="l-4">
         <Flex
           borderBottom="neutral-alpha-medium"
-          horizontal="space-between"
+          horizontal="between"
           vertical="center"
           fillWidth
           paddingX="24"
@@ -145,7 +145,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
 
         <Flex
           borderBottom="neutral-alpha-medium"
-          horizontal="space-between"
+          horizontal="between"
           vertical="center"
           fillWidth
           paddingX="24"
@@ -177,7 +177,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
         </Flex>
 
         <Flex
-          horizontal="space-between"
+          horizontal="between"
           vertical="center"
           fillWidth
           paddingX="24"
@@ -218,7 +218,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
       <Column fillWidth border="neutral-alpha-medium" radius="l-4">
         <Flex
           borderBottom="neutral-alpha-medium"
-          horizontal="space-between"
+          horizontal="between"
           vertical="center"
           fillWidth
           paddingX="24"
@@ -292,7 +292,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           />
         </Flex>
         <Flex
-          horizontal="space-between"
+          horizontal="between"
           vertical="center"
           fillWidth
           paddingX="24"
@@ -360,7 +360,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
       <Column fillWidth border="neutral-alpha-medium" radius="l-4">
         <Flex
           borderBottom="neutral-alpha-medium"
-          horizontal="space-between"
+          horizontal="between"
           vertical="center"
           fillWidth
           paddingX="24"
@@ -393,7 +393,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
         </Flex>
         <Flex
           borderBottom="neutral-alpha-medium"
-          horizontal="space-between"
+          horizontal="between"
           vertical="center"
           fillWidth
           paddingX="24"
@@ -441,7 +441,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
         </Flex>
         <Flex
           borderBottom="neutral-alpha-medium"
-          horizontal="space-between"
+          horizontal="between"
           vertical="center"
           fillWidth
           paddingX="24"
@@ -478,7 +478,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           />
         </Flex>
         <Flex
-          horizontal="space-between"
+          horizontal="between"
           vertical="center"
           fillWidth
           paddingX="24"

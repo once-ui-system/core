@@ -1,5 +1,9 @@
 @use "../styles/breakpoints.scss" as breakpoints;
 
+.display-grid {
+  display: grid;
+}
+
 .columns-1 {
   grid-template-columns: 1fr;
 }
@@ -48,102 +52,184 @@
   grid-template-columns: repeat(12, 1fr);
 }
 
-@include breakpoints.m {
-  .tablet-columns-1 {
+.grid-hide {
+  display: none;
+}
+
+.grid-show {
+  display: grid;
+}
+
+@include breakpoints.l {
+  .l-columns-1 {
       grid-template-columns: 1fr;
   }
 
-  .tablet-columns-2 {
+  .l-columns-2 {
       grid-template-columns: repeat(2, 1fr);
   }
 
-  .tablet-columns-3 {
+  .l-columns-3 {
       grid-template-columns: repeat(3, 1fr);
   }
 
-  .tablet-columns-4 {
+  .l-columns-4 {
       grid-template-columns: repeat(4, 1fr);
   }
 
-  .tablet-columns-5 {
+  .l-columns-5 {
       grid-template-columns: repeat(5, 1fr);
   }
 
-  .tablet-columns-6 {
+  .l-columns-6 {
       grid-template-columns: repeat(6, 1fr);
   }
 
-  .tablet-columns-7 {
+  .l-columns-7 {
       grid-template-columns: repeat(7, 1fr);
   }
 
-  .tablet-columns-8 {
+  .l-columns-8 {
       grid-template-columns: repeat(8, 1fr);
   }
 
-  .tablet-columns-9 {
+  .l-columns-9 {
       grid-template-columns: repeat(9, 1fr);
   }
 
-  .tablet-columns-10 {
+  .l-columns-10 {
       grid-template-columns: repeat(10, 1fr);
   }
 
-  .tablet-columns-11 {
+  .l-columns-11 {
       grid-template-columns: repeat(11, 1fr);
   }
 
-  .tablet-columns-12 {
+  .l-columns-12 {
       grid-template-columns: repeat(12, 1fr);
+  }
+
+  .l-grid-hide {
+    display: none;
+  }
+
+  .l-grid-show {
+    display: grid;
+  }
+}
+
+@include breakpoints.m {
+  .m-columns-1 {
+      grid-template-columns: 1fr;
+  }
+
+  .m-columns-2 {
+      grid-template-columns: repeat(2, 1fr);
+  }
+
+  .m-columns-3 {
+      grid-template-columns: repeat(3, 1fr);
+  }
+
+  .m-columns-4 {
+      grid-template-columns: repeat(4, 1fr);
+  }
+
+  .m-columns-5 {
+      grid-template-columns: repeat(5, 1fr);
+  }
+
+  .m-columns-6 {
+      grid-template-columns: repeat(6, 1fr);
+  }
+
+  .m-columns-7 {
+      grid-template-columns: repeat(7, 1fr);
+  }
+
+  .m-columns-8 {
+      grid-template-columns: repeat(8, 1fr);
+  }
+
+  .m-columns-9 {
+      grid-template-columns: repeat(9, 1fr);
+  }
+
+  .m-columns-10 {
+      grid-template-columns: repeat(10, 1fr);
+  }
+
+  .m-columns-11 {
+      grid-template-columns: repeat(11, 1fr);
+  }
+
+  .m-columns-12 {
+      grid-template-columns: repeat(12, 1fr);
+  }
+
+  .m-grid-hide {
+    display: none;
+  }
+
+  .m-grid-show {
+    display: grid;
   }
 }
 
 @include breakpoints.s {
-  .mobile-columns-1 {
+  .s-columns-1 {
       grid-template-columns: 1fr;
   }
 
-  .mobile-columns-2 {
+  .s-columns-2 {
       grid-template-columns: repeat(2, 1fr);
   }
 
-  .mobile-columns-3 {
+  .s-columns-3 {
       grid-template-columns: repeat(3, 1fr);
   }
 
-  .mobile-columns-4 {
+  .s-columns-4 {
       grid-template-columns: repeat(4, 1fr);
   }
 
-  .mobile-columns-5 {
+  .s-columns-5 {
       grid-template-columns: repeat(5, 1fr);
   }
 
-  .mobile-columns-6 {
+  .s-columns-6 {
       grid-template-columns: repeat(6, 1fr);
   }
 
-  .mobile-columns-7 {
+  .s-columns-7 {
       grid-template-columns: repeat(7, 1fr);
   }
 
-  .mobile-columns-8 {
+  .s-columns-8 {
       grid-template-columns: repeat(8, 1fr);
   }
 
-  .mobile-columns-9 {
+  .s-columns-9 {
       grid-template-columns: repeat(9, 1fr);
   }
 
-  .mobile-columns-10 {
+  .s-columns-10 {
       grid-template-columns: repeat(10, 1fr);
   }
 
-  .mobile-columns-11 {
+  .s-columns-11 {
       grid-template-columns: repeat(11, 1fr);
   }
 
-  .mobile-columns-12 {
+  .s-columns-12 {
       grid-template-columns: repeat(12, 1fr);
+  }
+
+  .s-grid-hide {
+    display: none;
+  }
+
+  .s-grid-show {
+    display: grid;
   }
 }

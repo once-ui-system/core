@@ -11,6 +11,8 @@ interface CardProps extends React.ComponentProps<typeof Flex> {
   href?: string;
   onClick?: () => void;
   fillHeight?: boolean;
+  style?: React.CSSProperties;
+  className?: string;
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -39,12 +41,12 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           border="neutral-medium"
           cursor="interactive"
           align="left"
-          className={styles.card}
+          className={classNames(styles.card, className)}
           onClick={onClick && onClick}
-          {...rest}
           style={{
             ...style,
           }}
+          {...rest}
         >
           {children}
         </Flex>

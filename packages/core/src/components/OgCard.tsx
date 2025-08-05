@@ -1,5 +1,6 @@
 "use client";
 
+import { CondensedTShirtSizes } from "@/types";
 import { Column, Media, Text, Row, Card, Skeleton } from ".";
 import { useOgData } from "../hooks/useFetchOg";
 import { useMemo } from "react";
@@ -19,35 +20,19 @@ export interface OgData {
   url: string;
 }
 
-export interface OgDisplayOptions {
-  favicon?: boolean;
-  domain?: boolean;
-  title?: boolean;
-  description?: boolean;
-  image?: boolean;
-}
-
-interface OgCardProps extends React.ComponentProps<typeof Card> {
+interface OgCardProps extends Omit<React.ComponentProps<typeof Card>, "title"> {
   url?: string;
   sizes?: string;
+  size?: CondensedTShirtSizes;
   ogData?: Partial<OgData> | null;
   direction?: "column" | "row" | "column-reverse" | "row-reverse";
-  display?: OgDisplayOptions;
   serviceConfig?: OgServiceConfig;
+  title?: string | false;
+  description?: string | false;
+  favicon?: string | false;
+  image?: string | false;
+  cardUrl?: string | false;
 }
-
-// This function is now simplified since the main proxying happens in the useFetchOg hook
-const getProxiedImageUrl = (imageUrl: string | undefined, proxyFn?: (url: string) => string): string => {
-  if (!imageUrl) return "";
-
-  // Local URLs don't need proxying
-  if (imageUrl.startsWith("/")) {
-    return imageUrl;
-  }
-  
-  // Use the provided proxy function or return the URL directly
-  return proxyFn ? proxyFn(imageUrl) : imageUrl;
-};
 
 const formatDisplayUrl = (url: string | undefined): string => {
   if (!url) return "";
@@ -90,41 +75,65 @@ const OgCard = ({
   url,
   ogData: providedOgData,
   direction = "column",
-  display,
   sizes = "320px",
+  size = "m",
   serviceConfig = {},
+  title,
+  description,
+  favicon,
+  image,
+  cardUrl,
   ...card
 }: OgCardProps) => {
-  const displayOptions = {
-    favicon: true,
-    domain: true,
-    title: true,
-    description: true,
-    image: true,
-    ...display,
-  };
   const { ogData: fetchedOgData, loading } = useOgData(url || null, serviceConfig.fetchOgUrl, serviceConfig.proxyOgUrl);
   const data = providedOgData || fetchedOgData;
   
-  // With our updated useOgData hook, images are already proxied through the API
-  // We only need additional proxying if a custom proxyImageUrl function is provided
-  const proxiedImageUrl = useMemo(() => {
+  // Resolve content based on props
+  const resolvedTitle = useMemo(() => {
+    if (title === false) return null;
+    if (typeof title === 'string') return title;
+    return data?.title;
+  }, [title, data?.title]);
+
+  const resolvedDescription = useMemo(() => {
+    if (description === false) return null;
+    if (typeof description === 'string') return description;
+    return data?.description;
+  }, [description, data?.description]);
+
+  const resolvedFavicon = useMemo(() => {
+    if (favicon === false) return null;
+    if (typeof favicon === 'string') return favicon;
+    return data?.faviconUrl || (data?.url ? getFaviconUrl(data.url, serviceConfig.proxyFaviconUrl) : "");
+  }, [favicon, data?.faviconUrl, data?.url, serviceConfig.proxyFaviconUrl]);
+
+  const resolvedImage = useMemo(() => {
+    if (image === false) return null;
+    if (typeof image === 'string') return image;
     return data?.image ? (serviceConfig.proxyImageUrl 
       ? serviceConfig.proxyImageUrl(data.image)
       : data.image) : "";
-  }, [data?.image, serviceConfig.proxyImageUrl]);
+  }, [image, data?.image, serviceConfig.proxyImageUrl]);
 
-  const faviconUrl = useMemo(() => {
-    return data?.faviconUrl || (data?.url ? getFaviconUrl(data.url, serviceConfig.proxyFaviconUrl) : "");
-  }, [data?.faviconUrl, data?.url, serviceConfig.proxyFaviconUrl]);
+  const resolvedUrl = useMemo(() => {
+    if (cardUrl === false) return null;
+    if (typeof cardUrl === 'string') return cardUrl;
+    return data?.url;
+  }, [cardUrl, data?.url]);
 
-  if (!loading && (!data || (!data.image && !data.title))) {
+  // With our updated useOgData hook, images are already proxied through the API
+  // We only need additional proxying if a custom proxyImageUrl function is provided
+  const proxiedImageUrl = useMemo(() => {
+    return resolvedImage || "";
+  }, [resolvedImage]);
+
+  if (!loading && (!data || (!resolvedImage && !resolvedTitle))) {
     return null;
   }
 
   return (
     <Card
-      href={data?.url}
+      href={resolvedUrl || undefined}
       direction={direction}
       fillWidth
       vertical={direction === "row" || direction === "row-reverse" ? "center" : undefined}
@@ -134,7 +143,7 @@ const OgCard = ({
       border="neutral-alpha-medium"
       {...card}
     >
-      {displayOptions.image && (proxiedImageUrl || loading) && (
+      {resolvedImage !== null && (proxiedImageUrl || loading) && (
         <Media
           minWidth={direction === "row" || direction === "row-reverse" ? 16 : undefined}
           maxWidth={direction === "row" || direction === "row-reverse" ? 24 : undefined}
@@ -146,48 +155,48 @@ const OgCard = ({
           src={proxiedImageUrl}
         />
       )}
-      <Column fillWidth paddingX="12" paddingY="12" gap="8">
-        {(displayOptions.favicon || displayOptions.domain) && (
+      <Column fillWidth paddingX={size === "s" ? "12" : size === "m" ? "20" : "32"} paddingY={size === "s" ? "12" : size === "m" ? "16" : "24"} gap={(size === "s" || size === "m") ? "8" : "20"}>
+        {resolvedFavicon !== null && (
           <Row fillWidth gap="8" vertical="center">
-            {displayOptions.favicon && (
-              <Media
-                aspectRatio="1/1"
-                src={faviconUrl}
-                loading={loading}
-                minWidth="16"
-                maxWidth="16"
-                radius="xs"
-                border="neutral-alpha-weak"
-              />
-            )}
-            {displayOptions.domain && (
+            <Media
+              aspectRatio="1/1"
+              sizes="24px"
+              src={resolvedFavicon}
+              loading={loading}
+              minWidth="16"
+              maxWidth="16"
+              fillWidth={false}
+              radius="xs"
+              border="neutral-alpha-weak"
+            />
+            {resolvedUrl && (
               loading ? (
                 <Skeleton shape="line" width="xs" height="xs" />
-              ) : data?.url && (
+              ) : (
                 <Text variant="label-default-s" onBackground="neutral-weak">
-                  {formatDisplayUrl(data.url)}
+                  {formatDisplayUrl(resolvedUrl)}
                 </Text>
               )
             )}
           </Row>
         )}
-        <Column fillWidth gap="2">
-          {displayOptions.title && (loading ? (
+        <Column fillWidth gap={size === "s" ? "4" : size === "m" ? "8" : "12"}>
+          {resolvedTitle !== null && (loading ? (
             <Skeleton shape="line" width="s" height="s" />
-          ) : data?.title && (
-            <Text variant="label-default-s">
-              {data.title}
+          ) : resolvedTitle && (
+            <Text variant={size === "s" ? "label-default-s" : size === "m" ? "label-default-m" : "label-default-l"}>
+              {resolvedTitle}
             </Text>
           ))}
-          {displayOptions.description && (
+          {resolvedDescription !== null && (
             loading ? (
               <Column fillWidth paddingY="8" gap="8">
                 <Skeleton shape="line" width="xl" height="xs" />
                 <Skeleton shape="line" width="l" height="xs" />
               </Column>
-            ) : data?.description ? (
-              <Text variant="label-default-s" onBackground="neutral-weak">
-                {data.description}
+            ) : resolvedDescription ? (
+              <Text variant={size === "s" ? "label-default-s" : size === "m" ? "label-default-m" : "label-default-l"} onBackground="neutral-weak">
+                {resolvedDescription}
               </Text>
             ) : null
           )}

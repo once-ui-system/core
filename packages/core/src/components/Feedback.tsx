@@ -55,9 +55,8 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
         {icon && (
           <Flex paddingY="16" paddingLeft="16">
             <Icon
-              padding="4"
+              padding="2"
               radius="m"
-              border={`${variant}-medium`}
               onBackground={`${variant}-medium`}
               name={variantIconMap[variant]}
               aria-hidden="true"
@@ -71,7 +70,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
                 <Flex fillWidth gap="16">
                   <Flex fillWidth paddingY="4">
                     <Text
-                      variant="heading-strong-m"
+                      variant="heading-strong-xs"
                       onBackground={`${variant}-medium`}
                       role="heading"
                       aria-level={2}
@@ -93,7 +92,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
                 </Flex>
               )}
               {description && (
-                <Text variant="body-default-s" onBackground={`${variant}-strong`}>
+                <Text marginBottom="2" marginTop="4" variant="body-default-s" onBackground={`${variant}-strong`}>
                   {description}
                 </Text>
               )}

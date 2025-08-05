@@ -91,8 +91,8 @@ export default function RootLayout({
         />
       </head>
       <Providers>
-        <Column as="body" background="page" fillWidth margin="0" padding="0">
-            {children}
+        <Column as="body" background="page" fillWidth margin="0" padding="0" horizontal="center">
+          {children}
         </Column>
       </Providers>
     </Flex>

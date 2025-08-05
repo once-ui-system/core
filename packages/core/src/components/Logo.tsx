@@ -4,7 +4,8 @@ import React, { useEffect } from "react";
 import Link from "next/link";
 import classNames from "classnames";
 import { SpacingToken } from "../types";
-import { Flex } from ".";
+import { Flex, ContextMenu, Option, Icon, Column, Line } from ".";
+import { useToast } from "../contexts";
 
 const sizeMap: Record<string, SpacingToken> = {
   xs: "20",
@@ -23,6 +24,7 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href?: string;
   dark?: boolean;
   light?: boolean;
+  brand?: {copy?: boolean; url?: string}
 }
 
 const Logo: React.FC<LogoProps> = ({
@@ -34,6 +36,7 @@ const Logo: React.FC<LogoProps> = ({
   style,
   dark,
   light,
+  brand,
   ...props
 }) => {
   useEffect(() => {
@@ -71,29 +74,140 @@ const Logo: React.FC<LogoProps> = ({
     </>
   );
 
-  return href ? (
-    <Link
-      className={classNames("radius-l", "display-flex", "fit-height", dark ? "dark-flex" : "", light ? "light-flex" : "", className)}
-      style={style}
-      href={href}
-      aria-label="Trademark"
-      {...props}
+  const { addToast } = useToast();
+  
+  const copyIconToClipboard = async () => {
+    if (!icon) {
+      addToast({
+        variant: "danger",
+        message: "No icon available to copy"
+      });
+      return;
+    }
+    
+    try {
+      const response = await fetch(icon);
+      const svgText = await response.text();
+      await navigator.clipboard.writeText(svgText);
+      
+      addToast({
+        variant: "success",
+        message: "Icon copied to clipboard as SVG"
+      });
+    } catch (error) {
+      addToast({
+        variant: "danger",
+        message: "Failed to copy icon to clipboard"
+      });
+      console.error("Error copying icon:", error);
+    }
+  };
+  
+  const copyWordmarkToClipboard = async () => {
+    if (!wordmark) {
+      addToast({
+        variant: "danger",
+        message: "No wordmark available to copy"
+      });
+      return;
+    }
+    
+    try {
+      const response = await fetch(wordmark);
+      const svgText = await response.text();
+      await navigator.clipboard.writeText(svgText);
+      
+      addToast({
+        variant: "success",
+        message: "Wordmark copied to clipboard as SVG"
+      });
+    } catch (error) {
+      addToast({
+        variant: "danger",
+        message: "Failed to copy wordmark to clipboard"
+      });
+      console.error("Error copying wordmark:", error);
+    }
+  };
+
+  const renderDropdownContent = () => {
+    return (
+      <Column fillWidth>
+        <Column fillWidth padding="4" gap="4">
+          {brand?.copy && icon && (
+            <Option 
+              value="copy-icon" 
+              label="Copy icon as SVG" 
+              hasPrefix={<Logo size="xs" icon={icon} style={{opacity: 0.5}} />}
+              onClick={copyIconToClipboard}
+            />
+          )}
+          {brand?.copy && wordmark && (
+            <Option 
+              value="copy-wordmark" 
+              label="Copy wordmark as SVG" 
+              hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="wordmark" />}
+              onClick={copyWordmarkToClipboard}
+            />
+          )}
+        </Column>
+        {brand?.url && (
+          <>
+            <Line/>
+            <Column fillWidth padding="4">
+                <Option 
+                  value="brand-guidelines" 
+                  label="Visit brand guidelines" 
+                  hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="arrowUpRight" />}
+                  href={brand.url}
+                />
+            </Column>
+          </>
+        )}
+      </Column>
+    );
+  };
+
+  const enableContext = brand && ((brand.copy && (icon || wordmark)) || brand.url);
+
+  const renderLogo = () => {
+    if (href) {
+      return (
+        <Link
+          className={classNames("radius-l", "display-flex", "fit-height", dark ? "dark-flex" : "", light ? "light-flex" : "", className)}
+          style={style}
+          href={href}
+          aria-label="Trademark"
+          {...props}
+        >
+          {content}
+        </Link>
+      );
+    } else {
+      return (
+        <Flex
+          className={classNames(className)}
+          dark={dark}
+          light={light}
+          radius="l"
+          fitHeight
+          style={style}
+          aria-label="Trademark"
+        >
+          {content}
+        </Flex>
+      );
+    }
+  };
+
+  return enableContext ? (
+    <ContextMenu
+      dropdown={renderDropdownContent()}
+      placement="bottom-start"
     >
-      {content}
-    </Link>
-  ) : (
-    <Flex
-      className={classNames(className)}
-      dark={dark}
-      light={light}
-      radius="l"
-      fitHeight
-      style={style}
-      aria-label="Trademark"
-    >
-      {content}
-    </Flex>
-  );
+      {renderLogo()}
+    </ContextMenu>
+  ) : renderLogo();
 };
 
 Logo.displayName = "Logo";

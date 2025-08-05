@@ -1,9 +1,9 @@
 "use client";
 
-import React, { CSSProperties, useState, useRef, useEffect } from "react";
+import React, { CSSProperties, useState, useRef, useEffect, ReactNode } from "react";
 import Image from "next/image";
 
-import { Flex, Skeleton } from ".";
+import { Column, Flex, Row, Skeleton } from ".";
 
 export interface MediaProps extends React.ComponentProps<typeof Flex> {
   aspectRatio?: string;
@@ -16,6 +16,10 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   unoptimized?: boolean;
   sizes?: string;
   priority?: boolean;
+  caption?: ReactNode;
+  fillWidth?: boolean;
+  style?: CSSProperties;
+  className?: string;
 }
 
 const Media: React.FC<MediaProps> = ({
@@ -29,6 +33,10 @@ const Media: React.FC<MediaProps> = ({
   unoptimized = false,
   priority,
   sizes = "100vw",
+  caption,
+  fillWidth = true,
+  style,
+  className,
   ...rest
 }) => {
   const [isEnlarged, setIsEnlarged] = useState(false);
@@ -114,65 +122,76 @@ const Media: React.FC<MediaProps> = ({
 
   return (
     <>
-      <Flex
-        ref={imageRef}
-        fillWidth
-        overflow="hidden"
-        zIndex={0}
-        cursor={enlarge ? "interactive" : ""}
-        style={{
-          outline: "none",
-          isolation: "isolate",
-          height: aspectRatio ? "" : height ? `${height}rem` : "100%",
-          aspectRatio,
-          borderRadius: isEnlarged ? "0" : undefined,
-          ...calculateTransform(),
-        }}
-        onClick={handleClick}
-        {...rest}
-      >
-        {loading && <Skeleton shape="block" />}
-        {!loading && isVideo && (
-          <video
-            src={src}
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: objectFit,
-            }}
-          />
+      <>
+        <Column
+          as={caption ? "figure" : undefined}
+          ref={imageRef}
+          fillWidth
+          overflow="hidden"
+          zIndex={0}
+          margin="0"
+          cursor={enlarge ? "interactive" : undefined}
+          style={{
+            outline: "none",
+            isolation: "isolate",
+            height: aspectRatio ? "" : height ? `${height}rem` : "100%",
+            aspectRatio,
+            borderRadius: isEnlarged ? "0" : undefined,
+            ...calculateTransform(),
+            ...style,
+          }}
+          onClick={handleClick}
+          className={className}
+          {...rest}
+        >
+          {loading && <Skeleton shape="block" />}
+          {!loading && isVideo && (
+            <video
+              src={src}
+              autoPlay
+              loop
+              muted
+              playsInline
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: objectFit,
+              }}
+            />
+          )}
+          {!loading && isYouTube && (
+            <iframe
+              width="100%"
+              height="100%"
+              src={getYouTubeEmbedUrl(src)}
+              frameBorder="0"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              style={{
+                objectFit: objectFit,
+              }}
+            />
+          )}
+          {!loading && !isVideo && !isYouTube && (
+            <Image
+              src={src}
+              alt={alt}
+              priority={priority}
+              sizes={sizes}
+              unoptimized={unoptimized}
+              fill
+              style={{
+                objectFit: objectFit,
+              }}
+            />
+          )}
+        </Column>
+        {caption && (
+          <Row as="figcaption" fillWidth textVariant="label-default-s" onBackground="neutral-weak" paddingY="12" paddingX="24" horizontal="center" align="center">
+            {caption}
+          </Row>
         )}
-        {!loading && isYouTube && (
-          <iframe
-            width="100%"
-            height="100%"
-            src={getYouTubeEmbedUrl(src)}
-            frameBorder="0"
-            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            style={{
-              objectFit: objectFit,
-            }}
-          />
-        )}
-        {!loading && !isVideo && !isYouTube && (
-          <Image
-            src={src}
-            alt={alt}
-            priority={priority}
-            sizes={sizes}
-            unoptimized={unoptimized}
-            fill
-            style={{
-              objectFit: objectFit,
-            }}
-          />
-        )}
-      </Flex>
+      </>
 
       {isEnlarged && enlarge && (
         <Flex

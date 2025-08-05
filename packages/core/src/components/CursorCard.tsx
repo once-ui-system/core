@@ -34,7 +34,7 @@ const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
 
     useEffect(() => {
       const checkTouchDevice = () => {
-        return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+        return "ontouchstart" in window;
       };
 
       setIsTouchDevice(checkTouchDevice());

@@ -21,7 +21,7 @@ interface CommonProps {
     | "top-right"
     | "bottom-right"
     | "bottom-left";
-  horizontal?: "start" | "center" | "end" | "space-between";
+  horizontal?: "start" | "center" | "end" | "between";
   fillWidth?: boolean;
   weight?: "default" | "strong";
   truncate?: boolean;
