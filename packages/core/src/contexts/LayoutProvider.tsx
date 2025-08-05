@@ -36,7 +36,7 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
 }) => {
   // Merge custom breakpoints with defaults
   const breakpoints: Breakpoints = {
-    ...DEFAULT_BREAKPOINTS,
+  ...DEFAULT_BREAKPOINTS,
     ...customBreakpoints,
   };
 

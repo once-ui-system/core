@@ -5,7 +5,7 @@ import { Text, ElementType, Column, Row } from ".";
 import styles from "./Option.module.scss";
 import React, { forwardRef, KeyboardEvent, useRef, useEffect, useState } from "react";
 
-export interface OptionProps {
+export interface OptionProps extends Omit<React.ComponentProps<typeof Row>, "onClick"> {
   label?: React.ReactNode;
   href?: string;
   value: string;
@@ -39,7 +39,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
       onClick,
       onLinkClick,
       children,
-      ...props
+      ...flex
     },
     ref,
   ) => {
@@ -112,7 +112,6 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         }}
       >
         <Row
-          {...props}
           fillWidth
           vertical="center"
           paddingX="12"
@@ -124,12 +123,14 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           borderStyle="solid"
           cursor={disabled ? "not-allowed" : "interactive"}
           transition="micro-medium"
+          onBackground="neutral-strong"
           className={classNames(styles.option, {
             [styles.danger]: danger,
             [styles.selected]: selected,
             [styles.highlighted]: highlighted || isHighlightedByClass,
             [styles.disabled]: disabled,
           })}
+          {...flex}
         >
           {hasPrefix && <Row className={styles.prefix}>{hasPrefix}</Row>}
           {children}
