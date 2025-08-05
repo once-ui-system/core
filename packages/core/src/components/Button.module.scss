@@ -29,7 +29,7 @@
     border-color: var(--solid-border-color-brand);
     color: var(--brand-on-solid-strong);
 
-    &:hover, &:focus {
+    &:hover {
         background: var(--brand-solid-strong);
 
         &:disabled {
@@ -47,7 +47,7 @@
     background: var(--static-transparent);
     color: var(--neutral-on-background-strong);
 
-    &:hover, &:focus {
+    &:hover {
         background: var(--neutral-alpha-weak);
         border-color: var(--neutral-alpha-weak);
 
@@ -64,7 +64,7 @@
     color: var(--neutral-on-background-strong);
     border: 1px solid var(--static-transparent);
 
-    &:hover, &:focus {
+    &:hover {
         border: 1px solid var(--neutral-border-medium);
 
         &:disabled {
@@ -80,7 +80,7 @@
     background: var(--static-transparent);
     color: var(--neutral-on-background-medium);
 
-    &:hover, &:focus {
+    &:hover {
         color: var(--neutral-on-background-strong);
 
         &:disabled {
@@ -99,7 +99,7 @@
     border-color: var(--solid-border-color-danger);
     color: var(--danger-on-solid-strong);
 
-    &:hover, &:focus {
+    &:hover {
         background: var(--danger-solid-strong);
 
         &:disabled {
