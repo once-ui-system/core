@@ -165,6 +165,8 @@ const CountFx: React.FC<CountFxProps> = ({
         
         // Convert to percentage position
         position = relativePosition * 200; // 200% for full wheel height
+
+        const opacity = Math.max(0, 1 - Math.abs(relativePosition) * 2);
         
         wheelDigits.push(
           <Row
@@ -174,13 +176,14 @@ const CountFx: React.FC<CountFxProps> = ({
             left="0"
             right="0"
             bottom="0"
+            pointerEvents="none"
+            fillWidth
             key={i}
             style={{
               height: '1em',
-              width: '100%',
               transform: `translateY(${position}%)`,
-              transition: 'none', // No transition for smooth effect
-              pointerEvents: 'none',
+              transition: 'none',
+              opacity: opacity,
             }}
           >
             {i}
@@ -190,20 +193,25 @@ const CountFx: React.FC<CountFxProps> = ({
       
       return (
         <Row
-          align="center"
-          overflow="hidden"
-          inline
-          key={index}
           style={{
             height: '1em',
-            width: '0.8em',
             marginLeft: '-0.125em',
             marginRight: '-0.125em',
-            position: 'relative',
-            isolation: 'isolate',
-          }}
-        >
-          {wheelDigits}
+        }}>
+          <Row
+            align="center"
+            inline
+            overflow="hidden"
+            key={index}
+            style={{
+              opacity: 1,
+              height: '2em',
+              width: '0.8em',
+              isolation: 'isolate',
+            }}
+          >
+            {wheelDigits}
+          </Row>
         </Row>
       );
     }).reverse();

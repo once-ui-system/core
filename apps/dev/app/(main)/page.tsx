@@ -58,12 +58,12 @@ export default function Home() {
   const [selectedCountry, setSelectedCountry] = useState("");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dateRangeValue, setDateRangeValue] = useState<DateRange | null>(null);
-  const [value, setValue] = useState(9428);
+  const [value, setValue] = useState(0);
   const [value2, setValue2] = useState(0);
 
   useEffect(() => {
     setTimeout(() => {
-      setValue(0);
+      setValue(23);
     }, 2000);
     
     setTimeout(() => {
@@ -129,10 +129,12 @@ export default function Home() {
         placeholder="Shimmer"
         readOnly
       />
-      <CountFx variant="display-strong-xl" value={value} speed={13000} effect="wheel" easing="ease-out" />
-      <CountFx variant="display-strong-xl" value={value} speed={3000} effect="smooth" easing="ease-out" />
-      <CountFx variant="display-strong-xl" value={value} speed={3000} effect="simple" easing="ease-out" />
-      <CountFx variant="display-strong-xl" value={value2} speed={3000} effect="smooth" easing="ease-out" />
+      <Row horizontal="between" fillWidth>
+      <Row fillWidth><CountFx variant="display-strong-xl" value={value} speed={13000} effect="wheel" easing="ease-out" /></Row>
+      <Row fillWidth><CountFx variant="display-strong-xl" value={value} speed={3000} effect="smooth" easing="ease-out" /></Row>
+      <Row fillWidth><CountFx variant="display-strong-xl" value={value} speed={3000} effect="simple" easing="ease-out" /></Row>
+      <Row fillWidth><CountFx variant="display-strong-xl" value={value2} speed={3000} effect="smooth" easing="ease-out" /></Row>
+      </Row>
       <ProgressBar value={value} />
       <BarChart
         title="Daily Time Spent on Activities"
@@ -429,7 +431,6 @@ export default function Home() {
             timePicker={true}
             minDate={new Date("2020-01-01")} 
             maxDate={new Date("2030-12-31")}
-            onChange={(date) => console.log('DateInput selected:', date)}
           />
         </Column>
         <Table
