@@ -285,7 +285,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                 if (wrapper) {
                   const trigger = wrapper.querySelector('.dropdown-trigger');
                   if (trigger) {
-                    console.log('Clicking trigger to close portal dropdown');
                     (trigger as HTMLElement).click();
                   }
                 }
@@ -320,9 +319,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
       // Listen for close-nested-dropdowns events if this is a nested dropdown
       const handleCloseNestedDropdowns = () => {
-        console.log('Dropdown received close event:', { isNested, isOpen, wrapperRef: currentWrapperRef });
         if (isNested && isOpen) {
-          console.log('Nested dropdown received close event');
           handleOpenChange(false);
           setFocusedIndex(-1);
         }

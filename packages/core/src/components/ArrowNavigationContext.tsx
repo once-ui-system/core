@@ -87,7 +87,6 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
       className={className}
       style={{...style, outline: 'none'}}
       onKeyDown={(e) => {
-        console.log('ArrowNavigation keydown:', e.key, 'autoFocus:', autoFocus, 'disabled:', disabled);
         navigation.handleKeyDown(e);
       }}
       role={role || defaultRole}

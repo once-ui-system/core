@@ -214,10 +214,8 @@ export const useArrowNavigation = ({
           
         case 'Enter':
         case ' ':
-          console.log('ArrowNavigation: Enter/Space pressed, focusedIndex:', focusedIndex, 'itemCount:', itemCount);
           if (focusedIndex >= 0 && focusedIndex < itemCount) {
             e.preventDefault();
-            console.log('ArrowNavigation: Calling onSelect with index:', focusedIndex);
             onSelect?.(focusedIndex);
           }
           break;
