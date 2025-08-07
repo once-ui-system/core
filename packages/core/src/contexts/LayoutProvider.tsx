@@ -68,23 +68,31 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
   };
 
   useEffect(() => {
-    // Initialize width
-    const updateWidth = () => {
-      const newWidth = window.innerWidth;
-      setWidth(newWidth);
-      setCurrentBreakpoint(getCurrentBreakpoint(newWidth));
-    };
+      // Update CSS custom properties
+      const root = document.documentElement;
+      Object.entries(breakpoints).forEach(([key, value]) => {
+          if (value !== Infinity) {
+              root.style.setProperty(`--breakpoint-${key}`, `${value}px`);
+          }
+      });
 
-    // Set initial width
-    updateWidth();
+        // Initialize width
+        const updateWidth = () => {
+            const newWidth = window.innerWidth;
+            setWidth(newWidth);
+            setCurrentBreakpoint(getCurrentBreakpoint(newWidth));
+        };
 
-    // Add resize listener
-    window.addEventListener('resize', updateWidth);
+        // Set initial width
+        updateWidth();
 
-    return () => {
-      window.removeEventListener('resize', updateWidth);
-    };
-  }, [breakpoints]);
+        // Add resize listener
+        window.addEventListener('resize', updateWidth);
+
+        return () => {
+            window.removeEventListener('resize', updateWidth);
+        };
+    }, [breakpoints]);
 
   const value: LayoutContextType = {
     currentBreakpoint,

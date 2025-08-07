@@ -1,6 +1,12 @@
-$breakpoint-s: 768px;
-$breakpoint-m: 1024px;
-$breakpoint-l: 1440px;
+:root {
+  --breakpoint-s: 768px;
+  --breakpoint-m: 1024px;
+  --breakpoint-l: 1440px;
+}
+
+$breakpoint-s: var(--breakpoint-s);
+$breakpoint-m: var(--breakpoint-m);
+$breakpoint-l: var(--breakpoint-l);
 
 @mixin s {
   @media (max-width: #{$breakpoint-s}) {
