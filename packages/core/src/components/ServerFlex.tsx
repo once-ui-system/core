@@ -179,10 +179,12 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       l?.position && `l-position-${l.position}`,
       m?.position && `m-position-${m.position}`,
       s?.position && `s-position-${s.position}`,
+      xs?.position && `xs-position-${xs.position}`,
       hide && "flex-hide",
       l?.hide && "l-flex-hide",
       m?.hide && "m-flex-hide",
       s?.hide && "s-flex-hide",
+      xs?.hide && "xs-flex-hide",
       padding && `p-${padding}`,
       paddingLeft && `pl-${paddingLeft}`,
       paddingRight && `pr-${paddingRight}`,
@@ -238,6 +240,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       l?.direction && `l-flex-${l.direction}`,
       m?.direction && `m-flex-${m.direction}`,
       s?.direction && `s-flex-${s.direction}`,
+      xs?.direction && `xs-flex-${xs.direction}`,
       pointerEvents && `pointer-events-${pointerEvents}`,
       transition && `transition-${transition}`,
       opacity && `opacity-${opacity}`,
@@ -278,6 +281,14 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
         (s?.direction === "row" || s?.direction === "row-reverse" || s?.direction === undefined
           ? `s-align-${s.vertical}`
           : `s-justify-${s.vertical}`),
+      xs?.horizontal &&
+        (xs?.direction === "row" || xs?.direction === "row-reverse" || xs?.direction === undefined
+            ? `xs-justify-${xs.horizontal}`
+            : `xs-align-${xs.horizontal}`),
+      xs?.vertical &&
+        (xs?.direction === "row" || xs?.direction === "row-reverse" || xs?.direction === undefined
+            ? `xs-align-${xs.vertical}`
+            : `xs-justify-${xs.vertical}`),
       center && "center",
       fit && "fit",
       fitWidth && "fit-width",

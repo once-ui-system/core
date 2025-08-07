@@ -233,3 +233,61 @@
     display: grid;
   }
 }
+
+@include breakpoints.xs {
+    .xs-columns-1 {
+        grid-template-columns: 1fr;
+    }
+
+    .xs-columns-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .xs-columns-3 {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .xs-columns-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    .xs-columns-5 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+
+    .xs-columns-6 {
+        grid-template-columns: repeat(6, 1fr);
+    }
+
+    .xs-columns-7 {
+        grid-template-columns: repeat(7, 1fr);
+    }
+
+    .xs-columns-8 {
+        grid-template-columns: repeat(8, 1fr);
+    }
+
+    .xs-columns-9 {
+        grid-template-columns: repeat(9, 1fr);
+    }
+
+    .xs-columns-10 {
+        grid-template-columns: repeat(10, 1fr);
+    }
+
+    .xs-columns-11 {
+        grid-template-columns: repeat(11, 1fr);
+    }
+
+    .xs-columns-12 {
+        grid-template-columns: repeat(12, 1fr);
+    }
+
+    .xs-grid-hide {
+        display: none;
+    }
+
+    .xs-grid-show {
+        display: grid;
+    }
+}
