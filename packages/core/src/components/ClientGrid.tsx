@@ -5,6 +5,7 @@ import { ServerGrid, Cursor } from ".";
 import { GridProps, StyleProps, DisplayProps } from "../interfaces";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
 import { useLayout } from "..";
+import {useResponsiveClasses} from "../hooks/useResponsiveClasses";
 
 interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];
@@ -20,6 +21,8 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(({ cursor, hide, 
   const elementRef = useRef<HTMLDivElement>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const { currentBreakpoint } = useLayout();
+
+  useResponsiveClasses(elementRef, { xl, l, m, s, xs }, currentBreakpoint);
   
   // Combine refs
   const combinedRef = (node: HTMLDivElement) => {
