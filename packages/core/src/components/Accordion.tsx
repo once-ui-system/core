@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, forwardRef, useImperativeHandle, useEffect, useCallback } from "react";
-import { Flex, Icon, Text, Column, Grid } from ".";
+import { Flex, Icon, Text, Column, Grid, Row } from ".";
 import styles from "./Accordion.module.scss";
 import classNames from "classnames";
 
@@ -76,7 +76,7 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
 
     return (
       <Column fillWidth>
-        <Flex
+        <Row
           tabIndex={0}
           className={classNames(styles.accordion, className)}
           style={style}
@@ -98,7 +98,7 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
           radius={radius}
           role="button"
         >
-          <Text variant="heading-strong-s">{title}</Text>
+          <Row fillWidth textVariant="heading-strong-s">{title}</Row>
           <Icon
             name={icon}
             size={size === "s" ? "xs" : "s"}
@@ -109,7 +109,7 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
               transition: "var(--transition-micro-medium)",
             }}
           />
-        </Flex>
+        </Row>
         <Grid
           id="accordion-content"
           fillWidth
@@ -119,7 +119,7 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
           }}
           aria-hidden={!isAccordionOpen}
         >
-          <Flex fillWidth minHeight={0} overflow="hidden">
+          <Row fillWidth minHeight={0} overflow="hidden">
             <Column
               fillWidth
               paddingX={size === "s" ? "12" : size === "m" ? "16" : "20"}
@@ -129,7 +129,7 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
             >
               {children}
             </Column>
-          </Flex>
+          </Row>
         </Grid>
       </Column>
     );
