@@ -18,6 +18,7 @@ interface LayoutContextType {
   currentBreakpoint: BreakpointKey;
   width: number;
   breakpoints: Breakpoints;
+  isDefaultBreakpoints: boolean;
   isBreakpoint: (key: BreakpointKey) => boolean;
   maxWidth: (key: BreakpointKey) => boolean;
   minWidth: (key: BreakpointKey) => boolean;
@@ -68,13 +69,14 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
   };
 
   useEffect(() => {
-      // Update CSS custom properties
-      const root = document.documentElement;
-      Object.entries(breakpoints).forEach(([key, value]) => {
-          if (value !== Infinity) {
-              root.style.setProperty(`--breakpoint-${key}`, `${value}px`);
-          }
-      });
+      // Update CSS custom properties (Not usable because of media queries)
+      // This part is commented out because CSS custom properties cannot be used with media queries in this
+      //const root = document.documentElement;
+      //Object.entries(breakpoints).forEach(([key, value]) => {
+      //    if (value !== Infinity) {
+      //        root.style.setProperty(`--breakpoint-${key}`, `${value}px`);
+      //    }
+      //});
 
         // Initialize width
         const updateWidth = () => {
@@ -98,6 +100,7 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     currentBreakpoint,
     width,
     breakpoints,
+    isDefaultBreakpoints: JSON.stringify(breakpoints) === JSON.stringify(DEFAULT_BREAKPOINTS),
     isBreakpoint,
     maxWidth,
     minWidth,

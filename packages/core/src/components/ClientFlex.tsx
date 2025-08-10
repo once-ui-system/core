@@ -20,9 +20,11 @@ interface ClientFlexProps extends FlexProps, StyleProps, DisplayProps {
 const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
   const elementRef = useRef<HTMLDivElement>(null);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
-  const { currentBreakpoint } = useLayout();
+  const { currentBreakpoint, isDefaultBreakpoints } = useLayout();
 
-  useResponsiveClasses(elementRef, { xl, l, m, s, xs }, currentBreakpoint);
+    if (!isDefaultBreakpoints) {
+        useResponsiveClasses(elementRef, { xl, l, m, s, xs }, currentBreakpoint);
+    }
   
   // Combine refs
   const combinedRef = (node: HTMLDivElement) => {
@@ -174,6 +176,7 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(({ cursor, hide, 
         m={m}
         s={s}
         xs={xs}
+        isDefaultBreakpoints={isDefaultBreakpoints}
         hide={effectiveHide}
         ref={combinedRef}
         style={{
