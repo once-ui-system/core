@@ -125,11 +125,8 @@ export const useResponsiveClasses = (
                     case "wrap":
                         className = `flex-${value}`;
                         break;
-                    case "show":
-                        className = "flex-show";
-                        break;
                     case "hide":
-                        className = "flex-hide";
+                        className = value ? "flex-hide" : "flex-show";
                         break;
                     // Position offsets
                     case "top":

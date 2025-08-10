@@ -22,7 +22,7 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(({ cursor, hide, 
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const { currentBreakpoint, isDefaultBreakpoints } = useLayout();
 
-    if (!isDefaultBreakpoints) {
+    if (!isDefaultBreakpoints()) {
         useResponsiveClasses(elementRef, { xl, l, m, s, xs }, currentBreakpoint);
     }
   
@@ -176,7 +176,7 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(({ cursor, hide, 
         m={m}
         s={s}
         xs={xs}
-        isDefaultBreakpoints={isDefaultBreakpoints}
+        isDefaultBreakpoints={isDefaultBreakpoints()}
         hide={effectiveHide}
         ref={combinedRef}
         style={{

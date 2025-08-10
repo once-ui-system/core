@@ -18,7 +18,7 @@ interface LayoutContextType {
   currentBreakpoint: BreakpointKey;
   width: number;
   breakpoints: Breakpoints;
-  isDefaultBreakpoints: boolean;
+  isDefaultBreakpoints: () => boolean;
   isBreakpoint: (key: BreakpointKey) => boolean;
   maxWidth: (key: BreakpointKey) => boolean;
   minWidth: (key: BreakpointKey) => boolean;
@@ -68,6 +68,10 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     return width > breakpoints[key];
   };
 
+  const isDefaultBreakpoints = (): boolean => {
+    return JSON.stringify(breakpoints) === JSON.stringify(DEFAULT_BREAKPOINTS);
+  }
+
   useEffect(() => {
       // Update CSS custom properties (Not usable because of media queries)
       // This part is commented out because CSS custom properties cannot be used with media queries in this
@@ -100,7 +104,7 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     currentBreakpoint,
     width,
     breakpoints,
-    isDefaultBreakpoints: JSON.stringify(breakpoints) === JSON.stringify(DEFAULT_BREAKPOINTS),
+    isDefaultBreakpoints,
     isBreakpoint,
     maxWidth,
     minWidth,
