@@ -18,6 +18,7 @@ interface LayoutContextType {
   currentBreakpoint: BreakpointKey;
   width: number;
   breakpoints: Breakpoints;
+  isDefaultBreakpoints: () => boolean;
   isBreakpoint: (key: BreakpointKey) => boolean;
   maxWidth: (key: BreakpointKey) => boolean;
   minWidth: (key: BreakpointKey) => boolean;
@@ -67,29 +68,43 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     return width > breakpoints[key];
   };
 
+  const isDefaultBreakpoints = (): boolean => {
+    return JSON.stringify(breakpoints) === JSON.stringify(DEFAULT_BREAKPOINTS);
+  }
+
   useEffect(() => {
-    // Initialize width
-    const updateWidth = () => {
-      const newWidth = window.innerWidth;
-      setWidth(newWidth);
-      setCurrentBreakpoint(getCurrentBreakpoint(newWidth));
-    };
+      // Update CSS custom properties (Not usable because of media queries)
+      // This part is commented out because CSS custom properties cannot be used with media queries in this
+      //const root = document.documentElement;
+      //Object.entries(breakpoints).forEach(([key, value]) => {
+      //    if (value !== Infinity) {
+      //        root.style.setProperty(`--breakpoint-${key}`, `${value}px`);
+      //    }
+      //});
 
-    // Set initial width
-    updateWidth();
+        // Initialize width
+        const updateWidth = () => {
+            const newWidth = window.innerWidth;
+            setWidth(newWidth);
+            setCurrentBreakpoint(getCurrentBreakpoint(newWidth));
+        };
 
-    // Add resize listener
-    window.addEventListener('resize', updateWidth);
+        // Set initial width
+        updateWidth();
 
-    return () => {
-      window.removeEventListener('resize', updateWidth);
-    };
-  }, [breakpoints]);
+        // Add resize listener
+        window.addEventListener('resize', updateWidth);
+
+        return () => {
+            window.removeEventListener('resize', updateWidth);
+        };
+    }, [breakpoints]);
 
   const value: LayoutContextType = {
     currentBreakpoint,
     width,
     breakpoints,
+    isDefaultBreakpoints,
     isBreakpoint,
     maxWidth,
     minWidth,

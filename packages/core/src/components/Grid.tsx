@@ -66,10 +66,15 @@ const Grid = forwardRef<HTMLDivElement, SmartGridProps>(({ cursor, xl, l, m, s, 
       
       // Check xs breakpoint
       if (currentBreakpoint === 'xs') {
-        // For xs, we cascade down from all larger breakpoints
-        if (s?.hide !== undefined) return s.hide === true;
-        if (m?.hide !== undefined) return m.hide === true;
-        if (l?.hide !== undefined) return l.hide === true;
+          // If xs.hide is explicitly set, use that value
+          if (xs?.hide !== undefined) return xs.hide === true;
+          // Otherwise check if s.hide is set (cascading down)
+          if (s?.hide !== undefined) return s.hide === true;
+          // Otherwise check if m.hide is set (cascading down)
+          if (m?.hide !== undefined) return m.hide === true;
+          // Otherwise check if l.hide is set (cascading down)
+          if (l?.hide !== undefined) return l.hide === true;
+          // Finally fall back to default hide prop
         return hide === true;
       }
       
