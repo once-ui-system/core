@@ -18,13 +18,13 @@ interface ComponentProps
     StyleProps,
     CommonProps,
     DisplayProps {
-      xl?: any;
-      l?: any;
-      m?: any;
-      s?: any;
-      xs?: any;
-      isDefaultBreakpoints?: boolean;
-    }
+  xl?: any;
+  l?: any;
+  m?: any;
+  s?: any;
+  xs?: any;
+  isDefaultBreakpoints?: boolean;
+}
 
 const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
   (
@@ -115,7 +115,6 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
     },
     ref,
   ) => {
-
     const generateDynamicClass = (type: string, value: string | "-1" | undefined) => {
       if (!value) return undefined;
 
@@ -216,7 +215,8 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
         !borderStyle &&
         "border-solid",
       border && !borderWidth && `border-1`,
-      (borderTop || borderRight || borderBottom || borderLeft || borderX || borderY) && "border-reset",
+      (borderTop || borderRight || borderBottom || borderLeft || borderX || borderY) &&
+        "border-reset",
       borderTop && "border-top-1",
       borderRight && "border-right-1",
       borderBottom && "border-bottom-1",
@@ -239,55 +239,57 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       shadow && `shadow-${shadow}`,
       zIndex && `z-index-${zIndex}`,
       textType && `font-${textType}`,
-      typeof cursor === 'string' && `cursor-${cursor}`,
+      typeof cursor === "string" && `cursor-${cursor}`,
       dark && "dark-grid",
       light && "light-grid",
       className,
     );
 
     if (isDefaultBreakpoints) {
-        classes += " " + classNames(
-            l?.position && `l-position-${l.position}`,
-            m?.position && `m-position-${m.position}`,
-            s?.position && `s-position-${s.position}`,
-            xs?.position && `xs-position-${xs.position}`,
-            l?.hide && "l-grid-hide",
-            m?.hide && "m-grid-hide",
-            s?.hide && "s-grid-hide",
-            xs?.hide && "xs-grid-hide",
-            l?.columns && `l-columns-${l.columns}`,
-            m?.columns && `m-columns-${m.columns}`,
-            s?.columns && `s-columns-${s.columns}`,
-            xs?.columns && `xs-columns-${xs.columns}`,
-            l?.overflow && `l-overflow-${l.overflow}`,
-            m?.overflow && `m-overflow-${m.overflow}`,
-            s?.overflow && `s-overflow-${s.overflow}`,
-            xs?.overflow && `xs-overflow-${xs.overflow}`,
-            l?.overflowX && `l-overflow-x-${l.overflowX}`,
-            m?.overflowX && `m-overflow-x-${m.overflowX}`,
-            s?.overflowX && `s-overflow-x-${s.overflowX}`,
-            xs?.overflowX && `xs-overflow-x-${xs.overflowX}`,
-            l?.overflowY && `l-overflow-y-${l.overflowY}`,
-            m?.overflowY && `m-overflow-y-${m.overflowY}`,
-            s?.overflowY && `s-overflow-y-${s.overflowY}`,
-            xs?.overflowY && `xs-overflow-y-${xs.overflowY}`,
-            l?.top && `l-top-${l.top}`,
-            m?.top && `m-top-${m.top}`,
-            s?.top && `s-top-${s.top}`,
-            xs?.top && `xs-top-${xs.top}`,
-            l?.right && `l-right-${l.right}`,
-            m?.right && `m-right-${m.right}`,
-            s?.right && `s-right-${s.right}`,
-            xs?.right && `xs-right-${xs.right}`,
-            l?.bottom && `l-bottom-${l.bottom}`,
-            m?.bottom && `m-bottom-${m.bottom}`,
-            s?.bottom && `s-bottom-${s.bottom}`,
-            xs?.bottom && `xs-bottom-${xs.bottom}`,
-            l?.left && `l-left-${l.left}`,
-            m?.left && `m-left-${m.left}`,
-            s?.left && `s-left-${s.left}`,
-            xs?.left && `xs-left-${xs.left}`,
-        )
+      classes +=
+        " " +
+        classNames(
+          l?.position && `l-position-${l.position}`,
+          m?.position && `m-position-${m.position}`,
+          s?.position && `s-position-${s.position}`,
+          xs?.position && `xs-position-${xs.position}`,
+          l?.hide && "l-grid-hide",
+          m?.hide && "m-grid-hide",
+          s?.hide && "s-grid-hide",
+          xs?.hide && "xs-grid-hide",
+          l?.columns && `l-columns-${l.columns}`,
+          m?.columns && `m-columns-${m.columns}`,
+          s?.columns && `s-columns-${s.columns}`,
+          xs?.columns && `xs-columns-${xs.columns}`,
+          l?.overflow && `l-overflow-${l.overflow}`,
+          m?.overflow && `m-overflow-${m.overflow}`,
+          s?.overflow && `s-overflow-${s.overflow}`,
+          xs?.overflow && `xs-overflow-${xs.overflow}`,
+          l?.overflowX && `l-overflow-x-${l.overflowX}`,
+          m?.overflowX && `m-overflow-x-${m.overflowX}`,
+          s?.overflowX && `s-overflow-x-${s.overflowX}`,
+          xs?.overflowX && `xs-overflow-x-${xs.overflowX}`,
+          l?.overflowY && `l-overflow-y-${l.overflowY}`,
+          m?.overflowY && `m-overflow-y-${m.overflowY}`,
+          s?.overflowY && `s-overflow-y-${s.overflowY}`,
+          xs?.overflowY && `xs-overflow-y-${xs.overflowY}`,
+          l?.top && `l-top-${l.top}`,
+          m?.top && `m-top-${m.top}`,
+          s?.top && `s-top-${s.top}`,
+          xs?.top && `xs-top-${xs.top}`,
+          l?.right && `l-right-${l.right}`,
+          m?.right && `m-right-${m.right}`,
+          s?.right && `s-right-${s.right}`,
+          xs?.right && `xs-right-${xs.right}`,
+          l?.bottom && `l-bottom-${l.bottom}`,
+          m?.bottom && `m-bottom-${m.bottom}`,
+          s?.bottom && `s-bottom-${s.bottom}`,
+          xs?.bottom && `xs-bottom-${xs.bottom}`,
+          l?.left && `l-left-${l.left}`,
+          m?.left && `m-left-${m.left}`,
+          s?.left && `s-left-${s.left}`,
+          xs?.left && `xs-left-${xs.left}`,
+        );
     }
 
     const combinedStyle: CSSProperties = {
@@ -300,7 +302,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       aspectRatio: aspectRatio,
       textAlign: align,
       // Hide default cursor when using custom cursor
-      cursor: typeof cursor === 'string' ? cursor : undefined,
+      cursor: typeof cursor === "string" ? cursor : undefined,
       ...style,
     };
 

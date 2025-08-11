@@ -18,13 +18,13 @@ interface ComponentProps
     StyleProps,
     CommonProps,
     DisplayProps {
-      xl?: any;
-      l?: any;
-      m?: any;
-      s?: any;
-      xs?: any;
-      isDefaultBreakpoints?: boolean;
-    }
+  xl?: any;
+  l?: any;
+  m?: any;
+  s?: any;
+  xs?: any;
+  isDefaultBreakpoints?: boolean;
+}
 
 const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
   (
@@ -122,7 +122,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
     },
     ref,
   ) => {
-
     if (onBackground && onSolid) {
       console.warn(
         "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
@@ -198,7 +197,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
           ? "g-vertical--1"
           : "g-horizontal--1"
         : gap && `g-${gap}`,
-      top ? `top-${top}` : (position === "sticky" ? "top-0" : undefined),
+      top ? `top-${top}` : position === "sticky" ? "top-0" : undefined,
       right && `right-${right}`,
       bottom && `bottom-${bottom}`,
       left && `left-${left}`,
@@ -212,7 +211,8 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
         !borderStyle &&
         "border-solid",
       border && !borderWidth && "border-1",
-      (borderTop || borderRight || borderBottom || borderLeft || borderX || borderY) && "border-reset",
+      (borderTop || borderRight || borderBottom || borderLeft || borderX || borderY) &&
+        "border-reset",
       borderTop && "border-top-1",
       borderRight && "border-right-1",
       borderBottom && "border-bottom-1",
@@ -261,7 +261,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       shadow && `shadow-${shadow}`,
       zIndex && `z-index-${zIndex}`,
       textType && `font-${textType}`,
-      typeof cursor === 'string' && `cursor-${cursor}`,
+      typeof cursor === "string" && `cursor-${cursor}`,
       dark && "dark-flex",
       light && "light-flex",
       colorClass,
@@ -270,52 +270,58 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
     );
 
     if (isDefaultBreakpoints) {
-        classes += " " + classNames(
-            l?.position && `l-position-${l.position}`,
-            m?.position && `m-position-${m.position}`,
-            s?.position && `s-position-${s.position}`,
-            xs?.position && `xs-position-${xs.position}`,
-            l?.hide && "l-flex-hide",
-            m?.hide && "m-flex-hide",
-            s?.hide && "s-flex-hide",
-            xs?.hide && "xs-flex-hide",
-            l?.direction && `l-flex-${l.direction}`,
-            m?.direction && `m-flex-${m.direction}`,
-            s?.direction && `s-flex-${s.direction}`,
-            xs?.direction && `xs-flex-${xs.direction}`,
-            l?.horizontal &&
+      classes +=
+        " " +
+        classNames(
+          l?.position && `l-position-${l.position}`,
+          m?.position && `m-position-${m.position}`,
+          s?.position && `s-position-${s.position}`,
+          xs?.position && `xs-position-${xs.position}`,
+          l?.hide && "l-flex-hide",
+          m?.hide && "m-flex-hide",
+          s?.hide && "s-flex-hide",
+          xs?.hide && "xs-flex-hide",
+          l?.direction && `l-flex-${l.direction}`,
+          m?.direction && `m-flex-${m.direction}`,
+          s?.direction && `s-flex-${s.direction}`,
+          xs?.direction && `xs-flex-${xs.direction}`,
+          l?.horizontal &&
             (l?.direction === "row" || l?.direction === "row-reverse" || l?.direction === undefined
-                ? `l-justify-${l.horizontal}`
-                : `l-align-${l.horizontal}`),
-            l?.vertical &&
+              ? `l-justify-${l.horizontal}`
+              : `l-align-${l.horizontal}`),
+          l?.vertical &&
             (l?.direction === "row" || l?.direction === "row-reverse" || l?.direction === undefined
-                ? `l-align-${l.vertical}`
-                : `l-justify-${l.vertical}`),
-            m?.horizontal &&
+              ? `l-align-${l.vertical}`
+              : `l-justify-${l.vertical}`),
+          m?.horizontal &&
             (m?.direction === "row" || m?.direction === "row-reverse" || m?.direction === undefined
-                ? `m-justify-${m.horizontal}`
-                : `m-align-${m.horizontal}`),
-            m?.vertical &&
+              ? `m-justify-${m.horizontal}`
+              : `m-align-${m.horizontal}`),
+          m?.vertical &&
             (m?.direction === "row" || m?.direction === "row-reverse" || m?.direction === undefined
-                ? `m-align-${m.vertical}`
-                : `m-justify-${m.vertical}`),
-            s?.horizontal &&
+              ? `m-align-${m.vertical}`
+              : `m-justify-${m.vertical}`),
+          s?.horizontal &&
             (s?.direction === "row" || s?.direction === "row-reverse" || s?.direction === undefined
-                ? `s-justify-${s.horizontal}`
-                : `s-align-${s.horizontal}`),
-            s?.vertical &&
+              ? `s-justify-${s.horizontal}`
+              : `s-align-${s.horizontal}`),
+          s?.vertical &&
             (s?.direction === "row" || s?.direction === "row-reverse" || s?.direction === undefined
-                ? `s-align-${s.vertical}`
-                : `s-justify-${s.vertical}`),
-            xs?.horizontal &&
-            (xs?.direction === "row" || xs?.direction === "row-reverse" || xs?.direction === undefined
-                ? `xs-justify-${xs.horizontal}`
-                : `xs-align-${xs.horizontal}`),
-            xs?.vertical &&
-            (xs?.direction === "row" || xs?.direction === "row-reverse" || xs?.direction === undefined
-                ? `xs-align-${xs.vertical}`
-                : `xs-justify-${xs.vertical}`)
-        )
+              ? `s-align-${s.vertical}`
+              : `s-justify-${s.vertical}`),
+          xs?.horizontal &&
+            (xs?.direction === "row" ||
+            xs?.direction === "row-reverse" ||
+            xs?.direction === undefined
+              ? `xs-justify-${xs.horizontal}`
+              : `xs-align-${xs.horizontal}`),
+          xs?.vertical &&
+            (xs?.direction === "row" ||
+            xs?.direction === "row-reverse" ||
+            xs?.direction === undefined
+              ? `xs-align-${xs.vertical}`
+              : `xs-justify-${xs.vertical}`),
+        );
     }
 
     const parseDimension = (
@@ -363,7 +369,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       height: parseDimension(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
-      cursor: typeof cursor === 'string' ? cursor : undefined,
+      cursor: typeof cursor === "string" ? cursor : undefined,
       ...style,
     };
 
