@@ -1,0 +1,410 @@
+---
+title: "Input"
+summary: "Input provides a flexible text entry field with support for labels, validation, and custom styling."
+updatedAt: "2025-05-12"
+docs: "once-ui/form-controls/input.mdx"
+github: "components/Input.tsx"
+navLabel: "Input"
+navIcon: "switch"
+---
+
+import { ValidationInputExample } from "../../product/InputExample"
+
+The `Input` component provides a text entry field with floating labels, validation support, and customizable styling. Use it for collecting user input in forms.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Input
+      id="basic-input"
+      label="Email"
+      hasPrefix={<Icon marginLeft="4" onBackground="neutral-weak" name="email" size="xs" />}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Input
+    id="input-1"
+    label="Email"
+    hasPrefix={
+      <Icon marginLeft="4" onBackground="neutral-weak" name="email" size="xs" />
+    }
+/>`,
+      language: "tsx",
+      label: "Input"
+    }
+  ]}
+/>
+
+## Error
+
+The Input component supports error state and message separately. Access them with the `error` and `errorMessage` props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <Input
+        id="error-input"
+        label="Email"
+        error
+      />
+      <Input
+        id="error-input"
+        label="Password"
+        error
+        errorMessage={
+          <Row vertical="center" gap="8">
+            <Icon name="danger" size="xs" />
+            Please enter at least 8 characters
+          </Row>
+        }
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Input
+    id="input-1"
+    label="Email"
+    error
+    errorMessage={
+      <Row vertical="center" gap="8">
+        <Icon name="danger" size="xs" />
+        Please enter a valid email address
+      </Row>
+    }
+/>`,
+      language: "tsx",
+      label: "Error"
+    }
+  ]}
+/>
+
+## Validation
+
+The Input component supports custom validation through the `validate` prop. This prop accepts a function that receives the input value and returns either an error message or null. The validation is happens automatically on value change with an automatic debounce of 1 second.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ValidationInputExample />}
+  codes={[
+    {
+      code:
+`const [value, setValue] = useState("");
+
+const validateEmail = (email: any) => {
+    if (!email) return null;
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return "Please enter a valid email address";
+    }
+    
+    return null;
+};
+
+<Input
+    id="input-1"
+    value={value}
+    onChange={(e) => setValue(e.target.value)}
+    validate={validateEmail}
+    placeholder="Email"
+/>`,
+      language: "tsx",
+      label: "Validation"
+    }
+  ]}
+/>
+
+## Prefix & Suffix
+
+Add icons or other elements before or after the input text.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<SearchInput />}
+  codes={[
+    {
+      code:
+`const [searchValue, setSearchValue] = useState<string>("");
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+};
+
+const handleClear = () => {
+    setSearchValue("");
+};
+
+<Input
+    id="input-1"
+    label="Search"
+    value={searchValue}
+    onChange={handleChange}
+    hasPrefix={<Icon name="search" size="xs" />}
+    hasSuffix={
+      searchValue.length > 0 ? (
+        <IconButton 
+          variant="ghost" 
+          icon="close" 
+          size="s" 
+          onClick={handleClear}
+          aria-label="Clear search"
+        />
+      ) : null
+    }
+/>`,
+      language: "tsx",
+      label: "Prefix & Suffix"
+    }
+  ]}
+/>
+
+## Placeholder
+
+Use the `placeholder` prop to use placeholder instead of label. The placeholder disappears when the input has value.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Input
+      id="placeholder-input"
+      placeholder="Name"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Input
+    id="input-1"
+    placeholder="Name"
+/>`,
+      language: "tsx",
+      label: "Placeholder"
+    }
+  ]}
+/>
+
+## Description
+
+Use the `description` prop to add a description below the input.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Input
+      id="description-input"
+      label="Email"
+      description={<Row vertical="center" gap="4">Provide your email address in the following format: <InlineCode>name@domain.com</InlineCode></Row>}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Input
+    id="input-1"
+    label="Email"
+    description="Provide your email address in the format name@domain.com"
+/>`,
+      language: "tsx",
+      label: "Description"
+    }
+  ]}
+/>
+
+## NumberInput
+
+The `NumberInput` component provides a specialized input for numeric values with increment and decrement buttons. It supports min, max, and step values to control the range and increments.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<NumberInputExample />}
+  codes={[
+    {
+      code:
+`const [value, setValue] = useState<number>(0);
+  
+const handleChange = (newValue: number) => {
+    setValue(newValue);
+};
+
+<NumberInput
+    id="number-input-example"
+    label="Quantity"
+    value={value}
+    onChange={handleChange}
+    min={0}
+    max={100}
+    step={1}
+/>`,
+      language: "tsx",
+      label: "NumberInput"
+    }
+  ]}
+/>
+
+## OTPInput
+
+The `OTPInput` component is designed for one-time passwords and verification codes, providing separate input fields for each digit.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<OTPInputExample autoFocus={false} />}
+  codes={[
+    {
+      code:
+`const { addToast } = useToast();
+
+const handleComplete = (code: string) => {
+    addToast({
+      variant: "success",
+      message: "Verification code " + code + " submitted successfully"
+    });
+};
+
+<OTPInput
+    id="otp-input-example"
+    length={6}
+    onComplete={handleComplete}
+    autoFocus
+/>`,
+      language: "tsx",
+      label: "OTPInput"
+    }
+  ]}
+/>
+
+## PasswordInput
+
+The `PasswordInput` component extends the standard input with a toggle to show or hide the password text.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<PasswordInputExample />}
+  codes={[
+    {
+      code:
+`const [password, setPassword] = useState<string>('');
+  
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+};
+
+<PasswordInput
+    id="password-input-example"
+    label="Password"
+    value={password}
+    onChange={handleChange}
+    placeholder="Enter your password"
+/>`,
+      language: "tsx",
+      label: "PasswordInput"
+    }
+  ]}
+/>
+
+## TagInput
+
+The `TagInput` component allows users to input multiple tags or keywords, displaying them as chips that can be removed individually.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<TagInputExample />}
+  codes={[
+    {
+      code:
+`const [tags, setTags] = useState<string[]>(['React', 'Next.js']);
+  
+const handleChange = (newTags: string[]) => {
+    setTags(newTags);
+};
+
+<TagInput
+    id="tag-input-example"
+    value={tags}
+    onChange={handleChange}
+    placeholder="Add interest"
+    hasSuffix={<Kbd position="absolute" top="12" right="12">Enter</Kbd>}
+/>`,
+      language: "tsx",
+      label: "TagInput"
+    }
+  ]}
+/>
+
+## Styling
+
+You can use the `radius` prop to apply custom radius to sides or corners. It works well with the `Column` component's `-1` gap to create a seamless connection between inputs.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="-1">
+      <Input
+        radius="top"
+        id="custom-input-name"
+        placeholder="Full name"
+      />
+      <Input
+        radius="bottom"
+        id="custom-input-username"
+        placeholder="Username"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column fillWidth gap="16">
+    <Input
+      radius="top"
+      id="input-1"
+      placeholder="Name"
+    />
+    <Input
+      radius="bottom"
+      id="input-2"
+      placeholder="Name"
+    />
+</Column>`,
+      language: "tsx",
+      label: "Custom styling"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["id", "string"],
+    ["label", "string"],
+    ["placeholder", "string"],
+    ["height", ["s", "m"], "m"],
+    ["error", "boolean", "false"],
+    ["errorMessage", "ReactNode"],
+    ["description", "ReactNode"],
+    ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
+    ["hasPrefix", "ReactNode"],
+    ["hasSuffix", "ReactNode"],
+    ["cursor", ["interactive"]],
+    ["validate", "(value: ReactNode) => ReactNode | null"],
+    ["className"],
+    ["style"],
+    ["...input"]
+  ]}
+/>

@@ -1,0 +1,111 @@
+---
+title: "Color"
+summary: "Once UI is an open-source design system built for indie creators, small teams, and startups to fuel the next generation of web applications."
+updatedAt: "2025-05-04"
+docs: "once-ui/basics/color.mdx"
+navLabel: "Color"
+navIcon: "lightbulb"
+---
+
+Once UI's color system is designed to be accessible and consistent, allowing you to create
+harmonious, functional interfaces. It consists of two layers: the{" "}
+`base layer` that contains all possible color tokens and the{" "}
+`semantic layer` that aliases the base tokens to give them
+meaningful names.
+
+## Base tokens
+
+In Once UI, we call the different color spaces `schemes`. Color tokens
+are constructed from pairing a scheme with a weight, such as `sand-700`. Base tokens serve as the foundational layer of the
+color system and they are not meant to be used directly.
+
+### Schemes
+
+Schemes provide a comprehensive and consistent initial color palette. There are 16
+different schemes defined in the system:
+
+<Grid marginBottom="48" fillWidth gap="1" columns="4" s={{columns: 2}} radius="l" overflow="hidden">
+  {[
+    { name: "Sand", color: "var(--scheme-sand-500)" },
+    { name: "Gray", color: "var(--scheme-gray-500)" },
+    { name: "Slate", color: "var(--scheme-slate-500)" },
+    { name: "Red", color: "var(--scheme-red-500)" },
+    { name: "Orange", color: "var(--scheme-orange-500)" },
+    { name: "Yellow", color: "var(--scheme-yellow-500)" },
+    { name: "Moss", color: "var(--scheme-moss-500)" },
+    { name: "Green", color: "var(--scheme-green-500)" },
+    { name: "Emerald", color: "var(--scheme-emerald-500)" },
+    { name: "Aqua", color: "var(--scheme-aqua-500)" },
+    { name: "Cyan", color: "var(--scheme-cyan-500)" },
+    { name: "Blue", color: "var(--scheme-blue-500)" },
+    { name: "Indigo", color: "var(--scheme-indigo-500)" },
+    { name: "Violet", color: "var(--scheme-violet-500)" },
+    { name: "Magenta", color: "var(--scheme-magenta-500)" },
+    { name: "Pink", color: "var(--scheme-pink-500)" }
+  ].map((scheme) => (
+    <Flex
+      padding="16"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-m"
+      onSolid="neutral-strong"
+      key={scheme.name}
+      style={{ backgroundColor: scheme.color }}
+    >
+      {scheme.name}
+    </Flex>
+  ))}
+</Grid>
+
+### Weights
+
+Color weights have a contrast ratio tied to them, so weights have the same contrast ratio
+regardless of scheme. This makes theme management not only possible but accessible and
+consistent. Contrast ratios are measured by placing the color over a pure black
+background.
+
+There are 12 weights available for each color scheme:
+
+<Grid marginBottom="16" gap="1" columns="6" s={{columns: 2}} m={{columns: 3}} radius="l" overflow="hidden">
+  {[
+    { weight: 100, contrast: 1.05, theme: "dark" },
+    { weight: 200, contrast: 1.15, theme: "dark" },
+    { weight: 300, contrast: 2, theme: "dark" },
+    { weight: 400, contrast: 3, theme: "dark" },
+    { weight: 500, contrast: 4.5, theme: "dark" },
+    { weight: 600, contrast: 7, theme: "dark" },
+    { weight: 700, contrast: 10, theme: "light" },
+    { weight: 800, contrast: 14, theme: "light" },
+    { weight: 900, contrast: 16, theme: "light" },
+    { weight: 1000, contrast: 18, theme: "light" },
+    { weight: 1100, contrast: 19, theme: "light" },
+    { weight: 1200, contrast: 20, theme: "light" }
+  ].map((weight) => (
+    <Column
+      gap="4"
+      padding="16"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-s"
+      key={weight.weight}
+      style={{ backgroundColor: `var(--scheme-cyan-${weight.weight})` }}
+    >
+      <Text data-theme={weight.theme} onBackground="brand-strong">
+        {weight.weight}
+      </Text>
+      <Text
+        data-theme={weight.theme}
+        onBackground="brand-weak"
+      >
+        {weight.contrast}
+      </Text>
+    </Column>
+  ))}
+</Grid>
+
+## Semantic tokens
+
+Semantic tokens reference base tokens but under more descriptive names, offering enhanced
+control and consistency in color selection. Semantic color tokens can be applied in 3
+different ways: with component properties on the Flex, Grid, Heading and Text components;
+with utility classes and with CSS variables.

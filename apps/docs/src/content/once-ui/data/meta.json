@@ -1,0 +1,12 @@
+{
+  "title": "Data-viz",
+  "order": 6,
+  "pages": {
+    "setup": 1,
+    "lineChart": 2,
+    "barChart": 3,
+    "groupedBarChart": 4,
+    "lineBarChart": 5,
+    "pieChart": 6
+  }
+}

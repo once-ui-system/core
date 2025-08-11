@@ -1,0 +1,117 @@
+---
+title: "Schema"
+summary: "Add Schema.org structured data to your pages for SEO and rich search results."
+updatedAt: "2025-05-04"
+github: "modules/seo/Schema.tsx"
+navLabel: "Schema"
+navIcon: "modules"
+---
+
+Add Schema.org structured data to your pages for SEO and rich search results.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      label: "Schema",
+      language: "tsx",
+      code:
+`<Schema
+    as="webPage"
+    title="My Page Title"
+    description="A comprehensive description of the page content"
+    baseURL="https://example.com"
+    path="/docs/getting-started"
+    author={{
+      name: "John Doe",
+    }}
+/>`,
+    },
+  ]}
+/>
+
+## Advanced setup
+            
+For larger sites, store your schema data in a central configuration file to maintain
+consistency across pages:
+
+### 1. Config file
+
+Store your site-wide metadata in a configuration file:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      label: "app/resources/seo.js",
+      language: "javascript",
+      code:
+`// default metadata
+const meta = {
+    title: "Once UI: Build the future",
+    description: "An open-source design system for indie creators to ship like teams of 10+ alone.",
+};
+
+// default schema data
+const schema = {
+    title: "Once UI",
+    description: meta.description,
+    baseURL: "https://once-ui.com",
+    path: "/",
+    image: "/images/cover.jpg",
+    author: {
+      name: "Once UI Team",
+      url: "https://once-ui.com"
+    }
+};
+
+export { schema };`,
+    },
+  ]}
+/>
+
+### 2. Reference
+
+Reference the configuration in your pages:
+          
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={30}
+  lineNumbers
+  codes={[
+    {
+      label: "app/{page}/page.tsx",
+      language: "tsx",
+      code:
+`import { Schema } from '@/once-ui/modules';
+import { schema } from '@/app/resources/seo';
+
+export default function HomePage() {
+    return (
+      <>
+        <Schema
+          as="organization"
+          title={schema.title}
+          description={schema.description}
+          baseURL={schema.baseURL}
+          path={schema.path}
+          image={schema.image}
+          author={schema.author}
+        />
+        {/* Rest of your page component */}
+      </>
+    );
+}`,
+    },
+  ]}
+/>
+
+This approach makes it easier to maintain consistent schema data across your site and
+update it from a single location.

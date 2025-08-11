@@ -1,0 +1,77 @@
+---
+title: "InfiniteScroll"
+summary: "The InfiniteScroll component progressively loads content as the visitor scrolls."
+updatedAt: "2025-05-08"
+docs: "once-ui/components/infiniteScroll.mdx"
+github: "components/InfiniteScroll.tsx"
+navLabel: "InfiniteScroll"
+navIcon: "components"
+---
+
+The `InfiniteScroll` component provides an infinite scrollable container that progressively loads content as the visitor scrolls.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <InfiniteScrollExample />
+  }
+  codes={[
+    {
+      code:
+`import { useState, useCallback } from "react";
+import { InfiniteScroll, Flex } from "@once-ui/react";
+
+function InfiniteScrollExample() {
+    const [items, setItems] = useState(Array(5).fill(null).map((_, i) => i));
+    const [loading, setLoading] = useState(false);
+    
+    const loadMore = useCallback(async () => {
+      setLoading(true);
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      const lastItem = items[items.length - 1] || 0;
+      const newItems = Array(5).fill(null).map((_, i) => lastItem + i + 1);
+      
+      setItems(prev => [...prev, ...newItems]);
+      setLoading(false);
+      
+      // Return true if there are more items to load
+      return items.length < 50;
+    }, [items]);
+    
+    return (
+      <InfiniteScroll
+        items={items}
+        loadMore={loadMore}
+        loading={loading}
+        threshold={200}
+        renderItem={(item) => (
+          <Flex key={item}/>
+        )}
+      />
+    );
+}`,
+      language: "tsx",
+      label: "InfiniteScroll"
+    }
+  ]}
+/>
+
+## API Reference
+
+<PropsTable
+  content={[
+    ["items", "T[]"],
+    ["renderItem", "(item: T, index: number) => ReactNode"],
+    ["loadMore", "() => Promise<boolean>"],
+    ["loading", "boolean", "false"],
+    ["threshold", "number", "200"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>

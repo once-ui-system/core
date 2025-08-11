@@ -1,0 +1,11 @@
+{
+  "title": "Basics",
+  "order": 1,
+  "pages": {
+    "structure": 1,
+    "color": 2,
+    "spacing": 3,
+    "typography": 4,
+    "border": 5
+  }
+}

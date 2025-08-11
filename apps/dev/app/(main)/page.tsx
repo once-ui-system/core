@@ -166,7 +166,7 @@ export default function Home() {
           position: "bottom-center",
         }}
         series={[
-          { key: "Reading", color: "aqua" },
+          { key: "Reading", color: "aqua", hasPrefix: "asd" },
           { key: "Sports", color: "yellow" },
           { key: "Doomscrolling", color: "orange" }
         ]}

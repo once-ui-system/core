@@ -1,0 +1,80 @@
+---
+title: "CompareImage"
+summary: "Once UI is an open-source design system built for indie creators, small teams, and startups to fuel the next generation of web applications."
+updatedAt: "2025-05-04"
+docs: "once-ui/components/compareImage.mdx"
+github: "components/CompareImage.tsx"
+navLabel: "CompareImage"
+navIcon: "components"
+---
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CompareImage
+      radius="xl"
+      border="neutral-alpha-weak"
+      overflow="hidden"
+      aspectRatio="16 / 9"
+      leftContent={{ src: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Left image - Vibe Coding light" }}
+      rightContent={{ src: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Right image - Vibe Coding dark" }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CompareImage
+    radius="xl"
+    border="neutral-alpha-weak"
+    overflow="hidden"
+    aspectRatio="16 / 9"
+    leftContent={{ src: "/images/1.jpg", alt: "Image 1" }}
+    rightContent={{ src: "/images/2.jpg", alt: "Image 2" }}
+/>`,
+      language: "tsx",
+      label: "Image"
+    }
+  ]}
+/>
+
+The `CompareImage` component supports `ReactNode` for the content.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CompareImage
+      style={{isolation: "isolate"}}
+      radius="xl"
+      border="neutral-alpha-weak"
+      overflow="hidden"
+      aspectRatio="16 / 9"
+      leftContent={{src: <Background center fill gradient={{display: true, x: 0, y: 50, colorStart: "brand-background-strong", colorEnd: "accent-background-weak"}}><Row zIndex="1">Left</Row></Background>}}
+      rightContent={{src: <Background center fill gradient={{display: true, x: 0, y: 50, colorStart: "accent-background-strong", colorEnd: "brand-background-weak"}}><Row zIndex="1">Right</Row></Background>}}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CompareImage
+    radius="xl"
+    border="neutral-alpha-weak"
+    overflow="hidden"
+    aspectRatio="16 / 9"
+    leftContent={{ src: "/images/1.jpg", alt: "Image 1" }}
+    rightContent={{ src: "/images/2.jpg", alt: "Image 2" }}
+/>`,
+      language: "tsx",
+      label: "ReactNode"
+    }
+  ]}
+/>
+
+<PropsTable
+  content={[
+    ["leftContent", "{ src: string | React.ReactNode, alt?: string }"],
+    ["rightContent", "{ src: string | React.ReactNode, alt?: string }"],
+    ["...flex"]
+  ]}
+/>

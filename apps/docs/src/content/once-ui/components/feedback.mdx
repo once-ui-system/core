@@ -1,0 +1,185 @@
+---
+title: "Feedback"
+summary: "The Feedback component provides contextual alerts and notifications with various styles and customization options."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/feedback.mdx"
+github: "components/Feedback.tsx"
+navLabel: "Feedback"
+navIcon: "components"
+---
+
+A component for providing users with contextual information, alerts, and notifications. The Feedback component helps communicate important messages with appropriate visual styling based on the context.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Feedback 
+        variant="info" 
+        title="Information" 
+        description="This is an informational message for the user."
+      />
+      <Feedback 
+        variant="success" 
+        title="Success" 
+        description="Your action has been completed successfully."
+      />
+      <Feedback 
+        variant="warning" 
+        title="Warning" 
+        description="Please be aware of this important notice."
+      />
+      <Feedback 
+        variant="danger" 
+        title="Error" 
+        description="Something went wrong. Please try again."
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Feedback
+    title="Information" 
+    description="This is an informational message for the user."
+/>
+<Feedback 
+    variant="success" 
+    title="Success" 
+    description="Your action has been completed successfully."
+/>
+<Feedback 
+    variant="warning" 
+    title="Warning" 
+    description="Please be aware of this important notice."
+/>
+<Feedback 
+    variant="danger" 
+    title="Error" 
+    description="Something went wrong. Please try again."
+/>`,
+      language: "tsx",
+      label: "Feedback"
+    }
+  ]}
+/>
+
+## Icon
+
+Feedback components can include an icon to enhance visual communication.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Feedback
+        title="With Icon" 
+        description="This feedback includes an icon for better visual communication."
+      />
+      <Feedback 
+        icon={false}
+        variant="warning"
+        title="Without Icon" 
+        description="This feedback does not include an icon."
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Feedback
+    title="With Icon"
+    description="This feedback includes an icon for better visual communication."
+/>
+<Feedback
+    icon={false}
+    variant="warning"
+    title="Without Icon"
+    description="This feedback does not include an icon."
+/>`,
+      language: "tsx",
+      label: "Icon"
+    }
+  ]}
+/>
+
+## With close button
+
+Add a close button to allow users to dismiss the feedback.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Feedback
+      title="Dismissible Feedback" 
+      description="This feedback can be dismissed by clicking the close button."
+      showCloseButton={true}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Feedback
+    title="Dismissible Feedback" 
+    description="This feedback can be dismissed by clicking the close button."
+    showCloseButton={true}
+    onClose={() => {
+      // Handle close action
+      console.log('Feedback closed');
+    }}
+/>`,
+      language: "tsx",
+      label: "Close"
+    }
+  ]}
+/>
+
+## Custom content
+
+Add custom content to the feedback component.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Feedback>
+      <Text variant="body-default-m" marginTop="4">This is custom content inside the Feedback component. You can add any components or elements here.</Text>
+      <Button size="s">Action</Button>
+    </Feedback>
+  }
+  codes={[
+    {
+      code:
+`<Feedback>
+    <Text variant="body-default-m" marginTop="4">
+      This is custom content inside the Feedback component. You can add any components or elements here.
+    </Text>
+    <Button size="s">
+      Action
+    </Button>
+</Feedback>`,
+      language: "tsx",
+      label: "Custom content"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["variant", ["info", "danger", "warning", "success"], "info"],
+    ["icon", "boolean", "true"],
+    ["title", "string"],
+    ["description", "string"],
+    ["showCloseButton", "boolean", "false"],
+    ["onClose", "() => void"],
+    ["children"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>

@@ -1,0 +1,55 @@
+---
+title: "TiltFx"
+summary: "Applies a subtle 3D tilt effect based on mouse movement. Ideal for interactive cards or media blocks."
+updatedAt: "2025-05-11"
+docs: "once-ui/effects/tiltFx.mdx"
+github: "components/TiltFx.tsx"
+navLabel: "TiltFx"
+navIcon: "sparkle"
+---
+
+TiltFx creates a depth-based tilt animation that follows the user’s mouse cursor. The effect is driven by `rotateX`/`rotateY` transforms and resets on mouse leave. It’s designed for hoverable visual elements like images or feature blocks.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <TiltFx border="brand-alpha-weak" maxWidth={24} aspectRatio={3 / 4} radius="l">
+      <Media sizes="640px" src="/images/docs/once-ui/purple-worm.jpg" />
+      <Flex
+        fillWidth
+        position="absolute"
+        bottom="0"
+        height={10}
+        horizontal="center"
+        vertical="end"
+        paddingBottom="32"
+        textVariant="display-default-xs"
+      >
+        Purple Worm
+      </Flex>
+    </TiltFx>
+  }
+  codes={[
+    {
+      code:
+`<TiltFx aspectRatio={3 / 4} radius="l">
+    <Media src="/images/purple-worm.jpg" />
+    <Text>Purple Worm</Text>
+</TiltFx>`,
+      language: "tsx",
+      label: "TiltFx"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["children"],
+    ["className"],
+    ["style"],
+    ["...flex"],
+  ]}
+/>

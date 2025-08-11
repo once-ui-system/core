@@ -1,0 +1,310 @@
+---
+title: "Textarea"
+summary: "A multi-line text input component for collecting longer form text content."
+updatedAt: "2025-05-13"
+docs: "once-ui/form-controls/textarea.mdx"
+github: "components/Textarea.tsx"
+navLabel: "Textarea"
+navIcon: "switch"
+---
+
+The `Textarea` component provides a multi-line text input field for collecting longer form text content from users. It supports various features like auto-resizing, validation, and custom styling.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea
+      id="basic-textarea"
+      label="Comments"
+      placeholder="Enter your comments here"
+      lines={3}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="basic-textarea"
+    label="Comments"
+    placeholder="Enter your comments here"
+    lines={3}
+/>`,
+      language: "tsx",
+      label: "Textarea"
+    }
+  ]}
+/>
+
+## Description
+
+Add a description to provide additional context or instructions for the textarea.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea
+      id="bio-textarea"
+      label="Bio"
+      placeholder="Tell us about yourself"
+      description="Your bio will be displayed on your public profile"
+      lines={5}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="bio-textarea"
+    label="Bio"
+    placeholder="Tell us about yourself"
+    description="Your bio will be displayed on your public profile"
+    lines={5}
+/>`,
+      language: "tsx",
+      label: "Description"
+    }
+  ]}
+/>
+
+## Error state
+
+Display error messages by setting the `error` and `errorMessage` props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea
+      id="error-textarea"
+      label="Description"
+      placeholder="Enter a description"
+      error={true}
+      errorMessage="This field is required"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="error-textarea"
+    label="Description"
+    placeholder="Enter a description"
+    error={true}
+    errorMessage="This field is required"
+/>`,
+      language: "tsx",
+      label: "Error state"
+    }
+  ]}
+/>
+
+## Resize
+
+Control how the textarea can be resized using the `resize` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Textarea
+        id="resize-vertical"
+        label="Vertical Resize"
+        placeholder="This textarea can be resized vertically"
+        resize="vertical"
+      />
+      <Textarea
+        id="resize-none"
+        label="No Resize"
+        placeholder="This textarea cannot be resized"
+        resize="none"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="resize-horizontal"
+    label="Horizontal Resize"
+    placeholder="This textarea can be resized horizontally"
+    resize="horizontal"
+/>
+
+<Textarea
+    id="resize-none"
+    label="No Resize"
+    placeholder="This textarea cannot be resized"
+    resize="none"
+/>`,
+      language: "tsx",
+      label: "Resize"
+    }
+  ]}
+/>
+
+## Auto-resize
+
+Set the `lines` prop to "auto" to make the textarea automatically resize based on its content.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea
+      id="auto-resize-textarea"
+      label="Notes"
+      placeholder="Enter your notes"
+      lines="auto"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="auto-resize-textarea"
+    label="Notes"
+    placeholder="Enter your notes"
+    lines="auto"
+/>`,
+      language: "tsx",
+      label: "Auto-resize"
+    }
+  ]}
+/>
+
+## Styling
+
+Customize the appearance of the `Textarea` using the `radius` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="-1" fillWidth>
+      <Textarea
+        id="custom-top"
+        label="Top Radius"
+        placeholder="This textarea has top radius"
+        radius="top"
+      />
+      <Textarea
+        id="custom-bottom"
+        label="Bottom Radius"
+        placeholder="This textarea has bottom radius"
+        radius="bottom"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column gap="-1" fillWidth>
+    <Textarea
+      id="custom-top"
+      label="Top Radius"
+      placeholder="This textarea has top radius"
+      radius="top"
+    />
+    <Textarea
+      id="custom-bottom"
+      label="Bottom Radius"
+      placeholder="This textarea has bottom radius"
+      radius="bottom"
+    />
+</Column>`,
+      language: "tsx",
+      label: "Styling"
+    }
+  ]}
+/>
+
+## State
+
+Manage the `Textarea` state with React's useState hook.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<Textarea
+    id="state-textarea"
+    label="Message"
+    value=""
+    placeholder="Type your message"
+/>}
+  codes={[
+    {
+      code:
+`const [value, setValue] = useState('');
+
+const handleChange = (e) => {
+    setValue(e.target.value);
+};
+
+<Textarea
+    id="state-textarea"
+    label="Message"
+    value={value}
+    onChange={handleChange}
+    placeholder="Type your message"
+/>`,
+      language: "tsx",
+      label: "State"
+    }
+  ]}
+/>
+
+## Validation
+
+Use the `validate` prop to add custom validation to the `Textarea`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ValidationTextareaExample />}
+  codes={[
+    {
+      code:
+`const validateContent = (value) => {
+    if (value && value.length < 20) {
+        return "Please enter at least 20 characters";
+    }
+    return null;
+};
+
+<Textarea
+    id="validation-textarea"
+    label="Review"
+    placeholder="Write your review"
+    validate={validateContent}
+/>`,
+      language: "tsx",
+      label: "Validation"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  content={[
+    ["id", "string"],
+    ["label", "string"],
+    ["placeholder", "string"],
+    ["lines", ["number", "auto"], "3"],
+    ["error", "boolean", "false"],
+    ["errorMessage", "ReactNode"],
+    ["description", "ReactNode"],
+    ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"], "none"],
+    ["hasPrefix", "ReactNode"],
+    ["hasSuffix", "ReactNode"],
+    ["resize", ["horizontal", "vertical", "both", "none"], "vertical"],
+    ["validate", "(value: ReactNode) => ReactNode | null"],
+    ["className"],
+    ["style"]
+  ]}
+/>

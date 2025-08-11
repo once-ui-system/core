@@ -1,0 +1,298 @@
+---
+title: "Heading"
+summary: "A typographic component for displaying headings with various sizes, weights, and styles."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/heading.mdx"
+github: "components/Heading.tsx"
+navLabel: "Heading"
+navIcon: "components"
+---
+
+The Heading component is used for displaying titles and section headings throughout your application. It provides consistent typography with various sizes, weights, and styles to establish visual hierarchy.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Heading variant="heading-strong-xl">Heading 1</Heading>
+      <Heading variant="heading-strong-l">Heading 2</Heading>
+      <Heading variant="heading-strong-m">Heading 3</Heading>
+      <Heading variant="heading-strong-s">Heading 4</Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading variant="heading-strong-xl">
+    Heading 1
+</Heading>
+<Heading variant="heading-strong-l" as="h2">
+    Heading 2
+</Heading>
+<Heading variant="heading-strong-m" as="h3">
+    Heading 3
+</Heading>
+<Heading variant="heading-strong-s" as="h4">
+    Heading 4
+</Heading>`,
+      language: "tsx",
+      label: "Heading"
+    }
+  ]}
+/>
+
+## Variants
+
+Heading components can be styled using the `variant` prop which combines font type, weight, and size.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <Heading variant="display-strong-xl">Display Strong XL</Heading>
+      <Heading variant="display-strong-l">Display Strong L</Heading>
+      <Heading variant="display-strong-m">Display Strong M</Heading>
+      <Heading variant="display-strong-s">Display Strong S</Heading>
+      <Heading variant="display-strong-xs">Display Strong XS</Heading>
+
+      <Heading variant="display-default-xl">Display Default XL</Heading>
+      <Heading variant="display-default-l">Display Default L</Heading>
+      <Heading variant="display-default-m">Display Default M</Heading>
+      <Heading variant="display-default-s">Display Default S</Heading>
+      <Heading variant="display-default-xs">Display Default XS</Heading>
+
+      <Heading variant="heading-strong-xl">Heading Strong XL</Heading>
+      <Heading variant="heading-strong-l">Heading Strong L</Heading>
+      <Heading variant="heading-strong-m">Heading Strong M</Heading>
+      <Heading variant="heading-strong-s">Heading Strong S</Heading>
+      <Heading variant="heading-strong-xs">Heading Strong XS</Heading>
+
+      <Heading variant="heading-default-xl">Heading Default XL</Heading>
+      <Heading variant="heading-default-l">Heading Default L</Heading>
+      <Heading variant="heading-default-m">Heading Default M</Heading>
+      <Heading variant="heading-default-s">Heading Default S</Heading>
+      <Heading variant="heading-default-xs">Heading Default XS</Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading variant="display-strong-xl">
+    Display Strong XL
+</Heading>
+<Heading variant="heading-default-m">
+    Heading Default M
+</Heading>`,
+      language: "tsx",
+      label: "Variants"
+    }
+  ]}
+/>
+
+## Colors
+
+Headings can be styled with different colors using the `onBackground` or `onSolid` props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Heading onBackground="brand-medium">Brand medium</Heading>
+      <Heading onBackground="accent-medium">Accent medium</Heading>
+      <Heading onBackground="danger-weak">Danger weak</Heading>
+      <Heading onBackground="success-weak">Success weak</Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading onBackground="brand-medium">
+    Brand medium
+</Heading>
+<Heading onBackground="accent-medium">
+    Accent medium
+</Heading>
+<Heading onBackground="danger-weak">
+    Danger weak
+</Heading>
+<Heading onBackground="success-weak">
+    Success weak
+</Heading>`,
+      language: "tsx",
+      label: "Colors"
+    }
+  ]}
+/>
+
+## Alignment
+
+Control the text alignment of headings using the `align` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Heading align="left">Left Aligned</Heading>
+      <Heading align="center">Center Aligned</Heading>
+      <Heading align="right">Right Aligned</Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading align="left">
+    Left aligned
+</Heading>
+<Heading align="center">
+    Center aligned
+</Heading>
+<Heading align="right">
+    Right aligned
+</Heading>`,
+      language: "tsx",
+      label: "Alignment"
+    }
+  ]}
+/>
+
+## Wrapping
+
+Control how text wraps with the `wrap` prop. By default, the `wrap` prop is set to `balance`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" maxWidth={32}>
+      <Heading>This text uses balance wrapping for optimal readability</Heading>
+      <Heading wrap="normal">This text uses normal wrapping behavior</Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading>
+    This text uses balance wrapping for optimal readability
+</Heading>
+<Heading wrap="normal">
+    This text uses normal wrapping behavior
+</Heading>`,
+      language: "tsx",
+      label: "Wrapping"
+    }
+  ]}
+/>
+
+## Spacing
+
+Headings support various spacing props for margin and padding.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Heading marginLeft="40">
+          With left margin
+      </Heading>
+      <Heading padding="8">
+          With padding
+      </Heading>
+      <Heading marginTop="16" marginBottom="16">
+          With top and bottom margin
+      </Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading marginLeft="40">
+    With left margin
+</Heading>
+<Heading padding="8">
+    With padding
+</Heading>
+<Heading marginTop="16" marginBottom="16">
+    With top and bottom margin
+</Heading>`,
+      language: "tsx",
+      label: "Spacing"
+    }
+  ]}
+/>
+
+## Semantic HTML
+
+Use the `as` prop to control the underlying HTML element while maintaining consistent styling.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Heading variant="heading-strong-xl">This is an h1 element</Heading>
+      <Heading variant="heading-strong-l">This is an h2 element</Heading>
+      <Heading variant="heading-strong-m">This is an h3 element</Heading>
+      <Heading variant="heading-strong-s">This is an h4 element</Heading>
+      <Heading variant="heading-strong-xs">This is an h5 element</Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading as="h1">
+    This is an h1 element
+</Heading>
+<Heading as="h2">
+    This is an h2 element
+</Heading>
+<Heading as="h3">
+    This is an h3 element
+</Heading>
+<Heading as="h4">
+    This is an h4 element
+</Heading>
+<Heading as="h5">
+    This is an h5 element
+</Heading>`,
+      language: "tsx",
+      label: "Semantic HTML"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["as", ["h1", "h2", "h3", "h4", "h5", "h6"], "h1"],
+    ["variant", "TextVariant"],
+    ["size", ["xs", "s", "m", "l", "xl"], "m"],
+    ["weight", ["default", "strong"], "strong"],
+    ["onBackground", "`${ColorScheme}-${ColorWeight}`"],
+    ["onSolid", "`${ColorScheme}-${ColorWeight}`"],
+    ["align", ["left", "center", "right", "justify"]],
+    ["wrap", ["normal", "nowrap", "balance"], "balance"],
+    ["padding", "SpacingToken"],
+    ["paddingX", "SpacingToken"],
+    ["paddingY", "SpacingToken"],
+    ["paddingLeft", "SpacingToken"],
+    ["paddingRight", "SpacingToken"],
+    ["paddingTop", "SpacingToken"],
+    ["paddingBottom", "SpacingToken"],
+    ["margin", "SpacingToken"],
+    ["marginX", "SpacingToken"],
+    ["marginY", "SpacingToken"],
+    ["marginLeft", "SpacingToken"],
+    ["marginRight", "SpacingToken"],
+    ["marginTop", "SpacingToken"],
+    ["marginBottom", "SpacingToken"],
+    ["children"],
+    ["className"],
+    ["style"]
+  ]}
+/>

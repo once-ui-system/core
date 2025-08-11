@@ -1,0 +1,19 @@
+.navigation {
+  &:last-of-type {
+    margin-bottom: var(--static-space-24);
+  }
+}
+
+.panel {
+	transform: scale(0.2);
+	opacity: 0;
+  visibility: hidden;
+	transform-origin: top left;
+	transition: var(--transition-macro-medium);
+
+	&.open {
+		transform: scale(1);
+		visibility: visible;
+		opacity: 1;
+	}
+}

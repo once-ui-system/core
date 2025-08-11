@@ -1,0 +1,850 @@
+---
+title: "Setup"
+summary: "Everything you need to know about the setup, shared props and common configuration for Once UI's data viz module."
+updatedAt: "2025-05-14"
+docs: "once-ui/data/setup.mdx"
+navLabel: "Setup"
+navIcon: "learn"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The Once UI data-viz module is a collection of opinionated chart solutions built on top of [Recharts](https://recharts.org/) and [Date-fns](https://date-fns.org/). It was designed to help you create beautiful and interactive charts with minimal code.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="GDP Growth vs. CO₂ Emissions"
+  axis="x"
+  curve="linear"
+  date={{
+    start: new Date("2000-01-01"),
+    end: new Date("2024-01-01"),
+    format: "yyyy"
+  }}
+  legend={{
+    display: true,
+    position: "top-left"
+  }}
+  series={[
+    { key: "GDP per Capita (USD)" },
+    { key: "CO₂ per Capita (kg)" }
+  ]}
+  data={[
+    { date: "2000-01-01", "CO₂ per Capita (kg)": 40000, "GDP per Capita (USD)": 5270 },
+    { date: "2001-01-01", "CO₂ per Capita (kg)": 41000, "GDP per Capita (USD)": 5400 },
+    { date: "2002-01-01", "CO₂ per Capita (kg)": 42000, "GDP per Capita (USD)": 5580 },
+    { date: "2003-01-01", "CO₂ per Capita (kg)": 43000, "GDP per Capita (USD)": 5840 },
+    { date: "2004-01-01", "CO₂ per Capita (kg)": 44000, "GDP per Capita (USD)": 6100 },
+    { date: "2005-01-01", "CO₂ per Capita (kg)": 46000, "GDP per Capita (USD)": 6450 },
+    { date: "2006-01-01", "CO₂ per Capita (kg)": 47000, "GDP per Capita (USD)": 6900 },
+    { date: "2007-01-01", "CO₂ per Capita (kg)": 48000, "GDP per Capita (USD)": 7350 },
+    { date: "2008-01-01", "CO₂ per Capita (kg)": 46000, "GDP per Capita (USD)": 7600 },
+    { date: "2009-01-01", "CO₂ per Capita (kg)": 44000, "GDP per Capita (USD)": 7400 },
+    { date: "2010-01-01", "CO₂ per Capita (kg)": 47000, "GDP per Capita (USD)": 7900 },
+    { date: "2011-01-01", "CO₂ per Capita (kg)": 49000, "GDP per Capita (USD)": 8200 },
+    { date: "2012-01-01", "CO₂ per Capita (kg)": 48000, "GDP per Capita (USD)": 8500 },
+    { date: "2013-01-01", "CO₂ per Capita (kg)": 47000, "GDP per Capita (USD)": 8800 },
+    { date: "2014-01-01", "CO₂ per Capita (kg)": 46000, "GDP per Capita (USD)": 9100 },
+    { date: "2015-01-01", "CO₂ per Capita (kg)": 45000, "GDP per Capita (USD)": 9400 },
+    { date: "2016-01-01", "CO₂ per Capita (kg)": 45000, "GDP per Capita (USD)": 9700 },
+    { date: "2017-01-01", "CO₂ per Capita (kg)": 46000, "GDP per Capita (USD)": 10100 },
+    { date: "2018-01-01", "CO₂ per Capita (kg)": 47000, "GDP per Capita (USD)": 10600 },
+    { date: "2019-01-01", "CO₂ per Capita (kg)": 46000, "GDP per Capita (USD)": 11000 },
+    { date: "2020-01-01", "CO₂ per Capita (kg)": 42000, "GDP per Capita (USD)": 10800 },
+    { date: "2021-01-01", "CO₂ per Capita (kg)": 44000, "GDP per Capita (USD)": 11300 },
+    { date: "2022-01-01", "CO₂ per Capita (kg)": 45000, "GDP per Capita (USD)": 11700 },
+    { date: "2023-01-01", "CO₂ per Capita (kg)": 45000, "GDP per Capita (USD)": 12000 },
+    { date: "2024-01-01", "CO₂ per Capita (kg)": 44000, "GDP per Capita (USD)": 12300 }
+  ]}
+/>
+
+## Config
+
+The default settings for the data viz module are stored in the `src/app/resources/data.config.js` file. You can use it to define the default height, highlight color, data mode and variant.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`variant: "gradient", // flat | gradient | outline
+mode: "categorical", // categorical | divergent | sequential
+height: 24, // default chart height
+axisLine: {
+    stroke: "var(--neutral-alpha-weak)",
+},
+tick: {
+    fill: "var(--neutral-on-background-weak)",
+    fontSize: 11,
+},
+tickLine: false,`,
+      language: "tsx",
+      label: "Config"
+    }
+  ]}
+/>
+
+## Props
+
+All charts share the same props for common settings, so it's easy to swap between different chart types with minimal code changes. Each chart may have additional, chart-specific props.
+
+### Data
+
+Use the `series` and `data` props to define the chart data to render, and assign colors to override defaults.
+
+The `series` prop is an array of objects, where each object has a `key` property that defines the name of the series, and an optional `color` property that defines the color of the series. Match the `key` property with the property name in the `data` prop.
+
+<BarChart
+  marginTop="16"
+  title="Daily Time Spent on Activities"
+  axis="none"
+  barWidth="xl"
+  legend={{
+    position: "bottom-center",
+  }}
+  series={[
+    { key: "Reading", color: "aqua" },
+    { key: "Sports", color: "yellow" },
+    { key: "Doomscrolling", color: "orange" }
+  ]}
+  data={[
+    { label: "Minutes per day", "Reading": 16, "Sports": 36, "Doomscrolling": 250 },
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  highlight="9-11,14"
+  compact
+  codes={[
+    {
+      code:
+`<BarChart
+    title="Daily Time Spent on Activities"
+    axis="x"
+    barWidth="xl"
+    legend={{
+      position: "bottom-center",
+    }}
+    series={[
+      { key: "Reading", color: "aqua" },
+      { key: "Sports", color: "yellow" },
+      { key: "Doomscrolling", color: "orange" }
+    ]}
+    data={[
+      { label: "Minutes per day", "Reading": 16, "Sports": 36, "Doomscrolling": 128 },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Details"
+    }
+  ]}
+/>
+
+<PropsTable
+  content={[
+    ["series", "{[{key: string, color?: string}]}"],
+    ["data", "{[{date: string, [key: string]: number}]}"],
+  ]}
+/>
+
+When working with time series data, use the `date` prop to define the date format. Alternatively, you can translate the date values to `Date` objects to render the dates based on the default format.
+
+<LineChart
+  marginTop="16"
+  title="Cost of College vs. Income"
+  axis="x"
+  date={{
+    format: "yyyy"
+  }}
+  series={[
+    { key: "Median Household Income", color: "cyan" },
+    { key: "College Tuition", color: "magenta" }
+  ]}
+  data={[
+    { date: new Date("1980-01-01"), "Median Household Income": 22000, "College Tuition": 3000 },
+    { date: new Date("1990-01-01"), "Median Household Income": 30000, "College Tuition": 6000 },
+    { date: new Date("2000-01-01"), "Median Household Income": 42000, "College Tuition": 10000 },
+    { date: new Date("2010-01-01"), "Median Household Income": 49000, "College Tuition": 18000 },
+    { date: new Date("2020-01-01"), "Median Household Income": 53000, "College Tuition": 25000 },
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  highlight="5"
+  compact
+  codes={[
+    {
+      code:
+`<LineChart
+    title="Cost of College vs. Income"
+    axis="x"
+    date={{
+      format: "yyyy"
+    }}
+    series={[
+      { key: "Median Household Income", color: "cyan" },
+      { key: "College Tuition", color: "magenta" }
+    ]}
+    data={[
+      { date: new Date("1980-01-01"), "Median Household Income": 22000, "College Tuition": 3000 },
+      { date: new Date("1990-01-01"), "Median Household Income": 30000, "College Tuition": 6000 },
+      { date: new Date("2000-01-01"), "Median Household Income": 42000, "College Tuition": 10000 },
+      { date: new Date("2010-01-01"), "Median Household Income": 49000, "College Tuition": 18000 },
+      { date: new Date("2020-01-01"), "Median Household Income": 53000, "College Tuition": 25000 },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Details"
+    }
+  ]}
+/>
+
+### Context
+
+Render textual context above the chart with the `title` and `description` props.
+
+<Row fillWidth s={{direction: "column"}} gap="16" marginTop="16">
+<BarChart
+  data-viz-style="divergent"
+  title="Wealth distribution"
+  description="Global share of wealth held by Top 1% vs Bottom 99%"
+  axis="none"
+  legend={{
+    position: "bottom-center"
+  }}
+  series={[
+    { key: "Top 1%" },
+    { key: "Bottom 99%" }
+  ]}
+  data={[
+    { label: "2025 (est.)", "Top 1%": 52.5, "Bottom 99%": 47.5 }
+  ]}
+/>
+
+<BarChart
+  data-viz-style="divergent"
+  axis="none"
+  legend={{
+    position: "bottom-center"
+  }}
+  series={[
+    { key: "Top 1%" },
+    { key: "Bottom 99%" }
+  ]}
+  data={[
+    { name: "2025 (est.)", "Top 1%": 52.5, "Bottom 99%": 47.5 }
+  ]}
+/>
+</Row>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  highlight="2-3"
+  compact
+  codes={[
+    {
+      code:
+`<BarChart
+    title="Wealth distribution"
+    description="Global share of wealth held by Top 1% vs Bottom 99%"
+    axis="none"
+    legend={{
+      position: "bottom-center"
+    }}
+    series={[
+      { key: "Top 1%" },
+      { key: "Bottom 99%" }
+    ]}
+    data={[
+      { label: "2025 (est.)", "Top 1%": 52.5, "Bottom 99%": 47.5 }
+    ]}
+/>`,
+      language: "tsx",
+      label: "Details"
+    }
+  ]}
+/>
+
+<PropsTable
+  content={[
+    ["title", "ReactNode"],
+    ["description", "ReactNode"],
+  ]}
+/>
+
+### Axis
+
+Use the `axis` prop to control the visibility of the `x` and `y` axis.
+
+<Row fillWidth s={{direction: "column"}} gap="16" marginTop="16">
+  <LineChart
+    title="CEO vs Employee Paycheck"
+    axis="both"
+    date={{
+      format: "yyyy"
+    }}
+    series={[
+      { key: "Employee Paycheck", color: "aqua" },
+      { key: "CEO Paycheck", color: "red" }
+    ]}
+    data={[
+      { date: new Date("1980-01-01"), "CEO Paycheck": 500000, "Employee Paycheck": 25000 },
+      { date: new Date("1990-01-01"), "CEO Paycheck": 800000, "Employee Paycheck": 30000 },
+      { date: new Date("2000-01-01"), "CEO Paycheck": 1200000, "Employee Paycheck": 33000 },
+      { date: new Date("2010-01-01"), "CEO Paycheck": 1600000, "Employee Paycheck": 35000 },
+      { date: new Date("2020-01-01"), "CEO Paycheck": 3000000, "Employee Paycheck": 40000 },
+    ]}
+  />
+
+  <LineChart
+    overflow="hidden"
+    title="CEO vs Employee Paycheck"
+    axis="none"
+    date={{
+      format: "yyyy"
+    }}
+    series={[
+      { key: "Employee Paycheck", color: "aqua" },
+      { key: "CEO Paycheck", color: "red" }
+    ]}
+    data={[
+      { date: new Date("1980-01-01"), "CEO Paycheck": 500000, "Employee Paycheck": 25000 },
+      { date: new Date("1990-01-01"), "CEO Paycheck": 800000, "Employee Paycheck": 30000 },
+      { date: new Date("2000-01-01"), "CEO Paycheck": 1200000, "Employee Paycheck": 33000 },
+      { date: new Date("2010-01-01"), "CEO Paycheck": 1600000, "Employee Paycheck": 35000 },
+      { date: new Date("2020-01-01"), "CEO Paycheck": 3000000, "Employee Paycheck": 40000 },
+    ]}
+  />
+</Row>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  highlight="3"
+  compact
+  codes={[
+    {
+      code:
+`<LineChart
+    title="CEO vs Employee Paycheck"
+    axis="both" // x | y | both | none
+    date={{
+      format: "yyyy"
+    }}
+    series={[
+      { key: "Employee Paycheck", color: "green" },
+      { key: "CEO Paycheck", color: "red" }
+    ]}
+    data={[
+      { date: new Date("1980-01-01"), "CEO Paycheck": 500000, "Employee Paycheck": 25000 },
+      { date: new Date("1990-01-01"), "CEO Paycheck": 800000, "Employee Paycheck": 30000 },
+      { date: new Date("2000-01-01"), "CEO Paycheck": 1200000, "Employee Paycheck": 33000 },
+      { date: new Date("2010-01-01"), "CEO Paycheck": 1600000, "Employee Paycheck": 35000 },
+      { date: new Date("2020-01-01"), "CEO Paycheck": 3000000, "Employee Paycheck": 40000 },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Details"
+    }
+  ]}
+/>
+
+<PropsTable
+  content={[
+    ["axis", ["x", "y", "both", "none"], "both"],
+  ]}
+/>
+
+### Legend
+
+Use the `legend` prop to control the visibility, position, and direction of the legend.
+
+<Row fillWidth s={{direction: "column"}} gap="16" marginTop="16">
+  <PieChart
+    data-viz-style="sequential"
+    title="Carbon Emission by Country"
+    legend={{
+      display: true,
+      position: "top-left",
+      direction: "column"
+    }}
+    ring={{ inner: 40, outer: 50 }}
+    origo={{ x: 70, y: 70 }}
+    series={{
+      key: "value",
+    }}
+    data={[
+      { name: "EU", value: 7 },
+      { name: "China", value: 28 },
+      { name: "United States", value: 14 },
+      { name: "Rest of the World", value: 51 }
+    ]}
+  />
+
+  <PieChart
+    data-viz-style="sequential"
+    title="Carbon Emission by Country"
+    legend={{
+      display: true,
+      position: "bottom-center",
+    }}
+    ring={{ inner: 55, outer: 65 }}
+    origo={{
+      y: 40
+    }}
+    series={{
+      key: "value",
+    }}
+    data={[
+      { name: "EU", value: 7 },
+      { name: "China", value: 28 },
+      { name: "United States", value: 14 },
+      { name: "Rest of the World", value: 51 }
+    ]}
+  />
+</Row>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  highlight="5"
+  compact
+  codes={[
+    {
+      code:
+`<PieChart
+    title="Carbon Emission by Country"
+    legend={{
+      display: true,
+      position: "bottom-center", // top-left | top-center | top-right | bottom-left | bottom-center | bottom-right
+    }}
+    ring={{ inner: 60, outer: 70 }}
+    series={{
+      key: "value",
+    }}
+    data={[
+      { name: "EU", value: 7 },
+      { name: "China", value: 28 },
+      { name: "United States", value: 14 },
+      { name: "Rest of the World", value: 51 }
+    ]}
+/>`,
+      language: "tsx",
+      label: "Details"
+    }
+  ]}
+/>
+
+
+<PropsTable
+  content={[
+    ["legend", "{{display: boolean, position: Position}}"],
+  ]}
+/>
+
+### Date
+
+Use the `date` prop to define the date format and datepicker visibility and options.
+
+<LineBarChart
+  title="CEO vs Employee Paycheck"
+  axis="both"
+  date={{
+    format: "yyyy",
+    start: new Date("2000-01-01"),
+    end: new Date("2020-01-01"),
+    selector: true,
+    presets: {
+      display: true,
+      granularity: "week"
+    },
+    dual: true
+  }}
+  series={[
+    { key: "Screen Time (hrs)", color: "moss" },
+    { key: "Physical Activity (hrs)", color: "yellow" }
+  ]}
+  data={[
+    { date: new Date("2000-01-01"), "Screen Time (hrs)": 2.5, "Physical Activity (hrs)": 1.8 },
+    { date: new Date("2005-01-01"), "Screen Time (hrs)": 3.0, "Physical Activity (hrs)": 1.6 },
+    { date: new Date("2010-01-01"), "Screen Time (hrs)": 4.0, "Physical Activity (hrs)": 1.3 },
+    { date: new Date("2015-01-01"), "Screen Time (hrs)": 5.5, "Physical Activity (hrs)": 1.0 },
+    { date: new Date("2020-01-01"), "Screen Time (hrs)": 7.0, "Physical Activity (hrs)": 0.8 },
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  highlight="6-14"
+  compact
+  codes={[
+    {
+      code:
+`<LineBarChart
+    marginTop="16"
+    title="CEO vs Employee Paycheck"
+    axis="both"
+    date={{
+      format: "yyyy",
+      start: new Date("2000-01-01"),
+      end: new Date("2020-01-01"),
+      selector: true,
+      presets: {
+        display: true,
+        granularity: "week"
+      },
+      dual: true
+    }}
+    series={[
+      { key: "Screen Time (hrs)", color: "moss" },
+      { key: "Physical Activity (hrs)", color: "yellow" }
+    ]}
+    data={[
+      { date: new Date("2000-01-01"), "Screen Time (hrs)": 2.5, "Physical Activity (hrs)": 1.8 },
+      { date: new Date("2005-01-01"), "Screen Time (hrs)": 3.0, "Physical Activity (hrs)": 1.6 },
+      { date: new Date("2010-01-01"), "Screen Time (hrs)": 4.0, "Physical Activity (hrs)": 1.3 },
+      { date: new Date("2015-01-01"), "Screen Time (hrs)": 5.5, "Physical Activity (hrs)": 1.0 },
+      { date: new Date("2020-01-01"), "Screen Time (hrs)": 7.0, "Physical Activity (hrs)": 0.8 },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Details"
+    }
+  ]}
+/>
+
+
+<PropsTable
+  content={[
+    ["date", "{{format: string, start: Date, end: Date, selector: boolean, presets: { display: boolean, granularity: string }, dual: boolean}}"],
+  ]}
+/>
+
+## Variants
+
+Set the `variant` prop to `gradient`, `flat`, or `outline` to change the chart's appearance.
+
+<Row fillWidth marginTop="16" gap="-1" radius="l" border="neutral-medium">
+<LineChart
+  border="transparent"
+  variant="gradient"
+  axis="x"
+  legend={{
+    display: false,
+  }}
+  date={{
+    format: "yyyy"
+  }}
+  series={[
+    { key: "Area (km²)", color: "contrast" },
+    { key: "Temp Anomaly (°C)", color: "red" }
+  ]}
+  data={[
+    { date: "1825-01-01", "Area (km²)": 5.375, "Temp Anomaly (°C)": 0.1 },
+    { date: "1850-01-01", "Area (km²)": 5.3, "Temp Anomaly (°C)": 0.2 },
+    { date: "1875-01-01", "Area (km²)": 5.1, "Temp Anomaly (°C)": 0.3 },
+    { date: "1900-01-01", "Area (km²)": 4.9, "Temp Anomaly (°C)": 0.4 },
+  ]}
+/>
+
+<LineChart
+  border="transparent"
+  variant="flat"
+  axis="x"
+  legend={{
+    display: false,
+  }}
+  date={{
+    format: "yyyy"
+  }}
+  series={[
+    { key: "Area (km²)", color: "contrast" },
+    { key: "Temp Anomaly (°C)", color: "red" }
+  ]}
+  data={[
+    { date: "1900-01-01", "Area (km²)": 4.9, "Temp Anomaly (°C)": 0.4 },
+    { date: "1925-01-01", "Area (km²)": 4.6, "Temp Anomaly (°C)": 0.5 },
+    { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
+  ]}
+/>
+
+<LineChart
+  border="transparent"
+  variant="outline"
+  axis="x"
+  legend={{
+    display: false,
+  }}
+  date={{
+    format: "yyyy"
+  }}
+  series={[
+    { key: "Area (km²)", color: "contrast" },
+    { key: "Temp Anomaly (°C)", color: "red" }
+  ]}
+  data={[
+    { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
+    { date: "1975-01-01", "Area (km²)": 3.4, "Temp Anomaly (°C)": 0.9 },
+    { date: "2000-01-01", "Area (km²)": 2.3, "Temp Anomaly (°C)": 1.1 },
+    { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
+  ]}
+/>
+</Row>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  highlight="2"
+  compact
+  codes={[
+    {
+      code:
+`border="transparent"
+  variant="outline" // gradient | flat | outline
+  axis="x"
+  legend={{
+    display: false,
+  }}
+  date={{
+    format: "yyyy"
+  }}
+  series={[
+    { key: "Area (km²)", color: "contrast" },
+    { key: "Temp Anomaly (°C)", color: "red" }
+  ]}
+  data={[
+    { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
+    { date: "1975-01-01", "Area (km²)": 3.4, "Temp Anomaly (°C)": 0.9 },
+    { date: "2000-01-01", "Area (km²)": 2.3, "Temp Anomaly (°C)": 1.1 },
+    { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
+  ]}`,
+      language: "tsx",
+      label: "Details"
+    }
+  ]}
+/>
+
+<PropsTable
+  content={[
+    ["variant", ["gradient", "flat", "outline"], "gradient"],
+  ]}
+/>
+
+## Color modes
+
+Use the `data-viz` prop to change the chart's color mode to `categorical`, `divergent`, or `sequential`.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Tesla employee vs Elon Musk vs Hungary"
+  description="Monthly compensation / state budget"
+  axis="x"
+  curve="step"
+  date={{
+    format: "yyyy",
+  }}
+  series={[
+    { key: "Tesla Employee" },
+    { key: "Elon Musk" },
+    { key: "Hungary" }
+  ]}
+  data={[
+    { date: "2000-01-01", "Elon Musk": 5000, "Tesla Employee": 3000, "Hungary": 2500000000 },
+    { date: "2005-01-01", "Elon Musk": 5000, "Tesla Employee": 4200, "Hungary": 4000000000 },
+    { date: "2010-01-01", "Elon Musk": 0, "Tesla Employee": 5500, "Hungary": 5000000000 },
+    { date: "2015-01-01", "Elon Musk": 10000, "Tesla Employee": 6300, "Hungary": 6000000000 },
+    { date: "2018-01-01", "Elon Musk": 100000000, "Tesla Employee": 7000, "Hungary": 6800000000 },
+    { date: "2020-01-01", "Elon Musk": 2800000000, "Tesla Employee": 7600, "Hungary": 7500000000 },
+    { date: "2023-01-01", "Elon Musk": 4500000000, "Tesla Employee": 8300, "Hungary": 7900000000 },
+    { date: "2025-01-01", "Elon Musk": 5600000000, "Tesla Employee": 8800, "Hungary": 8200000000 }
+  ]}
+/>
+
+Colors are assigned automatically. You can override them in the `series` prop.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  data-viz-style="divergent"
+  title="Tesla employee vs Elon Musk vs Hungary"
+  description="Monthly compensation / state budget"
+  axis="x"
+  curve="step"
+  date={{
+    format: "yyyy",
+  }}
+  series={[
+    { key: "Tesla Employee" },
+    { key: "Elon Musk" },
+    { key: "Hungary" }
+  ]}
+  data={[
+    { date: "2000-01-01", "Elon Musk": 5000, "Tesla Employee": 3000, "Hungary": 2500000000 },
+    { date: "2005-01-01", "Elon Musk": 5000, "Tesla Employee": 4200, "Hungary": 4000000000 },
+    { date: "2010-01-01", "Elon Musk": 0, "Tesla Employee": 5500, "Hungary": 5000000000 },
+    { date: "2015-01-01", "Elon Musk": 10000, "Tesla Employee": 6300, "Hungary": 6000000000 },
+    { date: "2018-01-01", "Elon Musk": 100000000, "Tesla Employee": 7000, "Hungary": 6800000000 },
+    { date: "2020-01-01", "Elon Musk": 2800000000, "Tesla Employee": 7600, "Hungary": 7500000000 },
+    { date: "2023-01-01", "Elon Musk": 4500000000, "Tesla Employee": 8300, "Hungary": 7900000000 },
+    { date: "2025-01-01", "Elon Musk": 5600000000, "Tesla Employee": 8800, "Hungary": 8200000000 }
+  ]}
+/>
+
+When using `data-viz-style="divergent"` or `data-viz-style="sequential"`, we recommend using the default colors, since they are distributed evenly.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  data-viz-style="sequential"
+  title="Tesla employee vs Elon Musk vs Hungary"
+  description="Monthly compensation / state budget"
+  axis="x"
+  curve="step"
+  date={{
+    format: "yyyy",
+  }}
+  series={[
+    { key: "Tesla Employee" },
+    { key: "Elon Musk" },
+    { key: "Hungary" }
+  ]}
+  data={[
+    { date: "2000-01-01", "Elon Musk": 5000, "Tesla Employee": 3000, "Hungary": 2500000000 },
+    { date: "2005-01-01", "Elon Musk": 5000, "Tesla Employee": 4200, "Hungary": 4000000000 },
+    { date: "2010-01-01", "Elon Musk": 0, "Tesla Employee": 5500, "Hungary": 5000000000 },
+    { date: "2015-01-01", "Elon Musk": 10000, "Tesla Employee": 6300, "Hungary": 6000000000 },
+    { date: "2018-01-01", "Elon Musk": 100000000, "Tesla Employee": 7000, "Hungary": 6800000000 },
+    { date: "2020-01-01", "Elon Musk": 2800000000, "Tesla Employee": 7600, "Hungary": 7500000000 },
+    { date: "2023-01-01", "Elon Musk": 4500000000, "Tesla Employee": 8300, "Hungary": 7900000000 },
+    { date: "2025-01-01", "Elon Musk": 5600000000, "Tesla Employee": 8800, "Hungary": 8200000000 }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  highlight="2"
+  compact
+  codes={[
+    {
+      code:
+`<LineChart
+    data-viz-style="divergent" // categorical | divergent | sequential
+    title="Tesla employee vs Elon Musk vs Hungary"
+    description="Monthly compensation / state budget"
+    axis="x"
+    curve="step"
+    date={{
+      format: "yyyy",
+    }}
+    series={[
+      { key: "Tesla Employee" },
+      { key: "Elon Musk" },
+      { key: "Hungary" }
+    ]}
+    data={[
+      { date: "2000-01-01", "Elon Musk": 5000, "Tesla Employee": 3000, "Hungary": 2500000000 },
+      { date: "2005-01-01", "Elon Musk": 5000, "Tesla Employee": 4200, "Hungary": 4000000000 },
+      { date: "2010-01-01", "Elon Musk": 0, "Tesla Employee": 5500, "Hungary": 5000000000 },
+      { date: "2015-01-01", "Elon Musk": 10000, "Tesla Employee": 6300, "Hungary": 6000000000 },
+      { date: "2018-01-01", "Elon Musk": 100000000, "Tesla Employee": 7000, "Hungary": 6800000000 },
+      { date: "2020-01-01", "Elon Musk": 2800000000, "Tesla Employee": 7600, "Hungary": 7500000000 },
+      { date: "2023-01-01", "Elon Musk": 4500000000, "Tesla Employee": 8300, "Hungary": 7900000000 },
+      { date: "2025-01-01", "Elon Musk": 5600000000, "Tesla Employee": 8800, "Hungary": 8200000000 }
+    ]}
+/>`,
+      language: "tsx",
+      label: "Details"
+    }
+  ]}
+/>
+
+<PropsTable
+  content={[
+    ["data-viz", ["categorical", "divergent", "sequential"], "categorical"],
+  ]}
+/>
+
+## Style overrides
+
+You can override the default container styles with `Flex` props.
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  border="brand-medium"
+  background="brand-medium"
+  radius="xs"
+  title="The TikTok Takeover"
+  description="Avg. daily time spent per user on TikTok (minutes)"
+  barWidth="xl"
+  legend={{
+    display: false
+  }}
+  series={{
+    key: "Minutes",
+    color: "contrast"
+  }}
+  data={[
+    { date: "2020-01-01", Minutes: 20, label: "2020" },
+    { date: "2021-01-01", Minutes: 40, label: "2021" },
+    { date: "2022-01-01", Minutes: 65, label: "2022" },
+    { date: "2023-01-01", Minutes: 85, label: "2023" },
+    { date: "2024-01-01", Minutes: 95, label: "2024" },
+    { date: "2025-01-01", Minutes: 180, label: "2025 (proj.)" }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  highlight="2-6"
+  compact
+  codes={[
+    {
+      code:
+`<BarChart
+    marginTop="16"
+    marginBottom="24"
+    border="brand-medium"
+    background="brand-medium"
+    radius="xs"
+    title="The TikTok Takeover"
+    description="Avg. daily time spent per user on TikTok (minutes)"
+    barWidth="xl"
+    legend={{
+      display: false
+    }}
+    series={{
+      key: "Minutes",
+      color: "contrast"
+    }}
+    data={[
+      { date: "2020-01-01", Minutes: 20, label: "2020" },
+      { date: "2021-01-01", Minutes: 40, label: "2021" },
+      { date: "2022-01-01", Minutes: 65, label: "2022" },
+      { date: "2023-01-01", Minutes: 85, label: "2023" },
+      { date: "2024-01-01", Minutes: 95, label: "2024" },
+      { date: "2025-01-01", Minutes: 180, label: "2025 (proj.)" }
+    ]}
+/>`,
+      language: "tsx",
+      label: "Details"
+    }
+  ]}
+/>
+
+<PropsTable
+  content={[
+    ["...flex"]
+  ]}
+/>

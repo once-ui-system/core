@@ -1,0 +1,89 @@
+---
+title: "AccordionGroup"
+summary: "The AccordionGroup component provides a container for multiple Accordion components with consistent styling and spacing."
+updatedAt: "2025-05-04"
+docs: "once-ui/components/accordionGroup.mdx"
+github: "components/AccordionGroup.tsx"
+navLabel: "AccordionGroup"
+navIcon: "components"
+---
+
+A container component that groups multiple Accordion components together with consistent styling and dividers between each item. It's useful for creating FAQ sections, navigation menus, and other grouped collapsible content.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <AccordionGroup
+      items={[
+        {
+          title: "First item",
+          content: <Text onBackground="neutral-weak">Content for the first item</Text>
+        },
+        {
+          title: "Second item",
+          content: <Text onBackground="neutral-weak">Content for the second item</Text>
+        },
+        {
+          title: "Third item",
+          content: <Text onBackground="neutral-weak">Content for the third item</Text>
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<AccordionGroup
+    items={[
+      {
+        title: "First Item",
+        content:
+          <Text onBackground="neutral-weak">
+            Content for the first item
+          </Text>
+      },
+      {
+        title: "Second Item",
+        content:
+          <Text onBackground="neutral-weak">
+            Content for the second item
+          </Text>
+      },
+      {
+        title: "Third Item",
+        content:
+          <Text onBackground="neutral-weak">
+            Content for the third item
+          </Text>
+      }
+    ]}
+/>`,
+      language: "tsx",
+      label: "AccordionGroup"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["items", "AccordionItem[]"],
+    ["size", ["s", "m", "l"], "m"],
+    ["style"],
+    ["className"],
+    ["...flex"]
+  ]}
+/>
+
+## AccordionItem
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  content={[
+    ["title", "ReactNode"],
+    ["content", "ReactNode"],
+  ]}
+/>

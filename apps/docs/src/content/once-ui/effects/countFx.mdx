@@ -1,0 +1,68 @@
+---
+title: "CountFx"
+summary: "CountFx is a wrapper for numbers with different animation effects."
+updatedAt: "2025-05-11"
+docs: "once-ui/effects/countFx.mdx"
+github: "components/CountFx.tsx"
+navLabel: "CountFx"
+navIcon: "sparkle"
+navTag: "new"
+navTagVariant: "cyan"
+---
+
+CountFx is a wrapper for numbers with different animation effects.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <CountFxExample />
+  }
+  codes={[
+    {
+      code:
+`<CountFx
+    variant="display-strong-m"
+    value={1234}
+    speed={5000}
+    effect="wheel"
+    easing="ease-out"
+/>
+
+<CountFx
+    variant="display-strong-m"
+    value={1234}
+    speed={5000}
+    effect="smooth"
+    easing="ease-out"
+/>
+
+<CountFx
+    variant="display-strong-m"
+    value={1234}
+    speed={5000}
+    separator=","
+    effect="simple"
+    easing="ease-out"
+/>`,
+      language: "tsx",
+      label: "CountFx"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["value", "number"],
+    ["effect", ["wheel", "smooth", "simple"], "simple"],
+    ["speed", "number (ms)", "1000"],
+    ["easing", ["linear", "ease-out", "ease-in-out"], "ease-out"],
+    ["separator", "string"],
+    ["className"],
+    ["style"],
+    ["...text", "TextProps"]
+  ]}
+/>

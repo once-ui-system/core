@@ -1,0 +1,364 @@
+---
+title: "CodeBlock"
+summary: "A versatile component for displaying and formatting code snippets with syntax highlighting, copy functionality, and interactive previews."
+updatedAt: "2025-05-14"
+github: "modules/code/CodeBlock.tsx"
+docs: "once-ui/modules/codeBlock.mdx"
+navLabel: "CodeBlock"
+navIcon: "modules"
+---
+
+The `CodeBlock` component provides a way to display code snippets with syntax highlighting, interactive tabs for multiple code examples, and optional live previews. It supports various customization options including copy buttons, fullscreen mode, and line numbers.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Button size="s" weight="default" prefixIcon="sparkle">Click me</Button>
+  }
+  codes={[
+    {
+      code:
+`<CodeBlock
+    copyButton
+    preview={
+      <Button size="s" weight="default" prefixIcon="sparkle">
+        Click me
+      </Button>
+    }
+    codes={[
+      {
+        code: "const greeting = 'Hello, world!';",
+        language: "javascript",
+        label: "Example"
+      }
+    ]}
+/>`,
+      language: "tsx",
+      label: "CodeBlock"
+    }
+  ]}
+  copyButton
+/>
+
+## Preview
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+	previewPadding="0"
+  preview={
+    <Row fillWidth center padding="16">
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        shadow="m"
+        fillWidth
+        radius="m"
+        height={12}
+        border="neutral-alpha-medium"
+      />
+    </Row>
+  }
+	codes={[
+		{
+			code:
+`<CodeBlock
+		copyButton
+		previewPadding="0"
+		preview={
+			<Row fillWidth center padding="16">
+				<Background
+					background="neutral-alpha-weak"
+					lines={{display: true, color: "neutral-alpha-weak"}}
+					shadow="m"
+					fillWidth
+					radius="m"
+					height={12}
+					border="neutral-alpha-medium"
+				/>
+			</Row>
+		}
+		codes={[
+			{
+				code: "...",
+				language: "tsx",
+				label: "Preview"
+			}
+		]}
+/>`,
+			language: "tsx",
+			label: "Preview"
+		}
+	]}
+/>
+
+## Multiple code
+
+The `CodeBlock` can display multiple code examples with tabs for easy navigation.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  preview={
+    <CodeBlock
+        copyButton={false}
+      codes={[
+        {
+          code:
+`// JavaScript
+const button = document.createElement('button');
+button.textContent = 'Example Button';
+button.classList.add('secondary');
+document.body.appendChild(button);`,
+          language: "javascript",
+          label: "JavaScript"
+        },
+        {
+          code:
+`<!-- HTML -->
+<button class="secondary">
+    Example Button
+</button>`,
+          language: "html",
+          label: "HTML"
+        },
+        {
+          code:
+`/* CSS */
+button.secondary {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 16px;
+}`,
+          language: "css",
+          label: "CSS"
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CodeBlock
+    copyButton={false}
+    codes={[
+      {
+        code:
+"// JavaScript
+const button = document.createElement('button');
+button.textContent = 'Example Button';
+button.classList.add('secondary');
+document.body.appendChild(button);",
+        language: "javascript",
+        label: "JavaScript"
+      },
+      {
+        code:
+"<!-- HTML -->
+<button class="secondary">
+    Example Button
+</button>",
+        language: "html",
+        label: "HTML"
+    },
+    {
+        code:
+"/* CSS */
+button.secondary {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 16px;
+}",
+        language: "css",
+        label: "CSS"
+      }
+    ]}
+/>`,
+      language: "tsx",
+      label: "Multiple code"
+    }
+  ]}
+/>
+
+## Compact mode
+
+Use the `compact` prop for a more condensed display.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CodeBlock
+			compact
+			copyButton={false}
+			codes={[
+				{
+					code: "console.log('Compact mode example');",
+					language: "javascript",
+					label: "Compact"
+				}
+			]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CodeBlock
+		compact
+		copyButton={false}
+		codes={[
+			{
+				code: "console.log('Compact mode example');",
+				language: "javascript",
+				label: "Compact"
+			}
+		]}
+/>`,
+      language: "tsx",
+      label: "Compact"
+    }
+  ]}
+/>
+
+## Line numbers
+
+Use the `lineNumbers` prop to display line numbers for better code readability and reference.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CodeBlock
+        lineNumbers
+				compact
+        codes={[
+          {
+            code:
+`function greet() {
+		console.log('Hello!')
+		return 'Greeting sent'
+}`,
+            language: "tsx",
+            label: "Line numbers"
+          }
+        ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CodeBlock
+		lineNumbers
+		compact
+		codes={[
+    {
+      code:
+"function greet() {
+		console.log('Hello!')
+		return 'Greeting sent'
+}",
+      language: "tsx",
+      label: "Line numbers"
+    }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Line numbers"
+    }
+  ]}
+/>
+
+## Highlight
+
+Use the `highlight` prop to highlight specific lines of code. The value should be a string with line numbers or ranges (e.g., "1,3-5").
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<CodeBlock
+		codes={[
+			{
+				code:
+"function calculateTotal(items) {
+let total = 0;
+	
+for (let i = 0; i < items.length; i++) {
+		const item = items[i];
+		total += item.price * item.quantity;
+}
+	
+return total;
+}",
+				language: "javascript",
+				highlight: "2,4-6",
+				label: "Highlight"
+			}
+		]}
+/>`,
+      language: "tsx",
+      highlight: "2,4-6",
+      label: "Highlight"
+    }
+  ]}
+/>
+
+## Extras
+
+The `CodeBlock` component supports additional features like fullscreen mode and style customization.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  fullscreenButton
+  styleButton
+  codes={[
+    {
+      code:
+`<CodeBlock
+		fullscreenButton
+		styleButton
+		reloadButton
+		codes={[
+			{
+				code:
+"const data = fetchData();
+console.log('Processing data...');
+renderResults(data);",
+				language: "javascript",
+				label: "Extras"
+			}
+		]}
+/>`,
+      language: "tsx",
+      label: "Extras"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["codes", "CodeInstance[]", "[]"],
+    ["preview", "ReactNode"],
+    ["copyButton", "boolean", "true"],
+    ["styleButton", "boolean", "false"],
+    ["reloadButton", "boolean", "false"],
+    ["fullscreenButton", "boolean", "false"],
+    ["compact", "boolean", "false"],
+    ["lineNumbers", "boolean", "false"],
+    ["codeHeight", "number"],
+    ["fillHeight", "boolean", "false"],
+    ["previewPadding", "SpacingToken", "'l'"],
+    ["onInstanceChange", "(index: number) => void"],
+    ["...flex"]
+  ]}
+/>
+

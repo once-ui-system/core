@@ -1,0 +1,69 @@
+---
+title: "Quick start"
+summary: "Magic Store is a comprehensive, SEO-friendly, responsive e-commerce solution built with Once UI and Fourthwall."
+image: "/images/docs/magic-store.jpg"
+updatedAt: "2025-04-11"
+navLabel: "Quick start"
+navIcon: "learn"
+---
+
+<Feedback icon vertical="center" description={<>Once UI Pro is required to use Magic Store. <SmartLink href="https://once-ui.com/pro">Subscribe</SmartLink> to gain access to the GitHub repository.</>}/>
+
+## About
+
+Magic Store is a complete e-commerce solution built with Once UI and powered by Fourthwall. Once UI provides an easy-to-customize and responsive storefront, while Fourthwall handles the payment processing, manufacturing and shipping. You can set up a fully-functional e-commerce store with Magic Store in minutes, without writing a single line of code.
+
+## License
+
+Magic Store is licensed under the [Dopler CC license](https://once-ui.com/products/magic-store). The license allows for personal, internal or external and commercial use, but prohibits distribution of the source code, redistribution, or monetization of the source code in any way.
+
+## Quick start
+
+Clone the git repository:
+
+<CodeBlock compact marginBottom="16" codes={[
+  {
+    code: "git clone https://github.com/once-ui-system/magic-store.git",
+    language: "bash"
+  }
+]} />
+
+Install the necessary dependencies:
+
+<CodeBlock compact marginBottom="16" codes={[
+  {
+    code: "npm install",
+    language: "bash"
+  }
+]} />
+
+Start the local development server:
+
+<CodeBlock compact marginBottom="16" codes={[
+  {
+    code: "npm run dev",
+    language: "bash"
+  }
+]} />
+
+## Next steps
+
+1. [Set up a store](https://link.fourthwall.com/ref/design-engineers-club) on Fourthwall.
+2. [Make some products](https://my-shop.fourthwall.com/admin/dashboard/products/all/) and [create a collection](https://my-shop.fourthwall.com/admin/dashboard/products/collections/).
+3. After you have signed up, [get a storefront token](https://my-shop.fourthwall.com/admin/dashboard/settings/for-developers).
+4. Fill out the environment variables below in `.env.local`:
+
+<CodeBlock marginBottom="16" codes={[
+  {
+    code: `NEXT_PUBLIC_FW_STOREFRONT_TOKEN="<your storefront token>" # Example: ptkn_...
+NEXT_PUBLIC_FW_CHECKOUT="<your store url>" # Example: vercel-shop.fourthwall.com. Used for checkout
+NEXT_PUBLIC_VERCEL_URL="<the url of your vercel site>" # Example: fw-commerce.vercel.app. This is used for sitemap.xml + robots.txt.
+`,
+    language: "tsx",
+    label: ".env.local"
+  }
+]} />
+
+This will sync the products and collections between your Fourthwall store and Magic Store.
+
+5. Add the same variables to your hosting provider's environment variables before deploying the app.

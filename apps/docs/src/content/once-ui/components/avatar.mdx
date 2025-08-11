@@ -1,0 +1,153 @@
+---
+title: "Avatar"
+summary: "The Avatar component displays a user's profile picture, initials, or fallback icon in a circular container."
+updatedAt: "2025-05-05"
+docs: "once-ui/components/avatar.mdx"
+github: "components/Avatar.tsx"
+navLabel: "Avatar"
+navIcon: "components"
+---
+
+A versatile component for displaying user profile images, initials, or fallback icons in a circular container. Commonly used in user interfaces to represent people.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Avatar src="/images/avatar.jpg" size="l" />
+      <Avatar size="l" value="Q" />
+      <Avatar size="l" empty />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="16">
+    <Avatar src="/images/avatar.jpg" size="l" />
+    <Avatar size="l" value="Q" />
+    <Avatar size="l" empty />
+</Row>`,
+      language: "tsx",
+      label: "Avatar"
+    }
+  ]}
+/>
+
+## Sizes
+
+Use the T-shirt size model or set sizes with numbers (REM).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="24" center>
+      <Row gap="16" horizontal="center" vertical="center">
+        <Avatar size={1.5} value="A" />
+        <Avatar size={2.5} value="B" />
+        <Avatar size={3.5} value="C" />
+        <Avatar size={4.5} value="D" />
+        <Avatar size={5.5} value="E" />
+      </Row>
+      <Row gap="16" horizontal="center" vertical="center">
+        <Avatar size="xs" value="A" />
+        <Avatar size="s" value="B" />
+        <Avatar size="m" value="C" />
+        <Avatar size="l" value="D" />
+        <Avatar size="xl" value="E" />
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="16" center>
+    <Avatar size={1.5} value="A" />
+    <Avatar size={2.5} value="B" />
+    <Avatar size={3.5} value="C" />
+    <Avatar size={4.5} value="D" />
+    <Avatar size={5.5} value="E" />
+  </Row>
+  <Row gap="16" center>
+    <Avatar size="xs" value="A" />
+    <Avatar size="s" value="B" />
+    <Avatar size="m" value="C" />
+    <Avatar size="l" value="D" />
+    <Avatar size="xl" value="E" />
+</Row>`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+## Status indicator
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Avatar value="G" statusIndicator={{ color: "green" }} />
+      <Avatar value="Y" statusIndicator={{ color: "yellow" }} />
+      <Avatar value="R" statusIndicator={{ color: "red" }} />
+      <Avatar value="G" statusIndicator={{ color: "gray" }} />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="16">
+    <Avatar value="G" statusIndicator={{ color: "green" }} />
+    <Avatar value="Y" statusIndicator={{ color: "yellow" }} />
+    <Avatar value="R" statusIndicator={{ color: "red" }} />
+    <Avatar value="G" statusIndicator={{ color: "gray" }} />
+</Row>`,
+      language: "tsx",
+      label: "Status indicator"
+    }
+  ]}
+/>
+
+## Loading state
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" center>
+      <Avatar size="l" loading />
+      <Avatar size="m" loading />
+      <Avatar size="s" loading />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="16">
+    <Avatar size="l" loading />
+    <Avatar size="m" loading />
+    <Avatar size="s" loading />
+</Row>`,
+      language: "tsx",
+      label: "Loading"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["size", ["xs", "s", "m", "l", "xl", "number"], "m"],
+    ["value", "string"],
+    ["src", "string"],
+    ["loading", "boolean", "false"],
+    ["empty", "boolean", "false"],
+    ["statusIndicator", "object"],
+    ["style"],
+    ["className"],
+    ["...flex"]
+  ]}
+/>

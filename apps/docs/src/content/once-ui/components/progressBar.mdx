@@ -1,0 +1,103 @@
+---
+title: "ProgressBar"
+summary: "The ProgressBar component shows the progress of an action or task with an animation as it progresses."
+updatedAt: "2025-07-31"
+docs: "once-ui/components/progressBar.mdx"
+github: "components/ProgressBar.tsx"
+navLabel: "ProgressBar"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+A component for showing the progress of an action or task with an animation as it progresses.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <ProgressBarExample />
+  }
+  codes={[
+    {
+      code:
+`const [value, setValue] = useState<number>(0);
+  
+useEffect(() => {
+    let currentValue = 0;
+    const interval = setInterval(() => {
+      currentValue += 1;
+      setValue(currentValue);
+      
+      if (currentValue >= 100) {
+        clearInterval(interval);
+      }
+    }, 50);
+    
+    return () => clearInterval(interval);
+}, []);
+  
+return (
+    <ProgressBar value={value} />
+);`,
+      language: "tsx",
+      label: "ProgressBar"
+    }
+  ]}
+/>
+
+## Label
+
+You can disable the label by setting the `label` prop to `false`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ProgressBar value={50} label={false} />
+  }
+  codes={[
+    {
+      code:
+`<ProgressBar value={50} label={false} />`,
+      language: "tsx",
+      label: "Label"
+    }
+  ]}
+/>
+
+## BarBackground
+
+You can modify the bar background by setting the `barBackground` prop to a solid style property.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ProgressBar value={50} barBackground="accent-medium" />
+  }
+  codes={[
+    {
+      code:
+`<ProgressBar value={50} barBackground="accent-medium" />`,
+      language: "tsx",
+      label: "BarBackground"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["value", "number", "0-100"],
+    ["min", "number", "0"],
+    ["max", "number", "100"],
+    ["label", "boolean", "true"],
+    ["barBackground", "StyleProps['solid']", "brand-strong"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>

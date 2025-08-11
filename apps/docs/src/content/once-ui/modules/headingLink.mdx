@@ -1,0 +1,129 @@
+---
+title: "HeadingLink"
+summary: "The HeadingLink component creates linkable section headings that work with the HeadingNav component for automatic table of contents navigation."
+updatedAt: "2025-06-15"
+docs: "once-ui/modules/headingLink.mdx"
+github: "modules/navigation/HeadingLink.tsx"
+navLabel: "HeadingLink"
+navIcon: "modules"
+---
+
+The `HeadingLink` component creates linkable section headings that automatically integrate with the HeadingNav component to provide a smooth navigation experience throughout your content.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <HeadingLink as="h2" id="example-section">
+        Example Section
+      </HeadingLink>
+      <Text onBackground="neutral-weak">
+        This is a section with a linkable heading
+      </Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<HeadingLink as="h2" id="example-section">
+    Example Section
+</HeadingLink>
+<Text onBackground="neutral-weak">
+    This is a section with a linkable heading
+</Text>`,
+      language: "tsx",
+      label: "HeadingLink"
+    }
+  ]}
+/>
+
+## Usage
+
+Use the `HeadingLink` component to create section headings throughout your content. When used with the `HeadingNav` component, these headings will automatically appear in the navigation.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <HeadingLink as="h2" id="first-section">
+        First Section
+      </HeadingLink>
+      <Text onBackground="neutral-weak" marginBottom="16">
+        Content for the first section
+      </Text>
+      <HeadingLink as="h3" id="subsection">
+        Subsection
+      </HeadingLink>
+      <Text onBackground="neutral-weak">
+        Content for the subsection
+      </Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<HeadingLink as="h2" id="first-section">
+    First Section
+</HeadingLink>
+<Text onBackground="neutral-weak" marginBottom="16">
+    Content for the first section
+</Text>
+<HeadingLink as="h3" id="subsection">
+    Subsection
+</HeadingLink>
+<Text onBackground="neutral-weak">
+    Content for the subsection
+</Text>`,
+      language: "tsx",
+      label: "Multiple headings"
+    }
+  ]}
+/>
+
+## Styling
+
+The `HeadingLink` component can be customized with the standard `Heading` styling props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth>
+      <HeadingLink as="h2" id="styled-heading" onBackground="accent-weak" marginBottom="16">
+        Styled Heading
+      </HeadingLink>
+      <Text onBackground="neutral-weak">
+        This heading has custom styling
+      </Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<HeadingLink 
+    as="h2" 
+    id="styled-heading" 
+    onBackground="accent-weak"
+    marginBottom="16"
+>
+    Styled Heading
+</HeadingLink>`,
+      language: "tsx",
+      label: "Styling"
+    }
+  ]}
+/>
+
+## HeadingNav
+
+The `HeadingLink` component works seamlessly with the `HeadingNav` component to create an automatic table of contents.
+
+## Features
+
+- Creates linkable section headings with anchor IDs
+- Automatically integrates with HeadingNav for table of contents
+- Supports all heading levels (h1-h6)
+- Provides hover link indicators for easy navigation
+- Fully accessible with proper heading semantics

@@ -1,0 +1,84 @@
+---
+title: "DatePicker"
+summary: "A flexible calendar component for date and time selection with support for range selection and time picking."
+updatedAt: "2025-05-13"
+docs: "once-ui/form-controls/datePicker.mdx"
+github: "components/DatePicker.tsx"
+navLabel: "DatePicker"
+navIcon: "switch"
+---
+
+The DatePicker component provides an interactive calendar interface for selecting dates and times. It supports various features like time selection, month navigation, and date range selection.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <BasicDatePickerExample />
+  }
+  codes={[
+    {
+      code:
+`<DatePicker 
+    value={selectedDate}
+    onChange={handleDateChange}
+/>`,
+      language: "tsx",
+      label: "DatePicker"
+    }
+  ]}
+/>
+
+## TimePicker
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <DateTimePickerExample />
+  }
+  codes={[
+    {
+      code:
+`<DatePicker 
+    value={dateTime}
+    onChange={handleDateTimeChange}
+    timePicker
+/>`,
+      language: "tsx",
+      label: "TimePicker"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  content={[
+    ["value", "Date"],
+    ["onChange", "(date: Date) => void"],
+    ["minDate", "Date"],
+    ["maxDate", "Date"],
+    ["previousMonth", "boolean", "true"],
+    ["nextMonth", "boolean", "true"],
+    ["timePicker", "boolean", "false"],
+    ["defaultDate", "Date"],
+    ["defaultTime", "{ hours: number; minutes: number }"],
+    ["size", "'s' | 'm' | 'l'", "'m'"],
+    ["currentMonth", "number", "Current month"],
+    ["currentYear", "number", "Current year"],
+    ["onMonthChange", "(increment: number) => void"],
+    ["range", "{ startDate?: Date; endDate?: Date }"],
+    ["onHover", "(date: Date | null) => void"],
+    ["className"],
+    ["style"]
+  ]}
+/>
+
+## Accessibility
+
+- Keyboard navigation support for date selection
+- Clear visual indicators for selected dates
+- Proper ARIA attributes for screen readers

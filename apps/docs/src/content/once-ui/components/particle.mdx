@@ -1,0 +1,237 @@
+---
+title: "Particle"
+summary: "The Particle component provides customizable decorative particles with gradients, dots, grids, lines, and masking effects."
+updatedAt: "2025-05-08"
+docs: "once-ui/components/particle.mdx"
+github: "components/Particle.tsx"
+navLabel: "Particle"
+navIcon: "components"
+---
+
+The `Particle` component provides customizable decorative particles with gradients, dots, grids, lines, and masking effects.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Particle
+      fill
+      interactive
+      speed={3}
+      interactionRadius={100}
+      height={24}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Particle
+    fill
+    interactive
+    speed={3}
+    interactionRadius={100}
+    height={24}
+/>`,
+      language: "tsx",
+      label: "Particle"
+    }
+  ]}
+/>
+
+## Density
+
+The `density` prop controls the number of particles to display.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Particle
+      fill
+      interactive
+      height={24}
+      density={250}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Particle
+    fill
+    height={24}
+    density={250}
+/>`,
+      language: "tsx",
+      label: "Density"
+    }
+  ]}
+/>
+
+## Color
+
+The `color` prop controls the color of the particles.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Particle
+      fill
+      interactive
+      height={24}
+      color="accent-solid-medium"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Particle
+    fill
+    height={24}
+    color="brand-background-strong"
+/>`,
+      language: "tsx",
+      label: "Color"
+    }
+  ]}
+/>
+
+## Size
+
+The `size` prop controls the size of the particles.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Particle
+      fill
+      interactive
+      height={24}
+      size="8"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Particle
+    fill
+    height={24}
+    size="8"
+/>`,
+      language: "tsx",
+      label: "Size"
+    }
+  ]}
+/>
+
+## Speed
+
+The `speed` prop controls the speed of the particles.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Particle
+      fill
+      height={24}
+      speed={5}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Particle
+    fill
+    height={24}
+    speed={5}
+/>`,
+      language: "tsx",
+      label: "Speed"
+    }
+  ]}
+/>
+
+## Interactive
+
+The `interactive` prop controls whether the particles are interactive. Use the `interactionRadius` prop to control the radius of the interaction area.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Particle
+      fill
+      interactive
+      height={24}
+      interactionRadius={100}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Particle
+    fill
+    height={24}
+    interactive
+/>`,
+      language: "tsx",
+      label: "Interactive"
+    }
+  ]}
+/>
+
+## Opacity
+
+The `opacity` prop controls the opacity of the particles.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Particle
+      fill
+      interactive
+      height={24}
+      opacity={50}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Particle
+    fill
+    height={24}
+    opacity={50}
+/>`,
+      language: "tsx",
+      label: "Opacity"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["density", "number", "100"],
+    ["color", "string", "brand-on-background-weak"],
+    ["size", "SpacingToken", "2"],
+    ["speed", "number", "0.3"],
+    ["interactive", "boolean", "false"],
+    ["interactionRadius", "number", "20"],
+    ["opacity", "DisplayProps['opacity']", "100"],
+    ["className"],
+    ["style"],
+    ["children"],
+    ["...flex"]
+  ]}
+/>

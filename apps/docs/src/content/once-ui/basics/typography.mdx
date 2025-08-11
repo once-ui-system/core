@@ -1,0 +1,143 @@
+---
+title: "Typography"
+summary: "Once UI is an open-source design system built for indie creators, small teams, and startups to fuel the next generation of web applications."
+updatedAt: "2025-05-04"
+docs: "once-ui/basics/typography.mdx"
+navLabel: "Typography"
+navIcon: "lightbulb"
+---
+
+
+Once UI manages typography properties with the [`Text`](/once-ui/components/text) and 
+[`Heading`](/once-ui/components/heading) components. They apply utility classes and CSS variables under the hood. See the [Config](/once-ui/config) page for our recommended font setup.
+
+## Font family
+
+Add `font-family` classes to elements.
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Class" },
+      { content: "Variable" },
+      { content: "Default" },
+    ],
+    rows: [
+      [".font-display", <InlineCode>var(--font-heading)</InlineCode>, <InlineCode>var(--font-primary)</InlineCode>],
+      [".font-heading", <InlineCode>var(--font-heading)</InlineCode>, <InlineCode>var(--font-primary)</InlineCode>],
+      [".font-body", <InlineCode>var(--font-body)</InlineCode>, <InlineCode>var(--font-primary)</InlineCode>],
+      [".font-label", <InlineCode>var(--font-label)</InlineCode>, <InlineCode>var(--font-primary)</InlineCode>],
+      [".font-code", <InlineCode>var(--font-code)</InlineCode>, <InlineCode>var(--font-code)</InlineCode>]
+    ]
+  }}
+/>
+
+## Font size
+
+Add `font-size` classes to elements. The value adjusts to the adjacent or closest parent `font-family` class.
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Class" },
+      { content: "Variable" },
+    ],
+    rows: [
+      [".font-size-inherit", "—"],
+      [".font-xl", "dynamic"],
+      [".font-l", "dynamic"],
+      [".font-m", "dynamic"],
+      [".font-s", "dynamic"],
+      [".font-xs", "dynamic"]
+    ]
+  }}
+/>
+
+## Font weight
+
+Add `font-weight` classes to elements. The value adjusts to the adjacent or closest parent `font-family` class.
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Class" },
+      { content: "Variable" },
+    ],
+    rows: [
+      [".font-weight-inherit", "—"],
+      [".font-default", "dynamic"],
+      [".font-strong", "dynamic"]
+    ]
+  }}
+/>
+
+## Color
+
+Learn about setting `color` properties in the
+<SmartLink href="/once-ui/color#on-background">color documentation</SmartLink>.
+        
+## Font scaling
+
+Modify the `font-size` of the HTML element for different breakpoints.
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Variable" },
+      { content: "Default" },
+    ],
+    rows: [
+      [<InlineCode>var(--font-scaling-desktop)</InlineCode>, <InlineCode>16px</InlineCode>],
+      [<InlineCode>var(--font-scaling-tablet)</InlineCode>, <InlineCode>16px</InlineCode>],
+      [<InlineCode>var(--font-scaling-mobile)</InlineCode>, <InlineCode>16px</InlineCode>]
+    ]
+  }}
+/>
+        
+## Font multiply
+
+Modify the `font-size` scaling factor individually for different `font-family` classes.
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Variable" },
+      { content: "Default" },
+    ],
+    rows: [
+      [<InlineCode>var(--font-size-heading-multiplier)</InlineCode>, <InlineCode>1</InlineCode>],
+      [<InlineCode>var(--font-size-body-multiplier)</InlineCode>, <InlineCode>1</InlineCode>],
+      [<InlineCode>var(--font-size-label-multiplier)</InlineCode>, <InlineCode>1</InlineCode>]
+    ]
+  }}
+/>
+        
+## Line multiply
+
+Modify the `line-height` scaling factor individually for different `font-family` classes.
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Variable" },
+      { content: "Default" },
+    ],
+    rows: [
+      [<InlineCode>var(--line-height-heading-multiplier)</InlineCode>, <InlineCode>1</InlineCode>],
+      [<InlineCode>var(--line-height-body-multiplier)</InlineCode>, <InlineCode>1</InlineCode>],
+      [<InlineCode>var(--line-height-label-multiplier)</InlineCode>, <InlineCode>1</InlineCode>]
+    ]
+  }}
+/>

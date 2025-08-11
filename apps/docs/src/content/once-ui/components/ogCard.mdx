@@ -1,0 +1,197 @@
+---
+title: "OgCard"
+summary: "A component that displays rich link previews with Open Graph metadata for URLs."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/ogCard.mdx"
+github: "components/OgCard.tsx"
+navLabel: "OgCard"
+navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
+---
+
+The `OgCard` component displays rich link previews for URLs by fetching and rendering Open Graph metadata. It's perfect for showcasing external links with preview images, titles, and descriptions.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <OgCard 
+      url="https://once-ui.com"
+    />
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "OgCard",
+      code:
+`<OgCard 
+    url="https://once-ui.com"
+/>`,
+    }
+  ]}
+/>
+
+## Mock data
+
+Instead of fetching Open Graph data from a URL, you can directly provide the data to display.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <OgCard 
+      title="Design Engineers Club"
+      description="The Design Engineers Club is a community of vibe coders."
+      image="/images/docs/once-ui/vibe-coding-dark.jpg"
+      favicon="/images/avatar.jpg"
+      url="https://designengineers.club"
+    />
+  }
+  codes={[
+    {
+      code:
+`<OgCard 
+    title="Design Engineers Club"
+    description="The Design Engineers Club is a community of vibe coders."
+    image="/images/docs/once-ui/vibe-coding-dark.jpg"
+    favicon="/images/avatar.jpg"
+    url="https://designengineers.club"
+/>`,
+      language: "tsx",
+      label: "Mock data"
+    }
+  ]}
+/>
+
+## Direction
+
+The OgCard component supports different layout directions.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <OgCard 
+        url="https://once-ui.com/about"
+        direction="row"
+      />
+      <OgCard 
+        url="https://once-ui.com/products"
+        direction="row-reverse"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<OgCard 
+    url="https://once-ui.com/about"
+    direction="row"
+/>
+
+<OgCard 
+    url="https://once-ui.com/products"
+    direction="row-reverse"
+/>`,
+      language: "tsx",
+      label: "Direction"
+    }
+  ]}
+/>
+
+## Size
+
+The OgCard component supports different sizes.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <OgCard
+        size="s"
+        url="https://once-ui.com/about"
+      />
+      <OgCard
+        size="m"
+        url="https://once-ui.com/products"
+      />
+      <OgCard
+        size="l"
+        url="https://once-ui.com/customize"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<OgCard 
+    size="s"
+    url="https://once-ui.com/about"
+/>
+<OgCard 
+    size="m"
+    url="https://once-ui.com/products"
+/>
+<OgCard 
+    size="l"
+    url="https://once-ui.com/customize"
+/>`,
+      language: "tsx",
+      label: "Size"
+    }
+  ]}
+/>
+
+## Custom style
+
+The `OgCard` extends the `Card` component, so you can use all `Card` props to customize its appearance.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <OgCard 
+      url="https://once-ui.com/customize"
+      background="brand-alpha-weak"
+      border="brand-alpha-medium"
+      shadow="l"
+    />
+  }
+  codes={[
+    {
+      code:
+`<OgCard 
+    url="https://once-ui.com/customize"
+    direction="column"
+    background="brand-alpha-weak"
+    border="brand-alpha-medium"
+    shadow="l"
+/>`,
+      language: "tsx",
+      label: "Custom style"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["url", "string"],
+    ["title", ["string", "false"]],
+    ["description", ["string", "false"]],
+    ["image", ["string", "false"]],
+    ["favicon", ["string", "false"]],
+    ["...card", "CardProps"]
+  ]}
+/>
+
+## Notes
+
+- The component automatically fetches favicons for the domain
+- Images are proxied through an API endpoint to avoid CORS issues
+- You can overwrite the default props by providing static values
+- You can set any value to `false` to disable it

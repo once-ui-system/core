@@ -1,0 +1,93 @@
+---
+title: "BarChart"
+summary: "A versatile component for displaying and formatting code snippets with syntax highlighting, copy functionality, and interactive previews."
+updatedAt: "2025-05-14"
+docs: "once-ui/data/barChart.mdx"
+github: "modules/data/BarChart.tsx"
+navLabel: "BarChart"
+navIcon: "barChart"
+---
+
+The `BarChart` component provides a way to display bar charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features.
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  title="The TikTok Takeover"
+  description="Avg. daily time spent per user on TikTok (minutes)"
+  barWidth="xl"
+  legend={{
+    display: false
+  }}
+  series={{
+    key: "Minutes",
+    color: "contrast"
+  }}
+  data={[
+    { date: "2020-01-01", Minutes: 20, label: "2020" },
+    { date: "2021-01-01", Minutes: 40, label: "2021" },
+    { date: "2022-01-01", Minutes: 65, label: "2022" },
+    { date: "2023-01-01", Minutes: 85, label: "2023" },
+    { date: "2024-01-01", Minutes: 95, label: "2024" },
+    { date: "2025-01-01", Minutes: 180, label: "2025 (proj.)" }
+  ]}
+/>
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  title="Daily Time Spent on Activities"
+  description="Social media vs. reading"
+  axis="x"
+  barWidth="xl"
+  series={{
+    key: "Minutes",
+    color: "indigo"
+  }}
+  data={[
+    { activity: "Reading", Minutes: 16 },
+    { activity: "Social Media", Minutes: 144 },
+  ]}
+/>
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  title="Quarterly revenue"
+  description="How much dough we made per quarter in 2023 and 2024"
+    data={[
+      { name: "Q1", Income: 35000, Expenses: 45000, Profit: 30000 },
+      { name: "Q2", Income: 42000, Expenses: 48000, Profit: 36000 },
+      { name: "Q3", Income: 55000, Expenses: 51000, Profit: 40000 },
+      { name: "Q4", Income: 75000, Expenses: 52000, Profit: 48000 },
+    ]}
+    series={[
+      { key: "Income" },
+      { key: "Expenses" },
+      { key: "Profit" }
+    ]}
+/>
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  data-viz="divergent"
+  title="Wealth distribution"
+  description="Global share of wealth held by Top 1% vs Bottom 99%, 2000–2025"
+  barWidth="s"
+  legend={{
+    position: "top-center",
+  }}
+  series={[
+    { key: "Top 1%" },
+    { key: "Bottom 99%" }
+  ]}
+  data={[
+    { name: "2000", "Top 1%": 32.0, "Bottom 99%": 68.0 },
+    { name: "2005", "Top 1%": 33.0, "Bottom 99%": 67.0 },
+    { name: "2010", "Top 1%": 35.4, "Bottom 99%": 64.6 },
+    { name: "2015", "Top 1%": 45.0, "Bottom 99%": 55.0 },
+    { name: "2020", "Top 1%": 50.0, "Bottom 99%": 50.0 },
+    { name: "2025 (est.)", "Top 1%": 52.5, "Bottom 99%": 47.5 }
+  ]}
+/>

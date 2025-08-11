@@ -1,0 +1,184 @@
+---
+title: "IconProvider"
+summary: "Once UI is an open-source design system built for indie creators, small teams, and startups to fuel the next generation of web applications."
+updatedAt: "2025-06-08"
+docs: "once-ui/contexts/iconProvider.mdx"
+github: "contexts/IconProvider.tsx"
+navLabel: "IconProvider"
+navIcon: "chip"
+---
+
+The `IconProvider` component is a context provider that allows you to pass an object of icon instances to your application. Add any icon from the [react-icons](https://react-icons.github.io/react-icons/) library to the provider.
+
+## Simple setup
+
+Wrap your app with `IconProvider` and pass it the icons as props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { HiHome } from "react-icons/hi2";
+
+<IconProvider icons={{home: HiHome}}>
+    {children}
+</IconProvider>`,
+      language: "tsx",
+      label: "layout.tsx"
+    }
+  ]}
+/>
+
+## Advanced setup
+
+You can create a separate file for all icons, for example `icons.ts`. We also recommend using a `Providers` component to wrap your app.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={32}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { iconLibrary } from "../resources/icons.ts";
+import { IconProvider, ToastProvider, ThemeProvider, DataThemeProvider } from "@once-ui-system/core";
+
+export function Providers({ children }: {
+    children: React.ReactNode
+}) {
+    return (
+      <ThemeProvider>
+        <DataThemeProvider>
+          <ToastProvider>
+            <IconProvider icons={iconLibrary}>
+              {children}
+            </IconProvider>
+          </ToastProvider>
+        </DataThemeProvider>
+      </ThemeProvider>
+    );
+}`,
+      language: "tsx",
+      highlight: "1,11,13",
+      label: "Providers.tsx",
+    },
+    {
+    code:
+`// This is the default iconset used by Once UI
+import { IconType } from "react-icons";
+
+import {
+    HiChevronUp,
+    HiChevronDown,
+    HiChevronRight,
+    HiChevronLeft,
+    HiOutlineArrowPath,
+    HiOutlineSun,
+    HiOutlineMoon,
+    HiOutlineEye,
+    HiOutlineEyeSlash,
+    HiOutlineClipboard,
+    HiOutlineMagnifyingGlass,
+    HiOutlineLink,
+    HiArrowUpRight,
+    HiOutlineShieldCheck,
+    HiOutlineSparkles,
+    HiOutlineComputerDesktop,
+    HiOutlineQuestionMarkCircle,
+    HiOutlineInformationCircle,
+    HiOutlineExclamationTriangle,
+    HiOutlineExclamationCircle,
+    HiOutlineCheckCircle,
+    HiOutlineXMark,
+    HiOutlineUser,
+    HiOutlineEyeDropper,
+    HiOutlineMinus,
+    HiOutlinePlus,
+    HiOutlineCalendar,
+    HiOutlineDocumentDuplicate,
+    HiOutlineCheck,
+    HiOutlineArrowsPointingIn,
+    HiOutlineArrowsPointingOut,
+} from "react-icons/hi2";
+
+export const iconLibrary: Record<string, IconType> = {
+    chevronUp: HiChevronUp,
+    chevronDown: HiChevronDown,
+    chevronRight: HiChevronRight,
+    chevronLeft: HiChevronLeft,
+    refresh: HiOutlineArrowPath,
+    light: HiOutlineSun,
+    dark: HiOutlineMoon,
+    help: HiOutlineQuestionMarkCircle,
+    info: HiOutlineInformationCircle,
+    warning: HiOutlineExclamationTriangle,
+    danger: HiOutlineExclamationCircle,
+    checkbox: HiOutlineCheck,
+    check: HiOutlineCheckCircle,
+    copy: HiOutlineDocumentDuplicate,
+    eyeDropper: HiOutlineEyeDropper,
+    clipboard: HiOutlineClipboard,
+    person: HiOutlineUser,
+    close: HiOutlineXMark,
+    openLink: HiOutlineLink,
+    arrowUpRight: HiArrowUpRight,
+    minus: HiOutlineMinus,
+    plus: HiOutlinePlus,
+    calendar: HiOutlineCalendar,
+    eye: HiOutlineEye,
+    eyeOff: HiOutlineEyeSlash,
+    search: HiOutlineMagnifyingGlass,
+    security: HiOutlineShieldCheck,
+    sparkle: HiOutlineSparkles,
+    computer: HiOutlineComputerDesktop,
+    minimize: HiOutlineArrowsPointingIn,
+    maximize: HiOutlineArrowsPointingOut,
+};
+
+export type IconLibrary = typeof iconLibrary;
+export type IconName = keyof IconLibrary;
+`,
+    language: "tsx",
+    label: "icons.ts",
+  }
+  ]}
+/>
+
+## Default icons
+
+Overwrite the default icons used in Once UI components (for example the chevron in the `Select` component) by providing new icons with the same keys to the `IconProvider`.
+
+## Icon component
+
+The <SmartLink suffixIcon="arrowUpRight" href="/once-ui/components/icon">`Icon`</SmartLink> component is a wrapper around icon instances to control their size and color. We recommend
+inserting icons through this component.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`<Icon
+    name="help"
+    onBackground="neutral-medium"
+    size="m"/>`,
+    language: "tsx",
+    label: "Example",}
+  ]}
+  preview={<Row gap="24" wrap>
+      <Icon name="rocket" size="m" />
+      <Icon name="close" size="m" />
+      <Icon name="check" size="m" />
+      <Icon name="info" size="m" />
+      <Icon name="warning" size="m" />
+      <Icon name="chevronDown" size="m" />
+      <Icon name="search" size="m" />
+    </Row>}
+/>

@@ -1,0 +1,55 @@
+# Once UI Documentation
+
+> Comprehensive documentation for Once UI and Magic templates - the open-source design system for indie creators.
+
+## Documentation
+
+- [Get Started](https://docs.once-ui.com/get-started): Complete guide to Once UI templates
+- [Quick Start](https://docs.once-ui.com/once-ui/quick-start): Set up your first Once UI project
+- [Changelog](https://docs.once-ui.com/changelog): View recent updates and releases
+- [Roadmap](https://docs.once-ui.com/roadmap): See what's coming next
+
+## Magic Templates
+
+### Magic Bio
+
+- [Quick Start](https://docs.once-ui.com/magic-bio/quick-start): Set up your bio page
+- [Links](https://docs.once-ui.com/magic-bio/links): Manage your links
+- [Profile](https://docs.once-ui.com/magic-bio/profile): Customize your profile
+- [Analytics](https://docs.once-ui.com/magic-bio/analytics): Track link clicks
+- [SEO](https://docs.once-ui.com/magic-bio/seo): SEO optimization
+
+### Magic Store
+
+- [Quick Start](https://docs.once-ui.com/magic-store/quick-start): Set up your store
+- [Products](https://docs.once-ui.com/magic-store/products): Product management
+- [Collections](https://docs.once-ui.com/magic-store/collections): Collection management
+- [Size Guide](https://docs.once-ui.com/magic-store/size-guide): Product sizing
+- [Promotions](https://docs.once-ui.com/magic-store/promotions): Discounts and offers
+- [Mailchimp](https://docs.once-ui.com/magic-store/mailchimp): Newsletter integration
+- [Styling](https://docs.once-ui.com/magic-store/styling): Customize your store
+- [Compliance](https://docs.once-ui.com/magic-store/compliance): Legal requirements
+- [SEO](https://docs.once-ui.com/magic-store/seo): SEO optimization
+
+### Magic Portfolio
+
+- [Quick Start](https://docs.once-ui.com/magic-portfolio/quick-start): Set up your portfolio
+- [Pages](https://docs.once-ui.com/magic-portfolio/pages): Configure page routing
+- [Content](https://docs.once-ui.com/magic-portfolio/content): Manage your content
+- [Work](https://docs.once-ui.com/magic-portfolio/work): Project showcase
+- [Blog](https://docs.once-ui.com/magic-portfolio/blog): Blog management
+- [Password](https://docs.once-ui.com/magic-portfolio/password): Protected pages
+- [Mailchimp](https://docs.once-ui.com/magic-portfolio/mailchimp): Newsletter integration
+- [Styling](https://docs.once-ui.com/magic-portfolio/styling): Customize your portfolio
+- [SEO](https://docs.once-ui.com/magic-portfolio/seo): SEO settings
+- [Localization](https://docs.once-ui.com/magic-portfolio/localization): Language support
+
+### Magic Docs
+
+- [Quick Start](https://docs.once-ui.com/magic-docs/quick-start): Set up your documentation site
+- [Pages](https://docs.once-ui.com/magic-docs/pages): Configure page routing and access
+- [Components](https://docs.once-ui.com/magic-docs/components): Documentation components
+- [Sidebar](https://docs.once-ui.com/magic-docs/sidebar): Automatic sidebar generation
+- [Search](https://docs.once-ui.com/magic-docs/search): Kbar-powered search
+- [Styling](https://docs.once-ui.com/magic-docs/styling): Customize your docs
+- [SEO](https://docs.once-ui.com/magic-docs/seo): SEO optimization

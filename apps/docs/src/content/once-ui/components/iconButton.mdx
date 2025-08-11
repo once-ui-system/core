@@ -1,0 +1,197 @@
+---
+title: "IconButton"
+summary: "A button component that displays an icon with various styles, sizes, and interactive states."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/iconButton.mdx"
+github: "components/IconButton.tsx"
+navLabel: "IconButton"
+navIcon: "components"
+---
+
+The IconButton component provides a compact, icon-based interactive element for user actions. It's ideal for toolbar actions, navigation controls, and other UI elements where space is limited.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center" wrap>
+      <IconButton icon="check" variant="primary" />
+      <IconButton icon="plus" variant="secondary" />
+      <IconButton icon="chevronDown" variant="tertiary" />
+      <IconButton icon="danger" variant="danger" />
+      <IconButton icon="info" variant="ghost" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<IconButton icon="check" variant="primary" />
+<IconButton icon="plus" variant="secondary" />
+<IconButton icon="chevronDown" variant="tertiary" />
+<IconButton icon="danger" variant="danger" />
+<IconButton icon="info" variant="ghost" />`,
+      language: "tsx",
+      label: "IconButton"
+    }
+  ]}
+/>
+
+## Sizes
+
+IconButtons come in different sizes to accommodate various use cases.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" vertical="center" horizontal="center">
+      <IconButton icon="chevronDown" size="s" />
+      <IconButton icon="chevronDown" size="m" />
+      <IconButton icon="chevronDown" size="l" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<IconButton icon="chevronDown" size="s" />
+<IconButton icon="chevronDown" size="m" />
+<IconButton icon="chevronDown" size="l" />`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+## Tooltip
+
+Add tooltips to provide context for icon buttons.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <IconButton variant="secondary" icon="check" tooltip="Confirm" tooltipPosition="left" />
+      <IconButton variant="secondary" icon="danger" tooltip="Delete" tooltipPosition="top" />
+      <IconButton variant="secondary" icon="info" tooltip="Information" tooltipPosition="bottom" />
+      <IconButton variant="secondary" icon="warning" tooltip="Warning" tooltipPosition="right" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<IconButton variant="secondary" icon="check" tooltip="Confirm" tooltipPosition="left" />
+<IconButton variant="secondary" icon="danger" tooltip="Delete" tooltipPosition="top" />
+<IconButton variant="secondary" icon="info" tooltip="Information" tooltipPosition="bottom" />
+<IconButton variant="secondary" icon="warning" tooltip="Warning" tooltipPosition="right" />`,
+      language: "tsx",
+      label: "Tooltip"
+    }
+  ]}
+/>
+
+## Radius
+
+Customize the border radius of the `IconButton` for different design needs.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="1" horizontal="center">
+      <IconButton icon="chevronLeft" radius="top-left" />
+      <IconButton icon="chevronDown" radius="none" />
+      <IconButton icon="chevronRight" radius="bottom-right" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<IconButton icon="chevronLeft" radius="top-left" />
+<IconButton icon="chevronDown" radius="none" />
+<IconButton icon="chevronRight" radius="bottom-right" />`,
+      language: "tsx",
+      label: "Radius"
+    }
+  ]}
+/>
+
+## As link
+
+IconButtons can function as links when provided with an `href` property.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <IconButton icon="arrowUpRight" href="#" variant="secondary" />
+      <IconButton icon="chevronRight" href="#" variant="tertiary" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<IconButton icon="arrowUpRight" href="#" variant="secondary" />
+<IconButton icon="chevronRight" href="#" variant="tertiary" />`,
+      language: "tsx",
+      label: "Links"
+    }
+  ]}
+/>
+
+## Custom content
+
+Use the children prop to add custom content to the IconButton.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <IconButton>
+        <Text variant="body-strong-s" onSolid="neutral-medium">A</Text>
+      </IconButton>
+      <IconButton variant="secondary">
+        <Text variant="body-strong-s">B</Text>
+      </IconButton>
+      <IconButton variant="tertiary">
+        <Text variant="body-strong-s">C</Text>
+      </IconButton>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<IconButton>
+    <Text variant="body-strong-s" onSolid="neutral-medium">A</Text>
+</IconButton>
+<IconButton variant="secondary">
+    <Text variant="body-strong-s">B</Text>
+</IconButton>
+<IconButton variant="tertiary">
+    <Text variant="body-strong-s">C</Text>
+</IconButton>`,
+      language: "tsx",
+      label: "Custom content"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["icon", "IconName", "refresh"],
+    ["size", ["s", "m", "l"], "m"],
+    ["variant", ["primary", "secondary", "tertiary", "danger", "ghost"], "primary"],
+    ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
+    ["tooltip", "string"],
+    ["tooltipPosition", ["top", "bottom", "left", "right"], "top"],
+    ["href", "string"],
+    ["id", "string"]
+    ["children"],
+    ["className"],
+    ["style"],
+  ]}
+/>

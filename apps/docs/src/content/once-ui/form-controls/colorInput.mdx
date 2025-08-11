@@ -1,0 +1,55 @@
+---
+title: "ColorInput"
+summary: "ColorInput provides a user-friendly color picker with hex value display and visual color preview."
+updatedAt: "2025-05-12"
+docs: "once-ui/form-controls/colorInput.mdx"
+github: "components/ColorInput.tsx"
+navLabel: "ColorInput"
+navIcon: "switch"
+---
+
+The `ColorInput` component provides an enhanced color picker that displays the selected color as a visual preview alongside its hex value. It extends the standard HTML color input with a more user-friendly interface.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ColorInputExample />}
+  codes={[
+    {
+      code:
+`const [colorValue, setColorValue] = useState("#4287f5");
+  
+const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setColorValue(e.target.value);
+};
+
+<ColorInput
+    id="color-input-example"
+    label="Brand Color"
+    value={colorValue}
+    onChange={handleColorChange}
+/>`,
+      language: "tsx",
+      label: "ColorInput"
+    }
+  ]}
+/>
+
+## Features
+
+- **Color Preview**: Shows a visual preview of the selected color
+- **Hex Value Display**: Displays the hex code of the selected color
+- **Native Color Picker**: Uses the browser's native color picker for selection
+- **Reset Option**: Includes a button to clear the selected color
+
+## Props
+
+The `ColorInput` component extends the standard `Input` component props with the following modifications:
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  content={[
+    ["...input"]
+  ]}
+/>

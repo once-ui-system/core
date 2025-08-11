@@ -1,0 +1,152 @@
+---
+title: "Config"
+summary: "Once UI is an open-source design system built for indie creators, small teams, and startups to fuel the next generation of web applications."
+updatedAt: "2025-05-04"
+docs: "once-ui/config.mdx"
+navLabel: "Config"
+navIcon: "learn"
+---
+
+Once UI manages app-level design configuration with the help of Providers. Here's our recommended root `layout.tsx` and `once-ui.config.js` structure:
+
+<CodeBlock
+    marginTop="16"
+    marginBottom="24"
+    codeHeight={48}
+    lineNumbers
+    codes={[
+      {
+        code:
+`import '@once-ui-system/core/css/styles.css';
+import '@once-ui-system/core/css/tokens.css';
+
+import classNames from "classnames";
+import { Column } from "@once-ui-system/core";
+import { fonts } from "../resources/once-ui.config";
+
+interface RootLayoutProps {
+    children: React.ReactNode;
+}
+
+export default async function RootLayout({ children }: RootLayoutProps) {
+    return (
+      <>
+        <Column
+          as="html"
+          lang="en"
+          suppressHydrationWarning
+          className={classNames(
+            fonts.primary.variable,
+            fonts.secondary.variable,
+            fonts.tertiary.variable,
+            fonts.code.variable,
+          )}
+        >
+          <head>
+            <script
+              dangerouslySetInnerHTML={{
+                __html: '
+                  (function() {
+                    try {
+                      const root = document.documentElement;
+                      
+                      const defaultTheme = 'system';
+                      root.setAttribute('data-neutral', 'gray');
+                      root.setAttribute('data-brand', 'blue');
+                      root.setAttribute('data-accent', 'indigo');
+                      root.setAttribute('data-solid', 'contrast');
+                      root.setAttribute('data-solid-style', 'flat');
+                      root.setAttribute('data-border', 'playful');
+                      root.setAttribute('data-surface', 'filled');
+                      root.setAttribute('data-transition', 'all');
+                      root.setAttribute('data-scaling', '100');
+                      root.setAttribute('data-viz-style', 'categorical');
+                      
+                      const resolveTheme = (themeValue) => {
+                        if (!themeValue || themeValue === 'system') {
+                          return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                        }
+                        return themeValue;
+                      };
+                      
+                      const theme = localStorage.getItem('data-theme');
+                      const resolvedTheme = resolveTheme(theme);
+                      root.setAttribute('data-theme', resolvedTheme);
+                      
+                      const styleKeys = ['neutral', 'brand', 'accent', 'solid', 'solid-style', 'viz-style', 'border', 'surface', 'transition', 'scaling'];
+                      styleKeys.forEach(key => {
+                        const value = localStorage.getItem('data-' + key);
+                        if (value) {
+                          root.setAttribute('data-' + key, value);
+                        }
+                      });
+                    } catch (e) {
+                      document.documentElement.setAttribute('data-theme', 'dark');
+                    }
+                  })();
+                ',
+              }}
+            />
+          </head>
+          <ThemeProvider>
+            <DataThemeProvider>
+              <ToastProvider>
+                <IconProvider>
+                  <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}>
+                    {children}
+                  </Column>
+                </IconProvider>
+              </ToastProvider>
+            </DataThemeProvider>
+          </ThemeProvider>
+        </Column>
+      </>
+    );
+}`,
+        language: "tsx",
+        label: "layout.tsx",
+      },
+      {
+        code:
+`import { Geist } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
+
+const heading = Geist({
+    variable: "--font-heading",
+    subsets: ["latin"],
+    display: "swap",
+});
+
+const body = Geist({
+    variable: "--font-body",
+    subsets: ["latin"],
+    display: "swap",
+});
+
+const label = Geist({
+    variable: "--font-label",
+    subsets: ["latin"],
+    display: "swap",
+});
+
+const code = Geist_Mono({
+    variable: "--font-code",
+    subsets: ["latin"],
+    display: "swap",
+});
+
+const fonts = {
+    heading: heading,
+    body: body,
+    label: label,
+    code: code,
+};
+
+export { fonts };`,
+        language: "tsx",
+        label: "once-ui.config.js",
+      },
+    ]}
+/>
+
+This setup provides everything you need to get started with Once UI. Read more about the customization and usage of each provider in the [Contexts](/once-ui/contexts/themeProvider) section.

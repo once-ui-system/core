@@ -1,0 +1,583 @@
+---
+title: "Spacing"
+summary: "Once UI is an open-source design system built for indie creators, small teams, and startups to fuel the next generation of web applications."
+updatedAt: "2025-05-04"
+docs: "once-ui/basics/spacing.mdx"
+navLabel: "Spacing"
+navIcon: "lightbulb"
+---
+
+Once UI utilizes a spacing system based on a custom 8px grid to provide options for setting white spaces effortlessly and consistently.
+
+## Spacing system
+
+Once UI relies on the type called `SpacingToken` to define static and responsive spaces. It's used for margins, paddings, gaps, and position distances. Static spaces are set in REMs and can be referenced with their pixel value calculated with a 16px root font size. For a more illustrative example, visit the [Structure](/once-ui/basics/structure) page. These spacings will slightly adjust based on your `--font-scaling` variables.
+
+<Row gap="4" paddingTop="64" marginBottom="24">
+  {[0, 1, 2, 4, 8, 12, 16, 20, 24, 32, 40, 48, 56, 64, 80, 104, 128, 160].map((size) => (
+    <Background
+      key={size}
+      radius="s"
+      overflow="visible"
+      lines={{display: true, angle: -45, color: "neutral-alpha-weak", size: "8", thickness: 1}}
+      background="neutral-alpha-weak"
+      border="neutral-alpha-medium"
+      center
+      fillWidth
+      style={{ 
+        height: `var(--static-space-${size})`,
+      }}
+    >
+      <InlineCode position="absolute" style={{ top: '-2rem' }}>{size}</InlineCode>
+    </Background>
+  ))}
+</Row>
+
+Responsive spaces are also set in REMs, but they are rescaled at the `m` and `s` breakpoints. They can be accessed through the T-shirt size model.
+
+<Row gap="4" paddingTop="64" marginBottom="24">
+  {['xs', 's', 'm', 'l', 'xl'].map((size) => (
+    <Background
+      key={size}
+      radius="s"
+      overflow="visible"
+      lines={{display: true, angle: -45, color: "neutral-alpha-weak", size: "8", thickness: 1}}
+      background="neutral-alpha-weak"
+      border="neutral-alpha-medium"
+      center
+      fillWidth
+      style={{ 
+        height: `var(--responsive-space-${size})`,
+      }}
+    >
+      <InlineCode position="absolute" style={{ top: '-2rem' }}>{size}</InlineCode>
+    </Background>
+  ))}
+</Row>
+
+## Breakpoints
+
+Once UI uses a custom PostCSS config with custom-media to define and use breakpoints globally. Breakpoints are defined in the `styles/breakpoints.scss` file.
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Breakpoint" },
+      { content: "Variable" },
+      { content: "Value" },
+    ],
+    rows: [
+      [<InlineCode>--s</InlineCode>, <InlineCode>@custom-media --s (max-width: 768px)</InlineCode>, <InlineCode>max-width: 768px</InlineCode>],
+      [<InlineCode>--m</InlineCode>, <InlineCode>@custom-media --m (max-width: 1024px)</InlineCode>, <InlineCode>max-width: 1024px</InlineCode>]
+    ]
+  }}
+/>
+
+<Feedback icon marginTop="24" description={<>We recommend setting paddings and margins with the <InlineCode>Flex</InlineCode> and <InlineCode>Grid</InlineCode> components. Flex props are exposed on most Once UI components to prevent unnecessary nesting.</>} />
+
+## Margin
+
+You can set the static and responsive spacing tokens for different margin properties on any element with utility classes or inline-styles.
+
+### Static margin
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Class" },
+      { content: "Variable" },
+      { content: "Value" },
+    ],
+    rows: [
+      [<InlineCode>margin</InlineCode>, "", ""],
+      [".m-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".m-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".m-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".m-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".m-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".m-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".m-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".m-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".m-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".m-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".m-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".m-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".m-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".m-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".m-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".m-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".m-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".m-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+      
+      [<><InlineCode>margin-left</InlineCode> + <InlineCode>margin-right</InlineCode></>, "", ""],
+      [".mx-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".mx-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".mx-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".mx-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".mx-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".mx-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".mx-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".mx-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".mx-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".mx-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".mx-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".mx-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".mx-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".mx-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".mx-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".mx-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".mx-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".mx-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+      
+      [<><InlineCode>margin-top</InlineCode> + <InlineCode>margin-bottom</InlineCode></>, "", ""],
+      [".my-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".my-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".my-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".my-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".my-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".my-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".my-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".my-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".my-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".my-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".my-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".my-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".my-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".my-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".my-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".my-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".my-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".my-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+    
+      [<InlineCode>margin-top</InlineCode>, "", ""],
+      [".mt-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".mt-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".mt-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".mt-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".mt-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".mt-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".mt-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".mt-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".mt-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".mt-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".mt-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".mt-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".mt-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".mt-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".mt-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".mt-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".mt-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".mt-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+
+      [<InlineCode>margin-right</InlineCode>, "", ""],
+      [".mr-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".mr-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".mr-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".mr-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".mr-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".mr-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".mr-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".mr-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".mr-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".mr-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".mr-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".mr-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".mr-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".mr-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".mr-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".mr-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".mr-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".mr-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+    
+      [<InlineCode>margin-bottom</InlineCode>, "", ""],
+      [".mb-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".mb-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".mb-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".mb-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".mb-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".mb-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".mb-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".mb-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".mb-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".mb-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".mb-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".mb-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".mb-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".mb-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".mb-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".mb-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".mb-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".mb-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+
+      [<InlineCode>margin-left</InlineCode>, "", ""],
+      [".ml-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".ml-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".ml-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".ml-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".ml-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".ml-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".ml-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".ml-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".ml-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".ml-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".ml-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".ml-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".ml-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".ml-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".ml-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".ml-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".ml-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".ml-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+    ]
+  }}
+/>
+
+### Responsive margin
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Class" },
+      { content: "Variable" },
+      { content: "Value" },
+    ],
+    rows: [
+      [<InlineCode>margin</InlineCode>, "", ""],
+      [".m-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".m-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".m-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".m-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".m-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>],
+      
+      [<><InlineCode>margin-left</InlineCode> + <InlineCode>margin-right</InlineCode></>, "", ""],
+      [".mx-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".mx-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".mx-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".mx-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".mx-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+
+      [<><InlineCode>margin-top</InlineCode> + <InlineCode>margin-bottom</InlineCode></>, "", ""],
+      [".my-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".my-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".my-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".my-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".my-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+
+      [<InlineCode>margin-top</InlineCode>, "", ""],
+      [".mt-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".mt-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".mt-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".mt-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".mt-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+
+      [<InlineCode>margin-right</InlineCode>, "", ""],
+      [".mr-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".mr-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".mr-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".mr-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".mr-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+
+      [<InlineCode>margin-bottom</InlineCode>, "", ""],
+      [".mb-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".mb-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".mb-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".mb-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".mb-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+    
+      [<InlineCode>margin-left</InlineCode>, "", ""],
+      [".ml-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".ml-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".ml-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".ml-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".ml-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+    ]
+  }}
+/>
+
+## Padding
+
+You can set the static and responsive spacing tokens for different padding properties on any element with utility classes or inline-styles.
+
+### Static padding
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Class" },
+      { content: "Variable" },
+      { content: "Value" },
+    ],
+    rows: [
+      [<InlineCode>padding</InlineCode>, "", ""],
+      [".p-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".p-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".p-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".p-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".p-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".p-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".p-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".p-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".p-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".p-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".p-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".p-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".p-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".p-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".p-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".p-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".p-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".p-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+      
+      [<><InlineCode>padding-left</InlineCode> + <InlineCode>padding-right</InlineCode></>, "", ""],
+      [".mp-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".mp-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".mp-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".mp-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".mp-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".mp-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".mp-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".mp-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".mp-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".mp-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".mp-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".mp-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".mp-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".mp-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".mp-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".mp-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".mp-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".mp-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+      
+      [<><InlineCode>padding-top</InlineCode> + <InlineCode>padding-bottom</InlineCode></>, "", ""],
+      [".py-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".py-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".py-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".py-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".py-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".py-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".py-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".py-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".py-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".py-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".py-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".py-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".py-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".py-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".py-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".py-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".py-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".py-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+    
+      [<InlineCode>padding-top</InlineCode>, "", ""],
+      [".pt-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".pt-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".pt-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".pt-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".pt-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".pt-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".pt-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".pt-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".pt-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".pt-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".pt-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".pt-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".pt-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".pt-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".pt-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".pt-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".pt-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".pt-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+
+      [<InlineCode>padding-right</InlineCode>, "", ""],
+      [".pr-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".pr-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".pr-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".pr-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".pr-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".pr-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".pr-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".pr-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".pr-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".pr-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".pr-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".pr-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".pr-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".pr-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".pr-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".pr-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".pr-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".pr-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+    
+      [<InlineCode>padding-bottom</InlineCode>, "", ""],
+      [".pb-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".pb-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".pb-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".pb-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".pb-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".pb-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".pb-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".pb-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".pb-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".pb-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".pb-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".pb-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".pb-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".pb-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".pb-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".pb-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".pb-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".pb-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+
+      [<InlineCode>padding-left</InlineCode>, "", ""],
+      [".pl-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".pl-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".pl-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".pl-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".pl-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".pl-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".pl-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".pl-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".pl-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".pl-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".pl-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".pl-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".pl-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".pl-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".pl-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".pl-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".pl-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".pl-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+    ]
+  }}
+/>
+
+### Responsive padding
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Class" },
+      { content: "Variable" },
+      { content: "Value" },
+    ],
+    rows: [
+      [<InlineCode>padding</InlineCode>, "", ""],
+      [".p-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".p-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".p-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".p-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".p-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>],
+      
+      [<><InlineCode>padding-left</InlineCode> + <InlineCode>padding-right</InlineCode></>, "", ""],
+      [".px-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".px-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".px-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".px-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".px-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+
+      [<><InlineCode>padding-top</InlineCode> + <InlineCode>padding-bottom</InlineCode></>, "", ""],
+      [".py-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".py-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".py-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".py-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".py-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+
+      [<InlineCode>padding-top</InlineCode>, "", ""],
+      [".pt-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".pt-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".pt-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".pt-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".pt-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+
+      [<InlineCode>padding-right</InlineCode>, "", ""],
+      [".pr-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".pr-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".pr-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".pr-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".pr-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+
+      [<InlineCode>padding-bottom</InlineCode>, "", ""],
+      [".pb-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".pb-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".pb-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".pb-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".pb-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+    
+      [<InlineCode>padding-left</InlineCode>, "", ""],
+      [".pl-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".pl-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".pl-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".pl-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".pl-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+    ]
+  }}
+/>
+
+## Gap
+
+You can set the static and responsive spacing tokens for different gap properties on any element with utility classes or inline-styles.
+
+### Static gap
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Class" },
+      { content: "Variable" },
+      { content: "Value" },
+    ],
+    rows: [
+      [".g-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
+      [".g-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
+      [".g-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
+      [".g-4", <InlineCode>var(--static-space-4)</InlineCode>, <InlineCode>0.25rem</InlineCode>],
+      [".g-8", <InlineCode>var(--static-space-8)</InlineCode>, <InlineCode>0.5rem</InlineCode>],
+      [".g-12", <InlineCode>var(--static-space-12)</InlineCode>, <InlineCode>0.75rem</InlineCode>],
+      [".g-16", <InlineCode>var(--static-space-16)</InlineCode>, <InlineCode>1rem</InlineCode>],
+      [".g-20", <InlineCode>var(--static-space-20)</InlineCode>, <InlineCode>1.25rem</InlineCode>],
+      [".g-24", <InlineCode>var(--static-space-24)</InlineCode>, <InlineCode>1.5rem</InlineCode>],
+      [".g-32", <InlineCode>var(--static-space-32)</InlineCode>, <InlineCode>2rem</InlineCode>],
+      [".g-40", <InlineCode>var(--static-space-40)</InlineCode>, <InlineCode>2.5rem</InlineCode>],
+      [".g-48", <InlineCode>var(--static-space-48)</InlineCode>, <InlineCode>3rem</InlineCode>],
+      [".g-56", <InlineCode>var(--static-space-56)</InlineCode>, <InlineCode>3.5rem</InlineCode>],
+      [".g-64", <InlineCode>var(--static-space-64)</InlineCode>, <InlineCode>4rem</InlineCode>],
+      [".g-80", <InlineCode>var(--static-space-80)</InlineCode>, <InlineCode>5rem</InlineCode>],
+      [".g-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
+      [".g-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
+      [".g-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
+    ]
+  }}
+/>
+
+### Responsive gap
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Class" },
+      { content: "Variable" },
+      { content: "Value" },
+    ],
+    rows: [
+      [".g-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
+      [".g-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
+      [".g-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
+      [".g-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
+      [".g-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
+    ]
+  }}
+/>

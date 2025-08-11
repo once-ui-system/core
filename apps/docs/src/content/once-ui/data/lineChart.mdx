@@ -1,0 +1,53 @@
+---
+title: "LineChart"
+summary: "A versatile component for displaying and formatting code snippets with syntax highlighting, copy functionality, and interactive previews."
+updatedAt: "2025-05-14"
+docs: "once-ui/data/lineChart.mdx"
+github: "modules/data/LineChart.tsx"
+navLabel: "LineChart"
+navIcon: "lineChart"
+---
+
+The `LineChart` component provides a way to display line charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  variant="outline"
+  axis="x"
+  curve="step"
+  title="Dachstein Glacier Retreat vs. Global Warming"
+  description="Surface area of the Dachstein glacier and global temperature anomaly over time"
+  legend={{
+    display: false,
+  }}
+  date={{
+    start: new Date("1500-01-01"),
+    end: new Date("2030-01-01"),
+    format: "yyyy"
+  }}
+  series={[
+    { key: "Area (km²)", color: "contrast" },
+    { key: "Temp Anomaly (°C)", color: "red" }
+  ]}
+  data={[
+    { date: "1600-01-01", "Area (km²)": 5.6, "Temp Anomaly (°C)": -0.3 },
+    { date: "1625-01-01", "Area (km²)": 5.575, "Temp Anomaly (°C)": -0.4 },
+    { date: "1650-01-01", "Area (km²)": 5.55, "Temp Anomaly (°C)": -0.3 },
+    { date: "1675-01-01", "Area (km²)": 5.525, "Temp Anomaly (°C)": -0.2 },
+    { date: "1700-01-01", "Area (km²)": 5.5, "Temp Anomaly (°C)": -0.4 },
+    { date: "1725-01-01", "Area (km²)": 5.475, "Temp Anomaly (°C)": -0.3 },
+    { date: "1750-01-01", "Area (km²)": 5.45, "Temp Anomaly (°C)": -0.2 },
+    { date: "1775-01-01", "Area (km²)": 5.425, "Temp Anomaly (°C)": -0.1 },
+    { date: "1800-01-01", "Area (km²)": 5.4, "Temp Anomaly (°C)": 0.0 },
+    { date: "1825-01-01", "Area (km²)": 5.375, "Temp Anomaly (°C)": 0.1 },
+    { date: "1850-01-01", "Area (km²)": 5.3, "Temp Anomaly (°C)": 0.2 },
+    { date: "1875-01-01", "Area (km²)": 5.1, "Temp Anomaly (°C)": 0.3 },
+    { date: "1900-01-01", "Area (km²)": 4.9, "Temp Anomaly (°C)": 0.4 },
+    { date: "1925-01-01", "Area (km²)": 4.6, "Temp Anomaly (°C)": 0.5 },
+    { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
+    { date: "1975-01-01", "Area (km²)": 3.4, "Temp Anomaly (°C)": 0.9 },
+    { date: "2000-01-01", "Area (km²)": 2.3, "Temp Anomaly (°C)": 1.1 },
+    { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
+  ]}
+/>

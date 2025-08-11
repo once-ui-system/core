@@ -1,0 +1,50 @@
+---
+title: "HeadingNav"
+summary: "The HeadingNav component provides an automatic table of contents navigation that highlights the current section as you scroll through the page."
+updatedAt: "2025-05-13"
+docs: "once-ui/modules/headingNav.mdx"
+github: "modules/navigation/HeadingNav.tsx"
+navLabel: "HeadingNav"
+navIcon: "modules"
+---
+
+The `HeadingNav` component provides an automatic table of contents navigation that
+highlights the current section as you scroll through the page.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <HeadingNav width={12} position="sticky" top="64" fitHeight />
+  }
+  codes={[
+    {
+      code:
+`<HeadingNav
+    width={12}
+    position="sticky"
+    top="64"
+    fitHeight
+/>`,
+      language: "tsx",
+      label: "HeadingNav"
+    }
+  ]}
+/>
+
+## Features
+
+- Automatically detects and displays page headings
+- Highlights the current section while scrolling
+- Smooth scrolling to sections when clicking links
+- Responsive and accessible navigation
+
+## Usage
+
+Simply add the `HeadingNav` component to your page and use `HeadingLink` or `Heading` components for your
+section headings.
+
+## Customization
+
+The `HeadingNav` component inherits styles from its parent container and can be customized
+using standard CSS properties.

@@ -1,0 +1,16 @@
+{
+  "title": "Magic Portfolio",
+  "order": 2,
+  "pages": {
+    "quick-start": 1,
+    "pages": 2,
+    "styling": 3,
+    "content": 4,
+    "work": 5,
+    "blog": 6,
+    "password": 7,
+    "mailchimp": 8,
+    "localization": 9,
+    "seo": 10
+  }
+}

@@ -1,0 +1,178 @@
+---
+title: "NavIcon"
+summary: "The NavIcon component provides a toggleable hamburger menu icon for navigation interfaces."
+updatedAt: "2025-05-11"
+docs: "once-ui/components/navIcon.mdx"
+github: "components/NavIcon.tsx"
+navLabel: "NavIcon"
+navIcon: "components"
+---
+
+A simple yet effective component for creating hamburger menu icons that can toggle between active and inactive states. NavIcon is commonly used in responsive navigation interfaces to indicate the presence of a menu.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  preview={
+    <NavIconToggle />
+  }
+  codes={[
+    {
+      code:
+`"use client";
+
+import { NavIcon, Flex, Text, Row } from "@once-ui/components";
+import { useState } from "react";
+
+function NavIconToggle() {
+    const [isActive, setIsActive] = useState(false);
+    
+    const handleClick = () => {
+      setIsActive(!isActive);
+    };
+
+    return (
+      <Column fillWidth>
+        <Flex 
+          paddingX="20" 
+          paddingY="8" 
+          background="surface"
+          border="surface"
+          radius="l" 
+          horizontal="between" 
+          vertical="center"
+          fillWidth
+        >
+          <Logo wordmark={false}/>
+          <NavIcon 
+            isActive={isActive} 
+            onClick={handleClick} 
+            aria-label="Toggle navigation menu"
+            aria-expanded={isActive}
+            aria-controls="demo-nav"
+          />
+        </Flex>
+        
+        {isActive && (
+          <Column 
+            id="demo-nav"
+            padding="16" 
+            background="surface" 
+            border="surface"
+            radius="l" 
+            marginTop="8"
+            fillWidth
+            gap="8"
+          >
+            <ToggleButton fillWidth horizontal="start" size="l">
+              Home
+            </ToggleButton>
+            <ToggleButton fillWidth horizontal="start" size="l">
+              Products
+            </ToggleButton>
+            <ToggleButton fillWidth horizontal="start" size="l">
+              About
+            </ToggleButton>
+            <ToggleButton fillWidth horizontal="start" size="l">
+              Contact
+            </ToggleButton>
+          </Column>
+        )}
+      </Column>
+    );
+}`,
+      language: "tsx",
+      label: "NavIcon"
+    }
+  ]}
+/>
+
+## States
+
+NavIcon has two states: `active` and `inactive`, controlled by the `isActive` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <NavIconStates />
+  }
+  codes={[
+    {
+      code:
+`<NavIcon isActive={false} />
+<NavIcon isActive={true} />`,
+      language: "tsx",
+      label: "States"
+    }
+  ]}
+/>
+
+## Customization
+
+The NavIcon component accepts all the props of the `Flex` component, allowing for customization of size, spacing, and other properties.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CustomNavIcon />
+  }
+  codes={[
+    {
+      code:
+`<NavIcon 
+    isActive={isActive} 
+    onClick={handleClick}
+    width="48"
+    height="48"
+    border="neutral-alpha-medium"
+    background="neutral-strong"
+    padding="8"
+    radius="full"
+/>`,
+      language: "tsx",
+      label: "Customization"
+    }
+  ]}
+/>
+
+## Props
+
+<PropsTable
+  content={[
+    ["isActive", "boolean", "false"],
+    ["onClick", "() => void"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>
+
+## Accessibility
+
+The NavIcon component includes a `tabIndex={0}` by default, making it keyboard accessible. When implementing NavIcon in your application, consider the following accessibility best practices:
+
+- Add an `aria-label` or `aria-labelledby` attribute to describe the purpose of the button
+- Use `aria-expanded` to indicate the current state of the menu it controls
+- Ensure the menu that is toggled by the NavIcon is properly accessible
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<NavIcon 
+    isActive={isMenuOpen} 
+    onClick={toggleMenu}
+    aria-label="Toggle navigation menu"
+    aria-expanded={isMenuOpen}
+    aria-controls="mobile-nav"
+/>`,
+      language: "tsx",
+      label: "Accessibility"
+    }
+  ]}
+/>

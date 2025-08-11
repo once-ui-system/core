@@ -1,0 +1,178 @@
+---
+title: "Media"
+summary: "The Media component intelligently renders images, YouTube videos, or MP4s with optional loading states and fullscreen enlargement support."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/media.mdx"
+github: "components/Media.tsx"
+navLabel: "Media"
+navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
+---
+
+`Media` handles responsive media content with support for lazy loading, aspect ratios, and intelligent rendering of videos or embeds. Use it for dynamic content blocks with consistent behavior.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Media
+      src="/images/docs/once-ui/vibe-coding-light.jpg"
+      alt="Preview"
+      radius="xl"
+      border="neutral-alpha-medium"
+      aspectRatio="16/9"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Media
+    src="/image.jpg"
+    alt="Preview"
+    radius="xl"
+    border="neutral-alpha-medium"
+    aspectRatio="16/9"
+/>`,
+      language: "tsx",
+      label: "Media"
+    }
+  ]}
+/>
+
+## Loading
+
+Show a skeleton block while content is loading.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Media
+      loading
+      src="/images/docs/once-ui/vibe-coding-light.jpg"
+      aspectRatio="16/9"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Media
+    loading
+    src="/image.jpg"
+    aspectRatio="16/9"
+/>`,
+      language: "tsx",
+      label: "Skeleton"
+    }
+  ]}
+/>
+
+## Caption
+
+The `caption` prop renders a `ReactNode` below the image, making it easy to provide additional details. It will render the image as `figure` and the caption as `figcaption`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Media
+      caption="Vibe code with Quasar! The time is now."
+      src="/images/docs/once-ui/vibe-coding-light.jpg"
+      alt="Preview"
+      radius="xl"
+      border="neutral-alpha-medium"
+      aspectRatio="16/9"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Media
+    caption="Vibe code with Quasar! The time is now."
+    src="/image.jpg"
+    alt="Preview"
+    radius="xl"
+    border="neutral-alpha-medium"
+    aspectRatio="16/9"
+/>`,
+      language: "tsx",
+      label: "Caption"
+    }
+  ]}
+/>
+
+## Enlarge
+
+Enable full-screen zooming for images and videos.
+
+<Media
+  enlarge
+  radius="xl"
+  marginTop="16"
+  src="/images/docs/once-ui/vibe-coding-light.jpg"
+  aspectRatio="16/9"
+/>
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Media
+    enlarge
+    src="/image.jpg"
+    aspectRatio="16/9"
+/>`,
+      language: "tsx",
+      label: "Enlarge"
+    }
+  ]}
+/>
+
+## YouTube
+
+The component auto-detects and renders YouTube links, just pass a YouTube URL to the `src` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Media
+      src="https://www.youtube.com/watch?v=TQT_FSdxbC8"
+      aspectRatio="16/9"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Media
+    src="https://www.youtube.com/watch?v=TQT_FSdxbC8"
+    aspectRatio="16/9"
+/>`,
+      language: "tsx",
+      label: "YouTube"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["src", "string"],
+    ["alt", "string", `""`],
+    ["aspectRatio", "string"],
+    ["height", "number"],
+    ["objectFit", ["contain", "cover", "fill", "none", "scale-down"], "cover"],
+    ["loading", "boolean", "false"],
+    ["enlarge", "boolean", "false"],
+    ["priority", "boolean"],
+    ["unoptimized", "boolean"],
+    ["sizes", "string", "100vw"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>

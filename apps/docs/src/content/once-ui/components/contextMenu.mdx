@@ -1,0 +1,107 @@
+---
+title: "ContextMenu"
+summary: "The ContextMenu component provides contextual options / information on right click."
+updatedAt: "2025-07-31"
+docs: "once-ui/components/contextMenu.mdx"
+github: "components/ContextMenu.tsx"
+navLabel: "ContextMenu"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+A component for providing users with contextual options / information on right click.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <ContextMenu
+        dropdown={
+          <Column gap="2" padding="4" minWidth={10}>
+            <Row paddingBottom="8" paddingTop="12" paddingX="16" onBackground="neutral-weak">
+              <Text variant="label-default-s">Context Menu</Text>
+            </Row>
+            <Option
+              hasPrefix={<Icon size="xs" name="edit" onBackground="neutral-weak" />}
+              label="Edit"
+              value="edit"
+            />
+            <Option
+              hasPrefix={<Icon size="xs" name="document" onBackground="neutral-weak" />}
+              label="Duplicate"
+              value="duplicate"
+            />
+            <Option
+              hasPrefix={<Icon size="xs" name="copy" onBackground="neutral-weak" />}
+              label="Copy"
+              value="copy"
+            />
+            <Option
+              hasPrefix={<Icon size="xs" name="eyeOff" onBackground="neutral-weak" />}
+              label="Hide"
+              value="hide"
+            />
+            <Line marginY="2" />
+            <Option
+              hasPrefix={<Icon size="xs" name="delete" onBackground="danger-medium" />}
+              danger
+              label="Delete"
+              value="delete"
+            />
+          </Column>
+        }
+        placement="bottom-start"
+      >
+        <Row fillWidth align="center" horizontal="center" padding="40" radius="l" background="surface" border="neutral-alpha-medium" textVariant="label-default-m">Right click me</Row>
+      </ContextMenu>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ContextMenu
+    placement="bottom-start"
+    dropdown={
+      <Column gap="2" padding="4" minWidth={10}>
+        <Option
+          hasPrefix={<Icon size="xs" name="edit" onBackground="neutral-weak" />}
+          label="Edit"
+          value="edit"
+        />
+        <Option
+          hasPrefix={<Icon size="xs" name="copy" onBackground="neutral-weak" />}
+          label="Duplicate"
+          value="duplicate"
+        />
+        <Line marginY="2" />
+        <Option
+          hasPrefix={<Icon size="xs" name="delete" onBackground="danger-medium" />}
+          danger
+          label="Delete"
+          value="delete"
+        />
+      </Column>
+    }
+>
+    <Row fillWidth align="center" horizontal="center" padding="40" radius="l" background="surface" border="neutral-alpha-medium" textVariant="label-default-m">Right click me</Row>
+</ContextMenu>`,
+      language: "tsx",
+      label: "ContextMenu"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["dropdown", "ReactNode", ""],
+    ["placement", "string", "bottom-start"],
+    ["children"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>

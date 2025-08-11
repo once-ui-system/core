@@ -1,0 +1,10 @@
+{
+  "title": "Once UI",
+  "order": 1,
+  "pages": {
+    "quick-start": 1,
+    "config": 2,
+    "icons": 3,
+    "components": 4
+  }
+}

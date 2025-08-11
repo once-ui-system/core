@@ -1,0 +1,168 @@
+---
+title: "AutoScroll"
+summary: "The `AutoScroll` component provides an infinite scrollable container that automatically scrolls to the left."
+updatedAt: "2025-05-08"
+docs: "once-ui/components/autoScroll.mdx"
+github: "components/AutoScroll.tsx"
+navLabel: "AutoScroll"
+navIcon: "components"
+---
+
+The `AutoScroll` component provides an infinite scrollable container that automatically scrolls to the left.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <AutoScroll paddingY="40">
+      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    </AutoScroll>
+  }
+  codes={[
+    {
+      code:
+`<AutoScroll>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+</AutoScroll>`,
+      language: "tsx",
+      label: "AutoScroll"
+    }
+  ]}
+/>
+
+## Speed
+
+The `speed` prop controls the speed of the scrolling.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <AutoScroll paddingY="40" speed="fast">
+      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    </AutoScroll>
+  }
+  codes={[
+    {
+      code:
+`<AutoScroll speed="fast">
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+</AutoScroll>`,
+      language: "tsx",
+      label: "Speed"
+    }
+  ]}
+/>
+
+## Pause
+
+The `pause` prop controls whether the scrolling should pause when the user hovers over the container.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <AutoScroll paddingY="40" pause>
+      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    </AutoScroll>
+  }
+  codes={[
+    {
+      code:
+`<AutoScroll pause>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+</AutoScroll>`,
+      language: "tsx",
+      label: "Pause"
+    }
+  ]}
+/>
+
+## Fade
+
+Combine with the `<Fade>` component to create a fade-in and fade-out effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <>
+      <Fade zIndex="1" to="right" fillHeight width="64" position="absolute" left="0" top="0"/>
+      <AutoScroll paddingY="40">
+        <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+        <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+        <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+        <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+        <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+        <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+      </AutoScroll>
+      <Fade zIndex="1" to="left" fillHeight width="64" position="absolute" right="0" top="0"/>
+    </>
+  }
+  codes={[
+    {
+      code:
+`<>
+  <Fade zIndex="1" to="right" fillHeight width="64" position="absolute" left="0" top="0"/>
+  <AutoScroll paddingY="40">
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+  </AutoScroll>
+  <Fade zIndex="1" to="left" fillHeight width="64" position="absolute" right="0" top="0"/>
+</>`,
+      language: "tsx",
+      label: "Fade"
+    }
+  ]}
+/>
+
+## API Reference
+
+<PropsTable
+  content={[
+    ["speed", "slow | medium | fast", "medium"],
+    ["pause", "boolean", "false"],
+    ["children"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>

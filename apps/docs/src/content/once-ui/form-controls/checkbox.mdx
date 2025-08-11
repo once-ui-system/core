@@ -1,0 +1,160 @@
+---
+title: "Checkbox"
+summary: "Checkbox provides a selectable control for binary or indeterminate states with customizable labels and styling."
+updatedAt: "2025-05-12"
+docs: "once-ui/form-controls/checkbox.mdx"
+github: "components/Checkbox.tsx"
+navLabel: "Checkbox"
+navIcon: "switch"
+---
+
+The `Checkbox` component provides a selectable control that can be toggled between checked, unchecked, and indeterminate states. It's built on top of the `InteractiveDetails` component for consistent styling and behavior.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Checkbox
+      label="Accept terms and conditions"
+      description="By checking this box, you agree to our terms of service."
+    />
+  }
+  codes={[
+    {
+      code:
+`<Checkbox
+    label="Accept terms and conditions"
+    description="By checking this box, you agree to our terms of service."
+/>`,
+      language: "tsx",
+      label: "Checkbox"
+    }
+  ]}
+/>
+
+## State
+
+Use the `isChecked` prop with React state to create controlled checkboxes.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Checkbox
+      label="Controlled checkbox"
+    />
+  }
+  codes={[
+    {
+      code:
+`const [checked, setChecked] = useState(false);
+
+<Checkbox
+    label="Controlled checkbox"
+    isChecked={checked}
+    onToggle={() => setChecked(!checked)}
+/>
+
+// You can also update the state programmatically
+const handleReset = () => setChecked(false);`,
+      language: "tsx",
+      label: "State"
+    }
+  ]}
+/>
+
+## Indeterminate
+
+The checkbox can display an indeterminate state, useful for parent checkboxes that control a group of child checkboxes.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<IndeterminateCheckboxExample />}
+  codes={[
+    {
+      code:
+`const [items, setItems] = useState([
+    { id: 1, label: 'Item 1', checked: true },
+    { id: 2, label: 'Item 2', checked: false },
+    { id: 3, label: 'Item 3', checked: true }
+]);
+
+const allChecked = items.every(item => item.checked);
+const someChecked = items.some(item => item.checked);
+const isIndeterminate = someChecked && !allChecked;
+
+const toggleAll = () => {
+    const newCheckedState = !allChecked;
+    setItems(items.map(item => ({
+      ...item,
+      checked: newCheckedState
+    })));
+};
+
+<Checkbox
+    label="Select all items"
+    isChecked={allChecked || isIndeterminate}
+    isIndeterminate={isIndeterminate}
+    onToggle={toggleAll}
+/>
+
+{items.map(item => (
+    <Checkbox
+      key={item.id}
+      label={item.label}
+      isChecked={item.checked}
+      onToggle={() => {
+        setItems(items.map(i => 
+          i.id === item.id ? { ...i, checked: !i.checked } : i
+        ));
+      }}
+    />
+))}`,
+      language: "tsx",
+      label: "Indeterminate"
+    }
+  ]}
+/>
+
+## Disabled
+
+Disable the checkbox to prevent user interaction.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Checkbox
+      label="Disabled checkbox"
+      disabled
+    />
+  }
+  codes={[
+    {
+      code:
+`<Checkbox
+    label="Disabled checkbox"
+    disabled
+/>`,
+      language: "tsx",
+      label: "Disabled"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["isChecked", "boolean", "false"],
+    ["isIndeterminate", "boolean", "false"],
+    ["onToggle", "() => void"],
+    ["label", "ReactNode"],
+    ["description", "ReactNode"],
+    ["disabled", "boolean", "false"],
+    ["className"],
+    ["style"],
+    ["...input"]
+  ]}
+/>

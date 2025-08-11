@@ -1,0 +1,209 @@
+---
+title: "MediaUpload"
+summary: "The MediaUpload component provides a drag-and-drop interface for uploading and previewing images with built-in compression."
+updatedAt: "2025-05-14"
+docs: "once-ui/modules/mediaUpload.mdx"
+github: "modules/media/MediaUpload.tsx"
+navLabel: "MediaUpload"
+navIcon: "modules"
+---
+
+A versatile component for uploading and previewing images. MediaUpload provides a drag-and-drop interface with built-in image compression and preview capabilities.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <MediaUpload />
+  }
+  codes={[
+    {
+      code:
+`<MediaUpload />`,
+      language: "tsx",
+      label: "MediaUpload"
+    }
+  ]}
+/>
+
+## Aspect ratio
+
+MediaUpload supports different aspect ratios to accommodate various design requirements.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <MediaUpload />
+      <MediaUpload aspectRatio="4 / 3" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<MediaUpload />
+<MediaUpload aspectRatio="4 / 3" />`,
+      language: "tsx",
+      label: "Aspect ratio"
+    }
+  ]}
+/>
+
+## Preview
+
+Display an initial preview image by setting the `initialPreviewImage` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <MediaUpload 
+      aspectRatio="16 / 9"
+      initialPreviewImage="/images/docs/once-ui/vibe-coding-dark.jpg"
+    />
+  }
+  codes={[
+    {
+      code:
+`<MediaUpload 
+    initialPreviewImage="/image.jpg" 
+/>`,
+      language: "tsx",
+      label: "Preview"
+    }
+  ]}
+/>
+
+## Empty
+
+Customize the empty state message with the `emptyState` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <MediaUpload 
+      emptyState={
+        <Column gap="8" fill center align="center">
+          <Icon name="image" size="m" />
+          <Text variant="label-default-s">Add cover image</Text>
+        </Column>
+      } 
+    />
+  }
+  codes={[
+    {
+      code:
+`<MediaUpload
+    emptyState={
+      <Column gap="8" fill center align="center">
+        <Icon name="image" size="m" />
+        <Text variant="label-default-s">Add cover image</Text>
+      </Column>
+    } 
+/>`,
+      language: "tsx",
+      label: "Empty"
+    }
+  ]}
+/>
+
+## Loading
+
+Show a loading spinner while processing uploads.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <MediaUpload loading />
+  }
+  codes={[
+    {
+      code:
+`<MediaUpload loading />`,
+      language: "tsx",
+      label: "Loading"
+    }
+  ]}
+/>
+
+## File handling
+
+Handle uploaded files with the `onFileUpload` callback.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const handleFileUpload = async (file: File) => {
+    try {
+      // Upload file to your server or storage service
+      const response = await uploadToServer(file);
+      console.log('File uploaded successfully:', response);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+};
+
+<MediaUpload
+    onFileUpload={handleFileUpload}
+/>`,
+      language: "tsx",
+      label: "File handling"
+    }
+  ]}
+/>
+
+## Compression
+
+By default, MediaUpload compresses images before uploading. You can customize the compression settings or disable it entirely. The `MediaUpload` uses `compressorjs` under the hood and compresses images client side.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<MediaUpload 
+    compress
+    quality={0.6}
+    resizeMaxWidth={1280}
+    resizeMaxHeight={720}
+    convertTypes={["image/webp", "image/jpeg"]}
+/>
+
+<MediaUpload
+    compress={false}
+/>`,
+      language: "tsx",
+      label: "Compression"
+    }
+  ]}
+/>
+
+## Props
+
+<PropsTable
+  content={[
+    ["onFileUpload", "(file: File) => Promise<void>"],
+    ["compress", ["true", "false"], "true"],
+    ["aspectRatio", "string", "'16 / 9'"],
+    ["initialPreviewImage", ["string", "null"], "null"],
+    ["emptyState", "React.ReactNode", "'Drag and drop or click to browse'"],
+    ["quality", "number", "0.8"],
+    ["sizes", "string"],
+    ["convertTypes", "string[]", "['image/png', 'image/webp', 'image/jpg']"],
+    ["resizeMaxWidth", "number", "1920"],
+    ["resizeMaxHeight", "number", "1920"],
+    ["resizeWidth", "number", "1200"],
+    ["resizeHeight", "number", "1200"],
+    ["loading", ["true", "false"], "false"],
+    ["accept", "string", "'image/*'"],
+    ["children"],
+    ["...flex"]
+  ]}
+/>

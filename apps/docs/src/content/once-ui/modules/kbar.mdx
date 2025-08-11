@@ -1,0 +1,111 @@
+---
+title: "Kbar"
+summary: "The Kbar component provides a command palette for quick navigation and actions throughout your application using keyboard shortcuts."
+updatedAt: "2025-05-14"
+docs: "once-ui/modules/kbar.mdx"
+github: "modules/navigation/Kbar.tsx"
+navLabel: "Kbar"
+navIcon: "modules"
+---
+
+The `Kbar` component provides a powerful command palette for your application, allowing users to quickly navigate and perform actions using keyboard shortcuts. It enhances productivity by providing a searchable interface for commands and navigation.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const kbarItems = [
+    {
+      id: 'home',
+      name: 'Home',
+      section: 'Navigation',
+      shortcut: ['H'],
+      keywords: 'home main start',
+      href: '/',
+      icon: 'home'
+    },
+    {
+      id: 'docs',
+      name: 'Documentation',
+      section: 'Navigation',
+      shortcut: ['D'],
+      keywords: 'docs guide help',
+      href: '/docs',
+      icon: 'document'
+    }
+];
+
+function MyLayout({ children }) {
+    return (
+      <>
+        <header>
+          <Kbar items={kbarItems}>
+            <Button prefixIcon="command">Search</Button>
+          </Kbar>
+        </header>
+        <main>
+          {children}
+        </main>
+      </>
+    );
+}`,
+      language: "tsx",
+      label: "Kbar"
+    }
+  ]}
+/>
+
+
+**Props:**
+- `items`: Array of `KbarItem` objects that define the available commands
+- `children`: React nodes, typically containing a `Button`
+
+## KbarItem
+
+Each item in the command palette is defined by the `KbarItem` interface:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`interface KbarItem {
+    id: string;          // Unique identifier for the item
+    name: string;        // Display name in the command palette
+    section: string;     // Group name for organizing items
+    shortcut: string[];  // Keyboard shortcut keys
+    keywords: string;    // Search keywords
+    href?: string;       // Navigation URL (optional)
+    perform?: () => void; // Action to perform when selected (optional)
+    icon?: string;       // Icon name from Once UI icon set (optional)
+    description?: ReactNode; // Additional description (optional)
+}`,
+      language: "tsx",
+      label: "KbarItem"
+    }
+  ]}
+/>
+
+You must provide either `href` or `perform` for each item to define what happens when the item is selected.
+
+## Accessibility
+
+The Kbar component supports full keyboard navigation:
+
+- `↑` / `↓`: Navigate between items
+- `Enter`: Select the highlighted item
+- `Esc`: Close the command palette
+
+Users can also type to search and filter the available commands.
+
+## Best practices
+
+- Keep item names short and descriptive
+- Use icons to make items more recognizable
+- Group related items into logical sections
+- Include relevant keywords to improve search results
+- Provide keyboard shortcuts for frequently used actions
+- Consider adding a visible button to open Kbar for discoverability

@@ -1,0 +1,85 @@
+---
+title: "EmojiPicker"
+summary: "The EmojiPicker component provides a way to select emojis from categories."
+updatedAt: "2025-05-04"
+docs: "once-ui/components/emojiPicker.mdx"
+github: "components/EmojiPicker.tsx"
+navLabel: "EmojiPicker"
+navIcon: "components"
+---
+
+The `EmojiPicker` component allows you to select and insert emojis from categories.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <EmojiPicker/>
+  }
+  codes={[
+    {
+      code:
+`<EmojiPicker/>`,
+      language: "tsx",
+      label: "EmojiPicker"
+    }
+  ]}
+/>
+
+## Columns
+
+You can pass a `columns` prop to the component to override the default columns.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <EmojiPicker columns={10}/>
+  }
+  codes={[
+    {
+      code:
+`<EmojiPicker columns={10}/>`,
+      language: "tsx",
+      label: "Columns"
+    }
+  ]}
+/>
+
+## Custom style
+
+You can pass a `style` prop to the component to override the default styles.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <EmojiPicker background="surface" border="neutral-medium" padding="8" radius="l" height={24}/>
+  }
+  codes={[
+    {
+      code:
+`<EmojiPicker
+    background="surface"
+    border="neutral-medium"
+    padding="8"
+    radius="l"
+    height={24}
+/>`,
+      language: "tsx",
+      label: "Custom style"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["onSelect", "(emoji: string) => void"]
+    ["columns", "number", "10"],
+    ["style"],
+    ["className"],
+    ["...flex"]
+  ]}
+/>

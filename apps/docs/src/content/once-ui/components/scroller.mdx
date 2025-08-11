@@ -1,0 +1,146 @@
+---
+title: "Scroller"
+summary: "A component for creating scrollable content areas with navigation buttons."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/scroller.mdx"
+github: "components/Scroller.tsx"
+navLabel: "Scroller"
+navIcon: "components"
+---
+
+The `Scroller` component creates a scrollable container with automatic navigation buttons that appear when content overflows. It's perfect for horizontal or vertical scrolling of content like cards, images, or any elements that might not fit in the available space.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Scroller fadeColor="transparent">
+      <Row gap="16">
+        {Array(10).fill(0).map((_, i) => (
+          <Background
+            key={i}
+            fillWidth
+            height={6}
+            width={12}
+            background="neutral-alpha-weak"
+            border="neutral-alpha-medium" radius="l"
+            lines={{display: true, color: "neutral-alpha-weak"}}/>
+        ))}
+      </Row>
+    </Scroller>
+  }
+  codes={[
+    {
+      code:
+`<Scroller fadeColor="transparent">
+    <Row gap="16">
+      {Array(10).fill(0).map((_, i) => (
+        <Flex key={i}/>
+      ))}
+    </Row>
+</Scroller>`,
+      language: "tsx",
+      label: "Scroller"
+    }
+  ]}
+/>
+
+## Vertical
+
+The `Scroller` can be configured to scroll vertically by setting the `direction` prop to `column`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Scroller direction="column" height={24} fadeColor="transparent">
+      <Column gap="16" horizontal="center" fillWidth>
+        {Array(6).fill(0).map((_, i) => (
+          <Background
+            key={i}
+            fillWidth
+            height={6}
+            width={12}
+            background="neutral-alpha-weak"
+            border="neutral-alpha-medium" radius="l"
+            lines={{display: true, color: "neutral-alpha-weak"}}/>
+        ))}
+      </Column>
+    </Scroller>
+  }
+  codes={[
+    {
+      code:
+`<Scroller direction="column" height={24} fadeColor="transparent">
+    <Column gap="16" horizontal="center" fillWidth>
+      {Array(6).fill(0).map((_, i) => (
+        <Flex key={i} />
+      ))}
+    </Column>
+</Scroller>`,
+      language: "tsx",
+      label: "Vertical"
+    }
+  ]}
+/>
+
+## Fade
+
+You can customize the color of the fade effect that appears behind the scroll buttons.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Scroller fadeColor="brand-medium">
+      <Row gap="16">
+        {Array(10).fill(0).map((_, i) => (
+          <Background
+            key={i}
+            fillWidth
+            height={6}
+            width={12}
+            background="neutral-alpha-weak"
+            border="neutral-alpha-medium" radius="l"
+            lines={{display: true, color: "neutral-alpha-weak"}}/>
+        ))}
+      </Row>
+    </Scroller>
+  }
+  codes={[
+    {
+      code:
+`<Scroller fadeColor="brand-medium">
+    <Row gap="16">
+      {Array(10).fill(0).map((_, i) => (
+        <Flex key={i} />
+      ))}
+    </Row>
+</Scroller>`,
+      language: "tsx",
+      label: "Fade"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["direction", ["row", "column"], "row"],
+    ["fadeColor", "BaseColor"],
+    ["onItemClick", "(index: number) => void"],
+    ["children"],
+    ["className"],
+    ["style"]
+    ["...flex"]
+  ]}
+/>
+
+## Accessibility
+
+The Scroller component includes the following accessibility features:
+
+- Scroll buttons have appropriate aria-labels
+- Keyboard navigation support for the scroll buttons
+- Preserves keyboard navigation and click events of child elements

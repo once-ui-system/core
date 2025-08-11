@@ -1,0 +1,136 @@
+---
+title: "Table"
+summary: "The Table component displays structured tabular data with optional sorting and click interactions. It supports custom cell rendering and dynamic row behavior."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/table.mdx"
+github: "components/Table.tsx"
+navLabel: "Table"
+navIcon: "components"
+---
+
+`Table` is used to organize and render lists of information in a column/row format. It supports sorting, optional click handlers, and flexible cell content using `ReactNode`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      data={{
+        headers: [
+          { content: "Name", key: "name", sortable: true },
+          { content: "Role", key: "role", sortable: true },
+        ],
+        rows: [
+          ["Alice", "Engineer"],
+          ["Bob", "Designer"],
+          ["Carol", "Product"],
+        ],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+    data={{
+      headers: [
+        { content: "Name", key: "name" },
+        { content: "Role", key: "role" },
+      ],
+      rows: [
+        ["Alice", "Engineer"],
+        ["Bob", "Designer"],
+        ["Carol", "Product"],
+      ],
+    }}
+/>`,
+      language: "tsx",
+      label: "Table"
+    }
+  ]}
+/>
+
+## Sorting
+
+Enable sorting per column by setting `sortable: true` on the corresponding header. Click toggles between ascending and descending.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      data={{
+        headers: [
+          { content: "Name", key: "name", sortable: true },
+          { content: "Role", key: "role", sortable: true },
+        ],
+        rows: [
+          ["Alice", "Engineer"],
+          ["Bob", "Designer"],
+          ["Carol", "Product"],
+        ],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+    data={{
+      headers: [
+        { content: "Name", key: "name", sortable: true },
+        { content: "Role", key: "role", sortable: true },
+      ],
+      rows: [
+        ["Alice", "Engineer"],
+        ["Bob", "Designer"],
+        ["Carol", "Product"],
+      ],
+    }}
+/>`,
+      language: "tsx",
+      label: "Sorting"
+    }
+  ]}
+/>
+
+## Row actions
+
+Add `onRowClick` to make rows interactive. A hover state is applied automatically.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Table
+    onRowClick={(index) => alert(\`Clicked row \${index}\`)}
+    data={{
+      headers: [
+        { content: "Task", key: "task" },
+        { content: "Status", key: "status" },
+      ],
+      rows: [
+        ["Launch", "In progress"],
+        ["Prototype", "Done"],
+      ],
+    }}
+/>`,
+      language: "tsx",
+      label: "Row actions"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["data", `{ headers: { content: ReactNode; key: string; sortable?: boolean; }[]; rows: ReactNode[][]; }`],
+    ["onRowClick", "(rowIndex: number) => void"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>

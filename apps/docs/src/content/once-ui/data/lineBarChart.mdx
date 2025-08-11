@@ -1,0 +1,35 @@
+---
+title: "LineBarChart"
+summary: "A versatile component for displaying and formatting code snippets with syntax highlighting, copy functionality, and interactive previews."
+updatedAt: "2025-05-14"
+docs: "once-ui/data/lineBarChart.mdx"
+github: "modules/data/LineBarChart.tsx"
+navLabel: "LineBarChart"
+navIcon: "lineBarChart"
+---
+
+The `LineBarChart` component provides a way to display line charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features.
+
+<LineBarChart
+  marginTop="16"
+  marginBottom="24"
+  title="Traffic Per Weekday"
+  description="How many users we had per weekday"
+  axis="both"
+  legend={{
+    position: "bottom-center"
+  }}
+  series={[
+    { key: "Traffic", color: "blue" },
+    { key: "Conversions", color: "indigo" }
+  ]}
+  data={[
+    { name: "Mon", Traffic: 4500, Conversions: 2190 },
+    { name: "Tue", Traffic: 5200, Conversions: 4230 },
+    { name: "Wed", Traffic: 4800, Conversions: 3250 },
+    { name: "Thu", Traffic: 5900, Conversions: 3280 },
+    { name: "Fri", Traffic: 6800, Conversions: 4320 },
+    { name: "Sat", Traffic: 4800, Conversions: 3190 },
+    { name: "Sun", Traffic: 3900, Conversions: 3170 },
+  ]}
+/>

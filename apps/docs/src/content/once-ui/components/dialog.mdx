@@ -1,0 +1,246 @@
+---
+title: "Dialog"
+summary: "The Dialog component provides a modal window that overlays the page content for focused user interactions and important information."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/dialog.mdx"
+github: "components/Dialog.tsx"
+navLabel: "Dialog"
+navIcon: "components"
+---
+
+Dialogs are overlay windows that focus user attention on important information, collect input, or require decisions. They appear above the main content and block interaction with the rest of the page until dismissed.
+
+## Basic usage
+
+A simple dialog with a title, description, and content.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <BasicDialog />
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+
+return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>
+        Open Dialog
+      </Button>
+      <Dialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Basic dialog"
+        description="This is a simple dialog with a title and description."
+      >
+        <Column fillWidth gap="16" marginTop="12">
+          Dialog content goes here. This area can contain any React components.
+          <Row fillWidth vertical="center" gap="8">
+            <Input
+              id="name"
+              label="Enter your name"
+            />
+            <Button label="Submit" onClick={() => setIsOpen(false)}/>
+          </Row>
+        </Column>
+      </Dialog>
+    </>
+);`,
+      language: "tsx",
+      label: "Dialog"
+    }
+  ]}
+/>
+
+## Footer
+
+Add a footer section to contain action buttons.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <DialogWithFooter />
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+
+return (
+    <>
+      <Button variant="secondary" onClick={() => setIsOpen(true)}>
+        Dialog with footer
+      </Button>
+      <Dialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Dialog with footer"
+        footer={
+          <>
+            <Button variant="secondary" onClick={() => setIsOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={() => setIsOpen(false)}>
+              Confirm
+            </Button>
+          </>
+        }
+      >
+        <Text>
+          This dialog has a footer with action buttons. The footer is a great place
+          for primary and secondary actions.
+        </Text>
+      </Dialog>
+    </>
+);`,
+      language: "tsx",
+      label: "Footer"
+    }
+  ]}
+/>
+
+## Stacked dialogs
+
+Dialogs can be stacked on top of each other for multi-step interactions.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <StackedDialogs />
+  }
+  codes={[
+    {
+      code:
+`const [isBaseOpen, setIsBaseOpen] = useState(false);
+const [isStackedOpen, setIsStackedOpen] = useState(false);
+
+return (
+    <>
+      <Button variant="secondary" onClick={() => setIsBaseOpen(true)}>
+        Open stacked dialogs
+      </Button>
+      
+      <Dialog
+        isOpen={isBaseOpen}
+        onClose={() => setIsBaseOpen(false)}
+        title="Base dialog"
+        base={isStackedOpen}
+        footer={
+          <Row gap="8">
+            <Button variant="secondary" onClick={() => setIsBaseOpen(false)}>
+              Close
+            </Button>
+            <Button onClick={() => setIsStackedOpen(true)}>
+              Open stacked dialog
+            </Button>
+          </Row>
+        }
+      >
+        <Text marginBottom="16">
+          This is the base dialog. Click the button below to open a stacked dialog on top.
+        </Text>
+      </Dialog>
+      
+      <Dialog
+        isOpen={isStackedOpen}
+        onClose={() => setIsStackedOpen(false)}
+        title="Stacked dialog"
+        stack
+        footer={
+          <Button onClick={() => setIsStackedOpen(false)}>Close stacked dialog</Button>
+        }
+      >
+        <Text>
+          This is a stacked dialog that appears on top of the base dialog.
+          Notice how the base dialog is dimmed in the background.
+        </Text>
+      </Dialog>
+    </>
+);`,
+      language: "tsx",
+      label: "Stacked dialogs"
+    }
+  ]}
+/>
+
+## Customized dialog
+
+Dialogs can be customized with Flex props for different visual styles.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CustomizedDialog />
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+
+return (
+    <>
+      <Button variant="danger" onClick={() => setIsOpen(true)}>
+        Customized dialog
+      </Button>
+      <Dialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Customized dialog"
+        maxWidth={48}
+        background="danger-weak"
+        border="danger-medium"
+      >
+        <Column fillWidth gap="16">
+          <Feedback vertical="center" variant="danger">
+            This dialog has custom styling applied through Flex props.
+            You can customize the background, border, and other properties.
+          </Feedback>
+          <Text onBackground="danger-weak">
+            Custom content can be added inside the dialog body.
+          </Text>
+          <Button variant="danger" onClick={() => setIsOpen(false)}>
+            Close
+          </Button>
+        </Column>
+      </Dialog>
+    </>
+);`,
+      language: "tsx",
+      label: "Customized dialog"
+    }
+  ]}
+/>
+
+## Accessibility
+
+The Dialog component follows accessibility best practices:
+
+- Uses `role="dialog"` and `aria-modal="true"`
+- Traps focus within the dialog when open
+- Supports keyboard navigation and Escape key to close
+- Provides proper labeling with `aria-labelledby`
+- Makes content outside the dialog inert when dialog is open
+
+## API reference
+
+<PropsTable
+  content={[
+    ["isOpen", "boolean", "false"],
+    ["onClose", "() => void"],
+    ["title", "ReactNode | string"],
+    ["description", "ReactNode"],
+    ["footer", "ReactNode"],
+    ["base", "boolean", "false"],
+    ["stack", "boolean", "false"],
+    ["onHeightChange", "(height: number) => void"],
+    ["minHeight", "number"],
+    ["children"],
+    ["...flex"]
+  ]}
+/>

@@ -1,0 +1,134 @@
+---
+title: "HoloFx"
+summary: "A lighting and texture effect that simulates a holographic sheen. Ideal for decorative images, product cards, or hero visuals."
+updatedAt: "2025-05-11"
+docs: "once-ui/effects/holoFx.mdx"
+github: "components/HoloFx.tsx"
+navLabel: "HoloFx"
+navIcon: "sparkle"
+---
+
+HoloFx simulates a holographic light sheen by layering interactive visual effects like shine, burn, and texture over any content block. It uses radial masks and mouse tracking to shift light and create movement. Not supported on touch-screens.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <HoloFx
+      border="brand-alpha-weak"
+      maxWidth={24}
+      aspectRatio={3 / 4}
+      radius="l"
+      shine={{
+        opacity: 30,
+        blending: "color-dodge",
+      }}
+      burn={{
+        opacity: 30,
+        blending: "color-dodge",
+      }}
+      texture={{
+        opacity: 10,
+        image: "/images/textures/foil.jpg",
+        blending: "color-dodge",
+      }}
+    >
+      <Media sizes="640px" src="/images/docs/once-ui/proxima-b.jpg" />
+      <Fade
+        to="top"
+        pattern={{ size: "4", display: true }}
+        position="absolute"
+        bottom="0"
+        height={10}
+        horizontal="center"
+        vertical="end"
+        paddingBottom="32"
+        textVariant="display-default-xs"
+      >
+        Proxima B
+      </Fade>
+    </HoloFx>
+  }
+  codes={[
+    {
+      code:
+`<HoloFx
+    border="brand-alpha-weak"
+    maxWidth={24}
+    aspectRatio={3 / 4}
+    radius="l"
+    shine={{
+      opacity: 30,
+      blending: "color-dodge",
+    }}
+    burn={{
+      opacity: 30,
+      blending: "color-dodge",
+    }}
+    texture={{
+      opacity: 10,
+      image: "/images/textures/foil.jpg",
+      blending: "color-dodge",
+    }}
+  >
+    <Media src="/images/proxima-b.jpg" />
+    <Fade>
+      Proxima B
+    </Fade>
+</HoloFx>`,
+      language: "tsx",
+      label: "HoloFx"
+    }
+  ]}
+/>
+
+## API reference
+
+### HoloFx Props
+
+<PropsTable
+  content={[
+    ["children"],
+    ["className"],
+    ["style"],
+    ["...flex"],
+  ]}
+/>
+
+### Shine Props
+<PropsTable
+  content={[
+    ["opacity", "number", "30"],
+    ["filter", "string", "-"],
+    ["blending", "mixBlendMode", "color-dodge"],
+    ["mask", "MaskOptions", "-"]
+  ]}
+/>
+
+### Burn Props
+<PropsTable
+  content={[
+    ["opacity", "number", "30"],
+    ["filter", "string", "brightness(0.2) contrast(2)"],
+    ["blending", "mixBlendMode", "color-dodge"],
+    ["mask", "MaskOptions", "-"]
+  ]}
+/>
+
+### Texture Props
+<PropsTable
+  content={[
+    ["opacity", "number", "10"],
+    ["filter", "string", "-"],
+    ["blending", "mixBlendMode", "color-dodge"],
+    ["image", "string", "repeating-linear-gradient(...)"],
+    ["mask", "MaskOptions", "-"]
+  ]}
+/>
+
+### Mask Options
+<PropsTable
+  content={[
+    ["maskPosition", "string", "100 200"]
+  ]}
+/>

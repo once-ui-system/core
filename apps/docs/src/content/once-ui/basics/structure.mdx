@@ -1,0 +1,1568 @@
+---
+title: "Structure"
+summary: "Once UI is an open-source design system built for indie creators, small teams, and startups to fuel the next generation of web applications."
+updatedAt: "2025-05-04"
+docs: "once-ui/basics/structure.mdx"
+navLabel: "Structure"
+navIcon: "lightbulb"
+navTag: "Update"
+navTagVariant: "indigo"
+---
+
+## Flex
+
+Once UI layouts are built using `Flex` and `Grid`, prop-based abstractions over CSS flexbox and grid. These primitives are the foundation of the system, enabling layout logic through composition rather than CSS.
+
+<Flex
+  marginTop="16"
+  marginBottom="24"
+  fillWidth
+  gap="12"
+  radius="l"
+  padding="l"
+  border="neutral-medium"
+  background="surface"
+>
+  {Array(6)
+    .fill(null)
+    .map((_, index) => (
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        key={index}
+        shadow="m"
+        fillWidth
+        radius="m"
+        height={8}
+        border="neutral-alpha-medium"
+      />
+    ))}
+</Flex>
+
+### Syntax
+
+We expose two convenience wrappers: `Row` and `Column`. These are semantically expressive `Flex` elements with pre-set directions. Use them instead of the `Flex` for better semantics and code quality.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth fitHeight gap="16" s={{direction: "column"}} textVariant="label-default-s" onBackground="neutral-weak">
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        fillWidth center border="neutral-alpha-medium" radius="m" padding="16">
+          col
+      </Background>
+      <Column fill gap="16">
+        <Background
+          background="neutral-alpha-weak"
+          lines={{display: true, color: "neutral-alpha-weak"}}
+          fill center border="neutral-alpha-medium" radius="m" padding="16">
+            row
+        </Background>
+        <Background
+          background="neutral-alpha-weak"
+          lines={{display: true, color: "neutral-alpha-weak"}}
+          fill center border="neutral-alpha-medium" radius="m" padding="16">
+            row
+        </Background>
+      </Column>
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        fillWidth center border="neutral-alpha-medium" radius="m" padding="16">
+          col
+      </Background>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row fillWidth fitHeight gap="16" s={{direction: "column"}}>
+    <Column fillWidth center>
+        col
+    </Column>
+    <Column fill gap="16">
+      <Row fill center>
+          row
+      </Row>
+      <Row fill center>
+          row
+      </Row>
+    </Column>
+    <Column fillWidth center>
+        col
+    </Column>
+</Row>
+`,
+      language: "tsx",
+      label: "Flex layout"
+    }
+  ]}
+/>
+
+
+### Alignment
+
+Rather than wrestling with `justifyContent` and `alignItems`, we use semantic `horizontal` and `vertical` props that auto-adjust based on direction.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        fillWidth minHeight={10} padding="16" radius="m" border="neutral-alpha-medium">
+        <Button size="s" data-border="rounded">Continue</Button>
+      </Background>
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        fillWidth center minHeight={10} padding="16" radius="m" border="neutral-alpha-medium">
+        <Button size="s" data-border="rounded">Continue</Button>
+      </Background>
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        fillWidth horizontal="end" vertical="end" minHeight={10} padding="16" radius="m" border="neutral-alpha-medium">
+        <Button size="s" data-border="rounded">Continue</Button>
+      </Background>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column fillWidth minHeight={10}>
+    <Button label="Continue"/>
+</Column>
+<Column fillWidth center minHeight={10}>
+    <Button label="Continue"/>
+</Column>
+<Column fillWidth horizontal="end" vertical="end" minHeight={10}>
+    <Button label="Continue"/>
+</Column>
+`,
+      language: "tsx",
+      label: "Alignment"
+    }
+  ]}
+/>
+
+The `start` is the default value for both alignments, so we don't declare them. The `center` prop is shorthand for both `horizontal="center"` and `vertical="center"`.
+
+We can also use `around` and `between` values for the alignment props:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        fillWidth horizontal="between" padding="16" radius="m" border="neutral-alpha-medium">
+        <IconButton icon="chevronLeft" variant="secondary" data-border="rounded"/>
+        <Button size="s" data-border="rounded">Continue</Button>
+      </Background>
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        direction="column" minHeight={16} fillWidth horizontal="center" vertical="around" padding="16" radius="m" border="neutral-alpha-medium">
+        <IconButton icon="chevronLeft" variant="secondary" data-border="rounded"/>
+        <Button size="s" data-border="rounded">Continue</Button>
+      </Background>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column fillWidth horizontal="between">
+    <IconButton icon="chevronLeft"/>
+    <Button label="Continue"/>
+</Column>
+<Column fillWidth horizontal="center" vertical="around">
+    <IconButton icon="chevronLeft"/>
+    <Button label="Continue"/>
+</Column>
+`,
+      language: "tsx",
+      label: "Space between"
+    }
+  ]}
+/>
+
+### Size
+
+Use the `fillWidth`, `fillHeight`, or shorthand `fill` to fill up the remaining space. These properties also apply `minWidth` and `minHeight` of `0` if not specified.
+
+Use `fit`, `fitWidth`, `fitHeight` to apply `fit-content`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth horizontal="center" gap="16">
+      <Background
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="m" padding="16"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        fit>
+        <Button size="s" data-border="rounded">Continue</Button>
+      </Background>
+      <Background
+        background="neutral-alpha-weak"
+        horizontal="center" border="neutral-alpha-medium" radius="m" padding="16"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        fillWidth fitHeight>
+        <Button size="s" data-border="rounded">Continue</Button>
+      </Background>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column fit>
+    <Button label="Continue"/>
+</Column>
+<Column fillWidth fitHeight horizontal="center">
+    <Button label="Continue"/>
+</Column>
+`,
+      language: "tsx",
+      label: "Fill"
+    }
+  ]}
+/>
+
+Use the `flex` prop to create asymmetric space distributions, like a bento grid:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <Row fillWidth gap="16" s={{direction: "column"}}>
+        <Background
+          minHeight={8}
+          flex="2"
+          background="neutral-alpha-weak" border="neutral-alpha-medium" radius="m"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background
+          minHeight={8}
+          flex="3"
+          background="neutral-alpha-weak" border="neutral-alpha-medium" radius="m"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+      </Row>
+      <Row fillWidth gap="16" s={{direction: "column"}}>
+        <Background
+          minHeight={8}
+          flex="3"
+          background="neutral-alpha-weak" border="neutral-alpha-medium" radius="m"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background
+          minHeight={8}
+          flex="2"
+          background="neutral-alpha-weak" border="neutral-alpha-medium" radius="m"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column fillWidth gap="16">
+    <Row fillWidth gap="16" s={{direction: "column"}}>
+      <Row flex="2" height={8}/>
+      <Row flex="3" height={8}/>
+    </Row>
+    <Row fillWidth gap="16" s={{direction: "column"}}>
+      <Row flex="3" height={8}/>
+      <Row flex="2" height={8}/>
+    </Row>
+</Column>`,
+      language: "tsx",
+      label: "Flex"
+    }
+  ]}
+/>
+
+You can also use `maxWidth`, `minHeight`, and `aspectRatio`. `maxWidth` will also apply `fillWidth`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fitHeight fillWidth horizontal="center" gap="16" align="center" onBackground="neutral-weak" textVariant="label-default-s">
+      <Background maxWidth={20}
+        background="neutral-alpha-weak"
+        center border="neutral-alpha-medium" radius="m" padding="16"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        maxWidth: 20
+      </Background>
+      <Background
+        background="neutral-alpha-weak"
+        center border="neutral-alpha-medium" radius="m" padding="16"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        aspectRatio="16/9">
+        aspectRatio: 16 / 9
+      </Background>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column maxWidth={20}>
+    maxWidth: 20
+</Column>
+<Column fillWidth aspectRatio="16/9">
+    aspectRatio: 16 / 9
+</Column>
+`,
+      language: "tsx",
+      label: "Fill"
+    }
+  ]}
+/>
+
+### Position
+
+Override the default `relative` position with `absolute`, `fixed`, `sticky`, or `static`. Use `top`, `right`, `bottom`, and `left` to position the element. Set [SpacingToken](/once-ui/basics/spacing) values for `top`, `right`, `bottom`, and `left`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth height={12} padding="24" border="neutral-alpha-medium" radius="xl">
+      <Background
+        fill
+        background="neutral-alpha-weak"
+        center border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+      </Background>
+      <Icon width="40" height="40" position="absolute" top="12" right="12" center solid="brand-medium" radius="full" name="close" onSolid="brand-strong"/>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column padding="24">
+    <Row fill/>
+    <Icon position="absolute" top="12" right="12" name="close"/>
+</Column>`,
+      language: "tsx",
+      label: "Position"
+    }
+  ]}
+/>
+
+### Color
+
+Use the `background` and `solid` props to apply colors, and the `onBackground` and `onSolid` props respectively to apply text colors.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+  <Flex fillWidth gap="l" s={{direction: "column"}}>
+    <Column
+      data-theme="dark"
+      fillWidth
+      background="brand-medium"
+      border="brand-medium"
+      padding="l"
+      radius="m"
+      center
+      gap="16"
+      minHeight={8}
+    >
+      <Tag
+        position="absolute"
+        left="8"
+        top="8"
+        label="Dark"
+      />
+      <Text variant="body-default-s" onBackground="brand-medium" align="center">
+        Text on background
+      </Text>
+    </Column>
+
+    <Column
+      data-theme="light"
+      fillWidth
+      background="brand-medium"
+      border="brand-medium"
+      padding="l"
+      radius="m"
+      center
+      gap="16"
+      minHeight={8}
+    >
+      <Tag
+        position="absolute"
+        left="8"
+        top="8"
+        label="Light"
+      />
+      <Text variant="body-default-s" onBackground="brand-medium" align="center">
+        Text on background
+      </Text>
+    </Column>
+  </Flex>
+  }
+  codes={[
+    {
+      code:
+`<Row background="brand-medium">
+    <Text onBackground="brand-medium">
+      Text on background
+    </Text>
+</Row>`,
+      language: "tsx",
+      label: "Background + onBackground"
+    }
+  ]}
+/>
+
+The `solid` prop is commonly used for interactive element backgrounds, such as the button and checkbox.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+  <Flex fillWidth gap="l" s={{direction: "column"}}>
+    <Column
+      data-theme="dark"
+      fillWidth
+      background="neutral-medium"
+      border="neutral-medium"
+      padding="l"
+      radius="m"
+      center
+      gap="16"
+      minHeight={8}
+    >
+      <Tag
+        position="absolute"
+        left="8"
+        top="8"
+        label="Dark"
+        variant="neutral"
+      />
+      <Column
+        solid="accent-medium"
+        paddingY="8"
+        paddingX="16"
+        radius="m"
+        vertical="center"
+        gap="16"
+      >
+        <Text onSolid="neutral-strong" align="center" variant="label-default-s">
+          Text on solid
+        </Text>
+      </Column>
+    </Column>
+
+    <Column
+      data-theme="light"
+      fillWidth
+      background="neutral-medium"
+      padding="l"
+      radius="m"
+      center
+      gap="16"
+      minHeight={8}
+      border="neutral-medium"
+    >
+      <Tag
+        position="absolute"
+        left="8"
+        top="8"
+        label="Light"
+        variant="neutral"
+      />
+      <Column
+        solid="accent-medium"
+        paddingY="8"
+        paddingX="16"
+        radius="m"
+        vertical="center"
+        gap="16"
+      >
+        <Text onSolid="neutral-strong" align="center" variant="label-default-s">
+          Text on solid
+        </Text>
+      </Column>
+    </Column>
+  </Flex>
+  }
+  codes={[
+    {
+      code:
+`<Row solid="accent-medium">
+    <Text onSolid="accent-strong">
+      Text on solid
+    </Text>
+</Row>`,
+      language: "tsx",
+      label: "Solid + onSolid"
+    }
+  ]}
+/>
+
+The `alpha` properties let you design subtle backgrounds and overlays.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+  <Flex fillWidth gap="l" s={{direction: "column"}}>
+    <Column
+      data-theme="dark"
+      fillWidth
+      background="neutral-medium"
+      border="neutral-medium"
+      padding="l"
+      radius="m"
+      center
+      gap="16"
+      minHeight={8}
+    >
+      <Tag
+        position="absolute"
+        left="8"
+        top="8"
+        label="Dark"
+        variant="neutral"
+      />
+      <Column
+        background="success-alpha-weak"
+        border="success-alpha-weak"
+        paddingY="8"
+        paddingX="16"
+        radius="m"
+        vertical="center"
+        gap="16"
+      >
+        <Text onBackground="success-medium" align="center" variant="label-default-s">
+          Text on alpha
+        </Text>
+      </Column>
+    </Column>
+
+    <Column
+      data-theme="light"
+      fillWidth
+      background="neutral-medium"
+      padding="l"
+      radius="m"
+      center
+      gap="16"
+      minHeight={8}
+      border="neutral-medium"
+    >
+      <Tag
+        position="absolute"
+        left="8"
+        top="8"
+        label="Light"
+        variant="neutral"
+      />
+      <Column
+        background="success-alpha-weak"
+        border="success-alpha-weak"
+        paddingY="8"
+        paddingX="16"
+        radius="m"
+        vertical="center"
+        gap="16"
+      >
+        <Text onBackground="success-medium" align="center" variant="label-default-s">
+          Text on alpha
+        </Text>
+      </Column>
+    </Column>
+  </Flex>
+  }
+  codes={[
+    {
+      code:
+`<Row background="success-alpha-weak" border="success-alpha-weak">
+    <Text onBackground="success-medium">
+      Text on alpha
+    </Text>
+</Row>`,
+      language: "tsx",
+      label: "Alpha + onBackground"
+    }
+  ]}
+/>
+
+The `surface` background and border property allows you to style elements differently in light- and dark mode. By default, the surface background is `neutral-medium` in dark mode and `neutral-weak` in light mode, and the border color is `transparent` in dark mode and `neutral-medium` in light mode.
+
+The surface properties are designed for large layout container elements such as headers or sidebars.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+  <Column
+    horizontal="center"
+    data-surface="filled" fillWidth gap="l" s={{direction: "column"}}>
+    <Flex
+      fillWidth
+      vertical="center"
+      background="neutral-weak"
+      paddingY="l"
+      paddingX="m"
+      radius="m"
+      gap="16"
+      minHeight={8}
+      border="neutral-medium"
+    >
+      <Tag
+        position="absolute"
+        left="8"
+        top="8"
+        label="Dark"
+        variant="neutral"
+      />
+      <Flex
+        fillWidth
+        paddingX="16"
+        paddingY="8"
+        background="surface"
+        border="surface"
+        radius="m"
+        horizontal="between"
+        vertical="center"
+      >
+        <Logo dark wordmark="/trademark/type-dark.svg" size="xs" href="/"/>
+        <Logo light wordmark="/trademark/type-light.svg" size="xs" href="/"/>
+        <Avatar
+          size="m"
+          src="/images/avatar.jpg"
+          statusIndicator={{
+            color: "green",
+          }}
+        />
+      </Flex>
+    </Flex>
+    <ThemeSwitcher/>
+  </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row
+    background="surface"
+    border="surface">
+    <Logo dark wordmark="/trademark/type-dark.svg" size="xs"/>
+    <Logo light wordmark="/trademark/type-light.svg" size="xs"/>
+    <Avatar/>
+</Row>`,
+      language: "tsx",
+      label: "Surface"
+    }
+  ]}
+/>
+
+### Spacing
+
+Use utility props to apply spacing consistently, such as the `padding`, `paddingX`, `marginTop`, etc. Values can be [spacing tokens](/once-ui/basics/spacing) or numbers (converted to `rem`). Use the `gap` to set the internal spacing between children.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth>
+      <Background fillWidth height="48"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="m" padding="16"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Column fillWidth paddingX="xl" paddingY="24" gap="40" marginTop="40"
+        border="neutral-alpha-medium" radius="m">
+        <Background fillWidth height="64"
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="m" padding="16"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fillWidth height="64"
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="m" padding="16"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+      </Column>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column fillWidth>
+    <Row fillWidth height="48" radius="m"/>
+    <Column fillWidth paddingX="xl" paddingY="24" gap="40" marginTop="40" radius="m">
+      <Row fillWidth height="64" radius="m" padding="16"/>
+      <Row fillWidth height="64" radius="m" padding="16"/>
+    </Column>
+</Column>`,
+      language: "tsx",
+      label: "Spacing"
+    }
+  ]}
+/>
+
+### Border
+
+Apply borders using the `border`, `borderWidth` and `borderStyle` props. Since most borders are 1px solid, this will be the default if not specified. Border naming follows the same color naming as `background` and `solid`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="24" wrap horizontal="center">
+      <Background
+        background="success-alpha-weak"
+        lines={{display: true, color: "success-alpha-medium"}}
+        border="success-medium"
+        radius="full"
+        height="64"
+        width="64"
+      />
+      <Background
+        background="warning-alpha-weak"
+        lines={{display: true, color: "warning-alpha-medium"}}
+        border="warning-medium"
+        borderWidth="2"
+        radius="full"
+        height="64"
+        width="64"
+      />
+      <Background
+        background="danger-alpha-weak"
+        lines={{display: true, color: "danger-alpha-medium"}}
+        border="danger-medium"
+        borderWidth="2"
+        borderStyle="dashed"
+        radius="full"
+        height="64"
+        width="64"
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Background
+    border="success-medium"
+  />
+  <Background
+    border="warning-medium"
+    borderWidth="2"
+  />
+  <Background
+    border="danger-medium"
+    borderWidth="2"
+    borderStyle="dashed"
+/>`,
+      language: "tsx",
+      label: "Border"
+    }
+  ]}
+/>
+
+### Radius
+
+Border radius convention follows the [extended T-shirt size model](/once-ui/basics/border).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Flex fillWidth s={{direction: "column"}} gap="m">
+      <Flex fillWidth padding="8" shadow="m" border="neutral-alpha-medium" radius="xs-8">
+        <Flex fillWidth padding="4" border="neutral-alpha-medium" radius="xs-4">
+          <Background
+            background="neutral-alpha-weak"
+            lines={{display: true, color: "neutral-alpha-weak"}}
+            fillWidth
+            height={4}
+            border="neutral-alpha-medium"
+            radius="xs"
+          />
+        </Flex>
+      </Flex>
+      <Flex fillWidth padding="8" shadow="m" border="neutral-alpha-medium" radius="s-8">
+        <Flex fillWidth padding="4" border="neutral-alpha-medium" radius="s-4">
+          <Background
+            background="neutral-alpha-weak"
+            lines={{display: true, color: "neutral-alpha-weak"}}
+            fillWidth
+            height={4}
+            border="neutral-alpha-medium"
+            radius="s"
+          />
+        </Flex>
+      </Flex>
+      <Flex fillWidth padding="8" shadow="m" border="neutral-alpha-medium" radius="m-8">
+        <Flex fillWidth padding="4" border="neutral-alpha-medium" radius="m-4">
+          <Background
+            background="neutral-alpha-weak"
+            lines={{display: true, color: "neutral-alpha-weak"}}
+            fillWidth
+            height={4}
+            border="neutral-alpha-medium"
+            radius="m"
+          />
+        </Flex>
+      </Flex>
+      <Flex fillWidth padding="8" shadow="m" border="neutral-alpha-medium" radius="l-8">
+        <Flex fillWidth padding="4" border="neutral-alpha-medium" radius="l-4">
+          <Background
+            background="neutral-alpha-weak"
+            lines={{display: true, color: "neutral-alpha-weak"}}
+            fillWidth
+            height={4}
+            border="neutral-alpha-medium"
+            radius="l"
+          />
+        </Flex>
+      </Flex>
+      <Flex fillWidth padding="8" shadow="m" border="neutral-alpha-medium" radius="xl-8">
+        <Flex fillWidth padding="4" border="neutral-alpha-medium" radius="xl-4">
+          <Background
+            background="neutral-alpha-weak"
+            lines={{display: true, color: "neutral-alpha-weak"}}
+            fillWidth
+            height={4}
+            border="neutral-alpha-medium"
+            radius="xl"
+          />
+        </Flex>
+      </Flex>
+    </Flex>
+  }
+  codes={[
+    {
+      code:
+`<Row radius="xs-8" padding="8">
+    <Row radius="xs-4" padding="4">
+      <Row radius="xs"/>
+    </Row>
+  </Row>
+  <Row radius="s-8" padding="8">
+    <Row radius="s-4" padding="4">
+      <Row radius="s"/>
+    </Row>
+  </Row>
+  <Row radius="m-8" padding="8">
+    <Row radius="m-4" padding="4">
+      <Row radius="m"/>
+    </Row>
+  </Row>
+  <Row radius="l-8" padding="8">
+    <Row radius="l-4" padding="4">
+      <Row radius="l"/>
+    </Row>
+  </Row>
+  <Row radius="xl-8" padding="8">
+    <Row radius="xl-4" padding="4">
+      <Row radius="xl"/>
+    </Row>
+</Row>`,
+      language: "tsx",
+      label: "Radius"
+    }
+  ]}
+/>
+
+Apply radius to specific sides or corners of a `Flex`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center" gap="4">
+      <Background fillWidth height={4}
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" leftRadius="l" rightRadius="xs"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fillWidth height={4}
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" leftRadius="xs" rightRadius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row>
+    <Row leftRadius="l" rightRadius="xs"/>
+    <Row leftRadius="xs" rightRadius="l"/>
+</Row>`,
+      language: "tsx",
+      label: "Selective radius"
+    }
+  ]}
+/>
+
+Define a `radius` and then override it at specific corners:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="4">
+      <Row fillWidth horizontal="center" gap="4">
+        <Background fillWidth height={4}
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="xs" topLeftRadius="l"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fillWidth height={4}
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="xs" topRightRadius="l"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+      </Row>
+      <Row fillWidth horizontal="center" gap="4">
+        <Background fillWidth height={4}
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="xs" bottomLeftRadius="l"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fillWidth height={4}
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="xs" bottomRightRadius="l"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row>
+    <Row radius="xs" topLeftRadius="l"/>
+    <Row radius="xs" topRightRadius="l"/>
+  </Row>
+  <Row>
+    <Row radius="xs" bottomLeftRadius="l"/>
+    <Row radius="xs" bottomRightRadius="l"/>
+</Row>`,
+      language: "tsx",
+      label: "Radius overrides"
+    }
+  ]}
+/>
+
+### Shadow
+
+Use the `shadow` prop to apply box-shadows with the default T-shirt size model.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="40" horizontal="center">
+      <Row fillWidth gap="16" height={6}>
+        <Background fill
+          shadow="xs"
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="l"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fill
+          shadow="s"
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="l"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fill
+          shadow="m"
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="l"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fill
+          shadow="l"
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="l"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fill
+          shadow="xl"
+          background="neutral-alpha-weak"
+          border="neutral-alpha-medium" radius="l"
+          lines={{display: true, color: "neutral-alpha-weak"}}/>
+      </Row>
+      <ThemeSwitcher/>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row shadow="xs"/>
+<Row shadow="s"/>
+<Row shadow="m"/>
+<Row shadow="l"/>
+<Row shadow="xl"/>`,
+      language: "tsx",
+      label: "Shadow"
+    }
+  ]}
+/>
+
+### Opacity
+
+You can set `opacity` from `0` to `100` in steps of `10`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="16" height={6}>
+      <Background fill opacity="0"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="10"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="20"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="30"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="40"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="50"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="60"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="70"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="80"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="90"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill opacity="100"
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row opacity="0"/>
+<Row opacity="10"/>
+<Row opacity="20"/>
+<Row opacity="30"/>
+<Row opacity="40"/>
+<Row opacity="50"/>
+<Row opacity="60"/>
+<Row opacity="70"/>
+<Row opacity="80"/>
+<Row opacity="90"/>
+<Row opacity="100"/>`,
+      language: "tsx",
+      label: "Opacity"
+    }
+  ]}
+/>
+
+### Conditionals
+
+Use the `hide` prop to conditionally render elements based on breakpoint.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="24" align="center" onBackground="neutral-weak" textVariant="label-default-s">
+      <Background m={{hide: true}} fillWidth padding="24" center
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Shown above the "m" breakpoint
+      </Background>
+      <Background hide m={{hide: false}} fillWidth padding="24" center
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Hidden on / below the "m" breakpoint
+      </Background>
+      You can only see a single block, but there are two here.
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row m={{hide: true}}>
+    <Text>Shown above the "m" breakpoint</Text>
+</Row>
+<Row hide m={{hide: false}}>
+    <Text>Hidden on / below the "m" breakpoint</Text>
+</Row>`,
+      language: "tsx",
+      label: "Hide / Show"
+    }
+  ]}
+/>
+
+Use the `dark` and `light` props to limit rendering by theme.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="24" horizontal="center">
+      <Media src="/images/docs/once-ui/vibe-coding-dark.jpg" alt="Dark theme" dark
+        sizes="(max-width: 1024px) 90vw, 640px"
+        aspectRatio="16/9"
+        border="neutral-alpha-medium" radius="l"/>
+      <Media src="/images/docs/once-ui/vibe-coding-light.jpg" alt="Light theme" light
+        sizes="(max-width: 1024px) 90vw, 640px"
+        aspectRatio="16/9"
+        border="neutral-alpha-medium" radius="l"/>
+      <ThemeSwitcher/>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Media dark src="/image-dark.jpg"/>
+<Media light src="/image-light.jpg"/>`,
+      language: "tsx",
+      label: "Hide / Show"
+    }
+  ]}
+/>
+
+### Cursor
+
+Adjust the cursor with the `cursor` prop. Use the `interactive` value to utilize a tokenized variable for the pointer, so you can update all instances simultaneously.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="24">
+      <Background
+        height={6} padding="16"
+        horizontal="center" vertical="end"
+        onBackground="neutral-weak"
+        textVariant="label-default-s"
+        cursor="interactive"
+        fillWidth
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Interactive
+      </Background>
+      <Background
+        height={6} padding="16"
+        horizontal="center" vertical="end"
+        onBackground="neutral-weak"
+        textVariant="label-default-s"
+        cursor="text"
+        fillWidth
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        text
+      </Background>
+      <Background
+        height={6} padding="16"
+        horizontal="center" vertical="end"
+        onBackground="neutral-weak"
+        textVariant="label-default-s"
+        cursor="wait"
+        fillWidth
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        wait
+      </Background>
+      <Background
+        height={6} padding="16"
+        horizontal="center" vertical="end"
+        onBackground="neutral-weak"
+        textVariant="label-default-s"
+        cursor="zoom-in"
+        fillWidth
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        zoom-in
+      </Background>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row cursor="interactive">
+    Interactive
+</Row>
+<Row cursor="text">
+    text
+</Row>
+<Row cursor="wait">
+    wait
+</Row>
+<Row cursor="zoom-in">
+    zoom-in
+</Row>`,
+      language: "tsx",
+      label: "Cursor"
+    }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="24">
+      <Background
+        height={6} padding="16"
+        horizontal="center" vertical="end"
+        onBackground="neutral-weak"
+        textVariant="label-default-s"
+        fillWidth
+        cursor={<Spinner />}
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Loading
+      </Background>
+      <Background
+        height={6} padding="16"
+        horizontal="center" vertical="end"
+        onBackground="neutral-weak"
+        textVariant="label-default-s"
+        cursor={<Row fill center><Line minWidth={1000} /> <Line vert minHeight={1000} position="absolute" /></Row>}
+        fillWidth
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Crosshair
+      </Background>
+      <Background
+        height={6} padding="16"
+        horizontal="center" vertical="end"
+        onBackground="neutral-weak"
+        textVariant="label-default-s"
+        cursor={<Row width="24" height="24" radius="full" solid="brand-strong" />}
+        fillWidth
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Circle
+      </Background>
+      <Background
+        height={6} padding="16"
+        horizontal="center" vertical="end"
+        onBackground="neutral-weak"
+        textVariant="label-default-s"
+        cursor={<Media src="/images/docs/poko-dafaq.png" width="128" alt="Poko cursor" sizes="128px" aspectRatio="232/198"/>}
+        fillWidth
+        background="neutral-alpha-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Poko
+      </Background>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row cursor="interactive">
+    Interactive
+</Row>
+<Row cursor="text">
+    text
+</Row>
+<Row cursor="wait">
+    wait
+</Row>
+<Row cursor="zoom-in">
+    zoom-in
+</Row>`,
+      language: "tsx",
+      label: "Custom cursor"
+    }
+  ]}
+/>
+
+
+### zIndex
+
+You can set `zIndex` from `-1` to `10`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="24" textVariant="label-default-s" onBackground="neutral-weak" align="center">
+    <Row fillWidth height={6} style={{isolation: "isolate"}}>
+      <Background fill zIndex="10" style={{marginLeft: "-1rem"}}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill zIndex="8" style={{marginLeft: "-1rem"}}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill zIndex="6" style={{marginLeft: "-1rem"}}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill zIndex="4" style={{marginLeft: "-1rem"}}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill zIndex="2" style={{marginLeft: "-1rem"}}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background fill zIndex="0" style={{marginLeft: "-1rem"}}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+    </Row>
+    Based on the HTML, the order should be the opposite, but we reverse it with zIndex.
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row zIndex="10"/>
+<Row zIndex="8"/>
+<Row zIndex="6"/>
+<Row zIndex="4"/>
+<Row zIndex="2"/>
+<Row zIndex="0"/>`,
+      language: "tsx",
+      label: "zIndex"
+    }
+  ]}
+/>
+
+### Text
+
+Use the `textVariant` prop to apply text styles to children elements. Use the `align` to set their alignment, and the `onBackground` to set their color.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <Background
+        center padding="16" fillWidth
+        textVariant="display-strong-xs"
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Display text
+      </Background>
+      <Background
+        center padding="16" fillWidth
+        textVariant="heading-strong-l"
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Heading text
+      </Background>
+      <Background
+        center padding="16" fillWidth
+        textVariant="body-default-m" onBackground="neutral-weak"
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Body text
+      </Background>
+      <Background
+        center padding="16" fillWidth
+        textVariant="code-default-m" onBackground="success-weak"
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Code text
+      </Background>
+      <Background
+        center padding="16" fillWidth
+        textVariant="label-default-s" onBackground="brand-weak"
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        Label text
+      </Background>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row textVariant="display-strong-xs">
+    Display text
+</Row>
+<Row textVariant="heading-strong-l">
+    Heading text
+</Row>
+<Row textVariant="body-default-m" onBackground="neutral-weak">
+    Body text
+</Row>
+<Row textVariant="code-default-m" onBackground="success-weak">
+    Code text
+</Row>
+<Row textVariant="label-default-s" onBackground="brand-weak">
+    Label text
+</Row>`,
+      language: "tsx",
+      label: "Text"
+    }
+  ]}
+/>
+
+### Responsiveness
+
+Override layout flow with `s` or `m` props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="24" s={{direction: "column"}}>
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+    </Row>
+  }
+  codes={[
+    {
+      code: `
+<Row s={{direction: "column"}}>
+    <Row fillWidth height={6}/>
+    <Row fillWidth height={6}/>
+    <Row fillWidth height={6}/>
+    <Row fillWidth height={6}/>
+</Row>
+`,
+      language: "tsx",
+      label: "Responsive direction"
+    }
+  ]}
+/>
+
+- `overflowX`, `overflowY`, or `overflow`
+
+- `transition="micro-medium"` sets duration presets
+
+## Grid
+
+All non-flex-specific properties of the `Flex` are also available on the `Grid`.
+
+### Columns
+
+Use the `columns` prop to define the number of columns. use the `s` and `m` props to define the number of columns on mobile and tablet devices.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Grid fillWidth columns="3" m={{columns: 2}} s={{columns: 1}} gap="24">
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+      <Background
+        fillWidth
+        height={6}
+        background="neutral-weak"
+        border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}/>
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<Grid fillWidth columns="4"/>
+    <Row fillWidth/>
+    <Row fillWidth/>
+    <Row fillWidth/>
+    <Row fillWidth/>
+    <Row fillWidth/>
+    <Row fillWidth/>
+</Grid>`,
+      language: "tsx",
+      label: "Columns"
+    }
+  ]}
+/>
+
+## Composition
+
+Both `Flex` and `Grid` components:
+
+- Use `forwardRef`
+- Expose `className`, `style`, and full layout props
+- Furthermore, Flex spreads props on the outermost `Flex` wrapper of components
+
+That’s the Once UI layout model — composable, prop-based, responsive by default, and production-oriented.
+
+You now have a low-code layouting language.

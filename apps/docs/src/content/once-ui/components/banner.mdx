@@ -1,0 +1,165 @@
+---
+title: "Banner"
+summary: "The Banner component displays important information in a highlighted horizontal bar across the interface."
+updatedAt: "2025-05-05"
+docs: "once-ui/components/banner.mdx"
+github: "components/Banner.tsx"
+navLabel: "Banner"
+navIcon: "components"
+---
+
+A simple component for displaying important announcements, notifications, or status messages in a prominent horizontal bar. Commonly used to draw attention to critical information or updates.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth>
+      <Banner>
+        Free shipping on orders over $50
+      </Banner>
+      <Row fillWidth padding="8">
+        <Background height="64" fillWidth radius="m" border="neutral-alpha-medium" lines={{display: true, angle: -45, color: "neutral-alpha-weak", size: "8", thickness: 1}}/>
+      </Row>
+    </Column>
+  }
+  previewPadding="0"
+  codes={[
+    {
+      code:
+`<Banner>
+    Free shipping on orders over $50
+</Banner>`,
+      language: "tsx",
+      label: "Banner"
+    }
+  ]}
+/>
+
+## With icons
+
+Add icons to enhance visual communication.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="8"
+  preview={
+    <Column fillWidth gap="8">
+      <Banner radius="s">
+        <Icon name="check" size="s" /> Claim your free credits.
+      </Banner>
+      <Row fillWidth padding="8">
+        <Background height="64" fillWidth radius="m" border="neutral-alpha-medium" lines={{display: true, angle: -45, color: "neutral-alpha-weak", size: "8", thickness: 1}}/>
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Banner radius="s">
+    <Icon name="check" size="s" />
+    Claim your free credits.
+</Banner>
+
+<Row fillWidth padding="8">
+    <Background height="64" fillWidth radius="m" border="neutral-alpha-medium" lines={{display: true, angle: -45, color: "neutral-alpha-weak", size: "8", thickness: 1}}/>
+</Row>`,
+      language: "tsx",
+      label: "Banner with icon"
+    }
+  ]}
+/>
+
+## Custom styling
+
+Customize the appearance of banners using Flex props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Banner radius="s" border="success-medium" background="success-weak" onBackground="success-medium">
+        <Icon name="check" size="s" />
+        Operation completed successfully.
+      </Banner>
+      <Banner radius="s" border="warning-medium" background="warning-weak" onBackground="warning-medium">
+        <Icon name="warning" size="s" />
+        Please review your information before proceeding.
+      </Banner>
+      <Banner radius="s" border="danger-medium" background="danger-weak" onBackground="danger-medium">
+        <Icon name="danger" size="s" />
+        Critical error detected in the system.
+      </Banner>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Banner solid="success-medium" onSolid="success-strong">
+    <Icon name="check" size="s" />
+    Operation completed successfully.
+</Banner>
+
+<Banner solid="warning-medium" onSolid="warning-strong">
+    <Icon name="warning" size="s" />
+    Please review your information before proceeding.
+</Banner>
+
+<Banner solid="danger-medium" onSolid="danger-strong">
+    <Icon name="alert" size="s" />
+    Critical error detected in the system.
+</Banner>`,
+      language: "tsx",
+      label: "Custom styled banners"
+    }
+  ]}
+/>
+
+## With actions
+
+Add interactive elements to banners.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Column fillWidth>
+      <Banner horizontal="between">
+        Accept our privacy policy to continue.
+        <Row gap="8">
+          <Button size="s">Decline</Button>
+          <Button size="s" variant="secondary">Accept</Button>
+        </Row>
+      </Banner>
+      <Row fillWidth padding="8">
+        <Background height="64" fillWidth radius="m" border="neutral-alpha-medium" lines={{display: true, angle: -45, color: "neutral-alpha-weak", size: "8", thickness: 1}}/>
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Banner horizontal="between">
+    Accept our privacy policy to continue.
+    <Row gap="8">
+      <Button size="s">Decline</Button>
+      <Button size="s" variant="secondary">Accept</Button>
+    </Row>
+</Banner>`,
+      language: "tsx",
+      label: "Banner with actions"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["children"],
+    ["...flex"]
+  ]}
+/>

@@ -1,0 +1,98 @@
+---
+title: "InlineCode"
+summary: "A component for displaying inline code snippets with consistent styling."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/inlineCode.mdx"
+github: "components/InlineCode.tsx"
+navLabel: "InlineCode"
+navIcon: "components"
+---
+
+The InlineCode component is used to display code snippets inline with text. It provides consistent styling with a monospace font and a subtle background to make code stand out from regular text.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" wrap>
+      <InlineCode>npm install once-ui</InlineCode>
+      <InlineCode>const value = 42;</InlineCode>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<InlineCode>npm install once-ui</InlineCode>
+<InlineCode>const value = 42;</InlineCode>`,
+      language: "tsx",
+      label: "InlineCode"
+    }
+  ]}
+/>
+
+## Inline
+
+InlineCode can be used within text elements to highlight code snippets.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Text>Install the package using <InlineCode>npm install once-ui</InlineCode> or <InlineCode>yarn add once-ui</InlineCode>.</Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text>
+    Install the package using <InlineCode>npm install once-ui</InlineCode> or <InlineCode>yarn add once-ui</InlineCode>.
+</Text>`,
+      language: "tsx",
+      label: "Inline"
+    }
+  ]}
+/>
+
+## Custom styling
+
+InlineCode inherits Flex props, allowing for customization of its appearance.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" wrap>
+      <InlineCode background="brand-alpha-weak" border="brand-alpha-medium">Custom background</InlineCode>
+      <InlineCode background="accent-alpha-weak" border="accent-alpha-medium">Accent style</InlineCode>
+      <InlineCode background="success-alpha-weak" border="success-alpha-medium">Success style</InlineCode>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<InlineCode background="brand-alpha-weak" border="brand-alpha-medium">
+    Custom background
+</InlineCode>
+<InlineCode background="accent-alpha-weak" border="accent-alpha-medium">
+    Accent style
+</InlineCode>
+<InlineCode background="success-alpha-weak" border="success-alpha-medium">
+    Success style
+</InlineCode>`,
+      language: "tsx",
+      label: "Custom styling"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["children"],
+    ["className"],
+    ["style"],
+    ["...flex"],
+  ]}
+/>

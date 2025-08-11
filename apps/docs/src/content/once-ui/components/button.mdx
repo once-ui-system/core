@@ -1,0 +1,384 @@
+---
+title: "Button"
+summary: "The Button component provides interactive elements for user actions with various styles, sizes, and states."
+updatedAt: "2025-05-05"
+docs: "once-ui/components/button.mdx"
+github: "components/Button.tsx"
+navLabel: "Button"
+navIcon: "components"
+---
+
+A versatile component for triggering actions or navigating to different pages. Buttons communicate interactivity and guide users through their journey in the application.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Button size="s" weight="default" prefixIcon="check">Primary</Button>
+      <Button size="s" weight="default" variant="secondary" prefixIcon="plus">Secondary</Button>
+      <Button size="s" weight="default" variant="tertiary" suffixIcon="chevronDown">Tertiary</Button>
+      <Button size="s" weight="default" variant="danger" prefixIcon="danger">Danger</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Button size="s" weight="default">
+    Primary
+  </Button>
+  <Button size="s" weight="default" variant="secondary">
+    Secondary
+  </Button>
+  <Button size="s" weight="default" variant="tertiary">
+    Tertiary
+  </Button>
+  <Button size="s" weight="default" variant="danger">
+    Danger
+</Button>`,
+      language: "tsx",
+      label: "Variants"
+    }
+  ]}
+/>
+
+## Sizes
+
+Buttons come in different sizes to accommodate various use cases.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" vertical="center" horizontal="center">
+      <Button size="s">Small</Button>
+      <Button size="m">Medium</Button>
+      <Button size="l">Large</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Button size="s">
+    Small
+  </Button>
+  <Button size="m">
+    Medium
+  </Button>
+  <Button size="l">
+    Large
+</Button>`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+## Text weight
+
+Control the font weight of button text.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Button variant="secondary" size="s" weight="default">Default</Button>
+      <Button variant="secondary" size="s" weight="strong">Strong</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="16">
+    <Button variant="secondary" size="s" weight="default">
+      Default
+    </Button>
+    <Button variant="secondary" size="s" weight="strong">
+      Strong
+    </Button>
+</Row>`,
+      language: "tsx",
+      label: "Text weight"
+    }
+  ]}
+/>
+
+## Fill width
+
+Control the width of button.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center" maxWidth={20}>
+      <Button size="s" weight="default">
+      Default
+      </Button>
+      <Button size="s" fillWidth weight="default">
+      Filled
+      </Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="16" horizontal="center" maxWidth={20}>
+    <Button size="s" weight="default">
+      Default
+    </Button>
+    <Button size="s" fillWidth weight="default">
+      Filled
+    </Button>
+</Row>`,
+      language: "tsx",
+      label: "Width"
+    }
+  ]}
+/>
+
+## With icons
+
+Enhance buttons with icons to improve visual communication.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Button prefixIcon="check">Confirm</Button>
+      <Button suffixIcon="chevronRight">Next</Button>
+      <Button prefixIcon="info" suffixIcon="chevronRight">Learn more</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Button prefixIcon="check">
+    Confirm
+  </Button>
+  <Button suffixIcon="chevronRight">
+    Next
+  </Button>
+  <Button prefixIcon="info" suffixIcon="chevronRight">
+    Learn more
+</Button>`,
+      language: "tsx",
+      label: "With icon"
+    }
+  ]}
+/>
+
+## Loading
+
+Display a loading spinner to indicate that an action is in progress.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Button weight="default" loading>Loading</Button>
+      <Button weight="default" variant="secondary" loading>Processing</Button>
+      <Button weight="default" variant="tertiary" loading>Saving</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Button loading>
+    Loading
+  </Button>
+  <Button variant="secondary" loading>
+    Processing
+  </Button>
+  <Button variant="tertiary" loading>
+    Saving
+</Button>`,
+      language: "tsx",
+      label: "Loading"
+    }
+  ]}
+/>
+
+## Radius
+
+Customize the corner radius of buttons for different design needs.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Button weight="default" radius="top-left">Top left</Button>
+      <Button weight="default" radius="none">No radius</Button>
+      <Button weight="default" radius="bottom-right">Bottom right</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Button weight="default" radius="none">
+    No radius
+  </Button>
+  <Button weight="default">
+    Default radius
+  </Button>
+  <Button weight="default" radius="top-left">
+    Top left
+  </Button>
+  <Button weight="default" radius="bottom-right">
+    Bottom right
+</Button>`,
+      language: "tsx",
+      label: "Radius"
+    }
+  ]}
+/>
+
+## As link
+
+Buttons can function as links when provided with an `href` property.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Button href="#">Link Button</Button>
+      <Button href="#" variant="secondary">Secondary Link</Button>
+      <Button href="#" variant="tertiary" suffixIcon="chevronRight">Learn More</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Button href="#">
+    Link Button
+  </Button>
+  <Button href="#" variant="secondary">
+    Secondary Link
+  </Button>
+  <Button href="#" variant="tertiary" suffixIcon="chevronRight">
+    Learn More
+</Button>`,
+      language: "tsx",
+      label: "Links"
+    }
+  ]}
+/>
+
+## Arrow animation
+
+Add an animated arrow that responds to hover events.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Button id="arrow-button-1" arrowIcon>Primary</Button>
+      <Button id="arrow-button-2" variant="secondary" arrowIcon>Secondary</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Button id="arrow-button-1" arrowIcon>
+    Primary
+  </Button>
+  <Button id="arrow-button-2" variant="secondary" arrowIcon>
+    Secondary
+</Button>`,
+      language: "tsx",
+      label: "Arrow"
+    }
+  ]}
+/>
+
+## Horizontal alignment
+
+Control the alignment of button content.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" horizontal="center" maxWidth={20}>
+      <Button size="s" fillWidth horizontal="start" prefixIcon="check">Left Aligned</Button>
+      <Button size="s" fillWidth horizontal="center">Center Aligned</Button>
+      <Button size="s" fillWidth horizontal="end" suffixIcon="chevronDown">Right Aligned</Button>
+      <Button size="s" fillWidth horizontal="between" prefixIcon="check" suffixIcon="chevronDown">Space Between</Button>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Button fillWidth horizontal="start" prefixIcon="check">
+    Left Aligned
+  </Button>
+  <Button fillWidth horizontal="center">
+    Center Aligned
+  </Button>
+  <Button fillWidth horizontal="end" suffixIcon="chevronDown">
+    Right Aligned
+  </Button>
+  <Button fillWidth horizontal="between" prefixIcon="check" suffixIcon="chevronDown">
+    Space Between
+</Button>`,
+      language: "tsx",
+      label: "Alignment"
+    }
+  ]}
+/>
+
+## Data attributes
+
+Override default styles with data attributes.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row wrap gap="16" horizontal="center">
+      <Button data-border="rounded" size="s">Button</Button>
+      <Button data-border="playful" data-solid="color" size="s">Button</Button>
+      <Button data-border="conservative" data-solid="inverse" data-brand="yellow" size="s">Button</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row wrap gap="16" horizontal="center">
+    <Button data-border="rounded" size="s">Button</Button>
+    <Button data-border="playful" data-solid="color" size="s">Button</Button>
+    <Button data-border="conservative" data-solid="inverse" data-brand="yellow" size="s">Button</Button>
+</Row>`,
+      language: "tsx",
+      label: "Data attributes"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["variant", ["primary", "secondary", "tertiary", "danger"], "primary"],
+    ["size", ["s", "m", "l"], "m"],
+    ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
+    ["label", "string"],
+    ["weight", ["default", "strong"], "strong"],
+    ["prefixIcon", "IconName"],
+    ["suffixIcon", "IconName"],
+    ["loading", "boolean", "false"],
+    ["fillWidth", "boolean", "false"],
+    ["horizontal", ["start", "center", "end", "between"], "center"],
+    ["children", "ReactNode"],
+    ["href", "string"],
+    ["arrowIcon", "boolean", "false"],
+    ["className"],
+    ["style"],
+  ]}
+/>

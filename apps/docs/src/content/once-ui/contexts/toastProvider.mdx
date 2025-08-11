@@ -1,0 +1,145 @@
+---
+title: "ToastProvider"
+summary: "ToastProvider enables global toast notifications via context and renders them with the Toaster component."
+updatedAt: "2025-06-08"
+docs: "once-ui/contexts/toastProvider.mdx"
+github: "contexts/ToastProvider.tsx"
+navLabel: "Toast"
+navIcon: "chip"
+---
+
+The `ToastProvider` wraps your app to provide access to `useToast`, allowing any component to trigger lightweight, dismissible toast messages globally.
+
+## Simple setup
+
+Wrap your app with `ToastProvider` to activate toast functionality.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`<ToastProvider>
+    {children}
+</ToastProvider>`,
+      language: "tsx",
+      label: "layout.tsx"
+    }
+  ]}
+/>
+
+## Advanced setup
+
+We recommend using a `Providers` component to wrap your app.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { ToastProvider, ThemeProvider, DataThemeProvider, IconProvider } from "@once-ui-system/core";
+
+export function Providers({ children }: {
+    children: React.ReactNode
+}) {
+    return (
+      <ThemeProvider>
+        <DataThemeProvider>
+          <ToastProvider>
+            <IconProvider>
+              {children}
+            </IconProvider>
+          </ToastProvider>
+        </DataThemeProvider>
+      </ThemeProvider>
+    );
+}`,
+      language: "tsx",
+      highlight: "9,13",
+      label: "ToastProvider"
+    }
+  ]}
+/>
+
+Use the `useToast()` hook to display notifications from anywhere in your app:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  preview={
+    <ToastExample />
+  }
+  codes={[
+    {
+      code:
+`"use client";
+
+import React, { useState } from "react";
+import { Button, Row, useToast } from "@once-ui-system/core";
+
+export function ToastExample() {
+    const { addToast } = useToast();
+    const [count, setCount] = useState(0);
+
+    const handleAddToast = (variant: 'success' | 'danger') => {
+      setCount(prev => prev + 1);
+      addToast({
+        variant,
+        message: "Toast #" + (count + 1) + " - " + (variant === 'success' ? 'Success!' : 'Error!'),
+        action: variant === 'danger' ? (
+          <Button size="s" onClick={() => addToast({ variant: 'success', message: 'Retry successful!' })}>
+            Retry
+          </Button>
+        ) : undefined,
+      });
+    };
+
+    return (
+      <Row gap="8">
+        <Button size="s" onClick={() => handleAddToast('success')}>
+          Show Success
+        </Button>
+        <Button size="s" variant="secondary" onClick={() => handleAddToast('danger')}>
+          Show Error
+        </Button>
+      </Row>
+    );
+}`,
+      language: "tsx",
+      label: "useToast"
+    }
+  ]}
+/>
+
+## Toaster
+
+The `ToastProvider` automatically renders a `<Toaster />` under the hood, passing it the current list of toasts and a `removeToast` handler.
+
+## API reference
+
+### useToast
+
+<PropsTable
+  content={[
+    ["toasts", "Toast[]"],
+    ["addToast", "(toast: { message: ReactNode; variant: 'success' | 'danger'; action?: ReactNode }) => void"],
+    ["removeToast", "(id: string) => void"]
+  ]}
+/>
+
+### Toast
+
+<PropsTable
+  content={[
+    ["id", "string"],
+    ["variant", "success" | "danger"],
+    ["message", "ReactNode"],
+    ["action", "ReactNode"]
+  ]}
+/>

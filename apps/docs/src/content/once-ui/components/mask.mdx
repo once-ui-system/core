@@ -1,0 +1,216 @@
+---
+title: "Mask"
+summary: "The Mask component provides a customizable radial mask effect."
+updatedAt: "2025-05-08"
+docs: "once-ui/components/mask.mdx"
+github: "components/Mask.tsx"
+navLabel: "Mask"
+navIcon: "components"
+---
+
+The Mask component provides a customizable radial mask effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Mask
+      fill
+      height={24}
+      x={50}
+      y={0}
+      radius={33}
+    >
+      <Media sizes="(max-width: 768px) 90vw, 768px" fill src="/images/docs/vibe-coding-dark.jpg" />
+    </Mask>
+  }
+  codes={[
+    {
+      code:
+`<Mask
+    fill
+    height={24}
+    x={50}
+    y={0}
+    radius={33}>
+    <Media fill src="/image.jpg" />
+</Mask>`,
+      language: "tsx",
+      label: "Mask"
+    }
+  ]}
+/>
+
+## Coordinates
+
+Use the `x` and `y` props to position the mask. The coordinates are relative to the parent element.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Mask
+      fill
+      height={24}
+      x={50}
+      y={50}
+      radius={33}
+    >
+      <Media sizes="(max-width: 768px) 90vw, 768px" fill src="/images/docs/vibe-coding-dark.jpg" />
+    </Mask>
+  }
+  codes={[
+    {
+      code:
+`<Mask
+    fill
+    height={24}
+    x={50}
+    y={0}
+    radius={33}>
+    <Media fill src="/image.jpg" />
+</Mask>`,
+      language: "tsx",
+      label: "Coordinates"
+    }
+  ]}
+/>
+
+## Radius
+
+Use the `radius` prop to set the radius of the mask (defined in `vh` - viewport height).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Mask
+      fill
+      height={24}
+      x={35}
+      y={40}
+      radius={10}
+    >
+      <Media sizes="(max-width: 768px) 90vw, 768px" fill src="/images/docs/vibe-coding-dark.jpg" />
+    </Mask>
+  }
+  codes={[
+    {
+      code:
+`<Mask
+    fill
+    height={24}
+    x={35}
+    y={40}
+    radius={10}>
+    <Media fill src="/image.jpg" />
+</Mask>`,
+      language: "tsx",
+      label: "Radius"
+    }
+  ]}
+/>
+
+## Cursor
+
+Use the `cursor` prop to enable cursor tracking reveal.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Mask
+      fill
+      cursor
+      height={24}
+    >
+      <Media sizes="(max-width: 768px) 90vw, 768px" fill src="/images/docs/vibe-coding-dark.jpg" />
+    </Mask>
+  }
+  codes={[
+    {
+      code:
+`<Mask
+    fill
+    height={24}
+    cursor>
+    <Media fill src="/image.jpg" />
+</Mask>`,
+      language: "tsx",
+      label: "Cursor"
+    }
+  ]}
+/>
+
+## Flex
+
+The `Mask` component extends the `Flex` component, so you can use all the props of `Flex`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="24" horizontal="center">
+      <Mask
+        fillWidth
+        x={50}
+        y={50}
+        radius={20}
+        borderBottom="neutral-medium"
+      />
+      <Text onBackground="neutral-weak" variant="label-default-s" align="center">
+        Fading lines
+      </Text>
+      <Mask
+        fillWidth
+        x={50}
+        y={50}
+        radius={20}
+        borderBottom="neutral-medium"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Mask
+    fillWidth
+    x={50}
+    y={50}
+    radius={20}
+    borderBottom="neutral-medium"
+/>
+<Text onBackground="neutral-weak" variant="label-default-s" align="center">
+    Fading lines
+</Text>
+<Mask
+    fillWidth
+    x={50}
+    y={50}
+    radius={20}
+    borderBottom="neutral-medium"
+/>`,
+      language: "tsx",
+      label: "Flex"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["cursor", "boolean", "false"],
+    ["x", "number"],
+    ["y", "number"],
+    ["radius", "number", "50"],
+    ["className"],
+    ["style"],
+    ["children"],
+    ["...flex"]
+  ]}
+/>

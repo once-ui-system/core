@@ -1,0 +1,108 @@
+---
+title: "DataThemeProvider"
+summary: "The DataThemeProvider enables global style default configuration for Once UI's data-viz components."
+updatedAt: "2025-06-08"
+docs: "once-ui/contexts/dataThemeProvider.mdx"
+github: "contexts/DataThemeProvider.tsx"
+navLabel: "DataThemeProvider"
+navIcon: "chip"
+---
+
+The `DataThemeProvider` is a context provider that allows you to override the default app-level data-viz styles configuration.
+
+## Simple setup
+
+Wrap your app with `DataThemeProvider` and pass the style configuration as props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`<DataThemeProvider
+    variant="gradient" // flat | gradient | outline
+    mode="categorical" // categorical | divergent | sequential
+    height={24} // default chart height
+    axis={{
+      stroke: "var(--neutral-alpha-weak)",
+    }}
+    tick={{
+      fill: "var(--neutral-on-background-weak)",
+      fontSize: 11,
+      line: false
+    }}
+>
+    {children}
+</DataThemeProvider>`,
+      language: "tsx",
+      label: "layout.tsx"
+    }
+  ]}
+/>
+
+## Advanced setup
+
+You can create a single source of truth for all style configuration in a separate file, for example `once-ui.config.js`. We also recommend using a `Providers` component to wrap your app.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { dataStyle } from "@/resources/once-ui.config";
+import { DataThemeProvider, ThemeProvider, IconProvider, ToastProvider, ChartVariant, ChartMode } from "@once-ui-system/core";
+
+export function Providers({ children }: {
+    children: React.ReactNode
+}) {
+    return (
+      <ThemeProvider>
+        <DataThemeProvider
+          variant={dataStyle.variant as ChartVariant}
+          mode={dataStyle.mode as ChartMode}
+          height={dataStyle.height}
+          axis={{
+            stroke: dataStyle.axis.stroke
+          }}
+          tick={{
+            fill: dataStyle.tick.fill,
+            fontSize: dataStyle.tick.fontSize,
+            line: dataStyle.tick.line
+          }}>
+          <ToastProvider>
+            <IconProvider>
+              {children}
+            </IconProvider>
+          </ToastProvider>
+        </DataThemeProvider>
+      </ThemeProvider>
+    );
+}`,
+      language: "tsx",
+      highlight: "1,9-20,26",
+      label: "Providers.tsx"
+    },
+    {
+      code:
+`export const dataStyle = {
+    variant: "gradient", // flat | gradient | outline
+    mode: "categorical", // categorical | divergent | sequential
+    height: 24, // default chart height
+    axis: {
+      stroke: "var(--neutral-alpha-weak)",
+    },
+    tick: {
+      fill: "var(--neutral-on-background-weak)",
+      fontSize: 11,
+      line: false
+    },
+};`,
+      language: "tsx",
+      label: "once-ui.config.js"
+    }
+  ]}
+/>

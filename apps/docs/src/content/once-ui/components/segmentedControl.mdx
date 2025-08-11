@@ -1,0 +1,168 @@
+---
+title: "SegmentedControl"
+summary: "The SegmentedControl component allows users to select a single option from a set of horizontally arranged buttons. It supports keyboard navigation and customizable options."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/segmentedControl.mdx"
+github: "components/SegmentedControl.tsx"
+navLabel: "Segmented Control"
+navIcon: "components"
+---
+
+Use this component for toggle-style selection between discrete options. It supports keyboard interaction, styling, and controlled or uncontrolled usage.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <SegmentedControl
+      fillWidth={false}
+      buttons={[
+        { value: "day", label: "Day" },
+        { value: "week", label: "Week" },
+        { value: "month", label: "Month" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+    fillWidth={false}
+    buttons={[
+      { value: "day", label: "Day" },
+      { value: "week", label: "Week" },
+      { value: "month", label: "Month" },
+    ]}
+    onToggle={(value) => console.log(value)}
+/>`,
+      language: "tsx",
+      label: "Basic usage"
+    }
+  ]}
+/>
+
+## Default selected
+
+Use `defaultSelected` to define an initial active button in uncontrolled mode.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <SegmentedControl
+        fillWidth={false}
+        defaultSelected="week"
+        buttons={[
+          { value: "day", label: "Day" },
+          { value: "week", label: "Week" },
+          { value: "month", label: "Month" },
+        ]}
+      />
+      </Row>
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+    fillWidth={false}
+    defaultSelected="week"
+    buttons={[
+      { value: "day", label: "Day" },
+      { value: "week", label: "Week" },
+      { value: "month", label: "Month" },
+    ]}
+    onToggle={(value) => console.log(value)}
+/>`,
+      language: "tsx",
+      label: "Default selected"
+    }
+  ]}
+/>
+
+## Controlled state
+
+Control the selected value externally with the `selected` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <SegmentedControl
+        fillWidth={false}
+        selected="month"
+        buttons={[
+          { value: "day", label: "Day" },
+          { value: "week", label: "Week" },
+          { value: "month", label: "Month" },
+        ]}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+  fillWidth={false}
+  selected="month"
+  buttons={[
+    { value: "day", label: "Day" },
+    { value: "week", label: "Week" },
+    { value: "month", label: "Month" },
+  ]}
+  onToggle={(value) => console.log(value)}
+/>`,
+      language: "tsx",
+      label: "Controlled"
+    }
+  ]}
+/>
+
+## Fill width
+
+Distribute the button widths evenly across the container.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <SegmentedControl
+      buttons={[
+        { value: "a", label: "A" },
+        { value: "b", label: "B" },
+        { value: "c", label: "C" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+  buttons={[
+    { value: "a", label: "A" },
+    { value: "b", label: "B" },
+    { value: "c", label: "C" },
+  ]}
+  onToggle={(value) => console.log(value)}
+/>`,
+      language: "tsx",
+      label: "Fill width"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["buttons", "ButtonOption[]"],
+    ["onToggle", "(value: string, event?) => void"],
+    ["defaultSelected", "string"],
+    ["selected", "string"],
+    ["fillWidth", "boolean", "true"],
+    ["className"],
+    ["style"],
+    ["...scroller", "ScrollerProps"]
+  ]}
+/>

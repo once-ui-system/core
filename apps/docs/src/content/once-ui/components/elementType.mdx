@@ -1,0 +1,141 @@
+---
+title: "ElementType"
+summary: "A versatile component that renders as different HTML elements based on provided props."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/elementType.mdx"
+github: "components/ElementType.tsx"
+navLabel: "ElementType"
+navIcon: "components"
+---
+
+The ElementType component is a utility component that dynamically renders as different HTML elements based on the props provided. It can render as a link (`<a>` or Next.js `<Link>`), a button, or a div, making it useful for creating interactive elements with consistent styling but different underlying behaviors.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`// Renders as a Next.js Link for internal navigation
+<ElementType href="/about">
+    Go to About
+</ElementType>
+
+// Renders as an anchor tag for external links
+<ElementType href="https://example.com">
+    Visit Example
+</ElementType>
+
+// Renders as a button when onClick is provided
+<ElementType onClick={() => alert('Clicked!')}>
+    Click Me
+</ElementType>
+
+// Renders as a div when no interactive props are provided
+<ElementType className="container">
+    Content
+</ElementType>`,
+      language: "tsx",
+      label: "ElementType"
+    }
+  ]}
+/>
+
+## Link behavior
+
+ElementType automatically handles both internal and external links.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`// External link - renders as <a> with target="_blank"
+<ElementType href="https://github.com/once-ui-systems">
+    Visit our GitHub repository
+</ElementType>
+
+// Internal link - renders as Next.js <Link>
+<ElementType href="/components/button">
+    View Button
+</ElementType>`,
+      language: "tsx",
+      label: "Link"
+    }
+  ]}
+/>
+
+## Button behavior
+
+ElementType renders as a button when provided with an onClick handler or type prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`// Renders as a button with onClick handler
+<ElementType onClick={() => console.log('Button clicked')}>
+    Perform Action
+</ElementType>
+
+// Renders as a submit button
+<ElementType type="submit">
+    Submit Form
+</ElementType>`,
+      language: "tsx",
+      label: "Button"
+    }
+  ]}
+/>
+
+## Fallback
+
+When no interactive props are provided, `ElementType` renders as a `Flex` component.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`// Renders as a Flex component
+<ElementType>
+    <p>This is wrapped in a Flex component</p>
+</ElementType>`,
+      language: "tsx",
+      label: "Fallback"
+    }
+  ]}
+/>
+
+## Behavior
+
+The ElementType component follows these rules to determine which element to render:
+
+1. If `href` is provided and the URL is external (starts with `http://` or `https://`), renders as an `<a>` tag with `target="_blank"` and `rel="noreferrer"`. If the URL is internal, renders as a Next.js `<Link>` component
+
+2. If `onClick` is provided or `type` is "submit" or "button", renders as a `<button>` element
+
+3. Otherwise, renders as a `<Flex>` component (which is a div with additional styling)
+
+## Usage
+
+The ElementType component is designed to be used internally by other Once UI components to provide consistent behavior while allowing flexibility in the rendered HTML element. For example, it's used by the `Button` component to enable both link and button behaviors.
+
+## API reference
+
+<PropsTable
+  content={[
+    ["href", "string"],
+    ["onClick", "() => void"],
+    ["onLinkClick", "() => void"],
+    ["type", ["button", "submit", "reset"]],
+    ["children"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>

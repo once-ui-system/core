@@ -1,0 +1,219 @@
+---
+title: "ToggleButton"
+summary: "ToggleButton is an interactive button used for segmented controls or stateful actions. It supports icon placement, sizing, and selection styling."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/toggleButton.mdx"
+github: "components/ToggleButton.tsx"
+navLabel: "Toggle"
+navIcon: "components"
+---
+
+`ToggleButton` provides a flexible button-like element that can act as a toggle, tab, or segmented control. It supports selected state, prefix/suffix icons, and optional link behavior.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12">
+      <ToggleButton selected label="Selected" />
+      <ToggleButton label="Default" />
+      <ToggleButton label="Link" href="#" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<ToggleButton selected label="Selected" />
+<ToggleButton label="Default" />
+<ToggleButton label="Link" href="#" />`,
+      language: "tsx",
+      label: "Basic usage"
+    }
+  ]}
+/>
+
+## Icons
+
+You can attach icons to the left or right using `prefixIcon` and `suffixIcon`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12">
+      <ToggleButton label="Back" prefixIcon="chevronLeft" />
+      <ToggleButton label="Forward" suffixIcon="chevronRight" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<ToggleButton label="Back" prefixIcon="chevronLeft" />
+<ToggleButton label="Forward" suffixIcon="chevronRight" />`,
+      language: "tsx",
+      label: "With icons"
+    }
+  ]}
+/>
+
+## Sizes
+
+Available in small, medium, and large.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12" vertical="center">
+      <ToggleButton label="Small" size="s" />
+      <ToggleButton label="Medium" size="m" />
+      <ToggleButton label="Large" size="l" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<ToggleButton label="Small" size="s" />
+<ToggleButton label="Medium" size="m" />
+<ToggleButton label="Large" size="l" />`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+## Variants
+
+Use `ghost` for minimal styling or `outline` for bordered styling.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12">
+      <ToggleButton variant="ghost" label="Ghost" />
+      <ToggleButton variant="outline" label="Outline" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<ToggleButton variant="ghost" label="Ghost" />
+<ToggleButton variant="outline" label="Outline" />`,
+      language: "tsx",
+      label: "Variants"
+    }
+  ]}
+/>
+
+## Radius
+
+Customize rounding for each side or corner.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12">
+      <ToggleButton variant="outline" label="Left radius" radius="left" />
+      <ToggleButton variant="outline" label="No radius" radius="none" />
+      <ToggleButton variant="outline" label="Top right radius" radius="top-right" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<ToggleButton variant="outline" label="Left radius" radius="left" />
+<ToggleButton variant="outline" label="No radius" radius="none" />
+<ToggleButton variant="outline" label="Top right radius" radius="top-right" />`,
+      language: "tsx",
+      label: "Radius"
+    }
+  ]}
+/>
+
+## Alignment
+
+Customize content alignment.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12" fillWidth>
+      <ToggleButton variant="outline" label="Center" horizontal="center" fillWidth />
+<ToggleButton variant="outline" label="End" horizontal="end" fillWidth suffixIcon="chevronRight" />
+<ToggleButton variant="outline" label="Space between" horizontal="between" fillWidth prefixIcon="check" suffixIcon="chevronDown" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<ToggleButton variant="outline" label="Center" horizontal="center" fillWidth />
+<ToggleButton variant="outline" label="End" horizontal="end" fillWidth suffixIcon="chevronRight" />
+<ToggleButton variant="outline" label="Space between" horizontal="between" fillWidth prefixIcon="check" suffixIcon="chevronDown" />`,
+      language: "tsx",
+      label: "Alignment"
+    }
+  ]}
+/>
+
+## Custom content
+
+You can pass custom content to the toggle button.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12">
+      <ToggleButton variant="outline"><Row vertical="center" gap="8">Dashboard<Tag label="New" size="s"/></Row></ToggleButton>
+      <ToggleButton variant="outline"><Row vertical="center" gap="8">Notifications<StatusIndicator size="s"/></Row></ToggleButton>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<ToggleButton variant="outline">
+    <Row vertical="center" gap="8">
+      Dashboard
+      <Tag label="New" size="s"/>
+    </Row>
+</ToggleButton>
+<ToggleButton variant="outline">
+    <Row vertical="center" gap="8">
+      Notifications
+      <StatusIndicator size="s"/>
+    </Row>
+</ToggleButton>`,
+      language: "tsx",
+      label: "Custom content"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["label", "ReactNode"],
+    ["selected", "boolean", "false"],
+    ["variant", ["ghost", "outline"], "ghost"],
+    ["size", ["s", "m", "l"], "m"],
+    ["radius", [
+      "none", "top", "right", "bottom", "left",
+      "top-left", "top-right", "bottom-right", "bottom-left"
+    ]],
+    ["horizontal", ["start", "center", "end", "between"], "center"],
+    ["fillWidth", "boolean", "false"],
+    ["weight", ["default", "strong"], "default"],
+    ["truncate", "boolean", "false"],
+    ["prefixIcon", "IconName"],
+    ["suffixIcon", "IconName"],
+    ["href", "string"],
+    ["children"],
+    ["className"],
+    ["style"],
+    ["...ButtonHTMLAttributes", "ButtonAttributes"],
+  ]}
+/>

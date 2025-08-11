@@ -1,0 +1,130 @@
+---
+title: "RadioButton"
+summary: "RadioButton provides a selectable control for mutually exclusive options with customizable labels and styling."
+updatedAt: "2025-05-12"
+docs: "once-ui/form-controls/radioButton.mdx"
+github: "components/RadioButton.tsx"
+navLabel: "RadioButton"
+navIcon: "switch"
+---
+
+The `RadioButton` component provides a selectable control for mutually exclusive options in a group. It's built on top of the `InteractiveDetails` component for consistent styling and behavior.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioButton
+      name="subscription"
+      value="monthly"
+      label="Monthly subscription"
+      description="Billed monthly at $9.99"
+    />
+  }
+  codes={[
+    {
+      code:
+`<RadioButton
+    name="subscription"
+    value="monthly"
+    label="Monthly subscription"
+    description="Billed monthly at $9.99"
+    onToggle={() => console.log('Selected monthly')}
+/>`,
+      language: "tsx",
+      label: "RadioButton"
+    }
+  ]}
+/>
+
+## State
+
+Use the `isChecked` prop to control the radio button state externally.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<SubscriptionRadioGroup />}
+  codes={[
+    {
+      code:
+`const [selectedPlan, setSelectedPlan] = useState<string>("monthly");
+
+const handleToggle = (value: string) => {
+    setSelectedPlan(value);
+};
+
+<Column gap="16">
+    <RadioButton
+      name="subscription"
+      value="monthly"
+      label="Monthly subscription"
+      description="Billed monthly at $9.99"
+      isChecked={selectedPlan === "monthly"}
+      onToggle={() => handleToggle("monthly")}
+    />
+    <RadioButton
+      name="subscription"
+      value="annual"
+      label="Annual subscription"
+      description="Billed annually at $99.99"
+      isChecked={selectedPlan === "annual"}
+      onToggle={() => handleToggle("annual")}
+    />
+    <RadioButton
+      name="subscription"
+      value="lifetime"
+      label="Lifetime access"
+      description="One-time payment of $299.99"
+      isChecked={selectedPlan === "lifetime"}
+      onToggle={() => handleToggle("lifetime")}
+    />
+</Column>`,
+      language: "tsx",
+      label: "State"
+    }
+  ]}
+/>
+
+## Disabled
+
+Disable the radio button to prevent user interaction.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioButton
+      label="Disabled radio button"
+      disabled
+    />
+  }
+  codes={[
+    {
+      code:
+`<RadioButton
+    label="Disabled radio button"
+    disabled
+/>`,
+      language: "tsx",
+      label: "Disabled"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["isChecked", "boolean", "false"],
+    ["onToggle", "() => void"],
+    ["name", "string"],
+    ["value", "string"],
+    ["label", "ReactNode"],
+    ["description", "ReactNode"],
+    ["disabled", "boolean", "false"],
+    ["className"],
+    ["style"],
+    ["...input"]
+  ]}
+/>

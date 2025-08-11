@@ -1,0 +1,82 @@
+---
+title: "Accordion"
+summary: "The Accordion component provides a collapsible container to show and hide content, saving space and improving user experience."
+updatedAt: "2025-05-04"
+docs: "once-ui/components/accordion.mdx"
+github: "components/Accordion.tsx"
+navLabel: "Accordion"
+navIcon: "components"
+---
+
+A collapsible container that allows users to expand and collapse sections of content, helping to organize information in a compact way. It's useful for FAQs, navigation menus, and any content that benefits from progressive disclosure.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth>
+      <Accordion title="Example" open>
+        <Text onBackground="neutral-weak">Example content</Text>
+      </Accordion>
+      <Accordion title="Example">
+        <Text onBackground="neutral-weak">Example content</Text>
+      </Accordion>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column fillWidth>
+		<Accordion title="Example" open>
+			<Text onBackground="neutral-weak">
+				Example content
+			</Text>
+		</Accordion>
+		<Accordion title="Example">
+			<Text onBackground="neutral-weak">
+				Example content
+			</Text>
+		</Accordion>
+</Column>`,
+      language: "tsx",
+      label: "Accordion"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["title", "ReactNode"],
+    ["children", "ReactNode"],
+    ["icon", "string", "chevronDown"],
+    ["iconRotation", "number", "180"],
+    ["size", ["s", "m", "l"], "m"],
+    ["radius", ["xs", "s", "m", "l", "xl", "full"]],
+    ["open", "boolean", "false"],
+    ["style"],
+    ["className"],
+    ["...flex"]
+  ]}
+/>
+
+## Methods
+
+The Accordion component exposes the following methods through a ref:
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Method", key: "method" },
+      { content: "Description", key: "description" }
+    ],
+    rows: [
+      ["toggle()", "Toggles the accordion between open and closed states"],
+      ["open()", "Opens the accordion, making its content visible"],
+      ["close()", "Closes the accordion, hiding its content"]
+    ]
+  }}
+/>

@@ -1,0 +1,496 @@
+---
+title: "ThemeProvider"
+summary: "The ThemeProvider enables dynamic light, dark, and system themes by syncing user preferences with the `data-theme` attribute and exposing a global theme context."
+updatedAt: "2025-06-08"
+docs: "once-ui/contexts/themeProvider.mdx"
+github: "contexts/ThemeProvider.tsx"
+navLabel: "ThemeProvider"
+navIcon: "chip"
+---
+
+The `ThemeProvider` is a context that persists user theme preferences and syncs with the system’s light/dark setting. It provides a `useTheme` hook to manage theme state at runtime and sets data attributes on the `<html>` element.
+
+## Simple setup
+
+Wrap your app with `ThemeProvider` and pass the style configuration as props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`<ThemeProvider
+    theme="system" // system | dark | light
+    brand="blue" // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+    accent="indigo" // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+    neutral="gray" // sand | gray | slate
+    solid="contrast" // color | contrast
+    solidStyle="flat" // flat | plastic
+    border="playful" // rounded | playful | conservative
+    surface="translucent" // filled | translucent
+    transition="all" // all | micro | macro
+    scaling="100" // 90 | 95 | 100 | 105 | 110
+>
+    {children}
+</ThemeProvider>`,
+      language: "tsx",
+      label: "layout.tsx"
+    }
+  ]}
+/>
+
+## Advanced setup
+
+You can create a single source of truth for all style configuration in a separate file, for example `once-ui.config.js`. We also recommend using a `Providers` component to wrap your app.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { style } from "@/resources/once-ui.config";
+import { ThemeProvider, DataThemeProvider, IconProvider, BorderStyle, ToastProvider, NeutralColor, ScalingSize, Schemes, SolidStyle, SolidType, SurfaceStyle, TransitionStyle, Theme } from "@once-ui-system/core";
+
+export function Providers({ children }: {
+    children: React.ReactNode
+}) {
+    return (
+      <ThemeProvider
+        theme={style.theme as Theme}
+        brand={style.brand as Schemes}
+        accent={style.accent as Schemes}
+        neutral={style.neutral as NeutralColor}
+        solid={style.solid as SolidType}
+        solidStyle={style.solidStyle as SolidStyle}
+        border={style.border as BorderStyle}
+        surface={style.surface as SurfaceStyle}
+        transition={style.transition as TransitionStyle}
+        scaling={style.scaling as ScalingSize}>
+        <DataThemeProvider>
+          <ToastProvider>
+            <IconProvider>
+              {children}
+            </IconProvider>
+          </ToastProvider>
+        </DataThemeProvider>
+      </ThemeProvider>
+    );
+}`,
+      language: "tsx",
+      highlight: "1,9-18",
+      label: "Providers.tsx"
+    },
+    {
+      code:
+`export const style = {
+    theme: "system", // system | dark | light
+    neutral: "gray", // sand | gray | slate
+    brand: "blue", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+    accent: "indigo", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+    solid: "contrast", // color | contrast
+    solidStyle: "flat", // flat | plastic
+    border: "playful", // rounded | playful | conservative
+    surface: "translucent", // filled | translucent
+    transition: "all", // all | micro | macro
+    scaling: "100"
+};`,
+      language: "tsx",
+      label: "once-ui.config.js"
+    }
+  ]}
+/>
+
+If you don't pass any props to the `ThemeProvider`, it will fall back to defaults. If the visitor has theme preferences (saved in localStorage), the `ThemeProvider` will use those. To force a theme, set `theme` on the `ThemeProvider` as `light` or `dark`.
+
+## Custom color
+
+Use a custom color palette for the `data-brand`, `data-accent` and `data-neutral` attributes by setting their values to `custom` and loading the `CSS` variables in the `layout.tsx` file. You can generate palettes using the [Once UI customize page](https://once-ui/customize).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`:root {
+    --scheme-brand-100: #08002f;
+    --scheme-brand-200:  #04025c;
+    --scheme-brand-300:  #1f398e;
+    --scheme-brand-400:  #3856ae;
+    --scheme-brand-500:  #5071cc;
+    --scheme-brand-600:  #6f94f1;
+    --scheme-brand-700:  #8db3ff;
+    --scheme-brand-800:  #b2dbff;
+    --scheme-brand-900:  #bfe8ff;
+    --scheme-brand-1000: #ccf6ff;
+    --scheme-brand-1100: #d2fcff;
+    --scheme-brand-1200: #d2fcff;
+    --scheme-brand-600-10: rgba(111,148,241,0.1);
+    --scheme-brand-600-30: rgba(111,148,241,0.3);
+    --scheme-brand-600-50: rgba(111,148,241,0.5);
+
+    --scheme-accent-100:  #030b10;
+    --scheme-accent-200:  #0d181d;
+    --scheme-accent-300:  #364248;
+    --scheme-accent-400:  #505d64;
+    --scheme-accent-500:  #69777e;
+    --scheme-accent-600:  #8a989f;
+    --scheme-accent-700:  #a8b7bf;
+    --scheme-accent-800:  #c8d7df;
+    --scheme-accent-900:  #d5e4ec;
+    --scheme-accent-1000: #e2f1f9;
+    --scheme-accent-1100: #e9f8ff;
+    --scheme-accent-1200: #efffff;
+    --scheme-accent-600-10: rgba(138,152,159,0.1);
+    --scheme-accent-600-30: rgba(138,152,159,0.3);
+    --scheme-accent-600-50: rgba(138,152,159,0.5);
+
+    --scheme-neutral-100:  #020b10;
+    --scheme-neutral-200:  #0b181d;
+    --scheme-neutral-300:  #344248;
+    --scheme-neutral-400:  #4f5d64;
+    --scheme-neutral-500:  #68777e;
+    --scheme-neutral-600:  #89989f;
+    --scheme-neutral-700:  #a7b7be;
+    --scheme-neutral-800:  #c7d7df;
+    --scheme-neutral-900:  #d4e4ec;
+    --scheme-neutral-1000: #e1f2f9;
+    --scheme-neutral-1100: #e7f8ff;
+    --scheme-neutral-1200: #eeffff;
+    --scheme-neutral-600-10: rgba(137,152,159,0.1);
+    --scheme-neutral-600-30: rgba(137,152,159,0.3);
+    --scheme-neutral-600-50: rgba(137,152,159,0.5);
+}`,
+      language: "css",
+      label: "custom.css"
+    },
+    {
+      code:
+`export const style = {
+    theme: "system",
+    neutral: "custom",
+    brand: "custom",
+    accent: "custom",
+    solid: "contrast",
+    solidStyle: "flat",
+    border: "playful",
+    surface: "translucent",
+    transition: "all",
+    scaling: "100"
+};`,
+      language: "tsx",
+      highlight: "3-5",
+      label: "once-ui.config.js"
+    }
+  ]}
+/>
+
+## UseTheme
+
+Access and modify theme state with `useTheme`:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`const { theme, setTheme } = useTheme();
+
+useEffect(() => {
+    console.log("Current theme:", theme);
+}, [theme]);`,
+      language: "tsx",
+      label: "useTheme"
+    }
+  ]}
+/>
+
+## SSR hydration
+
+Inject the following script into the `<head>` to set the initial theme before hydration in `layout.tsx`. It will prevent flash of unstyled content (FOUC).
+
+```tsx
+<head>
+  <script
+    id="theme-init"
+    dangerouslySetInnerHTML={{
+      __html: `
+          (function() {
+            try {
+              const root = document.documentElement;
+              
+              // Set defaults from config
+              const config = ${JSON.stringify({
+                theme: style.theme,
+                brand: style.brand,
+                accent: style.accent,
+                neutral: style.neutral,
+                solid: style.solid,
+                'solid-style': style.solidStyle,
+                border: style.border,
+                surface: style.surface,
+                transition: style.transition,
+                scaling: style.scaling,
+                'viz-style': dataStyle.variant,
+              })};
+              
+              // Apply default values
+              Object.entries(config).forEach(([key, value]) => {
+                root.setAttribute('data-' + key, value);
+              });
+              
+              // Resolve theme
+              const resolveTheme = (themeValue) => {
+                if (!themeValue || themeValue === 'system') {
+                  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                return themeValue;
+              };
+              
+              // Apply saved theme or use config default
+              const savedTheme = localStorage.getItem('data-theme');
+              // Only override with system preference if explicitly set to 'system'
+              const resolvedTheme = savedTheme ? resolveTheme(savedTheme) : config.theme === 'system' ? resolveTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : config.theme;
+              root.setAttribute('data-theme', resolvedTheme);
+              
+              // Apply any saved style overrides
+              const styleKeys = Object.keys(config);
+              styleKeys.forEach(key => {
+                const value = localStorage.getItem('data-' + key);
+                if (value) {
+                  root.setAttribute('data-' + key, value);
+                }
+              });
+            } catch (e) {
+              console.error('Failed to initialize theme:', e);
+              document.documentElement.setAttribute('data-theme', 'dark');
+            }
+          })();
+        `,
+      }}
+    />
+</head>
+```
+
+## Style your app
+
+Visit the [ThemeSwitcher](/once-ui/components/themeSwitcher) or [StylePanel](/once-ui/components/stylePanel) page for native, out-of-the-box `ThemeProvider` implementation with localStorage persistence. Use these components to provide user-facing style controls or to quickly test different styles during development.
+
+<StylePanel marginBottom="40" />
+
+## Style overrides
+        
+The `ThemeProvider` relies on data attributes to set theme and style preferences. Data modes are inherited from the parent and can be applied to any
+semantic HTML element, providing simple, seamless style overrides.
+
+Just add the `data-theme`, `data-neutral`, `data-brand`, `data-accent`, `data-border`, `data-surface`, `data-solid`, `data-solid-style`, `data-transition` or `data-scaling` attributes to any semantic HTML element to override its default style.
+
+<CodeBlock
+    marginTop="16"
+    marginBottom="24"
+    preview={
+<Column
+    overflow="hidden"
+    data-theme="dark"
+    background="page"
+    border="neutral-medium"
+    radius="xl-8"
+    padding="8"
+    maxWidth={32}
+    maxHeight={44}
+  >
+    <Flex
+      fillWidth
+      horizontal="center"
+      position="absolute"
+      bottom="8"
+      zIndex={1}
+      data-theme="light"
+      data-border="rounded"
+      padding="8"
+    >
+      <Row maxWidth={20}
+        horizontal="between"
+        padding="8"
+        vertical="center"
+        background="neutral-weak"
+        border="neutral-medium"
+        radius="full">
+        <IconButton
+          variant="secondary"
+          tooltip="Home"
+          icon="home"
+        />
+        <IconButton variant="ghost" tooltip="Notifications" icon="notification" />
+        <IconButton variant="ghost" tooltip="Search" icon="search" />
+        <Avatar
+            src="/images/avatar.jpg"
+        />
+      </Row>
+    </Flex>
+    <Column fillHeight padding="m" gap="16" flex={1}>
+        <SegmentedControl
+          buttons={[
+            {
+              label: "For you",
+              value: "For you",
+            },
+            {
+              label: "Following",
+              value: "Following",
+            },
+            {
+              label: "Freelancing",
+              value: "Freelancing",
+            },
+            {
+              label: "Self",
+              value: "Self",
+            },
+            {
+              label: "Productivity",
+              value: "Productivity",
+            },
+            {
+              label: "Mental Health",
+              value: "Mental Health",
+            },
+            {
+              label: "Media",
+              value: "Media",
+            },
+          ]}
+          defaultSelected="For you"
+        />
+      <Column paddingX="8" paddingTop="20" paddingBottom="64" gap="48" flex={1}>
+        {[
+          {
+            name: "Lorant",
+            avatar: "/images/avatar.jpg",
+            title: "Launch your fully functional ecommerce store in an hour",
+            subtitle: "With the power of Fourthwall and flexibility of Once UI.",
+            date: "Jun 23",
+            likes: 48,
+            comments: 2,
+            topic: "Productivity",
+            topicLink: "",
+            imageSrc: "/images/docs/magic-store.jpg",
+          },
+          {
+            name: "Lorant",
+            avatar: "/images/avatar.jpg",
+            title: "Ship quality product docs without writing code",
+            subtitle: "Magic Docs is Once UI's mdx-based documentation template.",
+            date: "Jun 16",
+            likes: 31,
+            comments: 0,
+            topic: "Design",
+            topicLink: "",
+            imageSrc: "/images/docs/magic-docs.jpg",
+          },
+        ].map((article, index) => (
+          <Column key={index} fillWidth gap="12">
+            <User
+              name={article.name}
+              avatarProps={{
+                empty: false,
+                size: "s",
+                src: article.avatar,
+              }}
+            />
+            <Flex fillWidth gap="24" s={{direction: "column"}}>
+              <Column gap="12">
+                <Text variant="heading-strong-l" onBackground="neutral-strong">
+                  {article.title}
+                </Text>
+                <Text variant="body-default-m" onBackground="neutral-weak">
+                  {article.subtitle}
+                </Text>
+              </Column>
+              <Flex minWidth={8} overflow="hidden" radius="m" border="neutral-medium" fitHeight>
+                <Media
+                  aspectRatio="3 / 2"
+                  alt="Image preview for article"
+                  sizes="120px"
+                  src={article.imageSrc}
+                />
+              </Flex>
+            </Flex>
+            <Flex gap="8" paddingTop="8" vertical="center">
+              <Icon size="xs" name="HiOutlineDocumentText" />
+              <Text variant="body-default-xs" onBackground="neutral-medium">
+                Because you follow{" "}
+                <SmartLink className="brand-on-background-weak" href={article.topicLink}>
+                  {article.topic}
+                </SmartLink>
+              </Text>
+            </Flex>
+            <Flex
+              vertical="center"
+              paddingTop="8"
+              textVariant="body-default-s"
+              onBackground="neutral-medium"
+            >
+              <Flex gap="32" fillWidth>
+                <Text>{article.date}</Text>
+                <Flex vertical="center" gap="8">
+                  <Icon size="s" name="like" />
+                  <Text>{article.likes}</Text>
+                </Flex>
+                <Flex vertical="center" gap="8">
+                  <Icon size="s" name="chat" />
+                  <Text>{article.comments}</Text>
+                </Flex>
+              </Flex>
+              <Flex gap="12">
+                <IconButton
+                  size="s"
+                  variant="ghost"
+                  icon="HiOutlineBookmark"
+                  tooltip="Save"
+                  tooltipPosition="top"
+                />
+                <IconButton
+                  size="s"
+                  variant="ghost"
+                  icon="HiMiniEllipsisVertical"
+                  tooltip="more"
+                  tooltipPosition="top"
+                />
+              </Flex>
+            </Flex>
+          </Column>
+        ))}
+      </Column>
+    </Column>
+  </Column>
+    }
+    highlight="2-3,5-6"
+    codes={[
+        {
+            code:
+`<Column
+    data-theme="dark"
+    data-border="playful">
+    <Row
+      data-theme="light"
+      data-border="rounded">
+      {children}
+    </Row>
+    <Row>
+      {children}
+    </Row>
+</Column>`,
+            language: "tsx",
+            label: "Overrides"
+        }
+    ]}
+/>

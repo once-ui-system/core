@@ -1,0 +1,295 @@
+---
+title: "Text"
+summary: "A flexible typography component for rendering inline or block text with configurable font styles, spacing, and color."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/text.mdx"
+github: "components/Text.tsx"
+navLabel: "Text"
+navIcon: "components"
+---
+
+The `Text` component provides consistent typography throughout your UI, with support for variants, color tokens, alignment, and spacing. It is typically used for body content, labels, descriptions, and captions.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="12">
+      <Text variant="body-default-m">This is default body text.</Text>
+      <Text variant="label-strong-s">This is a strong label.</Text>
+      <Text size="s" weight="strong">This is small, strong text.</Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text variant="body-default-m">
+  This is default body text.
+</Text>
+<Text variant="label-strong-s">
+  This is a strong label.
+</Text>
+<Text size="s" weight="strong">
+  This is small, strong text.
+</Text>`,
+      language: "tsx",
+      label: "Text"
+    }
+  ]}
+/>
+
+## Variants
+
+Use `variant` to apply a named combination of `type`, `weight`, and `size`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="12" fillWidth>
+      <Text variant="label-default-s">Label Default S</Text>
+      <Text variant="label-default-m">Label Default M</Text>
+      <Text variant="label-default-l">Label Default L</Text>
+      <Text variant="label-strong-s">Label Strong S</Text>
+      <Text variant="label-strong-m">Label Strong M</Text>
+      <Text variant="label-strong-l">Label Strong L</Text>
+      <Text variant="body-default-xs">Body Default XS</Text>
+      <Text variant="body-default-s">Body Default S</Text>
+      <Text variant="body-default-m">Body Default M</Text>
+      <Text variant="body-default-l">Body Default L</Text>
+      <Text variant="body-default-xl">Body Default XL</Text>
+      <Text variant="body-strong-xs">Body Strong XS</Text>
+      <Text variant="body-strong-s">Body Strong S</Text>
+      <Text variant="body-strong-m">Body Strong M</Text>
+      <Text variant="body-strong-l">Body Strong L</Text>
+      <Text variant="body-strong-xl">Body Strong XL</Text>
+      <Text variant="code-default-xs">Code Default XS</Text>
+      <Text variant="code-default-s">Code Default S</Text>
+      <Text variant="code-default-m">Code Default M</Text>
+      <Text variant="code-default-l">Code Default L</Text>
+      <Text variant="code-default-xl">Code Default XL</Text>
+      <Text variant="code-strong-xs">Code Strong XS</Text>
+      <Text variant="code-strong-s">Code Strong S</Text>
+      <Text variant="code-strong-m">Code Strong M</Text>
+      <Text variant="code-strong-l">Code Strong L</Text>
+      <Text variant="code-strong-xl">Code Strong XL</Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text variant="label-default-s">Label Default S</Text>
+<Text variant="body-strong-xl">Body Strong XL</Text>
+<Text variant="code-default-m">Code Default M</Text>`,
+      language: "tsx",
+      label: "Variants"
+    }
+  ]}
+/>
+
+## Colors
+
+Text color can be set using `onBackground` or `onSolid`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16" textVariant="label-default-s">
+    <Row gap="12" fillWidth s={{direction: "column"}}>
+      <Row gap="12" fillWidth radius="l" padding="12" horizontal="center">
+        <Text onBackground="neutral-weak">Neutral weak</Text>
+      </Row>
+      <Row gap="12" fillWidth radius="l" padding="12" horizontal="center">
+        <Text onBackground="accent-weak">Accent weak</Text>
+      </Row>
+      <Row gap="12" fillWidth radius="l" padding="12" horizontal="center">
+        <Text onBackground="brand-weak">Brand weak</Text>
+      </Row>
+    </Row>
+    <Row gap="12" fillWidth s={{direction: "column"}}>
+      <Row gap="12" solid="neutral-medium" fillWidth radius="l" padding="12" horizontal="center">
+        <Text onSolid="neutral-weak">Neutral medium</Text>
+      </Row>
+      <Row gap="12" solid="accent-medium" fillWidth radius="l" padding="12" horizontal="center">
+        <Text onSolid="accent-weak">Accent medium</Text>
+      </Row>
+      <Row gap="12" solid="brand-medium" fillWidth radius="l" padding="12" horizontal="center">
+        <Text onSolid="brand-weak">Brand medium</Text>
+      </Row>
+    </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text onBackground="neutral-strong">
+    Neutral strong
+</Text>
+<Text onBackground="accent-weak">
+    Accent weak
+</Text>
+<Text onSolid="brand-medium">
+    On brand medium
+</Text>`,
+      language: "tsx",
+      label: "Colors"
+    }
+  ]}
+/>
+
+## Alignment
+
+Set horizontal alignment with the `align` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="12" fillWidth>
+      <Text>
+        Left aligned
+      </Text>
+      <Text align="center">
+        Center aligned
+      </Text>
+      <Text align="right">
+        Right aligned
+      </Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text>
+    Left aligned
+</Text>
+<Text align="center">
+    Center aligned
+</Text>
+<Text align="right">
+    Right aligned
+</Text>`,
+      language: "tsx",
+      label: "Alignment"
+    }
+  ]}
+/>
+
+## Wrapping
+
+Control how the text wraps using the `wrap` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="24" textVariant="body-default-xl" maxWidth={20}>
+      <Text>This text uses normal wrapping behavior</Text>
+      <Text wrap="balance">This text uses balance wrapping for optimal readability</Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text>
+    This text uses normal wrapping behavior
+</Text>
+<Text wrap="balance">
+    This text uses balance wrapping for optimal readability
+</Text>`,
+      language: "tsx",
+      label: "Wrapping"
+    }
+  ]}
+/>
+
+## Spacing
+
+Use margin and padding props to control layout spacing.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="12">
+      <Text padding="8">With padding</Text>
+      <Text marginBottom="16">With bottom margin</Text>
+      <Text paddingX="12" paddingY="8">With horizontal and vertical padding</Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text padding="8">
+    With padding
+</Text>
+<Text marginBottom="16">
+    With bottom margin
+</Text>
+<Text paddingX="12" paddingY="8">
+    With horizontal and vertical padding
+</Text>`,
+      language: "tsx",
+      label: "Spacing"
+    }
+  ]}
+/>
+
+## Semantic HTML
+
+Control the rendered tag using the `as` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="12">
+      <Text as="p">Rendered as a paragraph</Text>
+      <Text as="label">Rendered as a label</Text>
+      <Text as="strong">Rendered as strong</Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text as="p">Rendered as a paragraph</Text>
+<Text as="label">Rendered as a label</Text>
+<Text as="strong">Rendered as strong</Text>`,
+      language: "tsx",
+      label: "Semantic HTML"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["as", "ElementType", `"span"`],
+    ["variant", "TextVariant"],
+    ["size", ["xs", "s", "m", "l", "xl"]],
+    ["weight", ["default", "strong"]],
+    ["onBackground", "`${ColorScheme}-${ColorWeight}`"],
+    ["onSolid", "`${ColorScheme}-${ColorWeight}`"],
+    ["align", ["left", "center", "right", "justify"]],
+    ["wrap", ["normal", "nowrap", "balance"], "balance"],
+    ["padding", "SpacingToken"],
+    ["paddingX", "SpacingToken"],
+    ["paddingY", "SpacingToken"],
+    ["paddingLeft", "SpacingToken"],
+    ["paddingRight", "SpacingToken"],
+    ["paddingTop", "SpacingToken"],
+    ["paddingBottom", "SpacingToken"],
+    ["margin", "SpacingToken"],
+    ["marginX", "SpacingToken"],
+    ["marginY", "SpacingToken"],
+    ["marginLeft", "SpacingToken"],
+    ["marginRight", "SpacingToken"],
+    ["marginTop", "SpacingToken"],
+    ["marginBottom", "SpacingToken"],
+    ["children"],
+    ["className"],
+    ["style"]
+  ]}
+/>
