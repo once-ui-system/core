@@ -1,6 +1,6 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
-import type { MDXComponents } from 'mdx/types';
+type MDXComponents = React.ComponentProps<typeof MDXRemote>['components'];
 import React, { ReactNode } from "react";
 
 import * as productComponents from "@/product";
