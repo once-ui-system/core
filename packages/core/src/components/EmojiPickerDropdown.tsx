@@ -4,7 +4,8 @@ import React from "react";
 import { DropdownWrapper, EmojiPicker } from ".";
 import { StyleProps, gridSize } from "..";
 
-export interface EmojiPickerDropdownProps extends Omit<React.ComponentProps<typeof DropdownWrapper>, 'dropdown'> {
+export interface EmojiPickerDropdownProps
+  extends Omit<React.ComponentProps<typeof DropdownWrapper>, "dropdown"> {
   onSelect: (emoji: string) => void;
   background?: StyleProps["background"];
   columns?: gridSize;

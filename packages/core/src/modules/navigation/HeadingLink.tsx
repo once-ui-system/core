@@ -21,36 +21,33 @@ const variantMap = {
   h6: "heading-strong-xs",
 } as const;
 
-export const HeadingLink: React.FC<HeadingLinkProps> = ({
-  id,
-  as,
-  children,
-  style,
-  ...flex
-}) => {
+export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, as, children, style, ...flex }) => {
   const { addToast } = useToast();
 
-  const copyURL = useCallback((id: string) => {
-    try {
-      const url = `${window.location.origin}${window.location.pathname}#${id}`;
-      navigator.clipboard.writeText(url).then(
-        () => {
-          addToast?.({
-            variant: "success",
-            message: "Link copied to clipboard.",
-          });
-        },
-        () => {
-          addToast?.({
-            variant: "danger",
-            message: "Failed to copy link.",
-          });
-        },
-      );
-    } catch (error) {
-      console.error("Error copying to clipboard:", error);
-    }
-  }, [addToast]);
+  const copyURL = useCallback(
+    (id: string) => {
+      try {
+        const url = `${window.location.origin}${window.location.pathname}#${id}`;
+        navigator.clipboard.writeText(url).then(
+          () => {
+            addToast?.({
+              variant: "success",
+              message: "Link copied to clipboard.",
+            });
+          },
+          () => {
+            addToast?.({
+              variant: "danger",
+              message: "Failed to copy link.",
+            });
+          },
+        );
+      } catch (error) {
+        console.error("Error copying to clipboard:", error);
+      }
+    },
+    [addToast],
+  );
 
   const variant = variantMap[as];
 

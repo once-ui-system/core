@@ -108,7 +108,7 @@ const HoloFx: React.FC<HoloFxProps> = ({ children, shine, burn, texture, ...rest
         {children}
       </Flex>
       <Flex
-        m={{hide: true}}
+        m={{ hide: true }}
         position="absolute"
         fill
         pointerEvents="none"
@@ -123,7 +123,7 @@ const HoloFx: React.FC<HoloFxProps> = ({ children, shine, burn, texture, ...rest
         {children}
       </Flex>
       <Flex
-        m={{hide: true}}
+        m={{ hide: true }}
         position="absolute"
         fill
         pointerEvents="none"
@@ -138,7 +138,7 @@ const HoloFx: React.FC<HoloFxProps> = ({ children, shine, burn, texture, ...rest
         {children}
       </Flex>
       <Flex
-        m={{hide: true}}
+        m={{ hide: true }}
         position="absolute"
         fill
         pointerEvents="none"

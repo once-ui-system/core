@@ -54,12 +54,12 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
-  const { 
-    variant: themeVariant, 
-    mode, 
-    height, 
+  const {
+    variant: themeVariant,
+    mode,
+    height,
     tick: { fill: tickFill, fontSize: tickFontSize, line: tickLine },
-    axis: { stroke: axisLineStroke }
+    axis: { stroke: axisLineStroke },
   } = useDataTheme();
   const variant = variantProp || themeVariant;
   const legend = {
@@ -141,7 +141,14 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   const chartId = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
 
   return (
-    <Column fillWidth height={height} border={border} radius="l" data-viz-style={dataVizStyle || mode} {...flex}>
+    <Column
+      fillWidth
+      height={height}
+      border={border}
+      radius="l"
+      data-viz-style={dataVizStyle || mode}
+      {...flex}
+    >
       <ChartHeader
         title={title}
         description={description}

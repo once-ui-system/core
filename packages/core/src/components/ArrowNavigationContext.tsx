@@ -1,8 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useRef, ReactNode, useEffect } from 'react';
-import { useArrowNavigation, ArrowNavigationOptions } from '../hooks/useArrowNavigation';
-import { FocusTrap } from './FocusTrap';
+import React, { createContext, useContext, useRef, ReactNode, useEffect } from "react";
+import { useArrowNavigation, ArrowNavigationOptions } from "../hooks/useArrowNavigation";
+import { FocusTrap } from "./FocusTrap";
 
 interface ArrowNavigationContextType {
   focusedIndex: number;
@@ -13,12 +13,12 @@ interface ArrowNavigationContextType {
 
 const ArrowNavigationContext = createContext<ArrowNavigationContextType | null>(null);
 
-export interface ArrowNavigationProps extends Omit<ArrowNavigationOptions, 'containerRef'> {
+export interface ArrowNavigationProps extends Omit<ArrowNavigationOptions, "containerRef"> {
   children: ReactNode;
   className?: string;
   style?: React.CSSProperties;
   role?: string;
-  'aria-label'?: string;
+  "aria-label"?: string;
   trapFocus?: boolean;
   focusTrapActive?: boolean;
   onEscape?: () => void;
@@ -41,7 +41,7 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
   className,
   style,
   role,
-  'aria-label': ariaLabel,
+  "aria-label": ariaLabel,
   trapFocus = false,
   focusTrapActive = true,
   onEscape,
@@ -49,7 +49,7 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
   restoreFocus = true,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  
+
   const navigation = useArrowNavigation({
     layout,
     itemCount,
@@ -76,18 +76,25 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
       return () => clearTimeout(timer);
     }
   }, [autoFocus, disabled]);
-  
+
   // Determine the appropriate role based on layout if not provided
-  const defaultRole = layout === 'grid' ? 'grid' : 'listbox';
-  
+  const defaultRole = layout === "grid" ? "grid" : "listbox";
+
   // Create the navigation container
   const navigationContainer = (
     <div
       ref={containerRef}
       className={className}
-      style={{...style, outline: 'none'}}
+      style={{ ...style, outline: "none" }}
       onKeyDown={(e) => {
-        console.log('ArrowNavigation keydown:', e.key, 'autoFocus:', autoFocus, 'disabled:', disabled);
+        console.log(
+          "ArrowNavigation keydown:",
+          e.key,
+          "autoFocus:",
+          autoFocus,
+          "disabled:",
+          disabled,
+        );
         navigation.handleKeyDown(e);
       }}
       role={role || defaultRole}
@@ -122,7 +129,7 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
 export const useArrowNavigationContext = () => {
   const context = useContext(ArrowNavigationContext);
   if (!context) {
-    throw new Error('useArrowNavigationContext must be used within an ArrowNavigation component');
+    throw new Error("useArrowNavigationContext must be used within an ArrowNavigation component");
   }
   return context;
 };
@@ -132,7 +139,7 @@ export const useArrowNavigationContext = () => {
  */
 export function withArrowNavigation<P extends object>(
   Component: React.ComponentType<P>,
-  options: Omit<ArrowNavigationProps, 'children'>
+  options: Omit<ArrowNavigationProps, "children">,
 ): React.FC<P & { children?: ReactNode }> {
   return ({ children, ...props }) => (
     <ArrowNavigation {...options}>

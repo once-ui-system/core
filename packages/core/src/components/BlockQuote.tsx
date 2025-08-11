@@ -30,7 +30,7 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
         {children}
       </Flex>
     );
-  }
+  },
 );
 
 BlockQuote.displayName = "BlockQuote";

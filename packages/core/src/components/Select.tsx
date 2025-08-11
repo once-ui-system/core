@@ -57,9 +57,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
   ) => {
     const [isFocused, setIsFocused] = useState(false);
     const [isFilled, setIsFilled] = useState(false);
-    
+
     const [internalValue, setInternalValue] = useState(multiple ? [] : value);
-    
+
     useEffect(() => {
       if (value !== undefined) {
         setInternalValue(value);
@@ -81,10 +81,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       setIsFocused(true);
       setIsDropdownOpen(true);
       // Set highlighted index to first option or current selection
-      const currentIndex = options.findIndex(option => 
-        multiple 
+      const currentIndex = options.findIndex((option) =>
+        multiple
           ? Array.isArray(currentValue) && currentValue.includes(option.value)
-          : option.value === currentValue
+          : option.value === currentValue,
       );
     };
 
@@ -92,9 +92,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       // Don't close dropdown if focus is moving to an element within the select component
       if (selectRef.current && !selectRef.current.contains(event.relatedTarget as Node)) {
         // Only close if we're not moving to the dropdown or its children
-        const isMovingToDropdown = event.relatedTarget && 
-          (event.relatedTarget as Element).closest('[data-dropdown]');
-        
+        const isMovingToDropdown =
+          event.relatedTarget && (event.relatedTarget as Element).closest("[data-dropdown]");
+
         if (!isMovingToDropdown) {
           setIsFocused(false);
           setIsDropdownOpen(false);
@@ -106,7 +106,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       if (multiple) {
         const currentValues = Array.isArray(currentValue) ? currentValue : [];
         const newValues = currentValues.includes(value)
-          ? currentValues.filter(v => v !== value)
+          ? currentValues.filter((v) => v !== value)
           : [...currentValues, value];
         setInternalValue(newValues);
         onSelect?.(newValues);
@@ -130,14 +130,14 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     const currentValue = value !== undefined ? value : internalValue;
     const selectedOption = options.find((opt) => opt.value === currentValue) || null;
-    
+
     // For multiple mode, get display text
     const getDisplayText = () => {
       if (multiple) {
         const selectedValues = Array.isArray(currentValue) ? currentValue : [];
         if (selectedValues.length === 0) return "";
         if (selectedValues.length === 1) {
-          const option = options.find(opt => opt.value === selectedValues[0]);
+          const option = options.find((opt) => opt.value === selectedValues[0]);
           return String(option?.label || selectedValues[0]);
         }
         return `${selectedValues.length} options selected`;
@@ -150,11 +150,13 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       if (isDropdownOpen) {
         // Reset skip flag when dropdown opens
         skipNextFocusRef.current = false;
-        
+
         // If searchable is true, focus the search input
         if (searchable) {
           setTimeout(() => {
-            const searchInput = selectRef.current?.querySelector(`#select-search-${searchInputId}`) as HTMLInputElement;
+            const searchInput = selectRef.current?.querySelector(
+              `#select-search-${searchInputId}`,
+            ) as HTMLInputElement;
             if (searchInput) {
               searchInput.focus();
             }
@@ -165,7 +167,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     // Filter options based on search query
     const filteredOptions = options.filter((option) =>
-      searchable ? option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase()) : true
+      searchable
+        ? option.label?.toString().toLowerCase().includes(searchQuery.toLowerCase())
+        : true,
     );
 
     return (
@@ -184,7 +188,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         closeAfterClick={false}
         disableTriggerClick={true}
         style={{
-          ...style
+          ...style,
         }}
         trigger={
           <Input
@@ -244,7 +248,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                     e.stopPropagation();
                     setIsDropdownOpen(false);
                     setSearchQuery("");
-                    const mainInput = selectRef.current?.querySelector("input:not([id^='select-search'])");
+                    const mainInput = selectRef.current?.querySelector(
+                      "input:not([id^='select-search'])",
+                    );
                     if (mainInput instanceof HTMLInputElement) {
                       mainInput.focus();
                     }
@@ -252,7 +258,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                 }}
                 onBlur={(e) => {
                   const relatedTarget = e.relatedTarget as Node;
-                  const isClickInDropdown = selectRef.current && selectRef.current.contains(relatedTarget);
+                  const isClickInDropdown =
+                    selectRef.current && selectRef.current.contains(relatedTarget);
                   if (!isClickInDropdown) {
                     handleBlur(e);
                   }
@@ -281,27 +288,28 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                       handleSelect(option.value);
                       setIsDropdownOpen(false);
                     }}
-                    selected={multiple 
-                      ? Array.isArray(currentValue) && currentValue.includes(option.value)
-                      : option.value === currentValue
+                    selected={
+                      multiple
+                        ? Array.isArray(currentValue) && currentValue.includes(option.value)
+                        : option.value === currentValue
                     }
                     tabIndex={-1}
-                    hasPrefix={multiple 
-                      ? Array.isArray(currentValue) && currentValue.includes(option.value)
-                        ? <Icon name="check" size="xs" onBackground="neutral-weak" />
-                        : Array.isArray(currentValue) && currentValue.length > 0 
-                          ? <Flex minWidth="20"/> 
-                          : undefined
-                      : undefined
+                    hasPrefix={
+                      multiple ? (
+                        Array.isArray(currentValue) && currentValue.includes(option.value) ? (
+                          <Icon name="check" size="xs" onBackground="neutral-weak" />
+                        ) : Array.isArray(currentValue) && currentValue.length > 0 ? (
+                          <Flex minWidth="20" />
+                        ) : undefined
+                      ) : undefined
                     }
                   />
                 ))}
-                {searchQuery &&
-                  filteredOptions.length === 0 && (
-                    <Flex fillWidth center paddingX="16" paddingY="32">
-                      {emptyState}
-                    </Flex>
-                  )}
+                {searchQuery && filteredOptions.length === 0 && (
+                  <Flex fillWidth center paddingX="16" paddingY="32">
+                    {emptyState}
+                  </Flex>
+                )}
               </Column>
             </ArrowNavigation>
           </Column>

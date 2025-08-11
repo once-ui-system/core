@@ -52,7 +52,12 @@ interface KbarContentProps {
   placeholder?: string;
 }
 
-export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items, placeholder = "Search" }) => {
+export const KbarContent: React.FC<KbarContentProps> = ({
+  isOpen,
+  onClose,
+  items,
+  placeholder = "Search",
+}) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -109,10 +114,12 @@ export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items
           ) : undefined,
           hasSuffix:
             item.shortcut && item.shortcut.length > 0 ? (
-              <Row gap="2" style={{transform: "scale(0.9)", transformOrigin: "right"}}>
+              <Row gap="2" style={{ transform: "scale(0.9)", transformOrigin: "right" }}>
                 {item.shortcut.map((key, i) => (
                   <Row gap="2" key={i}>
-                    <Kbd minWidth="24" style={{transform: "scale(0.8)"}}>{key}</Kbd>
+                    <Kbd minWidth="24" style={{ transform: "scale(0.8)" }}>
+                      {key}
+                    </Kbd>
                     {i < item.shortcut.length - 1 && <Text onBackground="neutral-weak">+</Text>}
                   </Row>
                 ))}
@@ -328,7 +335,15 @@ export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items
             autoComplete="off"
           />
         </Row>
-        <Column ref={scrollContainerRef} fillWidth padding="4" gap="2" overflowY="auto" radius="l" border="neutral-alpha-weak">
+        <Column
+          ref={scrollContainerRef}
+          fillWidth
+          padding="4"
+          gap="2"
+          overflowY="auto"
+          radius="l"
+          border="neutral-alpha-weak"
+        >
           {groupedItems.map((option, index) => {
             if (option.isCustom) {
               return <React.Fragment key={option.value}>{option.label}</React.Fragment>;
@@ -359,17 +374,44 @@ export const KbarContent: React.FC<KbarContentProps> = ({ isOpen, onClose, items
             );
           })}
           {searchQuery && filteredItems.length === 0 && (
-            <Flex fillWidth center paddingX="16" paddingY="64" textVariant="body-default-m" onBackground="neutral-weak">
-                No results found
+            <Flex
+              fillWidth
+              center
+              paddingX="16"
+              paddingY="64"
+              textVariant="body-default-m"
+              onBackground="neutral-weak"
+            >
+              No results found
             </Flex>
           )}
         </Column>
         <Row fillWidth paddingX="24" paddingY="8">
-          <Row style={{transform: "scale(0.8)", transformOrigin: "left"}} gap="8" onBackground="neutral-weak" textVariant="label-default-m" vertical="center">
-            <Kbd minWidth="20"><Row><Icon name="chevronUp" size="xs"/></Row></Kbd>
-            <Kbd minWidth="20"><Row><Icon name="chevronDown" size="xs"/></Row></Kbd>
-            <Text marginLeft="8" marginRight="24">Navigate</Text>
-            <Kbd minWidth="20"><Row><Icon name="enter" size="xs"/></Row></Kbd>
+          <Row
+            style={{ transform: "scale(0.8)", transformOrigin: "left" }}
+            gap="8"
+            onBackground="neutral-weak"
+            textVariant="label-default-m"
+            vertical="center"
+          >
+            <Kbd minWidth="20">
+              <Row>
+                <Icon name="chevronUp" size="xs" />
+              </Row>
+            </Kbd>
+            <Kbd minWidth="20">
+              <Row>
+                <Icon name="chevronDown" size="xs" />
+              </Row>
+            </Kbd>
+            <Text marginLeft="8" marginRight="24">
+              Navigate
+            </Text>
+            <Kbd minWidth="20">
+              <Row>
+                <Icon name="enter" size="xs" />
+              </Row>
+            </Kbd>
             <Text marginLeft="8">Go to</Text>
           </Row>
         </Row>

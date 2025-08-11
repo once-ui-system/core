@@ -36,7 +36,15 @@ import {
   HiOutlineArrowTurnDownLeft,
 } from "react-icons/hi2";
 
-import { IoAtOutline, IoFastFoodOutline, IoFlagOutline, IoFootballOutline, IoGiftOutline, IoGlobeOutline, IoPawOutline } from "react-icons/io5";
+import {
+  IoAtOutline,
+  IoFastFoodOutline,
+  IoFlagOutline,
+  IoFootballOutline,
+  IoGiftOutline,
+  IoGlobeOutline,
+  IoPawOutline,
+} from "react-icons/io5";
 import { LuTextCursorInput } from "react-icons/lu";
 
 export const iconLibrary: Record<string, IconType> = {
@@ -80,7 +88,7 @@ export const iconLibrary: Record<string, IconType> = {
   symbol: IoAtOutline,
   flag: IoFlagOutline,
   wordmark: LuTextCursorInput,
-  enter: HiOutlineArrowTurnDownLeft
+  enter: HiOutlineArrowTurnDownLeft,
 };
 
 export type IconLibrary = typeof iconLibrary;

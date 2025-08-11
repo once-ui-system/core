@@ -52,10 +52,10 @@ const BarChart: React.FC<BarChartProps> = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
-  const { 
-    variant: themeVariant, 
-    mode, 
-    height, 
+  const {
+    variant: themeVariant,
+    mode,
+    height,
     tick: { fill: tickFill, fontSize: tickFontSize, line: tickLine },
     axis: { stroke: axisLineStroke },
   } = useDataTheme();
@@ -135,7 +135,14 @@ const BarChart: React.FC<BarChartProps> = ({
   }, [data, selectedDateRange, xAxisKey]);
 
   return (
-    <Column fillWidth height={height} border={border} radius="l" data-viz-style={dataVizStyle || mode} {...flex}>
+    <Column
+      fillWidth
+      height={height}
+      border={border}
+      radius="l"
+      data-viz-style={dataVizStyle || mode}
+      {...flex}
+    >
       <ChartHeader
         title={title}
         description={description}

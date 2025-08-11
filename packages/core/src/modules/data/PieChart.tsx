@@ -21,7 +21,7 @@ import {
   DataTooltip,
   Legend,
   ChartHeader,
-  useDataTheme
+  useDataTheme,
 } from "../../";
 
 import { getDistributedColor } from "./utils/colorDistribution";
@@ -54,11 +54,7 @@ export const PieChart: React.FC<PieChartProps> = ({
   "data-viz-style": dataViz,
   ...flex
 }) => {
-  const { 
-    variant: themeVariant, 
-    mode, 
-    height
-  } = useDataTheme();
+  const { variant: themeVariant, mode, height } = useDataTheme();
   const variant = variantProp || themeVariant;
   const legend = {
     display: legendProp.display !== undefined ? legendProp.display : true,

@@ -18,24 +18,24 @@ export const Cursor: React.FC<CursorProps> = ({ cursor, elementRef }) => {
   useEffect(() => {
     const checkTouchDevice = () => {
       // Check for touch capability
-      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
       // Check for pointer capability (some devices have both mouse and touch)
-      const hasPointer = window.matchMedia('(pointer: fine)').matches;
-      
+      const hasPointer = window.matchMedia("(pointer: fine)").matches;
+
       // Consider it a touch device if it has touch but no fine pointer (mouse)
       setIsTouchDevice(hasTouch && !hasPointer);
     };
 
     checkTouchDevice();
-    
+
     // Listen for changes in pointer capability (e.g., when external mouse is connected)
-    const mediaQuery = window.matchMedia('(pointer: fine)');
+    const mediaQuery = window.matchMedia("(pointer: fine)");
     const handlePointerChange = () => checkTouchDevice();
-    
-    mediaQuery.addEventListener('change', handlePointerChange);
-    
+
+    mediaQuery.addEventListener("change", handlePointerChange);
+
     return () => {
-      mediaQuery.removeEventListener('change', handlePointerChange);
+      mediaQuery.removeEventListener("change", handlePointerChange);
     };
   }, []);
 
@@ -50,7 +50,7 @@ export const Cursor: React.FC<CursorProps> = ({ cursor, elementRef }) => {
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
-      
+
       // Schedule the update for the next animation frame
       animationFrameId = requestAnimationFrame(() => {
         setMousePosition({ x: e.clientX, y: e.clientY });
@@ -67,9 +67,9 @@ export const Cursor: React.FC<CursorProps> = ({ cursor, elementRef }) => {
 
     const element = elementRef.current;
     if (element) {
-      element.addEventListener('mouseenter', handleMouseEnter);
-      element.addEventListener('mouseleave', handleMouseLeave);
-      document.addEventListener('mousemove', handleMouseMove);
+      element.addEventListener("mouseenter", handleMouseEnter);
+      element.addEventListener("mouseleave", handleMouseLeave);
+      document.addEventListener("mousemove", handleMouseMove);
     }
 
     return () => {
@@ -77,10 +77,10 @@ export const Cursor: React.FC<CursorProps> = ({ cursor, elementRef }) => {
         cancelAnimationFrame(animationFrameId);
       }
       if (element) {
-        element.removeEventListener('mouseenter', handleMouseEnter);
-        element.removeEventListener('mouseleave', handleMouseLeave);
+        element.removeEventListener("mouseenter", handleMouseEnter);
+        element.removeEventListener("mouseleave", handleMouseLeave);
       }
-      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener("mousemove", handleMouseMove);
     };
   }, [cursor, elementRef, isTouchDevice]);
 
@@ -88,22 +88,22 @@ export const Cursor: React.FC<CursorProps> = ({ cursor, elementRef }) => {
   if (isTouchDevice || !isHovering) return null;
 
   return createPortal(
-    <Flex 
+    <Flex
       position="fixed"
       pointerEvents="none"
       zIndex={10}
       style={{
         left: mousePosition.x,
         top: mousePosition.y,
-        transform: 'translate(-50%, -50%)',
-        transition: 'none'
+        transform: "translate(-50%, -50%)",
+        transition: "none",
       }}
     >
       {cursor}
     </Flex>,
-    document.body
+    document.body,
   );
 };
 
 Cursor.displayName = "Cursor";
-export default Cursor; 
+export default Cursor;

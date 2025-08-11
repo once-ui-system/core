@@ -47,38 +47,39 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
     const [isHighlightedByClass, setIsHighlightedByClass] = useState(false);
     // Use a more generic type that works with ElementType
     const elementRef = useRef<HTMLElement>(null);
-    
+
     // Check for highlighted class applied by ArrowNavigation
     useEffect(() => {
       if (!elementRef.current) return;
-      
+
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
-          if (mutation.type === 'attributes' && 
-              (mutation.attributeName === 'class' || 
-               mutation.attributeName === 'data-highlighted')) {
+          if (
+            mutation.type === "attributes" &&
+            (mutation.attributeName === "class" || mutation.attributeName === "data-highlighted")
+          ) {
             if (mutation.target instanceof HTMLElement) {
               const element = mutation.target;
               setIsHighlightedByClass(
-                element.classList.contains('highlighted') || 
-                element.getAttribute('data-highlighted') === 'true'
+                element.classList.contains("highlighted") ||
+                  element.getAttribute("data-highlighted") === "true",
               );
             }
           }
         });
       });
-      
-      observer.observe(elementRef.current, { 
+
+      observer.observe(elementRef.current, {
         attributes: true,
-        attributeFilter: ['class', 'data-highlighted']
+        attributeFilter: ["class", "data-highlighted"],
       });
-      
+
       // Initial check
       setIsHighlightedByClass(
-        elementRef.current.classList.contains('highlighted') || 
-        elementRef.current.getAttribute('data-highlighted') === 'true'
+        elementRef.current.classList.contains("highlighted") ||
+          elementRef.current.getAttribute("data-highlighted") === "true",
       );
-      
+
       return () => observer.disconnect();
     }, []);
     return (
@@ -86,7 +87,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         tabIndex={tabIndex}
         ref={(el) => {
           // Forward the ref
-          if (typeof ref === 'function') {
+          if (typeof ref === "function") {
             ref(el as HTMLDivElement);
           } else if (ref) {
             ref.current = el as HTMLDivElement;

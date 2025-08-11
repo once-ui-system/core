@@ -63,7 +63,7 @@ const getFaviconUrl = (url: string | undefined, proxyFn?: (url: string) => strin
     const domain = urlObj.hostname;
 
     const faviconSourceUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-    
+
     // Use the provided proxy function or return the favicon URL directly
     return proxyFn ? proxyFn(faviconSourceUrl) : faviconSourceUrl;
   } catch (error) {
@@ -85,39 +85,47 @@ const OgCard = ({
   cardUrl,
   ...card
 }: OgCardProps) => {
-  const { ogData: fetchedOgData, loading } = useOgData(url || null, serviceConfig.fetchOgUrl, serviceConfig.proxyOgUrl);
+  const { ogData: fetchedOgData, loading } = useOgData(
+    url || null,
+    serviceConfig.fetchOgUrl,
+    serviceConfig.proxyOgUrl,
+  );
   const data = providedOgData || fetchedOgData;
-  
+
   // Resolve content based on props
   const resolvedTitle = useMemo(() => {
     if (title === false) return null;
-    if (typeof title === 'string') return title;
+    if (typeof title === "string") return title;
     return data?.title;
   }, [title, data?.title]);
 
   const resolvedDescription = useMemo(() => {
     if (description === false) return null;
-    if (typeof description === 'string') return description;
+    if (typeof description === "string") return description;
     return data?.description;
   }, [description, data?.description]);
 
   const resolvedFavicon = useMemo(() => {
     if (favicon === false) return null;
-    if (typeof favicon === 'string') return favicon;
-    return data?.faviconUrl || (data?.url ? getFaviconUrl(data.url, serviceConfig.proxyFaviconUrl) : "");
+    if (typeof favicon === "string") return favicon;
+    return (
+      data?.faviconUrl || (data?.url ? getFaviconUrl(data.url, serviceConfig.proxyFaviconUrl) : "")
+    );
   }, [favicon, data?.faviconUrl, data?.url, serviceConfig.proxyFaviconUrl]);
 
   const resolvedImage = useMemo(() => {
     if (image === false) return null;
-    if (typeof image === 'string') return image;
-    return data?.image ? (serviceConfig.proxyImageUrl 
-      ? serviceConfig.proxyImageUrl(data.image)
-      : data.image) : "";
+    if (typeof image === "string") return image;
+    return data?.image
+      ? serviceConfig.proxyImageUrl
+        ? serviceConfig.proxyImageUrl(data.image)
+        : data.image
+      : "";
   }, [image, data?.image, serviceConfig.proxyImageUrl]);
 
   const resolvedUrl = useMemo(() => {
     if (cardUrl === false) return null;
-    if (typeof cardUrl === 'string') return cardUrl;
+    if (typeof cardUrl === "string") return cardUrl;
     return data?.url;
   }, [cardUrl, data?.url]);
 
@@ -155,7 +163,12 @@ const OgCard = ({
           src={proxiedImageUrl}
         />
       )}
-      <Column fillWidth paddingX={size === "s" ? "12" : size === "m" ? "20" : "32"} paddingY={size === "s" ? "12" : size === "m" ? "16" : "24"} gap={(size === "s" || size === "m") ? "8" : "20"}>
+      <Column
+        fillWidth
+        paddingX={size === "s" ? "12" : size === "m" ? "20" : "32"}
+        paddingY={size === "s" ? "12" : size === "m" ? "16" : "24"}
+        gap={size === "s" || size === "m" ? "8" : "20"}
+      >
         {resolvedFavicon !== null && (
           <Row fillWidth gap="8" vertical="center">
             <Media
@@ -169,37 +182,55 @@ const OgCard = ({
               radius="xs"
               border="neutral-alpha-weak"
             />
-            {resolvedUrl && (
-              loading ? (
+            {resolvedUrl &&
+              (loading ? (
                 <Skeleton shape="line" width="xs" height="xs" />
               ) : (
                 <Text variant="label-default-s" onBackground="neutral-weak">
                   {formatDisplayUrl(resolvedUrl)}
                 </Text>
-              )
-            )}
+              ))}
           </Row>
         )}
         <Column fillWidth gap={size === "s" ? "4" : size === "m" ? "8" : "12"}>
-          {resolvedTitle !== null && (loading ? (
-            <Skeleton shape="line" width="s" height="s" />
-          ) : resolvedTitle && (
-            <Text variant={size === "s" ? "label-default-s" : size === "m" ? "label-default-m" : "label-default-l"}>
-              {resolvedTitle}
-            </Text>
-          ))}
-          {resolvedDescription !== null && (
-            loading ? (
+          {resolvedTitle !== null &&
+            (loading ? (
+              <Skeleton shape="line" width="s" height="s" />
+            ) : (
+              resolvedTitle && (
+                <Text
+                  variant={
+                    size === "s"
+                      ? "label-default-s"
+                      : size === "m"
+                        ? "label-default-m"
+                        : "label-default-l"
+                  }
+                >
+                  {resolvedTitle}
+                </Text>
+              )
+            ))}
+          {resolvedDescription !== null &&
+            (loading ? (
               <Column fillWidth paddingY="8" gap="8">
                 <Skeleton shape="line" width="xl" height="xs" />
                 <Skeleton shape="line" width="l" height="xs" />
               </Column>
             ) : resolvedDescription ? (
-              <Text variant={size === "s" ? "label-default-s" : size === "m" ? "label-default-m" : "label-default-l"} onBackground="neutral-weak">
+              <Text
+                variant={
+                  size === "s"
+                    ? "label-default-s"
+                    : size === "m"
+                      ? "label-default-m"
+                      : "label-default-l"
+                }
+                onBackground="neutral-weak"
+              >
                 {resolvedDescription}
               </Text>
-            ) : null
-          )}
+            ) : null)}
         </Column>
       </Column>
     </Card>

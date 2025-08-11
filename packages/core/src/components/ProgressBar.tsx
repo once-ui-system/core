@@ -27,20 +27,19 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
       style,
       ...rest
     },
-    ref
+    ref,
   ) => {
-    const percent = Math.max(
-      0,
-      Math.min(100, ((value - min) / (max - min)) * 100)
-    );
+    const percent = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
     return (
       <Column
         horizontal="center"
         gap="16"
-        fillWidth ref={ref}
+        fillWidth
+        ref={ref}
         style={style}
         className={classNames(className)}
-        {...rest}>
+        {...rest}
+      >
         <Flex
           background="neutral-medium"
           border="neutral-alpha-weak"
@@ -60,10 +59,14 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
             radius="full"
           />
         </Flex>
-        {label && <Text align="center"><CountFx value={value} speed={1000} duration={1000} easing="ease-in-out"/>%</Text>}
+        {label && (
+          <Text align="center">
+            <CountFx value={value} speed={1000} duration={1000} easing="ease-in-out" />%
+          </Text>
+        )}
       </Column>
     );
-  }
+  },
 );
 
 ProgressBar.displayName = "ProgressBar";

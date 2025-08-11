@@ -187,10 +187,10 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
               />
             }
             dropdown={
-              <Row padding="4" s={{direction: "column"}}>
+              <Row padding="4" s={{ direction: "column" }}>
                 {presets.display && (
                   <Column
-                    s={{direction: "row"}}
+                    s={{ direction: "row" }}
                     padding="4"
                     gap="2"
                     minWidth={8}

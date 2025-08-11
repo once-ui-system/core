@@ -94,10 +94,10 @@ export const DateInput: React.FC<DateInputProps> = ({
       }
       dropdown={
         <DatePicker
-          key={`datepicker-${isOpen ? 'open' : 'closed'}-${value?.getTime() || 0}`}
+          key={`datepicker-${isOpen ? "open" : "closed"}-${value?.getTime() || 0}`}
           padding="20"
-          value={value} 
-          onChange={handleDateChange} 
+          value={value}
+          onChange={handleDateChange}
           timePicker={timePicker}
           minDate={minDate}
           maxDate={maxDate}

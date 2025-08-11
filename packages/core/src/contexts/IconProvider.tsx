@@ -17,7 +17,7 @@ export const IconProvider = ({
   children: React.ReactNode;
 }) => {
   const mergedIcons = { ...defaultIcons };
-  
+
   if (icons) {
     Object.entries(icons).forEach(([key, icon]) => {
       if (icon !== undefined) {
@@ -26,11 +26,7 @@ export const IconProvider = ({
     });
   }
 
-  return (
-    <IconContext.Provider value={{ icons: mergedIcons }}>
-      {children}
-    </IconContext.Provider>
-  );
+  return <IconContext.Provider value={{ icons: mergedIcons }}>{children}</IconContext.Provider>;
 };
 
 export const useIcons = () => useContext(IconContext);

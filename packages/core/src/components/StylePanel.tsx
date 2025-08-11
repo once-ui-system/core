@@ -2,7 +2,16 @@
 
 import { forwardRef, useState, useEffect } from "react";
 import { Flex, Text, SegmentedControl, IconButton, Scroller, Column, ThemeSwitcher } from ".";
-import { BorderStyle, NeutralColor, ScalingSize, SolidStyle, SolidType, SurfaceStyle, TransitionStyle, useStyle } from "../contexts/ThemeProvider";
+import {
+  BorderStyle,
+  NeutralColor,
+  ScalingSize,
+  SolidStyle,
+  SolidType,
+  SurfaceStyle,
+  TransitionStyle,
+  useStyle,
+} from "../contexts/ThemeProvider";
 import { useDataTheme } from "../contexts/DataThemeProvider";
 import styles from "./StylePanel.module.scss";
 import classNames from "classnames";
@@ -25,7 +34,7 @@ const colorOptions = {
 const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref) => {
   const styleContext = useStyle();
   const { mode: chartMode, setChartOptions } = useDataTheme();
-  
+
   const [mounted, setMounted] = useState(false);
   const [borderValue, setBorderValue] = useState<BorderStyle>("playful");
   const [brandValue, setBrandValue] = useState<Schemes | "custom">("blue");
@@ -37,17 +46,17 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
   const [scalingValue, setScalingValue] = useState<ScalingSize>("100");
   const [chartModeValue, setChartModeValue] = useState<ChartMode>("categorical");
   const [transitionValue, setTransitionValue] = useState<TransitionStyle>("all");
-  
+
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedSolid = localStorage.getItem('data-solid');
-      const storedSolidStyle = localStorage.getItem('data-solid-style');
-      
+    if (typeof window !== "undefined") {
+      const storedSolid = localStorage.getItem("data-solid");
+      const storedSolidStyle = localStorage.getItem("data-solid-style");
+
       if (storedSolid) setSolidValue(storedSolid as SolidType);
       if (storedSolidStyle) setSolidStyleValue(storedSolidStyle as SolidStyle);
     }
   }, []);
-  
+
   useEffect(() => {
     setMounted(true);
     if (mounted) {
@@ -72,9 +81,16 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
         </Text>
       </Column>
       <Column fillWidth border="neutral-alpha-medium" radius="l-4">
-        <Flex horizontal="between" vertical="center" fillWidth paddingX="24" paddingY="16" borderBottom="neutral-alpha-medium">
+        <Flex
+          horizontal="between"
+          vertical="center"
+          fillWidth
+          paddingX="24"
+          paddingY="16"
+          borderBottom="neutral-alpha-medium"
+        >
           <Text variant="label-default-s">Theme</Text>
-          <ThemeSwitcher/>
+          <ThemeSwitcher />
         </Flex>
         <Flex horizontal="between" vertical="center" fillWidth paddingX="24" paddingY="16">
           <Text variant="label-default-s">Shape</Text>
@@ -129,7 +145,10 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={color}
                 center
                 tabIndex={0}
-                className={classNames(styles.select, mounted && brandValue === color ? styles.selected : "")}
+                className={classNames(
+                  styles.select,
+                  mounted && brandValue === color ? styles.selected : "",
+                )}
                 onClick={() => {
                   styleContext.setStyle({ brand: color as Schemes });
                   setBrandValue(color as Schemes);
@@ -162,7 +181,10 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={color}
                 center
                 tabIndex={0}
-                className={classNames(styles.select, mounted && accentValue === color ? styles.selected : "")}
+                className={classNames(
+                  styles.select,
+                  mounted && accentValue === color ? styles.selected : "",
+                )}
                 onClick={() => {
                   styleContext.setStyle({ accent: color as Schemes });
                   setAccentValue(color as Schemes);
@@ -176,14 +198,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           </Scroller>
         </Flex>
 
-        <Flex
-          horizontal="between"
-          vertical="center"
-          fillWidth
-          paddingX="24"
-          paddingY="16"
-          gap="24"
-        >
+        <Flex horizontal="between" vertical="center" fillWidth paddingX="24" paddingY="16" gap="24">
           <Flex textVariant="label-default-s" minWidth={3}>
             Neutral
           </Flex>
@@ -194,7 +209,10 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={color}
                 center
                 tabIndex={0}
-                className={classNames(styles.select, mounted && neutralValue === color ? styles.selected : "")}
+                className={classNames(
+                  styles.select,
+                  mounted && neutralValue === color ? styles.selected : "",
+                )}
                 onClick={() => {
                   styleContext.setStyle({ neutral: color as NeutralColor });
                   setNeutralValue(color as NeutralColor);
@@ -285,20 +303,13 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
             onToggle={(value) => {
               styleContext.setStyle({ solid: value as SolidType });
               setSolidValue(value as SolidType);
-              localStorage.setItem('data-solid', value);
+              localStorage.setItem("data-solid", value);
             }}
             selected={mounted ? solidValue : undefined}
             defaultSelected="contrast"
           />
         </Flex>
-        <Flex
-          horizontal="between"
-          vertical="center"
-          fillWidth
-          paddingX="24"
-          paddingY="16"
-          gap="24"
-        >
+        <Flex horizontal="between" vertical="center" fillWidth paddingX="24" paddingY="16" gap="24">
           <Text variant="label-default-s">Effect</Text>
           <SegmentedControl
             maxWidth={22}
@@ -344,7 +355,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
             onToggle={(value) => {
               styleContext.setStyle({ solidStyle: value as SolidStyle });
               setSolidStyleValue(value as SolidStyle);
-              localStorage.setItem('data-solid-style', value);
+              localStorage.setItem("data-solid-style", value);
             }}
             selected={mounted ? solidStyleValue : undefined}
             defaultSelected="flat"
@@ -477,14 +488,7 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
             ]}
           />
         </Flex>
-        <Flex
-          horizontal="between"
-          vertical="center"
-          fillWidth
-          paddingX="24"
-          paddingY="16"
-          gap="24"
-        >
+        <Flex horizontal="between" vertical="center" fillWidth paddingX="24" paddingY="16" gap="24">
           <Text variant="label-default-s">Transition</Text>
           <SegmentedControl
             maxWidth={22}

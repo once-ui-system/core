@@ -4,10 +4,10 @@ import React, { createContext, useContext, useEffect, useState, ReactNode } from
 
 // Default breakpoints
 export const DEFAULT_BREAKPOINTS = {
-  xs: 480,  // Extra small (mobile small)
-  s: 768,   // Small (mobile)
-  m: 1024,  // Medium (tablet)
-  l: 1440,  // Large (desktop)
+  xs: 480, // Extra small (mobile small)
+  s: 768, // Small (mobile)
+  m: 1024, // Medium (tablet)
+  l: 1440, // Large (desktop)
   xl: Infinity, // Above all breakpoints
 } as const;
 
@@ -30,9 +30,9 @@ interface LayoutProviderProps {
   breakpoints?: Partial<Breakpoints>;
 }
 
-const LayoutProvider: React.FC<LayoutProviderProps> = ({ 
-  children, 
-  breakpoints: customBreakpoints 
+const LayoutProvider: React.FC<LayoutProviderProps> = ({
+  children,
+  breakpoints: customBreakpoints,
 }) => {
   // Merge custom breakpoints with defaults
   const breakpoints: Breakpoints = {
@@ -41,15 +41,15 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
   };
 
   const [width, setWidth] = useState<number>(0);
-  const [currentBreakpoint, setCurrentBreakpoint] = useState<BreakpointKey>('l');
+  const [currentBreakpoint, setCurrentBreakpoint] = useState<BreakpointKey>("l");
 
   // Determine current breakpoint based on width
   const getCurrentBreakpoint = (width: number): BreakpointKey => {
-    if (width <= breakpoints.xs) return 'xs';
-    if (width <= breakpoints.s) return 's';
-    if (width <= breakpoints.m) return 'm';
-    if (width <= breakpoints.l) return 'l';
-    return 'xl';
+    if (width <= breakpoints.xs) return "xs";
+    if (width <= breakpoints.s) return "s";
+    if (width <= breakpoints.m) return "m";
+    if (width <= breakpoints.l) return "l";
+    return "xl";
   };
 
   // Check if current breakpoint matches the given key
@@ -79,10 +79,10 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     updateWidth();
 
     // Add resize listener
-    window.addEventListener('resize', updateWidth);
+    window.addEventListener("resize", updateWidth);
 
     return () => {
-      window.removeEventListener('resize', updateWidth);
+      window.removeEventListener("resize", updateWidth);
     };
   }, [breakpoints]);
 
@@ -95,19 +95,15 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     minWidth,
   };
 
-  return (
-    <LayoutContext.Provider value={value}>
-      {children}
-    </LayoutContext.Provider>
-  );
+  return <LayoutContext.Provider value={value}>{children}</LayoutContext.Provider>;
 };
 
 export const useLayout = (): LayoutContextType => {
   const context = useContext(LayoutContext);
   if (!context) {
-    throw new Error('useLayout must be used within a LayoutProvider');
+    throw new Error("useLayout must be used within a LayoutProvider");
   }
   return context;
 };
 
-export { LayoutProvider }; 
+export { LayoutProvider };

@@ -18,12 +18,12 @@ interface ComponentProps
     StyleProps,
     CommonProps,
     DisplayProps {
-      xl?: any;
-      l?: any;
-      m?: any;
-      s?: any;
-      xs?: any;
-    }
+  xl?: any;
+  l?: any;
+  m?: any;
+  s?: any;
+  xs?: any;
+}
 
 const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
   (
@@ -120,7 +120,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
     },
     ref,
   ) => {
-
     if (onBackground && onSolid) {
       console.warn(
         "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
@@ -202,7 +201,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
           ? "g-vertical--1"
           : "g-horizontal--1"
         : gap && `g-${gap}`,
-      top ? `top-${top}` : (position === "sticky" ? "top-0" : undefined),
+      top ? `top-${top}` : position === "sticky" ? "top-0" : undefined,
       right && `right-${right}`,
       bottom && `bottom-${bottom}`,
       left && `left-${left}`,
@@ -216,7 +215,8 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
         !borderStyle &&
         "border-solid",
       border && !borderWidth && "border-1",
-      (borderTop || borderRight || borderBottom || borderLeft || borderX || borderY) && "border-reset",
+      (borderTop || borderRight || borderBottom || borderLeft || borderX || borderY) &&
+        "border-reset",
       borderTop && "border-top-1",
       borderRight && "border-right-1",
       borderBottom && "border-bottom-1",
@@ -292,7 +292,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       shadow && `shadow-${shadow}`,
       zIndex && `z-index-${zIndex}`,
       textType && `font-${textType}`,
-      typeof cursor === 'string' && `cursor-${cursor}`,
+      typeof cursor === "string" && `cursor-${cursor}`,
       dark && "dark-flex",
       light && "light-flex",
       colorClass,
@@ -345,7 +345,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       height: parseDimension(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
-      cursor: typeof cursor === 'string' ? cursor : undefined,
+      cursor: typeof cursor === "string" ? cursor : undefined,
       ...style,
     };
 

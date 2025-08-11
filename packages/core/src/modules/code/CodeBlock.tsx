@@ -4,11 +4,8 @@ import React, { useState, useEffect, useRef, ReactNode } from "react";
 
 // We'll import CSS files dynamically on the client side
 const loadCssFiles = async () => {
-  if (typeof window !== 'undefined') {
-    await Promise.all([
-      import("./CodeHighlight.css"),
-      import("./LineNumber.css")
-    ]);
+  if (typeof window !== "undefined") {
+    await Promise.all([import("./CodeHighlight.css"), import("./LineNumber.css")]);
     return true;
   }
   return false;
@@ -22,7 +19,7 @@ import Prism from "prismjs";
 
 // We'll load these dynamically on the client side only
 const loadPrismDependencies = async () => {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     // Only import these on the client side
     await Promise.all([
       import("prismjs/plugins/line-highlight/prism-line-highlight"),
@@ -30,7 +27,7 @@ const loadPrismDependencies = async () => {
       import("prismjs/components/prism-jsx"),
       import("prismjs/components/prism-css"),
       import("prismjs/components/prism-typescript"),
-      import("prismjs/components/prism-tsx")
+      import("prismjs/components/prism-tsx"),
     ]);
     return true;
   }
@@ -93,17 +90,15 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     language: "",
   };
   const { code, language } = codeInstance;
-  const highlight = codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
+  const highlight =
+    codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
 
   useEffect(() => {
     const loadDependencies = async () => {
-      await Promise.all([
-        loadPrismDependencies(),
-        loadCssFiles()
-      ]);
+      await Promise.all([loadPrismDependencies(), loadCssFiles()]);
       setDependenciesLoaded(true);
     };
-    
+
     loadDependencies();
   }, []);
 
@@ -310,7 +305,11 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               )}
               tabIndex={-1}
             >
-              <code tabIndex={-1} ref={codeRef} className={classNames(styles.code, `language-${language}`)}>
+              <code
+                tabIndex={-1}
+                ref={codeRef}
+                className={classNames(styles.code, `language-${language}`)}
+              >
                 {typeof code === "string" ? code : code.content}
               </code>
             </pre>

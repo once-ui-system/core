@@ -191,8 +191,9 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
       const handleClickOutside = (event: MouseEvent) => {
         if (event.button !== 0) return;
 
-        const isInsideDropdownPortal = (event.target as Element)?.closest('.dropdown-portal') !== null;
-        
+        const isInsideDropdownPortal =
+          (event.target as Element)?.closest(".dropdown-portal") !== null;
+
         if (isInsideDropdownPortal) {
           return;
         }
@@ -209,7 +210,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
         const timeoutId = setTimeout(() => {
           document.addEventListener("mousedown", handleClickOutside, { capture: true });
         }, 10);
-        
+
         return () => {
           clearTimeout(timeoutId);
           document.removeEventListener("mousedown", handleClickOutside, { capture: true });

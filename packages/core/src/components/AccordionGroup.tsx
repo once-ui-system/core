@@ -26,18 +26,21 @@ const AccordionGroup: React.FC<AccordionGroupProps> = ({
 }) => {
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
-  const handleAccordionToggle = useCallback((index: number) => {
-    if (autoCollapse) {
-      // If clicking the same accordion, close it
-      if (openAccordion === index) {
-        setOpenAccordion(null);
-      } else {
-        // Otherwise, open the clicked accordion and close others
-        setOpenAccordion(index);
+  const handleAccordionToggle = useCallback(
+    (index: number) => {
+      if (autoCollapse) {
+        // If clicking the same accordion, close it
+        if (openAccordion === index) {
+          setOpenAccordion(null);
+        } else {
+          // Otherwise, open the clicked accordion and close others
+          setOpenAccordion(index);
+        }
       }
-    }
-    // If autoCollapse is false, let each accordion handle its own state
-  }, [autoCollapse, openAccordion]);
+      // If autoCollapse is false, let each accordion handle its own state
+    },
+    [autoCollapse, openAccordion],
+  );
 
   if (!items || items.length === 0) {
     return null;
@@ -55,8 +58,8 @@ const AccordionGroup: React.FC<AccordionGroupProps> = ({
     >
       {items.map((item, index) => (
         <React.Fragment key={index}>
-          <Accordion 
-            title={item.title} 
+          <Accordion
+            title={item.title}
             size={size}
             open={autoCollapse ? openAccordion === index : undefined}
             onToggle={() => handleAccordionToggle(index)}

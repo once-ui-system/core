@@ -92,7 +92,12 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
                 </Flex>
               )}
               {description && (
-                <Text marginBottom="2" marginTop="4" variant="body-default-s" onBackground={`${variant}-strong`}>
+                <Text
+                  marginBottom="2"
+                  marginTop="4"
+                  variant="body-default-s"
+                  onBackground={`${variant}-strong`}
+                >
                   {description}
                 </Text>
               )}

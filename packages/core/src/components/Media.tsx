@@ -187,7 +187,16 @@ const Media: React.FC<MediaProps> = ({
           )}
         </Column>
         {caption && (
-          <Row as="figcaption" fillWidth textVariant="label-default-s" onBackground="neutral-weak" paddingY="12" paddingX="24" horizontal="center" align="center">
+          <Row
+            as="figcaption"
+            fillWidth
+            textVariant="label-default-s"
+            onBackground="neutral-weak"
+            paddingY="12"
+            paddingX="24"
+            horizontal="center"
+            align="center"
+          >
             {caption}
           </Row>
         )}
