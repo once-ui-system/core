@@ -52,12 +52,12 @@ const LineChart: React.FC<LineChartProps> = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
- const { 
-    variant: themeVariant, 
-    mode, 
-    height, 
+  const {
+    variant: themeVariant,
+    mode,
+    height,
     tick: { fill: tickFill, fontSize: tickFontSize, line: tickLine },
-    axis: { stroke: axisLineStroke }
+    axis: { stroke: axisLineStroke },
   } = useDataTheme();
   const variant = variantProp || themeVariant;
   const legend = {
@@ -141,7 +141,14 @@ const LineChart: React.FC<LineChartProps> = ({
   };
 
   return (
-    <Column fillWidth height={height} border={border} radius="l" data-viz-style={dataVizStyle || mode} {...flex}>
+    <Column
+      fillWidth
+      height={height}
+      border={border}
+      radius="l"
+      data-viz-style={dataVizStyle || mode}
+      {...flex}
+    >
       <ChartHeader
         title={title}
         description={description}

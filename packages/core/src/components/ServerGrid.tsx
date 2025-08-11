@@ -18,12 +18,12 @@ interface ComponentProps
     StyleProps,
     CommonProps,
     DisplayProps {
-      xl?: any;
-      l?: any;
-      m?: any;
-      s?: any;
-      xs?: any;
-    }
+  xl?: any;
+  l?: any;
+  m?: any;
+  s?: any;
+  xs?: any;
+}
 
 const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
   (
@@ -113,7 +113,6 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
     },
     ref,
   ) => {
-
     const generateDynamicClass = (type: string, value: string | "-1" | undefined) => {
       if (!value) return undefined;
 
@@ -244,7 +243,8 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
         !borderStyle &&
         "border-solid",
       border && !borderWidth && `border-1`,
-      (borderTop || borderRight || borderBottom || borderLeft || borderX || borderY) && "border-reset",
+      (borderTop || borderRight || borderBottom || borderLeft || borderX || borderY) &&
+        "border-reset",
       borderTop && "border-top-1",
       borderRight && "border-right-1",
       borderBottom && "border-bottom-1",
@@ -267,7 +267,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       shadow && `shadow-${shadow}`,
       zIndex && `z-index-${zIndex}`,
       textType && `font-${textType}`,
-      typeof cursor === 'string' && `cursor-${cursor}`,
+      typeof cursor === "string" && `cursor-${cursor}`,
       dark && "dark-grid",
       light && "light-grid",
       className,
@@ -283,7 +283,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       aspectRatio: aspectRatio,
       textAlign: align,
       // Hide default cursor when using custom cursor
-      cursor: typeof cursor === 'string' ? cursor : undefined,
+      cursor: typeof cursor === "string" ? cursor : undefined,
       ...style,
     };
 

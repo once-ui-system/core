@@ -156,16 +156,7 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
           initialPositions.delete(particleEl);
         });
       };
-    }, [
-      color,
-      size,
-      speed,
-      interactive,
-      interactionRadius,
-      opacity,
-      density,
-      containerRef,
-    ]);
+    }, [color, size, speed, interactive, interactionRadius, opacity, density, containerRef]);
 
     return (
       <Flex

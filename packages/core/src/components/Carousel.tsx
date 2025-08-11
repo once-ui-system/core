@@ -47,7 +47,7 @@ const Carousel: React.FC<CarouselProps> = ({
   const preloadNextImage = (nextIndex: number) => {
     if (nextIndex >= 0 && nextIndex < items.length) {
       const item = items[nextIndex];
-      if (typeof item.slide === 'string') {
+      if (typeof item.slide === "string") {
         nextImageRef.current = new Image();
         nextImageRef.current.src = item.slide;
       }
@@ -113,12 +113,12 @@ const Carousel: React.FC<CarouselProps> = ({
         }}
         onTouchEnd={(e: React.TouchEvent) => {
           if (touchStartXRef.current === null) return;
-          
+
           const touchEndX = e.changedTouches[0].clientX;
           touchEndXRef.current = touchEndX;
-          
+
           const diffX = touchStartXRef.current - touchEndX;
-          
+
           // Detect swipe (more than 50px movement is considered a swipe)
           if (Math.abs(diffX) > 50) {
             if (diffX > 0) {
@@ -127,12 +127,12 @@ const Carousel: React.FC<CarouselProps> = ({
               handlePrevClick();
             }
           }
-          
+
           touchStartXRef.current = null;
           touchEndXRef.current = null;
         }}
       >
-        {typeof items[activeIndex]?.slide === 'string' ? (
+        {typeof items[activeIndex]?.slide === "string" ? (
           <Media
             sizes={sizes}
             priority
@@ -140,56 +140,124 @@ const Carousel: React.FC<CarouselProps> = ({
             radius="l"
             border="neutral-alpha-weak"
             overflow="hidden"
-            alt={items[activeIndex]?.alt || ''}
+            alt={items[activeIndex]?.alt || ""}
             aspectRatio={aspectRatio}
             src={items[activeIndex]?.slide as string}
             style={{
-              ...(items.length > 1 && {
-              }),
+              ...(items.length > 1 && {}),
             }}
           />
         ) : (
-          <Flex 
+          <Flex
             radius="l"
             overflow="hidden"
             border="neutral-alpha-weak"
             aspectRatio={aspectRatio}
             style={{
-              ...(items.length > 1 && {
-              }),
+              ...(items.length > 1 && {}),
             }}
           >
             {items[activeIndex]?.slide}
           </Flex>
         )}
-        <Row className={styles.controls} position="absolute" top="0" left="0" radius="l" overflow="hidden" fill horizontal="between">
+        <Row
+          className={styles.controls}
+          position="absolute"
+          top="0"
+          left="0"
+          radius="l"
+          overflow="hidden"
+          fill
+          horizontal="between"
+        >
           {activeIndex > 0 ? (
-            <Row className={styles.left} cursor="interactive" maxWidth={12} fill vertical="center" onClick={handlePrevClick}>
+            <Row
+              className={styles.left}
+              cursor="interactive"
+              maxWidth={12}
+              fill
+              vertical="center"
+              onClick={handlePrevClick}
+            >
               {controls && (
                 <>
-                  <Fade m={{hide: true}} transition="micro-medium" className={styles.fade} position="absolute" left="0" top="0" to="right" fillHeight maxWidth={6}/>
-                  <Flex m={{hide: true}} transition="micro-medium" className={styles.button} marginLeft="m" radius="l" overflow="hidden" background="surface">
-                    <IconButton tabIndex={0} onClick={handlePrevClick} variant="secondary" icon="chevronLeft" />
+                  <Fade
+                    m={{ hide: true }}
+                    transition="micro-medium"
+                    className={styles.fade}
+                    position="absolute"
+                    left="0"
+                    top="0"
+                    to="right"
+                    fillHeight
+                    maxWidth={6}
+                  />
+                  <Flex
+                    m={{ hide: true }}
+                    transition="micro-medium"
+                    className={styles.button}
+                    marginLeft="m"
+                    radius="l"
+                    overflow="hidden"
+                    background="surface"
+                  >
+                    <IconButton
+                      tabIndex={0}
+                      onClick={handlePrevClick}
+                      variant="secondary"
+                      icon="chevronLeft"
+                    />
                   </Flex>
                 </>
               )}
             </Row>
           ) : (
-            <Flex maxWidth={12}/>
+            <Flex maxWidth={12} />
           )}
           {activeIndex < items.length - 1 ? (
-            <Row className={styles.right} cursor="interactive" maxWidth={12} fill vertical="center" horizontal="end" onClick={handleNextClick}>
+            <Row
+              className={styles.right}
+              cursor="interactive"
+              maxWidth={12}
+              fill
+              vertical="center"
+              horizontal="end"
+              onClick={handleNextClick}
+            >
               {controls && (
                 <>
-                  <Fade m={{hide: true}} transition="micro-medium" className={styles.fade} position="absolute" right="0" top="0" to="left" fillHeight maxWidth={6}/>
-                  <Flex m={{hide: true}} transition="micro-medium" className={styles.button} marginRight="m" radius="l" overflow="hidden" background="surface">
-                    <IconButton tabIndex={0} onClick={handleNextClick} variant="secondary" icon="chevronRight" />
+                  <Fade
+                    m={{ hide: true }}
+                    transition="micro-medium"
+                    className={styles.fade}
+                    position="absolute"
+                    right="0"
+                    top="0"
+                    to="left"
+                    fillHeight
+                    maxWidth={6}
+                  />
+                  <Flex
+                    m={{ hide: true }}
+                    transition="micro-medium"
+                    className={styles.button}
+                    marginRight="m"
+                    radius="l"
+                    overflow="hidden"
+                    background="surface"
+                  >
+                    <IconButton
+                      tabIndex={0}
+                      onClick={handleNextClick}
+                      variant="secondary"
+                      icon="chevronRight"
+                    />
                   </Flex>
                 </>
               )}
             </Row>
           ) : (
-            <Flex maxWidth={12}/>
+            <Flex maxWidth={12} />
           )}
         </Row>
       </RevealFx>
@@ -221,7 +289,10 @@ const Carousel: React.FC<CarouselProps> = ({
                 <Flex
                   key={index}
                   style={{
-                    border: activeIndex === index ? "2px solid var(--brand-solid-strong)" : "2px solid var(--static-transparent)",
+                    border:
+                      activeIndex === index
+                        ? "2px solid var(--brand-solid-strong)"
+                        : "2px solid var(--static-transparent)",
                   }}
                   radius="m-8"
                   padding="4"
@@ -230,9 +301,9 @@ const Carousel: React.FC<CarouselProps> = ({
                   minHeight={thumbnail.height}
                   maxHeight={thumbnail.height}
                 >
-                  {typeof item.slide === 'string' ? (
+                  {typeof item.slide === "string" ? (
                     <Media
-                      alt={item.alt || ''}
+                      alt={item.alt || ""}
                       aspectRatio={aspectRatio}
                       sizes={thumbnail.sizes}
                       src={item.slide}

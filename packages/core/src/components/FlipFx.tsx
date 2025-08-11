@@ -80,12 +80,15 @@ const FlipFx = forwardRef<HTMLDivElement, FlipFxProps>((props, ref) => {
     onFlip?.(!flippedState);
   }, [disableClickFlip, autoFlipInterval, flippedState, onFlip]);
 
-  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      handleFlip();
-    }
-  }, [handleFlip]);
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        handleFlip();
+      }
+    },
+    [handleFlip],
+  );
 
   return (
     <Flex
@@ -140,7 +143,8 @@ const FlipFx = forwardRef<HTMLDivElement, FlipFxProps>((props, ref) => {
         <Flex
           fill
           style={{
-            transform: flipDirection === "vertical" ? "rotateY(-180deg) rotateX(180deg)" : undefined,
+            transform:
+              flipDirection === "vertical" ? "rotateY(-180deg) rotateX(180deg)" : undefined,
           }}
         >
           {back}

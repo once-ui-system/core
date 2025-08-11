@@ -39,7 +39,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
       if (typeof speed === "number") {
         return speed;
       }
-      
+
       switch (speed) {
         case "fast":
           return 1000;

@@ -1,0 +1,199 @@
+@use "../styles/breakpoints.scss" as breakpoints;
+
+.columns-1 {
+  column-count: 1;
+}
+
+.columns-2 {
+  column-count: 2;
+}
+
+.columns-3 {
+  column-count: 3;
+}
+
+.columns-4 {
+  column-count: 4;
+}
+
+.columns-5 {
+  column-count: 5;
+}
+
+.columns-6 {
+  column-count: 6;
+}
+
+.columns-7 {
+  column-count: 7;
+}
+
+.columns-8 {
+  column-count: 8;
+}
+
+.columns-9 {
+  column-count: 9;
+}
+
+.columns-10 {
+  column-count: 10;
+}
+
+.columns-11 {
+  column-count: 11;
+}
+
+.columns-12 {
+  column-count: 12;
+}
+
+@include breakpoints.l {
+  .l-columns-1 {
+      column-count: 1;
+  }
+
+  .l-columns-2 {
+      column-count: 2;
+  }
+
+  .l-columns-3 {
+      column-count: 3;
+  }
+
+  .l-columns-4 {
+      column-count: 4;
+  }
+
+  .l-columns-5 {
+      column-count: 5;
+  }
+
+  .l-columns-6 {
+      column-count: 6;
+  }
+
+  .l-columns-7 {
+      column-count: 7;
+  }
+
+  .l-columns-8 {
+      column-count: 8;
+  }
+
+  .l-columns-9 {
+      column-count: 9;
+  }
+
+  .l-columns-10 {
+      column-count: 10;
+  }
+
+  .l-columns-11 {
+      column-count: 11;
+  }
+
+  .l-columns-12 {
+      column-count: 12;
+  }
+}
+
+@include breakpoints.m {
+  .m-columns-1 {
+      column-count: 1;
+  }
+
+  .m-columns-2 {
+      column-count: 2;
+  }
+
+  .m-columns-3 {
+      column-count: 3;
+  }
+
+  .m-columns-4 {
+      column-count: 4;
+  }
+
+  .m-columns-5 {
+      column-count: 5;
+  }
+
+  .m-columns-6 {
+      column-count: 6;
+  }
+
+  .m-columns-7 {
+      column-count: 7;
+  }
+
+  .m-columns-8 {
+      column-count: 8;
+  }
+
+  .m-columns-9 {
+      column-count: 9;
+  }
+
+  .m-columns-10 {
+      column-count: 10;
+  }
+
+  .m-columns-11 {
+      column-count: 11;
+  }
+
+  .m-columns-12 {
+      column-count: 12;
+  }
+}
+
+@include breakpoints.s {
+  .s-columns-1 {
+      column-count: 1;
+  }
+
+  .s-columns-2 {
+      column-count: 2;
+  }
+
+  .s-columns-3 {
+      column-count: 3;
+  }
+
+  .s-columns-4 {
+      column-count: 4;
+  }
+
+  .s-columns-5 {
+      column-count: 5;
+  }
+
+  .s-columns-6 {
+      column-count: 6;
+  }
+
+  .s-columns-7 {
+      column-count: 7;
+  }
+
+  .s-columns-8 {
+      column-count: 8;
+  }
+
+  .s-columns-9 {
+      column-count: 9;
+  }
+
+  .s-columns-10 {
+      column-count: 10;
+  }
+
+  .s-columns-11 {
+      column-count: 11;
+  }
+
+  .s-columns-12 {
+      column-count: 12;
+  }
+}

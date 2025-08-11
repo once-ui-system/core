@@ -17,15 +17,15 @@ export function useOgData(url: string | null, customFetchUrl?: string, customPro
   useEffect(() => {
     const fetchOgData = async () => {
       try {
-        const fetchUrl = customFetchUrl 
-          ? `${customFetchUrl}?url=${encodeURIComponent(url!)}` 
+        const fetchUrl = customFetchUrl
+          ? `${customFetchUrl}?url=${encodeURIComponent(url!)}`
           : `/api/og/fetch?url=${encodeURIComponent(url!)}`;
-        
+
         const response = await fetch(fetchUrl);
-        
+
         // Check if response is JSON
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
           throw new Error(`Expected JSON response, got ${contentType}`);
         }
 

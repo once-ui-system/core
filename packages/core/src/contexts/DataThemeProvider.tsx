@@ -46,17 +46,17 @@ const DataThemeContext = createContext<DataThemeState>({
 
 // Helper function to get stored chart options from localStorage
 function getStoredChartOptions() {
-  if (typeof window === 'undefined') return {};
-  
+  if (typeof window === "undefined") return {};
+
   try {
-    const dataVizMode = localStorage.getItem('data-viz-style');
-    
+    const dataVizMode = localStorage.getItem("data-viz-style");
+
     if (dataVizMode) {
       return { mode: dataVizMode as ChartMode };
     }
     return {};
   } catch (e) {
-    console.error('Error reading stored chart options:', e);
+    console.error("Error reading stored chart options:", e);
     return {};
   }
 }
@@ -71,7 +71,7 @@ export function DataThemeProvider({
   ...rest
 }: DataThemeProviderProps) {
   const camelToKebab = (str: string): string => {
-    return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+    return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase();
   };
 
   // Initialize with defaults and provided props for server-side rendering
@@ -83,32 +83,32 @@ export function DataThemeProvider({
     ...(axis ? { axis } : {}),
     ...(tick ? { tick } : {}),
   });
-  
+
   const [mounted, setMounted] = useState(false);
-  
+
   useEffect(() => {
     const storedOptions = getStoredChartOptions();
-    
+
     if (Object.keys(storedOptions).length > 0) {
-      setChartOptionsState(prev => ({
+      setChartOptionsState((prev) => ({
         ...prev,
         ...storedOptions,
       }));
     }
-    
+
     setMounted(true);
   }, []);
 
   const applyDataVizAttribute = (mode: ChartMode, saveToLocalStorage = false) => {
-    if (typeof document !== 'undefined') {
-      if (document.documentElement.hasAttribute('data-data-viz')) {
-        document.documentElement.removeAttribute('data-data-viz');
+    if (typeof document !== "undefined") {
+      if (document.documentElement.hasAttribute("data-data-viz")) {
+        document.documentElement.removeAttribute("data-data-viz");
       }
-      
-      document.documentElement.setAttribute('data-viz-style', mode);
-      
+
+      document.documentElement.setAttribute("data-viz-style", mode);
+
       if (saveToLocalStorage) {
-        localStorage.setItem('data-viz-style', mode);
+        localStorage.setItem("data-viz-style", mode);
       }
     }
   };
@@ -120,16 +120,16 @@ export function DataThemeProvider({
   }, [chartOptions.mode, mounted]);
 
   const handleSetChartOptions = (newOptions: Partial<ChartOptions>) => {
-    setChartOptionsState(prevOptions => {
+    setChartOptionsState((prevOptions) => {
       const updatedOptions = {
         ...prevOptions,
         ...newOptions,
       };
-      
-      if (newOptions.mode && mounted && typeof window !== 'undefined') {
+
+      if (newOptions.mode && mounted && typeof window !== "undefined") {
         applyDataVizAttribute(newOptions.mode, true);
       }
-      
+
       return updatedOptions;
     });
   };
@@ -139,11 +139,7 @@ export function DataThemeProvider({
     setChartOptions: handleSetChartOptions,
   };
 
-  return (
-    <DataThemeContext.Provider value={value}>
-      {children}
-    </DataThemeContext.Provider>
-  );
+  return <DataThemeContext.Provider value={value}>{children}</DataThemeContext.Provider>;
 }
 
 export const useDataTheme = () => {

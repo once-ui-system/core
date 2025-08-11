@@ -51,22 +51,8 @@ export interface GridProps extends HTMLAttributes<HTMLDivElement> {
 
 export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
   direction?: "row" | "column" | "row-reverse" | "column-reverse";
-  horizontal?:
-    | "start"
-    | "center"
-    | "end"
-    | "between"
-    | "around"
-    | "even"
-    | "stretch";
-  vertical?:
-    | "start"
-    | "center"
-    | "end"
-    | "between"
-    | "around"
-    | "even"
-    | "stretch";
+  horizontal?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
+  vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
   center?: boolean;
   wrap?: boolean;
   flex?: flex;

@@ -7,7 +7,7 @@ import { useTheme } from "../contexts";
 const ThemeSwitcher = forwardRef<HTMLDivElement, React.ComponentProps<typeof Row>>((flex, ref) => {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = React.useState(false);
-  
+
   React.useEffect(() => {
     setMounted(true);
   }, []);

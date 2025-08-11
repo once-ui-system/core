@@ -24,7 +24,7 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   href?: string;
   dark?: boolean;
   light?: boolean;
-  brand?: {copy?: boolean; url?: string}
+  brand?: { copy?: boolean; url?: string };
 }
 
 const Logo: React.FC<LogoProps> = ({
@@ -75,56 +75,56 @@ const Logo: React.FC<LogoProps> = ({
   );
 
   const { addToast } = useToast();
-  
+
   const copyIconToClipboard = async () => {
     if (!icon) {
       addToast({
         variant: "danger",
-        message: "No icon available to copy"
+        message: "No icon available to copy",
       });
       return;
     }
-    
+
     try {
       const response = await fetch(icon);
       const svgText = await response.text();
       await navigator.clipboard.writeText(svgText);
-      
+
       addToast({
         variant: "success",
-        message: "Icon copied to clipboard as SVG"
+        message: "Icon copied to clipboard as SVG",
       });
     } catch (error) {
       addToast({
         variant: "danger",
-        message: "Failed to copy icon to clipboard"
+        message: "Failed to copy icon to clipboard",
       });
       console.error("Error copying icon:", error);
     }
   };
-  
+
   const copyWordmarkToClipboard = async () => {
     if (!wordmark) {
       addToast({
         variant: "danger",
-        message: "No wordmark available to copy"
+        message: "No wordmark available to copy",
       });
       return;
     }
-    
+
     try {
       const response = await fetch(wordmark);
       const svgText = await response.text();
       await navigator.clipboard.writeText(svgText);
-      
+
       addToast({
         variant: "success",
-        message: "Wordmark copied to clipboard as SVG"
+        message: "Wordmark copied to clipboard as SVG",
       });
     } catch (error) {
       addToast({
         variant: "danger",
-        message: "Failed to copy wordmark to clipboard"
+        message: "Failed to copy wordmark to clipboard",
       });
       console.error("Error copying wordmark:", error);
     }
@@ -135,17 +135,17 @@ const Logo: React.FC<LogoProps> = ({
       <Column fillWidth>
         <Column fillWidth padding="4" gap="4">
           {brand?.copy && icon && (
-            <Option 
-              value="copy-icon" 
-              label="Copy icon as SVG" 
-              hasPrefix={<Logo size="xs" icon={icon} style={{opacity: 0.5}} />}
+            <Option
+              value="copy-icon"
+              label="Copy icon as SVG"
+              hasPrefix={<Logo size="xs" icon={icon} style={{ opacity: 0.5 }} />}
               onClick={copyIconToClipboard}
             />
           )}
           {brand?.copy && wordmark && (
-            <Option 
-              value="copy-wordmark" 
-              label="Copy wordmark as SVG" 
+            <Option
+              value="copy-wordmark"
+              label="Copy wordmark as SVG"
               hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="wordmark" />}
               onClick={copyWordmarkToClipboard}
             />
@@ -153,14 +153,14 @@ const Logo: React.FC<LogoProps> = ({
         </Column>
         {brand?.url && (
           <>
-            <Line/>
+            <Line />
             <Column fillWidth padding="4">
-                <Option 
-                  value="brand-guidelines" 
-                  label="Visit brand guidelines" 
-                  hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="arrowUpRight" />}
-                  href={brand.url}
-                />
+              <Option
+                value="brand-guidelines"
+                label="Visit brand guidelines"
+                hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="arrowUpRight" />}
+                href={brand.url}
+              />
             </Column>
           </>
         )}
@@ -174,7 +174,14 @@ const Logo: React.FC<LogoProps> = ({
     if (href) {
       return (
         <Link
-          className={classNames("radius-l", "display-flex", "fit-height", dark ? "dark-flex" : "", light ? "light-flex" : "", className)}
+          className={classNames(
+            "radius-l",
+            "display-flex",
+            "fit-height",
+            dark ? "dark-flex" : "",
+            light ? "light-flex" : "",
+            className,
+          )}
           style={style}
           href={href}
           aria-label="Trademark"
@@ -201,13 +208,12 @@ const Logo: React.FC<LogoProps> = ({
   };
 
   return enableContext ? (
-    <ContextMenu
-      dropdown={renderDropdownContent()}
-      placement="bottom-start"
-    >
+    <ContextMenu dropdown={renderDropdownContent()} placement="bottom-start">
       {renderLogo()}
     </ContextMenu>
-  ) : renderLogo();
+  ) : (
+    renderLogo()
+  );
 };
 
 Logo.displayName = "Logo";

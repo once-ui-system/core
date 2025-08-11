@@ -12,7 +12,11 @@ export interface SwatchProps {
   variant?: ChartVariant;
 }
 
-export const Swatch: React.FC<SwatchProps> = ({ color, size = "m", variant = useDataTheme().variant }) => {
+export const Swatch: React.FC<SwatchProps> = ({
+  color,
+  size = "m",
+  variant = useDataTheme().variant,
+}) => {
   const sizeMap: Record<
     string,
     { minWidth: SpacingToken; minHeight: SpacingToken; radius: RadiusSize }

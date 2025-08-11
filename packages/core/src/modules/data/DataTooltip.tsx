@@ -64,12 +64,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
             </Row>
             <Text onBackground="neutral-strong" variant="label-default-s">
               {typeof entry.value === "number" ? (
-                <CountFx
-                  value={entry.value}
-                  separator=","
-                  speed={500}
-                  easing="ease-in-out"
-                />
+                <CountFx value={entry.value} separator="," speed={500} easing="ease-in-out" />
               ) : (
                 entry.value
               )}
