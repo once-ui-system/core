@@ -49,6 +49,7 @@ import {
   CountFx,
   Input,
   Feedback,
+  MasonryGrid,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -115,6 +116,27 @@ export default function Home() {
       <Flex hide s={{hide: false}}>hide by default, show on s</Flex>
       <Flex hide xs={{hide: false}}>hide by default, show on xs</Flex>
       <Feedback icon title="Feedback" description="This is a feedback"></Feedback>
+      
+      <MasonryGrid
+       padding="l"
+       radius="l"
+       background="neutral-medium"
+        columns={6}
+        m={{columns: 2}}
+      >
+          {...[16, 6, 4, 6, 16, 12, 7, 24, 4, 12, 6, 2, 24, 17, 12, 5, 9, 6, 20, 11].map((height, index) => (
+              <Flex
+                  key={index}
+                  background="overlay"
+                  radius="l"
+                  border="neutral-alpha-medium"
+                  fill
+                  height={height}
+              >{index}
+              </Flex>
+          ))}
+      </MasonryGrid>
+
       <Select
         id="multiselect-example"
         options={customOptions}

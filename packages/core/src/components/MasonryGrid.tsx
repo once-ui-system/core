@@ -1,7 +1,11 @@
 import React, { forwardRef } from "react";
 import type { CSSProperties, ReactNode } from "react";
-import { Flex } from "./Flex";
 import { SpacingToken } from "../types";
+import { Grid } from "./Grid";
+import { Column } from "./Column";
+import classNames from "classnames";
+import styles from "./MasonryGrid.module.scss";
+import { Flex } from "./Flex";
 
 // Utility to parse token to CSS value
 function parseToken(value: SpacingToken | "-1" | number | undefined, type: "width" | "height") {
@@ -37,43 +41,54 @@ function parseToken(value: SpacingToken | "-1" | number | undefined, type: "widt
     return undefined;
 }
 
-export interface MasonryGridProps extends React.ComponentProps<typeof Flex> {
+interface MasonryGridProps extends Omit<React.ComponentProps<typeof Flex>, "columns" | "rows"> {
     children: ReactNode;
-    columnWidth?: SpacingToken | number | undefined;
     gap?: SpacingToken | "-1" | undefined;
+    columns?: number;
     style?: CSSProperties;
     className?: string;
 }
 
-export const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
-    ({ children, columnWidth = "24", gap = "8", style, className, ...rest }, ref) => {
-        // Masonry effect using CSS columns
-        const columnWidthValue = parseToken(columnWidth, "width") ?? "160px";
-        const gapValue = parseToken(gap, "width") ?? "16px";
-        const masonryStyle: CSSProperties = {
-            display: "block", // force block for columns layout
-            columnWidth: columnWidthValue,
-            columnGap: gapValue,
-            ...style,
-        };
+const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
+    ({ children, gap = "8", columns = 3, style, className, l, m, s, ...flex }, ref) => {
+        const gapValue = parseToken(gap, "width") ?? "var(--static-space-8)";
+
+        const classes = classNames(
+            columns && styles[`columns-${columns}`],
+            l?.columns && styles[`l-columns-${l.columns}`],
+            m?.columns && styles[`m-columns-${m.columns}`],
+            s?.columns && styles[`s-columns-${s.columns}`],
+            className,
+        );
+
         return (
-            <Flex ref={ref} style={masonryStyle} className={className} {...rest}>
-                {/* Each child should be block-level for proper masonry effect */}
-                {React.Children.map(children, (child) => (
-                    <div
+            <Flex   
+                fillWidth
+                className={classes}
+                ref={ref}
+                {...flex}
+                style={{
+                    display: "block",
+                    columnGap: gapValue,
+                    ...style,
+                }}>
+                {React.Children.map(children, (child, idx) => (
+                    <Column
+                        key={idx}
+                        fillWidth
+                        fitHeight
                         style={{
                             breakInside: "avoid",
                             marginBottom: gapValue,
-                            width: columnWidthValue,
-                            height: "fit-content",
-                            minWidth: columnWidthValue,
                         }}
                     >
                         {child}
-                    </div>
+                    </Column>
                 ))}
             </Flex>
         );
     },
 );
+
+export { MasonryGrid };
 MasonryGrid.displayName = "MasonryGrid";
