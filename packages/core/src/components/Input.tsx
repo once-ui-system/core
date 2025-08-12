@@ -9,7 +9,7 @@ import React, {
   ReactNode,
 } from "react";
 import classNames from "classnames";
-import { Column, Flex, Text } from ".";
+import { Column, Flex, Row, Text } from ".";
 import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 
@@ -138,7 +138,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           [styles.error]: (error || (displayError && debouncedValue !== "")) && props.value !== "",
         })}
       >
-        <Column
+        <Row
           transition="micro-medium"
           border="neutral-medium"
           background="neutral-alpha-weak"
@@ -156,9 +156,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         >
           {hasPrefix && (
-            <Flex paddingLeft="12" className={styles.prefix} position="static">
+            <Row paddingLeft="12" className={styles.prefix} position="static">
               {hasPrefix}
-            </Flex>
+            </Row>
           )}
           <Column fillWidth>
             <input
@@ -187,28 +187,20 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {children}
           </Column>
           {hasSuffix && (
-            <Flex paddingRight="12" className={styles.suffix} position="static">
+            <Row paddingRight="12" className={styles.suffix} position="static">
               {hasSuffix}
-            </Flex>
+            </Row>
           )}
-        </Column>
+        </Row>
         {displayError && errorMessage !== false && (
-          <Flex paddingX="16">
-            <Text as="span" id={`${id}-error`} variant="body-default-s" onBackground="danger-weak">
-              {validationError || errorMessage}
-            </Text>
-          </Flex>
+          <Row paddingX="16" id={`${id}-error`} textVariant="body-default-s" onBackground="danger-weak">
+            {validationError || errorMessage}
+          </Row>
         )}
         {description && (
-          <Flex
-            paddingX="16"
-            fillWidth
-            id={`${id}-description`}
-            textVariant="body-default-s"
-            onBackground="neutral-weak"
-          >
+          <Row paddingX="16" id={`${id}-description`} textVariant="body-default-s" onBackground="neutral-weak">
             {description}
-          </Flex>
+          </Row>
         )}
       </Column>
     );
