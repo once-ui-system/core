@@ -10,6 +10,7 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   height?: number;
   alt?: string;
   loading?: boolean;
+  layout?: "fixed" | "responsive";
   objectFit?: CSSProperties["objectFit"];
   enlarge?: boolean;
   src: string;
@@ -17,24 +18,26 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   sizes?: string;
   priority?: boolean;
   caption?: ReactNode;
+  fill?: boolean;
   fillWidth?: boolean;
   style?: CSSProperties;
   className?: string;
 }
 
 const Media: React.FC<MediaProps> = ({
-  aspectRatio,
-  height,
-  alt = "",
-  loading = false,
-  objectFit = "cover",
-  enlarge = false,
   src,
-  unoptimized = false,
-  priority,
-  sizes = "100vw",
-  caption,
+  alt = "",
   fillWidth = true,
+  fill = false,
+  loading = false,
+  enlarge = false,
+  unoptimized = false,
+  objectFit = "cover",
+  sizes = "100vw",
+  aspectRatio = "original",
+  height,
+  priority,
+  caption,
   style,
   className,
   ...rest
@@ -134,8 +137,8 @@ const Media: React.FC<MediaProps> = ({
           style={{
             outline: "none",
             isolation: "isolate",
-            height: aspectRatio ? "" : height ? `${height}rem` : "100%",
-            aspectRatio,
+            height: aspectRatio === "original" ? undefined : aspectRatio ? "" : height ? `${height}rem` : "100%",
+            aspectRatio: aspectRatio === "original" ? undefined : aspectRatio,
             borderRadius: isEnlarged ? "0" : undefined,
             ...calculateTransform(),
             ...style,
@@ -144,7 +147,7 @@ const Media: React.FC<MediaProps> = ({
           className={className}
           {...rest}
         >
-          {loading && <Skeleton shape="block" />}
+          {loading && <Skeleton shape="block" radius={rest.radius} />}
           {!loading && isVideo && (
             <video
               src={src}
@@ -176,10 +179,13 @@ const Media: React.FC<MediaProps> = ({
             <Image
               src={src}
               alt={alt}
-              priority={priority}
               sizes={sizes}
+              priority={priority}
               unoptimized={unoptimized}
-              fill
+              fill={fill || aspectRatio !== "original"}
+              layout={fill ? "fixed" : aspectRatio === "original" ? "responsive" : "fixed"}
+              width={aspectRatio === "original" ? 0 : undefined}
+              height={aspectRatio === "original" ? 0 : undefined}
               style={{
                 objectFit: objectFit,
               }}

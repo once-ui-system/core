@@ -1,8 +1,8 @@
 "use client";
 
 import { SpacingToken } from "@/types";
-import { Flex, RevealFx, Scroller, Media, Column, Row, IconButton, Fade } from ".";
-import { useEffect, useState, useRef, TouchEvent } from "react";
+import { Flex, RevealFx, Scroller, Media, Column, Row, IconButton, Fade, ProgressBar } from ".";
+import { useEffect, useState, useRef } from "react";
 import styles from "./Carousel.module.scss";
 
 interface CarouselItem {
@@ -19,28 +19,42 @@ interface ThumbnailItem {
 interface CarouselProps extends React.ComponentProps<typeof Flex> {
   items: CarouselItem[];
   controls?: boolean;
-  indicator?: "line" | "thumbnail";
+  priority?: boolean;
+  fill?: boolean;
+  indicator?: "line" | "thumbnail" | false;
   aspectRatio?: string;
   sizes?: string;
   revealedByDefault?: boolean;
   thumbnail?: ThumbnailItem;
+  play?: {auto?: boolean, interval?: number, controls?: boolean, progress?: boolean};
 }
 
 const Carousel: React.FC<CarouselProps> = ({
   items = [],
+  fill = false,
   controls = true,
+  priority = false,
   indicator = "line",
-  aspectRatio = "16 / 9",
+  aspectRatio = "original",
   sizes,
   revealedByDefault = false,
   thumbnail = { scaling: 1, height: "80", sizes: "120px" },
+  play = {auto: false, interval: 3000, controls: true},
   ...rest
 }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isTransitioning, setIsTransitioning] = useState(revealedByDefault);
   const [initialTransition, setInitialTransition] = useState(revealedByDefault);
+  const [isPlaying, setIsPlaying] = useState<boolean>(play.auto || false);
+  const [progressPercent, setProgressPercent] = useState<number>(0);
+  
+  // Initialize auto-play state when props change
+  useEffect(() => {
+    setIsPlaying(play.auto || false);
+  }, [play.auto]);
   const nextImageRef = useRef<HTMLImageElement | null>(null);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  const autoPlayIntervalRef = useRef<NodeJS.Timeout | undefined>(undefined);
   const touchStartXRef = useRef<number | null>(null);
   const touchEndXRef = useRef<number | null>(null);
 
@@ -62,8 +76,9 @@ const Carousel: React.FC<CarouselProps> = ({
   };
 
   const handleNextClick = () => {
-    if (items.length > 1 && activeIndex < items.length - 1) {
-      const nextIndex = activeIndex + 1;
+    if (items.length > 1) {
+      // If at the last slide, loop back to the first one
+      const nextIndex = activeIndex < items.length - 1 ? activeIndex + 1 : 0;
       handleControlClick(nextIndex);
     }
   };
@@ -84,7 +99,67 @@ const Carousel: React.FC<CarouselProps> = ({
       }, 300);
     }
   };
+  
+  // Simple function to handle auto-play
+  const handleNextWithLoop = () => {
+    const nextIndex = activeIndex < items.length - 1 ? activeIndex + 1 : 0;
+    handleControlClick(nextIndex);
+  };
 
+  // Progress tracking for animation
+  useEffect(() => {
+    let progressTimer: NodeJS.Timeout | undefined;
+    
+    if (isPlaying && play.progress && items.length > 1) {
+      // Reset progress when slide changes
+      setProgressPercent(0);
+      
+      // Update progress every 50ms
+      const updateFrequency = 50; // ms
+      const interval = play.interval || 3000; // Default to 3000ms if undefined
+      const totalSteps = Math.floor(interval / updateFrequency);
+      let currentStep = 0;
+      
+      progressTimer = setInterval(() => {
+        currentStep++;
+        const percent = Math.min((currentStep / totalSteps) * 100, 100);
+        setProgressPercent(percent);
+      }, updateFrequency);
+    }
+    
+    return () => {
+      if (progressTimer) {
+        clearInterval(progressTimer);
+      }
+    };
+  }, [isPlaying, activeIndex, play.interval, play.progress, items.length]);
+  
+  // Handle auto-play functionality
+  useEffect(() => {
+    // Clear any existing interval first
+    if (autoPlayIntervalRef.current) {
+      clearInterval(autoPlayIntervalRef.current);
+      autoPlayIntervalRef.current = undefined;
+    }
+    
+    // Start auto-play if enabled
+    if (isPlaying && items.length > 1) {
+      autoPlayIntervalRef.current = setInterval(() => {
+        // Simply call the next function which already has looping logic
+        handleNextWithLoop();
+      }, play.interval);
+    }
+
+    // Cleanup function
+    return () => {
+      if (autoPlayIntervalRef.current) {
+        clearInterval(autoPlayIntervalRef.current);
+        autoPlayIntervalRef.current = undefined;
+      }
+    };
+  }, [isPlaying, items.length, play.interval, handleNextWithLoop]);
+
+  // Handle initial transition
   useEffect(() => {
     if (!revealedByDefault && !initialTransition) {
       setIsTransitioning(true);
@@ -97,16 +172,44 @@ const Carousel: React.FC<CarouselProps> = ({
     };
   }, [revealedByDefault, initialTransition]);
 
+  // Toggle play/pause function
+  const togglePlayPause = () => {
+    setIsPlaying(prev => !prev);
+  };
+
   if (items.length === 0) {
     return null;
   }
 
   return (
-    <Column fillWidth gap="12" {...rest} aspectRatio={undefined}>
+    <Column fillWidth fillHeight={fill} gap="12" {...rest} aspectRatio={undefined} style={{isolation: "isolate"}}>
+      {items.length > 1 && play.controls && play.auto !== undefined && (
+        <Flex
+          position="absolute"
+          top="16"
+          right="16"
+          zIndex={1}
+        >
+          <Flex
+            radius="m"
+            background="surface"
+          >
+            <IconButton
+              onClick={(e: React.MouseEvent) => {
+                e.stopPropagation();
+                togglePlayPause();
+              }}
+              variant="secondary"
+              icon={isPlaying ? "pause" : "play"}
+            />
+          </Flex>
+        </Flex>
+      )}
       <RevealFx
         fillWidth
+        fillHeight={fill}
         trigger={isTransitioning}
-        aspectRatio={aspectRatio}
+        aspectRatio={aspectRatio === "original" ? undefined : aspectRatio}
         speed={300}
         onTouchStart={(e: React.TouchEvent) => {
           touchStartXRef.current = e.touches[0].clientX;
@@ -134,40 +237,34 @@ const Carousel: React.FC<CarouselProps> = ({
       >
         {typeof items[activeIndex]?.slide === "string" ? (
           <Media
+            fill={fill}
             sizes={sizes}
-            priority
-            fill
-            radius="l"
+            priority={priority}
+            radius={rest.radius || "l"}
             border="neutral-alpha-weak"
             overflow="hidden"
-            alt={items[activeIndex]?.alt || ""}
-            aspectRatio={aspectRatio}
+            aspectRatio={fill ? undefined : aspectRatio === "original" ? undefined : aspectRatio}
             src={items[activeIndex]?.slide as string}
-            style={{
-              ...(items.length > 1 && {}),
-            }}
+            alt={items[activeIndex]?.alt || ""}
           />
         ) : (
           <Flex
-            radius="l"
+            radius={rest.radius || "l"}
             overflow="hidden"
             border="neutral-alpha-weak"
             aspectRatio={aspectRatio}
-            style={{
-              ...(items.length > 1 && {}),
-            }}
           >
             {items[activeIndex]?.slide}
           </Flex>
         )}
         <Row
+          fill
           className={styles.controls}
+          radius={rest.radius || "l"}
           position="absolute"
           top="0"
           left="0"
-          radius="l"
           overflow="hidden"
-          fill
           horizontal="between"
         >
           {activeIndex > 0 ? (
@@ -260,8 +357,23 @@ const Carousel: React.FC<CarouselProps> = ({
             <Flex maxWidth={12} />
           )}
         </Row>
+        {play.progress && (
+          <Row
+            fillWidth
+            paddingBottom="12"
+            paddingX="24"
+            position="absolute"
+            bottom="0"
+            left="0"
+            zIndex={1}
+          >
+            <Row radius="full" background="neutral-alpha-weak" height="2" fillWidth>
+              <Row radius="full" solid="brand-strong" style={{width: `${progressPercent}%`, transition: `width 0.05s linear`}} fillHeight />
+            </Row>
+          </Row>
+        )}
       </RevealFx>
-      {items.length > 1 && (
+      {items.length > 1 && indicator !== false && (
         <>
           {indicator === "line" ? (
             <Flex gap="4" paddingX="s" fillWidth horizontal="center">

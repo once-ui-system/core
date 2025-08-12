@@ -34,6 +34,8 @@ import {
   HiOutlineArrowsPointingOut,
   HiOutlineFaceSmile,
   HiOutlineArrowTurnDownLeft,
+  HiOutlinePlay,
+  HiOutlinePause,
 } from "react-icons/hi2";
 
 import {
@@ -89,6 +91,8 @@ export const iconLibrary: Record<string, IconType> = {
   flag: IoFlagOutline,
   wordmark: LuTextCursorInput,
   enter: HiOutlineArrowTurnDownLeft,
+  play: HiOutlinePlay,
+  pause: HiOutlinePause,
 };
 
 export type IconLibrary = typeof iconLibrary;
