@@ -66,7 +66,6 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
             style={{
               margin: "calc(-1 * var(--static-space-8)) var(--static-space-8)",
             }}
-            direction="row"
             gap="4"
             vertical="center"
             wrap

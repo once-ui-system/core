@@ -50,6 +50,7 @@ import {
   Input,
   Feedback,
   MasonryGrid,
+  TagInput,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -116,6 +117,33 @@ export default function Home() {
       <Flex hide s={{hide: false}}>hide by default, show on s</Flex>
       <Flex hide xs={{hide: false}}>hide by default, show on xs</Flex>
       <Feedback icon title="Feedback" description="This is a feedback"></Feedback>
+
+      <Column maxWidth="s">
+        <Media src="/images/cover-01.jpg" caption="Caption" radius="xl" />
+      </Column>
+
+      <TagInput
+        label="Tag Input"
+        id="tag-input"
+        value={selectedOption}
+        onChange={handleMultiSelectChange}
+      />
+      
+      <Row height={32} fillWidth background="danger-medium">
+      <Carousel
+          play={{auto: true, interval: 3000, controls: true, progress: true}}
+          fill
+          indicator={false}
+          controls={true}
+          items={[
+            { slide: "/images/demo.jpg", alt: "demo" },
+            { slide: "/images/cover-01.jpg", alt: "Demo" },
+            { slide: "/images/cover-02.jpg", alt: "Demo" },
+            { slide: "/images/cover-03.jpg", alt: "Demo" },
+            { slide: "/images/cover-04.jpg", alt: "Demo" },
+          ]}
+        />
+      </Row>
       
       <MasonryGrid
        padding="l"
@@ -131,6 +159,7 @@ export default function Home() {
                   radius="l"
                   border="neutral-alpha-medium"
                   fill
+                  center
                   height={height}
               >{index}
               </Flex>
@@ -166,7 +195,7 @@ export default function Home() {
           position: "bottom-center",
         }}
         series={[
-          { key: "Reading", color: "aqua", hasPrefix: "asd" },
+          { key: "Reading", color: "aqua" },
           { key: "Sports", color: "yellow" },
           { key: "Doomscrolling", color: "orange" }
         ]}
@@ -790,16 +819,6 @@ onClose={() => setIsDialogOpen(false)}>
         favicon={false}
           url="https://once-ui.com"
           size="l"
-        />
-        <Carousel
-          indicator="thumbnail"
-          items={[
-            { slide: "/images/demo.jpg", alt: "demo" },
-            { slide: "/images/cover-01.jpg", alt: "Demo" },
-            { slide: "/images/cover-02.jpg", alt: "Demo" },
-            { slide: "/images/cover-03.jpg", alt: "Demo" },
-            { slide: "/images/cover-04.jpg", alt: "Demo" },
-          ]}
         />
         <StylePanel/>
         <BlockQuote>
