@@ -13,7 +13,7 @@ const loadCssFiles = async () => {
 
 import styles from "./CodeBlock.module.scss";
 
-import { Flex, IconButton, Scroller, Row, StyleOverlay, ToggleButton } from "../../components";
+import { Flex, IconButton, Scroller, Row, StyleOverlay, ToggleButton, Column } from "../../components";
 
 import Prism from "prismjs";
 
@@ -170,14 +170,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   };
 
   return (
-    <Flex
+    <Column
       position={isFullscreen ? "fixed" : "relative"}
       zIndex={0}
       background="surface"
       radius="l"
       overflow="hidden"
       border="neutral-medium"
-      direction="column"
       vertical="center"
       fillWidth
       minHeight={2.5}
@@ -329,7 +328,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           )}
         </Flex>
       )}
-    </Flex>
+    </Column>
   );
 };
 

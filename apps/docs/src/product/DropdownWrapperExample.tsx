@@ -86,7 +86,7 @@ export function DropdownWithIcons() {
         </Button>
       }
       dropdown={
-        <Flex fillWidth padding="4" direction="column" gap="2">
+        <Column fillWidth padding="4" gap="2">
           {options.map((option) => (
             <Option
               key={option.value}
@@ -98,7 +98,7 @@ export function DropdownWithIcons() {
               onClick={handleSelect}
             />
           ))}
-        </Flex>
+        </Column>
       }
     />
   );
@@ -132,7 +132,7 @@ export function CustomPositionDropdown() {
         </Button>
       }
       dropdown={
-        <Flex fillWidth padding="4" direction="column" gap="2">
+        <Column fillWidth padding="4" gap="2">
           {options.map((option) => (
             <Option
               key={option.value}
@@ -142,7 +142,7 @@ export function CustomPositionDropdown() {
               onClick={handleSelect}
             />
           ))}
-        </Flex>
+        </Column>
       }
     />
   );

@@ -2,7 +2,7 @@
 
 import React from "react";
 import classNames from "classnames";
-import { Flex, DropdownWrapper, User, UserProps, DropdownWrapperProps } from ".";
+import { DropdownWrapper, User, UserProps, DropdownWrapperProps, Column } from ".";
 import styles from "./UserMenu.module.scss";
 import { Placement } from "@floating-ui/react-dom";
 
@@ -37,9 +37,8 @@ const UserMenu: React.FC<UserMenuProps> = ({
         borderRadius: "var(--radius-full)",
       }}
       trigger={
-        <Flex
+        <Column
           tabIndex={0}
-          direction="column"
           padding="4"
           radius="full"
           cursor="interactive"
@@ -49,7 +48,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
           style={style}
         >
           <User {...userProps} />
-        </Flex>
+        </Column>
       }
       dropdown={dropdown}
     />

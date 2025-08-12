@@ -14,7 +14,8 @@ import {
   Flex,
   Text,
   Kbd,
-  useToast
+  useToast,
+  Column
 } from "@once-ui-system/core";
 
 // Search input with managed state and conditional clear button
@@ -166,7 +167,7 @@ export function OTPInputExample({ autoFocus = true }: { autoFocus?: boolean }) {
   };
   
   return (
-    <Flex direction="column" gap="16">
+    <Column gap="16">
       <Text as="label" htmlFor="otp-input-example" variant="label-default-s" onBackground="neutral-weak">
         Verification Code
       </Text>
@@ -176,7 +177,7 @@ export function OTPInputExample({ autoFocus = true }: { autoFocus?: boolean }) {
         onComplete={handleComplete}
         autoFocus={autoFocus}
       />
-    </Flex>
+    </Column>
   );
 }
 

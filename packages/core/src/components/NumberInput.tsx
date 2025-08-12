@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, useState } from "react";
-import { Input, Flex, IconButton } from ".";
+import { Input, Flex, IconButton, Column } from ".";
 import styles from "./NumberInput.module.scss";
 import classNames from "classnames";
 
@@ -70,11 +70,10 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         hasSuffix={
           <>
             <Flex position="static" minWidth={1.25}></Flex>
-            <Flex
+            <Column
               position="absolute"
               right="0"
               top="0"
-              direction="column"
               borderLeft="neutral-medium"
               fillHeight
               background="neutral-alpha-weak"
@@ -108,7 +107,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
                   aria-label="Decrement value"
                 />
               </Flex>
-            </Flex>
+            </Column>
           </>
         }
         className={styles.numberInput}

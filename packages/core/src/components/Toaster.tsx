@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { Flex, Toast } from ".";
+import { Column, Row, Toast } from ".";
 import styles from "./Toaster.module.scss";
 
 interface ToasterProps {
@@ -26,16 +26,15 @@ const Toaster: React.FC<ToasterProps> = ({ toasts, removeToast }) => {
   if (!mounted) return null;
 
   return createPortal(
-    <Flex
+    <Column
       zIndex={10}
       fillWidth
-      direction="column"
       maxWidth={32}
       position="fixed"
       className={styles.toastContainer}
     >
       {toasts.map((toast, index, array) => (
-        <Flex
+        <Row
           padding="4"
           fillWidth
           position="absolute"
@@ -55,9 +54,9 @@ const Toaster: React.FC<ToasterProps> = ({ toasts, removeToast }) => {
           >
             {toast.message}
           </Toast>
-        </Flex>
+        </Row>
       ))}
-    </Flex>,
+    </Column>,
     document.body,
   );
 };

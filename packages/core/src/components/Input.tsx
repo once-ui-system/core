@@ -138,7 +138,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           [styles.error]: (error || (displayError && debouncedValue !== "")) && props.value !== "",
         })}
       >
-        <Flex
+        <Column
           transition="micro-medium"
           border="neutral-medium"
           background="neutral-alpha-weak"
@@ -191,7 +191,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               {hasSuffix}
             </Flex>
           )}
-        </Flex>
+        </Column>
         {displayError && errorMessage !== false && (
           <Flex paddingX="16">
             <Text as="span" id={`${id}-error`} variant="body-default-s" onBackground="danger-weak">

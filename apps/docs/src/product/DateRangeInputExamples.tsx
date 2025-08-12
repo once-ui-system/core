@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { DateRangeInput, DateRange, Flex } from "@once-ui-system/core";
+import { DateRangeInput, DateRange, Flex, Column } from "@once-ui-system/core";
 
 // Basic DateRangeInput example with managed state
 export function BasicDateRangeInputExample() {
@@ -54,9 +54,9 @@ export function CustomLabelDateRangeInputExample() {
 // Component that combines all examples
 export function DateRangeInputExamples() {
   return (
-    <Flex direction="column" gap="32">
+    <Column gap="32">
       <BasicDateRangeInputExample />
       <CustomLabelDateRangeInputExample />
-    </Flex>
+    </Column>
   );
 }

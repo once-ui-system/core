@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
-import { Flex, Heading, IconButton, Text } from ".";
+import { Column, Flex, Heading, IconButton, Text } from ".";
 import styles from "./Dialog.module.scss";
 
 interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
@@ -248,7 +248,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             transform: base ? "scale(0.94) translateY(-1.25rem)" : "",
           }}
         >
-          <Flex
+          <Column
             position="unset"
             className={classNames(styles.dialog, {
               [styles.open]: isAnimating,
@@ -263,7 +263,6 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             radius="xl"
             border="neutral-medium"
             background="neutral-weak"
-            direction="column"
             tabIndex={-1}
             onKeyDown={(e) => {
               if (e.key === "Tab") {
@@ -289,9 +288,8 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             }}
             {...rest}
           >
-            <Flex
+            <Column
               as="header"
-              direction="column"
               paddingX="24"
               paddingTop="24"
               paddingBottom="s"
@@ -318,23 +316,22 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
                   {description}
                 </Text>
               )}
-            </Flex>
-            <Flex
+            </Column>
+            <Column
               as="section"
               paddingX="24"
               paddingBottom="24"
               flex={1}
               overflowY="auto"
-              direction="column"
             >
               {children}
-            </Flex>
+            </Column>
             {footer && (
               <Flex borderTop="neutral-medium" as="footer" horizontal="end" padding="12" gap="8">
                 {footer}
               </Flex>
             )}
-          </Flex>
+          </Column>
         </Flex>
       </Flex>,
       document.body,

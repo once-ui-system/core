@@ -1,9 +1,9 @@
 "use client";
 
 import React, { ReactNode, forwardRef, SyntheticEvent } from "react";
-import { Flex } from ".";
+import { Column, Row } from ".";
 
-interface DropdownProps extends Omit<React.ComponentProps<typeof Flex>, "onSelect"> {
+interface DropdownProps extends Omit<React.ComponentProps<typeof Row>, "onSelect"> {
   selectedOption?: string;
   children?: ReactNode;
   onEscape?: () => void;
@@ -11,7 +11,7 @@ interface DropdownProps extends Omit<React.ComponentProps<typeof Flex>, "onSelec
 }
 
 const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
-  ({ selectedOption, className, children, onEscape, onSelect, ...rest }, ref) => {
+  ({ selectedOption, className, children, onEscape, onSelect, ...flex }, ref) => {
     const handleSelect = (event: SyntheticEvent<HTMLDivElement>) => {
       // Only handle clicks on elements that have a data-value attribute
       const target = event.target as HTMLElement;
@@ -25,7 +25,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
     };
 
     return (
-      <Flex
+      <Row
         ref={ref}
         role="listbox"
         onClick={handleSelect}
@@ -33,12 +33,12 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         border="neutral-medium"
         background="surface"
         overflow="hidden"
-        {...rest}
+        {...flex}
       >
-        <Flex flex={1} overflowY="auto" direction="column" gap="2">
+        <Column flex={1} overflowY="auto" gap="2">
           {children}
-        </Flex>
-      </Flex>
+        </Column>
+      </Row>
     );
   },
 );

@@ -9,7 +9,7 @@ import React, {
   ReactNode,
 } from "react";
 import classNames from "classnames";
-import { Flex, Text } from ".";
+import { Column, Row, Text } from ".";
 import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 
@@ -142,8 +142,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     );
 
     return (
-      <Flex
-        direction="column"
+      <Column
         gap="8"
         fillWidth
         fitHeight
@@ -151,7 +150,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           [styles.error]: displayError && debouncedValue !== "",
         })}
       >
-        <Flex
+        <Row
           minHeight={placeholder ? "48" : "56"}
           transition="micro-medium"
           border="neutral-medium"
@@ -165,11 +164,11 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           )}
         >
           {hasPrefix && (
-            <Flex paddingLeft="12" className={styles.prefix}>
+            <Row paddingLeft="12" className={styles.prefix}>
               {hasPrefix}
-            </Flex>
+            </Row>
           )}
-          <Flex fillWidth direction="column">
+          <Column fillWidth>
             <textarea
               {...props}
               ref={(node) => {
@@ -209,33 +208,24 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               </Text>
             )}
             {children}
-          </Flex>
+          </Column>
           {hasSuffix && (
-            <Flex paddingRight="12" className={styles.suffix}>
+            <Row paddingRight="12" className={styles.suffix}>
               {hasSuffix}
-            </Flex>
+            </Row>
           )}
-        </Flex>
+        </Row>
         {displayError && errorMessage !== false && (
-          <Flex paddingX="16">
-            <Text as="span" id={`${id}-error`} variant="body-default-s" onBackground="danger-weak">
-              {displayError}
-            </Text>
-          </Flex>
+          <Row paddingX="16" id={`${id}-error`} textVariant="body-default-s" onBackground="danger-weak">
+            {displayError}
+          </Row>
         )}
         {description && (
-          <Flex paddingX="16">
-            <Text
-              as="span"
-              id={`${id}-description`}
-              variant="body-default-s"
-              onBackground="neutral-weak"
-            >
-              {description}
-            </Text>
-          </Flex>
+          <Row paddingX="16" id={`${id}-description`} textVariant="body-default-s" onBackground="neutral-weak">
+            {description}
+          </Row>
         )}
-      </Flex>
+      </Column>
     );
   },
 );
