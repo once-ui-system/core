@@ -191,6 +191,7 @@ const CountFx: React.FC<CountFxProps> = ({
 
       return (
         <Row
+          key={index}
           style={{
             height: '1em',
             marginLeft: '-0.125em',
@@ -200,7 +201,6 @@ const CountFx: React.FC<CountFxProps> = ({
             align="center"
             inline
             overflow="hidden"
-            key={index}
             style={{
               opacity: 1,
               height: '2em',
