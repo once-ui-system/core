@@ -243,6 +243,7 @@ const Carousel: React.FC<CarouselProps> = ({
             radius={rest.radius || "l"}
             border="neutral-alpha-weak"
             overflow="hidden"
+            fillWidth={fill}
             aspectRatio={fill ? undefined : aspectRatio === "original" ? undefined : aspectRatio}
             src={items[activeIndex]?.slide as string}
             alt={items[activeIndex]?.alt || ""}
