@@ -22,6 +22,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   priority?: boolean;
   fill?: boolean;
   indicator?: "line" | "thumbnail" | false;
+  translateY?: SpacingToken | number;
   aspectRatio?: string;
   sizes?: string;
   revealedByDefault?: boolean;
@@ -35,6 +36,7 @@ const Carousel: React.FC<CarouselProps> = ({
   controls = true,
   priority = false,
   indicator = "line",
+  translateY,
   aspectRatio = "original",
   sizes,
   revealedByDefault = false,
@@ -209,6 +211,7 @@ const Carousel: React.FC<CarouselProps> = ({
         fillWidth
         fillHeight={fill}
         trigger={isTransitioning}
+        translateY={translateY}
         aspectRatio={aspectRatio === "original" ? undefined : aspectRatio}
         speed={300}
         onTouchStart={(e: React.TouchEvent) => {
