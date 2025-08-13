@@ -241,19 +241,19 @@ const Carousel: React.FC<CarouselProps> = ({
             sizes={sizes}
             priority={priority}
             radius={rest.radius || "l"}
-            border="neutral-alpha-weak"
+            border={rest.border || "neutral-alpha-weak"}
             overflow="hidden"
-            fillWidth={fill}
-            aspectRatio={fill ? undefined : aspectRatio === "original" ? undefined : aspectRatio}
+            aspectRatio={fill ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
             src={items[activeIndex]?.slide as string}
             alt={items[activeIndex]?.alt || ""}
           />
         ) : (
           <Flex
-            radius={rest.radius || "l"}
+            fill={fill}
             overflow="hidden"
-            border="neutral-alpha-weak"
-            aspectRatio={aspectRatio}
+            radius={rest.radius || "l"}
+            border={rest.border || "neutral-alpha-weak"}
+            aspectRatio={fill ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
           >
             {items[activeIndex]?.slide}
           </Flex>

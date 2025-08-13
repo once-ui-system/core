@@ -91,7 +91,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             src={src}
             fill
             alt="Avatar"
-            aspectRatio="1/1"
+            aspectRatio="1"
             sizes={typeof size === "string" ? `${sizeMapping[size]}px` : `${size * 16}px`}
             className={styles.image}
           />

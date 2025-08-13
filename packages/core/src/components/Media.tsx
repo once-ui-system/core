@@ -10,7 +10,6 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   height?: number;
   alt?: string;
   loading?: boolean;
-  layout?: "fixed" | "responsive";
   objectFit?: CSSProperties["objectFit"];
   enlarge?: boolean;
   src: string;
@@ -182,12 +181,14 @@ const Media: React.FC<MediaProps> = ({
               sizes={sizes}
               priority={priority}
               unoptimized={unoptimized}
-              fill={fill || aspectRatio !== "original"}
-              layout={fill ? "fixed" : aspectRatio === "original" ? "responsive" : "fixed"}
-              width={aspectRatio === "original" ? 0 : undefined}
-              height={aspectRatio === "original" ? 0 : undefined}
+              fill={fill || !aspectRatio}
+              width={fill ? undefined : 0}
+              height={fill ? undefined : 0}
               style={{
                 objectFit: objectFit,
+                aspectRatio: fill ? undefined : aspectRatio,
+                width: aspectRatio ? "100%" : undefined,
+                height: aspectRatio ? "100%" : undefined,
               }}
             />
           )}

@@ -122,6 +122,15 @@ export default function Home() {
       <Column maxWidth="s">
         <Media src="/images/cover-01.jpg" caption="Caption" radius="xl" />
       </Column>
+      
+      <Row fillWidth height={56}>
+        <Carousel
+          fill
+          play={{auto: true, interval: 5000, controls: false, progress: false}}
+          items={[
+            {slide: "/images/movies/01.jpg" },
+          ]} />
+      </Row>
 
       <Avatar size="xl" src="/images/cover-01.jpg" />
 
@@ -135,7 +144,6 @@ export default function Home() {
       <Row height={32} fillWidth background="danger-medium">
       <Carousel
           play={{auto: true, interval: 3000, controls: true, progress: true}}
-          fill
           indicator={false}
           controls={true}
           items={[
