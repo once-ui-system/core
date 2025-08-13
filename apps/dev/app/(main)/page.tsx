@@ -51,6 +51,7 @@ import {
   Feedback,
   MasonryGrid,
   TagInput,
+  Avatar,
 } from "@once-ui-system/core";
 
 export default function Home() {
@@ -121,6 +122,8 @@ export default function Home() {
       <Column maxWidth="s">
         <Media src="/images/cover-01.jpg" caption="Caption" radius="xl" />
       </Column>
+
+      <Avatar size="xl" src="/images/cover-01.jpg" />
 
       <TagInput
         label="Tag Input"
