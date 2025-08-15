@@ -12,8 +12,5 @@
   "engines": {
     "node": "20.x"
   },
-  "dependencies": {
-    "next": "15.3.1"
-  },
   "packageManager": "pnpm@10.14.0"
 }
