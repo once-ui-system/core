@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, ReactNode } from "react";
+import ReactDOM from "react-dom";
 
 // We'll import CSS files dynamically on the client side
 const loadCssFiles = async () => {
@@ -12,8 +13,9 @@ const loadCssFiles = async () => {
 };
 
 import styles from "./CodeBlock.module.scss";
-
 import { Flex, IconButton, Scroller, Row, StyleOverlay, ToggleButton, Column } from "../../components";
+
+
 
 import Prism from "prismjs";
 
@@ -41,6 +43,7 @@ type CodeInstance = {
   language: string;
   label: string;
   highlight?: string;
+  prefixIcon?: string;
 };
 
 interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
@@ -83,6 +86,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const preRef = useRef<HTMLPreElement>(null);
   const [selectedInstance, setSelectedInstance] = useState(0);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const codeBlockRef = useRef<HTMLDivElement>(null);
   const [dependenciesLoaded, setDependenciesLoaded] = useState(false);
 
   const codeInstance = codes[selectedInstance] || {
@@ -108,15 +113,20 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         Prism.highlightAll();
       }, 0);
     }
-  }, [dependenciesLoaded, code, codes.length]);
+  }, [dependenciesLoaded, code, codes.length, selectedInstance, isFullscreen, isAnimating]);
 
   useEffect(() => {
     if (isFullscreen) {
       document.body.style.overflow = "hidden";
+      
+      // Start animation after a small delay to allow portal to render
+      setTimeout(() => {
+        setIsAnimating(true);
+      }, 10);
 
       const handleEscKey = (event: KeyboardEvent) => {
         if (event.key === "Escape") {
-          setIsFullscreen(false);
+          toggleFullscreen();
         }
       };
 
@@ -128,6 +138,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       };
     } else {
       document.body.style.overflow = "";
+      setIsAnimating(false);
     }
 
     return () => {
@@ -162,47 +173,88 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     const index = codes.findIndex((instance) => instance.label === selectedLabel);
     if (index !== -1) {
       setSelectedInstance(index);
+      
+      // Re-highlight after tab change
+      setTimeout(() => {
+        Prism.highlightAll();
+      }, 10);
     }
   };
 
   const toggleFullscreen = () => {
-    setIsFullscreen((prev) => !prev);
+    if (isFullscreen) {
+      // When exiting fullscreen, first remove animation class, then remove portal after transition
+      setIsAnimating(false);
+      setTimeout(() => {
+        setIsFullscreen(false);
+        
+        // Re-highlight after exiting fullscreen
+        setTimeout(() => {
+          Prism.highlightAll();
+        }, 10);
+      }, 300); // Match transition duration
+    } else {
+      // When entering fullscreen, immediately show portal
+      setIsFullscreen(true);
+      
+      // Re-highlight after entering fullscreen
+      setTimeout(() => {
+        Prism.highlightAll();
+      }, 50);
+    }
   };
 
-  return (
+  // Ensure highlighting is applied after animation completes
+  useEffect(() => {
+    if (isAnimating && dependenciesLoaded) {
+      // Re-highlight after animation completes
+      setTimeout(() => {
+        Prism.highlightAll();
+      }, 350); // Slightly longer than animation duration
+    }
+  }, [isAnimating, dependenciesLoaded]);
+
+  // Create a function to render the CodeBlock content
+  const renderCodeBlock = (inPortal = false) => (
     <Column
-      position={isFullscreen ? "fixed" : "relative"}
-      zIndex={0}
-      background="surface"
+      ref={inPortal ? undefined : codeBlockRef}
       radius="l"
+      background="surface"
+      border="neutral-alpha-weak"
       overflow="hidden"
-      border="neutral-medium"
       vertical="center"
       fillWidth
       minHeight={2.5}
       className={classNames(className, {
-        [styles.fullscreen]: isFullscreen,
+        [styles.fullscreen]: inPortal && isFullscreen,
       })}
-      style={style}
+      style={{ 
+        isolation: "isolate", 
+        ...(inPortal ? {
+          transition: "transform 0.3s ease, opacity 0.3s ease",
+          transform: isAnimating ? "scale(1)" : "scale(0.95)",
+          opacity: isAnimating ? 1 : 0,
+        } : {}),
+        ...style 
+      }}
       {...rest}
     >
       {(codes.length > 1 || (copyButton && !compact)) && (
-        <Flex
-          borderBottom="neutral-medium"
+        <Row
           zIndex={2}
           position="static"
           fillWidth
           fitHeight
           horizontal="between"
-          gap="16"
         >
           {codes.length > 1 ? (
-            <Scroller paddingX="4">
-              {codes.map((instance, index) => (
-                <Row paddingY="4" paddingRight="2" key={index}>
+            <Scroller paddingX="8" fadeColor="surface">
+              <Row data-scaling="90" fitWidth fillHeight vertical="center" paddingY="4" gap="2">
+                {codes.map((instance, index) => (
                   <ToggleButton
-                    className="mr-2"
+                    key={index}
                     weight="default"
+                    prefixIcon={instance.prefixIcon}
                     selected={selectedInstance === index}
                     label={instance.label}
                     onClick={() => {
@@ -211,8 +263,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       handleContent(instance.label);
                     }}
                   />
-                </Row>
-              ))}
+                ))}
+              </Row>
             </Scroller>
           ) : (
             <Row
@@ -225,7 +277,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             </Row>
           )}
           {!compact && (
-            <Flex padding="4" gap="2" position="static">
+            <Row paddingY="4" paddingX="8" gap="2" position="static">
               {reloadButton && (
                 <IconButton
                   size="m"
@@ -261,36 +313,43 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                   icon={copyIcon}
                 />
               )}
-            </Flex>
+            </Row>
           )}
-        </Flex>
+        </Row>
       )}
       {preview && (
-        <Flex
-          style={{
-            isolation: "isolate",
-          }}
-          key={refreshKey}
-          padding={previewPadding}
-          tabIndex={-1}
-          fillHeight
-          horizontal="center"
-          overflowY="auto"
-        >
-          {Array.isArray(preview)
-            ? preview.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
-            : preview}
-        </Flex>
+        <Row key={refreshKey} paddingX="4" paddingBottom="4" fill>
+          <Row
+            fill
+            background="overlay"
+            padding={previewPadding}
+            tabIndex={-1}
+            horizontal="center"
+            radius="l"
+            border="neutral-alpha-weak"
+            overflowY="auto"
+          >
+            {Array.isArray(preview)
+              ? preview.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
+              : preview}
+          </Row>
+        </Row>
       )}
       {codes.length > 0 && code && (
-        <Flex
-          borderTop={!compact && preview ? "neutral-medium" : undefined}
-          fillWidth
+        <Row
+          border={!compact && !preview ? "neutral-medium" : undefined}
+          style={{
+            left: "-1px",
+            bottom: "-1px",
+            width: "calc(100% + 2px)",
+          }}
+          radius="l"
           flex="1"
           fillHeight={fillHeight}
         >
-          <Flex overflowX="auto" fillWidth tabIndex={-1}>
+          <Row overflowX="auto" fillWidth tabIndex={-1}>
             <pre
+              tabIndex={-1}
               style={{ maxHeight: `${codeHeight}rem` }}
               data-line={highlight || deprecatedHighlight}
               ref={preRef}
@@ -302,7 +361,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                   "line-numbers": lineNumbers,
                 },
               )}
-              tabIndex={-1}
             >
               <code
                 tabIndex={-1}
@@ -312,9 +370,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 {typeof code === "string" ? code : code.content}
               </code>
             </pre>
-          </Flex>
+          </Row>
           {compact && copyButton && (
-            <Flex position="absolute" right="4" top="4" className={styles.compactCopy} zIndex={1}>
+            <Row position="absolute" right="4" top="4" className={styles.compactCopy} zIndex={1}>
               <IconButton
                 tooltip="Copy"
                 tooltipPosition="left"
@@ -324,11 +382,33 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 size="m"
                 variant="tertiary"
               />
-            </Flex>
+            </Row>
           )}
-        </Flex>
+        </Row>
       )}
     </Column>
+  );
+
+  return (
+    <>
+      {renderCodeBlock(false)}
+      {isFullscreen && ReactDOM.createPortal(
+        <Flex
+          position="fixed"
+          zIndex={9}
+          top="0"
+          left="0"
+          right="0"
+          bottom="0"
+          background={isAnimating ? "overlay" : "transparent"}
+          style={{backdropFilter: "blur(0.5rem)"}}
+          transition="macro-medium"
+        >
+          {renderCodeBlock(true)}
+        </Flex>,
+        document.body
+      )}
+    </>
   );
 };
 

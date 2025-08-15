@@ -122,6 +122,75 @@ export default function Home() {
       <Column maxWidth="s">
         <Media src="/images/cover-01.jpg" caption="Caption" radius="xl" />
       </Column>
+
+      
+      <CodeBlock
+      fullscreenButton
+      lineNumbers
+      preview={<p>Preview</p>}
+      codeHeight={40}
+        codes={[
+          {
+            code:
+`function calculateTotal(items) {
+  let total = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    total += item.price * item.quantity;
+  }
+
+  return total;
+
+  function calculateTotal(items) {
+  let total = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    total += item.price * item.quantity;
+  }
+
+  return total;
+  function calculateTotal(items) {
+  let total = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    total += item.price * item.quantity;
+  }
+
+  return total;
+  function calculateTotal(items) {
+  let total = 0;
+
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    total += item.price * item.quantity;
+  }
+
+  return total;
+  
+  for (let i = 0; i < items.length; i++) {
+    const item = items[i];
+    total += item.price * item.quantity;
+  }
+
+  return total;
+}`,
+            language: "javascript",
+            highlight: "2,4-6",
+            prefixIcon: "chevronLeft",
+            label: "Highlight"
+          },
+          {
+            code:
+      ``,
+            language: "javascript",
+            highlight: "7",
+            label: "Highlight 2"
+          }
+        ]}
+      />
       
       <Row fillWidth height={56}>
         <Carousel
