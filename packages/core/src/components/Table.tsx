@@ -50,7 +50,7 @@ function Table({ data, onRowClick, ...flex }: TableProps) {
 
   const headers = data.headers.map((header, index) => (
     <th
-      style={{ textAlign: "left", borderBottom: "1px solid var(--neutral-alpha-medium)" }}
+      style={{ textAlign: "left", borderBottom: "1px solid var(--neutral-alpha-weak)" }}
       className="px-16 py-12 font-label font-default font-s"
       key={index}
     >
@@ -100,7 +100,7 @@ function Table({ data, onRowClick, ...flex }: TableProps) {
       fillWidth
       radius="l"
       overflowY="hidden"
-      border="neutral-alpha-medium"
+      border="neutral-alpha-weak"
       background="surface"
       overflowX="auto"
       marginTop="8"
