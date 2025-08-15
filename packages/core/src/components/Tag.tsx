@@ -3,12 +3,13 @@
 import React, { forwardRef, ReactNode } from "react";
 import classNames from "classnames";
 
-import { Flex, Text, Icon } from ".";
+import { Flex, Text, Icon, Row } from ".";
 import styles from "./Tag.module.scss";
 import { IconName } from "../icons";
+import { ColorScheme } from "@/types";
 
 interface TagProps extends React.ComponentProps<typeof Flex> {
-  variant?: "brand" | "accent" | "warning" | "success" | "danger" | "neutral" | "info" | "gradient";
+  variant?: ColorScheme | "gradient";
   size?: "s" | "m" | "l";
   label?: string;
   prefixIcon?: IconName;
@@ -30,28 +31,31 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
     },
     ref,
   ) => {
-    const paddingSize = size === "s" ? "2" : "4";
+    const paddingX = size === "s" ? "8" : size === "m" ? "8" : "12";
+    const paddingY = size === "s" ? "1" : size === "m" ? "2" : "4";
 
     return (
-      <Flex
+      <Row
         fitWidth
-        borderWidth={1}
-        borderStyle="solid"
+        background={variant !== "gradient" ? `${variant}-weak` as const : undefined}
+        border={variant !== "gradient" ? `${variant}-alpha-medium` as const : "brand-medium"}
+        onBackground={variant !== "gradient" ? `${variant}-medium` as const : undefined}
+        paddingX={paddingX} paddingY={paddingY}
         vertical="center"
-        radius="l"
+        radius="s"
         gap="4"
         ref={ref}
-        className={classNames(styles.tag, styles[variant], styles[size], className)}
+        className={classNames(styles.tag, variant === "gradient" ? styles.gradient : undefined, className)}
         {...rest}
       >
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}
-        <Flex style={{ userSelect: "none" }} paddingX={paddingSize} vertical="center">
-          <Text as="span" variant="label-default-s">
+        <Row style={{ userSelect: "none" }} vertical="center">
+          <Text variant="label-default-s">
             {label || children}
           </Text>
-        </Flex>
+        </Row>
         {suffixIcon && <Icon name={suffixIcon} size="xs" />}
-      </Flex>
+      </Row>
     );
   },
 );
