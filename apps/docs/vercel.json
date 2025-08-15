@@ -1,0 +1,1 @@
+{ "version": 2, "framework": "nextjs", "installCommand": "npx -y pnpm@10.14.0 -w install --frozen-lockfile", "buildCommand": "npx -y pnpm@10.14.0 build" }
