@@ -322,16 +322,15 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         </Row>
       )}
       {preview && (
-        <Row key={refreshKey} paddingX="4" paddingBottom="4" paddingTop={compact ? "4" : "0"} fillWidth fitHeight>
+        <Row key={refreshKey} paddingX="4" paddingBottom="4" paddingTop={compact ? "4" : "0"} fill>
           <Row
-            fillWidth
-            fitHeight
+            fill
             background="overlay"
             padding={previewPadding}
             tabIndex={-1}
             horizontal="center"
             radius="l"
-            overflow="hidden"
+            overflowY="auto"
             border="neutral-alpha-weak"
           >
             {Array.isArray(preview)
