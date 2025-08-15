@@ -2,11 +2,13 @@
   "name": "@once-ui-system/docs",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "export": "next export",
     "biome-write": "npx @biomejs/biome format --write .",
     "watch": "tsc --watch --project tsconfig.build.json"
   },

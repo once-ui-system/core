@@ -14,10 +14,6 @@
 ### Magic Bio
 
 - [Quick Start](https://docs.once-ui.com/magic-bio/quick-start): Set up your bio page
-- [Links](https://docs.once-ui.com/magic-bio/links): Manage your links
-- [Profile](https://docs.once-ui.com/magic-bio/profile): Customize your profile
-- [Analytics](https://docs.once-ui.com/magic-bio/analytics): Track link clicks
-- [SEO](https://docs.once-ui.com/magic-bio/seo): SEO optimization
 
 ### Magic Store
 
