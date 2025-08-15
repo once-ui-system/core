@@ -89,8 +89,8 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
           <Flex
             fillWidth={fillWidth}
             horizontal={horizontal}
-            padding={size === "s" ? "2" : "4"}
             textWeight={weight}
+            paddingX={size === "s" ? "2" : "4"}
             textSize={size === "l" ? "m" : "s"}
             className="font-label"
             position="static"
