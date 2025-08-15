@@ -1,9 +1,7 @@
 "use client";
 
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { Spinner } from "./Spinner";
-import { Column } from "./Column";
-import { Row } from "./Row";
+import { Column, Row, Spinner } from ".";
 
 export interface InfiniteScrollProps<T> extends React.ComponentProps<typeof Row> {
   items: T[];
@@ -25,15 +23,20 @@ function InfiniteScroll<T>({
   const [hasMore, setHasMore] = useState(true);
   const [isLoading, setIsLoading] = useState(loading);
   const observerRef = useRef<IntersectionObserver | null>(null);
-  const lastItemRef = useRef<HTMLDivElement | null>(null);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+
+  // Keep internal loading in sync with prop
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [loading]);
 
   const handleLoadMore = async () => {
     if (isLoading || !hasMore) return;
 
     setIsLoading(true);
     try {
-      const hasMoreItems = await loadMore();
-      setHasMore(hasMoreItems);
+      const more = await loadMore();
+      setHasMore(more);
     } catch (error) {
       console.error("Error loading more items:", error);
       setHasMore(false);
@@ -45,13 +48,9 @@ function InfiniteScroll<T>({
   useEffect(() => {
     if (!hasMore || isLoading) return;
 
-    if (observerRef.current) {
-      observerRef.current.disconnect();
-    }
-
+    observerRef.current?.disconnect();
     observerRef.current = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
+      ([entry]) => {
         if (entry.isIntersecting) {
           handleLoadMore();
         }
@@ -59,34 +58,27 @@ function InfiniteScroll<T>({
       {
         root: null,
         rootMargin: `0px 0px ${threshold}px 0px`,
-        threshold: 0.1,
-      },
+        threshold: 0,
+      }
     );
 
-    if (lastItemRef.current) {
-      observerRef.current.observe(lastItemRef.current);
+    if (sentinelRef.current) {
+      observerRef.current.observe(sentinelRef.current);
     }
 
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [items, hasMore, isLoading]);
+    return () => observerRef.current?.disconnect();
+  }, [items.length, hasMore, isLoading, threshold]);
 
   return (
     <>
-      {items.map((item, index) => {
-        // If this is the last item, attach the ref
-        if (index === items.length - 1) {
-          return (
-            <Row key={index} ref={lastItemRef} {...flex}>
-              {renderItem(item, index)}
-            </Row>
-          );
-        }
-        return <React.Fragment key={index}>{renderItem(item, index)}</React.Fragment>;
-      })}
+      {items.map((item, index) => (
+        <React.Fragment key={index}>{renderItem(item, index)}</React.Fragment>
+      ))}
+
+      {/* Sentinel at the end */}
+      <Row {...flex}>
+        <div ref={sentinelRef} style={{ height: 1, width: 1 }} />
+      </Row>
 
       {isLoading && (
         <Column fillWidth horizontal="center" padding="24">
@@ -97,4 +89,5 @@ function InfiniteScroll<T>({
   );
 }
 
+InfiniteScroll.displayName = "InfiniteScroll";
 export { InfiniteScroll };
