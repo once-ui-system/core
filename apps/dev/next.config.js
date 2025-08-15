@@ -1,11 +1,17 @@
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ['@once-ui-system/core'],
+  transpilePackages: ["@once-ui-system/core"],
   reactStrictMode: true,
-  turbopack: { },
+  turbopack: {},
   webpack: (config) => {
     return config;
-  }
+  },
+  outputFileTracingRoot: path.join(__dirname, "../../"),
 };
 
-module.exports = nextConfig;
+export default nextConfig;
