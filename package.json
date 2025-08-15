@@ -9,9 +9,6 @@
     "dev": "turbo dev",
     "build": "turbo build"
   },
-  "devDependencies": {
-    "turbo": "^1.13.4"
-  },
   "engines": {
     "node": "20.x"
   },
