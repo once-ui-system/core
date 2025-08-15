@@ -185,7 +185,7 @@ const Carousel: React.FC<CarouselProps> = ({
 
   return (
     <Column fillWidth fillHeight={fill} gap="12" {...rest} aspectRatio={undefined} style={{isolation: "isolate"}}>
-      {items.length > 1 && play.controls && play.auto !== undefined && (
+      {items.length > 1 && play.controls && play.auto && (
         <Flex
           position="absolute"
           top="16"
@@ -252,7 +252,7 @@ const Carousel: React.FC<CarouselProps> = ({
           />
         ) : (
           <Flex
-            fill={fill}
+            fill
             overflow="hidden"
             radius={rest.radius || "l"}
             border={rest.border || "neutral-alpha-weak"}

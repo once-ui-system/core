@@ -1,9 +1,9 @@
 "use client";
 
 import React, { CSSProperties, useState, useRef, useEffect, ReactNode } from "react";
-import Image from "next/image";
-
 import { Column, Flex, Row, Skeleton } from ".";
+import Image from "next/image";
+import classNames from "classnames";
 
 export interface MediaProps extends React.ComponentProps<typeof Flex> {
   aspectRatio?: string;
@@ -44,9 +44,15 @@ const Media: React.FC<MediaProps> = ({
   const [isEnlarged, setIsEnlarged] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
 
-  const handleClick = () => {
-    if (enlarge) {
-      setIsEnlarged(!isEnlarged);
+  const handleImageClick = () => {
+    if (enlarge && !isEnlarged) {
+      setIsEnlarged(true);
+    }
+  };
+
+  const handleOverlayClick = () => {
+    if (isEnlarged) {
+      setIsEnlarged(false);
     }
   };
 
@@ -124,6 +130,27 @@ const Media: React.FC<MediaProps> = ({
 
   return (
     <>
+      {isEnlarged && enlarge && typeof document !== 'undefined' && (
+        <Flex
+          center
+          position="fixed"
+          background="overlay"
+          pointerEvents="auto"
+          onClick={handleOverlayClick}
+          top="0"
+          left="0"
+          zIndex={9}
+          opacity={100}
+          cursor="interactive"
+          transition="macro-medium"
+          className="cursor-interactive"
+          style={{
+            backdropFilter: "blur(0.5rem)",
+            width: "100vw",
+            height: "100vh",
+          }}
+        />
+      )}
       <>
         <Column
           as={caption ? "figure" : undefined}
@@ -142,8 +169,8 @@ const Media: React.FC<MediaProps> = ({
             ...calculateTransform(),
             ...style,
           }}
-          onClick={handleClick}
-          className={className}
+          onClick={handleImageClick}
+          className={classNames(enlarge && !isEnlarged ? "cursor-interactive" : undefined, className)}
           {...rest}
         >
           {loading && <Skeleton shape="block" radius={rest.radius} />}
@@ -208,62 +235,6 @@ const Media: React.FC<MediaProps> = ({
           </Row>
         )}
       </>
-
-      {isEnlarged && enlarge && (
-        <Flex
-          horizontal="center"
-          vertical="center"
-          position="fixed"
-          background="overlay"
-          pointerEvents="none"
-          onClick={handleClick}
-          top="0"
-          left="0"
-          zIndex={isEnlarged ? 9 : undefined}
-          opacity={isEnlarged ? 100 : 0}
-          cursor="interactive"
-          transition="macro-medium"
-          style={{
-            backdropFilter: isEnlarged ? "var(--backdrop-filter)" : "0px",
-            width: "100vw",
-            height: "100vh",
-          }}
-        >
-          <Flex
-            style={{
-              height: "100vh",
-              transform: "translate(-50%, -50%)",
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            {isVideo ? (
-              <video
-                src={src}
-                autoPlay
-                loop
-                muted
-                playsInline
-                style={{
-                  width: "90vw",
-                  height: "auto",
-                  objectFit: "contain",
-                }}
-              />
-            ) : (
-              <Image
-                src={src}
-                alt={alt}
-                fill
-                sizes="90vw"
-                unoptimized={unoptimized}
-                style={{
-                  objectFit: "contain",
-                }}
-              />
-            )}
-          </Flex>
-        </Flex>
-      )}
     </>
   );
 };
