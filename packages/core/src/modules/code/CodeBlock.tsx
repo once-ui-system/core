@@ -13,7 +13,7 @@ const loadCssFiles = async () => {
 };
 
 import styles from "./CodeBlock.module.scss";
-import { Flex, IconButton, Scroller, Row, StyleOverlay, ToggleButton, Column } from "../../components";
+import { Flex, IconButton, Scroller, Row, StyleOverlay, ToggleButton, Column, Text } from "../../components";
 
 
 
@@ -215,7 +215,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   }, [isAnimating, dependenciesLoaded]);
 
   // Create a function to render the CodeBlock content
-  const renderCodeBlock = (inPortal = false) => (
+  const renderCodeBlock = (inPortal = false, resetMargin = false) => (
     <Column
       ref={inPortal ? undefined : codeBlockRef}
       radius="l"
@@ -234,6 +234,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           transition: "transform 0.3s ease, opacity 0.3s ease",
           transform: isAnimating ? "scale(1)" : "scale(0.95)",
           opacity: isAnimating ? 1 : 0,
+          ...(resetMargin ? {
+            margin: 0,
+          } : {}),
         } : {}),
         ...style 
       }}
@@ -256,13 +259,14 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     weight="default"
                     prefixIcon={instance.prefixIcon}
                     selected={selectedInstance === index}
-                    label={instance.label}
                     onClick={() => {
                       setSelectedInstance(index);
                       onInstanceChange?.(index);
                       handleContent(instance.label);
                     }}
-                  />
+                  >
+                    <Text onBackground={selectedInstance === index ? "neutral-strong" : "neutral-weak"}>{instance.label}</Text>
+                  </ToggleButton>
                 ))}
               </Row>
             </Scroller>
@@ -318,16 +322,17 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         </Row>
       )}
       {preview && (
-        <Row key={refreshKey} paddingX="4" paddingBottom="4" fill>
+        <Row key={refreshKey} paddingX="4" paddingBottom="4" paddingTop={compact ? "4" : "0"} fillWidth fitHeight>
           <Row
-            fill
+            fillWidth
+            fitHeight
             background="overlay"
             padding={previewPadding}
             tabIndex={-1}
             horizontal="center"
             radius="l"
+            overflow="hidden"
             border="neutral-alpha-weak"
-            overflowY="auto"
           >
             {Array.isArray(preview)
               ? preview.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
@@ -337,7 +342,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       )}
       {codes.length > 0 && code && (
         <Row
-          border={!compact && !preview ? "neutral-medium" : undefined}
+          border={!compact && !preview ? "neutral-alpha-weak" : undefined}
           style={{
             left: "-1px",
             bottom: "-1px",
@@ -372,7 +377,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             </pre>
           </Row>
           {compact && copyButton && (
-            <Row position="absolute" right="4" top="4" className={styles.compactCopy} zIndex={1}>
+            <Row position="absolute" right="4" top="4" marginRight="2" className={styles.compactCopy} zIndex={1}>
               <IconButton
                 tooltip="Copy"
                 tooltipPosition="left"
@@ -404,7 +409,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           style={{backdropFilter: "blur(0.5rem)"}}
           transition="macro-medium"
         >
-          {renderCodeBlock(true)}
+          {renderCodeBlock(true, true)}
         </Flex>,
         document.body
       )}
