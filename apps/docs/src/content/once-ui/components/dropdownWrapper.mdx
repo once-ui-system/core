@@ -91,7 +91,7 @@ Control the placement of the dropdown relative to its trigger element.
 `const [isOpen, setIsOpen] = useState(false);
 
 return (
-  <Flex horizontal="center">
+  <Row horizontal="center">
     <DropdownWrapper
       isOpen={isOpen}
       onOpenChange={setIsOpen}
@@ -102,7 +102,7 @@ return (
         </Button>
       }
       dropdown={
-        <Flex fillWidth padding="4" direction="column" gap="2">
+        <Column fillWidth padding="4" gap="2">
           <Option
             label="Top option"
             value="top"
@@ -118,10 +118,10 @@ return (
             value="bottom"
             onClick={() => setIsOpen(false)}
           />
-        </Flex>
+        </Column>
       }
     />
-  </Flex>
+  </Row>
 );`,
       language: "tsx",
       label: "Placement"
@@ -181,7 +181,7 @@ return (
       }
       dropdown={
         <Column fillWidth minWidth={12}>
-          <Column padding="4" fillWidth position="sticky" top="0" background="page" zIndex={1}>
+          <Column padding="4" fillWidth position="sticky" top="0" background="surface" zIndex={1}>
             <Input
               height="s"
               id="search-dropdown"

@@ -122,10 +122,10 @@ const NavigationItemComponent: React.FC<{
             paddingTop="4"
             open={shouldBeOpen}
             title={
-              <Row fillWidth textVariant="label-strong-s" onBackground="brand-strong">
+              <Row fillWidth vertical="center" textVariant="label-strong-s" onBackground="brand-strong">
                 {item.title}
                 {item.pro && (
-                  <Tag position="absolute" right="12" data-theme="dark" data-brand="brand" style={{transform: "scale(0.8)", transformOrigin: "right center"}} variant="brand" size="s">
+                  <Tag position="absolute" right="12" top="0" data-theme="dark" data-brand="brand" style={{top: "50%", transform: "translateY(-50%) scale(0.8)", transformOrigin: "right center"}} variant="brand" size="s">
                       Pro
                   </Tag>
                 )}
@@ -168,7 +168,7 @@ const NavigationItemComponent: React.FC<{
             {item.label || item.title}
         </Row>
         {item.navTag && (
-          <Tag data-theme="dark" data-brand={item.navTagVariant} style={{marginRight: "-0.5rem", transform: "scale(0.8)", transformOrigin: "right center"}} variant="brand" size="s">
+          <Tag data-theme="dark" data-brand={item.navTagVariant} style={{marginRight: "-0.25rem", transform: "scale(0.8)", transformOrigin: "right center"}} variant="brand" size="s">
               {item.navTag}
           </Tag>
         )}

@@ -96,35 +96,37 @@ Use the `series` and `data` props to define the chart data to render, and assign
 
 The `series` prop is an array of objects, where each object has a `key` property that defines the name of the series, and an optional `color` property that defines the color of the series. Match the `key` property with the property name in the `data` prop.
 
-<BarChart
-  marginTop="16"
-  title="Daily Time Spent on Activities"
-  axis="none"
-  barWidth="xl"
-  legend={{
-    position: "bottom-center",
-  }}
-  series={[
-    { key: "Reading", color: "aqua" },
-    { key: "Sports", color: "yellow" },
-    { key: "Doomscrolling", color: "orange" }
-  ]}
-  data={[
-    { label: "Minutes per day", "Reading": 16, "Sports": 36, "Doomscrolling": 250 },
-  ]}
-/>
-
 <CodeBlock
   marginTop="16"
   marginBottom="24"
+  previewPadding="none"
+  fullscreenButton={true}
   highlight="9-11,14"
-  compact
+  preview={
+    <BarChart
+      title="Daily Time Spent on Activities"
+      axis="none"
+      border="transparent"
+      barWidth="xl"
+      legend={{
+        position: "bottom-center",
+      }}
+      series={[
+        { key: "Reading", color: "aqua" },
+        { key: "Sports", color: "yellow" },
+        { key: "Doomscrolling", color: "orange" }
+      ]}
+      data={[
+        { label: "Minutes per day", "Reading": 16, "Sports": 36, "Doomscrolling": 250 },
+      ]}
+    />
+  }
   codes={[
     {
       code:
 `<BarChart
     title="Daily Time Spent on Activities"
-    axis="x"
+    axis="none"
     barWidth="xl"
     legend={{
       position: "bottom-center",
@@ -139,7 +141,7 @@ The `series` prop is an array of objects, where each object has a `key` property
     ]}
 />`,
       language: "tsx",
-      label: "Details"
+      label: "Data"
     }
   ]}
 />
@@ -153,31 +155,33 @@ The `series` prop is an array of objects, where each object has a `key` property
 
 When working with time series data, use the `date` prop to define the date format. Alternatively, you can translate the date values to `Date` objects to render the dates based on the default format.
 
-<LineChart
-  marginTop="16"
-  title="Cost of College vs. Income"
-  axis="x"
-  date={{
-    format: "yyyy"
-  }}
-  series={[
-    { key: "Median Household Income", color: "cyan" },
-    { key: "College Tuition", color: "magenta" }
-  ]}
-  data={[
-    { date: new Date("1980-01-01"), "Median Household Income": 22000, "College Tuition": 3000 },
-    { date: new Date("1990-01-01"), "Median Household Income": 30000, "College Tuition": 6000 },
-    { date: new Date("2000-01-01"), "Median Household Income": 42000, "College Tuition": 10000 },
-    { date: new Date("2010-01-01"), "Median Household Income": 49000, "College Tuition": 18000 },
-    { date: new Date("2020-01-01"), "Median Household Income": 53000, "College Tuition": 25000 },
-  ]}
-/>
-
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   highlight="5"
-  compact
+  fullscreenButton={true}
+  previewPadding="none"
+  preview={
+    <LineChart
+      title="Cost of College vs. Income"
+      border="transparent"
+      axis="x"
+      date={{
+        format: "yyyy"
+      }}
+      series={[
+        { key: "Median Household Income", color: "cyan" },
+        { key: "College Tuition", color: "magenta" }
+      ]}
+      data={[
+        { date: new Date("1980-01-01"), "Median Household Income": 22000, "College Tuition": 3000 },
+        { date: new Date("1990-01-01"), "Median Household Income": 30000, "College Tuition": 6000 },
+        { date: new Date("2000-01-01"), "Median Household Income": 42000, "College Tuition": 10000 },
+        { date: new Date("2010-01-01"), "Median Household Income": 49000, "College Tuition": 18000 },
+        { date: new Date("2020-01-01"), "Median Household Income": 53000, "College Tuition": 25000 },
+      ]}
+    />
+  }
   codes={[
     {
       code:
@@ -453,38 +457,40 @@ Use the `legend` prop to control the visibility, position, and direction of the 
 
 Use the `date` prop to define the date format and datepicker visibility and options.
 
-<LineBarChart
-  title="CEO vs Employee Paycheck"
-  axis="both"
-  date={{
-    format: "yyyy",
-    start: new Date("2000-01-01"),
-    end: new Date("2020-01-01"),
-    selector: true,
-    presets: {
-      display: true,
-      granularity: "week"
-    },
-    dual: true
-  }}
-  series={[
-    { key: "Screen Time (hrs)", color: "moss" },
-    { key: "Physical Activity (hrs)", color: "yellow" }
-  ]}
-  data={[
-    { date: new Date("2000-01-01"), "Screen Time (hrs)": 2.5, "Physical Activity (hrs)": 1.8 },
-    { date: new Date("2005-01-01"), "Screen Time (hrs)": 3.0, "Physical Activity (hrs)": 1.6 },
-    { date: new Date("2010-01-01"), "Screen Time (hrs)": 4.0, "Physical Activity (hrs)": 1.3 },
-    { date: new Date("2015-01-01"), "Screen Time (hrs)": 5.5, "Physical Activity (hrs)": 1.0 },
-    { date: new Date("2020-01-01"), "Screen Time (hrs)": 7.0, "Physical Activity (hrs)": 0.8 },
-  ]}
-/>
-
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   highlight="6-14"
-  compact
+  previewPadding="none"
+  fullscreenButton={true}
+  preview={
+    <LineBarChart
+      title="CEO vs Employee Paycheck"
+      axis="both"
+      date={{
+        format: "yyyy",
+        start: new Date("2000-01-01"),
+        end: new Date("2020-01-01"),
+        selector: true,
+        presets: {
+          display: true,
+          granularity: "week"
+        },
+        dual: true
+      }}
+      series={[
+        { key: "Screen Time (hrs)", color: "moss" },
+        { key: "Physical Activity (hrs)", color: "yellow" }
+      ]}
+      data={[
+        { date: new Date("2000-01-01"), "Screen Time (hrs)": 2.5, "Physical Activity (hrs)": 1.8 },
+        { date: new Date("2005-01-01"), "Screen Time (hrs)": 3.0, "Physical Activity (hrs)": 1.6 },
+        { date: new Date("2010-01-01"), "Screen Time (hrs)": 4.0, "Physical Activity (hrs)": 1.3 },
+        { date: new Date("2015-01-01"), "Screen Time (hrs)": 5.5, "Physical Activity (hrs)": 1.0 },
+        { date: new Date("2020-01-01"), "Screen Time (hrs)": 7.0, "Physical Activity (hrs)": 0.8 },
+      ]}
+    />
+  }
   codes={[
     {
       code:
@@ -532,100 +538,102 @@ Use the `date` prop to define the date format and datepicker visibility and opti
 
 Set the `variant` prop to `gradient`, `flat`, or `outline` to change the chart's appearance.
 
-<Row fillWidth marginTop="16" gap="-1" radius="l" border="neutral-medium">
-<LineChart
-  border="transparent"
-  variant="gradient"
-  axis="x"
-  legend={{
-    display: false,
-  }}
-  date={{
-    format: "yyyy"
-  }}
-  series={[
-    { key: "Area (km²)", color: "contrast" },
-    { key: "Temp Anomaly (°C)", color: "red" }
-  ]}
-  data={[
-    { date: "1825-01-01", "Area (km²)": 5.375, "Temp Anomaly (°C)": 0.1 },
-    { date: "1850-01-01", "Area (km²)": 5.3, "Temp Anomaly (°C)": 0.2 },
-    { date: "1875-01-01", "Area (km²)": 5.1, "Temp Anomaly (°C)": 0.3 },
-    { date: "1900-01-01", "Area (km²)": 4.9, "Temp Anomaly (°C)": 0.4 },
-  ]}
-/>
-
-<LineChart
-  border="transparent"
-  variant="flat"
-  axis="x"
-  legend={{
-    display: false,
-  }}
-  date={{
-    format: "yyyy"
-  }}
-  series={[
-    { key: "Area (km²)", color: "contrast" },
-    { key: "Temp Anomaly (°C)", color: "red" }
-  ]}
-  data={[
-    { date: "1900-01-01", "Area (km²)": 4.9, "Temp Anomaly (°C)": 0.4 },
-    { date: "1925-01-01", "Area (km²)": 4.6, "Temp Anomaly (°C)": 0.5 },
-    { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
-  ]}
-/>
-
-<LineChart
-  border="transparent"
-  variant="outline"
-  axis="x"
-  legend={{
-    display: false,
-  }}
-  date={{
-    format: "yyyy"
-  }}
-  series={[
-    { key: "Area (km²)", color: "contrast" },
-    { key: "Temp Anomaly (°C)", color: "red" }
-  ]}
-  data={[
-    { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
-    { date: "1975-01-01", "Area (km²)": 3.4, "Temp Anomaly (°C)": 0.9 },
-    { date: "2000-01-01", "Area (km²)": 2.3, "Temp Anomaly (°C)": 1.1 },
-    { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
-  ]}
-/>
-</Row>
-
 <CodeBlock
-  marginTop="16"
   marginBottom="24"
+  previewPadding="none"
+  fullscreenButton={true}
   highlight="2"
-  compact
+  preview={
+    <Row fillWidth gap="-1" radius="l" overflow="hidden">
+      <LineChart
+        border="transparent"
+        variant="gradient"
+        axis="x"
+        legend={{
+          display: false,
+        }}
+        date={{
+          format: "yyyy"
+        }}
+        series={[
+          { key: "Area (km²)", color: "contrast" },
+          { key: "Temp Anomaly (°C)", color: "red" }
+        ]}
+        data={[
+          { date: "1825-01-01", "Area (km²)": 5.375, "Temp Anomaly (°C)": 0.1 },
+          { date: "1850-01-01", "Area (km²)": 5.3, "Temp Anomaly (°C)": 0.2 },
+          { date: "1875-01-01", "Area (km²)": 5.1, "Temp Anomaly (°C)": 0.3 },
+          { date: "1900-01-01", "Area (km²)": 4.9, "Temp Anomaly (°C)": 0.4 },
+        ]}
+      />
+
+      <LineChart
+        border="transparent"
+        variant="flat"
+        axis="x"
+        legend={{
+          display: false,
+        }}
+        date={{
+          format: "yyyy"
+        }}
+        series={[
+          { key: "Area (km²)", color: "contrast" },
+          { key: "Temp Anomaly (°C)", color: "red" }
+        ]}
+        data={[
+          { date: "1900-01-01", "Area (km²)": 4.9, "Temp Anomaly (°C)": 0.4 },
+          { date: "1925-01-01", "Area (km²)": 4.6, "Temp Anomaly (°C)": 0.5 },
+          { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
+        ]}
+      />
+
+      <LineChart
+        border="transparent"
+        variant="outline"
+        axis="x"
+        legend={{
+          display: false,
+        }}
+        date={{
+          format: "yyyy"
+        }}
+        series={[
+          { key: "Area (km²)", color: "contrast" },
+          { key: "Temp Anomaly (°C)", color: "red" }
+        ]}
+        data={[
+          { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
+          { date: "1975-01-01", "Area (km²)": 3.4, "Temp Anomaly (°C)": 0.9 },
+          { date: "2000-01-01", "Area (km²)": 2.3, "Temp Anomaly (°C)": 1.1 },
+          { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
+        ]}
+      />
+    </Row>
+  }
   codes={[
     {
       code:
-`border="transparent"
-  variant="outline" // gradient | flat | outline
-  axis="x"
-  legend={{
-    display: false,
-  }}
-  date={{
-    format: "yyyy"
-  }}
-  series={[
-    { key: "Area (km²)", color: "contrast" },
-    { key: "Temp Anomaly (°C)", color: "red" }
-  ]}
-  data={[
-    { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
-    { date: "1975-01-01", "Area (km²)": 3.4, "Temp Anomaly (°C)": 0.9 },
-    { date: "2000-01-01", "Area (km²)": 2.3, "Temp Anomaly (°C)": 1.1 },
-    { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
-  ]}`,
+`<LineChart
+    variant="outline" // gradient | flat | outline
+    axis="x"
+    legend={{
+      display: false,
+    }}
+    date={{
+      format: "yyyy"
+    }}
+    series={[
+      { key: "Area (km²)", color: "contrast" },
+      { key: "Temp Anomaly (°C)", color: "red" }
+    ]}
+    data={[
+      { date: "1950-01-01", "Area (km²)": 4.2, "Temp Anomaly (°C)": 0.6 },
+      { date: "1975-01-01", "Area (km²)": 3.4, "Temp Anomaly (°C)": 0.9 },
+      { date: "2000-01-01", "Area (km²)": 2.3, "Temp Anomaly (°C)": 1.1 },
+      { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
+    ]}
+/>`,
       language: "tsx",
       label: "Details"
     }
@@ -781,9 +789,8 @@ You can override the default container styles with `Flex` props.
 <BarChart
   marginTop="16"
   marginBottom="24"
-  border="brand-medium"
-  background="brand-medium"
-  radius="xs"
+  border="brand-alpha-medium"
+  background="brand-weak"
   title="The TikTok Takeover"
   description="Avg. daily time spent per user on TikTok (minutes)"
   barWidth="xl"
@@ -815,9 +822,8 @@ You can override the default container styles with `Flex` props.
 `<BarChart
     marginTop="16"
     marginBottom="24"
-    border="brand-medium"
-    background="brand-medium"
-    radius="xs"
+    border="brand-alpha-medium"
+    background="brand-weak"
     title="The TikTok Takeover"
     description="Avg. daily time spent per user on TikTok (minutes)"
     barWidth="xl"

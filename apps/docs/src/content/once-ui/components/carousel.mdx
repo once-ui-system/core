@@ -150,6 +150,42 @@ You can customize the aspect ratio of the carousel to fit your design needs.
   ]}
 />
 
+## Auto Play
+
+You can enable auto play with the `play` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Carousel
+      controls={false}
+      indicator={false}
+      play={{auto: true, interval: 5000, controls: true, progress: true}}
+      items={[
+        { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+        { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Carousel
+    controls={false}
+    indicator={false}
+    play={{auto: true, interval: 5000, controls: true, progress: true}}
+    items={[
+      { slide: "/images/1.jpg", alt: "Image 1" },
+      { slide: "/images/2.jpg", alt: "Image 2" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Auto Play"
+    }
+  ]}
+/>
+
 ## Custom content
 
 You can place custom content inside the slides as `ReactNode`.
@@ -160,8 +196,8 @@ You can place custom content inside the slides as `ReactNode`.
   preview={
     <Carousel
       items={[
-        { slide: <Row fill center radius="s" background="brand-strong"><Text>Slide 1</Text></Row> },
-        { slide: <Row fill center radius="s" background="accent-strong"><Text>Slide 2</Text></Row> },
+        { slide: <Row height={20} fill center radius="s" background="brand-strong"><Text>Slide 1</Text></Row> },
+        { slide: <Row height={20} fill center radius="s" background="accent-strong"><Text>Slide 2</Text></Row> },
       ]}
     />
   }
@@ -170,8 +206,8 @@ You can place custom content inside the slides as `ReactNode`.
       code:
 `<Carousel
     items={[
-      { slide: <Row fill center radius="s" background="brand-strong"><Text>Slide 1</Text></Row> },
-      { slide: <Row fill center radius="s" background="accent-strong"><Text>Slide 2</Text></Row> },
+      { slide: <Row height={20} fill center radius="s" background="brand-strong"><Text>Slide 1</Text></Row> },
+      { slide: <Row height={20} fill center radius="s" background="accent-strong"><Text>Slide 2</Text></Row> },
     ]}
 />`,
       language: "tsx",
@@ -190,6 +226,7 @@ You can place custom content inside the slides as `ReactNode`.
     ["controls", "boolean", "true"],
     ["sizes", "string"],
     ["revealedByDefault", "boolean", "false"],
+    ["auto", "boolean", "false"],
     ["...flex"]
   ]}
 />

@@ -21,7 +21,6 @@ navTagVariant: "indigo"
       alt="Preview"
       radius="xl"
       border="neutral-alpha-medium"
-      aspectRatio="16/9"
     />
   }
   codes={[
@@ -32,7 +31,6 @@ navTagVariant: "indigo"
     alt="Preview"
     radius="xl"
     border="neutral-alpha-medium"
-    aspectRatio="16/9"
 />`,
       language: "tsx",
       label: "Media"
@@ -42,7 +40,7 @@ navTagVariant: "indigo"
 
 ## Loading
 
-Show a skeleton block while content is loading.
+Show a skeleton block while content is loading. Only works when `aspectRatio` is specified.
 
 <CodeBlock
   marginTop="16"
@@ -50,8 +48,9 @@ Show a skeleton block while content is loading.
   preview={
     <Media
       loading
-      src="/images/docs/once-ui/vibe-coding-light.jpg"
+      radius="l"
       aspectRatio="16/9"
+      src="/images/docs/once-ui/vibe-coding-light.jpg"
     />
   }
   codes={[
@@ -59,8 +58,9 @@ Show a skeleton block while content is loading.
       code:
 `<Media
     loading
-    src="/image.jpg"
+    radius="l"
     aspectRatio="16/9"
+    src="/image.jpg"
 />`,
       language: "tsx",
       label: "Skeleton"
@@ -76,14 +76,15 @@ The `caption` prop renders a `ReactNode` below the image, making it easy to prov
   marginTop="16"
   marginBottom="24"
   preview={
-    <Media
-      caption="Vibe code with Quasar! The time is now."
-      src="/images/docs/once-ui/vibe-coding-light.jpg"
-      alt="Preview"
-      radius="xl"
-      border="neutral-alpha-medium"
-      aspectRatio="16/9"
-    />
+    <Column fillWidth>
+      <Media
+        caption="Vibe code with Quasar! The time is now."
+        src="/images/docs/once-ui/vibe-coding-light.jpg"
+        alt="Preview"
+        radius="xl"
+        border="neutral-alpha-medium"
+      />
+    </Column>
   }
   codes={[
     {
@@ -94,7 +95,6 @@ The `caption` prop renders a `ReactNode` below the image, making it easy to prov
     alt="Preview"
     radius="xl"
     border="neutral-alpha-medium"
-    aspectRatio="16/9"
 />`,
       language: "tsx",
       label: "Caption"
@@ -108,11 +108,11 @@ Enable full-screen zooming for images and videos.
 
 <Media
   enlarge
-  radius="xl"
+  radius="l"
   marginTop="16"
   src="/images/docs/once-ui/vibe-coding-light.jpg"
-  aspectRatio="16/9"
 />
+
 <CodeBlock
   marginTop="16"
   marginBottom="24"
@@ -121,11 +121,75 @@ Enable full-screen zooming for images and videos.
       code:
 `<Media
     enlarge
-    src="/image.jpg"
-    aspectRatio="16/9"
+    src="/images/docs/once-ui/vibe-coding-dark.jpg"
 />`,
       language: "tsx",
       label: "Enlarge"
+    }
+  ]}
+/>
+
+## Aspect Ratio
+
+The `Media` component will automatically detect the aspect ratio of the image and set it to `auto` if not specified. You can provide an explicit aspect ratio using the `aspectRatio` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <Media
+      maxWidth={24}
+      radius="l"
+      aspectRatio="3/4"
+      src="/images/docs/once-ui/vibe-coding-light.jpg"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Media
+    maxWidth={24}
+    aspectRatio="3/4"
+    radius="l"
+    src="/image.jpg"
+/>`,
+      language: "tsx",
+      label: "Aspect Ratio"
+    }
+  ]}
+/>
+
+## Fill
+
+Use the `fill` prop to make the media fill its container.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <Row maxWidth={18} height={8}>
+      <Media
+        fill
+        radius="l"
+        sizes="240px"
+        src="/images/docs/once-ui/vibe-coding-light.jpg"
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row maxWidth={18} height={8}>
+    <Media
+      fill
+      radius="l"
+      src="/image.jpg"
+    />
+</Row>`,
+      language: "tsx",
+      label: "Fill"
     }
   ]}
 />
@@ -142,6 +206,7 @@ The component auto-detects and renders YouTube links, just pass a YouTube URL to
     <Media
       src="https://www.youtube.com/watch?v=TQT_FSdxbC8"
       aspectRatio="16/9"
+      radius="xl"
     />
   }
   codes={[
@@ -150,6 +215,7 @@ The component auto-detects and renders YouTube links, just pass a YouTube URL to
 `<Media
     src="https://www.youtube.com/watch?v=TQT_FSdxbC8"
     aspectRatio="16/9"
+    radius="xl"
 />`,
       language: "tsx",
       label: "YouTube"

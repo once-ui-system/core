@@ -108,7 +108,7 @@ function createParagraph({ children }: TextProps) {
 }
 
 function createInlineCode({ children }: { children: ReactNode }) {
-  return <onceUIComponents.InlineCode>{children}</onceUIComponents.InlineCode>;
+  return <onceUIComponents.InlineCode onBackground="neutral-strong">{children}</onceUIComponents.InlineCode>;
 }
 
 function createBlockQuote({ children }: { children: ReactNode }) {

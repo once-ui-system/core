@@ -186,7 +186,7 @@ export function SearchableDropdown() {
       }
       dropdown={
         <Column fillWidth minWidth={12}>
-          <Column padding="4" fillWidth position="sticky" top="0" background="page" zIndex={1}>
+          <Column padding="4" fillWidth position="sticky" top="0" background="surface" zIndex={1}>
             <Input
               height="s"
               id="search-dropdown"

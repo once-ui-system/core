@@ -76,41 +76,6 @@ The `speed` prop controls the speed of the scrolling.
   ]}
 />
 
-## Pause
-
-The `pause` prop controls whether the scrolling should pause when the user hovers over the container.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  previewPadding="0"
-  preview={
-    <AutoScroll paddingY="40" pause>
-      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-      <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-      <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-    </AutoScroll>
-  }
-  codes={[
-    {
-      code:
-`<AutoScroll pause>
-    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-</AutoScroll>`,
-      language: "tsx",
-      label: "Pause"
-    }
-  ]}
-/>
-
 ## Fade
 
 Combine with the `<Fade>` component to create a fade-in and fade-out effect.
@@ -121,32 +86,32 @@ Combine with the `<Fade>` component to create a fade-in and fade-out effect.
   previewPadding="0"
   preview={
     <>
-      <Fade zIndex="1" to="right" fillHeight width="64" position="absolute" left="0" top="0"/>
+      <Fade zIndex="1" to="right" fillHeight width="64" position="absolute" left="0" top="0" pointerEvents="none"/>
       <AutoScroll paddingY="40">
-        <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-        <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-        <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-        <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-        <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-        <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+        <Logo dark wordmark="/trademark/type-dark.svg" size="s" href="#"/>
+        <Logo light wordmark="/trademark/type-light.svg" size="s" href="#"/>
+        <Logo dark wordmark="/trademark/type-dark.svg" size="s" href="#"/>
+        <Logo light wordmark="/trademark/type-light.svg" size="s" href="#"/>
+        <Logo dark wordmark="/trademark/type-dark.svg" size="s" href="#"/>
+        <Logo light wordmark="/trademark/type-light.svg" size="s" href="#"/>
       </AutoScroll>
-      <Fade zIndex="1" to="left" fillHeight width="64" position="absolute" right="0" top="0"/>
+      <Fade zIndex="1" to="left" fillHeight width="64" position="absolute" right="0" top="0" pointerEvents="none"/>
     </>
   }
   codes={[
     {
       code:
 `<>
-  <Fade zIndex="1" to="right" fillHeight width="64" position="absolute" left="0" top="0"/>
-  <AutoScroll paddingY="40">
-    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-    <Logo className="dark-flex" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-    <Logo className="light-flex" wordmark="/trademark/type-light.svg" size="s" href="/"/>
-  </AutoScroll>
-  <Fade zIndex="1" to="left" fillHeight width="64" position="absolute" right="0" top="0"/>
+    <Fade zIndex="1" to="right" fillHeight width="64" position="absolute" left="0" top="0"/>
+    <AutoScroll paddingY="40">
+      <Logo dark wordmark="/trademark/type-dark.svg" size="s" href="#"/>
+      <Logo light wordmark="/trademark/type-light.svg" size="s" href="#"/>
+      <Logo dark wordmark="/trademark/type-dark.svg" size="s" href="#"/>
+      <Logo light wordmark="/trademark/type-light.svg" size="s" href="#"/>
+      <Logo dark wordmark="/trademark/type-dark.svg" size="s" href="#"/>
+      <Logo light wordmark="/trademark/type-light.svg" size="s" href="#"/>
+    </AutoScroll>
+    <Fade zIndex="1" to="left" fillHeight width="64" position="absolute" right="0" top="0"/>
 </>`,
       language: "tsx",
       label: "Fade"
@@ -158,8 +123,9 @@ Combine with the `<Fade>` component to create a fade-in and fade-out effect.
 
 <PropsTable
   content={[
-    ["speed", "slow | medium | fast", "medium"],
-    ["pause", "boolean", "false"],
+    ["speed", ["slow", "medium", "fast"], "medium"],
+    ["hover", ["slow", "pause", "none"], "slow"],
+    ["reverse", "boolean", "false"],
     ["children"],
     ["className"],
     ["style"],
