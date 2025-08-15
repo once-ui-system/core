@@ -1,1 +1,1 @@
-{ "version": 2, "framework": "other", "installCommand": "npx -y pnpm@10.14.0 -w install", "buildCommand": "npx -y pnpm@10.14.0 build" }
+{ "version": 2, "installCommand": "npx -y pnpm@10.14.0 -w install", "buildCommand": "npx -y pnpm@10.14.0 build" }
