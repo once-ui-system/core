@@ -48,6 +48,15 @@ const nextConfig = {
       moduleIds: 'deterministic',
     };
     
+    // Ensure symlinked workspace packages resolve correctly in dev
+    // and allow importing the local package directly.
+    if (!config.resolve) config.resolve = {};
+    config.resolve.symlinks = false;
+    config.resolve.alias = {
+      ...(config.resolve.alias || {}),
+      '@once-ui-system/core': new URL('../../packages/core', import.meta.url).pathname,
+    };
+
     // Disable persistent caching in production to reduce size
     if (!dev) {
       config.cache = false;
