@@ -15,7 +15,7 @@ const nextConfig = {
     silenceDeprecations: ["legacy-js-api"],
   },
   pageExtensions: ["ts", "tsx", "md", "mdx"],
-  transpilePackages: ["next-mdx-remote"],
+  transpilePackages: ["next-mdx-remote", "@once-ui-system/core"],
   output: 'standalone',
   experimental: {
     serverMinification: true,
