@@ -88,17 +88,19 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               }}
             />
           </head>
-          <ThemeProvider>
-            <DataThemeProvider>
-              <ToastProvider>
-                <IconProvider>
-                  <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}>
-                    {children}
-                  </Column>
-                </IconProvider>
-              </ToastProvider>
-            </DataThemeProvider>
-          </ThemeProvider>
+          <LayoutProvider>
+            <ThemeProvider>
+              <DataThemeProvider>
+                <ToastProvider>
+                  <IconProvider>
+                    <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}>
+                      {children}
+                    </Column>
+                  </IconProvider>
+                </ToastProvider>
+              </DataThemeProvider>
+            </ThemeProvider>
+          </LayoutProvider>
         </Column>
       </>
     );
