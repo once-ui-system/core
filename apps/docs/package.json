@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "prebuild": "pnpm -C ../../packages/core build",
+    "prebuild": "pnpm --filter @once-ui-system/core build",
+    "postinstall": "pnpm --filter @once-ui-system/core build",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

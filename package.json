@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "dev": "turbo dev",
-    "build": "turbo build"
+    "build": "turbo build --filter=docs..."
   },
   "engines": {
     "node": "20.x"
