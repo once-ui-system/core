@@ -5,41 +5,6 @@ const routes = {
   '/roadmap':    true,
 }
 
-// Import and set font for each variant
-import { Geist } from "next/font/google";
-import { Geist_Mono } from "next/font/google";
-
-const heading = Geist({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const body = Geist({
-  variable: "--font-body",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const label = Geist({
-  variable: "--font-label",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const code = Geist_Mono({
-  variable: "--font-code",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const fonts = {
-  heading: heading,
-  body: body,
-  label: label,
-  code: code,
-};
-
 const style = {
   theme: "system", // dark | light
   neutral: "gray", // sand | gray | slate
@@ -150,7 +115,7 @@ const schema = {
   logo: "",
   type: "Organization",
   name: "Once UI",
-  description: "Once UI and Magic templates documentation.",
+  description: "Once UI design system and Next.js component library and Magic templates documentation.",
   email: "support@once-ui.com",
   locale: "en_US"
 };
@@ -176,4 +141,4 @@ const meta = {
   }
 };
 
-export { dataStyle, effects, style, layout, baseURL, social, schema, meta, routes, fonts };
+export { dataStyle, effects, style, layout, baseURL, social, schema, meta, routes };

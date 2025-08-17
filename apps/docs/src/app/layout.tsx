@@ -9,10 +9,44 @@ import { baseURL } from "@/resources";
 import { Analytics } from "@vercel/analytics/react"
 
 import { Background, Column, Flex, Meta } from "@once-ui-system/core";
-import { dataStyle, effects, fonts, layout, schema, style } from "../resources/once-ui.config";
+import { dataStyle, effects, layout, schema, style } from "../resources/once-ui.config";
 import { meta } from "@/resources";
 import { RouteGuard } from "@/product/RouteGuard";
 import { Providers } from '@/product/Providers';
+
+import { Geist } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
+
+const heading = Geist({
+  variable: "--font-heading",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const body = Geist({
+  variable: "--font-body",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const label = Geist({
+  variable: "--font-label",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const code = Geist_Mono({
+  variable: "--font-code",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+const fonts = {
+  heading: heading,
+  body: body,
+  label: label,
+  code: code,
+};
 
 export async function generateMetadata() {
   const baseMetadata = Meta.generate({
@@ -124,72 +158,72 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           />
         </head>
         <Providers>
-        <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}>
-        <Background
-          position="absolute"
-          top="0"
-          left="0"
-          mask={{
-            cursor: effects.mask.cursor,
-            x: effects.mask.x,
-            y: effects.mask.y,
-              radius: effects.mask.radius,
-            }}
-            gradient={{
-              display: effects.gradient.display,
-              x: effects.gradient.x,
-              y: effects.gradient.y,
-              width: effects.gradient.width,
-              height: effects.gradient.height,
-              tilt: effects.gradient.tilt,
-              colorStart: effects.gradient.colorStart,
-              colorEnd: effects.gradient.colorEnd,
-              opacity: effects.gradient.opacity as
-                | 0
-                | 10
-                | 20
-                | 30
-                | 40
-                | 50
-                | 60
-                | 70
-                | 80
-                | 90
-                | 100,
-            }}
-            dots={{
-              display: effects.dots.display,
-              color: effects.dots.color,
-              size: effects.dots.size as any,
-              opacity: effects.dots.opacity as any,
-            }}
-            grid={{
-              display: effects.grid.display,
-              color: effects.grid.color,
-              width: effects.grid.width as any,
-              height: effects.grid.height as any,
-              opacity: effects.grid.opacity as any,
-            }}
-            lines={{
-              display: effects.lines.display,
-              opacity: effects.lines.opacity as any,
-            }}
-          />
-          <Header />
-          <Flex
-            fillWidth
-            padding="l"
-            horizontal="center"
-            flex={1}
-          >
-            <Flex horizontal="center" maxWidth={layout.body.width} minHeight="0">
-              <RouteGuard>
-                {children}
-              </RouteGuard>
+          <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}>
+          <Background
+            position="absolute"
+            top="0"
+            left="0"
+            mask={{
+              cursor: effects.mask.cursor,
+              x: effects.mask.x,
+              y: effects.mask.y,
+                radius: effects.mask.radius,
+              }}
+              gradient={{
+                display: effects.gradient.display,
+                x: effects.gradient.x,
+                y: effects.gradient.y,
+                width: effects.gradient.width,
+                height: effects.gradient.height,
+                tilt: effects.gradient.tilt,
+                colorStart: effects.gradient.colorStart,
+                colorEnd: effects.gradient.colorEnd,
+                opacity: effects.gradient.opacity as
+                  | 0
+                  | 10
+                  | 20
+                  | 30
+                  | 40
+                  | 50
+                  | 60
+                  | 70
+                  | 80
+                  | 90
+                  | 100,
+              }}
+              dots={{
+                display: effects.dots.display,
+                color: effects.dots.color,
+                size: effects.dots.size as any,
+                opacity: effects.dots.opacity as any,
+              }}
+              grid={{
+                display: effects.grid.display,
+                color: effects.grid.color,
+                width: effects.grid.width as any,
+                height: effects.grid.height as any,
+                opacity: effects.grid.opacity as any,
+              }}
+              lines={{
+                display: effects.lines.display,
+                opacity: effects.lines.opacity as any,
+              }}
+            />
+            <Header />
+            <Flex
+              fillWidth
+              padding="l"
+              horizontal="center"
+              flex={1}
+            >
+              <Flex horizontal="center" maxWidth={layout.body.width} minHeight="0">
+                <RouteGuard>
+                  {children}
+                </RouteGuard>
+              </Flex>
             </Flex>
-          </Flex>
-          <Footer />
-        </Column>
+            <Footer />
+          </Column>
         </Providers>
         <Analytics />
       </Flex>
