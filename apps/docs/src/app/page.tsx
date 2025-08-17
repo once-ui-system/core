@@ -90,9 +90,10 @@ export default function Home() {
               effect={false}
               border="neutral-alpha-medium"
               shadow={undefined}
-              href="/once-ui/quick-start"
+              href="/changelog"
               vertical="center"
               marginBottom="12"
+              radius="l"
             >
               <Tag marginRight="12" variant="brand">NEW</Tag>
               <Text
