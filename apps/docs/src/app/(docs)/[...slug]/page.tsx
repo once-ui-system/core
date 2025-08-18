@@ -147,7 +147,7 @@ export default async function Docs({
             <>
               <Line width="40"/>
               <Row fillWidth vertical="center" gap="8" onBackground="neutral-weak" textVariant="label-default-s">
-                Edit this page on <SmartLink prefixIcon="github" href={"https://github.com/once-ui-system/docs/tree/main/src/content/" + doc.metadata.docs}>GitHub</SmartLink>
+                Edit this page on <SmartLink prefixIcon="github" href={"https://github.com/once-ui-system/core/tree/main/apps/docs/src/content/" + doc.metadata.docs}>GitHub</SmartLink>
               </Row>
             </>
           )}
