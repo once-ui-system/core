@@ -3,16 +3,9 @@ import '@once-ui-system/core/css/tokens.css';
 
 import classNames from "classnames";
 
-import { Footer, Header } from "@/product";
-import { baseURL } from "@/resources";
-
-import { Analytics } from "@vercel/analytics/react"
-
-import { Background, Column, Flex, Meta } from "@once-ui-system/core";
-import { dataStyle, effects, layout, schema, style } from "../resources/once-ui.config";
-import { meta } from "@/resources";
-import { RouteGuard } from "@/product/RouteGuard";
-import { Providers } from '@/product/Providers';
+import { Background, Column, Flex } from "@once-ui-system/core";
+import { dataStyle, effects, style } from "../resources/once-ui.config";
+import { Providers } from "../components/Providers";
 
 import { Geist } from "next/font/google";
 import { Geist_Mono } from "next/font/google";
@@ -47,37 +40,6 @@ const fonts = {
   label: label,
   code: code,
 };
-
-export async function generateMetadata() {
-  const baseMetadata = Meta.generate({
-    title: meta.home.title,
-    description: meta.home.description,
-    baseURL: baseURL,
-    path: meta.home.path,
-    image: meta.home.image
-  });
-
-  return {
-    ...baseMetadata,
-    metadataBase: new URL(`${baseURL}`),
-    openGraph: {
-      ...baseMetadata.openGraph,
-      siteName: meta.home.title,
-      locale: schema.locale,
-    },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-      },
-    },
-  };
-}
 
 export default function RootLayout({
   children,
@@ -209,23 +171,18 @@ export default function RootLayout({
                 opacity: effects.lines.opacity as any,
               }}
             />
-            <Header />
             <Flex
               fillWidth
               padding="l"
               horizontal="center"
               flex={1}
             >
-              <Flex horizontal="center" maxWidth={layout.body.width} minHeight="0">
-                <RouteGuard>
-                  {children}
-                </RouteGuard>
+              <Flex fillWidth horizontal="center">
+                {children}
               </Flex>
             </Flex>
-            <Footer />
           </Column>
         </Providers>
-        <Analytics />
       </Flex>
     </>
   );

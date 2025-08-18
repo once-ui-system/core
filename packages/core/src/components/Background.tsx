@@ -107,10 +107,10 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
               ["--gradient-tilt" as string]: gradient.tilt != null ? `${gradient.tilt}deg` : "0deg",
               ["--gradient-color-start" as string]: gradient.colorStart
                 ? `var(--${gradient.colorStart})`
-                : "var(--brand-solid-strong)",
+                : "var(--brand-background-strong)",
               ["--gradient-color-end" as string]: gradient.colorEnd
                 ? `var(--${gradient.colorEnd})`
-                : "var(--brand-solid-weak)",
+                : "var(--static-transparent)",
             }}
           />
         )}

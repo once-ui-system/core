@@ -1,44 +1,9 @@
 // IMPORTANT: Replace with your own domain address - it's used for SEO in meta tags and schema
-const baseURL = "https://demo.once-ui.com";
-
-// Import and set font for each variant
-import { Geist } from "next/font/google";
-import { Geist_Mono } from "next/font/google";
-
-const heading = Geist({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const body = Geist({
-  variable: "--font-body",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const label = Geist({
-  variable: "--font-label",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const code = Geist_Mono({
-  variable: "--font-code",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const font = {
-  heading: heading,
-  body: body,
-  label: label,
-  code: code,
-};
+const baseURL = "https://dev.once-ui.com";
 
 // default customization applied to the HTML in the main layout.tsx
 const style = {
-  theme: "dark", // dark | light - not needed when using ThemeProvider
+  theme: "light", // dark | light - not needed when using ThemeProvider
   neutral: "gray", // sand | gray | slate
   brand: "blue", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
   accent: "indigo", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
@@ -48,6 +13,20 @@ const style = {
   surface: "filled", // filled | translucent
   transition: "all", // all | micro | macro
   scaling: "100", // 90 | 95 | 100 | 105 | 110
+};
+
+const dataStyle = {
+  variant: "gradient", // flat | gradient | outline
+  mode: "categorical", // categorical | divergent | sequential
+  height: 24, // default chart height
+  axis: {
+    stroke: "var(--neutral-alpha-weak)",
+  },
+  tick: {
+    fill: "var(--neutral-on-background-weak)",
+    fontSize: 11,
+    line: false
+  },
 };
 
 const effects = {
@@ -69,7 +48,7 @@ const effects = {
     opacity: 50,
   },
   dots: {
-    display: true,
+    display: false,
     size: "2",
     color: "brand-on-background-weak",
     opacity: 40,
@@ -99,9 +78,9 @@ const meta = {
     description:
       "An open-source design system and component library for Next.js that emphasizes easy styling and accessibility in UI development.",
     image: "/og/home.jpg",
-    canonical: "https://once-ui.com",
+    canonical: "https://dev.once-ui.com",
     robots: "index,follow",
-    alternates: [{ href: "https://once-ui.com", hrefLang: "en" }],
+    alternates: [{ href: "https://dev.once-ui.com", hrefLang: "en" }],
   },
   // add more routes and reference them in page.tsx
 };
@@ -122,4 +101,4 @@ const social = {
   discord: "https://discord.com/invite/5EyAQ4eNdS",
 };
 
-export { baseURL, font, style, meta, schema, social, effects };
+export { baseURL, style, meta, schema, social, effects, dataStyle };
