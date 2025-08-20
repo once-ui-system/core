@@ -1,7 +1,6 @@
 import { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
 import {
-  ColorScheme,
-  ColorWeight,
+  Colors,
   flex,
   gridSize,
   opacity,
@@ -116,46 +115,38 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   textType?: TextType;
   textWeight?: TextWeight;
   background?:
-    | `${ColorScheme}-${ColorWeight}`
-    | `${ColorScheme}-alpha-${ColorWeight}`
+    | Colors
     | "surface"
     | "overlay"
     | "page"
     | "transparent";
-  solid?: `${ColorScheme}-${ColorWeight}`;
+  solid?: Colors;
   borderTop?:
-    | `${ColorScheme}-${ColorWeight}`
-    | `${ColorScheme}-alpha-${ColorWeight}`
+    | Colors
     | "surface"
     | "transparent";
   borderRight?:
-    | `${ColorScheme}-${ColorWeight}`
-    | `${ColorScheme}-alpha-${ColorWeight}`
+    | Colors
     | "surface"
     | "transparent";
   borderBottom?:
-    | `${ColorScheme}-${ColorWeight}`
-    | `${ColorScheme}-alpha-${ColorWeight}`
+    | Colors
     | "surface"
     | "transparent";
   borderLeft?:
-    | `${ColorScheme}-${ColorWeight}`
-    | `${ColorScheme}-alpha-${ColorWeight}`
+    | Colors
     | "surface"
     | "transparent";
   borderX?:
-    | `${ColorScheme}-${ColorWeight}`
-    | `${ColorScheme}-alpha-${ColorWeight}`
+    | Colors
     | "surface"
     | "transparent";
   borderY?:
-    | `${ColorScheme}-${ColorWeight}`
-    | `${ColorScheme}-alpha-${ColorWeight}`
+    | Colors
     | "surface"
     | "transparent";
   border?:
-    | `${ColorScheme}-${ColorWeight}`
-    | `${ColorScheme}-alpha-${ColorWeight}`
+    | Colors
     | "surface"
     | "transparent";
   borderStyle?: "solid" | "dashed";
@@ -196,8 +187,8 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export interface CommonProps extends HTMLAttributes<HTMLDivElement> {
-  onBackground?: `${ColorScheme}-${ColorWeight}`;
-  onSolid?: `${ColorScheme}-${ColorWeight}`;
+  onBackground?: Colors;
+  onSolid?: Colors;
   align?: CSSProperties["textAlign"];
   className?: string;
   children?: ReactNode;

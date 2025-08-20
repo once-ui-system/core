@@ -74,6 +74,8 @@ export type ColorCategory = "on-solid" | "on-background";
 
 export type ColorWeight = "weak" | "medium" | "strong";
 
+export type Colors = `${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`;
+
 export type RadiusSize = TShirtSizes | "full" | "none";
 
 export type RadiusNest = "4" | "8";
