@@ -22,6 +22,7 @@ import {
   Legend,
   ChartHeader,
   useDataTheme,
+  RadiusSize,
 } from "../../";
 
 import { getDistributedColor } from "./utils/colorDistribution";
@@ -43,10 +44,11 @@ export const PieChart: React.FC<PieChartProps> = ({
   emptyState,
   errorState,
   error = false,
-  origo = { x: 50, y: 50 },
   loading = false,
+  tooltip = true,
+  origo = { x: 50, y: 50 },
   legend: legendProp = {},
-  border = "neutral-medium",
+  border = "neutral-alpha-weak",
   variant: variantProp,
   ring = { inner: 0, outer: 80 },
   dataKey = "value",
@@ -131,13 +133,12 @@ export const PieChart: React.FC<PieChartProps> = ({
       <ChartHeader
         title={title}
         description={description}
-        borderBottom={border}
         dateRange={selectedDateRange}
         date={date}
         onDateRangeChange={handleDateRangeChange}
         presets={date?.presets}
       />
-      <Row fill>
+      <Row fill borderTop={(title || description || date?.selector) ? (border || "neutral-alpha-weak") : undefined} topRadius={flex.radius as RadiusSize || "l"} overflow="hidden">
         <ChartStatus
           loading={loading}
           empty={!filteredData || filteredData.length === 0}
@@ -260,31 +261,34 @@ export const PieChart: React.FC<PieChartProps> = ({
                       fill={variant === "outline" ? "transparent" : `url(#${gradientId})`}
                       strokeWidth={variant === "outline" ? 2 : 1}
                       stroke={baseColor}
+                      style={{outline: "none"}}
                     />
                   );
                 })}
               </RechartsPie>
-              <RechartsTooltip
-                content={(props) => {
-                  if (props.payload && props.payload.length > 0) {
-                    const entry = props.payload[0];
-                    const index = filteredData.findIndex((item) => item[nameKey] === entry.name);
-                    const colorKey =
-                      filteredData[index]?.color || getDistributedColor(index, filteredData.length);
-                    const color = `var(--data-${colorKey})`;
+              {tooltip && (
+                <RechartsTooltip
+                  content={(props) => {
+                    if (props.payload && props.payload.length > 0) {
+                      const entry = props.payload[0];
+                      const index = filteredData.findIndex((item) => item[nameKey] === entry.name);
+                      const colorKey =
+                        filteredData[index]?.color || getDistributedColor(index, filteredData.length);
+                      const color = `var(--data-${colorKey})`;
 
-                    props.payload[0].color = color;
-                  }
-                  return (
-                    <DataTooltip
-                      {...props}
-                      label={undefined}
-                      date={date}
-                      variant={variant as ChartVariant}
-                    />
-                  );
-                }}
-              />
+                      props.payload[0].color = color;
+                    }
+                    return (
+                      <DataTooltip
+                        {...props}
+                        label={undefined}
+                        date={date}
+                        variant={variant as ChartVariant}
+                      />
+                    );
+                  }}
+                />
+              )}
             </RechartsPieChart>
           </RechartsResponsiveContainer>
         )}

@@ -56,6 +56,8 @@ interface ChartProps extends Omit<React.ComponentProps<typeof Flex>, "title" | "
   emptyState?: React.ReactNode;
   errorState?: React.ReactNode;
   error?: boolean;
+  tooltip?: boolean;
+  grid?: "x" | "y" | "both" | "none";
   axis?: "x" | "y" | "both" | "none";
   variant?: ChartVariant;
   loading?: boolean;

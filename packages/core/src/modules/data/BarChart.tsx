@@ -26,6 +26,7 @@ import {
   barWidth,
 } from ".";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
+import { RadiusSize } from "@/types";
 
 interface BarChartProps extends ChartProps {
   barWidth?: barWidth;
@@ -43,9 +44,11 @@ const BarChart: React.FC<BarChartProps> = ({
   errorState,
   error = false,
   loading = false,
+  tooltip = true,
   legend: legendProp = {},
   axis = "both",
-  border = "neutral-medium",
+  grid = "y",
+  border = "neutral-alpha-weak",
   variant: variantProp,
   barWidth = "l",
   hover = false,
@@ -146,13 +149,12 @@ const BarChart: React.FC<BarChartProps> = ({
       <ChartHeader
         title={title}
         description={description}
-        borderBottom={border}
         dateRange={selectedDateRange}
         date={date}
         onDateRangeChange={handleDateRangeChange}
         presets={date?.presets}
       />
-      <Row fill>
+      <Row fill borderTop={(title || description || date?.selector) ? (border || "neutral-alpha-weak") : undefined} topRadius={flex.radius as RadiusSize || "l"} overflow="hidden">
         <ChartStatus
           loading={loading}
           empty={!filteredData || filteredData.length === 0}
@@ -167,11 +169,7 @@ const BarChart: React.FC<BarChartProps> = ({
               margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
               barGap={4}
             >
-              <RechartsCartesianGrid
-                horizontal
-                vertical={false}
-                stroke="var(--neutral-alpha-weak)"
-              />
+              <RechartsCartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
               {legend.display && (
                 <RechartsLegend
                   content={(props) => {
@@ -258,12 +256,14 @@ const BarChart: React.FC<BarChartProps> = ({
                   }}
                 />
               )}
-              <RechartsTooltip
-                cursor={{ fill: hover ? "var(--neutral-alpha-weak)" : "var(--static-transparent)" }}
-                content={(props) => (
-                  <DataTooltip {...props} date={date} variant={variant as ChartVariant} />
-                )}
-              />
+              {tooltip && (
+                <RechartsTooltip
+                  cursor={{ fill: hover ? "var(--neutral-alpha-weak)" : "var(--static-transparent)" }}
+                  content={(props) => (
+                    <DataTooltip {...props} date={date} variant={variant as ChartVariant} />
+                  )}
+                />
+              )}
               <defs>
                 {barColors.map((color, index) => (
                   <LinearGradient

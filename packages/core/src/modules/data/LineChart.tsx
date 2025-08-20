@@ -25,7 +25,7 @@ import {
   ChartVariant,
   curveType,
 } from ".";
-import { schemes } from "../../types";
+import { RadiusSize, schemes } from "../../types";
 import { getDistributedColor } from "./utils/colorDistribution";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 
@@ -44,9 +44,11 @@ const LineChart: React.FC<LineChartProps> = ({
   errorState,
   error = false,
   loading = false,
+  tooltip = true,
   legend: legendProp = {},
   axis = "both",
-  border = "neutral-medium",
+  grid = "both",
+  border = "neutral-alpha-weak",
   variant: variantProp,
   curve = "natural",
   "data-viz-style": dataVizStyle,
@@ -152,13 +154,12 @@ const LineChart: React.FC<LineChartProps> = ({
       <ChartHeader
         title={title}
         description={description}
-        borderBottom={border}
         dateRange={selectedDateRange}
         date={date}
         onDateRangeChange={handleDateRangeChange}
         presets={date?.presets}
       />
-      <Row fill>
+      <Row fill borderTop={(title || description || date?.selector) ? (border || "neutral-alpha-weak") : undefined} topRadius={flex.radius as RadiusSize || "l"} overflow="hidden">
         <ChartStatus
           loading={loading}
           empty={!filteredData || filteredData.length === 0}
@@ -186,7 +187,7 @@ const LineChart: React.FC<LineChartProps> = ({
                   );
                 })}
               </defs>
-              <RechartsCartesianGrid vertical horizontal stroke="var(--neutral-alpha-weak)" />
+              <RechartsCartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
               {legend.display && (
                 <RechartsLegend
                   content={(props) => {
@@ -273,15 +274,17 @@ const LineChart: React.FC<LineChartProps> = ({
                   }}
                 />
               )}
-              <RechartsTooltip
-                cursor={{
-                  stroke: "var(--neutral-border-strong)",
-                  strokeWidth: 1,
-                }}
-                content={(props) => (
-                  <DataTooltip {...props} variant={variant as ChartVariant} date={date} />
-                )}
-              />
+              {tooltip && (
+                <RechartsTooltip
+                  cursor={{
+                    stroke: "var(--neutral-border-strong)",
+                    strokeWidth: 1,
+                  }}
+                  content={(props) => (
+                    <DataTooltip {...props} variant={variant as ChartVariant} date={date} />
+                  )}
+                />
+              )}
               {autoSeries.map(({ key, color }, index) => {
                 const colorValue = color || schemes[index % schemes.length];
                 const lineColor = `var(--data-${colorValue})`;

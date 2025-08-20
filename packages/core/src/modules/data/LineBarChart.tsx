@@ -28,6 +28,7 @@ import {
   curveType,
 } from ".";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
+import { RadiusSize } from "@/types";
 
 interface LineBarChartProps extends ChartProps {
   barWidth?: barWidth;
@@ -45,9 +46,11 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   errorState,
   error = false,
   loading = false,
+  tooltip = true,
   legend: legendProp = {},
+  grid = "y",
   axis = "both",
-  border = "neutral-medium",
+  border = "neutral-alpha-weak",
   variant: variantProp,
   barWidth = "l",
   curve = "natural",
@@ -152,13 +155,12 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
       <ChartHeader
         title={title}
         description={description}
-        borderBottom={border}
         dateRange={selectedDateRange}
         date={date}
         onDateRangeChange={handleDateRangeChange}
         presets={date?.presets}
       />
-      <Row fill>
+      <Row fill borderTop={(title || description || date?.selector) ? (border || "neutral-alpha-weak") : undefined} topRadius={flex.radius as RadiusSize || "l"} overflow="hidden">
         <ChartStatus
           loading={loading}
           empty={!filteredData || filteredData.length === 0}
@@ -186,11 +188,7 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                   variant={variant as ChartVariant}
                 />
               </defs>
-              <RechartsCartesianGrid
-                horizontal
-                vertical={false}
-                stroke="var(--neutral-alpha-weak)"
-              />
+              <RechartsCartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
               {legend.display && (
                 <RechartsLegend
                   content={
@@ -270,20 +268,22 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                   }}
                 />
               )}
-              <RechartsTooltip
-                cursor={{
-                  stroke: "var(--neutral-border-strong)",
-                  strokeWidth: 1,
-                }}
-                content={(props) => (
-                  <DataTooltip
-                    {...props}
-                    variant={variant as ChartVariant}
-                    date={date}
-                    dataKey={xAxisKey}
-                  />
-                )}
-              />
+              {tooltip && (
+                <RechartsTooltip
+                  cursor={{
+                    stroke: "var(--neutral-border-strong)",
+                    strokeWidth: 1,
+                  }}
+                  content={(props) => (
+                    <DataTooltip
+                      {...props}
+                      variant={variant as ChartVariant}
+                      date={date}
+                      dataKey={xAxisKey}
+                    />
+                  )}
+                />
+              )}
               <RechartsArea
                 type={curve}
                 dataKey={lineSeries.key}
