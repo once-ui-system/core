@@ -138,7 +138,7 @@
   
     --brand-alpha-strong:           var(--function-brand-600-50);
     --brand-alpha-medium:           var(--function-brand-600-30);
-    --brand-alpha-weak:             var(--function-brand-600-10);
+    --brand-alpha-weak:             var(--function-brand-600-15);
 
     /* accent */
     --accent-background-strong:     var(--function-accent-300);
@@ -162,7 +162,7 @@
   
     --accent-alpha-strong:          var(--function-accent-600-50);
     --accent-alpha-medium:          var(--function-accent-600-30);
-    --accent-alpha-weak:            var(--function-accent-600-10);
+    --accent-alpha-weak:            var(--function-accent-600-15);
 
     /* neutral */
     --neutral-background-strong:    var(--function-neutral-300);
@@ -186,7 +186,7 @@
   
     --neutral-alpha-strong:         var(--function-neutral-600-50);
     --neutral-alpha-medium:         var(--function-neutral-600-30);
-    --neutral-alpha-weak:           var(--function-neutral-600-10);
+    --neutral-alpha-weak:           var(--function-neutral-600-15);
 
     /* info */
     --info-background-strong:       var(--function-info-300);
@@ -210,7 +210,7 @@
   
     --info-alpha-strong:            var(--function-info-600-50);
     --info-alpha-medium:            var(--function-info-600-30);
-    --info-alpha-weak:              var(--function-info-600-10);
+    --info-alpha-weak:              var(--function-info-600-15);
 
     /* warning */
     --warning-background-strong:    var(--function-warning-300);
@@ -234,7 +234,7 @@
   
     --warning-alpha-strong:         var(--function-warning-600-50);
     --warning-alpha-medium:         var(--function-warning-600-30);
-    --warning-alpha-weak:           var(--function-warning-600-10);
+    --warning-alpha-weak:           var(--function-warning-600-15);
 
     /* danger */
     --danger-background-strong:     var(--function-danger-300);
@@ -258,7 +258,7 @@
   
     --danger-alpha-strong:          var(--function-danger-600-50);
     --danger-alpha-medium:          var(--function-danger-600-30);
-    --danger-alpha-weak:            var(--function-danger-600-10);
+    --danger-alpha-weak:            var(--function-danger-600-15);
 
     /* success */ 
     --success-background-strong:    var(--function-success-300);
@@ -282,7 +282,7 @@
   
     --success-alpha-strong:         var(--function-success-600-50);
     --success-alpha-medium:         var(--function-success-600-30);
-    --success-alpha-weak:           var(--function-success-600-10);
+    --success-alpha-weak:           var(--function-success-600-15);
 
     .dark-flex {
         display: flex;
@@ -333,7 +333,7 @@
   
     --brand-alpha-strong:           var(--function-brand-600-50);
     --brand-alpha-medium:           var(--function-brand-600-30);
-    --brand-alpha-weak:             var(--function-brand-600-10);
+    --brand-alpha-weak:             var(--function-brand-600-15);
     
     /* accent */
     --accent-background-strong:     var(--function-accent-800);
@@ -357,7 +357,7 @@
   
     --accent-alpha-strong:          var(--function-accent-600-50);
     --accent-alpha-medium:          var(--function-accent-600-30);
-    --accent-alpha-weak:            var(--function-accent-600-10);
+    --accent-alpha-weak:            var(--function-accent-600-15);
 
     /* neutral */
     --neutral-background-strong:    var(--function-neutral-800);
@@ -381,7 +381,7 @@
   
     --neutral-alpha-strong:         var(--function-neutral-600-50);
     --neutral-alpha-medium:         var(--function-neutral-600-30);
-    --neutral-alpha-weak:           var(--function-neutral-600-10);
+    --neutral-alpha-weak:           var(--function-neutral-600-15);
 
     /* info */
     --info-background-strong:       var(--function-info-800);
@@ -405,7 +405,7 @@
   
     --info-alpha-strong:            var(--function-info-600-50);
     --info-alpha-medium:            var(--function-info-600-30);
-    --info-alpha-weak:              var(--function-info-600-10);
+    --info-alpha-weak:              var(--function-info-600-15);
 
     /* warning */
     --warning-background-strong:    var(--function-warning-800);
@@ -429,7 +429,7 @@
   
     --warning-alpha-strong:         var(--function-warning-600-50);
     --warning-alpha-medium:         var(--function-warning-600-30);
-    --warning-alpha-weak:           var(--function-warning-600-10);
+    --warning-alpha-weak:           var(--function-warning-600-15);
    
     /* danger */   
     --danger-background-strong:     var(--function-danger-800);
@@ -453,7 +453,7 @@
   
     --danger-alpha-strong:          var(--function-danger-600-50);
     --danger-alpha-medium:          var(--function-danger-600-30);
-    --danger-alpha-weak:            var(--function-danger-600-10);
+    --danger-alpha-weak:            var(--function-danger-600-15);
    
     /* success */   
     --success-background-strong:    var(--function-success-800);
@@ -477,7 +477,7 @@
   
     --success-alpha-strong:         var(--function-success-600-50);
     --success-alpha-medium:         var(--function-success-600-30);
-    --success-alpha-weak:           var(--function-success-600-10);
+    --success-alpha-weak:           var(--function-success-600-15);
     
     .dark-flex {
         display: none;
