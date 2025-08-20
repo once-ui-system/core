@@ -105,7 +105,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
   };
 
   return (
-    <Flex gap="4" flex={1} className={className} {...rest}>
+    <Flex gap="8" flex={1} className={className} {...rest}>
       {menuGroups.map((group, index) => (
         <Row
           key={`menu-group-${index}`}
