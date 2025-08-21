@@ -159,7 +159,6 @@ export const useResponsiveClasses = (
       const value = getValueWithCascading(property);
 
       if (value !== undefined) {
-        console.log(property, value)
         // Remove all possible classes for this property
         const possibleClasses = getPropertyClassNames(property);
         possibleClasses.forEach((possibleClass) => {
