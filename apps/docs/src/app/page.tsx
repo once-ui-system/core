@@ -7,7 +7,6 @@ import {
   Button, 
   Grid, 
   Media, 
-  Line, 
   StatusIndicator,
   Badge,
   Tag,
@@ -18,7 +17,7 @@ import {
 } from "@once-ui-system/core";
 import { baseURL, meta, schema, changelog, roadmap } from "@/resources";
 import { formatDate } from "./utils/formatDate";
-import Products from "@/product/Products";
+import { Products } from "@/product";
 
 export async function generateMetadata() {
   return Meta.generate({

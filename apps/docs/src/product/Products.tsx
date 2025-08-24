@@ -1,8 +1,8 @@
 
 
-import { Avatar, AvatarGroup, Card, Column, Grid, Media, Row, Text } from "@once-ui-system/core";
+import { AvatarGroup, Card, Column, Grid, Media, Row, Text } from "@once-ui-system/core";
 
-export default function Products() {
+export function Products() {
     return (
       <Grid fillWidth columns="2" m={{columns: 1}} gap="12" marginTop="16">
         {[
