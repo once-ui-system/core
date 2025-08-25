@@ -1,0 +1,195 @@
+---
+title: "BlockQuote"
+summary: "The BlockQuote component displays a highlighted quotation with semantic <blockquote> markup."
+updatedAt: "2025-05-08"
+docs: "once-ui/components/blockquote.mdx"
+github: "components/BlockQuote.tsx"
+navLabel: "BlockQuote"
+navIcon: "components"
+---
+
+Use `BlockQuote` to present quoted text with emphasis and proper semantics. It renders a semantic `<blockquote>` element and forwards all layout and style props from `Flex`, as well as native attributes like `cite`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <BlockQuote>
+      <Text variant="body-default-m">
+        “We shape our tools and thereafter our tools shape us.”
+      </Text>
+    </BlockQuote>
+  }
+  codes={[
+    {
+      code:
+`<BlockQuote>
+  <Text variant="body-default-m">
+    “We shape our tools and thereafter our tools shape us.”
+  </Text>
+</BlockQuote>`,
+      language: "tsx",
+      label: "BlockQuote"
+    }
+  ]}
+/>
+
+## Cite
+
+Attach a citation source using the native `cite` attribute. This is useful for accessibility and provenance.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <BlockQuote cite="https://example.com/essay">
+      <Text variant="body-default-m">
+        “Simplicity is the ultimate sophistication.”
+      </Text>
+      <Text onBackground="brand-weak" variant="label-default-s" marginTop="8">
+        — Leonardo da Vinci
+      </Text>
+    </BlockQuote>
+  }
+  codes={[
+    {
+      code:
+`<BlockQuote cite="https://example.com/essay">
+  <Text variant="body-default-m">
+    “Simplicity is the ultimate sophistication.”
+  </Text>
+  <Text onBackground="brand-weak" variant="label-default-s" marginTop="8">
+    — Leonardo da Vinci
+  </Text>
+</BlockQuote>`,
+      language: "tsx",
+      label: "Cite"
+    }
+  ]}
+/>
+
+## With author
+
+Include an author line below the quote.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <BlockQuote>
+      <Text variant="body-default-m">
+        “Programs must be written for people to read, and only incidentally for machines to execute.”
+      </Text>
+      <Row marginTop="12" gap="8" vertical="center" textVariant="label-default-s" onBackground="brand-medium">
+        <Text>— Harold Abelson</Text>
+      </Row>
+    </BlockQuote>
+  }
+  codes={[
+    {
+      code:
+`<BlockQuote>
+  <Text variant="body-default-m">
+    “Programs must be written for people to read, and only incidentally for machines to execute.”
+  </Text>
+  <Row marginTop="12" gap="8" vertical="center" textVariant="label-default-s" onBackground="brand-medium">
+    <Text>— Harold Abelson</Text>
+  </Row>
+</BlockQuote>`,
+      language: "tsx",
+      label: "With author"
+    }
+  ]}
+/>
+
+## With avatar
+
+You can enrich the author line with an avatar.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <BlockQuote>
+      <Text variant="body-default-m">
+        “Talk is cheap. Show me the code.”
+      </Text>
+      <Row marginTop="12" gap="8" vertical="center" textVariant="label-default-s" onBackground="brand-medium">
+        <Avatar size="xs" src="/images/avatar.jpg" />
+        <Text>— Linus Torvalds</Text>
+      </Row>
+    </BlockQuote>
+  }
+  codes={[
+    {
+      code:
+`<BlockQuote>
+  <Text variant="body-default-m">“Talk is cheap. Show me the code.”</Text>
+  <Row marginTop="12" gap="8" vertical="center" textVariant="label-default-s" onBackground="brand-medium">
+    <Avatar size="xs" src="/images/avatar.jpg" />
+    <Text>— Linus Torvalds</Text>
+  </Row>
+</BlockQuote>`,
+      language: "tsx",
+      label: "With avatar"
+    }
+  ]}
+/>
+
+## Styling
+
+`BlockQuote` ships with a default look, but you can override appearance using any `Flex` styling props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" wrap>
+      <BlockQuote background="surface" border="neutral-alpha-medium" onBackground="neutral-strong">
+        <Text variant="body-default-m">“Default surface styling.”</Text>
+      </BlockQuote>
+      <BlockQuote background="page" border="neutral-alpha-weak" onBackground="neutral-medium" borderStyle="solid">
+        <Text variant="body-default-m">“Subtle page tone.”</Text>
+      </BlockQuote>
+      <BlockQuote background="brand-alpha-weak" border="brand-alpha-strong" radius="l-4">
+        <Text variant="body-default-m">“Branded emphasis.”</Text>
+      </BlockQuote>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<BlockQuote background="surface" border="neutral-alpha-medium" onBackground="neutral-strong">
+  <Text variant="body-default-m">“Default surface styling.”</Text>
+</BlockQuote>
+
+<BlockQuote background="page" border="neutral-alpha-weak" onBackground="neutral-medium" borderStyle="solid">
+  <Text variant="body-default-m">“Subtle page tone.”</Text>
+</BlockQuote>
+
+<BlockQuote background="brand-alpha-weak" border="brand-alpha-strong" radius="l-4">
+  <Text variant="body-default-m">“Branded emphasis.”</Text>
+</BlockQuote>`,
+      language: "tsx",
+      label: "Styling"
+    }
+  ]}
+/>
+
+## API Reference
+
+<PropsTable
+  content={[
+    ["children"],
+    ["cite", "string"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>
+
+## Accessibility Considerations
+
+`BlockQuote` renders a semantic `<blockquote>` element to convey quoted content to assistive technologies. Provide a meaningful `cite` URL when available to reference the source. Ensure sufficient color contrast if you override the default `background` or `onBackground` props.
+
+
