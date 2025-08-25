@@ -98,3 +98,204 @@
 .line-numbers .line-highlight:after {
   content: none;
 }
+
+.language-json .token.property {
+  color: var(--code-blue);
+}
+
+.language-json .token.string {
+  color: var(--code-green);
+}
+
+.language-yaml .token.key {
+  color: var(--code-blue);
+}
+
+.language-yaml .token.scalar {
+  color: var(--code-green);
+}
+
+/* GitHub-style diff support */
+.language-diff .diff-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0;
+}
+
+.language-diff .diff-row {
+  display: table-row;
+}
+
+.language-diff .diff-line-number {
+  pointer-events: none;
+  top: 0;
+  width: var(--static-space-40);
+  user-select: none;
+  display: table-cell;
+  padding-right: var(--static-space-4);
+  text-align: right;
+  vertical-align: top;
+  color: var(--neutral-on-background-weak);
+  border-right: 1px solid var(--neutral-border-weak);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.language-diff .diff-line-content {
+  display: table-cell;
+  padding: 0 var(--static-space-12);
+  vertical-align: top;
+  white-space: pre;
+  word-wrap: break-word;
+  position: relative;
+}
+
+/* Line types */
+.language-diff .diff-row.added {
+  background-color: var(--success-alpha-weak);
+}
+
+.language-diff .diff-row.added .diff-line-number {
+  background-color: var(--success-alpha-medium);
+  border-right-color: var(--success-alpha-strong);
+  color: var(--success-on-background-strong);
+}
+
+.language-diff .diff-row.added .diff-line-content {
+  color: var(--success-on-background-strong);
+}
+
+.language-diff .diff-row.deleted {
+  background-color: var(--danger-alpha-weak);
+}
+
+.language-diff .diff-row.deleted .diff-line-number {
+  background-color: var(--danger-alpha-medium);
+  border-right-color: var(--danger-alpha-strong);
+  color: var(--danger-on-background-strong);
+}
+
+.language-diff .diff-row.deleted .diff-line-content {
+  color: var(--danger-on-background-strong);
+}
+
+.language-diff .diff-row.context .diff-line-content {
+  color: var(--neutral-on-background-strong);
+}
+
+.language-diff .diff-row.hunk {
+  background-color: var(--brand-alpha-weak);
+}
+
+.language-diff .diff-row.hunk .diff-line-number {
+  background-color: var(--brand-alpha-medium);
+  color: var(--brand-on-background-strong);
+  border-right-color: var(--brand-border-strong);
+}
+
+.language-diff .diff-row.hunk .diff-line-content {
+  color: var(--brand-on-background-strong);
+  font-weight: var(--font-weight-medium);
+}
+
+/* File headers */
+.language-diff .diff-row.file-header {
+  background-color: var(--neutral-alpha-weak);
+}
+
+.language-diff .diff-row.file-header .diff-line-number {
+  background-color: var(--neutral-alpha-medium);
+}
+
+.language-diff .diff-row.file-header .diff-line-content {
+  color: var(--neutral-on-background-medium);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Expand buttons for collapsed hunks */
+.language-diff .diff-expand {
+  background-color: var(--neutral-alpha-weak);
+  border: 1px solid var(--neutral-alpha-medium);
+  color: var(--neutral-on-background-medium);
+  padding: 4px 8px;
+  font-size: 11px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.language-diff .diff-expand:hover {
+  background-color: var(--neutral-alpha-medium);
+  color: var(--neutral-on-background-strong);
+}
+
+/* Plus/minus signs */
+.language-diff .diff-sign {
+  text-align: center;
+  font-weight: var(--font-weight-medium);
+  user-select: none;
+}
+
+.language-diff .diff-row.added .diff-sign::before {
+  content: "+";
+  color: var(--success-on-background-strong);
+}
+
+.language-diff .diff-row.deleted .diff-sign::before {
+  content: "-";
+  color: var(--danger-on-background-strong);
+}
+
+/* Side-by-side view support */
+.language-diff.side-by-side {
+  display: block;
+}
+
+.language-diff.side-by-side .diff-table {
+  display: flex;
+  width: 100%;
+}
+
+.language-diff.side-by-side .diff-half {
+  flex: 1;
+  display: table;
+  border-right: 1px solid var(--neutral-alpha-medium);
+}
+
+.language-diff.side-by-side .diff-half:last-child {
+  border-right: none;
+}
+
+/* Legacy support for simple diff tokens */
+.token.diff.prefix {
+  color: var(--code-gray);
+  font-weight: bold;
+  user-select: none;
+}
+
+.token.diff.header {
+  color: var(--code-moss);
+  font-weight: bold;
+}
+
+.token.diff.file {
+  color: var(--neutral-on-background-strong);
+  font-weight: bold;
+}
+
+.language-diff .token.coord {
+  color: var(--code-violet);
+  background: var(--brand-alpha-weak);
+  font-weight: bold;
+  border-left: 2px solid var(--brand-alpha-medium);
+}
+
+/* Fallback for simple diff highlighting */
+.language-diff .token.inserted {
+  background-color: rgba(34, 197, 94, 0.1);
+  color: #22c55e;
+}
+
+.language-diff .token.deleted {
+  background-color: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}

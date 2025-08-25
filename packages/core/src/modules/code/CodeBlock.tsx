@@ -13,37 +13,138 @@ const loadCssFiles = async () => {
 };
 
 import styles from "./CodeBlock.module.scss";
-import { Flex, IconButton, Scroller, Row, StyleOverlay, ToggleButton, Column, Text } from "../../components";
-
-
+import {
+  Flex,
+  IconButton,
+  Scroller,
+  Row,
+  StyleOverlay,
+  ToggleButton,
+  Column,
+  Text,
+} from "../../components";
 
 import Prism from "prismjs";
 
 // We'll load these dynamically on the client side only
-const loadPrismDependencies = async () => {
+const loadPrismDependencies = async (...langs: string[]) => {
   if (typeof window !== "undefined") {
     // Only import these on the client side
     await Promise.all([
       import("prismjs/plugins/line-highlight/prism-line-highlight"),
       import("prismjs/plugins/line-numbers/prism-line-numbers"),
-      import("prismjs/components/prism-jsx"),
-      import("prismjs/components/prism-css"),
-      import("prismjs/components/prism-typescript"),
-      import("prismjs/components/prism-tsx"),
+      import("prismjs/plugins/diff-highlight/prism-diff-highlight"),
+      ...langs.map((lang) =>
+        import(`prismjs/components/prism-${lang}`).catch(() => {
+          // Fallback for languages that might not exist
+          console.warn(`Language ${lang} not found in Prism.js components`);
+          return null;
+        }),
+      ),
     ]);
     return true;
   }
   return false;
 };
 import classNames from "classnames";
-import { SpacingToken } from "../../types";
+import { Language, SpacingToken } from "../../types";
+
+// GitHub-style diff parser
+const parseDiff = (diffContent: string, startLineNumber?: number) => {
+  const lines = diffContent.split("\n");
+  const parsedLines: Array<{
+    type: "file-header" | "hunk" | "added" | "deleted" | "context";
+    oldLineNumber?: number;
+    newLineNumber?: number;
+    content: string;
+  }> = [];
+
+  let oldLineNumber = startLineNumber ? startLineNumber - 1 : 0;
+  let newLineNumber = startLineNumber ? startLineNumber - 1 : 0;
+
+  for (const line of lines) {
+    if (
+      line.startsWith("diff --git") ||
+      line.startsWith("index ") ||
+      line.startsWith("+++") ||
+      line.startsWith("---")
+    ) {
+      parsedLines.push({
+        type: "file-header",
+        content: line,
+      });
+    } else if (line.startsWith("@@")) {
+      // Parse hunk header to get line numbers
+      const match = line.match(/@@ -(\d+)(?:,\d+)? \+(\d+)(?:,\d+)? @@/);
+      if (match) {
+        oldLineNumber = parseInt(match[1]) - 1;
+        newLineNumber = parseInt(match[2]) - 1;
+      }
+      parsedLines.push({
+        type: "hunk",
+        content: line,
+      });
+    } else if (line.startsWith("+")) {
+      newLineNumber++;
+      parsedLines.push({
+        type: "added",
+        newLineNumber,
+        content: line.substring(1),
+      });
+    } else if (line.startsWith("-")) {
+      oldLineNumber++;
+      parsedLines.push({
+        type: "deleted",
+        oldLineNumber,
+        content: line.substring(1),
+      });
+    } else if (line.startsWith(" ") || line === "") {
+      oldLineNumber++;
+      newLineNumber++;
+      parsedLines.push({
+        type: "context",
+        oldLineNumber,
+        newLineNumber,
+        content: line.substring(1),
+      });
+    }
+  }
+
+  return parsedLines;
+};
+
+// GitHub-style diff renderer
+const renderGitHubDiff = (diffContent: string, startLineNumber?: number) => {
+  const parsedLines = parseDiff(diffContent, startLineNumber);
+
+  return (
+    <div className="diff-table">
+      {parsedLines.map((line, index) => (
+        <div key={index} className={`diff-row ${line.type}`}>
+          <div className="diff-line-number">
+            {line.type === "added" ? "" : line.oldLineNumber || ""}
+          </div>
+          <div className="diff-line-number">
+            {line.type === "deleted" ? "" : line.newLineNumber || ""}
+          </div>
+          <div className="diff-line-content">
+            {line.type === "added" && <span className="diff-sign">+</span>}
+            {line.type === "deleted" && <span className="diff-sign">-</span>}
+            {line.content}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 type CodeInstance = {
   code: string | { content: string; error: string | null };
-  language: string;
+  language: Language;
   label: string;
   highlight?: string;
   prefixIcon?: string;
+  startLineNumber?: number;
 };
 
 interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
@@ -100,7 +201,14 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
 
   useEffect(() => {
     const loadDependencies = async () => {
-      await Promise.all([loadPrismDependencies(), loadCssFiles()]);
+      await Promise.all([
+        loadPrismDependencies(
+          ...codes.map((data) => {
+            return data.language;
+          }),
+        ),
+        loadCssFiles(),
+      ]);
       setDependenciesLoaded(true);
     };
 
@@ -118,7 +226,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   useEffect(() => {
     if (isFullscreen) {
       document.body.style.overflow = "hidden";
-      
+
       // Start animation after a small delay to allow portal to render
       setTimeout(() => {
         setIsAnimating(true);
@@ -173,7 +281,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     const index = codes.findIndex((instance) => instance.label === selectedLabel);
     if (index !== -1) {
       setSelectedInstance(index);
-      
+
       // Re-highlight after tab change
       setTimeout(() => {
         Prism.highlightAll();
@@ -187,7 +295,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       setIsAnimating(false);
       setTimeout(() => {
         setIsFullscreen(false);
-        
+
         // Re-highlight after exiting fullscreen
         setTimeout(() => {
           Prism.highlightAll();
@@ -196,7 +304,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     } else {
       // When entering fullscreen, immediately show portal
       setIsFullscreen(true);
-      
+
       // Re-highlight after entering fullscreen
       setTimeout(() => {
         Prism.highlightAll();
@@ -228,28 +336,26 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
       })}
-      style={{ 
-        isolation: "isolate", 
-        ...(inPortal ? {
-          transition: "transform 0.3s ease, opacity 0.3s ease",
-          transform: isAnimating ? "scale(1)" : "scale(0.95)",
-          opacity: isAnimating ? 1 : 0,
-          ...(resetMargin ? {
-            margin: 0,
-          } : {}),
-        } : {}),
-        ...style 
+      style={{
+        isolation: "isolate",
+        ...(inPortal
+          ? {
+              transition: "transform 0.3s ease, opacity 0.3s ease",
+              transform: isAnimating ? "scale(1)" : "scale(0.95)",
+              opacity: isAnimating ? 1 : 0,
+              ...(resetMargin
+                ? {
+                    margin: 0,
+                  }
+                : {}),
+            }
+          : {}),
+        ...style,
       }}
       {...rest}
     >
       {(codes.length > 1 || (copyButton && !compact)) && (
-        <Row
-          zIndex={2}
-          position="static"
-          fillWidth
-          fitHeight
-          horizontal="between"
-        >
+        <Row zIndex={2} position="static" fillWidth fitHeight horizontal="between">
           {codes.length > 1 ? (
             <Scroller paddingX="8" fadeColor="surface">
               <Row data-scaling="90" fitWidth fillHeight vertical="center" paddingY="4" gap="2">
@@ -265,7 +371,11 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       handleContent(instance.label);
                     }}
                   >
-                    <Text onBackground={selectedInstance === index ? "neutral-strong" : "neutral-weak"}>{instance.label}</Text>
+                    <Text
+                      onBackground={selectedInstance === index ? "neutral-strong" : "neutral-weak"}
+                    >
+                      {instance.label}
+                    </Text>
                   </ToggleButton>
                 ))}
               </Row>
@@ -352,31 +462,51 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           fillHeight={fillHeight}
         >
           <Row overflowX="auto" fillWidth tabIndex={-1}>
-            <pre
-              tabIndex={-1}
-              style={{ maxHeight: `${codeHeight}rem` }}
-              data-line={highlight || deprecatedHighlight}
-              ref={preRef}
-              className={classNames(
-                lineNumbers ? styles.lineNumberPadding : styles.padding,
-                styles.pre,
-                `language-${language}`,
-                {
-                  "line-numbers": lineNumbers,
-                },
-              )}
-            >
-              <code
-                tabIndex={-1}
-                ref={codeRef}
-                className={classNames(styles.code, `language-${language}`)}
+            {language === "diff" ? (
+              <div
+                className={classNames(styles.padding, styles.pre, `language-${language}`)}
+                style={{ maxHeight: `${codeHeight}rem`, overflow: "auto", width: "100%" }}
               >
-                {typeof code === "string" ? code : code.content}
-              </code>
-            </pre>
+                {renderGitHubDiff(
+                  typeof code === "string" ? code : code.content,
+                  codeInstance.startLineNumber,
+                )}
+              </div>
+            ) : (
+              <pre
+                suppressHydrationWarning
+                tabIndex={-1}
+                style={{ maxHeight: `${codeHeight}rem` }}
+                data-line={highlight || deprecatedHighlight}
+                ref={preRef}
+                className={classNames(
+                  lineNumbers ? styles.lineNumberPadding : styles.padding,
+                  styles.pre,
+                  `language-${language}`,
+                  {
+                    "line-numbers": lineNumbers,
+                  },
+                )}
+              >
+                <code
+                  tabIndex={-1}
+                  ref={codeRef}
+                  className={classNames(styles.code, `language-${language}`)}
+                >
+                  {typeof code === "string" ? code : code.content}
+                </code>
+              </pre>
+            )}
           </Row>
           {compact && copyButton && (
-            <Row position="absolute" right="4" top="4" marginRight="2" className={styles.compactCopy} zIndex={1}>
+            <Row
+              position="absolute"
+              right="4"
+              top="4"
+              marginRight="2"
+              className={styles.compactCopy}
+              zIndex={1}
+            >
               <IconButton
                 tooltip="Copy"
                 tooltipPosition="left"
@@ -396,22 +526,23 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   return (
     <>
       {renderCodeBlock(false)}
-      {isFullscreen && ReactDOM.createPortal(
-        <Flex
-          position="fixed"
-          zIndex={9}
-          top="0"
-          left="0"
-          right="0"
-          bottom="0"
-          background={isAnimating ? "overlay" : "transparent"}
-          style={{backdropFilter: "blur(0.5rem)"}}
-          transition="macro-medium"
-        >
-          {renderCodeBlock(true, true)}
-        </Flex>,
-        document.body
-      )}
+      {isFullscreen &&
+        ReactDOM.createPortal(
+          <Flex
+            position="fixed"
+            zIndex={9}
+            top="0"
+            left="0"
+            right="0"
+            bottom="0"
+            background={isAnimating ? "overlay" : "transparent"}
+            style={{ backdropFilter: "blur(0.5rem)" }}
+            transition="macro-medium"
+          >
+            {renderCodeBlock(true, true)}
+          </Flex>,
+          document.body,
+        )}
     </>
   );
 };
