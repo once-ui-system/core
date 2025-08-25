@@ -233,6 +233,8 @@
   text-align: center;
   font-weight: var(--font-weight-medium);
   user-select: none;
+  display: inline-flex;
+  margin-right: var(--static-space-8);
 }
 
 .language-diff .diff-row.added .diff-sign::before {
