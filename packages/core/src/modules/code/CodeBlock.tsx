@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef, ReactNode } from "react";
+import React, {useState, useEffect, useRef, ReactNode, RefObject} from "react";
 import ReactDOM from "react-dom";
 
 // We'll import CSS files dynamically on the client side
@@ -114,7 +114,7 @@ const parseDiff = (diffContent: string, startLineNumber?: number) => {
 };
 
 // GitHub-style diff renderer
-const renderGitHubDiff = (diffContent: string, startLineNumber?: number) => {
+const renderGitHubDiff = (diffContent: string, startLineNumber: number | undefined, codeRef: RefObject<HTMLElement | null>) => {
   const parsedLines = parseDiff(diffContent, startLineNumber);
 
   return (
@@ -130,7 +130,12 @@ const renderGitHubDiff = (diffContent: string, startLineNumber?: number) => {
           <div className="diff-line-content">
             {line.type === "added" && <span className="diff-sign">+</span>}
             {line.type === "deleted" && <span className="diff-sign">-</span>}
-            {line.content}
+            <code
+                ref={codeRef}
+                className={classNames(styles.code, `language-diff`)}
+            >
+              {line.content}
+            </code>
           </div>
         </div>
       ))}
@@ -195,7 +200,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     code: "",
     language: "",
   };
-  const { code, language } = codeInstance;
+  const { code, language, startLineNumber } = codeInstance;
   const highlight =
     codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
 
@@ -469,7 +474,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               >
                 {renderGitHubDiff(
                   typeof code === "string" ? code : code.content,
-                  codeInstance.startLineNumber,
+                  startLineNumber,
+                  codeRef
                 )}
               </div>
             ) : (
