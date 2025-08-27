@@ -26,26 +26,182 @@ import {
 
 import Prism from "prismjs";
 
-// We'll load these dynamically on the client side only
-const loadPrismDependencies = async (...langs: string[]) => {
-  if (typeof window !== "undefined") {
-    // Only import these on the client side
+// Complete dependency map for Prism.js languages
+const languageDependencies: Record<string, string[]> = {
+  // Languages that require clike (C-like syntax)
+  'arduino': ['clike'],
+  'c': ['clike'],
+  'cpp': ['c'],
+  'csharp': ['clike'],
+  'dart': ['clike'],
+  'java': ['clike'],
+  'javascript': ['clike'],
+  'kotlin': ['clike'],
+  'objectivec': ['c'],
+  'scala': ['java'],
+  'swift': ['clike'],
+  'processing': ['clike'],
+  'solidity': ['clike'],
+  'squirrel': ['clike'],
+  'unrealscript': ['clike'],
+  'cilkc': ['c'],
+  'cilkcpp': ['cpp'],
+  'cfscript': ['clike'],
+  'chaiscript': ['clike'],
+  'cil': ['clike'],
+  'concurnas': ['clike'],
+  'crystal': ['clike'],
+  'gcode': ['clike'],
+  'glsl': ['c'],
+  'hlsl': ['c'],
+  'opencl': ['c'],
+  'reason': ['clike'],
+
+  // Languages that require markup (HTML/XML)
+  'xml-doc': ['markup'],
+  'mathml': ['markup'],
+  'svg': ['markup'],
+  'ssml': ['markup'],
+  'asciidoc': ['markup'],
+  'dns-zone-file': ['markup'],
+  'javadoclike': ['markup'],
+  'markdown': ['markup'],
+  'nasm': ['markup'],
+  'parser': ['markup'],
+  'plant-uml': ['markup'],
+  'powerquery': ['markup'],
+  'solution-file': ['markup'],
+  't4-templating': ['markup'],
+  'turtle': ['markup'],
+  'web-idl': ['markup'],
+  'xquery': ['markup'],
+
+  // Languages that require markup-templating
+  'django': ['markup-templating'],
+  'erb': ['markup-templating', 'ruby'],
+  'etlua': ['markup-templating', 'lua'],
+  'handlebars': ['markup-templating'],
+  'jsp': ['markup-templating', 'java'],
+  'latte': ['markup-templating', 'php'],
+  'liquid': ['markup-templating'],
+  'mustache': ['markup-templating'],
+  'php': ['markup-templating'],
+  'smarty': ['markup-templating'],
+  'twig': ['markup-templating'],
+  'velocity': ['markup-templating'],
+  'ejs': ['markup-templating', 'javascript'],
+  'ftl': ['markup-templating'],
+  'tt2': ['clike', 'markup-templating'],
+
+  // Languages that require javascript
+  'actionscript': ['javascript'],
+  'coffeescript': ['javascript'],
+  'flow': ['javascript'],
+  'jsx': ['markup', 'javascript'],
+  'n4js': ['javascript'],
+  'qml': ['javascript'],
+  'typescript': ['javascript'],
+  'tsx': ['jsx', 'typescript'],
+  'jsdoc': ['javascript', 'javadoclike'],
+  'js-extras': ['javascript'],
+  'js-templates': ['javascript'],
+  'jsstacktrace': ['javascript'],
+  'mongodb': ['javascript'],
+  'rescript': ['javascript'],
+
+  // Languages that require CSS
+  'less': ['css'],
+  'sass': ['css'],
+  'scss': ['css'],
+  'stylus': ['css'],
+  'css-extras': ['css'],
+
+  // Languages that require JSON
+  'json5': ['json'],
+  'jsonp': ['json'],
+
+  // Languages with specific complex dependencies
+  'aspnet': ['markup', 'csharp'],
+  'cshtml': ['markup', 'csharp'],
+  'bison': ['c'],
+  'docker': ['clike'],
+  'firestore-security-rules': ['clike'],
+  'go-module': ['go'],
+  'haml': ['ruby'],
+  'javadoc': ['markup', 'java'],
+  'lilypond': ['scheme'],
+  'mel': ['python'],
+  'nginx': ['clike'],
+  'phpdoc': ['php', 'javadoclike'],
+  'pug': ['markup', 'javascript'],
+  'qsharp': ['csharp'],
+  't4-cs': ['csharp', 't4-templating'],
+  't4-vb': ['vbnet', 't4-templating'],
+  'vbnet': ['basic'],
+};
+
+// Track loaded languages to avoid re-loading
+const loadedLanguages = new Set<string>(['markup', 'css', 'clike', 'javascript']);
+
+// Recursively load language dependencies
+const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
+  if (typeof window === "undefined") return false;
+
+  // Skip if already loaded
+  if (loadedLanguages.has(lang)) {
+    return true;
+  }
+
+  try {
+    // Load dependencies first
+    const dependencies = languageDependencies[lang] || [];
+    for (const dep of dependencies) {
+      if (!loadedLanguages.has(dep)) {
+        await loadLanguageWithDependencies(dep);
+      }
+    }
+
+    // Load the main language
+    await import(`prismjs/components/prism-${lang}`);
+    loadedLanguages.add(lang);
+    return true;
+
+  } catch (error) {
+    console.warn(`✗ Failed to load Prism language '${lang}':`, error);
+    return false;
+  }
+};
+
+// Load multiple languages and plugins
+const loadPrismDependencies = async (...langs: string[]): Promise<boolean> => {
+  if (typeof window === "undefined") return false;
+
+  try {
+    // Load core plugins first
     await Promise.all([
       import("prismjs/plugins/line-highlight/prism-line-highlight"),
       import("prismjs/plugins/line-numbers/prism-line-numbers"),
       import("prismjs/plugins/diff-highlight/prism-diff-highlight"),
-      ...langs.map((lang) =>
-        import(`prismjs/components/prism-${lang}`).catch(() => {
-          // Fallback for languages that might not exist
-          console.warn(`Language ${lang} not found in Prism.js components`);
-          return null;
-        }),
-      ),
     ]);
-    return true;
+
+    // Filter out empty/invalid languages and remove duplicates
+    const validLangs = [...new Set(langs.filter(lang => lang && lang.trim()))];
+
+    // Load each language with its dependencies
+    const results = await Promise.all(
+      validLangs.map(lang => loadLanguageWithDependencies(lang))
+    );
+
+    const successCount = results.filter(Boolean).length;
+
+    return successCount > 0;
+
+  } catch (error) {
+    console.error('💥 Error loading Prism dependencies:', error);
+    return false;
   }
-  return false;
 };
+
 import classNames from "classnames";
 import { Language, SpacingToken } from "../../types";
 
@@ -203,8 +359,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const { code, language, startLineNumber } = codeInstance;
   const highlight =
     codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
-
-  console.log(highlight, codeInstance.highlight, deprecatedHighlight);
 
   useEffect(() => {
     const loadDependencies = async () => {
