@@ -204,6 +204,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const highlight =
     codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
 
+  console.log(highlight, codeInstance.highlight, deprecatedHighlight);
+
   useEffect(() => {
     const loadDependencies = async () => {
       await Promise.all([
@@ -480,6 +482,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               </div>
             ) : (
               <pre
+                key={`${selectedInstance}-${highlight || deprecatedHighlight || 'no-highlight'}`}
                 suppressHydrationWarning
                 tabIndex={-1}
                 style={{ maxHeight: `${codeHeight}rem` }}
