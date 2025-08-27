@@ -128,8 +128,8 @@ const renderGitHubDiff = (diffContent: string, startLineNumber: number | undefin
             {line.type === "deleted" ? "" : line.newLineNumber || ""}
           </div>
           <div className="diff-line-content">
-            {line.type === "added" && <span className="diff-sign">+</span>}
-            {line.type === "deleted" && <span className="diff-sign">-</span>}
+            {line.type === "added" && <span className="diff-sign"></span>}
+            {line.type === "deleted" && <span className="diff-sign"></span>}
             <code
                 ref={codeRef}
                 className={classNames(styles.code, `language-diff`)}

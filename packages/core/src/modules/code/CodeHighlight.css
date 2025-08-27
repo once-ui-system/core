@@ -117,6 +117,7 @@
 
 /* GitHub-style diff support */
 .language-diff .diff-table {
+  display: table;
   width: 100%;
   border-collapse: collapse;
   margin: 0;
