@@ -6,27 +6,43 @@ docs: "once-ui/components/blockquote.mdx"
 github: "components/BlockQuote.tsx"
 navLabel: "BlockQuote"
 navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
 ---
 
-Use `BlockQuote` to present quoted text with emphasis and proper semantics. It renders a semantic `<blockquote>` element and forwards all layout and style props from `Flex`, as well as native attributes like `cite`.
+Use `BlockQuote` to present quoted text with emphasis and proper semantics. It renders a semantic `<blockquote>` element and forwards all layout and style props from `Flex`.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <BlockQuote>
-      <Text variant="body-default-m">
-        “We shape our tools and thereafter our tools shape us.”
-      </Text>
+    <BlockQuote
+      author={{
+        name: "Lorant",
+        avatar: "/images/avatar.jpg",
+      }}
+      link={{
+        href: "https://once-ui.com/blog/truth",
+        label: "once-ui.com"
+      }}
+      subline="Building is lonely if you do it alone.">
+      “If you’re going to take this path, find your people.”
     </BlockQuote>
   }
   codes={[
     {
       code:
-`<BlockQuote>
-  <Text variant="body-default-m">
-    “We shape our tools and thereafter our tools shape us.”
-  </Text>
+`<BlockQuote
+    author={{
+      name: "Lorant",
+      avatar: "/images/avatar.jpg",
+    }}
+    link={{
+      href: "https://once-ui.com/blog/truth",
+      label: "once-ui.com"
+    }}
+    subline="Building is lonely if you do it alone.">
+    “If you’re going to take this path, find your people.”
 </BlockQuote>`,
       language: "tsx",
       label: "BlockQuote"
@@ -34,41 +50,81 @@ Use `BlockQuote` to present quoted text with emphasis and proper semantics. It r
   ]}
 />
 
-## Cite
+## Content
 
-Attach a citation source using the native `cite` attribute. This is useful for accessibility and provenance.
+Use the `children` prop as the quote text and display an additional `preline` or `subline`.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <BlockQuote cite="https://example.com/essay">
-      <Text variant="body-default-m">
-        “Simplicity is the ultimate sophistication.”
-      </Text>
-      <Text onBackground="brand-weak" variant="label-default-s" marginTop="8">
-        — Leonardo da Vinci
-      </Text>
+    <BlockQuote
+      preline="That’s when we realized the deeper problem."
+      subline="Open your feed and you’ll see the same promises everywhere."
+      author={{
+        name: "Lorant",
+        avatar: "/images/avatar.jpg",
+      }}>
+      “So much of the industry has shifted from solving real problems to selling shortcuts.”
     </BlockQuote>
   }
   codes={[
     {
       code:
-`<BlockQuote cite="https://example.com/essay">
-  <Text variant="body-default-m">
-    “Simplicity is the ultimate sophistication.”
-  </Text>
-  <Text onBackground="brand-weak" variant="label-default-s" marginTop="8">
-    — Leonardo da Vinci
-  </Text>
+`<BlockQuote
+    preline="That’s when we realized the deeper problem."
+    subline="Open your feed and you’ll see the same promises everywhere."
+    author={{
+      name: "Lorant",
+      avatar: "/images/avatar.jpg",
+    }}>
+    “So much of the industry has shifted from solving real problems to selling shortcuts.”
 </BlockQuote>`,
       language: "tsx",
-      label: "Cite"
+      label: "Content"
     }
   ]}
 />
 
-## With author
+## Link
+
+Attach a citation source using the `link` attribute. This is useful for accessibility and provenance.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <BlockQuote
+      author={{
+        name: "Lorant",
+      }}
+      link={{
+        href: "once-ui.com/truth",
+        label: "once-ui.com"
+      }}>
+      “The first time a stranger pays for something you’ve built — something that came entirely from your mind — your worldview changes forever.”
+    </BlockQuote>
+  }
+  codes={[
+    {
+      code:
+`<BlockQuote
+    author={{
+      name: "Lorant",
+    }}
+    link={{
+      href: "once-ui.com/truth",
+      label: "once-ui.com"
+    }}>
+    “The first time a stranger pays for something you’ve built — something that came entirely from your mind — your worldview changes forever.”
+</BlockQuote>`,
+      language: "tsx",
+      label: "Link"
+    }
+  ]}
+/>
+
+## Author
 
 Include an author line below the quote.
 
@@ -76,62 +132,119 @@ Include an author line below the quote.
   marginTop="16"
   marginBottom="24"
   preview={
-    <BlockQuote>
-      <Text variant="body-default-m">
-        “Programs must be written for people to read, and only incidentally for machines to execute.”
-      </Text>
-      <Row marginTop="12" gap="8" vertical="center" textVariant="label-default-s" onBackground="brand-medium">
-        <Text>— Harold Abelson</Text>
-      </Row>
+    <BlockQuote
+      author={{
+        name: "Harold Abelson",
+        avatar: "/images/avatar.jpg",
+      }}>
+      “Programs must be written for people to read, and only incidentally for machines to execute.”
     </BlockQuote>
   }
   codes={[
     {
       code:
-`<BlockQuote>
-  <Text variant="body-default-m">
-    “Programs must be written for people to read, and only incidentally for machines to execute.”
-  </Text>
-  <Row marginTop="12" gap="8" vertical="center" textVariant="label-default-s" onBackground="brand-medium">
-    <Text>— Harold Abelson</Text>
-  </Row>
+`<BlockQuote
+    author={{
+      name: "Lorant",
+      avatar: "/images/avatar.jpg",
+    }}>
+      “No single piece guarantees success, but together, they create inevitability. Over time, people start recognizing your name, your style, your values, and your products. That recognition compounds.”
 </BlockQuote>`,
       language: "tsx",
-      label: "With author"
+      label: "Author"
     }
   ]}
 />
 
-## With avatar
+## Separators
 
-You can enrich the author line with an avatar.
+Adjust the visibility of the separator lines by setting `top`, `bottom` or `none` to the `separator` prop.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <BlockQuote>
-      <Text variant="body-default-m">
-        “Talk is cheap. Show me the code.”
-      </Text>
-      <Row marginTop="12" gap="8" vertical="center" textVariant="label-default-s" onBackground="brand-medium">
-        <Avatar size="xs" src="/images/avatar.jpg" />
-        <Text>— Linus Torvalds</Text>
-      </Row>
+    <BlockQuote
+      separator="top">
+      “We weren’t interested in selling visions that fall apart the moment someone buys in. We wanted to build products that last.”
     </BlockQuote>
   }
   codes={[
     {
       code:
-`<BlockQuote>
-  <Text variant="body-default-m">“Talk is cheap. Show me the code.”</Text>
-  <Row marginTop="12" gap="8" vertical="center" textVariant="label-default-s" onBackground="brand-medium">
-    <Avatar size="xs" src="/images/avatar.jpg" />
-    <Text>— Linus Torvalds</Text>
-  </Row>
+`<BlockQuote separator="top">
+    “We weren’t interested in selling visions that fall apart the moment someone buys in. We wanted to build products that last.”
 </BlockQuote>`,
       language: "tsx",
-      label: "With avatar"
+      label: "Separator"
+    }
+  ]}
+/>
+
+## Alignment
+
+Adjust the alignment of the quote text by setting `align` to `left`, `center` or `right`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth>
+      <BlockQuote
+        align="left"
+        separator="none"
+        author={{
+          name: "Lorant",
+        }}
+        link={{
+          href: "once-ui.com/truth",
+          label: "once-ui.com"
+        }}>
+        “The first time a stranger pays for something you’ve built — something that came entirely from your mind — your worldview changes forever.”
+      </BlockQuote>
+      <BlockQuote
+        align="right"
+        separator="top"
+        author={{
+          name: "Lorant",
+        }}
+        link={{
+          href: "once-ui.com/truth",
+          label: "once-ui.com"
+        }}>
+        “The first time a stranger pays for something you’ve built — something that came entirely from your mind — your worldview changes forever.”
+      </BlockQuote>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<BlockQuote
+    align="left"
+    separator="none"
+    author={{
+      name: "Lorant",
+    }}
+    link={{
+      href: "once-ui.com/truth",
+      label: "once-ui.com"
+    }}>
+    “The first time a stranger pays for something you’ve built — something that came entirely from your mind — your worldview changes forever.”
+</BlockQuote>
+<BlockQuote
+    align="right"
+    separator="top"
+    author={{
+      name: "Lorant",
+    }}
+    link={{
+      href: "once-ui.com/truth",
+      label: "once-ui.com"
+    }}>
+    “The first time a stranger pays for something you’ve built — something that came entirely from your mind — your worldview changes forever.”
+</BlockQuote>`,
+      language: "tsx",
+      label: "Alignment"
     }
   ]}
 />
@@ -144,31 +257,41 @@ You can enrich the author line with an avatar.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row gap="16" wrap>
-      <BlockQuote background="surface" border="neutral-alpha-medium" onBackground="neutral-strong">
-        <Text variant="body-default-m">“Default surface styling.”</Text>
-      </BlockQuote>
-      <BlockQuote background="page" border="neutral-alpha-weak" onBackground="neutral-medium" borderStyle="solid">
-        <Text variant="body-default-m">“Subtle page tone.”</Text>
-      </BlockQuote>
-      <BlockQuote background="brand-alpha-weak" border="brand-alpha-strong" radius="l-4">
-        <Text variant="body-default-m">“Branded emphasis.”</Text>
-      </BlockQuote>
-    </Row>
+    <BlockQuote 
+        border="neutral-alpha-medium"
+        background="surface"
+        radius="xl"
+        padding="l"
+        align="left"
+        separator="none"
+        author={{
+          name: "Lorant",
+        }}
+        link={{
+          href: "once-ui.com/truth",
+          label: "once-ui.com"
+        }}>
+        <Text variant="heading-default-l">“The first time a stranger pays for something you’ve built — something that came entirely from your mind — your worldview changes forever.”</Text>
+    </BlockQuote>
   }
   codes={[
     {
       code:
-`<BlockQuote background="surface" border="neutral-alpha-medium" onBackground="neutral-strong">
-  <Text variant="body-default-m">“Default surface styling.”</Text>
-</BlockQuote>
-
-<BlockQuote background="page" border="neutral-alpha-weak" onBackground="neutral-medium" borderStyle="solid">
-  <Text variant="body-default-m">“Subtle page tone.”</Text>
-</BlockQuote>
-
-<BlockQuote background="brand-alpha-weak" border="brand-alpha-strong" radius="l-4">
-  <Text variant="body-default-m">“Branded emphasis.”</Text>
+`<BlockQuote 
+    border="neutral-alpha-medium"
+    background="surface"
+    radius="xl"
+    padding="l"
+    align="left"
+    separator="none"
+    author={{
+      name: "Lorant",
+    }}
+    link={{
+      href: "once-ui.com/truth",
+      label: "once-ui.com"
+    }}>
+    <Text variant="heading-default-l">“The first time a stranger pays for something you’ve built — something that came entirely from your mind — your worldview changes forever.”</Text>
 </BlockQuote>`,
       language: "tsx",
       label: "Styling"
@@ -181,7 +304,11 @@ You can enrich the author line with an avatar.
 <PropsTable
   content={[
     ["children"],
-    ["cite", "string"],
+    ["subline", "ReactNode.ReactNode"],
+    ["author", "{ name?: string; avatar?: string }"],
+    ["link", "{ href?: string; label?: string }"],
+    ["separator", ["top", "bottom", "both", "none"], "both"],
+    ["align", ["left", "center", "right"], "center"],
     ["className"],
     ["style"],
     ["...flex"]
@@ -190,6 +317,6 @@ You can enrich the author line with an avatar.
 
 ## Accessibility Considerations
 
-`BlockQuote` renders a semantic `<blockquote>` element to convey quoted content to assistive technologies. Provide a meaningful `cite` URL when available to reference the source. Ensure sufficient color contrast if you override the default `background` or `onBackground` props.
+`BlockQuote` renders a semantic `<blockquote>` element to convey quoted content to assistive technologies. Provide a `link` URL when available to reference the source. Ensure sufficient color contrast if you override the default `background` or `onBackground` props.
 
 

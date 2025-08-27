@@ -24,7 +24,7 @@ If your repository includes Once UI components, you can guide AI with simple, na
 
 <Row fillWidth vertical="end" gap="12">
     <Avatar size="s" src="/images/avatar.jpg" marginBottom="20"/>
-    > I want you to implement a feed view using the `@Grid` component. Use the `@Card` component for each feed item. The card should be column direction with an `@Avatar` in the header, a `@Text` containing the name, and another one for the date. The card should have a `@Media` for the image, and two `@Text` for the title and description.
+    <Column fillWidth padding="20" marginY="20" background="surface" border="neutral-alpha-weak" borderStyle="dashed" radius="l"><Text>I want you to implement a feed view using the `@Grid` component. Use the `@Card` component for each feed item. The card should be column direction with an `@Avatar` in the header, a `@Text` containing the name, and another one for the date. The card should have a `@Media` for the image, and two `@Text` for the title and description.</Text></Column>
 </Row>
 
 As you build more with Once UI, AI models will learn your patterns and start suggesting better code, faster. The more you rely on real usage, the less they hallucinate.
@@ -55,7 +55,7 @@ To configure it:
 
 <Row fillWidth vertical="end" gap="12">
   <Avatar size="s" src="/images/avatar.jpg" marginBottom="20"/>
-  > get-library-docs /once-ui-system/mcp
+  <Row fillWidth padding="20" marginY="20" background="surface" border="neutral-alpha-weak" borderStyle="dashed" radius="l">get-library-docs /once-ui-system/mcp</Row>
 </Row>
 
 This syncs the Once UI documentation with your local agent environment. To invoke the context, end your prompt with `use context7`.
@@ -64,7 +64,7 @@ Example:
 
 <Row fillWidth vertical="end" gap="12">
   <Avatar size="s" src="/images/avatar.jpg" marginBottom="20"/>
-  > I want you to implement [...]. use context7
+  <Row fillWidth padding="20" marginY="20" background="surface" border="neutral-alpha-weak" borderStyle="dashed" radius="l">I want you to implement [...]. use context7</Row>
 </Row>
 
 This lets your agent leverage the full Once UI system — even if it’s not installed locally.
