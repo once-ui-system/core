@@ -10,7 +10,7 @@ interface InlineCodeProps extends React.ComponentProps<typeof Flex> {
 }
 
 const InlineCode = forwardRef<HTMLDivElement, InlineCodeProps>(
-  ({ children, className, style, ...rest }, ref) => {
+  ({ children, className, style, ...flex }, ref) => {
     return (
       <Flex
         as="span"
@@ -26,7 +26,7 @@ const InlineCode = forwardRef<HTMLDivElement, InlineCodeProps>(
         border="neutral-alpha-medium"
         className={classNames(styles.inlineCode, className)}
         style={style}
-        {...rest}
+        {...flex}
       >
         {children}
       </Flex>

@@ -1,0 +1,108 @@
+---
+title: "Pulse"
+summary: "A colored dot with a pulsing animation effect."
+updatedAt: "2025-08-28"
+docs: "once-ui/components/pulse.mdx"
+github: "components/Pulse.tsx"
+navLabel: "Pulse"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `Pulse` component is used to display a colored dot with a pulsing animation effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <Pulse size="s"/>
+      <Pulse size="m" variant="danger"/>
+      <Pulse size="l" variant="success"/>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Pulse size="s"/>
+<Pulse size="m" variant="danger"/>
+<Pulse size="l" variant="success"/>`,
+      language: "tsx",
+      label: "Pulse"
+    }
+  ]}
+/>
+
+## Color
+
+Set the color of the pulse using the `variant` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <Pulse variant="brand"/>
+      <Pulse variant="accent"/>
+      <Pulse variant="neutral"/>
+      <Pulse variant="info"/>
+      <Pulse variant="warning"/>
+      <Pulse variant="danger"/>
+      <Pulse variant="success"/>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Pulse variant="brand"/>
+<Pulse variant="accent"/>
+<Pulse variant="neutral"/>
+<Pulse variant="info"/>
+<Pulse variant="warning"/>
+<Pulse variant="danger"/>
+<Pulse variant="success"/>`,
+      language: "tsx",
+      label: "Pulse"
+    }
+  ]}
+/>
+
+## Size
+
+Set the size of the pulse using the `size` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <Pulse size="s"/>
+      <Pulse size="m"/>
+      <Pulse size="l"/>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Pulse size="s"/>
+<Pulse size="m"/>
+<Pulse size="l"/>`,
+      language: "tsx",
+      label: "Pulse"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["variant", "ColorScheme", "brand"],
+    ["size", "CondensedTShirtSizes", "s"],
+    ["children"],
+    ["className"],
+    ["style"],
+    ["...flex"],
+  ]}
+/>
