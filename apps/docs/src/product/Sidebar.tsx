@@ -235,12 +235,12 @@ const SidebarContent: React.FC<{
   navigation: NavigationItem[];
   pathname: string;
 }> = React.memo(({ navigation, pathname }) => {
-  // Create a render function that captures the current pathname
+  // Helper: default renderer
   const renderNavigation = (items: NavigationItem[], depth = 0) => {
     return (
       <>
         {items.map((item) => (
-          <NavigationItem 
+          <NavigationItem
             key={item.slug}
             item={item}
             depth={depth}
@@ -252,23 +252,126 @@ const SidebarContent: React.FC<{
     );
   };
 
-  // Create resources section
+  // Partition root items into: prioritized roots, once-ui, templates (magic-*), and the rest
+  const onceUiItem = navigation.find((n) => n.slug === 'once-ui' && n.children);
+  const templateItems = navigation.filter((n) => /^magic-/.test(n.slug));
+  const prioritizedRoots = navigation.filter((n) => n.slug === 'get-started' || n.slug === 'vibe-coding');
+  const otherRootItems = navigation.filter((n) => n !== onceUiItem && !/^magic-/.test(n.slug) && !prioritizedRoots.includes(n));
+
+  // Build Guides and Reference groups within Once UI
+  const renderOnceUiGrouped = () => {
+    if (!onceUiItem || !onceUiItem.children) return null;
+
+    const children = onceUiItem.children;
+
+    // Identify items by slug/title
+    const isQuickStart = (i: NavigationItem) => i.slug === 'once-ui/quick-start';
+    const isConfig = (i: NavigationItem) => i.slug === 'once-ui/config';
+    const isComponentsDir = (i: NavigationItem) => !!i.children && (i.slug === 'components' || i.title.toLowerCase() === 'components');
+    const isComponentsOverview = (i: NavigationItem) => i.slug === 'once-ui/components';
+    const isBasicsDir = (i: NavigationItem) => !!i.children && (i.slug === 'basics' || i.title.toLowerCase() === 'basics');
+    const isContextsDir = (i: NavigationItem) => !!i.children && (i.slug === 'contexts' || i.title.toLowerCase() === 'contexts');
+
+    const guides: NavigationItem[] = [];
+    const reference: NavigationItem[] = [];
+
+    children.forEach((child) => {
+      if (isQuickStart(child) || isConfig(child) || isBasicsDir(child) || isContextsDir(child)) {
+        guides.push(child);
+        return;
+      }
+      // Components overview under Guides, Components directory under Reference
+      if (isComponentsOverview(child)) {
+        guides.push(child);
+        return;
+      }
+      if (isComponentsDir(child)) {
+        reference.push(child);
+        return;
+      }
+      reference.push(child);
+    });
+
+    return (
+      <Row fillWidth>
+        <Column fillWidth marginTop="2">
+          <Accordion
+            gap="2"
+            icon="chevronRight"
+            iconRotation={90}
+            size="s"
+            radius="s"
+            paddingLeft="4"
+            paddingTop="4"
+            open={true}
+            title={
+              <Row fillWidth vertical="center" textVariant="label-strong-s" onBackground="brand-strong">
+                Once UI
+              </Row>
+            }
+          >
+            <Column gap="2" paddingLeft="4" paddingTop="4">
+              <Row paddingY="12" paddingLeft="8" textVariant="label-strong-s" onBackground="brand-strong">
+                Guides
+              </Row>
+              {renderNavigation(guides, 1)}
+
+              <Row paddingY="12" paddingLeft="8" textVariant="label-strong-s" onBackground="brand-strong">
+                Reference
+              </Row>
+              {renderNavigation(reference, 1)}
+            </Column>
+          </Accordion>
+        </Column>
+      </Row>
+    );
+  };
+
+  // Templates (Pro) synthetic group
+  const renderTemplatesGroup = () => {
+    if (templateItems.length === 0) return null;
+    return (
+      <Row fillWidth>
+        <Column fillWidth marginTop="2">
+          <Accordion
+            gap="2"
+            icon="chevronRight"
+            iconRotation={90}
+            size="s"
+            radius="s"
+            paddingLeft="4"
+            paddingTop="4"
+            open={false}
+            title={
+              <Row fillWidth vertical="center" textVariant="label-strong-s" onBackground="brand-strong">
+                Templates (Pro)
+              </Row>
+            }
+          >
+            {renderNavigation(templateItems, 1)}
+          </Accordion>
+        </Column>
+      </Row>
+    );
+  };
+
+  // Resources section (kept as-is)
   const resourcesSection = (!(routes['/roadmap'] || routes['/changelog'])) ? null : (
     <Column gap="2" marginTop="32" paddingLeft="4">
       <Row textVariant="label-strong-s" onBackground="brand-strong" paddingLeft="8" paddingY="12">
         Resources
       </Row>
       {routes['/roadmap'] && (
-        <ResourceLink 
+        <ResourceLink
           href="/roadmap"
           icon="roadmap"
           label="Roadmap"
           pathname={pathname}
         />
       )}
-      
+
       {routes['/changelog'] && (
-        <ResourceLink 
+        <ResourceLink
           href="/changelog"
           icon="changelog"
           label="Changelog"
@@ -280,7 +383,10 @@ const SidebarContent: React.FC<{
 
   return (
     <>
-      {renderNavigation(navigation, 0)}
+      {renderNavigation(prioritizedRoots, 0)}
+      {renderOnceUiGrouped()}
+      {renderNavigation(otherRootItems.filter(Boolean) as NavigationItem[], 0)}
+      {renderTemplatesGroup()}
       {resourcesSection}
     </>
   );
