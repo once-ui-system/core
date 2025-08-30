@@ -682,16 +682,22 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         </Row>
       )}
       {preview && (
-        <Row key={refreshKey} paddingX="4" paddingBottom="4" paddingTop={compact ? "4" : "0"} fill>
+        <Row
+          key={refreshKey}
+          paddingX="4"
+          paddingBottom="4"
+          paddingTop={compact ? "4" : "0"}
+          fill
+        >
           <Row
             fill
             background="overlay"
+            radius="l"
+            border="neutral-alpha-weak"
             padding={previewPadding}
             tabIndex={-1}
             horizontal="center"
-            radius="l"
             overflowY="auto"
-            border="neutral-alpha-weak"
           >
             {Array.isArray(preview)
               ? preview.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
@@ -702,20 +708,19 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       {codes.length > 0 && code && (
         <Row
           border={!compact && !preview ? "neutral-alpha-weak" : undefined}
+          fillHeight={fillHeight}
+          radius="l"
+          flex="1"
           style={{
             left: "-1px",
             bottom: "-1px",
             width: "calc(100% + 2px)",
           }}
-          radius="l"
-          flex="1"
-          fillHeight={fillHeight}
         >
           <Row overflowX="auto" fillWidth tabIndex={-1}>
             {language.includes("diff") ? (
               <div
                 className={classNames(
-                  styles.padding,
                   styles.pre,
                   `language-diff${Array.isArray(language) ? `-${language[1]}` : ``}`,
                 )}

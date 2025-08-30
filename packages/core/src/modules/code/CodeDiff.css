@@ -1,8 +1,7 @@
 .language-diff .diff-table {
   display: table;
-  width: calc(100% + var(--static-space-8));
+  width: 100%;
   border-collapse: collapse;
-  margin-left: calc(-1 * var(--static-space-8));
 }
 
 .language-diff .diff-row {
