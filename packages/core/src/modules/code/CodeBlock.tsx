@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState, useEffect, useRef, ReactNode, RefObject} from "react";
+import React, { ReactNode, RefObject, useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import { Language, SpacingToken } from "../../types";
@@ -32,119 +32,119 @@ const loadCssFiles = async () => {
 // Complete dependency map for Prism.js languages
 const languageDependencies: Record<string, string[]> = {
   // Languages that require clike (C-like syntax)
-  'arduino': ['clike'],
-  'c': ['clike'],
-  'cpp': ['c'],
-  'csharp': ['clike'],
-  'dart': ['clike'],
-  'java': ['clike'],
-  'javascript': ['clike'],
-  'kotlin': ['clike'],
-  'objectivec': ['c'],
-  'scala': ['java'],
-  'swift': ['clike'],
-  'processing': ['clike'],
-  'solidity': ['clike'],
-  'squirrel': ['clike'],
-  'unrealscript': ['clike'],
-  'cilkc': ['c'],
-  'cilkcpp': ['cpp'],
-  'cfscript': ['clike'],
-  'chaiscript': ['clike'],
-  'cil': ['clike'],
-  'concurnas': ['clike'],
-  'crystal': ['clike'],
-  'gcode': ['clike'],
-  'glsl': ['c'],
-  'hlsl': ['c'],
-  'opencl': ['c'],
-  'reason': ['clike'],
+  arduino: ["clike"],
+  c: ["clike"],
+  cpp: ["c"],
+  csharp: ["clike"],
+  dart: ["clike"],
+  java: ["clike"],
+  javascript: ["clike"],
+  kotlin: ["clike"],
+  objectivec: ["c"],
+  scala: ["java"],
+  swift: ["clike"],
+  processing: ["clike"],
+  solidity: ["clike"],
+  squirrel: ["clike"],
+  unrealscript: ["clike"],
+  cilkc: ["c"],
+  cilkcpp: ["cpp"],
+  cfscript: ["clike"],
+  chaiscript: ["clike"],
+  cil: ["clike"],
+  concurnas: ["clike"],
+  crystal: ["clike"],
+  gcode: ["clike"],
+  glsl: ["c"],
+  hlsl: ["c"],
+  opencl: ["c"],
+  reason: ["clike"],
 
   // Languages that require markup (HTML/XML)
-  'xml-doc': ['markup'],
-  'mathml': ['markup'],
-  'svg': ['markup'],
-  'ssml': ['markup'],
-  'asciidoc': ['markup'],
-  'dns-zone-file': ['markup'],
-  'javadoclike': ['markup'],
-  'markdown': ['markup'],
-  'nasm': ['markup'],
-  'parser': ['markup'],
-  'plant-uml': ['markup'],
-  'powerquery': ['markup'],
-  'solution-file': ['markup'],
-  't4-templating': ['markup'],
-  'turtle': ['markup'],
-  'web-idl': ['markup'],
-  'xquery': ['markup'],
+  "xml-doc": ["markup"],
+  mathml: ["markup"],
+  svg: ["markup"],
+  ssml: ["markup"],
+  asciidoc: ["markup"],
+  "dns-zone-file": ["markup"],
+  javadoclike: ["markup"],
+  markdown: ["markup"],
+  nasm: ["markup"],
+  parser: ["markup"],
+  "plant-uml": ["markup"],
+  powerquery: ["markup"],
+  "solution-file": ["markup"],
+  "t4-templating": ["markup"],
+  turtle: ["markup"],
+  "web-idl": ["markup"],
+  xquery: ["markup"],
 
   // Languages that require markup-templating
-  'django': ['markup-templating'],
-  'erb': ['markup-templating', 'ruby'],
-  'etlua': ['markup-templating', 'lua'],
-  'handlebars': ['markup-templating'],
-  'jsp': ['markup-templating', 'java'],
-  'latte': ['markup-templating', 'php'],
-  'liquid': ['markup-templating'],
-  'mustache': ['markup-templating'],
-  'php': ['markup-templating'],
-  'smarty': ['markup-templating'],
-  'twig': ['markup-templating'],
-  'velocity': ['markup-templating'],
-  'ejs': ['markup-templating', 'javascript'],
-  'ftl': ['markup-templating'],
-  'tt2': ['clike', 'markup-templating'],
+  django: ["markup-templating"],
+  erb: ["markup-templating", "ruby"],
+  etlua: ["markup-templating", "lua"],
+  handlebars: ["markup-templating"],
+  jsp: ["markup-templating", "java"],
+  latte: ["markup-templating", "php"],
+  liquid: ["markup-templating"],
+  mustache: ["markup-templating"],
+  php: ["markup-templating"],
+  smarty: ["markup-templating"],
+  twig: ["markup-templating"],
+  velocity: ["markup-templating"],
+  ejs: ["markup-templating", "javascript"],
+  ftl: ["markup-templating"],
+  tt2: ["clike", "markup-templating"],
 
   // Languages that require javascript
-  'actionscript': ['javascript'],
-  'coffeescript': ['javascript'],
-  'flow': ['javascript'],
-  'jsx': ['markup', 'javascript'],
-  'n4js': ['javascript'],
-  'qml': ['javascript'],
-  'typescript': ['javascript'],
-  'tsx': ['jsx', 'typescript'],
-  'jsdoc': ['javascript', 'javadoclike'],
-  'js-extras': ['javascript'],
-  'js-templates': ['javascript'],
-  'jsstacktrace': ['javascript'],
-  'mongodb': ['javascript'],
-  'rescript': ['javascript'],
+  actionscript: ["javascript"],
+  coffeescript: ["javascript"],
+  flow: ["javascript"],
+  jsx: ["markup", "javascript"],
+  n4js: ["javascript"],
+  qml: ["javascript"],
+  typescript: ["javascript"],
+  tsx: ["jsx", "typescript"],
+  jsdoc: ["javascript", "javadoclike"],
+  "js-extras": ["javascript"],
+  "js-templates": ["javascript"],
+  jsstacktrace: ["javascript"],
+  mongodb: ["javascript"],
+  rescript: ["javascript"],
 
   // Languages that require CSS
-  'less': ['css'],
-  'sass': ['css'],
-  'scss': ['css'],
-  'stylus': ['css'],
-  'css-extras': ['css'],
+  less: ["css"],
+  sass: ["css"],
+  scss: ["css"],
+  stylus: ["css"],
+  "css-extras": ["css"],
 
   // Languages that require JSON
-  'json5': ['json'],
-  'jsonp': ['json'],
+  json5: ["json"],
+  jsonp: ["json"],
 
   // Languages with specific complex dependencies
-  'aspnet': ['markup', 'csharp'],
-  'cshtml': ['markup', 'csharp'],
-  'bison': ['c'],
-  'docker': ['clike'],
-  'firestore-security-rules': ['clike'],
-  'go-module': ['go'],
-  'haml': ['ruby'],
-  'javadoc': ['markup', 'java'],
-  'lilypond': ['scheme'],
-  'mel': ['python'],
-  'nginx': ['clike'],
-  'phpdoc': ['php', 'javadoclike'],
-  'pug': ['markup', 'javascript'],
-  'qsharp': ['csharp'],
-  't4-cs': ['csharp', 't4-templating'],
-  't4-vb': ['vbnet', 't4-templating'],
-  'vbnet': ['basic'],
+  aspnet: ["markup", "csharp"],
+  cshtml: ["markup", "csharp"],
+  bison: ["c"],
+  docker: ["clike"],
+  "firestore-security-rules": ["clike"],
+  "go-module": ["go"],
+  haml: ["ruby"],
+  javadoc: ["markup", "java"],
+  lilypond: ["scheme"],
+  mel: ["python"],
+  nginx: ["clike"],
+  phpdoc: ["php", "javadoclike"],
+  pug: ["markup", "javascript"],
+  qsharp: ["csharp"],
+  "t4-cs": ["csharp", "t4-templating"],
+  "t4-vb": ["vbnet", "t4-templating"],
+  vbnet: ["basic"],
 };
 
 // Track loaded languages to avoid re-loading
-const loadedLanguages = new Set<string>(['markup', 'css', 'clike', 'javascript']);
+const loadedLanguages = new Set<string>(["markup", "css", "clike", "javascript"]);
 
 // Recursively load language dependencies
 const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
@@ -168,7 +168,6 @@ const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
     await import(`prismjs/components/prism-${lang}`);
     loadedLanguages.add(lang);
     return true;
-
   } catch (error) {
     console.warn(`✗ Failed to load Prism language '${lang}':`, error);
     return false;
@@ -184,23 +183,21 @@ const loadPrismDependencies = async (...langs: string[]): Promise<boolean> => {
     await Promise.all([
       import("prismjs/plugins/line-highlight/prism-line-highlight"),
       import("prismjs/plugins/line-numbers/prism-line-numbers"),
+      import("prismjs/components/prism-diff"),
       import("prismjs/plugins/diff-highlight/prism-diff-highlight"),
     ]);
 
     // Filter out empty/invalid languages and remove duplicates
-    const validLangs = [...new Set(langs.filter(lang => lang && lang.trim()))];
+    const validLangs = [...new Set(langs.filter((lang) => lang && lang.trim()))];
 
     // Load each language with its dependencies
-    const results = await Promise.all(
-      validLangs.map(lang => loadLanguageWithDependencies(lang))
-    );
+    const results = await Promise.all(validLangs.map((lang) => loadLanguageWithDependencies(lang)));
 
     const successCount = results.filter(Boolean).length;
 
     return successCount > 0;
-
   } catch (error) {
-    console.error('💥 Error loading Prism dependencies:', error);
+    console.error("💥 Error loading Prism dependencies:", error);
     return false;
   }
 };
@@ -269,39 +266,92 @@ const parseDiff = (diffContent: string, startLineNumber?: number) => {
   return parsedLines;
 };
 
-// Diff renderer
-const renderDiff = (diffContent: string, startLineNumber: number | undefined, codeRef: RefObject<HTMLElement | null>) => {
+const isInformationalLine = (type: "file-header" | "hunk" | "added" | "deleted" | "context") => {
+  return ["hunk", "file-header"].includes(type);
+};
+
+// GitHub-style diff renderer with syntax highlighting
+const renderDiff = (
+  diffContent: string,
+  startLineNumber: number | undefined,
+  codeRef: RefObject<HTMLElement | null>,
+  lang: string | undefined,
+) => {
   const parsedLines = parseDiff(diffContent, startLineNumber);
+
+  const codeLines = parsedLines.filter((line) => !isInformationalLine(line.type));
+
+  // Apply syntax highlighting to code lines
+  let highlightedLines: string[] = [];
+  if (lang && Prism.languages[lang]) {
+    try {
+      highlightedLines = codeLines.map((line) => {
+        try {
+          return Prism.highlight(line.content, Prism.languages[lang], lang);
+        } catch (error) {
+          console.warn(`Failed to highlight line: ${line.content}`, error);
+          return line.content;
+        }
+      });
+    } catch (error) {
+      console.warn(`Failed to highlight code with language ${lang}:`, error);
+      highlightedLines = codeLines.map((line) => line.content);
+    }
+  } else {
+    highlightedLines = codeLines.map((line) => line.content);
+  }
+
+  let codeLineIndex = 0;
 
   return (
     <div className="diff-table">
-      {parsedLines.map((line, index) => (
-        <div key={index} className={`diff-row ${line.type}`}>
-          <div className="diff-line-number">
-            <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>{line.type === "added" ? "" : line.oldLineNumber || ""}</Text>
+      {parsedLines.map((line, index) => {
+        let content = line.content;
+        let className = "";
+
+        if (isInformationalLine(line.type)) {
+          if (Prism.languages.diff) {
+            try {
+              content = Prism.highlight(line.content, Prism.languages.diff, "diff");
+            } catch (error) {
+              console.warn(`Failed to highlight diff line: ${line.content}`, error);
+            }
+          }
+          className = "language-diff";
+        } else {
+          content = highlightedLines[codeLineIndex] || line.content;
+          className = `language-${lang || "text"}`;
+          codeLineIndex++;
+        }
+
+        return (
+          <div key={index} className={`diff-row ${line.type}`}>
+            <div className="diff-line-number">
+              {(line.type === "deleted" || line.type === "context") &&
+                line.oldLineNumber !== undefined && <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>{line.oldLineNumber}</Text>}
+            </div>
+            <div className="diff-line-number">
+              {(line.type === "added" || line.type === "context") &&
+                line.newLineNumber !== undefined && <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>{line.newLineNumber}</Text>}
+            </div>
+            <div className="diff-line-content">
+              <span className="diff-sign"></span>
+              <code
+                suppressHydrationWarning
+                className={className}
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+            </div>
           </div>
-          <div className="diff-line-number">
-            <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>{line.type === "deleted" ? "" : line.newLineNumber || ""}</Text>
-          </div>
-          <div className="diff-line-content">
-            {line.type === "added" && <span className="diff-sign"></span>}
-            {line.type === "deleted" && <span className="diff-sign"></span>}
-            <code
-                ref={codeRef}
-                className={classNames(styles.code, `language-diff`)}
-            >
-              {line.content}
-            </code>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
 
 type CodeInstance = {
   code: string | { content: string; error: string | null };
-  language: Language;
+  language: Language | ["diff", Language];
   label: string;
   highlight?: string;
   prefixIcon?: string;
@@ -364,7 +414,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     const loadDependencies = async () => {
       await Promise.all([
         loadPrismDependencies(
-          ...codes.map((data) => {
+          ...codes.flatMap((data) => {
             return data.language;
           }),
         ),
@@ -414,6 +464,45 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       document.body.style.overflow = "";
     };
   }, [isFullscreen]);
+
+  // Special handling for diff highlighting
+  useEffect(() => {
+    if (
+      codeInstance &&
+      Array.isArray(codeInstance.language) &&
+      codeInstance.language.includes("diff")
+    ) {
+      const timeoutId = setTimeout(() => {
+        if (codeRef.current) {
+          const diffRows = codeRef.current.querySelectorAll(".diff-row");
+          const lang = codeInstance.language[1];
+
+          if (lang && Prism.languages[lang]) {
+            diffRows.forEach((row) => {
+              const codeContent = row.querySelector(".diff-line-content code");
+              const rowElement = row as HTMLElement;
+
+              if (
+                codeContent &&
+                (rowElement.classList.contains("added") ||
+                  rowElement.classList.contains("deleted") ||
+                  rowElement.classList.contains("context"))
+              ) {
+                const textContent = codeContent.textContent || "";
+                try {
+                  codeContent.innerHTML = Prism.highlight(textContent, Prism.languages[lang], lang);
+                } catch (error) {
+                  console.warn("Failed to re-highlight line:", error);
+                }
+              }
+            });
+          }
+        }
+      }, 50);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [codeInstance, codes]);
 
   const [copyIcon, setCopyIcon] = useState<string>("clipboard");
   const handleCopy = () => {
@@ -623,20 +712,25 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           fillHeight={fillHeight}
         >
           <Row overflowX="auto" fillWidth tabIndex={-1}>
-            {language === "diff" ? (
+            {language.includes("diff") ? (
               <div
-                className={classNames(styles.padding, styles.pre, `language-${language}`)}
+                className={classNames(
+                  styles.padding,
+                  styles.pre,
+                  `language-diff${Array.isArray(language) ? `-${language[1]}` : ``}`,
+                )}
                 style={{ maxHeight: `${codeHeight}rem`, overflow: "auto", width: "100%" }}
               >
                 {renderDiff(
                   typeof code === "string" ? code : code.content,
                   startLineNumber,
-                  codeRef
+                  codeRef,
+                  Array.isArray(language) ? language[1] : undefined,
                 )}
               </div>
             ) : (
               <pre
-                key={`${selectedInstance}-${highlight || deprecatedHighlight || 'no-highlight'}`}
+                key={`${selectedInstance}-${highlight || deprecatedHighlight || "no-highlight"}`}
                 suppressHydrationWarning
                 tabIndex={-1}
                 style={{ maxHeight: `${codeHeight}rem` }}
