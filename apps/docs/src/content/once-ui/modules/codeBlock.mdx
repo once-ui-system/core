@@ -313,7 +313,16 @@ return total;
 
 ## Code Diff
 
-Display Git-style diffs by setting the language to "diff". You can optionally set `startLineNumber` to control numbering.
+Display Git-style diffs by setting the language to "diff". Numbering can be used from coordinates, also specified manually by setting the `startLineNumber` parameter. Numbering prioritizes as follows:
+<Card
+    border="neutral-alpha-medium"
+    vertical="center"
+    horizontal='center'
+    gap="4"
+    radius="l"
+    paddingX="16">
+    coordinates > `startLineNumber` > 0 (fallback to 0 if not set)
+</Card>
 
 <CodeBlock
   marginTop="16"
@@ -325,13 +334,13 @@ Display Git-style diffs by setting the language to "diff". You can optionally se
         {
           language: "diff",
           label: "Diff",
-          startLineNumber: 1,
           code:
 `diff --git a/src/utils/math.ts b/src/utils/math.ts
 index 1a2b3c4..5d6e7f8 100644
 --- a/src/utils/math.ts
 +++ b/src/utils/math.ts
-@@ -10,7 +10,10 @@ export function add(a: number, b: number): number {
+@@ -10,7 +10,10 @@
+export function add(a: number, b: number): number {
    return a + b;
 }
 
@@ -362,7 +371,7 @@ index 1a2b3c4..5d6e7f8 100644
       label: "Diff",
       startLineNumber: 1,
       code:
-"diff --git a/src/utils/math.ts b/src/utils/math.ts\nindex 1a2b3c4..5d6e7f8 100644\n--- a/src/utils/math.ts\n+++ b/src/utils/math.ts\n@@ -10,7 +10,10 @@ export function add(a: number, b: number): number {\n  return a + b;\n}\n\n-export function multiply(a: number, b: number): number {\n-  return a * b;\n-}\n+export function multiply(a: number, b: number): number {\n+  if (a === 0 || b === 0) {\n+    return 0;\n+  }\n+  return a * b;\n+}\n\n export function subtract(a: number, b: number): number {\n  return a - b;\n}",
+"diff --git a/src/utils/math.ts b/src/utils/math.ts\nindex 1a2b3c4..5d6e7f8 100644\n--- a/src/utils/math.ts\n+++ b/src/utils/math.ts\n@@ -10,7 +10,10 @@\n export function add(a: number, b: number): number {\n  return a + b;\n}\n\n-export function multiply(a: number, b: number): number {\n-  return a * b;\n-}\n+export function multiply(a: number, b: number): number {\n+  if (a === 0 || b === 0) {\n+    return 0;\n+  }\n+  return a * b;\n+}\n\n export function subtract(a: number, b: number): number {\n  return a - b;\n}",
     }
   ]}
 />`,
@@ -371,6 +380,66 @@ index 1a2b3c4..5d6e7f8 100644
     }
   ]}
   copyButton
+/>
+
+You can enable syntax highlighting by specifying a similar array as the language parameter: `[ “diff”, “typescript” ]`
+
+<CodeBlock
+    marginTop="16"
+    marginBottom="24"
+    preview={
+        <CodeBlock
+            copyButton={false}
+            codes={[
+                {
+                    language: [ "diff", "typescript" ],
+                    label: "Diff",
+                    code:
+                        `diff --git a/src/utils/math.ts b/src/utils/math.ts
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/utils/math.ts
++++ b/src/utils/math.ts
+@@ -10,7 +10,10 @@
+export function add(a: number, b: number): number {
+   return a + b;
+}
+
+- export function multiply(a: number, b: number): number {
+-  return a * b;
+- }
++ export function multiply(a: number, b: number): number {
++  if (a === 0 || b === 0) {
++    return 0;
++  }
++  return a * b;
++ }
+
+export function subtract(a: number, b: number): number {
+  return a - b;
+}`
+                }
+            ]}
+        />
+    }
+    codes={[
+        {
+            code:
+                `<CodeBlock
+  codes={[
+    {
+      language:  [ "diff", "typescript" ],
+      label: "Diff",
+      startLineNumber: 1,
+      code:
+"diff --git a/src/utils/math.ts b/src/utils/math.ts\nindex 1a2b3c4..5d6e7f8 100644\n--- a/src/utils/math.ts\n+++ b/src/utils/math.ts\n@@ -10,7 +10,10 @@\n export function add(a: number, b: number): number {\n  return a + b;\n}\n\n-export function multiply(a: number, b: number): number {\n-  return a * b;\n-}\n+export function multiply(a: number, b: number): number {\n+  if (a === 0 || b === 0) {\n+    return 0;\n+  }\n+  return a * b;\n+}\n\n export function subtract(a: number, b: number): number {\n  return a - b;\n}",
+    }
+  ]}
+/>`,
+            language: "tsx",
+            label: "Code Diff"
+        }
+    ]}
+    copyButton
 />
 
 ## Extras
@@ -425,4 +494,16 @@ renderResults(data);"
     ["...flex"]
   ]}
 />
+
+<PropsTable
+    content={[
+        ["code", "string | { content: string; error: string | null }"],
+        ["language", `Language | [ "diff" , Language ]`],
+        ["label", "string"],
+        ["highlight", "string"],
+        ["prefixIcon", "string"],
+        ["startLineNumber", "number", "0"]
+    ]}
+/>
+
 
