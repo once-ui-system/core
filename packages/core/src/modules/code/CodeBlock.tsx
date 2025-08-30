@@ -251,14 +251,14 @@ const parseDiff = (diffContent: string, startLineNumber?: number) => {
         oldLineNumber,
         content: line.substring(1),
       });
-    } else if (line.startsWith(" ") || line === "") {
+    } else if (line.startsWith("") || line === "") {
       oldLineNumber++;
       newLineNumber++;
       parsedLines.push({
         type: "context",
         oldLineNumber,
         newLineNumber,
-        content: line.substring(1),
+        content: line,
       });
     }
   }
@@ -320,7 +320,7 @@ const renderDiff = (
           className = "language-diff";
         } else {
           content = highlightedLines[codeLineIndex] || line.content;
-          className = `language-${lang || "text"}`;
+          className = `language-${lang || "diff"}`;
           codeLineIndex++;
         }
 
@@ -722,7 +722,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               <div
                 className={classNames(
                   styles.pre,
-                  `language-diff${Array.isArray(language) ? `-${language[1]}` : ``}`,
+                  `language-diff`,
                 )}
                 style={{ maxHeight: `${codeHeight}rem`, overflow: "auto", width: "100%" }}
               >
