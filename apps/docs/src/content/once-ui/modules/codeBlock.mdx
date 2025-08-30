@@ -313,16 +313,7 @@ return total;
 
 ## Code Diff
 
-Display Git-style diffs by setting the language to "diff". Numbering can be used from coordinates, also specified manually by setting the `startLineNumber` parameter. Numbering prioritizes as follows:
-<Card
-    border="neutral-alpha-medium"
-    vertical="center"
-    horizontal='center'
-    gap="4"
-    radius="l"
-    paddingX="16">
-    coordinates > `startLineNumber` > 0 (fallback to 0 if not set)
-</Card>
+Display Git-style diffs by setting the language to "diff". Numbering can be used from coordinates, also specified manually by setting the `startLineNumber` parameter. Numbering prioritizes as follows: `coordinates` > `startLineNumber` > `0` (fallback)
 
 <CodeBlock
   marginTop="16"
@@ -497,8 +488,8 @@ renderResults(data);"
 
 <PropsTable
     content={[
-        ["code", "string | { content: string; error: string | null }"],
-        ["language", `Language | [ "diff" , Language ]`],
+        ["code", ["string", `{ content: string; error: string | null }`]],
+        ["language", ["Language", `[ "diff" , Language ]`]],
         ["label", "string"],
         ["highlight", "string"],
         ["prefixIcon", "string"],
