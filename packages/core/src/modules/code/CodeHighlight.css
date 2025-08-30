@@ -98,3 +98,19 @@
 .line-numbers .line-highlight:after {
   content: none;
 }
+
+.language-json .token.property {
+  color: var(--code-blue);
+}
+
+.language-json .token.string {
+  color: var(--code-green);
+}
+
+.language-yaml .token.key {
+  color: var(--code-blue);
+}
+
+.language-yaml .token.scalar {
+  color: var(--code-green);
+}

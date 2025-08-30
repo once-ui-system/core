@@ -6,6 +6,8 @@ github: "modules/code/CodeBlock.tsx"
 docs: "once-ui/modules/codeBlock.mdx"
 navLabel: "CodeBlock"
 navIcon: "modules"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The `CodeBlock` component provides a way to display code snippets with syntax highlighting, interactive tabs for multiple code examples, and optional live previews. It supports various customization options including copy buttons, fullscreen mode, and line numbers.
@@ -18,6 +20,8 @@ The `CodeBlock` component provides a way to display code snippets with syntax hi
   }
   codes={[
     {
+      language: "tsx",
+      label: "CodeBlock",
       code:
 `<CodeBlock
     copyButton
@@ -28,14 +32,12 @@ The `CodeBlock` component provides a way to display code snippets with syntax hi
     }
     codes={[
       {
-        code: "const greeting = 'Hello, world!';",
         language: "javascript",
-        label: "Example"
+        label: "Example",
+        code: "const greeting = 'Hello, world!';"
       }
     ]}
 />`,
-      language: "tsx",
-      label: "CodeBlock"
     }
   ]}
   copyButton
@@ -62,6 +64,8 @@ The `CodeBlock` component provides a way to display code snippets with syntax hi
   }
 	codes={[
 		{
+			language: "tsx",
+			label: "Preview",
 			code:
 `<CodeBlock
 		copyButton
@@ -81,14 +85,12 @@ The `CodeBlock` component provides a way to display code snippets with syntax hi
 		}
 		codes={[
 			{
-				code: "...",
 				language: "tsx",
-				label: "Preview"
+				label: "Preview",
+				code: "..."
 			}
 		]}
-/>`,
-			language: "tsx",
-			label: "Preview"
+/>`
 		}
 	]}
 />
@@ -106,25 +108,27 @@ The `CodeBlock` can display multiple code examples with tabs for easy navigation
         copyButton={false}
       codes={[
         {
+          language: "javascript",
+          label: "JavaScript",
           code:
 `// JavaScript
 const button = document.createElement('button');
 button.textContent = 'Example Button';
 button.classList.add('secondary');
-document.body.appendChild(button);`,
-          language: "javascript",
-          label: "JavaScript"
+document.body.appendChild(button);`
         },
         {
+          language: "html",
+          label: "HTML",
           code:
 `<!-- HTML -->
 <button class="secondary">
     Example Button
-</button>`,
-          language: "html",
-          label: "HTML"
+</button>`
         },
         {
+          language: "css",
+          label: "CSS",
           code:
 `/* CSS */
 button.secondary {
@@ -132,9 +136,7 @@ button.secondary {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 8px 16px;
-}`,
-          language: "css",
-          label: "CSS"
+}`
         }
       ]}
     />
@@ -146,25 +148,27 @@ button.secondary {
     copyButton={false}
     codes={[
       {
+        language: "javascript",
+        label: "JavaScript",
         code:
 "// JavaScript
 const button = document.createElement('button');
 button.textContent = 'Example Button';
 button.classList.add('secondary');
 document.body.appendChild(button);",
-        language: "javascript",
-        label: "JavaScript"
       },
       {
+        language: "html",
+        label: "HTML",
         code:
 "<!-- HTML -->
 <button class="secondary">
     Example Button
-</button>",
-        language: "html",
-        label: "HTML"
+</button>"
     },
     {
+        language: "css",
+        label: "CSS",
         code:
 "/* CSS */
 button.secondary {
@@ -172,9 +176,7 @@ button.secondary {
     border: 1px solid #ccc;
     border-radius: 4px;
     padding: 8px 16px;
-}",
-        language: "css",
-        label: "CSS"
+}"
       }
     ]}
 />`,
@@ -206,6 +208,8 @@ Use the `compact` prop for a more condensed display.
   }
   codes={[
     {
+      language: "tsx",
+      label: "Compact",
       code:
 `<CodeBlock
 		compact
@@ -217,9 +221,7 @@ Use the `compact` prop for a more condensed display.
 				label: "Compact"
 			}
 		]}
-/>`,
-      language: "tsx",
-      label: "Compact"
+/>`
     }
   ]}
 />
@@ -237,37 +239,37 @@ Use the `lineNumbers` prop to display line numbers for better code readability a
 				compact
         codes={[
           {
+            language: "tsx",
+            label: "Line numbers",
             code:
 `function greet() {
 		console.log('Hello!')
 		return 'Greeting sent'
 }`,
-            language: "tsx",
-            label: "Line numbers"
           }
         ]}
     />
   }
   codes={[
     {
+      language: "tsx",
+      label: "Line numbers",
       code:
 `<CodeBlock
 		lineNumbers
 		compact
 		codes={[
     {
+      language: "tsx",
+      label: "Line numbers",
       code:
 "function greet() {
 		console.log('Hello!')
 		return 'Greeting sent'
-}",
-      language: "tsx",
-      label: "Line numbers"
+}"
     }
   ]}
-/>`,
-      language: "tsx",
-      label: "Line numbers"
+/>`
     }
   ]}
 />
@@ -285,6 +287,9 @@ Use the `highlight` prop to highlight specific lines of code. The value should b
 `<CodeBlock
 		codes={[
 			{
+				language: "tsx",
+				highlight: "2,4-6",
+				label: "Highlight",
 				code:
 "function calculateTotal(items) {
 let total = 0;
@@ -295,10 +300,7 @@ for (let i = 0; i < items.length; i++) {
 }
 	
 return total;
-}",
-				language: "tsx",
-				highlight: "2,4-6",
-				label: "Highlight"
+}"
 			}
 		]}
 />`,
@@ -307,6 +309,128 @@ return total;
       label: "Highlight"
     }
   ]}
+/>
+
+## Code Diff
+
+Display Git-style diffs by setting the language to "diff". Numbering can be used from coordinates, also specified manually by setting the `startLineNumber` parameter. Numbering prioritizes as follows: `coordinates` > `startLineNumber` > `0` (fallback)
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CodeBlock
+      copyButton={false}
+      codes={[
+        {
+          language: "diff",
+          label: "Diff",
+          code:
+`diff --git a/src/utils/math.ts b/src/utils/math.ts
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/utils/math.ts
++++ b/src/utils/math.ts
+@@ -10,7 +10,10 @@
+export function add(a: number, b: number): number {
+   return a + b;
+}
+
+- export function multiply(a: number, b: number): number {
+-  return a * b;
+- }
++ export function multiply(a: number, b: number): number {
++  if (a === 0 || b === 0) {
++    return 0;
++  }
++  return a * b;
++ }
+
+  export function subtract(a: number, b: number): number {
+    return a - b;
+  }`
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CodeBlock
+  codes={[
+    {
+      language: "diff",
+      label: "Diff",
+      startLineNumber: 1,
+      code:
+"diff --git a/src/utils/math.ts b/src/utils/math.ts\nindex 1a2b3c4..5d6e7f8 100644\n--- a/src/utils/math.ts\n+++ b/src/utils/math.ts\n@@ -10,7 +10,10 @@\n export function add(a: number, b: number): number {\n  return a + b;\n}\n\n-export function multiply(a: number, b: number): number {\n-  return a * b;\n-}\n+export function multiply(a: number, b: number): number {\n+  if (a === 0 || b === 0) {\n+    return 0;\n+  }\n+  return a * b;\n+}\n\n export function subtract(a: number, b: number): number {\n  return a - b;\n}",
+    }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Code Diff"
+    }
+  ]}
+  copyButton
+/>
+
+You can enable syntax highlighting by specifying a similar array as the language parameter: `[ “diff”, “typescript” ]`
+
+<CodeBlock
+    marginTop="16"
+    marginBottom="24"
+    preview={
+        <CodeBlock
+            copyButton={false}
+            codes={[
+                {
+                    language: [ "diff", "typescript" ],
+                    label: "Diff",
+                    code:
+                        `diff --git a/src/utils/math.ts b/src/utils/math.ts
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/utils/math.ts
++++ b/src/utils/math.ts
+@@ -10,7 +10,10 @@
+export function add(a: number, b: number): number {
+   return a + b;
+}
+
+- export function multiply(a: number, b: number): number {
+-  return a * b;
+- }
++ export function multiply(a: number, b: number): number {
++  if (a === 0 || b === 0) {
++    return 0;
++  }
++  return a * b;
++ }
+
+export function subtract(a: number, b: number): number {
+  return a - b;
+}`
+                }
+            ]}
+        />
+    }
+    codes={[
+        {
+            code:
+                `<CodeBlock
+  codes={[
+    {
+      language:  [ "diff", "typescript" ],
+      label: "Diff",
+      startLineNumber: 1,
+      code:
+"diff --git a/src/utils/math.ts b/src/utils/math.ts\nindex 1a2b3c4..5d6e7f8 100644\n--- a/src/utils/math.ts\n+++ b/src/utils/math.ts\n@@ -10,7 +10,10 @@\n export function add(a: number, b: number): number {\n  return a + b;\n}\n\n-export function multiply(a: number, b: number): number {\n-  return a * b;\n-}\n+export function multiply(a: number, b: number): number {\n+  if (a === 0 || b === 0) {\n+    return 0;\n+  }\n+  return a * b;\n+}\n\n export function subtract(a: number, b: number): number {\n  return a - b;\n}",
+    }
+  ]}
+/>`,
+            language: "tsx",
+            label: "Code Diff"
+        }
+    ]}
+    copyButton
 />
 
 ## Extras
@@ -320,6 +444,8 @@ The `CodeBlock` component supports additional features like fullscreen mode and 
   styleButton
   codes={[
     {
+      language: "tsx",
+      label: "Extras",
       code:
 `<CodeBlock
 		fullscreenButton
@@ -327,17 +453,15 @@ The `CodeBlock` component supports additional features like fullscreen mode and 
 		reloadButton
 		codes={[
 			{
+				language: "javascript",
+				label: "Extras",
 				code:
 "const data = fetchData();
 console.log('Processing data...');
-renderResults(data);",
-				language: "javascript",
-				label: "Extras"
+renderResults(data);"
 			}
 		]}
-/>`,
-      language: "tsx",
-      label: "Extras"
+/>`
     }
   ]}
 />
@@ -361,4 +485,16 @@ renderResults(data);",
     ["...flex"]
   ]}
 />
+
+<PropsTable
+    content={[
+        ["code", ["string", `{ content: string; error: string | null }`]],
+        ["language", ["Language", `[ "diff" , Language ]`]],
+        ["label", "string"],
+        ["highlight", "string"],
+        ["prefixIcon", "string"],
+        ["startLineNumber", "number", "0"]
+    ]}
+/>
+
 
