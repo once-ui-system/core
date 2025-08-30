@@ -2,16 +2,9 @@
 
 import React, {useState, useEffect, useRef, ReactNode, RefObject} from "react";
 import ReactDOM from "react-dom";
-
-// We'll import CSS files dynamically on the client side
-const loadCssFiles = async () => {
-  if (typeof window !== "undefined") {
-    await Promise.all([import("./CodeHighlight.css"), import("./LineNumber.css")]);
-    return true;
-  }
-  return false;
-};
-
+import classNames from "classnames";
+import { Language, SpacingToken } from "../../types";
+import Prism from "prismjs";
 import styles from "./CodeBlock.module.scss";
 import {
   Flex,
@@ -24,7 +17,17 @@ import {
   Text,
 } from "../../components";
 
-import Prism from "prismjs";
+const loadCssFiles = async () => {
+  if (typeof window !== "undefined") {
+    await Promise.all([
+      import("./CodeHighlight.css"),
+      import("./LineNumber.css"),
+      import("./CodeDiff.css"),
+    ]);
+    return true;
+  }
+  return false;
+};
 
 // Complete dependency map for Prism.js languages
 const languageDependencies: Record<string, string[]> = {
@@ -202,10 +205,7 @@ const loadPrismDependencies = async (...langs: string[]): Promise<boolean> => {
   }
 };
 
-import classNames from "classnames";
-import { Language, SpacingToken } from "../../types";
-
-// GitHub-style diff parser
+// Diff parser
 const parseDiff = (diffContent: string, startLineNumber?: number) => {
   const lines = diffContent.split("\n");
   const parsedLines: Array<{
@@ -269,8 +269,8 @@ const parseDiff = (diffContent: string, startLineNumber?: number) => {
   return parsedLines;
 };
 
-// GitHub-style diff renderer
-const renderGitHubDiff = (diffContent: string, startLineNumber: number | undefined, codeRef: RefObject<HTMLElement | null>) => {
+// Diff renderer
+const renderDiff = (diffContent: string, startLineNumber: number | undefined, codeRef: RefObject<HTMLElement | null>) => {
   const parsedLines = parseDiff(diffContent, startLineNumber);
 
   return (
@@ -278,10 +278,10 @@ const renderGitHubDiff = (diffContent: string, startLineNumber: number | undefin
       {parsedLines.map((line, index) => (
         <div key={index} className={`diff-row ${line.type}`}>
           <div className="diff-line-number">
-            {line.type === "added" ? "" : line.oldLineNumber || ""}
+            <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>{line.type === "added" ? "" : line.oldLineNumber || ""}</Text>
           </div>
           <div className="diff-line-number">
-            {line.type === "deleted" ? "" : line.newLineNumber || ""}
+            <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>{line.type === "deleted" ? "" : line.newLineNumber || ""}</Text>
           </div>
           <div className="diff-line-content">
             {line.type === "added" && <span className="diff-sign"></span>}
@@ -515,7 +515,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       }}
       {...rest}
     >
-      {(codes.length > 1 || (copyButton && !compact)) && (
+      {!compact && (
         <Row zIndex={2} position="static" fillWidth fitHeight horizontal="between">
           {codes.length > 1 ? (
             <Scroller paddingX="8" fadeColor="surface">
@@ -628,7 +628,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 className={classNames(styles.padding, styles.pre, `language-${language}`)}
                 style={{ maxHeight: `${codeHeight}rem`, overflow: "auto", width: "100%" }}
               >
-                {renderGitHubDiff(
+                {renderDiff(
                   typeof code === "string" ? code : code.content,
                   startLineNumber,
                   codeRef
