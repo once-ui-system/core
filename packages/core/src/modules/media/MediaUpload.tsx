@@ -132,15 +132,13 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
 
     return (
       <Flex
-        style={{ isolation: "isolate" }}
+        style={{ isolation: "isolate", cursor: "pointer" }}
         transition="micro-medium"
         overflow="hidden"
-        cursor="interactive"
         className={styles.container}
         aspectRatio={aspectRatio}
         fillWidth
-        horizontal="center"
-        vertical="center"
+        center
         border="neutral-medium"
         radius="l"
         onClick={handleFileSelection}
@@ -153,12 +151,11 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
           <>
             {previewImage ? (
               <Media
+                height={undefined}
                 style={{
-                  cursor: "pointer",
                   filter: uploading ? "grayscale(1)" : "",
                 }}
                 sizes={sizes}
-                fill
                 src={previewImage ? previewImage : ""}
                 alt="Preview of uploaded image"
               />
