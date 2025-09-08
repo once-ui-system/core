@@ -1,0 +1,8 @@
+{
+  "title": "Supabase Starter",
+  "pro": true,
+  "order": 8,
+  "pages": {
+    "quick-start": 1
+  }
+}
