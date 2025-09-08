@@ -22,11 +22,6 @@ const roadmap = [
             type: "feature"
           },
           {
-            title: "Codeblock higlhight",
-            description: "Fix highlight issue when switching between Codeblock tabs.",
-            type: "bug"
-          },
-          {
             title: "OgCard",
             description: "Update OgCard docs with display prop. (Related: OgCard improvements)",
             type: "documentation"
@@ -51,6 +46,11 @@ const roadmap = [
       {
         title: "Done",
         tasks: [
+          {
+            title: "Codeblock higlhight",
+            description: "Fix highlight issue when switching between Codeblock tabs.",
+            type: "bug"
+          },
           {
             title: "Flex & Grid breakpoint objects",
             description: "Override props based on breakpoint.",
@@ -137,16 +137,16 @@ const roadmap = [
       {
         title: "Planned",
         tasks: [
-          {
-            title: "Magic Connect",
-            description: "New social media app product template.",
-            type: "feature"
-          },
         ]
       },
       {
         title: "In Progress",
         tasks: [
+          {
+            title: "Magic Connect",
+            description: "New social media app product template.",
+            type: "feature"
+          },
         ]
       },
       {
@@ -271,16 +271,16 @@ const roadmap = [
       {
         title: "Planned",
         tasks: [
-          {
-            title: "Add OG data overrides",
-            description: "Add OG data overrides to links. (Related: OgCard improvements)",
-            type: "improvement"
-          },
         ]
       },
       {
         title: "In Progress",
         tasks: [
+          {
+            title: "Add OG data overrides",
+            description: "Add OG data overrides to links. (Related: OgCard improvements)",
+            type: "improvement"
+          },
         ]
       },
       {

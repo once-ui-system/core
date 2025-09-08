@@ -145,6 +145,34 @@ The OgCard component supports different sizes.
   ]}
 />
 
+## Conditional rendering
+
+You can hide each element of the `OgCard` component by setting its prop value to `false`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <OgCard
+        description={false}
+        url="https://once-ui.com/about"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Conditional rendering",
+      code:
+`<OgCard 
+    description={false}
+    url="https://once-ui.com/about"
+/>`
+    }
+  ]}
+/>
+
 ## Custom style
 
 The `OgCard` extends the `Card` component, so you can use all `Card` props to customize its appearance.
