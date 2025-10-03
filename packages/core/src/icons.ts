@@ -47,13 +47,14 @@ import {
   IoGlobeOutline,
   IoPawOutline,
 } from "react-icons/io5";
-import { LuTextCursorInput } from "react-icons/lu";
+import { LuChevronsLeftRight, LuTextCursorInput } from "react-icons/lu";
 
 export const iconLibrary: Record<string, IconType> = {
   chevronUp: HiChevronUp,
   chevronDown: HiChevronDown,
   chevronRight: HiChevronRight,
   chevronLeft: HiChevronLeft,
+  chevronsLeftRight: LuChevronsLeftRight,
   refresh: HiOutlineArrowPath,
   light: HiOutlineSun,
   dark: HiOutlineMoon,

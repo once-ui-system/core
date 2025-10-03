@@ -12,15 +12,17 @@ interface SideContent {
 interface CompareImageProps extends React.ComponentProps<typeof Flex> {
   leftContent: SideContent;
   rightContent: SideContent;
+  aspectRatio?: string;
 }
 
-const renderContent = (content: SideContent, clipPath: string) => {
+const renderContent = (content: SideContent, clipPath: string, aspectRatio?: string) => {
   if (typeof content.src === "string") {
     return (
       <Media
         src={content.src}
         alt={content.alt || ""}
         fill
+        aspectRatio={aspectRatio || "16/9"}
         position="absolute"
         style={{ clipPath }}
       />
@@ -34,7 +36,7 @@ const renderContent = (content: SideContent, clipPath: string) => {
   );
 };
 
-const CompareImage = ({ leftContent, rightContent, ...rest }: CompareImageProps) => {
+const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: CompareImageProps) => {
   const [position, setPosition] = useState(50);
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -82,9 +84,9 @@ const CompareImage = ({ leftContent, rightContent, ...rest }: CompareImageProps)
   }, []);
 
   return (
-    <Flex ref={containerRef} aspectRatio="16/9" fillWidth style={{ touchAction: "none" }} {...rest}>
-      {renderContent(leftContent, `inset(0 ${100 - position}% 0 0)`)}
-      {renderContent(rightContent, `inset(0 0 0 ${position}%)`)}
+    <Flex ref={containerRef} aspectRatio={aspectRatio || "16/9"} fillWidth style={{ touchAction: "none" }} {...rest}>
+      {renderContent(leftContent, `inset(0 ${100 - position}% 0 0)`, aspectRatio)}
+      {renderContent(rightContent, `inset(0 0 0 ${position}%)`, aspectRatio)}
 
       {/* Hit area and visible line */}
       <Flex
@@ -102,16 +104,20 @@ const CompareImage = ({ leftContent, rightContent, ...rest }: CompareImageProps)
       >
         <Flex width="1" fillHeight background="neutral-strong" zIndex={2} />
       </Flex>
-      <IconButton
-        icon="chevronsLeftRight"
-        variant="secondary"
+      <Flex
+        radius="l"
+        background="surface"
         className={styles.dragIcon}
         style={{
           left: `${position}%`,
-        }}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleMouseDown}
-      />
+        }}>
+        <IconButton
+          icon="chevronsLeftRight"
+          variant="secondary"
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleMouseDown}
+        />
+      </Flex>
     </Flex>
   );
 };
