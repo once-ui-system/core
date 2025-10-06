@@ -52,7 +52,9 @@ import {
   MasonryGrid,
   TagInput,
   Avatar,
+  Background,
 } from "@once-ui-system/core";
+import { style } from "@/resources/once-ui.config";
 
 export default function Home() {
   const [selectedEmoji, setSelectedEmoji] = React.useState<string>("");
@@ -113,10 +115,16 @@ export default function Home() {
 
   return (
     <Column fill center padding="l" gap="l" maxWidth="m">
+      <Column fillWidth m={{direction: "row"}}>
       <Flex hide l={{hide: false}}>hide by default, show on l</Flex>
-      <Flex hide m={{hide: false}}>hide by default, show on m</Flex>
+      <Flex hide l={{hide: false}}>hide by default, show on l</Flex>
+      <Flex hide m={{hide: false, style: {background: "red"}}}>hide by default, show on m</Flex>
+      <Flex hide m={{hide: false, style: {background: "red"}}}>hide by default, show on m</Flex>
+      <Flex hide s={{hide: false}}>hide by default, show on s</Flex>
       <Flex hide s={{hide: false}}>hide by default, show on s</Flex>
       <Flex hide xs={{hide: false}}>hide by default, show on xs</Flex>
+      <Flex hide xs={{hide: false}}>hide by default, show on xs</Flex>
+      </Column>
       <Feedback icon title="Feedback" description="This is a feedback"></Feedback>
 
       <Column maxWidth="s">

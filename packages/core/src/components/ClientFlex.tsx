@@ -119,55 +119,8 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
     // Determine if we should hide the default cursor
     const shouldHideCursor = typeof cursor === "object" && cursor && !isTouchDevice;
 
-    // Determine if we should apply the hide class based on current breakpoint
-    const shouldApplyHideClass = () => {
-      try {
-        const { currentBreakpoint } = useLayout();
-
-        // Logic matching the shouldHide function in Flex component
-        if (currentBreakpoint === "xl") {
-          if (xl?.hide !== undefined) return xl.hide === true;
-          return hide === true;
-        }
-
-        if (currentBreakpoint === "l") {
-          if (l?.hide !== undefined) return l.hide === true;
-          return hide === true;
-        }
-
-        if (currentBreakpoint === "m") {
-          if (m?.hide !== undefined) return m.hide === true;
-          if (l?.hide !== undefined) return l.hide === true;
-          if (xl?.hide !== undefined) return xl.hide === true;
-          return hide === true;
-        }
-
-        if (currentBreakpoint === "s") {
-          if (s?.hide !== undefined) return s.hide === true;
-          if (m?.hide !== undefined) return m.hide === true;
-          if (l?.hide !== undefined) return l.hide === true;
-          if (xl?.hide !== undefined) return xl.hide === true;
-          return hide === true;
-        }
-
-        if (currentBreakpoint === "xs") {
-          if (xs?.hide !== undefined) return xs.hide === true;
-          if (s?.hide !== undefined) return s.hide === true;
-          if (m?.hide !== undefined) return m.hide === true;
-          if (l?.hide !== undefined) return l.hide === true;
-          if (xl?.hide !== undefined) return xl.hide === true;
-          return hide === true;
-        }
-
-        return hide === true;
-      } catch {
-        return hide === true;
-      }
-    };
-
-    // Apply hide class only if it should be hidden at current breakpoint
-    const effectiveHide = shouldApplyHideClass();
-
+    // Pass hide prop directly to ServerFlex - it will handle responsive hiding via CSS classes
+    // No need for client-side logic that causes re-renders on every resize
     return (
       <>
         <ServerFlex
@@ -178,7 +131,7 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
           s={s}
           xs={xs}
           isDefaultBreakpoints={isDefaultBreakpoints()}
-          hide={effectiveHide}
+          hide={hide}
           ref={combinedRef}
           style={{
             ...props.style,

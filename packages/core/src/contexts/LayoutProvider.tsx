@@ -85,18 +85,34 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     // Initialize width
     const updateWidth = () => {
       const newWidth = window.innerWidth;
+      const newBreakpoint = getCurrentBreakpoint(newWidth);
+      
+      // Only update state if breakpoint actually changed
       setWidth(newWidth);
-      setCurrentBreakpoint(getCurrentBreakpoint(newWidth));
+      setCurrentBreakpoint((prev) => {
+        if (prev !== newBreakpoint) {
+          return newBreakpoint;
+        }
+        return prev;
+      });
+    };
+
+    // Debounce resize handler
+    let timeoutId: NodeJS.Timeout;
+    const debouncedUpdateWidth = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(updateWidth, 100);
     };
 
     // Set initial width
     updateWidth();
 
-    // Add resize listener
-    window.addEventListener("resize", updateWidth);
+    // Add resize listener with debouncing
+    window.addEventListener("resize", debouncedUpdateWidth);
 
     return () => {
-      window.removeEventListener("resize", updateWidth);
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", debouncedUpdateWidth);
     };
   }, [breakpoints]);
 

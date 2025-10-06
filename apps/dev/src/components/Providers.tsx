@@ -5,7 +5,7 @@ import { DataThemeProvider, IconProvider, LayoutProvider, ThemeProvider, ToastPr
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider>
-      <LayoutProvider>
+      <LayoutProvider breakpoints={{xs: 420, s: 560, m: 960, l: 1280, xl: 1600}}>
         <DataThemeProvider>
           <ToastProvider>
             <IconProvider>
