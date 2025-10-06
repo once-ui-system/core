@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useCallback } from "react";
-import { Heading, Flex, IconButton } from "../../components";
+import { Heading, IconButton, Row } from "../../components";
 import { useToast } from "../../contexts";
 import styles from "./HeadingLink.module.scss";
 
-interface HeadingLinkProps extends React.ComponentProps<typeof Flex> {
+interface HeadingLinkProps extends React.ComponentProps<typeof Row> {
   id: string;
   as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   children: React.ReactNode;
@@ -52,7 +52,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, as, children, styl
   const variant = variantMap[as];
 
   return (
-    <Flex
+    <Row
       style={style}
       onClick={() => copyURL(id)}
       className={styles.control}
@@ -71,6 +71,6 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, as, children, styl
         tooltip="Copy"
         tooltipPosition="right"
       />
-    </Flex>
+    </Row>
   );
 };
