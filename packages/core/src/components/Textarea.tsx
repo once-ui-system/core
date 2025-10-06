@@ -34,6 +34,7 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   className?: string;
   hasPrefix?: ReactNode;
   hasSuffix?: ReactNode;
+  characterCount?: boolean;
   resize?: "horizontal" | "vertical" | "both" | "none";
   validate?: (value: ReactNode) => ReactNode | null;
 }
@@ -52,6 +53,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       className,
       hasPrefix,
       hasSuffix,
+      characterCount,
       resize = "vertical",
       validate,
       children,
@@ -208,6 +210,22 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               </Text>
             )}
             {children}
+            {characterCount && props.maxLength && (
+            <Row fillWidth paddingLeft="16" paddingY="8" className={styles.suffix}>
+              <Text
+                variant="label-default-s"
+                onBackground={
+                  props.maxLength - String(props.value || '').length <= 5
+                    ? "danger-weak"
+                    : props.maxLength - String(props.value || '').length <= 10
+                      ? "warning-weak"
+                      : "neutral-weak"
+                }
+              >
+                {props.maxLength - String(props.value || '').length}
+              </Text>
+            </Row>
+          )}
           </Column>
           {hasSuffix && (
             <Row paddingRight="12" className={styles.suffix}>

@@ -9,7 +9,7 @@ import React, {
   ReactNode,
 } from "react";
 import classNames from "classnames";
-import { Column, Flex, Row, Text } from ".";
+import { Column, Row, Text } from ".";
 import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 
@@ -35,6 +35,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   style?: React.CSSProperties;
   hasPrefix?: ReactNode;
   hasSuffix?: ReactNode;
+  characterCount?: boolean;
   cursor?: undefined | "interactive";
   validate?: (value: ReactNode) => ReactNode | null;
 }
@@ -54,6 +55,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       style,
       hasPrefix,
       hasSuffix,
+      characterCount,
       children,
       onFocus,
       onBlur,
@@ -186,6 +188,22 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
             {children}
           </Column>
+          {characterCount && props.maxLength && (
+            <Row paddingRight="12" className={styles.suffix} position="static">
+              <Text
+                variant="label-default-s"
+                onBackground={
+                  props.maxLength - String(props.value || '').length <= 5
+                    ? "danger-weak"
+                    : props.maxLength - String(props.value || '').length <= 10
+                      ? "warning-weak"
+                      : "neutral-weak"
+                }
+              >
+                {props.maxLength - String(props.value || '').length}
+              </Text>
+            </Row>
+          )}
           {hasSuffix && (
             <Row paddingRight="12" className={styles.suffix} position="static">
               {hasSuffix}

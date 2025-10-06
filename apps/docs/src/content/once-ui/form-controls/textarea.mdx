@@ -8,6 +8,8 @@ navLabel: "Textarea"
 navIcon: "switch"
 ---
 
+import { ValidationTextareaExample, TextareaCharacterCountExample } from "../../product/TextareaExamples"
+
 The `Textarea` component provides a multi-line text input field for collecting longer form text content from users. It supports various features like auto-resizing, validation, and custom styling.
 
 <CodeBlock
@@ -286,6 +288,38 @@ Use the `validate` prop to add custom validation to the `Textarea`.
   ]}
 />
 
+## Character count
+
+Display a character counter with color-coded feedback based on remaining characters. The counter changes color when approaching the limit.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<TextareaCharacterCountExample />}
+  codes={[
+    {
+      code:
+`const [bio, setBio] = useState<string>("");
+
+const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setBio(e.target.value);
+};
+
+<Textarea
+    id="bio-textarea"
+    placeholder="Bio"
+    value={bio}
+    onChange={handleChange}
+    maxLength={200}
+    characterCount
+    lines={4}
+/>`,
+      language: "tsx",
+      label: "Character count"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -302,6 +336,7 @@ Use the `validate` prop to add custom validation to the `Textarea`.
     ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"], "none"],
     ["hasPrefix", "ReactNode"],
     ["hasSuffix", "ReactNode"],
+    ["characterCount", "boolean", "false"],
     ["resize", ["horizontal", "vertical", "both", "none"], "vertical"],
     ["validate", "(value: ReactNode) => ReactNode | null"],
     ["className"],
