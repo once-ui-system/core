@@ -1,11 +1,13 @@
 ---
 title: "MegaMenu"
 summary: "MegaMenu displays a top-level navigation bar with expandable dropdowns for organized access to grouped links. It supports dynamic sizing and contextual visibility."
-updatedAt: "2025-05-09"
+updatedAt: "2025-10-06"
 docs: "once-ui/modules/megaMenu.mdx"
 github: "modules/navigation/MegaMenu.tsx"
 navLabel: "MegaMenu"
 navIcon: "modules"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 Use `MegaMenu` for complex navigational layouts where primary sections include sub-links, descriptions, and icons. Ideal for app headers and multi-level SaaS interfaces.
@@ -54,6 +56,12 @@ Use `MegaMenu` for complex navigational layouts where primary sections include s
               href: "#",
               icon: "settings",
               description: "Configure your preferences",
+            },
+            {
+              label: "Monitor",
+              href: "#",
+              icon: "screen",
+              description: "Monitor your metrics",
             },
           ],
         },
@@ -119,23 +127,6 @@ Use `MegaMenu` for complex navigational layouts where primary sections include s
               href: "#",
               icon: "code",
               description: "Technical documentation",
-            },
-          ],
-        },
-        {
-          title: "Support",
-          links: [
-            {
-              label: "Help center",
-              href: "#",
-              icon: "help",
-              description: "Get your questions answered",
-            },
-            {
-              label: "Community",
-              href: "#",
-              icon: "person",
-              description: "Connect with other users",
             },
           ],
         },
@@ -358,14 +349,124 @@ Use `MegaMenu` for complex navigational layouts where primary sections include s
     ]}
 />`,
       language: "tsx",
-      label: "Megamenu"
+      label: "MegaMenu"
+    }
+  ]}
+/>
+
+## Custom content
+
+You can use the `content` prop to render custom JSX instead of the default sections layout:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  preview={
+    <Row fillWidth height={20} overflow="hidden">
+      <MegaMenu
+        menuGroups={[
+          {
+            id: "featured",
+            label: "Featured",
+            suffixIcon: "chevronDown",
+            content: (
+              <Column gap="16" padding="8">
+                <Text variant="heading-strong-s" marginLeft="16">
+                  New Release
+                </Text>
+                <Row gap="12">
+                  <Card
+                    padding="16"
+                    radius="m"
+                    width={12}
+                    border="neutral-alpha-weak"
+                    href="#"
+                  >
+                    <Column gap="8">
+                      <Icon name="sparkle" size="s" onBackground="neutral-weak" marginBottom="8" />
+                      <Text variant="label-strong-m">AI Features</Text>
+                      <Text variant="body-default-s" onBackground="neutral-weak">
+                        Agents and Chatbots
+                      </Text>
+                    </Column>
+                  </Card>
+                  <Card
+                    padding="16"
+                    radius="m"
+                    width={12}
+                    border="neutral-alpha-weak"
+                    href="#"
+                  >
+                    <Column gap="8">
+                      <Icon name="rocket" size="s" onBackground="neutral-weak" marginBottom="8" />
+                      <Text variant="label-strong-m">Performance</Text>
+                      <Text variant="body-default-s" onBackground="neutral-weak">
+                        10x faster than before
+                      </Text>
+                    </Column>
+                  </Card>
+                </Row>
+              </Column>
+            ),
+          },
+          {
+            id: "products",
+            label: "Products",
+            href: "/products",
+          },
+        ]}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<MegaMenu
+    menuGroups={[
+      {
+        id: "featured",
+        label: "Featured",
+        suffixIcon: "chevronDown",
+        content: (
+          <Column gap="16" padding="8">
+            <Text variant="heading-strong-l" marginBottom="8">
+              New Release
+            </Text>
+            <Row gap="12">
+              <Card padding="16" radius="m" border="neutral-alpha-medium">
+                <Column gap="8">
+                  <Icon name="sparkle" size="l" onBackground="brand-medium" />
+                  <Text variant="label-strong-m">AI Features</Text>
+                  <Text variant="body-default-s" onBackground="neutral-weak">
+                    Explore our new AI-powered tools
+                  </Text>
+                </Column>
+              </Card>
+              <Card padding="16" radius="m" border="neutral-alpha-medium">
+                <Column gap="8">
+                  <Icon name="rocket" size="l" onBackground="accent-medium" />
+                  <Text variant="label-strong-m">Performance</Text>
+                  <Text variant="body-default-s" onBackground="neutral-weak">
+                    10x faster than before
+                  </Text>
+                </Column>
+              </Card>
+            </Row>
+          </Column>
+        ),
+      },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Custom content"
     }
   ]}
 />
 
 ## Usage
 
-The `MegaMenu` component is designed for desktop screens. You can hide it at the medium breakpoint by adding the `hide="m"` prop directly to the component.
+The `MegaMenu` component is designed for desktop screens. You can hide it at the medium breakpoint by adding the `m={{hide: true}}` prop directly to the component.
 
 ## API reference
 
@@ -380,7 +481,7 @@ The `MegaMenu` component is designed for desktop screens. You can hide it at the
 
 ### Types
 
-```ts
+```tsx
 interface MenuGroup {
   id: string;
   label: ReactNode;
@@ -388,6 +489,7 @@ interface MenuGroup {
   href?: string;
   selected?: boolean;
   sections?: MenuSection[];
+  content?: ReactNode; // Custom content slot for dropdown
 }
 
 interface MenuSection {

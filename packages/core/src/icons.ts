@@ -94,6 +94,7 @@ export const iconLibrary: Record<string, IconType> = {
   enter: HiOutlineArrowTurnDownLeft,
   play: HiOutlinePlay,
   pause: HiOutlinePause,
+  screen: HiOutlineComputerDesktop,
 };
 
 export type IconLibrary = typeof iconLibrary;
