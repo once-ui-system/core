@@ -150,6 +150,44 @@
   }
 }
 
+@include breakpoints.xs {
+  .xs-overflow-auto {
+    overflow: auto;
+  }
+
+  .xs-overflow-x-scroll{
+    overflow-x: scroll;
+  }
+
+  .xs-overflow-x-auto {
+    overflow-x: auto;
+  }
+
+  .xs-overflow-y-auto{
+    overflow-y: auto;
+  }
+
+  .xs-overflow-y-scroll{
+    overflow-y: scroll;
+  }
+
+  .xs-overflow-hidden {
+    overflow: hidden;
+  }
+
+  .xs-overflow-scroll{
+    overflow: scroll;
+  }
+
+  .xs-overflow-x-hidden {
+    overflow-x: hidden;
+  }
+
+  .xs-overflow-y-hidden{
+    overflow-y: hidden;
+  }
+}
+
 .opacity-0 {
   opacity: 0;
 }
