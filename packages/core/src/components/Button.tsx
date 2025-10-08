@@ -23,6 +23,7 @@ interface CommonProps {
     | "bottom-left";
   label?: string;
   weight?: "default" | "strong";
+  rounded?: boolean;
   prefixIcon?: IconName;
   suffixIcon?: IconName;
   loading?: boolean;
@@ -46,6 +47,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
       variant = "primary",
       size = "m",
       radius,
+      rounded,
       label,
       weight = "strong",
       children,
@@ -73,6 +75,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
         href={href}
         ref={ref}
         disabled={disabled}
+        data-border={rounded ? "rounded" : undefined}
         className={classNames(
           styles.button,
           styles[variant],
