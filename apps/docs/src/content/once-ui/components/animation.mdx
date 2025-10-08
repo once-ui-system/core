@@ -1,0 +1,426 @@
+---
+title: "Animation"
+summary: "Animation is a versatile component that provides preset animation effects with configurable triggers, easing curves, and timing."
+updatedAt: "2025-10-08"
+docs: "once-ui/components/animation.mdx"
+github: "components/Animation.tsx"
+navLabel: "Animation"
+navIcon: "components"
+---
+
+The `Animation` component provides a simple way to add animations to any element with value-based animation props, configurable triggers, and fine-grained control over timing and easing. Each animation prop accepts a value representing the initial state.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight={20}>
+      <Animation fade={0} triggerType="hover" center
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Trigger fade</Text>
+          </Row>
+        }>
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Text variant="label-default-s">Fade</Text>
+        </Row>
+      </Animation>
+      <Animation scale={0.8} triggerType="hover" center
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Trigger scale</Text>
+          </Row>
+        }>
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Text variant="label-default-s">Scale</Text>
+        </Row>
+      </Animation>
+      <Animation slideUp={1.5} triggerType="hover" center
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Trigger slide</Text>
+          </Row>
+        }>
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Text variant="label-default-s">Slide</Text>
+        </Row>
+      </Animation>
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Animation",
+      code:
+`<Animation fade={0} triggerType="hover" center
+    trigger={
+      <Row padding="16" radius="m" border="neutral-medium" fit>
+        <Text>Trigger fade</Text>
+      </Row>
+    }>
+    <Row padding="l" radius="m" background="page" border="neutral-medium" center>
+      <Text>Fade</Text>
+    </Row>
+</Animation>
+
+<Animation scale={0.8} triggerType="hover" center
+    trigger={
+      <Row padding="16" radius="m" border="neutral-medium" fit>
+        <Text>Trigger scale</Text>
+      </Row>
+    }>
+    <Row padding="l" radius="m" background="page" border="neutral-medium" center>
+      <Text>Scale</Text>
+    </Row>
+</Animation>
+
+<Animation slideUp={1.5} triggerType="hover" center
+    trigger={
+      <Row padding="16" radius="m" border="neutral-medium" fit>
+        <Text>Trigger slide</Text>
+      </Row>
+    }>
+    <Row padding="l" radius="m" background="page" border="neutral-medium" center>
+      <Text>Slide</Text>
+    </Row>
+</Animation>`
+    }
+  ]}
+/>
+
+## Animation types
+
+All animations are value-based - the value represents the initial state, and it animates to the natural end state (opacity: 1, scale: 1, blur: 0, translate: 0).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight={20}>
+      <Animation blur={8} triggerType="hover" center duration={400}
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Blur</Text>
+          </Row>
+        }>
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Icon name="sparkles" size="l" />
+        </Row>
+      </Animation>
+      <Animation zoomIn={0} triggerType="hover" center duration={400}
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Zoom in</Text>
+          </Row>
+        }>
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Icon name="search" size="l" />
+        </Row>
+      </Animation>
+      <Animation slideUp={1.5} triggerType="hover" center duration={400}
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Slide up</Text>
+          </Row>
+        }>
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Icon name="arrowUp" size="l" />
+        </Row>
+      </Animation>
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Types",
+      code:
+`<Animation blur={8} triggerType="hover" center
+  trigger={
+    <Row padding="16" radius="m" border="neutral-medium" fit>
+      <Text>Blur</Text>
+    </Row>
+  }>
+  <Row padding="l" radius="m" background="page" border="neutral-medium" center>
+    <Icon name="sparkles" size="l" />
+  </Row>
+</Animation>
+
+<Animation zoomIn={0} triggerType="hover" center
+  trigger={
+    <Row padding="16" radius="m" border="neutral-medium" fit>
+      <Text>Zoom in</Text>
+    </Row>
+  }>
+  <Row padding="l" radius="m" background="page" border="neutral-medium" center>
+    <Icon name="search" size="l" />
+  </Row>
+</Animation>`
+    }
+  ]}
+/>
+
+## Manual trigger
+
+Use the `trigger` prop with interactive elements like NavIcon or Button. For controlled state (like toggling NavIcon's active state), use `triggerType="manual"` with the `active` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="around" minHeight={16}>
+      <AnimationNavIconExample />
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Interactive",
+      code:
+`"use client";
+
+import { useState } from "react";
+import { Animation, NavIcon, Dropdown, Option } from "@once-ui-system/core";
+
+function NavIconMenu() {
+  const [isActive, setIsActive] = useState(false);
+
+  return (
+    <Animation
+      trigger={
+        <div onClick={() => setIsActive(!isActive)}>
+          <NavIcon isActive={isActive} />
+        </div>
+      }
+      slideDown={1}
+      triggerType="manual"
+      active={isActive}
+      duration={300}
+    >
+      <Dropdown position="absolute" top="48" padding="4" gap="2" radius="l">
+        <Option label="Option 1" onClick={() => setIsActive(false)} />
+        <Option label="Option 2" onClick={() => setIsActive(false)} />
+        <Option label="Option 3" onClick={() => setIsActive(false)} />
+      </Dropdown>
+    </Animation>
+  );
+}`
+    }
+  ]}
+/>
+
+## Easing curves
+
+Customize animation feel with different easing curves: `linear`, `ease`, `ease-in`, `ease-out`, `ease-in-out`, `spring`, `bounce`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight={20}>
+      <Animation scale={0.8} triggerType="hover" easing="spring" center duration={500}
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Spring</Text>
+          </Row>
+        }>
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Icon name="zap" size="l" />
+        </Row>
+      </Animation>
+      <Animation scale={0.8} triggerType="hover" easing="bounce" center duration={500}
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Bounce</Text>
+          </Row>
+        }>
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Icon name="activity" size="l" />
+        </Row>
+      </Animation>
+      <Animation scale={0.8} triggerType="hover" easing="ease-in-out" center duration={500}
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Ease</Text>
+          </Row>
+        }>
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Icon name="trendingUp" size="l" />
+        </Row>
+      </Animation>
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Easing",
+      code:
+`<Animation scale={0.8} triggerType="hover" easing="spring" duration={500}>
+  <Row>Spring easing</Row>
+</Animation>`
+    }
+  ]}
+/>
+
+## Without trigger (Card context)
+
+When used without a trigger, animations apply directly to the element - perfect for Cards and similar components.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}}>
+      <Animation fade={0.4} triggerType="hover" duration={300}>
+        <Card padding="l" direction="column" gap="12" style={{ width: '16rem' }}>
+          <Icon name="heart" size="l" />
+          <Column gap="4">
+            <Text variant="heading-strong-m">Hover Card</Text>
+            <Text onBackground="neutral-weak" variant="body-default-s">
+              This card animates on hover.
+            </Text>
+          </Column>
+        </Card>
+      </Animation>
+      <Animation zoomOut={1.1} fade={1} triggerType="hover" duration={300}>
+        <Card padding="l" direction="column" gap="12" style={{ width: '16rem' }}>
+          <Icon name="star" size="l" />
+          <Column gap="4">
+            <Text variant="heading-strong-m">Fade Card</Text>
+            <Text onBackground="neutral-weak" variant="body-default-s">
+              Smooth fade animation.
+            </Text>
+          </Column>
+        </Card>
+      </Animation>
+      <Animation blur={16} fade={1} triggerType="hover" duration={300}>
+        <Card padding="l" direction="column" gap="12" style={{ width: '16rem' }}>
+          <Icon name="star" size="l" />
+          <Column gap="4">
+            <Text variant="heading-strong-m">Fade Card</Text>
+            <Text onBackground="neutral-weak" variant="body-default-s">
+              Smooth fade animation.
+            </Text>
+          </Column>
+        </Card>
+      </Animation>
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Card",
+      code:
+`<Animation scale={0.95} triggerType="hover">
+  <Card padding="l" direction="column" gap="12">
+    <Icon name="heart" size="l" />
+    <Column gap="4">
+      <Text variant="heading-strong-m">Hover Card</Text>
+      <Text onBackground="neutral-weak" variant="body-default-s">
+        This card animates on hover.
+      </Text>
+    </Column>
+  </Card>
+</Animation>`
+    }
+  ]}
+/>
+
+## Combining animations
+
+Stack multiple animations by providing multiple props. Each value represents the initial state.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight={20}>
+      <Animation 
+        fade={0}
+        scale={0.8}
+        triggerType="hover" 
+        center
+        duration={400}
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Fade + Scale</Text>
+          </Row>
+        }
+      >
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Icon name="layers" size="l" />
+        </Row>
+      </Animation>
+      <Animation 
+        blur={10}
+        scale={0.85}
+        slideUp={1}
+        triggerType="hover" 
+        center
+        duration={400}
+        trigger={
+          <Row padding="16" radius="m" border="neutral-medium" fit>
+            <Text variant="label-default-s">Blur + Scale + Slide</Text>
+          </Row>
+        }
+      >
+        <Row padding="l" radius="m" background="page" border="neutral-medium" center width="128" height="128">
+          <Icon name="sparkles" size="l" />
+        </Row>
+      </Animation>
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Custom",
+      code:
+`<Animation 
+  fade={0}
+  scale={0.8}
+  triggerType="hover" 
+  duration={400}
+  trigger={<Row>Trigger</Row>}
+>
+  <Row>Fade + Scale</Row>
+</Animation>
+
+<Animation 
+  blur={10}
+  scale={0.85}
+  slideUp={1}
+  triggerType="hover"
+>
+  <Row>Blur + Scale + Slide</Row>
+</Animation>`
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["trigger", "ReactNode", "Optional trigger element (e.g., NavIcon, Button) that controls the animation"],
+    ["children", "ReactNode", "Content to animate"],
+    ["fade", "number", "Initial opacity (0-1). Animates to 1"],
+    ["scale", "number", "Initial scale value. Animates to 1"],
+    ["blur", "number", "Initial blur in px. Animates to 0"],
+    ["slideUp", "number", "Initial distance below in rem. Animates to 0"],
+    ["slideDown", "number", "Initial distance above in rem. Animates to 0"],
+    ["slideLeft", "number", "Initial distance right in rem. Animates to 0"],
+    ["slideRight", "number", "Initial distance left in rem. Animates to 0"],
+    ["zoomIn", "number", "Initial scale (zooming in). Animates to 1"],
+    ["zoomOut", "number", "Initial scale (zooming out). Animates to 1"],
+    ["triggerType", "'hover' | 'click' | 'manual'", "How to trigger the animation (default: 'manual')"],
+    ["active", "boolean", "Control animation state when triggerType='manual'"],
+    ["delay", "number", "Delay before animation starts in ms (default: 0)"],
+    ["duration", "number", "Animation duration in ms (default: 300)"],
+    ["easing", "EasingCurve", "Easing curve: 'linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out', 'spring', 'bounce' (default: 'ease-out')"],
+    ["transformOrigin", "string", "CSS transform-origin value (default: 'center')"],
+    ["distance", "number", "Distance for slide animations in px (default: 20)"],
+    ["scale", "number", "Scale value for scale animations (default: 0.95)"],
+    ["blur", "number", "Blur amount in px for blur animation (default: 4)"],
+    ["reverse", "boolean", "Reverse the animation direction (default: false)"],
+    ["...flex"]
+  ]}
+/>

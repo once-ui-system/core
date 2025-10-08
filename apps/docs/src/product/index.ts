@@ -3,6 +3,7 @@ export * from "./Footer";
 export * from "./Sidebar";
 export * from "./RouteGuard";
 export * from "./Providers";
+export * from "./AnimationExample";
 export * from "./CheckboxExample";
 export * from "./ChipExamples";
 export * from "./ClientOption";

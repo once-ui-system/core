@@ -1,0 +1,346 @@
+---
+title: "Hover"
+summary: "Hover is a wrapper component that displays an overlay on top of its trigger element when hovered or focused."
+updatedAt: "2025-10-08"
+docs: "once-ui/components/hover.mdx"
+github: "components/Hover.tsx"
+navLabel: "Hover"
+navIcon: "components"
+---
+
+The `Hover` component wraps any element and displays an overlay on top when the user hovers over it or focuses on it. It's perfect for creating interactive cards with hover effects, image overlays, or any content that needs to reveal additional information on interaction.
+
+**Touch behavior:** By default (`touch="disable"`), the hover effect is disabled on touch devices. You can set `touch="enable"` to allow hover interactions, or `touch="display"` to always show the overlay on touch devices.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <Hover
+        maxWidth={24}
+        radius="l-4"
+        trigger={
+          <Card padding="8" direction="column" radius="l-4">
+            <Media
+              fillWidth
+              aspectRatio="16 / 9"
+              radius="l"
+              alt="Example"
+              src="/images/docs/once-ui/vibe-coding-light.jpg"
+              sizes="480px"
+            />
+            <Column fillWidth padding="20" gap="8">
+              <Text variant="heading-strong-m">Hover over me</Text>
+              <Text onBackground="neutral-weak" variant="body-default-s">
+                Move your cursor over this card to see the overlay effect.
+              </Text>
+            </Column>
+          </Card>
+        }
+        overlay={
+          <Flex
+            fill
+            background="overlay"
+            align="center"
+            center
+          >
+            <Text variant="heading-strong-l" onSolid="neutral-strong">
+              Overlay content
+            </Text>
+          </Flex>
+        }
+      />
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Hover",
+      code:
+`<Hover
+    maxWidth={24}
+    radius="l-4"
+    trigger={
+      <Card padding="8" direction="column" radius="l-4">
+        <Media
+          fillWidth
+          aspectRatio="16 / 9"
+          radius="l"
+          alt="Example"
+          src="/images/docs/once-ui/vibe-coding-light.jpg"
+          sizes="480px"
+        />
+        <Column fillWidth padding="20" gap="8">
+          <Text variant="heading-strong-m">Hover over me</Text>
+          <Text onBackground="neutral-weak" variant="body-default-s">
+            Move your cursor over this card to see the overlay effect.
+          </Text>
+        </Column>
+      </Card>
+    }
+    overlay={
+      <Flex
+        fill
+        background="overlay"
+        align="center"
+        center
+      >
+        <Text variant="heading-strong-l" onSolid="neutral-strong">
+          Overlay content
+        </Text>
+      </Flex>
+    }
+/>`,
+    }
+  ]}
+/>
+
+## Delay
+
+Add a delay before the overlay appears to prevent accidental triggers.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <Hover
+        fillWidth
+        style={{ maxWidth: '24rem' }}
+        delay={300}
+        trigger={
+          <Card padding="l" direction="column" gap="12">
+            <Text variant="heading-strong-m">Delayed hover</Text>
+            <Text onBackground="neutral-weak" variant="body-default-s">
+              The overlay will appear after 300ms.
+            </Text>
+          </Card>
+        }
+        overlay={
+          <Flex
+            fillWidth
+            fillHeight
+            background="rgba(0, 100, 200, 0.8)"
+            align="center"
+            justify="center"
+          >
+            <Icon name="check" size="xl" style={{ color: 'white' }} />
+          </Flex>
+        }
+      />
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Delay",
+      code:
+`<Hover
+  fillWidth
+  delay={300}
+  trigger={
+    <Card padding="l" direction="column" gap="12">
+      <Text variant="heading-strong-m">Delayed hover</Text>
+      <Text onBackground="neutral-weak" variant="body-default-s">
+        The overlay will appear after 300ms.
+      </Text>
+    </Card>
+  }
+  overlay={
+    <Flex
+      fillWidth
+      fillHeight
+      background="rgba(0, 100, 200, 0.8)"
+      align="center"
+      justify="center"
+    >
+      <Icon name="check" size="xl" style={{ color: 'white' }} />
+    </Flex>
+  }
+/>`,
+    }
+  ]}
+/>
+
+## Custom overlay styling
+
+Customize the overlay appearance with `overlayClassName` and `overlayStyle` props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center" gap="16">
+      <Hover
+        fillWidth
+        style={{ maxWidth: '16rem' }}
+        trigger={
+          <Card padding="m" align="center" justify="center" style={{ height: '12rem' }}>
+            <Text variant="heading-strong-m">Gradient</Text>
+          </Card>
+        }
+        overlay={
+          <Flex
+            fillWidth
+            fillHeight
+            align="end"
+            justify="center"
+            padding="m"
+            style={{
+              background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)'
+            }}
+          >
+            <Text variant="label-default-s" style={{ color: 'white' }}>
+              Bottom gradient
+            </Text>
+          </Flex>
+        }
+      />
+      <Hover
+        fillWidth
+        style={{ maxWidth: '16rem' }}
+        trigger={
+          <Card padding="m" align="center" justify="center" style={{ height: '12rem' }}>
+            <Text variant="heading-strong-m">Blur</Text>
+          </Card>
+        }
+        overlay={
+          <Flex
+            fillWidth
+            fillHeight
+            align="center"
+            justify="center"
+            style={{
+              backdropFilter: 'blur(8px)',
+              background: 'rgba(255, 255, 255, 0.1)'
+            }}
+          >
+            <Text variant="heading-strong-l" style={{ color: 'white' }}>
+              Blurred
+            </Text>
+          </Flex>
+        }
+      />
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Custom styling",
+      code:
+`<Hover
+  fillWidth
+  trigger={
+    <Card padding="m" align="center" justify="center" style={{ height: '12rem' }}>
+      <Text variant="heading-strong-m">Gradient</Text>
+    </Card>
+  }
+  overlay={
+    <Flex
+      fillWidth
+      fillHeight
+      align="end"
+      justify="center"
+      padding="m"
+      style={{
+        background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)'
+      }}
+    >
+      <Text variant="label-default-s" style={{ color: 'white' }}>
+        Bottom gradient
+      </Text>
+    </Flex>
+  }
+/>`,
+    }
+  ]}
+/>
+
+## Accessibility
+
+The component supports keyboard navigation by default. When `showOnFocus` is enabled (default), the overlay will appear when the trigger receives focus, making it accessible for keyboard users.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <Hover
+        fillWidth
+        style={{ maxWidth: '24rem' }}
+        showOnFocus={true}
+        trigger={
+          <Card padding="l" direction="column" gap="12">
+            <Text variant="heading-strong-m">Keyboard accessible</Text>
+            <Text onBackground="neutral-weak" variant="body-default-s">
+              Tab to this card to see the overlay with keyboard navigation.
+            </Text>
+          </Card>
+        }
+        overlay={
+          <Flex
+            fillWidth
+            fillHeight
+            background="rgba(100, 50, 200, 0.8)"
+            align="center"
+            justify="center"
+          >
+            <Text variant="heading-strong-l" style={{ color: 'white' }}>
+              Focused!
+            </Text>
+          </Flex>
+        }
+      />
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Accessibility",
+      code:
+`<Hover
+  fillWidth
+  showOnFocus={true}
+  trigger={
+    <Card padding="l" direction="column" gap="12">
+      <Text variant="heading-strong-m">Keyboard accessible</Text>
+      <Text onBackground="neutral-weak" variant="body-default-s">
+        Tab to this card to see the overlay with keyboard navigation.
+      </Text>
+    </Card>
+  }
+  overlay={
+    <Flex
+      fillWidth
+      fillHeight
+      background="rgba(100, 50, 200, 0.8)"
+      align="center"
+      justify="center"
+    >
+      <Text variant="heading-strong-l" style={{ color: 'white' }}>
+        Focused!
+      </Text>
+    </Flex>
+  }
+/>`,
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["trigger", "ReactNode", "The element to wrap (e.g., Card, Image)"],
+    ["overlay", "ReactNode", "Content to display on hover/focus"],
+    ["delay", "number", "Delay in milliseconds before showing the overlay (default: 0)"],
+    ["hideDelay", "number", "Delay in milliseconds before hiding the overlay (default: 0)"],
+    ["disabled", "boolean", "Disable hover functionality (default: false)"],
+    ["showOnFocus", "boolean", "Show overlay on keyboard focus (default: true)"],
+    ["touch", "'disable' | 'enable' | 'display'", "Touch device behavior: 'disable' (default) - no hover, 'enable' - allow hover, 'display' - always show overlay"],
+    ["overlayClassName", "string", "Custom className for the overlay"],
+    ["overlayStyle", "React.CSSProperties", "Custom inline styles for the overlay"],
+    ["...flex"]
+  ]}
+/>

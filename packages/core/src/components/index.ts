@@ -1,5 +1,6 @@
 export * from "./Accordion";
 export * from "./AccordionGroup";
+export * from "./Animation";
 export * from "./Arrow";
 export * from "./ArrowNavigationContext";
 export * from "./AutoScroll";
@@ -44,6 +45,7 @@ export * from "./ClientGrid";
 export * from "./Grid";
 export * from "./Heading";
 export * from "./HoloFx";
+export * from "./Hover";
 export * from "./Icon";
 export * from "./IconButton";
 export * from "./InfiniteScroll";
