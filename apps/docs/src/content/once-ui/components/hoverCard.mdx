@@ -1,0 +1,89 @@
+---
+title: "HoverCard"
+summary: "HoverCard displays content in a portal positioned relative to a trigger element on hover, with customizable animations and placement."
+updatedAt: "2025-10-09"
+docs: "once-ui/components/hoverCard.mdx"
+github: "components/HoverCard.tsx"
+navLabel: "HoverCard"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `HoverCard` component is a syntactic sugar for the `Animation` component with a handful of smart defaults.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <HoverCard
+        placement="top"
+        trigger={<Avatar size="l" src="/images/avatar.jpg" />}
+      >
+        <Card padding="20" radius="l" maxWidth={24} href="https://lorant.one">
+          <Column gap="20">
+            <Row gap="20" fillWidth vertical="center">
+              <Avatar size={3} src="/images/avatar.jpg" />
+              <Column gap="4">
+                <Text variant="heading-strong-m">Lorant One</Text>
+                <Text variant="body-default-s" onBackground="neutral-weak">
+                  Design Engineer
+                </Text>
+              </Column>
+            </Row>
+            <Text variant="body-default-s" onBackground="neutral-weak">
+              Published 100k+ lines of open-source code. Author of The Dopler Method, The Design Dividend, and Learn anything.
+            </Text>
+            <Row gap="8" wrap>
+              <Tag>Design</Tag>
+              <Tag>Frontend</Tag>
+              <Tag>Writing</Tag>
+            </Row>
+          </Column>
+        </Card>
+      </HoverCard>
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Rich content",
+      code:
+`<HoverCard
+    trigger={<Avatar size="l" src="/images/avatar.jpg" />}
+>
+    <Card padding="20" radius="l" maxWidth={24} href="https://lorant.one">
+      <Column gap="20">
+        <Row gap="20" fillWidth vertical="center">
+          <Avatar size={3} src="/images/avatar.jpg" />
+          <Column gap="4">
+            <Text variant="heading-strong-m">Lorant One</Text>
+            <Text variant="body-default-s" onBackground="neutral-weak">
+              Design Engineer
+            </Text>
+          </Column>
+        </Row>
+        <Text variant="body-default-s" onBackground="neutral-weak">
+          Published 100k+ lines of open-source code. Author of The Dopler Method, The Design Dividend, and Learn anything.
+        </Text>
+        <Row gap="8" wrap>
+          <Tag>Design</Tag>
+          <Tag>Frontend</Tag>
+          <Tag>Writing</Tag>
+        </Row>
+      </Column>
+    </Card>
+</HoverCard>`
+    }
+  ]}
+/>
+
+
+## API reference
+
+<PropsTable
+  content={[
+    ["...animation"]
+  ]}
+/>
