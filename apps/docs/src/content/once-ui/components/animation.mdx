@@ -6,6 +6,8 @@ docs: "once-ui/components/animation.mdx"
 github: "components/Animation.tsx"
 navLabel: "Animation"
 navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
 ---
 
 The `Animation` component provides a simple way to add animations to any element with value-based animation props, configurable triggers, and fine-grained control over timing and easing. Each animation prop accepts a value representing the initial state.
@@ -90,7 +92,7 @@ The `Animation` component provides a simple way to add animations to any element
 
 ## Animation types
 
-All animations are value-based - the value represents the initial state, and it animates to the natural end state (opacity: 1, scale: 1, blur: 0, translate: 0).
+All animations are value-based - the value represents the initial state, and it animates to the natural end state (`opacity: 1`, `scale: 1`, `blur: 0`, `translate: 0`).
 
 <CodeBlock
   marginTop="16"
@@ -107,7 +109,7 @@ All animations are value-based - the value represents the initial state, and it 
           <Icon name="sparkles" size="l" />
         </Row>
       </Animation>
-      <Animation zoomIn={0} triggerType="hover" center duration={400}
+      <Animation zoomIn={1.2} triggerType="hover" center duration={400}
         trigger={
           <Row padding="16" radius="m" border="neutral-medium" fit>
             <Text variant="label-default-s">Zoom in</Text>
@@ -261,9 +263,9 @@ Customize animation feel with different easing curves: `linear`, `ease`, `ease-i
   ]}
 />
 
-## Without trigger (Card context)
+## Self trigger
 
-When used without a trigger, animations apply directly to the element - perfect for Cards and similar components.
+When used without a trigger, animations apply directly to the element.
 
 <CodeBlock
   marginTop="16"
@@ -271,34 +273,34 @@ When used without a trigger, animations apply directly to the element - perfect 
   preview={
     <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}}>
       <Animation fade={0.4} triggerType="hover" duration={300}>
-        <Card padding="l" direction="column" gap="12" style={{ width: '16rem' }}>
+        <Card padding="l" direction="column" gap="12" fillWidth radius="l">
           <Icon name="heart" size="l" />
           <Column gap="4">
-            <Text variant="heading-strong-m">Hover Card</Text>
+            <Text variant="heading-strong-m">Fade in</Text>
             <Text onBackground="neutral-weak" variant="body-default-s">
-              This card animates on hover.
+              Fade in on hover
             </Text>
           </Column>
         </Card>
       </Animation>
       <Animation zoomOut={1.1} fade={1} triggerType="hover" duration={300}>
-        <Card padding="l" direction="column" gap="12" style={{ width: '16rem' }}>
+        <Card padding="l" direction="column" gap="12" fillWidth radius="l" href="#">
           <Icon name="star" size="l" />
           <Column gap="4">
-            <Text variant="heading-strong-m">Fade Card</Text>
+            <Text variant="heading-strong-m">Zoom Card</Text>
             <Text onBackground="neutral-weak" variant="body-default-s">
-              Smooth fade animation.
+              Scale up on hover
             </Text>
           </Column>
         </Card>
       </Animation>
       <Animation blur={16} fade={1} triggerType="hover" duration={300}>
-        <Card padding="l" direction="column" gap="12" style={{ width: '16rem' }}>
+        <Card padding="l" direction="column" gap="12" fillWidth radius="l">
           <Icon name="star" size="l" />
           <Column gap="4">
-            <Text variant="heading-strong-m">Fade Card</Text>
+            <Text variant="heading-strong-m">Blur</Text>
             <Text onBackground="neutral-weak" variant="body-default-s">
-              Smooth fade animation.
+              Reveal on hover
             </Text>
           </Column>
         </Card>
@@ -319,6 +321,65 @@ When used without a trigger, animations apply directly to the element - perfect 
         This card animates on hover.
       </Text>
     </Column>
+  </Card>
+</Animation>`
+    }
+  ]}
+/>
+
+## Portal mode
+
+Enable portal rendering to display animated content in a positioned overlay using Floating UI. Perfect for tooltips, popovers, and hover cards.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <Animation
+        triggerType="hover"
+        portal
+        placement="top-end"
+        fade={0}
+        slideUp={1}
+        scale={0.8}
+        duration={200}
+        trigger={
+          <Button variant="secondary" href="#">
+            Hover for portal
+          </Button>
+        }
+      >
+        <Card padding="m" radius="l" maxWidth={20}>
+          <Column gap="8">
+            <Text variant="heading-strong-s">Portal Content</Text>
+            <Text variant="body-default-s" onBackground="neutral-weak">
+              This renders in a portal with Floating UI positioning!
+            </Text>
+          </Column>
+        </Card>
+      </Animation>
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Portal",
+      code:
+`<Animation
+  triggerType="hover"
+  portal
+  placement="top"
+  fade={0}
+  scale={0.95}
+  trigger={
+    <Button variant="secondary">
+      Hover for portal
+    </Button>
+  }
+>
+  <Card padding="m" radius="l">
+    <Text>Portal Content</Text>
   </Card>
 </Animation>`
     }
@@ -417,6 +478,9 @@ Stack multiple animations by providing multiple props. Each value represents the
     ["duration", "number", "Animation duration in ms (default: 300)"],
     ["easing", "EasingCurve", "Easing curve: 'linear', 'ease', 'ease-in', 'ease-out', 'ease-in-out', 'spring', 'bounce' (default: 'ease-out')"],
     ["transformOrigin", "string", "CSS transform-origin value (default: 'center')"],
+    ["portal", "boolean", "Render content in a portal with Floating UI positioning (default: false)"],
+    ["placement", "Placement", "Position for portal mode: 'top', 'bottom', 'left', 'right', etc. (default: 'top')"],
+    ["offsetDistance", "number", "Distance from trigger in pixels for portal mode (default: 8)"],
     ["distance", "number", "Distance for slide animations in px (default: 20)"],
     ["scale", "number", "Scale value for scale animations (default: 0.95)"],
     ["blur", "number", "Blur amount in px for blur animation (default: 4)"],

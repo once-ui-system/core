@@ -46,6 +46,7 @@ export * from "./Grid";
 export * from "./Heading";
 export * from "./HoloFx";
 export * from "./Hover";
+export * from "./HoverCard";
 export * from "./Icon";
 export * from "./IconButton";
 export * from "./InfiniteScroll";
