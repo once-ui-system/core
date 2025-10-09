@@ -8,6 +8,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
   useCallback,
+  CSSProperties,
 } from "react";
 import { createPortal } from "react-dom";
 import {
@@ -49,7 +50,9 @@ export interface AnimationProps extends React.ComponentProps<typeof Flex> {
   duration?: number;
   easing?: EasingCurve;
   transformOrigin?: string;
+  childrenPosition?: CSSProperties["position"];
   reverse?: boolean;
+  touch?: "disable" | "enable" | "display";
   // Portal props
   portal?: boolean;
   placement?: Placement;
@@ -86,7 +89,9 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
       duration = 300,
       easing = "ease-out",
       transformOrigin = "center",
+      childrenPosition = "absolute",
       reverse = false,
+      touch = "enable",
       portal = false,
       placement = "top",
       offsetDistance = "8",
@@ -99,6 +104,7 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
     const [mounted, setMounted] = useState(false);
     const [isBrowser, setIsBrowser] = useState(false);
     const [isPositioned, setIsPositioned] = useState(false);
+    const [isTouchDevice, setIsTouchDevice] = useState(false);
     
     const wrapperRef = useRef<HTMLDivElement>(null);
     const floatingRef = useRef<HTMLDivElement>(null);
@@ -108,16 +114,34 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 
     useEffect(() => {
       setMounted(true);
+      setIsTouchDevice(
+        "ontouchstart" in window || navigator.maxTouchPoints > 0
+      );
       if (portal) {
         setIsBrowser(true);
       }
     }, [portal]);
 
     const isControlled = controlledActive !== undefined;
-    const isActive = isControlled ? controlledActive : internalActive;
+    const rawActive = isControlled ? controlledActive : internalActive;
+    
+    // Determine if animation should be active based on touch mode
+    const isActive = (() => {
+      // If on touch device, handle based on touch prop
+      if (isTouchDevice && triggerType === "hover") {
+        if (touch === 'disable') return false;
+        if (touch === 'display') return true;
+        // touch === 'enable', fall through to normal logic
+      }
+      
+      // For non-touch or when mounted, use the raw active state
+      if (!mounted && !isTouchDevice) return false;
+      
+      return rawActive;
+    })();
 
     // Floating UI for portal positioning
-    const { x, y, strategy, refs: floatingRefs } = useFloating({
+    const { x, y, strategy, placement: finalPlacement, refs: floatingRefs } = useFloating({
       placement,
       open: isActive,
       middleware: [
@@ -217,7 +241,8 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
       };
 
       // For portals, animation should trigger based on isPositioned, not isActive
-      const effectiveActive = portal ? isPositioned : isActive;
+      // For touch="display", don't animate until we know if it's a touch device
+      const effectiveActive = portal ? isPositioned : (touch === 'display' && !mounted ? true : isActive);
       const shouldAnimate = reverse ? !effectiveActive : effectiveActive;
 
       // Combine styles from multiple animations
@@ -314,10 +339,10 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
               <Flex
                 ref={floatingRef}
                 zIndex={10}
-                paddingTop={placement.includes("bottom") ? offsetDistance : undefined}
-                paddingBottom={placement.includes("top") ? offsetDistance : undefined}
-                paddingLeft={placement.includes("right") ? offsetDistance : undefined}
-                paddingRight={placement.includes("left") ? offsetDistance : undefined}
+                paddingTop={finalPlacement.includes("bottom") ? offsetDistance : undefined}
+                paddingBottom={finalPlacement.includes("top") ? offsetDistance : undefined}
+                paddingLeft={finalPlacement.includes("right") ? offsetDistance : undefined}
+                paddingRight={finalPlacement.includes("left") ? offsetDistance : undefined}
                 style={{
                   position: strategy,
                   top: y ?? 0,
@@ -354,7 +379,7 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
             {trigger}
           </Flex>
           <Flex
-            position="absolute"
+            position={childrenPosition}
             style={{
               ...animationStyle,
               pointerEvents: isActive ? "auto" : "none",

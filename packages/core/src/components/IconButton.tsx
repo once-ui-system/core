@@ -1,8 +1,8 @@
 "use client";
 
-import React, { forwardRef, useState, useEffect, ReactNode } from "react";
+import React, { forwardRef, ReactNode } from "react";
 import { ElementType } from "./ElementType";
-import { Flex, Icon, Tooltip } from ".";
+import { Flex, Icon, Tooltip, HoverCard } from ".";
 import buttonStyles from "./Button.module.scss";
 import iconStyles from "./IconButton.module.scss";
 import classNames from "classnames";
@@ -52,36 +52,9 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
     },
     ref,
   ) => {
-    const [isTooltipVisible, setTooltipVisible] = useState(false);
-    const [isHover, setIsHover] = useState(false);
-
-    useEffect(() => {
-      let timer: NodeJS.Timeout;
-      if (isHover) {
-        timer = setTimeout(() => {
-          setTooltipVisible(true);
-        }, 400);
-      } else {
-        setTooltipVisible(false);
-      }
-
-      return () => clearTimeout(timer);
-    }, [isHover]);
-
-    const content = (
-      <>
-        {children ? children : <Icon name={icon} size="s" />}
-        {tooltip && isTooltipVisible && (
-          <Flex position="absolute" zIndex={1} className={iconStyles[tooltipPosition]}>
-            <Tooltip label={tooltip} />
-          </Flex>
-        )}
-      </>
-    );
-
     const radiusSize = size === "s" || size === "m" ? "m" : "l";
 
-    return (
+    const button = (
       <ElementType
         id={id}
         href={href}
@@ -102,16 +75,31 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
           className,
         )}
         style={style}
-        onMouseEnter={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}
         aria-label={tooltip || icon}
         {...props}
       >
         <Flex fill center>
-          {content}
+          {children ? children : <Icon name={icon} size="s" />}
         </Flex>
       </ElementType>
     );
+
+    if (tooltip) {
+      return (
+        <HoverCard
+          trigger={button}
+          placement={tooltipPosition}
+          fade={0}
+          scale={0.9}
+          duration={200}
+          offsetDistance="4"
+        >
+          <Tooltip label={tooltip} />
+        </HoverCard>
+      );
+    }
+
+    return button;
   },
 );
 

@@ -1,14 +1,13 @@
 "use client";
 
-import React, { forwardRef, useState, useEffect, ReactNode } from "react";
+import React, { forwardRef, ReactNode } from "react";
 import classNames from "classnames";
 import { IconType } from "react-icons";
 import { IconName } from "../icons";
 import { useIcons } from "../contexts/IconProvider";
 import { ColorScheme, ColorWeight } from "../types";
-import { Flex, Tooltip } from ".";
+import { Flex, Tooltip, HoverCard } from ".";
 import styles from "./Icon.module.scss";
-import iconStyles from "./IconButton.module.scss";
 
 interface IconProps extends React.ComponentProps<typeof Flex> {
   name: IconName;
@@ -38,22 +37,6 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
     },
     ref,
   ) => {
-    const [isTooltipVisible, setTooltipVisible] = useState(false);
-    const [isHover, setIsHover] = useState(false);
-
-    useEffect(() => {
-      let timer: NodeJS.Timeout;
-      if (isHover) {
-        timer = setTimeout(() => {
-          setTooltipVisible(true);
-        }, 400);
-      } else {
-        setTooltipVisible(false);
-      }
-
-      return () => clearTimeout(timer);
-    }, [isHover]);
-
     const { icons } = useIcons();
     const IconComponent: IconType | undefined = icons[name];
 
@@ -77,7 +60,7 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
       colorClass = `${scheme}-on-solid-${weight}`;
     }
 
-    return (
+    const icon = (
       <Flex
         inline
         fit
@@ -86,19 +69,26 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
         className={classNames(colorClass, styles.icon, styles[size], className)}
         aria-hidden={decorative ? "true" : undefined}
         aria-label={decorative ? undefined : name}
-        onMouseEnter={() => setIsHover(true)}
-        onMouseLeave={() => setIsHover(false)}
         style={style}
         {...rest}
       >
         <IconComponent />
-        {tooltip && isTooltipVisible && (
-          <Flex position="absolute" zIndex={1} className={iconStyles[tooltipPosition]}>
-            <Tooltip label={tooltip} />
-          </Flex>
-        )}
       </Flex>
     );
+
+    if (tooltip) {
+      return (
+        <HoverCard
+          trigger={icon}
+          placement={tooltipPosition}
+          offsetDistance="4"
+        >
+          <Tooltip label={tooltip} />
+        </HoverCard>
+      );
+    }
+
+    return icon;
   },
 );
 
