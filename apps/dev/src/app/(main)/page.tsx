@@ -131,6 +131,23 @@ export default function Home() {
         <Media src="/images/cover-01.jpg" caption="Caption" radius="xl" />
       </Column>
 
+      <DropdownWrapper
+            placement="bottom-end"
+              trigger={
+                <Row>
+                  <IconButton data-border="rounded" variant="secondary" icon="bell"/>
+                  <Row data-solid="inverse" minWidth="8" minHeight="8" radius="full" solid="brand-strong" position="absolute" top="2" right="2"/>
+                </Row>
+              }
+              dropdown={
+                <Column width={20} background="surface" radius="l" gap="2" padding="4" border="neutral-alpha-weak">
+                  <Option value="1">Option 1</Option>
+                  <Option value="2">Option 2</Option>
+                  <Option value="3">Option 3</Option>
+                </Column>
+              }
+            />
+
       
       <CodeBlock
       fullscreenButton

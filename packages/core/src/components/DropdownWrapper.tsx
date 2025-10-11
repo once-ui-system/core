@@ -4,6 +4,7 @@ import React, {
   useState,
   useRef,
   useEffect,
+  useLayoutEffect,
   ReactNode,
   forwardRef,
   useImperativeHandle,
@@ -180,6 +181,43 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     // Store the previously focused element to restore focus when dropdown closes
     const previouslyFocusedElement = useRef<Element | null>(null);
 
+    // Lock/unlock body scroll when dropdown opens/closes - use useLayoutEffect to run synchronously before paint
+    useLayoutEffect(() => {
+      if (isOpen) {
+        // Store current scroll position
+        const scrollX = window.scrollX;
+        const scrollY = window.scrollY;
+        
+        // Store original styles
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        const originalOverflow = document.body.style.overflow;
+        const originalPaddingRight = document.body.style.paddingRight;
+        
+        // Prevent any scroll events during dropdown opening
+        const preventScroll = (e: Event) => {
+          window.scrollTo(scrollX, scrollY);
+        };
+        
+        // Lock scroll immediately (synchronously before browser paint)
+        document.body.style.overflow = 'hidden';
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+        
+        // Listen for scroll events and force back to original position
+        window.addEventListener('scroll', preventScroll, { passive: false });
+        
+        // Restore scroll position if it changed
+        window.scrollTo(scrollX, scrollY);
+        
+        return () => {
+          // Remove scroll listener
+          window.removeEventListener('scroll', preventScroll);
+          // Restore original styles
+          document.body.style.overflow = originalOverflow;
+          document.body.style.paddingRight = originalPaddingRight;
+        };
+      }
+    }, [isOpen]);
+
     // Force update when dropdown opens
     useEffect(() => {
       if (isOpen && mounted) {
@@ -195,8 +233,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       if (isOpen && mounted) {
         // Store the currently focused element before focusing the dropdown
         previouslyFocusedElement.current = document.activeElement;
-
-        // Store current scroll position
+        
+        // Store scroll position before any operations
         const scrollX = window.scrollX;
         const scrollY = window.scrollY;
 
@@ -213,9 +251,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
             if (focusableElements.length > 0) {
               (focusableElements[0] as HTMLElement).focus({ preventScroll: true });
-
-              // Ensure scroll position is maintained
-              setTimeout(() => window.scrollTo(scrollX, scrollY), 0);
             }
 
             const optionElements = dropdownRef.current
@@ -229,19 +264,20 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               optionElements.forEach((el, i) => {
                 if (i === 0) {
                   (el as HTMLElement).classList.add("highlighted");
-                  // Make sure the first option is visible
-                  (el as HTMLElement).scrollIntoView({ block: "nearest" });
                 } else {
                   (el as HTMLElement).classList.remove("highlighted");
                 }
               });
             }
+            
+            // Ensure scroll position hasn't changed
+            window.scrollTo(scrollX, scrollY);
           }
         });
       } else if (!isOpen && previouslyFocusedElement.current) {
         // Only try to focus if the element is still in the document
         if (document.contains(previouslyFocusedElement.current)) {
-          (previouslyFocusedElement.current as HTMLElement).focus();
+          (previouslyFocusedElement.current as HTMLElement).focus({ preventScroll: true });
         }
       }
     }, [isOpen, mounted, refs, update]);
@@ -353,6 +389,31 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       ) as HTMLElement[];
     }, []);
 
+    // Track hover on options to sync with keyboard navigation
+    useEffect(() => {
+      if (!isOpen || !dropdownRef.current) return;
+
+      const handleOptionHover = (e: MouseEvent) => {
+        const target = e.target as HTMLElement;
+        const option = target.closest('[role="option"], [data-value]') as HTMLElement;
+        
+        if (option && dropdownRef.current?.contains(option)) {
+          const options = getOptions();
+          const index = options.indexOf(option);
+          if (index >= 0 && index !== focusedIndex) {
+            setFocusedIndex(index);
+          }
+        }
+      };
+
+      const dropdown = dropdownRef.current;
+      dropdown.addEventListener('mouseover', handleOptionHover);
+
+      return () => {
+        dropdown.removeEventListener('mouseover', handleOptionHover);
+      };
+    }, [isOpen, focusedIndex, getOptions]);
+
     // Determine the appropriate navigation layout
     const determineNavigationLayout = useCallback((): NavigationLayout => {
       // Use the prop if provided, otherwise default to column
@@ -405,9 +466,19 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       (index: number) => {
         setFocusedIndex(index);
         const options = getOptions();
-        if (index >= 0 && index < options.length) {
-          // Ensure the option is visible
-          options[index].scrollIntoView({ block: "nearest", behavior: "smooth" });
+        if (index >= 0 && index < options.length && dropdownRef.current) {
+          // Scroll within the dropdown container only, not the page
+          const option = options[index];
+          const container = dropdownRef.current;
+          const optionRect = option.getBoundingClientRect();
+          const containerRect = container.getBoundingClientRect();
+          
+          // Check if option is outside visible area of container
+          if (optionRect.bottom > containerRect.bottom) {
+            option.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          } else if (optionRect.top < containerRect.top) {
+            option.scrollIntoView({ block: "nearest", behavior: "smooth" });
+          }
         }
       },
       [getOptions],
