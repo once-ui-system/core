@@ -104,7 +104,6 @@ export const iconLibrary: Record<string, IconType> = {
   visa: RiVisaLine,
   security: HiOutlineShieldCheck,
   sparkle: HiOutlineSparkles,
-  document: HiOutlineBars3BottomLeft,
   linkedin: FaLinkedin,
   analytics: HiOutlineDocumentChartBar,
   threads: FaThreads,

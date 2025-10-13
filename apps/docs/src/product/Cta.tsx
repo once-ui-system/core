@@ -23,7 +23,7 @@ export const Cta = () => {
           y={50}
           radius={25}
           >
-          <Particle style={{transform: "scale(1.1)"}} opacity={70} position="absolute" top="0" left="0" fill interactive speed={4} density={100} size="2" interactionRadius={50}/>
+          <Particle style={{transform: "scale(1.1)"}} opacity={70} position="absolute" top="0" left="0" fill interactive speed={4} density={100} size="2" intensity={50}/>
         </Mask>
         </Row>
         <Button data-border="rounded" id="hero-cta-button" href="https://once-ui.com/auth?signup" arrowIcon>
