@@ -13,6 +13,7 @@ export * from "./DateRangeInputExamples";
 export * from "./DialogExample";
 export * from "./DropdownExample";
 export * from "./DropdownWrapperExample";
+export * from "./EmojiPickerDropdownExample";
 export * from "./InfiniteScrollExample";
 export * from "./InputExamples";
 export * from "./InteractiveDetailsExamples";
