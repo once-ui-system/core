@@ -1,0 +1,422 @@
+---
+title: "MatrixFx"
+summary: "The MatrixFx component creates an animated dot matrix reveal effect using native Canvas 2D API."
+updatedAt: "2025-10-13"
+docs: "once-ui/components/MatrixFx.mdx"
+github: "components/MatrixFx.tsx"
+navLabel: "MatrixFx"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `MatrixFx` component creates an animated dot matrix reveal effect using the native Canvas 2D API. It supports instant reveal, progressive reveal on mount, or hover-triggered animations with smooth transitions. Perfect for hero sections, backgrounds, or interactive hover cards.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["accent-solid-strong", "accent-solid-weak"]}
+      trigger="mount"
+      flicker
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["brand-solid-strong", "accent-solid-strong"]}
+    trigger="mount"
+    flicker
+/>`,
+      language: "tsx",
+      label: "MatrixFx"
+    }
+  ]}
+/>
+
+## Speed
+
+Control the reveal animation speed with the `animationSpeed` prop. Higher values make the reveal faster.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  reloadButton
+  preview={
+    <MatrixFx
+      height={24}
+      trigger="mount"
+      animationSpeed={2}
+      colors={["accent-solid-medium"]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    trigger="mount"
+    animationSpeed={2}
+    colors={["accent-solid-medium"]}
+/>`,
+      language: "tsx",
+      label: "Speed"
+    }
+  ]}
+/>
+
+## Colors
+
+Use multiple colors for variety. Supports CSS variables and any valid color format.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={[
+        "brand-solid-strong",
+        "brand-background-strong",
+        "success-solid-strong"
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={[
+        "brand-solid-medium",
+        "accent-solid-medium",
+        "danger-solid-medium"
+    ]}
+/>`,
+      language: "tsx",
+      label: "Colors"
+    }
+  ]}
+/>
+
+## Size & Spacing
+
+Customize the size of dots and spacing between them.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      fill
+      height={24}
+      size={6}
+      spacing={8}
+      colors={["accent-solid-strong"]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    fill
+    height={24}
+    size={6}
+    spacing={8}
+    colors={["brand-solid-strong"]}
+/>`,
+      language: "tsx",
+      label: "Size & Spacing"
+    }
+  ]}
+/>
+
+## Direction
+
+Control where the reveal animation starts from.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  reloadButton
+  preview={
+    <MatrixFx
+      height={24}
+      revealFrom="top"
+      trigger="mount"
+      colors={["brand-solid-strong"]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    revealFrom="top"
+    colors={["brand-solid-strong"]}
+/>`,
+      language: "tsx",
+      label: "Direction"
+    }
+  ]}
+/>
+
+## Content
+
+Place content inside the reveal effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["neutral-solid-medium"]}
+    >
+      <Column gap="16" fill center>
+        <Heading variant="display-strong-xl" onBackground="neutral-strong" align="center">
+          Canvas Reveal
+        </Heading>
+        <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+          Animated dot matrix effect with native Canvas 2D
+        </Text>
+      </Column>
+    </MatrixFx>
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["neutral-solid-medium"]}
+>
+    <Column gap="16" fill center>
+      <Heading variant="display-strong-xl">
+        Canvas Reveal
+      </Heading>
+      <Text variant="body-default-l">
+        Animated dot matrix effect
+      </Text>
+    </Column>
+</MatrixFx>`,
+      language: "tsx",
+      label: "Content"
+    }
+  ]}
+/>
+
+## Flicker
+
+Add a subtle animated flicker to create a dynamic, alive feeling.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["danger-solid-strong"]}
+      flicker
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["danger-solid-strong"]}
+    flicker
+/>`,
+      language: "tsx",
+      label: "Flicker"
+    }
+  ]}
+/>
+
+## Hover
+
+Use `trigger="hover"` for native hover support. Dots progressively appear on hover and smoothly reverse when you move away.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="16"
+  codeHeight={24}
+  preview={
+    <Row gap="16" fillWidth height={24}>
+      <Row
+        fill
+        center
+        padding="24"
+        border="neutral-alpha-weak"
+        radius="l"
+        overflow="hidden"
+      >
+        <MatrixFx
+          position="absolute"
+          top="0"
+          left="0"
+          trigger="hover"
+          size={1}
+          spacing={2}
+          flicker
+        />
+        <Background
+          fill
+          position="absolute"
+          left="0"
+          top="0"
+          x="0"
+          y="0"
+          gradient={{
+            display: true,
+            colorStart: "neutral-background-weak",
+          }}
+          pointerEvents="none"/>
+        <Column align="center" horizontal="center" pointerEvents="none">
+          <Logo dark icon="/trademark/icon-dark.svg" />
+          <Logo light icon="/trademark/icon-light.svg" />
+        </Column>
+      </Row>
+      <Row
+        fill
+        center
+        padding="24"
+        border="neutral-alpha-weak"
+        radius="l"
+        overflow="hidden"
+      >
+        <MatrixFx
+          position="absolute"
+          top="0"
+          left="0"
+          trigger="hover"
+          size={1}
+          spacing={2}
+          flicker
+          revealFrom="bottom"
+        />
+        <Background
+          fill
+          position="absolute"
+          left="0"
+          top="0"
+          x="0"
+          y="0"
+          gradient={{
+            display: true,
+            colorStart: "neutral-background-weak",
+          }}
+          pointerEvents="none"/>
+        <Column align="center" horizontal="center" pointerEvents="none">
+          <Logo dark icon="/trademark/icon-dark.svg" />
+          <Logo light icon="/trademark/icon-light.svg" />
+        </Column>
+      </Row>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`
+<Row
+    fill
+    center
+    padding="24"
+    border="neutral-alpha-weak"
+    radius="l"
+    overflow="hidden"
+>
+    <MatrixFx
+      position="absolute"
+      top="0"
+      left="0"
+      trigger="hover"
+      size={1}
+      spacing={2}
+      flicker
+    />
+    <Background
+      fill
+      position="absolute"
+      left="0"
+      top="0"
+      x="0"
+      y="0"
+      gradient={{
+        display: true,
+        colorStart: "neutral-background-weak",
+      }}
+      pointerEvents="none"/>
+    <Column align="center" horizontal="center" pointerEvents="none">
+      <Logo dark icon="/trademark/icon-dark.svg" />
+      <Logo light icon="/trademark/icon-light.svg" />
+    </Column>
+</Row>
+<Row
+    fill
+    center
+    padding="24"
+    border="neutral-alpha-weak"
+    radius="l"
+    overflow="hidden"
+>
+    <MatrixFx
+      position="absolute"
+      top="0"
+      left="0"
+      trigger="hover"
+      size={1}
+      spacing={2}
+      flicker
+      revealFrom="bottom"
+    />
+    <Background
+      fill
+      position="absolute"
+      left="0"
+      top="0"
+      x="0"
+      y="0"
+      gradient={{
+        display: true,
+        colorStart: "neutral-background-weak",
+      }}
+      pointerEvents="none"/>
+    <Column align="center" horizontal="center" pointerEvents="none">
+      <Logo dark icon="/trademark/icon-dark.svg" />
+      <Logo light icon="/trademark/icon-light.svg" />
+    </Column>
+</Row>`,
+      language: "tsx",
+      label: "Hover"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["animationSpeed", "number", "1"],
+    ["colors", "string[]", '["brand-solid-medium"]'],
+    ["size", "number", "3"],
+    ["spacing", "number", "3"],
+    ["trigger", ["instant","hover","mount"], "instant"],
+    ["flicker", "boolean", "false"],
+    ["revealFrom", ["center","top","bottom","left","right"], "center"],
+    ["children"],
+    ["...flex"]
+  ]}
+/>
