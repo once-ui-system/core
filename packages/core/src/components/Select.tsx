@@ -294,7 +294,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           />
         }
         dropdown={
-          <Column fillWidth padding="2" data-dropdown="true">
+          <Column fillWidth padding="4" data-dropdown="true">
             <ArrowNavigation
               layout="column"
               itemCount={filteredOptions.length}
@@ -319,7 +319,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                 />
               )}
             
-              <Column fillWidth padding="4" gap="2">
+              <Column fillWidth paddingTop="4" gap="2">
                 {filteredOptions.map((option, index) => (
                   <Option
                     key={option.value}
