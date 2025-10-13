@@ -79,6 +79,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       minWidth,
       minHeight,
       maxHeight,
+      scrollbar = "minimal",
       fit = false,
       fitWidth = false,
       fitHeight = false,
@@ -238,6 +239,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
+      (overflow || overflowX || overflowY) && `scrollbar-${scrollbar}`,
       flex && `flex-${flex}`,
       horizontal &&
         (direction === "row" || direction === "row-reverse" || direction === undefined

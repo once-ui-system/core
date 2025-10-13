@@ -173,6 +173,7 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
   overflow?: CSSProperties["overflow"];
   overflowX?: CSSProperties["overflowX"];
   overflowY?: CSSProperties["overflowY"];
+  scrollbar?: "default" | "minimal";
   transition?:
     | "micro-short"
     | "micro-medium"

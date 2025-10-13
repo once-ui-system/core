@@ -158,7 +158,8 @@ export default function RootLayout({
           />
         </head>
         <Providers>
-          <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}>
+          <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}
+            scrollbar="default">
           <Background
             position="absolute"
             top="0"

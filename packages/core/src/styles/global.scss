@@ -1,5 +1,8 @@
 * {
     box-sizing: border-box;
+}
+
+html {
     scroll-behavior: smooth;
 }
 
@@ -10,13 +13,6 @@ h1, h2, h3, h4, h5, h6 {
 img {
     user-select: none;
 }
-
-/*:root {
-    --breakpoint-xs: 480px;
-    --breakpoint-s: 768px;
-    --breakpoint-m: 1024px;
-    --breakpoint-l: 1440px;
- } */
 
 /* SELECTION */
 ::selection {
@@ -37,28 +33,4 @@ a:not(.button) {
         text-decoration: none;
         color: var(--brand-on-background-strong);
     }
-}
-
-/* SCROLLBAR */
-::-webkit-scrollbar {
-    background: var(--static-transparent);
-    width: var(--static-space-8);
-    height: var(--static-space-8);
-}
-
-::-webkit-scrollbar-track {
-    background: var(--static-transparent);
-}
-
-::-webkit-scrollbar-thumb {
-    background: var(--neutral-alpha-medium);
-    transition: var(--transition-micro-medium);
-
-    &:hover {
-        background: var(--neutral-alpha-strong);
-    }
-}
-
-::-webkit-scrollbar-corner {
-    background-color: var(--static-transparent);
 }

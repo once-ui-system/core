@@ -36,6 +36,32 @@
   overflow-y: hidden;
 }
 
+.scrollbar-minimal {
+  &::-webkit-scrollbar {
+      background: var(--static-transparent);
+      width: var(--static-space-4);
+      height: var(--static-space-4);
+  }
+
+  &::-webkit-scrollbar-track {
+      background: var(--static-transparent);
+  }
+
+  &::-webkit-scrollbar-thumb {
+      background: var(--neutral-alpha-medium);
+      transition: var(--transition-micro-medium);
+      border-radius: var(--radius-full);
+
+      &:hover {
+          background: var(--neutral-alpha-strong);
+      }
+  }
+
+  &::-webkit-scrollbar-corner {
+      background-color: var(--static-transparent);
+  }
+}
+
 @include breakpoints.l {
   .l-overflow-auto {
     overflow: auto;
