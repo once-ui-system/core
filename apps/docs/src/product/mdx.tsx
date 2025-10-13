@@ -17,26 +17,10 @@ const onceUIComponents = allComponents;
   
 
 function CustomLink({ href, children, ...props }: CustomLinkProps) {
-  if (href.startsWith("/")) {
-    return (
-      <onceUIComponents.SmartLink href={href} {...props}>
-        {children}
-      </onceUIComponents.SmartLink>
-    );
-  }
-
-  if (href.startsWith("#")) {
-    return (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    );
-  }
-
   return (
-    <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+    <onceUIComponents.SmartLink href={href} {...props} style={{ textDecoration: "underline" }}>
       {children}
-    </a>
+    </onceUIComponents.SmartLink>
   );
 }
 
