@@ -11,7 +11,8 @@ interface ParticleProps extends React.ComponentProps<typeof Flex> {
   size?: SpacingToken;
   speed?: number;
   interactive?: boolean;
-  interactionRadius?: number;
+  mode?: "repel" | "attract";
+  intensity?: number;
   opacity?: DisplayProps["opacity"];
   className?: string;
   style?: React.CSSProperties;
@@ -26,7 +27,8 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
       size = "2",
       speed = 0.3,
       interactive = false,
-      interactionRadius = 20,
+      mode = "repel",
+      intensity = 20,
       opacity = 100,
       children,
       className,
@@ -107,18 +109,38 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
 
           let targetX = initial.x + baseNoiseX;
           let targetY = initial.y + baseNoiseY;
+          let isCloseToMouse = false;
 
           if (interactive) {
             const dx = mousePosition.x - currentX;
             const dy = mousePosition.y - currentY;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
-            if (distance < interactionRadius) {
-              const force = (interactionRadius - distance) * repulsionStrength;
+            if (distance < intensity) {
               const angle = Math.atan2(dy, dx);
 
-              targetX -= Math.cos(angle) * force;
-              targetY -= Math.sin(angle) * force;
+              if (mode === "attract") {
+                // Attract: move towards cursor
+                const minDistance = 8;
+                
+                if (distance <= minDistance) {
+                  // Particle is close - freeze it at cursor position (no noise, no movement)
+                  targetX = mousePosition.x;
+                  targetY = mousePosition.y;
+                  isCloseToMouse = true;
+                } else {
+                  // Force is proportional to distance (strong when far, weak when close)
+                  const normalizedDistance = Math.min(distance / intensity, 1);
+                  const force = distance * repulsionStrength * normalizedDistance * 0.3;
+                  targetX = currentX + Math.cos(angle) * force;
+                  targetY = currentY + Math.sin(angle) * force;
+                }
+              } else {
+                // Repel: move away from cursor (original behavior)
+                const force = (intensity - distance) * repulsionStrength;
+                targetX -= Math.cos(angle) * force;
+                targetY -= Math.sin(angle) * force;
+              }
             }
           }
 
@@ -156,7 +178,7 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
           initialPositions.delete(particleEl);
         });
       };
-    }, [color, size, speed, interactive, interactionRadius, opacity, density, containerRef]);
+    }, [color, size, speed, interactive, intensity, opacity, density, containerRef]);
 
     return (
       <Flex
