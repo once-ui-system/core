@@ -1,11 +1,13 @@
 "use client";
 
 import React, { forwardRef, useEffect, useState, useRef, useCallback } from "react";
-import { Column, Flex, Row, SmartLink, Text, useHeadingLinks } from "../../";
+import { Column, Flex, Icon, Row, SmartLink, Text, useHeadingLinks } from "../../";
 
-interface props extends React.ComponentProps<typeof Flex> {}
+interface props extends React.ComponentProps<typeof Flex> {
+  header?: boolean;
+}
 
-const HeadingNav = forwardRef<HTMLDivElement, props>(({ className, style, ...rest }, ref) => {
+const HeadingNav = forwardRef<HTMLDivElement, props>(({ className, style, header = true, ...rest }, ref) => {
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const indicatorRef = useRef<HTMLDivElement>(null);
@@ -175,69 +177,81 @@ const HeadingNav = forwardRef<HTMLDivElement, props>(({ className, style, ...res
   };
 
   return (
-    <Row paddingLeft="8" gap="12" className={className} style={style} ref={ref} {...rest}>
-      <Row width="2" background="neutral-alpha-medium" radius="full" overflow="hidden">
-        <Row
-          ref={indicatorRef}
-          height="32"
-          paddingY="4"
-          fillWidth
-          position="absolute"
-          style={{
-            top: `calc(${activeIndex} * var(--static-space-32))`,
-            transition: "top 0.3s ease",
-          }}
-        >
-          <Row fillWidth solid="brand-strong" radius="full" />
-        </Row>
-      </Row>
-      <Column fillWidth>
-        {headings.map((heading, index) => {
-          const indent = heading.level - 2;
-          const isActive = heading.id === activeHeadingId;
-
-          return (
-            <Flex key={heading.id} fillWidth height="32" paddingX="4">
-              <SmartLink
+    <Column gap="16" position="sticky" fitHeight className={className} style={style} ref={ref} {...rest}>
+      {headings.length > 0 &&
+        <>
+          {header &&
+            <Row gap="12" paddingLeft="2" vertical="center" onBackground="neutral-medium" textVariant="label-default-s">
+              <Icon name="document" size="xs"/>
+              On this page
+            </Row>
+          }
+          <Row paddingLeft="8" gap="12">
+            <Row width="2" background="neutral-alpha-medium" radius="full" overflow="hidden">
+              <Row
+                ref={indicatorRef}
+                height="32"
+                paddingY="4"
                 fillWidth
-                href={"#" + heading.id}
-                onClick={(e) => {
-                  e.preventDefault();
-                  const target = document.getElementById(heading.id);
-                  if (target) {
-                    const targetPosition =
-                      target.getBoundingClientRect().top + window.scrollY - 150;
-                    window.scrollTo({
-                      top: targetPosition,
-                      behavior: "smooth",
-                    });
-
-                    handleHeadingClick(heading.id, index);
-                  }
-                }}
+                position="absolute"
                 style={{
-                  paddingLeft: `calc(${indent} * var(--static-space-8))`,
-                  color: isActive
-                    ? "var(--neutral-on-background-strong)"
-                    : "var(--neutral-on-background-weak)",
-                  transition: "color 0.2s ease",
+                  top: `calc(${activeIndex} * var(--static-space-32))`,
+                  transition: "top 0.3s ease",
                 }}
               >
-                <Text
-                  variant={isActive ? "body-strong-s" : "body-default-s"}
-                  truncate
-                  style={{
-                    transition: "font-weight 0.2s ease",
-                  }}
-                >
-                  {heading.text}
-                </Text>
-              </SmartLink>
-            </Flex>
-          );
-        })}
-      </Column>
-    </Row>
+                <Row fillWidth solid="brand-strong" radius="full" />
+              </Row>
+            </Row>
+            <Column fillWidth>
+              {headings.map((heading, index) => {
+                const indent = heading.level - 2;
+                const isActive = heading.id === activeHeadingId;
+
+                return (
+                  <Flex key={heading.id} fillWidth height="32" paddingX="4">
+                    <SmartLink
+                      fillWidth
+                      href={"#" + heading.id}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const target = document.getElementById(heading.id);
+                        if (target) {
+                          const targetPosition =
+                            target.getBoundingClientRect().top + window.scrollY - 150;
+                            window.scrollTo({
+                              top: targetPosition,
+                              behavior: "smooth",
+                            });
+
+                          handleHeadingClick(heading.id, index);
+                        }
+                      }}
+                      style={{
+                        paddingLeft: `calc(${indent} * var(--static-space-8))`,
+                        color: isActive
+                          ? "var(--neutral-on-background-strong)"
+                          : "var(--neutral-on-background-weak)",
+                        transition: "color 0.2s ease",
+                      }}
+                    >
+                      <Text
+                        variant={isActive ? "body-strong-s" : "body-default-s"}
+                        truncate
+                        style={{
+                          transition: "font-weight 0.2s ease",
+                        }}
+                      >
+                        {heading.text}
+                      </Text>
+                    </SmartLink>
+                  </Flex>
+                );
+              })}
+            </Column>
+          </Row>
+        </>
+      }
+    </Column>
   );
 });
 
