@@ -14,6 +14,7 @@ import {
   DropdownWrapperProps,
   Column,
   ArrowNavigation,
+  useArrowNavigationContext,
 } from ".";
 import inputStyles from "./Input.module.scss";
 import { Placement } from "@floating-ui/react-dom";
@@ -34,6 +35,88 @@ interface SelectProps
   fillWidth?: boolean;
   multiple?: boolean;
 }
+
+// Inner component that uses the arrow navigation context
+const SearchInput: React.FC<{
+  searchInputId: string;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  setIsDropdownOpen: (open: boolean) => void;
+  handleClearSearch: (e: React.MouseEvent) => void;
+  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+  selectRef: React.RefObject<HTMLDivElement | null>;
+}> = ({
+  searchInputId,
+  searchQuery,
+  setSearchQuery,
+  setIsDropdownOpen,
+  handleClearSearch,
+  handleBlur,
+  selectRef,
+}) => {
+  const { handleKeyDown: navKeyDown } = useArrowNavigationContext();
+
+  return (
+    <Input
+      data-scaling="90"
+      id={`select-search-${searchInputId}`}
+      placeholder="Search"
+      height="s"
+      hasSuffix={
+        searchQuery ? (
+          <IconButton
+            tooltip="Clear"
+            tooltipPosition="left"
+            icon="close"
+            variant="ghost"
+            size="s"
+            onClick={handleClearSearch}
+          />
+        ) : undefined
+      }
+      hasPrefix={<Icon name="search" size="xs" />}
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      onClick={(e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        setIsDropdownOpen(true);
+      }}
+      onFocus={(e) => {
+        e.stopPropagation();
+        setIsDropdownOpen(true);
+      }}
+      onKeyDown={(e) => {
+        // Handle arrow keys and Enter for navigation
+        if (["ArrowDown", "ArrowUp", "Enter", "Home", "End"].includes(e.key)) {
+          navKeyDown(e as any);
+          return;
+        }
+        
+        if (e.key === "Escape") {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsDropdownOpen(false);
+          setSearchQuery("");
+          const mainInput = selectRef.current?.querySelector(
+            "input:not([id^='select-search'])",
+          );
+          if (mainInput instanceof HTMLInputElement) {
+            mainInput.focus();
+          }
+        }
+      }}
+      onBlur={(e) => {
+        const relatedTarget = e.relatedTarget as Node;
+        const isClickInDropdown =
+          selectRef.current && selectRef.current.contains(relatedTarget);
+        if (!isClickInDropdown) {
+          handleBlur(e);
+        }
+      }}
+    />
+  );
+};
 
 const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
@@ -212,60 +295,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         }
         dropdown={
           <Column fillWidth padding="2" data-dropdown="true">
-            {searchable && (
-              <Input
-                data-scaling="90"
-                id={`select-search-${searchInputId}`}
-                placeholder="Search"
-                height="s"
-                hasSuffix={
-                  searchQuery ? (
-                    <IconButton
-                      tooltip="Clear"
-                      tooltipPosition="left"
-                      icon="close"
-                      variant="ghost"
-                      size="s"
-                      onClick={handleClearSearch}
-                    />
-                  ) : undefined
-                }
-                hasPrefix={<Icon name="search" size="xs" />}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  setIsDropdownOpen(true);
-                }}
-                onFocus={(e) => {
-                  e.stopPropagation();
-                  setIsDropdownOpen(true);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Escape") {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    setIsDropdownOpen(false);
-                    setSearchQuery("");
-                    const mainInput = selectRef.current?.querySelector(
-                      "input:not([id^='select-search'])",
-                    );
-                    if (mainInput instanceof HTMLInputElement) {
-                      mainInput.focus();
-                    }
-                  }
-                }}
-                onBlur={(e) => {
-                  const relatedTarget = e.relatedTarget as Node;
-                  const isClickInDropdown =
-                    selectRef.current && selectRef.current.contains(relatedTarget);
-                  if (!isClickInDropdown) {
-                    handleBlur(e);
-                  }
-                }}
-              />
-            )}
             <ArrowNavigation
               layout="column"
               itemCount={filteredOptions.length}
@@ -276,8 +305,20 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
               }}
               onEscape={() => setIsDropdownOpen(false)}
               autoFocus={!searchable}
-              disabled={searchable}
+              disabled={false}
             >
+              {searchable && (
+                <SearchInput
+                  searchInputId={searchInputId}
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  setIsDropdownOpen={setIsDropdownOpen}
+                  handleClearSearch={handleClearSearch}
+                  handleBlur={handleBlur}
+                  selectRef={selectRef}
+                />
+              )}
+            
               <Column fillWidth padding="4" gap="2">
                 {filteredOptions.map((option, index) => (
                   <Option

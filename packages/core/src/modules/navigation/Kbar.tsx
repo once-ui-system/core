@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback, useMemo, ReactNode } from "react";
-import { Flex, Text, Icon, Column, Input, Option, Row, Kbd } from "../../";
+import { Flex, Text, Icon, Column, Input, Option, Row, Kbd, ArrowNavigation, useArrowNavigationContext } from "../../";
 import { createPortal } from "react-dom";
 import { useRouter, usePathname } from "next/navigation";
 import styles from "./Kbar.module.scss";
@@ -31,6 +31,39 @@ const SectionHeader: React.FC<{ label: string }> = ({ label }) => (
   </Row>
 );
 
+// Search input that uses arrow navigation context
+const KbarSearchInput: React.FC<{
+  placeholder: string;
+  searchQuery: string;
+  onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+}> = ({ placeholder, searchQuery, onSearchChange, inputRef }) => {
+  const { handleKeyDown: navKeyDown } = useArrowNavigationContext();
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      // Forward arrow keys and Enter to navigation
+      if (["ArrowUp", "ArrowDown", "Enter", "Home", "End"].includes(e.key)) {
+        navKeyDown(e as any);
+      }
+    },
+    [navKeyDown],
+  );
+
+  return (
+    <Input
+      id="kbar-search"
+      placeholder={placeholder}
+      value={searchQuery}
+      onChange={onSearchChange}
+      onKeyDown={handleKeyDown}
+      ref={inputRef}
+      hasPrefix={<Icon marginLeft="4" onBackground="neutral-weak" name="search" size="xs" />}
+      autoComplete="off"
+    />
+  );
+};
+
 interface KbarTriggerProps {
   onClick?: () => void;
   children: React.ReactNode;
@@ -59,11 +92,9 @@ export const KbarContent: React.FC<KbarContentProps> = ({
   placeholder = "Search",
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
   const router = useRouter();
   const [isClosing, setIsClosing] = useState(false);
 
@@ -145,86 +176,25 @@ export const KbarContent: React.FC<KbarContentProps> = ({
     return groupedItems.filter((item) => !item.isCustom);
   }, [groupedItems]);
 
-  // Reset optionRefs when nonCustomOptions change
-  useEffect(() => {
-    optionRefs.current = Array(nonCustomOptions.length).fill(null);
-  }, [nonCustomOptions.length]);
-
-  // Reset highlighted index when search query changes
-  useEffect(() => {
-    setHighlightedIndex(nonCustomOptions.length > 0 ? 0 : null);
-  }, [searchQuery, nonCustomOptions.length]);
-
-  // Handle keyboard navigation
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (!nonCustomOptions.length) return;
-
-      switch (e.key) {
-        case "ArrowDown":
-          e.preventDefault();
-          setHighlightedIndex((prevIndex) => {
-            if (prevIndex === null) return 0;
-            return (prevIndex + 1) % nonCustomOptions.length;
-          });
-          break;
-        case "ArrowUp":
-          e.preventDefault();
-          setHighlightedIndex((prevIndex) => {
-            if (prevIndex === null) return nonCustomOptions.length - 1;
-            return (prevIndex - 1 + nonCustomOptions.length) % nonCustomOptions.length;
-          });
-          break;
-        case "Enter":
-          e.preventDefault();
-          if (highlightedIndex !== null && highlightedIndex < nonCustomOptions.length) {
-            const selectedOption = nonCustomOptions[highlightedIndex];
-            if (selectedOption) {
-              // Find the original item to get the perform function or href
-              const originalItem = items.find((item) => item.id === selectedOption.value);
-              if (originalItem) {
-                if (originalItem.href) {
-                  router.push(originalItem.href);
-                  onClose();
-                } else if (originalItem.perform) {
-                  originalItem.perform();
-                  onClose();
-                }
-              }
-            }
-          }
-          break;
-      }
-    },
-    [nonCustomOptions, items, router, onClose, highlightedIndex],
-  );
-
-  // Scroll highlighted element into view
-  useEffect(() => {
-    if (isOpen && highlightedIndex !== null && nonCustomOptions.length > 0) {
-      // Use requestAnimationFrame to ensure the DOM has updated
-      requestAnimationFrame(() => {
-        const highlightedElement = optionRefs.current[highlightedIndex];
-        const scrollContainer = scrollContainerRef.current;
-
-        if (highlightedElement && scrollContainer) {
-          const elementRect = highlightedElement.getBoundingClientRect();
-          const containerRect = scrollContainer.getBoundingClientRect();
-
-          // Check if the element is not fully visible
-          if (elementRect.bottom > containerRect.bottom) {
-            // Element is below the visible area - scroll just enough to show it
-            const scrollAmount = elementRect.bottom - containerRect.bottom + 8; // Add a small buffer
-            scrollContainer.scrollTop += scrollAmount;
-          } else if (elementRect.top < containerRect.top) {
-            // Element is above the visible area - scroll just enough to show it
-            const scrollAmount = containerRect.top - elementRect.top + 8; // Add a small buffer
-            scrollContainer.scrollTop -= scrollAmount;
+  // Handle item selection
+  const handleSelect = useCallback(
+    (index: number) => {
+      const selectedOption = nonCustomOptions[index];
+      if (selectedOption) {
+        const originalItem = items.find((item) => item.id === selectedOption.value);
+        if (originalItem) {
+          if (originalItem.href) {
+            router.push(originalItem.href);
+            handleClose();
+          } else if (originalItem.perform) {
+            originalItem.perform();
+            handleClose();
           }
         }
-      });
-    }
-  }, [highlightedIndex, isOpen, nonCustomOptions.length]);
+      }
+    },
+    [nonCustomOptions, items, router, handleClose],
+  );
 
   // Handle escape key
   useEffect(() => {
@@ -263,14 +233,8 @@ export const KbarContent: React.FC<KbarContentProps> = ({
   useEffect(() => {
     if (!isOpen) {
       setSearchQuery("");
-      setHighlightedIndex(null);
-    } else {
-      // Set the first item as highlighted when opened
-      if (nonCustomOptions.length > 0) {
-        setHighlightedIndex(0);
-      }
     }
-  }, [isOpen, nonCustomOptions]);
+  }, [isOpen]);
 
   // Focus search input when kbar is opened
   useEffect(() => {
@@ -323,69 +287,66 @@ export const KbarContent: React.FC<KbarContentProps> = ({
         className={`${styles.content} ${isClosing ? styles.closing : ""}`}
         onClick={(e) => e.stopPropagation()}
       >
-        <Row fillWidth padding="8">
-          <Input
-            id="kbar-search"
-            placeholder={placeholder}
-            value={searchQuery}
-            onChange={handleSearchChange}
-            onKeyDown={handleKeyDown}
-            ref={inputRef}
-            hasPrefix={<Icon marginLeft="4" onBackground="neutral-weak" name="search" size="xs" />}
-            autoComplete="off"
-          />
-        </Row>
-        <Column
-          ref={scrollContainerRef}
-          fillWidth
-          padding="4"
-          gap="2"
-          overflowY="auto"
-          radius="l"
-          border="neutral-alpha-weak"
+        <ArrowNavigation
+          layout="column"
+          itemCount={nonCustomOptions.length}
+          onSelect={handleSelect}
+          onEscape={handleClose}
+          wrap={true}
+          initialFocusedIndex={0}
+          itemSelector='[role="option"]'
+          autoFocus={false}
         >
-          {groupedItems.map((option, index) => {
-            if (option.isCustom) {
-              return <React.Fragment key={option.value}>{option.label}</React.Fragment>;
-            }
+          <Row fillWidth padding="8">
+            <KbarSearchInput
+              placeholder={placeholder}
+              searchQuery={searchQuery}
+              onSearchChange={handleSearchChange}
+              inputRef={inputRef}
+            />
+          </Row>
+          <Column
+            ref={scrollContainerRef}
+            fillWidth
+            padding="4"
+            gap="2"
+            overflowY="auto"
+            radius="l"
+            border="neutral-alpha-weak"
+          >
+            {groupedItems.map((option, index) => {
+              if (option.isCustom) {
+                return <React.Fragment key={option.value}>{option.label}</React.Fragment>;
+              }
 
-            // Find the index in the non-custom options array
-            const optionIndex = nonCustomOptions.findIndex((item) => item.value === option.value);
-            const isHighlighted = optionIndex === highlightedIndex;
-
-            return (
-              <Option
-                ref={(el) => {
-                  if (optionIndex >= 0 && optionIndex < optionRefs.current.length) {
-                    optionRefs.current[optionIndex] = el;
-                  }
-                }}
-                key={option.value}
-                label={option.label}
-                value={option.value}
-                hasPrefix={option.hasPrefix}
-                hasSuffix={option.hasSuffix}
-                description={option.description}
-                {...(option.href
-                  ? { href: option.href, onClick: undefined, onLinkClick: onClose }
-                  : { onClick: option.onClick })}
-                highlighted={isHighlighted}
-              />
-            );
-          })}
-          {searchQuery && filteredItems.length === 0 && (
-            <Flex
-              fillWidth
-              center
-              paddingX="16"
-              paddingY="64"
-              textVariant="body-default-m"
-              onBackground="neutral-weak"
-            >
-              No results found
-            </Flex>
-          )}
-        </Column>
+              return (
+                <Option
+                  key={option.value}
+                  label={option.label}
+                  value={option.value}
+                  hasPrefix={option.hasPrefix}
+                  hasSuffix={option.hasSuffix}
+                  description={option.description}
+                  {...(option.href
+                    ? { href: option.href, onClick: undefined, onLinkClick: handleClose }
+                    : { onClick: option.onClick })}
+                />
+              );
+            })}
+            {searchQuery && filteredItems.length === 0 && (
+              <Flex
+                fillWidth
+                center
+                paddingX="16"
+                paddingY="64"
+                textVariant="body-default-m"
+                onBackground="neutral-weak"
+              >
+                No results found
+              </Flex>
+            )}
+          </Column>
+        </ArrowNavigation>
         <Row fillWidth paddingX="24" paddingY="8">
           <Row
             style={{ transform: "scale(0.8)", transformOrigin: "left" }}
