@@ -11,6 +11,7 @@ export * from "./Banner";
 export * from "./Background";
 export * from "./BlockQuote";
 export * from "./Button";
+export * from "./MatrixFx";
 export * from "./Carousel";
 export * from "./Card";
 export * from "./CursorCard";
