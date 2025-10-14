@@ -144,8 +144,8 @@ const Footer = () => {
           <Row gap="8" paddingY="24" center fillWidth textVariant="label-default-s" onBackground="neutral-medium" borderTop="neutral-alpha-medium">
             Once UI is an open-source project by{" "}
             <SmartLink href="https://dopler.app" unstyled>
-              <Logo dark icon="/trademarks/dopler-icon-dark.svg" size="xs" />
-              <Logo light icon="/trademarks/dopler-icon-light.svg" size="xs" />
+              <Logo dark icon="/trademark/dopler-icon-dark.svg" size="xs" />
+              <Logo light icon="/trademark/dopler-icon-light.svg" size="xs" />
               Dopler
             </SmartLink>
           </Row>
