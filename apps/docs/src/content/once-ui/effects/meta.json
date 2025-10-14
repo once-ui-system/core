@@ -1,5 +1,10 @@
 {
   "title": "Effects",
   "order": 7,
-  "pages": {}
+  "pages": {
+    "matrixFx": 1,
+    "shineFx": 2,
+    "typeFx": 3,
+    "tiltFx": 4
+  }
 }

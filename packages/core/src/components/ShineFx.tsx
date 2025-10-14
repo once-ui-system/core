@@ -7,12 +7,14 @@ import styles from "./ShineFx.module.scss";
 export interface ShineFxProps extends React.ComponentProps<typeof Text> {
   speed?: number;
   disabled?: boolean;
+  baseOpacity?: number;
   children?: React.ReactNode;
 }
 
 const ShineFx: React.FC<ShineFxProps> = ({
-  speed = 5,
+  speed = 1,
   disabled = false,
+  baseOpacity = 0.3,
   children,
   className,
   style,
@@ -27,6 +29,7 @@ const ShineFx: React.FC<ShineFxProps> = ({
       style={{
         ...style,
         animationDuration,
+        ["--shine-base-opacity" as string]: baseOpacity,
       }}
     >
       {children}

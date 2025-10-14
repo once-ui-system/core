@@ -16,8 +16,8 @@ ShineFx creates a smooth, animated shine effect that sweeps across text. The eff
   marginTop="16"
   marginBottom="24"
   preview={
-    <ShineFx variant="heading-default-xl">
-      Shine bright like a diamond
+    <ShineFx variant="heading-default-xl" speed={0.75}>
+      Thinking...
     </ShineFx>
   }
   codes={[
@@ -68,6 +68,53 @@ Adjust the animation speed with the `speed` prop. Higher values create slower an
 </ShineFx>`,
       language: "tsx",
       label: "Speed"
+    }
+  ]}
+/>
+
+## Base opacity
+
+Control the base text visibility with the `baseOpacity` prop (0-1). Higher values improve readability and accessibility, while lower values create a more subtle effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <ShineFx variant="heading-default-l" baseOpacity={0.1}>
+        Subtle (0.1)
+      </ShineFx>
+      <ShineFx variant="heading-default-l" baseOpacity={0.3}>
+        Default (0.3)
+      </ShineFx>
+      <ShineFx variant="heading-default-l" baseOpacity={0.6}>
+        More visible (0.6)
+      </ShineFx>
+      <ShineFx variant="heading-default-l" baseOpacity={0.9}>
+        High visibility (0.9)
+      </ShineFx>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ShineFx baseOpacity={0.1}>
+    Subtle (0.1)
+</ShineFx>
+
+<ShineFx baseOpacity={0.3}>
+    Default (0.3)
+</ShineFx>
+
+<ShineFx baseOpacity={0.6}>
+    More visible (0.6)
+</ShineFx>
+
+<ShineFx baseOpacity={0.9}>
+    High visibility (0.9)
+</ShineFx>`,
+      language: "tsx",
+      label: "Opacity"
     }
   ]}
 />
@@ -150,6 +197,7 @@ ShineFx works with all Text component variants and styling props.
 <PropsTable
   content={[
     ["speed", "number", "5", "Animation duration in seconds. Higher values create slower animations."],
+    ["baseOpacity", "number", "0.3", "Base text opacity from 0 to 1. Higher values improve readability and accessibility."],
     ["disabled", "boolean", "false", "Disables the shine animation when true."],
     ["children"],
     ["className"],

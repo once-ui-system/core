@@ -1,15 +1,17 @@
 .shineFx {
+  --shine-base-opacity: 0.3;
+  
+  display: inline-block;
+  color: rgba(255, 255, 255, var(--shine-base-opacity));
   background: linear-gradient(
     120deg,
-    rgba(255, 255, 255, 0) 40%,
-    rgba(255, 255, 255, 0.8) 50%,
-    rgba(255, 255, 255, 0) 60%
+    transparent 40%,
+    rgba(255, 255, 255, 1) 50%,
+    transparent 60%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
-  display: inline-block;
   animation: shine 5s linear infinite;
 }
 
@@ -24,5 +26,6 @@
 
 .shineFx.disabled {
   animation: none;
-  -webkit-text-fill-color: inherit;
+  color: inherit;
+  background: none;
 }
