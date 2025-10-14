@@ -93,6 +93,7 @@ export * from "./TagInput";
 export * from "./Text";
 export * from "./Textarea";
 export * from "./TiltFx";
+export * from "./Timeline";
 export * from "./Toast";
 export * from "./Toaster";
 export * from "./ToggleButton";

@@ -1,0 +1,480 @@
+---
+title: "Timeline"
+summary: "Display events or steps in chronological order with flexible layouts and states."
+updatedAt: "2025-10-14"
+docs: "once-ui/components/timeline.mdx"
+github: "components/Timeline.tsx"
+navLabel: "Timeline"
+navIcon: "component"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+Timeline helps visualize sequences of events, process steps, or historical data. Configure items via an object array with simple props or custom React nodes.
+
+## Basic usage
+
+Use `label` and `description` props for quick setup.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Timeline
+      size="xs"
+      items={[
+        {
+          label: "January 2024",
+          description: "Project kickoff",
+          state: "completed"
+        },
+        {
+          label: "March 2024",
+          description: "Design phase completed",
+          state: "completed"
+        },
+        {
+          label: "October 2024",
+          description: "Development in progress",
+          state: "active"
+        },
+        {
+          label: "December 2024",
+          description: "Launch planned",
+          state: "default"
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Timeline
+  items={[
+    {
+      label: "January 2024",
+      description: "Project kickoff",
+      state: "completed"
+    },
+    {
+      label: "October 2024",
+      description: "Development in progress",
+      state: "active"
+    },
+    {
+      label: "December 2024",
+      description: "Launch planned",
+      state: "default"
+    }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Basic"
+    }
+  ]}
+/>
+
+## Numbered steps
+
+Add `number` prop to display step numbers in markers.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Timeline
+      items={[
+        {
+          number: 1,
+          label: "Create account",
+          description: "Sign up with email and password",
+          state: "completed"
+        },
+        {
+          number: 2,
+          label: "Verify email",
+          description: "Click the link we sent you",
+          state: "completed"
+        },
+        {
+          number: 3,
+          label: "Complete profile",
+          description: "Add your basic information",
+          state: "active"
+        },
+        {
+          number: 4,
+          label: "Start building",
+          description: "Create your first project",
+          state: "default"
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Timeline
+  items={[
+    {
+      number: 1,
+      label: "Create account",
+      description: "Sign up with email",
+      state: "completed"
+    },
+    {
+      number: 2,
+      label: "Verify email",
+      description: "Click the link",
+      state: "completed"
+    },
+    {
+      number: 3,
+      label: "Complete profile",
+      description: "Add your info",
+      state: "active"
+    }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Numbered"
+    }
+  ]}
+/>
+
+## Alignment
+
+Control timeline alignment with the `alignment` prop. Use `"left"`, `"right"`, or `"alternate"` for different layouts.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="32">
+      <Column gap="8">
+        <Text variant="label-default-s" onBackground="neutral-weak">Left aligned</Text>
+        <Timeline
+          items={[
+            { label: "First milestone", state: "completed", size: "s" },
+            { label: "Current work", state: "active", size: "s" }
+          ]}
+        />
+      </Column>
+      <Column gap="8">
+        <Text variant="label-default-s" onBackground="neutral-weak">Right aligned</Text>
+        <Timeline
+          alignment="right"
+          items={[
+            { label: "Left side content", state: "completed", size: "s" },
+            { label: "Right side content", state: "active", size: "s" },
+            { label: "Left side again", state: "default", size: "s" }
+          ]}
+        />
+      </Column>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`// Left aligned (default)
+<Timeline
+  items={[
+    { label: "First milestone", state: "completed" }
+  ]}
+/>
+
+// Alternate sides
+<Timeline
+  alignment="alternate"
+  items={[
+    { label: "Left side", state: "completed" },
+    { label: "Right side", state: "active" }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Alignment"
+    }
+  ]}
+/>
+
+## Marker states
+
+Visual feedback with different marker states: `default`, `active`, `completed`, and `error`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" wrap>
+      <Timeline items={[{ label: "Default", state: "default" }]} />
+      <Timeline items={[{ label: "Active", state: "active" }]} />
+      <Timeline items={[{ label: "Completed", state: "completed" }]} />
+      <Timeline items={[{ label: "Error", state: "error" }]} />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Timeline
+  items={[
+    { label: "Default", state: "default" },
+    { label: "Active", state: "active" },
+    { label: "Completed", state: "completed" },
+    { label: "Error", state: "error" }
+  ]}
+/>`,
+      language: "tsx",
+      label: "States"
+    }
+  ]}
+/>
+
+## Marker sizes
+
+Control marker size with `size` prop: `"s"`, `"m"`, or `"l"`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" wrap>
+      <Timeline items={[{ label: "Small", state: "active", size: "s" }]} />
+      <Timeline items={[{ label: "Medium", state: "active", size: "m" }]} />
+      <Timeline items={[{ label: "Large", state: "active", size: "l" }]} />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Timeline
+  items={[
+    { label: "Small", size: "s" },
+    { label: "Medium", size: "m" },
+    { label: "Large", size: "l" }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+## Custom content
+
+Use the `content` prop with custom React nodes for rich layouts.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Timeline
+      items={[
+        {
+          state: "completed",
+          content: (
+            <Column gap="4">
+              <Row gap="8" vertical="center">
+                <Text variant="label-default-m">Version 1.0 Released</Text>
+                <Badge variant="success">Shipped</Badge>
+              </Row>
+              <Text variant="body-default-s" onBackground="neutral-weak">
+                Initial product launch with core features
+              </Text>
+              <Text variant="label-default-xs" onBackground="neutral-weak">
+                3 months ago
+              </Text>
+            </Column>
+          )
+        },
+        {
+          state: "active",
+          content: (
+            <Column gap="4">
+              <Row gap="8" vertical="center">
+                <Text variant="label-default-m">Version 2.0 Beta</Text>
+                <Badge variant="brand">In Progress</Badge>
+              </Row>
+              <Text variant="body-default-s" onBackground="neutral-weak">
+                New features and performance improvements
+              </Text>
+              <Text variant="label-default-xs" onBackground="neutral-weak">
+                Current sprint
+              </Text>
+            </Column>
+          )
+        },
+        {
+          state: "default",
+          content: (
+            <Column gap="4">
+              <Row gap="8" vertical="center">
+                <Text variant="label-default-m">Version 3.0 Planning</Text>
+                <Badge variant="neutral">Planned</Badge>
+              </Row>
+              <Text variant="body-default-s" onBackground="neutral-weak">
+                Major architectural updates
+              </Text>
+              <Text variant="label-default-xs" onBackground="neutral-weak">
+                Q1 2025
+              </Text>
+            </Column>
+          )
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Timeline
+  items={[
+    {
+      state: "completed",
+      content: (
+        <Column gap="4">
+          <Row gap="8" vertical="center">
+            <Text variant="label-default-m">Version 1.0</Text>
+            <Badge variant="success">Shipped</Badge>
+          </Row>
+          <Text variant="body-default-s">
+            Initial product launch
+          </Text>
+          <Text variant="label-default-xs">3 months ago</Text>
+        </Column>
+      )
+    }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Custom content"
+    }
+  ]}
+/>
+
+## Custom markers
+
+Use the `marker` prop to render custom marker elements.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Timeline
+      items={[
+        {
+          marker: <Icon name="check" size="s" onBackground="success-strong" />,
+          label: "Payment received",
+          state: "completed"
+        },
+        {
+          marker: <Icon name="truck" size="s" onBackground="brand-strong" />,
+          label: "Order shipped",
+          state: "active"
+        },
+        {
+          marker: <Icon name="package" size="s" onBackground="neutral-medium" />,
+          label: "Out for delivery",
+          state: "default"
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Timeline
+  items={[
+    {
+      marker: <Icon name="check" size="s" />,
+      label: "Payment received",
+      state: "completed"
+    },
+    {
+      marker: <Icon name="truck" size="s" />,
+      label: "Order shipped",
+      state: "active"
+    }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Custom markers"
+    }
+  ]}
+/>
+
+## Row
+
+Use the `marker` prop to render custom marker elements.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Timeline
+      data-solid="color"
+      fillWidth
+      direction="row"
+      size="xs"
+      items={[
+        {
+          label: "Order",
+          state: "active"
+        },
+        {
+          label: "Confirmation",
+          state: "active"
+        },
+        {
+          label: "Payment",
+          state: "default"
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Timeline
+  direction="row"
+  items={[
+    {
+      marker: <Icon name="check" size="s" />,
+      label: "Payment received",
+      state: "completed"
+    },
+    {
+      marker: <Icon name="check" size="s" />,
+      label: "Order shipped",
+      state: "active"
+    }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Custom markers"
+    }
+  ]}
+/>
+
+## API reference
+
+### Timeline
+<PropsTable
+  content={[
+    ["items", "TimelineItem[]", "required", "Array of timeline items to display."],
+    ["alignment", "\"left\" | \"right\" | \"alternate\"", "\"left\"", "Controls timeline alignment and item positioning."],
+    ["...flex", "", "", "All Flex component props (direction, gap, etc.)"],
+  ]}
+/>
+
+### TimelineItem (object)
+<PropsTable
+  content={[
+    ["label", "string", "", "Simple text label for quick setup."],
+    ["description", "string", "", "Secondary text description."],
+    ["number", "number | string", "", "Display number or text in the marker."],
+    ["state", "\"default\" | \"active\" | \"completed\" | \"error\"", "\"default\"", "Visual state of the marker with different colors."],
+    ["size", "\"s\" | \"m\" | \"l\"", "\"m\"", "Size of the marker dot."],
+    ["marker", "ReactNode", "", "Custom marker element (overrides default dot)."],
+    ["content", "ReactNode", "", "Custom content element (overrides label/description)."],
+  ]}
+/>
