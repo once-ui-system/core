@@ -201,6 +201,13 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
               if (revealProgress > introOffset) {
                 const fadeIn = (revealProgress - introOffset) * 8;
                 opacity = Math.min(1, fadeIn * fadeIn) * dot.baseOpacity;
+                
+                // Apply flicker effect if enabled
+                if (flicker) {
+                  const flickerValue = Math.sin(time * dot.flickerSpeed * 3 + dot.flickerPhase);
+                  const flickerMultiplier = 0.6 + (flickerValue * 0.4);
+                  opacity *= flickerMultiplier;
+                }
               }
 
               if (opacity > 0) {
