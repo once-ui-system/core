@@ -12,8 +12,8 @@ import {
   Tag,
   Meta,
   Schema,
-  Background,
-  RevealFx
+  MatrixFx,
+  Mask
 } from "@once-ui-system/core";
 import { baseURL, meta, schema, changelog, roadmap } from "@/resources";
 import { formatDate } from "./utils/formatDate";
@@ -67,10 +67,9 @@ const latestChangelogEntry = changelog[0];
 export default function Home() {
   return (
     <Row fillWidth horizontal="center">
-      <RevealFx fill position="absolute" style={{height: "100vh", width: "calc(100% + 5rem)", top: "-6rem", left: "-2.5rem", filter: "blur(1rem)"}}>
-        <Background gradient={{display: true, colorStart: "brand-background-medium", colorEnd: "static-transparent", x: 50, y: 0, height: 75, width: 50, tilt: -20}}/>
-        <Background position="absolute" gradient={{display: true, colorStart: "accent-background-strong", colorEnd: "static-transparent", x: 75, y: 10, height: 75, width: 50, tilt: -20, opacity: 30}}/>
-      </RevealFx>
+      <Mask x={50} y={0} radius={100} fill position="absolute" style={{height: "100vh", top: "-6rem"}}>
+        <MatrixFx flicker trigger="mount" revealFrom="top" colors={["brand-alpha-strong", "static-transparent"]}/>
+      </Mask>
       <Column maxWidth={56} gap="xl">
         <Schema
           as="webPage"
@@ -104,14 +103,14 @@ export default function Home() {
                 <Text
                   variant="label-default-s"
                 >
-                  Once UI 1.4 release
+                  Once UI 1.5 release
                 </Text>
               </Badge>
               <Heading variant="display-strong-s">
                 Once UI Docs
               </Heading>
               <Text wrap="balance" onBackground="neutral-weak" variant="body-default-xl" marginBottom="20">
-                Get started with our premium, plug-and-play solutions built for vibe coding
+                Ship million-dollar startup quality from your mom's basement
               </Text>
               <Button data-border="rounded" size="s" href="/get-started" variant="secondary" arrowIcon id="get-started">Quick start</Button>
             </Column>
@@ -127,7 +126,6 @@ export default function Home() {
               Products
             </Text>
             <Text
-              variant="label-default-s" 
               onBackground="neutral-weak"
               marginTop="8"
               marginBottom="16"
