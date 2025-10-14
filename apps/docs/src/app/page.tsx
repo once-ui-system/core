@@ -100,9 +100,7 @@ export default function Home() {
                 radius="l"
               >
                 <Tag marginRight="12" variant="brand">NEW</Tag>
-                <Text
-                  variant="label-default-s"
-                >
+                <Text variant="label-default-s">
                   Once UI 1.5 release
                 </Text>
               </Badge>
@@ -110,7 +108,7 @@ export default function Home() {
                 Once UI Docs
               </Heading>
               <Text wrap="balance" onBackground="neutral-weak" variant="body-default-xl" marginBottom="20">
-                Ship million-dollar startup quality from your mom's basement
+                Open-source design system and boilerplates for indie builders
               </Text>
               <Button data-border="rounded" size="s" href="/get-started" variant="secondary" arrowIcon id="get-started">Quick start</Button>
             </Column>
