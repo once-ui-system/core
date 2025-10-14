@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useRef, ReactNode, useEffect } from "react";
 import { useArrowNavigation, ArrowNavigationOptions } from "../hooks/useArrowNavigation";
 import { FocusTrap } from "./FocusTrap";
+import { Column } from "./Column";
 
 interface ArrowNavigationContextType {
   focusedIndex: number;
@@ -82,10 +83,10 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
 
   // Create the navigation container
   const navigationContainer = (
-    <div
+    <Column
       ref={containerRef}
       className={className}
-      style={{ ...style, outline: "none" }}
+      style={{ ...style, maxHeight: "100%", outline: "none" }}
       onKeyDown={(e) => {
         navigation.handleKeyDown(e);
       }}
@@ -94,7 +95,7 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
       tabIndex={-1}
     >
       {children}
-    </div>
+    </Column>
   );
 
   return (
