@@ -25,4 +25,5 @@ export * from "./RadioButtonExample";
 export * from "./SwitchExample";
 export * from "./TextareaExamples";
 export * from "./ToastExample";
+export * from "./TypeFxCustomExample";
 export * from "./Products";
