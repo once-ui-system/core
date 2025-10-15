@@ -428,7 +428,7 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, ...rest }) => {
 
   return (
     <>
-      <KbarTrigger onClick={handleOpen} {...rest}>
+      <KbarTrigger tabIndex={0} onClick={handleOpen} {...rest}>
         {children}
       </KbarTrigger>
       {isOpen &&
