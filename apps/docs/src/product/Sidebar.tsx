@@ -361,7 +361,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
           <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
         ) : (
           <Column fillWidth gap="2">
-            {Array.from({ length: 8 }).map((_, i) => (
+            {Array.from({ length: 7 }).map((_, i) => (
               <Row key={i} height="40" paddingX="4" vertical="center">
                 <Row fill radius="l" overflow="hidden" opacity={50}>
                   <Skeleton shape="block" delay={i.toString() as any} />

@@ -82,7 +82,7 @@ export default function Home() {
           
           {/* Hero Section */}
           <Column maxWidth={62} gap="12" minHeight="m" vertical="center" radius="l" overflow="hidden" border="brand-alpha-weak">
-            <MatrixFx position="absolute" top="0" left="0" flicker colors={["brand-background-strong"]} />
+            <MatrixFx trigger="mount" revealFrom="bottom" data-solid="color" position="absolute" top="0" left="0" flicker colors={["brand-solid-strong"]} />
             <Background position="absolute" gradient={{display: true, colorStart: "page-background", x: 0, y: 50, height: 300, width: 150}}></Background>
             <Column fillWidth gap="16" padding="48">
               <Badge
@@ -102,7 +102,7 @@ export default function Home() {
                   Once UI 1.5 release
                 </Text>
               </Badge>
-              <Heading variant="display-strong-s" marginTop="12">
+              <Heading variant="display-strong-m" marginTop="12">
                 Once UI Docs
               </Heading>
               <Text wrap="balance" onBackground="neutral-weak" variant="body-default-xl" marginBottom="20">
@@ -152,12 +152,12 @@ export default function Home() {
               </Text>
             </Column>
             
-            <Column fillWidth>
+            <Column fillWidth paddingX="4">
               {latestChangelogEntry.image && (
                 <Media
                   priority
                   sizes="(max-width: 768px) 100vw, 768px"
-                  radius="l"
+                  radius="m"
                   src={latestChangelogEntry.image} 
                   alt={`Illustration for ${latestChangelogEntry.title}`}
                   border="neutral-alpha-weak"

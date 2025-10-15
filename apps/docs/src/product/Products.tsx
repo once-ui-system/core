@@ -31,6 +31,12 @@ export function Products() {
             href: "/magic-store/quick-start"
           },
           {
+            title: "Supabase Starter",
+            description: "Set up a database and authentication in minutes",
+            image: "/images/docs/supabase-starter.jpg",
+            href: "/supabase-starter/quick-start"
+          },
+          {
             title: "Magic Convert",
             description: "Launch your conversion-optimized landing page",
             image: "/images/docs/magic-convert.jpg",
