@@ -55,8 +55,8 @@ export default async function Docs({
   
   return (
     <>
-      <Row fillWidth horizontal="center">
-        <Column as="main" maxWidth={layout.content.width} gap="l" paddingBottom="xl">
+      <Row fillWidth horizontal="center" padding="l">
+        <Column as="main" maxWidth={layout.content.width} gap="l" paddingBottom="xl" paddingTop="12">
           <Schema
             as="techArticle"
             title={doc.metadata.title + " – " + schema.name}
@@ -153,7 +153,9 @@ export default async function Docs({
           )}
         </Column>
       </Row>
-      <HeadingNav maxWidth={layout.sideNav.width} s={{hide: true}} top="80"/>
+      <Row borderLeft="neutral-alpha-medium" fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
+        <HeadingNav top="80" />
+      </Row>
     </>
   );
 }

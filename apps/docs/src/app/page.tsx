@@ -11,11 +11,9 @@ import {
   Badge,
   Tag,
   Meta,
-  Schema,
-  MatrixFx,
-  Mask
+  Schema
 } from "@once-ui-system/core";
-import { baseURL, meta, schema, changelog, roadmap } from "@/resources";
+import { baseURL, meta, schema, changelog, roadmap, layout } from "@/resources";
 import { formatDate } from "./utils/formatDate";
 import { Products } from "@/product";
 
@@ -66,10 +64,8 @@ const latestChangelogEntry = changelog[0];
 
 export default function Home() {
   return (
+    <Row fillWidth>
     <Row fillWidth horizontal="center">
-      <Mask x={50} y={0} radius={100} fill position="absolute" style={{height: "100vh", top: "-6rem"}}>
-        <MatrixFx flicker trigger="mount" revealFrom="top" colors={["brand-alpha-strong", "static-transparent"]}/>
-      </Mask>
       <Column maxWidth={56} gap="xl">
         <Schema
           as="webPage"
@@ -328,6 +324,11 @@ export default function Home() {
           </Row>
         </Column>
       </Column>
+    </Row>
+    <Row
+      width={layout.sidebar.width} 
+      minWidth={layout.sidebar.width}
+      m={{hide: true}}/>
     </Row>
   );
 }
