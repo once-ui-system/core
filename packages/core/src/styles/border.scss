@@ -95,6 +95,11 @@
     border-top-left-radius: var(--radius-xl);
 }
 
+.radius-full-top {
+    border-top-left-radius: var(--radius-full);
+    border-top-right-radius: var(--radius-full);
+}
+
 .radius-xs-right {
     border-bottom-right-radius: var(--radius-xs);
     border-top-right-radius: var(--radius-xs);
@@ -118,6 +123,11 @@
 .radius-xl-right {
     border-bottom-right-radius: var(--radius-xl);
     border-top-right-radius: var(--radius-xl);
+}
+
+.radius-full-right {
+    border-bottom-right-radius: var(--radius-full);
+    border-top-right-radius: var(--radius-full);
 }
 
 .radius-xs-bottom {
@@ -145,6 +155,11 @@
     border-bottom-left-radius: var(--radius-xl);
 }
 
+.radius-full-bottom {
+    border-bottom-left-radius: var(--radius-full);
+    border-bottom-right-radius: var(--radius-full);
+}
+
 .radius-xs-left {
     border-bottom-left-radius: var(--radius-xs);
     border-top-left-radius: var(--radius-xs);
@@ -170,6 +185,11 @@
     border-top-left-radius: var(--radius-xl);
 }
 
+.radius-full-left {
+    border-bottom-left-radius: var(--radius-full);
+    border-top-left-radius: var(--radius-full);
+}
+
 .radius-xs-top-left {
     border-top-left-radius: var(--radius-xs);
 }
@@ -188,6 +208,10 @@
 
 .radius-xl-top-left {
     border-top-left-radius: var(--radius-xl);
+}
+
+.radius-full-top-left {
+    border-top-left-radius: var(--radius-full);
 }
 
 .radius-xs-top-right {
@@ -210,6 +234,10 @@
     border-top-right-radius: var(--radius-xl);
 }
 
+.radius-full-top-right {
+    border-top-right-radius: var(--radius-full);
+}
+
 .radius-xs-bottom-right {
     border-bottom-right-radius: var(--radius-xs);
 }
@@ -230,6 +258,10 @@
     border-bottom-right-radius: var(--radius-xl);
 }
 
+.radius-full-bottom-right {
+    border-bottom-right-radius: var(--radius-full);
+}
+
 .radius-xs-bottom-left {
     border-bottom-left-radius: var(--radius-xs);
 }
@@ -248,6 +280,10 @@
 
 .radius-xl-bottom-left {
     border-bottom-left-radius: var(--radius-xl);
+}
+
+.radius-full-bottom-left {
+    border-bottom-left-radius: var(--radius-full);
 }
 
 
