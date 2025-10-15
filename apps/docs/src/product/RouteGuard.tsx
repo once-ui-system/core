@@ -40,7 +40,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
 
     if (loading) {
         return (
-        <Flex fillWidth paddingY="128" horizontal="center">
+        <Flex style={{minHeight: "calc(100vh - var(--static-space-56))"}} paddingY="128" center>
             <Spinner />
         </Flex>
         );
