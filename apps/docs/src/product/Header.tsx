@@ -152,17 +152,7 @@ export function Header() {
 
   return (
     <>
-      <Fade
-        pattern={{ display: true, size: "2" }}
-        zIndex={3}
-        pointerEvents="none"
-        height="64"
-        position="fixed"
-        fillWidth
-        top="0"
-        left="0"
-      />
-      <Flex as="header" horizontal="center" position="sticky" top="0" zIndex={9} fillWidth vertical="center" paddingY="12" paddingX="l">
+      <Flex as="header" background="page" horizontal="center" position="sticky" top="0" zIndex={9} fillWidth vertical="center" paddingY="12" paddingX="24" borderBottom="neutral-alpha-medium">
         <Row maxWidth={layout.header.width} vertical="center" horizontal="between" gap="l">
           <Row fillWidth vertical="center" gap="8">
             <NavIcon hide m={{hide: false}} onClick={toggleSidebar}/>

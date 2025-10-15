@@ -1,5 +1,5 @@
-import { social } from "@/resources";
-import { Column, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
+import { layout, social } from "@/resources";
+import { Background, Column, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
 import { Cta } from "./Cta";
 
 const navigation = [
@@ -66,22 +66,103 @@ const navigation = [
 
 const Footer = () => {
   return (
-    <Column
-      fillWidth
-      paddingTop="128"
-      horizontal="center"
-    >
-      <Cta/>
-      <Row fillWidth horizontal="center" 
-        background="page"
-        paddingX="l"
-      >
+    <Column fillWidth horizontal="center">
+
+      <Row fillWidth borderY="neutral-alpha-medium">
+        <Background
+          lines={{
+            display: true,
+            color: "neutral-alpha-weak",
+            angle: -45,
+            size: "4"
+          }}
+          borderRight="neutral-alpha-medium"
+          width={layout.sidebar.width} 
+          minWidth={layout.sidebar.width}
+          m={{hide: true}}/>
+        <Cta/>
+        <Background
+          lines={{
+            display: true,
+            color: "neutral-alpha-weak",
+            angle: -45,
+            size: "4"
+          }}
+          borderLeft="neutral-alpha-medium"
+          width={layout.sidebar.width} 
+          minWidth={layout.sidebar.width}
+          m={{hide: true}}/>
+      </Row>
+
+      <Row fillWidth horizontal="center">
+        <Row flex={1}>
+          <Background
+            fill
+            border="neutral-alpha-medium"
+            bottomRightRadius="full"
+            topLeftRadius="full"
+            width={layout.sidebar.width} 
+            minWidth={layout.sidebar.width}
+            m={{hide: true}}/>
+          <Column flex={1}
+            bottomLeftRadius="full"
+            topRightRadius="full"
+            overflow="hidden"
+            border="neutral-alpha-medium"
+            l={{hide: true}}>
+            <Row
+              flex={1}
+              minWidth={4}
+              overflow="hidden">
+              <Background
+                fill
+                position="absolute"
+                bottom="0"
+                left="0"
+                data-solid="color"
+                gradient={{
+                  display: true,
+                  x: 50,
+                  y: 100,
+                  width: 100,
+                  height: 50,
+                  colorStart: "brand-solid-strong",
+                  colorEnd: "page-background",
+                }}
+              />
+              <Background
+                fill
+                position="absolute"
+                bottom="0"
+                left="0"
+                style={{filter: "blur(1rem)", transform: "scale(1.1)"}}
+                gradient={{
+                  display: true,
+                  x: 50,
+                  y: 100,
+                  width: 100,
+                  height: 30,
+                  colorStart: "brand-on-background-strong",
+                }}
+              />
+            </Row>
+            <Background
+              lines={{
+                display: true,
+                color: "neutral-alpha-weak",
+                angle: -45,
+                size: "4"
+              }}
+              flex={1}
+              minWidth={4}/>
+          </Column>
+        </Row>
         <Column 
           maxWidth="xl"
           borderX="neutral-alpha-medium">
           <Row paddingX="xl" paddingTop="xl" paddingBottom="40" fillWidth horizontal="between" vertical="center">
-            <Logo href="/" dark icon="/trademarks/icon-dark.svg" size="m"/>
-            <Logo href="/" light icon="/trademarks/icon-light.svg" size="m"/>
+            <Logo href="/" dark icon="/trademark/icon-dark.svg" size="m"/>
+            <Logo href="/" light icon="/trademark/icon-light.svg" size="m"/>
             <Row gap="8">
               {social.map((item, index) => (
                 <IconButton
@@ -90,7 +171,7 @@ const Footer = () => {
                   variant="secondary"
                   size="l"
                   key={index}
-                  href={item.href}
+                  href={item.link}
                 />
               ))}
             </Row>
@@ -141,15 +222,102 @@ const Footer = () => {
               </Column>
             ))}
           </Row>
-          <Row gap="8" paddingY="24" center fillWidth textVariant="label-default-s" onBackground="neutral-medium" borderTop="neutral-alpha-medium">
-            Once UI is an open-source project by{" "}
-            <SmartLink href="https://dopler.app" unstyled>
-              <Logo dark icon="/trademark/dopler-icon-dark.svg" size="xs" />
-              <Logo light icon="/trademark/dopler-icon-light.svg" size="xs" />
-              Dopler
-            </SmartLink>
-          </Row>
         </Column>
+        <Row flex={1}>
+          <Background
+            lines={{
+              display: true,
+              color: "neutral-alpha-weak",
+              angle: -45,
+              size: "4"
+            }}
+            flex={1}
+            border="neutral-alpha-medium"
+            bottomRadius="full"
+            topLeftRadius="full"
+            minWidth={4}
+            l={{hide: true}}/>
+          <Background
+            fillWidth
+            border="neutral-alpha-medium"
+            leftRadius="full"
+            width={layout.sidebar.width} 
+            minWidth={layout.sidebar.width}
+            m={{hide: true}}/>
+        </Row>
+      </Row>
+      
+      <Row fillWidth borderTop="neutral-alpha-medium" horizontal="center">
+        <Row flex={1}>
+          <Background
+            lines={{
+              display: true,
+              color: "neutral-alpha-weak",
+              angle: -45,
+              size: "4"
+            }}
+            borderRight="neutral-alpha-medium"
+            width={layout.sidebar.width} 
+            minWidth={layout.sidebar.width}
+            m={{hide: true}}/>
+          <Row fillWidth overflow="hidden" minWidth={4} l={{hide: true}}/>
+        </Row>
+        <Row gap="8" paddingY="24" center maxWidth="xl" textVariant="label-default-s" onBackground="neutral-medium" borderX="neutral-alpha-medium">
+          Once UI is an open-source project by{" "}
+          <SmartLink href="https://dopler.app" unstyled>
+            <Logo dark icon="/trademark/dopler-icon-dark.svg" size="xs" />
+            <Logo light icon="/trademark/dopler-icon-light.svg" size="xs" />
+            Dopler
+          </SmartLink>
+        </Row>
+        <Row flex={1}>
+          <Row fillWidth overflow="hidden" minWidth={4} l={{hide: true}}>
+            <Background
+              fill
+              position="absolute"
+              bottom="0"
+              left="0"
+              data-solid="color"
+              gradient={{
+                display: true,
+                x: 0,
+                y: 50,
+                width: 100,
+                height: 200,
+                colorStart: "brand-solid-strong",
+                colorEnd: "page-background",
+              }}
+            />
+            <Background
+              fill
+              position="absolute"
+              bottom="0"
+              left="0"
+              style={{filter: "blur(1rem)", transform: "scale(1.1)"}}
+              gradient={{
+                display: true,
+                x: 0,
+                y: 50,
+                width: 50,
+                height: 200,
+                colorStart: "brand-on-background-strong",
+              }}
+            />
+          </Row>
+          <Background
+            lines={{
+              display: true,
+              color: "neutral-alpha-weak",
+              angle: -45,
+              size: "4"
+            }}
+            bottomLeftRadius="full"
+            borderLeft="neutral-alpha-medium"
+            borderBottom="neutral-alpha-medium"
+            width={layout.sidebar.width} 
+            minWidth={layout.sidebar.width}
+            m={{hide: true}}/>
+        </Row>
       </Row>
     </Column>
   );
