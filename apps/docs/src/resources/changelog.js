@@ -1,5 +1,39 @@
 const changelog = [
   {
+    date: "2025-10-15",
+    title: "Once UI v1.5",
+    image: "/images/changelog/once-ui-1-5.jpg",
+    description: "Once UI v1.5 is here with new components and enhanced developer experience.",
+    sections: [
+      {
+        title: "New components",
+        bullets: [
+          "List, ListItem",
+          "ProgressBar",
+          "CountFx",
+          "ContextMenu",
+        ],
+      },
+      {
+        title: "Flex & Grid",
+        bullets: [
+          "Custom cursor",
+          "Breakpoint object",
+          "Dynamically render on server / client"
+        ],
+      },
+      {
+        title: "Improvements",
+        bullets: [
+          "Dropdown accessibility",
+          "Multiselect for Select",
+          "Autocollapse AccordionGroup",
+          "Native Media caption",
+        ]
+      }
+    ]
+  },
+  {
     date: "2025-07-30",
     title: "Once UI v1.4",
     image: "/api/og/generate?title=Once UI v1.4&description=Next level devX",

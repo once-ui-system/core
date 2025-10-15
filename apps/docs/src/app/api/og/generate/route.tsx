@@ -6,21 +6,33 @@ export async function GET(request: Request) {
   let url = new URL(request.url);
   let title = url.searchParams.get("title") || "Documentation";
   let description = url.searchParams.get("description");
-  const font = fetch(new URL("../../../../../public/fonts/Inter.ttf", import.meta.url)).then((res) =>
-    res.arrayBuffer(),
-  );
-  const fontData = await font;
+  
+  async function loadGoogleFont(font: string) {
+    const url = `https://fonts.googleapis.com/css2?family=${font}`
+    const css = await (await fetch(url)).text()
+    const resource = css.match(/src: url\((.+)\) format\('(opentype|truetype)'\)/)
+    if (resource) {
+      const response = await fetch(resource[1])
+      if (response.status == 200) {
+        return await response.arrayBuffer()
+      }
+    }
+    throw new Error('failed to load font data')
+  }
 
   return new ImageResponse(
     <div
       style={{
+        boxSizing: "border-box",
         display: "flex",
         width: "100%",
         height: "100%",
         padding: "8rem",
-        background: "#151515",
+        background: "#0A0A0A",
         position: "relative",
         alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
       }}
     >
       {/* Horizontal lines */}
@@ -59,27 +71,31 @@ export async function GET(request: Request) {
         background: "#333333" 
       }} />
 
+      <img src="https://docs.once-ui.com/trademark/icon-dark.svg" width="200" height="200" />
+
       <div
         style={{
           display: "flex",
+          marginTop: "6rem",
           flexDirection: "column",
           gap: "4rem",
-          fontFamily: "Inter",
+          fontFamily: "Geist",
           fontStyle: "normal",
           color: "white",
           width: "100%",
-          marginLeft: "8rem",
-          alignItems: "flex-start",
+          alignItems: "center",
+          textAlign: "center",
         }}
       >
         <span
           style={{
             fontSize: "8rem",
             lineHeight: "8rem",
+            fontWeight: "bold",
             letterSpacing: "-0.05em",
             whiteSpace: "pre-wrap",
             textWrap: "balance",
-            textAlign: "left",
+            textAlign: "center",
           }}
         >
           {title}
@@ -90,11 +106,11 @@ export async function GET(request: Request) {
               fontSize: "3rem",
               lineHeight: "3.5rem",
               color: "#9ca3af",
-              fontWeight: "medium",
+              fontWeight: "normal",
               whiteSpace: "pre-wrap",
               textWrap: "balance",
               marginTop: "-2rem",
-              textAlign: "left",
+              textAlign: "center",
             }}
           >
             {description}
@@ -123,8 +139,8 @@ export async function GET(request: Request) {
       height: 1080,
       fonts: [
         {
-          name: "Inter",
-          data: fontData,
+          name: "Geist",
+          data: await loadGoogleFont('Geist:wght@400;700'),
           style: "normal",
         },
       ],
