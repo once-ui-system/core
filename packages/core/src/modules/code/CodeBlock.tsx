@@ -724,6 +724,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           border={!compact && !preview ? "neutral-alpha-weak" : undefined}
           fillHeight={fillHeight}
           radius="l"
+          paddingRight="2"
+          paddingBottom="2"
           flex="1"
           style={{
             left: "-1px",
