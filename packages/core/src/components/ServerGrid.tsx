@@ -187,7 +187,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
-      scrollbar && `scrollbar-${scrollbar}`,
+      (overflow && overflow !== "hidden" || overflowX && overflowX !== "hidden" || overflowY && overflowY !== "hidden") && `scrollbar-${scrollbar}`,
       padding && `p-${padding}`,
       paddingLeft && `pl-${paddingLeft}`,
       paddingRight && `pr-${paddingRight}`,

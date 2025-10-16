@@ -239,7 +239,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
-      (overflow || overflowX || overflowY) && `scrollbar-${scrollbar}`,
+      (overflow && overflow !== "hidden" || overflowX && overflowX !== "hidden" || overflowY && overflowY !== "hidden") && `scrollbar-${scrollbar}`,
       flex && `flex-${flex}`,
       horizontal &&
         (direction === "row" || direction === "row-reverse" || direction === undefined
