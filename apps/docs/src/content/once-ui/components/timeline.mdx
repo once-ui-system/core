@@ -229,18 +229,20 @@ Visual feedback with different marker states: `default`, `active`, `completed`, 
   ]}
 />
 
-## Marker sizes
+## Sizes
 
-Control marker size with `size` prop: `"s"`, `"m"`, or `"l"`.
+Control size with the `size` prop: `xs`, `s`, `m`, `l` or `xl`.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row gap="24" wrap>
-      <Timeline items={[{ label: "Small", state: "active", size: "s" }]} />
-      <Timeline items={[{ label: "Medium", state: "active", size: "m" }]} />
-      <Timeline items={[{ label: "Large", state: "active", size: "l" }]} />
+      <Timeline size="xs" items={[{ label: "Small", state: "active" }]} />
+      <Timeline size="s" items={[{ label: "Medium", state: "active" }]} />
+      <Timeline size="m" items={[{ label: "Large", state: "active" }]} />
+      <Timeline size="l" items={[{ label: "Extra large", state: "active" }]} />
+      <Timeline size="xl" items={[{ label: "Extra extra large", state: "active" }]} />
     </Row>
   }
   codes={[
@@ -362,7 +364,7 @@ Use the `marker` prop to render custom marker elements.
     <Timeline
       items={[
         {
-          marker: <Icon name="check" size="s" onBackground="success-strong" />,
+          marker: <Icon name="check" size="s" onBackground="success-weak" />,
           label: "Payment received",
           state: "completed"
         },
@@ -372,9 +374,9 @@ Use the `marker` prop to render custom marker elements.
           state: "active"
         },
         {
-          marker: <Icon name="package" size="s" onBackground="neutral-medium" />,
+          marker: <Icon name="package" size="s" onBackground="danger-weak" />,
           label: "Out for delivery",
-          state: "default"
+          state: "danger"
         }
       ]}
     />
@@ -422,7 +424,11 @@ Use the `marker` prop to render custom marker elements.
         },
         {
           label: "Confirmation",
-          state: "active"
+          state: "success"
+        },
+        {
+          label: "Overview",
+          state: "danger"
         },
         {
           label: "Payment",

@@ -60,6 +60,8 @@ import {
   HiOutlineChartPie,
   HiOutlineArrowTrendingUp,
   HiOutlineCpuChip,
+  HiOutlineTruck,
+  HiOutlineArchiveBox,
 } from "react-icons/hi2";
 
 import { LiaCubesSolid } from "react-icons/lia";
@@ -143,7 +145,9 @@ export const iconLibrary: Record<string, IconType> = {
   lineChart: HiOutlineArrowTrendingUp,
   pieChart: HiOutlineChartPie,
   lineBarChart: HiOutlinePresentationChartLine,
-  chip: HiOutlineCpuChip
+  chip: HiOutlineCpuChip,
+  truck: HiOutlineTruck,
+  package: HiOutlineArchiveBox,
 };
 
 export type IconLibrary = typeof iconLibrary;

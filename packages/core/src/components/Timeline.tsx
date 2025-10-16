@@ -39,17 +39,12 @@ const Timeline: React.FC<TimelineProps> = ({
     <Column {...flex}>
       {items.map((item, index) => {
         const state = item.state || "default";
-        const prevState = index > 0 ? (items[index - 1].state || "default") : state;
         const nextState = index < items.length - 1 ? (items[index + 1].state || "default") : state;
         
         const currentColor = getStateColor(state);
-        const prevColor = getStateColor(prevState);
         const nextColor = getStateColor(nextState);
 
         const isHorizontal = flex.direction === "row";
-        const gradientToPrev = isHorizontal
-          ? `linear-gradient(to left, ${currentColor}, ${prevColor})`
-          : `linear-gradient(to top, ${currentColor}, ${prevColor})`;
         const gradientToNext = isHorizontal
           ? `linear-gradient(to right, ${currentColor}, ${nextColor})`
           : `linear-gradient(to bottom, ${currentColor}, ${nextColor})`;
@@ -63,7 +58,8 @@ const Timeline: React.FC<TimelineProps> = ({
             {/* Marker */}
             <Column
               fillWidth
-              horizontal="center" marginTop={!isHorizontal && index === 0 ? "8" : undefined}
+              horizontal="center" 
+              marginTop={isHorizontal ? undefined : index === 0 ? (size === "xl" ? "8" : size === "l" ? "12" : size === "m" ? "16" : size === "s" ? "20" : "16") : undefined}
               vertical={isHorizontal ? "center" : undefined}
               direction={isHorizontal ? "row" : "column"}
               minWidth={!isHorizontal ? (size === "xs" ? "8" : size === "s" ? "24" : size === "m" ? "32" : size === "l" ? "40" : "48") : undefined}
@@ -85,7 +81,7 @@ const Timeline: React.FC<TimelineProps> = ({
                   center radius="full"
                   solid={state === "active" ? "brand-strong" : state === "success" ? "success-strong" : state === "danger" ? "danger-strong" : undefined}
                   background={state === "default" ? "neutral-weak" : undefined}
-                  border={state === "success" ? "success-strong" : state === "danger" ? "danger-strong" : "neutral-strong"}
+                  border={state === "success" ? "success-strong" : state === "danger" ? "danger-strong" : state === "active" ? "brand-strong" : "neutral-strong"}
                   minHeight={size === "xs" ? "8" : size === "s" ? "24" : size === "m" ? "32" : size === "l" ? "40" : "48"}
                   maxHeight={size === "xs" ? "8" : size === "s" ? "24" : size === "m" ? "32" : size === "l" ? "40" : "48"}
                   minWidth={size === "xs" ? "8" : size === "s" ? "24" : size === "m" ? "32" : size === "l" ? "40" : "48"}
@@ -120,7 +116,7 @@ const Timeline: React.FC<TimelineProps> = ({
               ) : (
                 <>
                   {item.label && (
-                    <Text variant="label-default-m" onBackground={state === "danger" ? "danger-medium" : undefined}>{item.label}</Text>
+                    <Text variant="label-default-m" onBackground={state === "danger" ? "danger-weak" : undefined}>{item.label}</Text>
                   )}
                   {item.description && (
                     <Text variant="body-default-s" onBackground={state === "danger" ? "danger-weak" : "neutral-weak"}>
