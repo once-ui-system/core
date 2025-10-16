@@ -14,6 +14,7 @@ import {
   Row,
 } from ".";
 import { useDebounce } from "../hooks/useDebounce";
+import styles from "./EmojiPicker.module.scss";
 
 type EmojiItem = {
   char: string;
@@ -115,11 +116,7 @@ const EmojiButton = memo(({ emoji, index, isFocused, onSelect, onFocus }: EmojiB
       onClick={() => onSelect(emoji.char)}
       aria-label={emoji.description}
       title={emoji.description}
-      style={{
-        transform: isFocused ? "scale(1.05)" : "scale(1)",
-        background: isFocused ? "var(--neutral-alpha-weak)" : "transparent",
-        transition: "transform 0.1s ease, outline 0.1s ease",
-      }}
+      className={styles.emojiButton}
       onFocus={() => onFocus(index)}
       role="gridcell"
       ref={isFocused ? (el) => el?.focus() : undefined}
