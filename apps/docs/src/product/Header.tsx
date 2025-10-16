@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Button, Fade, Flex, Logo, NavIcon, Row, Kbar, useTheme } from "@once-ui-system/core";
+import { Button, Flex, Logo, NavIcon, Row, Kbar, useTheme, Animation } from "@once-ui-system/core";
 import { layout, routes } from "@/resources/once-ui.config";
 import { Sidebar, NavigationItem } from "./Sidebar";
 
@@ -155,7 +155,27 @@ export function Header() {
       <Flex as="header" background="page" horizontal="center" position="sticky" top="0" zIndex={9} fillWidth vertical="center" paddingY="12" paddingX="24" borderBottom="neutral-alpha-medium">
         <Row maxWidth={layout.header.width} vertical="center" horizontal="between" gap="l">
           <Row fillWidth vertical="center" gap="8">
-            <NavIcon hide m={{hide: false}} onClick={toggleSidebar}/>
+            <Animation
+              triggerType="click"
+              slideDown={1}
+              trigger={
+                <NavIcon hide m={{hide: false}} onClick={toggleSidebar} isActive={sidebarVisible}/>
+              }>
+              <Row
+                width={24}
+                style={{height: "calc(100vh - var(--static-space-64))", top: "3.25rem", left: "-1.5rem"}} 
+                background="page" 
+                position="fixed"
+                borderTop="neutral-alpha-medium"
+                zIndex={9}>
+                <Sidebar
+                  data-scaling="110"
+                  fillWidth
+                  width={undefined}
+                  padding="8" 
+                />
+              </Row>
+            </Animation>
             <Logo dark wordmark="/trademark/type-dark.svg" size="s" href="/"/>
             <Logo light wordmark="/trademark/type-light.svg" size="s" href="/"/>
           </Row>
@@ -179,20 +199,6 @@ export function Header() {
           </Row>
         </Row>
       </Flex>
-
-      {sidebarVisible && (
-        <Sidebar 
-          maxWidth={100}
-          style={{height: "calc(100vh - var(--static-space-64))", backdropFilter: "blur(2rem)"}} 
-          padding="8" 
-          background="overlay" 
-          position="fixed"
-          borderTop="neutral-alpha-weak"
-          left="0" 
-          top="64"
-          zIndex={9}
-        />
-      )}
     </>
   );
 };
