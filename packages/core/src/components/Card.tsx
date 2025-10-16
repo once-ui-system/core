@@ -16,7 +16,7 @@ interface CardProps extends React.ComponentProps<typeof Flex> {
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ children, href, onClick, style, className, fillHeight, ...rest }, ref) => {
+  ({ children, href, onClick, style, className, fillHeight, ...flex }, ref) => {
     return (
       <ElementType
         tabIndex={onClick || href ? 0 : undefined}
@@ -27,7 +27,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           fillHeight ? "fill-height" : undefined,
           "min-width-0",
           (onClick || href) && "focus-ring",
-          (onClick || href) && "radius-l",
+          (onClick || href) && (`radius-${flex.radius}` || "radius-l"),
         )}
         href={href}
         onClick={onClick && onClick}
@@ -41,12 +41,10 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           border="neutral-medium"
           cursor="interactive"
           align="left"
-          className={classNames(styles.card, className)}
           onClick={onClick && onClick}
-          style={{
-            ...style,
-          }}
-          {...rest}
+          className={classNames(styles.card, className)}
+          style={{...style}}
+          {...flex}
         >
           {children}
         </Flex>
