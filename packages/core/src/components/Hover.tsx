@@ -11,17 +11,14 @@ import React, {
 } from "react";
 import { Flex, Row } from ".";
 import styles from "./Hover.module.scss";
-import classNames from "classnames";
 
 export interface HoverProps extends React.ComponentProps<typeof Flex> {
   trigger: ReactNode;
   overlay: ReactNode;
-  overlayClassName?: string;
-  overlayStyle?: React.CSSProperties;
+  interactive?: boolean;
   delay?: number;
   hideDelay?: number;
   disabled?: boolean;
-  showOnFocus?: boolean;
   touch?: "disable" | "enable" | "display";
 }
 
@@ -30,12 +27,10 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
     {
       trigger,
       overlay,
-      overlayClassName,
-      overlayStyle,
+      interactive = false,
       delay = 0,
       hideDelay = 0,
       disabled = false,
-      showOnFocus = true,
       touch = "disable",
       ...flex
     },
@@ -102,11 +97,9 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
     }, [hideOverlay]);
 
     const handleFocus = useCallback(() => {
-      if (showOnFocus) {
-        setIsFocused(true);
-        showOverlay();
-      }
-    }, [showOnFocus, showOverlay]);
+      setIsFocused(true);
+      showOverlay();
+    }, [showOverlay]);
 
     const handleBlur = useCallback(() => {
       setIsFocused(false);
@@ -146,22 +139,21 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
         onMouseLeave={handleMouseLeave}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        tabIndex={showOnFocus ? 0 : undefined}
         {...flex}
       >
         {trigger}
         {shouldShowOverlay && (
           <Row
             position="absolute"
+            pointerEvents={interactive ? "auto" : "none"}
             fill
             style={{
               top: 0,
               left: 0,
               right: 0,
               bottom: 0,
-              ...overlayStyle,
             }}
-            className={classNames(styles.fadeIn, overlayClassName)}
+            className={styles.fadeIn}
           >
             {overlay}
           </Row>
