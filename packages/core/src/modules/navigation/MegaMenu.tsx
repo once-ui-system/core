@@ -188,6 +188,9 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
               requestAnimationFrame(() => {
                 setActiveDropdown(group.id);
               });
+            } else {
+              // Close dropdown if hovering over item without dropdown content
+              setActiveDropdown(null);
             }
           }}
           onMouseLeave={() => {
@@ -216,6 +219,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
           position="absolute"
           pointerEvents="auto"
           opacity={100}
+          overflow="hidden"
           top="32"
           className={isFirstAppearance ? styles.dropdown : ""}
           style={{
@@ -224,7 +228,6 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
             height: `${dropdownPosition.height}px`,
             transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
             visibility: "visible",
-            overflow: "hidden",
           }}
           onMouseEnter={() => {
             // Cancel the close timer if we re-enter
@@ -269,12 +272,12 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                 <Row
                   key={`dropdown-content-${groupIndex}`}
                   gap="16"
+                  position={isActive ? "relative" : "absolute"}
                   data-dropdown-content
                   ref={(el) => {
                     contentRefs.current[group.id] = el;
                   }}
                   style={{
-                    position: isActive ? "relative" : "absolute",
                     transform: isActive ? "scale(1)" : "scale(0.9)",
                     opacity: isActive ? 1 : 0,
                     pointerEvents: isActive ? "auto" : "none",
@@ -309,27 +312,27 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                           href={link.href}
                           onClick={handleLinkClick}
                         >
-                          {link.description ? (
-                            <Row gap="12" style={{marginLeft: "-0.5rem"}}>
-                              {link.icon && (
-                                <Icon
-                                  name={link.icon}
-                                  size="s"
-                                  padding="8"
-                                  radius="s"
-                                  border="neutral-alpha-weak"
-                                />
-                              )}
-                              <Column gap="4">
+                          <Row gap="12" style={{marginLeft: "-0.5rem"}}>
+                            {link.icon && (
+                              <Icon
+                                name={link.icon}
+                                size="s"
+                                padding="8"
+                                radius="s"
+                                border="neutral-alpha-weak"
+                              />
+                            )}
+                            <Column gap="4">
+                              {link.label && (
                                 <Text onBackground="neutral-strong" variant="label-strong-s">
                                   {link.label}
                                 </Text>
+                              )}
+                              {link.description && (
                                 <Text onBackground="neutral-weak" truncate>{link.description}</Text>
-                              </Column>
-                            </Row>
-                          ) : (
-                            link.label
-                          )}
+                              )}
+                            </Column>
+                          </Row>
                         </ToggleButton>
                       ))}
                     </Column>
