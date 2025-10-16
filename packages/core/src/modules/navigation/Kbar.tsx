@@ -276,7 +276,6 @@ export const KbarContent: React.FC<KbarContentProps> = ({
     >
       <Column
         ref={containerRef}
-        maxHeight={32}
         fitHeight
         maxWidth="xs"
         background="surface"
@@ -307,6 +306,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
           </Row>
           <Column
             ref={scrollContainerRef}
+            maxHeight={32}
             fillWidth
             padding="4"
             gap="2"
