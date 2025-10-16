@@ -158,6 +158,9 @@ export function Header() {
             <Animation
               triggerType="click"
               slideDown={1}
+              scale={0.9}
+              blur={0.5}
+              duration={200}
               trigger={
                 <NavIcon hide m={{hide: false}} onClick={toggleSidebar} isActive={sidebarVisible}/>
               }>
