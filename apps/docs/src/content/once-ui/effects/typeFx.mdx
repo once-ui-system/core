@@ -121,14 +121,13 @@ Use the `custom` trigger to programmatically control when the typing animation s
 
 <PropsTable
   content={[
-    ["words", "string | string[]", "Text to type out. If array, cycles through each string"],
+    ["words", "string | string[]"],
     ["speed", "number (ms)", "100"],
-    ["delay", "number (ms)", "Initial delay before typing starts", "0"],
-    ["hold", "number (ms)", "How long to display complete text before deleting", "2000"],
+    ["delay", "number (ms)", "0"],
+    ["hold", "number (ms)", "2000"],
     ["trigger", ["instant", "custom"], "instant"],
-    ["loop", "boolean", "Whether to loop through words continuously", "true"],
-    ["onTrigger", "(triggerFn: () => void) => void", "Callback for custom trigger control"],
-    ["className"],
-    ["style"],
+    ["loop", "boolean", "true"],
+    ["onTrigger", "(triggerFn: () => void) => void"],
+    ["...text", "TextProps"],
   ]}
 />

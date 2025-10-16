@@ -7,7 +7,7 @@ export const TypeFxCustomExample = () => {
   const triggerFnRef = useRef<(() => void) | null>(null);
 
   return (
-    <Column gap="16">
+    <Column fillWidth horizontal="center" gap="16">
       <TypeFx
         words={["Click the button", "to start typing", "this animation"]}
         speed={60}
