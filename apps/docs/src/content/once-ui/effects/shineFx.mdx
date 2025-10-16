@@ -32,7 +32,7 @@ ShineFx creates a smooth, animated shine effect that sweeps across text. The eff
   ]}
 />
 
-## Speed control
+## Speed
 
 Adjust the animation speed with the `speed` prop. Higher values create slower animations, while lower values make the shine effect faster.
 
@@ -119,7 +119,7 @@ Control the base text visibility with the `baseOpacity` prop (0-1). Higher value
   ]}
 />
 
-## Disabled state
+## Disabled
 
 Disable the animation with the `disabled` prop to show static text without the shine effect.
 
@@ -152,7 +152,7 @@ Disable the animation with the `disabled` prop to show static text without the s
   ]}
 />
 
-## With different variants
+## Variants
 
 ShineFx works with all Text component variants and styling props.
 
@@ -164,11 +164,11 @@ ShineFx works with all Text component variants and styling props.
       <ShineFx variant="display-default-xs">
         Display variant
       </ShineFx>
-      <ShineFx variant="heading-default-l" onBackground="brand-strong">
+      <ShineFx variant="heading-default-l" onBackground="brand-medium">
         Heading with color
       </ShineFx>
-      <ShineFx variant="body-default-m">
-        Body text shine effect
+      <ShineFx variant="body-default-m" onBackground="danger-weak">
+        Body with color
       </ShineFx>
     </Column>
   }
@@ -184,7 +184,7 @@ ShineFx works with all Text component variants and styling props.
 </ShineFx>
 
 <ShineFx variant="body-default-m" onBackground="danger-weak">
-    Body text shine effect
+    Body with color
 </ShineFx>`,
       language: "tsx",
       label: "Variants"
@@ -196,12 +196,10 @@ ShineFx works with all Text component variants and styling props.
 
 <PropsTable
   content={[
-    ["speed", "number", "5", "Animation duration in seconds. Higher values create slower animations."],
-    ["baseOpacity", "number", "0.3", "Base text opacity from 0 to 1. Higher values improve readability and accessibility."],
-    ["disabled", "boolean", "false", "Disables the shine animation when true."],
-    ["children"],
-    ["className"],
-    ["style"],
-    ["...text", "", "", "All Text component props (variant, onBackground, etc.)"],
+    ["speed", "number", "5"],
+    ["baseOpacity", "number", "0.3"],
+    ["disabled", "boolean", "false"],
+    ["children", "ReactNode"],
+    ["...text", "TextProps"],
   ]}
 />

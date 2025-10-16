@@ -2,12 +2,12 @@
   --shine-base-opacity: 0.3;
   
   display: inline-block;
-  color: rgba(255, 255, 255, var(--shine-base-opacity));
+  -webkit-text-fill-color: transparent;
   background: linear-gradient(
     120deg,
-    transparent 40%,
-    rgba(255, 255, 255, 1) 50%,
-    transparent 60%
+    color-mix(in srgb, currentColor, transparent calc((1 - var(--shine-base-opacity)) * 100%)) 40%,
+    currentColor 50%,
+    color-mix(in srgb, currentColor, transparent calc((1 - var(--shine-base-opacity)) * 100%)) 60%
   );
   background-size: 200% 100%;
   -webkit-background-clip: text;
@@ -26,6 +26,8 @@
 
 .shineFx.disabled {
   animation: none;
-  color: inherit;
+  -webkit-text-fill-color: inherit;
   background: none;
+  -webkit-background-clip: unset;
+  background-clip: unset;
 }
