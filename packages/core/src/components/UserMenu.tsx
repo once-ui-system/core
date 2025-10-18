@@ -25,6 +25,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
   placement,
   className,
   style,
+  loading,
   ...userProps
 }) => {
   return (
@@ -33,26 +34,28 @@ const UserMenu: React.FC<UserMenuProps> = ({
       maxWidth={maxWidth}
       minHeight={minHeight}
       placement={placement}
+      disableTriggerClick={loading}
       style={{
         borderRadius: "var(--radius-full)",
       }}
       trigger={
         <Column
-          tabIndex={0}
+          tabIndex={loading ? -1 : 0}
           padding="4"
           radius="full"
-          cursor="interactive"
+          cursor={loading ? "default" : "interactive"}
           border={selected ? "neutral-medium" : "transparent"}
           background={selected ? "neutral-strong" : "transparent"}
+          pointerEvents={loading ? "none" : "auto"}
           className={classNames(className || "", selected ? styles.selected : "", styles.wrapper)}
           style={style}
         >
-          <User {...userProps} />
+          <User loading={loading} {...userProps} />
         </Column>
       }
       dropdown={dropdown}
     />
-  );
+);
 };
 
 UserMenu.displayName = "UserMenu";
