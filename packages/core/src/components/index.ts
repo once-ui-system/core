@@ -13,6 +13,7 @@ export * from "./BlockQuote";
 export * from "./Button";
 export * from "./MatrixFx";
 export * from "./Carousel";
+export * from "./Swiper";
 export * from "./Card";
 export * from "./CursorCard";
 export * from "./Cursor";
