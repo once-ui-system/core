@@ -1,42 +1,53 @@
+import { SmartLink } from "@once-ui-system/core";
+
 const changelog = [
   {
-    date: "2025-10-15",
-    title: "Once UI v1.5",
+    date: "2025-10-19",
+    title: "Once UI 1.5: Curiosity in code",
     image: "/images/changelog/once-ui-1-5.jpg",
-    description: "Once UI v1.5 is here with new components and enhanced developer experience.",
     sections: [
       {
         title: "New components",
         bullets: [
-          "List, ListItem",
-          "ProgressBar",
-          "CountFx",
-          "ContextMenu",
+          <><SmartLink unstyled href="/once-ui/components/hover">Hover</SmartLink>: Minimal component for overlaying elements</>,
+          <><SmartLink unstyled href="/once-ui/components/animation">Animation</SmartLink>: Robust component for complex interactions</>,
+          <><SmartLink unstyled href="/once-ui/components/hoverCard">HoverCard</SmartLink>: Portal-based element with Animation</>,
+          <><SmartLink unstyled href="/once-ui/components/timeline">Timeline</SmartLink>: Static timeline with various data elements</>,
+          <><SmartLink unstyled href="/once-ui/components/swiper">Swiper</SmartLink>: Multi-image with gestures and dragging</>,
+          <><SmartLink unstyled href="/once-ui/effects/typeFx">TypeFx</SmartLink>: Typewriter-style animation</>,
+          <><SmartLink unstyled href="/once-ui/effects/matrixFx">MatrixFx</SmartLink>: Canvas-based dot pattern animation</>,
+          <><SmartLink unstyled href="/once-ui/effects/shineFx">ShineFx</SmartLink>: Shining text effect</>,
         ],
       },
       {
-        title: "Flex & Grid",
+        title: "Component improvements",
         bullets: [
-          "Custom cursor",
-          "Breakpoint object",
-          "Dynamically render on server / client"
-        ],
-      },
-      {
-        title: "Improvements",
-        bullets: [
-          "Dropdown accessibility",
-          "Multiselect for Select",
-          "Autocollapse AccordionGroup",
-          "Native Media caption",
+          <><SmartLink unstyled href="/once-ui/components/flex">Flex</SmartLink>: Custom breakpoint support, scrollbar customization, radius 'full' for individual corners</>,
+          <><SmartLink unstyled href="/once-ui/components/button">Button</SmartLink>: rounded prop for a fully rounded style (shorthand for data-border)</>,
+          <><SmartLink unstyled href="/once-ui/components/background">Background</SmartLink>: Better visual rendering for background lines</>,
+          <><SmartLink unstyled href="/once-ui/components/card">Card</SmartLink>: Improved border radius, removed hover effect on tap</>,
+          <><SmartLink unstyled href="/once-ui/form-controls/input">Input</SmartLink>, <SmartLink unstyled href="/once-ui/form-controls/textarea">Textarea</SmartLink>: Native char count support for maxLength</>,
+          <><SmartLink unstyled href="/once-ui/modules/megaMenu">MegaMenu</SmartLink>: Better animations, custom content support, less re-rendering</>,
+          <><SmartLink unstyled href="/once-ui/components/icon">Icon</SmartLink>, <SmartLink unstyled href="/once-ui/components/iconButton">IconButton</SmartLink>, <SmartLink unstyled href="/once-ui/components/headingLink">HeadingLink</SmartLink>: Refactored with Animation component</>,
+          <><SmartLink unstyled href="/once-ui/modules/headingNav">HeadingNav</SmartLink>: Default heading for element</>,
+          <><SmartLink unstyled href="/once-ui/components/tooltip">Tooltip</SmartLink>: Fadein animation support</>,
+          <><SmartLink unstyled href="/once-ui/components/heading">Heading</SmartLink>, <SmartLink unstyled href="/once-ui/components/text">Text</SmartLink>: Display size line-height adjustments</>,
+          <><SmartLink unstyled href="/once-ui/effects/tiltFx">TiltFx</SmartLink>: Distortion amount support</>,
         ]
+      },
+      {
+        title: "Accessibility improvements",
+        bullets: [
+          <><SmartLink unstyled href="/once-ui/components/dropdownWrapper">DropdownWrapper</SmartLink>: Scroll lock and better hover + arrow key handling</>,
+          <><SmartLink unstyled href="/once-ui/components/emojiPicker">EmojiPicker</SmartLink>: Refactored scroll behavior and performance</>,
+        ],
       }
     ]
   },
   {
     date: "2025-07-30",
-    title: "Once UI v1.4",
-    image: "/api/og/generate?title=Once UI v1.4&description=Next level devX",
+    title: "Once UI 1.4: Next level devX",
+    image: "/api/og/generate?title=Once UI 1.4&description=Next level devX",
     description: "Once UI v1.4 is here with new components and enhanced developer experience.",
     sections: [
       {

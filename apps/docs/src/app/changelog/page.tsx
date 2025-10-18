@@ -1,5 +1,5 @@
 import React from "react";
-import { Column, SmartLink, Row, Line, Text, Heading, Media, Meta, Schema, HeadingLink } from "@once-ui-system/core";
+import { Column, SmartLink, Row, Line, Text, Heading, Media, Meta, Schema, HeadingLink, List, ListItem, Button } from "@once-ui-system/core";
 import { baseURL, meta, schema, changelog } from "@/resources";
 import { formatDate } from "../utils/formatDate";
 
@@ -62,7 +62,7 @@ const Changelog: React.FC = () => {
                 )}
               </Column>
             </Column>
-            <Column fillWidth gap="12" paddingBottom="48">
+            <Column fillWidth gap="4" paddingBottom="128">
               <HeadingLink id={entry.date} as="h2">
                 {entry.title}
               </HeadingLink>
@@ -77,7 +77,7 @@ const Changelog: React.FC = () => {
                 <Media
                   priority={index === 0}
                   sizes="(max-width: 768px) 100vw, 768px"
-                  marginTop="20"
+                  marginTop="24"
                   radius="l"
                   src={entry.image} 
                   alt={`Illustration for ${entry.title}`}
@@ -88,7 +88,7 @@ const Changelog: React.FC = () => {
               
               {entry.sections.map((section, sectionIndex) => {
                 return (
-                  <Column key={sectionIndex} fillWidth marginTop="20">
+                  <Column key={sectionIndex} fillWidth marginTop="40">
                     <Heading as="h3" marginBottom="8">
                       {section.title}
                     </Heading>
@@ -100,22 +100,20 @@ const Changelog: React.FC = () => {
                     )}
                     
                     {section.bullets && section.bullets.length > 0 && (
-                      <ul style={{marginTop: "var(--static-space-8)"}}>
+                      <List marginTop="8">
                         {section.bullets.map((bullet, bulletIndex) => (
-                          <li key={bulletIndex}>
-                            <Text variant="body-default-m" onBackground="neutral-weak">
-                              {bullet}
-                            </Text>
-                          </li>
+                          <ListItem key={bulletIndex} marginBottom="8" onBackground="neutral-medium">
+                            {bullet}
+                          </ListItem>
                         ))}
-                      </ul>
+                      </List>
                     )}
                     
                     {section.link && (
-                      <Row paddingY="8">
-                        <SmartLink href={section.link} suffixIcon="chevronRight">
+                      <Row paddingTop="32">
+                        <Button variant="secondary" size="s" rounded href={section.link} suffixIcon="chevronRight">
                           View update
-                        </SmartLink>
+                        </Button>
                       </Row>
                     )}
                   </Column>

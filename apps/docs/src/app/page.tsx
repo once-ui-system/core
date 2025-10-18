@@ -188,7 +188,7 @@ export default function Home() {
             <Column paddingX="32" paddingY="24" fillWidth horizontal="between" s={{direction: "column"}} gap="4">
               <Row fillWidth vertical="center" horizontal="between" gap="16" wrap>
                 <Heading as="h2" variant="display-default-xs">
-                  Q2 2025 Roadmap
+                  Q4 2025 Roadmap
                 </Heading>
                 <Button data-border="rounded" weight="default" variant="secondary" href="/roadmap" size="s" suffixIcon="chevronRight">
                 View Roadmap
