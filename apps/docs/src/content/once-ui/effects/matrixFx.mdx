@@ -41,7 +41,7 @@ The `MatrixFx` component creates an animated dot matrix reveal effect using the 
 
 ## Speed
 
-Control the reveal animation speed with the `animationSpeed` prop. Higher values make the reveal faster.
+Control the reveal animation speed with the `speed` prop. Higher values make the reveal faster.
 
 <CodeBlock
   marginTop="16"
@@ -52,7 +52,7 @@ Control the reveal animation speed with the `animationSpeed` prop. Higher values
     <MatrixFx
       height={24}
       trigger="mount"
-      animationSpeed={2}
+      speed={2}
       colors={["accent-solid-medium"]}
     />
   }
@@ -62,7 +62,7 @@ Control the reveal animation speed with the `animationSpeed` prop. Higher values
 `<MatrixFx
     height={24}
     trigger="mount"
-    animationSpeed={2}
+    speed={2}
     colors={["accent-solid-medium"]}
 />`,
       language: "tsx",
@@ -409,7 +409,7 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
 
 <PropsTable
   content={[
-    ["animationSpeed", "number", "1"],
+    ["speed", "number", "1"],
     ["colors", "string[]", '["brand-solid-medium"]'],
     ["size", "number", "3"],
     ["spacing", "number", "3"],

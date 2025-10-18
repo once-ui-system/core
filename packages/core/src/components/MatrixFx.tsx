@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { Flex } from ".";
 
 interface MatrixFxProps extends React.ComponentProps<typeof Flex> {
-  animationSpeed?: number;
+  speed?: number;
   colors?: string[];
   size?: number;
   spacing?: number;
@@ -17,7 +17,7 @@ interface MatrixFxProps extends React.ComponentProps<typeof Flex> {
 const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
   (
     {
-      animationSpeed = 1,
+      speed = 1,
       colors = ["brand-solid-medium"],
       size = 3,
       spacing = 3,
@@ -186,7 +186,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
             const now = Date.now();
             const elapsed = (now - revealStartTimeRef.current) / 1000;
             // Cubic easing: starts very slow, then explodes
-            const revealProgress = Math.pow(elapsed, 3) * animationSpeed * 3;
+            const revealProgress = Math.pow(elapsed, 3) * speed * 3;
             
             // Check if animation is complete (max offset is ~1.3)
             if (revealProgress >= 2.0) {
@@ -244,7 +244,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           const now = Date.now();
           const elapsed = (now - revealStartTimeRef.current) / 1000;
           // Cubic easing: starts very slow, then explodes
-          const revealProgress = Math.pow(elapsed, 3) * animationSpeed * 3;
+          const revealProgress = Math.pow(elapsed, 3) * speed * 3;
           
           // Cap progress to prevent infinite growth (max offset is ~1.3)
           const cappedProgress = Math.min(revealProgress, 2.0);
@@ -282,7 +282,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           if (hideStartProgressRef.current > 0) {
             const elapsed = (Date.now() - hideStartTimeRef.current) / 1000;
             // Use quadratic easing for faster hide (power of 2)
-            const hideSpeed = animationSpeed * 6; // Faster to handle max progress of 2.0
+            const hideSpeed = speed * 6; // Faster to handle max progress of 2.0
             const hideProgress = Math.pow(elapsed, 2) * hideSpeed;
             
             // Reverse from the progress we had when hide started
@@ -332,7 +332,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           cancelAnimationFrame(animationRef.current);
         }
       };
-    }, [colors, size, spacing, animationSpeed, revealFrom, trigger, flicker]);
+    }, [colors, size, spacing, speed, revealFrom, trigger, flicker]);
 
     const handleMouseEnter = () => {
       if (trigger === "hover" && !isHoveredRef.current) {
@@ -342,13 +342,13 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         if (hideStartProgressRef.current > 0) {
           // Calculate current position during hide
           const hideElapsed = (now - hideStartTimeRef.current) / 1000;
-          const hideSpeed = animationSpeed * 6;
+          const hideSpeed = speed * 6;
           const hideProgress = Math.pow(hideElapsed, 2) * hideSpeed;
           const currentProgress = Math.max(0, hideStartProgressRef.current - hideProgress);
           
           // Reverse the cubic easing formula: progress = elapsed^3 * speed * 3
           // So: elapsed = (progress / (speed * 3)) ^ (1/3)
-          const effectiveElapsed = Math.pow(currentProgress / (animationSpeed * 3), 1 / 3);
+          const effectiveElapsed = Math.pow(currentProgress / (speed * 3), 1 / 3);
           const simulatedStartTime = now - effectiveElapsed * 1000;
           revealStartTimeRef.current = simulatedStartTime;
         } else {
