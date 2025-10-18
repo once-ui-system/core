@@ -40,7 +40,7 @@
 }
 
 .container:hover .element::before,
-.element:focus-within::before {
+.element:focus-visible::before {
     content: '';
     position: absolute;
     top: 50%;
