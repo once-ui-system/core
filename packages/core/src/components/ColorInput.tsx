@@ -36,67 +36,66 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
         hasPrefix={
           <Flex>
             <Flex
+              width={value ? "0" : "20"}
+              opacity={value ? 0 : 100}
+              transition="micro-medium"
               style={{
-                width: value ? "var(--static-space-0)" : "var(--static-space-20)",
                 transform: value ? "scale(0)" : "scale(1)",
-                opacity: value ? "0" : "1",
-                transition: "0.2s ease-in-out all",
               }}
             >
-              <Flex padding="2">
-                <Icon size="xs" name="eyeDropper" onBackground="neutral-medium" />
-              </Flex>
+              <Icon marginLeft="4" padding="2" size="xs" name="eyeDropper" onBackground="neutral-medium" />
             </Flex>
             <Flex
               border="neutral-strong"
               className={`prefix ${value ? "" : "hidden"}`}
               onClick={handleHexClick}
               height="20"
+              marginLeft="4"
+              width={value ? "20" : "0"}
+              cursor="interactive"
               radius="xs"
+              opacity={value ? 100 : 0}
+              transition="micro-medium"
               style={{
                 backgroundColor: value,
-                cursor: "pointer",
-                width: value ? "var(--static-space-20)" : "var(--static-space-0)",
                 transform: value ? "scale(1)" : "scale(0)",
-                opacity: value ? "1" : "0",
-                transition: "0.2s ease-in-out all",
               }}
-            ></Flex>
+            />
           </Flex>
         }
         hasSuffix={
           <Flex
             className={`suffix ${value ? "" : "hidden"}`}
             position="absolute"
+            cursor="interactive"
+            left="48"
             style={{
-              left: "var(--static-space-48)",
-              cursor: "pointer",
               width: "calc(100% - var(--static-space-48))",
             }}
           >
             <Flex
               onClick={handleHexClick}
               fillWidth
-              style={{
-                opacity: value ? "1" : "0",
-                transition: "opacity 0.2s ease-in-out",
-              }}
+              opacity={value ? 100 : 0}
+              transition="micro-medium"
             >
               {value}
             </Flex>
             {value && (
-              <IconButton
-                onClick={handleReset}
-                variant="secondary"
-                tooltip="Remove"
-                tooltipPosition="left"
-                icon="close"
+              <Flex
+                position="absolute"
+                right="12"
                 style={{
-                  position: "absolute",
-                  right: "var(--static-space-12)",
                   transform: "translateY(-50%)",
-                }}
-              />
+                }}>
+                <IconButton
+                  onClick={handleReset}
+                  variant="secondary"
+                  tooltip="Remove"
+                  tooltipPosition="left"
+                  icon="close"
+                />
+              </Flex>
             )}
           </Flex>
         }
