@@ -428,7 +428,17 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, ...rest }) => {
 
   return (
     <>
-      <KbarTrigger tabIndex={0} onClick={handleOpen} {...rest}>
+      <KbarTrigger 
+        tabIndex={0} 
+        onClick={handleOpen}
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            handleOpen();
+          }
+        }}
+        {...rest}
+      >
         {children}
       </KbarTrigger>
       {isOpen &&
