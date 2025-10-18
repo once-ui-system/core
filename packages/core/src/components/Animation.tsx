@@ -241,8 +241,8 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
       };
 
       // For portals, animation should trigger based on isPositioned, not isActive
-      // For touch="display", don't animate until we know if it's a touch device
-      const effectiveActive = portal ? isPositioned : (touch === 'display' && !mounted ? true : isActive);
+      // For touch="display", wait until mounted to determine state
+      const effectiveActive = portal ? isPositioned : (touch === 'display' && !mounted ? false : isActive);
       const shouldAnimate = reverse ? !effectiveActive : effectiveActive;
 
       // Combine styles from multiple animations
