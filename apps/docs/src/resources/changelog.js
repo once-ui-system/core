@@ -22,7 +22,7 @@ const changelog = [
       {
         title: "Component improvements",
         bullets: [
-          <><SmartLink unstyled href="/once-ui/components/flex">Flex</SmartLink>: Custom breakpoint support, scrollbar customization, radius 'full' for individual corners</>,
+          <><SmartLink unstyled href="/once-ui/components/flex">Flex</SmartLink>: Custom breakpoint support, scrollbar customization, radius &apos;full&apos; for individual corners</>,
           <><SmartLink unstyled href="/once-ui/components/button">Button</SmartLink>: rounded prop for a fully rounded style (shorthand for data-border)</>,
           <><SmartLink unstyled href="/once-ui/components/background">Background</SmartLink>: Better visual rendering for background lines</>,
           <><SmartLink unstyled href="/once-ui/components/card">Card</SmartLink>: Improved border radius, removed hover effect on tap</>,
