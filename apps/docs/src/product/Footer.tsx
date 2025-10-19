@@ -1,5 +1,5 @@
 import { layout, social } from "@/resources";
-import { Background, Column, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
+import { Avatar, Background, Column, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
 import { Cta } from "./Cta";
 
 const navigation = [
@@ -263,11 +263,10 @@ const Footer = () => {
           <Row fillWidth overflow="hidden" minWidth={4} l={{hide: true}}/>
         </Row>
         <Row gap="8" paddingY="24" center maxWidth="xl" textVariant="label-default-s" onBackground="neutral-medium" borderX="neutral-alpha-medium">
-          Once UI is an open-source project by{" "}
+          Built with curiosity by{" "}
           <SmartLink href="https://dopler.app" unstyled>
-            <Logo dark icon="/trademarks/dopler-icon-dark.svg" size="xs" />
-            <Logo light icon="/trademarks/dopler-icon-light.svg" size="xs" />
-            Dopler
+            <Avatar size="xs" src="/images/avatar.jpg"/>
+            Lorant One
           </SmartLink>
         </Row>
         <Row flex={1}>

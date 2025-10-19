@@ -74,7 +74,7 @@ export default async function Docs({
             <Text variant="label-default-l" onBackground="neutral-medium">{sectionTitle}</Text>
             <Heading variant="display-strong-s">{doc.metadata.title}</Heading>
             <Text variant="body-default-s" onBackground="neutral-weak">
-              Last update: {formatDate(doc.metadata.updatedAt)}
+              Updated: {formatDate(doc.metadata.updatedAt)}
             </Text>
             {doc.metadata.github && (
               <Button className="mt-20" href={"https://github.com/once-ui-system/core/blob/main/packages/core/src/" + doc.metadata.github} size="s" variant="secondary" prefixIcon="github" weight="default" data-border="rounded">

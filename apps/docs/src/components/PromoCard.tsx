@@ -40,7 +40,7 @@ export function PromoCard({
 
   const cardContent = (
     <Card fillWidth href={href} overflow="hidden">
-      <Animation scale={1.05} reverse fade={1} triggerType="hover">
+      <Animation fillWidth scale={1.05} reverse fade={1} triggerType="hover">
         <Media src={image} priority sizes="400px"/>
       </Animation>
     </Card>
@@ -52,6 +52,7 @@ export function PromoCard({
       onMouseLeave={() => setIsHovered(false)}
     >
       <Hover
+        fillWidth
         trigger={cardContent}
         overlay={
           <Row fill padding="4">
