@@ -305,13 +305,13 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                       {section.links.map((link, linkIndex) => (
                         <ToggleButton
                           key={`link-${linkIndex}`}
-                          style={{ height: "auto", minHeight: "fit-content", paddingLeft: "var(--static-space-4)", paddingTop: "var(--static-space-4)", paddingBottom: "var(--static-space-4)", paddingRight: "var(--static-space-12)" }}
+                          style={{ height: "auto", minHeight: "fit-content", paddingLeft: "var(--static-space-0)", paddingTop: "var(--static-space-4)", paddingBottom: "var(--static-space-4)", paddingRight: "var(--static-space-12)" }}
                           fillWidth
                           horizontal="start"
                           href={link.href}
                           onClick={handleLinkClick}
                         >
-                          <Row gap="12" style={{marginLeft: "-0.5rem"}}>
+                          <Row gap="12">
                             {link.icon && (
                               <Icon
                                 name={link.icon}
