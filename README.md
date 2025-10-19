@@ -13,12 +13,12 @@
 
   <br/>
 
-  A design system for Next.js apps for indie builders.
+  The indie design system for Next.js apps
 
   [![npm version](https://img.shields.io/npm/v/@once-ui-system/core.svg)](https://www.npmjs.com/package/@once-ui-system/core)
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE.md)
   [![npm downloads](https://img.shields.io/npm/dm/@once-ui-system/core.svg)](https://www.npmjs.com/package/@once-ui-system/core)
-  [![Discord](https://img.shields.io/discord/5EyAQ4eNdS?color=7289da&logo=discord&logoColor=white)](https://discord.com/invite/5EyAQ4eNdS)
+  [![Discord](https://img.shields.io/discord/1083398120035074148?color=7289da&logo=discord&logoColor=white)](https://discord.com/invite/5EyAQ4eNdS)
 </div>
 
 
