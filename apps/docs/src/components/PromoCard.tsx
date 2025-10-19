@@ -41,7 +41,7 @@ export function PromoCard({
   const cardContent = (
     <Card fillWidth href={href} overflow="hidden">
       <Animation fillWidth scale={1.05} reverse fade={1} triggerType="hover">
-        <Media src={image} priority sizes="400px"/>
+        <Media aspectRatio="1/1" src={image} priority sizes="400px"/>
       </Animation>
     </Card>
   );
