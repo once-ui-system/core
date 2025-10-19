@@ -152,7 +152,7 @@ export function Header() {
 
   return (
     <>
-      <Flex as="header" background="page" horizontal="center" position="sticky" top="0" zIndex={9} fillWidth vertical="center" paddingY="12" paddingX="24" borderBottom="neutral-alpha-medium">
+      <Flex as="header" background="page" horizontal="center" position="sticky" top="0" zIndex={9} fillWidth vertical="center" paddingY="12" paddingRight="24" paddingLeft="20" borderBottom="neutral-alpha-medium">
         <Row maxWidth={layout.header.width} vertical="center" horizontal="between" gap="l">
           <Row fillWidth vertical="center" gap="8">
             <Animation

@@ -1,4 +1,4 @@
-import { SmartLink } from "@once-ui-system/core";
+import { SmartLink, InlineCode } from "@once-ui-system/core";
 
 const changelog = [
   {
@@ -31,7 +31,7 @@ const changelog = [
           <><SmartLink unstyled href="/once-ui/components/icon">Icon</SmartLink>, <SmartLink unstyled href="/once-ui/components/iconButton">IconButton</SmartLink>, <SmartLink unstyled href="/once-ui/components/headingLink">HeadingLink</SmartLink>: Refactored with Animation component</>,
           <><SmartLink unstyled href="/once-ui/modules/headingNav">HeadingNav</SmartLink>: Default heading for element</>,
           <><SmartLink unstyled href="/once-ui/components/tooltip">Tooltip</SmartLink>: Fadein animation support</>,
-          <><SmartLink unstyled href="/once-ui/components/heading">Heading</SmartLink>, <SmartLink unstyled href="/once-ui/components/text">Text</SmartLink>: Display size line-height adjustments</>,
+          <><SmartLink unstyled href="/once-ui/components/heading">Heading</SmartLink>, <SmartLink unstyled href="/once-ui/components/text">Text</SmartLink>: Display size line-height adjustments and support for <InlineCode>xs</InlineCode> and <InlineCode>xl</InlineCode> label sizes</>,
           <><SmartLink unstyled href="/once-ui/effects/tiltFx">TiltFx</SmartLink>: Distortion amount support</>,
         ]
       },
