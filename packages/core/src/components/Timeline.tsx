@@ -5,12 +5,11 @@ import { Column, Flex, Line, Text } from ".";
 import { TShirtSizes } from "@/types";
 
 export interface TimelineItem {
-  label?: string;
-  description?: string;
-  number?: number | string;
+  label?: React.ReactNode;
+  description?: React.ReactNode;
   state?: "default" | "active" | "success" | "danger";
   marker?: React.ReactNode;
-  content?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 interface TimelineProps extends Omit<React.ComponentProps<typeof Flex>, 'children'> {
@@ -52,7 +51,7 @@ const Timeline: React.FC<TimelineProps> = ({
         return (
           <Flex
             key={index}
-            direction={isHorizontal ? "column" : undefined}
+            direction={isHorizontal ? "column" : alignment === "right" ? "row-reverse" : undefined}
             fillWidth
           >
             {/* Marker */}
@@ -73,9 +72,6 @@ const Timeline: React.FC<TimelineProps> = ({
                   maxHeight={flex.direction === "row" ? undefined : "8"}
                 />
               )}
-              {item.marker !== undefined ? (
-                item.marker
-              ) : (
                 <Flex
                   fillWidth
                   center radius="full"
@@ -86,14 +82,16 @@ const Timeline: React.FC<TimelineProps> = ({
                   maxHeight={size === "xs" ? "8" : size === "s" ? "24" : size === "m" ? "32" : size === "l" ? "40" : "48"}
                   minWidth={size === "xs" ? "8" : size === "s" ? "24" : size === "m" ? "32" : size === "l" ? "40" : "48"}
                   maxWidth={size === "xs" ? "8" : size === "s" ? "24" : size === "m" ? "32" : size === "l" ? "40" : "48"}>
-                  {item.number !== undefined ? (
-                    <Text
+                  {item.marker && (
+                    <Flex
+                      center
                       onSolid={state === "active" ? "brand-strong" : state === "success" ? "success-strong" : state === "danger" ? "danger-strong" : undefined}
                       onBackground={state === "default" ? "neutral-weak" : undefined}
-                      variant="label-default-m">{item.number}</Text>
-                  ) : null}
+                      textVariant="label-default-m">
+                      {item.marker}
+                    </Flex>
+                  )}
                 </Flex>
-              )}
               {index !== items.length - 1 && (
                 <Line
                   vert={!isHorizontal}
@@ -108,12 +106,9 @@ const Timeline: React.FC<TimelineProps> = ({
               fillWidth
               paddingX="20" paddingTop="12" paddingBottom="24"
               horizontal={isHorizontal && index === 0 ? "start" : isHorizontal && index === items.length - 1 ? "end" : isHorizontal ? "center" : undefined}
-              align={isHorizontal && index === 0 ? "left" : isHorizontal && index === items.length - 1 ? "right" : isHorizontal ? "center" : undefined}
-              gap="4"
+              align={isHorizontal && index === 0 ? "left" : isHorizontal && index === items.length - 1 ? "right" : isHorizontal ? "center" : alignment === "right" ? "right" : undefined}
+              gap="2"
             >
-              {item.content !== undefined ? (
-                item.content
-              ) : (
                 <>
                   {item.label && (
                     <Text variant="label-default-m" onBackground={state === "danger" ? "danger-weak" : undefined}>{item.label}</Text>
@@ -123,8 +118,8 @@ const Timeline: React.FC<TimelineProps> = ({
                       {item.description}
                     </Text>
                   )}
+                  {item.children}
                 </>
-              )}
             </Column>
           </Flex>
         );
