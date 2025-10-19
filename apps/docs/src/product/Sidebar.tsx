@@ -348,9 +348,8 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
         gap="2" 
         as="nav" 
         overflowY="auto"
-        paddingX="12"
-        paddingY="16"
-        style={{maxHeight: "calc(100vh - 4rem)", top: "3.5rem"}}
+        padding="12"
+        style={{maxHeight: "calc(100vh - 4rem)", top: "3.875rem"}}
       >
         {hasLoaded ? (
           <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
