@@ -71,7 +71,7 @@ export async function GET(request: Request) {
         background: "#333333" 
       }} />
 
-      <img src="https://docs.once-ui.com/trademark/icon-dark.svg" width="200" height="200" />
+      <img src="https://docs.once-ui.com/trademarks/icon-dark.svg" width="200" height="200" />
 
       <div
         style={{

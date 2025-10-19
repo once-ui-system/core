@@ -99,7 +99,7 @@ export default function Home() {
               >
                 <Tag marginRight="12" variant="brand">NEW</Tag>
                 <Text variant="label-default-s">
-                  Once UI 1.5 release
+                  Once UI 1.5 — Curiosity in code
                 </Text>
               </Badge>
               <Heading variant="display-strong-m" marginTop="12">

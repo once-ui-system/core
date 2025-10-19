@@ -161,8 +161,8 @@ const Footer = () => {
           maxWidth="xl"
           borderX="neutral-alpha-medium">
           <Row paddingX="xl" paddingTop="xl" paddingBottom="40" fillWidth horizontal="between" vertical="center">
-            <Logo href="/" dark icon="/trademark/icon-dark.svg" size="m"/>
-            <Logo href="/" light icon="/trademark/icon-light.svg" size="m"/>
+            <Logo href="/" dark icon="/trademarks/icon-dark.svg" size="m"/>
+            <Logo href="/" light icon="/trademarks/icon-light.svg" size="m"/>
             <Row gap="8">
               {social.map((item, index) => (
                 <IconButton
@@ -265,8 +265,8 @@ const Footer = () => {
         <Row gap="8" paddingY="24" center maxWidth="xl" textVariant="label-default-s" onBackground="neutral-medium" borderX="neutral-alpha-medium">
           Once UI is an open-source project by{" "}
           <SmartLink href="https://dopler.app" unstyled>
-            <Logo dark icon="/trademark/dopler-icon-dark.svg" size="xs" />
-            <Logo light icon="/trademark/dopler-icon-light.svg" size="xs" />
+            <Logo dark icon="/trademarks/dopler-icon-dark.svg" size="xs" />
+            <Logo light icon="/trademarks/dopler-icon-light.svg" size="xs" />
             Dopler
           </SmartLink>
         </Row>

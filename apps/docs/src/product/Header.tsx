@@ -179,8 +179,8 @@ export function Header() {
                 />
               </Row>
             </Animation>
-            <Logo dark wordmark="/trademark/type-dark.svg" size="s" href="/"/>
-            <Logo light wordmark="/trademark/type-light.svg" size="s" href="/"/>
+            <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
+            <Logo light wordmark="/trademarks/type-light.svg" size="s" href="/"/>
           </Row>
           <Kbar s={{hide: true}} items={kbar} radius="full" background="neutral-alpha-weak">
             <Button data-border="rounded" size="s" variant="tertiary" weight="default">
