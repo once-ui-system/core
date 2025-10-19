@@ -157,6 +157,7 @@ export function Header() {
           <Row fillWidth vertical="center" gap="8">
             <Animation
               triggerType="click"
+              active={sidebarVisible}
               slideDown={1}
               scale={0.9}
               blur={0.5}
