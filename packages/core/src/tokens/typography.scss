@@ -41,9 +41,11 @@
     --font-size-body-s:            0.875rem;
     --font-size-body-xs:           0.75rem;
 
+    --font-size-label-xl:          1.125rem;
     --font-size-label-l:           1rem;
     --font-size-label-m:           0.925rem;
     --font-size-label-s:           0.825rem;
+    --font-size-label-xs:          0.75rem;
 
     /* LINE HEIGHT */
     --line-height-display-xl:      5rem;
@@ -64,9 +66,11 @@
     --line-height-body-s:          1.125rem;
     --line-height-body-xs:         1rem;
 
+    --line-height-label-xl:        1.5rem;
     --line-height-label-l:         1.25rem;
     --line-height-label-m:         1.25rem;
     --line-height-label-s:         1rem;
+    --line-height-label-xs:        0.875rem;
 }
 
 @include breakpoints.m {

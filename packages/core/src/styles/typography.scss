@@ -163,6 +163,11 @@ h1, h2, h3, h4, h5, h6, p {
         font-weight: var(--font-weight-label-default);
     }
 
+    &.font-xl, & > .font-xl {
+        font-size:   calc(var(--font-size-label-xl) * var(--font-size-label-multiplier));
+        line-height: calc(var(--line-height-label-xl) * var(--line-height-label-multiplier));
+    }
+
     &.font-l, & > .font-l {
         font-size:   calc(var(--font-size-label-l) * var(--font-size-label-multiplier));
         line-height: calc(var(--line-height-label-l) * var(--line-height-label-multiplier));
@@ -176,6 +181,11 @@ h1, h2, h3, h4, h5, h6, p {
     &.font-s, & > .font-s {
         font-size:   calc(var(--font-size-label-s) * var(--font-size-label-multiplier));
         line-height: calc(var(--line-height-label-s) * var(--line-height-label-multiplier));
+    }
+
+    &.font-xs, & > .font-xs {
+        font-size:   calc(var(--font-size-label-xs) * var(--font-size-label-multiplier));
+        line-height: calc(var(--line-height-label-xs) * var(--line-height-label-multiplier));
     }
 }
 
@@ -190,6 +200,11 @@ h1, h2, h3, h4, h5, h6, p {
         font-weight: var(--font-weight-code-default);
     }
 
+    &.font-xl, & > .font-xl {
+        font-size:   calc(var(--font-size-label-xl) * var(--font-size-label-multiplier));
+        line-height: calc(var(--line-height-label-xl) * var(--line-height-label-multiplier));
+    }
+
     &.font-l, & > .font-l {
         font-size:   calc(var(--font-size-label-l) * var(--font-size-label-multiplier));
         line-height: calc(var(--line-height-label-l) * var(--line-height-label-multiplier));
@@ -203,5 +218,10 @@ h1, h2, h3, h4, h5, h6, p {
     &.font-s, & > .font-s {
         font-size:   calc(var(--font-size-label-s) * var(--font-size-label-multiplier));
         line-height: calc(var(--line-height-label-s) * var(--line-height-label-multiplier));
+    }
+
+    &.font-xs, & > .font-xs {
+        font-size:   calc(var(--font-size-label-xs) * var(--font-size-label-multiplier));
+        line-height: calc(var(--line-height-label-xs) * var(--line-height-label-multiplier));
     }
 }
