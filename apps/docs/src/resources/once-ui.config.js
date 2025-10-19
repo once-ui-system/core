@@ -115,7 +115,7 @@ const schema = {
   logo: "",
   type: "Organization",
   name: "Once UI",
-  description: "Once UI design system and Next.js component library and Magic templates documentation.",
+  description: "Once UI design system and component library documentation for Next.js.",
   email: "support@once-ui.com",
   locale: "en_US"
 };
@@ -125,7 +125,7 @@ const meta = {
     title: `Docs – ${schema.name}`,
     description: schema.description,
     path: "/",
-    image: "/api/og/generate?title=Magic Templates&description=Documentation of the official Once UI templates"
+    image: "/api/og/generate?title=Once UI&description=Build your next app with Once UI"
   },
   roadmap: {
     title: `Roadmap – ${schema.name}`,
