@@ -2,13 +2,13 @@
 
 <div align="center">
   <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://docs.once-ui.com/trademark/icon-dark.svg" width="64" height="64">
-    <source media="(prefers-color-scheme: light)" srcset="https://docs.once-ui.com/trademark/icon-light.svg" width="64" height="64">
-    <img alt="Once UI Logo" src="https://docs.once-ui.com/trademark/icon-dark.svg" width="64" height="64">
+    <source media="(prefers-color-scheme: dark)" srcset="https://docs.once-ui.com/trademarks/icon-dark.svg" width="64" height="64">
+    <source media="(prefers-color-scheme: light)" srcset="https://docs.once-ui.com/trademarks/icon-light.svg" width="64" height="64">
+    <img alt="Once UI Logo" src="https://docs.once-ui.com/trademarks/icon-dark.svg" width="64" height="64">
   </picture><picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://docs.once-ui.com/trademark/type-dark.svg" width="200" height="64">
-    <source media="(prefers-color-scheme: light)" srcset="https://docs.once-ui.com/trademark/type-light.svg" width="200" height="64">
-    <img alt="Once UI Wordmark" src="https://docs.once-ui.com/trademark/type-dark.svg" width="200" height="64">
+    <source media="(prefers-color-scheme: dark)" srcset="https://docs.once-ui.com/trademarks/type-dark.svg" width="200" height="64">
+    <source media="(prefers-color-scheme: light)" srcset="https://docs.once-ui.com/trademarks/type-light.svg" width="200" height="64">
+    <img alt="Once UI Wordmark" src="https://docs.once-ui.com/trademarks/type-dark.svg" width="200" height="64">
   </picture>
 
   <br/>
