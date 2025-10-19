@@ -4,7 +4,7 @@ import { AvatarGroup, Card, Column, Grid, Media, Row, Text } from "@once-ui-syst
 
 export function Products() {
     return (
-      <Grid fillWidth columns="2" m={{columns: 1}} gap="12" marginTop="16">
+      <Grid fillWidth columns="2" s={{columns: 1}} gap="12" marginTop="16">
         {[
           {
             title: "Once UI Core",

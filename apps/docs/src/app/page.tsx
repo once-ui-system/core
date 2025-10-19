@@ -18,6 +18,7 @@ import {
 import { baseURL, meta, schema, changelog, roadmap, layout } from "@/resources";
 import { formatDate } from "./utils/formatDate";
 import { Products } from "@/product";
+import { PromoCard } from "@/components/PromoCard";
 
 export async function generateMetadata() {
   return Meta.generate({
@@ -329,7 +330,46 @@ export default function Home() {
       <Row
         width={layout.sidebar.width} 
         minWidth={layout.sidebar.width}
-        m={{hide: true}}/>
+        m={{hide: true}}
+        fillHeight>
+          <Column
+            fill
+            position="sticky"
+            style={{maxHeight: "calc(100vh - 3.5rem)", top: "3.5rem"}}
+            gap="-1">
+            <Column fill borderLeft="neutral-alpha-medium" vertical="end">
+              <Background
+                fillWidth
+                height={2}
+                borderTop="neutral-alpha-medium"
+                lines={{
+                  display: true,
+                  color: "neutral-alpha-weak",
+                  angle: -45,
+                  size: "4"
+                }}/>
+              <Row fillWidth padding="24" borderTop="neutral-alpha-medium">
+                <Heading as="h3" variant="heading-strong-m">Support our recent launch!</Heading>
+              </Row>
+            </Column>
+            {[
+              {
+                href: "https://store.dopler.app/product/curiosity-in-code-hooded-long-sleeve",
+                image: "/images/docs/swag-promo-01.png",
+              },
+              {
+                href: "https://store.dopler.app/product/curiosity-in-code-desk-mat",
+                image: "/images/docs/swag-promo-02.png",
+              }
+            ].map((product, index) => (
+              <PromoCard 
+                key={index}
+                href={product.href}
+                image={product.image}
+              />
+            ))}
+          </Column>
+      </Row>
     </Row>
   );
 }

@@ -334,28 +334,23 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
     }
   }, [initialNavigation, hasLoaded]);
 
-  // Create a stable container that doesn't change
-  const containerStyle = useMemo(() => ({
-    maxHeight: "calc(100vh - var(--static-space-64))",
-    top: "4rem"
-  }), []);
-
   return (
     <Column
       fillHeight
       borderRight="neutral-alpha-medium"
       width={layout.sidebar.width} 
       minWidth={layout.sidebar.width}
+      paddingY="4"
       {...rest}>
       <Column 
-        position="sticky"  
+        position="sticky"
         fillHeight
         gap="2" 
         as="nav" 
         overflowY="auto"
         paddingX="12"
         paddingY="16"
-        style={containerStyle} 
+        style={{maxHeight: "calc(100vh - 4rem)", top: "3.5rem"}}
       >
         {hasLoaded ? (
           <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
