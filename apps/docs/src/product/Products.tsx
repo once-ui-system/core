@@ -4,7 +4,7 @@ import { AvatarGroup, Card, Column, Grid, Media, Row, Text } from "@once-ui-syst
 
 export function Products() {
     return (
-      <Grid fillWidth columns="2" m={{columns: 1}} gap="12" marginTop="16">
+      <Grid fillWidth columns="2" s={{columns: 1}} gap="12" marginTop="16">
         {[
           {
             title: "Once UI Core",
@@ -29,6 +29,12 @@ export function Products() {
             description: "Start selling merch with a ready-made storefront",
             image: "/images/docs/magic-store.jpg",
             href: "/magic-store/quick-start"
+          },
+          {
+            title: "Supabase Starter",
+            description: "Set up a database and authentication in minutes",
+            image: "/images/docs/supabase-starter.jpg",
+            href: "/supabase-starter/quick-start"
           },
           {
             title: "Magic Convert",
@@ -59,8 +65,8 @@ export function Products() {
             paddingX="4"
           >
             <Row paddingX="16" paddingY="12" gap="12" vertical="center">
-              <AvatarGroup dark reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademark/icon-dark.svg"}]} size="s" />
-              <AvatarGroup light reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademark/icon-light.svg"}]} size="s" />
+              <AvatarGroup dark reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-dark.svg"}]} size="s" />
+              <AvatarGroup light reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-light.svg"}]} size="s" />
               <Text variant="label-default-s">Once UI</Text>
             </Row>
             <Media

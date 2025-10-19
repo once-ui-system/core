@@ -8,7 +8,7 @@ navLabel: "Input"
 navIcon: "switch"
 ---
 
-import { ValidationInputExample } from "../../product/InputExample"
+import { ValidationInputExample, CharacterCountExample } from "../../product/InputExample"
 
 The `Input` component provides a text entry field with floating labels, validation support, and customizable styling. Use it for collecting user input in forms.
 
@@ -221,6 +221,37 @@ Use the `description` prop to add a description below the input.
   ]}
 />
 
+## Character count
+
+Display a character counter with color-coded feedback based on remaining characters. The counter changes color when approaching the limit.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<CharacterCountExample />}
+  codes={[
+    {
+      code:
+`const [bio, setBio] = useState<string>("");
+
+const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBio(e.target.value);
+};
+
+<Input
+    id="bio-input"
+    placeholder="Bio"
+    value={bio}
+    onChange={handleChange}
+    maxLength={100}
+    characterCount
+/>`,
+      language: "tsx",
+      label: "Character count"
+    }
+  ]}
+/>
+
 ## NumberInput
 
 The `NumberInput` component provides a specialized input for numeric values with increment and decrement buttons. It supports min, max, and step values to control the range and increments.
@@ -401,6 +432,7 @@ You can use the `radius` prop to apply custom radius to sides or corners. It wor
     ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
     ["hasPrefix", "ReactNode"],
     ["hasSuffix", "ReactNode"],
+    ["characterCount", "boolean", "false"],
     ["cursor", ["interactive"]],
     ["validate", "(value: ReactNode) => ReactNode | null"],
     ["className"],

@@ -66,7 +66,7 @@ const RoadmapTask = ({ task: taskItem }: { task: Task }) => (
 
 export default function RoadmapPage() {
   return (
-    <Column maxWidth={layout.body.width} minWidth={0} gap="24" as="main">
+    <Column maxWidth={layout.body.width} as="main" padding="l">
       <Schema
         as="webPage"
         title={meta.roadmap.title}
@@ -82,7 +82,7 @@ export default function RoadmapPage() {
           Roadmap
         </Heading>
         <Text wrap="balance" onBackground="neutral-weak" variant="body-default-xl" marginBottom="20">
-          List of features planned for Q3 2025
+          List of features planned for Q4 2025
         </Text>
       </Column>
 

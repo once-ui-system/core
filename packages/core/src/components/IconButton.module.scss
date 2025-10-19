@@ -1,27 +1,3 @@
-.top {
-	bottom: calc(100% + var(--static-space-2));
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.bottom {
-	top: calc(100% + var(--static-space-2));
-	left: 50%;
-	transform: translateX(-50%);
-}
-
-.left {
-	right: calc(100% + var(--static-space-2));
-	top: 50%;
-	transform: translateY(-50%);
-}
-
-.right {
-	left: calc(100% + var(--static-space-2));
-	top: 50%;
-	transform: translateY(-50%);
-}
-
 .s {
 	min-height: var(--static-space-24);
 	min-width: var(--static-space-24);

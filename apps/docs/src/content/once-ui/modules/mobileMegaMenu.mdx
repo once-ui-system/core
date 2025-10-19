@@ -365,7 +365,7 @@ Use `MobileMegaMenu` as the mobile counterpart to `MegaMenu`. It supports dynami
 
 ## Usage
 
-The `MobileMegaMenu` component is designed for mobile screens. You can hide it at the large breakpoint by adding the `hide="l"` prop directly to the component. Make sure you design a desktop navigation that works well with your app.
+The `MobileMegaMenu` component is designed for mobile screens. You can hide it at the large breakpoint by adding the `hide` boolean prop directly to the component, and overwriting it at a breakpoint using the `hide={{l: false}}` prop. Make sure you design a desktop navigation that works well with your app.
 
 ## API reference
 
@@ -380,7 +380,7 @@ The `MobileMegaMenu` component is designed for mobile screens. You can hide it a
 
 ### Types
 
-```ts
+```tsx
 interface MenuGroup {
   id: string;
   label: ReactNode;

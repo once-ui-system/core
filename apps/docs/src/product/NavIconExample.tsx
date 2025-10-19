@@ -22,8 +22,8 @@ export function NavIconToggle() {
         vertical="center"
         fillWidth
       >
-        <Flex dark><Logo icon="/trademark/icon-dark.svg"/></Flex>
-        <Flex light><Logo icon="/trademark/icon-light.svg"/></Flex>
+        <Flex dark><Logo icon="/trademarks/icon-dark.svg"/></Flex>
+        <Flex light><Logo icon="/trademarks/icon-light.svg"/></Flex>
         <NavIcon 
           isActive={isActive} 
           onClick={handleClick} 

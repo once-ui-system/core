@@ -1,0 +1,133 @@
+---
+title: "TypeFx"
+summary: "Animates text with a typewriter effect, typing and deleting characters one by one. Perfect for hero sections and dynamic headings."
+updatedAt: "2025-10-14"
+docs: "once-ui/effects/typeFx.mdx"
+github: "components/TypeFx.tsx"
+navLabel: "TypeFx"
+navIcon: "sparkle"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+TypeFx creates a realistic typewriter animation that types out text character-by-character. When multiple words are provided, it automatically types, holds, deletes, and cycles through them.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="8" vertical="center">
+      <TypeFx
+        words={["amazing products", "stunning websites", "modern apps"]}
+        speed={80}
+        hold={2000}
+        trigger="instant"
+      >Build{" "}</TypeFx>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="8" vertical="center">
+  <Text variant="heading-default-l">
+    Build
+  </Text>
+  <TypeFx
+    words={["amazing products", "stunning websites", "modern apps"]}
+    speed={80}
+    hold={2000}
+    trigger="instant"
+  />
+</Row>`,
+      language: "tsx",
+      label: "TypeFx"
+    }
+  ]}
+/>
+
+## Single word
+
+TypeFx can also display a single word that types out once without looping.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <TypeFx
+      words="Welcome to the future"
+      speed={100}
+      delay={500}
+      trigger="instant"
+    />
+  }
+  codes={[
+    {
+      code:
+`<TypeFx
+  words="Welcome to the future"
+  speed={100}
+  delay={500}
+  trigger="instant"
+/>`,
+      language: "tsx",
+      label: "Single word"
+    }
+  ]}
+/>
+
+## Custom trigger
+
+Use the `custom` trigger to programmatically control when the typing animation starts.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <TypeFxCustomExample />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`function TypeFxCustomExample() {
+  const triggerFnRef = useRef<(() => void) | null>(null);
+
+  return (
+    <>
+      <TypeFx
+        words={["Click the button", "to start typing", "this animation"]}
+        speed={60}
+        hold={1500}
+        trigger="custom"
+        onTrigger={(fn) => {
+          triggerFnRef.current = fn;
+        }}
+      />
+      <Button onClick={() => triggerFnRef.current?.()}>
+        Start typing
+      </Button>
+    </>
+  );
+}`,
+      language: "tsx",
+      label: "Custom trigger"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["words", "string | string[]"],
+    ["speed", "number (ms)", "100"],
+    ["delay", "number (ms)", "0"],
+    ["hold", "number (ms)", "2000"],
+    ["trigger", ["instant", "custom"], "instant"],
+    ["loop", "boolean", "true"],
+    ["onTrigger", "(triggerFn: () => void) => void"],
+    ["...text", "TextProps"],
+  ]}
+/>

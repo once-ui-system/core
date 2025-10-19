@@ -18,6 +18,7 @@ interface LayoutContextType {
   currentBreakpoint: BreakpointKey;
   width: number;
   breakpoints: Breakpoints;
+  isDefaultBreakpoints: () => boolean;
   isBreakpoint: (key: BreakpointKey) => boolean;
   maxWidth: (key: BreakpointKey) => boolean;
   minWidth: (key: BreakpointKey) => boolean;
@@ -67,22 +68,51 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     return width > breakpoints[key];
   };
 
+  const isDefaultBreakpoints = (): boolean => {
+    return JSON.stringify(breakpoints) === JSON.stringify(DEFAULT_BREAKPOINTS);
+  };
+
   useEffect(() => {
+    // Update CSS custom properties (Not usable because of media queries)
+    // This part is commented out because CSS custom properties cannot be used with media queries in this
+    //const root = document.documentElement;
+    //Object.entries(breakpoints).forEach(([key, value]) => {
+    //    if (value !== Infinity) {
+    //        root.style.setProperty(`--breakpoint-${key}`, `${value}px`);
+    //    }
+    //});
+
     // Initialize width
     const updateWidth = () => {
       const newWidth = window.innerWidth;
+      const newBreakpoint = getCurrentBreakpoint(newWidth);
+      
+      // Only update state if breakpoint actually changed
       setWidth(newWidth);
-      setCurrentBreakpoint(getCurrentBreakpoint(newWidth));
+      setCurrentBreakpoint((prev) => {
+        if (prev !== newBreakpoint) {
+          return newBreakpoint;
+        }
+        return prev;
+      });
+    };
+
+    // Debounce resize handler
+    let timeoutId: NodeJS.Timeout;
+    const debouncedUpdateWidth = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(updateWidth, 100);
     };
 
     // Set initial width
     updateWidth();
 
-    // Add resize listener
-    window.addEventListener("resize", updateWidth);
+    // Add resize listener with debouncing
+    window.addEventListener("resize", debouncedUpdateWidth);
 
     return () => {
-      window.removeEventListener("resize", updateWidth);
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", debouncedUpdateWidth);
     };
   }, [breakpoints]);
 
@@ -90,6 +120,7 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     currentBreakpoint,
     width,
     breakpoints,
+    isDefaultBreakpoints,
     isBreakpoint,
     maxWidth,
     minWidth,

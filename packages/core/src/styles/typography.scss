@@ -19,6 +19,12 @@ html {
     }
 }
 
+@include breakpoints.xs {
+    html {
+        font-size: var(--font-scaling-mobile);
+    }
+}
+
 h1, h2, h3, h4, h5, h6, p {
     margin: 0;
 }
@@ -43,32 +49,32 @@ h1, h2, h3, h4, h5, h6, p {
     }
 
     &.font-xl, & > .font-xl {
-        font-size:   calc(var(--font-size-display-xl) * var(--font-size-heading-multiplier));
-        line-height: calc(var(--line-height-display-xl) * var(--line-height-heading-multiplier));
+        font-size:   calc(var(--font-size-display-xl) * var(--font-size-display-multiplier));
+        line-height: calc(var(--line-height-display-xl) * var(--line-height-display-multiplier));
         letter-spacing: -0.05em;
     }
     
     &.font-l, & > .font-l {
-        font-size:   calc(var(--font-size-display-l) * var(--font-size-heading-multiplier));
-        line-height: calc(var(--line-height-display-l) * var(--line-height-heading-multiplier));
+        font-size:   calc(var(--font-size-display-l) * var(--font-size-display-multiplier));
+        line-height: calc(var(--line-height-display-l) * var(--line-height-display-multiplier));
         letter-spacing: -0.04em;
     }
     
     &.font-m, & > .font-m {
-        font-size:   calc(var(--font-size-display-m) * var(--font-size-heading-multiplier));
-        line-height: calc(var(--line-height-display-m) * var(--line-height-heading-multiplier));
+        font-size:   calc(var(--font-size-display-m) * var(--font-size-display-multiplier));
+        line-height: calc(var(--line-height-display-m) * var(--line-height-display-multiplier));
         letter-spacing: -0.03em;
     }
     
     &.font-s, & > .font-s {
-        font-size:   calc(var(--font-size-display-s) * var(--font-size-heading-multiplier));
-        line-height: calc(var(--line-height-display-s) * var(--line-height-heading-multiplier));
+        font-size:   calc(var(--font-size-display-s) * var(--font-size-display-multiplier));
+        line-height: calc(var(--line-height-display-s) * var(--line-height-display-multiplier));
         letter-spacing: -0.02em;
     }
 
     &.font-xs, & > .font-xs {
-        font-size:   calc(var(--font-size-display-xs) * var(--font-size-heading-multiplier));
-        line-height: calc(var(--line-height-display-xs) * var(--line-height-heading-multiplier));
+        font-size:   calc(var(--font-size-display-xs) * var(--font-size-display-multiplier));
+        line-height: calc(var(--line-height-display-xs) * var(--line-height-display-multiplier));
     }
 }
 
@@ -157,6 +163,11 @@ h1, h2, h3, h4, h5, h6, p {
         font-weight: var(--font-weight-label-default);
     }
 
+    &.font-xl, & > .font-xl {
+        font-size:   calc(var(--font-size-label-xl) * var(--font-size-label-multiplier));
+        line-height: calc(var(--line-height-label-xl) * var(--line-height-label-multiplier));
+    }
+
     &.font-l, & > .font-l {
         font-size:   calc(var(--font-size-label-l) * var(--font-size-label-multiplier));
         line-height: calc(var(--line-height-label-l) * var(--line-height-label-multiplier));
@@ -170,6 +181,11 @@ h1, h2, h3, h4, h5, h6, p {
     &.font-s, & > .font-s {
         font-size:   calc(var(--font-size-label-s) * var(--font-size-label-multiplier));
         line-height: calc(var(--line-height-label-s) * var(--line-height-label-multiplier));
+    }
+
+    &.font-xs, & > .font-xs {
+        font-size:   calc(var(--font-size-label-xs) * var(--font-size-label-multiplier));
+        line-height: calc(var(--line-height-label-xs) * var(--line-height-label-multiplier));
     }
 }
 
@@ -184,6 +200,11 @@ h1, h2, h3, h4, h5, h6, p {
         font-weight: var(--font-weight-code-default);
     }
 
+    &.font-xl, & > .font-xl {
+        font-size:   calc(var(--font-size-label-xl) * var(--font-size-label-multiplier));
+        line-height: calc(var(--line-height-label-xl) * var(--line-height-label-multiplier));
+    }
+
     &.font-l, & > .font-l {
         font-size:   calc(var(--font-size-label-l) * var(--font-size-label-multiplier));
         line-height: calc(var(--line-height-label-l) * var(--line-height-label-multiplier));
@@ -197,5 +218,10 @@ h1, h2, h3, h4, h5, h6, p {
     &.font-s, & > .font-s {
         font-size:   calc(var(--font-size-label-s) * var(--font-size-label-multiplier));
         line-height: calc(var(--line-height-label-s) * var(--line-height-label-multiplier));
+    }
+
+    &.font-xs, & > .font-xs {
+        font-size:   calc(var(--font-size-label-xs) * var(--font-size-label-multiplier));
+        line-height: calc(var(--line-height-label-xs) * var(--line-height-label-multiplier));
     }
 }

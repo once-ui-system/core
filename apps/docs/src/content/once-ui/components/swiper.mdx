@@ -1,0 +1,270 @@
+---
+title: "Swiper"
+summary: "A scroll-based carousel with native snap scrolling, similar to Instagram or Airbnb galleries."
+updatedAt: "2025-10-18"
+docs: "once-ui/components/scroll-carousel.mdx"
+github: "components/Swiper.tsx"
+navLabel: "Swiper"
+navIcon: "components"
+---
+
+An interactive carousel that uses native CSS scroll-snap for smooth, performant scrolling. Features native touch/swipe gestures on mobile and drag-to-scroll on desktop for seamless navigation between slides.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Swiper
+      radius="l"
+      items={[
+        { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+        { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Swiper
+    items={[
+      { slide: "/images/1.jpg", alt: "Image 1" },
+      { slide: "/images/2.jpg", alt: "Image 2" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Swiper"
+    }
+  ]}
+/>
+
+## Interactions
+
+The Swiper uses native CSS scroll-snap, providing smooth touch gestures on mobile, trackpad scrolling, and mouse drag-to-scroll on desktop. Simply click and drag to navigate between slides.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Swiper
+      items={[
+        { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+        { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Swiper
+    items={[
+      { slide: "/images/1.jpg", alt: "Image 1" },
+      { slide: "/images/2.jpg", alt: "Image 2" },
+      { slide: "/images/3.jpg", alt: "Image 3" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Interactions"
+    }
+  ]}
+/>
+
+## Indicators
+
+By default, the Swiper displays dot indicators below the carousel. The active dot is highlighted and slightly scaled for better visibility.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="32" fillWidth>
+      <Swiper
+        indicator={true}
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+      <Swiper
+        indicator={false}
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Swiper
+    indicator={true}
+    items={[...]}
+/>
+
+<Swiper
+    indicator={false}
+    items={[...]}
+/>`,
+      language: "tsx",
+      label: "Indicators"
+    }
+  ]}
+/>
+
+## Controls
+
+The `controls` prop supports three options: `true` (appear on hover), `false` (hidden), or `"contained"` (always visible inside the carousel). Buttons are automatically hidden when at the first or last slide.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="32" fillWidth>
+      <Swiper
+        controls={true}
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+      <Swiper
+        controls="contained"
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+      <Swiper
+        controls={false}
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Swiper
+    controls={true} // Appear on hover
+    items={[...]}
+/>
+
+<Swiper
+    controls="contained" // Always visible
+    items={[...]}
+/>
+
+<Swiper
+    controls={false} // Hidden
+    items={[...]}
+/>`,
+      language: "tsx",
+      label: "Controls"
+    }
+  ]}
+/>
+
+## Aspect ratio
+
+Customize the aspect ratio of the carousel to fit your design needs. Supports standard aspect ratio values.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="32" fillWidth>
+      <Swiper
+        aspectRatio="16 / 9"
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+      <Swiper
+        aspectRatio="4 / 3"
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+      <Swiper
+        aspectRatio="1 / 1"
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Swiper
+    aspectRatio="16 / 9"
+    items={[...]}
+/>
+
+<Swiper
+    aspectRatio="4 / 3"
+    items={[...]}
+/>
+
+<Swiper
+    aspectRatio="1 / 1"
+    items={[...]}
+/>`,
+      language: "tsx",
+      label: "Aspect ratio"
+    }
+  ]}
+/>
+
+## Custom content
+
+You can place custom content inside the slides as `ReactNode`, not just images.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Swiper
+      items={[
+        { slide: <Row fill center background="brand-strong"><Text variant="heading-strong-xl">Slide 1</Text></Row> },
+        { slide: <Row fill center background="accent-strong"><Text variant="heading-strong-xl">Slide 2</Text></Row> },
+        { slide: <Row fill center background="neutral-strong"><Text variant="heading-strong-xl">Slide 3</Text></Row> },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Swiper
+    items={[
+      { slide: <Row fill center background="brand-strong"><Text>Slide 1</Text></Row> },
+      { slide: <Row fill center background="accent-strong"><Text>Slide 2</Text></Row> },
+      { slide: <Row fill center background="neutral-strong"><Text>Slide 3</Text></Row> },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Custom content"
+    }
+  ]}
+/>
+
+## API Reference
+
+<PropsTable
+  content={[
+    ["items", "Array<{ slide: string | ReactNode; alt?: string }>", "[]"],
+    ["aspectRatio", "string", "16 / 9"],
+    ["controls", ["true", "false", "contained"], "true"],
+    ["indicator", "boolean", "true"],
+    ["priority", "boolean", "false"],
+    ["fill", "boolean", "false"],
+    ["sizes", "string", "undefined"],
+    ["...flex"]
+  ]}
+/>

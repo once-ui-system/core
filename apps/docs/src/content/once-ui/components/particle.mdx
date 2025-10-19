@@ -6,6 +6,8 @@ docs: "once-ui/components/particle.mdx"
 github: "components/Particle.tsx"
 navLabel: "Particle"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The `Particle` component provides customizable decorative particles with gradients, dots, grids, lines, and masking effects.
@@ -19,7 +21,7 @@ The `Particle` component provides customizable decorative particles with gradien
       fill
       interactive
       speed={3}
-      interactionRadius={100}
+      intensity={100}
       height={24}
     />
   }
@@ -30,7 +32,7 @@ The `Particle` component provides customizable decorative particles with gradien
     fill
     interactive
     speed={3}
-    interactionRadius={100}
+    intensity={100}
     height={24}
 />`,
       language: "tsx",
@@ -160,7 +162,7 @@ The `speed` prop controls the speed of the particles.
 
 ## Interactive
 
-The `interactive` prop controls whether the particles are interactive. Use the `interactionRadius` prop to control the radius of the interaction area.
+The `interactive` prop controls whether the particles are interactive. Use the `intensity` prop to control the radius of the interaction area.
 
 <CodeBlock
   marginTop="16"
@@ -171,7 +173,7 @@ The `interactive` prop controls whether the particles are interactive. Use the `
       fill
       interactive
       height={24}
-      interactionRadius={100}
+      intensity={100}
     />
   }
   codes={[
@@ -184,6 +186,40 @@ The `interactive` prop controls whether the particles are interactive. Use the `
 />`,
       language: "tsx",
       label: "Interactive"
+    }
+  ]}
+/>
+
+## Mode
+
+The `mode` prop controls how particles interact with the cursor. Use `repel` to push particles away or `attract` to pull them towards the cursor.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Particle
+      fill
+      interactive
+      mode="attract"
+      height={24}
+      intensity={30}
+      speed={2}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Particle
+    fill
+    interactive
+    mode="attract"
+    height={24}
+    intensity={30}
+/>`,
+      language: "tsx",
+      label: "Mode"
     }
   ]}
 />
@@ -227,7 +263,8 @@ The `opacity` prop controls the opacity of the particles.
     ["size", "SpacingToken", "2"],
     ["speed", "number", "0.3"],
     ["interactive", "boolean", "false"],
-    ["interactionRadius", "number", "20"],
+    ["mode", ["repel","attract"], "repel"],
+    ["intensity", "number", "20"],
     ["opacity", "DisplayProps['opacity']", "100"],
     ["className"],
     ["style"],

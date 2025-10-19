@@ -1,0 +1,31 @@
+.scrollContainer {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.slide {
+  flex-shrink: 0;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.carouselContainer {
+  @media (hover: hover) and (pointer: fine) {
+    &:hover .navButton,
+    &:focus-within .navButton {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+
+.navButton {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+
+  @media (hover: none) {
+    display: none;
+  }
+}

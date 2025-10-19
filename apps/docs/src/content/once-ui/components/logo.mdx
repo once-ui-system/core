@@ -6,8 +6,6 @@ docs: "once-ui/components/logo.mdx"
 github: "components/Logo.tsx"
 navLabel: "Logo"
 navIcon: "components"
-navTag: "Update"
-navTagVariant: "indigo"
 ---
 
 The Logo component is used to display brand logos with consistent styling and sizing. It supports displaying both an icon and a wordmark, either separately or together.
@@ -18,10 +16,10 @@ The Logo component is used to display brand logos with consistent styling and si
   preview={
     <Column fillWidth center gap="40">
       <Row dark>
-        <Logo icon="/trademark/icon-dark.svg" wordmark="/trademark/type-dark.svg" size="s" href="/"/>
+        <Logo icon="/trademarks/icon-dark.svg" wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
       </Row>
       <Row light>
-        <Logo icon="/trademark/icon-light.svg" wordmark="/trademark/type-light.svg" size="s" href="/"/>
+        <Logo icon="/trademarks/icon-light.svg" wordmark="/trademarks/type-light.svg" size="s" href="/"/>
       </Row>
       <ThemeSwitcher/>
     </Column>
@@ -30,10 +28,10 @@ The Logo component is used to display brand logos with consistent styling and si
     {
       code:
 `<Row dark>
-    <Logo icon="/trademark/icon-dark.svg" wordmark="/trademark/type-dark.svg" size="s" href="https://once-ui.com"/>
+    <Logo icon="/trademarks/icon-dark.svg" wordmark="/trademarks/type-dark.svg" size="s" href="https://once-ui.com"/>
 </Row>
 <Row light>
-    <Logo icon="/trademark/icon-light.svg" wordmark="/trademark/type-light.svg" size="s" href="https://once-ui.com"/>
+    <Logo icon="/trademarks/icon-light.svg" wordmark="/trademarks/type-light.svg" size="s" href="https://once-ui.com"/>
 </Row>`,
       language: "tsx",
       label: "Logo"
@@ -51,29 +49,29 @@ The Logo component comes in different sizes to accommodate various use cases.
   preview={
     <>
     <Column gap="16" center dark>
-      <Logo wordmark="/trademark/type-dark.svg" size="xs" />
-      <Logo wordmark="/trademark/type-dark.svg" size="s" />
-      <Logo wordmark="/trademark/type-dark.svg" size="m" />
-      <Logo wordmark="/trademark/type-dark.svg" size="l" />
-      <Logo wordmark="/trademark/type-dark.svg" size="xl" />
+      <Logo wordmark="/trademarks/type-dark.svg" size="xs" />
+      <Logo wordmark="/trademarks/type-dark.svg" size="s" />
+      <Logo wordmark="/trademarks/type-dark.svg" size="m" />
+      <Logo wordmark="/trademarks/type-dark.svg" size="l" />
+      <Logo wordmark="/trademarks/type-dark.svg" size="xl" />
     </Column>
     <Column gap="16" center light>
-      <Logo wordmark="/trademark/type-light.svg" size="xs" />
-      <Logo wordmark="/trademark/type-light.svg" size="s" />
-      <Logo wordmark="/trademark/type-light.svg" size="m" />
-      <Logo wordmark="/trademark/type-light.svg" size="l" />
-      <Logo wordmark="/trademark/type-light.svg" size="xl" />
+      <Logo wordmark="/trademarks/type-light.svg" size="xs" />
+      <Logo wordmark="/trademarks/type-light.svg" size="s" />
+      <Logo wordmark="/trademarks/type-light.svg" size="m" />
+      <Logo wordmark="/trademarks/type-light.svg" size="l" />
+      <Logo wordmark="/trademarks/type-light.svg" size="xl" />
     </Column>
     </>
   }
   codes={[
     {
       code:
-`<Logo wordmark="/trademark/type-dark.svg" size="xs" />
-<Logo wordmark="/trademark/type-dark.svg" size="s" />
-<Logo wordmark="/trademark/type-dark.svg" size="m" />
-<Logo wordmark="/trademark/type-dark.svg" size="l" />
-<Logo wordmark="/trademark/type-dark.svg" size="xl" />`,
+`<Logo wordmark="/trademarks/type-dark.svg" size="xs" />
+<Logo wordmark="/trademarks/type-dark.svg" size="s" />
+<Logo wordmark="/trademarks/type-dark.svg" size="m" />
+<Logo wordmark="/trademarks/type-dark.svg" size="l" />
+<Logo wordmark="/trademarks/type-dark.svg" size="xl" />`,
       language: "tsx",
       label: "Sizes"
     }
@@ -90,20 +88,20 @@ Display only the icon part of the logo.
   preview={
     <>
       <Row gap="16" center dark>
-        <Logo icon="/trademark/icon-dark.svg" size="s" />
-        <Logo icon="/trademark/icon-dark.svg" size="l" />
+        <Logo icon="/trademarks/icon-dark.svg" size="s" />
+        <Logo icon="/trademarks/icon-dark.svg" size="l" />
       </Row>
       <Row gap="16" center light>
-        <Logo icon="/trademark/icon-light.svg" size="s" />
-        <Logo icon="/trademark/icon-light.svg" size="l" />
+        <Logo icon="/trademarks/icon-light.svg" size="s" />
+        <Logo icon="/trademarks/icon-light.svg" size="l" />
       </Row>
     </>
   }
   codes={[
     {
       code:
-`<Logo icon="/trademark/icon-dark.svg" size="s" />
-<Logo icon="/trademark/icon-dark.svg" size="l" />`,
+`<Logo icon="/trademarks/icon-dark.svg" size="s" />
+<Logo icon="/trademarks/icon-dark.svg" size="l" />`,
       language: "tsx",
       label: "Icon"
     }
@@ -120,20 +118,20 @@ Display only the wordmark part of the logo.
   preview={
     <>
       <Row gap="16" center dark>
-        <Logo wordmark="/trademark/type-dark.svg" size="s" />
-        <Logo wordmark="/trademark/type-dark.svg" size="l" />
+        <Logo wordmark="/trademarks/type-dark.svg" size="s" />
+        <Logo wordmark="/trademarks/type-dark.svg" size="l" />
       </Row>
       <Row gap="16" center light>
-        <Logo wordmark="/trademark/type-light.svg" size="s" />
-        <Logo wordmark="/trademark/type-light.svg" size="l" />
+        <Logo wordmark="/trademarks/type-light.svg" size="s" />
+        <Logo wordmark="/trademarks/type-light.svg" size="l" />
       </Row>
     </>
   }
   codes={[
     {
       code:
-`<Logo wordmark="/trademark/type-dark.svg" size="s" />
-<Logo wordmark="/trademark/type-dark.svg" size="l" />`,
+`<Logo wordmark="/trademarks/type-dark.svg" size="s" />
+<Logo wordmark="/trademarks/type-dark.svg" size="l" />`,
       language: "tsx",
       label: "Wordmark"
     }
@@ -150,20 +148,20 @@ The Logo component can function as a link when provided with an `href` property.
   preview={
     <>
       <Row gap="16" center dark>
-        <Logo wordmark="/trademark/type-dark.svg" href="https://once-ui.com" />
-        <Logo wordmark="/trademark/type-dark.svg" href="https://once-ui.com" size="l" />
+        <Logo wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" />
+        <Logo wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" size="l" />
       </Row>
       <Row gap="16" center light>
-        <Logo wordmark="/trademark/type-light.svg" href="https://once-ui.com" />
-        <Logo wordmark="/trademark/type-light.svg" href="https://once-ui.com" size="l" />
+        <Logo wordmark="/trademarks/type-light.svg" href="https://once-ui.com" />
+        <Logo wordmark="/trademarks/type-light.svg" href="https://once-ui.com" size="l" />
       </Row>
     </>
   }
   codes={[
     {
       code:
-`<Logo wordmark="/trademark/type-dark.svg" href="https://once-ui.com" />
-<Logo wordmark="/trademark/type-dark.svg" href="https://once-ui.com" size="l" />`,
+`<Logo wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" />
+<Logo wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" size="l" />`,
       language: "tsx",
       label: "Links"
     }
@@ -179,15 +177,15 @@ The `brand` prop provides a `copy` option for allowing the icon and wordmark to 
   marginBottom="24"
   preview={
     <>
-      <Logo light icon="/trademark/icon-light.svg" wordmark="/trademark/type-light.svg" brand={{ copy: true, url: "https://once-ui.com/brand" }} />
-      <Logo dark icon="/trademark/icon-dark.svg" wordmark="/trademark/type-dark.svg" brand={{ copy: true, url: "https://once-ui.com/brand" }} />
+      <Logo light icon="/trademarks/icon-light.svg" wordmark="/trademarks/type-light.svg" brand={{ copy: true, url: "https://once-ui.com/brand" }} />
+      <Logo dark icon="/trademarks/icon-dark.svg" wordmark="/trademarks/type-dark.svg" brand={{ copy: true, url: "https://once-ui.com/brand" }} />
     </>
   }
   codes={[
     {
       code:
 `<Logo
-    wordmark="/trademark/type-dark.svg"
+    wordmark="/trademarks/type-dark.svg"
     brand={{
       copy: true,
       url: "https://once-ui.com/brand"

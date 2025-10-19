@@ -1,12 +1,11 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, KeyboardEvent, useId } from "react";
+import { useState, useCallback, useRef, useEffect, KeyboardEvent, useId, memo, useMemo } from "react";
 import {
   SegmentedControl,
   ButtonOption,
   IconButton,
   Grid,
-  Scroller,
   Flex,
   Text,
   Input,
@@ -15,6 +14,7 @@ import {
   Row,
 } from ".";
 import { useDebounce } from "../hooks/useDebounce";
+import styles from "./EmojiPicker.module.scss";
 
 type EmojiItem = {
   char: string;
@@ -97,6 +97,37 @@ export interface EmojiPickerProps extends Omit<React.ComponentProps<typeof Flex>
   style?: React.CSSProperties;
 }
 
+// Memoized emoji button to prevent unnecessary re-renders
+interface EmojiButtonProps {
+  emoji: EmojiItem;
+  index: number;
+  isFocused: boolean;
+  onSelect: (emoji: string) => void;
+  onFocus: (index: number) => void;
+}
+
+const EmojiButton = memo(({ emoji, index, isFocused, onSelect, onFocus }: EmojiButtonProps) => {
+  return (
+    <IconButton
+      key={index}
+      tabIndex={index === 0 || isFocused ? 0 : -1}
+      variant="tertiary"
+      size="l"
+      onClick={() => onSelect(emoji.char)}
+      aria-label={emoji.description}
+      title={emoji.description}
+      className={styles.emojiButton}
+      onFocus={() => onFocus(index)}
+      role="gridcell"
+      ref={isFocused ? (el) => el?.focus() : undefined}
+    >
+      <Text variant="heading-default-xl">{emoji.char}</Text>
+    </IconButton>
+  );
+});
+
+EmojiButton.displayName = "EmojiButton";
+
 const EmojiPicker = ({
   onSelect,
   onClose,
@@ -155,16 +186,23 @@ const EmojiPicker = ({
     setActiveCategory(value);
   }, []);
 
-  const filteredEmojis = searchQuery
-    ? Object.values(emojiData)
-        .flat()
-        .filter((emoji: EmojiItem) => emoji.description.includes(searchQuery.toLowerCase()))
-    : emojiData[activeCategory as keyof typeof emojiData] || [];
+  const filteredEmojis = useMemo(() => 
+    searchQuery
+      ? Object.values(emojiData)
+          .flat()
+          .filter((emoji: EmojiItem) => emoji.description.includes(searchQuery.toLowerCase()))
+      : emojiData[activeCategory as keyof typeof emojiData] || []
+  , [searchQuery, activeCategory]);
 
   // Reset focused index when filtered emojis change
   useEffect(() => {
     setFocusedEmojiIndex(-1);
   }, [filteredEmojis]);
+
+  // Memoize the onFocus handler to prevent re-creating on every render
+  const handleFocus = useCallback((index: number) => {
+    setFocusedEmojiIndex(index);
+  }, []);
 
   // Handle keyboard navigation
   const handleKeyDown = useCallback(
@@ -242,7 +280,7 @@ const EmojiPicker = ({
         aria-label="Search emojis"
       />
 
-      <Scroller tabIndex={-1} direction="column" fillHeight fadeColor={background}>
+      <Column tabIndex={-1} fillHeight overflowY="auto" overflowX="hidden">
         {filteredEmojis.length > 0 ? (
           <Grid
             gap="2"
@@ -254,37 +292,23 @@ const EmojiPicker = ({
             tabIndex={-1}
             role="grid"
           >
-            {filteredEmojis.map((emoji: EmojiItem, index: number) => {
-              const isFocused = index === focusedEmojiIndex;
-              return (
-                <IconButton
-                  key={index}
-                  tabIndex={index === 0 || isFocused ? 0 : -1}
-                  variant="tertiary"
-                  size="l"
-                  onClick={() => handleEmojiSelect(emoji.char)}
-                  aria-label={emoji.description}
-                  title={emoji.description}
-                  style={{
-                    transform: isFocused ? "scale(1.05)" : "scale(1)",
-                    background: isFocused ? "var(--neutral-alpha-weak)" : "transparent",
-                    transition: "transform 0.1s ease, outline 0.1s ease",
-                  }}
-                  onFocus={() => setFocusedEmojiIndex(index)}
-                  role="gridcell"
-                  ref={isFocused ? (el) => el?.focus() : undefined}
-                >
-                  <Text variant="heading-default-xl">{emoji.char}</Text>
-                </IconButton>
-              );
-            })}
+            {filteredEmojis.map((emoji: EmojiItem, index: number) => (
+              <EmojiButton
+                key={index}
+                emoji={emoji}
+                index={index}
+                isFocused={index === focusedEmojiIndex}
+                onSelect={handleEmojiSelect}
+                onFocus={handleFocus}
+              />
+            ))}
           </Grid>
         ) : (
           <Row fill center align="center" onBackground="neutral-weak">
             No results found
           </Row>
         )}
-      </Scroller>
+      </Column>
 
       {!searchQuery && (
         <SegmentedControl

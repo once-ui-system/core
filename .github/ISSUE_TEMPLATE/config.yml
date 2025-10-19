@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentation
+    url: https://docs.once-ui.com
+    about: Check out our documentation for guides and API references
+  - name: 💬 Discord Community
+    url: https://discord.com/invite/5EyAQ4eNdS
+    about: Join our Discord for help, support and discussion with the community
+  - name: 🔍 Discussions
+    url: https://github.com/once-ui-system/core/discussions
+    about: Ask questions and discuss ideas with the community

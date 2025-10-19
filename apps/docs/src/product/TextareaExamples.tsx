@@ -29,3 +29,23 @@ export function ValidationTextareaExample() {
     />
   );
 }
+
+export function TextareaCharacterCountExample() {
+  const [bio, setBio] = useState<string>("");
+  
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setBio(e.target.value);
+  };
+  
+  return (
+    <Textarea
+      id="character-count-textarea"
+      placeholder="Bio"
+      value={bio}
+      onChange={handleChange}
+      maxLength={200}
+      characterCount
+      lines={4}
+    />
+  );
+}

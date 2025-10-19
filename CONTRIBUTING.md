@@ -51,7 +51,7 @@ Before submitting a PR:
 
 ### Best practices
 
-- Follow our [component conventions](https://docs.once-ui.com/once-ui/components) and file structure.
+- Follow our [component conventions](https://docs.once-ui.com/once-ui/basics/components) and file structure.
 - Use the naming system and design tokens already defined in the project.
 
 ## Join the community

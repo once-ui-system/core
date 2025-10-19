@@ -150,14 +150,21 @@ const loadedLanguages = new Set<string>(["markup", "css", "clike", "javascript"]
 const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
   if (typeof window === "undefined") return false;
 
+  // Handle language aliases
+  const languageAliases: Record<string, string> = {
+    ts: "typescript",
+  };
+  
+  const actualLang = languageAliases[lang] || lang;
+
   // Skip if already loaded
-  if (loadedLanguages.has(lang)) {
+  if (loadedLanguages.has(actualLang)) {
     return true;
   }
 
   try {
     // Load dependencies first
-    const dependencies = languageDependencies[lang] || [];
+    const dependencies = languageDependencies[actualLang] || [];
     for (const dep of dependencies) {
       if (!loadedLanguages.has(dep)) {
         await loadLanguageWithDependencies(dep);
@@ -165,8 +172,9 @@ const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
     }
 
     // Load the main language
-    await import(`prismjs/components/prism-${lang}`);
-    loadedLanguages.add(lang);
+    await import(`prismjs/components/prism-${actualLang}`);
+    loadedLanguages.add(actualLang);
+    loadedLanguages.add(lang); // Also mark the alias as loaded
     return true;
   } catch (error) {
     console.warn(`✗ Failed to load Prism language '${lang}':`, error);
@@ -283,11 +291,16 @@ const renderDiff = (
 
   // Apply syntax highlighting to code lines
   let highlightedLines: string[] = [];
+  
   if (lang && Prism.languages[lang]) {
     try {
       highlightedLines = codeLines.map((line) => {
         try {
-          return Prism.highlight(line.content, Prism.languages[lang], lang);
+          // Check if language is loaded before highlighting
+          if (Prism.languages[lang]) {
+            return Prism.highlight(line.content, Prism.languages[lang], lang);
+          }
+          return line.content;
         } catch (error) {
           console.warn(`Failed to highlight line: ${line.content}`, error);
           return line.content;
@@ -407,6 +420,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     language: "",
   };
   const { code, language, startLineNumber } = codeInstance;
+  
   const highlight =
     codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
 
@@ -432,7 +446,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         Prism.highlightAll();
       }, 0);
     }
-  }, [dependenciesLoaded, code, codes.length, selectedInstance, isFullscreen, isAnimating]);
+  }, [dependenciesLoaded, code, codes.length, selectedInstance, isFullscreen, isAnimating, language]);
 
   useEffect(() => {
     if (isFullscreen) {
@@ -710,6 +724,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           border={!compact && !preview ? "neutral-alpha-weak" : undefined}
           fillHeight={fillHeight}
           radius="l"
+          paddingRight="2"
+          paddingBottom="2"
           flex="1"
           style={{
             left: "-1px",

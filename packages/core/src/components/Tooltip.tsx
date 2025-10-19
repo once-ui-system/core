@@ -1,10 +1,11 @@
 import React, { forwardRef, ReactNode } from "react";
 import classNames from "classnames";
 
-import { Flex, Icon } from ".";
+import { Icon, Row } from ".";
 import { IconName } from "../icons";
+import styles from "./Tooltip.module.scss";
 
-interface TooltipProps extends React.ComponentProps<typeof Flex> {
+interface TooltipProps extends React.ComponentProps<typeof Row> {
   label: ReactNode;
   prefixIcon?: IconName;
   suffixIcon?: IconName;
@@ -15,7 +16,7 @@ interface TooltipProps extends React.ComponentProps<typeof Flex> {
 const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
   ({ label, prefixIcon, suffixIcon, className, style, ...flex }, ref) => {
     return (
-      <Flex
+      <Row
         m={{ hide: true }}
         ref={ref}
         style={{
@@ -32,20 +33,20 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         radius="s"
         border="neutral-medium"
         role="tooltip"
-        className={classNames(className)}
+        className={classNames(styles.fadeIn, className)}
         {...flex}
       >
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}
-        <Flex
+        <Row
           paddingX="2"
           vertical="center"
           textVariant="body-default-xs"
           onBackground="neutral-strong"
         >
           {label}
-        </Flex>
+        </Row>
         {suffixIcon && <Icon name={suffixIcon} size="xs" />}
-      </Flex>
+      </Row>
     );
   },
 );

@@ -1,0 +1,242 @@
+---
+title: "EmojiPickerDropdown"
+summary: "The EmojiPickerDropdown component provides a dropdown interface for selecting emojis."
+updatedAt: "2025-10-13"
+docs: "once-ui/components/emojiPickerDropdown.mdx"
+github: "components/EmojiPickerDropdown.tsx"
+navLabel: "EmojiPickerDropdown"
+navIcon: "components"
+---
+
+The `EmojiPickerDropdown` component combines the `EmojiPicker` with a `DropdownWrapper` to provide a complete dropdown emoji selection experience. Simply pass a trigger element and handle emoji selection.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <BasicEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPickerDropdown
+    trigger={<Button label="Select Emoji" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+  />
+  {selectedEmoji && (
+    <Text variant="heading-default-xl">
+      Selected: {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "EmojiPickerDropdown"
+    }
+  ]}
+/>
+
+## With IconButton trigger
+
+You can use an `IconButton` as the trigger for a more compact UI.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <IconButtonEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPickerDropdown
+    trigger={<IconButton icon="smiley" variant="secondary" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+  />
+  {selectedEmoji && (
+    <Text variant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "With IconButton"
+    }
+  ]}
+/>
+
+## Columns
+
+You can customize the number of columns in the emoji grid.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CustomColumnsEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPickerDropdown
+    trigger={<Button label="Select Emoji (10 columns)" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    columns="10"
+  />
+  {selectedEmoji && (
+    <Text variant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "Custom columns"
+    }
+  ]}
+/>
+
+## Placement
+
+Control where the dropdown appears relative to the trigger using the `placement` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <PlacementEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" wrap vertical="center">
+  <EmojiPickerDropdown
+    trigger={<Button label="Top" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    placement="top"
+  />
+  <EmojiPickerDropdown
+    trigger={<Button label="Bottom" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    placement="bottom"
+  />
+  <EmojiPickerDropdown
+    trigger={<Button label="Left" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    placement="left"
+  />
+  <EmojiPickerDropdown
+    trigger={<Button label="Right" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    placement="right"
+  />
+  {selectedEmoji && (
+    <Text variant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "Placement"
+    }
+  ]}
+/>
+
+## Custom background
+
+Customize the dropdown background color.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CustomBackgroundEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPickerDropdown
+    trigger={<Button label="Custom Background" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    background="neutral-weak"
+  />
+  {selectedEmoji && (
+    <Text variant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "Custom background"
+    }
+  ]}
+/>
+
+## Controlled state
+
+Control the open/close state externally using `isOpen` and `onOpenChange`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ControlledEmojiPickerDropdown />
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+const [selectedEmoji, setSelectedEmoji] = useState("");
+
+<Row gap="16" vertical="center">
+  <EmojiPickerDropdown
+    trigger={<Button label="Controlled Dropdown" />}
+    onSelect={(emoji) => setSelectedEmoji(emoji)}
+    isOpen={isOpen}
+    onOpenChange={setIsOpen}
+  />
+  <Button 
+    variant="secondary" 
+    label={isOpen ? "Close" : "Open"} 
+    onClick={() => setIsOpen(!isOpen)}
+  />
+  {selectedEmoji && (
+    <Text variant="heading-default-xl">
+      {selectedEmoji}
+    </Text>
+  )}
+</Row>`,
+      language: "tsx",
+      label: "Controlled state"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["trigger", "ReactElement", "The element that triggers the dropdown (required)"],
+    ["onSelect", "(emoji: string) => void", "Callback when an emoji is selected (required)"],
+    ["columns", "gridSize", "Number of columns in the emoji grid", "8"],
+    ["background", "StyleProps['background']", "Background color of the dropdown", "surface"],
+    ["closeAfterClick", "boolean", "Whether to close dropdown after selecting emoji", "true"],
+    ["placement", "Placement", "Position of dropdown relative to trigger", "bottom"],
+    ["isOpen", "boolean", "Controlled open state"],
+    ["onOpenChange", "(open: boolean) => void", "Callback when open state changes"],
+    ["fillWidth", "boolean", "Whether dropdown matches trigger width"],
+    ["minDropdownWidth", "number", "Minimum width of dropdown in pixels"]
+  ]}
+/>

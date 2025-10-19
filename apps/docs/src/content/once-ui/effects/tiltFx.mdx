@@ -1,14 +1,16 @@
 ---
 title: "TiltFx"
 summary: "Applies a subtle 3D tilt effect based on mouse movement. Ideal for interactive cards or media blocks."
-updatedAt: "2025-05-11"
+updatedAt: "2025-10-14"
 docs: "once-ui/effects/tiltFx.mdx"
 github: "components/TiltFx.tsx"
 navLabel: "TiltFx"
 navIcon: "sparkle"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
-TiltFx creates a depth-based tilt animation that follows the user’s mouse cursor. The effect is driven by `rotateX`/`rotateY` transforms and resets on mouse leave. It’s designed for hoverable visual elements like images or feature blocks.
+TiltFx creates a depth-based tilt animation that follows the user's mouse cursor. The effect is driven by `rotateX`/`rotateY` transforms and resets on mouse leave. It's designed for hoverable visual elements like images or feature blocks.
 
 <CodeBlock
   marginTop="16"
@@ -38,7 +40,66 @@ TiltFx creates a depth-based tilt animation that follows the user’s mouse curs
     <Text>Purple Worm</Text>
 </TiltFx>`,
       language: "tsx",
-      label: "TiltFx"
+      label: "Basic"
+    }
+  ]}
+/>
+
+## Intensity
+
+Control the strength of the tilt effect with the `intensity` prop. Lower values create a subtle effect, while higher values make it more dramatic.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" wrap horizontal="center">
+      <TiltFx border="brand-alpha-weak" maxWidth={16} aspectRatio={3 / 4} radius="l">
+        <Media sizes="320px" src="/images/docs/once-ui/purple-worm.jpg" />
+        <Flex
+          fillWidth
+          position="absolute"
+          bottom="0"
+          height={10}
+          horizontal="center"
+          vertical="end"
+          paddingBottom="16"
+          textVariant="body-default-xs"
+        >
+          Default (1)
+        </Flex>
+      </TiltFx>
+      <TiltFx border="brand-alpha-weak" maxWidth={16} aspectRatio={3 / 4} radius="l" intensity={4}>
+        <Media sizes="320px" src="/images/docs/once-ui/purple-worm.jpg" />
+        <Flex
+          fillWidth
+          position="absolute"
+          bottom="0"
+          height={10}
+          horizontal="center"
+          vertical="end"
+          paddingBottom="16"
+          textVariant="body-default-xs"
+        >
+          Strong (4)
+        </Flex>
+      </TiltFx>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<TiltFx intensity={1}>
+    <Media src="/images/purple-worm.jpg" />
+    <Text>Default (1)</Text>
+</TiltFx>
+
+<TiltFx intensity={4}>
+    <Media src="/images/purple-worm.jpg" />
+    <Text>Strong (4)</Text>
+</TiltFx>`,
+      language: "tsx",
+      label: "Intensity"
     }
   ]}
 />
@@ -47,6 +108,7 @@ TiltFx creates a depth-based tilt animation that follows the user’s mouse curs
 
 <PropsTable
   content={[
+    ["intensity", "number", "1", "Controls the strength of the tilt effect. Higher values create more dramatic rotation and depth."],
     ["children"],
     ["className"],
     ["style"],

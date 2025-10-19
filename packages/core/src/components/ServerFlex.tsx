@@ -23,6 +23,7 @@ interface ComponentProps
   m?: any;
   s?: any;
   xs?: any;
+  isDefaultBreakpoints?: boolean;
 }
 
 const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
@@ -39,6 +40,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       m,
       s,
       xs,
+      isDefaultBreakpoints = true,
       wrap = false,
       horizontal,
       vertical,
@@ -77,6 +79,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       minWidth,
       minHeight,
       maxHeight,
+      scrollbar = "minimal",
       fit = false,
       fitWidth = false,
       fitHeight = false,
@@ -172,16 +175,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       return `${scheme}-${type}-${weight}`;
     };
 
-    const classes = classNames(
+    let classes = classNames(
       inline ? "display-inline-flex" : "display-flex",
       position && `position-${position}`,
-      l?.position && `l-position-${l.position}`,
-      m?.position && `m-position-${m.position}`,
-      s?.position && `s-position-${s.position}`,
       hide && "flex-hide",
-      l?.hide && "l-flex-hide",
-      m?.hide && "m-flex-hide",
-      s?.hide && "s-flex-hide",
       padding && `p-${padding}`,
       paddingLeft && `pl-${paddingLeft}`,
       paddingRight && `pr-${paddingRight}`,
@@ -235,9 +232,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       bottomLeftRadius && `radius-${bottomLeftRadius}-bottom-left`,
       bottomRightRadius && `radius-${bottomRightRadius}-bottom-right`,
       direction && `flex-${direction}`,
-      l?.direction && `l-flex-${l.direction}`,
-      m?.direction && `m-flex-${m.direction}`,
-      s?.direction && `s-flex-${s.direction}`,
       pointerEvents && `pointer-events-${pointerEvents}`,
       transition && `transition-${transition}`,
       opacity && `opacity-${opacity}`,
@@ -245,6 +239,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
+      (overflow && overflow !== "hidden" || overflowX && overflowX !== "hidden" || overflowY && overflowY !== "hidden") && `scrollbar-${scrollbar}`,
       flex && `flex-${flex}`,
       horizontal &&
         (direction === "row" || direction === "row-reverse" || direction === undefined
@@ -254,30 +249,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
         (direction === "row" || direction === "row-reverse" || direction === undefined
           ? `align-${vertical}`
           : `justify-${vertical}`),
-      l?.horizontal &&
-        (l?.direction === "row" || l?.direction === "row-reverse" || l?.direction === undefined
-          ? `l-justify-${l.horizontal}`
-          : `l-align-${l.horizontal}`),
-      l?.vertical &&
-        (l?.direction === "row" || l?.direction === "row-reverse" || l?.direction === undefined
-          ? `l-align-${l.vertical}`
-          : `l-justify-${l.vertical}`),
-      m?.horizontal &&
-        (m?.direction === "row" || m?.direction === "row-reverse" || m?.direction === undefined
-          ? `m-justify-${m.horizontal}`
-          : `m-align-${m.horizontal}`),
-      m?.vertical &&
-        (m?.direction === "row" || m?.direction === "row-reverse" || m?.direction === undefined
-          ? `m-align-${m.vertical}`
-          : `m-justify-${m.vertical}`),
-      s?.horizontal &&
-        (s?.direction === "row" || s?.direction === "row-reverse" || s?.direction === undefined
-          ? `s-justify-${s.horizontal}`
-          : `s-align-${s.horizontal}`),
-      s?.vertical &&
-        (s?.direction === "row" || s?.direction === "row-reverse" || s?.direction === undefined
-          ? `s-align-${s.vertical}`
-          : `s-justify-${s.vertical}`),
       center && "center",
       fit && "fit",
       fitWidth && "fit-width",
@@ -299,6 +270,65 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       className,
       ...variantClasses,
     );
+
+    if (isDefaultBreakpoints) {
+      classes +=
+        " " +
+        classNames(
+          l?.position && `l-position-${l.position}`,
+          m?.position && `m-position-${m.position}`,
+          s?.position && `s-position-${s.position}`,
+          xs?.position && `xs-position-${xs.position}`,
+          l?.hide === true && "l-flex-hide",
+          l?.hide === false && "l-flex-show",
+          m?.hide === true && "m-flex-hide",
+          m?.hide === false && "m-flex-show",
+          s?.hide === true && "s-flex-hide",
+          s?.hide === false && "s-flex-show",
+          xs?.hide === true && "xs-flex-hide",
+          xs?.hide === false && "xs-flex-show",
+          l?.direction && `l-flex-${l.direction}`,
+          m?.direction && `m-flex-${m.direction}`,
+          s?.direction && `s-flex-${s.direction}`,
+          xs?.direction && `xs-flex-${xs.direction}`,
+          l?.horizontal &&
+            (l?.direction === "row" || l?.direction === "row-reverse" || l?.direction === undefined
+              ? `l-justify-${l.horizontal}`
+              : `l-align-${l.horizontal}`),
+          l?.vertical &&
+            (l?.direction === "row" || l?.direction === "row-reverse" || l?.direction === undefined
+              ? `l-align-${l.vertical}`
+              : `l-justify-${l.vertical}`),
+          m?.horizontal &&
+            (m?.direction === "row" || m?.direction === "row-reverse" || m?.direction === undefined
+              ? `m-justify-${m.horizontal}`
+              : `m-align-${m.horizontal}`),
+          m?.vertical &&
+            (m?.direction === "row" || m?.direction === "row-reverse" || m?.direction === undefined
+              ? `m-align-${m.vertical}`
+              : `m-justify-${m.vertical}`),
+          s?.horizontal &&
+            (s?.direction === "row" || s?.direction === "row-reverse" || s?.direction === undefined
+              ? `s-justify-${s.horizontal}`
+              : `s-align-${s.horizontal}`),
+          s?.vertical &&
+            (s?.direction === "row" || s?.direction === "row-reverse" || s?.direction === undefined
+              ? `s-align-${s.vertical}`
+              : `s-justify-${s.vertical}`),
+          xs?.horizontal &&
+            (xs?.direction === "row" ||
+            xs?.direction === "row-reverse" ||
+            xs?.direction === undefined
+              ? `xs-justify-${xs.horizontal}`
+              : `xs-align-${xs.horizontal}`),
+          xs?.vertical &&
+            (xs?.direction === "row" ||
+            xs?.direction === "row-reverse" ||
+            xs?.direction === undefined
+              ? `xs-align-${xs.vertical}`
+              : `xs-justify-${xs.vertical}`),
+        );
+    }
 
     const parseDimension = (
       value: number | SpacingToken | undefined,

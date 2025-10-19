@@ -1,5 +1,8 @@
 {
   "title": "Modules",
   "order": 3,
-  "pages": {}
+  "pages": {
+    "kbar": 1,
+    "megaMenu": 2
+  }
 }

@@ -55,8 +55,8 @@ export default async function Docs({
   
   return (
     <>
-      <Row fillWidth horizontal="center">
-        <Column as="main" maxWidth={layout.content.width} gap="l" paddingBottom="xl">
+      <Row fillWidth horizontal="center" padding="l">
+        <Column as="main" maxWidth={layout.content.width} gap="l" paddingBottom="xl" paddingTop="12">
           <Schema
             as="techArticle"
             title={doc.metadata.title + " – " + schema.name}
@@ -74,7 +74,7 @@ export default async function Docs({
             <Text variant="label-default-l" onBackground="neutral-medium">{sectionTitle}</Text>
             <Heading variant="display-strong-s">{doc.metadata.title}</Heading>
             <Text variant="body-default-s" onBackground="neutral-weak">
-              Last update: {formatDate(doc.metadata.updatedAt)}
+              Updated: {formatDate(doc.metadata.updatedAt)}
             </Text>
             {doc.metadata.github && (
               <Button className="mt-20" href={"https://github.com/once-ui-system/core/blob/main/packages/core/src/" + doc.metadata.github} size="s" variant="secondary" prefixIcon="github" weight="default" data-border="rounded">
@@ -153,13 +153,9 @@ export default async function Docs({
           )}
         </Column>
       </Row>
-      <Column gap="16" maxWidth={layout.sideNav.width} s={{hide: true}} position="sticky" top="80" fitHeight>
-        <Row gap="12" paddingLeft="2" vertical="center" onBackground="neutral-medium" textVariant="label-default-s">
-          <Icon name="document" size="xs"/>
-          On this page
-        </Row>
-        <HeadingNav/>
-      </Column>
+      <Row borderLeft="neutral-alpha-medium" fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
+        <HeadingNav top="80" />
+      </Row>
     </>
   );
 }

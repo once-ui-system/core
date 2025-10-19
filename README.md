@@ -1,65 +1,54 @@
-## Once UI monorepo
+<br/>
 
-This monorepo hosts the official Once UI package and its internal development sandbox. It is designed for testing, development, and contribution—not for production deployment.
+<div align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://docs.once-ui.com/trademark/icon-dark.svg" width="64" height="64">
+    <source media="(prefers-color-scheme: light)" srcset="https://docs.once-ui.com/trademark/icon-light.svg" width="64" height="64">
+    <img alt="Once UI Logo" src="https://docs.once-ui.com/trademark/icon-dark.svg" width="64" height="64">
+  </picture><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://docs.once-ui.com/trademark/type-dark.svg" width="200" height="64">
+    <source media="(prefers-color-scheme: light)" srcset="https://docs.once-ui.com/trademark/type-light.svg" width="200" height="64">
+    <img alt="Once UI Wordmark" src="https://docs.once-ui.com/trademark/type-dark.svg" width="200" height="64">
+  </picture>
 
-## Developer notice
+  <br/>
 
-It includes:
+  The indie design system for Next.js apps
 
-- `packages/core`: the published [@once-ui-system/core](https://www.npmjs.com/package/@once-ui-system/core) package
-- `apps/docs`: the official documentation of Once UI and Magic templates built with [Magic Docs](https://once-ui.com/products/magic-docs)
-- `apps/dev`: a simple sandbox app wired via symlink for testing components
+  [![npm version](https://img.shields.io/npm/v/@once-ui-system/core.svg)](https://www.npmjs.com/package/@once-ui-system/core)
+  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE.md)
+  [![npm downloads](https://img.shields.io/npm/dm/@once-ui-system/core.svg)](https://www.npmjs.com/package/@once-ui-system/core)
+  [![Discord](https://img.shields.io/discord/1083398120035074148?color=7289da&logo=discord&logoColor=white)](https://discord.com/invite/5EyAQ4eNdS)
+</div>
 
-This setup is intended for contributors and maintainers.
-If you're building a real project, we recommend using:
 
-1. [Once UI Starter](https://github.com/once-ui-system/nextjs-starter)
-2. or install via your package manager:
 
-```bash
-npm install @once-ui-system/core
-# or
-yarn add @once-ui-system/core
-# or
-pnpm add @once-ui-system/core
-```
-
-### For contributors
-
-Fork this repo, install dependencies, and run apps:
-
-```bash
-pnpm install
-pnpm dev
-```
-
-The components will update automatically when you make changes to the Core library. If you modify the CSS modules, you'll have to run `pnpm build` in the `packages/core` directory.
+<br/>
 
 ## Documentation
 
-Start here: [docs.once-ui.com](https://docs.once-ui.com/once-ui/quick-start).
+Learn how to set up and build with Once UI at [docs.once-ui.com](https://docs.once-ui.com/once-ui/quick-start).
 
-## Creators
+## Installation
 
-**Lorant One**: [Portfolio](https://lorant.one) / [Threads](https://www.threads.net/@lorant.one) / [LinkedIn](https://www.linkedin.com/in/lorant-one/)
+```bash
+npm install @once-ui-system/core
+```
 
-**Collaborators**: [Once UI Frontiers](https://once-ui.com/about)
+## Authors
 
-## Join the movement
+Built and maintained by [**Lorant One**](https://lorant.one).
 
-![Design Engineers Club](https://docs.once-ui.com/images/docs/vibe-coding-dark.jpg)
+## Community
 
-Join the [Design Engineers Club](https://discord.com/invite/5EyAQ4eNdS) on Discord. Build with intention. Share with integrity.
+Join the [Design Engineers Club](https://discord.com/invite/5EyAQ4eNdS) for help, support and discussion.
 
-## Feedback & Bugs
+Found a bug? Report it [here](https://github.com/once-ui-system/core/issues/new?labels=bug&template=bug_report.md). Got a feature request? Submit it [here](https://github.com/once-ui-system/core/issues/new?labels=feature%20request&template=feature_request.md).
 
-Found a bug? [Report it](https://github.com/once-ui-system/core/issues/new?labels=bug&template=bug_report.md)
-Got an idea? [Submit a request](https://github.com/once-ui-system/core/issues/new?labels=feature%20request&template=feature_request.md)
+## Contributing
 
-## Support us
+Please read our [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to Once UI.
+
+## Sponsors
 
 Once UI is an indie project. [Sponsor us](https://github.com/sponsors/once-ui-system) and get featured on our site!
-
-## License
-
-Distributed under the MIT License. See `LICENSE.txt`.

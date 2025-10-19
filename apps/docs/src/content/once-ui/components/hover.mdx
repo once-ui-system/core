@@ -1,0 +1,308 @@
+---
+title: "Hover"
+summary: "Hover is a wrapper component that displays an overlay on top of its trigger element when hovered or focused."
+updatedAt: "2025-10-08"
+docs: "once-ui/components/hover.mdx"
+github: "components/Hover.tsx"
+navLabel: "Hover"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `Hover` component wraps any element and displays an overlay on top when the user hovers over it or focuses on it. It's perfect for creating interactive cards with hover effects, image overlays, or any content that needs to reveal additional information on interaction.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+      <Hover
+        tabIndex={-1}
+        trigger={
+          <Card maxWidth={24} padding="8" direction="column" radius="l-8" href="#">
+            <Media
+              fillWidth
+              aspectRatio="16 / 9"
+              radius="l"
+              alt="Example"
+              src="/images/docs/once-ui/vibe-coding-light.jpg"
+              sizes="480px"
+            />
+            <Column fillWidth padding="20" gap="8">
+              <Text variant="heading-strong-m">Hover over me</Text>
+              <Text onBackground="neutral-weak" variant="body-default-s">
+                Move your cursor over this card to see the overlay effect.
+              </Text>
+            </Column>
+          </Card>
+        }
+        overlay={
+          <Tag position="absolute" top="24" right="24">
+            New!
+          </Tag>
+        }
+      />
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Hover",
+      code:
+`<Hover
+    tabIndex={-1}
+    trigger={
+      <Card maxWidth={24} padding="8" direction="column" radius="l-8" href="#">
+        <Media
+          fillWidth
+          aspectRatio="16 / 9"
+          radius="l"
+          alt="Example"
+          src="/images/docs/once-ui/vibe-coding-light.jpg"
+          sizes="480px"
+        />
+        <Column fillWidth padding="20" gap="8">
+          <Text variant="heading-strong-m">Hover over me</Text>
+          <Text onBackground="neutral-weak" variant="body-default-s">
+            Move your cursor over this card to see the overlay effect.
+          </Text>
+        </Column>
+      </Card>
+    }
+    overlay={
+      <Tag position="absolute" top="24" right="24">
+        New!
+      </Tag>
+    }
+/>`,
+    }
+  ]}
+/>
+
+## Delay
+
+Add a delay before the overlay appears or disappears with the `delay` and `hideDelay` props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Hover
+      tabIndex={-1}
+      delay={500}
+      hideDelay={1000}
+      trigger={
+        <Card maxWidth={24} padding="8" direction="column" radius="l-8" href="#">
+          <Media
+            fillWidth
+            aspectRatio="16 / 9"
+            radius="l"
+            alt="Example"
+            src="/images/docs/once-ui/vibe-coding-light.jpg"
+            sizes="480px"
+          />
+          <Column fillWidth padding="20" gap="8">
+            <Text variant="heading-strong-m">Hover over me</Text>
+            <Text onBackground="neutral-weak" variant="body-default-s">
+              Move your cursor over this card to see the overlay effect.
+            </Text>
+          </Column>
+        </Card>
+      }
+      overlay={
+        <Row fill horizontal="center" padding="32">
+          <Background top="0" left="0" position="absolute" gradient={{display: true, colorStart: "page-background", y: 0, width: 300, height: 50}} radius="l-8"/>
+          <Row textVariant="heading-strong-m">Read article</Row>
+        </Row>
+      }
+    />
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Delay",
+      code:
+`<Hover
+    tabIndex={-1}
+    delay={500}
+    hideDelay={1000}
+    trigger={
+      <Card maxWidth={24} padding="8" direction="column" radius="l-8" href="#">
+        <Media
+          fillWidth
+          aspectRatio="16 / 9"
+          radius="l"
+          alt="Example"
+          src="/images/docs/once-ui/vibe-coding-light.jpg"
+          sizes="480px"
+        />
+        <Column fillWidth padding="20" gap="8">
+          <Text variant="heading-strong-m">Hover over me</Text>
+          <Text onBackground="neutral-weak" variant="body-default-s">
+            Move your cursor over this card to see the overlay effect.
+          </Text>
+        </Column>
+      </Card>
+    }
+    overlay={
+      <Row fill horizontal="center" padding="32">
+        <Background top="0" left="0" position="absolute" gradient={{display: true, colorStart: "page-background", y: 0, width: 300, height: 50}} radius="l-8"/>
+        <Row textVariant="heading-strong-m">Read article</Row>
+      </Row>
+    }
+/>`,
+    }
+  ]}
+/>
+
+## Accessibility
+
+The component supports keyboard navigation. For non-focusable triggers, add `tabIndex={0}` to make the wrapper keyboard-accessible. If your trigger is already focusable (like a Card with `href`), use `tabIndex={-1}` to prevent duplicate focus stops.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Hover
+      trigger={
+        <Card padding="l" direction="column" gap="12" maxWidth={24} center align="center" radius="l" tabIndex={0}>
+          <Text variant="heading-strong-m">Keyboard accessible</Text>
+          <Text onBackground="neutral-weak" variant="body-default-s">
+            Tab to this card to see the overlay
+          </Text>
+        </Card>
+      }
+      overlay={
+        <Column fill padding="l" gap="12" background="surface" border="neutral-medium" center align="center" radius="l">
+          <Text variant="heading-strong-l">
+            Focused!
+          </Text>
+          <Text onBackground="neutral-weak" variant="body-default-s">
+            Showing an overlay
+          </Text>
+        </Column>
+      }
+    />
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Accessibility",
+      code:
+`<Hover
+    trigger={
+      <Card padding="l" direction="column" gap="12" maxWidth={24} center align="center" radius="l" tabIndex={0}>
+        <Text variant="heading-strong-m">Keyboard accessible</Text>
+        <Text onBackground="neutral-weak" variant="body-default-s">
+          Tab to this card to see the overlay
+        </Text>
+      </Card>
+    }
+    overlay={
+      <Column fill padding="l" gap="12" background="surface" border="neutral-medium" center align="center" radius="l">
+        <Text variant="heading-strong-l">
+          Focused!
+        </Text>
+        <Text onBackground="neutral-weak" variant="body-default-s">
+          Showing an overlay
+        </Text>
+      </Column>
+    }
+/>`,
+    }
+  ]}
+/>
+
+By default, the hover effect is disabled on touch devices. You can set `touch="enable"` to allow hover interactions, or `touch="display"` to always show the overlay on touch devices.
+
+## Interactive
+
+By default, the overlay is not interactive and click events are passed through to the trigger. You can set `interactive` to make the overlay interactive.
+
+<Feedback marginBottom="24" marginTop="16">Be careful when using interactive overlays, since they prevent click events from reaching the trigger.</Feedback>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Hover
+      tabIndex={-1}
+      interactive
+      trigger={
+        <Card maxWidth={24} padding="8" direction="column" radius="l-8">
+          <Media
+            fillWidth
+            aspectRatio="16 / 9"
+            radius="l"
+            alt="Example"
+            src="/images/docs/once-ui/vibe-coding-light.jpg"
+            sizes="480px"
+          />
+          <Column fillWidth padding="20" gap="8">
+            <Text variant="heading-strong-m">Hover over me</Text>
+            <Text onBackground="neutral-weak" variant="body-default-s">
+              Move your cursor over this card to see the overlay effect.
+            </Text>
+          </Column>
+        </Card>
+      }
+      overlay={
+        <Row fill horizontal="center" padding="32">
+          <Button href="#">
+            Read article
+          </Button>
+        </Row>
+      }
+    />
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Hover",
+      code:
+`<Hover
+    tabIndex={-1}
+    interactive
+    trigger={
+      <Card maxWidth={24} padding="8" direction="column" radius="l-8">
+        <Media
+          fillWidth
+          aspectRatio="16 / 9"
+          radius="l"
+          alt="Example"
+          src="/images/docs/once-ui/vibe-coding-light.jpg"
+          sizes="480px"
+        />
+        <Column fillWidth padding="20" gap="8">
+          <Text variant="heading-strong-m">Hover over me</Text>
+          <Text onBackground="neutral-weak" variant="body-default-s">
+            Move your cursor over this card to see the overlay effect.
+          </Text>
+        </Column>
+      </Card>
+    }
+    overlay={
+      <Row fill horizontal="center" padding="32">
+        <Button href="#">
+          Read article
+        </Button>
+      </Row>
+    }
+/>`,
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["trigger", "ReactNode"],
+    ["overlay", "ReactNode"],
+    ["interactive", "boolean", "false"],
+    ["delay", "number", "0"],
+    ["hideDelay", "number", "0"],
+    ["disabled", "boolean", "false"],
+    ["touch", ["disable", "enable", "display"], "disable"],
+    ["...flex"]
+  ]}
+/>

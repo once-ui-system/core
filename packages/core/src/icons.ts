@@ -36,6 +36,7 @@ import {
   HiOutlineArrowTurnDownLeft,
   HiOutlinePlay,
   HiOutlinePause,
+  HiOutlineBars3BottomLeft,
 } from "react-icons/hi2";
 
 import {
@@ -94,6 +95,8 @@ export const iconLibrary: Record<string, IconType> = {
   enter: HiOutlineArrowTurnDownLeft,
   play: HiOutlinePlay,
   pause: HiOutlinePause,
+  screen: HiOutlineComputerDesktop,
+  document: HiOutlineBars3BottomLeft,
 };
 
 export type IconLibrary = typeof iconLibrary;

@@ -30,6 +30,7 @@ const EmojiPickerDropdown: React.FC<EmojiPickerDropdownProps> = ({
     <DropdownWrapper
       {...dropdownProps}
       trigger={trigger}
+      handleArrowNavigation={false}
       dropdown={
         <EmojiPicker
           columns={columns}

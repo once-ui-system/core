@@ -60,10 +60,17 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           ) {
             if (mutation.target instanceof HTMLElement) {
               const element = mutation.target;
-              setIsHighlightedByClass(
-                element.classList.contains("highlighted") ||
-                  element.getAttribute("data-highlighted") === "true",
-              );
+              const hasHighlighted = element.classList.contains("highlighted") ||
+                element.getAttribute("data-highlighted") === "true";
+              
+              // If highlighted class was just added but element is being hovered, remove it immediately
+              if (hasHighlighted && element.matches(':hover')) {
+                element.classList.remove('highlighted');
+                element.removeAttribute('data-highlighted');
+                setIsHighlightedByClass(false);
+              } else {
+                setIsHighlightedByClass(hasHighlighted);
+              }
             }
           }
         });
@@ -75,13 +82,35 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
       });
 
       // Initial check
-      setIsHighlightedByClass(
-        elementRef.current.classList.contains("highlighted") ||
-          elementRef.current.getAttribute("data-highlighted") === "true",
-      );
+      const hasHighlighted = elementRef.current.classList.contains("highlighted") ||
+        elementRef.current.getAttribute("data-highlighted") === "true";
+      
+      // Check if element is being hovered on initial check too
+      if (hasHighlighted && elementRef.current.matches(':hover')) {
+        elementRef.current.classList.remove('highlighted');
+        elementRef.current.removeAttribute('data-highlighted');
+        setIsHighlightedByClass(false);
+      } else {
+        setIsHighlightedByClass(hasHighlighted);
+      }
 
       return () => observer.disconnect();
     }, []);
+
+    // Sync hover state with keyboard navigation by removing highlight from ALL options including self
+    const handleMouseEnter = () => {
+      if (!disabled) {
+        // Remove highlighted class from ALL options (including self) to let CSS :hover take over
+        if (elementRef.current?.parentElement) {
+          const allOptions = elementRef.current.parentElement.querySelectorAll('[role="option"]');
+          allOptions.forEach((option) => {
+            option.classList.remove('highlighted');
+            option.removeAttribute('data-highlighted');
+          });
+        }
+      }
+    };
+
     return (
       <ElementType
         tabIndex={tabIndex}
@@ -100,6 +129,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         className="reset-button-styles fill-width"
         onLinkClick={onLinkClick}
         onClick={() => onClick?.(value)}
+        onMouseEnter={handleMouseEnter}
         data-value={value}
         role="option"
         aria-selected={selected}
@@ -134,7 +164,6 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           {...flex}
         >
           {hasPrefix && <Row className={styles.prefix}>{hasPrefix}</Row>}
-          {children}
           <Column
             horizontal="start"
             style={{
@@ -143,7 +172,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
             fillWidth
           >
             <Text onBackground="neutral-strong" variant="label-default-s">
-              {label}
+              {label || children}
             </Text>
             {description && (
               <Text variant="body-default-xs" onBackground="neutral-weak">

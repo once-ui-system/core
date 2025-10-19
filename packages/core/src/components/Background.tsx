@@ -131,34 +131,43 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
             }
           />
         )}
-        {lines.display && (
-          <Flex
-            position="absolute"
-            top="0"
-            left="0"
-            fill
-            pointerEvents="none"
-            className={styles.lines}
-            opacity={lines.opacity}
-            style={
-              {
-                "--lines-angle": `${lines.angle ?? -45}deg`,
-                "--lines-color": `var(--${lines.color ?? "brand-on-background-weak"})`,
-                "--lines-thickness": `${lines.thickness ?? 1}px`,
-                "--lines-spacing": `var(--static-space-${lines.size ?? "8"})`,
-                background: `
-                repeating-linear-gradient(
-                  var(--lines-angle),
-                  var(--static-transparent),
-                  var(--static-transparent) calc(var(--lines-spacing) - var(--lines-thickness)),
-                  var(--lines-color) calc(var(--lines-spacing) - var(--lines-thickness)),
-                  var(--lines-color) var(--lines-spacing)
-                )
-              `,
-              } as React.CSSProperties
-            }
-          />
-        )}
+        {lines.display && (() => {
+          const angle = lines.angle ?? -45;
+          const angleRad = (angle * Math.PI) / 180;
+          // Adjust spacing to maintain uniform perpendicular distance
+          // For diagonal lines, multiply by the secant of the angle
+          const adjustmentFactor = 1 / Math.cos(angleRad);
+          const baseSpacing = lines.size ?? "8";
+          
+          return (
+            <Flex
+              position="absolute"
+              top="0"
+              left="0"
+              fill
+              pointerEvents="none"
+              className={styles.lines}
+              opacity={lines.opacity}
+              style={
+                {
+                  "--lines-angle": `${angle}deg`,
+                  "--lines-color": `var(--${lines.color ?? "brand-on-background-weak"})`,
+                  "--lines-thickness": `${lines.thickness ?? 1}px`,
+                  "--lines-spacing": `calc(var(--static-space-${baseSpacing}) * ${adjustmentFactor})`,
+                  background: `
+                  repeating-linear-gradient(
+                    var(--lines-angle),
+                    var(--static-transparent),
+                    var(--static-transparent) calc(var(--lines-spacing) - var(--lines-thickness)),
+                    var(--lines-color) calc(var(--lines-spacing) - var(--lines-thickness)),
+                    var(--lines-color) var(--lines-spacing)
+                  )
+                `,
+                } as React.CSSProperties
+              }
+            />
+          );
+        })()}
         {grid.display && (
           <Flex
             position="absolute"

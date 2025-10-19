@@ -79,6 +79,25 @@ export function ValidationInputExample() {
   );
 }
 
+export function CharacterCountExample() {
+  const [bio, setBio] = useState<string>("");
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBio(e.target.value);
+  };
+  
+  return (
+    <Input
+      id="character-count-input"
+      placeholder="Bio"
+      value={bio}
+      onChange={handleChange}
+      maxLength={100}
+      characterCount
+    />
+  );
+}
+
 // Color input example with managed state
 export function ColorInputExample() {
   const [colorValue, setColorValue] = useState("#4287f5");

@@ -1,0 +1,205 @@
+---
+title: "ShineFx"
+summary: "Adds a smooth animated shine effect to text. Perfect for highlighting key features or creating eye-catching headings."
+updatedAt: "2025-10-14"
+docs: "once-ui/effects/shineFx.mdx"
+github: "components/ShineFx.tsx"
+navLabel: "ShineFx"
+navIcon: "sparkle"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+ShineFx creates a smooth, animated shine effect that sweeps across text. The effect uses a gradient that moves horizontally, creating a shimmering appearance ideal for drawing attention to important text.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ShineFx variant="heading-default-xl" speed={0.75}>
+      Thinking...
+    </ShineFx>
+  }
+  codes={[
+    {
+      code:
+`<ShineFx variant="heading-default-xl">
+    Shine bright like a diamond
+</ShineFx>`,
+      language: "tsx",
+      label: "Basic"
+    }
+  ]}
+/>
+
+## Speed
+
+Adjust the animation speed with the `speed` prop. Higher values create slower animations, while lower values make the shine effect faster.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <ShineFx variant="heading-default-l" speed={2}>
+        Fast shine (2s)
+      </ShineFx>
+      <ShineFx variant="heading-default-l" speed={5}>
+        Default shine (5s)
+      </ShineFx>
+      <ShineFx variant="heading-default-l" speed={10}>
+        Slow shine (10s)
+      </ShineFx>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ShineFx speed={2}>
+    Fast shine (2s)
+</ShineFx>
+
+<ShineFx speed={5}>
+    Default shine (5s)
+</ShineFx>
+
+<ShineFx speed={10}>
+    Slow shine (10s)
+</ShineFx>`,
+      language: "tsx",
+      label: "Speed"
+    }
+  ]}
+/>
+
+## Base opacity
+
+Control the base text visibility with the `baseOpacity` prop (0-1). Higher values improve readability and accessibility, while lower values create a more subtle effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <ShineFx variant="heading-default-l" baseOpacity={0.1}>
+        Subtle (0.1)
+      </ShineFx>
+      <ShineFx variant="heading-default-l" baseOpacity={0.3}>
+        Default (0.3)
+      </ShineFx>
+      <ShineFx variant="heading-default-l" baseOpacity={0.6}>
+        More visible (0.6)
+      </ShineFx>
+      <ShineFx variant="heading-default-l" baseOpacity={0.9}>
+        High visibility (0.9)
+      </ShineFx>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ShineFx baseOpacity={0.1}>
+    Subtle (0.1)
+</ShineFx>
+
+<ShineFx baseOpacity={0.3}>
+    Default (0.3)
+</ShineFx>
+
+<ShineFx baseOpacity={0.6}>
+    More visible (0.6)
+</ShineFx>
+
+<ShineFx baseOpacity={0.9}>
+    High visibility (0.9)
+</ShineFx>`,
+      language: "tsx",
+      label: "Opacity"
+    }
+  ]}
+/>
+
+## Disabled
+
+Disable the animation with the `disabled` prop to show static text without the shine effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" wrap>
+      <ShineFx variant="heading-default-l">
+        Animated
+      </ShineFx>
+      <ShineFx variant="heading-default-l" disabled>
+        Disabled
+      </ShineFx>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<ShineFx>
+    Animated
+</ShineFx>
+
+<ShineFx disabled>
+    Disabled
+</ShineFx>`,
+      language: "tsx",
+      label: "Disabled"
+    }
+  ]}
+/>
+
+## Variants
+
+ShineFx works with all Text component variants and styling props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <ShineFx variant="display-default-xs">
+        Display variant
+      </ShineFx>
+      <ShineFx variant="heading-default-l" onBackground="brand-medium">
+        Heading with color
+      </ShineFx>
+      <ShineFx variant="body-default-m" onBackground="danger-weak">
+        Body with color
+      </ShineFx>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ShineFx variant="display-default-xs">
+    Display variant
+</ShineFx>
+
+<ShineFx variant="heading-default-l" onBackground="brand-medium">
+    Heading with color
+</ShineFx>
+
+<ShineFx variant="body-default-m" onBackground="danger-weak">
+    Body with color
+</ShineFx>`,
+      language: "tsx",
+      label: "Variants"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["speed", "number", "5"],
+    ["baseOpacity", "number", "0.3"],
+    ["disabled", "boolean", "false"],
+    ["children", "ReactNode"],
+    ["...text", "TextProps"],
+  ]}
+/>

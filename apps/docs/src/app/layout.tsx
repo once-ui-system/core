@@ -1,14 +1,15 @@
 import '@once-ui-system/core/css/styles.css';
 import '@once-ui-system/core/css/tokens.css';
+import '../resources/custom.scss';
 
 import classNames from "classnames";
 
-import { Footer, Header } from "@/product";
+import { Footer, Header, Sidebar } from "@/product";
 import { baseURL } from "@/resources";
 
 import { Analytics } from "@vercel/analytics/react"
 
-import { Background, Column, Flex, Meta } from "@once-ui-system/core";
+import { Background, Column, Flex, Meta, Row } from "@once-ui-system/core";
 import { dataStyle, effects, layout, schema, style } from "../resources/once-ui.config";
 import { meta } from "@/resources";
 import { RouteGuard } from "@/product/RouteGuard";
@@ -158,7 +159,8 @@ export default function RootLayout({
           />
         </head>
         <Providers>
-          <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}>
+          <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}
+            scrollbar="default">
           <Background
             position="absolute"
             top="0"
@@ -212,13 +214,14 @@ export default function RootLayout({
             <Header />
             <Flex
               fillWidth
-              padding="l"
-              horizontal="center"
               flex={1}
             >
               <Flex horizontal="center" maxWidth={layout.body.width} minHeight="0">
                 <RouteGuard>
-                  {children}
+                  <Sidebar m={{hide: true}} paddingRight="2" />
+                  <Row fillWidth>
+                    {children}
+                  </Row>
                 </RouteGuard>
               </Flex>
             </Flex>

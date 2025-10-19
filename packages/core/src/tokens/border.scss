@@ -13,13 +13,13 @@
     
     --radius-l:         1rem;
     --radius-l-nest-4:  1.25rem;
-    --radius-l-nest-8:  1.75rem;
+    --radius-l-nest-8:  1.625rem;
 
     --radius-xl:        1.25rem;
     --radius-xl-nest-4: 1.5rem;
     --radius-xl-nest-8: 1.875rem;
 
-    --radius-full:       999rem;
+    --radius-full:      999rem;
 }
 
 [data-border="conservative"] {
@@ -43,7 +43,7 @@
     --radius-xl-nest-4: 1rem;
     --radius-xl-nest-8: 1.25rem;
 
-    --radius-full:       999rem;
+    --radius-full:      999rem;
 }
 
 [data-border="rounded"] {
@@ -67,5 +67,29 @@
     --radius-xl-nest-4: 2.25rem;
     --radius-xl-nest-8: 2.75rem;
 
-    --radius-full:       999rem;
+    --radius-full:      999rem;
+}
+
+[data-border="sharp"] {
+    --radius-xs:        0;
+    --radius-xs-nest-4: 0;
+    --radius-xs-nest-8: 0;
+
+    --radius-s:         0;
+    --radius-s-nest-4:  0;
+    --radius-s-nest-8:  0;
+
+    --radius-m:         0;
+    --radius-m-nest-4:  0;
+    --radius-m-nest-8:  0;
+    
+    --radius-l:         0;
+    --radius-l-nest-4:  0;
+    --radius-l-nest-8:  0;
+
+    --radius-xl:        0;
+    --radius-xl-nest-4: 0;
+    --radius-xl-nest-8: 0;
+
+    --radius-full:      999rem;
 }

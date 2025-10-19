@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import { Schemes, Accordion, Column, Flex, Icon, Row, Tag, ToggleButton } from "@once-ui-system/core";
+import { Schemes, Accordion, Column, Flex, Icon, Row, Tag, ToggleButton, Text, Mask, MatrixFx, Card, Hover, Background, Animation, Button, Spinner, Skeleton } from "@once-ui-system/core";
 import { usePathname } from 'next/navigation';
 import { routes, layout } from "@/resources";
 
@@ -334,26 +334,48 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
     }
   }, [initialNavigation, hasLoaded]);
 
-  // Create a stable container that doesn't change
-  const containerStyle = useMemo(() => ({
-    maxHeight: "calc(100vh - var(--static-space-80))"
-  }), []);
-
   return (
-    <Column 
+    <Column
+      fillHeight
+      borderRight="neutral-alpha-medium"
       width={layout.sidebar.width} 
-      minWidth={layout.sidebar.width} 
-      position="sticky" 
-      top="64" 
-      fitHeight 
-      gap="2" 
-      as="nav" 
-      overflowY="auto" 
-      paddingRight="8" 
-      style={containerStyle} 
-      {...rest}
-    >
-      {hasLoaded && <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />}
+      minWidth={layout.sidebar.width}
+      paddingY="4"
+      {...rest}>
+      <Column 
+        position="sticky"
+        fillHeight
+        gap="2" 
+        as="nav" 
+        overflowY="auto"
+        padding="12"
+        style={{maxHeight: "calc(100vh - 4rem)", top: "3.875rem"}}
+      >
+        {hasLoaded ? (
+          <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
+        ) : (
+          <Column fillWidth gap="2">
+            {Array.from({ length: 7 }).map((_, i) => (
+              <Row key={i} height="40" paddingX="4" vertical="center">
+                <Row fill radius="l" overflow="hidden" opacity={50}>
+                  <Skeleton shape="block" delay={i.toString() as any} />
+                </Row>
+              </Row>
+            ))}
+          </Column>
+        )}
+        <Row fill vertical="end" style={{minHeight: "fit-content"}}>
+        <Card href="https://once-ui.com/pricing?ref=docs" fillWidth border="neutral-alpha-medium" background="transparent" radius="l" overflow="hidden">
+          <MatrixFx position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-solid-strong", "static-transparent"]}/>
+          <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
+          <Column fillWidth padding="20" gap="12">
+            <Text variant="heading-strong-s">Get Once UI Pro</Text>
+            <Text variant="label-default-s" onBackground="neutral-weak" marginBottom="8">Build a digital presence with deployment-ready apps</Text>
+            <Button rounded size="s" id="get-pro-banner" arrowIcon>Get Pro</Button>
+          </Column>
+        </Card>
+        </Row>
+      </Column>
     </Column>
   );
 };

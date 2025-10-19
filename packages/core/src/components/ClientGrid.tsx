@@ -5,6 +5,7 @@ import { ServerGrid, Cursor } from ".";
 import { GridProps, StyleProps, DisplayProps } from "../interfaces";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
 import { useLayout } from "..";
+import { useResponsiveClasses } from "../hooks/useResponsiveClasses";
 
 interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];
@@ -20,7 +21,11 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
   ({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
     const elementRef = useRef<HTMLDivElement>(null);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    const { currentBreakpoint } = useLayout();
+    const { currentBreakpoint, isDefaultBreakpoints } = useLayout();
+
+    if (!isDefaultBreakpoints()) {
+      useResponsiveClasses(elementRef, { xl, l, m, s, xs }, currentBreakpoint);
+    }
 
     // Combine refs
     const combinedRef = (node: HTMLDivElement) => {
@@ -114,55 +119,8 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
     // Determine if we should hide the default cursor
     const shouldHideCursor = typeof cursor === "object" && cursor && !isTouchDevice;
 
-    // Determine if we should apply the hide class based on current breakpoint
-    const shouldApplyHideClass = () => {
-      try {
-        const { currentBreakpoint } = useLayout();
-
-        // Logic matching the shouldHide function in Grid component
-        if (currentBreakpoint === "xl") {
-          if (xl?.hide !== undefined) return xl.hide === true;
-          return hide === true;
-        }
-
-        if (currentBreakpoint === "l") {
-          if (l?.hide !== undefined) return l.hide === true;
-          return hide === true;
-        }
-
-        if (currentBreakpoint === "m") {
-          if (m?.hide !== undefined) return m.hide === true;
-          if (l?.hide !== undefined) return l.hide === true;
-          if (xl?.hide !== undefined) return xl.hide === true;
-          return hide === true;
-        }
-
-        if (currentBreakpoint === "s") {
-          if (s?.hide !== undefined) return s.hide === true;
-          if (m?.hide !== undefined) return m.hide === true;
-          if (l?.hide !== undefined) return l.hide === true;
-          if (xl?.hide !== undefined) return xl.hide === true;
-          return hide === true;
-        }
-
-        if (currentBreakpoint === "xs") {
-          if (xs?.hide !== undefined) return xs.hide === true;
-          if (s?.hide !== undefined) return s.hide === true;
-          if (m?.hide !== undefined) return m.hide === true;
-          if (l?.hide !== undefined) return l.hide === true;
-          if (xl?.hide !== undefined) return xl.hide === true;
-          return hide === true;
-        }
-
-        return hide === true;
-      } catch {
-        return hide === true;
-      }
-    };
-
-    // Apply hide class only if it should be hidden at current breakpoint
-    const effectiveHide = shouldApplyHideClass();
-
+    // Pass hide prop directly to ServerGrid - it will handle responsive hiding via CSS classes
+    // No need for client-side logic that causes re-renders on every resize
     return (
       <>
         <ServerGrid
@@ -172,7 +130,8 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
           m={m}
           s={s}
           xs={xs}
-          hide={effectiveHide}
+          isDefaultBreakpoints={isDefaultBreakpoints()}
+          hide={hide}
           ref={combinedRef}
           style={{
             ...props.style,

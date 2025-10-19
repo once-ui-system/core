@@ -107,6 +107,7 @@ const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: Compa
       <Flex
         radius="l"
         background="surface"
+        fitHeight
         className={styles.dragIcon}
         style={{
           left: `${position}%`,
