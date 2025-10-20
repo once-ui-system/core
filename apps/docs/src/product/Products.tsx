@@ -8,49 +8,49 @@ export function Products() {
         {[
           {
             title: "Once UI Core",
-            description: "Build with an open-source design system",
+            description: "Open-source design system for Next.js",
             image: "/images/docs/once-ui.jpg",
             href: "/once-ui/quick-start"
           },
           {
             title: "Magic Portfolio",
-            description: "Showcase your work with a beautiful portfolio template",
+            description: "Beautiful, responsive portfolio template",
             image: "/images/docs/magic-portfolio.jpg",
             href: "/magic-portfolio/quick-start"
           },
           {
             title: "Magic Docs",
-            description: "Create beautiful documentations like this one",
+            description: "Beautiful, MDX documentation template",
             image: "/images/docs/magic-docs.jpg",
             href: "/magic-docs/quick-start"
           },
           {
             title: "Magic Store",
-            description: "Start selling merch with a ready-made storefront",
+            description: "Ready-made storefront for selling merch",
             image: "/images/docs/magic-store.jpg",
             href: "/magic-store/quick-start"
           },
           {
             title: "Supabase Starter",
-            description: "Set up a database and authentication in minutes",
+            description: "App boilerplate with database and authentication",
             image: "/images/docs/supabase-starter.jpg",
             href: "/supabase-starter/quick-start"
           },
           {
             title: "Magic Convert",
-            description: "Launch your conversion-optimized landing page",
+            description: "Conversion-optimized landing page and dashboard",
             image: "/images/docs/magic-convert.jpg",
             href: "/magic-convert/quick-start"
           },
           {
             title: "Magic Agent",
-            description: "Build your chatbot with the Vercel AI SDK",
+            description: "Chatbot with the Vercel AI SDK",
             image: "/images/docs/magic-agent.jpg",
             href: "/magic-agent/quick-start"
           },
           {
             title: "Magic Bio",
-            description: "Launch a modern link-in-bio page",
+            description: "Simple, modern link-in-bio page",
             image: "/images/docs/magic-bio.jpg",
             href: "/magic-bio/quick-start"
           }
