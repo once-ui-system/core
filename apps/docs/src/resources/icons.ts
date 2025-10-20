@@ -14,7 +14,6 @@ import {
   HiArrowUpRight,
   HiOutlineShieldCheck,
   HiOutlineSparkles,
-  HiOutlineBars3BottomLeft,
   HiOutlineHome,
   HiOutlineComputerDesktop,
   HiOutlineAcademicCap,
@@ -62,6 +61,7 @@ import {
   HiOutlineCpuChip,
   HiOutlineTruck,
   HiOutlineArchiveBox,
+  HiOutlineArrowUp,
 } from "react-icons/hi2";
 
 import { LiaCubesSolid } from "react-icons/lia";
@@ -148,6 +148,7 @@ export const iconLibrary: Record<string, IconType> = {
   chip: HiOutlineCpuChip,
   truck: HiOutlineTruck,
   package: HiOutlineArchiveBox,
+  arrowUp: HiOutlineArrowUp,
 };
 
 export type IconLibrary = typeof iconLibrary;

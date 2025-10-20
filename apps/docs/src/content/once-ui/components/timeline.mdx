@@ -50,23 +50,23 @@ Use `label` and `description` props for quick setup.
     {
       code:
 `<Timeline
-  items={[
-    {
-      label: "January 2024",
-      description: "Project kickoff",
-      state: "completed"
-    },
-    {
-      label: "October 2024",
-      description: "Development in progress",
-      state: "active"
-    },
-    {
-      label: "December 2024",
-      description: "Launch planned",
-      state: "default"
-    }
-  ]}
+    items={[
+      {
+        label: "January 2024",
+        description: "Project kickoff",
+        state: "completed"
+      },
+      {
+        label: "October 2024",
+        description: "Development in progress",
+        state: "active"
+      },
+      {
+        label: "December 2024",
+        description: "Launch planned",
+        state: "default"
+      }
+    ]}
 />`,
       language: "tsx",
       label: "Basic"
@@ -111,20 +111,22 @@ Control timeline alignment with the `alignment` prop. Use `left` or `right` for 
   codes={[
     {
       code:
-`// Left aligned (default)
-<Timeline
-  items={[
-    { label: "First milestone", state: "completed" }
-  ]}
+`<Timeline
+    size="s"
+    items={[
+      { label: "First milestone", state: "default" },
+      { label: "Current work", state: "active" },
+      { label: "Future work", state: "default" }
+    ]}
 />
-
-// Alternate sides
 <Timeline
-  alignment="alternate"
-  items={[
-    { label: "Left side", state: "completed" },
-    { label: "Right side", state: "active" }
-  ]}
+    alignment="right"
+    size="s"
+    items={[
+      { label: "First milestone", state: "default" },
+      { label: "Current work", state: "active" },
+      { label: "Future work", state: "default" }
+    ]}
 />`,
       language: "tsx",
       label: "Alignment"
@@ -198,12 +200,23 @@ Control size with the `size` prop: `xs`, `s`, `m`, `l` or `xl`.
     {
       code:
 `<Timeline
-  items={[
-    { label: "Small", size: "s" },
-    { label: "Medium", size: "m" },
-    { label: "Large", size: "l" }
-  ]}
+    size="xs"
+    items={[
+      {
+        label: "Step 1",
+        state: "default"
+      },
+      {
+        label: "Step 2",
+        state: "default"
+      },
+      {
+        label: "Step 3",
+        state: "active"
+      }
+    ]}
 />`,
+      highlight: "2",
       language: "tsx",
       label: "Sizes"
     }
@@ -273,26 +286,25 @@ Customize the marker with the `marker` prop.
     {
       code:
 `<Timeline
-  items={[
-    {
-      marker: 1,
-      label: "Create account",
-      description: "Sign up with email",
-      state: "completed"
-    },
-    {
-      marker: 2,
-      label: "Verify email",
-      description: "Click the link",
-      state: "completed"
-    },
-    {
-      marker: 3,
-      label: "Complete profile",
-      description: "Add your info",
-      state: "active"
-    }
-  ]}
+    items={[
+      {
+        marker: 1,
+        label: "Create account",
+        description: "Sign up with email and password",
+        state: "completed"
+      },
+      ...
+    ]}
+/>
+<Timeline
+    items={[
+      {
+        marker: <Icon name="check" size="s" />,
+        label: "Payment received",
+        state: "completed"
+      },
+      ...
+    ]}
 />`,
       language: "tsx",
       label: "Marker"
@@ -324,12 +336,12 @@ Visual feedback with different marker states: `default`, `active`, `success`, an
     {
       code:
 `<Timeline
-  items={[
-    { label: "Default", state: "default" },
-    { label: "Active", state: "active" },
-    { label: "Success", state: "success" },
-    { label: "Danger", state: "danger" }
-  ]}
+    items={[
+      { label: "Default", state: "default" },
+      { label: "Active", state: "active" },
+      { label: "Success", state: "success" },
+      { label: "Danger", state: "danger" }
+    ]}
 />`,
       language: "tsx",
       label: "States"
@@ -384,23 +396,19 @@ Extend the label and description with custom React nodes. Use the `children` pro
     {
       code:
 `<Timeline
-  items={[
-    {
-      state: "completed",
-      children: (
-        <Column gap="4">
-          <Row gap="8" vertical="center">
-            <Text variant="label-default-m">Version 1.0</Text>
-            <Badge variant="success">Shipped</Badge>
+    items={[
+      {
+        state: "completed",
+        label: <Row vertical="center" gap="8">Dispatched<Tag variant="success">Done</Tag></Row>,
+        description: "Order #123456789",
+        children: (
+          <Row fitWidth radius="full" paddingY="4" paddingX="8" border="neutral-alpha-medium" textVariant="label-default-xs" onBackground="neutral-weak" marginTop="8">
+            3 days ago
           </Row>
-          <Text variant="body-default-s">
-            Initial product launch
-          </Text>
-          <Text variant="label-default-xs">3 months ago</Text>
-        </Column>
-      )
-    }
-  ]}
+        )
+      },
+      ...
+    ]}
 />`,
       language: "tsx",
       label: "Extra content"
@@ -445,19 +453,27 @@ Use the `marker` prop to render custom marker elements.
     {
       code:
 `<Timeline
-  direction="row"
-  items={[
-    {
-      marker: <Icon name="check" size="s" />,
-      label: "Payment received",
-      state: "completed"
-    },
-    {
-      marker: <Icon name="check" size="s" />,
-      label: "Order shipped",
-      state: "active"
-    }
-  ]}
+    fillWidth
+    direction="row"
+    size="xs"
+    items={[
+      {
+        label: "Order",
+        state: "active"
+      },
+      {
+        label: "Confirmation",
+        state: "success"
+      },
+      {
+        label: "Overview",
+        state: "danger"
+      },
+      {
+        label: "Payment",
+        state: "default"
+      }
+    ]}
 />`,
       language: "tsx",
       label: "Custom markers"
@@ -471,6 +487,7 @@ Use the `marker` prop to render custom marker elements.
 <PropsTable
   content={[
     ["items", "TimelineItem[]", "required"],
+    ["direction", ["column", "row"], "column"],
     ["alignment", ["left", "right"], "left"],
     ["size", ["xs", "s", "m", "l", "xl"], "m"],
     ["...flex"],
@@ -480,10 +497,10 @@ Use the `marker` prop to render custom marker elements.
 ### TimelineItem
 <PropsTable
   content={[
-    ["label", "ReactNode", ""],
-    ["description", "ReactNode", ""],
+    ["label", "ReactNode"],
+    ["description", "ReactNode"],
     ["state", ["default", "active", "completed", "error"], "default"],
-    ["marker", "ReactNode", ""],
-    ["children", "ReactNode", ""],
+    ["marker", "ReactNode"],
+    ["children", "ReactNode"],
   ]}
 />
