@@ -264,7 +264,7 @@ const Footer = () => {
         </Row>
         <Row gap="8" paddingY="24" center maxWidth="xl" textVariant="label-default-s" onBackground="neutral-medium" borderX="neutral-alpha-medium">
           Built with curiosity by{" "}
-          <SmartLink href="https://dopler.app" unstyled>
+          <SmartLink href="https://lorant.one" unstyled>
             <Avatar size="xs" src="/images/avatar.jpg"/>
             Lorant One
           </SmartLink>
