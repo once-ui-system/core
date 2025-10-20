@@ -364,7 +364,7 @@ const renderDiff = (
 
 type CodeInstance = {
   code: string | { content: string; error: string | null };
-  language: Language | ["diff", Language];
+  language: string | ["diff", string];
   label: string;
   highlight?: string;
   prefixIcon?: string;
