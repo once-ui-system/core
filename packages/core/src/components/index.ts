@@ -12,6 +12,7 @@ export * from "./Background";
 export * from "./BlockQuote";
 export * from "./Button";
 export * from "./MatrixFx";
+export * from "./WeatherFx";
 export * from "./Carousel";
 export * from "./Swiper";
 export * from "./Card";

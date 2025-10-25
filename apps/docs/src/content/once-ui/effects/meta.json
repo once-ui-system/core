@@ -3,8 +3,9 @@
   "order": 7,
   "pages": {
     "matrixFx": 1,
-    "shineFx": 2,
-    "typeFx": 3,
-    "tiltFx": 4
+    "weatherFx": 2,
+    "shineFx": 3,
+    "typeFx": 4,
+    "tiltFx": 5
   }
 }

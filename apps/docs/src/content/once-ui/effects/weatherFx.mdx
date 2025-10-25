@@ -1,0 +1,774 @@
+---
+title: "WeatherFx"
+summary: "The WeatherFx component creates animated weather effects (rain, snow, leaves) using native Canvas 2D API."
+updatedAt: "2025-10-25"
+docs: "once-ui/effects/WeatherFx.mdx"
+github: "components/WeatherFx.tsx"
+navLabel: "WeatherFx"
+navIcon: "sparkle"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `WeatherFx` component creates animated weather effects using the native Canvas 2D API. It supports rain, snow, and falling leaves with customizable colors, speed, and intensity. Perfect for backgrounds, hero sections, or thematic content areas.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <WeatherFx
+      height={24}
+      type="rain"
+      colors={["accent-solid-medium"]}
+      intensity={75}
+    />
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={24}
+    type="rain"
+    colors={["accent-solid-medium"]}
+    intensity={75}
+/>`,
+      language: "tsx",
+      label: "WeatherFx"
+    }
+  ]}
+/>
+
+## Weather Types
+
+Switch between different weather effects: rain, snow, and falling leaves.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Row gap="16" fillWidth>
+      <WeatherFx
+        fill
+        height={20}
+        type="rain"
+        colors={["brand-solid-medium"]}
+        intensity={60}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Rain</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={20}
+        type="snow"
+        colors={["neutral-solid-weak"]}
+        intensity={60}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Snow</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={20}
+        type="leaves"
+        colors={["warning-solid-strong", "danger-solid-strong"]}
+        intensity={40}
+        speed={0.7}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Leaves</Text>
+        </Column>
+      </WeatherFx>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={20}
+    type="rain"
+    colors={["brand-solid-medium"]}
+    intensity={60}
+/>
+
+<WeatherFx
+    height={20}
+    type="snow"
+    colors={["neutral-solid-weak"]}
+    intensity={60}
+/>
+
+<WeatherFx
+    height={20}
+    type="leaves"
+    colors={["warning-solid-strong", "danger-solid-strong"]}
+    intensity={40}
+    speed={0.7}
+/>`,
+      language: "tsx",
+      label: "Types"
+    }
+  ]}
+/>
+
+## Intensity
+
+Control the number of particles with the `intensity` prop. Higher values create denser effects.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Row gap="16" fillWidth>
+      <WeatherFx
+        fill
+        height={16}
+        type="rain"
+        intensity={30}
+        colors={["brand-solid-medium"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Light</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={16}
+        type="rain"
+        intensity={75}
+        colors={["brand-solid-medium"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Medium</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={16}
+        type="rain"
+        intensity={150}
+        colors={["brand-solid-medium"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Heavy</Text>
+        </Column>
+      </WeatherFx>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={16}
+    type="rain"
+    intensity={30}
+    colors={["brand-solid-medium"]}
+/>
+
+<WeatherFx
+    height={16}
+    type="rain"
+    intensity={75}
+    colors={["brand-solid-medium"]}
+/>
+
+<WeatherFx
+    height={16}
+    type="rain"
+    intensity={150}
+    colors={["brand-solid-medium"]}
+/>`,
+      language: "tsx",
+      label: "Intensity"
+    }
+  ]}
+/>
+
+## Speed
+
+Control the fall speed with the `speed` prop. Higher values make particles fall faster.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Row gap="16" fillWidth>
+      <WeatherFx
+        fill
+        height={16}
+        type="rain"
+        speed={0.5}
+        colors={["accent-solid-medium"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Slow</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={16}
+        type="rain"
+        speed={1.5}
+        colors={["accent-solid-medium"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Fast</Text>
+        </Column>
+      </WeatherFx>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={16}
+    type="rain"
+    speed={0.5}
+    colors={["accent-solid-medium"]}
+/>
+
+<WeatherFx
+    height={16}
+    type="rain"
+    speed={1.5}
+    colors={["accent-solid-medium"]}
+/>`,
+      language: "tsx",
+      label: "Speed"
+    }
+  ]}
+/>
+
+## Angle
+
+Control the direction with the `angle` prop to simulate wind. Positive values angle to the right, negative to the left.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Row gap="16" fillWidth>
+      <WeatherFx
+        fill
+        height={16}
+        type="rain"
+        angle={-15}
+        colors={["brand-solid-medium"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Left -15°</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={16}
+        type="rain"
+        angle={0}
+        colors={["brand-solid-medium"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Straight 0°</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={16}
+        type="rain"
+        angle={15}
+        colors={["brand-solid-medium"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Right 15°</Text>
+        </Column>
+      </WeatherFx>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={16}
+    type="rain"
+    angle={-15}
+    colors={["brand-solid-medium"]}
+/>
+
+<WeatherFx
+    height={16}
+    type="rain"
+    angle={0}
+    colors={["brand-solid-medium"]}
+/>
+
+<WeatherFx
+    height={16}
+    type="rain"
+    angle={15}
+    colors={["brand-solid-medium"]}
+/>`,
+      language: "tsx",
+      label: "Angle"
+    }
+  ]}
+/>
+
+## Colors
+
+Use multiple colors for variety. Supports CSS variables and any valid color format.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <WeatherFx
+      height={24}
+      type="rain"
+      colors={[
+        "brand-solid-strong",
+        "accent-solid-strong",
+        "success-solid-strong"
+      ]}
+      intensity={100}
+    />
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={24}
+    type="rain"
+    colors={[
+        "brand-solid-strong",
+        "accent-solid-strong",
+        "success-solid-strong"
+    ]}
+    intensity={100}
+/>`,
+      language: "tsx",
+      label: "Colors"
+    }
+  ]}
+/>
+
+## With Content
+
+Overlay content on top of the weather effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <WeatherFx
+      height={24}
+      type="rain"
+      colors={["neutral-solid-weak"]}
+      intensity={100}
+    >
+      <Column gap="16" fill center>
+        <Heading variant="display-strong-xl" onBackground="neutral-strong" align="center">
+          Rainy Day
+        </Heading>
+        <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+          Animated weather effects with native Canvas 2D
+        </Text>
+      </Column>
+    </WeatherFx>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={24}
+    type="rain"
+    colors={["neutral-solid-weak"]}
+    intensity={100}
+>
+    <Column gap="16" fill center>
+      <Heading variant="display-strong-xl">
+        Rainy Day
+      </Heading>
+      <Text variant="body-default-l">
+        Animated weather effects
+      </Text>
+    </Column>
+</WeatherFx>`,
+      language: "tsx",
+      label: "With Content"
+    }
+  ]}
+/>
+
+## Background Effect
+
+Use as a full-screen background effect with absolute positioning.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="16"
+  codeHeight={24}
+  preview={
+    <Row
+      fill
+      center
+      padding="24"
+      border="neutral-alpha-weak"
+      radius="l"
+      overflow="hidden"
+      height={24}
+    >
+      <WeatherFx
+        position="absolute"
+        top="0"
+        left="0"
+        type="rain"
+        colors={["accent-solid-weak"]}
+        intensity={80}
+        speed={1.2}
+      />
+      <Background
+        fill
+        position="absolute"
+        left="0"
+        top="0"
+        x="0"
+        y="0"
+        gradient={{
+          display: true,
+          colorStart: "neutral-background-weak",
+        }}
+        pointerEvents="none"
+      />
+      <Column align="center" horizontal="center" pointerEvents="none" gap="8">
+        <Logo dark icon="/trademarks/icon-dark.svg" />
+        <Logo light icon="/trademarks/icon-light.svg" />
+        <Text variant="label-default-s" onBackground="neutral-weak">Weather Effect</Text>
+      </Column>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row
+    fill
+    center
+    padding="24"
+    border="neutral-alpha-weak"
+    radius="l"
+    overflow="hidden"
+>
+    <WeatherFx
+      position="absolute"
+      top="0"
+      left="0"
+      type="rain"
+      colors={["accent-solid-weak"]}
+      intensity={80}
+      speed={1.2}
+    />
+    <Background
+      fill
+      position="absolute"
+      left="0"
+      top="0"
+      x="0"
+      y="0"
+      gradient={{
+        display: true,
+        colorStart: "neutral-background-weak",
+      }}
+      pointerEvents="none"
+    />
+    <Column align="center" horizontal="center" pointerEvents="none">
+      <Logo dark icon="/trademarks/icon-dark.svg" />
+      <Logo light icon="/trademarks/icon-light.svg" />
+    </Column>
+</Row>`,
+      language: "tsx",
+      label: "Background Effect"
+    }
+  ]}
+/>
+
+## Snow Effect
+
+Snow features realistic physics with depth-based sizing, opacity, and organic floating motion.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <WeatherFx
+      height={24}
+      type="snow"
+      colors={["neutral-solid-weak", "neutral-solid-medium"]}
+      intensity={100}
+      speed={0.8}
+    >
+      <Column gap="16" fill center>
+        <Heading variant="display-strong-xl" onBackground="neutral-strong" align="center">
+          Winter Wonderland
+        </Heading>
+        <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+          Snowflakes with depth and floating motion
+        </Text>
+      </Column>
+    </WeatherFx>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={24}
+    type="snow"
+    colors={["neutral-solid-weak", "neutral-solid-medium"]}
+    intensity={100}
+    speed={0.8}
+>
+    <Column gap="16" fill center>
+      <Heading variant="display-strong-xl">
+        Winter Wonderland
+      </Heading>
+      <Text variant="body-default-l">
+        Snowflakes with depth and motion
+      </Text>
+    </Column>
+</WeatherFx>`,
+      language: "tsx",
+      label: "Snow Effect"
+    }
+  ]}
+/>
+
+## Leaves Effect
+
+Leaves feature gradient colors, rotation animation, and tumbling motion for an autumn feel.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Row fillWidth height={18}>
+      <Mask fill position="absolute" x={100} y={0} radius={50}>
+        <WeatherFx
+          fill
+          type="leaves"
+          colors={["danger-solid-strong", "warning-solid-strong", "warning-background-strong"]}
+          intensity={50}
+          speed={0.6}
+          angle={-60}
+        />
+      </Mask>
+      <LineChart
+        position="absolute"
+        bottom="0"
+        left="0"
+        height={8}
+        border="transparent"
+        grid={{
+          display: false
+        }}
+        axis="none"
+        date={{
+          start: new Date("2024-10-25T00:00:00"),
+          end: new Date("2024-10-25T23:59:59"),
+          format: "HH:mm"
+        }}
+        legend={{
+          display: false,
+        }}
+        series={[
+          { key: "Temperature", color: "red" }
+        ]}
+        data={[
+          { date: "2024-10-25T00:00:00", "Temperature": 8 },
+          { date: "2024-10-25T02:00:00", "Temperature": 7 },
+          { date: "2024-10-25T04:00:00", "Temperature": 6 },
+          { date: "2024-10-25T06:00:00", "Temperature": 5 },
+          { date: "2024-10-25T08:00:00", "Temperature": 7 },
+          { date: "2024-10-25T10:00:00", "Temperature": 11 },
+          { date: "2024-10-25T12:00:00", "Temperature": 14 },
+          { date: "2024-10-25T14:00:00", "Temperature": 14.5 },
+          { date: "2024-10-25T16:00:00", "Temperature": 15 },
+          { date: "2024-10-25T18:00:00", "Temperature": 13 },
+          { date: "2024-10-25T20:00:00", "Temperature": 10 },
+          { date: "2024-10-25T22:00:00", "Temperature": 9 }
+        ]}
+      />
+      <Column gap="16" padding="24" pointerEvents="none">
+        <Heading variant="display-strong-s">
+          9°C
+        </Heading>
+        <Text variant="body-default-l">
+          Saturday, 11:30 AM
+        </Text>
+        <Text variant="label-default-s" onBackground="neutral-weak">
+          Precipitation: 0%<br/>
+          Humidity: 72%<br/>
+          Wind: 8 km/h
+        </Text>
+      </Column>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={24}
+    type="leaves"
+    colors={["warning-solid-strong", "danger-solid-strong", "success-solid-medium"]}
+    intensity={50}
+    speed={0.6}
+    angle={5}
+>
+    <Column gap="16" fill center>
+      <Heading variant="display-strong-xl">
+        Autumn Breeze
+      </Heading>
+      <Text variant="body-default-l">
+        Rotating leaves with gradients
+      </Text>
+    </Column>
+</WeatherFx>`,
+      language: "tsx",
+      label: "Leaves Effect"
+    }
+  ]}
+/>
+
+## Duration
+
+Control how long particles are emitted with the `duration` prop (in seconds). After the duration, existing particles finish their animation but no new ones spawn.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  reloadButton
+  preview={
+    <WeatherFx
+      height={24}
+      type="snow"
+      colors={["accent-solid-medium"]}
+      intensity={80}
+      duration={3}
+    >
+      <Column gap="16" fill center>
+        <Heading variant="display-strong-l" onBackground="neutral-strong" align="center">
+          3 Second Burst
+        </Heading>
+        <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+          Snow stops emitting after 3 seconds
+        </Text>
+      </Column>
+    </WeatherFx>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={24}
+    type="snow"
+    colors={["accent-solid-medium"]}
+    intensity={80}
+    duration={3}
+>
+    <Column gap="16" fill center>
+      <Heading variant="display-strong-l">
+        3 Second Burst
+      </Heading>
+    </Column>
+</WeatherFx>`,
+      language: "tsx",
+      label: "Duration"
+    }
+  ]}
+/>
+
+## Hover Trigger
+
+Use `trigger="hover"` to only emit particles when hovering over the element.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="16"
+  preview={
+    <Row gap="16" fillWidth>
+      <WeatherFx
+        fill
+        height={16}
+        type="leaves"
+        trigger="hover"
+        colors={["warning-solid-strong", "danger-solid-strong"]}
+        intensity={40}
+        speed={0.8}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Hover me!</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={16}
+        type="rain"
+        trigger="hover"
+        colors={["brand-solid-medium"]}
+        intensity={60}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Hover for rain</Text>
+        </Column>
+      </WeatherFx>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={16}
+    type="leaves"
+    trigger="hover"
+    colors={["warning-solid-strong", "danger-solid-strong"]}
+    intensity={40}
+/>
+
+<WeatherFx
+    height={16}
+    type="rain"
+    trigger="hover"
+    colors={["brand-solid-medium"]}
+    intensity={60}
+/>`,
+      language: "tsx",
+      label: "Hover Trigger"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["type", ["rain","snow","leaves"], "rain"],
+    ["speed", "number", "1"],
+    ["angle", "number", "0"],
+    ["colors", "string[]", '["brand-solid-medium"]'],
+    ["intensity", "number", "50"],
+    ["duration", "number", "undefined"],
+    ["trigger", ["mount","hover"], "mount"],
+    ["children"],
+    ["...flex"]
+  ]}
+/>
