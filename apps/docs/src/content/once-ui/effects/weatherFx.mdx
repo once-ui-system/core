@@ -17,20 +17,41 @@ The `WeatherFx` component creates animated weather effects using the native Canv
   marginBottom="24"
   previewPadding="0"
   preview={
-    <WeatherFx
-      height={24}
-      type="rain"
-      colors={["accent-solid-medium"]}
-      intensity={75}
-    />
+    <>
+      <Media
+        priority
+        src="/images/docs/once-ui/vibe-coding-light.jpg"
+        alt="Preview"
+      />
+      <WeatherFx
+        fill
+        position="absolute"
+        top="0"
+        left="0"
+        angle={-30}
+        speed={2}
+        colors={["static-white"]}
+        type="rain"
+        intensity={75}
+      />
+    </>
   }
   codes={[
     {
       code:
-`<WeatherFx
-    height={24}
+`<Media
+    src="/image.jpg"
+    alt="Preview"
+/>
+<WeatherFx
+    fill
+    position="absolute"
+    top="0"
+    left="0"
+    angle={-30}
+    speed={2}
+    colors={["static-white"]}
     type="rain"
-    colors={["accent-solid-medium"]}
     intensity={75}
 />`,
       language: "tsx",
@@ -204,7 +225,7 @@ Control the fall speed with the `speed` prop. Higher values make particles fall 
         height={16}
         type="rain"
         speed={0.5}
-        colors={["accent-solid-medium"]}
+        colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
           <Text variant="label-default-s" onBackground="neutral-weak">Slow</Text>
@@ -215,7 +236,7 @@ Control the fall speed with the `speed` prop. Higher values make particles fall 
         height={16}
         type="rain"
         speed={1.5}
-        colors={["accent-solid-medium"]}
+        colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
           <Text variant="label-default-s" onBackground="neutral-weak">Fast</Text>
@@ -230,14 +251,14 @@ Control the fall speed with the `speed` prop. Higher values make particles fall 
     height={16}
     type="rain"
     speed={0.5}
-    colors={["accent-solid-medium"]}
+    colors={["brand-solid-medium"]}
 />
 
 <WeatherFx
     height={16}
     type="rain"
     speed={1.5}
-    colors={["accent-solid-medium"]}
+    colors={["brand-solid-medium"]}
 />`,
       language: "tsx",
       label: "Speed"
@@ -332,9 +353,8 @@ Use multiple colors for variety. Supports CSS variables and any valid color form
       height={24}
       type="rain"
       colors={[
-        "brand-solid-strong",
-        "accent-solid-strong",
-        "success-solid-strong"
+        "success-solid-strong",
+        "warning-solid-strong",
       ]}
       intensity={100}
     />
@@ -346,9 +366,8 @@ Use multiple colors for variety. Supports CSS variables and any valid color form
     height={24}
     type="rain"
     colors={[
-        "brand-solid-strong",
-        "accent-solid-strong",
-        "success-solid-strong"
+      "success-solid-strong",
+      "warning-solid-strong",
     ]}
     intensity={100}
 />`,
@@ -431,7 +450,7 @@ Use as a full-screen background effect with absolute positioning.
         top="0"
         left="0"
         type="rain"
-        colors={["accent-solid-weak"]}
+        colors={["brand-solid-weak"]}
         intensity={80}
         speed={1.2}
       />
@@ -471,7 +490,7 @@ Use as a full-screen background effect with absolute positioning.
       top="0"
       left="0"
       type="rain"
-      colors={["accent-solid-weak"]}
+      colors={["brand-solid-weak"]}
       intensity={80}
       speed={1.2}
     />
@@ -511,12 +530,13 @@ Snow features realistic physics with depth-based sizing, opacity, and organic fl
     <WeatherFx
       height={24}
       type="snow"
-      colors={["neutral-solid-weak", "neutral-solid-medium"]}
+      data-solid="contrast"
+      colors={["brand-solid-strong", "neutral-solid-weak"]}
       intensity={100}
       speed={0.8}
     >
       <Column gap="16" fill center>
-        <Heading variant="display-strong-xl" onBackground="neutral-strong" align="center">
+        <Heading variant="display-strong-l" align="center">
           Winter Wonderland
         </Heading>
         <Text variant="body-default-l" onBackground="neutral-weak" align="center">
@@ -531,12 +551,13 @@ Snow features realistic physics with depth-based sizing, opacity, and organic fl
 `<WeatherFx
     height={24}
     type="snow"
-    colors={["neutral-solid-weak", "neutral-solid-medium"]}
+    data-solid="contrast"
+    colors={["brand-solid-strong", "neutral-solid-weak"]}
     intensity={100}
     speed={0.8}
 >
     <Column gap="16" fill center>
-      <Heading variant="display-strong-xl">
+      <Heading variant="display-strong-l">
         Winter Wonderland
       </Heading>
       <Text variant="body-default-l">
@@ -660,7 +681,7 @@ Control how long particles are emitted with the `duration` prop (in seconds). Af
     <WeatherFx
       height={24}
       type="snow"
-      colors={["accent-solid-medium"]}
+      colors={["brand-solid-medium"]}
       intensity={80}
       duration={3}
     >
@@ -680,7 +701,7 @@ Control how long particles are emitted with the `duration` prop (in seconds). Af
 `<WeatherFx
     height={24}
     type="snow"
-    colors={["accent-solid-medium"]}
+    colors={["brand-solid-medium"]}
     intensity={80}
     duration={3}
 >
@@ -716,7 +737,7 @@ Use `trigger="hover"` to only emit particles when hovering over the element.
         speed={0.8}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Hover me!</Text>
+          <Text variant="label-default-s" onBackground="neutral-weak">Hover for leaves!</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
@@ -728,7 +749,7 @@ Use `trigger="hover"` to only emit particles when hovering over the element.
         intensity={60}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Hover for rain</Text>
+          <Text variant="label-default-s" onBackground="neutral-weak">Hover for rain!</Text>
         </Column>
       </WeatherFx>
     </Row>

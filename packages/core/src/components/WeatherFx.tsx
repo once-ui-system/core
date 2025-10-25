@@ -277,14 +277,24 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
               }
             }
 
-            // Draw rain drop as an angled line
+            // Draw rain drop as an angled line with gradient
+            const x1 = drop.x;
+            const y1 = drop.y;
+            const x2 = drop.x + dx * drop.length;
+            const y2 = drop.y + dy * drop.length;
+            
+            // Create gradient from solid to transparent
+            const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+            gradient.addColorStop(0, 'transparent');
+            gradient.addColorStop(1, drop.color);
+            
             ctx.beginPath();
-            ctx.strokeStyle = drop.color;
+            ctx.strokeStyle = gradient;
             ctx.globalAlpha = drop.opacity;
             ctx.lineWidth = drop.thickness;
             ctx.lineCap = "round";
-            ctx.moveTo(drop.x, drop.y);
-            ctx.lineTo(drop.x + dx * drop.length, drop.y + dy * drop.length);
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
             ctx.stroke();
           });
         } else if (type === "snow") {
