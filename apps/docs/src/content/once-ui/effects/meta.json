@@ -4,8 +4,9 @@
   "pages": {
     "matrixFx": 1,
     "weatherFx": 2,
-    "shineFx": 3,
-    "typeFx": 4,
-    "tiltFx": 5
+    "countdownFx": 3,
+    "shineFx": 4,
+    "typeFx": 5,
+    "tiltFx": 6
   }
 }

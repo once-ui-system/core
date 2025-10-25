@@ -8,6 +8,7 @@ export * from "./CheckboxExample";
 export * from "./ChipExamples";
 export * from "./ClientOption";
 export * from "./CountFxExample";
+export * from "./CountdownFxExample";
 export * from "./DatePickerExamples";
 export * from "./DateRangeInputExamples";
 export * from "./DialogExample";

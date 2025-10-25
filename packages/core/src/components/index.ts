@@ -19,6 +19,7 @@ export * from "./Card";
 export * from "./CursorCard";
 export * from "./Cursor";
 export * from "./CountFx";
+export * from "./CountdownFx";
 export * from "./Column";
 export * from "./Checkbox";
 export * from "./Chip";
