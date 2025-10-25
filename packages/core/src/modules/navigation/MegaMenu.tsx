@@ -95,13 +95,6 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                 const contentWidth = activeContent.scrollWidth; // Use scrollWidth for full content
                 const contentHeight = activeContent.offsetHeight;
                 
-                console.log('Content measurements:', {
-                  activeDropdown,
-                  contentWidth,
-                  contentHeight,
-                  offsetWidth: activeContent.offsetWidth,
-                });
-                
                 // Restore button widths
                 fillWidthButtons.forEach((button, index) => {
                   button.style.width = originalWidths[index];
