@@ -1,0 +1,163 @@
+---
+title: "CountdownFx"
+summary: "The CountdownFx component creates animated countdown timers with wheel effects, counting down to a target date."
+updatedAt: "2025-10-25"
+docs: "once-ui/effects/CountdownFx.mdx"
+github: "components/CountdownFx.tsx"
+navLabel: "CountdownFx"
+navIcon: "sparkle"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `CountdownFx` component wraps `CountFx` to create beautiful countdown timers. It automatically calculates and displays the time remaining until a target date with smooth wheel animations and colon separators.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<CountdownFxBasic />}
+  codes={[
+    {
+      code:
+`<CountdownFx
+    targetDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
+    variant="display-strong-l"
+    format="HH:MM:SS"
+/>`,
+      language: "tsx",
+      label: "CountdownFx"
+    }
+  ]}
+/>
+
+## Format Options
+
+Choose between different time formats based on your needs.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<CountdownFxFormats />}
+  codes={[
+    {
+      code:
+`<CountdownFx
+    targetDate={new Date(Date.now() + 5 * 60 * 60 * 1000)}
+    format="HH:MM:SS"
+/>
+
+<CountdownFx
+    targetDate={new Date(Date.now() + 10 * 60 * 1000)}
+    format="MM:SS"
+/>
+
+<CountdownFx
+    targetDate={new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)}
+    format="DD:HH:MM:SS"
+/>`,
+      language: "tsx",
+      label: "Formats"
+    }
+  ]}
+/>
+
+## Effects
+
+Use different animation effects from CountFx.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<CountdownFxEffects />}
+  codes={[
+    {
+      code:
+`<CountdownFx
+    targetDate={targetDate}
+    effect="wheel"
+/>
+
+<CountdownFx
+    targetDate={targetDate}
+    effect="smooth"
+/>
+
+<CountdownFx
+    targetDate={targetDate}
+    effect="simple"
+/>`,
+      language: "tsx",
+      label: "Effects"
+    }
+  ]}
+/>
+
+## Launch Countdown
+
+Create compelling launch countdowns for product releases, events, or promotions.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<CountdownFxLaunch />}
+  codes={[
+    {
+      code:
+`<Column gap="16" fill center padding="32" data-solid="contrast" radius="l">
+    <Heading variant="display-strong-xl" align="center">
+      Launching Soon
+    </Heading>
+    <CountdownFx
+      targetDate={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)}
+      variant="display-strong-l"
+      format="DD:HH:MM:SS"
+      onBackground="brand-medium"
+    />
+    <Text variant="body-default-m">
+      Get ready for something amazing
+    </Text>
+</Column>`,
+      language: "tsx",
+      label: "Launch Countdown"
+    }
+  ]}
+/>
+
+## On Complete Callback
+
+Execute a function when the countdown reaches zero.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<CountdownFxOnComplete />}
+  codes={[
+    {
+      code:
+`<CountdownFx
+    targetDate={new Date(Date.now() + 5000)}
+    format="MM:SS"
+    onComplete={() => {
+      console.log('Countdown complete!');
+      // Trigger your action here
+    }}
+/>`,
+      language: "tsx",
+      label: "On Complete"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["targetDate", "Date | string", "required"],
+    ["format", ["HH:MM:SS","DD:HH:MM:SS","MM:SS"], "HH:MM:SS"],
+    ["effect", ["simple","wheel","smooth"], "wheel"],
+    ["onComplete", "() => void", "undefined"],
+    ["speed", "number", "1000"],
+    ["easing", ["linear","ease-out","ease-in-out"], "ease-out"],
+    ["...text"]
+  ]}
+/>

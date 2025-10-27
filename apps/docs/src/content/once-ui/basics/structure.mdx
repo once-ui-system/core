@@ -1434,53 +1434,80 @@ Use the `textVariant` prop to apply text styles to children elements. Use the `a
 
 ### Responsiveness
 
-Override layout flow with `s` or `m` props.
+Responsive overrides with `s`, `m` and `l` let you adapt any Flex/Grid prop per breakpoint,
+with s overriding m and m overriding l and l overriding base.
 
 <CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={
-    <Row fillWidth gap="24" s={{direction: "column"}}>
-      <Background
-        fillWidth
-        height={6}
-        background="neutral-weak"
-        border="neutral-alpha-medium" radius="l"
-        lines={{display: true, color: "neutral-alpha-weak"}}/>
-      <Background
-        fillWidth
-        height={6}
-        background="neutral-weak"
-        border="neutral-alpha-medium" radius="l"
-        lines={{display: true, color: "neutral-alpha-weak"}}/>
-      <Background
-        fillWidth
-        height={6}
-        background="neutral-weak"
-        border="neutral-alpha-medium" radius="l"
-        lines={{display: true, color: "neutral-alpha-weak"}}/>
-      <Background
-        fillWidth
-        height={6}
-        background="neutral-weak"
-        border="neutral-alpha-medium" radius="l"
-        lines={{display: true, color: "neutral-alpha-weak"}}/>
-    </Row>
-  }
-  codes={[
-    {
-      code: `
-<Row s={{direction: "column"}}>
-    <Row fillWidth height={6}/>
-    <Row fillWidth height={6}/>
-    <Row fillWidth height={6}/>
-    <Row fillWidth height={6}/>
+    marginTop="16"
+    marginBottom="24"
+    preview={
+      <Row fillWidth gap="16" s={{direction: "column"}}>
+        <Background fillWidth height={6} background="neutral-weak" border="neutral-alpha-medium" radius="l"/>
+        <Background fillWidth height={6} background="neutral-weak" border="neutral-alpha-medium" radius="l"/>
+        <Background fillWidth height={6} background="neutral-weak" border="neutral-alpha-medium" radius="l"/>
+      </Row>
+    }
+    codes={[
+        {
+            code: `
+<Row fillWidth gap="16" s={{direction: "column"}}>
+    <Background fillWidth height={6} />
+    <Background fillWidth height={6} />
+    <Background fillWidth height={6} />
 </Row>
 `,
-      language: "tsx",
-      label: "Responsive direction"
+            language: "tsx",
+            label: "Responsive direction"
+        }
+    ]}
+/>
+
+<CodeBlock
+    marginTop="16"
+    marginBottom="24"
+    preview={
+      <Column fillWidth gap="16">
+          <Row fillWidth height={6} background="neutral-medium" border="neutral-medium" radius="m" center>
+            <Text variant="label-default-s" onBackground="neutral-strong">Visible on all screens</Text>
+          </Row>
+
+          <Row hide m={{hide: false}} fillWidth height={6} background="neutral-medium" border="neutral-medium" radius="m" center>
+            <Text variant="label-default-s" onBackground="neutral-strong">Visible on "m" and below</Text>
+          </Row>
+
+          <Row hide s={{hide: false}} fillWidth height={6} background="neutral-medium" border="neutral-medium" radius="m" center>
+            <Text variant="label-default-s" onBackground="neutral-strong">Visible on "s" and below</Text>
+          </Row>
+
+          <Row hide xs={{hide: false}} fillWidth height={6} background="neutral-medium" border="neutral-medium" radius="m" center>
+            <Text variant="label-default-s" onBackground="neutral-strong">Visible on "xs"</Text>
+          </Row>
+      </Column>
     }
-  ]}
+    codes={[
+        {
+            code:
+`<Column fillWidth gap="16">
+    <Row>
+      <Text>Visible on all screens</Text>
+    </Row>
+
+    <Row hide m={{hide: false}}>
+      <Text>Visible on "m" and below</Text>
+    </Row>
+
+    <Row hide s={{hide: false}}>
+      <Text>Visible on "s" and below</Text>
+    </Row>
+
+    <Row hide xs={{hide: false}}>
+      <Text>Visible on "xs"</Text>
+    </Row>
+</Column>`,
+            language: "tsx",
+            label: "Conditional rendering"
+        }
+    ]}
 />
 
 - `overflowX`, `overflowY`, or `overflow`
