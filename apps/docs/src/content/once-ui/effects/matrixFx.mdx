@@ -244,6 +244,118 @@ Add a subtle animated flicker to create a dynamic, alive feeling.
   ]}
 />
 
+## Bulge
+
+Add dynamic wave effects to create fluid, organic motion. Choose between `ripple` (circular waves from center) or `wave` (S-curve flowing diagonally). Tiles are displaced, scale up at the wave front, and fade at the edges.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["accent-solid-strong"]}
+      bulge={{
+        type: "ripple",
+        duration: 4,
+        intensity: 15,
+        repeat: true
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["accent-solid-strong"]}
+    bulge={{
+        type: "ripple",   // Circular wave from center
+        duration: 4,      // Wave duration in seconds
+        intensity: 15,    // Displacement strength
+        repeat: true      // Continuous cycles
+    }}
+/>`,
+      language: "tsx",
+      label: "Ripple"
+    }
+  ]}
+/>
+
+The `wave` type creates an organic, flowing S-curve that travels diagonally from bottom-left to top-right. The curve rotates and morphs as it moves, straightening at the edges for a natural liquid motion.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["success-solid-strong"]}
+      bulge={{
+        type: "wave",
+        duration: 3,
+        intensity: 20,
+        repeat: true
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["success-solid-strong"]}
+    bulge={{
+        type: "wave",     // S-curve diagonal flow
+        duration: 3,
+        intensity: 20,
+        repeat: true
+    }}
+/>`,
+      language: "tsx",
+      label: "Wave"
+    }
+  ]}
+/>
+
+Use `repeat: false` for a single wave that plays once. Add `delay` for a pause before starting or between cycles (useful for sequencing multiple effects).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  reloadButton
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["danger-solid-strong"]}
+      bulge={{
+        duration: 3,
+        intensity: 12,
+        repeat: false
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["danger-solid-strong"]}
+    bulge={{
+        duration: 3,
+        intensity: 12,
+        repeat: false   // Single wave only
+    }}
+/>`,
+      language: "tsx",
+      label: "Single Wave"
+    }
+  ]}
+/>
+
 ## Hover
 
 Use `trigger="hover"` for native hover support. Dots progressively appear on hover and smoothly reverse when you move away.
@@ -268,9 +380,15 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
           top="0"
           left="0"
           trigger="hover"
-          size={1}
+          size={2}
           spacing={2}
+          speed={1}
           flicker
+          bulge={{
+            duration: 2,
+            intensity: 5,
+            repeat: false
+          }}
         />
         <Background
           fill
@@ -302,7 +420,7 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
           top="0"
           left="0"
           trigger="hover"
-          size={1}
+          size={2}
           spacing={2}
           flicker
           revealFrom="bottom"
@@ -343,9 +461,14 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
       top="0"
       left="0"
       trigger="hover"
-      size={1}
+      size={2}
       spacing={2}
       flicker
+      bulge={{
+        duration: 3,
+        intensity: 12,
+        repeat: false
+      }}
     />
     <Background
       fill
@@ -377,7 +500,7 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
       top="0"
       left="0"
       trigger="hover"
-      size={1}
+      size={2}
       spacing={2}
       flicker
       revealFrom="bottom"
@@ -415,6 +538,7 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
     ["spacing", "number", "3"],
     ["trigger", ["instant","hover","mount"], "instant"],
     ["flicker", "boolean", "false"],
+    ["bulge", '{ type?: "ripple" | "wave"; duration?: number; intensity?: number; repeat?: boolean; delay?: number }', "undefined"],
     ["revealFrom", ["center","top","bottom","left","right"], "center"],
     ["children"],
     ["...flex"]
