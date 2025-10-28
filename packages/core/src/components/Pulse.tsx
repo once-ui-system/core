@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode, forwardRef } from "react";
 import { Row } from ".";
 import styles from "./Pulse.module.scss";
