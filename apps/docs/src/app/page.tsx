@@ -83,7 +83,20 @@ export default function Home() {
           
           {/* Hero Section */}
           <Column maxWidth={62} gap="12" minHeight="m" vertical="center" radius="l" overflow="hidden" border="brand-alpha-weak">
-            <MatrixFx trigger="mount" revealFrom="bottom" data-solid="color" position="absolute" top="0" left="0" flicker colors={["brand-solid-strong"]} />
+            <MatrixFx
+              data-solid="color"
+              position="absolute"
+              top="0"
+              left="0"
+              flicker
+              colors={["brand-solid-strong"]} 
+              bulge={{
+                type: "wave",
+                duration: 3,
+                intensity: 20,
+                repeat: true
+              }}
+            />
             <Background position="absolute" gradient={{display: true, colorStart: "page-background", x: 0, y: 50, height: 300, width: 150}}></Background>
             <Column fillWidth gap="16" padding="48">
               <Badge
