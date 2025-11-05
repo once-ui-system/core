@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useRef } from 'react';
+import { useRef } from "react";
 import { TypeFx, Button, Column } from "@once-ui-system/core";
 
 export const TypeFxCustomExample = () => {
@@ -17,7 +17,12 @@ export const TypeFxCustomExample = () => {
           triggerFnRef.current = fn;
         }}
       />
-      <Button onClick={() => triggerFnRef.current?.()} data-border="rounded" variant="secondary" size="s">
+      <Button
+        onClick={() => triggerFnRef.current?.()}
+        data-border="rounded"
+        variant="secondary"
+        size="s"
+      >
         Start typing
       </Button>
     </Column>
