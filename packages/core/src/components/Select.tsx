@@ -265,7 +265,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           if (typeof ref === "function") ref(node);
           else if (ref) ref.current = node;
         }}
-        isOpen={isDropdownOpen}
+        open={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
         placement={placement}
         closeAfterClick={false}

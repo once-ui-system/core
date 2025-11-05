@@ -6,8 +6,10 @@
         border-color: var(--neutral-border-medium);
     }
 
-    &:has(.placeholder) {
-        min-height: var(--static-space-48);
+    &:has(.placeholder):has(.floating) {
+        .placeholder {
+          padding-top: var(--static-space-12);
+        }
     }
 }
 
@@ -59,13 +61,9 @@
 .s {
     min-height: var(--static-space-48);
 
-    &:has(.placeholder) {
-        min-height: var(--static-space-40);
-    }
-
     .label {
         &.floating {
-            top: var(--static-space-4);
+            top: calc(var(--static-space-4) - var(--static-space-1));
         }
     }
 }

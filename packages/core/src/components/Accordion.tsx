@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, forwardRef, useImperativeHandle, useEffect, useCallback } from "react";
-import { Flex, Icon, Text, Column, Grid, Row } from ".";
+import { Flex, Icon, Column, Grid, Row } from ".";
 import styles from "./Accordion.module.scss";
 import classNames from "classnames";
 

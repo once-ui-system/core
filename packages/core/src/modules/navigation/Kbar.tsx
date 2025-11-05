@@ -79,14 +79,14 @@ export const KbarTrigger: React.FC<KbarTriggerProps> = ({ onClick, children, ...
 };
 
 interface KbarContentProps {
-  isOpen: boolean;
+  open: boolean;
   onClose: () => void;
   items: KbarItem[];
   placeholder?: string;
 }
 
 export const KbarContent: React.FC<KbarContentProps> = ({
-  isOpen,
+  open,
   onClose,
   items,
   placeholder = "Search",
@@ -204,18 +204,18 @@ export const KbarContent: React.FC<KbarContentProps> = ({
       }
     };
 
-    if (isOpen) {
+    if (open) {
       document.addEventListener("keydown", handleEscapeKey);
     }
 
     return () => {
       document.removeEventListener("keydown", handleEscapeKey);
     };
-  }, [isOpen, handleClose]);
+  }, [open, handleClose]);
 
   // Lock body scroll when kbar is open
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       // Prevent body scrolling when kbar is open
       document.body.style.overflow = "hidden";
     } else {
@@ -227,18 +227,18 @@ export const KbarContent: React.FC<KbarContentProps> = ({
       // Cleanup function to ensure body scroll is restored
       document.body.style.overflow = "unset";
     };
-  }, [isOpen]);
+  }, [open]);
 
   // Clear search query when kbar is closed
   useEffect(() => {
-    if (!isOpen) {
+    if (!open) {
       setSearchQuery("");
     }
-  }, [isOpen]);
+  }, [open]);
 
   // Focus search input when kbar is opened
   useEffect(() => {
-    if (isOpen && inputRef.current) {
+    if (open && inputRef.current) {
       // Use a small timeout to ensure the component is fully rendered
       const timer = setTimeout(() => {
         inputRef.current?.focus();
@@ -246,7 +246,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
 
       return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [open]);
 
   // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -254,7 +254,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
   };
 
   // Render nothing if not open
-  if (!isOpen) return null;
+  if (!open) return null;
 
   // Create portal for the kbar
   return (
@@ -443,7 +443,7 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, ...rest }) => {
       </KbarTrigger>
       {isOpen &&
         createPortal(
-          <KbarContent isOpen={isOpen} onClose={handleClose} items={items} />,
+          <KbarContent open={isOpen} onClose={handleClose} items={items} />,
           document.body,
         )}
     </>

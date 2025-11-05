@@ -5,14 +5,14 @@ import { Textarea } from "@once-ui-system/core";
 
 // Textarea with validation
 export function ValidationTextareaExample() {
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState("");
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
   };
 
   const validateContent = (value: React.ReactNode) => {
-    if (value && typeof value === 'string' && value.length < 20) {
+    if (value && typeof value === "string" && value.length < 20) {
       return "Please enter at least 20 characters";
     }
     return null;
