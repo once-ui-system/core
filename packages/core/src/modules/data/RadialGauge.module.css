@@ -1,0 +1,21 @@
+.svg {
+  display: block;
+}
+
+.activeLine {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.inactiveLine {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Glow animation */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}

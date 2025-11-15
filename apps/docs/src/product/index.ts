@@ -28,3 +28,4 @@ export * from "./TextareaExamples";
 export * from "./ToastExample";
 export * from "./TypeFxCustomExample";
 export * from "./Products";
+export * from "./RadialGaugeExample";

@@ -4,6 +4,7 @@ export * from "./LineChart";
 export * from "./BarChart";
 export * from "./PieChart";
 export * from "./LineBarChart";
+export * from "./RadialGauge";
 
 export * from "./ChartHeader";
 export * from "./ChartStatus";
