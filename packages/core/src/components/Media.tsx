@@ -45,8 +45,12 @@ const Media: React.FC<MediaProps> = ({
   const imageRef = useRef<HTMLDivElement>(null);
 
   const handleImageClick = () => {
-    if (enlarge && !isEnlarged) {
-      setIsEnlarged(true);
+    if (enlarge) {
+      if (!isEnlarged) {
+        setIsEnlarged(true);
+      } else {
+        setIsEnlarged(false);
+      }
     }
   };
 
@@ -159,7 +163,6 @@ const Media: React.FC<MediaProps> = ({
           overflow="hidden"
           zIndex={0}
           margin="0"
-          cursor={enlarge ? "interactive" : undefined}
           style={{
             outline: "none",
             isolation: "isolate",
@@ -170,7 +173,7 @@ const Media: React.FC<MediaProps> = ({
             ...style,
           }}
           onClick={handleImageClick}
-          className={classNames(enlarge && !isEnlarged ? "cursor-interactive" : undefined, className)}
+          className={classNames(enlarge && !isEnlarged ? "cursor-zoom-in" : enlarge && isEnlarged ? "cursor-zoom-out" : undefined, className)}
           {...rest}
         >
           {loading && <Skeleton shape="block" radius={rest.radius} />}
@@ -205,7 +208,7 @@ const Media: React.FC<MediaProps> = ({
             <Image
               src={src}
               alt={alt}
-              sizes={sizes}
+              sizes={isEnlarged ? "100vw" : sizes}
               priority={priority}
               unoptimized={unoptimized}
               fill={fill || !aspectRatio}
