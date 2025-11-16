@@ -11,6 +11,22 @@ interface BulgeConfig {
   delay?: number;
 }
 
+interface Dot {
+  x: number;
+  y: number;
+  gridX: number;
+  gridY: number;
+  color: string;
+  baseOpacity: number;
+  distanceFromOrigin: number;
+  randomOffset: number;
+  flickerPhase: number;
+  flickerSpeed: number;
+  gridSize?: number;
+  canvasW?: number;
+  canvasH?: number;
+}
+
 interface MatrixFxProps extends React.ComponentProps<typeof Flex> {
   speed?: number;
   colors?: string[];
@@ -51,7 +67,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
     const isHoveredRef = useRef<boolean>(false);
     const mountAnimationCompleteRef = useRef<boolean>(false);
     const bulgeStartTimeRef = useRef<number>(Date.now());
-    const dotsRef = useRef<any[]>([]);
+    const dotsRef = useRef<Dot[]>([]);
 
     useEffect(() => {
       if (forwardedRef) {
@@ -104,19 +120,6 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       const cols = Math.ceil(paddedWidth / totalSize);
       const rows = Math.ceil(paddedHeight / totalSize);
 
-      interface Dot {
-        x: number;
-        y: number;
-        gridX: number;
-        gridY: number;
-        color: string;
-        baseOpacity: number;
-        distanceFromOrigin: number;
-        randomOffset: number;
-        flickerPhase: number;
-        flickerSpeed: number;
-      }
-
       // Only create new dots if grid doesn't exist or dimensions/size changed
       let dots: Dot[] = dotsRef.current;
       let maxDistance = 0;
@@ -166,10 +169,10 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
               randomOffset: Math.random() * 0.3,
               flickerPhase: Math.random() * Math.PI * 2,
               flickerSpeed: 0.8 + Math.random() * 0.4,
-              gridSize: totalSize, // Store for comparison
-              canvasW: canvasWidth, // Store for comparison
-              canvasH: canvasHeight, // Store for comparison
-            } as any);
+              gridSize: totalSize,
+              canvasW: canvasWidth,
+              canvasH: canvasHeight,
+            });
           }
         }
 
