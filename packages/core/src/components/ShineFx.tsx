@@ -3,10 +3,12 @@
 import React from "react";
 import { Text } from ".";
 import styles from "./ShineFx.module.scss";
+import classNames from "classnames";
 
 export interface ShineFxProps extends React.ComponentProps<typeof Text> {
   speed?: number;
   disabled?: boolean;
+  inverse?: boolean;
   baseOpacity?: number;
   children?: React.ReactNode;
 }
@@ -14,6 +16,7 @@ export interface ShineFxProps extends React.ComponentProps<typeof Text> {
 const ShineFx: React.FC<ShineFxProps> = ({
   speed = 1,
   disabled = false,
+  inverse = false,
   baseOpacity = 0.3,
   children,
   className,
@@ -25,7 +28,7 @@ const ShineFx: React.FC<ShineFxProps> = ({
   return (
     <Text
       {...text}
-      className={`${styles.shineFx} ${disabled ? styles.disabled : ""} ${className || ""}`}
+      className={classNames(styles.shineFx, disabled ? styles.disabled : "", inverse ? styles.inverse : styles.default, className)}
       style={{
         ...style,
         animationDuration,

@@ -16,6 +16,7 @@ navIcon: "components"
   preview={
     <Media
       priority
+      sizes="(max-width: 768px) 100vw, 768px"
       src="/images/docs/once-ui/vibe-coding-light.jpg"
       alt="Preview"
       radius="xl"
@@ -28,6 +29,7 @@ navIcon: "components"
 `<Media
     src="/image.jpg"
     alt="Preview"
+    sizes="(max-width: 768px) 100vw, 768px"
     radius="xl"
     border="neutral-alpha-medium"
 />`,
@@ -49,6 +51,7 @@ Show a skeleton block while content is loading. Only works when `aspectRatio` is
       loading
       radius="l"
       aspectRatio="16/9"
+      sizes="(max-width: 768px) 100vw, 768px"
       src="/images/docs/once-ui/vibe-coding-light.jpg"
     />
   }
@@ -79,6 +82,7 @@ The `caption` prop renders a `ReactNode` below the image, making it easy to prov
       <Media
         caption="Vibe code with Quasar! The time is now."
         src="/images/docs/once-ui/vibe-coding-light.jpg"
+        sizes="(max-width: 768px) 100vw, 768px"
         alt="Preview"
         radius="xl"
         border="neutral-alpha-medium"
@@ -109,6 +113,7 @@ Enable full-screen zooming for images and videos.
   enlarge
   radius="l"
   marginTop="16"
+  sizes="(max-width: 768px) 100vw, 768px"
   src="/images/docs/once-ui/vibe-coding-light.jpg"
 />
 

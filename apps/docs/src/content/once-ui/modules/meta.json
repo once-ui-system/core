@@ -3,6 +3,7 @@
   "order": 3,
   "pages": {
     "kbar": 1,
-    "megaMenu": 2
+    "megaMenu": 2,
+    "headingNav": 3
   }
 }

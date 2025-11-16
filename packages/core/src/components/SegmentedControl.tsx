@@ -13,6 +13,7 @@ interface SegmentedControlProps extends Omit<React.ComponentProps<typeof Scrolle
   defaultSelected?: string;
   fillWidth?: boolean;
   selected?: string;
+  compact?: boolean;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -23,6 +24,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
   defaultSelected,
   fillWidth = true,
   selected,
+  compact = false,
   className,
   style,
   ...scrollerProps
@@ -103,21 +105,27 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
       aria-orientation="horizontal"
       onKeyDown={handleKeyDown}
     >
-      <Flex fillWidth={fillWidth} gap="-1">
+      <Flex
+        fillWidth={fillWidth}
+        gap={compact ? "-1" : "2"}
+        padding={compact ? "0" : "4"}
+        radius="l"
+        border={compact ? undefined : "neutral-alpha-weak"}
+      >
         {buttons.map((button, index) => {
           return (
             <ToggleButton
               ref={(el) => {
                 buttonRefs.current[index] = el as HTMLButtonElement;
               }}
-              variant="outline"
-              radius={index === 0 ? "left" : index === buttons.length - 1 ? "right" : "none"}
+              variant={compact ? "outline" : "ghost"}
+              radius={compact ? (index === 0 ? "left" : index === buttons.length - 1 ? "right" : "none") : undefined}
               key={button.value}
               selected={index === selectedIndex}
               onClick={(event) => handleButtonClick(button, event)}
               role="tab"
               className={className}
-              style={style}
+              style={{opacity: (index !== selectedIndex && !compact) ? 0.6 : 1, ...style}}
               aria-selected={index === selectedIndex}
               aria-controls={`panel-${button.value}`}
               tabIndex={index === selectedIndex ? 0 : -1}

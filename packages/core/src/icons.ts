@@ -49,6 +49,7 @@ import {
   IoPawOutline,
 } from "react-icons/io5";
 import { LuChevronsLeftRight, LuTextCursorInput } from "react-icons/lu";
+import { PiBatteryFull, PiGauge } from "react-icons/pi";
 
 export const iconLibrary: Record<string, IconType> = {
   chevronUp: HiChevronUp,
@@ -97,6 +98,8 @@ export const iconLibrary: Record<string, IconType> = {
   pause: HiOutlinePause,
   screen: HiOutlineComputerDesktop,
   document: HiOutlineBars3BottomLeft,
+  radialGauge: PiGauge,
+  linearGauge: PiBatteryFull
 };
 
 export type IconLibrary = typeof iconLibrary;

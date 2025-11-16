@@ -6,6 +6,8 @@ docs: "once-ui/components/segmentedControl.mdx"
 github: "components/SegmentedControl.tsx"
 navLabel: "Segmented Control"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 Use this component for toggle-style selection between discrete options. It supports keyboard interaction, styling, and controlled or uncontrolled usage.
@@ -41,9 +43,48 @@ Use this component for toggle-style selection between discrete options. It suppo
   ]}
 />
 
-## Default selected
+## External state
 
-Use `defaultSelected` to define an initial active button in uncontrolled mode.
+Use `selected` to manage the selected state from the parent.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <SegmentedControl
+        fillWidth={false}
+        selected="month"
+        buttons={[
+          { value: "day", label: "Day" },
+          { value: "week", label: "Week" },
+          { value: "month", label: "Month" },
+        ]}
+      />
+      </Row>
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+    fillWidth={false}
+    selected="month"
+    buttons={[
+      { value: "day", label: "Day" },
+      { value: "week", label: "Week" },
+      { value: "month", label: "Month" },
+    ]}
+    onToggle={(value) => console.log(value)}
+/>`,
+      language: "tsx",
+      label: "External state"
+    }
+  ]}
+/>
+
+## Internal state
+
+Use `defaultSelected` to define an initial active button in uncontrolled mode. Don't use it along with the `selected` prop.
 
 <CodeBlock
   marginTop="16"
@@ -75,7 +116,46 @@ Use `defaultSelected` to define an initial active button in uncontrolled mode.
     onToggle={(value) => console.log(value)}
 />`,
       language: "tsx",
-      label: "Default selected"
+      label: "Internal state"
+    }
+  ]}
+/>
+
+## Compact
+
+Use `compact` to create a compact variant.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <SegmentedControl
+        compact
+        defaultSelected="week"
+        buttons={[
+          { value: "day", label: "Day" },
+          { value: "week", label: "Week" },
+          { value: "month", label: "Month" },
+        ]}
+      />
+      </Row>
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+    compact
+    defaultSelected="week"
+    buttons={[
+      { value: "day", label: "Day" },
+      { value: "week", label: "Week" },
+      { value: "month", label: "Month" },
+    ]}
+    onToggle={(value) => console.log(value)}
+/>`,
+      language: "tsx",
+      label: "Compact"
     }
   ]}
 />

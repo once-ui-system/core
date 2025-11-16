@@ -1,0 +1,390 @@
+---
+title: "CelebrationFx"
+summary: "The CelebrationFx component creates animated celebration effects like confetti and fireworks using native Canvas 2D API."
+updatedAt: "2025-11-16"
+docs: "once-ui/effects/celebrationFx.mdx"
+github: "components/CelebrationFx.tsx"
+navLabel: "CelebrationFx"
+navIcon: "sparkle"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `CelebrationFx` component creates animated celebration effects using the native Canvas 2D API. Choose between confetti or fireworks animations with multiple trigger modes, customizable colors, and intensity controls. Perfect for success states, achievements, milestones, or interactive celebrations.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  reloadButton
+  fullscreenButton
+  preview={
+    <CelebrationFx
+      height={20}
+      type="confetti"
+      duration={4}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CelebrationFx
+  height={20}
+  type="confetti"
+  duration={4}
+/>`,
+      language: "tsx",
+      label: "Usage"
+    }
+  ]}
+/>
+
+## Celebration types
+
+Choose between `confetti` (falling particles) or `fireworks` (explosive bursts).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  reloadButton
+  fullscreenButton
+  preview={
+    <Grid fillWidth height={16} columns={2} gap="16" s={{ columns: 1 }}>
+      <CelebrationFx
+        type="confetti"
+        duration={5}
+      />
+      <CelebrationFx
+        type="fireworks"
+        duration={5}
+      />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<CelebrationFx
+    type="confetti"
+    duration={5}
+/>
+<CelebrationFx
+    type="fireworks"
+    duration={5}
+/>`,
+      language: "tsx",
+      label: "Types"
+    }
+  ]}
+/>
+
+## Trigger
+
+Control when the celebration starts with `mount` (automatic), `hover` (on mouse enter), `click` (fires from click position), or `manual` (controlled via `active` prop).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  reloadButton
+  fullscreenButton
+  highlight="5"
+  preview={
+    <CelebrationFx
+      height={16}
+      type="confetti"
+      trigger="hover"
+      center
+    >
+      <Text variant="heading-strong-l">
+        Hover me!
+      </Text>
+    </CelebrationFx>
+  }
+  codes={[
+    {
+      code:
+`<CelebrationFx
+    height={16}
+    type="confetti"
+    trigger="hover"
+    center
+>
+    <Text variant="heading-strong-l">
+      Hover me!
+    </Text>
+</CelebrationFx>`,
+      language: "tsx",
+      label: "Hover"
+    }
+  ]}
+/>
+
+Use `trigger="click"` to fire celebrations from exactly where users click. Perfect for interactive celebrations!
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  fullscreenButton
+  highlight="5"
+  preview={
+    <Grid fillWidth height={16} columns={2} gap="16" s={{ columns: 1 }}>
+      <CelebrationFx
+        type="fireworks"
+        trigger="click"
+        center
+      >
+        <Text variant="heading-strong-l">
+          Click for fireworks!
+        </Text>
+      </CelebrationFx>
+      <CelebrationFx
+        type="confetti"
+        trigger="click"
+        center
+      >
+        <Text variant="heading-strong-l">
+          Click for confetti!
+        </Text>
+      </CelebrationFx>
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<CelebrationFx
+    type="fireworks"
+    trigger="click"
+    center
+>
+    <Text variant="heading-strong-l">
+      Click for fireworks!
+    </Text>
+</CelebrationFx>
+<CelebrationFx
+    type="confetti"
+    trigger="click"
+    center
+>
+    <Text variant="heading-strong-l">
+      Click for confetti!
+    </Text>
+</CelebrationFx>`,
+      language: "tsx",
+      label: "Click"
+    }
+  ]}
+/>
+
+## Color
+
+Customize celebration colors using design tokens or any valid CSS color.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  reloadButton
+  fullscreenButton
+  highlight="5"
+  preview={
+    <CelebrationFx
+      height={16}
+      type="fireworks"
+      duration={5}
+      colors={["accent-background-strong", "danger-background-strong", "warning-background-strong"]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CelebrationFx
+  height={16}
+  type="fireworks"
+  duration={5}
+  colors={["accent-background-strong", "danger-background-strong", "warning-background-strong"]}
+/>`,
+      language: "tsx",
+      label: "Colors"
+    }
+  ]}
+/>
+
+### Intensity & speed
+
+Control particle density with `intensity` and animation speed with `speed`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  reloadButton
+  fullscreenButton
+  highlight="5-6"
+  preview={
+    <Grid fillWidth height={16} columns={2} gap="16" s={{ columns: 1 }}>
+      <CelebrationFx
+        type="confetti"
+        duration={5}
+        intensity={100}
+        speed={2}
+      />
+      <CelebrationFx
+        type="confetti"
+        duration={5}
+        intensity={20}
+        speed={0.5}
+      />
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<CelebrationFx
+    height={16}
+    type="confetti"
+    duration={5}
+    intensity={100}
+    speed={2}
+/>
+<CelebrationFx
+    height={16}
+    type="confetti"
+    duration={5}
+    intensity={20}
+    speed={0.5}
+/>`,
+      language: "tsx",
+      label: "Intensity"
+    }
+  ]}
+/>
+
+Control the celebration programmatically using `trigger="manual"` and the `active` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  reloadButton
+  fullscreenButton
+  preview={
+    <CelebrationFxExample />
+  }
+  codes={[
+    {
+      code:
+`"use client";
+
+import React, { useState } from "react";
+import { CelebrationFx, Button, Column } from "@once-ui-system/core";
+
+export function demo() {
+    const [active, setActive] = useState(false);
+
+    return (
+      <Column gap="16" fillWidth>
+        <CelebrationFx
+          height={16}
+          type="fireworks"
+          trigger="manual"
+          active={active}
+        />
+        <Button
+          onClick={() => {
+            setActive(true);
+            setTimeout(() => setActive(false), 3000);
+          }}
+        >
+          Launch Fireworks
+        </Button>
+      </Column>
+    );
+}`,
+      language: "tsx",
+      label: "Manual"
+    }
+  ]}
+/>
+
+### Custom content
+
+Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  reloadButton
+  fullscreenButton
+  preview={
+    <CelebrationFx
+      height={20}
+      type="confetti"
+      duration={6}
+      center
+    >
+      <Column
+        gap="16"
+        padding="48"
+        center
+        background="neutral-weak"
+        radius="l"
+      >
+        <Icon name="trophy" size="xl" onBackground="accent-strong" />
+        <Text variant="heading-strong-xl">Achievement Unlocked!</Text>
+        <Text variant="body-default-s" onBackground="neutral-weak">
+          You've completed all challenges
+        </Text>
+      </Column>
+    </CelebrationFx>
+  }
+  codes={[
+    {
+      code:
+`<CelebrationFx
+    height={20}
+    type="confetti"
+    duration={6}
+    center
+>
+    <Column
+      gap="16"
+      padding="48"
+      center
+      background="neutral-weak"
+      radius="l"
+    >
+      <Icon name="trophy" size="xl" onBackground="accent-strong" />
+      <Text variant="heading-strong-xl">Achievement Unlocked!</Text>
+      <Text variant="body-default-s" onBackground="neutral-weak">
+        You've completed all challenges
+      </Text>
+    </Column>
+</CelebrationFx>`,
+      language: "tsx",
+      label: "Overlay"
+    }
+  ]}
+/>
+
+## Props
+
+The `CelebrationFx` component extends all layout props from `Flex` plus the following celebration-specific props:
+
+<PropsTable
+  content={[
+    ["type", ["confetti", "fireworks"], "confetti"],
+    ["speed", "number", "1"],
+    ["colors", "string[]", '["brand-solid-medium", "accent-solid-medium"]'],
+    ["intensity", "number", "50"],
+    ["duration", "number (s)", "undefined (infinite)"],
+    ["trigger", ["mount", "hover", "click", "manual"], "mount"],
+    ["active", "boolean", "true (for manual trigger)"],
+    ["children"],
+    ["...flex"],
+  ]}
+/>
+
+Use `CelebrationFx` to add delightful, performant celebration animations to success states, milestones, achievements, or any moment worth celebrating in your application.

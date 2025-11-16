@@ -11,13 +11,30 @@ interface BulgeConfig {
   delay?: number;
 }
 
+interface Dot {
+  x: number;
+  y: number;
+  gridX: number;
+  gridY: number;
+  color: string;
+  baseOpacity: number;
+  distanceFromOrigin: number;
+  randomOffset: number;
+  flickerPhase: number;
+  flickerSpeed: number;
+  gridSize?: number;
+  canvasW?: number;
+  canvasH?: number;
+}
+
 interface MatrixFxProps extends React.ComponentProps<typeof Flex> {
   speed?: number;
   colors?: string[];
   size?: number;
   spacing?: number;
   revealFrom?: "center" | "top" | "bottom" | "left" | "right";
-  trigger?: "hover" | "instant" | "mount";
+  trigger?: "hover" | "instant" | "mount" | "click" | "manual";
+  active?: boolean;
   flicker?: boolean;
   bulge?: BulgeConfig;
   children?: React.ReactNode;
@@ -32,6 +49,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       spacing = 3,
       revealFrom = "center",
       trigger = "instant",
+      active = false,
       flicker = false,
       bulge,
       children,
@@ -49,6 +67,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
     const isHoveredRef = useRef<boolean>(false);
     const mountAnimationCompleteRef = useRef<boolean>(false);
     const bulgeStartTimeRef = useRef<number>(Date.now());
+    const dotsRef = useRef<Dot[]>([]);
 
     useEffect(() => {
       if (forwardedRef) {
@@ -101,68 +120,72 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       const cols = Math.ceil(paddedWidth / totalSize);
       const rows = Math.ceil(paddedHeight / totalSize);
 
-      interface Dot {
-        x: number;
-        y: number;
-        gridX: number;
-        gridY: number;
-        color: string;
-        baseOpacity: number;
-        distanceFromOrigin: number;
-        randomOffset: number;
-        flickerPhase: number;
-        flickerSpeed: number;
-      }
+      // Only create new dots if grid doesn't exist or dimensions/size changed
+      let dots: Dot[] = dotsRef.current;
+      let maxDistance = 0;
 
-      const dots: Dot[] = [];
+      if (dots.length === 0 || dots[0]?.gridSize !== totalSize || dots[0]?.canvasW !== canvasWidth || dots[0]?.canvasH !== canvasHeight) {
+        // Create new dot grid
+        dots = [];
 
-      for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-          const x = col * totalSize + size / 2 - maxDisplacement;
-          const y = row * totalSize + size / 2 - maxDisplacement;
+        for (let row = 0; row < rows; row++) {
+          for (let col = 0; col < cols; col++) {
+            const x = col * totalSize + size / 2 - maxDisplacement;
+            const y = row * totalSize + size / 2 - maxDisplacement;
 
-          // Calculate distance from reveal origin
-          let distanceFromOrigin = 0;
-          const centerX = canvasWidth / 2;
-          const centerY = canvasHeight / 2;
+            // Calculate distance from reveal origin
+            let distanceFromOrigin = 0;
+            const centerX = canvasWidth / 2;
+            const centerY = canvasHeight / 2;
 
-          switch (revealFrom) {
-            case "center":
-              const dx = x - centerX;
-              const dy = y - centerY;
-              distanceFromOrigin = Math.sqrt(dx * dx + dy * dy);
-              break;
-            case "top":
-              distanceFromOrigin = y;
-              break;
-            case "bottom":
-              distanceFromOrigin = canvasHeight - y;
-              break;
-            case "left":
-              distanceFromOrigin = x;
-              break;
-            case "right":
-              distanceFromOrigin = canvasWidth - x;
-              break;
+            switch (revealFrom) {
+              case "center":
+                const dx = x - centerX;
+                const dy = y - centerY;
+                distanceFromOrigin = Math.sqrt(dx * dx + dy * dy);
+                break;
+              case "top":
+                distanceFromOrigin = y;
+                break;
+              case "bottom":
+                distanceFromOrigin = canvasHeight - y;
+                break;
+              case "left":
+                distanceFromOrigin = x;
+                break;
+              case "right":
+                distanceFromOrigin = canvasWidth - x;
+                break;
+            }
+
+            dots.push({
+              x,
+              y,
+              gridX: col,
+              gridY: row,
+              color: parsedColors[Math.floor(Math.random() * parsedColors.length)],
+              baseOpacity: 0.3 + Math.random() * 0.7,
+              distanceFromOrigin,
+              randomOffset: Math.random() * 0.3,
+              flickerPhase: Math.random() * Math.PI * 2,
+              flickerSpeed: 0.8 + Math.random() * 0.4,
+              gridSize: totalSize,
+              canvasW: canvasWidth,
+              canvasH: canvasHeight,
+            });
           }
-
-          dots.push({
-            x,
-            y,
-            gridX: col,
-            gridY: row,
-            color: parsedColors[Math.floor(Math.random() * parsedColors.length)],
-            baseOpacity: 0.3 + Math.random() * 0.7,
-            distanceFromOrigin,
-            randomOffset: Math.random() * 0.3,
-            flickerPhase: Math.random() * Math.PI * 2, // Random starting point
-            flickerSpeed: 0.8 + Math.random() * 0.4, // Random speed between 0.8 and 1.2
-          });
         }
-      }
 
-      // Find max distance for normalization
-      const maxDistance = Math.max(...dots.map((d) => d.distanceFromOrigin));
+        // Find max distance for normalization
+        maxDistance = Math.max(...dots.map((d) => d.distanceFromOrigin));
+        dotsRef.current = dots;
+      } else {
+        // Update colors on existing dots
+        dots.forEach((dot) => {
+          dot.color = parsedColors[Math.floor(Math.random() * parsedColors.length)];
+        });
+        maxDistance = Math.max(...dots.map((d) => d.distanceFromOrigin));
+      }
 
 
       // Animation loop
@@ -475,9 +498,10 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           return;
         }
 
-        // For hover trigger with animation
-        if (isHoveredRef.current) {
-          // Revealing animation with explosive easing
+        // For hover, click, and manual triggers with animation
+        if (trigger === "hover" || trigger === "click" || trigger === "manual") {
+          if (isHoveredRef.current) {
+            // Revealing animation with explosive easing
           const now = Date.now();
           const elapsed = (now - revealStartTimeRef.current) / 1000;
           // Cubic easing: starts very slow, then explodes
@@ -622,6 +646,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
               hideStartProgressRef.current = 0;
             }
           }
+          }
         }
 
         ctx.globalAlpha = 1;
@@ -637,6 +662,39 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         }
       };
     }, [colors, size, spacing, speed, revealFrom, trigger, flicker, bulge]);
+
+    // Manual trigger control via `active` prop
+    useEffect(() => {
+      if (trigger !== "manual") return;
+      const now = Date.now();
+      if (active) {
+        // Mimic mouse enter
+        if (hideStartProgressRef.current > 0) {
+          const hideElapsed = (now - hideStartTimeRef.current) / 1000;
+          const hideSpeed = speed * 6;
+          const hideProgress = Math.pow(hideElapsed, 2) * hideSpeed;
+          const currentProgress = Math.max(0, hideStartProgressRef.current - hideProgress);
+          const effectiveElapsed = Math.pow(currentProgress / (speed * 3), 1 / 3);
+          const simulatedStartTime = now - effectiveElapsed * 1000;
+          revealStartTimeRef.current = simulatedStartTime;
+        } else {
+          revealStartTimeRef.current = now;
+        }
+        if (bulge && !bulge.repeat) {
+          bulgeStartTimeRef.current = now;
+        }
+        isHoveredRef.current = true;
+        hideStartProgressRef.current = 0;
+      } else {
+        // Mimic mouse leave
+        if (isHoveredRef.current) {
+          const currentProgress = maxRevealProgressRef.current;
+          hideStartTimeRef.current = Date.now();
+          hideStartProgressRef.current = currentProgress;
+          isHoveredRef.current = false;
+        }
+      }
+    }, [active, trigger, speed, bulge]);
 
     const handleMouseEnter = () => {
       if (trigger === "hover" && !isHoveredRef.current) {
@@ -686,6 +744,36 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       }
     };
 
+    const handleClick = () => {
+      if (trigger !== "click") return;
+      if (!isHoveredRef.current) {
+        // Enter
+        const now = Date.now();
+        if (hideStartProgressRef.current > 0) {
+          const hideElapsed = (now - hideStartTimeRef.current) / 1000;
+          const hideSpeed = speed * 6;
+          const hideProgress = Math.pow(hideElapsed, 2) * hideSpeed;
+          const currentProgress = Math.max(0, hideStartProgressRef.current - hideProgress);
+          const effectiveElapsed = Math.pow(currentProgress / (speed * 3), 1 / 3);
+          const simulatedStartTime = now - effectiveElapsed * 1000;
+          revealStartTimeRef.current = simulatedStartTime;
+        } else {
+          revealStartTimeRef.current = now;
+        }
+        if (bulge && !bulge.repeat) {
+          bulgeStartTimeRef.current = now;
+        }
+        isHoveredRef.current = true;
+        hideStartProgressRef.current = 0;
+      } else {
+        // Leave
+        const currentProgress = maxRevealProgressRef.current;
+        hideStartTimeRef.current = Date.now();
+        hideStartProgressRef.current = currentProgress;
+        isHoveredRef.current = false;
+      }
+    };
+
     return (
       <Flex
         ref={containerRef}
@@ -694,6 +782,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
         {...rest}
       >
         <canvas

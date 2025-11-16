@@ -1,6 +1,6 @@
 ---
 title: "WeatherFx"
-summary: "The WeatherFx component creates animated weather effects (rain, snow, leaves) using native Canvas 2D API."
+summary: "The WeatherFx component creates animated weather effects (rain, snow, leaves, lightning) using native Canvas 2D API."
 updatedAt: "2025-10-25"
 docs: "once-ui/effects/WeatherFx.mdx"
 github: "components/WeatherFx.tsx"
@@ -10,7 +10,7 @@ navTag: "New"
 navTagVariant: "cyan"
 ---
 
-The `WeatherFx` component creates animated weather effects using the native Canvas 2D API. It supports rain, snow, and falling leaves with customizable colors, speed, and intensity. Perfect for backgrounds, hero sections, or thematic content areas.
+The `WeatherFx` component creates animated weather effects using the native Canvas 2D API. It supports rain, snow, falling leaves, and lightning with customizable colors, speed, and intensity. Perfect for backgrounds, hero sections, or thematic content areas.
 
 <CodeBlock
   marginTop="16"
@@ -63,7 +63,7 @@ The `WeatherFx` component creates animated weather effects using the native Canv
 
 ## Weather Types
 
-Switch between different weather effects: rain, snow, and falling leaves.
+Switch between different weather effects: rain, snow, falling leaves, and lightning.
 
 <CodeBlock
   marginTop="16"
@@ -105,6 +105,17 @@ Switch between different weather effects: rain, snow, and falling leaves.
           <Text variant="label-default-s" onBackground="neutral-weak">Leaves</Text>
         </Column>
       </WeatherFx>
+      <WeatherFx
+        fill
+        height={20}
+        type="lightning"
+        colors={["brand-solid-strong"]}
+        intensity={20}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Lightning</Text>
+        </Column>
+      </WeatherFx>
     </Row>
   }
   codes={[
@@ -130,6 +141,13 @@ Switch between different weather effects: rain, snow, and falling leaves.
     colors={["warning-solid-strong", "danger-solid-strong"]}
     intensity={40}
     speed={0.7}
+/>
+
+<WeatherFx
+    height={20}
+    type="lightning"
+    colors={["brand-solid-strong"]}
+    intensity={20}
 />`,
       language: "tsx",
       label: "Types"
@@ -669,6 +687,131 @@ Leaves feature gradient colors, rotation animation, and tumbling motion for an a
   ]}
 />
 
+## Lightning Effect
+
+Lightning features highly realistic bolt generation with chaotic, organic branching at all angles. Each bolt creates dense networks of branches spreading in multiple directions with up to 4 levels of hierarchy. The effect uses small, erratic segments and high branching probability to create the natural, fractal-like appearance of real lightning. Bolts animate from top to bottom with progressively thinner branches. The `intensity` prop controls both the frequency and number of simultaneous strikes.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <WeatherFx
+      height={24}
+      type="lightning"
+      data-solid="contrast"
+      colors={["warning-solid-strong"]}
+      intensity={15}
+    >
+      <Column gap="16" fill center>
+        <Heading variant="display-strong-l" align="center">
+          Thunderstorm
+        </Heading>
+        <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+          Dynamic lightning with branching bolts
+        </Text>
+      </Column>
+    </WeatherFx>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={24}
+    type="lightning"
+    data-solid="contrast"
+    colors={["warning-solid-strong"]}
+    intensity={15}
+>
+    <Column gap="16" fill center>
+      <Heading variant="display-strong-l">
+        Thunderstorm
+      </Heading>
+      <Text variant="body-default-l">
+        Dynamic lightning with branching bolts
+      </Text>
+    </Column>
+</WeatherFx>`,
+      language: "tsx",
+      label: "Lightning Effect"
+    }
+  ]}
+/>
+
+## Lightning Intensity
+
+For lightning, the `intensity` prop controls strike frequency and bolt patterns. The effect alternates between single and multi-bolt strikes for natural variation. Low intensity (1-15) creates single, rare strikes. Medium intensity (16-30) occasionally spawns double bolts. High intensity (31-60) alternates between single and 2-3 bolt strikes. Very high intensity (61+) creates dramatic storms alternating between single and 2-4 simultaneous bolts.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Row gap="16" fillWidth>
+      <WeatherFx
+        fill
+        height={16}
+        type="lightning"
+        intensity={5}
+        colors={["brand-solid-strong"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Rare (5)</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={16}
+        type="lightning"
+        intensity={20}
+        colors={["brand-solid-strong"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Frequent (20)</Text>
+        </Column>
+      </WeatherFx>
+      <WeatherFx
+        fill
+        height={16}
+        type="lightning"
+        intensity={50}
+        colors={["brand-solid-strong"]}
+      >
+        <Column fill center padding="16">
+          <Text variant="label-default-s" onBackground="neutral-weak">Storm (50)</Text>
+        </Column>
+      </WeatherFx>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={16}
+    type="lightning"
+    intensity={5}
+    colors={["brand-solid-strong"]}
+/>
+
+<WeatherFx
+    height={16}
+    type="lightning"
+    intensity={20}
+    colors={["brand-solid-strong"]}
+/>
+
+<WeatherFx
+    height={16}
+    type="lightning"
+    intensity={50}
+    colors={["brand-solid-strong"]}
+/>`,
+      language: "tsx",
+      label: "Lightning Intensity"
+    }
+  ]}
+/>
+
 ## Duration
 
 Control how long particles are emitted with the `duration` prop (in seconds). After the duration, existing particles finish their animation but no new ones spawn.
@@ -718,7 +861,7 @@ Control how long particles are emitted with the `duration` prop (in seconds). Af
   ]}
 />
 
-## Hover Trigger
+## Trigger
 
 Use `trigger="hover"` to only emit particles when hovering over the element.
 
@@ -779,17 +922,90 @@ Use `trigger="hover"` to only emit particles when hovering over the element.
   ]}
 />
 
+Use `trigger="click"` to toggle emission on click.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <WeatherFx
+      fill
+      height={16}
+      type="rain"
+      trigger="click"
+      colors={["brand-solid-medium"]}
+      intensity={60}
+    >
+      <Column fill center padding="16">
+        <Text variant="label-default-s" onBackground="neutral-weak">Click to toggle rain</Text>
+      </Column>
+    </WeatherFx>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={16}
+    type="rain"
+    trigger="click"
+    colors={["brand-solid-medium"]}
+    intensity={60}
+/>`,
+      language: "tsx",
+      label: "Click Trigger"
+    }
+  ]}
+/>
+
+Use `trigger="manual"` with the `active` prop to control emission from parent state.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <WeatherFxExample />
+  }
+  codes={[
+    {
+      code:
+`"use client";
+
+import React from "react";
+import { WeatherFx, Row, ToggleButton } from "@once-ui-system/core";
+
+export function Demo() {
+    const [on, setOn] = React.useState(false);
+
+    return (
+      <Row gap="8" fillWidth>
+        <ToggleButton onClick={() => setOn((v) => !v)}>
+          {on ? "Stop" : "Start"}
+        </ToggleButton>
+        <WeatherFx height={16} type="snow" trigger="manual" active={on} intensity={60} />
+      </Row>
+    );
+}
+`,
+      language: "tsx",
+      label: "Manual Trigger"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   content={[
-    ["type", ["rain","snow","leaves"], "rain"],
+    ["type", ["rain","snow","leaves","lightning"], "rain"],
     ["speed", "number", "1"],
     ["angle", "number", "0"],
     ["colors", "string[]", '["brand-solid-medium"]'],
     ["intensity", "number", "50"],
     ["duration", "number", "undefined"],
-    ["trigger", ["mount","hover"], "mount"],
+    ["trigger", ["mount","hover","click","manual"], "mount"],
+    ["active", "boolean (manual)", "false"],
     ["children"],
     ["...flex"]
   ]}

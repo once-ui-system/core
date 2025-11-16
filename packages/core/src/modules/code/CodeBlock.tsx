@@ -660,7 +660,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 <IconButton
                   size="m"
                   tooltip="Reload"
-                  tooltipPosition="left"
+                  tooltipPosition="bottom"
                   variant="tertiary"
                   onClick={handleRefresh}
                   icon="refresh"
@@ -670,7 +670,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 <IconButton
                   size="m"
                   tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-                  tooltipPosition="left"
+                  tooltipPosition="bottom"
                   variant="tertiary"
                   icon={isFullscreen ? "minimize" : "maximize"}
                   onClick={toggleFullscreen}
@@ -685,7 +685,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 <IconButton
                   size="m"
                   tooltip="Copy"
-                  tooltipPosition="left"
+                  tooltipPosition="bottom"
                   variant="tertiary"
                   onClick={handleCopy}
                   icon={copyIcon}

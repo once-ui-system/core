@@ -95,9 +95,9 @@ Use multiple colors for variety. Supports CSS variables and any valid color form
 `<MatrixFx
     height={24}
     colors={[
-        "brand-solid-medium",
-        "accent-solid-medium",
-        "danger-solid-medium"
+      "brand-solid-medium",
+      "accent-solid-medium",
+      "danger-solid-medium"
     ]}
 />`,
       language: "tsx",
@@ -271,10 +271,10 @@ Add dynamic wave effects to create fluid, organic motion. Choose between `ripple
     height={24}
     colors={["accent-solid-strong"]}
     bulge={{
-        type: "ripple",   // Circular wave from center
-        duration: 4,      // Wave duration in seconds
-        intensity: 15,    // Displacement strength
-        repeat: true      // Continuous cycles
+      type: "ripple",   // Circular wave from center
+      duration: 4,      // Wave duration in seconds
+      intensity: 15,    // Displacement strength
+      repeat: true      // Continuous cycles
     }}
 />`,
       language: "tsx",
@@ -308,10 +308,10 @@ The `wave` type creates an organic, flowing S-curve that travels diagonally from
     height={24}
     colors={["success-solid-strong"]}
     bulge={{
-        type: "wave",     // S-curve diagonal flow
-        duration: 3,
-        intensity: 20,
-        repeat: true
+      type: "wave",     // S-curve diagonal flow
+      duration: 3,
+      intensity: 20,
+      repeat: true
     }}
 />`,
       language: "tsx",
@@ -345,9 +345,9 @@ Use `repeat: false` for a single wave that plays once. Add `delay` for a pause b
     height={24}
     colors={["danger-solid-strong"]}
     bulge={{
-        duration: 3,
-        intensity: 12,
-        repeat: false   // Single wave only
+      duration: 3,
+      intensity: 12,
+      repeat: false   // Single wave only
     }}
 />`,
       language: "tsx",
@@ -356,14 +356,14 @@ Use `repeat: false` for a single wave that plays once. Add `delay` for a pause b
   ]}
 />
 
-## Hover
+## Trigger
 
 Use `trigger="hover"` for native hover support. Dots progressively appear on hover and smoothly reverse when you move away.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  previewPadding="16"
+  previewPadding="0"
   codeHeight={24}
   preview={
     <Row gap="16" fillWidth height={24}>
@@ -528,6 +528,72 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
   ]}
 />
 
+Use `trigger="click"` to toggle the effect on click.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={16}
+      trigger="click"
+      colors={["brand-solid-medium"]}
+    >
+      <Column fill center padding="16">
+        <Text variant="label-default-s" onBackground="neutral-weak">Click to toggle</Text>
+      </Column>
+    </MatrixFx>
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={16}
+    trigger="click"
+    colors={["brand-solid-medium"]}
+/>`,
+      language: "tsx",
+      label: "Click Trigger"
+    }
+  ]}
+/>
+
+Use `trigger="manual"` with the `active` prop to control the effect from parent state.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFxExample />
+  }
+  codes={[
+    {
+      code:
+`"use client";
+
+import React from "react";
+import { MatrixFx, Row, ToggleButton } from "@once-ui-system/core";
+
+export function Demo() {
+    const [on, setOn] = React.useState(false);
+    return (
+      <Row gap="8" fillWidth>
+        <ToggleButton onClick={() => setOn((v) => !v)}>
+          {on ? "Stop" : "Start"}
+        </ToggleButton>
+        <MatrixFx height={16} trigger="manual" active={on} colors={["brand-solid-medium"]} />
+      </Row>
+    );
+}
+`,
+      language: "tsx",
+      label: "Manual Trigger"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -536,7 +602,8 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
     ["colors", "string[]", '["brand-solid-medium"]'],
     ["size", "number", "3"],
     ["spacing", "number", "3"],
-    ["trigger", ["instant","hover","mount"], "instant"],
+    ["trigger", ["instant","hover","mount","click","manual"], "instant"],
+    ["active", "boolean (manual)", "false"],
     ["flicker", "boolean", "false"],
     ["bulge", '{ type?: "ripple" | "wave"; duration?: number; intensity?: number; repeat?: boolean; delay?: number }', "undefined"],
     ["revealFrom", ["center","top","bottom","left","right"], "center"],
