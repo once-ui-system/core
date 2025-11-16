@@ -6,6 +6,8 @@ docs: "once-ui/components/avatar.mdx"
 github: "components/Avatar.tsx"
 navLabel: "Avatar"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 A versatile component for displaying user profile images, initials, or fallback icons in a circular container. Commonly used in user interfaces to represent people.
@@ -30,6 +32,50 @@ A versatile component for displaying user profile images, initials, or fallback 
 </Row>`,
       language: "tsx",
       label: "Avatar"
+    }
+  ]}
+/>
+
+## Empty
+
+Use the `empty` prop to render an empty avatar.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Avatar size="l" empty />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Avatar size="l" empty />`,
+      language: "tsx",
+      label: "Empty"
+    }
+  ]}
+/>
+
+## Icon
+
+Use the `icon` prop to render an icon in the avatar.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center">
+      <Avatar size="l" icon="sparkle" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Avatar size="l" icon="sparkle" />`,
+      language: "tsx",
+      label: "Icon"
     }
   ]}
 />
@@ -143,6 +189,7 @@ Use the T-shirt size model or set sizes with numbers (REM).
     ["size", ["xs", "s", "m", "l", "xl", "number"], "m"],
     ["value", "string"],
     ["src", "string"],
+    ["icon", "string"],
     ["loading", "boolean", "false"],
     ["empty", "boolean", "false"],
     ["statusIndicator", "object"],
