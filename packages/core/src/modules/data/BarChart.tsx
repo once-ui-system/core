@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { formatDate } from "./utils/formatDate";
 import {
   BarChart as RechartsBarChart,
@@ -31,6 +31,8 @@ import { RadiusSize } from "@/types";
 interface BarChartProps extends ChartProps {
   barWidth?: barWidth;
   hover?: boolean;
+  reverseY?: boolean;
+  reverseX?: boolean;
   "data-viz-style"?: string;
 }
 
@@ -52,6 +54,8 @@ const BarChart: React.FC<BarChartProps> = ({
   variant: variantProp,
   barWidth = "l",
   hover = false,
+  reverseY = false,
+  reverseX = false,
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
@@ -86,20 +90,27 @@ const BarChart: React.FC<BarChartProps> = ({
     }
   }, [date?.start, date?.end]);
 
-  const handleDateRangeChange = (newRange: DateRange) => {
-    setSelectedDateRange(newRange);
-    if (date?.onChange) {
-      date.onChange(newRange);
-    }
-  };
+  const handleDateRangeChange = useCallback(
+    (newRange: DateRange) => {
+      setSelectedDateRange(newRange);
+      if (date?.onChange) {
+        date.onChange(newRange);
+      }
+    },
+    [date],
+  );
 
   const seriesArray = Array.isArray(series) ? series : series ? [series] : [];
   const seriesKeys = seriesArray.map((s) => s.key);
   const chartId = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
-  const coloredSeriesArray = seriesArray.map((s, index) => ({
-    ...s,
-    color: s.color || getDistributedColor(index, seriesArray.length),
-  }));
+  const coloredSeriesArray = useMemo(
+    () =>
+      seriesArray.map((s, index) => ({
+        ...s,
+        color: s.color || getDistributedColor(index, seriesArray.length),
+      })),
+    [seriesArray],
+  );
 
   const xAxisKey = Object.keys(data[0] || {}).find((key) => !seriesKeys.includes(key)) || "name";
 
@@ -113,6 +124,63 @@ const BarChart: React.FC<BarChartProps> = ({
         }));
 
   const barColors = autoSeries.map((s) => `var(--data-${s.color})`);
+
+  const legendContent = useCallback(
+    (props: any) => {
+      const customPayload = autoSeries.map((series, index) => ({
+        value: series.key,
+        color: barColors[index],
+      }));
+
+      return (
+        <Legend
+          variant={variant as ChartVariant}
+          payload={customPayload}
+          labels={axis}
+          position={legend.position}
+          direction={legend.direction}
+        />
+      );
+    },
+    [autoSeries, barColors, variant, axis, legend.position, legend.direction],
+  );
+
+  const legendWrapperStyle = useMemo(
+    () => ({
+      position: "absolute" as const,
+      top:
+        legend.position === "top-center" ||
+        legend.position === "top-left" ||
+        legend.position === "top-right"
+          ? reverseX ? 32 : 0
+          : undefined,
+      bottom:
+        legend.position === "bottom-center" ||
+        legend.position === "bottom-left" ||
+        legend.position === "bottom-right"
+          ? 0
+          : undefined,
+      paddingBottom:
+        legend.position === "bottom-center" ||
+        legend.position === "bottom-left" ||
+        legend.position === "bottom-right"
+          ? "var(--static-space-40)"
+          : undefined,
+      left:
+        (axis === "y" || axis === "both") &&
+        (legend.position === "top-center" || legend.position === "bottom-center")
+          ? "var(--static-space-64)"
+          : 0,
+      width:
+        (axis === "y" || axis === "both") &&
+        (legend.position === "top-center" || legend.position === "bottom-center")
+          ? "calc(100% - var(--static-space-64))"
+          : "100%",
+      right: 0,
+      margin: 0,
+    }),
+    [legend.position, reverseX, axis],
+  );
 
   const filteredData = React.useMemo(() => {
     if (!selectedDateRange || !data || data.length === 0) {
@@ -140,7 +208,7 @@ const BarChart: React.FC<BarChartProps> = ({
   return (
     <Column
       fillWidth
-      height={height}
+      minHeight={height}
       border={border}
       radius="l"
       data-viz-style={dataVizStyle || mode}
@@ -172,61 +240,15 @@ const BarChart: React.FC<BarChartProps> = ({
               <RechartsCartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
               {legend.display && (
                 <RechartsLegend
-                  content={(props) => {
-                    const customPayload = autoSeries.map((series, index) => ({
-                      value: series.key,
-                      color: barColors[index],
-                    }));
-
-                    return (
-                      <Legend
-                        variant={variant as ChartVariant}
-                        payload={customPayload}
-                        labels={axis}
-                        position={legend.position}
-                        direction={legend.direction}
-                      />
-                    );
-                  }}
-                  wrapperStyle={{
-                    position: "absolute",
-                    top:
-                      legend.position === "top-center" ||
-                      legend.position === "top-left" ||
-                      legend.position === "top-right"
-                        ? 0
-                        : undefined,
-                    bottom:
-                      legend.position === "bottom-center" ||
-                      legend.position === "bottom-left" ||
-                      legend.position === "bottom-right"
-                        ? 0
-                        : undefined,
-                    paddingBottom:
-                      legend.position === "bottom-center" ||
-                      legend.position === "bottom-left" ||
-                      legend.position === "bottom-right"
-                        ? "var(--static-space-40)"
-                        : undefined,
-                    left:
-                      (axis === "y" || axis === "both") &&
-                      (legend.position === "top-center" || legend.position === "bottom-center")
-                        ? "var(--static-space-64)"
-                        : 0,
-                    width:
-                      (axis === "y" || axis === "both") &&
-                      (legend.position === "top-center" || legend.position === "bottom-center")
-                        ? "calc(100% - var(--static-space-64))"
-                        : "100%",
-                    right: 0,
-                    margin: 0,
-                  }}
+                  content={legendContent}
+                  wrapperStyle={legendWrapperStyle}
                 />
               )}
               <RechartsXAxis
                 dataKey={xAxisKey}
                 axisLine={false}
                 tickLine={tickLine}
+                orientation={reverseX ? "top" : "bottom"}
                 tick={
                   axis === "x" || axis === "both"
                     ? {
@@ -246,6 +268,7 @@ const BarChart: React.FC<BarChartProps> = ({
                   allowDataOverflow
                   width={64}
                   padding={{ top: 40 }}
+                  orientation={reverseY ? "right" : "left"}
                   tickLine={tickLine}
                   tick={{
                     fill: tickFill,

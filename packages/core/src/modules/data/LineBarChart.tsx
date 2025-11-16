@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { isWithinInterval, parseISO } from "date-fns";
 import { formatDate } from "./utils/formatDate";
 import {
@@ -33,6 +33,8 @@ import { RadiusSize } from "@/types";
 interface LineBarChartProps extends ChartProps {
   barWidth?: barWidth;
   curve?: curveType;
+  reverseY?: boolean;
+  reverseX?: boolean;
   "data-viz-style"?: string;
 }
 
@@ -54,6 +56,8 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   variant: variantProp,
   barWidth = "l",
   curve = "natural",
+  reverseY = false,
+  reverseX = false,
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
@@ -120,12 +124,15 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
     return data;
   }, [data, selectedDateRange, xAxisKey]);
 
-  const handleDateRangeChange = (newRange: DateRange) => {
-    setSelectedDateRange(newRange);
-    if (date?.onChange) {
-      date.onChange(newRange);
-    }
-  };
+  const handleDateRangeChange = useCallback(
+    (newRange: DateRange) => {
+      setSelectedDateRange(newRange);
+      if (date?.onChange) {
+        date.onChange(newRange);
+      }
+    },
+    [date],
+  );
 
   const chartSeriesArray = Array.isArray(series) ? series : series ? [series] : [];
   if (chartSeriesArray.length < 2) {
@@ -140,6 +147,56 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
 
   const finalLineColor = `var(--data-${lineColor})`;
   const finalBarColor = `var(--data-${barColor})`;
+
+  const legendContent = useMemo(
+    () => (
+      <Legend
+        variant={variant as ChartVariant}
+        colors={[finalLineColor, finalBarColor]}
+        labels={axis}
+        position={legend.position}
+        direction={legend.direction}
+      />
+    ),
+    [variant, finalLineColor, finalBarColor, axis, legend.position, legend.direction],
+  );
+
+  const legendWrapperStyle = useMemo(
+    () => ({
+      position: "absolute" as const,
+      top:
+        legend.position === "top-center" ||
+        legend.position === "top-left" ||
+        legend.position === "top-right"
+          ? reverseX ? 32 : 0
+          : undefined,
+      bottom:
+        legend.position === "bottom-center" ||
+        legend.position === "bottom-left" ||
+        legend.position === "bottom-right"
+          ? 0
+          : undefined,
+      paddingBottom:
+        legend.position === "bottom-center" ||
+        legend.position === "bottom-left" ||
+        legend.position === "bottom-right"
+          ? "var(--static-space-40)"
+          : undefined,
+      left:
+        (axis === "y" || axis === "both") &&
+        (legend.position === "top-center" || legend.position === "bottom-center")
+          ? "var(--static-space-64)"
+          : 0,
+      width:
+        (axis === "y" || axis === "both") &&
+        (legend.position === "top-center" || legend.position === "bottom-center")
+          ? "calc(100% - var(--static-space-64))"
+          : "100%",
+      right: 0,
+      margin: 0,
+    }),
+    [legend.position, reverseX, axis],
+  );
 
   const chartId = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
 
@@ -191,48 +248,8 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
               <RechartsCartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
               {legend.display && (
                 <RechartsLegend
-                  content={
-                    <Legend
-                      variant={variant as ChartVariant}
-                      colors={[finalLineColor, finalBarColor]}
-                      labels={axis}
-                      position={legend.position}
-                      direction={legend.direction}
-                    />
-                  }
-                  wrapperStyle={{
-                    position: "absolute",
-                    top:
-                      legend.position === "top-center" ||
-                      legend.position === "top-left" ||
-                      legend.position === "top-right"
-                        ? 0
-                        : undefined,
-                    bottom:
-                      legend.position === "bottom-center" ||
-                      legend.position === "bottom-left" ||
-                      legend.position === "bottom-right"
-                        ? 0
-                        : undefined,
-                    paddingBottom:
-                      legend.position === "bottom-center" ||
-                      legend.position === "bottom-left" ||
-                      legend.position === "bottom-right"
-                        ? "var(--static-space-40)"
-                        : undefined,
-                    left:
-                      (axis === "y" || axis === "both") &&
-                      (legend.position === "top-center" || legend.position === "bottom-center")
-                        ? "var(--static-space-64)"
-                        : 0,
-                    width:
-                      (axis === "y" || axis === "both") &&
-                      (legend.position === "top-center" || legend.position === "bottom-center")
-                        ? "calc(100% - var(--static-space-64))"
-                        : "100%",
-                    right: 0,
-                    margin: 0,
-                  }}
+                  content={legendContent}
+                  wrapperStyle={legendWrapperStyle}
                 />
               )}
               <RechartsXAxis
@@ -240,6 +257,7 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                 tickMargin={6}
                 dataKey={xAxisKey}
                 hide={!(axis === "x" || axis === "both")}
+                orientation={reverseX ? "top" : "bottom"}
                 axisLine={{
                   stroke: axisLineStroke,
                 }}
@@ -258,6 +276,7 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                   width={64}
                   padding={{ top: 40 }}
                   allowDataOverflow
+                  orientation={reverseY ? "right" : "left"}
                   tickLine={tickLine}
                   tick={{
                     fill: tickFill,

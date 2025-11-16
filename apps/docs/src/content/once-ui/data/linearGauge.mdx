@@ -12,10 +12,6 @@ navTagVariant: "cyan"
 
 The `LinearGauge` component renders a horizontal tick-based gauge ideal for progress indicators, metrics dashboards, and system health displays. It supports flexible label configurations including none, percentage, or custom values.
 
-## Usage
-
-### Basic usage
-
 <CodeBlock
   marginTop="16"
   marginBottom="24"
@@ -32,9 +28,9 @@ The `LinearGauge` component renders a horizontal tick-based gauge ideal for prog
     {
       code:
 `<LinearGauge
-  width={400}
-  height={60}
-  value={65}
+    width={400}
+    height={60}
+    value={65}
 />`,
       language: "tsx",
       label: "Usage"
@@ -42,7 +38,7 @@ The `LinearGauge` component renders a horizontal tick-based gauge ideal for prog
   ]}
 />
 
-### Percentage labels
+### Labels
 
 Show percentage labels at key intervals (0%, 25%, 50%, 75%, 100%).
 
@@ -64,18 +60,16 @@ Show percentage labels at key intervals (0%, 25%, 50%, 75%, 100%).
     {
       code:
 `<LinearGauge
-  width={400}
-  height={80}
-  value={75}
-  labels="percentage"
+    width={400}
+    height={80}
+    value={75}
+    labels="percentage"
 />`,
       language: "tsx",
       label: "Percentage"
     }
   ]}
 />
-
-### Custom labels
 
 Provide an array of custom labels distributed evenly across the gauge.
 
@@ -97,10 +91,10 @@ Provide an array of custom labels distributed evenly across the gauge.
     {
       code:
 `<LinearGauge
-  width={400}
-  height={80}
-  value={42}
-  labels={["Low", "Med", "High", "Max"]}
+    width={400}
+    height={80}
+    value={42}
+    labels={["Low", "Med", "High", "Max"]}
 />`,
       language: "tsx",
       label: "Custom"
@@ -131,11 +125,11 @@ Flip the order of labels and gauge by using `direction="column-reverse"`.
     {
       code:
 `<LinearGauge
-  width={400}
-  height={80}
-  value={65}
-  labels="percentage"
-  direction="column-reverse"
+    width={400}
+    height={80}
+    value={65}
+    labels="percentage"
+    direction="column-reverse"
 />`,
       language: "tsx",
       label: "Reverse"
@@ -151,9 +145,10 @@ Use the `hue` prop to represent different states with color gradients.
   marginTop="16"
   marginBottom="24"
   previewPadding="l"
+  codeHeight={24}
   fullscreenButton={true}
   preview={
-    <Column gap="16" fillWidth>
+    <Column gap="32" fillWidth>
       <LinearGauge
         width={400}
         height={60}
@@ -175,51 +170,40 @@ Use the `hue` prop to represent different states with color gradients.
         hue="danger"
         labels="percentage"
       />
+      <LinearGauge
+        width={400}
+        height={80}
+        value={90}
+        hue={[280, 180]}
+        labels="percentage"
+      />
     </Column>
   }
   codes={[
     {
       code:
 `<Column gap="16">
-  <LinearGauge
-    width={400}
-    height={60}
-    value={82}
-    hue="success"
-    labels="percentage"
-  />
-  <LinearGauge
-    width={400}
-    height={60}
-    value={56}
-    hue="neutral"
-    labels="percentage"
-  />
-  <LinearGauge
-    width={400}
-    height={60}
-    value={28}
-    hue="danger"
-    labels="percentage"
-  />
-</Column>`,
-      language: "tsx",
-      label: "States"
-    }
-  ]}
-/>
-
-### Custom hue gradient
-
-Provide a custom hue range as a tuple `[startHue, endHue]` for fine-grained color control.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  previewPadding="l"
-  fullscreenButton={true}
-  highlight="5"
-  preview={
+    <LinearGauge
+      width={400}
+      height={60}
+      value={82}
+      hue="success"
+      labels="percentage"
+    />
+    <LinearGauge
+      width={400}
+      height={60}
+      value={56}
+      hue="neutral"
+      labels="percentage"
+    />
+    <LinearGauge
+      width={400}
+      height={60}
+      value={28}
+      hue="danger"
+      labels="percentage"
+    />
     <LinearGauge
       width={400}
       height={80}
@@ -227,24 +211,14 @@ Provide a custom hue range as a tuple `[startHue, endHue]` for fine-grained colo
       hue={[280, 180]}
       labels="percentage"
     />
-  }
-  codes={[
-    {
-      code:
-`<LinearGauge
-  width={400}
-  height={80}
-  value={90}
-  hue={[280, 180]}
-  labels="percentage"
-/>`,
+</Column>`,
       language: "tsx",
-      label: "Custom hue"
+      label: "States"
     }
   ]}
 />
 
-### Tick density
+## Ticks
 
 Customize tick count, width, and length for different visual densities.
 
@@ -271,15 +245,15 @@ Customize tick count, width, and length for different visual densities.
     {
       code:
 `<LinearGauge
-  width={400}
-  height={80}
-  value={68}
-  line={{
-    count: 80,
-    width: 2,
-    length: 32,
-  }}
-  labels="percentage"
+    width={400}
+    height={80}
+    value={68}
+    line={{
+      count: 80,
+      width: 2,
+      length: 32,
+    }}
+    labels="percentage"
 />`,
       language: "tsx",
       label: "Density"
