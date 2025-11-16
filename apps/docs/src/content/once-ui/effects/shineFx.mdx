@@ -41,11 +41,11 @@ Adjust the animation speed with the `speed` prop. Higher values create slower an
   marginBottom="24"
   preview={
     <Column gap="16">
-      <ShineFx variant="heading-default-l" speed={2}>
-        Fast shine (2s)
+      <ShineFx variant="heading-default-l" speed={1}>
+        Fast shine - default (1s)
       </ShineFx>
       <ShineFx variant="heading-default-l" speed={5}>
-        Default shine (5s)
+        Medium shine (5s)
       </ShineFx>
       <ShineFx variant="heading-default-l" speed={10}>
         Slow shine (10s)
@@ -55,19 +55,45 @@ Adjust the animation speed with the `speed` prop. Higher values create slower an
   codes={[
     {
       code:
-`<ShineFx speed={2}>
-    Fast shine (2s)
+`<ShineFx speed={1}>
+    Fast shine - default (1s)
+</ShineFx>
+
+<ShineFx speed={3}>
+    Medium shine (3s)
 </ShineFx>
 
 <ShineFx speed={5}>
-    Default shine (5s)
-</ShineFx>
-
-<ShineFx speed={10}>
-    Slow shine (10s)
+    Slow shine (5s)
 </ShineFx>`,
       language: "tsx",
       label: "Speed"
+    }
+  ]}
+/>
+
+## Inverse
+
+Use the `inverse` prop to invert the shine effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <ShineFx variant="heading-default-l" inverse>
+        Inverse shine
+      </ShineFx>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ShineFx inverse>
+    Inverse shine
+</ShineFx>`,
+      language: "tsx",
+      label: "Inverse"
     }
   ]}
 />
