@@ -251,8 +251,10 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
             {dropdownGroups.map((group, groupIndex) => {
               const isActive = activeDropdown === group.id;
               const wasActive = previousDropdownRef.current === group.id;
-              // Animate when switching between dropdowns (not when first opening or returning to same)
-              const shouldAnimate = isActive && !wasActive && previousDropdownRef.current !== null;
+              // Exiting: was active previously but not active now
+              const isExiting = wasActive && !isActive;
+              // Animate only when switching between dropdowns (not when first opening or returning to same)
+              const shouldAnimate = (isActive || isExiting) && previousDropdownRef.current !== null;
               
               // Update previous ref when active changes
               if (isActive && !wasActive) {
@@ -271,11 +273,15 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                     contentRefs.current[group.id] = el;
                   }}
                   style={{
+                    zIndex: isExiting ? 3 : isActive ? 2 : 1,
                     transform: isActive ? "scale(1)" : "scale(0.9)",
-                    opacity: isActive ? 1 : 0,
+                    opacity: isActive ? 1 : isExiting ? 0 : 0,
                     pointerEvents: isActive ? "auto" : "none",
-                    transition: shouldAnimate ? "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)" : "opacity 0.2s ease-in",
-                    visibility: isActive ? "visible" : "hidden",
+                    transition: shouldAnimate
+                      ? "opacity 240ms ease, transform 240ms cubic-bezier(0.4, 0, 0.2, 1)"
+                      : "opacity 200ms ease",
+                    transitionDelay: shouldAnimate ? (isActive ? "120ms" : "0ms") : "0ms",
+                    visibility: isActive || isExiting ? "visible" : "hidden",
                   }}
                 >
                   {/* Render custom content if provided, otherwise render sections */}
