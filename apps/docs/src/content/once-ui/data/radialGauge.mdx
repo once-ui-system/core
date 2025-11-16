@@ -6,13 +6,11 @@ docs: "once-ui/data/radialGauge.mdx"
 github: "modules/data/RadialGauge.tsx"
 navLabel: "RadialGauge"
 navIcon: "radialGauge"
+navTag: "New"
+navTagVariant: "cyan"
 ---
 
 The `RadialGauge` component renders a tick-based circular or arc-shaped gauge that is ideal for health metrics, KPIs, and other real-time values. It supports full circles, semicircles, and custom arcs with configurable angles, direction, density, and visual health states.
-
-## Usage
-
-### Basic usage
 
 <CodeBlock
   marginTop="16"
@@ -20,12 +18,19 @@ The `RadialGauge` component renders a tick-based circular or arc-shaped gauge th
   previewPadding="none"
   fullscreenButton={true}
   preview={
-    <RadialGauge
-      width={260}
-      height={260}
-      value={72}
-      unit="%"
-    />
+    <Row padding="l">
+      <RadialGauge
+        width={260}
+        height={260}
+        value={72}
+        line={{
+          count: 40,
+          width: 2,
+          length: 32,
+        }}
+        unit="%"
+      />
+    </Row>
   }
   codes={[
     {
@@ -42,75 +47,96 @@ The `RadialGauge` component renders a tick-based circular or arc-shaped gauge th
   ]}
 />
 
-### Health status gauge
+## Hue
 
-Use the `health` prop to quickly change the color ramp of active ticks to represent different states.
+Use the `hue` prop to quickly change the color ramp of active ticks to represent different states.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   previewPadding="none"
+  codeHeight={20}
   fullscreenButton={true}
   preview={
-    <Row gap="16" s={{ direction: "column" }}>
-      <RadialGauge
-        width={220}
-        height={220}
-        value={82}
-        unit="%"
-        health="good"
-      />
-      <RadialGauge
-        width={220}
-        height={220}
-        value={56}
-        unit="%"
-        health="normal"
-      />
-      <RadialGauge
-        width={220}
-        height={220}
-        value={28}
-        unit="%"
-        health="bad"
-      />
-    </Row>
+    <Grid maxWidth="s" columns={2} gap="16" s={{ columns: 1 }}>
+      <Row padding="l">
+        <RadialGauge
+          width={260}
+          height={260}
+          value={82}
+          unit="%"
+          hue="success"
+        />
+      </Row>
+      <Row padding="l">
+        <RadialGauge
+          width={260}
+          height={260}
+          value={56}
+          unit="%"
+          hue="neutral"
+        />
+      </Row>
+      <Row padding="l">
+        <RadialGauge
+          width={260}
+          height={260}
+          value={28}
+          unit="%"
+          hue="danger"
+        />
+      </Row>
+      <Row padding="l">
+        <RadialGauge
+          width={260}
+          height={260}
+          value={90}
+          unit="%"
+          hue={[0, 200]}
+        />
+      </Row>
+    </Grid>
   }
   codes={[
     {
       code:
-`<Row gap="16">
-  <RadialGauge
-    width={220}
-    height={220}
+`<RadialGauge
+    width={260}
+    height={260}
     value={82}
     unit="%"
-    health="good"
-  />
-  <RadialGauge
-    width={220}
-    height={220}
+    hue="success"
+/>
+<RadialGauge
+    width={260}
+    height={260}
     value={56}
     unit="%"
-    health="normal"
-  />
-  <RadialGauge
-    width={220}
-    height={220}
+    hue="neutral"
+/>
+<RadialGauge
+    width={260}
+    height={260}
     value={28}
     unit="%"
-    health="bad"
-  />
-</Row>`,
+    hue="danger"
+/>
+<RadialGauge
+    width={260}
+    height={260}
+    value={90}
+    unit="%"
+    hue={[0, 200]}
+/>`,
       language: "tsx",
-      label: "States"
+      label: "Hue"
     }
   ]}
 />
 
-### Semicircular gauge
+## Angles
 
-You can create semicircular or arc gauges by combining `startAngle`, `sweepAngle`, and `edgePad`. The angle system is **intuitive**:
+You can create semicircular or arc gauges by combining `angle` and `edgePad`. The angle system is **intuitive**:
 
 - `0`° = left
 - `90`° = top
@@ -122,37 +148,56 @@ You can create semicircular or arc gauges by combining `startAngle`, `sweepAngle
   marginBottom="24"
   previewPadding="none"
   fullscreenButton={true}
-  highlight="6-8"
+  highlight="9-12"
   preview={
-    <RadialGauge
-      width={420}
-      height={220}
-      value={68}
-      unit="%"
-      startAngle={-90}
-      sweepAngle={180}
-      edgePad={4}
-    />
+    <Row
+      maxWidth={24}
+      padding="24"
+      horizontal="center">
+      <RadialGauge
+        width={300}
+        height={150}
+        value={68}
+        line={{
+          count: 24,
+        }}
+        angle={{
+          start: 0,
+          sweep: 180,
+        }}
+      >
+        <Row fill vertical="end" horizontal="center" padding="20">
+          <Text variant="heading-strong-xl">68%</Text>
+        </Row>
+      </RadialGauge>
+    </Row>
   }
   codes={[
     {
       code:
 `<RadialGauge
-  width={420}
-  height={220}
-  value={68}
-  unit="%"
-  startAngle={-90}
-  sweepAngle={180}
-  edgePad={4}
-/>`,
+    width={300}
+    height={150}
+    value={68}
+    line={{
+      count: 24,
+    }}
+    angle={{
+      start: 0,
+      sweep: 180,
+    }}
+>
+    <Row fill vertical="end" horizontal="center" padding="20">
+      <Text variant="heading-strong-xl">68%</Text>
+    </Row>
+</RadialGauge>`,
       language: "tsx",
       label: "Angles"
     }
   ]}
 />
 
-### Fine-grained tick density
+## Line tick
 
 Control how many ticks are rendered and how long they are using `lineCount`, `lineWidth`, and `lineLength`.
 
@@ -163,27 +208,33 @@ Control how many ticks are rendered and how long they are using `lineCount`, `li
   fullscreenButton={true}
   highlight="5-7"
   preview={
-    <RadialGauge
-      width={320}
-      height={320}
-      value={42}
-      unit="ms"
-      lineCount={80}
-      lineWidth={2}
-      lineLength={32}
-    />
+    <Row padding="24">
+      <RadialGauge
+        width={320}
+        height={320}
+        value={42}
+        unit="ms"
+        line={{
+          count: 80,
+          width: 2,
+          length: 32,
+        }}
+      />
+    </Row>
   }
   codes={[
     {
       code:
 `<RadialGauge
-  width={320}
-  height={320}
-  value={42}
-  unit="ms"
-  lineCount={80}
-  lineWidth={2}
-  lineLength={32}
+    width={320}
+    height={320}
+    value={42}
+    unit="ms"
+    line={{
+      count: 80,
+      width: 2,
+      length: 32,
+    }}
 />`,
       language: "tsx",
       label: "Density"
@@ -191,7 +242,7 @@ Control how many ticks are rendered and how long they are using `lineCount`, `li
   ]}
 />
 
-### Animated speed meter
+## Animation
 
 For interactive demos or dashboards, you can animate the `value` over time on the client. The example below simulates accelerating and braking.
 
@@ -199,9 +250,12 @@ For interactive demos or dashboards, you can animate the `value` over time on th
   marginTop="16"
   marginBottom="24"
   previewPadding="none"
+  codeHeight={24}
   fullscreenButton={true}
   preview={
-    <RadialGaugeSpeedDemo />
+    <Row paddingTop="24">
+      <RadialGaugeSpeedDemo />
+    </Row>
   }
   codes={[
     {
@@ -264,8 +318,10 @@ export function RadialGaugeSpeedDemo() {
         height={260}
         value={value}
         unit="km/h"
-        startAngle={-120}
-        sweepAngle={240}
+        angle={{
+          start: -120,
+          sweep: 240,
+        }}
         edgePad={4}
       />
       <Text variant="label-default-m" onBackground="neutral-medium">
@@ -288,17 +344,14 @@ The `RadialGauge` component accepts all layout props from `Column` (except `dire
   content={[
     ["width", "number", "300"],
     ["height", "number", "300"],
-    ["lineCount", "number", "60"],
-    ["lineWidth", "number", "3"],
-    ["lineLength", "number", "40"],
-    ["value", "number (0–100)", "7"],
+    ["line", "object", "{{ count: 60, width: 3, length: 40 }}"],
+    ["value", "0–100", "7"],
     ["unit", "ReactNode"],
-    ["startAngle", "number", "0"],
-    ["sweepAngle", "number", "360"],
-    ["direction", "\"cw\" | \"ccw\"", "\"cw\""],
+    ["angle", "object", "{{ start: 0, sweep: 360 }}"],
+    ["direction", ["cw", "ccw"], "cw"],
     ["edgePad", "number", "0"],
-    ["health", "\"good\" | \"normal\" | \"bad\"", "\"good\""],
-    ["children", "ReactNode"],
+    ["hue", ["success", "neutral", "danger"], "success"],
+    ["children"],
     ["...flex"],
   ]}
 />

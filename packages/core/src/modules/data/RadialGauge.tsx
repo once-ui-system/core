@@ -2,41 +2,65 @@
 
 import React, { useEffect, useState } from "react";
 import { Column, CountFx, Text } from "../../";
-import styles from "./RadialGauge.module.css";
+import styles from "./Gauge.module.css";
 
 interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Column>, 'direction'> {
   width?: number;
   height?: number;
-  lineCount?: number;
-  lineWidth?: number;
-  lineLength?: number;
+  line?: {
+    count?: number;
+    width?: number;
+    length?: number;
+  };
   unit?: React.ReactNode;
   value?: number;
-  startAngle?: number;     // 0=left, 90=top, 180=right, 270=bottom (intuitive coordinate system)
-  sweepAngle?: number;     // arc span in degrees (e.g., 180 for semicircle, 240 for gauge)
+  angle?: {
+    start: number;
+    sweep: number;
+  };
   direction?: 'cw' | 'ccw';// default 'cw' (arc rotation direction)
   edgePad?: number;        // default 0, number of ticks to trim at both ends
   children?: React.ReactNode;
-  health?: "good" | "normal" | "bad";
+  hue?: "success" | "neutral" | "danger" | [number, number];
+  color?: string;
 }
+
+const resolveHueRange = (hue: RadialGaugeProps["hue"]): [number, number] => {
+  if (hue && typeof hue !== "string") {
+    const [start = 200, end = 120] = hue;
+    return [start, end];
+  }
+
+  if (hue === "danger") return [0, 30];
+  if (hue === "neutral") return [30, 60];
+  if (hue === "success") return [200, 120];
+
+  return [200, 120];
+};
 
 export const RadialGauge = ({
   width = 300,
   height = 300,
-  lineCount = 60,
-  lineWidth = 3,
-  lineLength = 40,
+  line,
   value = 7,
-  startAngle = 0,       // 0=left; use 90 for top-centered arcs
-  sweepAngle = 360,
+  angle = {
+    start: 0,
+    sweep: 360,
+  },
   direction = 'cw',
   edgePad = 0,
   unit,
   children,
-  health = "good",
+  hue,
+  color = "contrast",
   ...flex
 }: RadialGaugeProps) => {
   const pad = 4;
+  
+  // Destructure line with individual defaults
+  const lineCount = line?.count ?? 48;
+  const lineWidth = line?.width ?? 3;
+  const lineLength = line?.length ?? 40;
   
   // For semicircles (sweepAngle ~180), use width or height as the diameter
   // For full circles, use the smaller dimension
@@ -44,7 +68,7 @@ export const RadialGauge = ({
   let cx: number;
   let cy: number;
   
-  if (sweepAngle <= 180) {
+  if (angle.sweep <= 180) {
     // Semicircle: span the full width, center horizontally
     radius = width / 2 - pad;
     cx = width / 2;
@@ -85,45 +109,39 @@ export const RadialGauge = ({
 
   // Transform user angles to intuitive system: 0°=left, 90°=top, 180°=right
   // SVG rotation: 0°=up, 90°=right, so user's angle - 90 maps correctly
-  const internalStartAngle = startAngle - 90;
+  const internalStartAngle = angle.start - 90;
+  const hasHue = hue !== undefined;
+  const [startHue, endHue] = resolveHueRange(hue);
 
   const renderLines = () => {
     const lines = [];
     for (let j = 0; j < ticks; j++) {
       // map j∈[0,ticks-1] to angle ∈ [startAngle, startAngle + sweepAngle]
       const t = ticks > 1 ? j / (ticks - 1) : 0;
-      const angle = internalStartAngle + dir * (t * sweepAngle);
+      const finalAngle = internalStartAngle + dir * (t * angle.sweep);
       const isActive = j < activeLines;
 
       const gradientPosition = t; // 0..1 across the arc
 
-      // Determine hue ramp based on health
-      const [startHue, endHue] =
-        health === 'bad'
-          ? [0, 30]         // red -> orange
-          : health === 'normal'
-          ? [30, 60]        // orange -> yellow
-          : [200, 120];     // blue -> green (good)
-
-      const hue = startHue + (endHue - startHue) * gradientPosition;
+      const finalHue = startHue + (endHue - startHue) * gradientPosition;
 
       lines.push(
         <line
           key={j}
           x1={cx}
-          y1={cy - (radius - lineLength)}
+          y1={cy - (radius - pad - lineLength)}
           x2={cx}
-          y2={cy - radius + 10}
+          y2={cy - (radius - pad)}
           strokeLinecap="round"
           className={isActive ? styles.activeLine : styles.inactiveLine}
           style={{
-            transform: `rotate(${angle}deg)`,
+            transform: `rotate(${finalAngle}deg)`,
             transformOrigin: `${cx}px ${cy}px`,
             strokeWidth: lineWidth,
             opacity: isActive ? 1 : 0.7,
-            stroke: isActive
-              ? `hsl(${hue}, 100%, 50%)`
-              : 'var(--neutral-alpha-medium)',
+            stroke: isActive && hasHue
+              ? `hsl(${finalHue}, 100%, 50%)`
+              : isActive && color ? `var(--data-${color})` : 'var(--neutral-alpha-medium)',
           }}
         />
       );

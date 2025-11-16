@@ -1,5 +1,6 @@
 .svg {
   display: block;
+  overflow: visible;
 }
 
 .activeLine {
@@ -8,6 +9,11 @@
 
 .inactiveLine {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.label {
+  font-family: var(--font-code);
+  user-select: none;
 }
 
 /* Glow animation */
