@@ -30,3 +30,6 @@ export * from "./TypeFxCustomExample";
 export * from "./Products";
 export * from "./RadialGaugeExample";
 export * from "./CelebrationFxExample";
+export * from "./WeatherFxExample";
+export * from "./MatrixFxExample";
+

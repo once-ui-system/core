@@ -861,7 +861,7 @@ Control how long particles are emitted with the `duration` prop (in seconds). Af
   ]}
 />
 
-## Hover Trigger
+## Trigger
 
 Use `trigger="hover"` to only emit particles when hovering over the element.
 
@@ -922,6 +922,78 @@ Use `trigger="hover"` to only emit particles when hovering over the element.
   ]}
 />
 
+Use `trigger="click"` to toggle emission on click.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <WeatherFx
+      fill
+      height={16}
+      type="rain"
+      trigger="click"
+      colors={["brand-solid-medium"]}
+      intensity={60}
+    >
+      <Column fill center padding="16">
+        <Text variant="label-default-s" onBackground="neutral-weak">Click to toggle rain</Text>
+      </Column>
+    </WeatherFx>
+  }
+  codes={[
+    {
+      code:
+`<WeatherFx
+    height={16}
+    type="rain"
+    trigger="click"
+    colors={["brand-solid-medium"]}
+    intensity={60}
+/>`,
+      language: "tsx",
+      label: "Click Trigger"
+    }
+  ]}
+/>
+
+Use `trigger="manual"` with the `active` prop to control emission from parent state.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <WeatherFxExample />
+  }
+  codes={[
+    {
+      code:
+`"use client";
+
+import React from "react";
+import { WeatherFx, Row, ToggleButton } from "@once-ui-system/core";
+
+export function Demo() {
+    const [on, setOn] = React.useState(false);
+
+    return (
+      <Row gap="8" fillWidth>
+        <ToggleButton onClick={() => setOn((v) => !v)}>
+          {on ? "Stop" : "Start"}
+        </ToggleButton>
+        <WeatherFx height={16} type="snow" trigger="manual" active={on} intensity={60} />
+      </Row>
+    );
+}
+`,
+      language: "tsx",
+      label: "Manual Trigger"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -932,7 +1004,8 @@ Use `trigger="hover"` to only emit particles when hovering over the element.
     ["colors", "string[]", '["brand-solid-medium"]'],
     ["intensity", "number", "50"],
     ["duration", "number", "undefined"],
-    ["trigger", ["mount","hover"], "mount"],
+    ["trigger", ["mount","hover","click","manual"], "mount"],
+    ["active", "boolean (manual)", "false"],
     ["children"],
     ["...flex"]
   ]}
