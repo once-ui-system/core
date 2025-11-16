@@ -29,3 +29,4 @@ export * from "./ToastExample";
 export * from "./TypeFxCustomExample";
 export * from "./Products";
 export * from "./RadialGaugeExample";
+export * from "./CelebrationFxExample";

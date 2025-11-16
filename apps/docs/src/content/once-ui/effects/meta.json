@@ -2,6 +2,7 @@
   "title": "Effects",
   "order": 7,
   "pages": {
+    "celebrationFx": 0,
     "matrixFx": 1,
     "weatherFx": 2,
     "countdownFx": 3,
