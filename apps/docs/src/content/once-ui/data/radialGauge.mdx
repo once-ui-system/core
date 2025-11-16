@@ -36,10 +36,10 @@ The `RadialGauge` component renders a tick-based circular or arc-shaped gauge th
     {
       code:
 `<RadialGauge
-  width={260}
-  height={260}
-  value={72}
-  unit="%"
+    width={260}
+    height={260}
+    value={72}
+    unit="%"
 />`,
       language: "tsx",
       label: "Usage"
@@ -148,7 +148,7 @@ You can create semicircular or arc gauges by combining `angle` and `edgePad`. Th
   marginBottom="24"
   previewPadding="none"
   fullscreenButton={true}
-  highlight="9-12"
+  highlight="8-11"
   preview={
     <Row
       maxWidth={24}
@@ -197,7 +197,7 @@ You can create semicircular or arc gauges by combining `angle` and `edgePad`. Th
   ]}
 />
 
-## Line tick
+## Ticks
 
 Control how many ticks are rendered and how long they are using `lineCount`, `lineWidth`, and `lineLength`.
 
@@ -206,7 +206,7 @@ Control how many ticks are rendered and how long they are using `lineCount`, `li
   marginBottom="24"
   previewPadding="none"
   fullscreenButton={true}
-  highlight="5-7"
+  highlight="6-10"
   preview={
     <Row padding="24">
       <RadialGauge
