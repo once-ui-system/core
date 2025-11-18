@@ -49,7 +49,6 @@ import {
     TagInput,
     Avatar,
     Background,
-    Input,
     Card,
     Chip,
     Fade,
@@ -97,6 +96,7 @@ import {
     TypeFx,
     WeatherFx,
     CountdownFx,
+    Input,
 } from "@once-ui-system/core";
 
 interface ComponentCategory {
@@ -104,25 +104,12 @@ interface ComponentCategory {
     description: string;
     components: {
         name: string;
-        element: React.ReactNode;
+        element: React.ReactNode[] | React.ReactNode;
     }[];
 }
 
 export default function ComponentsCheck() {
     const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-    const [menuSelections, setMenuSelections] = useState<Record<string, string>>({});
-    const [expandedComponents, setExpandedComponents] = useState<Set<string>>(new Set());
-
-    const toggleComponent = (componentName: string) => {
-        const newSet = new Set(expandedComponents);
-        if (newSet.has(componentName)) {
-            newSet.delete(componentName);
-        } else {
-            newSet.add(componentName);
-        }
-        setExpandedComponents(newSet);
-    };
-
     const categories: ComponentCategory[] = [
         {
             name: "Layout",
@@ -150,7 +137,11 @@ export default function ComponentsCheck() {
             components: [
                 { name: "Button", element: <Button>Click me</Button> },
                 { name: "IconButton", element: <IconButton icon="heart" /> },
-                { name: "Input", element: <Input id="input-test" placeholder="Enter text" /> },
+                { name: "Input", element: [
+                        <Input key={"input-1"} id="input-test" placeholder="label"/>,
+                        <Input key={"input-2"} id="input-test-2" placeholder="label" label="label test"/>,
+                        <Input key={"input-3"} id="input-test-3" label="label test"/>
+                    ]},
                 { name: "Textarea", element: <Textarea id="textarea-test" placeholder="Enter text..." lines={3} /> },
                 { name: "Checkbox", element: <Checkbox label="Checkbox" /> },
                 { name: "Switch", element: <Switch isChecked={false} onToggle={() => console.log()} label="Toggle" /> },
@@ -365,6 +356,7 @@ export default function ComponentsCheck() {
                                                     padding="m"
                                                     cursor="pointer"
                                                     center
+                                                    gap="m"
                                                 >
                                                     {component.element}
                                                 </Column>
