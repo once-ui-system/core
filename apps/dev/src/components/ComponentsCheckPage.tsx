@@ -138,10 +138,10 @@ export default function ComponentsCheck() {
                 { name: "Button", element: <Button>Click me</Button> },
                 { name: "IconButton", element: <IconButton icon="heart" /> },
                 { name: "Input", element: [
-                    <Input key={"input-1"} id="input-test" placeholder="label"/>,
-                    <Input key={"input-2"} id="input-test-2" placeholder="label" label="label test"/>,
-                    <Input key={"input-3"} id="input-test-3" label="label test"/>
-                ]},
+                        <Input key={"input-1"} id="input-test" placeholder="label"/>,
+                        <Input key={"input-2"} id="input-test-2" placeholder="label" label="label test"/>,
+                        <Input key={"input-3"} id="input-test-3" label="label test"/>
+                    ]},
                 { name: "Textarea", element: <Textarea id="textarea-test" placeholder="Enter text..." lines={3} /> },
                 { name: "Checkbox", element: <Checkbox label="Checkbox" /> },
                 { name: "Switch", element: <Switch isChecked={false} onToggle={() => console.log()} label="Toggle" /> },
