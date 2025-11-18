@@ -1,0 +1,359 @@
+---
+title: "RadialGauge"
+summary: "A radial, tick-based gauge for visualizing health metrics and real-time values using circular or arc-based layouts."
+updatedAt: "2025-11-15"
+docs: "once-ui/data/radialGauge.mdx"
+github: "modules/data/RadialGauge.tsx"
+navLabel: "RadialGauge"
+navIcon: "radialGauge"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `RadialGauge` component renders a tick-based circular or arc-shaped gauge that is ideal for health metrics, KPIs, and other real-time values. It supports full circles, semicircles, and custom arcs with configurable angles, direction, density, and visual health states.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  fullscreenButton={true}
+  preview={
+    <Row padding="l">
+      <RadialGauge
+        width={260}
+        height={260}
+        value={72}
+        line={{
+          count: 40,
+          width: 2,
+          length: 32,
+        }}
+        unit="%"
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<RadialGauge
+    width={260}
+    height={260}
+    value={72}
+    unit="%"
+/>`,
+      language: "tsx",
+      label: "Usage"
+    }
+  ]}
+/>
+
+## Hue
+
+Use the `hue` prop to quickly change the color ramp of active ticks to represent different states.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  codeHeight={20}
+  fullscreenButton={true}
+  preview={
+    <Grid maxWidth="s" columns={2} gap="16" s={{ columns: 1 }}>
+      <Row padding="l">
+        <RadialGauge
+          width={260}
+          height={260}
+          value={82}
+          unit="%"
+          hue="success"
+        />
+      </Row>
+      <Row padding="l">
+        <RadialGauge
+          width={260}
+          height={260}
+          value={56}
+          unit="%"
+          hue="neutral"
+        />
+      </Row>
+      <Row padding="l">
+        <RadialGauge
+          width={260}
+          height={260}
+          value={28}
+          unit="%"
+          hue="danger"
+        />
+      </Row>
+      <Row padding="l">
+        <RadialGauge
+          width={260}
+          height={260}
+          value={90}
+          unit="%"
+          hue={[0, 200]}
+        />
+      </Row>
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<RadialGauge
+    width={260}
+    height={260}
+    value={82}
+    unit="%"
+    hue="success"
+/>
+<RadialGauge
+    width={260}
+    height={260}
+    value={56}
+    unit="%"
+    hue="neutral"
+/>
+<RadialGauge
+    width={260}
+    height={260}
+    value={28}
+    unit="%"
+    hue="danger"
+/>
+<RadialGauge
+    width={260}
+    height={260}
+    value={90}
+    unit="%"
+    hue={[0, 200]}
+/>`,
+      language: "tsx",
+      label: "Hue"
+    }
+  ]}
+/>
+
+## Angles
+
+You can create semicircular or arc gauges by combining `angle` and `edgePad`. The angle system is **intuitive**:
+
+- `0`° = left
+- `90`° = top
+- `180`° = right
+- `270`° = bottom
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  fullscreenButton={true}
+  highlight="8-11"
+  preview={
+    <Row
+      maxWidth={24}
+      padding="24"
+      horizontal="center">
+      <RadialGauge
+        width={300}
+        height={150}
+        value={68}
+        line={{
+          count: 24,
+        }}
+        angle={{
+          start: 0,
+          sweep: 180,
+        }}
+      >
+        <Row fill vertical="end" horizontal="center" padding="20">
+          <Text variant="heading-strong-xl">68%</Text>
+        </Row>
+      </RadialGauge>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<RadialGauge
+    width={300}
+    height={150}
+    value={68}
+    line={{
+      count: 24,
+    }}
+    angle={{
+      start: 0,
+      sweep: 180,
+    }}
+>
+    <Row fill vertical="end" horizontal="center" padding="20">
+      <Text variant="heading-strong-xl">68%</Text>
+    </Row>
+</RadialGauge>`,
+      language: "tsx",
+      label: "Angles"
+    }
+  ]}
+/>
+
+## Ticks
+
+Control how many ticks are rendered and how long they are using `lineCount`, `lineWidth`, and `lineLength`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  fullscreenButton={true}
+  highlight="6-10"
+  preview={
+    <Row padding="24">
+      <RadialGauge
+        width={320}
+        height={320}
+        value={42}
+        unit="ms"
+        line={{
+          count: 80,
+          width: 2,
+          length: 32,
+        }}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<RadialGauge
+    width={320}
+    height={320}
+    value={42}
+    unit="ms"
+    line={{
+      count: 80,
+      width: 2,
+      length: 32,
+    }}
+/>`,
+      language: "tsx",
+      label: "Density"
+    }
+  ]}
+/>
+
+## Animation
+
+For interactive demos or dashboards, you can animate the `value` over time on the client. The example below simulates accelerating and braking.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="none"
+  codeHeight={24}
+  fullscreenButton={true}
+  preview={
+    <Row paddingTop="24">
+      <RadialGaugeSpeedDemo />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`"use client";
+
+import React, { useEffect, useState } from "react";
+import { RadialGauge, Column, Text } from "@once-ui-system/core";
+
+export function RadialGaugeSpeedDemo() {
+  const [value, setValue] = useState(20);
+  const [phase, setPhase] = useState<"idle" | "accelerate" | "brake">("idle");
+
+  useEffect(() => {
+    let timeout: ReturnType<typeof setTimeout> | undefined;
+    let interval: ReturnType<typeof setInterval> | undefined;
+
+    const startAccelerate = () => {
+      setPhase("accelerate");
+      interval = setInterval(() => {
+        setValue(prev => {
+          const next = Math.min(prev + 6, 96);
+          if (next >= 96) {
+            clearInterval(interval);
+            timeout = setTimeout(startBrake, 600);
+          }
+          return next;
+        });
+      }, 90);
+    };
+
+    const startBrake = () => {
+      setPhase("brake");
+      interval = setInterval(() => {
+        setValue(prev => {
+          const next = Math.max(prev - 8, 18);
+          if (next <= 18) {
+            clearInterval(interval);
+            timeout = setTimeout(startAccelerate, 800);
+          }
+          return next;
+        });
+      }, 90);
+    };
+
+    timeout = setTimeout(startAccelerate, 400);
+
+    return () => {
+      if (interval) clearInterval(interval);
+      if (timeout) clearTimeout(timeout);
+    };
+  }, []);
+
+  const label = phase === "accelerate" ? "Accelerating" : phase === "brake" ? "Braking" : "Idle";
+
+  return (
+    <Column center gap="8">
+      <RadialGauge
+        width={260}
+        height={260}
+        value={value}
+        unit="km/h"
+        angle={{
+          start: -120,
+          sweep: 240,
+        }}
+        edgePad={4}
+      />
+      <Text variant="label-default-m" onBackground="neutral-medium">
+        {label}
+      </Text>
+    </Column>
+  );
+}`,
+      language: "tsx",
+      label: "Animated speed meter"
+    }
+  ]}
+/>
+
+## Props
+
+The `RadialGauge` component accepts all layout props from `Column` (except `direction`) plus the following gauge-specific props:
+
+<PropsTable
+  content={[
+    ["width", "number", "300"],
+    ["height", "number", "300"],
+    ["line", "object", "{{ count: 60, width: 3, length: 40 }}"],
+    ["value", "0–100", "7"],
+    ["unit", "ReactNode"],
+    ["angle", "object", "{{ start: 0, sweep: 360 }}"],
+    ["direction", ["cw", "ccw"], "cw"],
+    ["edgePad", "number", "0"],
+    ["hue", ["success", "neutral", "danger"], "success"],
+    ["children"],
+    ["...flex"],
+  ]}
+/>
+
+Use `RadialGauge` when you need a compact, highly legible representation of a single metric that can be scanned quickly, such as system health, SLO burn rate, or real-time utilization.

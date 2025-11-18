@@ -1,0 +1,281 @@
+---
+title: "LinearGauge"
+summary: "A horizontal, tick-based gauge for visualizing progress, metrics, and health with flexible label configurations."
+updatedAt: "2025-11-16"
+docs: "once-ui/data/linearGauge.mdx"
+github: "modules/data/LinearGauge.tsx"
+navLabel: "LinearGauge"
+navIcon: "linearGauge"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `LinearGauge` component renders a horizontal tick-based gauge ideal for progress indicators, metrics dashboards, and system health displays. It supports flexible label configurations including none, percentage, or custom values.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  fullscreenButton={true}
+  preview={
+    <LinearGauge
+      width={400}
+      height={60}
+      value={65}
+    />
+  }
+  codes={[
+    {
+      code:
+`<LinearGauge
+    width={400}
+    height={60}
+    value={65}
+/>`,
+      language: "tsx",
+      label: "Usage"
+    }
+  ]}
+/>
+
+## Labels
+
+Show percentage labels at key intervals (0%, 25%, 50%, 75%, 100%).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  fullscreenButton={true}
+  highlight="5"
+  preview={
+    <LinearGauge
+      width={400}
+      height={80}
+      value={75}
+      labels="percentage"
+    />
+  }
+  codes={[
+    {
+      code:
+`<LinearGauge
+    width={400}
+    height={80}
+    value={75}
+    labels="percentage"
+/>`,
+      language: "tsx",
+      label: "Percentage"
+    }
+  ]}
+/>
+
+Provide an array of custom labels distributed evenly across the gauge.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  fullscreenButton={true}
+  highlight="5"
+  preview={
+    <LinearGauge
+      width={400}
+      height={80}
+      value={42}
+      labels={["Low", "Med", "High", "Max"]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<LinearGauge
+    width={400}
+    height={80}
+    value={42}
+    labels={["Low", "Med", "High", "Max"]}
+/>`,
+      language: "tsx",
+      label: "Custom"
+    }
+  ]}
+/>
+
+## Reverse order
+
+Flip the order of labels and gauge by using `direction="column-reverse"`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  fullscreenButton={true}
+  highlight="6"
+  preview={
+    <LinearGauge
+      width={400}
+      height={80}
+      value={65}
+      labels="percentage"
+      direction="column-reverse"
+    />
+  }
+  codes={[
+    {
+      code:
+`<LinearGauge
+    width={400}
+    height={80}
+    value={65}
+    labels="percentage"
+    direction="column-reverse"
+/>`,
+      language: "tsx",
+      label: "Reverse"
+    }
+  ]}
+/>
+
+## Hue
+
+Use the `hue` prop to represent different states with color gradients.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  codeHeight={24}
+  fullscreenButton={true}
+  preview={
+    <Column gap="32" fillWidth>
+      <LinearGauge
+        width={400}
+        height={60}
+        value={82}
+        hue="success"
+        labels="percentage"
+      />
+      <LinearGauge
+        width={400}
+        height={60}
+        value={56}
+        hue="neutral"
+        labels="percentage"
+      />
+      <LinearGauge
+        width={400}
+        height={60}
+        value={28}
+        hue="danger"
+        labels="percentage"
+      />
+      <LinearGauge
+        width={400}
+        height={80}
+        value={90}
+        hue={[280, 180]}
+        labels="percentage"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column gap="16">
+    <LinearGauge
+      width={400}
+      height={60}
+      value={82}
+      hue="success"
+      labels="percentage"
+    />
+    <LinearGauge
+      width={400}
+      height={60}
+      value={56}
+      hue="neutral"
+      labels="percentage"
+    />
+    <LinearGauge
+      width={400}
+      height={60}
+      value={28}
+      hue="danger"
+      labels="percentage"
+    />
+    <LinearGauge
+      width={400}
+      height={80}
+      value={90}
+      hue={[280, 180]}
+      labels="percentage"
+    />
+</Column>`,
+      language: "tsx",
+      label: "States"
+    }
+  ]}
+/>
+
+## Ticks
+
+Customize tick count, width, and length for different visual densities.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="l"
+  fullscreenButton={true}
+  highlight="5-9"
+  preview={
+    <LinearGauge
+      width={400}
+      height={80}
+      value={68}
+      line={{
+        count: 80,
+        width: 2,
+        length: 32,
+      }}
+      labels="percentage"
+    />
+  }
+  codes={[
+    {
+      code:
+`<LinearGauge
+    width={400}
+    height={80}
+    value={68}
+    line={{
+      count: 80,
+      width: 2,
+      length: 32,
+    }}
+    labels="percentage"
+/>`,
+      language: "tsx",
+      label: "Density"
+    }
+  ]}
+/>
+
+## Props
+
+The `LinearGauge` component accepts all layout props from `Flex` (except `direction`) plus the following gauge-specific props:
+
+<PropsTable
+  content={[
+    ["width", "number", "400"],
+    ["height", "number", "80"],
+    ["line", "object", "{{ count: 48, width: 3, length: 40 }}"],
+    ["value", "0–100", "50"],
+    ["labels", ["none", "percentage", "string[]"], "none"],
+    ["hue", ["success", "neutral", "danger", "[number, number]"]],
+    ["color", "string", "contrast"],
+    ["...flex"],
+  ]}
+/>
+
+Use `LinearGauge` for horizontal metrics displays, progress tracking, or any scenario where a linear representation is more appropriate than a radial one.

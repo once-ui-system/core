@@ -13,7 +13,9 @@ import {
   Meta,
   Schema,
   MatrixFx,
-  Background
+  Background,
+  Pulse,
+  ShineFx
 } from "@once-ui-system/core";
 import { baseURL, meta, schema, changelog, roadmap, layout } from "@/resources";
 import { formatDate } from "./utils/formatDate";
@@ -89,7 +91,7 @@ export default function Home() {
               top="0"
               left="0"
               flicker
-              colors={["brand-solid-strong"]} 
+              colors={["brand-solid-strong"]}
               bulge={{
                 type: "wave",
                 duration: 3,
@@ -101,20 +103,27 @@ export default function Home() {
             <Column fillWidth gap="16" padding="48">
               <Badge
                 background="overlay"
+                style={{backdropFilter: "blue(0.25rem)"}}
                 paddingLeft="8"
-                paddingRight="20"
-                paddingY="8"
-                effect={false}
-                border="neutral-alpha-weak"
-                shadow={undefined}
+                paddingRight="4"
+                border="brand-alpha-weak"
+                arrow={false}
+                paddingY="4"
                 href="/changelog"
-                vertical="center"
-                radius="l"
               >
-                <Tag marginRight="12" variant="brand">NEW</Tag>
-                <Text variant="label-default-s">
-                  Once UI 1.5 — Curiosity in code
-                </Text>
+                <Row vertical="center">
+                  <Pulse size="s"/>
+                  <Row
+                    marginLeft="12"
+                    textVariant="label-default-s"
+                    onBackground="brand-medium"
+                    gap="8"
+                    vertical="center"
+                  >
+                    <Text weight="strong" onBackground="brand-strong">Once UI 1.5</Text> Curiosity in code
+                    <Tag variant="brand" data-border="rounded"><ShineFx speed={2} baseOpacity={0.8}>New</ShineFx></Tag>
+                  </Row>
+                </Row>
               </Badge>
               <Heading variant="display-strong-m" marginTop="12">
                 Once UI Docs

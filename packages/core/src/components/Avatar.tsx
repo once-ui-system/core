@@ -4,6 +4,7 @@ import React, { forwardRef } from "react";
 
 import { Skeleton, Icon, Text, StatusIndicator, Flex, Media } from ".";
 import styles from "./Avatar.module.scss";
+import { IconName } from "@/icons";
 
 interface AvatarProps extends React.ComponentProps<typeof Flex> {
   size?: "xs" | "s" | "m" | "l" | "xl" | number;
@@ -11,6 +12,7 @@ interface AvatarProps extends React.ComponentProps<typeof Flex> {
   src?: string;
   loading?: boolean;
   empty?: boolean;
+  icon?: IconName;
   statusIndicator?: {
     color: "green" | "yellow" | "red" | "gray";
   };
@@ -36,7 +38,7 @@ const statusIndicatorSizeMapping: Record<"xs" | "s" | "m" | "l" | "xl", "s" | "m
 
 const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   (
-    { size = "m", value, src, loading, empty, statusIndicator, className, style = {}, ...rest },
+    { size = "m", value, src, loading, empty, icon, statusIndicator, className, style = {}, ...rest },
     ref,
   ) => {
     const sizeInRem = typeof size === "number" ? `${size}rem` : undefined;
@@ -75,7 +77,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         return (
           <Icon
             onBackground="neutral-medium"
-            name="person"
+            name={icon || "person"}
             size="m"
             style={typeof size === "number" ? { fontSize: `${size / 3}rem` } : undefined}
             className={styles.icon}
