@@ -15,7 +15,7 @@ import { Column, Flex, Heading, IconButton, Text } from ".";
 import styles from "./Dialog.module.scss";
 
 interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
-  isOpen: boolean;
+  open: boolean;
   onClose: () => void;
   title: ReactNode | string;
   description?: ReactNode;
@@ -55,7 +55,7 @@ export const DialogProvider: React.FC<{
 const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
   (
     {
-      isOpen,
+      open,
       onClose,
       title,
       description,
@@ -70,15 +70,15 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     ref,
   ) => {
     const dialogRef = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(isOpen);
+    const [isVisible, setIsVisible] = useState(open);
     const [isAnimating, setIsAnimating] = useState(false);
     const { stackedDialogOpen, setStackedDialogOpen } = useContext(DialogContext);
 
     useEffect(() => {
       if (stack) {
-        setStackedDialogOpen(isOpen);
+        setStackedDialogOpen(open);
       }
-    }, [stack, isOpen, setStackedDialogOpen]);
+    }, [stack, open, setStackedDialogOpen]);
 
     useEffect(() => {
       if (dialogRef.current && isVisible) {
@@ -88,7 +88,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     }, [isVisible, onHeightChange]);
 
     useEffect(() => {
-      if (isOpen) {
+      if (open) {
         setIsVisible(true);
         setTimeout(() => {
           setIsAnimating(true);
@@ -99,7 +99,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
           setIsVisible(false);
         }, 300);
       }
-    }, [isOpen]);
+    }, [open]);
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
@@ -129,16 +129,16 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     );
 
     useEffect(() => {
-      if (isOpen) {
+      if (open) {
         document.addEventListener("keydown", handleKeyDown);
         return () => {
           document.removeEventListener("keydown", handleKeyDown);
         };
       }
-    }, [isOpen, handleKeyDown]);
+    }, [open, handleKeyDown]);
 
     useEffect(() => {
-      if (isOpen) {
+      if (open) {
         document.body.style.overflow = "hidden";
         // Make everything outside the dialog inert
         document.body.childNodes.forEach((node) => {
@@ -175,17 +175,17 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
           document.body.style.overflow = "unset";
         }
       }
-    }, [isOpen, stack]);
+    }, [open, stack]);
 
     useEffect(() => {
-      if (isOpen && dialogRef.current) {
+      if (open && dialogRef.current) {
         const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
         );
         const firstElement = focusableElements[0];
         firstElement.focus();
       }
-    }, [isOpen]);
+    }, [open]);
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {

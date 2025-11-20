@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  Input, 
-  Icon, 
-  IconButton, 
-  ColorInput, 
-  DateInput, 
-  NumberInput, 
-  OTPInput, 
-  PasswordInput, 
+import {
+  Input,
+  Icon,
+  IconButton,
+  ColorInput,
+  DateInput,
+  NumberInput,
+  OTPInput,
+  PasswordInput,
   TagInput,
   Flex,
   Text,
@@ -202,8 +202,8 @@ export function OTPInputExample({ autoFocus = true }: { autoFocus?: boolean }) {
 
 // Password Input example with toggle visibility
 export function PasswordInputExample() {
-  const [password, setPassword] = useState<string>('');
-  
+  const [password, setPassword] = useState<string>("");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
@@ -220,8 +220,8 @@ export function PasswordInputExample() {
 
 // Tag Input example for adding multiple tags
 export function TagInputExample() {
-  const [tags, setTags] = useState<string[]>(['React', 'Next.js']);
-  
+  const [tags, setTags] = useState<string[]>(["React", "Next.js"]);
+
   const handleChange = (newTags: string[]) => {
     setTags(newTags);
   };
