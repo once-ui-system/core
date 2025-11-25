@@ -37,6 +37,7 @@ interface MatrixFxProps extends React.ComponentProps<typeof Flex> {
   active?: boolean;
   flicker?: boolean;
   bulge?: BulgeConfig;
+  fps?: number;
   children?: React.ReactNode;
 }
 
@@ -52,6 +53,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       active = false,
       flicker = false,
       bulge,
+      fps = 60,
       children,
       ...rest
     },
@@ -68,6 +70,9 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
     const mountAnimationCompleteRef = useRef<boolean>(false);
     const bulgeStartTimeRef = useRef<number>(Date.now());
     const dotsRef = useRef<Dot[]>([]);
+    const lastFrameTimeRef = useRef<number>(0);
+    const isStaticRef = useRef<boolean>(false);
+    const isVisibleRef = useRef<boolean>(true);
 
     useEffect(() => {
       if (forwardedRef) {
@@ -78,6 +83,32 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         }
       }
     }, [forwardedRef]);
+
+    // Viewport visibility detection
+    useEffect(() => {
+      const container = containerRef.current;
+      if (!container) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            isVisibleRef.current = entry.isIntersecting;
+          });
+        },
+        {
+          // Start animating when 10% visible for smooth transitions
+          threshold: 0.1,
+          // Add margin to start rendering slightly before entering viewport
+          rootMargin: '50px',
+        }
+      );
+
+      observer.observe(container);
+
+      return () => {
+        observer.disconnect();
+      };
+    }, []);
 
     useEffect(() => {
       const canvas = canvasRef.current;
@@ -190,6 +221,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
 
       // Animation loop
       const startTime = Date.now();
+      const frameInterval = 1000 / fps; // Target ms per frame
       
       // Bulge configuration
       const bulgeEnabled = !!bulge;
@@ -204,7 +236,30 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       const centerY = canvasHeight / 2;
       const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY);
       
-      const animate = () => {
+      // Cache for static rendering (when animation completes)
+      let cachedImageData: ImageData | null = null;
+      
+      const animate = (currentTime: number = 0) => {
+        // Skip rendering if not visible in viewport
+        if (!isVisibleRef.current) {
+          animationRef.current = requestAnimationFrame(animate);
+          return;
+        }
+        
+        // FPS throttling
+        if (currentTime - lastFrameTimeRef.current < frameInterval) {
+          animationRef.current = requestAnimationFrame(animate);
+          return;
+        }
+        lastFrameTimeRef.current = currentTime;
+        
+        // If static and we have cached image, just render that
+        if (isStaticRef.current && cachedImageData) {
+          ctx.putImageData(cachedImageData, 0, 0);
+          animationRef.current = requestAnimationFrame(animate);
+          return;
+        }
+        
         ctx.clearRect(0, 0, canvasWidth, canvasHeight);
 
         const time = (Date.now() - startTime) / 1000; // Time in seconds
@@ -248,45 +303,53 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
 
         // For instant trigger, show all dots immediately at full opacity
         if (trigger === "instant") {
-          dots.forEach((dot) => {
-            ctx.fillStyle = dot.color;
-            let opacity = dot.baseOpacity;
-            
-            // Apply flicker effect if enabled
-            if (flicker) {
-              const flickerValue = Math.sin(time * dot.flickerSpeed * 3 + dot.flickerPhase);
-              const flickerMultiplier = 0.6 + (flickerValue * 0.4); // Oscillate between 0.6 and 1.0
-              opacity *= flickerMultiplier;
-            }
-            
-            // Calculate bulge displacement
-            let offsetX = 0;
-            let offsetY = 0;
-            let sizeMultiplier = 1;
-            let bulgeOpacity = 1;
-            if (bulgeEnabled && showBulge) {
-              if (bulgeType === "ripple") {
-                // Ripple: circular wave from center
-                const dx = dot.x - centerX;
-                const dy = dot.y - centerY;
-                const distanceFromCenter = Math.sqrt(dx * dx + dy * dy);
-                
-                const distanceToWave = Math.abs(distanceFromCenter - waveRadius);
-                const waveWidth = maxRadius * 0.15;
-                const distanceNorm = distanceToWave / waveWidth;
-                
-                const waveFactor = Math.exp(-distanceNorm * distanceNorm * 4);
-                
-                const angle = Math.atan2(dy, dx);
-                const displacementAmount = waveFactor * bulgeIntensity * bulgeFadeOut;
-                offsetX = Math.cos(angle) * displacementAmount;
-                offsetY = Math.sin(angle) * displacementAmount;
-                
-                sizeMultiplier = 1 + waveFactor * 0.8 * bulgeFadeOut;
-                
-                const waveOpacity = 0.3 + waveFactor * 0.7;
-                bulgeOpacity = 1 + (waveOpacity - 1) * bulgeFadeOut;
-              } else if (bulgeType === "wave") {
+          // Check if we're in a static state (no flicker, no active bulge)
+          const isCurrentlyStatic = !flicker && (!bulgeEnabled || !showBulge);
+          
+          if (isCurrentlyStatic && isStaticRef.current && cachedImageData) {
+            // Use cached render
+            ctx.putImageData(cachedImageData, 0, 0);
+          } else {
+            // Render dots
+            dots.forEach((dot) => {
+              ctx.fillStyle = dot.color;
+              let opacity = dot.baseOpacity;
+              
+              // Apply flicker effect if enabled
+              if (flicker) {
+                const flickerValue = Math.sin(time * dot.flickerSpeed * 3 + dot.flickerPhase);
+                const flickerMultiplier = 0.6 + (flickerValue * 0.4); // Oscillate between 0.6 and 1.0
+                opacity *= flickerMultiplier;
+              }
+              
+              // Calculate bulge displacement
+              let offsetX = 0;
+              let offsetY = 0;
+              let sizeMultiplier = 1;
+              let bulgeOpacity = 1;
+              if (bulgeEnabled && showBulge) {
+                if (bulgeType === "ripple") {
+                  // Ripple: circular wave from center
+                  const dx = dot.x - centerX;
+                  const dy = dot.y - centerY;
+                  const distanceFromCenter = Math.sqrt(dx * dx + dy * dy);
+                  
+                  const distanceToWave = Math.abs(distanceFromCenter - waveRadius);
+                  const waveWidth = maxRadius * 0.15;
+                  const distanceNorm = distanceToWave / waveWidth;
+                  
+                  const waveFactor = Math.exp(-distanceNorm * distanceNorm * 4);
+                  
+                  const angle = Math.atan2(dy, dx);
+                  const displacementAmount = waveFactor * bulgeIntensity * bulgeFadeOut;
+                  offsetX = Math.cos(angle) * displacementAmount;
+                  offsetY = Math.sin(angle) * displacementAmount;
+                  
+                  sizeMultiplier = 1 + waveFactor * 0.8 * bulgeFadeOut;
+                  
+                  const waveOpacity = 0.3 + waveFactor * 0.7;
+                  bulgeOpacity = 1 + (waveOpacity - 1) * bulgeFadeOut;
+                } else if (bulgeType === "wave") {
                 // Wave: Organic S-curve from bottom-left to top-right with rotation
                 const diagonalLength = Math.sqrt(canvasWidth * canvasWidth + canvasHeight * canvasHeight);
                 // Start wave off-screen before bottom-left, end off-screen after top-right
@@ -340,12 +403,19 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
                 bulgeOpacity = 1 + (waveOpacity - 1) * bulgeFadeOut;
               }
             }
+              
+              ctx.globalAlpha = opacity * bulgeOpacity;
+              const adjustedSize = size * sizeMultiplier;
+              const sizeOffset = (adjustedSize - size) / 2;
+              ctx.fillRect(dot.x + offsetX - sizeOffset, dot.y + offsetY - sizeOffset, adjustedSize, adjustedSize);
+            });
             
-            ctx.globalAlpha = opacity * bulgeOpacity;
-            const adjustedSize = size * sizeMultiplier;
-            const sizeOffset = (adjustedSize - size) / 2;
-            ctx.fillRect(dot.x + offsetX - sizeOffset, dot.y + offsetY - sizeOffset, adjustedSize, adjustedSize);
-          });
+            // Cache if now static
+            if (isCurrentlyStatic) {
+              cachedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              isStaticRef.current = true;
+            }
+          }
           ctx.globalAlpha = 1;
           animationRef.current = requestAnimationFrame(animate);
           return;
@@ -434,15 +504,21 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
             });
           } else {
             // Animation complete - show all dots with optional flicker
-            dots.forEach((dot) => {
-              ctx.fillStyle = dot.color;
-              let opacity = dot.baseOpacity;
-              
-              if (flicker) {
-                const flickerValue = Math.sin(time * dot.flickerSpeed * 3 + dot.flickerPhase);
-                const flickerMultiplier = 0.6 + (flickerValue * 0.4);
-                opacity *= flickerMultiplier;
-              }
+            const isCurrentlyStatic = !flicker && (!bulgeEnabled || !showBulge);
+            
+            if (isCurrentlyStatic && isStaticRef.current && cachedImageData) {
+              // Use cached render for completed static state
+              ctx.putImageData(cachedImageData, 0, 0);
+            } else {
+              dots.forEach((dot) => {
+                ctx.fillStyle = dot.color;
+                let opacity = dot.baseOpacity;
+                
+                if (flicker) {
+                  const flickerValue = Math.sin(time * dot.flickerSpeed * 3 + dot.flickerPhase);
+                  const flickerMultiplier = 0.6 + (flickerValue * 0.4);
+                  opacity *= flickerMultiplier;
+                }
               
               // Calculate bulge displacement
               let offsetX = 0;
@@ -485,12 +561,19 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
                   bulgeOpacity = 0.4 + waveFactor * 0.6;
                 }
               }
+                
+                ctx.globalAlpha = opacity * bulgeOpacity;
+                const adjustedSize = size * sizeMultiplier;
+                const sizeOffset = (adjustedSize - size) / 2;
+                ctx.fillRect(dot.x + offsetX - sizeOffset, dot.y + offsetY - sizeOffset, adjustedSize, adjustedSize);
+              });
               
-              ctx.globalAlpha = opacity * bulgeOpacity;
-              const adjustedSize = size * sizeMultiplier;
-              const sizeOffset = (adjustedSize - size) / 2;
-              ctx.fillRect(dot.x + offsetX - sizeOffset, dot.y + offsetY - sizeOffset, adjustedSize, adjustedSize);
-            });
+              // Cache if now static
+              if (isCurrentlyStatic) {
+                cachedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                isStaticRef.current = true;
+              }
+            }
           }
           
           ctx.globalAlpha = 1;
@@ -661,7 +744,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           cancelAnimationFrame(animationRef.current);
         }
       };
-    }, [colors, size, spacing, speed, revealFrom, trigger, flicker, bulge]);
+    }, [colors, size, spacing, speed, revealFrom, trigger, flicker, bulge, fps]);
 
     // Manual trigger control via `active` prop
     useEffect(() => {
@@ -685,6 +768,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         }
         isHoveredRef.current = true;
         hideStartProgressRef.current = 0;
+        isStaticRef.current = false; // Invalidate cache
       } else {
         // Mimic mouse leave
         if (isHoveredRef.current) {
@@ -725,6 +809,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         
         isHoveredRef.current = true;
         hideStartProgressRef.current = 0; // Clear hide state
+        isStaticRef.current = false; // Invalidate cache
       }
     };
 
@@ -765,6 +850,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         }
         isHoveredRef.current = true;
         hideStartProgressRef.current = 0;
+        isStaticRef.current = false; // Invalidate cache
       } else {
         // Leave
         const currentProgress = maxRevealProgressRef.current;
