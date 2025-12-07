@@ -14,7 +14,7 @@
   "dependencies": {
     "@once-ui-system/core": "workspace:*",
     "classnames": "^2.5.1",
-    "next": "15.5.4",
+    "next": "16.0.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
