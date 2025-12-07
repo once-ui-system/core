@@ -10,10 +10,9 @@ import React from "react";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string[] }>;
+  params: { slug: string[] };
 }): Promise<Metadata> {
-  const routeParams = await params;
-  const slugPath = routeParams.slug ? routeParams.slug.join('/') : '';
+  const slugPath = params.slug ? params.slug.join('/') : '';
 
   const docs = await getPages();
   const doc = docs.find((doc) => doc.slug === slugPath);
@@ -33,9 +32,8 @@ export async function generateMetadata({
 
 export default async function Docs({
   params,
- }: { params: Promise<{ slug: string[] }> }) {
-  const routeParams = await params;
-  const slugPath = routeParams.slug.join('/');
+}: { params: { slug: string[] } }) {
+  const slugPath = params.slug.join('/');
 
   let doc = getPages().find((doc) => doc.slug === slugPath);
 
@@ -46,9 +44,9 @@ export default async function Docs({
   const { prevPage, nextPage } = getAdjacentPages(slugPath, 'section');
   
   // Determine section title - use "Docs" for top-level elements
-  const sectionTitle = routeParams.slug.length === 1 && !routeParams.slug[0].includes('/') 
+  const sectionTitle = params.slug.length === 1 && !params.slug[0].includes('/') 
     ? "Docs"
-    : routeParams.slug[0]
+    : params.slug[0]
       ?.split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
