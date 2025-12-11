@@ -34,30 +34,6 @@ const nextConfig = {
       },
     ],
   },
-  // Reduce webpack cache size
-  webpack: (config, { dev, isServer }) => {
-    // Only enable source maps in development
-    if (!dev) {
-      config.devtool = false;
-    }
-    
-    // Optimize bundle size
-    config.optimization = {
-      ...config.optimization,
-      moduleIds: 'deterministic',
-    };
-    
-    // Disable persistent caching in production to reduce size
-    if (!dev) {
-      config.cache = false;
-    }
-    
-    return config;
-  },
-  // Disable webpack cache in production
-  generateBuildId: async () => {
-    return `build-${Date.now()}`;
-  },
   
   // Add redirects from /docs/slug to /slug
   async redirects() {
