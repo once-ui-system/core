@@ -5,7 +5,6 @@ import { Column, Heading, Icon, Row, Media, Text, Card, HeadingNav, Meta, Schema
 import { baseURL, layout, schema } from "@/resources";
 import { CustomMDX } from "@/product/mdx";
 import { Metadata } from "next";
-import React from "react";
 
 export async function generateMetadata({
   params,
