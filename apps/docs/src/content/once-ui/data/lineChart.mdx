@@ -10,6 +10,18 @@ navIcon: "lineChart"
 
 The `LineChart` component provides a way to display line charts with interactive features, including hover effects, click events, and custom styling options. It supports various customization options including different chart types, color schemes, and interactive features.
 
+## Live morph animation
+
+<LineChartStreamingExample />
+
+This example uses the `useStreamingViewport` hook to smoothly pan the x-axis domain (viewport) while streaming new samples, then passes the resulting data into `LineChart`.
+
+## Live (animation disabled)
+
+<LineChartStreamingExample animation={false} />
+
+## Static example
+
 <LineChart
   marginTop="16"
   marginBottom="24"
