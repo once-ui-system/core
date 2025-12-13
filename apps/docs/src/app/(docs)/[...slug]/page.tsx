@@ -6,6 +6,14 @@ import { baseURL, layout, schema } from "@/resources";
 import { CustomMDX } from "@/product/mdx";
 import { Metadata } from "next";
 
+export async function generateStaticParams() {
+  const docs = await getPages();
+  
+  return docs.map((doc) => ({
+    slug: doc.slug.split('/'),
+  }));
+}
+
 export async function generateMetadata({
   params,
 }: {

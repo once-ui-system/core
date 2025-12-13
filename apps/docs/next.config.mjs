@@ -10,6 +10,7 @@ const withMDXConfig = withMDX({
 })
 
 const nextConfig = {
+  output: 'standalone',
   sassOptions: {
     compiler: "modern",
     silenceDeprecations: ["legacy-js-api"],
