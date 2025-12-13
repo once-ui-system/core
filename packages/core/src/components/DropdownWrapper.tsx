@@ -214,11 +214,14 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         const originalLeft = document.body.style.left;
         const originalWidth = document.body.style.width;
         const originalOverflow = document.body.style.overflow;
-        const originalPaddingRight = document.body.style.paddingRight;
         const originalScrollBehavior = document.documentElement.style.scrollBehavior;
+        const originalScrollbarGutter = document.documentElement.style.scrollbarGutter;
         
         // Disable smooth scrolling completely
         document.documentElement.style.scrollBehavior = 'auto';
+        
+        // Preserve scrollbar gutter to keep scrollbar visible
+        document.documentElement.style.scrollbarGutter = 'stable';
         
         // Lock scroll by fixing body position at current scroll offset
         document.body.style.position = 'fixed';
@@ -226,7 +229,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         document.body.style.left = `-${scrollX}px`;
         document.body.style.width = '100%';
         document.body.style.overflow = 'hidden';
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
         
         return () => {
           // Restore body position first (so it becomes scrollable again)
@@ -235,13 +237,13 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           document.body.style.left = originalLeft;
           document.body.style.width = originalWidth;
           document.body.style.overflow = originalOverflow;
-          document.body.style.paddingRight = originalPaddingRight;
           
           // Restore scroll position while scroll-behavior is still 'auto'
           window.scrollTo(scrollX, scrollY);
           
-          // Finally restore smooth scrolling
+          // Finally restore smooth scrolling and scrollbar gutter
           document.documentElement.style.scrollBehavior = originalScrollBehavior;
+          document.documentElement.style.scrollbarGutter = originalScrollbarGutter;
         };
       }
     }, [isOpen]);
