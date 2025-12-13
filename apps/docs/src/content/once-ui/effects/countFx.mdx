@@ -6,6 +6,8 @@ docs: "once-ui/effects/countFx.mdx"
 github: "components/CountFx.tsx"
 navLabel: "CountFx"
 navIcon: "sparkle"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 CountFx is a wrapper for numbers with different animation effects.
@@ -50,6 +52,45 @@ CountFx is a wrapper for numbers with different animation effects.
   ]}
 />
 
+## Decimals
+
+CountFx supports decimal values with the `decimals` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <CountFxDecimalExample />
+  }
+  codes={[
+    {
+      code:
+`<CountFx
+    variant="display-strong-m"
+    value={123.456}
+    decimals={2}
+    speed={2000}
+    effect="simple"
+    easing="ease-out"
+/>
+
+<CountFx
+    variant="display-strong-m"
+    value={99.99}
+    decimals={2}
+    speed={2000}
+    separator=","
+    effect="simple"
+    easing="ease-out"
+    children=" USD"
+/>`,
+      language: "tsx",
+      label: "Decimals"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -58,6 +99,7 @@ CountFx is a wrapper for numbers with different animation effects.
     ["effect", ["wheel", "smooth", "simple"], "simple"],
     ["speed", "number (ms)", "1000"],
     ["easing", ["linear", "ease-out", "ease-in-out"], "ease-out"],
+    ["decimals", "number"],
     ["separator", "string"],
     ["className"],
     ["style"],
