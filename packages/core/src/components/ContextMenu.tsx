@@ -27,8 +27,8 @@ export interface ContextMenuProps {
   className?: string;
   onSelect?: (value: string) => void;
   closeAfterClick?: boolean;
-  isOpen?: boolean;
-  onOpenChange?: (isOpen: boolean) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   selectedOption?: string;
 }
 
@@ -40,7 +40,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       minHeight,
       onSelect,
       closeAfterClick = true,
-      isOpen,
+      open,
       onOpenChange,
       minWidth = 12,
       maxWidth,
@@ -61,8 +61,8 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     const previouslyFocusedElement = useRef<Element | null>(null);
 
     // Control open state internally if not provided
-    const isControlled = isOpen !== undefined;
-    const isDropdownOpen = isControlled ? isOpen : internalIsOpen;
+    const isControlled = open !== undefined;
+    const isDropdownOpen = isControlled ? open : internalIsOpen;
 
     // Handle open state changes
     const handleOpenChange = useCallback(
