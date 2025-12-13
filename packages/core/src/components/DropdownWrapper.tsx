@@ -220,8 +220,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         // Disable smooth scrolling completely
         document.documentElement.style.scrollBehavior = 'auto';
         
-        // Preserve scrollbar gutter to keep scrollbar visible
-        document.documentElement.style.scrollbarGutter = 'stable';
+        // Preserve scrollbar gutter only if there's an actual scrollbar
+        if (scrollbarWidth > 0) {
+          document.documentElement.style.scrollbarGutter = 'stable';
+        }
         
         // Lock scroll by fixing body position at current scroll offset
         document.body.style.position = 'fixed';
