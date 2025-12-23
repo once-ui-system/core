@@ -37,6 +37,7 @@ import {
   HiOutlinePlay,
   HiOutlinePause,
   HiOutlineBars3BottomLeft,
+  HiOutlineAdjustmentsHorizontal,
 } from "react-icons/hi2";
 
 import {
@@ -99,7 +100,8 @@ export const iconLibrary: Record<string, IconType> = {
   screen: HiOutlineComputerDesktop,
   document: HiOutlineBars3BottomLeft,
   radialGauge: PiGauge,
-  linearGauge: PiBatteryFull
+  linearGauge: PiBatteryFull,
+  opacity: HiOutlineAdjustmentsHorizontal
 };
 
 export type IconLibrary = typeof iconLibrary;

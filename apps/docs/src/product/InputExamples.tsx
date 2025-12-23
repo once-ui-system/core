@@ -116,6 +116,25 @@ export function ColorInputExample() {
   );
 }
 
+// Color input with alpha support
+export function ColorInputAlphaExample() {
+  const [colorValue, setColorValue] = useState("rgba(66, 135, 245, 0.8)");
+  
+  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setColorValue(e.target.value);
+  };
+  
+  return (
+    <ColorInput
+      id="color-input-alpha-example"
+      label="Brand Color"
+      value={colorValue}
+      onChange={handleColorChange}
+      supportAlpha
+    />
+  );
+}
+
 // Date input example with managed state
 export function DateInputExample() {
   const [date, setDate] = useState<Date | undefined>(new Date());
