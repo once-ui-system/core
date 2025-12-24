@@ -10,9 +10,10 @@ const withMDXConfig = withMDX({
 })
 
 const nextConfig = {
-  // Exclude workspace source files from build output
+  // Exclude workspace source files and cache from build output
   outputFileTracingExcludes: {
     '*': [
+      '.next/cache/**/*',
       '../../packages/core/src/**/*',
       '../../packages/core/node_modules/**/*',
       '../../packages/core/.next/**/*',
