@@ -28,7 +28,7 @@ const shapes = ["sharp", "conservative", "playful", "rounded"];
 const colorOptions = {
   brand: [...schemes],
   accent: [...schemes],
-  neutral: ["sand", "gray", "slate"],
+  neutral: ["gray", "sand", "slate", "dusk", "mint", "rose"],
 };
 
 const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref) => {
