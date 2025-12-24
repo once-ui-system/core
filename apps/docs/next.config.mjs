@@ -10,6 +10,17 @@ const withMDXConfig = withMDX({
 })
 
 const nextConfig = {
+  // Exclude workspace source files from build output
+  outputFileTracingExcludes: {
+    '*': [
+      '../../packages/core/src/**/*',
+      '../../packages/core/node_modules/**/*',
+      '../../packages/core/.next/**/*',
+      '../../packages/core/scripts/**/*',
+      '../../packages/core/tsconfig*.json',
+      '../../packages/**/*.md',
+    ],
+  },
   sassOptions: {
     compiler: "modern",
     silenceDeprecations: ["legacy-js-api"],
