@@ -115,7 +115,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       const container = containerRef.current;
       if (!canvas || !container) return;
 
-      const ctx = canvas.getContext("2d");
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
       if (!ctx) return;
 
       // Set canvas size
