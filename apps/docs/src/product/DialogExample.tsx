@@ -18,7 +18,7 @@ export function BasicDialog() {
     <>
       <Button onClick={() => setIsOpen(true)}>Open Dialog</Button>
       <Dialog
-        isOpen={isOpen}
+        open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Basic dialog"
         description="This is a simple dialog with a title and description."
@@ -45,7 +45,7 @@ export function DialogWithFooter() {
     <>
       <Button variant="secondary" onClick={() => setIsOpen(true)}>Dialog with footer</Button>
       <Dialog
-        isOpen={isOpen}
+        open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Dialog with footer"
         footer={
@@ -73,7 +73,7 @@ export function StackedDialogs() {
       <Button variant="secondary" onClick={() => setIsBaseOpen(true)}>Open stacked dialogs</Button>
       
       <Dialog
-        isOpen={isBaseOpen}
+        open={isBaseOpen}
         onClose={() => setIsBaseOpen(false)}
         title="Base dialog"
         base={isStackedOpen}
@@ -90,7 +90,7 @@ export function StackedDialogs() {
       </Dialog>
       
       <Dialog
-        isOpen={isStackedOpen}
+        open={isStackedOpen}
         onClose={() => setIsStackedOpen(false)}
         title="Stacked dialog"
         stack
@@ -114,7 +114,7 @@ export function CustomizedDialog() {
     <>
       <Button variant="danger" onClick={() => setIsOpen(true)}>Customized dialog</Button>
       <Dialog
-        isOpen={isOpen}
+        open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Customized dialog"
         maxWidth={48}

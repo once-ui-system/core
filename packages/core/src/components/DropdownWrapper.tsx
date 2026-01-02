@@ -40,8 +40,8 @@ export interface DropdownWrapperProps {
   onSelect?: (value: string) => void;
   closeAfterClick?: boolean;
   handleArrowNavigation?: boolean;
-  isOpen?: boolean;
-  onOpenChange?: (isOpen: boolean) => void;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
   isNested?: boolean;
   navigationLayout?: NavigationLayout;
   columns?: number | string;
@@ -62,7 +62,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       minHeight,
       onSelect,
       closeAfterClick = true,
-      isOpen: controlledIsOpen,
+      open: controlledIsOpen,
       handleArrowNavigation = true,
       onOpenChange,
       minWidth,

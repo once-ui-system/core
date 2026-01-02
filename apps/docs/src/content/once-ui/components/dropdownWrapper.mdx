@@ -43,7 +43,7 @@ const handleSelect = (value: string) => {
 
 return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 
@@ -95,7 +95,7 @@ Control the placement of the dropdown relative to its trigger element.
 return (
   <Row horizontal="center">
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       placement="top"
       trigger={
@@ -169,7 +169,7 @@ const filteredOptions = options.filter(option =>
 
 return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       minHeight={200}
       trigger={
@@ -228,8 +228,8 @@ return (
   content={[
     ["trigger", "ReactNode"],
     ["dropdown", "ReactNode"],
-    ["isOpen", "boolean", "false"],
-    ["onOpenChange", "(isOpen: boolean) => void"],
+    ["open", "boolean", "false"],
+    ["onOpenChange", "(open: boolean) => void"],
     ["placement", "Placement", "bottom-start"],
     ["minWidth", "number"],
     ["maxWidth", "number"],
