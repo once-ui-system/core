@@ -205,7 +205,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         const scrollY = window.scrollY;
         const scrollX = window.scrollX;
         
-        // Calculate scrollbar width to prevent layout shift
+        // Check if page is actually scrollable (has vertical overflow)
+        const hasVerticalScrollbar = document.documentElement.scrollHeight > document.documentElement.clientHeight;
         const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
         
         // Store original styles
@@ -220,8 +221,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         // Disable smooth scrolling completely
         document.documentElement.style.scrollBehavior = 'auto';
         
-        // Preserve scrollbar gutter only if there's an actual scrollbar
-        if (scrollbarWidth > 0) {
+        // Preserve scrollbar gutter only if there's an actual scrollbar visible
+        if (hasVerticalScrollbar && scrollbarWidth > 0) {
           document.documentElement.style.scrollbarGutter = 'stable';
         }
         
