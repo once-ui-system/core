@@ -205,48 +205,36 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         const scrollY = window.scrollY;
         const scrollX = window.scrollX;
         
-        // Check if page is actually scrollable (has vertical overflow)
-        const hasVerticalScrollbar = document.documentElement.scrollHeight > document.documentElement.clientHeight;
-        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+        // Prevent scroll via events instead of hiding overflow
+        const preventScroll = (e: Event) => {
+          e.preventDefault();
+          e.stopPropagation();
+          // Restore scroll position if it changed
+          window.scrollTo(scrollX, scrollY);
+        };
         
-        // Store original styles
-        const originalPosition = document.body.style.position;
-        const originalTop = document.body.style.top;
-        const originalLeft = document.body.style.left;
-        const originalWidth = document.body.style.width;
-        const originalOverflow = document.body.style.overflow;
-        const originalScrollBehavior = document.documentElement.style.scrollBehavior;
-        const originalScrollbarGutter = document.documentElement.style.scrollbarGutter;
+        // Add event listeners to prevent scrolling
+        window.addEventListener('wheel', preventScroll, { passive: false });
+        window.addEventListener('touchmove', preventScroll, { passive: false });
+        window.addEventListener('scroll', preventScroll, { passive: false });
         
-        // Disable smooth scrolling completely
-        document.documentElement.style.scrollBehavior = 'auto';
-        
-        // Preserve scrollbar gutter only if there's an actual scrollbar visible
-        if (hasVerticalScrollbar && scrollbarWidth > 0) {
-          document.documentElement.style.scrollbarGutter = 'stable';
-        }
-        
-        // Lock scroll by fixing body position at current scroll offset
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.left = `-${scrollX}px`;
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
+        // Prevent keyboard scrolling
+        const preventKeyScroll = (e: Event) => {
+          const ke = e as globalThis.KeyboardEvent;
+          const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
+          if (scrollKeys.includes(ke.key)) {
+            ke.preventDefault();
+            window.scrollTo(scrollX, scrollY);
+          }
+        };
+        window.addEventListener('keydown', preventKeyScroll);
         
         return () => {
-          // Restore body position first (so it becomes scrollable again)
-          document.body.style.position = originalPosition;
-          document.body.style.top = originalTop;
-          document.body.style.left = originalLeft;
-          document.body.style.width = originalWidth;
-          document.body.style.overflow = originalOverflow;
-          
-          // Restore scroll position while scroll-behavior is still 'auto'
-          window.scrollTo(scrollX, scrollY);
-          
-          // Finally restore smooth scrolling and scrollbar gutter
-          document.documentElement.style.scrollBehavior = originalScrollBehavior;
-          document.documentElement.style.scrollbarGutter = originalScrollbarGutter;
+          // Remove all event listeners
+          window.removeEventListener('wheel', preventScroll);
+          window.removeEventListener('touchmove', preventScroll);
+          window.removeEventListener('scroll', preventScroll);
+          window.removeEventListener('keydown', preventKeyScroll);
         };
       }
     }, [isOpen]);
