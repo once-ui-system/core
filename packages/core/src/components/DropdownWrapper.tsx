@@ -207,15 +207,21 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         
         // Prevent scroll via events instead of hiding overflow
         const preventScroll = (e: Event) => {
+          // Allow scroll if it's inside the dropdown content
+          const target = e.target as HTMLElement;
+          if (dropdownRef.current?.contains(target)) {
+            return; // Allow dropdown content to scroll
+          }
+          
           e.preventDefault();
           e.stopPropagation();
           // Restore scroll position if it changed
           window.scrollTo(scrollX, scrollY);
         };
         
-        // Add event listeners to prevent scrolling
-        window.addEventListener('wheel', preventScroll, { passive: false });
-        window.addEventListener('touchmove', preventScroll, { passive: false });
+        // Add event listeners to prevent scrolling on page body
+        document.body.addEventListener('wheel', preventScroll, { passive: false });
+        document.body.addEventListener('touchmove', preventScroll, { passive: false });
         window.addEventListener('scroll', preventScroll, { passive: false });
         
         // Prevent keyboard scrolling
@@ -223,6 +229,12 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           const ke = e as globalThis.KeyboardEvent;
           const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
           if (scrollKeys.includes(ke.key)) {
+            // Allow keyboard scroll if focus is inside dropdown
+            const target = ke.target as HTMLElement;
+            if (dropdownRef.current?.contains(target)) {
+              return; // Allow dropdown content to scroll with keyboard
+            }
+            
             ke.preventDefault();
             window.scrollTo(scrollX, scrollY);
           }
@@ -231,8 +243,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         
         return () => {
           // Remove all event listeners
-          window.removeEventListener('wheel', preventScroll);
-          window.removeEventListener('touchmove', preventScroll);
+          document.body.removeEventListener('wheel', preventScroll);
+          document.body.removeEventListener('touchmove', preventScroll);
           window.removeEventListener('scroll', preventScroll);
           window.removeEventListener('keydown', preventKeyScroll);
         };
