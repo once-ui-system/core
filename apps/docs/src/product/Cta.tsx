@@ -3,8 +3,18 @@ import { Row, Button, Mask, Particle, Column, TypeFx, Background } from "@once-u
 export const Cta = () => {
   return (
     <Row fillWidth horizontal="center">
-      <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth={4} l={{hide: true}}/>
-      <Column maxWidth="xl" height="m" center paddingX="l" gap="24" s={{direction: "column"}} borderLeft="neutral-alpha-medium" borderRight="neutral-alpha-medium" overflow="hidden">
+      <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth={4} l={{ hide: true }} />
+      <Column
+        maxWidth="xl"
+        height="m"
+        center
+        paddingX="l"
+        gap="24"
+        s={{ direction: "column" }}
+        borderLeft="neutral-alpha-medium"
+        borderRight="neutral-alpha-medium"
+        overflow="hidden"
+      >
         <Background
           position="absolute"
           fill
@@ -12,9 +22,17 @@ export const Cta = () => {
             display: true,
             color: "neutral-alpha-weak",
             angle: -45,
-            size: "4"
-          }}/>
-        <Row overflow="hidden" position="absolute" minWidth={80} minHeight={28} radius="full" border="neutral-alpha-medium">
+            size: "4",
+          }}
+        />
+        <Row
+          overflow="hidden"
+          position="absolute"
+          minWidth={80}
+          minHeight={28}
+          radius="full"
+          border="neutral-alpha-medium"
+        >
           <Background
             fill
             position="absolute"
@@ -36,7 +54,7 @@ export const Cta = () => {
             position="absolute"
             bottom="0"
             left="0"
-            style={{filter: "blur(1rem)", transform: "scale(1.1)"}}
+            style={{ filter: "blur(1rem)", transform: "scale(1.1)" }}
             gradient={{
               display: true,
               x: 50,
@@ -46,17 +64,46 @@ export const Cta = () => {
               colorStart: "brand-on-background-strong",
             }}
           />
-          </Row>
-          <Row overflow="hidden" position="absolute" minWidth={58} minHeight={28} radius="full" border="neutral-alpha-medium"/>
-          <Row overflow="hidden" position="absolute" minWidth={42} minHeight={28} radius="full" border="neutral-alpha-medium"/>
-          <Row overflow="hidden" position="absolute" minWidth={28} minHeight={28} radius="full" border="neutral-alpha-medium">
-          <Mask fill
-            position="absolute"
-            x={50}
-            y={50}
-            radius={25}
-            >
-            <Particle style={{transform: "scale(1.1)"}} opacity={70} position="absolute" top="0" left="0" fill interactive speed={1.5} density={100} size="2" intensity={20} mode="attract"/>
+        </Row>
+        <Row
+          overflow="hidden"
+          position="absolute"
+          minWidth={58}
+          minHeight={28}
+          radius="full"
+          border="neutral-alpha-medium"
+        />
+        <Row
+          overflow="hidden"
+          position="absolute"
+          minWidth={42}
+          minHeight={28}
+          radius="full"
+          border="neutral-alpha-medium"
+        />
+        <Row
+          overflow="hidden"
+          position="absolute"
+          minWidth={28}
+          minHeight={28}
+          radius="full"
+          border="neutral-alpha-medium"
+        >
+          <Mask fill position="absolute" x={50} y={50} radius={25}>
+            <Particle
+              style={{ transform: "scale(1.1)" }}
+              opacity={70}
+              position="absolute"
+              top="0"
+              left="0"
+              fill
+              interactive
+              speed={1.5}
+              density={100}
+              size="2"
+              intensity={20}
+              mode="attract"
+            />
           </Mask>
         </Row>
         <Column horizontal="center" gap="20">
@@ -67,12 +114,17 @@ export const Cta = () => {
             hold={2000}
             trigger="instant"
           />
-          <Button data-border="rounded" id="hero-cta-button" href="https://once-ui.com/auth?signup" arrowIcon>
+          <Button
+            data-border="rounded"
+            id="hero-cta-button"
+            href="https://once-ui.com/auth?signup"
+            arrowIcon
+          >
             Start now
           </Button>
         </Column>
       </Column>
-      <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth={4} l={{hide: true}}/>
+      <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth={4} l={{ hide: true }} />
     </Row>
   );
 };

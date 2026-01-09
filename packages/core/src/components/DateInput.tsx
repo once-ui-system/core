@@ -102,12 +102,12 @@ export const DateInput: React.FC<DateInputProps> = ({
           minDate={minDate}
           maxDate={maxDate}
           autoFocus={true}
-          isOpen={isOpen}
+          open={isOpen}
         />
       }
       fillWidth
       minHeight={minHeight}
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       className={className}
       closeAfterClick={!timePicker}
