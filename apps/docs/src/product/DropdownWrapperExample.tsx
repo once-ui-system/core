@@ -174,7 +174,6 @@ export function SearchableDropdown() {
     <DropdownWrapper
       isOpen={isOpen}
       onOpenChange={setIsOpen}
-      minHeight={200}
       trigger={
         <Button 
           variant="secondary" 

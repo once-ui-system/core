@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useMemo } from "react";
-import { Schemes, Accordion, Column, Flex, Icon, Row, Tag, ToggleButton, Text, Mask, MatrixFx, Card, Hover, Background, Animation, Button, Spinner, Skeleton } from "@once-ui-system/core";
+import { Schemes, Accordion, Column, Flex, Icon, Row, Tag, ToggleButton, Text, Mask, MatrixFx, Card, Hover, Background, Animation, Button, Spinner, Skeleton, IconButton } from "@once-ui-system/core";
 import { usePathname } from 'next/navigation';
 import { routes, layout } from "@/resources";
 
@@ -364,17 +364,28 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
             ))}
           </Column>
         )}
-        <Row fill vertical="end" style={{minHeight: "fit-content"}}>
-        <Card href="https://once-ui.com/pricing?ref=docs" fillWidth border="neutral-alpha-medium" background="transparent" radius="l" overflow="hidden">
-          <MatrixFx position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-solid-strong", "static-transparent"]}/>
-          <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
-          <Column fillWidth padding="20" gap="12">
-            <Text variant="heading-strong-s">Get Once UI Pro</Text>
-            <Text variant="label-default-s" onBackground="neutral-weak" marginBottom="8">Build a digital presence with deployment-ready apps</Text>
-            <Button rounded size="s" id="get-pro-banner" arrowIcon>Get Pro</Button>
-          </Column>
-        </Card>
-        </Row>
+        <Column fill vertical="end" gap="8" style={{minHeight: "fit-content"}}>
+          <Card href="https://once-ui.com/handbook?ref=docs" fillWidth border="brand-alpha-medium" background="brand-alpha-weak" radius="l" overflow="hidden">
+            <MatrixFx minWidth={12} minHeight={8} position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-background-strong", "static-transparent"]}/>
+            <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
+            <Column fillWidth padding="20" gap="8">
+              <Row fillWidth gap="16" vertical="center">
+                <Text variant="heading-strong-s">Once UI Handbook</Text>
+                <IconButton variant="secondary" icon="chevronRight" size="s"/>
+              </Row>
+              <Text variant="label-default-s" onBackground="neutral-weak" wrap="balance">AI-native workflows for design engineers</Text>
+            </Column>
+          </Card>
+          <Card href="https://once-ui.com/pricing?ref=docs" fillWidth border="neutral-alpha-medium" background="transparent" radius="l" overflow="hidden">
+            <MatrixFx minWidth={12} minHeight={8} position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-solid-strong", "static-transparent"]}/>
+            <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
+            <Column fillWidth padding="20" gap="8">
+              <Text variant="heading-strong-s">Once UI Pro</Text>
+              <Text variant="label-default-s" onBackground="neutral-weak" marginBottom="8" wrap="balance">Build a digital presence with deployment-ready apps</Text>
+              <Button rounded size="s" id="get-pro-banner" arrowIcon>Get Pro</Button>
+            </Column>
+          </Card>
+        </Column>
       </Column>
     </Column>
   );

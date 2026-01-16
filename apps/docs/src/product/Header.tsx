@@ -192,13 +192,8 @@ export function Header() {
             </Button>
           </Kbar>
           <Row fillWidth horizontal="end" gap="8" data-border="rounded">
-            <Row s={{hide: true}}>
-              <Button size="s" variant="secondary" href="https://once-ui.com/products">
-                Start building
-              </Button>
-            </Row>
-            <Button href="https://once-ui.com/auth" size="s">
-              Sign up
+            <Button href="https://once-ui.com" size="s">
+              Continue to Once UI
             </Button>
           </Row>
         </Row>
