@@ -369,7 +369,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
             <MatrixFx minWidth={12} minHeight={8} position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-background-strong", "static-transparent"]}/>
             <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
             <Column fillWidth padding="20" gap="8">
-              <Row fillWidth gap="16" vertical="center">
+              <Row fillWidth gap="16" vertical="center" horizontal="between">
                 <Text variant="heading-strong-s">Once UI Handbook</Text>
                 <IconButton variant="secondary" icon="chevronRight" size="s"/>
               </Row>
