@@ -140,9 +140,16 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     useEffect(() => {
       if (isOpen) {
         document.body.style.overflow = "hidden";
-        // Make everything outside the dialog inert
+
+        // Find the portal container (direct child of body that contains the dialog)
+        let portalContainer: HTMLElement | null = dialogRef.current;
+        while (portalContainer && portalContainer.parentElement !== document.body) {
+          portalContainer = portalContainer.parentElement;
+        }
+
+        // Make everything outside the dialog inert, except the dialog's own portal container
         document.body.childNodes.forEach((node) => {
-          if (node instanceof HTMLElement && node !== document.getElementById("portal-root")) {
+          if (node instanceof HTMLElement && node !== portalContainer) {
             node.inert = true;
           }
         });
