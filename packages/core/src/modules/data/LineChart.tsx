@@ -175,6 +175,7 @@ const LineChart: React.FC<LineChartProps> = ({
       return (
         <Legend
           payload={customPayload}
+          reverseY={reverseY}
           labels={axis}
           position={legend.position}
           direction={legend.direction}
