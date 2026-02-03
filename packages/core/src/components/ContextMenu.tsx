@@ -12,7 +12,7 @@ import React, {
 } from "react";
 import { Placement } from "@floating-ui/react-dom";
 import { createPortal } from "react-dom";
-import { Flex, Dropdown } from ".";
+import { Flex, Dropdown, ScrollLock } from ".";
 import styles from "./ContextMenu.module.scss";
 
 export interface ContextMenuProps {
@@ -130,7 +130,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       };
     }, [isDropdownOpen, handleOpenChange]);
 
-    // Scroll locking and focus management
+    // Focus management
     useEffect(() => {
       if (isDropdownOpen) {
         // Store the currently focused element before focusing the dropdown
@@ -138,10 +138,6 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
 
         // Reset focus index when opening
         setFocusedIndex(-1);
-
-        // Lock scroll
-        const originalStyle = window.getComputedStyle(document.body).overflow;
-        document.body.style.overflow = "hidden";
 
         // Store current scroll position
         const scrollX = window.scrollX;
@@ -186,16 +182,9 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
           }
         }, 50); // Small delay to ensure DOM is ready
 
-        return () => {
-          // Unlock scroll when component unmounts or dropdown closes
-          document.body.style.overflow = originalStyle;
-        };
       } else if (!isDropdownOpen && previouslyFocusedElement.current) {
         // Restore focus when closing
         (previouslyFocusedElement.current as HTMLElement).focus();
-
-        // Ensure scroll is unlocked
-        document.body.style.overflow = "";
       }
     }, [isDropdownOpen]);
 
@@ -301,17 +290,19 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     );
 
     return (
-      <Flex
-        ref={containerRef}
-        onContextMenu={handleContextMenu}
-        onClick={handleClick}
-        className={className || ""}
-        style={style}
-      >
-        {children}
-        {isDropdownOpen &&
-          isBrowser &&
-          createPortal(
+      <>
+        <ScrollLock enabled={isDropdownOpen} allowScrollInElement={dropdownRef} />
+        <Flex
+          ref={containerRef}
+          onContextMenu={handleContextMenu}
+          onClick={handleClick}
+          className={className || ""}
+          style={style}
+        >
+          {children}
+          {isDropdownOpen &&
+            isBrowser &&
+            createPortal(
             <Flex
               position="fixed"
               zIndex={10}
@@ -364,6 +355,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
             document.body,
           )}
       </Flex>
+      </>
     );
   },
 );

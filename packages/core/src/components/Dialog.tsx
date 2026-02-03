@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
-import { Column, Flex, Heading, IconButton, Text } from ".";
+import { Column, Flex, Heading, IconButton, ScrollLock, Text } from ".";
 import styles from "./Dialog.module.scss";
 
 interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
@@ -147,7 +147,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
         return portalContainer;
       };
 
-      // Cleanup function to restore inert and overflow state
+      // Cleanup function to restore inert state
       const cleanup = () => {
         // Restore inert on all body children
         document.body.childNodes.forEach((node) => {
@@ -165,12 +165,9 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             }
           });
         }
-
-        document.body.style.overflow = "unset";
       };
 
       if (isOpen) {
-        document.body.style.overflow = "hidden";
 
         const portalContainer = getPortalContainer();
 
@@ -209,7 +206,6 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
               node.inert = false;
             }
           });
-          document.body.style.overflow = "unset";
         }
       }
     }, [isOpen, stack]);
@@ -258,7 +254,9 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     if (!isVisible) return null;
 
     return ReactDOM.createPortal(
-      <Flex
+      <>
+        <ScrollLock enabled={isOpen} allowScrollInElement={dialogRef} />
+        <Flex
         ref={ref}
         transition="macro-medium"
         background="overlay"
@@ -370,7 +368,8 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             )}
           </Column>
         </Flex>
-      </Flex>,
+      </Flex>
+      </>,
       document.body,
     );
   },

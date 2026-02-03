@@ -22,7 +22,7 @@ import {
   autoUpdate,
   Placement,
 } from "@floating-ui/react-dom";
-import { Flex, Dropdown, Column, Row, FocusTrap, ArrowNavigation } from ".";
+import { Flex, Dropdown, Column, Row, FocusTrap, ArrowNavigation, ScrollLock } from ".";
 import styles from "./DropdownWrapper.module.scss";
 import { NavigationLayout } from "../hooks/useArrowNavigation";
 
@@ -197,59 +197,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     // Store the previously focused element to restore focus when dropdown closes
     const previouslyFocusedElement = useRef<Element | null>(null);
-
-    // Lock/unlock body scroll when dropdown opens/closes
-    useLayoutEffect(() => {
-      if (isOpen) {
-        // Store current scroll position
-        const scrollY = window.scrollY;
-        const scrollX = window.scrollX;
-        
-        // Prevent scroll via events instead of hiding overflow
-        const preventScroll = (e: Event) => {
-          // Allow scroll if it's inside the dropdown content
-          const target = e.target as HTMLElement;
-          if (dropdownRef.current?.contains(target)) {
-            return; // Allow dropdown content to scroll
-          }
-          
-          e.preventDefault();
-          e.stopPropagation();
-          // Restore scroll position if it changed
-          window.scrollTo(scrollX, scrollY);
-        };
-        
-        // Add event listeners to prevent scrolling on page body
-        document.body.addEventListener('wheel', preventScroll, { passive: false });
-        document.body.addEventListener('touchmove', preventScroll, { passive: false });
-        window.addEventListener('scroll', preventScroll, { passive: false });
-        
-        // Prevent keyboard scrolling
-        const preventKeyScroll = (e: Event) => {
-          const ke = e as globalThis.KeyboardEvent;
-          const scrollKeys = ['ArrowUp', 'ArrowDown', 'PageUp', 'PageDown', 'Home', 'End', ' '];
-          if (scrollKeys.includes(ke.key)) {
-            // Allow keyboard scroll if focus is inside dropdown
-            const target = ke.target as HTMLElement;
-            if (dropdownRef.current?.contains(target)) {
-              return; // Allow dropdown content to scroll with keyboard
-            }
-            
-            ke.preventDefault();
-            window.scrollTo(scrollX, scrollY);
-          }
-        };
-        window.addEventListener('keydown', preventKeyScroll);
-        
-        return () => {
-          // Remove all event listeners
-          document.body.removeEventListener('wheel', preventScroll);
-          document.body.removeEventListener('touchmove', preventScroll);
-          window.removeEventListener('scroll', preventScroll);
-          window.removeEventListener('keydown', preventKeyScroll);
-        };
-      }
-    }, [isOpen]);
 
     // Force update when dropdown opens
     useEffect(() => {
@@ -588,15 +535,17 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     );
 
     return (
-      <Column
-        fillWidth={fillWidth}
-        fitWidth={!fillWidth}
-        transition="macro-medium"
-        style={{
-          ...style,
-        }}
-        className={className}
-        ref={wrapperRef}
+      <>
+        <ScrollLock enabled={isOpen} allowScrollInElement={dropdownRef} />
+        <Column
+          fillWidth={fillWidth}
+          fitWidth={!fillWidth}
+          transition="macro-medium"
+          style={{
+            ...style,
+          }}
+          className={className}
+          ref={wrapperRef}
         onClick={
           disableTriggerClick
             ? undefined
@@ -838,6 +787,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             document.body,
           )}
       </Column>
+      </>
     );
   },
 );

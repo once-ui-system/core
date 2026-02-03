@@ -80,6 +80,7 @@ export * from "./RevealFx";
 export * from "./Row";
 export * from "./Scroller";
 export * from "./ShineFx";
+export * from "./ScrollLock";
 export * from "./ScrollToTop";
 export * from "./SegmentedControl";
 export * from "./Select";

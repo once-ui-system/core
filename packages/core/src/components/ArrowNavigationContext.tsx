@@ -71,7 +71,7 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
       // Small delay to ensure the component is fully mounted
       const timer = setTimeout(() => {
         if (containerRef.current) {
-          containerRef.current.focus();
+          containerRef.current.focus({ preventScroll: true });
         }
       }, 0);
       return () => clearTimeout(timer);
