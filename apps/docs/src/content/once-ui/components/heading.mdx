@@ -6,6 +6,8 @@ docs: "once-ui/components/heading.mdx"
 github: "components/Heading.tsx"
 navLabel: "Heading"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The Heading component is used for displaying titles and section headings throughout your application. It provides consistent typography with various sizes, weights, and styles to establish visual hierarchy.
@@ -87,6 +89,58 @@ Heading components can be styled using the `variant` prop which combines font ty
 </Heading>`,
       language: "tsx",
       label: "Variants"
+    }
+  ]}
+/>
+
+## Font family
+
+You can override the default `font-family` that comes with the variant with the `family` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <Heading variant="display-strong-m" family="code">
+        Display Strong M, but monospace
+      </Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading variant="display-strong-m" family="code">
+    Display Strong M, but monospace
+</Heading>`,
+      language: "tsx",
+      label: "Font family"
+    }
+  ]}
+/>
+
+## Font weight
+
+You can override the default `font-weight` inside a variant with the `weight` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <Heading variant="heading-strong-xl">
+        Heading Strong XL, <Text weight="default">but this is default</Text>
+      </Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading variant="heading-strong-xl">
+    Heading Strong XL, <Text weight="default">but this is default</Text>
+</Heading>`,
+      language: "tsx",
+      label: "Font weight"
     }
   ]}
 />
@@ -273,24 +327,25 @@ Use the `as` prop to control the underlying HTML element while maintaining consi
     ["variant", "TextVariant"],
     ["size", ["xs", "s", "m", "l", "xl"], "m"],
     ["weight", ["default", "strong"], "strong"],
+    ["family", ["display", "heading", "body", "label", "code"]],
     ["onBackground", "`${ColorScheme}-${ColorWeight}`"],
     ["onSolid", "`${ColorScheme}-${ColorWeight}`"],
     ["align", ["left", "center", "right", "justify"]],
     ["wrap", ["normal", "nowrap", "balance"], "balance"],
-    ["padding", "SpacingToken"],
-    ["paddingX", "SpacingToken"],
-    ["paddingY", "SpacingToken"],
-    ["paddingLeft", "SpacingToken"],
-    ["paddingRight", "SpacingToken"],
-    ["paddingTop", "SpacingToken"],
-    ["paddingBottom", "SpacingToken"],
-    ["margin", "SpacingToken"],
-    ["marginX", "SpacingToken"],
-    ["marginY", "SpacingToken"],
-    ["marginLeft", "SpacingToken"],
-    ["marginRight", "SpacingToken"],
-    ["marginTop", "SpacingToken"],
-    ["marginBottom", "SpacingToken"],
+    ["padding", ["SpacingToken", "number"]],
+    ["paddingX", ["SpacingToken", "number"]],
+    ["paddingY", ["SpacingToken", "number"]],
+    ["paddingLeft", ["SpacingToken", "number"]],
+    ["paddingRight", ["SpacingToken", "number"]],
+    ["paddingTop", ["SpacingToken", "number"]],
+    ["paddingBottom", ["SpacingToken", "number"]],
+    ["margin", ["SpacingToken", "number"]],
+    ["marginX", ["SpacingToken", "number"]],
+    ["marginY", ["SpacingToken", "number"]],
+    ["marginLeft", ["SpacingToken", "number"]],
+    ["marginRight", ["SpacingToken", "number"]],
+    ["marginTop", ["SpacingToken", "number"]],
+    ["marginBottom", ["SpacingToken", "number"]],
     ["children"],
     ["className"],
     ["style"]
