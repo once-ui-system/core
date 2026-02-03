@@ -225,3 +225,23 @@ h1, h2, h3, h4, h5, h6, p {
         line-height: calc(var(--line-height-label-xs) * var(--line-height-label-multiplier));
     }
 }
+
+.font-family-display {
+    font-family: var(--font-display);
+}
+
+.font-family-heading {
+    font-family: var(--font-heading);
+}
+
+.font-family-body {
+    font-family: var(--font-body);
+}
+
+.font-family-label {
+    font-family: var(--font-label);
+}
+
+.font-family-code {
+    font-family: var(--font-code);
+}
