@@ -138,11 +138,45 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     }, [isOpen, handleKeyDown]);
 
     useEffect(() => {
+      // Find the portal container (direct child of body that contains the dialog)
+      const getPortalContainer = (): HTMLElement | null => {
+        let portalContainer: HTMLElement | null = dialogRef.current;
+        while (portalContainer && portalContainer.parentElement !== document.body) {
+          portalContainer = portalContainer.parentElement;
+        }
+        return portalContainer;
+      };
+
+      // Cleanup function to restore inert and overflow state
+      const cleanup = () => {
+        // Restore inert on all body children
+        document.body.childNodes.forEach((node) => {
+          if (node instanceof HTMLElement) {
+            node.inert = false;
+          }
+        });
+
+        // Also restore inert on any dialogs (for stacked dialog case)
+        if (stack) {
+          const dialogs = document.querySelectorAll('[role="dialog"]');
+          dialogs.forEach((dialog) => {
+            if (dialog instanceof HTMLElement) {
+              dialog.inert = false;
+            }
+          });
+        }
+
+        document.body.style.overflow = "unset";
+      };
+
       if (isOpen) {
         document.body.style.overflow = "hidden";
-        // Make everything outside the dialog inert
+
+        const portalContainer = getPortalContainer();
+
+        // Make everything outside the dialog inert, except the dialog's own portal container
         document.body.childNodes.forEach((node) => {
-          if (node instanceof HTMLElement && node !== document.getElementById("portal-root")) {
+          if (node instanceof HTMLElement && node !== portalContainer) {
             node.inert = true;
           }
         });
@@ -156,6 +190,9 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             }
           });
         }
+
+        // Return cleanup function for when component unmounts or isOpen changes
+        return cleanup;
       } else {
         // If this is a stacked dialog closing, restore interactivity to base dialog
         if (stack) {
