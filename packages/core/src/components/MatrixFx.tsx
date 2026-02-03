@@ -73,6 +73,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
     const lastFrameTimeRef = useRef<number>(0);
     const isStaticRef = useRef<boolean>(false);
     const isVisibleRef = useRef<boolean>(true);
+    const animateFnRef = useRef<((time?: number) => void) | null>(null);
 
     useEffect(() => {
       if (forwardedRef) {
@@ -253,10 +254,10 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         }
         lastFrameTimeRef.current = currentTime;
         
-        // If static and we have cached image, just render that
+        // If static and we have cached image, just render that and stop animating
         if (isStaticRef.current && cachedImageData) {
           ctx.putImageData(cachedImageData, 0, 0);
-          animationRef.current = requestAnimationFrame(animate);
+          // Don't request another frame - animation is complete
           return;
         }
         
@@ -417,7 +418,14 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
             }
           }
           ctx.globalAlpha = 1;
-          animationRef.current = requestAnimationFrame(animate);
+          
+          // Only continue animating if there's something dynamic (flicker or bulge)
+          if (!isCurrentlyStatic) {
+            animationRef.current = requestAnimationFrame(animate);
+          } else {
+            // Clear the ref so the animation can be restarted
+            animationRef.current = undefined;
+          }
           return;
         }
 
@@ -577,7 +585,15 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           }
           
           ctx.globalAlpha = 1;
-          animationRef.current = requestAnimationFrame(animate);
+          
+          // Only continue animating if mount animation is incomplete or there's something dynamic
+          const isCurrentlyStatic = mountAnimationCompleteRef.current && !flicker && (!bulgeEnabled || !showBulge);
+          if (!isCurrentlyStatic) {
+            animationRef.current = requestAnimationFrame(animate);
+          } else {
+            // Clear the ref so the animation can be restarted
+            animationRef.current = undefined;
+          }
           return;
         }
 
@@ -733,9 +749,20 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         }
 
         ctx.globalAlpha = 1;
-        animationRef.current = requestAnimationFrame(animate);
+        
+        // Only continue animating if there's active animation or dynamic content
+        const hasActiveAnimation = isHoveredRef.current || hideStartProgressRef.current > 0;
+        const hasDynamicContent = flicker || (bulgeEnabled && showBulge);
+        if (hasActiveAnimation || hasDynamicContent) {
+          animationRef.current = requestAnimationFrame(animate);
+        } else {
+          // Clear the ref so the animation can be restarted
+          animationRef.current = undefined;
+        }
       };
 
+      // Store animate function in ref so it can be restarted
+      animateFnRef.current = animate;
       animate();
 
       return () => {
@@ -769,6 +796,11 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         isHoveredRef.current = true;
         hideStartProgressRef.current = 0;
         isStaticRef.current = false; // Invalidate cache
+        
+        // Restart animation loop if it was stopped
+        if (!animationRef.current && animateFnRef.current) {
+          animationRef.current = requestAnimationFrame(animateFnRef.current);
+        }
       } else {
         // Mimic mouse leave
         if (isHoveredRef.current) {
@@ -776,6 +808,11 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           hideStartTimeRef.current = Date.now();
           hideStartProgressRef.current = currentProgress;
           isHoveredRef.current = false;
+          
+          // Restart animation loop if it was stopped (for hide animation)
+          if (!animationRef.current && animateFnRef.current) {
+            animationRef.current = requestAnimationFrame(animateFnRef.current);
+          }
         }
       }
     }, [active, trigger, speed, bulge]);
@@ -810,6 +847,11 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         isHoveredRef.current = true;
         hideStartProgressRef.current = 0; // Clear hide state
         isStaticRef.current = false; // Invalidate cache
+        
+        // Restart animation loop if it was stopped
+        if (!animationRef.current && animateFnRef.current) {
+          animationRef.current = requestAnimationFrame(animateFnRef.current);
+        }
       }
     };
 
@@ -826,6 +868,11 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         hideStartTimeRef.current = Date.now();
         hideStartProgressRef.current = currentProgress; // Capture current progress
         isHoveredRef.current = false;
+        
+        // Restart animation loop if it was stopped (for hide animation)
+        if (!animationRef.current && animateFnRef.current) {
+          animationRef.current = requestAnimationFrame(animateFnRef.current);
+        }
       }
     };
 
@@ -851,12 +898,22 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         isHoveredRef.current = true;
         hideStartProgressRef.current = 0;
         isStaticRef.current = false; // Invalidate cache
+        
+        // Restart animation loop if it was stopped
+        if (!animationRef.current && animateFnRef.current) {
+          animationRef.current = requestAnimationFrame(animateFnRef.current);
+        }
       } else {
         // Leave
         const currentProgress = maxRevealProgressRef.current;
         hideStartTimeRef.current = Date.now();
         hideStartProgressRef.current = currentProgress;
         isHoveredRef.current = false;
+        
+        // Restart animation loop if it was stopped (for hide animation)
+        if (!animationRef.current && animateFnRef.current) {
+          animationRef.current = requestAnimationFrame(animateFnRef.current);
+        }
       }
     };
 
@@ -879,7 +936,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
             left: 0,
             width: "100%",
             height: "100%",
-            pointerEvents: "none", // Let mouse events pass through to parent
+            pointerEvents: "none",
           }}
         />
         {children}
