@@ -103,6 +103,7 @@ export * from "./Toaster";
 export * from "./ToggleButton";
 export * from "./Tooltip";
 export * from "./TypeFx";
+export * from "./ThemeInit";
 export * from "./ThemeSwitcher";
 export * from "./User";
 export * from "./UserMenu";
