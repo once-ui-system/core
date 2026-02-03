@@ -50,9 +50,9 @@ const navigation = [
       { label: "Brand assets", href: "https://once-ui.com/brand" },
     ],
     legal: [
-      { label: "Terms of Use", href: "https://dopler.app/terms" },
-      { label: "Privacy Policy", href: "https://dopler.app/privacy" },
-      { label: "License Agreement", href: "https://dopler.app/license" },
+      { label: "Terms of Use", href: "https://once-ui.com/terms-of-use" },
+      { label: "Privacy Policy", href: "https://once-ui.com/privacy-policy" },
+      { label: "License Agreement", href: "https://once-ui.com/license-agreement" },
     ]
   },
   {
