@@ -9,6 +9,7 @@ export interface CountFxProps extends React.ComponentProps<typeof Text> {
   easing?: "linear" | "ease-out" | "ease-in-out";
   format?: (value: number) => string;
   separator?: string;
+  decimals?: number;
   effect?: "simple" | "wheel" | "smooth";
   children?: React.ReactNode;
 }
@@ -19,6 +20,7 @@ const CountFx: React.FC<CountFxProps> = ({
   easing = "ease-out",
   format,
   separator,
+  decimals,
   effect = "simple",
   children,
   ...text
@@ -28,12 +30,17 @@ const CountFx: React.FC<CountFxProps> = ({
   const animationRef = useRef<number | undefined>(undefined);
   const previousValueRef = useRef<number>(value);
 
-  // Default format function with separator support
+  // Default format function with separator and decimals support
   const defaultFormat = (val: number) => {
+    let formattedValue = decimals !== undefined ? val.toFixed(decimals) : val.toString();
+    
     if (separator) {
-      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+      const parts = formattedValue.split('.');
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, separator);
+      formattedValue = parts.join('.');
     }
-    return val.toString();
+    
+    return formattedValue;
   };
 
   const formatValue = format || defaultFormat;
@@ -233,17 +240,23 @@ const CountFx: React.FC<CountFxProps> = ({
 
       if (effect === "wheel") {
         // For wheel animation, we animate each digit independently
-        const currentValue = Math.floor(startValue + difference * easedProgress);
+        const currentValue = decimals !== undefined 
+          ? parseFloat((startValue + difference * easedProgress).toFixed(decimals))
+          : Math.floor(startValue + difference * easedProgress);
         setDisplayValue(currentValue);
       } else if (effect === "smooth") {
         // For smooth animation, we track progress and animate digits independently
         setAnimationProgress(easedProgress);
-        const currentValue = Math.floor(startValue + difference * easedProgress);
+        const currentValue = decimals !== undefined 
+          ? parseFloat((startValue + difference * easedProgress).toFixed(decimals))
+          : Math.floor(startValue + difference * easedProgress);
         setDisplayValue(currentValue);
       } else {
         // Simple animation
         const currentValue = startValue + difference * easedProgress;
-        const currentStepValue = Math.floor(currentValue);
+        const currentStepValue = decimals !== undefined 
+          ? parseFloat(currentValue.toFixed(decimals))
+          : Math.floor(currentValue);
         setDisplayValue(currentStepValue);
       }
 

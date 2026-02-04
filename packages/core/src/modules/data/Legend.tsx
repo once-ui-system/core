@@ -10,6 +10,7 @@ interface LegendProps {
   payload?: any[];
   labels?: "x" | "y" | "both" | "none";
   colors?: string[];
+  reverseY?: boolean;
   direction?: "row" | "column";
   position?:
     | "top-left"
@@ -25,6 +26,7 @@ const Legend: React.FC<LegendProps> = ({
   payload,
   labels = "both",
   position = "top-left",
+  reverseY,
   direction,
   colors,
   variant = useDataTheme().variant,
@@ -38,7 +40,7 @@ const Legend: React.FC<LegendProps> = ({
       case "top-left":
         return {
           paddingLeft:
-            labels === "y" || labels === "both"
+            (labels === "y" || labels === "both") && !reverseY
               ? "var(--static-space-80)"
               : "var(--static-space-20)",
           top: "var(--static-space-12)",

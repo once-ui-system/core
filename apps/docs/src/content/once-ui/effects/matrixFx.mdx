@@ -19,6 +19,7 @@ The `MatrixFx` component creates an animated dot matrix reveal effect using the 
   preview={
     <MatrixFx
       height={24}
+      fps={30}
       colors={["accent-solid-strong", "accent-solid-weak"]}
       trigger="mount"
       flicker
@@ -227,6 +228,7 @@ Add a subtle animated flicker to create a dynamic, alive feeling.
     <MatrixFx
       height={24}
       colors={["danger-solid-strong"]}
+      fps={30}
       flicker
     />
   }
@@ -384,6 +386,7 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
           spacing={2}
           speed={1}
           flicker
+          fps={30}
           bulge={{
             duration: 2,
             intensity: 10,
@@ -423,6 +426,7 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
           size={2}
           spacing={2}
           flicker
+          fps={30}
           revealFrom="bottom"
         />
         <Background
@@ -605,6 +609,7 @@ export function Demo() {
     ["trigger", ["instant","hover","mount","click","manual"], "instant"],
     ["active", "boolean (manual)", "false"],
     ["flicker", "boolean", "false"],
+    ["fps", "number", "60"],
     ["bulge", '{ type?: "ripple" | "wave"; duration?: number; intensity?: number; repeat?: boolean; delay?: number }', "undefined"],
     ["revealFrom", ["center","top","bottom","left","right"], "center"],
     ["children"],

@@ -10,13 +10,24 @@ const withMDXConfig = withMDX({
 })
 
 const nextConfig = {
+  // Exclude workspace source files and cache from build output
+  outputFileTracingExcludes: {
+    '*': [
+      '.next/cache/**/*',
+      '../../packages/core/src/**/*',
+      '../../packages/core/node_modules/**/*',
+      '../../packages/core/.next/**/*',
+      '../../packages/core/scripts/**/*',
+      '../../packages/core/tsconfig*.json',
+      '../../packages/**/*.md',
+    ],
+  },
   sassOptions: {
     compiler: "modern",
     silenceDeprecations: ["legacy-js-api"],
   },
   pageExtensions: ["ts", "tsx", "md", "mdx"],
   transpilePackages: ["next-mdx-remote", "@once-ui-system/core"],
-  output: 'standalone',
   experimental: {
     serverMinification: true,
     serverActions: {
@@ -34,30 +45,6 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-  },
-  // Reduce webpack cache size
-  webpack: (config, { dev, isServer }) => {
-    // Only enable source maps in development
-    if (!dev) {
-      config.devtool = false;
-    }
-    
-    // Optimize bundle size
-    config.optimization = {
-      ...config.optimization,
-      moduleIds: 'deterministic',
-    };
-    
-    // Disable persistent caching in production to reduce size
-    if (!dev) {
-      config.cache = false;
-    }
-    
-    return config;
-  },
-  // Disable webpack cache in production
-  generateBuildId: async () => {
-    return `build-${Date.now()}`;
   },
   
   // Add redirects from /docs/slug to /slug

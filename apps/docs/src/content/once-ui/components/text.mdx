@@ -6,6 +6,8 @@ docs: "once-ui/components/text.mdx"
 github: "components/Text.tsx"
 navLabel: "Text"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The `Text` component provides consistent typography throughout your UI, with support for variants, color tokens, alignment, and spacing. It is typically used for body content, labels, descriptions, and captions.
@@ -83,6 +85,58 @@ Use `variant` to apply a named combination of `type`, `weight`, and `size`.
 <Text variant="code-default-m">Code Default M</Text>`,
       language: "tsx",
       label: "Variants"
+    }
+  ]}
+/>
+
+## Font family
+
+You can override the default `font-family` that comes with the variant with the `family` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <Text variant="body-strong-m" family="code">
+        Body Strong M, but monospace
+      </Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text variant="body-strong-m" family="code">
+    Body Strong M, but monospace
+</Text>`,
+      language: "tsx",
+      label: "Font family"
+    }
+  ]}
+/>
+
+## Font weight
+
+You can override the default `font-weight` inside a variant with the `weight` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <Text variant="body-strong-xl">
+        Body Strong XL, <Text weight="default">but this is default</Text>
+      </Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text variant="heading-strong-xl">
+    Text Strong XL, <Text weight="default">but this is default</Text>
+</Text>`,
+      language: "tsx",
+      label: "Font weight"
     }
   ]}
 />
@@ -270,24 +324,25 @@ Control the rendered tag using the `as` prop.
     ["variant", "TextVariant"],
     ["size", ["xs", "s", "m", "l", "xl"]],
     ["weight", ["default", "strong"]],
+    ["family", ["display", "heading", "body", "label", "code"]],
     ["onBackground", "`${ColorScheme}-${ColorWeight}`"],
     ["onSolid", "`${ColorScheme}-${ColorWeight}`"],
     ["align", ["left", "center", "right", "justify"]],
     ["wrap", ["normal", "nowrap", "balance"], "balance"],
-    ["padding", "SpacingToken"],
-    ["paddingX", "SpacingToken"],
-    ["paddingY", "SpacingToken"],
-    ["paddingLeft", "SpacingToken"],
-    ["paddingRight", "SpacingToken"],
-    ["paddingTop", "SpacingToken"],
-    ["paddingBottom", "SpacingToken"],
-    ["margin", "SpacingToken"],
-    ["marginX", "SpacingToken"],
-    ["marginY", "SpacingToken"],
-    ["marginLeft", "SpacingToken"],
-    ["marginRight", "SpacingToken"],
-    ["marginTop", "SpacingToken"],
-    ["marginBottom", "SpacingToken"],
+    ["padding", ["SpacingToken", "number"]],
+    ["paddingX", ["SpacingToken", "number"]],
+    ["paddingY", ["SpacingToken", "number"]],
+    ["paddingLeft", ["SpacingToken", "number"]],
+    ["paddingRight", ["SpacingToken", "number"]],
+    ["paddingTop", ["SpacingToken", "number"]],
+    ["paddingBottom", ["SpacingToken", "number"]],
+    ["margin", ["SpacingToken", "number"]],
+    ["marginX", ["SpacingToken", "number"]],
+    ["marginY", ["SpacingToken", "number"]],
+    ["marginLeft", ["SpacingToken", "number"]],
+    ["marginRight", ["SpacingToken", "number"]],
+    ["marginTop", ["SpacingToken", "number"]],
+    ["marginBottom", ["SpacingToken", "number"]],
     ["children"],
     ["className"],
     ["style"]

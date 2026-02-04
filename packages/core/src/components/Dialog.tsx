@@ -11,11 +11,11 @@ import React, {
 } from "react";
 import ReactDOM from "react-dom";
 import classNames from "classnames";
-import { Column, Flex, Heading, IconButton, Text } from ".";
+import { Column, Flex, Heading, IconButton, ScrollLock, Text } from ".";
 import styles from "./Dialog.module.scss";
 
 interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
   title: ReactNode | string;
   description?: ReactNode;
@@ -55,7 +55,7 @@ export const DialogProvider: React.FC<{
 const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
   (
     {
-      open,
+      isOpen,
       onClose,
       title,
       description,
@@ -70,15 +70,15 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     ref,
   ) => {
     const dialogRef = useRef<HTMLDivElement>(null);
-    const [isVisible, setIsVisible] = useState(open);
+    const [isVisible, setIsVisible] = useState(isOpen);
     const [isAnimating, setIsAnimating] = useState(false);
     const { stackedDialogOpen, setStackedDialogOpen } = useContext(DialogContext);
 
     useEffect(() => {
       if (stack) {
-        setStackedDialogOpen(open);
+        setStackedDialogOpen(isOpen);
       }
-    }, [stack, open, setStackedDialogOpen]);
+    }, [stack, isOpen, setStackedDialogOpen]);
 
     useEffect(() => {
       if (dialogRef.current && isVisible) {
@@ -88,7 +88,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     }, [isVisible, onHeightChange]);
 
     useEffect(() => {
-      if (open) {
+      if (isOpen) {
         setIsVisible(true);
         setTimeout(() => {
           setIsAnimating(true);
@@ -99,7 +99,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
           setIsVisible(false);
         }, 300);
       }
-    }, [open]);
+    }, [isOpen]);
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
@@ -129,20 +129,51 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     );
 
     useEffect(() => {
-      if (open) {
+      if (isOpen) {
         document.addEventListener("keydown", handleKeyDown);
         return () => {
           document.removeEventListener("keydown", handleKeyDown);
         };
       }
-    }, [open, handleKeyDown]);
+    }, [isOpen, handleKeyDown]);
 
     useEffect(() => {
-      if (open) {
-        document.body.style.overflow = "hidden";
-        // Make everything outside the dialog inert
+      // Find the portal container (direct child of body that contains the dialog)
+      const getPortalContainer = (): HTMLElement | null => {
+        let portalContainer: HTMLElement | null = dialogRef.current;
+        while (portalContainer && portalContainer.parentElement !== document.body) {
+          portalContainer = portalContainer.parentElement;
+        }
+        return portalContainer;
+      };
+
+      // Cleanup function to restore inert state
+      const cleanup = () => {
+        // Restore inert on all body children
         document.body.childNodes.forEach((node) => {
-          if (node instanceof HTMLElement && node !== document.getElementById("portal-root")) {
+          if (node instanceof HTMLElement) {
+            node.inert = false;
+          }
+        });
+
+        // Also restore inert on any dialogs (for stacked dialog case)
+        if (stack) {
+          const dialogs = document.querySelectorAll('[role="dialog"]');
+          dialogs.forEach((dialog) => {
+            if (dialog instanceof HTMLElement) {
+              dialog.inert = false;
+            }
+          });
+        }
+      };
+
+      if (isOpen) {
+
+        const portalContainer = getPortalContainer();
+
+        // Make everything outside the dialog inert, except the dialog's own portal container
+        document.body.childNodes.forEach((node) => {
+          if (node instanceof HTMLElement && node !== portalContainer) {
             node.inert = true;
           }
         });
@@ -156,6 +187,9 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             }
           });
         }
+
+        // Return cleanup function for when component unmounts or isOpen changes
+        return cleanup;
       } else {
         // If this is a stacked dialog closing, restore interactivity to base dialog
         if (stack) {
@@ -172,20 +206,19 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
               node.inert = false;
             }
           });
-          document.body.style.overflow = "unset";
         }
       }
-    }, [open, stack]);
+    }, [isOpen, stack]);
 
     useEffect(() => {
-      if (open && dialogRef.current) {
+      if (isOpen && dialogRef.current) {
         const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(
           'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
         );
         const firstElement = focusableElements[0];
         firstElement.focus();
       }
-    }, [open]);
+    }, [isOpen]);
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
@@ -221,7 +254,9 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     if (!isVisible) return null;
 
     return ReactDOM.createPortal(
-      <Flex
+      <>
+        <ScrollLock enabled={isOpen} allowScrollInElement={dialogRef} />
+        <Flex
         ref={ref}
         transition="macro-medium"
         background="overlay"
@@ -333,7 +368,8 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             )}
           </Column>
         </Flex>
-      </Flex>,
+      </Flex>
+      </>,
       document.body,
     );
   },

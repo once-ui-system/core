@@ -73,6 +73,8 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       right,
       bottom,
       left,
+      translateX,
+      translateY,
       fit,
       fill,
       fillWidth = false,
@@ -116,6 +118,13 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
     },
     ref,
   ) => {
+    // Cascade breakpoints: larger breakpoint styles flow down to smaller ones
+    // Order: xl > l > m > s > xs
+    const cascadedL = l ? { ...l } : undefined;
+    const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
+    const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
+    const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
+
     const generateDynamicClass = (type: string, value: string | "-1" | undefined) => {
       if (!value) return undefined;
 
@@ -138,37 +147,51 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
     };
 
     const parseDimension = (
-      value: number | SpacingToken | undefined,
+      value: number | SpacingToken | string | undefined,
       type: "width" | "height",
     ): string | undefined => {
       if (value === undefined) return undefined;
       if (typeof value === "number") return `${value}rem`;
-      if (
-        [
-          "0",
-          "1",
-          "2",
-          "4",
-          "8",
-          "12",
-          "16",
-          "20",
-          "24",
-          "32",
-          "40",
-          "48",
-          "56",
-          "64",
-          "80",
-          "104",
-          "128",
-          "160",
-        ].includes(value)
-      ) {
-        return `var(--static-space-${value})`;
-      }
-      if (["xs", "s", "m", "l", "xl"].includes(value)) {
-        return `var(--responsive-${type}-${value})`;
+      if (typeof value === "string") {
+        // Check for CSS unit values - pass through directly
+        if (
+          value.endsWith("%") ||
+          value.endsWith("vh") ||
+          value.endsWith("dvh") ||
+          value.endsWith("vw") ||
+          value.startsWith("calc(")
+        ) {
+          return value;
+        }
+        // Static spacing tokens
+        if (
+          [
+            "0",
+            "1",
+            "2",
+            "4",
+            "8",
+            "12",
+            "16",
+            "20",
+            "24",
+            "32",
+            "40",
+            "48",
+            "56",
+            "64",
+            "80",
+            "104",
+            "128",
+            "160",
+          ].includes(value)
+        ) {
+          return `var(--static-space-${value})`;
+        }
+        // Responsive tokens
+        if (["xs", "s", "m", "l", "xl"].includes(value)) {
+          return `var(--responsive-${type}-${value})`;
+        }
       }
       return undefined;
     };
@@ -188,31 +211,36 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
       (overflow && overflow !== "hidden" || overflowX && overflowX !== "hidden" || overflowY && overflowY !== "hidden") && `scrollbar-${scrollbar}`,
-      padding && `p-${padding}`,
-      paddingLeft && `pl-${paddingLeft}`,
-      paddingRight && `pr-${paddingRight}`,
-      paddingTop && `pt-${paddingTop}`,
-      paddingBottom && `pb-${paddingBottom}`,
-      paddingX && `px-${paddingX}`,
-      paddingY && `py-${paddingY}`,
-      margin && `m-${margin}`,
-      marginLeft && `ml-${marginLeft}`,
-      marginRight && `mr-${marginRight}`,
-      marginTop && `mt-${marginTop}`,
-      marginBottom && `mb-${marginBottom}`,
-      marginX && `mx-${marginX}`,
-      marginY && `my-${marginY}`,
-      gap && `g-${gap}`,
-      top && `top-${top}`,
-      right && `right-${right}`,
-      bottom && `bottom-${bottom}`,
-      left && `left-${left}`,
+      typeof padding !== "number" && padding && `p-${padding}`,
+      typeof paddingLeft !== "number" && paddingLeft && `pl-${paddingLeft}`,
+      typeof paddingRight !== "number" && paddingRight && `pr-${paddingRight}`,
+      typeof paddingTop !== "number" && paddingTop && `pt-${paddingTop}`,
+      typeof paddingBottom !== "number" && paddingBottom && `pb-${paddingBottom}`,
+      typeof paddingX !== "number" && paddingX && `px-${paddingX}`,
+      typeof paddingY !== "number" && paddingY && `py-${paddingY}`,
+      typeof margin !== "number" && margin && `m-${margin}`,
+      typeof marginLeft !== "number" && marginLeft && `ml-${marginLeft}`,
+      typeof marginRight !== "number" && marginRight && `mr-${marginRight}`,
+      typeof marginTop !== "number" && marginTop && `mt-${marginTop}`,
+      typeof marginBottom !== "number" && marginBottom && `mb-${marginBottom}`,
+      typeof marginX !== "number" && marginX && `mx-${marginX}`,
+      typeof marginY !== "number" && marginY && `my-${marginY}`,
+      typeof gap !== "number" && gap && `g-${gap}`,
+      typeof top === "string" && !top.endsWith("%") && !top.endsWith("vh") && !top.endsWith("dvh") && !top.endsWith("vw") && !top.startsWith("calc(") && top && `top-${top}`,
+      typeof right === "string" && !right.endsWith("%") && !right.endsWith("vh") && !right.endsWith("dvh") && !right.endsWith("vw") && !right.startsWith("calc(") && right && `right-${right}`,
+      typeof bottom === "string" && !bottom.endsWith("%") && !bottom.endsWith("vh") && !bottom.endsWith("dvh") && !bottom.endsWith("vw") && !bottom.startsWith("calc(") && bottom && `bottom-${bottom}`,
+      typeof left === "string" && !left.endsWith("%") && !left.endsWith("vh") && !left.endsWith("dvh") && !left.endsWith("vw") && !left.startsWith("calc(") && left && `left-${left}`,
       generateDynamicClass("background", background),
       generateDynamicClass("solid", solid),
-      generateDynamicClass(
-        "border",
-        border || borderTop || borderRight || borderBottom || borderLeft || borderX || borderY,
-      ),
+      // Handle border color: boolean uses default-border, string uses dynamic class
+      (border === true || borderTop === true || borderRight === true || borderBottom === true || borderLeft === true || borderX === true || borderY === true) && "default-border",
+      typeof border === "string" && generateDynamicClass("border", border),
+      typeof borderTop === "string" && generateDynamicClass("border", borderTop),
+      typeof borderRight === "string" && generateDynamicClass("border", borderRight),
+      typeof borderBottom === "string" && generateDynamicClass("border", borderBottom),
+      typeof borderLeft === "string" && generateDynamicClass("border", borderLeft),
+      typeof borderX === "string" && generateDynamicClass("border", borderX),
+      typeof borderY === "string" && generateDynamicClass("border", borderY),
       (border || borderTop || borderRight || borderBottom || borderLeft || borderX || borderY) &&
         !borderStyle &&
         "border-solid",
@@ -251,52 +279,77 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       classes +=
         " " +
         classNames(
-          l?.position && `l-position-${l.position}`,
-          m?.position && `m-position-${m.position}`,
-          s?.position && `s-position-${s.position}`,
-          xs?.position && `xs-position-${xs.position}`,
-          l?.hide === true && "l-grid-hide",
-          l?.hide === false && "l-grid-show",
-          m?.hide === true && "m-grid-hide",
-          m?.hide === false && "m-grid-show",
-          s?.hide === true && "s-grid-hide",
-          s?.hide === false && "s-grid-show",
-          xs?.hide === true && "xs-grid-hide",
-          xs?.hide === false && "xs-grid-show",
-          l?.columns && `l-columns-${l.columns}`,
-          m?.columns && `m-columns-${m.columns}`,
-          s?.columns && `s-columns-${s.columns}`,
-          xs?.columns && `xs-columns-${xs.columns}`,
-          l?.overflow && `l-overflow-${l.overflow}`,
-          m?.overflow && `m-overflow-${m.overflow}`,
-          s?.overflow && `s-overflow-${s.overflow}`,
-          xs?.overflow && `xs-overflow-${xs.overflow}`,
-          l?.overflowX && `l-overflow-x-${l.overflowX}`,
-          m?.overflowX && `m-overflow-x-${m.overflowX}`,
-          s?.overflowX && `s-overflow-x-${s.overflowX}`,
-          xs?.overflowX && `xs-overflow-x-${xs.overflowX}`,
-          l?.overflowY && `l-overflow-y-${l.overflowY}`,
-          m?.overflowY && `m-overflow-y-${m.overflowY}`,
-          s?.overflowY && `s-overflow-y-${s.overflowY}`,
-          xs?.overflowY && `xs-overflow-y-${xs.overflowY}`,
-          l?.top && `l-top-${l.top}`,
-          m?.top && `m-top-${m.top}`,
-          s?.top && `s-top-${s.top}`,
-          xs?.top && `xs-top-${xs.top}`,
-          l?.right && `l-right-${l.right}`,
-          m?.right && `m-right-${m.right}`,
-          s?.right && `s-right-${s.right}`,
-          xs?.right && `xs-right-${xs.right}`,
-          l?.bottom && `l-bottom-${l.bottom}`,
-          m?.bottom && `m-bottom-${m.bottom}`,
-          s?.bottom && `s-bottom-${s.bottom}`,
-          xs?.bottom && `xs-bottom-${xs.bottom}`,
-          l?.left && `l-left-${l.left}`,
-          m?.left && `m-left-${m.left}`,
-          s?.left && `s-left-${s.left}`,
-          xs?.left && `xs-left-${xs.left}`,
+          cascadedL?.position && `l-position-${cascadedL.position}`,
+          cascadedM?.position && `m-position-${cascadedM.position}`,
+          cascadedS?.position && `s-position-${cascadedS.position}`,
+          cascadedXs?.position && `xs-position-${cascadedXs.position}`,
+          cascadedL?.hide === true && "l-grid-hide",
+          cascadedL?.hide === false && "l-grid-show",
+          cascadedM?.hide === true && "m-grid-hide",
+          cascadedM?.hide === false && "m-grid-show",
+          cascadedS?.hide === true && "s-grid-hide",
+          cascadedS?.hide === false && "s-grid-show",
+          cascadedXs?.hide === true && "xs-grid-hide",
+          cascadedXs?.hide === false && "xs-grid-show",
+          cascadedL?.columns && `l-columns-${cascadedL.columns}`,
+          cascadedM?.columns && `m-columns-${cascadedM.columns}`,
+          cascadedS?.columns && `s-columns-${cascadedS.columns}`,
+          cascadedXs?.columns && `xs-columns-${cascadedXs.columns}`,
+          cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
+          cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
+          cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
+          cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
+          cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
+          cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
+          cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
+          cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
+          cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
+          cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
+          cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
+          cascadedXs?.overflowY && `xs-overflow-y-${cascadedXs.overflowY}`,
+          cascadedL?.top && `l-top-${cascadedL.top}`,
+          cascadedM?.top && `m-top-${cascadedM.top}`,
+          cascadedS?.top && `s-top-${cascadedS.top}`,
+          cascadedXs?.top && `xs-top-${cascadedXs.top}`,
+          cascadedL?.right && `l-right-${cascadedL.right}`,
+          cascadedM?.right && `m-right-${cascadedM.right}`,
+          cascadedS?.right && `s-right-${cascadedS.right}`,
+          cascadedXs?.right && `xs-right-${cascadedXs.right}`,
+          cascadedL?.bottom && `l-bottom-${cascadedL.bottom}`,
+          cascadedM?.bottom && `m-bottom-${cascadedM.bottom}`,
+          cascadedS?.bottom && `s-bottom-${cascadedS.bottom}`,
+          cascadedXs?.bottom && `xs-bottom-${cascadedXs.bottom}`,
+          cascadedL?.left && `l-left-${cascadedL.left}`,
+          cascadedM?.left && `m-left-${cascadedM.left}`,
+          cascadedS?.left && `s-left-${cascadedS.left}`,
+          cascadedXs?.left && `xs-left-${cascadedXs.left}`,
         );
     }
+
+    const parsePosition = (
+      value: number | string | undefined,
+    ): string | undefined => {
+      if (value === undefined) return undefined;
+      if (typeof value === "number") return `${value}rem`;
+      if (typeof value === "string") {
+        if (
+          value.endsWith("%") ||
+          value.endsWith("vh") ||
+          value.endsWith("dvh") ||
+          value.endsWith("vw") ||
+          value.startsWith("calc(")
+        ) {
+          return value;
+        }
+      }
+      return undefined;
+    };
+
+    const translateXValue = parsePosition(translateX);
+    const translateYValue = parsePosition(translateY);
+    const transform = translateXValue || translateYValue
+      ? `translate(${translateXValue || "0"}, ${translateYValue || "0"})`
+      : undefined;
 
     const combinedStyle: CSSProperties = {
       maxWidth: parseDimension(maxWidth, "width"),
@@ -309,6 +362,22 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       textAlign: align,
       // Hide default cursor when using custom cursor
       cursor: typeof cursor === "string" ? cursor : undefined,
+      padding: typeof padding === "number" ? `${padding}rem` : undefined,
+      paddingLeft: typeof paddingLeft === "number" ? `${paddingLeft}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
+      paddingRight: typeof paddingRight === "number" ? `${paddingRight}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
+      paddingTop: typeof paddingTop === "number" ? `${paddingTop}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
+      paddingBottom: typeof paddingBottom === "number" ? `${paddingBottom}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
+      margin: typeof margin === "number" ? `${margin}rem` : undefined,
+      marginLeft: typeof marginLeft === "number" ? `${marginLeft}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
+      marginRight: typeof marginRight === "number" ? `${marginRight}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
+      marginTop: typeof marginTop === "number" ? `${marginTop}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
+      marginBottom: typeof marginBottom === "number" ? `${marginBottom}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
+      gap: typeof gap === "number" ? `${gap}rem` : undefined,
+      top: parsePosition(top),
+      right: parsePosition(right),
+      bottom: parsePosition(bottom),
+      left: parsePosition(left),
+      transform,
       ...style,
     };
 

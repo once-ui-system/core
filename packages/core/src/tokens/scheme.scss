@@ -7,31 +7,7 @@
     --static-black:        #000000;
     --static-black-medium: #0000004D;
 
-    /* CUSTOM */
-    /* 
-        Insert code for your custom color palette
-        generated at https://once-ui.com/customize
-    */
-
     /* BASE */
-    /* sand */
-    --scheme-sand-100:  #0D0A00;
-    --scheme-sand-200:  #1B1608;
-    --scheme-sand-300:  #443F30;
-    --scheme-sand-400:  #5E594C;
-    --scheme-sand-500:  #797465;
-    --scheme-sand-600:  #999486;
-    --scheme-sand-700:  #B7B2A4;
-    --scheme-sand-800:  #D7D2C4;
-    --scheme-sand-900:  #E5E0D2;
-    --scheme-sand-1000: #F2EDDF;
-    --scheme-sand-1100: #F8F3E5;
-    --scheme-sand-1200: #FDF9EE;
-
-    --scheme-sand-600-15: #99948626;
-    --scheme-sand-600-30: #9994864D;
-    --scheme-sand-600-50: #99948680;
-    
     /* gray */
     --scheme-gray-100:  #0A0A0A;
     --scheme-gray-200:  #151515;
@@ -50,23 +26,95 @@
     --scheme-gray-600-30: #9595954D;
     --scheme-gray-600-50: #95959580;
     
+    /* sand */
+    --scheme-sand-100:  #0a0905;
+    --scheme-sand-200:  #171611;
+    --scheme-sand-300:  #414039;
+    --scheme-sand-400:  #5d5b54;
+    --scheme-sand-500:  #797770;
+    --scheme-sand-600:  #97958e;
+    --scheme-sand-700:  #b6b4ad;
+    --scheme-sand-800:  #d6d4cc;
+    --scheme-sand-900:  #e3e1d9;
+    --scheme-sand-1000: #f0efe7;
+    --scheme-sand-1100: #f7f5ed;
+    --scheme-sand-1200: #fefcf4;
+    
+    --scheme-sand-600-15: #97958e26;
+    --scheme-sand-600-30: #97958e4D;
+    --scheme-sand-600-50: #97958e80;
+    
     /* slate */
-    --scheme-slate-100:  #040816;
-    --scheme-slate-200:  #0F152B;
-    --scheme-slate-300:  #393F55;
-    --scheme-slate-400:  #52586F;
-    --scheme-slate-500:  #6D748A;
-    --scheme-slate-600:  #8E94AA;
-    --scheme-slate-700:  #ACB2C8;
-    --scheme-slate-800:  #CCD2E8;
-    --scheme-slate-900:  #DAE0F6;
-    --scheme-slate-1000: #E9EDFE;
-    --scheme-slate-1100: #F1F3FD;
-    --scheme-slate-1200: #F8F9FD;
+    --scheme-slate-100:  #080811;
+    --scheme-slate-200:  #15151f;
+    --scheme-slate-300:  #3e3f4a;
+    --scheme-slate-400:  #595a66;
+    --scheme-slate-500:  #757683;
+    --scheme-slate-600:  #9697a5;
+    --scheme-slate-700:  #b2b3c1;
+    --scheme-slate-800:  #d2d3e2;
+    --scheme-slate-900:  #dfe0ef;
+    --scheme-slate-1000: #ecedfc;
+    --scheme-slate-1100: #f3f4ff;
+    --scheme-slate-1200: #f9faff;
 
-    --scheme-slate-600-15: #8E94AA26;
-    --scheme-slate-600-30: #8E94AA4D;
-    --scheme-slate-600-50: #8E94AA80;
+    --scheme-slate-600-15: #9697a526;
+    --scheme-slate-600-30: #9697a54D;
+    --scheme-slate-600-50: #9697a580;
+
+    /* mint */
+    --scheme-mint-100:  #030b0a;
+    --scheme-mint-200:  #0d1917;
+    --scheme-mint-300:  #364341;
+    --scheme-mint-400:  #505e5c;
+    --scheme-mint-500:  #6a7875;
+    --scheme-mint-600:  #8a9996;
+    --scheme-mint-700:  #a9b8b5;
+    --scheme-mint-800:  #c8d8d5;
+    --scheme-mint-900:  #d5e5e2;
+    --scheme-mint-1000: #e2f3f0;
+    --scheme-mint-1100: #e9f9f6;
+    --scheme-mint-1200: #f0fffd;
+    
+    --scheme-mint-600-15: #8a999626;
+    --scheme-mint-600-30: #8a99964D;
+    --scheme-mint-600-50: #8a999680;
+
+    /* rose */
+    --scheme-rose-100:  #110606;
+    --scheme-rose-200:  #1f1212;
+    --scheme-rose-300:  #4d3e3e;
+    --scheme-rose-400:  #675656;
+    --scheme-rose-500:  #847273;
+    --scheme-rose-600:  #a59393;
+    --scheme-rose-700:  #c2afaf;
+    --scheme-rose-800:  #e2cfcf;
+    --scheme-rose-900:  #f3dfdf;
+    --scheme-rose-1000: #fde9e9;
+    --scheme-rose-1100: #fff3f3;
+    --scheme-rose-1200: #fffafa;
+
+    --scheme-rose-600-15: #a5939326;
+    --scheme-rose-600-30: #a593934D;
+    --scheme-rose-600-50: #a5939380;
+
+    /* dusk */
+    --scheme-dusk-100:  #0d070d;
+    --scheme-dusk-200:  #1a131a;
+    --scheme-dusk-300:  #453d45;
+    --scheme-dusk-400:  #605860;
+    --scheme-dusk-500:  #7d747d;
+    --scheme-dusk-600:  #9e959e;
+    --scheme-dusk-700:  #bab1ba;
+    --scheme-dusk-800:  #dad1da;
+    --scheme-dusk-900:  #e7dee7;
+    --scheme-dusk-1000: #f5ebf5;
+    --scheme-dusk-1100: #fbf1fb;
+    --scheme-dusk-1200: #fff8ff;
+
+    --scheme-dusk-600-15: #9e959e26;
+    --scheme-dusk-600-30: #9e959e4D;
+    --scheme-dusk-600-50: #9e959e80;
 
     /* red */
     --scheme-red-100:  #130507;

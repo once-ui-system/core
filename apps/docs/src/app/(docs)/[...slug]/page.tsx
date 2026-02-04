@@ -5,15 +5,22 @@ import { Column, Heading, Icon, Row, Media, Text, Card, HeadingNav, Meta, Schema
 import { baseURL, layout, schema } from "@/resources";
 import { CustomMDX } from "@/product/mdx";
 import { Metadata } from "next";
-import React from "react";
+
+export async function generateStaticParams() {
+  const docs = await getPages();
+  
+  return docs.map((doc) => ({
+    slug: doc.slug.split('/'),
+  }));
+}
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
-  const routeParams = await params;
-  const slugPath = routeParams.slug ? routeParams.slug.join('/') : '';
+  const { slug } = await params;
+  const slugPath = slug ? slug.join('/') : '';
 
   const docs = await getPages();
   const doc = docs.find((doc) => doc.slug === slugPath);
@@ -33,9 +40,9 @@ export async function generateMetadata({
 
 export default async function Docs({
   params,
- }: { params: Promise<{ slug: string[] }> }) {
-  const routeParams = await params;
-  const slugPath = routeParams.slug.join('/');
+}: { params: Promise<{ slug: string[] }> }) {
+  const { slug } = await params;
+  const slugPath = slug.join('/');
 
   let doc = getPages().find((doc) => doc.slug === slugPath);
 
@@ -46,9 +53,9 @@ export default async function Docs({
   const { prevPage, nextPage } = getAdjacentPages(slugPath, 'section');
   
   // Determine section title - use "Docs" for top-level elements
-  const sectionTitle = routeParams.slug.length === 1 && !routeParams.slug[0].includes('/') 
+  const sectionTitle = slug.length === 1 && !slug[0].includes('/') 
     ? "Docs"
-    : routeParams.slug[0]
+    : slug[0]
       ?.split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');

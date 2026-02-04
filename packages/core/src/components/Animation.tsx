@@ -354,6 +354,7 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
                 onMouseEnter={triggerType === "hover" ? handleMouseEnter : undefined}
                 onMouseLeave={triggerType === "hover" ? handleMouseLeave : undefined}
                 aria-hidden={!isActive}
+                {...flex}
               >
                 {children}
               </Flex>,

@@ -50,19 +50,32 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
         baseStyleRef.current = { ...props.style };
       }
 
-      // Determine which responsive props to apply based on current breakpoint
-      let currentResponsiveProps: any = null;
-      if (currentBreakpoint === "xl" && xl) {
-        currentResponsiveProps = xl;
-      } else if (currentBreakpoint === "l" && l) {
-        currentResponsiveProps = l;
-      } else if (currentBreakpoint === "m" && m) {
-        currentResponsiveProps = m;
-      } else if (currentBreakpoint === "s" && s) {
-        currentResponsiveProps = s;
-      } else if (currentBreakpoint === "xs" && xs) {
-        currentResponsiveProps = xs;
-      }
+      // Cascade breakpoints: larger breakpoint styles flow down to smaller ones
+      // Order: xl > l > m > s > xs
+      const getCascadedProps = () => {
+        const breakpointOrder = ["xl", "l", "m", "s", "xs"];
+        const breakpointProps = { xl, l, m, s, xs };
+        const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
+        
+        if (currentIndex === -1) return null;
+        
+        // Merge props from current breakpoint up to the largest defined breakpoint
+        let mergedProps: any = {};
+        for (let i = 0; i <= currentIndex; i++) {
+          const bp = breakpointOrder[i] as keyof typeof breakpointProps;
+          if (breakpointProps[bp]) {
+            mergedProps = { ...mergedProps, ...breakpointProps[bp] };
+            // Deep merge style objects
+            if (breakpointProps[bp].style) {
+              mergedProps.style = { ...mergedProps.style, ...breakpointProps[bp].style };
+            }
+          }
+        }
+        
+        return Object.keys(mergedProps).length > 0 ? mergedProps : null;
+      };
+
+      const currentResponsiveProps = getCascadedProps();
 
       // Clear only responsive styles, not base styles
       appliedResponsiveStyles.current.forEach((key) => {

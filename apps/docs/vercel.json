@@ -1,5 +1,6 @@
 {
   "version": 2,
   "installCommand": "npx -y pnpm@10.14.0 install",
-  "buildCommand": "pnpm build"
+  "buildCommand": "cd ../.. && pnpm --filter @once-ui-system/core build && cd apps/docs && pnpm build",
+  "framework": "nextjs"
 }
