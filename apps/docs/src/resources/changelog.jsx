@@ -17,8 +17,8 @@ const changelog = [
         title: "Component improvements",
         bullets: [
           <><SmartLink unstyled href="/once-ui/components/structure">Flex + Grid</SmartLink>: improved unit support, translate props, border shorthand</>,
-          <><SmartLink unstyled href="/once-ui/components/structure">Heading + Text</SmartLink>: family prop to override default variant</>,
-          <><SmartLink unstyled href="/once-ui/components/textarea">Textarea</SmartLink>: styled scrollbar</>,
+          <><SmartLink unstyled href="/once-ui/components/heading">Heading + Text</SmartLink>: family prop to override default variant</>,
+          <><SmartLink unstyled href="/once-ui/form-controls/textarea">Textarea</SmartLink>: styled scrollbar</>,
         ]
       },
       {
