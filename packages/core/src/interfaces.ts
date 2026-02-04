@@ -1,6 +1,7 @@
 import { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
 import {
   Colors,
+  CSSUnit,
   flex,
   gridSize,
   opacity,
@@ -72,12 +73,12 @@ export interface TextProps<T extends ElementType = "span"> extends HTMLAttribute
 }
 
 export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
-  width?: number | SpacingToken;
-  height?: number | SpacingToken;
-  maxWidth?: number | SpacingToken;
-  minWidth?: number | SpacingToken;
-  minHeight?: number | SpacingToken;
-  maxHeight?: number | SpacingToken;
+  width?: number | SpacingToken | CSSUnit;
+  height?: number | SpacingToken | CSSUnit;
+  maxWidth?: number | SpacingToken | CSSUnit;
+  minWidth?: number | SpacingToken | CSSUnit;
+  minHeight?: number | SpacingToken | CSSUnit;
+  maxHeight?: number | SpacingToken | CSSUnit;
   fit?: boolean;
   fitWidth?: boolean;
   fitHeight?: boolean;
@@ -88,25 +89,27 @@ export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export interface SpacingProps extends HTMLAttributes<HTMLDivElement> {
-  padding?: SpacingToken;
-  paddingLeft?: SpacingToken;
-  paddingRight?: SpacingToken;
-  paddingTop?: SpacingToken;
-  paddingBottom?: SpacingToken;
-  paddingX?: SpacingToken;
-  paddingY?: SpacingToken;
-  margin?: SpacingToken;
-  marginLeft?: SpacingToken;
-  marginRight?: SpacingToken;
-  marginTop?: SpacingToken;
-  marginBottom?: SpacingToken;
-  marginX?: SpacingToken;
-  marginY?: SpacingToken;
-  gap?: SpacingToken | "-1";
-  top?: SpacingToken;
-  right?: SpacingToken;
-  bottom?: SpacingToken;
-  left?: SpacingToken;
+  padding?: SpacingToken | number;
+  paddingLeft?: SpacingToken | number;
+  paddingRight?: SpacingToken | number;
+  paddingTop?: SpacingToken | number;
+  paddingBottom?: SpacingToken | number;
+  paddingX?: SpacingToken | number;
+  paddingY?: SpacingToken | number;
+  margin?: SpacingToken | number;
+  marginLeft?: SpacingToken | number;
+  marginRight?: SpacingToken | number;
+  marginTop?: SpacingToken | number;
+  marginBottom?: SpacingToken | number;
+  marginX?: SpacingToken | number;
+  marginY?: SpacingToken | number;
+  gap?: SpacingToken | number | "-1";
+  top?: SpacingToken | number | CSSUnit;
+  right?: SpacingToken | number | CSSUnit;
+  bottom?: SpacingToken | number | CSSUnit;
+  left?: SpacingToken | number | CSSUnit;
+  translateX?: SpacingToken | number | CSSUnit;
+  translateY?: SpacingToken | number | CSSUnit;
 }
 
 export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
@@ -124,33 +127,40 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   borderTop?:
     | Colors
     | "surface"
-    | "transparent";
+    | "transparent"
+    | boolean;
   borderRight?:
     | Colors
     | "surface"
-    | "transparent";
+    | "transparent"
+    | boolean;
   borderBottom?:
     | Colors
     | "surface"
-    | "transparent";
+    | "transparent"
+    | boolean;
   borderLeft?:
     | Colors
     | "surface"
-    | "transparent";
+    | "transparent"
+    | boolean;
   borderX?:
     | Colors
     | "surface"
-    | "transparent";
+    | "transparent"
+    | boolean;
   borderY?:
     | Colors
     | "surface"
-    | "transparent";
+    | "transparent"
+    | boolean;
   border?:
     | Colors
     | "surface"
-    | "transparent";
+    | "transparent"
+    | boolean;
   borderStyle?: "solid" | "dashed";
-  borderWidth?: 1 | 2 | 4 | 6 | 8;
+  borderWidth?: 1 | 2 | 4 | 6 | 8 | "1" | "2" | "4" | "6" | "8";
   topRadius?: RadiusSize;
   rightRadius?: RadiusSize;
   bottomRadius?: RadiusSize;
@@ -182,7 +192,7 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
     | "macro-medium"
     | "macro-long";
   opacity?: opacity;
-  zIndex?: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+  zIndex?: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | "-1" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10";
   dark?: boolean;
   light?: boolean;
 }

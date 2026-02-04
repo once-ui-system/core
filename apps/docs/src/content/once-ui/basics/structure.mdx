@@ -327,9 +327,59 @@ You can also use `maxWidth`, `minHeight`, and `aspectRatio`. `maxWidth` will als
   ]}
 />
 
+Size props (`width`, `height`, `maxWidth`, `minWidth`, `maxHeight`, `minHeight`) also accept CSS unit values like `%`, `vh`, `dvh`, `vw`, and `calc()`. These are applied directly as inline styles.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fitHeight fillWidth gap="16" align="center" onBackground="neutral-weak" textVariant="label-default-s">
+      <Background
+        width="50%"
+        background="neutral-alpha-weak"
+        center border="neutral-alpha-medium" radius="m" padding="16"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        width: 50%
+      </Background>
+      <Background
+        height="20vh"
+        fillWidth
+        background="neutral-alpha-weak"
+        center border="neutral-alpha-medium" radius="m" padding="16"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        height: 20vh
+      </Background>
+      <Background
+        maxWidth="calc(100% - 4rem)"
+        background="neutral-alpha-weak"
+        center border="neutral-alpha-medium" radius="m" padding="16"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+        maxWidth: calc(100% - 4rem)
+      </Background>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column width="50%">
+    width: 50%
+</Column>
+<Column height="20vh" fillWidth>
+    height: 20vh
+</Column>
+<Column maxWidth="calc(100% - 4rem)">
+    maxWidth: calc(100% - 4rem)
+</Column>
+`,
+      language: "tsx",
+      label: "CSS units"
+    }
+  ]}
+/>
+
 ### Position
 
-Override the default `relative` position with `absolute`, `fixed`, `sticky`, or `static`. Use `top`, `right`, `bottom`, and `left` to position the element. Set [SpacingToken](/once-ui/basics/spacing) values for `top`, `right`, `bottom`, and `left`.
+Override the default `relative` position with `absolute`, `fixed`, `sticky`, or `static`. Use `top`, `right`, `bottom`, and `left` to position the element. These props accept [SpacingToken](/once-ui/basics/spacing), numbers (rem), or CSS units like `%`, `vh`, `dvh`, `vw`, and `calc()`.
 
 <CodeBlock
   marginTop="16"
@@ -353,7 +403,60 @@ Override the default `relative` position with `absolute`, `fixed`, `sticky`, or 
     <Icon position="absolute" top="12" right="12" name="close"/>
 </Column>`,
       language: "tsx",
-      label: "Position"
+      label: "SpacingToken"
+    },
+    {
+      code:
+`<Column padding="24">
+    <Row fill/>
+    <Icon position="absolute" top={1} right={1} name="close"/>
+</Column>`,
+      language: "tsx",
+      label: "Number (rem)"
+    },
+    {
+      code:
+`<Column padding="24">
+    <Row fill/>
+    <Icon position="absolute" top="50%" left="50%" name="close"/>
+</Column>`,
+      language: "tsx",
+      label: "CSS units"
+    }
+  ]}
+/>
+
+Use `translateX` and `translateY` to apply CSS transforms. These props also accept SpacingToken, numbers (rem), or CSS units.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth height={12} padding="24" border="neutral-alpha-medium" radius="xl">
+      <Background
+        fill
+        background="neutral-alpha-weak"
+        center border="neutral-alpha-medium" radius="l"
+        lines={{display: true, color: "neutral-alpha-weak"}}>
+      </Background>
+      <Icon width="40" height="40" position="absolute" top="50%" left="50%" translateX="-50%" translateY="-50%" center solid="brand-medium" radius="full" name="close" onSolid="brand-strong"/>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column padding="24">
+    <Row fill/>
+    <Icon
+      position="absolute"
+      top="50%"
+      left="50%"
+      translateX="-50%"
+      translateY="-50%"
+      name="close"/>
+</Column>`,
+      language: "tsx",
+      label: "Center with translate"
     }
   ]}
 />
@@ -678,32 +781,30 @@ Use utility props to apply spacing consistently, such as the `padding`, `padding
   marginBottom="24"
   preview={
     <Column fillWidth>
-      <Background fillWidth height="48"
-        background="neutral-alpha-weak"
-        border="neutral-alpha-medium" radius="m" padding="16"
-        lines={{display: true, color: "neutral-alpha-weak"}}/>
-      <Column fillWidth paddingX="xl" paddingY="24" gap="40" marginTop="40"
-        border="neutral-alpha-medium" radius="m">
-        <Background fillWidth height="64"
+      <Row fillWidth paddingX="xl" paddingY={2} gap="40" border="neutral-alpha-medium" radius="l">
+        <Background
+          fillWidth
+          height="64"
           background="neutral-alpha-weak"
-          border="neutral-alpha-medium" radius="m" padding="16"
+          border="neutral-alpha-medium" radius="m"
           lines={{display: true, color: "neutral-alpha-weak"}}/>
-        <Background fillWidth height="64"
+        <Background
+          fillWidth
+          height="64"
           background="neutral-alpha-weak"
-          border="neutral-alpha-medium" radius="m" padding="16"
+          border="neutral-alpha-medium" radius="m"
           lines={{display: true, color: "neutral-alpha-weak"}}/>
-      </Column>
+      </Row>
     </Column>
   }
   codes={[
     {
       code:
 `<Column fillWidth>
-    <Row fillWidth height="48" radius="m"/>
-    <Column fillWidth paddingX="xl" paddingY="24" gap="40" marginTop="40" radius="m">
-      <Row fillWidth height="64" radius="m" padding="16"/>
-      <Row fillWidth height="64" radius="m" padding="16"/>
-    </Column>
+    <Row fillWidth paddingX="xl" paddingY={2} gap="40" border="neutral-alpha-medium" radius="l">
+      <Row fillWidth height="64" />
+      <Row fillWidth height="64" />
+    </Row>
 </Column>`,
       language: "tsx",
       label: "Spacing"
@@ -715,11 +816,21 @@ Use utility props to apply spacing consistently, such as the `padding`, `padding
 
 Apply borders using the `border`, `borderWidth` and `borderStyle` props. Since most borders are 1px solid, this will be the default if not specified. Border naming follows the same color naming as `background` and `solid`.
 
+<Feedback title="New border shorthands" description={<>The <InlineCode>border</InlineCode>, <InlineCode>borderTop</InlineCode>, <InlineCode>borderBottom</InlineCode>, <InlineCode>borderLeft</InlineCode>, <InlineCode>borderRight</InlineCode>, <InlineCode>borderX</InlineCode>, <InlineCode>borderY</InlineCode> will now apply a default border as <InlineCode>--default-border: var(--neutral-border-medium);</InlineCode> that you can overwrite in you custom stylesheet.</>}/>
+
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row fillWidth gap="24" wrap horizontal="center">
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-medium"}}
+        border
+        radius="full"
+        height="64"
+        width="64"
+      />
       <Background
         background="success-alpha-weak"
         lines={{display: true, color: "success-alpha-medium"}}
@@ -753,6 +864,9 @@ Apply borders using the `border`, `borderWidth` and `borderStyle` props. Since m
     {
       code:
 `<Background
+    border
+  />
+  <Background
     border="success-medium"
   />
   <Background
@@ -1434,8 +1548,26 @@ Use the `textVariant` prop to apply text styles to children elements. Use the `a
 
 ### Responsiveness
 
-Responsive overrides with `s`, `m` and `l` let you adapt any Flex/Grid prop per breakpoint,
-with s overriding m and m overriding l and l overriding base.
+Responsive overrides with `xs`, `s`, `m`, `l` and `xl let you adapt any Flex/Grid prop per breakpoint,
+with smaller breakpoints overriding larger ones.
+
+Breakpoints are managed by the `LayoutProvider` component. You can override default breakpoints by passing a `breakpoints` prop to the `LayoutProvider`.
+
+<Table
+  data={{
+    headers: [
+      { content: "Breakpoint", key: "breakpoint" },
+      { content: "Width", key: "width" },
+    ],
+    rows: [
+      ["xs", "480px"],
+      ["s", "768px"],
+      ["m", "1024px"],
+      ["l", "1440px"],
+      ["xl", "above all"],
+    ],
+  }}
+/>
 
 <CodeBlock
     marginTop="16"
@@ -1510,9 +1642,11 @@ with s overriding m and m overriding l and l overriding base.
     ]}
 />
 
-- `overflowX`, `overflowY`, or `overflow`
+## Other props
 
-- `transition="micro-medium"` sets duration presets
+- `overflowX`, `overflowY`, or `overflow` to set overflow behavior
+
+- `transition="micro-medium"` sets transition-all presets
 
 ## Grid
 
@@ -1520,7 +1654,7 @@ All non-flex-specific properties of the `Flex` are also available on the `Grid`.
 
 ### Columns
 
-Use the `columns` prop to define the number of columns. use the `s` and `m` props to define the number of columns on mobile and tablet devices.
+Use the `columns` prop to define the number of columns. Use the `xs`, `s`, `m`, `l` and `xl` props to define the number of columns at different breakpoints.
 
 <CodeBlock
   marginTop="16"
@@ -1591,5 +1725,3 @@ Both `Flex` and `Grid` components:
 - Furthermore, Flex spreads props on the outermost `Flex` wrapper of components
 
 That’s the Once UI layout model — composable, prop-based, responsive by default, and production-oriented.
-
-You now have a low-code layouting language.

@@ -6,6 +6,8 @@ docs: "once-ui/form-controls/colorInput.mdx"
 github: "components/ColorInput.tsx"
 navLabel: "ColorInput"
 navIcon: "switch"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The `ColorInput` component provides an enhanced color picker that displays the selected color as a visual preview alongside its hex value. It extends the standard HTML color input with a more user-friendly interface.
@@ -41,6 +43,44 @@ const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 - **Hex Value Display**: Displays the hex code of the selected color
 - **Native Color Picker**: Uses the browser's native color picker for selection
 - **Reset Option**: Includes a button to clear the selected color
+- **Alpha Support**: Optional opacity/transparency control via dropdown slider
+
+## Alpha support
+
+Enable alpha channel (transparency) control by setting `supportAlpha` to true. This adds an opacity button that opens a dropdown with a slider to adjust transparency from 0-100%.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ColorInputAlphaExample />}
+  codes={[
+    {
+      code:
+`const [colorValue, setColorValue] = useState("rgba(66, 135, 245, 0.8)");
+  
+const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setColorValue(e.target.value);
+};
+
+<ColorInput
+    id="color-input-alpha-example"
+    label="Brand Color"
+    value={colorValue}
+    onChange={handleColorChange}
+    supportAlpha
+/>`,
+      language: "tsx",
+      label: "With alpha"
+    }
+  ]}
+/>
+
+When `supportAlpha` is enabled:
+- The value is automatically converted to `rgba(r, g, b, a)` format
+- An opacity icon appears in the input suffix
+- Clicking the icon opens a dropdown with a slider (0-100% opacity)
+- The color preview shows transparency
+- The display text shows RGBA values
 
 ## Props
 
@@ -50,6 +90,7 @@ The `ColorInput` component extends the standard `Input` component props with the
   marginTop="16"
   marginBottom="24"
   content={[
+    ["supportAlpha", "boolean", "false"],
     ["...input"]
   ]}
 />

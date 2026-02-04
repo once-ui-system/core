@@ -1,0 +1,154 @@
+---
+title: "Toast"
+summary: "A notification component that displays temporary messages with auto-dismiss and optional actions."
+updatedAt: "2025-02-03"
+docs: "once-ui/components/toast.mdx"
+github: "components/Toast.tsx"
+navLabel: "Toast"
+navIcon: "components"
+---
+
+The `Toast` component displays temporary notification messages that automatically dismiss after 6 seconds. It's typically used through the [ToastProvider](/once-ui/contexts/toastProvider) context, but can also be used standalone.
+
+<Feedback title="Using Toasts" description={<>For most use cases, use the <InlineCode>useToast</InlineCode> hook from <SmartLink href="/once-ui/contexts/toastProvider">ToastProvider</SmartLink> instead of rendering Toast components directly. The provider handles positioning, stacking, and lifecycle management automatically.</>}/>
+
+## Variants
+
+Toast supports two variants: `success` for positive feedback and `danger` for errors or warnings.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Toast variant="success">
+        Your changes have been saved successfully!
+      </Toast>
+      <Toast variant="danger">
+        Failed to save changes. Please try again.
+      </Toast>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Toast variant="success">
+    Your changes have been saved successfully!
+</Toast>
+<Toast variant="danger">
+    Failed to save changes. Please try again.
+</Toast>`,
+      language: "tsx",
+      label: "Variants"
+    }
+  ]}
+/>
+
+## With actions
+
+Add interactive elements like buttons to allow users to take action on the notification.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Toast 
+        variant="danger"
+        action={
+          <Button size="s">
+            Retry
+          </Button>
+        }
+      >
+        Connection failed. Check your network.
+      </Toast>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Toast 
+    variant="danger"
+    action={
+      <Button size="s">
+        Retry
+      </Button>
+    }
+>
+    Connection failed. Check your network.
+</Toast>`,
+      language: "tsx",
+      label: "With action"
+    }
+  ]}
+/>
+
+## Without icon
+
+Hide the default variant icon by setting `icon={false}`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Toast variant="success" icon={false}>
+        Task completed
+      </Toast>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Toast variant="success" icon={false}>
+    Task completed
+</Toast>`,
+      language: "tsx",
+      label: "Without icon"
+    }
+  ]}
+/>
+
+## Toaster
+
+<Feedback marginBottom="24" title="Automatic rendering" description={<>You don't need to manually render the Toaster component. It's automatically included when you wrap your app with <InlineCode>ToastProvider</InlineCode>. See the <SmartLink href="/once-ui/contexts/toastProvider">ToastProvider documentation</SmartLink> for setup instructions.</>}/>
+
+The `Toaster` component manages multiple toast notifications, handling positioning, stacking animations, and portal rendering. It's automatically included when using `ToastProvider`.
+
+The Toaster:
+- Renders toasts in a fixed position at the bottom center of the screen
+- Stacks multiple toasts with scale and opacity animations
+- Uses React portals to render outside the normal DOM hierarchy
+- Limits width to 32rem for optimal readability
+
+## Accessibility
+
+Toast components include proper ARIA attributes:
+- `role="alert"` for screen reader announcements
+- `aria-live="assertive"` for immediate notification
+- Keyboard-accessible close button with tooltip
+
+## API reference
+
+### Toast element
+
+<PropsTable
+  content={[
+    ["variant", ["success", "danger"]],
+    ["icon", "boolean", "true"],
+    ["onClose", "() => void"],
+    ["action", "ReactNode"],
+    ["children", "ReactNode"],
+    ["className", "string"]
+  ]}
+/>
+
+### Toaster element
+
+<PropsTable
+  content={[
+    ["toasts", "{ id: string; variant: 'success' | 'danger'; message: ReactNode; action?: ReactNode }[]"],
+    ["removeToast", "(id: string) => void"]
+  ]}
+/>

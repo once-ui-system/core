@@ -1,0 +1,75 @@
+.container {
+  user-select: none;
+  isolation: isolate;
+}
+
+.sliderWrapper {
+  cursor: var(--cursor-grab);
+
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.track {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  right: 0;
+  height: var(--static-space-4);
+  background-color: var(--neutral-alpha-medium);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background-color: var(--brand-solid-medium);
+  pointer-events: none;
+}
+
+.input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: inherit;
+  z-index: 2;
+  margin: 0;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--static-space-16);
+  height: var(--static-space-16);
+  background-color: var(--brand-on-solid-strong);
+  border: var(--static-space-2) solid var(--brand-solid-medium);
+  border-radius: var(--radius-full);
+  pointer-events: none;
+  transition: transform 0.1s ease-out;
+  box-shadow: var(--shadow-s);
+}
+
+.sliderWrapper:hover .thumb,
+.dragging .thumb {
+  transform: translate(-50%, -50%) scale(1.2);
+  cursor: var(--cursor-grabbing);
+}
+
+.input:focus-visible ~ .thumb {
+  outline: var(--static-space-2) solid var(--brand-alpha-medium);
+  outline-offset: var(--static-space-2);
+}

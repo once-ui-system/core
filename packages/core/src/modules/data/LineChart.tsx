@@ -33,6 +33,12 @@ interface LineChartProps extends ChartProps {
   curve?: curveType;
   reverseY?: boolean;
   reverseX?: boolean;
+  animation?: boolean;
+  animationBegin?: number;
+  animationDuration?: number;
+  animationEasing?: unknown;
+  xAxisType?: "number" | "category";
+  xDomain?: [number, number];
   "data-viz-style"?: string;
 }
 
@@ -55,6 +61,12 @@ const LineChart: React.FC<LineChartProps> = ({
   curve = "natural",
   reverseY = false,
   reverseX = false,
+  animation = true,
+  animationBegin,
+  animationDuration,
+  animationEasing,
+  xAxisType,
+  xDomain,
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
@@ -163,6 +175,7 @@ const LineChart: React.FC<LineChartProps> = ({
       return (
         <Legend
           payload={customPayload}
+          reverseY={reverseY}
           labels={axis}
           position={legend.position}
           direction={legend.direction}
@@ -266,6 +279,8 @@ const LineChart: React.FC<LineChartProps> = ({
                 height={32}
                 tickMargin={6}
                 dataKey={xAxisKey}
+                {...(xAxisType ? { type: xAxisType } : {})}
+                {...(xDomain ? { domain: xDomain as any } : {})}
                 hide={!(axis === "x" || axis === "both")}
                 orientation={reverseX ? "top" : "bottom"}
                 axisLine={{
@@ -317,6 +332,10 @@ const LineChart: React.FC<LineChartProps> = ({
                     type={curve}
                     dataKey={key}
                     name={key}
+                    isAnimationActive={animation}
+                    animationBegin={animationBegin}
+                    animationDuration={animationDuration}
+                    animationEasing={animationEasing as any}
                     stroke={lineColor}
                     transform="translate(0, -1)"
                     fill={

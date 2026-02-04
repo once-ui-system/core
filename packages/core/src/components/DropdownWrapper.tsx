@@ -22,7 +22,7 @@ import {
   autoUpdate,
   Placement,
 } from "@floating-ui/react-dom";
-import { Flex, Dropdown, Column, Row, FocusTrap, ArrowNavigation } from ".";
+import { Flex, Dropdown, Column, Row, FocusTrap, ArrowNavigation, ScrollLock } from ".";
 import styles from "./DropdownWrapper.module.scss";
 import { NavigationLayout } from "../hooks/useArrowNavigation";
 
@@ -197,54 +197,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     // Store the previously focused element to restore focus when dropdown closes
     const previouslyFocusedElement = useRef<Element | null>(null);
-
-    // Lock/unlock body scroll when dropdown opens/closes
-    useLayoutEffect(() => {
-      if (isOpen) {
-        // Store current scroll position
-        const scrollY = window.scrollY;
-        const scrollX = window.scrollX;
-        
-        // Calculate scrollbar width to prevent layout shift
-        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-        
-        // Store original styles
-        const originalPosition = document.body.style.position;
-        const originalTop = document.body.style.top;
-        const originalLeft = document.body.style.left;
-        const originalWidth = document.body.style.width;
-        const originalOverflow = document.body.style.overflow;
-        const originalPaddingRight = document.body.style.paddingRight;
-        const originalScrollBehavior = document.documentElement.style.scrollBehavior;
-        
-        // Disable smooth scrolling completely
-        document.documentElement.style.scrollBehavior = 'auto';
-        
-        // Lock scroll by fixing body position at current scroll offset
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollY}px`;
-        document.body.style.left = `-${scrollX}px`;
-        document.body.style.width = '100%';
-        document.body.style.overflow = 'hidden';
-        document.body.style.paddingRight = `${scrollbarWidth}px`;
-        
-        return () => {
-          // Restore body position first (so it becomes scrollable again)
-          document.body.style.position = originalPosition;
-          document.body.style.top = originalTop;
-          document.body.style.left = originalLeft;
-          document.body.style.width = originalWidth;
-          document.body.style.overflow = originalOverflow;
-          document.body.style.paddingRight = originalPaddingRight;
-          
-          // Restore scroll position while scroll-behavior is still 'auto'
-          window.scrollTo(scrollX, scrollY);
-          
-          // Finally restore smooth scrolling
-          document.documentElement.style.scrollBehavior = originalScrollBehavior;
-        };
-      }
-    }, [isOpen]);
 
     // Force update when dropdown opens
     useEffect(() => {
@@ -583,15 +535,17 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     );
 
     return (
-      <Column
-        fillWidth={fillWidth}
-        fitWidth={!fillWidth}
-        transition="macro-medium"
-        style={{
-          ...style,
-        }}
-        className={className}
-        ref={wrapperRef}
+      <>
+        <ScrollLock enabled={isOpen} allowScrollInElement={dropdownRef} />
+        <Column
+          fillWidth={fillWidth}
+          fitWidth={!fillWidth}
+          transition="macro-medium"
+          style={{
+            ...style,
+          }}
+          className={className}
+          ref={wrapperRef}
         onClick={
           disableTriggerClick
             ? undefined
@@ -833,6 +787,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             document.body,
           )}
       </Column>
+      </>
     );
   },
 );

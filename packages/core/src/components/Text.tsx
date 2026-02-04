@@ -1,4 +1,4 @@
-import React, { ElementType, ComponentPropsWithoutRef } from "react";
+import { ElementType, ComponentPropsWithoutRef } from "react";
 import classNames from "classnames";
 
 import { TextProps, CommonProps, SpacingProps } from "../interfaces";
@@ -14,6 +14,7 @@ const Text = <T extends ElementType = "span">({
   variant,
   size,
   weight,
+  family,
   onBackground,
   onSolid,
   align,
@@ -69,8 +70,8 @@ const Text = <T extends ElementType = "span">({
     colorClass = `${scheme}-on-solid-${weight}`;
   }
 
-  const generateClassName = (prefix: string, token: SpacingToken | undefined) => {
-    return token ? `${prefix}-${token}` : undefined;
+  const generateClassName = (prefix: string, value: SpacingToken | number | undefined) => {
+    return typeof value === "string" ? `${prefix}-${value}` : undefined;
   };
 
   const combinedClasses = classNames(
@@ -92,16 +93,29 @@ const Text = <T extends ElementType = "span">({
     generateClassName("mx", marginX),
     generateClassName("my", marginY),
     truncate && "truncate",
+    family && `font-family-${family}`,
   );
+
+  const combinedStyle = {
+    textAlign: align,
+    textWrap: wrap,
+    padding: typeof padding === "number" ? `${padding}rem` : undefined,
+    paddingLeft: typeof paddingLeft === "number" ? `${paddingLeft}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
+    paddingRight: typeof paddingRight === "number" ? `${paddingRight}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
+    paddingTop: typeof paddingTop === "number" ? `${paddingTop}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
+    paddingBottom: typeof paddingBottom === "number" ? `${paddingBottom}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
+    margin: typeof margin === "number" ? `${margin}rem` : undefined,
+    marginLeft: typeof marginLeft === "number" ? `${marginLeft}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
+    marginRight: typeof marginRight === "number" ? `${marginRight}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
+    marginTop: typeof marginTop === "number" ? `${marginTop}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
+    marginBottom: typeof marginBottom === "number" ? `${marginBottom}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
+    ...style,
+  };
 
   return (
     <Component
       className={combinedClasses}
-      style={{
-        textAlign: align,
-        textWrap: wrap,
-        ...style,
-      }}
+      style={combinedStyle}
       {...props}
     >
       {children}

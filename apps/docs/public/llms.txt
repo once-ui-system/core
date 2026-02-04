@@ -1,15 +1,174 @@
-# Once UI Documentation
+# Once UI
 
-> Comprehensive documentation for Once UI and Magic templates - the open-source design system for indie creators.
+> An open-source design system and component library for Next.js that helps indie creators ship like teams of 10+ alone.
+
+Once UI provides a comprehensive set of customizable components and tools for building beautiful, accessible web applications. It includes both open-source core components and pro features for rapid development.
+
+## Installation
+
+- [Get started](https://docs.once-ui.com/get-started): Once UI and product introduction
+- Install Once UI Starter: `npx create-once-ui-app@latest my-app`
+- Clone Once UI Starter: `git clone https://github.com/once-ui-system/nextjs-starter.git`
+
+## Pro Features
+
+- [Once UI Pro](https://once-ui.com/products): Pre-built templates and copy-paste blocks
+- [Figma Integration](https://once-ui.com/figma): Design system and component library for Figma
 
 ## Documentation
 
-- [Get Started](https://docs.once-ui.com/get-started): Complete guide to Once UI templates
-- [Quick Start](https://docs.once-ui.com/once-ui/quick-start): Set up your first Once UI project
-- [Changelog](https://docs.once-ui.com/changelog): View recent updates and releases
-- [Roadmap](https://docs.once-ui.com/roadmap): See what's coming next
+- [Quick start](https://docs.once-ui.com/once-ui/quick-start): Set up a Once UI project
+- [Config](https://docs.once-ui.com/once-ui/config): Configuration options
+- [Customization Guide](https://once-ui.com/brand): Theming and styling documentation
 
-## Magic Templates
+### Basics
+
+- [Structure](https://docs.once-ui.com/once-ui/basics/structure): Flexible box and grid layout container
+- [Color](https://docs.once-ui.com/once-ui/basics/color): How color and themes works in Once UI
+- [Spacing](https://docs.once-ui.com/once-ui/basics/spacing): How margin, padding and gap works in Once UI
+- [Typography](https://docs.once-ui.com/once-ui/basics/typography): How font-size and font-weight works in Once UI
+- [Border](https://docs.once-ui.com/once-ui/basics/border): How border-radius and color works in Once UI
+- [Components](https://docs.once-ui.com/once-ui/basics/components): Best practices for creating custom Once UI components
+
+### Context
+
+- [LayoutProvider](https://docs.once-ui.com/once-ui/contexts/layoutProvider): Layout context
+- [ThemeProvider](https://docs.once-ui.com/once-ui/contexts/themeProvider): Theme context
+- [DataThemeProvider](https://docs.once-ui.com/once-ui/contexts/dataThemeProvider): Data theme context
+- [IconProvider](https://docs.once-ui.com/once-ui/contexts/iconProvider): Icon context
+- [ToastProvider](https://docs.once-ui.com/once-ui/contexts/toastProvider): Toast context
+
+### Modules
+
+- [Kbar](https://docs.once-ui.com/once-ui/modules/kbar): Keyboard navigation component
+- [MegaMenu](https://docs.once-ui.com/once-ui/modules/megaMenu): Navigation mega menu component
+- [MobileMegaMenu](https://docs.once-ui.com/once-ui/modules/mobileMegaMenu): Mobile navigation mega menu component
+- [HeadingNav](https://docs.once-ui.com/once-ui/modules/headingNav): Table of contents navigation
+- [Meta](https://docs.once-ui.com/once-ui/modules/meta): SEO meta tags component
+- [Schema](https://docs.once-ui.com/once-ui/modules/schema): Structured data schema component
+- [CodeBlock](https://docs.once-ui.com/once-ui/modules/codeBlock): Syntax-highlighted code display
+- [MediaUpload](https://docs.once-ui.com/once-ui/modules/mediaUpload): Media upload with compression
+
+### Components
+
+- [Accordion](https://docs.once-ui.com/once-ui/components/accordion): Expandable accordion component
+- [AccordionGroup](https://docs.once-ui.com/once-ui/components/accordionGroup): Grouped accordion component
+- [Animation](https://docs.once-ui.com/once-ui/components/animation): Animation component
+- [Arrow](https://docs.once-ui.com/once-ui/components/arrow): Animated arrow component
+- [AutoScroll](https://docs.once-ui.com/once-ui/components/autoScroll): Auto-scroll component
+- [Avatar](https://docs.once-ui.com/once-ui/components/avatar): User avatar display
+- [AvatarGroup](https://docs.once-ui.com/once-ui/components/avatarGroup): Grouped avatar display
+- [Background](https://docs.once-ui.com/once-ui/components/background): Background with effects
+- [Badge](https://docs.once-ui.com/once-ui/components/badge): Badge component
+- [Banner](https://docs.once-ui.com/once-ui/components/banner): Banner component
+- [BlockQuote](https://docs.once-ui.com/once-ui/components/blockQuote): Block quote component
+- [Button](https://docs.once-ui.com/once-ui/components/button): Core button component
+- [Card](https://docs.once-ui.com/once-ui/components/card): Content container component
+- [Carousel](https://docs.once-ui.com/once-ui/components/carousel): Image/content carousel
+- [CompareImage](https://docs.once-ui.com/once-ui/modules/compareImage): Image comparison slider
+- [ContextMenu](https://docs.once-ui.com/once-ui/components/contextMenu): Context menu component
+- [CursorCard](https://docs.once-ui.com/once-ui/components/cursorCard): Cursor card component
+- [Dialog](https://docs.once-ui.com/once-ui/components/dialog): Modal dialog component
+- [Dropdown](https://docs.once-ui.com/once-ui/components/dropdown): Dropdown menu component
+- [DropdownWrapper](https://docs.once-ui.com/once-ui/components/dropdownWrapper): Composable dropdown wrapper component
+- [ElementType](https://docs.once-ui.com/once-ui/components/elementType): Automatic semantic resolution component
+- [EmojiPicker](https://docs.once-ui.com/once-ui/components/emojiPicker): Emoji picker component
+- [EmojiPickerDropdown](https://docs.once-ui.com/once-ui/components/emojiPickerDropdown): Emoji picker dropdown component
+- [Fade](https://docs.once-ui.com/once-ui/components/fade): Fade effect component
+- [Feedback](https://docs.once-ui.com/once-ui/components/feedback): User feedback display
+- [Flex](https://docs.once-ui.com/once-ui/components/flex): Flexible box layout container
+- [Grid](https://docs.once-ui.com/once-ui/components/grid): Grid layout container
+- [Heading](https://docs.once-ui.com/once-ui/components/heading): Heading component
+- [Hover](https://docs.once-ui.com/once-ui/components/hover): Hover effect component
+- [HoverCard](https://docs.once-ui.com/once-ui/components/hoverCard): Hover card component
+- [Icon](https://docs.once-ui.com/once-ui/components/icon): Icon component
+- [IconButton](https://docs.once-ui.com/once-ui/components/iconButton): Button with icon
+- [InfiniteScroll](https://docs.once-ui.com/once-ui/components/infiniteScroll): Infinite scroll component
+- [InlineCode](https://docs.once-ui.com/once-ui/components/inlineCode): Inline code display
+- [Kbd](https://docs.once-ui.com/once-ui/components/kbd): Keyboard key display
+- [Line](https://docs.once-ui.com/once-ui/components/line): Line separator
+- [List](https://docs.once-ui.com/once-ui/components/list): List component
+- [Logo](https://docs.once-ui.com/once-ui/components/logo): Logo component
+- [LogoCloud](https://docs.once-ui.com/once-ui/components/logoCloud): Logo grid display
+- [Mask](https://docs.once-ui.com/once-ui/components/mask): Mask component
+- [MasonryGrid](https://docs.once-ui.com/once-ui/components/masonryGrid): Masonry grid layout container
+- [Media](https://docs.once-ui.com/once-ui/components/media): Enhanced image component
+- [NavIcon](https://docs.once-ui.com/once-ui/components/navIcon): Navigation icon
+- [OgCard](https://docs.once-ui.com/once-ui/components/ogCard): Open graph card component
+- [Option](https://docs.once-ui.com/once-ui/components/option): Option component
+- [Particle](https://docs.once-ui.com/once-ui/components/particle): Particle component
+- [ProgressBar](https://docs.once-ui.com/once-ui/components/progressBar): Progress bar component
+- [Pulse](https://docs.once-ui.com/once-ui/components/pulse): Pulse effect component
+- [Scroller](https://docs.once-ui.com/once-ui/components/scroller): Scrolling container
+- [SegmentedControl](https://docs.once-ui.com/once-ui/components/segmentedControl): Segmented control/tabs
+- [Skeleton](https://docs.once-ui.com/once-ui/components/skeleton): Loading placeholder
+- [Slider](https://docs.once-ui.com/once-ui/components/slider): Slider component
+- [SmartLink](https://docs.once-ui.com/once-ui/components/smartLink): Enhanced link component
+- [Spinner](https://docs.once-ui.com/once-ui/components/spinner): Loading indicator
+- [StatusIndicator](https://docs.once-ui.com/once-ui/components/statusIndicator): Status indicator component
+- [StyleOverlay](https://docs.once-ui.com/once-ui/components/styleOverlay): Style overlay component
+- [StylePanel](https://docs.once-ui.com/once-ui/components/stylePanel): Style panel component
+- [Swiper](https://docs.once-ui.com/once-ui/components/swiper): Image swiper component
+- [Table](https://docs.once-ui.com/once-ui/components/table): Table component
+- [Tag](https://docs.once-ui.com/once-ui/components/tag): Tag component
+- [Text](https://docs.once-ui.com/once-ui/components/text): Text component
+- [ThemeSwitcher](https://docs.once-ui.com/once-ui/components/themeSwitcher): Theme toggle
+- [Timeline](https://docs.once-ui.com/once-ui/components/timeline): Timeline component
+- [ToggleButton](https://docs.once-ui.com/once-ui/components/toggleButton): Toggle button
+- [Tooltip](https://docs.once-ui.com/once-ui/components/tooltip): Tooltip component
+- [User](https://docs.once-ui.com/once-ui/components/user): User profile component
+- [UserMenu](https://docs.once-ui.com/once-ui/components/userMenu): User menu component
+
+### Form Controls
+
+- [Checkbox](https://docs.once-ui.com/once-ui/form-controls/checkbox): Checkbox input
+- [Chip](https://docs.once-ui.com/once-ui/form-controls/chip): Chip/tag component
+- [ColorInput](https://docs.once-ui.com/once-ui/form-controls/colorInput): Color picker input
+- [DateInput](https://docs.once-ui.com/once-ui/form-controls/dateInput): Date input
+- [DatePicker](https://docs.once-ui.com/once-ui/form-controls/datePicker): Date selection input
+- [DateRangeInput](https://docs.once-ui.com/once-ui/form-controls/dateRangeInput): Date range input
+- [DateRangePicker](https://docs.once-ui.com/once-ui/form-controls/dateRangePicker): Date range picker
+- [Input](https://docs.once-ui.com/once-ui/form-controls/input): Text input field
+- [NumberInput](https://docs.once-ui.com/once-ui/form-controls/input): Numeric input
+- [OTPInput](https://docs.once-ui.com/once-ui/form-controls/input): One-time password input
+- [PasswordInput](https://docs.once-ui.com/once-ui/form-controls/input): Password input field
+- [TagInput](https://docs.once-ui.com/once-ui/form-controls/input): Tag input field
+- [RadioButton](https://docs.once-ui.com/once-ui/form-controls/radioButton): Radio selection
+- [Select](https://docs.once-ui.com/once-ui/form-controls/select): Dropdown select
+- [Switch](https://docs.once-ui.com/once-ui/form-controls/switch): Toggle switch
+- [Textarea](https://docs.once-ui.com/once-ui/form-controls/textarea): Multi-line text input
+
+### Effects
+
+- [CelebrationFx](https://docs.once-ui.com/once-ui/effects/celebrationFx): Firework and confetti animation effect
+- [MatrixFx](https://docs.once-ui.com/once-ui/effects/matrixFx): Matrix grid effect with bulge and flicker animation
+- [WeatherFx](https://docs.once-ui.com/once-ui/effects/weatherFx): Weather effect (rain, snow, leaves, lightning)
+- [CountdownFx](https://docs.once-ui.com/once-ui/effects/countdownFx): Countdown timer effect
+- [ShineFx](https://docs.once-ui.com/once-ui/effects/shineFx): Shine animation effect for texts
+- [TypeFx](https://docs.once-ui.com/once-ui/effects/typeFx): Typewriter effect
+- [CountFx](https://docs.once-ui.com/once-ui/effects/countFx): Numeric count animation effect
+- [FlipFx](https://docs.once-ui.com/once-ui/effects/flipFx): Flip animation effect
+- [GlitchFx](https://docs.once-ui.com/once-ui/effects/glitchFx): Glitch animation effect
+- [HoloFx](https://docs.once-ui.com/once-ui/effects/holoFx): Holographic effect
+- [LetterFx](https://docs.once-ui.com/once-ui/effects/letterFx): Text animation effect
+- [RevealFx](https://docs.once-ui.com/once-ui/effects/revealFx): Reveal animation
+- [TiltFx](https://docs.once-ui.com/once-ui/effects/tiltFx): Tilt interaction effect
+
+## Template docs
+
+Our Magic templates are deployment-ready, responsive, customizable solutions built on top of Once UI.
+
+### Magic Convert
+
+- [Quick Start](https://docs.once-ui.com/magic-convert/quick-start): Set up your bio page
+
+### Magic Agent
+
+- [Quick Start](https://docs.once-ui.com/magic-agent/quick-start): Set up your AI agent
+
+### Supabase Starter
+
+- [Quick Start](https://docs.once-ui.com/supabase-starter/quick-start): Set up your Supabase project
 
 ### Magic Bio
 
@@ -49,3 +208,66 @@
 - [Search](https://docs.once-ui.com/magic-docs/search): Kbar-powered search
 - [Styling](https://docs.once-ui.com/magic-docs/styling): Customize your docs
 - [SEO](https://docs.once-ui.com/magic-docs/seo): SEO optimization
+
+## Pro Blocks
+
+- [Authentication](https://once-ui.com/blocks/authentication): Ready-to-use authentication pages
+- [About](https://once-ui.com/blocks/about): Company and team pages
+- [Blog](https://once-ui.com/blocks/blog): Blog and content pages
+- [Contact](https://once-ui.com/blocks/contact): Contact page template
+- [Careers](https://once-ui.com/blocks/careers): Job listings and careers page
+- [Pricing](https://once-ui.com/blocks/pricing): Pricing tables and plans
+- [Settings](https://once-ui.com/blocks/settings): User settings dashboard
+- [Dashboard](https://once-ui.com/blocks/dashboard): User dashboard
+- [Streaming](https://once-ui.com/blocks/streaming): Streaming page template
+- [Waitlist](https://once-ui.com/blocks/waitlist): Waitlist page template
+- [Productivity](https://once-ui.com/blocks/productivity): Productivity page template
+- [Ecommerce](https://once-ui.com/blocks/ecommerce): Ecommerce page template
+- [Social](https://once-ui.com/blocks/social): Social page template
+- [Features](https://once-ui.com/blocks/features): Product features showcase
+- [Bento](https://once-ui.com/bento): Bento section layouts
+- [FAQ](https://once-ui.com/blocks/faq): Frequently asked questions page
+- [Cookie](https://once-ui.com/blocks/cookie): Cookie consent banner
+- [Newsletter](https://once-ui.com/blocks/newsletter): Newsletter subscription form
+- [Hero](https://once-ui.com/blocks/hero): Hero section layouts
+- [Plans](https://once-ui.com/blocks/plans): Plan selector and comparison
+- [Testimonial](https://once-ui.com/blocks/testimonial): Customer testimonials
+- [Header](https://once-ui.com/blocks/header): Site header layouts
+- [Sidebar](https://once-ui.com/blocks/sidebar): Sidebar navigation
+- [Footer](https://once-ui.com/blocks/footer): Site footer layouts
+- [Widgets](https://once-ui.com/blocks/widgets): Widget components
+- [Background](https://once-ui.com/blocks/background): Customizable background with masking effects
+
+## Products
+
+- [Supabase Starter](https://once-ui.com/products/supabase-starter): Once UI and Supabase integration.
+- [Magic Spotlight](https://once-ui.com/products/magic-spotlight): Launch a simple, beautiful content creator / founder portfolio.
+- [Magic Convert](https://once-ui.com/products/magic-convert): Launch a landing page and dashboard for your SaaS with your frontend infrastructure template.
+- [Magic Docs](https://once-ui.com/products/magic-docs): Launch a simple, lean and fully customizable product documentation site in minutes.
+- [Magic Bio](https://once-ui.com/products/magic-bio): Launch your bio page for your projects and social profiles and grow your network.
+- [Magic Store](https://once-ui.com/products/magic-store): Set up your fully branded merch store in minutes and start selling with a trusted print-on-demand provider.
+- [Magic Portfolio](https://once-ui.com/products/magic-portfolio): Build a professional portfolio with CV, blog and password protected pages.
+- [Once UI Starter](https://once-ui.com/products/once-ui-starter): Clean Once UI setup.
+- [Once UI Core](https://once-ui.com/products/once-ui-core): The core components library for building beautiful, accessible web applications.
+- [Once UI Tailwind Starter](https://once-ui.com/products/once-ui-tw-starter): Clean Once UI setup with Tailwind CSS.
+
+## Guides
+
+- [The Dopler Method: How we build products that last](https://once-ui.com/blog/the-dopler-method): How we build high quality products.
+- [The Dopler Method: Trading comfort for truth](https://once-ui.com/blog/truth): Mental model for founders.
+- [The Dopler Method: How to make people care](https://once-ui.com/blog/presence): How to make people care.
+- [The Dopler Method: Building products that stick](https://once-ui.com/blog/product): Building products that stick.
+- [The Dopler Method: How ideas become culture](https://once-ui.com/blog/community): How ideas become culture.
+- [The Dopler Method: Building a business around your life](https://once-ui.com/blog/lifestyle): Building a business around your life.
+
+## Optional
+
+- [About](https://once-ui.com/about): Meet the team and community behind Once UI.
+- [Pricing](https://once-ui.com/pricing): Explore subscription options and Pro features.
+- [Changelog](https://docs.once-ui.com/changelog): View recent updates and releases.
+- [Roadmap](https://docs.once-ui.com/roadmap): See what's coming next.
+- [License](https://dopler.app/license): License agreement for our products and resources.
+- [Terms](https://dopler.app/terms): Terms of service for our products and resources.
+- [Privacy](https://dopler.app/privacy): Privacy policy for our products and resources.
+- [Sign up](https://once-ui.com/auth?signup): Create your free account.
+- [GitHub Profile](https://github.com/once-ui-system): Source code and starter templates

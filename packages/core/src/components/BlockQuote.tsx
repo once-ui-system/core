@@ -1,3 +1,5 @@
+"use client";
+
 import { forwardRef } from "react";
 import { Avatar, Column, Line, Row, SmartLink, Text } from ".";
 

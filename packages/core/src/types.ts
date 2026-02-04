@@ -59,6 +59,8 @@ export type ShadowSize = TShirtSizes;
 
 export type SpacingToken = StaticSpacingToken | ResponsiveSpacingToken;
 
+export type CSSUnit = `${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`;
+
 export type opacity = 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
 
 export type ColorScheme =

@@ -9,7 +9,7 @@ import { baseURL } from "@/resources";
 
 import { Analytics } from "@vercel/analytics/react"
 
-import { Background, Column, Flex, Meta, Row } from "@once-ui-system/core";
+import { Background, Column, Flex, Meta, Row, ThemeInit } from "@once-ui-system/core";
 import { dataStyle, effects, layout, schema, style } from "../resources/once-ui.config";
 import { meta } from "@/resources";
 import { RouteGuard } from "@/product/RouteGuard";
@@ -99,62 +99,19 @@ export default function RootLayout({
         )}
       >
         <head>
-          <script
-            // biome-ignore lint/security/noDangerouslySetInnerHtml: <It's not dynamic nor a security issue.>
-            dangerouslySetInnerHTML={{
-              __html: `
-                (function() {
-                  try {
-                    const root = document.documentElement;
-                    
-                    // Set defaults from config
-                    const config = ${JSON.stringify({
-                      theme: style.theme,
-                      brand: style.brand,
-                      accent: style.accent,
-                      neutral: style.neutral,
-                      solid: style.solid,
-                      'solid-style': style.solidStyle,
-                      border: style.border,
-                      surface: style.surface,
-                      transition: style.transition,
-                      scaling: style.scaling,
-                      'viz-style': dataStyle.variant,
-                    })};
-                    
-                    // Apply default values
-                    Object.entries(config).forEach(([key, value]) => {
-                      root.setAttribute('data-' + key, value);
-                    });
-                    
-                    // Resolve theme
-                    const resolveTheme = (themeValue) => {
-                      if (!themeValue || themeValue === 'system') {
-                        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-                      }
-                      return themeValue;
-                    };
-                    
-                    // Apply saved theme or use config default
-                    const savedTheme = localStorage.getItem('data-theme');
-                    // Only override with system preference if explicitly set to 'system'
-                    const resolvedTheme = savedTheme ? resolveTheme(savedTheme) : config.theme === 'system' ? resolveTheme(window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : config.theme;
-                    root.setAttribute('data-theme', resolvedTheme);
-                    
-                    // Apply any saved style overrides
-                    const styleKeys = Object.keys(config);
-                    styleKeys.forEach(key => {
-                      const value = localStorage.getItem('data-' + key);
-                      if (value) {
-                        root.setAttribute('data-' + key, value);
-                      }
-                    });
-                  } catch (e) {
-                    console.error('Failed to initialize theme:', e);
-                    document.documentElement.setAttribute('data-theme', 'dark');
-                  }
-                })();
-              `,
+          <ThemeInit
+            config={{
+              theme: style.theme,
+              brand: style.brand,
+              accent: style.accent,
+              neutral: style.neutral,
+              solid: style.solid,
+              'solid-style': style.solidStyle,
+              border: style.border,
+              surface: style.surface,
+              transition: style.transition,
+              scaling: style.scaling,
+              'viz-style': dataStyle.variant,
             }}
           />
         </head>

@@ -8,6 +8,7 @@ export * from "./CheckboxExample";
 export * from "./ChipExamples";
 export * from "./ClientOption";
 export * from "./CountFxExample";
+export * from "./CountFxDecimalExample";
 export * from "./CountdownFxExample";
 export * from "./DatePickerExamples";
 export * from "./DateRangeInputExamples";
@@ -32,4 +33,6 @@ export * from "./RadialGaugeExample";
 export * from "./CelebrationFxExample";
 export * from "./WeatherFxExample";
 export * from "./MatrixFxExample";
+export * from "./LineChartStreamingExample";
+export * from "./SliderExamples"
 
