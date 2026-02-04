@@ -172,7 +172,7 @@ export default function ComponentsCheck() {
                 { name: "Avatar", element: <Avatar size="m" /> },
                 { name: "AvatarGroup", element: <AvatarGroup avatars={[{}, {}, {}]} /> },
                 { name: "Media", element: <Media src="/images/cover-01.jpg" aspectRatio="16/9" radius="l" /> },
-                { name: "Carousel", element: <Row height={32} fillWidth><Carousel items={[{ slide: "/images/demo.jpg" }]} /></Row> },
+                { name: "Carousel", element: <Row height={32} fillWidth><Carousel items={[{ slide: "/images/demo.jpg" }, { slide: "/images/demo.jpg" }]} /></Row> },
                 { name: "Logo", element: <Logo icon="/trademarks/icon-dark.svg" size="xs" /> },
                 { name: "LogoCloud", element: <LogoCloud logos={[{ icon: "/trademarks/icon-dark.svg" }]} /> },
             ],
