@@ -37,6 +37,10 @@ import {
   HiOutlinePlay,
   HiOutlinePause,
   HiOutlineBars3BottomLeft,
+  HiOutlinePencil,
+  HiOutlineTrash,
+  HiOutlineEnvelope,
+  HiOutlineArrowDownTray,
 } from "react-icons/hi2";
 
 import {
@@ -99,7 +103,11 @@ export const iconLibrary: Record<string, IconType> = {
   screen: HiOutlineComputerDesktop,
   document: HiOutlineBars3BottomLeft,
   radialGauge: PiGauge,
-  linearGauge: PiBatteryFull
+  linearGauge: PiBatteryFull,
+  edit: HiOutlinePencil,
+  trash: HiOutlineTrash,
+  mail: HiOutlineEnvelope,
+  download: HiOutlineArrowDownTray,
 };
 
 export type IconLibrary = typeof iconLibrary;
