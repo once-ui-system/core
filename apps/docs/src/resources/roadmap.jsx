@@ -1,16 +1,11 @@
 const roadmap = [
   {
-    product: "Once UI Core",
+    product: "Once UI Projects",
     brand: "blue",
     columns: [
       {
         title: "Planned",
         tasks: [
-          {
-            title: "StylePanel refactoring",
-            description: "Make stylepanel composable and add additional edit options like custom colors.",
-            type: "feature"
-          },
           {
             title: "Chart states",
             description: "Add state examples to chart docs. (Related: Chart error state)",
@@ -26,45 +21,9 @@ const roadmap = [
       {
         title: "In Progress",
         tasks: [
-        ]
-      },
-      {
-        title: "Done",
-        tasks: [
-          {
-            title: "Once UI 1.5",
-            description: "New Once UI 1.5 components and documentation.",
-            type: "feature"
-          },
-        ]
-      }
-    ]
-  },
-  {
-    product: "Once UI Pro",
-    brand: "indigo",
-    columns: [
-      {
-        title: "Planned",
-        tasks: [
-          {
-            title: "Once UI 1.5 blocks",
-            description: "New Once UI 1.5 blocks.",
-            type: "feature"
-          },
-          {
-            title: "Magic Agent",
-            description: "Upgrade to latest AI SDK.",
-            type: "improvement"
-          },
-        ]
-      },
-      {
-        title: "In Progress",
-        tasks: [
           {
             title: "Supa Hub",
-            description: "Monorepo with multiple social media frontends and a single backend.",
+            description: "Release Supa Hub for testing.",
             type: "feature"
           },
         ]
@@ -72,63 +31,11 @@ const roadmap = [
       {
         title: "Done",
         tasks: [
-        ]
-      },
-    ]
-  },
-  {
-    product: "Magic Docs",
-    brand: "magenta",
-    columns: [
-      {
-        title: "Planned",
-        tasks: [
           {
-            title: "Hot reload",
-            description: "Automatically re-render documentation when changes are detected in MDX files.",
+            title: "Once UI 1.6",
+            description: "New components and accessibility improvements.",
             type: "feature"
           },
-          {
-            title: "Versioning",
-            description: "Add versioning to documentation.",
-            type: "feature"
-          },
-        ]
-      },
-      {
-        title: "In Progress",
-        tasks: [
-        ]
-      },
-      {
-        title: "Done",
-        tasks: [
-        ]
-      }
-    ]
-  },
-  {
-    product: "Magic Portfolio",
-    brand: "orange",
-    columns: [
-      {
-        title: "Planned",
-        tasks: [
-        ]
-      },
-      {
-        title: "In Progress",
-        tasks: [
-          {
-            title: "Fix OG error",
-            description: "Fix Open Graph resolution error.",
-            type: "bug"
-          },
-        ]
-      },
-      {
-        title: "Done",
-        tasks: [
         ]
       }
     ]

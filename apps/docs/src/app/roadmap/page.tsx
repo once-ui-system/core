@@ -82,7 +82,7 @@ export default function RoadmapPage() {
           Roadmap
         </Heading>
         <Text wrap="balance" onBackground="neutral-weak" variant="body-default-xl" marginBottom="20">
-          List of features planned for Q4 2025
+          List of features planned for Q1 2026
         </Text>
       </Column>
 

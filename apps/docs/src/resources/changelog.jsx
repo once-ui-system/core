@@ -2,6 +2,36 @@ import { SmartLink, InlineCode } from "@once-ui-system/core";
 
 const changelog = [
   {
+    date: "2026-02-03",
+    title: "Once UI 1.6: Presence in structure",
+    image: "/images/changelog/once-ui-1-6.jpg",
+    sections: [
+      {
+        title: "New components",
+        bullets: [
+          <>ScrollLock: New utility component</>,
+          <>ThemeInit: New utility component</>,
+        ],
+      },
+      {
+        title: "Component improvements",
+        bullets: [
+          <><SmartLink unstyled href="/once-ui/components/structure">Flex + Grid</SmartLink>: improved unit support, translate props, border shorthand</>,
+          <><SmartLink unstyled href="/once-ui/components/structure">Heading + Text</SmartLink>: family prop to override default variant</>,
+          <><SmartLink unstyled href="/once-ui/components/textarea">Textarea</SmartLink>: styled scrollbar</>,
+        ]
+      },
+      {
+        title: "Accessibility improvements",
+        bullets: [
+          <><SmartLink unstyled href="/once-ui/components/dropdownWrapper">DropdownWrapper</SmartLink>: improved scroll locking</>,
+          <><SmartLink unstyled href="/once-ui/components/dialog">Dialog</SmartLink>: improved scroll locking and fix inert bug</>,
+          <><SmartLink unstyled href="/once-ui/components/contextMenu">ContextMenu</SmartLink>: improved scroll locking</>,
+        ],
+      }
+    ]
+  },
+  {
     date: "2025-10-19",
     title: "Once UI 1.5: Curiosity in code",
     image: "/images/changelog/once-ui-1-5.jpg",
