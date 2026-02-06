@@ -10,13 +10,13 @@ const changelog = [
         title: "New components",
         bullets: [
           <>ScrollLock: New utility component</>,
-          <>ThemeInit: New utility component</>,
+          <><SmartLink unstyled href="/once-ui/config"></SmartLink>ThemeInit: New utility component</>,
         ],
       },
       {
         title: "Component improvements",
         bullets: [
-          <><SmartLink unstyled href="/once-ui/components/structure">Flex + Grid</SmartLink>: improved unit support, translate props, border shorthand</>,
+          <><SmartLink unstyled href="/once-ui/basics/structure">Flex + Grid</SmartLink>: improved unit support, translate props, border shorthand</>,
           <><SmartLink unstyled href="/once-ui/components/heading">Heading + Text</SmartLink>: family prop to override default variant</>,
           <><SmartLink unstyled href="/once-ui/form-controls/textarea">Textarea</SmartLink>: styled scrollbar</>,
         ]
