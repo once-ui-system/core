@@ -71,13 +71,13 @@ importers:
         version: 3.1.0(acorn@8.14.1)(webpack@5.99.9)
       '@next/mdx':
         specifier: ^15.5.9
-        version: 15.5.9(@mdx-js/loader@3.1.0(acorn@8.14.1)(webpack@5.99.9))(@mdx-js/react@3.1.0(@types/react@19.0.1)(react@19.0.0))
+        version: 15.5.9(@mdx-js/loader@3.1.0(acorn@8.14.1)(webpack@5.99.9))(@mdx-js/react@3.1.0(@types/react@19.2.4)(react@19.2.4))
       '@once-ui-system/core':
         specifier: workspace:*
         version: link:../../packages/core
       '@vercel/analytics':
         specifier: ^1.3.1
-        version: 1.5.0(next@15.5.9(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.89.1))(react@19.0.0)
+        version: 1.5.0(next@15.5.9(react-dom@19.2.3(react@19.2.4))(react@19.2.4)(sass@1.89.1))(react@19.2.4)
       classnames:
         specifier: ^2.5.1
         version: 2.5.1
@@ -92,19 +92,19 @@ importers:
         version: 4.0.3
       next:
         specifier: ^15.5.9
-        version: 15.5.9(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.89.1)
+        version: 15.5.9(react-dom@19.2.3(react@19.2.4))(react@19.2.4)(sass@1.89.1)
       next-mdx-remote:
-        specifier: ^5.0.0
-        version: 5.0.0(@types/react@19.0.1)(acorn@8.14.1)(react@19.0.0)
+        specifier: ^6.0.0
+        version: 6.0.0(@types/react@19.2.4)(acorn@8.14.1)(react@19.2.4)
       react:
-        specifier: 19.0.0
-        version: 19.0.0
+        specifier: 19.2.4
+        version: 19.2.4
       react-dom:
-        specifier: 19.0.0
-        version: 19.0.0(react@19.0.0)
+        specifier: 19.2.3
+        version: 19.2.3(react@19.2.4)
       react-icons:
         specifier: ^5.2.1
-        version: 5.5.0(react@19.0.0)
+        version: 5.5.0(react@19.2.4)
       sass:
         specifier: ^1.77.6
         version: 1.89.1
@@ -116,11 +116,11 @@ importers:
         specifier: ^20
         version: 20.17.23
       '@types/react':
-        specifier: 19.0.1
-        version: 19.0.1
+        specifier: 19.2.4
+        version: 19.2.4
       '@types/react-dom':
-        specifier: 19.0.2
-        version: 19.0.2(@types/react@19.0.1)
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.4)
       rimraf:
         specifier: ^6.0.1
         version: 6.0.1
@@ -1085,8 +1085,16 @@ packages:
     peerDependencies:
       '@types/react': ^19.0.0
 
+  '@types/react-dom@19.2.3':
+    resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
+    peerDependencies:
+      '@types/react': ^19.2.0
+
   '@types/react@19.0.1':
     resolution: {integrity: sha512-YW6614BDhqbpR5KtUYzTA+zlA7nayzJRA9ljz9CQoxthR0sDisYZLuvSMsil36t4EH/uAt8T52Xb4sVw17G+SQ==}
+
+  '@types/react@19.2.4':
+    resolution: {integrity: sha512-tBFxBp9Nfyy5rsmefN+WXc1JeW/j2BpBHFdLZbEVfs9wn3E3NRFxwV0pJg8M1qQAexFpvz73hJXFofV0ZAu92A==}
 
   '@types/unist@2.0.11':
     resolution: {integrity: sha512-CmBKiL6NNo/OqgmMn95Fk9Whlp2mtvIv+KNpQKN2F4SjvrEesubTRWGYSg+BnWZOnlCaSTU1sMpsBOzgbYhnsA==}
@@ -2543,8 +2551,8 @@ packages:
   neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
 
-  next-mdx-remote@5.0.0:
-    resolution: {integrity: sha512-RNNbqRpK9/dcIFZs/esQhuLA8jANqlH694yqoDBK8hkVdJUndzzGmnPHa2nyi90N4Z9VmzuSWNRpr5ItT3M7xQ==}
+  next-mdx-remote@6.0.0:
+    resolution: {integrity: sha512-cJEpEZlgD6xGjB4jL8BnI8FaYdN9BzZM4NwadPe1YQr7pqoWjg9EBCMv3nXBkuHqMRfv2y33SzUsuyNh9LFAQQ==}
     engines: {node: '>=14', npm: '>=7'}
     peerDependencies:
       react: '>=16'
@@ -2778,6 +2786,11 @@ packages:
     peerDependencies:
       react: ^19.0.0
 
+  react-dom@19.2.3:
+    resolution: {integrity: sha512-yELu4WmLPw5Mr/lmeEpox5rw3RETacE++JgHqQzd2dg+YbJuat3jH4ingc+WPZhxaoFzdv9y33G+F7Nl5O0GBg==}
+    peerDependencies:
+      react: ^19.2.3
+
   react-icons@5.5.0:
     resolution: {integrity: sha512-MEFcXdkP3dLo8uumGI5xN3lDFNsRtrjbOEKDLD7yv76v4wpnEq2Lt2qeHaQOr34I/wPN3s3+N08WkQ+CW37Xiw==}
     peerDependencies:
@@ -2803,6 +2816,10 @@ packages:
 
   react@19.0.0:
     resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
+    engines: {node: '>=0.10.0'}
+
+  react@19.2.4:
+    resolution: {integrity: sha512-9nfp2hYpCwOjAN+8TZFGhtWEwgvWHXqESH8qT89AT/lWklpLON22Lc8pEtnpsZz7VmawabSU0gCjnj8aC0euHQ==}
     engines: {node: '>=0.10.0'}
 
   readdirp@4.1.2:
@@ -2932,6 +2949,9 @@ packages:
 
   scheduler@0.25.0:
     resolution: {integrity: sha512-xFVuu11jh+xcO7JOAGJNOXld8/TcEHK/4CituBUeUb5hqxJLj9YuemAEuvm9gQ/+pgXYfbQuqAkiYu+u7YEsNA==}
+
+  scheduler@0.27.0:
+    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
 
   schema-utils@4.3.2:
     resolution: {integrity: sha512-Gn/JaSk/Mt9gYubxTtSn/QCV4em9mpAPiR1rqy/Ocu19u/G9J5WWdNoUT4SiV6mFC3y6cxyFcFwdzPM3FgxGAQ==}
@@ -3254,9 +3274,6 @@ packages:
   unified@11.0.5:
     resolution: {integrity: sha512-xKvGhPWw3k84Qjh8bI3ZeJjqnyadK+GEFtazSfZv/rKeTkTjOJho6mFqh2SM96iIcZokxiOpg78GazTSg8+KHA==}
 
-  unist-util-is@5.2.1:
-    resolution: {integrity: sha512-u9njyyfEh43npf1M+yGKDGVPbY/JWEemg5nH05ncKPfi+kBbKBJoTdsogMu33uhytuLlv9y0O7GH7fEdwLdLQw==}
-
   unist-util-is@6.0.0:
     resolution: {integrity: sha512-2qCTHimwdxLfz+YzdGfkqNlH0tLi9xjTnHddPmJwtIG9MGsdbutfTc4P+haPD7l7Cjxf/WZj+we5qfVPvvxfYw==}
 
@@ -3266,20 +3283,20 @@ packages:
   unist-util-position@5.0.0:
     resolution: {integrity: sha512-fucsC7HjXvkB5R3kTCO7kUjRdrS0BJt3M/FPxmHMBOm8JQi2BsHAHFsy27E0EolP8rp0NzXsJ+jNPyDWvOJZPA==}
 
-  unist-util-remove@3.1.1:
-    resolution: {integrity: sha512-kfCqZK5YVY5yEa89tvpl7KnBBHu2c6CzMkqHUrlOqaRgGOMp0sMvwWOVrbAtj03KhovQB7i96Gda72v/EFE0vw==}
+  unist-util-remove@4.0.0:
+    resolution: {integrity: sha512-b4gokeGId57UVRX/eVKej5gXqGlc9+trkORhFJpu9raqZkZhU0zm8Doi05+HaiBsMEIJowL+2WtQ5ItjsngPXg==}
 
   unist-util-stringify-position@4.0.0:
     resolution: {integrity: sha512-0ASV06AAoKCDkS2+xw5RXJywruurpbC4JZSm7nr7MOt1ojAzvyyaO+UxZf18j8FCF6kmzCZKcAgN/yu2gm2XgQ==}
-
-  unist-util-visit-parents@5.1.3:
-    resolution: {integrity: sha512-x6+y8g7wWMyQhL1iZfhIPhDAs7Xwbn9nRosDXl7qoPTSCy0yNxnKc+hWokFifWQIDGi154rdUqKvbCa4+1kLhg==}
 
   unist-util-visit-parents@6.0.1:
     resolution: {integrity: sha512-L/PqWzfTP9lzzEa6CKs0k2nARxTdZduw3zyh8d2NVBnsyvHjSX4TWse388YrrQKbvI8w20fGjGlhgT96WwKykw==}
 
   unist-util-visit@5.0.0:
     resolution: {integrity: sha512-MR04uvD+07cwl/yhVuVWAtw+3GOR/knlL55Nd/wAdblk27GCVt3lqpTivy/tkJcZoNPzTwS1Y+KMojlLDhoTzg==}
+
+  unist-util-visit@5.1.0:
+    resolution: {integrity: sha512-m+vIdyeCOpdr/QeQCu2EzxX/ohgS8KbnPDgFni4dQsfSCtpz8UqDyY5GjRru8PDKuYn7Fq19j1CQ+nJSsGKOzg==}
 
   unrs-resolver@1.7.11:
     resolution: {integrity: sha512-OhuAzBImFPjKNgZ2JwHMfGFUA6NSbRegd1+BPjC1Y0E6X9Y/vJ4zKeGmIMqmlYboj6cMNEwKI+xQisrg4J0HaQ==}
@@ -3832,11 +3849,11 @@ snapshots:
       - acorn
       - supports-color
 
-  '@mdx-js/react@3.1.0(@types/react@19.0.1)(react@19.0.0)':
+  '@mdx-js/react@3.1.0(@types/react@19.2.4)(react@19.2.4)':
     dependencies:
       '@types/mdx': 2.0.13
-      '@types/react': 19.0.1
-      react: 19.0.0
+      '@types/react': 19.2.4
+      react: 19.2.4
 
   '@napi-rs/wasm-runtime@0.2.10':
     dependencies:
@@ -3855,12 +3872,12 @@ snapshots:
     dependencies:
       fast-glob: 3.3.1
 
-  '@next/mdx@15.5.9(@mdx-js/loader@3.1.0(acorn@8.14.1)(webpack@5.99.9))(@mdx-js/react@3.1.0(@types/react@19.0.1)(react@19.0.0))':
+  '@next/mdx@15.5.9(@mdx-js/loader@3.1.0(acorn@8.14.1)(webpack@5.99.9))(@mdx-js/react@3.1.0(@types/react@19.2.4)(react@19.2.4))':
     dependencies:
       source-map: 0.7.6
     optionalDependencies:
       '@mdx-js/loader': 3.1.0(acorn@8.14.1)(webpack@5.99.9)
-      '@mdx-js/react': 3.1.0(@types/react@19.0.1)(react@19.0.0)
+      '@mdx-js/react': 3.1.0(@types/react@19.2.4)(react@19.2.4)
 
   '@next/swc-darwin-arm64@15.3.3':
     optional: true
@@ -4095,7 +4112,15 @@ snapshots:
     dependencies:
       '@types/react': 19.0.1
 
+  '@types/react-dom@19.2.3(@types/react@19.2.4)':
+    dependencies:
+      '@types/react': 19.2.4
+
   '@types/react@19.0.1':
+    dependencies:
+      csstype: 3.1.3
+
+  '@types/react@19.2.4':
     dependencies:
       csstype: 3.1.3
 
@@ -4250,10 +4275,10 @@ snapshots:
   '@unrs/resolver-binding-win32-x64-msvc@1.7.11':
     optional: true
 
-  '@vercel/analytics@1.5.0(next@15.5.9(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.89.1))(react@19.0.0)':
+  '@vercel/analytics@1.5.0(next@15.5.9(react-dom@19.2.3(react@19.2.4))(react@19.2.4)(sass@1.89.1))(react@19.2.4)':
     optionalDependencies:
-      next: 15.5.9(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.89.1)
-      react: 19.0.0
+      next: 15.5.9(react-dom@19.2.3(react@19.2.4))(react@19.2.4)(sass@1.89.1)
+      react: 19.2.4
 
   '@webassemblyjs/ast@1.14.1':
     dependencies:
@@ -5923,13 +5948,14 @@ snapshots:
 
   neo-async@2.6.2: {}
 
-  next-mdx-remote@5.0.0(@types/react@19.0.1)(acorn@8.14.1)(react@19.0.0):
+  next-mdx-remote@6.0.0(@types/react@19.2.4)(acorn@8.14.1)(react@19.2.4):
     dependencies:
       '@babel/code-frame': 7.27.1
       '@mdx-js/mdx': 3.1.0(acorn@8.14.1)
-      '@mdx-js/react': 3.1.0(@types/react@19.0.1)(react@19.0.0)
-      react: 19.0.0
-      unist-util-remove: 3.1.1
+      '@mdx-js/react': 3.1.0(@types/react@19.2.4)(react@19.2.4)
+      react: 19.2.4
+      unist-util-remove: 4.0.0
+      unist-util-visit: 5.1.0
       vfile: 6.0.3
       vfile-matter: 5.0.1
     transitivePeerDependencies:
@@ -5963,15 +5989,15 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  next@15.5.9(react-dom@19.0.0(react@19.0.0))(react@19.0.0)(sass@1.89.1):
+  next@15.5.9(react-dom@19.2.3(react@19.2.4))(react@19.2.4)(sass@1.89.1):
     dependencies:
       '@next/env': 15.5.9
       '@swc/helpers': 0.5.15
       caniuse-lite: 1.0.30001735
       postcss: 8.4.31
-      react: 19.0.0
-      react-dom: 19.0.0(react@19.0.0)
-      styled-jsx: 5.1.6(react@19.0.0)
+      react: 19.2.4
+      react-dom: 19.2.3(react@19.2.4)
+      styled-jsx: 5.1.6(react@19.2.4)
     optionalDependencies:
       '@next/swc-darwin-arm64': 15.5.7
       '@next/swc-darwin-x64': 15.5.7
@@ -6186,9 +6212,18 @@ snapshots:
       react: 19.0.0
       scheduler: 0.25.0
 
+  react-dom@19.2.3(react@19.2.4):
+    dependencies:
+      react: 19.2.4
+      scheduler: 0.27.0
+
   react-icons@5.5.0(react@19.0.0):
     dependencies:
       react: 19.0.0
+
+  react-icons@5.5.0(react@19.2.4):
+    dependencies:
+      react: 19.2.4
 
   react-is@16.13.1: {}
 
@@ -6212,6 +6247,8 @@ snapshots:
       react-dom: 19.0.0(react@19.0.0)
 
   react@19.0.0: {}
+
+  react@19.2.4: {}
 
   readdirp@4.1.2: {}
 
@@ -6383,6 +6420,8 @@ snapshots:
       '@parcel/watcher': 2.5.1
 
   scheduler@0.25.0: {}
+
+  scheduler@0.27.0: {}
 
   schema-utils@4.3.2:
     dependencies:
@@ -6673,6 +6712,11 @@ snapshots:
       client-only: 0.0.1
       react: 19.0.0
 
+  styled-jsx@5.1.6(react@19.2.4):
+    dependencies:
+      client-only: 0.0.1
+      react: 19.2.4
+
   supports-color@7.2.0:
     dependencies:
       has-flag: 4.0.0
@@ -6814,10 +6858,6 @@ snapshots:
       trough: 2.2.0
       vfile: 6.0.3
 
-  unist-util-is@5.2.1:
-    dependencies:
-      '@types/unist': 2.0.11
-
   unist-util-is@6.0.0:
     dependencies:
       '@types/unist': 3.0.3
@@ -6830,20 +6870,15 @@ snapshots:
     dependencies:
       '@types/unist': 3.0.3
 
-  unist-util-remove@3.1.1:
+  unist-util-remove@4.0.0:
     dependencies:
-      '@types/unist': 2.0.11
-      unist-util-is: 5.2.1
-      unist-util-visit-parents: 5.1.3
+      '@types/unist': 3.0.3
+      unist-util-is: 6.0.0
+      unist-util-visit-parents: 6.0.1
 
   unist-util-stringify-position@4.0.0:
     dependencies:
       '@types/unist': 3.0.3
-
-  unist-util-visit-parents@5.1.3:
-    dependencies:
-      '@types/unist': 2.0.11
-      unist-util-is: 5.2.1
 
   unist-util-visit-parents@6.0.1:
     dependencies:
@@ -6851,6 +6886,12 @@ snapshots:
       unist-util-is: 6.0.0
 
   unist-util-visit@5.0.0:
+    dependencies:
+      '@types/unist': 3.0.3
+      unist-util-is: 6.0.0
+      unist-util-visit-parents: 6.0.1
+
+  unist-util-visit@5.1.0:
     dependencies:
       '@types/unist': 3.0.3
       unist-util-is: 6.0.0

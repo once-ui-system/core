@@ -187,8 +187,9 @@ type CustomMDXProps = Omit<MDXRemoteProps, 'components'> & {
 
 export function CustomMDX(props: CustomMDXProps) {
   return (
-    <MDXRemote 
-      {...props} 
+    <MDXRemote
+      {...props}
+      options={{ blockJS: false }}
       components={{ 
         ...mdxComponents, 
         ...(props.components || {}) 
