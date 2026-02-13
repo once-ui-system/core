@@ -13,7 +13,7 @@ export async function generateMetadata() {
   });
 }
 
-const Changelog: React.FC = () => {
+export default function Changelog() {
   return (
     <Row fillWidth horizontal="center" padding="l">
       <Column
@@ -125,6 +125,4 @@ const Changelog: React.FC = () => {
       </Column>
     </Row>
   );
-};
-
-export default Changelog;
+}
