@@ -281,6 +281,7 @@ const BarChart: React.FC<BarChartProps> = ({
               )}
               {tooltip && (
                 <RechartsTooltip
+                  {...({} as any)}
                   cursor={{ fill: hover ? "var(--neutral-alpha-weak)" : "var(--static-transparent)" }}
                   content={(props) => (
                     <DataTooltip {...props} date={date} variant={variant as ChartVariant} />
@@ -299,6 +300,7 @@ const BarChart: React.FC<BarChartProps> = ({
               </defs>
               {autoSeries.map((series, index) => (
                 <RechartsBar
+                  {...({} as any)}
                   key={series.key}
                   dataKey={series.key}
                   name={series.key}

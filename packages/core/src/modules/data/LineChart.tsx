@@ -314,6 +314,7 @@ const LineChart: React.FC<LineChartProps> = ({
               )}
               {tooltip && (
                 <RechartsTooltip
+                  {...({} as any)}
                   cursor={{
                     stroke: "var(--neutral-border-strong)",
                     strokeWidth: 1,
@@ -328,6 +329,7 @@ const LineChart: React.FC<LineChartProps> = ({
                 const lineColor = `var(--data-${colorValue})`;
                 return (
                   <RechartsArea
+                    {...({} as any)}
                     key={key}
                     type={curve}
                     dataKey={key}

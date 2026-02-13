@@ -268,6 +268,7 @@ export const PieChart: React.FC<PieChartProps> = ({
               </RechartsPie>
               {tooltip && (
                 <RechartsTooltip
+                  {...({} as any)}
                   content={(props) => {
                     if (props.payload && props.payload.length > 0) {
                       const entry = props.payload[0];
