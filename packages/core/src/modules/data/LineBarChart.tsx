@@ -289,7 +289,6 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
               )}
               {tooltip && (
                 <RechartsTooltip
-                  {...({} as any)}
                   cursor={{
                     stroke: "var(--neutral-border-strong)",
                     strokeWidth: 1,
@@ -305,7 +304,6 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                 />
               )}
               <RechartsArea
-                {...({} as any)}
                 type={curve}
                 dataKey={lineSeries.key}
                 name={lineSeries.key}
@@ -320,7 +318,6 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
                 }}
               />
               <RechartsBar
-                {...({} as any)}
                 dataKey={barSeries.key}
                 name={barSeries.key}
                 fill={`url(#barGradient${chartId})`}
