@@ -1,3 +1,19 @@
+.indicator {
+  &:hover, &:focus-within {
+    .inactive {
+      background: var(--neutral-alpha-strong);
+    }
+  }
+}
+
+.inactive {
+  background: var(--neutral-alpha-medium);
+}
+
+.active {
+  background: var(--neutral-on-background-strong);
+}
+
 .controls {
   &:hover, &:focus-within {
     .fade {

@@ -1,7 +1,7 @@
 "use client";
 
 import { SpacingToken } from "@/types";
-import { Flex, RevealFx, Scroller, Media, Column, Row, IconButton, Fade, ProgressBar } from ".";
+import { Flex, RevealFx, Scroller, Media, Column, Row, IconButton, Fade } from ".";
 import { useEffect, useState, useRef } from "react";
 import styles from "./Carousel.module.scss";
 
@@ -42,7 +42,7 @@ const Carousel: React.FC<CarouselProps> = ({
   revealedByDefault = false,
   thumbnail = { scaling: 1, height: "80", sizes: "120px" },
   play = { auto: false, interval: 3000, controls: true },
-  ...rest
+  ...flex
 }) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [hoverIndex, setHoverIndex] = useState<number|undefined>(0);
@@ -185,7 +185,7 @@ const Carousel: React.FC<CarouselProps> = ({
   }
 
   return (
-    <Column fillWidth fillHeight={fill} gap="0" {...rest} aspectRatio={undefined} style={{ isolation: "isolate" }}>
+    <Column fillWidth fillHeight={fill} gap="8" {...flex} aspectRatio={undefined} style={{ isolation: "isolate" }}>
       {items.length > 1 && play.controls && play.auto && (
         <Flex
           position="absolute"
@@ -244,8 +244,8 @@ const Carousel: React.FC<CarouselProps> = ({
             fill={fill}
             sizes={sizes}
             priority={priority}
-            radius={rest.radius || "l"}
-            border={rest.border || "neutral-alpha-weak"}
+            radius={flex.radius || "l"}
+            border={flex.border || "neutral-alpha-weak"}
             overflow="hidden"
             aspectRatio={fill ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
             src={items[activeIndex]?.slide as string}
@@ -255,8 +255,8 @@ const Carousel: React.FC<CarouselProps> = ({
           <Flex
             fill
             overflow="hidden"
-            radius={rest.radius || "l"}
-            border={rest.border || "neutral-alpha-weak"}
+            radius={flex.radius || "l"}
+            border={flex.border || "neutral-alpha-weak"}
             aspectRatio={fill ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
           >
             {items[activeIndex]?.slide}
@@ -265,7 +265,7 @@ const Carousel: React.FC<CarouselProps> = ({
         <Row
           fill
           className={styles.controls}
-          radius={rest.radius || "l"}
+          radius={flex.radius || "l"}
           position="absolute"
           top="0"
           left="0"
@@ -381,30 +381,23 @@ const Carousel: React.FC<CarouselProps> = ({
       {items.length > 1 && indicator !== false && (
         <>
           {indicator === "line" ? (
-            <Flex gap="4" paddingX="s" marginTop="8" fillWidth horizontal="center">
+            <Flex gap="4" paddingX="s" fillWidth horizontal="center">
               {items.map((_, index) => (
                 <Flex
+                  className={styles.indicator}
                   onClick={() => handleControlClick(index)}
-                  onMouseEnter={() => setHoverIndex(index)}
-                  onMouseLeave={() => setHoverIndex(undefined)}
-                  cursor="pointer"
+                  cursor={activeIndex === index ? undefined : "interactive"}
                   key={index}
                   fillWidth
-                  height="8"
+                  height="12"
                   vertical="center"
                 >
                   <Flex
+                    className={activeIndex === index ? styles.active : styles.inactive}
                     radius="full"
-                    style={{
-                      background:
-                        activeIndex === index || hoverIndex === index
-                          ? "var(--neutral-on-background-strong)"
-                          : "var(--neutral-alpha-medium)",
-                      transition: "background 0.2s ease",
-                    }}
+                    transition="micro-short"
                     fillWidth
-                    height="4"
-                    vertical="center"
+                    height="2"
                   />
                 </Flex>
               ))}
