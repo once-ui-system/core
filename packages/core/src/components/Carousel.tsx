@@ -211,6 +211,7 @@ const Carousel: React.FC<CarouselProps> = ({
       <RevealFx
         fillWidth
         fillHeight={fill}
+        radius={rest.radius || "l"}
         trigger={isTransitioning}
         translateY={translateY}
         aspectRatio={aspectRatio === "original" ? undefined : aspectRatio}
