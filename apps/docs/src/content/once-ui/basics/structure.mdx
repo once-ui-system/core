@@ -1193,44 +1193,7 @@ You can set `opacity` from `0` to `100` in steps of `10`.
   ]}
 />
 
-### Conditionals
-
-Use the `hide` prop to conditionally render elements based on breakpoint.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={
-    <Column fillWidth gap="24" align="center" onBackground="neutral-weak" textVariant="label-default-s">
-      <Background m={{hide: true}} fillWidth padding="24" center
-        background="neutral-alpha-weak"
-        border="neutral-alpha-medium" radius="l"
-        lines={{display: true, color: "neutral-alpha-weak"}}>
-        Shown above the "m" breakpoint
-      </Background>
-      <Background hide m={{hide: false}} fillWidth padding="24" center
-        background="neutral-alpha-weak"
-        border="neutral-alpha-medium" radius="l"
-        lines={{display: true, color: "neutral-alpha-weak"}}>
-        Hidden on / below the "m" breakpoint
-      </Background>
-      You can only see a single block, but there are two here.
-    </Column>
-  }
-  codes={[
-    {
-      code:
-`<Row m={{hide: true}}>
-    <Text>Shown above the "m" breakpoint</Text>
-</Row>
-<Row hide m={{hide: false}}>
-    <Text>Hidden on / below the "m" breakpoint</Text>
-</Row>`,
-      language: "tsx",
-      label: "Hide / Show"
-    }
-  ]}
-/>
+### Theme-based rendering
 
 Use the `dark` and `light` props to limit rendering by theme.
 
@@ -1548,8 +1511,10 @@ Use the `textVariant` prop to apply text styles to children elements. Use the `a
 
 ### Responsiveness
 
-Responsive overrides with `xs`, `s`, `m`, `l` and `xl let you adapt any Flex/Grid prop per breakpoint,
+Responsive overrides with `xs`, `s`, `m`, `l` and `xl` let you adapt any Flex/Grid prop per breakpoint,
 with smaller breakpoints overriding larger ones.
+
+#### Breakpoints
 
 Breakpoints are managed by the `LayoutProvider` component. You can override default breakpoints by passing a `breakpoints` prop to the `LayoutProvider`.
 
@@ -1560,23 +1525,27 @@ Breakpoints are managed by the `LayoutProvider` component. You can override defa
       { content: "Width", key: "width" },
     ],
     rows: [
-      ["xs", "480px"],
-      ["s", "768px"],
-      ["m", "1024px"],
-      ["l", "1440px"],
-      ["xl", "above all"],
+      ["xs", <InlineCode>480px</InlineCode>],
+      ["s", <InlineCode>768px</InlineCode>],
+      ["m", <InlineCode>1024px</InlineCode>],
+      ["l", <InlineCode>1440px</InlineCode>],
+      ["xl", <InlineCode>above all</InlineCode>],
     ],
   }}
 />
+
+#### Override direction
+
+Overriding the direction with the breakpoints props using the `direction` property will cascade down to smaller breakpoints.
 
 <CodeBlock
     marginTop="16"
     marginBottom="24"
     preview={
       <Row fillWidth gap="16" s={{direction: "column"}}>
-        <Background fillWidth height={6} background="neutral-weak" border="neutral-alpha-medium" radius="l"/>
-        <Background fillWidth height={6} background="neutral-weak" border="neutral-alpha-medium" radius="l"/>
-        <Background fillWidth height={6} background="neutral-weak" border="neutral-alpha-medium" radius="l"/>
+        <Background fillWidth height={6} background="neutral-alpha-weak" border="neutral-alpha-medium" radius="l"lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fillWidth height={6} background="neutral-alpha-weak" border="neutral-alpha-medium" radius="l"lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fillWidth height={6} background="neutral-alpha-weak" border="neutral-alpha-medium" radius="l"lines={{display: true, color: "neutral-alpha-weak"}}/>
       </Row>
     }
     codes={[
@@ -1589,7 +1558,36 @@ Breakpoints are managed by the `LayoutProvider` component. You can override defa
 </Row>
 `,
             language: "tsx",
-            label: "Responsive direction"
+            label: "Direction"
+        }
+    ]}
+/>
+
+#### Override alignment
+
+Overriding the alignment with the breakpoints props using the `horizontal` or `vertical` properties will cascade down to smaller breakpoints.
+
+<CodeBlock
+    marginTop="16"
+    marginBottom="24"
+    preview={
+      <Column fillWidth gap="16" m={{horizontal: "center"}} s={{horizontal: "end"}}>
+        <Background fillWidth maxWidth="60%" height={6} background="neutral-alpha-weak" border="neutral-alpha-medium" radius="l" lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fillWidth maxWidth="60%" height={6} background="neutral-alpha-weak" border="neutral-alpha-medium" radius="l" lines={{display: true, color: "neutral-alpha-weak"}}/>
+        <Background fillWidth maxWidth="60%" height={6} background="neutral-alpha-weak" border="neutral-alpha-medium" radius="l" lines={{display: true, color: "neutral-alpha-weak"}}/>
+      </Column>
+    }
+    codes={[
+        {
+            code: `
+<Column fillWidth gap="16" m={{horizontal: "center"}} s={{horizontal: "end"}}>
+    <Background fillWidth height={6} />
+    <Background fillWidth height={6} />
+    <Background fillWidth height={6} />
+</Column>
+`,
+            language: "tsx",
+            label: "Alignment"
         }
     ]}
 />
@@ -1664,37 +1662,37 @@ Use the `columns` prop to define the number of columns. Use the `xs`, `s`, `m`, 
       <Background
         fillWidth
         height={6}
-        background="neutral-weak"
+        background="neutral-alpha-weak"
         border="neutral-alpha-medium" radius="l"
         lines={{display: true, color: "neutral-alpha-weak"}}/>
       <Background
         fillWidth
         height={6}
-        background="neutral-weak"
+        background="neutral-alpha-weak"
         border="neutral-alpha-medium" radius="l"
         lines={{display: true, color: "neutral-alpha-weak"}}/>
       <Background
         fillWidth
         height={6}
-        background="neutral-weak"
+        background="neutral-alpha-weak"
         border="neutral-alpha-medium" radius="l"
         lines={{display: true, color: "neutral-alpha-weak"}}/>
       <Background
         fillWidth
         height={6}
-        background="neutral-weak"
+        background="neutral-alpha-weak"
         border="neutral-alpha-medium" radius="l"
         lines={{display: true, color: "neutral-alpha-weak"}}/>
       <Background
         fillWidth
         height={6}
-        background="neutral-weak"
+        background="neutral-alpha-weak"
         border="neutral-alpha-medium" radius="l"
         lines={{display: true, color: "neutral-alpha-weak"}}/>
       <Background
         fillWidth
         height={6}
-        background="neutral-weak"
+        background="neutral-alpha-weak"
         border="neutral-alpha-medium" radius="l"
         lines={{display: true, color: "neutral-alpha-weak"}}/>
     </Grid>
