@@ -6,6 +6,11 @@ import classNames from "classnames";
 import styles from "./MasonryGrid.module.scss";
 import { Flex } from "./Flex";
 
+interface MasonryBreakpointProps {
+  columns?: number;
+  hide?: boolean;
+}
+
 function parseToken(value: SpacingToken | "-1" | number | undefined, type: "width" | "height") {
   if (value === undefined) return undefined;
   if (typeof value === "number") return `${value}rem`;
@@ -39,16 +44,20 @@ function parseToken(value: SpacingToken | "-1" | number | undefined, type: "widt
   return undefined;
 }
 
-interface MasonryGridProps extends React.ComponentProps<typeof Flex> {
+interface MasonryGridProps extends Omit<React.ComponentProps<typeof Flex>, 'l' | 'm' | 's' | 'xs'> {
   children: ReactNode;
   gap?: SpacingToken | "-1" | undefined;
   columns?: number;
   style?: CSSProperties;
   className?: string;
+  l?: MasonryBreakpointProps;
+  m?: MasonryBreakpointProps;
+  s?: MasonryBreakpointProps;
+  xs?: MasonryBreakpointProps;
 }
 
 const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
-  ({ children, gap = "8", columns = 3, style, className, l, m, s, ...flex }, ref) => {
+  ({ children, gap = "8", columns = 3, style, className, l, m, s, xs, ...flex }, ref) => {
     const gapValue = parseToken(gap, "width") ?? "var(--static-space-8)";
 
     const classes = classNames(
@@ -56,6 +65,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
       l?.columns && styles[`l-columns-${l.columns}`],
       m?.columns && styles[`m-columns-${m.columns}`],
       s?.columns && styles[`s-columns-${s.columns}`],
+      xs?.columns && styles[`xs-columns-${xs.columns}`],
       className,
     );
 
