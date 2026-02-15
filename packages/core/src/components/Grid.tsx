@@ -8,6 +8,7 @@ import {
   SizeProps,
   CommonProps,
   DisplayProps,
+  GridBreakpointProps,
 } from "../interfaces";
 import { ClientGrid } from "./ClientGrid";
 import { ServerGrid } from "./ServerGrid";
@@ -19,11 +20,11 @@ interface SmartGridProps
     SizeProps,
     CommonProps,
     DisplayProps {
-  xl?: any;
-  l?: any;
-  m?: any;
-  s?: any;
-  xs?: any;
+  xl?: GridBreakpointProps;
+  l?: GridBreakpointProps;
+  m?: GridBreakpointProps;
+  s?: GridBreakpointProps;
+  xs?: GridBreakpointProps;
 }
 
 const Grid = forwardRef<HTMLDivElement, SmartGridProps>(

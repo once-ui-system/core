@@ -8,6 +8,7 @@ import {
   StyleProps,
   CommonProps,
   DisplayProps,
+  GridBreakpointProps,
 } from "../interfaces";
 import { SpacingToken, ColorScheme, ColorWeight } from "../types";
 
@@ -18,11 +19,11 @@ interface ComponentProps
     StyleProps,
     CommonProps,
     DisplayProps {
-  xl?: any;
-  l?: any;
-  m?: any;
-  s?: any;
-  xs?: any;
+  xl?: GridBreakpointProps;
+  l?: GridBreakpointProps;
+  m?: GridBreakpointProps;
+  s?: GridBreakpointProps;
+  xs?: GridBreakpointProps;
   isDefaultBreakpoints?: boolean;
 }
 
@@ -210,7 +211,10 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
-      (overflow && overflow !== "hidden" || overflowX && overflowX !== "hidden" || overflowY && overflowY !== "hidden") && `scrollbar-${scrollbar}`,
+      ((overflow && overflow !== "hidden") ||
+        (overflowX && overflowX !== "hidden") ||
+        (overflowY && overflowY !== "hidden")) &&
+        `scrollbar-${scrollbar}`,
       typeof padding !== "number" && padding && `p-${padding}`,
       typeof paddingLeft !== "number" && paddingLeft && `pl-${paddingLeft}`,
       typeof paddingRight !== "number" && paddingRight && `pr-${paddingRight}`,
@@ -226,14 +230,49 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       typeof marginX !== "number" && marginX && `mx-${marginX}`,
       typeof marginY !== "number" && marginY && `my-${marginY}`,
       typeof gap !== "number" && gap && `g-${gap}`,
-      typeof top === "string" && !top.endsWith("%") && !top.endsWith("vh") && !top.endsWith("dvh") && !top.endsWith("vw") && !top.startsWith("calc(") && top && `top-${top}`,
-      typeof right === "string" && !right.endsWith("%") && !right.endsWith("vh") && !right.endsWith("dvh") && !right.endsWith("vw") && !right.startsWith("calc(") && right && `right-${right}`,
-      typeof bottom === "string" && !bottom.endsWith("%") && !bottom.endsWith("vh") && !bottom.endsWith("dvh") && !bottom.endsWith("vw") && !bottom.startsWith("calc(") && bottom && `bottom-${bottom}`,
-      typeof left === "string" && !left.endsWith("%") && !left.endsWith("vh") && !left.endsWith("dvh") && !left.endsWith("vw") && !left.startsWith("calc(") && left && `left-${left}`,
+      typeof top === "string" &&
+        !top.endsWith("%") &&
+        !top.endsWith("vh") &&
+        !top.endsWith("dvh") &&
+        !top.endsWith("vw") &&
+        !top.startsWith("calc(") &&
+        top &&
+        `top-${top}`,
+      typeof right === "string" &&
+        !right.endsWith("%") &&
+        !right.endsWith("vh") &&
+        !right.endsWith("dvh") &&
+        !right.endsWith("vw") &&
+        !right.startsWith("calc(") &&
+        right &&
+        `right-${right}`,
+      typeof bottom === "string" &&
+        !bottom.endsWith("%") &&
+        !bottom.endsWith("vh") &&
+        !bottom.endsWith("dvh") &&
+        !bottom.endsWith("vw") &&
+        !bottom.startsWith("calc(") &&
+        bottom &&
+        `bottom-${bottom}`,
+      typeof left === "string" &&
+        !left.endsWith("%") &&
+        !left.endsWith("vh") &&
+        !left.endsWith("dvh") &&
+        !left.endsWith("vw") &&
+        !left.startsWith("calc(") &&
+        left &&
+        `left-${left}`,
       generateDynamicClass("background", background),
       generateDynamicClass("solid", solid),
       // Handle border color: boolean uses default-border, string uses dynamic class
-      (border === true || borderTop === true || borderRight === true || borderBottom === true || borderLeft === true || borderX === true || borderY === true) && "default-border",
+      (border === true ||
+        borderTop === true ||
+        borderRight === true ||
+        borderBottom === true ||
+        borderLeft === true ||
+        borderX === true ||
+        borderY === true) &&
+        "default-border",
       typeof border === "string" && generateDynamicClass("border", border),
       typeof borderTop === "string" && generateDynamicClass("border", borderTop),
       typeof borderRight === "string" && generateDynamicClass("border", borderRight),
@@ -326,9 +365,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
         );
     }
 
-    const parsePosition = (
-      value: number | string | undefined,
-    ): string | undefined => {
+    const parsePosition = (value: number | string | undefined): string | undefined => {
       if (value === undefined) return undefined;
       if (typeof value === "number") return `${value}rem`;
       if (typeof value === "string") {
@@ -347,9 +384,10 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
 
     const translateXValue = parsePosition(translateX);
     const translateYValue = parsePosition(translateY);
-    const transform = translateXValue || translateYValue
-      ? `translate(${translateXValue || "0"}, ${translateYValue || "0"})`
-      : undefined;
+    const transform =
+      translateXValue || translateYValue
+        ? `translate(${translateXValue || "0"}, ${translateYValue || "0"})`
+        : undefined;
 
     const combinedStyle: CSSProperties = {
       maxWidth: parseDimension(maxWidth, "width"),
@@ -363,15 +401,55 @@ const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
       // Hide default cursor when using custom cursor
       cursor: typeof cursor === "string" ? cursor : undefined,
       padding: typeof padding === "number" ? `${padding}rem` : undefined,
-      paddingLeft: typeof paddingLeft === "number" ? `${paddingLeft}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
-      paddingRight: typeof paddingRight === "number" ? `${paddingRight}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
-      paddingTop: typeof paddingTop === "number" ? `${paddingTop}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
-      paddingBottom: typeof paddingBottom === "number" ? `${paddingBottom}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
+      paddingLeft:
+        typeof paddingLeft === "number"
+          ? `${paddingLeft}rem`
+          : typeof paddingX === "number"
+            ? `${paddingX}rem`
+            : undefined,
+      paddingRight:
+        typeof paddingRight === "number"
+          ? `${paddingRight}rem`
+          : typeof paddingX === "number"
+            ? `${paddingX}rem`
+            : undefined,
+      paddingTop:
+        typeof paddingTop === "number"
+          ? `${paddingTop}rem`
+          : typeof paddingY === "number"
+            ? `${paddingY}rem`
+            : undefined,
+      paddingBottom:
+        typeof paddingBottom === "number"
+          ? `${paddingBottom}rem`
+          : typeof paddingY === "number"
+            ? `${paddingY}rem`
+            : undefined,
       margin: typeof margin === "number" ? `${margin}rem` : undefined,
-      marginLeft: typeof marginLeft === "number" ? `${marginLeft}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
-      marginRight: typeof marginRight === "number" ? `${marginRight}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
-      marginTop: typeof marginTop === "number" ? `${marginTop}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
-      marginBottom: typeof marginBottom === "number" ? `${marginBottom}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
+      marginLeft:
+        typeof marginLeft === "number"
+          ? `${marginLeft}rem`
+          : typeof marginX === "number"
+            ? `${marginX}rem`
+            : undefined,
+      marginRight:
+        typeof marginRight === "number"
+          ? `${marginRight}rem`
+          : typeof marginX === "number"
+            ? `${marginX}rem`
+            : undefined,
+      marginTop:
+        typeof marginTop === "number"
+          ? `${marginTop}rem`
+          : typeof marginY === "number"
+            ? `${marginY}rem`
+            : undefined,
+      marginBottom:
+        typeof marginBottom === "number"
+          ? `${marginBottom}rem`
+          : typeof marginY === "number"
+            ? `${marginY}rem`
+            : undefined,
       gap: typeof gap === "number" ? `${gap}rem` : undefined,
       top: parsePosition(top),
       right: parsePosition(right),

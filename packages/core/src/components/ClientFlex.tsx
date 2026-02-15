@@ -2,18 +2,18 @@
 
 import { forwardRef } from "react";
 import { ServerFlex, Cursor } from ".";
-import { FlexProps, StyleProps, DisplayProps } from "../interfaces";
+import { FlexProps, StyleProps, DisplayProps, FlexBreakpointProps } from "../interfaces";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
 import { useLayout } from "..";
 import { useResponsiveClasses } from "../hooks/useResponsiveClasses";
 
 interface ClientFlexProps extends FlexProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];
-  xl?: any;
-  l?: any;
-  m?: any;
-  s?: any;
-  xs?: any;
+  xl?: FlexBreakpointProps;
+  l?: FlexBreakpointProps;
+  m?: FlexBreakpointProps;
+  s?: FlexBreakpointProps;
+  xs?: FlexBreakpointProps;
   hide?: boolean;
 }
 
@@ -24,7 +24,8 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
     const { currentBreakpoint, isDefaultBreakpoints } = useLayout();
 
     if (!isDefaultBreakpoints()) {
-      useResponsiveClasses(elementRef, { xl, l, m, s, xs }, currentBreakpoint);
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      useResponsiveClasses(elementRef, props.direction, { xl, l, m, s, xs }, currentBreakpoint);
     }
 
     // Combine refs
@@ -56,22 +57,18 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
         const breakpointOrder = ["xl", "l", "m", "s", "xs"];
         const breakpointProps = { xl, l, m, s, xs };
         const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
-        
+
         if (currentIndex === -1) return null;
-        
+
         // Merge props from current breakpoint up to the largest defined breakpoint
         let mergedProps: any = {};
         for (let i = 0; i <= currentIndex; i++) {
           const bp = breakpointOrder[i] as keyof typeof breakpointProps;
           if (breakpointProps[bp]) {
             mergedProps = { ...mergedProps, ...breakpointProps[bp] };
-            // Deep merge style objects
-            if (breakpointProps[bp].style) {
-              mergedProps.style = { ...mergedProps.style, ...breakpointProps[bp].style };
-            }
           }
         }
-        
+
         return Object.keys(mergedProps).length > 0 ? mergedProps : null;
       };
 

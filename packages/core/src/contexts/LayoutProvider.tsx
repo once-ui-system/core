@@ -37,7 +37,7 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
 }) => {
   // Merge custom breakpoints with defaults
   const breakpoints: Breakpoints = {
-  ...DEFAULT_BREAKPOINTS,
+    ...DEFAULT_BREAKPOINTS,
     ...customBreakpoints,
   };
 
@@ -73,20 +73,11 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
   };
 
   useEffect(() => {
-    // Update CSS custom properties (Not usable because of media queries)
-    // This part is commented out because CSS custom properties cannot be used with media queries in this
-    //const root = document.documentElement;
-    //Object.entries(breakpoints).forEach(([key, value]) => {
-    //    if (value !== Infinity) {
-    //        root.style.setProperty(`--breakpoint-${key}`, `${value}px`);
-    //    }
-    //});
-
     // Initialize width
     const updateWidth = () => {
       const newWidth = window.innerWidth;
       const newBreakpoint = getCurrentBreakpoint(newWidth);
-      
+
       // Only update state if breakpoint actually changed
       setWidth(newWidth);
       setCurrentBreakpoint((prev) => {

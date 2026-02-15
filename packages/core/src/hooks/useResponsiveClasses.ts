@@ -4,30 +4,64 @@ import { useCallback, useEffect } from "react";
 import React, { useRef } from "react";
 
 // Helper function to get all possible class names for a property
-const getPropertyClassNames = (property: string): string[] => {
+const getPropertyClassNames = (property: string, baseDirection: string | undefined): string[] => {
   const classNames: string[] = [];
 
   switch (property) {
     case "position":
-      classNames.push("position-static", "position-relative", "position-absolute", "position-fixed", "position-sticky");
+      classNames.push(
+        "position-static",
+        "position-relative",
+        "position-absolute",
+        "position-fixed",
+        "position-sticky",
+      );
       break;
     case "direction":
       classNames.push("flex-row", "flex-row-reverse", "flex-column", "flex-column-reverse");
       break;
     case "horizontal":
-      classNames.push("justify-start", "justify-end", "justify-center", "justify-between", "justify-around", "justify-evenly", "align-start", "align-end", "align-center", "align-stretch");
+      !baseDirection || baseDirection === "row" || baseDirection === "row-reverse"
+        ? classNames.push(
+            "justify-start",
+            "justify-end",
+            "justify-center",
+            "justify-between",
+            "justify-around",
+            "justify-evenly",
+          )
+        : classNames.push("align-start", "align-end", "align-center", "align-stretch");
       break;
     case "vertical":
-      classNames.push("justify-start", "justify-end", "justify-center", "justify-between", "justify-around", "justify-evenly", "align-start", "align-end", "align-center", "align-stretch");
+      !baseDirection || baseDirection === "row" || baseDirection === "row-reverse"
+        ? classNames.push("align-start", "align-end", "align-center", "align-stretch")
+        : classNames.push(
+            "justify-start",
+            "justify-end",
+            "justify-center",
+            "justify-between",
+            "justify-around",
+            "justify-evenly",
+          );
       break;
     case "overflow":
       classNames.push("overflow-visible", "overflow-hidden", "overflow-scroll", "overflow-auto");
       break;
     case "overflowX":
-      classNames.push("overflow-x-visible", "overflow-x-hidden", "overflow-x-scroll", "overflow-x-auto");
+      classNames.push(
+        "overflow-x-visible",
+        "overflow-x-hidden",
+        "overflow-x-scroll",
+        "overflow-x-auto",
+      );
       break;
     case "overflowY":
-      classNames.push("overflow-y-visible", "overflow-y-hidden", "overflow-y-scroll", "overflow-y-auto");
+      classNames.push(
+        "overflow-y-visible",
+        "overflow-y-hidden",
+        "overflow-y-scroll",
+        "overflow-y-auto",
+      );
       break;
     case "columns":
       // Generate common column numbers
@@ -36,10 +70,10 @@ const getPropertyClassNames = (property: string): string[] => {
       }
       break;
     case "flex":
-        // Generate common flex classes
-        for (let i = 1; i <= 12; i++) {
-            classNames.push(`flex-${i}`);
-        }
+      // Generate common flex classes
+      for (let i = 1; i <= 12; i++) {
+        classNames.push(`flex-${i}`);
+      }
       break;
     case "wrap":
       classNames.push("flex-wrap", "flex-nowrap", "flex-wrap-reverse");
@@ -48,16 +82,92 @@ const getPropertyClassNames = (property: string): string[] => {
       classNames.push("flex-hide", "flex-show");
       break;
     case "top":
-      classNames.push("top-0", "top-1", "top-2", "top-4", "top-8", "top-12", "top-16", "top-20", "top-24", "top-32", "top-40", "top-48", "top-56", "top-64", "top-80", "top-104", "top-128", "top-160");
+      classNames.push(
+        "top-0",
+        "top-1",
+        "top-2",
+        "top-4",
+        "top-8",
+        "top-12",
+        "top-16",
+        "top-20",
+        "top-24",
+        "top-32",
+        "top-40",
+        "top-48",
+        "top-56",
+        "top-64",
+        "top-80",
+        "top-104",
+        "top-128",
+        "top-160",
+      );
       break;
     case "right":
-        classNames.push("right-0", "right-1", "right-2", "right-4", "right-8", "right-12", "right-16", "right-20", "right-24", "right-32", "right-40", "right-48", "right-56", "right-64", "right-80", "right-104", "right-128", "right-160");
+      classNames.push(
+        "right-0",
+        "right-1",
+        "right-2",
+        "right-4",
+        "right-8",
+        "right-12",
+        "right-16",
+        "right-20",
+        "right-24",
+        "right-32",
+        "right-40",
+        "right-48",
+        "right-56",
+        "right-64",
+        "right-80",
+        "right-104",
+        "right-128",
+        "right-160",
+      );
       break;
     case "bottom":
-      classNames.push("bottom-0", "bottom-1", "bottom-2", "bottom-4", "bottom-8", "bottom-12", "bottom-16", "bottom-20", "bottom-24", "bottom-32", "bottom-40", "bottom-48", "bottom-56", "bottom-64", "bottom-80", "bottom-104", "bottom-128", "bottom-160");
+      classNames.push(
+        "bottom-0",
+        "bottom-1",
+        "bottom-2",
+        "bottom-4",
+        "bottom-8",
+        "bottom-12",
+        "bottom-16",
+        "bottom-20",
+        "bottom-24",
+        "bottom-32",
+        "bottom-40",
+        "bottom-48",
+        "bottom-56",
+        "bottom-64",
+        "bottom-80",
+        "bottom-104",
+        "bottom-128",
+        "bottom-160",
+      );
       break;
     case "left":
-      classNames.push("left-0", "left-1", "left-2", "left-4", "left-8", "left-12", "left-16", "left-20", "left-24", "left-32", "left-40", "left-48", "left-56", "left-64", "left-80", "left-104", "left-128", "left-160");
+      classNames.push(
+        "left-0",
+        "left-1",
+        "left-2",
+        "left-4",
+        "left-8",
+        "left-12",
+        "left-16",
+        "left-20",
+        "left-24",
+        "left-32",
+        "left-40",
+        "left-48",
+        "left-56",
+        "left-64",
+        "left-80",
+        "left-104",
+        "left-128",
+        "left-160",
+      );
       break;
   }
 
@@ -66,18 +176,16 @@ const getPropertyClassNames = (property: string): string[] => {
 
 export const useResponsiveClasses = (
   elementRef: React.RefObject<HTMLDivElement | null>,
+  baseDirection: "row" | "column" | "row-reverse" | "column-reverse" | undefined,
   responsiveProps: { xl?: any; l?: any; m?: any; s?: any; xs?: any },
   currentBreakpoint: string,
 ) => {
-  if (!elementRef) {
-    return;
-  }
   const appliedClasses = useRef<Set<string>>(new Set());
   const originalClasses = useRef<string[]>([]);
   const isInitialized = useRef(false);
 
   const applyResponsiveClasses = useCallback(() => {
-    if (!elementRef.current) return;
+    if (!elementRef || !elementRef.current) return;
 
     const element = elementRef.current;
 
@@ -160,7 +268,7 @@ export const useResponsiveClasses = (
 
       if (value !== undefined) {
         // Remove all possible classes for this property
-        const possibleClasses = getPropertyClassNames(property);
+        const possibleClasses = getPropertyClassNames(property, baseDirection);
         possibleClasses.forEach((possibleClass) => {
           if (element.classList.contains(possibleClass)) {
             element.classList.remove(possibleClass);
@@ -177,19 +285,17 @@ export const useResponsiveClasses = (
             className = `flex-${value}`;
             break;
           case "horizontal":
-            // Determine if it should be justify or align based on direction
-            const direction = getValueWithCascading("direction");
-            const isRowDirection = !direction || direction === "row" || direction === "row-reverse";
-            className = isRowDirection ? `justify-${value}` : `align-${value}`;
-            break;
           case "vertical":
-            // Determine if it should be justify or align based on direction
-            const verticalDirection = getValueWithCascading("direction");
-            const isVerticalRowDirection =
-              !verticalDirection ||
-              verticalDirection === "row" ||
-              verticalDirection === "row-reverse";
-            className = isVerticalRowDirection ? `align-${value}` : `justify-${value}`;
+            const direction = getValueWithCascading("direction") || baseDirection;
+            const isRowDirection = !direction || direction === "row" || direction === "row-reverse";
+            className =
+              property === "horizontal"
+                ? isRowDirection
+                  ? `justify-${value}`
+                  : `align-${value}`
+                : isRowDirection
+                  ? `align-${value}`
+                  : `justify-${value}`;
             break;
           // Display properties
           case "overflow":
@@ -236,9 +342,9 @@ export const useResponsiveClasses = (
         }
       } else {
         // If value is undefined, restore original classes for this property
-        const possibleClasses = getPropertyClassNames(property);
-        const originalClassesToRestore = originalClasses.current.filter(originalClass =>
-          possibleClasses.includes(originalClass)
+        const possibleClasses = getPropertyClassNames(property, baseDirection);
+        const originalClassesToRestore = originalClasses.current.filter((originalClass) =>
+          possibleClasses.includes(originalClass),
         );
 
         // First remove all possible classes for this property
@@ -256,7 +362,7 @@ export const useResponsiveClasses = (
         });
       }
     });
-  }, [responsiveProps, currentBreakpoint]);
+  }, [elementRef, responsiveProps, currentBreakpoint, baseDirection]);
 
   useEffect(() => {
     applyResponsiveClasses();

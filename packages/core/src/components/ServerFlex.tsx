@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { CSSProperties, forwardRef } from "react";
 
 import {
+  FlexBreakpointProps,
   CommonProps,
   DisplayProps,
   FlexProps,
@@ -18,11 +19,11 @@ interface ComponentProps
     StyleProps,
     CommonProps,
     DisplayProps {
-  xl?: any;
-  l?: any;
-  m?: any;
-  s?: any;
-  xs?: any;
+  xl?: FlexBreakpointProps;
+  l?: FlexBreakpointProps;
+  m?: FlexBreakpointProps;
+  s?: FlexBreakpointProps;
+  xs?: FlexBreakpointProps;
   isDefaultBreakpoints?: boolean;
 }
 
@@ -139,7 +140,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
 
     // Cascade breakpoints: larger breakpoint styles flow down to smaller ones
     // Order: xl > l > m > s > xs
-    const cascadedL = l ? { ...l } : undefined;
+    const cascadedL = l ? { direction, ...l } : { direction };
     const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
     const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
@@ -207,14 +208,52 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
           ? "g-vertical--1"
           : "g-horizontal--1"
         : typeof gap !== "number" && gap && `g-${gap}`,
-      typeof top === "string" && !top.endsWith("%") && !top.endsWith("vh") && !top.endsWith("dvh") && !top.endsWith("vw") && !top.startsWith("calc(") && top ? `top-${top}` : position === "sticky" && top === undefined ? "top-0" : undefined,
-      typeof right === "string" && !right.endsWith("%") && !right.endsWith("vh") && !right.endsWith("dvh") && !right.endsWith("vw") && !right.startsWith("calc(") && right && `right-${right}`,
-      typeof bottom === "string" && !bottom.endsWith("%") && !bottom.endsWith("vh") && !bottom.endsWith("dvh") && !bottom.endsWith("vw") && !bottom.startsWith("calc(") && bottom && `bottom-${bottom}`,
-      typeof left === "string" && !left.endsWith("%") && !left.endsWith("vh") && !left.endsWith("dvh") && !left.endsWith("vw") && !left.startsWith("calc(") && left && `left-${left}`,
+      typeof top === "string" &&
+        !top.endsWith("%") &&
+        !top.endsWith("vh") &&
+        !top.endsWith("dvh") &&
+        !top.endsWith("vw") &&
+        !top.startsWith("calc(") &&
+        top
+        ? `top-${top}`
+        : position === "sticky" && top === undefined
+          ? "top-0"
+          : undefined,
+      typeof right === "string" &&
+        !right.endsWith("%") &&
+        !right.endsWith("vh") &&
+        !right.endsWith("dvh") &&
+        !right.endsWith("vw") &&
+        !right.startsWith("calc(") &&
+        right &&
+        `right-${right}`,
+      typeof bottom === "string" &&
+        !bottom.endsWith("%") &&
+        !bottom.endsWith("vh") &&
+        !bottom.endsWith("dvh") &&
+        !bottom.endsWith("vw") &&
+        !bottom.startsWith("calc(") &&
+        bottom &&
+        `bottom-${bottom}`,
+      typeof left === "string" &&
+        !left.endsWith("%") &&
+        !left.endsWith("vh") &&
+        !left.endsWith("dvh") &&
+        !left.endsWith("vw") &&
+        !left.startsWith("calc(") &&
+        left &&
+        `left-${left}`,
       generateDynamicClass("background", background),
       generateDynamicClass("solid", solid),
       // Handle border color: boolean uses default-border, string uses dynamic class
-      (border === true || borderTop === true || borderRight === true || borderBottom === true || borderLeft === true || borderX === true || borderY === true) && "default-border",
+      (border === true ||
+        borderTop === true ||
+        borderRight === true ||
+        borderBottom === true ||
+        borderLeft === true ||
+        borderX === true ||
+        borderY === true) &&
+        "default-border",
       typeof border === "string" && generateDynamicClass("border", border),
       typeof borderTop === "string" && generateDynamicClass("border", borderTop),
       typeof borderRight === "string" && generateDynamicClass("border", borderRight),
@@ -253,7 +292,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
-      (overflow && overflow !== "hidden" || overflowX && overflowX !== "hidden" || overflowY && overflowY !== "hidden") && `scrollbar-${scrollbar}`,
+      ((overflow && overflow !== "hidden") ||
+        (overflowX && overflowX !== "hidden") ||
+        (overflowY && overflowY !== "hidden")) &&
+        `scrollbar-${scrollbar}`,
       flex && `flex-${flex}`,
       horizontal &&
         (direction === "row" || direction === "row-reverse" || direction === undefined
@@ -306,27 +348,39 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
           cascadedS?.direction && `s-flex-${cascadedS.direction}`,
           cascadedXs?.direction && `xs-flex-${cascadedXs.direction}`,
           cascadedL?.horizontal &&
-            (cascadedL?.direction === "row" || cascadedL?.direction === "row-reverse" || cascadedL?.direction === undefined
+            (cascadedL?.direction === "row" ||
+            cascadedL?.direction === "row-reverse" ||
+            cascadedL?.direction === undefined
               ? `l-justify-${cascadedL.horizontal}`
               : `l-align-${cascadedL.horizontal}`),
           cascadedL?.vertical &&
-            (cascadedL?.direction === "row" || cascadedL?.direction === "row-reverse" || cascadedL?.direction === undefined
+            (cascadedL?.direction === "row" ||
+            cascadedL?.direction === "row-reverse" ||
+            cascadedL?.direction === undefined
               ? `l-align-${cascadedL.vertical}`
               : `l-justify-${cascadedL.vertical}`),
           cascadedM?.horizontal &&
-            (cascadedM?.direction === "row" || cascadedM?.direction === "row-reverse" || cascadedM?.direction === undefined
+            (cascadedM?.direction === "row" ||
+            cascadedM?.direction === "row-reverse" ||
+            cascadedM?.direction === undefined
               ? `m-justify-${cascadedM.horizontal}`
               : `m-align-${cascadedM.horizontal}`),
           cascadedM?.vertical &&
-            (cascadedM?.direction === "row" || cascadedM?.direction === "row-reverse" || cascadedM?.direction === undefined
+            (cascadedM?.direction === "row" ||
+            cascadedM?.direction === "row-reverse" ||
+            cascadedM?.direction === undefined
               ? `m-align-${cascadedM.vertical}`
               : `m-justify-${cascadedM.vertical}`),
           cascadedS?.horizontal &&
-            (cascadedS?.direction === "row" || cascadedS?.direction === "row-reverse" || cascadedS?.direction === undefined
+            (cascadedS?.direction === "row" ||
+            cascadedS?.direction === "row-reverse" ||
+            cascadedS?.direction === undefined
               ? `s-justify-${cascadedS.horizontal}`
               : `s-align-${cascadedS.horizontal}`),
           cascadedS?.vertical &&
-            (cascadedS?.direction === "row" || cascadedS?.direction === "row-reverse" || cascadedS?.direction === undefined
+            (cascadedS?.direction === "row" ||
+            cascadedS?.direction === "row-reverse" ||
+            cascadedS?.direction === undefined
               ? `s-align-${cascadedS.vertical}`
               : `s-justify-${cascadedS.vertical}`),
           cascadedXs?.horizontal &&
@@ -416,9 +470,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
 
     const translateXValue = parsePosition(translateX);
     const translateYValue = parsePosition(translateY);
-    const transform = translateXValue || translateYValue
-      ? `translate(${translateXValue || "0"}, ${translateYValue || "0"})`
-      : undefined;
+    const transform =
+      translateXValue || translateYValue
+        ? `translate(${translateXValue || "0"}, ${translateYValue || "0"})`
+        : undefined;
 
     const combinedStyle: CSSProperties = {
       maxWidth: parseDimension(maxWidth, "width"),
@@ -431,15 +486,55 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
       textAlign: align,
       cursor: typeof cursor === "string" ? cursor : undefined,
       padding: typeof padding === "number" ? `${padding}rem` : undefined,
-      paddingLeft: typeof paddingLeft === "number" ? `${paddingLeft}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
-      paddingRight: typeof paddingRight === "number" ? `${paddingRight}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
-      paddingTop: typeof paddingTop === "number" ? `${paddingTop}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
-      paddingBottom: typeof paddingBottom === "number" ? `${paddingBottom}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
+      paddingLeft:
+        typeof paddingLeft === "number"
+          ? `${paddingLeft}rem`
+          : typeof paddingX === "number"
+            ? `${paddingX}rem`
+            : undefined,
+      paddingRight:
+        typeof paddingRight === "number"
+          ? `${paddingRight}rem`
+          : typeof paddingX === "number"
+            ? `${paddingX}rem`
+            : undefined,
+      paddingTop:
+        typeof paddingTop === "number"
+          ? `${paddingTop}rem`
+          : typeof paddingY === "number"
+            ? `${paddingY}rem`
+            : undefined,
+      paddingBottom:
+        typeof paddingBottom === "number"
+          ? `${paddingBottom}rem`
+          : typeof paddingY === "number"
+            ? `${paddingY}rem`
+            : undefined,
       margin: typeof margin === "number" ? `${margin}rem` : undefined,
-      marginLeft: typeof marginLeft === "number" ? `${marginLeft}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
-      marginRight: typeof marginRight === "number" ? `${marginRight}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
-      marginTop: typeof marginTop === "number" ? `${marginTop}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
-      marginBottom: typeof marginBottom === "number" ? `${marginBottom}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
+      marginLeft:
+        typeof marginLeft === "number"
+          ? `${marginLeft}rem`
+          : typeof marginX === "number"
+            ? `${marginX}rem`
+            : undefined,
+      marginRight:
+        typeof marginRight === "number"
+          ? `${marginRight}rem`
+          : typeof marginX === "number"
+            ? `${marginX}rem`
+            : undefined,
+      marginTop:
+        typeof marginTop === "number"
+          ? `${marginTop}rem`
+          : typeof marginY === "number"
+            ? `${marginY}rem`
+            : undefined,
+      marginBottom:
+        typeof marginBottom === "number"
+          ? `${marginBottom}rem`
+          : typeof marginY === "number"
+            ? `${marginY}rem`
+            : undefined,
       gap: typeof gap === "number" ? `${gap}rem` : undefined,
       top: parsePosition(top),
       right: parsePosition(right),

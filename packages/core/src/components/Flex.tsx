@@ -6,6 +6,7 @@ import {
   SizeProps,
   CommonProps,
   DisplayProps,
+  FlexBreakpointProps,
 } from "../interfaces";
 import { ClientFlex } from "./ClientFlex";
 import { ServerFlex } from "./ServerFlex";
@@ -17,11 +18,11 @@ interface SmartFlexProps
     SizeProps,
     CommonProps,
     DisplayProps {
-  xl?: any;
-  l?: any;
-  m?: any;
-  s?: any;
-  xs?: any;
+  xl?: FlexBreakpointProps;
+  l?: FlexBreakpointProps;
+  m?: FlexBreakpointProps;
+  s?: FlexBreakpointProps;
+  xs?: FlexBreakpointProps;
 }
 
 const Flex = forwardRef<HTMLDivElement, SmartFlexProps>(
