@@ -1,0 +1,245 @@
+---
+title: "useHeadingLinks"
+summary: "React hook for extracting heading elements from the page for table of contents navigation."
+updatedAt: "2026-02-22"
+docs: "once-ui/hooks/useHeadingLinks.mdx"
+github: "hooks/useHeadingLinks.ts"
+navLabel: "useHeadingLinks"
+navIcon: "code"
+---
+
+The `useHeadingLinks` hook extracts all heading elements (h2-h6) from the current page and returns them as a structured array. This is useful for creating table of contents, navigation menus, or document outlines.
+
+**Used in components:** [HeadingNav](/once-ui/components/heading-nav)
+
+<Feedback marginTop="16" marginBottom="24" description="Most of the time you don't need to use this hook directly. The HeadingNav component already uses it internally to generate table of contents navigation. Use this hook when you need custom rendering or additional processing of page headings."/>
+
+## Features
+
+- Automatically finds all headings on the page
+- Extracts heading text, ID, and level
+- Filters out headings with `data-exclude-nav` attribute
+- Generates IDs for headings without them
+- Updates on mount
+
+## Basic usage
+
+Create a table of contents:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useHeadingLinks } from '@once-ui-system/core';
+
+function TableOfContents() {
+  const headings = useHeadingLinks();
+
+  return (
+    <nav>
+      <h2>On this page</h2>
+      <ul>
+        {headings.map((heading) => (
+          <li
+            key={heading.id}
+            style={{ marginLeft: (heading.level - 2) * 16 }}
+          >
+            <a href={'#' + heading.id}>{heading.text}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+}`,
+      language: "tsx",
+      label: "TableOfContents.tsx"
+    }
+  ]}
+/>
+
+## With styling
+
+Create a styled navigation menu:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={32}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useHeadingLinks } from '@once-ui-system/core';
+
+function DocumentNav() {
+  const headings = useHeadingLinks();
+
+  return (
+    <Flex
+      direction="column"
+      gap="8"
+      padding="16"
+      border="neutral-medium"
+      radius="m"
+    >
+      <Text variant="label-default-s">Contents</Text>
+      {headings.map((heading) => (
+        <a
+          key={heading.id}
+          href={'#' + heading.id}
+          style={{
+            paddingLeft: (heading.level - 2) * 12,
+            fontSize: heading.level === 2 ? '14px' : '13px',
+            fontWeight: heading.level === 2 ? 600 : 400
+          }}
+        >
+          {heading.text}
+        </a>
+      ))}
+    </Flex>
+  );
+}`,
+      language: "tsx",
+      label: "DocumentNav.tsx"
+    }
+  ]}
+/>
+
+## Excluding headings
+
+Exclude specific headings from navigation:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={16}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function MyPage() {
+  return (
+    <article>
+      <h2>Introduction</h2>
+      <p>This heading will appear in navigation</p>
+      
+      <h2 data-exclude-nav>Internal Note</h2>
+      <p>This heading will NOT appear in navigation</p>
+      
+      <h2>Main Content</h2>
+      <p>This heading will appear in navigation</p>
+    </article>
+  );
+}`,
+      language: "tsx",
+      label: "MyPage.tsx"
+    }
+  ]}
+/>
+
+## Return value
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`interface Heading {
+  id: string;      // Element ID or generated ID
+  text: string;    // Heading text content
+  level: number;   // Heading level (2-6)
+}
+
+const headings: Heading[] = useHeadingLinks();
+
+// Example output:
+// [
+//   { id: 'introduction', text: 'Introduction', level: 2 },
+//   { id: 'features', text: 'Features', level: 2 },
+//   { id: 'api', text: 'API Reference', level: 3 }
+// ]`,
+      language: "tsx",
+      label: "Return type"
+    }
+  ]}
+/>
+
+## With active section tracking
+
+Combine with scroll tracking to highlight active section:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={36}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useState, useEffect } from 'react';
+import { useHeadingLinks } from '@once-ui-system/core';
+
+function ActiveTOC() {
+  const headings = useHeadingLinks();
+  const [activeId, setActiveId] = useState('');
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveId(entry.target.id);
+          }
+        });
+      },
+      { rootMargin: '-80px 0px -80% 0px' }
+    );
+
+    headings.forEach(({ id }) => {
+      const element = document.getElementById(id);
+      if (element) observer.observe(element);
+    });
+
+    return () => observer.disconnect();
+  }, [headings]);
+
+  return (
+    <nav>
+      {headings.map((heading) => (
+        <a
+          key={heading.id}
+          href={'#' + heading.id}
+          className={activeId === heading.id ? 'active' : ''}
+        >
+          {heading.text}
+        </a>
+      ))}
+    </nav>
+  );
+}`,
+      language: "tsx",
+      label: "ActiveTOC.tsx"
+    }
+  ]}
+/>
+
+## Use cases
+
+- **Documentation sites**: Auto-generate table of contents
+- **Blog posts**: Create article outlines
+- **Long-form content**: Improve navigation
+- **Accessibility**: Provide skip links
+
+## Notes
+
+- Only runs once on mount (not reactive to DOM changes)
+- Headings without IDs get auto-generated IDs
+- Only includes h2-h6 (h1 is typically the page title)
+- Respects `data-exclude-nav` attribute

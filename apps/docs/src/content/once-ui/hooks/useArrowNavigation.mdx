@@ -1,0 +1,370 @@
+---
+title: "useArrowNavigation"
+summary: "React hook for implementing keyboard arrow navigation in lists, grids, and menus."
+updatedAt: "2026-02-22"
+docs: "once-ui/hooks/useArrowNavigation.mdx"
+github: "hooks/useArrowNavigation.ts"
+navLabel: "useArrowNavigation"
+navIcon: "code"
+---
+
+The `useArrowNavigation` hook provides keyboard navigation for interactive elements using arrow keys. It supports row, column, and grid layouts with customizable behavior.
+
+**Used in components:** [DropdownWrapper](/once-ui/components/dropdown-wrapper), [EmojiPicker](/once-ui/components/emoji-picker), [Select](/once-ui/components/select), [ContextMenu](/once-ui/components/context-menu), [MegaMenu](/once-ui/components/mega-menu)
+
+<Feedback marginTop="16" marginBottom="24" description="Most of the time you don't need to use this hook directly. Components like DropdownWrapper, Select, and MegaMenu already provide built-in keyboard navigation. Use this hook when building custom navigable interfaces that aren't covered by existing components."/>
+
+## Features
+
+- Arrow key navigation (up, down, left, right)
+- Support for row, column, and grid layouts
+- Automatic focus management
+- Enter/Space key selection
+- Optional wrapping at boundaries
+- Visual focus highlighting
+- ARIA-compliant accessibility
+
+## Basic usage
+
+Add arrow navigation to a list:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={32}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useRef } from 'react';
+import { useArrowNavigation } from '@once-ui-system/core';
+
+function NavigableList({ items }: { items: string[] }) {
+  const containerRef = useRef(null);
+  
+  const { handleKeyDown, focusedIndex } = useArrowNavigation({
+    layout: 'column',
+    itemCount: items.length,
+    containerRef,
+    onSelect: (index) => console.log('Selected:', items[index])
+  });
+
+  return (
+    <div ref={containerRef} onKeyDown={handleKeyDown}>
+      {items.map((item, index) => (
+        <button
+          key={index}
+          data-focused={focusedIndex === index}
+        >
+          {item}
+        </button>
+      ))}
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "NavigableList.tsx"
+    }
+  ]}
+/>
+
+## Grid layout
+
+Navigate a grid with arrow keys:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={36}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useRef } from 'react';
+import { useArrowNavigation } from '@once-ui-system/core';
+
+function EmojiGrid({ emojis }: { emojis: string[] }) {
+  const containerRef = useRef(null);
+  
+  const { handleKeyDown, focusedIndex } = useArrowNavigation({
+    layout: 'grid',
+    itemCount: emojis.length,
+    columns: 8,
+    containerRef,
+    onSelect: (index) => selectEmoji(emojis[index]),
+    wrap: true
+  });
+
+  return (
+    <div
+      ref={containerRef}
+      onKeyDown={handleKeyDown}
+      role="grid"
+      style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)' }}
+    >
+      {emojis.map((emoji, index) => (
+        <button
+          key={index}
+          role="gridcell"
+          data-focused={focusedIndex === index}
+        >
+          {emoji}
+        </button>
+      ))}
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "EmojiGrid.tsx"
+    }
+  ]}
+/>
+
+## Row layout
+
+Navigate horizontally:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={28}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function TabNavigation({ tabs }: { tabs: Tab[] }) {
+  const containerRef = useRef(null);
+  
+  const { handleKeyDown, focusedIndex } = useArrowNavigation({
+    layout: 'row',
+    itemCount: tabs.length,
+    containerRef,
+    onSelect: (index) => setActiveTab(tabs[index].id),
+    wrap: true
+  });
+
+  return (
+    <div ref={containerRef} onKeyDown={handleKeyDown} role="tablist">
+      {tabs.map((tab, index) => (
+        <button
+          key={tab.id}
+          role="tab"
+          aria-selected={focusedIndex === index}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "TabNavigation.tsx"
+    }
+  ]}
+/>
+
+## API Reference
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  props={[
+    {
+      name: "layout",
+      type: "'row' | 'column' | 'grid'",
+      required: true,
+      description: "Navigation layout type."
+    },
+    {
+      name: "itemCount",
+      type: "number",
+      required: true,
+      description: "Total number of navigable items."
+    },
+    {
+      name: "columns",
+      type: "number",
+      default: "8",
+      description: "Number of columns for grid layout."
+    },
+    {
+      name: "containerRef",
+      type: "RefObject<HTMLElement>",
+      required: false,
+      description: "Reference to the container element."
+    },
+    {
+      name: "onSelect",
+      type: "(index: number) => void",
+      required: false,
+      description: "Callback when item is selected with Enter/Space."
+    },
+    {
+      name: "onFocusChange",
+      type: "(index: number) => void",
+      required: false,
+      description: "Callback when focus changes."
+    },
+    {
+      name: "wrap",
+      type: "boolean",
+      default: "true",
+      description: "Whether to wrap at boundaries."
+    },
+    {
+      name: "initialFocusedIndex",
+      type: "number",
+      default: "-1",
+      description: "Initial focused item index."
+    },
+    {
+      name: "itemSelector",
+      type: "string",
+      default: "'[role=\"option\"], [data-value], button'",
+      description: "CSS selector for focusable items."
+    },
+    {
+      name: "autoFocus",
+      type: "boolean",
+      default: "false",
+      description: "Auto-focus first item on mount."
+    },
+    {
+      name: "disabled",
+      type: "boolean",
+      default: "false",
+      description: "Disable navigation."
+    },
+    {
+      name: "disableHighlighting",
+      type: "boolean",
+      default: "false",
+      description: "Disable visual focus highlighting."
+    }
+  ]}
+/>
+
+## Return value
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={16}
+  lineNumbers
+  codes={[
+    {
+      code:
+`{
+  handleKeyDown: (e: KeyboardEvent) => void;
+  focusedIndex: number;
+  setFocusedIndex: (index: number) => void;
+  resetFocus: () => void;
+}`,
+      language: "tsx",
+      label: "Return type"
+    }
+  ]}
+/>
+
+## Keyboard controls
+
+- **Arrow Up**: Move focus up (column/grid)
+- **Arrow Down**: Move focus down (column/grid)
+- **Arrow Left**: Move focus left (row/grid)
+- **Arrow Right**: Move focus right (row/grid)
+- **Enter/Space**: Select focused item
+- **Home**: Focus first item
+- **End**: Focus last item
+
+## Styling focused items
+
+Use the `focusedIndex` to style the focused item:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function StyledList() {
+  const { handleKeyDown, focusedIndex } = useArrowNavigation({
+    layout: 'column',
+    itemCount: items.length
+  });
+
+  return (
+    <div onKeyDown={handleKeyDown}>
+      {items.map((item, index) => (
+        <button
+          key={index}
+          className={focusedIndex === index ? 'focused' : ''}
+          style={{
+            outline: focusedIndex === index ? '2px solid blue' : 'none',
+            transform: focusedIndex === index ? 'scale(1.05)' : 'scale(1)'
+          }}
+        >
+          {item}
+        </button>
+      ))}
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "StyledList.tsx"
+    }
+  ]}
+/>
+
+## Accessibility
+
+The hook automatically manages:
+
+- Focus visibility with visual indicators
+- ARIA roles and attributes
+- Keyboard event handling
+- Focus trap within container
+
+For best accessibility, add appropriate ARIA attributes:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`<div
+  ref={containerRef}
+  onKeyDown={handleKeyDown}
+  role="listbox"
+  aria-label="Options"
+>
+  {items.map((item, index) => (
+    <div
+      key={index}
+      role="option"
+      aria-selected={focusedIndex === index}
+      tabIndex={focusedIndex === index ? 0 : -1}
+    >
+      {item}
+    </div>
+  ))}
+</div>`,
+      language: "tsx",
+      label: "Accessible list"
+    }
+  ]}
+/>
+
+## Used in components
+
+This hook is used internally by:
+
+- EmojiPicker
+- Dropdown
+- Select
+- ContextMenu
+- MegaMenu

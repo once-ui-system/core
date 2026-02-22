@@ -5,6 +5,8 @@
     "quick-start": 1,
     "config": 2,
     "icons": 3,
-    "components": 4
+    "components": 4,
+    "utils": 8,
+    "hooks": 9
   }
 }

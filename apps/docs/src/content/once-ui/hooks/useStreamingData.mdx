@@ -1,0 +1,276 @@
+---
+title: "useStreamingData"
+summary: "React hook for creating smooth, animated streaming data visualizations."
+updatedAt: "2026-02-22"
+docs: "once-ui/hooks/useStreamingData.mdx"
+github: "hooks/useStreamingData.ts"
+navLabel: "useStreamingData"
+navIcon: "code"
+---
+
+The `useStreamingData` hook creates smooth, animated data streams for real-time visualizations. It interpolates between data points and maintains a sliding window of values, perfect for live charts and dashboards.
+
+**Used in components:** Not used internally by Once UI components
+
+<Feedback marginTop="16" marginBottom="24" description="This is a utility hook for building custom real-time data visualizations. Use it when you need to create live charts, dashboards, or streaming data displays with smooth animations."/>
+
+## Features
+
+- Smooth interpolation between data points
+- Configurable sliding window size
+- Customizable update intervals
+- Pause/resume streaming
+- Reset to initial state
+- RequestAnimationFrame-based updates
+
+## Basic usage
+
+Create a streaming line chart:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={36}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useStreamingData } from '@once-ui-system/core';
+import { LineChart, Line } from 'recharts';
+
+function StreamingChart() {
+  const { data, running, setRunning } = useStreamingData({
+    initialData: generateInitialData(),
+    windowSize: 20,
+    intervalMs: 1000,
+    xKey: 'time',
+    numericKeys: ['value'],
+    getNextTarget: ({ lastPoint, nextX }) => ({
+      value: Math.random() * 100
+    })
+  });
+
+  return (
+    <div>
+      <button onClick={() => setRunning(!running)}>
+        {running ? 'Pause' : 'Resume'}
+      </button>
+      <LineChart width={600} height={300} data={data}>
+        <Line
+          type="monotone"
+          dataKey="value"
+          stroke="#8884d8"
+          isAnimationActive={false}
+        />
+      </LineChart>
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "StreamingChart.tsx"
+    }
+  ]}
+/>
+
+## Multi-series data
+
+Stream multiple data series:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={32}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function MultiSeriesChart() {
+  const { data, running, setRunning, reset } = useStreamingData({
+    initialData: [
+      { time: 0, cpu: 20, memory: 30, disk: 15 },
+      { time: 1, cpu: 25, memory: 32, disk: 16 }
+    ],
+    windowSize: 30,
+    intervalMs: 2000,
+    stepMs: 16,
+    xKey: 'time',
+    numericKeys: ['cpu', 'memory', 'disk'],
+    getNextTarget: ({ lastPoint }) => ({
+      cpu: Math.min(100, Math.max(0, lastPoint.cpu + (Math.random() - 0.5) * 20)),
+      memory: Math.min(100, Math.max(0, lastPoint.memory + (Math.random() - 0.5) * 15)),
+      disk: Math.min(100, Math.max(0, lastPoint.disk + (Math.random() - 0.5) * 10))
+    })
+  });
+
+  return (
+    <div>
+      <button onClick={() => setRunning(!running)}>
+        {running ? 'Pause' : 'Resume'}
+      </button>
+      <button onClick={reset}>Reset</button>
+      <LineChart width={800} height={400} data={data}>
+        <Line dataKey="cpu" stroke="#ff0000" />
+        <Line dataKey="memory" stroke="#00ff00" />
+        <Line dataKey="disk" stroke="#0000ff" />
+      </LineChart>
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "MultiSeriesChart.tsx"
+    }
+  ]}
+/>
+
+## API Reference
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  props={[
+    {
+      name: "initialData",
+      type: "T[]",
+      required: true,
+      description: "Initial data points to display."
+    },
+    {
+      name: "windowSize",
+      type: "number",
+      required: true,
+      description: "Number of data points to keep in the sliding window."
+    },
+    {
+      name: "intervalMs",
+      type: "number",
+      required: true,
+      description: "Milliseconds between new data points."
+    },
+    {
+      name: "stepMs",
+      type: "number",
+      default: "16",
+      description: "Milliseconds between animation frames (60fps = 16ms)."
+    },
+    {
+      name: "xKey",
+      type: "keyof T",
+      required: true,
+      description: "Key for the x-axis value (usually time or index)."
+    },
+    {
+      name: "numericKeys",
+      type: "Array<keyof T>",
+      required: true,
+      description: "Array of keys for numeric values to animate."
+    },
+    {
+      name: "getNextTarget",
+      type: "({ lastPoint, nextX }) => Partial<T>",
+      required: true,
+      description: "Function that returns target values for the next data point."
+    }
+  ]}
+/>
+
+## Return value
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={16}
+  lineNumbers
+  codes={[
+    {
+      code:
+`{
+  data: T[];                                    // Current data window
+  running: boolean;                             // Whether streaming is active
+  setRunning: (running: boolean) => void;       // Control streaming state
+  reset: () => void;                            // Reset to initial data
+}`,
+      language: "tsx",
+      label: "Return type"
+    }
+  ]}
+/>
+
+## How it works
+
+1. **Initialization**: Starts with `initialData` trimmed to `windowSize`
+2. **New point creation**: Every `intervalMs`, creates a new data point
+3. **Interpolation**: Smoothly animates from current to target values
+4. **Sliding window**: Maintains only the last `windowSize` points
+5. **Animation**: Updates every `stepMs` using requestAnimationFrame
+
+## Performance tips
+
+- Use `stepMs: 16` for 60fps (smooth)
+- Use `stepMs: 33` for 30fps (more efficient)
+- Keep `windowSize` reasonable (20-50 points)
+- Avoid expensive calculations in `getNextTarget`
+
+## Real-world example
+
+System monitoring dashboard:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={40}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function SystemMonitor() {
+  const { data, running, setRunning } = useStreamingData({
+    initialData: Array.from({ length: 20 }, (_, i) => ({
+      time: i,
+      cpu: 20 + Math.random() * 10,
+      memory: 40 + Math.random() * 10,
+      network: 10 + Math.random() * 5
+    })),
+    windowSize: 30,
+    intervalMs: 1000,
+    xKey: 'time',
+    numericKeys: ['cpu', 'memory', 'network'],
+    getNextTarget: ({ lastPoint }) => {
+      // Simulate realistic system metrics
+      const cpuChange = (Math.random() - 0.5) * 15;
+      const memoryChange = (Math.random() - 0.5) * 5;
+      const networkChange = (Math.random() - 0.5) * 10;
+      
+      return {
+        cpu: Math.min(100, Math.max(0, lastPoint.cpu + cpuChange)),
+        memory: Math.min(100, Math.max(0, lastPoint.memory + memoryChange)),
+        network: Math.min(100, Math.max(0, lastPoint.network + networkChange))
+      };
+    }
+  });
+
+  return (
+    <Flex direction="column" gap="16">
+      <Flex gap="8">
+        <Button onClick={() => setRunning(!running)}>
+          {running ? 'Pause' : 'Resume'}
+        </Button>
+        <Text>CPU: {data[data.length - 1]?.cpu.toFixed(1)}%</Text>
+        <Text>Memory: {data[data.length - 1]?.memory.toFixed(1)}%</Text>
+      </Flex>
+      <LineChart width={800} height={300} data={data}>
+        <Line dataKey="cpu" stroke="#ff4444" isAnimationActive={false} />
+        <Line dataKey="memory" stroke="#44ff44" isAnimationActive={false} />
+        <Line dataKey="network" stroke="#4444ff" isAnimationActive={false} />
+      </LineChart>
+    </Flex>
+  );
+}`,
+      language: "tsx",
+      label: "SystemMonitor.tsx"
+    }
+  ]}
+/>
+
+## Related hooks
+
+- `useStreamingViewport` - Similar but with dynamic viewport adjustment

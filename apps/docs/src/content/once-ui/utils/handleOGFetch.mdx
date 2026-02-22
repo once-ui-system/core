@@ -1,0 +1,219 @@
+---
+title: "handleOGFetch"
+summary: "Server-side utility for fetching and parsing Open Graph metadata from URLs."
+updatedAt: "2026-02-22"
+docs: "once-ui/utils/handleOGFetch.mdx"
+github: "server/og-utils.ts"
+navLabel: "handleOGFetch"
+navIcon: "server"
+---
+
+The `handleOGFetch` function is a server-side utility that fetches and parses Open Graph metadata from any URL. It's designed to be used in Next.js API routes to extract title, description, image, and favicon information from web pages.
+
+## Features
+
+- Fetches HTML content from URLs with configurable timeout
+- Extracts Open Graph metadata (title, description, image)
+- Falls back to standard HTML meta tags if OG tags aren't available
+- Decodes HTML entities in text content
+- Supports custom user agents
+- Works with Next.js Edge Runtime
+
+## Basic usage
+
+Create an API route that uses the utility:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { NextRequest } from 'next/server';
+import { handleOGFetch } from '@once-ui-system/core/server';
+
+export async function GET(request: NextRequest) {
+  return handleOGFetch(request);
+}`,
+      language: "tsx",
+      label: "app/api/og/fetch/route.ts"
+    }
+  ]}
+/>
+
+Then fetch metadata from your client:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={16}
+  lineNumbers
+  codes={[
+    {
+      code:
+`const response = await fetch(
+  \`/api/og/fetch?url=\${encodeURIComponent('https://example.com')}\`
+);
+const data = await response.json();
+
+console.log(data);
+// { url, title, description, image, faviconUrl }`,
+      language: "tsx",
+      label: "Component.tsx"
+    }
+  ]}
+/>
+
+## With options
+
+Customize timeout, user agent, and entity decoding:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { NextRequest } from 'next/server';
+import { handleOGFetch } from '@once-ui-system/core/server';
+
+export const runtime = 'edge';
+
+export async function GET(request: NextRequest) {
+  return handleOGFetch(request, {
+    timeout: 5000,
+    userAgent: 'MyBot/1.0',
+    decodeEntities: true
+  });
+}`,
+      language: "tsx",
+      label: "app/api/og/fetch/route.ts"
+    }
+  ]}
+/>
+
+## Response format
+
+The function returns a JSON response with the following structure:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`interface OGData {
+  url: string;          // The requested URL
+  title: string;        // Page or OG title
+  description: string;  // Page or OG description
+  image: string;        // OG image URL
+  faviconUrl?: string;  // Favicon URL (optional)
+}`,
+      language: "tsx",
+      label: "OGData interface"
+    }
+  ]}
+/>
+
+## API Reference
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  props={[
+    {
+      name: "request",
+      type: "Request",
+      required: true,
+      description: "Next.js request object. Must include a 'url' query parameter."
+    },
+    {
+      name: "options",
+      type: "OGFetchOptions",
+      required: false,
+      description: "Optional configuration object."
+    },
+    {
+      name: "options.timeout",
+      type: "number",
+      default: "5000",
+      description: "Request timeout in milliseconds."
+    },
+    {
+      name: "options.userAgent",
+      type: "string",
+      default: "'Mozilla/5.0 (compatible; OG-Fetcher/1.0)'",
+      description: "User agent string for the fetch request."
+    },
+    {
+      name: "options.decodeEntities",
+      type: "boolean",
+      default: "true",
+      description: "Whether to decode HTML entities in title and description."
+    }
+  ]}
+/>
+
+## Error handling
+
+The function returns appropriate error responses:
+
+- **400**: Missing URL parameter
+- **500**: Failed to fetch or parse the URL
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={12}
+  lineNumbers
+  codes={[
+    {
+      code:
+`{
+  "error": "Failed to fetch Open Graph data",
+  "message": "HTTP 404: Not Found"
+}`,
+      language: "json",
+      label: "Error response"
+    }
+  ]}
+/>
+
+## Use with useOgData hook
+
+Combine with the `useOgData` hook for seamless client-side integration:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useOgData } from '@once-ui-system/core';
+
+function MyComponent() {
+  const { ogData, loading } = useOgData('https://example.com');
+
+  if (loading) return <div>Loading...</div>;
+  
+  return (
+    <div>
+      <h1>{ogData?.title}</h1>
+      <p>{ogData?.description}</p>
+      {ogData?.image && <img src={ogData.image} alt={ogData.title} />}
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "Component.tsx"
+    }
+  ]}
+/>

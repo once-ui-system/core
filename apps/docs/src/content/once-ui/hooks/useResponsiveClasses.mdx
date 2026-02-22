@@ -1,0 +1,120 @@
+---
+title: "useResponsiveClasses"
+summary: "Internal hook for managing responsive CSS classes in Flex and Grid components."
+updatedAt: "2026-02-22"
+docs: "once-ui/hooks/useResponsiveClasses.mdx"
+github: "hooks/useResponsiveClasses.ts"
+navLabel: "useResponsiveClasses"
+navIcon: "code"
+---
+
+The `useResponsiveClasses` hook is an internal utility used by Flex and Grid components to manage responsive CSS classes based on breakpoints. It dynamically applies and removes classes as the viewport size changes.
+
+**Used in components:** [Flex](/once-ui/components/flex), [Grid](/once-ui/components/grid)
+
+<Feedback marginTop="16" marginBottom="24" description="This is an internal hook. You should never need to use this hook directly. Instead, use the Flex and Grid components with responsive props (e.g., `direction={{ s: 'column', m: 'row' }}`), which automatically handle responsive behavior."/>
+
+## Features
+
+- Automatic responsive class management
+- Breakpoint-based class switching
+- Optimized for performance
+- Used internally by Flex and Grid
+
+## Internal usage
+
+This hook is used internally by the Flex and Grid components and is not typically used directly in application code.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`// Internal usage in Flex component
+const useResponsiveClasses = ({
+  elementRef,
+  baseDirection,
+  responsiveProps,
+  breakpoints
+}) => {
+  // Manages responsive class application
+  // based on window size and breakpoints
+  
+  useEffect(() => {
+    // Add/remove classes on resize
+  }, [breakpoints]);
+};`,
+      language: "tsx",
+      label: "Internal usage"
+    }
+  ]}
+/>
+
+## How it works
+
+The hook:
+
+1. Monitors window resize events
+2. Compares current width against breakpoints
+3. Applies appropriate CSS classes for the current breakpoint
+4. Removes classes from other breakpoints
+
+## Supported properties
+
+The hook manages responsive classes for:
+
+- `position` - static, relative, absolute, fixed, sticky
+- `direction` - row, column, row-reverse, column-reverse
+- `horizontal` - justify-start, justify-end, justify-center, etc.
+- `vertical` - align-start, align-end, align-center, etc.
+- `overflow` - visible, hidden, scroll, auto
+- `overflowX` - x-axis overflow
+- `overflowY` - y-axis overflow
+- `columns` - grid column count (1-12)
+- `flex` - flex values (1-12)
+- `wrap` - wrap, nowrap, wrap-reverse
+
+## Performance
+
+The hook is optimized with:
+
+- Debounced resize handling
+- Efficient class manipulation
+- Minimal re-renders
+- Cleanup on unmount
+
+## Related components
+
+Used by:
+
+- Flex
+- Grid
+
+## Example output
+
+When a Flex component has responsive props:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={12}
+  lineNumbers
+  codes={[
+    {
+      code:
+`<Flex direction={{ s: 'column', m: 'row' }}>
+  {/* Hook applies 'flex-column' on small screens */}
+  {/* Hook applies 'flex-row' on medium+ screens */}
+</Flex>`,
+      language: "tsx",
+      label: "Responsive Flex"
+    }
+  ]}
+/>
+
+## Note
+
+This is an internal hook. For responsive layouts, use the Flex and Grid components directly with responsive props rather than using this hook.

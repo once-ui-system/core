@@ -1,0 +1,263 @@
+---
+title: "devLogger"
+summary: "Client-side logging utility that only outputs in development mode."
+updatedAt: "2026-02-22"
+docs: "once-ui/utils/devLogger.mdx"
+github: "utils/devLogger.ts"
+navLabel: "devLogger"
+navIcon: "code"
+---
+
+The `dev` logger is a client-side utility that wraps console methods to only output logs in development mode. This prevents debug messages from appearing in production builds.
+
+## Features
+
+- Only logs in development environment
+- Supports all console methods: `log`, `warn`, `error`, `info`, `debug`
+- Drop-in replacement for console methods
+- Zero overhead in production
+
+## Basic usage
+
+Import and use like the standard console:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { dev } from '@once-ui-system/core';
+
+function MyComponent() {
+  dev.log('Component rendered');
+  dev.warn('This is a warning');
+  dev.error('This is an error');
+  
+  return <div>Hello World</div>;
+}`,
+      language: "tsx",
+      label: "Component.tsx"
+    }
+  ]}
+/>
+
+## Available methods
+
+All standard console methods are available:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { dev } from '@once-ui-system/core';
+
+// General logging
+dev.log('Debug message', { data: 'value' });
+
+// Warnings
+dev.warn('Something might be wrong');
+
+// Errors
+dev.error('An error occurred', error);
+
+// Info
+dev.info('Informational message');
+
+// Debug
+dev.debug('Detailed debug info');`,
+      language: "tsx",
+      label: "Usage examples"
+    }
+  ]}
+/>
+
+## Why use devLogger?
+
+### Without devLogger
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function MyComponent() {
+  // This will log in production! 😱
+  console.log('User data:', userData);
+  
+  // Manual checks are verbose
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Debug info');
+  }
+  
+  return <div>Content</div>;
+}`,
+      language: "tsx",
+      label: "Without devLogger"
+    }
+  ]}
+/>
+
+### With devLogger
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={16}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { dev } from '@once-ui-system/core';
+
+function MyComponent() {
+  // Only logs in development ✅
+  dev.log('User data:', userData);
+  dev.log('Debug info');
+  
+  return <div>Content</div>;
+}`,
+      language: "tsx",
+      label: "With devLogger"
+    }
+  ]}
+/>
+
+## Benefits
+
+- **Clean production builds**: No debug logs in production
+- **Better performance**: No unnecessary console operations in production
+- **Security**: Prevents accidental data leaks through console logs
+- **Convenience**: No need for manual environment checks
+
+## API Reference
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  props={[
+    {
+      name: "dev.log",
+      type: "(...args: any[]) => void",
+      description: "Logs messages in development mode only."
+    },
+    {
+      name: "dev.warn",
+      type: "(...args: any[]) => void",
+      description: "Logs warnings in development mode only."
+    },
+    {
+      name: "dev.error",
+      type: "(...args: any[]) => void",
+      description: "Logs errors in development mode only."
+    },
+    {
+      name: "dev.info",
+      type: "(...args: any[]) => void",
+      description: "Logs info messages in development mode only."
+    },
+    {
+      name: "dev.debug",
+      type: "(...args: any[]) => void",
+      description: "Logs debug messages in development mode only."
+    }
+  ]}
+/>
+
+## Best practices
+
+### Use for debugging
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { dev } from '@once-ui-system/core';
+
+function useCustomHook(data: any) {
+  dev.log('Hook called with:', data);
+  
+  useEffect(() => {
+    dev.log('Effect running');
+    return () => dev.log('Effect cleanup');
+  }, []);
+  
+  return processedData;
+}`,
+      language: "tsx",
+      label: "Debugging hooks"
+    }
+  ]}
+/>
+
+### Use for development feedback
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { dev } from '@once-ui-system/core';
+
+async function fetchData() {
+  dev.log('Fetching data...');
+  
+  try {
+    const response = await fetch('/api/data');
+    const data = await response.json();
+    dev.log('Data received:', data);
+    return data;
+  } catch (error) {
+    dev.error('Fetch failed:', error);
+    throw error;
+  }
+}`,
+      language: "tsx",
+      label: "API debugging"
+    }
+  ]}
+/>
+
+### Don't use for production errors
+
+For errors that should be tracked in production, use regular console.error or an error tracking service:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { dev } from '@once-ui-system/core';
+
+function handleError(error: Error) {
+  // ❌ Don't use dev for production errors
+  dev.error('Critical error:', error);
+  
+  // ✅ Use regular console or error tracking
+  console.error('Critical error:', error);
+  // or: errorTracker.captureException(error);
+}`,
+      language: "tsx",
+      label: "Error handling"
+    }
+  ]}
+/>

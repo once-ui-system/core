@@ -1,0 +1,340 @@
+---
+title: "useDebounce"
+summary: "React hook that delays updating a value until after a specified delay period."
+updatedAt: "2026-02-22"
+docs: "once-ui/hooks/useDebounce.mdx"
+github: "hooks/useDebounce.ts"
+navLabel: "useDebounce"
+navIcon: "code"
+---
+
+The `useDebounce` hook delays updating a value until after a specified delay period has passed without changes. This is useful for optimizing performance in scenarios like search inputs, API calls, or expensive computations.
+
+**Used in components:** [Input](/once-ui/components/input), [Textarea](/once-ui/components/textarea) (for character count updates), [EmojiPicker](/once-ui/components/emoji-picker) (for search filtering)
+
+<Feedback marginTop="16" marginBottom="24" description="Most of the time you don't need to use this hook directly. The Input and Textarea components already use it internally when `maxLength` is set. Use this hook when you need custom debouncing logic in your own components."/>
+
+## Features
+
+- Delays value updates until user stops typing
+- Prevents excessive API calls or computations
+- Simple and lightweight implementation
+- Works with any value type
+
+## Basic usage
+
+Debounce a search input to avoid excessive API calls:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={28}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useState } from 'react';
+import { useDebounce } from '@once-ui-system/core';
+
+function SearchComponent() {
+  const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearch = useDebounce(searchTerm, 500);
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      // This only runs 500ms after user stops typing
+      fetchSearchResults(debouncedSearch);
+    }
+  }, [debouncedSearch]);
+
+  return (
+    <input
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.target.value)}
+      placeholder="Search..."
+    />
+  );
+}`,
+      language: "tsx",
+      label: "SearchComponent.tsx"
+    }
+  ]}
+/>
+
+## With API calls
+
+Optimize API requests by debouncing user input:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={32}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useState, useEffect } from 'react';
+import { useDebounce } from '@once-ui-system/core';
+
+function UserSearch() {
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const debouncedQuery = useDebounce(query, 300);
+
+  useEffect(() => {
+    if (!debouncedQuery) {
+      setResults([]);
+      return;
+    }
+
+    setLoading(true);
+    fetch('/api/users?q=' + debouncedQuery)
+      .then(res => res.json())
+      .then(data => {
+        setResults(data);
+        setLoading(false);
+      });
+  }, [debouncedQuery]);
+
+  return (
+    <div>
+      <input value={query} onChange={(e) => setQuery(e.target.value)} />
+      {loading && <div>Loading...</div>}
+      {results.map(user => <div key={user.id}>{user.name}</div>)}
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "UserSearch.tsx"
+    }
+  ]}
+/>
+
+## With expensive computations
+
+Debounce expensive calculations:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useState, useMemo } from 'react';
+import { useDebounce } from '@once-ui-system/core';
+
+function DataProcessor() {
+  const [input, setInput] = useState('');
+  const debouncedInput = useDebounce(input, 500);
+
+  const processedData = useMemo(() => {
+    // Expensive computation only runs after debounce
+    return expensiveProcessing(debouncedInput);
+  }, [debouncedInput]);
+
+  return (
+    <div>
+      <textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <div>{processedData}</div>
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "DataProcessor.tsx"
+    }
+  ]}
+/>
+
+## API Reference
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  props={[
+    {
+      name: "value",
+      type: "any",
+      required: true,
+      description: "The value to debounce. Can be any type (string, number, object, etc.)."
+    },
+    {
+      name: "delay",
+      type: "number",
+      required: true,
+      description: "Delay in milliseconds before updating the debounced value."
+    }
+  ]}
+/>
+
+## Return value
+
+Returns the debounced value that updates only after the specified delay period has passed without changes.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={12}
+  lineNumbers
+  codes={[
+    {
+      code:
+`const debouncedValue = useDebounce(value, delay);
+// Type: same as input value
+// Updates: only after 'delay' ms of no changes`,
+      language: "tsx",
+      label: "Return type"
+    }
+  ]}
+/>
+
+## Common use cases
+
+### Search inputs
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function SearchBar() {
+  const [search, setSearch] = useState('');
+  const debouncedSearch = useDebounce(search, 300);
+
+  useEffect(() => {
+    if (debouncedSearch) {
+      // Search API called only after user stops typing
+      searchAPI(debouncedSearch);
+    }
+  }, [debouncedSearch]);
+
+  return (
+    <input
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+  );
+}`,
+      language: "tsx",
+      label: "SearchBar.tsx"
+    }
+  ]}
+/>
+
+### Form validation
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function EmailInput() {
+  const [email, setEmail] = useState('');
+  const debouncedEmail = useDebounce(email, 500);
+  const [isValid, setIsValid] = useState(true);
+
+  useEffect(() => {
+    if (debouncedEmail) {
+      // Validate only after user stops typing
+      setIsValid(validateEmail(debouncedEmail));
+    }
+  }, [debouncedEmail]);
+
+  return (
+    <input
+      value={email}
+      onChange={(e) => setEmail(e.target.value)}
+      className={isValid ? 'valid' : 'invalid'}
+    />
+  );
+}`,
+      language: "tsx",
+      label: "EmailInput.tsx"
+    }
+  ]}
+/>
+
+### Window resize handling
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function ResponsiveComponent() {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const debouncedWidth = useDebounce(windowWidth, 200);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    // Expensive layout calculations only after resize stops
+    recalculateLayout(debouncedWidth);
+  }, [debouncedWidth]);
+
+  return <div>Width: {debouncedWidth}px</div>;
+}`,
+      language: "tsx",
+      label: "ResponsiveComponent.tsx"
+    }
+  ]}
+/>
+
+## Performance tips
+
+- **Choose appropriate delay**: 300-500ms for search, 100-200ms for UI feedback
+- **Combine with useMemo**: Debounce input, then memoize expensive computations
+- **Cancel pending requests**: Clean up API calls when component unmounts
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={28}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function OptimizedSearch() {
+  const [query, setQuery] = useState('');
+  const debouncedQuery = useDebounce(query, 300);
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    if (debouncedQuery) {
+      fetch(\\\`/api/search?q=\\\${debouncedQuery}\\\`, {
+        signal: controller.signal
+      });
+    }
+
+    return () => {
+      // Cancel pending request on cleanup
+      controller.abort();
+    };
+  }, [debouncedQuery]);
+
+  return <input value={query} onChange={(e) => setQuery(e.target.value)} />;
+}`,
+      language: "tsx",
+      label: "OptimizedSearch.tsx"
+    }
+  ]}
+/>

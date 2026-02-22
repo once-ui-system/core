@@ -1,0 +1,285 @@
+---
+title: "useStreamingViewport"
+summary: "React hook for streaming data with dynamic viewport adjustment for charts."
+updatedAt: "2026-02-22"
+docs: "once-ui/hooks/useStreamingViewport.mdx"
+github: "hooks/useStreamingViewport.ts"
+navLabel: "useStreamingViewport"
+navIcon: "code"
+---
+
+The `useStreamingViewport` hook is similar to `useStreamingData` but includes automatic viewport (x-axis domain) management. It's ideal for charts that need to show a moving window of time-series data.
+
+**Used in components:** Not used internally by Once UI components
+
+<Feedback marginTop="16" marginBottom="24" description="This is a utility hook for building custom real-time data visualizations with dynamic viewport adjustment. Use it when you need charts where the x-axis automatically scrolls with incoming data, such as live monitoring dashboards."/>
+
+## Features
+
+- Smooth data interpolation
+- Automatic viewport adjustment
+- Sliding window with dynamic x-domain
+- Pause/resume streaming
+- Reset functionality
+- RequestAnimationFrame-based updates
+
+## Basic usage
+
+Create a streaming chart with auto-adjusting viewport:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={36}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { useStreamingViewport } from '@once-ui-system/core';
+import { LineChart, Line, XAxis } from 'recharts';
+
+function StreamingViewportChart() {
+  const { data, xDomain, running, setRunning } = useStreamingViewport({
+    initialData: generateInitialData(),
+    windowSize: 20,
+    intervalMs: 1000,
+    xKey: 'time',
+    numericKeys: ['value'],
+    getNextTarget: ({ lastPoint, nextX }) => ({
+      value: Math.random() * 100
+    })
+  });
+
+  return (
+    <div>
+      <button onClick={() => setRunning(!running)}>
+        {running ? 'Pause' : 'Resume'}
+      </button>
+      <LineChart width={600} height={300} data={data}>
+        <XAxis
+          dataKey="time"
+          domain={xDomain}
+          type="number"
+        />
+        <Line
+          type="monotone"
+          dataKey="value"
+          stroke="#8884d8"
+          isAnimationActive={false}
+        />
+      </LineChart>
+    </div>
+  );
+}`,
+      language: "tsx",
+      label: "StreamingViewportChart.tsx"
+    }
+  ]}
+/>
+
+## Real-time metrics
+
+Monitor live system metrics with moving viewport:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={40}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function LiveMetrics() {
+  const { data, xDomain, running, setRunning, reset } = useStreamingViewport({
+    initialData: Array.from({ length: 30 }, (_, i) => ({
+      timestamp: Date.now() - (30 - i) * 1000,
+      requests: 100 + Math.random() * 50,
+      errors: Math.random() * 5,
+      latency: 50 + Math.random() * 100
+    })),
+    windowSize: 30,
+    intervalMs: 1000,
+    xKey: 'timestamp',
+    numericKeys: ['requests', 'errors', 'latency'],
+    getNextTarget: ({ lastPoint }) => ({
+      requests: Math.max(0, lastPoint.requests + (Math.random() - 0.5) * 30),
+      errors: Math.max(0, lastPoint.errors + (Math.random() - 0.5) * 2),
+      latency: Math.max(0, lastPoint.latency + (Math.random() - 0.5) * 40)
+    })
+  });
+
+  return (
+    <Flex direction="column" gap="16">
+      <Flex gap="8">
+        <Button onClick={() => setRunning(!running)}>
+          {running ? 'Pause' : 'Resume'}
+        </Button>
+        <Button onClick={reset}>Reset</Button>
+      </Flex>
+      <LineChart width={800} height={400} data={data}>
+        <XAxis
+          dataKey="timestamp"
+          domain={xDomain}
+          type="number"
+          tickFormatter={(ts) => new Date(ts).toLocaleTimeString()}
+        />
+        <Line dataKey="requests" stroke="#00ff00" isAnimationActive={false} />
+        <Line dataKey="errors" stroke="#ff0000" isAnimationActive={false} />
+        <Line dataKey="latency" stroke="#0000ff" isAnimationActive={false} />
+      </LineChart>
+    </Flex>
+  );
+}`,
+      language: "tsx",
+      label: "LiveMetrics.tsx"
+    }
+  ]}
+/>
+
+## API Reference
+
+<PropsTable
+  marginTop="16"
+  marginBottom="24"
+  props={[
+    {
+      name: "initialData",
+      type: "T[]",
+      required: true,
+      description: "Initial data points to display."
+    },
+    {
+      name: "windowSize",
+      type: "number",
+      required: true,
+      description: "Number of data points to keep in the sliding window."
+    },
+    {
+      name: "intervalMs",
+      type: "number",
+      required: true,
+      description: "Milliseconds between new data points."
+    },
+    {
+      name: "stepMs",
+      type: "number",
+      default: "16",
+      description: "Milliseconds between animation frames."
+    },
+    {
+      name: "xKey",
+      type: "keyof T",
+      required: true,
+      description: "Key for the x-axis value (timestamp or index)."
+    },
+    {
+      name: "numericKeys",
+      type: "Array<keyof T>",
+      required: true,
+      description: "Array of keys for numeric values to animate."
+    },
+    {
+      name: "getNextTarget",
+      type: "({ lastPoint, nextX }) => Partial<T>",
+      required: true,
+      description: "Function that returns target values for the next data point."
+    }
+  ]}
+/>
+
+## Return value
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  lineNumbers
+  codes={[
+    {
+      code:
+`{
+  data: T[];                                    // Current data window
+  xDomain: [number, number];                    // X-axis domain [min, max]
+  running: boolean;                             // Whether streaming is active
+  setRunning: (running: boolean) => void;       // Control streaming state
+  reset: () => void;                            // Reset to initial data
+}`,
+      language: "tsx",
+      label: "Return type"
+    }
+  ]}
+/>
+
+## Difference from useStreamingData
+
+The key difference is the `xDomain` return value:
+
+- **useStreamingData**: Returns only `data`
+- **useStreamingViewport**: Returns `data` + `xDomain` for chart axis
+
+Use `useStreamingViewport` when you need the chart viewport to move with the data.
+
+## Example with timestamps
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={32}
+  lineNumbers
+  codes={[
+    {
+      code:
+`function TimestampChart() {
+  const { data, xDomain, running, setRunning } = useStreamingViewport({
+    initialData: Array.from({ length: 20 }, (_, i) => ({
+      timestamp: Date.now() - (20 - i) * 2000,
+      temperature: 20 + Math.random() * 5,
+      humidity: 60 + Math.random() * 10
+    })),
+    windowSize: 20,
+    intervalMs: 2000,
+    xKey: 'timestamp',
+    numericKeys: ['temperature', 'humidity'],
+    getNextTarget: ({ lastPoint }) => ({
+      temperature: lastPoint.temperature + (Math.random() - 0.5) * 2,
+      humidity: lastPoint.humidity + (Math.random() - 0.5) * 5
+    })
+  });
+
+  return (
+    <LineChart width={800} height={400} data={data}>
+      <XAxis
+        dataKey="timestamp"
+        domain={xDomain}
+        type="number"
+        scale="time"
+        tickFormatter={(ts) => new Date(ts).toLocaleTimeString()}
+      />
+      <Line dataKey="temperature" stroke="#ff4444" />
+      <Line dataKey="humidity" stroke="#4444ff" />
+    </LineChart>
+  );
+}`,
+      language: "tsx",
+      label: "TimestampChart.tsx"
+    }
+  ]}
+/>
+
+## Performance considerations
+
+- Uses requestAnimationFrame for smooth animations
+- Automatically pauses when `running` is false
+- Cleans up on unmount
+- Efficient sliding window implementation
+
+## Use cases
+
+- **Real-time dashboards**: System monitoring, analytics
+- **Live data feeds**: Stock prices, sensor data
+- **Performance monitoring**: Server metrics, application stats
+- **IoT dashboards**: Temperature, humidity, sensor readings
+
+## Related hooks
+
+- `useStreamingData` - Similar but without viewport management
