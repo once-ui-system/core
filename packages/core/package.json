@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "Once UI for Next.js NPM package",
   "keywords": [
     "once-ui",
@@ -65,6 +65,10 @@
     "./hooks": {
       "import": "./dist/hooks/index.js",
       "require": "./dist/hooks/index.js"
+    },
+    "./server": {
+      "import": "./dist/server/index.js",
+      "require": "./dist/server/index.js"
     }
   },
   "scripts": {
