@@ -168,27 +168,10 @@ function RichLinkPreview({ url }: { url: string }) {
 ### useOgData
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
-  props={[
-    {
-      name: "url",
-      type: "string | null",
-      required: true,
-      description: "The URL to fetch Open Graph data from. Pass null to skip fetching."
-    },
-    {
-      name: "customFetchUrl",
-      type: "string",
-      required: false,
-      description: "Custom API endpoint for fetching OG data. Defaults to '/api/og/fetch'."
-    },
-    {
-      name: "customProxyUrl",
-      type: "string",
-      required: false,
-      description: "Custom API endpoint for proxying images. Defaults to '/api/og/proxy'."
-    }
+  content={[
+    ["url", ["string", "null"], "-"],
+    ["customFetchUrl", "string", "'/api/og/fetch'"],
+    ["customProxyUrl", "string", "'/api/og/proxy'"]
   ]}
 />
 
@@ -223,27 +206,10 @@ function RichLinkPreview({ url }: { url: string }) {
 ### useOgImage
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
-  props={[
-    {
-      name: "url",
-      type: "string | null",
-      required: true,
-      description: "The URL to fetch Open Graph image from."
-    },
-    {
-      name: "customFetchUrl",
-      type: "string",
-      required: false,
-      description: "Custom API endpoint for fetching OG data."
-    },
-    {
-      name: "customProxyUrl",
-      type: "string",
-      required: false,
-      description: "Custom API endpoint for proxying images."
-    }
+  content={[
+    ["url", ["string", "null"], "-"],
+    ["customFetchUrl", "string", "'/api/og/fetch'"],
+    ["customProxyUrl", "string", "'/api/og/proxy'"]
   ]}
 />
 

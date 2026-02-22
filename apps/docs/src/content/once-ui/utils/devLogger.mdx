@@ -142,34 +142,12 @@ function MyComponent() {
 ## API Reference
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
-  props={[
-    {
-      name: "dev.log",
-      type: "(...args: any[]) => void",
-      description: "Logs messages in development mode only."
-    },
-    {
-      name: "dev.warn",
-      type: "(...args: any[]) => void",
-      description: "Logs warnings in development mode only."
-    },
-    {
-      name: "dev.error",
-      type: "(...args: any[]) => void",
-      description: "Logs errors in development mode only."
-    },
-    {
-      name: "dev.info",
-      type: "(...args: any[]) => void",
-      description: "Logs info messages in development mode only."
-    },
-    {
-      name: "dev.debug",
-      type: "(...args: any[]) => void",
-      description: "Logs debug messages in development mode only."
-    }
+  content={[
+    ["devLogger.log", "(...args: any[]) => void", "-"],
+    ["devLogger.warn", "(...args: any[]) => void", "-"],
+    ["devLogger.error", "(...args: any[]) => void", "-"],
+    ["devLogger.info", "(...args: any[]) => void", "-"],
+    ["devLogger.debug", "(...args: any[]) => void", "-"]
   ]}
 />
 

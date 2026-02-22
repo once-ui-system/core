@@ -154,21 +154,9 @@ function DataProcessor() {
 ## API Reference
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
-  props={[
-    {
-      name: "value",
-      type: "any",
-      required: true,
-      description: "The value to debounce. Can be any type (string, number, object, etc.)."
-    },
-    {
-      name: "delay",
-      type: "number",
-      required: true,
-      description: "Delay in milliseconds before updating the debounced value."
-    }
+  content={[
+    ["value", "any", "-"],
+    ["delay", "number", "-"]
   ]}
 />
 

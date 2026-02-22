@@ -5,7 +5,7 @@ updatedAt: "2026-02-22"
 docs: "once-ui/utils/handleOGFetch.mdx"
 github: "server/og-utils.ts"
 navLabel: "handleOGFetch"
-navIcon: "server"
+navIcon: "code"
 ---
 
 The `handleOGFetch` function is a server-side utility that fetches and parses Open Graph metadata from any URL. It's designed to be used in Next.js API routes to extract title, description, image, and favicon information from web pages.
@@ -124,39 +124,12 @@ The function returns a JSON response with the following structure:
 ## API Reference
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
-  props={[
-    {
-      name: "request",
-      type: "Request",
-      required: true,
-      description: "Next.js request object. Must include a 'url' query parameter."
-    },
-    {
-      name: "options",
-      type: "OGFetchOptions",
-      required: false,
-      description: "Optional configuration object."
-    },
-    {
-      name: "options.timeout",
-      type: "number",
-      default: "5000",
-      description: "Request timeout in milliseconds."
-    },
-    {
-      name: "options.userAgent",
-      type: "string",
-      default: "'Mozilla/5.0 (compatible; OG-Fetcher/1.0)'",
-      description: "User agent string for the fetch request."
-    },
-    {
-      name: "options.decodeEntities",
-      type: "boolean",
-      default: "true",
-      description: "Whether to decode HTML entities in title and description."
-    }
+  content={[
+    ["request", "Request", "-"],
+    ["options", "OGFetchOptions", "-"],
+    ["options.timeout", "number", "10000"],
+    ["options.userAgent", ["'bot'", "'browser'"], "'bot'"],
+    ["options.decodeEntities", "boolean", "false"]
   ]}
 />
 

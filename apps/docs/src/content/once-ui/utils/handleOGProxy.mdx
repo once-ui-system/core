@@ -5,7 +5,7 @@ updatedAt: "2026-02-22"
 docs: "once-ui/utils/handleOGProxy.mdx"
 github: "server/og-utils.ts"
 navLabel: "handleOGProxy"
-navIcon: "server"
+navIcon: "code"
 ---
 
 The `handleOGProxy` function is a server-side utility that proxies external images through your server. This is essential for displaying Open Graph images from external sources without CORS restrictions.
@@ -101,33 +101,11 @@ External images often have CORS restrictions that prevent direct usage in web ap
 ## API Reference
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
-  props={[
-    {
-      name: "request",
-      type: "Request",
-      required: true,
-      description: "Next.js request object. Must include a 'url' query parameter with the image URL to proxy."
-    },
-    {
-      name: "options",
-      type: "OGProxyOptions",
-      required: false,
-      description: "Optional configuration object."
-    },
-    {
-      name: "options.userAgent",
-      type: "string",
-      default: "'Mozilla/5.0 (compatible; OG-Proxy/1.0)'",
-      description: "User agent string for the fetch request."
-    },
-    {
-      name: "options.cacheMaxAge",
-      type: "number",
-      default: "3600",
-      description: "Cache duration in seconds. Default is 1 hour (3600)."
-    }
+  content={[
+    ["request", "Request", "-"],
+    ["options", "OGProxyOptions", "-"],
+    ["options.userAgent", "string", "'Mozilla/5.0 (compatible; OG-Proxy/1.0)'", "User agent string for the fetch request."],
+    ["options.cacheMaxAge", "number", "3600", "Cache duration in seconds (1 hour)."]
   ]}
 />
 

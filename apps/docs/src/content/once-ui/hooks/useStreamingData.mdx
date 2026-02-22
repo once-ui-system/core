@@ -125,51 +125,14 @@ Stream multiple data series:
 ## API Reference
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
-  props={[
-    {
-      name: "initialData",
-      type: "T[]",
-      required: true,
-      description: "Initial data points to display."
-    },
-    {
-      name: "windowSize",
-      type: "number",
-      required: true,
-      description: "Number of data points to keep in the sliding window."
-    },
-    {
-      name: "intervalMs",
-      type: "number",
-      required: true,
-      description: "Milliseconds between new data points."
-    },
-    {
-      name: "stepMs",
-      type: "number",
-      default: "16",
-      description: "Milliseconds between animation frames (60fps = 16ms)."
-    },
-    {
-      name: "xKey",
-      type: "keyof T",
-      required: true,
-      description: "Key for the x-axis value (usually time or index)."
-    },
-    {
-      name: "numericKeys",
-      type: "Array<keyof T>",
-      required: true,
-      description: "Array of keys for numeric values to animate."
-    },
-    {
-      name: "getNextTarget",
-      type: "({ lastPoint, nextX }) => Partial<T>",
-      required: true,
-      description: "Function that returns target values for the next data point."
-    }
+  content={[
+    ["initialData", "T[]", "-"],
+    ["windowSize", "number", "-"],
+    ["intervalMs", "number", "-"],
+    ["stepMs", "number", "16"],
+    ["xKey", "keyof T", "-"],
+    ["numericKeys", "Array<keyof T>", "-"],
+    ["getNextTarget", "({ lastPoint, nextX }) => Partial<T>", "-"]
   ]}
 />
 

@@ -50,16 +50,16 @@ function NavigableList({ items }: { items: string[] }) {
   });
 
   return (
-    <div ref={containerRef} onKeyDown={handleKeyDown}>
+    <Column ref={containerRef} onKeyDown={handleKeyDown}>
       {items.map((item, index) => (
-        <button
+        <Button
           key={index}
           data-focused={focusedIndex === index}
         >
           {item}
-        </button>
+        </Button>
       ))}
-    </div>
+    </Column>
   );
 }`,
       language: "tsx",
@@ -96,22 +96,22 @@ function EmojiGrid({ emojis }: { emojis: string[] }) {
   });
 
   return (
-    <div
+    <Grid
       ref={containerRef}
       onKeyDown={handleKeyDown}
       role="grid"
-      style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)' }}
+      columns={8}
     >
       {emojis.map((emoji, index) => (
-        <button
+        <Button
           key={index}
           role="gridcell"
           data-focused={focusedIndex === index}
         >
           {emoji}
-        </button>
+        </Button>
       ))}
-    </div>
+    </Grid>
   );
 }`,
       language: "tsx",
@@ -144,17 +144,17 @@ Navigate horizontally:
   });
 
   return (
-    <div ref={containerRef} onKeyDown={handleKeyDown} role="tablist">
+    <Row ref={containerRef} onKeyDown={handleKeyDown} role="tablist">
       {tabs.map((tab, index) => (
-        <button
+        <Button
           key={tab.id}
           role="tab"
           aria-selected={focusedIndex === index}
         >
           {tab.label}
-        </button>
+        </Button>
       ))}
-    </div>
+    </Row>
   );
 }`,
       language: "tsx",
@@ -166,81 +166,19 @@ Navigate horizontally:
 ## API Reference
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
-  props={[
-    {
-      name: "layout",
-      type: "'row' | 'column' | 'grid'",
-      required: true,
-      description: "Navigation layout type."
-    },
-    {
-      name: "itemCount",
-      type: "number",
-      required: true,
-      description: "Total number of navigable items."
-    },
-    {
-      name: "columns",
-      type: "number",
-      default: "8",
-      description: "Number of columns for grid layout."
-    },
-    {
-      name: "containerRef",
-      type: "RefObject<HTMLElement>",
-      required: false,
-      description: "Reference to the container element."
-    },
-    {
-      name: "onSelect",
-      type: "(index: number) => void",
-      required: false,
-      description: "Callback when item is selected with Enter/Space."
-    },
-    {
-      name: "onFocusChange",
-      type: "(index: number) => void",
-      required: false,
-      description: "Callback when focus changes."
-    },
-    {
-      name: "wrap",
-      type: "boolean",
-      default: "true",
-      description: "Whether to wrap at boundaries."
-    },
-    {
-      name: "initialFocusedIndex",
-      type: "number",
-      default: "-1",
-      description: "Initial focused item index."
-    },
-    {
-      name: "itemSelector",
-      type: "string",
-      default: "'[role=\"option\"], [data-value], button'",
-      description: "CSS selector for focusable items."
-    },
-    {
-      name: "autoFocus",
-      type: "boolean",
-      default: "false",
-      description: "Auto-focus first item on mount."
-    },
-    {
-      name: "disabled",
-      type: "boolean",
-      default: "false",
-      description: "Disable navigation."
-    },
-    {
-      name: "disableHighlighting",
-      type: "boolean",
-      default: "false",
-      description: "Disable visual focus highlighting."
-    }
+  content={[
+    ["layout", ["'row'", "'column'", "'grid'"], "-"],
+    ["itemCount", "number", "-"],
+    ["columns", "number", "8"],
+    ["containerRef", "RefObject<HTMLElement>", "-"],
+    ["onSelect", "(index: number) => void", "-"],
+    ["onFocusChange", "(index: number) => void", "-"],
+    ["wrap", "boolean", "true"],
+    ["initialFocusedIndex", "number", "-1"],
+    ["itemSelector", "string", "'[role=\"option\"], [data-value], button'"],
+    ["autoFocus", "boolean", "false"],
+    ["disabled", "boolean", "false"],
+    ["disableHighlighting", "boolean", "false"]
   ]}
 />
 

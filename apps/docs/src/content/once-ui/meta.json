@@ -4,9 +4,14 @@
   "pages": {
     "quick-start": 1,
     "config": 2,
-    "icons": 3,
-    "components": 4,
-    "utils": 8,
-    "hooks": 9
+    "basics": 3,
+    "contexts": 4,
+    "modules": 5,
+    "form-controls": 6,
+    "components": 7,
+    "data": 8,
+    "effects": 9,
+    "utils": 10,
+    "hooks": 11
   }
 }
