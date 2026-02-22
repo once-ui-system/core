@@ -91,6 +91,7 @@ export default function RootLayout({
         as="html"
         lang="en"
         suppressHydrationWarning
+        data-scroll-behavior="smooth"
         className={classNames(
           fonts.heading.variable,
           fonts.body.variable,
