@@ -206,6 +206,16 @@ export interface FlexBreakpointProps extends BaseBreakpointProps {
   direction?: "row" | "column" | "row-reverse" | "column-reverse";
   horizontal?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
   vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
+  center?: boolean;
+  overflow?: CSSProperties["overflow"];
+  overflowX?: CSSProperties["overflowX"];
+  overflowY?: CSSProperties["overflowY"];
+  top?: SpacingToken;
+  right?: SpacingToken;
+  bottom?: SpacingToken;
+  left?: SpacingToken;
+  aspectRatio?: CSSProperties["aspectRatio"];
+  style?: CSSProperties;
 }
 
 export interface GridBreakpointProps extends BaseBreakpointProps {
@@ -217,4 +227,6 @@ export interface GridBreakpointProps extends BaseBreakpointProps {
   right?: SpacingToken;
   bottom?: SpacingToken;
   left?: SpacingToken;
+  aspectRatio?: CSSProperties["aspectRatio"];
+  style?: CSSProperties;
 }
