@@ -14,6 +14,7 @@ const Text = <T extends ElementType = "span">({
   variant,
   size,
   weight,
+  type,
   family,
   onBackground,
   onSolid,
@@ -41,8 +42,8 @@ const Text = <T extends ElementType = "span">({
 }: TypeProps<T>) => {
   const Component = as || "span";
 
-  if (variant && (size || weight)) {
-    console.warn("When 'variant' is set, 'size' and 'weight' are ignored.");
+  if (variant && (size || weight || type)) {
+    console.warn("When 'variant' is set, 'size', 'type' and 'weight' are ignored.");
   }
 
   if (onBackground && onSolid) {
@@ -56,10 +57,11 @@ const Text = <T extends ElementType = "span">({
     return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
   };
 
+  const typeClass = type ? `font-${type}` : "";
   const sizeClass = size ? `font-${size}` : "";
   const weightClass = weight ? `font-${weight}` : "";
 
-  const classes = variant ? getVariantClasses(variant) : [sizeClass, weightClass];
+  const classes = variant ? getVariantClasses(variant) : [typeClass, sizeClass, weightClass];
 
   let colorClass = "";
   if (onBackground) {
