@@ -1,0 +1,102 @@
+---
+title: "useReducedMotion"
+summary: "React hook that detects reduced motion preferences and low-end device hardware to optimize animation performance."
+updatedAt: "2026-03-12"
+docs: "once-ui/hooks/useReducedMotion.mdx"
+github: "hooks/useReducedMotion.ts"
+navLabel: "useReducedMotion"
+navIcon: "code"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `useReducedMotion` hook detects whether animations should be disabled based on the user's `prefers-reduced-motion` system setting and low-end device hardware (CPU cores, device memory). It returns a `shouldAnimate` flag that components use to automatically skip or simplify animations.
+
+**Used in components:** [Mask](/once-ui/components/mask), [Particle](/once-ui/components/particle), [TiltFx](/once-ui/effects/tiltFx), [HoloFx](/once-ui/effects/holoFx), [MatrixFx](/once-ui/effects/matrixFx), [WeatherFx](/once-ui/effects/weatherFx), [CelebrationFx](/once-ui/effects/celebrationFx), [ShineFx](/once-ui/effects/shineFx)
+
+<Feedback marginTop="16" marginBottom="24" description="All effect components use this hook internally with a reducedMotion prop defaulting to 'auto'. You only need this hook directly when building custom animated components."/>
+
+## Features
+
+- Detects `prefers-reduced-motion: reduce` media query
+- Detects low-end devices (≤2 CPU cores or ≤2GB memory)
+- Reactive — updates when the user changes their system setting
+- Override support: force animations on or off regardless of detection
+- SSR-safe — returns safe defaults on the server
+
+## Basic usage
+
+Use the hook to conditionally run animations:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import { useReducedMotion } from "@once-ui-system/core";
+
+function MyComponent() {
+    const { shouldAnimate } = useReducedMotion();
+
+    useEffect(() => {
+        if (!shouldAnimate) return;
+        // Start animation loop
+    }, [shouldAnimate]);
+}`,
+      language: "tsx",
+      label: "Basic"
+    }
+  ]}
+/>
+
+## Override
+
+Pass `true` to force reduced motion (disable animations), `false` to force full animations, or `"auto"` (default) to detect automatically.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`// Auto-detect (default)
+const { shouldAnimate } = useReducedMotion("auto");
+
+// Force animations off
+const { shouldAnimate } = useReducedMotion(true);
+
+// Force animations on
+const { shouldAnimate } = useReducedMotion(false);`,
+      language: "tsx",
+      label: "Override"
+    }
+  ]}
+/>
+
+## Return value
+
+<PropsTable
+  content={[
+    ["prefersReducedMotion", "boolean"],
+    ["isLowEnd", "boolean"],
+    ["shouldAnimate", "boolean"],
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["override", ['true', 'false', '"auto"'], '"auto"'],
+  ]}
+/>
+
+## Hardware detection
+
+The hook checks two signals to determine low-end devices:
+
+- **`navigator.hardwareConcurrency`** — number of CPU cores (≤2 = low-end)
+- **`navigator.deviceMemory`** — device memory in GB (≤2 = low-end, Chrome/Edge only)
+
+These checks run once on mount and do not change during the session.

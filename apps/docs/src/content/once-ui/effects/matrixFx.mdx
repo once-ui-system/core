@@ -598,6 +598,12 @@ export function Demo() {
   ]}
 />
 
+## Performance
+
+MatrixFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, the animation renders a single static frame (no flicker, no bulge animation). You can override this with the `reducedMotion` prop.
+
+See [useReducedMotion](/once-ui/hooks/useReducedMotion) for details.
+
 ## API reference
 
 <PropsTable
@@ -612,6 +618,7 @@ export function Demo() {
     ["fps", "number", "60"],
     ["bulge", '{ type?: "ripple" | "wave"; duration?: number; intensity?: number; repeat?: boolean; delay?: number }', "undefined"],
     ["revealFrom", ["center","top","bottom","left","right"], "center"],
+    ["reducedMotion", ['true', 'false', '"auto"'], '"auto"'],
     ["children"],
     ["...flex"]
   ]}

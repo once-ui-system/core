@@ -254,6 +254,12 @@ The `opacity` prop controls the opacity of the particles.
   ]}
 />
 
+## Performance
+
+Particle automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, particles are placed statically without animation. The animation also pauses when the element is outside the viewport. You can override this with the `reducedMotion` prop.
+
+See [useReducedMotion](/once-ui/hooks/useReducedMotion) for details.
+
 ## API reference
 
 <PropsTable
@@ -266,6 +272,7 @@ The `opacity` prop controls the opacity of the particles.
     ["mode", ["repel","attract"], "repel"],
     ["intensity", "number", "20"],
     ["opacity", "DisplayProps['opacity']", "100"],
+    ["reducedMotion", ['true', 'false', '"auto"'], '"auto"'],
     ["className"],
     ["style"],
     ["children"],

@@ -4,6 +4,8 @@ import React, { useEffect, useRef } from "react";
 import { SpacingToken } from "../types";
 import { DisplayProps } from "../interfaces";
 import { Flex } from ".";
+import { useInViewport } from "../hooks/useInViewport";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 interface ParticleProps extends React.ComponentProps<typeof Flex> {
   density?: number;
@@ -14,6 +16,7 @@ interface ParticleProps extends React.ComponentProps<typeof Flex> {
   mode?: "repel" | "attract";
   intensity?: number;
   opacity?: DisplayProps["opacity"];
+  reducedMotion?: boolean | "auto";
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -30,6 +33,7 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
       mode = "repel",
       intensity = 20,
       opacity = 100,
+      reducedMotion = "auto",
       children,
       className,
       style,
@@ -38,6 +42,8 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
     forwardedRef,
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const isInViewport = useInViewport(containerRef);
+    const { shouldAnimate } = useReducedMotion(reducedMotion);
 
     useEffect(() => {
       if (forwardedRef && "current" in forwardedRef) {
@@ -49,11 +55,23 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
 
     useEffect(() => {
       const container = containerRef.current;
-      const particles: HTMLElement[] = [];
-      const particleTargets = new Map<HTMLElement, { x: number; y: number }>();
-      const initialPositions = new Map<HTMLElement, { x: number; y: number }>();
+      if (!container) return;
+
+      // If reduced motion, render static particles with no animation loop
+      const effectiveDensity = shouldAnimate ? density : Math.min(density, 30);
+
+      const particleEls: HTMLElement[] = [];
+
+      // Flat arrays for fast iteration — no Map lookups or style parsing per frame
+      const currentX = new Float32Array(effectiveDensity);
+      const currentY = new Float32Array(effectiveDensity);
+      const initialX = new Float32Array(effectiveDensity);
+      const initialY = new Float32Array(effectiveDensity);
+      const targetX = new Float32Array(effectiveDensity);
+      const targetY = new Float32Array(effectiveDensity);
+
       let mousePosition = { x: -1000, y: -1000 };
-      let animationFrameId: number;
+      let animationFrameId: number | null = null;
 
       const parsedSize = `var(--static-space-${size})`;
       const parsedOpacity = `${opacity}%`;
@@ -61,132 +79,129 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
       const repulsionStrength = 0.15 * (speed || 1);
 
       const handleMouseMove = (e: MouseEvent) => {
-        const rect = container?.getBoundingClientRect();
-        if (!rect) return;
+        const rect = container.getBoundingClientRect();
         mousePosition = {
           x: ((e.clientX - rect.left) / rect.width) * 100,
           y: ((e.clientY - rect.top) / rect.height) * 100,
         };
       };
 
-      const createParticle = () => {
-        const particleEl = document.createElement("div");
-        particleEl.style.position = "absolute";
-        particleEl.style.width = parsedSize;
-        particleEl.style.height = parsedSize;
-        particleEl.style.background = `var(--${color})`;
-        particleEl.style.borderRadius = "50%";
-        particleEl.style.pointerEvents = "none";
-        particleEl.style.opacity = parsedOpacity;
-        particleEl.style.transition = "transform 0.4s ease-out, opacity 0.6s ease-out";
+      // Create particles using translate3d instead of left/top
+      for (let i = 0; i < effectiveDensity; i++) {
+        const el = document.createElement("div");
+        el.style.cssText = `
+          position:absolute;left:0;top:0;
+          width:${parsedSize};height:${parsedSize};
+          background:var(--${color});
+          border-radius:50%;
+          pointer-events:none;
+          opacity:${parsedOpacity};
+          will-change:transform;
+        `;
 
-        const initialX = 10 + Math.random() * 80;
-        const initialY = 10 + Math.random() * 80;
+        const ix = 10 + Math.random() * 80;
+        const iy = 10 + Math.random() * 80;
 
-        particleEl.style.left = `${initialX}%`;
-        particleEl.style.top = `${initialY}%`;
+        initialX[i] = ix;
+        initialY[i] = iy;
+        currentX[i] = ix;
+        currentY[i] = iy;
+        targetX[i] = ix;
+        targetY[i] = iy;
 
-        initialPositions.set(particleEl, { x: initialX, y: initialY });
-        particleTargets.set(particleEl, { x: initialX, y: initialY });
+        el.style.transform = `translate3d(${ix}cqw, ${iy}cqh, 0)`;
+        container.appendChild(el);
+        particleEls.push(el);
+      }
 
-        container?.appendChild(particleEl);
-        particles.push(particleEl);
-        return particleEl;
-      };
+      // If reduced motion or not in viewport initially, just place them statically
+      if (!shouldAnimate) return () => cleanup();
 
       const updateParticles = () => {
-        particles.forEach((particleEl, index) => {
-          const currentTarget = particleTargets.get(particleEl);
-          const initial = initialPositions.get(particleEl);
-          if (!currentTarget || !initial) return;
+        const time = Date.now() * 0.001 * speed;
 
-          const currentX = parseFloat(particleEl.style.left);
-          const currentY = parseFloat(particleEl.style.top);
+        for (let i = 0; i < effectiveDensity; i++) {
+          const cx = currentX[i];
+          const cy = currentY[i];
 
-          const time = Date.now() * 0.001 * speed;
-          const baseNoiseX = Math.sin(time + index) * 0.5;
-          const baseNoiseY = Math.cos(time + index * 1.2) * 0.5;
+          const baseNoiseX = Math.sin(time + i) * 0.5;
+          const baseNoiseY = Math.cos(time + i * 1.2) * 0.5;
 
-          let targetX = initial.x + baseNoiseX;
-          let targetY = initial.y + baseNoiseY;
-          let isCloseToMouse = false;
+          let tx = initialX[i] + baseNoiseX;
+          let ty = initialY[i] + baseNoiseY;
 
           if (interactive) {
-            const dx = mousePosition.x - currentX;
-            const dy = mousePosition.y - currentY;
+            const dx = mousePosition.x - cx;
+            const dy = mousePosition.y - cy;
             const distance = Math.sqrt(dx * dx + dy * dy);
 
             if (distance < intensity) {
               const angle = Math.atan2(dy, dx);
 
               if (mode === "attract") {
-                // Attract: move towards cursor
                 const minDistance = 8;
-                
                 if (distance <= minDistance) {
-                  // Particle is close - freeze it at cursor position (no noise, no movement)
-                  targetX = mousePosition.x;
-                  targetY = mousePosition.y;
-                  isCloseToMouse = true;
+                  tx = mousePosition.x;
+                  ty = mousePosition.y;
                 } else {
-                  // Force is proportional to distance (strong when far, weak when close)
                   const normalizedDistance = Math.min(distance / intensity, 1);
                   const force = distance * repulsionStrength * normalizedDistance * 0.3;
-                  targetX = currentX + Math.cos(angle) * force;
-                  targetY = currentY + Math.sin(angle) * force;
+                  tx = cx + Math.cos(angle) * force;
+                  ty = cy + Math.sin(angle) * force;
                 }
               } else {
-                // Repel: move away from cursor (original behavior)
                 const force = (intensity - distance) * repulsionStrength;
-                targetX -= Math.cos(angle) * force;
-                targetY -= Math.sin(angle) * force;
+                tx -= Math.cos(angle) * force;
+                ty -= Math.sin(angle) * force;
               }
             }
           }
 
-          targetX = Math.max(5, Math.min(95, targetX));
-          targetY = Math.max(5, Math.min(95, targetY));
+          tx = Math.max(5, Math.min(95, tx));
+          ty = Math.max(5, Math.min(95, ty));
 
-          particleTargets.set(particleEl, {
-            x: targetX,
-            y: targetY,
-          });
+          targetX[i] = tx;
+          targetY[i] = ty;
 
-          particleEl.style.left = `${currentX + (targetX - currentX) * movementSpeed}%`;
-          particleEl.style.top = `${currentY + (targetY - currentY) * movementSpeed}%`;
-        });
+          const nx = cx + (tx - cx) * movementSpeed;
+          const ny = cy + (ty - cy) * movementSpeed;
+          currentX[i] = nx;
+          currentY[i] = ny;
+
+          particleEls[i].style.transform = `translate3d(${nx}cqw, ${ny}cqh, 0)`;
+        }
 
         animationFrameId = requestAnimationFrame(updateParticles);
       };
 
       if (interactive) {
-        document.addEventListener("mousemove", handleMouseMove);
+        container.addEventListener("mousemove", handleMouseMove, { passive: true });
       }
 
-      for (let i = 0; i < density; i++) {
-        createParticle();
+      // Start animation only if in viewport
+      if (isInViewport) {
+        animationFrameId = requestAnimationFrame(updateParticles);
       }
 
-      updateParticles();
+      function cleanup() {
+        container!.removeEventListener("mousemove", handleMouseMove);
+        if (animationFrameId != null) {
+          cancelAnimationFrame(animationFrameId);
+        }
+        particleEls.forEach((el) => el.remove());
+      }
 
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-        cancelAnimationFrame(animationFrameId);
-        particles.forEach((particleEl) => {
-          particleEl.remove();
-          particleTargets.delete(particleEl);
-          initialPositions.delete(particleEl);
-        });
-      };
-    }, [color, size, speed, interactive, intensity, opacity, density, containerRef]);
+      return () => cleanup();
+    }, [color, size, speed, interactive, intensity, opacity, density, mode, shouldAnimate, isInViewport]);
 
     return (
       <Flex
         ref={containerRef}
         fill
-        pointerEvents="none"
+        position="relative"
+        pointerEvents={interactive ? "auto" : "none"}
         className={className}
-        style={style}
+        style={{ containerType: "size", ...style }}
         {...rest}
       >
         {children}

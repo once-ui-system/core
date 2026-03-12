@@ -218,6 +218,12 @@ ShineFx works with all Text component variants and styling props.
   ]}
 />
 
+## Performance
+
+ShineFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, the shine animation is disabled (equivalent to `disabled={true}`). You can override this with the `reducedMotion` prop.
+
+See [useReducedMotion](/once-ui/hooks/useReducedMotion) for details.
+
 ## API reference
 
 <PropsTable
@@ -225,6 +231,8 @@ ShineFx works with all Text component variants and styling props.
     ["speed", "number", "5"],
     ["baseOpacity", "number", "0.3"],
     ["disabled", "boolean", "false"],
+    ["inverse", "boolean", "false"],
+    ["reducedMotion", ['true', 'false', '"auto"'], '"auto"'],
     ["children", "ReactNode"],
     ["...text", "TextProps"],
   ]}

@@ -5,6 +5,8 @@ import styles from "./HoloFx.module.scss";
 import { Flex } from ".";
 import { CSSProperties } from "react";
 import classNames from "classnames";
+import { useInViewport } from "../hooks/useInViewport";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 interface MaskOptions {
   maskPosition?: string;
@@ -12,6 +14,7 @@ interface MaskOptions {
 
 interface HoloFxProps extends React.ComponentProps<typeof Flex> {
   children: React.ReactNode;
+  reducedMotion?: boolean | "auto";
   shine?: {
     opacity?: number;
     filter?: string;
@@ -44,9 +47,13 @@ const getMaskStyle = (mask?: MaskOptions): string => {
   return mask?.maskPosition ? formatMask(mask.maskPosition) : formatMask();
 };
 
-const HoloFx: React.FC<HoloFxProps> = ({ children, shine, burn, texture, ...rest }) => {
+const HoloFx: React.FC<HoloFxProps> = ({ children, reducedMotion = "auto", shine, burn, texture, ...rest }) => {
   const ref = useRef<HTMLDivElement>(null);
   const lastCallRef = useRef<number>(0);
+
+  const isInViewport = useInViewport(ref);
+  const { shouldAnimate } = useReducedMotion(reducedMotion);
+  const isActive = isInViewport && shouldAnimate;
 
   const shineDefaults = {
     opacity: 30,
@@ -73,6 +80,8 @@ const HoloFx: React.FC<HoloFxProps> = ({ children, shine, burn, texture, ...rest
   };
 
   useEffect(() => {
+    if (!isActive) return;
+
     const handleMouseMove = (event: MouseEvent) => {
       const now = Date.now();
       if (now - lastCallRef.current < 16) return;
@@ -95,12 +104,12 @@ const HoloFx: React.FC<HoloFxProps> = ({ children, shine, burn, texture, ...rest
       element.style.setProperty("--gradient-pos-y", `${deltaY}%`);
     };
 
-    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
     };
-  }, []);
+  }, [isActive]);
 
   return (
     <Flex overflow="hidden" className={styles.holoFx} ref={ref} {...rest}>

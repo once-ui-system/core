@@ -104,11 +104,18 @@ Control the strength of the tilt effect with the `intensity` prop. Lower values 
   ]}
 />
 
+## Performance
+
+TiltFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, the tilt effect is disabled. You can override this behavior with the `reducedMotion` prop.
+
+See [useReducedMotion](/once-ui/hooks/useReducedMotion) for details.
+
 ## API reference
 
 <PropsTable
   content={[
-    ["intensity", "number", "1", "Controls the strength of the tilt effect. Higher values create more dramatic rotation and depth."],
+    ["intensity", "number", "1"],
+    ["reducedMotion", ['true', 'false', '"auto"'], '"auto"'],
     ["children"],
     ["className"],
     ["style"],

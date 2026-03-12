@@ -8,6 +8,8 @@
     "useResponsiveClasses": 4,
     "useHeadingLinks": 5,
     "useStreamingData": 6,
-    "useStreamingViewport": 7
+    "useStreamingViewport": 7,
+    "useInViewport": 8,
+    "useReducedMotion": 9
   }
 }

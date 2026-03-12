@@ -1,0 +1,87 @@
+---
+title: "useInViewport"
+summary: "React hook that detects whether an element is currently visible in the viewport using IntersectionObserver."
+updatedAt: "2026-03-12"
+docs: "once-ui/hooks/useInViewport.mdx"
+github: "hooks/useInViewport.ts"
+navLabel: "useInViewport"
+navIcon: "code"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `useInViewport` hook uses the `IntersectionObserver` API to detect whether a referenced element is currently visible within the viewport. This is useful for pausing animations, lazy-loading content, or triggering effects only when elements are on screen.
+
+**Used in components:** [Mask](/once-ui/components/mask), [Particle](/once-ui/components/particle), [HoloFx](/once-ui/effects/holoFx)
+
+<Feedback marginTop="16" marginBottom="24" description="Most animated components already use this hook internally to pause when off-screen. Use this hook directly when building custom components that need viewport awareness."/>
+
+## Features
+
+- Lightweight wrapper around `IntersectionObserver`
+- Returns a simple boolean — `true` when the element is in view
+- Accepts standard `IntersectionObserverInit` options
+- Cleans up automatically on unmount
+
+## Basic usage
+
+Pass a ref to the hook and use the returned boolean to conditionally render or animate:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import { useRef } from "react";
+import { useInViewport } from "@once-ui-system/core";
+
+function MyComponent() {
+    const ref = useRef<HTMLDivElement>(null);
+    const isInViewport = useInViewport(ref);
+
+    return (
+        <div ref={ref}>
+            {isInViewport ? "Visible!" : "Off screen"}
+        </div>
+    );
+}`,
+      language: "tsx",
+      label: "Basic"
+    }
+  ]}
+/>
+
+## Custom threshold
+
+Pass `IntersectionObserverInit` options as the second argument to customize when the element is considered "in viewport":
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`// Trigger when 50% of the element is visible
+const isHalfVisible = useInViewport(ref, { threshold: 0.5 });
+
+// Start detecting 100px before the element enters
+const isNearViewport = useInViewport(ref, { rootMargin: "100px" });`,
+      language: "tsx",
+      label: "Options"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["ref", "RefObject<HTMLElement | null>"],
+    ["options", "IntersectionObserverInit", "{ threshold: 0 }"],
+  ]}
+/>
+
+## Return value
+
+Returns a `boolean` — `true` when the element is intersecting the viewport, `false` otherwise.

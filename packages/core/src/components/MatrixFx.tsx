@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { Flex } from ".";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 interface BulgeConfig {
   type?: "ripple" | "wave";
@@ -38,6 +39,7 @@ interface MatrixFxProps extends React.ComponentProps<typeof Flex> {
   flicker?: boolean;
   bulge?: BulgeConfig;
   fps?: number;
+  reducedMotion?: boolean | "auto";
   children?: React.ReactNode;
 }
 
@@ -54,11 +56,13 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       flicker = false,
       bulge,
       fps = 60,
+      reducedMotion = "auto",
       children,
       ...rest
     },
     forwardedRef,
   ) => {
+    const { shouldAnimate } = useReducedMotion(reducedMotion);
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animationRef = useRef<number | undefined>(undefined);
@@ -240,6 +244,12 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       // Cache for static rendering (when animation completes)
       let cachedImageData: ImageData | null = null;
       
+      // When reduced motion is active, force static rendering after first frame
+      if (!shouldAnimate) {
+        isStaticRef.current = true;
+        mountAnimationCompleteRef.current = true;
+      }
+
       const animate = (currentTime: number = 0) => {
         // Skip rendering if not visible in viewport
         if (!isVisibleRef.current) {

@@ -39,7 +39,7 @@ The `CelebrationFx` component creates animated celebration effects using the nat
   ]}
 />
 
-## Celebration types
+## Types
 
 Choose between `confetti` (falling particles) or `fireworks` (explosive bursts).
 
@@ -208,7 +208,7 @@ Customize celebration colors using design tokens or any valid CSS color.
   ]}
 />
 
-### Intensity & speed
+## Intensity & speed
 
 Control particle density with `intensity` and animation speed with `speed`.
 
@@ -305,7 +305,7 @@ export function demo() {
   ]}
 />
 
-### Custom content
+## Custom content
 
 Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
 
@@ -366,6 +366,12 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
   ]}
 />
 
+## Performance
+
+CelebrationFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, the animation is completely disabled. You can override this with the `reducedMotion` prop.
+
+See [useReducedMotion](/once-ui/hooks/useReducedMotion) for details.
+
 ## Props
 
 The `CelebrationFx` component extends all layout props from `Flex` plus the following celebration-specific props:
@@ -379,6 +385,7 @@ The `CelebrationFx` component extends all layout props from `Flex` plus the foll
     ["duration", "number (s)", "undefined (infinite)"],
     ["trigger", ["mount", "hover", "click", "manual"], "mount"],
     ["active", "boolean", "true (for manual trigger)"],
+    ["reducedMotion", ['true', 'false', '"auto"'], '"auto"'],
     ["children"],
     ["...flex"],
   ]}

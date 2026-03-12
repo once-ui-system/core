@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { Flex } from ".";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 type CelebrationType = "confetti" | "fireworks";
 
@@ -13,6 +14,7 @@ interface CelebrationFxProps extends React.ComponentProps<typeof Flex> {
   duration?: number;
   trigger?: "mount" | "hover" | "manual" | "click";
   active?: boolean; // For manual trigger
+  reducedMotion?: boolean | "auto";
   children?: React.ReactNode;
 }
 
@@ -63,11 +65,13 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
       duration,
       trigger = "mount",
       active = true,
+      reducedMotion = "auto",
       children,
       ...rest
     },
     forwardedRef,
   ) => {
+    const { shouldAnimate } = useReducedMotion(reducedMotion);
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animationRef = useRef<number | undefined>(undefined);
@@ -321,7 +325,9 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
         animationRef.current = requestAnimationFrame(animate);
       };
 
-      animate();
+      if (shouldAnimate) {
+        animate();
+      }
 
       return () => {
         window.removeEventListener("resize", updateSize);
@@ -329,7 +335,7 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
           cancelAnimationFrame(animationRef.current);
         }
       };
-    }, [type, colors, speed, intensity, duration, trigger]);
+    }, [type, colors, speed, intensity, duration, trigger, shouldAnimate]);
 
     const handleMouseEnter = () => {
       if (trigger === "hover" && !isHoveredRef.current) {

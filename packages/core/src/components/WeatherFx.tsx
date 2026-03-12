@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef } from "react";
 import { Flex } from ".";
+import { useReducedMotion } from "../hooks/useReducedMotion";
 
 type WeatherType = "rain" | "snow" | "leaves" | "lightning";
 
@@ -14,6 +15,7 @@ interface WeatherFxProps extends React.ComponentProps<typeof Flex> {
   duration?: number;
   trigger?: "mount" | "hover" | "click" | "manual";
   active?: boolean;
+  reducedMotion?: boolean | "auto";
   children?: React.ReactNode;
 }
 
@@ -90,11 +92,13 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
       duration,
       trigger = "mount",
       active = false,
+      reducedMotion = "auto",
       children,
       ...rest
     },
     forwardedRef,
   ) => {
+    const { shouldAnimate } = useReducedMotion(reducedMotion);
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const animationRef = useRef<number | undefined>(undefined);
@@ -737,6 +741,13 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
         animationRef.current = requestAnimationFrame(animate);
       };
 
+      if (!shouldAnimate) {
+        // When reduced motion is active, don't start the animation loop at all
+        return () => {
+          window.removeEventListener("resize", updateSize);
+        };
+      }
+
       animate();
 
       return () => {
@@ -745,7 +756,7 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
           cancelAnimationFrame(animationRef.current);
         }
       };
-    }, [type, colors, speed, intensity, angle, duration, trigger]);
+    }, [type, colors, speed, intensity, angle, duration, trigger, shouldAnimate]);
 
     // Respond to external control in manual mode
     useEffect(() => {
@@ -852,6 +863,93 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
         isHoveredRef.current = true;
         isEmittingRef.current = true;
         emitStartTimeRef.current = Date.now();
+
+        // Initialize particles if none exist yet
+        if (particlesRef.current.length === 0) {
+          const canvas = canvasRef.current;
+          const container = containerRef.current;
+          if (canvas && container) {
+            const cw = canvas.width / 2;
+            const ch = canvas.height / 2;
+            const parsedColors = colors.map((color) => {
+              const computedColor = getComputedStyle(container).getPropertyValue(`--${color}`);
+              return computedColor || color;
+            });
+            const angleRad = (angle * Math.PI) / 180;
+            const horizontalOffset = Math.abs(Math.tan(angleRad) * ch);
+
+            if (type === "rain") {
+              const particles: RainDrop[] = [];
+              for (let i = 0; i < intensity; i++) {
+                const spawnWidth = cw + horizontalOffset * 2;
+                const spawnX = Math.random() * spawnWidth - horizontalOffset;
+                particles.push({
+                  x: spawnX,
+                  y: Math.random() * ch - ch,
+                  length: 10 + Math.random() * 20,
+                  speed: (2 + Math.random() * 3) * speed,
+                  color: parsedColors[Math.floor(Math.random() * parsedColors.length)],
+                  opacity: 0.3 + Math.random() * 0.5,
+                  thickness: 1 + Math.random() * 1.5,
+                });
+              }
+              particlesRef.current = particles;
+            } else if (type === "snow") {
+              const particles: Snowflake[] = [];
+              for (let i = 0; i < intensity; i++) {
+                const depth = Math.random();
+                const size = 2 + depth * 4;
+                const spawnWidth = cw + horizontalOffset * 2;
+                const spawnX = Math.random() * spawnWidth - horizontalOffset;
+                particles.push({
+                  x: spawnX,
+                  y: Math.random() * ch - ch,
+                  size,
+                  speed: (0.3 + depth * 0.7) * speed,
+                  color: parsedColors[Math.floor(Math.random() * parsedColors.length)],
+                  opacity: 0.4 + depth * 0.5,
+                  swayAmplitude: 20 + Math.random() * 30,
+                  swaySpeed: 0.5 + Math.random() * 1,
+                  swayOffset: Math.random() * Math.PI * 2,
+                  depth,
+                });
+              }
+              particlesRef.current = particles;
+            } else if (type === "leaves") {
+              const particles: Leaf[] = [];
+              for (let i = 0; i < intensity; i++) {
+                const depth = Math.random();
+                const width = 8 + depth * 12;
+                const height = width * (0.6 + Math.random() * 0.4);
+                const spawnWidth = cw + horizontalOffset * 2;
+                const spawnX = Math.random() * spawnWidth - horizontalOffset;
+                const colorIndex = Math.floor(Math.random() * parsedColors.length);
+                const color1 = parsedColors[colorIndex];
+                const color2 = parsedColors[Math.min(colorIndex + 1, parsedColors.length - 1)];
+                particles.push({
+                  x: spawnX,
+                  y: Math.random() * ch - ch,
+                  width,
+                  height,
+                  speed: (0.4 + depth * 0.8) * speed,
+                  color1,
+                  color2,
+                  opacity: 0.6 + depth * 0.3,
+                  swayAmplitude: 30 + Math.random() * 50,
+                  swaySpeed: 0.3 + Math.random() * 0.7,
+                  swayOffset: Math.random() * Math.PI * 2,
+                  rotation: Math.random() * Math.PI * 2,
+                  rotationSpeed: (Math.random() - 0.5) * 0.08,
+                  rotation3D: Math.random() * Math.PI * 2,
+                  rotation3DSpeed: (Math.random() - 0.5) * 0.06,
+                  depth,
+                });
+              }
+              particlesRef.current = particles;
+            }
+            // Lightning doesn't need pre-initialization (spawns dynamically)
+          }
+        }
       }
     };
 

@@ -994,6 +994,12 @@ export function Demo() {
   ]}
 />
 
+## Performance
+
+WeatherFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, the animation is completely disabled (no particles are rendered). You can override this with the `reducedMotion` prop.
+
+See [useReducedMotion](/once-ui/hooks/useReducedMotion) for details.
+
 ## API reference
 
 <PropsTable
@@ -1006,6 +1012,7 @@ export function Demo() {
     ["duration", "number", "undefined"],
     ["trigger", ["mount","hover","click","manual"], "mount"],
     ["active", "boolean (manual)", "false"],
+    ["reducedMotion", ['true', 'false', '"auto"'], '"auto"'],
     ["children"],
     ["...flex"]
   ]}
