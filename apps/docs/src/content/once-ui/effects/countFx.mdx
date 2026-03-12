@@ -109,6 +109,54 @@ useEffect(() => {
   ]}
 />
 
+## Trigger on scroll
+
+Use the [useInViewport](/once-ui/hooks/useInViewport) hook to trigger the count animation when the element enters the viewport. This example starts counting when the element reaches the center of the screen.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ScrollCountExample />
+  }
+  codes={[
+    {
+      code:
+`import { useRef, useState, useEffect } from "react";
+import { CountFx, useInViewport } from "@once-ui-system/core";
+
+function ScrollCountExample() {
+    const ref = useRef<HTMLDivElement>(null);
+    const [value, setValue] = useState<number>(0);
+    
+    // Trigger when element reaches center of viewport
+    // rootMargin: "-50% 0px" creates a line at the vertical center
+    const isInViewport = useInViewport(ref, { 
+        rootMargin: "-50% 0px" 
+    });
+    
+    useEffect(() => {
+        if (isInViewport) {
+            setValue(9876);
+        }
+    }, [isInViewport]);
+    
+    return (
+      <CountFx
+        variant="display-strong-l"
+        value={value}
+        speed={2000}
+        effect="wheel"
+        easing="ease-out"
+      />
+    );
+}`,
+      language: "tsx",
+      label: "Scroll trigger"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
