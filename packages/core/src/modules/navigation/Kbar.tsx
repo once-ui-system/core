@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback, useMemo, ReactNode } from "react";
-import { Flex, Text, Icon, Column, Input, Option, Row, Kbd, ArrowNavigation, useArrowNavigationContext } from "../../";
+import { Flex, Text, Icon, Column, Input, Option, Row, Kbd, ArrowNavigation, useArrowNavigationContext, ScrollLock } from "../../";
 import { createPortal } from "react-dom";
 import { useRouter, usePathname } from "next/navigation";
 import styles from "./Kbar.module.scss";
@@ -213,21 +213,6 @@ export const KbarContent: React.FC<KbarContentProps> = ({
     };
   }, [isOpen, handleClose]);
 
-  // Lock body scroll when kbar is open
-  useEffect(() => {
-    if (isOpen) {
-      // Prevent body scrolling when kbar is open
-      document.body.style.overflow = "hidden";
-    } else {
-      // Restore body scrolling when kbar is closed
-      document.body.style.overflow = "unset";
-    }
-
-    return () => {
-      // Cleanup function to ensure body scroll is restored
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
 
   // Clear search query when kbar is closed
   useEffect(() => {
@@ -258,6 +243,8 @@ export const KbarContent: React.FC<KbarContentProps> = ({
 
   // Create portal for the kbar
   return (
+    <>
+    <ScrollLock enabled={isOpen} allowScrollInElement={scrollContainerRef} />
     <Row
       position="fixed"
       top="0"
@@ -378,6 +365,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
         </Row>
       </Column>
     </Row>
+    </>
   );
 };
 
