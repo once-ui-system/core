@@ -1,7 +1,7 @@
 ---
 title: "Text"
 summary: "A flexible typography component for rendering inline or block text with configurable font styles, spacing, and color."
-updatedAt: "2025-05-09"
+updatedAt: "2026-03-07"
 docs: "once-ui/components/text.mdx"
 github: "components/Text.tsx"
 navLabel: "Text"
@@ -19,7 +19,7 @@ The `Text` component provides consistent typography throughout your UI, with sup
     <Column gap="12">
       <Text variant="body-default-m">This is default body text.</Text>
       <Text variant="label-strong-s">This is a strong label.</Text>
-      <Text size="s" weight="strong">This is small, strong text.</Text>
+      <Text size="s" weight="strong" type="body">This is small, strong text.</Text>
     </Column>
   }
   codes={[
@@ -31,7 +31,7 @@ The `Text` component provides consistent typography throughout your UI, with sup
 <Text variant="label-strong-s">
   This is a strong label.
 </Text>
-<Text size="s" weight="strong">
+<Text size="s" weight="strong" type="body">
   This is small, strong text.
 </Text>`,
       language: "tsx",
@@ -324,6 +324,7 @@ Control the rendered tag using the `as` prop.
     ["variant", "TextVariant"],
     ["size", ["xs", "s", "m", "l", "xl"]],
     ["weight", ["default", "strong"]],
+    ["type", ["display", "heading", "body", "label", "code"]],
     ["family", ["display", "heading", "body", "label", "code"]],
     ["onBackground", "`${ColorScheme}-${ColorWeight}`"],
     ["onSolid", "`${ColorScheme}-${ColorWeight}`"],
