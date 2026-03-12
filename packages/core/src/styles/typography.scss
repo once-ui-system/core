@@ -37,16 +37,16 @@ h1, h2, h3, h4, h5, h6, p {
     font-weight: inherit;
 }
 
+.font-default {
+    font-weight: var(--font-weight-display-default);
+}
+
+.font-strong {
+    font-weight: var(--font-weight-display-strong);
+}
+
 .font-display {
     font-family: var(--font-heading);
-
-    &.font-strong, & > .font-strong {
-        font-weight: var(--font-weight-display-strong);
-    }
-
-    &.font-default, & > .font-default {
-        font-weight: var(--font-weight-display-default);
-    }
 
     &.font-xl, & > .font-xl {
         font-size:   calc(var(--font-size-display-xl) * var(--font-size-display-multiplier));
@@ -81,14 +81,6 @@ h1, h2, h3, h4, h5, h6, p {
 .font-heading {
     font-family: var(--font-heading);
 
-    &.font-strong, & > .font-strong {
-        font-weight: var(--font-weight-heading-strong);
-    }
-
-    &.font-default, & > .font-default {
-        font-weight: var(--font-weight-heading-default);
-    }
-
     &.font-xl, & > .font-xl {
         font-size:   calc(var(--font-size-heading-xl) * var(--font-size-heading-multiplier));
         line-height: calc(var(--line-height-heading-xl) * var(--line-height-heading-multiplier));
@@ -117,14 +109,6 @@ h1, h2, h3, h4, h5, h6, p {
 
 .font-body {
     font-family: var(--font-body);
-
-    &.font-strong, & > .font-strong {
-        font-weight: var(--font-weight-body-strong);
-    }
-
-    &.font-default, & > .font-default {
-        font-weight: var(--font-weight-body-default);
-    }
 
     &.font-xl, & > .font-xl {
         font-size:   calc(var(--font-size-body-xl) * var(--font-size-body-multiplier));
@@ -155,14 +139,6 @@ h1, h2, h3, h4, h5, h6, p {
 .font-label {
     font-family: var(--font-label);
 
-    &.font-strong, & > .font-strong {
-        font-weight: var(--font-weight-label-strong);
-    }
-
-    &.font-default, & > .font-default {
-        font-weight: var(--font-weight-label-default);
-    }
-
     &.font-xl, & > .font-xl {
         font-size:   calc(var(--font-size-label-xl) * var(--font-size-label-multiplier));
         line-height: calc(var(--line-height-label-xl) * var(--line-height-label-multiplier));
@@ -191,14 +167,6 @@ h1, h2, h3, h4, h5, h6, p {
 
 .font-code {
     font-family: var(--font-code);
-
-    &.font-strong, & > .font-strong {
-        font-weight: var(--font-weight-code-strong);
-    }
-
-    &.font-default, & > .font-default {
-        font-weight: var(--font-weight-code-default);
-    }
 
     &.font-xl, & > .font-xl {
         font-size:   calc(var(--font-size-label-xl) * var(--font-size-label-multiplier));
