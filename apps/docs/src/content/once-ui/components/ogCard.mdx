@@ -202,6 +202,44 @@ The `OgCard` extends the `Card` component, so you can use all `Card` props to cu
   ]}
 />
 
+## Required API routes
+
+To use `OgCard` with automatic Open Graph fetching, your application must expose the following API routes.
+
+These routes are used internally by the component to fetch metadata and safely load external assets.
+
+### 1. OG metadata fetch
+
+`/api/og/fetch`
+
+This endpoint retrieves Open Graph metadata (title, description, image, favicon) from a given URL.
+
+It is used when `OgCard` receives only a `url` prop.
+
+You can refer to the implementation in:
+- `handleOGFetch.mdx`
+
+---
+
+### 2. OG image proxy
+
+`/api/og/proxy`
+
+This endpoint proxies external images to avoid CORS restrictions when rendering preview images inside the card.
+
+You can refer to the implementation in:
+- `handleOGProxy.mdx`
+
+---
+
+### 3. (Optional) OG generate endpoint
+
+`/api/og/generate`
+
+Used in advanced setups where OG images are dynamically generated server-side.
+
+This is optional depending on your configuration.
+
 ## API reference
 
 <PropsTable
