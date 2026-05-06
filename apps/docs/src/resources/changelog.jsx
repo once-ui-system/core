@@ -17,9 +17,9 @@ const changelog = [
         bullets: [
           <><SmartLink unstyled href="/once-ui/components/scrollContainer">ScrollContainer</SmartLink>: New media display component</>,
           <><SmartLink unstyled href="/once-ui/components/splitView">SplitView</SmartLink>: New adjustable layout component</>,
-          <><SmartLink unstyled href="/once-ui/components/Modal">Modal</SmartLink>: New fullscreen modal component</>,
-          <><SmartLink unstyled href="/once-ui/effects/BlobFx">BlobFx</SmartLink>: New fluid blob effect</>,
-          <><SmartLink unstyled href="/once-ui/effects/FadingLettersFx">FadingLettersFx</SmartLink>: New fading letters text effect</>,
+          <><SmartLink unstyled href="/once-ui/components/modal">Modal</SmartLink>: New fullscreen modal component</>,
+          <><SmartLink unstyled href="/once-ui/effects/blobFx">BlobFx</SmartLink>: New fluid blob effect</>,
+          <><SmartLink unstyled href="/once-ui/effects/fadingLettersFx">FadingLettersFx</SmartLink>: New fading letters text effect</>,
         ],
       },
       {
@@ -32,6 +32,7 @@ const changelog = [
           <>Input & Textarea: New Ghost variant</>,
           <>Flex & Grid: Removed unnecessary class duplication</>,
           <>Textarea: Fixed &quot;jumping&quot; issue when using auto height</>,
+          <>Media: Shorthand for &quot;sizes&quot; property</>,
         ]
       },
       {
