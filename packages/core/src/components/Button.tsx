@@ -75,6 +75,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
         href={href}
         ref={ref}
         disabled={disabled}
+        data-disabled={disabled ? true : undefined}
         data-border={rounded ? "rounded" : undefined}
         className={classNames(
           styles.button,

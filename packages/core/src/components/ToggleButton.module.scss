@@ -16,7 +16,7 @@
     }
 
     @media (hover: hover) and (pointer: fine) {
-        &:hover {
+        &:hover:not([data-disabled]) {
             background: var(--neutral-alpha-weak);
             border-color: var(--neutral-alpha-weak);
         }
@@ -27,12 +27,10 @@
         border-color: var(--neutral-alpha-weak);
     }
 
-    &:disabled {
-        background: var(--neutral-alpha-weak);
-        color: var(--neutral-on-background-medium);
-        border: none;
-        pointer-events: none;
-        cursor: not-allowed;
+    &[data-disabled] {
+        background: var(--neutral-background-medium);
+        color: var(--neutral-on-background-weak);
+        border-color: transparent;
     }
 }
 

@@ -26,6 +26,7 @@ interface CommonProps {
   fillWidth?: boolean;
   weight?: "default" | "strong";
   truncate?: boolean;
+  disabled?: boolean;
   prefixIcon?: IconName;
   suffixIcon?: IconName;
   className?: string;
@@ -49,6 +50,7 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
       fillWidth = false,
       weight = "default",
       truncate = false,
+      disabled = false,
       prefixIcon,
       suffixIcon,
       className,
@@ -63,6 +65,8 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
       <ElementType
         ref={ref}
         href={href}
+        disabled={disabled}
+        data-disabled={disabled ? true : undefined}
         data-border={rounded ? "rounded" : undefined}
         className={classNames(
           styles.button,
@@ -76,7 +80,7 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
               : `radius-${size}`,
           "text-decoration-none",
           "button",
-          "cursor-interactive",
+          disabled ? "cursor-not-allowed" : "cursor-interactive",
           {
             ["fill-width"]: fillWidth,
             ["fit-width"]: !fillWidth,

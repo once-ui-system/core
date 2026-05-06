@@ -12,19 +12,6 @@
     &:focus-visible {
         z-index: 1;
     }
-
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            z-index: 1;
-        }
-    }
-
-    &:disabled {
-        box-shadow: none;
-        cursor: not-allowed;
-        background: var(--neutral-background-medium);
-        color: var(--neutral-on-background-weak);
-    }
 }
 
 .primary {
@@ -35,15 +22,16 @@
     border-color: var(--solid-border-color-brand);
     color: var(--brand-on-solid-strong);
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            background: var(--brand-solid-strong);
+    &[data-disabled] {
+        box-shadow: none;
+        background: var(--neutral-background-medium);
+        color: var(--neutral-on-background-weak);
+        border-color: transparent;
+    }
 
-            &:disabled {
-                background: var(--neutral-background-medium);
-                color: var(--neutral-on-background-weak);
-                border: none;
-            }
+    @media (hover: hover) and (pointer: fine) {
+        &:hover:not([data-disabled]) {
+            background: var(--brand-solid-strong);
         }
     }
 }
@@ -55,16 +43,17 @@
     background: var(--static-transparent);
     color: var(--neutral-on-background-strong);
 
+    &[data-disabled] {
+        box-shadow: none;
+        background: var(--neutral-background-medium);
+        color: var(--neutral-on-background-weak);
+        border-color: transparent;
+    }
+
     @media (hover: hover) and (pointer: fine) {
-        &:hover {
+        &:hover:not([data-disabled]) {
             background: var(--neutral-alpha-weak);
             border-color: var(--neutral-alpha-weak);
-
-            &:disabled {
-                background: var(--neutral-background-medium);
-                color: var(--neutral-on-background-weak);
-                border: 1px solid var(--neutral-alpha-weak);
-            }
         }
     }
 }
@@ -74,15 +63,16 @@
     color: var(--neutral-on-background-strong);
     border: 1px solid var(--static-transparent);
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            border: 1px solid var(--neutral-border-medium);
+    &[data-disabled] {
+        box-shadow: none;
+        background: var(--neutral-background-medium);
+        color: var(--neutral-on-background-weak);
+        border-color: transparent;
+    }
 
-            &:disabled {
-                background: var(--neutral-background-medium);
-                color: var(--neutral-on-background-weak);
-                border: 1px solid var(--static-transparent);
-            }
+    @media (hover: hover) and (pointer: fine) {
+        &:hover:not([data-disabled]) {
+            border: 1px solid var(--neutral-border-medium);
         }
     }
 }
@@ -92,15 +82,16 @@
     background: var(--static-transparent);
     color: var(--neutral-on-background-medium);
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            color: var(--neutral-on-background-strong);
+    &[data-disabled] {
+        box-shadow: none;
+        background: var(--neutral-background-medium);
+        color: var(--neutral-on-background-weak);
+        border-color: transparent;
+    }
 
-            &:disabled {
-                background: var(--neutral-background-medium);
-                color: var(--neutral-on-background-weak);
-                border: 1px solid var(--neutral-alpha-weak);
-            }
+    @media (hover: hover) and (pointer: fine) {
+        &:hover:not([data-disabled]) {
+            color: var(--neutral-on-background-strong);
         }
     }
 }
@@ -113,15 +104,16 @@
     border-color: var(--solid-border-color-danger);
     color: var(--danger-on-solid-strong);
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover {
-            background: var(--danger-solid-strong);
+    &[data-disabled] {
+        box-shadow: none;
+        background: var(--neutral-background-medium);
+        color: var(--neutral-on-background-weak);
+        border-color: transparent;
+    }
 
-            &:disabled {
-                background: var(--neutral-background-medium);
-                color: var(--neutral-on-background-weak);
-                border: none;
-            }
+    @media (hover: hover) and (pointer: fine) {
+        &:hover:not([data-disabled]) {
+            background: var(--danger-solid-strong);
         }
     }
 }

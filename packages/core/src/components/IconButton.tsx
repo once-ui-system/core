@@ -66,12 +66,12 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
         href={href}
         ref={ref}
         disabled={disabled}
+        data-disabled={disabled ? true : undefined}
         data-border={rounded ? "rounded" : undefined}
         className={classNames(
           buttonStyles.button,
           buttonStyles[variant],
           iconStyles[size],
-          className,
           radius === "none"
             ? "radius-none"
             : radius
@@ -80,9 +80,6 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
           "text-decoration-none",
           "button",
           disabled ? "cursor-not-allowed" : "cursor-interactive",
-          {
-            [buttonStyles.disabled]: disabled,
-          },
           className,
         )}
         style={style}

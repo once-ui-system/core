@@ -178,9 +178,9 @@ Enhance buttons with icons to improve visual communication.
   ]}
 />
 
-## Loading
+## States
 
-Display a loading spinner to indicate that an action is in progress.
+Display different states of buttons to indicate their current status, such as loading or disabled.
 
 <CodeBlock
   marginTop="16"
@@ -188,8 +188,8 @@ Display a loading spinner to indicate that an action is in progress.
   preview={
     <Row gap="16" horizontal="center">
       <Button weight="default" loading>Loading</Button>
-      <Button weight="default" variant="secondary" loading>Processing</Button>
-      <Button weight="default" variant="tertiary" loading>Saving</Button>
+      <Button weight="default" variant="secondary"><ShineFx>Processing</ShineFx></Button>
+      <Button weight="default" disabled>Disabled</Button>
     </Row>
   }
   codes={[
@@ -198,14 +198,15 @@ Display a loading spinner to indicate that an action is in progress.
 `<Button loading>
     Loading
   </Button>
-  <Button variant="secondary" loading>
-    Processing
+  <Button variant="secondary">
+    <ShineFx>Processing</ShineFx>
   </Button>
-  <Button variant="tertiary" loading>
-    Saving
-</Button>`,
+  <Button disabled>
+    Disabled
+  </Button>
+`,
       language: "tsx",
-      label: "Loading"
+      label: "States"
     }
   ]}
 />
