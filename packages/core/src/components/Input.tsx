@@ -118,7 +118,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const displayError = validationError || errorMessage;
 
     const fontSizeMap = {
-      xs: "font-xs",
+      xs: "font-s",
       s: "font-s",
       m: "font-m",
       l: "font-l",
@@ -160,21 +160,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           vertical="stretch"
           className={classNames(
             styles.base,
-            {
-              [styles.xs]: height === "xs",
-            },
-            {
-              [styles.s]: height === "s",
-            },
-            {
-              [styles.m]: height === "m",
-            },
-            {
-              [styles.l]: height === "l",
-            },
-            {
-              [styles.xl]: height === "xl",
-            },
+            height && styles[height],
             radius === "none" ? "radius-none" : radius ? `radius-l-${radius}` : "radius-l",
           )}
         >
