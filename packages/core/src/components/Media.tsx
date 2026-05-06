@@ -1,7 +1,7 @@
 "use client";
 
 import React, { CSSProperties, useState, useRef, useEffect, ReactNode } from "react";
-import { Column, Flex, Row, Skeleton } from ".";
+import { Column, Flex, Row, Skeleton, ScrollLock } from ".";
 import Image from "next/image";
 import classNames from "classnames";
 
@@ -90,18 +90,6 @@ const Media: React.FC<MediaProps> = ({
     };
   }, [isEnlarged]);
 
-  useEffect(() => {
-    if (isEnlarged) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isEnlarged]);
-
   const calculateTransform = () => {
     if (!imageRef.current) return {};
 
@@ -154,6 +142,7 @@ const Media: React.FC<MediaProps> = ({
 
   return (
     <>
+      <ScrollLock enabled={isEnlarged} />
       {isEnlarged && enlarge && typeof document !== 'undefined' && (
         <Flex
           center
