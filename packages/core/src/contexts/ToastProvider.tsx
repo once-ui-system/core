@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Toaster } from "../components";
-import {ToastPosition} from "../types";
+import { ToastPosition } from "../types";
 
 interface Toast {
   id: string;
