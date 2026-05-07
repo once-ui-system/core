@@ -443,3 +443,5 @@ export type Language =
   | "yaml"
   | "yang"
   | "zig";
+
+export type ToastPosition = "top" | "bottom";

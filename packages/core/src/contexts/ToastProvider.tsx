@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, ReactNode } from "react";
 import { Toaster } from "../components";
+import {ToastPosition} from "../types";
 
 interface Toast {
   id: string;
@@ -28,7 +29,12 @@ export const useToast = () => {
 
 const ToastProvider: React.FC<{
   children: ReactNode;
-}> = ({ children }) => {
+  xl?: ToastPosition;
+  l?: ToastPosition;
+  m?: ToastPosition;
+  s?: ToastPosition;
+  xs?: ToastPosition;
+}> = ({ children, xl, l, m, s, xs }) => {
   // Use the same Toast interface type for the state
   const [toasts, setToasts] = useState<Toast[]>([]);
 
@@ -53,7 +59,7 @@ const ToastProvider: React.FC<{
       }}
     >
       {children}
-      <Toaster toasts={toasts} removeToast={removeToast} />
+      <Toaster toasts={toasts} removeToast={removeToast} xl={xl} l={l} m={m} s={s} xs={xs} />
     </ToastContext.Provider>
   );
 };
