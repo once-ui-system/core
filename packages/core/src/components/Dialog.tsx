@@ -26,6 +26,7 @@ interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   stack?: boolean;
   onHeightChange?: (height: number) => void;
   minHeight?: number;
+  closeOnClickaway?: boolean;
 }
 
 const DialogContext = React.createContext<{
@@ -56,6 +57,7 @@ export const DialogProvider: React.FC<{
 const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
   (
     {
+      closeOnClickaway = true,
       isOpen,
       onClose,
       title,
@@ -257,6 +259,8 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
         }
 
         if (!dialogRef.current?.contains(event.target as Node)) {
+          if (!closeOnClickaway) return;
+          
           if (stack || !base) {
             event.preventDefault();
             onClose();
