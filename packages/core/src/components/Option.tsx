@@ -167,15 +167,37 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           <Column
             horizontal="start"
             style={{
+              minWidth: 0,
               whiteSpace: "nowrap",
             }}
             fillWidth
           >
-            <Text onBackground="neutral-strong" variant="label-default-s">
+            <Text
+              onBackground="neutral-strong"
+              variant="label-default-s"
+              // `width: 100%` is required for ellipsis to engage: without
+              // it the span is shrink-to-fit and `overflow: hidden` has
+              // nothing to clip against. `minWidth: 0` on the parent
+              // Column lets this 100% actually constrain to available
+              // space inside a flex row.
+              style={{
+                width: "100%",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
               {label || children}
             </Text>
             {description && (
-              <Text variant="body-default-xs" onBackground="neutral-weak">
+              <Text
+                variant="body-default-xs"
+                onBackground="neutral-weak"
+                style={{
+                  width: "100%",
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                }}
+              >
                 {description}
               </Text>
             )}
