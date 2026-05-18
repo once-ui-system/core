@@ -4,7 +4,6 @@ import React, { ReactNode, RefObject, useEffect, useRef, useState } from "react"
 import ReactDOM from "react-dom";
 import classNames from "classnames";
 import { SpacingToken } from "../../types";
-import Prism from "prismjs";
 import styles from "./CodeBlock.module.scss";
 import {
   Flex,
@@ -16,6 +15,15 @@ import {
   Column,
   Text,
 } from "../../components";
+
+let Prism: any;
+
+async function getPrism() {
+  if (!Prism) {
+    Prism = (await import("prismjs")).default;
+  }
+  return Prism;
+}
 
 const loadCssFiles = async () => {
   if (typeof window !== "undefined") {
@@ -284,6 +292,7 @@ const renderDiff = (
   startLineNumber: number | undefined,
   codeRef: RefObject<HTMLElement | null>,
   lang: string | undefined,
+  prism: any,
 ) => {
   const parsedLines = parseDiff(diffContent, startLineNumber);
 
@@ -292,13 +301,13 @@ const renderDiff = (
   // Apply syntax highlighting to code lines
   let highlightedLines: string[] = [];
   
-  if (lang && Prism.languages[lang]) {
+  if (lang && prism.languages[lang]) {
     try {
       highlightedLines = codeLines.map((line) => {
         try {
           // Check if language is loaded before highlighting
-          if (Prism.languages[lang]) {
-            return Prism.highlight(line.content, Prism.languages[lang], lang);
+          if (prism.languages[lang]) {
+            return prism.highlight(line.content, prism.languages[lang], lang);
           }
           return line.content;
         } catch (error) {
@@ -323,9 +332,9 @@ const renderDiff = (
         let className = "";
 
         if (isInformationalLine(line.type)) {
-          if (Prism.languages.diff) {
+          if (prism.languages.diff) {
             try {
-              content = Prism.highlight(line.content, Prism.languages.diff, "diff");
+              content = prism.highlight(line.content, prism.languages.diff, "diff");
             } catch (error) {
               console.warn(`Failed to highlight diff line: ${line.content}`, error);
             }
@@ -414,6 +423,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const [isAnimating, setIsAnimating] = useState(false);
   const codeBlockRef = useRef<HTMLDivElement>(null);
   const [dependenciesLoaded, setDependenciesLoaded] = useState(false);
+  const [prismInstance, setPrismInstance] = useState<any>(null);
 
   const codeInstance = codes[selectedInstance] || {
     code: "",
@@ -434,6 +444,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         ),
         loadCssFiles(),
       ]);
+      const resolvedPrism = await getPrism();
+      setPrismInstance(resolvedPrism);
       setDependenciesLoaded(true);
     };
 
@@ -442,7 +454,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
 
   useEffect(() => {
     if (dependenciesLoaded && codeRef.current && codes.length > 0) {
-      setTimeout(() => {
+      setTimeout(async () => {
+        const Prism = await getPrism();
         Prism.highlightAll();
       }, 0);
     }
@@ -486,7 +499,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       Array.isArray(codeInstance.language) &&
       codeInstance.language.includes("diff")
     ) {
-      const timeoutId = setTimeout(() => {
+      const timeoutId = setTimeout(async () => {
+        const Prism = await getPrism();
         if (codeRef.current) {
           const diffRows = codeRef.current.querySelectorAll(".diff-row");
           const lang = codeInstance.language[1];
@@ -547,7 +561,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       setSelectedInstance(index);
 
       // Re-highlight after tab change
-      setTimeout(() => {
+      setTimeout(async () => {
+        const Prism = await getPrism();
         Prism.highlightAll();
       }, 10);
     }
@@ -557,11 +572,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     if (isFullscreen) {
       // When exiting fullscreen, first remove animation class, then remove portal after transition
       setIsAnimating(false);
-      setTimeout(() => {
+      setTimeout(async () => {
         setIsFullscreen(false);
 
         // Re-highlight after exiting fullscreen
-        setTimeout(() => {
+        setTimeout(async () => {
+          const Prism = await getPrism();
           Prism.highlightAll();
         }, 10);
       }, 300); // Match transition duration
@@ -570,7 +586,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       setIsFullscreen(true);
 
       // Re-highlight after entering fullscreen
-      setTimeout(() => {
+      setTimeout(async () => {
+        const Prism = await getPrism();
         Prism.highlightAll();
       }, 50);
     }
@@ -580,7 +597,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   useEffect(() => {
     if (isAnimating && dependenciesLoaded) {
       // Re-highlight after animation completes
-      setTimeout(() => {
+      setTimeout(async () => {
+        const Prism = await getPrism();
         Prism.highlightAll();
       }, 350); // Slightly longer than animation duration
     }
@@ -742,11 +760,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 )}
                 style={{ maxHeight: `${codeHeight}rem`, overflow: "auto", width: "100%" }}
               >
-                {renderDiff(
+                {prismInstance && renderDiff(
                   typeof code === "string" ? code : code.content,
                   startLineNumber,
                   codeRef,
                   Array.isArray(language) ? language[1] : undefined,
+                  prismInstance,
                 )}
               </div>
             ) : (

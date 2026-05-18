@@ -1,9 +1,17 @@
 "use client";
 
 import React, { useRef, useState, forwardRef, useEffect } from "react";
-import Compressor from "compressorjs";
 import { Flex, Icon, Media, Spinner, Text } from "../../";
 import styles from "./MediaUpload.module.scss";
+
+let Compressor: any;
+
+async function getCompressor() {
+  if (!Compressor) {
+    Compressor = (await import("compressorjs")).default;
+  }
+  return Compressor;
+}
 
 export interface MediaUploadProps extends React.ComponentProps<typeof Flex> {
   onFileUpload?: (file: File) => Promise<void>;
@@ -103,19 +111,21 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
       }
     };
 
-    const compressImage = (file: File) => {
+    const compressImage = async (file: File) => {
+      const Compressor = (await getCompressor()).default ?? (await getCompressor());
+
       new Compressor(file, {
-        convertTypes: convertTypes,
-        quality: quality,
+        convertTypes,
+        quality,
         maxWidth: resizeMaxWidth,
         maxHeight: resizeMaxHeight,
         convertSize: 400 * 1024,
         width: resizeWidth,
         height: resizeHeight,
-        success(compressedFile) {
-          uploadFile(compressedFile as File);
+        success(compressedFile: File) {
+          uploadFile(compressedFile);
         },
-        error(err) {
+        error(err: unknown) {
           console.error("Compression error:", err);
           uploadFile(file);
         },
