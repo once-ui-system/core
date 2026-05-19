@@ -164,27 +164,11 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           {...flex}
         >
           {hasPrefix && <Row className={styles.prefix}>{hasPrefix}</Row>}
-          <Column
-            horizontal="start"
-            style={{
-              minWidth: 0,
-              whiteSpace: "nowrap",
-            }}
-            fillWidth
-          >
+          <Column fillWidth align="left">
             <Text
               onBackground="neutral-strong"
               variant="label-default-s"
-              // `width: 100%` is required for ellipsis to engage: without
-              // it the span is shrink-to-fit and `overflow: hidden` has
-              // nothing to clip against. `minWidth: 0` on the parent
-              // Column lets this 100% actually constrain to available
-              // space inside a flex row.
-              style={{
-                width: "100%",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
+              truncate
             >
               {label || children}
             </Text>
@@ -192,11 +176,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
               <Text
                 variant="body-default-xs"
                 onBackground="neutral-weak"
-                style={{
-                  width: "100%",
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                }}
+                truncate
               >
                 {description}
               </Text>
