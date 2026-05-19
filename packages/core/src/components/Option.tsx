@@ -164,18 +164,20 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           {...flex}
         >
           {hasPrefix && <Row className={styles.prefix}>{hasPrefix}</Row>}
-          <Column
-            horizontal="start"
-            style={{
-              whiteSpace: "nowrap",
-            }}
-            fillWidth
-          >
-            <Text onBackground="neutral-strong" variant="label-default-s">
+          <Column fillWidth align="left">
+            <Text
+              onBackground="neutral-strong"
+              variant="label-default-s"
+              truncate
+            >
               {label || children}
             </Text>
             {description && (
-              <Text variant="body-default-xs" onBackground="neutral-weak">
+              <Text
+                variant="body-default-xs"
+                onBackground="neutral-weak"
+                truncate
+              >
                 {description}
               </Text>
             )}
