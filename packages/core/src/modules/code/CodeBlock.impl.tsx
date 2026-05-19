@@ -20,7 +20,7 @@ let Prism: any;
 
 async function getPrism() {
   if (!Prism) {
-    const mod = await import("prismjs");
+    const mod = await import(/* webpackIgnore: true */ "prismjs" as any);
     Prism = (mod as any).default ?? mod;
   }
   return Prism;
@@ -181,7 +181,7 @@ const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
     }
 
     // Load the main language
-    await import(`prismjs/components/prism-${actualLang}`);
+    await import(/* webpackIgnore: true */ `prismjs/components/prism-${actualLang}` as any);
     loadedLanguages.add(actualLang);
     loadedLanguages.add(lang); // Also mark the alias as loaded
     return true;
@@ -202,10 +202,10 @@ const loadPrismDependencies = async (...langs: string[]): Promise<boolean> => {
 
     // Load core plugins first
     await Promise.all([
-      import("prismjs/plugins/line-highlight/prism-line-highlight"),
-      import("prismjs/plugins/line-numbers/prism-line-numbers"),
-      import("prismjs/components/prism-diff"),
-      import("prismjs/plugins/diff-highlight/prism-diff-highlight"),
+      import(/* webpackIgnore: true */ "prismjs/plugins/line-highlight/prism-line-highlight" as any),
+      import(/* webpackIgnore: true */ "prismjs/plugins/line-numbers/prism-line-numbers" as any),
+      import(/* webpackIgnore: true */ "prismjs/components/prism-diff" as any),
+      import(/* webpackIgnore: true */ "prismjs/plugins/diff-highlight/prism-diff-highlight" as any),
     ]);
 
     // Filter out empty/invalid languages and remove duplicates

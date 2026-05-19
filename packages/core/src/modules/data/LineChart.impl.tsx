@@ -3,16 +3,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { isWithinInterval, parseISO } from "date-fns";
 import { formatDate } from "./utils/formatDate";
-import {
-  AreaChart as RechartsAreaChart,
-  Area as RechartsArea,
-  YAxis as RechartsYAxis,
-  XAxis as RechartsXAxis,
-  CartesianGrid as RechartsCartesianGrid,
-  Tooltip as RechartsTooltip,
-  ResponsiveContainer as RechartsResponsiveContainer,
-  Legend as RechartsLegend,
-} from "recharts";
+import { getRechartsComponents } from "./rechartsLoader";
 import { Column, Row, DateRange } from "../../components";
 import {
   LinearGradient,
@@ -83,6 +74,11 @@ const LineChart: React.FC<LineChartProps> = ({
     position: legendProp.position || "top-left",
     direction: legendProp.direction,
   };
+  const [rc, setRc] = useState<any>(null);
+
+  useEffect(() => {
+    getRechartsComponents().then(setRc);
+  }, []);
 
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>(
     date?.start && date?.end
@@ -248,111 +244,91 @@ const LineChart: React.FC<LineChartProps> = ({
           error={error}
           errorState={errorState}
         />
-        {!loading && !error && filteredData && filteredData.length > 0 && (
-          <RechartsResponsiveContainer width="100%" height="100%">
-            <RechartsAreaChart
-              data={filteredData}
-              margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
-            >
-              <defs>
+        {!loading && !error && filteredData && filteredData.length > 0 && rc && (() => {
+          const { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend: RLegend } = rc;
+          return (
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart
+                data={filteredData}
+                margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
+              >
+                <defs>
+                  {autoSeries.map(({ key, color }, index) => {
+                    const colorValue = color || schemes[index % schemes.length];
+                    const lineColor = `var(--data-${colorValue})`;
+                    return (
+                      <LinearGradient
+                        key={`gradient-${chartId}-${index}`}
+                        id={`barGradient${chartId}${index}`}
+                        variant={variant as ChartVariant}
+                        color={lineColor}
+                      />
+                    );
+                  })}
+                </defs>
+                <CartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
+                {legend.display && (
+                  <RLegend content={legendContent} wrapperStyle={legendWrapperStyle} />
+                )}
+                <XAxis
+                  height={32}
+                  tickMargin={6}
+                  dataKey={xAxisKey}
+                  {...(xAxisType ? { type: xAxisType } : {})}
+                  {...(xDomain ? { domain: xDomain as any } : {})}
+                  hide={!(axis === "x" || axis === "both")}
+                  orientation={reverseX ? "top" : "bottom"}
+                  axisLine={{ stroke: axisLineStroke }}
+                  tickLine={tickLine}
+                  tick={{ fill: tickFill, fontSize: tickFontSize }}
+                  tickFormatter={(value: any) => {
+                    const dataPoint = data.find((item) => item[xAxisKey] === value);
+                    return formatDate(value, date, dataPoint);
+                  }}
+                />
+                {(axis === "y" || axis === "both") && (
+                  <YAxis
+                    width={64}
+                    padding={{ top: 40 }}
+                    allowDataOverflow
+                    orientation={reverseY ? "right" : "left"}
+                    tickLine={tickLine}
+                    tick={{ fill: tickFill, fontSize: tickFontSize }}
+                    axisLine={{ stroke: axisLineStroke }}
+                  />
+                )}
+                {tooltip && (
+                  <Tooltip
+                    cursor={{ stroke: "var(--neutral-border-strong)", strokeWidth: 1 }}
+                    content={(props: any) => (
+                      <DataTooltip {...props} variant={variant as ChartVariant} date={date} />
+                    )}
+                  />
+                )}
                 {autoSeries.map(({ key, color }, index) => {
                   const colorValue = color || schemes[index % schemes.length];
                   const lineColor = `var(--data-${colorValue})`;
                   return (
-                    <LinearGradient
-                      key={`gradient-${chartId}-${index}`}
-                      id={`barGradient${chartId}${index}`}
-                      variant={variant as ChartVariant}
-                      color={lineColor}
+                    <Area
+                      key={key}
+                      type={curve}
+                      dataKey={key}
+                      name={key}
+                      isAnimationActive={animation}
+                      animationBegin={animationBegin}
+                      animationDuration={animationDuration}
+                      animationEasing={animationEasing as any}
+                      stroke={lineColor}
+                      transform="translate(0, -1)"
+                      fill={variant === "outline" ? "transparent" : `url(#barGradient${chartId}${index})`}
+                      activeDot={{ r: 4, fill: lineColor, stroke: "var(--background)", strokeWidth: 0 }}
                     />
                   );
                 })}
-              </defs>
-              <RechartsCartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
-              {legend.display && (
-                <RechartsLegend
-                  content={legendContent}
-                  wrapperStyle={legendWrapperStyle}
-                />
-              )}
-              <RechartsXAxis
-                height={32}
-                tickMargin={6}
-                dataKey={xAxisKey}
-                {...(xAxisType ? { type: xAxisType } : {})}
-                {...(xDomain ? { domain: xDomain as any } : {})}
-                hide={!(axis === "x" || axis === "both")}
-                orientation={reverseX ? "top" : "bottom"}
-                axisLine={{
-                  stroke: axisLineStroke,
-                }}
-                tickLine={tickLine}
-                tick={{
-                  fill: tickFill,
-                  fontSize: tickFontSize,
-                }}
-                tickFormatter={(value) => {
-                  const dataPoint = data.find((item) => item[xAxisKey] === value);
-                  return formatDate(value, date, dataPoint);
-                }}
-              />
-              {(axis === "y" || axis === "both") && (
-                <RechartsYAxis
-                  width={64}
-                  padding={{ top: 40 }}
-                  allowDataOverflow
-                  orientation={reverseY ? "right" : "left"}
-                  tickLine={tickLine}
-                  tick={{
-                    fill: tickFill,
-                    fontSize: tickFontSize,
-                  }}
-                  axisLine={{
-                    stroke: axisLineStroke,
-                  }}
-                />
-              )}
-              {tooltip && (
-                <RechartsTooltip
-                  cursor={{
-                    stroke: "var(--neutral-border-strong)",
-                    strokeWidth: 1,
-                  }}
-                  content={(props) => (
-                    <DataTooltip {...props} variant={variant as ChartVariant} date={date} />
-                  )}
-                />
-              )}
-              {autoSeries.map(({ key, color }, index) => {
-                const colorValue = color || schemes[index % schemes.length];
-                const lineColor = `var(--data-${colorValue})`;
-                return (
-                  <RechartsArea
-                    key={key}
-                    type={curve}
-                    dataKey={key}
-                    name={key}
-                    isAnimationActive={animation}
-                    animationBegin={animationBegin}
-                    animationDuration={animationDuration}
-                    animationEasing={animationEasing as any}
-                    stroke={lineColor}
-                    transform="translate(0, -1)"
-                    fill={
-                      variant === "outline" ? "transparent" : `url(#barGradient${chartId}${index})`
-                    }
-                    activeDot={{
-                      r: 4,
-                      fill: lineColor,
-                      stroke: "var(--background)",
-                      strokeWidth: 0,
-                    }}
-                  />
-                );
-              })}
-            </RechartsAreaChart>
-          </RechartsResponsiveContainer>
-        )}
+              </AreaChart>
+            </ResponsiveContainer>
+          );
+        })()}
       </Row>
     </Column>
   );

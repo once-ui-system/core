@@ -2,17 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { formatDate } from "./utils/formatDate";
-import {
-  BarChart as RechartsBarChart,
-  Bar as RechartsBar,
-  XAxis as RechartsXAxis,
-  YAxis as RechartsYAxis,
-  ResponsiveContainer as RechartsResponsiveContainer,
-  CartesianGrid as RechartsCartesianGrid,
-  Tooltip as RechartsTooltip,
-  Legend as RechartsLegend,
-} from "recharts";
-
+import { getRechartsComponents } from "./rechartsLoader";
 import { Column, Row, DateRange } from "../../components";
 import { getDistributedColor } from "./utils/colorDistribution";
 import {
@@ -72,6 +62,12 @@ const BarChart: React.FC<BarChartProps> = ({
     position: legendProp.position || "top-left",
     direction: legendProp.direction,
   };
+  const [rc, setRc] = useState<any>(null);
+
+  useEffect(() => {
+    getRechartsComponents().then(setRc);
+  }, []);
+
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>(
     date?.start && date?.end
       ? {
@@ -230,105 +226,91 @@ const BarChart: React.FC<BarChartProps> = ({
           error={error}
           errorState={errorState}
         />
-        {!loading && !error && filteredData && filteredData.length > 0 && (
-          <RechartsResponsiveContainer width="100%" height="100%">
-            <RechartsBarChart
-              data={filteredData}
-              margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
-              barGap={4}
-            >
-              <RechartsCartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
-              {legend.display && (
-                <RechartsLegend
-                  content={legendContent}
-                  wrapperStyle={legendWrapperStyle}
-                />
-              )}
-              <RechartsXAxis
-                dataKey={xAxisKey}
-                axisLine={false}
-                tickLine={tickLine}
-                orientation={reverseX ? "top" : "bottom"}
-                tick={
-                  axis === "x" || axis === "both"
-                    ? {
-                        fill: tickFill,
-                        fontSize: tickFontSize,
-                      }
-                    : false
-                }
-                tickFormatter={(value) => {
-                  const dataPoint = data.find((item) => item[xAxisKey] === value);
-                  return formatDate(value, date, dataPoint);
-                }}
-                hide={!(axis === "x" || axis === "both")}
-              />
-              {(axis === "y" || axis === "both") && (
-                <RechartsYAxis
-                  allowDataOverflow
-                  width={64}
-                  padding={{ top: 40 }}
-                  orientation={reverseY ? "right" : "left"}
+        {!loading && !error && filteredData && filteredData.length > 0 && rc && (() => {
+          const { ResponsiveContainer, BarChart: RBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend: RLegend } = rc;
+          return (
+            <ResponsiveContainer width="100%" height="100%">
+              <RBarChart
+                data={filteredData}
+                margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
+                barGap={4}
+              >
+                <CartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
+                {legend.display && (
+                  <RLegend
+                    content={legendContent}
+                    wrapperStyle={legendWrapperStyle}
+                  />
+                )}
+                <XAxis
+                  dataKey={xAxisKey}
+                  axisLine={false}
                   tickLine={tickLine}
-                  tick={{
-                    fill: tickFill,
-                    fontSize: tickFontSize,
+                  orientation={reverseX ? "top" : "bottom"}
+                  tick={
+                    axis === "x" || axis === "both"
+                      ? { fill: tickFill, fontSize: tickFontSize }
+                      : false
+                  }
+                  tickFormatter={(value: any) => {
+                    const dataPoint = data.find((item) => item[xAxisKey] === value);
+                    return formatDate(value, date, dataPoint);
                   }}
-                  axisLine={{
-                    stroke: axisLineStroke,
-                  }}
+                  hide={!(axis === "x" || axis === "both")}
                 />
-              )}
-              {tooltip && (
-                <RechartsTooltip
-                  cursor={{ fill: hover ? "var(--neutral-alpha-weak)" : "var(--static-transparent)" }}
-                  content={(props) => (
-                    <DataTooltip {...props} date={date} variant={variant as ChartVariant} />
-                  )}
-                />
-              )}
-              <defs>
-                {barColors.map((color, index) => (
-                  <LinearGradient
-                    key={`gradient-${chartId}-${index}`}
-                    id={`barGradient${chartId}${index}`}
-                    color={color}
-                    variant={variant as ChartVariant}
+                {(axis === "y" || axis === "both") && (
+                  <YAxis
+                    allowDataOverflow
+                    width={64}
+                    padding={{ top: 40 }}
+                    orientation={reverseY ? "right" : "left"}
+                    tickLine={tickLine}
+                    tick={{ fill: tickFill, fontSize: tickFontSize }}
+                    axisLine={{ stroke: axisLineStroke }}
+                  />
+                )}
+                {tooltip && (
+                  <Tooltip
+                    cursor={{ fill: hover ? "var(--neutral-alpha-weak)" : "var(--static-transparent)" }}
+                    content={(props: any) => (
+                      <DataTooltip {...props} date={date} variant={variant as ChartVariant} />
+                    )}
+                  />
+                )}
+                <defs>
+                  {barColors.map((color, index) => (
+                    <LinearGradient
+                      key={`gradient-${chartId}-${index}`}
+                      id={`barGradient${chartId}${index}`}
+                      color={color}
+                      variant={variant as ChartVariant}
+                    />
+                  ))}
+                </defs>
+                {autoSeries.map((series, index) => (
+                  <Bar
+                    key={series.key}
+                    dataKey={series.key}
+                    name={series.key}
+                    fill={`url(#barGradient${chartId}${index})`}
+                    stroke={barColors[index]}
+                    strokeWidth={1}
+                    transform="translate(0, -1)"
+                    barSize={
+                      barWidth === "fill" ? "100%" :
+                      barWidth === "xs" ? 12 :
+                      barWidth === "s" ? 16 :
+                      barWidth === "m" ? 24 :
+                      barWidth === "l" ? 40 :
+                      barWidth === "xl" ? 64 : barWidth
+                    }
+                    radius={barWidth === "fill" || barWidth === "xl" ? [10, 10, 10, 10] : [6, 6, 6, 6]}
                   />
                 ))}
-              </defs>
-              {autoSeries.map((series, index) => (
-                <RechartsBar
-                  key={series.key}
-                  dataKey={series.key}
-                  name={series.key}
-                  fill={`url(#barGradient${chartId}${index})`}
-                  stroke={barColors[index]}
-                  strokeWidth={1}
-                  transform="translate(0, -1)"
-                  barSize={
-                    typeof barWidth === "string" && barWidth === "fill"
-                      ? "100%"
-                      : typeof barWidth === "string" && barWidth === "xs"
-                        ? 12
-                        : typeof barWidth === "string" && barWidth === "s"
-                          ? 16
-                          : typeof barWidth === "string" && barWidth === "m"
-                            ? 24
-                            : typeof barWidth === "string" && barWidth === "l"
-                              ? 40
-                              : typeof barWidth === "string" && barWidth === "xl"
-                                ? 64
-                                : barWidth
-                  }
-                  radius={
-                    barWidth === "fill" || barWidth === "xl" ? [10, 10, 10, 10] : [6, 6, 6, 6]
-                  }
-                />
-              ))}
-            </RechartsBarChart>
-          </RechartsResponsiveContainer>
-        )}
+              </RBarChart>
+            </ResponsiveContainer>
+          );
+        })()}
       </Row>
     </Column>
   );

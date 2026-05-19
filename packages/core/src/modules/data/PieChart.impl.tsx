@@ -1,14 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import {
-  PieChart as RechartsPieChart,
-  Pie as RechartsPie,
-  Cell as RechartsCell,
-  Tooltip as RechartsTooltip,
-  ResponsiveContainer as RechartsResponsiveContainer,
-  Legend as RechartsLegend,
-} from "recharts";
+import { getRechartsComponents } from "./rechartsLoader";
 import {
   schemes,
   Column,
@@ -58,6 +51,12 @@ const PieChart: React.FC<PieChartProps> = ({
 }) => {
   const { variant: themeVariant, mode, height } = useDataTheme();
   const variant = variantProp || themeVariant;
+  const [rc, setRc] = useState<any>(null);
+
+  useEffect(() => {
+    getRechartsComponents().then(setRc);
+  }, []);
+
   const legend = {
     display: legendProp.display !== undefined ? legendProp.display : true,
     position: legendProp.position || "bottom-center",
@@ -146,10 +145,12 @@ const PieChart: React.FC<PieChartProps> = ({
           error={error}
           errorState={errorState}
         />
-        {!loading && !error && filteredData && filteredData.length > 0 && (
-          <RechartsResponsiveContainer width="100%" height="100%">
-            <RechartsPieChart>
-              <defs>
+        {!loading && !error && filteredData && filteredData.length > 0 && rc && (() => {
+          const { ResponsiveContainer, PieChart: RPieChart, Pie, Cell, Tooltip, Legend: RLegend } = rc;
+          return (
+            <ResponsiveContainer width="100%" height="100%">
+              <RPieChart>
+                <defs>
                 <pattern
                   id="pieChartMasterPattern"
                   patternUnits="userSpaceOnUse"
@@ -207,91 +208,74 @@ const PieChart: React.FC<PieChartProps> = ({
                     </pattern>
                   );
                 })}
-              </defs>
-              {legend.display && (
-                <RechartsLegend
-                  content={(props) => (
-                    <Legend
-                      {...props}
-                      variant={variant as ChartVariant}
-                      position={legend.position}
-                      direction={legend.direction}
-                      labels="none"
-                      colors={colorPalette}
-                    />
-                  )}
-                  wrapperStyle={{
-                    position: "absolute",
-                    top:
-                      legend.position === "top-center" ||
-                      legend.position === "top-left" ||
-                      legend.position === "top-right"
-                        ? 0
-                        : undefined,
-                    bottom:
-                      legend.position === "bottom-center" ||
-                      legend.position === "bottom-left" ||
-                      legend.position === "bottom-right"
-                        ? 0
-                        : undefined,
-                    right: 0,
-                    left: 0,
-                    margin: 0,
-                  }}
-                />
-              )}
-              <RechartsPie
-                data={filteredData}
-                cx={origo.x + "%"}
-                cy={origo.y + "%"}
-                labelLine={false}
-                innerRadius={ring.inner + "%"}
-                outerRadius={ring.outer + "%"}
-                dataKey={dataKey}
-                nameKey={nameKey}
-                stroke={variant === "outline" ? undefined : "none"}
-              >
-                {filteredData.map((entry, index) => {
-                  const colorKey = entry.color || getDistributedColor(index, filteredData.length);
-                  const baseColor = `var(--data-${colorKey})`;
-                  const gradientId = getGradientId(String(colorKey));
-                  return (
-                    <RechartsCell
-                      key={`cell-${index}`}
-                      fill={variant === "outline" ? "transparent" : `url(#${gradientId})`}
-                      strokeWidth={variant === "outline" ? 2 : 1}
-                      stroke={baseColor}
-                      style={{outline: "none"}}
-                    />
-                  );
-                })}
-              </RechartsPie>
-              {tooltip && (
-                <RechartsTooltip
-                  content={(props) => {
-                    if (props.payload && props.payload.length > 0) {
-                      const entry = props.payload[0];
-                      const index = filteredData.findIndex((item) => item[nameKey] === entry.name);
-                      const colorKey =
-                        filteredData[index]?.color || getDistributedColor(index, filteredData.length);
-                      const color = `var(--data-${colorKey})`;
-
-                      props.payload[0].color = color;
-                    }
-                    return (
-                      <DataTooltip
+                </defs>
+                {legend.display && (
+                  <RLegend
+                    content={(props: any) => (
+                      <Legend
                         {...props}
-                        label={undefined}
-                        date={date}
                         variant={variant as ChartVariant}
+                        position={legend.position}
+                        direction={legend.direction}
+                        labels="none"
+                        colors={colorPalette}
+                      />
+                    )}
+                    wrapperStyle={{
+                      position: "absolute",
+                      top: legend.position === "top-center" || legend.position === "top-left" || legend.position === "top-right" ? 0 : undefined,
+                      bottom: legend.position === "bottom-center" || legend.position === "bottom-left" || legend.position === "bottom-right" ? 0 : undefined,
+                      right: 0,
+                      left: 0,
+                      margin: 0,
+                    }}
+                  />
+                )}
+                <Pie
+                  data={filteredData}
+                  cx={origo.x + "%"}
+                  cy={origo.y + "%"}
+                  labelLine={false}
+                  innerRadius={ring.inner + "%"}
+                  outerRadius={ring.outer + "%"}
+                  dataKey={dataKey}
+                  nameKey={nameKey}
+                  stroke={variant === "outline" ? undefined : "none"}
+                >
+                  {filteredData.map((entry, index) => {
+                    const colorKey = entry.color || getDistributedColor(index, filteredData.length);
+                    const baseColor = `var(--data-${colorKey})`;
+                    const gradientId = getGradientId(String(colorKey));
+                    return (
+                      <Cell
+                        key={`cell-${index}`}
+                        fill={variant === "outline" ? "transparent" : `url(#${gradientId})`}
+                        strokeWidth={variant === "outline" ? 2 : 1}
+                        stroke={baseColor}
+                        style={{outline: "none"}}
                       />
                     );
-                  }}
-                />
-              )}
-            </RechartsPieChart>
-          </RechartsResponsiveContainer>
-        )}
+                  })}
+                </Pie>
+                {tooltip && (
+                  <Tooltip
+                    content={(props: any) => {
+                      if (props.payload && props.payload.length > 0) {
+                        const entry = props.payload[0];
+                        const index = filteredData.findIndex((item) => item[nameKey] === entry.name);
+                        const colorKey = filteredData[index]?.color || getDistributedColor(index, filteredData.length);
+                        props.payload[0].color = `var(--data-${colorKey})`;
+                      }
+                      return (
+                        <DataTooltip {...props} label={undefined} date={date} variant={variant as ChartVariant} />
+                      );
+                    }}
+                  />
+                )}
+              </RPieChart>
+            </ResponsiveContainer>
+          );
+        })()}
       </Row>
     </Column>
   );
