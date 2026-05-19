@@ -100,7 +100,7 @@
     "react-dom": ">=18",
     "recharts": ">=3.0.0",
     "sass": "^1.77.6",
-    "sharp": "^0.33.4"
+    "sharp": "^0.33.4 || ^0.34"
   },
   "peerDependenciesMeta": {
     "compressorjs": { "optional": true },
