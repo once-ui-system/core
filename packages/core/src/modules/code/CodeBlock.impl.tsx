@@ -20,7 +20,8 @@ let Prism: any;
 
 async function getPrism() {
   if (!Prism) {
-    Prism = (await import("prismjs")).default;
+    const mod = await import("prismjs");
+    Prism = (mod as any).default ?? mod;
   }
   return Prism;
 }
@@ -195,6 +196,10 @@ const loadPrismDependencies = async (...langs: string[]): Promise<boolean> => {
   if (typeof window === "undefined") return false;
 
   try {
+    // Ensure Prism is loaded and set as a global before plugins run
+    const prism = await getPrism();
+    (window as unknown as Record<string, unknown>)["Prism"] = prism;
+
     // Load core plugins first
     await Promise.all([
       import("prismjs/plugins/line-highlight/prism-line-highlight"),
@@ -422,7 +427,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const codeBlockRef = useRef<HTMLDivElement>(null);
-  const [dependenciesLoaded, setDependenciesLoaded] = useState(false);
   const [prismInstance, setPrismInstance] = useState<any>(null);
 
   const codeInstance = codes[selectedInstance] || {
@@ -436,6 +440,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
 
   useEffect(() => {
     const loadDependencies = async () => {
+      const resolvedPrism = await getPrism();
       await Promise.all([
         loadPrismDependencies(
           ...codes.flatMap((data) => {
@@ -444,22 +449,22 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         ),
         loadCssFiles(),
       ]);
-      const resolvedPrism = await getPrism();
       setPrismInstance(resolvedPrism);
-      setDependenciesLoaded(true);
     };
 
     loadDependencies();
   }, []);
 
   useEffect(() => {
-    if (dependenciesLoaded && codeRef.current && codes.length > 0) {
-      setTimeout(async () => {
-        const Prism = await getPrism();
-        Prism.highlightAll();
+    if (prismInstance && codeRef.current && codes.length > 0) {
+      const el = codeRef.current;
+      const rawCode = typeof code === "string" ? code : code?.content ?? "";
+      setTimeout(() => {
+        el.textContent = rawCode;
+        prismInstance.highlightElement(el);
       }, 0);
     }
-  }, [dependenciesLoaded, code, codes.length, selectedInstance, isFullscreen, isAnimating, language]);
+  }, [prismInstance, code, codes.length, selectedInstance, isFullscreen, isAnimating, language]);
 
   useEffect(() => {
     if (isFullscreen) {
@@ -559,12 +564,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     const index = codes.findIndex((instance) => instance.label === selectedLabel);
     if (index !== -1) {
       setSelectedInstance(index);
-
-      // Re-highlight after tab change
-      setTimeout(async () => {
-        const Prism = await getPrism();
-        Prism.highlightAll();
-      }, 10);
     }
   };
 
@@ -574,35 +573,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       setIsAnimating(false);
       setTimeout(async () => {
         setIsFullscreen(false);
-
-        // Re-highlight after exiting fullscreen
-        setTimeout(async () => {
-          const Prism = await getPrism();
-          Prism.highlightAll();
-        }, 10);
       }, 300); // Match transition duration
     } else {
       // When entering fullscreen, immediately show portal
       setIsFullscreen(true);
-
-      // Re-highlight after entering fullscreen
-      setTimeout(async () => {
-        const Prism = await getPrism();
-        Prism.highlightAll();
-      }, 50);
     }
   };
-
-  // Ensure highlighting is applied after animation completes
-  useEffect(() => {
-    if (isAnimating && dependenciesLoaded) {
-      // Re-highlight after animation completes
-      setTimeout(async () => {
-        const Prism = await getPrism();
-        Prism.highlightAll();
-      }, 350); // Slightly longer than animation duration
-    }
-  }, [isAnimating, dependenciesLoaded]);
 
   // Create a function to render the CodeBlock content
   const renderCodeBlock = (inPortal = false, resetMargin = false) => (

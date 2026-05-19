@@ -1,6 +1,7 @@
 declare module "prismjs" {
   const Prism: {
     highlightAll: () => void;
+    highlightElement: (element: Element) => void;
     highlight: (code: string, grammar: any, language: string) => string;
     languages: {
       [language: string]: any;
