@@ -1,11 +1,13 @@
 ---
 title: "ToastProvider"
 summary: "ToastProvider enables global toast notifications via context and renders them with the Toaster component."
-updatedAt: "2025-06-08"
+updatedAt: "2026-05-08"
 docs: "once-ui/contexts/toastProvider.mdx"
 github: "contexts/ToastProvider.tsx"
 navLabel: "Toast"
 navIcon: "chip"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The `ToastProvider` wraps your app to provide access to `useToast`, allowing any component to trigger lightweight, dismissible toast messages globally.
@@ -32,7 +34,7 @@ Wrap your app with `ToastProvider` to activate toast functionality.
 
 ## Advanced setup
 
-We recommend using a `Providers` component to wrap your app.
+We recommend using a `Providers` component to wrap your app. You can choose to display toasts at the top or bottom based on breakpoints.
 
 <CodeBlock
   marginTop="16"
@@ -49,7 +51,9 @@ export function Providers({ children }: {
     return (
       <ThemeProvider>
         <DataThemeProvider>
-          <ToastProvider>
+          <ToastProvider
+            s="top"
+          >
             <IconProvider>
               {children}
             </IconProvider>
@@ -59,7 +63,7 @@ export function Providers({ children }: {
     );
 }`,
       language: "tsx",
-      highlight: "9,13",
+      highlight: "9-11,15",
       label: "ToastProvider"
     }
   ]}

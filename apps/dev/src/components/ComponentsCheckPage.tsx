@@ -99,6 +99,7 @@ import {
     Input,
     Dialog,
     FadingLettersFx,
+    useToast,
 } from "@once-ui-system/core";
 
 interface ComponentDemo {
@@ -131,6 +132,14 @@ export default function ComponentsCheck() {
     const [switchOn, setSwitchOn] = useState(false);
     const [segmentValue, setSegmentValue] = useState("one");
     const [dialogOpen, setDialogOpen] = useState(false);
+    const { addToast } = useToast();
+
+    const handleAddToast = () => {
+        addToast({
+            variant: 'success',
+            message: "This is a toast!",
+        });
+    };
 
     const categories: Category[] = [
         {
@@ -495,6 +504,12 @@ export default function ComponentsCheck() {
                         />
                     ),
                 },
+                {
+                    name: "Toaster",
+                    element: (
+                        <Button onClick={() => handleAddToast()}>Show Toast</Button>
+                    )
+                }
             ],
         },
         {

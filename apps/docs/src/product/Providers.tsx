@@ -32,7 +32,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
             line: dataStyle.tick.line
           }}
         >
-          <ToastProvider>
+          <ToastProvider
+              s={'top'}
+          >
             <IconProvider icons={iconLibrary}>
               {children}
             </IconProvider>
