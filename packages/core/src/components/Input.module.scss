@@ -51,7 +51,7 @@
 }
 
 .textareaLabel {
-    top: var(--static-space-12);
+    top: calc(var(--static-space-16) + var(--static-space-2));
 }
 
 .xs {
