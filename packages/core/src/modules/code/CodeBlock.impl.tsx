@@ -20,7 +20,20 @@ let Prism: any;
 
 async function getPrism() {
   if (!Prism) {
-    const mod = await import(/* webpackIgnore: true */ "prismjs" as any);
+    // Both magic comments are required:
+    //   - webpackIgnore: webpack would otherwise statically bundle
+    //     prismjs even though we treat it as an optional peer dep.
+    //   - turbopackIgnore: Next.js 16 defaults to Turbopack, which
+    //     doesn't honour webpack-specific directives — without this
+    //     the import gets resolved at build time and code highlighting
+    //     fails silently for any consumer using Turbopack.
+    //
+    // The 'as any' specifier-cast keeps TS from flagging the bare
+    // string as an unresolved module path when prismjs isn't declared
+    // as a runtime dep on the consumer's tsconfig.
+    const mod = await import(
+      /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs" as any
+    );
     Prism = (mod as any).default ?? mod;
   }
   return Prism;
@@ -180,8 +193,12 @@ const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
       }
     }
 
-    // Load the main language
-    await import(/* webpackIgnore: true */ `prismjs/components/prism-${actualLang}` as any);
+    // Load the main language. Both ignore directives so Turbopack
+    // (Next 16's default) also leaves the import as a runtime
+    // resolution — see comment in getPrism().
+    await import(
+      /* webpackIgnore: true */ /* turbopackIgnore: true */ `prismjs/components/prism-${actualLang}` as any
+    );
     loadedLanguages.add(actualLang);
     loadedLanguages.add(lang); // Also mark the alias as loaded
     return true;
@@ -200,12 +217,21 @@ const loadPrismDependencies = async (...langs: string[]): Promise<boolean> => {
     const prism = await getPrism();
     (window as unknown as Record<string, unknown>)["Prism"] = prism;
 
-    // Load core plugins first
+    // Load core plugins first. Both webpackIgnore + turbopackIgnore so
+    // Next 16's Turbopack also leaves these as runtime resolutions.
     await Promise.all([
-      import(/* webpackIgnore: true */ "prismjs/plugins/line-highlight/prism-line-highlight" as any),
-      import(/* webpackIgnore: true */ "prismjs/plugins/line-numbers/prism-line-numbers" as any),
-      import(/* webpackIgnore: true */ "prismjs/components/prism-diff" as any),
-      import(/* webpackIgnore: true */ "prismjs/plugins/diff-highlight/prism-diff-highlight" as any),
+      import(
+        /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs/plugins/line-highlight/prism-line-highlight" as any
+      ),
+      import(
+        /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs/plugins/line-numbers/prism-line-numbers" as any
+      ),
+      import(
+        /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs/components/prism-diff" as any
+      ),
+      import(
+        /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs/plugins/diff-highlight/prism-diff-highlight" as any
+      ),
     ]);
 
     // Filter out empty/invalid languages and remove duplicates
