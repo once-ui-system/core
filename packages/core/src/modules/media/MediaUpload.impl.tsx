@@ -8,16 +8,14 @@ let Compressor: any;
 
 async function getCompressor() {
   if (!Compressor) {
-    // compressorjs is an OPTIONAL peer dep — both ignore directives
-    // are required so neither webpack nor Next 16's Turbopack tries
-    // to statically resolve it at build time. Without these, builds
-    // that don't have compressorjs installed fail with "Module not
-    // found: 'compressorjs'" even though we mean to defer the
-    // resolution to runtime.
-    const mod = await import(
-      /* webpackIgnore: true */ /* turbopackIgnore: true */ "compressorjs" as any
-    );
-    Compressor = (mod as any).default ?? mod;
+    // Bundler-resolved dynamic import. compressorjs gets code-split
+    // into its own chunk that only loads when MediaUpload actually
+    // renders (the public entry React.lazy()'s the impl). No
+    // webpackIgnore / turbopackIgnore — those leave a bare module
+    // specifier in the runtime output, which browsers can't
+    // resolve. (mod.default ?? mod) handles both CJS / ESM shapes.
+    const mod = await import("compressorjs");
+    Compressor = (mod as { default?: unknown }).default ?? mod;
   }
   return Compressor;
 }

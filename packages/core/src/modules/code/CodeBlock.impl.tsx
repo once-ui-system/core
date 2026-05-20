@@ -20,21 +20,19 @@ let Prism: any;
 
 async function getPrism() {
   if (!Prism) {
-    // Both magic comments are required:
-    //   - webpackIgnore: webpack would otherwise statically bundle
-    //     prismjs even though we treat it as an optional peer dep.
-    //   - turbopackIgnore: Next.js 16 defaults to Turbopack, which
-    //     doesn't honour webpack-specific directives — without this
-    //     the import gets resolved at build time and code highlighting
-    //     fails silently for any consumer using Turbopack.
+    // Plain dynamic import — no ignore directives. The bundler
+    // resolves and code-splits prismjs into its own chunk; the
+    // chunk only loads when this function is called (which only
+    // happens when CodeBlock renders, since CodeBlock itself is
+    // React.lazy()'d in the public entry — see ./CodeBlock.tsx).
     //
-    // The 'as any' specifier-cast keeps TS from flagging the bare
-    // string as an unresolved module path when prismjs isn't declared
-    // as a runtime dep on the consumer's tsconfig.
-    const mod = await import(
-      /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs" as any
-    );
-    Prism = (mod as any).default ?? mod;
+    // Earlier revisions used webpackIgnore / turbopackIgnore to
+    // keep the import "optional" — that leaves a bare module
+    // specifier in the runtime output, which browsers can't
+    // resolve and fail with "Failed to resolve module specifier
+    // 'prismjs'". Browser code needs a bundler-resolved path.
+    const mod = await import("prismjs");
+    Prism = (mod as { default?: unknown }).default ?? mod;
   }
   return Prism;
 }
@@ -193,12 +191,11 @@ const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
       }
     }
 
-    // Load the main language. Both ignore directives so Turbopack
-    // (Next 16's default) also leaves the import as a runtime
-    // resolution — see comment in getPrism().
-    await import(
-      /* webpackIgnore: true */ /* turbopackIgnore: true */ `prismjs/components/prism-${actualLang}` as any
-    );
+    // Load the main language via a bundler-resolved template-literal
+    // import. Webpack + Turbopack both pre-collect every file matching
+    // `prismjs/components/prism-*.js` into per-language chunks and
+    // dispatch the right one at runtime; no ignore directive needed.
+    await import(`prismjs/components/prism-${actualLang}`);
     loadedLanguages.add(actualLang);
     loadedLanguages.add(lang); // Also mark the alias as loaded
     return true;
@@ -217,21 +214,14 @@ const loadPrismDependencies = async (...langs: string[]): Promise<boolean> => {
     const prism = await getPrism();
     (window as unknown as Record<string, unknown>)["Prism"] = prism;
 
-    // Load core plugins first. Both webpackIgnore + turbopackIgnore so
-    // Next 16's Turbopack also leaves these as runtime resolutions.
+    // Load core plugins first. Bundler-resolved — each import is a
+    // static specifier so webpack + Turbopack code-split them into
+    // chunks that load on first highlight.
     await Promise.all([
-      import(
-        /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs/plugins/line-highlight/prism-line-highlight" as any
-      ),
-      import(
-        /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs/plugins/line-numbers/prism-line-numbers" as any
-      ),
-      import(
-        /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs/components/prism-diff" as any
-      ),
-      import(
-        /* webpackIgnore: true */ /* turbopackIgnore: true */ "prismjs/plugins/diff-highlight/prism-diff-highlight" as any
-      ),
+      import("prismjs/plugins/line-highlight/prism-line-highlight"),
+      import("prismjs/plugins/line-numbers/prism-line-numbers"),
+      import("prismjs/components/prism-diff"),
+      import("prismjs/plugins/diff-highlight/prism-diff-highlight"),
     ]);
 
     // Filter out empty/invalid languages and remove duplicates
