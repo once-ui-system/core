@@ -20,8 +20,19 @@ let Prism: any;
 
 async function getPrism() {
   if (!Prism) {
-    const mod = await import(/* webpackIgnore: true */ "prismjs" as any);
-    Prism = (mod as any).default ?? mod;
+    // Plain dynamic import — no ignore directives. The bundler
+    // resolves and code-splits prismjs into its own chunk; the
+    // chunk only loads when this function is called (which only
+    // happens when CodeBlock renders, since CodeBlock itself is
+    // React.lazy()'d in the public entry — see ./CodeBlock.tsx).
+    //
+    // Earlier revisions used webpackIgnore / turbopackIgnore to
+    // keep the import "optional" — that leaves a bare module
+    // specifier in the runtime output, which browsers can't
+    // resolve and fail with "Failed to resolve module specifier
+    // 'prismjs'". Browser code needs a bundler-resolved path.
+    const mod = await import("prismjs");
+    Prism = (mod as { default?: unknown }).default ?? mod;
   }
   return Prism;
 }
@@ -180,8 +191,11 @@ const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
       }
     }
 
-    // Load the main language
-    await import(/* webpackIgnore: true */ `prismjs/components/prism-${actualLang}` as any);
+    // Load the main language via a bundler-resolved template-literal
+    // import. Webpack + Turbopack both pre-collect every file matching
+    // `prismjs/components/prism-*.js` into per-language chunks and
+    // dispatch the right one at runtime; no ignore directive needed.
+    await import(`prismjs/components/prism-${actualLang}`);
     loadedLanguages.add(actualLang);
     loadedLanguages.add(lang); // Also mark the alias as loaded
     return true;
@@ -200,12 +214,14 @@ const loadPrismDependencies = async (...langs: string[]): Promise<boolean> => {
     const prism = await getPrism();
     (window as unknown as Record<string, unknown>)["Prism"] = prism;
 
-    // Load core plugins first
+    // Load core plugins first. Bundler-resolved — each import is a
+    // static specifier so webpack + Turbopack code-split them into
+    // chunks that load on first highlight.
     await Promise.all([
-      import(/* webpackIgnore: true */ "prismjs/plugins/line-highlight/prism-line-highlight" as any),
-      import(/* webpackIgnore: true */ "prismjs/plugins/line-numbers/prism-line-numbers" as any),
-      import(/* webpackIgnore: true */ "prismjs/components/prism-diff" as any),
-      import(/* webpackIgnore: true */ "prismjs/plugins/diff-highlight/prism-diff-highlight" as any),
+      import("prismjs/plugins/line-highlight/prism-line-highlight"),
+      import("prismjs/plugins/line-numbers/prism-line-numbers"),
+      import("prismjs/components/prism-diff"),
+      import("prismjs/plugins/diff-highlight/prism-diff-highlight"),
     ]);
 
     // Filter out empty/invalid languages and remove duplicates

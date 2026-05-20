@@ -8,7 +8,14 @@ let Compressor: any;
 
 async function getCompressor() {
   if (!Compressor) {
-    Compressor = (await import("compressorjs")).default;
+    // Bundler-resolved dynamic import. compressorjs gets code-split
+    // into its own chunk that only loads when MediaUpload actually
+    // renders (the public entry React.lazy()'s the impl). No
+    // webpackIgnore / turbopackIgnore — those leave a bare module
+    // specifier in the runtime output, which browsers can't
+    // resolve. (mod.default ?? mod) handles both CJS / ESM shapes.
+    const mod = await import("compressorjs");
+    Compressor = (mod as { default?: unknown }).default ?? mod;
   }
   return Compressor;
 }
