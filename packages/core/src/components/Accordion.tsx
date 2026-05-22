@@ -1,11 +1,18 @@
 "use client";
 
-import React, { useState, forwardRef, useImperativeHandle, useEffect, useCallback } from "react";
-import { Flex, Icon, Text, Column, Grid, Row } from ".";
+import React, {
+  useState,
+  forwardRef,
+  useImperativeHandle,
+  useEffect,
+  useCallback,
+  useRef,
+} from "react";
+import { Flex, Icon, Column, Grid, Row } from ".";
 import styles from "./Accordion.module.scss";
 import classNames from "classnames";
 
-export interface AccordionHandle extends HTMLDivElement {
+export interface AccordionHandle {
   toggle: () => void;
   open: () => void;
   close: () => void;
@@ -22,9 +29,12 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   onToggle?: () => void;
   className?: string;
   style?: React.CSSProperties;
+  headerProps?: React.ComponentProps<typeof Row>;
+  contentProps?: React.ComponentProps<typeof Column>;
+  toggleOnHeaderClick?: boolean;
 }
 
-const Accordion = forwardRef<AccordionHandle, AccordionProps>(
+const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
   (
     {
       title,
@@ -37,25 +47,26 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
       size = "m",
       className,
       style,
+      headerProps,
+      contentProps,
+      toggleOnHeaderClick = true,
       ...rest
     },
     ref,
   ) => {
+    const headerRef = useRef<HTMLDivElement>(null);
     const [isOpen, setIsOpen] = useState(open);
 
     useEffect(() => {
       setIsOpen(open);
     }, [open]);
 
-    // Use controlled state when onToggle is provided, otherwise use internal state
     const isAccordionOpen = onToggle ? open : isOpen;
 
     const toggleAccordion = useCallback(() => {
       if (onToggle) {
-        // If onToggle is provided, let the parent control the state
         onToggle();
       } else {
-        // Otherwise, manage state internally
         setIsOpen((prev) => !prev);
       }
     }, [onToggle]);
@@ -63,42 +74,90 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
     useImperativeHandle(
       ref,
       () => {
-        const methods = {
+        const node = headerRef.current ?? document.createElement("div");
+        return Object.assign(node, {
           toggle: toggleAccordion,
           open: () => setIsOpen(true),
           close: () => setIsOpen(false),
-        };
-
-        return Object.assign(document.createElement("div"), methods) as unknown as AccordionHandle;
+        }) as HTMLDivElement & AccordionHandle;
       },
       [toggleAccordion],
     );
 
+    const {
+      className: headerClassName,
+      style: headerStyle,
+      onClick: headerOnClick,
+      onKeyDown: headerOnKeyDown,
+      ref: headerPropsRef,
+      ...headerRest
+    } = headerProps ?? {};
+
+    const {
+      className: contentClassName,
+      ...contentRest
+    } = contentProps ?? {};
+
+    const setHeaderRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        headerRef.current = node;
+        if (typeof headerPropsRef === "function") {
+          headerPropsRef(node);
+        } else if (headerPropsRef && "current" in headerPropsRef) {
+          (headerPropsRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
+        }
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref && "current" in ref) {
+          ref.current = node;
+        }
+      },
+      [headerPropsRef, ref],
+    );
+
+    const handleHeaderClick = (e: React.MouseEvent<HTMLDivElement>) => {
+      headerOnClick?.(e);
+      if (e.defaultPrevented || !toggleOnHeaderClick) return;
+      toggleAccordion();
+    };
+
+    const handleHeaderKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      headerOnKeyDown?.(e);
+      if (e.defaultPrevented || !toggleOnHeaderClick) return;
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        toggleAccordion();
+      }
+    };
+
+    const headerPaddingY = size === "s" ? "8" : size === "m" ? "12" : "16";
+    const headerPaddingX = size === "s" ? "12" : size === "m" ? "16" : "20";
+    const contentPaddingX = size === "s" ? "12" : size === "m" ? "16" : "20";
+
     return (
       <Column fillWidth>
         <Row
-          tabIndex={0}
-          className={classNames(styles.accordion, className)}
-          style={style}
+          ref={setHeaderRef}
+          tabIndex={headerRest.tabIndex ?? 0}
+          className={classNames(styles.accordion, className, headerClassName)}
+          style={{ ...style, ...headerStyle }}
           cursor="interactive"
           transition="macro-medium"
-          paddingY={size === "s" ? "8" : size === "m" ? "12" : "16"}
-          paddingX={size === "s" ? "12" : size === "m" ? "16" : "20"}
+          paddingY={headerPaddingY}
+          paddingX={headerPaddingX}
           vertical="center"
           horizontal="between"
-          onClick={toggleAccordion}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              toggleAccordion();
-            }
-          }}
+          onClick={handleHeaderClick}
+          onKeyDown={handleHeaderKeyDown}
           aria-expanded={isAccordionOpen}
           aria-controls="accordion-content"
           radius={radius}
           role="button"
+          {...headerRest}
         >
-          <Row fillWidth textVariant="heading-strong-s">{title}</Row>
+          <Row fillWidth textVariant="heading-strong-s">
+            {title}
+          </Row>
           <Icon
             name={icon}
             size={size === "s" ? "xs" : "s"}
@@ -122,9 +181,11 @@ const Accordion = forwardRef<AccordionHandle, AccordionProps>(
           <Row fillWidth minHeight={0} overflow="hidden">
             <Column
               fillWidth
-              paddingX={size === "s" ? "12" : size === "m" ? "16" : "20"}
+              className={contentClassName}
+              paddingX={contentPaddingX}
               paddingTop="8"
               paddingBottom="16"
+              {...contentRest}
               {...rest}
             >
               {children}
