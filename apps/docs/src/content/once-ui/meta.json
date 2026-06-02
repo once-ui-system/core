@@ -2,16 +2,17 @@
   "title": "Once UI",
   "order": 1,
   "pages": {
-    "quick-start": 1,
-    "config": 2,
-    "basics": 3,
-    "contexts": 4,
-    "modules": 5,
-    "form-controls": 6,
-    "components": 7,
-    "data": 8,
-    "effects": 9,
-    "utils": 10,
-    "hooks": 11
+    "about": 1,
+    "quick-start": 2,
+    "config": 3,
+    "basics": 4,
+    "contexts": 5,
+    "modules": 6,
+    "form-controls": 7,
+    "components": 8,
+    "data": 9,
+    "effects": 10,
+    "utils": 11,
+    "hooks": 12
   }
 }

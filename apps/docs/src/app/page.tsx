@@ -9,17 +9,16 @@ import {
   Media, 
   StatusIndicator,
   Badge,
-  Tag,
   Meta,
   Schema,
   MatrixFx,
   Background,
   Pulse,
-  ShineFx
+  Card
 } from "@once-ui-system/core";
 import { baseURL, meta, schema, changelog, roadmap, layout } from "@/resources";
 import { formatDate } from "./utils/formatDate";
-import { Products } from "@/product";
+import { getQuarterLabel } from "./utils/getQuarter";
 import { PromoCard } from "@/components/PromoCard";
 
 export async function generateMetadata() {
@@ -84,12 +83,14 @@ export default function Home() {
           />
           
           {/* Hero Section */}
-          <Column maxWidth={62} gap="12" minHeight="m" vertical="center" radius="l" overflow="hidden" border="brand-alpha-weak">
+          <Column maxWidth={96} minHeight="s" gap="12" center overflow="hidden">
             <MatrixFx
               data-solid="color"
               position="absolute"
               top="0"
               left="0"
+              size={1.5}
+              spacing={8}
               flicker
               colors={["brand-solid-strong"]}
               bulge={{
@@ -100,15 +101,15 @@ export default function Home() {
               }}
             />
             <Background position="absolute" gradient={{display: true, colorStart: "page-background", x: 0, y: 50, height: 300, width: 150}}></Background>
-            <Column fillWidth gap="16" padding="48">
+            <Column maxWidth="m" horizontal="center" align="center" gap="16" padding="48">
               <Badge
                 background="overlay"
                 style={{backdropFilter: "blue(0.25rem)"}}
                 paddingLeft="8"
-                paddingRight="4"
+                paddingRight="16"
                 border="brand-alpha-weak"
                 arrow={false}
-                paddingY="4"
+                paddingY="8"
                 href="/changelog"
               >
                 <Row vertical="center">
@@ -117,43 +118,40 @@ export default function Home() {
                     marginLeft="12"
                     textVariant="label-default-s"
                     onBackground="brand-medium"
-                    gap="8"
+                    gap="12"
                     vertical="center"
                   >
-                    <Text weight="strong" onBackground="brand-strong">Once UI 1.7</Text> Form with intent
-
-                    <Tag variant="brand" data-border="rounded"><ShineFx speed={2} baseOpacity={0.8}>New</ShineFx></Tag>
+                    <Text onBackground="brand-strong">v1.7</Text> Form with intent
                   </Row>
                 </Row>
               </Badge>
-              <Heading variant="display-strong-m" marginTop="12">
-                Once UI Docs
+              <Heading variant="display-strong-m" marginTop="12" marginBottom="24">
+                Open-source frontend infrastructure for the AI-native web
               </Heading>
-              <Text wrap="balance" onBackground="neutral-weak" variant="body-default-xl" marginBottom="20">
-                Open-source design system and<br/> app templates for indie builders
-              </Text>
-              <Button data-border="rounded" size="s" href="/get-started" variant="secondary" arrowIcon id="get-started">Quick start</Button>
+              <Button data-border="rounded" size="l" href="/once-ui/quick-start" id="quick-start">Install Once UI</Button>
             </Column>
           </Column>
 
-          <Column maxWidth={56}>
-            <Column fillWidth gap="4">
-              <Text 
-                variant="display-default-s" 
-                onBackground="neutral-strong"
-              >
-                Products
-              </Text>
-              <Text
-                onBackground="neutral-weak"
-                marginTop="8"
-                marginBottom="16"
-              >
-                Deploy fully functional apps in minutes
-              </Text>
-            </Column>
-            <Products />
-          </Column>
+          <Grid maxWidth={56} columns="3" s={{columns: 1}} gap="8">
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="/once-ui/about">
+              <Column fillWidth gap="16">
+                <Text variant="heading-strong-xs">About Once UI</Text>
+                <Text onBackground="neutral-weak" variant="body-default-s">Comprehensive design system and component library for your next project</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="https://once-ui.com/products/magic-portfolio">
+              <Column fillWidth gap="16">
+                <Text variant="heading-strong-xs">Magic Portfolio</Text>
+                <Text onBackground="neutral-weak" variant="body-default-s">Free portfolio template that feels genuinely unique and professional</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="https://once-ui.com/products">
+              <Column fillWidth gap="16">
+                <Text variant="heading-strong-xs">Premium app templates</Text>
+                <Text onBackground="neutral-weak" variant="body-default-s">Ready-to-deploy app templates for your next project: store, landing page, founder site, and more</Text>
+              </Column>
+            </Card>
+          </Grid>
           
           {/* Latest Update Section */}
           <Column 
@@ -212,7 +210,7 @@ export default function Home() {
             <Column paddingX="32" paddingY="24" fillWidth horizontal="between" s={{direction: "column"}} gap="4">
               <Row fillWidth vertical="center" horizontal="between" gap="16" wrap>
                 <Heading as="h2" variant="display-default-xs">
-                  Q4 2025 Roadmap
+                  {`Roadmap ${getQuarterLabel()}`}
                 </Heading>
                 <Button data-border="rounded" weight="default" variant="secondary" href="/roadmap" size="s" suffixIcon="chevronRight">
                 View Roadmap
@@ -357,40 +355,24 @@ export default function Home() {
         fillHeight>
           <Column
             fill
+            padding="8"
             position="sticky"
             style={{maxHeight: "calc(100vh - 3.5rem)", top: "3.5rem"}}
-            gap="-1">
-            <Column fill borderLeft="neutral-alpha-medium" vertical="end">
-              <Background
-                fillWidth
-                height={2}
-                borderTop="neutral-alpha-medium"
-                lines={{
-                  display: true,
-                  color: "neutral-alpha-weak",
-                  angle: -45,
-                  size: "4"
-                }}/>
-              <Row fillWidth padding="24" borderTop="neutral-alpha-medium">
-                <Heading as="h3" variant="heading-strong-m">Support our recent launch!</Heading>
-              </Row>
-            </Column>
-            {[
-              {
-                href: "https://store.dopler.app/product/curiosity-in-code-hooded-long-sleeve",
-                image: "/images/docs/swag-promo-01.png",
-              },
-              {
-                href: "https://store.dopler.app/product/curiosity-in-code-desk-mat",
-                image: "/images/docs/swag-promo-02.png",
-              }
-            ].map((product, index) => (
-              <PromoCard 
-                key={index}
-                href={product.href}
-                image={product.image}
-              />
-            ))}
+            gap="8">
+            <Column fill />
+            <Card radius="l" href="https://once-ui.com/pricing?ref=docs" fillWidth background="transparent" overflow="hidden">
+              <MatrixFx minWidth={12} minHeight={8} position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-solid-strong", "static-transparent"]}/>
+              <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
+              <Column fillWidth padding="20" gap="16">
+                <Text variant="heading-strong-xs">Support the project and get access to exclusive features!</Text>
+                <Button rounded size="s" id="get-pro-banner" prefixIcon="bolt">Get Pro</Button>
+              </Column>
+            </Card>
+            <PromoCard
+              href="https://designengineers.club"
+              image="/images/docs/swag-promo-01.png"
+              buttonText="Join the Club"
+            />
           </Column>
       </Row>
     </Row>

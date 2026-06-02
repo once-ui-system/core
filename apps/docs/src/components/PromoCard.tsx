@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, useMemo } from "react";
 import {
   Row,
   Button,
@@ -10,7 +10,8 @@ import {
   LetterFx,
   Background,
   Media,
-  Text
+  Text,
+  MatrixFx
 } from "@once-ui-system/core";
 
 export interface PromoCardProps {
@@ -38,12 +39,40 @@ export function PromoCard({
     }
   }, [isHovered]);
 
-  const cardContent = (
-    <Card fillWidth href={href} overflow="hidden">
-      <Animation fillWidth scale={1.05} reverse fade={1} triggerType="hover">
-        <Media aspectRatio="1/1" src={image} priority sizes="400px"/>
-      </Animation>
-    </Card>
+  const cardContent = useMemo(
+    () => (
+      <Card radius="l" fillWidth href={href} overflow="hidden">
+        <MatrixFx minWidth={12} minHeight={8} position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-solid-strong", "static-transparent"]}/>
+        <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 100, width: 300, height: 300}} pointerEvents="none"/>
+        <Animation fillWidth scale={1.05} reverse fade={1} triggerType="hover">
+          <Media aspectRatio="3/4" src={image} priority sizes={400} />
+        </Animation>
+      </Card>
+    ),
+    [href, image],
+  );
+
+  const overlayContent = useMemo(
+    () => (
+      <Row fill padding="4">
+        <Row fill border="neutral-alpha-medium" radius="l" vertical="end" overflow="hidden" padding="12" horizontal="center">
+            <Button size="s">
+              <Text variant="code-strong-s">
+                <LetterFx
+                  charset={["x", "y", "z", "0", "/", "!", "u", "o"]}
+                  trigger="custom"
+                  onTrigger={(triggerFn) => {
+                    triggerLetterFxRef.current = triggerFn;
+                  }}
+                >
+                  Explore
+                </LetterFx>
+              </Text>
+            </Button>
+        </Row>
+      </Row>
+    ),
+    [],
   );
 
   return (
@@ -54,45 +83,7 @@ export function PromoCard({
       <Hover
         fillWidth
         trigger={cardContent}
-        overlay={
-          <Row fill padding="4">
-            <Row fill border="neutral-alpha-medium" radius="l" vertical="end" overflow="hidden">
-              <Row fillWidth height="32">
-                <Background
-                  fill
-                  borderTop="neutral-alpha-medium"
-                  lines={{
-                    display: true,
-                    color: "neutral-alpha-weak",
-                    angle: -45,
-                    size: "4"
-                  }}/>
-                <Button data-border="sharp" size="s" suffixIcon="chevronRight">
-                  <Text variant="code-default-s">
-                    <LetterFx
-                      charset={["x", "y", "z", "0", "/", "!", "u", "o"]}
-                      trigger="custom"
-                      onTrigger={(triggerFn) => {
-                        triggerLetterFxRef.current = triggerFn;
-                      }}
-                    >
-                      Buy now
-                    </LetterFx>
-                  </Text>
-                </Button>
-                <Background
-                  fill
-                  borderTop="neutral-alpha-medium"
-                  lines={{
-                    display: true,
-                    color: "neutral-alpha-weak",
-                    angle: -45,
-                    size: "4"
-                  }}/>
-              </Row>
-            </Row>
-          </Row>
-        }
+        overlay={overlayContent}
       />
     </Row>
   );

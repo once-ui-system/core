@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
-import { Button, Flex, Logo, NavIcon, Row, Kbar, useTheme, Animation } from "@once-ui-system/core";
+import { Button, Flex, Logo, NavIcon, Row, Kbar, useTheme, Animation, Text } from "@once-ui-system/core";
 import { layout, routes } from "@/resources/once-ui.config";
 import { Sidebar, NavigationItem } from "./Sidebar";
 
@@ -152,7 +152,7 @@ export function Header() {
 
   return (
     <>
-      <Flex as="header" background="page" horizontal="center" position="sticky" top="0" zIndex={9} fillWidth vertical="center" paddingY="12" paddingRight="24" paddingLeft="20" borderBottom="neutral-alpha-medium">
+      <Flex as="header" background="page" horizontal="center" position="sticky" top="0" zIndex={9} fillWidth vertical="center" paddingY="12" paddingRight="16" paddingLeft="12">
         <Row maxWidth={layout.header.width} vertical="center" horizontal="between" gap="l">
           <Row fillWidth vertical="center" gap="8">
             <Animation
@@ -180,8 +180,11 @@ export function Header() {
                 />
               </Row>
             </Animation>
-            <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
-            <Logo light wordmark="/trademarks/type-light.svg" size="s" href="/"/>
+            <Row vertical="end" gap="8">
+              <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
+              <Logo light wordmark="/trademarks/type-light.svg" size="s" href="/"/>
+              <Text onBackground="neutral-weak" marginBottom="1">Docs</Text>
+            </Row>
           </Row>
           <Kbar s={{hide: true}} items={kbar} radius="full" background="neutral-alpha-weak">
             <Button data-border="rounded" size="s" variant="tertiary" weight="default">
@@ -193,7 +196,7 @@ export function Header() {
           </Kbar>
           <Row fillWidth horizontal="end" gap="8" data-border="rounded">
             <Button href="https://once-ui.com" size="s">
-              Continue to Once UI
+              Open Once UI
             </Button>
           </Row>
         </Row>

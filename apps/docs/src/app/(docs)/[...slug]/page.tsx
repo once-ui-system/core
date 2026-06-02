@@ -63,7 +63,7 @@ export default async function Docs({
   return (
     <>
       <Row fillWidth horizontal="center" padding="l">
-        <Column as="main" maxWidth={layout.content.width} gap="l" paddingBottom="xl" paddingTop="12">
+        <Column as="main" maxWidth={60} horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
           <Schema
             as="techArticle"
             title={doc.metadata.title + " – " + schema.name}
@@ -77,7 +77,7 @@ export default async function Docs({
               name: schema.name
             }}
           />
-          <Column fillWidth gap="8" vertical="center">
+          <Column maxWidth={layout.content.width} gap="8" vertical="center">
             <Text variant="label-default-l" onBackground="neutral-medium">{sectionTitle}</Text>
             <Heading variant="display-strong-s">{doc.metadata.title}</Heading>
             <Text variant="body-default-s" onBackground="neutral-weak">
@@ -90,13 +90,13 @@ export default async function Docs({
             )}
           </Column>
           {doc.metadata.image && (
-            <Media border="neutral-alpha-medium" enlarge src={doc.metadata.image} alt={"Thumbnail of " + doc.metadata.title} aspectRatio="16 / 9" radius="m" sizes="(max-width: 768px) 100vw, 768px" priority />
+            <Media marginY="24" border="neutral-alpha-weak" enlarge src={doc.metadata.image} alt={"Thumbnail of " + doc.metadata.title} aspectRatio="16 / 9" radius="m" sizes={768} priority />
           )}
-          <Column as="article" fillWidth>
+          <Column as="article" maxWidth={layout.content.width}>
             <CustomMDX source={doc.content} />
           </Column>
           
-          <Row gap="16" fillWidth horizontal="between" s={{direction: "column"}}>              
+          <Row gap="16" maxWidth={layout.content.width} horizontal="between" s={{direction: "column"}}>              
             {prevPage ? (
               <Row fillWidth>
               <Row maxWidth={20}>
@@ -151,16 +151,16 @@ export default async function Docs({
             ) : <Row/>}
           </Row>
           {doc.metadata.docs && (
-            <>
+            <Column maxWidth={layout.content.width} gap="24" marginTop="40">
               <Line width="40"/>
               <Row fillWidth vertical="center" gap="8" onBackground="neutral-weak" textVariant="label-default-s">
                 Edit this page on <SmartLink prefixIcon="github" href={"https://github.com/once-ui-system/core/tree/main/apps/docs/src/content/" + doc.metadata.docs}>GitHub</SmartLink>
               </Row>
-            </>
+            </Column>
           )}
         </Column>
       </Row>
-      <Row borderLeft="neutral-alpha-medium" fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
+      <Row fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
         <HeadingNav top="80" />
       </Row>
     </>

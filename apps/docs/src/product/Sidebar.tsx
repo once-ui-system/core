@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
-import { Schemes, Accordion, Column, Flex, Icon, Row, Tag, ToggleButton, Text, Mask, MatrixFx, Card, Hover, Background, Animation, Button, Spinner, Skeleton, IconButton } from "@once-ui-system/core";
+import React, { useEffect, useState } from "react";
+import { Schemes, Accordion, Column, Flex, Icon, Row, Tag, ToggleButton, Text, MatrixFx, Card, Background, Button, Skeleton, IconButton } from "@once-ui-system/core";
 import { usePathname } from 'next/navigation';
 import { routes, layout } from "@/resources";
 
@@ -111,7 +111,7 @@ const NavigationItemComponent: React.FC<{
           marginTop="2">
           {layout.sidebar.collapsible ? (
           <Accordion
-            gap="2"
+            gap="4"
             icon="chevronRight"
             iconRotation={90}
             size="s"
@@ -122,24 +122,19 @@ const NavigationItemComponent: React.FC<{
             paddingTop="4"
             open={shouldBeOpen}
             title={
-              <Row fillWidth vertical="center" textVariant="label-strong-s" onBackground="brand-strong">
+              <Row fillWidth vertical="center" textVariant="label-strong-xs" onBackground="neutral-weak">
                 {item.title}
-                {item.pro && (
-                  <Tag position="absolute" right="12" top="0" data-theme="dark" data-brand="brand" style={{top: "50%", transform: "translateY(-50%) scale(0.8)", transformOrigin: "right center"}} variant="brand" size="s">
-                      Pro
-                  </Tag>
-                )}
               </Row>
             }>
               {renderNavigation(item.children, depth + 1)}
           </Accordion>
           ) : (
             <Column
-              gap="2"
+              gap="4"
               paddingLeft="4"
-              paddingTop="4">
+              paddingTop="12">
                 <Row 
-                  paddingY="12" paddingLeft="8" textVariant="label-strong-s" onBackground="brand-strong">
+                  paddingY="12" paddingLeft="8" textVariant="label-strong-s" onBackground="neutral-weak">
                   {item.title}
                 </Row>
                 {renderNavigation(item.children, depth + 1)}
@@ -161,16 +156,13 @@ const NavigationItemComponent: React.FC<{
         <Row
           overflow="hidden"
           gap="8"
-          onBackground={isSelected ? "neutral-strong" : "neutral-weak"}
+          onBackground="neutral-strong"
           textVariant={isSelected ? "label-strong-s" : "label-default-s"}
           style={{ textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
-            {item.navIcon && <Icon size="xs" name={item.navIcon}/>}
-            {item.label || item.title}
+          {item.label || item.title}
         </Row>
         {item.navTag && (
-          <Tag data-theme="dark" data-brand={item.navTagVariant} style={{marginRight: "-0.25rem", transform: "scale(0.8)", transformOrigin: "right center"}} variant="brand" size="s">
-              {item.navTag}
-          </Tag>
+          <Row width="4" height="4" radius="full" solid="brand-strong" data-brand={item.navTagVariant} style={{transform: "scale(1.2)", transformOrigin: "right center"}} />
         )}
       </Row>
     </ToggleButton>
@@ -254,7 +246,7 @@ const SidebarContent: React.FC<{
 
   // Create resources section
   const resourcesSection = (!(routes['/roadmap'] || routes['/changelog'])) ? null : (
-    <Column gap="2" marginTop="32" paddingLeft="4">
+    <Column gap="4" marginTop="32" paddingLeft="4">
       <Row textVariant="label-strong-s" onBackground="brand-strong" paddingLeft="8" paddingY="12">
         Resources
       </Row>
@@ -337,7 +329,6 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
   return (
     <Column
       fillHeight
-      borderRight="neutral-alpha-medium"
       width={layout.sidebar.width} 
       minWidth={layout.sidebar.width}
       paddingY="4"
@@ -345,7 +336,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
       <Column 
         position="sticky"
         fillHeight
-        gap="2" 
+        gap="4" 
         as="nav" 
         overflowY="auto"
         padding="12"
@@ -354,7 +345,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
         {hasLoaded ? (
           <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
         ) : (
-          <Column fillWidth gap="2">
+          <Column fillWidth gap="4">
             {Array.from({ length: 7 }).map((_, i) => (
               <Row key={i} height="40" paddingX="4" vertical="center">
                 <Row fill radius="l" overflow="hidden" opacity={50}>
@@ -364,28 +355,6 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
             ))}
           </Column>
         )}
-        <Column fill vertical="end" gap="8" style={{minHeight: "fit-content"}}>
-          <Card href="https://once-ui.com/handbook?ref=docs" fillWidth border="brand-alpha-medium" background="brand-alpha-weak" radius="l" overflow="hidden">
-            <MatrixFx minWidth={12} minHeight={8} position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-background-strong", "static-transparent"]}/>
-            <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
-            <Column fillWidth padding="20" gap="8">
-              <Row fillWidth gap="16" vertical="center" horizontal="between">
-                <Text variant="heading-strong-s">Once UI Handbook</Text>
-                <IconButton variant="secondary" icon="chevronRight" size="s"/>
-              </Row>
-              <Text variant="label-default-s" onBackground="neutral-weak" wrap="balance">AI-native workflows for design engineers</Text>
-            </Column>
-          </Card>
-          <Card href="https://once-ui.com/pricing?ref=docs" fillWidth border="neutral-alpha-medium" background="transparent" radius="l" overflow="hidden">
-            <MatrixFx minWidth={12} minHeight={8} position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-solid-strong", "static-transparent"]}/>
-            <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
-            <Column fillWidth padding="20" gap="8">
-              <Text variant="heading-strong-s">Once UI Pro</Text>
-              <Text variant="label-default-s" onBackground="neutral-weak" marginBottom="8" wrap="balance">Build a digital presence with deployment-ready apps</Text>
-              <Button rounded size="s" id="get-pro-banner" arrowIcon>Get Pro</Button>
-            </Column>
-          </Card>
-        </Column>
       </Column>
     </Column>
   );

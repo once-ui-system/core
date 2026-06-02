@@ -181,7 +181,7 @@ const HeadingNav = forwardRef<HTMLDivElement, props>(({ className, style, header
       {headings.length > 0 &&
         <>
           {header &&
-            <Row gap="12" paddingLeft="2" vertical="center" onBackground="neutral-medium" textVariant="label-default-s">
+            <Row gap="12" paddingLeft="2" vertical="center" onBackground="neutral-weak" textVariant="label-default-s">
               <Icon name="document" size="xs"/>
               On this page
             </Row>

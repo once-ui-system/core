@@ -82,7 +82,7 @@ function createParagraph({ children }: TextProps) {
     <onceUIComponents.Text
       style={{ lineHeight: "175%" }}
       variant="body-default-m"
-      onBackground="neutral-medium"
+      onBackground="neutral-strong"
       marginTop="8"
       marginBottom="12"
     >
@@ -120,6 +120,7 @@ function createListItem({ children }: { children: ReactNode }) {
     <onceUIComponents.ListItem
       marginTop="4"
       marginBottom="8"
+      style={{ lineHeight: "175%" }}
     >
       {children}
     </onceUIComponents.ListItem>

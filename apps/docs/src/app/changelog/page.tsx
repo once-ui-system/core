@@ -1,5 +1,5 @@
 import React from "react";
-import { Column, SmartLink, Row, Line, Text, Heading, Media, Meta, Schema, HeadingLink, List, ListItem, Button } from "@once-ui-system/core";
+import { Column, Row, Line, Text, Heading, Media, Meta, Schema, HeadingLink, List, ListItem, Button } from "@once-ui-system/core";
 import { baseURL, meta, schema, changelog } from "@/resources";
 import { formatDate } from "../utils/formatDate";
 

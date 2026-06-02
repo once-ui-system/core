@@ -62,6 +62,7 @@ import {
   HiOutlineTruck,
   HiOutlineArchiveBox,
   HiOutlineArrowUp,
+  HiOutlineBolt,
 } from "react-icons/hi2";
 
 import { LiaCubesSolid } from "react-icons/lia";
@@ -149,6 +150,7 @@ export const iconLibrary: Record<string, IconType> = {
   truck: HiOutlineTruck,
   package: HiOutlineArchiveBox,
   arrowUp: HiOutlineArrowUp,
+  bolt: HiOutlineBolt
 };
 
 export type IconLibrary = typeof iconLibrary;

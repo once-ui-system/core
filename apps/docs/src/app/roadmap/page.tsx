@@ -2,6 +2,7 @@ import React from "react";
 import { Text, Column, Row, Card, User, Heading, StatusIndicator, Meta, Schema } from "@once-ui-system/core";
 import { baseURL, layout, meta, roadmap, schema, task } from "../../resources";
 import { Schemes } from "@once-ui-system/core";
+import { getQuarterLabel } from "../utils/getQuarter";
 
 export interface Task {
   title: string;
@@ -82,7 +83,7 @@ export default function RoadmapPage() {
           Roadmap
         </Heading>
         <Text wrap="balance" onBackground="neutral-weak" variant="body-default-xl" marginBottom="20">
-          List of features planned for Q1 2026
+          List of features planned for {getQuarterLabel()}
         </Text>
       </Column>
 

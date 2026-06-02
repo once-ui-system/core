@@ -114,7 +114,7 @@ const Footer = () => {
                 variant="tertiary"
                 size="l"
                 key={index}
-                href={item.href}
+                href={item.link}
               />
             ))}
           </Row>

@@ -1,13 +1,13 @@
 ---
-title: "Config"
+title: "Configuration"
 summary: "Configure Once UI with app-level design settings."
-updatedAt: "2025-05-04"
+updatedAt: "2026-06-02"
 docs: "once-ui/config.mdx"
-navLabel: "Config"
-navIcon: "learn"
+navLabel: "Configuration"
+navIcon: "settings"
 ---
 
-Once UI manages app-level design configuration with the help of Providers. Here's our recommended root `layout.tsx` and `once-ui.config.js` structure:
+Once UI manages app-level design configuration with the help of Providers and a config file. Here's our recommended root `layout.tsx` and `once-ui.config.js` structure:
 
 <CodeBlock
     marginTop="16"
@@ -43,23 +43,21 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <head>
-            <head>
-              <ThemeInit
-                config={{
-                  theme: "system",
-                  brand: "blue",
-                  accent: "indigo",
-                  neutral: "gray",
-                  solid: "contrast",
-                  'solid-style': "flat",
-                  border: "playful",
-                  surface: "filled",
-                  transition: "all",
-                  scaling: "100",
-                  'viz-style': "gradient",
-                }}
-              />
-            </head>
+            <ThemeInit
+              config={{
+                theme: "system",
+                brand: "blue",
+                accent: "indigo",
+                neutral: "gray",
+                solid: "contrast",
+                'solid-style': "flat",
+                border: "playful",
+                surface: "filled",
+                transition: "all",
+                scaling: "100",
+                'viz-style': "gradient",
+              }}
+            />
           </head>
           <LayoutProvider>
             <ThemeProvider>

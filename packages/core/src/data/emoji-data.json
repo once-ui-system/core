@@ -8477,6 +8477,14 @@
       "tags": []
     },
     {
+      "char": "🚏",
+      "description": "bus stop",
+      "aliases": [
+        "busstop"
+      ],
+      "tags": []
+    },
+    {
       "char": "🛣️",
       "description": "motorway",
       "aliases": [
