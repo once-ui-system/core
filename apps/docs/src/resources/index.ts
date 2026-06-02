@@ -1,5 +1,4 @@
 export {
-  effects,
   style,
   layout,
   baseURL,
