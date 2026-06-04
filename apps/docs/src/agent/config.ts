@@ -1,34 +1,15 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import path from "node:path";
+import {
+  agentDiscoveryPaths,
+  absolute,
+  contentSignal,
+} from "@/agent/paths";
 import { baseURL, schema } from "@/resources";
 
-export const contentSignal = "search=yes, ai-input=yes, ai-train=no";
-
-export const agentDiscoveryPaths = {
-  apiCatalog: "/.well-known/api-catalog",
-  agentSkills: "/.well-known/agent-skills/index.json",
-  mcpServerCard: "/.well-known/mcp/server-card.json",
-  llmsTxt: "/llms.txt",
-  aiCoding: "/once-ui/ai-coding",
-  navigationApi: "/api/navigation",
-  navigationOpenApi: "/openapi/navigation.json",
-  authMd: "/auth.md",
-} as const;
-
-function absolute(pathname: string) {
-  return `${baseURL}${pathname}`;
-}
-
-/** RFC 8288 Link header value for the homepage */
-export const agentLinkHeader = [
-  `<${absolute(agentDiscoveryPaths.apiCatalog)}>; rel="api-catalog"`,
-  `<${absolute(agentDiscoveryPaths.agentSkills)}>; rel="agent-skills"; type="application/json"`,
-  `<${absolute(agentDiscoveryPaths.mcpServerCard)}>; rel="mcp-server-card"; type="application/json"`,
-  `<${absolute(agentDiscoveryPaths.llmsTxt)}>; rel="alternate"; type="text/plain"; title="LLM site map"`,
-  `<${absolute(agentDiscoveryPaths.aiCoding)}>; rel="service-doc"; title="AI Coding and MCP"`,
-  `<${absolute(agentDiscoveryPaths.navigationApi)}>; rel="describedby"; type="application/json"`,
-].join(", ");
+export { agentDiscoveryPaths, contentSignal } from "@/agent/paths";
+export { agentLinkHeader } from "@/agent/link-header";
 
 export function getLlmsTxtDigest(): string {
   const filePath = path.join(process.cwd(), "public", "llms.txt");

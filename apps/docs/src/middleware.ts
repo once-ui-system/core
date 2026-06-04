@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { agentLinkHeader } from "@/agent/config";
-import { acceptsMarkdown } from "@/agent/markdown";
+import { acceptsMarkdown } from "@/agent/accept";
+import { agentLinkHeader } from "@/agent/link-header";
 
 const SKIP_MARKDOWN_PREFIXES = ["/api/", "/_next/", "/.well-known/"];
 

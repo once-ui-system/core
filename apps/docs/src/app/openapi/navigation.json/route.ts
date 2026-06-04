@@ -1,5 +1,5 @@
 import { baseURL, schema } from "@/resources";
-import { agentDiscoveryPaths } from "@/agent/config";
+import { agentDiscoveryPaths } from "@/agent/paths";
 
 export const runtime = "nodejs";
 

@@ -1,4 +1,4 @@
-import { contentSignal } from "@/agent/config";
+import { contentSignal } from "@/agent/paths";
 import { baseURL } from "@/resources";
 
 const AI_CRAWLERS = [

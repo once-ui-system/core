@@ -45,11 +45,3 @@ export function getMarkdownForPath(pathname: string): string | null {
 
   return `${lines.join("\n")}\n`;
 }
-
-export function acceptsMarkdown(acceptHeader: string | null): boolean {
-  if (!acceptHeader) return false;
-  return acceptHeader.split(",").some((part) => {
-    const value = part.split(";")[0]?.trim().toLowerCase();
-    return value === "text/markdown" || value === "text/x-markdown";
-  });
-}
