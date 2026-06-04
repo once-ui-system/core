@@ -4,15 +4,16 @@
   "pages": {
     "about": 1,
     "quick-start": 2,
-    "config": 3,
-    "basics": 4,
-    "contexts": 5,
-    "modules": 6,
-    "form-controls": 7,
-    "components": 8,
-    "data": 9,
-    "effects": 10,
-    "utils": 11,
-    "hooks": 12
+    "ai-coding": 3,
+    "config": 4,
+    "basics": 5,
+    "contexts": 6,
+    "modules": 7,
+    "form-controls": 8,
+    "components": 9,
+    "data": 10,
+    "effects": 11,
+    "utils": 12,
+    "hooks": 13
   }
 }
