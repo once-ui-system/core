@@ -1,0 +1,2702 @@
+{
+ "name": "@once-ui-system/core",
+ "version": "1.7.9",
+ "generated": "2026-06-12",
+ "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
+ "tokens": {
+  "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\"",
+  "ResponsiveSpacingToken": "TShirtSizes",
+  "ShadowSize": "TShirtSizes",
+  "SpacingToken": "StaticSpacingToken | ResponsiveSpacingToken",
+  "CSSUnit": "`${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`",
+  "opacity": "0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "ColorWeight": "\"weak\" | \"medium\" | \"strong\"",
+  "Colors": "`${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`",
+  "RadiusSize": "TShirtSizes | \"full\" | \"none\"",
+  "TextType": "\"body\" | \"heading\" | \"display\" | \"label\" | \"code\"",
+  "TextWeight": "\"default\" | \"strong\"",
+  "TextSize": "TShirtSizes",
+  "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`",
+  "gridSize": "\"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\" | \"11\" | \"12\" | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12",
+  "flex": "\"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\" | \"11\" | \"12\" | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12",
+  "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"opacity\""
+ },
+ "mixins": {
+  "CommonProps": {
+   "onBackground": "Colors",
+   "onSolid": "Colors",
+   "align": "CSSProperties[\"textAlign\"]"
+  },
+  "DisplayProps": {
+   "as": "ElementType",
+   "inline": "boolean",
+   "hide": "boolean",
+   "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "position": "CSSProperties[\"position\"]",
+   "overflow": "CSSProperties[\"overflow\"]",
+   "overflowX": "CSSProperties[\"overflowX\"]",
+   "overflowY": "CSSProperties[\"overflowY\"]",
+   "scrollbar": "\"default\" | \"minimal\"",
+   "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\"",
+   "opacity": "opacity",
+   "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\"",
+   "dark": "boolean",
+   "light": "boolean"
+  },
+  "FlexBreakpointProps": {
+   "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
+   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
+   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
+   "center": "boolean",
+   "overflow": "CSSProperties[\"overflow\"]",
+   "overflowX": "CSSProperties[\"overflowX\"]",
+   "overflowY": "CSSProperties[\"overflowY\"]",
+   "top": "SpacingToken",
+   "right": "SpacingToken",
+   "bottom": "SpacingToken",
+   "left": "SpacingToken",
+   "aspectRatio": "CSSProperties[\"aspectRatio\"]",
+   "style": "CSSProperties"
+  },
+  "FlexProps": {
+   "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
+   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
+   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
+   "center": "boolean",
+   "wrap": "boolean",
+   "flex": "flex"
+  },
+  "GridBreakpointProps": {
+   "columns": "GridProps[\"columns\"]",
+   "overflow": "CSSProperties[\"overflow\"]",
+   "overflowX": "CSSProperties[\"overflowX\"]",
+   "overflowY": "CSSProperties[\"overflowY\"]",
+   "top": "SpacingToken",
+   "right": "SpacingToken",
+   "bottom": "SpacingToken",
+   "left": "SpacingToken",
+   "aspectRatio": "CSSProperties[\"aspectRatio\"]",
+   "style": "CSSProperties"
+  },
+  "GridProps": {
+   "columns": "gridSize",
+   "rows": "gridSize"
+  },
+  "SizeProps": {
+   "width": "number | SpacingToken | CSSUnit",
+   "height": "number | SpacingToken | CSSUnit",
+   "maxWidth": "number | SpacingToken | CSSUnit",
+   "minWidth": "number | SpacingToken | CSSUnit",
+   "minHeight": "number | SpacingToken | CSSUnit",
+   "maxHeight": "number | SpacingToken | CSSUnit",
+   "fit": "boolean",
+   "fitWidth": "boolean",
+   "fitHeight": "boolean",
+   "fill": "boolean",
+   "fillWidth": "boolean",
+   "fillHeight": "boolean",
+   "aspectRatio": "CSSProperties[\"aspectRatio\"]"
+  },
+  "SpacingProps": {
+   "padding": "SpacingToken | number",
+   "paddingLeft": "SpacingToken | number",
+   "paddingRight": "SpacingToken | number",
+   "paddingTop": "SpacingToken | number",
+   "paddingBottom": "SpacingToken | number",
+   "paddingX": "SpacingToken | number",
+   "paddingY": "SpacingToken | number",
+   "margin": "SpacingToken | number",
+   "marginLeft": "SpacingToken | number",
+   "marginRight": "SpacingToken | number",
+   "marginTop": "SpacingToken | number",
+   "marginBottom": "SpacingToken | number",
+   "marginX": "SpacingToken | number",
+   "marginY": "SpacingToken | number",
+   "gap": "SpacingToken | number | \"-1\"",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "translateX": "SpacingToken | number | CSSUnit",
+   "translateY": "SpacingToken | number | CSSUnit"
+  },
+  "StyleProps": {
+   "textVariant": "TextVariant",
+   "textSize": "TextSize",
+   "textType": "TextType",
+   "textWeight": "TextWeight",
+   "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
+   "solid": "Colors",
+   "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
+   "border": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderStyle": "\"solid\" | \"dashed\"",
+   "borderWidth": "1 | 2 | 4 | 6 | 8 | \"1\" | \"2\" | \"4\" | \"6\" | \"8\"",
+   "topRadius": "RadiusSize",
+   "rightRadius": "RadiusSize",
+   "bottomRadius": "RadiusSize",
+   "leftRadius": "RadiusSize",
+   "topLeftRadius": "RadiusSize",
+   "topRightRadius": "RadiusSize",
+   "bottomLeftRadius": "RadiusSize",
+   "bottomRightRadius": "RadiusSize",
+   "shadow": "ShadowSize",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
+  },
+  "TextProps": {
+   "as": "T",
+   "variant": "TextVariant",
+   "wrap": "CSSProperties[\"textWrap\"]",
+   "size": "TextSize",
+   "weight": "TextWeight",
+   "family": "TextType",
+   "truncate": "boolean"
+  }
+ },
+ "components": {
+  "Accordion": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "!React.ReactNode",
+    "children": "!React.ReactNode",
+    "icon": "string = chevronDown",
+    "iconRotation": "number = 180",
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "radius": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" | \"full\" = m",
+    "open": "boolean = false",
+    "onToggle": "() => void",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "headerProps": "React.ComponentProps<typeof Row>",
+    "contentProps": "React.ComponentProps<typeof Column>",
+    "toggleOnHeaderClick": "boolean = true"
+   }
+  },
+  "AccordionGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!AccordionItem[]",
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "autoCollapse": "boolean = true",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "Animation": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "trigger": "ReactNode",
+    "children": "!ReactNode",
+    "fade": "number",
+    "scale": "number",
+    "blur": "number",
+    "slideUp": "number",
+    "slideDown": "number",
+    "slideLeft": "number",
+    "slideRight": "number",
+    "zoomIn": "number",
+    "zoomOut": "number",
+    "triggerType": "TriggerType = manual",
+    "active": "boolean",
+    "delay": "number = 0",
+    "duration": "number = 300",
+    "easing": "EasingCurve = ease-out",
+    "transformOrigin": "string = center",
+    "childrenPosition": "CSSProperties[\"position\"] = absolute",
+    "reverse": "boolean = false",
+    "touch": "\"disable\" | \"enable\" | \"display\" = enable",
+    "portal": "boolean = false",
+    "placement": "Placement = top",
+    "offsetDistance": "SpacingToken = 8"
+   }
+  },
+  "Arrow": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "trigger": "!string",
+    "scale": "number = 0.8",
+    "color": "\"onBackground\" | \"onSolid\" = onBackground",
+    "style": "React.CSSProperties",
+    "className": "string"
+   }
+  },
+  "AutoScroll": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "!React.ReactNode",
+    "speed": "\"slow\" | \"medium\" | \"fast\" = medium",
+    "hover": "\"slow\" | \"pause\" | \"none\" = slow",
+    "reverse": "boolean = false",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "scrollGap": "number | string"
+   }
+  },
+  "Avatar": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "size": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" | number = m",
+    "value": "string",
+    "src": "string",
+    "unoptimized": "boolean",
+    "loading": "boolean",
+    "empty": "boolean",
+    "icon": "IconName",
+    "statusIndicator": "{ color: \"green\" | \"yellow\" | \"red\" | \"gray\"; }",
+    "style": "React.CSSProperties = {}",
+    "className": "string"
+   }
+  },
+  "AvatarGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "avatars": "!AvatarProps[]",
+    "size": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "reverse": "boolean = false",
+    "limit": "number",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "Badge": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "string",
+    "icon": "IconName",
+    "arrow": "boolean = href ? true : false",
+    "children": "React.ReactNode",
+    "href": "string",
+    "effect": "boolean = true",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "id": "string"
+   }
+  },
+  "BlobFx": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "seed": "number = 0"
+   }
+  },
+  "Banner": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "Background": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "gradient": "GradientProps = {}",
+    "dots": "DotsProps = {}",
+    "grid": "GridProps = {}",
+    "lines": "LinesProps = {}",
+    "mask": "MaskProps",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "children": "React.ReactNode"
+   }
+  },
+  "BlockQuote": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "!React.ReactNode",
+    "preline": "React.ReactNode",
+    "subline": "React.ReactNode",
+    "separator": "\"top\" | \"bottom\" | \"both\" | \"none\" = both",
+    "author": "{ name?: React.ReactNode, avatar?: string, }",
+    "link": "{ href: string, label: string }",
+    "style": "React.CSSProperties",
+    "className": "string",
+    "align": "\"center\" | \"left\" | \"right\" = center"
+   }
+  },
+  "Button": {
+   "group": "components",
+   "props": {
+    "variant": "\"primary\" | \"secondary\" | \"tertiary\" | \"danger\" = primary",
+    "size": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+    "label": "string",
+    "weight": "\"default\" | \"strong\" = strong",
+    "rounded": "boolean",
+    "prefixIcon": "IconName",
+    "suffixIcon": "IconName",
+    "loading": "boolean = false",
+    "disabled": "boolean = false",
+    "fillWidth": "boolean = false",
+    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = center",
+    "children": "ReactNode",
+    "href": "string",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "id": "string",
+    "arrowIcon": "boolean = false"
+   }
+  },
+  "MatrixFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "speed": "number = 1",
+    "colors": "string[] = [\"brand-solid-medium\"]",
+    "size": "number = 3",
+    "spacing": "number = 3",
+    "revealFrom": "\"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = center",
+    "trigger": "\"hover\" | \"instant\" | \"mount\" | \"click\" | \"manual\" = instant",
+    "active": "boolean = false",
+    "flicker": "boolean = false",
+    "bulge": "BulgeConfig",
+    "fps": "number = 60",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "children": "React.ReactNode"
+   }
+  },
+  "WeatherFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "type": "WeatherType = rain",
+    "speed": "number = 1",
+    "colors": "string[] = [\"brand-solid-medium\"]",
+    "intensity": "number = 50",
+    "angle": "number = 0",
+    "duration": "number",
+    "trigger": "\"mount\" | \"hover\" | \"click\" | \"manual\" = mount",
+    "active": "boolean = false",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "children": "React.ReactNode"
+   }
+  },
+  "Carousel": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!CarouselItem[] = []",
+    "controls": "boolean = true",
+    "priority": "boolean = false",
+    "fill": "boolean = false",
+    "indicator": "\"line\" | \"thumbnail\" | false = line",
+    "translateY": "SpacingToken | number",
+    "aspectRatio": "string = original",
+    "sizes": "string",
+    "revealedByDefault": "boolean = false",
+    "thumbnail": "ThumbnailItem = { scaling: 1, height: \"80\", sizes: \"120px\" }",
+    "play": "{ auto?: boolean, interval?: number, controls?: boolean, progress?: boolean } = { auto: false, interval: 3000, controls: true }"
+   }
+  },
+  "Swiper": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!SwiperItem[] = []",
+    "controls": "boolean | \"contained\" = true",
+    "priority": "boolean = false",
+    "fill": "boolean = false",
+    "aspectRatio": "string = 16 / 9",
+    "sizes": "string",
+    "indicator": "boolean = true"
+   }
+  },
+  "Card": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "React.ReactNode",
+    "href": "string",
+    "onClick": "() => void",
+    "fillHeight": "boolean",
+    "style": "React.CSSProperties",
+    "className": "string"
+   }
+  },
+  "CursorCard": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "trigger": "ReactNode",
+    "overlay": "ReactNode",
+    "placement": "Placement = bottom-left",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "Cursor": {
+   "group": "components",
+   "props": {
+    "cursor": "!React.ReactNode",
+    "elementRef": "!React.RefObject<HTMLElement | null>"
+   }
+  },
+  "CountFx": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "SpacingProps",
+    "TextProps"
+   ],
+   "props": {
+    "value": "!number",
+    "speed": "number = 1000",
+    "easing": "\"linear\" | \"ease-out\" | \"ease-in-out\" = ease-out",
+    "format": "(value: number) => string",
+    "separator": "string",
+    "decimals": "number",
+    "effect": "\"simple\" | \"wheel\" | \"smooth\" = simple",
+    "children": "React.ReactNode"
+   }
+  },
+  "CountdownFx": {
+   "group": "components",
+   "props": {
+    "targetDate": "!Date | string",
+    "format": "\"HH:MM:SS\" | \"DD:HH:MM:SS\" | \"MM:SS\" = HH:MM:SS",
+    "effect": "CountFxProps['effect'] = wheel",
+    "onComplete": "() => void"
+   }
+  },
+  "Column": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "React.ReactNode"
+   }
+  },
+  "Checkbox": {
+   "group": "components",
+   "extends": [
+    "InteractiveDetails"
+   ],
+   "props": {
+    "isChecked": "boolean",
+    "isIndeterminate": "boolean = false",
+    "onToggle": "() => void"
+   }
+  },
+  "Chip": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "!string",
+    "selected": "boolean = true",
+    "prefixIcon": "IconName",
+    "onRemove": "() => void",
+    "onClick": "MouseEventHandler<HTMLDivElement>",
+    "children": "ReactNode",
+    "iconButtonProps": "Partial<IconButtonProps> = {}",
+    "style": "React.CSSProperties",
+    "className": "string"
+   }
+  },
+  "ColorInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "props": {
+    "value": "!string",
+    "onChange": "!(e: React.ChangeEvent<HTMLInputElement>) => void",
+    "supportAlpha": "boolean = false"
+   }
+  },
+  "CompareImage": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "leftContent": "!SideContent",
+    "rightContent": "!SideContent",
+    "aspectRatio": "string"
+   }
+  },
+  "ContextMenu": {
+   "group": "components",
+   "props": {
+    "children": "!ReactNode",
+    "dropdown": "!ReactNode",
+    "placement": "Placement = bottom-end",
+    "fillWidth": "boolean = false",
+    "minWidth": "number = 12",
+    "maxWidth": "number",
+    "minHeight": "number",
+    "style": "React.CSSProperties",
+    "className": "string",
+    "onSelect": "(value: string) => void",
+    "closeAfterClick": "boolean = true",
+    "isOpen": "boolean",
+    "onOpenChange": "(isOpen: boolean) => void",
+    "selectedOption": "string",
+    "disabled": "boolean = false"
+   }
+  },
+  "DateInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "props": {
+    "id": "!string",
+    "label": "string",
+    "placeholder": "string",
+    "value": "Date",
+    "onChange": "(date: Date) => void",
+    "minHeight": "number",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "timePicker": "boolean = false",
+    "minDate": "Date",
+    "maxDate": "Date"
+   }
+  },
+  "DatePicker": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "value": "Date",
+    "onChange": "(date: Date) => void",
+    "minDate": "Date",
+    "maxDate": "Date",
+    "previousMonth": "boolean = true",
+    "nextMonth": "boolean = true",
+    "timePicker": "boolean = false",
+    "defaultDate": "Date",
+    "defaultTime": "{ hours: number; minutes: number; }",
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "isNested": "boolean = false",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "currentMonth": "number",
+    "currentYear": "number",
+    "onMonthChange": "(increment: number) => void",
+    "range": "{ startDate?: Date; endDate?: Date; }",
+    "onHover": "(date: Date | null) => void",
+    "autoFocus": "boolean = false",
+    "isOpen": "boolean"
+   }
+  },
+  "DateRangeInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "props": {
+    "id": "!string",
+    "startLabel": "!string = Start",
+    "endLabel": "!string = End",
+    "value": "DateRange",
+    "onChange": "(range: DateRange) => void",
+    "minHeight": "number",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "DateRangePicker": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "value": "DateRange",
+    "onChange": "(range: DateRange) => void",
+    "minDate": "Date",
+    "maxDate": "Date",
+    "dual": "boolean",
+    "size": "\"s\" | \"m\" | \"l\" = m"
+   }
+  },
+  "DialogProvider": {
+   "group": "components",
+   "props": {
+    "children": "!React.ReactNode"
+   }
+  },
+  "Dialog": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "isOpen": "!boolean",
+    "onClose": "!() => void",
+    "title": "!ReactNode | string",
+    "description": "ReactNode",
+    "children": "ReactNode",
+    "footer": "ReactNode",
+    "base": "boolean",
+    "stack": "boolean",
+    "onHeightChange": "(height: number) => void",
+    "minHeight": "number",
+    "closeOnClickaway": "boolean = true"
+   }
+  },
+  "Dropdown": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "selectedOption": "string",
+    "children": "ReactNode",
+    "onEscape": "() => void",
+    "onSelect": "(event: string) => void",
+    "disabled": "boolean = false"
+   }
+  },
+  "DropdownWrapper": {
+   "group": "components",
+   "props": {
+    "fillWidth": "boolean = false",
+    "minWidth": "number",
+    "maxWidth": "number",
+    "minHeight": "number",
+    "placement": "Placement = bottom-start",
+    "trigger": "!ReactNode",
+    "dropdown": "!ReactNode",
+    "selectedOption": "string",
+    "style": "React.CSSProperties",
+    "className": "string",
+    "onSelect": "(value: string) => void",
+    "closeAfterClick": "boolean = true",
+    "handleArrowNavigation": "boolean = true",
+    "isOpen": "boolean",
+    "onOpenChange": "(isOpen: boolean) => void",
+    "isNested": "boolean = false",
+    "navigationLayout": "NavigationLayout",
+    "columns": "number | string = 8",
+    "optionsCount": "number",
+    "dropdownId": "string",
+    "disableTriggerClick": "boolean = false"
+   }
+  },
+  "EmojiPicker": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "onSelect": "!(emoji: string) => void",
+    "onClose": "() => void",
+    "className": "string",
+    "background": "StyleProps[\"background\"]",
+    "columns": "gridSize = 8",
+    "style": "React.CSSProperties"
+   }
+  },
+  "EmojiPickerDropdown": {
+   "group": "components",
+   "extends": [
+    "DropdownWrapper"
+   ],
+   "props": {
+    "onSelect": "!(emoji: string) => void",
+    "background": "StyleProps[\"background\"] = surface",
+    "columns": "gridSize = 8"
+   }
+  },
+  "Fade": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "className": "string",
+    "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
+    "base": "BaseColor = page",
+    "blur": "number = 0.5",
+    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\r\n        display: false,\r\n        size: \"4\",\r\n      }",
+    "style": "React.CSSProperties",
+    "children": "ReactNode"
+   }
+  },
+  "Feedback": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "variant": "\"info\" | \"danger\" | \"warning\" | \"success\" = info",
+    "icon": "boolean = true",
+    "title": "string",
+    "description": "string",
+    "showCloseButton": "boolean = false",
+    "onClose": "() => void",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "children": "ReactNode"
+   }
+  },
+  "Flex": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "xl": "FlexBreakpointProps",
+    "l": "FlexBreakpointProps",
+    "m": "FlexBreakpointProps",
+    "s": "FlexBreakpointProps",
+    "xs": "FlexBreakpointProps"
+   }
+  },
+  "FlipFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "flipDirection": "\"horizontal\" | \"vertical\"",
+    "timing": "number",
+    "flipped": "boolean",
+    "onFlip": "(flipped: boolean) => void",
+    "disableClickFlip": "boolean",
+    "autoFlipInterval": "number",
+    "front": "!React.ReactNode",
+    "back": "!React.ReactNode",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "GlitchFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "!React.ReactNode",
+    "speed": "\"slow\" | \"medium\" | \"fast\" = medium",
+    "interval": "number = 2500",
+    "trigger": "\"instant\" | \"hover\" | \"custom\" = instant",
+    "continuous": "boolean = true"
+   }
+  },
+  "Grid": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "GridProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "xl": "GridBreakpointProps",
+    "l": "GridBreakpointProps",
+    "m": "GridBreakpointProps",
+    "s": "GridBreakpointProps",
+    "xs": "GridBreakpointProps"
+   }
+  },
+  "Heading": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "SpacingProps",
+    "TextProps"
+   ],
+   "props": {
+    "wrap": "CSSProperties[\"textWrap\"] = balance"
+   }
+  },
+  "HoloFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "!React.ReactNode",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "shine": "{ opacity?: number; filter?: string; blending?: CSSProperties[\"mixBlendMode\"]; mask?: MaskOptions; }",
+    "burn": "{ opacity?: number; filter?: string; blending?: CSSProperties[\"mixBlendMode\"]; mask?: MaskOptions; }",
+    "texture": "{ opacity?: number; filter?: string; blending?: CSSProperties[\"mixBlendMode\"]; image?: string; mask?: MaskOptions; }"
+   }
+  },
+  "Hover": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "trigger": "!ReactNode",
+    "overlay": "!ReactNode",
+    "interactive": "boolean = false",
+    "delay": "number = 0",
+    "hideDelay": "number = 0",
+    "disabled": "boolean = false",
+    "touch": "\"disable\" | \"enable\" | \"display\" = disable"
+   }
+  },
+  "HoverCard": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Animation"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "Icon": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "name": "!IconName",
+    "onBackground": "`${ColorScheme}-${ColorWeight}`",
+    "onSolid": "`${ColorScheme}-${ColorWeight}`",
+    "size": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "decorative": "boolean = true",
+    "tooltip": "ReactNode",
+    "tooltipPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = top",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "IconButton": {
+   "group": "components",
+   "props": {
+    "icon": "IconName = refresh",
+    "id": "string",
+    "size": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+    "rounded": "boolean = false",
+    "tooltip": "ReactNode",
+    "tooltipPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = top",
+    "variant": "\"primary\" | \"secondary\" | \"tertiary\" | \"danger\" | \"ghost\" = primary",
+    "loading": "boolean = false",
+    "disabled": "boolean = false",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "href": "string",
+    "children": "ReactNode"
+   }
+  },
+  "InfiniteScroll": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!T[]",
+    "renderItem": "!(item: T, index: number) => ReactNode",
+    "loadMore": "!() => Promise<boolean>",
+    "loading": "boolean = false",
+    "threshold": "number = 200",
+    "className": "string"
+   }
+  },
+  "InlineCode": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "!ReactNode",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "Input": {
+   "group": "components",
+   "props": {
+    "id": "!string",
+    "label": "string",
+    "placeholder": "string",
+    "height": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "error": "boolean = false",
+    "errorMessage": "ReactNode",
+    "description": "ReactNode",
+    "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "hasPrefix": "ReactNode",
+    "hasSuffix": "ReactNode",
+    "variant": "\"default\" | \"ghost\" = default",
+    "characterCount": "boolean",
+    "cursor": "undefined | \"interactive\"",
+    "validate": "(value: ReactNode) => ReactNode | null",
+    "loading": "boolean = false"
+   }
+  },
+  "InteractiveDetails": {
+   "group": "components",
+   "props": {
+    "label": "React.ReactNode",
+    "description": "React.ReactNode",
+    "disabled": "boolean",
+    "iconButtonProps": "IconButtonProps",
+    "onClick": "!() => void",
+    "className": "string",
+    "id": "string"
+   }
+  },
+  "Kbd": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "string",
+    "children": "ReactNode",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "LetterFx": {
+   "group": "components",
+   "props": {
+    "children": "!ReactNode",
+    "trigger": "\"hover\" | \"instant\" | \"custom\" = hover",
+    "speed": "\"fast\" | \"medium\" | \"slow\" = medium",
+    "charset": "string[] = defaultCharset",
+    "onTrigger": "(triggerFn: () => void) => void",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "Line": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "vert": "boolean",
+    "style": "React.CSSProperties"
+   }
+  },
+  "List": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "as": "\"ul\" | \"ol\" = ul",
+    "children": "React.ReactNode",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "ListItem": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "SpacingProps",
+    "TextProps"
+   ],
+   "props": {
+    "children": "React.ReactNode",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "Logo": {
+   "group": "components",
+   "props": {
+    "className": "string",
+    "size": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "style": "React.CSSProperties",
+    "icon": "string",
+    "wordmark": "string",
+    "href": "string",
+    "dark": "boolean",
+    "light": "boolean",
+    "brand": "{ copy?: boolean; url?: string }"
+   }
+  },
+  "LogoCloud": {
+   "group": "components",
+   "extends": [
+    "Grid"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "GridProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "logos": "!LogoProps[]",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "limit": "number = 6",
+    "rotationInterval": "number = ANIMATION_DURATION"
+   }
+  },
+  "Mask": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "cursor": "boolean = false",
+    "x": "number",
+    "y": "number",
+    "radius": "number = 50",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "children": "React.ReactNode"
+   }
+  },
+  "MasonryGrid": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "!ReactNode",
+    "gap": "SpacingToken | \"-1\" | undefined = 8",
+    "columns": "number = 3",
+    "style": "CSSProperties",
+    "className": "string",
+    "l": "MasonryBreakpointProps",
+    "m": "MasonryBreakpointProps",
+    "s": "MasonryBreakpointProps",
+    "xs": "MasonryBreakpointProps"
+   }
+  },
+  "Media": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "aspectRatio": "string = original",
+    "height": "number",
+    "alt": "string = ",
+    "loading": "boolean = false",
+    "objectFit": "CSSProperties[\"objectFit\"] = cover",
+    "enlarge": "boolean = false",
+    "src": "!string",
+    "unoptimized": "boolean = false",
+    "sizes": "string | number = 100vw",
+    "priority": "boolean",
+    "caption": "ReactNode",
+    "fill": "boolean = false",
+    "fillWidth": "boolean = true",
+    "loop": "boolean = true",
+    "autoplay": "boolean = true",
+    "sound": "boolean = false",
+    "controls": "boolean = false",
+    "style": "CSSProperties",
+    "className": "string"
+   }
+  },
+  "Modal": {
+   "group": "components",
+   "props": {
+    "children": "!React.ReactNode",
+    "backdrop": "React.ReactNode",
+    "title": "!React.ReactNode",
+    "isOpen": "!boolean",
+    "onClose": "!() => void"
+   }
+  },
+  "NavIcon": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "className": "string",
+    "style": "React.CSSProperties",
+    "onClick": "() => void",
+    "isActive": "boolean"
+   }
+  },
+  "NumberInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "props": {
+    "value": "number",
+    "onChange": "(value: number) => void",
+    "min": "number",
+    "max": "number",
+    "step": "number = 1",
+    "padStart": "number"
+   }
+  },
+  "OgCard": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Card"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "url": "string",
+    "sizes": "string = 320px",
+    "size": "CondensedTShirtSizes = m",
+    "ogData": "Partial<OgData> | null",
+    "direction": "\"column\" | \"row\" | \"column-reverse\" | \"row-reverse\" = column",
+    "serviceConfig": "OgServiceConfig = {}",
+    "title": "string | false",
+    "description": "string | false",
+    "favicon": "string | false",
+    "image": "string | false",
+    "cardUrl": "string | false"
+   }
+  },
+  "Option": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "React.ReactNode",
+    "href": "string",
+    "value": "!string",
+    "hasPrefix": "React.ReactNode",
+    "hasSuffix": "React.ReactNode",
+    "description": "React.ReactNode",
+    "danger": "boolean",
+    "selected": "boolean",
+    "disabled": "boolean = false",
+    "highlighted": "boolean",
+    "tabIndex": "number",
+    "children": "React.ReactNode",
+    "onClick": "(value: string) => void",
+    "onLinkClick": "() => void"
+   }
+  },
+  "OTPInput": {
+   "group": "components",
+   "props": {
+    "length": "number = 4",
+    "onComplete": "(code: string) => void",
+    "error": "boolean = false",
+    "errorMessage": "React.ReactNode",
+    "disabled": "boolean = false",
+    "autoFocus": "boolean = false"
+   }
+  },
+  "Particle": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "density": "number = 100",
+    "color": "string = brand-on-background-weak",
+    "size": "SpacingToken = 2",
+    "speed": "number = 0.3",
+    "interactive": "boolean = false",
+    "mode": "\"repel\" | \"attract\" = repel",
+    "intensity": "number = 20",
+    "opacity": "DisplayProps[\"opacity\"] = 100",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "children": "React.ReactNode"
+   }
+  },
+  "PasswordInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ]
+  },
+  "ProgressBar": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "value": "!number",
+    "min": "number = 0",
+    "max": "number = 100",
+    "label": "boolean = true",
+    "barBackground": "StyleProps[\"solid\"] = brand-strong",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "Pulse": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "variant": "ColorScheme = brand",
+    "size": "CondensedTShirtSizes = m",
+    "children": "ReactNode",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "RadioButton": {
+   "group": "components",
+   "extends": [
+    "InteractiveDetails"
+   ],
+   "props": {
+    "style": "React.CSSProperties",
+    "className": "string",
+    "isChecked": "boolean",
+    "name": "string",
+    "value": "string",
+    "disabled": "boolean",
+    "onToggle": "() => void"
+   }
+  },
+  "RevealFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "!React.ReactNode",
+    "speed": "\"slow\" | \"medium\" | \"fast\" | number = medium",
+    "delay": "number = 0",
+    "revealedByDefault": "boolean = false",
+    "translateY": "number | SpacingToken",
+    "trigger": "boolean",
+    "style": "React.CSSProperties",
+    "className": "string"
+   }
+  },
+  "Row": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "React.ReactNode"
+   }
+  },
+  "Scroller": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "React.ReactNode",
+    "direction": "\"row\" | \"column\" = row",
+    "fadeColor": "BaseColor",
+    "onItemClick": "(index: number) => void",
+    "radius": "RadiusSize"
+   }
+  },
+  "ScrollContainer": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!React.ReactNode[]",
+    "controlPlacement": "\"top-start\" | \"top-center\" | \"top-end\" | \"top-between\" | \"bottom-start\" | \"bottom-center\" | \"bottom-end\" | \"bottom-between\" = top-start"
+   }
+  },
+  "ScrollToTop": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "offset": "number = 300"
+   }
+  },
+  "SegmentedControl": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Scroller"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "buttons": "!ButtonOption[]",
+    "onToggle": "!(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
+    "defaultSelected": "string",
+    "fillWidth": "boolean = true",
+    "selected": "string",
+    "compact": "boolean = false",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "Select": {
+   "group": "components",
+   "extends": [
+    "Input",
+    "DropdownWrapper"
+   ],
+   "props": {
+    "options": "!SelectOptionType[]",
+    "value": "string | string[] = ",
+    "emptyState": "ReactNode = No results",
+    "onSelect": "(value: any) => void",
+    "placement": "Placement",
+    "searchable": "boolean = false",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "fillWidth": "boolean = true",
+    "multiple": "boolean = false"
+   }
+  },
+  "ShineFx": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "SpacingProps",
+    "TextProps"
+   ],
+   "props": {
+    "speed": "number = 1",
+    "disabled": "boolean = false",
+    "inverse": "boolean = false",
+    "baseOpacity": "number = 0.3",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "children": "React.ReactNode"
+   }
+  },
+  "Skeleton": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "shape": "!\"line\" | \"circle\" | \"block\" = line",
+    "width": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
+    "height": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
+    "delay": "\"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\"",
+    "style": "React.CSSProperties",
+    "className": "string"
+   }
+  },
+  "Slider": {
+   "group": "components",
+   "props": {
+    "value": "!number",
+    "onChange": "!(value: number) => void",
+    "min": "number = 0",
+    "max": "number = 100",
+    "step": "number = 1",
+    "label": "string",
+    "showValue": "boolean = false",
+    "disabled": "boolean = false",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "SmartLink": {
+   "group": "components",
+   "props": {
+    "prefixIcon": "IconName",
+    "suffixIcon": "IconName",
+    "fillWidth": "boolean = false",
+    "iconSize": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = xs",
+    "selected": "boolean",
+    "unstyled": "boolean = false",
+    "children": "!ReactNode",
+    "href": "string",
+    "style": "React.CSSProperties",
+    "className": "string"
+   }
+  },
+  "Spinner": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "size": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "ariaLabel": "string = Loading",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "SplitView": {
+   "group": "components",
+   "props": {
+    "leftPanel": "!ReactNode",
+    "rightPanel": "!ReactNode",
+    "defaultSplit": "number = 0.3",
+    "minSplit": "number = 0.2",
+    "maxSplit": "number = 0.8",
+    "xl": "FlexBreakpointProps",
+    "l": "FlexBreakpointProps",
+    "m": "FlexBreakpointProps",
+    "s": "FlexBreakpointProps",
+    "xs": "FlexBreakpointProps",
+    "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
+    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
+    "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
+    "center": "boolean",
+    "wrap": "boolean",
+    "flex": "flex",
+    "children": "React.ReactNode",
+    "textVariant": "TextVariant",
+    "textSize": "TextSize",
+    "textType": "TextType",
+    "textWeight": "TextWeight",
+    "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
+    "solid": "Colors",
+    "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
+    "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
+    "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
+    "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
+    "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
+    "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean",
+    "borderStyle": "\"solid\" | \"dashed\"",
+    "borderWidth": "1 | 2 | 4 | 6 | 8 | \"1\" | \"2\" | \"4\" | \"6\" | \"8\"",
+    "topRadius": "RadiusSize",
+    "rightRadius": "RadiusSize",
+    "bottomRadius": "RadiusSize",
+    "leftRadius": "RadiusSize",
+    "topLeftRadius": "RadiusSize",
+    "topRightRadius": "RadiusSize",
+    "bottomLeftRadius": "RadiusSize",
+    "bottomRightRadius": "RadiusSize",
+    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`",
+    "shadow": "ShadowSize",
+    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+    "padding": "SpacingToken | number",
+    "paddingLeft": "SpacingToken | number",
+    "paddingRight": "SpacingToken | number",
+    "paddingTop": "SpacingToken | number",
+    "paddingBottom": "SpacingToken | number",
+    "paddingX": "SpacingToken | number",
+    "paddingY": "SpacingToken | number",
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number",
+    "gap": "SpacingToken | number | \"-1\"",
+    "top": "SpacingToken | number | CSSUnit",
+    "right": "SpacingToken | number | CSSUnit",
+    "bottom": "SpacingToken | number | CSSUnit",
+    "left": "SpacingToken | number | CSSUnit",
+    "translateX": "SpacingToken | number | CSSUnit",
+    "translateY": "SpacingToken | number | CSSUnit",
+    "width": "number | SpacingToken | CSSUnit",
+    "height": "number | SpacingToken | CSSUnit",
+    "maxWidth": "number | SpacingToken | CSSUnit",
+    "minWidth": "number | SpacingToken | CSSUnit",
+    "minHeight": "number | SpacingToken | CSSUnit",
+    "maxHeight": "number | SpacingToken | CSSUnit",
+    "fit": "boolean",
+    "fitWidth": "boolean",
+    "fitHeight": "boolean",
+    "fill": "boolean",
+    "fillWidth": "boolean",
+    "fillHeight": "boolean",
+    "aspectRatio": "CSSProperties[\"aspectRatio\"]",
+    "onBackground": "Colors",
+    "onSolid": "Colors",
+    "align": "CSSProperties[\"textAlign\"]",
+    "as": "ElementType",
+    "inline": "boolean",
+    "hide": "boolean",
+    "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+    "position": "CSSProperties[\"position\"]",
+    "overflow": "CSSProperties[\"overflow\"]",
+    "overflowX": "CSSProperties[\"overflowX\"]",
+    "overflowY": "CSSProperties[\"overflowY\"]",
+    "scrollbar": "\"default\" | \"minimal\"",
+    "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\"",
+    "opacity": "opacity",
+    "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\"",
+    "dark": "boolean",
+    "light": "boolean"
+   }
+  },
+  "StatusIndicator": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "color": "!\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\" | \"gray\" = blue",
+    "ariaLabel": "string = `${color} status indicator`",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "StylePanel": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "style": "React.CSSProperties",
+    "className": "string"
+   }
+  },
+  "StyleOverlay": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "iconButtonProps": "Partial<React.ComponentProps<typeof IconButton>>",
+    "children": "!React.ReactNode",
+    "zIndex": "DisplayProps[\"zIndex\"] = 2"
+   }
+  },
+  "Switch": {
+   "group": "components",
+   "extends": [
+    "InteractiveDetails"
+   ],
+   "props": {
+    "style": "React.CSSProperties",
+    "className": "string",
+    "isChecked": "!boolean",
+    "loading": "boolean = false",
+    "name": "string",
+    "value": "string",
+    "disabled": "boolean",
+    "reverse": "boolean = false",
+    "ariaLabel": "string = Toggle switch",
+    "onToggle": "!() => void"
+   }
+  },
+  "Table": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "data": "!{ headers: { content: ReactNode; key: string; sortable?: boolean; }[]; rows: ReactNode[][]; }",
+    "onRowClick": "(rowIndex: number) => void"
+   }
+  },
+  "Tag": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "variant": "ColorScheme | \"gradient\" = neutral",
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "label": "string = ",
+    "prefixIcon": "IconName",
+    "suffixIcon": "IconName",
+    "children": "ReactNode"
+   }
+  },
+  "TagInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "props": {
+    "value": "!string[]",
+    "onChange": "!(value: string[]) => void"
+   }
+  },
+  "Text": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "SpacingProps",
+    "TextProps"
+   ]
+  },
+  "Textarea": {
+   "group": "components",
+   "props": {
+    "id": "!string",
+    "label": "string",
+    "placeholder": "string",
+    "lines": "number | \"auto\" = 3",
+    "height": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "error": "boolean = false",
+    "errorMessage": "ReactNode",
+    "description": "ReactNode",
+    "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+    "className": "string",
+    "hasPrefix": "ReactNode",
+    "hasSuffix": "ReactNode",
+    "variant": "\"default\" | \"ghost\" = default",
+    "characterCount": "boolean",
+    "resize": "\"horizontal\" | \"vertical\" | \"both\" | \"none\" = vertical",
+    "validate": "(value: ReactNode) => ReactNode | null",
+    "disabled": "boolean = false"
+   }
+  },
+  "TiltFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "!React.ReactNode",
+    "intensity": "number = 1",
+    "reducedMotion": "boolean | \"auto\" = auto"
+   }
+  },
+  "Timeline": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!TimelineItem[]",
+    "alignment": "\"left\" | \"right\" = left",
+    "size": "TShirtSizes = m"
+   }
+  },
+  "Toast": {
+   "group": "components",
+   "props": {
+    "className": "string",
+    "variant": "!\"success\" | \"danger\"",
+    "icon": "boolean = true",
+    "onClose": "() => void",
+    "action": "React.ReactNode",
+    "children": "!React.ReactNode"
+   }
+  },
+  "Toaster": {
+   "group": "components",
+   "props": {
+    "toasts": "!{ id: string; variant: \"success\" | \"danger\"; message: React.ReactNode; action?: React.ReactNode; }[]",
+    "removeToast": "!(id: string) => void",
+    "xl": "ToastPosition",
+    "l": "ToastPosition",
+    "m": "ToastPosition",
+    "s": "ToastPosition",
+    "xs": "ToastPosition"
+   }
+  },
+  "ToggleButton": {
+   "group": "components",
+   "props": {
+    "label": "ReactNode",
+    "selected": "boolean = false",
+    "variant": "\"ghost\" | \"outline\" = ghost",
+    "size": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+    "rounded": "boolean = false",
+    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = center",
+    "fillWidth": "boolean = false",
+    "weight": "\"default\" | \"strong\" = default",
+    "truncate": "boolean = false",
+    "disabled": "boolean = false",
+    "prefixIcon": "IconName",
+    "suffixIcon": "IconName",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "children": "ReactNode",
+    "href": "string"
+   }
+  },
+  "Tooltip": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "!ReactNode",
+    "prefixIcon": "IconName",
+    "suffixIcon": "IconName",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "TypeFx": {
+   "group": "components",
+   "props": {
+    "words": "!string | string[]",
+    "speed": "number = 100",
+    "delay": "number = 0",
+    "hold": "number = 2000",
+    "trigger": "\"instant\" | \"custom\" = instant",
+    "onTrigger": "(triggerFn: () => void) => void",
+    "loop": "boolean = true",
+    "children": "React.ReactNode"
+   }
+  },
+  "ThemeSwitcher": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "User": {
+   "group": "components",
+   "props": {
+    "name": "string",
+    "children": "React.ReactNode",
+    "subline": "React.ReactNode",
+    "tag": "string",
+    "tagProps": "TagProps = {}",
+    "loading": "boolean = false",
+    "avatarProps": "AvatarProps = {}",
+    "className": "string"
+   }
+  },
+  "UserMenu": {
+   "group": "components",
+   "extends": [
+    "User",
+    "DropdownWrapper"
+   ],
+   "props": {
+    "selected": "boolean = false",
+    "placement": "Placement",
+    "dropdown": "React.ReactNode",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "CelebrationFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "type": "CelebrationType = confetti",
+    "speed": "number = 1",
+    "colors": "string[] = [\"brand-solid-medium\", \"accent-solid-medium\"]",
+    "intensity": "number = 50",
+    "duration": "number",
+    "trigger": "\"mount\" | \"hover\" | \"manual\" | \"click\" = mount",
+    "active": "boolean = true",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "children": "React.ReactNode"
+   }
+  },
+  "FadingLettersFx": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "SpacingProps",
+    "TextProps"
+   ],
+   "props": {
+    "text": "!string",
+    "animationState": "!AnimationState",
+    "messageIdx": "number = 0"
+   }
+  },
+  "CodeBlock": {
+   "group": "modules",
+   "extends": [
+    "CodeBlock.impl",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "MediaUpload": {
+   "group": "modules",
+   "extends": [
+    "MediaUpload.impl",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "Schema": {
+   "group": "modules",
+   "props": {
+    "as": "!\"website\" | \"article\" | \"blogPosting\" | \"techArticle\" | \"webPage\" | \"organization\"",
+    "title": "!string",
+    "description": "!string",
+    "baseURL": "!string",
+    "path": "!string",
+    "datePublished": "string",
+    "dateModified": "string",
+    "image": "string",
+    "sameAs": "string[] = []",
+    "author": "{ name: string; url?: string; image?: string; }"
+   }
+  },
+  "Kbar": {
+   "group": "modules",
+   "props": {
+    "items": "!KbarItem[]",
+    "children": "!React.ReactNode"
+   }
+  },
+  "MobileMegaMenu": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "menuGroups": "!MenuGroup[]",
+    "onClose": "() => void"
+   }
+  },
+  "MegaMenu": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "menuGroups": "!MenuGroup[]",
+    "className": "string"
+   }
+  },
+  "HeadingLink": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "id": "!string",
+    "as": "!\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\"",
+    "children": "!React.ReactNode",
+    "style": "React.CSSProperties"
+   }
+  },
+  "HeadingNav": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "header": "boolean = true"
+   }
+  },
+  "ChartHeader": {
+   "group": "modules",
+   "extends": [
+    "Flex",
+    "Column"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "React.ReactNode",
+    "description": "React.ReactNode",
+    "dateRange": "DateRange",
+    "date": "DateConfig",
+    "onDateRangeChange": "(range: DateRange) => void",
+    "presets": "PresetsConfig = { display: true, granularity: \"week\" }"
+   }
+  },
+  "ChartStatus": {
+   "group": "modules",
+   "props": {
+    "loading": "boolean = false",
+    "empty": "boolean = false",
+    "error": "boolean = false",
+    "emptyState": "React.ReactNode = No data available for the selected period",
+    "errorState": "React.ReactNode = An error occurred while fetching data"
+   }
+  },
+  "LinearGradient": {
+   "group": "modules",
+   "props": {
+    "id": "!string",
+    "color": "!string",
+    "x1": "string = 0",
+    "y1": "string = 0",
+    "x2": "string = 0",
+    "y2": "string = 1",
+    "stops": "GradientStop[]",
+    "variant": "ChartVariant = useDataTheme().variant"
+   }
+  },
+  "RadialGradient": {
+   "group": "modules",
+   "props": {
+    "id": "!string",
+    "color": "!string",
+    "cx": "string = 50%",
+    "cy": "string = 50%",
+    "r": "string = 50%",
+    "fx": "string = 50%",
+    "fy": "string = 50%",
+    "stops": "GradientStop[]",
+    "variant": "ChartVariant = useDataTheme().variant"
+   }
+  },
+  "BarChart": {
+   "group": "modules",
+   "extends": [
+    "BarChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "LineChart": {
+   "group": "modules",
+   "extends": [
+    "LineChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "PieChart": {
+   "group": "modules",
+   "extends": [
+    "PieChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "LineBarChart": {
+   "group": "modules",
+   "extends": [
+    "LineBarChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
+  "DataTooltip": {
+   "group": "modules",
+   "props": {
+    "active": "boolean",
+    "payload": "readonly any[]",
+    "label": "string | number",
+    "dataKey": "string = name",
+    "DataTooltip": "React.ReactNode",
+    "date": "DateConfig = { format: \"MMM d\" }",
+    "colors": "boolean = true",
+    "variant": "ChartVariant = gradient"
+   }
+  },
+  "Legend": {
+   "group": "modules",
+   "props": {
+    "payload": "readonly any[]",
+    "labels": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+    "colors": "string[]",
+    "reverseY": "boolean",
+    "direction": "\"row\" | \"column\"",
+    "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\" = top-left",
+    "variant": "ChartVariant = useDataTheme().variant"
+   }
+  },
+  "RadialGauge": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "width": "number = 300",
+    "height": "number = 300",
+    "line": "{ count?: number; width?: number; length?: number; }",
+    "unit": "React.ReactNode",
+    "value": "number = 7",
+    "angle": "{ start: number; sweep: number; } = {\r\n    start: 0,\r\n    sweep: 360,\r\n  }",
+    "direction": "'cw' | 'ccw' = cw",
+    "edgePad": "number = 0",
+    "children": "React.ReactNode",
+    "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
+    "color": "string = contrast"
+   }
+  },
+  "LinearGauge": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "width": "number = 400",
+    "height": "number = 80",
+    "line": "{ count?: number; width?: number; length?: number; }",
+    "value": "number = 50",
+    "labels": "\"none\" | \"percentage\" | string[] = none",
+    "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
+    "color": "string = contrast"
+   }
+  }
+ }
+}
