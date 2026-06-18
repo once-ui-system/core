@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "1.7.9",
+  "version": "1.7.10",
   "description": "Once UI for Next.js NPM package",
   "keywords": [
     "once-ui",
@@ -84,7 +84,8 @@
     "typecheck": "tsc --noEmit",
     "dev": "tsc --watch --preserveWatchOutput",
     "prepack": "pnpm build",
-    "generate-emoji-data": "node scripts/generate-emoji-data.js"
+    "generate-emoji-data": "node scripts/generate-emoji-data.js",
+    "generate-ai-spec": "node scripts/generate-ai-spec.js"
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.1.8",
