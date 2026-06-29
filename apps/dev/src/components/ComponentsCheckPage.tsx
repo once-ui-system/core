@@ -15,7 +15,6 @@ import {
     Media,
     EmojiPicker,
     EmojiPickerDropdown,
-    Flex,
     OgCard,
     Icon,
     Textarea,
@@ -49,7 +48,7 @@ import {
     TagInput,
     Avatar,
     Background,
-    Card,
+    Flex,
     Chip,
     Fade,
     Hover,
@@ -116,14 +115,14 @@ interface Category {
 
 function DemoCard({ name, children }: { name: string; children: React.ReactNode }) {
     return (
-        <Card padding="m" radius="l" fillWidth border="neutral-alpha-medium" background="surface">
+        <Flex padding="m" radius="l" fillWidth border="neutral-alpha-medium" background="surface">
             <Column gap="s" fillWidth>
                 <Text variant="label-default-s" onBackground="neutral-weak">{name}</Text>
                 <Flex center minHeight="8" fillWidth>
                     {children}
                 </Flex>
             </Column>
-        </Card>
+        </Flex>
     );
 }
 
@@ -202,6 +201,9 @@ export default function ComponentsCheck() {
                             <Button variant="primary">Primary</Button>
                             <Button variant="secondary">Secondary</Button>
                             <Button variant="tertiary">Tertiary</Button>
+                            <Button variant="quaternary">Quaternary</Button>
+                            <Button variant="success">Success</Button>
+                            <Button variant="warning">Warning</Button>
                             <Button variant="danger">Danger</Button>
                         </Row>
                     ),
@@ -213,6 +215,10 @@ export default function ComponentsCheck() {
                             <IconButton icon="sparkle" variant="primary" />
                             <IconButton icon="refresh" variant="secondary" />
                             <IconButton icon="plus" variant="tertiary" />
+                            <IconButton icon="check" variant="quaternary" />
+                            <IconButton icon="checkCircle" variant="success" />
+                            <IconButton icon="warning" variant="warning" />
+                            <IconButton icon="close" variant="danger" />
                         </Row>
                     ),
                 },
@@ -637,9 +643,9 @@ export default function ComponentsCheck() {
                     name: "CursorCard",
                     element: (
                         <CursorCard>
-                            <Card padding="l" radius="l" background="neutral-medium" center fillWidth>
+                            <Flex padding="l" radius="l" background="neutral-medium" center fillWidth>
                                 <Text>Move cursor over me</Text>
-                            </Card>
+                            </Flex>
                         </CursorCard>
                     ),
                 },
@@ -657,7 +663,7 @@ export default function ComponentsCheck() {
                         />
                     ),
                 },
-                { name: "Card", element: <Card padding="l" radius="l" fillWidth><Text>A simple card component</Text></Card> },
+                { name: "Flex", element: <Flex padding="l" radius="l" fillWidth><Text>A simple card component</Text></Flex> },
                 { name: "Background", element: <Background style={{ height: "8rem", position: "relative" }}><Text>Background</Text></Background> },
                 { name: "StylePanel", element: <StylePanel /> },
                 { name: "ThemeSwitcher", element: <ThemeSwitcher /> },

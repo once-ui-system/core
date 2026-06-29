@@ -1,6 +1,6 @@
 'use client';
 
-import { Row, Card, Column } from '@once-ui-system/core';
+import { Row, Card, Column } from '.';
 import { useState, useEffect, useRef, ReactNode } from 'react';
 
 interface SplitViewProps extends React.ComponentProps<typeof Row> {

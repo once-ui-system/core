@@ -9,7 +9,7 @@ import styles from "./Button.module.scss";
 import { IconName } from "../icons";
 
 interface CommonProps {
-  variant?: "primary" | "secondary" | "tertiary" | "danger";
+  variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "danger" | "success" | "warning";
   size?: "xs" | "s" | "m" | "l" | "xl";
   radius?:
     | "none"
@@ -119,7 +119,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
             }}
             trigger={"#" + id}
             scale={size === "s" ? 0.8 : size === "m" ? 0.9 : 1}
-            color={variant === "primary" ? "onSolid" : "onBackground"}
+            color={variant === "primary" || variant === "danger" || variant === "success" || variant === "warning" ? "onSolid" : "onBackground"}
           />
         )}
         {suffixIcon && <Icon name={suffixIcon} size={iconSize} />}
