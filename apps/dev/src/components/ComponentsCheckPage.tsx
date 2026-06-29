@@ -133,11 +133,8 @@ export default function ComponentsCheck() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const { addToast } = useToast();
 
-    const handleAddToast = () => {
-        addToast({
-            variant: 'success',
-            message: "This is a toast!",
-        });
+    const handleAddToast = (variant: "success" | "danger" | "warning" | "info") => {
+        addToast({ variant, message: `This is a ${variant} toast!` });
     };
 
     const categories: Category[] = [
@@ -513,7 +510,12 @@ export default function ComponentsCheck() {
                 {
                     name: "Toaster",
                     element: (
-                        <Button onClick={() => handleAddToast()}>Show Toast</Button>
+                        <Row gap="8" wrap>
+                            <Button onClick={() => handleAddToast("success")}>Success</Button>
+                            <Button onClick={() => handleAddToast("danger")}>Danger</Button>
+                            <Button onClick={() => handleAddToast("warning")}>Warning</Button>
+                            <Button onClick={() => handleAddToast("info")}>Info</Button>
+                        </Row>
                     )
                 }
             ],

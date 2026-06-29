@@ -11,7 +11,7 @@ import { ToastPosition } from "../types";
 interface ToasterProps {
   toasts: {
     id: string;
-    variant: "success" | "danger";
+    variant: "success" | "danger" | "warning" | "info";
     message: React.ReactNode;
     action?: React.ReactNode;
   }[];
