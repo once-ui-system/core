@@ -56,19 +56,36 @@ const AccordionGroup: React.FC<AccordionGroupProps> = ({
       className={className || ""}
       {...rest}
     >
-      {items.map((item, index) => (
-        <React.Fragment key={index}>
-          <Accordion
-            title={item.title}
-            size={size}
-            open={autoCollapse ? openAccordion === index : undefined}
-            onToggle={() => handleAccordionToggle(index)}
-          >
-            {item.content}
-          </Accordion>
-          {index < items.length - 1 && <Line background="neutral-alpha-medium" />}
-        </React.Fragment>
-      ))}
+      {items.map((item, index) => {
+        const isFirst = index === 0;
+        const isLast = index === items.length - 1;
+
+        let radiusStyle: React.CSSProperties | undefined;
+        if (items.length > 1) {
+          if (isFirst) {
+            radiusStyle = { borderRadius: "var(--radius-m) var(--radius-m) 0 0" };
+          } else if (isLast) {
+            radiusStyle = { borderRadius: "0 0 var(--radius-m) var(--radius-m)" };
+          } else {
+            radiusStyle = { borderRadius: 0 };
+          }
+        }
+
+        return (
+          <React.Fragment key={index}>
+            <Accordion
+              title={item.title}
+              size={size}
+              open={autoCollapse ? openAccordion === index : undefined}
+              onToggle={() => handleAccordionToggle(index)}
+              headerProps={radiusStyle ? { style: radiusStyle } : undefined}
+            >
+              {item.content}
+            </Accordion>
+            {!isLast && <Line background="neutral-alpha-medium" />}
+          </React.Fragment>
+        );
+      })}
     </Column>
   );
 };

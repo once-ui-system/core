@@ -83,6 +83,7 @@ import {
     AvatarGroup,
     UserMenu,
     ThemeSwitcher,
+    Banner,
     Timeline,
     NavIcon,
     CursorCard,
@@ -133,8 +134,8 @@ export default function ComponentsCheck() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const { addToast } = useToast();
 
-    const handleAddToast = (variant: "success" | "danger" | "warning" | "info") => {
-        addToast({ variant, message: `This is a ${variant} toast!` });
+    const handleAddToast = () => {
+        addToast({ variant: 'success', message: "This is a toast!" });
     };
 
     const categories: Category[] = [
@@ -198,7 +199,7 @@ export default function ComponentsCheck() {
                             <Button variant="primary">Primary</Button>
                             <Button variant="secondary">Secondary</Button>
                             <Button variant="tertiary">Tertiary</Button>
-                            <Button variant="quaternary">Quaternary</Button>
+                            <Button variant="subtle">Subtle</Button>
                             <Button variant="success">Success</Button>
                             <Button variant="warning">Warning</Button>
                             <Button variant="danger">Danger</Button>
@@ -212,7 +213,7 @@ export default function ComponentsCheck() {
                             <IconButton icon="sparkle" variant="primary" />
                             <IconButton icon="refresh" variant="secondary" />
                             <IconButton icon="plus" variant="tertiary" />
-                            <IconButton icon="check" variant="quaternary" />
+                            <IconButton icon="check" variant="subtle" />
                             <IconButton icon="checkCircle" variant="success" />
                             <IconButton icon="warning" variant="warning" />
                             <IconButton icon="close" variant="danger" />
@@ -510,12 +511,7 @@ export default function ComponentsCheck() {
                 {
                     name: "Toaster",
                     element: (
-                        <Row gap="8" wrap>
-                            <Button onClick={() => handleAddToast("success")}>Success</Button>
-                            <Button onClick={() => handleAddToast("danger")}>Danger</Button>
-                            <Button onClick={() => handleAddToast("warning")}>Warning</Button>
-                            <Button onClick={() => handleAddToast("info")}>Info</Button>
-                        </Row>
+                        <Button onClick={() => handleAddToast()}>Show Toast</Button>
                     )
                 }
             ],
@@ -644,11 +640,10 @@ export default function ComponentsCheck() {
                 {
                     name: "CursorCard",
                     element: (
-                        <CursorCard>
-                            <Flex padding="l" radius="l" background="neutral-medium" center fillWidth>
-                                <Text>Move cursor over me</Text>
-                            </Flex>
-                        </CursorCard>
+                        <CursorCard
+                            trigger={<Flex padding="l" radius="l" background="neutral-medium" center fillWidth><Text>Move cursor over me</Text></Flex>}
+                            overlay={<Flex padding="l" radius="l" background="surface" border="neutral-medium"><Text>I follow your cursor!</Text></Flex>}
+                        />
                     ),
                 },
                 {
@@ -787,6 +782,129 @@ export default function ComponentsCheck() {
                                 { date: new Date(2025, 5), Users: 480 },
                             ]}
                         />
+                    ),
+                },
+            ],
+        },
+        {
+            id: "modified",
+            name: "Modified Components",
+            description: "Custom changes and new features added",
+            components: [
+                {
+                    name: "Toast all variants",
+                    element: (
+                        <Row gap="8" wrap>
+                            <Button onClick={() => addToast({ variant: 'success', message: "Success toast!" })}>Success</Button>
+                            <Button onClick={() => addToast({ variant: 'danger', message: "Danger toast!" })}>Danger</Button>
+                            <Button onClick={() => addToast({ variant: 'warning', message: "Warning toast!" })}>Warning</Button>
+                            <Button onClick={() => addToast({ variant: 'info', message: "Info toast!" })}>Info</Button>
+                        </Row>
+                    ),
+                },
+                {
+                    name: "ProgressBar positions",
+                    element: (
+                        <Column gap="s" fillWidth>
+                            <ProgressBar value={25} labelPosition="bottom" />
+                            <ProgressBar value={65} labelPosition="top" />
+                            <ProgressBar value={75} labelPosition="left" />
+                            <ProgressBar value={90} labelPosition="right" />
+                        </Column>
+                    ),
+                },
+                {
+                    name: "CompareImage grab cursor",
+                    element: (
+                        <CompareImage
+                            leftContent={{ src: "/images/cover-01.jpg" }}
+                            rightContent={{ src: "/images/cover-02.jpg" }}
+                        />
+                    ),
+                },
+                {
+                    name: "AccordionGroup smart radius",
+                    element: (
+                        <AccordionGroup
+                            items={[
+                                { title: "First item", content: "Top accordion — only top corners rounded" },
+                                { title: "Second item", content: "Middle accordion — no border radius" },
+                                { title: "Third item", content: "Bottom accordion — only bottom corners rounded" },
+                            ]}
+                        />
+                    ),
+                },
+                {
+                    name: "Feedback",
+                    element: <Feedback icon title="Changes saved" description="Your settings have been updated successfully." />,
+                },
+                {
+                    name: "Text opacity",
+                    element: (
+                        <Column gap="8">
+                            <Text opacity={100}>Opacity 100 (default)</Text>
+                            <Text opacity={60}>Opacity 60</Text>
+                            <Text opacity={30}>Opacity 30</Text>
+                            <Text opacity={10}>Opacity 10</Text>
+                        </Column>
+                    ),
+                },
+                {
+                    name: "Button variants",
+                    element: (
+                        <Row gap="8" wrap>
+                            <Button variant="subtle">Subtle</Button>
+                            <Button variant="success">Success</Button>
+                            <Button variant="warning">Warning</Button>
+                        </Row>
+                    ),
+                },
+                {
+                    name: "IconButton variants",
+                    element: (
+                        <Row gap="8">
+                            <IconButton variant="subtle" icon="settings" />
+                            <IconButton variant="success" icon="check" />
+                            <IconButton variant="warning" icon="warning" />
+                        </Row>
+                    ),
+                },
+                {
+                    name: "Option subtle variant",
+                    element: (
+                        <Column gap="4" fillWidth>
+                            <Option variant="default" value="1" label="Default option" />
+                            <Option variant="subtle" value="2" label="Subtle option" />
+                            <Option variant="subtle" value="3" label="Subtle selected" selected />
+                        </Column>
+                    ),
+                },
+                {
+                    name: "CursorCard smooth follow",
+                    element: (
+                        <CursorCard
+                            trigger={<Flex padding="l" radius="l" background="neutral-medium" center fillWidth><Text>Hover me — card follows smoothly</Text></Flex>}
+                            overlay={<Flex padding="l" radius="l" background="surface" border="neutral-medium"><Text>I glide to your cursor ✨</Text></Flex>}
+                        />
+                    ),
+                },
+                {
+                    name: "Input / Button size sync",
+                    element: (
+                        <Column gap="12" fillWidth>
+                            {(["xs", "s", "m", "l", "xl"] as const).map((s) => (
+                                <Column gap="8" key={s}>
+                                    <Text variant="label-default-s" onBackground="neutral-weak">{s.toUpperCase()}</Text>
+                                    <Row gap="8" wrap vertical="center">
+                                        <Button size={s} label={s.toUpperCase()} />
+                                        <Input id={`size-${s}`} height={s} label="Input" placeholder={s} />
+                                        <ColorInput id={`color-${s}`} height={s} value="#3b82f6" onChange={() => {}} />
+                                        <DateInput id={`date-${s}`} height={s} />
+                                        <DateRangeInput id={`dr-${s}`} height={s} startLabel="Start" endLabel="End" />
+                                    </Row>
+                                </Column>
+                            ))}
+                        </Column>
                     ),
                 },
             ],

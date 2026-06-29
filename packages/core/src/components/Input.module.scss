@@ -1,6 +1,6 @@
 .base {
     backdrop-filter: var(--backdrop-filter);
-    min-height: var(--static-space-56);
+    min-height: var(--static-space-40);
 
     &.focused, &.filled {
         border-color: var(--neutral-border-medium);
@@ -55,11 +55,15 @@
 }
 
 .xs {
-    min-height: var(--static-space-40);
+    min-height: var(--static-space-24);
+
+    .input:not(.placeholder) {
+        padding-top: var(--static-space-4);
+    }
 
     .label, .textareaLabel {
         &.floating {
-            top: calc(var(--static-space-4) - var(--static-space-1));
+            top: calc(var(--static-space-1));
         }
     }
 
@@ -71,31 +75,43 @@
 }
 
 .s {
-    min-height: var(--static-space-48);
+    min-height: var(--static-space-32);
+
+    .input:not(.placeholder) {
+        padding-top: var(--static-space-6);
+    }
 
     .label, .textareaLabel {
         &.floating {
-            top: calc(var(--static-space-4) - var(--static-space-1));
+            top: calc(var(--static-space-2));
         }
     }
 }
 
 .m {
-    min-height: var(--static-space-56);
+    min-height: var(--static-space-40);
+
+    .input:not(.placeholder) {
+        padding-top: var(--static-space-8);
+    }
     
     .label, .textareaLabel {
         &.floating {
-            top: calc(var(--static-space-8) - var(--static-space-2));
+            top: calc(var(--static-space-4));
         }
     }
 }
 
 .l {
-    min-height: var(--static-space-64);
+    min-height: var(--static-space-48);
+
+    .input:not(.placeholder) {
+        padding-top: var(--static-space-10);
+    }
     
     .label {
         &.floating {
-            top: calc(var(--static-space-8) - var(--static-space-2));
+            top: calc(var(--static-space-6));
         }
     }
 
@@ -107,11 +123,15 @@
 }
 
 .xl {
-    min-height: var(--static-space-72);
+    min-height: var(--static-space-56);
+
+    .input:not(.placeholder) {
+        padding-top: var(--static-space-12);
+    }
     
     .label {
         &.floating {
-            top: calc(var(--static-space-12) - var(--static-space-2));
+            top: calc(var(--static-space-8));
         }
     }
     
@@ -142,7 +162,7 @@
     }
 
     &:not(.placeholder) {
-        padding-top: var(--static-space-16);
+        padding-top: var(--static-space-12);
     }
 
     &.placeholder.hasChildren {

@@ -121,7 +121,7 @@
   }
 }
 
-.quaternary {
+.subtle {
   background: color-mix(
     in srgb,
     var(--neutral-background-medium) 70%,
@@ -144,7 +144,7 @@
     &:hover:not([data-disabled]) {
       background: color-mix(
         in srgb,
-        var(--neutral-background-strong) 40%,
+        var(--neutral-background-strong) 50%,
         transparent
       );
     }

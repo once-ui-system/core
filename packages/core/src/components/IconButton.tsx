@@ -25,7 +25,7 @@ interface CommonProps {
   rounded?: boolean;
   tooltip?: ReactNode;
   tooltipPosition?: "top" | "bottom" | "left" | "right";
-  variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "danger" | "success" | "warning" | "ghost";
+  variant?: "primary" | "secondary" | "tertiary" | "subtle" | "danger" | "success" | "warning" | "ghost";
   loading?: boolean;
   disabled?: boolean;
   className?: string;

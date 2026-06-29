@@ -9,6 +9,7 @@ export interface OptionProps extends Omit<React.ComponentProps<typeof Row>, "onC
   label?: React.ReactNode;
   href?: string;
   value: string;
+  variant?: "default" | "subtle";
   hasPrefix?: React.ReactNode;
   hasSuffix?: React.ReactNode;
   description?: React.ReactNode;
@@ -31,6 +32,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
       hasPrefix,
       hasSuffix,
       description,
+      variant = "default",
       danger,
       selected,
       disabled = false,
@@ -155,7 +157,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           cursor={disabled ? "not-allowed" : "interactive"}
           transition="micro-medium"
           onBackground="neutral-strong"
-          className={classNames(styles.option, {
+          className={classNames(styles.option, styles[variant], {
             [styles.danger]: danger,
             [styles.selected]: selected,
             [styles.highlighted]: highlighted || isHighlightedByClass,

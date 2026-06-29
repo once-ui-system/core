@@ -9,7 +9,7 @@ import { IconName } from "../icons";
 interface CommonProps {
   label?: ReactNode;
   selected?: boolean;
-  variant?: "ghost" | "outline";
+  variant?: "ghost" | "outline" | "subtle";
   size?: "xs" | "s" | "m" | "l" | "xl";
   radius?:
     | "none"

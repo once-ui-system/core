@@ -38,19 +38,19 @@ const renderContent = (content: SideContent, clipPath: string, aspectRatio?: str
 
 const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: CompareImageProps) => {
   const [position, setPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
 
   const handleMouseDown = () => {
-    isDragging.current = true;
+    setIsDragging(true);
   };
 
   const handleMouseUp = () => {
-    isDragging.current = false;
+    setIsDragging(false);
   };
 
   const updatePosition = (clientX: number) => {
-    if (!isDragging.current || !containerRef.current) return;
+    if (!isDragging || !containerRef.current) return;
 
     const rect = containerRef.current.getBoundingClientRect();
     const x = clientX - rect.left;
@@ -98,6 +98,7 @@ const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: Compa
         bottom="0"
         style={{
           left: `${position}%`,
+          cursor: isDragging ? "grabbing" : "grab",
         }}
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
@@ -117,6 +118,7 @@ const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: Compa
           variant="secondary"
           onMouseDown={handleMouseDown}
           onTouchStart={handleMouseDown}
+          style={{ cursor: isDragging ? "grabbing" : "grab" }}
         />
       </Flex>
     </Flex>
