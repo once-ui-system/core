@@ -120,66 +120,10 @@ There are 12 weights available for each color scheme:
 
 ## Semantic tokens
 
-Semantic tokens are contextual — they adapt based on your theme configuration. Each of the 7 semantic schemes provides tokens for backgrounds, text, solids, borders, and overlays across the `strong`, `medium`, and `weak` weight variants.
+Semantic tokens are contextual — they adapt based on your theme configuration. Each of the 7 semantic schemes provides tokens for backgrounds, text, solids, borders, and overlays across the `strong`, `medium`, and `weak` weight variants. 
 
-<Grid
-  marginBottom="48"
-  fillWidth
-  gap="1"
-  columns="4"
-  s={{ columns: 2 }}
-  radius="l"
-  overflow="hidden"
->
-  {[
-    {
-      name: "Neutral",
-      color: "var(--neutral-background-strong)",
-      text: "var(--neutral-on-background-medium)",
-    },
-    {
-      name: "Brand",
-      color: "var(--brand-background-strong)",
-      text: "var(--brand-on-background-medium)",
-    },
-    {
-      name: "Accent",
-      color: "var(--accent-background-strong)",
-      text: "var(--accent-on-background-medium)",
-    },
-    {
-      name: "Info",
-      color: "var(--info-background-strong)",
-      text: "var(--info-on-background-medium)",
-    },
-    {
-      name: "Danger",
-      color: "var(--danger-background-strong)",
-      text: "var(--danger-on-background-medium)",
-    },
-    {
-      name: "Warning",
-      color: "var(--warning-background-strong)",
-      text: "var(--warning-on-background-medium)",
-    },
-    {
-      name: "Success",
-      color: "var(--success-background-strong)",
-      text: "var(--success-on-background-medium)",
-    },
-  ].map((scheme) => (
-    <Flex
-      padding="16"
-      horizontal="center"
-      align="center"
-      textVariant="label-default-m"
-      key={scheme.name}
-      style={{ backgroundColor: scheme.color, color: scheme.text }}
-    >
-      {scheme.name}
-    </Flex>
-  ))}
-</Grid>
+
+<Button size="s" variant="secondary" prefixIcon="github" weight="default" data-border="rounded" href="https://github.com/once-ui-system/core/tree/main/packages/core/src/tokens">View token source on GitHub</Button>
 
 ### 1. Neutral
 
@@ -193,63 +137,108 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   overflow="hidden"
 >
   {[
-    { l: "bg-s", c: "var(--neutral-background-strong)" },
-    { l: "bg-m", c: "var(--neutral-background-medium)" },
-    { l: "bg-w", c: "var(--neutral-background-weak)" },
     {
-      l: "on-bg-s",
-      c: "var(--neutral-on-background-strong)",
-      t: "var(--neutral-background-weak)",
+      label: "background-strong",
+      bg: "var(--neutral-background-strong)",
+      color: "var(--neutral-on-background-strong)",
     },
     {
-      l: "on-bg-m",
-      c: "var(--neutral-on-background-medium)",
-      t: "var(--neutral-background-weak)",
+      label: "background-medium",
+      bg: "var(--neutral-background-medium)",
+      color: "var(--neutral-on-background-medium)",
     },
     {
-      l: "on-bg-w",
-      c: "var(--neutral-on-background-weak)",
-      t: "var(--neutral-background-weak)",
-    },
-    { l: "solid-s", c: "var(--neutral-solid-strong)" },
-    { l: "solid-m", c: "var(--neutral-solid-medium)" },
-    { l: "solid-w", c: "var(--neutral-solid-weak)" },
-    {
-      l: "on-sol-s",
-      c: "var(--neutral-on-solid-strong)",
-      t: "var(--neutral-solid-strong)",
+      label: "background-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--neutral-on-background-weak)",
     },
     {
-      l: "on-sol-w",
-      c: "var(--neutral-on-solid-weak)",
-      t: "var(--neutral-solid-strong)",
+      label: "on-background-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--neutral-on-background-strong)",
     },
-    { l: "bdr-s", c: "var(--neutral-border-strong)", b: true },
-    { l: "bdr-m", c: "var(--neutral-border-medium)", b: true },
-    { l: "bdr-w", c: "var(--neutral-border-weak)", b: true },
-    { l: "alpha-s", c: "var(--neutral-alpha-strong)" },
-    { l: "alpha-m", c: "var(--neutral-alpha-medium)" },
-    { l: "alpha-w", c: "var(--neutral-alpha-weak)" },
-  ].map((t) => (
+    {
+      label: "on-background-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--neutral-on-background-medium)",
+    },
+    {
+      label: "on-background-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--neutral-on-background-weak)",
+    },
+    {
+      label: "solid-strong",
+      bg: "var(--neutral-solid-strong)",
+      color: "var(--neutral-on-solid-strong)",
+    },
+    {
+      label: "solid-medium",
+      bg: "var(--neutral-solid-medium)",
+      color: "var(--neutral-on-solid-strong)",
+    },
+    {
+      label: "solid-weak",
+      bg: "var(--neutral-solid-weak)",
+      color: "var(--neutral-on-solid-weak)",
+    },
+    {
+      label: "on-solid-strong",
+      bg: "var(--neutral-solid-strong)",
+      color: "var(--neutral-on-solid-strong)",
+    },
+    {
+      label: "on-solid-weak",
+      bg: "var(--neutral-solid-strong)",
+      color: "var(--neutral-on-solid-weak)",
+    },
+    {
+      label: "border-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--neutral-on-background-strong)",
+      border: "var(--neutral-border-strong)",
+    },
+    {
+      label: "border-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--neutral-on-background-medium)",
+      border: "var(--neutral-border-medium)",
+    },
+    {
+      label: "border-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--neutral-on-background-weak)",
+      border: "var(--neutral-border-weak)",
+    },
+    {
+      label: "alpha-strong",
+      bg: "var(--neutral-alpha-strong)",
+      color: "var(--neutral-on-background-strong)",
+    },
+    {
+      label: "alpha-medium",
+      bg: "var(--neutral-alpha-medium)",
+      color: "var(--neutral-on-background-strong)",
+    },
+    {
+      label: "alpha-weak",
+      bg: "var(--neutral-alpha-weak)",
+      color: "var(--neutral-on-background-strong)",
+    },
+  ].map((item) => (
     <Flex
-      padding="12"
+      padding="16"
       horizontal="center"
       align="center"
       textVariant="label-default-xs"
-      key={t.l}
-      onSolid={t.t ? undefined : "neutral-strong"}
-      style={
-        t.t
-          ? { backgroundColor: t.t, color: t.c }
-          : t.b
-            ? {
-                backgroundColor: "var(--neutral-background-weak)",
-                border: `2px solid ${t.c}`,
-              }
-            : { backgroundColor: t.c }
-      }
+      key={item.label}
+      style={{
+        backgroundColor: item.bg,
+        color: item.color,
+        ...(item.border ? { border: `2px solid ${item.border}` } : {}),
+      }}
     >
-      {t.l}
+      {item.label}
     </Flex>
   ))}
 </Grid>
@@ -265,7 +254,7 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   ]}
 />
 
-### 2. brand
+### 2. Brand
 
 <Grid
   marginBottom="16"
@@ -277,63 +266,108 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   overflow="hidden"
 >
   {[
-    { l: "bg-s", c: "var(--brand-background-strong)" },
-    { l: "bg-m", c: "var(--brand-background-medium)" },
-    { l: "bg-w", c: "var(--brand-background-weak)" },
     {
-      l: "on-bg-s",
-      c: "var(--brand-on-background-strong)",
-      t: "var(--neutral-background-weak)",
+      label: "background-strong",
+      bg: "var(--brand-background-strong)",
+      color: "var(--brand-on-background-strong)",
     },
     {
-      l: "on-bg-m",
-      c: "var(--brand-on-background-medium)",
-      t: "var(--neutral-background-weak)",
+      label: "background-medium",
+      bg: "var(--brand-background-medium)",
+      color: "var(--brand-on-background-medium)",
     },
     {
-      l: "on-bg-w",
-      c: "var(--brand-on-background-weak)",
-      t: "var(--neutral-background-weak)",
-    },
-    { l: "solid-s", c: "var(--brand-solid-strong)" },
-    { l: "solid-m", c: "var(--brand-solid-medium)" },
-    { l: "solid-w", c: "var(--brand-solid-weak)" },
-    {
-      l: "on-sol-s",
-      c: "var(--brand-on-solid-strong)",
-      t: "var(--brand-solid-strong)",
+      label: "background-weak",
+      bg: "var(--brand-background-weak)",
+      color: "var(--brand-on-background-weak)",
     },
     {
-      l: "on-sol-w",
-      c: "var(--brand-on-solid-weak)",
-      t: "var(--brand-solid-strong)",
+      label: "on-background-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--brand-on-background-strong)",
     },
-    { l: "bdr-s", c: "var(--brand-border-strong)", b: true },
-    { l: "bdr-m", c: "var(--brand-border-medium)", b: true },
-    { l: "bdr-w", c: "var(--brand-border-weak)", b: true },
-    { l: "alpha-s", c: "var(--brand-alpha-strong)" },
-    { l: "alpha-m", c: "var(--brand-alpha-medium)" },
-    { l: "alpha-w", c: "var(--brand-alpha-weak)" },
-  ].map((t) => (
+    {
+      label: "on-background-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--brand-on-background-medium)",
+    },
+    {
+      label: "on-background-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--brand-on-background-weak)",
+    },
+    {
+      label: "solid-strong",
+      bg: "var(--brand-solid-strong)",
+      color: "var(--brand-on-solid-strong)",
+    },
+    {
+      label: "solid-medium",
+      bg: "var(--brand-solid-medium)",
+      color: "var(--brand-on-solid-strong)",
+    },
+    {
+      label: "solid-weak",
+      bg: "var(--brand-solid-weak)",
+      color: "var(--brand-on-solid-weak)",
+    },
+    {
+      label: "on-solid-strong",
+      bg: "var(--brand-solid-strong)",
+      color: "var(--brand-on-solid-strong)",
+    },
+    {
+      label: "on-solid-weak",
+      bg: "var(--brand-solid-strong)",
+      color: "var(--brand-on-solid-weak)",
+    },
+    {
+      label: "border-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--brand-on-background-strong)",
+      border: "var(--brand-border-strong)",
+    },
+    {
+      label: "border-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--brand-on-background-medium)",
+      border: "var(--brand-border-medium)",
+    },
+    {
+      label: "border-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--brand-on-background-weak)",
+      border: "var(--brand-border-weak)",
+    },
+    {
+      label: "alpha-strong",
+      bg: "var(--brand-alpha-strong)",
+      color: "var(--brand-on-background-strong)",
+    },
+    {
+      label: "alpha-medium",
+      bg: "var(--brand-alpha-medium)",
+      color: "var(--brand-on-background-strong)",
+    },
+    {
+      label: "alpha-weak",
+      bg: "var(--brand-alpha-weak)",
+      color: "var(--brand-on-background-strong)",
+    },
+  ].map((item) => (
     <Flex
-      padding="12"
+      padding="16"
       horizontal="center"
       align="center"
       textVariant="label-default-xs"
-      key={t.l}
-      onSolid={t.t ? undefined : "neutral-strong"}
-      style={
-        t.t
-          ? { backgroundColor: t.t, color: t.c }
-          : t.b
-            ? {
-                backgroundColor: "var(--neutral-background-weak)",
-                border: `2px solid ${t.c}`,
-              }
-            : { backgroundColor: t.c }
-      }
+      key={item.label}
+      style={{
+        backgroundColor: item.bg,
+        color: item.color,
+        ...(item.border ? { border: `2px solid ${item.border}` } : {}),
+      }}
     >
-      {t.l}
+      {item.label}
     </Flex>
   ))}
 </Grid>
@@ -349,7 +383,7 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   ]}
 />
 
-### 3. accent
+### 3. Accent
 
 <Grid
   marginBottom="16"
@@ -361,63 +395,108 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   overflow="hidden"
 >
   {[
-    { l: "bg-s", c: "var(--accent-background-strong)" },
-    { l: "bg-m", c: "var(--accent-background-medium)" },
-    { l: "bg-w", c: "var(--accent-background-weak)" },
     {
-      l: "on-bg-s",
-      c: "var(--accent-on-background-strong)",
-      t: "var(--neutral-background-weak)",
+      label: "background-strong",
+      bg: "var(--accent-background-strong)",
+      color: "var(--accent-on-background-strong)",
     },
     {
-      l: "on-bg-m",
-      c: "var(--accent-on-background-medium)",
-      t: "var(--neutral-background-weak)",
+      label: "background-medium",
+      bg: "var(--accent-background-medium)",
+      color: "var(--accent-on-background-medium)",
     },
     {
-      l: "on-bg-w",
-      c: "var(--accent-on-background-weak)",
-      t: "var(--neutral-background-weak)",
-    },
-    { l: "solid-s", c: "var(--accent-solid-strong)" },
-    { l: "solid-m", c: "var(--accent-solid-medium)" },
-    { l: "solid-w", c: "var(--accent-solid-weak)" },
-    {
-      l: "on-sol-s",
-      c: "var(--accent-on-solid-strong)",
-      t: "var(--accent-solid-strong)",
+      label: "background-weak",
+      bg: "var(--accent-background-weak)",
+      color: "var(--accent-on-background-weak)",
     },
     {
-      l: "on-sol-w",
-      c: "var(--accent-on-solid-weak)",
-      t: "var(--accent-solid-strong)",
+      label: "on-background-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--accent-on-background-strong)",
     },
-    { l: "bdr-s", c: "var(--accent-border-strong)", b: true },
-    { l: "bdr-m", c: "var(--accent-border-medium)", b: true },
-    { l: "bdr-w", c: "var(--accent-border-weak)", b: true },
-    { l: "alpha-s", c: "var(--accent-alpha-strong)" },
-    { l: "alpha-m", c: "var(--accent-alpha-medium)" },
-    { l: "alpha-w", c: "var(--accent-alpha-weak)" },
-  ].map((t) => (
+    {
+      label: "on-background-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--accent-on-background-medium)",
+    },
+    {
+      label: "on-background-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--accent-on-background-weak)",
+    },
+    {
+      label: "solid-strong",
+      bg: "var(--accent-solid-strong)",
+      color: "var(--accent-on-solid-strong)",
+    },
+    {
+      label: "solid-medium",
+      bg: "var(--accent-solid-medium)",
+      color: "var(--accent-on-solid-strong)",
+    },
+    {
+      label: "solid-weak",
+      bg: "var(--accent-solid-weak)",
+      color: "var(--accent-on-solid-weak)",
+    },
+    {
+      label: "on-solid-strong",
+      bg: "var(--accent-solid-strong)",
+      color: "var(--accent-on-solid-strong)",
+    },
+    {
+      label: "on-solid-weak",
+      bg: "var(--accent-solid-strong)",
+      color: "var(--accent-on-solid-weak)",
+    },
+    {
+      label: "border-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--accent-on-background-strong)",
+      border: "var(--accent-border-strong)",
+    },
+    {
+      label: "border-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--accent-on-background-medium)",
+      border: "var(--accent-border-medium)",
+    },
+    {
+      label: "border-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--accent-on-background-weak)",
+      border: "var(--accent-border-weak)",
+    },
+    {
+      label: "alpha-strong",
+      bg: "var(--accent-alpha-strong)",
+      color: "var(--accent-on-background-strong)",
+    },
+    {
+      label: "alpha-medium",
+      bg: "var(--accent-alpha-medium)",
+      color: "var(--accent-on-background-strong)",
+    },
+    {
+      label: "alpha-weak",
+      bg: "var(--accent-alpha-weak)",
+      color: "var(--accent-on-background-strong)",
+    },
+  ].map((item) => (
     <Flex
-      padding="12"
+      padding="16"
       horizontal="center"
       align="center"
       textVariant="label-default-xs"
-      key={t.l}
-      onSolid={t.t ? undefined : "neutral-strong"}
-      style={
-        t.t
-          ? { backgroundColor: t.t, color: t.c }
-          : t.b
-            ? {
-                backgroundColor: "var(--neutral-background-weak)",
-                border: `2px solid ${t.c}`,
-              }
-            : { backgroundColor: t.c }
-      }
+      key={item.label}
+      style={{
+        backgroundColor: item.bg,
+        color: item.color,
+        ...(item.border ? { border: `2px solid ${item.border}` } : {}),
+      }}
     >
-      {t.l}
+      {item.label}
     </Flex>
   ))}
 </Grid>
@@ -433,7 +512,7 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   ]}
 />
 
-### 4. info
+### 4. Info
 
 <Grid
   marginBottom="16"
@@ -445,63 +524,108 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   overflow="hidden"
 >
   {[
-    { l: "bg-s", c: "var(--info-background-strong)" },
-    { l: "bg-m", c: "var(--info-background-medium)" },
-    { l: "bg-w", c: "var(--info-background-weak)" },
     {
-      l: "on-bg-s",
-      c: "var(--info-on-background-strong)",
-      t: "var(--neutral-background-weak)",
+      label: "background-strong",
+      bg: "var(--info-background-strong)",
+      color: "var(--info-on-background-strong)",
     },
     {
-      l: "on-bg-m",
-      c: "var(--info-on-background-medium)",
-      t: "var(--neutral-background-weak)",
+      label: "background-medium",
+      bg: "var(--info-background-medium)",
+      color: "var(--info-on-background-medium)",
     },
     {
-      l: "on-bg-w",
-      c: "var(--info-on-background-weak)",
-      t: "var(--neutral-background-weak)",
-    },
-    { l: "solid-s", c: "var(--info-solid-strong)" },
-    { l: "solid-m", c: "var(--info-solid-medium)" },
-    { l: "solid-w", c: "var(--info-solid-weak)" },
-    {
-      l: "on-sol-s",
-      c: "var(--info-on-solid-strong)",
-      t: "var(--info-solid-strong)",
+      label: "background-weak",
+      bg: "var(--info-background-weak)",
+      color: "var(--info-on-background-weak)",
     },
     {
-      l: "on-sol-w",
-      c: "var(--info-on-solid-weak)",
-      t: "var(--info-solid-strong)",
+      label: "on-background-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--info-on-background-strong)",
     },
-    { l: "bdr-s", c: "var(--info-border-strong)", b: true },
-    { l: "bdr-m", c: "var(--info-border-medium)", b: true },
-    { l: "bdr-w", c: "var(--info-border-weak)", b: true },
-    { l: "alpha-s", c: "var(--info-alpha-strong)" },
-    { l: "alpha-m", c: "var(--info-alpha-medium)" },
-    { l: "alpha-w", c: "var(--info-alpha-weak)" },
-  ].map((t) => (
+    {
+      label: "on-background-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--info-on-background-medium)",
+    },
+    {
+      label: "on-background-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--info-on-background-weak)",
+    },
+    {
+      label: "solid-strong",
+      bg: "var(--info-solid-strong)",
+      color: "var(--info-on-solid-strong)",
+    },
+    {
+      label: "solid-medium",
+      bg: "var(--info-solid-medium)",
+      color: "var(--info-on-solid-strong)",
+    },
+    {
+      label: "solid-weak",
+      bg: "var(--info-solid-weak)",
+      color: "var(--info-on-solid-weak)",
+    },
+    {
+      label: "on-solid-strong",
+      bg: "var(--info-solid-strong)",
+      color: "var(--info-on-solid-strong)",
+    },
+    {
+      label: "on-solid-weak",
+      bg: "var(--info-solid-strong)",
+      color: "var(--info-on-solid-weak)",
+    },
+    {
+      label: "border-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--info-on-background-strong)",
+      border: "var(--info-border-strong)",
+    },
+    {
+      label: "border-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--info-on-background-medium)",
+      border: "var(--info-border-medium)",
+    },
+    {
+      label: "border-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--info-on-background-weak)",
+      border: "var(--info-border-weak)",
+    },
+    {
+      label: "alpha-strong",
+      bg: "var(--info-alpha-strong)",
+      color: "var(--info-on-background-strong)",
+    },
+    {
+      label: "alpha-medium",
+      bg: "var(--info-alpha-medium)",
+      color: "var(--info-on-background-strong)",
+    },
+    {
+      label: "alpha-weak",
+      bg: "var(--info-alpha-weak)",
+      color: "var(--info-on-background-strong)",
+    },
+  ].map((item) => (
     <Flex
-      padding="12"
+      padding="16"
       horizontal="center"
       align="center"
       textVariant="label-default-xs"
-      key={t.l}
-      onSolid={t.t ? undefined : "neutral-strong"}
-      style={
-        t.t
-          ? { backgroundColor: t.t, color: t.c }
-          : t.b
-            ? {
-                backgroundColor: "var(--neutral-background-weak)",
-                border: `2px solid ${t.c}`,
-              }
-            : { backgroundColor: t.c }
-      }
+      key={item.label}
+      style={{
+        backgroundColor: item.bg,
+        color: item.color,
+        ...(item.border ? { border: `2px solid ${item.border}` } : {}),
+      }}
     >
-      {t.l}
+      {item.label}
     </Flex>
   ))}
 </Grid>
@@ -517,7 +641,7 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   ]}
 />
 
-### 5. danger
+### 5. Danger
 
 <Grid
   marginBottom="16"
@@ -529,63 +653,108 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   overflow="hidden"
 >
   {[
-    { l: "bg-s", c: "var(--danger-background-strong)" },
-    { l: "bg-m", c: "var(--danger-background-medium)" },
-    { l: "bg-w", c: "var(--danger-background-weak)" },
     {
-      l: "on-bg-s",
-      c: "var(--danger-on-background-strong)",
-      t: "var(--neutral-background-weak)",
+      label: "background-strong",
+      bg: "var(--danger-background-strong)",
+      color: "var(--danger-on-background-strong)",
     },
     {
-      l: "on-bg-m",
-      c: "var(--danger-on-background-medium)",
-      t: "var(--neutral-background-weak)",
+      label: "background-medium",
+      bg: "var(--danger-background-medium)",
+      color: "var(--danger-on-background-medium)",
     },
     {
-      l: "on-bg-w",
-      c: "var(--danger-on-background-weak)",
-      t: "var(--neutral-background-weak)",
-    },
-    { l: "solid-s", c: "var(--danger-solid-strong)" },
-    { l: "solid-m", c: "var(--danger-solid-medium)" },
-    { l: "solid-w", c: "var(--danger-solid-weak)" },
-    {
-      l: "on-sol-s",
-      c: "var(--danger-on-solid-strong)",
-      t: "var(--danger-solid-strong)",
+      label: "background-weak",
+      bg: "var(--danger-background-weak)",
+      color: "var(--danger-on-background-weak)",
     },
     {
-      l: "on-sol-w",
-      c: "var(--danger-on-solid-weak)",
-      t: "var(--danger-solid-strong)",
+      label: "on-background-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--danger-on-background-strong)",
     },
-    { l: "bdr-s", c: "var(--danger-border-strong)", b: true },
-    { l: "bdr-m", c: "var(--danger-border-medium)", b: true },
-    { l: "bdr-w", c: "var(--danger-border-weak)", b: true },
-    { l: "alpha-s", c: "var(--danger-alpha-strong)" },
-    { l: "alpha-m", c: "var(--danger-alpha-medium)" },
-    { l: "alpha-w", c: "var(--danger-alpha-weak)" },
-  ].map((t) => (
+    {
+      label: "on-background-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--danger-on-background-medium)",
+    },
+    {
+      label: "on-background-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--danger-on-background-weak)",
+    },
+    {
+      label: "solid-strong",
+      bg: "var(--danger-solid-strong)",
+      color: "var(--danger-on-solid-strong)",
+    },
+    {
+      label: "solid-medium",
+      bg: "var(--danger-solid-medium)",
+      color: "var(--danger-on-solid-strong)",
+    },
+    {
+      label: "solid-weak",
+      bg: "var(--danger-solid-weak)",
+      color: "var(--danger-on-solid-weak)",
+    },
+    {
+      label: "on-solid-strong",
+      bg: "var(--danger-solid-strong)",
+      color: "var(--danger-on-solid-strong)",
+    },
+    {
+      label: "on-solid-weak",
+      bg: "var(--danger-solid-strong)",
+      color: "var(--danger-on-solid-weak)",
+    },
+    {
+      label: "border-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--danger-on-background-strong)",
+      border: "var(--danger-border-strong)",
+    },
+    {
+      label: "border-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--danger-on-background-medium)",
+      border: "var(--danger-border-medium)",
+    },
+    {
+      label: "border-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--danger-on-background-weak)",
+      border: "var(--danger-border-weak)",
+    },
+    {
+      label: "alpha-strong",
+      bg: "var(--danger-alpha-strong)",
+      color: "var(--danger-on-background-strong)",
+    },
+    {
+      label: "alpha-medium",
+      bg: "var(--danger-alpha-medium)",
+      color: "var(--danger-on-background-strong)",
+    },
+    {
+      label: "alpha-weak",
+      bg: "var(--danger-alpha-weak)",
+      color: "var(--danger-on-background-strong)",
+    },
+  ].map((item) => (
     <Flex
-      padding="12"
+      padding="16"
       horizontal="center"
       align="center"
       textVariant="label-default-xs"
-      key={t.l}
-      onSolid={t.t ? undefined : "neutral-strong"}
-      style={
-        t.t
-          ? { backgroundColor: t.t, color: t.c }
-          : t.b
-            ? {
-                backgroundColor: "var(--neutral-background-weak)",
-                border: `2px solid ${t.c}`,
-              }
-            : { backgroundColor: t.c }
-      }
+      key={item.label}
+      style={{
+        backgroundColor: item.bg,
+        color: item.color,
+        ...(item.border ? { border: `2px solid ${item.border}` } : {}),
+      }}
     >
-      {t.l}
+      {item.label}
     </Flex>
   ))}
 </Grid>
@@ -601,7 +770,7 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   ]}
 />
 
-### 6. warning
+### 6. Warning
 
 <Grid
   marginBottom="16"
@@ -613,63 +782,108 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   overflow="hidden"
 >
   {[
-    { l: "bg-s", c: "var(--warning-background-strong)" },
-    { l: "bg-m", c: "var(--warning-background-medium)" },
-    { l: "bg-w", c: "var(--warning-background-weak)" },
     {
-      l: "on-bg-s",
-      c: "var(--warning-on-background-strong)",
-      t: "var(--neutral-background-weak)",
+      label: "background-strong",
+      bg: "var(--warning-background-strong)",
+      color: "var(--warning-on-background-strong)",
     },
     {
-      l: "on-bg-m",
-      c: "var(--warning-on-background-medium)",
-      t: "var(--neutral-background-weak)",
+      label: "background-medium",
+      bg: "var(--warning-background-medium)",
+      color: "var(--warning-on-background-medium)",
     },
     {
-      l: "on-bg-w",
-      c: "var(--warning-on-background-weak)",
-      t: "var(--neutral-background-weak)",
-    },
-    { l: "solid-s", c: "var(--warning-solid-strong)" },
-    { l: "solid-m", c: "var(--warning-solid-medium)" },
-    { l: "solid-w", c: "var(--warning-solid-weak)" },
-    {
-      l: "on-sol-s",
-      c: "var(--warning-on-solid-strong)",
-      t: "var(--warning-solid-strong)",
+      label: "background-weak",
+      bg: "var(--warning-background-weak)",
+      color: "var(--warning-on-background-weak)",
     },
     {
-      l: "on-sol-w",
-      c: "var(--warning-on-solid-weak)",
-      t: "var(--warning-solid-strong)",
+      label: "on-background-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--warning-on-background-strong)",
     },
-    { l: "bdr-s", c: "var(--warning-border-strong)", b: true },
-    { l: "bdr-m", c: "var(--warning-border-medium)", b: true },
-    { l: "bdr-w", c: "var(--warning-border-weak)", b: true },
-    { l: "alpha-s", c: "var(--warning-alpha-strong)" },
-    { l: "alpha-m", c: "var(--warning-alpha-medium)" },
-    { l: "alpha-w", c: "var(--warning-alpha-weak)" },
-  ].map((t) => (
+    {
+      label: "on-background-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--warning-on-background-medium)",
+    },
+    {
+      label: "on-background-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--warning-on-background-weak)",
+    },
+    {
+      label: "solid-strong",
+      bg: "var(--warning-solid-strong)",
+      color: "var(--warning-on-solid-strong)",
+    },
+    {
+      label: "solid-medium",
+      bg: "var(--warning-solid-medium)",
+      color: "var(--warning-on-solid-strong)",
+    },
+    {
+      label: "solid-weak",
+      bg: "var(--warning-solid-weak)",
+      color: "var(--warning-on-solid-weak)",
+    },
+    {
+      label: "on-solid-strong",
+      bg: "var(--warning-solid-strong)",
+      color: "var(--warning-on-solid-strong)",
+    },
+    {
+      label: "on-solid-weak",
+      bg: "var(--warning-solid-strong)",
+      color: "var(--warning-on-solid-weak)",
+    },
+    {
+      label: "border-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--warning-on-background-strong)",
+      border: "var(--warning-border-strong)",
+    },
+    {
+      label: "border-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--warning-on-background-medium)",
+      border: "var(--warning-border-medium)",
+    },
+    {
+      label: "border-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--warning-on-background-weak)",
+      border: "var(--warning-border-weak)",
+    },
+    {
+      label: "alpha-strong",
+      bg: "var(--warning-alpha-strong)",
+      color: "var(--warning-on-background-strong)",
+    },
+    {
+      label: "alpha-medium",
+      bg: "var(--warning-alpha-medium)",
+      color: "var(--warning-on-background-strong)",
+    },
+    {
+      label: "alpha-weak",
+      bg: "var(--warning-alpha-weak)",
+      color: "var(--warning-on-background-strong)",
+    },
+  ].map((item) => (
     <Flex
-      padding="12"
+      padding="16"
       horizontal="center"
       align="center"
       textVariant="label-default-xs"
-      key={t.l}
-      onSolid={t.t ? undefined : "neutral-strong"}
-      style={
-        t.t
-          ? { backgroundColor: t.t, color: t.c }
-          : t.b
-            ? {
-                backgroundColor: "var(--neutral-background-weak)",
-                border: `2px solid ${t.c}`,
-              }
-            : { backgroundColor: t.c }
-      }
+      key={item.label}
+      style={{
+        backgroundColor: item.bg,
+        color: item.color,
+        ...(item.border ? { border: `2px solid ${item.border}` } : {}),
+      }}
     >
-      {t.l}
+      {item.label}
     </Flex>
   ))}
 </Grid>
@@ -685,7 +899,7 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   ]}
 />
 
-### 7. success
+### 7. Success
 
 <Grid
   marginBottom="16"
@@ -697,63 +911,108 @@ Semantic tokens are contextual — they adapt based on your theme configuration.
   overflow="hidden"
 >
   {[
-    { l: "bg-s", c: "var(--success-background-strong)" },
-    { l: "bg-m", c: "var(--success-background-medium)" },
-    { l: "bg-w", c: "var(--success-background-weak)" },
     {
-      l: "on-bg-s",
-      c: "var(--success-on-background-strong)",
-      t: "var(--neutral-background-weak)",
+      label: "background-strong",
+      bg: "var(--success-background-strong)",
+      color: "var(--success-on-background-strong)",
     },
     {
-      l: "on-bg-m",
-      c: "var(--success-on-background-medium)",
-      t: "var(--neutral-background-weak)",
+      label: "background-medium",
+      bg: "var(--success-background-medium)",
+      color: "var(--success-on-background-medium)",
     },
     {
-      l: "on-bg-w",
-      c: "var(--success-on-background-weak)",
-      t: "var(--neutral-background-weak)",
-    },
-    { l: "solid-s", c: "var(--success-solid-strong)" },
-    { l: "solid-m", c: "var(--success-solid-medium)" },
-    { l: "solid-w", c: "var(--success-solid-weak)" },
-    {
-      l: "on-sol-s",
-      c: "var(--success-on-solid-strong)",
-      t: "var(--success-solid-strong)",
+      label: "background-weak",
+      bg: "var(--success-background-weak)",
+      color: "var(--success-on-background-weak)",
     },
     {
-      l: "on-sol-w",
-      c: "var(--success-on-solid-weak)",
-      t: "var(--success-solid-strong)",
+      label: "on-background-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--success-on-background-strong)",
     },
-    { l: "bdr-s", c: "var(--success-border-strong)", b: true },
-    { l: "bdr-m", c: "var(--success-border-medium)", b: true },
-    { l: "bdr-w", c: "var(--success-border-weak)", b: true },
-    { l: "alpha-s", c: "var(--success-alpha-strong)" },
-    { l: "alpha-m", c: "var(--success-alpha-medium)" },
-    { l: "alpha-w", c: "var(--success-alpha-weak)" },
-  ].map((t) => (
+    {
+      label: "on-background-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--success-on-background-medium)",
+    },
+    {
+      label: "on-background-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--success-on-background-weak)",
+    },
+    {
+      label: "solid-strong",
+      bg: "var(--success-solid-strong)",
+      color: "var(--success-on-solid-strong)",
+    },
+    {
+      label: "solid-medium",
+      bg: "var(--success-solid-medium)",
+      color: "var(--success-on-solid-strong)",
+    },
+    {
+      label: "solid-weak",
+      bg: "var(--success-solid-weak)",
+      color: "var(--success-on-solid-weak)",
+    },
+    {
+      label: "on-solid-strong",
+      bg: "var(--success-solid-strong)",
+      color: "var(--success-on-solid-strong)",
+    },
+    {
+      label: "on-solid-weak",
+      bg: "var(--success-solid-strong)",
+      color: "var(--success-on-solid-weak)",
+    },
+    {
+      label: "border-strong",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--success-on-background-strong)",
+      border: "var(--success-border-strong)",
+    },
+    {
+      label: "border-medium",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--success-on-background-medium)",
+      border: "var(--success-border-medium)",
+    },
+    {
+      label: "border-weak",
+      bg: "var(--neutral-background-weak)",
+      color: "var(--success-on-background-weak)",
+      border: "var(--success-border-weak)",
+    },
+    {
+      label: "alpha-strong",
+      bg: "var(--success-alpha-strong)",
+      color: "var(--success-on-background-strong)",
+    },
+    {
+      label: "alpha-medium",
+      bg: "var(--success-alpha-medium)",
+      color: "var(--success-on-background-strong)",
+    },
+    {
+      label: "alpha-weak",
+      bg: "var(--success-alpha-weak)",
+      color: "var(--success-on-background-strong)",
+    },
+  ].map((item) => (
     <Flex
-      padding="12"
+      padding="16"
       horizontal="center"
       align="center"
       textVariant="label-default-xs"
-      key={t.l}
-      onSolid={t.t ? undefined : "neutral-strong"}
-      style={
-        t.t
-          ? { backgroundColor: t.t, color: t.c }
-          : t.b
-            ? {
-                backgroundColor: "var(--neutral-background-weak)",
-                border: `2px solid ${t.c}`,
-              }
-            : { backgroundColor: t.c }
-      }
+      key={item.label}
+      style={{
+        backgroundColor: item.bg,
+        color: item.color,
+        ...(item.border ? { border: `2px solid ${item.border}` } : {}),
+      }}
     >
-      {t.l}
+      {item.label}
     </Flex>
   ))}
 </Grid>
