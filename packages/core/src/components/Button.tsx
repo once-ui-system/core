@@ -7,6 +7,7 @@ import classNames from "classnames";
 import { Spinner, Icon, Arrow, Flex } from ".";
 import styles from "./Button.module.scss";
 import { IconName } from "../icons";
+import { ColorScheme, ColorWeight } from "../types";
 
 interface CommonProps {
   variant?: "primary" | "secondary" | "tertiary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
@@ -36,6 +37,7 @@ interface CommonProps {
   style?: React.CSSProperties;
   id?: string;
   arrowIcon?: boolean;
+  color?: `${ColorScheme}-${ColorWeight}`;
 }
 
 export type ButtonProps = CommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -60,6 +62,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
       href,
       id,
       arrowIcon = false,
+      color,
       className,
       style,
       ...props
@@ -99,7 +102,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
         style={style}
         {...props}
       >
-        {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} />}
+        {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} onBackground={color} />}
         {loading && <Spinner size={size} />}
         {(label || children) && (
           <Flex
@@ -122,7 +125,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
             color={variant === "primary" || variant === "danger" || variant === "success" || variant === "warning" ? "onSolid" : "onBackground"}
           />
         )}
-        {suffixIcon && <Icon name={suffixIcon} size={iconSize} />}
+        {suffixIcon && <Icon name={suffixIcon} size={iconSize} onBackground={color} />}
       </ElementType>
     );
   },

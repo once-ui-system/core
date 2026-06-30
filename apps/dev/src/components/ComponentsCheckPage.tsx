@@ -86,6 +86,7 @@ import {
     Banner,
     Timeline,
     NavIcon,
+    CodeBlock,
     CursorCard,
     FlipFx,
     GlitchFx,
@@ -268,7 +269,33 @@ export default function ComponentsCheck() {
                         />
                     ),
                 },
-                { name: "ToggleButton", element: <ToggleButton label="Toggle me" /> },
+                {
+                    name: "IconButton color prop",
+                    element: (
+                        <Column gap="l" fillWidth>
+                            <Row gap="8" wrap vertical="center">
+                                <Text variant="label-default-s" onBackground="neutral-weak">IconButton secondary</Text>
+                                <IconButton variant="secondary" color="brand-strong" icon="settings" />
+                                <IconButton variant="secondary" color="danger-strong" icon="close" />
+                                <IconButton variant="secondary" color="warning-strong" icon="warning" />
+                                <IconButton variant="secondary" color="success-strong" icon="check" />
+                            </Row>
+                            <Row gap="8" wrap vertical="center">
+                                <Text variant="label-default-s" onBackground="neutral-weak">IconButton ghost</Text>
+                                <IconButton variant="ghost" color="brand-strong" icon="settings" />
+                                <IconButton variant="ghost" color="danger-strong" icon="close" />
+                                <IconButton variant="ghost" color="info-strong" icon="info" />
+                                <IconButton variant="ghost" color="success-strong" icon="check" />
+                            </Row>
+                            <Row gap="8" wrap vertical="center">
+                                <Text variant="label-default-s" onBackground="neutral-weak">Button prefixIcon/suffixIcon</Text>
+                                <Button variant="secondary" prefixIcon="settings" color="brand-strong">Settings</Button>
+                                <Button variant="secondary" suffixIcon="arrowRight" color="danger-strong">Delete</Button>
+                                <Button variant="ghost" prefixIcon="info" color="info-strong">Info</Button>
+                            </Row>
+                        </Column>
+                    ),
+                },
             ],
         },
         {
@@ -743,6 +770,25 @@ export default function ComponentsCheck() {
                         />
                     ),
                 },
+                {
+                    name: "CodeBlock",
+                    element: (
+                        <CodeBlock
+                            preview={
+                                <Flex padding="l" center fillWidth>
+                                    <Button variant="primary" size="s">Preview button</Button>
+                                </Flex>
+                            }
+                            codes={[
+                                {
+                                    code: `function greet(name) {\n  return \`Hello, \${name}!\`;\n}`,
+                                    language: "javascript",
+                                    label: "JavaScript",
+                                },
+                            ]}
+                        />
+                    ),
+                },
             ],
         },
         {
@@ -877,6 +923,70 @@ export default function ComponentsCheck() {
                         <CursorCard
                             trigger={<Flex padding="l" radius="l" background="neutral-medium" center fillWidth><Text>Hover me — card follows smoothly</Text></Flex>}
                             overlay={<Flex padding="l" radius="l" background="surface" border="neutral-medium"><Text>I glide to your cursor ✨</Text></Flex>}
+                        />
+                    ),
+                },
+                {
+                    name: "Carousel auto play",
+                    element: (
+                        <Carousel
+                            aspectRatio="16/9"
+                            items={[
+                                { slide: "/images/cover-01.jpg" },
+                                { slide: "/images/cover-02.jpg" },
+                                { slide: "/images/cover-03.jpg" },
+                            ]}
+                            play={{ auto: true, interval: 3000, controls: true, progress: true }}
+                        />
+                    ),
+                },
+                {
+                    name: "Pulse with pulseSize",
+                    element: (
+                        <Row gap="l" vertical="center">
+                            <Pulse pulseSize={80}><Text>Large pulse</Text></Pulse>
+                            <Pulse pulseSize={40}><Text>Small pulse</Text></Pulse>
+                            <Pulse><Text>Default pulse</Text></Pulse>
+                        </Row>
+                    ),
+                },
+                {
+                    name: "Swiper with fade nav",
+                    element: (
+                        <Swiper
+                            aspectRatio="16/9"
+                            items={[
+                                { slide: "/images/cover-01.jpg" },
+                                { slide: "/images/cover-02.jpg" },
+                                { slide: "/images/cover-03.jpg" },
+                            ]}
+                        />
+                    ),
+                },
+                {
+                    name: "CodeBlock collapsed",
+                    element: (
+                        <CodeBlock
+                            isCollapsible
+                            maxLines={3}
+                            copyButton
+                            styleButton
+                            reloadButton
+                            fullscreenButton
+                            preview={
+                                <Column gap="m" fillWidth horizontal="center" padding="l">
+                                    <Heading variant="heading-strong-m">Hello World</Heading>
+                                    <Text variant="body-default-m" onBackground="neutral-medium">This is a preview of the code below.</Text>
+                                    <Button variant="primary" size="s">Click me</Button>
+                                </Column>
+                            }
+                            codes={[
+                                {
+                                    code: `function hello() {\n  console.log("Hello World");\n}\n\nfunction goodbye() {\n  console.log("Goodbye");\n}\n\nfunction main() {\n  hello();\n  goodbye();\n}`,
+                                    language: "javascript",
+                                    label: "JavaScript",
+                                },
+                            ]}
                         />
                     ),
                 },

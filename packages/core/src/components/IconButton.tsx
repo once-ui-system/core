@@ -7,6 +7,7 @@ import buttonStyles from "./Button.module.scss";
 import iconStyles from "./IconButton.module.scss";
 import classNames from "classnames";
 import { IconName } from "../icons";
+import { ColorScheme, ColorWeight } from "../types";
 
 interface CommonProps {
   icon?: IconName;
@@ -32,6 +33,7 @@ interface CommonProps {
   style?: React.CSSProperties;
   href?: string;
   children?: ReactNode;
+  color?: `${ColorScheme}-${ColorWeight}`;
 }
 
 export type IconButtonProps = CommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -52,6 +54,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
       disabled = false,
       href,
       children,
+      color,
       className,
       style,
       ...props
@@ -93,7 +96,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
           ) : children ? (
             children
           ) : (
-            <Icon name={icon} size="s" />
+            <Icon name={icon} size="s" onBackground={color} />
           )}
         </Flex>
       </ElementType>
