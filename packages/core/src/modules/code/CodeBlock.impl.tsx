@@ -702,7 +702,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           horizontal="between"
         >
           {codes.length > 1 ? (
-            <Scroller paddingX="8" fadeColor="surface">
+            <Scroller paddingX="8">
               <Row
                 data-scaling="90"
                 fitWidth

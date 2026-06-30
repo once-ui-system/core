@@ -10,7 +10,7 @@ import { IconName } from "../icons";
 import { ColorScheme, ColorWeight } from "../types";
 
 interface CommonProps {
-  variant?: "primary" | "secondary" | "tertiary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
+  variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
   size?: "xs" | "s" | "m" | "l" | "xl";
   radius?:
     | "none"

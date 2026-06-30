@@ -1,6 +1,13 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback, useMemo, ReactNode } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useMemo,
+  ReactNode,
+} from "react";
 import {
   Flex,
   Text,
@@ -49,7 +56,14 @@ const KbarSearchInput: React.FC<{
   searchQuery: string;
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
-}> = ({ placeholder, searchQuery, onSearchChange, inputRef }) => {
+  inputSize?: "xs" | "s" | "m" | "l" | "xl";
+}> = ({
+  placeholder,
+  searchQuery,
+  onSearchChange,
+  inputRef,
+  inputSize = "m",
+}) => {
   const { handleKeyDown: navKeyDown } = useArrowNavigationContext();
 
   const handleKeyDown = useCallback(
@@ -70,7 +84,16 @@ const KbarSearchInput: React.FC<{
       onChange={onSearchChange}
       onKeyDown={handleKeyDown}
       ref={inputRef}
-      hasPrefix={<Icon marginLeft="4" onBackground="neutral-weak" name="search" size="xs" />}
+      height={inputSize}
+      
+      hasPrefix={
+        <Icon
+          marginLeft="4"
+          onBackground="neutral-weak"
+          name="search"
+          size="xs"
+        />
+      }
       autoComplete="off"
     />
   );
@@ -82,7 +105,11 @@ interface KbarTriggerProps {
   [key: string]: any; // Allow any additional props
 }
 
-export const KbarTrigger: React.FC<KbarTriggerProps> = ({ onClick, children, ...rest }) => {
+export const KbarTrigger: React.FC<KbarTriggerProps> = ({
+  onClick,
+  children,
+  ...rest
+}) => {
   return (
     <Row onClick={onClick} {...rest}>
       {children}
@@ -95,6 +122,7 @@ interface KbarContentProps {
   onClose: () => void;
   items: KbarItem[];
   placeholder?: string;
+  inputSize?: "xs" | "s" | "m" | "l" | "xl";
 }
 
 export const KbarContent: React.FC<KbarContentProps> = ({
@@ -102,6 +130,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
   onClose,
   items,
   placeholder = "Search",
+  inputSize = "m",
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const containerRef = useRef<HTMLDivElement>(null);
@@ -126,8 +155,12 @@ export const KbarContent: React.FC<KbarContentProps> = ({
       const searchLower = searchQuery.toLowerCase();
       return (
         item.name.toLowerCase().includes(searchLower) ||
-        (item.keywords ? item.keywords.toLowerCase().includes(searchLower) : false) ||
-        (item.section ? item.section.toLowerCase().includes(searchLower) : false)
+        (item.keywords
+          ? item.keywords.toLowerCase().includes(searchLower)
+          : false) ||
+        (item.section
+          ? item.section.toLowerCase().includes(searchLower)
+          : false)
       );
     });
   }, [items, searchQuery]);
@@ -146,7 +179,9 @@ export const KbarContent: React.FC<KbarContentProps> = ({
       });
 
       // Add items for this section
-      const sectionItems = filteredItems.filter((item) => item.section === section);
+      const sectionItems = filteredItems.filter(
+        (item) => item.section === section,
+      );
 
       for (const item of sectionItems) {
         result.push({
@@ -157,13 +192,18 @@ export const KbarContent: React.FC<KbarContentProps> = ({
           ) : undefined,
           hasSuffix:
             item.shortcut && item.shortcut.length > 0 ? (
-              <Row gap="2" style={{ transform: "scale(0.9)", transformOrigin: "right" }}>
+              <Row
+                gap="2"
+                style={{ transform: "scale(0.9)", transformOrigin: "right" }}
+              >
                 {item.shortcut.map((key, i) => (
                   <Row gap="2" key={i}>
                     <Kbd minWidth="24" style={{ transform: "scale(0.8)" }}>
                       {key}
                     </Kbd>
-                    {i < item.shortcut.length - 1 && <Text onBackground="neutral-weak">+</Text>}
+                    {i < item.shortcut.length - 1 && (
+                      <Text onBackground="neutral-weak">+</Text>
+                    )}
                   </Row>
                 ))}
               </Row>
@@ -193,7 +233,9 @@ export const KbarContent: React.FC<KbarContentProps> = ({
     (index: number) => {
       const selectedOption = nonCustomOptions[index];
       if (selectedOption) {
-        const originalItem = items.find((item) => item.id === selectedOption.value);
+        const originalItem = items.find(
+          (item) => item.id === selectedOption.value,
+        );
         if (originalItem) {
           if (originalItem.href) {
             router.push(originalItem.href);
@@ -225,7 +267,6 @@ export const KbarContent: React.FC<KbarContentProps> = ({
     };
   }, [isOpen, handleClose]);
 
-
   // Clear search query when kbar is closed
   useEffect(() => {
     if (!isOpen) {
@@ -256,127 +297,136 @@ export const KbarContent: React.FC<KbarContentProps> = ({
   // Create portal for the kbar
   return (
     <>
-    <ScrollLock enabled={isOpen} allowScrollInElement={scrollContainerRef} />
-    <Row
-      position="fixed"
-      top="0"
-      left="0"
-      right="0"
-      bottom="0"
-      zIndex={10}
-      center
-      background="overlay"
-      className={`${styles.overlay} ${isClosing ? styles.closing : ""}`}
-      onClick={(e) => {
-        if (e.target === e.currentTarget) {
-          handleClose();
-        }
-      }}
-    >
-      <Column
-        ref={containerRef}
-        fitHeight
-        maxWidth="xs"
-        background="surface"
-        radius="l-4"
-        border="neutral-alpha-medium"
-        overflow="hidden"
-        shadow="l"
-        className={`${styles.content} ${isClosing ? styles.closing : ""}`}
-        onClick={(e) => e.stopPropagation()}
+      <ScrollLock enabled={isOpen} allowScrollInElement={scrollContainerRef} />
+      <Row
+        position="fixed"
+        top="0"
+        left="0"
+        right="0"
+        bottom="0"
+        zIndex={10}
+        center
+        background="overlay"
+        className={`${styles.overlay} ${isClosing ? styles.closing : ""}`}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            handleClose();
+          }
+        }}
       >
-        <ArrowNavigation
-          layout="column"
-          itemCount={nonCustomOptions.length}
-          onSelect={handleSelect}
-          onEscape={handleClose}
-          wrap={true}
-          initialFocusedIndex={0}
-          itemSelector='[role="option"]'
-          autoFocus={false}
+        <Column
+          ref={containerRef}
+          fitHeight
+          maxWidth="xs"
+          background="surface"
+          radius="l-4"
+          border="neutral-alpha-medium"
+          overflow="hidden"
+          shadow="l"
+          className={`${styles.content} ${isClosing ? styles.closing : ""}`}
+          onClick={(e) => e.stopPropagation()}
         >
-          <Row fillWidth padding="8">
-            <KbarSearchInput
-              placeholder={placeholder}
-              searchQuery={searchQuery}
-              onSearchChange={handleSearchChange}
-              inputRef={inputRef}
-            />
-          </Row>
-          <Column
-            ref={scrollContainerRef}
-            maxHeight={32}
-            fillWidth
-            padding="4"
-            gap="2"
-            overflowY="auto"
-            radius="l"
-            border="neutral-alpha-weak"
+          <ArrowNavigation
+            layout="column"
+            itemCount={nonCustomOptions.length}
+            onSelect={handleSelect}
+            onEscape={handleClose}
+            wrap={true}
+            initialFocusedIndex={0}
+            itemSelector='[role="option"]'
+            autoFocus={false}
           >
-            {groupedItems.map((option, index) => {
-              if (option.isCustom) {
-                return <React.Fragment key={option.value}>{option.label}</React.Fragment>;
-              }
+            <Row fillWidth padding="8">
+              <KbarSearchInput
+                placeholder={placeholder}
+                searchQuery={searchQuery}
+                onSearchChange={handleSearchChange}
+                inputRef={inputRef}
+                inputSize={inputSize}
+              />
+            </Row>
+            <Column
+              ref={scrollContainerRef}
+              maxHeight={32}
+              fillWidth
+              padding="4"
+              gap="2"
+              overflowY="auto"
+              radius="l"
+              border="neutral-alpha-weak"
+            >
+              {groupedItems.map((option, index) => {
+                if (option.isCustom) {
+                  return (
+                    <React.Fragment key={option.value}>
+                      {option.label}
+                    </React.Fragment>
+                  );
+                }
 
-              return (
-                <Option
-                  key={option.value}
-                  label={option.label}
-                  value={option.value}
-                  hasPrefix={option.hasPrefix}
-                  hasSuffix={option.hasSuffix}
-                  description={option.description}
-                  {...(option.href
-                    ? { href: option.href, onClick: undefined, onLinkClick: handleClose }
-                    : { onClick: option.onClick })}
-                />
-              );
-            })}
-            {searchQuery && filteredItems.length === 0 && (
-              <Flex
-                fillWidth
-                center
-                paddingX="16"
-                paddingY="64"
-                textVariant="body-default-m"
-                onBackground="neutral-weak"
-              >
-                No results found
-              </Flex>
-            )}
-          </Column>
-        </ArrowNavigation>
-        <Row fillWidth paddingX="24" paddingY="8">
-          <Row
-            style={{ transform: "scale(0.8)", transformOrigin: "left" }}
-            gap="8"
-            onBackground="neutral-weak"
-            textVariant="label-default-m"
-            vertical="center"
-          >
-            <Kbd minWidth="20">
-              <Row>
-                <Icon name="chevronUp" size="xs" />
-              </Row>
-            </Kbd>
-            <Kbd minWidth="20">
-              <Row>
-                <Icon name="chevronDown" size="xs" />
-              </Row>
-            </Kbd>
-            <Text marginLeft="8" marginRight="24">
-              Navigate
-            </Text>
-            <Kbd minWidth="20">
-              <Row>
-                <Icon name="enter" size="xs" />
-              </Row>
-            </Kbd>
-            <Text marginLeft="8">Go to</Text>
+                return (
+                  <Option
+                    key={option.value}
+                    label={option.label}
+                    value={option.value}
+                    hasPrefix={option.hasPrefix}
+                    hasSuffix={option.hasSuffix}
+                    description={option.description}
+                    {...(option.href
+                      ? {
+                          href: option.href,
+                          onClick: undefined,
+                          onLinkClick: handleClose,
+                        }
+                      : { onClick: option.onClick })}
+                  />
+                );
+              })}
+              {searchQuery && filteredItems.length === 0 && (
+                <Flex
+                  fillWidth
+                  center
+                  paddingX="16"
+                  paddingY="64"
+                  textVariant="body-default-m"
+                  onBackground="neutral-weak"
+                >
+                  No results found
+                </Flex>
+              )}
+            </Column>
+          </ArrowNavigation>
+          <Row fillWidth paddingX="24" paddingY="8">
+            <Row
+              style={{ transform: "scale(0.8)", transformOrigin: "left" }}
+              gap="8"
+              onBackground="neutral-weak"
+              textVariant="label-default-m"
+              vertical="center"
+            >
+              <Kbd minWidth="20">
+                <Row>
+                  <Icon name="chevronUp" size="xs" />
+                </Row>
+              </Kbd>
+              <Kbd minWidth="20">
+                <Row>
+                  <Icon name="chevronDown" size="xs" />
+                </Row>
+              </Kbd>
+              <Text marginLeft="8" marginRight="24">
+                Navigate
+              </Text>
+              <Kbd minWidth="20">
+                <Row>
+                  <Icon name="enter" size="xs" />
+                </Row>
+              </Kbd>
+              <Text marginLeft="8">Go to</Text>
+            </Row>
           </Row>
-        </Row>
-      </Column>
-    </Row>
+        </Column>
+      </Row>
     </>
   );
 };
@@ -384,10 +434,16 @@ export const KbarContent: React.FC<KbarContentProps> = ({
 export interface KbarProps {
   items: KbarItem[];
   children: React.ReactNode;
+  inputSize?: "xs" | "s" | "m" | "l" | "xl";
   [key: string]: any; // Allow any additional props
 }
 
-export const Kbar: React.FC<KbarProps> = ({ items, children, ...rest }) => {
+export const Kbar: React.FC<KbarProps> = ({
+  items,
+  children,
+  inputSize,
+  ...rest
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -428,8 +484,8 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, ...rest }) => {
 
   return (
     <>
-      <KbarTrigger 
-        tabIndex={0} 
+      <KbarTrigger
+        tabIndex={0}
         onClick={handleOpen}
         onKeyDown={(e: React.KeyboardEvent) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -443,7 +499,12 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, ...rest }) => {
       </KbarTrigger>
       {isOpen &&
         createPortal(
-          <KbarContent isOpen={isOpen} onClose={handleClose} items={items} />,
+          <KbarContent
+            isOpen={isOpen}
+            onClose={handleClose}
+            items={items}
+            inputSize={inputSize}
+          />,
           document.body,
         )}
     </>

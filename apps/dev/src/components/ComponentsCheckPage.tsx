@@ -697,13 +697,35 @@ export default function ComponentsCheck() {
                     element: <EmojiPickerDropdown trigger={<Button variant="secondary">Pick Emoji</Button>} onSelect={() => {}} />,
                 },
                 {
-                    name: "Kbar",
+                    name: "Kbar (inputSize=xs)",
                     element: (
-                        <Kbar items={[
+                        <Kbar inputSize="xs" items={[
                             { id: "home", name: "Home", section: "Navigation", shortcut: ["H"], keywords: "home" },
                             { id: "search", name: "Search", section: "Navigation", shortcut: ["S"], keywords: "search" },
                         ]}>
-                            <Button variant="secondary" prefixIcon="search">Search</Button>
+                            <Button variant="secondary" prefixIcon="search">xs</Button>
+                        </Kbar>
+                    ),
+                },
+                {
+                    name: "Kbar (inputSize=m)",
+                    element: (
+                        <Kbar inputSize="m" items={[
+                            { id: "home", name: "Home", section: "Navigation", shortcut: ["H"], keywords: "home" },
+                            { id: "search", name: "Search", section: "Navigation", shortcut: ["S"], keywords: "search" },
+                        ]}>
+                            <Button variant="secondary" prefixIcon="search">m</Button>
+                        </Kbar>
+                    ),
+                },
+                {
+                    name: "Kbar (inputSize=l)",
+                    element: (
+                        <Kbar inputSize="l" items={[
+                            { id: "home", name: "Home", section: "Navigation", shortcut: ["H"], keywords: "home" },
+                            { id: "search", name: "Search", section: "Navigation", shortcut: ["S"], keywords: "search" },
+                        ]}>
+                            <Button variant="secondary" prefixIcon="search">l</Button>
                         </Kbar>
                     ),
                 },
@@ -901,6 +923,7 @@ export default function ComponentsCheck() {
                         <Row gap="8" wrap>
                             <Button variant="subtle">Subtle</Button>
                             <Button variant="ghost">Ghost</Button>
+                            <Button variant="quaternary">Quaternary</Button>
                             <Button variant="link">Link</Button>
                             <Button variant="success">Success</Button>
                             <Button variant="warning">Warning</Button>
