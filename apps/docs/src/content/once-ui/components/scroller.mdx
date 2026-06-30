@@ -1,11 +1,13 @@
 ---
 title: "Scroller"
 summary: "A component for creating scrollable content areas with navigation buttons."
-updatedAt: "2025-05-09"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/scroller.mdx"
 github: "components/Scroller.tsx"
 navLabel: "Scroller"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The `Scroller` component creates a scrollable container with automatic navigation buttons that appear when content overflows. It's perfect for horizontal or vertical scrolling of content like cards, images, or any elements that might not fit in the available space.
@@ -128,7 +130,7 @@ You can customize the color of the fade effect that appears behind the scroll bu
 <PropsTable
   content={[
     ["direction", ["row", "column"], "row"],
-    ["fadeColor", "BaseColor"],
+    ["fadeColor", "BaseColor", "'transparent'"],
     ["onItemClick", "(index: number) => void"],
     ["children"],
     ["className"],

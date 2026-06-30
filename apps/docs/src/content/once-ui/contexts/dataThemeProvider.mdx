@@ -17,24 +17,29 @@ Wrap your app with `DataThemeProvider` and pass the style configuration as props
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  lineNumbers
-  codes={[
-    {
-      code:
+  lineNumbers  
+  isCollapsible={false}
+
+codes={[
+{
+code:
 `<DataThemeProvider
-    variant="gradient" // flat | gradient | outline
-    mode="categorical" // categorical | divergent | sequential
-    height={24} // default chart height
-    axis={{
+variant="gradient" // flat | gradient | outline
+mode="categorical" // categorical | divergent | sequential
+height={24} // default chart height
+axis={{
       stroke: "var(--neutral-alpha-weak)",
     }}
-    tick={{
+tick={{
       fill: "var(--neutral-on-background-weak)",
       fontSize: 11,
       line: false
     }}
+
 >
+
     {children}
+
 </DataThemeProvider>`,
       language: "tsx",
       label: "layout.tsx"

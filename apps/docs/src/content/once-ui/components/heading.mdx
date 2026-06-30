@@ -1,11 +1,13 @@
 ---
 title: "Heading"
 summary: "A typographic component for displaying headings with various sizes, weights, and styles."
-updatedAt: "2025-05-09"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/heading.mdx"
 github: "components/Heading.tsx"
 navLabel: "Heading"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The Heading component is used for displaying titles and section headings throughout your application. It provides consistent typography with various sizes, weights, and styles to establish visual hierarchy.
@@ -179,6 +181,42 @@ Headings can be styled with different colors using the `onBackground` or `onSoli
   ]}
 />
 
+## Opacity
+
+Control heading visibility with the `opacity` prop, accepting values from 0 to 100.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Heading opacity={100}>Opacity 100</Heading>
+      <Heading opacity={70}>Opacity 70</Heading>
+      <Heading opacity={40}>Opacity 40</Heading>
+      <Heading opacity={10}>Opacity 10</Heading>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Heading opacity={100}>
+    Opacity 100
+</Heading>
+<Heading opacity={70}>
+    Opacity 70
+</Heading>
+<Heading opacity={40}>
+    Opacity 40
+</Heading>
+<Heading opacity={10}>
+    Opacity 10
+</Heading>`,
+      language: "tsx",
+      label: "Opacity"
+    }
+  ]}
+/>
+
 ## Alignment
 
 Control the text alignment of headings using the `align` prop.
@@ -328,6 +366,7 @@ Use the `as` prop to control the underlying HTML element while maintaining consi
     ["family", ["display", "heading", "body", "label", "code"]],
     ["onBackground", "`${ColorScheme}-${ColorWeight}`"],
     ["onSolid", "`${ColorScheme}-${ColorWeight}`"],
+    ["opacity", "Opacity", "100"],
     ["align", ["left", "center", "right", "justify"]],
     ["wrap", ["normal", "nowrap", "balance"], "balance"],
     ["padding", ["SpacingToken", "number"]],

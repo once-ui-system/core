@@ -1,11 +1,13 @@
 ---
 title: "Pulse"
 summary: "A colored dot with a pulsing animation effect."
-updatedAt: "2025-08-28"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/pulse.mdx"
 github: "components/Pulse.tsx"
 navLabel: "Pulse"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The `Pulse` component is used to display a colored dot with a pulsing animation effect.
@@ -92,12 +94,37 @@ Set the size of the pulse using the `size` prop.
   ]}
 />
 
+## Pulse size
+
+Customize the pulse ring dimensions with the `pulseSize` prop, accepting a number or string value.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <Pulse size="m" pulseSize={80} />
+      <Pulse size="m" pulseSize="4rem" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Pulse size="m" pulseSize={80} />
+<Pulse size="m" pulseSize="4rem" />`,
+      language: "tsx",
+      label: "Pulse size"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   content={[
     ["variant", "ColorScheme", "brand"],
     ["size", "CondensedTShirtSizes", "s"],
+    ["pulseSize", ["number", "string"]],
     ["children"],
     ["className"],
     ["style"],

@@ -1,11 +1,13 @@
 ---
 title: "Toast"
 summary: "A notification component that displays temporary messages with auto-dismiss and optional actions."
-updatedAt: "2025-02-03"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/toast.mdx"
 github: "components/Toast.tsx"
 navLabel: "Toast"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The `Toast` component displays temporary notification messages that automatically dismiss after 6 seconds. It's typically used through the [ToastProvider](/once-ui/contexts/toastProvider) context, but can also be used standalone.
@@ -14,7 +16,7 @@ The `Toast` component displays temporary notification messages that automaticall
 
 ## Variants
 
-Toast supports two variants: `success` for positive feedback and `danger` for errors or warnings.
+Toast supports four variants: `success` for positive feedback, `danger` for errors, `warning` for cautionary messages, and `info` for informational notices.
 
 <CodeBlock
   marginTop="16"
@@ -27,6 +29,12 @@ Toast supports two variants: `success` for positive feedback and `danger` for er
       <Toast variant="danger">
         Failed to save changes. Please try again.
       </Toast>
+      <Toast variant="warning">
+        Your session is about to expire.
+      </Toast>
+      <Toast variant="info">
+        New update available. Refresh to see the latest.
+      </Toast>
     </Column>
   }
   codes={[
@@ -37,6 +45,12 @@ Toast supports two variants: `success` for positive feedback and `danger` for er
 </Toast>
 <Toast variant="danger">
     Failed to save changes. Please try again.
+</Toast>
+<Toast variant="warning">
+    Your session is about to expire.
+</Toast>
+<Toast variant="info">
+    New update available. Refresh to see the latest.
 </Toast>`,
       language: "tsx",
       label: "Variants"
@@ -135,7 +149,7 @@ Toast components include proper ARIA attributes:
 
 <PropsTable
   content={[
-    ["variant", ["success", "danger"]],
+    ["variant", ["success", "danger", "warning", "info"]],
     ["icon", "boolean", "true"],
     ["onClose", "() => void"],
     ["action", "ReactNode"],
@@ -148,7 +162,7 @@ Toast components include proper ARIA attributes:
 
 <PropsTable
   content={[
-    ["toasts", "{ id: string; variant: 'success' | 'danger'; message: ReactNode; action?: ReactNode }[]"],
+    ["toasts", "{ id: string; variant: 'success' | 'danger' | 'warning' | 'info'; message: ReactNode; action?: ReactNode }[]"],
     ["removeToast", "(id: string) => void"]
   ]}
 />

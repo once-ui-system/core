@@ -477,7 +477,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   fullscreenButton = false,
   lineNumbers = false,
   maxLines = 5,
-  isCollapsible = false,
+  isCollapsible = true,
   compact = false,
   className,
   style,
@@ -924,7 +924,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       background="transparent"
                     >
                       <Flex
-                        padding="m"
                         radius="m"
                         background="neutral-weak"
                         fit

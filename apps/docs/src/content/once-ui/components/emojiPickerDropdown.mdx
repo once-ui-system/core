@@ -1,11 +1,13 @@
 ---
 title: "EmojiPickerDropdown"
 summary: "The EmojiPickerDropdown component provides a dropdown interface for selecting emojis."
-updatedAt: "2025-10-13"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/emojiPickerDropdown.mdx"
 github: "components/EmojiPickerDropdown.tsx"
 navLabel: "EmojiPickerDropdown"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "indigo"
 ---
 
 The `EmojiPickerDropdown` component combines the `EmojiPicker` with a `DropdownWrapper` to provide a complete dropdown emoji selection experience. Simply pass a trigger element and handle emoji selection.
@@ -230,7 +232,7 @@ const [selectedEmoji, setSelectedEmoji] = useState("");
   content={[
     ["trigger", "ReactElement", "The element that triggers the dropdown (required)"],
     ["onSelect", "(emoji: string) => void", "Callback when an emoji is selected (required)"],
-    ["columns", "gridSize", "Number of columns in the emoji grid", "8"],
+    ["columns", "GridSize", "Number of columns in the emoji grid", "8"],
     ["background", "StyleProps['background']", "Background color of the dropdown", "surface"],
     ["closeAfterClick", "boolean", "Whether to close dropdown after selecting emoji", "true"],
     ["placement", "Placement", "Position of dropdown relative to trigger", "bottom"],
