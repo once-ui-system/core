@@ -854,6 +854,8 @@ export default function ComponentsCheck() {
                     element: (
                         <Row gap="8" wrap>
                             <Button variant="subtle">Subtle</Button>
+                            <Button variant="ghost">Ghost</Button>
+                            <Button variant="link">Link</Button>
                             <Button variant="success">Success</Button>
                             <Button variant="warning">Warning</Button>
                         </Row>
@@ -870,41 +872,12 @@ export default function ComponentsCheck() {
                     ),
                 },
                 {
-                    name: "Option subtle variant",
-                    element: (
-                        <Column gap="4" fillWidth>
-                            <Option variant="default" value="1" label="Default option" />
-                            <Option variant="subtle" value="2" label="Subtle option" />
-                            <Option variant="subtle" value="3" label="Subtle selected" selected />
-                        </Column>
-                    ),
-                },
-                {
                     name: "CursorCard smooth follow",
                     element: (
                         <CursorCard
                             trigger={<Flex padding="l" radius="l" background="neutral-medium" center fillWidth><Text>Hover me — card follows smoothly</Text></Flex>}
                             overlay={<Flex padding="l" radius="l" background="surface" border="neutral-medium"><Text>I glide to your cursor ✨</Text></Flex>}
                         />
-                    ),
-                },
-                {
-                    name: "Input / Button size sync",
-                    element: (
-                        <Column gap="12" fillWidth>
-                            {(["xs", "s", "m", "l", "xl"] as const).map((s) => (
-                                <Column gap="8" key={s}>
-                                    <Text variant="label-default-s" onBackground="neutral-weak">{s.toUpperCase()}</Text>
-                                    <Row gap="8" wrap vertical="center">
-                                        <Button size={s} label={s.toUpperCase()} />
-                                        <Input id={`size-${s}`} height={s} label="Input" placeholder={s} />
-                                        <ColorInput id={`color-${s}`} height={s} value="#3b82f6" onChange={() => {}} />
-                                        <DateInput id={`date-${s}`} height={s} />
-                                        <DateRangeInput id={`dr-${s}`} height={s} startLabel="Start" endLabel="End" />
-                                    </Row>
-                                </Column>
-                            ))}
-                        </Column>
                     ),
                 },
             ],

@@ -93,7 +93,31 @@
 
   @media (hover: hover) and (pointer: fine) {
     &:hover:not([data-disabled]) {
+      background: color-mix(
+        in srgb,
+        var(--neutral-background-medium) 70%,
+        transparent
+      );
       color: var(--neutral-on-background-strong);
+    }
+  }
+}
+
+.link {
+  border: none;
+  background: var(--static-transparent);
+  color: var(--neutral-on-background-strong);
+
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      text-decoration: underline !important;
     }
   }
 }

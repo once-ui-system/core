@@ -45,27 +45,3 @@
     color: var(--neutral-on-background-weak);
     border: none;
 }
-
-.subtle {
-    border-color: var(--static-transparent);
-
-    &.highlighted {
-        background: var(--neutral-alpha-weak);
-        border-color: var(--static-transparent);
-    }
-
-    &.selected {
-        background: var(--neutral-alpha-medium);
-        border-color: var(--static-transparent);
-    }
-
-    &.danger {
-        color: var(--danger-on-background-medium);
-
-        &.selected {
-            background: color-mix(in srgb, var(--danger-alpha-weak) 60%, transparent);
-            color: var(--danger-on-background-medium);
-            border-color: var(--static-transparent);
-        }
-    }
-}
