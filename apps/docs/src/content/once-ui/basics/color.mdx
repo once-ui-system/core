@@ -26,7 +26,15 @@ color system and they are not meant to be used directly.
 Schemes provide a comprehensive and consistent initial color palette. There are 16
 different schemes defined in the system:
 
-<Grid marginBottom="48" fillWidth gap="1" columns="4" s={{columns: 2}} radius="l" overflow="hidden">
+<Grid
+  marginBottom="48"
+  fillWidth
+  gap="1"
+  columns="4"
+  s={{ columns: 2 }}
+  radius="l"
+  overflow="hidden"
+>
   {[
     { name: "Sand", color: "var(--scheme-sand-500)" },
     { name: "Gray", color: "var(--scheme-gray-500)" },
@@ -43,7 +51,7 @@ different schemes defined in the system:
     { name: "Indigo", color: "var(--scheme-indigo-500)" },
     { name: "Violet", color: "var(--scheme-violet-500)" },
     { name: "Magenta", color: "var(--scheme-magenta-500)" },
-    { name: "Pink", color: "var(--scheme-pink-500)" }
+    { name: "Pink", color: "var(--scheme-pink-500)" },
   ].map((scheme) => (
     <Flex
       padding="16"
@@ -68,7 +76,15 @@ background.
 
 There are 12 weights available for each color scheme:
 
-<Grid marginBottom="16" gap="1" columns="6" s={{columns: 2}} m={{columns: 3}} radius="l" overflow="hidden">
+<Grid
+  marginBottom="16"
+  gap="1"
+  columns="6"
+  s={{ columns: 2 }}
+  m={{ columns: 3 }}
+  radius="l"
+  overflow="hidden"
+>
   {[
     { weight: 100, contrast: 1.05, theme: "dark" },
     { weight: 200, contrast: 1.15, theme: "dark" },
@@ -81,7 +97,7 @@ There are 12 weights available for each color scheme:
     { weight: 900, contrast: 16, theme: "light" },
     { weight: 1000, contrast: 18, theme: "light" },
     { weight: 1100, contrast: 19, theme: "light" },
-    { weight: 1200, contrast: 20, theme: "light" }
+    { weight: 1200, contrast: 20, theme: "light" },
   ].map((weight) => (
     <Column
       gap="4"
@@ -95,12 +111,660 @@ There are 12 weights available for each color scheme:
       <Text data-theme={weight.theme} onBackground="brand-strong">
         {weight.weight}
       </Text>
-      <Text
-        data-theme={weight.theme}
-        onBackground="brand-weak"
-      >
+      <Text data-theme={weight.theme} onBackground="brand-weak">
         {weight.contrast}
       </Text>
     </Column>
   ))}
 </Grid>
+
+## Semantic tokens
+
+Semantic tokens are contextual — they adapt based on your theme configuration. Each of the 7 semantic schemes provides tokens for backgrounds, text, solids, borders, and overlays across the `strong`, `medium`, and `weak` weight variants.
+
+<Grid
+  marginBottom="48"
+  fillWidth
+  gap="1"
+  columns="4"
+  s={{ columns: 2 }}
+  radius="l"
+  overflow="hidden"
+>
+  {[
+    {
+      name: "Neutral",
+      color: "var(--neutral-background-strong)",
+      text: "var(--neutral-on-background-medium)",
+    },
+    {
+      name: "Brand",
+      color: "var(--brand-background-strong)",
+      text: "var(--brand-on-background-medium)",
+    },
+    {
+      name: "Accent",
+      color: "var(--accent-background-strong)",
+      text: "var(--accent-on-background-medium)",
+    },
+    {
+      name: "Info",
+      color: "var(--info-background-strong)",
+      text: "var(--info-on-background-medium)",
+    },
+    {
+      name: "Danger",
+      color: "var(--danger-background-strong)",
+      text: "var(--danger-on-background-medium)",
+    },
+    {
+      name: "Warning",
+      color: "var(--warning-background-strong)",
+      text: "var(--warning-on-background-medium)",
+    },
+    {
+      name: "Success",
+      color: "var(--success-background-strong)",
+      text: "var(--success-on-background-medium)",
+    },
+  ].map((scheme) => (
+    <Flex
+      padding="16"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-m"
+      key={scheme.name}
+      style={{ backgroundColor: scheme.color, color: scheme.text }}
+    >
+      {scheme.name}
+    </Flex>
+  ))}
+</Grid>
+
+### 1. Neutral
+
+<Grid
+  marginBottom="16"
+  fillWidth
+  gap="1"
+  columns="3"
+  s={{ columns: 2 }}
+  radius="l"
+  overflow="hidden"
+>
+  {[
+    { l: "bg-s", c: "var(--neutral-background-strong)" },
+    { l: "bg-m", c: "var(--neutral-background-medium)" },
+    { l: "bg-w", c: "var(--neutral-background-weak)" },
+    {
+      l: "on-bg-s",
+      c: "var(--neutral-on-background-strong)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-m",
+      c: "var(--neutral-on-background-medium)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-w",
+      c: "var(--neutral-on-background-weak)",
+      t: "var(--neutral-background-weak)",
+    },
+    { l: "solid-s", c: "var(--neutral-solid-strong)" },
+    { l: "solid-m", c: "var(--neutral-solid-medium)" },
+    { l: "solid-w", c: "var(--neutral-solid-weak)" },
+    {
+      l: "on-sol-s",
+      c: "var(--neutral-on-solid-strong)",
+      t: "var(--neutral-solid-strong)",
+    },
+    {
+      l: "on-sol-w",
+      c: "var(--neutral-on-solid-weak)",
+      t: "var(--neutral-solid-strong)",
+    },
+    { l: "bdr-s", c: "var(--neutral-border-strong)", b: true },
+    { l: "bdr-m", c: "var(--neutral-border-medium)", b: true },
+    { l: "bdr-w", c: "var(--neutral-border-weak)", b: true },
+    { l: "alpha-s", c: "var(--neutral-alpha-strong)" },
+    { l: "alpha-m", c: "var(--neutral-alpha-medium)" },
+    { l: "alpha-w", c: "var(--neutral-alpha-weak)" },
+  ].map((t) => (
+    <Flex
+      padding="12"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-xs"
+      key={t.l}
+      onSolid={t.t ? undefined : "neutral-strong"}
+      style={
+        t.t
+          ? { backgroundColor: t.t, color: t.c }
+          : t.b
+            ? {
+                backgroundColor: "var(--neutral-background-weak)",
+                border: `2px solid ${t.c}`,
+              }
+            : { backgroundColor: t.c }
+      }
+    >
+      {t.l}
+    </Flex>
+  ))}
+</Grid>
+
+<PropsTable
+  content={[
+    ["neutral-background", ["strong", "medium", "weak"]],
+    ["neutral-on-background", ["strong", "medium", "weak"]],
+    ["neutral-solid", ["strong", "medium", "weak"]],
+    ["neutral-on-solid", ["strong", "weak"]],
+    ["neutral-border", ["strong", "medium", "weak"]],
+    ["neutral-alpha", ["strong", "medium", "weak"]],
+  ]}
+/>
+
+### 2. brand
+
+<Grid
+  marginBottom="16"
+  fillWidth
+  gap="1"
+  columns="3"
+  s={{ columns: 2 }}
+  radius="l"
+  overflow="hidden"
+>
+  {[
+    { l: "bg-s", c: "var(--brand-background-strong)" },
+    { l: "bg-m", c: "var(--brand-background-medium)" },
+    { l: "bg-w", c: "var(--brand-background-weak)" },
+    {
+      l: "on-bg-s",
+      c: "var(--brand-on-background-strong)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-m",
+      c: "var(--brand-on-background-medium)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-w",
+      c: "var(--brand-on-background-weak)",
+      t: "var(--neutral-background-weak)",
+    },
+    { l: "solid-s", c: "var(--brand-solid-strong)" },
+    { l: "solid-m", c: "var(--brand-solid-medium)" },
+    { l: "solid-w", c: "var(--brand-solid-weak)" },
+    {
+      l: "on-sol-s",
+      c: "var(--brand-on-solid-strong)",
+      t: "var(--brand-solid-strong)",
+    },
+    {
+      l: "on-sol-w",
+      c: "var(--brand-on-solid-weak)",
+      t: "var(--brand-solid-strong)",
+    },
+    { l: "bdr-s", c: "var(--brand-border-strong)", b: true },
+    { l: "bdr-m", c: "var(--brand-border-medium)", b: true },
+    { l: "bdr-w", c: "var(--brand-border-weak)", b: true },
+    { l: "alpha-s", c: "var(--brand-alpha-strong)" },
+    { l: "alpha-m", c: "var(--brand-alpha-medium)" },
+    { l: "alpha-w", c: "var(--brand-alpha-weak)" },
+  ].map((t) => (
+    <Flex
+      padding="12"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-xs"
+      key={t.l}
+      onSolid={t.t ? undefined : "neutral-strong"}
+      style={
+        t.t
+          ? { backgroundColor: t.t, color: t.c }
+          : t.b
+            ? {
+                backgroundColor: "var(--neutral-background-weak)",
+                border: `2px solid ${t.c}`,
+              }
+            : { backgroundColor: t.c }
+      }
+    >
+      {t.l}
+    </Flex>
+  ))}
+</Grid>
+
+<PropsTable
+  content={[
+    ["brand-background", ["strong", "medium", "weak"]],
+    ["brand-on-background", ["strong", "medium", "weak"]],
+    ["brand-solid", ["strong", "medium", "weak"]],
+    ["brand-on-solid", ["strong", "weak"]],
+    ["brand-border", ["strong", "medium", "weak"]],
+    ["brand-alpha", ["strong", "medium", "weak"]],
+  ]}
+/>
+
+### 3. accent
+
+<Grid
+  marginBottom="16"
+  fillWidth
+  gap="1"
+  columns="3"
+  s={{ columns: 2 }}
+  radius="l"
+  overflow="hidden"
+>
+  {[
+    { l: "bg-s", c: "var(--accent-background-strong)" },
+    { l: "bg-m", c: "var(--accent-background-medium)" },
+    { l: "bg-w", c: "var(--accent-background-weak)" },
+    {
+      l: "on-bg-s",
+      c: "var(--accent-on-background-strong)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-m",
+      c: "var(--accent-on-background-medium)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-w",
+      c: "var(--accent-on-background-weak)",
+      t: "var(--neutral-background-weak)",
+    },
+    { l: "solid-s", c: "var(--accent-solid-strong)" },
+    { l: "solid-m", c: "var(--accent-solid-medium)" },
+    { l: "solid-w", c: "var(--accent-solid-weak)" },
+    {
+      l: "on-sol-s",
+      c: "var(--accent-on-solid-strong)",
+      t: "var(--accent-solid-strong)",
+    },
+    {
+      l: "on-sol-w",
+      c: "var(--accent-on-solid-weak)",
+      t: "var(--accent-solid-strong)",
+    },
+    { l: "bdr-s", c: "var(--accent-border-strong)", b: true },
+    { l: "bdr-m", c: "var(--accent-border-medium)", b: true },
+    { l: "bdr-w", c: "var(--accent-border-weak)", b: true },
+    { l: "alpha-s", c: "var(--accent-alpha-strong)" },
+    { l: "alpha-m", c: "var(--accent-alpha-medium)" },
+    { l: "alpha-w", c: "var(--accent-alpha-weak)" },
+  ].map((t) => (
+    <Flex
+      padding="12"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-xs"
+      key={t.l}
+      onSolid={t.t ? undefined : "neutral-strong"}
+      style={
+        t.t
+          ? { backgroundColor: t.t, color: t.c }
+          : t.b
+            ? {
+                backgroundColor: "var(--neutral-background-weak)",
+                border: `2px solid ${t.c}`,
+              }
+            : { backgroundColor: t.c }
+      }
+    >
+      {t.l}
+    </Flex>
+  ))}
+</Grid>
+
+<PropsTable
+  content={[
+    ["accent-background", ["strong", "medium", "weak"]],
+    ["accent-on-background", ["strong", "medium", "weak"]],
+    ["accent-solid", ["strong", "medium", "weak"]],
+    ["accent-on-solid", ["strong", "weak"]],
+    ["accent-border", ["strong", "medium", "weak"]],
+    ["accent-alpha", ["strong", "medium", "weak"]],
+  ]}
+/>
+
+### 4. info
+
+<Grid
+  marginBottom="16"
+  fillWidth
+  gap="1"
+  columns="3"
+  s={{ columns: 2 }}
+  radius="l"
+  overflow="hidden"
+>
+  {[
+    { l: "bg-s", c: "var(--info-background-strong)" },
+    { l: "bg-m", c: "var(--info-background-medium)" },
+    { l: "bg-w", c: "var(--info-background-weak)" },
+    {
+      l: "on-bg-s",
+      c: "var(--info-on-background-strong)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-m",
+      c: "var(--info-on-background-medium)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-w",
+      c: "var(--info-on-background-weak)",
+      t: "var(--neutral-background-weak)",
+    },
+    { l: "solid-s", c: "var(--info-solid-strong)" },
+    { l: "solid-m", c: "var(--info-solid-medium)" },
+    { l: "solid-w", c: "var(--info-solid-weak)" },
+    {
+      l: "on-sol-s",
+      c: "var(--info-on-solid-strong)",
+      t: "var(--info-solid-strong)",
+    },
+    {
+      l: "on-sol-w",
+      c: "var(--info-on-solid-weak)",
+      t: "var(--info-solid-strong)",
+    },
+    { l: "bdr-s", c: "var(--info-border-strong)", b: true },
+    { l: "bdr-m", c: "var(--info-border-medium)", b: true },
+    { l: "bdr-w", c: "var(--info-border-weak)", b: true },
+    { l: "alpha-s", c: "var(--info-alpha-strong)" },
+    { l: "alpha-m", c: "var(--info-alpha-medium)" },
+    { l: "alpha-w", c: "var(--info-alpha-weak)" },
+  ].map((t) => (
+    <Flex
+      padding="12"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-xs"
+      key={t.l}
+      onSolid={t.t ? undefined : "neutral-strong"}
+      style={
+        t.t
+          ? { backgroundColor: t.t, color: t.c }
+          : t.b
+            ? {
+                backgroundColor: "var(--neutral-background-weak)",
+                border: `2px solid ${t.c}`,
+              }
+            : { backgroundColor: t.c }
+      }
+    >
+      {t.l}
+    </Flex>
+  ))}
+</Grid>
+
+<PropsTable
+  content={[
+    ["info-background", ["strong", "medium", "weak"]],
+    ["info-on-background", ["strong", "medium", "weak"]],
+    ["info-solid", ["strong", "medium", "weak"]],
+    ["info-on-solid", ["strong", "weak"]],
+    ["info-border", ["strong", "medium", "weak"]],
+    ["info-alpha", ["strong", "medium", "weak"]],
+  ]}
+/>
+
+### 5. danger
+
+<Grid
+  marginBottom="16"
+  fillWidth
+  gap="1"
+  columns="3"
+  s={{ columns: 2 }}
+  radius="l"
+  overflow="hidden"
+>
+  {[
+    { l: "bg-s", c: "var(--danger-background-strong)" },
+    { l: "bg-m", c: "var(--danger-background-medium)" },
+    { l: "bg-w", c: "var(--danger-background-weak)" },
+    {
+      l: "on-bg-s",
+      c: "var(--danger-on-background-strong)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-m",
+      c: "var(--danger-on-background-medium)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-w",
+      c: "var(--danger-on-background-weak)",
+      t: "var(--neutral-background-weak)",
+    },
+    { l: "solid-s", c: "var(--danger-solid-strong)" },
+    { l: "solid-m", c: "var(--danger-solid-medium)" },
+    { l: "solid-w", c: "var(--danger-solid-weak)" },
+    {
+      l: "on-sol-s",
+      c: "var(--danger-on-solid-strong)",
+      t: "var(--danger-solid-strong)",
+    },
+    {
+      l: "on-sol-w",
+      c: "var(--danger-on-solid-weak)",
+      t: "var(--danger-solid-strong)",
+    },
+    { l: "bdr-s", c: "var(--danger-border-strong)", b: true },
+    { l: "bdr-m", c: "var(--danger-border-medium)", b: true },
+    { l: "bdr-w", c: "var(--danger-border-weak)", b: true },
+    { l: "alpha-s", c: "var(--danger-alpha-strong)" },
+    { l: "alpha-m", c: "var(--danger-alpha-medium)" },
+    { l: "alpha-w", c: "var(--danger-alpha-weak)" },
+  ].map((t) => (
+    <Flex
+      padding="12"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-xs"
+      key={t.l}
+      onSolid={t.t ? undefined : "neutral-strong"}
+      style={
+        t.t
+          ? { backgroundColor: t.t, color: t.c }
+          : t.b
+            ? {
+                backgroundColor: "var(--neutral-background-weak)",
+                border: `2px solid ${t.c}`,
+              }
+            : { backgroundColor: t.c }
+      }
+    >
+      {t.l}
+    </Flex>
+  ))}
+</Grid>
+
+<PropsTable
+  content={[
+    ["danger-background", ["strong", "medium", "weak"]],
+    ["danger-on-background", ["strong", "medium", "weak"]],
+    ["danger-solid", ["strong", "medium", "weak"]],
+    ["danger-on-solid", ["strong", "weak"]],
+    ["danger-border", ["strong", "medium", "weak"]],
+    ["danger-alpha", ["strong", "medium", "weak"]],
+  ]}
+/>
+
+### 6. warning
+
+<Grid
+  marginBottom="16"
+  fillWidth
+  gap="1"
+  columns="3"
+  s={{ columns: 2 }}
+  radius="l"
+  overflow="hidden"
+>
+  {[
+    { l: "bg-s", c: "var(--warning-background-strong)" },
+    { l: "bg-m", c: "var(--warning-background-medium)" },
+    { l: "bg-w", c: "var(--warning-background-weak)" },
+    {
+      l: "on-bg-s",
+      c: "var(--warning-on-background-strong)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-m",
+      c: "var(--warning-on-background-medium)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-w",
+      c: "var(--warning-on-background-weak)",
+      t: "var(--neutral-background-weak)",
+    },
+    { l: "solid-s", c: "var(--warning-solid-strong)" },
+    { l: "solid-m", c: "var(--warning-solid-medium)" },
+    { l: "solid-w", c: "var(--warning-solid-weak)" },
+    {
+      l: "on-sol-s",
+      c: "var(--warning-on-solid-strong)",
+      t: "var(--warning-solid-strong)",
+    },
+    {
+      l: "on-sol-w",
+      c: "var(--warning-on-solid-weak)",
+      t: "var(--warning-solid-strong)",
+    },
+    { l: "bdr-s", c: "var(--warning-border-strong)", b: true },
+    { l: "bdr-m", c: "var(--warning-border-medium)", b: true },
+    { l: "bdr-w", c: "var(--warning-border-weak)", b: true },
+    { l: "alpha-s", c: "var(--warning-alpha-strong)" },
+    { l: "alpha-m", c: "var(--warning-alpha-medium)" },
+    { l: "alpha-w", c: "var(--warning-alpha-weak)" },
+  ].map((t) => (
+    <Flex
+      padding="12"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-xs"
+      key={t.l}
+      onSolid={t.t ? undefined : "neutral-strong"}
+      style={
+        t.t
+          ? { backgroundColor: t.t, color: t.c }
+          : t.b
+            ? {
+                backgroundColor: "var(--neutral-background-weak)",
+                border: `2px solid ${t.c}`,
+              }
+            : { backgroundColor: t.c }
+      }
+    >
+      {t.l}
+    </Flex>
+  ))}
+</Grid>
+
+<PropsTable
+  content={[
+    ["warning-background", ["strong", "medium", "weak"]],
+    ["warning-on-background", ["strong", "medium", "weak"]],
+    ["warning-solid", ["strong", "medium", "weak"]],
+    ["warning-on-solid", ["strong", "weak"]],
+    ["warning-border", ["strong", "medium", "weak"]],
+    ["warning-alpha", ["strong", "medium", "weak"]],
+  ]}
+/>
+
+### 7. success
+
+<Grid
+  marginBottom="16"
+  fillWidth
+  gap="1"
+  columns="3"
+  s={{ columns: 2 }}
+  radius="l"
+  overflow="hidden"
+>
+  {[
+    { l: "bg-s", c: "var(--success-background-strong)" },
+    { l: "bg-m", c: "var(--success-background-medium)" },
+    { l: "bg-w", c: "var(--success-background-weak)" },
+    {
+      l: "on-bg-s",
+      c: "var(--success-on-background-strong)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-m",
+      c: "var(--success-on-background-medium)",
+      t: "var(--neutral-background-weak)",
+    },
+    {
+      l: "on-bg-w",
+      c: "var(--success-on-background-weak)",
+      t: "var(--neutral-background-weak)",
+    },
+    { l: "solid-s", c: "var(--success-solid-strong)" },
+    { l: "solid-m", c: "var(--success-solid-medium)" },
+    { l: "solid-w", c: "var(--success-solid-weak)" },
+    {
+      l: "on-sol-s",
+      c: "var(--success-on-solid-strong)",
+      t: "var(--success-solid-strong)",
+    },
+    {
+      l: "on-sol-w",
+      c: "var(--success-on-solid-weak)",
+      t: "var(--success-solid-strong)",
+    },
+    { l: "bdr-s", c: "var(--success-border-strong)", b: true },
+    { l: "bdr-m", c: "var(--success-border-medium)", b: true },
+    { l: "bdr-w", c: "var(--success-border-weak)", b: true },
+    { l: "alpha-s", c: "var(--success-alpha-strong)" },
+    { l: "alpha-m", c: "var(--success-alpha-medium)" },
+    { l: "alpha-w", c: "var(--success-alpha-weak)" },
+  ].map((t) => (
+    <Flex
+      padding="12"
+      horizontal="center"
+      align="center"
+      textVariant="label-default-xs"
+      key={t.l}
+      onSolid={t.t ? undefined : "neutral-strong"}
+      style={
+        t.t
+          ? { backgroundColor: t.t, color: t.c }
+          : t.b
+            ? {
+                backgroundColor: "var(--neutral-background-weak)",
+                border: `2px solid ${t.c}`,
+              }
+            : { backgroundColor: t.c }
+      }
+    >
+      {t.l}
+    </Flex>
+  ))}
+</Grid>
+
+<PropsTable
+  content={[
+    ["success-background", ["strong", "medium", "weak"]],
+    ["success-on-background", ["strong", "medium", "weak"]],
+    ["success-solid", ["strong", "medium", "weak"]],
+    ["success-on-solid", ["strong", "weak"]],
+    ["success-border", ["strong", "medium", "weak"]],
+    ["success-alpha", ["strong", "medium", "weak"]],
+  ]}
+/>
