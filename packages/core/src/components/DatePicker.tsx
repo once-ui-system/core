@@ -18,6 +18,8 @@ import {
   Row,
   ArrowNavigation,
 } from ".";
+import { CondensedTShirtSizes } from "../types";
+import { getLastOpenedDropdown, setLastOpenedDropdown, clearLastOpenedDropdown } from "../utils";
 import styles from "./DatePicker.module.scss";
 
 export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
@@ -33,7 +35,7 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
     hours: number;
     minutes: number;
   };
-  size?: "s" | "m" | "l";
+  size?: CondensedTShirtSizes;
   isNested?: boolean;
   className?: string;
   style?: React.CSSProperties;
@@ -642,9 +644,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       // Update global tracking for keyboard navigation
                       if (open) {
                         // Set this as the last opened dropdown
-                        (window as any).lastOpenedDropdown = "month-dropdown";
-                      } else if ((window as any).lastOpenedDropdown === "month-dropdown") {
-                        (window as any).lastOpenedDropdown = null;
+                        setLastOpenedDropdown("month-dropdown");
+                      } else if (getLastOpenedDropdown() === "month-dropdown") {
+                        clearLastOpenedDropdown();
                       }
                     }}
                     trigger={
@@ -653,8 +655,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                           event.preventDefault();
                           event.stopPropagation();
                           setIsMonthOpen(true);
-                          // Update global tracking
-                          (window as any).lastOpenedDropdown = "month-dropdown";
+                           setLastOpenedDropdown("month-dropdown");
                         }}
                         variant="secondary"
                         size="s"
@@ -692,8 +693,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                                 if (!monthDisabled) {
                                   handleMonthSelect(index);
                                   setIsMonthOpen(false);
-                                  // Clear global tracking
-                                  (window as any).lastOpenedDropdown = null;
+                                  clearLastOpenedDropdown();
                                 }
                               }}
                             />
@@ -715,10 +715,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       setIsYearOpen(open);
                       // Update global tracking for keyboard navigation
                       if (open) {
-                        // Set this as the last opened dropdown
-                        (window as any).lastOpenedDropdown = "year-dropdown";
-                      } else if ((window as any).lastOpenedDropdown === "year-dropdown") {
-                        (window as any).lastOpenedDropdown = null;
+                        setLastOpenedDropdown("year-dropdown");
+                      } else if (getLastOpenedDropdown() === "year-dropdown") {
+                        clearLastOpenedDropdown();
                       }
                     }}
                     placement="bottom-start"
@@ -730,8 +729,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                           event.preventDefault();
                           event.stopPropagation();
                           setIsYearOpen(true);
-                          // Update global tracking
-                          (window as any).lastOpenedDropdown = "year-dropdown";
+                          setLastOpenedDropdown("year-dropdown");
                         }}
                       >
                         <Row vertical="center" gap="4">
@@ -771,8 +769,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                                 if (!allMonthsDisabled) {
                                   handleYearSelect(year);
                                   setIsYearOpen(false);
-                                  // Clear global tracking
-                                  (window as any).lastOpenedDropdown = null;
+                                  clearLastOpenedDropdown();
                                 }
                               }}
                             />

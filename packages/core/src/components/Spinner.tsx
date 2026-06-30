@@ -3,9 +3,10 @@ import React, { forwardRef } from "react";
 import styles from "./Spinner.module.scss";
 import { Flex } from ".";
 import classNames from "classnames";
+import { TShirtSizes } from "../types";
 
 interface SpinnerProps extends React.ComponentProps<typeof Flex> {
-  size?: "xs" | "s" | "m" | "l" | "xl";
+  size?: TShirtSizes;
   ariaLabel?: string;
   className?: string;
   style?: React.CSSProperties;

@@ -54,7 +54,10 @@ const Text = <T extends ElementType = "span">({
   }
 
   const getVariantClasses = (variant: TextVariant) => {
-    const [fontType, weight, size] = variant.split("-");
+    const parts = variant.split("-");
+    const size = parts.pop()!;
+    const weight = parts.pop()!;
+    const fontType = parts.join("-");
     return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
   };
 

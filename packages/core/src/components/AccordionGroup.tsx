@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback } from "react";
 import { Column, Accordion, Line, Flex } from ".";
+import { CondensedTShirtSizes } from "../types";
 
 export type AccordionItem = {
   title: React.ReactNode;
@@ -10,7 +11,7 @@ export type AccordionItem = {
 
 export interface AccordionGroupProps extends React.ComponentProps<typeof Flex> {
   items: AccordionItem[];
-  size?: "s" | "m" | "l";
+  size?: CondensedTShirtSizes;
   autoCollapse?: boolean;
   className?: string;
   style?: React.CSSProperties;

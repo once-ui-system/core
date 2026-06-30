@@ -12,7 +12,7 @@ import {
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 
-interface ComponentProps
+interface ServerFlexProps
   extends FlexProps,
     SpacingProps,
     SizeProps,
@@ -27,7 +27,7 @@ interface ComponentProps
   isDefaultBreakpoints?: boolean;
 }
 
-const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
+const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
   (
     {
       as: Component = "div",
@@ -146,7 +146,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ComponentProps>(
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
 
     const getVariantClasses = (variant: TextVariant) => {
-      const [fontType, weight, size] = variant.split("-");
+      const parts = variant.split("-");
+      const size = parts.pop()!;
+      const weight = parts.pop()!;
+      const fontType = parts.join("-");
       return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
     };
 

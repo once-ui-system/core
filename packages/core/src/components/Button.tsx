@@ -7,11 +7,11 @@ import classNames from "classnames";
 import { Spinner, Icon, Arrow, Flex } from ".";
 import styles from "./Button.module.scss";
 import { IconName } from "../icons";
-import { ColorScheme, ColorWeight } from "../types";
+import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 
-interface CommonProps {
+interface ButtonCommonProps {
   variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
-  size?: "xs" | "s" | "m" | "l" | "xl";
+  size?: TShirtSizes;
   radius?:
     | "none"
     | "top"
@@ -40,8 +40,8 @@ interface CommonProps {
   color?: `${ColorScheme}-${ColorWeight}`;
 }
 
-export type ButtonProps = CommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
-export type AnchorProps = CommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+export type ButtonProps = ButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
+export type AnchorProps = ButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
   (

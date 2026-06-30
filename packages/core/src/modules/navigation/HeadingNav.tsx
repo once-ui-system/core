@@ -3,11 +3,11 @@
 import React, { forwardRef, useEffect, useState, useRef, useCallback } from "react";
 import { Column, Flex, Icon, Row, SmartLink, Text, useHeadingLinks } from "../../";
 
-interface props extends React.ComponentProps<typeof Flex> {
+export interface HeadingNavProps extends React.ComponentProps<typeof Flex> {
   header?: boolean;
 }
 
-const HeadingNav = forwardRef<HTMLDivElement, props>(({ className, style, header = true, ...rest }, ref) => {
+const HeadingNav = forwardRef<HTMLDivElement, HeadingNavProps>(({ className, style, header = true, ...rest }, ref) => {
   const [activeHeadingId, setActiveHeadingId] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const indicatorRef = useRef<HTMLDivElement>(null);

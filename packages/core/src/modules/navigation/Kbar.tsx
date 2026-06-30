@@ -22,6 +22,7 @@ import {
   ScrollLock,
 } from "../../components";
 import { createPortal } from "react-dom";
+import { TShirtSizes } from "../../types";
 import { useRouter, usePathname } from "next/navigation";
 import styles from "./Kbar.module.scss";
 
@@ -56,7 +57,7 @@ const KbarSearchInput: React.FC<{
   searchQuery: string;
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
-  inputSize?: "xs" | "s" | "m" | "l" | "xl";
+  inputSize?: TShirtSizes;
 }> = ({
   placeholder,
   searchQuery,
@@ -99,10 +100,8 @@ const KbarSearchInput: React.FC<{
   );
 };
 
-interface KbarTriggerProps {
+export interface KbarTriggerProps extends Omit<React.ComponentProps<typeof Row>, "onClick"> {
   onClick?: () => void;
-  children: React.ReactNode;
-  [key: string]: any; // Allow any additional props
 }
 
 export const KbarTrigger: React.FC<KbarTriggerProps> = ({
@@ -117,12 +116,12 @@ export const KbarTrigger: React.FC<KbarTriggerProps> = ({
   );
 };
 
-interface KbarContentProps {
+export interface KbarContentProps {
   isOpen: boolean;
   onClose: () => void;
   items: KbarItem[];
   placeholder?: string;
-  inputSize?: "xs" | "s" | "m" | "l" | "xl";
+  inputSize?: TShirtSizes;
 }
 
 export const KbarContent: React.FC<KbarContentProps> = ({
@@ -434,7 +433,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
 export interface KbarProps {
   items: KbarItem[];
   children: React.ReactNode;
-  inputSize?: "xs" | "s" | "m" | "l" | "xl";
+  inputSize?: TShirtSizes;
   [key: string]: any; // Allow any additional props
 }
 

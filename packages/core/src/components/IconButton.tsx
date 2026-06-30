@@ -7,12 +7,12 @@ import buttonStyles from "./Button.module.scss";
 import iconStyles from "./IconButton.module.scss";
 import classNames from "classnames";
 import { IconName } from "../icons";
-import { ColorScheme, ColorWeight } from "../types";
+import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 
-interface CommonProps {
+interface IconButtonCommonProps {
   icon?: IconName;
   id?: string;
-  size?: "xs" | "s" | "m" | "l" | "xl";
+  size?: TShirtSizes;
   radius?:
     | "none"
     | "top"
@@ -26,7 +26,7 @@ interface CommonProps {
   rounded?: boolean;
   tooltip?: ReactNode;
   tooltipPosition?: "top" | "bottom" | "left" | "right";
-  variant?: "primary" | "secondary" | "tertiary" | "subtle" | "danger" | "success" | "warning" | "ghost";
+  variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
   loading?: boolean;
   disabled?: boolean;
   className?: string;
@@ -36,8 +36,8 @@ interface CommonProps {
   color?: `${ColorScheme}-${ColorWeight}`;
 }
 
-export type IconButtonProps = CommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
-type AnchorProps = CommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+export type IconButtonProps = IconButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
+type AnchorProps = IconButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
   (
@@ -86,7 +86,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
           className,
         )}
         style={style}
-        aria-label={tooltip || icon}
+        aria-label={(tooltip || icon) as string | undefined}
         aria-disabled={disabled}
         {...props}
       >
