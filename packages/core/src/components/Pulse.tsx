@@ -3,12 +3,12 @@
 import { ReactNode, forwardRef } from "react";
 import { Row } from ".";
 import styles from "./Pulse.module.scss";
-import { CondensedTShirtSizes, ColorScheme } from "../types";
+import { CondensedTShirtSizes, ColorScheme, TShirtSizes } from "../types";
 
 interface PulseProps extends React.ComponentProps<typeof Row> {
   variant?: ColorScheme;
   size?: CondensedTShirtSizes;
-  pulseSize?: number | string;
+  pulseSize?: string | number;
   children?: ReactNode;
   className?: string;
   style?: React.CSSProperties;

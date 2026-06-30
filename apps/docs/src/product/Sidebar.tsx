@@ -1,31 +1,50 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Schemes, Accordion, Column, Flex, Icon, Row, Tag, ToggleButton, Text, MatrixFx, Card, Background, Button, Skeleton, IconButton } from "@once-ui-system/core";
-import { usePathname } from 'next/navigation';
+import {
+  Schemes,
+  Accordion,
+  Column,
+  Flex,
+  Icon,
+  Row,
+  ToggleButton,
+  Skeleton,
+  StatusIndicator,
+  Pulse,
+  ColorScheme,
+} from "@once-ui-system/core";
+import { usePathname } from "next/navigation";
 import { routes, layout } from "@/resources";
 
-import styles from './Sidebar.module.scss';
+import styles from "./Sidebar.module.scss";
 
 // Global navigation cache to prevent refetching
 let globalNavigationCache: any = null;
 
-export interface NavigationItem extends Omit<React.ComponentProps<typeof Flex>, "title" | "label" | "children">{
+export interface NavigationItem extends Omit<
+  React.ComponentProps<typeof Flex>,
+  "title" | "label" | "children"
+> {
   slug: string;
   title: string;
   label?: string;
   order?: number;
   children?: NavigationItem[];
+  updatedAt: string;
   schemes?: Schemes;
   keywords?: string;
   pro?: boolean;
   navIcon?: string;
   navTag?: string;
   navLabel?: string;
-  navTagVariant?: Schemes;
+  navTagVariant?: ColorScheme;
 }
 
-interface SidebarProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
+interface SidebarProps extends Omit<
+  React.ComponentProps<typeof Flex>,
+  "children"
+> {
   initialNavigation?: NavigationItem[];
 }
 
@@ -37,53 +56,54 @@ const NavigationItemComponent: React.FC<{
   renderNavigation: (items: NavigationItem[], depth: number) => React.ReactNode;
 }> = ({ item, depth, pathname, renderNavigation }) => {
   const correctedSlug = item.slug;
-  
+
   // Extract the path segments for better matching
-  const pathSegments = pathname.split('/').filter(Boolean);
-  
+  const pathSegments = pathname.split("/").filter(Boolean);
+
   // For top-level directories, check if their name is in the pathname segments
   // This will match routes like "/once-ui/quick-start" for the "once-ui" parent
-  const isTopLevelMatch = depth === 0 && 
-                          pathSegments.length >= 2 && 
-                          pathSegments[0] === 'docs' && 
-                          correctedSlug.split('/')[0] === pathSegments[1];
-  
+  const isTopLevelMatch =
+    depth === 0 &&
+    pathSegments.length >= 2 &&
+    pathSegments[0] === "docs" &&
+    correctedSlug.split("/")[0] === pathSegments[1];
+
   // For deeper items, check for exact match or if it's a parent path
   const isExactMatch = pathname === `/${correctedSlug}`;
   const isParentPath = pathname.startsWith(`/${correctedSlug}/`);
-  
+
   // Only consider exact matches for selection, not parent paths
   const isSelected = isExactMatch;
-  
+
   // Use this for accordion open state - if it's a parent or exact match
   const isActive = isExactMatch || isParentPath || isTopLevelMatch;
-  
+
   // Check if the current path is within this section by comparing path segments
   // This is more reliable for deeper nested routes
   const isPathWithinSection = (() => {
     // Skip this check for empty paths
     if (!correctedSlug) return false;
-    
-    const sectionSegments = correctedSlug.split('/').filter(Boolean);
-    
+
+    const sectionSegments = correctedSlug.split("/").filter(Boolean);
+
     // If there aren't enough segments in the path, it can't be within this section
     if (pathSegments.length < sectionSegments.length) return false;
-    
+
     // Check if all section segments match the corresponding path segments
     for (let i = 0; i < sectionSegments.length; i++) {
       if (pathSegments[i] !== sectionSegments[i]) {
         return false;
       }
     }
-    
+
     return true;
   })();
-  
+
   // For accordion sections, check if any child's path is in the current URL
-  const hasActiveChild = item.children?.some(child => {
+  const hasActiveChild = item.children?.some((child) => {
     const childSlug = child.slug;
-    const childSegments = childSlug.split('/').filter(Boolean);
-    
+    const childSegments = childSlug.split("/").filter(Boolean);
+
     // Check if the pathname segments match this child's segments
     if (pathSegments.length >= childSegments.length) {
       for (let i = 0; i < childSegments.length; i++) {
@@ -93,51 +113,58 @@ const NavigationItemComponent: React.FC<{
       }
       return true;
     }
-    
+
     return false;
   });
-  
+
   // Check if current section should be open based on path matching
   // This ensures the section is open when arriving at a page within this section
-  const shouldBeOpen = isSelected || hasActiveChild || isParentPath || isPathWithinSection;
+  const shouldBeOpen =
+    isSelected || hasActiveChild || isParentPath || isPathWithinSection;
 
   if (item.children) {
     return (
       <Row
-        fillWidth 
-        style={{paddingLeft: `calc(${depth} * var(--static-space-8))`}}>
-        <Column
-          fillWidth
-          marginTop="2">
+        fillWidth
+        style={{ paddingLeft: `calc(${depth} * var(--static-space-8))` }}
+      >
+        <Column fillWidth marginTop="2">
           {layout.sidebar.collapsible ? (
-          <Accordion
-            gap="4"
-            icon="chevronRight"
-            iconRotation={90}
-            size="s"
-            radius="s"
-            paddingX={undefined}
-            paddingBottom={undefined}
-            paddingLeft="4"
-            paddingTop="4"
-            open={shouldBeOpen}
-            title={
-              <Row fillWidth vertical="center" textVariant="label-strong-xs" onBackground="neutral-weak">
-                {item.title}
-              </Row>
-            }>
-              {renderNavigation(item.children, depth + 1)}
-          </Accordion>
-          ) : (
-            <Column
+            <Accordion
               gap="4"
+              icon="chevronRight"
+              iconRotation={90}
+              size="s"
+              radius="s"
+              paddingX={undefined}
+              paddingBottom={undefined}
               paddingLeft="4"
-              paddingTop="12">
-                <Row 
-                  paddingY="12" paddingLeft="8" textVariant="label-strong-s" onBackground="neutral-weak">
+              paddingTop="4"
+              open={shouldBeOpen}
+              title={
+                <Row
+                  fillWidth
+                  vertical="center"
+                  textVariant="label-strong-xs"
+                  onBackground="neutral-weak"
+                >
                   {item.title}
                 </Row>
-                {renderNavigation(item.children, depth + 1)}
+              }
+            >
+              {renderNavigation(item.children, depth + 1)}
+            </Accordion>
+          ) : (
+            <Column gap="4" paddingLeft="4" paddingTop="12">
+              <Row
+                paddingY="12"
+                paddingLeft="8"
+                textVariant="label-strong-s"
+                onBackground="neutral-weak"
+              >
+                {item.title}
+              </Row>
+              {renderNavigation(item.children, depth + 1)}
             </Column>
           )}
         </Column>
@@ -151,18 +178,33 @@ const NavigationItemComponent: React.FC<{
       horizontal="between"
       selected={isSelected}
       className={depth === 0 ? styles.navigation : undefined}
-      href={`/${correctedSlug}`}>
+      href={`/${correctedSlug}`}
+    >
       <Row fillWidth horizontal="between" vertical="center">
         <Row
           overflow="hidden"
           gap="8"
           onBackground="neutral-strong"
           textVariant={isSelected ? "label-strong-s" : "label-default-s"}
-          style={{ textOverflow: "ellipsis", whiteSpace: "nowrap"}}>
+          style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+        >
           {item.label || item.title}
         </Row>
         {item.navTag && (
-          <Row width="4" height="4" radius="full" solid="brand-strong" data-brand={item.navTagVariant} style={{transform: "scale(1.2)", transformOrigin: "right center"}} />
+          <Pulse
+            variant={
+              item.updatedAt &&
+              Date.now() - new Date(item.updatedAt).getTime() >
+                60 * 24 * 60 * 60 * 1000
+                ? "neutral"
+                : item.updatedAt &&
+                    Date.now() - new Date(item.updatedAt).getTime() >
+                      20 * 24 * 60 * 60 * 1000
+                  ? "warning"
+                  : item.navTagVariant
+            }
+            size="s"
+          />
         )}
       </Row>
     </ToggleButton>
@@ -170,17 +212,20 @@ const NavigationItemComponent: React.FC<{
 };
 
 // Add display name and memoize with a less aggressive comparison function
-const NavigationItem = React.memo(NavigationItemComponent, (prevProps, nextProps) => {
-  // Always re-render if the pathname changes - this is critical for active state updates
-  if (prevProps.pathname !== nextProps.pathname) {
-    return false; // Different pathname means we should re-render
-  }
-  
-  // Otherwise, only re-render if the item itself changes
-  return prevProps.item === nextProps.item;
-});
+const NavigationItem = React.memo(
+  NavigationItemComponent,
+  (prevProps, nextProps) => {
+    // Always re-render if the pathname changes - this is critical for active state updates
+    if (prevProps.pathname !== nextProps.pathname) {
+      return false; // Different pathname means we should re-render
+    }
 
-NavigationItem.displayName = 'NavigationItem';
+    // Otherwise, only re-render if the item itself changes
+    return prevProps.item === nextProps.item;
+  },
+);
+
+NavigationItem.displayName = "NavigationItem";
 
 // Memoized resource link component
 const ResourceLinkComponent: React.FC<{
@@ -190,19 +235,21 @@ const ResourceLinkComponent: React.FC<{
   pathname: string;
 }> = ({ href, icon, label, pathname }) => {
   const isSelected = pathname === href;
-  
+
   return (
     <ToggleButton
       fillWidth
       horizontal="between"
       selected={isSelected}
       className={styles.navigation}
-      href={href}>
-      <Row 
+      href={href}
+    >
+      <Row
         gap="8"
         onBackground={isSelected ? "neutral-strong" : "neutral-weak"}
-        textVariant={isSelected ? "label-strong-s" : "label-default-s"}>
-        <Icon size="xs" name={icon}/>
+        textVariant={isSelected ? "label-strong-s" : "label-default-s"}
+      >
+        <Icon size="xs" name={icon} />
         {label}
       </Row>
     </ToggleButton>
@@ -210,89 +257,106 @@ const ResourceLinkComponent: React.FC<{
 };
 
 // Add display name and memoize with a less aggressive comparison function
-const ResourceLink = React.memo(ResourceLinkComponent, (prevProps, nextProps) => {
-  // Always re-render if the pathname changes - this is critical for active state updates
-  if (prevProps.pathname !== nextProps.pathname) {
-    return false; // Different pathname means we should re-render
-  }
-  
-  // Otherwise, only re-render if the href or icon changes
-  return prevProps.href === nextProps.href && prevProps.icon === nextProps.icon;
-});
+const ResourceLink = React.memo(
+  ResourceLinkComponent,
+  (prevProps, nextProps) => {
+    // Always re-render if the pathname changes - this is critical for active state updates
+    if (prevProps.pathname !== nextProps.pathname) {
+      return false; // Different pathname means we should re-render
+    }
 
-ResourceLink.displayName = 'ResourceLink';
+    // Otherwise, only re-render if the href or icon changes
+    return (
+      prevProps.href === nextProps.href && prevProps.icon === nextProps.icon
+    );
+  },
+);
+
+ResourceLink.displayName = "ResourceLink";
 
 // Create a stable version of the sidebar that doesn't re-render
 const SidebarContent: React.FC<{
   navigation: NavigationItem[];
   pathname: string;
-}> = React.memo(({ navigation, pathname }) => {
-  // Create a render function that captures the current pathname
-  const renderNavigation = (items: NavigationItem[], depth = 0) => {
+}> = React.memo(
+  ({ navigation, pathname }) => {
+    // Create a render function that captures the current pathname
+    const renderNavigation = (items: NavigationItem[], depth = 0) => {
+      return (
+        <>
+          {items.map((item) => (
+            <NavigationItem
+              key={item.slug}
+              item={item}
+              depth={depth}
+              pathname={pathname}
+              renderNavigation={renderNavigation}
+            />
+          ))}
+        </>
+      );
+    };
+
+    // Create resources section
+    const resourcesSection = !(
+      routes["/roadmap"] || routes["/changelog"]
+    ) ? null : (
+      <Column gap="4" marginTop="32" paddingLeft="4">
+        <Row
+          textVariant="label-strong-s"
+          onBackground="brand-strong"
+          paddingLeft="8"
+          paddingY="12"
+        >
+          Resources
+        </Row>
+        {routes["/roadmap"] && (
+          <ResourceLink
+            href="/roadmap"
+            icon="roadmap"
+            label="Roadmap"
+            pathname={pathname}
+          />
+        )}
+
+        {routes["/changelog"] && (
+          <ResourceLink
+            href="/changelog"
+            icon="changelog"
+            label="Changelog"
+            pathname={pathname}
+          />
+        )}
+      </Column>
+    );
+
     return (
       <>
-        {items.map((item) => (
-          <NavigationItem 
-            key={item.slug}
-            item={item}
-            depth={depth}
-            pathname={pathname}
-            renderNavigation={renderNavigation}
-          />
-        ))}
+        {renderNavigation(navigation, 0)}
+        {resourcesSection}
       </>
     );
-  };
+  },
+  (prevProps, nextProps) => {
+    // Always re-render if pathname changes
+    if (prevProps.pathname !== nextProps.pathname) {
+      return false; // Different pathname means we should re-render
+    }
 
-  // Create resources section
-  const resourcesSection = (!(routes['/roadmap'] || routes['/changelog'])) ? null : (
-    <Column gap="4" marginTop="32" paddingLeft="4">
-      <Row textVariant="label-strong-s" onBackground="brand-strong" paddingLeft="8" paddingY="12">
-        Resources
-      </Row>
-      {routes['/roadmap'] && (
-        <ResourceLink 
-          href="/roadmap"
-          icon="roadmap"
-          label="Roadmap"
-          pathname={pathname}
-        />
-      )}
-      
-      {routes['/changelog'] && (
-        <ResourceLink 
-          href="/changelog"
-          icon="changelog"
-          label="Changelog"
-          pathname={pathname}
-        />
-      )}
-    </Column>
-  );
+    // Otherwise, only re-render if navigation changes
+    return prevProps.navigation === nextProps.navigation;
+  },
+);
 
-  return (
-    <>
-      {renderNavigation(navigation, 0)}
-      {resourcesSection}
-    </>
-  );
-}, (prevProps, nextProps) => {
-  // Always re-render if pathname changes
-  if (prevProps.pathname !== nextProps.pathname) {
-    return false; // Different pathname means we should re-render
-  }
-  
-  // Otherwise, only re-render if navigation changes
-  return prevProps.navigation === nextProps.navigation;
-});
-
-SidebarContent.displayName = 'SidebarContent';
+SidebarContent.displayName = "SidebarContent";
 
 const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
-  const [navigation, setNavigation] = useState<NavigationItem[]>(initialNavigation || []);
+  const [navigation, setNavigation] = useState<NavigationItem[]>(
+    initialNavigation || [],
+  );
   const [hasLoaded, setHasLoaded] = useState(false);
   const pathname = usePathname();
-  
+
   // Load navigation data only once, using global cache
   useEffect(() => {
     // Use initialNavigation if provided
@@ -302,14 +366,14 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
       setHasLoaded(true);
       return;
     }
-    
+
     // Use global cache if available
     if (globalNavigationCache) {
       setNavigation(globalNavigationCache);
       setHasLoaded(true);
       return;
     }
-    
+
     // Fetch only if not loaded and no global cache
     if (!hasLoaded) {
       fetch("/api/navigation")
@@ -329,21 +393,26 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
   return (
     <Column
       fillHeight
-      width={layout.sidebar.width} 
+      width={layout.sidebar.width}
       minWidth={layout.sidebar.width}
       paddingY="4"
-      {...rest}>
-      <Column 
+      {...rest}
+    >
+      <Column
         position="sticky"
         fillHeight
-        gap="4" 
-        as="nav" 
+        gap="4"
+        as="nav"
         overflowY="auto"
         padding="12"
-        style={{maxHeight: "calc(100vh - 4rem)", top: "3.875rem"}}
+        style={{ maxHeight: "calc(100vh - 4rem)", top: "3.875rem" }}
       >
         {hasLoaded ? (
-          <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
+          <SidebarContent
+            key={pathname}
+            navigation={navigation}
+            pathname={pathname}
+          />
         ) : (
           <Column fillWidth gap="4">
             {Array.from({ length: 7 }).map((_, i) => (
@@ -367,6 +436,6 @@ const MemoizedSidebar = React.memo(Sidebar, (prevProps, nextProps) => {
   return prevProps.initialNavigation === nextProps.initialNavigation;
 });
 
-MemoizedSidebar.displayName = 'MemoizedSidebar';
+MemoizedSidebar.displayName = "MemoizedSidebar";
 
 export { MemoizedSidebar as Sidebar };
