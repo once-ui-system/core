@@ -33,53 +33,6 @@ const STATIC_TOKENS = [
   { label: "black-medium", token: "static-black-medium" },
 ];
 
-function AmbientTokens() {
-  return (
-    <>
-      <HeadingLink marginTop="24" marginBottom="12" as="h3" id={slugify("Ambient tokens")}>
-        Ambient tokens
-      </HeadingLink>
-      <Grid marginBottom="16" gap="1" columns="5" s={{ columns: 2 }} radius="l" overflow="hidden">
-        {AMBIENT_SWATCHES.map((item) => (
-          <Flex
-            key={item.label}
-            padding="16"
-            horizontal="center"
-            align="center"
-            textVariant="label-default-xs"
-            style={{
-              backgroundColor: item.isBorder
-                ? "var(--neutral-background-weak)"
-                : `var(--${item.token})`,
-              color: item.isBorder
-                ? "var(--neutral-on-background-weak)"
-                : item.token === "backdrop"
-                  ? "var(--static-white)"
-                  : item.token === "page-background"
-                    ? "var(--neutral-on-background-weak)"
-                    : "var(--neutral-on-background-medium)",
-              outline: item.isBorder
-                ? undefined
-                : "1px solid var(--neutral-border-medium)",
-            }}
-          >
-            {item.label}
-          </Flex>
-        ))}
-      </Grid>
-      <PropsTable
-        content={[
-          ["page-background", "CSS color"],
-          ["backdrop", "CSS color"],
-          ["surface-background", "CSS color"],
-          ["surface-border", "CSS color"],
-          ["default-border", "CSS color"],
-        ]}
-      />
-    </>
-  );
-}
-
 function CodeTokens() {
   return (
     <>
@@ -182,9 +135,7 @@ function StaticTokens() {
                 : item.token.includes("white")
                   ? "var(--static-black)"
                   : "var(--static-white)",
-              border: item.token === "static-transparent"
-                ? "2px solid var(--neutral-border-medium)"
-                : undefined,
+            
             }}
           >
             {item.label}
@@ -207,7 +158,6 @@ function StaticTokens() {
 function AdditionalTokens() {
   return (
     <>
-      <AmbientTokens />
       <CodeTokens />
       <DataTokens />
       <StaticTokens />
