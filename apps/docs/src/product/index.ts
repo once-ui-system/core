@@ -35,4 +35,7 @@ export * from "./WeatherFxExample";
 export * from "./MatrixFxExample";
 export * from "./LineChartStreamingExample";
 export * from "./ModalExamples";
-export * from "./SliderExamples"
+export * from "./SliderExamples";
+export * from "./SemanticColorSection";
+export * from "./ColorSchemeGrid";
+export * from "./AdditionalTokens"

@@ -190,22 +190,19 @@ const NavigationItemComponent: React.FC<{
         >
           {item.label || item.title}
         </Row>
-        {item.navTag && (
-          <Pulse
-            variant={
-              item.updatedAt &&
-              Date.now() - new Date(item.updatedAt).getTime() >
-                60 * 24 * 60 * 60 * 1000
-                ? "neutral"
-                : item.updatedAt &&
-                    Date.now() - new Date(item.updatedAt).getTime() >
-                      20 * 24 * 60 * 60 * 1000
-                  ? "warning"
-                  : item.navTagVariant
-            }
-            size="s"
-          />
-        )}
+        {item.navTag && (() => {
+          if (!item.updatedAt) {
+            return <Pulse variant={item.navTagVariant} size="s" />;
+          }
+          const age = Date.now() - new Date(item.updatedAt).getTime();
+          if (age > 60 * 24 * 60 * 60 * 1000) return null;
+          const variant = age > 30 * 24 * 60 * 60 * 1000
+            ? "neutral"
+            : age > 20 * 24 * 60 * 60 * 1000
+              ? "warning"
+              : item.navTagVariant;
+          return <Pulse variant={variant} size="s" />;
+        })()}
       </Row>
     </ToggleButton>
   );
