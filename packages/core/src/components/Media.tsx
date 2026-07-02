@@ -133,7 +133,12 @@ const Media: React.FC<MediaProps> = ({
     return embedUrl;
   };
 
-  const isVideo = src?.endsWith(".mp4");
+  const isVideoUrl = (url: string) => {
+    const videoExtensions = /\.(mp4|webm|mov|avi|ogv|m4v|mkv|flv|wmv|3gp|3g2)(\?.*)?$/i;
+    return videoExtensions.test(url);
+  };
+
+  const isVideo = isVideoUrl(src);
   const isYouTube = isYouTubeVideo(src);
   const resolvedSizes =
     typeof sizes === "number"
