@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Flex, HeadingLink } from "@once-ui-system/core";
+import { Column, Flex, HeadingLink } from "@once-ui-system/core";
 import { PropsTable } from "./PropsTable";
 
 const TOKEN_ROWS: { label: string; bg: string; color: string; border?: string }[][] = [
@@ -18,12 +18,12 @@ const TOKEN_ROWS: { label: string; bg: string; color: string; border?: string }[
   [
     { label: "solid-strong", bg: "solid-strong", color: "on-solid-strong" },
     { label: "solid-medium", bg: "solid-medium", color: "on-solid-strong" },
-    { label: "solid-weak", bg: "solid-weak", color: "on-solid-weak" },
+    { label: "solid-weak", bg: "solid-weak", color: "on-solid-strong" },
   ],
   [
-    { label: "on-solid-strong", bg: "background-strong", color: "on-solid-strong" },
-    { label: "on-solid-medium", bg: "background-medium", color: "on-solid-medium" },
-    { label: "on-solid-weak", bg: "background-strong", color: "on-solid-weak" },
+    { label: "on-solid-strong", bg: "solid-strong", color: "on-solid-strong" },
+    { label: "on-solid-medium", bg: "solid-strong", color: "on-solid-medium" },
+    { label: "on-solid-weak", bg: "solid-strong", color: "on-solid-weak" },
   ],
   [
     { label: "border-strong", bg: "background-weak", color: "on-background-strong", border: "border-strong" },
@@ -38,16 +38,13 @@ const TOKEN_ROWS: { label: string; bg: string; color: string; border?: string }[
 ];
 
 export const SEMANTIC_SECTIONS = [
-     { number: 1, name: "Neutral", prefix: "neutral" },
-   { number: 2, name: "Brand", prefix: "brand" },
-   { number: 3, name: "Accent", prefix: "accent" },
-
-    { number: 4, name: "Info", prefix: "info" }, 
+  { number: 1, name: "Neutral", prefix: "neutral" },
+  { number: 2, name: "Brand", prefix: "brand" },
+  { number: 3, name: "Accent", prefix: "accent" },
+  { number: 4, name: "Info", prefix: "info" }, 
   { number: 5, name: "Danger", prefix: "danger" },
   { number: 6, name: "Warning", prefix: "warning" },
   { number: 7, name: "Success", prefix: "success" },
-
-
 ];
 
 function slugify(str: string) {
@@ -63,7 +60,7 @@ function SemanticColorSection({ number, name, prefix }: { number: number; name: 
         {number}. {name}
       </HeadingLink>
 
-      <Flex fillWidth gap="1" radius="l" overflow="hidden" style={{ flexDirection: "column" }}>
+      <Column fillWidth gap="1" radius="l" overflow="hidden">
         {TOKEN_ROWS.map((row, i) => (
           <Flex key={i} fillWidth gap="1">
             {row.map((item) => (
@@ -85,14 +82,14 @@ function SemanticColorSection({ number, name, prefix }: { number: number; name: 
             ))}
           </Flex>
         ))}
-      </Flex>
+      </Column>
 
       <PropsTable
         content={[
           [`${prefix}-background`, ["strong", "medium", "weak"]],
           [`${prefix}-on-background`, ["strong", "medium", "weak"]],
           [`${prefix}-solid`, ["strong", "medium", "weak"]],
-          [`${prefix}-on-solid`, ["strong", "weak"]],
+          [`${prefix}-on-solid`, ["strong", "medium", "weak"]],
           [`${prefix}-border`, ["strong", "medium", "weak"]],
           [`${prefix}-alpha`, ["strong", "medium", "weak"]],
         ]}

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Flex } from "@once-ui-system/core";
+import { Column, Flex, Row } from "@once-ui-system/core";
 import { PropsTable } from "./PropsTable";
 
 const SCHEMES = [
@@ -17,15 +17,15 @@ const WEIGHTS = [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200];
 function ColorSchemeGrid() {
   return (
     <>
-      <Flex fillWidth marginBottom="16" style={{ overflowX: "auto" }}>
-        <Flex style={{ flexDirection: "column", gap: "var(--static-space-1)", minWidth: "680px" }}>
-          <Flex gap="1" style={{ position: "sticky", top: 0, zIndex: 1 }}>
+      <Row fillWidth marginBottom="16" overflowX="auto">
+        <Column fillWidth gap="1" minWidth={40} paddingY="8">
+          <Row gap="1" position="sticky" background="page" zIndex={1}>
             <Flex
               paddingX="8"
               paddingY="12"
               horizontal="center"
               align="center"
-              style={{ width: "72px", flexShrink: 0 }}
+              minWidth="80"
               textVariant="label-default-xs"
               onBackground="neutral-medium"
             />
@@ -35,23 +35,21 @@ function ColorSchemeGrid() {
                 fillWidth
                 paddingY="12"
                 horizontal="center"
-                align="center"
                 textVariant="label-default-xs"
                 onBackground="neutral-medium"
               >
                 {w}
               </Flex>
             ))}
-          </Flex>
+          </Row>
           {SCHEMES.map((scheme) => (
             <Flex key={scheme} gap="1">
               <Flex
                 paddingX="8"
                 paddingY="12"
-                horizontal="center"
-                align="center"
                 radius="s"
-                style={{ width: "72px", flexShrink: 0, textTransform: "capitalize" }}
+                minWidth="80"
+                vertical="center"
                 textVariant="label-default-xs"
                 onBackground="neutral-medium"
               >
@@ -62,18 +60,17 @@ function ColorSchemeGrid() {
                   key={weight}
                   fillWidth
                   radius="s"
+                  aspectRatio="1"
                   title={`${scheme}-${weight}`}
                   style={{
                     backgroundColor: `var(--scheme-${scheme.toLowerCase()}-${weight})`,
-                    aspectRatio: "1",
-                    minHeight: "28px",
                   }}
                 />
               ))}
             </Flex>
           ))}
-        </Flex>
-      </Flex>
+        </Column>
+      </Row>
 
       <PropsTable
         content={SCHEMES.map((s) => [
