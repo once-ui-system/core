@@ -279,8 +279,8 @@ Use the `lineNumbers` prop to display line numbers for better code readability a
 Use the `highlight` prop to highlight specific lines of code. The value should be a string with line numbers or ranges (e.g., "1,3-5").
 
 <CodeBlock
-  marginTop="16"  isCollapsible={false}
-
+  marginTop="16"
+  isCollapsible={false}
   marginBottom="24"
   codes={[
     {
@@ -321,8 +321,8 @@ Display Git-style diffs by setting the language to "diff". Numbering can be used
   marginBottom="24"
   preview={
     <CodeBlock
-      copyButton={false}  isCollapsible={false}
-
+      copyButton={false}
+      isCollapsible={false}
       codes={[
         {
           language: "diff",
@@ -382,8 +382,8 @@ You can enable syntax highlighting by specifying a similar array as the language
     marginBottom="24"
     preview={
         <CodeBlock
-            copyButton={false}  isCollapsible={false}
-
+            copyButton={false}
+            isCollapsible={false}
             codes={[
                 {
                     language: [ "diff", "typescript" ],
@@ -441,8 +441,8 @@ export function subtract(a: number, b: number): number {
 The `CodeBlock` component supports additional features like fullscreen mode and style customization.
 
 <CodeBlock
-  marginTop="16"  isCollapsible={false}
-
+  marginTop="16"
+  isCollapsible={false}
   marginBottom="24"
   fullscreenButton
   styleButton

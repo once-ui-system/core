@@ -477,7 +477,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   fullscreenButton = false,
   lineNumbers = false,
   maxLines = 5,
-  isCollapsible = true,
+  isCollapsible = false,
   compact = false,
   className,
   style,
