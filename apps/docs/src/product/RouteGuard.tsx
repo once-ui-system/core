@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { routes } from '@/resources';
-import { Flex, Spinner } from '@once-ui-system/core';
 import NotFound from '@/app/not-found';
 
 interface RouteGuardProps {
@@ -39,11 +38,7 @@ const RouteGuard: React.FC<RouteGuardProps> = ({ children }) => {
     }, [pathname]);
 
     if (loading) {
-        return (
-        <Flex style={{minHeight: "calc(100vh - var(--static-space-56))"}} paddingY="128" center>
-            <Spinner />
-        </Flex>
-        );
+        return;
     }
 
     if (!isRouteEnabled) {
