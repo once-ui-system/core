@@ -3,18 +3,19 @@
 import { ReactNode, forwardRef } from "react";
 import { Row } from ".";
 import styles from "./Pulse.module.scss";
-import { CondensedTShirtSizes, ColorScheme } from "../types";
+import { CondensedTShirtSizes, ColorScheme, TShirtSizes } from "../types";
 
 interface PulseProps extends React.ComponentProps<typeof Row> {
   variant?: ColorScheme;
   size?: CondensedTShirtSizes;
+  pulseSize?: string | number;
   children?: ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }
 
 const Pulse = forwardRef<HTMLDivElement, PulseProps>(
-  ({ children, className, style, size = "m", variant = "brand", ...flex }: PulseProps, ref) => {
+  ({ children, className, style, size = "m", pulseSize, variant = "brand", ...flex }: PulseProps, ref) => {
     return (
       <Row ref={ref} minWidth={size === "s" ? "16" : size === "m" ? "24" : "32"} minHeight={size === "s" ? "16" : size === "m" ? "24" : "32"} center data-solid="color" className={className} style={style} {...flex}>
         <Row position="absolute" className={styles.position}>
@@ -24,6 +25,7 @@ const Pulse = forwardRef<HTMLDivElement, PulseProps>(
             className={styles.dot}
             width={size === "s" ? "32" : size === "m" ? "48" : "64"}
             height={size === "s" ? "32" : size === "m" ? "48" : "64"}
+            style={pulseSize != null ? { width: pulseSize, height: pulseSize } : undefined}
           />
         </Row>
         <Row

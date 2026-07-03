@@ -156,7 +156,8 @@
     --accent-solid-medium:          var(--function-accent-400);
     --accent-solid-weak:            var(--function-accent-300);
   
-    --accent-on-solid-strong:       var(--static-white);      
+    --accent-on-solid-strong:       var(--static-white);
+    --accent-on-solid-medium:       var(--function-accent-1000);
     --accent-on-solid-weak:         var(--function-accent-900);
 
     --accent-border-strong:         var(--function-accent-400);
@@ -181,6 +182,7 @@
     --neutral-solid-weak:           var(--function-neutral-300);
   
     --neutral-on-solid-strong:      var(--static-white);      
+    --neutral-on-solid-medium:      var(--function-neutral-1000);
     --neutral-on-solid-weak:        var(--function-neutral-900);
 
     --neutral-border-strong:        var(--function-neutral-400);
@@ -205,6 +207,7 @@
     --info-solid-weak:              var(--function-info-300);
   
     --info-on-solid-strong:         var(--static-white);      
+    --info-on-solid-medium:         var(--function-info-1000);
     --info-on-solid-weak:           var(--function-info-900);
 
     --info-border-strong:           var(--function-info-400);
@@ -229,6 +232,7 @@
     --warning-solid-weak:           var(--function-warning-300);
   
     --warning-on-solid-strong:      var(--static-white);      
+    --warning-on-solid-medium:      var(--function-warning-1000);
     --warning-on-solid-weak:        var(--function-warning-900);
 
     --warning-border-strong:        var(--function-warning-400);
@@ -253,6 +257,7 @@
     --danger-solid-weak:            var(--function-danger-300);
   
     --danger-on-solid-strong:       var(--static-white);      
+    --danger-on-solid-medium:       var(--function-danger-1000);
     --danger-on-solid-weak:         var(--function-danger-900);
 
     --danger-border-strong:         var(--function-danger-400);
@@ -277,6 +282,7 @@
     --success-solid-weak:           var(--function-success-300);
   
     --success-on-solid-strong:      var(--static-white);      
+    --success-on-solid-medium:      var(--function-success-1000);
     --success-on-solid-weak:        var(--function-success-900);
 
     --success-border-strong:        var(--function-success-400);
@@ -352,6 +358,7 @@
     --accent-solid-weak:            var(--function-accent-400);
   
     --accent-on-solid-strong:       var(--static-white);      
+    --accent-on-solid-medium:       var(--function-accent-1100);
     --accent-on-solid-weak:         var(--function-accent-1000);
 
     --accent-border-strong:         var(--function-accent-800);
@@ -376,6 +383,7 @@
     --neutral-solid-weak:           var(--function-neutral-400);
   
     --neutral-on-solid-strong:      var(--static-white);      
+    --neutral-on-solid-medium:      var(--function-neutral-1100);
     --neutral-on-solid-weak:        var(--function-neutral-1000);
 
     --neutral-border-strong:        var(--function-neutral-800);
@@ -400,6 +408,7 @@
     --info-solid-weak:              var(--function-info-400);
   
     --info-on-solid-strong:         var(--static-white);      
+    --info-on-solid-medium:         var(--function-info-1100);
     --info-on-solid-weak:           var(--function-info-1000);
 
     --info-border-strong:           var(--function-info-800);
@@ -424,6 +433,7 @@
     --warning-solid-weak:           var(--function-warning-400);
   
     --warning-on-solid-strong:      var(--static-white);      
+    --warning-on-solid-medium:      var(--function-warning-1100);
     --warning-on-solid-weak:        var(--function-warning-1000);
 
     --warning-border-strong:        var(--function-warning-800);
@@ -448,6 +458,7 @@
     --danger-solid-weak:            var(--function-danger-400);
   
     --danger-on-solid-strong:       var(--static-white);      
+    --danger-on-solid-medium:       var(--function-danger-1100);
     --danger-on-solid-weak:         var(--function-danger-1000);
 
     --danger-border-strong:         var(--function-danger-800);
@@ -472,6 +483,7 @@
     --success-solid-weak:           var(--function-success-400);
   
     --success-on-solid-strong:      var(--static-white);      
+    --success-on-solid-medium:      var(--function-success-1100);
     --success-on-solid-weak:        var(--function-success-1000);
 
     --success-border-strong:        var(--function-success-800);
@@ -562,6 +574,7 @@
     --brand-solid-weak:           var(--function-brand-300);
 
     --brand-on-solid-strong:      var(--static-white);      
+    --brand-on-solid-medium:      var(--function-brand-1100);
     --brand-on-solid-weak:        var(--function-brand-900);
 }
 
@@ -572,6 +585,7 @@
     --brand-solid-weak:           var(--function-neutral-900);
 
     --brand-on-solid-strong:      var(--static-black);
+    --brand-on-solid-medium:      var(--function-neutral-100);
     --brand-on-solid-weak:        var(--function-neutral-200);
 }
 
@@ -582,6 +596,7 @@
     --brand-solid-weak:           var(--function-brand-600);
 
     --brand-on-solid-strong:      var(--static-black);      
+    --brand-on-solid-medium:      var(--function-brand-1100);
     --brand-on-solid-weak:        var(--function-brand-200);
 }
 
@@ -592,6 +607,7 @@
     --brand-solid-weak:           var(--function-brand-400);
   
     --brand-on-solid-strong:      var(--static-white);      
+    --brand-on-solid-medium:      var(--function-brand-1100);
     --brand-on-solid-weak:        var(--function-brand-1000);
 }
 
@@ -601,7 +617,8 @@
     --brand-solid-medium:         var(--static-black);
     --brand-solid-weak:           var(--function-neutral-400);
   
-    --brand-on-solid-strong:      var(--static-white);      
+    --brand-on-solid-strong:      var(--static-white);
+    --brand-on-solid-medium:      var(--function-neutral-1100);
     --brand-on-solid-weak:        var(--function-neutral-1000);
 }
 
@@ -635,5 +652,6 @@
     --brand-solid-weak:           var(--function-brand-700);
   
     --brand-on-solid-strong:      var(--static-black);      
+    --brand-on-solid-medium:      var(--function-neutral-100);
     --brand-on-solid-weak:        var(--function-brand-200);
 }

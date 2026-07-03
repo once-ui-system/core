@@ -1,11 +1,13 @@
 ---
 title: "ProgressBar"
 summary: "The ProgressBar component shows the progress of an action or task with an animation as it progresses."
-updatedAt: "2025-07-31"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/progressBar.mdx"
 github: "components/ProgressBar.tsx"
 navLabel: "ProgressBar"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 A component for showing the progress of an action or task with an animation as it progresses.
@@ -85,6 +87,34 @@ You can modify the bar background by setting the `barBackground` prop to a solid
   ]}
 />
 
+## Label position
+
+Control where the percentage label appears using the `labelPosition` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="24" fillWidth>
+      <ProgressBar value={75} labelPosition="top" />
+      <ProgressBar value={50} labelPosition="bottom" />
+      <ProgressBar value={65} labelPosition="left" />
+      <ProgressBar value={85} labelPosition="right" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ProgressBar value={75} labelPosition="top" />
+<ProgressBar value={50} labelPosition="bottom" />
+<ProgressBar value={65} labelPosition="left" />
+<ProgressBar value={85} labelPosition="right" />`,
+      language: "tsx",
+      label: "Label position"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -93,6 +123,7 @@ You can modify the bar background by setting the `barBackground` prop to a solid
     ["min", "number", "0"],
     ["max", "number", "100"],
     ["label", "boolean", "true"],
+    ["labelPosition", ["top", "bottom", "left", "right"], "bottom"],
     ["barBackground", "StyleProps['solid']", "brand-strong"],
     ["className"],
     ["style"],

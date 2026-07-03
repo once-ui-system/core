@@ -1,11 +1,13 @@
 ---
 title: "IconButton"
 summary: "A button component that displays an icon with various styles, sizes, and interactive states."
-updatedAt: "2025-05-09"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/iconButton.mdx"
 github: "components/IconButton.tsx"
 navLabel: "IconButton"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 The IconButton component provides a compact, icon-based interactive element for user actions. It's ideal for toolbar actions, navigation controls, and other UI elements where space is limited.
@@ -14,13 +16,22 @@ The IconButton component provides a compact, icon-based interactive element for 
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row gap="16" horizontal="center" wrap>
-      <IconButton icon="check" variant="primary" />
-      <IconButton icon="plus" variant="secondary" />
-      <IconButton icon="chevronDown" variant="tertiary" />
-      <IconButton icon="danger" variant="danger" />
-      <IconButton icon="info" variant="ghost" />
-    </Row>
+    <Column gap="12" fillWidth>
+      <Row gap="16" horizontal="center" wrap>
+        <IconButton icon="check" variant="primary" />
+        <IconButton icon="plus" variant="secondary" />
+        <IconButton icon="chevronDown" variant="tertiary" />
+        <IconButton icon="danger" variant="danger" />
+        <IconButton icon="info" variant="ghost" />
+      </Row>
+      <Row gap="16" horizontal="center" wrap>
+        <IconButton icon="sparkle" variant="quaternary" />
+        <IconButton icon="settings" variant="subtle" />
+        <IconButton icon="check" variant="success" />
+        <IconButton icon="warning" variant="warning" />
+        <IconButton icon="link" variant="link" />
+      </Row>
+    </Column>
   }
   codes={[
     {
@@ -29,7 +40,12 @@ The IconButton component provides a compact, icon-based interactive element for 
 <IconButton icon="plus" variant="secondary" />
 <IconButton icon="chevronDown" variant="tertiary" />
 <IconButton icon="danger" variant="danger" />
-<IconButton icon="info" variant="ghost" />`,
+<IconButton icon="info" variant="ghost" />
+<IconButton icon="sparkle" variant="quaternary" />
+<IconButton icon="settings" variant="subtle" />
+<IconButton icon="check" variant="success" />
+<IconButton icon="warning" variant="warning" />
+<IconButton icon="link" variant="link" />`,
       language: "tsx",
       label: "IconButton"
     }
@@ -183,8 +199,8 @@ Use the children prop to add custom content to the IconButton.
 <PropsTable
   content={[
     ["icon", "IconName", "refresh"],
-    ["size", ["s", "m", "l"], "m"],
-    ["variant", ["primary", "secondary", "tertiary", "danger", "ghost"], "primary"],
+    ["size", ["xs", "s", "m", "l", "xl"], "m"],
+    ["variant", ["primary", "secondary", "tertiary", "quaternary", "subtle", "danger", "success", "warning", "ghost", "link"], "primary"],
     ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
     ["tooltip", "string"],
     ["tooltipPosition", ["top", "bottom", "left", "right"], "top"],

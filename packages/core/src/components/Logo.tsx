@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import Link from "next/link";
 import classNames from "classnames";
-import { SpacingToken } from "../types";
+import { SpacingToken, TShirtSizes } from "../types";
 import { Flex, ContextMenu, Option, Icon, Column, Line } from ".";
 import { useToast } from "../contexts";
 
@@ -17,7 +17,7 @@ const sizeMap: Record<string, SpacingToken> = {
 
 interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   className?: string;
-  size?: "xs" | "s" | "m" | "l" | "xl";
+  size?: TShirtSizes;
   style?: React.CSSProperties;
   icon?: string;
   wordmark?: string;

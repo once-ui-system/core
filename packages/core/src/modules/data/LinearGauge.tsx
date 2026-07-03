@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Column, Flex, Row, Text } from "../../";
 import styles from "./Gauge.module.css";
 
-interface LinearGaugeProps extends React.ComponentProps<typeof Flex> {
+export interface LinearGaugeProps extends React.ComponentProps<typeof Flex> {
   width?: number;
   height?: number;
   line?: {

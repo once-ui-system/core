@@ -1,154 +1,276 @@
 .button {
-    display: flex;
-    align-items: center;
-    position: relative;
-    user-select: none;
-    padding: 0;
-    white-space: nowrap;
-    text-decoration: none;
-    -webkit-tap-highlight-color: transparent;
-    transition: var(--transition-micro-medium);
+  display: flex;
+  align-items: center;
+  position: relative;
+  user-select: none;
+  padding: 0;
+  white-space: nowrap;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: var(--transition-micro-medium);
 
-    &:focus-visible {
-        z-index: 1;
-    }
+  &:focus-visible {
+    z-index: 1;
+  }
 }
 
 .primary {
-    box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size) var(--solid-inset-color-brand);
-    background: var(--brand-solid-medium);
-    border-style: solid;
-    border-width: var(--solid-border-width);
-    border-color: var(--solid-border-color-brand);
-    color: var(--brand-on-solid-strong);
+  box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
+    var(--solid-inset-color-brand);
+  background: var(--brand-solid-medium);
+  border-style: solid;
+  border-width: var(--solid-border-width);
+  border-color: var(--solid-border-color-brand);
+  color: var(--brand-on-solid-strong);
 
-    &[data-disabled] {
-        box-shadow: none;
-        background: var(--neutral-background-medium);
-        color: var(--neutral-on-background-weak);
-        border-color: transparent;
-    }
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover:not([data-disabled]) {
-            background: var(--brand-solid-strong);
-        }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      background: var(--brand-solid-strong);
     }
+  }
 }
 
 .secondary {
-    box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size) var(--solid-inset-color-neutral);
-    border-style: solid;
-    border: 1px solid var(--neutral-alpha-weak);
-    background: var(--static-transparent);
-    color: var(--neutral-on-background-strong);
+  box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
+    var(--solid-inset-color-neutral);
+  border-style: solid;
+  border: 1px solid var(--neutral-alpha-weak);
+  background: var(--static-transparent);
+  color: var(--neutral-on-background-strong);
 
-    &[data-disabled] {
-        box-shadow: none;
-        background: var(--neutral-background-medium);
-        color: var(--neutral-on-background-weak);
-        border-color: transparent;
-    }
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover:not([data-disabled]) {
-            background: var(--neutral-alpha-weak);
-            border-color: var(--neutral-alpha-weak);
-        }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      background: var(--neutral-alpha-weak);
+      border-color: var(--neutral-alpha-weak);
     }
+  }
 }
 
 .tertiary {
-    background: var(--static-transparent);
-    color: var(--neutral-on-background-strong);
-    border: 1px solid var(--static-transparent);
+  background: var(--static-transparent);
+  color: var(--neutral-on-background-strong);
+  border: 1px solid var(--static-transparent);
 
-    &[data-disabled] {
-        box-shadow: none;
-        background: var(--neutral-background-medium);
-        color: var(--neutral-on-background-weak);
-        border-color: transparent;
-    }
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover:not([data-disabled]) {
-            border: 1px solid var(--neutral-border-medium);
-        }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      border: 1px solid var(--neutral-border-medium);
     }
+  }
 }
 
 .ghost {
-    border: none;
-    background: var(--static-transparent);
-    color: var(--neutral-on-background-medium);
+  border: none;
+  background: var(--static-transparent);
+  color: var(--neutral-on-background-medium);
 
-    &[data-disabled] {
-        box-shadow: none;
-        background: var(--neutral-background-medium);
-        color: var(--neutral-on-background-weak);
-        border-color: transparent;
-    }
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover:not([data-disabled]) {
-            color: var(--neutral-on-background-strong);
-        }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      color: var(--neutral-on-background-strong);
     }
+  }
+}
+
+.quaternary {
+  border: none;
+  background: var(--static-transparent);
+  color: var(--neutral-on-background-medium);
+
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      background: color-mix(
+        in srgb,
+        var(--neutral-background-medium) 70%,
+        transparent
+      );
+      color: var(--neutral-on-background-strong);
+    }
+  }
+}
+
+.link {
+  border: none;
+  background: var(--static-transparent);
+  color: var(--neutral-on-background-strong);
+
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      text-decoration: underline !important;
+    }
+  }
 }
 
 .danger {
-    box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size) var(--solid-inset-color-danger);
-    background: var(--danger-solid-medium);
-    border-style: solid;
-    border-width: var(--solid-border-width);
-    border-color: var(--solid-border-color-danger);
-    color: var(--danger-on-solid-strong);
+  box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
+    var(--solid-inset-color-danger);
+  background: var(--danger-solid-medium);
+  border-style: solid;
+  border-width: var(--solid-border-width);
+  border-color: var(--solid-border-color-danger);
+  color: var(--danger-on-solid-strong);
 
-    &[data-disabled] {
-        box-shadow: none;
-        background: var(--neutral-background-medium);
-        color: var(--neutral-on-background-weak);
-        border-color: transparent;
-    }
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
 
-    @media (hover: hover) and (pointer: fine) {
-        &:hover:not([data-disabled]) {
-            background: var(--danger-solid-strong);
-        }
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      background: var(--danger-solid-strong);
     }
+  }
+}
+
+.subtle {
+  background: color-mix(
+    in srgb,
+    var(--neutral-background-medium) 70%,
+    transparent
+  );
+
+  border-style: solid;
+  border-width: var(--solid-border-width);
+  border-color: var(--static-transparent);
+  color: var(--neutral-on-background-strong);
+
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      background: color-mix(
+        in srgb,
+        var(--neutral-background-strong) 50%,
+        transparent
+      );
+    }
+  }
+}
+
+.success {
+  box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
+    var(--success-alpha-strong);
+  background: var(--success-solid-medium);
+  border-style: solid;
+  border-width: var(--solid-border-width);
+  border-color: var(--success-alpha-strong);
+  color: var(--success-on-solid-strong);
+
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      background: var(--success-solid-strong);
+    }
+  }
+}
+
+.warning {
+  box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
+    var(--warning-alpha-strong);
+  background: var(--warning-solid-medium);
+  border-style: solid;
+  border-width: var(--solid-border-width);
+  border-color: var(--warning-alpha-strong);
+  color: var(--warning-on-solid-strong);
+
+  &[data-disabled] {
+    box-shadow: none;
+    background: var(--neutral-background-medium);
+    color: var(--neutral-on-background-weak);
+    border-color: transparent;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover:not([data-disabled]) {
+      background: var(--warning-solid-strong);
+    }
+  }
 }
 
 .xs {
-    padding: var(--static-space-2) var(--static-space-4);
-    min-height: var(--static-space-24);
-    height: var(--static-space-24);
-    gap: var(--static-space-2);
+  padding: var(--static-space-2) var(--static-space-4);
+  min-height: var(--static-space-24);
+  height: var(--static-space-24);
+  gap: var(--static-space-2);
 }
 
 .s {
-    padding: var(--static-space-4) var(--static-space-8);
-    min-height: var(--static-space-32);
-    height: var(--static-space-32);
-    gap: var(--static-space-4);
+  padding: var(--static-space-4) var(--static-space-8);
+  min-height: var(--static-space-32);
+  height: var(--static-space-32);
+  gap: var(--static-space-4);
 }
 
 .m {
-    padding: var(--static-space-8) var(--static-space-12);
-    min-height: var(--static-space-40);
-    height: var(--static-space-40);
-    gap: var(--static-space-4);
+  padding: var(--static-space-8) var(--static-space-12);
+  min-height: var(--static-space-40);
+  height: var(--static-space-40);
+  gap: var(--static-space-4);
 }
 
 .l {
-    padding: var(--static-space-12) var(--static-space-20);
-    min-height: var(--static-space-48);
-    height: var(--static-space-48);
-    gap: var(--static-space-8);
+  padding: var(--static-space-12) var(--static-space-20);
+  min-height: var(--static-space-48);
+  height: var(--static-space-48);
+  gap: var(--static-space-8);
 }
 
 .xl {
-    padding: var(--static-space-16) var(--static-space-24);
-    min-height: var(--static-space-56);
-    height: var(--static-space-56);
-    gap: var(--static-space-12);
+  padding: var(--static-space-16) var(--static-space-24);
+  min-height: var(--static-space-56);
+  height: var(--static-space-56);
+  gap: var(--static-space-12);
 }

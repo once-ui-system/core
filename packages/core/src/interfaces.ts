@@ -2,9 +2,9 @@ import { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
 import {
   Colors,
   CSSUnit,
-  flex,
-  gridSize,
-  opacity,
+  FlexValue,
+  GridSize,
+  Opacity,
   RadiusNest,
   RadiusSize,
   ShadowSize,
@@ -37,13 +37,13 @@ export interface ResponsiveFlexProps extends ResponsiveProps {
 }
 
 export interface ResponsiveGridProps extends ResponsiveProps {
-  columns?: gridSize;
-  rows?: gridSize;
+  columns?: GridSize;
+  rows?: GridSize;
 }
 
 export interface GridProps extends HTMLAttributes<HTMLDivElement> {
-  columns?: gridSize;
-  rows?: gridSize;
+  columns?: GridSize;
+  rows?: GridSize;
   l?: ResponsiveGridProps;
   m?: ResponsiveGridProps;
   s?: ResponsiveGridProps;
@@ -55,7 +55,7 @@ export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
   vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
   center?: boolean;
   wrap?: boolean;
-  flex?: flex;
+  flex?: FlexValue;
   xl?: ResponsiveFlexProps;
   l?: ResponsiveFlexProps;
   m?: ResponsiveFlexProps;
@@ -128,7 +128,7 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   borderY?: Colors | "surface" | "transparent" | boolean;
   border?: Colors | "surface" | "transparent" | boolean;
   borderStyle?: "solid" | "dashed";
-  borderWidth?: 1 | 2 | 4 | 6 | 8 | "1" | "2" | "4" | "6" | "8";
+  borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8";
   topRadius?: RadiusSize;
   rightRadius?: RadiusSize;
   bottomRadius?: RadiusSize;
@@ -159,7 +159,7 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
     | "macro-short"
     | "macro-medium"
     | "macro-long";
-  opacity?: opacity;
+  opacity?: Opacity;
   zIndex?:
     | -1
     | 0
@@ -198,7 +198,7 @@ export interface CommonProps extends HTMLAttributes<HTMLDivElement> {
   style?: React.CSSProperties;
 }
 
-interface BaseBreakpointProps {
+export interface BaseBreakpointProps {
   position?: CSSProperties["position"];
   hide?: boolean;
 }

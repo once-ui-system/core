@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Flex, Media, IconButton } from ".";
 import styles from "./CompareImage.module.scss";
 
@@ -38,36 +38,36 @@ const renderContent = (content: SideContent, clipPath: string, aspectRatio?: str
 
 const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: CompareImageProps) => {
   const [position, setPosition] = useState(50);
+  const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
 
-  const handleMouseDown = () => {
-    isDragging.current = true;
-  };
+  const handleMouseDown = useCallback(() => {
+    isDraggingRef.current = true;
+  }, []);
 
-  const handleMouseUp = () => {
-    isDragging.current = false;
-  };
+  const handleMouseUp = useCallback(() => {
+    isDraggingRef.current = false;
+  }, []);
 
-  const updatePosition = (clientX: number) => {
-    if (!isDragging.current || !containerRef.current) return;
+  const handleMouseMove = useCallback((e: MouseEvent) => {
+    if (!isDraggingRef.current || !containerRef.current) return;
 
     const rect = containerRef.current.getBoundingClientRect();
-    const x = clientX - rect.left;
+    const x = e.clientX - rect.left;
     const containerWidth = rect.width;
 
-    // Calculate percentage (constrained between 0 and 100)
-    const newPosition = Math.max(0, Math.min(100, (x / containerWidth) * 100));
-    setPosition(newPosition);
-  };
+    setPosition(Math.max(0, Math.min(100, (x / containerWidth) * 100)));
+  }, []);
 
-  const handleMouseMove = (e: MouseEvent) => {
-    updatePosition(e.clientX);
-  };
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!isDraggingRef.current || !containerRef.current) return;
 
-  const handleTouchMove = (e: TouchEvent) => {
-    updatePosition(e.touches[0].clientX);
-  };
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const containerWidth = rect.width;
+
+    setPosition(Math.max(0, Math.min(100, (x / containerWidth) * 100)));
+  }, []);
 
   useEffect(() => {
     document.addEventListener("mousemove", handleMouseMove);
@@ -81,7 +81,7 @@ const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: Compa
       document.removeEventListener("touchmove", handleTouchMove);
       document.removeEventListener("touchend", handleMouseUp);
     };
-  }, []);
+  }, [handleMouseMove, handleMouseUp, handleTouchMove]);
 
   return (
     <Flex ref={containerRef} aspectRatio={aspectRatio || "16/9"} fillWidth style={{ touchAction: "none" }} {...rest}>
@@ -98,6 +98,7 @@ const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: Compa
         bottom="0"
         style={{
           left: `${position}%`,
+          cursor: "col-resize",
         }}
         onMouseDown={handleMouseDown}
         onTouchStart={handleMouseDown}
@@ -117,6 +118,7 @@ const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: Compa
           variant="secondary"
           onMouseDown={handleMouseDown}
           onTouchStart={handleMouseDown}
+          style={{ cursor: "grab" }}
         />
       </Flex>
     </Flex>

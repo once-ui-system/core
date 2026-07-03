@@ -1,11 +1,13 @@
 ---
 title: "Pulse"
 summary: "A colored dot with a pulsing animation effect."
-updatedAt: "2025-08-28"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/pulse.mdx"
 github: "components/Pulse.tsx"
 navLabel: "Pulse"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 The `Pulse` component is used to display a colored dot with a pulsing animation effect.
@@ -15,20 +17,19 @@ The `Pulse` component is used to display a colored dot with a pulsing animation 
   marginBottom="24"
   preview={
     <Row gap="40" fillWidth center>
-      <Pulse size="s"/>
-      <Pulse size="m" variant="danger"/>
-      <Pulse size="l" variant="success"/>
+      <Pulse size="s" />
+      <Pulse size="m" variant="danger" />
+      <Pulse size="l" variant="success" />
     </Row>
   }
   codes={[
     {
-      code:
-`<Pulse size="s"/>
+      code: `<Pulse size="s"/>
 <Pulse size="m" variant="danger"/>
 <Pulse size="l" variant="success"/>`,
       language: "tsx",
-      label: "Pulse"
-    }
+      label: "Pulse",
+    },
   ]}
 />
 
@@ -41,19 +42,18 @@ Set the color of the pulse using the `variant` prop.
   marginBottom="24"
   preview={
     <Row gap="40" fillWidth center>
-      <Pulse variant="brand"/>
-      <Pulse variant="accent"/>
-      <Pulse variant="neutral"/>
-      <Pulse variant="info"/>
-      <Pulse variant="warning"/>
-      <Pulse variant="danger"/>
-      <Pulse variant="success"/>
+      <Pulse variant="brand" />
+      <Pulse variant="accent" />
+      <Pulse variant="neutral" />
+      <Pulse variant="info" />
+      <Pulse variant="warning" />
+      <Pulse variant="danger" />
+      <Pulse variant="success" />
     </Row>
   }
   codes={[
     {
-      code:
-`<Pulse variant="brand"/>
+      code: `<Pulse variant="brand"/>
 <Pulse variant="accent"/>
 <Pulse variant="neutral"/>
 <Pulse variant="info"/>
@@ -61,8 +61,8 @@ Set the color of the pulse using the `variant` prop.
 <Pulse variant="danger"/>
 <Pulse variant="success"/>`,
       language: "tsx",
-      label: "Color"
-    }
+      label: "Color",
+    },
   ]}
 />
 
@@ -75,20 +75,42 @@ Set the size of the pulse using the `size` prop.
   marginBottom="24"
   preview={
     <Row gap="40" fillWidth center>
-      <Pulse size="s"/>
-      <Pulse size="m"/>
-      <Pulse size="l"/>
+      <Pulse size="s" />
+      <Pulse size="m" />
+      <Pulse size="l" />
     </Row>
   }
   codes={[
     {
-      code:
-`<Pulse size="s"/>
+      code: `<Pulse size="s"/>
 <Pulse size="m"/>
 <Pulse size="l"/>`,
       language: "tsx",
-      label: "Size"
-    }
+      label: "Size",
+    },
+  ]}
+/>
+
+## Pulse size
+
+Customize the pulse ring dimensions with the `pulseSize` prop, accepting a number or string value.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <Pulse size="m" pulseSize={80} />
+      <Pulse size="m" pulseSize="4rem" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Pulse size="m" pulseSize={80} />
+<Pulse size="m" pulseSize="4rem" />`,
+      language: "tsx",
+      label: "Pulse size",
+    },
   ]}
 />
 
@@ -98,6 +120,7 @@ Set the size of the pulse using the `size` prop.
   content={[
     ["variant", "ColorScheme", "brand"],
     ["size", "CondensedTShirtSizes", "s"],
+    ["pulseSize", ["number", "string"]],
     ["children"],
     ["className"],
     ["style"],

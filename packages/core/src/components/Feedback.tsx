@@ -67,7 +67,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
         )}
         <Column fillWidth padding="16" gap="24" vertical="center">
           {(title || description) && (
-            <Column fillWidth gap="4">
+            <Column fillWidth gap="2">
               {title && (
                 <Flex fillWidth gap="16">
                   <Flex fillWidth paddingY="4">
@@ -96,7 +96,6 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
               {description && (
                 <Text
                   marginBottom="2"
-                  marginTop="4"
                   variant="body-default-s"
                   onBackground={`${variant}-strong`}
                 >

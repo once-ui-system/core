@@ -1,11 +1,13 @@
 ---
 title: "Accordion"
 summary: "The Accordion component provides a collapsible container to show and hide content, saving space and improving user experience."
-updatedAt: "2025-05-04"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/accordion.mdx"
 github: "components/Accordion.tsx"
 navLabel: "Accordion"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 A collapsible container that allows users to expand and collapse sections of content, helping to organize information in a compact way. It's useful for FAQs, navigation menus, and any content that benefits from progressive disclosure.
@@ -52,7 +54,7 @@ A collapsible container that allows users to expand and collapse sections of con
     ["children", "ReactNode"],
     ["icon", "string", "chevronDown"],
     ["iconRotation", "number", "180"],
-    ["size", ["s", "m", "l"], "m"],
+    ["size", "CondensedTShirtSizes", "m"],
     ["radius", ["xs", "s", "m", "l", "xl", "full"]],
     ["open", "boolean", "false"],
     ["style"],
@@ -60,6 +62,10 @@ A collapsible container that allows users to expand and collapse sections of con
     ["...flex"]
   ]}
 />
+
+## Interaction
+
+The accordion title area shows a pointer cursor, indicating it's clickable for expand/collapse.
 
 ## Methods
 

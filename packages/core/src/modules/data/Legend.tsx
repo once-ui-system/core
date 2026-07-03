@@ -7,7 +7,7 @@ import { useDataTheme } from "../../contexts/DataThemeProvider";
 import { ChartVariant } from "./interfaces";
 
 interface LegendProps {
-  payload?: readonly any[];
+  payload?: readonly Record<string, any>[];
   labels?: "x" | "y" | "both" | "none";
   colors?: string[];
   reverseY?: boolean;
@@ -106,7 +106,7 @@ const Legend: React.FC<LegendProps> = ({
       direction={direction}
       style={positionStyle}
     >
-      {payload.map((entry: any, index: number) => {
+      {payload.map((entry: Record<string, any>, index: number) => {
         const color = colors && colors[index] ? colors[index] : entry.stroke || entry.color;
         return (
           <Row key={index} vertical="center" gap="8">

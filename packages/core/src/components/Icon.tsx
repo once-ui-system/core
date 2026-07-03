@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { IconType } from "react-icons";
 import { IconName } from "../icons";
 import { useIcons } from "../contexts/IconProvider";
-import { ColorScheme, ColorWeight } from "../types";
+import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 import { Flex, Tooltip, HoverCard } from ".";
 import styles from "./Icon.module.scss";
 
@@ -13,7 +13,7 @@ interface IconProps extends React.ComponentProps<typeof Flex> {
   name: IconName;
   onBackground?: `${ColorScheme}-${ColorWeight}`;
   onSolid?: `${ColorScheme}-${ColorWeight}`;
-  size?: "xs" | "s" | "m" | "l" | "xl";
+  size?: TShirtSizes;
   decorative?: boolean;
   tooltip?: ReactNode;
   tooltipPosition?: "top" | "bottom" | "left" | "right";

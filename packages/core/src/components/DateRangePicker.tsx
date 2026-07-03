@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Flex, DatePicker } from ".";
+import { CondensedTShirtSizes } from "../types";
 
 export interface DateRange {
   startDate: Date | undefined;
@@ -14,7 +15,7 @@ export interface DateRangePickerProps extends Omit<React.ComponentProps<typeof F
   minDate?: Date;
   maxDate?: Date;
   dual?: boolean;
-  size?: "s" | "m" | "l";
+  size?: CondensedTShirtSizes;
 }
 
 const DateRangePicker: React.FC<DateRangePickerProps> = ({

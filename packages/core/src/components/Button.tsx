@@ -7,10 +7,11 @@ import classNames from "classnames";
 import { Spinner, Icon, Arrow, Flex } from ".";
 import styles from "./Button.module.scss";
 import { IconName } from "../icons";
+import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 
-interface CommonProps {
-  variant?: "primary" | "secondary" | "tertiary" | "danger";
-  size?: "xs" | "s" | "m" | "l" | "xl";
+interface ButtonCommonProps {
+  variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
+  size?: TShirtSizes;
   radius?:
     | "none"
     | "top"
@@ -36,10 +37,11 @@ interface CommonProps {
   style?: React.CSSProperties;
   id?: string;
   arrowIcon?: boolean;
+  color?: `${ColorScheme}-${ColorWeight}`;
 }
 
-export type ButtonProps = CommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
-export type AnchorProps = CommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+export type ButtonProps = ButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
+export type AnchorProps = ButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
   (
@@ -60,6 +62,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
       href,
       id,
       arrowIcon = false,
+      color,
       className,
       style,
       ...props
@@ -99,7 +102,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
         style={style}
         {...props}
       >
-        {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} />}
+        {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} onBackground={color} />}
         {loading && <Spinner size={size} />}
         {(label || children) && (
           <Flex
@@ -119,10 +122,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
             }}
             trigger={"#" + id}
             scale={size === "s" ? 0.8 : size === "m" ? 0.9 : 1}
-            color={variant === "primary" ? "onSolid" : "onBackground"}
+            color={variant === "primary" || variant === "danger" || variant === "success" || variant === "warning" ? "onSolid" : "onBackground"}
           />
         )}
-        {suffixIcon && <Icon name={suffixIcon} size={iconSize} />}
+        {suffixIcon && <Icon name={suffixIcon} size={iconSize} onBackground={color} />}
       </ElementType>
     );
   },

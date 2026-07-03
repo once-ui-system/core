@@ -1,11 +1,13 @@
 ---
 title: "ThemeProvider"
 summary: "The ThemeProvider enables dynamic light, dark, and system themes by syncing user preferences with the `data-theme` attribute and exposing a global theme context."
-updatedAt: "2025-06-08"
+updatedAt: "2026-06-30"
 docs: "once-ui/contexts/themeProvider.mdx"
 github: "contexts/ThemeProvider.tsx"
 navLabel: "ThemeProvider"
 navIcon: "chip"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 The `ThemeProvider` is a context that persists user theme preferences and syncs with the system’s light/dark setting. It provides a `useTheme` hook to manage theme state at runtime and sets data attributes on the `<html>` element.
@@ -18,10 +20,10 @@ Wrap your app with `ThemeProvider` and pass the style configuration as props.
   marginTop="16"
   marginBottom="24"
   lineNumbers
+  isCollapsible={false}
   codes={[
     {
-      code:
-`<ThemeProvider
+      code: `<ThemeProvider
     theme="system" // system | dark | light
     brand="blue" // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
     accent="indigo" // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
@@ -36,8 +38,8 @@ Wrap your app with `ThemeProvider` and pass the style configuration as props.
     {children}
 </ThemeProvider>`,
       language: "tsx",
-      label: "layout.tsx"
-    }
+      label: "layout.tsx",
+    },
   ]}
 />
 
@@ -113,27 +115,28 @@ Use a custom color palette for the `data-brand`, `data-accent` and `data-neutral
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={24}
-  lineNumbers
-  codes={[
-    {
-      code:
+  codeHeight={24}  isCollapsible={false}
+
+lineNumbers
+codes={[
+{
+code:
 `:root {
-    --scheme-brand-100: #08002f;
-    --scheme-brand-200:  #04025c;
-    --scheme-brand-300:  #1f398e;
-    --scheme-brand-400:  #3856ae;
-    --scheme-brand-500:  #5071cc;
-    --scheme-brand-600:  #6f94f1;
-    --scheme-brand-700:  #8db3ff;
-    --scheme-brand-800:  #b2dbff;
-    --scheme-brand-900:  #bfe8ff;
-    --scheme-brand-1000: #ccf6ff;
-    --scheme-brand-1100: #d2fcff;
-    --scheme-brand-1200: #d2fcff;
-    --scheme-brand-600-15: rgba(111,148,241,0.15);
-    --scheme-brand-600-30: rgba(111,148,241,0.3);
-    --scheme-brand-600-50: rgba(111,148,241,0.5);
+--scheme-brand-100: #08002f;
+--scheme-brand-200: #04025c;
+--scheme-brand-300: #1f398e;
+--scheme-brand-400: #3856ae;
+--scheme-brand-500: #5071cc;
+--scheme-brand-600: #6f94f1;
+--scheme-brand-700: #8db3ff;
+--scheme-brand-800: #b2dbff;
+--scheme-brand-900: #bfe8ff;
+--scheme-brand-1000: #ccf6ff;
+--scheme-brand-1100: #d2fcff;
+--scheme-brand-1200: #d2fcff;
+--scheme-brand-600-15: rgba(111,148,241,0.15);
+--scheme-brand-600-30: rgba(111,148,241,0.3);
+--scheme-brand-600-50: rgba(111,148,241,0.5);
 
     --scheme-accent-100:  #030b10;
     --scheme-accent-200:  #0d181d;
@@ -166,6 +169,7 @@ Use a custom color palette for the `data-brand`, `data-accent` and `data-neutral
     --scheme-neutral-600-15: rgba(137,152,159,0.15);
     --scheme-neutral-600-30: rgba(137,152,159,0.3);
     --scheme-neutral-600-50: rgba(137,152,159,0.5);
+
 }`,
       language: "css",
       label: "custom.css"
@@ -173,22 +177,22 @@ Use a custom color palette for the `data-brand`, `data-accent` and `data-neutral
     {
       code:
 `export const style = {
-    theme: "system",
-    neutral: "custom",
-    brand: "custom",
-    accent: "custom",
-    solid: "contrast",
-    solidStyle: "flat",
-    border: "playful",
-    surface: "translucent",
-    transition: "all",
-    scaling: "100"
+theme: "system",
+neutral: "custom",
+brand: "custom",
+accent: "custom",
+solid: "contrast",
+solidStyle: "flat",
+border: "playful",
+surface: "translucent",
+transition: "all",
+scaling: "100"
 };`,
-      language: "tsx",
-      highlight: "3-5",
-      label: "once-ui.config.js"
-    }
-  ]}
+language: "tsx",
+highlight: "3-5",
+label: "once-ui.config.js"
+}
+]}
 />
 
 ## UseTheme
@@ -197,20 +201,21 @@ Access and modify theme state with `useTheme`:
 
 <CodeBlock
   marginTop="16"
-  marginBottom="24"
-  lineNumbers
-  codes={[
-    {
-      code:
+  marginBottom="24"  isCollapsible={false}
+
+lineNumbers
+codes={[
+{
+code:
 `const { theme, setTheme } = useTheme();
 
 useEffect(() => {
-    console.log("Current theme:", theme);
+console.log("Current theme:", theme);
 }, [theme]);`,
-      language: "tsx",
-      label: "useTheme"
-    }
-  ]}
+language: "tsx",
+label: "useTheme"
+}
+]}
 />
 
 ## SSR hydration
@@ -225,8 +230,7 @@ Add the `<ThemeInit>` component to the `<head>` to set the initial theme before 
     {
       language: "tsx",
       label: "layout.tsx",
-      code:
-`<head>
+      code: `<head>
     <ThemeInit
       config={{
         theme: style.theme,
@@ -243,8 +247,8 @@ Add the `<ThemeInit>` component to the `<head>` to set the initial theme before 
       }}
     />
 </head>
-`
-    }
+`,
+    },
   ]}
 />
 
@@ -255,56 +259,56 @@ Visit the [ThemeSwitcher](/once-ui/components/themeSwitcher) or [StylePanel](/on
 <StylePanel marginBottom="40" />
 
 ## Style overrides
-        
+
 The `ThemeProvider` relies on data attributes to set theme and style preferences. Data modes are inherited from the parent and can be applied to any
 semantic HTML element, providing simple, seamless style overrides.
 
 Just add the `data-theme`, `data-neutral`, `data-brand`, `data-accent`, `data-border`, `data-surface`, `data-solid`, `data-solid-style`, `data-transition` or `data-scaling` attributes to any semantic HTML element to override its default style.
 
 <CodeBlock
-    marginTop="16"
-    marginBottom="24"
-    preview={
-<Column
-    overflow="hidden"
-    data-theme="dark"
-    background="page"
-    border="neutral-medium"
-    radius="xl-8"
-    padding="8"
-    maxWidth={32}
-    maxHeight={44}
-  >
-    <Flex
-      fillWidth
-      horizontal="center"
-      position="absolute"
-      bottom="8"
-      zIndex={1}
-      data-theme="light"
-      data-border="rounded"
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column
+      overflow="hidden"
+      data-theme="dark"
+      background="page"
+      border="neutral-medium"
+      radius="xl-8"
       padding="8"
+      maxWidth={32}
+      maxHeight={44}
     >
-      <Row maxWidth={20}
-        horizontal="between"
+      <Flex
+        fillWidth
+        horizontal="center"
+        position="absolute"
+        bottom="8"
+        zIndex={1}
+        data-theme="light"
+        data-border="rounded"
         padding="8"
-        vertical="center"
-        background="neutral-weak"
-        border="neutral-medium"
-        radius="full">
-        <IconButton
-          variant="secondary"
-          tooltip="Home"
-          icon="home"
-        />
-        <IconButton variant="ghost" tooltip="Notifications" icon="notification" />
-        <IconButton variant="ghost" tooltip="Search" icon="search" />
-        <Avatar
-            src="/images/avatar.jpg"
-        />
-      </Row>
-    </Flex>
-    <Column fillHeight padding="m" gap="16" flex={1}>
+      >
+        <Row
+          maxWidth={20}
+          horizontal="between"
+          padding="8"
+          vertical="center"
+          background="neutral-weak"
+          border="neutral-medium"
+          radius="full"
+        >
+          <IconButton variant="secondary" tooltip="Home" icon="home" />
+          <IconButton
+            variant="ghost"
+            tooltip="Notifications"
+            icon="notification"
+          />
+          <IconButton variant="ghost" tooltip="Search" icon="search" />
+          <Avatar src="/images/avatar.jpg" />
+        </Row>
+      </Flex>
+      <Column fillHeight padding="m" gap="16" flex={1}>
         <SegmentedControl
           buttons={[
             {
@@ -338,114 +342,133 @@ Just add the `data-theme`, `data-neutral`, `data-brand`, `data-accent`, `data-bo
           ]}
           defaultSelected="For you"
         />
-      <Column paddingX="8" paddingTop="20" paddingBottom="64" gap="48" flex={1}>
-        {[
-          {
-            name: "Lorant",
-            avatar: "/images/avatar.jpg",
-            title: "Launch your fully functional ecommerce store in an hour",
-            subtitle: "With the power of Fourthwall and flexibility of Once UI.",
-            date: "Jun 23",
-            likes: 48,
-            comments: 2,
-            topic: "Productivity",
-            topicLink: "",
-            imageSrc: "/images/docs/magic-store.jpg",
-          },
-          {
-            name: "Lorant",
-            avatar: "/images/avatar.jpg",
-            title: "Ship quality product docs without writing code",
-            subtitle: "Magic Docs is Once UI's mdx-based documentation template.",
-            date: "Jun 16",
-            likes: 31,
-            comments: 0,
-            topic: "Design",
-            topicLink: "",
-            imageSrc: "/images/docs/magic-docs.jpg",
-          },
-        ].map((article, index) => (
-          <Column key={index} fillWidth gap="12">
-            <User
-              name={article.name}
-              avatarProps={{
-                empty: false,
-                size: "s",
-                src: article.avatar,
-              }}
-            />
-            <Flex fillWidth gap="24" s={{direction: "column"}}>
-              <Column gap="12">
-                <Text variant="heading-strong-l" onBackground="neutral-strong">
-                  {article.title}
-                </Text>
-                <Text variant="body-default-m" onBackground="neutral-weak">
-                  {article.subtitle}
-                </Text>
-              </Column>
-              <Flex minWidth={8} overflow="hidden" radius="m" border="neutral-medium" fitHeight>
-                <Media
-                  aspectRatio="3 / 2"
-                  alt="Image preview for article"
-                  sizes="120px"
-                  src={article.imageSrc}
-                />
-              </Flex>
-            </Flex>
-            <Flex gap="8" paddingTop="8" vertical="center">
-              <Icon size="xs" name="HiOutlineDocumentText" />
-              <Text variant="body-default-xs" onBackground="neutral-medium">
-                Because you follow{" "}
-                <SmartLink className="brand-on-background-weak" href={article.topicLink}>
-                  {article.topic}
-                </SmartLink>
-              </Text>
-            </Flex>
-            <Flex
-              vertical="center"
-              paddingTop="8"
-              textVariant="body-default-s"
-              onBackground="neutral-medium"
-            >
-              <Flex gap="32" fillWidth>
-                <Text>{article.date}</Text>
-                <Flex vertical="center" gap="8">
-                  <Icon size="s" name="like" />
-                  <Text>{article.likes}</Text>
-                </Flex>
-                <Flex vertical="center" gap="8">
-                  <Icon size="s" name="chat" />
-                  <Text>{article.comments}</Text>
+        <Column
+          paddingX="8"
+          paddingTop="20"
+          paddingBottom="64"
+          gap="48"
+          flex={1}
+        >
+          {[
+            {
+              name: "Lorant",
+              avatar: "/images/avatar.jpg",
+              title: "Launch your fully functional ecommerce store in an hour",
+              subtitle:
+                "With the power of Fourthwall and flexibility of Once UI.",
+              date: "Jun 23",
+              likes: 48,
+              comments: 2,
+              topic: "Productivity",
+              topicLink: "",
+              imageSrc: "/images/docs/magic-store.jpg",
+            },
+            {
+              name: "Lorant",
+              avatar: "/images/avatar.jpg",
+              title: "Ship quality product docs without writing code",
+              subtitle:
+                "Magic Docs is Once UI's mdx-based documentation template.",
+              date: "Jun 16",
+              likes: 31,
+              comments: 0,
+              topic: "Design",
+              topicLink: "",
+              imageSrc: "/images/docs/magic-docs.jpg",
+            },
+          ].map((article, index) => (
+            <Column key={index} fillWidth gap="12">
+              <User
+                name={article.name}
+                avatarProps={{
+                  empty: false,
+                  size: "s",
+                  src: article.avatar,
+                }}
+              />
+              <Flex fillWidth gap="24" s={{ direction: "column" }}>
+                <Column gap="12">
+                  <Text
+                    variant="heading-strong-l"
+                    onBackground="neutral-strong"
+                  >
+                    {article.title}
+                  </Text>
+                  <Text variant="body-default-m" onBackground="neutral-weak">
+                    {article.subtitle}
+                  </Text>
+                </Column>
+                <Flex
+                  minWidth={8}
+                  overflow="hidden"
+                  radius="m"
+                  border="neutral-medium"
+                  fitHeight
+                >
+                  <Media
+                    aspectRatio="3 / 2"
+                    alt="Image preview for article"
+                    sizes="120px"
+                    src={article.imageSrc}
+                  />
                 </Flex>
               </Flex>
-              <Flex gap="12">
-                <IconButton
-                  size="s"
-                  variant="ghost"
-                  icon="HiOutlineBookmark"
-                  tooltip="Save"
-                  tooltipPosition="top"
-                />
-                <IconButton
-                  size="s"
-                  variant="ghost"
-                  icon="HiMiniEllipsisVertical"
-                  tooltip="more"
-                  tooltipPosition="top"
-                />
+              <Flex gap="8" paddingTop="8" vertical="center">
+                <Icon size="xs" name="HiOutlineDocumentText" />
+                <Text variant="body-default-xs" onBackground="neutral-medium">
+                  Because you follow{" "}
+                  <SmartLink
+                    className="brand-on-background-weak"
+                    href={article.topicLink}
+                  >
+                    {article.topic}
+                  </SmartLink>
+                </Text>
               </Flex>
-            </Flex>
-          </Column>
-        ))}
+              <Flex
+                vertical="center"
+                paddingTop="8"
+                textVariant="body-default-s"
+                onBackground="neutral-medium"
+              >
+                <Flex gap="32" fillWidth>
+                  <Text>{article.date}</Text>
+                  <Flex vertical="center" gap="8">
+                    <Icon size="s" name="like" />
+                    <Text>{article.likes}</Text>
+                  </Flex>
+                  <Flex vertical="center" gap="8">
+                    <Icon size="s" name="chat" />
+                    <Text>{article.comments}</Text>
+                  </Flex>
+                </Flex>
+                <Flex gap="12">
+                  <IconButton
+                    size="s"
+                    variant="ghost"
+                    icon="HiOutlineBookmark"
+                    tooltip="Save"
+                    tooltipPosition="top"
+                  />
+                  <IconButton
+                    size="s"
+                    variant="ghost"
+                    icon="HiMiniEllipsisVertical"
+                    tooltip="more"
+                    tooltipPosition="top"
+                  />
+                </Flex>
+              </Flex>
+            </Column>
+          ))}
+        </Column>
       </Column>
     </Column>
-  </Column>
-    }
-    highlight="2-3,5-6"
-    codes={[
-        {
-            code:
-`<Column
+  }
+  highlight="2-3,5-6"
+  codes={[
+    {
+      code: `<Column
     data-theme="dark"
     data-border="playful">
     <Row
@@ -457,8 +480,8 @@ Just add the `data-theme`, `data-neutral`, `data-brand`, `data-accent`, `data-bo
       {children}
     </Row>
 </Column>`,
-            language: "tsx",
-            label: "Overrides"
-        }
-    ]}
+      language: "tsx",
+      label: "Overrides",
+    },
+  ]}
 />

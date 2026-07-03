@@ -3,7 +3,7 @@
 import React from "react";
 import { Icon, Column, Flex, Option, Accordion, ElementType, Text } from "../../";
 
-interface MenuLink {
+export interface MenuLink {
   label: React.ReactNode;
   href: string;
   icon?: string;
@@ -11,12 +11,12 @@ interface MenuLink {
   selected?: boolean;
 }
 
-interface MenuSection {
+export interface MenuSection {
   title?: React.ReactNode;
   links: MenuLink[];
 }
 
-interface MenuGroup {
+export interface MenuGroup {
   id: string;
   label: React.ReactNode;
   suffixIcon?: string;
@@ -25,7 +25,7 @@ interface MenuGroup {
   sections?: MenuSection[];
 }
 
-interface MobileMegaMenuProps extends React.ComponentProps<typeof Flex> {
+export interface MobileMegaMenuProps extends React.ComponentProps<typeof Flex> {
   menuGroups: MenuGroup[];
   onClose?: () => void;
 }

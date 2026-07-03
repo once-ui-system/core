@@ -22,7 +22,7 @@ interface ScrollableChildProps {
 const Scroller: React.FC<ScrollerProps> = ({
   children,
   direction = "row",
-  fadeColor,
+  fadeColor = "transparent",
   radius,
   className,
   style,
