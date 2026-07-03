@@ -5,7 +5,7 @@ import { Animation, Heading, IconButton, Row } from "../../components";
 import { useToast } from "../../contexts";
 import styles from "./HeadingLink.module.scss";
 
-interface HeadingLinkProps extends React.ComponentProps<typeof Row> {
+export interface HeadingLinkProps extends React.ComponentProps<typeof Row> {
   id: string;
   as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   children: React.ReactNode;

@@ -2,16 +2,17 @@ import Link from "next/link";
 import React, { ReactNode, forwardRef } from "react";
 import { Flex } from ".";
 
-interface ElementTypeProps {
+type ElementTypeProps = {
   href?: string;
-  onClick?: () => void;
+  onClick?: (event: any) => void;
   onLinkClick?: () => void;
   children: ReactNode;
   className?: string;
   style?: React.CSSProperties;
-  type?: "button" | "submit" | "reset";
-  [key: string]: any;
-}
+  type?: string;
+} & (Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "type" | "onClick">
+  | Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type" | "onClick">
+  | React.HTMLAttributes<HTMLDivElement>);
 
 const isExternalLink = (url: string) => /^https?:\/\//.test(url);
 
@@ -56,7 +57,7 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
           className={className}
           onClick={onClick}
           style={style}
-          type={type}
+          type={type as React.ButtonHTMLAttributes<HTMLButtonElement>["type"]}
           {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
         >
           {children}

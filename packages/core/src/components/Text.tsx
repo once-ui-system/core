@@ -1,12 +1,13 @@
 import { ElementType, ComponentPropsWithoutRef } from "react";
 import classNames from "classnames";
 
-import { TextProps, CommonProps, SpacingProps } from "../interfaces";
+import { TextProps, CommonProps, SpacingProps, DisplayProps } from "../interfaces";
 import { ColorScheme, ColorWeight, TextVariant, SpacingToken } from "../types";
 
 type TypeProps<T extends ElementType> = TextProps<T> &
   CommonProps &
   SpacingProps &
+  Omit<DisplayProps, "as"> &
   ComponentPropsWithoutRef<T>;
 
 const Text = <T extends ElementType = "span">({
@@ -37,6 +38,7 @@ const Text = <T extends ElementType = "span">({
   style,
   className,
   truncate,
+  opacity,
   ...props
 }: TypeProps<T>) => {
   const Component = as || "span";
@@ -52,7 +54,10 @@ const Text = <T extends ElementType = "span">({
   }
 
   const getVariantClasses = (variant: TextVariant) => {
-    const [fontType, weight, size] = variant.split("-");
+    const parts = variant.split("-");
+    const size = parts.pop()!;
+    const weight = parts.pop()!;
+    const fontType = parts.join("-");
     return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
   };
 
@@ -92,6 +97,7 @@ const Text = <T extends ElementType = "span">({
     generateClassName("mb", marginBottom),
     generateClassName("mx", marginX),
     generateClassName("my", marginY),
+    opacity && `opacity-${opacity}`,
     truncate && "truncate",
     family && `font-family-${family}`,
   );

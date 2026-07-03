@@ -4,7 +4,7 @@ import { CurveType } from "recharts/types/shape/Curve";
 
 type ChartVariant = "flat" | "gradient" | "outline";
 type ChartMode = "categorical" | "divergent" | "sequential";
-type barWidth = TShirtSizes | "fill" | number;
+type BarWidth = TShirtSizes | "fill" | number;
 type curveType = CurveType;
 
 interface DataPoint {
@@ -34,7 +34,7 @@ interface DateConfig {
   onChange?: (range: DateRange) => void;
 }
 
-interface legendConfig {
+interface LegendConfig {
   display?: boolean;
   direction?: "row" | "column";
   position?:
@@ -51,7 +51,7 @@ interface ChartProps extends Omit<React.ComponentProps<typeof Flex>, "title" | "
   description?: React.ReactNode;
   series: SeriesConfig | SeriesConfig[];
   data: DataPoint[];
-  legend?: legendConfig;
+  legend?: LegendConfig;
   date?: DateConfig;
   emptyState?: React.ReactNode;
   errorState?: React.ReactNode;
@@ -70,7 +70,7 @@ export type {
   PresetsConfig,
   ChartProps,
   ChartVariant,
-  barWidth,
+  BarWidth,
   curveType,
   ChartMode,
 };

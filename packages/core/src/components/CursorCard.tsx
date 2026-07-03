@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import React, {
   useState,
@@ -23,7 +23,10 @@ export interface CursorCardProps extends React.ComponentProps<typeof Flex> {
 }
 
 const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
-  ({ trigger, overlay, placement = "bottom-left", className, style, ...flex }, ref) => {
+  (
+    { trigger, overlay, placement = "bottom-left", className, style, ...flex },
+    ref,
+  ) => {
     const [isHovering, setIsHovering] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isTouchDevice, setIsTouchDevice] = useState(false);

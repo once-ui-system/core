@@ -5,12 +5,13 @@ import classNames from "classnames";
 import { Flex, Icon, ElementType } from ".";
 import styles from "./ToggleButton.module.scss";
 import { IconName } from "../icons";
+import { TShirtSizes } from "../types";
 
-interface CommonProps {
+interface ToggleButtonCommonProps {
   label?: ReactNode;
   selected?: boolean;
-  variant?: "ghost" | "outline";
-  size?: "xs" | "s" | "m" | "l" | "xl";
+  variant?: "ghost" | "outline" | "subtle";
+  size?: TShirtSizes;
   radius?:
     | "none"
     | "top"
@@ -35,7 +36,7 @@ interface CommonProps {
   href?: string;
 }
 
-export type ToggleButtonProps = CommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
+export type ToggleButtonProps = ToggleButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
   (

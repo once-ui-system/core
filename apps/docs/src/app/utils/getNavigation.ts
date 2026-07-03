@@ -15,6 +15,7 @@ interface NavigationItem {
     children?: NavigationItem[];
     order?: number;
     pro?: boolean;
+    updatedAt?: string;
 }
 
 interface MetaData {
@@ -137,6 +138,7 @@ export default function getNavigation(dirPath = path.join(process.cwd(), 'src/co
         navTagVariant: data.navTagVariant,
         keywords: data.keywords,
         order: pageOrder !== undefined ? pageOrder : data.order,
+        updatedAt: data.updatedAt,
       };
       
       return item;

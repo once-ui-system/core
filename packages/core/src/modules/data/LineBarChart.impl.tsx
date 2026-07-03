@@ -14,14 +14,14 @@ import {
   ChartProps,
   SeriesConfig,
   ChartVariant,
-  barWidth,
+  BarWidth,
   curveType,
 } from ".";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import { RadiusSize } from "@/types";
 
 export interface LineBarChartProps extends ChartProps {
-  barWidth?: barWidth;
+  barWidth?: BarWidth;
   curve?: curveType;
   reverseY?: boolean;
   reverseX?: boolean;

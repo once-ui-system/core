@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Column, CountFx, Text } from "../../";
 import styles from "./Gauge.module.css";
 
-interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Column>, 'direction'> {
+export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Column>, 'direction'> {
   width?: number;
   height?: number;
   line?: {

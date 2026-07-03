@@ -1,11 +1,13 @@
 ---
 title: "Text"
 summary: "A flexible typography component for rendering inline or block text with configurable font styles, spacing, and color."
-updatedAt: "2026-03-07"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/text.mdx"
 github: "components/Text.tsx"
 navLabel: "Text"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 The `Text` component provides consistent typography throughout your UI, with support for variants, color tokens, alignment, and spacing. It is typically used for body content, labels, descriptions, and captions.
@@ -190,6 +192,42 @@ Text color can be set using `onBackground` or `onSolid`.
   ]}
 />
 
+## Opacity
+
+Control text visibility with the `opacity` prop, accepting values from 0 to 100.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="12" fillWidth>
+      <Text opacity={100}>Opacity 100</Text>
+      <Text opacity={70}>Opacity 70</Text>
+      <Text opacity={40}>Opacity 40</Text>
+      <Text opacity={10}>Opacity 10</Text>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Text opacity={100}>
+    Opacity 100
+</Text>
+<Text opacity={70}>
+    Opacity 70
+</Text>
+<Text opacity={40}>
+    Opacity 40
+</Text>
+<Text opacity={10}>
+    Opacity 10
+</Text>`,
+      language: "tsx",
+      label: "Opacity"
+    }
+  ]}
+/>
+
 ## Alignment
 
 Set horizontal alignment with the `align` prop.
@@ -325,6 +363,7 @@ Control the rendered tag using the `as` prop.
     ["family", ["display", "heading", "body", "label", "code"]],
     ["onBackground", "`${ColorScheme}-${ColorWeight}`"],
     ["onSolid", "`${ColorScheme}-${ColorWeight}`"],
+    ["opacity", "Opacity", "100"],
     ["align", ["left", "center", "right", "justify"]],
     ["wrap", ["normal", "nowrap", "balance"], "balance"],
     ["padding", ["SpacingToken", "number"]],

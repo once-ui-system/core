@@ -12,7 +12,7 @@ import {
 } from "../interfaces";
 import { SpacingToken, ColorScheme, ColorWeight } from "../types";
 
-interface ComponentProps
+interface ServerGridProps
   extends GridProps,
     SpacingProps,
     SizeProps,
@@ -27,7 +27,7 @@ interface ComponentProps
   isDefaultBreakpoints?: boolean;
 }
 
-const ServerGrid = forwardRef<HTMLDivElement, ComponentProps>(
+const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
   (
     {
       as: Component = "div",

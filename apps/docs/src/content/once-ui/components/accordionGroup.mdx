@@ -1,14 +1,18 @@
 ---
 title: "AccordionGroup"
 summary: "The AccordionGroup component provides a container for multiple Accordion components with consistent styling and spacing."
-updatedAt: "2025-05-04"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/accordionGroup.mdx"
 github: "components/AccordionGroup.tsx"
 navLabel: "AccordionGroup"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 A container component that groups multiple Accordion components together with consistent styling and dividers between each item. It's useful for creating FAQ sections, navigation menus, and other grouped collapsible content.
+
+AccordionGroup applies smart border-radius: the first item gets top-radius, the last item gets bottom-radius, and middle items have no radius — creating a cohesive grouped appearance.
 
 <CodeBlock
   marginTop="16"
@@ -70,7 +74,7 @@ A container component that groups multiple Accordion components together with co
 <PropsTable
   content={[
     ["items", "AccordionItem[]"],
-    ["size", ["s", "m", "l"], "m"],
+    ["size", "CondensedTShirtSizes", "m"],
     ["style"],
     ["className"],
     ["...flex"]
@@ -85,5 +89,6 @@ A container component that groups multiple Accordion components together with co
   content={[
     ["title", "ReactNode"],
     ["content", "ReactNode"],
+    ["headerProps", "FlexProps"],
   ]}
 />

@@ -71,3 +71,22 @@
 .outline {
     border-color: var(--neutral-alpha-weak);
 }
+
+.subtle {
+    border-color: var(--static-transparent);
+
+    &.selected {
+        background: var(--neutral-alpha-medium);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover:not([data-disabled]) {
+            background: var(--neutral-alpha-weak);
+            border-color: var(--static-transparent);
+        }
+
+        &.selected:hover:not([data-disabled]) {
+            background: var(--neutral-background-medium);
+        }
+    }
+}

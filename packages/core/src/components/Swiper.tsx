@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Media, Column, Row, IconButton } from ".";
+import { Flex, Media, Column, Row, IconButton, Fade } from ".";
 import { useEffect, useState, useRef, useCallback } from "react";
 import styles from "./Swiper.module.scss";
 
@@ -195,6 +195,7 @@ const Swiper: React.FC<SwiperProps> = ({
           radius={rest.radius || "l"}
           border={rest.border || "neutral-alpha-weak"}
           overflow="hidden"
+          position="relative"
         >
           {/* Scroll Container */}
           <Row
@@ -256,52 +257,78 @@ const Swiper: React.FC<SwiperProps> = ({
             </Flex>
           ))}
           </Row>
+
+          {/* Navigation Controls */}
+          {controls && items.length > 1 && (
+            <>
+              {/* Previous Button */}
+              {activeIndex > 0 && (
+                <>
+                  <Fade
+                    transition="micro-medium"
+                    position="absolute"
+                    left="0"
+                    top="0"
+                    base="transparent"
+                    to="right"
+                    fillHeight
+                    maxWidth={6}
+                    zIndex={1}
+                  />
+                  <Flex
+                    position="absolute"
+                    left="16"
+                    zIndex={1}
+                    className={styles.navButton}
+                    style={{ top: "50%", transform: "translateY(-50%)" }}
+                  >
+                    <Flex radius="l" background="surface" overflow="hidden">
+                      <IconButton
+                        onClick={handlePrevClick}
+                        variant="secondary"
+                        icon="chevronLeft"
+                        aria-label="Previous slide"
+                      />
+                    </Flex>
+                  </Flex>
+                </>
+              )}
+
+              {/* Next Button */}
+              {activeIndex < items.length - 1 && (
+                <>
+                  <Fade
+                    transition="micro-medium"
+                    position="absolute"
+                    right="0"
+                    top="0"
+                    base="transparent"
+                    to="left"
+                    fillHeight
+                    zIndex={1}
+                    maxWidth={6}
+                  />
+                  <Flex
+                    position="absolute"
+                    right="16"
+                    zIndex={1}
+                    className={styles.navButton}
+                    style={{ top: "50%", transform: "translateY(-50%)" }}
+                  >
+                    <Flex radius="l" background="surface" overflow="hidden">
+                      <IconButton
+                        onClick={handleNextClick}
+                        variant="secondary"
+                        icon="chevronRight"
+                        aria-label="Next slide"
+                      />
+                    </Flex>
+                  </Flex>
+                </>
+              )}
+            </>
+          )}
         </Flex>
-
-        {/* Navigation Controls */}
-        {controls && items.length > 1 && (
-          <>
-            {/* Previous Button */}
-            {activeIndex > 0 && (
-              <Flex
-                position="absolute"
-                left="16"
-                zIndex={1}
-                className={styles.navButton}
-                style={{ top: "50%", transform: "translateY(-50%)" }}
-              >
-                <Flex radius="l" background="surface" overflow="hidden">
-                  <IconButton
-                    onClick={handlePrevClick}
-                    variant="secondary"
-                    icon="chevronLeft"
-                    aria-label="Previous slide"
-                  />
-                </Flex>
-              </Flex>
-            )}
-
-            {/* Next Button */}
-            {activeIndex < items.length - 1 && (
-              <Flex
-                position="absolute"
-                right="16"
-                zIndex={1}
-                className={styles.navButton}
-                style={{ top: "50%", transform: "translateY(-50%)" }}
-              >
-                <Flex radius="l" background="surface" overflow="hidden">
-                  <IconButton
-                    onClick={handleNextClick}
-                    variant="secondary"
-                    icon="chevronRight"
-                    aria-label="Next slide"
-                  />
-                </Flex>
-              </Flex>
-            )}
-          </>
-        )}
       </Flex>
 
       {/* Dot Indicators */}

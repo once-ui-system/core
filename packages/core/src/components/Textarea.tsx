@@ -12,13 +12,14 @@ import classNames from "classnames";
 import { Column, Row, Text } from ".";
 import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
+import { TShirtSizes } from "../types";
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
   id: string;
   label?: string;
   placeholder?: string;
   lines?: number | "auto";
-  height?: "xs" | "s" | "m" | "l" | "xl";
+  height?: TShirtSizes;
   error?: boolean;
   errorMessage?: ReactNode;
   description?: ReactNode;

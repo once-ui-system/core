@@ -8,7 +8,7 @@ import { ChartVariant, DateConfig } from "./interfaces";
 
 interface DataTooltipProps {
   active?: boolean;
-  payload?: readonly any[];
+  payload?: readonly Record<string, any>[];
   label?: string | number;
   dataKey?: string;
   DataTooltip?: React.ReactNode;
@@ -54,7 +54,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
         </Row>
       )}
       <Column fillWidth horizontal="between" paddingX="12" gap="4">
-        {payload.map((entry: any, index: number) => (
+        {payload.map((entry: Record<string, any>, index: number) => (
           <Row key={index} horizontal="between" fillWidth gap="16">
             <Row vertical="center" gap="8">
               {colors && <Swatch color={entry.stroke || entry.color} size="s" variant={variant} />}

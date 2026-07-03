@@ -1,11 +1,13 @@
 ---
 title: "CodeBlock"
 summary: "A versatile component for displaying and formatting code snippets with syntax highlighting, copy functionality, and interactive previews."
-updatedAt: "2025-05-14"
+updatedAt: "2026-06-30"
 github: "modules/code/CodeBlock.tsx"
 docs: "once-ui/modules/codeBlock.mdx"
 navLabel: "CodeBlock"
 navIcon: "modules"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 The `CodeBlock` component provides a way to display code snippets with syntax highlighting, interactive tabs for multiple code examples, and optional live previews. It supports various customization options including copy buttons, fullscreen mode, and line numbers.
@@ -277,7 +279,8 @@ Use the `lineNumbers` prop to display line numbers for better code readability a
 Use the `highlight` prop to highlight specific lines of code. The value should be a string with line numbers or ranges (e.g., "1,3-5").
 
 <CodeBlock
-  marginTop="16"
+  marginTop="16"  isCollapsible={false}
+
   marginBottom="24"
   codes={[
     {
@@ -318,7 +321,8 @@ Display Git-style diffs by setting the language to "diff". Numbering can be used
   marginBottom="24"
   preview={
     <CodeBlock
-      copyButton={false}
+      copyButton={false}  isCollapsible={false}
+
       codes={[
         {
           language: "diff",
@@ -378,7 +382,8 @@ You can enable syntax highlighting by specifying a similar array as the language
     marginBottom="24"
     preview={
         <CodeBlock
-            copyButton={false}
+            copyButton={false}  isCollapsible={false}
+
             codes={[
                 {
                     language: [ "diff", "typescript" ],
@@ -436,7 +441,8 @@ export function subtract(a: number, b: number): number {
 The `CodeBlock` component supports additional features like fullscreen mode and style customization.
 
 <CodeBlock
-  marginTop="16"
+  marginTop="16"  isCollapsible={false}
+
   marginBottom="24"
   fullscreenButton
   styleButton
@@ -464,6 +470,33 @@ renderResults(data);"
   ]}
 />
 
+## Collapsible
+
+Use `maxLines` to limit code height and show a "View code" overlay for expandable code blocks.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"  isCollapsible={false}
+
+  codes={[
+    {
+      code:
+`<CodeBlock
+    maxLines={3}
+    codes={[
+      {
+        language: "tsx",
+        label: "Collapsible",
+        code: "function greet(name: string) {\\n  return \`Hello, \${name}!\`;\\n}\\n\\nfunction farewell(name: string) {\\n  return \`Goodbye, \${name}!\`;\\n}\\n\\nconst result = greet('World');\\nconsole.log(result);"
+      }
+    ]}
+/>`,
+      language: "tsx",
+      label: "Collapsible"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -477,6 +510,7 @@ renderResults(data);"
     ["compact", "boolean", "false"],
     ["lineNumbers", "boolean", "false"],
     ["codeHeight", "number"],
+    ["maxLines", "number"],
     ["fillHeight", "boolean", "false"],
     ["previewPadding", "SpacingToken", "'l'"],
     ["onInstanceChange", "(index: number) => void"],

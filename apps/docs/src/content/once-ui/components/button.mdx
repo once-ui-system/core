@@ -1,11 +1,13 @@
 ---
 title: "Button"
 summary: "The Button component provides interactive elements for user actions with various styles, sizes, and states."
-updatedAt: "2025-05-05"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/button.mdx"
 github: "components/Button.tsx"
 navLabel: "Button"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 A versatile component for triggering actions or navigating to different pages. Buttons communicate interactivity and guide users through their journey in the application.
@@ -14,28 +16,37 @@ A versatile component for triggering actions or navigating to different pages. B
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row gap="16" horizontal="center">
-      <Button size="s" weight="default" prefixIcon="check">Primary</Button>
-      <Button size="s" weight="default" variant="secondary" prefixIcon="plus">Secondary</Button>
-      <Button size="s" weight="default" variant="tertiary" suffixIcon="chevronDown">Tertiary</Button>
-      <Button size="s" weight="default" variant="danger" prefixIcon="danger">Danger</Button>
-    </Row>
+    <Column gap="12" fillWidth>
+      <Row gap="16" horizontal="center" wrap>
+        <Button size="s" weight="default" >Primary</Button>
+        <Button size="s" weight="default" variant="secondary">Secondary</Button>
+        <Button size="s" weight="default" variant="tertiary">Tertiary</Button><Button size="s" weight="default" variant="quaternary">Quaternary</Button>
+        <Button size="s" weight="default" variant="subtle">Subtle</Button>
+      </Row>
+      <Row gap="16" horizontal="center" wrap>
+                <Button size="s" weight="default" variant="danger" prefixIcon="danger">Danger</Button>
+        <Button size="s" weight="default" variant="success" prefixIcon="check">Success</Button>
+        <Button size="s" weight="default" variant="warning" prefixIcon="warning">Warning</Button>
+      </Row>
+      <Row gap="16" horizontal="center" wrap>
+        <Button size="s" weight="default" variant="ghost">Ghost</Button>
+        <Button size="s" weight="default" variant="link">Link</Button>
+      </Row>
+    </Column>
   }
   codes={[
     {
       code:
-`<Button size="s" weight="default">
-    Primary
-  </Button>
-  <Button size="s" weight="default" variant="secondary">
-    Secondary
-  </Button>
-  <Button size="s" weight="default" variant="tertiary">
-    Tertiary
-  </Button>
-  <Button size="s" weight="default" variant="danger">
-    Danger
-</Button>`,
+`<Button size="s" weight="default">Primary</Button>
+<Button size="s" weight="default" variant="secondary">Secondary</Button>
+<Button size="s" weight="default" variant="tertiary">Tertiary</Button>
+<Button size="s" weight="default" variant="danger">Danger</Button>
+<Button size="s" weight="default" variant="quaternary">Quaternary</Button>
+<Button size="s" weight="default" variant="subtle">Subtle</Button>
+<Button size="s" weight="default" variant="success" prefixIcon="check">Success</Button>
+<Button size="s" weight="default" variant="warning" prefixIcon="warning">Warning</Button>
+<Button size="s" weight="default" variant="ghost">Ghost</Button>
+<Button size="s" weight="default" variant="link">Link</Button>`,
       language: "tsx",
       label: "Variants"
     }
@@ -370,15 +381,44 @@ Override default styles with data attributes.
   ]}
 />
 
+## Color
+
+Use the `color` prop to apply a specific color scheme to the button. Accepts a `${ColorScheme}-${ColorWeight}` value.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" horizontal="center" wrap>
+      <Button size="s" variant="secondary" color="brand-strong">Brand</Button>
+      <Button size="s" variant="secondary" color="accent-strong">Accent</Button>
+      <Button size="s" variant="secondary" color="success-strong">Success</Button>
+      <Button size="s" variant="secondary" color="warning-strong">Warning</Button>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Button variant="secondary" color="brand-strong">Brand</Button>
+<Button variant="secondary" color="accent-strong">Accent</Button>
+<Button variant="secondary" color="success-strong">Success</Button>
+<Button variant="secondary" color="warning-strong">Warning</Button>`,
+      language: "tsx",
+      label: "Color"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   content={[
-    ["variant", ["primary", "secondary", "tertiary", "danger"], "primary"],
-    ["size", ["s", "m", "l"], "m"],
+    ["variant", ["primary", "secondary", "tertiary", "quaternary", "subtle", "danger", "success", "warning", "ghost", "link"], "primary"],
+    ["size", ["xs", "s", "m", "l", "xl"], "m"],
     ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
     ["label", "string"],
     ["weight", ["default", "strong"], "strong"],
+    ["color", "`${ColorScheme}-${ColorWeight}`"],
     ["prefixIcon", "IconName"],
     ["suffixIcon", "IconName"],
     ["loading", "boolean", "false"],
@@ -387,6 +427,8 @@ Override default styles with data attributes.
     ["children", "ReactNode"],
     ["href", "string"],
     ["arrowIcon", "boolean", "false"],
+    ["rounded", "boolean"],
+    ["id", "string"],
     ["className"],
     ["style"],
   ]}

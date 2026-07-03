@@ -18,8 +18,8 @@ The `ScrollContainer` component creates a horizontal scrolling area with navigat
   preview={
     <ScrollContainer
       aspectRatio="16/9"
-      items={Array(8).fill(0).map(() => (
-        <Column fill padding="8">
+      items={Array(8).fill(0).map((_, i) => (
+        <Column key={i} fill padding="8">
           <Background
             fill
             background="neutral-alpha-weak"
@@ -59,8 +59,8 @@ Position navigation controls at the top or bottom with different horizontal alig
       <ScrollContainer
         aspectRatio="16/9"
         controlPlacement="top-start"
-        items={Array(6).fill(0).map(() => (
-            <Column fill padding="8">
+        items={Array(6).fill(0).map((_, i) => (
+            <Column key={i} fill padding="8">
               <Background
                 fill
                 background="neutral-alpha-weak"
@@ -75,8 +75,8 @@ Position navigation controls at the top or bottom with different horizontal alig
       <ScrollContainer
         aspectRatio="16/9"
         controlPlacement="bottom-center"
-        items={Array(6).fill(0).map(() => (
-          <Column fill padding="8">
+        items={Array(6).fill(0).map((_, i) => (
+          <Column key={i} fill padding="8">
             <Background
               fill
               background="neutral-alpha-weak"

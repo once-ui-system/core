@@ -1,11 +1,13 @@
 ---
 title: "ToggleButton"
 summary: "ToggleButton is an interactive button used for segmented controls or stateful actions. It supports icon placement, sizing, and selection styling."
-updatedAt: "2025-05-09"
+updatedAt: "2026-06-30"
 docs: "once-ui/components/toggleButton.mdx"
 github: "components/ToggleButton.tsx"
 navLabel: "Toggle"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 `ToggleButton` provides a flexible button-like element that can act as a toggle, tab, or segmented control. It supports selected state, prefix/suffix icons, and optional link behavior.
@@ -88,7 +90,7 @@ Available in extra small, small, medium, large, and extra large.
 
 ## Variants
 
-Use `ghost` for minimal styling or `outline` for bordered styling.
+Choose from `ghost`, `outline`, or `subtle` variants.
 
 <CodeBlock
   marginTop="16"
@@ -97,13 +99,15 @@ Use `ghost` for minimal styling or `outline` for bordered styling.
     <Row gap="12">
       <ToggleButton variant="ghost" label="Ghost" />
       <ToggleButton variant="outline" label="Outline" />
+      <ToggleButton variant="subtle" label="Subtle" />
     </Row>
   }
   codes={[
     {
       code:
 `<ToggleButton variant="ghost" label="Ghost" />
-<ToggleButton variant="outline" label="Outline" />`,
+<ToggleButton variant="outline" label="Outline" />
+<ToggleButton variant="subtle" label="Subtle" />`,
       language: "tsx",
       label: "Variants"
     }
@@ -202,7 +206,7 @@ You can pass custom content to the toggle button.
   content={[
     ["label", "ReactNode"],
     ["selected", "boolean", "false"],
-    ["variant", ["ghost", "outline"], "ghost"],
+    ["variant", ["ghost", "outline", "subtle"], "ghost"],
     ["size", ["xs", "s", "m", "l", "xl"], "m"],
     ["radius", [
       "none", "top", "right", "bottom", "left",

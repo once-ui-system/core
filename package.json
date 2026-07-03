@@ -2,13 +2,14 @@
   "private": true,
   "name": "once-ui-monorepo",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "packages/*",
+    "apps/*"
   ],
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build --filter=@once-ui-system/docs...",
-    "format": "pnpm -r --if-present run format && pnpm -r --if-present run biome-write"
+    "format": "pnpm -r --if-present run format && pnpm -r --if-present run biome-write",
+    "dev:core": "npx -y kill-port 3000 && bun run --filter @once-ui-system/core build && bun run --filter @once-ui-system/dev dev"
   },
   "engines": {
     "node": "20.x"
@@ -17,10 +18,8 @@
   "devDependencies": {
     "turbo": "^2.5.6"
   },
-  "pnpm": {
-    "overrides": {
-      "@types/react": "19.2.5",
-      "@types/react-dom": "19.2.3"
-    }
+  "overrides": {
+    "@types/react": "19.2.5",
+    "@types/react-dom": "19.2.3"
   }
 }

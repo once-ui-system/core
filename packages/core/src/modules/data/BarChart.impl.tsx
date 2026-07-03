@@ -13,13 +13,13 @@ import {
   ChartVariant,
   ChartStatus,
   ChartHeader,
-  barWidth,
+  BarWidth,
 } from ".";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import { RadiusSize } from "@/types";
 
 export interface BarChartProps extends ChartProps {
-  barWidth?: barWidth;
+  barWidth?: BarWidth;
   hover?: boolean;
   reverseY?: boolean;
   reverseX?: boolean;

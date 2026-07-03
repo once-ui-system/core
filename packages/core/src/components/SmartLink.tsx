@@ -4,12 +4,13 @@ import React, { forwardRef, ReactNode } from "react";
 import classNames from "classnames";
 import { Icon, ElementType } from ".";
 import { IconName } from "../icons";
+import { TShirtSizes } from "../types";
 
-interface CommonProps {
+interface SmartLinkCommonProps {
   prefixIcon?: IconName;
   suffixIcon?: IconName;
   fillWidth?: boolean;
-  iconSize?: "xs" | "s" | "m" | "l" | "xl";
+  iconSize?: TShirtSizes;
   selected?: boolean;
   unstyled?: boolean;
   children: ReactNode;
@@ -18,7 +19,7 @@ interface CommonProps {
   className?: string;
 }
 
-export type SmartLinkProps = CommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+export type SmartLinkProps = SmartLinkCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
 const SmartLink = forwardRef<HTMLAnchorElement, SmartLinkProps>(
   (

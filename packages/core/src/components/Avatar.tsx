@@ -5,9 +5,10 @@ import React, { forwardRef } from "react";
 import { Skeleton, Icon, Text, StatusIndicator, Flex, Media } from ".";
 import styles from "./Avatar.module.scss";
 import { IconName } from "@/icons";
+import { TShirtSizes, CondensedTShirtSizes } from "@/types";
 
 interface AvatarProps extends React.ComponentProps<typeof Flex> {
-  size?: "xs" | "s" | "m" | "l" | "xl" | number;
+  size?: TShirtSizes | number;
   value?: string;
   src?: string;
   unoptimized?: boolean;
@@ -21,7 +22,7 @@ interface AvatarProps extends React.ComponentProps<typeof Flex> {
   className?: string;
 }
 
-const sizeMapping: Record<"xs" | "s" | "m" | "l" | "xl", number> = {
+const sizeMapping: Record<TShirtSizes, number> = {
   xs: 20,
   s: 24,
   m: 32,
@@ -29,7 +30,7 @@ const sizeMapping: Record<"xs" | "s" | "m" | "l" | "xl", number> = {
   xl: 160,
 };
 
-const statusIndicatorSizeMapping: Record<"xs" | "s" | "m" | "l" | "xl", "s" | "m" | "l"> = {
+const statusIndicatorSizeMapping: Record<TShirtSizes, CondensedTShirtSizes> = {
   xs: "s",
   s: "s",
   m: "m",

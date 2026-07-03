@@ -6,7 +6,7 @@ import { ToastPosition } from "../types";
 
 interface Toast {
   id: string;
-  variant: "success" | "danger";
+  variant: "success" | "danger" | "warning" | "info";
   message: ReactNode;
   action?: ReactNode;
 }

@@ -11,6 +11,7 @@ import React, {
 import { Flex, Icon, Column, Grid, Row } from ".";
 import styles from "./Accordion.module.scss";
 import classNames from "classnames";
+import { CondensedTShirtSizes } from "../types";
 
 export interface AccordionHandle {
   toggle: () => void;
@@ -23,7 +24,7 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   children: React.ReactNode;
   icon?: string;
   iconRotation?: number;
-  size?: "s" | "m" | "l";
+  size?: CondensedTShirtSizes;
   radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
   open?: boolean;
   onToggle?: () => void;

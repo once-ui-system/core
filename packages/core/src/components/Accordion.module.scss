@@ -1,4 +1,5 @@
 .accordion {
+    cursor: pointer;
     &:hover {
         background: var(--neutral-alpha-weak);
     }
