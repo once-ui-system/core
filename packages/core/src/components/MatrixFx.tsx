@@ -123,45 +123,63 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       const ctx = canvas.getContext("2d", { willReadFrequently: true });
       if (!ctx) return;
 
-      // Set canvas size
+      // Set canvas size — skip until the container has layout (0×0 crashes getImageData)
       let canvasWidth = 0;
       let canvasHeight = 0;
-      
-      const updateSize = () => {
+      let initialized = false;
+      let disposed = false;
+
+      const applySize = (): boolean => {
         const rect = container.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0) {
+          return false;
+        }
         canvasWidth = rect.width;
         canvasHeight = rect.height;
-        canvas.width = rect.width * 2; // 2x for retina
-        canvas.height = rect.height * 2;
+        canvas.width = Math.floor(rect.width * 2);
+        canvas.height = Math.floor(rect.height * 2);
         canvas.style.width = `${rect.width}px`;
         canvas.style.height = `${rect.height}px`;
-        ctx.scale(2, 2); // Scale for retina
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(2, 2);
+        return true;
       };
 
-      updateSize();
-      window.addEventListener("resize", updateSize);
+      const handleResize = () => {
+        const prevW = canvasWidth;
+        const prevH = canvasHeight;
+        if (!applySize()) return;
+        if (initialized && (prevW !== canvasWidth || prevH !== canvasHeight)) {
+          dotsRef.current = [];
+          isStaticRef.current = false;
+        }
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      const setup = () => {
+        if (disposed || initialized) return;
+        if (!applySize()) return;
+        initialized = true;
 
       // Parse colors - convert token names to CSS variables
       const parsedColors = colors.map((color) => {
-        // Get computed value from CSS variable
         const computedColor = getComputedStyle(container).getPropertyValue(`--${color}`);
         return computedColor || color;
       });
 
       // Create dot grid with padding to prevent edge gaps during displacement
       const totalSize = size + spacing;
-      const maxDisplacement = (bulge?.intensity ?? 10) * 2; // Account for max possible displacement
+      const maxDisplacement = (bulge?.intensity ?? 10) * 2;
       const paddedWidth = canvasWidth + maxDisplacement * 2;
       const paddedHeight = canvasHeight + maxDisplacement * 2;
       const cols = Math.ceil(paddedWidth / totalSize);
       const rows = Math.ceil(paddedHeight / totalSize);
 
-      // Only create new dots if grid doesn't exist or dimensions/size changed
       let dots: Dot[] = dotsRef.current;
       let maxDistance = 0;
 
       if (dots.length === 0 || dots[0]?.gridSize !== totalSize || dots[0]?.canvasW !== canvasWidth || dots[0]?.canvasH !== canvasHeight) {
-        // Create new dot grid
         dots = [];
 
         for (let row = 0; row < rows; row++) {
@@ -169,17 +187,17 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
             const x = col * totalSize + size / 2 - maxDisplacement;
             const y = row * totalSize + size / 2 - maxDisplacement;
 
-            // Calculate distance from reveal origin
             let distanceFromOrigin = 0;
             const centerX = canvasWidth / 2;
             const centerY = canvasHeight / 2;
 
             switch (revealFrom) {
-              case "center":
+              case "center": {
                 const dx = x - centerX;
                 const dy = y - centerY;
                 distanceFromOrigin = Math.sqrt(dx * dx + dy * dy);
                 break;
+              }
               case "top":
                 distanceFromOrigin = y;
                 break;
@@ -212,38 +230,40 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           }
         }
 
-        // Find max distance for normalization
-        maxDistance = Math.max(...dots.map((d) => d.distanceFromOrigin));
+        maxDistance = dots.length > 0 ? Math.max(...dots.map((d) => d.distanceFromOrigin)) : 0;
         dotsRef.current = dots;
       } else {
-        // Update colors on existing dots
         dots.forEach((dot) => {
           dot.color = parsedColors[Math.floor(Math.random() * parsedColors.length)];
         });
-        maxDistance = Math.max(...dots.map((d) => d.distanceFromOrigin));
+        maxDistance = dots.length > 0 ? Math.max(...dots.map((d) => d.distanceFromOrigin)) : 0;
       }
 
-
-      // Animation loop
       const startTime = Date.now();
-      const frameInterval = 1000 / fps; // Target ms per frame
-      
-      // Bulge configuration
+      const frameInterval = 1000 / fps;
+
       const bulgeEnabled = !!bulge;
-      const bulgeType = bulge?.type ?? "ripple"; // Default: ripple
-      const bulgeDuration = bulge?.duration ?? 3; // Default: 3 seconds per wave
-      const bulgeIntensity = bulge?.intensity ?? 10; // Default: 10px displacement
-      const bulgeRepeat = bulge?.repeat ?? true; // Default: true
-      const bulgeDelay = bulge?.delay ?? 0; // Default: 0ms
-      
-      // Calculate center point for circular wave
+      const bulgeType = bulge?.type ?? "ripple";
+      const bulgeDuration = bulge?.duration ?? 3;
+      const bulgeIntensity = bulge?.intensity ?? 10;
+      const bulgeRepeat = bulge?.repeat ?? true;
+      const bulgeDelay = bulge?.delay ?? 0;
+
       const centerX = canvasWidth / 2;
       const centerY = canvasHeight / 2;
       const maxRadius = Math.sqrt(centerX * centerX + centerY * centerY);
-      
-      // Cache for static rendering (when animation completes)
+
       let cachedImageData: ImageData | null = null;
-      
+
+      const cacheStaticFrame = () => {
+        if (canvas.width <= 0 || canvas.height <= 0) return;
+        try {
+          cachedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        } catch {
+          cachedImageData = null;
+        }
+      };
+
       // When reduced motion is active, force static rendering after first frame
       if (!shouldAnimate) {
         isStaticRef.current = true;
@@ -251,6 +271,11 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       }
 
       const animate = (currentTime: number = 0) => {
+        if (canvasWidth <= 0 || canvasHeight <= 0) {
+          animationRef.current = requestAnimationFrame(animate);
+          return;
+        }
+
         // Skip rendering if not visible in viewport
         if (!isVisibleRef.current) {
           animationRef.current = requestAnimationFrame(animate);
@@ -423,7 +448,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
             
             // Cache if now static
             if (isCurrentlyStatic) {
-              cachedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+              cacheStaticFrame();
               isStaticRef.current = true;
             }
           }
@@ -588,7 +613,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
               
               // Cache if now static
               if (isCurrentlyStatic) {
-                cachedImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                cacheStaticFrame();
                 isStaticRef.current = true;
               }
             }
@@ -774,14 +799,28 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       // Store animate function in ref so it can be restarted
       animateFnRef.current = animate;
       animate();
+      };
+
+      setup();
+
+      const resizeObserver = new ResizeObserver(() => {
+        if (!initialized) {
+          setup();
+        } else {
+          handleResize();
+        }
+      });
+      resizeObserver.observe(container);
 
       return () => {
-        window.removeEventListener("resize", updateSize);
+        disposed = true;
+        resizeObserver.disconnect();
+        window.removeEventListener("resize", handleResize);
         if (animationRef.current) {
           cancelAnimationFrame(animationRef.current);
         }
       };
-    }, [colors, size, spacing, speed, revealFrom, trigger, flicker, bulge, fps]);
+    }, [colors, size, spacing, speed, revealFrom, trigger, flicker, bulge, fps, shouldAnimate]);
 
     // Manual trigger control via `active` prop
     useEffect(() => {
