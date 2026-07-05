@@ -1,6 +1,6 @@
 {
  "name": "@once-ui-system/core",
- "version": "1.7.11",
+ "version": "1.7.12",
  "generated": "2026-07-05",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
