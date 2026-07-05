@@ -1,0 +1,12 @@
+{
+ "name": "Modal",
+ "group": "components",
+ "props": {
+  "children": "!React.ReactNode",
+  "backdrop": "React.ReactNode",
+  "title": "!React.ReactNode",
+  "isOpen": "!boolean",
+  "onClose": "!() => void"
+ },
+ "mixinsRef": []
+}

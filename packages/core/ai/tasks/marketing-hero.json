@@ -1,0 +1,33 @@
+{
+  "id": "marketing-hero",
+  "title": "Marketing hero",
+  "description": "Headline with text effect, CTA pair, social proof logos, background effect",
+  "components": [
+    "Column",
+    "Row",
+    "Heading",
+    "Text",
+    "Button",
+    "Background",
+    "RevealFx",
+    "LetterFx",
+    "LogoCloud",
+    "Grid",
+    "Line"
+  ],
+  "recipes": ["hero-glow-dots", "reveal-stagger"],
+  "example": "examples/marketing-hero.tsx",
+  "gotchas": [
+    "Background.gradient.width",
+    "Background.absolute",
+    "section.gaps",
+    "heading.scale",
+    "animation.budget",
+    "overflow.hero"
+  ],
+  "quality": {
+    "sectionGap": "104",
+    "heroHeading": "display-strong-l",
+    "eyebrow": "label-default-s onBackground=\"brand-medium\""
+  }
+}

@@ -1,0 +1,12 @@
+{
+ "name": "TagInput",
+ "group": "components",
+ "extends": [
+  "Input"
+ ],
+ "props": {
+  "value": "!string[]",
+  "onChange": "!(value: string[]) => void"
+ },
+ "mixinsRef": []
+}

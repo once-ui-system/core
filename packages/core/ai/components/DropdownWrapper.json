@@ -1,0 +1,28 @@
+{
+ "name": "DropdownWrapper",
+ "group": "components",
+ "props": {
+  "fillWidth": "boolean = false",
+  "minWidth": "number",
+  "maxWidth": "number",
+  "minHeight": "number",
+  "placement": "Placement = bottom-start",
+  "trigger": "!ReactNode",
+  "dropdown": "!ReactNode",
+  "selectedOption": "string",
+  "style": "React.CSSProperties",
+  "className": "string",
+  "onSelect": "(value: string) => void",
+  "closeAfterClick": "boolean = true",
+  "handleArrowNavigation": "boolean = true",
+  "isOpen": "boolean",
+  "onOpenChange": "(isOpen: boolean) => void",
+  "isNested": "boolean = false",
+  "navigationLayout": "NavigationLayout",
+  "columns": "number | string = 8",
+  "optionsCount": "number",
+  "dropdownId": "string",
+  "disableTriggerClick": "boolean = false"
+ },
+ "mixinsRef": []
+}

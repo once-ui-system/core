@@ -1,0 +1,16 @@
+{
+ "name": "UserMenu",
+ "group": "components",
+ "extends": [
+  "User",
+  "DropdownWrapper"
+ ],
+ "props": {
+  "selected": "boolean = false",
+  "placement": "Placement",
+  "dropdown": "React.ReactNode",
+  "className": "string",
+  "style": "React.CSSProperties"
+ },
+ "mixinsRef": []
+}

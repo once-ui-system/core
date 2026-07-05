@@ -1,0 +1,14 @@
+{
+ "name": "InteractiveDetails",
+ "group": "components",
+ "props": {
+  "label": "React.ReactNode",
+  "description": "React.ReactNode",
+  "disabled": "boolean",
+  "iconButtonProps": "IconButtonProps",
+  "onClick": "!() => void",
+  "className": "string",
+  "id": "string"
+ },
+ "mixinsRef": []
+}

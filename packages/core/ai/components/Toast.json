@@ -1,0 +1,13 @@
+{
+ "name": "Toast",
+ "group": "components",
+ "props": {
+  "className": "string",
+  "variant": "!\"success\" | \"danger\" | \"warning\" | \"info\"",
+  "icon": "boolean = true",
+  "onClose": "() => void",
+  "action": "React.ReactNode",
+  "children": "!React.ReactNode"
+ },
+ "mixinsRef": []
+}

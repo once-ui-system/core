@@ -1,0 +1,12 @@
+{
+ "name": "ChartStatus",
+ "group": "modules",
+ "props": {
+  "loading": "boolean = false",
+  "empty": "boolean = false",
+  "error": "boolean = false",
+  "emptyState": "React.ReactNode = No data available for the selected period",
+  "errorState": "React.ReactNode = An error occurred while fetching data"
+ },
+ "mixinsRef": []
+}

@@ -1,0 +1,22 @@
+{
+ "name": "IconButton",
+ "group": "components",
+ "props": {
+  "icon": "IconName = refresh",
+  "id": "string",
+  "size": "TShirtSizes = m",
+  "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "rounded": "boolean = false",
+  "tooltip": "ReactNode",
+  "tooltipPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = top",
+  "variant": "\"primary\" | \"secondary\" | \"tertiary\" | \"quaternary\" | \"subtle\" | \"danger\" | \"success\" | \"warning\" | \"ghost\" | \"link\" = primary",
+  "loading": "boolean = false",
+  "disabled": "boolean = false",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "href": "string",
+  "children": "ReactNode",
+  "color": "`${ColorScheme}-${ColorWeight}`"
+ },
+ "mixinsRef": []
+}

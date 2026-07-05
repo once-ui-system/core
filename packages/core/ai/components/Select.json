@@ -1,0 +1,21 @@
+{
+ "name": "Select",
+ "group": "components",
+ "extends": [
+  "Input",
+  "DropdownWrapper"
+ ],
+ "props": {
+  "options": "!SelectOptionType[]",
+  "value": "string | string[] = ",
+  "emptyState": "ReactNode = No results",
+  "onSelect": "(value: any) => void",
+  "placement": "Placement",
+  "searchable": "boolean = false",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "fillWidth": "boolean = true",
+  "multiple": "boolean = false"
+ },
+ "mixinsRef": []
+}

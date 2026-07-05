@@ -1,0 +1,13 @@
+{
+ "name": "ColorInput",
+ "group": "components",
+ "extends": [
+  "Input"
+ ],
+ "props": {
+  "value": "!string",
+  "onChange": "!(e: React.ChangeEvent<HTMLInputElement>) => void",
+  "supportAlpha": "boolean = false"
+ },
+ "mixinsRef": []
+}

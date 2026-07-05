@@ -1,0 +1,15 @@
+{
+ "name": "TypeFx",
+ "group": "components",
+ "props": {
+  "words": "!string | string[]",
+  "speed": "number = 100",
+  "delay": "number = 0",
+  "hold": "number = 2000",
+  "trigger": "\"instant\" | \"custom\" = instant",
+  "onTrigger": "(triggerFn: () => void) => void",
+  "loop": "boolean = true",
+  "children": "React.ReactNode"
+ },
+ "mixinsRef": []
+}

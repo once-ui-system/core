@@ -1,0 +1,17 @@
+{
+ "name": "RadioButton",
+ "group": "components",
+ "extends": [
+  "InteractiveDetails"
+ ],
+ "props": {
+  "style": "React.CSSProperties",
+  "className": "string",
+  "isChecked": "boolean",
+  "name": "string",
+  "value": "string",
+  "disabled": "boolean",
+  "onToggle": "() => void"
+ },
+ "mixinsRef": []
+}

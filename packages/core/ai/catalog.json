@@ -1,0 +1,1650 @@
+{
+ "version": "1.7.11",
+ "generated": "2026-07-05",
+ "components": {
+  "Accordion": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Accordion component",
+   "tags": [
+    "components"
+   ]
+  },
+  "AccordionGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Expandable FAQ / disclosure sections",
+   "tags": [
+    "content",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Column",
+    "Text",
+    "Heading"
+   ]
+  },
+  "Animation": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Animation component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Arrow": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Arrow component",
+   "tags": [
+    "components"
+   ]
+  },
+  "AutoScroll": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "AutoScroll component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Avatar": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "User avatar with size tokens",
+   "tags": [
+    "media",
+    "profile"
+   ],
+   "pairsWith": [
+    "Row",
+    "User",
+    "AvatarGroup"
+   ]
+  },
+  "AvatarGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Stacked overlapping avatars",
+   "tags": [
+    "profile",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Avatar",
+    "Row"
+   ]
+  },
+  "Badge": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Notification count or status badge",
+   "tags": [
+    "typography",
+    "dashboard"
+   ],
+   "avoid": "Passing same text in title prop and children"
+  },
+  "BlobFx": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "purpose": "Drifting blurred brand blobs for ambient panels",
+   "tags": [
+    "decoration",
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Column",
+    "Card"
+   ]
+  },
+  "Banner": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "purpose": "Top-of-page announcement strip",
+   "tags": [
+    "navigation",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Row",
+    "Button",
+    "SmartLink"
+   ]
+  },
+  "Background": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Absolute decorative layer: gradients, dots, lines, grid textures",
+   "tags": [
+    "decoration",
+    "effect"
+   ],
+   "pairsWith": [
+    "Column",
+    "Row",
+    "MatrixFx",
+    "BlobFx"
+   ]
+  },
+  "BlockQuote": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Quoted text — keep smaller than section headings",
+   "tags": [
+    "typography",
+    "marketing"
+   ],
+   "avoid": "Using default size larger than display-strong-xs section titles"
+  },
+  "Button": {
+   "group": "components",
+   "purpose": "Primary action and navigation with variants and icons",
+   "tags": [
+    "action",
+    "basics"
+   ],
+   "pairsWith": [
+    "Icon",
+    "SmartLink",
+    "Row"
+   ]
+  },
+  "MatrixFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Animated matrix field with optional bulge wave",
+   "tags": [
+    "decoration",
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Background",
+    "Column",
+    "RevealFx"
+   ]
+  },
+  "WeatherFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "WeatherFx component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Carousel": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Image/content carousel with navigation",
+   "tags": [
+    "media",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Media",
+    "Column",
+    "Button"
+   ]
+  },
+  "Swiper": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Touch-friendly image swiper",
+   "tags": [
+    "media",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Media",
+    "Row"
+   ]
+  },
+  "Card": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Interactive surface only — requires href or onClick",
+   "tags": [
+    "surface"
+   ],
+   "avoid": "Static panels (pricing tiers, testimonials, stats) — use Column + surface recipe",
+   "pairsWith": [
+    "Background",
+    "Media",
+    "Heading",
+    "SmartLink"
+   ]
+  },
+  "CursorCard": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Card that follows cursor for spotlight effects",
+   "tags": [
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Background",
+    "Column"
+   ]
+  },
+  "Cursor": {
+   "group": "components",
+   "purpose": "Cursor component",
+   "tags": [
+    "components"
+   ]
+  },
+  "CountFx": {
+   "group": "components",
+   "purpose": "Animated number counter for stats and pricing",
+   "tags": [
+    "effect",
+    "data",
+    "marketing"
+   ],
+   "pairsWith": [
+    "useInViewport",
+    "Text",
+    "Row"
+   ]
+  },
+  "CountdownFx": {
+   "group": "components",
+   "purpose": "CountdownFx component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Column": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Vertical flex layout — default direction column",
+   "tags": [
+    "layout",
+    "basics"
+   ],
+   "preferOver": "Flex with direction=\"column\"",
+   "pairsWith": [
+    "Row",
+    "Grid",
+    "Heading",
+    "Text"
+   ]
+  },
+  "Checkbox": {
+   "group": "components",
+   "extends": [
+    "InteractiveDetails"
+   ],
+   "purpose": "Checkbox with label for forms",
+   "tags": [
+    "form",
+    "settings"
+   ],
+   "pairsWith": [
+    "Column",
+    "Row"
+   ]
+  },
+  "Chip": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Selectable chip for ratings, filters, tags",
+   "tags": [
+    "form",
+    "feedback"
+   ],
+   "pairsWith": [
+    "Row",
+    "Textarea",
+    "Dialog"
+   ]
+  },
+  "ColorInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "purpose": "ColorInput component",
+   "tags": [
+    "components"
+   ]
+  },
+  "CompareImage": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Before/after image comparison slider",
+   "tags": [
+    "media",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Column",
+    "Media"
+   ]
+  },
+  "ContextMenu": {
+   "group": "components",
+   "purpose": "Right-click context menu",
+   "tags": [
+    "overlay",
+    "chat"
+   ],
+   "pairsWith": [
+    "Column",
+    "Row"
+   ]
+  },
+  "DateInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "purpose": "DateInput component",
+   "tags": [
+    "components"
+   ]
+  },
+  "DatePicker": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "DatePicker component",
+   "tags": [
+    "components"
+   ]
+  },
+  "DateRangeInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "purpose": "DateRangeInput component",
+   "tags": [
+    "components"
+   ]
+  },
+  "DateRangePicker": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Date range filter for dashboards and tables",
+   "tags": [
+    "form",
+    "dashboard"
+   ],
+   "pairsWith": [
+    "Input",
+    "Row",
+    "Table"
+   ]
+  },
+  "DialogProvider": {
+   "group": "components",
+   "purpose": "DialogProvider component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Dialog": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Modal dialog with stack support for multi-step flows",
+   "tags": [
+    "overlay",
+    "auth"
+   ],
+   "pairsWith": [
+    "OTPInput",
+    "PasswordInput",
+    "Button",
+    "Column"
+   ]
+  },
+  "Dropdown": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Dropdown menu for actions and navigation",
+   "tags": [
+    "overlay",
+    "navigation"
+   ],
+   "pairsWith": [
+    "IconButton",
+    "UserMenu"
+   ]
+  },
+  "DropdownWrapper": {
+   "group": "components",
+   "purpose": "DropdownWrapper component",
+   "tags": [
+    "components"
+   ]
+  },
+  "EmojiPicker": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "EmojiPicker component",
+   "tags": [
+    "components"
+   ]
+  },
+  "EmojiPickerDropdown": {
+   "group": "components",
+   "extends": [
+    "DropdownWrapper"
+   ],
+   "purpose": "Emoji picker in a dropdown for chat/message inputs",
+   "tags": [
+    "overlay",
+    "chat"
+   ],
+   "pairsWith": [
+    "Input",
+    "IconButton",
+    "Row"
+   ]
+  },
+  "Fade": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Edge overlay strip on scroll containers — not a content wrapper",
+   "tags": [
+    "effect",
+    "chat"
+   ],
+   "avoid": "Wrapping entire message lists or sections"
+  },
+  "Feedback": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Inline feedback message display",
+   "tags": [
+    "feedback"
+   ],
+   "pairsWith": [
+    "useToast",
+    "Dialog"
+   ]
+  },
+  "Flex": {
+   "group": "components",
+   "purpose": "Dynamic-direction flex container — use only when direction changes at breakpoints",
+   "tags": [
+    "layout",
+    "basics"
+   ],
+   "avoid": "Static row/column layouts — use Row or Column instead"
+  },
+  "FlipFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Flip card between front and back faces",
+   "tags": [
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Card",
+    "Column"
+   ]
+  },
+  "GlitchFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Glitch text effect",
+   "tags": [
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Heading",
+    "Text"
+   ]
+  },
+  "Grid": {
+   "group": "components",
+   "purpose": "CSS grid container with token-based columns/rows",
+   "tags": [
+    "layout",
+    "basics"
+   ],
+   "pairsWith": [
+    "Column",
+    "Row",
+    "Card"
+   ]
+  },
+  "Heading": {
+   "group": "components",
+   "purpose": "Semantic headings with display/heading variants",
+   "tags": [
+    "typography",
+    "basics"
+   ],
+   "pairsWith": [
+    "Text",
+    "Column",
+    "RevealFx"
+   ]
+  },
+  "HoloFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Holographic foil effect on cards",
+   "tags": [
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Card",
+    "Media"
+   ]
+  },
+  "Hover": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Hover state wrapper for subtle scale/glow transitions",
+   "tags": [
+    "effect"
+   ],
+   "pairsWith": [
+    "Card",
+    "Media"
+   ]
+  },
+  "HoverCard": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Animation"
+   ],
+   "purpose": "Rich popover card on hover",
+   "tags": [
+    "overlay",
+    "profile"
+   ],
+   "pairsWith": [
+    "Avatar",
+    "User",
+    "Column"
+   ]
+  },
+  "Icon": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Icon from IconName list in spec — never invent names",
+   "tags": [
+    "basics"
+   ],
+   "pairsWith": [
+    "Row",
+    "Button",
+    "IconButton"
+   ]
+  },
+  "IconButton": {
+   "group": "components",
+   "purpose": "Icon-only action with optional tooltip",
+   "tags": [
+    "action",
+    "chat"
+   ],
+   "pairsWith": [
+    "Tooltip",
+    "Row"
+   ]
+  },
+  "InfiniteScroll": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "purpose": "Infinite scroll wrapper for feeds and lists",
+   "tags": [
+    "layout",
+    "chat"
+   ],
+   "pairsWith": [
+    "Column",
+    "Spinner"
+   ]
+  },
+  "InlineCode": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Inline code snippet styling",
+   "tags": [
+    "typography",
+    "docs"
+   ],
+   "pairsWith": [
+    "Text",
+    "CodeBlock"
+   ]
+  },
+  "Input": {
+   "group": "components",
+   "purpose": "Text input with label, validation, and icons",
+   "tags": [
+    "form"
+   ],
+   "pairsWith": [
+    "PasswordInput",
+    "Select",
+    "Switch",
+    "Column"
+   ]
+  },
+  "InteractiveDetails": {
+   "group": "components",
+   "purpose": "InteractiveDetails component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Kbd": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Keyboard shortcut display",
+   "tags": [
+    "typography",
+    "chat"
+   ],
+   "pairsWith": [
+    "Row",
+    "Text"
+   ]
+  },
+  "LetterFx": {
+   "group": "components",
+   "purpose": "Per-letter text animation for hero headlines",
+   "tags": [
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Heading",
+    "Column"
+   ]
+  },
+  "Line": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Horizontal divider / section separator",
+   "tags": [
+    "decoration",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Column",
+    "Row"
+   ]
+  },
+  "List": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Styled list with icons or bullets",
+   "tags": [
+    "content"
+   ],
+   "pairsWith": [
+    "Column",
+    "Icon",
+    "Text"
+   ]
+  },
+  "ListItem": {
+   "group": "components",
+   "purpose": "ListItem component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Logo": {
+   "group": "components",
+   "purpose": "Brand logo with light/dark variants",
+   "tags": [
+    "media",
+    "navigation"
+   ],
+   "pairsWith": [
+    "SmartLink",
+    "Row"
+   ]
+  },
+  "LogoCloud": {
+   "group": "components",
+   "extends": [
+    "Grid"
+   ],
+   "purpose": "Grid of partner/customer logos — always set columns",
+   "tags": [
+    "marketing",
+    "social-proof"
+   ],
+   "pairsWith": [
+    "Grid",
+    "Media",
+    "Logo"
+   ]
+  },
+  "Mask": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Mask component",
+   "tags": [
+    "components"
+   ]
+  },
+  "MasonryGrid": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Pinterest-style masonry layout",
+   "tags": [
+    "layout",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Media",
+    "Card"
+   ]
+  },
+  "Media": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Optimized image/video with aspect ratio and radius",
+   "tags": [
+    "media",
+    "basics"
+   ],
+   "avoid": "Raw img elements",
+   "pairsWith": [
+    "Card",
+    "Column",
+    "TiltFx"
+   ]
+  },
+  "Modal": {
+   "group": "components",
+   "purpose": "Modal component",
+   "tags": [
+    "components"
+   ]
+  },
+  "NavIcon": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "NavIcon component",
+   "tags": [
+    "components"
+   ]
+  },
+  "NumberInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "purpose": "NumberInput component",
+   "tags": [
+    "components"
+   ]
+  },
+  "OgCard": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Card"
+   ],
+   "purpose": "Open Graph link preview card",
+   "tags": [
+    "media",
+    "social"
+   ],
+   "pairsWith": [
+    "SmartLink",
+    "Media"
+   ]
+  },
+  "Option": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Option component",
+   "tags": [
+    "components"
+   ]
+  },
+  "OTPInput": {
+   "group": "components",
+   "purpose": "One-time password input for verification steps",
+   "tags": [
+    "form",
+    "auth"
+   ],
+   "pairsWith": [
+    "Dialog",
+    "Column",
+    "Button"
+   ]
+  },
+  "Particle": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Floating particle decoration",
+   "tags": [
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Background",
+    "Column"
+   ]
+  },
+  "PasswordInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "purpose": "Password field with show/hide toggle",
+   "tags": [
+    "form",
+    "auth"
+   ],
+   "pairsWith": [
+    "Input",
+    "Dialog",
+    "Column"
+   ]
+  },
+  "ProgressBar": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Linear progress indicator",
+   "tags": [
+    "data",
+    "onboarding"
+   ],
+   "pairsWith": [
+    "StatusIndicator",
+    "Column",
+    "Text"
+   ]
+  },
+  "Pulse": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Pulse component",
+   "tags": [
+    "components"
+   ]
+  },
+  "RadioButton": {
+   "group": "components",
+   "extends": [
+    "InteractiveDetails"
+   ],
+   "purpose": "RadioButton component",
+   "tags": [
+    "components"
+   ]
+  },
+  "RevealFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Viewport-triggered entrance animation — one key set per page",
+   "tags": [
+    "effect",
+    "motion"
+   ],
+   "pairsWith": [
+    "useInViewport",
+    "Grid",
+    "Column"
+   ]
+  },
+  "Row": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Horizontal flex layout — default direction row",
+   "tags": [
+    "layout",
+    "basics"
+   ],
+   "preferOver": "Flex with direction=\"row\"",
+   "pairsWith": [
+    "Column",
+    "Grid",
+    "Text",
+    "Button"
+   ]
+  },
+  "Scroller": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Horizontal scroll container for chips, tabs, cards",
+   "tags": [
+    "layout"
+   ],
+   "pairsWith": [
+    "Row",
+    "Chip"
+   ]
+  },
+  "ScrollContainer": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "purpose": "ScrollContainer component",
+   "tags": [
+    "components"
+   ]
+  },
+  "ScrollToTop": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "ScrollToTop component",
+   "tags": [
+    "components"
+   ]
+  },
+  "SegmentedControl": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Scroller"
+   ],
+   "purpose": "Toggle between 2–5 options (billing period, view mode)",
+   "tags": [
+    "control",
+    "dashboard"
+   ],
+   "pairsWith": [
+    "Row",
+    "Grid"
+   ]
+  },
+  "Select": {
+   "group": "components",
+   "extends": [
+    "Input",
+    "DropdownWrapper"
+   ],
+   "purpose": "Dropdown select for forms and filters",
+   "tags": [
+    "form",
+    "dashboard"
+   ],
+   "pairsWith": [
+    "Input",
+    "Row",
+    "Column"
+   ]
+  },
+  "ShineFx": {
+   "group": "components",
+   "purpose": "Shine sweep animation on text",
+   "tags": [
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Heading",
+    "Text"
+   ]
+  },
+  "Skeleton": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Loading placeholder for cards and lists",
+   "tags": [
+    "feedback",
+    "ecommerce"
+   ],
+   "pairsWith": [
+    "Grid",
+    "Media",
+    "Column"
+   ]
+  },
+  "Slider": {
+   "group": "components",
+   "purpose": "Numeric range slider",
+   "tags": [
+    "form",
+    "settings"
+   ],
+   "pairsWith": [
+    "Row",
+    "Text"
+   ]
+  },
+  "SmartLink": {
+   "group": "components",
+   "purpose": "Enhanced link with Once UI styling",
+   "tags": [
+    "navigation",
+    "basics"
+   ],
+   "avoid": "Raw a elements"
+  },
+  "Spinner": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Loading indicator for async/streaming states",
+   "tags": [
+    "feedback",
+    "chat"
+   ],
+   "pairsWith": [
+    "Row",
+    "Text"
+   ]
+  },
+  "SplitView": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "purpose": "Resizable two-pane layout for sidebars and chat",
+   "tags": [
+    "layout",
+    "chat",
+    "settings"
+   ],
+   "pairsWith": [
+    "Column",
+    "Row"
+   ]
+  },
+  "StatusIndicator": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Colored status dot for online/offline/success states",
+   "tags": [
+    "data",
+    "onboarding"
+   ],
+   "pairsWith": [
+    "Row",
+    "Text",
+    "Avatar"
+   ]
+  },
+  "StylePanel": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "StylePanel component",
+   "tags": [
+    "components"
+   ]
+  },
+  "StyleOverlay": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "StyleOverlay component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Switch": {
+   "group": "components",
+   "extends": [
+    "InteractiveDetails"
+   ],
+   "purpose": "Boolean toggle for settings",
+   "tags": [
+    "form",
+    "settings"
+   ],
+   "pairsWith": [
+    "Row",
+    "Column",
+    "Text"
+   ]
+  },
+  "Table": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Structured data table with headers and rows",
+   "tags": [
+    "data",
+    "dashboard"
+   ],
+   "pairsWith": [
+    "Column",
+    "Tag",
+    "Icon"
+   ]
+  },
+  "Tag": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Metadata label — do not duplicate text in label prop and children",
+   "tags": [
+    "typography",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Row",
+    "Badge",
+    "Heading"
+   ]
+  },
+  "TagInput": {
+   "group": "components",
+   "extends": [
+    "Input"
+   ],
+   "purpose": "TagInput component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Text": {
+   "group": "components",
+   "purpose": "Body, label, display, and code typography",
+   "tags": [
+    "typography",
+    "basics"
+   ],
+   "pairsWith": [
+    "Heading",
+    "Column",
+    "Row"
+   ]
+  },
+  "Textarea": {
+   "group": "components",
+   "purpose": "Multi-line text input",
+   "tags": [
+    "form",
+    "feedback"
+   ],
+   "pairsWith": [
+    "Dialog",
+    "Column",
+    "Chip"
+   ]
+  },
+  "TiltFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Pointer-tilt interaction wrapper for cards and previews",
+   "tags": [
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Card",
+    "Media",
+    "Column"
+   ]
+  },
+  "Timeline": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Versioned changelog / release history layout",
+   "tags": [
+    "content",
+    "docs"
+   ],
+   "pairsWith": [
+    "Tag",
+    "CodeBlock",
+    "Text"
+   ]
+  },
+  "Toast": {
+   "group": "components",
+   "purpose": "Toast component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Toaster": {
+   "group": "components",
+   "purpose": "Toaster component",
+   "tags": [
+    "components"
+   ]
+  },
+  "ToggleButton": {
+   "group": "components",
+   "purpose": "ToggleButton component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Tooltip": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "purpose": "Hover/focus tooltip for icon buttons and truncated text",
+   "tags": [
+    "overlay",
+    "basics"
+   ],
+   "pairsWith": [
+    "IconButton",
+    "Text"
+   ]
+  },
+  "TypeFx": {
+   "group": "components",
+   "purpose": "Typewriter text effect",
+   "tags": [
+    "effect",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Heading",
+    "Text"
+   ]
+  },
+  "ThemeSwitcher": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "purpose": "Light/dark theme toggle",
+   "tags": [
+    "navigation",
+    "settings"
+   ],
+   "pairsWith": [
+    "IconButton",
+    "Row"
+   ]
+  },
+  "User": {
+   "group": "components",
+   "purpose": "User profile row with avatar, name, and metadata",
+   "tags": [
+    "profile",
+    "chat"
+   ],
+   "pairsWith": [
+    "Avatar",
+    "Row",
+    "Text"
+   ]
+  },
+  "UserMenu": {
+   "group": "components",
+   "extends": [
+    "User",
+    "DropdownWrapper"
+   ],
+   "purpose": "Avatar-triggered account menu",
+   "tags": [
+    "overlay",
+    "navigation"
+   ],
+   "pairsWith": [
+    "Avatar",
+    "Dropdown",
+    "Column"
+   ]
+  },
+  "CelebrationFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Confetti/fireworks on completion milestones",
+   "tags": [
+    "effect",
+    "onboarding"
+   ],
+   "pairsWith": [
+    "Column",
+    "Button"
+   ]
+  },
+  "FadingLettersFx": {
+   "group": "components",
+   "purpose": "FadingLettersFx component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Kbar": {
+   "group": "modules",
+   "purpose": "Command palette (⌘K) for navigation and actions",
+   "tags": [
+    "navigation",
+    "chat"
+   ],
+   "pairsWith": [
+    "Kbd",
+    "Dialog"
+   ]
+  },
+  "MobileMegaMenu": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "MobileMegaMenu component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "MegaMenu": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Navigation mega menu with featured card and link columns",
+   "tags": [
+    "navigation",
+    "marketing"
+   ],
+   "pairsWith": [
+    "Background",
+    "SmartLink",
+    "Column",
+    "Row"
+   ]
+  },
+  "HeadingLink": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "HeadingLink component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "HeadingNav": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "HeadingNav component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "ChartHeader": {
+   "group": "modules",
+   "extends": [
+    "Flex",
+    "Column"
+   ],
+   "purpose": "ChartHeader component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "ChartStatus": {
+   "group": "modules",
+   "purpose": "ChartStatus component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "LinearGradient": {
+   "group": "modules",
+   "purpose": "LinearGradient component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "RadialGradient": {
+   "group": "modules",
+   "purpose": "RadialGradient component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "BarChart": {
+   "group": "modules",
+   "extends": [
+    "BarChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "purpose": "BarChart component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "LineChart": {
+   "group": "modules",
+   "extends": [
+    "LineChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "purpose": "LineChart component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "PieChart": {
+   "group": "modules",
+   "extends": [
+    "PieChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "purpose": "PieChart component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "LineBarChart": {
+   "group": "modules",
+   "extends": [
+    "LineBarChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "purpose": "LineBarChart component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "DataTooltip": {
+   "group": "modules",
+   "purpose": "DataTooltip component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "Legend": {
+   "group": "modules",
+   "purpose": "Legend component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "RadialGauge": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "RadialGauge component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "LinearGauge": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "LinearGauge component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "CodeBlock": {
+   "group": "modules",
+   "extends": [
+    "CodeBlock.impl",
+    "Flex"
+   ],
+   "purpose": "Syntax-highlighted code with optional live preview",
+   "tags": [
+    "docs",
+    "content"
+   ],
+   "pairsWith": [
+    "InlineCode",
+    "Column"
+   ]
+  },
+  "MediaUpload": {
+   "group": "modules",
+   "extends": [
+    "MediaUpload.impl",
+    "Flex"
+   ],
+   "purpose": "Image upload with compression for profile/settings",
+   "tags": [
+    "form",
+    "settings"
+   ],
+   "pairsWith": [
+    "Avatar",
+    "Column",
+    "Button"
+   ]
+  },
+  "Schema": {
+   "group": "modules",
+   "purpose": "Schema component",
+   "tags": [
+    "modules"
+   ]
+  }
+ }
+}

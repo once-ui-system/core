@@ -347,11 +347,116 @@ function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
   fs.writeFileSync(OUT_FILE, JSON.stringify(spec, null, 1));
 
+  emitArtifacts(spec, pkg.version);
+
   const count = Object.keys(components).length;
   console.log(`AI spec generated: ${count} components -> ${path.relative(ROOT, OUT_FILE)}`);
   if (warnings.length) {
     console.log(`Warnings (${warnings.length}):`);
     for (const w of warnings) console.log(`  - ${w}`);
+  }
+}
+
+/** Post-process Row/Column and emit sliced agent artifacts */
+function emitArtifacts(spec, version) {
+  const shorthands = {
+    fill: { replaces: "fillWidth fillHeight", on: ["Row", "Column", "Flex", "Grid"] },
+    fit: { replaces: "fitWidth fitHeight", on: ["Row", "Column", "Flex", "Grid"] },
+    center: { replaces: 'horizontal="center" vertical="center"', on: ["Row", "Column", "Flex"] },
+    layout: {
+      Column: { preferOver: 'Flex direction="column"' },
+      Row: { preferOver: 'Flex direction="row"' },
+      Flex: { useWhen: "direction changes at breakpoints only" },
+    },
+  };
+
+  if (spec.components.Row) {
+    spec.components.Row.preset = { direction: "row" };
+    spec.components.Row.preferOver = 'Flex with direction="row"';
+  }
+  if (spec.components.Column) {
+    spec.components.Column.preset = { direction: "column" };
+    spec.components.Column.preferOver = 'Flex with direction="column"';
+  }
+  spec.shorthands = shorthands;
+
+  fs.writeFileSync(OUT_FILE, JSON.stringify(spec, null, 1));
+
+  const seedPath = path.join(OUT_DIR, "catalog.seed.json");
+  const seed = fs.existsSync(seedPath)
+    ? JSON.parse(fs.readFileSync(seedPath, "utf8"))
+    : {};
+
+  const catalog = { version, generated: spec.generated, components: {} };
+  for (const [name, entry] of Object.entries(spec.components)) {
+    const meta = seed[name] || {};
+    catalog.components[name] = {
+      group: entry.group,
+      extends: entry.extends,
+      purpose: meta.purpose || `${name} component`,
+      tags: meta.tags || [entry.group],
+      ...(meta.avoid ? { avoid: meta.avoid } : {}),
+      ...(meta.preferOver ? { preferOver: meta.preferOver } : {}),
+      ...(meta.pairsWith ? { pairsWith: meta.pairsWith } : {}),
+    };
+  }
+  fs.writeFileSync(path.join(OUT_DIR, "catalog.json"), JSON.stringify(catalog, null, 1));
+
+  const componentsDir = path.join(OUT_DIR, "components");
+  fs.mkdirSync(componentsDir, { recursive: true });
+  for (const [name, entry] of Object.entries(spec.components)) {
+    const slice = {
+      name,
+      ...entry,
+      mixinsRef: entry.mixins || [],
+      tokensRef: Object.keys(entry.mixins || []).length ? "see spec.json mixins" : undefined,
+    };
+    if (slice.mixins) {
+      slice.resolvedMixins = {};
+      for (const mixin of slice.mixins) {
+        if (spec.mixins[mixin]) slice.resolvedMixins[mixin] = spec.mixins[mixin];
+      }
+    }
+    fs.writeFileSync(path.join(componentsDir, `${name}.json`), JSON.stringify(slice, null, 1));
+  }
+
+  const manifest = {
+    version,
+    generated: spec.generated,
+    files: {
+      spec: "spec.json",
+      catalog: "catalog.json",
+      rules: "rules.compact.md",
+      rulesFull: "rules.md",
+      recipes: "recipes.md",
+      gotchas: "gotchas.json",
+      tasks: "tasks/index.json",
+      examples: "examples/",
+      components: "components/",
+    },
+    bootstrap: ["rules.compact.md", "catalog.json"],
+    resolve: "tasks/index.json",
+  };
+  fs.writeFileSync(path.join(OUT_DIR, "manifest.json"), JSON.stringify(manifest, null, 1));
+
+  syncDocsPublic();
+  console.log(`AI artifacts: catalog + ${Object.keys(spec.components).length} component slices`);
+}
+
+function syncDocsPublic() {
+  const docsAi = path.join(ROOT, "../../apps/docs/public/ai");
+  if (!fs.existsSync(path.dirname(docsAi))) return;
+  copyDir(OUT_DIR, docsAi);
+  console.log(`Synced AI artifacts -> ${path.relative(ROOT, docsAi)}`);
+}
+
+function copyDir(src, dest) {
+  if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) copyDir(srcPath, destPath);
+    else fs.copyFileSync(srcPath, destPath);
   }
 }
 

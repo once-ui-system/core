@@ -1,0 +1,13 @@
+{
+ "name": "EmojiPickerDropdown",
+ "group": "components",
+ "extends": [
+  "DropdownWrapper"
+ ],
+ "props": {
+  "onSelect": "!(emoji: string) => void",
+  "background": "StyleProps[\"background\"] = surface",
+  "columns": "GridSize = 8"
+ },
+ "mixinsRef": []
+}

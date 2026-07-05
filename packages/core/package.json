@@ -69,10 +69,20 @@
     "./server": {
       "import": "./dist/server/index.js",
       "require": "./dist/server/index.js"
-    }
+    },
+    "./ai/manifest.json": "./ai/manifest.json",
+    "./ai/spec.json": "./ai/spec.json",
+    "./ai/catalog.json": "./ai/catalog.json",
+    "./ai/gotchas.json": "./ai/gotchas.json",
+    "./ai/rules.compact.md": "./ai/rules.compact.md",
+    "./ai/rules.md": "./ai/rules.md",
+    "./ai/recipes.md": "./ai/recipes.md",
+    "./ai/tasks/*": "./ai/tasks/*",
+    "./ai/components/*": "./ai/components/*",
+    "./ai/examples/*": "./ai/examples/*"
   },
   "scripts": {
-    "build": "pnpm clean && pnpm generate-emoji-data && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",
+    "build": "pnpm clean && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",
     "build:css": "sass src/styles/index.scss:dist/css/styles.css src/tokens/index.scss:dist/css/tokens.css --style=compressed",
     "copy-files": "node scripts/copy-files.js",
     "clean": "rimraf dist",
@@ -85,7 +95,8 @@
     "dev": "tsc --watch --preserveWatchOutput",
     "prepack": "pnpm build",
     "generate-emoji-data": "node scripts/generate-emoji-data.js",
-    "generate-ai-spec": "node scripts/generate-ai-spec.js"
+    "generate-ai-spec": "node scripts/generate-ai-spec.js",
+    "validate-ai-code": "node scripts/validate-ai-code.js"
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.1.8",

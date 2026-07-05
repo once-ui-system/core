@@ -1,0 +1,14 @@
+{
+ "name": "Legend",
+ "group": "modules",
+ "props": {
+  "payload": "readonly Record<string, any>[]",
+  "labels": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+  "colors": "string[]",
+  "reverseY": "boolean",
+  "direction": "\"row\" | \"column\"",
+  "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\" = top-left",
+  "variant": "ChartVariant = useDataTheme().variant"
+ },
+ "mixinsRef": []
+}

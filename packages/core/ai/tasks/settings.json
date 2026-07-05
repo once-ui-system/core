@@ -1,0 +1,34 @@
+{
+  "id": "settings",
+  "title": "Settings page",
+  "description": "Sidebar sections, profile form, danger zone",
+  "components": [
+    "Column",
+    "Row",
+    "SplitView",
+    "Heading",
+    "Text",
+    "Button",
+    "Input",
+    "Select",
+    "Switch",
+    "Checkbox",
+    "Slider",
+    "MediaUpload",
+    "Avatar",
+    "Line",
+    "Tag"
+  ],
+  "recipes": [],
+  "example": "examples/settings.tsx",
+  "gotchas": [
+    "Card.interactive",
+    "layout.shorthands",
+    "color.tokens",
+    "layout.defaults"
+  ],
+  "quality": {
+    "surfaceRecipe": "background=\"surface\" border=\"neutral-alpha-weak\" radius=\"l\" padding=\"24\"",
+    "dangerZone": "border=\"danger-alpha-medium\" on danger actions only"
+  }
+}

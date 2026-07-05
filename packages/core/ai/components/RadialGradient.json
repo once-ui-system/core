@@ -1,0 +1,16 @@
+{
+ "name": "RadialGradient",
+ "group": "modules",
+ "props": {
+  "id": "!string",
+  "color": "!string",
+  "cx": "string = 50%",
+  "cy": "string = 50%",
+  "r": "string = 50%",
+  "fx": "string = 50%",
+  "fy": "string = 50%",
+  "stops": "GradientStop[]",
+  "variant": "ChartVariant = useDataTheme().variant"
+ },
+ "mixinsRef": []
+}

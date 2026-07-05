@@ -1,0 +1,13 @@
+{
+ "name": "OTPInput",
+ "group": "components",
+ "props": {
+  "length": "number = 4",
+  "onComplete": "(code: string) => void",
+  "error": "boolean = false",
+  "errorMessage": "React.ReactNode",
+  "disabled": "boolean = false",
+  "autoFocus": "boolean = false"
+ },
+ "mixinsRef": []
+}

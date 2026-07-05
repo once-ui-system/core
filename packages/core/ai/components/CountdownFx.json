@@ -1,0 +1,11 @@
+{
+ "name": "CountdownFx",
+ "group": "components",
+ "props": {
+  "targetDate": "!Date | string",
+  "format": "\"HH:MM:SS\" | \"DD:HH:MM:SS\" | \"MM:SS\" = HH:MM:SS",
+  "effect": "CountFxProps['effect'] = wheel",
+  "onComplete": "() => void"
+ },
+ "mixinsRef": []
+}

@@ -1,0 +1,23 @@
+{
+  "id": "chat",
+  "title": "Chat UI",
+  "description": "Message list with avatars, streaming indicator, input bar with emoji picker",
+  "components": [
+    "Column",
+    "Row",
+    "SplitView",
+    "Avatar",
+    "Text",
+    "Input",
+    "IconButton",
+    "EmojiPickerDropdown",
+    "Fade",
+    "Spinner",
+    "Kbd",
+    "User",
+    "Line"
+  ],
+  "recipes": [],
+  "example": "examples/chat.tsx",
+  "gotchas": ["Fade.edge", "Badge.duplicate", "layout.shorthands"]
+}

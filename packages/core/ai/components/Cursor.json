@@ -1,0 +1,9 @@
+{
+ "name": "Cursor",
+ "group": "components",
+ "props": {
+  "cursor": "!React.ReactNode",
+  "elementRef": "!React.RefObject<HTMLElement | null>"
+ },
+ "mixinsRef": []
+}
