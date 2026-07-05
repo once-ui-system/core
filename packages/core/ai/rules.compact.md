@@ -1,6 +1,6 @@
 # Once UI — compact codegen rules
 
-Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. Fetch component slices on demand.
+Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For production-quality composition, read matching Pro blocks from `examples/blocks/manifest.json`. Fetch component slices on demand.
 
 ## Layout
 

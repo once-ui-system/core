@@ -102,6 +102,12 @@ export function buildAgentSkillsIndex() {
         url: absolute(agentDiscoveryPaths.aiTasks),
       },
       {
+        name: "once-ui-blocks",
+        type: "documentation",
+        description: "Once UI Pro block references — production-quality composition patterns for headers, dashboards, chat, waitlist, roadmap",
+        url: absolute("/ai/examples/blocks/manifest.json"),
+      },
+      {
         name: "once-ui-docs",
         type: "documentation",
         description:

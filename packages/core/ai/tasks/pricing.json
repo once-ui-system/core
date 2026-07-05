@@ -22,6 +22,10 @@
   ],
   "recipes": ["hero-matrix-strip", "highlighted-card-glow", "blob-ambient-panel"],
   "example": "examples/pricing.tsx",
+  "blocks": {
+    "manifest": "examples/blocks/manifest.json",
+    "patterns": ["Header2", "Footer2"]
+  },
   "gotchas": [
     "Card.interactive",
     "RevealFx.delay",

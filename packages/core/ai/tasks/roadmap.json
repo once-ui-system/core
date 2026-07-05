@@ -1,0 +1,22 @@
+{
+  "id": "roadmap",
+  "title": "Product roadmap",
+  "description": "Kanban-style roadmap with status columns and task cards",
+  "components": [
+    "Column",
+    "Row",
+    "Heading",
+    "Text",
+    "Card",
+    "StatusIndicator",
+    "User",
+    "Scroller"
+  ],
+  "recipes": [],
+  "example": "examples/blocks/Roadmap1.tsx",
+  "blocks": {
+    "manifest": "examples/blocks/manifest.json",
+    "primary": ["Roadmap1"]
+  },
+  "gotchas": ["Card.interactive", "layout.shorthands", "heading.scale"]
+}

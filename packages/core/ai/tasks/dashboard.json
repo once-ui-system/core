@@ -20,6 +20,11 @@
   ],
   "recipes": ["reveal-stagger"],
   "example": "examples/dashboard.tsx",
+  "blocks": {
+    "manifest": "examples/blocks/manifest.json",
+    "primary": ["Dashboard1", "Table1"],
+    "compose": ["Header1", "Sidebar1"]
+  },
   "gotchas": [
     "Card.interactive",
     "CountFx.trigger",

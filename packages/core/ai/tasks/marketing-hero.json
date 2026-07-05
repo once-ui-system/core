@@ -17,6 +17,11 @@
   ],
   "recipes": ["hero-glow-dots", "reveal-stagger"],
   "example": "examples/marketing-hero.tsx",
+  "blocks": {
+    "manifest": "examples/blocks/manifest.json",
+    "primary": ["Waitlist1", "Header1", "Footer4"],
+    "patterns": ["Background6", "Footer3"]
+  },
   "gotchas": [
     "Background.gradient.width",
     "Background.absolute",

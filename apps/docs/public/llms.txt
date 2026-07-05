@@ -23,6 +23,7 @@ Once UI provides a comprehensive set of customizable components and tools for bu
 - [Codegen rules](https://docs.once-ui.com/ai/rules.compact.md): Compact rules for agents (~2KB)
 - [Component catalog](https://docs.once-ui.com/ai/catalog.json): Purpose, tags, and pairing hints
 - [Task bundles](https://docs.once-ui.com/ai/tasks/index.json): Intent → components + gold examples
+- [Pro block references](https://docs.once-ui.com/ai/examples/blocks/manifest.json): Production-quality composition patterns
 - [Config](https://docs.once-ui.com/once-ui/config): Configuration options
 - [Customization Guide](https://once-ui.com/brand): Theming and styling documentation
 

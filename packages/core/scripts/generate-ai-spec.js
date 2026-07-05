@@ -432,6 +432,7 @@ function emitArtifacts(spec, version) {
       gotchas: "gotchas.json",
       tasks: "tasks/index.json",
       examples: "examples/",
+      blocks: "examples/blocks/manifest.json",
       components: "components/",
     },
     bootstrap: ["rules.compact.md", "catalog.json"],

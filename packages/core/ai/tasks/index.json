@@ -6,6 +6,7 @@
     { "id": "settings", "file": "tasks/settings.json", "priority": 3 },
     { "id": "dashboard", "file": "tasks/dashboard.json", "priority": 4 },
     { "id": "chat", "file": "tasks/chat.json", "priority": 5 },
-    { "id": "auth", "file": "tasks/auth.json", "priority": 6 }
+    { "id": "auth", "file": "tasks/auth.json", "priority": 6 },
+    { "id": "roadmap", "file": "tasks/roadmap.json", "priority": 7 }
   ]
 }

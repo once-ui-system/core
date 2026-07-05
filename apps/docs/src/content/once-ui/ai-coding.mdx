@@ -22,6 +22,7 @@ For **writing UI code**, use the harness — not full doc pages. It keeps contex
 | Task bundle | [/ai/tasks/{intent}.json](/ai/tasks/index.json) | Match user intent (pricing, dashboard, …) |
 | Component slice | [/ai/components/{Name}.json](/ai/catalog.json) | On demand, only components you use |
 | Gold example | [/ai/examples/](/ai/tasks/index.json) | Mimic structure for the task type |
+| Pro blocks | [/ai/examples/blocks/manifest.json](/ai/examples/blocks/manifest.json) | Production-quality composition references |
 | Gotchas | [/ai/gotchas.json](/ai/gotchas.json) | When using Background, Card, RevealFx, Fade |
 
 **npm imports** (version-pinned):
@@ -42,7 +43,7 @@ npm install @once-ui-system/core
 1. Load `rules.compact.md`
 2. Resolve intent → `tasks/{intent}.json`
 3. Fetch component slices listed in the task bundle
-4. Read the gold example for structure
+4. Read the gold example for structure; for production fidelity, read matching **Pro blocks** from `examples/blocks/manifest.json`
 5. Generate code
 6. Validate: `pnpm validate-ai-code path/to/file.tsx`
 
