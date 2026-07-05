@@ -1,0 +1,15 @@
+{
+ "name": "User",
+ "group": "components",
+ "props": {
+  "name": "string",
+  "children": "React.ReactNode",
+  "subline": "React.ReactNode",
+  "tag": "string",
+  "tagProps": "TagProps = {}",
+  "loading": "boolean = false",
+  "avatarProps": "AvatarProps = {}",
+  "className": "string"
+ },
+ "mixinsRef": []
+}

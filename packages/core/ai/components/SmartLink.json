@@ -1,0 +1,17 @@
+{
+ "name": "SmartLink",
+ "group": "components",
+ "props": {
+  "prefixIcon": "IconName",
+  "suffixIcon": "IconName",
+  "fillWidth": "boolean = false",
+  "iconSize": "TShirtSizes = xs",
+  "selected": "boolean",
+  "unstyled": "boolean = false",
+  "children": "!ReactNode",
+  "href": "string",
+  "style": "React.CSSProperties",
+  "className": "string"
+ },
+ "mixinsRef": []
+}

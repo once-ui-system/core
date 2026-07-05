@@ -1,0 +1,26 @@
+{
+ "name": "Button",
+ "group": "components",
+ "props": {
+  "variant": "\"primary\" | \"secondary\" | \"tertiary\" | \"quaternary\" | \"subtle\" | \"danger\" | \"success\" | \"warning\" | \"ghost\" | \"link\" = primary",
+  "size": "TShirtSizes = m",
+  "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "label": "string",
+  "weight": "\"default\" | \"strong\" = strong",
+  "rounded": "boolean",
+  "prefixIcon": "IconName",
+  "suffixIcon": "IconName",
+  "loading": "boolean = false",
+  "disabled": "boolean = false",
+  "fillWidth": "boolean = false",
+  "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = center",
+  "children": "ReactNode",
+  "href": "string",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "id": "string",
+  "arrowIcon": "boolean = false",
+  "color": "`${ColorScheme}-${ColorWeight}`"
+ },
+ "mixinsRef": []
+}

@@ -1,7 +1,7 @@
 ---
 title: "AI Coding (MCP)"
-updatedAt: "2026-06-02"
-summary: "Once UI is an agent-first AI design system that empowers indie creators to build responsive, high-quality apps effortlessly."
+updatedAt: "2026-07-05"
+summary: "Once UI is an agent-first design system with a codegen harness: compact rules, component catalog, task bundles, and gold examples."
 image: "/images/cover.jpg"
 navIcon: "code"
 ---
@@ -10,17 +10,46 @@ navIcon: "code"
 
 Once UI is an agent-first design system that empowers indie creators to build high-quality, responsive apps — without wrestling with complexity. Designed for AI-native workflows, it turns abstract intent into concrete interfaces with minimal syntax.
 
-## AI Workflow
+## Agent harness (recommended for codegen)
 
-Once UI uses custom tokens and props to deliver an intuitive, compact developer experience. Our philosophy: infer what you’re trying to build — even with minimal input — and Once UI applies smart defaults under the hood.
+For **writing UI code**, use the harness — not full doc pages. It keeps context under ~10KB per task.
 
-Compared to Tailwind + shadcn, Once UI yields up to **70% more compact** output, with **cleaner, more natural syntax**.
+| Artifact | URL | When to load |
+|----------|-----|--------------|
+| Manifest | [/ai/manifest.json](/ai/manifest.json) | Entry point — lists all harness files |
+| Compact rules | [/ai/rules.compact.md](/ai/rules.compact.md) | Always, before any UI task (~2KB) |
+| Component catalog | [/ai/catalog.json](/ai/catalog.json) | Pick components by purpose/tag |
+| Task bundle | [/ai/tasks/index.json](/ai/tasks/index.json) | Match user intent → `tasks/pricing.json`, etc. |
+| Component slice | [/ai/components/Grid.json](/ai/catalog.json) | On demand — one file per component |
+| Gold example | [/ai/examples/](/ai/tasks/index.json) | Mimic structure for the task type |
+| Pro blocks | [/ai/examples/blocks/manifest.json](/ai/examples/blocks/manifest.json) | Production-quality composition references |
+| Gotchas | [/ai/gotchas.json](/ai/gotchas.json) | When using Background, Card, RevealFx, Fade |
 
-That said, most AI models aren’t yet as fluent in Once UI as they are with Tailwind. To bridge that, we’ve created tooling and patterns to help agents learn fast — and guess better over time.
+**npm imports** (version-pinned):
 
-## MCP Server
+```bash
+npm install @once-ui-system/core
+```
 
-Agents can pull Once UI documentation through [Context7’s MCP server](https://context7.com/once-ui-system/core), supported in editors like Windsurf and Cursor.
+```tsx
+// Conceptual — read in your agent environment
+// @once-ui-system/core/ai/rules.compact.md
+// @once-ui-system/core/ai/tasks/pricing.json
+// @once-ui-system/core/ai/components/Grid.json
+```
+
+**Workflow:**
+
+1. Load `rules.compact.md`
+2. Resolve intent → pick a file from `tasks/index.json` (e.g. `tasks/pricing.json`)
+3. Fetch component slices listed in the task bundle
+4. Read the gold example for structure; for production fidelity, read matching **Pro blocks** from `examples/blocks/manifest.json`
+5. Generate code
+6. Validate: `pnpm validate-ai-code path/to/file.tsx`
+
+## MCP Server (exploratory docs)
+
+For **how does X work?** questions, agents can pull docs through [Context7's MCP server](https://context7.com/once-ui-system/core).
 
 To configure it:
 
@@ -40,20 +69,12 @@ To configure it:
 ```
 
 3. Restart your IDE
-4. Run the following code:
+4. Run: `get-library-docs /once-ui-system/core`
 
-<Row fillWidth vertical="end" gap="12" paddingY="20">
-  <Avatar size="s" src="/images/avatar.jpg" marginBottom="8"/>
-  <Row fillWidth padding="20" background="surface" border="neutral-alpha-weak" borderStyle="dashed" radius="l">get-library-docs /once-ui-system/core</Row>
-</Row>
+Use Context7 for exploration. Use the harness for codegen.
 
-This syncs the Once UI documentation with your local agent environment. To invoke the context, end your prompt with `use context7`.
+## Syntax advantage
 
-Example:
+Compared to Tailwind + shadcn, Once UI yields up to **70% more compact** output, with **cleaner, more natural syntax** — semantic `Row`/`Column`, token props, and purpose-built components.
 
-<Row fillWidth vertical="end" gap="12" paddingY="20">
-  <Avatar size="s" src="/images/avatar.jpg" marginBottom="8"/>
-  <Row fillWidth padding="20" background="surface" border="neutral-alpha-weak" borderStyle="dashed" radius="l">I want you to implement [...]. use context7</Row>
-</Row>
-
-This lets your agent leverage the full Once UI system.
+That compactness only pays off when agents load the harness and follow the rules — especially layout shorthands (`fill`, `center`), surface recipes, and component appropriateness (`Card` is interactive-only).

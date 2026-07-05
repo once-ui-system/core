@@ -1,0 +1,82 @@
+{
+ "name": "CountFx",
+ "group": "components",
+ "mixins": [
+  "CommonProps",
+  "DisplayProps",
+  "SpacingProps",
+  "TextProps"
+ ],
+ "props": {
+  "value": "!number",
+  "speed": "number = 1000",
+  "easing": "\"linear\" | \"ease-out\" | \"ease-in-out\" = ease-out",
+  "format": "(value: number) => string",
+  "separator": "string",
+  "decimals": "number",
+  "effect": "\"simple\" | \"wheel\" | \"smooth\" = simple",
+  "children": "React.ReactNode"
+ },
+ "mixinsRef": [
+  "CommonProps",
+  "DisplayProps",
+  "SpacingProps",
+  "TextProps"
+ ],
+ "tokensRef": "see spec.json mixins",
+ "resolvedMixins": {
+  "CommonProps": {
+   "onBackground": "Colors",
+   "onSolid": "Colors",
+   "align": "CSSProperties[\"textAlign\"]"
+  },
+  "DisplayProps": {
+   "as": "ElementType",
+   "inline": "boolean",
+   "hide": "boolean",
+   "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "position": "CSSProperties[\"position\"]",
+   "overflow": "CSSProperties[\"overflow\"]",
+   "overflowX": "CSSProperties[\"overflowX\"]",
+   "overflowY": "CSSProperties[\"overflowY\"]",
+   "scrollbar": "\"default\" | \"minimal\"",
+   "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\"",
+   "opacity": "Opacity",
+   "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\"",
+   "dark": "boolean",
+   "light": "boolean"
+  },
+  "SpacingProps": {
+   "padding": "SpacingToken | number",
+   "paddingLeft": "SpacingToken | number",
+   "paddingRight": "SpacingToken | number",
+   "paddingTop": "SpacingToken | number",
+   "paddingBottom": "SpacingToken | number",
+   "paddingX": "SpacingToken | number",
+   "paddingY": "SpacingToken | number",
+   "margin": "SpacingToken | number",
+   "marginLeft": "SpacingToken | number",
+   "marginRight": "SpacingToken | number",
+   "marginTop": "SpacingToken | number",
+   "marginBottom": "SpacingToken | number",
+   "marginX": "SpacingToken | number",
+   "marginY": "SpacingToken | number",
+   "gap": "SpacingToken | number | \"-1\"",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "translateX": "SpacingToken | number | CSSUnit",
+   "translateY": "SpacingToken | number | CSSUnit"
+  },
+  "TextProps": {
+   "as": "T",
+   "variant": "TextVariant",
+   "wrap": "CSSProperties[\"textWrap\"]",
+   "size": "TextSize",
+   "weight": "TextWeight",
+   "family": "TextType",
+   "truncate": "boolean"
+  }
+ }
+}

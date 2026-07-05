@@ -1,0 +1,24 @@
+{
+ "name": "Textarea",
+ "group": "components",
+ "props": {
+  "id": "!string",
+  "label": "string",
+  "placeholder": "string",
+  "lines": "number | \"auto\" = 3",
+  "height": "TShirtSizes = m",
+  "error": "boolean = false",
+  "errorMessage": "ReactNode",
+  "description": "ReactNode",
+  "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "className": "string",
+  "hasPrefix": "ReactNode",
+  "hasSuffix": "ReactNode",
+  "variant": "\"default\" | \"ghost\" = default",
+  "characterCount": "boolean",
+  "resize": "\"horizontal\" | \"vertical\" | \"both\" | \"none\" = vertical",
+  "validate": "(value: ReactNode) => ReactNode | null",
+  "disabled": "boolean = false"
+ },
+ "mixinsRef": []
+}

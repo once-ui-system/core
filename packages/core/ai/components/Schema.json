@@ -1,0 +1,17 @@
+{
+ "name": "Schema",
+ "group": "modules",
+ "props": {
+  "as": "!\"website\" | \"article\" | \"blogPosting\" | \"techArticle\" | \"webPage\" | \"organization\"",
+  "title": "!string",
+  "description": "!string",
+  "baseURL": "!string",
+  "path": "!string",
+  "datePublished": "string",
+  "dateModified": "string",
+  "image": "string",
+  "sameAs": "string[] = []",
+  "author": "{ name: string; url?: string; image?: string; }"
+ },
+ "mixinsRef": []
+}

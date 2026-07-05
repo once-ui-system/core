@@ -1,0 +1,42 @@
+{
+  "id": "pricing",
+  "title": "Pricing page",
+  "description": "Three tiers, highlighted middle tier, feature comparison table, FAQ accordion",
+  "components": [
+    "Column",
+    "Row",
+    "Grid",
+    "Heading",
+    "Text",
+    "Button",
+    "Background",
+    "MatrixFx",
+    "BlobFx",
+    "RevealFx",
+    "CountFx",
+    "SegmentedControl",
+    "Table",
+    "AccordionGroup",
+    "Tag",
+    "Icon"
+  ],
+  "recipes": ["hero-matrix-strip", "highlighted-card-glow", "blob-ambient-panel"],
+  "example": "examples/pricing.tsx",
+  "blocks": {
+    "manifest": "examples/blocks/manifest.json",
+    "patterns": ["Header2", "Footer2"]
+  },
+  "gotchas": [
+    "Card.interactive",
+    "RevealFx.delay",
+    "LogoCloud.columns",
+    "layout.shorthands",
+    "section.gaps",
+    "animation.budget"
+  ],
+  "quality": {
+    "sectionGap": "104",
+    "tierPanel": "Column background=\"surface\" border radius=\"l\" — not Card",
+    "highlightedTier": "border=\"brand-alpha-medium\" + Background gradient glow"
+  }
+}

@@ -34,3 +34,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AI harness — synced from @once-ui-system/core on build
+/public/ai/

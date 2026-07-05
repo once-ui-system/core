@@ -1,0 +1,411 @@
+{
+  "Row": {
+    "purpose": "Horizontal flex layout — default direction row",
+    "tags": ["layout", "basics"],
+    "preferOver": "Flex with direction=\"row\"",
+    "pairsWith": ["Column", "Grid", "Text", "Button"]
+  },
+  "Column": {
+    "purpose": "Vertical flex layout — default direction column",
+    "tags": ["layout", "basics"],
+    "preferOver": "Flex with direction=\"column\"",
+    "pairsWith": ["Row", "Grid", "Heading", "Text"]
+  },
+  "Grid": {
+    "purpose": "CSS grid container with token-based columns/rows",
+    "tags": ["layout", "basics"],
+    "pairsWith": ["Column", "Row", "Card"]
+  },
+  "Flex": {
+    "purpose": "Dynamic-direction flex container — use only when direction changes at breakpoints",
+    "tags": ["layout", "basics"],
+    "avoid": "Static row/column layouts — use Row or Column instead"
+  },
+  "Background": {
+    "purpose": "Absolute decorative layer: gradients, dots, lines, grid textures",
+    "tags": ["decoration", "effect"],
+    "pairsWith": ["Column", "Row", "MatrixFx", "BlobFx"]
+  },
+  "MatrixFx": {
+    "purpose": "Animated matrix field with optional bulge wave",
+    "tags": ["decoration", "effect", "marketing"],
+    "pairsWith": ["Background", "Column", "RevealFx"]
+  },
+  "BlobFx": {
+    "purpose": "Drifting blurred brand blobs for ambient panels",
+    "tags": ["decoration", "effect", "marketing"],
+    "pairsWith": ["Column", "Card"]
+  },
+  "RevealFx": {
+    "purpose": "Viewport-triggered entrance animation — one key set per page",
+    "tags": ["effect", "motion"],
+    "pairsWith": ["useInViewport", "Grid", "Column"]
+  },
+  "TiltFx": {
+    "purpose": "Pointer-tilt interaction wrapper for cards and previews",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Card", "Media", "Column"]
+  },
+  "Card": {
+    "purpose": "Interactive surface only — requires href or onClick",
+    "tags": ["surface"],
+    "avoid": "Static panels (pricing tiers, testimonials, stats) — use Column + surface recipe",
+    "pairsWith": ["Background", "Media", "Heading", "SmartLink"]
+  },
+  "Button": {
+    "purpose": "Primary action and navigation with variants and icons",
+    "tags": ["action", "basics"],
+    "pairsWith": ["Icon", "SmartLink", "Row"]
+  },
+  "Heading": {
+    "purpose": "Semantic headings with display/heading variants",
+    "tags": ["typography", "basics"],
+    "pairsWith": ["Text", "Column", "RevealFx"]
+  },
+  "Text": {
+    "purpose": "Body, label, display, and code typography",
+    "tags": ["typography", "basics"],
+    "pairsWith": ["Heading", "Column", "Row"]
+  },
+  "Media": {
+    "purpose": "Optimized image/video with aspect ratio and radius",
+    "tags": ["media", "basics"],
+    "avoid": "Raw img elements",
+    "pairsWith": ["Card", "Column", "TiltFx"]
+  },
+  "Avatar": {
+    "purpose": "User avatar with size tokens",
+    "tags": ["media", "profile"],
+    "pairsWith": ["Row", "User", "AvatarGroup"]
+  },
+  "Table": {
+    "purpose": "Structured data table with headers and rows",
+    "tags": ["data", "dashboard"],
+    "pairsWith": ["Column", "Tag", "Icon"]
+  },
+  "AccordionGroup": {
+    "purpose": "Expandable FAQ / disclosure sections",
+    "tags": ["content", "marketing"],
+    "pairsWith": ["Column", "Text", "Heading"]
+  },
+  "SegmentedControl": {
+    "purpose": "Toggle between 2–5 options (billing period, view mode)",
+    "tags": ["control", "dashboard"],
+    "pairsWith": ["Row", "Grid"]
+  },
+  "CountFx": {
+    "purpose": "Animated number counter for stats and pricing",
+    "tags": ["effect", "data", "marketing"],
+    "pairsWith": ["useInViewport", "Text", "Row"]
+  },
+  "LogoCloud": {
+    "purpose": "Grid of partner/customer logos — always set columns",
+    "tags": ["marketing", "social-proof"],
+    "pairsWith": ["Grid", "Media", "Logo"]
+  },
+  "Dialog": {
+    "purpose": "Modal dialog with stack support for multi-step flows",
+    "tags": ["overlay", "auth"],
+    "pairsWith": ["OTPInput", "PasswordInput", "Button", "Column"]
+  },
+  "Input": {
+    "purpose": "Text input with label, validation, and icons",
+    "tags": ["form"],
+    "pairsWith": ["PasswordInput", "Select", "Switch", "Column"]
+  },
+  "Select": {
+    "purpose": "Dropdown select for forms and filters",
+    "tags": ["form", "dashboard"],
+    "pairsWith": ["Input", "Row", "Column"]
+  },
+  "ProgressBar": {
+    "purpose": "Linear progress indicator",
+    "tags": ["data", "onboarding"],
+    "pairsWith": ["StatusIndicator", "Column", "Text"]
+  },
+  "StatusIndicator": {
+    "purpose": "Colored status dot for online/offline/success states",
+    "tags": ["data", "onboarding"],
+    "pairsWith": ["Row", "Text", "Avatar"]
+  },
+  "Timeline": {
+    "purpose": "Versioned changelog / release history layout",
+    "tags": ["content", "docs"],
+    "pairsWith": ["Tag", "CodeBlock", "Text"]
+  },
+  "MegaMenu": {
+    "purpose": "Navigation mega menu with featured card and link columns",
+    "tags": ["navigation", "marketing"],
+    "pairsWith": ["Background", "SmartLink", "Column", "Row"]
+  },
+  "EmojiPickerDropdown": {
+    "purpose": "Emoji picker in a dropdown for chat/message inputs",
+    "tags": ["overlay", "chat"],
+    "pairsWith": ["Input", "IconButton", "Row"]
+  },
+  "Fade": {
+    "purpose": "Edge overlay strip on scroll containers — not a content wrapper",
+    "tags": ["effect", "chat"],
+    "avoid": "Wrapping entire message lists or sections"
+  },
+  "Spinner": {
+    "purpose": "Loading indicator for async/streaming states",
+    "tags": ["feedback", "chat"],
+    "pairsWith": ["Row", "Text"]
+  },
+  "Kbd": {
+    "purpose": "Keyboard shortcut display",
+    "tags": ["typography", "chat"],
+    "pairsWith": ["Row", "Text"]
+  },
+  "Tag": {
+    "purpose": "Metadata label — do not duplicate text in label prop and children",
+    "tags": ["typography", "marketing"],
+    "pairsWith": ["Row", "Badge", "Heading"]
+  },
+  "Badge": {
+    "purpose": "Notification count or status badge",
+    "tags": ["typography", "dashboard"],
+    "avoid": "Passing same text in title prop and children"
+  },
+  "Skeleton": {
+    "purpose": "Loading placeholder for cards and lists",
+    "tags": ["feedback", "ecommerce"],
+    "pairsWith": ["Grid", "Media", "Column"]
+  },
+  "HoverCard": {
+    "purpose": "Rich popover card on hover",
+    "tags": ["overlay", "profile"],
+    "pairsWith": ["Avatar", "User", "Column"]
+  },
+  "UserMenu": {
+    "purpose": "Avatar-triggered account menu",
+    "tags": ["overlay", "navigation"],
+    "pairsWith": ["Avatar", "Dropdown", "Column"]
+  },
+  "CelebrationFx": {
+    "purpose": "Confetti/fireworks on completion milestones",
+    "tags": ["effect", "onboarding"],
+    "pairsWith": ["Column", "Button"]
+  },
+  "LetterFx": {
+    "purpose": "Per-letter text animation for hero headlines",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Heading", "Column"]
+  },
+  "TypeFx": {
+    "purpose": "Typewriter text effect",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Heading", "Text"]
+  },
+  "DateRangePicker": {
+    "purpose": "Date range filter for dashboards and tables",
+    "tags": ["form", "dashboard"],
+    "pairsWith": ["Input", "Row", "Table"]
+  },
+  "Chip": {
+    "purpose": "Selectable chip for ratings, filters, tags",
+    "tags": ["form", "feedback"],
+    "pairsWith": ["Row", "Textarea", "Dialog"]
+  },
+  "Feedback": {
+    "purpose": "Inline feedback message display",
+    "tags": ["feedback"],
+    "pairsWith": ["useToast", "Dialog"]
+  },
+  "CodeBlock": {
+    "purpose": "Syntax-highlighted code with optional live preview",
+    "tags": ["docs", "content"],
+    "pairsWith": ["InlineCode", "Column"]
+  },
+  "SplitView": {
+    "purpose": "Resizable two-pane layout for sidebars and chat",
+    "tags": ["layout", "chat", "settings"],
+    "pairsWith": ["Column", "Row"]
+  },
+  "Line": {
+    "purpose": "Horizontal divider / section separator",
+    "tags": ["decoration", "marketing"],
+    "pairsWith": ["Column", "Row"]
+  },
+  "Icon": {
+    "purpose": "Icon from IconName list in spec — never invent names",
+    "tags": ["basics"],
+    "pairsWith": ["Row", "Button", "IconButton"]
+  },
+  "IconButton": {
+    "purpose": "Icon-only action with optional tooltip",
+    "tags": ["action", "chat"],
+    "pairsWith": ["Tooltip", "Row"]
+  },
+  "SmartLink": {
+    "purpose": "Enhanced link with Once UI styling",
+    "tags": ["navigation", "basics"],
+    "avoid": "Raw a elements"
+  },
+  "Scroller": {
+    "purpose": "Horizontal scroll container for chips, tabs, cards",
+    "tags": ["layout"],
+    "pairsWith": ["Row", "Chip"]
+  },
+  "InfiniteScroll": {
+    "purpose": "Infinite scroll wrapper for feeds and lists",
+    "tags": ["layout", "chat"],
+    "pairsWith": ["Column", "Spinner"]
+  },
+  "MasonryGrid": {
+    "purpose": "Pinterest-style masonry layout",
+    "tags": ["layout", "marketing"],
+    "pairsWith": ["Media", "Card"]
+  },
+  "CompareImage": {
+    "purpose": "Before/after image comparison slider",
+    "tags": ["media", "marketing"],
+    "pairsWith": ["Column", "Media"]
+  },
+  "OgCard": {
+    "purpose": "Open Graph link preview card",
+    "tags": ["media", "social"],
+    "pairsWith": ["SmartLink", "Media"]
+  },
+  "Kbar": {
+    "purpose": "Command palette (⌘K) for navigation and actions",
+    "tags": ["navigation", "chat"],
+    "pairsWith": ["Kbd", "Dialog"]
+  },
+  "MediaUpload": {
+    "purpose": "Image upload with compression for profile/settings",
+    "tags": ["form", "settings"],
+    "pairsWith": ["Avatar", "Column", "Button"]
+  },
+  "PasswordInput": {
+    "purpose": "Password field with show/hide toggle",
+    "tags": ["form", "auth"],
+    "pairsWith": ["Input", "Dialog", "Column"]
+  },
+  "OTPInput": {
+    "purpose": "One-time password input for verification steps",
+    "tags": ["form", "auth"],
+    "pairsWith": ["Dialog", "Column", "Button"]
+  },
+  "Switch": {
+    "purpose": "Boolean toggle for settings",
+    "tags": ["form", "settings"],
+    "pairsWith": ["Row", "Column", "Text"]
+  },
+  "Checkbox": {
+    "purpose": "Checkbox with label for forms",
+    "tags": ["form", "settings"],
+    "pairsWith": ["Column", "Row"]
+  },
+  "Textarea": {
+    "purpose": "Multi-line text input",
+    "tags": ["form", "feedback"],
+    "pairsWith": ["Dialog", "Column", "Chip"]
+  },
+  "Slider": {
+    "purpose": "Numeric range slider",
+    "tags": ["form", "settings"],
+    "pairsWith": ["Row", "Text"]
+  },
+  "Carousel": {
+    "purpose": "Image/content carousel with navigation",
+    "tags": ["media", "marketing"],
+    "pairsWith": ["Media", "Column", "Button"]
+  },
+  "Swiper": {
+    "purpose": "Touch-friendly image swiper",
+    "tags": ["media", "marketing"],
+    "pairsWith": ["Media", "Row"]
+  },
+  "Tooltip": {
+    "purpose": "Hover/focus tooltip for icon buttons and truncated text",
+    "tags": ["overlay", "basics"],
+    "pairsWith": ["IconButton", "Text"]
+  },
+  "Dropdown": {
+    "purpose": "Dropdown menu for actions and navigation",
+    "tags": ["overlay", "navigation"],
+    "pairsWith": ["IconButton", "UserMenu"]
+  },
+  "ContextMenu": {
+    "purpose": "Right-click context menu",
+    "tags": ["overlay", "chat"],
+    "pairsWith": ["Column", "Row"]
+  },
+  "CursorCard": {
+    "purpose": "Card that follows cursor for spotlight effects",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Background", "Column"]
+  },
+  "Hover": {
+    "purpose": "Hover state wrapper for subtle scale/glow transitions",
+    "tags": ["effect"],
+    "pairsWith": ["Card", "Media"]
+  },
+  "Particle": {
+    "purpose": "Floating particle decoration",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Background", "Column"]
+  },
+  "ShineFx": {
+    "purpose": "Shine sweep animation on text",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Heading", "Text"]
+  },
+  "GlitchFx": {
+    "purpose": "Glitch text effect",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Heading", "Text"]
+  },
+  "HoloFx": {
+    "purpose": "Holographic foil effect on cards",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Card", "Media"]
+  },
+  "FlipFx": {
+    "purpose": "Flip card between front and back faces",
+    "tags": ["effect", "marketing"],
+    "pairsWith": ["Card", "Column"]
+  },
+  "ThemeSwitcher": {
+    "purpose": "Light/dark theme toggle",
+    "tags": ["navigation", "settings"],
+    "pairsWith": ["IconButton", "Row"]
+  },
+  "User": {
+    "purpose": "User profile row with avatar, name, and metadata",
+    "tags": ["profile", "chat"],
+    "pairsWith": ["Avatar", "Row", "Text"]
+  },
+  "AvatarGroup": {
+    "purpose": "Stacked overlapping avatars",
+    "tags": ["profile", "marketing"],
+    "pairsWith": ["Avatar", "Row"]
+  },
+  "Logo": {
+    "purpose": "Brand logo with light/dark variants",
+    "tags": ["media", "navigation"],
+    "pairsWith": ["SmartLink", "Row"]
+  },
+  "BlockQuote": {
+    "purpose": "Quoted text — keep smaller than section headings",
+    "tags": ["typography", "marketing"],
+    "avoid": "Using default size larger than display-strong-xs section titles"
+  },
+  "InlineCode": {
+    "purpose": "Inline code snippet styling",
+    "tags": ["typography", "docs"],
+    "pairsWith": ["Text", "CodeBlock"]
+  },
+  "List": {
+    "purpose": "Styled list with icons or bullets",
+    "tags": ["content"],
+    "pairsWith": ["Column", "Icon", "Text"]
+  },
+  "Banner": {
+    "purpose": "Top-of-page announcement strip",
+    "tags": ["navigation", "marketing"],
+    "pairsWith": ["Row", "Button", "SmartLink"]
+  }
+}

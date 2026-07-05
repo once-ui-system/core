@@ -73,4 +73,13 @@ if (fs.existsSync(path.resolve(__dirname, "../README.md"))) {
 // Copy style files
 console.log("Copying style files and other assets...");
 copyDir(srcDir, destDir);
+
+// Copy AI harness artifacts for npm publish
+const aiDir = path.resolve(__dirname, "../ai");
+const aiDest = path.resolve(destDir, "ai");
+if (fs.existsSync(aiDir)) {
+  console.log("Copying AI artifacts...");
+  copyDir(aiDir, aiDest);
+}
+
 console.log("Files copied successfully!");

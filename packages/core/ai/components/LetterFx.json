@@ -1,0 +1,14 @@
+{
+ "name": "LetterFx",
+ "group": "components",
+ "props": {
+  "children": "!ReactNode",
+  "trigger": "\"hover\" | \"instant\" | \"custom\" = hover",
+  "speed": "\"fast\" | \"medium\" | \"slow\" = medium",
+  "charset": "string[] = defaultCharset",
+  "onTrigger": "(triggerFn: () => void) => void",
+  "className": "string",
+  "style": "React.CSSProperties"
+ },
+ "mixinsRef": []
+}

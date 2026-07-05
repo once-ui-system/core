@@ -1,0 +1,21 @@
+{
+ "name": "DateInput",
+ "group": "components",
+ "extends": [
+  "Input"
+ ],
+ "props": {
+  "id": "!string",
+  "label": "string",
+  "placeholder": "string",
+  "value": "Date",
+  "onChange": "(date: Date) => void",
+  "minHeight": "number",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "timePicker": "boolean = false",
+  "minDate": "Date",
+  "maxDate": "Date"
+ },
+ "mixinsRef": []
+}

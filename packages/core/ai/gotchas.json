@@ -1,0 +1,85 @@
+{
+  "Background.gradient.width": {
+    "rule": "Quarter-percent units: 400 = 100% of container. Soft glows use width 100–200, not 500.",
+    "components": ["Background"]
+  },
+  "Background.gradient.x": {
+    "rule": "x/y are percent positions of the container (50/50 = center).",
+    "components": ["Background"]
+  },
+  "Background.absolute": {
+    "rule": "Every absolute decorative layer needs top=\"0\" left=\"0\" or it offsets by parent padding.",
+    "components": ["Background", "MatrixFx", "BlobFx"]
+  },
+  "Card.interactive": {
+    "rule": "Card is for interactive surfaces only (href or onClick). Static panels use Column + background=\"surface\" border=\"neutral-alpha-weak\" radius=\"l\".",
+    "components": ["Card"]
+  },
+  "Fade.edge": {
+    "rule": "Fade is an edge overlay strip on scroll containers, not a content wrapper.",
+    "components": ["Fade"]
+  },
+  "RevealFx.delay": {
+    "rule": "delay is in seconds — stagger with delay={index * 0.1}, never index * 80.",
+    "components": ["RevealFx"]
+  },
+  "RevealFx.translateY": {
+    "rule": "translateY as a number is in rem. Use translateY={1} or token \"16\" (1rem); 16 means 16rem.",
+    "components": ["RevealFx"]
+  },
+  "LogoCloud.columns": {
+    "rule": "LogoCloud extends Grid — always set columns and responsive overrides or logos stack in one column.",
+    "components": ["LogoCloud"]
+  },
+  "StatusIndicator.color": {
+    "rule": "StatusIndicator uses color=\"green\" | \"red\" | \"orange\" | \"gray\" etc. — not variant or semantic scheme names.",
+    "components": ["StatusIndicator"]
+  },
+    "rule": "Icon names must come from IconName in spec.json — never invent names like more, bell, arrowRight.",
+    "components": ["Icon", "Button", "IconButton"]
+  },
+  "Badge.duplicate": {
+    "rule": "Do not pass the same text as both title prop and children — it renders twice.",
+    "components": ["Badge"]
+  },
+  "Tag.duplicate": {
+    "rule": "Do not pass the same text as both label prop and children — it renders twice.",
+    "components": ["Tag"]
+  },
+  "color.tokens": {
+    "rule": "Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.",
+    "components": ["Column", "Row", "Text", "Button"]
+  },
+  "color.background-weak": {
+    "rule": "*-background-weak is nearly the page color — invisible as accent. Use alpha tokens (brand-alpha-medium) for glows.",
+    "components": ["Background"]
+  },
+  "layout.shorthands": {
+    "rule": "Use fill not fillWidth fillHeight; center not horizontal=\"center\" vertical=\"center\"; Row/Column not Flex direction=.",
+    "components": ["Row", "Column", "Flex", "Grid"]
+  },
+  "layout.defaults": {
+    "rule": "Never write props equal to defaults: position=\"relative\", direction on Row/Column, variant=\"primary\" on Button.",
+    "components": ["Row", "Column", "Button"]
+  },
+  "section.gaps": {
+    "rule": "Gap between page sections: 80–160 (typical 104). Inside sections: 24–40.",
+    "components": ["Column"]
+  },
+  "heading.scale": {
+    "rule": "Hero = display-strong-l/xl; section titles = display-strong-xs/s — never heading-* for section titles.",
+    "components": ["Heading"]
+  },
+  "animation.budget": {
+    "rule": "Entry animation budget: hero + at most 1–2 key moments. Animate coherent blocks all-or-none within a sibling set.",
+    "components": ["RevealFx", "CountFx"]
+  },
+  "CountFx.trigger": {
+    "rule": "CountFx has no trigger prop — drive value from useInViewport latch instead.",
+    "components": ["CountFx"]
+  },
+  "overflow.hero": {
+    "rule": "overflow=\"hidden\" on full-bleed sections clips glows into hard bands — only use when parent has radius.",
+    "components": ["Column", "Background"]
+  }
+}

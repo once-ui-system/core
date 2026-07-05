@@ -1,0 +1,15 @@
+{
+ "name": "DataTooltip",
+ "group": "modules",
+ "props": {
+  "active": "boolean",
+  "payload": "readonly Record<string, any>[]",
+  "label": "string | number",
+  "dataKey": "string = name",
+  "DataTooltip": "React.ReactNode",
+  "date": "DateConfig = { format: \"MMM d\" }",
+  "colors": "boolean = true",
+  "variant": "ChartVariant = gradient"
+ },
+ "mixinsRef": []
+}

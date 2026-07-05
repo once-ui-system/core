@@ -1,0 +1,10 @@
+{
+ "name": "Kbar",
+ "group": "modules",
+ "props": {
+  "items": "!KbarItem[]",
+  "children": "!React.ReactNode",
+  "inputSize": "TShirtSizes"
+ },
+ "mixinsRef": []
+}

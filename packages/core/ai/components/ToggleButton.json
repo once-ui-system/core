@@ -1,0 +1,24 @@
+{
+ "name": "ToggleButton",
+ "group": "components",
+ "props": {
+  "label": "ReactNode",
+  "selected": "boolean = false",
+  "variant": "\"ghost\" | \"outline\" | \"subtle\" = ghost",
+  "size": "TShirtSizes = m",
+  "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "rounded": "boolean = false",
+  "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = center",
+  "fillWidth": "boolean = false",
+  "weight": "\"default\" | \"strong\" = default",
+  "truncate": "boolean = false",
+  "disabled": "boolean = false",
+  "prefixIcon": "IconName",
+  "suffixIcon": "IconName",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "children": "ReactNode",
+  "href": "string"
+ },
+ "mixinsRef": []
+}

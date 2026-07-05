@@ -1,0 +1,22 @@
+{
+ "name": "ContextMenu",
+ "group": "components",
+ "props": {
+  "children": "!ReactNode",
+  "dropdown": "!ReactNode",
+  "placement": "Placement = bottom-end",
+  "fillWidth": "boolean = false",
+  "minWidth": "number = 12",
+  "maxWidth": "number",
+  "minHeight": "number",
+  "style": "React.CSSProperties",
+  "className": "string",
+  "onSelect": "(value: string) => void",
+  "closeAfterClick": "boolean = true",
+  "isOpen": "boolean",
+  "onOpenChange": "(isOpen: boolean) => void",
+  "selectedOption": "string",
+  "disabled": "boolean = false"
+ },
+ "mixinsRef": []
+}

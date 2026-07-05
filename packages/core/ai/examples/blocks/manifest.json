@@ -1,0 +1,191 @@
+{
+  "version": 1,
+  "description": "Once UI Pro block references for agent codegen — canonical composition patterns at production quality. Reference-only; not all blocks are runnable standalone.",
+  "usage": "Load the block matching your task intent. Mimic structure and prop patterns; adapt data and copy.",
+  "blocks": [
+    {
+      "id": "Header1",
+      "file": "Header1.tsx",
+      "title": "App header with MegaMenu + Kbar",
+      "tags": ["navigation", "header", "marketing"],
+      "components": ["MegaMenu", "MobileMegaMenu", "Kbar", "Logo", "UserMenu", "NavIcon", "SmartLink"],
+      "patterns": ["sticky header", "mega menu sections with featured links", "command palette ⌘K"],
+      "tasks": ["marketing-hero", "dashboard"],
+      "standalone": true
+    },
+    {
+      "id": "Header2",
+      "file": "Header2.tsx",
+      "title": "Minimal marketing header",
+      "tags": ["navigation", "header", "marketing"],
+      "components": ["Logo", "Row", "Button", "SmartLink"],
+      "tasks": ["marketing-hero"],
+      "standalone": true
+    },
+    {
+      "id": "Header3",
+      "file": "Header3.tsx",
+      "title": "Streaming/media header",
+      "tags": ["navigation", "header", "streaming"],
+      "components": ["Logo", "IconButton", "UserMenu"],
+      "tasks": ["streaming"],
+      "standalone": true
+    },
+    {
+      "id": "Header4",
+      "file": "Header4.tsx",
+      "title": "Compact docs-style header",
+      "tags": ["navigation", "header", "docs"],
+      "components": ["Logo", "UserMenu", "ToggleButton", "SmartLink"],
+      "tasks": ["settings"],
+      "standalone": true
+    },
+    {
+      "id": "Footer1",
+      "file": "Footer1.tsx",
+      "title": "Minimal footer bar",
+      "tags": ["footer"],
+      "components": ["Row", "IconButton", "Text"],
+      "standalone": true
+    },
+    {
+      "id": "Footer2",
+      "file": "Footer2.tsx",
+      "title": "Footer with CTA",
+      "tags": ["footer", "marketing"],
+      "components": ["Column", "Button", "SmartLink"],
+      "standalone": true
+    },
+    {
+      "id": "Footer3",
+      "file": "Footer3.tsx",
+      "title": "Multi-column sitemap footer",
+      "tags": ["footer", "marketing"],
+      "components": ["Grid", "SmartLink", "Tag", "Logo", "IconButton"],
+      "patterns": ["5-column nav grid with responsive collapse"],
+      "tasks": ["marketing-hero"],
+      "standalone": true
+    },
+    {
+      "id": "Footer4",
+      "file": "Footer4.tsx",
+      "title": "Premium footer with TypeFx + Particle",
+      "tags": ["footer", "marketing", "effect"],
+      "components": ["Background", "Particle", "TypeFx", "Mask", "Avatar", "Tag"],
+      "patterns": ["animated wordmark", "particle decoration", "masked gradient"],
+      "tasks": ["marketing-hero"],
+      "standalone": true
+    },
+    {
+      "id": "Waitlist1",
+      "file": "Waitlist1.tsx",
+      "title": "Waitlist / coming-soon hero",
+      "tags": ["marketing", "hero", "waitlist"],
+      "components": ["RevealFx", "CountFx", "AvatarGroup", "Input", "Badge", "Background"],
+      "patterns": ["custom cursor SVG", "subscriber count animation", "email capture with validation"],
+      "tasks": ["marketing-hero"],
+      "related": ["Background6.tsx"],
+      "standalone": true
+    },
+    {
+      "id": "Dashboard1",
+      "file": "Dashboard1.tsx",
+      "title": "Full analytics dashboard shell",
+      "tags": ["dashboard", "data"],
+      "components": ["Card", "LineChart", "Grid", "Scroller", "StatusIndicator", "Table1"],
+      "patterns": ["StatCard with sparkline chart overlay", "activity feed with Card rows", "orders table"],
+      "tasks": ["dashboard"],
+      "compose": ["Sidebar1.tsx", "Header1.tsx", "Table1.tsx"],
+      "standalone": false
+    },
+    {
+      "id": "Table1",
+      "file": "Table1.tsx",
+      "title": "Data table with search, pagination, selection",
+      "tags": ["data", "dashboard", "table"],
+      "components": ["Input", "Checkbox", "DropdownWrapper", "CountFx", "IconButton", "ToggleButton"],
+      "patterns": ["custom render columns", "selectable rows", "items per page"],
+      "tasks": ["dashboard", "chat"],
+      "standalone": true
+    },
+    {
+      "id": "Chat1",
+      "file": "Chat1.tsx",
+      "title": "Three-pane chat layout",
+      "tags": ["chat", "layout"],
+      "components": ["SplitView pattern via Row", "Sidebar4", "Feed3", "Sidebar5", "Table1"],
+      "patterns": ["channel sidebar + feed + members panel", "view switching"],
+      "tasks": ["chat"],
+      "compose": ["Feed3.tsx", "Sidebar4.tsx", "Sidebar5.tsx"],
+      "standalone": false
+    },
+    {
+      "id": "Feed3",
+      "file": "Feed3.tsx",
+      "title": "Chat message feed + composer",
+      "tags": ["chat", "social"],
+      "components": ["Avatar", "Textarea", "EmojiPickerDropdown", "Media", "OgCard", "IconButton"],
+      "patterns": ["thread messages without bubbles", "attachment grid", "reactions row", "emoji picker prefix"],
+      "tasks": ["chat"],
+      "standalone": true
+    },
+    {
+      "id": "Sidebar4",
+      "file": "Sidebar4.tsx",
+      "title": "Chat channel sidebar",
+      "tags": ["chat", "sidebar", "navigation"],
+      "components": ["Scroller", "ToggleButton", "Fade", "Media", "Avatar"],
+      "patterns": ["cover image header with Fade strip", "grouped channel list", "user status footer"],
+      "tasks": ["chat"],
+      "standalone": true
+    },
+    {
+      "id": "Sidebar5",
+      "file": "Sidebar5.tsx",
+      "title": "Chat members panel",
+      "tags": ["chat", "sidebar"],
+      "components": ["Card", "Avatar", "DropdownWrapper", "Heading"],
+      "tasks": ["chat"],
+      "standalone": true
+    },
+    {
+      "id": "Roadmap1",
+      "file": "Roadmap1.tsx",
+      "title": "Kanban-style product roadmap",
+      "tags": ["roadmap", "content", "community"],
+      "components": ["Card", "StatusIndicator", "User", "Scroller"],
+      "patterns": ["horizontal column scroll", "Card for linked tasks / Column for static", "brand dot product header"],
+      "tasks": ["roadmap"],
+      "standalone": true
+    },
+    {
+      "id": "Streaming1",
+      "file": "Streaming1.tsx",
+      "title": "Video streaming page",
+      "tags": ["streaming", "media", "marketing"],
+      "components": ["Media", "Carousel", "ProgressBar", "Fade", "Scroller"],
+      "patterns": ["floating controls portal", "episode carousel", "hero video player"],
+      "compose": ["Header3.tsx", "Footer2.tsx"],
+      "standalone": false
+    },
+    {
+      "id": "Productivity1",
+      "file": "Productivity1.tsx",
+      "title": "Issue board / kanban productivity",
+      "tags": ["productivity", "dashboard"],
+      "components": ["Card", "AvatarGroup", "IconButton", "Scroller"],
+      "patterns": ["horizontal issue columns", "Card task items with avatars"],
+      "compose": ["Sidebar2.tsx"],
+      "standalone": false
+    }
+  ],
+  "byTask": {
+    "marketing-hero": ["Waitlist1", "Header1", "Footer4", "Footer3"],
+    "dashboard": ["Dashboard1", "Table1", "Header1", "Sidebar1"],
+    "chat": ["Chat1", "Feed3", "Sidebar4", "Sidebar5", "Table1"],
+    "settings": ["Header4", "Sidebar1"],
+    "pricing": ["Header2", "Footer2"],
+    "auth": ["Header2"],
+    "roadmap": ["Roadmap1"]
+  }
+}

@@ -1,0 +1,18 @@
+{
+ "name": "DateRangeInput",
+ "group": "components",
+ "extends": [
+  "Input"
+ ],
+ "props": {
+  "id": "!string",
+  "startLabel": "!string = Start",
+  "endLabel": "!string = End",
+  "value": "DateRange",
+  "onChange": "(range: DateRange) => void",
+  "minHeight": "number",
+  "className": "string",
+  "style": "React.CSSProperties"
+ },
+ "mixinsRef": []
+}

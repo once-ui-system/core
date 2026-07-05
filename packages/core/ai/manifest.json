@@ -1,0 +1,21 @@
+{
+ "version": "1.7.11",
+ "generated": "2026-07-05",
+ "files": {
+  "spec": "spec.json",
+  "catalog": "catalog.json",
+  "rules": "rules.compact.md",
+  "rulesFull": "rules.md",
+  "recipes": "recipes.md",
+  "gotchas": "gotchas.json",
+  "tasks": "tasks/index.json",
+  "examples": "examples/",
+  "blocks": "examples/blocks/manifest.json",
+  "components": "components/"
+ },
+ "bootstrap": [
+  "rules.compact.md",
+  "catalog.json"
+ ],
+ "resolve": "tasks/index.json"
+}

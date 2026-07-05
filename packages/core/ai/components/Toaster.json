@@ -1,0 +1,14 @@
+{
+ "name": "Toaster",
+ "group": "components",
+ "props": {
+  "toasts": "!{ id: string; variant: \"success\" | \"danger\" | \"warning\" | \"info\"; message: React.ReactNode; action?: React.ReactNode; }[]",
+  "removeToast": "!(id: string) => void",
+  "xl": "ToastPosition",
+  "l": "ToastPosition",
+  "m": "ToastPosition",
+  "s": "ToastPosition",
+  "xs": "ToastPosition"
+ },
+ "mixinsRef": []
+}

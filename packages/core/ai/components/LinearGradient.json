@@ -1,0 +1,15 @@
+{
+ "name": "LinearGradient",
+ "group": "modules",
+ "props": {
+  "id": "!string",
+  "color": "!string",
+  "x1": "string = 0",
+  "y1": "string = 0",
+  "x2": "string = 0",
+  "y2": "string = 1",
+  "stops": "GradientStop[]",
+  "variant": "ChartVariant = useDataTheme().variant"
+ },
+ "mixinsRef": []
+}

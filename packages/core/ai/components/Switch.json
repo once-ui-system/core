@@ -1,0 +1,20 @@
+{
+ "name": "Switch",
+ "group": "components",
+ "extends": [
+  "InteractiveDetails"
+ ],
+ "props": {
+  "style": "React.CSSProperties",
+  "className": "string",
+  "isChecked": "!boolean",
+  "loading": "boolean = false",
+  "name": "string",
+  "value": "string",
+  "disabled": "boolean",
+  "reverse": "boolean = false",
+  "ariaLabel": "string = Toggle switch",
+  "onToggle": "!() => void"
+ },
+ "mixinsRef": []
+}

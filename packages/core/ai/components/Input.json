@@ -1,0 +1,24 @@
+{
+ "name": "Input",
+ "group": "components",
+ "props": {
+  "id": "!string",
+  "label": "string",
+  "placeholder": "string",
+  "height": "TShirtSizes = m",
+  "error": "boolean = false",
+  "errorMessage": "ReactNode",
+  "description": "ReactNode",
+  "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "hasPrefix": "ReactNode",
+  "hasSuffix": "ReactNode",
+  "variant": "\"default\" | \"ghost\" = default",
+  "characterCount": "boolean",
+  "cursor": "undefined | \"interactive\"",
+  "validate": "(value: ReactNode) => ReactNode | null",
+  "loading": "boolean = false"
+ },
+ "mixinsRef": []
+}

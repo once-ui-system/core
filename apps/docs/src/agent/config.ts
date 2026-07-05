@@ -11,10 +11,14 @@ import { baseURL, schema } from "@/resources";
 export { agentDiscoveryPaths, contentSignal } from "@/agent/paths";
 export { agentLinkHeader } from "@/agent/link-header";
 
-export function getLlmsTxtDigest(): string {
-  const filePath = path.join(process.cwd(), "public", "llms.txt");
+export function getFileDigest(relativePath: string): string {
+  const filePath = path.join(process.cwd(), "public", relativePath);
   const content = readFileSync(filePath, "utf8");
   return createHash("sha256").update(content).digest("hex");
+}
+
+export function getLlmsTxtDigest(): string {
+  return getFileDigest("llms.txt");
 }
 
 export function buildApiCatalogLinkset() {
@@ -44,6 +48,23 @@ export function buildApiCatalogLinkset() {
           },
         ],
       },
+      {
+        anchor: absolute(agentDiscoveryPaths.aiManifest),
+        "service-doc": [
+          {
+            href: absolute(agentDiscoveryPaths.aiManifest),
+            type: "application/json",
+          },
+          {
+            href: absolute(agentDiscoveryPaths.aiRules),
+            type: "text/markdown",
+          },
+          {
+            href: absolute(agentDiscoveryPaths.aiCatalog),
+            type: "application/json",
+          },
+        ],
+      },
     ],
   };
 }
@@ -52,6 +73,40 @@ export function buildAgentSkillsIndex() {
   return {
     $schema: "https://agentskills.io/schemas/discovery/v0.2.0",
     skills: [
+      {
+        name: "once-ui-codegen",
+        type: "documentation",
+        description:
+          "Once UI agent-first codegen harness: compact rules, component catalog, task bundles, and gold examples",
+        url: absolute(agentDiscoveryPaths.aiManifest),
+        digest: { sha256: getFileDigest("ai/manifest.json") },
+      },
+      {
+        name: "once-ui-rules",
+        type: "documentation",
+        description: "Compact Once UI codegen rules — load before any UI generation task",
+        url: absolute(agentDiscoveryPaths.aiRules),
+        digest: { sha256: getFileDigest("ai/rules.compact.md") },
+      },
+      {
+        name: "once-ui-catalog",
+        type: "documentation",
+        description: "Once UI component catalog with purpose, tags, and pairing hints",
+        url: absolute(agentDiscoveryPaths.aiCatalog),
+        digest: { sha256: getFileDigest("ai/catalog.json") },
+      },
+      {
+        name: "once-ui-tasks",
+        type: "documentation",
+        description: "Intent-to-component task bundles with gold example references",
+        url: absolute(agentDiscoveryPaths.aiTasks),
+      },
+      {
+        name: "once-ui-blocks",
+        type: "documentation",
+        description: "Once UI Pro block references — production-quality composition patterns for headers, dashboards, chat, waitlist, roadmap",
+        url: absolute("/ai/examples/blocks/manifest.json"),
+      },
       {
         name: "once-ui-docs",
         type: "documentation",
@@ -64,7 +119,7 @@ export function buildAgentSkillsIndex() {
         name: "once-ui-mcp",
         type: "mcp",
         description:
-          "Context7 MCP server for Once UI library documentation in AI-assisted editors",
+          "Context7 MCP server for exploratory Once UI documentation queries",
         url: "https://context7.com/once-ui-system/core",
       },
     ],

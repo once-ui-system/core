@@ -1,0 +1,16 @@
+{
+ "name": "Logo",
+ "group": "components",
+ "props": {
+  "className": "string",
+  "size": "TShirtSizes = m",
+  "style": "React.CSSProperties",
+  "icon": "string",
+  "wordmark": "string",
+  "href": "string",
+  "dark": "boolean",
+  "light": "boolean",
+  "brand": "{ copy?: boolean; url?: string }"
+ },
+ "mixinsRef": []
+}

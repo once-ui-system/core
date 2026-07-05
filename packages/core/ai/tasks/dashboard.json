@@ -1,0 +1,39 @@
+{
+  "id": "dashboard",
+  "title": "Analytics dashboard",
+  "description": "KPI stat cards, charts area, recent-activity list",
+  "components": [
+    "Column",
+    "Row",
+    "Grid",
+    "Heading",
+    "Text",
+    "Background",
+    "CountFx",
+    "StatusIndicator",
+    "Table",
+    "SegmentedControl",
+    "Tag",
+    "Icon",
+    "RevealFx",
+    "Line"
+  ],
+  "recipes": ["reveal-stagger"],
+  "example": "examples/dashboard.tsx",
+  "blocks": {
+    "manifest": "examples/blocks/manifest.json",
+    "primary": ["Dashboard1", "Table1"],
+    "compose": ["Header1", "Sidebar1"]
+  },
+  "gotchas": [
+    "Card.interactive",
+    "CountFx.trigger",
+    "RevealFx.delay",
+    "layout.shorthands",
+    "LogoCloud.columns"
+  ],
+  "quality": {
+    "statCard": "Column surface recipe — not Card",
+    "kpiNumber": "CountFx or display-strong-s with viewport latch"
+  }
+}
