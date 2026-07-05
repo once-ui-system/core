@@ -31,7 +31,10 @@
     "rule": "LogoCloud extends Grid — always set columns and responsive overrides or logos stack in one column.",
     "components": ["LogoCloud"]
   },
-  "Icon.names": {
+  "StatusIndicator.color": {
+    "rule": "StatusIndicator uses color=\"green\" | \"red\" | \"orange\" | \"gray\" etc. — not variant or semantic scheme names.",
+    "components": ["StatusIndicator"]
+  },
     "rule": "Icon names must come from IconName in spec.json — never invent names like more, bell, arrowRight.",
     "components": ["Icon", "Button", "IconButton"]
   },

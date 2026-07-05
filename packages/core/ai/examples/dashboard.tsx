@@ -83,7 +83,7 @@ export function DashboardExample() {
                   <Text variant="label-default-s" onBackground="neutral-weak">
                     {stat.label}
                   </Text>
-                  <StatusIndicator variant={stat.up ? "success" : "warning"} />
+                  <StatusIndicator color={stat.up ? "green" : "orange"} />
                 </Row>
                 <Row vertical="end" gap="4">
                   {stat.prefix && (

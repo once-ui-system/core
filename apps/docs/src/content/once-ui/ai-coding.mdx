@@ -19,8 +19,8 @@ For **writing UI code**, use the harness — not full doc pages. It keeps contex
 | Manifest | [/ai/manifest.json](/ai/manifest.json) | Entry point — lists all harness files |
 | Compact rules | [/ai/rules.compact.md](/ai/rules.compact.md) | Always, before any UI task (~2KB) |
 | Component catalog | [/ai/catalog.json](/ai/catalog.json) | Pick components by purpose/tag |
-| Task bundle | [/ai/tasks/{intent}.json](/ai/tasks/index.json) | Match user intent (pricing, dashboard, …) |
-| Component slice | [/ai/components/{Name}.json](/ai/catalog.json) | On demand, only components you use |
+| Task bundle | [/ai/tasks/index.json](/ai/tasks/index.json) | Match user intent → `tasks/pricing.json`, etc. |
+| Component slice | [/ai/components/Grid.json](/ai/catalog.json) | On demand — one file per component |
 | Gold example | [/ai/examples/](/ai/tasks/index.json) | Mimic structure for the task type |
 | Pro blocks | [/ai/examples/blocks/manifest.json](/ai/examples/blocks/manifest.json) | Production-quality composition references |
 | Gotchas | [/ai/gotchas.json](/ai/gotchas.json) | When using Background, Card, RevealFx, Fade |
@@ -41,7 +41,7 @@ npm install @once-ui-system/core
 **Workflow:**
 
 1. Load `rules.compact.md`
-2. Resolve intent → `tasks/{intent}.json`
+2. Resolve intent → pick a file from `tasks/index.json` (e.g. `tasks/pricing.json`)
 3. Fetch component slices listed in the task bundle
 4. Read the gold example for structure; for production fidelity, read matching **Pro blocks** from `examples/blocks/manifest.json`
 5. Generate code
