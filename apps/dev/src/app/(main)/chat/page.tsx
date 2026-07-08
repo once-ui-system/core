@@ -2,6 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import {
+  AgentActivityBar,
+  AgentGeneration,
+  type AgentUpdate,
+  type ToolCall,
+} from "@/components/agent-chat";
+import {
   Avatar,
   Column,
   EmojiPickerDropdown,
@@ -120,6 +126,26 @@ const history: Message[] = [
 
 const STREAM_REPLY =
   "Pulling the deployment checklist — builds are green, e2e passed, and the canary is at 12% with no error spike. Safe to promote when you're ready.";
+
+const AGENT_TOOL_CALLS: ToolCall[] = [
+  { id: "tc-1", name: "Read", detail: "apps/dev/src/app/(main)/chat/page.tsx" },
+  { id: "tc-2", name: "Read", detail: "packages/core/src/components/Dialog.tsx" },
+  { id: "tc-3", name: "Read", detail: "packages/core/src/components/Accordion.tsx" },
+  { id: "tc-4", name: "Grep", detail: "accordion|tool|generation" },
+  { id: "tc-5", name: "Grep", detail: "ToolCall|AgentActivity" },
+  { id: "tc-6", name: "Edit", detail: "apps/dev/src/app/(main)/chat/page.tsx" },
+  { id: "tc-7", name: "Shell", detail: "pnpm --filter @once-ui-system/core test" },
+];
+
+const AGENT_UPDATES: AgentUpdate[] = [
+  { id: "u-1", time: "9:41:02", message: "Read apps/dev/src/app/(main)/chat/page.tsx" },
+  { id: "u-2", time: "9:41:03", message: "Read packages/core/src/components/Dialog.tsx" },
+  { id: "u-3", time: "9:41:04", message: "Read packages/core/src/components/Accordion.tsx" },
+  { id: "u-4", time: "9:41:05", message: 'Grep "accordion|tool|generation"' },
+  { id: "u-5", time: "9:41:06", message: 'Grep "ToolCall|AgentActivity"' },
+  { id: "u-6", time: "9:41:08", message: "Edit apps/dev/src/app/(main)/chat/page.tsx" },
+  { id: "u-7", time: "9:41:10", message: "Shell pnpm --filter @once-ui-system/core test" },
+];
 
 function UnreadCount({ count }: { count: number }) {
   return (
@@ -255,30 +281,32 @@ function MessageRow({
   );
 }
 
-function StreamingMessage({ text, active }: { text: string; active: boolean }) {
+function AgentMessage({
+  text,
+  active,
+  toolCalls,
+  updates,
+}: {
+  text: string;
+  active: boolean;
+  toolCalls: ToolCall[];
+  updates: AgentUpdate[];
+}) {
   return (
     <Row gap="12" paddingX="20" paddingY="16">
       <Column width={8} horizontal="start">
         <Avatar size="m" value="AI" icon="sparkle" />
       </Column>
-      <Column flex={1} gap="4" minWidth={0}>
+      <Column flex={1} gap="8" minWidth={0}>
         <Row gap="8" vertical="center">
           <Text variant="label-strong-s">Nexus AI</Text>
           <Text variant="label-default-xs" onBackground="neutral-weak">
             now
           </Text>
-          {active && <Spinner size="xs" ariaLabel="Nexus AI is responding" />}
+          {active ? <Spinner size="xs" ariaLabel="Nexus AI is responding" /> : null}
         </Row>
-        <Column maxWidth={48}>
-          <Text variant="body-default-s" onBackground="neutral-strong">
-            {text}
-            {active && (
-              <Text as="span" onBackground="brand-medium">
-                ▍
-              </Text>
-            )}
-          </Text>
-        </Column>
+        <AgentActivityBar toolCalls={toolCalls} updates={updates} />
+        <AgentGeneration text={text} active={active} />
       </Column>
     </Row>
   );
@@ -299,6 +327,8 @@ export default function ChatPage() {
   const [draft, setDraft] = useState("");
   const [streamedText, setStreamedText] = useState("");
   const [isStreaming, setIsStreaming] = useState(true);
+  const [visibleToolCalls, setVisibleToolCalls] = useState<ToolCall[]>([]);
+  const [visibleUpdates, setVisibleUpdates] = useState<AgentUpdate[]>([]);
   const [clearedUnread, setClearedUnread] = useState<Record<string, boolean>>({});
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -308,13 +338,30 @@ export default function ChatPage() {
     if (!activeConversation.isAi) return;
 
     let index = 0;
+    let toolIndex = 0;
+    let updateIndex = 0;
     setStreamedText("");
+    setVisibleToolCalls([]);
+    setVisibleUpdates([]);
     setIsStreaming(true);
 
     const interval = window.setInterval(() => {
       index += 1;
       setStreamedText(STREAM_REPLY.slice(0, index));
+
+      if (index % 18 === 0 && toolIndex < AGENT_TOOL_CALLS.length) {
+        setVisibleToolCalls((prev) => [...prev, AGENT_TOOL_CALLS[toolIndex]]);
+        toolIndex += 1;
+      }
+
+      if (index % 24 === 0 && updateIndex < AGENT_UPDATES.length) {
+        setVisibleUpdates((prev) => [...prev, AGENT_UPDATES[updateIndex]]);
+        updateIndex += 1;
+      }
+
       if (index >= STREAM_REPLY.length) {
+        setVisibleToolCalls(AGENT_TOOL_CALLS);
+        setVisibleUpdates(AGENT_UPDATES);
         setIsStreaming(false);
         window.clearInterval(interval);
       }
@@ -325,7 +372,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [streamedText, isStreaming, activeId]);
+  }, [streamedText, isStreaming, visibleToolCalls.length, visibleUpdates.length, activeId]);
 
   const handleSelect = (id: string) => {
     setActiveId(id);
@@ -440,7 +487,12 @@ export default function ChatPage() {
                         }}
                         showHeader
                       />
-                      <StreamingMessage text={streamedText} active={isStreaming} />
+                      <AgentMessage
+                        text={streamedText}
+                        active={isStreaming}
+                        toolCalls={visibleToolCalls}
+                        updates={visibleUpdates}
+                      />
                     </>
                   ) : (
                     history.map((message, index) => {
