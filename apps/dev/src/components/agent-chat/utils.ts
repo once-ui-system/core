@@ -5,6 +5,9 @@ export function groupToolCalls(calls: ToolCall[]): ToolCallGroup[] {
   const groups: ToolCallGroup[] = [];
 
   for (const call of calls) {
+    // Defensive: skip if call doesn't have a name
+    if (!call || !call.name) continue;
+    
     const last = groups[groups.length - 1];
     if (last && last.name === call.name) {
       last.count += 1;

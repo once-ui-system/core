@@ -10,11 +10,14 @@ type ToolCallGroupProps = {
 };
 
 export function ToolCallGroup({ groups, onSelect }: ToolCallGroupProps) {
-  if (groups.length === 0) return null;
+  if (!groups || groups.length === 0) return null;
 
   return (
     <Row gap="4" wrap>
       {groups.map((group) => {
+        // Defensive: skip if group doesn't have required properties
+        if (!group || !group.name) return null;
+        
         const label = group.count > 1 ? `${group.name} ×${group.count}` : group.name;
 
         return (
