@@ -1,0 +1,90 @@
+{
+  "siteId": "bdbe103d-9204-48bf-a2f1-756deb1c2cc9",
+  "pages": [
+    {
+      "path": "/index.mdx",
+      "title": "Once UI Learn",
+      "summary": "Learn Once UI Core — semantics, layout, styling, and agent-friendly patterns for humans and AI.",
+      "contentId": "db5faad3-0ac5-4903-b6f8-5b19b7b905b6",
+      "file": "index.mdx"
+    },
+    {
+      "path": "/what-is-once-ui.mdx",
+      "title": "What is Once UI?",
+      "summary": "Philosophy and core ideas — semantics over CSS, tokens, and agent-first design.",
+      "contentId": "ccf224ed-bd76-4129-938e-fdff2667d1d5",
+      "file": "start/what-is-once-ui.mdx"
+    },
+    {
+      "path": "/install-and-config.mdx",
+      "title": "Install & config",
+      "summary": "Install @once-ui-system/core and wrap your app in providers.",
+      "contentId": "b863fe6f-a179-4583-ad07-d8f5d91be423",
+      "file": "start/install-and-config.mdx"
+    },
+    {
+      "path": "/your-first-page.mdx",
+      "title": "Your first page",
+      "summary": "Build a complete page with the Once UI skeleton in 10 minutes.",
+      "contentId": "f3555833-facd-4a13-898d-fbcd325146d8",
+      "file": "start/your-first-page.mdx"
+    },
+    {
+      "path": "/semantics-over-css.mdx",
+      "title": "Semantics over CSS",
+      "summary": "Style by meaning with design tokens — not arbitrary CSS values.",
+      "contentId": "59ccd086-a495-4562-8520-740f446d27f4",
+      "file": "foundations/semantics-over-css.mdx"
+    },
+    {
+      "path": "/layout-row-column-grid.mdx",
+      "title": "Row, Column & Grid",
+      "summary": "Layout decision tree — when to use Row, Column, Flex, and Grid.",
+      "contentId": "3158f4fd-ab54-435f-b7db-25fa32dc33c8",
+      "file": "foundations/layout-row-column-grid.mdx"
+    },
+    {
+      "path": "/spacing-and-rhythm.mdx",
+      "title": "Spacing & rhythm",
+      "summary": "Section gaps, inner gaps, and the spacing token scale.",
+      "contentId": "c2237c3f-11cc-4368-a21a-86cffb31b246",
+      "file": "foundations/spacing-and-rhythm.mdx"
+    },
+    {
+      "path": "/color-and-surfaces.mdx",
+      "title": "Color & surfaces",
+      "summary": "Color schemes, the static panel recipe, and when to use Card.",
+      "contentId": "f8360c99-7a72-4de1-8f7a-5a7938f9e22b",
+      "file": "foundations/color-and-surfaces.mdx"
+    },
+    {
+      "path": "/typography-scale.mdx",
+      "title": "Typography scale",
+      "summary": "Display, heading, body, and label variants — and when to use each.",
+      "contentId": "ea6f6b0b-0fc9-4919-8650-52f741071c5f",
+      "file": "foundations/typography-scale.mdx"
+    },
+    {
+      "path": "/page-skeleton.mdx",
+      "title": "Page skeleton",
+      "summary": "The reusable page structure every Once UI page starts from.",
+      "contentId": "be99fb15-a6bd-49af-90e0-eba82860f70c",
+      "file": "patterns/page-skeleton.mdx"
+    },
+    {
+      "path": "/column-not-flex.mdx",
+      "title": "Column, not Flex",
+      "summary": "Use Row and Column for static layouts — Flex only when direction changes.",
+      "contentId": "d0c932a5-f21e-4aee-8c17-7cdd66071a3b",
+      "file": "tips/column-not-flex.mdx"
+    },
+    {
+      "path": "/harness-overview.mdx",
+      "title": "Harness overview",
+      "summary": "Agent codegen workflow — bootstrap, task routing, and validation.",
+      "contentId": "23e701ce-e2bb-4392-97f8-e20c4dd5e9bf",
+      "file": "for-agents/harness-overview.mdx"
+    }
+  ],
+  "deletePageIds": []
+}

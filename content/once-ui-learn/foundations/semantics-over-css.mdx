@@ -1,0 +1,79 @@
+<Feedback title="5 min · Beginner · Foundations" description="Once UI props map to design tokens — not arbitrary CSS. This is what makes code predictable for humans and agents." variant="info" />
+
+## The idea
+
+In Once UI, you style by **meaning**, not by value:
+
+- `gap="16"` — spacing from the token scale
+- `background="surface"` — semantic surface color
+- `onBackground="neutral-weak"` — text color that contrasts with the parent
+
+You almost never write `style={{ ... }}`, class names, or hex colors. The prop *is* the design decision.
+
+## Token scales
+
+**Spacing** — fixed steps, not free-form pixels:
+
+```
+"0" "1" "2" "4" "8" "12" "16" "20" "24" "32" "40" "48" "56" "64" "80" "104" "128" "160"
+```
+
+**Colors** — scheme + weight:
+
+```
+neutral-weak    brand-medium    danger-strong
+neutral-alpha-weak    brand-alpha-medium
+```
+
+Also: `surface`, `overlay`, `page`, `transparent` for backgrounds.
+
+**Typography** — type + weight + size:
+
+```
+display-strong-l    heading-strong-m    body-default-s    label-default-xs
+```
+
+## Props on layout components
+
+Style surfaces directly on `Row`, `Column`, `Grid` — no wrapper needed:
+
+```text
+<Column
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  padding="24"
+  gap="16"
+  textVariant="label-default-s"
+  onBackground="neutral-weak"
+>
+  Panel content without nesting Text for simple labels
+</Column>
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `background="brand-medium"` | `background: "#3b82f6"` |
+| `gap="24"` | `gap: 22` or `gap: "1.5rem"` |
+| `textVariant="display-strong-l"` | `fontSize: 32, fontWeight: 700` |
+| `onBackground="neutral-weak"` | `color: "#666"` |
+
+## Why agents care
+
+The codegen harness (`spec.json`) encodes every valid token. When you use semantic props:
+
+1. Agents can't invent invalid colors or spacing
+2. `validate-ai-code` catches hex/rgb and wrong flex patterns
+3. Refactors are prop renames, not CSS archaeology
+
+## Check yourself
+
+- [ ] No hex, rgb, or hsl in generated code
+- [ ] Spacing values come from the token scale
+- [ ] Text on layout uses `textVariant` + `onBackground` when possible
+
+## Next step
+
+→ [Row, Column & Grid](/layout-row-column-grid.mdx)
