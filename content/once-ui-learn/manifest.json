@@ -72,6 +72,48 @@
       "file": "patterns/page-skeleton.mdx"
     },
     {
+      "path": "/static-panel.mdx",
+      "title": "Static panel",
+      "summary": "The surface recipe for non-interactive panels — stats, settings, feature boxes.",
+      "contentId": "b0ad2cee-989b-4361-9a9d-6b5d8ba4daa6",
+      "file": "patterns/static-panel.mdx"
+    },
+    {
+      "path": "/hero-section.mdx",
+      "title": "Hero section",
+      "summary": "Hero composition — eyebrow, headline, actions, and optional ambient glow.",
+      "contentId": "5643e79e-e159-45c5-aeff-055166d2a3c5",
+      "file": "patterns/hero-section.mdx"
+    },
+    {
+      "path": "/form-layout.mdx",
+      "title": "Form layout",
+      "summary": "Stack fields, group sections, and place actions in Once UI forms.",
+      "contentId": "2f2728ce-1ae7-4328-bcdf-05e04197c019",
+      "file": "patterns/form-layout.mdx"
+    },
+    {
+      "path": "/decoration-layers.mdx",
+      "title": "Decoration layers",
+      "summary": "Absolute Background layers, glow budget, and placement rules.",
+      "contentId": "9dfad041-5ea1-4e6e-8d92-85ec099320c5",
+      "file": "patterns/decoration-layers.mdx"
+    },
+    {
+      "path": "/highlighted-card.mdx",
+      "title": "Highlighted card",
+      "summary": "Interactive Card with brand glow for featured pricing tiers and CTAs.",
+      "contentId": "9db8372e-25c0-4fa7-bb3a-aec8cd7a4635",
+      "file": "patterns/highlighted-card.mdx"
+    },
+    {
+      "path": "/responsive-stacking.mdx",
+      "title": "Responsive stacking",
+      "summary": "Breakpoint props for mobile stacking — no media queries needed.",
+      "contentId": "182724a1-eb85-4ab5-8ae8-006f9ea77a0a",
+      "file": "patterns/responsive-stacking.mdx"
+    },
+    {
       "path": "/column-not-flex.mdx",
       "title": "Column, not Flex",
       "summary": "Use Row and Column for static layouts — Flex only when direction changes.",

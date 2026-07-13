@@ -23,17 +23,15 @@ DOPLER_API_TOKEN=av_live_... node content/once-ui-learn/upload.mjs
 
 Uploads draft MDX to the Once UI Learn site. Review and publish in the Aveiro editor.
 
-## Pages (Phase 1)
+## Pages (Phase 1 + 2)
 
-1. Once UI Learn (home)
-2. What is Once UI?
-3. Install & config
-4. Your first page
-5. Semantics over CSS
-6. Row, Column & Grid
-7. Spacing & rhythm
-8. Color & surfaces
-9. Typography scale
-10. Page skeleton
-11. Column, not Flex
-12. Harness overview
+**Start & foundations** (12 pages) — orientation, layout, spacing, color, typography, tips, agents.
+
+**Common patterns** (6 pages):
+
+1. Static panel
+2. Hero section
+3. Form layout
+4. Decoration layers
+5. Highlighted card
+6. Responsive stacking
