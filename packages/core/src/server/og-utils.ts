@@ -1,4 +1,10 @@
 import { NextResponse } from 'next/server';
+import {
+  fetchValidatedUrl,
+  OGUrlValidationError,
+  type OGUrlValidationOptions,
+  validateOgUrl,
+} from './og-url-validation';
 
 export interface OGData {
   url: string;
@@ -8,7 +14,7 @@ export interface OGData {
   faviconUrl?: string;
 }
 
-export interface OGFetchOptions {
+export interface OGFetchOptions extends OGUrlValidationOptions {
   timeout?: number;
   userAgent?: string;
   decodeEntities?: boolean;
@@ -39,17 +45,26 @@ function decodeHTMLEntities(text: string): string {
   });
 }
 
-async function fetchWithTimeout(url: string, timeout = 5000, userAgent = 'Mozilla/5.0 (compatible; OG-Fetcher/1.0)') {
+async function fetchWithTimeout(
+  url: string,
+  timeout = 5000,
+  userAgent = 'Mozilla/5.0 (compatible; OG-Fetcher/1.0)',
+  validationOptions: OGUrlValidationOptions = {},
+) {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   try {
-    const response = await fetch(url, { 
-      signal: controller.signal,
-      headers: {
-        'User-Agent': userAgent
-      }
-    });
+    const response = await fetchValidatedUrl(
+      url,
+      {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': userAgent,
+        },
+      },
+      validationOptions,
+    );
     clearTimeout(timeoutId);
     return response;
   } catch (error) {
@@ -58,8 +73,17 @@ async function fetchWithTimeout(url: string, timeout = 5000, userAgent = 'Mozill
   }
 }
 
+function validationErrorResponse(): NextResponse {
+  return NextResponse.json({ error: 'URL is not allowed' }, { status: 400 });
+}
+
 export async function handleOGFetch(request: Request, options: OGFetchOptions = {}): Promise<NextResponse> {
-  const { timeout = 5000, userAgent = 'Mozilla/5.0 (compatible; OG-Fetcher/1.0)', decodeEntities = true } = options;
+  const {
+    timeout = 5000,
+    userAgent = 'Mozilla/5.0 (compatible; OG-Fetcher/1.0)',
+    decodeEntities = true,
+    allowedDomains,
+  } = options;
   const { searchParams } = new URL(request.url);
   const url = searchParams.get('url');
 
@@ -67,11 +91,22 @@ export async function handleOGFetch(request: Request, options: OGFetchOptions = 
     return NextResponse.json({ error: 'URL parameter is required' }, { status: 400 });
   }
 
+  const validationOptions = { allowedDomains };
+
   try {
-    const response = await fetchWithTimeout(url, timeout, userAgent);
+    await validateOgUrl(url, validationOptions);
+  } catch (error) {
+    if (error instanceof OGUrlValidationError) {
+      return validationErrorResponse();
+    }
+    return validationErrorResponse();
+  }
+
+  try {
+    const response = await fetchWithTimeout(url, timeout, userAgent, validationOptions);
 
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(`HTTP ${response.status}`);
     }
 
     const html = await response.text();
@@ -120,19 +155,23 @@ export async function handleOGFetch(request: Request, options: OGFetchOptions = 
   } catch (error) {
     console.error('Error fetching OG data:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch Open Graph data', message: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Failed to fetch Open Graph data' },
       { status: 500 }
     );
   }
 }
 
-export interface OGProxyOptions {
+export interface OGProxyOptions extends OGUrlValidationOptions {
   userAgent?: string;
   cacheMaxAge?: number;
 }
 
 export async function handleOGProxy(request: Request, options: OGProxyOptions = {}): Promise<NextResponse> {
-  const { userAgent = 'Mozilla/5.0 (compatible; OG-Proxy/1.0)', cacheMaxAge = 3600 } = options;
+  const {
+    userAgent = 'Mozilla/5.0 (compatible; OG-Proxy/1.0)',
+    cacheMaxAge = 3600,
+    allowedDomains,
+  } = options;
   const { searchParams } = new URL(request.url);
   const url = searchParams.get('url');
 
@@ -140,17 +179,32 @@ export async function handleOGProxy(request: Request, options: OGProxyOptions = 
     return NextResponse.json({ error: 'URL parameter is required' }, { status: 400 });
   }
 
+  const validationOptions = { allowedDomains };
+
   try {
-    const response = await fetch(url, {
-      headers: {
-        'User-Agent': userAgent,
+    await validateOgUrl(url, validationOptions);
+  } catch (error) {
+    if (error instanceof OGUrlValidationError) {
+      return validationErrorResponse();
+    }
+    return validationErrorResponse();
+  }
+
+  try {
+    const response = await fetchValidatedUrl(
+      url,
+      {
+        headers: {
+          'User-Agent': userAgent,
+        },
       },
-    });
+      validationOptions,
+    );
 
     if (!response.ok) {
       return NextResponse.json(
-        { error: `Failed to fetch image: ${response.status}` },
-        { status: response.status }
+        { error: 'Failed to fetch image' },
+        { status: response.status >= 400 && response.status < 600 ? response.status : 502 }
       );
     }
 
@@ -166,8 +220,11 @@ export async function handleOGProxy(request: Request, options: OGProxyOptions = 
   } catch (error) {
     console.error('Error proxying image:', error);
     return NextResponse.json(
-      { error: 'Failed to proxy image', message: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Failed to proxy image' },
       { status: 500 }
     );
   }
 }
+
+export { OGUrlValidationError, validateOgUrl } from './og-url-validation';
+export type { OGUrlValidationOptions } from './og-url-validation';
