@@ -1,0 +1,98 @@
+<Feedback title="5 min · Pattern" description="Once UI handles responsive layout through breakpoint props on components — not CSS media queries." variant="info" />
+
+## Breakpoint keys
+
+Override layout at breakpoints using props on the same component:
+
+| Key | Typical viewport |
+|-----|------------------|
+| `xl` | Largest |
+| `l` | Desktop |
+| `m` | Tablet |
+| `s` | Mobile landscape |
+| `xs` | Mobile portrait |
+
+Larger breakpoint styles cascade down. Set the desktop layout as defaults, then override at `s` or `m`.
+
+## Stack on mobile
+
+The most common pattern — horizontal row that becomes vertical:
+
+```text
+<Row gap="24" s={{ direction: "column" }}>
+  <Column fill>Left content</Column>
+  <Column fill>Right content</Column>
+</Row>
+```
+
+Desktop: side by side. Mobile (`s`): stacked.
+
+## Responsive grid
+
+Reduce columns as viewport shrinks:
+
+```text
+<Grid columns="3" gap="24" m={{ columns: "2" }} s={{ columns: "1" }}>
+  <Column>...</Column>
+  <Column>...</Column>
+  <Column>...</Column>
+</Grid>
+```
+
+## Responsive spacing
+
+Tighten gaps on smaller screens:
+
+```text
+<Column gap="32" s={{ gap: "16" }}>
+  ...
+</Column>
+```
+
+## Responsive buttons
+
+Stack CTA buttons on mobile:
+
+```text
+<Row gap="16" horizontal="center" s={{ direction: "column" }}>
+  <Button href="/start">Get started</Button>
+  <Button variant="secondary" href="/docs">Learn more</Button>
+</Row>
+```
+
+## When layout needs a direction flip only
+
+If the only responsive change is direction, use `Row` with breakpoint override — no need for a separate layout component:
+
+```text
+<Row gap="16" vertical="center" s={{ direction: "column", horizontal: "start" }}>
+  <Icon name="check" />
+  <Text variant="body-default-s">Feature description</Text>
+</Row>
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `s={{ direction: "column" }}` | CSS `@media` queries |
+| `s={{ columns: "1" }}` on Grid | Separate mobile component |
+| `s={{ gap: "16" }}` | Inline `style` overrides |
+| Desktop layout as default props | Mobile-first with `xs` only |
+
+## Server vs client
+
+Breakpoint props require client-side class resolution. Once UI's `Row`, `Column`, and `Grid` handle this automatically — they switch to client rendering when breakpoint props are present.
+
+## Check yourself
+
+- [ ] No CSS media queries for layout
+- [ ] Desktop layout set as default props
+- [ ] Mobile overrides use `s` or `m` keys
+- [ ] Buttons and panels stack with `s={{ direction: "column" }}`
+
+## Related
+
+→ [Row, Column & Grid](/layout-row-column-grid.mdx)
+→ [Hero section](/hero-section.mdx)
+→ [Page skeleton](/page-skeleton.mdx)

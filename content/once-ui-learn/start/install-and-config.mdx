@@ -1,0 +1,49 @@
+<Feedback title="5 min · Beginner · Start" description="Install @once-ui-system/core, wrap your app in providers, and you're ready to build." variant="info" />
+
+## Install
+
+```bash
+npm install @once-ui-system/core
+```
+
+Once UI targets **Next.js App Router** (React 18+). The package includes components, SCSS tokens, contexts, and the AI harness under `@once-ui-system/core/ai/`.
+
+## Minimal setup
+
+Wrap your root layout with the theme and layout providers from the package:
+
+1. Import `@once-ui-system/core/styles` once in your root layout
+2. Wrap children with `ThemeProvider` and `LayoutProvider` from `@once-ui-system/core`
+
+Full setup code and provider options are in the [config guide](https://docs.once-ui.com/once-ui/config).
+
+## Config (optional)
+
+Most projects work with defaults. When you need customization:
+
+- **Theme** — color scheme, accent, border style, surface fill via provider props or data attributes on the html element
+- **Layout** — max content widths, breakpoint values via the layout provider
+
+## Dev workflow
+
+To iterate on the library while building an app:
+
+```bash
+# Terminal 1 — watch the core package
+pnpm --filter @once-ui-system/core dev
+
+# Terminal 2 — run your app
+cd apps/dev && pnpm dev
+```
+
+The `apps/dev` sandbox in the monorepo is a live component playground — useful for seeing variants before you write docs or lessons.
+
+## Check yourself
+
+- [ ] Global styles imported in root layout
+- [ ] Theme and layout providers wrapping children
+- [ ] No Tailwind or global CSS fighting Once UI tokens
+
+## Next step
+
+→ [Your first page](/your-first-page.mdx)
