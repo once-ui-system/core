@@ -131,24 +131,28 @@
       "path": "/common-patterns/dialog-modal.mdx",
       "title": "Dialog & modal",
       "summary": "Controlled dialogs with title, footer actions, and stacked multi-step flows.",
+      "contentId": "5b876cb5-69af-4921-a9b5-ba8c4fe0f088",
       "file": "patterns/dialog-modal.mdx"
     },
     {
       "path": "/common-patterns/toast-and-feedback.mdx",
       "title": "Toast & feedback",
       "summary": "Global toast notifications via ToastProvider and useToast — plus when to use inline Feedback.",
+      "contentId": "fe3a2420-45e0-44f3-969c-265eaa65e4f9",
       "file": "patterns/toast-and-feedback.mdx"
     },
     {
       "path": "/design-tips/icons-and-buttons.mdx",
       "title": "Icons & buttons",
       "summary": "Valid icon names, prefixIcon patterns, semantic colors, and button variants.",
+      "contentId": "e16f8c7c-491b-45c7-80b4-f05f6f7edec8",
       "file": "foundations/icons-and-buttons.mdx"
     },
     {
       "path": "/agent-resources/common-gotchas.mdx",
       "title": "Common gotchas",
       "summary": "Codegen mistakes from gotchas.json — layout, surfaces, motion, and component traps.",
+      "contentId": "06eaaa39-11ed-4d18-af0b-a0a71352948b",
       "file": "for-agents/common-gotchas.mdx"
     }
   ],

@@ -2,25 +2,16 @@
 
 ## Setup (once per app)
 
-Add `ToastProvider` inside your providers stack, alongside `ThemeProvider`:
+Add the toast provider inside your app providers stack — the same place you configure theme and icons. See the [ToastProvider guide](https://docs.once-ui.com/once-ui/contexts/toastProvider) for the full provider tree.
 
-```text
-<ThemeProvider>
-  <DataThemeProvider>
-    <ToastProvider s="top">
-      <IconProvider>
-        {children}
-      </IconProvider>
-    </ToastProvider>
-  </DataThemeProvider>
-</ThemeProvider>
-```
+At minimum you need:
 
-The `s="top"` prop places toasts at the top on small screens. Omit it for bottom placement everywhere.
+1. A `ToastProvider` wrapper at the app root (inside theme providers)
+2. Optional `s="top"` to place toasts at the top on small screens
 
 ## Trigger a toast
 
-From any client component:
+From any client component, import and call the toast hook:
 
 ```text
 import { useToast } from "@once-ui-system/core";
@@ -91,14 +82,14 @@ Keep actions short — one verb, `size="s"`.
 
 | ✅ Once UI way | ❌ Common mistake |
 |----------------|-------------------|
-| `ToastProvider` at app root | Mounting a new provider per page |
+| Toast provider at app root | Mounting a new provider per page |
 | `useToast()` hook | Custom fixed-position divs |
 | Semantic `variant` | Hard-coded green/red hex colors |
 | Short `message` string | Paragraph-length toast text |
 
 ## Check yourself
 
-- [ ] `ToastProvider` wraps the app (not individual routes)
+- [ ] Toast provider wraps the app (not individual routes)
 - [ ] Success and error paths both show feedback
 - [ ] Messages are one line — details belong in a Dialog or inline Feedback
 
