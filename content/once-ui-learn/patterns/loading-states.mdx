@@ -1,0 +1,100 @@
+<Feedback title="4 min · Pattern" description="Skeleton placeholders preserve layout while data loads. Spinners signal in-flight actions. Use both — skeletons for content areas, spinners for buttons and inline fetches." variant="info" />
+
+## Skeleton vs spinner
+
+| State | Component | Example |
+|-------|-----------|---------|
+| Page section loading | `Skeleton` | Dashboard cards, table rows, profile header |
+| Button action in progress | `Spinner` inside `Button` | Save, submit, delete |
+| Full-page blocking load | Centered `Spinner` in `Column` | Initial route fetch |
+| Background refresh | None — keep stale content visible | Settings panel re-fetch |
+
+Skeletons **hold space** so the layout does not jump when real content arrives. Spinners **signal activity** on an element the user just interacted with.
+
+## Skeleton shapes
+
+`Skeleton` has three shapes:
+
+| Shape | Use for |
+|-------|---------|
+| `line` (default) | Text lines, table rows |
+| `circle` | Avatars, icon placeholders |
+| `block` | Images, chart areas, media cards |
+
+```text
+<Column gap="12" fillWidth>
+  <Skeleton shape="circle" width="l" height="l" />
+  <Skeleton shape="line" width="xl" />
+  <Skeleton shape="line" width="m" />
+  <Skeleton shape="block" width="fill" height="l" />
+</Column>
+```
+
+`width` and `height` use t-shirt sizes (`xs` through `xl`), not pixel values.
+
+## Stagger with delay
+
+Offset skeleton shimmer with the `delay` prop (`"1"` through `"6"`) when rendering a list of placeholders:
+
+```text
+{Array.from({ length: 4 }).map((_, index) => (
+  <Row key={index} gap="12" vertical="center" fillWidth>
+    <Skeleton shape="circle" width="m" height="m" delay={String(index + 1)} />
+    <Column gap="8" fillWidth>
+      <Skeleton shape="line" width="l" delay={String(index + 1)} />
+      <Skeleton shape="line" width="s" delay={String(index + 1)} />
+    </Column>
+  </Row>
+))}
+```
+
+Match the skeleton layout to the real content it replaces — same gaps, same approximate widths.
+
+## Table skeleton
+
+Mirror your table structure with skeleton rows inside the same static panel:
+
+```text
+<Column fillWidth padding="24" gap="16" background="surface" border="neutral-alpha-weak" radius="l">
+  <Skeleton shape="line" width="m" />
+  {Array.from({ length: 5 }).map((_, i) => (
+    <Skeleton key={i} shape="line" width="fill" height="s" delay={String((i % 6) + 1)} />
+  ))}
+</Column>
+```
+
+Swap the skeleton block for `<Table ... />` once `rows` are ready.
+
+## Button spinner
+
+Pass `loading` to `Button` — it swaps label for a spinner automatically:
+
+```text
+<Button loading={isSaving} onClick={handleSave}>
+  Save changes
+</Button>
+```
+
+Do not nest a manual `Spinner` inside a `Button` unless you need a custom layout.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Skeleton matching final layout | Generic gray `div` with inline styles |
+| `Button loading={true}` | Disabled button with no feedback |
+| Keep stale content during refresh | Full-page spinner on every re-fetch |
+| `delay` stagger on lists | All skeletons animating in sync |
+
+## Check yourself
+
+- [ ] Skeleton shape matches what it replaces (circle for avatar, block for image)
+- [ ] Layout gaps are identical between skeleton and loaded state
+- [ ] Buttons use `loading` prop, not a separate overlay
+- [ ] Empty state shown after load completes with zero results
+
+## Related
+
+→ [Tables & lists](/common-patterns/tables-and-lists.mdx)
+→ [Toast & feedback](/common-patterns/toast-and-feedback.mdx)
+→ Full reference: [docs.once-ui.com — Skeleton](https://docs.once-ui.com/once-ui/components/skeleton)

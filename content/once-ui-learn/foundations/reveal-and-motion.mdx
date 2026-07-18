@@ -1,0 +1,106 @@
+<Feedback title="5 min · Foundations" description="RevealFx handles entry animation. Continuous effects like BlobFx and MatrixFx are decoration — budget them strictly so pages stay premium, not noisy." variant="info" />
+
+## Two kinds of motion
+
+| Type | Components | Budget |
+|------|------------|--------|
+| **Entry** (plays once) | `RevealFx`, `CountFx` | One staggered set per page |
+| **Ambient** (loops) | `BlobFx`, `MatrixFx`, `Pulse` | At most two places, never adjacent |
+
+Entry motion draws attention to content arriving. Ambient motion sets mood in hero or CTA sections. Mixing both everywhere dilutes the effect.
+
+Source: [recipes.md](https://docs.once-ui.com/ai/recipes.md) decoration budget rules.
+
+## RevealFx basics
+
+Wrap content you want to fade/slide in. Control playback with the `trigger` prop:
+
+```text
+const ref = useRef(null);
+const inViewport = useInViewport(ref);
+const [seen, setSeen] = useState(false);
+
+useEffect(() => {
+  if (inViewport) setSeen(true);
+}, [inViewport]);
+
+<Column ref={ref} gap="16" fillWidth>
+  <RevealFx trigger={seen} translateY="8">
+    <Heading variant="display-strong-s">Welcome back</Heading>
+  </RevealFx>
+</Column>
+```
+
+Latch `seen` so the animation plays once when the element enters the viewport — not on every scroll pass.
+
+## Stagger a grid
+
+Delay each child by index. **Delay is in seconds**, not milliseconds:
+
+```text
+<Grid ref={ref} columns="3" gap="16" s={{ columns: 1 }}>
+  {items.map((item, index) => (
+    <RevealFx
+      key={item.id}
+      trigger={seen}
+      translateY="8"
+      delay={index * 0.1}
+    >
+      <Card href={item.href} fillWidth padding="24">
+        <Text variant="heading-strong-s">{item.title}</Text>
+      </Card>
+    </RevealFx>
+  ))}
+</Grid>
+```
+
+`translateY` accepts a spacing token string (`"8"`, `"16"`) or a rem number (`1` = 1rem). Bare `16` means 16rem — a common codegen mistake.
+
+## Pair with CountFx
+
+Drive stat numbers from the same viewport latch:
+
+```text
+<RevealFx trigger={seen} translateY="8">
+  <Column gap="4">
+  <CountFx value={seen ? 2400 : 0} separator="," />
+  <Text variant="label-default-s" onBackground="neutral-weak">Active users</Text>
+  </Column>
+</RevealFx>
+```
+
+`CountFx` has no `trigger` prop — animate by changing `value`.
+
+## Ambient decoration budget
+
+Hard limits from the Core recipes:
+
+- **One ambient background layer per section** — hero, highlighted card, or final CTA only
+- **Continuous motion in at most two places** per page, never side by side
+- **One accent family** — decorations use `brand-*` or `neutral-*`, not mixed schemes
+- Every decorative layer: `position="absolute" top="0" left="0" fill pointerEvents="none"`, content at `zIndex={1}`
+
+See [Decoration layers](/common-patterns/decoration-layers.mdx) for placement recipes.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `delay={index * 0.1}` (seconds) | `delay={index * 80}` (ms — animates for minutes) |
+| `translateY="8"` or `translateY={1}` | `translateY={16}` (16rem jump) |
+| Viewport latch with `useInViewport` | `trigger={true}` on page load for below-fold content |
+| Stagger all siblings or none | Only the highlighted card animates |
+| `CountFx value={seen ? n : 0}` | `CountFx trigger={seen}` |
+
+## Check yourself
+
+- [ ] Only one staggered RevealFx group on the page
+- [ ] Delays use fractional seconds (0.1, 0.2, …)
+- [ ] Ambient Fx limited to hero / CTA anchors
+- [ ] Decorative layers have `top="0" left="0"` inside padded parents
+
+## Related
+
+→ [Decoration layers](/common-patterns/decoration-layers.mdx)
+→ [Common gotchas](/agent-resources/common-gotchas.mdx) — motion section
+→ Source: [recipes.md](https://docs.once-ui.com/ai/recipes.md)

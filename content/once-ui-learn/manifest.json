@@ -1,0 +1,184 @@
+{
+  "siteId": "bdbe103d-9204-48bf-a2f1-756deb1c2cc9",
+  "pages": [
+    {
+      "path": "/index.mdx",
+      "title": "Once UI Learn",
+      "summary": "Learn Once UI Core — semantics, layout, styling, and agent-friendly patterns for humans and AI.",
+      "contentId": "db5faad3-0ac5-4903-b6f8-5b19b7b905b6",
+      "file": "index.mdx"
+    },
+    {
+      "path": "/what-is-once-ui.mdx",
+      "title": "What is Once UI?",
+      "summary": "Philosophy and core ideas — semantics over CSS, tokens, and agent-first design.",
+      "contentId": "ccf224ed-bd76-4129-938e-fdff2667d1d5",
+      "file": "start/what-is-once-ui.mdx"
+    },
+    {
+      "path": "/install-and-config.mdx",
+      "title": "Install & config",
+      "summary": "Install @once-ui-system/core and wrap your app in providers.",
+      "contentId": "b863fe6f-a179-4583-ad07-d8f5d91be423",
+      "file": "start/install-and-config.mdx"
+    },
+    {
+      "path": "/your-first-page.mdx",
+      "title": "Your first page",
+      "summary": "Build a complete page with the Once UI skeleton in 10 minutes.",
+      "contentId": "f3555833-facd-4a13-898d-fbcd325146d8",
+      "file": "start/your-first-page.mdx"
+    },
+    {
+      "path": "/semantics-over-css.mdx",
+      "title": "Semantics over CSS",
+      "summary": "Style by meaning with design tokens — not arbitrary CSS values.",
+      "contentId": "59ccd086-a495-4562-8520-740f446d27f4",
+      "file": "foundations/semantics-over-css.mdx"
+    },
+    {
+      "path": "/layout-row-column-grid.mdx",
+      "title": "Row, Column & Grid",
+      "summary": "Layout decision tree — when to use Row, Column, Flex, and Grid.",
+      "contentId": "3158f4fd-ab54-435f-b7db-25fa32dc33c8",
+      "file": "foundations/layout-row-column-grid.mdx"
+    },
+    {
+      "path": "/spacing-and-rhythm.mdx",
+      "title": "Spacing & rhythm",
+      "summary": "Section gaps, inner gaps, and the spacing token scale.",
+      "contentId": "c2237c3f-11cc-4368-a21a-86cffb31b246",
+      "file": "foundations/spacing-and-rhythm.mdx"
+    },
+    {
+      "path": "/color-and-surfaces.mdx",
+      "title": "Color & surfaces",
+      "summary": "Color schemes, the static panel recipe, and when to use Card.",
+      "contentId": "f8360c99-7a72-4de1-8f7a-5a7938f9e22b",
+      "file": "foundations/color-and-surfaces.mdx"
+    },
+    {
+      "path": "/typography-scale.mdx",
+      "title": "Typography scale",
+      "summary": "Display, heading, body, and label variants — and when to use each.",
+      "contentId": "ea6f6b0b-0fc9-4919-8650-52f741071c5f",
+      "file": "foundations/typography-scale.mdx"
+    },
+    {
+      "path": "/page-skeleton.mdx",
+      "title": "Page skeleton",
+      "summary": "The reusable page structure every Once UI page starts from.",
+      "contentId": "be99fb15-a6bd-49af-90e0-eba82860f70c",
+      "file": "patterns/page-skeleton.mdx"
+    },
+    {
+      "path": "/static-panel.mdx",
+      "title": "Static panel",
+      "summary": "The surface recipe for non-interactive panels — stats, settings, feature boxes.",
+      "contentId": "b0ad2cee-989b-4361-9a9d-6b5d8ba4daa6",
+      "file": "patterns/static-panel.mdx"
+    },
+    {
+      "path": "/hero-section.mdx",
+      "title": "Hero section",
+      "summary": "Hero composition — eyebrow, headline, actions, and optional ambient glow.",
+      "contentId": "5643e79e-e159-45c5-aeff-055166d2a3c5",
+      "file": "patterns/hero-section.mdx"
+    },
+    {
+      "path": "/form-layout.mdx",
+      "title": "Form layout",
+      "summary": "Stack fields, group sections, and place actions in Once UI forms.",
+      "contentId": "2f2728ce-1ae7-4328-bcdf-05e04197c019",
+      "file": "patterns/form-layout.mdx"
+    },
+    {
+      "path": "/decoration-layers.mdx",
+      "title": "Decoration layers",
+      "summary": "Absolute Background layers, glow budget, and placement rules.",
+      "contentId": "9dfad041-5ea1-4e6e-8d92-85ec099320c5",
+      "file": "patterns/decoration-layers.mdx"
+    },
+    {
+      "path": "/highlighted-card.mdx",
+      "title": "Highlighted card",
+      "summary": "Interactive Card with brand glow for featured pricing tiers and CTAs.",
+      "contentId": "9db8372e-25c0-4fa7-bb3a-aec8cd7a4635",
+      "file": "patterns/highlighted-card.mdx"
+    },
+    {
+      "path": "/responsive-stacking.mdx",
+      "title": "Responsive stacking",
+      "summary": "Breakpoint props for mobile stacking — no media queries needed.",
+      "contentId": "182724a1-eb85-4ab5-8ae8-006f9ea77a0a",
+      "file": "patterns/responsive-stacking.mdx"
+    },
+    {
+      "path": "/column-not-flex.mdx",
+      "title": "Column, not Flex",
+      "summary": "Use Row and Column for static layouts — Flex only when direction changes.",
+      "contentId": "d0c932a5-f21e-4aee-8c17-7cdd66071a3b",
+      "file": "tips/column-not-flex.mdx"
+    },
+    {
+      "path": "/harness-overview.mdx",
+      "title": "Harness overview",
+      "summary": "Agent codegen workflow — bootstrap, task routing, and validation.",
+      "contentId": "23e701ce-e2bb-4392-97f8-e20c4dd5e9bf",
+      "file": "for-agents/harness-overview.mdx"
+    },
+    {
+      "path": "/common-patterns/dialog-modal.mdx",
+      "title": "Dialog & modal",
+      "summary": "Controlled dialogs with title, footer actions, and stacked multi-step flows.",
+      "contentId": "5b876cb5-69af-4921-a9b5-ba8c4fe0f088",
+      "file": "patterns/dialog-modal.mdx"
+    },
+    {
+      "path": "/common-patterns/toast-and-feedback.mdx",
+      "title": "Toast & feedback",
+      "summary": "Global toast notifications via ToastProvider and useToast — plus when to use inline Feedback.",
+      "contentId": "fe3a2420-45e0-44f3-969c-265eaa65e4f9",
+      "file": "patterns/toast-and-feedback.mdx"
+    },
+    {
+      "path": "/design-tips/icons-and-buttons.mdx",
+      "title": "Icons & buttons",
+      "summary": "Valid icon names, prefixIcon patterns, semantic colors, and button variants.",
+      "contentId": "e16f8c7c-491b-45c7-80b4-f05f6f7edec8",
+      "file": "foundations/icons-and-buttons.mdx"
+    },
+    {
+      "path": "/agent-resources/common-gotchas.mdx",
+      "title": "Common gotchas",
+      "summary": "Codegen mistakes from gotchas.json — layout, surfaces, motion, and component traps.",
+      "contentId": "06eaaa39-11ed-4d18-af0b-a0a71352948b",
+      "file": "for-agents/common-gotchas.mdx"
+    },
+    {
+      "path": "/common-patterns/tables-and-lists.mdx",
+      "title": "Tables & lists",
+      "summary": "Structured data with Table, simpler stacks with List — plus empty and loading states.",
+      "file": "patterns/tables-and-lists.mdx"
+    },
+    {
+      "path": "/common-patterns/loading-states.mdx",
+      "title": "Loading states",
+      "summary": "Skeleton placeholders for content areas, spinners for actions — keep layout stable while data loads.",
+      "file": "patterns/loading-states.mdx"
+    },
+    {
+      "path": "/design-tips/reveal-and-motion.mdx",
+      "title": "Reveal & motion",
+      "summary": "RevealFx entry animation, CountFx pairing, and the ambient decoration budget.",
+      "file": "foundations/reveal-and-motion.mdx"
+    },
+    {
+      "path": "/agent-resources/validate-generated-code.mdx",
+      "title": "Validate generated code",
+      "summary": "Run pnpm validate-ai-code after codegen — what it catches and how to pair with gotchas.json.",
+      "file": "for-agents/validate-generated-code.mdx"
+    }
+  ],
+  "deletePageIds": []
+}

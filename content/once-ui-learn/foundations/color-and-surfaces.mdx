@@ -1,0 +1,90 @@
+<Feedback title="6 min · Beginner · Foundations" description="Static panels use Column + surface props. Card is for interactive surfaces only." variant="info" />
+
+## Color schemes
+
+Colors follow `{scheme}-{weight}` or `{scheme}-alpha-{weight}`:
+
+| Scheme | Use for |
+|--------|---------|
+| `neutral` | Text, borders, subtle backgrounds |
+| `brand` | Primary accent, CTAs, highlights |
+| `accent` | Secondary accent (sparingly) |
+| `danger` / `warning` / `success` / `info` | Status and feedback |
+
+Weights: `weak`, `medium`, `strong`. Alpha variants (`brand-alpha-medium`) are for overlays and glows.
+
+Background shortcuts: `surface`, `overlay`, `page`, `transparent`.
+
+## The static panel recipe
+
+For pricing tiers, stats, settings sections — anything **not clickable**:
+
+```text
+<Column
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  padding="24"
+  gap="16"
+  fill
+>
+  <Heading variant="heading-strong-m">Panel title</Heading>
+  <Text variant="body-default-s" onBackground="neutral-weak">
+    Panel body
+  </Text>
+</Column>
+```
+
+This is the workhorse pattern. Memorize it.
+
+## Card is interactive only
+
+`Card` is for surfaces with `href` or `onClick` — clickable tiles, links, selectable items.
+
+| Surface type | Component |
+|--------------|-----------|
+| Static panel | `Column` + surface recipe |
+| Clickable tile | `Card href="..."` or `Card onClick` |
+| Button action | `Button` |
+
+Using `Card` for a non-interactive box is one of the most common Once UI mistakes.
+
+## Text on colored backgrounds
+
+Use `onBackground` to set text color relative to the parent:
+
+```text
+<Column background="brand-medium" padding="24" radius="l">
+  <Text variant="body-default-m" onBackground="brand-weak">
+    Light text on brand background
+  </Text>
+</Column>
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `background="surface"` | `background: "#f5f5f5"` |
+| `border="neutral-alpha-weak"` | `border: 1px solid #e5e5e5` |
+| `Column` + surface props | `<Card>` for static content |
+| `onBackground="neutral-weak"` | Hardcoded text color |
+
+## Decoration colors
+
+For glows and gradients, prefer alpha tokens:
+
+- `brand-alpha-medium` — glows, ambient layers
+- `neutral-alpha-weak` — dot textures, subtle overlays
+
+Never mix multiple accent families in decoration on one page.
+
+## Check yourself
+
+- [ ] Static panels use the surface recipe on `Column`
+- [ ] `Card` only appears with `href` or `onClick`
+- [ ] No hex/rgb colors anywhere
+
+## Next step
+
+→ [Typography scale](/typography-scale.mdx)

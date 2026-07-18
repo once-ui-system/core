@@ -1,0 +1,131 @@
+<Feedback title="5 min · Pattern" description="Tables show structured data with sortable headers. Lists handle simpler stacks of rows, avatars, or actions. Pick the right primitive before you reach for a custom grid." variant="info" />
+
+## When to use what
+
+| Need | Component |
+|------|-----------|
+| Column headers, sortable data, row click | `Table` |
+| Simple stacked rows with icons or avatars | `List` + `ListItem` |
+| Card-style repeating content | `Grid` of static panels or `Card` |
+| Key-value settings rows | `Column` surface recipe with `Row` dividers |
+
+Dashboard task bundles reference `Table` for recent-activity panels — see [tasks/dashboard.json](https://docs.once-ui.com/ai/tasks/dashboard.json).
+
+## Basic table
+
+`Table` takes a `data` object with `headers` and `rows`. Header cells are React nodes; rows are arrays of cell content:
+
+```text
+const headers = [
+  { key: "name", content: "Project", sortable: true },
+  { key: "status", content: "Status" },
+  { key: "updated", content: "Updated", sortable: true },
+];
+
+const rows = [
+  [
+    <Text variant="body-default-s">Marketing site</Text>,
+    <Tag label="Active" variant="success" />,
+    <Text variant="body-default-xs" onBackground="neutral-weak">2h ago</Text>,
+  ],
+  [
+    <Text variant="body-default-s">API docs</Text>,
+    <Tag label="Draft" variant="warning" />,
+    <Text variant="body-default-xs" onBackground="neutral-weak">Yesterday</Text>,
+  ],
+];
+
+<Table fillWidth data={{ headers, rows }} />
+```
+
+Wrap the table in a static panel when it sits inside a dashboard card:
+
+```text
+<Column
+  fillWidth
+  padding="24"
+  gap="16"
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+>
+  <Row horizontal="between" vertical="center" fillWidth>
+    <Heading variant="heading-strong-s">Recent activity</Heading>
+    <Button size="s" variant="secondary">View all</Button>
+  </Row>
+  <Table fillWidth data={{ headers, rows }} onRowClick={(i) => openRow(i)} />
+</Column>
+```
+
+## Sortable headers
+
+Set `sortable: true` on a header definition. Once UI renders the sort affordance — wire your own sort logic in the parent and pass reordered `rows`.
+
+Keep sort state outside the table. The component displays data; it does not own server pagination or filtering.
+
+## Lists for simpler stacks
+
+When you do not need column alignment, use `List` and `ListItem`:
+
+```text
+<List gap="8" fillWidth>
+  {members.map((member) => (
+    <ListItem
+      key={member.id}
+      prefix={<Avatar src={member.avatar} size="s" />}
+      suffix={<IconButton icon="chevronRight" variant="ghost" size="s" />}
+      onClick={() => openMember(member.id)}
+    >
+      <Column gap="2">
+        <Text variant="body-default-s">{member.name}</Text>
+        <Text variant="body-default-xs" onBackground="neutral-weak">
+          {member.role}
+        </Text>
+      </Column>
+    </ListItem>
+  ))}
+</List>
+```
+
+`ListItem` is interactive when you pass `onClick` or `href` — same rule as `Card`.
+
+## Empty and loading states
+
+Pair tables with skeleton placeholders while data loads. See [Loading states](/common-patterns/loading-states.mdx).
+
+For zero rows, show a short message inside the panel instead of an empty table:
+
+```text
+{rows.length === 0 ? (
+  <Column center gap="8" paddingY="32">
+    <Text variant="body-default-s" onBackground="neutral-weak">
+      No projects yet
+    </Text>
+    <Button size="s">Create project</Button>
+  </Column>
+) : (
+  <Table fillWidth data={{ headers, rows }} />
+)}
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `Table` with `data.headers` + `data.rows` | Hand-built `Grid` pretending to be a table |
+| `Tag` / `StatusIndicator` in status cells | Raw colored `<span>` elements |
+| Static panel wrapper for dashboard tables | `Card` without `href` or `onClick` |
+| `List` for avatar / action rows | `Table` with one column |
+
+## Check yourself
+
+- [ ] Headers use `key` strings that match your sort logic
+- [ ] Status cells use semantic components (`Tag`, `StatusIndicator`)
+- [ ] Table sits in a surface panel, not bare on the page background
+- [ ] Empty state handled when `rows` is empty
+
+## Related
+
+→ [Loading states](/common-patterns/loading-states.mdx)
+→ [Static panel](/common-patterns/static-panel.mdx)
+→ Full reference: [docs.once-ui.com — Table](https://docs.once-ui.com/once-ui/components/table)

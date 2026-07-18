@@ -1,0 +1,89 @@
+<Feedback title="8 min · For agents" description="Load rules.compact.md + a task bundle (~8KB), not full doc pages. Generate, then validate mechanically." variant="info" />
+
+## Bootstrap (always)
+
+Before any UI codegen task, load these two files:
+
+```
+@once-ui-system/core/ai/rules.compact.md    (~2KB)
+@once-ui-system/core/ai/catalog.json        (component index)
+```
+
+Or from the docs site:
+
+- [rules.compact.md](https://docs.once-ui.com/ai/rules.compact.md)
+- [catalog.json](https://docs.once-ui.com/ai/catalog.json)
+
+Entry point listing all artifacts: [manifest.json](https://docs.once-ui.com/ai/manifest.json)
+
+## Route by intent
+
+Match the user's request to a task bundle via [tasks/index.json](https://docs.once-ui.com/ai/tasks/index.json):
+
+| Intent | Task bundle |
+|--------|-------------|
+| Marketing hero | `tasks/marketing-hero.json` |
+| Pricing page | `tasks/pricing.json` |
+| Settings panel | `tasks/settings.json` |
+| Dashboard | `tasks/dashboard.json` |
+| Chat interface | `tasks/chat.json` |
+| Auth flow | `tasks/auth.json` |
+| Roadmap | `tasks/roadmap.json` |
+
+Each bundle lists: required components, recipes, gotchas, quality targets, and Pro block references.
+
+## Progressive loading
+
+Don't load everything. Per task:
+
+1. `rules.compact.md` — layout, surfaces, typography, motion rules
+2. Task bundle — component list + gotcha keys
+3. Component slices — `ai/components/{Name}.json` on demand
+4. Recipes — `recipes.md` sections referenced by the task
+5. Gotchas — `gotchas.json` entries for components you'll use
+6. Pro blocks — `examples/blocks/manifest.json` for production fidelity
+
+**Target: under ~10KB context per task**, not full doc pages.
+
+## Workflow
+
+```
+1. Load rules.compact.md
+2. Resolve intent → pick task bundle
+3. Fetch component slices listed in the bundle
+4. Read gold example / Pro block for structure
+5. Generate TSX
+6. Validate: pnpm validate-ai-code path/to/file.tsx
+```
+
+## What validate-ai-code catches
+
+- `Flex direction=` → should be Row/Column
+- `fillWidth fillHeight` → should be `fill`
+- Hex/rgb colors → should be token props
+- Invented icon names → must match `IconName` in spec
+- Default props that should be omitted
+
+## Context budget
+
+| Load | Size | When |
+|------|------|------|
+| `rules.compact.md` | ~2KB | Always |
+| `catalog.json` | ~4KB | Component selection |
+| Task bundle | ~1KB | Intent matched |
+| Component slice | ~0.5KB each | On demand |
+| Full doc page | 10–50KB | **Avoid for codegen** |
+
+## Humans vs agents
+
+| Need | Use |
+|------|-----|
+| "How do I think about layout?" | Once UI Learn (this site) |
+| "What props does Grid accept?" | docs.once-ui.com reference |
+| "Build me a pricing page" | Harness task bundles |
+
+## Related
+
+→ [What is Once UI?](/what-is-once-ui.mdx)
+→ [Column, not Flex](/column-not-flex.mdx)
+→ Full harness docs: [docs.once-ui.com/once-ui/ai-coding](https://docs.once-ui.com/once-ui/ai-coding)
