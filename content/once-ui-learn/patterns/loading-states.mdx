@@ -4,16 +4,16 @@
 
 | State | Component | Example |
 |-------|-----------|---------|
-| Page section loading | `Skeleton` | Dashboard cards, table rows, profile header |
-| Button action in progress | `Spinner` inside `Button` | Save, submit, delete |
-| Full-page blocking load | Centered `Spinner` in `Column` | Initial route fetch |
+| Page section loading | Skeleton shape props | Dashboard cards, table rows, profile header |
+| Button action in progress | Button `loading` prop | Save, submit, delete |
+| Full-page blocking load | Centered spinner in Column | Initial route fetch |
 | Background refresh | None — keep stale content visible | Settings panel re-fetch |
 
-Skeletons **hold space** so the layout does not jump when real content arrives. Spinners **signal activity** on an element the user just interacted with.
+Skeletons **hold space** so the layout does not jump when real content arrives. The loading prop on buttons **signals activity** on an element the user just interacted with.
 
 ## Skeleton shapes
 
-`Skeleton` has three shapes:
+The skeleton component has three shapes:
 
 | Shape | Use for |
 |-------|---------|
@@ -21,67 +21,37 @@ Skeletons **hold space** so the layout does not jump when real content arrives. 
 | `circle` | Avatars, icon placeholders |
 | `block` | Images, chart areas, media cards |
 
-```text
-<Column gap="12" fillWidth>
-  <Skeleton shape="circle" width="l" height="l" />
-  <Skeleton shape="line" width="xl" />
-  <Skeleton shape="line" width="m" />
-  <Skeleton shape="block" width="fill" height="l" />
-</Column>
-```
+Build a profile placeholder with a circle on top and two lines below. Use t-shirt `width` and `height` sizes (`xs` through `xl`), not pixel values.
 
-`width` and `height` use t-shirt sizes (`xs` through `xl`), not pixel values.
+A media card placeholder uses `shape="block"` with `width="fill"` and `height="l"`.
 
 ## Stagger with delay
 
-Offset skeleton shimmer with the `delay` prop (`"1"` through `"6"`) when rendering a list of placeholders:
+Offset shimmer with the `delay` prop (`"1"` through `"6"`) when rendering a list of placeholders.
 
-```text
-{Array.from({ length: 4 }).map((_, index) => (
-  <Row key={index} gap="12" vertical="center" fillWidth>
-    <Skeleton shape="circle" width="m" height="m" delay={String(index + 1)} />
-    <Column gap="8" fillWidth>
-      <Skeleton shape="line" width="l" delay={String(index + 1)} />
-      <Skeleton shape="line" width="s" delay={String(index + 1)} />
-    </Column>
-  </Row>
-))}
-```
-
-Match the skeleton layout to the real content it replaces — same gaps, same approximate widths.
+Map over four items and pass `delay={String(index + 1)}` on each row's skeleton children. Match the skeleton layout to the real content it replaces — same gaps, same approximate widths.
 
 ## Table skeleton
 
 Mirror your table structure with skeleton rows inside the same static panel:
 
-```text
-<Column fillWidth padding="24" gap="16" background="surface" border="neutral-alpha-weak" radius="l">
-  <Skeleton shape="line" width="m" />
-  {Array.from({ length: 5 }).map((_, i) => (
-    <Skeleton key={i} shape="line" width="fill" height="s" delay={String((i % 6) + 1)} />
-  ))}
-</Column>
-```
+1. Wrap in a Column surface panel (`padding="24"`, `background="surface"`, `border="neutral-alpha-weak"`, `radius="l"`)
+2. One line skeleton for the section title
+3. Five line skeletons with `width="fill"` and staggered delay
 
-Swap the skeleton block for `<Table ... />` once `rows` are ready.
+Swap the skeleton block for your table component once rows are ready.
 
-## Button spinner
+## Button loading state
 
-Pass `loading` to `Button` — it swaps label for a spinner automatically:
+Pass `loading={isSaving}` to Button — it swaps the label for a built-in spinner automatically.
 
-```text
-<Button loading={isSaving} onClick={handleSave}>
-  Save changes
-</Button>
-```
-
-Do not nest a manual `Spinner` inside a `Button` unless you need a custom layout.
+Do not nest a manual spinner inside a button unless you need a custom layout.
 
 ## Write this / not this
 
 | ✅ Once UI way | ❌ Common mistake |
 |----------------|-------------------|
-| Skeleton matching final layout | Generic gray `div` with inline styles |
+| Skeleton matching final layout | Generic gray div with inline styles |
 | `Button loading={true}` | Disabled button with no feedback |
 | Keep stale content during refresh | Full-page spinner on every re-fetch |
 | `delay` stagger on lists | All skeletons animating in sync |
@@ -90,7 +60,7 @@ Do not nest a manual `Spinner` inside a `Button` unless you need a custom layout
 
 - [ ] Skeleton shape matches what it replaces (circle for avatar, block for image)
 - [ ] Layout gaps are identical between skeleton and loaded state
-- [ ] Buttons use `loading` prop, not a separate overlay
+- [ ] Buttons use the loading prop, not a separate overlay
 - [ ] Empty state shown after load completes with zero results
 
 ## Related

@@ -4,8 +4,8 @@
 
 | Type | Components | Budget |
 |------|------------|--------|
-| **Entry** (plays once) | `RevealFx`, `CountFx` | One staggered set per page |
-| **Ambient** (loops) | `BlobFx`, `MatrixFx`, `Pulse` | At most two places, never adjacent |
+| **Entry** (plays once) | RevealFx, CountFx | One staggered set per page |
+| **Ambient** (loops) | BlobFx, MatrixFx, Pulse | At most two places, never adjacent |
 
 Entry motion draws attention to content arriving. Ambient motion sets mood in hero or CTA sections. Mixing both everywhere dilutes the effect.
 
@@ -13,63 +13,36 @@ Source: [recipes.md](https://docs.once-ui.com/ai/recipes.md) decoration budget r
 
 ## RevealFx basics
 
-Wrap content you want to fade/slide in. Control playback with the `trigger` prop:
+Wrap content you want to fade or slide in. Control playback with the `trigger` prop.
 
-```text
-const ref = useRef(null);
-const inViewport = useInViewport(ref);
-const [seen, setSeen] = useState(false);
+Pattern:
 
-useEffect(() => {
-  if (inViewport) setSeen(true);
-}, [inViewport]);
-
-<Column ref={ref} gap="16" fillWidth>
-  <RevealFx trigger={seen} translateY="8">
-    <Heading variant="display-strong-s">Welcome back</Heading>
-  </RevealFx>
-</Column>
-```
+1. Attach a ref to the container
+2. Use `useInViewport(ref)` to detect visibility
+3. Latch a `seen` boolean in `useEffect` when in viewport
+4. Pass `trigger={seen}` to each RevealFx child
 
 Latch `seen` so the animation plays once when the element enters the viewport — not on every scroll pass.
 
+Set `translateY="8"` for a subtle upward slide. The prop accepts spacing token strings (`"8"`, `"16"`) or a rem number (`1` = 1rem). Bare `16` means 16rem — a common codegen mistake.
+
 ## Stagger a grid
 
-Delay each child by index. **Delay is in seconds**, not milliseconds:
+Delay each child by index. **Delay is in seconds**, not milliseconds.
 
-```text
-<Grid ref={ref} columns="3" gap="16" s={{ columns: 1 }}>
-  {items.map((item, index) => (
-    <RevealFx
-      key={item.id}
-      trigger={seen}
-      translateY="8"
-      delay={index * 0.1}
-    >
-      <Card href={item.href} fillWidth padding="24">
-        <Text variant="heading-strong-s">{item.title}</Text>
-      </Card>
-    </RevealFx>
-  ))}
-</Grid>
-```
+In a three-column grid, map items and pass `delay={index * 0.1}` on each reveal wrapper. On mobile, stack with `s={{ columns: 1 }}`.
 
-`translateY` accepts a spacing token string (`"8"`, `"16"`) or a rem number (`1` = 1rem). Bare `16` means 16rem — a common codegen mistake.
+Stagger **all** siblings in a set — never animate only the highlighted card.
 
 ## Pair with CountFx
 
 Drive stat numbers from the same viewport latch:
 
-```text
-<RevealFx trigger={seen} translateY="8">
-  <Column gap="4">
-  <CountFx value={seen ? 2400 : 0} separator="," />
-  <Text variant="label-default-s" onBackground="neutral-weak">Active users</Text>
-  </Column>
-</RevealFx>
-```
+- Wrap the stat block in a reveal wrapper with `trigger={seen}`
+- Set `CountFx value={seen ? 2400 : 0}` with a separator for thousands
+- Label below with `Text variant="label-default-s"`
 
-`CountFx` has no `trigger` prop — animate by changing `value`.
+CountFx has no `trigger` prop — animate by changing `value` from 0 to the target.
 
 ## Ambient decoration budget
 
@@ -88,13 +61,13 @@ See [Decoration layers](/common-patterns/decoration-layers.mdx) for placement re
 |----------------|-------------------|
 | `delay={index * 0.1}` (seconds) | `delay={index * 80}` (ms — animates for minutes) |
 | `translateY="8"` or `translateY={1}` | `translateY={16}` (16rem jump) |
-| Viewport latch with `useInViewport` | `trigger={true}` on page load for below-fold content |
+| Viewport latch with useInViewport | `trigger={true}` on page load for below-fold content |
 | Stagger all siblings or none | Only the highlighted card animates |
-| `CountFx value={seen ? n : 0}` | `CountFx trigger={seen}` |
+| CountFx value driven by seen latch | CountFx trigger prop (does not exist) |
 
 ## Check yourself
 
-- [ ] Only one staggered RevealFx group on the page
+- [ ] Only one staggered reveal group on the page
 - [ ] Delays use fractional seconds (0.1, 0.2, …)
 - [ ] Ambient Fx limited to hero / CTA anchors
 - [ ] Decorative layers have `top="0" left="0"` inside padded parents
