@@ -13,20 +13,20 @@ Marketing pages use [page skeleton](/page-skeleton.mdx) patterns. App shells use
 
 ## Building blocks
 
-| Piece | Component | Role |
-|-------|-----------|------|
-| Sticky header | `Row as="header"` | `position="sticky" top="0" zIndex={2}` |
-| Mega menu | `MegaMenu` | Dropdown nav with grouped links |
-| Command palette | `Kbar` | Searchable shortcuts (⌘K) |
-| Mobile nav | `MobileMegaMenu` | Full-screen menu on small screens |
-| User menu | `UserMenu` | Avatar, account links, sign out |
-| Sidebar | `Sidebar1`–`Sidebar5` | Section or channel navigation |
+| Piece | Module | Role |
+|-------|--------|------|
+| Sticky header | Row as header | position sticky, top 0, zIndex 2 |
+| Mega menu | MegaMenu | Dropdown nav with grouped links |
+| Command palette | Kbar | Searchable shortcuts (⌘K) |
+| Mobile nav | MobileMegaMenu | Full-screen menu on small screens |
+| User menu | UserMenu | Avatar, account links, sign out |
+| Sidebar | Sidebar1–Sidebar5 | Section or channel navigation |
 
 Reference implementation: `packages/core/ai/examples/blocks/Header1.tsx`
 
 ## Header anatomy
 
-A production header follows this structure:
+A production header is a sticky Row with three zones: logo, center nav, and actions.
 
 ```text
 <Row
@@ -43,25 +43,20 @@ A production header follows this structure:
   zIndex={2}
 >
   <Row gap="4" vertical="center">
-    <NavIcon hide s={{ hide: false }} />
-    <Logo dark wordmark="..." size="s" href="/" />
-    <Logo light wordmark="..." size="s" href="/" />
   </Row>
-
-  <MegaMenu m={{ hide: true }} items={nav} />
-
   <Row gap="8" vertical="center">
-    <Kbar items={kbarItems} />
-    <UserMenu avatar="..." />
+    <Button size="s" variant="tertiary">Search</Button>
   </Row>
 </Row>
 ```
 
+Wire the left zone to Logo + NavIcon, the center to MegaMenu, and the right to Kbar + UserMenu. See Header1 for the full composition.
+
 Three responsive rules:
 
-1. **`NavIcon`** — hidden on desktop, visible on mobile (`hide s={{ hide: false }}`)
-2. **`MegaMenu`** — hidden on mobile (`m={{ hide: true }}`)
-3. **`Kbar`** — hidden on mobile, shown from tablet up (`m={{ hide: true }}`)
+1. **NavIcon** — hidden on desktop, visible on mobile (`hide s={{ hide: false }}`)
+2. **MegaMenu** — hidden on mobile (`m={{ hide: true }}`)
+3. **Kbar** — hidden on mobile, shown from tablet up (`m={{ hide: true }}`)
 
 ## MegaMenu data shape
 
@@ -91,7 +86,7 @@ const nav = [
 ];
 ```
 
-Use `usePathname()` to highlight the active route. Pass `pathname` to `MegaMenu` so the current page gets active styling.
+Use `usePathname()` to highlight the active route. Pass `pathname` to MegaMenu so the current page gets active styling.
 
 ## Command palette (Kbar)
 
@@ -111,7 +106,7 @@ const kbar = [
 ];
 ```
 
-Wrap the trigger in `Kbar` and pass `items`. On Mac, show `⌘` in the trigger; on Windows, `Ctrl`.
+Wrap the trigger in Kbar and pass `items`. On Mac, show ⌘ in the trigger; on Windows, Ctrl.
 
 ## Sidebar + header composition
 
@@ -119,9 +114,9 @@ For dashboard-style apps, compose blocks instead of building from scratch:
 
 | Layout | Blocks |
 |--------|--------|
-| Dashboard | `Header1` + `Sidebar1` + content |
-| Chat | `Sidebar4` + `Feed3` + `Sidebar5` |
-| Settings | `Sidebar2` + form content |
+| Dashboard | Header1 + Sidebar1 + content |
+| Chat | Sidebar4 + Feed3 + Sidebar5 |
+| Settings | Sidebar2 + form content |
 
 Install Pro blocks via the CLI (see [Pro block registry](/agent-resources/pro-block-registry.mdx)):
 
@@ -133,9 +128,9 @@ npx once-ui add Header1 Sidebar1 Dashboard1
 
 The harness maps app-shell tasks in `examples/blocks/manifest.json` under `byTask`:
 
-- `dashboard` → `Header1`, `Sidebar1`, `Dashboard1`
-- `chat` → `Sidebar4`, `Sidebar5`, `Chat1`
-- `settings` → `Sidebar2`
+- dashboard → Header1, Sidebar1, Dashboard1
+- chat → Sidebar4, Sidebar5, Chat1
+- settings → Sidebar2
 
 Load the block manifest after resolving the task bundle — don't invent header markup from memory.
 

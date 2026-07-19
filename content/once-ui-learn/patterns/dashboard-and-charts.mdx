@@ -5,7 +5,7 @@
 A typical analytics dashboard has four zones:
 
 1. **Page header** — eyebrow, title, time-range filter
-2. **KPI row** — 3–4 stat cards in a responsive `Grid`
+2. **KPI row** — 3–4 stat cards in a responsive Grid
 3. **Chart area** — trend lines or bar charts
 4. **Activity table** — recent events with status tags
 
@@ -15,7 +15,7 @@ Pro block: `packages/core/ai/examples/blocks/Dashboard1.tsx`
 
 ## Page header with filter
 
-Stack the title and `SegmentedControl` on mobile, side-by-side on desktop:
+Stack the title and SegmentedControl on mobile, side-by-side on desktop:
 
 ```text
 <Row
@@ -47,7 +47,7 @@ Stack the title and `SegmentedControl` on mobile, side-by-side on desktop:
 
 ## KPI stat cards — static surface, not Card
 
-**This is the #1 dashboard mistake:** wrapping KPI numbers in `Card`.
+**This is the #1 dashboard mistake:** wrapping KPI numbers in Card.
 
 Stat tiles are **read-only panels**. Use the static surface recipe:
 
@@ -63,45 +63,28 @@ Stat tiles are **read-only panels**. Use the static surface recipe:
     <Text variant="label-default-s" onBackground="neutral-weak">
       Revenue
     </Text>
-    <StatusIndicator color="green" />
+    <Icon name="trendUp" size="s" />
   </Row>
-  <CountFx variant="display-strong-xs" value={128400} speed={1200} separator="," />
+  <Heading variant="display-strong-xs">$128,400</Heading>
   <Text variant="body-default-s" onBackground="success-weak">
     +12.4%
   </Text>
 </Column>
 ```
 
-Reserve `Card` for tiles that are **clickable links** to a detail view.
+For animated numbers, swap the Heading for CountFx in your TSX — drive `value` from a `useInViewport` latch so the count starts when the row scrolls into view.
 
-## CountFx viewport latch
-
-`CountFx` animates numbers on mount. On dashboards, trigger the count when the stat row scrolls into view:
-
-```text
-const statsRef = useRef(null);
-const inViewport = useInViewport(statsRef);
-const [seen, setSeen] = useState(false);
-
-useEffect(() => {
-  if (inViewport) setSeen(true);
-}, [inViewport]);
-
-<Grid ref={statsRef} columns="4" gap="16" m={{ columns: 2 }} s={{ columns: 1 }}>
-  <CountFx value={seen ? stat.value : 0} ... />
-</Grid>
-```
-
-Without the latch, numbers animate before the user sees them — or re-animate on every re-render.
+Reserve Card for tiles that are **clickable links** to a detail view.
 
 ## Staggered reveal
 
-Wrap each stat in `RevealFx` with incremental delay for a polished entrance:
+Wrap each stat in RevealFx with incremental delay for a polished entrance:
 
 ```text
 <RevealFx fill trigger={seen} translateY="8" delay={index * 0.1}>
-  <Column background="surface" ...>
-    {/* stat content */}
+  <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16">
+    <Text variant="label-default-s" onBackground="neutral-weak">Revenue</Text>
+    <Heading variant="display-strong-xs">$128,400</Heading>
   </Column>
 </RevealFx>
 ```
@@ -110,7 +93,7 @@ Keep total stagger under ~0.4s for a row of four cards.
 
 ## Charts and sparklines
 
-For inline sparklines inside interactive stat cards, use `LineChart` as an absolute background layer:
+For inline sparklines inside interactive stat cards, use LineChart as an absolute background layer inside Card:
 
 ```text
 <Card
@@ -143,38 +126,27 @@ For inline sparklines inside interactive stat cards, use `LineChart` as an absol
 </Card>
 ```
 
-`pointerEvents="none"` on the chart — same rule as [decoration layers](/decoration-layers.mdx).
+Set pointerEvents="none" on the chart — same rule as [decoration layers](/decoration-layers.mdx).
 
 ## Activity table
 
-Use `Table` with `Tag` cells for status. See [tables and lists](/common-patterns/tables-and-lists.mdx) for column definitions.
+Use Table with Tag cells for status. See [tables and lists](/common-patterns/tables-and-lists.mdx) for column definitions.
 
-```text
-const activity = {
-  headers: [
-    { content: "Event", key: "event" },
-    { content: "Status", key: "status" },
-    { content: "Time", key: "time" },
-  ],
-  rows: [
-    ["Plan upgraded", <Tag size="s" variant="success">Completed</Tag>, "2m ago"],
-  ],
-};
-```
+Build rows with event name, a Tag for status, and a time string. Swap Tag variants (`success`, `brand`, `danger`) to match event type.
 
 ## Quality checklist
 
 | Check | Rule |
 |-------|------|
-| Stat surfaces | `Column` with `background="surface"` — not `Card` |
-| KPI numbers | `CountFx` with viewport latch, or `display-strong-s` static |
-| Grid | `columns="4" m={{ columns: 2 }} s={{ columns: 1 }}` |
-| Chart overlay | `pointerEvents="none"`, `axis="none"` for sparklines |
-| App shell | Compose `Header1` + `Sidebar1` from Pro blocks |
+| Stat surfaces | Column with background="surface" — not Card |
+| KPI numbers | CountFx with viewport latch, or display-strong-s static |
+| Grid | columns="4" m={{ columns: 2 }} s={{ columns: 1 }} |
+| Chart overlay | pointerEvents="none", axis="none" for sparklines |
+| App shell | Compose Header1 + Sidebar1 from Pro blocks |
 
 ## Agent note
 
-`dashboard.json` lists gotcha keys: `Card.interactive`, `CountFx.trigger`, `RevealFx.delay`. Load them from `gotchas.json` before generating.
+`dashboard.json` lists gotcha keys: Card.interactive, CountFx.trigger, RevealFx.delay. Load them from `gotchas.json` before generating.
 
 ## Related
 

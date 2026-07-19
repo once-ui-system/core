@@ -10,13 +10,13 @@ Entry point: `packages/core/ai/manifest.json` → `"resolve": "tasks/index.json"
 
 | User says… | Bundle | Gold example | Primary blocks |
 |------------|--------|--------------|----------------|
-| "landing page", "hero" | `marketing-hero.json` | `examples/marketing-hero.tsx` | `Hero1`, `Header1` |
-| "pricing", "plans" | `pricing.json` | `examples/pricing.tsx` | `Pricing1`, `Pricing2` |
-| "settings", "preferences" | `settings.json` | `examples/settings.tsx` | `Settings1`, `Sidebar2` |
-| "dashboard", "analytics" | `dashboard.json` | `examples/dashboard.tsx` | `Dashboard1`, `Table1` |
-| "chat", "messaging" | `chat.json` | `examples/chat.tsx` | `Chat1`, `Feed3`, `Sidebar4` |
-| "login", "signup", "auth" | `auth.json` | `examples/auth.tsx` | `Auth1`, `Auth2` |
-| "roadmap", "kanban" | `roadmap.json` | `examples/roadmap.tsx` | `Roadmap1` |
+| "landing page", "hero" | marketing-hero.json | examples/marketing-hero.tsx | Hero1, Header1 |
+| "pricing", "plans" | pricing.json | examples/pricing.tsx | Pricing1, Pricing2 |
+| "settings", "preferences" | settings.json | examples/settings.tsx | Settings1, Sidebar2 |
+| "dashboard", "analytics" | dashboard.json | examples/dashboard.tsx | Dashboard1, Table1 |
+| "chat", "messaging" | chat.json | examples/chat.tsx | Chat1, Feed3, Sidebar4 |
+| "login", "signup", "auth" | auth.json | examples/auth.tsx | Auth1, Auth2 |
+| "roadmap", "kanban" | roadmap.json | examples/roadmap.tsx | Roadmap1 |
 
 ## Resolution workflow
 
@@ -40,7 +40,7 @@ Every `tasks/*.json` file has the same shape:
   "id": "dashboard",
   "title": "Analytics dashboard",
   "description": "KPI stat cards, charts area, recent-activity list",
-  "components": ["Column", "Grid", "CountFx", "Table", ...],
+  "components": ["Column", "Grid", "Table", ...],
   "recipes": ["reveal-stagger"],
   "example": "examples/dashboard.tsx",
   "blocks": {
@@ -56,13 +56,13 @@ Every `tasks/*.json` file has the same shape:
 
 | Field | Use it for |
 |-------|------------|
-| `components` | Which `components/{Name}.json` slices to fetch |
-| `recipes` | Sections in `recipes.md` for composition patterns |
-| `example` | Gold TSX — copy structure, not verbatim |
-| `blocks.primary` | Main Pro blocks to install or reference |
-| `blocks.compose` | App shell blocks (header, sidebar) |
-| `gotchas` | Keys to look up in `gotchas.json` |
-| `quality` | Non-negotiable rules for this UI type |
+| components | Which components/{Name}.json slices to fetch |
+| recipes | Sections in recipes.md for composition patterns |
+| example | Gold TSX — copy structure, not verbatim |
+| blocks.primary | Main Pro blocks to install or reference |
+| blocks.compose | App shell blocks (header, sidebar) |
+| gotchas | Keys to look up in gotchas.json |
+| quality | Non-negotiable rules for this UI type |
 
 ## Pro block registry
 
@@ -89,9 +89,9 @@ When the request spans multiple bundles, pick the **primary surface** and compos
 
 | Request | Primary bundle | Compose from |
 |---------|----------------|--------------|
-| "Dashboard with chat" | `dashboard.json` | `chat.json` blocks for a chat widget |
-| "Pricing landing page" | `marketing-hero.json` | `pricing.json` for the plans section |
-| "Settings with auth gate" | `auth.json` | `settings.json` for the panel |
+| "Dashboard with chat" | dashboard.json | chat.json blocks for a chat widget |
+| "Pricing landing page" | marketing-hero.json | pricing.json for the plans section |
+| "Settings with auth gate" | auth.json | settings.json for the panel |
 
 Load both bundles' gotcha lists. Generate the primary surface first, then add secondary sections.
 
@@ -99,8 +99,8 @@ Load both bundles' gotcha lists. Generate the primary surface first, then add se
 
 | Artifact | Size | Load when |
 |----------|------|-----------|
-| `rules.compact.md` | ~2KB | Always |
-| `catalog.json` | ~4KB | Component selection |
+| rules.compact.md | ~2KB | Always |
+| catalog.json | ~4KB | Component selection |
 | Task bundle | ~1KB | Intent matched |
 | Component slice | ~0.5KB each | Listed in bundle |
 | Gold example | 2–5KB | Before generating |
@@ -117,14 +117,14 @@ After generating, always run:
 pnpm validate-ai-code src/components/MyDashboard.tsx
 ```
 
-This catches `Flex direction=`, invented icon names, hex colors, and other rules from `gotchas.json`. See [Validate generated code](/agent-resources/validate-generated-code.mdx).
+This catches Flex direction=, invented icon names, hex colors, and other rules from gotchas.json. See [Validate generated code](/agent-resources/validate-generated-code.mdx).
 
 ## Humans vs agents
 
 | Question | Answer |
 |----------|--------|
 | "How should I think about this pattern?" | Once UI Learn (this site) |
-| "What props does CountFx accept?" | docs.once-ui.com reference |
+| "What props does a component accept?" | docs.once-ui.com reference |
 | "Build me a dashboard" | Task bundle + gold example |
 
 ## Related
