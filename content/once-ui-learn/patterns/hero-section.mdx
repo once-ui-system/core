@@ -1,0 +1,95 @@
+<Feedback title="6 min · Pattern" description="Every marketing page starts with a hero: eyebrow, headline, description, and actions — optionally with a subtle ambient glow." variant="info" />
+
+## Anatomy
+
+A Once UI hero has four layers:
+
+1. **Optional ambient glow** — full-bleed `Background` outside `maxWidth`
+2. **Eyebrow** — `label-default-s` in brand color
+3. **Headline** — `display-strong-l` or `display-strong-xl`
+4. **Actions** — `Row` of buttons, stacking on mobile
+
+## Basic hero (no decoration)
+
+```text
+<Column fillWidth horizontal="center" paddingY="80">
+  <Column maxWidth="m" gap="24" horizontal="center">
+    <Text variant="label-default-s" onBackground="brand-medium" align="center">
+      EYEBROW
+    </Text>
+    <Heading variant="display-strong-l" align="center">
+      Build faster with Once UI
+    </Heading>
+    <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+      A semantic design system for humans and agents.
+    </Text>
+    <Row gap="16" horizontal="center" s={{ direction: "column" }}>
+      <Button href="/start">Get started</Button>
+      <Button variant="secondary" href="/docs">Documentation</Button>
+    </Row>
+  </Column>
+</Column>
+```
+
+## Hero with glow (optional)
+
+Add one ambient layer on the **full-bleed wrapper**, not inside `maxWidth`:
+
+```text
+<Column fillWidth horizontal="center" paddingY="80">
+  <Background
+    position="absolute" top="0" left="0" fill pointerEvents="none"
+    gradient={{
+      display: true,
+      colorStart: "brand-alpha-medium",
+      colorEnd: "static-transparent",
+      x: 50, y: 0,
+      width: 150, height: 80,
+      opacity: 60,
+    }}
+    dots={{ display: true, color: "neutral-alpha-weak", size: "2", opacity: 40 }}
+  />
+  <Column zIndex={1} maxWidth="m" gap="24" horizontal="center">
+    {/* hero content */}
+  </Column>
+</Column>
+```
+
+## Typography hierarchy
+
+| Element | Variant |
+|---------|---------|
+| Eyebrow | `label-default-s` + `onBackground="brand-medium"` |
+| Headline | `display-strong-l` (or `xl` for landing pages) |
+| Description | `body-default-m` + `onBackground="neutral-weak"` |
+
+Never use `heading-*` for the main hero title.
+
+## Decoration budget
+
+- **One** ambient layer per hero section
+- Glow `width`: 100–200 (quarter-percent units; 400 = 100%)
+- Use `brand-alpha-medium` for glows — not `brand-background-weak`
+- Content always gets `zIndex={1}` above decoration
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `display-strong-l` for headline | `heading-strong-xl` for hero |
+| Glow outside `maxWidth` column | Glow clipped inside narrow container |
+| `pointerEvents="none"` on Background | Clickable decoration blocking buttons |
+| One glow per hero | Multiple competing gradient layers |
+
+## Check yourself
+
+- [ ] Eyebrow uses `label-default-s`
+- [ ] Headline uses `display-strong-l` or larger
+- [ ] Buttons stack on mobile via `s={{ direction: "column" }}`
+- [ ] At most one ambient decoration layer
+
+## Related
+
+→ [Page skeleton](/page-skeleton.mdx)
+→ [Decoration layers](/decoration-layers.mdx)
+→ [Typography scale](/typography-scale.mdx)

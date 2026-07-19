@@ -1,0 +1,80 @@
+<Feedback title="6 min · For agents" description="The gotchas.json file encodes mistakes that pass TypeScript but render wrong. Load relevant entries before codegen — not the full docs site." variant="info" />
+
+## Where gotchas live
+
+```
+@once-ui-system/core/ai/gotchas.json
+```
+
+Each entry has a `rule`, affected `components`, and a dot-notation key (e.g. `Card.interactive`). After picking a task bundle, load only the gotcha keys listed in that bundle.
+
+Hosted copy: [docs.once-ui.com/ai/gotchas.json](https://docs.once-ui.com/ai/gotchas.json)
+
+## Layout gotchas
+
+| Key | Rule |
+|-----|------|
+| `layout.shorthands` | Use `fill` not `fillWidth fillHeight`; `center` not `horizontal="center" vertical="center"`; `Row`/`Column` not `Flex direction=` |
+| `layout.defaults` | Never write props equal to defaults: `position="relative"`, `direction` on Row/Column, `variant="primary"` on Button |
+| `section.gaps` | Gap between page sections: 80–160 (typical 104). Inside sections: 24–40. Never 48 between major sections |
+
+## Surface gotchas
+
+| Key | Rule |
+|-----|------|
+| `Card.interactive` | `Card` is for interactive surfaces only (`href` or `onClick`). Static panels use the Column surface recipe |
+| `color.tokens` | Colors are semantic tokens (`{scheme}-{weight}`), never hex/rgb |
+| `color.background-weak` | `*-background-weak` is nearly the page color — use alpha tokens (`brand-alpha-medium`) for glows |
+
+## Decoration gotchas
+
+| Key | Rule |
+|-----|------|
+| `Background.absolute` | Every absolute decorative layer needs `top="0" left="0"` or it offsets by parent padding |
+| `Background.gradient.width` | Quarter-percent units: 400 = 100%. Soft glows use width 100–200, not 500 |
+| `overflow.hero` | `overflow="hidden"` on full-bleed sections clips glows into hard bands |
+
+## Motion gotchas
+
+| Key | Rule |
+|-----|------|
+| `RevealFx.delay` | Delay is in **seconds** — stagger with `delay={index * 0.1}`, never `index * 80` |
+| `RevealFx.translateY` | Number = rem. Use `translateY={1}` or token `"16"`; bare `16` means 16rem |
+| `CountFx.trigger` | No `trigger` prop — drive `value` from a `useInViewport` latch |
+| `animation.budget` | Entry animation budget: hero + at most 1–2 key moments per page |
+
+## Component gotchas
+
+| Key | Rule |
+|-----|------|
+| `Icon.names` | Icon names must come from `IconName` in spec.json — never invent |
+| `Badge.duplicate` | Don't pass the same text as both `title` prop and children |
+| `Tag.duplicate` | Don't pass the same text as both `label` prop and children |
+| `Fade.edge` | `Fade` is an edge overlay strip on scroll containers, not a content wrapper |
+| `LogoCloud.columns` | Always set `columns` and responsive overrides or logos stack in one column |
+| `StatusIndicator.color` | Uses `color="green"` etc. — not variant or scheme names |
+
+## Validation workflow
+
+After generating TSX, run:
+
+```bash
+pnpm validate-ai-code path/to/file.tsx
+```
+
+This catches shorthand mistakes, hex colors, invented icons, and redundant default props — the same issues gotchas.json prevents at generation time.
+
+## Context budget tip
+
+| Approach | Context cost |
+|----------|--------------|
+| Load `gotchas.json` entries for your task | ~0.5KB |
+| Load full component doc page | 10–50KB |
+| Load `rules.compact.md` + task bundle + targeted gotchas | **~4KB total** |
+
+## Related
+
+→ [Harness overview](/design-tips/harness-overview.mdx)
+→ [Icons & buttons](/design-tips/icons-and-buttons.mdx)
+→ [Column, not Flex](/agent-resources/column-not-flex.mdx)
+→ Source: [gotchas.json](https://docs.once-ui.com/ai/gotchas.json)

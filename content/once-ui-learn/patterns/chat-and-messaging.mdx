@@ -1,0 +1,144 @@
+<Feedback title="7 min · Pattern" description="Chat UIs are multi-pane layouts: channel sidebar, message feed, and optional detail panel. Once UI Pro blocks and SplitView handle the composition — agents should start from Chat1, not invent bubble markup." variant="info" />
+
+## Chat layout zones
+
+A production chat interface has three panes:
+
+| Zone | Purpose | Block / component |
+|------|---------|-------------------|
+| Left sidebar | Channels, DMs, search | `Sidebar4` |
+| Center feed | Messages, threads, composer | `Feed3` |
+| Right panel | Thread details, members, files | `Sidebar5` |
+
+Task bundle: `packages/core/ai/tasks/chat.json`  
+Pro block: `packages/core/ai/examples/blocks/Chat1.tsx`
+
+## Three-pane Row
+
+The simplest chat shell is a full-height `Row`:
+
+```text
+<Row fill minHeight="100vh">
+  <Sidebar4 activeItem={activeItem} onSelectItem={setActiveItem} />
+  <Feed3 />
+  <Sidebar5 />
+</Row>
+```
+
+`Sidebar4` owns channel list state. `Feed3` renders the active thread. `Sidebar5` shows contextual details.
+
+For resizable panes, wrap sections in `SplitView` — the dev sandbox (`apps/dev/src/app/(main)/chat/page.tsx`) uses this for adjustable sidebar widths.
+
+## Message feed patterns
+
+`Feed3` uses a **thread-without-bubbles** style — messages are rows with avatar, name, timestamp, and body text. This reads cleaner in productivity apps (Linear, Discord, Slack) than chat bubbles.
+
+Each message row:
+
+```text
+<Row gap="12" fillWidth paddingY="8">
+  <Avatar src={message.avatar} size="m" />
+  <Column fillWidth gap="4">
+    <Row gap="8" vertical="center">
+      <Text variant="label-default-s">{message.author}</Text>
+      <Text variant="body-default-xs" onBackground="neutral-weak">
+        {message.time}
+      </Text>
+    </Row>
+    <Text variant="body-default-m">{message.body}</Text>
+  </Column>
+</Row>
+```
+
+## Composer bar
+
+The input area sits at the bottom of the feed column:
+
+```text
+<Column fillHeight>
+  <Scroller fill>
+    {/* message list */}
+  </Scroller>
+  <Row gap="8" padding="16" borderTop="neutral-alpha-weak">
+    <Input fillWidth placeholder="Message #general" />
+    <EmojiPickerDropdown onSelect={handleEmoji} />
+    <IconButton icon="send" variant="primary" aria-label="Send message" />
+  </Row>
+</Column>
+```
+
+Use `EmojiPickerDropdown` for emoji selection — don't build a custom picker.
+
+## Fade edge strips
+
+Long message lists need scroll affordance. Wrap the scroller in `Fade` with edge strips:
+
+```text
+<Fade fillHeight edges={["top", "bottom"]} base="page">
+  <Scroller fill>
+    {messages.map(...)}
+  </Scroller>
+</Fade>
+```
+
+`Fade.edge` is a common gotcha — the `edges` prop must be an array, not a boolean.
+
+## Streaming and agent replies
+
+For AI chat, show activity while the model generates:
+
+```text
+<Row gap="12" vertical="center" paddingY="8">
+  <Spinner size="s" />
+  <Text variant="body-default-s" onBackground="neutral-weak">
+    Thinking…
+  </Text>
+</Row>
+```
+
+Stream tokens into the message body as they arrive. Keep the composer disabled until the stream completes, or allow the user to cancel with a stop button.
+
+## Members view swap
+
+`Chat1` swaps the center pane when the user selects "Members" from the sidebar — same shell, different content:
+
+```text
+{activeItem === "Members" ? (
+  <Table1 data={members} columns={memberColumns} showSearch />
+) : (
+  <Feed3 />
+)}
+```
+
+This pattern avoids a separate route for every sidebar item.
+
+## Keyboard shortcuts
+
+Show shortcuts with `Kbd` in tooltips and help text:
+
+```text
+<Row gap="4" vertical="center">
+  <Text variant="body-default-xs" onBackground="neutral-weak">Send</Text>
+  <Kbd>Enter</Kbd>
+</Row>
+```
+
+## Quality checklist
+
+| Check | Rule |
+|-------|------|
+| Layout | `Row fill` — three panes, not nested Columns |
+| Scroll | `Scroller` inside `Fade` with edge strips |
+| Avatars | `Avatar` with `size="m"` in message rows |
+| Emoji | `EmojiPickerDropdown` — don't invent picker UI |
+| Badges | One status badge per row — no duplicate `Badge` |
+
+## Agent note
+
+`chat.json` references blocks `Chat1`, `Feed3`, `Sidebar4`, `Sidebar5`. Load `examples/blocks/Chat1.tsx` for structure before generating. Gotcha keys: `Fade.edge`, `Badge.duplicate`.
+
+## Related
+
+→ [App shell navigation](/common-patterns/app-shell-navigation.mdx)
+→ [Tables and lists](/common-patterns/tables-and-lists.mdx)
+→ [Loading states](/common-patterns/loading-states.mdx)

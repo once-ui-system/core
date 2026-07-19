@@ -1,0 +1,100 @@
+<Feedback title="4 min · Pattern" description="Toasts are ephemeral status messages. Wrap your app in ToastProvider once, then call useToast() from any component — no prop drilling." variant="info" />
+
+## Setup (once per app)
+
+Add the toast provider inside your app providers stack — the same place you configure theme and icons. See the [ToastProvider guide](https://docs.once-ui.com/once-ui/contexts/toastProvider) for the full provider tree.
+
+At minimum you need:
+
+1. A `ToastProvider` wrapper at the app root (inside theme providers)
+2. Optional `s="top"` to place toasts at the top on small screens
+
+## Trigger a toast
+
+From any client component, import and call the toast hook:
+
+```text
+import { useToast } from "@once-ui-system/core";
+
+function SaveButton() {
+  const { addToast } = useToast();
+
+  return (
+    <Button
+      onClick={() =>
+        addToast({
+          variant: "success",
+          message: "Settings saved",
+        })
+      }
+    >
+      Save
+    </Button>
+  );
+}
+```
+
+## Variants
+
+| Variant | Use for |
+|---------|---------|
+| `success` | Completed actions — saved, copied, sent |
+| `danger` | Errors — failed save, network error |
+| `warning` | Caution — unsaved changes, quota near limit |
+| `info` | Neutral updates — background sync, tips |
+
+```text
+addToast({ variant: "danger", message: "Could not delete item" });
+addToast({ variant: "warning", message: "You have unsaved changes" });
+addToast({ variant: "info", message: "Syncing in the background" });
+```
+
+## Inline Feedback vs toast
+
+Once UI has two feedback surfaces — pick the right one:
+
+| Surface | When | Example |
+|---------|------|---------|
+| `<Feedback>` | Persistent context on the page | Lesson intro callouts, form section hints |
+| `useToast()` | Transient result of an action | "Copied to clipboard", "Upload failed" |
+
+This page's header uses `<Feedback>` — that's intentional. Toasts disappear after a few seconds.
+
+## Toast with action
+
+Add a follow-up action when the user might want to undo:
+
+```text
+addToast({
+  variant: "success",
+  message: "File moved to trash",
+  action: (
+    <Button size="s" variant="secondary" onClick={handleUndo}>
+      Undo
+    </Button>
+  ),
+});
+```
+
+Keep actions short — one verb, `size="s"`.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Toast provider at app root | Mounting a new provider per page |
+| `useToast()` hook | Custom fixed-position divs |
+| Semantic `variant` | Hard-coded green/red hex colors |
+| Short `message` string | Paragraph-length toast text |
+
+## Check yourself
+
+- [ ] Toast provider wraps the app (not individual routes)
+- [ ] Success and error paths both show feedback
+- [ ] Messages are one line — details belong in a Dialog or inline Feedback
+
+## Related
+
+→ [Dialog & modal](/common-patterns/dialog-modal.mdx)
+→ [Install & config](/beginner-guides/install-and-config.mdx)
+→ Full reference: [docs.once-ui.com — ToastProvider](https://docs.once-ui.com/once-ui/contexts/toastProvider)
