@@ -53,27 +53,25 @@ Use `href` for pages and `perform` for in-app actions like "Toggle theme" or "Cr
 
 ## Header trigger
 
-Wrap a Button inside Kbar as the trigger:
+Wrap a Button inside the command palette module as the trigger. Pass your `items` array to the module and use a tertiary Button with a command icon:
 
 ```text
 <Row gap="8" vertical="center" m={{ hide: true }}>
-  <Kbar items={kbar}>
-    <Button size="s" variant="tertiary" prefixIcon="command">
-      Search
-    </Button>
-  </Kbar>
+  <Button size="s" variant="tertiary" prefixIcon="command">
+    Search
+  </Button>
 </Row>
 ```
 
-Hide the trigger on mobile (`m={{ hide: true }}`) where screen space is tight — users can still open the palette with the keyboard shortcut.
+Place the trigger Button as a child of the Kbar module (see Header1 for the full wrapper). Hide the trigger Row on mobile (`m={{ hide: true }}`) where screen space is tight — users can still open the palette with the keyboard shortcut.
 
 Show the platform-appropriate modifier in shortcut hints: ⌘ on Mac, Ctrl on Windows. Header1 checks `navigator.platform` for this.
 
 ## Global keyboard shortcut
 
-Kbar registers ⌘K (or Ctrl+K) automatically when mounted. You do not need a separate `useEffect` listener — just ensure Kbar is rendered inside your layout, not inside a page that unmounts on navigation.
+The command palette module registers ⌘K (or Ctrl+K) automatically when mounted. You do not need a separate listener — just ensure it is rendered inside your layout, not inside a page that unmounts on navigation.
 
-Place Kbar in the root layout or app shell header so it persists across routes.
+Place the module in the root layout or app shell header so it persists across routes.
 
 ## Sections and search
 
@@ -96,7 +94,7 @@ The built-in search matches against `name`, `keywords`, and `section`. Add gener
 { id: "logout", name: "Sign out", perform: () => signOut(), section: "Actions", ... }
 ```
 
-When an item has `href`, Kbar uses SmartLink routing. When it has `perform`, the callback runs and the palette closes.
+When an item has `href`, the module uses SmartLink routing. When it has `perform`, the callback runs and the palette closes.
 
 ## Placement in app shell
 
@@ -123,7 +121,7 @@ See [App shell navigation](/common-patterns/app-shell-navigation.mdx) for the fu
 | Plain objects in `items` array | JSX elements as items |
 | `keywords` for search aliases | Only matching on `name` |
 | `href` for routes, `perform` for actions | Mixing onClick into item data |
-| Kbar in root layout / header | Kbar inside a page component |
+| Kbar in root layout / header | Palette inside a page component |
 | Hide trigger on mobile, keep shortcut | No mobile access at all |
 
 ## Check yourself
@@ -131,7 +129,7 @@ See [App shell navigation](/common-patterns/app-shell-navigation.mdx) for the fu
 - [ ] Every item has a unique `id`
 - [ ] Navigation items use `href`, actions use `perform`
 - [ ] `keywords` cover common search terms
-- [ ] Kbar mounted in persistent layout (not per-page)
+- [ ] Module mounted in persistent layout (not per-page)
 - [ ] Trigger hidden on mobile, keyboard shortcut still works
 
 ## Related

@@ -62,7 +62,7 @@ async function upsertPage(siteId, entry, existingByPath) {
   };
   const existing = existingByPath.get(entry.path);
   if (existing) {
-    const { page } = await api("PUT", `/sites/${siteId}/pages/${existing.id}`, {
+    const { page } = await api("PATCH", `/sites/${siteId}/pages/${existing.id}`, {
       content,
       metadata,
       title: entry.title,
