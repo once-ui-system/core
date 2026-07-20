@@ -1,0 +1,29 @@
+{
+  "siteId": "bdbe103d-9204-48bf-a2f1-756deb1c2cc9",
+  "pages": [
+    {
+      "path": "/common-patterns/auth-and-verification.mdx",
+      "title": "Auth & verification",
+      "summary": "Split sign-up layouts, social auth, PasswordInput, and OTP verification in stacked dialogs.",
+      "file": "common-patterns/auth-and-verification.mdx"
+    },
+    {
+      "path": "/common-patterns/settings-and-split-panels.mdx",
+      "title": "Settings & split panels",
+      "summary": "SplitView settings layout with section sidebar, form panels, toggles, and danger zones.",
+      "file": "common-patterns/settings-and-split-panels.mdx"
+    },
+    {
+      "path": "/common-patterns/data-filters-toolbar.mdx",
+      "title": "Data filters & toolbar",
+      "summary": "Compose table toolbars with search, SegmentedControl view switchers, date ranges, and filter chips.",
+      "file": "common-patterns/data-filters-toolbar.mdx"
+    },
+    {
+      "path": "/common-patterns/command-palette.mdx",
+      "title": "Command palette",
+      "summary": "Wire the Kbar module for searchable navigation, actions, and keyboard shortcuts in your app shell.",
+      "file": "common-patterns/command-palette.mdx"
+    }
+  ]
+}
