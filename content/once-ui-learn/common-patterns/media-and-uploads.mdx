@@ -24,7 +24,7 @@ const handleFileUpload = async (file: File) => {
   setAvatarUrl(url);
 };
 
-<MediaUpload onFileUpload={handleFileUpload} />
+// Mount the media upload module with onFileUpload={handleFileUpload}
 ```
 
 The callback receives a `File` after optional compression. Upload to your API or storage service inside `onFileUpload` — MediaUpload handles preview locally, not remote persistence.

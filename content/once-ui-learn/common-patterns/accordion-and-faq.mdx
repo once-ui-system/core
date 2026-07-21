@@ -98,19 +98,17 @@ AccordionGroup accepts `size` — condensed t-shirt sizes (`s`, `m`, `l`):
 
 Match accordion size to surrounding heading scale. FAQ under `display-strong-xs` headings works well at `m`.
 
-## Standalone Accordion
+## Standalone collapsible block
 
-For a single collapsible block (not a group), use Accordion directly:
+For a single collapsible block (not a group), use the standalone accordion component directly. Pass a `title` string and child content:
 
 ```text
-<Accordion title="Advanced options" size="m">
-  <Text onBackground="neutral-weak">
-    Configure webhooks, API keys, and custom domains here.
-  </Text>
-</Accordion>
+// Single collapsible block — not wrapped in a group
+// title="Advanced options" size="m"
+// children: Text with onBackground="neutral-weak"
 ```
 
-Do not wrap a single Accordion in AccordionGroup — the group adds outer borders and dividers meant for multiple items.
+Do not wrap a single collapsible item in a group — the group adds outer borders and dividers meant for multiple items.
 
 ## Write this / not this
 
