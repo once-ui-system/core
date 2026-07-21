@@ -1,0 +1,90 @@
+.container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--neutral-solid-strong);
+  outline: none;
+
+  &:fullscreen,
+  &:-webkit-full-screen {
+    .video {
+      object-fit: contain;
+    }
+  }
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: none;
+  transition: opacity var(--transition-micro-medium);
+
+  &.visible {
+    opacity: 1;
+  }
+
+  &.hidden {
+    opacity: 0;
+  }
+}
+
+.gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.25) 35%,
+    transparent 65%
+  );
+  pointer-events: none;
+}
+
+.centerPlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+}
+
+.centerPlayButton {
+  backdrop-filter: blur(0.5rem);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.controls {
+  position: relative;
+  z-index: 1;
+  pointer-events: auto;
+}
+
+.progressTrack {
+  height: 0.1875rem;
+  cursor: pointer;
+  transition: height var(--transition-micro-short);
+
+  &:hover {
+    height: 0.3125rem;
+  }
+}
+
+.progressFill {
+  transition: width 0.05s linear;
+}
+
+.time {
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}

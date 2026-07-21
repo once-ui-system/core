@@ -36,6 +36,8 @@ import {
   HiOutlineArrowTurnDownLeft,
   HiOutlinePlay,
   HiOutlinePause,
+  HiOutlineSpeakerWave,
+  HiOutlineSpeakerXMark,
   HiOutlineBars3BottomLeft,
   HiOutlineAdjustmentsHorizontal,
 } from "react-icons/hi2";
@@ -97,6 +99,8 @@ export const iconLibrary: Record<string, IconType> = {
   enter: HiOutlineArrowTurnDownLeft,
   play: HiOutlinePlay,
   pause: HiOutlinePause,
+  volume: HiOutlineSpeakerWave,
+  volumeOff: HiOutlineSpeakerXMark,
   screen: HiOutlineComputerDesktop,
   document: HiOutlineBars3BottomLeft,
   radialGauge: PiGauge,

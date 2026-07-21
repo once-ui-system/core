@@ -269,6 +269,43 @@ The component auto-detects and renders YouTube links, just pass a YouTube URL to
   ]}
 />
 
+## Video
+
+For MP4 and other file-based video, set `controls` to render a minimal custom player with play/pause, seek, mute, and fullscreen. Keyboard shortcuts: space (play/pause), `m` (mute), `f` (fullscreen), arrow keys (seek).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Media
+      src="https://www.w3schools.com/html/mov_bbb.mp4"
+      aspectRatio="16/9"
+      autoplay={false}
+      controls
+      sound
+      loop={false}
+      radius="xl"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Media
+    src="/video.mp4"
+    aspectRatio="16/9"
+    autoplay={false}
+    controls
+    sound
+    loop={false}
+    radius="xl"
+/>`,
+      language: "tsx",
+      label: "Video"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable

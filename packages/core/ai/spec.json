@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "1.7.11",
- "generated": "2026-07-05",
+ "version": "1.7.12",
+ "generated": "2026-07-21",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -18,7 +18,7 @@
   "TextWeight": "\"default\" | \"strong\"",
   "TextSize": "TShirtSizes",
   "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`",
-  "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"opacity\""
+  "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"volume\" | \"volumeOff\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"opacity\""
  },
  "mixins": {
   "CommonProps": {
