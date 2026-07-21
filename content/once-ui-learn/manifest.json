@@ -1,0 +1,29 @@
+{
+  "siteId": "bdbe103d-9204-48bf-a2f1-756deb1c2cc9",
+  "pages": [
+    {
+      "path": "/common-patterns/pricing-and-plans.mdx",
+      "title": "Pricing & plans",
+      "summary": "Three-tier pricing grids, billing toggles, comparison tables, and FAQ accordions from the pricing task bundle.",
+      "file": "common-patterns/pricing-and-plans.mdx"
+    },
+    {
+      "path": "/common-patterns/accordion-and-faq.mdx",
+      "title": "Accordion & FAQ",
+      "summary": "AccordionGroup for FAQ sections, split-column layouts, autoCollapse behavior, and standalone Accordion usage.",
+      "file": "common-patterns/accordion-and-faq.mdx"
+    },
+    {
+      "path": "/common-patterns/media-and-uploads.mdx",
+      "title": "Media & uploads",
+      "summary": "MediaUpload drag-and-drop, compression, preview, and profile photo patterns in settings forms.",
+      "file": "common-patterns/media-and-uploads.mdx"
+    },
+    {
+      "path": "/common-patterns/empty-and-error-states.mdx",
+      "title": "Empty & error states",
+      "summary": "Compose empty, error, and filtered-empty states with Icon, Heading, Text, and Button — distinct from loading skeletons.",
+      "file": "common-patterns/empty-and-error-states.mdx"
+    }
+  ]
+}

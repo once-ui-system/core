@@ -1,0 +1,158 @@
+<Feedback title="5 min · Pattern" description="Empty and error states tell users what happened and what to do next. Compose them with Column, Icon, Heading, Text, and Button — not generic placeholder divs." variant="info" />
+
+## What this pattern covers
+
+Every data-driven UI needs three non-happy paths:
+
+- **Empty** — query succeeded but returned zero results
+- **Error** — fetch failed or action was rejected
+- **No access** — user lacks permission to view content
+
+These are different from [loading states](/common-patterns/loading-states.mdx) (skeletons and spinners). Show empty/error only **after** the request resolves.
+
+## Empty state anatomy
+
+A good empty state has four parts:
+
+1. Icon or illustration (muted, not decorative)
+2. Heading — what is empty
+3. Text — why it might be empty or what to do
+4. Primary action Button (optional secondary)
+
+```text
+<Column fillWidth center padding="48" gap="16" maxWidth="xs">
+  <Icon name="inbox" size="l" onBackground="neutral-weak" />
+  <Heading as="h3" variant="heading-strong-s" align="center">
+    No projects yet
+  </Heading>
+  <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+    Create your first project to start tracking work.
+  </Text>
+  <Button arrowIcon>Create project</Button>
+</Column>
+```
+
+Center the block inside its parent with `center` on Column. Use `maxWidth="xs"` so text lines stay readable.
+
+## Inside a table or list panel
+
+When a table has no rows, replace the Table with an empty state inside the same surface panel:
+
+```text
+<Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="24">
+  <Row fillWidth horizontal="between" vertical="center">
+    <Heading as="h2" variant="heading-strong-m">Projects</Heading>
+    <Button size="s" prefixIcon="plus">New</Button>
+  </Row>
+  {/* if rows.length === 0 → empty state Column */}
+  {/* else → Table */}
+</Column>
+```
+
+Keep the panel header (title + action button) visible even when empty. Only the body swaps to the empty state.
+
+## Error state anatomy
+
+Error states add a retry path and use danger-adjacent colors sparingly:
+
+```text
+<Column fillWidth center padding="48" gap="16" maxWidth="xs">
+  <Icon name="alertCircle" size="l" onBackground="danger-medium" />
+  <Heading as="h3" variant="heading-strong-s" align="center">
+    Couldn't load projects
+  </Heading>
+  <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+    Check your connection and try again.
+  </Text>
+  <Row gap="12">
+    <Button onClick={retry}>Try again</Button>
+    <Button variant="secondary">Contact support</Button>
+  </Row>
+</Column>
+```
+
+Use `onBackground="danger-medium"` on the Icon only — not on the entire panel. Reserve danger borders for destructive actions (see settings danger zones).
+
+## Inline error vs full-page error
+
+| Scope | When | Layout |
+|-------|------|--------|
+| Inline | Single widget failed (chart, sidebar widget) | Compact Column inside the widget's bounds |
+| Section | Main content area failed | Centered empty state in content Column |
+| Full page | Route-level failure | Column with `minHeight` filling the viewport |
+
+For inline errors, skip the Icon and use Text with a retry Button:
+
+```text
+<Column center padding="24" gap="8">
+  <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+    Failed to load chart data.
+  </Text>
+  <Button size="s" variant="secondary">Retry</Button>
+</Column>
+```
+
+## Filtered empty vs truly empty
+
+Distinguish "no data exists" from "no matches for your filters":
+
+| Situation | Heading | Action |
+|-----------|---------|--------|
+| No data yet | "No projects yet" | Create / import Button |
+| Filters returned zero | "No matching projects" | Clear filters Button (secondary) |
+| Search returned zero | "No results for '{query}'" | Adjust search Text, no Button needed |
+
+```text
+<Column center gap="16" padding="48">
+  <Heading as="h3" variant="heading-strong-s">No matching projects</Heading>
+  <Text variant="body-default-s" onBackground="neutral-weak">
+    Try adjusting your filters or search terms.
+  </Text>
+  <Button variant="secondary" onClick={clearFilters}>Clear filters</Button>
+</Column>
+```
+
+## Toast vs inline error
+
+Use inline/section error states for **persistent** failures the user needs to act on. Use [toast feedback](/common-patterns/toast-and-feedback.mdx) for **transient** action failures (save failed, copy failed) where the form context is still visible.
+
+| Failure type | Surface |
+|--------------|---------|
+| Page/section fetch failed | Inline or section error state |
+| Form submit rejected | Toast + keep form visible with field errors |
+| Background sync failed | Toast notification |
+
+## Agent checklist
+
+When generating list or dashboard views:
+
+1. Handle three render branches: loading → empty/error → data
+2. Never show skeleton and empty state simultaneously
+3. Include a primary action in empty states when the user can create data
+4. Include retry in error states when the operation can be re-attempted
+5. Differentiate filtered-empty from truly-empty copy
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Icon + Heading + Text + Button stack | Plain "No data" string centered in a div |
+| Empty state inside existing panel | Remove panel chrome when empty |
+| Retry Button on errors | Error with no recovery path |
+| "Clear filters" for filtered empty | Same copy as truly-empty state |
+| Toast for transient action failures | Full-page error for a failed save |
+
+## Check yourself
+
+- [ ] Loading skeleton removed before showing empty/error
+- [ ] Empty state has heading, explanation, and action when applicable
+- [ ] Error state has retry or support path
+- [ ] Filtered-empty uses different copy than truly-empty
+- [ ] Danger colors limited to Icon accent, not full panel background
+
+## Related
+
+→ [Loading states](/common-patterns/loading-states.mdx)
+→ [Tables & lists](/common-patterns/tables-and-lists.mdx)
+→ [Toast & feedback](/common-patterns/toast-and-feedback.mdx)
+→ [Data filters & toolbar](/common-patterns/data-filters-toolbar.mdx)

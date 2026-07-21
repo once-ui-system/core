@@ -1,0 +1,210 @@
+<Feedback title="7 min · Pattern" description="Pricing pages combine tier grids, billing toggles, comparison tables, and FAQ accordions. Once UI ships a pricing task bundle and gold example with highlighted middle tiers." variant="info" />
+
+## What this pattern covers
+
+A production pricing page usually has four sections:
+
+- Hero with eyebrow, headline, and value prop
+- Three-tier grid with a highlighted "most popular" plan
+- Monthly / yearly toggle via SegmentedControl
+- Feature comparison table and FAQ accordion at the bottom
+
+Gold reference: `packages/core/ai/examples/pricing.tsx` and task bundle `packages/core/ai/tasks/pricing.json`.
+
+For production fidelity, also read matching Pro blocks from `examples/blocks/manifest.json` (Header2, Footer2 patterns).
+
+## Page structure
+
+Stack sections in a Column with `gap="104"` — the pricing task bundle's recommended section rhythm:
+
+```text
+<Column as="main" fillWidth horizontal="center" gap="104" paddingBottom="104">
+  {/* Hero with ambient background */}
+  {/* Tier grid + billing toggle */}
+  {/* Comparison table on neutral band */}
+  {/* Bottom CTA panel */}
+</Column>
+```
+
+Keep section gaps at `104` between major blocks. Do not cram tiers, table, and FAQ into one surface panel.
+
+## Tier grid
+
+Use a three-column Grid that collapses to one column on mobile:
+
+```text
+<Grid columns="3" gap="24" s={{ columns: 1 }}>
+  {/* tier panels */}
+</Grid>
+```
+
+Each tier is a **Column surface panel**, not a Card:
+
+```text
+<Column
+  fill
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  padding="32"
+  overflow="hidden"
+>
+  <Column fill gap="24">
+    <Heading as="h3" variant="heading-strong-m">Starter</Heading>
+    <Text variant="body-default-s" onBackground="neutral-weak">
+      For solo builders shipping their first product.
+    </Text>
+    {/* price row */}
+    {/* feature list with Icon checkmarks */}
+    <Button fillWidth variant="secondary" arrowIcon>Start with Starter</Button>
+  </Column>
+</Column>
+```
+
+Use `Column` with `background="surface"` and `border` — not `Card.interactive`. Pricing tiers are informational panels, not clickable cards.
+
+## Highlighted middle tier
+
+The recommended plan gets brand border and a glow Background gradient:
+
+```text
+<Column
+  fill
+  background="surface"
+  border="brand-alpha-medium"
+  radius="l"
+  padding="32"
+  overflow="hidden"
+>
+  <Background
+    position="absolute"
+    top="0"
+    left="0"
+    fill
+    pointerEvents="none"
+    gradient={{
+      display: true,
+      colorStart: "brand-alpha-medium",
+      colorEnd: "static-transparent",
+      x: 50, y: 0, width: 200, height: 60, opacity: 50,
+    }}
+  />
+  <Column zIndex={1} fill gap="24">
+    <Row fillWidth horizontal="between" vertical="center">
+      <Heading as="h3" variant="heading-strong-m">Pro</Heading>
+      <Tag variant="brand" size="s" label="Most popular" />
+    </Row>
+    <Button fillWidth arrowIcon>Start free trial</Button>
+  </Column>
+</Column>
+```
+
+Add a `Tag variant="brand"` badge on the highlighted tier. Use `Button` with `arrowIcon` on the primary CTA.
+
+## Billing toggle
+
+Place SegmentedControl in the tier section header row:
+
+```text
+<Row fillWidth horizontal="between" vertical="end" gap="24" s={{ direction: "column", horizontal: "start" }}>
+  <Heading as="h2" variant="display-strong-xs">Three plans, one decision</Heading>
+  <SegmentedControl
+    selected={billing}
+    onToggle={(value) => setBilling(value)}
+    buttons={[
+      { value: "monthly", label: "Monthly" },
+      { value: "yearly", label: "Yearly −20%" },
+    ]}
+  />
+</Row>
+```
+
+Store billing in React state (`"monthly" | "yearly"`) and derive displayed prices from your tier data. For animated price transitions, use the CountFx component in your app — reference it in prose, not inline in static examples.
+
+## Feature list per tier
+
+Map features with Icon checkmarks inside each tier panel:
+
+```text
+<Column flex={1} gap="12">
+  <Row gap="12" vertical="center">
+    <Icon name="checkbox" size="xs" onBackground="brand-medium" />
+    <Text variant="body-default-s">Unlimited projects</Text>
+  </Row>
+</Column>
+```
+
+Use `flex={1}` on the feature Column so CTAs align at the bottom across tiers of different heights.
+
+## Comparison table
+
+Below the tiers, add a full-width Table on a neutral band:
+
+```text
+<Column fillWidth horizontal="center" background="neutral-alpha-weak" paddingY="80" paddingX="24">
+  <Column fillWidth maxWidth="l" gap="40">
+    <Heading as="h2" variant="display-strong-xs">Every feature, side by side</Heading>
+    <Table
+      fillWidth
+      data={{
+        headers: [
+          { content: "Feature", key: "feature" },
+          { content: "Starter", key: "starter" },
+          { content: "Pro", key: "pro" },
+        ],
+        rows: [
+          ["Projects", "3", "Unlimited"],
+          ["API access", "—", "✓"],
+        ],
+      }}
+    />
+  </Column>
+</Column>
+```
+
+See [Tables & lists](/common-patterns/tables-and-lists.mdx) for row formatting and empty cells.
+
+## FAQ accordion
+
+Close the page with an AccordionGroup for pricing questions. Pass an `items` array where each entry has `title` (string) and `content` (React node, usually Text).
+
+Set `autoCollapse={true}` (default) so only one question is open at a time. Use `size="m"` for marketing pages.
+
+Reference AccordionGroup in your app — see [Accordion & FAQ](/common-patterns/accordion-and-faq.mdx) for the item shape and split-column layout.
+
+## Agent checklist
+
+When generating a pricing page from the task bundle:
+
+1. Load `packages/core/ai/tasks/pricing.json` for component list and quality hints
+2. Read `examples/pricing.tsx` for section order and tier structure
+3. Use `sectionGap: "104"` and tier panels as Column surfaces
+4. Highlight middle tier with `border="brand-alpha-medium"` + Background gradient
+5. Match Pro block header/footer patterns from the blocks manifest
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Column surface panels for tiers | Card with onClick on entire tier |
+| `Grid columns="3"` + `s={{ columns: 1 }}` | Flexbox with manual media queries |
+| SegmentedControl for billing toggle | Two separate buttons with custom active state |
+| Table for feature matrix | Nested div grids pretending to be a table |
+| `gap="104"` between major sections | Everything in one padded container |
+| Tag on highlighted tier | Inline styled "Popular" span |
+
+## Check yourself
+
+- [ ] Three tiers in a responsive Grid
+- [ ] Middle tier has brand border, glow Background, and Tag badge
+- [ ] Billing toggle updates all price displays
+- [ ] Feature checkmarks use Icon, not unicode bullets
+- [ ] Comparison Table below tiers on neutral background
+- [ ] FAQ AccordionGroup at the bottom
+
+## Related
+
+→ [Hero section](/common-patterns/hero-section.mdx)
+→ [Accordion & FAQ](/common-patterns/accordion-and-faq.mdx)
+→ [Tables & lists](/common-patterns/tables-and-lists.mdx)
+→ Task bundle: `packages/core/ai/tasks/pricing.json`
