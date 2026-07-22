@@ -1,0 +1,117 @@
+<Feedback title="6 min · Design" description="ThemeInit prevents FOUC, ThemeProvider persists style knobs to localStorage, and data-* attributes on html drive every token in theme.scss." variant="info" />
+
+## How theming works
+
+Once UI does not rely on CSS-in-JS for theme switching. Instead:
+
+1. **`ThemeInit`** — blocking inline script in `<head>` sets `data-theme`, `data-brand`, `data-accent`, etc. before first paint
+2. **`ThemeProvider`** — client context that reads/writes the same `data-*` keys to `localStorage`
+3. **`tokens/theme.scss`** — selectors like `[data-theme="dark"][data-brand="blue"]` map to CSS variables
+
+This means zero flash of wrong theme and no prop-drilling for colors.
+
+## ThemeInit in your root layout
+
+Render `<ThemeInit />` inside `<html>` before `<body>`. Pass defaults that match your brand — users can override via localStorage or a settings panel.
+
+```tsx
+import { ThemeInit } from "@once-ui-system/core";
+
+<html>
+  <head>
+    <ThemeInit
+      config={{
+        theme: "system",
+        brand: "blue",
+        accent: "indigo",
+        neutral: "gray",
+        solid: "contrast",
+        "solid-style": "flat",
+        border: "playful",
+        surface: "filled",
+        transition: "all",
+        scaling: "100",
+        "viz-style": "categorical",
+      }}
+    />
+  </head>
+  <body>{children}</body>
+</html>
+```
+
+Priority order: **localStorage → config defaults → system preference** (for `theme: "system"`).
+
+## ThemeProvider for interactive apps
+
+Wrap client subtrees with `ThemeProvider`. Use `useTheme()` for light/dark/system and `useStyle()` for brand, accent, border style, surface, scaling, and more.
+
+```tsx
+"use client";
+import { ThemeProvider, useTheme } from "@once-ui-system/core";
+
+export function Providers({ children }) {
+  return (
+    <ThemeProvider theme="system" brand="blue" accent="indigo">
+      {children}
+    </ThemeProvider>
+  );
+}
+```
+
+`setStyle({ border: "conservative", scaling: "105" })` updates both the DOM attribute and localStorage so refreshes keep the choice.
+
+## Style dimensions at a glance
+
+| Attribute | Options | Effect |
+|-----------|---------|--------|
+| `data-theme` | light, dark, system | Color scheme |
+| `data-brand` / `data-accent` | scheme tokens | Primary + highlight hues |
+| `data-neutral` | sand, gray, slate | Gray ramp |
+| `data-border` | rounded, playful, conservative | Corner radius scale |
+| `data-surface` | filled, translucent | Panel opacity |
+| `data-scaling` | 90–110 | Global size multiplier |
+| `data-viz-style` | categorical, divergent, sequential | Chart color ramps |
+
+`color-and-surfaces` covers **which token to pick** — this page covers **how they get applied at runtime**.
+
+## Charts follow data theme
+
+Wrap dashboard routes with `DataThemeProvider` and read `useDataTheme()` inside chart pages. `LineChart` and siblings pick categorical vs sequential palettes from `data-viz-style` automatically.
+
+```tsx
+<Column gap="16" padding="24">
+  <Heading variant="heading-strong-l">Weekly signups</Heading>
+  <LineChart data={series} xKey="week" yKey="count" height={240} />
+</Column>
+```
+
+Toggle `viz-style` in your settings panel to verify chart colors track the global data theme.
+
+## Built-in UI switchers
+
+Core ships `ThemeSwitcher` and `StylePanel` for full settings surfaces. Drop them in a header dropdown or a `/settings/appearance` route — both call the same `setStyle` API under the hood.
+
+For minimal headers, a three-option `SegmentedControl` (light / system / dark) wired to `setTheme` is enough.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `ThemeInit` in `<head>` | Client-only theme after hydration flash |
+| `data-brand` tokens | Hard-coded hex in components |
+| `setStyle` for user prefs | Inline `style={{ color: … }}` overrides |
+| `DataThemeProvider` on chart routes | Charts with fixed color arrays |
+
+## Check yourself
+
+- [ ] `ThemeInit` renders before body content
+- [ ] Defaults in `ThemeInit` match `ThemeProvider` props
+- [ ] Settings UI updates persist across refresh
+- [ ] Chart pages sit inside `DataThemeProvider`
+
+## Related
+
+→ [Color & surfaces](/design-tips/color-and-surfaces.mdx)
+→ [Dashboard & charts](/common-patterns/dashboard-and-charts.mdx)
+→ [Settings & split panels](/common-patterns/settings-and-split-panels.mdx)
+→ Full reference: [docs.once-ui.com — ThemeProvider](https://docs.once-ui.com/once-ui/contexts/theme-provider)

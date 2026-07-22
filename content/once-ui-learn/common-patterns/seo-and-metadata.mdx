@@ -1,0 +1,77 @@
+<Feedback title="5 min · Pattern" description="generateMetadata and Schema ship in @once-ui-system/core — wire them once in your root layout and every route inherits correct OG, Twitter, and JSON-LD output." variant="info" />
+
+## What ships in Core
+
+| Piece | Module | Role |
+|-------|--------|------|
+| `generateMetadata()` | `modules/seo/Meta` | Next.js `Metadata` object with OG + Twitter cards |
+| `Schema` | `modules/seo/Schema` | JSON-LD script tag (`WebSite`, `Article`, `BlogPosting`, etc.) |
+| `handleOGFetch` | `server/og-utils` | Server-side URL preview for link cards |
+
+These are **server-safe** — import from `@once-ui-system/core` in layouts and page files, not inside client components.
+
+## generateMetadata in a layout
+
+Pass `baseURL`, `title`, `description`, and optional `path`. When you omit `image`, Core falls back to `/api/og/generate?title=…` so every page gets a share card without hand-crafting images.
+
+```ts
+import { generateMetadata as onceMeta } from "@once-ui-system/core";
+
+export const metadata = onceMeta({
+  title: "Dashboard",
+  description: "Team metrics and activity",
+  baseURL: "https://app.example.com",
+  path: "/dashboard",
+  type: "website",
+});
+```
+
+For blog posts, set `type: "article"` and pass `publishedTime` plus an `author` object. Use `noindex` / `nofollow` on private routes instead of maintaining a separate robots file per page.
+
+## JSON-LD with Schema
+
+Drop `<Schema />` in your root layout or article template. Pick the `as` prop that matches the page type — `website` for home, `blogPosting` for posts, `organization` for company pages.
+
+```tsx
+import { Schema } from "@once-ui-system/core";
+
+<Schema
+  as="blogPosting"
+  title="Loading states in Once UI"
+  description="Skeletons hold layout; spinners signal actions."
+  baseURL="https://learn.once-ui.com"
+  path="/common-patterns/loading-states"
+  datePublished="2026-07-18"
+  author={{ name: "Once UI", url: "https://once-ui.com" }}
+/>
+```
+
+The component normalizes `baseURL` and `path`, builds an absolute `image` URL, and emits a single `<script type="application/ld+json">` block.
+
+## Link previews (OgCard)
+
+For in-app link unfurling, use `OgCard` with the `useOgData` hook on the client. On the server, call `handleOGFetch(url)` inside a route handler or Server Component — it returns title, description, image, and favicon.
+
+Keep fetch on the server when possible; client fetches are fine for chat or comment threads where the URL is user-supplied.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `generateMetadata()` with `baseURL` + `path` | Hard-coded `<meta>` tags per page |
+| `<Schema as="blogPosting" … />` | Hand-written JSON-LD strings |
+| Fallback OG image via title param | Blank `og:image` on share |
+| `noindex` on draft routes | Leaving staging pages indexable |
+
+## Check yourself
+
+- [ ] `baseURL` has no trailing slash issues (Core normalizes it)
+- [ ] Article pages pass `publishedTime` and `author`
+- [ ] Private routes set `noindex` or `robots`
+- [ ] JSON-LD `as` type matches the actual page content
+
+## Related
+
+→ [Hero section](/common-patterns/hero-section.mdx)
+→ [App shell navigation](/common-patterns/app-shell-navigation.mdx)
+→ Full reference: [docs.once-ui.com — Meta](https://docs.once-ui.com/once-ui/modules/seo)
