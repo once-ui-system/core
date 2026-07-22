@@ -45,20 +45,11 @@ Use for: design iterations, photo editing demos, layout before/after, accessibil
 
 ## Indicator control pattern
 
-When you need a compact toggle between line and thumbnail modes, use `SegmentedControl` in the page chrome — the Carousel `indicator` prop accepts the active value.
+When you need a compact toggle between line and thumbnail modes, use `SegmentedControl` in the page chrome — wire its value to the carousel `indicator` prop.
 
-```tsx
-<Column gap="16">
-  <SegmentedControl
-    buttons={[
-      { label: "Dots", value: "line" },
-      { label: "Thumbs", value: "thumbnail" },
-    ]}
-    selected="line"
-    onToggle={() => {}}
-  />
-  {/* Carousel indicator={selected} */}
-</Column>
+```text
+SegmentedControl buttons: Dots (line) | Thumbs (thumbnail)
+onToggle → set indicator prop on Carousel
 ```
 
 ## Write this / not this

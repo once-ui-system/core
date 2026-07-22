@@ -6,28 +6,32 @@
       "title": "SEO, Open Graph, and structured data",
       "summary": "generateMetadata, Schema JSON-LD, and server-side OG fetch — wire once in your layout.",
       "tag": "Common patterns",
-      "file": "common-patterns/seo-and-metadata.mdx"
+      "file": "common-patterns/seo-and-metadata.mdx",
+      "id": "80d855b1-745e-46d0-bf5a-6f8fe757a556"
     },
     {
       "path": "/common-patterns/code-blocks-and-previews.mdx",
       "title": "Documentation code blocks with live preview",
       "summary": "CodeBlock with prismjs, multi-file tabs, diff view, and side-by-side preview.",
       "tag": "Common patterns",
-      "file": "common-patterns/code-blocks-and-previews.mdx"
+      "file": "common-patterns/code-blocks-and-previews.mdx",
+      "id": "74b3fe1d-8086-44f3-be50-7c6fbfcef766"
     },
     {
       "path": "/common-patterns/carousel-and-compare-media.mdx",
       "title": "Carousels, galleries, and before/after comparisons",
       "summary": "Carousel for rotators and galleries; CompareImage for draggable A/B sliders.",
       "tag": "Common patterns",
-      "file": "common-patterns/carousel-and-compare-media.mdx"
+      "file": "common-patterns/carousel-and-compare-media.mdx",
+      "id": "c5410a20-583f-4ca8-a02b-24dd1903e5ea"
     },
     {
       "path": "/design-tips/theme-tokens-and-runtime-style.mdx",
       "title": "Theme tokens, FOUC-free init, and runtime style controls",
       "summary": "ThemeInit, ThemeProvider, data-* attributes, and DataThemeProvider for charts.",
       "tag": "Design tips",
-      "file": "design-tips/theme-tokens-and-runtime-style.mdx"
+      "file": "design-tips/theme-tokens-and-runtime-style.mdx",
+      "id": "30bbfc9c-7261-44bb-b8f1-0a775442f107"
     }
   ]
 }

@@ -4,7 +4,7 @@
 
 Once UI does not rely on CSS-in-JS for theme switching. Instead:
 
-1. **`ThemeInit`** — blocking inline script in `<head>` sets `data-theme`, `data-brand`, `data-accent`, etc. before first paint
+1. **ThemeInit** — blocking inline script in the document head sets `data-theme`, `data-brand`, `data-accent`, etc. before first paint
 2. **`ThemeProvider`** — client context that reads/writes the same `data-*` keys to `localStorage`
 3. **`tokens/theme.scss`** — selectors like `[data-theme="dark"][data-brand="blue"]` map to CSS variables
 
@@ -12,51 +12,29 @@ This means zero flash of wrong theme and no prop-drilling for colors.
 
 ## ThemeInit in your root layout
 
-Render `<ThemeInit />` inside `<html>` before `<body>`. Pass defaults that match your brand — users can override via localStorage or a settings panel.
+Render ThemeInit inside `html` before `body`. Pass defaults that match your brand — users can override via localStorage or a settings panel.
 
-```tsx
-import { ThemeInit } from "@once-ui-system/core";
-
-<html>
-  <head>
-    <ThemeInit
-      config={{
-        theme: "system",
-        brand: "blue",
-        accent: "indigo",
-        neutral: "gray",
-        solid: "contrast",
-        "solid-style": "flat",
-        border: "playful",
-        surface: "filled",
-        transition: "all",
-        scaling: "100",
-        "viz-style": "categorical",
-      }}
-    />
-  </head>
-  <body>{children}</body>
-</html>
+```text
+config.theme = "system"
+config.brand = "blue"
+config.accent = "indigo"
+config.neutral = "gray"
+config.solid = "contrast"
+config.solid-style = "flat"
+config.border = "playful"
+config.surface = "filled"
+config.transition = "all"
+config.scaling = "100"
+config.viz-style = "categorical"
 ```
 
 Priority order: **localStorage → config defaults → system preference** (for `theme: "system"`).
 
 ## ThemeProvider for interactive apps
 
-Wrap client subtrees with `ThemeProvider`. Use `useTheme()` for light/dark/system and `useStyle()` for brand, accent, border style, surface, scaling, and more.
+Wrap client subtrees with ThemeProvider. Use `useTheme()` for light/dark/system and `useStyle()` for brand, accent, border style, surface, scaling, and more.
 
-```tsx
-"use client";
-import { ThemeProvider, useTheme } from "@once-ui-system/core";
-
-export function Providers({ children }) {
-  return (
-    <ThemeProvider theme="system" brand="blue" accent="indigo">
-      {children}
-    </ThemeProvider>
-  );
-}
-```
+Default props to match ThemeInit: `theme="system"`, `brand="blue"`, `accent="indigo"`.
 
 `setStyle({ border: "conservative", scaling: "105" })` updates both the DOM attribute and localStorage so refreshes keep the choice.
 
@@ -76,16 +54,9 @@ export function Providers({ children }) {
 
 ## Charts follow data theme
 
-Wrap dashboard routes with `DataThemeProvider` and read `useDataTheme()` inside chart pages. `LineChart` and siblings pick categorical vs sequential palettes from `data-viz-style` automatically.
+Wrap dashboard routes with DataThemeProvider and read `useDataTheme()` inside chart pages. LineChart and siblings pick categorical vs sequential palettes from `data-viz-style` automatically.
 
-```tsx
-<Column gap="16" padding="24">
-  <Heading variant="heading-strong-l">Weekly signups</Heading>
-  <LineChart data={series} xKey="week" yKey="count" height={240} />
-</Column>
-```
-
-Toggle `viz-style` in your settings panel to verify chart colors track the global data theme.
+Build a chart section with Column + Heading + LineChart — pass `data`, `xKey`, `yKey`, and `height`. Toggle `viz-style` in your settings panel to verify chart colors track the global data theme.
 
 ## Built-in UI switchers
 
@@ -97,7 +68,7 @@ For minimal headers, a three-option `SegmentedControl` (light / system / dark) w
 
 | ✅ Once UI way | ❌ Common mistake |
 |----------------|-------------------|
-| `ThemeInit` in `<head>` | Client-only theme after hydration flash |
+| ThemeInit in document head | Client-only theme after hydration flash |
 | `data-brand` tokens | Hard-coded hex in components |
 | `setStyle` for user prefs | Inline `style={{ color: … }}` overrides |
 | `DataThemeProvider` on chart routes | Charts with fixed color arrays |

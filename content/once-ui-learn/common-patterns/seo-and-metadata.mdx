@@ -30,23 +30,24 @@ For blog posts, set `type: "article"` and pass `publishedTime` plus an `author` 
 
 ## JSON-LD with Schema
 
-Drop `<Schema />` in your root layout or article template. Pick the `as` prop that matches the page type — `website` for home, `blogPosting` for posts, `organization` for company pages.
+Drop the `Schema` component in your root layout or article template. Pick the `as` prop that matches the page type — `website` for home, `blogPosting` for posts, `organization` for company pages.
 
-```tsx
-import { Schema } from "@once-ui-system/core";
+Required props: `as`, `title`, `description`, `baseURL`, `path`. Optional: `datePublished`, `dateModified`, `author`, `image`, `sameAs`.
 
-<Schema
-  as="blogPosting"
-  title="Loading states in Once UI"
-  description="Skeletons hold layout; spinners signal actions."
-  baseURL="https://learn.once-ui.com"
-  path="/common-patterns/loading-states"
-  datePublished="2026-07-18"
-  author={{ name: "Once UI", url: "https://once-ui.com" }}
-/>
+Example shape for a blog post:
+
+```text
+as="blogPosting"
+title="Loading states in Once UI"
+description="Skeletons hold layout; spinners signal actions."
+baseURL="https://learn.once-ui.com"
+path="/common-patterns/loading-states"
+datePublished="2026-07-18"
+author.name="Once UI"
+author.url="https://once-ui.com"
 ```
 
-The component normalizes `baseURL` and `path`, builds an absolute `image` URL, and emits a single `<script type="application/ld+json">` block.
+The component normalizes `baseURL` and `path`, builds an absolute `image` URL, and emits a single JSON-LD script block.
 
 ## Link previews (OgCard)
 
@@ -58,8 +59,8 @@ Keep fetch on the server when possible; client fetches are fine for chat or comm
 
 | ✅ Once UI way | ❌ Common mistake |
 |----------------|-------------------|
-| `generateMetadata()` with `baseURL` + `path` | Hard-coded `<meta>` tags per page |
-| `<Schema as="blogPosting" … />` | Hand-written JSON-LD strings |
+| `generateMetadata()` with `baseURL` + `path` | Hard-coded meta tags per page |
+| Schema component with `as="blogPosting"` | Hand-written JSON-LD strings |
 | Fallback OG image via title param | Blank `og:image` on share |
 | `noindex` on draft routes | Leaving staging pages indexable |
 

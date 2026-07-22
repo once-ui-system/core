@@ -14,24 +14,12 @@ The public entry uses `React.lazy` so prismjs only loads when a page actually re
 
 Pass `code` (string) and `language`. Optional `label` shows a tab header; `highlight` accepts line numbers as a string (`"3-5,8"`).
 
-Describe the API in prose — the live `CodeBlock` component is not available in this Learn renderer. In your app:
+Describe the API in prose — the live CodeBlock component is not available in this Learn renderer. In your app, import from `@once-ui-system/core` and pass `code`, `language`, and optional `label`:
 
-```tsx
-import { CodeBlock } from "@once-ui-system/core";
-
-<CodeBlock
-  code={`import { Column, Heading } from "@once-ui-system/core";
-
-export function Page() {
-  return (
-    <Column gap="16" padding="24">
-      <Heading variant="display-strong-s">Hello</Heading>
-    </Column>
-  );
-}`}
-  language="tsx"
-  label="page.tsx"
-/>
+```text
+code="(Column with gap 16 and padding 24)…"
+language="tsx"
+label="page.tsx"
 ```
 
 ## Multi-file tabs
@@ -56,7 +44,7 @@ Keep preview nodes small — a `Column` with one `Button` and one `Input` is eno
 
 | ✅ Once UI way | ❌ Common mistake |
 |----------------|-------------------|
-| `CodeBlock` with `language="tsx"` | Raw `<pre>` with manual escaping |
+| CodeBlock with `language="tsx"` | Raw pre tags with manual escaping |
 | `codes={[…]}` for multi-file examples | One giant pasted file |
 | `preview={…}` for component demos | Screenshot-only docs |
 | Install `prismjs` in the docs app | Import prism in every page file |
