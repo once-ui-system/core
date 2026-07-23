@@ -1,4 +1,4 @@
-<Feedback title="4 min · Design tip" description="Tooltip is a compact label for short hints. HoverCard is a portal panel for rich previews — avatars, bios, stats. Use Tooltip for one line; HoverCard when the user needs more context." variant="info" />
+<Feedback title="4 min · Design tip" description="The tooltip is a compact label for short hints. The hover card is a portal panel for rich previews — avatars, bios, stats. Use tooltips for one line; hover cards when the user needs more context." variant="info" />
 
 ## Tooltip vs hover card
 
@@ -6,74 +6,59 @@
 |------|-----------|--------------|
 | Icon-only button label | Tooltip | One short phrase |
 | Keyboard shortcut hint | Tooltip | Text + optional prefix icon |
-| User profile preview | HoverCard | Avatar, name, tags, links |
-| Feature explanation | HoverCard | Multi-line description |
+| User profile preview | Hover card | Avatar, name, tags, links |
+| Feature explanation | Hover card | Multi-line description |
 
-Tooltip renders as a small Row with `role="tooltip"`. HoverCard wraps the Animation component with `triggerType="hover"` and portals content above or beside the trigger.
+The tooltip renders as a small Row with role tooltip. The hover card wraps the animation primitive with hover trigger type and portals content above or beside the trigger.
 
 ## Tooltip basics
 
-Tooltip accepts a `label` and optional `prefixIcon` / `suffixIcon`. It is a presentational shell — pair it with a parent that handles show/hide positioning (for example an IconButton wrapper or a focusable trigger).
+The tooltip accepts a label and optional prefixIcon or suffixIcon. It is a presentational shell — pair it with a parent that handles show/hide positioning (for example an IconButton wrapper or a focusable trigger).
 
 ```text
-<Row vertical="center" gap="4">
-  <IconButton icon="info" variant="ghost" aria-label="More info" />
-  <Tooltip label="Exports include all filtered rows" prefixIcon="info" />
-</Row>
+Row vertical="center" gap="4"
+  IconButton icon="info" variant="ghost" aria-label="More info"
+  Tooltip label="Exports include all filtered rows" prefixIcon="info"
 ```
 
-Keep labels under ~60 characters. If the explanation needs a paragraph, use HoverCard instead.
+Keep labels under ~60 characters. If the explanation needs a paragraph, use a hover card instead.
 
-### When not to use Tooltip
+### When not to use tooltips
 
 - Mobile-only flows (no hover) — use visible helper Text or a Dialog
 - Critical instructions the user must read — put them inline
-- Interactive content (links, buttons) inside the hint — use HoverCard
+- Interactive content (links, buttons) inside the hint — use a hover card
 
-## HoverCard for rich previews
+## Hover card for rich previews
 
-HoverCard takes a `trigger` element and children for the floating panel. Defaults: fade + slight slide-up, portal rendering, `placement="top"`.
+The hover card takes a trigger element and children for the floating panel. Defaults: fade + slight slide-up, portal rendering, placement top.
 
-Typical profile preview structure:
+Typical profile preview structure inside the card:
 
 ```text
-<HoverCard
-  placement="top"
-  trigger={<Avatar size="m" src="/avatar.jpg" tabIndex={0} />}
->
-  <Column padding="16" gap="12" radius="l" background="page" border="neutral-alpha-weak" maxWidth={24}>
-    <Row gap="12" vertical="center">
-      <Avatar size="l" src="/avatar.jpg" />
-      <Column gap="4">
-        <Heading variant="heading-strong-s">Alex Kim</Heading>
-        <Text variant="body-default-s" onBackground="neutral-weak">Product Design</Text>
-      </Column>
-    </Row>
-    <Text variant="body-default-s" onBackground="neutral-weak">
-      Ships design systems and documentation tools.
-    </Text>
-    <Row gap="8" wrap>
-      <Tag>Design</Tag>
-      <Tag>React</Tag>
-    </Row>
-  </Column>
-</HoverCard>
+Column padding="16" gap="12" radius="l" background="page" border="neutral-alpha-weak" maxWidth={24}
+  Row gap="12" vertical="center"
+    Avatar size="l"
+    Column gap="4"
+      Heading variant="heading-strong-s" → name
+      Text variant="body-default-s" → role
+  Text variant="body-default-s" → short bio
+  Row gap="8" wrap
+    Tag → skill labels
 ```
 
-### Trigger focus
-
-Add `tabIndex={0}` to non-focusable triggers (Avatar, Icon) so keyboard users can reach the card. The Animation component shows the panel on hover and focus.
+Set tabIndex={0} on non-focusable triggers (Avatar, Icon) so keyboard users can reach the card. The animation layer shows the panel on hover and focus.
 
 ### Placement and motion
 
-Override `placement` (`top`, `bottom`, `start`, `end`) when the trigger sits near viewport edges. HoverCard forwards Animation props — tune `duration` or `scale` sparingly; defaults are tuned for UI density.
+Override placement (top, bottom, start, end) when the trigger sits near viewport edges. Tune duration or scale sparingly — defaults are tuned for UI density.
 
 ## Density guidelines
 
 | Surface | Recommendation |
 |---------|----------------|
 | Data table column header | Tooltip on info icon |
-| Avatar in comment thread | HoverCard with name + role |
+| Avatar in comment thread | Hover card with name + role |
 | Chart data point | Tooltip with value label |
 | Pricing feature list | Inline Text, not hover-only |
 
@@ -84,16 +69,16 @@ Never hide required information exclusively behind hover. Tooltips and cards sup
 | ✅ Once UI way | ❌ Common mistake |
 |----------------|-------------------|
 | Tooltip for one-line hints | Paragraph text in a tooltip |
-| HoverCard for multi-field previews | Stacking 5 tooltips on one icon |
-| `tabIndex={0}` on hover triggers | Hover-only with no keyboard path |
+| Hover card for multi-field previews | Stacking 5 tooltips on one icon |
+| tabIndex on hover triggers | Hover-only with no keyboard path |
 | Visible labels on icon buttons | Tooltip as the only accessible name |
 
 ## Check yourself
 
-- [ ] Icon buttons have `aria-label` even when a tooltip exists
-- [ ] HoverCard content fits without horizontal scroll (`maxWidth`)
+- [ ] Icon buttons have aria-label even when a tooltip exists
+- [ ] Hover card content fits without horizontal scroll (maxWidth)
 - [ ] Critical info is visible without hovering
-- [ ] Triggers near screen edges use adjusted `placement`
+- [ ] Triggers near screen edges use adjusted placement
 - [ ] Tag rows in previews use the Tag component, not raw spans
 
 ## Related

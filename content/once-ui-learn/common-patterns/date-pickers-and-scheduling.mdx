@@ -1,70 +1,45 @@
-<Feedback title="5 min · Pattern" description="DateInput wraps a calendar dropdown for single dates. DateRangePicker and DateRangeInput handle start/end ranges. All three are client components — keep date state in the parent and pass controlled values." variant="info" />
+<Feedback title="5 min · Pattern" description="The date input field wraps a calendar dropdown for single dates. The range picker and range input handle start/end pairs. All are client components — keep date state in the parent and pass controlled values." variant="info" />
 
 ## Pick the right control
 
 | Need | Component | Notes |
 |------|-----------|-------|
-| Single date in a form field | DateInput | Input + dropdown calendar |
-| Date + time (meetings, deadlines) | DateInput with timePicker | Stays open until time is set |
-| Range inside a modal or filter panel | DateRangePicker | Standalone dual-month calendar |
-| Range with formatted text field | DateRangeInput | Input pair + shared picker |
+| Single date in a form field | Date input field | Input + dropdown calendar |
+| Date + time (meetings, deadlines) | Date input with time picker | Stays open until time is set |
+| Range inside a modal or filter panel | Range picker | Standalone dual-month calendar |
+| Range with formatted text field | Range input | Input pair + shared picker |
 
-All date components live under form controls in Core. Import from `@once-ui-system/core` and mark the parent file `"use client"` when you hold state.
+All date components live under form controls in Core. Import from the main package and mark the parent file as a client component when you hold state.
 
-## Single date with DateInput
+## Single date
 
-DateInput combines an Input trigger with a dropdown DatePicker. Pass a stable `id`, a `label`, a `Date` value, and an `onChange` handler.
+The date input field combines an Input trigger with a dropdown calendar. Pass a stable id, a label, a date value, and an onChange handler.
 
-```text
-const [date, setDate] = useState<Date | undefined>();
-
-<DateInput
-  id="event-date"
-  label="Event date"
-  value={date}
-  onChange={setDate}
-/>
-```
-
-The input displays a formatted locale string. Clicking or focusing opens the calendar. Selecting a day calls `onChange` and closes the dropdown (unless `timePicker` is enabled).
+Store the value as a date object or undefined in parent state. Wire id, label, value, and onChange to the date input field. The input displays a formatted locale string. Clicking or focusing opens the calendar. Selecting a day calls onChange and closes the dropdown — unless the time picker is enabled.
 
 ### Time selection
 
-Set `timePicker` when users need hour and minute precision — scheduling calls, publishing windows, or SLA timers.
+Enable the timePicker prop when users need hour and minute precision — scheduling calls, publishing windows, or SLA timers.
 
-```text
-<DateInput
-  id="meeting-time"
-  label="Meeting start"
-  value={start}
-  onChange={setStart}
-  timePicker
-/>
-```
-
-With `timePicker`, the dropdown stays open after the day is picked so the user can adjust hours and minutes.
+With timePicker, the dropdown stays open after the day is picked so the user can adjust hours and minutes.
 
 ### Bounds and validation
 
-Pass `minDate` and `maxDate` to block out-of-range days in the calendar. Pair with Input `error` text when server validation fails — the picker prevents most mistakes client-side, but API errors still need a message.
+Pass minDate and maxDate to block out-of-range days in the calendar. Pair with Input error text when server validation fails — the picker prevents most mistakes client-side, but API errors still need a message.
 
 ## Date ranges
 
-For analytics filters or booking flows, use a range shape:
+For analytics filters or booking flows, use a range object with startDate and endDate — each optional until the user finishes selecting.
 
-```text
-{ startDate: Date | undefined, endDate: Date | undefined }
-```
+The range picker embeds directly in a Column or Dialog — no input field. Ideal for filter sidebars and booking modals where the calendar is always visible.
 
-**DateRangePicker** embeds directly in a Column or Dialog — no input field. Ideal for filter sidebars and booking modals where the calendar is always visible.
+The range input adds labeled inputs that open the same range picker in a dropdown. Use it when space is tight and the range is secondary until expanded.
 
-**DateRangeInput** adds labeled inputs that open the same range picker in a dropdown. Use it when space is tight and the range is secondary until expanded.
-
-Highlight behavior: the first click sets `startDate`, the second sets `endDate`. Days between get a range highlight. Clicking a third time restarts selection.
+Highlight behavior: the first click sets startDate, the second sets endDate. Days between get a range highlight. Clicking a third time restarts selection.
 
 ## Layout in forms
 
-Stack date fields in a Column with `gap="16"`. For "from / to" pairs in one row, use a Row with `gap="12"` and `s={{ direction: "column" }}` so fields stack on mobile.
+Stack date fields in a Column with gap 16. For from/to pairs in one row, use a Row with gap 12 and responsive direction column on small screens so fields stack on mobile.
 
 Put scheduling fields after related text inputs (title, description) and before submit actions. If the range drives other filters (team, status), place the picker above the data table.
 
@@ -72,16 +47,16 @@ Put scheduling fields after related text inputs (title, description) and before 
 
 | ✅ Once UI way | ❌ Common mistake |
 |----------------|-------------------|
-| Controlled `Date` state in parent | Uncontrolled native `type="date"` inputs |
-| `timePicker` only when time matters | Always showing hour/minute pickers |
-| `minDate` / `maxDate` on the picker | Letting users pick impossible ranges |
-| DateRangePicker in a filter panel | Tiny native inputs with no calendar |
+| Controlled date state in parent | Uncontrolled native date inputs |
+| timePicker only when time matters | Always showing hour/minute pickers |
+| minDate / maxDate on the picker | Letting users pick impossible ranges |
+| Range picker in a filter panel | Tiny native inputs with no calendar |
 
 ## Check yourself
 
-- [ ] Parent file is `"use client"` when holding date state
-- [ ] Each DateInput has a unique `id` for label association
-- [ ] Range state uses `{ startDate, endDate }` consistently
+- [ ] Parent file is a client component when holding date state
+- [ ] Each date input has a unique id for label association
+- [ ] Range state uses startDate and endDate consistently
 - [ ] Time picker enabled only where time precision is required
 - [ ] Error text shown when server rejects a date
 

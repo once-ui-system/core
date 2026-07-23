@@ -1,115 +1,82 @@
-<Feedback title="5 min · Pattern" description="TagInput collects multiple strings as removable Chips. Tag displays read-only labels. Checkbox handles boolean consent and multi-select lists. Compose them in filter bars and settings forms." variant="info" />
+<Feedback title="5 min · Pattern" description="The tag input collects multiple strings as removable chips. Tag displays read-only labels. Checkbox handles boolean consent and multi-select lists. Compose them in filter bars and settings forms." variant="info" />
 
 ## Component roles
 
 | Component | Mode | Typical use |
 |-----------|------|-------------|
-| TagInput | Editable multi-value | Email recipients, skill tags, filter tokens |
-| Chip | Removable pill inside TagInput | Visual token with X button |
+| Tag input | Editable multi-value | Email recipients, skill tags, filter tokens |
+| Chip | Removable pill inside tag input | Visual token with X button |
 | Tag | Read-only label | Categories, status labels, skill badges |
 | Checkbox | Boolean or list selection | Terms acceptance, bulk row select |
 
 All extend Core layout primitives — use Column/Row gaps consistently with other form controls.
 
-## TagInput for multi-value fields
+## Tag input for multi-value fields
 
-TagInput wraps Input and manages a `string[]` value. Users type a token and press Enter or comma to commit; Backspace on empty input removes the last chip.
+The tag input wraps Input and manages a string array value. Users type a token and press Enter or comma to commit; Backspace on empty input removes the last chip.
 
-```text
-const [tags, setTags] = useState<string[]>(["design", "react"]);
+Keep tags in parent state as a string array. Wire id, label, placeholder, value, and onChange to the tag input field. Use an actionable placeholder like "Add a skill and press Enter".
 
-<TagInput
-  id="skills"
-  label="Skills"
-  placeholder="Add a skill and press Enter"
-  value={tags}
-  onChange={setTags}
-/>
-```
-
-Each committed string renders as a Chip with a remove button. Keep placeholders actionable ("Add a label…") so the interaction is discoverable.
+Each committed string renders as a removable chip. Keep placeholders actionable so the interaction is discoverable.
 
 ### Validation
 
-Validate on submit, not on every keystroke. Reject duplicates in your `onChange` handler:
-
-```text
-onChange={(next) => {
-  if (next.length > tags.length) {
-    const added = next[next.length - 1];
-    if (tags.includes(added)) return;
-  }
-  setTags(next);
-}}
-```
-
-Cap count server-side too — TagInput does not enforce max length by itself.
+Validate on submit, not on every keystroke. Reject duplicates in your onChange handler before updating state. Cap count server-side too — the tag input does not enforce max length by itself.
 
 ## Read-only Tag rows
 
-Use Tag when values are informational, not editable. Stack tags in a Row with `gap="8"` and `wrap`.
+Use Tag when values are informational, not editable. Stack tags in a Row with gap 8 and wrap enabled.
 
 ```text
-<Row gap="8" wrap>
-  <Tag>Design system</Tag>
-  <Tag>Documentation</Tag>
-  <Tag>Open source</Tag>
-</Row>
+Row gap="8" wrap
+  Tag → Design system
+  Tag → Documentation
+  Tag → Open source
 ```
 
-Tags inherit typography tokens — do not override with custom font sizes. For interactive filters, pair Tag with Button semantics or use ToggleButton instead.
+Tags inherit typography tokens — do not override with custom font sizes. For interactive filters, pair Tag with Button semantics or use toggle buttons instead.
 
 ## Checkbox patterns
 
 ### Single consent
 
-```text
-<Checkbox
-  id="terms"
-  label="I agree to the terms of service"
-  checked={accepted}
-  onChange={setAccepted}
-/>
-```
-
-Place consent checkboxes directly above the submit Button. Disable submit until `checked` is true.
+Wire id, label, checked, and onChange to the checkbox. Place consent checkboxes directly above the submit Button. Disable submit until checked is true.
 
 ### Select-all in tables
 
-Use a header Checkbox to toggle all visible rows. Keep indeterminate state in parent logic when some rows are selected. Pair with the tables guide for row selection layout.
+Use a header checkbox to toggle all visible rows. Keep indeterminate state in parent logic when some rows are selected. Pair with the tables guide for row selection layout.
 
 ## Filter bar composition
 
 A typical filter toolbar stacks:
 
-1. Row with `gap="12"` and `wrap`
-2. TagInput for free-text tokens (search facets)
-3. SegmentedControl or Dropdown for enumerated filters
+1. Row with gap 12 and wrap
+2. Tag input for free-text tokens (search facets)
+3. SegmentedControl or dropdown for enumerated filters
 4. Button variant ghost to clear all
 
 ```text
-<Row gap="12" wrap vertical="center">
-  <TagInput id="q" label="Keywords" value={keywords} onChange={setKeywords} />
-  <Button variant="ghost" onClick={clearFilters}>Clear</Button>
-</Row>
+Row gap="12" wrap vertical="center"
+  Input or tag input → keywords
+  Button variant="ghost" → Clear
 ```
 
-Align label sizes with other inputs in the bar (`size="m"` default).
+Align label sizes with other inputs in the bar (size m default).
 
 ## Write this / not this
 
 | ✅ Once UI way | ❌ Common mistake |
 |----------------|-------------------|
-| `string[]` state for TagInput | Comma-separated string in one Input |
-| Chip remove via TagInput onChange | Manually rendering unstyled spans |
+| string array state for tag input | Comma-separated string in one Input |
+| Chip remove via onChange | Manually rendering unstyled spans |
 | Tag for display-only labels | Editable contenteditable divs |
-| Checkbox with linked `id` + `label` | Clickable div with no input semantics |
+| Checkbox with linked id + label | Clickable div with no input semantics |
 
 ## Check yourself
 
-- [ ] TagInput value is `string[]`, not a delimited string
+- [ ] Tag input value is a string array, not a delimited string
 - [ ] Duplicate tags rejected before state update
-- [ ] Read-only labels use Tag, not Chip
+- [ ] Read-only labels use Tag, not chip
 - [ ] Consent checkboxes gate the submit action
 - [ ] Filter bar inputs share the same size token
 
