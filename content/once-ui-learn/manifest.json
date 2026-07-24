@@ -2,6 +2,7 @@
   "siteId": "bdbe103d-9204-48bf-a2f1-756deb1c2cc9",
   "pages": [
     {
+<<<<<<< HEAD
       "path": "/index.mdx",
       "title": "Once UI Learn",
       "summary": "Learn Once UI Core — semantics, layout, styling, and agent-friendly patterns for humans and AI.",
@@ -214,4 +215,34 @@
     }
   ],
   "deletePageIds": []
+=======
+      "path": "/common-patterns/auth-and-verification.mdx",
+      "title": "Auth & verification",
+      "summary": "Split sign-up layouts, social auth, PasswordInput, and OTP verification in stacked dialogs.",
+      "file": "common-patterns/auth-and-verification.mdx",
+      "id": "195ac69e-cf36-4e33-a000-000f8eec135a"
+    },
+    {
+      "path": "/common-patterns/settings-and-split-panels.mdx",
+      "title": "Settings & split panels",
+      "summary": "SplitView settings layout with section sidebar, form panels, toggles, and danger zones.",
+      "file": "common-patterns/settings-and-split-panels.mdx",
+      "id": "c99a96e6-0df3-4a0a-aff9-db2826ab4c67"
+    },
+    {
+      "path": "/common-patterns/data-filters-toolbar.mdx",
+      "title": "Data filters & toolbar",
+      "summary": "Compose table toolbars with search, SegmentedControl view switchers, date ranges, and filter chips.",
+      "file": "common-patterns/data-filters-toolbar.mdx",
+      "id": "afbff865-c315-4e9f-bb7f-4c31268af100"
+    },
+    {
+      "path": "/common-patterns/command-palette.mdx",
+      "title": "Command palette",
+      "summary": "Wire the Kbar module for searchable navigation, actions, and keyboard shortcuts in your app shell.",
+      "file": "common-patterns/command-palette.mdx",
+      "id": "0dba34b9-cf43-4453-ac17-34045ef74636"
+    }
+  ]
+>>>>>>> origin/cursor/learn-site-new-pages-3aed
 }

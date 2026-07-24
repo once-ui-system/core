@@ -1,0 +1,113 @@
+<Feedback title="6 min · Pattern" description="Auth flows combine split layouts, social sign-in, email/password fields, and stacked dialogs for OTP verification. Once UI ships PasswordInput and OTPInput for the sensitive steps." variant="info" />
+
+## What this pattern covers
+
+Production auth is rarely a single form. Typical flows include:
+
+- Split hero + form layout for sign-up and login
+- Social auth buttons above an email divider
+- Password fields with visibility toggle
+- OTP verification in a stacked dialog after email submit
+
+Gold reference: `packages/core/ai/examples/auth.tsx` and task bundle `packages/core/ai/tasks/auth.json`.
+
+## Split layout
+
+Use a two-column Grid that collapses to one column on mobile:
+
+```text
+<Column as="main" fillWidth center padding="24" minHeight="100vh">
+  <Grid
+    fillWidth
+    maxWidth="l"
+    columns="2"
+    radius="xl"
+    border="neutral-alpha-weak"
+    overflow="hidden"
+    background="surface"
+    s={{ columns: 1 }}
+  >
+    <Column minHeight={40} s={{ hide: true }}>
+      {/* Media hero — hidden on mobile */}
+    </Column>
+    <Column padding="48" gap="32" center>
+      {/* Form column */}
+    </Column>
+  </Grid>
+</Column>
+```
+
+Hide the media column on small screens with `s={{ hide: true }}`. Keep the form column full-width and centered.
+
+## Social auth + divider
+
+Stack social buttons first, then a horizontal divider:
+
+```text
+<Column fillWidth gap="12">
+  <Button fillWidth>Continue with GitHub</Button>
+  <Button fillWidth variant="secondary">Continue with Google</Button>
+</Column>
+
+<Row fillWidth vertical="center" gap="16">
+  <Line fill />
+  <Text variant="label-default-s" onBackground="neutral-weak">or</Text>
+  <Line fill />
+</Row>
+```
+
+Use `variant="secondary"` for the alternate provider so the primary OAuth option stands out.
+
+## Email and password fields
+
+Use `Input` for email and **PasswordInput** for passwords — it includes a built-in visibility toggle and label support.
+
+```text
+<Column fillWidth gap="16">
+  <Input id="email" label="Email" placeholder="you@company.com" />
+  <Row fillWidth horizontal="end">
+    <SmartLink href="/forgot">Forgot password?</SmartLink>
+  </Row>
+  <Button fillWidth arrowIcon>Sign up</Button>
+</Column>
+```
+
+Reference PasswordInput in prose: pass `id`, `label`, and `placeholder` the same way as Input. Never use a plain Input with `type="password"` — PasswordInput handles the toggle affordance.
+
+## OTP verification dialog
+
+After the user submits their email, open a **stacked Dialog** with OTPInput inside:
+
+1. Base page stays visible under the overlay
+2. Dialog `title` explains the step ("Check your email")
+3. OTPInput receives a 6-digit code
+4. Footer holds Resend (secondary) and Verify (primary)
+
+Use the `stack` prop on the OTP dialog if another dialog is already open (e.g. a terms acceptance step). See [Dialog & modal](/common-patterns/dialog-modal.mdx) for stacked dialog mechanics.
+
+OTPInput props: `length` (default 6), `onComplete` callback when all digits are entered, and standard `id` / `label`.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Grid `columns="2"` with `s={{ columns: 1 }}` | Flexbox with manual breakpoints |
+| PasswordInput for passwords | `<Input type="password">` |
+| OTP in stacked Dialog | Inline OTP on the same page after redirect |
+| `Line` + Text divider between social and email | Custom `<hr>` with inline styles |
+| SmartLink for "Sign in" / "Forgot password" | Raw `<a>` tags |
+
+## Check yourself
+
+- [ ] Hero column hidden on mobile (`s={{ hide: true }}`)
+- [ ] Social buttons use `fillWidth`
+- [ ] PasswordInput (not plain Input) for password fields
+- [ ] OTP step uses Dialog with `footer` actions
+- [ ] Destructive account actions are on a separate settings page, not in auth
+
+## Related
+
+→ [Dialog & modal](/common-patterns/dialog-modal.mdx)
+→ [Form layout](/common-patterns/form-layout.mdx)
+→ [Settings & split panels](/common-patterns/settings-and-split-panels.mdx)
+→ Full reference: [docs.once-ui.com — PasswordInput](https://docs.once-ui.com/once-ui/form-controls/passwordInput)

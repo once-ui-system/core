@@ -1,0 +1,155 @@
+<Feedback title="6 min · Pattern" description="Data tables need a toolbar above the rows — search, view switcher, date range, and active filter chips. Compose these with Row, SegmentedControl, and Input." variant="info" />
+
+## What this pattern covers
+
+A data table is more than columns and rows. Production tables almost always need:
+
+- A heading or selection count on the left
+- Search input on the right
+- SegmentedControl to switch views (All / Active / Archived)
+- DateRangePicker for time-bounded data
+- Active filter Tags the user can dismiss
+
+Gold reference: `packages/core/ai/examples/blocks/Table1.tsx` and eval task #9 in `packages/core/ai/eval-tasks.md`.
+
+## Toolbar anatomy
+
+The toolbar is a Row with `horizontal="between"` and responsive stacking:
+
+```text
+<Row
+  fillWidth
+  horizontal="between"
+  vertical="center"
+  paddingY="12"
+  paddingX="24"
+  gap="16"
+  s={{ direction: "column", horizontal: "start" }}
+>
+  <Text variant="label-default-m">Transactions</Text>
+  <Row gap="12" vertical="center">
+    {/* filters go here */}
+  </Row>
+</Row>
+```
+
+On mobile (`s={{ direction: "column" }}`), stack the heading above the filter controls.
+
+## Search input
+
+Table search uses Input with a search icon prefix and optional clear suffix:
+
+```text
+<Input
+  height="s"
+  id="search"
+  placeholder="Search..."
+  value={search}
+  hasPrefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
+  hasSuffix={
+    search.length > 0 && (
+      <IconButton
+        tooltip="Clear"
+        icon="close"
+        size="s"
+        variant="ghost"
+        onClick={() => setSearch("")}
+      />
+    )
+  }
+/>
+```
+
+Wire `value` and `onChange` to local state. Reset pagination to page 1 when the query changes.
+
+## View switcher with SegmentedControl
+
+Use SegmentedControl for mutually exclusive views:
+
+```text
+const views = [
+  { value: "all", label: "All" },
+  { value: "active", label: "Active" },
+  { value: "archived", label: "Archived" },
+];
+
+<SegmentedControl
+  buttons={views}
+  selected={view}
+  onToggle={(value) => setView(value)}
+/>
+```
+
+Controlled mode: own `selected` state and update it in `onToggle`. This same pattern appears on pricing pages for monthly/yearly billing toggles.
+
+## Date range filter
+
+**DateRangePicker** sits in the toolbar for time-bounded tables. Pass `value` (a `{ from, to }` range object) and `onChange` to update filter state.
+
+For compact toolbars, wrap DateRangePicker in a **DateRangeInput** — it renders as an Input that opens the picker in a dropdown.
+
+Filter logic: when a range is set, include only rows whose date field falls within `from`–`to`. Clear the range when the user picks "All time."
+
+## Active filter chips
+
+Show applied filters as dismissible Tags below the toolbar:
+
+```text
+<Row gap="8" wrap paddingX="24" paddingBottom="12">
+  <Tag variant="neutral" prefixIcon="calendar">
+    Last 30 days
+  </Tag>
+  <Tag variant="neutral" prefixIcon="filter">
+    Status: Active
+  </Tag>
+</Row>
+```
+
+Each Tag should have a click handler or close affordance to remove that filter and refresh the table.
+
+## Wiring filters to data
+
+Keep filter state in the parent and derive rows with `useMemo`:
+
+1. Start with the full dataset
+2. Apply view filter (active/archived)
+3. Apply date range filter
+4. Apply search query (use a custom `filterFn` for field-specific matching)
+5. Paginate the result
+
+Reference Table1's `filterFn` prop for custom search logic instead of JSON.stringify fallback.
+
+## Selection count
+
+When rows are selectable, replace the heading with a count:
+
+```text
+<Text variant="label-default-m">{selectedCount} selected</Text>
+```
+
+Show bulk actions (Delete, Export) in the toolbar only when `selectedCount > 0`.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| SegmentedControl for view tabs | Custom button group with manual active styles |
+| Input `height="s"` in toolbar | Full-size Input breaking toolbar height |
+| `useMemo` for derived rows | Filtering inside render without memoization |
+| Tag chips for active filters | No indication of applied filters |
+| Reset page on filter change | Stale page 5 with 0 results |
+
+## Check yourself
+
+- [ ] Toolbar stacks vertically on mobile
+- [ ] Search has clear button when query is non-empty
+- [ ] SegmentedControl is controlled (`selected` + `onToggle`)
+- [ ] Date range clears properly
+- [ ] Pagination resets when any filter changes
+
+## Related
+
+→ [Tables & lists](/common-patterns/tables-and-lists.mdx)
+→ [Loading states](/common-patterns/loading-states.mdx)
+→ [Dashboard & charts](/common-patterns/dashboard-and-charts.mdx)
+→ Full reference: [docs.once-ui.com — SegmentedControl](https://docs.once-ui.com/once-ui/components/segmentedControl)
