@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "1.7.12",
- "generated": "2026-07-21",
+ "version": "1.7.13",
+ "generated": "2026-07-24",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -18,7 +18,7 @@
   "TextWeight": "\"default\" | \"strong\"",
   "TextSize": "TShirtSizes",
   "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`",
-  "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"volume\" | \"volumeOff\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"opacity\""
+  "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"volume\" | \"volumeOff\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"edit\" | \"trash\" | \"mail\" | \"download\""
  },
  "mixins": {
   "CommonProps": {
@@ -753,8 +753,8 @@
     "className": "string",
     "onSelect": "(value: string) => void",
     "closeAfterClick": "boolean = true",
-    "isOpen": "boolean",
-    "onOpenChange": "(isOpen: boolean) => void",
+    "open": "boolean",
+    "onOpenChange": "(open: boolean) => void",
     "selectedOption": "string",
     "disabled": "boolean = false"
    }
@@ -811,7 +811,7 @@
     "range": "{ startDate?: Date; endDate?: Date; }",
     "onHover": "(date: Date | null) => void",
     "autoFocus": "boolean = false",
-    "isOpen": "boolean"
+    "open": "boolean"
    }
   },
   "DateRangeInput": {
@@ -922,8 +922,8 @@
     "onSelect": "(value: string) => void",
     "closeAfterClick": "boolean = true",
     "handleArrowNavigation": "boolean = true",
-    "isOpen": "boolean",
-    "onOpenChange": "(isOpen: boolean) => void",
+    "open": "boolean",
+    "onOpenChange": "(open: boolean) => void",
     "isNested": "boolean = false",
     "navigationLayout": "NavigationLayout",
     "columns": "number | string = 8",
@@ -2046,8 +2046,23 @@
     "StyleProps"
    ],
    "props": {
-    "data": "!{ headers: { content: ReactNode; key: string; sortable?: boolean; }[]; rows: ReactNode[][]; }",
-    "onRowClick": "(rowIndex: number) => void"
+    "data": "!{ headers: TableHeader[]; rows: ReactNode[][]; }",
+    "onRowClick": "(rowIndex: number) => void",
+    "searchable": "boolean = false",
+    "searchPlaceholder": "string = Search...",
+    "striped": "boolean = false",
+    "hoverable": "boolean = true",
+    "compact": "boolean = false",
+    "loading": "boolean = false",
+    "emptyState": "ReactNode",
+    "actions": "TableAction[]",
+    "stickyHeader": "boolean = false",
+    "rowClassName": "(rowIndex: number) => string",
+    "cellClassName": "(rowIndex: number, cellIndex: number) => string",
+    "paginated": "boolean = false",
+    "defaultPageSize": "number = 10",
+    "pageSizeOptions": "number[] = [5, 10, 20, 50]",
+    "loadingState": "ReactNode"
    }
   },
   "Tag": {

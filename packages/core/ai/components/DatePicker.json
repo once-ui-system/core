@@ -32,7 +32,7 @@
   "range": "{ startDate?: Date; endDate?: Date; }",
   "onHover": "(date: Date | null) => void",
   "autoFocus": "boolean = false",
-  "isOpen": "boolean"
+  "open": "boolean"
  },
  "mixinsRef": [
   "CommonProps",
