@@ -75,7 +75,7 @@
       "path": "/static-panel.mdx",
       "title": "Static panel",
       "summary": "The surface recipe for non-interactive panels — stats, settings, feature boxes.",
-      "contentId": "b0ad2cee-989b-4361-9a9b-6b5d8ba4daa6",
+      "contentId": "b0ad2cee-989b-4361-9a9d-6b5d8ba4daa6",
       "file": "patterns/static-panel.mdx"
     },
     {
@@ -154,6 +154,34 @@
       "summary": "Codegen mistakes from gotchas.json — layout, surfaces, motion, and component traps.",
       "contentId": "06eaaa39-11ed-4d18-af0b-a0a71352948b",
       "file": "for-agents/common-gotchas.mdx"
+    },
+    {
+      "path": "/common-patterns/tables-and-lists.mdx",
+      "title": "Tables & lists",
+      "summary": "Structured data with Table, simpler stacks with List — plus empty and loading states.",
+      "contentId": "61eaf09d-2af2-4c5a-816f-7a42b172b48a",
+      "file": "patterns/tables-and-lists.mdx"
+    },
+    {
+      "path": "/common-patterns/loading-states.mdx",
+      "title": "Loading states",
+      "summary": "Skeleton placeholders for content areas, spinners for actions — keep layout stable while data loads.",
+      "file": "patterns/loading-states.mdx",
+      "contentId": "49391be8-2045-43ca-a8fb-951f99037929"
+    },
+    {
+      "path": "/design-tips/reveal-and-motion.mdx",
+      "title": "Reveal & motion",
+      "summary": "RevealFx entry animation, CountFx pairing, and the ambient decoration budget.",
+      "file": "foundations/reveal-and-motion.mdx",
+      "contentId": "979335b0-806d-43d2-8997-a2f2d4233572"
+    },
+    {
+      "path": "/agent-resources/validate-generated-code.mdx",
+      "title": "Validate generated code",
+      "summary": "Run pnpm validate-ai-code after codegen — what it catches and how to pair with gotchas.json.",
+      "file": "for-agents/validate-generated-code.mdx",
+      "contentId": "c4a73cc5-bf9e-40c9-87b4-4ddf15e019cb"
     }
   ],
   "deletePageIds": []
