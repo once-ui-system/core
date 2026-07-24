@@ -1,5 +1,6 @@
 import React from "react";
 import Script from "next/script";
+import { safeScriptJson } from "../../utils/safe-html";
 
 export interface SchemaProps {
   as: "website" | "article" | "blogPosting" | "techArticle" | "webPage" | "organization";
@@ -96,9 +97,8 @@ export function Schema({
     <Script
       id={`schema-${as}-${path}`}
       type="application/ld+json"
-      // biome-ignore lint/security/noDangerouslySetInnerHtml: <It's not dynamic nor a security issue.>
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(schema),
+        __html: safeScriptJson(schema),
       }}
     />
   );
