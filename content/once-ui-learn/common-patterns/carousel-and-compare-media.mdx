@@ -1,0 +1,76 @@
+<Feedback title="5 min · Pattern" description="Carousel handles galleries, auto-play, and touch swipe; CompareImage adds a draggable before/after slider — both compose with Media and RevealFx." variant="info" />
+
+## When to use which
+
+| Goal | Component | Notes |
+|------|-----------|-------|
+| Image gallery or hero rotator | `Carousel` | Line or thumbnail indicators, optional auto-play |
+| Before/after or A-B comparison | `CompareImage` | Draggable clip-path divider |
+| Single responsive asset | `Media` | Used inside both components |
+| Marketing scroll strip | `AutoScroll` / `Swiper` | Continuous motion, not paginated slides |
+
+`media-and-uploads` covers file picking — this page covers **display** patterns for portfolios, product shots, and case studies.
+
+## Carousel basics
+
+`items` is an array of `{ slide, alt? }`. Each `slide` can be an image URL string or a custom React node.
+
+Key props:
+
+| Prop | Values | Use |
+|------|--------|-----|
+| `indicator` | `"line"`, `"thumbnail"`, `false` | Dot strip vs thumb strip vs none |
+| `play.auto` | boolean | Start auto-advance on mount |
+| `play.interval` | ms (default 3000) | Time per slide |
+| `play.progress` | boolean | Show fill bar during interval |
+| `revealedByDefault` | boolean | Skip entrance animation |
+| `aspectRatio` | e.g. `"16/9"` | Lock frame size |
+
+Carousel preloads the next slide, supports touch swipe, and wraps `RevealFx` for slide transitions. Thumbnail mode scrolls a `Scroller` row beneath the main frame.
+
+## CompareImage slider
+
+Pass `leftContent` and `rightContent`, each `{ src, alt? }`. `src` can be an image URL or a custom node for live UI comparison (e.g. light vs dark theme screenshot).
+
+`aspectRatio` defaults to `"16/9"`. The handle is keyboard-accessible — drag updates a clip-path on both sides.
+
+Use for: design iterations, photo editing demos, layout before/after, accessibility contrast checks.
+
+## Composition tips
+
+1. Wrap both components in a `Column` surface panel (`background="surface"`, `radius="l"`, `border="neutral-alpha-weak"`) so they match card patterns elsewhere
+2. Keep `alt` text on every image slide — Carousel forwards it to `Media`
+3. Prefer `play.auto` only above the fold; below-fold carousels should wait for user interaction
+4. Pair `CompareImage` with a short `Heading` + `Text` caption explaining what each side shows
+
+## Indicator control pattern
+
+When you need a compact toggle between line and thumbnail modes, use `SegmentedControl` in the page chrome — wire its value to the carousel `indicator` prop.
+
+```text
+SegmentedControl buttons: Dots (line) | Thumbs (thumbnail)
+onToggle → set indicator prop on Carousel
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `Carousel` with `items` + `indicator` | Third-party slider with custom CSS |
+| `CompareImage` for A/B shots | Two static images side by side |
+| `aspectRatio` on both components | Unsized images jumping layout |
+| `alt` on every slide | Decorative images with empty alt everywhere |
+
+## Check yourself
+
+- [ ] Carousel `items` length matches indicator count
+- [ ] Auto-play disabled or pausable on long galleries
+- [ ] CompareImage both sides share the same aspect ratio
+- [ ] Custom slide nodes still fit inside the frame (`fill` behavior)
+
+## Related
+
+→ [Media & uploads](/common-patterns/media-and-uploads.mdx)
+→ [Hero section](/common-patterns/hero-section.mdx)
+→ [Reveal & motion](/design-tips/reveal-and-motion.mdx)
+→ Full reference: [docs.once-ui.com — Carousel](https://docs.once-ui.com/once-ui/components/carousel)

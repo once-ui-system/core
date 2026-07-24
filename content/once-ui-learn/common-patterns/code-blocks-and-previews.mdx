@@ -1,0 +1,63 @@
+<Feedback title="6 min · Pattern" description="CodeBlock lazy-loads prismjs, supports multi-file tabs, live preview, diff view, and copy — the same module powers docs.once-ui.com." variant="info" />
+
+## Install the peer dependency
+
+`CodeBlock` is exported from `@once-ui-system/core` but **requires prismjs** at runtime. Without it, Core renders a `MissingDependency` placeholder with install instructions.
+
+```bash
+npm install prismjs
+```
+
+The public entry uses `React.lazy` so prismjs only loads when a page actually renders a code block.
+
+## Single snippet
+
+Pass `code` (string) and `language`. Optional `label` shows a tab header; `highlight` accepts line numbers as a string (`"3-5,8"`).
+
+Describe the API in prose — the live CodeBlock component is not available in this Learn renderer. In your app, import from `@once-ui-system/core` and pass `code`, `language`, and optional `label`:
+
+```text
+code="(Column with gap 16 and padding 24)…"
+language="tsx"
+label="page.tsx"
+```
+
+## Multi-file tabs
+
+Use the `codes` array when a guide spans several files. Each entry has `code`, `language`, and `label` — readers switch tabs without leaving the page.
+
+Typical split: `layout.tsx` + `page.tsx` + a client component. Match labels to real filenames so agents can map tabs to project paths.
+
+## Live preview side-by-side
+
+Set `preview` to a React node to show runnable output next to the source. This is how component docs demonstrate layout without a separate Storybook entry.
+
+Keep preview nodes small — a `Column` with one `Button` and one `Input` is enough. Heavy previews slow initial paint because prismjs loads on first render.
+
+## Diff and collapse
+
+- `mode="diff"` — pass `oldCode` and `newCode` for migration guides
+- `collapsed` / `collapsible` — long files start folded; readers expand on demand
+- Built-in copy and fullscreen controls ship with every block
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| CodeBlock with `language="tsx"` | Raw pre tags with manual escaping |
+| `codes={[…]}` for multi-file examples | One giant pasted file |
+| `preview={…}` for component demos | Screenshot-only docs |
+| Install `prismjs` in the docs app | Import prism in every page file |
+
+## Check yourself
+
+- [ ] `prismjs` is in `package.json` for any app rendering CodeBlock
+- [ ] Preview content uses `Column` / `Row`, not raw `div` + inline styles
+- [ ] Tab labels match real filenames in the target repo
+- [ ] Diff blocks show before/after, not two unrelated snippets
+
+## Related
+
+→ [Validate generated code](/agent-resources/validate-generated-code.mdx)
+→ [Your first page](/beginner-guides/your-first-page.mdx)
+→ Full reference: [docs.once-ui.com — CodeBlock](https://docs.once-ui.com/once-ui/modules/code)
