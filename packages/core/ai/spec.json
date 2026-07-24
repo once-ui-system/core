@@ -811,7 +811,7 @@
     "range": "{ startDate?: Date; endDate?: Date; }",
     "onHover": "(date: Date | null) => void",
     "autoFocus": "boolean = false",
-    "open": "boolean"
+    "isOpen": "boolean"
    }
   },
   "DateRangeInput": {
@@ -922,8 +922,8 @@
     "onSelect": "(value: string) => void",
     "closeAfterClick": "boolean = true",
     "handleArrowNavigation": "boolean = true",
-    "open": "boolean",
-    "onOpenChange": "(open: boolean) => void",
+    "isOpen": "boolean",
+    "onOpenChange": "(isOpen: boolean) => void",
     "isNested": "boolean = false",
     "navigationLayout": "NavigationLayout",
     "columns": "number | string = 8",

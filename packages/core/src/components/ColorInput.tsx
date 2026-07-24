@@ -158,7 +158,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                 {" "}
                 {supportAlpha && (
                   <DropdownWrapper
-                    open={isAlphaDropdownOpen}
+                    isOpen={isAlphaDropdownOpen}
                     onOpenChange={setIsAlphaDropdownOpen}
                     placement="top-end"
                     trigger={

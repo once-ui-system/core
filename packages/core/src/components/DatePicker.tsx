@@ -48,7 +48,7 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
   };
   onHover?: (date: Date | null) => void;
   autoFocus?: boolean;
-  open?: boolean;
+  isOpen?: boolean;
 }
 
 const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
@@ -73,7 +73,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       range,
       onHover,
       autoFocus = false,
-      open,
+      isOpen,
       ...rest
     },
     ref,
@@ -247,7 +247,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           return () => clearTimeout(timer);
         }
       }
-    }, [selectedDate, isTimeSelector, isReady, currentMonth, currentYear, open]);
+    }, [selectedDate, isTimeSelector, isReady, currentMonth, currentYear, isOpen]);
 
     const monthNames = [
       "January",
@@ -637,7 +637,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   <DropdownWrapper
                     isNested={isNested}
                     placement="bottom-start"
-                    open={isMonthOpen}
+                    isOpen={isMonthOpen}
                     dropdownId="month-dropdown"
                     onOpenChange={(open) => {
                       setIsMonthOpen(open);
@@ -709,7 +709,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                     optionsCount={generateYearOptions().length}
                     columns={generateYearOptions().length < 6 ? 1 : 6}
                     isNested={isNested}
-                    open={isYearOpen}
+                    isOpen={isYearOpen}
                     dropdownId="year-dropdown"
                     onOpenChange={(open) => {
                       setIsYearOpen(open);
