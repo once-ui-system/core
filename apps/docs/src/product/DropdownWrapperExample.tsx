@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
+import {
   Button,
   DropdownWrapper,
-  Flex, 
+  Flex,
   Text,
   Column,
   Option,
@@ -29,7 +29,7 @@ export function BasicDropdown() {
   
   return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 
@@ -74,7 +74,7 @@ export function DropdownWithIcons() {
   
   return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 
@@ -121,7 +121,7 @@ export function CustomPositionDropdown() {
   
   return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       placement="right-start"
       trigger={
@@ -172,7 +172,7 @@ export function SearchableDropdown() {
   
   return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 

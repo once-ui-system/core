@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Column, Row, Text, CountdownFx, Heading } from "@once-ui-system/core";
 
@@ -18,7 +18,9 @@ export const CountdownFxFormats = () => {
   return (
     <Column gap="24" fill>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">HH:MM:SS</Text>
+        <Text variant="label-default-s" onBackground="neutral-weak">
+          HH:MM:SS
+        </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 5 * 60 * 60 * 1000)}
           variant="heading-strong-l"
@@ -26,7 +28,9 @@ export const CountdownFxFormats = () => {
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">MM:SS</Text>
+        <Text variant="label-default-s" onBackground="neutral-weak">
+          MM:SS
+        </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 10 * 60 * 1000)}
           variant="heading-strong-l"
@@ -34,7 +38,9 @@ export const CountdownFxFormats = () => {
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">DD:HH:MM:SS</Text>
+        <Text variant="label-default-s" onBackground="neutral-weak">
+          DD:HH:MM:SS
+        </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)}
           variant="heading-strong-l"
@@ -49,7 +55,9 @@ export const CountdownFxEffects = () => {
   return (
     <Column gap="24" fill>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">Wheel Effect</Text>
+        <Text variant="label-default-s" onBackground="neutral-weak">
+          Wheel Effect
+        </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 2 * 60 * 60 * 1000)}
           variant="display-strong-m"
@@ -57,7 +65,9 @@ export const CountdownFxEffects = () => {
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">Smooth Effect</Text>
+        <Text variant="label-default-s" onBackground="neutral-weak">
+          Smooth Effect
+        </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 2 * 60 * 60 * 1000)}
           variant="display-strong-m"
@@ -65,7 +75,9 @@ export const CountdownFxEffects = () => {
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">Simple Effect</Text>
+        <Text variant="label-default-s" onBackground="neutral-weak">
+          Simple Effect
+        </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 2 * 60 * 60 * 1000)}
           variant="display-strong-m"
@@ -104,7 +116,7 @@ export const CountdownFxLaunch = () => {
 
 export const CountdownFxOnComplete = () => {
   const handleComplete = () => {
-    console.log('Countdown complete!');
+    console.log("Countdown complete!");
   };
 
   return (
