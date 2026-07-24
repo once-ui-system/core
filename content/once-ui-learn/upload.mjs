@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Upload Once UI Learn content to Aveiro via API.
  * Usage: DOPLER_API_TOKEN=av_live_... node content/once-ui-learn/upload.mjs
  */
@@ -24,6 +25,8 @@ import { readFileSync, existsSync } from "node:fs";
 =======
 >>>>>>> origin/cursor/learn-site-new-pages-9fc0
 =======
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-ba9a
  * Upload Once UI Learn MDX pages to Aveiro.
  * Requires DOPLER_API_TOKEN env var.
  *
@@ -33,11 +36,15 @@ import { readFileSync, existsSync } from "node:fs";
  */
 
 import { readFileSync } from "node:fs";
+<<<<<<< HEAD
 >>>>>>> origin/cursor/learn-site-new-pages-03d4
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-ba9a
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
@@ -198,6 +205,8 @@ async function main() {
 
   console.log(JSON.stringify({ uploaded: results.length, pages: results }, null, 2));
 =======
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-ba9a
 const BASE = "https://api.aveiro.app/api/v1";
 const TOKEN = process.env.DOPLER_API_TOKEN;
 
@@ -289,11 +298,15 @@ async function main() {
       console.log(`Created ${entry.path} → ${result.page.id}`);
     }
   }
+<<<<<<< HEAD
 >>>>>>> origin/cursor/learn-site-new-pages-03d4
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-ba9a
 }
 
 main().catch((err) => {
   console.error(err);
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 >>>>>>> origin/cursor/learn-site-new-pages-3aed
@@ -301,5 +314,7 @@ main().catch((err) => {
 >>>>>>> origin/cursor/learn-site-new-pages-9fc0
 =======
 >>>>>>> origin/cursor/learn-site-new-pages-03d4
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-ba9a
   process.exit(1);
 });

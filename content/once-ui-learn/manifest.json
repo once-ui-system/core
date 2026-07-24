@@ -5,6 +5,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       "path": "/index.mdx",
       "title": "Once UI Learn",
       "summary": "Learn Once UI Core — semantics, layout, styling, and agent-friendly patterns for humans and AI.",
@@ -307,4 +308,34 @@
     }
   ]
 >>>>>>> origin/cursor/learn-site-new-pages-03d4
+=======
+      "path": "/common-patterns/date-pickers-and-scheduling.mdx",
+      "title": "Date pickers and scheduling",
+      "summary": "DateInput for single dates, DateRangePicker for ranges — calendar UI with optional time selection.",
+      "tag": "Common patterns",
+      "file": "common-patterns/date-pickers-and-scheduling.mdx"
+    },
+    {
+      "path": "/common-patterns/context-menus-and-dropdowns.mdx",
+      "title": "Context menus and dropdown actions",
+      "summary": "Right-click ContextMenu and click Dropdown patterns for contextual actions without cluttering the UI.",
+      "tag": "Common patterns",
+      "file": "common-patterns/context-menus-and-dropdowns.mdx"
+    },
+    {
+      "path": "/design-tips/tooltips-and-hover-cards.mdx",
+      "title": "Tooltips and hover cards",
+      "summary": "Tooltip for inline hints; HoverCard for rich previews on hover — keep discoverability without modal noise.",
+      "tag": "Design tips",
+      "file": "design-tips/tooltips-and-hover-cards.mdx"
+    },
+    {
+      "path": "/common-patterns/tags-chips-and-multi-value-inputs.mdx",
+      "title": "Tags, chips, and multi-value inputs",
+      "summary": "TagInput, Chip, Tag, and Checkbox patterns for filters, labels, and multi-select form fields.",
+      "tag": "Common patterns",
+      "file": "common-patterns/tags-chips-and-multi-value-inputs.mdx"
+    }
+  ]
+>>>>>>> origin/cursor/learn-site-new-pages-ba9a
 }
