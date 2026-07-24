@@ -1,0 +1,88 @@
+<Feedback title="8 min · Beginner · Foundations" description="Row and Column are your defaults. Flex is for dynamic direction. Grid is for columns." variant="info" />
+
+## Decision tree
+
+```
+Need layout?
+├── Vertical stack     → Column
+├── Horizontal row     → Row
+├── Direction changes at breakpoints → Flex (or Row/Column with s={{ direction }})
+└── Multi-column grid  → Grid
+```
+
+## Row and Column
+
+Thin wrappers around `Flex` with fixed direction. **Always prefer these** for static layouts:
+
+```text
+<Column gap="16">
+  <Heading variant="display-strong-s">Title</Heading>
+  <Text variant="body-default-m" onBackground="neutral-weak">Body</Text>
+</Column>
+
+<Row gap="16" vertical="center">
+  <Icon name="check" />
+  <Text variant="body-default-s">Aligned row</Text>
+</Row>
+```
+
+## Flex — only when direction changes
+
+Use `Flex` (or responsive props on `Row`/`Column`) when layout flips at breakpoints:
+
+```text
+<Row gap="24" s={{ direction: "column" }}>
+  <Column fill>Left panel</Column>
+  <Column fill>Right panel</Column>
+</Row>
+```
+
+Breakpoint props: `xl`, `l`, `m`, `s`, `xs` — larger breakpoints cascade down. Never write media queries for layout.
+
+## Grid
+
+For explicit column counts:
+
+```text
+<Grid columns="3" gap="24" s={{ columns: "1" }}>
+  <Column>Item 1</Column>
+  <Column>Item 2</Column>
+  <Column>Item 3</Column>
+</Grid>
+```
+
+## Alignment shorthands
+
+| Shorthand | Expands to |
+|-----------|------------|
+| `center` | `horizontal="center" vertical="center"` |
+| `fill` | `fillWidth fillHeight` |
+| `fit` | `fitWidth fitHeight` |
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `Column` with `gap="16"` | `Flex` with `direction="column"` |
+| `Row` with `gap="16"` | `Flex` with `direction="row"` |
+| `center` | `horizontal="center" vertical="center"` |
+| `s={{ direction: "column" }}` | `@media (max-width: 768px) { flex-direction: column }` |
+
+## Other layout components
+
+| Component | When to use |
+|-----------|-------------|
+| `MasonryGrid` | Pinterest-style variable-height columns |
+| `SplitView` | Resizable two-pane (chat, settings) |
+| `Scroller` | Horizontal scroll regions |
+| `LogoCloud` | Logo grid — always set `columns` |
+
+## Check yourself
+
+- [ ] Static vertical layout uses `Column`, not `Flex direction="column"`
+- [ ] Static horizontal layout uses `Row`
+- [ ] Responsive layout uses breakpoint props, not CSS media queries
+
+## Next step
+
+→ [Spacing & rhythm](/spacing-and-rhythm.mdx)

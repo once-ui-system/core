@@ -1,0 +1,66 @@
+<Feedback title="5 min · Beginner · Foundations" description="Once UI spacing is rhythmic: 104 between sections, 24–40 inside sections, and a fixed token scale everywhere else." variant="info" />
+
+## Section rhythm
+
+The most important spacing rule in Once UI:
+
+| Context | Gap token | Notes |
+|---------|-----------|-------|
+| Between major sections | `"104"` | Hero → features → CTA |
+| Inside a section | `"24"`–`"40"` | Heading → body → actions |
+| Tight groups | `"8"`–`"16"` | Icon + label, form fields |
+| Page vertical padding | `paddingY="80"` | Top/bottom breathing room |
+
+**Never** use `"48"` between major sections — it breaks the vertical rhythm.
+
+## Page example
+
+```text
+<Column as="main" fillWidth horizontal="center">
+  <Column maxWidth="l" paddingY="80" gap="104" fillWidth>
+    {/* Section 1 */}
+    <Column gap="24">...</Column>
+
+    {/* Section 2 — 104px gap applied automatically */}
+    <Column gap="32">...</Column>
+
+    {/* Section 3 */}
+    <Column gap="24">...</Column>
+  </Column>
+</Column>
+```
+
+The outer `gap="104"` handles section separation. Inner `gap="24"` or `gap="32"` handles content within each section.
+
+## Padding vs gap
+
+- **`gap`** — space *between* children in a flex/grid container
+- **`padding`** / **`paddingX`** / **`paddingY`** — space *inside* a container's border
+- **`marginTop`** / **`marginBottom`** — escape hatch; prefer `gap` on the parent
+
+## Responsive spacing
+
+Spacing props accept the same breakpoint keys as layout:
+
+```text
+<Column gap="24" s={{ gap: "16" }}>
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `gap="104"` between sections | `marginBottom: 48` |
+| `gap="24"` inside sections | Mixed arbitrary margins |
+| `padding="24"` on panels | `padding: 20` |
+| `paddingY="80"` on page content | `padding-top: 60px` |
+
+## Check yourself
+
+- [ ] Major sections separated by `gap="104"` on the parent column
+- [ ] Inner content uses `"24"`–`"40"` gaps
+- [ ] All spacing values are from the token scale
+
+## Next step
+
+→ [Color & surfaces](/color-and-surfaces.mdx)

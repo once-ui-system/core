@@ -1,0 +1,90 @@
+<Feedback title="6 min · Pattern" description="Decoration in Once UI is layered with absolute Background components — never fighting the content, always budgeted." variant="info" />
+
+## The absolute layer rule
+
+Every decorative layer follows this template:
+
+```text
+<Background
+  position="absolute" top="0" left="0" fill pointerEvents="none"
+  gradient={{ display: true, colorStart: "brand-alpha-medium", colorEnd: "static-transparent", x: 50, y: 0, width: 150, height: 80, opacity: 60 }}
+/>
+```
+
+Content sitting above it:
+
+```text
+<Column zIndex={1} gap="24">
+  {/* your content */}
+</Column>
+```
+
+Three rules every layer must follow:
+
+1. `position="absolute" top="0" left="0"` — or it misaligns inside padded parents
+2. `pointerEvents="none"` — decoration never blocks clicks
+3. Content sibling gets `zIndex={1}`
+
+## Placement
+
+Put ambient layers on the **section wrapper**, outside any `maxWidth` column:
+
+```text
+<Column fillWidth horizontal="center" paddingY="80">
+  <Background position="absolute" top="0" left="0" fill pointerEvents="none" ... />
+  <Column zIndex={1} maxWidth="l" gap="24">
+    {/* content */}
+  </Column>
+</Column>
+```
+
+Clipping glow inside a narrow `maxWidth` container creates a hard-edged band.
+
+## Gradient units
+
+| Property | Unit | Example |
+|----------|------|---------|
+| `width` / `height` | Quarter-percent (400 = 100%) | Glows: 100–200 |
+| `x` / `y` | Percent position | `x: 50, y: 0` = top center |
+| `opacity` | 0–100 | Typical: 40–60 |
+
+## Decoration budget (hard limits)
+
+| Rule | Limit |
+|------|-------|
+| Ambient layers per section | 1 |
+| Continuous motion per page | 2 (hero + one CTA max) |
+| Accent families in decoration | 1 (`brand-*` or `neutral-*`) |
+| Sections with decoration | Anchor sections only (hero, highlight, final CTA) |
+
+Plain sections stay plain — contrast makes decorated sections feel premium.
+
+## Glow colors
+
+| ✅ Use | ❌ Avoid |
+|--------|----------|
+| `brand-alpha-medium` | `brand-background-weak` (invisible on page) |
+| `neutral-alpha-weak` | Hex or rgb values |
+| `static-transparent` as `colorEnd` | Opaque gradient ends |
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Glow on full-bleed wrapper | Glow inside `maxWidth` column |
+| `width: 150` for soft glow | `width: 500` (blows past edges) |
+| `top="0" left="0"` on every layer | Missing position props |
+| One ambient layer per section | Every section decorated |
+
+## Check yourself
+
+- [ ] Every `Background` has `top="0" left="0" fill pointerEvents="none"`
+- [ ] Content has `zIndex={1}`
+- [ ] Glow width is 100–200
+- [ ] Only anchor sections are decorated
+
+## Related
+
+→ [Hero section](/hero-section.mdx)
+→ [Highlighted card](/highlighted-card.mdx)
+→ Full recipes: [docs.once-ui.com/ai/recipes.md](https://docs.once-ui.com/ai/recipes.md)

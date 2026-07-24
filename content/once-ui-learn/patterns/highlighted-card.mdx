@@ -1,0 +1,96 @@
+<Feedback title="5 min · Pattern" description="Card is for interactive surfaces. Add a top glow and brand border to emphasize one item in a set — like a featured pricing tier." variant="info" />
+
+## When to use
+
+Use a **highlighted card** when one item in a set should stand out **and is interactive**:
+
+- "Most popular" pricing tier
+- Featured plan or product
+- Selectable option with `onClick`
+
+Static, non-clickable panels use the [static panel](/static-panel.mdx) recipe instead.
+
+## Basic interactive card
+
+```text
+<Card href="/pricing/pro" fillWidth padding="24" radius="l" background="surface" border="neutral-alpha-weak">
+  <Column gap="16" fillWidth>
+    <Heading variant="heading-strong-m">Pro</Heading>
+    <Text variant="display-strong-s" onBackground="neutral-strong">$29/mo</Text>
+    <Text variant="body-default-s" onBackground="neutral-weak">
+      For growing teams.
+    </Text>
+    <Button fillWidth>Get started</Button>
+  </Column>
+</Card>
+```
+
+`Card` requires `href` or `onClick` — that's what makes it a card, not a panel.
+
+## Highlighted variant
+
+Add a brand border and top glow for emphasis:
+
+```text
+<Card href="/pricing/pro" fillWidth padding="24" radius="l" background="surface" border="brand-alpha-medium" overflow="hidden">
+  <Background
+    position="absolute" top="0" left="0" fill pointerEvents="none"
+    gradient={{
+      display: true,
+      colorStart: "brand-alpha-medium",
+      colorEnd: "static-transparent",
+      x: 50, y: 0,
+      width: 200, height: 60,
+      opacity: 50,
+    }}
+  />
+  <Column zIndex={1} gap="20" fillWidth>
+    <Text variant="label-default-s" onBackground="brand-medium">MOST POPULAR</Text>
+    <Heading variant="heading-strong-m">Pro</Heading>
+    <Text variant="display-strong-s" onBackground="neutral-strong">$29/mo</Text>
+    <Button fillWidth>Get started</Button>
+  </Column>
+</Card>
+```
+
+## Pricing row
+
+Place cards side by side, highlighted in the center or end:
+
+```text
+<Row gap="24" vertical="stretch" s={{ direction: "column" }}>
+  <Card href="/basic" fill padding="24" radius="l" background="surface" border="neutral-alpha-weak">
+    {/* basic tier */}
+  </Card>
+  <Card href="/pro" fill padding="24" radius="l" background="surface" border="brand-alpha-medium" overflow="hidden">
+    {/* highlighted tier with glow */}
+  </Card>
+  <Card href="/enterprise" fill padding="24" radius="l" background="surface" border="neutral-alpha-weak">
+    {/* enterprise tier */}
+  </Card>
+</Row>
+```
+
+Use `vertical="stretch"` so all tiers match height.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `Card` with `href` or `onClick` | `Card` for static content |
+| `Column` + surface props for static boxes | `Card` without interaction |
+| Glow only on highlighted tier | Glow on every card in the set |
+| `overflow="hidden"` when using inner glow | Glow bleeding past radius |
+
+## Check yourself
+
+- [ ] Every `Card` has `href` or `onClick`
+- [ ] Static tiers use neutral border
+- [ ] Highlighted tier has brand border + top glow
+- [ ] Content inside glow has `zIndex={1}`
+
+## Related
+
+→ [Static panel](/static-panel.mdx)
+→ [Decoration layers](/decoration-layers.mdx)
+→ Task bundle: [tasks/pricing.json](https://docs.once-ui.com/ai/tasks/pricing.json)

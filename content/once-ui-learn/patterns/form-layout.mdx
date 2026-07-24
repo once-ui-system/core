@@ -1,0 +1,106 @@
+<Feedback title="5 min · Pattern" description="Forms in Once UI are stacked Columns with consistent gaps — label, field, helper text, grouped into sections." variant="info" />
+
+## Basic field
+
+A single form field is a vertical stack:
+
+```text
+<Column gap="8" fillWidth>
+  <Text variant="label-default-s" onBackground="neutral-weak">
+    Email address
+  </Text>
+  <Input
+    id="email"
+    placeholder="you@example.com"
+    fillWidth
+  />
+  <Text variant="body-default-xs" onBackground="neutral-weak">
+    We'll never share your email.
+  </Text>
+</Column>
+```
+
+Gap `"8"` keeps label, input, and helper tight. Use `"16"` between separate fields.
+
+## Form section
+
+Group related fields under a section title:
+
+```text
+<Column gap="24" fillWidth>
+  <Column gap="8">
+    <Heading variant="display-strong-xs">Account details</Heading>
+    <Text variant="body-default-s" onBackground="neutral-weak">
+      Update your profile information.
+    </Text>
+  </Column>
+
+  <Column gap="16" fillWidth>
+    <Column gap="8" fillWidth>
+      <Text variant="label-default-s" onBackground="neutral-weak">Name</Text>
+      <Input id="name" fillWidth />
+    </Column>
+    <Column gap="8" fillWidth>
+      <Text variant="label-default-s" onBackground="neutral-weak">Email</Text>
+      <Input id="email" type="email" fillWidth />
+    </Column>
+  </Column>
+</Column>
+```
+
+## Actions row
+
+Place submit/cancel below the fields:
+
+```text
+<Row gap="16" s={{ direction: "column" }}>
+  <Button type="submit">Save changes</Button>
+  <Button variant="secondary">Cancel</Button>
+</Row>
+```
+
+Primary action first. Stack on mobile with breakpoint props.
+
+## Inside a static panel
+
+Wrap settings forms in the surface recipe:
+
+```text
+<Column
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  padding="24"
+  gap="24"
+  fillWidth
+>
+  {/* form sections */}
+</Column>
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `Column gap="8"` per field | Label and input in a `Row` |
+| `fillWidth` on inputs | Fixed pixel widths |
+| `label-default-s` for labels | `body-default-m` for field labels |
+| `gap="16"` between fields | Inconsistent margins |
+
+## Accessible defaults
+
+- Always set `id` on inputs and match with label `htmlFor` when using separate `Text` labels
+- Use built-in `label` prop on form controls when the component supports it
+- Group related fields in a `Column`, not a flat list
+
+## Check yourself
+
+- [ ] Each field is a `Column gap="8"`
+- [ ] Fields separated by `gap="16"`
+- [ ] Section title uses `display-strong-xs`
+- [ ] Inputs have `fillWidth`
+
+## Related
+
+→ [Static panel](/static-panel.mdx)
+→ Form controls reference: [docs.once-ui.com](https://docs.once-ui.com/once-ui/form-controls/input)

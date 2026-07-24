@@ -1,0 +1,54 @@
+<Feedback title="5 min · Beginner · Start" description="Once UI turns layout and styling into semantic props — so you (and your AI agent) write less code that stays correct longer." variant="info" />
+
+## The idea
+
+Most design systems give you components and leave you to wrestle with CSS. Once UI goes further: **layout, color, spacing, and typography are all expressed as props on semantic components**.
+
+That means:
+
+- `<Column gap="16">` instead of flexbox boilerplate
+- `background="surface"` instead of hex colors
+- `textVariant="display-strong-l"` instead of font-size + weight classes
+
+The goal is **maintainability** — for humans reading the code six months later, and for agents generating it today.
+
+## Agent-first, human-friendly
+
+Once UI ships a **codegen harness** alongside the React library:
+
+| Artifact | Purpose |
+|----------|---------|
+| `rules.compact.md` | Do/don't tables for layout, surfaces, motion |
+| `catalog.json` | Pick components by purpose and tags |
+| `tasks/*.json` | Intent bundles (pricing page, chat UI, auth flow) |
+| `validate-ai-code` | Mechanical check for common mistakes |
+
+Humans learn the *why* here on Learn. Agents load the *how* from the harness. Both follow the same rules.
+
+## Three principles
+
+**1. Semantics over implementation**
+
+Use `Row` and `Column` — not `Flex direction="row"`. Use `Media` — not `<img>`. The component name tells you the intent.
+
+**2. Tokens over raw values**
+
+Spacing uses a fixed scale (`"8"`, `"16"`, `"24"`, `"104"`). Colors use schemes (`brand-medium`, `neutral-alpha-weak`). Never hex, never arbitrary pixels in props.
+
+**3. Composition over configuration**
+
+Pages are built by nesting `Column` → `Column maxWidth="l"` → sections. Decoration layers sit outside the content column. Patterns repeat — page skeleton, static panel, interactive card.
+
+## What you'll learn here
+
+| Section | Covers |
+|---------|--------|
+| **Start** | Install, first page |
+| **Foundations** | Layout, spacing, color, type |
+| **Patterns** | Reusable compositions |
+| **Tips** | Quick fixes for common mistakes |
+| **For agents** | Harness workflow and validation |
+
+## Next step
+
+→ [Install & config](/install-and-config.mdx)

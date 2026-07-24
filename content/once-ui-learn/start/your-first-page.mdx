@@ -1,0 +1,95 @@
+<Feedback title="10 min · Beginner · Start" description="Every Once UI page follows the same skeleton: a centered main column, a max-width content area, and sections spaced with token gaps." variant="info" />
+
+## The page skeleton
+
+Copy this structure for any new page:
+
+```text
+import { Column, Row, Heading, Text, Button } from "@once-ui-system/core";
+
+export default function HomePage() {
+  return (
+    <Column as="main" fillWidth horizontal="center">
+      <Column maxWidth="l" paddingY="80" gap="104" fillWidth>
+        {/* Section 1 — Hero */}
+        <Column gap="24" horizontal="center">
+          <Heading variant="display-strong-l" align="center">
+            Welcome
+          </Heading>
+          <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+            Your first Once UI page.
+          </Text>
+          <Row gap="16" s={{ direction: "column" }}>
+            <Button href="/start">Get started</Button>
+            <Button variant="secondary" href="/docs">Docs</Button>
+          </Row>
+        </Column>
+
+        {/* Section 2 — Features */}
+        <Column gap="24">
+          <Heading variant="display-strong-s">Features</Heading>
+          <Row gap="24" s={{ direction: "column" }}>
+            <Column
+              background="surface"
+              border="neutral-alpha-weak"
+              radius="l"
+              padding="24"
+              gap="16"
+              fill
+            >
+              <Heading variant="heading-strong-m">Semantic layout</Heading>
+              <Text variant="body-default-s" onBackground="neutral-weak">
+                Row, Column, Grid — props instead of CSS.
+              </Text>
+            </Column>
+            <Column
+              background="surface"
+              border="neutral-alpha-weak"
+              radius="l"
+              padding="24"
+              gap="16"
+              fill
+            >
+              <Heading variant="heading-strong-m">Design tokens</Heading>
+              <Text variant="body-default-s" onBackground="neutral-weak">
+                Spacing, color, and type from a single scale.
+              </Text>
+            </Column>
+          </Row>
+        </Column>
+      </Column>
+    </Column>
+  );
+}
+```
+
+## Anatomy
+
+| Layer | What it does |
+|-------|--------------|
+| `Column as="main"` | Page wrapper, centered horizontally |
+| `maxWidth="l"` | Content column — prevents edge-to-edge text |
+| `gap="104"` | Space **between** major sections |
+| `gap="24"` | Space **inside** a section |
+| Static panels | `Column` + `background="surface"` — not `Card` |
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `Column as="main" fillWidth horizontal="center"` | `<div className="container mx-auto">` |
+| `gap="104"` between sections | `margin-bottom: 48px` |
+| `Column` + surface props for panels | `<Card>` for non-interactive boxes |
+| `Row s={{ direction: "column" }}` | CSS `@media` for stacking |
+
+## Check yourself
+
+- [ ] Main wrapper uses `Column as="main"`
+- [ ] Content constrained with `maxWidth="l"` (or `"m"` for narrower pages)
+- [ ] Section gap is `"104"`, inner gap is `"24"`–`"40"`
+- [ ] Static feature boxes use the surface recipe, not `Card`
+
+## Go deeper
+
+→ [Page skeleton pattern](/page-skeleton.mdx)
+→ [Layout: Row, Column & Grid](/layout-row-column-grid.mdx)

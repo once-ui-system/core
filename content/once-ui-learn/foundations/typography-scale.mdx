@@ -1,0 +1,70 @@
+<Feedback title="5 min · Beginner · Foundations" description="Once UI typography is a scale of variants — display for heroes, heading for titles, body for prose, label for eyebrows." variant="info" />
+
+## The variant scale
+
+Typography variants follow `{type}-{weight}-{size}`:
+
+| Type | Use for | Examples |
+|------|---------|----------|
+| `display` | Heroes, page titles | `display-strong-l`, `display-strong-xl` |
+| `heading` | Section titles, card headings | `heading-strong-m`, `heading-strong-s` |
+| `body` | Paragraphs, descriptions | `body-default-m`, `body-default-s` |
+| `label` | Eyebrows, captions, metadata | `label-default-s`, `label-default-xs` |
+| `code` | Inline code, monospace | `code-default-s` |
+
+Weights: `default` or `strong`. Sizes: `xs`, `s`, `m`, `l`, `xl`.
+
+## Hierarchy rules
+
+| Element | Variant |
+|---------|---------|
+| Hero headline | `display-strong-l` or `display-strong-xl` |
+| Section title | `display-strong-xs` or `display-strong-s` |
+| Card heading | `heading-strong-m` |
+| Body text | `body-default-m` or `body-default-s` |
+| Eyebrow / kicker | `label-default-s` with `onBackground="brand-medium"` |
+
+**Section titles use `display-*`, not `heading-*`.** This is a common agent mistake.
+
+## Usage
+
+On text components:
+
+```text
+<Heading variant="display-strong-l">Hero title</Heading>
+<Text variant="body-default-m" onBackground="neutral-weak">
+  Supporting paragraph.
+</Text>
+<Text variant="label-default-s" onBackground="brand-medium">
+  EYEBROW TEXT
+</Text>
+```
+
+On layout components (skip wrapping `Text` for simple cases):
+
+```text
+<Column textVariant="label-default-s" onBackground="neutral-weak">
+  Label text directly on the container
+</Column>
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `display-strong-l` for hero | `heading-strong-xl` for hero |
+| `display-strong-s` for section title | `heading-strong-l` for section title |
+| `body-default-m` for paragraphs | Custom font-size |
+| `textVariant` on layout | Nesting `Text` for every label |
+
+## Check yourself
+
+- [ ] Hero uses `display-strong-l` or larger
+- [ ] Section titles use `display-strong-xs` or `display-strong-s`
+- [ ] Body text uses `body-default-*`
+- [ ] No custom font sizes outside the variant scale
+
+## Go deeper
+
+→ [Page skeleton pattern](/page-skeleton.mdx)
+→ Full reference: [docs.once-ui.com/once-ui/basics/typography](https://docs.once-ui.com/once-ui/basics/typography)
