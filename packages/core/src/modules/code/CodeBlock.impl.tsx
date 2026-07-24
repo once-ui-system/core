@@ -24,6 +24,7 @@ import {
   Button,
   Fade,
 } from "../../components";
+import { escapeHtml } from "../../utils/safe-html";
 
 let Prism: any;
 
@@ -352,18 +353,18 @@ const renderDiff = (
           if (prism.languages[lang]) {
             return prism.highlight(line.content, prism.languages[lang], lang);
           }
-          return line.content;
+          return escapeHtml(line.content);
         } catch (error) {
           console.warn(`Failed to highlight line: ${line.content}`, error);
-          return line.content;
+          return escapeHtml(line.content);
         }
       });
     } catch (error) {
       console.warn(`Failed to highlight code with language ${lang}:`, error);
-      highlightedLines = codeLines.map((line) => line.content);
+      highlightedLines = codeLines.map((line) => escapeHtml(line.content));
     }
   } else {
-    highlightedLines = codeLines.map((line) => line.content);
+    highlightedLines = codeLines.map((line) => escapeHtml(line.content));
   }
 
   let codeLineIndex = 0;
@@ -387,11 +388,14 @@ const renderDiff = (
                 `Failed to highlight diff line: ${line.content}`,
                 error,
               );
+              content = escapeHtml(line.content);
             }
+          } else {
+            content = escapeHtml(line.content);
           }
           className = "language-diff";
         } else {
-          content = highlightedLines[codeLineIndex] || line.content;
+          content = highlightedLines[codeLineIndex] || escapeHtml(line.content);
           className = `language-${lang || "diff"}`;
           codeLineIndex++;
         }
@@ -605,6 +609,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                   );
                 } catch (error) {
                   console.warn("Failed to re-highlight line:", error);
+                  codeContent.textContent = textContent;
                 }
               }
             });
