@@ -35,6 +35,33 @@ Learn how to set up and build with Once UI at [docs.once-ui.com](https://docs.on
 npm install @once-ui-system/core
 ```
 
+## AI codegen harness
+
+This package includes an agent-first harness under `ai/` for generating Once UI code with minimal context (~6–10KB per task).
+
+| Resource | Path |
+|----------|------|
+| Entry point | `@once-ui-system/core/ai/manifest.json` |
+| Compact rules | `@once-ui-system/core/ai/rules.compact.md` |
+| Component catalog | `@once-ui-system/core/ai/catalog.json` |
+| Task bundles | `@once-ui-system/core/ai/tasks/index.json` |
+
+**One-time setup in your app** (writes project `AGENTS.md` + Cursor rule):
+
+```bash
+npx once-ui-init-agent
+```
+
+**Validate generated code:**
+
+```bash
+npx once-ui-validate-ai-code src/app/page.tsx
+```
+
+Full guide: [docs.once-ui.com/once-ui/ai-coding](https://docs.once-ui.com/once-ui/ai-coding)
+
+Machine-readable discovery: see the `onceUi` field in this package's `package.json`.
+
 ## Authors
 
 Built and maintained by [**Lorant One**](https://lorant.one).

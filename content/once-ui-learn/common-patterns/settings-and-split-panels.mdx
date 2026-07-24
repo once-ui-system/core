@@ -1,0 +1,121 @@
+<Feedback title="7 min · Pattern" description="Settings pages pair a section sidebar with scrollable form panels. SplitView handles the two-pane layout; danger zones get semantic danger borders." variant="info" />
+
+## What this pattern covers
+
+Settings is one of the most common app interiors:
+
+- Left sidebar listing sections (Profile, Account, Notifications, Billing)
+- Right column with stacked form panels
+- Toggle rows for notification preferences
+- A danger zone panel for destructive actions
+
+Gold reference: `packages/core/ai/examples/settings.tsx` and task bundle `packages/core/ai/tasks/settings.json`.
+
+## Page header
+
+Start with a label + heading block before the split layout:
+
+```text
+<Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24">
+  <Column fillWidth maxWidth="l" gap="40">
+    <Column gap="12">
+      <Text variant="label-default-s" onBackground="brand-medium">
+        Settings
+      </Text>
+      <Heading as="h1" variant="display-strong-s">
+        Manage your workspace
+      </Heading>
+    </Column>
+    {/* SplitView below */}
+  </Column>
+</Column>
+```
+
+## SplitView layout
+
+**SplitView** accepts `leftPanel` and `rightPanel` children (or nested Column children). Set `minHeight` so the panes fill the viewport.
+
+Structure:
+
+1. **Left panel** — section nav as a Column surface (`background="surface"`, `border="neutral-alpha-weak"`, `radius="l"`, `padding="16"`)
+2. **Right panel** — stacked form sections with `flex={1}` and `gap="24"`
+
+Hide the sidebar on mobile with `s={{ hide: true }}` on the left Column. On small screens, use a Select or SegmentedControl at the top to switch sections instead.
+
+Each nav item is a Row with `padding="12"`, `radius="m"`, and `background="neutral-alpha-weak"` on the active section.
+
+## Form panels
+
+Wrap each settings group in a surface panel:
+
+```text
+<Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="24">
+  <Heading as="h2" variant="heading-strong-m">Profile</Heading>
+  <Row gap="16" vertical="center">
+    <Avatar size="l" value="LO" />
+    <Column gap="8">
+      <Button size="s" variant="secondary">Upload photo</Button>
+      <Text variant="label-default-s" onBackground="neutral-weak">
+        JPG or PNG, max 2 MB
+      </Text>
+    </Column>
+  </Row>
+  <Input id="name" label="Display name" placeholder="Lorant One" />
+  <Input id="email" label="Email" placeholder="you@company.com" />
+  <Row gap="12">
+    <Button>Save changes</Button>
+    <Button variant="secondary">Cancel</Button>
+  </Row>
+</Column>
+```
+
+Use **Select** for dropdowns (timezone, language) and **Switch** / **Checkbox** for boolean preferences. Pair each toggle with a label + description Column on the left and the control on the right in a `horizontal="between"` Row.
+
+Separate groups with **Line** dividers inside the same panel.
+
+## Danger zone
+
+Destructive sections use a danger border — never the default neutral border:
+
+```text
+<Column background="surface" border="danger-alpha-medium" radius="l" padding="24" gap="16">
+  <Heading as="h2" variant="heading-strong-m" onBackground="danger-medium">
+    Danger zone
+  </Heading>
+  <Text variant="body-default-s" onBackground="neutral-weak">
+    Permanently delete your workspace and all associated data.
+  </Text>
+  <Button variant="danger" size="s">Delete workspace</Button>
+</Column>
+```
+
+Only one danger panel per page. Put it last in the right column so users scroll past normal settings first.
+
+## MediaUpload for avatars
+
+For drag-and-drop photo upload, use the **MediaUpload** module instead of a plain file input. It supports `aspectRatio`, `initialPreviewImage`, and built-in drop-zone styling. Place it inside the profile panel next to or below the Avatar preview.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| SplitView for sidebar + content | Manual CSS grid with fixed pixel widths |
+| `border="danger-alpha-medium"` on danger zone | Red text only, no border distinction |
+| Switch rows with label + description | Toggle with no context |
+| Hide sidebar on mobile, show section picker | Cramped sidebar at 320px |
+| Save/Cancel in a Row at panel bottom | Floating action button for settings |
+
+## Check yourself
+
+- [ ] Page has label + heading before the split
+- [ ] Active nav item has `background="neutral-alpha-weak"`
+- [ ] Each form group is its own surface panel
+- [ ] Danger zone uses danger border and `variant="danger"` button
+- [ ] Sidebar hidden on mobile (`s={{ hide: true }}`)
+
+## Related
+
+→ [App shell navigation](/common-patterns/app-shell-navigation.mdx)
+→ [Form layout](/common-patterns/form-layout.mdx)
+→ [Dialog & modal](/common-patterns/dialog-modal.mdx)
+→ Full reference: [docs.once-ui.com — SplitView](https://docs.once-ui.com/once-ui/components/splitView)

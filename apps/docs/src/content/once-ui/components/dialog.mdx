@@ -1,7 +1,7 @@
 ---
 title: "Dialog"
 summary: "The Dialog component provides a modal window that overlays the page content for focused user interactions and important information."
-updatedAt: "2025-05-09"
+updatedAt: "2026-07-24"
 docs: "once-ui/components/dialog.mdx"
 github: "components/Dialog.tsx"
 navLabel: "Dialog"
@@ -105,7 +105,26 @@ return (
 
 ## Stacked dialogs
 
-Dialogs can be stacked on top of each other for multi-step interactions.
+Dialogs can be stacked on top of each other for multi-step interactions. Wrap your app (or the dialog subtree) in `DialogProvider` so stacked dialogs can coordinate focus and inert behavior on the base dialog.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={12}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { DialogProvider } from '@once-ui-system/core';
+
+export default function Layout({ children }) {
+  return <DialogProvider>{children}</DialogProvider>;
+}`,
+      language: "tsx",
+      label: "app/layout.tsx"
+    }
+  ]}
+/>
 
 <CodeBlock
   marginTop="16"
@@ -120,7 +139,7 @@ Dialogs can be stacked on top of each other for multi-step interactions.
 const [isStackedOpen, setIsStackedOpen] = useState(false);
 
 return (
-    <>
+    <DialogProvider>
       <Button variant="secondary" onClick={() => setIsBaseOpen(true)}>
         Open stacked dialogs
       </Button>
@@ -160,7 +179,7 @@ return (
           Notice how the base dialog is dimmed in the background.
         </Text>
       </Dialog>
-    </>
+    </DialogProvider>
 );`,
       language: "tsx",
       label: "Stacked dialogs"
@@ -217,6 +236,45 @@ return (
   ]}
 />
 
+## Close on clickaway
+
+By default, clicking the backdrop closes the dialog. Set `closeOnClickaway={false}` to require an explicit close action.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <DialogCloseOnClickaway />
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+
+return (
+  <>
+    <Button variant="secondary" onClick={() => setIsOpen(true)}>
+      Dialog without clickaway
+    </Button>
+    <Dialog
+      isOpen={isOpen}
+      onClose={() => setIsOpen(false)}
+      title="Confirm action"
+      closeOnClickaway={false}
+      footer={
+        <Button onClick={() => setIsOpen(false)}>Close</Button>
+      }
+    >
+      <Text>Clicking outside will not dismiss this dialog.</Text>
+    </Dialog>
+  </>
+);`,
+      language: "tsx",
+      label: "Close on clickaway"
+    }
+  ]}
+/>
+
 ## Accessibility
 
 The Dialog component follows accessibility best practices:
@@ -238,9 +296,20 @@ The Dialog component follows accessibility best practices:
     ["footer", "ReactNode"],
     ["base", "boolean", "false"],
     ["stack", "boolean", "false"],
+    ["closeOnClickaway", "boolean", "true"],
     ["onHeightChange", "(height: number) => void"],
     ["minHeight", "number"],
     ["children"],
     ["...flex"]
+  ]}
+/>
+
+### DialogProvider
+
+Wrap your application (or a subtree) when using stacked dialogs.
+
+<PropsTable
+  content={[
+    ["children", "ReactNode"]
   ]}
 />

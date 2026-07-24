@@ -27,3 +27,16 @@ Workspaces:
   - `pnpm --filter @once-ui-system/core lint` (Biome) fails because `biome.json` files use the `1.9.4` schema while the pinned CLI is `2.4.13` (unknown keys `ignore`, `organizeImports`).
   - `apps/dev` `pnpm lint` fails because its script is `next lint`, which was removed in Next 16.
   - `apps/docs` `pnpm lint` (Next 15) works and reports no errors.
+
+### Once UI codegen harness
+
+Before generating or editing Once UI UI code in `packages/core` or `apps/*`:
+
+1. Read `packages/core/ai/manifest.json` (or `@once-ui-system/core/ai/manifest.json` from npm)
+2. Load bootstrap: `rules.compact.md` + `catalog.json`
+3. Match intent via `ai/tasks/index.json` → fetch task bundle + component slices
+4. Validate: `pnpm --filter @once-ui-system/core validate-ai-code path/to/file.tsx`
+
+Consumer apps: run `npx once-ui-init-agent` once after install to scaffold project `AGENTS.md` + `.cursor/rules/once-ui-codegen.mdc`.
+
+Do not use full MDX doc pages for codegen — use the harness (~6–10KB per task). Guide: https://docs.once-ui.com/once-ui/ai-coding

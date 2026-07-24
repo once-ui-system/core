@@ -1,0 +1,89 @@
+<Feedback title="5 min · Intermediate · Patterns" description="The page skeleton is the single most reused pattern in Once UI — master it and every page type becomes a variation." variant="info" />
+
+## The pattern
+
+Every marketing page, docs page, dashboard, and settings screen starts here:
+
+```text
+<Column as="main" fillWidth horizontal="center">
+  <Column maxWidth="l" paddingY="80" gap="104" fillWidth>
+    {/* sections go here */}
+  </Column>
+</Column>
+```
+
+Three layers:
+
+1. **Page wrapper** — `Column as="main"` centers content horizontally
+2. **Content column** — `maxWidth="l"` constrains readable width
+3. **Sections** — direct children with `gap="104"` between them
+
+## Width tokens
+
+| maxWidth | Use for |
+|----------|---------|
+| `"s"` | Narrow forms, auth pages |
+| `"m"` | Blog posts, focused content |
+| `"l"` | Marketing pages, dashboards (default) |
+| `"xl"` | Wide data tables, galleries |
+
+## Section template
+
+Each section inside the content column:
+
+```text
+<Column gap="24" horizontal="center">
+  <Text variant="label-default-s" onBackground="brand-medium">
+    EYEBROW
+  </Text>
+  <Heading variant="display-strong-s" align="center">
+    Section title
+  </Heading>
+  <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+    Section description
+  </Text>
+  {/* section content */}
+</Column>
+```
+
+For left-aligned sections, drop `horizontal="center"` and `align="center"`.
+
+## Decoration placement
+
+Ambient backgrounds (glows, dots, MatrixFx) go on a **full-bleed wrapper outside** `maxWidth`:
+
+```text
+<Column fillWidth horizontal="center" paddingY="80" overflow="hidden">
+  <Background
+    position="absolute" top="0" left="0" fill pointerEvents="none"
+    gradient={{ display: true, colorStart: "brand-alpha-medium", colorEnd: "static-transparent", x: 50, y: 0, width: 150, height: 80, opacity: 60 }}
+  />
+  <Column zIndex={1} maxWidth="l" gap="24" horizontal="center">
+    {/* hero content */}
+  </Column>
+</Column>
+```
+
+Content always gets `zIndex={1}`. Decoration always gets `pointerEvents="none"`.
+
+## When to vary
+
+| Page type | Variation |
+|-----------|-----------|
+| Auth | `maxWidth="s"`, single section, no `gap="104"` |
+| Blog post | `maxWidth="m"`, prose-focused |
+| Dashboard | `maxWidth="l"`, left-aligned sections, `SplitView` |
+| Chat | `SplitView` or full-height `Column fill` |
+
+## Check yourself
+
+- [ ] `Column as="main"` is the outermost layout element
+- [ ] Content constrained with `maxWidth`
+- [ ] Sections are direct children with `gap="104"`
+- [ ] Decoration outside the `maxWidth` column
+
+## Related
+
+→ [Your first page](/your-first-page.mdx)
+→ [Spacing & rhythm](/spacing-and-rhythm.mdx)
+→ Decoration recipes: [docs.once-ui.com/ai/recipes.md](https://docs.once-ui.com/ai/recipes.md)

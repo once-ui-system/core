@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { ReactNode, forwardRef } from "react";
 import { Flex } from ".";
+import { sanitizeHref } from "../utils/safe-html";
 
 type ElementTypeProps = {
   href?: string;
@@ -18,12 +19,14 @@ const isExternalLink = (url: string) => /^https?:\/\//.test(url);
 
 const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
   ({ href, type, onClick, onLinkClick, children, className, style, ...props }, ref) => {
-    if (href) {
-      const isExternal = isExternalLink(href);
+    const safeHref = sanitizeHref(href);
+
+    if (safeHref) {
+      const isExternal = isExternalLink(safeHref);
       if (isExternal) {
         return (
           <a
-            href={href}
+            href={safeHref}
             target="_blank"
             rel="noreferrer"
             ref={ref as React.Ref<HTMLAnchorElement>}
@@ -38,7 +41,7 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
       }
       return (
         <Link
-          href={href}
+          href={safeHref}
           ref={ref as React.Ref<HTMLAnchorElement>}
           className={className}
           style={style}

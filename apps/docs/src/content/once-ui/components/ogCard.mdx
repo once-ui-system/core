@@ -240,16 +240,70 @@ Used in advanced setups where OG images are dynamically generated server-side.
 
 This is optional depending on your configuration.
 
+## Service configuration
+
+Use `serviceConfig` to point `OgCard` at custom API routes or to transform proxied image and favicon URLs. Pass pre-fetched data with `ogData` to skip the fetch entirely.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`<OgCard
+  url="https://example.com"
+  serviceConfig={{
+    fetchOgUrl: '/api/og/fetch',
+    proxyOgUrl: '/api/og/proxy',
+    proxyImageUrl: (url) => \`/api/og/proxy?url=\${encodeURIComponent(url)}\`,
+    proxyFaviconUrl: (url) => \`/api/og/proxy?url=\${encodeURIComponent(url)}\`,
+  }}
+/>
+
+<OgCard
+  ogData={{
+    url: 'https://example.com',
+    title: 'Example',
+    description: 'Pre-fetched metadata',
+    image: 'https://example.com/og.png',
+    faviconUrl: 'https://example.com/favicon.ico',
+  }}
+/>`,
+      language: "tsx",
+      label: "Service configuration"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   content={[
     ["url", "string"],
+    ["ogData", "Partial<OgData> | null"],
+    ["serviceConfig", "OgServiceConfig", "{}"],
+    ["size", ["s", "m", "l"], "m"],
+    ["sizes", "string", "320px"],
+    ["direction", ["column", "row", "column-reverse", "row-reverse"], "column"],
     ["title", ["string", "false"]],
     ["description", ["string", "false"]],
     ["image", ["string", "false"]],
     ["favicon", ["string", "false"]],
+    ["cardUrl", ["string", "false"]],
     ["...card", "CardProps"]
+  ]}
+/>
+
+### OgServiceConfig
+
+<PropsTable
+  content={[
+    ["fetchOgUrl", "string", "'/api/og/fetch'", "Endpoint for fetching OG metadata."],
+    ["proxyOgUrl", "string", "'/api/og/proxy'", "Endpoint for proxying external assets."],
+    ["proxyImageUrl", "(url: string) => string", "Transform OG image URLs before rendering."],
+    ["proxyFaviconUrl", "(url: string) => string", "Transform favicon URLs before rendering."]
   ]}
 />
 

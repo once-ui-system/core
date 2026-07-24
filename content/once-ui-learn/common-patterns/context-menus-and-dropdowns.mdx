@@ -1,0 +1,87 @@
+<Feedback title="5 min · Pattern" description="The context menu opens on right-click at the cursor. The dropdown opens on click from a trigger. Both use option rows inside a Column — share one menu-content pattern across the app." variant="info" />
+
+## Context menu vs dropdown
+
+| Pattern | Trigger | Best for |
+|---------|---------|----------|
+| Context menu | Right-click (or long-press) | Tables, canvases, file lists |
+| Dropdown | Click on button or row | Toolbars, row actions, sort menus |
+| Dropdown wrapper | Custom trigger element | Composed inputs (date picker, tag field) |
+
+The context menu portals the menu to the click position. The dropdown anchors to the trigger with floating-ui placement. Both support keyboard navigation and close on outside click.
+
+## Context menu structure
+
+Wrap the interactive surface (a table row, card, or canvas) as children. Pass menu content via the dropdown prop.
+
+Build the menu as a Column with padding, then list option rows with label and value props. Wire onSelect to route action values. closeAfterClick defaults to true so the menu dismisses after a choice.
+
+```text
+Column gap="2" padding="4" minWidth={10}
+  Option label="Edit" value="edit"
+  Option label="Duplicate" value="duplicate"
+  Option danger label="Delete" value="delete"
+```
+
+Wrap the target surface in a Row with surface background and border so users know the area is interactive.
+
+### Prefix icons and danger actions
+
+Add hasPrefix with an Icon on each option row for scanability. Mark destructive actions with the danger prop — it tints the label and icon toward the danger palette.
+
+Group related actions with spacing; separate Delete from safe actions with extra vertical gap.
+
+### Controlled open state
+
+For programmatic open/close (e.g. after an async delete), pass isOpen and onOpenChange. Leave uncontrolled for standard right-click behavior.
+
+## Dropdown for click actions
+
+The dropdown follows the same option list pattern but attaches to a visible trigger — typically a Button or IconButton.
+
+```text
+IconButton icon="more" variant="ghost" aria-label="Row actions"
+  → opens Column of Option rows
+```
+
+Tune placement (bottom-start, bottom-end, top) when the trigger sits near viewport edges. Use minWidth so short labels do not collapse the menu.
+
+## Shared menu content
+
+Extract a reusable menu Column when the same actions appear in both a context menu and a toolbar dropdown:
+
+1. Define a small function that returns the Column of option rows
+2. Pass it to the context menu dropdown on the file row
+3. Pass the same block to the dropdown on the row overflow button
+
+Keep action handlers in the parent — the menu component only renders labels and values.
+
+## Accessibility
+
+- Context menu restores focus to the previously focused element on close
+- Arrow keys move between options when the menu is open
+- Every IconButton trigger needs aria-label (no visible text)
+- Do not rely on right-click alone — offer an equivalent overflow dropdown
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Option rows with value + onSelect | Inline onClick on random divs |
+| Danger prop on destructive actions | Red text styled with custom CSS |
+| Overflow dropdown + context menu | Right-click as the only action path |
+| Extracted shared menu content | Copy-pasted menu blocks per row |
+
+## Check yourself
+
+- [ ] Destructive actions use danger on option rows
+- [ ] Icon-only triggers have aria-label
+- [ ] onSelect handles all menu values in one place
+- [ ] Click-based overflow exists wherever context menu is offered
+- [ ] Menu width fits the longest label (minWidth)
+
+## Related
+
+→ [Tables & lists](/common-patterns/tables-and-lists.mdx)
+→ [App shell navigation](/common-patterns/app-shell-navigation.mdx)
+→ Full reference: [docs.once-ui.com — ContextMenu](https://docs.once-ui.com/once-ui/components/contextMenu)

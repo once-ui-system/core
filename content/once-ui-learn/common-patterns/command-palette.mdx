@@ -1,0 +1,139 @@
+<Feedback title="5 min · Pattern" description="The Kbar module adds a searchable command palette with keyboard shortcuts. Mount it in your app shell header and wire items to routes or actions." variant="info" />
+
+## What this pattern covers
+
+A command palette (⌘K / Ctrl+K) lets power users jump anywhere without hunting through menus:
+
+- Searchable list of navigation targets and actions
+- Grouped by section (Navigation, Actions, Settings)
+- Keyboard shortcuts displayed per item
+- Trigger button in the app header
+
+Gold reference: `packages/core/ai/examples/blocks/Header1.tsx` and `packages/core/src/modules/navigation/Kbar.tsx`.
+
+## Kbar item shape
+
+Items are plain data objects — no JSX inside the array:
+
+```text
+const kbar = [
+  {
+    id: "dashboard",
+    name: "Dashboard",
+    icon: "home",
+    section: "Navigation",
+    keywords: "dashboard home overview",
+    href: "/dashboard",
+    shortcut: ["meta", "d"],
+  },
+  {
+    id: "new-project",
+    name: "New project",
+    icon: "plus",
+    section: "Actions",
+    keywords: "create project new",
+    perform: () => openCreateDialog(),
+    shortcut: ["meta", "n"],
+  },
+];
+```
+
+| Field | Purpose |
+|-------|---------|
+| `id` | Unique key |
+| `name` | Display label in results |
+| `section` | Group header ("Navigation", "Actions") |
+| `keywords` | Extra search terms (space-separated) |
+| `href` | Route for navigation items |
+| `perform` | Callback for action items (no navigation) |
+| `shortcut` | Keys shown in the UI (`["meta", "k"]` → ⌘K) |
+| `icon` | Icon name from the Once UI icon set |
+
+Use `href` for pages and `perform` for in-app actions like "Toggle theme" or "Create project."
+
+## Header trigger
+
+Wrap a Button inside the command palette module as the trigger. Pass your `items` array to the module and use a tertiary Button with a command icon:
+
+```text
+<Row gap="8" vertical="center" m={{ hide: true }}>
+  <Button size="s" variant="tertiary" prefixIcon="command">
+    Search
+  </Button>
+</Row>
+```
+
+Place the trigger Button as a child of the Kbar module (see Header1 for the full wrapper). Hide the trigger Row on mobile (`m={{ hide: true }}`) where screen space is tight — users can still open the palette with the keyboard shortcut.
+
+Show the platform-appropriate modifier in shortcut hints: ⌘ on Mac, Ctrl on Windows. Header1 checks `navigator.platform` for this.
+
+## Global keyboard shortcut
+
+The command palette module registers ⌘K (or Ctrl+K) automatically when mounted. You do not need a separate listener — just ensure it is rendered inside your layout, not inside a page that unmounts on navigation.
+
+Place the module in the root layout or app shell header so it persists across routes.
+
+## Sections and search
+
+Items group under `section` headers in the results list. Common sections:
+
+- **Navigation** — page links (`href`)
+- **Actions** — one-off commands (`perform`)
+- **Settings** — preferences and account links
+- **Recent** — dynamically populated from recent pages
+
+The built-in search matches against `name`, `keywords`, and `section`. Add generous `keywords` for items users might search by synonym ("prefs" → Settings).
+
+## Navigation vs actions
+
+```text
+// Navigation — uses href, router pushes on select
+{ id: "billing", name: "Billing", href: "/settings/billing", section: "Settings", ... }
+
+// Action — uses perform callback
+{ id: "logout", name: "Sign out", perform: () => signOut(), section: "Actions", ... }
+```
+
+When an item has `href`, the module uses SmartLink routing. When it has `perform`, the callback runs and the palette closes.
+
+## Placement in app shell
+
+The command palette belongs in the header's right zone, between nav links and the user menu:
+
+```text
+<Row as="header" fillWidth horizontal="between" vertical="center" ...>
+  <Row gap="4" vertical="center">
+    {/* Logo + NavIcon */}
+  </Row>
+  <Row gap="8" vertical="center">
+    {/* Kbar trigger */}
+    {/* UserMenu */}
+  </Row>
+</Row>
+```
+
+See [App shell navigation](/common-patterns/app-shell-navigation.mdx) for the full header composition with MegaMenu and mobile fallbacks.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Plain objects in `items` array | JSX elements as items |
+| `keywords` for search aliases | Only matching on `name` |
+| `href` for routes, `perform` for actions | Mixing onClick into item data |
+| Kbar in root layout / header | Palette inside a page component |
+| Hide trigger on mobile, keep shortcut | No mobile access at all |
+
+## Check yourself
+
+- [ ] Every item has a unique `id`
+- [ ] Navigation items use `href`, actions use `perform`
+- [ ] `keywords` cover common search terms
+- [ ] Module mounted in persistent layout (not per-page)
+- [ ] Trigger hidden on mobile, keyboard shortcut still works
+
+## Related
+
+→ [App shell navigation](/common-patterns/app-shell-navigation.mdx)
+→ [Chat & messaging](/common-patterns/chat-and-messaging.mdx)
+→ Full reference: [docs.once-ui.com — Kbar](https://docs.once-ui.com/once-ui/modules/kbar)

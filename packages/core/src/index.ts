@@ -6,4 +6,3 @@ export * from "./types";
 export * from "./interfaces";
 export * from "./utils";
 export * from "./hooks";
-export * from "./server";

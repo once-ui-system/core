@@ -1,0 +1,328 @@
+{
+  "siteId": "bdbe103d-9204-48bf-a2f1-756deb1c2cc9",
+  "pages": [
+    {
+      "path": "/agent-resources/common-gotchas.mdx",
+      "title": "Common gotchas",
+      "summary": "Codegen mistakes from gotchas.json \u2014 layout, surfaces, motion, and component traps.",
+      "contentId": "06eaaa39-11ed-4d18-af0b-a0a71352948b",
+      "file": "for-agents/common-gotchas.mdx"
+    },
+    {
+      "path": "/agent-resources/match-task-bundles.mdx",
+      "title": "Match task bundles",
+      "summary": "Route user intent to harness task bundles, gold examples, and Pro blocks.",
+      "contentId": "c8ee8949-2761-42f1-a4eb-d76a0f55776d",
+      "file": "for-agents/match-task-bundles.mdx"
+    },
+    {
+      "path": "/agent-resources/validate-generated-code.mdx",
+      "title": "Validate generated code",
+      "summary": "Run pnpm validate-ai-code after codegen \u2014 what it catches and how to pair with gotchas.json.",
+      "file": "for-agents/validate-generated-code.mdx",
+      "contentId": "c4a73cc5-bf9e-40c9-87b4-4ddf15e019cb"
+    },
+    {
+      "path": "/color-and-surfaces.mdx",
+      "title": "Color & surfaces",
+      "summary": "Color schemes, the static panel recipe, and when to use Card.",
+      "contentId": "f8360c99-7a72-4de1-8f7a-5a7938f9e22b",
+      "file": "foundations/color-and-surfaces.mdx"
+    },
+    {
+      "path": "/column-not-flex.mdx",
+      "title": "Column, not Flex",
+      "summary": "Use Row and Column for static layouts \u2014 Flex only when direction changes.",
+      "contentId": "d0c932a5-f21e-4aee-8c17-7cdd66071a3b",
+      "file": "tips/column-not-flex.mdx"
+    },
+    {
+      "path": "/common-patterns/accordion-and-faq.mdx",
+      "title": "Accordion & FAQ",
+      "summary": "AccordionGroup for FAQ sections, split-column layouts, autoCollapse behavior, and standalone Accordion usage.",
+      "file": "common-patterns/accordion-and-faq.mdx"
+    },
+    {
+      "path": "/common-patterns/app-shell-navigation.mdx",
+      "title": "App shell navigation",
+      "summary": "Sticky headers, MegaMenu, Kbar command palette, and Pro block app chrome.",
+      "contentId": "85a291fe-29f2-4375-b9cd-ecd701454dca",
+      "file": "patterns/app-shell-navigation.mdx"
+    },
+    {
+      "path": "/common-patterns/auth-and-verification.mdx",
+      "title": "Auth & verification",
+      "summary": "Split sign-up layouts, social auth, PasswordInput, and OTP verification in stacked dialogs.",
+      "file": "common-patterns/auth-and-verification.mdx",
+      "id": "195ac69e-cf36-4e33-a000-000f8eec135a"
+    },
+    {
+      "path": "/common-patterns/carousel-and-compare-media.mdx",
+      "title": "Carousels, galleries, and before/after comparisons",
+      "summary": "Carousel for rotators and galleries; CompareImage for draggable A/B sliders.",
+      "tag": "Common patterns",
+      "file": "common-patterns/carousel-and-compare-media.mdx",
+      "id": "c5410a20-583f-4ca8-a02b-24dd1903e5ea"
+    },
+    {
+      "path": "/common-patterns/chat-and-messaging.mdx",
+      "title": "Chat & messaging",
+      "summary": "Multi-pane chat layouts with channel sidebars, feeds, composers, and streaming replies.",
+      "contentId": "b579ab25-95e1-4f2a-b255-0a166cd68409",
+      "file": "patterns/chat-and-messaging.mdx"
+    },
+    {
+      "path": "/common-patterns/code-blocks-and-previews.mdx",
+      "title": "Documentation code blocks with live preview",
+      "summary": "CodeBlock with prismjs, multi-file tabs, diff view, and side-by-side preview.",
+      "tag": "Common patterns",
+      "file": "common-patterns/code-blocks-and-previews.mdx",
+      "id": "74b3fe1d-8086-44f3-be50-7c6fbfcef766"
+    },
+    {
+      "path": "/common-patterns/command-palette.mdx",
+      "title": "Command palette",
+      "summary": "Wire the Kbar module for searchable navigation, actions, and keyboard shortcuts in your app shell.",
+      "file": "common-patterns/command-palette.mdx",
+      "id": "0dba34b9-cf43-4453-ac17-34045ef74636"
+    },
+    {
+      "path": "/common-patterns/context-menus-and-dropdowns.mdx",
+      "title": "Context menus and dropdown actions",
+      "summary": "Right-click ContextMenu and click Dropdown patterns for contextual actions without cluttering the UI.",
+      "tag": "Common patterns",
+      "file": "common-patterns/context-menus-and-dropdowns.mdx"
+    },
+    {
+      "path": "/common-patterns/dashboard-and-charts.mdx",
+      "title": "Dashboard & charts",
+      "summary": "KPI stat rows, CountFx viewport latches, sparkline charts, and activity tables.",
+      "contentId": "ba86416c-4d15-4415-bd2b-2b9a3088f08f",
+      "file": "patterns/dashboard-and-charts.mdx"
+    },
+    {
+      "path": "/common-patterns/data-filters-toolbar.mdx",
+      "title": "Data filters & toolbar",
+      "summary": "Compose table toolbars with search, SegmentedControl view switchers, date ranges, and filter chips.",
+      "file": "common-patterns/data-filters-toolbar.mdx",
+      "id": "afbff865-c315-4e9f-bb7f-4c31268af100"
+    },
+    {
+      "path": "/common-patterns/date-pickers-and-scheduling.mdx",
+      "title": "Date pickers and scheduling",
+      "summary": "DateInput for single dates, DateRangePicker for ranges \u2014 calendar UI with optional time selection.",
+      "tag": "Common patterns",
+      "file": "common-patterns/date-pickers-and-scheduling.mdx"
+    },
+    {
+      "path": "/common-patterns/dialog-modal.mdx",
+      "title": "Dialog & modal",
+      "summary": "Controlled dialogs with title, footer actions, and stacked multi-step flows.",
+      "contentId": "5b876cb5-69af-4921-a9b5-ba8c4fe0f088",
+      "file": "patterns/dialog-modal.mdx"
+    },
+    {
+      "path": "/common-patterns/empty-and-error-states.mdx",
+      "title": "Empty & error states",
+      "summary": "Compose empty, error, and filtered-empty states with Icon, Heading, Text, and Button \u2014 distinct from loading skeletons.",
+      "file": "common-patterns/empty-and-error-states.mdx"
+    },
+    {
+      "path": "/common-patterns/loading-states.mdx",
+      "title": "Loading states",
+      "summary": "Skeleton placeholders for content areas, spinners for actions \u2014 keep layout stable while data loads.",
+      "file": "patterns/loading-states.mdx",
+      "contentId": "49391be8-2045-43ca-a8fb-951f99037929"
+    },
+    {
+      "path": "/common-patterns/media-and-uploads.mdx",
+      "title": "Media & uploads",
+      "summary": "MediaUpload drag-and-drop, compression, preview, and profile photo patterns in settings forms.",
+      "file": "common-patterns/media-and-uploads.mdx"
+    },
+    {
+      "path": "/common-patterns/pricing-and-plans.mdx",
+      "title": "Pricing & plans",
+      "summary": "Three-tier pricing grids, billing toggles, comparison tables, and FAQ accordions from the pricing task bundle.",
+      "file": "common-patterns/pricing-and-plans.mdx"
+    },
+    {
+      "path": "/common-patterns/seo-and-metadata.mdx",
+      "title": "SEO, Open Graph, and structured data",
+      "summary": "generateMetadata, Schema JSON-LD, and server-side OG fetch \u2014 wire once in your layout.",
+      "tag": "Common patterns",
+      "file": "common-patterns/seo-and-metadata.mdx",
+      "id": "80d855b1-745e-46d0-bf5a-6f8fe757a556"
+    },
+    {
+      "path": "/common-patterns/settings-and-split-panels.mdx",
+      "title": "Settings & split panels",
+      "summary": "SplitView settings layout with section sidebar, form panels, toggles, and danger zones.",
+      "file": "common-patterns/settings-and-split-panels.mdx",
+      "id": "c99a96e6-0df3-4a0a-aff9-db2826ab4c67"
+    },
+    {
+      "path": "/common-patterns/tables-and-lists.mdx",
+      "title": "Tables & lists",
+      "summary": "Structured data with Table, simpler stacks with List \u2014 plus empty and loading states.",
+      "contentId": "61eaf09d-2af2-4c5a-816f-7a42b172b48a",
+      "file": "patterns/tables-and-lists.mdx"
+    },
+    {
+      "path": "/common-patterns/tags-chips-and-multi-value-inputs.mdx",
+      "title": "Tags, chips, and multi-value inputs",
+      "summary": "TagInput, Chip, Tag, and Checkbox patterns for filters, labels, and multi-select form fields.",
+      "tag": "Common patterns",
+      "file": "common-patterns/tags-chips-and-multi-value-inputs.mdx"
+    },
+    {
+      "path": "/common-patterns/toast-and-feedback.mdx",
+      "title": "Toast & feedback",
+      "summary": "Global toast notifications via ToastProvider and useToast \u2014 plus when to use inline Feedback.",
+      "contentId": "fe3a2420-45e0-44f3-969c-265eaa65e4f9",
+      "file": "patterns/toast-and-feedback.mdx"
+    },
+    {
+      "path": "/decoration-layers.mdx",
+      "title": "Decoration layers",
+      "summary": "Absolute Background layers, glow budget, and placement rules.",
+      "contentId": "9dfad041-5ea1-4e6e-8d92-85ec099320c5",
+      "file": "patterns/decoration-layers.mdx"
+    },
+    {
+      "path": "/design-tips/icons-and-buttons.mdx",
+      "title": "Icons & buttons",
+      "summary": "Valid icon names, prefixIcon patterns, semantic colors, and button variants.",
+      "contentId": "e16f8c7c-491b-45c7-80b4-f05f6f7edec8",
+      "file": "foundations/icons-and-buttons.mdx"
+    },
+    {
+      "path": "/design-tips/reveal-and-motion.mdx",
+      "title": "Reveal & motion",
+      "summary": "RevealFx entry animation, CountFx pairing, and the ambient decoration budget.",
+      "file": "foundations/reveal-and-motion.mdx",
+      "contentId": "979335b0-806d-43d2-8997-a2f2d4233572"
+    },
+    {
+      "path": "/design-tips/theme-tokens-and-runtime-style.mdx",
+      "title": "Theme tokens, FOUC-free init, and runtime style controls",
+      "summary": "ThemeInit, ThemeProvider, data-* attributes, and DataThemeProvider for charts.",
+      "tag": "Design tips",
+      "file": "design-tips/theme-tokens-and-runtime-style.mdx",
+      "id": "30bbfc9c-7261-44bb-b8f1-0a775442f107"
+    },
+    {
+      "path": "/design-tips/tooltips-and-hover-cards.mdx",
+      "title": "Tooltips and hover cards",
+      "summary": "Tooltip for inline hints; HoverCard for rich previews on hover \u2014 keep discoverability without modal noise.",
+      "tag": "Design tips",
+      "file": "design-tips/tooltips-and-hover-cards.mdx"
+    },
+    {
+      "path": "/form-layout.mdx",
+      "title": "Form layout",
+      "summary": "Stack fields, group sections, and place actions in Once UI forms.",
+      "contentId": "2f2728ce-1ae7-4328-bcdf-05e04197c019",
+      "file": "patterns/form-layout.mdx"
+    },
+    {
+      "path": "/harness-overview.mdx",
+      "title": "Harness overview",
+      "summary": "Agent codegen workflow \u2014 bootstrap, task routing, and validation.",
+      "contentId": "23e701ce-e2bb-4392-97f8-e20c4dd5e9bf",
+      "file": "for-agents/harness-overview.mdx"
+    },
+    {
+      "path": "/hero-section.mdx",
+      "title": "Hero section",
+      "summary": "Hero composition \u2014 eyebrow, headline, actions, and optional ambient glow.",
+      "contentId": "5643e79e-e159-45c5-aeff-055166d2a3c5",
+      "file": "patterns/hero-section.mdx"
+    },
+    {
+      "path": "/highlighted-card.mdx",
+      "title": "Highlighted card",
+      "summary": "Interactive Card with brand glow for featured pricing tiers and CTAs.",
+      "contentId": "9db8372e-25c0-4fa7-bb3a-aec8cd7a4635",
+      "file": "patterns/highlighted-card.mdx"
+    },
+    {
+      "path": "/index.mdx",
+      "title": "Once UI Learn",
+      "summary": "Learn Once UI Core \u2014 semantics, layout, styling, and agent-friendly patterns for humans and AI.",
+      "contentId": "db5faad3-0ac5-4903-b6f8-5b19b7b905b6",
+      "file": "index.mdx"
+    },
+    {
+      "path": "/install-and-config.mdx",
+      "title": "Install & config",
+      "summary": "Install @once-ui-system/core and wrap your app in providers.",
+      "contentId": "b863fe6f-a179-4583-ad07-d8f5d91be423",
+      "file": "start/install-and-config.mdx"
+    },
+    {
+      "path": "/layout-row-column-grid.mdx",
+      "title": "Row, Column & Grid",
+      "summary": "Layout decision tree \u2014 when to use Row, Column, Flex, and Grid.",
+      "contentId": "3158f4fd-ab54-435f-b7db-25fa32dc33c8",
+      "file": "foundations/layout-row-column-grid.mdx"
+    },
+    {
+      "path": "/page-skeleton.mdx",
+      "title": "Page skeleton",
+      "summary": "The reusable page structure every Once UI page starts from.",
+      "contentId": "be99fb15-a6bd-49af-90e0-eba82860f70c",
+      "file": "patterns/page-skeleton.mdx"
+    },
+    {
+      "path": "/responsive-stacking.mdx",
+      "title": "Responsive stacking",
+      "summary": "Breakpoint props for mobile stacking \u2014 no media queries needed.",
+      "contentId": "182724a1-eb85-4ab5-8ae8-006f9ea77a0a",
+      "file": "patterns/responsive-stacking.mdx"
+    },
+    {
+      "path": "/semantics-over-css.mdx",
+      "title": "Semantics over CSS",
+      "summary": "Style by meaning with design tokens \u2014 not arbitrary CSS values.",
+      "contentId": "59ccd086-a495-4562-8520-740f446d27f4",
+      "file": "foundations/semantics-over-css.mdx"
+    },
+    {
+      "path": "/spacing-and-rhythm.mdx",
+      "title": "Spacing & rhythm",
+      "summary": "Section gaps, inner gaps, and the spacing token scale.",
+      "contentId": "c2237c3f-11cc-4368-a21a-86cffb31b246",
+      "file": "foundations/spacing-and-rhythm.mdx"
+    },
+    {
+      "path": "/static-panel.mdx",
+      "title": "Static panel",
+      "summary": "The surface recipe for non-interactive panels \u2014 stats, settings, feature boxes.",
+      "contentId": "b0ad2cee-989b-4361-9a9d-6b5d8ba4daa6",
+      "file": "patterns/static-panel.mdx"
+    },
+    {
+      "path": "/typography-scale.mdx",
+      "title": "Typography scale",
+      "summary": "Display, heading, body, and label variants \u2014 and when to use each.",
+      "contentId": "ea6f6b0b-0fc9-4919-8650-52f741071c5f",
+      "file": "foundations/typography-scale.mdx"
+    },
+    {
+      "path": "/what-is-once-ui.mdx",
+      "title": "What is Once UI?",
+      "summary": "Philosophy and core ideas \u2014 semantics over CSS, tokens, and agent-first design.",
+      "contentId": "ccf224ed-bd76-4129-938e-fdff2667d1d5",
+      "file": "start/what-is-once-ui.mdx"
+    },
+    {
+      "path": "/your-first-page.mdx",
+      "title": "Your first page",
+      "summary": "Build a complete page with the Once UI skeleton in 10 minutes.",
+      "contentId": "f3555833-facd-4a13-898d-fbcd325146d8",
+      "file": "start/your-first-page.mdx"
+    }
+  ],
+  "deletePageIds": []
+}

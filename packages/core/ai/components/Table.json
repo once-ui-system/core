@@ -13,8 +13,23 @@
   "StyleProps"
  ],
  "props": {
-  "data": "!{ headers: { content: ReactNode; key: string; sortable?: boolean; }[]; rows: ReactNode[][]; }",
-  "onRowClick": "(rowIndex: number) => void"
+  "data": "!{ headers: TableHeader[]; rows: ReactNode[][]; }",
+  "onRowClick": "(rowIndex: number) => void",
+  "searchable": "boolean = false",
+  "searchPlaceholder": "string = Search...",
+  "striped": "boolean = false",
+  "hoverable": "boolean = true",
+  "compact": "boolean = false",
+  "loading": "boolean = false",
+  "emptyState": "ReactNode",
+  "actions": "TableAction[]",
+  "stickyHeader": "boolean = false",
+  "rowClassName": "(rowIndex: number) => string",
+  "cellClassName": "(rowIndex: number, cellIndex: number) => string",
+  "paginated": "boolean = false",
+  "defaultPageSize": "number = 10",
+  "pageSizeOptions": "number[] = [5, 10, 20, 50]",
+  "loadingState": "ReactNode"
  },
  "mixinsRef": [
   "CommonProps",

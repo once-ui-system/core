@@ -1,0 +1,56 @@
+<Feedback title="2 min · Tip" description="Row and Column exist for a reason. Flex with direction is the #1 mistake in generated Once UI code." variant="warning" />
+
+## The tip
+
+**Write this:**
+
+```text
+<Column gap="16">
+  <Heading variant="display-strong-s">Title</Heading>
+  <Text variant="body-default-m" onBackground="neutral-weak">Body</Text>
+</Column>
+```
+
+**Not this:** a `Flex` with `direction="column"` — use `Column` instead.
+
+## Why
+
+`Row` and `Column` are **semantic layout primitives**. They tell the reader (human or agent) the intent immediately. `Flex direction="column"` is an implementation detail that:
+
+- Adds noise to every layout block
+- Fails `validate-ai-code` checks
+- Makes diffs harder to review
+
+`Flex` exists for one case: **when direction changes at breakpoints**.
+
+```text
+<Row gap="24" s={{ direction: "column" }}>
+  <Column fill>Left</Column>
+  <Column fill>Right</Column>
+</Row>
+```
+
+## Same rule for horizontal
+
+**Write this:**
+
+```text
+<Row gap="16" vertical="center">
+  <Icon name="check" />
+  <Text variant="body-default-s">Done</Text>
+</Row>
+```
+
+**Not this:** a `Flex` with `direction="row"` — use `Row` instead.
+
+## Agent note
+
+The harness encodes this in `rules.compact.md` and `catalog.json`:
+
+- `Column.preferOver`: `"Flex with direction=\"column\""`
+- `Flex.avoid`: `"Static row/column layouts — use Row or Column instead"`
+
+## Related
+
+→ [Layout: Row, Column & Grid](/layout-row-column-grid.mdx)
+→ [Harness overview](/harness-overview.mdx)

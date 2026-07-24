@@ -36,8 +36,13 @@ import {
   HiOutlineArrowTurnDownLeft,
   HiOutlinePlay,
   HiOutlinePause,
+  HiOutlineSpeakerWave,
+  HiOutlineSpeakerXMark,
   HiOutlineBars3BottomLeft,
-  HiOutlineAdjustmentsHorizontal,
+  HiOutlinePencil,
+  HiOutlineTrash,
+  HiOutlineEnvelope,
+  HiOutlineArrowDownTray,
 } from "react-icons/hi2";
 
 import {
@@ -97,11 +102,16 @@ export const iconLibrary: Record<string, IconType> = {
   enter: HiOutlineArrowTurnDownLeft,
   play: HiOutlinePlay,
   pause: HiOutlinePause,
+  volume: HiOutlineSpeakerWave,
+  volumeOff: HiOutlineSpeakerXMark,
   screen: HiOutlineComputerDesktop,
   document: HiOutlineBars3BottomLeft,
   radialGauge: PiGauge,
   linearGauge: PiBatteryFull,
-  opacity: HiOutlineAdjustmentsHorizontal
+  edit: HiOutlinePencil,
+  trash: HiOutlineTrash,
+  mail: HiOutlineEnvelope,
+  download: HiOutlineArrowDownTray,
 };
 
 export type IconLibrary = typeof iconLibrary;

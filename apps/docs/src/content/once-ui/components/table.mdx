@@ -123,14 +123,168 @@ Add `onRowClick` to make rows interactive. A hover state is applied automaticall
   ]}
 />
 
+## Search
+
+Enable `searchable` to filter rows by cell content. Use `searchPlaceholder` to customize the input label.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      searchable
+      searchPlaceholder="Filter by name..."
+      data={{
+        headers: [
+          { content: "Name", key: "name", sortable: true },
+          { content: "Role", key: "role" },
+        ],
+        rows: [
+          ["Alice", "Engineer"],
+          ["Bob", "Designer"],
+          ["Carol", "Product"],
+          ["Dan", "Marketing"],
+        ],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+    searchable
+    searchPlaceholder="Filter by name..."
+    data={{
+      headers: [
+        { content: "Name", key: "name", sortable: true },
+        { content: "Role", key: "role" },
+      ],
+      rows: [
+        ["Alice", "Engineer"],
+        ["Bob", "Designer"],
+        ["Carol", "Product"],
+      ],
+    }}
+/>`,
+      language: "tsx",
+      label: "Search"
+    }
+  ]}
+/>
+
+## Pagination
+
+Set `paginated` to split large datasets into pages. Control the default page size with `defaultPageSize` and `pageSizeOptions`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      paginated
+      defaultPageSize={3}
+      data={{
+        headers: [
+          { content: "Name", key: "name" },
+          { content: "Role", key: "role" },
+        ],
+        rows: [
+          ["Alice", "Engineer"],
+          ["Bob", "Designer"],
+          ["Carol", "Product"],
+          ["Dan", "Marketing"],
+          ["Eve", "Support"],
+          ["Frank", "Sales"],
+        ],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+  paginated
+  defaultPageSize={5}
+  pageSizeOptions={[5, 10, 20, 50]}
+  data={{ headers, rows }}
+/>`,
+      language: "tsx",
+      label: "Pagination"
+    }
+  ]}
+/>
+
+## Loading and empty states
+
+Use `loading` to show a spinner while data is fetched. Provide `emptyState` or `loadingState` for custom placeholders.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      loading
+      data={{
+        headers: [
+          { content: "Name", key: "name" },
+          { content: "Role", key: "role" },
+        ],
+        rows: [],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+  loading
+  loadingState={<Text>Fetching records...</Text>}
+  emptyState={<Text>No results found.</Text>}
+  data={{ headers, rows }}
+/>`,
+      language: "tsx",
+      label: "Loading"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   content={[
-    ["data", `{ headers: { content: ReactNode; key: string; sortable?: boolean; }[]; rows: ReactNode[][]; }`],
+    ["data", `{ headers: { content: ReactNode; key: string; sortable?: boolean; width?: string; align?: "left" | "center" | "right"; }[]; rows: ReactNode[][]; }`],
     ["onRowClick", "(rowIndex: number) => void"],
+    ["searchable", "boolean", "false"],
+    ["searchPlaceholder", "string", "Search..."],
+    ["striped", "boolean", "false"],
+    ["hoverable", "boolean", "true"],
+    ["compact", "boolean", "false"],
+    ["loading", "boolean", "false"],
+    ["emptyState", "ReactNode"],
+    ["loadingState", "ReactNode"],
+    ["actions", "TableAction[]"],
+    ["stickyHeader", "boolean", "false"],
+    ["maxHeight", "string"],
+    ["rowClassName", "(rowIndex: number) => string"],
+    ["cellClassName", "(rowIndex: number, cellIndex: number) => string"],
+    ["paginated", "boolean", "false"],
+    ["defaultPageSize", "number", "10"],
+    ["pageSizeOptions", "number[]", "[5, 10, 20, 50]"],
     ["className"],
     ["style"],
     ["...flex"]
+  ]}
+/>
+
+### TableAction
+
+<PropsTable
+  content={[
+    ["icon", "string"],
+    ["label", "string"],
+    ["tooltip", "string"],
+    ["variant", ["primary", "secondary", "tertiary", "danger"], "secondary"],
+    ["onClick", "(rowIndex: number) => void"],
+    ["disabled", "(rowIndex: number) => boolean"]
   ]}
 />

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { 
   Button, 
   Dialog,
+  DialogProvider,
   Text,
   Row,
   Feedback,
@@ -69,7 +70,7 @@ export function StackedDialogs() {
   const [isStackedOpen, setIsStackedOpen] = useState(false);
   
   return (
-    <>
+    <DialogProvider>
       <Button variant="secondary" onClick={() => setIsBaseOpen(true)}>Open stacked dialogs</Button>
       
       <Dialog
@@ -103,7 +104,7 @@ export function StackedDialogs() {
           Notice how the base dialog is dimmed in the background.
         </Text>
       </Dialog>
-    </>
+    </DialogProvider>
   );
 }
 
@@ -129,6 +130,29 @@ export function CustomizedDialog() {
           <Text onBackground="danger-weak">Custom content can be added inside the dialog body.</Text>
           <Button variant="danger" onClick={() => setIsOpen(false)}>Close</Button>
         </Column>
+      </Dialog>
+    </>
+  );
+}
+
+export function DialogCloseOnClickaway() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="secondary" onClick={() => setIsOpen(true)}>
+        Dialog without clickaway
+      </Button>
+      <Dialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Confirm action"
+        closeOnClickaway={false}
+        footer={
+          <Button onClick={() => setIsOpen(false)}>Close</Button>
+        }
+      >
+        <Text>Clicking outside will not dismiss this dialog.</Text>
       </Dialog>
     </>
   );

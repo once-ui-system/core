@@ -13,8 +13,8 @@
   "className": "string",
   "onSelect": "(value: string) => void",
   "closeAfterClick": "boolean = true",
-  "isOpen": "boolean",
-  "onOpenChange": "(isOpen: boolean) => void",
+  "open": "boolean",
+  "onOpenChange": "(open: boolean) => void",
   "selectedOption": "string",
   "disabled": "boolean = false"
  },

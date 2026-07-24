@@ -29,14 +29,18 @@ For **writing UI code**, use the harness — not full doc pages. It keeps contex
 
 ```bash
 npm install @once-ui-system/core
+npx once-ui-init-agent   # writes AGENTS.md + Cursor rule in your app (one-time)
 ```
 
 ```tsx
 // Conceptual — read in your agent environment
+// @once-ui-system/core/ai/manifest.json
 // @once-ui-system/core/ai/rules.compact.md
 // @once-ui-system/core/ai/tasks/pricing.json
 // @once-ui-system/core/ai/components/Grid.json
 ```
+
+Machine-readable discovery: `onceUi` field in `@once-ui-system/core` `package.json`.
 
 **Workflow:**
 

@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "1.7.11",
- "generated": "2026-07-05",
+ "version": "1.7.13",
+ "generated": "2026-07-24",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -18,7 +18,7 @@
   "TextWeight": "\"default\" | \"strong\"",
   "TextSize": "TShirtSizes",
   "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`",
-  "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"opacity\""
+  "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"volume\" | \"volumeOff\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"edit\" | \"trash\" | \"mail\" | \"download\""
  },
  "mixins": {
   "CommonProps": {
@@ -753,8 +753,8 @@
     "className": "string",
     "onSelect": "(value: string) => void",
     "closeAfterClick": "boolean = true",
-    "isOpen": "boolean",
-    "onOpenChange": "(isOpen: boolean) => void",
+    "open": "boolean",
+    "onOpenChange": "(open: boolean) => void",
     "selectedOption": "string",
     "disabled": "boolean = false"
    }
@@ -983,7 +983,7 @@
     "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
     "base": "BaseColor = page",
     "blur": "number = 0.5",
-    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\n        display: false,\n        size: \"4\",\n      }",
+    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\r\n        display: false,\r\n        size: \"4\",\r\n      }",
     "style": "React.CSSProperties",
     "children": "ReactNode"
    }
@@ -2046,8 +2046,23 @@
     "StyleProps"
    ],
    "props": {
-    "data": "!{ headers: { content: ReactNode; key: string; sortable?: boolean; }[]; rows: ReactNode[][]; }",
-    "onRowClick": "(rowIndex: number) => void"
+    "data": "!{ headers: TableHeader[]; rows: ReactNode[][]; }",
+    "onRowClick": "(rowIndex: number) => void",
+    "searchable": "boolean = false",
+    "searchPlaceholder": "string = Search...",
+    "striped": "boolean = false",
+    "hoverable": "boolean = true",
+    "compact": "boolean = false",
+    "loading": "boolean = false",
+    "emptyState": "ReactNode",
+    "actions": "TableAction[]",
+    "stickyHeader": "boolean = false",
+    "rowClassName": "(rowIndex: number) => string",
+    "cellClassName": "(rowIndex: number, cellIndex: number) => string",
+    "paginated": "boolean = false",
+    "defaultPageSize": "number = 10",
+    "pageSizeOptions": "number[] = [5, 10, 20, 50]",
+    "loadingState": "ReactNode"
    }
   },
   "Tag": {
@@ -2561,7 +2576,7 @@
     "line": "{ count?: number; width?: number; length?: number; }",
     "unit": "React.ReactNode",
     "value": "number = 7",
-    "angle": "{ start: number; sweep: number; } = {\n    start: 0,\n    sweep: 360,\n  }",
+    "angle": "{ start: number; sweep: number; } = {\r\n    start: 0,\r\n    sweep: 360,\r\n  }",
     "direction": "'cw' | 'ccw' = cw",
     "edgePad": "number = 0",
     "children": "React.ReactNode",

@@ -1,0 +1,140 @@
+<Feedback title="5 min · Pattern" description="MediaUpload provides drag-and-drop image picking with preview, compression, and loading states. Wire it in settings forms and content editors." variant="info" />
+
+## What this pattern covers
+
+Image upload surfaces appear in:
+
+- Profile settings (avatar or cover photo)
+- Content editors (blog cover, product image)
+- Onboarding steps (workspace logo)
+
+Once UI ships **MediaUpload** in the media module. It lazy-loads `compressorjs` for client-side compression and shows drag-and-drop affordances with preview.
+
+Gold reference: `packages/core/src/modules/media/MediaUpload.tsx` and task bundle `packages/core/ai/tasks/settings.json` (lists MediaUpload as a component).
+
+**Dependency:** MediaUpload requires `compressorjs`. Install with `npm install compressorjs` — without it, the component renders a missing-dependency message.
+
+## Basic usage
+
+MediaUpload is a drop zone with click-to-browse. Pass `onFileUpload` to handle the selected file:
+
+```text
+const handleFileUpload = async (file: File) => {
+  const url = await uploadToStorage(file);
+  setAvatarUrl(url);
+};
+
+// Mount the media upload module with onFileUpload={handleFileUpload}
+```
+
+The callback receives a `File` after optional compression. Upload to your API or storage service inside `onFileUpload` — MediaUpload handles preview locally, not remote persistence.
+
+## Profile photo row
+
+In settings forms, pair MediaUpload with Avatar for a compact upload row:
+
+```text
+<Row gap="16" vertical="center">
+  <Avatar size="l" src={avatarUrl} value="LO" />
+  <Column gap="8">
+    <Button size="s" variant="secondary">Upload photo</Button>
+    <Text variant="label-default-s" onBackground="neutral-weak">
+      JPG or PNG, max 2 MB
+    </Text>
+  </Column>
+</Row>
+```
+
+For a full drop zone instead of a button trigger, replace the Button row with MediaUpload at a smaller aspect ratio:
+
+Reference MediaUpload with `aspectRatio="1 / 1"` for square avatars, or `aspectRatio="16 / 9"` for cover images.
+
+## Aspect ratio
+
+Control the preview frame with `aspectRatio`:
+
+| Value | Use for |
+|-------|---------|
+| `"16 / 9"` (default) | Cover images, hero media |
+| `"4 / 3"` | Product shots, blog thumbnails |
+| `"1 / 1"` | Avatars, logos |
+
+## Custom empty state
+
+Replace the default "Drag and drop or click to browse" message with branded copy:
+
+```text
+<Column gap="8" fill center align="center">
+  <Icon name="image" size="m" />
+  <Text variant="label-default-s">Add cover image</Text>
+</Column>
+```
+
+Pass this Column as the `emptyState` prop on MediaUpload. Use Icon + Text for a clear affordance.
+
+## Preview and loading
+
+| Prop | Purpose |
+|------|---------|
+| `initialPreviewImage` | Show existing image on load (edit flows) |
+| `loading` | Spinner overlay while processing |
+| `accept` | File type filter (default `"image/*"`) |
+
+For edit screens, set `initialPreviewImage` to the current URL so users see what's already saved. Toggle `loading={isUploading}` while your `onFileUpload` promise resolves.
+
+## Compression defaults
+
+MediaUpload compresses images client-side by default:
+
+| Prop | Default | Notes |
+|------|---------|-------|
+| `compress` | `true` | Set `false` to skip compression |
+| `quality` | `0.8` | JPEG/WebP quality |
+| `resizeMaxWidth` | `1920` | Max dimension before resize |
+| `resizeMaxHeight` | `1920` | Max dimension before resize |
+| `convertTypes` | png, webp, jpg | Output format preferences |
+
+Lower `quality` for thumbnails (0.6) and keep defaults for hero images. Compression runs before `onFileUpload` fires.
+
+## Settings panel placement
+
+Place MediaUpload inside a surface panel with other profile fields:
+
+```text
+<Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="24">
+  <Heading as="h2" variant="heading-strong-m">Profile</Heading>
+  {/* MediaUpload or Avatar + upload row */}
+  <Input id="name" label="Display name" placeholder="Your name" />
+  <Row gap="12">
+    <Button>Save changes</Button>
+    <Button variant="secondary">Cancel</Button>
+  </Row>
+</Column>
+```
+
+See [Settings & split panels](/common-patterns/settings-and-split-panels.mdx) for the full split layout.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| MediaUpload with `onFileUpload` callback | Raw `<input type="file">` with custom CSS |
+| `initialPreviewImage` on edit screens | Blank drop zone when image already exists |
+| `loading` prop during upload | No feedback while file processes |
+| `compressorjs` installed in project | Expecting compression without the dependency |
+| `aspectRatio` matching final display | Square upload preview for wide cover image |
+
+## Check yourself
+
+- [ ] `compressorjs` is in project dependencies
+- [ ] `onFileUpload` uploads to your backend and updates state
+- [ ] Edit screens pass `initialPreviewImage`
+- [ ] `loading` toggles during async upload
+- [ ] `emptyState` matches the surrounding form tone
+- [ ] Aspect ratio matches where the image will display
+
+## Related
+
+→ [Settings & split panels](/common-patterns/settings-and-split-panels.mdx)
+→ [Loading states](/common-patterns/loading-states.mdx)
+→ Full reference: [docs.once-ui.com — MediaUpload](https://docs.once-ui.com/once-ui/modules/mediaUpload)

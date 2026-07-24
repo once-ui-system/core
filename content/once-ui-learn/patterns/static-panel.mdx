@@ -1,0 +1,86 @@
+<Feedback title="4 min · Pattern" description="The static panel recipe is the most reused surface pattern in Once UI — for stats, settings sections, feature boxes, and pricing tiers that aren't clickable." variant="info" />
+
+## When to use
+
+Use a **static panel** when content sits inside a bordered surface but **nothing is clickable**:
+
+- Feature comparison columns
+- Settings sections
+- Stats blocks
+- Non-interactive pricing tier boxes
+
+For clickable tiles, use `Card` with `href` or `onClick` instead — see [Highlighted card](/highlighted-card.mdx).
+
+## The recipe
+
+```text
+<Column
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  padding="24"
+  gap="16"
+  fill
+>
+  <Heading variant="heading-strong-m">Panel title</Heading>
+  <Text variant="body-default-s" onBackground="neutral-weak">
+    Supporting description.
+  </Text>
+</Column>
+```
+
+Five props define the look:
+
+| Prop | Value | Role |
+|------|-------|------|
+| `background` | `"surface"` | Elevated panel fill |
+| `border` | `"neutral-alpha-weak"` | Subtle edge |
+| `radius` | `"l"` | Rounded corners |
+| `padding` | `"24"` | Inner breathing room |
+| `gap` | `"16"` | Space between children |
+
+## Grid of panels
+
+Place multiple panels in a responsive row:
+
+```text
+<Row gap="24" s={{ direction: "column" }}>
+  <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16" fill>
+    ...
+  </Column>
+  <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16" fill>
+    ...
+  </Column>
+</Row>
+```
+
+Use `fill` on each panel so they share width equally in a row.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `Column` + surface props | `Card` without `href` or `onClick` |
+| `background="surface"` | Hex background color |
+| `border="neutral-alpha-weak"` | `border: 1px solid #eee` |
+| `gap="16"` inside panel | Random margin on each child |
+
+## Variations
+
+| Need | Adjust |
+|------|--------|
+| Tighter panel | `padding="16"`, `gap="12"` |
+| Stronger border | `border="neutral-medium"` |
+| No border | `border="transparent"` |
+| Full-width strip | Drop `radius`, use `paddingX="24" paddingY="32"` |
+
+## Check yourself
+
+- [ ] Panel is a `Column`, not a `Card`
+- [ ] All five surface props are set
+- [ ] Inner gap is `"16"` or `"24"`
+
+## Related
+
+→ [Color & surfaces](/color-and-surfaces.mdx)
+→ [Highlighted card](/highlighted-card.mdx)

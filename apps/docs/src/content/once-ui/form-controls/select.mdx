@@ -157,6 +157,36 @@ Customize the message shown when no options match the search query.
     ]}
 />
 
+## Multiple selection
+
+Set `multiple` to allow selecting more than one option. The `value` and `onSelect` callbacks receive arrays when multiple mode is enabled.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const [tags, setTags] = useState<string[]>([]);
+
+<Select
+  id="tags-select"
+  label="Tags"
+  multiple
+  value={tags}
+  options={[
+    { label: "Design", value: "design" },
+    { label: "Engineering", value: "engineering" },
+    { label: "Product", value: "product" },
+  ]}
+  onSelect={(value) => setTags(value as string[])}
+/>`,
+      language: "tsx",
+      label: "Multiple selection"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -164,11 +194,13 @@ Customize the message shown when no options match the search query.
         ["id", "string"],
         ["label", "string"],
         ["options", "SelectOptionType[]"],
-        ["value", "string", ""],
+        ["value", ["string", "string[]"], ""],
         ["emptyState", "ReactNode", "No results"],
-        ["onSelect", "(value: string) => void"],
+        ["onSelect", "(value: string | string[]) => void"],
         ["placement", "Placement"],
         ["searchable", "boolean", "false"],
+        ["multiple", "boolean", "false"],
+        ["fillWidth", "boolean", "true"],
         ["minHeight", "SpacingToken"],
         ["minWidth", "SpacingToken"],
         ["maxWidth", "SpacingToken"],

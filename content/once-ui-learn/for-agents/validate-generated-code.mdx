@@ -1,0 +1,96 @@
+<Feedback title="5 min · For agents" description="Mechanical validation catches mistakes that pass TypeScript — wrong layout primitives, hex colors, invented icons. Run it after every codegen pass." variant="info" />
+
+## The command
+
+From the monorepo root (or any app with the harness installed):
+
+```bash
+pnpm validate-ai-code path/to/GeneratedPage.tsx
+```
+
+The script lives in `@once-ui-system/core` and checks output against `rules.compact.md` and `gotchas.json` — the same sources you load before generation.
+
+## What it catches
+
+| Category | Example mistake | Expected fix |
+|----------|-----------------|--------------|
+| Layout | `Flex direction="column"` | `Column` |
+| Shorthands | `fillWidth fillHeight` | `fill` |
+| Colors | `#3b82f6` or `rgb(...)` | `onBackground="brand-medium"` |
+| Icons | `icon="settings"` (invented) | Valid `IconName` from spec.json |
+| Defaults | `variant="primary"` on Button | Omit — primary is default |
+| Surfaces | `Card` without `href`/`onClick` | Column surface recipe |
+
+Validation is **fast and deterministic**. Use it instead of re-reading full doc pages to spot-check output.
+
+## Recommended workflow
+
+```
+1. Load rules.compact.md + catalog.json
+2. Match intent → task bundle (tasks/index.json)
+3. Load component slices + gotchas for that bundle
+4. Generate TSX
+5. pnpm validate-ai-code <file>
+6. Fix reported issues → re-run until clean
+```
+
+See [Harness overview](/design-tips/harness-overview.mdx) for the loading order.
+
+## Pair with gotchas.json
+
+Validation catches syntax-level issues. `gotchas.json` catches semantic traps that still compile:
+
+| Gotcha key | Why validation alone misses it |
+|------------|-------------------------------|
+| `RevealFx.delay` | `delay={80}` is valid TS — but means 80 seconds |
+| `Card.interactive` | `<Card>` without click props compiles fine |
+| `section.gaps` | `gap="48"` between sections is valid but off-rhythm |
+| `Background.absolute` | Missing `top`/`left` still renders — just misaligned |
+
+Load gotcha keys listed in your task bundle **before** generating. Run validation **after**.
+
+## Task bundle quality targets
+
+Each bundle in `tasks/*.json` includes a `quality` section with acceptance criteria:
+
+```text
+// tasks/dashboard.json excerpt
+"quality": {
+  "statCard": "Column surface recipe — not Card",
+  "kpiNumber": "CountFx or display-strong-s with viewport latch"
+}
+```
+
+Check generated output against these targets even when validation passes.
+
+## When validation is not enough
+
+The script does not check:
+
+- Copy quality or accessibility labels
+- Responsive breakpoint coverage
+- Visual decoration budget (see [Reveal & motion](/design-tips/reveal-and-motion.mdx))
+- Whether the composition matches the referenced Pro block
+
+For structure fidelity, compare against a block anchor:
+
+```text
+https://once-ui.com/blocks/{category}#{BlockId}
+```
+
+See [Block anchors](/agent-resources/block-anchors.mdx) for the workflow.
+
+## Context budget
+
+| Step | Cost |
+|------|------|
+| `rules.compact.md` + task bundle + gotchas | ~4KB |
+| `pnpm validate-ai-code` | 0 context — runs locally |
+| Re-reading a full component doc page | 10–50KB — avoid |
+
+## Related
+
+→ [Harness overview](/design-tips/harness-overview.mdx)
+→ [Common gotchas](/agent-resources/common-gotchas.mdx)
+→ [Block anchors](/agent-resources/block-anchors.mdx)
+→ Source: [gotchas.json](https://docs.once-ui.com/ai/gotchas.json)

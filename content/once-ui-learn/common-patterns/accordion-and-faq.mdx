@@ -1,0 +1,135 @@
+<Feedback title="4 min · Pattern" description="AccordionGroup wraps multiple Accordion items with shared borders, dividers, and smart corner radius. Use it for FAQ sections, settings help, and collapsible docs." variant="info" />
+
+## What this pattern covers
+
+Grouped collapsible content appears everywhere:
+
+- Pricing page FAQ at the bottom
+- Product docs with expandable answers
+- Settings panels with help text per section
+- Mobile navigation sub-menus (see MobileMegaMenu in core)
+
+Once UI provides **AccordionGroup** for multi-item groups and standalone **Accordion** for one-off collapsible blocks.
+
+Gold reference: `packages/core/src/components/AccordionGroup.tsx` and the pricing example's FAQ section.
+
+## Item shape
+
+AccordionGroup takes a plain `items` array — each entry has `title` and `content`:
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `title` | ReactNode | Question label or section name |
+| `content` | ReactNode | Answer body — usually Text, sometimes a short Column |
+
+```text
+const faqItems = [
+  {
+    title: "Can I change plans later?",
+    content: (
+      <Text onBackground="neutral-weak">
+        Yes — upgrade or downgrade anytime from billing settings.
+      </Text>
+    ),
+  },
+  {
+    title: "Do you offer refunds?",
+    content: (
+      <Text onBackground="neutral-weak">
+        We offer a 14-day money-back guarantee on annual plans.
+      </Text>
+    ),
+  },
+];
+```
+
+Keep answers concise. Use `Text variant="body-default-s"` with `onBackground="neutral-weak"` for answer body copy.
+
+## Basic FAQ section
+
+Wrap the group in a section Column with a heading:
+
+```text
+<Column fillWidth maxWidth="m" gap="32">
+  <Heading as="h2" variant="display-strong-xs">
+    Frequently asked questions
+  </Heading>
+  {/* AccordionGroup with items={faqItems} */}
+</Column>
+```
+
+Pass `items={faqItems}` to AccordionGroup. The component handles borders, Line dividers between items, and corner radius on the first/last accordion automatically.
+
+## autoCollapse behavior
+
+| `autoCollapse` | Behavior |
+|----------------|----------|
+| `true` (default) | Opening one item closes the others — best for FAQ |
+| `false` | Each accordion manages its own open state — best for independent settings sections |
+
+For marketing FAQ pages, keep the default `autoCollapse={true}` so the list stays scannable.
+
+## Split FAQ layout
+
+On wide screens, split questions into two columns for long FAQ lists:
+
+```text
+<Grid columns="2" gap="24" s={{ columns: 1 }}>
+  <Column gap="16">
+    {/* AccordionGroup with first half of items */}
+  </Column>
+  <Column gap="16">
+    {/* AccordionGroup with second half of items */}
+  </Column>
+</Grid>
+```
+
+Slice your `items` array in half. Each column gets its own AccordionGroup so borders and radius render correctly per group.
+
+## Size variants
+
+AccordionGroup accepts `size` — condensed t-shirt sizes (`s`, `m`, `l`):
+
+| Size | Use for |
+|------|---------|
+| `s` | Dense settings sidebars, mobile nav |
+| `m` (default) | Marketing FAQ, docs pages |
+| `l` | Hero-adjacent feature lists with long titles |
+
+Match accordion size to surrounding heading scale. FAQ under `display-strong-xs` headings works well at `m`.
+
+## Standalone collapsible block
+
+For a single collapsible block (not a group), use the standalone accordion component directly. Pass a `title` string and child content:
+
+```text
+// Single collapsible block — not wrapped in a group
+// title="Advanced options" size="m"
+// children: Text with onBackground="neutral-weak"
+```
+
+Do not wrap a single collapsible item in a group — the group adds outer borders and dividers meant for multiple items.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| AccordionGroup for 2+ related items | Separate Accordions with manual borders |
+| `title` + `content` item objects | Nesting arbitrary JSX as children of the group |
+| `autoCollapse` for FAQ pages | All items open simultaneously on marketing pages |
+| Text with `onBackground="neutral-weak"` for answers | Raw `<p>` tags with inline color |
+| Split into two groups for two-column FAQ | One group stretched across two Grid cells |
+
+## Check yourself
+
+- [ ] Items array has both `title` and `content` on every entry
+- [ ] Answer text uses Text component with neutral-weak color
+- [ ] `autoCollapse` matches the UX (true for FAQ, false for independent sections)
+- [ ] Section heading above the group, not inside it
+- [ ] Two-column layout uses two separate AccordionGroups
+
+## Related
+
+→ [Pricing & plans](/common-patterns/pricing-and-plans.mdx)
+→ [Settings & split panels](/common-patterns/settings-and-split-panels.mdx)
+→ Full reference: [docs.once-ui.com — AccordionGroup](https://docs.once-ui.com/once-ui/components/accordionGroup)

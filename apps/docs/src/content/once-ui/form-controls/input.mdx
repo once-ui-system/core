@@ -306,6 +306,31 @@ The Input component supports two variants: `default` and `ghost`.
   ]}
  />
 
+## Loading
+
+Set `loading` to show a spinner in the input suffix while async validation or data fetching is in progress.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Input id="loading-input" label="Username" loading placeholder="Checking availability..." />
+  }
+  codes={[
+    {
+      code:
+`<Input
+  id="username"
+  label="Username"
+  loading
+  placeholder="Checking availability..."
+/>`,
+      language: "tsx",
+      label: "Loading"
+    }
+  ]}
+/>
+
 ## NumberInput
 
 The `NumberInput` component provides a specialized input for numeric values with increment and decrement buttons. It supports min, max, and step values to control the range and increments.
@@ -442,11 +467,13 @@ const handleChange = (newTags: string[]) => {
     ["errorMessage", "ReactNode"],
     ["description", "ReactNode"],
     ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
+    ["variant", ["default", "ghost"], "default"],
     ["hasPrefix", "ReactNode"],
     ["hasSuffix", "ReactNode"],
     ["characterCount", "boolean", "false"],
     ["cursor", ["interactive"]],
     ["validate", "(value: ReactNode) => ReactNode | null"],
+    ["loading", "boolean", "false"],
     ["className"],
     ["style"],
     ["...input"]
