@@ -1,12 +1,15 @@
 #!/usr/bin/env node
 /**
 <<<<<<< HEAD
+<<<<<<< HEAD
  * Upload Once UI Learn content to Aveiro via API.
  * Usage: DOPLER_API_TOKEN=av_live_... node content/once-ui-learn/upload.mjs
  */
 
 import { readFileSync } from "node:fs";
 =======
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-9fc0
  * Upload Once UI Learn pages to Aveiro.
  *
  * Usage:
@@ -15,16 +18,23 @@ import { readFileSync } from "node:fs";
  */
 
 import { readFileSync, existsSync } from "node:fs";
+<<<<<<< HEAD
 >>>>>>> origin/cursor/learn-site-new-pages-3aed
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-9fc0
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 <<<<<<< HEAD
+<<<<<<< HEAD
 const API_BASE = "https://api.aveiro.app/api/v1";
 =======
 const BASE_URL = "https://api.aveiro.app/api/v1";
 >>>>>>> origin/cursor/learn-site-new-pages-3aed
+=======
+const BASE_URL = "https://api.aveiro.app/api/v1";
+>>>>>>> origin/cursor/learn-site-new-pages-9fc0
 const TOKEN = process.env.DOPLER_API_TOKEN;
 
 if (!TOKEN) {
@@ -34,16 +44,22 @@ if (!TOKEN) {
 
 const manifest = JSON.parse(readFileSync(join(__dirname, "manifest.json"), "utf8"));
 <<<<<<< HEAD
+<<<<<<< HEAD
 const { siteId, pages, deletePageIds } = manifest;
 
 async function api(method, path, body) {
   const res = await fetch(`${API_BASE}${path}`, {
 =======
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-9fc0
 const shouldPublish = process.argv.includes("--publish");
 
 async function api(method, path, body) {
   const res = await fetch(`${BASE_URL}${path}`, {
+<<<<<<< HEAD
 >>>>>>> origin/cursor/learn-site-new-pages-3aed
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-9fc0
     method,
     headers: {
       Authorization: `Bearer ${TOKEN}`,
@@ -52,8 +68,11 @@ async function api(method, path, body) {
     body: body ? JSON.stringify(body) : undefined,
   });
 <<<<<<< HEAD
+<<<<<<< HEAD
   const data = await res.json();
 =======
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-9fc0
   const text = await res.text();
   let data;
   try {
@@ -61,13 +80,17 @@ async function api(method, path, body) {
   } catch {
     data = { raw: text };
   }
+<<<<<<< HEAD
 >>>>>>> origin/cursor/learn-site-new-pages-3aed
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-9fc0
   if (!res.ok) {
     throw new Error(`${method} ${path} → ${res.status}: ${JSON.stringify(data)}`);
   }
   return data;
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 async function main() {
   console.log(`Site: ${siteId}`);
@@ -107,6 +130,8 @@ async function main() {
 main().catch((err) => {
   console.error(err.message);
 =======
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-9fc0
 async function listPages(siteId) {
   const { pages } = await api("GET", `/sites/${siteId}/pages`);
   return pages;
@@ -163,6 +188,9 @@ async function main() {
 
 main().catch((err) => {
   console.error(err);
+<<<<<<< HEAD
 >>>>>>> origin/cursor/learn-site-new-pages-3aed
+=======
+>>>>>>> origin/cursor/learn-site-new-pages-9fc0
   process.exit(1);
 });
