@@ -27,7 +27,7 @@ Uploads draft MDX to the Once UI Learn site. Review and publish in the Aveiro ed
 
 **Start & foundations** (12 pages) — orientation, layout, spacing, color, typography, tips, agents.
 
-**Common patterns** (6 pages):
+**Common patterns** (8 pages):
 
 1. Static panel
 2. Hero section
@@ -35,3 +35,10 @@ Uploads draft MDX to the Once UI Learn site. Review and publish in the Aveiro ed
 4. Decoration layers
 5. Highlighted card
 6. Responsive stacking
+7. Dialog & modal
+8. Toast & feedback
+
+**Design tips & agents** (2 pages):
+
+1. Icons & buttons
+2. Common gotchas (for agents)

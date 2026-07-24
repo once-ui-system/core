@@ -1,0 +1,86 @@
+<Feedback title="5 min · Foundation" description="Icons in Once UI use a fixed catalog of names — never invent them. Pair icons with semantic color tokens and the right button variant." variant="info" />
+
+## Icon basics
+
+```text
+<Icon name="check" onBackground="success-medium" size="m" />
+<Icon name="danger" onBackground="danger-medium" />
+<Icon name="info" onBackground="brand-medium" />
+```
+
+| Prop | Values | Notes |
+|------|--------|-------|
+| `name` | `IconName` from spec | **Must exist in the catalog** — no invented names |
+| `onBackground` | `{scheme}-{weight}` | Same token system as Text and layout |
+| `size` | `xs` `s` `m` `l` `xl` | Default `m` — omit when default |
+
+## Valid icon names only
+
+The #1 codegen mistake is inventing icon names like `arrowRight`, `bell`, or `more`. Every name must match `IconName` in [spec.json](https://docs.once-ui.com/ai/spec.json).
+
+| ✅ Real names | ❌ Invented |
+|---------------|-------------|
+| `chevronRight` | `arrowRight` |
+| `notification` | `bell` |
+| `moreHorizontal` | `more` |
+| `check` | `checkmark` |
+
+When unsure, search the catalog or load `ai/components/Icon.json` from the harness.
+
+## Icon on buttons
+
+Use `prefixIcon` and `suffixIcon` on `Button` — don't nest a raw `<Icon>` unless you need custom layout:
+
+```text
+<Button prefixIcon="plus">New project</Button>
+<Button suffixIcon="chevronRight" variant="secondary">Learn more</Button>
+<IconButton icon="settings" aria-label="Settings" />
+```
+
+`IconButton` is for icon-only controls — always set `aria-label`.
+
+## Color semantics
+
+Match icon color to meaning:
+
+| Meaning | Token |
+|---------|-------|
+| Success / done | `onBackground="success-medium"` |
+| Error / destructive | `onBackground="danger-medium"` |
+| Warning | `onBackground="warning-medium"` |
+| Brand accent | `onBackground="brand-medium"` |
+| Muted / decorative | `onBackground="neutral-weak"` |
+
+Never use hex colors on icons.
+
+## Button variants
+
+| Variant | Use |
+|---------|-----|
+| `primary` (default) | Main CTA — one per section |
+| `secondary` | Alternative actions, cancel |
+| `tertiary` | Low-emphasis actions |
+| `danger` | Destructive commits |
+
+Omit `variant="primary"` — it's the default. Writing it adds noise for humans and agents alike.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `prefixIcon="check"` | `<Icon name="check" />` inside Button children |
+| `chevronRight` | `arrowRight` |
+| `onBackground="brand-medium"` | `color="#3B82F6"` |
+| `aria-label` on IconButton | Icon-only button with no label |
+
+## Check yourself
+
+- [ ] Every `name` / `prefixIcon` / `icon` exists in spec.json
+- [ ] Icon-only buttons have `aria-label`
+- [ ] At most one `primary` button per action group
+
+## Related
+
+→ [Semantics over CSS](/agent-resources/semantics-over-css.mdx)
+→ [Common gotchas](/agent-resources/common-gotchas.mdx)
+→ Full reference: [docs.once-ui.com — Icon](https://docs.once-ui.com/once-ui/components/icon)

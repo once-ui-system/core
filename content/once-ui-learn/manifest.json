@@ -75,7 +75,7 @@
       "path": "/static-panel.mdx",
       "title": "Static panel",
       "summary": "The surface recipe for non-interactive panels — stats, settings, feature boxes.",
-      "contentId": "b0ad2cee-989b-4361-9a9d-6b5d8ba4daa6",
+      "contentId": "b0ad2cee-989b-4361-9a9b-6b5d8ba4daa6",
       "file": "patterns/static-panel.mdx"
     },
     {
@@ -126,6 +126,34 @@
       "summary": "Agent codegen workflow — bootstrap, task routing, and validation.",
       "contentId": "23e701ce-e2bb-4392-97f8-e20c4dd5e9bf",
       "file": "for-agents/harness-overview.mdx"
+    },
+    {
+      "path": "/common-patterns/dialog-modal.mdx",
+      "title": "Dialog & modal",
+      "summary": "Controlled dialogs with title, footer actions, and stacked multi-step flows.",
+      "contentId": "5b876cb5-69af-4921-a9b5-ba8c4fe0f088",
+      "file": "patterns/dialog-modal.mdx"
+    },
+    {
+      "path": "/common-patterns/toast-and-feedback.mdx",
+      "title": "Toast & feedback",
+      "summary": "Global toast notifications via ToastProvider and useToast — plus when to use inline Feedback.",
+      "contentId": "fe3a2420-45e0-44f3-969c-265eaa65e4f9",
+      "file": "patterns/toast-and-feedback.mdx"
+    },
+    {
+      "path": "/design-tips/icons-and-buttons.mdx",
+      "title": "Icons & buttons",
+      "summary": "Valid icon names, prefixIcon patterns, semantic colors, and button variants.",
+      "contentId": "e16f8c7c-491b-45c7-80b4-f05f6f7edec8",
+      "file": "foundations/icons-and-buttons.mdx"
+    },
+    {
+      "path": "/agent-resources/common-gotchas.mdx",
+      "title": "Common gotchas",
+      "summary": "Codegen mistakes from gotchas.json — layout, surfaces, motion, and component traps.",
+      "contentId": "06eaaa39-11ed-4d18-af0b-a0a71352948b",
+      "file": "for-agents/common-gotchas.mdx"
     }
   ],
   "deletePageIds": []

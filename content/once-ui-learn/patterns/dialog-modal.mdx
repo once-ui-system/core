@@ -1,0 +1,121 @@
+<Feedback title="5 min · Pattern" description="Dialogs focus attention on a decision or input. In Once UI they are controlled components with title, optional footer actions, and stack support for multi-step flows." variant="info" />
+
+## When to use
+
+Reach for `Dialog` when the user must **confirm, decide, or enter data** before continuing:
+
+- Delete confirmations
+- Settings that need focus
+- Multi-step wizards (stacked dialogs)
+- Forms too important to tuck into a page section
+
+For lightweight status messages, use [Toast & feedback](/common-patterns/toast-and-feedback.mdx) instead.
+
+## Basic dialog
+
+Dialogs are **controlled** — you own `isOpen` state and pass `onClose`:
+
+```text
+const [isOpen, setIsOpen] = useState(false);
+
+<>
+  <Button onClick={() => setIsOpen(true)}>Open dialog</Button>
+
+  <Dialog
+    isOpen={isOpen}
+    onClose={() => setIsOpen(false)}
+    title="Rename project"
+    description="Choose a name your team will recognize."
+  >
+    <Column gap="16" fillWidth marginTop="12">
+      <Input id="project-name" label="Project name" fillWidth />
+    </Column>
+  </Dialog>
+</>
+```
+
+| Prop | Role |
+|------|------|
+| `isOpen` | Show or hide the overlay |
+| `onClose` | Called when user dismisses (Escape, clickaway, close button) |
+| `title` | Primary heading — required |
+| `description` | Optional supporting text below the title |
+| `children` | Body content — forms, text, any layout |
+
+## Footer actions
+
+Put primary and secondary actions in `footer`, not loose in the body:
+
+```text
+<Dialog
+  isOpen={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Delete workspace?"
+  description="This cannot be undone. All projects will be removed."
+  footer={
+    <Row gap="8">
+      <Button variant="secondary" onClick={() => setIsOpen(false)}>
+        Cancel
+      </Button>
+      <Button variant="danger" onClick={handleDelete}>
+        Delete
+      </Button>
+    </Row>
+  }
+>
+  <Text variant="body-default-s" onBackground="neutral-weak">
+    Type the workspace name to confirm.
+  </Text>
+</Dialog>
+```
+
+Use `variant="secondary"` for cancel and the semantic variant (`danger`, `primary`) for the committing action.
+
+## Stacked dialogs
+
+For multi-step flows, open a second dialog on top of the first with `stack`:
+
+```text
+<Dialog
+  isOpen={isBaseOpen}
+  onClose={() => setIsBaseOpen(false)}
+  title="Step 1 — Details"
+  footer={<Button onClick={() => setIsStackedOpen(true)}>Next</Button>}
+>
+  ...
+</Dialog>
+
+<Dialog
+  isOpen={isStackedOpen}
+  onClose={() => setIsStackedOpen(false)}
+  title="Step 2 — Confirm"
+  stack
+  footer={<Button onClick={handleFinish}>Finish</Button>}
+>
+  ...
+</Dialog>
+```
+
+The `stack` prop tells Once UI to layer this dialog above the base dialog with correct z-index and backdrop.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Controlled `isOpen` + `onClose` | Uncontrolled open state inside Dialog |
+| Actions in `footer` | Buttons floating in `children` without structure |
+| `Column gap="16"` for form body | Nested `Flex direction="column"` |
+| `stack` for step 2+ | Replacing step 1 content in place |
+
+## Check yourself
+
+- [ ] `title` is set on every dialog
+- [ ] Cancel and confirm live in `footer`
+- [ ] `onClose` resets local form state if needed
+- [ ] Destructive actions use `variant="danger"`
+
+## Related
+
+→ [Form layout](/common-patterns/form-layout.mdx)
+→ [Toast & feedback](/common-patterns/toast-and-feedback.mdx)
+→ Full reference: [docs.once-ui.com — Dialog](https://docs.once-ui.com/once-ui/components/dialog)
