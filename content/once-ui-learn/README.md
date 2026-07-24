@@ -42,10 +42,3 @@ Uploads draft MDX to the Once UI Learn site. Review and publish in the Aveiro ed
 
 1. Icons & buttons
 2. Common gotchas (for agents)
-
-**Phase 3** (4 pages — Jul 2026):
-
-1. Tables & lists
-2. Loading states
-3. Reveal & motion
-4. Validate generated code (for agents)

@@ -1,0 +1,155 @@
+<Feedback title="8 min · Pattern" description="Dashboards combine KPI stat rows, time-range filters, charts, and activity tables. The harness gold example shows the Once UI recipe — static surfaces for stats, interactive Card only when the tile is clickable." variant="info" />
+
+## Dashboard anatomy
+
+A typical analytics dashboard has four zones:
+
+1. **Page header** — eyebrow, title, time-range filter
+2. **KPI row** — 3–4 stat cards in a responsive Grid
+3. **Chart area** — trend lines or bar charts
+4. **Activity table** — recent events with status tags
+
+Task bundle: `packages/core/ai/tasks/dashboard.json`  
+Gold example: `packages/core/ai/examples/dashboard.tsx`  
+Pro block: `packages/core/ai/examples/blocks/Dashboard1.tsx`
+
+## Page header with filter
+
+Stack the title and SegmentedControl on mobile, side-by-side on desktop:
+
+```text
+<Row
+  fillWidth
+  horizontal="between"
+  vertical="end"
+  gap="24"
+  s={{ direction: "column", horizontal: "start" }}
+>
+  <Column gap="8">
+    <Text variant="label-default-s" onBackground="brand-medium">
+      Analytics
+    </Text>
+    <Heading as="h1" variant="display-strong-s">
+      Overview
+    </Heading>
+  </Column>
+  <SegmentedControl
+    selected={range}
+    onToggle={setRange}
+    buttons={[
+      { value: "7d", label: "7 days" },
+      { value: "30d", label: "30 days" },
+      { value: "90d", label: "90 days" },
+    ]}
+  />
+</Row>
+```
+
+## KPI stat cards — static surface, not Card
+
+**This is the #1 dashboard mistake:** wrapping KPI numbers in Card.
+
+Stat tiles are **read-only panels**. Use the static surface recipe:
+
+```text
+<Column
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  padding="24"
+  gap="16"
+>
+  <Row fillWidth horizontal="between" vertical="center">
+    <Text variant="label-default-s" onBackground="neutral-weak">
+      Revenue
+    </Text>
+    <Icon name="trendUp" size="s" />
+  </Row>
+  <Heading variant="display-strong-xs">$128,400</Heading>
+  <Text variant="body-default-s" onBackground="success-weak">
+    +12.4%
+  </Text>
+</Column>
+```
+
+For animated numbers, swap the Heading for CountFx in your TSX — drive `value` from a `useInViewport` latch so the count starts when the row scrolls into view.
+
+Reserve Card for tiles that are **clickable links** to a detail view.
+
+## Staggered reveal
+
+Wrap each stat in RevealFx with incremental delay for a polished entrance:
+
+```text
+<RevealFx fill trigger={seen} translateY="8" delay={index * 0.1}>
+  <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16">
+    <Text variant="label-default-s" onBackground="neutral-weak">Revenue</Text>
+    <Heading variant="display-strong-xs">$128,400</Heading>
+  </Column>
+</RevealFx>
+```
+
+Keep total stagger under ~0.4s for a row of four cards.
+
+## Charts and sparklines
+
+For inline sparklines inside interactive stat cards, use LineChart as an absolute background layer inside Card:
+
+```text
+<Card
+  fillWidth
+  paddingX="20"
+  paddingTop="20"
+  paddingBottom="80"
+  radius="l"
+  border="neutral-alpha-weak"
+  background="transparent"
+  href="/analytics/revenue"
+>
+  <LineChart
+    position="absolute"
+    left="0"
+    bottom="0"
+    height={6}
+    pointerEvents="none"
+    opacity={30}
+    axis="none"
+    tooltip={false}
+    legend={{ display: false }}
+    grid="none"
+    series={[{ key: "Current period", color: "green" }]}
+    data={sparkData}
+  />
+  <Column fillWidth gap="12">
+    <Heading variant="display-strong-xs">$128,400</Heading>
+  </Column>
+</Card>
+```
+
+Set pointerEvents="none" on the chart — same rule as [decoration layers](/decoration-layers.mdx).
+
+## Activity table
+
+Use Table with Tag cells for status. See [tables and lists](/common-patterns/tables-and-lists.mdx) for column definitions.
+
+Build rows with event name, a Tag for status, and a time string. Swap Tag variants (`success`, `brand`, `danger`) to match event type.
+
+## Quality checklist
+
+| Check | Rule |
+|-------|------|
+| Stat surfaces | Column with background="surface" — not Card |
+| KPI numbers | CountFx with viewport latch, or display-strong-s static |
+| Grid | columns="4" m={{ columns: 2 }} s={{ columns: 1 }} |
+| Chart overlay | pointerEvents="none", axis="none" for sparklines |
+| App shell | Compose Header1 + Sidebar1 from Pro blocks |
+
+## Agent note
+
+`dashboard.json` lists gotcha keys: Card.interactive, CountFx.trigger, RevealFx.delay. Load them from `gotchas.json` before generating.
+
+## Related
+
+→ [Static panel](/static-panel.mdx)
+→ [Tables and lists](/common-patterns/tables-and-lists.mdx)
+→ [App shell navigation](/common-patterns/app-shell-navigation.mdx)

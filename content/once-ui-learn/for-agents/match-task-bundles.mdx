@@ -1,0 +1,135 @@
+<Feedback title="6 min · For agents" description="After loading rules.compact.md, resolve user intent to a task bundle. Each bundle lists components, gotchas, gold examples, and Pro blocks — your blueprint for production-quality output." variant="info" />
+
+## Why task bundles exist
+
+Full component docs are 10–50KB each. Task bundles are **~1KB intent maps** that tell you exactly what to load for a given UI type.
+
+Entry point: `packages/core/ai/manifest.json` → `"resolve": "tasks/index.json"`
+
+## The seven bundles
+
+| User says… | Bundle | Gold example | Primary blocks |
+|------------|--------|--------------|----------------|
+| "landing page", "hero" | marketing-hero.json | examples/marketing-hero.tsx | Hero1, Header1 |
+| "pricing", "plans" | pricing.json | examples/pricing.tsx | Pricing1, Pricing2 |
+| "settings", "preferences" | settings.json | examples/settings.tsx | Settings1, Sidebar2 |
+| "dashboard", "analytics" | dashboard.json | examples/dashboard.tsx | Dashboard1, Table1 |
+| "chat", "messaging" | chat.json | examples/chat.tsx | Chat1, Feed3, Sidebar4 |
+| "login", "signup", "auth" | auth.json | examples/auth.tsx | Auth1, Auth2 |
+| "roadmap", "kanban" | roadmap.json | examples/roadmap.tsx | Roadmap1 |
+
+## Resolution workflow
+
+```
+1. Load rules.compact.md + catalog.json        (always, ~6KB)
+2. Read tasks/index.json                        (match intent)
+3. Open the matched task/*.json                 (~1KB)
+4. Fetch component slices from components/      (on demand)
+5. Read gold example + Pro block                (structure)
+6. Load gotchas.json entries listed in bundle   (avoid traps)
+7. Generate TSX
+8. Run: pnpm validate-ai-code path/to/file.tsx
+```
+
+## What each bundle contains
+
+Every `tasks/*.json` file has the same shape:
+
+```text
+{
+  "id": "dashboard",
+  "title": "Analytics dashboard",
+  "description": "KPI stat cards, charts area, recent-activity list",
+  "components": ["Column", "Grid", "Table", ...],
+  "recipes": ["reveal-stagger"],
+  "example": "examples/dashboard.tsx",
+  "blocks": {
+    "primary": ["Dashboard1", "Table1"],
+    "compose": ["Header1", "Sidebar1"]
+  },
+  "gotchas": ["Card.interactive", "CountFx.trigger", ...],
+  "quality": {
+    "statCard": "Column surface recipe — not Card"
+  }
+}
+```
+
+| Field | Use it for |
+|-------|------------|
+| components | Which components/{Name}.json slices to fetch |
+| recipes | Sections in recipes.md for composition patterns |
+| example | Gold TSX — copy structure, not verbatim |
+| blocks.primary | Main Pro blocks to install or reference |
+| blocks.compose | App shell blocks (header, sidebar) |
+| gotchas | Keys to look up in gotchas.json |
+| quality | Non-negotiable rules for this UI type |
+
+## Pro block registry
+
+Blocks live in `packages/core/ai/examples/blocks/`. The manifest at `examples/blocks/manifest.json` maps blocks to tasks via `byTask`:
+
+```text
+"byTask": {
+  "dashboard": ["Dashboard1", "Header1", "Sidebar1", "Table1"],
+  "chat": ["Chat1", "Feed3", "Sidebar4", "Sidebar5"]
+}
+```
+
+Install blocks into a project:
+
+```text
+npx once-ui add Dashboard1 Header1
+```
+
+Then adapt imports — blocks are starting points, not drop-in without customization.
+
+## Ambiguous intent
+
+When the request spans multiple bundles, pick the **primary surface** and compose:
+
+| Request | Primary bundle | Compose from |
+|---------|----------------|--------------|
+| "Dashboard with chat" | dashboard.json | chat.json blocks for a chat widget |
+| "Pricing landing page" | marketing-hero.json | pricing.json for the plans section |
+| "Settings with auth gate" | auth.json | settings.json for the panel |
+
+Load both bundles' gotcha lists. Generate the primary surface first, then add secondary sections.
+
+## Context budget
+
+| Artifact | Size | Load when |
+|----------|------|-----------|
+| rules.compact.md | ~2KB | Always |
+| catalog.json | ~4KB | Component selection |
+| Task bundle | ~1KB | Intent matched |
+| Component slice | ~0.5KB each | Listed in bundle |
+| Gold example | 2–5KB | Before generating |
+| Pro block | 5–15KB | When blocks.primary listed |
+| Full doc page | 10–50KB | **Never for codegen** |
+
+Target: **under 15KB** total context per generation task.
+
+## Validation
+
+After generating, always run:
+
+```text
+pnpm validate-ai-code src/components/MyDashboard.tsx
+```
+
+This catches Flex direction=, invented icon names, hex colors, and other rules from gotchas.json. See [Validate generated code](/agent-resources/validate-generated-code.mdx).
+
+## Humans vs agents
+
+| Question | Answer |
+|----------|--------|
+| "How should I think about this pattern?" | Once UI Learn (this site) |
+| "What props does a component accept?" | docs.once-ui.com reference |
+| "Build me a dashboard" | Task bundle + gold example |
+
+## Related
+
+→ [Harness overview](/harness-overview.mdx)
+→ [Common gotchas](/agent-resources/common-gotchas.mdx)
+→ [Validate generated code](/agent-resources/validate-generated-code.mdx)
+→ Full harness: [docs.once-ui.com/once-ui/ai-coding](https://docs.once-ui.com/once-ui/ai-coding)

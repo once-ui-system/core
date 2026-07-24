@@ -156,6 +156,7 @@
       "file": "for-agents/common-gotchas.mdx"
     },
     {
+<<<<<<< HEAD
       "path": "/common-patterns/tables-and-lists.mdx",
       "title": "Tables & lists",
       "summary": "Structured data with Table, simpler stacks with List — plus empty and loading states.",
@@ -182,6 +183,34 @@
       "summary": "Run pnpm validate-ai-code after codegen — what it catches and how to pair with gotchas.json.",
       "file": "for-agents/validate-generated-code.mdx",
       "contentId": "c4a73cc5-bf9e-40c9-87b4-4ddf15e019cb"
+=======
+      "path": "/common-patterns/app-shell-navigation.mdx",
+      "title": "App shell navigation",
+      "summary": "Sticky headers, MegaMenu, Kbar command palette, and Pro block app chrome.",
+      "contentId": "85a291fe-29f2-4375-b9cd-ecd701454dca",
+      "file": "patterns/app-shell-navigation.mdx"
+    },
+    {
+      "path": "/common-patterns/dashboard-and-charts.mdx",
+      "title": "Dashboard & charts",
+      "summary": "KPI stat rows, CountFx viewport latches, sparkline charts, and activity tables.",
+      "contentId": "ba86416c-4d15-4415-bd2b-2b9a3088f08f",
+      "file": "patterns/dashboard-and-charts.mdx"
+    },
+    {
+      "path": "/common-patterns/chat-and-messaging.mdx",
+      "title": "Chat & messaging",
+      "summary": "Multi-pane chat layouts with channel sidebars, feeds, composers, and streaming replies.",
+      "contentId": "b579ab25-95e1-4f2a-b255-0a166cd68409",
+      "file": "patterns/chat-and-messaging.mdx"
+    },
+    {
+      "path": "/agent-resources/match-task-bundles.mdx",
+      "title": "Match task bundles",
+      "summary": "Route user intent to harness task bundles, gold examples, and Pro blocks.",
+      "contentId": "c8ee8949-2761-42f1-a4eb-d76a0f55776d",
+      "file": "for-agents/match-task-bundles.mdx"
+>>>>>>> origin/cursor/learn-site-new-pages-9ecf
     }
   ],
   "deletePageIds": []

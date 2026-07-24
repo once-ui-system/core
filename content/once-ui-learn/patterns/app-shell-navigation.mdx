@@ -1,0 +1,141 @@
+<Feedback title="7 min · Pattern" description="Production apps need sticky headers, mega menus, and command palettes. Once UI ships Pro blocks and navigation modules that compose into a full app shell." variant="info" />
+
+## What an app shell is
+
+An **app shell** is the persistent chrome around your content:
+
+- Sticky header with logo, nav, and user menu
+- Optional sidebar for section navigation
+- Command palette (⌘K) for power users
+- Mobile menu fallback when horizontal space runs out
+
+Marketing pages use [page skeleton](/page-skeleton.mdx) patterns. App shells use **navigation modules** and Pro blocks.
+
+## Building blocks
+
+| Piece | Module | Role |
+|-------|--------|------|
+| Sticky header | Row as header | position sticky, top 0, zIndex 2 |
+| Mega menu | MegaMenu | Dropdown nav with grouped links |
+| Command palette | Kbar | Searchable shortcuts (⌘K) |
+| Mobile nav | MobileMegaMenu | Full-screen menu on small screens |
+| User menu | UserMenu | Avatar, account links, sign out |
+| Sidebar | Sidebar1–Sidebar5 | Section or channel navigation |
+
+Reference implementation: `packages/core/ai/examples/blocks/Header1.tsx`
+
+## Header anatomy
+
+A production header is a sticky Row with three zones: logo, center nav, and actions.
+
+```text
+<Row
+  as="header"
+  fillWidth
+  minHeight="56"
+  vertical="center"
+  horizontal="between"
+  paddingX="m"
+  background="page"
+  borderBottom="neutral-medium"
+  position="sticky"
+  top="0"
+  zIndex={2}
+>
+  <Row gap="4" vertical="center">
+  </Row>
+  <Row gap="8" vertical="center">
+    <Button size="s" variant="tertiary">Search</Button>
+  </Row>
+</Row>
+```
+
+Wire the left zone to Logo + NavIcon, the center to MegaMenu, and the right to Kbar + UserMenu. See Header1 for the full composition.
+
+Three responsive rules:
+
+1. **NavIcon** — hidden on desktop, visible on mobile (`hide s={{ hide: false }}`)
+2. **MegaMenu** — hidden on mobile (`m={{ hide: true }}`)
+3. **Kbar** — hidden on mobile, shown from tablet up (`m={{ hide: true }}`)
+
+## MegaMenu data shape
+
+Each top-level item can have dropdown sections:
+
+```text
+const nav = [
+  {
+    id: "products",
+    label: "Products",
+    suffixIcon: "chevronDown",
+    sections: [
+      {
+        title: "Featured",
+        links: [
+          {
+            label: "Analytics",
+            href: "/analytics",
+            icon: "chart",
+            description: "Get insights into your data",
+          },
+        ],
+      },
+    ],
+  },
+  { id: "pricing", label: "Pricing", href: "/pricing" },
+];
+```
+
+Use `usePathname()` to highlight the active route. Pass `pathname` to MegaMenu so the current page gets active styling.
+
+## Command palette (Kbar)
+
+Kbar items are plain objects — no JSX:
+
+```text
+const kbar = [
+  {
+    id: "dashboard",
+    name: "Dashboard",
+    icon: "home",
+    section: "Navigation",
+    keywords: "dashboard home overview",
+    href: "/dashboard",
+    shortcut: ["meta", "d"],
+  },
+];
+```
+
+Wrap the trigger in Kbar and pass `items`. On Mac, show ⌘ in the trigger; on Windows, Ctrl.
+
+## Sidebar + header composition
+
+For dashboard-style apps, compose blocks instead of building from scratch:
+
+| Layout | Blocks |
+|--------|--------|
+| Dashboard | Header1 + Sidebar1 + content |
+| Chat | Sidebar4 + Feed3 + Sidebar5 |
+| Settings | Sidebar2 + form content |
+
+Install Pro blocks via the CLI (see [Pro block registry](/agent-resources/pro-block-registry.mdx)):
+
+```text
+npx once-ui add Header1 Sidebar1 Dashboard1
+```
+
+## Agent note
+
+The harness maps app-shell tasks in `examples/blocks/manifest.json` under `byTask`:
+
+- dashboard → Header1, Sidebar1, Dashboard1
+- chat → Sidebar4, Sidebar5, Chat1
+- settings → Sidebar2
+
+Load the block manifest after resolving the task bundle — don't invent header markup from memory.
+
+## Related
+
+→ [Page skeleton](/page-skeleton.mdx)
+→ [Responsive stacking](/responsive-stacking.mdx)
+→ [Match task bundles](/agent-resources/match-task-bundles.mdx)
