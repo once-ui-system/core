@@ -1134,6 +1134,21 @@ export default function ComponentsCheck() {
                 />
               ),
             },
+            {
+              value: "video",
+              label: "Video",
+              element: (
+                <Media
+                  src="https://www.w3schools.com/html/mov_bbb.mp4"
+                  aspectRatio="16/9"
+                  radius="l"
+                  controls
+                  sound
+                  autoplay={false}
+                  loop={false}
+                />
+              ),
+            },
           ],
         },
         {

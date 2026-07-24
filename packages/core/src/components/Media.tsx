@@ -2,6 +2,7 @@
 
 import React, { CSSProperties, useState, useRef, useEffect, ReactNode } from "react";
 import { Column, Flex, Row, Skeleton, ScrollLock } from ".";
+import { MediaVideoPlayer } from "./MediaVideoPlayer";
 import Image from "next/image";
 import classNames from "classnames";
 
@@ -53,7 +54,7 @@ const Media: React.FC<MediaProps> = ({
   const imageRef = useRef<HTMLDivElement>(null);
 
   const handleImageClick = () => {
-    if (enlarge) {
+    if (canEnlarge) {
       if (!isEnlarged) {
         setIsEnlarged(true);
       } else {
@@ -140,6 +141,8 @@ const Media: React.FC<MediaProps> = ({
 
   const isVideo = isVideoUrl(src);
   const isYouTube = isYouTubeVideo(src);
+  const useCustomVideoControls = isVideo && controls;
+  const canEnlarge = enlarge && !useCustomVideoControls;
   const resolvedSizes =
     typeof sizes === "number"
       ? `(max-width: ${sizes}px) 100vw, ${sizes}px`
@@ -148,7 +151,7 @@ const Media: React.FC<MediaProps> = ({
   return (
     <>
       <ScrollLock enabled={isEnlarged} />
-      {isEnlarged && enlarge && typeof document !== 'undefined' && (
+      {isEnlarged && canEnlarge && typeof document !== 'undefined' && (
         <Flex
           center
           position="fixed"
@@ -187,11 +190,20 @@ const Media: React.FC<MediaProps> = ({
             ...style,
           }}
           onClick={handleImageClick}
-          className={classNames(enlarge && !isEnlarged ? "cursor-zoom-in" : enlarge && isEnlarged ? "cursor-zoom-out" : undefined, className)}
+          className={classNames(canEnlarge && !isEnlarged ? "cursor-zoom-in" : canEnlarge && isEnlarged ? "cursor-zoom-out" : undefined, className)}
           {...rest}
         >
           {loading && <Skeleton shape="block" radius={rest.radius} />}
-          {!loading && isVideo && (
+          {!loading && isVideo && useCustomVideoControls && (
+            <MediaVideoPlayer
+              src={src}
+              autoplay={autoplay}
+              loop={loop}
+              muted={!sound}
+              objectFit={objectFit}
+            />
+          )}
+          {!loading && isVideo && !useCustomVideoControls && (
             <video
               src={src}
               autoPlay={autoplay}
