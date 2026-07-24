@@ -8,7 +8,7 @@ import {
 const resolve4 = vi.fn();
 const resolve6 = vi.fn();
 
-vi.mock('node:dns', () => ({
+vi.mock('dns', () => ({
   promises: {
     resolve4,
     resolve6,

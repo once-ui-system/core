@@ -199,7 +199,9 @@ function isDomainAllowed(hostname: string, allowedDomains: string[]): boolean {
 }
 
 async function resolveHostnameAddresses(hostname: string): Promise<string[]> {
-  const dns = await import('node:dns');
+  // Use the bare specifier instead of "node:dns": webpack cannot handle the
+  // "node:" URI scheme when this package is processed via transpilePackages.
+  const dns = await import('dns');
   const addresses = new Set<string>();
 
   await Promise.all([

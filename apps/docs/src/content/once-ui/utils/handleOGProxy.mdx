@@ -1,7 +1,7 @@
 ---
 title: "handleOGProxy"
 summary: "Server-side utility for proxying external images to avoid CORS issues."
-updatedAt: "2026-02-22"
+updatedAt: "2026-07-24"
 docs: "once-ui/utils/handleOGProxy.mdx"
 github: "server/og-utils.ts"
 navLabel: "handleOGProxy"
@@ -16,6 +16,9 @@ The `handleOGProxy` function is a server-side utility that proxies external imag
 - Preserves original content type
 - Configurable cache control headers
 - Custom user agent support
+- Validates URLs to block SSRF (private IPs, localhost, non-HTTPS)
+- Optional domain allowlist via `allowedDomains`
+- Requires Node.js runtime (uses DNS resolution for hostname validation)
 - Handles errors gracefully
 
 ## Basic usage
@@ -32,6 +35,8 @@ Create an API route that uses the utility:
       code:
 `import { NextRequest } from 'next/server';
 import { handleOGProxy } from '@once-ui-system/core/server';
+
+export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   return handleOGProxy(request);
@@ -80,7 +85,8 @@ import { handleOGProxy } from '@once-ui-system/core/server';
 export async function GET(request: NextRequest) {
   return handleOGProxy(request, {
     userAgent: 'Mozilla/5.0 (compatible; ImageProxy/1.0)',
-    cacheMaxAge: 86400  // Cache for 24 hours
+    cacheMaxAge: 86400,
+    allowedDomains: ['example.com', 'once-ui.com'],
   });
 }`,
       language: "tsx",
@@ -105,7 +111,8 @@ External images often have CORS restrictions that prevent direct usage in web ap
     ["request", "Request", "-"],
     ["options", "OGProxyOptions", "-"],
     ["options.userAgent", "string", "'Mozilla/5.0 (compatible; OG-Proxy/1.0)'", "User agent string for the fetch request."],
-    ["options.cacheMaxAge", "number", "3600", "Cache duration in seconds (1 hour)."]
+    ["options.cacheMaxAge", "number", "3600", "Cache duration in seconds (1 hour)."],
+    ["options.allowedDomains", "string[]", "—", "When set, only these domains (and their subdomains) are permitted."]
   ]}
 />
 
@@ -136,7 +143,7 @@ The function returns the image binary data with appropriate headers:
 
 The function returns appropriate error responses:
 
-- **400**: Missing URL parameter
+- **400**: Missing URL parameter or URL failed validation (blocked domain, private IP, etc.)
 - **500**: Failed to fetch the image
 - **Original status**: If the external server returns an error, that status is forwarded
 
@@ -194,38 +201,30 @@ function MyComponent() {
 
 ## Security considerations
 
-- **Validate URLs**: Consider adding URL validation to prevent abuse
-- **Rate limiting**: Implement rate limiting to prevent proxy abuse
-- **Allowed domains**: Optionally restrict proxying to specific domains
+Both `handleOGFetch` and `handleOGProxy` validate URLs server-side before fetching:
+
+- Only **HTTPS** URLs are allowed
+- **Private IPs**, localhost, and link-local addresses are blocked
+- Embedded credentials in URLs are rejected
+- Redirect chains are followed and re-validated (up to 3 redirects)
+
+Use `allowedDomains` to restrict fetching to trusted hosts in production:
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={28}
+  codeHeight={16}
   lineNumbers
   codes={[
     {
       code:
-`import { NextRequest } from 'next/server';
-import { handleOGProxy } from '@once-ui-system/core/server';
-
-const ALLOWED_DOMAINS = ['example.com', 'trusted-site.com'];
-
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const url = searchParams.get('url');
-  
-  if (url) {
-    const domain = new URL(url).hostname;
-    if (!ALLOWED_DOMAINS.some(d => domain.endsWith(d))) {
-      return new Response('Domain not allowed', { status: 403 });
-    }
-  }
-  
-  return handleOGProxy(request);
-}`,
+`return handleOGProxy(request, {
+  allowedDomains: ['example.com', 'cdn.example.com'],
+});`,
       language: "tsx",
-      label: "app/api/og/proxy/route.ts"
+      label: "Domain allowlist"
     }
   ]}
 />
+
+Consider also adding rate limiting at the route level to prevent abuse.

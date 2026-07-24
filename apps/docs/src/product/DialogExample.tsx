@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { 
   Button, 
   Dialog,
+  DialogProvider,
   Text,
   Row,
   Feedback,
@@ -18,7 +19,7 @@ export function BasicDialog() {
     <>
       <Button onClick={() => setIsOpen(true)}>Open Dialog</Button>
       <Dialog
-        open={isOpen}
+        isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         title="Basic dialog"
         description="This is a simple dialog with a title and description."
@@ -45,7 +46,7 @@ export function DialogWithFooter() {
     <>
       <Button variant="secondary" onClick={() => setIsOpen(true)}>Dialog with footer</Button>
       <Dialog
-        open={isOpen}
+        isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         title="Dialog with footer"
         footer={
@@ -69,11 +70,11 @@ export function StackedDialogs() {
   const [isStackedOpen, setIsStackedOpen] = useState(false);
   
   return (
-    <>
+    <DialogProvider>
       <Button variant="secondary" onClick={() => setIsBaseOpen(true)}>Open stacked dialogs</Button>
       
       <Dialog
-        open={isBaseOpen}
+        isOpen={isBaseOpen}
         onClose={() => setIsBaseOpen(false)}
         title="Base dialog"
         base={isStackedOpen}
@@ -90,7 +91,7 @@ export function StackedDialogs() {
       </Dialog>
       
       <Dialog
-        open={isStackedOpen}
+        isOpen={isStackedOpen}
         onClose={() => setIsStackedOpen(false)}
         title="Stacked dialog"
         stack
@@ -103,7 +104,7 @@ export function StackedDialogs() {
           Notice how the base dialog is dimmed in the background.
         </Text>
       </Dialog>
-    </>
+    </DialogProvider>
   );
 }
 
@@ -114,7 +115,7 @@ export function CustomizedDialog() {
     <>
       <Button variant="danger" onClick={() => setIsOpen(true)}>Customized dialog</Button>
       <Dialog
-        open={isOpen}
+        isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         title="Customized dialog"
         maxWidth={48}
@@ -129,6 +130,29 @@ export function CustomizedDialog() {
           <Text onBackground="danger-weak">Custom content can be added inside the dialog body.</Text>
           <Button variant="danger" onClick={() => setIsOpen(false)}>Close</Button>
         </Column>
+      </Dialog>
+    </>
+  );
+}
+
+export function DialogCloseOnClickaway() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button variant="secondary" onClick={() => setIsOpen(true)}>
+        Dialog without clickaway
+      </Button>
+      <Dialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        title="Confirm action"
+        closeOnClickaway={false}
+        footer={
+          <Button onClick={() => setIsOpen(false)}>Close</Button>
+        }
+      >
+        <Text>Clicking outside will not dismiss this dialog.</Text>
       </Dialog>
     </>
   );

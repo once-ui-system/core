@@ -1,0 +1,27 @@
+---
+description: Load Once UI agent harness before generating UI code
+globs: "**/*.{tsx,jsx}"
+alwaysApply: false
+---
+
+# Once UI codegen harness
+
+Before generating or editing Once UI UI code in this project:
+
+1. Read `@once-ui-system/core/ai/manifest.json` (or `node_modules/@once-ui-system/core/ai/manifest.json`)
+2. Load bootstrap files from the manifest: `rules.compact.md` + `catalog.json`
+3. Resolve intent via `ai/tasks/index.json` → fetch the matching task bundle
+4. Fetch only the component slices listed in that task (`ai/components/*.json`)
+5. Read the task's gold example; for production layouts, read matching Pro blocks from `ai/examples/blocks/manifest.json`
+6. Validate output: `npx once-ui-validate-ai-code path/to/file.tsx`
+
+## Do not
+
+- Use full documentation MDX pages for codegen (too large; use the harness)
+- Use `Flex direction="column"` when `Column` works; same for `Row`
+- Use `fillWidth fillHeight` when `fill` works
+- Use `Card` for static panels (use the surface recipe on `Column`)
+
+## Remote fallback
+
+https://docs.once-ui.com/ai/manifest.json

@@ -1,6 +1,6 @@
 "use client";
 
-import {Flex, Row, Column, Icon, Text, IconButton, Input, Spinner, Tag, Select, Button} from ".";
+import {Flex, Row, Column, Icon, Text, IconButton, Input, Spinner, Select, Button, ShineFx} from ".";
 import { useState, useMemo, ReactNode } from "react";
 import styles from "./Table.module.scss";
 import classNames from "classnames";
@@ -253,7 +253,7 @@ function Table({
           <Column center padding="xl" gap="m">
             <Icon name="inbox" size="l" onBackground="neutral-weak" />
             <Column center gap="4">
-              <Text variant="heading-strong-s" onBackground="neutral-medium">
+              <Text variant="heading-strong-s">
                 No data available
               </Text>
               <Text variant="body-default-s" onBackground="neutral-weak">
@@ -274,10 +274,9 @@ function Table({
       >
         {loadingState || (
           <Column center padding="xl" gap="m">
-            <Spinner />
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <ShineFx variant="label-default-s">
               Loading data...
-            </Text>
+            </ShineFx>
           </Column>
         )}
       </td>
@@ -288,18 +287,16 @@ function Table({
     <Column fillWidth gap="m" {...flex}>
       {/* Search Bar */}
       {searchable && (
-        <Row horizontal="between" vertical="center" gap="m">
+        <Row horizontal="between" vertical="center" gap="m" maxWidth={12}>
           <Input
             id="table-search"
             placeholder={searchPlaceholder}
             value={searchQuery}
+            height="xs"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-            style={{ maxWidth: "320px" }}
           />
           {sortedRows.length !== data.rows.length && (
-            <Tag>
-              {sortedRows.length} of {data.rows.length}
-            </Tag>
+            <Text onBackground="neutral-weak">{sortedRows.length} of {data.rows.length}</Text>
           )}
         </Row>
       )}
@@ -346,92 +343,85 @@ function Table({
       {/* Pagination */}
       {paginated && !loading && sortedRows.length > 0 && (
         <Row horizontal="between" vertical="center" paddingX="s" gap="m" wrap>
-          <Row gap="s" vertical="center">
-            <Text as="p" variant="label-default-s" onBackground="neutral-medium">
-              Entries per page:
-            </Text>
-            <Select
-              id="page-size"
-              value={String(pageSize)}
-              height="s"
-              onSelect={(value) => {
-                setPageSize(Number(value));
-                setPage(1);
-              }}
-              options={pageSizeOptions.map(size => ({
-                label: String(size),
-                value: String(size)
-              }))}
-              style={{
-                  width: "56px",
-              }}
-            />
+          <Row gap="8" vertical="center">
+            <Row maxWidth={2}>
+              <Select
+                id="page-size"
+                placeholder="Select page size"
+                value={String(pageSize)}
+                height="xs"
+                onSelect={(value) => {
+                  setPageSize(Number(value));
+                  setPage(1);
+                }}
+                options={pageSizeOptions.map(size => ({
+                  label: String(size),
+                  value: String(size)
+                }))}
+              />
+            </Row>
             <Text variant="label-default-s" onBackground="neutral-medium">
-              Page {currentPage} of {totalPages}
+              {currentPage} / {totalPages}
             </Text>
           </Row>
 
-          <Row gap="4" vertical="center">
-            <Button
-              size="s"
-              variant="secondary"
-              onClick={() => setPage(1)}
-              disabled={currentPage === 1}
-            >
-              <Icon name="chevronLeft" size="s" />
-              <Icon name="chevronLeft" size="s" style={{ marginLeft: "-8px" }} />
-            </Button>
-            <Button
-              size="s"
-              variant="secondary"
-              onClick={() => setPage(currentPage - 1)}
-              disabled={currentPage === 1}
-            >
-              <Icon name="chevronLeft" size="s" />
-            </Button>
-            
-            {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
-              let pageNum;
-              if (totalPages <= 5) {
-                pageNum = i + 1;
-              } else if (currentPage <= 3) {
-                pageNum = i + 1;
-              } else if (currentPage >= totalPages - 2) {
-                pageNum = totalPages - 4 + i;
-              } else {
-                pageNum = currentPage - 2 + i;
-              }
+          {totalPages > 1 && (
+            <Row gap="4" vertical="center">
+              <IconButton
+                size="s"
+                variant="secondary"
+                icon="chevronDoubleLeft"
+                onClick={() => setPage(1)}
+                disabled={currentPage === 1}
+              />
+              <IconButton
+                size="s"
+                variant="secondary"
+                icon="chevronLeft"
+                onClick={() => setPage(currentPage - 1)}
+                disabled={currentPage === 1}
+              />
               
-              return (
-                <Button
-                  key={pageNum}
-                  size="s"
-                  variant={pageNum === currentPage ? "primary" : "tertiary"}
-                  onClick={() => setPage(pageNum)}
-                >
-                  {pageNum}
-                </Button>
-              );
-            })}
+              {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
+                let pageNum;
+                if (totalPages <= 5) {
+                  pageNum = i + 1;
+                } else if (currentPage <= 3) {
+                  pageNum = i + 1;
+                } else if (currentPage >= totalPages - 2) {
+                  pageNum = totalPages - 4 + i;
+                } else {
+                  pageNum = currentPage - 2 + i;
+                }
+                
+                return (
+                  <Button
+                    key={pageNum}
+                    size="s"
+                    variant={pageNum === currentPage ? "primary" : "tertiary"}
+                    onClick={() => setPage(pageNum)}
+                  >
+                    {pageNum}
+                  </Button>
+                );
+              })}
 
-            <Button
-              size="s"
-              variant="secondary"
-              onClick={() => setPage(currentPage + 1)}
-              disabled={currentPage === totalPages}
-            >
-              <Icon name="chevronRight" size="s" />
-            </Button>
-            <Button
-              size="s"
-              variant="secondary"
-              onClick={() => setPage(totalPages)}
-              disabled={currentPage === totalPages}
-            >
-              <Icon name="chevronRight" size="s" />
-              <Icon name="chevronRight" size="s" style={{ marginLeft: "-8px" }} />
-            </Button>
-          </Row>
+              <IconButton
+                size="s"
+                variant="secondary"
+                icon="chevronRight"
+                onClick={() => setPage(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              />
+              <IconButton
+                icon="chevronDoubleRight"
+                size="s"
+                variant="secondary"
+                onClick={() => setPage(totalPages)}
+                disabled={currentPage === totalPages}
+              />
+            </Row>
+          )}
         </Row>
       )}
 

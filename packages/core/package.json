@@ -9,7 +9,10 @@
     "scss",
     "design system",
     "design framework",
-    "nextjs design system"
+    "nextjs design system",
+    "ai",
+    "agent",
+    "codegen"
   ],
   "author": "Once UI",
   "license": "MIT",
@@ -22,6 +25,21 @@
     "url": "https://github.com/once-ui-system/core/issues"
   },
   "homepage": "https://docs.once-ui.com",
+  "onceUi": {
+    "harness": "./ai/manifest.json",
+    "bootstrap": [
+      "./ai/rules.compact.md",
+      "./ai/catalog.json"
+    ],
+    "tasks": "./ai/tasks/index.json",
+    "validate": "./scripts/validate-ai-code.js",
+    "initAgent": "./scripts/init-agent.js",
+    "docs": "https://docs.once-ui.com/once-ui/ai-coding"
+  },
+  "bin": {
+    "once-ui-init-agent": "./scripts/init-agent.js",
+    "once-ui-validate-ai-code": "./scripts/validate-ai-code.js"
+  },
   "main": "dist/index.js",
   "exports": {
     ".": {
@@ -80,7 +98,8 @@
     "./ai/tasks/*": "./ai/tasks/*",
     "./ai/components/*": "./ai/components/*",
     "./ai/examples/*": "./ai/examples/*",
-    "./ai/examples/blocks/*": "./ai/examples/blocks/*"
+    "./ai/examples/blocks/*": "./ai/examples/blocks/*",
+    "./AGENTS.md": "./AGENTS.md"
   },
   "scripts": {
     "build": "pnpm clean && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",
@@ -97,6 +116,7 @@
     "prepack": "pnpm build",
     "generate-emoji-data": "node scripts/generate-emoji-data.js",
     "generate-ai-spec": "node scripts/generate-ai-spec.js",
+    "init-agent": "node scripts/init-agent.js",
     "validate-ai-code": "node scripts/validate-ai-code.js"
   },
   "dependencies": {

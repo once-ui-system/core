@@ -29,7 +29,7 @@ export function BasicDropdown() {
   
   return (
     <DropdownWrapper
-      open={isOpen}
+      isOpen={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 
@@ -74,7 +74,7 @@ export function DropdownWithIcons() {
   
   return (
     <DropdownWrapper
-      open={isOpen}
+      isOpen={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 
@@ -121,7 +121,7 @@ export function CustomPositionDropdown() {
   
   return (
     <DropdownWrapper
-      open={isOpen}
+      isOpen={isOpen}
       onOpenChange={setIsOpen}
       placement="right-start"
       trigger={
@@ -172,7 +172,7 @@ export function SearchableDropdown() {
   
   return (
     <DropdownWrapper
-      open={isOpen}
+      isOpen={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 

@@ -1,7 +1,7 @@
 ---
 title: "handleOGFetch"
 summary: "Server-side utility for fetching and parsing Open Graph metadata from URLs."
-updatedAt: "2026-02-22"
+updatedAt: "2026-07-24"
 docs: "once-ui/utils/handleOGFetch.mdx"
 github: "server/og-utils.ts"
 navLabel: "handleOGFetch"
@@ -17,7 +17,9 @@ The `handleOGFetch` function is a server-side utility that fetches and parses Op
 - Falls back to standard HTML meta tags if OG tags aren't available
 - Decodes HTML entities in text content
 - Supports custom user agents
-- Works with Next.js Edge Runtime
+- Validates URLs to block SSRF (private IPs, localhost, non-HTTPS)
+- Optional domain allowlist via `allowedDomains`
+- Requires Node.js runtime (uses DNS resolution for hostname validation)
 
 ## Basic usage
 
@@ -33,6 +35,8 @@ Create an API route that uses the utility:
       code:
 `import { NextRequest } from 'next/server';
 import { handleOGFetch } from '@once-ui-system/core/server';
+
+export const runtime = 'nodejs';
 
 export async function GET(request: NextRequest) {
   return handleOGFetch(request);
@@ -81,13 +85,12 @@ Customize timeout, user agent, and entity decoding:
 `import { NextRequest } from 'next/server';
 import { handleOGFetch } from '@once-ui-system/core/server';
 
-export const runtime = 'edge';
-
 export async function GET(request: NextRequest) {
   return handleOGFetch(request, {
     timeout: 5000,
     userAgent: 'MyBot/1.0',
-    decodeEntities: true
+    decodeEntities: true,
+    allowedDomains: ['example.com', 'once-ui.com'],
   });
 }`,
       language: "tsx",
@@ -127,9 +130,10 @@ The function returns a JSON response with the following structure:
   content={[
     ["request", "Request", "-"],
     ["options", "OGFetchOptions", "-"],
-    ["options.timeout", "number", "10000"],
-    ["options.userAgent", ["'bot'", "'browser'"], "'bot'"],
-    ["options.decodeEntities", "boolean", "false"]
+    ["options.timeout", "number", "5000"],
+    ["options.userAgent", "string", "'Mozilla/5.0 (compatible; OG-Fetcher/1.0)'"],
+    ["options.decodeEntities", "boolean", "true"],
+    ["options.allowedDomains", "string[]", "—", "When set, only these domains (and their subdomains) are permitted."]
   ]}
 />
 
@@ -137,7 +141,7 @@ The function returns a JSON response with the following structure:
 
 The function returns appropriate error responses:
 
-- **400**: Missing URL parameter
+- **400**: Missing URL parameter or URL failed validation (blocked domain, private IP, etc.)
 - **500**: Failed to fetch or parse the URL
 
 <CodeBlock

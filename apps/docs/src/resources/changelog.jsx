@@ -2,6 +2,35 @@ import { SmartLink, InlineCode } from "@once-ui-system/core";
 
 const changelog = [
   {
+    date: "2026-07-24",
+    title: "Once UI 1.7.13",
+    sections: [
+      {
+        title: "Security",
+        bullets: [
+          <>Schema, ThemeInit, and CodeBlock: harden script/HTML output against XSS</>,
+          <>OG fetch and proxy: block SSRF via URL validation and optional domain allowlists</>,
+          <>Links: sanitize dangerous <InlineCode>href</InlineCode> schemes (<InlineCode>javascript:</InlineCode>, <InlineCode>data:</InlineCode>) in Button, Card, SmartLink, and related components</>,
+        ],
+      },
+      {
+        title: "Fixes",
+        bullets: [
+          <>Server utilities are no longer re-exported from the main package entry (import from <InlineCode>@once-ui-system/core/server</InlineCode>)</>,
+          <><SmartLink unstyled href="/once-ui/components/timeline">Timeline</SmartLink>: align labels with marker dots</>,
+          <>DropdownWrapper: restore <InlineCode>isOpen</InlineCode> prop for backward compatibility</>,
+        ],
+      },
+      {
+        title: "Component improvements",
+        bullets: [
+          <><SmartLink unstyled href="/once-ui/components/media">Media</SmartLink>: custom video controls (play/pause, seek, mute, fullscreen)</>,
+          <><SmartLink unstyled href="/once-ui/components/table">Table</SmartLink>: search, actions, pagination, and variants</>,
+        ],
+      },
+    ],
+  },
+  {
     date: "2026-05-04",
     title: "Once UI 1.7: Form with Intent",
     image: "/images/changelog/once-ui-1-7.jpg",

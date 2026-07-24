@@ -126,7 +126,7 @@ export function ControlledEmojiPickerDropdown() {
       <EmojiPickerDropdown
         trigger={<Button label="Controlled Dropdown" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
-        open={isOpen}
+        isOpen={isOpen}
         onOpenChange={setIsOpen}
       />
       <Button 

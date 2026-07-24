@@ -161,7 +161,7 @@ export default async function Docs({
         </Column>
       </Row>
       <Row fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
-        <HeadingNav top="80" />
+        <HeadingNav fillWidth top="80" />
       </Row>
     </>
   );
