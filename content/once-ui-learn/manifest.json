@@ -151,28 +151,32 @@
       "title": "Roadmap & kanban",
       "summary": "Status columns, task cards, StatusIndicator dots, and the roadmap task bundle — Roadmap1 Pro block as gold reference.",
       "tag": "Common patterns",
-      "file": "common-patterns/roadmap-and-kanban.mdx"
+      "file": "common-patterns/roadmap-and-kanban.mdx",
+      "contentId": "51882e20-864b-4854-a34e-ca558c5419d3"
     },
     {
       "path": "/common-patterns/form-inputs-and-controls.mdx",
       "title": "Form inputs & controls",
       "summary": "Select, Switch, Checkbox, RadioButton, Textarea, and NumberInput — field types beyond basic Input stacking.",
       "tag": "Common patterns",
-      "file": "common-patterns/form-inputs-and-controls.mdx"
+      "file": "common-patterns/form-inputs-and-controls.mdx",
+      "contentId": "816bcbb2-248c-4805-ace6-581169342ebb"
     },
     {
       "path": "/common-patterns/progress-status-and-badges.mdx",
       "title": "Progress, status & badges",
       "summary": "ProgressBar for completion, StatusIndicator for state dots, Badge for counts and labels.",
       "tag": "Common patterns",
-      "file": "common-patterns/progress-status-and-badges.mdx"
+      "file": "common-patterns/progress-status-and-badges.mdx",
+      "contentId": "a214324a-f169-4a0f-b830-8d3a2655b1c1"
     },
     {
       "path": "/common-patterns/scrolling-and-feeds.mdx",
       "title": "Scrolling & feeds",
       "summary": "Scroller for horizontal chip rails, InfiniteScroll for paginated feeds, and overflow patterns without scroll traps.",
       "tag": "Common patterns",
-      "file": "common-patterns/scrolling-and-feeds.mdx"
+      "file": "common-patterns/scrolling-and-feeds.mdx",
+      "contentId": "78a31d64-85f7-438a-bf18-29f60d9c54c5"
     },
     {
       "path": "/common-patterns/seo-and-metadata.mdx",
