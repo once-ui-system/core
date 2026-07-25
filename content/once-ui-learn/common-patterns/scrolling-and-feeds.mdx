@@ -1,0 +1,144 @@
+<Feedback title="6 min · Pattern" description="Scroller for horizontal chip and card rails, InfiniteScroll for paginated feeds, and overflow patterns for chat timelines and activity lists." variant="info" />
+
+## What this pattern covers
+
+Long content needs deliberate scroll behavior:
+
+- **Scroller** — horizontal rails with arrow buttons and edge fades (chips, tabs, card carousels)
+- **InfiniteScroll** — load-more feeds with intersection observer sentinel
+- **Plain overflow** — `overflowX="auto"` or `overflowY="auto"` on Row/Column for simple cases
+
+Gold references: `packages/core/ai/examples/chat.tsx` (feed scrolling), `packages/core/ai/examples/blocks/Feed3.tsx`, Roadmap1 column overflow.
+
+## When to use which
+
+| Need | Component | Why |
+|------|-----------|-----|
+| Horizontal chip/tab rail | Scroller `direction="row"` | Arrow buttons + fade edges |
+| Paginated activity feed | InfiniteScroll | Auto-fetches when sentinel visible |
+| Kanban columns on mobile | Row `overflowX="auto"` | Simple sideways scroll, no chrome |
+| Chat message history | Column `overflowY="auto"` inside fixed-height shell | Vertical scroll in pane |
+| Full page list | No wrapper — page scrolls naturally | Avoid nested scroll traps |
+
+## Scroller
+
+Scroller wraps children in a scrollable flex container with optional prev/next IconButtons and Fade overlays at the edges.
+
+| Prop | Default | Notes |
+|------|---------|-------|
+| `direction` | `"row"` | `"column"` for vertical rails |
+| `fadeColor` | `"transparent"` | Match your background token |
+| `onItemClick` | — | Optional index callback for keyboard nav |
+| `radius` | — | Clip children to rounded corners |
+
+Use Scroller for filter chip rows that overflow on mobile — the arrow buttons hint that more content exists off-screen.
+
+Describe chip children in prose: map your filter options to Tag or Button elements inside the Scroller.
+
+### Chip filter rail
+
+```text
+<Column gap="8" fillWidth>
+  <Text variant="label-default-s" onBackground="neutral-weak">
+    Categories
+  </Text>
+  {/* Scroller direction="row" gap="8" fadeColor="page" */}
+  {/*   map categories to Tag or Button per chip */}
+  {/* /Scroller */}
+</Column>
+```
+
+Set `fadeColor` to match the parent background (`"page"`, `"surface"`, or `"overlay"`) so fades blend seamlessly.
+
+## InfiniteScroll
+
+InfiniteScroll renders your items and watches a sentinel element at the bottom. When the sentinel enters the viewport, it calls `loadMore`.
+
+| Prop | Type | Notes |
+|------|------|-------|
+| `items` | `T[]` | Current loaded items |
+| `renderItem` | `(item, index) => ReactNode` | Row renderer per item |
+| `loadMore` | `() => Promise<boolean>` | Return `false` when no more pages |
+| `loading` | `boolean` | External loading flag |
+| `threshold` | `number` | Pixels before sentinel triggers (default 200) |
+
+The `loadMore` function should append to your items array in the parent and return whether more data exists.
+
+### Activity feed pattern
+
+```text
+<Column
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  fillWidth
+  gap="0"
+>
+  <Row paddingX="24" paddingY="16" borderBottom="neutral-alpha-weak">
+    <Text variant="label-default-m">Recent activity</Text>
+  </Row>
+
+  <Column paddingX="24" paddingY="8" fillWidth>
+    {/* InfiniteScroll
+          items={activities}
+          renderItem={(item) => (
+            <Row key={item.id} paddingY="12" gap="12" fillWidth>
+              <Avatar size="s" src={item.avatar} />
+              <Column gap="4" fillWidth>
+                <Text variant="body-default-s">{item.message}</Text>
+                <Text variant="label-default-xs" onBackground="neutral-weak">
+                  {item.time}
+                </Text>
+              </Column>
+            </Row>
+          )}
+          loadMore={fetchNextPage}
+          loading={isLoading}
+        */}
+  </Column>
+</Column>
+```
+
+Show a Spinner at the bottom while `loading` is true. Pair with [empty states](/common-patterns/empty-and-error-states.mdx) when the first page returns zero items.
+
+## Avoiding scroll traps
+
+Nested scroll containers frustrate users. Follow these rules:
+
+1. **One primary scroll axis per pane** — chat sidebar scrolls independently from message feed, but not two vertical scrollers in the same column
+2. **Fixed-height shell** — set `height` or `maxHeight` on the scrollable Column so overflow works
+3. **Page-level lists** — let the document scroll; do not wrap the entire page in InfiniteScroll unless you have a sticky header
+
+For chat layouts, see [Chat & messaging](/common-patterns/chat-and-messaging.mdx) — the feed Column gets `overflowY="auto"` inside a SplitView pane.
+
+## Loading and error in feeds
+
+| State | Pattern |
+|-------|---------|
+| Initial load | Skeleton rows or centered Spinner |
+| Loading more | Spinner below last item (InfiniteScroll built-in) |
+| No more pages | Remove sentinel — `loadMore` returns `false` |
+| Fetch error | Inline Feedback below the list with retry Button |
+| Empty first page | Empty state Column with icon and CTA |
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Scroller for chip rails with fades | Hidden overflow with no scroll hint |
+| InfiniteScroll `loadMore` returns boolean | Infinite loop when API has no cursor |
+| `fadeColor` matches parent background | White fades on dark surfaces |
+| Single scroll container per pane | Page inside scroll inside scroll |
+
+## Check yourself
+
+- [ ] Scroller `fadeColor` matches the panel background
+- [ ] InfiniteScroll `loadMore` stops when API is exhausted
+- [ ] Feed has empty state for zero results
+- [ ] No nested vertical scroll traps in the layout
+
+## Related
+
+→ [Chat & messaging](/common-patterns/chat-and-messaging.mdx)
+→ [Tables & lists](/common-patterns/tables-and-lists.mdx)
+→ [Loading states](/common-patterns/loading-states.mdx)

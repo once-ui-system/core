@@ -1,0 +1,149 @@
+<Feedback title="5 min · Pattern" description="ProgressBar for completion, StatusIndicator for state dots, and Badge for counts and labels — the three primitives for showing where things stand." variant="info" />
+
+## What this pattern covers
+
+Users need to see progress and state at a glance:
+
+- **ProgressBar** — upload progress, onboarding steps, storage usage
+- **StatusIndicator** — online/offline dots, kanban status, sync state
+- **Badge** — notification counts, version labels, category chips
+
+These appear in dashboards, settings, roadmaps, and navigation — often together on the same row.
+
+## ProgressBar
+
+ProgressBar renders a filled track with an optional animated percentage label.
+
+| Prop | Default | Use for |
+|------|---------|---------|
+| `value` | required | Current value (0–100 or custom range) |
+| `min` / `max` | 0 / 100 | Custom scales (e.g. 0–5 GB) |
+| `label` | `true` | Show percentage text |
+| `labelPosition` | `"bottom"` | `"top"`, `"bottom"`, `"left"`, `"right"` |
+| `barBackground` | `"brand-strong"` | Fill color token |
+
+The label uses an animated counter internally — you only pass the numeric `value`.
+
+### Storage usage example
+
+```text
+<Column gap="8" fillWidth>
+  <Row fillWidth horizontal="between" vertical="center">
+    <Text variant="body-strong-s">Storage</Text>
+    <Text variant="label-default-s" onBackground="neutral-weak">
+      7.2 GB of 10 GB
+    </Text>
+  </Row>
+  {/* ProgressBar value={72} barBackground="brand-strong" */}
+</Column>
+```
+
+### Onboarding checklist
+
+Stack multiple ProgressBar rows — one per step — with `labelPosition="right"` for a compact sidebar widget.
+
+Hide the label (`label={false}`) when the surrounding Text already states the percentage.
+
+## StatusIndicator
+
+StatusIndicator is a small colored dot. Use it anywhere a word label would be too heavy.
+
+| Color | Typical meaning |
+|-------|-----------------|
+| `green` / `emerald` | Online, success, complete |
+| `brand` | In progress, active |
+| `red` / `orange` | Error, blocked, warning |
+| `gray` / `neutral` | Offline, inactive, planned |
+| `yellow` | Pending, attention needed |
+
+Sizes follow t-shirt tokens: `xs`, `s`, `m` (default), `l`.
+
+Pair with a Text label in a Row:
+
+```text
+<Row gap="8" vertical="center">
+  {/* StatusIndicator color="green" size="s" ariaLabel="Online" */}
+  <Text variant="label-default-s">Online</Text>
+</Row>
+```
+
+Always set `ariaLabel` when the dot appears without adjacent text.
+
+### In tables and lists
+
+Add a StatusIndicator column for row state — sync status, deployment health, user presence. Keep the dot `size="s"` in dense tables.
+
+## Badge
+
+Badge displays short labels, counts, or links with optional icons.
+
+| Prop | Notes |
+|------|-------|
+| `children` | Badge text — do not duplicate in `title` |
+| `icon` | Optional leading IconName |
+| `href` | Makes badge a link; enables arrow by default |
+| `effect` | Subtle shine animation (default `true`) |
+
+```text
+<Row gap="8" vertical="center">
+  <Text variant="body-strong-s">Notifications</Text>
+  {/* Badge children="3" — unread count */}
+</Row>
+```
+
+Use Badge for version tags (`children="Beta"`), unread counts, and category labels in navigation sidebars.
+
+Avoid putting the same string in both `title` and `children` — pick one.
+
+## Combining all three
+
+A deployment status row might use:
+
+1. StatusIndicator (`green`) for "Healthy"
+2. ProgressBar (`value={100}`) for rollout completion
+3. Badge (`children="v2.4"`) for the release tag
+
+```text
+<Column
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  padding="24"
+  gap="16"
+  fillWidth
+>
+  <Row fillWidth horizontal="between" vertical="center">
+    <Row gap="8" vertical="center">
+      {/* StatusIndicator color="green" size="s" */}
+      <Text variant="body-strong-s">Production</Text>
+    </Row>
+    {/* Badge children="v2.4.1" */}
+  </Row>
+  {/* ProgressBar value={100} label={false} */}
+  <Text variant="body-default-xs" onBackground="neutral-weak">
+    All instances updated
+  </Text>
+</Column>
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| ProgressBar with token `barBackground` | Inline width div with hex color |
+| StatusIndicator + label Text | Color-only dot with no accessible name |
+| Badge `children` for text | Same text in `title` and `children` |
+| `label={false}` when context is obvious | Redundant percentage everywhere |
+
+## Check yourself
+
+- [ ] ProgressBar `value` matches your min/max range
+- [ ] StatusIndicator has `ariaLabel` when unlabeled
+- [ ] Badge text lives in `children` only
+- [ ] Colors use semantic tokens, not arbitrary CSS
+
+## Related
+
+→ [Roadmap & kanban](/common-patterns/roadmap-and-kanban.mdx)
+→ [Dashboard & charts](/common-patterns/dashboard-and-charts.mdx)
+→ [Loading states](/common-patterns/loading-states.mdx)

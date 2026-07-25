@@ -147,6 +147,34 @@
       "file": "common-patterns/pricing-and-plans.mdx"
     },
     {
+      "path": "/common-patterns/roadmap-and-kanban.mdx",
+      "title": "Roadmap & kanban",
+      "summary": "Status columns, task cards, StatusIndicator dots, and the roadmap task bundle — Roadmap1 Pro block as gold reference.",
+      "tag": "Common patterns",
+      "file": "common-patterns/roadmap-and-kanban.mdx"
+    },
+    {
+      "path": "/common-patterns/form-inputs-and-controls.mdx",
+      "title": "Form inputs & controls",
+      "summary": "Select, Switch, Checkbox, RadioButton, Textarea, and NumberInput — field types beyond basic Input stacking.",
+      "tag": "Common patterns",
+      "file": "common-patterns/form-inputs-and-controls.mdx"
+    },
+    {
+      "path": "/common-patterns/progress-status-and-badges.mdx",
+      "title": "Progress, status & badges",
+      "summary": "ProgressBar for completion, StatusIndicator for state dots, Badge for counts and labels.",
+      "tag": "Common patterns",
+      "file": "common-patterns/progress-status-and-badges.mdx"
+    },
+    {
+      "path": "/common-patterns/scrolling-and-feeds.mdx",
+      "title": "Scrolling & feeds",
+      "summary": "Scroller for horizontal chip rails, InfiniteScroll for paginated feeds, and overflow patterns without scroll traps.",
+      "tag": "Common patterns",
+      "file": "common-patterns/scrolling-and-feeds.mdx"
+    },
+    {
       "path": "/common-patterns/seo-and-metadata.mdx",
       "title": "SEO, Open Graph, and structured data",
       "summary": "generateMetadata, Schema JSON-LD, and server-side OG fetch \u2014 wire once in your layout.",

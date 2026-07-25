@@ -1,0 +1,168 @@
+<Feedback title="6 min · Pattern" description="Beyond basic Input fields — Select dropdowns, Switch toggles, Checkbox groups, RadioButton sets, Textarea, and NumberInput for complete settings and filter forms." variant="info" />
+
+## What this pattern covers
+
+Form layout covers stacking and sections. This page covers **field types** — the controls users interact with inside those stacks:
+
+- **Select** — single or multi-value dropdowns with optional search
+- **Switch** — boolean settings (notifications, dark mode)
+- **Checkbox** — multi-select options and consent checkboxes
+- **RadioButton** — mutually exclusive choices
+- **Textarea** — multi-line text
+- **NumberInput** — numeric values with step controls
+
+Gold references: `packages/core/ai/examples/settings.tsx`, `packages/core/ai/examples/blocks/Settings1.tsx`.
+
+## Select dropdown
+
+Select extends Input with a dropdown panel. Pass an `options` array and wire `value` + `onSelect`:
+
+| Prop | Use for |
+|------|---------|
+| `options` | `{ value, label }` pairs |
+| `value` | Current selection (string or string array) |
+| `onSelect` | Callback when user picks an option |
+| `searchable` | Long option lists (countries, timezones) |
+| `multiple` | Multi-select filters |
+
+Describe the API in prose — the Select component renders a trigger styled like Input and opens a dropdown on click.
+
+For a timezone picker, set `searchable={true}` so users can type to filter 400+ options.
+
+## Switch for boolean settings
+
+Switch is the right control for on/off preferences — not a Checkbox styled as a toggle.
+
+| Prop | Notes |
+|------|-------|
+| `isChecked` | Controlled boolean state |
+| `onToggle` | Called on click — flip state here |
+| `reverse` | Label on the left, switch on the right |
+| `loading` | Show spinner while saving async preference |
+
+Settings panels typically pair Switch with a label Column:
+
+```text
+<Row fillWidth horizontal="between" vertical="center" paddingY="12">
+  <Column gap="4">
+    <Text variant="body-strong-s">Email notifications</Text>
+    <Text variant="body-default-xs" onBackground="neutral-weak">
+      Receive updates about your account activity.
+    </Text>
+  </Column>
+  {/* Switch with isChecked and onToggle */}
+</Row>
+```
+
+Use a Line divider between consecutive Switch rows in a settings section.
+
+## Checkbox groups
+
+Checkbox works for independent options (feature flags, consent) and multi-select lists.
+
+Group related checkboxes in a Column with `gap="12"`. Each Checkbox carries its own `label` prop — do not duplicate the label in children.
+
+For a "select all" pattern, derive checked state from your data array and toggle all items in the parent handler.
+
+## RadioButton sets
+
+Use RadioButton when exactly one option must be selected — billing period, export format, privacy level.
+
+All radios in a set share the same `name` prop. Only the selected radio has `isChecked={true}`.
+
+```text
+<Column gap="12" fillWidth>
+  <Text variant="label-default-s" onBackground="neutral-weak">
+    Export format
+  </Text>
+  {/* RadioButton name="format" label="PDF" isChecked={format === "pdf"} */}
+  {/* RadioButton name="format" label="CSV" isChecked={format === "csv"} */}
+  {/* RadioButton name="format" label="JSON" isChecked={format === "json"} */}
+</Column>
+```
+
+## Textarea
+
+Textarea is for multi-line content — bios, descriptions, feedback.
+
+| Prop | Notes |
+|------|-------|
+| `rows` | Initial visible height |
+| `resize` | `"none"` for fixed-height panels |
+| `maxLength` | Character limit with counter in helper Text |
+
+Stack label, Textarea, and helper/error Text in a Column with `gap="8"` — same rhythm as Input fields.
+
+## NumberInput
+
+NumberInput adds increment/decrement controls for quantities, limits, and thresholds.
+
+Wire `value`, `onChange`, `min`, `max`, and `step`. Use inside filter toolbars when users need a numeric bound (e.g. minimum order value).
+
+## Validation and error states
+
+Form controls share validation props from Input:
+
+- `error` — boolean flag for invalid state
+- `errorMessage` — helper Text shown below the field
+- `disabled` — grayed out during submit or when permission denied
+
+Show errors after blur or submit — not on every keystroke unless the field is async-validated (like username availability).
+
+## Settings form recipe
+
+Combine controls inside a static panel:
+
+```text
+<Column
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  padding="24"
+  gap="24"
+  fillWidth
+>
+  <Column gap="8">
+    <Heading variant="display-strong-xs">Notifications</Heading>
+    <Text variant="body-default-s" onBackground="neutral-weak">
+      Choose how we contact you.
+    </Text>
+  </Column>
+
+  <Column gap="4" fillWidth>
+    {/* Switch rows with Line dividers */}
+  </Column>
+
+  <Column gap="16" fillWidth>
+    <Text variant="label-default-s" onBackground="neutral-weak">Language</Text>
+    {/* Select with options and onSelect */}
+  </Column>
+
+  <Row gap="16" s={{ direction: "column" }}>
+    <Button>Save changes</Button>
+    <Button variant="secondary">Cancel</Button>
+  </Row>
+</Column>
+```
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Switch for on/off settings | Checkbox pretending to be a toggle |
+| RadioButton for exclusive choice | Multiple independent Checkboxes |
+| `label` prop on form controls | Separate label with mismatched `htmlFor` |
+| Select with `searchable` for long lists | Native select with 200 options |
+
+## Check yourself
+
+- [ ] Each field type matches the interaction (Switch vs Checkbox vs Radio)
+- [ ] Labels use `label-default-s` or built-in `label` prop
+- [ ] Settings sections wrapped in static panel recipe
+- [ ] Error messages appear below the field, not in a toast
+
+## Related
+
+→ [Form layout](/common-patterns/form-layout.mdx)
+→ [Settings & split panels](/common-patterns/settings-and-split-panels.mdx)
+→ Full reference: [docs.once-ui.com — Form controls](https://docs.once-ui.com/once-ui/form-controls)

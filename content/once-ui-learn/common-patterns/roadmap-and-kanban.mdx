@@ -1,0 +1,157 @@
+<Feedback title="7 min · Pattern" description="Kanban roadmaps use status columns, task cards, and StatusIndicator dots. The roadmap task bundle and Roadmap1 Pro block are the gold reference for agents and humans." variant="info" />
+
+## What this pattern covers
+
+Product roadmaps, release boards, and sprint kanbans share the same structure:
+
+- A page title and optional product grouping
+- Horizontal status columns (Planned, In progress, Done, Blocked)
+- Task cards with title, description, assignee, and status dot
+- Optional links on cards when tasks have detail pages
+
+Gold reference: `packages/core/ai/tasks/roadmap.json` → `examples/blocks/Roadmap1.tsx`.
+
+For agents: resolve intent to the **roadmap** bundle, load component slices for Card, StatusIndicator, User, and Scroller, then read Roadmap1 before generating.
+
+## Data shape
+
+Model roadmap data as nested arrays — products, then columns, then tasks:
+
+| Level | Fields | Notes |
+|-------|--------|-------|
+| Product | `product`, `brand`, `columns` | Optional product header with brand color stripe |
+| Column | `title`, `tasks` | Status lane name + task array |
+| Task | `title`, `description?`, `type?`, `user?`, `href?` | `type` maps to status color/label |
+
+Define a `task` lookup object for status colors:
+
+```text
+const task = {
+  planned: { label: "Planned", color: "neutral" },
+  progress: { label: "In progress", color: "brand" },
+  done: { label: "Done", color: "success" },
+  blocked: { label: "Blocked", color: "danger" },
+};
+```
+
+Pass `task[taskItem.type].color` to **StatusIndicator** and `task[taskItem.type].label` to a Text label beside it.
+
+## Column layout
+
+Each status column is a static surface panel — not a Card:
+
+```text
+<Column
+  padding="4"
+  gap="4"
+  radius="s-4"
+  border="neutral-alpha-weak"
+  background="overlay"
+  fillWidth
+  minWidth={20}
+>
+  <Row fillWidth vertical="center" gap="8" paddingY="8" paddingX="16">
+    <Text variant="label-default-m">In progress</Text>
+    <Text variant="label-default-s" onBackground="neutral-weak">3</Text>
+  </Row>
+  <Column gap="4" fillWidth>
+    {/* task cards */}
+  </Column>
+</Column>
+```
+
+Wrap all columns in a horizontal Row with `overflowX="auto"` and `gap="4"` so narrow viewports scroll sideways.
+
+## Interactive vs static task cards
+
+| Task has `href`? | Use | Why |
+|------------------|-----|-----|
+| Yes | Card with `href` | Card is interactive only — links need Card |
+| No | Column surface panel | Static tasks should not look clickable |
+
+Interactive task card:
+
+```text
+<Card
+  href={task.href}
+  onBackground="neutral-strong"
+  border="neutral-alpha-weak"
+  fillWidth
+  radius="s"
+  padding="16"
+>
+  <Column gap="8" fillWidth>
+    <Text variant="body-strong-m">{task.title}</Text>
+    <Text variant="body-default-s" onBackground="neutral-weak">
+      {task.description}
+    </Text>
+  </Column>
+</Card>
+```
+
+Static task (no link): swap Card for a Column with the same surface props (`border`, `background`, `radius`, `padding`).
+
+## StatusIndicator on tasks
+
+Place a StatusIndicator dot beside the type label in the card footer Row. Use semantic colors from your `task` lookup — `brand` for in-progress, `success` for done, `danger` for blocked, `neutral` for planned.
+
+Set `ariaLabel` when the color alone does not convey meaning (e.g. `ariaLabel="Blocked"`).
+
+## Assignee row
+
+When a task has a `user` field, render a **User** row in the card footer with `avatarProps={{ size: "s", src, empty: !src }}` and the name in a label Text child.
+
+Keep assignee and status on one Row with `horizontal="between"` so they align on opposite sides.
+
+## Product header
+
+For multi-product roadmaps, add a product stripe before each column group:
+
+```text
+<Row gap="16" marginBottom="16" vertical="center" fillWidth>
+  <Row minWidth="40" width="40" height="40" padding="8" vertical="center">
+    <Row
+      radius="full"
+      fillWidth
+      minHeight="4"
+      solid="brand-medium"
+      data-brand="brand"
+      data-solid="inverse"
+    />
+  </Row>
+  <Heading as="h2" variant="display-default-xs">
+    Once UI Core
+  </Heading>
+</Row>
+```
+
+The `data-brand` attribute ties the stripe to your product's scheme token.
+
+## Horizontal scroll on mobile
+
+When columns overflow, wrap them in **Scroller** (direction `row`) for prev/next buttons and edge fades — or use a plain Row with `overflowX="auto"` for a simpler layout.
+
+Roadmap1 uses `overflowX="auto"` directly. Upgrade to Scroller when you want arrow buttons and fade hints.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Card only when `href` or `onClick` exists | Card for every task |
+| Column surface for status lanes | Nested Cards for columns |
+| StatusIndicator + label Text | Raw colored divs |
+| `task` lookup for consistent colors | Inline hex colors per card |
+
+## Check yourself
+
+- [ ] Columns use static Column panels, not Card
+- [ ] Only linked tasks use Card with `href`
+- [ ] Status colors come from a shared lookup object
+- [ ] Horizontal layout scrolls on narrow screens
+- [ ] Agents loaded `roadmap.json` and Roadmap1 before codegen
+
+## Related
+
+→ [Match task bundles](/agent-resources/match-task-bundles.mdx)
+→ [Dashboard & charts](/common-patterns/dashboard-and-charts.mdx)
+→ Full reference: [docs.once-ui.com — StatusIndicator](https://docs.once-ui.com/once-ui/components/status-indicator)
