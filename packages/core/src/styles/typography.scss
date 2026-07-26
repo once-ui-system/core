@@ -41,6 +41,14 @@ h1, h2, h3, h4, h5, h6, p {
     font-weight: var(--font-weight-display-default);
 }
 
+.font-bold {
+    font-weight: var(--font-weight-display-bold);
+}
+
+.font-bolder {
+    font-weight: var(--font-weight-display-bolder);
+}
+
 .font-strong {
     font-weight: var(--font-weight-display-strong);
 }

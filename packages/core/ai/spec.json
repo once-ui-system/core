@@ -15,7 +15,7 @@
   "Colors": "`${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`",
   "RadiusSize": "TShirtSizes | \"full\" | \"none\"",
   "TextType": "\"body\" | \"heading\" | \"display\" | \"label\" | \"code\"",
-  "TextWeight": "\"default\" | \"strong\"",
+  "TextWeight": "\"default\" | \"bold\" | \"bolder\" | \"strong\"",
   "TextSize": "TShirtSizes",
   "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`",
   "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"volume\" | \"volumeOff\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"edit\" | \"trash\" | \"mail\" | \"download\""

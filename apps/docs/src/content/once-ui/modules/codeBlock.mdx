@@ -472,22 +472,36 @@ renderResults(data);"
 
 ## Collapsible
 
-Use `maxLines` to limit code height and show a "View code" overlay for expandable code blocks.
+Use `maxLines` to limit code height and show a "View code" overlay for expandable code blocks. `isCollapsible` must be enabled for the overlay to appear.
 
 <CodeBlock
   marginTop="16"
-  marginBottom="24"  isCollapsible={false}
-
+  marginBottom="24"
+  isCollapsible
+  preview={
+    <CodeBlock
+      isCollapsible
+      maxLines={3}
+      codes={[
+        {
+          language: "tsx",
+          label: "Collapsible",
+          code: "function greet(name: string) {\n  return `Hello, ${name}!`;\n}\n\nfunction farewell(name: string) {\n  return `Goodbye, ${name}!`;\n}\n\nconst result = greet('World');\nconsole.log(result);"
+        }
+      ]}
+    />
+  }
   codes={[
     {
       code:
 `<CodeBlock
+    isCollapsible
     maxLines={3}
     codes={[
       {
         language: "tsx",
         label: "Collapsible",
-        code: "function greet(name: string) {\\n  return \`Hello, \${name}!\`;\\n}\\n\\nfunction farewell(name: string) {\\n  return \`Goodbye, \${name}!\`;\\n}\\n\\nconst result = greet('World');\\nconsole.log(result);"
+        code: "function greet(name) {\n  return \`Hello, \${name}!\`;\n}"
       }
     ]}
 />`,
@@ -514,6 +528,7 @@ Use `maxLines` to limit code height and show a "View code" overlay for expandabl
     ["maxLines", "number"],
     ["fillHeight", "boolean", "false"],
     ["previewPadding", "SpacingToken", "'l'"],
+    ["controlsBackground", "Colors | 'surface' | 'overlay' | 'page' | 'transparent'", "'surface'"],
     ["onInstanceChange", "(index: number) => void"],
     ["...flex"]
   ]}

@@ -761,6 +761,17 @@
       ]
     },
     {
+      "char": "😲",
+      "description": "astonished face",
+      "aliases": [
+        "astonished"
+      ],
+      "tags": [
+        "amazed",
+        "gasp"
+      ]
+    },
+    {
       "char": "😳",
       "description": "flushed face",
       "aliases": [
@@ -3389,6 +3400,14 @@
       "description": "hand with index finger and thumb crossed",
       "aliases": [
         "hand_with_index_finger_and_thumb_crossed"
+      ],
+      "tags": []
+    },
+    {
+      "char": "🤙",
+      "description": "call me hand",
+      "aliases": [
+        "call_me_hand"
       ],
       "tags": []
     },

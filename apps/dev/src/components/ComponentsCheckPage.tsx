@@ -446,6 +446,31 @@ export default function ComponentsCheck() {
             },
           ],
         },
+        {
+          name: "TextWeight",
+          variations: [
+            {
+              value: "default",
+              label: "Default (300)",
+              element: <Text weight="default" size="l">Light weight text — default</Text>,
+            },
+            {
+              value: "bold",
+              label: "Bold (400)",
+              element: <Text weight="bold" size="l">Normal weight text — bold</Text>,
+            },
+            {
+              value: "bolder",
+              label: "Bolder (500)",
+              element: <Text weight="bolder" size="l">Medium weight text — bolder</Text>,
+            },
+            {
+              value: "strong",
+              label: "Strong (600)",
+              element: <Text weight="strong" size="l">Semi-bold weight text — strong</Text>,
+            },
+          ],
+        },
       ],
     },
     {
