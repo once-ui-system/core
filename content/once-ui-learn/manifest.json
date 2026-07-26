@@ -180,28 +180,32 @@
       "title": "Profile, avatars & identity",
       "summary": "Avatar sizes, status indicators, profile headers, AvatarGroup stacks, and member list rows.",
       "tag": "Common patterns",
-      "file": "common-patterns/profile-and-avatars.mdx"
+      "file": "common-patterns/profile-and-avatars.mdx",
+      "contentId": "7560a503-2a79-4aab-b122-83b74ad0ee6c"
     },
     {
       "path": "/common-patterns/social-proof-and-logo-clouds.mdx",
       "title": "Social proof & logo clouds",
       "summary": "LogoCloud rotation, static partner grids, testimonial panels, and trust strips under heroes.",
       "tag": "Common patterns",
-      "file": "common-patterns/social-proof-and-logo-clouds.mdx"
+      "file": "common-patterns/social-proof-and-logo-clouds.mdx",
+      "contentId": "dbdc86ee-3b96-453e-bb90-2ff34ad4a476"
     },
     {
       "path": "/common-patterns/masonry-and-media-grids.mdx",
       "title": "Masonry & media grids",
       "summary": "MasonryGrid for variable-height galleries; Grid vs masonry decision tree and portfolio cells.",
       "tag": "Common patterns",
-      "file": "common-patterns/masonry-and-media-grids.mdx"
+      "file": "common-patterns/masonry-and-media-grids.mdx",
+      "contentId": "78aa1959-9e49-40f1-afc7-7074b91bfe7f"
     },
     {
       "path": "/common-patterns/table-pagination-and-selection.mdx",
       "title": "Table pagination, search & bulk selection",
       "summary": "Table1 Pro block patterns — search, page size, pagination footer, and bulk action bars.",
       "tag": "Common patterns",
-      "file": "common-patterns/table-pagination-and-selection.mdx"
+      "file": "common-patterns/table-pagination-and-selection.mdx",
+      "contentId": "4db38e0d-d555-414a-90d9-ef8cafa2f865"
     },
     {
       "path": "/common-patterns/toast-and-feedback.mdx",
