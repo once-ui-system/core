@@ -114,7 +114,7 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
 
   return (
     <DropdownWrapper
-      fillWidth
+      fillWidth={false}
       trigger={trigger}
       minHeight={minHeight}
       dropdown={dropdown}

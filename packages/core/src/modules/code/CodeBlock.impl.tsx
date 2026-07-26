@@ -460,6 +460,7 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   compact?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  controlsBackground?: React.ComponentProps<typeof Flex>["background"];
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
   highlight?: string;
@@ -484,6 +485,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   compact = false,
   className,
   style,
+  controlsBackground = "surface",
   onInstanceChange,
   ...rest
 }) => {
@@ -704,6 +706,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           fillWidth
           fitHeight
           horizontal="between"
+          background={controlsBackground}
         >
           {codes.length > 1 ? (
             <Scroller paddingX="8">
@@ -753,46 +756,54 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           {!compact && (
             <Row paddingY="4" paddingX="8" gap="2" position="static">
               {reloadButton && (
-                <IconButton
-                  size="m"
-                  tooltip="Reload"
-                  tooltipPosition="bottom"
-                  color="neutral-weak"
-                  variant="tertiary"
-                  onClick={handleRefresh}
-                  icon="refresh"
-                />
+                <Flex fit radius="full" background={controlsBackground}>
+                  <IconButton
+                    size="m"
+                    tooltip="Reload"
+                    tooltipPosition="bottom"
+                    color="neutral-weak"
+                    variant="tertiary"
+                    onClick={handleRefresh}
+                    icon="refresh"
+                  />
+                </Flex>
               )}
               {fullscreenButton && (
-                <IconButton
-                  size="m"
-                  color="neutral-weak"
-                  tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-                  tooltipPosition="bottom"
-                  variant="tertiary"
-                  icon={isFullscreen ? "minimize" : "maximize"}
-                  onClick={toggleFullscreen}
-                />
+                <Flex fit radius="full" background={controlsBackground}>
+                  <IconButton
+                    size="m"
+                    color="neutral-weak"
+                    tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+                    tooltipPosition="bottom"
+                    variant="tertiary"
+                    icon={isFullscreen ? "minimize" : "maximize"}
+                    onClick={toggleFullscreen}
+                  />
+                </Flex>
               )}
               {styleButton && (
                 <StyleOverlay>
-                  <IconButton
-                    variant="tertiary"
-                    icon="sparkle"
-                    color="neutral-weak"
-                  />
+                  <Flex fit radius="full" background={controlsBackground}>
+                    <IconButton
+                      variant="tertiary"
+                      icon="sparkle"
+                      color="neutral-weak"
+                    />
+                  </Flex>
                 </StyleOverlay>
               )}
               {copyButton && (
-                <IconButton
-                  size="m"
-                  tooltip="Copy"
-                  tooltipPosition="bottom"
-                  color="neutral-weak"
-                  variant="tertiary"
-                  onClick={handleCopy}
-                  icon={copyIcon}
-                />
+                <Flex fit radius="full" background={controlsBackground}>
+                  <IconButton
+                    size="m"
+                    tooltip="Copy"
+                    tooltipPosition="bottom"
+                    color="neutral-weak"
+                    variant="tertiary"
+                    onClick={handleCopy}
+                    icon={copyIcon}
+                  />
+                </Flex>
               )}
             </Row>
           )}
@@ -927,14 +938,10 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       pointerEvents="none"
                       background="transparent"
                     >
-                      <Flex
-                        radius="m"
-                        background="neutral-weak"
-                        fit
-                        pointerEvents="auto"
-                      >
+                      <Flex radius="m" fit pointerEvents="auto">
                         <Button
-                          variant="secondary"
+                          variant="subtle"
+                          weight="default"
                           size="s"
                           onClick={() => setIsExpanded(true)}
                         >
@@ -950,13 +957,15 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             (typeof code === "string" ? code : code.content).split("\n").length,
           )}
           {compact && copyButton && (
-            <Row
+            <Flex
               position="absolute"
               right="4"
               top="4"
               marginRight="2"
               className={styles.compactCopy}
               zIndex={1}
+              radius="full"
+              background={controlsBackground}
             >
               <IconButton
                 tooltip="Copy"
@@ -968,7 +977,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 size="m"
                 variant="tertiary"
               />
-            </Row>
+            </Flex>
           )}
         </Row>
       )}

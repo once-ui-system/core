@@ -501,7 +501,11 @@ export default function ComponentsCheck() {
                   <Button variant="primary" prefixIcon="arrowUpRight">
                     Download
                   </Button>
-                  <Button variant="ghost" prefixIcon="search" suffixIcon="enter">
+                  <Button
+                    variant="ghost"
+                    prefixIcon="search"
+                    suffixIcon="enter"
+                  >
                     Search
                   </Button>
                 </Row>
@@ -512,7 +516,9 @@ export default function ComponentsCheck() {
               label: "States",
               element: (
                 <Row gap="s" wrap vertical="center">
-                  <Button loading disabled>Loading</Button>
+                  <Button loading disabled>
+                    Loading
+                  </Button>
                   <Button disabled>Disabled</Button>
                   <Button arrowIcon id="btn-arrow">
                     Arrow
@@ -685,26 +691,42 @@ export default function ComponentsCheck() {
           name: "ColorInput",
           variations: [
             {
-              value: "default",
-              label: "Default",
+              value: "large",
+              label: "Large (100%)",
               element: (
-                <ColorInput
-                  id="color-default"
-                  value="#3b82f6"
-                  onChange={() => {}}
-                />
+                <div style={{ width: "100%" }}>
+                  <ColorInput
+                    id="color-lg"
+                    value="#3b82f6"
+                    onChange={() => {}}
+                  />
+                </div>
               ),
             },
             {
-              value: "alpha",
-              label: "With alpha",
+              value: "medium",
+              label: "Medium (50%)",
               element: (
-                <ColorInput
-                  id="color-alpha"
-                  value="rgba(59, 130, 246, 0.6)"
-                  supportAlpha
-                  onChange={() => {}}
-                />
+                <div style={{ width: "50%" }}>
+                  <ColorInput
+                    id="color-md"
+                    value="#3b82f6"
+                    onChange={() => {}}
+                  />
+                </div>
+              ),
+            },
+            {
+              value: "small",
+              label: "Small (25%)",
+              element: (
+                <div style={{ width: "25%" }}>
+                  <ColorInput
+                    id="color-sm"
+                    value="#3b82f6"
+                    onChange={() => {}}
+                  />
+                </div>
               ),
             },
           ],
@@ -805,34 +827,54 @@ export default function ComponentsCheck() {
           name: "Select",
           variations: [
             {
-              value: "default",
-              label: "Default",
+              value: "large",
+              label: "Large (100%)",
               element: (
-                <Select
-                  id="sel-framework"
-                  label="Framework"
-                  options={[
-                    { label: "Next.js", value: "next" },
-                    { label: "Remix", value: "remix" },
-                    { label: "Astro", value: "astro" },
-                  ]}
-                />
+                <div style={{ width: "100%" }}>
+                  <Select
+                    id="sel-lg"
+                    label="Framework"
+                    options={[
+                      { label: "Next.js", value: "next" },
+                      { label: "Remix", value: "remix" },
+                      { label: "Astro", value: "astro" },
+                    ]}
+                  />
+                </div>
               ),
             },
             {
-              value: "error",
-              label: "Error",
+              value: "medium",
+              label: "Medium (50%)",
               element: (
-                <Select
-                  id="sel-error"
-                  label="Country"
-                  error
-                  errorMessage="Please select a country"
-                  options={[
-                    { label: "USA", value: "us" },
-                    { label: "UK", value: "uk" },
-                  ]}
-                />
+                <div style={{ width: "50%" }}>
+                  <Select
+                    id="sel-md"
+                    label="Framework"
+                    options={[
+                      { label: "Next.js", value: "next" },
+                      { label: "Remix", value: "remix" },
+                      { label: "Astro", value: "astro" },
+                    ]}
+                  />
+                </div>
+              ),
+            },
+            {
+              value: "small",
+              label: "Small (25%)",
+              element: (
+                <div style={{ width: "25%" }}>
+                  <Select
+                    id="sel-sm"
+                    label="Framework"
+                    options={[
+                      { label: "Next.js", value: "next" },
+                      { label: "Remix", value: "remix" },
+                      { label: "Astro", value: "astro" },
+                    ]}
+                  />
+                </div>
               ),
             },
           ],
@@ -2154,10 +2196,42 @@ export default function ComponentsCheck() {
           name: "DateInput",
           variations: [
             {
-              value: "default",
-              label: "Default",
+              value: "large",
+              label: "Large (100%)",
               element: (
-                <DateInput id="di" label="Date" placeholder="Select a date" />
+                <div style={{ width: "100%" }}>
+                  <DateInput
+                    id="di-lg"
+                    label="Date"
+                    placeholder="Select a date"
+                  />
+                </div>
+              ),
+            },
+            {
+              value: "medium",
+              label: "Medium (50%)",
+              element: (
+                <div style={{ width: "50%" }}>
+                  <DateInput
+                    id="di-md"
+                    label="Date"
+                    placeholder="Select a date"
+                  />
+                </div>
+              ),
+            },
+            {
+              value: "small",
+              label: "Small (25%)",
+              element: (
+                <div style={{ width: "25%" }}>
+                  <DateInput
+                    id="di-sm"
+                    label="Date"
+                    placeholder="Select a date"
+                  />
+                </div>
               ),
             },
           ],
@@ -2166,15 +2240,45 @@ export default function ComponentsCheck() {
           name: "DateRangeInput",
           variations: [
             {
-              value: "default",
-              label: "Default",
+              value: "large",
+              label: "Large (100%)",
               element: (
-                <DateRangeInput
-                  id="dri"
-                  startLabel="Start"
-                  endLabel="End"
-                  placeholder="Select range"
-                />
+                <div style={{ width: "100%" }}>
+                  <DateRangeInput
+                    id="dri-lg"
+                    startLabel="Start"
+                    endLabel="End"
+                    placeholder="Select range"
+                  />
+                </div>
+              ),
+            },
+            {
+              value: "medium",
+              label: "Medium (50%)",
+              element: (
+                <div style={{ width: "50%" }}>
+                  <DateRangeInput
+                    id="dri-md"
+                    startLabel="Start"
+                    endLabel="End"
+                    placeholder="Select range"
+                  />
+                </div>
+              ),
+            },
+            {
+              value: "small",
+              label: "Small (25%)",
+              element: (
+                <div style={{ width: "25%" }}>
+                  <DateRangeInput
+                    id="dri-sm"
+                    startLabel="Start"
+                    endLabel="End"
+                    placeholder="Select range"
+                  />
+                </div>
               ),
             },
           ],
@@ -2646,6 +2750,23 @@ export default function ComponentsCheck() {
         {
           name: "CodeBlock",
           variations: [
+            {
+              value: "custom-bg",
+              label: "Custom BG (controls test)",
+              element: (
+                <CodeBlock
+                  style={{ background: "var(--neutral-background-medium)" }}
+                  controlsBackground="neutral-medium"
+                  codes={[
+                    {
+                      code: `const greeting = "Hello World";\nconsole.log(greeting);\n\n// Scroll test: enough lines to overflow\nfunction fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nfor (let i = 0; i < 20; i++) {\n  console.log(\`fib(\${i}) = \${fibonacci(i)}\`);\n}`,
+                      language: "javascript",
+                      label: "Inherit Test",
+                    },
+                  ]}
+                />
+              ),
+            },
             {
               value: "default",
               label: "Default",

@@ -105,7 +105,7 @@ export const DateInput: React.FC<DateInputProps> = ({
           isOpen={isOpen}
         />
       }
-      fillWidth
+      fillWidth={false}
       minHeight={minHeight}
       isOpen={isOpen}
       onOpenChange={setIsOpen}

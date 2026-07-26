@@ -151,25 +151,27 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       open: isOpen,
       middleware: [
         offset(4),
-        minHeight ? undefined : flip(),
+        flip(),
         shift(),
         size({
           apply({ availableWidth, availableHeight, elements }) {
-            // Get the width directly from the trigger element when needed
-            let width = "auto";
+            const floatingStyle = elements.floating.style;
 
             if (fillWidth && triggerRef.current) {
               const triggerWidth = triggerRef.current.getBoundingClientRect().width;
-              width = `${Math.max(triggerWidth, 200)}px`;
+              const w = `${Math.max(triggerWidth, 200)}px`;
+              floatingStyle.width = w;
+              floatingStyle.minWidth = minWidth ? `${minWidth}rem` : w;
+            } else {
+              // Let content determine width; only enforce bounds
+              floatingStyle.width = "";
+              const defaultMin = Math.min(320, availableWidth);
+              floatingStyle.minWidth = minWidth ? `${minWidth}rem` : `${defaultMin}px`;
             }
 
-            Object.assign(elements.floating.style, {
-              width: width,
-              minWidth: minWidth ? `${minWidth}rem` : fillWidth ? width : undefined,
-              maxWidth: maxWidth ? `${maxWidth}rem` : `${availableWidth}px`,
-              minHeight: `${Math.min(minHeight || 0)}px`,
-              maxHeight: `${availableHeight}px`,
-            });
+            floatingStyle.maxWidth = maxWidth ? `${maxWidth}rem` : `${availableWidth}px`;
+            floatingStyle.minHeight = `${Math.min(minHeight || 0)}px`;
+            floatingStyle.maxHeight = `${availableHeight}px`;
           },
         }),
       ],

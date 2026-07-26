@@ -316,8 +316,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     const generateYearOptions = () => {
       const currentYearNum = new Date().getFullYear();
-      const minYear = minDate ? minDate.getFullYear() : currentYearNum - 10;
-      const maxYear = maxDate ? maxDate.getFullYear() : currentYearNum + 10;
+      const minYear = minDate ? minDate.getFullYear() : currentYearNum - 25;
+      const maxYear = maxDate ? maxDate.getFullYear() : currentYearNum + 25;
 
       const years = [];
       for (let i = minYear; i <= maxYear; i++) {
@@ -705,9 +705,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   />
 
                   <DropdownWrapper
-                    navigationLayout="grid"
-                    optionsCount={generateYearOptions().length}
-                    columns={generateYearOptions().length < 6 ? 1 : 6}
                     isNested={isNested}
                     isOpen={isYearOpen}
                     dropdownId="year-dropdown"
@@ -739,10 +736,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       </Button>
                     }
                     dropdown={
-                      <Grid
-                        columns={generateYearOptions().length < 6 ? "1" : 6}
-                        gap="2"
+                      <Column
+                        fillWidth
                         padding="4"
+                        gap="2"
+                        overflowY="auto"
+                        style={{ maxHeight: "16rem" }}
                         onClick={(event: any) => {
                           event.preventDefault();
                           event.stopPropagation();
@@ -775,7 +774,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                             />
                           );
                         })}
-                      </Grid>
+                      </Column>
                     }
                     data-dropdown-id="year-dropdown"
                   />
