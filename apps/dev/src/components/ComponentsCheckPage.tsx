@@ -71,7 +71,6 @@ import {
   InlineCode,
   StatusIndicator,
   SegmentedControl,
-  ToggleButton,
   ScrollToTop,
   CompareImage,
   InteractiveDetails,
@@ -2131,7 +2130,7 @@ export default function ComponentsCheck() {
                 <Hover
                   trigger={<Text>Test</Text>}
                   overlay={<Column background="overlay" />}
-                  onClick={(e) => console.log(e)}
+                  onClick={() => {}}
                 >
                   <Text>Hover Effect</Text>
                 </Hover>
@@ -2149,7 +2148,7 @@ export default function ComponentsCheck() {
                 <FlipFx
                   back={<Text>Back</Text>}
                   front={<Text>Front</Text>}
-                  onClick={(e) => console.log(e)}
+                  onClick={() => {}}
                 >
                   <Text>Flip Effect</Text>
                 </FlipFx>
@@ -3138,7 +3137,7 @@ export default function ComponentsCheck() {
                       <Flex gap="s" fillWidth>
                         <SegmentedControl
                           selected={currentVar}
-                          onToggle={(value: any) => selectVar(comp.name, value)}
+                          onToggle={(value: string) => selectVar(comp.name, value)}
                           buttons={comp.variations.map((v) => ({
                             value: v.value,
                             label: v.label,

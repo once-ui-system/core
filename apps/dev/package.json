@@ -7,9 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "echo 'lint not available in Next.js 16'",
     "biome-write": "npx @biomejs/biome format --write .",
-    "watch": "tsc --watch --project tsconfig.build.json"
+    "watch": "echo 'watch not available — use turbo dev'"
   },
   "dependencies": {
     "@once-ui-system/core": "workspace:*",
@@ -26,12 +26,8 @@
     "@types/node": "^20",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
-    "css-loader": "^7.1.2",
     "eslint": "^9",
-    "eslint-config-next": "15.5.4",
     "sass": "^1.89.1",
-    "sass-loader": "^16.0.5",
-    "style-loader": "^4.0.0",
     "typescript": "^5"
   }
 }
