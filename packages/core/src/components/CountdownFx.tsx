@@ -75,7 +75,7 @@ const CountdownFx: React.FC<CountdownFxProps> = ({
   };
 
   const renderSeparator = () => (
-    <Text key={`sep-${Math.random()}`} {...countFxProps} style={{ width: '0.5em', textAlign: 'center' }}>
+    <Text key="separator" {...countFxProps} style={{ width: '0.5em', textAlign: 'center' }}>
       :
     </Text>
   );

@@ -352,7 +352,7 @@ const MediaVideoPlayer: React.FC<MediaVideoPlayerProps> = ({
             fillWidth
             radius="full"
             className={styles.progressTrack}
-            style={{ background: "rgba(255, 255, 255, 0.25)" }}
+            style={{ background: "var(--neutral-alpha-medium)" }}
             onPointerDown={handleProgressPointerDown}
             onPointerMove={handleProgressPointerMove}
             onPointerUp={handleProgressPointerUp}
