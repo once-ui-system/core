@@ -76,8 +76,10 @@ You can pass a `style` prop to the component to override the default styles.
 
 <PropsTable
   content={[
-    ["onSelect", "(emoji: string) => void"]
-    ["columns", "number", "10"],
+    ["onSelect", "(emoji: string) => void"],
+    ["onClose", "() => void"],
+    ["background", "StyleProps[\"background\"]"],
+    ["columns", "number", "8"],
     ["style"],
     ["className"],
     ["...flex"]
