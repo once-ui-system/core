@@ -176,6 +176,34 @@
       "file": "common-patterns/tags-chips-and-multi-value-inputs.mdx"
     },
     {
+      "path": "/common-patterns/profile-and-avatars.mdx",
+      "title": "Profile, avatars & identity",
+      "summary": "Avatar sizes, status indicators, profile headers, AvatarGroup stacks, and member list rows.",
+      "tag": "Common patterns",
+      "file": "common-patterns/profile-and-avatars.mdx"
+    },
+    {
+      "path": "/common-patterns/social-proof-and-logo-clouds.mdx",
+      "title": "Social proof & logo clouds",
+      "summary": "LogoCloud rotation, static partner grids, testimonial panels, and trust strips under heroes.",
+      "tag": "Common patterns",
+      "file": "common-patterns/social-proof-and-logo-clouds.mdx"
+    },
+    {
+      "path": "/common-patterns/masonry-and-media-grids.mdx",
+      "title": "Masonry & media grids",
+      "summary": "MasonryGrid for variable-height galleries; Grid vs masonry decision tree and portfolio cells.",
+      "tag": "Common patterns",
+      "file": "common-patterns/masonry-and-media-grids.mdx"
+    },
+    {
+      "path": "/common-patterns/table-pagination-and-selection.mdx",
+      "title": "Table pagination, search & bulk selection",
+      "summary": "Table1 Pro block patterns — search, page size, pagination footer, and bulk action bars.",
+      "tag": "Common patterns",
+      "file": "common-patterns/table-pagination-and-selection.mdx"
+    },
+    {
       "path": "/common-patterns/toast-and-feedback.mdx",
       "title": "Toast & feedback",
       "summary": "Global toast notifications via ToastProvider and useToast \u2014 plus when to use inline Feedback.",

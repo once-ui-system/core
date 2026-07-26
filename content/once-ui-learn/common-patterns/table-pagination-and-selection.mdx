@@ -1,0 +1,183 @@
+<Feedback title="7 min · Pattern" description="Data tables need search, page size, pagination controls, and optional bulk selection. The Table1 Pro block shows the full toolbar pattern — wire state in the parent, not inside Table." variant="info" />
+
+## What this pattern covers
+
+Basic `Table` renders headers and rows. Production admin tables add:
+
+- Search filter above the grid
+- Items-per-page control
+- Previous / next pagination
+- Row checkboxes with “select all on page”
+- Bulk action bar when selection is non-empty
+
+Gold reference: `packages/core/ai/examples/blocks/Table1.tsx` — canonical implementation for dashboard and settings task bundles.
+
+## State you own in the parent
+
+Keep four pieces of state outside the table component:
+
+| State | Purpose |
+|-------|---------|
+| `search` | Filter string |
+| `itemsPerPage` | Page size (5, 25, 50, 100) |
+| `currentPage` | 1-based page index |
+| `selectedIds` | Set of row identifiers |
+
+Derive filtered rows with `useMemo`, then slice for the current page:
+
+Describe in prose: `filtered = filterFn ? data.filter(...) : data`, then `paginated = filtered.slice(start, end)`. Reset `currentPage` to 1 when search or page size changes.
+
+## Toolbar layout
+
+Stack heading row and search:
+
+```text
+<Column
+  fillWidth
+  radius="l"
+  border="neutral-alpha-weak"
+  background="surface"
+>
+  <Row
+    fillWidth
+    horizontal="between"
+    vertical="center"
+    paddingY="12"
+    paddingX="24"
+    gap="16"
+    s={{ direction: "column" }}
+  >
+    <Heading variant="heading-strong-s">Projects</Heading>
+    <Input
+      id="table-search"
+      placeholder="Search…"
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+  </Row>
+  {/* table body */}
+</Column>
+```
+
+Use `fillWidth` on Input inside the toolbar Row so search expands on desktop.
+
+## Pagination footer
+
+Place page controls in a footer Row below the table:
+
+```text
+<Row
+  fillWidth
+  horizontal="between"
+  vertical="center"
+  paddingY="12"
+  paddingX="24"
+  gap="16"
+  s={{ direction: "column" }}
+>
+  <Text variant="body-default-xs" onBackground="neutral-weak">
+    Showing {startIndex + 1}–{endIndex} of {filtered.length}
+  </Text>
+  <Row gap="8" vertical="center">
+    <IconButton
+      icon="chevronLeft"
+      variant="secondary"
+      size="s"
+      disabled={currentPage === 1}
+      aria-label="Previous page"
+    />
+    <Text variant="body-default-s">
+      Page {currentPage} of {totalPages}
+    </Text>
+    <IconButton
+      icon="chevronRight"
+      variant="secondary"
+      size="s"
+      disabled={currentPage === totalPages}
+      aria-label="Next page"
+    />
+  </Row>
+</Row>
+```
+
+Wire `onClick` on IconButtons to decrement/increment `currentPage` with bounds checks.
+
+## Page size control
+
+SegmentedControl works well for page sizes when options are few:
+
+```text
+<SegmentedControl
+  buttons={[
+    { value: "25", label: "25" },
+    { value: "50", label: "50" },
+    { value: "100", label: "100" },
+  ]}
+  value={String(itemsPerPage)}
+  onChange={(v) => setItemsPerPage(Number(v))}
+/>
+```
+
+Place beside pagination or in the toolbar Row. Avoid dropdowns when three options suffice.
+
+## Bulk selection bar
+
+When `selectedIds.size > 0`, swap the heading for an action row:
+
+```text
+<Row fillWidth horizontal="between" vertical="center" gap="16">
+  <Text variant="body-strong-s">
+    {selectedIds.size} selected
+  </Text>
+  <Row gap="8">
+    <Button size="s" variant="secondary">Export</Button>
+    <Button size="s" variant="danger">Delete</Button>
+  </Row>
+</Row>
+```
+
+Describe checkbox columns in prose: Table1 renders a Checkbox in the first column when `selectable` is true. “Select all” toggles only the **current page** ids — not the entire filtered dataset unless you explicitly implement that.
+
+## Table body
+
+Pass paginated rows to `Table`:
+
+```text
+<Table fillWidth data={{ headers, rows: paginatedRows }} />
+```
+
+Status cells should use `Tag` — see [Progress, status & badges](/common-patterns/progress-status-and-badges.mdx).
+
+## Empty search results
+
+When `filtered.length === 0`, skip the table and show [Empty & error states](/common-patterns/empty-and-error-states.mdx) inside the same surface panel.
+
+## Agent notes
+
+- Task bundles: `dashboard.json`, `settings.json`
+- Do not embed pagination inside `Table` — it is presentational
+- Stable row ids: pass `getId` logic when data can reorder between pages
+- Validate with `pnpm --filter @once-ui-system/core validate-ai-code` after codegen
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Parent-owned filter + page state | Table with internal search API |
+| Reset page on filter change | Stuck on page 5 of empty results |
+| `Tag` in status cells | Raw colored spans |
+| Bulk actions only when selection &gt; 0 | Always-visible delete bar |
+
+## Check yourself
+
+- [ ] Search filters before pagination slice
+- [ ] Footer shows accurate range text
+- [ ] Previous/next disabled at boundaries
+- [ ] Empty and loading states handled — [Loading states](/common-patterns/loading-states.mdx)
+
+## Related
+
+→ [Tables & lists](/common-patterns/tables-and-lists.mdx)
+→ [Data filters & toolbar](/common-patterns/data-filters-toolbar.mdx)
+→ [Dashboard & charts](/common-patterns/dashboard-and-charts.mdx)
+→ Pro block: `packages/core/ai/examples/blocks/Table1.tsx`

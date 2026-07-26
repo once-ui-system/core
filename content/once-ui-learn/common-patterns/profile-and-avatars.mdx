@@ -1,0 +1,139 @@
+<Feedback title="5 min · Pattern" description="Avatars signal people — profile headers, member lists, and stacked groups. Pair Avatar with Row/Column layouts; use size tokens and status indicators instead of custom circles." variant="info" />
+
+## What this pattern covers
+
+Identity UI shows up everywhere: settings profile cards, chat headers, team directories, and “who’s online” stacks. Once UI ships:
+
+- **Avatar** — photo, initials, or icon fallback with size tokens
+- **AvatarGroup** — overlapping stacks for “+3 collaborators”
+- **User** row — avatar + name + subtitle in one composition (describe in prose; gold block `Settings1.tsx`)
+
+Gold references: `packages/core/ai/examples/settings.tsx`, `packages/core/ai/examples/blocks/Settings1.tsx`, and chat task bundle `packages/core/ai/tasks/chat.json`.
+
+## Avatar sizes
+
+Avatar uses t-shirt sizes (`xs` through `xl`) — not pixel diameters.
+
+| Context | Typical size |
+|---------|----------------|
+| Inline mention, table row | `s` |
+| List row, comment author | `m` |
+| Profile header | `l` or `xl` |
+| Hero marketing shot | `xl` |
+
+```text
+<Avatar src="/avatars/alice.jpg" size="m" />
+<Avatar value="LT" size="l" />
+<Avatar icon="user" size="m" empty />
+```
+
+- `src` — image URL
+- `value` — initials when no image
+- `icon` — fallback icon name from the icon spec
+- `empty` — placeholder state while loading
+
+## Status indicators
+
+Pass `statusIndicator` with `green`, `yellow`, `red`, or `gray` for presence dots — common in chat sidebars and team lists.
+
+Describe in prose: set `statusIndicator={{ color: "green" }}` on Avatar when the member is online. Keep one indicator per avatar; do not stack badges on top.
+
+## Profile header row
+
+Stack avatar beside name and metadata:
+
+```text
+<Row gap="16" vertical="center" fillWidth>
+  <Avatar src={user.avatar} size="l" />
+  <Column gap="4">
+    <Heading variant="heading-strong-s">{user.name}</Heading>
+    <Text variant="body-default-s" onBackground="neutral-weak">
+      {user.email}
+    </Text>
+  </Column>
+  <IconButton icon="settings" variant="ghost" aria-label="Edit profile" />
+</Row>
+```
+
+Use `Row horizontal="between"` when the action sits on the far edge. On mobile, stack with `s={{ direction: "column", horizontal: "start" }}`.
+
+## Avatar groups
+
+AvatarGroup overlaps avatars for “shared with” or live presence:
+
+Describe in prose: pass an `avatars` array of Avatar props. Cap visible faces (3–5) and show a `+N` overflow label in Text beside the group — the component handles overlap spacing.
+
+Typical placement: under a project title, above a comment thread, or in a dashboard “team on this doc” strip.
+
+## Member list without ListItem
+
+When Aveiro Learn cannot render List primitives, mirror list rows with Column + Row:
+
+```text
+<Column gap="8" fillWidth>
+  {members.map((member) => (
+    <Row
+      key={member.id}
+      gap="12"
+      vertical="center"
+      fillWidth
+      paddingY="8"
+      onClick={() => openMember(member.id)}
+    >
+      <Avatar src={member.avatar} size="s" />
+      <Column gap="2" fill>
+        <Text variant="body-default-s">{member.name}</Text>
+        <Text variant="body-default-xs" onBackground="neutral-weak">
+          {member.role}
+        </Text>
+      </Column>
+      <IconButton icon="chevronRight" variant="ghost" size="s" />
+    </Row>
+  ))}
+</Column>
+```
+
+In your app, prefer `List` + `ListItem` with `prefix={<Avatar … />}` — same layout, less markup.
+
+## Settings profile panel
+
+Wrap profile edits in the static panel recipe:
+
+```text
+<Column
+  fillWidth
+  padding="24"
+  gap="24"
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+>
+  {/* profile header row */}
+  {/* form fields — see Form layout */}
+</Column>
+```
+
+Pair with [Media & uploads](/common-patterns/media-and-uploads.mdx) when users change profile photos.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| `size="m"` on Avatar | `width={40} height={40}` inline styles |
+| Initials via `value` prop | Custom `border-radius: 50%` div |
+| `statusIndicator` for presence | Absolute-positioned dot div |
+| AvatarGroup for overlaps | Manual negative margin hacks |
+
+## Check yourself
+
+- [ ] Avatar size matches surrounding text scale
+- [ ] Profile header uses `Row` + `Column`, not centered float layout
+- [ ] Loading state uses `loading` or skeleton circle — see [Loading states](/common-patterns/loading-states.mdx)
+- [ ] Interactive rows have `onClick` or wrap in Button/Card with `href`
+
+## Related
+
+→ [Tables & lists](/common-patterns/tables-and-lists.mdx)
+→ [Settings & split panels](/common-patterns/settings-and-split-panels.mdx)
+→ [Chat & messaging](/common-patterns/chat-and-messaging.mdx)
+→ Full reference: [docs.once-ui.com — Avatar](https://docs.once-ui.com/once-ui/components/avatar)
