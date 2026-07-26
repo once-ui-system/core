@@ -572,7 +572,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     return (
       <Column
-        onClick={(event: any) => {
+        onClick={(event: React.MouseEvent) => {
           event.preventDefault();
           event.stopPropagation();
 
@@ -625,7 +625,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronLeft"
-                  onClick={(event: any) => {
+                  onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
                     handleMonthChange(-1);
@@ -651,7 +651,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                     }}
                     trigger={
                       <Button
-                        onClick={(event: any) => {
+                        onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                           setIsMonthOpen(true);
@@ -671,7 +671,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         fillWidth
                         gap="2"
                         padding="4"
-                        onClick={(event: any) => {
+                        onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                         }}
@@ -722,7 +722,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       <Button
                         variant="secondary"
                         size="s"
-                        onClick={(event: any) => {
+                        onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                           setIsYearOpen(true);
@@ -742,7 +742,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         gap="2"
                         overflowY="auto"
                         style={{ maxHeight: "16rem" }}
-                        onClick={(event: any) => {
+                        onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                         }}
@@ -790,7 +790,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronRight"
-                  onClick={(event: any) => {
+                  onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
                     handleMonthChange(1);
