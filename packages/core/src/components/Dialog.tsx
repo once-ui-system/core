@@ -24,6 +24,8 @@ interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   footer?: ReactNode;
   base?: boolean;
   stack?: boolean;
+  flush?: boolean;
+  hideClose?: boolean;
   onHeightChange?: (height: number) => void;
   minHeight?: number;
   closeOnClickaway?: boolean;
@@ -66,6 +68,8 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
       stack,
       base,
       footer,
+      flush = false,
+      hideClose = false,
       onHeightChange,
       minHeight,
       ...rest
@@ -313,7 +317,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             }}
           >
             <Column
-              position="unset"
+              position={flush ? "relative" : "unset"}
               className={classNames(styles.dialog, {
                 [styles.open]: isAnimating,
               })}
@@ -325,6 +329,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
               transition="macro-medium"
               shadow="xl"
               radius="xl"
+              topRadius={flush ? "none" : undefined}
               border="neutral-medium"
               background="neutral-weak"
               tabIndex={-1}
@@ -352,42 +357,64 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
               }}
               {...rest}
             >
-              <Column
-                as="header"
-                paddingX="24"
-                paddingTop="24"
-                paddingBottom="s"
-                gap="4"
-              >
-                <Flex fillWidth horizontal="between" gap="8">
-                  {typeof title === "string" ? (
-                    <Heading id={dialogTitleId} variant="heading-strong-l">
-                      {title}
-                    </Heading>
-                  ) : (
-                    <div id={dialogTitleId}>{title}</div>
+              {!flush && (
+                <Column
+                  as="header"
+                  paddingX="24"
+                  paddingTop="24"
+                  paddingBottom="s"
+                  gap="4"
+                >
+                  <Flex fillWidth horizontal="between" gap="8">
+                    {typeof title === "string" ? (
+                      <Heading id={dialogTitleId} variant="heading-strong-l">
+                        {title}
+                      </Heading>
+                    ) : (
+                      <div id={dialogTitleId}>{title}</div>
+                    )}
+                    {!hideClose && (
+                      <IconButton
+                        icon="close"
+                        size="m"
+                        variant="tertiary"
+                        tooltip="Close"
+                        onClick={onClose}
+                      />
+                    )}
+                  </Flex>
+                  {description && (
+                    <Text variant="body-default-s" onBackground="neutral-weak">
+                      {description}
+                    </Text>
                   )}
-                  <IconButton
-                    icon="close"
-                    size="m"
-                    variant="tertiary"
-                    tooltip="Close"
-                    onClick={onClose}
-                  />
-                </Flex>
-                {description && (
-                  <Text variant="body-default-s" onBackground="neutral-weak">
-                    {description}
-                  </Text>
-                )}
-              </Column>
+                </Column>
+              )}
               <Column
                 as="section"
-                paddingX="24"
-                paddingBottom="24"
+                paddingX={flush ? undefined : "24"}
+                paddingBottom={flush ? undefined : "24"}
                 flex={1}
                 overflowY="auto"
               >
+                {flush && !hideClose && (
+                  <Flex
+                    position="absolute"
+                    top="16"
+                    right="16"
+                    zIndex={1}
+                    radius="full"
+                    background="overlay"
+                  >
+                    <IconButton
+                      icon="close"
+                      size="m"
+                      variant="tertiary"
+                      tooltip="Close"
+                      onClick={onClose}
+                    />
+                  </Flex>
+                )}
                 {children}
               </Column>
               {footer && (

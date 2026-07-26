@@ -124,6 +124,7 @@ export default function ComponentsCheck() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [switchOn, setSwitchOn] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [mediaDialogOpen, setMediaDialogOpen] = useState(false);
   const { addToast } = useToast();
   const [selectedVariation, setSelectedVariation] = useState<
     Record<string, string>
@@ -1586,6 +1587,54 @@ export default function ComponentsCheck() {
                       </Row>
                     }
                   />
+                </>
+              ),
+            },
+            {
+              value: "media",
+              label: "Media header",
+              element: (
+                <>
+                  <Button variant="secondary" onClick={() => setMediaDialogOpen(true)}>
+                    Dialog with media
+                  </Button>
+                  <Dialog
+                    isOpen={mediaDialogOpen}
+                    onClose={() => setMediaDialogOpen(false)}
+                    title="Featured article"
+                    description="A preview of the latest design thinking."
+                    maxWidth={48}
+                    flush
+                    footer={
+                      <>
+                        <Button variant="secondary" onClick={() => setMediaDialogOpen(false)}>
+                          Dismiss
+                        </Button>
+                        <Button onClick={() => setMediaDialogOpen(false)}>
+                          Read more
+                        </Button>
+                      </>
+                    }
+                  >
+                    <Column fillWidth gap="20">
+                      <Media
+                        src="/images/cover-01.jpg"
+                        alt="Design preview"
+                        aspectRatio="16 / 10"
+                        radius="m"
+                        fillWidth
+                      />
+                      <Column fillWidth gap="8" paddingX="24">
+                        <Text variant="heading-strong-s">
+                          Building design systems that scale
+                        </Text>
+                        <Text onBackground="neutral-weak">
+                          A deep dive into creating modular, token-driven interfaces
+                          that stay consistent across products and teams.
+                        </Text>
+                      </Column>
+                    </Column>
+                  </Dialog>
                 </>
               ),
             },

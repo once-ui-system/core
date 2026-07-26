@@ -881,6 +881,8 @@
     "footer": "ReactNode",
     "base": "boolean",
     "stack": "boolean",
+    "flush": "boolean = false",
+    "hideClose": "boolean = false",
     "onHeightChange": "(height: number) => void",
     "minHeight": "number",
     "closeOnClickaway": "boolean = true"
