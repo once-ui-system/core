@@ -1,6 +1,7 @@
 import React from "react";
 import { act, createEvent, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { Dialog, DialogProvider } from "../components/Dialog";
 import { resetDialogState } from "../test/dialogTestUtils";
 import { LayoutProvider } from "../contexts";

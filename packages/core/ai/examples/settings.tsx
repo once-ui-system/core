@@ -39,31 +39,33 @@ export function SettingsExample() {
           </Heading>
         </Column>
 
-        <SplitView fillWidth minHeight={48}>
-          <Column
-            width={20}
-            gap="4"
-            padding="16"
-            background="surface"
-            border="neutral-alpha-weak"
-            radius="l"
-            s={{ hide: true }}
-          >
-            {sections.map((section, index) => (
-              <Row
-                key={section.id}
-                padding="12"
-                radius="m"
-                background={index === 0 ? "neutral-alpha-weak" : undefined}
-                textVariant="label-default-s"
-                cursor="interactive"
-              >
-                {section.label}
-              </Row>
-            ))}
-          </Column>
-
-          <Column flex={1} gap="24">
+        <SplitView fillWidth minHeight={48}
+          leftPanel={
+            <Column
+              width={20}
+              gap="4"
+              padding="16"
+              background="surface"
+              border="neutral-alpha-weak"
+              radius="l"
+              s={{ hide: true }}
+            >
+              {sections.map((section, index) => (
+                <Row
+                  key={section.id}
+                  padding="12"
+                  radius="m"
+                  background={index === 0 ? "neutral-alpha-weak" : undefined}
+                  textVariant="label-default-s"
+                  style={{ cursor: "pointer" }}
+                >
+                  {section.label}
+                </Row>
+              ))}
+            </Column>
+          }
+          rightPanel={
+            <Column flex={1} gap="24">
             <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="24">
               <Heading as="h2" variant="heading-strong-m">
                 Profile
@@ -106,7 +108,7 @@ export function SettingsExample() {
                     Release notes and changelog
                   </Text>
                 </Column>
-                <Switch checked />
+                <Switch isChecked onToggle={() => {}} />
               </Row>
               <Line />
               <Row fillWidth horizontal="between" vertical="center">
@@ -116,7 +118,7 @@ export function SettingsExample() {
                     Tips, templates, and community highlights
                   </Text>
                 </Column>
-                <Switch />
+                <Switch isChecked={false} onToggle={() => {}} />
               </Row>
               <Checkbox label="Weekly digest" isChecked />
             </Column>
@@ -132,7 +134,9 @@ export function SettingsExample() {
                 Delete workspace
               </Button>
             </Column>
-          </Column>
+            </Column>
+          }
+        >
         </SplitView>
       </Column>
     </Column>

@@ -109,7 +109,7 @@ const OverlayIntegrationHarness = () => (
       }
     />
     <ContextMenu
-      isOpen
+      open
       onOpenChange={() => undefined}
       dropdown={
         <div data-testid="context-scroll-region" style={{ overflowY: "auto", maxHeight: "80px" }}>
