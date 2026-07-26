@@ -39,6 +39,10 @@
     }
 }
 
+.noHover:hover .element::before {
+    display: none;
+}
+
 .container:hover .element::before,
 .element:focus-visible::before {
     content: '';

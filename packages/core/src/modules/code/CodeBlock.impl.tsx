@@ -460,7 +460,7 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   compact?: boolean;
   className?: string;
   style?: React.CSSProperties;
-  controlsBackground?: React.ComponentProps<typeof Flex>["background"];
+  background?: React.ComponentProps<typeof Flex>["background"];
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
   highlight?: string;
@@ -485,7 +485,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   compact = false,
   className,
   style,
-  controlsBackground = "surface",
+  background = "surface",
   onInstanceChange,
   ...rest
 }) => {
@@ -671,8 +671,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const renderCodeBlock = (inPortal = false, resetMargin = false) => (
     <Column
       ref={inPortal ? undefined : codeBlockRef}
-      radius="l"
-      background="surface"
+      background={background ?? "surface"}
       border="neutral-alpha-weak"
       overflow="hidden"
       vertical="center"
@@ -706,7 +705,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           fillWidth
           fitHeight
           horizontal="between"
-          background={controlsBackground}
+          background={background}
         >
           {codes.length > 1 ? (
             <Scroller paddingX="8">
@@ -756,7 +755,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           {!compact && (
             <Row paddingY="4" paddingX="8" gap="2" position="static">
               {reloadButton && (
-                <Flex fit radius="full" background={controlsBackground}>
+                <Flex fit radius="s" background={background}>
                   <IconButton
                     size="m"
                     tooltip="Reload"
@@ -769,7 +768,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 </Flex>
               )}
               {fullscreenButton && (
-                <Flex fit radius="full" background={controlsBackground}>
+                <Flex fit radius="s" background={background}>
                   <IconButton
                     size="m"
                     color="neutral-weak"
@@ -783,7 +782,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               )}
               {styleButton && (
                 <StyleOverlay>
-                  <Flex fit radius="full" background={controlsBackground}>
+                  <Flex fit radius="s" background={background}>
                     <IconButton
                       variant="tertiary"
                       icon="sparkle"
@@ -793,7 +792,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 </StyleOverlay>
               )}
               {copyButton && (
-                <Flex fit radius="full" background={controlsBackground}>
+                <Flex fit radius="s" background={background}>
                   <IconButton
                     size="m"
                     tooltip="Copy"
@@ -964,8 +963,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               marginRight="2"
               className={styles.compactCopy}
               zIndex={1}
-              radius="full"
-              background={controlsBackground}
+              radius="s"
+              background={background}
             >
               <IconButton
                 tooltip="Copy"

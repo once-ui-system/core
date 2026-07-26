@@ -1,7 +1,7 @@
 ---
 title: "RadioButton"
 summary: "RadioButton provides a selectable control for mutually exclusive options with customizable labels and styling."
-updatedAt: "2025-05-12"
+updatedAt: "2026-07-27"
 docs: "once-ui/form-controls/radioButton.mdx"
 github: "components/RadioButton.tsx"
 navLabel: "RadioButton"
@@ -112,6 +112,32 @@ Disable the radio button to prevent user interaction.
   ]}
 />
 
+## Hover
+
+Disable the hover pulse animation by setting `hoverable` to `false`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioButton
+      label="No hover effect"
+      hoverable={false}
+    />
+  }
+  codes={[
+    {
+      code:
+`<RadioButton
+    label="No hover effect"
+    hoverable={false}
+/>`,
+      language: "tsx",
+      label: "Hover"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -123,6 +149,7 @@ Disable the radio button to prevent user interaction.
     ["label", "ReactNode"],
     ["description", "ReactNode"],
     ["disabled", "boolean", "false"],
+    ["hoverable", "boolean", "true"],
     ["className"],
     ["style"],
     ["...input"]

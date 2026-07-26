@@ -681,7 +681,8 @@
    "props": {
     "isChecked": "boolean",
     "isIndeterminate": "boolean = false",
-    "onToggle": "() => void"
+    "onToggle": "() => void",
+    "hoverable": "boolean = true"
    }
   },
   "Chip": {
@@ -1696,7 +1697,8 @@
     "name": "string",
     "value": "string",
     "disabled": "boolean",
-    "onToggle": "() => void"
+    "onToggle": "() => void",
+    "hoverable": "boolean = true"
    }
   },
   "RevealFx": {

@@ -15,13 +15,14 @@ interface RadioButtonProps
   value?: string;
   disabled?: boolean;
   onToggle?: () => void;
+  hoverable?: boolean;
 }
 
 const generateId = () => `radio-${Math.random().toString(36).substring(2, 9)}`;
 
 const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
-    { style, className, isChecked: controlledIsChecked, name, value, onToggle, disabled, ...props },
+    { style, className, isChecked: controlledIsChecked, name, value, onToggle, disabled, hoverable = true, ...props },
     ref,
   ) => {
     const [isChecked, setIsChecked] = useState(controlledIsChecked || false);
@@ -57,6 +58,7 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
         zIndex={1}
         className={classNames(styles.container, className, {
           [styles.disabled]: disabled,
+          [styles.noHover]: !hoverable,
         })}
         style={style}
       >
@@ -83,6 +85,10 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
           onKeyDown={handleKeyDown}
           tabIndex={disabled ? -1 : 0}
           cursor={disabled ? "not-allowed" : undefined}
+          style={{
+            borderColor: "var(--neutral-border-medium)",
+            ...style,
+          }}
           className={classNames(styles.element, {
             [styles.checked]: controlledIsChecked !== undefined ? controlledIsChecked : isChecked,
             [styles.disabled]: disabled,

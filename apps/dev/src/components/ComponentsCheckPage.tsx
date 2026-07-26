@@ -452,22 +452,38 @@ export default function ComponentsCheck() {
             {
               value: "default",
               label: "Default (300)",
-              element: <Text weight="default" size="l">Light weight text — default</Text>,
+              element: (
+                <Text weight="default" size="l">
+                  Light weight text — default
+                </Text>
+              ),
             },
             {
               value: "bold",
               label: "Bold (400)",
-              element: <Text weight="bold" size="l">Normal weight text — bold</Text>,
+              element: (
+                <Text weight="bold" size="l">
+                  Normal weight text — bold
+                </Text>
+              ),
             },
             {
               value: "bolder",
               label: "Bolder (500)",
-              element: <Text weight="bolder" size="l">Medium weight text — bolder</Text>,
+              element: (
+                <Text weight="bolder" size="l">
+                  Medium weight text — bolder
+                </Text>
+              ),
             },
             {
               value: "strong",
               label: "Strong (600)",
-              element: <Text weight="strong" size="l">Semi-bold weight text — strong</Text>,
+              element: (
+                <Text weight="strong" size="l">
+                  Semi-bold weight text — strong
+                </Text>
+              ),
             },
           ],
         },
@@ -791,6 +807,11 @@ export default function ComponentsCheck() {
                 </Column>
               ),
             },
+            {
+              value: "no-hover",
+              label: "No hover",
+              element: <Checkbox hoverable={false} label="Hover disabled" />,
+            },
           ],
         },
         {
@@ -845,6 +866,11 @@ export default function ComponentsCheck() {
                   <RadioButton label="Option C" />
                 </Column>
               ),
+            },
+            {
+              value: "no-hover",
+              label: "No hover",
+              element: <RadioButton hoverable={false} label="Hover disabled" />,
             },
           ],
         },
@@ -2780,8 +2806,8 @@ export default function ComponentsCheck() {
               label: "Custom BG (controls test)",
               element: (
                 <CodeBlock
-                  style={{ background: "var(--neutral-background-medium)" }}
-                  controlsBackground="neutral-medium"
+                  background="accent-alpha-strong"
+                  compact
                   codes={[
                     {
                       code: `const greeting = "Hello World";\nconsole.log(greeting);\n\n// Scroll test: enough lines to overflow\nfunction fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nfor (let i = 0; i < 20; i++) {\n  console.log(\`fib(\${i}) = \${fibonacci(i)}\`);\n}`,

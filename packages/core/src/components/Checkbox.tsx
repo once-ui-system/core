@@ -11,6 +11,7 @@ interface CheckboxProps
   isChecked?: boolean;
   isIndeterminate?: boolean;
   onToggle?: () => void;
+  hoverable?: boolean;
 }
 
 const generateId = () => `checkbox-${Math.random().toString(36).substring(2, 9)}`;
@@ -24,6 +25,7 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
       isIndeterminate = false,
       onToggle,
       disabled,
+      hoverable = true,
       ...props
     },
     ref,
@@ -60,6 +62,7 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
         gap="16"
         className={classNames(styles.container, className, {
           [styles.disabled]: disabled,
+          [styles.noHover]: !hoverable,
         })}
         style={style}
       >
