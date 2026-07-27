@@ -180,19 +180,52 @@ const loadedLanguages = new Set<string>([
   "javascript",
 ]);
 
+// Language names that intentionally have no grammar — render as plain text
+// without attempting (and warn-failing) a Prism component import.
+const PLAIN_TEXT_LANGUAGES = new Set(["text", "plain", "plaintext", "none"]);
+
+// Short names surfaced by editors → Prism component file names. Prism ships
+// `prism-typescript`, `prism-markdown`, `prism-docker`, …; importing
+// `prism-md` or `prism-dockerfile` throws and the code silently renders
+// unhighlighted. `mdx` has no Prism grammar of its own — TSX is the closest.
+const languageAliases: Record<string, string> = {
+  ts: "typescript",
+  js: "javascript",
+  html: "markup",
+  xml: "markup",
+  svg: "markup",
+  md: "markdown",
+  mdx: "tsx",
+  dockerfile: "docker",
+  sh: "bash",
+  shell: "bash",
+  zsh: "bash",
+  yml: "yaml",
+};
+
+// Make the requested name resolvable at highlight time. Most Prism components
+// self-register their aliases (`markdown` registers `md`, `docker` registers
+// `dockerfile`), but names Prism doesn't know (`mdx`) only highlight if we
+// point them at the canonical grammar ourselves.
+const registerLanguageAlias = async (lang: string, actualLang: string) => {
+  if (lang === actualLang) return;
+  const prism = await getPrism();
+  if (!prism.languages[lang] && prism.languages[actualLang]) {
+    prism.languages[lang] = prism.languages[actualLang];
+  }
+};
+
 // Recursively load language dependencies
 const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
   if (typeof window === "undefined") return false;
 
-  // Handle language aliases
-  const languageAliases: Record<string, string> = {
-    ts: "typescript",
-  };
+  if (PLAIN_TEXT_LANGUAGES.has(lang)) return true;
 
   const actualLang = languageAliases[lang] || lang;
 
   // Skip if already loaded
   if (loadedLanguages.has(actualLang)) {
+    await registerLanguageAlias(lang, actualLang);
     return true;
   }
 
@@ -212,6 +245,7 @@ const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
     await import(`prismjs/components/prism-${actualLang}`);
     loadedLanguages.add(actualLang);
     loadedLanguages.add(lang); // Also mark the alias as loaded
+    await registerLanguageAlias(lang, actualLang);
     return true;
   } catch (error) {
     console.warn(`✗ Failed to load Prism language '${lang}':`, error);
