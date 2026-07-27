@@ -1,0 +1,140 @@
+<Feedback title="6 min · Pattern" description="Footers anchor marketing pages with sitemap grids, trust rows, and closing CTAs. Compose them with Column, Grid, SmartLink, and Logo — match Footer1–4 Pro blocks for production structure." variant="info" />
+
+## What this pattern covers
+
+Once UI footers range from minimal bars to multi-column sitemaps:
+
+- **Footer1** — compact icon + copyright row
+- **Footer2** — centered CTA above links
+- **Footer3** — five-column responsive sitemap grid
+- **Footer4** — premium footer with ambient effects (describe TypeFx and Particle in prose)
+
+Gold references: `packages/core/ai/examples/blocks/manifest.json` (Footer1–4), `packages/core/ai/examples/blocks/Footer3.tsx`.
+
+## Minimal footer bar
+
+Footer1 pattern: one Row with social IconButtons and muted copyright Text.
+
+```text
+<Row fillWidth horizontal="between" vertical="center" paddingY="24" paddingX="l">
+  <Text variant="label-default-s" onBackground="neutral-weak">
+    © 2026 Once UI
+  </Text>
+  <Row gap="8">
+    <IconButton icon="github" variant="ghost" size="s" />
+    <IconButton icon="discord" variant="ghost" size="s" />
+  </Row>
+</Row>
+```
+
+Use `horizontal="between"` so copyright and icons pin to opposite edges. Icon names must come from the Once UI icon spec — never invent names.
+
+## CTA footer
+
+Footer2 adds a closing headline and Button above the link row — common on landing pages after the final feature section:
+
+```text
+<Column fillWidth horizontal="center" paddingTop="80" paddingBottom="24" gap="48">
+  <Column gap="24" horizontal="center" maxWidth="s">
+    <Heading variant="display-strong-xs" align="center">
+      Ready to ship?
+    </Heading>
+    <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+      Install the package and scaffold your first page in minutes.
+    </Text>
+    <Button arrowIcon>Get started</Button>
+  </Column>
+  <Row fillWidth horizontal="between" paddingX="l">
+    <Text variant="label-default-s" onBackground="neutral-weak">
+      © 2026 Once UI
+    </Text>
+    <Row gap="16">
+      <Text variant="label-default-s" onBackground="neutral-weak">Docs</Text>
+      <Text variant="label-default-s" onBackground="neutral-weak">GitHub</Text>
+    </Row>
+  </Row>
+</Column>
+```
+
+Describe in prose: replace plain Text link labels with SmartLink when routes are known.
+
+## Multi-column sitemap
+
+Footer3 uses Grid with responsive column collapse:
+
+```text
+<Column fillWidth horizontal="center" paddingTop="80" paddingBottom="16">
+  <Column maxWidth="xl" paddingX="l" gap="48">
+    <Grid fillWidth columns={5} m={{ columns: 3 }} s={{ columns: 2 }} gap="32">
+      {sections.map((section) => (
+        <Column key={section.title} gap="16">
+          <Text variant="label-default-s">{section.title}</Text>
+          <Column gap="12">
+            {section.items.map((item) => (
+              <Text
+                key={item.label}
+                variant="body-default-s"
+                onBackground="neutral-weak"
+              >
+                {item.label}
+              </Text>
+            ))}
+          </Column>
+        </Column>
+      ))}
+    </Grid>
+    <Row fillWidth horizontal="between" vertical="center">
+      {/* Logo + social IconButtons */}
+    </Row>
+  </Column>
+</Column>
+```
+
+Rules for sitemap grids:
+
+- Set `columns={5}` with `m={{ columns: 3 }}` and `s={{ columns: 2 }}` — never rely on defaults
+- Section titles use `label-default-s`; links use `body-default-s` with `onBackground="neutral-weak"`
+- Optional Tag on items (e.g. “New”) — pass `label` only, not duplicate children (see gotchas.json)
+
+## Trust row above footer
+
+Pair [Social proof & logo clouds](/common-patterns/social-proof-and-logo-clouds.mdx) with the footer on marketing pages:
+
+1. Final feature or pricing section
+2. Centered trust label + logo grid
+3. Footer sitemap or CTA block
+
+Keep the trust strip visually lighter than the footer — smaller text, more whitespace above the sitemap.
+
+## Premium footer effects
+
+Footer4 combines Background, Particle, TypeFx, and Mask for animated wordmarks. These are decoration layers — follow [Decoration layers](/common-patterns/decoration-layers.mdx):
+
+- Absolute Background on the footer wrapper
+- `pointerEvents="none"` on all effect layers
+- Content Column with `zIndex={1}`
+
+Describe in prose: load Footer4 from `packages/core/ai/examples/blocks/Footer4.tsx` when you need particle + typewriter effects. Budget one animated footer per page, not per section.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Grid with breakpoint column overrides | Single-column stack of 20 links |
+| `paddingTop="80"` section rhythm | Footer glued to last section with no gap |
+| SmartLink for internal routes | Raw anchor tags with custom styles |
+| Muted `neutral-weak` link text | Links same weight as section titles |
+
+## Check yourself
+
+- [ ] Sitemap Grid sets `columns` at `s` / `m` breakpoints
+- [ ] CTA footer has one primary Button, not three competing actions
+- [ ] Copyright and legal links are present on marketing pages
+- [ ] Decoration effects use absolute layers with `pointerEvents="none"`
+
+## Related
+
+→ [Social proof & logo clouds](/common-patterns/social-proof-and-logo-clouds.mdx)
+→ [Hero section](/common-patterns/hero-section.mdx)
+→ [Decoration layers](/common-patterns/decoration-layers.mdx)
+→ Pro blocks: `packages/core/ai/examples/blocks/Footer1.tsx` – `Footer4.tsx`

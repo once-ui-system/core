@@ -1,0 +1,167 @@
+<Feedback title="7 min · Pattern" description="Waitlist pages combine a centered hero, email capture, and social proof counters. Follow Waitlist1 for structure — RevealFx entry, Input validation, and AvatarGroup trust rows." variant="info" />
+
+## What this pattern covers
+
+Coming-soon and waitlist flows need:
+
+- Centered hero with eyebrow, headline, and subcopy
+- Email Input with inline validation
+- Optional subscriber count animation (describe CountFx in prose)
+- Ambient Background decoration behind the form
+
+Gold reference: `packages/core/ai/examples/blocks/Waitlist1.tsx`, task bundle `packages/core/ai/tasks/marketing-hero.json`.
+
+## Page skeleton
+
+Waitlist pages are single-column, vertically centered — no sidebar:
+
+```text
+<Column as="main" fill minHeight="100vh" center padding="l">
+  <Column gap="40" maxWidth="xs" horizontal="center">
+    {/* eyebrow */}
+    {/* headline + subcopy */}
+    {/* email form */}
+    {/* trust row */}
+  </Column>
+</Column>
+```
+
+Use `maxWidth="xs"` so the headline and form stay narrow. Add an absolute Background layer on the outer Column for ambient glow — see [Decoration layers](/common-patterns/decoration-layers.mdx).
+
+## Eyebrow badge
+
+Waitlist1 wraps Logo + status text in a Badge-like Row. Describe in prose: use Badge with `background="brand-alpha-weak"` and `onBackground="brand-medium"` for the “Arriving soon” chip. Include dark and light Logo variants for theme switching.
+
+```text
+<Column horizontal="center" gap="8">
+  <Text variant="label-default-s" onBackground="brand-medium">
+    Arriving soon
+  </Text>
+</Column>
+```
+
+If you need the full Badge + Logo composition, read `Waitlist1.tsx` — the gold block shows dark/light Logo pairs separated by a vertical Line.
+
+## Headline stack
+
+Animate the hero in two beats with RevealFx — headline first, subcopy second:
+
+```text
+<Column gap="24" horizontal="center">
+  <Heading variant="display-strong-xl" align="center">
+    The all-in-one course platform
+  </Heading>
+  <Text
+    variant="heading-default-xl"
+    onBackground="neutral-medium"
+    align="center"
+  >
+    Launch and sell your courses with ease. We handle enrollment and analytics.
+  </Text>
+</Column>
+```
+
+Describe in prose: wrap each block in RevealFx with `delay={0.4}` and `delay={0.6}` (seconds, not milliseconds). See [Reveal & motion](/design-tips/reveal-and-motion.mdx).
+
+## Email capture row
+
+Pair Input with an IconButton or Button submit. Validate before calling your API:
+
+```text
+<Row fillWidth gap="8" vertical="center">
+  <Input
+    id="email"
+    label="Email"
+    placeholder="you@company.com"
+    value={email}
+    error={error}
+    onChange={(e) => setEmail(e.target.value)}
+  />
+  <IconButton icon="arrowRight" variant="primary" size="m" />
+</Row>
+```
+
+On mobile, stack vertically with `s={{ direction: "column" }}` on the Row. Show validation errors via Input `error` prop — not a separate toast for empty submit.
+
+Describe in prose: after successful subscribe, swap the form for a short confirmation Text and optionally increment a CountFx subscriber total.
+
+## Subscriber count
+
+Waitlist1 animates a subscriber count when the block enters the viewport. Describe in prose:
+
+- Drive CountFx `value` from state, not a `trigger` prop (see gotchas.json)
+- Latch the target number with a viewport hook so the counter runs once
+- Pair with AvatarGroup showing recent signups for social proof
+
+```text
+<Row gap="12" vertical="center">
+  <Row>
+    <Avatar src="/a1.jpg" size="s" />
+    <Avatar src="/a2.jpg" size="s" />
+    <Avatar src="/a3.jpg" size="s" />
+  </Row>
+  <Text variant="body-default-s" onBackground="neutral-weak">
+    Join 1,300+ on the waitlist
+  </Text>
+</Row>
+```
+
+For overlapping avatars, use AvatarGroup from the catalog — describe props in prose rather than nesting raw Avatar stacks.
+
+## Post-submit state
+
+Three branches after the user submits:
+
+| State | UI |
+|-------|-----|
+| Idle | Input + submit visible |
+| Submitting | Button `loading` or Input disabled |
+| Success | Confirmation Text, hide Input |
+
+```text
+{subscribed ? (
+  <Column gap="8" horizontal="center">
+    <Icon name="check" size="m" onBackground="success-medium" />
+    <Text variant="body-strong-s" align="center">
+      You are on the list
+    </Text>
+  </Column>
+) : (
+  {/* email Row */}
+)}
+```
+
+Use [Toast & feedback](/common-patterns/toast-and-feedback.mdx) only for unexpected API failures — success is inline.
+
+## Agent checklist
+
+When generating waitlist pages from `marketing-hero.json`:
+
+1. Single centered Column — no dashboard chrome
+2. RevealFx on headline blocks, not every Input label
+3. Input validation before submit
+4. CountFx driven by viewport latch, not `trigger`
+5. Background decoration absolute with `pointerEvents="none"`
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Narrow `maxWidth="xs"` hero | Full-width form lost in whitespace |
+| Inline success confirmation | Toast-only feedback with no visible state change |
+| RevealFx delay in seconds | `delay={400}` treating seconds as ms |
+| Input `error` for validation | Alert dialog on empty email |
+
+## Check yourself
+
+- [ ] Page centers vertically on large screens
+- [ ] Email validation runs before API call
+- [ ] Success state replaces the form, not stacked beneath it
+- [ ] Ambient Background is absolute, non-interactive
+
+## Related
+
+→ [Hero section](/common-patterns/hero-section.mdx)
+→ [Reveal & motion](/design-tips/reveal-and-motion.mdx)
+→ [Social proof & logo clouds](/common-patterns/social-proof-and-logo-clouds.mdx)
+→ Gold block: `packages/core/ai/examples/blocks/Waitlist1.tsx`

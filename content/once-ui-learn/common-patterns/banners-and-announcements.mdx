@@ -1,0 +1,138 @@
+<Feedback title="4 min · Pattern" description="Banner is a full-width announcement strip for product news, maintenance windows, and upgrade prompts. Keep copy short, actions optional, and dismiss state in your app — not inside the component." variant="info" />
+
+## What this pattern covers
+
+Top-of-page banners answer “what changed?” without blocking the main UI:
+
+- **Banner** — branded Row strip with centered label text
+- **IconButton** — dismiss or external-link affordance
+- **Button** — optional CTA inside the strip
+
+Gold references: `packages/core/ai/components/Banner.json`, marketing hero task `packages/core/ai/tasks/marketing-hero.json`.
+
+Banner extends Row with opinionated defaults: `solid="brand-medium"`, `onSolid="brand-strong"`, `textVariant="label-default-s"`, and `center` alignment. Override `solid` / `onSolid` for neutral or danger announcements.
+
+## Basic announcement
+
+Keep one line of copy. Put the announcement strip as the first child inside your app shell — above the sticky header.
+
+Describe in prose: use the Banner component — it extends Row with `solid="brand-medium"`, `onSolid="brand-strong"`, centered label text, and `fillWidth`. Render it only when `showBanner` is true.
+
+Equivalent structure with allowed primitives:
+
+```text
+<Row
+  fillWidth
+  center
+  gap="12"
+  paddingX="16"
+  paddingY="8"
+  solid="brand-medium"
+  onSolid="brand-strong"
+  textVariant="label-default-s"
+>
+  <Text onSolid="brand-strong">
+    Once UI 1.7 is live — read the changelog
+  </Text>
+  <IconButton icon="arrowUpRight" variant="ghost" size="s" />
+</Row>
+```
+
+Persist dismissal in localStorage or user preferences.
+
+## Banner with CTA
+
+When the action is more important than a link icon, add a small Button inside the same Row:
+
+```text
+<Row
+  fillWidth
+  center
+  gap="16"
+  paddingX="16"
+  paddingY="8"
+  solid="brand-medium"
+  onSolid="brand-strong"
+>
+  <Text onSolid="brand-strong">
+    Pro blocks are included in your plan
+  </Text>
+  <Button size="s" variant="secondary">
+    Browse blocks
+  </Button>
+  <IconButton icon="close" variant="ghost" size="s" />
+</Row>
+```
+
+Use `variant="secondary"` on Button so it contrasts against the solid banner background. Keep at most one primary action.
+
+## Semantic variants
+
+Override Row surface props on Banner for different tones:
+
+| Situation | solid | onSolid |
+|-----------|-------|---------|
+| Product news (default) | `brand-medium` | `brand-strong` |
+| Maintenance / caution | `warning-medium` | `warning-strong` |
+| Incident / outage | `danger-medium` | `danger-strong` |
+| Neutral FYI | `neutral-medium` | `neutral-strong` |
+
+```text
+<Row
+  fillWidth
+  center
+  gap="12"
+  paddingX="16"
+  paddingY="8"
+  solid="warning-medium"
+  onSolid="warning-strong"
+  textVariant="label-default-s"
+>
+  <Text onSolid="warning-strong">
+    Scheduled maintenance tonight 02:00–04:00 UTC
+  </Text>
+</Row>
+```
+
+## Placement in app chrome
+
+Typical shell order:
+
+1. Banner (conditional)
+2. Sticky header ([App shell navigation](/common-patterns/app-shell-navigation.mdx))
+3. Main content Column
+
+Do not nest Banner inside `maxWidth` content columns — it should span the full viewport width. If the header is sticky, stack Banner above it so both remain visible on scroll.
+
+## Dismissal pattern
+
+The Banner component has no built-in `onDismiss`. Wire dismissal in the parent:
+
+1. `useState` for visibility
+2. `IconButton` with `onClick` that sets false
+3. Optional `localStorage` key so returning users do not see stale promos
+
+Describe in prose: store `banner-dismissed-2026-07` in localStorage when the user closes a version-specific promo.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| One-line label text | Paragraph of release notes in the strip |
+| Banner above header, full width | Banner inside a padded content Column |
+| Dismiss state in parent | Expecting the strip to manage persistence |
+| Secondary Button for CTA | Full-size primary Button dominating the strip |
+
+## Check yourself
+
+- [ ] Copy fits on one line at mobile widths
+- [ ] Banner spans full viewport, not `maxWidth` content
+- [ ] Dismiss or snooze logic lives in app state
+- [ ] Semantic `solid` token matches message severity
+
+## Related
+
+→ [App shell navigation](/common-patterns/app-shell-navigation.mdx)
+→ [Hero section](/common-patterns/hero-section.mdx)
+→ [Toast & feedback](/common-patterns/toast-and-feedback.mdx)
+→ Full reference: [docs.once-ui.com — Banner](https://docs.once-ui.com/once-ui/components/banner)
