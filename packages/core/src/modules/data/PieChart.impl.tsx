@@ -137,7 +137,7 @@ const PieChart: React.FC<PieChartProps> = ({
         onDateRangeChange={handleDateRangeChange}
         presets={date?.presets}
       />
-      <Row fill borderTop={(title || description || date?.selector) ? (border || "neutral-alpha-weak") : undefined} topRadius={flex.radius as RadiusSize || "l"} overflow="hidden">
+      <Row fill borderTop={(title || description || date?.selector) ? (border || "neutral-alpha-weak") : undefined} topRadius={flex.radius as RadiusSize || "l"} overflow="hidden" style={{ minHeight: height ? `${height}rem` : undefined }}>
         <ChartStatus
           loading={loading}
           empty={!filteredData || filteredData.length === 0}

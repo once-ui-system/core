@@ -71,7 +71,6 @@ import {
   InlineCode,
   StatusIndicator,
   SegmentedControl,
-  ToggleButton,
   ScrollToTop,
   CompareImage,
   InteractiveDetails,
@@ -90,6 +89,7 @@ import {
   FlipFx,
   GlitchFx,
   HoloFx,
+  Card,
   MatrixFx,
   ShineFx,
   TiltFx,
@@ -124,6 +124,7 @@ export default function ComponentsCheck() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [switchOn, setSwitchOn] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [mediaDialogOpen, setMediaDialogOpen] = useState(false);
   const { addToast } = useToast();
   const [selectedVariation, setSelectedVariation] = useState<
     Record<string, string>
@@ -446,6 +447,47 @@ export default function ComponentsCheck() {
             },
           ],
         },
+        {
+          name: "TextWeight",
+          variations: [
+            {
+              value: "default",
+              label: "Default (300)",
+              element: (
+                <Text weight="default" size="l">
+                  Light weight text — default
+                </Text>
+              ),
+            },
+            {
+              value: "bold",
+              label: "Bold (400)",
+              element: (
+                <Text weight="bold" size="l">
+                  Normal weight text — bold
+                </Text>
+              ),
+            },
+            {
+              value: "bolder",
+              label: "Bolder (500)",
+              element: (
+                <Text weight="bolder" size="l">
+                  Medium weight text — bolder
+                </Text>
+              ),
+            },
+            {
+              value: "strong",
+              label: "Strong (600)",
+              element: (
+                <Text weight="strong" size="l">
+                  Semi-bold weight text — strong
+                </Text>
+              ),
+            },
+          ],
+        },
       ],
     },
     {
@@ -501,7 +543,11 @@ export default function ComponentsCheck() {
                   <Button variant="primary" prefixIcon="arrowUpRight">
                     Download
                   </Button>
-                  <Button variant="ghost" prefixIcon="search" suffixIcon="enter">
+                  <Button
+                    variant="ghost"
+                    prefixIcon="search"
+                    suffixIcon="enter"
+                  >
                     Search
                   </Button>
                 </Row>
@@ -512,7 +558,9 @@ export default function ComponentsCheck() {
               label: "States",
               element: (
                 <Row gap="s" wrap vertical="center">
-                  <Button loading disabled>Loading</Button>
+                  <Button loading disabled>
+                    Loading
+                  </Button>
                   <Button disabled>Disabled</Button>
                   <Button arrowIcon id="btn-arrow">
                     Arrow
@@ -685,26 +733,42 @@ export default function ComponentsCheck() {
           name: "ColorInput",
           variations: [
             {
-              value: "default",
-              label: "Default",
+              value: "large",
+              label: "Large (100%)",
               element: (
-                <ColorInput
-                  id="color-default"
-                  value="#3b82f6"
-                  onChange={() => {}}
-                />
+                <Flex fillWidth>
+                  <ColorInput
+                    id="color-lg"
+                    value="#3b82f6"
+                    onChange={() => {}}
+                  />
+                </Flex>
               ),
             },
             {
-              value: "alpha",
-              label: "With alpha",
+              value: "medium",
+              label: "Medium (50%)",
               element: (
-                <ColorInput
-                  id="color-alpha"
-                  value="rgba(59, 130, 246, 0.6)"
-                  supportAlpha
-                  onChange={() => {}}
-                />
+                <Flex style={{ width: "50%" }}>
+                  <ColorInput
+                    id="color-md"
+                    value="#3b82f6"
+                    onChange={() => {}}
+                  />
+                </Flex>
+              ),
+            },
+            {
+              value: "small",
+              label: "Small (25%)",
+              element: (
+                <Flex style={{ width: "25%" }}>
+                  <ColorInput
+                    id="color-sm"
+                    value="#3b82f6"
+                    onChange={() => {}}
+                  />
+                </Flex>
               ),
             },
           ],
@@ -743,6 +807,11 @@ export default function ComponentsCheck() {
                   <Checkbox disabled isChecked label="Disabled on" />
                 </Column>
               ),
+            },
+            {
+              value: "no-hover",
+              label: "No hover",
+              element: <Checkbox hoverable={false} label="Hover disabled" />,
             },
           ],
         },
@@ -799,40 +868,65 @@ export default function ComponentsCheck() {
                 </Column>
               ),
             },
+            {
+              value: "no-hover",
+              label: "No hover",
+              element: <RadioButton hoverable={false} label="Hover disabled" />,
+            },
           ],
         },
         {
           name: "Select",
           variations: [
             {
-              value: "default",
-              label: "Default",
+              value: "large",
+              label: "Large (100%)",
               element: (
-                <Select
-                  id="sel-framework"
-                  label="Framework"
-                  options={[
-                    { label: "Next.js", value: "next" },
-                    { label: "Remix", value: "remix" },
-                    { label: "Astro", value: "astro" },
-                  ]}
-                />
+                <Flex fillWidth>
+                  <Select
+                    id="sel-lg"
+                    label="Framework"
+                    options={[
+                      { label: "Next.js", value: "next" },
+                      { label: "Remix", value: "remix" },
+                      { label: "Astro", value: "astro" },
+                    ]}
+                  />
+                </Flex>
               ),
             },
             {
-              value: "error",
-              label: "Error",
+              value: "medium",
+              label: "Medium (50%)",
               element: (
-                <Select
-                  id="sel-error"
-                  label="Country"
-                  error
-                  errorMessage="Please select a country"
-                  options={[
-                    { label: "USA", value: "us" },
-                    { label: "UK", value: "uk" },
-                  ]}
-                />
+                <Flex style={{ width: "50%" }}>
+                  <Select
+                    id="sel-md"
+                    label="Framework"
+                    options={[
+                      { label: "Next.js", value: "next" },
+                      { label: "Remix", value: "remix" },
+                      { label: "Astro", value: "astro" },
+                    ]}
+                  />
+                </Flex>
+              ),
+            },
+            {
+              value: "small",
+              label: "Small (25%)",
+              element: (
+                <Flex style={{ width: "25%" }}>
+                  <Select
+                    id="sel-sm"
+                    label="Framework"
+                    options={[
+                      { label: "Next.js", value: "next" },
+                      { label: "Remix", value: "remix" },
+                      { label: "Astro", value: "astro" },
+                    ]}
+                  />
+                </Flex>
               ),
             },
           ],
@@ -1456,6 +1550,37 @@ export default function ComponentsCheck() {
             },
           ],
         },
+        {
+          name: "Card",
+          variations: [
+            {
+              value: "default",
+              label: "Default",
+              element: (
+                <Card padding="16" radius="m" border="neutral-alpha-medium">
+                  <Heading variant="heading-strong-s">Card title</Heading>
+                  <Text variant="body-default-s" onBackground="neutral-weak">
+                    A basic interactive card component.
+                  </Text>
+                </Card>
+              ),
+            },
+            {
+              value: "with-link",
+              label: "With href",
+              element: (
+                <Card
+                  href="#"
+                  padding="16"
+                  radius="m"
+                  border="neutral-alpha-medium"
+                >
+                  <Text variant="label-default-s">Linked card</Text>
+                </Card>
+              ),
+            },
+          ],
+        },
       ],
     },
     {
@@ -1493,6 +1618,61 @@ export default function ComponentsCheck() {
                       </Row>
                     }
                   />
+                </>
+              ),
+            },
+            {
+              value: "media",
+              label: "Media header",
+              element: (
+                <>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setMediaDialogOpen(true)}
+                  >
+                    Dialog with media
+                  </Button>
+                  <Dialog
+                    isOpen={mediaDialogOpen}
+                    onClose={() => setMediaDialogOpen(false)}
+                    title="Featured article"
+                    description="A preview of the latest design thinking."
+                    maxWidth={48}
+                    flush
+                    footer={
+                      <>
+                        <Button
+                          variant="secondary"
+                          onClick={() => setMediaDialogOpen(false)}
+                        >
+                          Dismiss
+                        </Button>
+                        <Button onClick={() => setMediaDialogOpen(false)}>
+                          Read more
+                        </Button>
+                      </>
+                    }
+                  >
+                    <Column fillWidth gap="20">
+                      <Media
+                        src="/images/cover-01.jpg"
+                        alt="Design preview"
+                        aspectRatio="16 / 10"
+                        radius="m"
+                        fillWidth
+                      />
+                      <Column fillWidth gap="8" paddingX="24">
+                        <Text variant="heading-strong-s">
+                          Building design systems that scale
+                        </Text>
+                        <Text onBackground="neutral-weak">
+                          A deep dive into creating modular, token-driven
+                          interfaces that stay consistent across products and
+                          teams.
+                        </Text>
+                      </Column>
+                    </Column>
+                  </Dialog>
                 </>
               ),
             },
@@ -1989,7 +2169,7 @@ export default function ComponentsCheck() {
                 <Hover
                   trigger={<Text>Test</Text>}
                   overlay={<Column background="overlay" />}
-                  onClick={(e) => console.log(e)}
+                  onClick={() => {}}
                 >
                   <Text>Hover Effect</Text>
                 </Hover>
@@ -2007,7 +2187,7 @@ export default function ComponentsCheck() {
                 <FlipFx
                   back={<Text>Back</Text>}
                   front={<Text>Front</Text>}
-                  onClick={(e) => console.log(e)}
+                  onClick={() => {}}
                 >
                   <Text>Flip Effect</Text>
                 </FlipFx>
@@ -2154,10 +2334,42 @@ export default function ComponentsCheck() {
           name: "DateInput",
           variations: [
             {
-              value: "default",
-              label: "Default",
+              value: "large",
+              label: "Large (100%)",
               element: (
-                <DateInput id="di" label="Date" placeholder="Select a date" />
+                <Flex fillWidth>
+                  <DateInput
+                    id="di-lg"
+                    label="Date"
+                    placeholder="Select a date"
+                  />
+                </Flex>
+              ),
+            },
+            {
+              value: "medium",
+              label: "Medium (50%)",
+              element: (
+                <Flex style={{ width: "50%" }}>
+                  <DateInput
+                    id="di-md"
+                    label="Date"
+                    placeholder="Select a date"
+                  />
+                </Flex>
+              ),
+            },
+            {
+              value: "small",
+              label: "Small (25%)",
+              element: (
+                <Flex style={{ width: "25%" }}>
+                  <DateInput
+                    id="di-sm"
+                    label="Date"
+                    placeholder="Select a date"
+                  />
+                </Flex>
               ),
             },
           ],
@@ -2166,15 +2378,45 @@ export default function ComponentsCheck() {
           name: "DateRangeInput",
           variations: [
             {
-              value: "default",
-              label: "Default",
+              value: "large",
+              label: "Large (100%)",
               element: (
-                <DateRangeInput
-                  id="dri"
-                  startLabel="Start"
-                  endLabel="End"
-                  placeholder="Select range"
-                />
+                <Flex fillWidth>
+                  <DateRangeInput
+                    id="dri-lg"
+                    startLabel="Start"
+                    endLabel="End"
+                    placeholder="Select range"
+                  />
+                </Flex>
+              ),
+            },
+            {
+              value: "medium",
+              label: "Medium (50%)",
+              element: (
+                <Flex style={{ width: "50%" }}>
+                  <DateRangeInput
+                    id="dri-md"
+                    startLabel="Start"
+                    endLabel="End"
+                    placeholder="Select range"
+                  />
+                </Flex>
+              ),
+            },
+            {
+              value: "small",
+              label: "Small (25%)",
+              element: (
+                <Flex style={{ width: "25%" }}>
+                  <DateRangeInput
+                    id="dri-sm"
+                    startLabel="Start"
+                    endLabel="End"
+                    placeholder="Select range"
+                  />
+                </Flex>
               ),
             },
           ],
@@ -2647,6 +2889,23 @@ export default function ComponentsCheck() {
           name: "CodeBlock",
           variations: [
             {
+              value: "custom-bg",
+              label: "Custom BG (controls test)",
+              element: (
+                <CodeBlock
+                  style={{ backgroundColor: "pink" }}
+                  compact
+                  codes={[
+                    {
+                      code: `const greeting = "Hello World";\nconsole.log(greeting);\n\n// Scroll test: enough lines to overflow\nfunction fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nfor (let i = 0; i < 20; i++) {\n  console.log(\`fib(\${i}) = \${fibonacci(i)}\`);\n}`,
+                      language: "javascript",
+                      label: "Inherit Test",
+                    },
+                  ]}
+                />
+              ),
+            },
+            {
               value: "default",
               label: "Default",
               element: (
@@ -2696,6 +2955,68 @@ export default function ComponentsCheck() {
                   codes={[
                     {
                       code: `function hello() {\n  console.log("Hello World");\n}\n\nfunction goodbye() {\n  console.log("Goodbye");\n}\n\nfunction main() {\n  hello();\n  goodbye();\n}`,
+                      language: "javascript",
+                      label: "JavaScript",
+                    },
+                  ]}
+                />
+              ),
+            },
+            {
+              value: "hide-code",
+              label: "Hide Code",
+              element: (
+                <CodeBlock
+                  hideCode
+                  preview={
+                    <Column gap="m" fillWidth horizontal="center" padding="l">
+                      <Heading variant="heading-strong-m">Hidden Code</Heading>
+                      <Text
+                        variant="body-default-m"
+                        onBackground="neutral-medium"
+                      >
+                        The code is hidden, only preview is shown.
+                      </Text>
+                      <Button variant="primary" size="s">
+                        Action
+                      </Button>
+                    </Column>
+                  }
+                  codes={[
+                    {
+                      code: `function hidden() {\n  return "This code is hidden";\n}`,
+                      language: "javascript",
+                      label: "JavaScript",
+                    },
+                  ]}
+                />
+              ),
+            },
+            {
+              value: "collapsible-full",
+              label: "Collapsible (maxLines=0)",
+              element: (
+                <CodeBlock
+                  isCollapsible
+                  maxLines={0}
+                  copyButton
+                  preview={
+                    <Column gap="m" fillWidth horizontal="center" padding="l">
+                      <Heading variant="heading-strong-m">Full Code</Heading>
+                      <Text
+                        variant="body-default-m"
+                        onBackground="neutral-medium"
+                      >
+                        Code is collapsible but shows all lines when expanded.
+                      </Text>
+                      <Button variant="primary" size="s">
+                        View
+                      </Button>
+                    </Column>
+                  }
+                  codes={[
+                    {
+                      code: `function first() {\n  console.log("Line 1");\n}\n\nfunction second() {\n  console.log("Line 2");\n}\n\nfunction third() {\n  console.log("Line 3");\n}\n\nfunction fourth() {\n  console.log("Line 4");\n}`,
                       language: "javascript",
                       label: "JavaScript",
                     },
@@ -2917,7 +3238,9 @@ export default function ComponentsCheck() {
                       <Flex gap="s" fillWidth>
                         <SegmentedControl
                           selected={currentVar}
-                          onToggle={(value: any) => selectVar(comp.name, value)}
+                          onToggle={(value: string) =>
+                            selectVar(comp.name, value)
+                          }
                           buttons={comp.variations.map((v) => ({
                             value: v.value,
                             label: v.label,

@@ -1,11 +1,13 @@
 ---
 title: "DropdownWrapper"
 summary: "The DropdownWrapper component provides a floating container that appears when triggered, allowing for custom dropdown menus and selectors."
-updatedAt: "2025-05-09"
+updatedAt: "2026-07-27"
 docs: "once-ui/components/dropdownWrapper.mdx"
 github: "components/DropdownWrapper.tsx"
 navLabel: "DropdownWrapper"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
 DropdownWrapper is a container component that handles the positioning and state management of dropdown menus. It provides a flexible way to create custom dropdown interfaces with various trigger elements and dropdown contents. It supports keyboard navigation when used with `Option` components.
@@ -236,6 +238,13 @@ return (
     ["selectedOption", "string"],
     ["onSelect", "(value: string) => void"],
     ["closeAfterClick", "boolean", "true"],
+    ["handleArrowNavigation", "boolean", "true"],
+    ["isNested", "boolean", "false"],
+    ["navigationLayout", "NavigationLayout"],
+    ["columns", "number", "8"],
+    ["optionsCount", "number"],
+    ["dropdownId", "string"],
+    ["disableTriggerClick", "boolean", "false"],
     ["style", "React.CSSProperties"],
     ["className", "string"]
   ]}

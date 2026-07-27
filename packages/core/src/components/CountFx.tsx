@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, forwardRef } from "react";
 import { Row, Text } from ".";
 
 export interface CountFxProps extends React.ComponentProps<typeof Text> {
@@ -14,7 +14,7 @@ export interface CountFxProps extends React.ComponentProps<typeof Text> {
   children?: React.ReactNode;
 }
 
-const CountFx: React.FC<CountFxProps> = ({
+const CountFx = forwardRef<HTMLDivElement, CountFxProps>(({
   value,
   speed = 1000,
   easing = "ease-out",
@@ -24,7 +24,7 @@ const CountFx: React.FC<CountFxProps> = ({
   effect = "simple",
   children,
   ...text
-}) => {
+}, ref) => {
   const [displayValue, setDisplayValue] = useState(value);
   const [animationProgress, setAnimationProgress] = useState(1);
   const animationRef = useRef<number | undefined>(undefined);
@@ -293,35 +293,41 @@ const CountFx: React.FC<CountFxProps> = ({
 
   if (effect === "wheel") {
     return (
-      <Text
-        {...text}
-        style={{ display: "flex", alignItems: "center", gap: "0.1em", ...text.style }}
-      >
-        {renderWheelDigits(displayValue, value)}
-        {children}
-      </Text>
+      <span ref={ref}>
+        <Text
+          {...text}
+          style={{ display: "flex", alignItems: "center", gap: "0.1em", ...text.style }}
+        >
+          {renderWheelDigits(displayValue, value)}
+          {children}
+        </Text>
+      </span>
     );
   }
 
   if (effect === "smooth") {
     return (
-      <Text
-        {...text}
-        style={{ display: "flex", alignItems: "center", gap: "0.1em", ...text.style }}
-      >
-        {renderSmoothDigits(previousValueRef.current, value, animationProgress)}
-        {children}
-      </Text>
+      <span ref={ref}>
+        <Text
+          {...text}
+          style={{ display: "flex", alignItems: "center", gap: "0.1em", ...text.style }}
+        >
+          {renderSmoothDigits(previousValueRef.current, value, animationProgress)}
+          {children}
+        </Text>
+      </span>
     );
   }
 
   return (
-    <Text {...text}>
-      {formatValue(displayValue)}
-      {children}
-    </Text>
+    <span ref={ref}>
+      <Text {...text}>
+        {formatValue(displayValue)}
+        {children}
+      </Text>
+    </span>
   );
-};
+});
 
 CountFx.displayName = "CountFx";
 export { CountFx };

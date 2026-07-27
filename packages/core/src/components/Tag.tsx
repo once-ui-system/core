@@ -6,7 +6,7 @@ import classNames from "classnames";
 import { Flex, Text, Icon, Row } from ".";
 import styles from "./Tag.module.scss";
 import { IconName } from "../icons";
-import { ColorScheme, CondensedTShirtSizes } from "@/types";
+import { ColorScheme, CondensedTShirtSizes } from "../types";
 
 interface TagProps extends React.ComponentProps<typeof Flex> {
   variant?: ColorScheme | "gradient";

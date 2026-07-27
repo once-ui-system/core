@@ -4,10 +4,15 @@ First off, thank you for taking the time to contribute! Once UI is an indie proj
 
 ## Monorepo structure
 
-This repo uses a monorepo layout with PNPM workspaces:
+This repo uses a monorepo layout with PNPM workspaces and Turborepo:
 
-`/packages/core` → The Once UI package [@once-ui-system/core](https://www.npmjs.com/package/@once-ui-system/core)
-`/apps/dev` → Local sandbox app for testing components (not for production)
+| Path | Description |
+|------|-------------|
+| `packages/core` | The Once UI package [@once-ui-system/core](https://www.npmjs.com/package/@once-ui-system/core) — all components, tokens, and utilities |
+| `apps/dev` | Local sandbox app for testing components (not for production) |
+| `apps/docs` | Documentation site at [docs.once-ui.com](https://docs.once-ui.com) |
+
+For the full directory layout and conventions, see [ARCHITECTURE.md](./ARCHITECTURE.md).
 
 ## Running the dev environment
 
@@ -19,7 +24,35 @@ cd apps/dev
 pnpm dev
 ```
 
-This will boot up a local app using the latest version of the package, ideal for testing and development.
+This boots a local app at `http://localhost:3000` using the latest version of the package, ideal for testing and development.
+
+To iterate on the library while running the dev app:
+
+```bash
+# Terminal 1 — watch mode for the library
+pnpm --filter @once-ui-system/core dev
+
+# Terminal 2 — dev app
+cd apps/dev && pnpm dev
+```
+
+## Rebuilding the library
+
+If apps fail to resolve `@once-ui-system/core`, rebuild it:
+
+```bash
+pnpm --filter @once-ui-system/core build
+```
+
+The build runs: `tsc` → `sass` (tokens + styles) → `copy-files` → `generate-ai-spec`.
+
+## Running tests
+
+```bash
+pnpm --filter @once-ui-system/core test
+```
+
+Note: 4 tests (Dialog inert + ScrollLock wheel) currently fail under jsdom 68/72 pass — this is a pre-existing jsdom behavior issue, not an env problem.
 
 ## Contributing guidelines
 
@@ -42,17 +75,22 @@ We welcome PRs for:
 - Accessibility enhancements
 - Performance tweaks
 - New utilities or design patterns that fit the system
+- Documentation improvements
 
 Before submitting a PR:
-- Make sure your changes pass linting: `pnpm lint`
-- Format your code: `pnpm format`
-- Test your changes in `apps/dev`
-- Reference an issue when applicable
+1. Test your changes in `apps/dev` — use `ComponentsCheckPage.tsx` to verify components visually
+2. Run tests: `pnpm --filter @once-ui-system/core test`
+3. Rebuild the library: `pnpm --filter @once-ui-system/core build`
+4. Reference an issue when applicable
 
-### Best practices
+### Code conventions
 
 - Follow our [component conventions](https://docs.once-ui.com/once-ui/basics/components) and file structure.
 - Use the naming system and design tokens already defined in the project.
+- Components should be server-compatible or marked `"use client"`.
+- Use `forwardRef` and accept `className`/`style` overrides.
+- Export new components through `src/components/index.ts` → `src/index.ts`.
+- Use SCSS modules (`.module.scss`) for scoped component styles.
 
 ## Join the community
 

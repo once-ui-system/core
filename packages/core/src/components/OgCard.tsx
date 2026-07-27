@@ -1,6 +1,6 @@
 "use client";
 
-import { CondensedTShirtSizes } from "@/types";
+import { CondensedTShirtSizes } from "../types";
 import { Column, Media, Text, Row, Card, Skeleton } from ".";
 import { useOgData } from "../hooks/useFetchOg";
 import { useMemo } from "react";

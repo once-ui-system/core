@@ -4,8 +4,8 @@ import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Column, Row, Toast } from ".";
 import styles from "./Toaster.module.scss";
-import { useLayout } from "../contexts";
 import classNames from "classnames";
+import { useLayout } from "../contexts";
 import { ToastPosition } from "../types";
 
 interface ToasterProps {

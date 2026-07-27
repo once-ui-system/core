@@ -3,7 +3,7 @@
 import React, { forwardRef } from "react";
 import classNames from "classnames";
 import { Column, CountFx, Flex, Row, Text } from ".";
-import { StyleProps } from "@/interfaces";
+import { StyleProps } from "../interfaces";
 
 interface ProgressBarProps extends React.ComponentProps<typeof Flex> {
   value: number;

@@ -35,6 +35,39 @@ Learn how to set up and build with Once UI at [docs.once-ui.com](https://docs.on
 npm install @once-ui-system/core
 ```
 
+## Getting started
+
+```bash
+git clone https://github.com/once-ui-system/core.git
+cd core
+pnpm install
+cd apps/dev
+pnpm dev
+```
+
+This boots the development sandbox at `http://localhost:3000` with the latest version of the library linked.
+
+## Project structure
+
+This is a **pnpm monorepo** with Turborepo. See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full directory layout, conventions, and where to contribute.
+
+```
+core/
+├── packages/core/     # @once-ui-system/core — the design system library
+├── apps/dev/          # Next.js 16 sandbox for component development
+└── apps/docs/         # Next.js 15 documentation site
+```
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm install` | Install all workspace dependencies |
+| `pnpm --filter @once-ui-system/core build` | Build the library (types, JS, CSS, AI artifacts) |
+| `pnpm --filter @once-ui-system/core test` | Run unit tests with Vitest |
+| `cd apps/dev && pnpm dev` | Start the dev sandbox |
+| `cd apps/docs && pnpm dev` | Start the docs site |
+
 ## Authors
 
 Built and maintained by [**Lorant One**](https://lorant.one).
@@ -47,7 +80,18 @@ Found a bug? Report it [here](https://github.com/once-ui-system/core/issues/new?
 
 ## Contributing
 
-Please read our [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to Once UI.
+We welcome contributions! Before submitting a PR:
+
+1. Read [ARCHITECTURE.md](./ARCHITECTURE.md) to understand the codebase layout.
+2. Read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines on code style, PR process, and conventions.
+3. Test your changes in `apps/dev` — use `ComponentsCheckPage.tsx` to visually verify components.
+4. Run `pnpm --filter @once-ui-system/core test` before submitting.
+
+**Where to start:**
+- Fix or add a component → `packages/core/src/components/`
+- Fix a complex module (CodeBlock, etc.) → `packages/core/src/modules/`
+- Update docs → `apps/docs/src/content/once-ui/`
+- Change design tokens → `packages/core/src/tokens/`
 
 ## Sponsors
 

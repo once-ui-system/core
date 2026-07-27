@@ -460,11 +460,13 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   compact?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  background?: React.ComponentProps<typeof Flex>["background"];
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
   highlight?: string;
   maxLines?: number;
   isCollapsible?: boolean;
+  hideCode?: boolean;
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({
@@ -482,11 +484,14 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   maxLines = 5,
   isCollapsible = false,
   compact = false,
+  hideCode = false,
   className,
   style,
+  background = "surface",
   onInstanceChange,
   ...rest
 }) => {
+  const styleBackgroundColor = style?.backgroundColor;
   const codeRef = useRef<HTMLElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
   const [selectedInstance, setSelectedInstance] = useState(0);
@@ -669,12 +674,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const renderCodeBlock = (inPortal = false, resetMargin = false) => (
     <Column
       ref={inPortal ? undefined : codeBlockRef}
-      radius="l"
-      background="surface"
+      background={background ?? "surface"}
       border="neutral-alpha-weak"
       overflow="hidden"
       vertical="center"
       fillWidth
+      radius="m"
       minHeight={2.5}
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
@@ -704,6 +709,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           fillWidth
           fitHeight
           horizontal="between"
+          background={background}
+          style={{ backgroundColor: styleBackgroundColor }}
         >
           {codes.length > 1 ? (
             <Scroller paddingX="8">
@@ -753,46 +760,54 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           {!compact && (
             <Row paddingY="4" paddingX="8" gap="2" position="static">
               {reloadButton && (
-                <IconButton
-                  size="m"
-                  tooltip="Reload"
-                  tooltipPosition="bottom"
-                  color="neutral-weak"
-                  variant="tertiary"
-                  onClick={handleRefresh}
-                  icon="refresh"
-                />
+                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                  <IconButton
+                    size="m"
+                    tooltip="Reload"
+                    tooltipPosition="bottom"
+                    color="neutral-weak"
+                    variant="tertiary"
+                    onClick={handleRefresh}
+                    icon="refresh"
+                  />
+                </Flex>
               )}
               {fullscreenButton && (
-                <IconButton
-                  size="m"
-                  color="neutral-weak"
-                  tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-                  tooltipPosition="bottom"
-                  variant="tertiary"
-                  icon={isFullscreen ? "minimize" : "maximize"}
-                  onClick={toggleFullscreen}
-                />
+                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                  <IconButton
+                    size="m"
+                    color="neutral-weak"
+                    tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+                    tooltipPosition="bottom"
+                    variant="tertiary"
+                    icon={isFullscreen ? "minimize" : "maximize"}
+                    onClick={toggleFullscreen}
+                  />
+                </Flex>
               )}
               {styleButton && (
                 <StyleOverlay>
-                  <IconButton
-                    variant="tertiary"
-                    icon="sparkle"
-                    color="neutral-weak"
-                  />
+                  <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                    <IconButton
+                      variant="tertiary"
+                      icon="sparkle"
+                      color="neutral-weak"
+                    />
+                  </Flex>
                 </StyleOverlay>
               )}
               {copyButton && (
-                <IconButton
-                  size="m"
-                  tooltip="Copy"
-                  tooltipPosition="bottom"
-                  color="neutral-weak"
-                  variant="tertiary"
-                  onClick={handleCopy}
-                  icon={copyIcon}
-                />
+                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                  <IconButton
+                    size="m"
+                    tooltip="Copy"
+                    tooltipPosition="bottom"
+                    color="neutral-weak"
+                    variant="tertiary"
+                    onClick={handleCopy}
+                    icon={copyIcon}
+                  />
+                </Flex>
               )}
             </Row>
           )}
@@ -824,7 +839,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           </Row>
         </Row>
       )}
-      {codes.length > 0 && code && (
+      {codes.length > 0 && code && !hideCode && (
         <Row
           border={!compact && !preview ? "neutral-alpha-weak" : undefined}
           fillHeight={fillHeight}
@@ -927,14 +942,10 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       pointerEvents="none"
                       background="transparent"
                     >
-                      <Flex
-                        radius="m"
-                        background="neutral-weak"
-                        fit
-                        pointerEvents="auto"
-                      >
+                      <Flex radius="m" fit pointerEvents="auto">
                         <Button
-                          variant="secondary"
+                          variant="subtle"
+                          weight="default"
                           size="s"
                           onClick={() => setIsExpanded(true)}
                         >
@@ -950,13 +961,16 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             (typeof code === "string" ? code : code.content).split("\n").length,
           )}
           {compact && copyButton && (
-            <Row
+            <Flex
               position="absolute"
               right="4"
               top="4"
               marginRight="2"
               className={styles.compactCopy}
               zIndex={1}
+              radius="s"
+              background={background}
+              style={{ backgroundColor: styleBackgroundColor }}
             >
               <IconButton
                 tooltip="Copy"
@@ -968,7 +982,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 size="m"
                 variant="tertiary"
               />
-            </Row>
+            </Flex>
           )}
         </Row>
       )}

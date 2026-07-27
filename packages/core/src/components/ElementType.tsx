@@ -5,7 +5,7 @@ import { sanitizeHref } from "../utils/safe-html";
 
 type ElementTypeProps = {
   href?: string;
-  onClick?: (event: any) => void;
+  onClick?: (event: React.MouseEvent<any>) => void;
   onLinkClick?: () => void;
   children: ReactNode;
   className?: string;

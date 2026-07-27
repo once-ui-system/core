@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect, forwardRef, useId } from "react";
 import classNames from "classnames";
 import { Flex, Icon, InteractiveDetails, InteractiveDetailsProps } from ".";
 import styles from "./SharedInteractiveStyles.module.scss";
@@ -11,9 +11,8 @@ interface CheckboxProps
   isChecked?: boolean;
   isIndeterminate?: boolean;
   onToggle?: () => void;
+  hoverable?: boolean;
 }
-
-const generateId = () => `checkbox-${Math.random().toString(36).substring(2, 9)}`;
 
 const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxProps>(
   (
@@ -24,12 +23,13 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
       isIndeterminate = false,
       onToggle,
       disabled,
+      hoverable = true,
       ...props
     },
     ref,
   ) => {
     const [isChecked, setIsChecked] = useState(controlledIsChecked || false);
-    const [checkboxId] = useState(generateId());
+    const checkboxId = useId();
 
     useEffect(() => {
       if (controlledIsChecked !== undefined) {
@@ -60,6 +60,7 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
         gap="16"
         className={classNames(styles.container, className, {
           [styles.disabled]: disabled,
+          [styles.noHover]: !hoverable,
         })}
         style={style}
       >

@@ -1,6 +1,6 @@
 "use client";
 
-import { SpacingToken } from "@/types";
+import { SpacingToken } from "../types";
 import {
   Flex,
   RevealFx,

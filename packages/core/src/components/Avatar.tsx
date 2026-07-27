@@ -4,8 +4,8 @@ import React, { forwardRef } from "react";
 
 import { Skeleton, Icon, Text, StatusIndicator, Flex, Media } from ".";
 import styles from "./Avatar.module.scss";
-import { IconName } from "@/icons";
-import { TShirtSizes, CondensedTShirtSizes } from "@/types";
+import { IconName } from "../icons";
+import { TShirtSizes, CondensedTShirtSizes } from "../types";
 
 interface AvatarProps extends React.ComponentProps<typeof Flex> {
   size?: TShirtSizes | number;

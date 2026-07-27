@@ -104,7 +104,7 @@ export default function Home() {
             <Column maxWidth="m" horizontal="center" align="center" gap="16" padding="48">
               <Badge
                 background="overlay"
-                style={{backdropFilter: "blue(0.25rem)"}}
+                style={{backdropFilter: "blur(0.25rem)"}}
                 paddingLeft="8"
                 paddingRight="16"
                 border="brand-alpha-weak"

@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "1.7.13",
- "generated": "2026-07-24",
+ "generated": "2026-07-27",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -15,7 +15,7 @@
   "Colors": "`${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`",
   "RadiusSize": "TShirtSizes | \"full\" | \"none\"",
   "TextType": "\"body\" | \"heading\" | \"display\" | \"label\" | \"code\"",
-  "TextWeight": "\"default\" | \"strong\"",
+  "TextWeight": "\"default\" | \"bold\" | \"bolder\" | \"strong\"",
   "TextSize": "TShirtSizes",
   "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`",
   "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"volume\" | \"volumeOff\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"edit\" | \"trash\" | \"mail\" | \"download\""
@@ -42,21 +42,6 @@
    "dark": "boolean",
    "light": "boolean"
   },
-  "FlexBreakpointProps": {
-   "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
-   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "center": "boolean",
-   "overflow": "CSSProperties[\"overflow\"]",
-   "overflowX": "CSSProperties[\"overflowX\"]",
-   "overflowY": "CSSProperties[\"overflowY\"]",
-   "top": "SpacingToken",
-   "right": "SpacingToken",
-   "bottom": "SpacingToken",
-   "left": "SpacingToken",
-   "aspectRatio": "CSSProperties[\"aspectRatio\"]",
-   "style": "CSSProperties"
-  },
   "FlexProps": {
    "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
@@ -64,18 +49,6 @@
    "center": "boolean",
    "wrap": "boolean",
    "flex": "FlexValue"
-  },
-  "GridBreakpointProps": {
-   "columns": "GridProps[\"columns\"]",
-   "overflow": "CSSProperties[\"overflow\"]",
-   "overflowX": "CSSProperties[\"overflowX\"]",
-   "overflowY": "CSSProperties[\"overflowY\"]",
-   "top": "SpacingToken",
-   "right": "SpacingToken",
-   "bottom": "SpacingToken",
-   "left": "SpacingToken",
-   "aspectRatio": "CSSProperties[\"aspectRatio\"]",
-   "style": "CSSProperties"
   },
   "GridProps": {
    "columns": "GridSize",
@@ -681,7 +654,8 @@
    "props": {
     "isChecked": "boolean",
     "isIndeterminate": "boolean = false",
-    "onToggle": "() => void"
+    "onToggle": "() => void",
+    "hoverable": "boolean = true"
    }
   },
   "Chip": {
@@ -880,6 +854,8 @@
     "footer": "ReactNode",
     "base": "boolean",
     "stack": "boolean",
+    "flush": "boolean = false",
+    "hideClose": "boolean = false",
     "onHeightChange": "(height: number) => void",
     "minHeight": "number",
     "closeOnClickaway": "boolean = true"
@@ -1696,7 +1672,8 @@
     "name": "string",
     "value": "string",
     "disabled": "boolean",
-    "onToggle": "() => void"
+    "onToggle": "() => void",
+    "hoverable": "boolean = true"
    }
   },
   "RevealFx": {
