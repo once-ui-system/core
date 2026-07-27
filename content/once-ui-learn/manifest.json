@@ -61,28 +61,32 @@
       "title": "Banners & announcements",
       "summary": "Full-width Banner strips for product news, maintenance windows, and dismissible upgrade prompts.",
       "tag": "Common patterns",
-      "file": "common-patterns/banners-and-announcements.mdx"
+      "file": "common-patterns/banners-and-announcements.mdx",
+      "contentId": "4afc1e79-a6c1-4a33-bcf8-4b6b7bbf5fca"
     },
     {
       "path": "/common-patterns/footer-layouts.mdx",
       "title": "Footer layouts",
       "summary": "Minimal bars, CTA closers, and multi-column sitemap grids — Footer1–4 Pro block patterns.",
       "tag": "Common patterns",
-      "file": "common-patterns/footer-layouts.mdx"
+      "file": "common-patterns/footer-layouts.mdx",
+      "contentId": "065efe3c-bfdc-4eed-bef6-633d1413e055"
     },
     {
       "path": "/common-patterns/onboarding-and-first-run.mdx",
       "title": "Onboarding & first run",
       "summary": "Welcome dialogs, setup checklists, guided empty dashboards, and profile completion nudges.",
       "tag": "Common patterns",
-      "file": "common-patterns/onboarding-and-first-run.mdx"
+      "file": "common-patterns/onboarding-and-first-run.mdx",
+      "contentId": "fe686c31-a79c-4f57-bd69-3e360995374a"
     },
     {
       "path": "/common-patterns/waitlist-and-coming-soon.mdx",
       "title": "Waitlist & coming soon",
       "summary": "Centered hero, email capture, RevealFx entry, and subscriber trust rows from Waitlist1.",
       "tag": "Common patterns",
-      "file": "common-patterns/waitlist-and-coming-soon.mdx"
+      "file": "common-patterns/waitlist-and-coming-soon.mdx",
+      "contentId": "c33a0873-7c9d-404c-b649-142f3f6196ec"
     },
     {
       "path": "/common-patterns/carousel-and-compare-media.mdx",
