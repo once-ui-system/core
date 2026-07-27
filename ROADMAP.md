@@ -29,6 +29,7 @@ What already exists (verified in-repo, not assumed):
 - [ ] Triage `apps/dev` lint breakage from the Next 16 `next lint` removal — either migrate to the new ESLint flat-config path or document the interim gap
 - [ ] Release-planning doc: define concrete patch/minor/major criteria for Core (what's a breaking change here, given `./server` subpath exports and heavy AI-codegen consumers)
 - [ ] Strengthen the existing Sponsors section: concrete tiers + "what a sponsor gets" (docs/README placement) — visibility only, no pricing decisions made by the agent
+- [ ] Triage the 130 Dependabot alerts GitHub reports on `main` (69 high, 48 moderate, 13 low as of 2026-07-27 push) — severity/exploitability pass, prioritized fix list; patch what's safe as a non-breaking dependency bump, escalate anything requiring a major bump
 - **Needs from Lorant:** confirm `CHANGELOG.md` becomes the source of truth over the docs-site page; sign-off on sponsor-tier copy before it ships publicly
 
 ### Week 2 · Aug 3 – Aug 9 — API consistency audit, pass 1
@@ -107,6 +108,7 @@ First run — baseline only, no `agent/*` branches exist yet to review. Noted fo
 | Confirm `CHANGELOG.md` as source of truth vs. the docs-site changelog page | Avoids building the wrong thing in Week 1 | Medium |
 | Go/no-go on the Week 3 library-split RFC once drafted | Major breaking change, affects Studio and Aveiro | Medium (Week 3) |
 | Sign-off on sponsor-tier copy before it ships | Public-facing change | Low (Week 1) |
+| Awareness: GitHub reports 130 Dependabot alerts on `main` (69 high) | Discovered on this run's push; triage is now a Week 1 item, but volume/severity may need a human look sooner | Medium |
 
 ## 7. Decision log
 
