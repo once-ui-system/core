@@ -1,0 +1,139 @@
+<Feedback title="5 min · Pattern" description="Logo clouds, partner grids, and trust strips answer “who uses this?” without a wall of screenshots. LogoCloud rotates logos; Grid + Logo works for static grids." variant="info" />
+
+## What this pattern covers
+
+Social proof blocks appear on marketing heroes, pricing pages, and signup flows:
+
+- **LogoCloud** — animated grid that rotates through a logo set
+- **Logo** — brand mark with light/dark variants
+- **Grid** — static partner wall when rotation is unnecessary
+- **AutoScroll** — horizontal marquee for dense logo strips (describe in prose)
+
+Gold references: `packages/core/ai/examples/blocks/Footer3.tsx` (footer trust row), marketing hero task `packages/core/ai/tasks/marketing-hero.json`, and pricing bundle `packages/core/ai/tasks/pricing.json`.
+
+## LogoCloud basics
+
+LogoCloud extends Grid. Pass a `logos` array of Logo props — each entry is the same shape you would pass to Logo directly.
+
+Describe in prose:
+
+- `logos` — full partner list
+- `limit` — how many show at once (default 6)
+- `rotationInterval` — milliseconds between rotations when `logos.length > limit`
+- Always set `columns` on the grid — the catalog warns LogoCloud needs explicit column counts at breakpoints
+
+Typical hero placement: centered Column under the headline, `gap="24"`, with a weak label:
+
+```text
+<Column gap="24" horizontal="center" fillWidth>
+  <Text variant="label-default-s" onBackground="neutral-weak">
+    Trusted by teams at
+  </Text>
+  {/* LogoCloud — logos prop wired in your app */}
+</Column>
+```
+
+## Static logo grid
+
+When you have six logos and no animation, use Grid + Logo (pass `dark`, `light`, `size`, and optional `href` per partner):
+
+```text
+<Grid fillWidth columns={6} m={{ columns: 4 }} s={{ columns: 3 }} gap="24">
+  {partners.map((partner) => (
+    <Column key={partner.id} center padding="12">
+      {/* Logo — dark, light, size="m", href */}
+    </Column>
+  ))}
+</Grid>
+```
+
+Use `horizontal="center"` on the Column so mixed aspect logos align cleanly.
+
+## Eyebrow + headline pairing
+
+Social proof should not compete with the hero CTA. Structure:
+
+1. Hero headline and primary Button
+2. Optional secondary Button
+3. Trust label + logos (smaller, neutral text)
+
+```text
+<Column gap="32" horizontal="center" maxWidth="m">
+  <Column gap="16" horizontal="center">
+    <Text variant="label-default-s" onBackground="brand-medium">
+      Now in public beta
+    </Text>
+    <Heading variant="display-strong-l" align="center">
+      Ship polished UI in hours
+    </Heading>
+    <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+      Semantics, tokens, and patterns agents can follow.
+    </Text>
+  </Column>
+  <Row gap="12" s={{ direction: "column" }}>
+    <Button>Start building</Button>
+    <Button variant="secondary">View docs</Button>
+  </Row>
+  {/* trust strip below */}
+</Column>
+```
+
+See [Hero section](/common-patterns/hero-section.mdx) for the full hero recipe.
+
+## Testimonial row (without Carousel)
+
+Carousels are heavy for a single quote. Use a static panel:
+
+```text
+<Column
+  fillWidth
+  padding="24"
+  gap="16"
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  maxWidth="m"
+>
+  <Text variant="body-default-m">“We cut our UI polish time in half.”</Text>
+  <Row gap="12" vertical="center">
+    <Avatar src="/avatars/ceo.jpg" size="s" />
+    <Column gap="2">
+      <Text variant="body-strong-s">Jane Park</Text>
+      <Text variant="body-default-xs" onBackground="neutral-weak">
+        CTO, Example Co
+      </Text>
+    </Column>
+  </Row>
+</Column>
+```
+
+For rotating testimonials, see [Carousels & compare media](/common-patterns/carousel-and-compare-media.mdx).
+
+## Marquee strips
+
+AutoScroll wraps children in a horizontal infinite scroll — useful when logos exceed viewport width.
+
+Describe in prose: wrap a Row of Logo components inside AutoScroll, set `speed` conservatively, and pause on hover if your UX research says users need to read marks. Prefer LogoCloud rotation when you want discrete swaps instead of continuous motion.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| LogoCloud with `columns` at breakpoints | Default grid with squashed logos |
+| Weak label above logos | Logos same size as headline |
+| Logo `dark` + `light` assets | Single PNG on wrong theme |
+| Static Grid for ≤6 partners | LogoCloud rotation for tiny sets |
+
+## Check yourself
+
+- [ ] Trust strip sits *below* primary CTA, not above headline
+- [ ] Logo assets include theme variants
+- [ ] Grid columns collapse on `s` / `m` breakpoints
+- [ ] Links use `href` on Logo when partners should be clickable
+
+## Related
+
+→ [Hero section](/common-patterns/hero-section.mdx)
+→ [Pricing & plans](/common-patterns/pricing-and-plans.mdx)
+→ [Decoration layers](/common-patterns/decoration-layers.mdx)
+→ Full reference: [docs.once-ui.com — LogoCloud](https://docs.once-ui.com/once-ui/components/logoCloud)

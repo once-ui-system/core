@@ -1,0 +1,95 @@
+<Feedback title="5 min · Pattern" description="Uniform Grid columns fit cards of the same height. MasonryGrid packs variable-height media — portfolios, inspiration boards, and mixed aspect shots." variant="info" />
+
+## What this pattern covers
+
+Gallery layouts are a common agent trap: teams use CSS Grid with manual row spans when heights differ.
+
+| Layout | Component | Best for |
+|--------|-----------|----------|
+| Equal-height cards | `Grid` | Pricing tiers, feature grids |
+| Variable image heights | `MasonryGrid` | Portfolios, mood boards, Pinterest-style feeds |
+| Single hero + thumbs | `Grid` + `Media` | Product detail pages |
+
+Gold references: `packages/core/ai/examples/blocks/Gallery1.tsx` (if present in blocks manifest), marketing hero media sections, and catalog entry `MasonryGrid`.
+
+## MasonryGrid API
+
+MasonryGrid is a flex-based masonry packer — pass `columns` and breakpoint overrides `l`, `m`, `s`, `xs`.
+
+Describe in prose:
+
+- `columns` — default column count (often 3 on desktop)
+- `gap` — spacing token between items (default `8`; use `16` for marketing galleries)
+- `l` / `m` / `s` / `xs` — per-breakpoint `{ columns: number }` objects
+
+Each child is one cell — usually a Card or Media wrapper.
+
+Typical desktop → mobile collapse: `columns={3}` with `s={{ columns: 2 }}` and `xs={{ columns: 1 }}`.
+
+## Portfolio cell
+
+Wrap each asset in Card when the tile is clickable. Use the Media component for the image (pass `src`, `alt`, `aspectRatio`, and `radius`) — avoid raw `img` tags.
+
+```text
+<Card href={`/work/${piece.id}`} radius="l" padding="0">
+  {/* Media — src, alt, aspectRatio="4 / 3", radius="l" */}
+  <Column padding="16" gap="4">
+    <Text variant="body-strong-s">{piece.title}</Text>
+    <Text variant="body-default-xs" onBackground="neutral-weak">
+      {piece.category}
+    </Text>
+  </Column>
+</Card>
+```
+
+## Masonry vs Grid decision tree
+
+1. **All tiles same structure and height?** → `Grid` with `columns` prop
+2. **Mixed aspect ratios, no strict rows?** → `MasonryGrid`
+3. **Horizontal filmstrip?** → `Scroller` — see [Scrolling & feeds](/common-patterns/scrolling-and-feeds.mdx)
+4. **Full-bleed carousel?** → [Carousel & compare media](/common-patterns/carousel-and-compare-media.mdx)
+
+## Section wrapper
+
+Galleries need breathing room — wrap in page Column with section gap:
+
+```text
+<Column fillWidth gap="48" paddingX="l" maxWidth="xl">
+  <Column gap="8">
+    <Heading variant="display-strong-s">Selected work</Heading>
+    <Text variant="body-default-m" onBackground="neutral-weak">
+      Brand, product, and editorial projects.
+    </Text>
+  </Column>
+  {/* MasonryGrid children */}
+</Column>
+```
+
+Use `gap="48"` between section title and grid per [Spacing & rhythm](/design-tips/spacing-and-rhythm.mdx).
+
+## Loading gallery skeleton
+
+While assets load, mirror masonry with a Grid of block skeletons (shape described in [Loading states](/common-patterns/loading-states.mdx)) — same `columns` and `gap` as the final MasonryGrid so layout does not jump.
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| MasonryGrid for mixed heights | Grid + manual `grid-row` spans |
+| Media `aspectRatio` prop | Unsized images collapsing layout |
+| Card `href` for clickable tiles | `div` with `onClick` only |
+| Breakpoint `columns` overrides | One column count for all widths |
+
+## Check yourself
+
+- [ ] Column counts defined for `s` and `xs`
+- [ ] Media `alt` text set for every image
+- [ ] Clickable tiles use Card with `href` or `onClick`
+- [ ] Section title uses display/heading variants, not body text
+
+## Related
+
+→ [Scrolling & feeds](/common-patterns/scrolling-and-feeds.mdx)
+→ [Media & uploads](/common-patterns/media-and-uploads.mdx)
+→ [Responsive stacking](/common-patterns/responsive-stacking.mdx)
+→ Full reference: [docs.once-ui.com — MasonryGrid](https://docs.once-ui.com/once-ui/components/masonryGrid)
