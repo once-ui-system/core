@@ -14,25 +14,46 @@ Banner extends Row with opinionated defaults: `solid="brand-medium"`, `onSolid="
 
 ## Basic announcement
 
-Keep one line of copy. Put the Banner as the first child inside your app shell — above the sticky header:
+Keep one line of copy. Put the announcement strip as the first child inside your app shell — above the sticky header.
+
+Describe in prose: use the Banner component — it extends Row with `solid="brand-medium"`, `onSolid="brand-strong"`, centered label text, and `fillWidth`. Render it only when `showBanner` is true.
+
+Equivalent structure with allowed primitives:
 
 ```text
-<Banner>
+<Row
+  fillWidth
+  center
+  gap="12"
+  paddingX="16"
+  paddingY="8"
+  solid="brand-medium"
+  onSolid="brand-strong"
+  textVariant="label-default-s"
+>
   <Text onSolid="brand-strong">
     Once UI 1.7 is live — read the changelog
   </Text>
   <IconButton icon="arrowUpRight" variant="ghost" size="s" />
-</Banner>
+</Row>
 ```
 
-Describe in prose: wrap the page in a Column, render Banner only when `showBanner` is true, and persist dismissal in localStorage or user preferences.
+Persist dismissal in localStorage or user preferences.
 
 ## Banner with CTA
 
-When the action is more important than a link icon, add a small Button:
+When the action is more important than a link icon, add a small Button inside the same Row:
 
 ```text
-<Banner gap="16">
+<Row
+  fillWidth
+  center
+  gap="16"
+  paddingX="16"
+  paddingY="8"
+  solid="brand-medium"
+  onSolid="brand-strong"
+>
   <Text onSolid="brand-strong">
     Pro blocks are included in your plan
   </Text>
@@ -40,7 +61,7 @@ When the action is more important than a link icon, add a small Button:
     Browse blocks
   </Button>
   <IconButton icon="close" variant="ghost" size="s" />
-</Banner>
+</Row>
 ```
 
 Use `variant="secondary"` on Button so it contrasts against the solid banner background. Keep at most one primary action.
@@ -57,11 +78,20 @@ Override Row surface props on Banner for different tones:
 | Neutral FYI | `neutral-medium` | `neutral-strong` |
 
 ```text
-<Banner solid="warning-medium" onSolid="warning-strong">
+<Row
+  fillWidth
+  center
+  gap="12"
+  paddingX="16"
+  paddingY="8"
+  solid="warning-medium"
+  onSolid="warning-strong"
+  textVariant="label-default-s"
+>
   <Text onSolid="warning-strong">
     Scheduled maintenance tonight 02:00–04:00 UTC
   </Text>
-</Banner>
+</Row>
 ```
 
 ## Placement in app chrome
@@ -76,7 +106,7 @@ Do not nest Banner inside `maxWidth` content columns — it should span the full
 
 ## Dismissal pattern
 
-Banner has no built-in `onDismiss`. Wire dismissal in the parent:
+The Banner component has no built-in `onDismiss`. Wire dismissal in the parent:
 
 1. `useState` for visibility
 2. `IconButton` with `onClick` that sets false
@@ -90,7 +120,7 @@ Describe in prose: store `banner-dismissed-2026-07` in localStorage when the use
 |----------------|-------------------|
 | One-line label text | Paragraph of release notes in the strip |
 | Banner above header, full width | Banner inside a padded content Column |
-| Dismiss state in parent | Expecting Banner to manage persistence |
+| Dismiss state in parent | Expecting the strip to manage persistence |
 | Secondary Button for CTA | Full-size primary Button dominating the strip |
 
 ## Check yourself
