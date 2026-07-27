@@ -491,6 +491,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   onInstanceChange,
   ...rest
 }) => {
+  const styleBackgroundColor = style?.backgroundColor;
   const codeRef = useRef<HTMLElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
   const [selectedInstance, setSelectedInstance] = useState(0);
@@ -709,6 +710,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           fitHeight
           horizontal="between"
           background={background}
+          style={{ backgroundColor: styleBackgroundColor }}
         >
           {codes.length > 1 ? (
             <Scroller paddingX="8">
@@ -758,7 +760,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           {!compact && (
             <Row paddingY="4" paddingX="8" gap="2" position="static">
               {reloadButton && (
-                <Flex fit radius="s" background={background}>
+                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
                   <IconButton
                     size="m"
                     tooltip="Reload"
@@ -771,7 +773,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 </Flex>
               )}
               {fullscreenButton && (
-                <Flex fit radius="s" background={background}>
+                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
                   <IconButton
                     size="m"
                     color="neutral-weak"
@@ -785,7 +787,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               )}
               {styleButton && (
                 <StyleOverlay>
-                  <Flex fit radius="s" background={background}>
+                  <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
                     <IconButton
                       variant="tertiary"
                       icon="sparkle"
@@ -795,7 +797,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 </StyleOverlay>
               )}
               {copyButton && (
-                <Flex fit radius="s" background={background}>
+                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
                   <IconButton
                     size="m"
                     tooltip="Copy"
@@ -968,6 +970,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               zIndex={1}
               radius="s"
               background={background}
+              style={{ backgroundColor: styleBackgroundColor }}
             >
               <IconButton
                 tooltip="Copy"

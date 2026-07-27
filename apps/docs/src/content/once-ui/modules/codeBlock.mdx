@@ -538,6 +538,79 @@ Use the `background` prop to change the CodeBlock's outer background. Combine wi
   ]}
 />
 
+### Custom colors
+
+Pass any color via `style.backgroundColor` &mdash; the button wrappers automatically pick it up.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  style={{ backgroundColor: "rgba(255, 0, 128, 0.5)" }}
+  codes={[
+    {
+      language: "tsx",
+      label: "Magenta (50%)",
+      code:
+`<CodeBlock
+    style={{ backgroundColor: "rgba(255, 0, 128, 0.5)" }}
+    codes={[
+      {
+        language: "tsx",
+        label: "Magenta",
+        code: "console.log('magenta');"
+      }
+    ]}
+/>`
+    }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  style={{ backgroundColor: "rgba(255, 192, 203, 0.5)" }}
+  codes={[
+    {
+      language: "tsx",
+      label: "Pink (50%)",
+      code:
+`<CodeBlock
+    style={{ backgroundColor: "rgba(255, 192, 203, 0.5)" }}
+    codes={[
+      {
+        language: "tsx",
+        label: "Pink",
+        code: "console.log('pink');"
+      }
+    ]}
+/>`
+    }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  style={{ backgroundColor: "rgba(0, 188, 212, 0.5)" }}
+  codes={[
+    {
+      language: "tsx",
+      label: "Cyan (50%)",
+      code:
+`<CodeBlock
+    style={{ backgroundColor: "rgba(0, 188, 212, 0.5)" }}
+    codes={[
+      {
+        language: "tsx",
+        label: "Cyan",
+        code: "console.log('cyan');"
+      }
+    ]}
+/>`
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable

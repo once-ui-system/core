@@ -2893,7 +2893,7 @@ export default function ComponentsCheck() {
               label: "Custom BG (controls test)",
               element: (
                 <CodeBlock
-                  background="accent-alpha-strong"
+                  style={{ backgroundColor: "pink" }}
                   compact
                   codes={[
                     {
