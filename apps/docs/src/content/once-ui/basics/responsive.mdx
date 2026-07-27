@@ -1,0 +1,368 @@
+---
+title: "Responsive Breakpoints"
+summary: "Per-component responsive breakpoint system with type-safe prop selection."
+updatedAt: "2026-07-27"
+docs: "once-ui/basics/responsive.mdx"
+github: "interfaces.ts"
+navLabel: "Responsive"
+navIcon: "basics"
+navTag: "Update"
+navTagVariant: "success"
+order: 7
+keywords: "responsive, breakpoints, xs, s, m, l, xl, mobile, adaptive"
+---
+
+# Responsive Breakpoints
+
+Once UI provides a type-safe responsive breakpoint system where each component only exposes the props it actually supports at each breakpoint.
+
+## Breakpoint values
+
+Breakpoints are managed by the `LayoutProvider` component. You can override default breakpoints by passing a `breakpoints` prop to the `LayoutProvider`.
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Breakpoint", key: "breakpoint" },
+      { content: "Min Width", key: "width" },
+      { content: "Typical Device", key: "device" },
+    ],
+    rows: [
+      ["xs", <InlineCode>480px</InlineCode>, "Mobile portrait"],
+      ["s", <InlineCode>768px</InlineCode>, "Mobile landscape / Tablet portrait"],
+      ["m", <InlineCode>1024px</InlineCode>, "Tablet landscape / Small laptop"],
+      ["l", <InlineCode>1440px</InlineCode>, "Desktop"],
+      ["xl", <InlineCode>1920px</InlineCode>, "Large desktop"],
+    ],
+  }}
+/>
+
+Breakpoints cascade downward: `xl` → `l` → `m` → `s` → `xs`. A value set at `xl` applies to all smaller breakpoints unless overridden.
+
+## Per-component props
+
+Each component defines its own breakpoint type using `BreakpointProps<Source, Keys>`, a generic that picks specific keys from the component's prop interfaces and makes them optional.
+
+### Flex / Row / Column
+
+Supports layout, spacing, sizing, colors, typography, and effects.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="16" s={{direction: "column"}}>
+      <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
+        <Text variant="body-default-s">Item 1</Text>
+      </Flex>
+      <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
+        <Text variant="body-default-s">Item 2</Text>
+      </Flex>
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Flex
+  direction="row"
+  padding="16"
+  background="surface"
+  xl={{ direction: "row", padding: "32" }}
+  m={{ direction: "column", padding: "16" }}
+  s={{ direction: "column", padding: "8" }}
+>
+  <Flex flex={1}>Item 1</Flex>
+  <Flex flex={1}>Item 2</Flex>
+</Flex>`,
+      language: "tsx",
+      label: "Responsive Flex"
+    }
+  ]}
+/>
+
+**Supported breakpoint props:**
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Category", key: "category" },
+      { content: "Props", key: "props" },
+    ],
+    rows: [
+      ["Layout", <InlineCode>direction, horizontal, vertical, center, wrap, flex</InlineCode>],
+      ["Spacing", <InlineCode>padding, paddingLeft, paddingRight, paddingTop, paddingBottom, paddingX, paddingY, margin, marginLeft, marginRight, marginTop, marginBottom, marginX, marginY, gap</InlineCode>],
+      ["Position", <InlineCode>top, right, bottom, left, position, hide</InlineCode>],
+      ["Sizing", <InlineCode>width, height, maxWidth, minWidth, minHeight, maxHeight, fit, fitWidth, fitHeight, fill, fillWidth, fillHeight, aspectRatio</InlineCode>],
+      ["Colors", <InlineCode>background, solid, border, borderTop, borderRight, borderBottom, borderLeft, borderX, borderY, borderStyle, borderWidth, radius, shadow, onBackground, onSolid</InlineCode>],
+      ["Typography", <InlineCode>align, textVariant, textSize, textWeight, textType</InlineCode>],
+      ["Effects", <InlineCode>opacity, zIndex, pointerEvents, transition, scrollbar, dark, light</InlineCode>],
+      ["Display", <InlineCode>overflow, overflowX, overflowY</InlineCode>],
+      ["Escape hatch", <InlineCode>style</InlineCode>],
+    ],
+  }}
+/>
+
+### Grid
+
+Supports grid-specific, spacing, sizing, colors, typography, and effects. Does **not** support `direction`, `horizontal`, `vertical`, `center`, `wrap`, `flex`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="16" s={{direction: "column"}}>
+      <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
+        <Text variant="body-default-s">Cell 1</Text>
+      </Flex>
+      <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
+        <Text variant="body-default-s">Cell 2</Text>
+      </Flex>
+      <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
+        <Text variant="body-default-s">Cell 3</Text>
+      </Flex>
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Grid
+  columns="3"
+  gap="16"
+  m={{ columns: 2 }}
+  s={{ columns: 1 }}
+>
+  <Flex padding="16">Cell 1</Flex>
+  <Flex padding="16">Cell 2</Flex>
+  <Flex padding="16">Cell 3</Flex>
+</Grid>`,
+      language: "tsx",
+      label: "Responsive Grid"
+    }
+  ]}
+/>
+
+**Supported breakpoint props:**
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Category", key: "category" },
+      { content: "Props", key: "props" },
+    ],
+    rows: [
+      ["Grid-specific", <InlineCode>columns, rows</InlineCode>],
+      ["Spacing", <InlineCode>padding, paddingLeft, paddingRight, paddingTop, paddingBottom, paddingX, paddingY, margin, marginLeft, marginRight, marginTop, marginBottom, marginX, marginY, gap</InlineCode>],
+      ["Position", <InlineCode>top, right, bottom, left, position, hide</InlineCode>],
+      ["Sizing", <InlineCode>width, height, maxWidth, minWidth, minHeight, maxHeight, fit, fitWidth, fitHeight, fill, fillWidth, fillHeight, aspectRatio</InlineCode>],
+      ["Colors", <InlineCode>background, solid, border, borderTop, borderRight, borderBottom, borderLeft, borderX, borderY, borderStyle, borderWidth, radius, shadow, onBackground, onSolid</InlineCode>],
+      ["Typography", <InlineCode>align, textVariant, textSize, textWeight, textType</InlineCode>],
+      ["Effects", <InlineCode>opacity, zIndex, pointerEvents, transition, scrollbar, dark, light</InlineCode>],
+      ["Display", <InlineCode>overflow, overflowX, overflowY</InlineCode>],
+      ["Escape hatch", <InlineCode>style</InlineCode>],
+    ],
+  }}
+/>
+
+### Card / Dialog / Mask
+
+These extend `Flex` and inherit all Flex breakpoint props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Card
+      background="surface"
+      radius="l"
+      padding="24"
+      xl={{ padding: "32" }}
+      m={{ padding: "16" }}
+    >
+      <Text variant="body-default-s">Card content</Text>
+    </Card>
+  }
+  codes={[
+    {
+      code: `<Card
+  background="surface"
+  radius="l"
+  padding="24"
+  xl={{ padding: "32" }}
+  m={{ padding: "16" }}
+>
+  Content
+</Card>`,
+      language: "tsx",
+      label: "Responsive Card"
+    }
+  ]}
+/>
+
+## How it works
+
+### Type system
+
+The generic `BreakpointProps<Source, Keys>` type picks specific keys from a source interface and makes them optional:
+
+```ts
+type BreakpointProps<Source, Keys extends keyof Source> = {
+  [K in Keys]?: Source[K];
+};
+```
+
+Each component defines its allowed props:
+
+```ts
+// Flex supports everything
+type FlexBreakpointProps = BreakpointProps<AllFlexProps,
+  | 'direction' | 'horizontal' | 'vertical' | 'center' | 'wrap' | 'flex'
+  | 'padding' | 'gap' | 'width' | 'height' | 'background' | 'opacity'
+  // ... etc
+>;
+
+// Grid excludes layout props
+type GridBreakpointProps = BreakpointProps<AllGridProps,
+  | 'columns' | 'rows'
+  | 'padding' | 'gap' | 'width' | 'height' | 'background' | 'opacity'
+  // ... etc (no direction, horizontal, vertical, center, wrap, flex)
+>;
+```
+
+### Runtime behavior
+
+1. **Default breakpoints (server-rendered):** When using the default breakpoint system, `ServerFlex`/`ServerGrid` generate CSS classes at build time (e.g., `m-padding-l`, `s-flex-column`).
+
+2. **Custom breakpoints (client-rendered):** When using custom breakpoints via `LayoutProvider`, `ClientFlex`/`ClientGrid` apply responsive styles client-side using `useResponsiveClasses` for CSS classes and `applyResponsiveStyles` for inline styles.
+
+3. **Cascade order:** `xl` → `l` → `m` → `s` → `xs`. Larger breakpoints flow down to smaller ones. Setting `xl={{ padding: "32" }}` applies `padding: 32` at all sizes unless a smaller breakpoint overrides it.
+
+## Examples
+
+### Hide on mobile
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Flex
+      hide
+      s={{ hide: false }}
+      padding="16"
+      background="surface"
+      radius="l"
+    >
+      <Text variant="body-default-s">Visible on mobile only</Text>
+    </Flex>
+  }
+  codes={[
+    {
+      code: `<Flex
+  hide
+  s={{ hide: false }}
+>
+  Visible on mobile only
+</Flex>`,
+      language: "tsx",
+      label: "Hide on desktop"
+    }
+  ]}
+/>
+
+### Direction change
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Flex
+      direction="row"
+      horizontal="between"
+      fillWidth
+      gap="16"
+      m={{ direction: "column" }}
+    >
+      <Flex padding="16" background="surface" radius="l">
+        <Text variant="body-default-s">Left content</Text>
+      </Flex>
+      <Flex padding="16" background="surface" radius="l">
+        <Text variant="body-default-s">Right content</Text>
+      </Flex>
+    </Flex>
+  }
+  codes={[
+    {
+      code: `<Flex
+  direction="row"
+  horizontal="between"
+  m={{ direction: "column" }}
+>
+  <Flex>Left content</Flex>
+  <Flex>Right content</Flex>
+</Flex>`,
+      language: "tsx",
+      label: "Direction change"
+    }
+  ]}
+/>
+
+## Custom breakpoints
+
+To use non-default breakpoints, wrap your app in a `LayoutProvider`:
+
+```tsx
+import { LayoutProvider } from "@once-ui-system/core";
+
+<LayoutProvider
+  breakpoints={{ xs: 480, s: 768, m: 1024, l: 1440, xl: 1920 }}
+>
+  <App />
+</LayoutProvider>
+```
+
+With custom breakpoints, responsive styles are applied client-side via JavaScript rather than server-rendered CSS classes.
+
+## TypeScript API
+
+Exported types for extending the breakpoint system:
+
+```ts
+import {
+  BreakpointProps,
+  FlexBreakpointProps,
+  GridBreakpointProps,
+  TextBreakpointProps,
+  ButtonBreakpointProps,
+  InputBreakpointProps,
+} from "@once-ui-system/core";
+
+// Create custom breakpoint type for your component
+type MyComponentBreakpointProps = BreakpointProps<
+  MyComponentProps,
+  'padding' | 'background' | 'opacity'
+>;
+```
+
+### Available breakpoint types
+
+<Table
+  marginTop="16"
+  marginBottom="24"
+  data={{
+    headers: [
+      { content: "Type", key: "type" },
+      { content: "Use Case", key: "usecase" },
+    ],
+    rows: [
+      [<InlineCode>BreakpointProps&lt;Source, Keys&gt;</InlineCode>, "Generic: pick any keys from any source"],
+      [<InlineCode>FlexBreakpointProps</InlineCode>, "Flex, Row, Column, Card, Dialog, Mask, etc."],
+      [<InlineCode>GridBreakpointProps</InlineCode>, "Grid, LogoCloud"],
+      [<InlineCode>TextBreakpointProps</InlineCode>, "Text (if breakpoints added)"],
+      [<InlineCode>ButtonBreakpointProps</InlineCode>, "Button (if breakpoints added)"],
+      [<InlineCode>InputBreakpointProps</InlineCode>, "Input (if breakpoints added)"],
+    ],
+  }}
+/>

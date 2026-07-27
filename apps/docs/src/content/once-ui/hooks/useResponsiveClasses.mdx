@@ -1,7 +1,7 @@
 ---
 title: "useResponsiveClasses"
 summary: "Internal hook for managing responsive CSS classes in Flex and Grid components."
-updatedAt: "2026-02-22"
+updatedAt: "2026-07-27"
 docs: "once-ui/hooks/useResponsiveClasses.mdx"
 github: "hooks/useResponsiveClasses.ts"
 navLabel: "useResponsiveClasses"
@@ -12,7 +12,7 @@ The `useResponsiveClasses` hook is an internal utility used by Flex and Grid com
 
 **Used in components:** [Flex](/once-ui/components/flex), [Grid](/once-ui/components/grid)
 
-<Feedback marginTop="16" marginBottom="24" description="This is an internal hook. You should never need to use this hook directly. Instead, use the Flex and Grid components with responsive props (e.g., `direction={{ s: 'column', m: 'row' }}`), which automatically handle responsive behavior."/>
+<Feedback marginTop="16" marginBottom="24" description="This is an internal hook. You should never need to use this hook directly. Instead, use the Flex and Grid components with responsive props (e.g., `m={{ direction: 'column' }}`), which automatically handle responsive behavior."/>
 
 ## Features
 
@@ -76,6 +76,31 @@ The hook manages responsive classes for:
 - `columns` - grid column count (1-12)
 - `flex` - flex values (1-12)
 - `wrap` - wrap, nowrap, wrap-reverse
+- `hide` / `show` - responsive visibility
+- `top`, `right`, `bottom`, `left` - position offsets
+- `align` - text alignment
+- `scrollbar` - scrollbar visibility
+- `pointerEvents` - pointer event handling
+- `opacity` - opacity levels
+- `zIndex` - z-index levels
+- `transition` - transition presets
+
+## Per-component breakpoint types
+
+The hook works with per-component breakpoint types defined via `BreakpointProps<Source, Keys>`:
+
+```ts
+// Each component defines only the props it supports
+type FlexBreakpointProps = BreakpointProps<AllFlexProps,
+  'direction' | 'horizontal' | 'vertical' | 'center' | 'wrap' | 'flex' |
+  'padding' | 'gap' | 'width' | 'height' | 'background' | 'opacity' | ...
+>;
+
+type GridBreakpointProps = BreakpointProps<AllGridProps,
+  'columns' | 'rows' |
+  'padding' | 'gap' | 'width' | 'height' | 'background' | 'opacity' | ...
+>;
+```
 
 ## Performance
 
@@ -105,9 +130,9 @@ When a Flex component has responsive props:
   codes={[
     {
       code:
-`<Flex direction={{ s: 'column', m: 'row' }}>
-  {/* Hook applies 'flex-column' on small screens */}
-  {/* Hook applies 'flex-row' on medium+ screens */}
+`<Flex direction="row" m={{ direction: 'column' }}>
+  {/* Hook applies 'flex-column' on medium screens */}
+  {/* Hook applies 'flex-row' on large+ screens */}
 </Flex>`,
       language: "tsx",
       label: "Responsive Flex"
@@ -117,4 +142,4 @@ When a Flex component has responsive props:
 
 ## Note
 
-This is an internal hook. For responsive layouts, use the Flex and Grid components directly with responsive props rather than using this hook.
+This is an internal hook. For responsive layouts, use the Flex and Grid components directly with responsive props rather than using this hook. See [Responsive Breakpoints](/once-ui/basics/responsive) for the full API.

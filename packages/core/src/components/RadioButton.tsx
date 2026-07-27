@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, forwardRef } from "react";
+import React, { useState, useEffect, forwardRef, useId } from "react";
 import classNames from "classnames";
 import { Flex, InteractiveDetails, InteractiveDetailsProps } from ".";
 import styles from "./SharedInteractiveStyles.module.scss";
@@ -18,15 +18,13 @@ interface RadioButtonProps
   hoverable?: boolean;
 }
 
-const generateId = () => `radio-${Math.random().toString(36).substring(2, 9)}`;
-
 const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
     { style, className, isChecked: controlledIsChecked, name, value, onToggle, disabled, hoverable = true, ...props },
     ref,
   ) => {
     const [isChecked, setIsChecked] = useState(controlledIsChecked || false);
-    const [radioId] = useState(generateId());
+    const radioId = useId();
 
     useEffect(() => {
       if (controlledIsChecked !== undefined) {

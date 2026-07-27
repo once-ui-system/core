@@ -42,21 +42,6 @@
    "dark": "boolean",
    "light": "boolean"
   },
-  "FlexBreakpointProps": {
-   "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
-   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "center": "boolean",
-   "overflow": "CSSProperties[\"overflow\"]",
-   "overflowX": "CSSProperties[\"overflowX\"]",
-   "overflowY": "CSSProperties[\"overflowY\"]",
-   "top": "SpacingToken",
-   "right": "SpacingToken",
-   "bottom": "SpacingToken",
-   "left": "SpacingToken",
-   "aspectRatio": "CSSProperties[\"aspectRatio\"]",
-   "style": "CSSProperties"
-  },
   "FlexProps": {
    "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
@@ -64,18 +49,6 @@
    "center": "boolean",
    "wrap": "boolean",
    "flex": "FlexValue"
-  },
-  "GridBreakpointProps": {
-   "columns": "GridProps[\"columns\"]",
-   "overflow": "CSSProperties[\"overflow\"]",
-   "overflowX": "CSSProperties[\"overflowX\"]",
-   "overflowY": "CSSProperties[\"overflowY\"]",
-   "top": "SpacingToken",
-   "right": "SpacingToken",
-   "bottom": "SpacingToken",
-   "left": "SpacingToken",
-   "aspectRatio": "CSSProperties[\"aspectRatio\"]",
-   "style": "CSSProperties"
   },
   "GridProps": {
    "columns": "GridSize",
