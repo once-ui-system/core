@@ -69,9 +69,19 @@ A component for providing users with contextual options / information on right c
           value="edit"
         />
         <Option
-          hasPrefix={<Icon size="xs" name="copy" onBackground="neutral-weak" />}
+          hasPrefix={<Icon size="xs" name="document" onBackground="neutral-weak" />}
           label="Duplicate"
           value="duplicate"
+        />
+        <Option
+          hasPrefix={<Icon size="xs" name="copy" onBackground="neutral-weak" />}
+          label="Copy"
+          value="copy"
+        />
+        <Option
+          hasPrefix={<Icon size="xs" name="eyeOff" onBackground="neutral-weak" />}
+          label="Hide"
+          value="hide"
         />
         <Line marginY="2" />
         <Option
@@ -96,7 +106,17 @@ A component for providing users with contextual options / information on right c
 <PropsTable
   content={[
     ["dropdown", "ReactNode", ""],
-    ["placement", "string", "bottom-start"],
+    ["placement", "Placement", "bottom-end"],
+    ["fillWidth", "boolean", "false"],
+    ["minWidth", "number", "12"],
+    ["maxWidth", "number"],
+    ["minHeight", "number"],
+    ["onSelect", "(value: string) => void"],
+    ["closeAfterClick", "boolean", "true"],
+    ["open", "boolean"],
+    ["onOpenChange", "(open: boolean) => void"],
+    ["selectedOption", "string"],
+    ["disabled", "boolean", "false"],
     ["children"],
     ["className"],
     ["style"],

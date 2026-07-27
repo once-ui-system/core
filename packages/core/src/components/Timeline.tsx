@@ -2,7 +2,7 @@
 
 import React from "react";
 import { Column, Flex, Line, Text } from ".";
-import { TShirtSizes } from "@/types";
+import { TShirtSizes } from "../types";
 
 export interface TimelineItem {
   label?: React.ReactNode;

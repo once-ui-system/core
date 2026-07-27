@@ -10,9 +10,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "export": "next export",
+    "export": "echo 'next export removed in Next.js 15 — use next build instead'",
     "biome-write": "npx @biomejs/biome format --write .",
-    "watch": "tsc --watch --project tsconfig.build.json"
+    "watch": "echo 'watch not available — use turbo dev'"
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",

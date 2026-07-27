@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, forwardRef } from "react";
 import { Input, DropdownWrapper, DatePicker } from ".";
 
 interface DateInputProps extends Omit<React.ComponentProps<typeof Input>, "onChange" | "value"> {
@@ -32,7 +32,7 @@ const formatDate = (date: Date, timePicker: boolean) => {
   return date.toLocaleString("en-US", options);
 };
 
-export const DateInput: React.FC<DateInputProps> = ({
+export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(({
   id,
   label,
   placeholder,
@@ -46,7 +46,7 @@ export const DateInput: React.FC<DateInputProps> = ({
   minDate,
   maxDate,
   ...rest
-}) => {
+}, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState(value ? formatDate(value, timePicker) : "");
 
@@ -77,6 +77,7 @@ export const DateInput: React.FC<DateInputProps> = ({
 
   return (
     <DropdownWrapper
+      ref={ref}
       trigger={
         <Input
           style={{
@@ -116,4 +117,6 @@ export const DateInput: React.FC<DateInputProps> = ({
       handleArrowNavigation={false}
     />
   );
-};
+});
+
+DateInput.displayName = "DateInput";

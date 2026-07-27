@@ -86,7 +86,7 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
           tabIndex={disabled ? -1 : 0}
           cursor={disabled ? "not-allowed" : undefined}
           style={{
-            borderColor: "var(--neutral-border-medium)",
+            borderColor: "var(--solid-border-color-neutral)",
             ...style,
           }}
           className={classNames(styles.element, {

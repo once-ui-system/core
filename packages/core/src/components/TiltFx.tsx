@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback, forwardRef } from "react";
 import styles from "./TiltFx.module.scss";
 import { Flex } from ".";
 import { useReducedMotion } from "../hooks/useReducedMotion";
@@ -11,9 +11,18 @@ interface TiltFxProps extends React.ComponentProps<typeof Flex> {
   reducedMotion?: boolean | "auto";
 }
 
-const TiltFx: React.FC<TiltFxProps> = ({ children, intensity = 1, reducedMotion = "auto", ...rest }) => {
-  const ref = useRef<HTMLDivElement>(null);
+const TiltFx = forwardRef<HTMLDivElement, TiltFxProps>(({ children, intensity = 1, reducedMotion = "auto", ...rest }, ref) => {
+  const internalRef = useRef<HTMLDivElement>(null);
   const lastCallRef = useRef(0);
+
+  const mergedRef = useCallback((node: HTMLDivElement | null) => {
+    internalRef.current = node;
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    }
+  }, [ref]);
   const resetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isTouchDeviceRef = useRef(false);
 
@@ -35,7 +44,7 @@ const TiltFx: React.FC<TiltFxProps> = ({ children, intensity = 1, reducedMotion 
     if (now - lastCallRef.current < 16) return;
     lastCallRef.current = now;
 
-    const element = ref.current;
+    const element = internalRef.current;
     if (!element) return;
 
     const rect = element.getBoundingClientRect();
@@ -60,7 +69,7 @@ const TiltFx: React.FC<TiltFxProps> = ({ children, intensity = 1, reducedMotion 
   const handleMouseLeave = () => {
     if (isTouchDeviceRef.current || !shouldAnimate) return;
 
-    const element = ref.current;
+    const element = internalRef.current;
     if (element) {
       resetTimeoutRef.current = setTimeout(() => {
         element.style.transform =
@@ -80,7 +89,7 @@ const TiltFx: React.FC<TiltFxProps> = ({ children, intensity = 1, reducedMotion 
 
   return (
     <Flex
-      ref={ref}
+      ref={mergedRef}
       overflow="hidden"
       className={styles.tiltFx}
       onMouseMove={handleMouseMove}
@@ -90,7 +99,7 @@ const TiltFx: React.FC<TiltFxProps> = ({ children, intensity = 1, reducedMotion 
       {children}
     </Flex>
   );
-};
+});
 
 export { TiltFx };
 TiltFx.displayName = "TiltFx";

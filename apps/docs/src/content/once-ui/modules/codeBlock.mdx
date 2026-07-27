@@ -511,6 +511,33 @@ Use `maxLines` to limit code height and show a "View code" overlay for expandabl
   ]}
 />
 
+## Custom background
+
+Use the `background` prop to change the CodeBlock's outer background. Combine with alpha tokens for transparency effects.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  background="brand-alpha-weak"
+  codes={[
+    {
+      language: "tsx",
+      label: "Custom background",
+      code:
+`<CodeBlock
+    background="brand-alpha-weak"
+    codes={[
+      {
+        language: "tsx",
+        label: "Custom background",
+        code: "console.log('Styled code block');"
+      }
+    ]}
+/>`
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable

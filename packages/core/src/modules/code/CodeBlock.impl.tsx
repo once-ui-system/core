@@ -466,6 +466,7 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   highlight?: string;
   maxLines?: number;
   isCollapsible?: boolean;
+  hideCode?: boolean;
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({
@@ -483,6 +484,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   maxLines = 5,
   isCollapsible = false,
   compact = false,
+  hideCode = false,
   className,
   style,
   background = "surface",
@@ -676,6 +678,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       overflow="hidden"
       vertical="center"
       fillWidth
+      radius="m"
       minHeight={2.5}
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
@@ -834,7 +837,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           </Row>
         </Row>
       )}
-      {codes.length > 0 && code && (
+      {codes.length > 0 && code && !hideCode && (
         <Row
           border={!compact && !preview ? "neutral-alpha-weak" : undefined}
           fillHeight={fillHeight}

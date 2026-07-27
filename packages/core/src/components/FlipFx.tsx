@@ -137,18 +137,10 @@ const FlipFx = forwardRef<HTMLDivElement, FlipFxProps>((props, ref) => {
         aria-hidden={!flippedState}
         style={{
           backfaceVisibility: "hidden",
-          transform: "rotateY(180deg)",
+          transform: flipDirection === "vertical" ? "rotateX(180deg)" : "rotateY(180deg)",
         }}
       >
-        <Flex
-          fill
-          style={{
-            transform:
-              flipDirection === "vertical" ? "rotateY(-180deg) rotateX(180deg)" : undefined,
-          }}
-        >
-          {back}
-        </Flex>
+        {back}
       </Flex>
     </Flex>
   );

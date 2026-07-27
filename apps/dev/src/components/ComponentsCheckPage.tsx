@@ -89,6 +89,7 @@ import {
   FlipFx,
   GlitchFx,
   HoloFx,
+  Card,
   MatrixFx,
   ShineFx,
   TiltFx,
@@ -735,39 +736,39 @@ export default function ComponentsCheck() {
               value: "large",
               label: "Large (100%)",
               element: (
-                <div style={{ width: "100%" }}>
+                <Flex fillWidth>
                   <ColorInput
                     id="color-lg"
                     value="#3b82f6"
                     onChange={() => {}}
                   />
-                </div>
+                </Flex>
               ),
             },
             {
               value: "medium",
               label: "Medium (50%)",
               element: (
-                <div style={{ width: "50%" }}>
+                <Flex style={{ width: "50%" }}>
                   <ColorInput
                     id="color-md"
                     value="#3b82f6"
                     onChange={() => {}}
                   />
-                </div>
+                </Flex>
               ),
             },
             {
               value: "small",
               label: "Small (25%)",
               element: (
-                <div style={{ width: "25%" }}>
+                <Flex style={{ width: "25%" }}>
                   <ColorInput
                     id="color-sm"
                     value="#3b82f6"
                     onChange={() => {}}
                   />
-                </div>
+                </Flex>
               ),
             },
           ],
@@ -881,7 +882,7 @@ export default function ComponentsCheck() {
               value: "large",
               label: "Large (100%)",
               element: (
-                <div style={{ width: "100%" }}>
+                <Flex fillWidth>
                   <Select
                     id="sel-lg"
                     label="Framework"
@@ -891,14 +892,14 @@ export default function ComponentsCheck() {
                       { label: "Astro", value: "astro" },
                     ]}
                   />
-                </div>
+                </Flex>
               ),
             },
             {
               value: "medium",
               label: "Medium (50%)",
               element: (
-                <div style={{ width: "50%" }}>
+                <Flex style={{ width: "50%" }}>
                   <Select
                     id="sel-md"
                     label="Framework"
@@ -908,14 +909,14 @@ export default function ComponentsCheck() {
                       { label: "Astro", value: "astro" },
                     ]}
                   />
-                </div>
+                </Flex>
               ),
             },
             {
               value: "small",
               label: "Small (25%)",
               element: (
-                <div style={{ width: "25%" }}>
+                <Flex style={{ width: "25%" }}>
                   <Select
                     id="sel-sm"
                     label="Framework"
@@ -925,7 +926,7 @@ export default function ComponentsCheck() {
                       { label: "Astro", value: "astro" },
                     ]}
                   />
-                </div>
+                </Flex>
               ),
             },
           ],
@@ -1549,6 +1550,37 @@ export default function ComponentsCheck() {
             },
           ],
         },
+        {
+          name: "Card",
+          variations: [
+            {
+              value: "default",
+              label: "Default",
+              element: (
+                <Card padding="16" radius="m" border="neutral-alpha-medium">
+                  <Heading variant="heading-strong-s">Card title</Heading>
+                  <Text variant="body-default-s" onBackground="neutral-weak">
+                    A basic interactive card component.
+                  </Text>
+                </Card>
+              ),
+            },
+            {
+              value: "with-link",
+              label: "With href",
+              element: (
+                <Card
+                  href="#"
+                  padding="16"
+                  radius="m"
+                  border="neutral-alpha-medium"
+                >
+                  <Text variant="label-default-s">Linked card</Text>
+                </Card>
+              ),
+            },
+          ],
+        },
       ],
     },
     {
@@ -1594,7 +1626,10 @@ export default function ComponentsCheck() {
               label: "Media header",
               element: (
                 <>
-                  <Button variant="secondary" onClick={() => setMediaDialogOpen(true)}>
+                  <Button
+                    variant="secondary"
+                    onClick={() => setMediaDialogOpen(true)}
+                  >
                     Dialog with media
                   </Button>
                   <Dialog
@@ -1606,7 +1641,10 @@ export default function ComponentsCheck() {
                     flush
                     footer={
                       <>
-                        <Button variant="secondary" onClick={() => setMediaDialogOpen(false)}>
+                        <Button
+                          variant="secondary"
+                          onClick={() => setMediaDialogOpen(false)}
+                        >
                           Dismiss
                         </Button>
                         <Button onClick={() => setMediaDialogOpen(false)}>
@@ -1628,8 +1666,9 @@ export default function ComponentsCheck() {
                           Building design systems that scale
                         </Text>
                         <Text onBackground="neutral-weak">
-                          A deep dive into creating modular, token-driven interfaces
-                          that stay consistent across products and teams.
+                          A deep dive into creating modular, token-driven
+                          interfaces that stay consistent across products and
+                          teams.
                         </Text>
                       </Column>
                     </Column>
@@ -2298,39 +2337,39 @@ export default function ComponentsCheck() {
               value: "large",
               label: "Large (100%)",
               element: (
-                <div style={{ width: "100%" }}>
+                <Flex fillWidth>
                   <DateInput
                     id="di-lg"
                     label="Date"
                     placeholder="Select a date"
                   />
-                </div>
+                </Flex>
               ),
             },
             {
               value: "medium",
               label: "Medium (50%)",
               element: (
-                <div style={{ width: "50%" }}>
+                <Flex style={{ width: "50%" }}>
                   <DateInput
                     id="di-md"
                     label="Date"
                     placeholder="Select a date"
                   />
-                </div>
+                </Flex>
               ),
             },
             {
               value: "small",
               label: "Small (25%)",
               element: (
-                <div style={{ width: "25%" }}>
+                <Flex style={{ width: "25%" }}>
                   <DateInput
                     id="di-sm"
                     label="Date"
                     placeholder="Select a date"
                   />
-                </div>
+                </Flex>
               ),
             },
           ],
@@ -2342,42 +2381,42 @@ export default function ComponentsCheck() {
               value: "large",
               label: "Large (100%)",
               element: (
-                <div style={{ width: "100%" }}>
+                <Flex fillWidth>
                   <DateRangeInput
                     id="dri-lg"
                     startLabel="Start"
                     endLabel="End"
                     placeholder="Select range"
                   />
-                </div>
+                </Flex>
               ),
             },
             {
               value: "medium",
               label: "Medium (50%)",
               element: (
-                <div style={{ width: "50%" }}>
+                <Flex style={{ width: "50%" }}>
                   <DateRangeInput
                     id="dri-md"
                     startLabel="Start"
                     endLabel="End"
                     placeholder="Select range"
                   />
-                </div>
+                </Flex>
               ),
             },
             {
               value: "small",
               label: "Small (25%)",
               element: (
-                <div style={{ width: "25%" }}>
+                <Flex style={{ width: "25%" }}>
                   <DateRangeInput
                     id="dri-sm"
                     startLabel="Start"
                     endLabel="End"
                     placeholder="Select range"
                   />
-                </div>
+                </Flex>
               ),
             },
           ],
@@ -2923,6 +2962,68 @@ export default function ComponentsCheck() {
                 />
               ),
             },
+            {
+              value: "hide-code",
+              label: "Hide Code",
+              element: (
+                <CodeBlock
+                  hideCode
+                  preview={
+                    <Column gap="m" fillWidth horizontal="center" padding="l">
+                      <Heading variant="heading-strong-m">Hidden Code</Heading>
+                      <Text
+                        variant="body-default-m"
+                        onBackground="neutral-medium"
+                      >
+                        The code is hidden, only preview is shown.
+                      </Text>
+                      <Button variant="primary" size="s">
+                        Action
+                      </Button>
+                    </Column>
+                  }
+                  codes={[
+                    {
+                      code: `function hidden() {\n  return "This code is hidden";\n}`,
+                      language: "javascript",
+                      label: "JavaScript",
+                    },
+                  ]}
+                />
+              ),
+            },
+            {
+              value: "collapsible-full",
+              label: "Collapsible (maxLines=0)",
+              element: (
+                <CodeBlock
+                  isCollapsible
+                  maxLines={0}
+                  copyButton
+                  preview={
+                    <Column gap="m" fillWidth horizontal="center" padding="l">
+                      <Heading variant="heading-strong-m">Full Code</Heading>
+                      <Text
+                        variant="body-default-m"
+                        onBackground="neutral-medium"
+                      >
+                        Code is collapsible but shows all lines when expanded.
+                      </Text>
+                      <Button variant="primary" size="s">
+                        View
+                      </Button>
+                    </Column>
+                  }
+                  codes={[
+                    {
+                      code: `function first() {\n  console.log("Line 1");\n}\n\nfunction second() {\n  console.log("Line 2");\n}\n\nfunction third() {\n  console.log("Line 3");\n}\n\nfunction fourth() {\n  console.log("Line 4");\n}`,
+                      language: "javascript",
+                      label: "JavaScript",
+                    },
+                  ]}
+                />
+              ),
+            },
           ],
         },
       ],
@@ -3137,7 +3238,9 @@ export default function ComponentsCheck() {
                       <Flex gap="s" fillWidth>
                         <SegmentedControl
                           selected={currentVar}
-                          onToggle={(value: string) => selectVar(comp.name, value)}
+                          onToggle={(value: string) =>
+                            selectVar(comp.name, value)
+                          }
                           buttons={comp.variations.map((v) => ({
                             value: v.value,
                             label: v.label,

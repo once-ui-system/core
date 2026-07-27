@@ -1,7 +1,7 @@
 ---
 title: "DataThemeProvider"
 summary: "The DataThemeProvider enables global style default configuration for Once UI's data-viz components."
-updatedAt: "2025-06-08"
+updatedAt: "2026-07-27"
 docs: "once-ui/contexts/dataThemeProvider.mdx"
 github: "contexts/DataThemeProvider.tsx"
 navLabel: "DataThemeProvider"
@@ -109,5 +109,20 @@ export function Providers({ children }: {
       language: "tsx",
       label: "once-ui.config.js"
     }
+  ]}
+/>
+
+## API reference
+
+### DataThemeProvider
+
+<PropsTable
+  content={[
+    ["children", "ReactNode"],
+    ["variant", ["flat", "gradient", "outline"], "gradient"],
+    ["mode", ["categorical", "divergent", "sequential"], "categorical"],
+    ["height", "number", "24"],
+    ["axis", "{ stroke: string }"],
+    ["tick", "{ fill: string; fontSize: number; line: boolean }"],
   ]}
 />
