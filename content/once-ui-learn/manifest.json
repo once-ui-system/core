@@ -57,6 +57,34 @@
       "id": "195ac69e-cf36-4e33-a000-000f8eec135a"
     },
     {
+      "path": "/common-patterns/banners-and-announcements.mdx",
+      "title": "Banners & announcements",
+      "summary": "Full-width Banner strips for product news, maintenance windows, and dismissible upgrade prompts.",
+      "tag": "Common patterns",
+      "file": "common-patterns/banners-and-announcements.mdx"
+    },
+    {
+      "path": "/common-patterns/footer-layouts.mdx",
+      "title": "Footer layouts",
+      "summary": "Minimal bars, CTA closers, and multi-column sitemap grids — Footer1–4 Pro block patterns.",
+      "tag": "Common patterns",
+      "file": "common-patterns/footer-layouts.mdx"
+    },
+    {
+      "path": "/common-patterns/onboarding-and-first-run.mdx",
+      "title": "Onboarding & first run",
+      "summary": "Welcome dialogs, setup checklists, guided empty dashboards, and profile completion nudges.",
+      "tag": "Common patterns",
+      "file": "common-patterns/onboarding-and-first-run.mdx"
+    },
+    {
+      "path": "/common-patterns/waitlist-and-coming-soon.mdx",
+      "title": "Waitlist & coming soon",
+      "summary": "Centered hero, email capture, RevealFx entry, and subscriber trust rows from Waitlist1.",
+      "tag": "Common patterns",
+      "file": "common-patterns/waitlist-and-coming-soon.mdx"
+    },
+    {
       "path": "/common-patterns/carousel-and-compare-media.mdx",
       "title": "Carousels, galleries, and before/after comparisons",
       "summary": "Carousel for rotators and galleries; CompareImage for draggable A/B sliders.",

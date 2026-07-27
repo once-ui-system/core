@@ -1,0 +1,165 @@
+<Feedback title="6 min · Pattern" description="First-run onboarding guides new users through setup with dialogs, checklist panels, and progressive disclosure. Compose with Dialog, static panels, and Button — keep one focus per step." variant="info" />
+
+## What this pattern covers
+
+Onboarding appears after signup or first login:
+
+- **Welcome Dialog** — short value prop + primary action
+- **Checklist panel** — static Column surface with completed steps
+- **Empty dashboard** — [Empty & error states](/common-patterns/empty-and-error-states.mdx) with guided CTAs
+- **Settings nudges** — inline Feedback rows for incomplete profile fields
+
+Gold references: `packages/core/ai/tasks/settings.json`, `packages/core/ai/examples/settings.tsx`, auth task `packages/core/ai/tasks/auth.json`.
+
+## Welcome dialog
+
+Start with a controlled Dialog — not a full-page modal route. One headline, two sentences, one Button:
+
+```text
+<Dialog
+  isOpen={showWelcome}
+  onClose={() => setShowWelcome(false)}
+  title="Welcome to your workspace"
+  footer={
+    <Row gap="12">
+      <Button onClick={startTour}>Get started</Button>
+      <Button variant="secondary" onClick={() => setShowWelcome(false)}>
+        Skip for now
+      </Button>
+    </Row>
+  }
+>
+  <Column gap="16">
+    <Text variant="body-default-m" onBackground="neutral-weak">
+      Connect your repo, invite teammates, and ship your first page in under ten minutes.
+    </Text>
+  </Column>
+</Dialog>
+```
+
+Persist `showWelcome` in user preferences or localStorage so returning users are not blocked.
+
+## Checklist panel
+
+Replace interactive Cards with a static surface panel listing setup steps:
+
+```text
+<Column
+  fillWidth
+  background="surface"
+  border="neutral-alpha-weak"
+  radius="l"
+  padding="24"
+  gap="24"
+>
+  <Column gap="8">
+    <Heading variant="heading-strong-s">Get set up</Heading>
+    <Text variant="body-default-s" onBackground="neutral-weak">
+      Complete these steps to unlock your dashboard.
+    </Text>
+  </Column>
+  <Column gap="12" fillWidth>
+    {steps.map((step) => (
+      <Row key={step.id} gap="12" vertical="center" fillWidth>
+        <Icon
+          name={step.done ? "check" : "circle"}
+          size="s"
+          onBackground={step.done ? "success-medium" : "neutral-weak"}
+        />
+        <Column gap="2" flex={1}>
+          <Text variant="body-strong-s">{step.title}</Text>
+          <Text variant="body-default-xs" onBackground="neutral-weak">
+            {step.description}
+          </Text>
+        </Column>
+        {!step.done && (
+          <Button size="s" variant="secondary">
+            {step.action}
+          </Button>
+        )}
+      </Row>
+    ))}
+  </Column>
+</Column>
+```
+
+Describe in prose: wire ProgressBar below the heading when you want a completion percentage — pass `value` as 0–100 based on `done` count.
+
+## Empty dashboard with guided CTA
+
+When data is empty because the user has not finished setup, use onboarding copy — not generic “No data”:
+
+```text
+<Column fillWidth center padding="48" gap="16" maxWidth="xs">
+  <Icon name="rocket" size="l" onBackground="brand-medium" />
+  <Heading variant="heading-strong-s" align="center">
+    Create your first project
+  </Heading>
+  <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+    Projects appear here once you import a repo or start from a template.
+  </Text>
+  <Button arrowIcon>New project</Button>
+</Column>
+```
+
+Differentiate from [Empty & error states](/common-patterns/empty-and-error-states.mdx): onboarding empty states assume the user is new; filtered-empty uses “Clear filters” instead.
+
+## Profile completion nudge
+
+In [Settings & split panels](/common-patterns/settings-and-split-panels.mdx), highlight incomplete fields with Feedback at the top of the active section:
+
+```text
+<Column gap="24">
+  <Feedback
+    title="Complete your profile"
+    description="Add a photo and display name so teammates recognize you."
+    variant="info"
+  />
+  {/* profile form fields */}
+</Column>
+```
+
+Dismiss the Feedback when required fields validate. Do not stack multiple Feedback rows — one nudge per section.
+
+## Multi-step vs checklist
+
+| Pattern | When | Surface |
+|---------|------|---------|
+| Checklist panel | Parallel tasks, any order | Static Column on dashboard |
+| Stacked dialogs | Sequential wizard, 3–4 steps | Controlled Dialog per step |
+| Inline empty state | Single critical first action | Centered Column in main area |
+
+For stacked dialogs, see [Dialog & modal](/common-patterns/dialog-modal.mdx) — advance `step` state in the parent and swap Dialog body content. Keep footer actions consistent: Back (secondary) + Continue (primary).
+
+## Agent checklist
+
+When generating onboarding from settings or auth task bundles:
+
+1. Welcome Dialog is dismissible — never trap users
+2. Checklist uses static panels, not Card without onClick
+3. Empty dashboard copy explains the *next* action, not the absence of data
+4. One Feedback nudge per settings section
+5. Progress tracked in parent state, not inside presentational components
+
+## Write this / not this
+
+| ✅ Once UI way | ❌ Common mistake |
+|----------------|-------------------|
+| Dismissible welcome Dialog | Full-screen blocking overlay with no skip |
+| Checklist in surface Column | Card rows without interaction |
+| “Create first X” onboarding copy | Generic “No results” on first visit |
+| One primary action per step | Three competing Buttons in welcome modal |
+
+## Check yourself
+
+- [ ] Welcome dialog can be skipped and stays dismissed
+- [ ] Checklist steps show done vs pending with Icon affordance
+- [ ] Empty dashboard CTA matches the actual first-run flow
+- [ ] Profile nudge dismisses when fields are complete
+
+## Related
+
+→ [Dialog & modal](/common-patterns/dialog-modal.mdx)
+→ [Empty & error states](/common-patterns/empty-and-error-states.mdx)
+→ [Settings & split panels](/common-patterns/settings-and-split-panels.mdx)
+→ [Auth & verification](/common-patterns/auth-and-verification.mdx)
