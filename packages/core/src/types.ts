@@ -89,7 +89,7 @@ export type RadiusNest = "4" | "8";
 
 export type TextType = "body" | "heading" | "display" | "label" | "code";
 
-export type TextWeight = "default" | "bold" | "bolder" | "strong";
+export type TextWeight = "default" | "normal" | "medium" | "strong";
 
 export type TextSize = TShirtSizes;
 

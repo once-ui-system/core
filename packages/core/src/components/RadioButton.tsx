@@ -83,10 +83,7 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
           onKeyDown={handleKeyDown}
           tabIndex={disabled ? -1 : 0}
           cursor={disabled ? "not-allowed" : undefined}
-          style={{
-            borderColor: "var(--solid-border-color-neutral)",
-            ...style,
-          }}
+          style={style}
           className={classNames(styles.element, {
             [styles.checked]: controlledIsChecked !== undefined ? controlledIsChecked : isChecked,
             [styles.disabled]: disabled,
