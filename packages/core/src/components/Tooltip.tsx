@@ -1,5 +1,5 @@
 import React, { forwardRef, ReactNode } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 
 import { Icon, Row } from ".";
 import { IconName } from "../icons";

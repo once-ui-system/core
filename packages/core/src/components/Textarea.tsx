@@ -8,7 +8,7 @@ import React, {
   useCallback,
   ReactNode,
 } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import { Column, Row, Text } from ".";
 import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
@@ -201,8 +201,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 } else if (ref) {
                   ref.current = node;
                 }
-                // @ts-ignore
-                textareaRef.current = node;
+                textareaRef.current = node as HTMLTextAreaElement | null;
               }}
               id={id}
               rows={typeof lines === "number" ? lines : 1}

@@ -1,7 +1,7 @@
 import '@once-ui-system/core/css/styles.css';
 import '@once-ui-system/core/css/tokens.css';
 
-import classNames from "classnames";
+import classNames from "clsx";
 
 import { Column, Flex, ThemeInit } from "@once-ui-system/core";
 import { dataStyle, style } from "@/resources/once-ui.config";
@@ -59,23 +59,21 @@ export default function RootLayout({
           fonts.code.variable,
         )}
       >
-        <head>
-          <ThemeInit
-            config={{
-              theme: style.theme,
-              brand: style.brand,
-              accent: style.accent,
-              neutral: style.neutral,
-              solid: style.solid,
-              'solid-style': style.solidStyle,
-              border: style.border,
-              surface: style.surface,
-              transition: style.transition,
-              scaling: style.scaling,
-              'viz-style': dataStyle.variant,
-            }}
-          />
-        </head>
+        <ThemeInit
+          config={{
+            theme: style.theme,
+            brand: style.brand,
+            accent: style.accent,
+            neutral: style.neutral,
+            solid: style.solid,
+            'solid-style': style.solidStyle,
+            border: style.border,
+            surface: style.surface,
+            transition: style.transition,
+            scaling: style.scaling,
+            'viz-style': dataStyle.variant,
+          }}
+        />
         <Providers>
           <Column background="page" as="body" fillWidth margin="0" padding="0" minHeight="100vh">
             <Flex

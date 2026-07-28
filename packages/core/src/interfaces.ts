@@ -189,7 +189,7 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
   light?: boolean;
 }
 
-export interface CommonProps extends HTMLAttributes<HTMLDivElement> {
+export interface CommonProps extends Omit<HTMLAttributes<HTMLDivElement>, "style"> {
   onBackground?: Colors;
   onSolid?: Colors;
   align?: CSSProperties["textAlign"];

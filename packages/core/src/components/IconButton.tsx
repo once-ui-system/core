@@ -5,7 +5,7 @@ import { ElementType } from "./ElementType";
 import { Flex, Icon, Tooltip, HoverCard, Spinner } from ".";
 import buttonStyles from "./Button.module.scss";
 import iconStyles from "./IconButton.module.scss";
-import classNames from "classnames";
+import classNames from "clsx";
 import { IconName } from "../icons";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 

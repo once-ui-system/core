@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
-import React, { useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 // Helper function to get all possible class names for a property
 const getPropertyClassNames = (property: string, baseDirection: string | undefined): string[] => {

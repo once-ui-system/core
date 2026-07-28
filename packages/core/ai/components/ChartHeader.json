@@ -2,8 +2,8 @@
  "name": "ChartHeader",
  "group": "modules",
  "extends": [
-  "Flex",
-  "Column"
+  "Column",
+  "Flex"
  ],
  "mixins": [
   "CommonProps",

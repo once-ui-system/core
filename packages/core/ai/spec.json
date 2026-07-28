@@ -340,8 +340,8 @@
   "BlobFx": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -358,8 +358,8 @@
   "Banner": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1131,8 +1131,8 @@
   "HoverCard": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Animation"
+    "Animation",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1191,8 +1191,8 @@
   "InfiniteScroll": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1514,8 +1514,8 @@
   "OgCard": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Card"
+    "Card",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1745,8 +1745,8 @@
   "ScrollContainer": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1781,8 +1781,8 @@
   "SegmentedControl": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Scroller"
+    "Scroller",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1813,7 +1813,7 @@
     "options": "!SelectOptionType[]",
     "value": "string | string[] = ",
     "emptyState": "ReactNode = No results",
-    "onSelect": "(value: any) => void",
+    "onSelect": "(value: string | string[]) => void",
     "placement": "Placement",
     "searchable": "boolean = false",
     "className": "string",
@@ -1914,8 +1914,8 @@
   "SplitView": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -2191,8 +2191,8 @@
   "Tooltip": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -2226,8 +2226,8 @@
   "ThemeSwitcher": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -2348,6 +2348,23 @@
     "className": "string"
    }
   },
+  "HeadingNav": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "header": "boolean = true"
+   }
+  },
   "HeadingLink": {
    "group": "modules",
    "extends": [
@@ -2368,28 +2385,11 @@
     "style": "React.CSSProperties"
    }
   },
-  "HeadingNav": {
-   "group": "modules",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "header": "boolean = true"
-   }
-  },
   "ChartHeader": {
    "group": "modules",
    "extends": [
-    "Flex",
-    "Column"
+    "Column",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",

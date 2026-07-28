@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, forwardRef } from "react";
 import { Column, Accordion, Line, Flex } from ".";
 import { CondensedTShirtSizes } from "../types";
 
@@ -17,14 +17,14 @@ export interface AccordionGroupProps extends React.ComponentProps<typeof Flex> {
   style?: React.CSSProperties;
 }
 
-const AccordionGroup: React.FC<AccordionGroupProps> = ({
+const AccordionGroup = forwardRef<HTMLDivElement, AccordionGroupProps>(({
   items,
   size = "m",
   style,
   className,
   autoCollapse = true,
   ...rest
-}) => {
+}, ref) => {
   const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
   const handleAccordionToggle = useCallback(
@@ -89,7 +89,7 @@ const AccordionGroup: React.FC<AccordionGroupProps> = ({
       })}
     </Column>
   );
-};
+})
 
 AccordionGroup.displayName = "AccordionGroup";
 export { AccordionGroup };

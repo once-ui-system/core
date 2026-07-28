@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Flex } from ".";
 import styles from "./ScrollToTop.module.scss";
-import classNames from "classnames";
+import classNames from "clsx";
 
 interface ScrollToTopProps extends React.ComponentProps<typeof Flex> {
   offset?: number;
@@ -46,3 +46,5 @@ export const ScrollToTop = ({ children, offset = 300, className, ...rest }: Scro
     </Flex>
   );
 };
+
+ScrollToTop.displayName = "ScrollToTop";

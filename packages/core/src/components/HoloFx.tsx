@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useCallback, forwardRef } from "react";
 import styles from "./HoloFx.module.scss";
 import { Flex } from ".";
 import { CSSProperties } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { forwardRef } from "react";
 import { Column, Flex, Line, Text } from ".";
 import { TShirtSizes } from "../types";
 
@@ -18,12 +18,12 @@ interface TimelineProps extends Omit<React.ComponentProps<typeof Flex>, 'childre
   size?: TShirtSizes;
 }
 
-const Timeline: React.FC<TimelineProps> = ({
+const Timeline = forwardRef<HTMLDivElement, TimelineProps>(({
   items,
   alignment = "left",
   size = "m",
   ...flex
-}) => {
+}, ref) => {
   // Helper to get color variable for state
   const getStateColor = (state: string) => {
     switch (state) {
@@ -159,7 +159,7 @@ const Timeline: React.FC<TimelineProps> = ({
       })}
     </Column>
   );
-};
+})
 
 Timeline.displayName = "Timeline";
 

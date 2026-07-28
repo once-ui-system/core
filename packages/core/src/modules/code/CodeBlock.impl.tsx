@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import ReactDOM from "react-dom";
-import classNames from "classnames";
+import classNames from "clsx";
 import { SpacingToken } from "../../types";
 import styles from "./CodeBlock.module.scss";
 import {

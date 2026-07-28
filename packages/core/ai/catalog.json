@@ -17,15 +17,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Expandable FAQ / disclosure sections",
+   "purpose": "AccordionGroup component",
    "tags": [
-    "content",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Column",
-    "Text",
-    "Heading"
+    "components"
    ]
   },
   "Animation": {
@@ -63,15 +57,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "User avatar with size tokens",
+   "purpose": "Avatar component",
    "tags": [
-    "media",
-    "profile"
-   ],
-   "pairsWith": [
-    "Row",
-    "User",
-    "AvatarGroup"
+    "components"
    ]
   },
   "AvatarGroup": {
@@ -79,14 +67,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Stacked overlapping avatars",
+   "purpose": "AvatarGroup component",
    "tags": [
-    "profile",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Avatar",
-    "Row"
+    "components"
    ]
   },
   "Badge": {
@@ -94,45 +77,31 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Notification count or status badge",
+   "purpose": "Badge component",
    "tags": [
-    "typography",
-    "dashboard"
-   ],
-   "avoid": "Passing same text in title prop and children"
+    "components"
+   ]
   },
   "BlobFx": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
-   "purpose": "Drifting blurred brand blobs for ambient panels",
+   "purpose": "BlobFx component",
    "tags": [
-    "decoration",
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Column",
-    "Card"
+    "components"
    ]
   },
   "Banner": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
-   ],
-   "purpose": "Top-of-page announcement strip",
-   "tags": [
-    "navigation",
-    "marketing"
-   ],
-   "pairsWith": [
     "Row",
-    "Button",
-    "SmartLink"
+    "Flex"
+   ],
+   "purpose": "Banner component",
+   "tags": [
+    "components"
    ]
   },
   "Background": {
@@ -140,16 +109,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Absolute decorative layer: gradients, dots, lines, grid textures",
+   "purpose": "Background component",
    "tags": [
-    "decoration",
-    "effect"
-   ],
-   "pairsWith": [
-    "Column",
-    "Row",
-    "MatrixFx",
-    "BlobFx"
+    "components"
    ]
   },
   "BlockQuote": {
@@ -157,24 +119,16 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Quoted text — keep smaller than section headings",
+   "purpose": "BlockQuote component",
    "tags": [
-    "typography",
-    "marketing"
-   ],
-   "avoid": "Using default size larger than display-strong-xs section titles"
+    "components"
+   ]
   },
   "Button": {
    "group": "components",
-   "purpose": "Primary action and navigation with variants and icons",
+   "purpose": "Button component",
    "tags": [
-    "action",
-    "basics"
-   ],
-   "pairsWith": [
-    "Icon",
-    "SmartLink",
-    "Row"
+    "components"
    ]
   },
   "MatrixFx": {
@@ -182,16 +136,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Animated matrix field with optional bulge wave",
+   "purpose": "MatrixFx component",
    "tags": [
-    "decoration",
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Background",
-    "Column",
-    "RevealFx"
+    "components"
    ]
   },
   "WeatherFx": {
@@ -209,15 +156,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Image/content carousel with navigation",
+   "purpose": "Carousel component",
    "tags": [
-    "media",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Media",
-    "Column",
-    "Button"
+    "components"
    ]
   },
   "Swiper": {
@@ -225,14 +166,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Touch-friendly image swiper",
+   "purpose": "Swiper component",
    "tags": [
-    "media",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Media",
-    "Row"
+    "components"
    ]
   },
   "Card": {
@@ -240,16 +176,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Interactive surface only — requires href or onClick",
+   "purpose": "Card component",
    "tags": [
-    "surface"
-   ],
-   "avoid": "Static panels (pricing tiers, testimonials, stats) — use Column + surface recipe",
-   "pairsWith": [
-    "Background",
-    "Media",
-    "Heading",
-    "SmartLink"
+    "components"
    ]
   },
   "CursorCard": {
@@ -257,14 +186,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Card that follows cursor for spotlight effects",
+   "purpose": "CursorCard component",
    "tags": [
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Background",
-    "Column"
+    "components"
    ]
   },
   "Cursor": {
@@ -276,16 +200,9 @@
   },
   "CountFx": {
    "group": "components",
-   "purpose": "Animated number counter for stats and pricing",
+   "purpose": "CountFx component",
    "tags": [
-    "effect",
-    "data",
-    "marketing"
-   ],
-   "pairsWith": [
-    "useInViewport",
-    "Text",
-    "Row"
+    "components"
    ]
   },
   "CountdownFx": {
@@ -300,17 +217,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Vertical flex layout — default direction column",
+   "purpose": "Column component",
    "tags": [
-    "layout",
-    "basics"
-   ],
-   "preferOver": "Flex with direction=\"column\"",
-   "pairsWith": [
-    "Row",
-    "Grid",
-    "Heading",
-    "Text"
+    "components"
    ]
   },
   "Checkbox": {
@@ -318,14 +227,9 @@
    "extends": [
     "InteractiveDetails"
    ],
-   "purpose": "Checkbox with label for forms",
+   "purpose": "Checkbox component",
    "tags": [
-    "form",
-    "settings"
-   ],
-   "pairsWith": [
-    "Column",
-    "Row"
+    "components"
    ]
   },
   "Chip": {
@@ -333,15 +237,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Selectable chip for ratings, filters, tags",
+   "purpose": "Chip component",
    "tags": [
-    "form",
-    "feedback"
-   ],
-   "pairsWith": [
-    "Row",
-    "Textarea",
-    "Dialog"
+    "components"
    ]
   },
   "ColorInput": {
@@ -359,26 +257,16 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Before/after image comparison slider",
+   "purpose": "CompareImage component",
    "tags": [
-    "media",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Column",
-    "Media"
+    "components"
    ]
   },
   "ContextMenu": {
    "group": "components",
-   "purpose": "Right-click context menu",
+   "purpose": "ContextMenu component",
    "tags": [
-    "overlay",
-    "chat"
-   ],
-   "pairsWith": [
-    "Column",
-    "Row"
+    "components"
    ]
   },
   "DateInput": {
@@ -416,15 +304,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Date range filter for dashboards and tables",
+   "purpose": "DateRangePicker component",
    "tags": [
-    "form",
-    "dashboard"
-   ],
-   "pairsWith": [
-    "Input",
-    "Row",
-    "Table"
+    "components"
    ]
   },
   "DialogProvider": {
@@ -439,16 +321,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Modal dialog with stack support for multi-step flows",
+   "purpose": "Dialog component",
    "tags": [
-    "overlay",
-    "auth"
-   ],
-   "pairsWith": [
-    "OTPInput",
-    "PasswordInput",
-    "Button",
-    "Column"
+    "components"
    ]
   },
   "Dropdown": {
@@ -456,14 +331,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Dropdown menu for actions and navigation",
+   "purpose": "Dropdown component",
    "tags": [
-    "overlay",
-    "navigation"
-   ],
-   "pairsWith": [
-    "IconButton",
-    "UserMenu"
+    "components"
    ]
   },
   "DropdownWrapper": {
@@ -488,15 +358,9 @@
    "extends": [
     "DropdownWrapper"
    ],
-   "purpose": "Emoji picker in a dropdown for chat/message inputs",
+   "purpose": "EmojiPickerDropdown component",
    "tags": [
-    "overlay",
-    "chat"
-   ],
-   "pairsWith": [
-    "Input",
-    "IconButton",
-    "Row"
+    "components"
    ]
   },
   "Fade": {
@@ -504,49 +368,36 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Edge overlay strip on scroll containers — not a content wrapper",
+   "purpose": "Fade component",
    "tags": [
-    "effect",
-    "chat"
-   ],
-   "avoid": "Wrapping entire message lists or sections"
+    "components"
+   ]
   },
   "Feedback": {
    "group": "components",
    "extends": [
     "Flex"
    ],
-   "purpose": "Inline feedback message display",
+   "purpose": "Feedback component",
    "tags": [
-    "feedback"
-   ],
-   "pairsWith": [
-    "useToast",
-    "Dialog"
+    "components"
    ]
   },
   "Flex": {
    "group": "components",
-   "purpose": "Dynamic-direction flex container — use only when direction changes at breakpoints",
+   "purpose": "Flex component",
    "tags": [
-    "layout",
-    "basics"
-   ],
-   "avoid": "Static row/column layouts — use Row or Column instead"
+    "components"
+   ]
   },
   "FlipFx": {
    "group": "components",
    "extends": [
     "Flex"
    ],
-   "purpose": "Flip card between front and back faces",
+   "purpose": "FlipFx component",
    "tags": [
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Card",
-    "Column"
+    "components"
    ]
   },
   "GlitchFx": {
@@ -554,40 +405,23 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Glitch text effect",
+   "purpose": "GlitchFx component",
    "tags": [
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Heading",
-    "Text"
+    "components"
    ]
   },
   "Grid": {
    "group": "components",
-   "purpose": "CSS grid container with token-based columns/rows",
+   "purpose": "Grid component",
    "tags": [
-    "layout",
-    "basics"
-   ],
-   "pairsWith": [
-    "Column",
-    "Row",
-    "Card"
+    "components"
    ]
   },
   "Heading": {
    "group": "components",
-   "purpose": "Semantic headings with display/heading variants",
+   "purpose": "Heading component",
    "tags": [
-    "typography",
-    "basics"
-   ],
-   "pairsWith": [
-    "Text",
-    "Column",
-    "RevealFx"
+    "components"
    ]
   },
   "HoloFx": {
@@ -595,14 +429,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Holographic foil effect on cards",
+   "purpose": "HoloFx component",
    "tags": [
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Card",
-    "Media"
+    "components"
    ]
   },
   "Hover": {
@@ -610,30 +439,20 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Hover state wrapper for subtle scale/glow transitions",
+   "purpose": "Hover component",
    "tags": [
-    "effect"
-   ],
-   "pairsWith": [
-    "Card",
-    "Media"
+    "components"
    ]
   },
   "HoverCard": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Animation"
+    "Animation",
+    "Flex"
    ],
-   "purpose": "Rich popover card on hover",
+   "purpose": "HoverCard component",
    "tags": [
-    "overlay",
-    "profile"
-   ],
-   "pairsWith": [
-    "Avatar",
-    "User",
-    "Column"
+    "components"
    ]
   },
   "Icon": {
@@ -641,42 +460,27 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Icon from IconName list in spec — never invent names",
+   "purpose": "Icon component",
    "tags": [
-    "basics"
-   ],
-   "pairsWith": [
-    "Row",
-    "Button",
-    "IconButton"
+    "components"
    ]
   },
   "IconButton": {
    "group": "components",
-   "purpose": "Icon-only action with optional tooltip",
+   "purpose": "IconButton component",
    "tags": [
-    "action",
-    "chat"
-   ],
-   "pairsWith": [
-    "Tooltip",
-    "Row"
+    "components"
    ]
   },
   "InfiniteScroll": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
-   "purpose": "Infinite scroll wrapper for feeds and lists",
+   "purpose": "InfiniteScroll component",
    "tags": [
-    "layout",
-    "chat"
-   ],
-   "pairsWith": [
-    "Column",
-    "Spinner"
+    "components"
    ]
   },
   "InlineCode": {
@@ -684,27 +488,16 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Inline code snippet styling",
+   "purpose": "InlineCode component",
    "tags": [
-    "typography",
-    "docs"
-   ],
-   "pairsWith": [
-    "Text",
-    "CodeBlock"
+    "components"
    ]
   },
   "Input": {
    "group": "components",
-   "purpose": "Text input with label, validation, and icons",
+   "purpose": "Input component",
    "tags": [
-    "form"
-   ],
-   "pairsWith": [
-    "PasswordInput",
-    "Select",
-    "Switch",
-    "Column"
+    "components"
    ]
   },
   "InteractiveDetails": {
@@ -719,26 +512,16 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Keyboard shortcut display",
+   "purpose": "Kbd component",
    "tags": [
-    "typography",
-    "chat"
-   ],
-   "pairsWith": [
-    "Row",
-    "Text"
+    "components"
    ]
   },
   "LetterFx": {
    "group": "components",
-   "purpose": "Per-letter text animation for hero headlines",
+   "purpose": "LetterFx component",
    "tags": [
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Heading",
-    "Column"
+    "components"
    ]
   },
   "Line": {
@@ -746,14 +529,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Horizontal divider / section separator",
+   "purpose": "Line component",
    "tags": [
-    "decoration",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Column",
-    "Row"
+    "components"
    ]
   },
   "List": {
@@ -761,14 +539,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Styled list with icons or bullets",
+   "purpose": "List component",
    "tags": [
-    "content"
-   ],
-   "pairsWith": [
-    "Column",
-    "Icon",
-    "Text"
+    "components"
    ]
   },
   "ListItem": {
@@ -780,14 +553,9 @@
   },
   "Logo": {
    "group": "components",
-   "purpose": "Brand logo with light/dark variants",
+   "purpose": "Logo component",
    "tags": [
-    "media",
-    "navigation"
-   ],
-   "pairsWith": [
-    "SmartLink",
-    "Row"
+    "components"
    ]
   },
   "LogoCloud": {
@@ -795,15 +563,9 @@
    "extends": [
     "Grid"
    ],
-   "purpose": "Grid of partner/customer logos — always set columns",
+   "purpose": "LogoCloud component",
    "tags": [
-    "marketing",
-    "social-proof"
-   ],
-   "pairsWith": [
-    "Grid",
-    "Media",
-    "Logo"
+    "components"
    ]
   },
   "Mask": {
@@ -821,14 +583,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Pinterest-style masonry layout",
+   "purpose": "MasonryGrid component",
    "tags": [
-    "layout",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Media",
-    "Card"
+    "components"
    ]
   },
   "Media": {
@@ -836,16 +593,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Optimized image/video with aspect ratio and radius",
+   "purpose": "Media component",
    "tags": [
-    "media",
-    "basics"
-   ],
-   "avoid": "Raw img elements",
-   "pairsWith": [
-    "Card",
-    "Column",
-    "TiltFx"
+    "components"
    ]
   },
   "Modal": {
@@ -878,17 +628,12 @@
   "OgCard": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Card"
+    "Card",
+    "Flex"
    ],
-   "purpose": "Open Graph link preview card",
+   "purpose": "OgCard component",
    "tags": [
-    "media",
-    "social"
-   ],
-   "pairsWith": [
-    "SmartLink",
-    "Media"
+    "components"
    ]
   },
   "Option": {
@@ -903,15 +648,9 @@
   },
   "OTPInput": {
    "group": "components",
-   "purpose": "One-time password input for verification steps",
+   "purpose": "OTPInput component",
    "tags": [
-    "form",
-    "auth"
-   ],
-   "pairsWith": [
-    "Dialog",
-    "Column",
-    "Button"
+    "components"
    ]
   },
   "Particle": {
@@ -919,14 +658,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Floating particle decoration",
+   "purpose": "Particle component",
    "tags": [
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Background",
-    "Column"
+    "components"
    ]
   },
   "PasswordInput": {
@@ -934,15 +668,9 @@
    "extends": [
     "Input"
    ],
-   "purpose": "Password field with show/hide toggle",
+   "purpose": "PasswordInput component",
    "tags": [
-    "form",
-    "auth"
-   ],
-   "pairsWith": [
-    "Input",
-    "Dialog",
-    "Column"
+    "components"
    ]
   },
   "ProgressBar": {
@@ -950,15 +678,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Linear progress indicator",
+   "purpose": "ProgressBar component",
    "tags": [
-    "data",
-    "onboarding"
-   ],
-   "pairsWith": [
-    "StatusIndicator",
-    "Column",
-    "Text"
+    "components"
    ]
   },
   "Pulse": {
@@ -986,15 +708,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Viewport-triggered entrance animation — one key set per page",
+   "purpose": "RevealFx component",
    "tags": [
-    "effect",
-    "motion"
-   ],
-   "pairsWith": [
-    "useInViewport",
-    "Grid",
-    "Column"
+    "components"
    ]
   },
   "Row": {
@@ -1002,17 +718,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Horizontal flex layout — default direction row",
+   "purpose": "Row component",
    "tags": [
-    "layout",
-    "basics"
-   ],
-   "preferOver": "Flex with direction=\"row\"",
-   "pairsWith": [
-    "Column",
-    "Grid",
-    "Text",
-    "Button"
+    "components"
    ]
   },
   "Scroller": {
@@ -1020,20 +728,16 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Horizontal scroll container for chips, tabs, cards",
+   "purpose": "Scroller component",
    "tags": [
-    "layout"
-   ],
-   "pairsWith": [
-    "Row",
-    "Chip"
+    "components"
    ]
   },
   "ScrollContainer": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "purpose": "ScrollContainer component",
    "tags": [
@@ -1053,17 +757,12 @@
   "SegmentedControl": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Scroller"
+    "Scroller",
+    "Flex"
    ],
-   "purpose": "Toggle between 2–5 options (billing period, view mode)",
+   "purpose": "SegmentedControl component",
    "tags": [
-    "control",
-    "dashboard"
-   ],
-   "pairsWith": [
-    "Row",
-    "Grid"
+    "components"
    ]
   },
   "Select": {
@@ -1072,27 +771,16 @@
     "Input",
     "DropdownWrapper"
    ],
-   "purpose": "Dropdown select for forms and filters",
+   "purpose": "Select component",
    "tags": [
-    "form",
-    "dashboard"
-   ],
-   "pairsWith": [
-    "Input",
-    "Row",
-    "Column"
+    "components"
    ]
   },
   "ShineFx": {
    "group": "components",
-   "purpose": "Shine sweep animation on text",
+   "purpose": "ShineFx component",
    "tags": [
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Heading",
-    "Text"
+    "components"
    ]
   },
   "Skeleton": {
@@ -1100,68 +788,44 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Loading placeholder for cards and lists",
+   "purpose": "Skeleton component",
    "tags": [
-    "feedback",
-    "ecommerce"
-   ],
-   "pairsWith": [
-    "Grid",
-    "Media",
-    "Column"
+    "components"
    ]
   },
   "Slider": {
    "group": "components",
-   "purpose": "Numeric range slider",
+   "purpose": "Slider component",
    "tags": [
-    "form",
-    "settings"
-   ],
-   "pairsWith": [
-    "Row",
-    "Text"
+    "components"
    ]
   },
   "SmartLink": {
    "group": "components",
-   "purpose": "Enhanced link with Once UI styling",
+   "purpose": "SmartLink component",
    "tags": [
-    "navigation",
-    "basics"
-   ],
-   "avoid": "Raw a elements"
+    "components"
+   ]
   },
   "Spinner": {
    "group": "components",
    "extends": [
     "Flex"
    ],
-   "purpose": "Loading indicator for async/streaming states",
+   "purpose": "Spinner component",
    "tags": [
-    "feedback",
-    "chat"
-   ],
-   "pairsWith": [
-    "Row",
-    "Text"
+    "components"
    ]
   },
   "SplitView": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
-   "purpose": "Resizable two-pane layout for sidebars and chat",
+   "purpose": "SplitView component",
    "tags": [
-    "layout",
-    "chat",
-    "settings"
-   ],
-   "pairsWith": [
-    "Column",
-    "Row"
+    "components"
    ]
   },
   "StatusIndicator": {
@@ -1169,15 +833,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Colored status dot for online/offline/success states",
+   "purpose": "StatusIndicator component",
    "tags": [
-    "data",
-    "onboarding"
-   ],
-   "pairsWith": [
-    "Row",
-    "Text",
-    "Avatar"
+    "components"
    ]
   },
   "StylePanel": {
@@ -1205,15 +863,9 @@
    "extends": [
     "InteractiveDetails"
    ],
-   "purpose": "Boolean toggle for settings",
+   "purpose": "Switch component",
    "tags": [
-    "form",
-    "settings"
-   ],
-   "pairsWith": [
-    "Row",
-    "Column",
-    "Text"
+    "components"
    ]
   },
   "Table": {
@@ -1221,15 +873,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Structured data table with headers and rows",
+   "purpose": "Table component",
    "tags": [
-    "data",
-    "dashboard"
-   ],
-   "pairsWith": [
-    "Column",
-    "Tag",
-    "Icon"
+    "components"
    ]
   },
   "Tag": {
@@ -1237,15 +883,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Metadata label — do not duplicate text in label prop and children",
+   "purpose": "Tag component",
    "tags": [
-    "typography",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Row",
-    "Badge",
-    "Heading"
+    "components"
    ]
   },
   "TagInput": {
@@ -1260,28 +900,16 @@
   },
   "Text": {
    "group": "components",
-   "purpose": "Body, label, display, and code typography",
+   "purpose": "Text component",
    "tags": [
-    "typography",
-    "basics"
-   ],
-   "pairsWith": [
-    "Heading",
-    "Column",
-    "Row"
+    "components"
    ]
   },
   "Textarea": {
    "group": "components",
-   "purpose": "Multi-line text input",
+   "purpose": "Textarea component",
    "tags": [
-    "form",
-    "feedback"
-   ],
-   "pairsWith": [
-    "Dialog",
-    "Column",
-    "Chip"
+    "components"
    ]
   },
   "TiltFx": {
@@ -1289,15 +917,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Pointer-tilt interaction wrapper for cards and previews",
+   "purpose": "TiltFx component",
    "tags": [
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Card",
-    "Media",
-    "Column"
+    "components"
    ]
   },
   "Timeline": {
@@ -1305,15 +927,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Versioned changelog / release history layout",
+   "purpose": "Timeline component",
    "tags": [
-    "content",
-    "docs"
-   ],
-   "pairsWith": [
-    "Tag",
-    "CodeBlock",
-    "Text"
+    "components"
    ]
   },
   "Toast": {
@@ -1340,58 +956,37 @@
   "Tooltip": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
-   "purpose": "Hover/focus tooltip for icon buttons and truncated text",
+   "purpose": "Tooltip component",
    "tags": [
-    "overlay",
-    "basics"
-   ],
-   "pairsWith": [
-    "IconButton",
-    "Text"
+    "components"
    ]
   },
   "TypeFx": {
    "group": "components",
-   "purpose": "Typewriter text effect",
+   "purpose": "TypeFx component",
    "tags": [
-    "effect",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Heading",
-    "Text"
+    "components"
    ]
   },
   "ThemeSwitcher": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
-   "purpose": "Light/dark theme toggle",
+   "purpose": "ThemeSwitcher component",
    "tags": [
-    "navigation",
-    "settings"
-   ],
-   "pairsWith": [
-    "IconButton",
-    "Row"
+    "components"
    ]
   },
   "User": {
    "group": "components",
-   "purpose": "User profile row with avatar, name, and metadata",
+   "purpose": "User component",
    "tags": [
-    "profile",
-    "chat"
-   ],
-   "pairsWith": [
-    "Avatar",
-    "Row",
-    "Text"
+    "components"
    ]
   },
   "UserMenu": {
@@ -1400,15 +995,9 @@
     "User",
     "DropdownWrapper"
    ],
-   "purpose": "Avatar-triggered account menu",
+   "purpose": "UserMenu component",
    "tags": [
-    "overlay",
-    "navigation"
-   ],
-   "pairsWith": [
-    "Avatar",
-    "Dropdown",
-    "Column"
+    "components"
    ]
   },
   "CelebrationFx": {
@@ -1416,14 +1005,9 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Confetti/fireworks on completion milestones",
+   "purpose": "CelebrationFx component",
    "tags": [
-    "effect",
-    "onboarding"
-   ],
-   "pairsWith": [
-    "Column",
-    "Button"
+    "components"
    ]
   },
   "FadingLettersFx": {
@@ -1435,14 +1019,9 @@
   },
   "Kbar": {
    "group": "modules",
-   "purpose": "Command palette (⌘K) for navigation and actions",
+   "purpose": "Kbar component",
    "tags": [
-    "navigation",
-    "chat"
-   ],
-   "pairsWith": [
-    "Kbd",
-    "Dialog"
+    "modules"
    ]
   },
   "MobileMegaMenu": {
@@ -1460,24 +1039,7 @@
    "extends": [
     "Flex"
    ],
-   "purpose": "Navigation mega menu with featured card and link columns",
-   "tags": [
-    "navigation",
-    "marketing"
-   ],
-   "pairsWith": [
-    "Background",
-    "SmartLink",
-    "Column",
-    "Row"
-   ]
-  },
-  "HeadingLink": {
-   "group": "modules",
-   "extends": [
-    "Flex"
-   ],
-   "purpose": "HeadingLink component",
+   "purpose": "MegaMenu component",
    "tags": [
     "modules"
    ]
@@ -1492,11 +1054,21 @@
     "modules"
    ]
   },
+  "HeadingLink": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "HeadingLink component",
+   "tags": [
+    "modules"
+   ]
+  },
   "ChartHeader": {
    "group": "modules",
    "extends": [
-    "Flex",
-    "Column"
+    "Column",
+    "Flex"
    ],
    "purpose": "ChartHeader component",
    "tags": [
@@ -1612,14 +1184,9 @@
     "CodeBlock.impl",
     "Flex"
    ],
-   "purpose": "Syntax-highlighted code with optional live preview",
+   "purpose": "CodeBlock component",
    "tags": [
-    "docs",
-    "content"
-   ],
-   "pairsWith": [
-    "InlineCode",
-    "Column"
+    "modules"
    ]
   },
   "MediaUpload": {
@@ -1628,15 +1195,9 @@
     "MediaUpload.impl",
     "Flex"
    ],
-   "purpose": "Image upload with compression for profile/settings",
+   "purpose": "MediaUpload component",
    "tags": [
-    "form",
-    "settings"
-   ],
-   "pairsWith": [
-    "Avatar",
-    "Column",
-    "Button"
+    "modules"
    ]
   },
   "Schema": {

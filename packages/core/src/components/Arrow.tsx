@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import classNames from "classnames";
+import { useEffect, useRef, forwardRef } from "react";
+import classNames from "clsx";
 import styles from "./Arrow.module.scss";
 import { Flex } from ".";
 
@@ -13,14 +13,14 @@ interface ArrowProps extends React.ComponentProps<typeof Flex> {
   className?: string;
 }
 
-const Arrow: React.FC<ArrowProps> = ({
+const Arrow = forwardRef<HTMLDivElement, ArrowProps>(({
   trigger,
   scale = 0.8,
   color = "onBackground",
   style,
   className,
   ...flex
-}) => {
+}, _ref) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const Arrow: React.FC<ArrowProps> = ({
       />
     </Flex>
   );
-};
+})
 
 Arrow.displayName = "Arrow";
 export { Arrow };

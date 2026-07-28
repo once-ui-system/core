@@ -1,14 +1,10 @@
 "use client";
 
 import { CountFx, Row } from "@once-ui-system/core";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Counter() {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    setCount(3000);
-  }, []);
+  const [count, setCount] = useState(3000);
 
   return (
     <Row fill center>

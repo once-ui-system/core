@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, forwardRef, useEffect, useCallback } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import {
   Flex,
   Text,

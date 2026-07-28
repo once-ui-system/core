@@ -2,8 +2,8 @@
  "name": "OgCard",
  "group": "components",
  "extends": [
-  "Flex",
-  "Card"
+  "Card",
+  "Flex"
  ],
  "mixins": [
   "CommonProps",

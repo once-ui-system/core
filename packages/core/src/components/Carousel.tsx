@@ -11,7 +11,7 @@ import {
   IconButton,
   Fade,
 } from ".";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, forwardRef } from "react";
 import styles from "./Carousel.module.scss";
 
 interface CarouselItem {
@@ -44,7 +44,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   };
 }
 
-const Carousel: React.FC<CarouselProps> = ({
+const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
   items = [],
   fill = false,
   controls = true,
@@ -57,7 +57,7 @@ const Carousel: React.FC<CarouselProps> = ({
   thumbnail = { scaling: 1, height: "80", sizes: "120px" },
   play = { auto: false, interval: 3000, controls: true },
   ...flex
-}) => {
+}, ref) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [hoverIndex, setHoverIndex] = useState<number | undefined>(0);
   const [isTransitioning, setIsTransitioning] = useState(revealedByDefault);
@@ -498,7 +498,7 @@ const Carousel: React.FC<CarouselProps> = ({
       )}
     </Column>
   );
-};
+})
 
 Carousel.displayName = "Carousel";
 export { Carousel };

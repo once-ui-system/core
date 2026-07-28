@@ -15,11 +15,37 @@ Workspaces:
 - Node: the repo declares `engines.node: 20.x`, but the VM ships Node 22 (LTS). There is **no `engine-strict`**, and Next 15/16 both support Node 22, so the harmless `Unsupported engine` warning during install can be ignored.
 - `pnpm install` builds `packages/core` automatically via the `apps/docs` `postinstall` hook, so `dist/` is ready after install. If the apps ever fail to resolve `@once-ui-system/core`, rebuild it with `pnpm --filter @once-ui-system/core build`.
 - To live-iterate on the library while running an app, run `pnpm --filter @once-ui-system/core dev` (tsc watch) alongside the app.
-- The root `dev:core` script uses `bun`, which is **not installed**. Use the pnpm flow instead (`cd apps/dev && pnpm dev`).
 
-### Running the apps (dev mode)
-- `apps/dev`: `cd apps/dev && pnpm dev` → http://localhost:3000
-- `apps/docs`: `cd apps/docs && pnpm dev` → also defaults to port 3000. **Both apps use port 3000**, so when running both at once give one a different port, e.g. `pnpm dev --port 3001`. (Running root `pnpm dev` / `turbo dev` starts both and will collide on 3000.)
+### Running the apps
+
+| Command | What it does |
+|---|---|
+| `pnpm dev` | All dev servers in parallel (docs - :3000, dev - :3001, core watch) |
+| `pnpm dev:core` | Core library TypeScript watch mode only |
+| `pnpm dev:docs` | Docs app only - http://localhost:3000 |
+| `pnpm dev:dev` | Dev sandbox app only - http://localhost:3001 |
+| `pnpm build` | Build everything (library + apps) |
+| `pnpm build:core` | Build just the library |
+| `pnpm build:docs` | Build docs + its dependencies |
+| `pnpm build:dev` | Build dev app + its dependencies |
+| `pnpm start` | Start all built apps (docs - :3000, dev - :3001) |
+| `pnpm start:docs` | Start built docs app only |
+| `pnpm start:dev` | Start built dev app only |
+| `pnpm lint` | Lint everything via Turbo |
+| `pnpm format` | Format all files |
+| `pnpm typecheck` | Typecheck everything in parallel |
+| `pnpm test` | Run all tests via Turbo |
+| `pnpm clean` | Clean all build artifacts |
+
+### Port assignments
+- **docs** - port 3000 (primary documentation site)
+- **dev** - port 3001 (development sandbox)
+
+The dev app has `--port 3001` baked into its `dev` script, so `turbo dev` runs both without collision.
+
+### Individual app dev commands
+- `apps/dev`: `cd apps/dev && pnpm dev` - http://localhost:3001
+- `apps/docs`: `cd apps/docs && pnpm dev` - http://localhost:3000
 
 ### Tests / lint (standard commands live in each `package.json`)
 - Tests: `pnpm --filter @once-ui-system/core test` (Vitest). Note: 4 tests (`Dialog` inert + `ScrollLock` wheel) currently fail under the pinned jsdom (68/72 pass); this is a pre-existing jsdom-behavior issue, not an env problem.
@@ -34,7 +60,7 @@ Before generating or editing Once UI UI code in `packages/core` or `apps/*`:
 
 1. Read `packages/core/ai/manifest.json` (or `@once-ui-system/core/ai/manifest.json` from npm)
 2. Load bootstrap: `rules.compact.md` + `catalog.json`
-3. Match intent via `ai/tasks/index.json` → fetch task bundle + component slices
+3. Match intent via `ai/tasks/index.json` - fetch task bundle + component slices
 4. Validate: `pnpm --filter @once-ui-system/core validate-ai-code path/to/file.tsx`
 
 Consumer apps: run `npx once-ui-init-agent` once after install to scaffold project `AGENTS.md` + `.cursor/rules/once-ui-codegen.mdc`.

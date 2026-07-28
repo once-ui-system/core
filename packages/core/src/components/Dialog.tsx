@@ -11,7 +11,7 @@ import React, {
   useId,
 } from "react";
 import ReactDOM from "react-dom";
-import classNames from "classnames";
+import classNames from "clsx";
 import { Column, Flex, Heading, IconButton, ScrollLock, Text } from ".";
 import styles from "./Dialog.module.scss";
 

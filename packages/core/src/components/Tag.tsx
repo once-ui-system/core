@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 
 import { Flex, Text, Icon, Row } from ".";
 import styles from "./Tag.module.scss";

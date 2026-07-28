@@ -150,7 +150,10 @@ export const iconLibrary: Record<string, IconType> = {
   truck: HiOutlineTruck,
   package: HiOutlineArchiveBox,
   arrowUp: HiOutlineArrowUp,
-  bolt: HiOutlineBolt
+  bolt: HiOutlineBolt,
+  linearGauge: HiOutlineChartBar,
+  radialGauge: HiOutlineChartPie,
+  basics: HiOutlineCube
 };
 
 export type IconLibrary = typeof iconLibrary;

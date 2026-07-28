@@ -31,7 +31,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           }}
         >
           <ToastProvider
-              m={'top'}
+              m="top"
           >
             <IconProvider>
               {children}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import { Icon, ElementType } from ".";
 import { IconName } from "../icons";
 import { TShirtSizes } from "../types";

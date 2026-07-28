@@ -126,7 +126,7 @@ export function DialogFlush() {
         description=""
       >
         <Media
-          src="/images/cover-01.jpg"
+          src="/images/docs/once-ui/cover.jpg"
           alt="Cover"
           maxWidth="100%"
           aspectRatio="16/9"

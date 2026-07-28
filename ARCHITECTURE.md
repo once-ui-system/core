@@ -2,7 +2,7 @@
 
 This repo is a **pnpm monorepo** managed by [Turborepo](https://turbo.build/repo). It contains one publishable library and two Next.js apps.
 
-```
+```text
 core/
 ├── packages/
 │   └── core/                  # @once-ui-system/core — the design system library
@@ -23,25 +23,27 @@ All source lives under `packages/core/src/`. The build produces `dist/` with JS 
 
 ### Directory layout
 
-| Path              | Purpose                                                                                                                                                                                      |
-| ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/components/` | **React components** (Button, Flex, Dialog, CodeBlock, etc.). Each component has a `.tsx` file and an optional `.module.scss` for scoped styles. Server-compatible or marked `"use client"`. |
-| `src/modules/`    | **Complex multi-file features** that compose multiple components (CodeBlock, SEO utilities, media players, navigation helpers). These are too large or coupled to live inside `components/`. |
-| `src/tokens/`     | **Design tokens** as SCSS variables — colors, typography, shadows, borders, spacing, layout. These generate `dist/css/tokens.css`. Consumed by both the library and apps.                    |
-| `src/styles/`     | **Utility classes** — SCSS that generates classes like `bg-surface`, `p-16`, `radius-m`, `flex-row`. These generate `dist/css/styles.css`.                                                   |
-| `src/interfaces/` | TypeScript interfaces for component props (`FlexProps`, `StyleProps`, `SpacingProps`, etc.).                                                                                                 |
-| `src/types.ts`    | Shared TypeScript types — `SpacingToken`, `RadiusSize`, `TextWeight`, `ColorScheme`, etc.                                                                                                    |
-| `src/hooks/`      | Custom React hooks used across components.                                                                                                                                                   |
-| `src/contexts/`   | React context providers (e.g., ScrollLock, ArrowNavigation).                                                                                                                                 |
-| `src/data/`       | Static data — icon names, emoji sets, design system constants.                                                                                                                               |
-| `src/utils/`      | Pure utility functions (safe HTML, helpers).                                                                                                                                                 |
-| `src/server/`     | Server-only utilities (ServerFlex, ServerGrid) for SSR-compatible rendering.                                                                                                                 |
-| `src/__tests__/`  | Unit and integration tests (Vitest).                                                                                                                                                         |
-| `src/icons.ts`    | Icon name constants and mapping.                                                                                                                                                             |
-| `src/index.ts`    | Public API barrel — everything exported from here is available to consumers.                                                                                                                 |
-| `ai/`             | AI codegen harness — manifest, task bundles, component slices, examples.                                                                                                                     |
-| `scripts/`        | Build helpers — emoji data generation, AI spec generation, file copying.                                                                                                                     |
-| `dist/`           | Build output (JS, CSS, types). Generated, not committed.                                                                                                                                     |
+| Path                | Purpose                                                                                                                                                                                      |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/components/`   | **React components** (Button, Flex, Dialog, CodeBlock, etc.). Each component has a `.tsx` file and an optional `.module.scss` for scoped styles. Server-compatible or marked `"use client"`. |
+| `src/modules/`      | **Complex multi-file features** that compose multiple components (CodeBlock, SEO utilities, media players, navigation helpers). These are too large or coupled to live inside `components/`. |
+| `src/tokens/`       | **Design tokens** as SCSS variables — colors, typography, shadows, borders, spacing, layout. These generate `dist/css/tokens.css`. Consumed by both the library and apps.                    |
+| `src/styles/`       | **Utility classes** — SCSS that generates classes like `bg-surface`, `p-16`, `radius-m`, `flex-row`. These generate `dist/css/styles.css`.                                                   |
+| `src/interfaces.ts` | TypeScript interfaces for component props (`FlexProps`, `StyleProps`, `SpacingProps`, etc.).                                                                                                 |
+| `src/types.ts`      | Shared TypeScript types — `SpacingToken`, `RadiusSize`, `TextWeight`, `ColorScheme`, etc.                                                                                                    |
+| `src/hooks/`        | Custom React hooks used across components.                                                                                                                                                   |
+| `src/contexts/`     | React context providers (e.g., ScrollLock, ArrowNavigation).                                                                                                                                 |
+| `src/data/`         | Static data — icon names, emoji sets, design system constants.                                                                                                                               |
+| `src/utils/`        | Pure utility functions (safe HTML, helpers).                                                                                                                                                 |
+| `src/server/`       | Server-only utilities (ServerFlex, ServerGrid) for SSR-compatible rendering.                                                                                                                 |
+| `src/__tests__/`    | Unit and integration tests (Vitest).                                                                                                                                                         |
+| `src/internal/`     | Internal state management utilities                                                                                                                                                          |
+| `src/data/`         | Static data files (emoji-data.json)                                                                                                                                                          |
+| `src/icons.ts`      | Icon name constants and mapping.                                                                                                                                                             |
+| `src/index.ts`      | Public API barrel — everything exported from here is available to consumers.                                                                                                                 |
+| `ai/`               | AI codegen harness — manifest, task bundles, component slices, examples.                                                                                                                     |
+| `scripts/`          | Build helpers — emoji data generation, AI spec generation, file copying.                                                                                                                     |
+| `dist/`             | Build output (JS, CSS, types). Generated, not committed.                                                                                                                                     |
 
 ### Key conventions
 
@@ -49,7 +51,7 @@ All source lives under `packages/core/src/`. The build produces `dist/` with JS 
 - **Tokens** follow the pattern `--{category}-{property}-{weight}` (e.g., `--brand-background-strong`).
 - **SCSS modules** use the `.module.scss` convention for scoped styles. Global utilities go in `src/styles/`.
 - **Components** use `forwardRef` and accept a `className`/`style` override. Spread remaining props to the root element.
-- **Exports** go through `src/components/index.ts` → `src/index.ts`. Always add new components to both.
+- **Exports** go through: `src/components/index.ts` → `src/index.ts`, plus separate re-exports from `contexts/`, `modules/`, `hooks/`, `utils/`, `types.ts`, `interfaces.ts`, `icons.ts`
 
 ---
 

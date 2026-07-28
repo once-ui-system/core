@@ -2,7 +2,7 @@
 
 import React, { ReactNode, forwardRef } from "react";
 import { ElementType } from "./ElementType";
-import classNames from "classnames";
+import classNames from "clsx";
 
 import { Spinner, Icon, Arrow, Flex } from ".";
 import styles from "./Button.module.scss";

@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 
 import styles from "./Spinner.module.scss";
 import { Flex } from ".";
-import classNames from "classnames";
+import classNames from "clsx";
 import { TShirtSizes } from "../types";
 
 interface SpinnerProps extends React.ComponentProps<typeof Flex> {

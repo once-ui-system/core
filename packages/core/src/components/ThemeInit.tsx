@@ -40,7 +40,9 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config }) => {
                   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
                 return themeValue;
-              };
+};
+
+ThemeInit.displayName = "ThemeInit";
 
               // Priority:
               // 1. localStorage
@@ -68,3 +70,5 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config }) => {
     />
   );
 };
+
+ThemeInit.displayName = "ThemeInit";

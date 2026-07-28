@@ -463,7 +463,7 @@ export default function ComponentsCheck() {
               value: "bold",
               label: "Bold (400)",
               element: (
-                <Text weight="bold" size="l">
+                <Text weight="normal" size="l">
                   Normal weight text — bold
                 </Text>
               ),
@@ -472,7 +472,7 @@ export default function ComponentsCheck() {
               value: "bolder",
               label: "Bolder (500)",
               element: (
-                <Text weight="bolder" size="l">
+                <Text weight="medium" size="l">
                   Medium weight text — bolder
                 </Text>
               ),

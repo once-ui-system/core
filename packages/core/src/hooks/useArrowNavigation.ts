@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useCallback, KeyboardEvent, RefObject, useEffect } from "react";
 
 export type NavigationLayout = "row" | "column" | "grid";

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, forwardRef } from "react";
 import ReactDOM from "react-dom";
 import { Column, Heading, IconButton, Row, ScrollLock } from ".";
 
@@ -12,7 +12,7 @@ export interface ModalProps {
   onClose: () => void;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, backdrop, title, isOpen, onClose }) => {
+const Modal = forwardRef<HTMLDivElement, ModalProps>(({ children, backdrop, title, isOpen, onClose }, ref) => {
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -120,7 +120,7 @@ const Modal: React.FC<ModalProps> = ({ children, backdrop, title, isOpen, onClos
     </>,
     document.body,
   );
-};
+})
 
 Modal.displayName = "Modal";
 export { Modal };

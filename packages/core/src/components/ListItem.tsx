@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import styles from "./List.module.scss";
 import { Text } from ".";
 

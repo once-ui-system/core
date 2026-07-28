@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, forwardRef } from "react";
 import Link from "next/link";
-import classNames from "classnames";
+import classNames from "clsx";
 import { SpacingToken, TShirtSizes } from "../types";
 import { Flex, ContextMenu, Option, Icon, Column, Line } from ".";
 import { useToast } from "../contexts";
@@ -27,7 +27,7 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   brand?: { copy?: boolean; url?: string };
 }
 
-const Logo: React.FC<LogoProps> = ({
+const Logo = forwardRef<HTMLDivElement, LogoProps>(({
   size = "m",
   href,
   icon,
@@ -38,7 +38,7 @@ const Logo: React.FC<LogoProps> = ({
   light,
   brand,
   ...props
-}) => {
+}, ref) => {
   useEffect(() => {
     if (!icon && !wordmark) {
       console.warn(
@@ -50,25 +50,23 @@ const Logo: React.FC<LogoProps> = ({
   const content = (
     <>
       {icon && (
-        // @ts-ignore
         <img
           style={{
             height: `var(--static-space-${sizeMap[size]})`,
             width: "auto",
           }}
           alt="Trademark"
-          src={icon}
+          src={icon as string}
         />
       )}
       {wordmark && (
-        // @ts-ignore
         <img
           style={{
             height: `var(--static-space-${sizeMap[size]})`,
             width: "auto",
           }}
           alt="Trademark"
-          src={wordmark}
+          src={wordmark as string}
         />
       )}
     </>
@@ -214,7 +212,7 @@ const Logo: React.FC<LogoProps> = ({
   ) : (
     renderLogo()
   );
-};
+})
 
 Logo.displayName = "Logo";
 export { Logo };

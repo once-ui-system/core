@@ -14,7 +14,7 @@ import {
 } from "../contexts/ThemeProvider";
 import { useDataTheme } from "../contexts/DataThemeProvider";
 import styles from "./StylePanel.module.scss";
-import classNames from "classnames";
+import classNames from "clsx";
 import { Schemes, schemes } from "../types";
 import { ChartMode } from "../modules/data";
 

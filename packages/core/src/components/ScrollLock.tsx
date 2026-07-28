@@ -128,3 +128,5 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
 
   return null;
 };
+
+ScrollLock.displayName = "ScrollLock";

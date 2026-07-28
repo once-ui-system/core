@@ -44,7 +44,7 @@ If apps fail to resolve `@once-ui-system/core`, rebuild it:
 pnpm --filter @once-ui-system/core build
 ```
 
-The build runs: `tsc` → `sass` (tokens + styles) → `copy-files` → `generate-ai-spec`.
+The build runs: `clean` → `generate-emoji-data` → `generate-ai-spec` → `tsc` → `copy-files` → `build:css`
 
 ## Running tests
 

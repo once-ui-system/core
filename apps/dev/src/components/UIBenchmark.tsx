@@ -1,6 +1,6 @@
 "use client";
 
-import React, {useState, useEffect, useCallback, JSX} from "react";
+import React, {useState, useEffect, useCallback} from "react";
 import {
   Button,
   Flex,
@@ -40,7 +40,7 @@ export const UIBenchmark: React.FC = () => {
 
   // Function for measuring performance
   const measurePerformance = useCallback(
-    (testName: string, renderFunction: () => JSX.Element, count: number): Promise<BenchmarkResult> => {
+    (testName: string, renderFunction: () => React.ReactElement, count: number): Promise<BenchmarkResult> => {
       return new Promise((resolve) => {
         const startTime = performance.now();
         let frameCount = 0;

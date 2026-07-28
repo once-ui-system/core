@@ -3,7 +3,7 @@ import styles from "./Fade.module.scss";
 
 import { Flex } from ".";
 import { ColorScheme, ColorWeight, SpacingToken } from "../types";
-import classNames from "classnames";
+import classNames from "clsx";
 
 export type BaseColor =
   | `${ColorScheme}-${ColorWeight}`

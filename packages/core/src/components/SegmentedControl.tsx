@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef } from "react";
 import { ToggleButton, Scroller, Flex, ToggleButtonProps } from ".";
 
 interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
@@ -18,7 +18,7 @@ interface SegmentedControlProps extends Omit<React.ComponentProps<typeof Scrolle
   style?: React.CSSProperties;
 }
 
-const SegmentedControl: React.FC<SegmentedControlProps> = ({
+const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(({
   buttons,
   onToggle,
   defaultSelected,
@@ -28,7 +28,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
   className,
   style,
   ...scrollerProps
-}) => {
+}, ref) => {
   const [internalSelected, setInternalSelected] = useState<string>(() => {
     if (selected !== undefined) return selected;
     if (defaultSelected !== undefined) return defaultSelected;
@@ -137,7 +137,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
       </Flex>
     </Scroller>
   );
-};
+})
 
 SegmentedControl.displayName = "SegmentedControl";
 
