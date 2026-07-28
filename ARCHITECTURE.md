@@ -8,7 +8,7 @@ core/
 │   └── core/                  # @once-ui-system/core — the design system library
 ├── apps/
 │   ├── dev/                   # Next.js 16 sandbox for component development
-│   └── docs/                  # Next.js 15 documentation site (docs.once-ui.com)
+│   └── docs/                  # Next.js 16 documentation site (docs.once-ui.com)
 ├── ARCHITECTURE.md            # this file
 ├── CONTRIBUTING.md            # contribution guidelines
 ├── pnpm-workspace.yaml        # workspace definition
@@ -36,9 +36,8 @@ All source lives under `packages/core/src/`. The build produces `dist/` with JS 
 | `src/data/`         | Static data — icon names, emoji sets, design system constants.                                                                                                                               |
 | `src/utils/`        | Pure utility functions (safe HTML, helpers).                                                                                                                                                 |
 | `src/server/`       | Server-only utilities (ServerFlex, ServerGrid) for SSR-compatible rendering.                                                                                                                 |
+| `src/internal/`     | Internal state management utilities.                                                                                                                                                         |
 | `src/__tests__/`    | Unit and integration tests (Vitest).                                                                                                                                                         |
-| `src/internal/`     | Internal state management utilities                                                                                                                                                          |
-| `src/data/`         | Static data files (emoji-data.json)                                                                                                                                                          |
 | `src/icons.ts`      | Icon name constants and mapping.                                                                                                                                                             |
 | `src/index.ts`      | Public API barrel — everything exported from here is available to consumers.                                                                                                                 |
 | `ai/`               | AI codegen harness — manifest, task bundles, component slices, examples.                                                                                                                     |
@@ -60,7 +59,7 @@ All source lives under `packages/core/src/`. The build produces `dist/` with JS 
 Local playground for developing and testing components. Routes are at `src/app/`. The main test page is `src/components/ComponentsCheckPage.tsx` which renders live variations of every component.
 
 ```bash
-cd apps/dev && pnpm dev   # http://localhost:3000
+cd apps/dev && pnpm dev   # http://localhost:3001
 ```
 
 ---
@@ -73,16 +72,31 @@ The public docs site at [docs.once-ui.com](https://docs.once-ui.com). Content li
 cd apps/docs && pnpm dev   # http://localhost:3000
 ```
 
+The docs site uses `proxy.ts` (Next.js 16) — `middleware.ts` was removed in Next.js 16. The proxy serves AI-friendly markdown representations of pages.
+
+---
+
+## Tooling
+
+| Tool | Purpose |
+|------|---------|
+| **pnpm** | Package manager with workspace support |
+| **Turborepo** | Build orchestration, caching, and parallel task execution |
+| **TypeScript** | Type checking (strict mode) |
+| **Biome** | Linting and formatting (replaces ESLint + Prettier) |
+| **Vitest** | Unit and integration testing |
+| **Sass** | SCSS compilation for design tokens and utility classes |
+
 ---
 
 ## Build pipeline
 
 ```bash
 pnpm install          # installs all workspaces + builds core via postinstall
-pnpm --filter @once-ui-system/core build   # rebuild the library
+pnpm build            # rebuild everything via Turbo
 ```
 
-The library build: `tsc` (types + JS) → `sass` (tokens.css + styles.css) → `copy-files` (AI artifacts, styles to dist). Turborepo caches outputs across runs.
+The library build: `clean` → `generate-emoji-data` → `generate-ai-spec` → `tsc` (types + JS) → `copy-files` → `build:css` (sass compilation). Turborepo caches outputs across runs.
 
 ---
 
@@ -98,4 +112,4 @@ The library build: `tsc` (types + JS) → `sass` (tokens.css + styles.css) → `
 | Test a component visually                     | `apps/dev/src/components/ComponentsCheckPage.tsx` |
 | Update or add docs page                       | `apps/docs/src/content/once-ui/`                  |
 | Change the AI codegen harness                 | `packages/core/ai/`                               |
-| Run tests                                     | `pnpm --filter @once-ui-system/core test`         |
+| Run tests                                     | `pnpm test`                                       |

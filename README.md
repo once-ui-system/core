@@ -41,11 +41,14 @@ npm install @once-ui-system/core
 git clone https://github.com/once-ui-system/core.git
 cd core
 pnpm install
-cd apps/dev
 pnpm dev
 ```
 
-This boots the development sandbox at `http://localhost:3000` with the latest version of the library linked.
+This boots both apps in parallel via Turborepo:
+- **Docs** → `http://localhost:3000`
+- **Dev sandbox** → `http://localhost:3001`
+
+> **Note:** `pnpm install` automatically builds the core library via a postinstall hook, so no separate build step is needed after initial setup.
 
 ## Project structure
 
@@ -55,18 +58,37 @@ This is a **pnpm monorepo** with Turborepo. See [ARCHITECTURE.md](./ARCHITECTURE
 core/
 ├── packages/core/     # @once-ui-system/core — the design system library
 ├── apps/dev/          # Next.js 16 sandbox for component development
-└── apps/docs/         # Next.js 15 documentation site
+└── apps/docs/         # Next.js 16 documentation site
 ```
 
 ## Scripts
 
 | Command | Description |
 |---------|-------------|
-| `pnpm install` | Install all workspace dependencies |
-| `pnpm --filter @once-ui-system/core build` | Build the library (types, JS, CSS, AI artifacts) |
-| `pnpm --filter @once-ui-system/core test` | Run unit tests with Vitest |
-| `cd apps/dev && pnpm dev` | Start the dev sandbox |
-| `cd apps/docs && pnpm dev` | Start the docs site |
+| `pnpm dev` | Start all dev servers in parallel (docs → :3000, dev → :3001, core watch) |
+| `pnpm build` | Build everything (library + apps) |
+| `pnpm test` | Run all tests via Turbo |
+| `pnpm lint` | Lint everything via Turbo |
+| `pnpm typecheck` | Typecheck everything in parallel |
+| `pnpm format` | Format all files |
+| `pnpm clean` | Clean all build artifacts |
+| `pnpm start` | Start all built apps (docs → :3000, dev → :3001) |
+
+Individual workspace commands:
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev:docs` | Docs app only → `http://localhost:3000` |
+| `pnpm dev:dev` | Dev sandbox only → `http://localhost:3001` |
+| `pnpm build:core` | Build just the library |
+| `pnpm test:core` | Run core tests only |
+| `pnpm lint:core` | Lint core only |
+| `pnpm start:docs` | Start built docs app only |
+| `pnpm start:dev` | Start built dev app only |
+
+## AI codegen harness
+
+The library ships an AI codegen harness in `packages/core/ai/` — a manifest, task bundles, component slices, and validation scripts. This powers the [Freebuff](https://freebuff.com) integration and enables AI agents to generate Once UI code correctly. See [AI Coding docs](https://docs.once-ui.com/once-ui/ai-coding) for details.
 
 ## Authors
 
@@ -85,7 +107,7 @@ We welcome contributions! Before submitting a PR:
 1. Read [ARCHITECTURE.md](./ARCHITECTURE.md) to understand the codebase layout.
 2. Read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines on code style, PR process, and conventions.
 3. Test your changes in `apps/dev` — use `ComponentsCheckPage.tsx` to visually verify components.
-4. Run `pnpm --filter @once-ui-system/core test` before submitting.
+4. Run `pnpm test` before submitting.
 
 **Where to start:**
 - Fix or add a component → `packages/core/src/components/`

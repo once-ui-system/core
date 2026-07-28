@@ -7,14 +7,16 @@ import React, { ReactNode } from "react";
 import {
   Accordion,
   AccordionGroup,
+  Banner,
   Animation,
   Arrow,
   AutoScroll,
   Avatar,
+  HeadingNav,
+  MediaUpload,
   AvatarGroup,
   Badge,
   Background,
-  Banner,
   BlobFx,
   BlockQuote,
   Button,
@@ -400,9 +402,11 @@ const mdxComponents = {
   InlineCode,
   CodeBlock,
   HeadingLink,
+  HeadingNav,
   Logo,
   LogoCloud,
   Kbd,
+  Icon,
 
   // ─── Core media ───
   Media,
@@ -413,6 +417,7 @@ const mdxComponents = {
   MasonryGrid,
   CompareImage,
   AutoScroll,
+  MediaUpload,
 
   // ─── Core actions ───
   Button,
@@ -420,6 +425,9 @@ const mdxComponents = {
   ToggleButton,
   SmartLink,
   Option,
+  Accordion,
+  AccordionGroup,
+  Banner,
 
   // ─── Core data display ───
   Avatar,

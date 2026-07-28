@@ -131,11 +131,17 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
         if (animationTimerRef.current) {
           clearTimeout(animationTimerRef.current);
           animationTimerRef.current = null;
-          previouslyFocusedElementRef.current?.focus();
-          previouslyFocusedElementRef.current = null;
         }
       };
     }, [isOpen]);
+
+    // Restore focus on unmount while the dialog was still open
+    useEffect(() => {
+      return () => {
+        previouslyFocusedElementRef.current?.focus();
+        previouslyFocusedElementRef.current = null;
+      };
+    }, []);
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
@@ -263,7 +269,9 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
           );
         const firstElement = focusableElements[0];
-        firstElement.focus();
+        if (firstElement) {
+          firstElement.focus();
+        }
       }
     }, [isOpen]);
 

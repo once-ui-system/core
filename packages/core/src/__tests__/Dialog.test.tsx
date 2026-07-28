@@ -4,6 +4,7 @@ import userEvent from "@testing-library/user-event";
 import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { Dialog, DialogProvider } from "../components/Dialog";
 import { resetDialogState } from "../test/dialogTestUtils";
+import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts";
 import styles from "../components/Dialog.module.scss";
 
@@ -52,6 +53,7 @@ const advanceTimers = (ms: number) => {
 };
 
 beforeEach(() => {
+  resetScrollLockState();
   resetDialogState();
 });
 
@@ -491,7 +493,7 @@ describe("Dialog", () => {
       const [baseOverlay] = screen.getAllByRole("dialog");
       const basePanel = getDialogPanel(baseOverlay);
 
-      expect(basePanel?.inert).toBe(true);
+      expect(baseOverlay.inert).toBe(true);
     });
 
     it("restores inert on the base dialog when the stacked dialog closes", () => {

@@ -5,6 +5,7 @@ import { Dialog, DropdownWrapper, ContextMenu } from ".";
 import { LayoutProvider } from "../contexts";
 import { KbarContent } from "../modules/navigation/Kbar";
 import { resetScrollLockTestState } from "../internal/scrollLockState";
+import { resetScrollLockState } from "../components/ScrollLock";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -124,6 +125,7 @@ const OverlayIntegrationHarness = () => (
 );
 
 beforeEach(() => {
+  resetScrollLockState();
   resetScrollLockTestState();
   document.body.innerHTML = "";
 });

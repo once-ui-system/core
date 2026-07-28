@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { render } from "@testing-library/react";
 import { vi, describe, it, expect, beforeEach } from "vitest";
-import { ScrollLock } from "../components/ScrollLock";
+import { ScrollLock, resetScrollLockState } from "../components/ScrollLock";
 
 const defineScrollMetrics = (
   element: HTMLElement,
@@ -92,6 +92,7 @@ const DualScrollLockHarness = () => {
 };
 
 beforeEach(() => {
+  resetScrollLockState();
   document.body.innerHTML = "";
 });
 

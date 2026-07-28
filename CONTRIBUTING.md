@@ -4,13 +4,13 @@ First off, thank you for taking the time to contribute! Once UI is an indie proj
 
 ## Monorepo structure
 
-This repo uses a monorepo layout with PNPM workspaces and Turborepo:
+This repo uses a monorepo layout with pnpm workspaces and Turborepo:
 
 | Path | Description |
 |------|-------------|
 | `packages/core` | The Once UI package [@once-ui-system/core](https://www.npmjs.com/package/@once-ui-system/core) — all components, tokens, and utilities |
-| `apps/dev` | Local sandbox app for testing components (not for production) |
-| `apps/docs` | Documentation site at [docs.once-ui.com](https://docs.once-ui.com) |
+| `apps/dev` | Local sandbox app for testing components (Next.js 16, port 3001) |
+| `apps/docs` | Documentation site at [docs.once-ui.com](https://docs.once-ui.com) (Next.js 16, port 3000) |
 
 For the full directory layout and conventions, see [ARCHITECTURE.md](./ARCHITECTURE.md).
 
@@ -20,11 +20,12 @@ The dev app is symlinked to the core package for rapid iteration.
 
 ```bash
 pnpm install
-cd apps/dev
 pnpm dev
 ```
 
-This boots a local app at `http://localhost:3000` using the latest version of the package, ideal for testing and development.
+This boots both apps in parallel via Turborepo:
+- **Docs** → `http://localhost:3000`
+- **Dev sandbox** → `http://localhost:3001`
 
 To iterate on the library while running the dev app:
 
@@ -33,7 +34,7 @@ To iterate on the library while running the dev app:
 pnpm --filter @once-ui-system/core dev
 
 # Terminal 2 — dev app
-cd apps/dev && pnpm dev
+pnpm dev:dev
 ```
 
 ## Rebuilding the library
@@ -49,10 +50,27 @@ The build runs: `clean` → `generate-emoji-data` → `generate-ai-spec` → `ts
 ## Running tests
 
 ```bash
-pnpm --filter @once-ui-system/core test
+pnpm test
 ```
 
-Note: 4 tests (Dialog inert + ScrollLock wheel) currently fail under jsdom 68/72 pass — this is a pre-existing jsdom behavior issue, not an env problem.
+This runs all tests via Turbo. To run only core tests:
+
+```bash
+pnpm test:core
+```
+
+Note: A small number of tests may fail under jsdom due to incomplete support for `inert` attribute and real wheel/touch events. This is a known jsdom limitation, not an environment issue.
+
+## Linting and formatting
+
+The project uses [Biome](https://biomejs.dev/) for linting and formatting (replaces ESLint + Prettier):
+
+```bash
+pnpm lint          # lint everything
+pnpm format        # format all files
+pnpm format:check  # check formatting without modifying
+pnpm typecheck     # typecheck everything
+```
 
 ## Contributing guidelines
 
@@ -79,9 +97,10 @@ We welcome PRs for:
 
 Before submitting a PR:
 1. Test your changes in `apps/dev` — use `ComponentsCheckPage.tsx` to verify components visually
-2. Run tests: `pnpm --filter @once-ui-system/core test`
-3. Rebuild the library: `pnpm --filter @once-ui-system/core build`
-4. Reference an issue when applicable
+2. Run tests: `pnpm test`
+3. Run typecheck: `pnpm typecheck:core` (or `pnpm typecheck` for all workspaces)
+4. If you modified `packages/core`, rebuild the library: `pnpm --filter @once-ui-system/core build`
+5. Reference an issue when applicable
 
 ### Code conventions
 
@@ -91,6 +110,15 @@ Before submitting a PR:
 - Use `forwardRef` and accept `className`/`style` overrides.
 - Export new components through `src/components/index.ts` → `src/index.ts`.
 - Use SCSS modules (`.module.scss`) for scoped component styles.
+- Run `pnpm format` before committing to ensure consistent formatting.
+
+### Next.js 16 migration notes
+
+If you're working with the docs app, note these Next.js 16 changes:
+- `middleware.ts` has been renamed to `proxy.ts` with the exported function renamed from `middleware` to `proxy`.
+- `next lint` has been removed — use `pnpm lint` (Biome) instead.
+- Turbopack is now the default bundler for both dev and build.
+- `params` and `searchParams` in pages/layouts are now `Promise` objects and must be awaited.
 
 ## Join the community
 
