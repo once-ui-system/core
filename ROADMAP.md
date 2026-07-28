@@ -23,14 +23,14 @@ What already exists (verified in-repo, not assumed):
 
 ### Week 1 · Jul 27 – Aug 2 — Release hygiene & known issues
 
-- [ ] Introduce root `CHANGELOG.md` as the actual source of truth going forward (keep the docs-site changelog page, but generate/sync it from this file instead of hand-authoring both)
+- [ ] Introduce root `CHANGELOG.md` as the actual source of truth going forward. **Re-scoped 2026-07-28 (Lorant):** in-repo `CHANGELOG.md` as source of truth is confirmed, but the publish target is not the docs-site changelog page — roadmap + changelog instead publish to a reworked Aveiro-hosted **Once UI Learn** site (`learn-once-ui.aveiro.page`). The Aveiro agent owns the site side; this agent owns authoring `CHANGELOG.md` and coordinates the publish pipeline with Aveiro via comments. Do not build a docs-site sync pipeline.
 - [ ] Fix the 4 documented Vitest/jsdom failures in `packages/core`
 - [ ] Resolve the Biome config-vs-CLI version mismatch (1.9.4 config, 2.4.13 CLI) so `lint`/`format` are trustworthy again
 - [ ] Triage `apps/dev` lint breakage from the Next 16 `next lint` removal — either migrate to the new ESLint flat-config path or document the interim gap
 - [ ] Release-planning doc: define concrete patch/minor/major criteria for Core (what's a breaking change here, given `./server` subpath exports and heavy AI-codegen consumers)
-- [ ] Strengthen the existing Sponsors section: concrete tiers + "what a sponsor gets" (docs/README placement) — visibility only, no pricing decisions made by the agent
-- [ ] Triage the 130 Dependabot alerts GitHub reports on `main` (69 high, 48 moderate, 13 low as of 2026-07-27 push) — severity/exploitability pass, prioritized fix list; patch what's safe as a non-breaking dependency bump, escalate anything requiring a major bump
-- **Needs from Lorant:** confirm `CHANGELOG.md` becomes the source of truth over the docs-site page; sign-off on sponsor-tier copy before it ships publicly
+- [ ] Strengthen the existing Sponsors section: concrete tiers + "what a sponsor gets" (docs/README placement) — visibility only, no pricing decisions made by the agent. **Gates outreach:** per the sprint sequencing rule, no outreach email should be sent until this ships.
+- [x] Triage the 130 Dependabot alerts GitHub reports on `main` (69 high, 48 moderate, 13 low as of 2026-07-27 push) — **done 2026-07-28**, see daily log. Verified 0 of `packages/core`'s actual runtime dependencies carry any advisory; every flagged package is transitive dev/build tooling or an app-level Next.js version. Patched 7 same-major transitive advisories (postcss, ws, flatted, yaml, immutable, fast-uri, @eslint/plugin-kit) via `pnpm.overrides` on `agent/2026-07-28-dependabot-triage`. Remaining alerts need major-version bumps (next, vite, ajv, js-yaml, picomatch) — flagged as follow-up, not blanket-overridden.
+- **Needs from Lorant:** review/merge `agent/2026-07-28-dependabot-triage`; sign-off on sponsor-tier copy before it ships publicly; awareness that ~110 alerts remain and need scoped major-version-bump follow-ups (see daily log)
 
 ### Week 2 · Aug 3 – Aug 9 — API consistency audit, pass 1
 
@@ -52,7 +52,7 @@ What already exists (verified in-repo, not assumed):
 - [ ] Component doc completeness audit (props tables, examples, common-failure warnings) against `ai/catalog.json`
 - [ ] Fill the top 10 gaps found
 - [ ] Publish `llms.txt` v1 if the Week 2 draft was approved
-- [ ] Reconcile the docs-site changelog against actual release history (post-`CHANGELOG.md`) and fix drift
+- [ ] Reconcile `CHANGELOG.md` against actual release history and fix drift — this content becomes what migrates to the Aveiro-hosted Once UI Learn site per the Week 1 re-scope (not the docs-site changelog page, which is being phased out of this role)
 
 ### Week 5 · Aug 24 – Aug 30 — Accessibility & regression pass
 
@@ -94,26 +94,35 @@ What already exists (verified in-repo, not assumed):
 First run — baseline only, no `agent/*` branches exist yet to review. Noted for next run:
 
 - `origin/once-ui-harness` — fully merged into `main` (0 ahead), historical, no action needed.
+- `agent/2026-07-27-roadmap-bootstrap` (this agent, 1 day old) — this file's own history; not yet merged, not stale. Today's ROADMAP.md work stacks on top of it (branch `agent/2026-07-28-roadmap-update`) rather than duplicating it — rebase/reconcile once Lorant merges the bootstrap.
+- `agent/2026-07-28-dependabot-triage` (this agent, new today) — dependency-advisory fixes, see Week 1 and daily log. Awaiting review.
+- PR #115 (`divyanshudhruv/core:main` → `main`, community contribution) — reviewed 2026-07-28, changes requested. See daily log and the `07-28.mdx` note in the Dopler Universe workspace for the full findings.
 - A large set of `origin/cursor/*` branches (learn-site content, xss-security-fixes, media-video-controls, og-ssrf-validation, setup-dev-environment, etc.) and a `revert-53-dialog-race-condition-fix` branch — not agent-authored by this automation, ages not yet checked. **Next run:** classify each against `main` (merged/stale vs. real diff) before touching any of them.
 
 ## 5. Daily log
 
 **2026-07-27 (bootstrap):** First run for this automation. Read `/agents.mdx` and the `once-ui-core` collection (context, Lorant's brief, the open revenue-sprint note) plus sibling roadmaps (Studio, Aveiro, Chirio) for overlap. Explored the repo (structure, exports, versioning, known issues per `AGENTS.md`) and wrote this roadmap from real repo state — no code changes this run, per the bootstrap protocol. Branch: `agent/2026-07-27-roadmap-bootstrap`.
 
+**2026-07-28:** Acted on Lorant's `open` note (five items). (1) **Dependabot triage:** ran `pnpm audit` directly (no GitHub Security API access from this agent's tools) — 143 findings monorepo-wide (13 low / 53 moderate / 77 high per pnpm's count, close to GitHub's 130/69/48/13). Cross-checked every high-severity finding's package against `packages/core/package.json`'s actual `dependencies` (7 packages: `@floating-ui/react-dom`, `classnames`, `compressorjs`, `date-fns`, `prismjs`, `react-icons`, `recharts`) — **zero of them have any advisory.** Every flagged package is either transitive dev/build tooling (vitest→vite/ws, sass→postcss, biome→glob/ajv) or an app's own Next.js peer/dependency (`next`, a peerDependency consumers supply themselves) — **real runtime risk to npm consumers of `@once-ui-system/core` is 0.** Patched 7 same-major, low-risk transitive advisories (postcss 8.4.31→8.5.23, ws 8.20.0→8.21.1, flatted 3.3.3→3.4.3, yaml 2.8.1→2.9.0, immutable 5.1.2→5.1.9, fast-uri 3.0.6→3.1.4, @eslint/plugin-kit 0.3.1→0.3.5) via `pnpm.overrides` in root `package.json`. Verified with a clean `pnpm --filter @once-ui-system/core build` and `test` (same 4 pre-existing jsdom failures documented in `AGENTS.md`, no new failures). Left unpatched and flagged for scoped follow-up: `next` (app-level version decision, not this agent's call), `vite` (7→8 is a major bump, risks vitest compat), `ajv` 6→8, `js-yaml` 3→4, `picomatch` 2→4 (all major-version API changes, too risky for a blanket override without dedicated testing). Branch: `agent/2026-07-28-dependabot-triage`, pushed. (2) **Community PR / (5) div's branch — same PR.** PR #115 (divyanshudhruv, "Improve component API surface, dark mode, and docs") is both the open community PR and "div's branch" Lorant asked about — one and the same. Read the full 4,747-line diff. Findings: the headline `TextWeight` addition uses `bold`→400 and `bolder`→500, which is backwards (CSS's own `bold` keyword means 700) and conflicts with this PR's own token names one layer down (`--font-weight-normal`, `--font-weight-medium`); proposed rename `bold`→`normal`, `bolder`→`medium` (values unchanged) in the review. Also found a real regression — a new unconditional inline `borderColor` style on `RadioButton` overrides the existing `.checked` class's brand-colored border via CSS specificity (inline always wins), silently breaking the checked-state ring in both themes — and two inaccurate PR-body claims (a described `controlsBackground`→`background` rename that never existed; a described `full`→`s` radius change on wrappers that didn't previously exist). Also flagged undisclosed scope creep touching shared internals (`DropdownWrapper` sizing/flip logic used by six other components, `DatePicker`'s year-picker layout/range, `Dropdown.tsx` props) not mentioned in the PR description. Posted a `REQUEST_CHANGES` review on GitHub with all of the above. **Go/no-go: no-go as submitted** — release not cut; will re-review once div pushes fixes. (3) **Bet 1 outreach:** per the vendor-outreach playbook, drafted Wave 0/1 emails in this agent's dated note in the Dopler Universe workspace (not in this public repo — recipient names/companies are internal-only per the information-classification rules). Flagged that they should not be sent until the sponsor-tiers page (Week 1, still open) ships, per the playbook's own sequencing rule. (4) **Changelog/roadmap re-scope:** folded into Week 1 and Week 4 above.
+
 ## 6. Needs from Lorant
 
 | Need | Why | Urgency |
 | --- | --- | --- |
-| Review and merge (or redirect) this roadmap | Nothing in Week 1 starts until this lands | Low, but blocking |
-| Confirm `CHANGELOG.md` as source of truth vs. the docs-site changelog page | Avoids building the wrong thing in Week 1 | Medium |
+| Review and merge (or redirect) `agent/2026-07-27-roadmap-bootstrap` and `agent/2026-07-28-roadmap-update` | Nothing in Week 1 starts until this lands | Low, but blocking |
+| Review and merge (or redirect) `agent/2026-07-28-dependabot-triage` | 7 transitive advisories patched, build/test verified green | Medium |
+| Decide on the ~110 remaining Dependabot alerts needing major-version bumps (`next`, `vite`, `ajv`, `js-yaml`, `picomatch`) | None are runtime risk to npm consumers (see daily log), but each needs a scoped, tested follow-up rather than a blanket override | Low (no active runtime risk) |
+| Review PR #115 findings and decide whether div gets asked for the rename + regression fix, or this agent proposes the diff directly | Blocks the patch release Lorant asked to prep | Medium |
 | Go/no-go on the Week 3 library-split RFC once drafted | Major breaking change, affects Studio and Aveiro | Medium (Week 3) |
-| Sign-off on sponsor-tier copy before it ships | Public-facing change | Low (Week 1) |
-| Awareness: GitHub reports 130 Dependabot alerts on `main` (69 high) | Discovered on this run's push; triage is now a Week 1 item, but volume/severity may need a human look sooner | Medium |
+| Sign-off on sponsor-tier copy before it ships | Public-facing change; also gates the vendor outreach drafts sitting in the Dopler Universe workspace | Low (Week 1) |
 
 ## 7. Decision log
 
 - **2026-07-27:** Bootstrap run scoped to roadmap creation only, per protocol — no code changes attempted yet.
 - **2026-07-27:** The open revenue-sprint note in this repo's Dopler Universe collection asks for sponsor-visibility work, a sponsor-prospect list, and draft outreach. Sponsor visibility (README/FUNDING.yml) already existed, so Week 1 above scopes it down to strengthening tiers/copy — public, low-risk, appropriate for this public repo. The prospect list and outreach drafts are commercial/internal work involving real third-party data; kept entirely out of this public file (per the public-repo guardrail) and deferred to the Aveiro-only workspace on a subsequent run, following the same no-fabricated-data discipline the Studio and Aveiro agents already established this sprint (real data or an escalation, never invented names).
+- **2026-07-28:** Dependabot triage used `pnpm audit` against the lockfile rather than GitHub's Security/Dependabot API, which this agent's GitHub tools don't expose — cross-checked the resulting counts (143 vs. GitHub's 130) are close enough to trust the severity breakdown, and confirmed the underlying finding (0 runtime risk to published `packages/core`) by directly diffing advisory package names against `packages/core/package.json`'s `dependencies`, not by trusting either tool's summary alone.
+- **2026-07-28:** Chose same-major-version `pnpm.overrides` only for this run's dependency fix batch, explicitly skipping every advisory that would require a major-version bump (`next`, `vite`, `ajv`, `js-yaml`, `picomatch`) — those change public APIs of tools this repo depends on and need a dedicated, tested follow-up rather than a blanket lockfile pin that could silently break the build.
+- **2026-07-28:** Posted a `REQUEST_CHANGES` GitHub review on PR #115 rather than merging or leaving it pending — found a real visual regression (RadioButton checked-state border) plus the typography-naming issue Lorant flagged, so "no-go" was the only defensible call; patch release stays unscoped until div (or this agent, if asked) pushes fixes.
 
 ## 8. Guardrails
 
