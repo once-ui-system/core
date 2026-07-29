@@ -22,7 +22,8 @@ Workspaces:
 - `apps/docs`: `cd apps/docs && pnpm dev` → also defaults to port 3000. **Both apps use port 3000**, so when running both at once give one a different port, e.g. `pnpm dev --port 3001`. (Running root `pnpm dev` / `turbo dev` starts both and will collide on 3000.)
 
 ### Tests / lint (standard commands live in each `package.json`)
-- Tests: `pnpm --filter @once-ui-system/core test` (Vitest). Note: 4 tests (`Dialog` inert + `ScrollLock` wheel) currently fail under the pinned jsdom (68/72 pass); this is a pre-existing jsdom-behavior issue, not an env problem.
+- Tests: `pnpm --filter @once-ui-system/core test` (Vitest). Known baseline on `main` (re-verified 2026-07-29): 4 tests fail (`Dialog` inert + `ScrollLock` wheel — pre-existing jsdom-behavior issues, not an env problem) **and** `ScrollLock.integration.test.tsx` fails to collect entirely — it imports `../internal/scrollLockState`, a module that was never committed (85/89 collected tests pass). PR #115 adds the missing module.
+- Typecheck: `pnpm --filter @once-ui-system/core typecheck` currently reports ~235 pre-existing errors on `main` (untyped `ai/examples` props and missing Vitest globals types in test files — PR #115 fixes these). Don't treat a non-zero baseline as caused by your change; compare against `main`.
 - Lint, pre-existing breakage to be aware of (do not "fix" as part of env setup):
   - `pnpm --filter @once-ui-system/core lint` (Biome) fails because `biome.json` files use the `1.9.4` schema while the pinned CLI is `2.4.13` (unknown keys `ignore`, `organizeImports`).
   - `apps/dev` `pnpm lint` fails because its script is `next lint`, which was removed in Next 16.
