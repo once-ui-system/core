@@ -9,7 +9,9 @@ import {
   Row,
   Feedback,
   Column,
+  Heading,
   Input,
+  Media,
 } from "@once-ui-system/core";
 
 export function BasicDialog() {
@@ -105,6 +107,38 @@ export function StackedDialogs() {
         </Text>
       </Dialog>
     </DialogProvider>
+  );
+}
+
+export function DialogFlush() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>Flush dialog</Button>
+      <Dialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        flush
+        hideClose
+        maxWidth={32}
+        title=""
+        description=""
+      >
+        <Media
+          src="/images/cover.jpg"
+          alt="Cover"
+          maxWidth="100%"
+          aspectRatio="16/9"
+        />
+        <Column padding="l" fillWidth gap="12">
+          <Heading variant="heading-strong-s">Flush dialog</Heading>
+          <Text variant="body-default-s" onBackground="neutral-weak">
+            Header removed. Content is flush to the edges.
+          </Text>
+        </Column>
+      </Dialog>
+    </>
   );
 }
 

@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback, forwardRef } from "react";
 import styles from "./HoloFx.module.scss";
 import { Flex } from ".";
 import { CSSProperties } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
@@ -47,11 +47,20 @@ const getMaskStyle = (mask?: MaskOptions): string => {
   return mask?.maskPosition ? formatMask(mask.maskPosition) : formatMask();
 };
 
-const HoloFx: React.FC<HoloFxProps> = ({ children, reducedMotion = "auto", shine, burn, texture, ...rest }) => {
-  const ref = useRef<HTMLDivElement>(null);
+const HoloFx = forwardRef<HTMLDivElement, HoloFxProps>(({ children, reducedMotion = "auto", shine, burn, texture, ...rest }, ref) => {
+  const internalRef = useRef<HTMLDivElement>(null);
   const lastCallRef = useRef<number>(0);
 
-  const isInViewport = useInViewport(ref);
+  const mergedRef = useCallback((node: HTMLDivElement | null) => {
+    internalRef.current = node;
+    if (typeof ref === 'function') {
+      ref(node);
+    } else if (ref) {
+      (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
+    }
+  }, [ref]);
+
+  const isInViewport = useInViewport(internalRef);
   const { shouldAnimate } = useReducedMotion(reducedMotion);
   const isActive = isInViewport && shouldAnimate;
 
@@ -87,7 +96,7 @@ const HoloFx: React.FC<HoloFxProps> = ({ children, reducedMotion = "auto", shine
       if (now - lastCallRef.current < 16) return;
       lastCallRef.current = now;
 
-      const element = ref.current;
+      const element = internalRef.current;
       if (!element) return;
 
       const rect = element.getBoundingClientRect();
@@ -112,7 +121,7 @@ const HoloFx: React.FC<HoloFxProps> = ({ children, reducedMotion = "auto", shine
   }, [isActive]);
 
   return (
-    <Flex overflow="hidden" className={styles.holoFx} ref={ref} {...rest}>
+    <Flex overflow="hidden" className={styles.holoFx} ref={mergedRef} {...rest}>
       <Flex fill className={styles.base}>
         {children}
       </Flex>
@@ -162,7 +171,7 @@ const HoloFx: React.FC<HoloFxProps> = ({ children, reducedMotion = "auto", shine
       ></Flex>
     </Flex>
   );
-};
+});
 
 HoloFx.displayName = "HoloFx";
 export { HoloFx };

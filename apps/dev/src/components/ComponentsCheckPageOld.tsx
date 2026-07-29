@@ -804,7 +804,7 @@ export default function ComponentsCheckOld() {
             <Hover
               trigger={<Text>Test</Text>}
               overlay={<Column background="overlay"></Column>}
-              onClick={(e) => console.log(e)}
+              onClick={() => {}}
             >
               <Text>Hover Effect</Text>
             </Hover>
@@ -816,7 +816,7 @@ export default function ComponentsCheckOld() {
             <FlipFx
               back={<Text>Back</Text>}
               front={<Text>Front</Text>}
-              onClick={(e) => console.log(e)}
+              onClick={() => {}}
             >
               <Text>Flip Effect</Text>
             </FlipFx>

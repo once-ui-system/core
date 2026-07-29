@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, ReactNode, KeyboardEvent, RefObject } from "react";
+import React, { useRef, useEffect, ReactNode, KeyboardEvent, RefObject, forwardRef } from "react";
 
 interface FocusTrapProps {
   children: ReactNode;
@@ -15,7 +15,7 @@ interface FocusTrapProps {
   autoFocus?: boolean;
 }
 
-const FocusTrap: React.FC<FocusTrapProps> = ({
+const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(({
   children,
   active,
   onEscape,
@@ -26,7 +26,7 @@ const FocusTrap: React.FC<FocusTrapProps> = ({
   returnFocusRef,
   restoreFocus = true,
   autoFocus = true,
-}) => {
+}, ref) => {
   const internalRef = useRef<HTMLDivElement>(null);
   const containerRef = externalRef || internalRef;
   const previouslyFocusedElement = useRef<Element | null>(null);
@@ -127,7 +127,7 @@ const FocusTrap: React.FC<FocusTrapProps> = ({
       {children}
     </div>
   );
-};
+})
 
 FocusTrap.displayName = "FocusTrap";
 export { FocusTrap };

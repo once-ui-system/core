@@ -1,10 +1,10 @@
 "use client";
 
-import React, { CSSProperties, useState, useRef, useEffect, ReactNode } from "react";
+import React, { CSSProperties, useState, useRef, useEffect, ReactNode, forwardRef } from "react";
 import { Column, Flex, Row, Skeleton, ScrollLock } from ".";
 import { MediaVideoPlayer } from "./MediaVideoPlayer";
 import Image from "next/image";
-import classNames from "classnames";
+import classNames from "clsx";
 
 export interface MediaProps extends React.ComponentProps<typeof Flex> {
   aspectRatio?: string;
@@ -28,7 +28,7 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   className?: string;
 }
 
-const Media: React.FC<MediaProps> = ({
+const Media = forwardRef<HTMLDivElement, MediaProps>(({
   src,
   alt = "",
   fillWidth = true,
@@ -49,7 +49,7 @@ const Media: React.FC<MediaProps> = ({
   style,
   className,
   ...rest
-}) => {
+}, ref) => {
   const [isEnlarged, setIsEnlarged] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -266,7 +266,7 @@ const Media: React.FC<MediaProps> = ({
       </>
     </>
   );
-};
+})
 
 Media.displayName = "Media";
 export { Media };

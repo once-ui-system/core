@@ -1,26 +1,253 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
-type MDXComponents = React.ComponentProps<typeof MDXRemote>['components'];
+type MDXComponents = React.ComponentProps<typeof MDXRemote>["components"];
 import React, { ReactNode } from "react";
 
-import * as productComponents from "@/product";
-import * as allComponents from "@once-ui-system/core";
+// ─── Core components (explicit imports to avoid Turbopack frozen module proxy) ───
+import {
+  Accordion,
+  AccordionGroup,
+  Banner,
+  Animation,
+  Arrow,
+  AutoScroll,
+  Avatar,
+  HeadingNav,
+  MediaUpload,
+  AvatarGroup,
+  Badge,
+  Background,
+  BlobFx,
+  BlockQuote,
+  Button,
+  Card,
+  Carousel,
+  CelebrationFx,
+  Checkbox,
+  Chip,
+  ClientFlex,
+  ClientGrid,
+  ColorInput,
+  Column,
+  CompareImage,
+  ContextMenu,
+  CountFx,
+  CountdownFx,
+  Cursor,
+  CursorCard,
+  DateInput,
+  DatePicker,
+  DateRangeInput,
+  DateRangePicker,
+  Dialog,
+  Dropdown,
+  DropdownWrapper,
+  ElementType,
+  EmojiPicker,
+  EmojiPickerDropdown,
+  Fade,
+  FadingLettersFx,
+  Feedback,
+  Flex,
+  FlipFx,
+  FocusTrap,
+  GlitchFx,
+  Grid,
+  Heading,
+  HoloFx,
+  Hover,
+  HoverCard,
+  Icon,
+  IconButton,
+  InfiniteScroll,
+  InlineCode,
+  Input,
+  InteractiveDetails,
+  Kbd,
+  LetterFx,
+  Line,
+  List,
+  ListItem,
+  Logo,
+  LogoCloud,
+  Mask,
+  MasonryGrid,
+  MatrixFx,
+  Media,
+  Modal,
+  NavIcon,
+  NumberInput,
+  OgCard,
+  Option,
+  OTPInput,
+  Particle,
+  PasswordInput,
+  ProgressBar,
+  Pulse,
+  RadioButton,
+  RevealFx,
+  Row,
+  ScrollContainer,
+  ScrollLock,
+  ScrollToTop,
+  Scroller,
+  SegmentedControl,
+  Select,
+  ShineFx,
+  Skeleton,
+  Slider,
+  SmartLink,
+  Spinner,
+  SplitView,
+  StatusIndicator,
+  StyleOverlay,
+  StylePanel,
+  Swiper,
+  Switch,
+  Table,
+  Tag,
+  TagInput,
+  Text,
+  Textarea,
+  ThemeInit,
+  ThemeSwitcher,
+  TiltFx,
+  Timeline,
+  Toast,
+  Toaster,
+  ToggleButton,
+  Tooltip,
+  TypeFx,
+  User,
+  UserMenu,
+  WeatherFx,
+} from "@once-ui-system/core";
 import type { MediaProps, TextProps } from "@once-ui-system/core";
 
+// Modules (CodeBlock, HeadingLink, charts, etc.)
+import {
+  CodeBlock,
+  HeadingLink,
+  BarChart,
+  LineChart,
+  PieChart,
+  LineBarChart,
+  RadialGauge,
+  LinearGauge,
+  ChartHeader,
+  Kbar,
+  MegaMenu,
+  MobileMegaMenu,
+} from "@once-ui-system/core";
+
+// ─── Product components (explicit imports, skip `Modal` which conflicts with core) ───
+import {
+  PropsTable,
+  ClientOption,
+  ColorSchemeGrid,
+  SemanticColorSections,
+  AdditionalTokens,
+  Cta,
+  Products,
+  PageList,
+  AnimationNavIconExample,
+  CountFxExample,
+  ScrollCountExample,
+  CountFxDecimalExample,
+  CelebrationFxExample,
+  MatrixFxExample,
+  WeatherFxExample,
+  LineChartStreamingExample,
+  InfiniteScrollExample,
+  ProgressBarExample,
+  ToastExample,
+  TypeFxCustomExample,
+  ModalExample,
+  ModalWithBackdrop,
+  BasicDialog,
+  DialogWithFooter,
+  StackedDialogs,
+  DialogFlush,
+  CustomizedDialog,
+  DialogCloseOnClickaway,
+  BasicDatePickerExample,
+  DateTimePickerExample,
+  DateRangePickerExample,
+  DateRangePickerPresetsExample,
+  BasicDateRangeInputExample,
+  CustomLabelDateRangeInputExample,
+  DateRangeInputExamples,
+  ValidationInputExample,
+  CharacterCountExample,
+  SearchInput,
+  ColorInputExample,
+  ColorInputAlphaExample,
+  DateInputExample,
+  DateTimeInputExample,
+  NumberInputExample,
+  OTPInputExample,
+  PasswordInputExample,
+  TagInputExample,
+  ValidationTextareaExample,
+  TextareaCharacterCountExample,
+  BasicSwitch,
+  SwitchWithFeedback,
+  SwitchWithLoading,
+  ReversedSwitch,
+  ClientSwitch,
+  SubscriptionRadioGroup,
+  BasicRawDropdown,
+  IconsRawDropdown,
+  DescriptionRawDropdown,
+  CustomStyledRawDropdown,
+  BasicDropdown,
+  DropdownWithIcons,
+  CustomPositionDropdown,
+  SearchableDropdown,
+  BasicEmojiPickerDropdown,
+  IconButtonEmojiPickerDropdown,
+  CustomColumnsEmojiPickerDropdown,
+  PlacementEmojiPickerDropdown,
+  CustomBackgroundEmojiPickerDropdown,
+  ControlledEmojiPickerDropdown,
+  NavIconToggle,
+  NavIconStates,
+  CustomNavIcon,
+  SliderBasicExample,
+  SliderLabelExample,
+  SliderShowValueExample,
+  SliderStepExample,
+  SliderMinMaxExample,
+  SliderDisabledExample,
+  RadialGaugeSpeedDemo,
+  CountdownFxBasic,
+  CountdownFxFormats,
+  CountdownFxEffects,
+  CountdownFxLaunch,
+  CountdownFxOnComplete,
+  IndeterminateCheckboxExample,
+  BasicChipExample,
+  InteractiveChipExample,
+  ChipWithIconsExample,
+  RemovableChipsExample,
+  CustomRemovableChipExample,
+  InteractiveDetailsExample,
+  FormControlsExample,
+  TooltipExample,
+} from "@/product";
+
+// ─── Custom MDX element overrides ───
 
 type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   href: string;
   children: ReactNode;
 };
 
-const onceUIComponents = allComponents;
-  
-
 function CustomLink({ href, children, ...props }: CustomLinkProps) {
   return (
-    <onceUIComponents.SmartLink href={href} {...props} style={{ textDecoration: "underline" }}>
+    <SmartLink href={href} {...props} style={{ textDecoration: "underline" }}>
       {children}
-    </onceUIComponents.SmartLink>
+    </SmartLink>
   );
 }
 
@@ -31,7 +258,7 @@ function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
   }
 
   return (
-    <onceUIComponents.Media
+    <Media
       marginTop="8"
       marginBottom="16"
       enlarge
@@ -49,18 +276,20 @@ function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
 function slugify(str: string): string {
   return str
     .toLowerCase()
-    .replace(/\s+/g, "-") // Replace spaces with -
-    .replace(/&/g, "-and-") // Replace & with 'and'
-    .replace(/[^\w\-]+/g, "") // Remove all non-word characters except for -
-    .replace(/\-\-+/g, "-"); // Replace multiple - with single -
+    .replace(/\s+/g, "-")
+    .replace(/&/g, "-and-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-");
 }
 
 function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
-  // Use HeadingLinkProps to ensure type compatibility
-  const CustomHeading = ({ children, ...props }: Omit<React.ComponentProps<typeof onceUIComponents.HeadingLink>, 'as' | 'id'>) => {
+  const CustomHeading = ({
+    children,
+    ...props
+  }: Omit<React.ComponentProps<typeof HeadingLink>, "as" | "id">) => {
     const slug = slugify(children as string);
     return (
-      <onceUIComponents.HeadingLink
+      <HeadingLink
         marginTop="24"
         marginBottom="12"
         as={as}
@@ -68,18 +297,17 @@ function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
         {...props}
       >
         {children}
-      </onceUIComponents.HeadingLink>
+      </HeadingLink>
     );
   };
 
   CustomHeading.displayName = `${as}`;
-
   return CustomHeading;
 }
 
 function createParagraph({ children }: TextProps) {
   return (
-    <onceUIComponents.Text
+    <Text
       style={{ lineHeight: "175%" }}
       variant="body-default-m"
       onBackground="neutral-strong"
@@ -87,102 +315,323 @@ function createParagraph({ children }: TextProps) {
       marginBottom="12"
     >
       {children}
-    </onceUIComponents.Text>
+    </Text>
   );
 }
 
 function createInlineCode({ children }: { children: ReactNode }) {
-  return <onceUIComponents.InlineCode onBackground="neutral-strong">{children}</onceUIComponents.InlineCode>;
+  return <InlineCode onBackground="neutral-strong">{children}</InlineCode>;
 }
 
 function createBlockQuote({ children }: { children: ReactNode }) {
   return (
-    <onceUIComponents.BlockQuote
-      marginTop="8"
-      marginBottom="12"
-    >
+    <BlockQuote marginTop="8" marginBottom="12">
       {children}
-    </onceUIComponents.BlockQuote>
+    </BlockQuote>
   );
 }
 
 function createList({ children }: { children: ReactNode }) {
-  return (
-    <onceUIComponents.List
-    >
-      {children}
-    </onceUIComponents.List>
-  );
+  return <List>{children}</List>;
 }
 
 function createListItem({ children }: { children: ReactNode }) {
   return (
-    <onceUIComponents.ListItem
-      marginTop="4"
-      marginBottom="8"
-      style={{ lineHeight: "175%" }}
-    >
+    <ListItem marginTop="4" marginBottom="8" style={{ lineHeight: "175%" }}>
       {children}
-    </onceUIComponents.ListItem>
+    </ListItem>
   );
 }
 
 function createCodeBlock(props: any) {
-  // For pre tags that contain code blocks
-  if (props.children && props.children.props && props.children.props.className) {
+  if (
+    props.children &&
+    props.children.props &&
+    props.children.props.className
+  ) {
     const { className, children } = props.children.props;
-    
-    // Extract language from className (format: language-xxx)
-    const language = className.replace('language-', '');
+    const language = className.replace("language-", "");
     const label = language.charAt(0).toUpperCase() + language.slice(1);
-    
+
     return (
-      <onceUIComponents.CodeBlock
+      <CodeBlock
         marginTop="8"
         marginBottom="16"
-        codes={[
-          {
-            code: children,
-            language,
-            label
-          }
-        ]}
+        codes={[{ code: children, language, label }]}
         copyButton={true}
       />
     );
   }
-  
-  // Fallback for other pre tags or empty code blocks
   return <pre {...props} />;
 }
 
 function createHr() {
-  return <onceUIComponents.Line />;
+  return <Line />;
 }
 
-// @ts-ignore
-const mdxComponents: MDXComponents = {
-  p: createParagraph as any,
-  h1: createHeading("h1") as any,
-  h2: createHeading("h2") as any,
-  h3: createHeading("h3") as any,
-  h4: createHeading("h4") as any,
-  h5: createHeading("h5") as any,
-  h6: createHeading("h6") as any,
-  img: createImage as any,
-  a: CustomLink as any,
-  code: createInlineCode as any,
-  pre: createCodeBlock as any,
-  blockquote: createBlockQuote as any,
-  ul: createList as any,
-  ol: createList as any,
-  li: createListItem as any,
-  hr: createHr as any,
-  ...onceUIComponents,
-  ...productComponents,
+const mdxComponents = {
+  // ─── MDX element overrides ───
+  p: createParagraph,
+  h1: createHeading("h1"),
+  h2: createHeading("h2"),
+  h3: createHeading("h3"),
+  h4: createHeading("h4"),
+  h5: createHeading("h5"),
+  h6: createHeading("h6"),
+  img: createImage,
+  a: CustomLink,
+  code: createInlineCode,
+  pre: createCodeBlock,
+  blockquote: createBlockQuote,
+  ul: createList,
+  ol: createList,
+  li: createListItem,
+  hr: createHr,
+
+  // ─── Core layout ───
+  Flex,
+  Row,
+  Column,
+  Grid,
+  ServerFlex: ClientFlex,
+  ServerGrid: ClientGrid,
+
+  // ─── Core typography & display ───
+  Text,
+  Heading,
+  InlineCode,
+  CodeBlock,
+  HeadingLink,
+  HeadingNav,
+  Logo,
+  LogoCloud,
+  Kbd,
+  Icon,
+
+  // ─── Core media ───
+  Media,
+  Background,
+  Mask,
+  Swiper,
+  Carousel,
+  MasonryGrid,
+  CompareImage,
+  AutoScroll,
+  MediaUpload,
+
+  // ─── Core actions ───
+  Button,
+  IconButton,
+  ToggleButton,
+  SmartLink,
+  Option,
+  Accordion,
+  AccordionGroup,
+  Banner,
+
+  // ─── Core data display ───
+  Avatar,
+  AvatarGroup,
+  Badge,
+  Tag,
+  Table,
+  List,
+  ListItem,
+  Timeline,
+  User,
+  UserMenu,
+  BlockQuote,
+  Line,
+  ProgressBar,
+  StatusIndicator,
+  Tooltip,
+  HoverCard,
+  OgCard,
+  Card,
+  CursorCard,
+  Feedback,
+
+  // ─── Core form controls ───
+  Input,
+  NumberInput,
+  PasswordInput,
+  OTPInput,
+  Textarea,
+  Select,
+  Switch,
+  Checkbox,
+  RadioButton,
+  Chip,
+  Slider,
+  DatePicker,
+  DateInput,
+  DateRangeInput,
+  DateRangePicker,
+  ColorInput,
+  TagInput,
+  InteractiveDetails,
+  SegmentedControl,
+  ElementType,
+  ContextMenu,
+  Dropdown,
+  DropdownWrapper,
+  EmojiPicker,
+  EmojiPickerDropdown,
+
+  // ─── Core navigation ───
+  NavIcon,
+  Arrow,
+  ScrollToTop,
+  Scroller,
+  ScrollContainer,
+  InfiniteScroll,
+  SplitView,
+  Kbar,
+  MegaMenu,
+  MobileMegaMenu,
+
+  // ─── Core overlay ───
+  Dialog,
+  Modal,
+  Toast,
+  Toaster,
+  Spinner,
+  Skeleton,
+  FocusTrap,
+  ScrollLock,
+  StyleOverlay,
+  StylePanel,
+  ThemeSwitcher,
+  ThemeInit,
+
+  // ─── Core effects ───
+  Animation,
+  Fade,
+  RevealFx,
+  FlipFx,
+  GlitchFx,
+  HoloFx,
+  TiltFx,
+  ShineFx,
+  Pulse,
+  LetterFx,
+  FadingLettersFx,
+  TypeFx,
+  CountFx,
+  CountdownFx,
+  BlobFx,
+  Particle,
+  Cursor,
+  Hover,
+  MatrixFx,
+  WeatherFx,
+  CelebrationFx,
+
+  // ─── Core data visualization ───
+  BarChart,
+  LineChart,
+  PieChart,
+  LineBarChart,
+  RadialGauge,
+  LinearGauge,
+  ChartHeader,
+
+  // ─── Product components ───
+  PropsTable,
+  ClientOption,
+  ColorSchemeGrid,
+  SemanticColorSections,
+  AdditionalTokens,
+  Cta,
+  Products,
+  PageList,
+  AnimationNavIconExample,
+  CountFxExample,
+  ScrollCountExample,
+  CountFxDecimalExample,
+  CelebrationFxExample,
+  MatrixFxExample,
+  WeatherFxExample,
+  LineChartStreamingExample,
+  InfiniteScrollExample,
+  ProgressBarExample: ProgressBarExample,
+  ToastExample,
+  TypeFxCustomExample,
+  ModalExample,
+  ModalWithBackdrop,
+  BasicDialog,
+  DialogWithFooter,
+  StackedDialogs,
+  DialogFlush,
+  CustomizedDialog,
+  DialogCloseOnClickaway,
+  BasicDatePickerExample,
+  DateTimePickerExample,
+  DateRangePickerExample,
+  DateRangePickerPresetsExample,
+  BasicDateRangeInputExample,
+  CustomLabelDateRangeInputExample,
+  DateRangeInputExamples,
+  ValidationInputExample,
+  CharacterCountExample,
+  SearchInput,
+  ColorInputExample,
+  ColorInputAlphaExample,
+  DateInputExample,
+  DateTimeInputExample,
+  NumberInputExample,
+  OTPInputExample,
+  PasswordInputExample,
+  TagInputExample,
+  ValidationTextareaExample,
+  TextareaCharacterCountExample,
+  BasicSwitch,
+  SwitchWithFeedback,
+  SwitchWithLoading,
+  ReversedSwitch,
+  ClientSwitch,
+  SubscriptionRadioGroup,
+  BasicRawDropdown,
+  IconsRawDropdown,
+  DescriptionRawDropdown,
+  CustomStyledRawDropdown,
+  BasicDropdown,
+  DropdownWithIcons,
+  CustomPositionDropdown,
+  SearchableDropdown,
+  BasicEmojiPickerDropdown,
+  IconButtonEmojiPickerDropdown,
+  CustomColumnsEmojiPickerDropdown,
+  PlacementEmojiPickerDropdown,
+  CustomBackgroundEmojiPickerDropdown,
+  ControlledEmojiPickerDropdown,
+  NavIconToggle,
+  NavIconStates,
+  CustomNavIcon,
+  SliderBasicExample,
+  SliderLabelExample,
+  SliderShowValueExample,
+  SliderStepExample,
+  SliderMinMaxExample,
+  SliderDisabledExample,
+  RadialGaugeSpeedDemo,
+  CountdownFxBasic,
+  CountdownFxFormats,
+  CountdownFxEffects,
+  CountdownFxLaunch,
+  CountdownFxOnComplete,
+  IndeterminateCheckboxExample,
+  BasicChipExample,
+  InteractiveChipExample,
+  ChipWithIconsExample,
+  RemovableChipsExample,
+  CustomRemovableChipExample,
+  InteractiveDetailsExample,
+  FormControlsExample,
+  TooltipExample,
 };
 
-type CustomMDXProps = Omit<MDXRemoteProps, 'components'> & {
+type CustomMDXProps = Omit<MDXRemoteProps, "components"> & {
   components?: Partial<MDXComponents>;
 };
 
@@ -191,10 +640,10 @@ export function CustomMDX(props: CustomMDXProps) {
     <MDXRemote
       {...props}
       options={{ blockJS: false }}
-      components={{ 
-        ...mdxComponents, 
-        ...(props.components || {}) 
-      }} 
+      components={{
+        ...mdxComponents,
+        ...(props.components || {}),
+      }}
     />
   );
 }

@@ -2,8 +2,8 @@
  "name": "SegmentedControl",
  "group": "components",
  "extends": [
-  "Flex",
-  "Scroller"
+  "Scroller",
+  "Flex"
  ],
  "mixins": [
   "CommonProps",

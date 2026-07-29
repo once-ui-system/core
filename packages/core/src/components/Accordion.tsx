@@ -10,7 +10,7 @@ import React, {
 } from "react";
 import { Flex, Icon, Column, Grid, Row } from ".";
 import styles from "./Accordion.module.scss";
-import classNames from "classnames";
+import classNames from "clsx";
 import { CondensedTShirtSizes } from "../types";
 
 export interface AccordionHandle {

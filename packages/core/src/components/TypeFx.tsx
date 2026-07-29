@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, forwardRef } from "react";
 import { Text } from ".";
 
 export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, 'children'> {
@@ -14,7 +14,7 @@ export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, 'ch
   children?: React.ReactNode;
 }
 
-const TypeFx: React.FC<TypeFxProps> = ({
+const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(({
   words,
   speed = 100,
   delay = 0,
@@ -24,7 +24,7 @@ const TypeFx: React.FC<TypeFxProps> = ({
   loop = true,
   children,
   ...text
-}) => {
+}, ref) => {
   const [displayText, setDisplayText] = useState("");
   const [isComplete, setIsComplete] = useState(false);
   const [triggered, setTriggered] = useState(trigger === "instant");
@@ -118,7 +118,7 @@ const TypeFx: React.FC<TypeFxProps> = ({
       {!isComplete && <span style={{ opacity: 0.5 }}>|</span>}
     </Text>
   );
-};
+});
 
 TypeFx.displayName = "TypeFx";
 

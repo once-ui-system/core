@@ -15,7 +15,8 @@
  "props": {
   "leftContent": "!SideContent",
   "rightContent": "!SideContent",
-  "aspectRatio": "string"
+  "aspectRatio": "string",
+  "unoptimized": "boolean"
  },
  "mixinsRef": [
   "CommonProps",

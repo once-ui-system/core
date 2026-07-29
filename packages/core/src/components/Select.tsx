@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, forwardRef, ReactNode, useId } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import {
   DropdownWrapper,
   Flex,
@@ -27,7 +27,7 @@ interface SelectProps
   options: SelectOptionType[];
   value?: string | string[];
   emptyState?: ReactNode;
-  onSelect?: (value: any) => void;
+  onSelect?: (value: string | string[]) => void;
   placement?: Placement;
   searchable?: boolean;
   className?: string;

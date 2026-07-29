@@ -1,9 +1,9 @@
 "use client";
 
 import ComponentsCheckOld from "@/components/ComponentsCheckPageOld";
-import { CountFx, Row } from "@once-ui-system/core";
+import "@once-ui-system/core";
 
-export default function Counter() {
+export default function CheckPageOld() {
 
 
   return (

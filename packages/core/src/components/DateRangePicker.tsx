@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import { Flex, DatePicker } from ".";
 import { CondensedTShirtSizes } from "../types";
 
@@ -18,7 +18,7 @@ export interface DateRangePickerProps extends Omit<React.ComponentProps<typeof F
   size?: CondensedTShirtSizes;
 }
 
-const DateRangePicker: React.FC<DateRangePickerProps> = ({
+const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(({
   value,
   onChange,
   minDate,
@@ -26,7 +26,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
   size = "m",
   dual,
   ...rest
-}) => {
+}, ref) => {
   const [internalValue, setInternalValue] = useState<DateRange>({
     startDate: value?.startDate || undefined,
     endDate: value?.endDate || undefined,
@@ -139,7 +139,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
       )}
     </Flex>
   );
-};
+})
 
 DateRangePicker.displayName = "DateRangePicker";
 export { DateRangePicker };

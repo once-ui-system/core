@@ -19,7 +19,7 @@ import {
   Placement,
 } from "@floating-ui/react-dom";
 import { Flex } from ".";
-import { SpacingToken } from "@/types";
+import { SpacingToken } from "../types";
 
 type TriggerType = "hover" | "click" | "manual";
 

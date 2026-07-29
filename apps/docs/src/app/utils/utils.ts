@@ -1,6 +1,6 @@
 import fs from "fs";
 import path from "path";
-import matter from "gray-matter";
+import frontMatter from "front-matter";
 import { Schemes } from "@once-ui-system/core";
 
 interface Post {
@@ -58,7 +58,7 @@ export function getPages(customPath = ["src", "content"]): Post[] {
     } else if (file.endsWith('.mdx')) {
       try {
         const fileContents = fs.readFileSync(filePath, 'utf8');
-        const { data, content } = matter(fileContents);
+        const { attributes, body } = frontMatter(fileContents) as { attributes: Record<string, any>; body: string };
 
         // Create slug without src/content prefix
         const slug = path.relative(contentBasePath, filePath)
@@ -71,20 +71,20 @@ export function getPages(customPath = ["src", "content"]): Post[] {
 
         posts.push({
           slug,
-          content,
-          navTag: data.tag,
-          navLabel: data.tagLabel,
-          navIcon: data.navIcon,
-          navTagVariant: data.navTagVariant,
+          content: body,
+          navTag: attributes.tag,
+          navLabel: attributes.tagLabel,
+          navIcon: attributes.navIcon,
+          navTagVariant: attributes.navTagVariant,
           metadata: {
-            title: data.title || '',
-            summary: data.summary,
-            docs: data.docs,
-            github: data.github,
-            updatedAt: data.updatedAt || '',
-            image: data.image,
+            title: attributes.title || '',
+            summary: attributes.summary,
+            docs: attributes.docs,
+            github: attributes.github,
+            updatedAt: attributes.updatedAt || '',
+            image: attributes.image,
             // Priority: 1. Frontmatter order, 2. meta.json order, 3. undefined
-            order: data.order !== undefined ? Number(data.order) : (metaOrder !== undefined ? Number(metaOrder) : undefined),
+            order: attributes.order !== undefined ? Number(attributes.order) : (metaOrder !== undefined ? Number(metaOrder) : undefined),
           },
         });
       } catch (error) {

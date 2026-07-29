@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef } from "react";
 import { Row, Text, CountFx, CountFxProps } from ".";
 
 export interface CountdownFxProps extends Omit<CountFxProps, 'value' | 'format' | 'separator' | 'effect'> {
@@ -10,13 +10,13 @@ export interface CountdownFxProps extends Omit<CountFxProps, 'value' | 'format' 
   onComplete?: () => void;
 }
 
-const CountdownFx: React.FC<CountdownFxProps> = ({
+const CountdownFx = forwardRef<HTMLDivElement, CountdownFxProps>(({
   targetDate,
   format = "HH:MM:SS",
   effect = "wheel",
   onComplete,
   ...countFxProps
-}) => {
+}, ref) => {
   const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
     hours: 0,
@@ -75,7 +75,7 @@ const CountdownFx: React.FC<CountdownFxProps> = ({
   };
 
   const renderSeparator = () => (
-    <Text key={`sep-${Math.random()}`} {...countFxProps} style={{ width: '0.5em', textAlign: 'center' }}>
+    <Text key="separator" {...countFxProps} style={{ width: '0.5em', textAlign: 'center' }}>
       :
     </Text>
   );
@@ -124,7 +124,7 @@ const CountdownFx: React.FC<CountdownFxProps> = ({
       {renderTimeUnit(timeRemaining.seconds, 'seconds')}
     </Row>
   );
-};
+})
 
 CountdownFx.displayName = "CountdownFx";
 export { CountdownFx };

@@ -3,7 +3,7 @@
 import React, { CSSProperties, forwardRef, useCallback, useEffect, useRef } from "react";
 import { Flex } from ".";
 import styles from "./Mask.module.scss";
-import classNames from "classnames";
+import classNames from "clsx";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 

@@ -2,7 +2,7 @@ import React, { forwardRef } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { SpacingToken } from "../types";
 import { Column } from "./Column";
-import classNames from "classnames";
+import classNames from "clsx";
 import styles from "./MasonryGrid.module.scss";
 import { Flex } from "./Flex";
 

@@ -4,7 +4,7 @@ import { agentLinkHeader } from "@/agent/link-header";
 
 const SKIP_MARKDOWN_PREFIXES = ["/api/", "/_next/", "/.well-known/"];
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (request.method !== "GET" && request.method !== "HEAD") {

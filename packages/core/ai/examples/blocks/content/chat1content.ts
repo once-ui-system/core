@@ -26,6 +26,7 @@ export const chatMembers = [
         bio: "Design engineer",
         avatar: "/images/creators/lorant.jpg",
         group: "Online",
+        statusColor: "green",
       },
       {
         name: "Lorant K.",
@@ -33,6 +34,7 @@ export const chatMembers = [
         bio: "Building Once UI",
         avatar: "/images/creators/lorant.jpg",
         group: "Online",
+        statusColor: "green",
       },
     ],
   },

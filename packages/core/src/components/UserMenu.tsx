@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import classNames from "classnames";
+import React, { forwardRef } from "react";
+import classNames from "clsx";
 import { DropdownWrapper, User, UserProps, DropdownWrapperProps, Column } from ".";
 import styles from "./UserMenu.module.scss";
 import { Placement } from "@floating-ui/react-dom";
@@ -16,7 +16,7 @@ interface UserMenuProps
   style?: React.CSSProperties;
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({
+const UserMenu = forwardRef<HTMLDivElement, UserMenuProps>(({
   selected = false,
   dropdown,
   minWidth,
@@ -27,7 +27,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
   style,
   loading,
   ...userProps
-}) => {
+}, ref) => {
   return (
     <DropdownWrapper
       minWidth={minWidth}
@@ -56,7 +56,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
       dropdown={dropdown}
     />
 );
-};
+});
 
 UserMenu.displayName = "UserMenu";
 export { UserMenu };

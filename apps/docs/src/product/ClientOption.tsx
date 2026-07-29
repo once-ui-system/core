@@ -9,7 +9,7 @@ import React from "react";
 export function ClientOption(props: OptionProps) {
   // Provide a no-op onClick handler if none is provided
   const handleClick = (value: string) => {
-    console.log(`Option clicked: ${value}`);
+    // Option clicked
   };
 
   return <Option {...props} onClick={props.onClick || handleClick} />;

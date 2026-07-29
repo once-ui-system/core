@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useRef, ReactNode, useEffect } from "react";
+import React, { createContext, useContext, useRef, ReactNode, useEffect, forwardRef } from "react";
 import { useArrowNavigation, ArrowNavigationOptions } from "../hooks/useArrowNavigation";
 import { FocusTrap } from "./FocusTrap";
 import { Column } from "./Column";
@@ -27,7 +27,7 @@ export interface ArrowNavigationProps extends Omit<ArrowNavigationOptions, "cont
   restoreFocus?: boolean;
 }
 
-export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
+const ArrowNavigation = forwardRef<HTMLDivElement, ArrowNavigationProps>(({
   layout,
   itemCount,
   columns,
@@ -48,7 +48,7 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
   onEscape,
   autoFocusTrap = true,
   restoreFocus = true,
-}) => {
+}, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const navigation = useArrowNavigation({
@@ -114,7 +114,10 @@ export const ArrowNavigation: React.FC<ArrowNavigationProps> = ({
       )}
     </ArrowNavigationContext.Provider>
   );
-};
+})
+
+ArrowNavigation.displayName = "ArrowNavigation";
+export { ArrowNavigation };
 
 /**
  * Hook to access the ArrowNavigation context

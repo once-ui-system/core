@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef } from "react";
 import { createPortal } from "react-dom";
 import { Flex } from ".";
 
@@ -9,7 +9,7 @@ interface CursorProps {
   elementRef: React.RefObject<HTMLElement | null>;
 }
 
-export const Cursor: React.FC<CursorProps> = ({ cursor, elementRef }) => {
+export const Cursor = forwardRef<HTMLDivElement, CursorProps>(({ cursor, elementRef }, ref) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -84,11 +84,12 @@ export const Cursor: React.FC<CursorProps> = ({ cursor, elementRef }) => {
     };
   }, [cursor, elementRef, isTouchDevice]);
 
-  // Don't render custom cursor on touch devices
-  if (isTouchDevice || !isHovering) return null;
+  // Don't render custom cursor on touch devices or during SSR
+  if (isTouchDevice || !isHovering || typeof document === "undefined") return null;
 
   return createPortal(
     <Flex
+      ref={ref}
       position="fixed"
       pointerEvents="none"
       zIndex={10}
@@ -103,7 +104,7 @@ export const Cursor: React.FC<CursorProps> = ({ cursor, elementRef }) => {
     </Flex>,
     document.body,
   );
-};
+});
 
 Cursor.displayName = "Cursor";
 export default Cursor;

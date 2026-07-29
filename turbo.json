@@ -1,9 +1,9 @@
 {
-  "$schema": "https://turborepo.org/schema.json",
+  "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": ["dist/**"]
+      "outputs": ["dist/**", ".next/**"]
     },
     "dev": {
       "cache": false,
@@ -11,6 +11,26 @@
     },
     "lint": {
       "outputs": []
+    },
+    "typecheck": {
+      "outputs": []
+    },
+    "format": {
+      "outputs": []
+    },
+    "format:check": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": [],
+      "dependsOn": ["build"]
+    },
+    "clean": {
+      "cache": false
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false
     }
   }
 }

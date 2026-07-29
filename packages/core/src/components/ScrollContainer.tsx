@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback, forwardRef } from "react";
 import { Column, Row, IconButton } from ".";
 
 export interface ScrollContainerProps extends React.ComponentProps<typeof Row> {
@@ -16,7 +16,7 @@ const getHorizontalAlignment = (placement: ScrollContainerProps["controlPlacemen
   return "start";
 };
 
-const ScrollContainer: React.FC<ScrollContainerProps> = ({ items, controlPlacement = "top-start", ...flex }) => {
+const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(({ items, controlPlacement = "top-start", ...flex }, ref) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -112,7 +112,7 @@ const ScrollContainer: React.FC<ScrollContainerProps> = ({ items, controlPlaceme
       </Row>
     </Column>
   );
-};
+})
 
 ScrollContainer.displayName = "ScrollContainer";
 export { ScrollContainer };

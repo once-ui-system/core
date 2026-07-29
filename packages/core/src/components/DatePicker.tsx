@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, forwardRef, useEffect, useCallback } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import {
   Flex,
   Text,
@@ -316,8 +316,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     const generateYearOptions = () => {
       const currentYearNum = new Date().getFullYear();
-      const minYear = minDate ? minDate.getFullYear() : currentYearNum - 10;
-      const maxYear = maxDate ? maxDate.getFullYear() : currentYearNum + 10;
+      const minYear = minDate ? minDate.getFullYear() : currentYearNum - 25;
+      const maxYear = maxDate ? maxDate.getFullYear() : currentYearNum + 25;
 
       const years = [];
       for (let i = minYear; i <= maxYear; i++) {
@@ -572,7 +572,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     return (
       <Column
-        onClick={(event: any) => {
+        onClick={(event: React.MouseEvent) => {
           event.preventDefault();
           event.stopPropagation();
 
@@ -625,7 +625,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronLeft"
-                  onClick={(event: any) => {
+                  onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
                     handleMonthChange(-1);
@@ -651,7 +651,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                     }}
                     trigger={
                       <Button
-                        onClick={(event: any) => {
+                        onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                           setIsMonthOpen(true);
@@ -671,7 +671,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         fillWidth
                         gap="2"
                         padding="4"
-                        onClick={(event: any) => {
+                        onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                         }}
@@ -705,9 +705,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   />
 
                   <DropdownWrapper
-                    navigationLayout="grid"
-                    optionsCount={generateYearOptions().length}
-                    columns={generateYearOptions().length < 6 ? 1 : 6}
                     isNested={isNested}
                     isOpen={isYearOpen}
                     dropdownId="year-dropdown"
@@ -725,7 +722,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       <Button
                         variant="secondary"
                         size="s"
-                        onClick={(event: any) => {
+                        onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                           setIsYearOpen(true);
@@ -739,11 +736,13 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       </Button>
                     }
                     dropdown={
-                      <Grid
-                        columns={generateYearOptions().length < 6 ? "1" : 6}
-                        gap="2"
+                      <Column
+                        fillWidth
                         padding="4"
-                        onClick={(event: any) => {
+                        gap="2"
+                        overflowY="auto"
+                        style={{ maxHeight: "16rem" }}
+                        onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                         }}
@@ -775,7 +774,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                             />
                           );
                         })}
-                      </Grid>
+                      </Column>
                     }
                     data-dropdown-id="year-dropdown"
                   />
@@ -791,7 +790,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronRight"
-                  onClick={(event: any) => {
+                  onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
                     handleMonthChange(1);

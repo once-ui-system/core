@@ -3,7 +3,7 @@
 import React, { forwardRef, useState } from "react";
 import { Input, Flex, IconButton, Column } from ".";
 import styles from "./NumberInput.module.scss";
-import classNames from "classnames";
+import classNames from "clsx";
 
 interface NumberInputProps
   extends Omit<React.ComponentProps<typeof Input>, "type" | "value" | "onChange"> {

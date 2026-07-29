@@ -44,9 +44,9 @@ export interface ResponsiveGridProps extends ResponsiveProps {
 export interface GridProps extends HTMLAttributes<HTMLDivElement> {
   columns?: GridSize;
   rows?: GridSize;
-  l?: ResponsiveGridProps;
-  m?: ResponsiveGridProps;
-  s?: ResponsiveGridProps;
+  l?: GridBreakpointProps;
+  m?: GridBreakpointProps;
+  s?: GridBreakpointProps;
 }
 
 export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
@@ -56,11 +56,11 @@ export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
   center?: boolean;
   wrap?: boolean;
   flex?: FlexValue;
-  xl?: ResponsiveFlexProps;
-  l?: ResponsiveFlexProps;
-  m?: ResponsiveFlexProps;
-  s?: ResponsiveFlexProps;
-  xs?: ResponsiveFlexProps;
+  xl?: FlexBreakpointProps;
+  l?: FlexBreakpointProps;
+  m?: FlexBreakpointProps;
+  s?: FlexBreakpointProps;
+  xs?: FlexBreakpointProps;
 }
 
 export interface TextProps<T extends ElementType = "span"> extends HTMLAttributes<T> {
@@ -189,7 +189,7 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
   light?: boolean;
 }
 
-export interface CommonProps extends HTMLAttributes<HTMLDivElement> {
+export interface CommonProps extends Omit<HTMLAttributes<HTMLDivElement>, "style"> {
   onBackground?: Colors;
   onSolid?: Colors;
   align?: CSSProperties["textAlign"];
@@ -198,36 +198,172 @@ export interface CommonProps extends HTMLAttributes<HTMLDivElement> {
   style?: React.CSSProperties;
 }
 
+// ============================================================================
+// Generic Breakpoint Type System
+// ============================================================================
+// BreakpointProps<Source, Keys> picks specific keys from a source interface
+// and makes them optional. This ensures each component's breakpoint type
+// only includes props that component actually supports.
+//
+// Usage:
+//   type FlexBreakpointProps = BreakpointProps<AllFlexProps, 'direction' | 'padding' | ...>;
+//   type GridBreakpointProps = BreakpointProps<AllGridProps, 'columns' | 'padding' | ...>;
+//   type TextBreakpointProps = BreakpointProps<AllTextProps, 'textVariant' | 'align' | ...>;
+// ============================================================================
+
+// Union of all prop interfaces available to Flex-derived components
+type AllFlexProps = FlexProps & StyleProps & SpacingProps & SizeProps & CommonProps & DisplayProps;
+
+// Union of all prop interfaces available to Grid-derived components
+type AllGridProps = GridProps & StyleProps & SpacingProps & SizeProps & CommonProps & DisplayProps;
+
+// Union of all prop interfaces available to Text-derived components
+type AllTextProps = TextProps & CommonProps & SpacingProps & DisplayProps;
+
+// Generic breakpoint type: picks Keys from Source and makes them optional
+export type BreakpointProps<Source, Keys extends keyof Source> = {
+  [K in Keys]?: Source[K];
+};
+
+// ============================================================================
+// Flex Breakpoint Props
+// Supports: layout, spacing, sizing, colors, typography, effects, position
+// ============================================================================
+export type FlexBreakpointProps = BreakpointProps<AllFlexProps,
+  // Layout
+  | 'direction' | 'horizontal' | 'vertical' | 'center' | 'wrap' | 'flex'
+  // Spacing
+  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
+  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
+  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  // Position offsets
+  | 'top' | 'right' | 'bottom' | 'left'
+  // Sizing
+  | 'width' | 'height' | 'maxWidth' | 'minWidth' | 'minHeight' | 'maxHeight'
+  | 'fit' | 'fitWidth' | 'fitHeight' | 'fill' | 'fillWidth' | 'fillHeight'
+  | 'aspectRatio'
+  // Colors
+  | 'background' | 'solid' | 'border' | 'borderTop' | 'borderRight' | 'borderBottom' | 'borderLeft'
+  | 'borderX' | 'borderY' | 'borderStyle' | 'borderWidth' | 'radius' | 'shadow'
+  | 'onBackground' | 'onSolid'
+  // Typography
+  | 'align' | 'textVariant' | 'textSize' | 'textWeight' | 'textType'
+  // Effects / state
+  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
+  | 'dark' | 'light'
+  // Display / position
+  | 'position' | 'hide' | 'overflow' | 'overflowX' | 'overflowY'
+  // Escape hatch
+  | 'style'
+>;
+
+// ============================================================================
+// Grid Breakpoint Props
+// Supports: grid-specific, spacing, sizing, colors, typography, effects, position
+// Does NOT support: direction, horizontal, vertical, center, wrap, flex
+// ============================================================================
+export type GridBreakpointProps = BreakpointProps<AllGridProps,
+  // Grid-specific
+  | 'columns' | 'rows'
+  // Spacing
+  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
+  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
+  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  // Position offsets
+  | 'top' | 'right' | 'bottom' | 'left'
+  // Sizing
+  | 'width' | 'height' | 'maxWidth' | 'minWidth' | 'minHeight' | 'maxHeight'
+  | 'fit' | 'fitWidth' | 'fitHeight' | 'fill' | 'fillWidth' | 'fillHeight'
+  | 'aspectRatio'
+  // Colors
+  | 'background' | 'solid' | 'border' | 'borderTop' | 'borderRight' | 'borderBottom' | 'borderLeft'
+  | 'borderX' | 'borderY' | 'borderStyle' | 'borderWidth' | 'radius' | 'shadow'
+  | 'onBackground' | 'onSolid'
+  // Typography
+  | 'align' | 'textVariant' | 'textSize' | 'textWeight' | 'textType'
+  // Effects / state
+  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
+  | 'dark' | 'light'
+  // Display / position
+  | 'position' | 'hide' | 'overflow' | 'overflowX' | 'overflowY'
+  // Escape hatch
+  | 'style'
+>;
+
+// ============================================================================
+// Text Breakpoint Props
+// Supports: typography, spacing, display effects, position
+// Does NOT support: layout (direction, horizontal, etc.), sizing, colors, border
+// ============================================================================
+export type TextBreakpointProps = BreakpointProps<AllTextProps,
+  // Typography
+  | 'variant' | 'size' | 'weight' | 'family' | 'align' | 'wrap'
+  // Spacing
+  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
+  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
+  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  // Position offsets
+  | 'top' | 'right' | 'bottom' | 'left'
+  // Effects / state
+  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
+  | 'dark' | 'light'
+  // Display / position
+  | 'position' | 'hide' | 'overflow' | 'overflowX' | 'overflowY'
+  // Escape hatch
+  | 'style'
+>;
+
+// ============================================================================
+// Button Breakpoint Props
+// Supports: spacing, colors, typography, border/radius, effects
+// Does NOT support: layout, sizing, overflow
+// ============================================================================
+export type ButtonBreakpointProps = BreakpointProps<SpacingProps & StyleProps & CommonProps & DisplayProps,
+  // Spacing
+  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
+  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
+  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  // Colors
+  | 'background' | 'solid' | 'border' | 'borderTop' | 'borderRight' | 'borderBottom' | 'borderLeft'
+  | 'borderX' | 'borderY' | 'borderStyle' | 'borderWidth' | 'radius' | 'shadow'
+  | 'onBackground' | 'onSolid'
+  // Typography
+  | 'align' | 'textVariant' | 'textSize' | 'textWeight' | 'textType'
+  // Effects / state
+  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
+  | 'dark' | 'light'
+  // Escape hatch
+  | 'style'
+>;
+
+// ============================================================================
+// Input Breakpoint Props
+// Supports: spacing, colors, border, typography, effects
+// Does NOT support: layout, sizing, overflow
+// ============================================================================
+export type InputBreakpointProps = BreakpointProps<SpacingProps & StyleProps & CommonProps & DisplayProps,
+  // Spacing
+  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
+  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
+  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  // Colors
+  | 'background' | 'solid' | 'border' | 'borderTop' | 'borderRight' | 'borderBottom' | 'borderLeft'
+  | 'borderX' | 'borderY' | 'borderStyle' | 'borderWidth' | 'radius' | 'shadow'
+  | 'onBackground' | 'onSolid'
+  // Typography
+  | 'align' | 'textVariant' | 'textSize' | 'textWeight' | 'textType'
+  // Effects / state
+  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
+  | 'dark' | 'light'
+  // Escape hatch
+  | 'style'
+>;
+
+// ============================================================================
+// Backward-compatible interfaces (deprecated, use types above)
+// These are kept for existing code that references them by name.
+// ============================================================================
 export interface BaseBreakpointProps {
   position?: CSSProperties["position"];
   hide?: boolean;
-}
-
-export interface FlexBreakpointProps extends BaseBreakpointProps {
-  direction?: "row" | "column" | "row-reverse" | "column-reverse";
-  horizontal?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
-  vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
-  center?: boolean;
-  overflow?: CSSProperties["overflow"];
-  overflowX?: CSSProperties["overflowX"];
-  overflowY?: CSSProperties["overflowY"];
-  top?: SpacingToken;
-  right?: SpacingToken;
-  bottom?: SpacingToken;
-  left?: SpacingToken;
-  aspectRatio?: CSSProperties["aspectRatio"];
-  style?: CSSProperties;
-}
-
-export interface GridBreakpointProps extends BaseBreakpointProps {
-  columns?: GridProps["columns"];
-  overflow?: CSSProperties["overflow"];
-  overflowX?: CSSProperties["overflowX"];
-  overflowY?: CSSProperties["overflowY"];
-  top?: SpacingToken;
-  right?: SpacingToken;
-  bottom?: SpacingToken;
-  left?: SpacingToken;
-  aspectRatio?: CSSProperties["aspectRatio"];
-  style?: CSSProperties;
 }

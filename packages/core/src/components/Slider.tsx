@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, useRef, useState, useEffect } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import { Column, Row, Text } from ".";
 import styles from "./Slider.module.scss";
 

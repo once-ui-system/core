@@ -1,5 +1,5 @@
 import { CSSProperties, forwardRef } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 
 import {
   GridProps,

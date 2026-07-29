@@ -8,7 +8,7 @@ import React, {
   useState,
 } from "react";
 import ReactDOM from "react-dom";
-import classNames from "classnames";
+import classNames from "clsx";
 import { SpacingToken } from "../../types";
 import styles from "./CodeBlock.module.scss";
 import {
@@ -180,19 +180,52 @@ const loadedLanguages = new Set<string>([
   "javascript",
 ]);
 
+// Language names that intentionally have no grammar — render as plain text
+// without attempting (and warn-failing) a Prism component import.
+const PLAIN_TEXT_LANGUAGES = new Set(["text", "plain", "plaintext", "none"]);
+
+// Short names surfaced by editors → Prism component file names. Prism ships
+// `prism-typescript`, `prism-markdown`, `prism-docker`, …; importing
+// `prism-md` or `prism-dockerfile` throws and the code silently renders
+// unhighlighted. `mdx` has no Prism grammar of its own — TSX is the closest.
+const languageAliases: Record<string, string> = {
+  ts: "typescript",
+  js: "javascript",
+  html: "markup",
+  xml: "markup",
+  svg: "markup",
+  md: "markdown",
+  mdx: "tsx",
+  dockerfile: "docker",
+  sh: "bash",
+  shell: "bash",
+  zsh: "bash",
+  yml: "yaml",
+};
+
+// Make the requested name resolvable at highlight time. Most Prism components
+// self-register their aliases (`markdown` registers `md`, `docker` registers
+// `dockerfile`), but names Prism doesn't know (`mdx`) only highlight if we
+// point them at the canonical grammar ourselves.
+const registerLanguageAlias = async (lang: string, actualLang: string) => {
+  if (lang === actualLang) return;
+  const prism = await getPrism();
+  if (!prism.languages[lang] && prism.languages[actualLang]) {
+    prism.languages[lang] = prism.languages[actualLang];
+  }
+};
+
 // Recursively load language dependencies
 const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
   if (typeof window === "undefined") return false;
 
-  // Handle language aliases
-  const languageAliases: Record<string, string> = {
-    ts: "typescript",
-  };
+  if (PLAIN_TEXT_LANGUAGES.has(lang)) return true;
 
   const actualLang = languageAliases[lang] || lang;
 
   // Skip if already loaded
   if (loadedLanguages.has(actualLang)) {
+    await registerLanguageAlias(lang, actualLang);
     return true;
   }
 
@@ -212,6 +245,7 @@ const loadLanguageWithDependencies = async (lang: string): Promise<boolean> => {
     await import(`prismjs/components/prism-${actualLang}`);
     loadedLanguages.add(actualLang);
     loadedLanguages.add(lang); // Also mark the alias as loaded
+    await registerLanguageAlias(lang, actualLang);
     return true;
   } catch (error) {
     console.warn(`✗ Failed to load Prism language '${lang}':`, error);
@@ -460,11 +494,13 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   compact?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  background?: React.ComponentProps<typeof Flex>["background"];
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
   highlight?: string;
   maxLines?: number;
   isCollapsible?: boolean;
+  hideCode?: boolean;
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({
@@ -482,11 +518,14 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   maxLines = 5,
   isCollapsible = false,
   compact = false,
+  hideCode = false,
   className,
   style,
+  background = "surface",
   onInstanceChange,
   ...rest
 }) => {
+  const styleBackgroundColor = style?.backgroundColor;
   const codeRef = useRef<HTMLElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
   const [selectedInstance, setSelectedInstance] = useState(0);
@@ -669,12 +708,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const renderCodeBlock = (inPortal = false, resetMargin = false) => (
     <Column
       ref={inPortal ? undefined : codeBlockRef}
-      radius="l"
-      background="surface"
+      background={background ?? "surface"}
       border="neutral-alpha-weak"
       overflow="hidden"
       vertical="center"
       fillWidth
+      radius="m"
       minHeight={2.5}
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
@@ -704,6 +743,8 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           fillWidth
           fitHeight
           horizontal="between"
+          background={background}
+          style={{ backgroundColor: styleBackgroundColor }}
         >
           {codes.length > 1 ? (
             <Scroller paddingX="8">
@@ -753,46 +794,54 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           {!compact && (
             <Row paddingY="4" paddingX="8" gap="2" position="static">
               {reloadButton && (
-                <IconButton
-                  size="m"
-                  tooltip="Reload"
-                  tooltipPosition="bottom"
-                  color="neutral-weak"
-                  variant="tertiary"
-                  onClick={handleRefresh}
-                  icon="refresh"
-                />
+                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                  <IconButton
+                    size="m"
+                    tooltip="Reload"
+                    tooltipPosition="bottom"
+                    color="neutral-weak"
+                    variant="tertiary"
+                    onClick={handleRefresh}
+                    icon="refresh"
+                  />
+                </Flex>
               )}
               {fullscreenButton && (
-                <IconButton
-                  size="m"
-                  color="neutral-weak"
-                  tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
-                  tooltipPosition="bottom"
-                  variant="tertiary"
-                  icon={isFullscreen ? "minimize" : "maximize"}
-                  onClick={toggleFullscreen}
-                />
+                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                  <IconButton
+                    size="m"
+                    color="neutral-weak"
+                    tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
+                    tooltipPosition="bottom"
+                    variant="tertiary"
+                    icon={isFullscreen ? "minimize" : "maximize"}
+                    onClick={toggleFullscreen}
+                  />
+                </Flex>
               )}
               {styleButton && (
                 <StyleOverlay>
-                  <IconButton
-                    variant="tertiary"
-                    icon="sparkle"
-                    color="neutral-weak"
-                  />
+                  <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                    <IconButton
+                      variant="tertiary"
+                      icon="sparkle"
+                      color="neutral-weak"
+                    />
+                  </Flex>
                 </StyleOverlay>
               )}
               {copyButton && (
-                <IconButton
-                  size="m"
-                  tooltip="Copy"
-                  tooltipPosition="bottom"
-                  color="neutral-weak"
-                  variant="tertiary"
-                  onClick={handleCopy}
-                  icon={copyIcon}
-                />
+                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                  <IconButton
+                    size="m"
+                    tooltip="Copy"
+                    tooltipPosition="bottom"
+                    color="neutral-weak"
+                    variant="tertiary"
+                    onClick={handleCopy}
+                    icon={copyIcon}
+                  />
+                </Flex>
               )}
             </Row>
           )}
@@ -824,7 +873,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           </Row>
         </Row>
       )}
-      {codes.length > 0 && code && (
+      {codes.length > 0 && code && !hideCode && (
         <Row
           border={!compact && !preview ? "neutral-alpha-weak" : undefined}
           fillHeight={fillHeight}
@@ -927,14 +976,10 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       pointerEvents="none"
                       background="transparent"
                     >
-                      <Flex
-                        radius="m"
-                        background="neutral-weak"
-                        fit
-                        pointerEvents="auto"
-                      >
+                      <Flex radius="m" fit pointerEvents="auto">
                         <Button
-                          variant="secondary"
+                          variant="subtle"
+                          weight="default"
                           size="s"
                           onClick={() => setIsExpanded(true)}
                         >
@@ -950,13 +995,16 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             (typeof code === "string" ? code : code.content).split("\n").length,
           )}
           {compact && copyButton && (
-            <Row
+            <Flex
               position="absolute"
               right="4"
               top="4"
               marginRight="2"
               className={styles.compactCopy}
               zIndex={1}
+              radius="s"
+              background={background}
+              style={{ backgroundColor: styleBackgroundColor }}
             >
               <IconButton
                 tooltip="Copy"
@@ -968,7 +1016,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 size="m"
                 variant="tertiary"
               />
-            </Row>
+            </Flex>
           )}
         </Row>
       )}

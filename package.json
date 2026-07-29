@@ -1,25 +1,38 @@
 {
   "private": true,
   "name": "once-ui-monorepo",
-  "workspaces": [
-    "packages/*",
-    "apps/*"
-  ],
   "scripts": {
     "dev": "turbo dev",
-    "build": "turbo build --filter=@once-ui-system/docs...",
-    "format": "pnpm -r --if-present run format && pnpm -r --if-present run biome-write",
-    "dev:core": "npx -y kill-port 3000 && bun run --filter @once-ui-system/core build && bun run --filter @once-ui-system/dev dev"
+    "dev:core": "pnpm --filter @once-ui-system/core dev",
+    "dev:docs": "pnpm --filter @once-ui-system/docs dev",
+    "dev:dev": "pnpm --filter @once-ui-system/dev dev",
+    "build": "turbo build",
+    "build:core": "pnpm --filter @once-ui-system/core build",
+    "build:docs": "turbo build --filter=@once-ui-system/docs...",
+    "build:dev": "turbo build --filter=@once-ui-system/dev...",
+    "start:docs": "pnpm --filter @once-ui-system/docs start",
+    "start:dev": "pnpm --filter @once-ui-system/dev start",
+    "lint": "turbo lint",
+    "lint:core": "pnpm --filter @once-ui-system/core lint",
+    "format": "turbo format",
+    "format:check": "turbo format:check",
+    "typecheck": "turbo typecheck",
+    "typecheck:core": "pnpm --filter @once-ui-system/core typecheck",
+    "test": "turbo test",
+    "test:core": "pnpm --filter @once-ui-system/core test",
+    "clean": "turbo clean",
+    "clean:core": "pnpm --filter @once-ui-system/core clean",
+    "start": "turbo start"
   },
   "engines": {
-    "node": "20.x"
+    "node": ">=20.x"
   },
   "packageManager": "pnpm@10.14.0",
   "devDependencies": {
-    "turbo": "^2.5.6"
+    "turbo": "^2.10.7"
   },
   "overrides": {
-    "@types/react": "19.2.5",
+    "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3"
   },
   "pnpm": {

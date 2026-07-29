@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import { IconType } from "react-icons";
 import { IconName } from "../icons";
 import { useIcons } from "../contexts/IconProvider";
