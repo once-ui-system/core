@@ -11,14 +11,25 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
-## [Unreleased] — proposed as 1.8.0
+## [Unreleased]
 
-Proposed release bundling community PR [#115](https://github.com/once-ui-system/core/pull/115)
-(@divyanshudhruv), the Prism grammar fix [#117](https://github.com/once-ui-system/core/pull/117),
-and the dependency-advisory patches. Classified **minor**, not patch: it adds new
-component props and widens `TextWeight`, swaps a runtime dependency
-(`classnames` → `clsx`), and changes the package `exports` map. Final contents and the
-publish itself are the maintainer's call.
+### Security
+
+- Patched 7 transitive dependency advisories via `pnpm.overrides` (`postcss`, `ws`,
+  `flatted`, `yaml`, `immutable`, `fast-uri`, `@eslint/plugin-kit`), re-applied against
+  the 1.8.0 lockfile, plus `sharp` pinned to `^0.35.3` (libvips CVEs; within the
+  package's declared peer range). None of the package's own runtime dependencies were
+  affected — see the triage entries in `ROADMAP.md` §5. Remaining audit findings are
+  all app-level/dev major-version bumps (`next`, `vite`, `webpack`, `esbuild`,
+  `brace-expansion` via minimatch@3), tracked as scoped follow-ups.
+
+## [1.8.0] — 2026-07-29
+
+Community PR [#115](https://github.com/once-ui-system/core/pull/115) (@divyanshudhruv),
+the Prism grammar fix [#117](https://github.com/once-ui-system/core/pull/117), and the
+release-integration fixes from [#120](https://github.com/once-ui-system/core/pull/120).
+Classified **minor** per [RELEASING.md](RELEASING.md): new component props, `TextWeight`
+widening, and a runtime dependency swap (`classnames` → `clsx`).
 
 ### Added
 
@@ -29,6 +40,8 @@ publish itself are the maintainer's call.
   `--font-weight-display-*` tokens and `.font-normal` / `.font-medium` utilities ([#115])
 - Per-component responsive breakpoint prop types (`FlexBreakpointProps`,
   `GridBreakpointProps`, `TextBreakpointProps`, …) ([#115])
+- `unoptimized` prop on image-rendering components (`Carousel`, `CompareImage`,
+  `OgCard`, `Swiper`) ([#120])
 
 ### Fixed
 
@@ -39,6 +52,9 @@ publish itself are the maintainer's call.
   collapse to zero height ([#115])
 - `CodeBlock`: Prism grammars now resolve for `md`, `mdx`, `dockerfile`, and shell
   aliases (`sh`/`shell`/`zsh`); plain-text languages no longer warn ([#117])
+- `ScrollLock`: regression fix from release integration; the four long-standing
+  jsdom test failures (`Dialog` inert + `ScrollLock` wheel) now pass — full suite
+  green at 92/92 ([#120])
 - Sass deprecation warning from an unused `@import` in `Toaster.module.scss` ([#115])
 
 ### Changed
@@ -54,15 +70,9 @@ publish itself are the maintainer's call.
 - Runtime deps bumped within their majors: `@floating-ui/react-dom`, `date-fns`,
   `react-icons`, `recharts`; `sharp` peer range widened to allow `^0.35` ([#115])
 
-### Security
-
-- Patched 7 transitive dependency advisories via `pnpm.overrides` (`postcss`, `ws`,
-  `flatted`, `yaml`, `immutable`, `fast-uri`, `@eslint/plugin-kit`). None of the
-  package's own runtime dependencies were affected — see the 2026-07-28 triage in
-  `ROADMAP.md` §5.
-
 [#115]: https://github.com/once-ui-system/core/pull/115
 [#117]: https://github.com/once-ui-system/core/pull/117
+[#120]: https://github.com/once-ui-system/core/pull/120
 
 ## [1.7.13] — 2026-07-25
 

@@ -48,10 +48,10 @@ The dev app has `--port 3001` baked into its `dev` script, so `turbo dev` runs b
 - `apps/docs`: `cd apps/docs && pnpm dev` - http://localhost:3000
 
 ### Tests / lint (standard commands live in each `package.json`)
-- Tests: `pnpm --filter @once-ui-system/core test` (Vitest). Known baseline on `main` (re-verified 2026-07-29): 4 tests fail (`Dialog` inert + `ScrollLock` wheel — pre-existing jsdom-behavior issues, not an env problem) **and** `ScrollLock.integration.test.tsx` fails to collect entirely — it imports `../internal/scrollLockState`, a module that was never committed (85/89 collected tests pass). PR #115 adds the missing module.
-- Typecheck: `pnpm --filter @once-ui-system/core typecheck` currently reports ~235 pre-existing errors on `main` (untyped `ai/examples` props and missing Vitest globals types in test files — PR #115 fixes these). Don't treat a non-zero baseline as caused by your change; compare against `main`.
+- Tests: `pnpm --filter @once-ui-system/core test` (Vitest). Baseline on `main` since the 1.8.0 merge (verified 2026-07-29): **all 5 suites / 92 tests pass.** The historical jsdom failures and the `scrollLockState` collection error were fixed by PRs #115/#120 — a failing test is now a real regression.
+- Typecheck: `pnpm --filter @once-ui-system/core typecheck` — **0 errors** on `main` since 1.8.0 (the ~235 pre-existing errors were fixed by PR #115). A non-zero result is now a real regression.
 - Lint, pre-existing breakage to be aware of (do not "fix" as part of env setup):
-  - `pnpm --filter @once-ui-system/core lint` (Biome) fails because `biome.json` files use the `1.9.4` schema while the pinned CLI is `2.4.13` (unknown keys `ignore`, `organizeImports`).
+  - `pnpm --filter @once-ui-system/core lint` (Biome) still fails after the 1.8.0 dep bumps: the config schema (`2.4.13`) trails the pinned CLI (`2.5.6`), and `biome check .` reports ~1,624 errors — the config/CLI reconciliation is a scheduled roadmap item, not an env problem.
   - `apps/dev` `pnpm lint` fails because its script is `next lint`, which was removed in Next 16.
   - `apps/docs` `pnpm lint` (Next 15) works and reports no errors.
 
