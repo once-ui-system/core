@@ -3,7 +3,7 @@
 import {Flex, Row, Column, Icon, Text, IconButton, Input, Spinner, Select, Button, ShineFx} from ".";
 import { useState, useMemo, ReactNode } from "react";
 import styles from "./Table.module.scss";
-import classNames from "classnames";
+import classNames from "clsx";
 
 type TableHeader = {
   content: ReactNode;
@@ -446,5 +446,6 @@ function Table({
   );
 }
 
+Table.displayName = "Table";
 export { Table };
 export type { TableProps, TableHeader, TableAction };

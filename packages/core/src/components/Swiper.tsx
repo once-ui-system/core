@@ -1,7 +1,7 @@
 "use client";
 
 import { Flex, Media, Column, Row, IconButton, Fade } from ".";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, forwardRef } from "react";
 import styles from "./Swiper.module.scss";
 
 interface SwiperItem {
@@ -16,10 +16,11 @@ interface SwiperProps extends React.ComponentProps<typeof Flex> {
   fill?: boolean;
   aspectRatio?: string;
   sizes?: string;
+  unoptimized?: boolean;
   indicator?: boolean;
 }
 
-const Swiper: React.FC<SwiperProps> = ({
+const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
   items = [],
   fill = false,
   controls = true,
@@ -27,8 +28,9 @@ const Swiper: React.FC<SwiperProps> = ({
   indicator = true,
   aspectRatio = "16 / 9",
   sizes,
+  unoptimized = false,
   ...rest
-}) => {
+}, ref) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isDragging, setIsDragging] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -181,7 +183,7 @@ const Swiper: React.FC<SwiperProps> = ({
   }
 
   return (
-    <Column fillWidth fillHeight={fill} aspectRatio={undefined} style={{ isolation: "isolate" }} {...rest}>
+    <Column ref={ref} fillWidth fillHeight={fill} aspectRatio={undefined} style={{ isolation: "isolate" }} {...rest}>
       <Flex
         fillWidth
         fillHeight={fill}
@@ -233,6 +235,7 @@ const Swiper: React.FC<SwiperProps> = ({
                 <Media
                   fill={fill}
                   sizes={sizes}
+                  unoptimized={unoptimized}
                   priority={priority && index === 0}
                   aspectRatio={fill ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
                   src={item.slide as string}
@@ -372,7 +375,7 @@ const Swiper: React.FC<SwiperProps> = ({
       )}
     </Column>
   );
-};
+});
 
 Swiper.displayName = "Swiper";
 export { Swiper };

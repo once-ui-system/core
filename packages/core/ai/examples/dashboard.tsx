@@ -137,7 +137,7 @@ export function DashboardExample() {
             <Heading as="h2" variant="heading-strong-s">
               Recent activity
             </Heading>
-            <Text variant="label-default-s" onBackground="brand-medium" cursor="interactive">
+            <Text variant="label-default-s" onBackground="brand-medium" style={{ cursor: "pointer" }}>
               View all
             </Text>
           </Row>

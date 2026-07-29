@@ -38,4 +38,5 @@ export * from "./ModalExamples";
 export * from "./SliderExamples";
 export * from "./SemanticColorSection";
 export * from "./ColorSchemeGrid";
-export * from "./AdditionalTokens"
+export * from "./AdditionalTokens";
+export * from "./Cta";

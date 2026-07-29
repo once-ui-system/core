@@ -14,7 +14,6 @@
 
 const fs = require("fs");
 const path = require("path");
-const ts = require("typescript");
 
 const ROOT = path.join(__dirname, "..");
 const SRC = path.join(ROOT, "src");
@@ -61,7 +60,7 @@ const TOKEN_ALIASES = [
   "CSSUnit",
 ];
 
-function loadTsConfig() {
+function loadTsConfig(ts) {
   const configPath = path.join(ROOT, "tsconfig.json");
   const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
   const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, ROOT);
@@ -93,8 +92,9 @@ function typeText(node) {
     .replace(/^\|\s*/, "");
 }
 
-function main() {
-  const options = loadTsConfig();
+async function main() {
+  const ts = await import("typescript");
+  const options = loadTsConfig(ts);
   const rootNames = BARRELS.map((b) => b.file).filter(fs.existsSync);
   const program = ts.createProgram(rootNames, options);
   const checker = program.getTypeChecker();
@@ -461,4 +461,4 @@ function copyDir(src, dest) {
   }
 }
 
-main();
+main().catch((e) => { console.error(e); process.exit(1); });

@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { forwardRef } from "react";
 import { Text } from ".";
 import styles from "./ShineFx.module.scss";
-import classNames from "classnames";
+import classNames from "clsx";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 export interface ShineFxProps extends React.ComponentProps<typeof Text> {
@@ -15,7 +15,7 @@ export interface ShineFxProps extends React.ComponentProps<typeof Text> {
   children?: React.ReactNode;
 }
 
-const ShineFx: React.FC<ShineFxProps> = ({
+const ShineFx = forwardRef<HTMLSpanElement, ShineFxProps>(({
   speed = 1,
   disabled = false,
   inverse = false,
@@ -25,7 +25,7 @@ const ShineFx: React.FC<ShineFxProps> = ({
   className,
   style,
   ...text
-}) => {
+}, ref) => {
   const { shouldAnimate } = useReducedMotion(reducedMotion);
   const isDisabled = disabled || !shouldAnimate;
   const animationDuration = `${speed}s`;
@@ -43,7 +43,7 @@ const ShineFx: React.FC<ShineFxProps> = ({
       {children}
     </Text>
   );
-};
+})
 
 ShineFx.displayName = "ShineFx";
 

@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, forwardRef } from "react";
 import { IconButton, Icon, Flex, Row } from ".";
-import classNames from "classnames";
+import classNames from "clsx";
 import styles from "./Toast.module.scss";
 import { IconName } from "../icons";
 

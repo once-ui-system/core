@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 
 import { Flex, InteractiveDetails, InteractiveDetailsProps, Spinner } from ".";
 import styles from "./Switch.module.scss";

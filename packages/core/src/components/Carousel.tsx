@@ -1,6 +1,6 @@
 "use client";
 
-import { SpacingToken } from "@/types";
+import { SpacingToken } from "../types";
 import {
   Flex,
   RevealFx,
@@ -11,7 +11,7 @@ import {
   IconButton,
   Fade,
 } from ".";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, forwardRef } from "react";
 import styles from "./Carousel.module.scss";
 
 interface CarouselItem {
@@ -34,6 +34,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   translateY?: SpacingToken | number;
   aspectRatio?: string;
   sizes?: string;
+  unoptimized?: boolean;
   revealedByDefault?: boolean;
   thumbnail?: ThumbnailItem;
   play?: {
@@ -44,7 +45,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   };
 }
 
-const Carousel: React.FC<CarouselProps> = ({
+const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
   items = [],
   fill = false,
   controls = true,
@@ -53,11 +54,12 @@ const Carousel: React.FC<CarouselProps> = ({
   translateY,
   aspectRatio = "original",
   sizes,
+  unoptimized = false,
   revealedByDefault = false,
   thumbnail = { scaling: 1, height: "80", sizes: "120px" },
   play = { auto: false, interval: 3000, controls: true },
   ...flex
-}) => {
+}, ref) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [hoverIndex, setHoverIndex] = useState<number | undefined>(0);
   const [isTransitioning, setIsTransitioning] = useState(revealedByDefault);
@@ -257,6 +259,7 @@ const Carousel: React.FC<CarouselProps> = ({
           <Media
             fill={fill}
             sizes={sizes}
+            unoptimized={unoptimized}
             priority={priority}
             radius={flex.radius || "l"}
             border={flex.border || "neutral-alpha-weak"}
@@ -468,6 +471,7 @@ const Carousel: React.FC<CarouselProps> = ({
                       alt={item.alt || ""}
                       aspectRatio={aspectRatio}
                       sizes={thumbnail.sizes}
+                      unoptimized={unoptimized}
                       src={item.slide}
                       cursor="interactive"
                       radius="m"
@@ -498,7 +502,7 @@ const Carousel: React.FC<CarouselProps> = ({
       )}
     </Column>
   );
-};
+})
 
 Carousel.displayName = "Carousel";
 export { Carousel };

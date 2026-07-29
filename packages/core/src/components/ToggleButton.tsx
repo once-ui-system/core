@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import { Flex, Icon, ElementType } from ".";
 import styles from "./ToggleButton.module.scss";
 import { IconName } from "../icons";

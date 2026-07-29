@@ -2,7 +2,7 @@ import '@once-ui-system/core/css/styles.css';
 import '@once-ui-system/core/css/tokens.css';
 import '../resources/custom.scss';
 
-import classNames from "classnames";
+import classNames from "clsx";
 
 import { Footer, Header, Sidebar } from "@/product";
 import { baseURL } from "@/resources";

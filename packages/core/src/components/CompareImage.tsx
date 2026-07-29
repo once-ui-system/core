@@ -13,15 +13,22 @@ interface CompareImageProps extends React.ComponentProps<typeof Flex> {
   leftContent: SideContent;
   rightContent: SideContent;
   aspectRatio?: string;
+  unoptimized?: boolean;
 }
 
-const renderContent = (content: SideContent, clipPath: string, aspectRatio?: string) => {
+const renderContent = (
+  content: SideContent,
+  clipPath: string,
+  aspectRatio?: string,
+  unoptimized?: boolean,
+) => {
   if (typeof content.src === "string") {
     return (
       <Media
         src={content.src}
         alt={content.alt || ""}
         fill
+        unoptimized={unoptimized}
         aspectRatio={aspectRatio || "16/9"}
         position="absolute"
         style={{ clipPath }}
@@ -36,7 +43,13 @@ const renderContent = (content: SideContent, clipPath: string, aspectRatio?: str
   );
 };
 
-const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: CompareImageProps) => {
+const CompareImage = ({
+  leftContent,
+  rightContent,
+  aspectRatio,
+  unoptimized,
+  ...rest
+}: CompareImageProps) => {
   const [position, setPosition] = useState(50);
   const isDraggingRef = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -85,8 +98,8 @@ const CompareImage = ({ leftContent, rightContent, aspectRatio, ...rest }: Compa
 
   return (
     <Flex ref={containerRef} aspectRatio={aspectRatio || "16/9"} fillWidth style={{ touchAction: "none" }} {...rest}>
-      {renderContent(leftContent, `inset(0 ${100 - position}% 0 0)`, aspectRatio)}
-      {renderContent(rightContent, `inset(0 0 0 ${position}%)`, aspectRatio)}
+      {renderContent(leftContent, `inset(0 ${100 - position}% 0 0)`, aspectRatio, unoptimized)}
+      {renderContent(rightContent, `inset(0 0 0 ${position}%)`, aspectRatio, unoptimized)}
 
       {/* Hit area and visible line */}
       <Flex

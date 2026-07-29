@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "1.7.13",
- "generated": "2026-07-24",
+ "version": "1.8.0",
+ "generated": "2026-07-29",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -15,7 +15,7 @@
   "Colors": "`${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`",
   "RadiusSize": "TShirtSizes | \"full\" | \"none\"",
   "TextType": "\"body\" | \"heading\" | \"display\" | \"label\" | \"code\"",
-  "TextWeight": "\"default\" | \"strong\"",
+  "TextWeight": "\"default\" | \"normal\" | \"medium\" | \"strong\"",
   "TextSize": "TShirtSizes",
   "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`",
   "IconName": "\"chevronUp\" | \"chevronDown\" | \"chevronRight\" | \"chevronLeft\" | \"chevronsLeftRight\" | \"refresh\" | \"light\" | \"dark\" | \"help\" | \"info\" | \"warning\" | \"danger\" | \"checkbox\" | \"check\" | \"copy\" | \"eyeDropper\" | \"clipboard\" | \"person\" | \"close\" | \"link\" | \"arrowUpRight\" | \"minus\" | \"plus\" | \"calendar\" | \"eye\" | \"eyeOff\" | \"search\" | \"security\" | \"sparkle\" | \"computer\" | \"minimize\" | \"maximize\" | \"smiley\" | \"paw\" | \"food\" | \"ball\" | \"world\" | \"gift\" | \"symbol\" | \"flag\" | \"wordmark\" | \"enter\" | \"play\" | \"pause\" | \"volume\" | \"volumeOff\" | \"screen\" | \"document\" | \"radialGauge\" | \"linearGauge\" | \"edit\" | \"trash\" | \"mail\" | \"download\""
@@ -42,21 +42,6 @@
    "dark": "boolean",
    "light": "boolean"
   },
-  "FlexBreakpointProps": {
-   "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
-   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "center": "boolean",
-   "overflow": "CSSProperties[\"overflow\"]",
-   "overflowX": "CSSProperties[\"overflowX\"]",
-   "overflowY": "CSSProperties[\"overflowY\"]",
-   "top": "SpacingToken",
-   "right": "SpacingToken",
-   "bottom": "SpacingToken",
-   "left": "SpacingToken",
-   "aspectRatio": "CSSProperties[\"aspectRatio\"]",
-   "style": "CSSProperties"
-  },
   "FlexProps": {
    "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
@@ -64,18 +49,6 @@
    "center": "boolean",
    "wrap": "boolean",
    "flex": "FlexValue"
-  },
-  "GridBreakpointProps": {
-   "columns": "GridProps[\"columns\"]",
-   "overflow": "CSSProperties[\"overflow\"]",
-   "overflowX": "CSSProperties[\"overflowX\"]",
-   "overflowY": "CSSProperties[\"overflowY\"]",
-   "top": "SpacingToken",
-   "right": "SpacingToken",
-   "bottom": "SpacingToken",
-   "left": "SpacingToken",
-   "aspectRatio": "CSSProperties[\"aspectRatio\"]",
-   "style": "CSSProperties"
   },
   "GridProps": {
    "columns": "GridSize",
@@ -367,8 +340,8 @@
   "BlobFx": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -385,8 +358,8 @@
   "Banner": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -546,6 +519,7 @@
     "translateY": "SpacingToken | number",
     "aspectRatio": "string = original",
     "sizes": "string",
+    "unoptimized": "boolean = false",
     "revealedByDefault": "boolean = false",
     "thumbnail": "ThumbnailItem = { scaling: 1, height: \"80\", sizes: \"120px\" }",
     "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; } = { auto: false, interval: 3000, controls: true }"
@@ -571,6 +545,7 @@
     "fill": "boolean = false",
     "aspectRatio": "string = 16 / 9",
     "sizes": "string",
+    "unoptimized": "boolean = false",
     "indicator": "boolean = true"
    }
   },
@@ -681,7 +656,8 @@
    "props": {
     "isChecked": "boolean",
     "isIndeterminate": "boolean = false",
-    "onToggle": "() => void"
+    "onToggle": "() => void",
+    "hoverable": "boolean = true"
    }
   },
   "Chip": {
@@ -736,7 +712,8 @@
    "props": {
     "leftContent": "!SideContent",
     "rightContent": "!SideContent",
-    "aspectRatio": "string"
+    "aspectRatio": "string",
+    "unoptimized": "boolean"
    }
   },
   "ContextMenu": {
@@ -880,6 +857,8 @@
     "footer": "ReactNode",
     "base": "boolean",
     "stack": "boolean",
+    "flush": "boolean = false",
+    "hideClose": "boolean = false",
     "onHeightChange": "(height: number) => void",
     "minHeight": "number",
     "closeOnClickaway": "boolean = true"
@@ -983,7 +962,7 @@
     "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
     "base": "BaseColor = page",
     "blur": "number = 0.5",
-    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\r\n        display: false,\r\n        size: \"4\",\r\n      }",
+    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\n        display: false,\n        size: \"4\",\n      }",
     "style": "React.CSSProperties",
     "children": "ReactNode"
    }
@@ -1155,8 +1134,8 @@
   "HoverCard": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Animation"
+    "Animation",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1215,8 +1194,8 @@
   "InfiniteScroll": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1538,8 +1517,8 @@
   "OgCard": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Card"
+    "Card",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1552,6 +1531,7 @@
    "props": {
     "url": "string",
     "sizes": "string = 320px",
+    "unoptimized": "boolean = false",
     "size": "CondensedTShirtSizes = m",
     "ogData": "Partial<OgData> | null",
     "direction": "\"column\" | \"row\" | \"column-reverse\" | \"row-reverse\" = column",
@@ -1696,7 +1676,8 @@
     "name": "string",
     "value": "string",
     "disabled": "boolean",
-    "onToggle": "() => void"
+    "onToggle": "() => void",
+    "hoverable": "boolean = true"
    }
   },
   "RevealFx": {
@@ -1768,8 +1749,8 @@
   "ScrollContainer": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1804,8 +1785,8 @@
   "SegmentedControl": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Scroller"
+    "Scroller",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1836,7 +1817,7 @@
     "options": "!SelectOptionType[]",
     "value": "string | string[] = ",
     "emptyState": "ReactNode = No results",
-    "onSelect": "(value: any) => void",
+    "onSelect": "(value: string | string[]) => void",
     "placement": "Placement",
     "searchable": "boolean = false",
     "className": "string",
@@ -1937,8 +1918,8 @@
   "SplitView": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -2214,8 +2195,8 @@
   "Tooltip": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -2249,8 +2230,8 @@
   "ThemeSwitcher": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -2371,6 +2352,23 @@
     "className": "string"
    }
   },
+  "HeadingNav": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "header": "boolean = true"
+   }
+  },
   "HeadingLink": {
    "group": "modules",
    "extends": [
@@ -2391,28 +2389,11 @@
     "style": "React.CSSProperties"
    }
   },
-  "HeadingNav": {
-   "group": "modules",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "header": "boolean = true"
-   }
-  },
   "ChartHeader": {
    "group": "modules",
    "extends": [
-    "Flex",
-    "Column"
+    "Column",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -2576,7 +2557,7 @@
     "line": "{ count?: number; width?: number; length?: number; }",
     "unit": "React.ReactNode",
     "value": "number = 7",
-    "angle": "{ start: number; sweep: number; } = {\r\n    start: 0,\r\n    sweep: 360,\r\n  }",
+    "angle": "{ start: number; sweep: number; } = {\n    start: 0,\n    sweep: 360,\n  }",
     "direction": "'cw' | 'ccw' = cw",
     "edgePad": "number = 0",
     "children": "React.ReactNode",

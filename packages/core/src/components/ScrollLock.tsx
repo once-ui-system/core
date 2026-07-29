@@ -7,6 +7,22 @@ interface ScrollLockProps {
   allowScrollInElement?: RefObject<HTMLElement | null>;
 }
 
+// Shared registry so multiple ScrollLock instances know about each other's allowed elements.
+// Refs are stored rather than elements: the ref target is usually mounted in a later commit
+// than the ScrollLock effect (portals, `isOpen &&` subtrees), so `current` is still null here.
+// Dereferencing at event time instead keeps late-attached containers scrollable.
+const allowedScrollRefs = new Set<RefObject<HTMLElement | null>>();
+
+const getAllowedScrollElements = (): HTMLElement[] => {
+  const elements: HTMLElement[] = [];
+  for (const ref of allowedScrollRefs) {
+    if (ref.current) {
+      elements.push(ref.current);
+    }
+  }
+  return elements;
+};
+
 export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) => {
   const scrollPositionRef = useRef({ x: 0, y: 0 });
 
@@ -22,6 +38,11 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
     queueMicrotask(() => {
       window.scrollTo(scrollX, scrollY);
     });
+
+    // Register this instance's allowed ref in the shared registry
+    if (allowScrollInElement) {
+      allowedScrollRefs.add(allowScrollInElement);
+    }
 
     // Check if an element can scroll in a given direction
     const canScroll = (el: HTMLElement, deltaY: number): boolean => {
@@ -63,13 +84,12 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
       return null;
     };
 
-    // Prevent wheel scroll
+    // Prevent wheel scroll — checks ALL registered allowed elements
     const preventWheel = (e: WheelEvent) => {
-      // Allow scroll if it's inside the allowed element AND that element can scroll
-      if (allowScrollInElement?.current) {
-        const target = e.target as HTMLElement;
-        if (allowScrollInElement.current.contains(target)) {
-          const scrollable = findScrollableParent(target, allowScrollInElement.current, e.deltaY);
+      const target = e.target as HTMLElement;
+      for (const allowed of getAllowedScrollElements()) {
+        if (allowed.contains(target)) {
+          const scrollable = findScrollableParent(target, allowed, e.deltaY);
           if (scrollable) {
             return; // Allow scroll within the scrollable element
           }
@@ -85,11 +105,11 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
     };
 
     const preventTouch = (e: TouchEvent) => {
-      if (allowScrollInElement?.current) {
-        const target = e.target as HTMLElement;
-        if (allowScrollInElement.current.contains(target)) {
+      const target = e.target as HTMLElement;
+      for (const allowed of getAllowedScrollElements()) {
+        if (allowed.contains(target)) {
           const deltaY = touchStartY - e.touches[0].clientY;
-          const scrollable = findScrollableParent(target, allowScrollInElement.current, deltaY);
+          const scrollable = findScrollableParent(target, allowed, deltaY);
           if (scrollable) {
             return;
           }
@@ -102,9 +122,9 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
     const preventKeyScroll = (e: KeyboardEvent) => {
       const scrollKeys = ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "];
       if (scrollKeys.includes(e.key)) {
-        if (allowScrollInElement?.current) {
-          const target = e.target as HTMLElement;
-          if (allowScrollInElement.current.contains(target)) {
+        const target = e.target as HTMLElement;
+        for (const allowed of getAllowedScrollElements()) {
+          if (allowed.contains(target)) {
             return;
           }
         }
@@ -123,8 +143,20 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
       window.removeEventListener("touchstart", handleTouchStart, { capture: true });
       window.removeEventListener("touchmove", preventTouch, { capture: true });
       window.removeEventListener("keydown", preventKeyScroll, { capture: true });
+
+      // Unregister from shared registry
+      if (allowScrollInElement) {
+        allowedScrollRefs.delete(allowScrollInElement);
+      }
     };
   }, [enabled, allowScrollInElement]);
 
   return null;
+};
+
+ScrollLock.displayName = "ScrollLock";
+
+/** Reset module-level state for testing */
+export const resetScrollLockState = () => {
+  allowedScrollRefs.clear();
 };

@@ -1,5 +1,5 @@
 import { ElementType, ComponentPropsWithoutRef } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 
 import { TextProps, CommonProps, SpacingProps, DisplayProps } from "../interfaces";
 import { ColorScheme, ColorWeight, TextVariant, SpacingToken } from "../types";

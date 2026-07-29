@@ -265,6 +265,58 @@ semantic HTML element, providing simple, seamless style overrides.
 
 Just add the `data-theme`, `data-neutral`, `data-brand`, `data-accent`, `data-border`, `data-surface`, `data-solid`, `data-solid-style`, `data-transition` or `data-scaling` attributes to any semantic HTML element to override its default style.
 
+## API reference
+
+### ThemeProvider
+
+<PropsTable
+  content={[
+    ["children", "ReactNode"],
+    ["theme", ["system", "dark", "light"], "system"],
+    ["brand", ["blue", "indigo", "violet", "magenta", "pink", "red", "orange", "yellow", "moss", "green", "emerald", "aqua", "cyan", "custom"], "blue"],
+    ["accent", ["blue", "indigo", "violet", "magenta", "pink", "red", "orange", "yellow", "moss", "green", "emerald", "aqua", "cyan", "custom"], "indigo"],
+    ["neutral", ["sand", "gray", "slate", "custom"], "gray"],
+    ["solid", ["color", "contrast", "inverse"], "contrast"],
+    ["solidStyle", ["flat", "plastic"], "flat"],
+    ["border", ["rounded", "playful", "conservative"], "playful"],
+    ["surface", ["filled", "translucent"], "translucent"],
+    ["transition", ["all", "micro", "macro", "none"], "all"],
+    ["scaling", ["90", "95", "100", "105", "110"], "100"],
+  ]}
+/>
+
+### useTheme
+
+Returns `{ theme, resolvedTheme, setTheme }`.
+
+<PropsTable
+  content={[
+    ["theme", "Theme", "Current theme setting"],
+    ["resolvedTheme", "\"light\" | \"dark\"", "Actual resolved theme"],
+    ["setTheme", "(theme: Theme) => void", "Update theme"],
+  ]}
+/>
+
+### useStyle
+
+Returns all style options plus `setStyle`.
+
+<PropsTable
+  content={[
+    ["theme", "Theme"],
+    ["neutral", "NeutralColor | \"custom\""],
+    ["brand", "Schemes | \"custom\""],
+    ["accent", "Schemes | \"custom\""],
+    ["solid", "SolidType"],
+    ["solidStyle", "SolidStyle"],
+    ["border", "BorderStyle"],
+    ["surface", "SurfaceStyle"],
+    ["transition", "TransitionStyle"],
+    ["scaling", "ScalingSize"],
+    ["setStyle", "(style: Partial<StyleOptions>) => void"],
+  ]}
+/>
+
 <CodeBlock
   marginTop="16"
   marginBottom="24"

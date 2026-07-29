@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 import styles from "./StatusIndicator.module.scss";
 import { Flex } from ".";
 import { CondensedTShirtSizes } from "../types";

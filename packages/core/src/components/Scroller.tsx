@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import classNames from "classnames";
+import React, { useEffect, useRef, useState, forwardRef } from "react";
+import classNames from "clsx";
 import { Flex, IconButton, BaseColor, Fade } from ".";
 import styles from "./Scroller.module.scss";
-import { RadiusSize } from "@/types";
+import { RadiusSize } from "../types";
 
 interface ScrollerProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
@@ -19,7 +19,7 @@ interface ScrollableChildProps {
   onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
-const Scroller: React.FC<ScrollerProps> = ({
+const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(({
   children,
   direction = "row",
   fadeColor = "transparent",
@@ -28,7 +28,7 @@ const Scroller: React.FC<ScrollerProps> = ({
   style,
   onItemClick,
   ...rest
-}) => {
+}, ref) => {
   const scrollerRef = useRef<HTMLDivElement>(null);
   const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
   const [showNextButton, setShowNextButton] = useState<boolean>(false);
@@ -199,7 +199,7 @@ const Scroller: React.FC<ScrollerProps> = ({
       )}
     </Flex>
   );
-};
+})
 
 Scroller.displayName = "Scroller";
 

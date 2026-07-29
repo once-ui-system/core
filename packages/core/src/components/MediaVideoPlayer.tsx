@@ -1,7 +1,7 @@
 "use client";
 
-import React, { CSSProperties, useCallback, useEffect, useRef, useState } from "react";
-import classNames from "classnames";
+import React, { CSSProperties, useCallback, useEffect, useRef, useState, forwardRef } from "react";
+import classNames from "clsx";
 import { Flex, IconButton, Row, Text } from ".";
 import styles from "./MediaVideoPlayer.module.scss";
 
@@ -26,14 +26,14 @@ const formatTime = (seconds: number) => {
   return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
 };
 
-const MediaVideoPlayer: React.FC<MediaVideoPlayerProps> = ({
+const MediaVideoPlayer = forwardRef<HTMLDivElement, MediaVideoPlayerProps>(({
   src,
   autoplay = false,
   loop = false,
   muted: mutedProp = true,
   objectFit = "cover",
   className,
-}) => {
+}, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -352,7 +352,7 @@ const MediaVideoPlayer: React.FC<MediaVideoPlayerProps> = ({
             fillWidth
             radius="full"
             className={styles.progressTrack}
-            style={{ background: "rgba(255, 255, 255, 0.25)" }}
+            style={{ background: "var(--neutral-alpha-medium)" }}
             onPointerDown={handleProgressPointerDown}
             onPointerMove={handleProgressPointerMove}
             onPointerUp={handleProgressPointerUp}
@@ -421,7 +421,7 @@ const MediaVideoPlayer: React.FC<MediaVideoPlayerProps> = ({
       </div>
     </div>
   );
-};
+})
 
 MediaVideoPlayer.displayName = "MediaVideoPlayer";
 export { MediaVideoPlayer };

@@ -3,7 +3,7 @@
 import React, { forwardRef, useEffect, useRef } from "react";
 import { Flex, Mask, MaskProps } from ".";
 import styles from "./Background.module.scss";
-import classNames from "classnames";
+import classNames from "clsx";
 import { DisplayProps } from "../interfaces";
 import { SpacingToken } from "../types";
 

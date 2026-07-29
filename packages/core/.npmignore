@@ -11,9 +11,8 @@ node_modules/
 .idea/
 
 # Config files
-.eslintrc
-.prettierrc
-next.config.js
+.eslintrc*
+next.config.*
 tsconfig.json
 tsconfig.build.json
 biome.json

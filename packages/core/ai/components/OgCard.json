@@ -2,8 +2,8 @@
  "name": "OgCard",
  "group": "components",
  "extends": [
-  "Flex",
-  "Card"
+  "Card",
+  "Flex"
  ],
  "mixins": [
   "CommonProps",
@@ -16,6 +16,7 @@
  "props": {
   "url": "string",
   "sizes": "string = 320px",
+  "unoptimized": "boolean = false",
   "size": "CondensedTShirtSizes = m",
   "ogData": "Partial<OgData> | null",
   "direction": "\"column\" | \"row\" | \"column-reverse\" | \"row-reverse\" = column",

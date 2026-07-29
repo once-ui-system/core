@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, forwardRef } from "react";
 import { Input, DropdownWrapper, Flex, DateRange, DateRangePicker, Row } from ".";
 
 interface DateRangeInputProps
@@ -32,7 +32,7 @@ const formatDateRange = (range: DateRange): LocalizedDateRange => {
   };
 };
 
-export const DateRangeInput: React.FC<DateRangeInputProps> = ({
+const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(({
   id,
   startLabel = "Start",
   endLabel = "End",
@@ -43,7 +43,7 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
   className,
   style,
   ...rest
-}) => {
+}, ref) => {
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState(
     value ? formatDateRange(value) : { startDate: "", endDate: "" },
@@ -114,7 +114,7 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
 
   return (
     <DropdownWrapper
-      fillWidth
+      fillWidth={false}
       trigger={trigger}
       minHeight={minHeight}
       dropdown={dropdown}
@@ -126,4 +126,7 @@ export const DateRangeInput: React.FC<DateRangeInputProps> = ({
       onOpenChange={setIsOpen}
     />
   );
-};
+})
+
+DateRangeInput.displayName = "DateRangeInput";
+export { DateRangeInput };

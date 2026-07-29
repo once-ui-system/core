@@ -35,6 +35,61 @@ Learn how to set up and build with Once UI at [docs.once-ui.com](https://docs.on
 npm install @once-ui-system/core
 ```
 
+## Getting started
+
+```bash
+git clone https://github.com/once-ui-system/core.git
+cd core
+pnpm install
+pnpm dev
+```
+
+This boots both apps in parallel via Turborepo:
+- **Docs** → `http://localhost:3000`
+- **Dev sandbox** → `http://localhost:3001`
+
+> **Note:** `pnpm install` automatically builds the core library via a postinstall hook, so no separate build step is needed after initial setup.
+
+## Project structure
+
+This is a **pnpm monorepo** with Turborepo. See [ARCHITECTURE.md](./ARCHITECTURE.md) for the full directory layout, conventions, and where to contribute.
+
+```
+core/
+├── packages/core/     # @once-ui-system/core — the design system library
+├── apps/dev/          # Next.js 16 sandbox for component development
+└── apps/docs/         # Next.js 16 documentation site
+```
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start all dev servers in parallel (docs → :3000, dev → :3001, core watch) |
+| `pnpm build` | Build everything (library + apps) |
+| `pnpm test` | Run all tests via Turbo |
+| `pnpm lint` | Lint everything via Turbo |
+| `pnpm typecheck` | Typecheck everything in parallel |
+| `pnpm format` | Format all files |
+| `pnpm clean` | Clean all build artifacts |
+| `pnpm start` | Start all built apps (docs → :3000, dev → :3001) |
+
+Individual workspace commands:
+
+| Command | Description |
+|---------|-------------|
+| `pnpm dev:docs` | Docs app only → `http://localhost:3000` |
+| `pnpm dev:dev` | Dev sandbox only → `http://localhost:3001` |
+| `pnpm build:core` | Build just the library |
+| `pnpm test:core` | Run core tests only |
+| `pnpm lint:core` | Lint core only |
+| `pnpm start:docs` | Start built docs app only |
+| `pnpm start:dev` | Start built dev app only |
+
+## AI codegen harness
+
+The library ships an AI codegen harness in `packages/core/ai/` — a manifest, task bundles, component slices, and validation scripts. This powers the [Freebuff](https://freebuff.com) integration and enables AI agents to generate Once UI code correctly. See [AI Coding docs](https://docs.once-ui.com/once-ui/ai-coding) for details.
+
 ## Authors
 
 Built and maintained by [**Lorant One**](https://lorant.one).
@@ -47,7 +102,18 @@ Found a bug? Report it [here](https://github.com/once-ui-system/core/issues/new?
 
 ## Contributing
 
-Please read our [CONTRIBUTING.md](./CONTRIBUTING.md) for details on our code of conduct, and the process for submitting pull requests to Once UI.
+We welcome contributions! Before submitting a PR:
+
+1. Read [ARCHITECTURE.md](./ARCHITECTURE.md) to understand the codebase layout.
+2. Read [CONTRIBUTING.md](./CONTRIBUTING.md) for guidelines on code style, PR process, and conventions.
+3. Test your changes in `apps/dev` — use `ComponentsCheckPage.tsx` to visually verify components.
+4. Run `pnpm test` before submitting.
+
+**Where to start:**
+- Fix or add a component → `packages/core/src/components/`
+- Fix a complex module (CodeBlock, etc.) → `packages/core/src/modules/`
+- Update docs → `apps/docs/src/content/once-ui/`
+- Change design tokens → `packages/core/src/tokens/`
 
 ## Sponsors
 

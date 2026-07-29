@@ -30,7 +30,7 @@ export function formatDate(
       if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}/.test(value)) {
         return format(parseISO(value), dateConfig.format);
       }
-    } catch (error) {}
+    } catch { /* not a valid date, return raw value */ }
   }
 
   return value;

@@ -5,7 +5,7 @@ import { Arrow, Flex, Icon, SmartLink } from ".";
 
 import styles from "./Badge.module.scss";
 import { IconName } from "../icons";
-import classNames from "classnames";
+import classNames from "clsx";
 
 export interface BadgeProps extends React.ComponentProps<typeof Flex> {
   title?: string;

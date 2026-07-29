@@ -116,7 +116,7 @@ export const CountdownFxLaunch = () => {
 
 export const CountdownFxOnComplete = () => {
   const handleComplete = () => {
-    console.log("Countdown complete!");
+      // Countdown complete
   };
 
   return (

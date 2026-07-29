@@ -1,7 +1,6 @@
 "use client";
 
-import { useCallback, useEffect } from "react";
-import React, { useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 // Helper function to get all possible class names for a property
 const getPropertyClassNames = (property: string, baseDirection: string | undefined): string[] => {
@@ -80,6 +79,50 @@ const getPropertyClassNames = (property: string, baseDirection: string | undefin
       break;
     case "hide":
       classNames.push("flex-hide", "flex-show");
+      break;
+    case "align":
+      classNames.push(
+        "align-start",
+        "align-center",
+        "align-end",
+      );
+      break;
+    case "scrollbar":
+      classNames.push("scrollbar", "scrollbar-hide", "scrollbar-show");
+      break;
+    case "pointerEvents":
+      classNames.push("pointer-events-none", "pointer-events-auto");
+      break;
+    case "opacity":
+      classNames.push(
+        "opacity-0",
+        "opacity-10",
+        "opacity-20",
+        "opacity-30",
+        "opacity-40",
+        "opacity-50",
+        "opacity-60",
+        "opacity-70",
+        "opacity-80",
+        "opacity-90",
+        "opacity-100",
+      );
+      break;
+    case "zIndex":
+      classNames.push(
+        "z-index-1",
+        "z-index-10",
+        "z-index-100",
+        "z-index-1000",
+        "z-index-10000",
+      );
+      break;
+    case "transition":
+      classNames.push(
+        "transition-all",
+        "transition-colors",
+        "transition-transform",
+      );
       break;
     case "top":
       classNames.push(
@@ -261,6 +304,13 @@ export const useResponsiveClasses = (
       "right",
       "bottom",
       "left",
+      // Additional class-based properties
+      "align",
+      "scrollbar",
+      "pointerEvents",
+      "opacity",
+      "zIndex",
+      "transition",
     ];
 
     properties.forEach((property) => {
@@ -320,6 +370,25 @@ export const useResponsiveClasses = (
             break;
           case "hide":
             className = value ? "flex-hide" : "flex-show";
+            break;
+          // Additional class-based properties
+          case "align":
+            className = `align-${value}`;
+            break;
+          case "scrollbar":
+            className = `scrollbar-${value}`;
+            break;
+          case "pointerEvents":
+            className = `pointer-events-${value}`;
+            break;
+          case "opacity":
+            className = `opacity-${value}`;
+            break;
+          case "zIndex":
+            className = `z-index-${value}`;
+            break;
+          case "transition":
+            className = `transition-${value}`;
             break;
           // Position offsets
           case "top":

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import classNames from "classnames";
+import classNames from "clsx";
 
 import { Flex, Text, Skeleton, Tag, TagProps, Avatar, AvatarProps, Column } from ".";
 

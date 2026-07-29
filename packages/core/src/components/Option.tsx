@@ -1,6 +1,6 @@
 "use client";
 
-import classNames from "classnames";
+import classNames from "clsx";
 import { Text, ElementType, Column, Row } from ".";
 import styles from "./Option.module.scss";
 import React, { forwardRef, KeyboardEvent, useRef, useEffect, useState } from "react";
