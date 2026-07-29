@@ -111,8 +111,7 @@ What already exists (verified in-repo, not assumed):
 | Need | Why | Urgency |
 | --- | --- | --- |
 | Review the consolidated daily PR (replaces the three separate agent branches) | Roadmap, security overrides, changelog + release policy all ride on it | Medium |
-| APPROVED review on #115 once satisfied with the `require`-condition answer | Gates #117's authorized merge and the whole 1.8.0 assembly | High |
-| Decide: ask div to restore the `exports` `require` condition, or accept the drop (then it's arguably major, not minor) | Package-resolution change; affects CJS/jest consumers | High |
+| APPROVED review on #115 — all review items now resolved (div restored the `require` condition in `bc20fe3`, verified 07-29 ~07:30 UTC) | Gates #117's authorized merge and the whole 1.8.0 assembly | High |
 | Decide on the ~110 remaining Dependabot alerts needing major-version bumps (`next`, `vite`, `ajv`, `js-yaml`, `picomatch`) | None are runtime risk to npm consumers (see daily log), but each needs a scoped, tested follow-up rather than a blanket override | Low (no active runtime risk) |
 | ~~Review PR #115 findings and decide whether div gets asked for the rename + regression fix~~ — resolved: div fixed both; superseded by the `require`-condition decision above | — | — |
 | Go/no-go on the Week 3 library-split RFC once drafted | Major breaking change, affects Studio and Aveiro | Medium (Week 3) |

@@ -44,8 +44,9 @@ publish itself are the maintainer's call.
 ### Changed
 
 - `classnames` replaced with `clsx` (identical API, smaller bundle) ([#115])
-- Package `exports` map: `require` conditions replaced with `types` conditions on all
-  subpaths — flagged during review; see [#115] for the CJS-consumer implications
+- Package `exports` map: `types` conditions added on all subpaths (`types` first,
+  `import`/`require` preserved — the interim `require` drop was caught in review and
+  restored in [#115]); CJS consumers unaffected
 - Several components converted from `React.FC` to `forwardRef` ([#115])
 - `DropdownWrapper` floating-ui sizing/flip behavior (affects `Select`, `DateInput`,
   `DateRangeInput`, `ContextMenu`, `EmojiPicker`, `MegaMenu`) ([#115])
