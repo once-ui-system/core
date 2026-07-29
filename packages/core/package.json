@@ -43,50 +43,61 @@
   "main": "dist/index.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     },
     "./components": {
+      "types": "./dist/components/index.d.ts",
       "import": "./dist/components/index.js",
-      "types": "./dist/components/index.d.ts"
+      "require": "./dist/components/index.js"
     },
     "./components/*": {
+      "types": "./dist/components/*.d.ts",
       "import": "./dist/components/*.js",
-      "types": "./dist/components/*.d.ts"
+      "require": "./dist/components/*.js"
     },
     "./contexts": {
+      "types": "./dist/contexts/index.d.ts",
       "import": "./dist/contexts/index.js",
-      "types": "./dist/contexts/index.d.ts"
+      "require": "./dist/contexts/index.js"
     },
     "./modules": {
+      "types": "./dist/modules/index.d.ts",
       "import": "./dist/modules/index.js",
-      "types": "./dist/modules/index.d.ts"
+      "require": "./dist/modules/index.js"
     },
     "./icons": {
+      "types": "./dist/icons/index.d.ts",
       "import": "./dist/icons/index.js",
-      "types": "./dist/icons/index.d.ts"
+      "require": "./dist/icons/index.js"
     },
     "./types": {
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/types/index.js",
-      "types": "./dist/types/index.d.ts"
+      "require": "./dist/types/index.js"
     },
     "./interfaces": {
+      "types": "./dist/interfaces/index.d.ts",
       "import": "./dist/interfaces/index.js",
-      "types": "./dist/interfaces/index.d.ts"
+      "require": "./dist/interfaces/index.js"
     },
     "./css/styles.css": "./dist/css/styles.css",
     "./css/tokens.css": "./dist/css/tokens.css",
     "./utils": {
+      "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",
-      "types": "./dist/utils/index.d.ts"
+      "require": "./dist/utils/index.js"
     },
     "./hooks": {
+      "types": "./dist/hooks/index.d.ts",
       "import": "./dist/hooks/index.js",
-      "types": "./dist/hooks/index.d.ts"
+      "require": "./dist/hooks/index.js"
     },
     "./server": {
+      "types": "./dist/server/index.d.ts",
       "import": "./dist/server/index.js",
-      "types": "./dist/server/index.d.ts"
+      "require": "./dist/server/index.js"
     },
     "./ai/manifest.json": "./ai/manifest.json",
     "./ai/spec.json": "./ai/spec.json",
