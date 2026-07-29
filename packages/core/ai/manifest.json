@@ -1,6 +1,6 @@
 {
- "version": "1.7.13",
- "generated": "2026-07-28",
+ "version": "1.8.0",
+ "generated": "2026-07-29",
  "files": {
   "spec": "spec.json",
   "catalog": "catalog.json",

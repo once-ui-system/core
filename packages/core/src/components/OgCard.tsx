@@ -23,6 +23,7 @@ export interface OgData {
 interface OgCardProps extends Omit<React.ComponentProps<typeof Card>, "title"> {
   url?: string;
   sizes?: string;
+  unoptimized?: boolean;
   size?: CondensedTShirtSizes;
   ogData?: Partial<OgData> | null;
   direction?: "column" | "row" | "column-reverse" | "row-reverse";
@@ -76,6 +77,7 @@ const OgCard = ({
   ogData: providedOgData,
   direction = "column",
   sizes = "320px",
+  unoptimized = false,
   size = "m",
   serviceConfig = {},
   title,
@@ -158,6 +160,7 @@ const OgCard = ({
           loading={loading}
           radius="l"
           sizes={sizes}
+          unoptimized={unoptimized}
           aspectRatio="16/9"
           border="neutral-alpha-weak"
           src={proxiedImageUrl}
@@ -174,6 +177,7 @@ const OgCard = ({
             <Media
               aspectRatio="1/1"
               sizes="24px"
+              unoptimized={unoptimized}
               src={resolvedFavicon}
               loading={loading}
               minWidth="16"

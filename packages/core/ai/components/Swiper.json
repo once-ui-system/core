@@ -19,6 +19,7 @@
   "fill": "boolean = false",
   "aspectRatio": "string = 16 / 9",
   "sizes": "string",
+  "unoptimized": "boolean = false",
   "indicator": "boolean = true"
  },
  "mixinsRef": [

@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "1.7.13",
- "generated": "2026-07-28",
+ "version": "1.8.0",
+ "generated": "2026-07-29",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -519,6 +519,7 @@
     "translateY": "SpacingToken | number",
     "aspectRatio": "string = original",
     "sizes": "string",
+    "unoptimized": "boolean = false",
     "revealedByDefault": "boolean = false",
     "thumbnail": "ThumbnailItem = { scaling: 1, height: \"80\", sizes: \"120px\" }",
     "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; } = { auto: false, interval: 3000, controls: true }"
@@ -544,6 +545,7 @@
     "fill": "boolean = false",
     "aspectRatio": "string = 16 / 9",
     "sizes": "string",
+    "unoptimized": "boolean = false",
     "indicator": "boolean = true"
    }
   },
@@ -710,7 +712,8 @@
    "props": {
     "leftContent": "!SideContent",
     "rightContent": "!SideContent",
-    "aspectRatio": "string"
+    "aspectRatio": "string",
+    "unoptimized": "boolean"
    }
   },
   "ContextMenu": {
@@ -959,7 +962,7 @@
     "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
     "base": "BaseColor = page",
     "blur": "number = 0.5",
-    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\r\n        display: false,\r\n        size: \"4\",\r\n      }",
+    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\n        display: false,\n        size: \"4\",\n      }",
     "style": "React.CSSProperties",
     "children": "ReactNode"
    }
@@ -1528,6 +1531,7 @@
    "props": {
     "url": "string",
     "sizes": "string = 320px",
+    "unoptimized": "boolean = false",
     "size": "CondensedTShirtSizes = m",
     "ogData": "Partial<OgData> | null",
     "direction": "\"column\" | \"row\" | \"column-reverse\" | \"row-reverse\" = column",
@@ -2553,7 +2557,7 @@
     "line": "{ count?: number; width?: number; length?: number; }",
     "unit": "React.ReactNode",
     "value": "number = 7",
-    "angle": "{ start: number; sweep: number; } = {\r\n    start: 0,\r\n    sweep: 360,\r\n  }",
+    "angle": "{ start: number; sweep: number; } = {\n    start: 0,\n    sweep: 360,\n  }",
     "direction": "'cw' | 'ccw' = cw",
     "edgePad": "number = 0",
     "children": "React.ReactNode",

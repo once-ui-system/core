@@ -7,8 +7,21 @@ interface ScrollLockProps {
   allowScrollInElement?: RefObject<HTMLElement | null>;
 }
 
-// Shared registry so multiple ScrollLock instances know about each other's allowed elements
-const allowedScrollElements = new Set<HTMLElement>();
+// Shared registry so multiple ScrollLock instances know about each other's allowed elements.
+// Refs are stored rather than elements: the ref target is usually mounted in a later commit
+// than the ScrollLock effect (portals, `isOpen &&` subtrees), so `current` is still null here.
+// Dereferencing at event time instead keeps late-attached containers scrollable.
+const allowedScrollRefs = new Set<RefObject<HTMLElement | null>>();
+
+const getAllowedScrollElements = (): HTMLElement[] => {
+  const elements: HTMLElement[] = [];
+  for (const ref of allowedScrollRefs) {
+    if (ref.current) {
+      elements.push(ref.current);
+    }
+  }
+  return elements;
+};
 
 export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) => {
   const scrollPositionRef = useRef({ x: 0, y: 0 });
@@ -26,9 +39,9 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
       window.scrollTo(scrollX, scrollY);
     });
 
-    // Register this instance's allowed element in the shared registry
-    if (allowScrollInElement?.current) {
-      allowedScrollElements.add(allowScrollInElement.current);
+    // Register this instance's allowed ref in the shared registry
+    if (allowScrollInElement) {
+      allowedScrollRefs.add(allowScrollInElement);
     }
 
     // Check if an element can scroll in a given direction
@@ -74,7 +87,7 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
     // Prevent wheel scroll — checks ALL registered allowed elements
     const preventWheel = (e: WheelEvent) => {
       const target = e.target as HTMLElement;
-      for (const allowed of allowedScrollElements) {
+      for (const allowed of getAllowedScrollElements()) {
         if (allowed.contains(target)) {
           const scrollable = findScrollableParent(target, allowed, e.deltaY);
           if (scrollable) {
@@ -93,7 +106,7 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
 
     const preventTouch = (e: TouchEvent) => {
       const target = e.target as HTMLElement;
-      for (const allowed of allowedScrollElements) {
+      for (const allowed of getAllowedScrollElements()) {
         if (allowed.contains(target)) {
           const deltaY = touchStartY - e.touches[0].clientY;
           const scrollable = findScrollableParent(target, allowed, deltaY);
@@ -110,7 +123,7 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
       const scrollKeys = ["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "];
       if (scrollKeys.includes(e.key)) {
         const target = e.target as HTMLElement;
-        for (const allowed of allowedScrollElements) {
+        for (const allowed of getAllowedScrollElements()) {
           if (allowed.contains(target)) {
             return;
           }
@@ -132,8 +145,8 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
       window.removeEventListener("keydown", preventKeyScroll, { capture: true });
 
       // Unregister from shared registry
-      if (allowScrollInElement?.current) {
-        allowedScrollElements.delete(allowScrollInElement.current);
+      if (allowScrollInElement) {
+        allowedScrollRefs.delete(allowScrollInElement);
       }
     };
   }, [enabled, allowScrollInElement]);
@@ -145,5 +158,5 @@ ScrollLock.displayName = "ScrollLock";
 
 /** Reset module-level state for testing */
 export const resetScrollLockState = () => {
-  allowedScrollElements.clear();
+  allowedScrollRefs.clear();
 };

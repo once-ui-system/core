@@ -34,6 +34,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   translateY?: SpacingToken | number;
   aspectRatio?: string;
   sizes?: string;
+  unoptimized?: boolean;
   revealedByDefault?: boolean;
   thumbnail?: ThumbnailItem;
   play?: {
@@ -53,6 +54,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
   translateY,
   aspectRatio = "original",
   sizes,
+  unoptimized = false,
   revealedByDefault = false,
   thumbnail = { scaling: 1, height: "80", sizes: "120px" },
   play = { auto: false, interval: 3000, controls: true },
@@ -257,6 +259,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
           <Media
             fill={fill}
             sizes={sizes}
+            unoptimized={unoptimized}
             priority={priority}
             radius={flex.radius || "l"}
             border={flex.border || "neutral-alpha-weak"}
@@ -468,6 +471,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
                       alt={item.alt || ""}
                       aspectRatio={aspectRatio}
                       sizes={thumbnail.sizes}
+                      unoptimized={unoptimized}
                       src={item.slide}
                       cursor="interactive"
                       radius="m"

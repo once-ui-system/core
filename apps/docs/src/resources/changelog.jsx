@@ -2,6 +2,42 @@ import { SmartLink, InlineCode } from "@once-ui-system/core";
 
 const changelog = [
   {
+    date: "2026-07-29",
+    title: "Once UI 1.8",
+    sections: [
+      {
+        title: "New features",
+        bullets: [
+          <><SmartLink unstyled href="/once-ui/basics/responsive">Responsive</SmartLink>: per-component breakpoint types, so each component only exposes the breakpoint props it actually supports</>,
+          <><SmartLink unstyled href="/once-ui/components/dialog">Dialog</SmartLink>: new <InlineCode>flush</InlineCode> and <InlineCode>hideClose</InlineCode> props for full-bleed, image-led dialogs</>,
+          <><SmartLink unstyled href="/once-ui/form-controls/checkbox">Checkbox</SmartLink> and <SmartLink unstyled href="/once-ui/form-controls/radioButton">RadioButton</SmartLink>: new <InlineCode>hoverable</InlineCode> prop to suppress the hover pulse</>,
+          <><SmartLink unstyled href="/once-ui/modules/codeBlock">CodeBlock</SmartLink>: new <InlineCode>background</InlineCode> and <InlineCode>hideCode</InlineCode> props</>,
+          <>Typography: new <InlineCode>normal</InlineCode> (400) and <InlineCode>medium</InlineCode> (500) weight variants</>,
+          <><SmartLink unstyled href="/once-ui/components/carousel">Carousel</SmartLink>, <SmartLink unstyled href="/once-ui/components/swiper">Swiper</SmartLink>, <SmartLink unstyled href="/once-ui/components/compareImage">CompareImage</SmartLink> and <SmartLink unstyled href="/once-ui/components/ogCard">OgCard</SmartLink>: new <InlineCode>unoptimized</InlineCode> prop, forwarded to the underlying <SmartLink unstyled href="/once-ui/components/media">Media</SmartLink></>,
+        ],
+      },
+      {
+        title: "Fixes",
+        bullets: [
+          <>ScrollLock: allowed scroll regions are now resolved when the event fires instead of on mount, so content inside Dialog, DropdownWrapper, ContextMenu and Kbar stays scrollable, including when several overlays are open at once</>,
+          <><SmartLink unstyled href="/once-ui/modules/codeBlock">CodeBlock</SmartLink>: resolve Prism grammars for <InlineCode>md</InlineCode>, <InlineCode>mdx</InlineCode>, <InlineCode>dockerfile</InlineCode> and shell aliases, which previously rendered unhighlighted</>,
+          <><SmartLink unstyled href="/once-ui/form-controls/checkbox">Checkbox</SmartLink> and <SmartLink unstyled href="/once-ui/form-controls/radioButton">RadioButton</SmartLink>: use React <InlineCode>useId()</InlineCode> instead of <InlineCode>Math.random()</InlineCode>, fixing hydration mismatches</>,
+          <>RadioButton: unchecked border is now visible in dark mode</>,
+          <>Charts: <InlineCode>minHeight</InlineCode> on the wrapper stops empty charts collapsing to zero height</>,
+          <>DropdownWrapper: keep <InlineCode>flip()</InlineCode> enabled and enforce a sensible <InlineCode>minWidth</InlineCode> so dropdowns no longer collapse on narrow screens</>,
+        ],
+      },
+      {
+        title: "Under the hood",
+        bullets: [
+          <><InlineCode>classnames</InlineCode> replaced with <InlineCode>clsx</InlineCode> for a smaller bundle</>,
+          <>Several components converted to <InlineCode>forwardRef</InlineCode> for proper ref forwarding</>,
+          <>Removed an unused Sass <InlineCode>@import</InlineCode> and replaced remaining <InlineCode>any</InlineCode> event types</>,
+        ],
+      },
+    ],
+  },
+  {
     date: "2026-07-24",
     title: "Once UI 1.7.13",
     sections: [

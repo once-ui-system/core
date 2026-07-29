@@ -16,6 +16,7 @@ interface SwiperProps extends React.ComponentProps<typeof Flex> {
   fill?: boolean;
   aspectRatio?: string;
   sizes?: string;
+  unoptimized?: boolean;
   indicator?: boolean;
 }
 
@@ -27,6 +28,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
   indicator = true,
   aspectRatio = "16 / 9",
   sizes,
+  unoptimized = false,
   ...rest
 }, ref) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -233,6 +235,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
                 <Media
                   fill={fill}
                   sizes={sizes}
+                  unoptimized={unoptimized}
                   priority={priority && index === 0}
                   aspectRatio={fill ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
                   src={item.slide as string}
