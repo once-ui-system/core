@@ -21,5 +21,16 @@
   "overrides": {
     "@types/react": "19.2.5",
     "@types/react-dom": "19.2.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "postcss": "^8.5.23",
+      "ws": "^8.21.1",
+      "flatted": "^3.4.3",
+      "yaml": "^2.9.0",
+      "immutable": "^5.1.9",
+      "fast-uri": "^3.1.4",
+      "@eslint/plugin-kit": "^0.3.5"
+    }
   }
 }
