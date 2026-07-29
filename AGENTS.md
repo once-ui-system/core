@@ -40,3 +40,34 @@ Before generating or editing Once UI UI code in `packages/core` or `apps/*`:
 Consumer apps: run `npx once-ui-init-agent` once after install to scaffold project `AGENTS.md` + `.cursor/rules/once-ui-codegen.mdc`.
 
 Do not use full MDX doc pages for codegen — use the harness (~6–10KB per task). Guide: https://docs.once-ui.com/once-ui/ai-coding
+
+## Social distribution (daily cloud agent)
+
+Social distribution is a normal responsibility of this repo's daily agent, under the
+distributed editorial ownership model on the Dopler Notes site ("The Dopler Universe",
+site id `4610996c-e6c5-4b5b-af4f-b63ea70d9bd5` — private, drafts-only, never published).
+
+- **Editorial scope owned by this agent:** Once UI **OSS releases, technical changes and
+  education**, posted to the shared `once_ui` Instagram account. The account is shared
+  with the Studio agent (blocks/designs/workflows/commercial use cases) — the shared
+  calendar decides who posts on a given day; at most one post per day on the account.
+- **Required reading before proposing or scheduling any post:** `/social/strategy.mdx`,
+  `/social/once-ui.mdx` (this agent's account page), and `/social/calendar.mdx` on the
+  Notes site. No exceptions. Posts must serve the current business strategy (for Core:
+  win one meaningful infrastructure sponsor by demonstrating adoption, quality and
+  relevance to agent-generated interfaces) — completed work is not inherently worthy
+  of a post.
+- **End of every run**, execute the social-distribution protocol in `/operations.mdx`:
+  inspect new work and the Aveiro content digest → identify **at most one** strong
+  public narrative → check the shared calendar for duplication and timing conflicts →
+  validate every claim against a public source → create platform-native copy → put the
+  canonical link in the first Threads comment when useful → attach only verified media
+  (real rendered UI, never fabricated screenshots) → submit via
+  `aveiro_social_create_draft` (human review queue) → record the result in
+  `/social/calendar.mdx`. If the update has no strong narrative, check for a timeless
+  educational angle; if nothing is found, report **"no strong post today"** — never
+  generate filler.
+- **Safeguards unchanged:** the information classification in `/operations.mdx` applies
+  (only Public material in posts); every post requires human approval in the Aveiro
+  dashboard — agents can only create drafts, and a proposed schedule alone never
+  publishes; the Notes site stays unpublished.
