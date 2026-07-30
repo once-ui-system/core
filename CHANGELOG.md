@@ -13,11 +13,19 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [1.8.1] — 2026-07-30
+
+Classified **patch** per [RELEASING.md](RELEASING.md): bug fixes restoring documented
+behavior and AI-harness validity, with no API surface changes.
+
 ### Fixed
 
-- `ai/gotchas.json` was invalid JSON — the `Icon.names` entry had lost its key line,
-  so any consumer of the AI harness that parsed the file failed. Restored the key;
-  the file now parses and all 21 gotcha entries are reachable.
+- `ai/gotchas.json` was invalid JSON in 1.8.0 — the `Icon.names` entry had lost its
+  key line, so any consumer of the AI harness that parsed the file failed. Restored the
+  key; the file now parses and all 21 gotcha entries are reachable.
+- `Table`: corrected CSS module classes and design tokens (`--surface-background`,
+  neutral borders, camelCase module classes aligned with `Table.tsx`) so sortable
+  headers, column alignment, striped/hover rows, and sticky header render as intended.
 
 ### Changed (repo tooling, not published code)
 
