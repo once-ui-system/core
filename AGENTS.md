@@ -50,10 +50,8 @@ The dev app has `--port 3001` baked into its `dev` script, so `turbo dev` runs b
 ### Tests / lint (standard commands live in each `package.json`)
 - Tests: `pnpm --filter @once-ui-system/core test` (Vitest). Baseline on `main` since the 1.8.0 merge (verified 2026-07-29): **all 5 suites / 92 tests pass.** The historical jsdom failures and the `scrollLockState` collection error were fixed by PRs #115/#120 — a failing test is now a real regression.
 - Typecheck: `pnpm --filter @once-ui-system/core typecheck` — **0 errors** on `main` since 1.8.0 (the ~235 pre-existing errors were fixed by PR #115). A non-zero result is now a real regression.
-- Lint, pre-existing breakage to be aware of (do not "fix" as part of env setup):
-  - `pnpm --filter @once-ui-system/core lint` (Biome) still fails after the 1.8.0 dep bumps: the config schema (`2.4.13`) trails the pinned CLI (`2.5.6`), and `biome check .` reports ~1,624 errors — the config/CLI reconciliation is a scheduled roadmap item, not an env problem.
-  - `apps/dev` `pnpm lint` fails because its script is `next lint`, which was removed in Next 16.
-  - `apps/docs` `pnpm lint` (Next 15) works and reports no errors.
+- Lint: all three packages run Biome 2.5.6 (`pnpm lint` = `biome check .`) with configs on the matching 2.5.6 schema, git-ignore integration on (build output like `dist`/`.next` is excluded), and generated artifacts (`ai/catalog.json`, `ai/manifest.json`, `ai/spec.json`, `ai/components/`, `src/data/emoji-data.json`) excluded from checks. ESLint was removed (Next 16 dropped `next lint`; the leftover configs/deps were dead).
+  - Known error inventory (2026-07-30, do not "fix" as part of env setup): `packages/core` 488 errors (177 import-organization + 139 formatting — mechanically fixable, held for a dedicated sweep because it touches ~209 files — plus ~172 real lint findings, largest: `noArrayIndexKey` 66, `useExhaustiveDependencies` 64), `apps/dev` 43, `apps/docs` 160. Burn-down is a scheduled roadmap item; don't introduce NEW diagnostics.
 
 ### Once UI codegen harness
 

@@ -13,6 +13,23 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- `ai/gotchas.json` was invalid JSON — the `Icon.names` entry had lost its key line,
+  so any consumer of the AI harness that parsed the file failed. Restored the key;
+  the file now parses and all 21 gotcha entries are reachable.
+
+### Changed (repo tooling, not published code)
+
+- Biome configs migrated to the 2.5.6 schema (they trailed on 2.4.13 while the CLI was
+  2.5.6), with git-ignore integration enabled and generated artifacts excluded from
+  checks — lint now reports real findings in shipped source instead of noise from
+  `dist/` and generated JSON. `apps/dev` and `apps/docs` got the missing
+  `@biomejs/biome` devDependency so their `lint`/`format` scripts actually run.
+- Removed dead ESLint remnants (`apps/dev/eslint.config.mjs`,
+  `apps/docs/.eslintrc.json`, unused `eslint`/`eslint-config-next` dependencies) —
+  Next 16 removed `next lint`, and all lint scripts already point at Biome.
+
 ### Security
 
 - Patched 7 transitive dependency advisories via `pnpm.overrides` (`postcss`, `ws`,
