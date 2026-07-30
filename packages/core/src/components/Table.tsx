@@ -141,22 +141,32 @@ function Table({
   const tableClasses = classNames(
     styles.table,
     {
-      [styles["table--striped"]]: striped,
-      [styles["table--hoverable"]]: hoverable,
-      [styles["table--compact"]]: compact,
-      [styles["table--clickable"]]: !!onRowClick,
-      [styles["table--sticky-header"]]: stickyHeader,
+      [styles.striped]: striped,
+      [styles.hoverable]: hoverable,
+      [styles.compact]: compact,
+      [styles.clickable]: !!onRowClick,
+      [styles.stickyHeader]: stickyHeader,
     }
   );
+
+  const getAlignClass = (align: TableHeader["align"], prefix: "th" | "td") => {
+    const key = align || "left";
+    const map = {
+      left: styles[`${prefix}AlignLeft`],
+      center: styles[`${prefix}AlignCenter`],
+      right: styles[`${prefix}AlignRight`],
+    } as const;
+    return map[key];
+  };
 
   const renderHeader = (header: TableHeader, index: number) => {
     const isActive = sortConfig?.key === header.key;
     const thClasses = classNames(
-      styles.table__th,
+      styles.th,
+      getAlignClass(header.align, "th"),
       {
-        [styles["table__th--sortable"]]: header.sortable,
-        [styles["table__th--active"]]: isActive,
-        [styles[`table__th--align-${header.align || "left"}`]]: true,
+        [styles.thSortable]: header.sortable,
+        [styles.thActive]: isActive,
       }
     );
 
@@ -181,7 +191,6 @@ function Table({
               onBackground={isActive ? "neutral-strong" : "neutral-weak"}
               style={{
                 transform: !isActive ? "rotate(90deg)" : undefined,
-                transition: "all 0.2s ease",
               }}
             />
           )}
@@ -192,7 +201,7 @@ function Table({
 
   const renderRow = (row: ReactNode[], originalIndex: number, displayIndex: number) => {
     const rowClasses = classNames(
-      styles.table__row,
+      styles.row,
       rowClassName?.(originalIndex)
     );
 
@@ -205,8 +214,8 @@ function Table({
         {row.map((cell, cellIndex) => {
           const header = data.headers[cellIndex];
           const tdClasses = classNames(
-            styles.table__td,
-            styles[`table__td--align-${header?.align || "left"}`],
+            styles.td,
+            getAlignClass(header?.align, "td"),
             cellClassName?.(originalIndex, cellIndex)
           );
 
@@ -218,7 +227,7 @@ function Table({
         })}
         {actions && actions.length > 0 && (
           <td 
-            className={classNames(styles.table__td, styles["table__td--actions"])}
+            className={classNames(styles.td, styles.tdActions)}
             style={{ width: `${actions.length * 32}px`, minWidth: `${actions.length * 32}px` }}
           >
             <Row gap="8" horizontal="start" vertical="center" onClick={(e) => e.stopPropagation()}>
@@ -247,7 +256,7 @@ function Table({
     <tr>
       <td 
         colSpan={data.headers.length + (actions?.length ? 1 : 0)} 
-        className={styles.table__empty}
+        className={styles.empty}
       >
         {emptyState || (
           <Column center padding="xl" gap="m">
@@ -270,7 +279,7 @@ function Table({
     <tr>
       <td 
         colSpan={data.headers.length + (actions?.length ? 1 : 0)} 
-        className={styles.table__loading}
+        className={styles.loading}
       >
         {loadingState || (
           <Column center padding="xl" gap="m">
@@ -310,14 +319,14 @@ function Table({
         overflowX="auto"
         overflowY={maxHeight ? "auto" : "visible"}
         style={{ maxHeight }}
-        className={styles.table__container}
+        className={styles.container}
       >
         <table className={tableClasses}>
-          <thead className={styles.table__thead}>
+          <thead className={styles.thead}>
             <tr>
               {data.headers.map((header, index) => renderHeader(header, index))}
               {actions && actions.length > 0 && (
-                <th className={classNames(styles.table__th, styles["table__th--actions"])}>
+                <th className={classNames(styles.th, styles.thActions)}>
                   <Text variant="label-strong-s" onBackground="neutral-medium">
                     Actions
                   </Text>
@@ -325,7 +334,7 @@ function Table({
               )}
             </tr>
           </thead>
-          <tbody className={styles.table__tbody}>
+          <tbody className={styles.tbody}>
             {loading ? (
               renderLoadingState()
             ) : sortedRows.length === 0 ? (

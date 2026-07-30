@@ -35,6 +35,7 @@
     "rule": "StatusIndicator uses color=\"green\" | \"red\" | \"orange\" | \"gray\" etc. — not variant or semantic scheme names.",
     "components": ["StatusIndicator"]
   },
+  "Icon.names": {
     "rule": "Icon names must come from IconName in spec.json — never invent names like more, bell, arrowRight.",
     "components": ["Icon", "Button", "IconButton"]
   },

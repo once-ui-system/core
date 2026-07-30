@@ -17,7 +17,7 @@
   "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
   "base": "BaseColor = page",
   "blur": "number = 0.5",
-  "pattern": "{ display?: boolean; size?: SpacingToken; } = {\n        display: false,\n        size: \"4\",\n      }",
+  "pattern": "{ display?: boolean; size?: SpacingToken; } = {\r\n        display: false,\r\n        size: \"4\",\r\n      }",
   "style": "React.CSSProperties",
   "children": "ReactNode"
  },

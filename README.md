@@ -117,4 +117,6 @@ We welcome contributions! Before submitting a PR:
 
 ## Sponsors
 
-Once UI is an indie project. [Sponsor us](https://github.com/sponsors/once-ui-system) and get featured on our site!
+Once UI is an indie project. Individuals can [sponsor us through GitHub Sponsors](https://github.com/sponsors/once-ui-system) and get featured on our site.
+
+Companies can partner with us through dedicated sponsor tiers — logo placement, recognition on ecosystem releases, and top-tier partnership options. See [once-ui.com/support](https://once-ui.com/support) for tiers and benefits, or reach out through the site to talk it through.

@@ -40,3 +40,6 @@ next-env.d.ts
 .claude/settings.local.json
 .opencode.bak/
 .playwright-mcp/
+
+# node compile cache
+node-compile-cache/
