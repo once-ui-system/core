@@ -163,10 +163,9 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               floatingStyle.width = w;
               floatingStyle.minWidth = minWidth ? `${minWidth}rem` : w;
             } else {
-              // Let content determine width; only enforce bounds
+              // Let content determine width; only apply an explicit minWidth
               floatingStyle.width = "";
-              const defaultMin = Math.min(320, availableWidth);
-              floatingStyle.minWidth = minWidth ? `${minWidth}rem` : `${defaultMin}px`;
+              floatingStyle.minWidth = minWidth ? `${minWidth}rem` : "";
             }
 
             floatingStyle.maxWidth = maxWidth ? `${maxWidth}rem` : `${availableWidth}px`;
