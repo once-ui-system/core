@@ -30,7 +30,7 @@ export async function GET(request: Request) {
         padding: "8rem",
         background: "#0A0A0A",
         position: "relative",
-        alignItems: "center",
+        alignItems: "flex-start",
         justifyContent: "center",
         flexDirection: "column",
       }}
@@ -71,20 +71,20 @@ export async function GET(request: Request) {
         background: "#333333" 
       }} />
 
-      <img alt="trademark" src="https://docs.once-ui.com/trademarks/icon-dark.svg" width="200" height="200" />
+      <img alt="trademark" src="https://docs.once-ui.com/trademarks/icon-dark.svg" width={200} height={200} />
 
       <div
         style={{
           display: "flex",
           marginTop: "6rem",
           flexDirection: "column",
-          gap: "4rem",
+          gap: "2rem",
           fontFamily: "Geist",
           fontStyle: "normal",
           color: "white",
           width: "100%",
-          alignItems: "center",
-          textAlign: "center",
+          alignItems: "flex-start",
+          textAlign: "left",
         }}
       >
         <span
@@ -94,8 +94,7 @@ export async function GET(request: Request) {
             fontWeight: "bold",
             letterSpacing: "-0.05em",
             whiteSpace: "pre-wrap",
-            textWrap: "balance",
-            textAlign: "center",
+            textAlign: "left",
           }}
         >
           {title}
@@ -103,35 +102,17 @@ export async function GET(request: Request) {
         {description && (
           <span
             style={{
-              fontSize: "3rem",
-              lineHeight: "3.5rem",
+              fontSize: "2.5rem",
+              lineHeight: "3rem",
               color: "#9ca3af",
               fontWeight: "normal",
               whiteSpace: "pre-wrap",
-              textWrap: "balance",
-              marginTop: "-2rem",
-              textAlign: "center",
+              textAlign: "left",
             }}
           >
             {description}
           </span>
         )}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "5rem",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.75rem",
-            }}
-          >
-          </div>
-        </div>
       </div>
     </div>,
     {
