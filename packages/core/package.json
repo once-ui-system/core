@@ -99,6 +99,11 @@
       "import": "./dist/server/index.js",
       "require": "./dist/server/index.js"
     },
+    "./classes": {
+      "types": "./dist/classes/index.d.ts",
+      "import": "./dist/classes/index.js",
+      "require": "./dist/classes/index.js"
+    },
     "./ai/manifest.json": "./ai/manifest.json",
     "./ai/spec.json": "./ai/spec.json",
     "./ai/catalog.json": "./ai/catalog.json",
