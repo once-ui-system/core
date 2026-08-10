@@ -65,22 +65,31 @@ Object.keys(peerDeps).forEach((dep) => {
 // Write the modified package.json to dist
 fs.writeFileSync(path.resolve(destDir, "package.json"), JSON.stringify(packageJson, null, 2));
 
-// Copy README and AGENTS.md
+// Copy README, AGENTS.md, and configs
 if (fs.existsSync(path.resolve(__dirname, "../README.md"))) {
   fs.copyFileSync(path.resolve(__dirname, "../README.md"), path.resolve(destDir, "README.md"));
 }
 if (fs.existsSync(path.resolve(__dirname, "../AGENTS.md"))) {
   fs.copyFileSync(path.resolve(__dirname, "../AGENTS.md"), path.resolve(destDir, "AGENTS.md"));
 }
+if (fs.existsSync(path.resolve(__dirname, "../tailwind.config.ts"))) {
+  fs.copyFileSync(
+    path.resolve(__dirname, "../tailwind.config.ts"),
+    path.resolve(destDir, "tailwind.config.ts"),
+  );
+}
+if (fs.existsSync(path.resolve(__dirname, "../postcss.config.js"))) {
+  fs.copyFileSync(
+    path.resolve(__dirname, "../postcss.config.js"),
+    path.resolve(destDir, "postcss.config.js"),
+  );
+}
 
 // Copy CLI scripts and agent templates for npm publish
 const scriptsDir = path.resolve(destDir, "scripts");
 fs.mkdirSync(scriptsDir, { recursive: true });
 for (const script of ["init-agent.js", "validate-ai-code.js"]) {
-  fs.copyFileSync(
-    path.resolve(__dirname, script),
-    path.join(scriptsDir, script),
-  );
+  fs.copyFileSync(path.resolve(__dirname, script), path.join(scriptsDir, script));
 }
 const agentSrc = path.resolve(__dirname, "../agent");
 const agentDest = path.resolve(destDir, "agent");
