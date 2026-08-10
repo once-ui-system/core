@@ -15,17 +15,8 @@
   "m": "FlexBreakpointProps",
   "s": "FlexBreakpointProps",
   "xs": "FlexBreakpointProps",
-  "isDefaultBreakpoints": "boolean = true",
-  "wrap": "boolean = false",
-  "fit": "boolean = false",
-  "fitWidth": "boolean = false",
-  "fitHeight": "boolean = false",
-  "fill": "boolean = false",
-  "fillWidth": "boolean = false",
-  "fillHeight": "boolean = false",
-  "as": "ElementType = div",
-  "position": "CSSProperties[\"position\"] = relative",
-  "scrollbar": "\"default\" | \"minimal\" = minimal"
+  "isDefaultBreakpoints": "boolean",
+  "as": "ElementType = div"
  },
  "mixinsRef": [
   "CommonProps",

@@ -152,10 +152,7 @@ export interface GenerateClassesProps {
   className?: string;
 }
 
-const formatSpacing = (
-  prefix: string,
-  val?: SpacingToken | number,
-): string | undefined => {
+const formatSpacing = (prefix: string, val?: SpacingToken | number): string | undefined => {
   if (val === undefined || val === null) return undefined;
   if (typeof val === "number") return `${prefix}-[${val}px]`;
   return `${prefix}-${val}`;
@@ -173,6 +170,29 @@ const formatDimension = (
       val.endsWith("vh") ||
       val.endsWith("dvh") ||
       val.endsWith("vw") ||
+      val.startsWith("calc(")
+    ) {
+      return `${prefix}-[${val}]`;
+    }
+    return `${prefix}-${val}`;
+  }
+  return undefined;
+};
+
+const formatTranslate = (
+  prefix: "translate-x" | "translate-y",
+  val?: number | SpacingToken | CSSUnit,
+): string | undefined => {
+  if (val === undefined || val === null) return undefined;
+  if (typeof val === "number") return `${prefix}-[${val}rem]`;
+  if (typeof val === "string") {
+    if (
+      val.endsWith("%") ||
+      val.endsWith("vh") ||
+      val.endsWith("dvh") ||
+      val.endsWith("vw") ||
+      val.endsWith("px") ||
+      val.endsWith("rem") ||
       val.startsWith("calc(")
     ) {
       return `${prefix}-[${val}]`;
@@ -202,8 +222,7 @@ const getColorClass = (
   }
   if (parts.length === 2) {
     const [scheme, weight] = parts;
-    const cat =
-      type === "bg" ? "background" : type === "border" ? "border" : "on-background";
+    const cat = type === "bg" ? "background" : type === "border" ? "border" : "on-background";
     return `${type}-${scheme}-${cat}-${weight}`;
   }
   return `${type}-${val}`;
@@ -242,11 +261,7 @@ const getVariantClasses = (variant?: TextVariant): string[] => {
 
   const fontClass = fontType ? `font-${fontType}` : "";
   const weightClass =
-    weight === "strong"
-      ? "font-bold"
-      : weight === "medium"
-        ? "font-medium"
-        : "font-normal";
+    weight === "strong" ? "font-bold" : weight === "medium" ? "font-medium" : "font-normal";
   const sizeClass = size ? `text-${size}` : "";
 
   return [fontClass, weightClass, sizeClass].filter(Boolean);
@@ -294,24 +309,13 @@ const getFlexAlignment = (
     even: "items-center",
   };
 
-  const hClass = horizontal
-    ? isRow
-      ? justifyMap[horizontal]
-      : itemsMap[horizontal]
-    : undefined;
-  const vClass = vertical
-    ? isRow
-      ? itemsMap[vertical]
-      : justifyMap[vertical]
-    : undefined;
+  const hClass = horizontal ? (isRow ? justifyMap[horizontal] : itemsMap[horizontal]) : undefined;
+  const vClass = vertical ? (isRow ? itemsMap[vertical] : justifyMap[vertical]) : undefined;
 
   return [hClass, vClass];
 };
 
-const getBreakpointClasses = (
-  prefix: string,
-  bp?: FlexBreakpointProps,
-): string[] => {
+const getBreakpointClasses = (prefix: string, bp?: FlexBreakpointProps): string[] => {
   if (!bp) return [];
   const classes: (string | undefined)[] = [];
 
@@ -505,98 +509,99 @@ export function generateClasses(
   dark?: boolean,
   light?: boolean,
 ): string;
-export function generateClasses(...args: any[]): string {
+export function generateClasses(...args: unknown[]): string {
   let p: GenerateClassesProps;
+  const a = args as any[];
 
-  if (args.length === 1 && typeof args[0] === "object" && args[0] !== null) {
-    p = args[0] as GenerateClassesProps;
+  if (a.length === 1 && typeof a[0] === "object" && a[0] !== null) {
+    p = a[0] as GenerateClassesProps;
   } else {
     p = {
-      padding: args[0],
-      paddingLeft: args[1],
-      paddingRight: args[2],
-      paddingTop: args[3],
-      paddingBottom: args[4],
-      paddingX: args[5],
-      paddingY: args[6],
-      margin: args[7],
-      marginLeft: args[8],
-      marginRight: args[9],
-      marginTop: args[10],
-      marginBottom: args[11],
-      marginX: args[12],
-      marginY: args[13],
-      gap: args[14],
-      top: args[15],
-      right: args[16],
-      bottom: args[17],
-      left: args[18],
-      translateX: args[19],
-      translateY: args[20],
-      flexDirection: args[21],
-      flexHorizontal: args[22],
-      flexVertical: args[23],
-      flexCenter: args[24],
-      flexWrap: args[25],
-      flex: args[26],
-      flexXl: args[27],
-      flexL: args[28],
-      flexM: args[29],
-      flexS: args[30],
-      flexXs: args[31],
-      textVariant: args[32],
-      textWrap: args[33],
-      textSize: args[34],
-      textWeight: args[35],
-      textAlign: args[36],
-      textType: args[37],
-      textFamily: args[38],
-      textTruncate: args[39],
-      width: args[40],
-      height: args[41],
-      maxWidth: args[42],
-      maxHeight: args[43],
-      fit: args[44],
-      fitWidth: args[45],
-      fitHeight: args[46],
-      fill: args[47],
-      fillWidth: args[48],
-      fillHeight: args[49],
-      aspectRatio: args[50],
-      background: args[51],
-      solid: args[52],
-      borderTop: args[53],
-      borderBottom: args[54],
-      borderRight: args[55],
-      borderLeft: args[56],
-      borderX: args[57],
-      borderY: args[58],
-      border: args[59],
-      borderStyle: args[60],
-      borderWidth: args[61],
-      topRadius: args[62],
-      rightRadius: args[63],
-      bottomRadius: args[64],
-      leftRadius: args[65],
-      topLeftRadius: args[66],
-      topRightRadius: args[67],
-      bottomLeftRadius: args[68],
-      bottomRightRadius: args[69],
-      radius: args[70],
-      shadow: args[71],
-      inline: args[72],
-      hide: args[73],
-      pointerEvents: args[74],
-      position: args[75],
-      overflow: args[76],
-      overflowX: args[77],
-      overflowY: args[78],
-      scrollbar: args[79],
-      transition: args[80],
-      opacity: args[81],
-      zIndex: args[82],
-      dark: args[83],
-      light: args[84],
+      padding: a[0],
+      paddingLeft: a[1],
+      paddingRight: a[2],
+      paddingTop: a[3],
+      paddingBottom: a[4],
+      paddingX: a[5],
+      paddingY: a[6],
+      margin: a[7],
+      marginLeft: a[8],
+      marginRight: a[9],
+      marginTop: a[10],
+      marginBottom: a[11],
+      marginX: a[12],
+      marginY: a[13],
+      gap: a[14],
+      top: a[15],
+      right: a[16],
+      bottom: a[17],
+      left: a[18],
+      translateX: a[19],
+      translateY: a[20],
+      flexDirection: a[21],
+      flexHorizontal: a[22],
+      flexVertical: a[23],
+      flexCenter: a[24],
+      flexWrap: a[25],
+      flex: a[26],
+      flexXl: a[27],
+      flexL: a[28],
+      flexM: a[29],
+      flexS: a[30],
+      flexXs: a[31],
+      textVariant: a[32],
+      textWrap: a[33],
+      textSize: a[34],
+      textWeight: a[35],
+      textAlign: a[36],
+      textType: a[37],
+      textFamily: a[38],
+      textTruncate: a[39],
+      width: a[40],
+      height: a[41],
+      maxWidth: a[42],
+      maxHeight: a[43],
+      fit: a[44],
+      fitWidth: a[45],
+      fitHeight: a[46],
+      fill: a[47],
+      fillWidth: a[48],
+      fillHeight: a[49],
+      aspectRatio: a[50],
+      background: a[51],
+      solid: a[52],
+      borderTop: a[53],
+      borderBottom: a[54],
+      borderRight: a[55],
+      borderLeft: a[56],
+      borderX: a[57],
+      borderY: a[58],
+      border: a[59],
+      borderStyle: a[60],
+      borderWidth: a[61],
+      topRadius: a[62],
+      rightRadius: a[63],
+      bottomRadius: a[64],
+      leftRadius: a[65],
+      topLeftRadius: a[66],
+      topRightRadius: a[67],
+      bottomLeftRadius: a[68],
+      bottomRightRadius: a[69],
+      radius: a[70],
+      shadow: a[71],
+      inline: a[72],
+      hide: a[73],
+      pointerEvents: a[74],
+      position: a[75],
+      overflow: a[76],
+      overflowX: a[77],
+      overflowY: a[78],
+      scrollbar: a[79],
+      transition: a[80],
+      opacity: a[81],
+      zIndex: a[82],
+      dark: a[83],
+      light: a[84],
     };
   }
 
@@ -676,8 +681,8 @@ export function generateClasses(...args: any[]): string {
     formatDimension("right", p.right),
     formatDimension("bottom", p.bottom),
     formatDimension("left", p.left),
-    p.translateX !== undefined && formatDimension("translate-x", p.translateX),
-    p.translateY !== undefined && formatDimension("translate-y", p.translateY),
+    p.translateX !== undefined && formatTranslate("translate-x", p.translateX),
+    p.translateY !== undefined && formatTranslate("translate-y", p.translateY),
 
     // Sizing
     formatDimension("w", p.width),
