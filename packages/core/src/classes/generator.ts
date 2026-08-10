@@ -16,7 +16,146 @@ import type {
 } from "../types";
 import { cn } from "./utils";
 
-const formatSpacing = (prefix: string, val?: SpacingToken | number): string | undefined => {
+export interface GenerateClassesProps {
+  padding?: SpacingToken | number;
+  paddingLeft?: SpacingToken | number;
+  paddingRight?: SpacingToken | number;
+  paddingTop?: SpacingToken | number;
+  paddingBottom?: SpacingToken | number;
+  paddingX?: SpacingToken | number;
+  paddingY?: SpacingToken | number;
+  margin?: SpacingToken | number;
+  marginLeft?: SpacingToken | number;
+  marginRight?: SpacingToken | number;
+  marginTop?: SpacingToken | number;
+  marginBottom?: SpacingToken | number;
+  marginX?: SpacingToken | number;
+  marginY?: SpacingToken | number;
+  gap?: SpacingToken | number | "-1";
+  top?: SpacingToken | number | CSSUnit;
+  right?: SpacingToken | number | CSSUnit;
+  bottom?: SpacingToken | number | CSSUnit;
+  left?: SpacingToken | number | CSSUnit;
+  translateX?: SpacingToken | number | CSSUnit;
+  translateY?: SpacingToken | number | CSSUnit;
+  flexDirection?: "row" | "column" | "row-reverse" | "column-reverse";
+  direction?: "row" | "column" | "row-reverse" | "column-reverse";
+  flexHorizontal?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
+  horizontal?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
+  flexVertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
+  vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
+  flexCenter?: boolean;
+  center?: boolean;
+  flexWrap?: boolean;
+  wrap?: boolean;
+  flex?: FlexValue;
+  flexXl?: FlexBreakpointProps;
+  xl?: FlexBreakpointProps;
+  flexL?: FlexBreakpointProps;
+  l?: FlexBreakpointProps;
+  flexM?: FlexBreakpointProps;
+  m?: FlexBreakpointProps;
+  flexS?: FlexBreakpointProps;
+  s?: FlexBreakpointProps;
+  flexXs?: FlexBreakpointProps;
+  xs?: FlexBreakpointProps;
+  textVariant?: TextVariant;
+  textWrap?: CSSProperties["textWrap"];
+  textSize?: TextSize;
+  textWeight?: TextWeight;
+  textAlign?: CSSProperties["textAlign"];
+  align?: CSSProperties["textAlign"];
+  textType?: TextType;
+  textFamily?: CSSProperties["fontFamily"];
+  textTruncate?: boolean;
+  truncate?: boolean;
+  width?: number | SpacingToken | CSSUnit;
+  height?: number | SpacingToken | CSSUnit;
+  maxWidth?: number | SpacingToken | CSSUnit;
+  maxHeight?: number | SpacingToken | CSSUnit;
+  minWidth?: number | SpacingToken | CSSUnit;
+  minHeight?: number | SpacingToken | CSSUnit;
+  fit?: boolean;
+  fitWidth?: boolean;
+  fitHeight?: boolean;
+  fill?: boolean;
+  fillWidth?: boolean;
+  fillHeight?: boolean;
+  aspectRatio?: CSSProperties["aspectRatio"];
+  background?: Colors | "surface" | "overlay" | "page" | "transparent";
+  solid?: Colors;
+  onBackground?: Colors;
+  onSolid?: Colors;
+  borderTop?: Colors | "surface" | "transparent" | boolean;
+  borderBottom?: Colors | "surface" | "transparent" | boolean;
+  borderRight?: Colors | "surface" | "transparent" | boolean;
+  borderLeft?: Colors | "surface" | "transparent" | boolean;
+  borderX?: Colors | "surface" | "transparent" | boolean;
+  borderY?: Colors | "surface" | "transparent" | boolean;
+  border?: Colors | "surface" | "transparent" | boolean;
+  borderStyle?: "solid" | "dashed";
+  borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8";
+  topRadius?: RadiusSize;
+  rightRadius?: RadiusSize;
+  bottomRadius?: RadiusSize;
+  leftRadius?: RadiusSize;
+  topLeftRadius?: RadiusSize;
+  topRightRadius?: RadiusSize;
+  bottomLeftRadius?: RadiusSize;
+  bottomRightRadius?: RadiusSize;
+  radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`;
+  shadow?: ShadowSize;
+  inline?: boolean;
+  hide?: boolean;
+  pointerEvents?: "none" | "all" | "auto";
+  position?: CSSProperties["position"];
+  overflow?: CSSProperties["overflow"];
+  overflowX?: CSSProperties["overflowX"];
+  overflowY?: CSSProperties["overflowY"];
+  scrollbar?: "default" | "minimal";
+  transition?:
+    | "micro-short"
+    | "micro-medium"
+    | "micro-long"
+    | "macro-short"
+    | "macro-medium"
+    | "macro-long";
+  opacity?: Opacity;
+  zIndex?:
+    | -1
+    | 0
+    | 1
+    | 2
+    | 3
+    | 4
+    | 5
+    | 6
+    | 7
+    | 8
+    | 9
+    | 10
+    | "-1"
+    | "0"
+    | "1"
+    | "2"
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "7"
+    | "8"
+    | "9"
+    | "10";
+  cursor?: CSSProperties["cursor"] | "interactive";
+  dark?: boolean;
+  light?: boolean;
+  className?: string;
+}
+
+const formatSpacing = (
+  prefix: string,
+  val?: SpacingToken | number,
+): string | undefined => {
   if (val === undefined || val === null) return undefined;
   if (typeof val === "number") return `${prefix}-[${val}px]`;
   return `${prefix}-${val}`;
@@ -63,7 +202,8 @@ const getColorClass = (
   }
   if (parts.length === 2) {
     const [scheme, weight] = parts;
-    const cat = type === "bg" ? "background" : type === "border" ? "border" : "on-background";
+    const cat =
+      type === "bg" ? "background" : type === "border" ? "border" : "on-background";
     return `${type}-${scheme}-${cat}-${weight}`;
   }
   return `${type}-${val}`;
@@ -102,7 +242,11 @@ const getVariantClasses = (variant?: TextVariant): string[] => {
 
   const fontClass = fontType ? `font-${fontType}` : "";
   const weightClass =
-    weight === "strong" ? "font-bold" : weight === "medium" ? "font-medium" : "font-normal";
+    weight === "strong"
+      ? "font-bold"
+      : weight === "medium"
+        ? "font-medium"
+        : "font-normal";
   const sizeClass = size ? `text-${size}` : "";
 
   return [fontClass, weightClass, sizeClass].filter(Boolean);
@@ -150,13 +294,24 @@ const getFlexAlignment = (
     even: "items-center",
   };
 
-  const hClass = horizontal ? (isRow ? justifyMap[horizontal] : itemsMap[horizontal]) : undefined;
-  const vClass = vertical ? (isRow ? itemsMap[vertical] : justifyMap[vertical]) : undefined;
+  const hClass = horizontal
+    ? isRow
+      ? justifyMap[horizontal]
+      : itemsMap[horizontal]
+    : undefined;
+  const vClass = vertical
+    ? isRow
+      ? itemsMap[vertical]
+      : justifyMap[vertical]
+    : undefined;
 
   return [hClass, vClass];
 };
 
-const getBreakpointClasses = (prefix: string, bp?: FlexBreakpointProps): string[] => {
+const getBreakpointClasses = (
+  prefix: string,
+  bp?: FlexBreakpointProps,
+): string[] => {
   if (!bp) return [];
   const classes: (string | undefined)[] = [];
 
@@ -232,6 +387,7 @@ const getBreakpointClasses = (prefix: string, bp?: FlexBreakpointProps): string[
   return classes.filter(Boolean).map((cls) => `${prefix}:${cls}`);
 };
 
+export function generateClasses(props: GenerateClassesProps): string;
 export function generateClasses(
   padding?: SpacingToken | number,
   paddingLeft?: SpacingToken | number,
@@ -348,153 +504,276 @@ export function generateClasses(
     | "10",
   dark?: boolean,
   light?: boolean,
-): string {
-  const [hAlign, vAlign] = getFlexAlignment(flexDirection, flexHorizontal, flexVertical);
+): string;
+export function generateClasses(...args: any[]): string {
+  let p: GenerateClassesProps;
+
+  if (args.length === 1 && typeof args[0] === "object" && args[0] !== null) {
+    p = args[0] as GenerateClassesProps;
+  } else {
+    p = {
+      padding: args[0],
+      paddingLeft: args[1],
+      paddingRight: args[2],
+      paddingTop: args[3],
+      paddingBottom: args[4],
+      paddingX: args[5],
+      paddingY: args[6],
+      margin: args[7],
+      marginLeft: args[8],
+      marginRight: args[9],
+      marginTop: args[10],
+      marginBottom: args[11],
+      marginX: args[12],
+      marginY: args[13],
+      gap: args[14],
+      top: args[15],
+      right: args[16],
+      bottom: args[17],
+      left: args[18],
+      translateX: args[19],
+      translateY: args[20],
+      flexDirection: args[21],
+      flexHorizontal: args[22],
+      flexVertical: args[23],
+      flexCenter: args[24],
+      flexWrap: args[25],
+      flex: args[26],
+      flexXl: args[27],
+      flexL: args[28],
+      flexM: args[29],
+      flexS: args[30],
+      flexXs: args[31],
+      textVariant: args[32],
+      textWrap: args[33],
+      textSize: args[34],
+      textWeight: args[35],
+      textAlign: args[36],
+      textType: args[37],
+      textFamily: args[38],
+      textTruncate: args[39],
+      width: args[40],
+      height: args[41],
+      maxWidth: args[42],
+      maxHeight: args[43],
+      fit: args[44],
+      fitWidth: args[45],
+      fitHeight: args[46],
+      fill: args[47],
+      fillWidth: args[48],
+      fillHeight: args[49],
+      aspectRatio: args[50],
+      background: args[51],
+      solid: args[52],
+      borderTop: args[53],
+      borderBottom: args[54],
+      borderRight: args[55],
+      borderLeft: args[56],
+      borderX: args[57],
+      borderY: args[58],
+      border: args[59],
+      borderStyle: args[60],
+      borderWidth: args[61],
+      topRadius: args[62],
+      rightRadius: args[63],
+      bottomRadius: args[64],
+      leftRadius: args[65],
+      topLeftRadius: args[66],
+      topRightRadius: args[67],
+      bottomLeftRadius: args[68],
+      bottomRightRadius: args[69],
+      radius: args[70],
+      shadow: args[71],
+      inline: args[72],
+      hide: args[73],
+      pointerEvents: args[74],
+      position: args[75],
+      overflow: args[76],
+      overflowX: args[77],
+      overflowY: args[78],
+      scrollbar: args[79],
+      transition: args[80],
+      opacity: args[81],
+      zIndex: args[82],
+      dark: args[83],
+      light: args[84],
+    };
+  }
+
+  const direction = p.direction ?? p.flexDirection;
+  const horizontal = p.horizontal ?? p.flexHorizontal;
+  const vertical = p.vertical ?? p.flexVertical;
+  const center = p.center ?? p.flexCenter;
+  const wrap = p.wrap ?? p.flexWrap;
+  const xl = p.xl ?? p.flexXl;
+  const l = p.l ?? p.flexL;
+  const m = p.m ?? p.flexM;
+  const s = p.s ?? p.flexS;
+  const xs = p.xs ?? p.flexXs;
+  const align = p.align ?? p.textAlign;
+  const truncate = p.truncate ?? p.textTruncate;
+
+  const [hAlign, vAlign] = getFlexAlignment(direction, horizontal, vertical);
 
   const hasAnyBorder =
-    Boolean(border) ||
-    Boolean(borderTop) ||
-    Boolean(borderBottom) ||
-    Boolean(borderLeft) ||
-    Boolean(borderRight) ||
-    Boolean(borderX) ||
-    Boolean(borderY);
+    Boolean(p.border) ||
+    Boolean(p.borderTop) ||
+    Boolean(p.borderBottom) ||
+    Boolean(p.borderLeft) ||
+    Boolean(p.borderRight) ||
+    Boolean(p.borderX) ||
+    Boolean(p.borderY);
+
+  let onColorClass: string | undefined;
+  if (p.onBackground) {
+    onColorClass = getColorClass("text", p.onBackground);
+  } else if (p.onSolid) {
+    const parts = p.onSolid.split("-");
+    if (parts.length === 2) {
+      onColorClass = `text-${parts[0]}-on-solid-${parts[1]}`;
+    }
+  }
 
   return cn(
     // Display & Position
-    inline ? "inline-flex" : "flex",
-    position && `${position}`,
-    hide && "hidden",
+    p.inline ? "inline-flex" : "flex",
+    p.position && `${p.position}`,
+    p.hide && "hidden",
 
     // Direction
-    flexDirection === "row" && "flex-row",
-    flexDirection === "column" && "flex-col",
-    flexDirection === "row-reverse" && "flex-row-reverse",
-    flexDirection === "column-reverse" && "flex-col-reverse",
+    direction === "row" && "flex-row",
+    direction === "column" && "flex-col",
+    direction === "row-reverse" && "flex-row-reverse",
+    direction === "column-reverse" && "flex-col-reverse",
 
     // Alignment
-    flexCenter && "justify-center items-center",
-    !flexCenter && hAlign,
-    !flexCenter && vAlign,
-    flexWrap && "flex-wrap",
-    flex !== undefined && `flex-${flex}`,
+    center && "justify-center items-center",
+    !center && hAlign,
+    !center && vAlign,
+    wrap && "flex-wrap",
+    p.flex !== undefined && `flex-${p.flex}`,
 
     // Spacing
-    formatSpacing("p", padding),
-    formatSpacing("pl", paddingLeft),
-    formatSpacing("pr", paddingRight),
-    formatSpacing("pt", paddingTop),
-    formatSpacing("pb", paddingBottom),
-    formatSpacing("px", paddingX),
-    formatSpacing("py", paddingY),
-    formatSpacing("m", margin),
-    formatSpacing("ml", marginLeft),
-    formatSpacing("mr", marginRight),
-    formatSpacing("mt", marginTop),
-    formatSpacing("mb", marginBottom),
-    formatSpacing("mx", marginX),
-    formatSpacing("my", marginY),
-    gap === "-1" ? "gap-[-1px]" : formatSpacing("gap", gap),
+    formatSpacing("p", p.padding),
+    formatSpacing("pl", p.paddingLeft),
+    formatSpacing("pr", p.paddingRight),
+    formatSpacing("pt", p.paddingTop),
+    formatSpacing("pb", p.paddingBottom),
+    formatSpacing("px", p.paddingX),
+    formatSpacing("py", p.paddingY),
+    formatSpacing("m", p.margin),
+    formatSpacing("ml", p.marginLeft),
+    formatSpacing("mr", p.marginRight),
+    formatSpacing("mt", p.marginTop),
+    formatSpacing("mb", p.marginBottom),
+    formatSpacing("mx", p.marginX),
+    formatSpacing("my", p.marginY),
+    p.gap === "-1" ? "gap-[-1px]" : formatSpacing("gap", p.gap),
 
     // Positioning Offsets
-    formatDimension("top", top),
-    position === "sticky" && top === undefined && "top-0",
-    formatDimension("right", right),
-    formatDimension("bottom", bottom),
-    formatDimension("left", left),
-    translateX !== undefined && formatDimension("translate-x", translateX),
-    translateY !== undefined && formatDimension("translate-y", translateY),
+    formatDimension("top", p.top),
+    p.position === "sticky" && p.top === undefined && "top-0",
+    formatDimension("right", p.right),
+    formatDimension("bottom", p.bottom),
+    formatDimension("left", p.left),
+    p.translateX !== undefined && formatDimension("translate-x", p.translateX),
+    p.translateY !== undefined && formatDimension("translate-y", p.translateY),
 
     // Sizing
-    formatDimension("w", width),
-    formatDimension("h", height),
-    formatDimension("max-w", maxWidth),
-    formatDimension("max-h", maxHeight),
-    fit && "w-fit h-fit",
-    fitWidth && "w-fit",
-    fitHeight && "h-fit",
-    fill && "w-full h-full min-w-0 min-h-0",
-    fillWidth && "w-full min-w-0",
-    fillHeight && "h-full min-h-0",
-    aspectRatio && `aspect-[${aspectRatio}]`,
+    formatDimension("w", p.width),
+    formatDimension("h", p.height),
+    formatDimension("max-w", p.maxWidth),
+    formatDimension("max-h", p.maxHeight),
+    formatDimension("min-w", p.minWidth),
+    formatDimension("min-h", p.minHeight),
+    p.fit && "w-fit h-fit",
+    p.fitWidth && "w-fit",
+    p.fitHeight && "h-fit",
+    p.fill && "w-full h-full min-w-0 min-h-0",
+    p.fillWidth && "w-full min-w-0",
+    p.fillHeight && "h-full min-h-0",
+    p.aspectRatio && `aspect-[${p.aspectRatio}]`,
 
     // Colors & Surface
-    getColorClass("bg", background),
-    getSolidClasses(solid),
+    getColorClass("bg", p.background),
+    getSolidClasses(p.solid),
+    onColorClass,
 
     // Borders
     hasAnyBorder && "border-solid",
-    border &&
-      (border === true
+    p.border &&
+      (p.border === true
         ? "border border-neutral-border-medium"
-        : `border ${getColorClass("border", border)}`),
-    borderTop &&
-      (borderTop === true
+        : `border ${getColorClass("border", p.border)}`),
+    p.borderTop &&
+      (p.borderTop === true
         ? "border-t border-neutral-border-medium"
-        : `border-t ${getColorClass("border", borderTop)}`),
-    borderBottom &&
-      (borderBottom === true
+        : `border-t ${getColorClass("border", p.borderTop)}`),
+    p.borderBottom &&
+      (p.borderBottom === true
         ? "border-b border-neutral-border-medium"
-        : `border-b ${getColorClass("border", borderBottom)}`),
-    borderLeft &&
-      (borderLeft === true
+        : `border-b ${getColorClass("border", p.borderBottom)}`),
+    p.borderLeft &&
+      (p.borderLeft === true
         ? "border-l border-neutral-border-medium"
-        : `border-l ${getColorClass("border", borderLeft)}`),
-    borderRight &&
-      (borderRight === true
+        : `border-l ${getColorClass("border", p.borderLeft)}`),
+    p.borderRight &&
+      (p.borderRight === true
         ? "border-r border-neutral-border-medium"
-        : `border-r ${getColorClass("border", borderRight)}`),
-    borderX &&
-      (borderX === true
+        : `border-r ${getColorClass("border", p.borderRight)}`),
+    p.borderX &&
+      (p.borderX === true
         ? "border-x border-neutral-border-medium"
-        : `border-x ${getColorClass("border", borderX)}`),
-    borderY &&
-      (borderY === true
+        : `border-x ${getColorClass("border", p.borderX)}`),
+    p.borderY &&
+      (p.borderY === true
         ? "border-y border-neutral-border-medium"
-        : `border-y ${getColorClass("border", borderY)}`),
-    borderStyle && `border-${borderStyle}`,
-    borderWidth && `border-[${borderWidth}px]`,
+        : `border-y ${getColorClass("border", p.borderY)}`),
+    p.borderStyle && `border-${p.borderStyle}`,
+    p.borderWidth && `border-[${p.borderWidth}px]`,
 
     // Radii
-    formatRadius("rounded", radius),
-    formatRadius("rounded-t", topRadius),
-    formatRadius("rounded-r", rightRadius),
-    formatRadius("rounded-b", bottomRadius),
-    formatRadius("rounded-l", leftRadius),
-    formatRadius("rounded-tl", topLeftRadius),
-    formatRadius("rounded-tr", topRightRadius),
-    formatRadius("rounded-bl", bottomLeftRadius),
-    formatRadius("rounded-br", bottomRightRadius),
+    formatRadius("rounded", p.radius),
+    formatRadius("rounded-t", p.topRadius),
+    formatRadius("rounded-r", p.rightRadius),
+    formatRadius("rounded-b", p.bottomRadius),
+    formatRadius("rounded-l", p.leftRadius),
+    formatRadius("rounded-tl", p.topLeftRadius),
+    formatRadius("rounded-tr", p.topRightRadius),
+    formatRadius("rounded-bl", p.bottomLeftRadius),
+    formatRadius("rounded-br", p.bottomRightRadius),
 
     // Typography
-    ...getVariantClasses(textVariant),
-    textSize && `text-${textSize}`,
-    getTextWeightClass(textWeight),
-    textAlign && `text-${textAlign}`,
-    textWrap && `text-${textWrap}`,
-    textType && `font-${textType}`,
-    textFamily && `font-[${textFamily}]`,
-    textTruncate && "truncate",
+    ...getVariantClasses(p.textVariant),
+    p.textSize && `text-${p.textSize}`,
+    getTextWeightClass(p.textWeight),
+    align && `text-${align}`,
+    p.textWrap && `text-${p.textWrap}`,
+    p.textType && `font-${p.textType}`,
+    p.textFamily && `font-[${p.textFamily}]`,
+    truncate && "truncate",
 
     // Effects & Layout
-    shadow && `shadow-${shadow}`,
-    transition && `transition-all duration-${transition}`,
-    opacity !== undefined && `opacity-${opacity}`,
-    pointerEvents && `pointer-events-${pointerEvents}`,
-    overflow && `overflow-${overflow}`,
-    overflowX && `overflow-x-${overflowX}`,
-    overflowY && `overflow-y-${overflowY}`,
-    scrollbar && `scrollbar-${scrollbar}`,
-    zIndex !== undefined &&
-      (typeof zIndex === "number" && zIndex < 0 ? `z-[${zIndex}]` : `z-${zIndex}`),
-    dark && "dark:flex",
-    light && "light:flex",
+    p.shadow && `shadow-${p.shadow}`,
+    p.transition && `transition-${p.transition}`,
+    p.opacity !== undefined && `opacity-${p.opacity}`,
+    p.pointerEvents && `pointer-events-${p.pointerEvents}`,
+    p.overflow && `overflow-${p.overflow}`,
+    p.overflowX && `overflow-x-${p.overflowX}`,
+    p.overflowY && `overflow-y-${p.overflowY}`,
+    p.scrollbar && `scrollbar-${p.scrollbar}`,
+    p.zIndex !== undefined && `z-index-${p.zIndex}`,
+    p.cursor && `cursor-${p.cursor}`,
+    p.dark && "dark-flex",
+    p.light && "light-flex",
 
     // Responsive Breakpoint Props
-    ...getBreakpointClasses("xl", flexXl),
-    ...getBreakpointClasses("l", flexL),
-    ...getBreakpointClasses("m", flexM),
-    ...getBreakpointClasses("s", flexS),
-    ...getBreakpointClasses("xs", flexXs),
+    ...getBreakpointClasses("xl", xl),
+    ...getBreakpointClasses("l", l),
+    ...getBreakpointClasses("m", m),
+    ...getBreakpointClasses("s", s),
+    ...getBreakpointClasses("xs", xs),
+
+    p.className,
   );
 }
