@@ -596,7 +596,7 @@
    "group": "components",
    "props": {
     "cursor": "!React.ReactNode",
-    "elementRef": "!React.RefObject<HTMLElement | null>"
+    "elementRef": "React.RefObject<HTMLElement | null>"
    }
   },
   "CountFx": {
@@ -1007,7 +1007,18 @@
     "l": "FlexBreakpointProps",
     "m": "FlexBreakpointProps",
     "s": "FlexBreakpointProps",
-    "xs": "FlexBreakpointProps"
+    "xs": "FlexBreakpointProps",
+    "isDefaultBreakpoints": "boolean = true",
+    "wrap": "boolean = false",
+    "fit": "boolean = false",
+    "fitWidth": "boolean = false",
+    "fitHeight": "boolean = false",
+    "fill": "boolean = false",
+    "fillWidth": "boolean = false",
+    "fillHeight": "boolean = false",
+    "as": "ElementType = div",
+    "position": "CSSProperties[\"position\"] = relative",
+    "scrollbar": "\"default\" | \"minimal\" = minimal"
    }
   },
   "FlipFx": {

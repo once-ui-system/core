@@ -39,8 +39,6 @@ export * from "./EmojiPicker";
 export * from "./EmojiPickerDropdown";
 export * from "./Fade";
 export * from "./Feedback";
-export * from "./ServerFlex";
-export * from "./ClientFlex";
 export * from "./Flex";
 export * from "./FlipFx";
 export * from "./FocusTrap";
