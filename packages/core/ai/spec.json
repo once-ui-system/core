@@ -563,12 +563,19 @@
     "StyleProps"
    ],
    "props": {
-    "children": "React.ReactNode",
+    "children": "ReactNode",
     "href": "string",
     "onClick": "() => void",
     "fillHeight": "boolean",
-    "style": "React.CSSProperties",
-    "className": "string"
+    "style": "CSSProperties",
+    "className": "string",
+    "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\" = surface",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-medium",
+    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}` = l",
+    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode = interactive",
+    "onBackground": "Colors = neutral-strong",
+    "align": "CSSProperties[\"textAlign\"] = left",
+    "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\" = macro-medium"
    }
   },
   "CursorCard": {

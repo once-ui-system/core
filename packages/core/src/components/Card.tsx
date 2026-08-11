@@ -1,49 +1,68 @@
 "use client";
 
-import React, { forwardRef } from "react";
-import { Flex } from ".";
-import styles from "./Card.module.scss";
+import { type CSSProperties, forwardRef, type ReactNode, type Ref } from "react";
+import { cn } from "../classes/utils";
 import { ElementType } from "./ElementType";
-import classNames from "clsx";
+import { Flex, type FlexComponentProps } from "./Flex";
 
-interface CardProps extends React.ComponentProps<typeof Flex> {
-  children?: React.ReactNode;
+export interface CardProps extends FlexComponentProps {
+  children?: ReactNode;
   href?: string;
   onClick?: () => void;
   fillHeight?: boolean;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   className?: string;
 }
 
 const Card = forwardRef<HTMLDivElement, CardProps>(
-  ({ children, href, onClick, style, className, fillHeight, ...flex }, ref) => {
+  (
+    {
+      children,
+      href,
+      onClick,
+      style,
+      className,
+      fillHeight,
+      background = "surface",
+      onBackground = "neutral-strong",
+      transition = "macro-medium",
+      border = "neutral-medium",
+      radius = "l",
+      cursor = "interactive",
+      align = "left",
+      ...flex
+    },
+    ref,
+  ) => {
+    const isInteractive = Boolean(onClick || href);
+
     return (
       <ElementType
-        tabIndex={onClick || href ? 0 : undefined}
-        className={classNames(
-          "reset-button-styles",
-          "display-flex",
-          "fill-width",
-          fillHeight ? "fill-height" : undefined,
-          "min-width-0",
-          (onClick || href) && "focus-ring",
-          (onClick || href) && (`radius-${flex.radius}` || "radius-l"),
+        tabIndex={isInteractive ? 0 : undefined}
+        className={cn(
+          "reset-button-styles flex w-full min-w-0 text-left",
+          fillHeight && "h-full min-h-0",
+          isInteractive && "focus-ring",
+          isInteractive && (radius ? `rounded-${radius}` : "rounded-l"),
         )}
         href={href}
-        onClick={onClick && onClick}
+        onClick={onClick}
         role={onClick ? "button" : href ? "link" : "none"}
-        ref={ref}
+        ref={ref as Ref<HTMLElement>}
       >
         <Flex
-          background="surface"
-          onBackground="neutral-strong"
-          transition="macro-medium"
-          border="neutral-medium"
-          cursor="interactive"
-          align="left"
-          onClick={onClick && onClick}
-          className={classNames(styles.card, className)}
-          style={{...style}}
+          fillWidth
+          fillHeight={fillHeight}
+          background={background}
+          onBackground={onBackground}
+          transition={transition}
+          border={border}
+          radius={radius}
+          cursor={cursor}
+          align={align}
+          onClick={onClick}
+          className={cn(isInteractive && "hover:bg-neutral-alpha-weak", className)}
+          style={style}
           {...flex}
         >
           {children}
@@ -54,4 +73,5 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
 );
 
 Card.displayName = "Card";
+
 export { Card };
