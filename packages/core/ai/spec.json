@@ -1762,8 +1762,7 @@
   "ScrollContainer": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1774,8 +1773,10 @@
     "StyleProps"
    ],
    "props": {
-    "items": "!React.ReactNode[]",
-    "controlPlacement": "\"top-start\" | \"top-center\" | \"top-end\" | \"top-between\" | \"bottom-start\" | \"bottom-center\" | \"bottom-end\" | \"bottom-between\" = top-start"
+    "items": "!ReactNode[] = []",
+    "controlPlacement": "\"top-start\" | \"top-center\" | \"top-end\" | \"top-between\" | \"bottom-start\" | \"bottom-center\" | \"bottom-end\" | \"bottom-between\" = top-start",
+    "className": "string",
+    "style": "CSSProperties"
    }
   },
   "ScrollToTop": {

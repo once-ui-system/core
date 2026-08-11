@@ -736,8 +736,7 @@
   "ScrollContainer": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Flex"
    ],
    "purpose": "ScrollContainer component",
    "tags": [
