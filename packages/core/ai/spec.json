@@ -1931,8 +1931,8 @@
   "SplitView": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -1947,7 +1947,9 @@
     "rightPanel": "!ReactNode",
     "defaultSplit": "number = 0.3",
     "minSplit": "number = 0.2",
-    "maxSplit": "number = 0.8"
+    "maxSplit": "number = 0.8",
+    "className": "string",
+    "style": "CSSProperties"
    }
   },
   "StatusIndicator": {

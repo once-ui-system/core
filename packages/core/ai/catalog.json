@@ -820,8 +820,8 @@
   "SplitView": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Row",
+    "Flex"
    ],
    "purpose": "SplitView component",
    "tags": [

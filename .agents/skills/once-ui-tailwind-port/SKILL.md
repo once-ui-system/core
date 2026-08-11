@@ -199,7 +199,18 @@ export type ClientFlexProps = FlexComponentProps;
 
 ---
 
-## 4. Verification & Testing Protocol
+## 4. Client vs Server Directive Guidelines
+
+- **Pure Server Components (No `"use client"` needed)**:
+  Layout and presentation components (e.g., `Flex`, `Grid`, `Row`, `Column`, `MasonryGrid`) that only compute classes and render children without interactive state or browser hooks.
+- **Client Components (Requires `"use client";` at top)**:
+  Components that:
+  1. Use React hooks (`useState`, `useEffect`, `useRef`, etc. like `SplitView`, `CursorCard`, `Accordion`).
+  2. Accept or attach event handlers (`onClick`, `onMouseDown`, etc. like `Card`, `Button`, `Input`). Next.js App Router requires `"use client"` on components accepting function props to serialize boundaries properly during SSR/SSG.
+
+---
+
+## 5. Verification, Build & Git Commit Protocol
 
 Always run the following commands after porting a component:
 
@@ -215,11 +226,21 @@ Always run the following commands after porting a component:
    ```
 
 3. **Vitest Unit Tests**:
+   Create or update unit tests in `packages/core/src/__tests__/[Component].test.tsx` and run:
    ```bash
    pnpm --filter @once-ui-system/core test
    ```
 
 4. **Monorepo Build**:
+   Ensure library, docs, and dev sandbox all build with 0 errors:
    ```bash
    pnpm build
    ```
+
+5. **Proper Git Commit**:
+   Stage the ported component, its tests, updated AI specs, and commit cleanly:
+   ```bash
+   git add packages/core/src/components/[Component].tsx packages/core/src/__tests__/[Component].test.tsx packages/core/ai
+   git commit -m "refactor(core): port [Component] to Tailwind CSS and generator"
+   ```
+
