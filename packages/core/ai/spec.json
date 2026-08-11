@@ -596,7 +596,7 @@
     "overlay": "ReactNode",
     "placement": "Placement = bottom-left",
     "className": "string",
-    "style": "React.CSSProperties"
+    "style": "CSSProperties"
    }
   },
   "Cursor": {

@@ -1,32 +1,30 @@
-﻿"use client";
+"use client";
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  ReactNode,
+import type { Placement } from "@floating-ui/react-dom";
+import {
+  type CSSProperties,
   forwardRef,
-  useImperativeHandle,
+  type ReactNode,
   useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { Placement } from "@floating-ui/react-dom";
-import { Flex } from ".";
-import styles from "./CursorCard.module.scss";
+import { cn } from "../classes/utils";
+import { Flex, type FlexComponentProps } from "./Flex";
 
-export interface CursorCardProps extends React.ComponentProps<typeof Flex> {
+export interface CursorCardProps extends FlexComponentProps {
   trigger?: ReactNode;
   overlay?: ReactNode;
   placement?: Placement;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
-  (
-    { trigger, overlay, placement = "bottom-left", className, style, ...flex },
-    ref,
-  ) => {
+  ({ trigger, overlay, placement = "bottom-left", className, style, ...flex }, ref) => {
     const [isHovering, setIsHovering] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -37,10 +35,21 @@ const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
 
     useEffect(() => {
       const checkTouchDevice = () => {
-        return "ontouchstart" in window;
+        const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+        const hasPointer = window.matchMedia("(pointer: fine)").matches;
+        return hasTouch && !hasPointer;
       };
 
       setIsTouchDevice(checkTouchDevice());
+
+      const mediaQuery = window.matchMedia("(pointer: fine)");
+      const handlePointerChange = () => setIsTouchDevice(checkTouchDevice());
+
+      mediaQuery.addEventListener("change", handlePointerChange);
+
+      return () => {
+        mediaQuery.removeEventListener("change", handlePointerChange);
+      };
     }, []);
 
     const handleMouseMove = useCallback(
@@ -105,7 +114,7 @@ const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
               left="0"
               pointerEvents="none"
               ref={cardRef}
-              className={`${styles.fadeIn} ${className || ""}`}
+              className={cn("animate-fadeIn", className)}
               style={{
                 isolation: "isolate",
                 transform: `translate(calc(${mousePosition.x}px ${placement.includes("left") ? "- 100%" : placement.includes("right") ? "" : "- 50%"}), calc(${mousePosition.y}px ${placement.includes("top") ? "- 100%" : placement.includes("bottom") ? "" : "- 50%"}))`,
