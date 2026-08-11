@@ -10,6 +10,7 @@
   "StyleProps"
  ],
  "props": {
+  "className": "string",
   "xl": "FlexBreakpointProps",
   "l": "FlexBreakpointProps",
   "m": "FlexBreakpointProps",

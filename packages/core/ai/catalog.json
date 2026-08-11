@@ -85,8 +85,8 @@
   "BlobFx": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "purpose": "BlobFx component",
    "tags": [
@@ -96,8 +96,8 @@
   "Banner": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "purpose": "Banner component",
    "tags": [
@@ -447,8 +447,8 @@
   "HoverCard": {
    "group": "components",
    "extends": [
-    "Animation",
-    "Flex"
+    "Flex",
+    "Animation"
    ],
    "purpose": "HoverCard component",
    "tags": [
@@ -736,8 +736,8 @@
   "ScrollContainer": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "purpose": "ScrollContainer component",
    "tags": [
@@ -820,8 +820,8 @@
   "SplitView": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "purpose": "SplitView component",
    "tags": [
@@ -974,8 +974,8 @@
   "ThemeSwitcher": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "purpose": "ThemeSwitcher component",
    "tags": [
@@ -1067,8 +1067,8 @@
   "ChartHeader": {
    "group": "modules",
    "extends": [
-    "Column",
-    "Flex"
+    "Flex",
+    "Column"
    ],
    "purpose": "ChartHeader component",
    "tags": [

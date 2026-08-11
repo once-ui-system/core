@@ -2,8 +2,8 @@
  "name": "ThemeSwitcher",
  "group": "components",
  "extends": [
-  "Row",
-  "Flex"
+  "Flex",
+  "Row"
  ],
  "mixins": [
   "CommonProps",

@@ -2,8 +2,8 @@
  "name": "HoverCard",
  "group": "components",
  "extends": [
-  "Animation",
-  "Flex"
+  "Flex",
+  "Animation"
  ],
  "mixins": [
   "CommonProps",

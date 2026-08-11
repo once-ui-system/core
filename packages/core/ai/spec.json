@@ -340,8 +340,8 @@
   "BlobFx": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "mixins": [
     "CommonProps",
@@ -358,8 +358,8 @@
   "Banner": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "mixins": [
     "CommonProps",
@@ -1003,6 +1003,7 @@
     "StyleProps"
    ],
    "props": {
+    "className": "string",
     "xl": "FlexBreakpointProps",
     "l": "FlexBreakpointProps",
     "m": "FlexBreakpointProps",
@@ -1138,8 +1139,8 @@
   "HoverCard": {
    "group": "components",
    "extends": [
-    "Animation",
-    "Flex"
+    "Flex",
+    "Animation"
    ],
    "mixins": [
     "CommonProps",
@@ -1753,8 +1754,8 @@
   "ScrollContainer": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "mixins": [
     "CommonProps",
@@ -1922,8 +1923,8 @@
   "SplitView": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "mixins": [
     "CommonProps",
@@ -2234,8 +2235,8 @@
   "ThemeSwitcher": {
    "group": "components",
    "extends": [
-    "Row",
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "mixins": [
     "CommonProps",
@@ -2396,8 +2397,8 @@
   "ChartHeader": {
    "group": "modules",
    "extends": [
-    "Column",
-    "Flex"
+    "Flex",
+    "Column"
    ],
    "mixins": [
     "CommonProps",

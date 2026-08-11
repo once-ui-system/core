@@ -109,6 +109,7 @@ Row.displayName = "Row";
 ```tsx
 import { type CSSProperties, forwardRef } from "react";
 import { generateClasses } from "../classes/generator";
+import { cn } from "../classes/utils";
 import type {
   CommonProps,
   DisplayProps,
@@ -127,6 +128,7 @@ export interface FlexComponentProps
     StyleProps,
     CommonProps,
     DisplayProps {
+  className?: string;
   xl?: FlexBreakpointProps;
   l?: FlexBreakpointProps;
   m?: FlexBreakpointProps;
@@ -135,7 +137,7 @@ export interface FlexComponentProps
   isDefaultBreakpoints?: boolean;
 }
 
-export const Flex = forwardRef<HTMLDivElement, FlexComponentProps>(
+const Flex = forwardRef<HTMLDivElement, FlexComponentProps>(
   (
     {
       as: Component = "div",
@@ -161,11 +163,13 @@ export const Flex = forwardRef<HTMLDivElement, FlexComponentProps>(
 
     const hasCustomCursor = typeof cursor === "object" && cursor !== null;
 
-    const classes = generateClasses({
-      ...props,
-      cursor: typeof cursor === "string" ? cursor : undefined,
+    const classes = cn(
+      generateClasses({
+        ...props,
+        cursor: typeof cursor === "string" ? cursor : undefined,
+      }),
       className,
-    });
+    );
 
     const combinedStyle: CSSProperties | undefined =
       hasCustomCursor || style

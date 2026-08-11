@@ -6,6 +6,14 @@ describe("cn", () => {
     expect(cn("p-4", "p-8")).toBe("p-8");
     expect(cn("flex", false && "hidden", "items-center")).toBe("flex items-center");
   });
+
+  it("overrides generated classes with user-provided className", () => {
+    const generated = generateClasses({ padding: "4", background: "surface" });
+    const merged = cn(generated, "p-8 custom-class");
+    expect(merged).toContain("p-8");
+    expect(merged).not.toContain("p-4");
+    expect(merged).toContain("custom-class");
+  });
 });
 
 describe("generateClasses", () => {

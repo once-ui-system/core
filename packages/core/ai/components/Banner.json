@@ -2,8 +2,8 @@
  "name": "Banner",
  "group": "components",
  "extends": [
-  "Row",
-  "Flex"
+  "Flex",
+  "Row"
  ],
  "mixins": [
   "CommonProps",
