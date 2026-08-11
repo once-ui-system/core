@@ -1,102 +1,84 @@
-import React, { forwardRef } from "react";
-import type { CSSProperties, ReactNode } from "react";
-import { SpacingToken } from "../types";
+import { Children, type CSSProperties, forwardRef, isValidElement, type ReactNode } from "react";
+import { cn } from "../classes/utils";
+import type { SpacingToken } from "../types";
 import { Column } from "./Column";
-import classNames from "clsx";
-import styles from "./MasonryGrid.module.scss";
-import { Flex } from "./Flex";
+import { Flex, type FlexComponentProps } from "./Flex";
 
-interface MasonryBreakpointProps {
-  columns?: number;
+export interface MasonryBreakpointProps {
+  columns?: number | string;
   hide?: boolean;
 }
 
-function parseToken(value: SpacingToken | "-1" | number | undefined, type: "width" | "height") {
-  if (value === undefined) return undefined;
-  if (typeof value === "number") return `${value}rem`;
-  if (
-    [
-      "0",
-      "1",
-      "2",
-      "4",
-      "8",
-      "12",
-      "16",
-      "20",
-      "24",
-      "32",
-      "40",
-      "48",
-      "56",
-      "64",
-      "80",
-      "104",
-      "128",
-      "160",
-    ].includes(value)
-  ) {
-    return `var(--static-space-${value})`;
-  }
-  if (["xs", "s", "m", "l", "xl"].includes(value)) {
-    return `var(--responsive-${type}-${value})`;
-  }
-  return undefined;
-}
-
-interface MasonryGridProps extends Omit<React.ComponentProps<typeof Flex>, 'l' | 'm' | 's' | 'xs'> {
+export interface MasonryGridProps extends Omit<FlexComponentProps, "l" | "m" | "s" | "xs" | "gap"> {
   children: ReactNode;
-  gap?: SpacingToken | "-1" | undefined;
-  columns?: number;
+  gap?: SpacingToken | "-1" | number;
+  columns?: number | string;
   style?: CSSProperties;
   className?: string;
+  xl?: MasonryBreakpointProps;
   l?: MasonryBreakpointProps;
   m?: MasonryBreakpointProps;
   s?: MasonryBreakpointProps;
   xs?: MasonryBreakpointProps;
 }
 
-const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
-  ({ children, gap = "8", columns = 3, style, className, l, m, s, xs, ...flex }, ref) => {
-    const gapValue = parseToken(gap, "width") ?? "var(--static-space-8)";
+const getColumnsClass = (prefix?: string, cols?: number | string) => {
+  if (!cols) return undefined;
+  const colClass = `columns-${cols}`;
+  return prefix ? `${prefix}:${colClass}` : colClass;
+};
 
-    const classes = classNames(
-      columns && styles[`columns-${columns}`],
-      l?.columns && styles[`l-columns-${l.columns}`],
-      m?.columns && styles[`m-columns-${m.columns}`],
-      s?.columns && styles[`s-columns-${s.columns}`],
-      xs?.columns && styles[`xs-columns-${xs.columns}`],
+const formatGapClass = (prefix: "gap" | "mb", gap?: SpacingToken | "-1" | number) => {
+  if (gap === undefined || gap === null) return undefined;
+  if (typeof gap === "number") return `${prefix}-[${gap}px]`;
+  if (gap === "-1") return `${prefix}-[-1px]`;
+  return `${prefix}-${gap}`;
+};
+
+const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
+  ({ children, gap = "8", columns = 3, style, className, xl, l, m, s, xs, ...flex }, ref) => {
+    const gapClass = formatGapClass("gap", gap);
+    const gapMarginClass = formatGapClass("mb", gap);
+
+    const classes = cn(
+      "block",
+      getColumnsClass(undefined, columns),
+      getColumnsClass("xl", xl?.columns),
+      getColumnsClass("l", l?.columns),
+      getColumnsClass("m", m?.columns),
+      getColumnsClass("s", s?.columns),
+      getColumnsClass("xs", xs?.columns),
+      xl?.hide && "xl:hidden",
+      l?.hide && "l:hidden",
+      m?.hide && "m:hidden",
+      s?.hide && "s:hidden",
+      xs?.hide && "xs:hidden",
+      gapClass,
       className,
     );
 
     return (
-      <Flex   
-        fillWidth
-        className={classes}
-        ref={ref}
-        {...flex}
-        style={{
-          display: "block",
-          columnGap: gapValue,
-          ...style,
-        }}>
-        {React.Children.map(children, (child, idx) => (
-          <Column
-            key={idx}
-            fillWidth
-            fitHeight
-            style={{
-              breakInside: "avoid",
-              marginBottom: gapValue,
-            }}
-          >
-            {child}
-          </Column>
-        ))}
+      <Flex fillWidth className={classes} ref={ref} style={style} {...flex}>
+        {Children.map(children, (child, idx) => {
+          const itemKey =
+            isValidElement(child) && child.key != null ? child.key : `masonry-item-${idx}`;
+
+          return (
+            <Column
+              key={itemKey}
+              fillWidth
+              fitHeight
+              className={cn("break-inside-avoid", gapMarginClass)}
+            >
+              {child}
+            </Column>
+          );
+        })}
       </Flex>
     );
   },
 );
 
-export { MasonryGrid };
 MasonryGrid.displayName = "MasonryGrid";
+
+export { MasonryGrid };
