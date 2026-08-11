@@ -151,4 +151,37 @@ describe("generateClasses", () => {
     expect(result).toContain("rounded-m");
     expect(result).toContain("shadow-s");
   });
+
+  it("generates grid classes and responsive columns", () => {
+    const result = generateClasses({
+      display: "grid",
+      columns: "3",
+      rows: "2",
+      gap: "16",
+      fillWidth: true,
+      s: { columns: 1 },
+      m: { columns: 2 },
+    });
+
+    expect(result).toContain("grid");
+    expect(result).toContain("grid-cols-3");
+    expect(result).toContain("grid-rows-2");
+    expect(result).toContain("gap-16");
+    expect(result).toContain("w-full");
+    expect(result).toContain("s:grid-cols-1");
+    expect(result).toContain("m:grid-cols-2");
+  });
+
+  it("generates inline-grid and dark-grid classes", () => {
+    const result = generateClasses({
+      display: "grid",
+      inline: true,
+      columns: 4,
+      dark: true,
+    });
+
+    expect(result).toContain("inline-grid");
+    expect(result).toContain("grid-cols-4");
+    expect(result).toContain("dark-grid");
+  });
 });

@@ -6294,16 +6294,6 @@
       ]
     },
     {
-      "char": "🪿",
-      "description": "goose",
-      "aliases": [
-        "goose"
-      ],
-      "tags": [
-        "honk"
-      ]
-    },
-    {
       "char": "🐸",
       "description": "frog",
       "aliases": [
@@ -15085,6 +15075,14 @@
       "description": "flag: Liechtenstein",
       "aliases": [
         "liechtenstein"
+      ],
+      "tags": []
+    },
+    {
+      "char": "🇱🇰",
+      "description": "flag: Sri Lanka",
+      "aliases": [
+        "sri_lanka"
       ],
       "tags": []
     },

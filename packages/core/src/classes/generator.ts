@@ -1,9 +1,10 @@
 import type { CSSProperties } from "react";
-import type { FlexBreakpointProps } from "../interfaces";
+import type { FlexBreakpointProps, GridBreakpointProps } from "../interfaces";
 import type {
   Colors,
   CSSUnit,
   FlexValue,
+  GridSize,
   Opacity,
   RadiusNest,
   RadiusSize,
@@ -17,6 +18,11 @@ import type {
 import { cn } from "./utils";
 
 export interface GenerateClassesProps {
+  display?: "flex" | "grid";
+  columns?: GridSize;
+  rows?: GridSize;
+  gridColumns?: GridSize;
+  gridRows?: GridSize;
   padding?: SpacingToken | number;
   paddingLeft?: SpacingToken | number;
   paddingRight?: SpacingToken | number;
@@ -49,16 +55,21 @@ export interface GenerateClassesProps {
   flexWrap?: boolean;
   wrap?: boolean;
   flex?: FlexValue;
-  flexXl?: FlexBreakpointProps;
-  xl?: FlexBreakpointProps;
-  flexL?: FlexBreakpointProps;
-  l?: FlexBreakpointProps;
-  flexM?: FlexBreakpointProps;
-  m?: FlexBreakpointProps;
-  flexS?: FlexBreakpointProps;
-  s?: FlexBreakpointProps;
-  flexXs?: FlexBreakpointProps;
-  xs?: FlexBreakpointProps;
+  flexXl?: FlexBreakpointProps | GridBreakpointProps;
+  gridXl?: GridBreakpointProps;
+  xl?: FlexBreakpointProps | GridBreakpointProps;
+  flexL?: FlexBreakpointProps | GridBreakpointProps;
+  gridL?: GridBreakpointProps;
+  l?: FlexBreakpointProps | GridBreakpointProps;
+  flexM?: FlexBreakpointProps | GridBreakpointProps;
+  gridM?: GridBreakpointProps;
+  m?: FlexBreakpointProps | GridBreakpointProps;
+  flexS?: FlexBreakpointProps | GridBreakpointProps;
+  gridS?: GridBreakpointProps;
+  s?: FlexBreakpointProps | GridBreakpointProps;
+  flexXs?: FlexBreakpointProps | GridBreakpointProps;
+  gridXs?: GridBreakpointProps;
+  xs?: FlexBreakpointProps | GridBreakpointProps;
   textVariant?: TextVariant;
   textWrap?: CSSProperties["textWrap"];
   textSize?: TextSize;
@@ -315,28 +326,51 @@ const getFlexAlignment = (
   return [hClass, vClass];
 };
 
-const getBreakpointClasses = (prefix: string, bp?: FlexBreakpointProps): string[] => {
+const formatGridSize = (prefix: "grid-cols" | "grid-rows", val?: GridSize): string | undefined => {
+  if (val === undefined || val === null) return undefined;
+  return `${prefix}-${val}`;
+};
+
+const getBreakpointClasses = (
+  prefix: string,
+  bp?: FlexBreakpointProps | GridBreakpointProps,
+  isGrid = false,
+): string[] => {
   if (!bp) return [];
   const classes: (string | undefined)[] = [];
 
   if (bp.hide === true) classes.push("hidden");
-  if (bp.hide === false) classes.push("flex");
+  if (bp.hide === false) classes.push(isGrid ? "grid" : "flex");
   if (bp.position) classes.push(`${bp.position}`);
 
-  if (bp.direction) {
+  // Grid-specific
+  if ("columns" in bp && bp.columns !== undefined) {
+    classes.push(formatGridSize("grid-cols", bp.columns));
+  }
+  if ("rows" in bp && bp.rows !== undefined) {
+    classes.push(formatGridSize("grid-rows", bp.rows));
+  }
+
+  // Flex-specific
+  if ("direction" in bp && bp.direction) {
     if (bp.direction === "row") classes.push("flex-row");
     if (bp.direction === "column") classes.push("flex-col");
     if (bp.direction === "row-reverse") classes.push("flex-row-reverse");
     if (bp.direction === "column-reverse") classes.push("flex-col-reverse");
   }
 
-  if (bp.center) classes.push("justify-center", "items-center");
-  if (bp.wrap !== undefined) classes.push(bp.wrap ? "flex-wrap" : "flex-nowrap");
-  if (bp.flex !== undefined) classes.push(`flex-${bp.flex}`);
+  if ("center" in bp && bp.center) classes.push("justify-center", "items-center");
+  if ("wrap" in bp && bp.wrap !== undefined) classes.push(bp.wrap ? "flex-wrap" : "flex-nowrap");
+  if ("flex" in bp && bp.flex !== undefined) classes.push(`flex-${bp.flex}`);
 
-  const [hAlign, vAlign] = getFlexAlignment(bp.direction, bp.horizontal, bp.vertical);
-  if (hAlign) classes.push(hAlign);
-  if (vAlign) classes.push(vAlign);
+  if ("horizontal" in bp || "vertical" in bp || "direction" in bp) {
+    const direction = "direction" in bp ? bp.direction : undefined;
+    const horizontal = "horizontal" in bp ? bp.horizontal : undefined;
+    const vertical = "vertical" in bp ? bp.vertical : undefined;
+    const [hAlign, vAlign] = getFlexAlignment(direction, horizontal, vertical);
+    if (hAlign) classes.push(hAlign);
+    if (vAlign) classes.push(vAlign);
+  }
 
   if (bp.padding !== undefined) classes.push(formatSpacing("p", bp.padding));
   if (bp.paddingLeft !== undefined) classes.push(formatSpacing("pl", bp.paddingLeft));
@@ -605,16 +639,19 @@ export function generateClasses(...args: unknown[]): string {
     };
   }
 
+  const isGrid = p.display === "grid" || p.columns !== undefined || p.rows !== undefined;
+  const columns = p.columns ?? p.gridColumns;
+  const rows = p.rows ?? p.gridRows;
   const direction = p.direction ?? p.flexDirection;
   const horizontal = p.horizontal ?? p.flexHorizontal;
   const vertical = p.vertical ?? p.flexVertical;
   const center = p.center ?? p.flexCenter;
   const wrap = p.wrap ?? p.flexWrap;
-  const xl = p.xl ?? p.flexXl;
-  const l = p.l ?? p.flexL;
-  const m = p.m ?? p.flexM;
-  const s = p.s ?? p.flexS;
-  const xs = p.xs ?? p.flexXs;
+  const xl = p.xl ?? p.flexXl ?? p.gridXl;
+  const l = p.l ?? p.flexL ?? p.gridL;
+  const m = p.m ?? p.flexM ?? p.gridM;
+  const s = p.s ?? p.flexS ?? p.gridS;
+  const xs = p.xs ?? p.flexXs ?? p.gridXs;
   const align = p.align ?? p.textAlign;
   const truncate = p.truncate ?? p.textTruncate;
 
@@ -641,22 +678,26 @@ export function generateClasses(...args: unknown[]): string {
 
   return cn(
     // Display & Position
-    p.inline ? "inline-flex" : "flex",
+    isGrid ? (p.inline ? "inline-grid" : "grid") : p.inline ? "inline-flex" : "flex",
     p.position && `${p.position}`,
     p.hide && "hidden",
 
-    // Direction
-    direction === "row" && "flex-row",
-    direction === "column" && "flex-col",
-    direction === "row-reverse" && "flex-row-reverse",
-    direction === "column-reverse" && "flex-col-reverse",
+    // Grid columns & rows
+    isGrid && formatGridSize("grid-cols", columns),
+    isGrid && formatGridSize("grid-rows", rows),
 
-    // Alignment
-    center && "justify-center items-center",
-    !center && hAlign,
-    !center && vAlign,
-    wrap && "flex-wrap",
-    p.flex !== undefined && `flex-${p.flex}`,
+    // Direction (flex only)
+    !isGrid && direction === "row" && "flex-row",
+    !isGrid && direction === "column" && "flex-col",
+    !isGrid && direction === "row-reverse" && "flex-row-reverse",
+    !isGrid && direction === "column-reverse" && "flex-col-reverse",
+
+    // Alignment (flex only)
+    !isGrid && center && "justify-center items-center",
+    !isGrid && !center && hAlign,
+    !isGrid && !center && vAlign,
+    !isGrid && wrap && "flex-wrap",
+    !isGrid && p.flex !== undefined && `flex-${p.flex}`,
 
     // Spacing
     formatSpacing("p", p.padding),
@@ -769,15 +810,15 @@ export function generateClasses(...args: unknown[]): string {
     p.scrollbar && `scrollbar-${p.scrollbar}`,
     p.zIndex !== undefined && `z-index-${p.zIndex}`,
     p.cursor && `cursor-${p.cursor}`,
-    p.dark && "dark-flex",
-    p.light && "light-flex",
+    p.dark && (isGrid ? "dark-grid" : "dark-flex"),
+    p.light && (isGrid ? "light-grid" : "light-flex"),
 
     // Responsive Breakpoint Props
-    ...getBreakpointClasses("xl", xl),
-    ...getBreakpointClasses("l", l),
-    ...getBreakpointClasses("m", m),
-    ...getBreakpointClasses("s", s),
-    ...getBreakpointClasses("xs", xs),
+    ...getBreakpointClasses("xl", xl, isGrid),
+    ...getBreakpointClasses("l", l, isGrid),
+    ...getBreakpointClasses("m", m, isGrid),
+    ...getBreakpointClasses("s", s, isGrid),
+    ...getBreakpointClasses("xs", xs, isGrid),
 
     p.className,
   );

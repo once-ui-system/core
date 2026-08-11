@@ -43,8 +43,6 @@ export * from "./Flex";
 export * from "./FlipFx";
 export * from "./FocusTrap";
 export * from "./GlitchFx";
-export * from "./ServerGrid";
-export * from "./ClientGrid";
 export * from "./Grid";
 export * from "./Heading";
 export * from "./HoloFx";

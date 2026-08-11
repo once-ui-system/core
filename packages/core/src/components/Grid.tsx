@@ -1,21 +1,21 @@
-import { forwardRef } from "react";
-import {
-  GridProps,
-  StyleProps,
-  SpacingProps,
-  SizeProps,
+import { type CSSProperties, forwardRef } from "react";
+import { generateClasses } from "../classes/generator";
+import type {
   CommonProps,
   DisplayProps,
   GridBreakpointProps,
+  GridProps,
+  SizeProps,
+  SpacingProps,
+  StyleProps,
 } from "../interfaces";
-import { ClientGrid } from "./ClientGrid";
-import { ServerGrid } from "./ServerGrid";
+import { Cursor } from "./Cursor";
 
-interface SmartGridProps
+export interface GridComponentProps
   extends GridProps,
-    StyleProps,
     SpacingProps,
     SizeProps,
+    StyleProps,
     CommonProps,
     DisplayProps {
   xl?: GridBreakpointProps;
@@ -23,52 +23,52 @@ interface SmartGridProps
   m?: GridBreakpointProps;
   s?: GridBreakpointProps;
   xs?: GridBreakpointProps;
+  isDefaultBreakpoints?: boolean;
 }
 
-const Grid = forwardRef<HTMLDivElement, SmartGridProps>(
-  ({ cursor, xl, l, m, s, xs, style, hide, ...props }, ref) => {
-    // Check if we need client-side functionality
-    const needsClientSide = () => {
-      // Custom cursor requires client-side
-      if (typeof cursor === "object" && cursor) return true;
-
-      // Responsive props require client-side
-      if (xl || l || m || s || xs) return true;
-
-      // Dynamic styles require client-side
-      if (
-        style &&
-        typeof style === "object" &&
-        Object.keys(style as Record<string, any>).length > 0
-      )
-        return true;
-
-      return false;
-    };
-
-    // Use client component if any client-side functionality is needed
-    if (needsClientSide()) {
-      return (
-        <ClientGrid
-          ref={ref}
-          cursor={cursor}
-          xl={xl}
-          l={l}
-          m={m}
-          s={s}
-          xs={xs}
-          style={style}
-          hide={hide}
-          {...props}
-        />
+export const Grid = forwardRef<HTMLDivElement, GridComponentProps>(
+  ({ as: Component = "div", cursor, className, style, children, ...props }, ref) => {
+    if (props.onBackground && props.onSolid) {
+      console.warn(
+        "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
       );
     }
 
-    // Use server component for static content
-    // The hide prop is handled via CSS classes in ServerGrid
-    return <ServerGrid ref={ref} cursor={cursor} hide={hide} {...props} />;
+    if (props.background && props.solid) {
+      console.warn(
+        "You cannot use both 'background' and 'solid' props simultaneously. Only one will be applied.",
+      );
+    }
+
+    const hasCustomCursor = typeof cursor === "object" && cursor !== null;
+
+    const classes = generateClasses({
+      display: "grid",
+      ...props,
+      cursor: typeof cursor === "string" ? cursor : undefined,
+      className,
+    });
+
+    const combinedStyle: CSSProperties | undefined =
+      hasCustomCursor || style
+        ? {
+            ...(hasCustomCursor ? { cursor: "none" } : {}),
+            ...style,
+          }
+        : undefined;
+
+    return (
+      <Component ref={ref} className={classes} style={combinedStyle} {...props}>
+        {children}
+        {hasCustomCursor && <Cursor cursor={cursor} />}
+      </Component>
+    );
   },
 );
 
 Grid.displayName = "Grid";
-export { Grid };
+
+export const ServerGrid = Grid;
+export const ClientGrid = Grid;
+export type ServerGridProps = GridComponentProps;
+export type ClientGridProps = GridComponentProps;

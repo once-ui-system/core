@@ -1074,7 +1074,9 @@
     "l": "GridBreakpointProps",
     "m": "GridBreakpointProps",
     "s": "GridBreakpointProps",
-    "xs": "GridBreakpointProps"
+    "xs": "GridBreakpointProps",
+    "isDefaultBreakpoints": "boolean",
+    "as": "ElementType = div"
    }
   },
   "Heading": {
