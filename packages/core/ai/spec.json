@@ -1752,11 +1752,13 @@
     "StyleProps"
    ],
    "props": {
-    "children": "React.ReactNode",
+    "children": "ReactNode",
     "direction": "\"row\" | \"column\" = row",
     "fadeColor": "BaseColor = transparent",
     "onItemClick": "(index: number) => void",
-    "radius": "RadiusSize"
+    "radius": "RadiusSize",
+    "className": "string",
+    "style": "CSSProperties"
    }
   },
   "ScrollContainer": {
