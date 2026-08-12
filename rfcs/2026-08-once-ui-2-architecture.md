@@ -34,6 +34,7 @@ Measured in-repo at v1.8.2 — not assumed:
 | Charts | Already isolated in `modules/data/` (7 chart components + gauges + legend/tooltip) behind a lazy `rechartsLoader.ts`, but `recharts ^3.10` is a hard `dependency` of core. |
 | Tokens + styles | `src/tokens/` + `src/styles/` ≈ 8,100 lines of SCSS, compiled to `dist/css/tokens.css` + `dist/css/styles.css`. Zero React coupling. `sass` is a peerDependency of the whole package. |
 | Tests | 4 suites (`Dialog`, `ScrollLock`, `og-url-validation`, `safe-html`), 92 passing tests. ~180 component files otherwise untested. |
+| Packaging reality | Measured with publint + arethetypeswrong on the packed 1.8.2 tarball: `dist/` is **ESM syntax in `.js` files with no `"type": "module"`**, and the compiled output uses extensionless directory imports (`export * from "./components"`), which Node's own loader rejects. Plain-Node `require()` *and* `import` of the package both fail — the package is **bundler-only today** (webpack/Turbopack/Vite resolve it; Node ≤20 does not, Node ≥22 partially via require(esm)). Additionally, the `./icons`, `./types`, and `./interfaces` subpaths pointed at `dist/<name>/index.js` while the build emits `dist/<name>.js` — unresolvable for every consumer including bundlers (fixed alongside this RFC; guarded by `src/__tests__/package-exports.test.ts`). |
 | Existing seeds | `./server` subpath already isolated (`07d5f92`); `utils/MissingDependency.tsx` already implements a "dependency absent → render explanation" fallback; `ElementType` already renders a plain `<a>` for external links. |
 | Consumers (in-org) | magic: 556 imports, all from the root entry. chirio: 33 root + 2 `./server`. supa-social: workspace apps on 1.8.2. All root-entry — a codemod migration is mechanical. |
 
@@ -180,10 +181,16 @@ protection-per-effort:
 - **Versioning/publishing: Changesets**, fixed (lockstep) version group for
   all runtime packages. `RELEASING.md` gains a section on multi-package
   releases; the "Lorant executes publish" rule is unchanged.
-- **Build:** keep `tsc` + sass per package (it works and preserves the
-  current dist shape); each package gets its own exports map with
-  `types`/`import`/`require` conditions, validated by publint in CI
-  (see §5.1) rather than by review vigilance.
+- **Build:** the "keep tsc as-is" option is off the table — the
+  packed-tarball audit (§2 "Packaging reality") shows today's output is
+  loadable only through bundlers. Each 2.0 package must emit output that
+  passes publint + arethetypeswrong across all four resolution modes:
+  either proper ESM (`"type": "module"` + explicit file extensions, e.g.
+  `tsc` with NodeNext resolution) or a dual ESM/CJS build via a bundler
+  (tsup/rolldown). Recommendation: **proper ESM-only with explicit
+  extensions** — 2.0 is the moment to drop the broken-anyway `require`
+  condition rather than start maintaining a dual build. Validated in CI
+  by `check:package` (see §5.1), not review vigilance.
 - **Boundary enforcement:** Biome/dependency-cruiser rules — core may not
   import `next/*` or `recharts`; foundations may not import React;
   `data`/`nextjs` may not deep-import core internals (public API only).
