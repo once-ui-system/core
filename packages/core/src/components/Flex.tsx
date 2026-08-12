@@ -46,6 +46,7 @@ const Flex = forwardRef<HTMLDivElement, FlexComponentProps>(
 
     const classes = cn(
       generateClasses({
+        display: "flex",
         ...props,
         cursor: typeof cursor === "string" ? cursor : undefined,
       }),

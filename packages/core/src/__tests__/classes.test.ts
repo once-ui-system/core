@@ -192,4 +192,44 @@ describe("generateClasses", () => {
     expect(result).toContain("grid-cols-4");
     expect(result).toContain("dark-grid");
   });
+
+  it("generates typography classes and handles text variants", () => {
+    const result = generateClasses({
+      variant: "heading-strong-xl",
+      align: "center",
+      textWrap: "balance",
+      truncate: true,
+    });
+
+    expect(result).toContain("font-heading");
+    expect(result).toContain("font-strong");
+    expect(result).toContain("font-xl");
+    expect(result).toContain("text-center");
+    expect(result).toContain("text-balance");
+    expect(result).toContain("truncate");
+  });
+
+  it("handles responsive typography breakpoints", () => {
+    const result = generateClasses({
+      variant: "heading-strong-m",
+      s: { align: "center", size: "s" },
+      m: { size: "l", hide: true },
+    });
+
+    expect(result).toContain("font-heading");
+    expect(result).toContain("font-strong");
+    expect(result).toContain("font-m");
+    expect(result).toContain("s:text-center");
+    expect(result).toContain("s:font-s");
+    expect(result).toContain("m:font-l");
+    expect(result).toContain("m:hidden");
+  });
+
+  it("preserves font type, weight, and size simultaneously through cn", () => {
+    const merged = cn("font-heading", "font-strong", "font-xl", "font-family-code");
+    expect(merged).toContain("font-heading");
+    expect(merged).toContain("font-strong");
+    expect(merged).toContain("font-xl");
+    expect(merged).toContain("font-family-code");
+  });
 });

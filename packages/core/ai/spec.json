@@ -1096,7 +1096,12 @@
     "TextProps"
    ],
    "props": {
-    "wrap": "CSSProperties[\"textWrap\"] = balance"
+    "wrap": "CSSProperties[\"textWrap\"] = balance",
+    "xl": "TextBreakpointProps",
+    "l": "TextBreakpointProps",
+    "m": "TextBreakpointProps",
+    "s": "TextBreakpointProps",
+    "xs": "TextBreakpointProps"
    }
   },
   "HoloFx": {

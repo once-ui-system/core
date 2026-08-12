@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { FlexBreakpointProps, GridBreakpointProps } from "../interfaces";
+import type { FlexBreakpointProps, GridBreakpointProps, TextBreakpointProps } from "../interfaces";
 import type {
   Colors,
   CSSUnit,
@@ -57,26 +57,30 @@ export interface GenerateClassesProps {
   flex?: FlexValue;
   flexXl?: FlexBreakpointProps | GridBreakpointProps;
   gridXl?: GridBreakpointProps;
-  xl?: FlexBreakpointProps | GridBreakpointProps;
+  xl?: FlexBreakpointProps | GridBreakpointProps | TextBreakpointProps;
   flexL?: FlexBreakpointProps | GridBreakpointProps;
   gridL?: GridBreakpointProps;
-  l?: FlexBreakpointProps | GridBreakpointProps;
+  l?: FlexBreakpointProps | GridBreakpointProps | TextBreakpointProps;
   flexM?: FlexBreakpointProps | GridBreakpointProps;
   gridM?: GridBreakpointProps;
-  m?: FlexBreakpointProps | GridBreakpointProps;
+  m?: FlexBreakpointProps | GridBreakpointProps | TextBreakpointProps;
   flexS?: FlexBreakpointProps | GridBreakpointProps;
   gridS?: GridBreakpointProps;
-  s?: FlexBreakpointProps | GridBreakpointProps;
+  s?: FlexBreakpointProps | GridBreakpointProps | TextBreakpointProps;
   flexXs?: FlexBreakpointProps | GridBreakpointProps;
   gridXs?: GridBreakpointProps;
-  xs?: FlexBreakpointProps | GridBreakpointProps;
+  xs?: FlexBreakpointProps | GridBreakpointProps | TextBreakpointProps;
+  variant?: TextVariant;
   textVariant?: TextVariant;
   textWrap?: CSSProperties["textWrap"];
   textSize?: TextSize;
+  size?: TextSize;
   textWeight?: TextWeight;
+  weight?: TextWeight;
   textAlign?: CSSProperties["textAlign"];
   align?: CSSProperties["textAlign"];
   textType?: TextType;
+  family?: TextType;
   textFamily?: CSSProperties["fontFamily"];
   textTruncate?: boolean;
   truncate?: boolean;
@@ -271,26 +275,15 @@ const getVariantClasses = (variant?: TextVariant): string[] => {
   const fontType = parts.join("-");
 
   const fontClass = fontType ? `font-${fontType}` : "";
-  const weightClass =
-    weight === "strong" ? "font-bold" : weight === "medium" ? "font-medium" : "font-normal";
-  const sizeClass = size ? `text-${size}` : "";
+  const weightClass = weight ? `font-${weight}` : "";
+  const sizeClass = size ? `font-${size}` : "";
 
   return [fontClass, weightClass, sizeClass].filter(Boolean);
 };
 
 const getTextWeightClass = (weight?: TextWeight): string | undefined => {
   if (!weight) return undefined;
-  switch (weight) {
-    case "strong":
-      return "font-bold";
-    case "medium":
-      return "font-medium";
-    case "normal":
-    case "default":
-      return "font-normal";
-    default:
-      return `font-${weight}`;
-  }
+  return `font-${weight}`;
 };
 
 const getFlexAlignment = (
@@ -333,94 +326,114 @@ const formatGridSize = (prefix: "grid-cols" | "grid-rows", val?: GridSize): stri
 
 const getBreakpointClasses = (
   prefix: string,
-  bp?: FlexBreakpointProps | GridBreakpointProps,
+  bp?: FlexBreakpointProps | GridBreakpointProps | TextBreakpointProps,
   isGrid = false,
 ): string[] => {
   if (!bp) return [];
+  const b = bp as Record<string, any>;
   const classes: (string | undefined)[] = [];
 
-  if (bp.hide === true) classes.push("hidden");
-  if (bp.hide === false) classes.push(isGrid ? "grid" : "flex");
-  if (bp.position) classes.push(`${bp.position}`);
+  if (b.hide === true) classes.push("hidden");
+  if (b.hide === false) classes.push(isGrid ? "grid" : "flex");
+  if (b.position) classes.push(`${b.position}`);
 
   // Grid-specific
-  if ("columns" in bp && bp.columns !== undefined) {
-    classes.push(formatGridSize("grid-cols", bp.columns));
+  if (b.columns !== undefined) {
+    classes.push(formatGridSize("grid-cols", b.columns));
   }
-  if ("rows" in bp && bp.rows !== undefined) {
-    classes.push(formatGridSize("grid-rows", bp.rows));
+  if (b.rows !== undefined) {
+    classes.push(formatGridSize("grid-rows", b.rows));
   }
 
   // Flex-specific
-  if ("direction" in bp && bp.direction) {
-    if (bp.direction === "row") classes.push("flex-row");
-    if (bp.direction === "column") classes.push("flex-col");
-    if (bp.direction === "row-reverse") classes.push("flex-row-reverse");
-    if (bp.direction === "column-reverse") classes.push("flex-col-reverse");
+  if (b.direction) {
+    if (b.direction === "row") classes.push("flex-row");
+    if (b.direction === "column") classes.push("flex-col");
+    if (b.direction === "row-reverse") classes.push("flex-row-reverse");
+    if (b.direction === "column-reverse") classes.push("flex-col-reverse");
   }
 
-  if ("center" in bp && bp.center) classes.push("justify-center", "items-center");
-  if ("wrap" in bp && bp.wrap !== undefined) classes.push(bp.wrap ? "flex-wrap" : "flex-nowrap");
-  if ("flex" in bp && bp.flex !== undefined) classes.push(`flex-${bp.flex}`);
+  if (b.center) classes.push("justify-center", "items-center");
+  if (b.wrap !== undefined) {
+    if (typeof b.wrap === "boolean") {
+      classes.push(b.wrap ? "flex-wrap" : "flex-nowrap");
+    } else if (typeof b.wrap === "string") {
+      classes.push(`text-${b.wrap}`);
+    }
+  }
+  if (b.textWrap) classes.push(`text-${b.textWrap}`);
+  if (b.flex !== undefined) classes.push(`flex-${b.flex}`);
 
-  if ("horizontal" in bp || "vertical" in bp || "direction" in bp) {
-    const direction = "direction" in bp ? bp.direction : undefined;
-    const horizontal = "horizontal" in bp ? bp.horizontal : undefined;
-    const vertical = "vertical" in bp ? bp.vertical : undefined;
-    const [hAlign, vAlign] = getFlexAlignment(direction, horizontal, vertical);
+  if (b.horizontal || b.vertical || b.direction) {
+    const [hAlign, vAlign] = getFlexAlignment(b.direction, b.horizontal, b.vertical);
     if (hAlign) classes.push(hAlign);
     if (vAlign) classes.push(vAlign);
   }
 
-  if (bp.padding !== undefined) classes.push(formatSpacing("p", bp.padding));
-  if (bp.paddingLeft !== undefined) classes.push(formatSpacing("pl", bp.paddingLeft));
-  if (bp.paddingRight !== undefined) classes.push(formatSpacing("pr", bp.paddingRight));
-  if (bp.paddingTop !== undefined) classes.push(formatSpacing("pt", bp.paddingTop));
-  if (bp.paddingBottom !== undefined) classes.push(formatSpacing("pb", bp.paddingBottom));
-  if (bp.paddingX !== undefined) classes.push(formatSpacing("px", bp.paddingX));
-  if (bp.paddingY !== undefined) classes.push(formatSpacing("py", bp.paddingY));
+  if (b.padding !== undefined) classes.push(formatSpacing("p", b.padding));
+  if (b.paddingLeft !== undefined) classes.push(formatSpacing("pl", b.paddingLeft));
+  if (b.paddingRight !== undefined) classes.push(formatSpacing("pr", b.paddingRight));
+  if (b.paddingTop !== undefined) classes.push(formatSpacing("pt", b.paddingTop));
+  if (b.paddingBottom !== undefined) classes.push(formatSpacing("pb", b.paddingBottom));
+  if (b.paddingX !== undefined) classes.push(formatSpacing("px", b.paddingX));
+  if (b.paddingY !== undefined) classes.push(formatSpacing("py", b.paddingY));
 
-  if (bp.margin !== undefined) classes.push(formatSpacing("m", bp.margin));
-  if (bp.marginLeft !== undefined) classes.push(formatSpacing("ml", bp.marginLeft));
-  if (bp.marginRight !== undefined) classes.push(formatSpacing("mr", bp.marginRight));
-  if (bp.marginTop !== undefined) classes.push(formatSpacing("mt", bp.marginTop));
-  if (bp.marginBottom !== undefined) classes.push(formatSpacing("mb", bp.marginBottom));
-  if (bp.marginX !== undefined) classes.push(formatSpacing("mx", bp.marginX));
-  if (bp.marginY !== undefined) classes.push(formatSpacing("my", bp.marginY));
+  if (b.margin !== undefined) classes.push(formatSpacing("m", b.margin));
+  if (b.marginLeft !== undefined) classes.push(formatSpacing("ml", b.marginLeft));
+  if (b.marginRight !== undefined) classes.push(formatSpacing("mr", b.marginRight));
+  if (b.marginTop !== undefined) classes.push(formatSpacing("mt", b.marginTop));
+  if (b.marginBottom !== undefined) classes.push(formatSpacing("mb", b.marginBottom));
+  if (b.marginX !== undefined) classes.push(formatSpacing("mx", b.marginX));
+  if (b.marginY !== undefined) classes.push(formatSpacing("my", b.marginY));
 
-  if (bp.gap !== undefined) {
-    if (bp.gap === "-1") {
+  if (b.gap !== undefined) {
+    if (b.gap === "-1") {
       classes.push("gap-[-1px]");
     } else {
-      classes.push(formatSpacing("gap", bp.gap));
+      classes.push(formatSpacing("gap", b.gap));
     }
   }
 
-  if (bp.top !== undefined) classes.push(formatDimension("top", bp.top));
-  if (bp.right !== undefined) classes.push(formatDimension("right", bp.right));
-  if (bp.bottom !== undefined) classes.push(formatDimension("bottom", bp.bottom));
-  if (bp.left !== undefined) classes.push(formatDimension("left", bp.left));
+  if (b.top !== undefined) classes.push(formatDimension("top", b.top));
+  if (b.right !== undefined) classes.push(formatDimension("right", b.right));
+  if (b.bottom !== undefined) classes.push(formatDimension("bottom", b.bottom));
+  if (b.left !== undefined) classes.push(formatDimension("left", b.left));
 
-  if (bp.width !== undefined) classes.push(formatDimension("w", bp.width));
-  if (bp.height !== undefined) classes.push(formatDimension("h", bp.height));
-  if (bp.maxWidth !== undefined) classes.push(formatDimension("max-w", bp.maxWidth));
-  if (bp.maxHeight !== undefined) classes.push(formatDimension("max-h", bp.maxHeight));
+  if (b.width !== undefined) classes.push(formatDimension("w", b.width));
+  if (b.height !== undefined) classes.push(formatDimension("h", b.height));
+  if (b.maxWidth !== undefined) classes.push(formatDimension("max-w", b.maxWidth));
+  if (b.maxHeight !== undefined) classes.push(formatDimension("max-h", b.maxHeight));
 
-  if (bp.fit) classes.push("w-fit", "h-fit");
-  if (bp.fitWidth) classes.push("w-fit");
-  if (bp.fitHeight) classes.push("h-fit");
-  if (bp.fill) classes.push("w-full", "h-full", "min-w-0", "min-h-0");
-  if (bp.fillWidth) classes.push("w-full", "min-w-0");
-  if (bp.fillHeight) classes.push("h-full", "min-h-0");
+  if (b.fit) classes.push("w-fit", "h-fit");
+  if (b.fitWidth) classes.push("w-fit");
+  if (b.fitHeight) classes.push("h-fit");
+  if (b.fill) classes.push("w-full", "h-full", "min-w-0", "min-h-0");
+  if (b.fillWidth) classes.push("w-full", "min-w-0");
+  if (b.fillHeight) classes.push("h-full", "min-h-0");
 
-  if (bp.background) classes.push(getColorClass("bg", bp.background));
-  if (bp.solid) classes.push(getSolidClasses(bp.solid));
-  if (bp.border) classes.push(getColorClass("border", bp.border));
-  if (bp.radius) classes.push(formatRadius("rounded", bp.radius));
-  if (bp.shadow) classes.push(`shadow-${bp.shadow}`);
-  if (bp.opacity !== undefined) classes.push(`opacity-${bp.opacity}`);
-  if (bp.overflow) classes.push(`overflow-${bp.overflow}`);
-  if (bp.pointerEvents) classes.push(`pointer-events-${bp.pointerEvents}`);
+  if (b.background) classes.push(getColorClass("bg", b.background));
+  if (b.solid) classes.push(getSolidClasses(b.solid));
+  if (b.border) classes.push(getColorClass("border", b.border));
+  if (b.radius) classes.push(formatRadius("rounded", b.radius));
+  if (b.shadow) classes.push(`shadow-${b.shadow}`);
+  if (b.opacity !== undefined) classes.push(`opacity-${b.opacity}`);
+  if (b.overflow) classes.push(`overflow-${b.overflow}`);
+  if (b.pointerEvents) classes.push(`pointer-events-${b.pointerEvents}`);
+
+  // Typography props in breakpoints
+  if (b.align) classes.push(`text-${b.align}`);
+  if (b.textAlign) classes.push(`text-${b.textAlign}`);
+  if (b.truncate || b.textTruncate) classes.push("truncate");
+  if (b.variant) classes.push(...getVariantClasses(b.variant));
+  if (b.textVariant) classes.push(...getVariantClasses(b.textVariant));
+  if (b.size) classes.push(`font-${b.size}`);
+  if (b.textSize) classes.push(`font-${b.textSize}`);
+  if (b.weight) classes.push(getTextWeightClass(b.weight));
+  if (b.textWeight) classes.push(getTextWeightClass(b.textWeight));
+  if (b.family) classes.push(`font-family-${b.family}`);
+  if (b.textType) classes.push(`font-${b.textType}`);
+  if (b.onBackground) classes.push(getColorClass("text", b.onBackground));
+  if (b.onSolid) classes.push(getSolidClasses(b.onSolid));
 
   return classes.filter(Boolean).map((cls) => `${prefix}:${cls}`);
 };
@@ -639,7 +652,6 @@ export function generateClasses(...args: unknown[]): string {
     };
   }
 
-  const isGrid = p.display === "grid" || p.columns !== undefined || p.rows !== undefined;
   const columns = p.columns ?? p.gridColumns;
   const rows = p.rows ?? p.gridRows;
   const direction = p.direction ?? p.flexDirection;
@@ -654,6 +666,29 @@ export function generateClasses(...args: unknown[]): string {
   const xs = p.xs ?? p.flexXs ?? p.gridXs;
   const align = p.align ?? p.textAlign;
   const truncate = p.truncate ?? p.textTruncate;
+
+  const isGrid = p.display === "grid" || columns !== undefined || rows !== undefined;
+  const isFlex =
+    !isGrid &&
+    (p.display === "flex" ||
+      (p.display === undefined &&
+        (direction !== undefined ||
+          horizontal !== undefined ||
+          vertical !== undefined ||
+          center !== undefined ||
+          (typeof wrap === "boolean" && wrap) ||
+          p.flex !== undefined ||
+          p.gap !== undefined ||
+          a.length > 1)));
+
+  let displayClass: string | undefined;
+  if (isGrid) {
+    displayClass = p.inline ? "inline-grid" : "grid";
+  } else if (isFlex) {
+    displayClass = p.inline ? "inline-flex" : "flex";
+  } else if (p.display) {
+    displayClass = p.inline ? `inline-${p.display}` : p.display;
+  }
 
   const [hAlign, vAlign] = getFlexAlignment(direction, horizontal, vertical);
 
@@ -678,7 +713,7 @@ export function generateClasses(...args: unknown[]): string {
 
   return cn(
     // Display & Position
-    isGrid ? (p.inline ? "inline-grid" : "grid") : p.inline ? "inline-flex" : "flex",
+    displayClass,
     p.position && `${p.position}`,
     p.hide && "hidden",
 
@@ -790,12 +825,12 @@ export function generateClasses(...args: unknown[]): string {
     formatRadius("rounded-br", p.bottomRightRadius),
 
     // Typography
-    ...getVariantClasses(p.textVariant),
-    p.textSize && `text-${p.textSize}`,
-    getTextWeightClass(p.textWeight),
+    ...getVariantClasses(p.variant ?? p.textVariant),
+    (p.size || p.textSize) && `font-${p.size ?? p.textSize}`,
+    getTextWeightClass(p.weight ?? p.textWeight),
     align && `text-${align}`,
     p.textWrap && `text-${p.textWrap}`,
-    p.textType && `font-${p.textType}`,
+    (p.family || p.textType) && `font-family-${p.family ?? p.textType}`,
     p.textFamily && `font-[${p.textFamily}]`,
     truncate && "truncate",
 
