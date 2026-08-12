@@ -10,14 +10,13 @@ import { describe, expect, it } from "vitest";
  * compiles the SCSS sources and snapshots the *names only* — values may change
  * freely (design tweaks), but a rename or removal fails CI until the snapshot
  * is intentionally updated (`pnpm vitest run -u`), making the change visible
- * in review. This becomes the API contract of @once-ui-system/foundations
- * after the 2.0 split.
+ * in review. This is the API contract of @once-ui-system/foundations.
  */
 
-const SRC_ROOT = join(__dirname, "..");
+const SCSS_ROOT = join(__dirname, "..", "scss");
 
 const compileEntry = (entry: string): string =>
-  compile(join(SRC_ROOT, entry), { style: "expanded" }).css;
+  compile(join(SCSS_ROOT, entry), { style: "expanded" }).css;
 
 const unique = (values: string[]): string[] => [...new Set(values)].sort();
 

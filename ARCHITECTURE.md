@@ -1,11 +1,12 @@
 # Architecture
 
-This repo is a **pnpm monorepo** managed by [Turborepo](https://turbo.build/repo). It contains one publishable library and two Next.js apps.
+This repo is a **pnpm monorepo** managed by [Turborepo](https://turbo.build/repo). It contains two publishable libraries and two Next.js apps. The 2.0 package split is in progress — see `rfcs/2026-08-once-ui-2-architecture.md`.
 
 ```text
 core/
 ├── packages/
-│   └── core/                  # @once-ui-system/core — the design system library
+│   ├── core/                  # @once-ui-system/core — the design system library
+│   └── foundations/           # @once-ui-system/foundations — design tokens + utility styles (no React)
 ├── apps/
 │   ├── dev/                   # Next.js 16 sandbox for component development
 │   └── docs/                  # Next.js 16 documentation site (docs.once-ui.com)
@@ -27,8 +28,6 @@ All source lives under `packages/core/src/`. The build produces `dist/` with JS 
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `src/components/`   | **React components** (Button, Flex, Dialog, CodeBlock, etc.). Each component has a `.tsx` file and an optional `.module.scss` for scoped styles. Server-compatible or marked `"use client"`. |
 | `src/modules/`      | **Complex multi-file features** that compose multiple components (CodeBlock, SEO utilities, media players, navigation helpers). These are too large or coupled to live inside `components/`. |
-| `src/tokens/`       | **Design tokens** as SCSS variables — colors, typography, shadows, borders, spacing, layout. These generate `dist/css/tokens.css`. Consumed by both the library and apps.                    |
-| `src/styles/`       | **Utility classes** — SCSS that generates classes like `bg-surface`, `p-16`, `radius-m`, `flex-row`. These generate `dist/css/styles.css`.                                                   |
 | `src/interfaces.ts` | TypeScript interfaces for component props (`FlexProps`, `StyleProps`, `SpacingProps`, etc.).                                                                                                 |
 | `src/types.ts`      | Shared TypeScript types — `SpacingToken`, `RadiusSize`, `TextWeight`, `ColorScheme`, etc.                                                                                                    |
 | `src/hooks/`        | Custom React hooks used across components.                                                                                                                                                   |
@@ -48,7 +47,7 @@ All source lives under `packages/core/src/`. The build produces `dist/` with JS 
 
 - **Props interfaces** live in `src/interfaces.ts` or colocated in the component file.
 - **Tokens** follow the pattern `--{category}-{property}-{weight}` (e.g., `--brand-background-strong`).
-- **SCSS modules** use the `.module.scss` convention for scoped styles. Global utilities go in `src/styles/`.
+- **SCSS modules** use the `.module.scss` convention for scoped styles. Global utilities and design tokens live in `packages/foundations/scss/`; the only foundations file components may reference is `../styles/breakpoints.scss` (a build-time synced copy).
 - **Components** use `forwardRef` and accept a `className`/`style` override. Spread remaining props to the root element.
 - **Exports** go through: `src/components/index.ts` → `src/index.ts`, plus separate re-exports from `contexts/`, `modules/`, `hooks/`, `utils/`, `types.ts`, `interfaces.ts`, `icons.ts`
 
@@ -96,7 +95,7 @@ pnpm install          # installs all workspaces + builds core via postinstall
 pnpm build            # rebuild everything via Turbo
 ```
 
-The library build: `clean` → `generate-emoji-data` → `generate-ai-spec` → `tsc` (types + JS) → `copy-files` → `build:css` (sass compilation). Turborepo caches outputs across runs.
+The core library build: `clean` → `sync-foundations` (copies `breakpoints.scss` from `packages/foundations`; gitignored) → `generate-emoji-data` → `generate-ai-spec` → `tsc` (types + JS) → `copy-files` → `build:css` (copies foundations' compiled CSS into `dist/css` for the deprecated `@once-ui-system/core/css/*` compat entries). Tokens and utility styles compile in `packages/foundations` (`sass`), which builds first via the workspace dependency. Turborepo caches outputs across runs.
 
 ---
 
@@ -106,8 +105,8 @@ The library build: `clean` → `generate-emoji-data` → `generate-ai-spec` → 
 | --------------------------------------------- | ------------------------------------------------- |
 | Fix or add a component                        | `packages/core/src/components/`                   |
 | Fix or add a complex module (CodeBlock, etc.) | `packages/core/src/modules/`                      |
-| Change colors, typography, spacing tokens     | `packages/core/src/tokens/`                       |
-| Add or modify utility classes                 | `packages/core/src/styles/`                       |
+| Change colors, typography, spacing tokens     | `packages/foundations/scss/tokens/`               |
+| Add or modify utility classes                 | `packages/foundations/scss/styles/`               |
 | Add a new shared type                         | `packages/core/src/types.ts`                      |
 | Test a component visually                     | `apps/dev/src/components/ComponentsCheckPage.tsx` |
 | Update or add docs page                       | `apps/docs/src/content/once-ui/`                  |
