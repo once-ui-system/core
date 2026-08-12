@@ -30,7 +30,7 @@ Measured in-repo at v1.8.2 — not assumed:
 
 | Concern | Reality |
 | --- | --- |
-| Next.js imports | **7 files only:** `components/Media.tsx` (next/image), `components/ElementType.tsx` + `components/Logo.tsx` (next/link), `modules/navigation/Kbar.tsx` + `MegaMenu.tsx` (next/navigation), `modules/seo/Schema.tsx` (next/script), `server/og-utils.ts` (next/server). Yet `next >=15.5` is a hard peerDependency for every consumer. |
+| Next.js imports | **8 files only:** `components/Media.tsx` (next/image), `components/ElementType.tsx` + `components/Logo.tsx` (next/link), `modules/navigation/Kbar.tsx` + `MegaMenu.tsx` (next/navigation), `modules/seo/Schema.tsx` (next/script), `modules/seo/Meta.tsx` (type-only `Metadata` import), `server/og-utils.ts` (next/server). Pinned by `src/__tests__/framework-boundary.test.ts`. Yet `next >=15.5` is a hard peerDependency for every consumer. |
 | Charts | Already isolated in `modules/data/` (7 chart components + gauges + legend/tooltip) behind a lazy `rechartsLoader.ts`, but `recharts ^3.10` is a hard `dependency` of core. |
 | Tokens + styles | `src/tokens/` + `src/styles/` ≈ 8,100 lines of SCSS, compiled to `dist/css/tokens.css` + `dist/css/styles.css`. Zero React coupling. `sass` is a peerDependency of the whole package. |
 | Tests | 4 suites (`Dialog`, `ScrollLock`, `og-url-validation`, `safe-html`), 92 passing tests. ~180 component files otherwise untested. |
@@ -86,7 +86,7 @@ packages/
 
 ### `@once-ui-system/nextjs`
 
-- The 7 Next-coupled surfaces, re-exported with their Next behavior:
+- The 8 Next-coupled surfaces, re-exported with their Next behavior:
   `Media` (next/image), link adapter (next/link), navigation adapter
   (next/navigation for `Kbar`/`MegaMenu`), `Schema`/`Meta` (next/script,
   App Router metadata helpers), and today's `./server` og-utils.
