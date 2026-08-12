@@ -1,16 +1,24 @@
 "use client";
 
-import { Row } from ".";
-import styles from "./AutoScroll.module.scss";
-import React, { forwardRef, useState, useRef, useEffect, useMemo } from "react";
+import {
+  type ComponentProps,
+  type CSSProperties,
+  forwardRef,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { Row } from "./Row";
 
-interface AutoScrollProps extends React.ComponentProps<typeof Row> {
-  children: React.ReactNode;
+export interface AutoScrollProps extends ComponentProps<typeof Row> {
+  children: ReactNode;
   speed?: "slow" | "medium" | "fast";
   hover?: "slow" | "pause" | "none";
   reverse?: boolean;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   scrollGap?: number | string;
 }
 
@@ -46,9 +54,6 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
     const [contentWidth, setContentWidth] = useState(0);
     const previousReverseRef = useRef(reverse);
 
-    // Stable reference to children to prevent unnecessary re-renders
-    const childrenStable = useMemo(() => children, []);
-
     // Measure the content width to calculate proper animation distance
     useEffect(() => {
       if (!contentRef.current) return;
@@ -56,8 +61,8 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
       const observer = new ResizeObserver((entries) => {
         for (const entry of entries) {
           const newWidth = entry.contentRect.width;
-          if (newWidth !== contentWidth && newWidth > 0) {
-            setContentWidth(newWidth);
+          if (newWidth > 0) {
+            setContentWidth((prev) => (prev !== newWidth ? newWidth : prev));
           }
         }
       });
@@ -67,7 +72,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
     }, []);
 
     // Save animation state before updates
-    const saveAnimationState = () => {
+    const saveAnimationState = useCallback(() => {
       if (animationRef.current) {
         const animation = animationRef.current;
         const currentTime = animation.currentTime;
@@ -78,30 +83,32 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
           playing: animation.playState === "running",
         };
       }
-    };
+    }, []);
 
     // Restore animation state after updates
-    const restoreAnimationState = (animation: Animation) => {
+    const restoreAnimationState = useCallback((animation: Animation) => {
       const state = animationStateRef.current;
 
       if (state.currentTime !== null) {
         animation.currentTime = state.currentTime;
       }
 
-      animation.updatePlaybackRate(state.playbackRate);
+      animation.updatePlaybackRate?.(state.playbackRate);
 
       if (state.playing) {
         animation.play();
       } else {
         animation.pause();
       }
-    };
+    }, []);
 
     // Create or update animation
-    const setupAnimation = () => {
+    const setupAnimation = useCallback(() => {
       if (!wrapperRef.current || contentWidth <= 0) return;
 
       const element = wrapperRef.current;
+      if (typeof element.animate !== "function") return;
+
       const duration = DURATIONS[speed];
       const parentWidth = element.parentElement?.clientWidth || 0;
 
@@ -148,7 +155,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
 
       // Restore previous animation state if available
       restoreAnimationState(animation);
-    };
+    }, [contentWidth, speed, reverse, saveAnimationState, restoreAnimationState]);
 
     // Setup animation when parameters change
     useEffect(() => {
@@ -160,7 +167,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
           animationRef.current = null;
         }
       };
-    }, [speed, reverse, contentWidth]);
+    }, [setupAnimation]);
 
     // Handle hover effects
     useEffect(() => {
@@ -172,11 +179,11 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
           animation.pause();
         } else if (hover === "slow") {
           const playbackRate = 0.25;
-          animation.updatePlaybackRate(playbackRate);
+          animation.updatePlaybackRate?.(playbackRate);
         }
       } else {
-        animation.updatePlaybackRate(1);
-        if (animation.playState === "paused" && hover !== "pause") {
+        animation.updatePlaybackRate?.(1);
+        if (animation.playState === "paused") {
           animation.play();
         }
       }
@@ -187,15 +194,15 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
       const handleResize = () => {
         if (contentRef.current) {
           const newWidth = contentRef.current.offsetWidth;
-          if (newWidth !== contentWidth && newWidth > 0) {
-            setContentWidth(newWidth);
+          if (newWidth > 0) {
+            setContentWidth((prev) => (prev !== newWidth ? newWidth : prev));
           }
         }
       };
 
       window.addEventListener("resize", handleResize);
       return () => window.removeEventListener("resize", handleResize);
-    }, [contentWidth]);
+    }, []);
 
     // Prevent animation from restarting when other components open/close
     useEffect(() => {
@@ -204,8 +211,8 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
         // Just check if we need to recalculate width
         if (contentRef.current) {
           const newWidth = contentRef.current.offsetWidth;
-          if (Math.abs(newWidth - contentWidth) > 5 && newWidth > 0) {
-            setContentWidth(newWidth);
+          if (newWidth > 0) {
+            setContentWidth((prev) => (Math.abs(newWidth - prev) > 5 ? newWidth : prev));
           }
         }
       });
@@ -219,7 +226,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
       });
 
       return () => observer.disconnect();
-    }, [contentWidth]);
+    }, []);
 
     const gapStyle = typeof scrollGap === "number" ? `${scrollGap}px` : scrollGap;
 
@@ -228,26 +235,26 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
         <Row
           fillWidth
           ref={wrapperRef}
-          className={styles.marqueeWrapper}
+          className="will-change-transform"
           onMouseEnter={() => setIsHovering(true)}
           onMouseLeave={() => setIsHovering(false)}
         >
           <Row
             fitWidth
             horizontal="around"
-            className={styles.marqueeContent}
+            className="whitespace-nowrap shrink-0 min-w-full"
             ref={contentRef}
             style={{ marginRight: gapStyle }}
           >
-            {children || childrenStable}
+            {children}
           </Row>
           <Row
             fitWidth
             horizontal="around"
-            className={styles.marqueeContent}
+            className="whitespace-nowrap shrink-0 min-w-full"
             style={{ marginRight: gapStyle }}
           >
-            {children || childrenStable}
+            {children}
           </Row>
         </Row>
       </Row>
@@ -256,4 +263,5 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
 );
 
 AutoScroll.displayName = "AutoScroll";
+
 export { AutoScroll };

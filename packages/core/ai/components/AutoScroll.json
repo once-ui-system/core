@@ -13,12 +13,12 @@
   "StyleProps"
  ],
  "props": {
-  "children": "!React.ReactNode",
+  "children": "!ReactNode",
   "speed": "\"slow\" | \"medium\" | \"fast\" = medium",
   "hover": "\"slow\" | \"pause\" | \"none\" = slow",
   "reverse": "boolean = false",
   "className": "string",
-  "style": "React.CSSProperties",
+  "style": "CSSProperties",
   "scrollGap": "number | string"
  },
  "mixinsRef": [
