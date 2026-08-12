@@ -1,29 +1,22 @@
 "use client";
 
-import React, {
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  useMemo,
-  ReactNode,
-} from "react";
+import React, { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import {
-  Flex,
-  Text,
-  Icon,
+  ArrowNavigation,
   Column,
+  Flex,
+  Icon,
   Input,
+  Kbd,
   Option,
   Row,
-  Kbd,
-  ArrowNavigation,
-  useArrowNavigationContext,
   ScrollLock,
+  Text,
+  useArrowNavigationContext,
 } from "../../components";
-import { createPortal } from "react-dom";
-import { TShirtSizes } from "../../types";
-import { useRouter, usePathname } from "next/navigation";
+import { useAdapters } from "../../contexts/AdapterProvider";
+import type { TShirtSizes } from "../../types";
 import styles from "./Kbar.module.scss";
 
 export interface KbarItem {
@@ -58,13 +51,7 @@ const KbarSearchInput: React.FC<{
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
   inputSize?: TShirtSizes;
-}> = ({
-  placeholder,
-  searchQuery,
-  onSearchChange,
-  inputRef,
-  inputSize = "m",
-}) => {
+}> = ({ placeholder, searchQuery, onSearchChange, inputRef, inputSize = "m" }) => {
   const { handleKeyDown: navKeyDown } = useArrowNavigationContext();
 
   const handleKeyDown = useCallback(
@@ -86,15 +73,7 @@ const KbarSearchInput: React.FC<{
       onKeyDown={handleKeyDown}
       ref={inputRef}
       height={inputSize}
-      
-      hasPrefix={
-        <Icon
-          marginLeft="4"
-          onBackground="neutral-weak"
-          name="search"
-          size="xs"
-        />
-      }
+      hasPrefix={<Icon marginLeft="4" onBackground="neutral-weak" name="search" size="xs" />}
       autoComplete="off"
     />
   );
@@ -104,11 +83,7 @@ export interface KbarTriggerProps extends Omit<React.ComponentProps<typeof Row>,
   onClick?: () => void;
 }
 
-export const KbarTrigger: React.FC<KbarTriggerProps> = ({
-  onClick,
-  children,
-  ...rest
-}) => {
+export const KbarTrigger: React.FC<KbarTriggerProps> = ({ onClick, children, ...rest }) => {
   return (
     <Row onClick={onClick} {...rest}>
       {children}
@@ -135,7 +110,8 @@ export const KbarContent: React.FC<KbarContentProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const router = useRouter();
+  const { useNavigate } = useAdapters();
+  const navigate = useNavigate();
   const [isClosing, setIsClosing] = useState(false);
 
   const handleClose = useCallback(() => {
@@ -154,12 +130,8 @@ export const KbarContent: React.FC<KbarContentProps> = ({
       const searchLower = searchQuery.toLowerCase();
       return (
         item.name.toLowerCase().includes(searchLower) ||
-        (item.keywords
-          ? item.keywords.toLowerCase().includes(searchLower)
-          : false) ||
-        (item.section
-          ? item.section.toLowerCase().includes(searchLower)
-          : false)
+        (item.keywords ? item.keywords.toLowerCase().includes(searchLower) : false) ||
+        (item.section ? item.section.toLowerCase().includes(searchLower) : false)
       );
     });
   }, [items, searchQuery]);
@@ -178,9 +150,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
       });
 
       // Add items for this section
-      const sectionItems = filteredItems.filter(
-        (item) => item.section === section,
-      );
+      const sectionItems = filteredItems.filter((item) => item.section === section);
 
       for (const item of sectionItems) {
         result.push({
@@ -191,18 +161,13 @@ export const KbarContent: React.FC<KbarContentProps> = ({
           ) : undefined,
           hasSuffix:
             item.shortcut && item.shortcut.length > 0 ? (
-              <Row
-                gap="2"
-                style={{ transform: "scale(0.9)", transformOrigin: "right" }}
-              >
+              <Row gap="2" style={{ transform: "scale(0.9)", transformOrigin: "right" }}>
                 {item.shortcut.map((key, i) => (
                   <Row gap="2" key={i}>
                     <Kbd minWidth="24" style={{ transform: "scale(0.8)" }}>
                       {key}
                     </Kbd>
-                    {i < item.shortcut.length - 1 && (
-                      <Text onBackground="neutral-weak">+</Text>
-                    )}
+                    {i < item.shortcut.length - 1 && <Text onBackground="neutral-weak">+</Text>}
                   </Row>
                 ))}
               </Row>
@@ -232,12 +197,10 @@ export const KbarContent: React.FC<KbarContentProps> = ({
     (index: number) => {
       const selectedOption = nonCustomOptions[index];
       if (selectedOption) {
-        const originalItem = items.find(
-          (item) => item.id === selectedOption.value,
-        );
+        const originalItem = items.find((item) => item.id === selectedOption.value);
         if (originalItem) {
           if (originalItem.href) {
-            router.push(originalItem.href);
+            navigate(originalItem.href);
             handleClose();
           } else if (originalItem.perform) {
             originalItem.perform();
@@ -246,7 +209,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
         }
       }
     },
-    [nonCustomOptions, items, router, handleClose],
+    [nonCustomOptions, items, navigate, handleClose],
   );
 
   // Handle escape key
@@ -356,11 +319,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
             >
               {groupedItems.map((option, index) => {
                 if (option.isCustom) {
-                  return (
-                    <React.Fragment key={option.value}>
-                      {option.label}
-                    </React.Fragment>
-                  );
+                  return <React.Fragment key={option.value}>{option.label}</React.Fragment>;
                 }
 
                 return (
@@ -437,14 +396,9 @@ export interface KbarProps {
   [key: string]: any; // Allow any additional props
 }
 
-export const Kbar: React.FC<KbarProps> = ({
-  items,
-  children,
-  inputSize,
-  ...rest
-}) => {
+export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
+  const { usePathname } = useAdapters();
   const pathname = usePathname();
 
   const handleOpen = () => {
@@ -498,12 +452,7 @@ export const Kbar: React.FC<KbarProps> = ({
       </KbarTrigger>
       {isOpen &&
         createPortal(
-          <KbarContent
-            isOpen={isOpen}
-            onClose={handleClose}
-            items={items}
-            inputSize={inputSize}
-          />,
+          <KbarContent isOpen={isOpen} onClose={handleClose} items={items} inputSize={inputSize} />,
           document.body,
         )}
     </>

@@ -1,7 +1,10 @@
-import Link from "next/link";
-import React, { ReactNode, forwardRef } from "react";
-import { Flex } from ".";
+"use client";
+
+import type React from "react";
+import { forwardRef, type ReactNode } from "react";
+import { useAdapters } from "../contexts/AdapterProvider";
 import { sanitizeHref } from "../utils/safe-html";
+import { Flex } from ".";
 
 type ElementTypeProps = {
   href?: string;
@@ -11,14 +14,17 @@ type ElementTypeProps = {
   className?: string;
   style?: React.CSSProperties;
   type?: string;
-} & (Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "type" | "onClick">
+} & (
+  | Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "type" | "onClick">
   | Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type" | "onClick">
-  | React.HTMLAttributes<HTMLDivElement>);
+  | React.HTMLAttributes<HTMLDivElement>
+);
 
 const isExternalLink = (url: string) => /^https?:\/\//.test(url);
 
 const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
   ({ href, type, onClick, onLinkClick, children, className, style, ...props }, ref) => {
+    const { Link } = useAdapters();
     const safeHref = sanitizeHref(href);
 
     if (safeHref) {
@@ -82,4 +88,5 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
 );
 
 ElementType.displayName = "ElementType";
+
 export { ElementType };

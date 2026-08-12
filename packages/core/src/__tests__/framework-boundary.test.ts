@@ -16,13 +16,13 @@ import { describe, expect, it } from "vitest";
 const SRC_ROOT = join(__dirname, "..");
 
 const NEXT_IMPORT_ALLOWLIST = [
-  "components/ElementType.tsx",
-  "components/Logo.tsx",
-  "components/Media.tsx",
-  "modules/navigation/Kbar.tsx",
-  "modules/navigation/MegaMenu.tsx",
+  // Next-only surfaces that move wholesale to the nextjs package in Phase 4.
   "modules/seo/Meta.tsx",
   "modules/seo/Schema.tsx",
+  // Adapter bindings behind the ./next subpath (never the root barrel) —
+  // becomes @once-ui-system/nextjs in Phase 4. Runtime components consume
+  // the AdapterProvider context instead of importing next/* directly.
+  "next/index.tsx",
   "server/og-utils.ts",
 ];
 

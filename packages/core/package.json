@@ -99,6 +99,11 @@
       "import": "./dist/server/index.js",
       "require": "./dist/server/index.js"
     },
+    "./next": {
+      "types": "./dist/next/index.d.ts",
+      "import": "./dist/next/index.js",
+      "require": "./dist/next/index.js"
+    },
     "./ai/manifest.json": "./ai/manifest.json",
     "./ai/spec.json": "./ai/spec.json",
     "./ai/catalog.json": "./ai/catalog.json",
