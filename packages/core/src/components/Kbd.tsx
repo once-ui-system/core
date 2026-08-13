@@ -1,12 +1,13 @@
-import React, { ReactNode, forwardRef } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { Text } from "./Text";
 
-import { Flex, Text } from ".";
-
-interface KbdProps extends React.ComponentProps<typeof Flex> {
+export interface KbdProps extends FlexComponentProps {
   label?: string;
   children?: ReactNode;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 const Kbd = forwardRef<HTMLDivElement, KbdProps>(
@@ -36,4 +37,3 @@ const Kbd = forwardRef<HTMLDivElement, KbdProps>(
 Kbd.displayName = "Kbd";
 
 export { Kbd };
-export type { KbdProps };
