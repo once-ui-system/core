@@ -7,6 +7,13 @@
   "SpacingProps",
   "TextProps"
  ],
+ "props": {
+  "xl": "TextBreakpointProps",
+  "l": "TextBreakpointProps",
+  "m": "TextBreakpointProps",
+  "s": "TextBreakpointProps",
+  "xs": "TextBreakpointProps"
+ },
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",

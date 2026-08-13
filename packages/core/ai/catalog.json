@@ -200,6 +200,9 @@
   },
   "CountFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "purpose": "CountFx component",
    "tags": [
     "components"
@@ -546,6 +549,9 @@
   },
   "ListItem": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "purpose": "ListItem component",
    "tags": [
     "components"
@@ -777,6 +783,9 @@
   },
   "ShineFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "purpose": "ShineFx component",
    "tags": [
     "components"
@@ -1011,6 +1020,9 @@
   },
   "FadingLettersFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "purpose": "FadingLettersFx component",
    "tags": [
     "components"

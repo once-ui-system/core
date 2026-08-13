@@ -608,6 +608,9 @@
   },
   "CountFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -1356,6 +1359,9 @@
   },
   "ListItem": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -1849,6 +1855,9 @@
   },
   "ShineFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -2108,7 +2117,14 @@
     "DisplayProps",
     "SpacingProps",
     "TextProps"
-   ]
+   ],
+   "props": {
+    "xl": "TextBreakpointProps",
+    "l": "TextBreakpointProps",
+    "m": "TextBreakpointProps",
+    "s": "TextBreakpointProps",
+    "xs": "TextBreakpointProps"
+   }
   },
   "Textarea": {
    "group": "components",
@@ -2319,6 +2335,9 @@
   },
   "FadingLettersFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",

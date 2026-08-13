@@ -1,6 +1,9 @@
 {
  "name": "ListItem",
  "group": "components",
+ "extends": [
+  "Text"
+ ],
  "mixins": [
   "CommonProps",
   "DisplayProps",

@@ -1,14 +1,27 @@
-import { ElementType, ComponentPropsWithoutRef } from "react";
-import classNames from "clsx";
+import type { ComponentPropsWithoutRef, ElementType } from "react";
+import { generateClasses } from "../classes/generator";
+import { cn } from "../classes/utils";
+import type {
+  CommonProps,
+  DisplayProps,
+  SpacingProps,
+  TextBreakpointProps,
+  TextProps,
+} from "../interfaces";
 
-import { TextProps, CommonProps, SpacingProps, DisplayProps } from "../interfaces";
-import { ColorScheme, ColorWeight, TextVariant, SpacingToken } from "../types";
-
-type TypeProps<T extends ElementType> = TextProps<T> &
+export type TextComponentProps<T extends ElementType = "span"> = TextProps<T> &
   CommonProps &
   SpacingProps &
   Omit<DisplayProps, "as"> &
-  ComponentPropsWithoutRef<T>;
+  ComponentPropsWithoutRef<T> & {
+    xl?: TextBreakpointProps;
+    l?: TextBreakpointProps;
+    m?: TextBreakpointProps;
+    s?: TextBreakpointProps;
+    xs?: TextBreakpointProps;
+  };
+
+export type TypeProps<T extends ElementType = "span"> = TextComponentProps<T>;
 
 const Text = <T extends ElementType = "span">({
   as,
@@ -18,29 +31,12 @@ const Text = <T extends ElementType = "span">({
   family,
   onBackground,
   onSolid,
-  align,
   wrap,
-  padding,
-  paddingLeft,
-  paddingRight,
-  paddingTop,
-  paddingBottom,
-  paddingX,
-  paddingY,
-  margin,
-  marginLeft,
-  marginRight,
-  marginTop,
-  marginBottom,
-  marginX,
-  marginY,
-  children,
-  style,
   className,
-  truncate,
-  opacity,
+  style,
+  children,
   ...props
-}: TypeProps<T>) => {
+}: TextComponentProps<T>) => {
   const Component = as || "span";
 
   if (variant && (size || weight)) {
@@ -53,77 +49,22 @@ const Text = <T extends ElementType = "span">({
     );
   }
 
-  const getVariantClasses = (variant: TextVariant) => {
-    const parts = variant.split("-");
-    const size = parts.pop()!;
-    const weight = parts.pop()!;
-    const fontType = parts.join("-");
-    return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
-  };
-
-  const sizeClass = size ? `font-${size}` : "";
-  const weightClass = weight ? `font-${weight}` : "";
-
-  const classes = variant ? getVariantClasses(variant) : [sizeClass, weightClass];
-
-  let colorClass = "";
-  if (onBackground) {
-    const [scheme, weight] = onBackground.split("-") as [ColorScheme, ColorWeight];
-    colorClass = `${scheme}-on-background-${weight}`;
-  } else if (onSolid) {
-    const [scheme, weight] = onSolid.split("-") as [ColorScheme, ColorWeight];
-    colorClass = `${scheme}-on-solid-${weight}`;
-  }
-
-  const generateClassName = (prefix: string, value: SpacingToken | number | undefined) => {
-    return typeof value === "string" ? `${prefix}-${value}` : undefined;
-  };
-
-  const combinedClasses = classNames(
-    ...classes,
-    colorClass,
+  const classes = cn(
+    generateClasses({
+      variant,
+      size,
+      weight,
+      family,
+      onBackground,
+      onSolid,
+      textWrap: wrap,
+      ...props,
+    }),
     className,
-    generateClassName("p", padding),
-    generateClassName("pl", paddingLeft),
-    generateClassName("pr", paddingRight),
-    generateClassName("pt", paddingTop),
-    generateClassName("pb", paddingBottom),
-    generateClassName("px", paddingX),
-    generateClassName("py", paddingY),
-    generateClassName("m", margin),
-    generateClassName("ml", marginLeft),
-    generateClassName("mr", marginRight),
-    generateClassName("mt", marginTop),
-    generateClassName("mb", marginBottom),
-    generateClassName("mx", marginX),
-    generateClassName("my", marginY),
-    opacity && `opacity-${opacity}`,
-    truncate && "truncate",
-    family && `font-family-${family}`,
   );
 
-  const combinedStyle = {
-    textAlign: align,
-    textWrap: wrap,
-    padding: typeof padding === "number" ? `${padding}rem` : undefined,
-    paddingLeft: typeof paddingLeft === "number" ? `${paddingLeft}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
-    paddingRight: typeof paddingRight === "number" ? `${paddingRight}rem` : typeof paddingX === "number" ? `${paddingX}rem` : undefined,
-    paddingTop: typeof paddingTop === "number" ? `${paddingTop}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
-    paddingBottom: typeof paddingBottom === "number" ? `${paddingBottom}rem` : typeof paddingY === "number" ? `${paddingY}rem` : undefined,
-    margin: typeof margin === "number" ? `${margin}rem` : undefined,
-    marginLeft: typeof marginLeft === "number" ? `${marginLeft}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
-    marginRight: typeof marginRight === "number" ? `${marginRight}rem` : typeof marginX === "number" ? `${marginX}rem` : undefined,
-    marginTop: typeof marginTop === "number" ? `${marginTop}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
-    marginBottom: typeof marginBottom === "number" ? `${marginBottom}rem` : typeof marginY === "number" ? `${marginY}rem` : undefined,
-    ...style,
-  };
-
   return (
-    <Component
-      className={combinedClasses}
-      style={combinedStyle}
-      {...props}
-    >
+    <Component className={classes} style={style} {...props}>
       {children}
     </Component>
   );

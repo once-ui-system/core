@@ -1,6 +1,9 @@
 {
  "name": "ShineFx",
  "group": "components",
+ "extends": [
+  "Text"
+ ],
  "mixins": [
   "CommonProps",
   "DisplayProps",
