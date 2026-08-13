@@ -13,9 +13,9 @@
   "StyleProps"
  ],
  "props": {
-  "children": "!ReactNode",
+  "children": "ReactNode",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",

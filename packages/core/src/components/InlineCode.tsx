@@ -1,14 +1,12 @@
-"use client";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import { Flex, type FlexComponentProps } from "./Flex";
 
-import React, { forwardRef, ReactNode } from "react";
-import styles from "./InlineCode.module.scss";
-import { Flex } from ".";
-import classNames from "clsx";
-
-interface InlineCodeProps extends React.ComponentProps<typeof Flex> {
-  children: ReactNode;
+export interface InlineCodeProps extends FlexComponentProps {
+  children?: ReactNode;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 const InlineCode = forwardRef<HTMLDivElement, InlineCodeProps>(
@@ -26,7 +24,7 @@ const InlineCode = forwardRef<HTMLDivElement, InlineCodeProps>(
         textType="code"
         background="neutral-alpha-weak"
         border="neutral-alpha-medium"
-        className={classNames(styles.inlineCode, className)}
+        className={cn("text-[80%] leading-[125%] align-middle", className)}
         style={style}
         {...flex}
       >
