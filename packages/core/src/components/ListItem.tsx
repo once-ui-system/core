@@ -1,27 +1,24 @@
-"use client";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import { Text, type TextComponentProps } from "./Text";
 
-import React, { forwardRef } from "react";
-import classNames from "clsx";
-import styles from "./List.module.scss";
-import { Text } from ".";
-
-interface ListItemProps extends React.ComponentProps<typeof Text> {
-  children?: React.ReactNode;
+export interface ListItemProps extends TextComponentProps<"li"> {
+  children?: ReactNode;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 const ListItem = forwardRef<HTMLLIElement, ListItemProps>(
   ({ className, children, style, ...props }, ref) => {
-    const listItemClass = classNames(styles.listItem, className);
-
     return (
       <Text
+        ref={ref}
         as="li"
         paddingY="0"
         paddingRight="0"
         paddingLeft="8"
-        className={listItemClass}
+        className={cn("marker:text-neutral-on-background-weak", className)}
         style={style}
         {...props}
       >
@@ -32,4 +29,5 @@ const ListItem = forwardRef<HTMLLIElement, ListItemProps>(
 );
 
 ListItem.displayName = "ListItem";
+
 export { ListItem };

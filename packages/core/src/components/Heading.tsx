@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, ElementType } from "react";
+import type { ComponentPropsWithRef, ElementType } from "react";
 import { generateClasses } from "../classes/generator";
 import { cn } from "../classes/utils";
 import type {
@@ -13,7 +13,7 @@ export type HeadingProps<T extends ElementType = "h1"> = TextProps<T> &
   CommonProps &
   SpacingProps &
   Omit<DisplayProps, "as"> &
-  ComponentPropsWithoutRef<T> & {
+  ComponentPropsWithRef<T> & {
     xl?: TextBreakpointProps;
     l?: TextBreakpointProps;
     m?: TextBreakpointProps;
@@ -29,35 +29,13 @@ const Heading = <T extends ElementType = "h1">({
   family,
   onBackground,
   onSolid,
-  align,
   wrap = "balance",
-  truncate,
-  opacity,
-  padding,
-  paddingLeft,
-  paddingRight,
-  paddingTop,
-  paddingBottom,
-  paddingX,
-  paddingY,
-  margin,
-  marginLeft,
-  marginRight,
-  marginTop,
-  marginBottom,
-  marginX,
-  marginY,
-  xl,
-  l,
-  m,
-  s,
-  xs,
   className,
   style,
   children,
   ...props
 }: HeadingProps<T>) => {
-  const Component = as || "h1";
+  const Component = (as || "h1") as ElementType;
   if (variant && (size || weight)) {
     console.warn("When 'variant' is set, 'size' and 'weight' are ignored.");
   }
@@ -76,35 +54,14 @@ const Heading = <T extends ElementType = "h1">({
       family,
       onBackground: !onBackground && !onSolid ? "neutral-strong" : onBackground,
       onSolid,
-      align,
       textWrap: wrap,
-      truncate,
-      opacity,
-      padding,
-      paddingLeft,
-      paddingRight,
-      paddingTop,
-      paddingBottom,
-      paddingX,
-      paddingY,
-      margin,
-      marginLeft,
-      marginRight,
-      marginTop,
-      marginBottom,
-      marginX,
-      marginY,
-      xl,
-      l,
-      m,
-      s,
-      xs,
+      ...props,
     }),
     className,
   );
 
   return (
-    <Component className={classes} style={style} {...(props as ComponentPropsWithoutRef<T>)}>
+    <Component className={classes} style={style} {...props}>
       {children}
     </Component>
   );

@@ -608,15 +608,6 @@
   },
   "CountFx": {
    "group": "components",
-   "extends": [
-    "Text"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "SpacingProps",
-    "TextProps"
-   ],
    "props": {
     "value": "!number",
     "speed": "number = 1000",
@@ -1091,21 +1082,7 @@
    }
   },
   "Heading": {
-   "group": "components",
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "SpacingProps",
-    "TextProps"
-   ],
-   "props": {
-    "wrap": "CSSProperties[\"textWrap\"] = balance",
-    "xl": "TextBreakpointProps",
-    "l": "TextBreakpointProps",
-    "m": "TextBreakpointProps",
-    "s": "TextBreakpointProps",
-    "xs": "TextBreakpointProps"
-   }
+   "group": "components"
   },
   "HoloFx": {
    "group": "components",
@@ -1352,9 +1329,9 @@
    ],
    "props": {
     "as": "\"ul\" | \"ol\" = ul",
-    "children": "React.ReactNode",
+    "children": "ReactNode",
     "className": "string",
-    "style": "React.CSSProperties"
+    "style": "CSSProperties"
    }
   },
   "ListItem": {
@@ -1369,9 +1346,9 @@
     "TextProps"
    ],
    "props": {
-    "children": "React.ReactNode",
+    "children": "ReactNode",
     "className": "string",
-    "style": "React.CSSProperties"
+    "style": "CSSProperties"
    }
   },
   "Logo": {
@@ -1855,15 +1832,6 @@
   },
   "ShineFx": {
    "group": "components",
-   "extends": [
-    "Text"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "SpacingProps",
-    "TextProps"
-   ],
    "props": {
     "speed": "number = 1",
     "disabled": "boolean = false",
@@ -2111,20 +2079,7 @@
    }
   },
   "Text": {
-   "group": "components",
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "SpacingProps",
-    "TextProps"
-   ],
-   "props": {
-    "xl": "TextBreakpointProps",
-    "l": "TextBreakpointProps",
-    "m": "TextBreakpointProps",
-    "s": "TextBreakpointProps",
-    "xs": "TextBreakpointProps"
-   }
+   "group": "components"
   },
   "Textarea": {
    "group": "components",
@@ -2335,15 +2290,6 @@
   },
   "FadingLettersFx": {
    "group": "components",
-   "extends": [
-    "Text"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "SpacingProps",
-    "TextProps"
-   ],
    "props": {
     "text": "!string",
     "animationState": "!AnimationState",

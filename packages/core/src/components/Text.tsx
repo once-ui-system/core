@@ -1,4 +1,4 @@
-import type { ComponentPropsWithoutRef, ElementType } from "react";
+import type { ComponentPropsWithRef, ElementType } from "react";
 import { generateClasses } from "../classes/generator";
 import { cn } from "../classes/utils";
 import type {
@@ -13,7 +13,7 @@ export type TextComponentProps<T extends ElementType = "span"> = TextProps<T> &
   CommonProps &
   SpacingProps &
   Omit<DisplayProps, "as"> &
-  ComponentPropsWithoutRef<T> & {
+  ComponentPropsWithRef<T> & {
     xl?: TextBreakpointProps;
     l?: TextBreakpointProps;
     m?: TextBreakpointProps;
@@ -37,7 +37,7 @@ const Text = <T extends ElementType = "span">({
   children,
   ...props
 }: TextComponentProps<T>) => {
-  const Component = as || "span";
+  const Component = (as || "span") as ElementType;
 
   if (variant && (size || weight)) {
     console.warn("When 'variant' is set, 'size' and 'weight' are ignored.");

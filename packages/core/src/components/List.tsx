@@ -1,39 +1,20 @@
-"use client";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { Column } from "./Column";
+import type { FlexComponentProps } from "./Flex";
 
-import React, { forwardRef } from "react";
-import { Column } from ".";
-
-interface ListProps extends React.ComponentProps<typeof Column> {
+export interface ListProps extends Omit<FlexComponentProps, "as"> {
   as?: "ul" | "ol";
-  children?: React.ReactNode;
+  children?: ReactNode;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 const List = forwardRef<HTMLDivElement, ListProps>(
   ({ as = "ul", className, children, style, ...props }, ref) => {
-    if (as === "ol") {
-      return (
-        <Column
-          as="ol"
-          fillWidth
-          margin="0"
-          paddingY="0"
-          paddingRight="0"
-          paddingLeft="20"
-          ref={ref}
-          className={className}
-          style={style}
-          {...props}
-        >
-          {children}
-        </Column>
-      );
-    }
-
     return (
       <Column
-        as="ul"
+        as={as}
         fillWidth
         margin="0"
         paddingY="0"
@@ -51,4 +32,5 @@ const List = forwardRef<HTMLDivElement, ListProps>(
 );
 
 List.displayName = "List";
+
 export { List };

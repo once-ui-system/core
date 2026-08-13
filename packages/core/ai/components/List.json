@@ -14,9 +14,9 @@
  ],
  "props": {
   "as": "\"ul\" | \"ol\" = ul",
-  "children": "React.ReactNode",
+  "children": "ReactNode",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",

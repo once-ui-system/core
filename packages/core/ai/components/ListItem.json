@@ -11,9 +11,9 @@
   "TextProps"
  ],
  "props": {
-  "children": "React.ReactNode",
+  "children": "ReactNode",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",

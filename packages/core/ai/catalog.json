@@ -200,9 +200,6 @@
   },
   "CountFx": {
    "group": "components",
-   "extends": [
-    "Text"
-   ],
    "purpose": "CountFx component",
    "tags": [
     "components"
@@ -783,9 +780,6 @@
   },
   "ShineFx": {
    "group": "components",
-   "extends": [
-    "Text"
-   ],
    "purpose": "ShineFx component",
    "tags": [
     "components"
@@ -1020,9 +1014,6 @@
   },
   "FadingLettersFx": {
    "group": "components",
-   "extends": [
-    "Text"
-   ],
    "purpose": "FadingLettersFx component",
    "tags": [
     "components"
