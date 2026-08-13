@@ -14,6 +14,7 @@ describe("Heading", () => {
       "neutral-on-background-strong",
       "text-balance",
     );
+    expect(container.firstElementChild).not.toHaveClass("flex");
   });
 
   it("renders polymorphic as element correctly", () => {

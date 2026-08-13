@@ -655,7 +655,6 @@ export function generateClasses(...args: unknown[]): string {
     };
   }
 
-  const isGrid = p.display === "grid" || p.columns !== undefined || p.rows !== undefined;
   const columns = p.columns ?? p.gridColumns;
   const rows = p.rows ?? p.gridRows;
   const direction = p.direction ?? p.flexDirection;
@@ -670,6 +669,29 @@ export function generateClasses(...args: unknown[]): string {
   const xs = p.xs ?? p.flexXs ?? p.gridXs;
   const align = p.align ?? p.textAlign;
   const truncate = p.truncate ?? p.textTruncate;
+
+  const isGrid = p.display === "grid" || columns !== undefined || rows !== undefined;
+  const isFlex =
+    !isGrid &&
+    (p.display === "flex" ||
+      (p.display === undefined &&
+        (direction !== undefined ||
+          horizontal !== undefined ||
+          vertical !== undefined ||
+          center !== undefined ||
+          (typeof wrap === "boolean" && wrap) ||
+          p.flex !== undefined ||
+          p.gap !== undefined ||
+          a.length > 1)));
+
+  let displayClass: string | undefined;
+  if (isGrid) {
+    displayClass = p.inline ? "inline-grid" : "grid";
+  } else if (isFlex) {
+    displayClass = p.inline ? "inline-flex" : "flex";
+  } else if (p.display) {
+    displayClass = p.inline ? `inline-${p.display}` : p.display;
+  }
 
   const [hAlign, vAlign] = getFlexAlignment(direction, horizontal, vertical);
 
@@ -694,7 +716,7 @@ export function generateClasses(...args: unknown[]): string {
 
   return cn(
     // Display & Position
-    isGrid ? (p.inline ? "inline-grid" : "grid") : p.inline ? "inline-flex" : "flex",
+    displayClass,
     p.position && `${p.position}`,
     p.hide && "hidden",
 
