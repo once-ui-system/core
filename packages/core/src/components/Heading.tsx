@@ -8,7 +8,6 @@ import type {
   TextBreakpointProps,
   TextProps,
 } from "../interfaces";
-import type { ColorScheme, ColorWeight, TextVariant } from "../types";
 
 export type HeadingProps<T extends ElementType = "h1"> = TextProps<T> &
   CommonProps &
@@ -30,36 +29,13 @@ const Heading = <T extends ElementType = "h1">({
   family,
   onBackground,
   onSolid,
-  align,
   wrap = "balance",
-  padding,
-  paddingLeft,
-  paddingRight,
-  paddingTop,
-  paddingBottom,
-  paddingX,
-  paddingY,
-  margin,
-  marginLeft,
-  marginRight,
-  marginTop,
-  marginBottom,
-  marginX,
-  marginY,
-  children,
-  style,
-  truncate,
-  opacity,
   className,
-  xl,
-  l,
-  m,
-  s,
-  xs,
+  style,
+  children,
   ...props
 }: HeadingProps<T>) => {
   const Component = as || "h1";
-
   if (variant && (size || weight)) {
     console.warn("When 'variant' is set, 'size' and 'weight' are ignored.");
   }
@@ -70,64 +46,22 @@ const Heading = <T extends ElementType = "h1">({
     );
   }
 
-  const getVariantClasses = (variant: TextVariant) => {
-    const parts = variant.split("-");
-    const size = parts.pop() ?? "";
-    const weight = parts.pop() ?? "";
-    const fontType = parts.join("-");
-    return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
-  };
-
-  const sizeClass = size ? `font-${size}` : "font-m";
-  const weightClass = weight ? `font-${weight}` : "font-strong";
-
-  const classes = variant ? getVariantClasses(variant) : [sizeClass, weightClass];
-
-  let colorClass = "neutral-on-background-strong";
-  if (onBackground) {
-    const [scheme, weight] = onBackground.split("-") as [ColorScheme, ColorWeight];
-    colorClass = `${scheme}-on-background-${weight}`;
-  } else if (onSolid) {
-    const [scheme, weight] = onSolid.split("-") as [ColorScheme, ColorWeight];
-    colorClass = `${scheme}-on-solid-${weight}`;
-  }
-
-  const generatedClasses = generateClasses({
-    padding,
-    paddingLeft,
-    paddingRight,
-    paddingTop,
-    paddingBottom,
-    paddingX,
-    paddingY,
-    margin,
-    marginLeft,
-    marginRight,
-    marginTop,
-    marginBottom,
-    marginX,
-    marginY,
-    align,
-    textWrap: wrap,
-    truncate,
-    opacity,
-    xl,
-    l,
-    m,
-    s,
-    xs,
-  });
-
-  const combinedClasses = cn(
-    ...classes,
-    colorClass,
-    family && `font-family-${family}`,
-    generatedClasses,
+  const classes = cn(
+    generateClasses({
+      variant,
+      size: !variant && !size ? "m" : size,
+      weight: !variant && !weight ? "strong" : weight,
+      family,
+      onBackground: !onBackground && !onSolid ? "neutral-strong" : onBackground,
+      onSolid,
+      textWrap: wrap,
+      ...props,
+    }),
     className,
   );
 
   return (
-    <Component className={combinedClasses} style={style} {...props}>
+    <Component className={classes} style={style} {...props}>
       {children}
     </Component>
   );
