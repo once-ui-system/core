@@ -13,13 +13,13 @@
   "StyleProps"
  ],
  "props": {
-  "children": "!React.ReactNode",
-  "preline": "React.ReactNode",
-  "subline": "React.ReactNode",
+  "children": "!ReactNode",
+  "preline": "ReactNode",
+  "subline": "ReactNode",
   "separator": "\"top\" | \"bottom\" | \"both\" | \"none\" = both",
-  "author": "{ name?: React.ReactNode, avatar?: string, }",
-  "link": "{ href: string, label: string }",
-  "style": "React.CSSProperties",
+  "author": "BlockQuoteAuthor",
+  "link": "BlockQuoteLink",
+  "style": "CSSProperties",
   "className": "string",
   "align": "\"center\" | \"left\" | \"right\" = center"
  },

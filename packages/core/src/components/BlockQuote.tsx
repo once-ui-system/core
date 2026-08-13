@@ -1,30 +1,60 @@
-"use client";
-
+import type { CSSProperties, ReactNode } from "react";
 import { forwardRef } from "react";
-import { Avatar, Column, Line, Row, SmartLink, Text } from ".";
+import { Avatar } from "./Avatar";
+import { Column } from "./Column";
+import type { FlexComponentProps } from "./Flex";
+import { Line } from "./Line";
+import { Row } from "./Row";
+import { SmartLink } from "./SmartLink";
+import { Text } from "./Text";
 
-interface BlockQuoteProps extends React.ComponentProps<typeof Column> {
-  children: React.ReactNode;
-  preline?: React.ReactNode;
-  subline?: React.ReactNode;
+export interface BlockQuoteAuthor {
+  name?: ReactNode;
+  avatar?: string;
+}
+
+export interface BlockQuoteLink {
+  href: string;
+  label?: string;
+}
+
+export interface BlockQuoteProps extends Omit<FlexComponentProps, "align"> {
+  children: ReactNode;
+  preline?: ReactNode;
+  subline?: ReactNode;
   separator?: "top" | "bottom" | "both" | "none";
-  author?: {
-    name?: React.ReactNode,
-    avatar?: string,
-  };
-  link?: { href: string, label: string };
-  style?: React.CSSProperties;
+  author?: BlockQuoteAuthor;
+  link?: BlockQuoteLink;
+  style?: CSSProperties;
   className?: string;
   align?: "center" | "left" | "right";
 }
 
 const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
-  ({ children, className, style, preline, subline, author, link, align = "center", separator = "both", ...flex }, ref) => {
+  (
+    {
+      children,
+      className,
+      style,
+      preline,
+      subline,
+      author,
+      link,
+      align = "center",
+      separator = "both",
+      ...flex
+    },
+    ref,
+  ) => {
+    const showTopSeparator = separator === "top" || separator === "both";
+    const showBottomSeparator = separator === "bottom" || separator === "both";
+    const horizontalAlign = align === "left" ? "start" : align === "right" ? "end" : "center";
+
     return (
       <Column fillWidth horizontal="center" gap="24">
-        {(separator === "top" || separator === "both") && (
+        {showTopSeparator && (
           <Row fillWidth horizontal="center">
-            <Line width="40"/>
+            <Line width="40" />
           </Row>
         )}
         <Column
@@ -33,7 +63,7 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
           fillWidth
           marginY="32"
           marginX="0"
-          horizontal={align === "left" ? "start" : align === "right" ? "end" : "center"}
+          horizontal={horizontalAlign}
           align={align}
           style={style}
           className={className}
@@ -54,29 +84,24 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
           )}
           {(author || link) && (
             <Row gap="12" center marginTop="32">
-              —
-              {author?.avatar && (
-                <Avatar size="s" src={author?.avatar} />
-              )}
-              {author?.name && (
-                <Text variant="label-default-s">{author?.name}</Text>
-              )}
+              —{author?.avatar && <Avatar size="s" src={author.avatar} />}
+              {author?.name && <Text variant="label-default-s">{author.name}</Text>}
               {link?.href && (
                 <Row as="cite">
                   <SmartLink
                     unstyled
-                    href={link?.href && (/^https?:\/\//.test(link.href) ? link.href : `https://${link.href}`)}
+                    href={/^https?:\/\//.test(link.href) ? link.href : `https://${link.href}`}
                   >
-                    <Text variant="label-default-s">{link?.label || link?.href}</Text>
+                    <Text variant="label-default-s">{link.label || link.href}</Text>
                   </SmartLink>
                 </Row>
               )}
             </Row>
           )}
         </Column>
-        {(separator === "bottom" || separator === "both") && (
+        {showBottomSeparator && (
           <Row fillWidth horizontal="center">
-            <Line width="40"/>
+            <Line width="40" />
           </Row>
         )}
       </Column>
@@ -85,4 +110,5 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
 );
 
 BlockQuote.displayName = "BlockQuote";
+
 export { BlockQuote };
