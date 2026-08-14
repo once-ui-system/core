@@ -1,5 +1,6 @@
 "use client";
 
+import { cva } from "class-variance-authority";
 import type { CSSProperties, ReactNode } from "react";
 import { forwardRef } from "react";
 import { generateClasses } from "../classes/generator";
@@ -11,11 +12,25 @@ import { ElementType } from "./ElementType";
 import { Flex } from "./Flex";
 import { HoverCard } from "./HoverCard";
 import { Icon } from "./Icon";
-import iconStyles from "./IconButton.module.scss";
 import { Spinner } from "./Spinner";
 import { Tooltip } from "./Tooltip";
 
-interface IconButtonCommonProps {
+export const iconButtonVariants = cva("p-0 inline-flex items-center justify-center", {
+  variants: {
+    size: {
+      xs: "size-20 min-w-20 min-h-20",
+      s: "size-24 min-w-24 min-h-24",
+      m: "size-32 min-w-32 min-h-32",
+      l: "size-40 min-w-40 min-h-40",
+      xl: "size-48 min-w-48 min-h-48",
+    },
+  },
+  defaultVariants: {
+    size: "m",
+  },
+});
+
+export interface IconButtonCommonProps {
   icon?: IconName;
   id?: string;
   size?: TShirtSizes;
@@ -53,7 +68,9 @@ interface IconButtonCommonProps {
 }
 
 export type IconButtonProps = IconButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
-type AnchorProps = IconButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+export type IconButtonAnchorProps = IconButtonCommonProps &
+  React.AnchorHTMLAttributes<HTMLAnchorElement>;
+type AnchorProps = IconButtonAnchorProps;
 
 const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
   (
@@ -78,7 +95,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
     },
     ref,
   ) => {
-    const radiusSize: RadiusSize = size === "s" || size === "m" ? "m" : "l";
+    const radiusSize: RadiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
 
     const resolvedRadius = {
       radius: !radius ? radiusSize : radius === "none" ? ("none" as const) : undefined,
@@ -105,7 +122,9 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
           buttonVariants({
             variant,
           }),
-          iconStyles[size],
+          iconButtonVariants({
+            size,
+          }),
           generateClasses({
             cursor: disabled ? "not-allowed" : "interactive",
             ...resolvedRadius,
