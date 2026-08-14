@@ -2181,9 +2181,10 @@
     "prefixIcon": "IconName",
     "suffixIcon": "IconName",
     "className": "string",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "children": "ReactNode",
-    "href": "string"
+    "href": "string",
+    "id": "string"
    }
   },
   "Tooltip": {
