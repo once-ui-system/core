@@ -1,13 +1,18 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import type { IconName } from "../icons";
+import type { ColorScheme, ColorWeight, TShirtSizes } from "../types";
+import { buttonVariants } from "./Button";
 import { ElementType } from "./ElementType";
-import { Flex, Icon, Tooltip, HoverCard, Spinner } from ".";
-import buttonStyles from "./Button.module.scss";
+import { Flex } from "./Flex";
+import { HoverCard } from "./HoverCard";
+import { Icon } from "./Icon";
 import iconStyles from "./IconButton.module.scss";
-import classNames from "clsx";
-import { IconName } from "../icons";
-import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
+import { Spinner } from "./Spinner";
+import { Tooltip } from "./Tooltip";
 
 interface IconButtonCommonProps {
   icon?: IconName;
@@ -26,11 +31,21 @@ interface IconButtonCommonProps {
   rounded?: boolean;
   tooltip?: ReactNode;
   tooltipPosition?: "top" | "bottom" | "left" | "right";
-  variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "quaternary"
+    | "subtle"
+    | "danger"
+    | "success"
+    | "warning"
+    | "ghost"
+    | "link";
   loading?: boolean;
   disabled?: boolean;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   href?: string;
   children?: ReactNode;
   color?: `${ColorScheme}-${ColorWeight}`;
@@ -38,6 +53,32 @@ interface IconButtonCommonProps {
 
 export type IconButtonProps = IconButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
 type AnchorProps = IconButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+
+const getRadiusClass = (radius?: IconButtonCommonProps["radius"], size: TShirtSizes = "m") => {
+  if (radius === "none") return "rounded-none";
+  const radiusSize = size === "s" || size === "m" ? "m" : "l";
+  if (!radius) return `rounded-${radiusSize}`;
+  switch (radius) {
+    case "top":
+      return `rounded-t-${radiusSize}`;
+    case "right":
+      return `rounded-r-${radiusSize}`;
+    case "bottom":
+      return `rounded-b-${radiusSize}`;
+    case "left":
+      return `rounded-l-${radiusSize}`;
+    case "top-left":
+      return `rounded-tl-${radiusSize}`;
+    case "top-right":
+      return `rounded-tr-${radiusSize}`;
+    case "bottom-right":
+      return `rounded-br-${radiusSize}`;
+    case "bottom-left":
+      return `rounded-bl-${radiusSize}`;
+    default:
+      return `rounded-${radiusSize}`;
+  }
+};
 
 const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
   (
@@ -57,32 +98,27 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
       color,
       className,
       style,
+      type,
       ...props
     },
     ref,
   ) => {
-    const radiusSize = size === "s" || size === "m" ? "m" : "l";
-
     const button = (
       <ElementType
         id={id}
         href={href}
         ref={ref}
+        type={type || (href ? undefined : "button")}
         disabled={disabled}
         data-disabled={disabled ? true : undefined}
         data-border={rounded ? "rounded" : undefined}
-        className={classNames(
-          buttonStyles.button,
-          buttonStyles[variant],
+        className={cn(
+          buttonVariants({
+            variant,
+            disabled,
+          }),
           iconStyles[size],
-          radius === "none"
-            ? "radius-none"
-            : radius
-              ? `radius-${radiusSize}-${radius}`
-              : `radius-${radiusSize}`,
-          "text-decoration-none",
-          "button",
-          disabled ? "cursor-not-allowed" : "cursor-interactive",
+          getRadiusClass(radius, size),
           className,
         )}
         style={style}
@@ -122,4 +158,5 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
 );
 
 IconButton.displayName = "IconButton";
+
 export { IconButton };

@@ -17,7 +17,7 @@
   "children": "ReactNode",
   "href": "string",
   "className": "string",
-  "style": "React.CSSProperties",
+  "style": "CSSProperties",
   "id": "string",
   "arrowIcon": "boolean = false",
   "color": "`${ColorScheme}-${ColorWeight}`"

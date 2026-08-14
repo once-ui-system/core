@@ -13,7 +13,7 @@
   "loading": "boolean = false",
   "disabled": "boolean = false",
   "className": "string",
-  "style": "React.CSSProperties",
+  "style": "CSSProperties",
   "href": "string",
   "children": "ReactNode",
   "color": "`${ColorScheme}-${ColorWeight}`"

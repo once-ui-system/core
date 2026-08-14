@@ -437,7 +437,7 @@
     "children": "ReactNode",
     "href": "string",
     "className": "string",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "id": "string",
     "arrowIcon": "boolean = false",
     "color": "`${ColorScheme}-${ColorWeight}`"
@@ -1182,7 +1182,7 @@
     "loading": "boolean = false",
     "disabled": "boolean = false",
     "className": "string",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "href": "string",
     "children": "ReactNode",
     "color": "`${ColorScheme}-${ColorWeight}`"
