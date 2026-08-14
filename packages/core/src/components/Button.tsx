@@ -3,9 +3,10 @@
 import { cva } from "class-variance-authority";
 import type { CSSProperties, ReactNode } from "react";
 import { forwardRef } from "react";
+import { generateClasses } from "../classes/generator";
 import { cn } from "../classes/utils";
 import type { IconName } from "../icons";
-import type { ColorScheme, ColorWeight, TShirtSizes } from "../types";
+import type { ColorScheme, ColorWeight, RadiusSize, TShirtSizes } from "../types";
 import { Arrow } from "./Arrow";
 import { ElementType } from "./ElementType";
 import { Flex } from "./Flex";
@@ -44,56 +45,13 @@ export const buttonVariants = cva(
         l: "py-12 px-20 min-h-48 h-48 gap-8",
         xl: "py-16 px-24 min-h-56 h-56 gap-12",
       },
-      fillWidth: {
-        true: "w-full",
-        false: "w-fit",
-      },
-      horizontal: {
-        start: "justify-start",
-        center: "justify-center",
-        end: "justify-end",
-        between: "justify-between",
-      },
-      disabled: {
-        true: "cursor-not-allowed",
-        false: "cursor-interactive",
-      },
     },
     defaultVariants: {
       variant: "primary",
       size: "m",
-      fillWidth: false,
-      horizontal: "center",
-      disabled: false,
     },
   },
 );
-
-const getRadiusClass = (radius?: ButtonCommonProps["radius"], size: TShirtSizes = "m") => {
-  if (radius === "none") return "rounded-none";
-  const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
-  if (!radius) return `rounded-${radiusSize}`;
-  switch (radius) {
-    case "top":
-      return `rounded-t-${radiusSize}`;
-    case "right":
-      return `rounded-r-${radiusSize}`;
-    case "bottom":
-      return `rounded-b-${radiusSize}`;
-    case "left":
-      return `rounded-l-${radiusSize}`;
-    case "top-left":
-      return `rounded-tl-${radiusSize}`;
-    case "top-right":
-      return `rounded-tr-${radiusSize}`;
-    case "bottom-right":
-      return `rounded-br-${radiusSize}`;
-    case "bottom-left":
-      return `rounded-bl-${radiusSize}`;
-    default:
-      return `rounded-${radiusSize}`;
-  }
-};
 
 export interface ButtonCommonProps {
   variant?:
@@ -167,6 +125,19 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
     ref,
   ) => {
     const iconSize = size === "l" || size === "xl" ? "s" : size === "m" ? "s" : "xs";
+    const radiusSize: RadiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
+
+    const resolvedRadius = {
+      radius: !radius ? radiusSize : radius === "none" ? ("none" as const) : undefined,
+      topRadius: radius === "top" ? radiusSize : undefined,
+      rightRadius: radius === "right" ? radiusSize : undefined,
+      bottomRadius: radius === "bottom" ? radiusSize : undefined,
+      leftRadius: radius === "left" ? radiusSize : undefined,
+      topLeftRadius: radius === "top-left" ? radiusSize : undefined,
+      topRightRadius: radius === "top-right" ? radiusSize : undefined,
+      bottomRightRadius: radius === "bottom-right" ? radiusSize : undefined,
+      bottomLeftRadius: radius === "bottom-left" ? radiusSize : undefined,
+    };
 
     return (
       <ElementType
@@ -181,11 +152,15 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
           buttonVariants({
             variant,
             size,
-            fillWidth,
-            horizontal,
-            disabled,
           }),
-          getRadiusClass(radius, size),
+          generateClasses({
+            fillWidth,
+            fitWidth: !fillWidth,
+            horizontal,
+            cursor: disabled ? "not-allowed" : "interactive",
+            ...resolvedRadius,
+            ...props,
+          }),
           className,
         )}
         style={style}

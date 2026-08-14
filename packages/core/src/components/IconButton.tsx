@@ -2,9 +2,10 @@
 
 import type { CSSProperties, ReactNode } from "react";
 import { forwardRef } from "react";
+import { generateClasses } from "../classes/generator";
 import { cn } from "../classes/utils";
 import type { IconName } from "../icons";
-import type { ColorScheme, ColorWeight, TShirtSizes } from "../types";
+import type { ColorScheme, ColorWeight, RadiusSize, TShirtSizes } from "../types";
 import { buttonVariants } from "./Button";
 import { ElementType } from "./ElementType";
 import { Flex } from "./Flex";
@@ -54,32 +55,6 @@ interface IconButtonCommonProps {
 export type IconButtonProps = IconButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
 type AnchorProps = IconButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const getRadiusClass = (radius?: IconButtonCommonProps["radius"], size: TShirtSizes = "m") => {
-  if (radius === "none") return "rounded-none";
-  const radiusSize = size === "s" || size === "m" ? "m" : "l";
-  if (!radius) return `rounded-${radiusSize}`;
-  switch (radius) {
-    case "top":
-      return `rounded-t-${radiusSize}`;
-    case "right":
-      return `rounded-r-${radiusSize}`;
-    case "bottom":
-      return `rounded-b-${radiusSize}`;
-    case "left":
-      return `rounded-l-${radiusSize}`;
-    case "top-left":
-      return `rounded-tl-${radiusSize}`;
-    case "top-right":
-      return `rounded-tr-${radiusSize}`;
-    case "bottom-right":
-      return `rounded-br-${radiusSize}`;
-    case "bottom-left":
-      return `rounded-bl-${radiusSize}`;
-    default:
-      return `rounded-${radiusSize}`;
-  }
-};
-
 const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
   (
     {
@@ -103,6 +78,20 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
     },
     ref,
   ) => {
+    const radiusSize: RadiusSize = size === "s" || size === "m" ? "m" : "l";
+
+    const resolvedRadius = {
+      radius: !radius ? radiusSize : radius === "none" ? ("none" as const) : undefined,
+      topRadius: radius === "top" ? radiusSize : undefined,
+      rightRadius: radius === "right" ? radiusSize : undefined,
+      bottomRadius: radius === "bottom" ? radiusSize : undefined,
+      leftRadius: radius === "left" ? radiusSize : undefined,
+      topLeftRadius: radius === "top-left" ? radiusSize : undefined,
+      topRightRadius: radius === "top-right" ? radiusSize : undefined,
+      bottomRightRadius: radius === "bottom-right" ? radiusSize : undefined,
+      bottomLeftRadius: radius === "bottom-left" ? radiusSize : undefined,
+    };
+
     const button = (
       <ElementType
         id={id}
@@ -115,10 +104,13 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
         className={cn(
           buttonVariants({
             variant,
-            disabled,
           }),
           iconStyles[size],
-          getRadiusClass(radius, size),
+          generateClasses({
+            cursor: disabled ? "not-allowed" : "interactive",
+            ...resolvedRadius,
+            ...props,
+          }),
           className,
         )}
         style={style}
