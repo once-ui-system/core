@@ -1,20 +1,55 @@
-"use client";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import type { IconName } from "../icons";
+import type { ColorScheme, CondensedTShirtSizes } from "../types";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { Icon } from "./Icon";
+import { Text } from "./Text";
 
-import React, { forwardRef, ReactNode } from "react";
-import classNames from "clsx";
+export const tagVariants = cva(
+  "inline-flex items-center select-none whitespace-nowrap border border-solid rounded-s gap-4",
+  {
+    variants: {
+      variant: {
+        neutral:
+          "bg-neutral-background-weak border-neutral-alpha-medium text-neutral-on-background-medium",
+        brand: "bg-brand-background-weak border-brand-alpha-medium text-brand-on-background-medium",
+        accent:
+          "bg-accent-background-weak border-accent-alpha-medium text-accent-on-background-medium",
+        info: "bg-info-background-weak border-info-alpha-medium text-info-on-background-medium",
+        danger:
+          "bg-danger-background-weak border-danger-alpha-medium text-danger-on-background-medium",
+        warning:
+          "bg-warning-background-weak border-warning-alpha-medium text-warning-on-background-medium",
+        success:
+          "bg-success-background-weak border-success-alpha-medium text-success-on-background-medium",
+        gradient:
+          "bg-[linear-gradient(45deg,var(--brand-background-strong),var(--accent-background-strong))] text-brand-on-background-medium border-brand-border-medium [background-clip:padding-box]",
+      },
+      size: {
+        s: "px-8 py-1",
+        m: "px-8 py-2",
+        l: "px-12 py-4",
+      },
+    },
+    defaultVariants: {
+      variant: "neutral",
+      size: "m",
+    },
+  },
+);
 
-import { Flex, Text, Icon, Row } from ".";
-import styles from "./Tag.module.scss";
-import { IconName } from "../icons";
-import { ColorScheme, CondensedTShirtSizes } from "../types";
-
-interface TagProps extends React.ComponentProps<typeof Flex> {
+export interface TagProps extends FlexComponentProps {
   variant?: ColorScheme | "gradient";
   size?: CondensedTShirtSizes;
   label?: string;
   prefixIcon?: IconName;
   suffixIcon?: IconName;
   children?: ReactNode;
+  className?: string;
+  style?: CSSProperties;
 }
 
 const Tag = forwardRef<HTMLDivElement, TagProps>(
@@ -26,36 +61,29 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
       prefixIcon,
       suffixIcon,
       className,
+      style,
       children,
       ...rest
     },
     ref,
   ) => {
-    const paddingX = size === "s" ? "8" : size === "m" ? "8" : "12";
-    const paddingY = size === "s" ? "1" : size === "m" ? "2" : "4";
-
     return (
-      <Row
-        fitWidth
-        background={variant !== "gradient" ? `${variant}-weak` as const : undefined}
-        border={variant !== "gradient" ? `${variant}-alpha-medium` as const : "brand-medium"}
-        onBackground={variant !== "gradient" ? `${variant}-medium` as const : undefined}
-        paddingX={paddingX} paddingY={paddingY}
-        vertical="center"
-        radius="s"
-        gap="4"
+      <Flex
         ref={ref}
-        className={classNames(styles.tag, variant === "gradient" ? styles.gradient : undefined, className)}
+        fitWidth
+        vertical="center"
+        className={cn(tagVariants({ variant, size }), className)}
+        style={style}
         {...rest}
       >
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}
-        <Row style={{ userSelect: "none" }} vertical="center">
-          <Text variant="label-default-s">
-            {label || children}
-          </Text>
-        </Row>
+        {(label || children) && (
+          <Flex vertical="center">
+            <Text variant="label-default-s">{label || children}</Text>
+          </Flex>
+        )}
         {suffixIcon && <Icon name={suffixIcon} size="xs" />}
-      </Row>
+      </Flex>
     );
   },
 );
@@ -63,4 +91,3 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
 Tag.displayName = "Tag";
 
 export { Tag };
-export type { TagProps };

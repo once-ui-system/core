@@ -18,7 +18,9 @@
   "label": "string = ",
   "prefixIcon": "IconName",
   "suffixIcon": "IconName",
-  "children": "ReactNode"
+  "children": "ReactNode",
+  "className": "string",
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
