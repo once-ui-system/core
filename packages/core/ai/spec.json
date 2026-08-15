@@ -234,10 +234,11 @@
     "StyleProps"
    ],
    "props": {
-    "trigger": "!string",
+    "trigger": "string",
+    "active": "boolean",
     "scale": "number = 0.8",
     "color": "\"onBackground\" | \"onSolid\" = onBackground",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "className": "string"
    }
   },

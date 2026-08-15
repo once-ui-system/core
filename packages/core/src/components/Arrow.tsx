@@ -1,76 +1,121 @@
 "use client";
 
-import { useEffect, useRef, forwardRef } from "react";
-import classNames from "clsx";
-import styles from "./Arrow.module.scss";
-import { Flex } from ".";
+import { cva } from "class-variance-authority";
+import type { CSSProperties } from "react";
+import { forwardRef, useEffect, useState } from "react";
+import { cn } from "../classes/utils";
+import { Flex, type FlexComponentProps } from "./Flex";
 
-interface ArrowProps extends React.ComponentProps<typeof Flex> {
-  trigger: string;
+export const arrowVariants = cva(
+  "relative flex items-center justify-center transition-all duration-micro-medium h-16",
+  {
+    variants: {
+      active: {
+        true: "w-16 visible",
+        false: "w-0 invisible",
+      },
+    },
+    defaultVariants: {
+      active: false,
+    },
+  },
+);
+
+export const arrowHeadVariants = cva(
+  "absolute right-0 rounded-full transition-all duration-micro-medium origin-[right_center] h-[0.0875rem]",
+  {
+    variants: {
+      color: {
+        onBackground: "bg-brand-on-background-strong",
+        onSolid: "bg-brand-on-solid-strong",
+      },
+      position: {
+        top: "rotate-0",
+        bottom: "rotate-0",
+      },
+      active: {
+        true: "w-8",
+        false: "w-0 rotate-0",
+      },
+    },
+    compoundVariants: [
+      {
+        position: "top",
+        active: true,
+        className: "rotate-45",
+      },
+      {
+        position: "bottom",
+        active: true,
+        className: "-rotate-45",
+      },
+    ],
+    defaultVariants: {
+      color: "onBackground",
+      position: "top",
+      active: false,
+    },
+  },
+);
+
+export interface ArrowProps extends FlexComponentProps {
+  trigger?: string;
+  active?: boolean;
   scale?: number;
   color?: "onBackground" | "onSolid";
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   className?: string;
 }
 
-const Arrow = forwardRef<HTMLDivElement, ArrowProps>(({
-  trigger,
-  scale = 0.8,
-  color = "onBackground",
-  style,
-  className,
-  ...flex
-}, _ref) => {
-  const ref = useRef<HTMLDivElement>(null);
+const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
+  ({ trigger, active, scale = 0.8, color = "onBackground", style, className, ...flex }, ref) => {
+    const [internalActive, setInternalActive] = useState(false);
+    const isActive = active !== undefined ? active : internalActive;
 
-  useEffect(() => {
-    const triggerElement = document.querySelector(trigger);
+    useEffect(() => {
+      if (!trigger) return;
+      const triggerElement = document.querySelector(trigger);
 
-    if (triggerElement && ref.current) {
-      const handleMouseOver = () => {
-        ref.current?.classList.add(styles.active);
-      };
+      if (triggerElement) {
+        const handleMouseOver = () => setInternalActive(true);
+        const handleMouseOut = () => setInternalActive(false);
 
-      const handleMouseOut = () => {
-        ref.current?.classList.remove(styles.active);
-      };
+        triggerElement.addEventListener("mouseenter", handleMouseOver);
+        triggerElement.addEventListener("mouseleave", handleMouseOut);
 
-      triggerElement.addEventListener("mouseenter", handleMouseOver);
-      triggerElement.addEventListener("mouseleave", handleMouseOut);
+        return () => {
+          triggerElement.removeEventListener("mouseenter", handleMouseOver);
+          triggerElement.removeEventListener("mouseleave", handleMouseOut);
+        };
+      }
+    }, [trigger]);
 
-      return () => {
-        triggerElement.removeEventListener("mouseenter", handleMouseOver);
-        triggerElement.removeEventListener("mouseleave", handleMouseOut);
-      };
-    }
-  }, [trigger]);
-
-  return (
-    <Flex
-      ref={ref}
-      center
-      className={classNames(styles.arrowContainer, className)}
-      style={{
-        transform: `scale(${scale})`,
-        ...style,
-      }}
-      {...flex}
-    >
+    return (
       <Flex
-        radius="full"
-        position="absolute"
-        className={classNames(styles.arrowHead, styles[color])}
-        height={0.0875}
-      />
-      <Flex
-        radius="full"
-        position="absolute"
-        className={classNames(styles.arrowHead, styles[color])}
-        height={0.0875}
-      />
-    </Flex>
-  );
-})
+        ref={ref}
+        center
+        className={cn(arrowVariants({ active: isActive }), className)}
+        style={{
+          transform: `scale(${scale})`,
+          ...style,
+        }}
+        {...flex}
+      >
+        <Flex
+          radius="full"
+          position="absolute"
+          className={arrowHeadVariants({ color, position: "top", active: isActive })}
+        />
+        <Flex
+          radius="full"
+          position="absolute"
+          className={arrowHeadVariants({ color, position: "bottom", active: isActive })}
+        />
+      </Flex>
+    );
+  },
+);
 
 Arrow.displayName = "Arrow";
+
 export { Arrow };
