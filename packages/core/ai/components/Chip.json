@@ -13,14 +13,14 @@
   "StyleProps"
  ],
  "props": {
-  "label": "!string",
+  "label": "string",
   "selected": "boolean = true",
   "prefixIcon": "IconName",
   "onRemove": "() => void",
   "onClick": "MouseEventHandler<HTMLDivElement>",
   "children": "ReactNode",
   "iconButtonProps": "Partial<IconButtonProps> = {}",
-  "style": "React.CSSProperties",
+  "style": "CSSProperties",
   "className": "string"
  },
  "mixinsRef": [

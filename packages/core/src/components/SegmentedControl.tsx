@@ -1,25 +1,21 @@
 "use client";
 
-import type { CSSProperties, KeyboardEvent, MouseEvent } from "react";
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { cn } from "../classes/utils";
-import { Flex } from "./Flex";
-import { Scroller, type ScrollerProps } from "./Scroller";
-import { ToggleButton, type ToggleButtonProps } from "./ToggleButton";
+import { Flex, Scroller, ToggleButton, type ToggleButtonProps } from ".";
 
-export interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
+interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
   value: string;
 }
 
-export interface SegmentedControlProps extends Omit<ScrollerProps, "onToggle"> {
+interface SegmentedControlProps extends Omit<React.ComponentProps<typeof Scroller>, "onToggle"> {
   buttons: ButtonOption[];
-  onToggle: (value: string, event?: MouseEvent<HTMLButtonElement>) => void;
+  onToggle: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void;
   defaultSelected?: string;
   fillWidth?: boolean;
   selected?: string;
   compact?: boolean;
   className?: string;
-  style?: CSSProperties;
+  style?: React.CSSProperties;
 }
 
 const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
@@ -53,7 +49,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
 
     const handleButtonClick = (
       clickedButton: ButtonOption,
-      event: MouseEvent<HTMLButtonElement>,
+      event: React.MouseEvent<HTMLButtonElement>,
     ) => {
       event.stopPropagation();
       const newSelected = clickedButton.value;
@@ -61,7 +57,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
       onToggle(newSelected, event);
     };
 
-    const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       const focusedIndex = buttonRefs.current.indexOf(document.activeElement as HTMLButtonElement);
 
       switch (event.key) {
@@ -70,7 +66,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
           event.preventDefault();
           const prevIndex =
             focusedIndex === -1
-              ? buttons.length - 1
+              ? buttons.length - 1 // If nothing is focused, focus the last item
               : focusedIndex > 0
                 ? focusedIndex - 1
                 : buttons.length - 1;
@@ -81,12 +77,16 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
         case "ArrowDown": {
           event.preventDefault();
           const nextIndex =
-            focusedIndex === -1 ? 0 : focusedIndex < buttons.length - 1 ? focusedIndex + 1 : 0;
+            focusedIndex === -1
+              ? 0 // If nothing is focused, focus the first item
+              : focusedIndex < buttons.length - 1
+                ? focusedIndex + 1
+                : 0;
           buttonRefs.current[nextIndex]?.focus();
           break;
         }
         case "Enter":
-        case " ": {
+        case " ": // Space key
           event.preventDefault();
           if (focusedIndex >= 0 && focusedIndex < buttons.length) {
             const focusedButton = buttons[focusedIndex];
@@ -94,7 +94,6 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
             onToggle(focusedButton.value);
           }
           break;
-        }
         default:
           return;
       }
@@ -104,11 +103,13 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
 
     return (
       <Scroller
-        ref={ref}
         direction="row"
         fillWidth={fillWidth}
         minWidth={0}
         {...scrollerProps}
+        ref={ref}
+        className={className}
+        style={style}
         role="tablist"
         aria-orientation="horizontal"
         onKeyDown={handleKeyDown}
@@ -148,15 +149,14 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
                 }
                 key={value}
                 selected={isSelected}
-                onClick={(event: MouseEvent<HTMLButtonElement>) => {
+                onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
                   buttonOnClick?.(event);
                   handleButtonClick(button, event);
                 }}
                 role="tab"
-                className={cn(className, buttonClassName)}
+                className={buttonClassName}
                 style={{
                   opacity: !isSelected && !compact ? 0.6 : 1,
-                  ...style,
                   ...buttonStyle,
                 }}
                 aria-selected={isSelected}
@@ -175,4 +175,5 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
 
 SegmentedControl.displayName = "SegmentedControl";
 
+export type { ButtonOption, SegmentedControlProps };
 export { SegmentedControl };

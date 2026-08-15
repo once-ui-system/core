@@ -119,7 +119,7 @@ describe("SegmentedControl", () => {
   });
 
   it("merges custom className and style", () => {
-    render(
+    const { container } = render(
       <SegmentedControl
         buttons={[
           { value: "a", label: "A", className: "btn-custom-a" },
@@ -130,8 +130,8 @@ describe("SegmentedControl", () => {
       />,
     );
 
+    expect(container.firstElementChild).toHaveClass("control-custom");
     const tabs = screen.getAllByRole("tab");
-    expect(tabs[0]).toHaveClass("control-custom", "btn-custom-a");
-    expect(tabs[1]).toHaveClass("control-custom");
+    expect(tabs[0]).toHaveClass("btn-custom-a");
   });
 });

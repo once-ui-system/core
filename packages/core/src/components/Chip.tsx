@@ -1,24 +1,44 @@
 "use client";
 
-import React, { ReactNode, MouseEventHandler, forwardRef } from "react";
-import classNames from "clsx";
-import { Text, Icon, IconButton, IconButtonProps, Flex } from ".";
-import styles from "./Chip.module.scss";
-import { IconName } from "../icons";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, MouseEvent, MouseEventHandler, ReactNode } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import type { IconName } from "../icons";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { Icon } from "./Icon";
+import { IconButton, type IconButtonProps } from "./IconButton";
+import { Text } from "./Text";
 
-interface ChipProps extends React.ComponentProps<typeof Flex> {
-  label: string;
+export const chipVariants = cva(
+  "inline-flex items-center select-none whitespace-nowrap transition-colors duration-micro-medium focus-visible:outline-none",
+  {
+    variants: {
+      selected: {
+        true: "bg-brand-alpha-medium text-brand-on-background-medium hover:bg-brand-alpha-medium focus:bg-brand-alpha-medium active:bg-brand-alpha-weak active:text-brand-on-background-weak",
+        false:
+          "bg-neutral-alpha-weak text-neutral-on-background-medium hover:bg-neutral-alpha-medium focus:bg-neutral-alpha-medium active:bg-neutral-alpha-weak active:text-neutral-on-background-weak",
+      },
+    },
+    defaultVariants: {
+      selected: true,
+    },
+  },
+);
+
+export interface ChipProps extends FlexComponentProps {
+  label?: string;
   selected?: boolean;
   prefixIcon?: IconName;
   onRemove?: () => void;
   onClick?: MouseEventHandler<HTMLDivElement>;
   children?: ReactNode;
   iconButtonProps?: Partial<IconButtonProps>;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   className?: string;
 }
 
-const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
+const Chip = forwardRef<HTMLDivElement, ChipProps>(
   (
     {
       label,
@@ -28,6 +48,8 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
       onClick,
       children,
       iconButtonProps = {},
+      className,
+      style,
       ...rest
     },
     ref,
@@ -43,10 +65,10 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
       },
     };
 
-    const combinedIconButtonProps = {
+    const combinedIconButtonProps: IconButtonProps = {
       ...defaultIconButtonProps,
       ...iconButtonProps,
-      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+      onClick: (e: MouseEvent<HTMLButtonElement>) => {
         defaultIconButtonProps.onClick?.(e);
         iconButtonProps.onClick?.(e);
       },
@@ -55,7 +77,7 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
     const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        if (onClick) onClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+        if (onClick) onClick(e as unknown as MouseEvent<HTMLDivElement>);
       }
     };
 
@@ -74,10 +96,13 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
         aria-pressed={selected}
         cursor="interactive"
         transition="micro-medium"
-        className={classNames(styles.chip, {
-          [styles.selected]: selected,
-          [styles.unselected]: !selected,
-        })}
+        className={cn(
+          chipVariants({
+            selected: Boolean(selected),
+          }),
+          className,
+        )}
+        style={style}
         {...rest}
       >
         {prefixIcon && <Icon name={prefixIcon} size="s" />}

@@ -15,13 +15,13 @@
  ],
  "props": {
   "buttons": "!ButtonOption[]",
-  "onToggle": "!(value: string, event?: MouseEvent<HTMLButtonElement>) => void",
+  "onToggle": "!(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
   "defaultSelected": "string",
   "fillWidth": "boolean = true",
   "selected": "string",
   "compact": "boolean = false",
   "className": "string",
-  "style": "CSSProperties"
+  "style": "React.CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
