@@ -1843,7 +1843,7 @@
     "placement": "Placement",
     "searchable": "boolean = false",
     "className": "string",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "fillWidth": "boolean = true",
     "multiple": "boolean = false"
    }

@@ -1,9 +1,16 @@
 "use client";
 
 import type { Placement } from "@floating-ui/react-dom";
-import classNames from "clsx";
-import type React from "react";
-import { forwardRef, type ReactNode, useEffect, useId, useRef, useState } from "react";
+import type {
+  CSSProperties,
+  FocusEvent,
+  KeyboardEvent,
+  MouseEvent,
+  ReactNode,
+  RefObject,
+} from "react";
+import { forwardRef, useEffect, useId, useRef, useState } from "react";
+import { cn } from "../classes/utils";
 import {
   ArrowNavigation,
   Column,
@@ -17,11 +24,11 @@ import {
   Option,
   type OptionProps,
   useArrowNavigationContext,
-} from ".";
+} from "./index";
 
-type SelectOptionType = Omit<OptionProps, "selected">;
+export type SelectOptionType = Omit<OptionProps, "selected">;
 
-interface SelectProps
+export interface SelectProps
   extends Omit<InputProps, "onSelect" | "value">,
     Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
   options: SelectOptionType[];
@@ -31,21 +38,23 @@ interface SelectProps
   placement?: Placement;
   searchable?: boolean;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   fillWidth?: boolean;
   multiple?: boolean;
 }
 
-// Inner component that uses the arrow navigation context
-const SearchInput: React.FC<{
+interface SearchInputProps {
   searchInputId: string;
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   setIsDropdownOpen: (open: boolean) => void;
-  handleClearSearch: (e: React.MouseEvent) => void;
-  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  selectRef: React.RefObject<HTMLDivElement | null>;
-}> = ({
+  handleClearSearch: (e: MouseEvent) => void;
+  handleBlur: (e: FocusEvent<HTMLInputElement>) => void;
+  selectRef: RefObject<HTMLDivElement | null>;
+}
+
+// Inner component that uses the arrow navigation context
+const SearchInput = ({
   searchInputId,
   searchQuery,
   setSearchQuery,
@@ -53,7 +62,7 @@ const SearchInput: React.FC<{
   handleClearSearch,
   handleBlur,
   selectRef,
-}) => {
+}: SearchInputProps) => {
   const { handleKeyDown: navKeyDown } = useArrowNavigationContext();
 
   return (
@@ -86,10 +95,10 @@ const SearchInput: React.FC<{
         e.stopPropagation();
         setIsDropdownOpen(true);
       }}
-      onKeyDown={(e) => {
+      onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
         // Handle arrow keys and Enter for navigation
         if (["ArrowDown", "ArrowUp", "Enter", "Home", "End"].includes(e.key)) {
-          navKeyDown(e as any);
+          navKeyDown(e as unknown as KeyboardEvent<HTMLElement>);
           return;
         }
 
@@ -106,7 +115,7 @@ const SearchInput: React.FC<{
       }}
       onBlur={(e) => {
         const relatedTarget = e.relatedTarget as Node;
-        const isClickInDropdown = selectRef.current && selectRef.current.contains(relatedTarget);
+        const isClickInDropdown = selectRef.current?.contains(relatedTarget);
         if (!isClickInDropdown) {
           handleBlur(e);
         }
@@ -135,9 +144,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     },
     ref,
   ) => {
-    const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(false);
-
     const [internalValue, setInternalValue] = useState(multiple ? [] : value);
 
     useEffect(() => {
@@ -145,11 +151,11 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         setInternalValue(value);
       }
     }, [value]);
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const searchInputId = useId();
     const [searchQuery, setSearchQuery] = useState("");
     const selectRef = useRef<HTMLDivElement | null>(null);
-    const clearButtonRef = useRef<HTMLButtonElement>(null);
 
     // Track if we should skip the next focus event
     const skipNextFocusRef = useRef(false);
@@ -158,17 +164,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     const handleFocus = () => {
       // Allow reopening the dropdown even after selection
-      setIsFocused(true);
       setIsDropdownOpen(true);
-      // Set highlighted index to first option or current selection
-      const currentIndex = options.findIndex((option) =>
-        multiple
-          ? Array.isArray(currentValue) && currentValue.includes(option.value)
-          : option.value === currentValue,
-      );
     };
 
-    const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+    const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
       // Don't close dropdown if focus is moving to an element within the select component
       if (selectRef.current && !selectRef.current.contains(event.relatedTarget as Node)) {
         // Only close if we're not moving to the dropdown or its children
@@ -176,29 +175,28 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           event.relatedTarget && (event.relatedTarget as Element).closest("[data-dropdown]");
 
         if (!isMovingToDropdown) {
-          setIsFocused(false);
           setIsDropdownOpen(false);
         }
       }
     };
 
-    const handleSelect = (value: string) => {
+    const handleSelect = (selectedValue: string) => {
       if (multiple) {
         const currentValues = Array.isArray(currentValue) ? currentValue : [];
-        const newValues = currentValues.includes(value)
-          ? currentValues.filter((v) => v !== value)
-          : [...currentValues, value];
+        const newValues = currentValues.includes(selectedValue)
+          ? currentValues.filter((v) => v !== selectedValue)
+          : [...currentValues, selectedValue];
         setInternalValue(newValues);
         onSelect?.(newValues);
       } else {
-        setInternalValue(value);
-        onSelect?.(value);
+        setInternalValue(selectedValue);
+        onSelect?.(selectedValue);
         setIsDropdownOpen(false);
       }
       justSelectedRef.current = true;
     };
 
-    const handleClearSearch = (e: React.MouseEvent) => {
+    const handleClearSearch = (e: MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
       setSearchQuery("");
@@ -221,9 +219,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           return String(option?.label || selectedValues[0]);
         }
         return `${selectedValues.length} options selected`;
-      } else {
-        return selectedOption?.label ? String(selectedOption.label) : "";
       }
+      return selectedOption?.label ? String(selectedOption.label) : "";
     };
 
     useEffect(() => {
@@ -267,9 +264,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         placement={placement}
         closeAfterClick={false}
         disableTriggerClick={true}
-        style={{
-          ...style,
-        }}
+        style={style}
         trigger={
           <Input
             {...rest}
@@ -281,7 +276,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
             value={getDisplayText()}
             onFocus={handleFocus}
             readOnly
-            className={classNames("fill-width", className)}
+            className={cn("w-full", className)}
             aria-haspopup="listbox"
             aria-expanded={isDropdownOpen}
           />
@@ -313,7 +308,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
               )}
 
               <Column fillWidth paddingTop="4" gap="2">
-                {filteredOptions.map((option, index) => (
+                {filteredOptions.map((option) => (
                   <Option
                     key={option.value}
                     {...option}
