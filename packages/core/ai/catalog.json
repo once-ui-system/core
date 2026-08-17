@@ -437,6 +437,7 @@
   "Hover": {
    "group": "components",
    "extends": [
+    "Row",
     "Flex"
    ],
    "purpose": "Hover component",

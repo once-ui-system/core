@@ -1,20 +1,13 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  ReactNode,
-  forwardRef,
-  useImperativeHandle,
-  useCallback,
-} from "react";
-import { Flex, Row } from ".";
-import styles from "./Hover.module.scss";
+import type { ReactNode } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { cn } from "../classes/utils";
+import { Row, type RowProps } from "./Row";
 
-export interface HoverProps extends React.ComponentProps<typeof Flex> {
-  trigger: ReactNode;
-  overlay: ReactNode;
+export interface HoverProps extends RowProps {
+  trigger?: ReactNode;
+  overlay?: ReactNode;
   interactive?: boolean;
   delay?: number;
   hideDelay?: number;
@@ -27,11 +20,14 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
     {
       trigger,
       overlay,
+      children,
       interactive = false,
       delay = 0,
       hideDelay = 0,
       disabled = false,
       touch = "disable",
+      className,
+      style,
       ...flex
     },
     ref,
@@ -40,23 +36,36 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
     const [isFocused, setIsFocused] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    
+
     const wrapperRef = useRef<HTMLDivElement>(null);
-    const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-    const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const showTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
     useEffect(() => {
       setMounted(true);
-      setIsTouchDevice(
-        "ontouchstart" in window || navigator.maxTouchPoints > 0
-      );
+      const checkTouchDevice = () => {
+        const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+        const hasPointer = window.matchMedia("(pointer: fine)").matches;
+        return hasTouch && !hasPointer;
+      };
+
+      setIsTouchDevice(checkTouchDevice());
+
+      const mediaQuery = window.matchMedia("(pointer: fine)");
+      const handlePointerChange = () => setIsTouchDevice(checkTouchDevice());
+
+      mediaQuery.addEventListener("change", handlePointerChange);
+
+      return () => {
+        mediaQuery.removeEventListener("change", handlePointerChange);
+      };
     }, []);
 
     const showOverlay = useCallback(() => {
       if (disabled) return;
-      
+
       // Clear any pending hide timeout
       if (hideTimeoutRef.current) {
         clearTimeout(hideTimeoutRef.current);
@@ -121,14 +130,14 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
     // Determine if overlay should show based on touch mode
     const shouldShowOverlay = (() => {
       if (!mounted || disabled) return false;
-      
+
       // If on touch device, handle based on touch prop
       if (isTouchDevice) {
-        if (touch === 'disable') return false;
-        if (touch === 'display') return true;
+        if (touch === "disable") return false;
+        if (touch === "display") return true;
         // touch === 'enable', fall through to normal hover logic
       }
-      
+
       return isHovered || isFocused;
     })();
 
@@ -139,21 +148,22 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
         onMouseLeave={handleMouseLeave}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        className={cn(className)}
+        style={style}
         {...flex}
       >
         {trigger}
+        {children}
         {shouldShowOverlay && (
           <Row
             position="absolute"
             pointerEvents={interactive ? "auto" : "none"}
             fill
-            style={{
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-            }}
-            className={styles.fadeIn}
+            top="0"
+            left="0"
+            right="0"
+            bottom="0"
+            className="animate-fadeIn"
           >
             {overlay}
           </Row>
@@ -164,4 +174,5 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
 );
 
 Hover.displayName = "Hover";
+
 export { Hover };

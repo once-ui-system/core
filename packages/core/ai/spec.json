@@ -1109,6 +1109,7 @@
   "Hover": {
    "group": "components",
    "extends": [
+    "Row",
     "Flex"
    ],
    "mixins": [
@@ -1120,8 +1121,8 @@
     "StyleProps"
    ],
    "props": {
-    "trigger": "!ReactNode",
-    "overlay": "!ReactNode",
+    "trigger": "ReactNode",
+    "overlay": "ReactNode",
     "interactive": "boolean = false",
     "delay": "number = 0",
     "hideDelay": "number = 0",
