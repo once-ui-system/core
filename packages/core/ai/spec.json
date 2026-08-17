@@ -1258,7 +1258,7 @@
     "description": "ReactNode",
     "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
     "className": "string",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "hasPrefix": "ReactNode",
     "hasSuffix": "ReactNode",
     "variant": "\"default\" | \"ghost\" = default",
