@@ -193,6 +193,9 @@
   },
   "Cursor": {
    "group": "components",
+   "extends": [
+    "Flex"
+   ],
    "purpose": "Cursor component",
    "tags": [
     "components"

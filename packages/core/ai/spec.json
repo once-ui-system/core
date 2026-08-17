@@ -602,9 +602,23 @@
   },
   "Cursor": {
    "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
    "props": {
-    "cursor": "!React.ReactNode",
-    "elementRef": "React.RefObject<HTMLElement | null>"
+    "cursor": "!ReactNode",
+    "elementRef": "RefObject<HTMLElement | null>",
+    "className": "string",
+    "style": "CSSProperties",
+    "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\" = 10"
    }
   },
   "CountFx": {
