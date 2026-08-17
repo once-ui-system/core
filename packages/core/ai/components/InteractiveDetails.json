@@ -2,13 +2,15 @@
  "name": "InteractiveDetails",
  "group": "components",
  "props": {
-  "label": "React.ReactNode",
-  "description": "React.ReactNode",
+  "label": "ReactNode",
+  "description": "ReactNode",
   "disabled": "boolean",
   "iconButtonProps": "IconButtonProps",
-  "onClick": "!() => void",
+  "onClick": "(event?: MouseEvent<HTMLDivElement>) => void",
   "className": "string",
-  "id": "string"
+  "id": "string",
+  "style": "CSSProperties",
+  "children": "ReactNode"
  },
  "mixinsRef": []
 }
