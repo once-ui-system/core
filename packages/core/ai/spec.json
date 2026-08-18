@@ -1689,12 +1689,7 @@
     "InteractiveDetails"
    ],
    "props": {
-    "style": "React.CSSProperties",
-    "className": "string",
     "isChecked": "boolean",
-    "name": "string",
-    "value": "string",
-    "disabled": "boolean",
     "onToggle": "() => void",
     "hoverable": "boolean = true"
    }
