@@ -1,12 +1,14 @@
 "use client";
 
-import React, { forwardRef, useState } from "react";
-import { Input, Flex, IconButton, Column } from ".";
-import styles from "./NumberInput.module.scss";
-import classNames from "clsx";
+import type { ChangeEvent } from "react";
+import { forwardRef, useEffect, useState } from "react";
+import { cn } from "../classes/utils";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { IconButton } from "./IconButton";
+import { Input, type InputProps } from "./Input";
 
-interface NumberInputProps
-  extends Omit<React.ComponentProps<typeof Input>, "type" | "value" | "onChange"> {
+export interface NumberInputProps extends Omit<InputProps, "type" | "value" | "onChange"> {
   value?: number;
   onChange?: (value: number) => void;
   min?: number;
@@ -16,19 +18,25 @@ interface NumberInputProps
 }
 
 const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
-  ({ value, onChange, min, max, step = 1, padStart, ...props }, ref) => {
+  ({ value, onChange, min, max, step = 1, padStart, className, ...props }, ref) => {
     const [localValue, setLocalValue] = useState<string>(
       padStart && value !== undefined
         ? value.toString().padStart(padStart, "0")
         : (value?.toString() ?? ""),
     );
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
+      if (value !== undefined) {
+        setLocalValue(padStart ? value.toString().padStart(padStart, "0") : value.toString());
+      }
+    }, [value, padStart]);
+
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
       setLocalValue(newValue);
 
       const numValue = parseFloat(newValue);
-      if (!isNaN(numValue) && onChange) {
+      if (!Number.isNaN(numValue) && onChange) {
         onChange(numValue);
       }
     };
@@ -69,7 +77,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         step={step}
         hasSuffix={
           <>
-            <Flex position="static" minWidth={1.25}></Flex>
+            <Flex position="static" minWidth={1.25} />
             <Column
               position="absolute"
               right="0"
@@ -85,7 +93,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
                 transition="micro-medium"
                 vertical="center"
                 paddingX="4"
-                className={classNames(styles.stepper)}
+                className="hover:bg-neutral-alpha-medium"
               >
                 <IconButton
                   icon="chevronUp"
@@ -101,7 +109,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
                 vertical="center"
                 transition="micro-medium"
                 paddingX="4"
-                className={classNames(styles.stepper)}
+                className="hover:bg-neutral-alpha-medium"
               >
                 <IconButton
                   icon="chevronDown"
@@ -114,11 +122,15 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
             </Column>
           </>
         }
-        className={styles.numberInput}
+        className={cn(
+          "[&_input[type=number]]:[appearance:textfield] [&_input[type=number]::-webkit-inner-spin-button]:m-0 [&_input[type=number]::-webkit-inner-spin-button]:[appearance:none] [&_input[type=number]::-webkit-outer-spin-button]:m-0 [&_input[type=number]::-webkit-outer-spin-button]:[appearance:none]",
+          className,
+        )}
       />
     );
   },
 );
 
 NumberInput.displayName = "NumberInput";
+
 export { NumberInput };
