@@ -1,14 +1,18 @@
 "use client";
 
-import React, { useState, useRef, forwardRef, useEffect } from "react";
-import { Column, Flex, Input, Text } from ".";
-import styles from "./OTPInput.module.scss";
+import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import { cn } from "../classes/utils";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { Input } from "./Input";
+import { Text } from "./Text";
 
-interface OTPInputProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface OTPInputProps extends HTMLAttributes<HTMLDivElement> {
   length?: number;
   onComplete?: (code: string) => void;
   error?: boolean;
-  errorMessage?: React.ReactNode;
+  errorMessage?: ReactNode;
   disabled?: boolean;
   autoFocus?: boolean;
 }
@@ -29,6 +33,10 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
   ) => {
     const [values, setValues] = useState<string[]>(Array(length).fill(""));
     const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
+
+    useEffect(() => {
+      setValues(Array(length).fill(""));
+    }, [length]);
 
     useEffect(() => {
       if (autoFocus && inputsRef.current[0]) {
@@ -54,7 +62,7 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
       }
     };
 
-    const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (index: number, event: KeyboardEvent<HTMLInputElement>) => {
       if (disabled) return;
 
       if (event.key === "Backspace") {
@@ -83,18 +91,19 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
 
       if (values.every((val) => val !== "")) return;
 
-      const firstEmptyIndex = values.findIndex((val) => val === "");
+      const firstEmptyIndex = values.indexOf("");
       if (firstEmptyIndex >= 0) {
         inputsRef.current[firstEmptyIndex]?.focus();
       }
     };
 
     return (
-      <Column gap="8" ref={ref}>
+      <Column gap="8" ref={ref} className={className} {...props}>
         <Flex gap="8" center onClick={handleContainerClick}>
           {Array.from({ length }, (_, index) => (
             <Input
-              key={index}
+              // biome-ignore lint/suspicious/noArrayIndexKey: fixed-length OTP digit slots
+              key={`otp-input-${index}`}
               ref={(el) => {
                 inputsRef.current[index] = el;
               }}
@@ -104,12 +113,14 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
               inputMode="numeric"
               maxLength={1}
               error={error}
+              disabled={disabled}
               value={values[index]}
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
               aria-label={`OTP digit ${index + 1} of ${length}`}
-              className={styles.inputs}
-              {...props}
+              className={cn(
+                "w-48 min-w-48 max-w-48 [&_input]:text-center [&_input]:text-heading-xl transition-all duration-200 focus-within:scale-105",
+              )}
             />
           ))}
         </Flex>
@@ -128,4 +139,3 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
 OTPInput.displayName = "OTPInput";
 
 export { OTPInput };
-export type { OTPInputProps };
