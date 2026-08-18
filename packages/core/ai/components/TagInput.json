@@ -5,7 +5,7 @@
   "Input"
  ],
  "props": {
-  "value": "!string[]",
+  "value": "!string[] = []",
   "onChange": "!(value: string[]) => void"
  },
  "mixinsRef": []

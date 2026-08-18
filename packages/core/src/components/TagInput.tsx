@@ -1,22 +1,18 @@
 "use client";
 
-import {
-  useState,
-  KeyboardEventHandler,
-  ChangeEventHandler,
-  FocusEventHandler,
-  forwardRef,
-} from "react";
+import type { ChangeEventHandler, FocusEventHandler, KeyboardEventHandler } from "react";
+import { forwardRef, useState } from "react";
+import { Chip } from "./Chip";
+import { Flex } from "./Flex";
+import { Input, type InputProps } from "./Input";
 
-import { Flex, Chip, Input, InputProps } from ".";
-
-interface TagInputProps extends Omit<InputProps, "onChange" | "value"> {
+export interface TagInputProps extends Omit<InputProps, "onChange" | "value"> {
   value: string[];
   onChange: (value: string[]) => void;
 }
 
 const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
-  ({ value, onChange, label, placeholder, ...inputProps }, ref) => {
+  ({ value = [], onChange, label, placeholder, ...inputProps }, ref) => {
     const [inputValue, setInputValue] = useState("");
     const [isFocused, setIsFocused] = useState(false);
 
@@ -27,8 +23,9 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
     const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
       if (e.key === "Enter" || e.key === ",") {
         e.preventDefault();
-        if (inputValue.trim()) {
-          onChange([...value, inputValue.trim()]);
+        const trimmed = inputValue.trim();
+        if (trimmed) {
+          onChange([...value, trimmed]);
           setInputValue("");
         }
       }
@@ -43,7 +40,7 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
       setIsFocused(true);
     };
 
-    const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
+    const handleBlur: FocusEventHandler<HTMLInputElement> = () => {
       setIsFocused(false);
     };
 
@@ -62,18 +59,11 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
         {...inputProps}
       >
         {value.length > 0 && (
-          <Flex
-            style={{
-              margin: "calc(-1 * var(--static-space-8)) var(--static-space-8)",
-            }}
-            gap="4"
-            vertical="center"
-            wrap
-            paddingY="16"
-          >
+          <Flex gap="4" vertical="center" wrap paddingY="16" className="-my-8 mx-8">
             {value.map((tag, index) => (
               <Chip
-                key={index}
+                // biome-ignore lint/suspicious/noArrayIndexKey: tag order and duplicates allowed
+                key={`${tag}-${index}`}
                 label={tag}
                 onRemove={() => handleRemoveTag(index)}
                 aria-label={`Remove tag ${tag}`}
@@ -89,4 +79,3 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
 TagInput.displayName = "TagInput";
 
 export { TagInput };
-export type { TagInputProps };
