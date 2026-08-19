@@ -18,7 +18,8 @@
   "minDate": "Date",
   "maxDate": "Date",
   "dual": "boolean",
-  "size": "CondensedTShirtSizes = m"
+  "size": "CondensedTShirtSizes = m",
+  "gap": "SpacingToken | number | \"-1\" = 24"
  },
  "mixinsRef": [
   "CommonProps",

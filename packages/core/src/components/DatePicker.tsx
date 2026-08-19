@@ -94,10 +94,18 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
 
     const [currentMonth, setCurrentMonth] = useState<number>(
-      value ? value.getMonth() : today.getMonth(),
+      typeof propCurrentMonth === "number"
+        ? propCurrentMonth
+        : value
+          ? value.getMonth()
+          : today.getMonth(),
     );
     const [currentYear, setCurrentYear] = useState<number>(
-      value ? value.getFullYear() : today.getFullYear(),
+      typeof propCurrentYear === "number"
+        ? propCurrentYear
+        : value
+          ? value.getFullYear()
+          : today.getFullYear(),
     );
 
     // Calculate the initial focused index based on the selected date
@@ -165,11 +173,15 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         });
         setIsPM(value.getHours() >= 12);
 
-        // Update current month/year to match the selected date
-        setCurrentMonth(value.getMonth());
-        setCurrentYear(value.getFullYear());
+        // Update current month/year to match the selected date if not controlled
+        if (typeof propCurrentMonth !== "number") {
+          setCurrentMonth(value.getMonth());
+        }
+        if (typeof propCurrentYear !== "number") {
+          setCurrentYear(value.getFullYear());
+        }
       }
-    }, [value]);
+    }, [value, propCurrentMonth, propCurrentYear]);
 
     // Effect to ensure proper highlighting when component mounts or selected date changes
     useEffect(() => {
