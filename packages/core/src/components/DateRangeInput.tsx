@@ -1,21 +1,27 @@
 "use client";
 
-import React, { useState, useCallback, useEffect, forwardRef } from "react";
-import { Input, DropdownWrapper, Flex, DateRange, DateRangePicker, Row } from ".";
+import type { CSSProperties } from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
+import { type DateRange, DateRangePicker } from "./DateRangePicker";
+import { DropdownWrapper } from "./DropdownWrapper";
+import { Flex } from "./Flex";
+import { Input, type InputProps } from "./Input";
+import { Row } from "./Row";
 
-interface DateRangeInputProps
-  extends Omit<React.ComponentProps<typeof Input>, "onChange" | "value" | "label"> {
+export interface DateRangeInputProps extends Omit<InputProps, "onChange" | "value" | "label"> {
   id: string;
-  startLabel: string;
-  endLabel: string;
+  startLabel?: string;
+  endLabel?: string;
   value?: DateRange;
   onChange?: (range: DateRange) => void;
   minHeight?: number;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
-interface LocalizedDateRange {
+export interface LocalizedDateRange {
   startDate: string | null;
   endDate: string | null;
 }
@@ -32,101 +38,120 @@ const formatDateRange = (range: DateRange): LocalizedDateRange => {
   };
 };
 
-const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(({
-  id,
-  startLabel = "Start",
-  endLabel = "End",
-  value,
-  onChange,
-  error,
-  minHeight,
-  className,
-  style,
-  ...rest
-}, ref) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [inputValue, setInputValue] = useState(
-    value ? formatDateRange(value) : { startDate: "", endDate: "" },
-  );
-  useEffect(() => {
-    if (value) {
-      setInputValue(formatDateRange(value));
-    }
-  }, [value]);
-
-  const handleDateChange = useCallback(
-    (range: DateRange) => {
-      setInputValue(formatDateRange(range));
-      onChange?.(range);
-      if (range.endDate != undefined) {
-        setIsOpen(false);
-      }
+const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
+  (
+    {
+      id,
+      startLabel = "Start",
+      endLabel = "End",
+      value,
+      onChange,
+      error,
+      minHeight,
+      className,
+      style,
+      minDate,
+      maxDate,
+      ...rest
     },
-    [onChange],
-  );
+    ref,
+  ) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [inputValue, setInputValue] = useState<LocalizedDateRange>(
+      value ? formatDateRange(value) : { startDate: "", endDate: "" },
+    );
 
-  const handleInputClick = useCallback(() => {
-    setIsOpen(true);
-  }, []);
+    useEffect(() => {
+      if (value) {
+        setInputValue(formatDateRange(value));
+      } else {
+        setInputValue({ startDate: "", endDate: "" });
+      }
+    }, [value]);
 
-  const handleInputFocus = useCallback(() => {
-    setIsOpen(true);
-  }, []);
+    const handleDateChange = useCallback(
+      (range: DateRange) => {
+        setInputValue(formatDateRange(range));
+        onChange?.(range);
+        if (range.endDate !== undefined) {
+          setIsOpen(false);
+        }
+      },
+      [onChange],
+    );
 
-  const trigger = (
-    <Row fillWidth horizontal="center" gap="-1">
-      <Input
-        className="cursor-interactive"
-        style={{
-          textOverflow: "ellipsis",
-        }}
-        radius={"left"}
-        id={id}
-        placeholder={startLabel}
-        value={inputValue.startDate ?? ""}
-        error={error}
-        readOnly
-        onFocus={handleInputFocus}
-        {...rest}
+    const handleInputFocus = useCallback(() => {
+      setIsOpen(true);
+    }, []);
+
+    const trigger = (
+      <Row fillWidth horizontal="center" gap="-1">
+        <Input
+          id={`${id}-start`}
+          placeholder={startLabel}
+          aria-label={startLabel}
+          value={inputValue.startDate ?? ""}
+          error={error}
+          readOnly
+          cursor="interactive"
+          radius="left"
+          onFocus={handleInputFocus}
+          onClick={handleInputFocus}
+          className="cursor-pointer [&_input]:truncate"
+          style={{
+            textOverflow: "ellipsis",
+          }}
+          {...rest}
+        />
+        <Input
+          id={`${id}-end`}
+          placeholder={endLabel}
+          aria-label={endLabel}
+          value={inputValue.endDate ?? ""}
+          error={error}
+          readOnly
+          cursor="interactive"
+          radius="right"
+          onFocus={handleInputFocus}
+          onClick={handleInputFocus}
+          className="cursor-pointer [&_input]:truncate"
+          style={{
+            textOverflow: "ellipsis",
+          }}
+          {...rest}
+        />
+      </Row>
+    );
+
+    const dropdown = (
+      <Flex padding="20" center={true}>
+        <DateRangePicker
+          value={value}
+          onChange={handleDateChange}
+          minDate={minDate}
+          maxDate={maxDate}
+        />
+      </Flex>
+    );
+
+    return (
+      <DropdownWrapper
+        ref={ref}
+        fillWidth={false}
+        trigger={trigger}
+        minHeight={minHeight}
+        dropdown={dropdown}
+        isOpen={isOpen}
+        closeAfterClick={false}
+        disableTriggerClick={true}
+        className={className}
+        style={style}
+        onOpenChange={setIsOpen}
       />
-      <Input
-        className="cursor-interactive"
-        style={{
-          textOverflow: "ellipsis",
-        }}
-        radius={"right"}
-        id={id}
-        placeholder={endLabel}
-        value={inputValue.endDate ?? ""}
-        error={error}
-        readOnly
-        onFocus={handleInputFocus}
-        {...rest}
-      />
-    </Row>
-  );
-
-  const dropdown = (
-    <Flex padding="20" center={true}>
-      <DateRangePicker value={value} onChange={handleDateChange} />
-    </Flex>
-  );
-
-  return (
-    <DropdownWrapper
-      fillWidth={false}
-      trigger={trigger}
-      minHeight={minHeight}
-      dropdown={dropdown}
-      isOpen={isOpen}
-      closeAfterClick={false}
-      disableTriggerClick={true}
-      className={className}
-      style={{ ...style }}
-      onOpenChange={setIsOpen}
-    />
-  );
-})
+    );
+  },
+);
 
 DateRangeInput.displayName = "DateRangeInput";
+
 export { DateRangeInput };

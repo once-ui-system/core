@@ -814,13 +814,15 @@
    ],
    "props": {
     "id": "!string",
-    "startLabel": "!string = Start",
-    "endLabel": "!string = End",
+    "startLabel": "string = Start",
+    "endLabel": "string = End",
     "value": "DateRange",
     "onChange": "(range: DateRange) => void",
     "minHeight": "number",
     "className": "string",
-    "style": "React.CSSProperties"
+    "style": "CSSProperties",
+    "minDate": "Date",
+    "maxDate": "Date"
    }
   },
   "DateRangePicker": {
