@@ -1,28 +1,26 @@
 "use client";
 
-import React, { useState, forwardRef, useEffect, useCallback } from "react";
-import classNames from "clsx";
-import {
-  Flex,
-  Text,
-  Button,
-  Grid,
-  SegmentedControl,
-  IconButton,
-  RevealFx,
-  NumberInput,
-  DropdownWrapper,
-  Option,
-  Column,
-  Icon,
-  Row,
-  ArrowNavigation,
-} from ".";
-import { CondensedTShirtSizes } from "../types";
-import { getLastOpenedDropdown, setLastOpenedDropdown, clearLastOpenedDropdown } from "../utils";
-import styles from "./DatePicker.module.scss";
+import type { ComponentProps, CSSProperties, MouseEvent } from "react";
+import { forwardRef, useCallback, useEffect, useState } from "react";
+import { cn } from "../classes/utils";
+import type { CondensedTShirtSizes } from "../types";
+import { clearLastOpenedDropdown, getLastOpenedDropdown, setLastOpenedDropdown } from "../utils";
+import { ArrowNavigation } from "./ArrowNavigationContext";
+import { Button } from "./Button";
+import { Column } from "./Column";
+import { DropdownWrapper } from "./DropdownWrapper";
+import { Flex } from "./Flex";
+import { Grid } from "./Grid";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { NumberInput } from "./NumberInput";
+import { Option } from "./Option";
+import { RevealFx } from "./RevealFx";
+import { Row } from "./Row";
+import { SegmentedControl } from "./SegmentedControl";
+import { Text } from "./Text";
 
-export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
+export interface DatePickerProps extends Omit<ComponentProps<typeof Flex>, "onChange"> {
   value?: Date;
   onChange?: (date: Date) => void;
   minDate?: Date;
@@ -38,7 +36,7 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
   size?: CondensedTShirtSizes;
   isNested?: boolean;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   currentMonth?: number;
   currentYear?: number;
   onMonthChange?: (increment: number) => void;
@@ -92,7 +90,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const [isTransitioning, setIsTransitioning] = useState(true);
     const [isMonthOpen, setIsMonthOpen] = useState(false);
     const [isYearOpen, setIsYearOpen] = useState(false);
-    const [isReady, setIsReady] = useState(false);
+    const [isReady] = useState(true);
     const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
 
     const [currentMonth, setCurrentMonth] = useState<number>(
@@ -156,34 +154,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     }, [propCurrentMonth, propCurrentYear]);
 
     // Track if calendar is synced to selected value
-    const [isCalendarSynced, setIsCalendarSynced] = useState(false);
-
-    // Sync currentMonth/currentYear to value on mount and when value changes
-    useEffect(() => {
-      // Reset calendar sync to ensure proper re-sync
-      setIsCalendarSynced(false);
-
-      if (value) {
-        setCurrentMonth(value.getMonth());
-        setCurrentYear(value.getFullYear());
-        // Small delay to ensure state updates are processed
-        const timer = setTimeout(() => {
-          setIsCalendarSynced(true);
-        }, 0);
-        return () => clearTimeout(timer);
-      } else {
-        setIsCalendarSynced(true);
-      }
-    }, [value]);
-
-    // Additional sync effect that runs when the component becomes ready
-    useEffect(() => {
-      if (isReady && value && !isCalendarSynced) {
-        setCurrentMonth(value.getMonth());
-        setCurrentYear(value.getFullYear());
-        setIsCalendarSynced(true);
-      }
-    }, [isReady, value, isCalendarSynced]);
+    const [isCalendarSynced] = useState(true);
 
     useEffect(() => {
       setSelectedDate(value);
@@ -199,15 +170,6 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         setCurrentYear(value.getFullYear());
       }
     }, [value]);
-
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setIsTransitioning(true);
-        setIsReady(true);
-      }, 100);
-
-      return () => clearTimeout(timer);
-    }, []);
 
     // Effect to ensure proper highlighting when component mounts or selected date changes
     useEffect(() => {
@@ -247,7 +209,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           return () => clearTimeout(timer);
         }
       }
-    }, [selectedDate, isTimeSelector, isReady, currentMonth, currentYear, isOpen]);
+    }, [selectedDate, isTimeSelector, isReady, currentMonth, currentYear]);
 
     const monthNames = [
       "January",
@@ -447,7 +409,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         const isDisabled = (minDate && currentDate < minDate) || (maxDate && currentDate > maxDate);
 
         // Calculate border radius for disabled days
-        let disabledRadius: "left" | "right" | "none" | undefined = undefined;
+        let disabledRadius: "left" | "right" | "none" | undefined;
         if (isDisabled) {
           // Find consecutive disabled days
           let consecutiveDisabledStart = day;
@@ -509,7 +471,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               tabIndex={-1}
               size={size}
               data-value={currentDate.toISOString()}
-              onClick={(e: React.MouseEvent) => {
+              onClick={(e: MouseEvent) => {
                 if (!isDisabled) {
                   if (timePicker) {
                     // Stop propagation to prevent DropdownWrapper from closing
@@ -518,7 +480,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   handleDateSelect(currentDate);
                 }
               }}
-              onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
+              onMouseEnter={() => {
                 onHover?.(currentDate);
                 setHoveredDate(currentDate);
               }}
@@ -572,7 +534,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     return (
       <Column
-        onClick={(event: React.MouseEvent) => {
+        onClick={(event: MouseEvent) => {
           event.preventDefault();
           event.stopPropagation();
 
@@ -585,7 +547,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           }
         }}
         ref={ref}
-        className={classNames(styles.calendar, className)}
+        className={cn("select-none", className)}
         style={style}
         fillWidth
         horizontal="center"
@@ -625,7 +587,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronLeft"
-                  onClick={(event: React.MouseEvent) => {
+                  onClick={(event: MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
                     handleMonthChange(-1);
@@ -651,11 +613,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                     }}
                     trigger={
                       <Button
-                        onClick={(event: React.MouseEvent) => {
+                        onClick={(event: MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                           setIsMonthOpen(true);
-                           setLastOpenedDropdown("month-dropdown");
+                          setLastOpenedDropdown("month-dropdown");
                         }}
                         variant="secondary"
                         size="s"
@@ -671,7 +633,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         fillWidth
                         gap="2"
                         padding="4"
-                        onClick={(event: React.MouseEvent) => {
+                        onClick={(event: MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                         }}
@@ -689,7 +651,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                                 </Text>
                               }
                               selected={index === currentMonth}
-                              onClick={(value) => {
+                              onClick={() => {
                                 if (!monthDisabled) {
                                   handleMonthSelect(index);
                                   setIsMonthOpen(false);
@@ -722,7 +684,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       <Button
                         variant="secondary"
                         size="s"
-                        onClick={(event: React.MouseEvent) => {
+                        onClick={(event: MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                           setIsYearOpen(true);
@@ -742,7 +704,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         gap="2"
                         overflowY="auto"
                         style={{ maxHeight: "16rem" }}
-                        onClick={(event: React.MouseEvent) => {
+                        onClick={(event: MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
                         }}
@@ -764,7 +726,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                                 </Text>
                               }
                               selected={year === currentYear}
-                              onClick={(value) => {
+                              onClick={() => {
                                 if (!allMonthsDisabled) {
                                   handleYearSelect(year);
                                   setIsYearOpen(false);
@@ -790,7 +752,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronRight"
-                  onClick={(event: React.MouseEvent) => {
+                  onClick={(event: MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
                     handleMonthChange(1);
@@ -890,7 +852,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 key={`calendar-${currentYear}-${currentMonth}-${selectedDate?.getTime() || 0}`}
                 disableHighlighting={true}
                 autoFocus={autoFocus}
-                onSelect={(index) => {
+                onSelect={(index: number) => {
                   // Find the actual button element at this index and click it
                   // Try multiple selectors for different scenarios (dropdown vs standalone)
                   const container =
@@ -908,7 +870,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                     }
                   }
                 }}
-                onFocusChange={(index) => {
+                onFocusChange={() => {
                   // Let React handle highlighting through props only
                   // No DOM manipulation needed
                 }}
@@ -937,4 +899,5 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 );
 
 DatePicker.displayName = "DatePicker";
+
 export { DatePicker };

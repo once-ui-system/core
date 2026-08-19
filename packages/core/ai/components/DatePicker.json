@@ -25,7 +25,7 @@
   "size": "CondensedTShirtSizes = m",
   "isNested": "boolean = false",
   "className": "string",
-  "style": "React.CSSProperties",
+  "style": "CSSProperties",
   "currentMonth": "number",
   "currentYear": "number",
   "onMonthChange": "(increment: number) => void",
