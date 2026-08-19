@@ -1,11 +1,35 @@
 "use client";
 
-import React, { forwardRef, useRef, useState, useEffect } from "react";
-import classNames from "clsx";
-import { Column, Row, Text } from ".";
-import styles from "./Slider.module.scss";
+import { cva } from "class-variance-authority";
+import type { ChangeEvent, CSSProperties, InputHTMLAttributes } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
+import { cn } from "../classes/utils";
+import { Column } from "./Column";
+import { Row } from "./Row";
+import { Text } from "./Text";
 
-interface SliderProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "onChange"> {
+export const sliderVariants = cva(
+  "group/slider relative flex items-center w-full h-40 select-none",
+  {
+    variants: {
+      disabled: {
+        true: "opacity-40 cursor-not-allowed",
+        false: "cursor-grab active:cursor-grabbing",
+      },
+      dragging: {
+        true: "cursor-grabbing",
+        false: "",
+      },
+    },
+    defaultVariants: {
+      disabled: false,
+      dragging: false,
+    },
+  },
+);
+
+export interface SliderProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "onChange" | "value"> {
   value: number;
   onChange: (value: number) => void;
   min?: number;
@@ -15,7 +39,7 @@ interface SliderProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 
   showValue?: boolean;
   disabled?: boolean;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 const Slider = forwardRef<HTMLInputElement, SliderProps>(
@@ -38,28 +62,28 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
     const sliderRef = useRef<HTMLInputElement>(null);
     const [isDragging, setIsDragging] = useState(false);
 
-    const percentage = ((value - min) / (max - min)) * 100;
+    const percentage =
+      max > min ? Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100)) : 0;
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
       const newValue = parseFloat(e.target.value);
       onChange(newValue);
     };
 
     useEffect(() => {
       if (isDragging) {
-        const handleMouseUp = () => setIsDragging(false);
-        window.addEventListener("mouseup", handleMouseUp);
-        return () => window.removeEventListener("mouseup", handleMouseUp);
+        const handleDragEnd = () => setIsDragging(false);
+        window.addEventListener("mouseup", handleDragEnd);
+        window.addEventListener("touchend", handleDragEnd);
+        return () => {
+          window.removeEventListener("mouseup", handleDragEnd);
+          window.removeEventListener("touchend", handleDragEnd);
+        };
       }
     }, [isDragging]);
 
     return (
-      <Column
-        fillWidth
-        gap="8"
-        className={classNames(styles.container, className)}
-        style={style}
-      >
+      <Column fillWidth gap="8" className={cn("select-none isolate", className)} style={style}>
         {(label || showValue) && (
           <Row fillWidth horizontal="between" vertical="center">
             {label && (
@@ -77,14 +101,12 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
         <Row
           fillWidth
           height="40"
-          className={classNames(styles.sliderWrapper, {
-            [styles.disabled]: disabled,
-            [styles.dragging]: isDragging,
-          })}
+          vertical="center"
+          className={cn(sliderVariants({ disabled, dragging: isDragging }))}
         >
-          <div className={styles.track}>
+          <div className="absolute top-1/2 -translate-y-1/2 inset-x-0 h-4 bg-neutral-alpha-medium rounded-full overflow-hidden">
             <div
-              className={styles.fill}
+              className="absolute top-0 left-0 h-full bg-brand-solid-medium pointer-events-none"
               style={{ width: `${percentage}%` }}
             />
           </div>
@@ -96,13 +118,23 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
             step={step}
             value={value}
             onChange={handleChange}
-            onMouseDown={() => setIsDragging(true)}
+            onMouseDown={() => !disabled && setIsDragging(true)}
+            onTouchStart={() => !disabled && setIsDragging(true)}
             disabled={disabled}
-            className={styles.input}
+            aria-label={label || (props["aria-label"] as string) || "Slider"}
+            aria-valuenow={value}
+            aria-valuemin={min}
+            aria-valuemax={max}
+            className="peer absolute top-0 left-0 w-full h-full opacity-0 cursor-inherit z-[2] m-0 disabled:cursor-not-allowed"
             {...props}
           />
           <div
-            className={styles.thumb}
+            className={cn(
+              "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-brand-on-solid-strong border-2 border-solid border-brand-solid-medium rounded-full pointer-events-none transition-transform duration-100 shadow-s",
+              !disabled && "group-hover/slider:scale-[1.2]",
+              isDragging && "scale-[1.2] cursor-grabbing",
+              "peer-focus-visible:outline-2 peer-focus-visible:outline-brand-alpha-medium peer-focus-visible:outline-offset-2",
+            )}
             style={{ left: `${percentage}%` }}
           />
         </Row>
@@ -114,4 +146,3 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
 Slider.displayName = "Slider";
 
 export { Slider };
-export type { SliderProps };

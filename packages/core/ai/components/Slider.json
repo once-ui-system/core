@@ -11,7 +11,7 @@
   "showValue": "boolean = false",
   "disabled": "boolean = false",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": []
 }
