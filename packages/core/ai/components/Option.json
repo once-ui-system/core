@@ -13,18 +13,18 @@
   "StyleProps"
  ],
  "props": {
-  "label": "React.ReactNode",
+  "label": "ReactNode",
   "href": "string",
   "value": "!string",
-  "hasPrefix": "React.ReactNode",
-  "hasSuffix": "React.ReactNode",
-  "description": "React.ReactNode",
+  "hasPrefix": "ReactNode",
+  "hasSuffix": "ReactNode",
+  "description": "ReactNode",
   "danger": "boolean",
   "selected": "boolean",
   "disabled": "boolean = false",
   "highlighted": "boolean",
   "tabIndex": "number",
-  "children": "React.ReactNode",
+  "children": "ReactNode",
   "onClick": "(value: string) => void",
   "onLinkClick": "() => void"
  },
