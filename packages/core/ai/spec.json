@@ -765,7 +765,7 @@
     "onChange": "(date: Date) => void",
     "minHeight": "number",
     "className": "string",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "timePicker": "boolean = false",
     "minDate": "Date",
     "maxDate": "Date"
