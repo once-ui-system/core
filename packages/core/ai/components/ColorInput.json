@@ -6,7 +6,7 @@
  ],
  "props": {
   "value": "!string",
-  "onChange": "!(e: React.ChangeEvent<HTMLInputElement>) => void",
+  "onChange": "!(e: ChangeEvent<HTMLInputElement>) => void",
   "supportAlpha": "boolean = false"
  },
  "mixinsRef": []
