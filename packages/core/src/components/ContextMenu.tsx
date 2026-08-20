@@ -1,19 +1,22 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  ReactNode,
+import type { Placement } from "@floating-ui/react-dom";
+import {
+  type CSSProperties,
   forwardRef,
-  MouseEvent as ReactMouseEvent,
-  KeyboardEvent,
+  type KeyboardEvent,
+  type MouseEvent as ReactMouseEvent,
+  type ReactNode,
   useCallback,
   useEffect,
+  useRef,
+  useState,
 } from "react";
-import { Placement } from "@floating-ui/react-dom";
 import { createPortal } from "react-dom";
-import { Flex, Dropdown, ScrollLock } from ".";
-import styles from "./ContextMenu.module.scss";
+import { cn } from "../classes/utils";
+import { Dropdown } from "./Dropdown";
+import { Flex } from "./Flex";
+import { ScrollLock } from "./ScrollLock";
 
 export interface ContextMenuProps {
   children: ReactNode;
@@ -23,7 +26,7 @@ export interface ContextMenuProps {
   minWidth?: number;
   maxWidth?: number;
   minHeight?: number;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   className?: string;
   onSelect?: (value: string) => void;
   closeAfterClick?: boolean;
@@ -50,6 +53,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       disabled = false,
       className,
       style,
+      selectedOption,
       ...rest
     },
     ref,
@@ -68,11 +72,11 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
 
     // Handle open state changes
     const handleOpenChange = useCallback(
-      (open: boolean) => {
+      (nextOpen: boolean) => {
         if (!isControlled) {
-          setInternalIsOpen(open);
+          setInternalIsOpen(nextOpen);
         }
-        onOpenChange?.(open);
+        onOpenChange?.(nextOpen);
       },
       [isControlled, onOpenChange],
     );
@@ -85,7 +89,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     const handleContextMenu = useCallback(
       (e: ReactMouseEvent) => {
         if (disabled) return;
-        
+
         e.preventDefault();
         e.stopPropagation();
 
@@ -102,7 +106,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     const handleClick = useCallback(
       (e: ReactMouseEvent) => {
         if (disabled) return;
-        
+
         // Check if it's a control+click (common right-click equivalent on Mac)
         if (e.ctrlKey || e.metaKey) {
           e.preventDefault();
@@ -120,12 +124,10 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
 
     // Close dropdown when clicking outside
     useEffect(() => {
-      const handleClickOutside = (e: MouseEvent) => {
-        if (
-          isDropdownOpen &&
-          dropdownRef.current &&
-          !dropdownRef.current.contains(e.target as Node)
-        ) {
+      if (!isDropdownOpen) return;
+
+      const handleClickOutside = (e: globalThis.MouseEvent) => {
+        if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
           handleOpenChange(false);
         }
       };
@@ -134,6 +136,21 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       return () => {
         document.removeEventListener("mousedown", handleClickOutside);
       };
+    }, [isDropdownOpen, handleOpenChange]);
+
+    // Handle global Escape key to close dropdown
+    useEffect(() => {
+      if (!isDropdownOpen) return;
+
+      const handleGlobalKeyDown = (e: globalThis.KeyboardEvent) => {
+        if (e.key === "Escape") {
+          handleOpenChange(false);
+          setFocusedIndex(-1);
+        }
+      };
+
+      document.addEventListener("keydown", handleGlobalKeyDown);
+      return () => document.removeEventListener("keydown", handleGlobalKeyDown);
     }, [isDropdownOpen, handleOpenChange]);
 
     // Focus management
@@ -150,7 +167,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
         const scrollY = window.scrollY;
 
         // Focus the dropdown after a small delay to ensure it's rendered
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           if (dropdownRef.current) {
             // Force focus on the dropdown container first
             dropdownRef.current.focus();
@@ -186,9 +203,12 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
             // Restore scroll position that might have been changed by focus
             window.scrollTo(scrollX, scrollY);
           }
-        }, 50); // Small delay to ensure DOM is ready
+        }, 50);
 
-      } else if (!isDropdownOpen && previouslyFocusedElement.current) {
+        return () => clearTimeout(timer);
+      }
+
+      if (!isDropdownOpen && previouslyFocusedElement.current) {
         // Restore focus when closing
         (previouslyFocusedElement.current as HTMLElement).focus();
       }
@@ -261,7 +281,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
           setFocusedIndex(newIndex);
 
           // Highlight the element visually
-          optionElements.forEach((el, i) => {
+          for (const [i, el] of optionElements.entries()) {
             if (i === newIndex) {
               (el as HTMLElement).classList.add("highlighted");
               // Scroll into view if needed
@@ -271,7 +291,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
             } else {
               (el as HTMLElement).classList.remove("highlighted");
             }
-          });
+          }
         } else if (e.key === "Enter" || e.key === " ") {
           e.preventDefault();
 
@@ -302,66 +322,54 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
           ref={containerRef}
           onContextMenu={handleContextMenu}
           onClick={handleClick}
-          className={className || ""}
-          style={{...style, opacity: disabled ? 0.6 : undefined}}
+          className={cn(disabled && "cursor-not-allowed opacity-60", className)}
+          style={style}
           aria-disabled={disabled}
         >
           {children}
           {isDropdownOpen &&
             isBrowser &&
             createPortal(
-            <Flex
-              position="fixed"
-              zIndex={10}
-              tabIndex={0}
-              ref={(node) => {
-                dropdownRef.current = node;
-                if (typeof ref === "function") {
-                  ref(node);
-                } else if (ref) {
-                  ref.current = node;
-                }
-              }}
-              className={styles.fadeIn}
-              style={{
-                top: contextPosition.y,
-                left: contextPosition.x,
-              }}
-              role="menu"
-              onKeyDown={handleKeyDown}
-              onClick={(e) => {
-                const el = e.target as HTMLElement;
-                const isSelectable =
-                  el.closest(".option") ||
-                  el.closest("[role='option']") ||
-                  el.closest("[data-value]");
-
-                if (isSelectable && closeAfterClick) {
-                  setTimeout(() => {
-                    handleOpenChange(false);
-                  }, 50);
-                }
-              }}
-            >
-              <Dropdown
-                minWidth={minWidth}
-                maxWidth={maxWidth}
-                minHeight={minHeight}
-                radius="l"
-                onSelect={(value) => {
-                  onSelect?.(value);
-                  if (closeAfterClick) {
-                    handleOpenChange(false);
+              <Flex
+                position="fixed"
+                zIndex={10}
+                tabIndex={0}
+                ref={(node) => {
+                  dropdownRef.current = node;
+                  if (typeof ref === "function") {
+                    ref(node);
+                  } else if (ref) {
+                    ref.current = node;
                   }
                 }}
-                {...rest}
+                className="origin-top-left animate-fadeIn"
+                style={{
+                  top: contextPosition.y,
+                  left: contextPosition.x,
+                }}
+                role="menu"
+                onKeyDown={handleKeyDown}
               >
-                {dropdown}
-              </Dropdown>
-            </Flex>,
-            document.body,
-          )}
-      </Flex>
+                <Dropdown
+                  minWidth={minWidth}
+                  maxWidth={maxWidth}
+                  minHeight={minHeight}
+                  radius="l"
+                  selectedOption={selectedOption}
+                  onSelect={(value) => {
+                    onSelect?.(value);
+                    if (closeAfterClick) {
+                      handleOpenChange(false);
+                    }
+                  }}
+                  {...rest}
+                >
+                  {dropdown}
+                </Dropdown>
+              </Flex>,
+              document.body,
+            )}
+        </Flex>
       </>
     );
   },

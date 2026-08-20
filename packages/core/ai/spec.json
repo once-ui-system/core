@@ -742,7 +742,7 @@
     "minWidth": "number = 12",
     "maxWidth": "number",
     "minHeight": "number",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "className": "string",
     "onSelect": "(value: string) => void",
     "closeAfterClick": "boolean = true",
