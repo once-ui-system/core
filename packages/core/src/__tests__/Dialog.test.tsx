@@ -1,25 +1,18 @@
-import React from "react";
 import { act, createEvent, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import type React from "react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Dialog, DialogProvider } from "../components/Dialog";
-import { resetDialogState } from "../test/dialogTestUtils";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts";
-import styles from "../components/Dialog.module.scss";
+import { resetDialogState } from "../test/dialogTestUtils";
 
 vi.mock("../components", async () => {
   const actual = await vi.importActual<typeof import("../components")>("../components");
 
   return {
     ...actual,
-    IconButton: ({
-      onClick,
-      tooltip,
-    }: {
-      onClick?: () => void;
-      tooltip?: string;
-    }) => (
+    IconButton: ({ onClick, tooltip }: { onClick?: () => void; tooltip?: string }) => (
       <button aria-label={tooltip || "Close"} onClick={onClick} type="button">
         Close
       </button>
@@ -126,7 +119,9 @@ describe("Dialog", () => {
       const labelledBy = overlay.getAttribute("aria-labelledby");
 
       expect(labelledBy).toBeTruthy();
-      expect(labelledBy && document.getElementById(labelledBy)).toHaveTextContent("Custom title node");
+      expect(labelledBy && document.getElementById(labelledBy)).toHaveTextContent(
+        "Custom title node",
+      );
     });
 
     it("renders description when provided", () => {
@@ -171,22 +166,22 @@ describe("Dialog", () => {
       rerender(<Dialog {...defaultProps} isOpen />);
 
       expect(getOverlay()).toBeInTheDocument();
-      expect(getOverlay()).not.toHaveClass(styles.open);
+      expect(getOverlay()).not.toHaveClass("open");
 
       advanceTimers(0);
 
-      expect(getOverlay()).toHaveClass(styles.open);
+      expect(getOverlay()).toHaveClass("open");
     });
 
     it("stops animating immediately on close and hides after 300ms", () => {
       const { rerender } = renderDialog();
 
       advanceTimers(0);
-      expect(getOverlay()).toHaveClass(styles.open);
+      expect(getOverlay()).toHaveClass("open");
 
       rerender(<Dialog {...defaultProps} isOpen={false} />);
 
-      expect(getOverlay()).not.toHaveClass(styles.open);
+      expect(getOverlay()).not.toHaveClass("open");
 
       advanceTimers(299);
       expect(getOverlay()).toBeInTheDocument();
@@ -206,7 +201,7 @@ describe("Dialog", () => {
       advanceTimers(300);
 
       expect(getOverlay()).toBeInTheDocument();
-      expect(getOverlay()).toHaveClass(styles.open);
+      expect(getOverlay()).toHaveClass("open");
     });
 
     it("handles rapid close-open-close without leaving the dialog visible", () => {
@@ -217,7 +212,7 @@ describe("Dialog", () => {
       rerender(<Dialog {...defaultProps} isOpen />);
       rerender(<Dialog {...defaultProps} isOpen={false} />);
 
-      expect(getOverlay()).not.toHaveClass(styles.open);
+      expect(getOverlay()).not.toHaveClass("open");
 
       advanceTimers(300);
 
@@ -395,19 +390,20 @@ describe("Dialog", () => {
     });
 
     it("does not crash when no focusable elements are found", () => {
-      const focusableSelector = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+      const focusableSelector =
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
       const originalQuerySelectorAll = HTMLElement.prototype.querySelectorAll;
       let interceptedQuery = false;
 
-      const spy = vi.spyOn(HTMLElement.prototype, "querySelectorAll").mockImplementation(
-        function mockQuery(this: HTMLElement, selectors: string) {
+      const spy = vi
+        .spyOn(HTMLElement.prototype, "querySelectorAll")
+        .mockImplementation(function mockQuery(this: HTMLElement, selectors: string) {
           if (selectors === focusableSelector && this.getAttribute("tabindex") === "-1") {
             interceptedQuery = true;
             return document.createDocumentFragment().querySelectorAll(selectors);
           }
           return originalQuerySelectorAll.call(this, selectors);
-        },
-      );
+        });
 
       try {
         expect(() => {
@@ -491,7 +487,6 @@ describe("Dialog", () => {
       renderDialog({ title: "Stacked dialog", stack: true });
 
       const [baseOverlay] = screen.getAllByRole("dialog");
-      const basePanel = getDialogPanel(baseOverlay);
 
       expect(baseOverlay.inert).toBe(true);
     });

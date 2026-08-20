@@ -851,7 +851,7 @@
   "DialogProvider": {
    "group": "components",
    "props": {
-    "children": "!React.ReactNode"
+    "children": "!ReactNode"
    }
   },
   "Dialog": {
