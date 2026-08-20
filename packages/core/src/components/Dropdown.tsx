@@ -1,9 +1,11 @@
 "use client";
 
-import React, { ReactNode, forwardRef, SyntheticEvent } from "react";
-import { Column, Row } from ".";
+import { forwardRef, type KeyboardEvent, type MouseEvent, type ReactNode } from "react";
+import { cn } from "../classes/utils";
+import { Column } from "./Column";
+import { Row, type RowProps } from "./Row";
 
-interface DropdownProps extends Omit<React.ComponentProps<typeof Row>, "onSelect"> {
+export interface DropdownProps extends Omit<RowProps, "onSelect"> {
   selectedOption?: string;
   children?: ReactNode;
   onEscape?: () => void;
@@ -12,10 +14,26 @@ interface DropdownProps extends Omit<React.ComponentProps<typeof Row>, "onSelect
 }
 
 const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
-  ({ selectedOption, className, children, onEscape, onSelect, disabled = false, ...flex }, ref) => {
-    const handleSelect = (event: SyntheticEvent<HTMLDivElement>) => {
+  (
+    {
+      selectedOption,
+      className,
+      children,
+      onEscape,
+      onSelect,
+      disabled = false,
+      border = "neutral-medium",
+      background = "surface",
+      onClick,
+      onKeyDown,
+      style,
+      ...flex
+    },
+    ref,
+  ) => {
+    const handleSelect = (event: MouseEvent<HTMLDivElement>) => {
       if (disabled) return;
-      
+
       // Only handle clicks on elements that have a data-value attribute
       const target = event.target as HTMLElement;
       const value =
@@ -25,6 +43,15 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
       if (onSelect && value) {
         onSelect(value);
       }
+
+      onClick?.(event);
+    };
+
+    const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === "Escape" && onEscape) {
+        onEscape();
+      }
+      onKeyDown?.(event);
     };
 
     return (
@@ -32,14 +59,16 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         ref={ref}
         role="listbox"
         onClick={handleSelect}
-        border="neutral-medium"
-        background="surface"
-        className={disabled ? "cursor-not-allowed" : undefined}
-        style={{ opacity: disabled ? 0.6 : undefined }}
+        onKeyDown={handleKeyDown}
+        border={border}
+        background={background}
+        cursor={disabled ? "not-allowed" : flex.cursor}
+        className={cn(disabled && "cursor-not-allowed opacity-60", className)}
+        style={style}
         aria-disabled={disabled}
         {...flex}
       >
-        <Column flex={1} overflowY="auto" gap="2">
+        <Column fillWidth flex={1} overflowY="auto" gap="2">
           {children}
         </Column>
       </Row>
@@ -50,4 +79,3 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 Dropdown.displayName = "Dropdown";
 
 export { Dropdown };
-export type { DropdownProps };

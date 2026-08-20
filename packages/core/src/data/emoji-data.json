@@ -14647,6 +14647,18 @@
       "tags": []
     },
     {
+      "char": "🇬🇧",
+      "description": "flag: United Kingdom",
+      "aliases": [
+        "gb",
+        "uk"
+      ],
+      "tags": [
+        "flag",
+        "british"
+      ]
+    },
+    {
       "char": "🇬🇩",
       "description": "flag: Grenada",
       "aliases": [

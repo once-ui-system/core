@@ -901,7 +901,9 @@
     "children": "ReactNode",
     "onEscape": "() => void",
     "onSelect": "(event: string) => void",
-    "disabled": "boolean = false"
+    "disabled": "boolean = false",
+    "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\" = surface",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-medium"
    }
   },
   "DropdownWrapper": {
