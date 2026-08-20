@@ -949,7 +949,7 @@
     "className": "string",
     "background": "StyleProps[\"background\"]",
     "columns": "GridSize = 8",
-    "style": "React.CSSProperties"
+    "style": "CSSProperties"
    }
   },
   "EmojiPickerDropdown": {

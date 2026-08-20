@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, KeyboardEvent, useId, memo, useMemo } from "react";
-import {
-  SegmentedControl,
-  ButtonOption,
-  IconButton,
-  Grid,
-  Flex,
-  Text,
-  Input,
-  Icon,
-  Column,
-  Row,
-} from ".";
+import type { ComponentProps, CSSProperties, KeyboardEvent } from "react";
+import { forwardRef, memo, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import generatedEmojiData from "../data/emoji-data.json";
 import { useDebounce } from "../hooks/useDebounce";
-import styles from "./EmojiPicker.module.scss";
+import type { StyleProps } from "../interfaces";
+import type { GridSize } from "../types";
+import { Column } from "./Column";
+import type { Flex } from "./Flex";
+import { Grid } from "./Grid";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { Input } from "./Input";
+import { Row } from "./Row";
+import { type ButtonOption, SegmentedControl } from "./SegmentedControl";
+import { Text } from "./Text";
 
 type EmojiItem = {
   char: string;
@@ -80,21 +80,18 @@ const fallbackEmojiData: EmojiData = {
   ],
 };
 
-import generatedEmojiData from "../data/emoji-data.json";
-import { StyleProps, GridSize } from "../";
-
 const emojiData: EmojiData =
   Object.keys(generatedEmojiData).length > 0
     ? (generatedEmojiData as EmojiData)
     : fallbackEmojiData;
 
-export interface EmojiPickerProps extends Omit<React.ComponentProps<typeof Flex>, "onSelect"> {
+export interface EmojiPickerProps extends Omit<ComponentProps<typeof Flex>, "onSelect"> {
   onSelect: (emoji: string) => void;
   onClose?: () => void;
   className?: string;
   background?: StyleProps["background"];
   columns?: GridSize;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 // Memoized emoji button to prevent unnecessary re-renders
@@ -109,14 +106,13 @@ interface EmojiButtonProps {
 const EmojiButton = memo(({ emoji, index, isFocused, onSelect, onFocus }: EmojiButtonProps) => {
   return (
     <IconButton
-      key={index}
       tabIndex={index === 0 || isFocused ? 0 : -1}
       variant="tertiary"
       size="l"
       onClick={() => onSelect(emoji.char)}
       aria-label={emoji.description}
       title={emoji.description}
-      className={styles.emojiButton}
+      className="will-change-transform [contain:layout_style_paint] transition-transform duration-100 ease-out hover:scale-105 focus-visible:scale-105 focus-visible:!bg-neutral-alpha-weak"
       onFocus={() => onFocus(index)}
       role="gridcell"
       ref={isFocused ? (el) => el?.focus() : undefined}
@@ -128,199 +124,200 @@ const EmojiButton = memo(({ emoji, index, isFocused, onSelect, onFocus }: EmojiB
 
 EmojiButton.displayName = "EmojiButton";
 
-const EmojiPicker = ({
-  onSelect,
-  onClose,
-  className,
-  background,
-  columns = "8",
-  style,
-  ...flex
-}: EmojiPickerProps) => {
-  const searchInputId = useId();
-  const [inputValue, setInputValue] = useState("");
-  const searchQuery = useDebounce(inputValue, 300);
-  const [activeCategory, setActiveCategory] = useState("smileys");
-  const [focusedEmojiIndex, setFocusedEmojiIndex] = useState<number>(-1);
-  const gridRef = useRef<HTMLDivElement>(null);
+const EmojiPicker = forwardRef<HTMLDivElement, EmojiPickerProps>(
+  ({ onSelect, onClose, className, background, columns = "8", style, ...flex }, ref) => {
+    const searchInputId = useId();
+    const [inputValue, setInputValue] = useState("");
+    const searchQuery = useDebounce(inputValue, 300);
+    const [activeCategory, setActiveCategory] = useState("smileys");
+    const [focusedEmojiIndex, setFocusedEmojiIndex] = useState<number>(-1);
+    const gridRef = useRef<HTMLDivElement>(null);
 
-  const getCategoryIcon = (category: string): string => {
-    switch (category) {
-      case "smileys":
-        return "smiley";
-      case "animals":
-        return "paw";
-      case "food":
-        return "food";
-      case "activities":
-        return "ball";
-      case "travel":
-        return "world";
-      case "objects":
-        return "gift";
-      case "symbols":
-        return "symbol";
-      case "flags":
-        return "flag";
-      default:
-        return "smiley";
-    }
-  };
-
-  const categoryButtons: ButtonOption[] = Object.keys(emojiData).map((category) => ({
-    value: category,
-    children: <Icon name={getCategoryIcon(category)} size="s" />,
-  }));
-
-  const handleEmojiSelect = useCallback(
-    (emoji: string) => {
-      onSelect(emoji);
-      if (onClose) {
-        onClose();
-      }
-    },
-    [onSelect, onClose],
-  );
-
-  const handleCategoryChange = useCallback((value: string) => {
-    setActiveCategory(value);
-  }, []);
-
-  const filteredEmojis = useMemo(() => 
-    searchQuery
-      ? Object.values(emojiData)
-          .flat()
-          .filter((emoji: EmojiItem) => emoji.description.includes(searchQuery.toLowerCase()))
-      : emojiData[activeCategory as keyof typeof emojiData] || []
-  , [searchQuery, activeCategory]);
-
-  // Reset focused index when filtered emojis change
-  useEffect(() => {
-    setFocusedEmojiIndex(-1);
-  }, [filteredEmojis]);
-
-  // Memoize the onFocus handler to prevent re-creating on every render
-  const handleFocus = useCallback((index: number) => {
-    setFocusedEmojiIndex(index);
-  }, []);
-
-  // Handle keyboard navigation
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent<HTMLDivElement>) => {
-      if (filteredEmojis.length === 0) return;
-
-      // Use provided columns prop for grid navigation
-      const emojisPerRow = Number(columns) || 6;
-
-      let newIndex = focusedEmojiIndex;
-
-      switch (e.key) {
-        case "ArrowRight":
-          e.preventDefault();
-          newIndex = focusedEmojiIndex < filteredEmojis.length - 1 ? focusedEmojiIndex + 1 : 0;
-          break;
-        case "ArrowLeft":
-          e.preventDefault();
-          newIndex = focusedEmojiIndex > 0 ? focusedEmojiIndex - 1 : filteredEmojis.length - 1;
-          break;
-        case "ArrowDown":
-          e.preventDefault();
-          newIndex = focusedEmojiIndex + emojisPerRow;
-          if (newIndex >= filteredEmojis.length) {
-            // Wrap to the beginning of the appropriate column
-            newIndex = focusedEmojiIndex % emojisPerRow;
-            if (newIndex >= filteredEmojis.length) newIndex = filteredEmojis.length - 1;
-          }
-          break;
-        case "ArrowUp":
-          e.preventDefault();
-          newIndex = focusedEmojiIndex - emojisPerRow;
-          if (newIndex < 0) {
-            // Wrap to the end of the appropriate column
-            const rowsCount = Math.ceil(filteredEmojis.length / emojisPerRow);
-            newIndex = (rowsCount - 1) * emojisPerRow + (focusedEmojiIndex % emojisPerRow);
-            if (newIndex >= filteredEmojis.length) {
-              newIndex = filteredEmojis.length - 1;
-            }
-          }
-          break;
-        case "Enter":
-        case " ":
-          if (focusedEmojiIndex >= 0 && focusedEmojiIndex < filteredEmojis.length) {
-            e.preventDefault();
-            handleEmojiSelect(filteredEmojis[focusedEmojiIndex].char);
-          }
-          break;
+    const getCategoryIcon = (category: string): string => {
+      switch (category) {
+        case "smileys":
+          return "smiley";
+        case "animals":
+          return "paw";
+        case "food":
+          return "food";
+        case "activities":
+          return "ball";
+        case "travel":
+          return "world";
+        case "objects":
+          return "gift";
+        case "symbols":
+          return "symbol";
+        case "flags":
+          return "flag";
         default:
-          return;
+          return "smiley";
       }
+    };
 
-      setFocusedEmojiIndex(newIndex);
-    },
-    [filteredEmojis, focusedEmojiIndex, handleEmojiSelect, columns],
-  );
+    const categoryButtons: ButtonOption[] = Object.keys(emojiData).map((category) => ({
+      value: category,
+      children: <Icon name={getCategoryIcon(category)} size="s" />,
+    }));
 
-  return (
-    <Column
-      gap="16"
-      background={background}
-      className={className}
-      style={style}
-      data-testid="emoji-picker"
-      height={24}
-      {...flex}
-    >
-      <Input
-        id={`emoji-search-${searchInputId}`}
-        placeholder="Search emojis"
-        value={inputValue}
-        height="s"
-        onChange={(e) => setInputValue(e.target.value)}
-        hasPrefix={<Icon size="s" onBackground="neutral-weak" name="search" />}
-        aria-label="Search emojis"
-      />
+    const handleEmojiSelect = useCallback(
+      (emoji: string) => {
+        onSelect(emoji);
+        if (onClose) {
+          onClose();
+        }
+      },
+      [onSelect, onClose],
+    );
 
-      <Column tabIndex={-1} fillHeight overflowY="auto" overflowX="hidden">
-        {filteredEmojis.length > 0 ? (
-          <Grid
-            gap="2"
+    const handleCategoryChange = useCallback((value: string) => {
+      setActiveCategory(value);
+    }, []);
+
+    const filteredEmojis = useMemo(
+      () =>
+        searchQuery
+          ? Object.values(emojiData)
+              .flat()
+              .filter((emoji: EmojiItem) =>
+                emoji.description.toLowerCase().includes(searchQuery.toLowerCase()),
+              )
+          : emojiData[activeCategory as keyof typeof emojiData] || [],
+      [searchQuery, activeCategory],
+    );
+
+    // Reset focused index when filtered emojis change
+    useEffect(() => {
+      if (filteredEmojis) {
+        setFocusedEmojiIndex(-1);
+      }
+    }, [filteredEmojis]);
+
+    // Memoize the onFocus handler to prevent re-creating on every render
+    const handleFocus = useCallback((index: number) => {
+      setFocusedEmojiIndex(index);
+    }, []);
+
+    // Handle keyboard navigation
+    const handleKeyDown = useCallback(
+      (e: KeyboardEvent<HTMLDivElement>) => {
+        if (filteredEmojis.length === 0) return;
+
+        // Use provided columns prop for grid navigation
+        const emojisPerRow = Number(columns) || 6;
+
+        let newIndex = focusedEmojiIndex;
+
+        switch (e.key) {
+          case "ArrowRight":
+            e.preventDefault();
+            newIndex = focusedEmojiIndex < filteredEmojis.length - 1 ? focusedEmojiIndex + 1 : 0;
+            break;
+          case "ArrowLeft":
+            e.preventDefault();
+            newIndex = focusedEmojiIndex > 0 ? focusedEmojiIndex - 1 : filteredEmojis.length - 1;
+            break;
+          case "ArrowDown":
+            e.preventDefault();
+            newIndex = focusedEmojiIndex + emojisPerRow;
+            if (newIndex >= filteredEmojis.length) {
+              // Wrap to the beginning of the appropriate column
+              newIndex = focusedEmojiIndex % emojisPerRow;
+              if (newIndex >= filteredEmojis.length) newIndex = filteredEmojis.length - 1;
+            }
+            break;
+          case "ArrowUp":
+            e.preventDefault();
+            newIndex = focusedEmojiIndex - emojisPerRow;
+            if (newIndex < 0) {
+              // Wrap to the end of the appropriate column
+              const rowsCount = Math.ceil(filteredEmojis.length / emojisPerRow);
+              newIndex = (rowsCount - 1) * emojisPerRow + (focusedEmojiIndex % emojisPerRow);
+              if (newIndex >= filteredEmojis.length) {
+                newIndex = filteredEmojis.length - 1;
+              }
+            }
+            break;
+          case "Enter":
+          case " ":
+            if (focusedEmojiIndex >= 0 && focusedEmojiIndex < filteredEmojis.length) {
+              e.preventDefault();
+              handleEmojiSelect(filteredEmojis[focusedEmojiIndex].char);
+            }
+            break;
+          default:
+            return;
+        }
+
+        setFocusedEmojiIndex(newIndex);
+      },
+      [filteredEmojis, focusedEmojiIndex, handleEmojiSelect, columns],
+    );
+
+    return (
+      <Column
+        ref={ref}
+        gap="16"
+        background={background}
+        className={className}
+        style={style}
+        data-testid="emoji-picker"
+        height={24}
+        {...flex}
+      >
+        <Input
+          id={`emoji-search-${searchInputId}`}
+          placeholder="Search emojis"
+          value={inputValue}
+          height="s"
+          onChange={(e) => setInputValue(e.target.value)}
+          hasPrefix={<Icon size="s" onBackground="neutral-weak" name="search" />}
+          aria-label="Search emojis"
+        />
+
+        <Column tabIndex={-1} fillHeight overflowY="auto" overflowX="hidden">
+          {filteredEmojis.length > 0 ? (
+            <Grid
+              gap="2"
+              fillWidth
+              columns={columns}
+              aria-label={searchQuery ? "Search results" : `${activeCategory} emojis`}
+              ref={gridRef}
+              onKeyDown={handleKeyDown}
+              tabIndex={-1}
+              role="grid"
+            >
+              {filteredEmojis.map((emoji: EmojiItem, index: number) => (
+                <EmojiButton
+                  key={`${emoji.char}-${emoji.description}`}
+                  emoji={emoji}
+                  index={index}
+                  isFocused={index === focusedEmojiIndex}
+                  onSelect={handleEmojiSelect}
+                  onFocus={handleFocus}
+                />
+              ))}
+            </Grid>
+          ) : (
+            <Row fill center align="center" onBackground="neutral-weak">
+              No results found
+            </Row>
+          )}
+        </Column>
+
+        {!searchQuery && (
+          <SegmentedControl
+            buttons={categoryButtons}
+            onToggle={handleCategoryChange}
+            defaultSelected={activeCategory}
             fillWidth
-            columns={columns}
-            aria-label={searchQuery ? "Search results" : `${activeCategory} emojis`}
-            ref={gridRef}
-            onKeyDown={handleKeyDown}
-            tabIndex={-1}
-            role="grid"
-          >
-            {filteredEmojis.map((emoji: EmojiItem, index: number) => (
-              <EmojiButton
-                key={index}
-                emoji={emoji}
-                index={index}
-                isFocused={index === focusedEmojiIndex}
-                onSelect={handleEmojiSelect}
-                onFocus={handleFocus}
-              />
-            ))}
-          </Grid>
-        ) : (
-          <Row fill center align="center" onBackground="neutral-weak">
-            No results found
-          </Row>
+          />
         )}
       </Column>
-
-      {!searchQuery && (
-        <SegmentedControl
-          buttons={categoryButtons}
-          onToggle={handleCategoryChange}
-          defaultSelected={activeCategory}
-          fillWidth
-        />
-      )}
-    </Column>
-  );
-};
+    );
+  },
+);
 
 EmojiPicker.displayName = "EmojiPicker";
 
