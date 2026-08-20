@@ -1,31 +1,40 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useLayoutEffect,
-  ReactNode,
+import {
+  autoUpdate,
+  flip,
+  offset,
+  type Placement,
+  shift,
+  size,
+  useFloating,
+} from "@floating-ui/react-dom";
+import {
+  Children,
+  cloneElement,
+  type FocusEvent,
   forwardRef,
-  useImperativeHandle,
+  isValidElement,
+  type KeyboardEvent,
+  type ReactElement,
+  type ReactNode,
   useCallback,
-  KeyboardEvent,
-  FocusEvent,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
 import { createPortal } from "react-dom";
-import {
-  useFloating,
-  shift,
-  offset,
-  flip,
-  size,
-  autoUpdate,
-  Placement,
-} from "@floating-ui/react-dom";
-import { Flex, Dropdown, Column, Row, FocusTrap, ArrowNavigation, ScrollLock } from ".";
-import styles from "./DropdownWrapper.module.scss";
-import { NavigationLayout } from "../hooks/useArrowNavigation";
-import { getLastOpenedDropdown, setLastOpenedDropdown, clearLastOpenedDropdown } from "../utils";
+import { cn } from "../classes/utils";
+import type { NavigationLayout } from "../hooks/useArrowNavigation";
+import { clearLastOpenedDropdown, getLastOpenedDropdown, setLastOpenedDropdown } from "../utils";
+import { ArrowNavigation } from "./ArrowNavigationContext";
+import { Column } from "./Column";
+import { Dropdown } from "./Dropdown";
+import { Flex } from "./Flex";
+import { FocusTrap } from "./FocusTrap";
+import { Row } from "./Row";
+import { ScrollLock } from "./ScrollLock";
 
 export interface DropdownWrapperProps {
   fillWidth?: boolean;
@@ -101,11 +110,11 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           // Close any other open dropdown before opening this one
           if (getLastOpenedDropdown() && getLastOpenedDropdown() !== dropdownId.current) {
             // Dispatch event to close other dropdowns
-            const closeEvent = new CustomEvent('close-other-dropdowns', {
-              detail: { exceptId: dropdownId.current }
+            const closeEvent = new CustomEvent("close-other-dropdowns", {
+              detail: { exceptId: dropdownId.current },
             });
             document.dispatchEvent(closeEvent);
-            
+
             // Small delay to let the other dropdown close and restore scroll first
             setTimeout(() => {
               if (!isControlled) {
@@ -116,7 +125,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             }, 50);
             return;
           }
-          
+
           setLastOpenedDropdown(dropdownId.current);
         } else {
           // Clear the last opened dropdown if this one is closing
@@ -131,7 +140,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
         onOpenChange?.(newIsOpen);
       },
-      [onOpenChange, isControlled, isNested],
+      [onOpenChange, isControlled],
     );
 
     // State to track if we're in a browser environment for portal rendering
@@ -142,9 +151,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     }, []);
 
     // Store the reference element's width for fillWidth calculation
-    const [referenceWidth, setReferenceWidth] = useState<number | null>(null);
-
-    // We'll measure the width directly in the floating UI middleware
+    const [_referenceWidth, setReferenceWidth] = useState<number | null>(null);
 
     const { x, y, strategy, refs, update } = useFloating({
       placement: placement,
@@ -188,7 +195,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           setReferenceWidth(wrapperRef.current.getBoundingClientRect().width);
         }
       }
-    }, [refs, mounted, fillWidth]);
+    }, [refs, fillWidth]);
 
     useEffect(() => {
       if (!mounted) {
@@ -238,13 +245,13 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
             if (optionElements.length > 0) {
               setFocusedIndex(0);
-              optionElements.forEach((el, i) => {
+              for (const [i, el] of optionElements.entries()) {
                 if (i === 0) {
                   (el as HTMLElement).classList.add("highlighted");
                 } else {
                   (el as HTMLElement).classList.remove("highlighted");
                 }
-              });
+              }
             }
           }
         });
@@ -261,8 +268,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         const target = event.target as HTMLElement;
 
         // Check if the click is inside the dropdown or the wrapper
-        const isClickInDropdown = dropdownRef.current && dropdownRef.current.contains(target);
-        const isClickInWrapper = wrapperRef.current && wrapperRef.current.contains(target);
+        const isClickInDropdown = Boolean(dropdownRef.current?.contains(target));
+        const isClickInWrapper = Boolean(wrapperRef.current?.contains(target));
 
         // Check if the click is on a dropdown trigger (for nested dropdowns)
         const isClickOnDropdownTrigger = target.closest(".dropdown-trigger") !== null;
@@ -293,18 +300,18 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             // Try to close all other dropdown portals
             const allPortals = document.querySelectorAll('[data-role="dropdown-portal"]');
 
-            allPortals.forEach((portal, index) => {
+            for (const portal of allPortals) {
               if (portal !== dropdownRef.current) {
                 // Try to find the dropdown wrapper that contains this portal
                 const wrapper = portal.closest('[data-role="dropdown-wrapper"]');
                 if (wrapper) {
-                  const trigger = wrapper.querySelector(".dropdown-trigger");
-                  if (trigger) {
-                    (trigger as HTMLElement).click();
+                  const triggerEl = wrapper.querySelector(".dropdown-trigger");
+                  if (triggerEl) {
+                    (triggerEl as HTMLElement).click();
                   }
                 }
               }
-            });
+            }
           }
         }
       },
@@ -314,10 +321,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     const handleFocusOut = useCallback(
       (event: FocusEvent) => {
         // Check if focus moved to the dropdown or stayed in the wrapper
-        const isFocusInDropdown =
-          dropdownRef.current && dropdownRef.current.contains(event.relatedTarget as Node);
-        const isFocusInWrapper =
-          wrapperRef.current && wrapperRef.current.contains(event.relatedTarget as Node);
+        const isFocusInDropdown = Boolean(
+          dropdownRef.current?.contains(event.relatedTarget as Node),
+        );
+        const isFocusInWrapper = Boolean(wrapperRef.current?.contains(event.relatedTarget as Node));
 
         // Only close if focus moved outside both the dropdown and the wrapper
         if (!isFocusInDropdown && !isFocusInWrapper) {
@@ -346,7 +353,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       const handleCloseOtherDropdowns = (e: Event) => {
         const customEvent = e as CustomEvent;
         const exceptId = customEvent.detail?.exceptId;
-        
+
         // Close this dropdown if it's not the one being excepted
         if (isOpen && dropdownId.current !== exceptId) {
           handleOpenChange(false);
@@ -355,7 +362,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       };
 
       document.addEventListener("close-nested-dropdowns", handleCloseNestedDropdowns);
-      document.addEventListener("close-other-dropdowns", handleCloseOtherDropdowns as EventListener);
+      document.addEventListener(
+        "close-other-dropdowns",
+        handleCloseOtherDropdowns as EventListener,
+      );
 
       return () => {
         document.removeEventListener("click", handleClickOutside);
@@ -364,9 +374,27 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           handleFocusOut as unknown as EventListener,
         );
         document.removeEventListener("close-nested-dropdowns", handleCloseNestedDropdowns);
-        document.removeEventListener("close-other-dropdowns", handleCloseOtherDropdowns as EventListener);
+        document.removeEventListener(
+          "close-other-dropdowns",
+          handleCloseOtherDropdowns as EventListener,
+        );
       };
     }, [handleClickOutside, handleFocusOut, isNested, isOpen, handleOpenChange]);
+
+    // Handle global Escape key to close dropdown
+    useEffect(() => {
+      if (!isOpen) return;
+
+      const handleGlobalKeyDown = (e: globalThis.KeyboardEvent) => {
+        if (e.key === "Escape") {
+          handleOpenChange(false);
+          setFocusedIndex(-1);
+        }
+      };
+
+      document.addEventListener("keydown", handleGlobalKeyDown);
+      return () => document.removeEventListener("keydown", handleGlobalKeyDown);
+    }, [isOpen, handleOpenChange]);
 
     // Get options from the dropdown
     const getOptions = useCallback(() => {
@@ -384,7 +412,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       const handleOptionHover = (e: MouseEvent) => {
         const target = e.target as HTMLElement;
         const option = target.closest('[role="option"], [data-value]') as HTMLElement;
-        
+
         if (option && dropdownRef.current?.contains(option)) {
           const options = getOptions();
           const index = options.indexOf(option);
@@ -394,21 +422,19 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         }
       };
 
-      const dropdown = dropdownRef.current;
-      dropdown.addEventListener('mouseover', handleOptionHover);
+      const dropdownEl = dropdownRef.current;
+      dropdownEl.addEventListener("mouseover", handleOptionHover);
 
       return () => {
-        dropdown.removeEventListener('mouseover', handleOptionHover);
+        dropdownEl.removeEventListener("mouseover", handleOptionHover);
       };
     }, [isOpen, focusedIndex, getOptions]);
 
     // Determine the appropriate navigation layout
     const determineNavigationLayout = useCallback((): NavigationLayout => {
-      // Use the prop if provided, otherwise default to column
       if (propNavigationLayout) {
         return propNavigationLayout;
       }
-      // Default to column layout for most dropdowns
       return "column";
     }, [propNavigationLayout]);
 
@@ -420,7 +446,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     // Update options count when dropdown opens or content changes
     useEffect(() => {
       if (isOpen) {
-        // If optionsCount is provided as a prop, use it
         if (propOptionsCount !== undefined) {
           setOptionsCount(propOptionsCount);
         } else {
@@ -428,7 +453,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           setOptionsCount(options.length);
         }
 
-        // Try to determine the layout based on the dropdown content or props
         setNavigationLayout(determineNavigationLayout());
       }
     }, [isOpen, getOptions, determineNavigationLayout, propOptionsCount]);
@@ -455,13 +479,11 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         setFocusedIndex(index);
         const options = getOptions();
         if (index >= 0 && index < options.length && dropdownRef.current) {
-          // Scroll within the dropdown container only, not the page
           const option = options[index];
           const container = dropdownRef.current;
           const optionRect = option.getBoundingClientRect();
           const containerRect = container.getBoundingClientRect();
-          
-          // Check if option is outside visible area of container
+
           if (optionRect.bottom > containerRect.bottom) {
             option.scrollIntoView({ block: "nearest", behavior: "auto" });
           } else if (optionRect.top < containerRect.top) {
@@ -492,7 +514,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
         // Handle tab key for focus trapping
         if (e.key === "Tab" && dropdownRef.current) {
-          // Find all focusable elements in the dropdown
           const focusableElements = Array.from(
             dropdownRef.current.querySelectorAll(
               'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
@@ -501,38 +522,23 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
           if (focusableElements.length === 0) return;
 
-          // Get the first and last focusable elements
           const firstElement = focusableElements[0];
           const lastElement = focusableElements[focusableElements.length - 1];
 
-          // Handle tab and shift+tab to cycle through focusable elements
           if (e.shiftKey) {
-            // Shift+Tab
             if (document.activeElement === firstElement) {
               e.preventDefault();
               lastElement.focus();
             }
           } else {
-            // Tab
             if (document.activeElement === lastElement) {
               e.preventDefault();
               firstElement.focus();
             }
           }
-
-          return;
         }
-
-        // If handleArrowNavigation is false, forward keyboard events to the dropdown content
-        if (!handleArrowNavigation && dropdownRef.current) {
-          // Let the dropdown content handle arrow keys, enter, space, etc.
-          return;
-        }
-
-        // Arrow key navigation will be handled by ArrowNavigation component
-        // Enter/Space key selection will be handled by ArrowNavigation component
       },
-      [isOpen, handleOpenChange, handleArrowNavigation],
+      [isOpen, handleOpenChange],
     );
 
     return (
@@ -542,83 +548,177 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           fillWidth={fillWidth}
           fitWidth={!fillWidth}
           transition="macro-medium"
-          style={{
-            ...style,
-          }}
+          style={style}
           className={className}
           ref={wrapperRef}
-        onClick={
-          disableTriggerClick
-            ? undefined
-            : (e) => {
-                if (!isOpen) {
-                  handleOpenChange(true);
-                  return;
-                }
-              }
-        }
-        onKeyDown={handleKeyDown}
-        tabIndex={-1}
-        role="button"
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        data-role="dropdown-wrapper"
-      >
-        <Row
-          ref={triggerRef}
-          fillWidth={fillWidth}
-          fitWidth={!fillWidth}
           onClick={
             disableTriggerClick
               ? undefined
               : (e) => {
-                  // If already open, close on trigger click
-                  if (isOpen) {
-                    handleOpenChange(false);
-                    return;
+                  if (e.target === wrapperRef.current && !isOpen) {
+                    handleOpenChange(true);
                   }
-                  handleOpenChange(true);
                 }
           }
-          onKeyDown={(e) => {
-            handleKeyDown(e);
-          }}
+          onKeyDown={handleKeyDown}
+          tabIndex={-1}
           role="button"
-          data-is-dropdown="true"
-          aria-haspopup="true"
+          aria-haspopup="listbox"
           aria-expanded={isOpen}
-          className="dropdown-trigger"
+          data-role="dropdown-wrapper"
         >
-          {trigger}
-        </Row>
-        {isOpen &&
-          dropdown &&
-          isBrowser &&
-          createPortal(
-            <FocusTrap
-              active={isOpen}
-              onEscape={() => handleOpenChange(false)}
-              autoFocus
-              restoreFocus
-            >
-              {handleArrowNavigation ? (
-                <ArrowNavigation
-                  layout={navigationLayout}
-                  itemCount={optionsCount}
-                  columns={typeof columns === "string" ? parseInt(columns, 10) || 8 : columns}
-                  onSelect={handleOptionSelect}
-                  onFocusChange={handleFocusChange}
-                  wrap
-                  autoFocus
-                  initialFocusedIndex={focusedIndex}
-                  itemSelector='.option, [role="option"], [data-value]'
-                  role={navigationLayout === "grid" ? "grid" : "listbox"}
-                  aria-label="Dropdown options"
-                  disabled={getLastOpenedDropdown() !== dropdownId.current}
-                >
+          <Row
+            ref={triggerRef}
+            fillWidth={fillWidth}
+            fitWidth={!fillWidth}
+            onClick={
+              disableTriggerClick
+                ? undefined
+                : (e) => {
+                    e.stopPropagation();
+                    handleOpenChange(!isOpen);
+                  }
+            }
+            onKeyDown={(e) => {
+              handleKeyDown(e);
+            }}
+            role="button"
+            data-is-dropdown="true"
+            aria-haspopup="true"
+            aria-expanded={isOpen}
+            className="dropdown-trigger"
+          >
+            {trigger}
+          </Row>
+          {isOpen &&
+            dropdown &&
+            isBrowser &&
+            createPortal(
+              <FocusTrap
+                active={isOpen}
+                onEscape={() => handleOpenChange(false)}
+                autoFocus
+                restoreFocus
+              >
+                {handleArrowNavigation ? (
+                  <ArrowNavigation
+                    layout={navigationLayout}
+                    itemCount={optionsCount}
+                    columns={
+                      typeof columns === "string" ? Number.parseInt(columns, 10) || 8 : columns
+                    }
+                    onSelect={handleOptionSelect}
+                    onFocusChange={handleFocusChange}
+                    wrap
+                    autoFocus
+                    initialFocusedIndex={focusedIndex}
+                    itemSelector='.option, [role="option"], [data-value]'
+                    role={navigationLayout === "grid" ? "grid" : "listbox"}
+                    aria-label="Dropdown options"
+                    disabled={getLastOpenedDropdown() !== dropdownId.current}
+                  >
+                    <Flex
+                      zIndex={9}
+                      className={cn("origin-top-right animate-fadeIn dropdown-portal")}
+                      minWidth={minWidth}
+                      ref={dropdownRef}
+                      style={{
+                        position: strategy,
+                        top: y ?? 0,
+                        left: x ?? 0,
+                      }}
+                      data-role="dropdown-portal"
+                      data-is-dropdown="true"
+                      data-dropdown-id={dropdownId.current}
+                      data-is-active={getLastOpenedDropdown() === dropdownId.current}
+                      onKeyDown={(e) => {
+                        if (!handleArrowNavigation) {
+                          return;
+                        }
+
+                        if (
+                          e.key !== "Tab" &&
+                          e.key !== "ArrowUp" &&
+                          e.key !== "ArrowDown" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight"
+                        ) {
+                          handleKeyDown(e);
+                        }
+                      }}
+                      onMouseDown={(e) => {
+                        const target = e.target as HTMLElement;
+                        const isInteractive = target.closest(
+                          'input, textarea, select, button, [role="button"], a',
+                        );
+                        if (!isInteractive) {
+                          e.preventDefault();
+                        }
+                      }}
+                      onPointerDown={(e) => {
+                        const target = e.target as HTMLElement;
+                        const isInteractive = target.closest(
+                          'input, textarea, select, button, [role="button"], a',
+                        );
+                        if (!isInteractive) {
+                          e.preventDefault();
+                        }
+                      }}
+                      onTouchStart={(e) => {
+                        const target = e.target as HTMLElement;
+                        const isInteractive = target.closest(
+                          'input, textarea, select, button, [role="button"], a',
+                        );
+                        if (!isInteractive) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      <Dropdown
+                        minWidth={minWidth}
+                        radius="l"
+                        padding="0"
+                        selectedOption={selectedOption}
+                        onSelect={(value) => {
+                          onSelect?.(value);
+                          if (closeAfterClick) {
+                            handleOpenChange(false);
+                            setFocusedIndex(-1);
+                          }
+                        }}
+                      >
+                        {Children.map(dropdown, (child) => {
+                          if (isValidElement(child)) {
+                            const childElement = child as ReactElement<Record<string, unknown>>;
+                            const props = childElement.props;
+                            const hasDataValue =
+                              props["data-value"] ||
+                              props.value ||
+                              childElement.type === "button" ||
+                              props.role === "option";
+
+                            if (hasDataValue) {
+                              return cloneElement(childElement, {
+                                onClick: (val: string) => {
+                                  onSelect?.(val);
+                                  if (closeAfterClick) {
+                                    handleOpenChange(false);
+                                    setFocusedIndex(-1);
+                                  }
+                                },
+                              });
+                            }
+                            return child;
+                          }
+                          return child;
+                        })}
+                      </Dropdown>
+                    </Flex>
+                  </ArrowNavigation>
+                ) : (
                   <Flex
                     zIndex={9}
-                    className={`${styles.fadeIn} dropdown-portal`}
+                    className={cn("origin-top-right animate-fadeIn dropdown-portal")}
                     minWidth={minWidth}
                     ref={dropdownRef}
                     style={{
@@ -631,43 +731,37 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                     data-dropdown-id={dropdownId.current}
                     data-is-active={getLastOpenedDropdown() === dropdownId.current}
                     onKeyDown={(e) => {
-                      // If handleArrowNavigation is false, let all keyboard events pass through
                       if (!handleArrowNavigation) {
                         return;
                       }
 
-                      // Let FocusTrap handle Tab key
-                      // Let ArrowNavigation handle arrow keys
-                      if (
-                        e.key !== "Tab" &&
-                        e.key !== "ArrowUp" &&
-                        e.key !== "ArrowDown" &&
-                        e.key !== "ArrowLeft" &&
-                        e.key !== "ArrowRight"
-                      ) {
+                      if (e.key !== "Tab") {
                         handleKeyDown(e);
                       }
                     }}
                     onMouseDown={(e) => {
-                      // Allow interactive elements (inputs, buttons, etc.) to work normally
                       const target = e.target as HTMLElement;
-                      const isInteractive = target.closest('input, textarea, select, button, [role="button"], a');
+                      const isInteractive = target.closest(
+                        'input, textarea, select, button, [role="button"], a',
+                      );
                       if (!isInteractive) {
                         e.preventDefault();
                       }
                     }}
                     onPointerDown={(e) => {
-                      // Allow interactive elements (inputs, buttons, etc.) to work normally
                       const target = e.target as HTMLElement;
-                      const isInteractive = target.closest('input, textarea, select, button, [role="button"], a');
+                      const isInteractive = target.closest(
+                        'input, textarea, select, button, [role="button"], a',
+                      );
                       if (!isInteractive) {
                         e.preventDefault();
                       }
                     }}
                     onTouchStart={(e) => {
-                      // Allow interactive elements (inputs, buttons, etc.) to work normally
                       const target = e.target as HTMLElement;
-                      const isInteractive = target.closest('input, textarea, select, button, [role="button"], a');
+                      const isInteractive = target.closest(
+                        'input, textarea, select, button, [role="button"], a',
+                      );
                       if (!isInteractive) {
                         e.preventDefault();
                       }
@@ -686,112 +780,19 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                         }
                       }}
                     >
-                      {React.Children.map(dropdown, (child) => {
-                        if (React.isValidElement(child)) {
-                          // Only add onClick handler to elements that have data-value or are interactive
-                          const childElement = child as React.ReactElement<any>;
-                          const hasDataValue =
-                            childElement.props["data-value"] ||
-                            childElement.props.value ||
-                            childElement.type === "button" ||
-                            childElement.props.role === "option";
-
-                          if (hasDataValue) {
-                            // Cast the child element to any to avoid TypeScript errors with unknown props
-                            return React.cloneElement(childElement, {
-                              onClick: (val: string) => {
-                                onSelect?.(val);
-                                if (closeAfterClick) {
-                                  handleOpenChange(false);
-                                  setFocusedIndex(-1);
-                                }
-                              },
-                            });
-                          }
-                          // Return the child unchanged if it doesn't need an onClick handler
-                          return child;
-                        }
-                        return child;
-                      })}
+                      {dropdown}
                     </Dropdown>
                   </Flex>
-                </ArrowNavigation>
-              ) : (
-                <Flex
-                  zIndex={9}
-                  className={`${styles.fadeIn} dropdown-portal`}
-                  minWidth={minWidth}
-                  ref={dropdownRef}
-                  style={{
-                    position: strategy,
-                    top: y ?? 0,
-                    left: x ?? 0,
-                  }}
-                  data-role="dropdown-portal"
-                  data-is-dropdown="true"
-                  data-dropdown-id={dropdownId.current}
-                  data-is-active={getLastOpenedDropdown() === dropdownId.current}
-                  onKeyDown={(e) => {
-                    // If handleArrowNavigation is false, let all keyboard events pass through
-                    if (!handleArrowNavigation) {
-                      return;
-                    }
-
-                    // Let FocusTrap handle Tab key
-                    if (e.key !== "Tab") {
-                      handleKeyDown(e);
-                    }
-                  }}
-                  onMouseDown={(e) => {
-                    // Allow interactive elements (inputs, buttons, etc.) to work normally
-                    const target = e.target as HTMLElement;
-                    const isInteractive = target.closest('input, textarea, select, button, [role="button"], a');
-                    if (!isInteractive) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onPointerDown={(e) => {
-                    // Allow interactive elements (inputs, buttons, etc.) to work normally
-                    const target = e.target as HTMLElement;
-                    const isInteractive = target.closest('input, textarea, select, button, [role="button"], a');
-                    if (!isInteractive) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onTouchStart={(e) => {
-                    // Allow interactive elements (inputs, buttons, etc.) to work normally
-                    const target = e.target as HTMLElement;
-                    const isInteractive = target.closest('input, textarea, select, button, [role="button"], a');
-                    if (!isInteractive) {
-                      e.preventDefault();
-                    }
-                  }}
-                >
-                  <Dropdown
-                    minWidth={minWidth}
-                    radius="l"
-                    padding="0"
-                    selectedOption={selectedOption}
-                    onSelect={(value) => {
-                      onSelect?.(value);
-                      if (closeAfterClick) {
-                        handleOpenChange(false);
-                        setFocusedIndex(-1);
-                      }
-                    }}
-                  >
-                    {dropdown}
-                  </Dropdown>
-                </Flex>
-              )}
-            </FocusTrap>,
-            document.body,
-          )}
-      </Column>
+                )}
+              </FocusTrap>,
+              document.body,
+            )}
+        </Column>
       </>
     );
   },
 );
 
 DropdownWrapper.displayName = "DropdownWrapper";
+
 export { DropdownWrapper };
