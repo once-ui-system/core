@@ -1,16 +1,16 @@
-import React, { forwardRef, ReactNode } from "react";
-import classNames from "clsx";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import type { IconName } from "../icons";
+import { Icon } from "./Icon";
+import { Row, type RowProps } from "./Row";
 
-import { Icon, Row } from ".";
-import { IconName } from "../icons";
-import styles from "./Tooltip.module.scss";
-
-interface TooltipProps extends React.ComponentProps<typeof Row> {
+export interface TooltipProps extends RowProps {
   label: ReactNode;
   prefixIcon?: IconName;
   suffixIcon?: IconName;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
@@ -19,11 +19,6 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
       <Row
         m={{ hide: true }}
         ref={ref}
-        style={{
-          whiteSpace: "nowrap",
-          userSelect: "none",
-          ...style,
-        }}
         vertical="center"
         gap="4"
         zIndex={1}
@@ -33,7 +28,8 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         radius="s"
         border="neutral-medium"
         role="tooltip"
-        className={classNames(styles.fadeIn, className)}
+        className={cn("animate-fadeIn select-none whitespace-nowrap", className)}
+        style={style}
         {...flex}
       >
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}

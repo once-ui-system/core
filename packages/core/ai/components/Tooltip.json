@@ -18,7 +18,7 @@
   "prefixIcon": "IconName",
   "suffixIcon": "IconName",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
