@@ -1,17 +1,19 @@
-import React, { forwardRef } from "react";
-import styles from "./NavIcon.module.scss";
-import { Flex } from ".";
-import classNames from "clsx";
+"use client";
 
-interface NavIconProps extends React.ComponentProps<typeof Flex> {
+import type { CSSProperties } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import { Flex, type FlexComponentProps } from "./Flex";
+
+export interface NavIconProps extends FlexComponentProps {
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   onClick?: () => void;
-  isActive: boolean;
+  isActive?: boolean;
 }
 
-const NavIcon = forwardRef<HTMLDivElement, Partial<NavIconProps>>(
-  ({ className, isActive, style, onClick, ...rest }, ref) => {
+const NavIcon = forwardRef<HTMLDivElement, NavIconProps>(
+  ({ className, isActive = false, style, onClick, ...rest }, ref) => {
     return (
       <Flex
         ref={ref}
@@ -22,13 +24,24 @@ const NavIcon = forwardRef<HTMLDivElement, Partial<NavIconProps>>(
         height="40"
         minHeight="40"
         minWidth="40"
+        position="relative"
         className={className}
         style={style}
         onClick={onClick}
         {...rest}
       >
-        <div className={classNames(styles.line, isActive && styles.active)} />
-        <div className={classNames(styles.line, isActive && styles.active)} />
+        <div
+          className={cn(
+            "absolute left-1/2 top-1/2 -translate-x-1/2 h-px w-24 bg-neutral-on-background-strong transition-transform duration-300",
+            isActive ? "translate-y-0 rotate-45" : "-translate-y-4",
+          )}
+        />
+        <div
+          className={cn(
+            "absolute left-1/2 top-1/2 -translate-x-1/2 h-px w-24 bg-neutral-on-background-strong transition-transform duration-300",
+            isActive ? "translate-y-0 -rotate-45" : "translate-y-4",
+          )}
+        />
       </Flex>
     );
   },

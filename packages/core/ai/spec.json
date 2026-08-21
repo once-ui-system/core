@@ -1521,9 +1521,9 @@
    ],
    "props": {
     "className": "string",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "onClick": "() => void",
-    "isActive": "boolean"
+    "isActive": "boolean = false"
    }
   },
   "NumberInput": {
