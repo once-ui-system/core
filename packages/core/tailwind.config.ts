@@ -217,6 +217,11 @@ const config: Config = {
         "104": "var(--static-space-104)",
         "128": "var(--static-space-128)",
         "160": "var(--static-space-160)",
+        xs: "var(--responsive-space-xs)",
+        s: "var(--responsive-space-s)",
+        m: "var(--responsive-space-m)",
+        l: "var(--responsive-space-l)",
+        xl: "var(--responsive-space-xl)",
       },
       fontFamily: {
         heading: ["var(--font-heading)", "sans-serif"],
@@ -239,6 +244,14 @@ const config: Config = {
         "macro-medium": "var(--transition-duration-macro-medium)",
         "macro-long": "var(--transition-duration-macro-long)",
       },
+      transitionProperty: {
+        "micro-short": "all var(--transition-duration-micro-short) ease",
+        "micro-medium": "all var(--transition-duration-micro-medium) ease",
+        "micro-long": "all var(--transition-duration-micro-long) ease",
+        "macro-short": "all var(--transition-duration-macro-short) ease",
+        "macro-medium": "all var(--transition-duration-macro-medium) ease",
+        "macro-long": "all var(--transition-duration-macro-long) ease",
+      },
       keyframes: {
         fadeIn: {
           from: { opacity: "0" },
@@ -250,6 +263,66 @@ const config: Config = {
       },
     },
   },
+  safelist: [
+    {
+      pattern:
+        /^(bg|text|border)-(page|surface|brand|neutral|accent|info|danger|warning|success|code|static)(-.+)?$/,
+      variants: ["xs", "s", "m", "l", "xl", "hover", "focus", "active"],
+    },
+    {
+      pattern:
+        /^(p|px|py|pt|pb|pl|pr|m|mx|my|mt|mb|ml|mr|gap|gap-x|gap-y|top|right|bottom|left|w|h|min-w|min-h|max-w|max-h)-(0|1|2|4|8|12|16|20|24|32|40|48|56|64|72|80|104|128|160|xs|s|m|l|xl|full|fit|auto|screen)$/,
+      variants: ["xs", "s", "m", "l", "xl"],
+    },
+    {
+      pattern:
+        /^rounded(-(t|r|b|l|tl|tr|br|bl))?-(none|xs|s|m|l|xl|full|xs-nest-4|xs-nest-8|s-nest-4|s-nest-8|m-nest-4|m-nest-8|l-nest-4|l-nest-8|xl-nest-4|xl-nest-8)$/,
+      variants: ["xs", "s", "m", "l", "xl"],
+    },
+    {
+      pattern: /^shadow-(xs|s|m|l|xl|none)$/,
+      variants: ["xs", "s", "m", "l", "xl", "hover"],
+    },
+    {
+      pattern: /^(flex|grid|inline-flex|inline-grid|hidden|block|inline|inline-block)$/,
+      variants: ["xs", "s", "m", "l", "xl"],
+    },
+    {
+      pattern: /^flex-(row|col|row-reverse|col-reverse|wrap|nowrap|wrap-reverse|1|auto|initial|none)$/,
+      variants: ["xs", "s", "m", "l", "xl"],
+    },
+    {
+      pattern: /^(justify|items|self)-(start|end|center|between|around|evenly|stretch|baseline|auto)$/,
+      variants: ["xs", "s", "m", "l", "xl"],
+    },
+    {
+      pattern: /^(grid-cols|grid-rows)-(1|2|3|4|5|6|7|8|9|10|11|12|none|subgrid)$/,
+      variants: ["xs", "s", "m", "l", "xl"],
+    },
+    {
+      pattern: /^(col-span|row-span)-(1|2|3|4|5|6|7|8|9|10|11|12|full)$/,
+      variants: ["xs", "s", "m", "l", "xl"],
+    },
+    {
+      pattern: /^opacity-(0|10|20|30|40|50|60|70|80|90|100)$/,
+      variants: ["xs", "s", "m", "l", "xl", "hover"],
+    },
+    {
+      pattern: /^overflow(-(x|y))?-(auto|hidden|clip|visible|scroll)$/,
+      variants: ["xs", "s", "m", "l", "xl"],
+    },
+    {
+      pattern: /^pointer-events-(none|auto|all)$/,
+    },
+    {
+      pattern:
+        /^cursor-(default|pointer|not-allowed|interactive|wait|text|move|grab|grabbing|col-resize|row-resize)$/,
+    },
+    {
+      pattern:
+        /^transition-(micro-short|micro-medium|micro-long|macro-short|macro-medium|macro-long)$/,
+    },
+  ],
   plugins: [],
 };
 
