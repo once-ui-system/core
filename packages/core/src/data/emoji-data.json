@@ -6294,16 +6294,6 @@
       ]
     },
     {
-      "char": "🪿",
-      "description": "goose",
-      "aliases": [
-        "goose"
-      ],
-      "tags": [
-        "honk"
-      ]
-    },
-    {
       "char": "🐸",
       "description": "frog",
       "aliases": [
@@ -14645,6 +14635,18 @@
         "gabon"
       ],
       "tags": []
+    },
+    {
+      "char": "🇬🇧",
+      "description": "flag: United Kingdom",
+      "aliases": [
+        "gb",
+        "uk"
+      ],
+      "tags": [
+        "flag",
+        "british"
+      ]
     },
     {
       "char": "🇬🇩",

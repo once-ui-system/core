@@ -2277,9 +2277,9 @@
    "props": {
     "selected": "boolean = false",
     "placement": "Placement",
-    "dropdown": "React.ReactNode",
+    "dropdown": "ReactNode",
     "className": "string",
-    "style": "React.CSSProperties"
+    "style": "CSSProperties"
    }
   },
   "CelebrationFx": {
