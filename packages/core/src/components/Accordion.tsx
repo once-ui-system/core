@@ -1,17 +1,14 @@
 "use client";
 
-import React, {
-  useState,
-  forwardRef,
-  useImperativeHandle,
-  useEffect,
-  useCallback,
-  useRef,
-} from "react";
-import { Flex, Icon, Column, Grid, Row } from ".";
-import styles from "./Accordion.module.scss";
-import classNames from "clsx";
-import { CondensedTShirtSizes } from "../types";
+import type { CSSProperties, KeyboardEvent, MouseEvent, MutableRefObject, ReactNode } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { cn } from "../classes/utils";
+import type { CondensedTShirtSizes } from "../types";
+import { Column } from "./Column";
+import type { Flex } from "./Flex";
+import { Grid } from "./Grid";
+import { Icon } from "./Icon";
+import { Row } from "./Row";
 
 export interface AccordionHandle {
   toggle: () => void;
@@ -19,9 +16,9 @@ export interface AccordionHandle {
   close: () => void;
 }
 
-interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
-  title: React.ReactNode;
-  children: React.ReactNode;
+export interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
+  title: ReactNode;
+  children: ReactNode;
   icon?: string;
   iconRotation?: number;
   size?: CondensedTShirtSizes;
@@ -29,7 +26,7 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   open?: boolean;
   onToggle?: () => void;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   headerProps?: React.ComponentProps<typeof Row>;
   contentProps?: React.ComponentProps<typeof Column>;
   toggleOnHeaderClick?: boolean;
@@ -72,18 +69,14 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       }
     }, [onToggle]);
 
-    useImperativeHandle(
-      ref,
-      () => {
-        const node = headerRef.current ?? document.createElement("div");
-        return Object.assign(node, {
-          toggle: toggleAccordion,
-          open: () => setIsOpen(true),
-          close: () => setIsOpen(false),
-        }) as HTMLDivElement & AccordionHandle;
-      },
-      [toggleAccordion],
-    );
+    useImperativeHandle(ref, () => {
+      const node = headerRef.current ?? document.createElement("div");
+      return Object.assign(node, {
+        toggle: toggleAccordion,
+        open: () => setIsOpen(true),
+        close: () => setIsOpen(false),
+      }) as HTMLDivElement & AccordionHandle;
+    }, [toggleAccordion]);
 
     const {
       className: headerClassName,
@@ -94,10 +87,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       ...headerRest
     } = headerProps ?? {};
 
-    const {
-      className: contentClassName,
-      ...contentRest
-    } = contentProps ?? {};
+    const { className: contentClassName, ...contentRest } = contentProps ?? {};
 
     const setHeaderRef = useCallback(
       (node: HTMLDivElement | null) => {
@@ -105,24 +95,19 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         if (typeof headerPropsRef === "function") {
           headerPropsRef(node);
         } else if (headerPropsRef && "current" in headerPropsRef) {
-          (headerPropsRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
-        }
-        if (typeof ref === "function") {
-          ref(node);
-        } else if (ref && "current" in ref) {
-          ref.current = node;
+          (headerPropsRef as MutableRefObject<HTMLDivElement | null>).current = node;
         }
       },
-      [headerPropsRef, ref],
+      [headerPropsRef],
     );
 
-    const handleHeaderClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleHeaderClick = (e: MouseEvent<HTMLDivElement>) => {
       headerOnClick?.(e);
       if (e.defaultPrevented || !toggleOnHeaderClick) return;
       toggleAccordion();
     };
 
-    const handleHeaderKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const handleHeaderKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
       headerOnKeyDown?.(e);
       if (e.defaultPrevented || !toggleOnHeaderClick) return;
       if (e.key === "Enter" || e.key === " ") {
@@ -140,7 +125,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
         <Row
           ref={setHeaderRef}
           tabIndex={headerRest.tabIndex ?? 0}
-          className={classNames(styles.accordion, className, headerClassName)}
+          className={cn("cursor-pointer hover:bg-neutral-alpha-weak", className, headerClassName)}
           style={{ ...style, ...headerStyle }}
           cursor="interactive"
           transition="macro-medium"
@@ -199,4 +184,5 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
 );
 
 Accordion.displayName = "Accordion";
+
 export { Accordion };

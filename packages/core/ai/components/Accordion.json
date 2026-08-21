@@ -13,8 +13,8 @@
   "StyleProps"
  ],
  "props": {
-  "title": "!React.ReactNode",
-  "children": "!React.ReactNode",
+  "title": "!ReactNode",
+  "children": "!ReactNode",
   "icon": "string = chevronDown",
   "iconRotation": "number = 180",
   "size": "CondensedTShirtSizes = m",
@@ -22,7 +22,7 @@
   "open": "boolean = false",
   "onToggle": "() => void",
   "className": "string",
-  "style": "React.CSSProperties",
+  "style": "CSSProperties",
   "headerProps": "React.ComponentProps<typeof Row>",
   "contentProps": "React.ComponentProps<typeof Column>",
   "toggleOnHeaderClick": "boolean = true"
