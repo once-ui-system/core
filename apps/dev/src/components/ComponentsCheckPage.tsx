@@ -1,106 +1,107 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  Heading,
-  Text,
-  Button,
-  Column,
+  Accordion,
+  AccordionGroup,
+  Arrow,
+  AutoScroll,
+  Avatar,
+  AvatarGroup,
+  Background,
   Badge,
-  Logo,
-  Line,
-  LetterFx,
-  StylePanel,
+  BarChart,
+  BlockQuote,
+  Button,
+  Card,
   Carousel,
-  Media,
+  Checkbox,
+  Chip,
+  CodeBlock,
+  ColorInput,
+  Column,
+  CompareImage,
+  ContextMenu,
+  CountdownFx,
+  CountFx,
+  CursorCard,
+  DateInput,
+  DatePicker,
+  DateRangeInput,
+  Dialog,
+  DropdownWrapper,
   EmojiPicker,
   EmojiPickerDropdown,
-  OgCard,
-  Icon,
-  Textarea,
-  Row,
-  IconButton,
-  Select,
-  Option,
-  DropdownWrapper,
-  AutoScroll,
-  User,
-  Table,
-  ContextMenu,
-  BlockQuote,
-  RevealFx,
-  DatePicker,
-  DateInput,
-  DateRangeInput,
-  Grid,
-  AccordionGroup,
-  Accordion,
-  Kbar,
-  Spinner,
-  BarChart,
-  ListItem,
-  List,
-  ProgressBar,
-  LineChart,
-  CountFx,
-  Feedback,
-  MasonryGrid,
-  TagInput,
-  Avatar,
-  Background,
-  Flex,
-  Chip,
   Fade,
-  Hover,
-  Pulse,
-  Tooltip,
-  Checkbox,
-  Switch,
-  RadioButton,
-  Skeleton,
-  HoverCard,
-  LogoCloud,
-  SmartLink,
-  Swiper,
-  Scroller,
-  Particle,
-  Arrow,
-  Mask,
-  Tag,
-  Kbd,
-  InlineCode,
-  StatusIndicator,
-  SegmentedControl,
-  ScrollToTop,
-  CompareImage,
-  InteractiveDetails,
-  InfiniteScroll,
-  PasswordInput,
-  NumberInput,
-  ColorInput,
-  OTPInput,
-  AvatarGroup,
-  UserMenu,
-  ThemeSwitcher,
-  Timeline,
-  NavIcon,
-  CodeBlock,
-  CursorCard,
+  FadingLettersFx,
+  Feedback,
+  Flex,
   FlipFx,
   GlitchFx,
+  Grid,
+  Heading,
   HoloFx,
-  Card,
-  MatrixFx,
-  ShineFx,
-  TiltFx,
-  TypeFx,
-  WeatherFx,
-  CountdownFx,
+  Hover,
+  HoverCard,
+  Icon,
+  IconButton,
+  InfiniteScroll,
+  InlineCode,
   Input,
-  Dialog,
-  FadingLettersFx,
+  InteractiveDetails,
+  Kbar,
+  Kbd,
+  LetterFx,
+  Line,
+  LineChart,
+  List,
+  ListItem,
+  Logo,
+  LogoCloud,
+  Mask,
+  MasonryGrid,
+  MatrixFx,
+  Media,
+  NavIcon,
+  NumberInput,
+  OgCard,
+  Option,
+  OTPInput,
+  Particle,
+  PasswordInput,
+  ProgressBar,
+  Pulse,
+  RadioButton,
+  RevealFx,
+  Row,
+  Scroller,
+  ScrollToTop,
+  SegmentedControl,
+  Select,
+  ShineFx,
+  Skeleton,
+  SmartLink,
+  Spinner,
+  StatusIndicator,
+  StylePanel,
+  Swiper,
+  Switch,
+  Table,
+  Tag,
+  TagInput,
+  Text,
+  Textarea,
+  ThemeSwitcher,
+  TiltFx,
+  Timeline,
+  Tooltip,
+  TypeFx,
+  User,
+  UserMenu,
   useToast,
+  WeatherFx,
 } from "@once-ui-system/core";
+import type React from "react";
+import { useState } from "react";
 
 interface ComponentVariation {
   value: string;
@@ -126,13 +127,9 @@ export default function ComponentsCheck() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [mediaDialogOpen, setMediaDialogOpen] = useState(false);
   const { addToast } = useToast();
-  const [selectedVariation, setSelectedVariation] = useState<
-    Record<string, string>
-  >({});
+  const [selectedVariation, setSelectedVariation] = useState<Record<string, string>>({});
 
-  const handleAddToast = (
-    variant: "success" | "danger" | "warning" | "info",
-  ) => {
+  const handleAddToast = (variant: "success" | "danger" | "warning" | "info") => {
     addToast({ variant, message: `This is a ${variant} toast!` });
   };
 
@@ -140,10 +137,7 @@ export default function ComponentsCheck() {
     setSelectedVariation((prev) => ({ ...prev, [compKey]: value }));
   };
 
-  const getVar = (
-    compKey: string,
-    variations: ComponentVariation[],
-  ): string => {
+  const getVar = (compKey: string, variations: ComponentVariation[]): string => {
     return selectedVariation[compKey] || variations[0].value;
   };
 
@@ -169,12 +163,7 @@ export default function ComponentsCheck() {
               value: "gap",
               label: "With gap",
               element: (
-                <Column
-                  gap="m"
-                  padding="m"
-                  background="neutral-medium"
-                  radius="l"
-                >
+                <Column gap="m" padding="m" background="neutral-medium" radius="l">
                   <Text>Item 1</Text>
                   <Text>Item 2</Text>
                 </Column>
@@ -184,12 +173,7 @@ export default function ComponentsCheck() {
               value: "horizontal",
               label: "Horizontal",
               element: (
-                <Column
-                  horizontal="center"
-                  padding="m"
-                  background="neutral-medium"
-                  radius="l"
-                >
+                <Column horizontal="center" padding="m" background="neutral-medium" radius="l">
                   <Text>Centered</Text>
                 </Column>
               ),
@@ -237,15 +221,8 @@ export default function ComponentsCheck() {
               value: "maxWidth",
               label: "maxWidth",
               element: (
-                <Flex
-                  maxWidth="xl"
-                  padding="m"
-                  background="brand-medium"
-                  radius="l"
-                >
-                  <Text onBackground="brand-strong">
-                    maxWidth=&quot;xl&quot;
-                  </Text>
+                <Flex maxWidth="xl" padding="m" background="brand-medium" radius="l">
+                  <Text onBackground="brand-strong">maxWidth=&quot;xl&quot;</Text>
                 </Flex>
               ),
             },
@@ -253,13 +230,7 @@ export default function ComponentsCheck() {
               value: "column",
               label: "Column dir",
               element: (
-                <Flex
-                  direction="column"
-                  gap="m"
-                  padding="m"
-                  background="neutral-medium"
-                  radius="l"
-                >
+                <Flex direction="column" gap="m" padding="m" background="neutral-medium" radius="l">
                   <Text>Flex 1</Text>
                   <Text>Flex 2</Text>
                 </Flex>
@@ -269,25 +240,10 @@ export default function ComponentsCheck() {
               value: "wrap",
               label: "Wrap",
               element: (
-                <Flex
-                  wrap
-                  gap="s"
-                  padding="m"
-                  background="neutral-medium"
-                  radius="l"
-                >
+                <Flex wrap gap="s" padding="m" background="neutral-medium" radius="l">
                   {Array.from({ length: 8 }, (_, i) => (
-                    <Flex
-                      key={i}
-                      padding="s"
-                      paddingX="m"
-                      background="brand-medium"
-                      radius="full"
-                    >
-                      <Text
-                        variant="label-default-s"
-                        onBackground="brand-strong"
-                      >
+                    <Flex key={i} padding="s" paddingX="m" background="brand-medium" radius="full">
+                      <Text variant="label-default-s" onBackground="brand-strong">
                         Item {i + 1}
                       </Text>
                     </Flex>
@@ -351,23 +307,17 @@ export default function ComponentsCheck() {
             {
               value: "heading",
               label: "Heading",
-              element: (
-                <Heading variant="heading-strong-l">Heading Strong L</Heading>
-              ),
+              element: <Heading variant="heading-strong-l">Heading Strong L</Heading>,
             },
             {
               value: "subheading",
               label: "Subheading",
-              element: (
-                <Heading variant="heading-strong-m">Heading Strong M</Heading>
-              ),
+              element: <Heading variant="heading-strong-m">Heading Strong M</Heading>,
             },
             {
               value: "small",
               label: "Small",
-              element: (
-                <Heading variant="heading-strong-s">Heading Strong S</Heading>
-              ),
+              element: <Heading variant="heading-strong-s">Heading Strong S</Heading>,
             },
           ],
         },
@@ -401,9 +351,7 @@ export default function ComponentsCheck() {
             {
               value: "code",
               label: "Code",
-              element: (
-                <Text variant="code-default-m">console.log("hello")</Text>
-              ),
+              element: <Text variant="code-default-m">console.log("hello")</Text>,
             },
             {
               value: "opacity",
@@ -543,11 +491,7 @@ export default function ComponentsCheck() {
                   <Button variant="primary" prefixIcon="arrowUpRight">
                     Download
                   </Button>
-                  <Button
-                    variant="ghost"
-                    prefixIcon="search"
-                    suffixIcon="enter"
-                  >
+                  <Button variant="ghost" prefixIcon="search" suffixIcon="enter">
                     Search
                   </Button>
                 </Row>
@@ -625,16 +569,8 @@ export default function ComponentsCheck() {
               label: "Default",
               element: (
                 <Column gap="s" fillWidth>
-                  <Input
-                    id="input-name"
-                    label="Name"
-                    placeholder="Enter your name"
-                  />
-                  <Input
-                    id="input-email"
-                    label="Email"
-                    placeholder="you@example.com"
-                  />
+                  <Input id="input-name" label="Name" placeholder="Enter your name" />
+                  <Input id="input-email" label="Email" placeholder="you@example.com" />
                 </Column>
               ),
             },
@@ -672,12 +608,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <Textarea
-                  id="ta-msg"
-                  label="Message"
-                  placeholder="Write something..."
-                  lines={3}
-                />
+                <Textarea id="ta-msg" label="Message" placeholder="Write something..." lines={3} />
               ),
             },
             {
@@ -701,11 +632,14 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <PasswordInput
-                  id="pwd"
-                  label="Password"
-                  placeholder="Enter password"
-                />
+                <form onSubmit={(e) => e.preventDefault()} style={{ width: "100%" }}>
+                  <PasswordInput
+                    id="pwd"
+                    label="Password"
+                    placeholder="Enter password"
+                    autoComplete="current-password"
+                  />
+                </form>
               ),
             },
           ],
@@ -716,16 +650,12 @@ export default function ComponentsCheck() {
             {
               value: "default",
               label: "Default",
-              element: (
-                <NumberInput id="num" label="Quantity" placeholder="0" />
-              ),
+              element: <NumberInput id="num" label="Quantity" placeholder="0" />,
             },
             {
               value: "minmax",
               label: "Min/Max",
-              element: (
-                <NumberInput id="num-bound" label="Age" min={0} max={150} />
-              ),
+              element: <NumberInput id="num-bound" label="Age" min={0} max={150} />,
             },
           ],
         },
@@ -737,11 +667,7 @@ export default function ComponentsCheck() {
               label: "Large (100%)",
               element: (
                 <Flex fillWidth>
-                  <ColorInput
-                    id="color-lg"
-                    value="#3b82f6"
-                    onChange={() => {}}
-                  />
+                  <ColorInput id="color-lg" value="#3b82f6" onChange={() => {}} />
                 </Flex>
               ),
             },
@@ -750,11 +676,7 @@ export default function ComponentsCheck() {
               label: "Medium (50%)",
               element: (
                 <Flex style={{ width: "50%" }}>
-                  <ColorInput
-                    id="color-md"
-                    value="#3b82f6"
-                    onChange={() => {}}
-                  />
+                  <ColorInput id="color-md" value="#3b82f6" onChange={() => {}} />
                 </Flex>
               ),
             },
@@ -763,11 +685,7 @@ export default function ComponentsCheck() {
               label: "Small (25%)",
               element: (
                 <Flex style={{ width: "25%" }}>
-                  <ColorInput
-                    id="color-sm"
-                    value="#3b82f6"
-                    onChange={() => {}}
-                  />
+                  <ColorInput id="color-sm" value="#3b82f6" onChange={() => {}} />
                 </Flex>
               ),
             },
@@ -821,20 +739,12 @@ export default function ComponentsCheck() {
             {
               value: "off",
               label: "Off",
-              element: (
-                <Switch
-                  isChecked={false}
-                  onToggle={() => {}}
-                  label="Notifications"
-                />
-              ),
+              element: <Switch isChecked={false} onToggle={() => {}} label="Notifications" />,
             },
             {
               value: "on",
               label: "On",
-              element: (
-                <Switch isChecked onToggle={() => {}} label="Dark mode" />
-              ),
+              element: <Switch isChecked onToggle={() => {}} label="Dark mode" />,
             },
             {
               value: "controlled",
@@ -937,24 +847,13 @@ export default function ComponentsCheck() {
             {
               value: "default",
               label: "Default",
-              element: (
-                <TagInput
-                  id="tags"
-                  value={["react", "typescript"]}
-                  onChange={() => {}}
-                />
-              ),
+              element: <TagInput id="tags" value={["react", "typescript"]} onChange={() => {}} />,
             },
             {
               value: "disabled",
               label: "Disabled",
               element: (
-                <TagInput
-                  id="tags-disabled"
-                  value={["react"]}
-                  disabled
-                  onChange={() => {}}
-                />
+                <TagInput id="tags-disabled" value={["react"]} disabled onChange={() => {}} />
               ),
             },
           ],
@@ -1007,26 +906,10 @@ export default function ComponentsCheck() {
                   <Text variant="label-default-s" onBackground="neutral-weak">
                     secondary
                   </Text>
-                  <IconButton
-                    variant="secondary"
-                    color="brand-strong"
-                    icon="sparkle"
-                  />
-                  <IconButton
-                    variant="secondary"
-                    color="danger-strong"
-                    icon="close"
-                  />
-                  <IconButton
-                    variant="secondary"
-                    color="warning-strong"
-                    icon="warning"
-                  />
-                  <IconButton
-                    variant="secondary"
-                    color="success-strong"
-                    icon="check"
-                  />
+                  <IconButton variant="secondary" color="brand-strong" icon="sparkle" />
+                  <IconButton variant="secondary" color="danger-strong" icon="close" />
+                  <IconButton variant="secondary" color="warning-strong" icon="warning" />
+                  <IconButton variant="secondary" color="success-strong" icon="check" />
                 </Row>
               ),
             },
@@ -1038,22 +921,10 @@ export default function ComponentsCheck() {
                   <Text variant="label-default-s" onBackground="neutral-weak">
                     ghost
                   </Text>
-                  <IconButton
-                    variant="ghost"
-                    color="brand-strong"
-                    icon="sparkle"
-                  />
-                  <IconButton
-                    variant="ghost"
-                    color="danger-strong"
-                    icon="close"
-                  />
+                  <IconButton variant="ghost" color="brand-strong" icon="sparkle" />
+                  <IconButton variant="ghost" color="danger-strong" icon="close" />
                   <IconButton variant="ghost" color="info-strong" icon="info" />
-                  <IconButton
-                    variant="ghost"
-                    color="success-strong"
-                    icon="check"
-                  />
+                  <IconButton variant="ghost" color="success-strong" icon="check" />
                 </Row>
               ),
             },
@@ -1062,18 +933,10 @@ export default function ComponentsCheck() {
               label: "Button prefixIcon/suffixIcon",
               element: (
                 <Row gap="8" wrap vertical="center">
-                  <Button
-                    variant="secondary"
-                    prefixIcon="sparkle"
-                    color="brand-strong"
-                  >
+                  <Button variant="secondary" prefixIcon="sparkle" color="brand-strong">
                     Settings
                   </Button>
-                  <Button
-                    variant="secondary"
-                    suffixIcon="chevronRight"
-                    color="danger-strong"
-                  >
+                  <Button variant="secondary" suffixIcon="chevronRight" color="danger-strong">
                     Delete
                   </Button>
                   <Button variant="ghost" prefixIcon="info" color="info-strong">
@@ -1205,14 +1068,7 @@ export default function ComponentsCheck() {
             {
               value: "image",
               label: "Image",
-              element: (
-                <Media
-                  src="/images/cover-01.jpg"
-                  aspectRatio="16/9"
-                  radius="l"
-                  enlarge
-                />
-              ),
+              element: <Media src="/images/cover-01.jpg" aspectRatio="16/9" radius="l" enlarge />,
             },
             {
               value: "youtube",
@@ -1267,11 +1123,7 @@ export default function ComponentsCheck() {
               element: (
                 <Row gap="s" vertical="center">
                   {["xs", "s", "m", "l"].map((s) => (
-                    <Avatar
-                      key={s}
-                      size={s as any}
-                      src="/images/cover-01.jpg"
-                    />
+                    <Avatar key={s} size={s as any} src="/images/cover-01.jpg" />
                   ))}
                 </Row>
               ),
@@ -1569,12 +1421,7 @@ export default function ComponentsCheck() {
               value: "with-link",
               label: "With href",
               element: (
-                <Card
-                  href="#"
-                  padding="16"
-                  radius="m"
-                  border="neutral-alpha-medium"
-                >
+                <Card href="#" padding="16" radius="m" border="neutral-alpha-medium">
                   <Text variant="label-default-s">Linked card</Text>
                 </Card>
               ),
@@ -1596,9 +1443,7 @@ export default function ComponentsCheck() {
               label: "Open",
               element: (
                 <>
-                  <Button onClick={() => setDialogOpen(true)}>
-                    Open Dialog
-                  </Button>
+                  <Button onClick={() => setDialogOpen(true)}>Open Dialog</Button>
                   <Dialog
                     isOpen={dialogOpen}
                     onClose={() => setDialogOpen(false)}
@@ -1606,15 +1451,10 @@ export default function ComponentsCheck() {
                     description="Are you sure you want to continue?"
                     footer={
                       <Row gap="s" horizontal="end" fillWidth>
-                        <Button
-                          variant="secondary"
-                          onClick={() => setDialogOpen(false)}
-                        >
+                        <Button variant="secondary" onClick={() => setDialogOpen(false)}>
                           Cancel
                         </Button>
-                        <Button onClick={() => setDialogOpen(false)}>
-                          Confirm
-                        </Button>
+                        <Button onClick={() => setDialogOpen(false)}>Confirm</Button>
                       </Row>
                     }
                   />
@@ -1626,10 +1466,7 @@ export default function ComponentsCheck() {
               label: "Media header",
               element: (
                 <>
-                  <Button
-                    variant="secondary"
-                    onClick={() => setMediaDialogOpen(true)}
-                  >
+                  <Button variant="secondary" onClick={() => setMediaDialogOpen(true)}>
                     Dialog with media
                   </Button>
                   <Dialog
@@ -1641,15 +1478,10 @@ export default function ComponentsCheck() {
                     flush
                     footer={
                       <>
-                        <Button
-                          variant="secondary"
-                          onClick={() => setMediaDialogOpen(false)}
-                        >
+                        <Button variant="secondary" onClick={() => setMediaDialogOpen(false)}>
                           Dismiss
                         </Button>
-                        <Button onClick={() => setMediaDialogOpen(false)}>
-                          Read more
-                        </Button>
+                        <Button onClick={() => setMediaDialogOpen(false)}>Read more</Button>
                       </>
                     }
                   >
@@ -1662,13 +1494,10 @@ export default function ComponentsCheck() {
                         fillWidth
                       />
                       <Column fillWidth gap="8" paddingX="24">
-                        <Text variant="heading-strong-s">
-                          Building design systems that scale
-                        </Text>
+                        <Text variant="heading-strong-s">Building design systems that scale</Text>
                         <Text onBackground="neutral-weak">
-                          A deep dive into creating modular, token-driven
-                          interfaces that stay consistent across products and
-                          teams.
+                          A deep dive into creating modular, token-driven interfaces that stay
+                          consistent across products and teams.
                         </Text>
                       </Column>
                     </Column>
@@ -1708,9 +1537,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <HoverCard
-                  trigger={<Button variant="secondary">Hover for card</Button>}
-                >
+                <HoverCard trigger={<Button variant="secondary">Hover for card</Button>}>
                   <Column padding="m">
                     <Text>Hover card content with extra detail</Text>
                   </Column>
@@ -1750,53 +1577,31 @@ export default function ComponentsCheck() {
             {
               value: "success",
               label: "Success",
-              element: (
-                <Button onClick={() => handleAddToast("success")}>
-                  Success Toast
-                </Button>
-              ),
+              element: <Button onClick={() => handleAddToast("success")}>Success Toast</Button>,
             },
             {
               value: "danger",
               label: "Danger",
-              element: (
-                <Button onClick={() => handleAddToast("danger")}>
-                  Danger Toast
-                </Button>
-              ),
+              element: <Button onClick={() => handleAddToast("danger")}>Danger Toast</Button>,
             },
             {
               value: "warning",
               label: "Warning",
-              element: (
-                <Button onClick={() => handleAddToast("warning")}>
-                  Warning Toast
-                </Button>
-              ),
+              element: <Button onClick={() => handleAddToast("warning")}>Warning Toast</Button>,
             },
             {
               value: "info",
               label: "Info",
-              element: (
-                <Button onClick={() => handleAddToast("info")}>
-                  Info Toast
-                </Button>
-              ),
+              element: <Button onClick={() => handleAddToast("info")}>Info Toast</Button>,
             },
             {
               value: "all",
               label: "All variants",
               element: (
                 <Row gap="8" wrap>
-                  <Button onClick={() => handleAddToast("success")}>
-                    Success
-                  </Button>
-                  <Button onClick={() => handleAddToast("danger")}>
-                    Danger
-                  </Button>
-                  <Button onClick={() => handleAddToast("warning")}>
-                    Warning
-                  </Button>
+                  <Button onClick={() => handleAddToast("success")}>Success</Button>
+                  <Button onClick={() => handleAddToast("danger")}>Danger</Button>
+                  <Button onClick={() => handleAddToast("warning")}>Warning</Button>
                   <Button onClick={() => handleAddToast("info")}>Info</Button>
                 </Row>
               ),
@@ -1812,9 +1617,7 @@ export default function ComponentsCheck() {
       components: [
         {
           name: "NavIcon",
-          variations: [
-            { value: "default", label: "Default", element: <NavIcon /> },
-          ],
+          variations: [{ value: "default", label: "Default", element: <NavIcon /> }],
         },
         {
           name: "ContextMenu",
@@ -1839,9 +1642,7 @@ export default function ComponentsCheck() {
         },
         {
           name: "UserMenu",
-          variations: [
-            { value: "default", label: "Default", element: <UserMenu /> },
-          ],
+          variations: [{ value: "default", label: "Default", element: <UserMenu /> }],
         },
         {
           name: "SmartLink",
@@ -1855,11 +1656,7 @@ export default function ComponentsCheck() {
               value: "icons",
               label: "With icons",
               element: (
-                <SmartLink
-                  href="/"
-                  prefixIcon="chevronLeft"
-                  suffixIcon="chevronRight"
-                >
+                <SmartLink href="/" prefixIcon="chevronLeft" suffixIcon="chevronRight">
                   Back and forth
                 </SmartLink>
               ),
@@ -1868,9 +1665,7 @@ export default function ComponentsCheck() {
         },
         {
           name: "ScrollToTop",
-          variations: [
-            { value: "default", label: "Default", element: <ScrollToTop /> },
-          ],
+          variations: [{ value: "default", label: "Default", element: <ScrollToTop /> }],
         },
       ],
     },
@@ -1887,10 +1682,7 @@ export default function ComponentsCheck() {
               label: "Default",
               element: (
                 <Accordion title="What is Once UI?">
-                  <Text>
-                    A design system and component library for Next.js
-                    applications.
-                  </Text>
+                  <Text>A design system and component library for Next.js applications.</Text>
                 </Accordion>
               ),
             },
@@ -1899,9 +1691,7 @@ export default function ComponentsCheck() {
               label: "Open by default",
               element: (
                 <Accordion open title="Installation">
-                  <Text>
-                    Run pnpm install @once-ui-system/core to get started.
-                  </Text>
+                  <Text>Run pnpm install @once-ui-system/core to get started.</Text>
                 </Accordion>
               ),
             },
@@ -1931,19 +1721,11 @@ export default function ComponentsCheck() {
                     },
                     {
                       title: "Configuration",
-                      content: (
-                        <Text>
-                          Edit once-ui.config.js to customize the theme.
-                        </Text>
-                      ),
+                      content: <Text>Edit once-ui.config.js to customize the theme.</Text>,
                     },
                     {
                       title: "Components",
-                      content: (
-                        <Text>
-                          Import components from @once-ui-system/core.
-                        </Text>
-                      ),
+                      content: <Text>Import components from @once-ui-system/core.</Text>,
                     },
                   ]}
                 />
@@ -1965,9 +1747,7 @@ export default function ComponentsCheck() {
                     },
                     {
                       title: "Third item",
-                      content: (
-                        <Text>Bottom — only bottom corners rounded</Text>
-                      ),
+                      content: <Text>Bottom — only bottom corners rounded</Text>,
                     },
                   ]}
                 />
@@ -2100,16 +1880,12 @@ export default function ComponentsCheck() {
             {
               value: "1h",
               label: "1 hour",
-              element: (
-                <CountdownFx targetDate={new Date(Date.now() + 3600000)} />
-              ),
+              element: <CountdownFx targetDate={new Date(Date.now() + 3600000)} />,
             },
             {
               value: "24h",
               label: "24 hours",
-              element: (
-                <CountdownFx targetDate={new Date(Date.now() + 86400000)} />
-              ),
+              element: <CountdownFx targetDate={new Date(Date.now() + 86400000)} />,
             },
           ],
         },
@@ -2184,11 +1960,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <FlipFx
-                  back={<Text>Back</Text>}
-                  front={<Text>Front</Text>}
-                  onClick={() => {}}
-                >
+                <FlipFx back={<Text>Back</Text>} front={<Text>Front</Text>} onClick={() => {}}>
                   <Text>Flip Effect</Text>
                 </FlipFx>
               ),
@@ -2326,9 +2098,7 @@ export default function ComponentsCheck() {
       components: [
         {
           name: "DatePicker",
-          variations: [
-            { value: "default", label: "Default", element: <DatePicker /> },
-          ],
+          variations: [{ value: "default", label: "Default", element: <DatePicker /> }],
         },
         {
           name: "DateInput",
@@ -2338,11 +2108,7 @@ export default function ComponentsCheck() {
               label: "Large (100%)",
               element: (
                 <Flex fillWidth>
-                  <DateInput
-                    id="di-lg"
-                    label="Date"
-                    placeholder="Select a date"
-                  />
+                  <DateInput id="di-lg" label="Date" placeholder="Select a date" />
                 </Flex>
               ),
             },
@@ -2351,11 +2117,7 @@ export default function ComponentsCheck() {
               label: "Medium (50%)",
               element: (
                 <Flex style={{ width: "50%" }}>
-                  <DateInput
-                    id="di-md"
-                    label="Date"
-                    placeholder="Select a date"
-                  />
+                  <DateInput id="di-md" label="Date" placeholder="Select a date" />
                 </Flex>
               ),
             },
@@ -2364,11 +2126,7 @@ export default function ComponentsCheck() {
               label: "Small (25%)",
               element: (
                 <Flex style={{ width: "25%" }}>
-                  <DateInput
-                    id="di-sm"
-                    label="Date"
-                    placeholder="Select a date"
-                  />
+                  <DateInput id="di-sm" label="Date" placeholder="Select a date" />
                 </Flex>
               ),
             },
@@ -2461,9 +2219,7 @@ export default function ComponentsCheck() {
         },
         {
           name: "Line",
-          variations: [
-            { value: "default", label: "Default", element: <Line /> },
-          ],
+          variations: [{ value: "default", label: "Default", element: <Line /> }],
         },
         {
           name: "Arrow",
@@ -2512,9 +2268,7 @@ export default function ComponentsCheck() {
         },
         {
           name: "Particle",
-          variations: [
-            { value: "default", label: "Default", element: <Particle /> },
-          ],
+          variations: [{ value: "default", label: "Default", element: <Particle /> }],
         },
         {
           name: "User",
@@ -2546,23 +2300,12 @@ export default function ComponentsCheck() {
               element: (
                 <CursorCard
                   trigger={
-                    <Flex
-                      padding="l"
-                      radius="l"
-                      background="neutral-medium"
-                      center
-                      fillWidth
-                    >
+                    <Flex padding="l" radius="l" background="neutral-medium" center fillWidth>
                       <Text>Move cursor over me</Text>
                     </Flex>
                   }
                   overlay={
-                    <Flex
-                      padding="l"
-                      radius="l"
-                      background="surface"
-                      border="neutral-medium"
-                    >
+                    <Flex padding="l" radius="l" background="surface" border="neutral-medium">
                       <Text>I follow your cursor!</Text>
                     </Flex>
                   }
@@ -2607,15 +2350,11 @@ export default function ComponentsCheck() {
         },
         {
           name: "StylePanel",
-          variations: [
-            { value: "default", label: "Default", element: <StylePanel /> },
-          ],
+          variations: [{ value: "default", label: "Default", element: <StylePanel /> }],
         },
         {
           name: "ThemeSwitcher",
-          variations: [
-            { value: "default", label: "Default", element: <ThemeSwitcher /> },
-          ],
+          variations: [{ value: "default", label: "Default", element: <ThemeSwitcher /> }],
         },
         {
           name: "EmojiPicker",
@@ -2744,13 +2483,7 @@ export default function ComponentsCheck() {
                 <Scroller>
                   <Row gap="s">
                     {[1, 2, 3, 4, 5, 6].map((n) => (
-                      <Flex
-                        key={n}
-                        padding="m"
-                        paddingX="l"
-                        background="neutral-medium"
-                        radius="m"
-                      >
+                      <Flex key={n} padding="m" paddingX="l" background="neutral-medium" radius="m">
                         <Text variant="label-default-s">Item {n}</Text>
                       </Flex>
                     ))}
@@ -2769,24 +2502,19 @@ export default function ComponentsCheck() {
               element: (
                 <AutoScroll>
                   <Row gap="s">
-                    {["Once", "UI", "Design", "System", "Components"].map(
-                      (word) => (
-                        <Flex
-                          key={word}
-                          padding="s"
-                          paddingX="m"
-                          background="brand-medium"
-                          radius="full"
-                        >
-                          <Text
-                            variant="label-default-s"
-                            onBackground="brand-strong"
-                          >
-                            {word}
-                          </Text>
-                        </Flex>
-                      ),
-                    )}
+                    {["Once", "UI", "Design", "System", "Components"].map((word) => (
+                      <Flex
+                        key={word}
+                        padding="s"
+                        paddingX="m"
+                        background="brand-medium"
+                        radius="full"
+                      >
+                        <Text variant="label-default-s" onBackground="brand-strong">
+                          {word}
+                        </Text>
+                      </Flex>
+                    ))}
                   </Row>
                 </AutoScroll>
               ),
@@ -2804,19 +2532,13 @@ export default function ComponentsCheck() {
                   aspectRatio="16/9"
                   items={[
                     {
-                      slide: (
-                        <Media src="/images/cover-03.jpg" aspectRatio="16/9" />
-                      ),
+                      slide: <Media src="/images/cover-03.jpg" aspectRatio="16/9" />,
                     },
                     {
-                      slide: (
-                        <Media src="/images/cover-04.jpg" aspectRatio="16/9" />
-                      ),
+                      slide: <Media src="/images/cover-04.jpg" aspectRatio="16/9" />,
                     },
                     {
-                      slide: (
-                        <Media src="/images/cover-05.jpg" aspectRatio="16/9" />
-                      ),
+                      slide: <Media src="/images/cover-05.jpg" aspectRatio="16/9" />,
                     },
                   ]}
                 />
@@ -2941,10 +2663,7 @@ export default function ComponentsCheck() {
                   preview={
                     <Column gap="m" fillWidth horizontal="center" padding="l">
                       <Heading variant="heading-strong-m">Hello World</Heading>
-                      <Text
-                        variant="body-default-m"
-                        onBackground="neutral-medium"
-                      >
+                      <Text variant="body-default-m" onBackground="neutral-medium">
                         This is a preview of the code below.
                       </Text>
                       <Button variant="primary" size="s">
@@ -2971,10 +2690,7 @@ export default function ComponentsCheck() {
                   preview={
                     <Column gap="m" fillWidth horizontal="center" padding="l">
                       <Heading variant="heading-strong-m">Hidden Code</Heading>
-                      <Text
-                        variant="body-default-m"
-                        onBackground="neutral-medium"
-                      >
+                      <Text variant="body-default-m" onBackground="neutral-medium">
                         The code is hidden, only preview is shown.
                       </Text>
                       <Button variant="primary" size="s">
@@ -3003,10 +2719,7 @@ export default function ComponentsCheck() {
                   preview={
                     <Column gap="m" fillWidth horizontal="center" padding="l">
                       <Heading variant="heading-strong-m">Full Code</Heading>
-                      <Text
-                        variant="body-default-m"
-                        onBackground="neutral-medium"
-                      >
+                      <Text variant="body-default-m" onBackground="neutral-medium">
                         Code is collapsible but shows all lines when expanded.
                       </Text>
                       <Button variant="primary" size="s">
@@ -3161,11 +2874,7 @@ export default function ComponentsCheck() {
           minWidth: "12rem",
         }}
       >
-        <Text
-          variant="label-default-s"
-          onBackground="neutral-weak"
-          marginBottom="s"
-        >
+        <Text variant="label-default-s" onBackground="neutral-weak" marginBottom="s">
           Components
         </Text>
         <Flex
@@ -3178,9 +2887,7 @@ export default function ComponentsCheck() {
         >
           <Text
             variant="label-default-s"
-            onBackground={
-              activeCategory === null ? "neutral-strong" : "neutral-weak"
-            }
+            onBackground={activeCategory === null ? "neutral-strong" : "neutral-weak"}
           >
             All
           </Text>
@@ -3192,9 +2899,7 @@ export default function ComponentsCheck() {
             paddingX="m"
             radius="m"
             cursor="pointer"
-            background={
-              activeCategory === cat.id ? "neutral-medium" : undefined
-            }
+            background={activeCategory === cat.id ? "neutral-medium" : undefined}
             onClick={() => {
               setActiveCategory(cat.id);
               scrollToSection(cat.id);
@@ -3202,9 +2907,7 @@ export default function ComponentsCheck() {
           >
             <Text
               variant="label-default-s"
-              onBackground={
-                activeCategory === cat.id ? "neutral-strong" : "neutral-weak"
-              }
+              onBackground={activeCategory === cat.id ? "neutral-strong" : "neutral-weak"}
             >
               {cat.name}
             </Text>
@@ -3238,9 +2941,7 @@ export default function ComponentsCheck() {
                       <Flex gap="s" fillWidth>
                         <SegmentedControl
                           selected={currentVar}
-                          onToggle={(value: string) =>
-                            selectVar(comp.name, value)
-                          }
+                          onToggle={(value: string) => selectVar(comp.name, value)}
                           buttons={comp.variations.map((v) => ({
                             value: v.value,
                             label: v.label,
@@ -3248,10 +2949,7 @@ export default function ComponentsCheck() {
                         />
                       </Flex>
                       <Flex center minHeight="8" fillWidth>
-                        {
-                          comp.variations.find((v) => v.value === currentVar)
-                            ?.element
-                        }
+                        {comp.variations.find((v) => v.value === currentVar)?.element}
                       </Flex>
                     </Column>
                   </Flex>

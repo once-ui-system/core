@@ -1,5 +1,5 @@
 import { type CSSProperties, forwardRef } from "react";
-import { generateClasses } from "../classes/generator";
+import { extractDomProps, generateClasses } from "../classes/generator";
 import type {
   CommonProps,
   DisplayProps,
@@ -57,8 +57,10 @@ export const Grid = forwardRef<HTMLDivElement, GridComponentProps>(
           }
         : undefined;
 
+    const domProps = extractDomProps(props);
+
     return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...props}>
+      <Component ref={ref} className={classes} style={combinedStyle} {...domProps}>
         {children}
         {hasCustomCursor && <Cursor cursor={cursor} />}
       </Component>

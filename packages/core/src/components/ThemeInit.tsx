@@ -1,5 +1,5 @@
-import React from 'react';
-import { safeScriptJson } from '../utils/safe-html';
+import type React from "react";
+import { safeScriptJson } from "../utils/safe-html";
 
 interface ThemeConfig {
   theme: string;
@@ -7,12 +7,12 @@ interface ThemeConfig {
   accent: string;
   neutral: string;
   solid: string;
-  'solid-style': string;
+  "solid-style": string;
   border: string;
   surface: string;
   transition: string;
   scaling: string;
-  'viz-style': string;
+  "viz-style": string;
 }
 
 interface ThemeInitProps {
@@ -40,9 +40,7 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config }) => {
                   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
                 return themeValue;
-};
-
-ThemeInit.displayName = "ThemeInit";
+              };
 
               // Priority:
               // 1. localStorage

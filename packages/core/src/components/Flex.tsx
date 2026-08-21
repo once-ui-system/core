@@ -1,5 +1,5 @@
 import { type CSSProperties, forwardRef } from "react";
-import { generateClasses } from "../classes/generator";
+import { extractDomProps, generateClasses } from "../classes/generator";
 import { cn } from "../classes/utils";
 import type {
   CommonProps,
@@ -61,8 +61,10 @@ const Flex = forwardRef<HTMLDivElement, FlexComponentProps>(
           }
         : undefined;
 
+    const domProps = extractDomProps(props);
+
     return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...props}>
+      <Component ref={ref} className={classes} style={combinedStyle} {...domProps}>
         {children}
         {hasCustomCursor && <Cursor cursor={cursor} />}
       </Component>

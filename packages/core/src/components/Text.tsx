@@ -1,5 +1,5 @@
 import type { ComponentPropsWithRef, ElementType } from "react";
-import { generateClasses } from "../classes/generator";
+import { extractDomProps, generateClasses } from "../classes/generator";
 import { cn } from "../classes/utils";
 import type {
   CommonProps,
@@ -63,8 +63,10 @@ const Text = <T extends ElementType = "span">({
     className,
   );
 
+  const domProps = extractDomProps(props);
+
   return (
-    <Component className={classes} style={style} {...props}>
+    <Component className={classes} style={style} {...domProps}>
       {children}
     </Component>
   );

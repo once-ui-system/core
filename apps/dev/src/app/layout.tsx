@@ -1,14 +1,12 @@
-import '@once-ui-system/core/css/styles.css';
-import '@once-ui-system/core/css/tokens.css';
-
-import classNames from "clsx";
+import "@/styles/globals.css";
+import "@once-ui-system/core/css/styles.css";
+import "@once-ui-system/core/css/tokens.css";
 
 import { Column, Flex, ThemeInit } from "@once-ui-system/core";
-import { dataStyle, style } from "@/resources/once-ui.config";
+import classNames from "clsx";
+import { Geist, Geist_Mono } from "next/font/google";
 import { Providers } from "@/components/Providers";
-
-import { Geist } from "next/font/google";
-import { Geist_Mono } from "next/font/google";
+import { dataStyle, style } from "@/resources/once-ui.config";
 
 const heading = Geist({
   variable: "--font-heading",
@@ -47,18 +45,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
-      <Flex
-        as="html"
-        lang="en"
-        suppressHydrationWarning
-        className={classNames(
-          fonts.heading.variable,
-          fonts.body.variable,
-          fonts.label.variable,
-          fonts.code.variable,
-        )}
-      >
+    <Flex
+      as="html"
+      lang="en"
+      suppressHydrationWarning
+      className={classNames(
+        fonts.heading.variable,
+        fonts.body.variable,
+        fonts.label.variable,
+        fonts.code.variable,
+      )}
+    >
+      <head>
         <ThemeInit
           config={{
             theme: style.theme,
@@ -66,29 +64,24 @@ export default function RootLayout({
             accent: style.accent,
             neutral: style.neutral,
             solid: style.solid,
-            'solid-style': style.solidStyle,
+            "solid-style": style.solidStyle,
             border: style.border,
             surface: style.surface,
             transition: style.transition,
             scaling: style.scaling,
-            'viz-style': dataStyle.variant,
+            "viz-style": dataStyle.variant,
           }}
         />
-        <Providers>
-          <Column background="page" as="body" fillWidth margin="0" padding="0" minHeight="100vh">
-            <Flex
-              fillWidth
-              padding="l"
-              horizontal="center"
-              flex={1}
-            >
-              <Flex fillWidth horizontal="center">
-                {children}
-              </Flex>
+      </head>
+      <Providers>
+        <Column background="page" as="body" fillWidth margin="0" padding="0" minHeight="100vh">
+          <Flex fillWidth padding="l" horizontal="center" flex={1}>
+            <Flex fillWidth horizontal="center">
+              {children}
             </Flex>
-          </Column>
-        </Providers>
-      </Flex>
-    </>
+          </Flex>
+        </Column>
+      </Providers>
+    </Flex>
   );
 }
