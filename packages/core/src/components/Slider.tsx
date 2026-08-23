@@ -104,9 +104,9 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
           vertical="center"
           className={cn(sliderVariants({ disabled, dragging: isDragging }))}
         >
-          <div className="absolute top-1/2 -translate-y-1/2 inset-x-0 h-4 bg-neutral-alpha-medium rounded-full overflow-hidden">
+          <div className="absolute top-1/2 -translate-y-1/2 inset-x-0 h-4 bg-neutral-alpha-medium rounded-full overflow-hidden pointer-events-none">
             <div
-              className="absolute top-0 left-0 h-full bg-brand-solid-medium pointer-events-none"
+              className="absolute top-0 left-0 h-full bg-brand-solid-medium pointer-events-none transition-[width] duration-75"
               style={{ width: `${percentage}%` }}
             />
           </div>
@@ -130,12 +130,12 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
           />
           <div
             className={cn(
-              "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-brand-on-solid-strong border-2 border-solid border-brand-solid-medium rounded-full pointer-events-none transition-transform duration-100 shadow-s",
-              !disabled && "group-hover/slider:scale-[1.2]",
-              isDragging && "scale-[1.2] cursor-grabbing",
-              "peer-focus-visible:outline-2 peer-focus-visible:outline-brand-alpha-medium peer-focus-visible:outline-offset-2",
+              "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-brand-on-solid-strong border-2 border-solid border-brand-solid-medium rounded-full pointer-events-none transition-transform duration-100 ease-out shadow-s",
+              !disabled && "group-hover/slider:scale-125",
+              isDragging && "scale-125 cursor-grabbing",
+              "peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-solid peer-focus-visible:outline-brand-alpha-medium peer-focus-visible:outline-offset-2",
             )}
-            style={{ left: `${percentage}%` }}
+            style={{ left: `calc(${percentage}% + ${(0.5 - percentage / 100) * 16}px)` }}
           />
         </Row>
       </Column>

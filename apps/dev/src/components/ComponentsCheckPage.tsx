@@ -859,6 +859,40 @@ export default function ComponentsCheck() {
           ],
         },
         {
+          name: "Slider",
+          variations: [
+            {
+              value: "default",
+              label: "Default & Label",
+              element: (
+                <Column gap="16" fillWidth>
+                  <Slider value={50} onChange={() => {}} label="Volume" showValue />
+                  <Slider value={25} onChange={() => {}} min={0} max={100} label="Brightness" />
+                </Column>
+              ),
+            },
+            {
+              value: "steps",
+              label: "Step & Range",
+              element: (
+                <Column gap="16" fillWidth>
+                  <Slider value={60} step={20} onChange={() => {}} label="Step (20)" showValue />
+                  <Slider value={22} min={10} max={30} onChange={() => {}} label="Temperature (°C)" showValue />
+                </Column>
+              ),
+            },
+            {
+              value: "disabled",
+              label: "Disabled",
+              element: (
+                <Column gap="16" fillWidth>
+                  <Slider value={40} disabled onChange={() => {}} label="Locked Setting" showValue />
+                </Column>
+              ),
+            },
+          ],
+        },
+        {
           name: "SegmentedControl",
           variations: [
             {
