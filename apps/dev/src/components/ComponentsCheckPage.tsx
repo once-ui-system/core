@@ -79,6 +79,7 @@ import {
   Select,
   ShineFx,
   Skeleton,
+  Slider,
   SmartLink,
   Spinner,
   StatusIndicator,
