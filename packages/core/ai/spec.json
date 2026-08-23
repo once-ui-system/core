@@ -9,7 +9,7 @@
   "ResponsiveSpacingToken": "TShirtSizes",
   "ShadowSize": "TShirtSizes",
   "SpacingToken": "StaticSpacingToken | ResponsiveSpacingToken",
-  "CSSUnit": "`${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`",
+  "CSSUnit": "`${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `${number}px` | `${number}rem` | `${number}em` | `calc(${string})`",
   "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
   "ColorWeight": "\"weak\" | \"medium\" | \"strong\"",
   "Colors": "`${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`",

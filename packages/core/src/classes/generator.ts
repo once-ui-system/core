@@ -18,7 +18,14 @@ import type {
 import { cn } from "./utils";
 
 export interface GenerateClassesProps {
-  display?: "flex" | "grid";
+  display?:
+    | "flex"
+    | "grid"
+    | "block"
+    | "inline-block"
+    | "inline"
+    | "none"
+    | CSSProperties["display"];
   columns?: GridSize;
   rows?: GridSize;
   gridColumns?: GridSize;
@@ -185,6 +192,9 @@ const formatDimension = (
       val.endsWith("vh") ||
       val.endsWith("dvh") ||
       val.endsWith("vw") ||
+      val.endsWith("px") ||
+      val.endsWith("rem") ||
+      val.endsWith("em") ||
       val.startsWith("calc(")
     ) {
       return `${prefix}-[${val}]`;
@@ -208,6 +218,7 @@ const formatTranslate = (
       val.endsWith("vw") ||
       val.endsWith("px") ||
       val.endsWith("rem") ||
+      val.endsWith("em") ||
       val.startsWith("calc(")
     ) {
       return `${prefix}-[${val}]`;
@@ -267,7 +278,13 @@ const formatRadius = (
   if (!val) return undefined;
   if (val === "full") return `${prefix}-full`;
   if (val === "none") return `${prefix}-none`;
-  return `${prefix}-${val}`;
+  if (val.includes("-nest-")) return `${prefix}-${val}`;
+  const normalized = val.endsWith("-4")
+    ? val.replace(/-4$/, "-nest-4")
+    : val.endsWith("-8")
+      ? val.replace(/-8$/, "-nest-8")
+      : val;
+  return `${prefix}-${normalized}`;
 };
 
 const getVariantClasses = (variant?: TextVariant): string[] => {
@@ -333,6 +350,7 @@ const getBreakpointClasses = (
   isGrid = false,
 ): string[] => {
   if (!bp) return [];
+  // biome-ignore lint/suspicious/noExplicitAny: dynamic breakpoint property access
   const b = bp as Record<string, any>;
   const classes: (string | undefined)[] = [];
 
@@ -561,6 +579,7 @@ export function generateClasses(
 ): string;
 export function generateClasses(...args: unknown[]): string {
   let p: GenerateClassesProps;
+  // biome-ignore lint/suspicious/noExplicitAny: legacy positional overload mapping
   const a = args as any[];
 
   if (a.length === 1 && typeof a[0] === "object" && a[0] !== null) {

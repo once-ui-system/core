@@ -64,6 +64,9 @@ export type CSSUnit =
   | `${number}vh`
   | `${number}dvh`
   | `${number}vw`
+  | `${number}px`
+  | `${number}rem`
+  | `${number}em`
   | `calc(${string})`;
 
 export type Opacity = 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
@@ -85,7 +88,7 @@ export type Colors = `${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${C
 
 export type RadiusSize = TShirtSizes | "full" | "none";
 
-export type RadiusNest = "4" | "8";
+export type RadiusNest = "4" | "8" | "nest-4" | "nest-8";
 
 export type TextType = "body" | "heading" | "display" | "label" | "code";
 
@@ -108,6 +111,8 @@ export type GridSize =
   | "10"
   | "11"
   | "12"
+  | "subgrid"
+  | "none"
   | 1
   | 2
   | 3
@@ -135,6 +140,9 @@ export type FlexValue =
   | "10"
   | "11"
   | "12"
+  | "auto"
+  | "initial"
+  | "none"
   | 0
   | 1
   | 2
