@@ -16,7 +16,7 @@ export const textareaVariants = cva(
   {
     variants: {
       variant: {
-        default: "border border-solid bg-neutral-alpha-weak border-neutral-medium",
+        default: "border border-solid bg-neutral-alpha-weak border-neutral-alpha-weak",
         ghost: "border border-solid bg-transparent border-transparent",
       },
       height: {
