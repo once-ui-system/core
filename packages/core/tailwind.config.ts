@@ -258,6 +258,16 @@ const config: Config = {
           from: { opacity: "0" },
           to: { opacity: "1" },
         },
+        pulse: {
+          "0%": {
+            transform: "scale(0)",
+            opacity: "1",
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "0",
+          },
+        },
         shineDefault: {
           "0%": { left: "-100%" },
           "1%": { left: "-100%", opacity: "1" },
@@ -275,6 +285,7 @@ const config: Config = {
       },
       animation: {
         fadeIn: "fadeIn 0.2s ease-in-out",
+        pulse: "pulse 2s infinite ease-out",
         shineDefault: "shineDefault 9s ease-in-out infinite",
         shineHover: "shineHover 3s ease-in-out infinite",
       },
