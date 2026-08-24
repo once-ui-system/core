@@ -1062,6 +1062,7 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
       <Flex
         ref={containerRef}
         fill
+        position="relative"
         overflow="hidden"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

@@ -19,7 +19,6 @@ import {
   CodeBlock,
   ColorInput,
   Column,
-  CompareImage,
   ContextMenu,
   CountdownFx,
   CountFx,
@@ -36,7 +35,6 @@ import {
   Feedback,
   Flex,
   FlipFx,
-  GlitchFx,
   Grid,
   Heading,
   HoloFx,
@@ -1231,21 +1229,6 @@ export default function ComponentsCheck() {
           ],
         },
         {
-          name: "CompareImage",
-          variations: [
-            {
-              value: "default",
-              label: "Default",
-              element: (
-                <CompareImage
-                  leftContent={{ src: "/images/cover-01.jpg" }}
-                  rightContent={{ src: "/images/cover-02.jpg" }}
-                />
-              ),
-            },
-          ],
-        },
-        {
           name: "Logo",
           variations: [
             {
@@ -1944,29 +1927,17 @@ export default function ComponentsCheck() {
             {
               value: "default",
               label: "Default",
-              element: (
-                <Pulse>
-                  <Text>Pulse Effect</Text>
-                </Pulse>
-              ),
+              element: <Pulse />,
             },
             {
               value: "large",
               label: "Large pulse",
-              element: (
-                <Pulse pulseSize={80}>
-                  <Text>Large pulse</Text>
-                </Pulse>
-              ),
+              element: <Pulse pulseSize={80} />,
             },
             {
               value: "small",
               label: "Small pulse",
-              element: (
-                <Pulse pulseSize={40}>
-                  <Text>Small pulse</Text>
-                </Pulse>
-              ),
+              element: <Pulse pulseSize={40} />,
             },
           ],
         },
@@ -2003,20 +1974,6 @@ export default function ComponentsCheck() {
           ],
         },
         {
-          name: "GlitchFx",
-          variations: [
-            {
-              value: "default",
-              label: "Default",
-              element: (
-                <GlitchFx>
-                  <Text>Glitch Effect</Text>
-                </GlitchFx>
-              ),
-            },
-          ],
-        },
-        {
           name: "HoloFx",
           variations: [
             {
@@ -2037,7 +1994,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <MatrixFx>
+                <MatrixFx style={{ width: "100%", height: "8rem" }}>
                   <Text>Matrix Effect</Text>
                 </MatrixFx>
               ),
@@ -2079,7 +2036,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <WeatherFx>
+                <WeatherFx style={{ width: "100%", height: "8rem" }}>
                   <Text>Weather Effect</Text>
                 </WeatherFx>
               ),
@@ -2303,7 +2260,7 @@ export default function ComponentsCheck() {
         },
         {
           name: "Particle",
-          variations: [{ value: "default", label: "Default", element: <Particle /> }],
+          variations: [{ value: "default", label: "Default", element: <Particle style={{ width: "100%", height: "8rem" }} /> }],
         },
         {
           name: "User",
@@ -2646,23 +2603,6 @@ export default function ComponentsCheck() {
           name: "CodeBlock",
           variations: [
             {
-              value: "custom-bg",
-              label: "Custom BG (controls test)",
-              element: (
-                <CodeBlock
-                  style={{ backgroundColor: "pink" }}
-                  compact
-                  codes={[
-                    {
-                      code: `const greeting = "Hello World";\nconsole.log(greeting);\n\n// Scroll test: enough lines to overflow\nfunction fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nfor (let i = 0; i < 20; i++) {\n  console.log(\`fib(\${i}) = \${fibonacci(i)}\`);\n}`,
-                      language: "javascript",
-                      label: "Inherit Test",
-                    },
-                  ]}
-                />
-              ),
-            },
-            {
               value: "default",
               label: "Default",
               element: (
@@ -2679,6 +2619,22 @@ export default function ComponentsCheck() {
                       code: `function greet(name) {\n  return \`Hello, \${name}!\`;\n}`,
                       language: "javascript",
                       label: "JavaScript",
+                    },
+                  ]}
+                />
+              ),
+            },
+            {
+              value: "compact",
+              label: "Compact",
+              element: (
+                <CodeBlock
+                  compact
+                  codes={[
+                    {
+                      code: `const greeting = "Hello World";\nconsole.log(greeting);\n\n// Scroll test: enough lines to overflow\nfunction fibonacci(n) {\n  if (n <= 1) return n;\n  return fibonacci(n - 1) + fibonacci(n - 2);\n}\n\nfor (let i = 0; i < 20; i++) {\n  console.log(\`fib(\${i}) = \${fibonacci(i)}\`);\n}`,
+                      language: "javascript",
+                      label: "Compact Test",
                     },
                   ]}
                 />
@@ -2897,7 +2853,7 @@ export default function ComponentsCheck() {
     : categories;
 
   return (
-    <Row fill gap="l" paddingY="l" style={{ maxWidth: "90rem" }}>
+    <Row fill gap="l" paddingY="l" style={{ maxWidth: "90rem", width: "100%", minWidth: 0 }}>
       <Column
         as="nav"
         gap="xs"
@@ -2907,6 +2863,8 @@ export default function ComponentsCheck() {
           top: "2rem",
           alignSelf: "flex-start",
           minWidth: "12rem",
+          maxWidth: "14rem",
+          flexShrink: 0,
         }}
       >
         <Text variant="label-default-s" onBackground="neutral-weak" marginBottom="s">
@@ -2950,9 +2908,9 @@ export default function ComponentsCheck() {
         ))}
       </Column>
 
-      <Column gap="xl" flex={1} style={{ minWidth: 0 }}>
+      <Column gap="xl" flex={1} style={{ minWidth: 0, maxWidth: "100%", overflow: "hidden" }}>
         {filteredCategories.map((category) => (
-          <Column key={category.id} id={category.id} gap="m" fillWidth>
+          <Column key={category.id} id={category.id} gap="m" fillWidth style={{ minWidth: 0 }}>
             <Column gap="xs">
               <Heading variant="heading-strong-l">{category.name}</Heading>
               <Text variant="body-default-s" onBackground="neutral-weak">
@@ -2960,7 +2918,7 @@ export default function ComponentsCheck() {
               </Text>
             </Column>
             <Line />
-            <Grid columns="2" gap="m" fillWidth>
+            <Grid columns="2" gap="m" fillWidth style={{ minWidth: 0 }}>
               {category.components.map((comp) => {
                 const currentVar = getVar(comp.name, comp.variations);
                 return (
@@ -2971,9 +2929,10 @@ export default function ComponentsCheck() {
                     fillWidth
                     border="neutral-alpha-medium"
                     background="surface"
+                    style={{ minWidth: 0, overflow: "hidden" }}
                   >
-                    <Column gap="s" fillWidth>
-                      <Flex gap="s" fillWidth>
+                    <Column gap="s" fillWidth style={{ minWidth: 0, overflow: "hidden" }}>
+                      <Flex gap="s" fillWidth style={{ minWidth: 0, overflowX: "auto" }}>
                         <SegmentedControl
                           selected={currentVar}
                           onToggle={(value: string) => selectVar(comp.name, value)}
@@ -2983,7 +2942,7 @@ export default function ComponentsCheck() {
                           }))}
                         />
                       </Flex>
-                      <Flex center minHeight="8" fillWidth>
+                      <Flex center minHeight="8" fillWidth style={{ minWidth: 0, overflow: "hidden" }}>
                         {comp.variations.find((v) => v.value === currentVar)?.element}
                       </Flex>
                     </Column>

@@ -17,7 +17,7 @@ interface PulseProps extends React.ComponentProps<typeof Row> {
 const Pulse = forwardRef<HTMLDivElement, PulseProps>(
   ({ children, className, style, size = "m", pulseSize, variant = "brand", ...flex }: PulseProps, ref) => {
     return (
-      <Row ref={ref} minWidth={size === "s" ? "16" : size === "m" ? "24" : "32"} minHeight={size === "s" ? "16" : size === "m" ? "24" : "32"} center data-solid="color" className={className} style={style} {...flex}>
+      <Row ref={ref} position="relative" minWidth={size === "s" ? "16" : size === "m" ? "24" : "32"} minHeight={size === "s" ? "16" : size === "m" ? "24" : "32"} center data-solid="color" className={className} style={style} {...flex}>
         <Row position="absolute" className={styles.position}>
           <Row
             solid={`${variant}-medium`}
@@ -34,6 +34,7 @@ const Pulse = forwardRef<HTMLDivElement, PulseProps>(
           minHeight={size === "s" ? "4" : size === "m" ? "8" : "12"}
           radius="full"
         />
+        {children}
       </Row>
     );
   },

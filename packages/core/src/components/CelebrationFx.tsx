@@ -397,6 +397,7 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
       <Flex
         ref={containerRef}
         fill
+        position="relative"
         overflow="hidden"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

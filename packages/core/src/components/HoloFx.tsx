@@ -121,7 +121,7 @@ const HoloFx = forwardRef<HTMLDivElement, HoloFxProps>(({ children, reducedMotio
   }, [isActive]);
 
   return (
-    <Flex overflow="hidden" className={styles.holoFx} ref={mergedRef} {...rest}>
+    <Flex position="relative" overflow="hidden" className={styles.holoFx} ref={mergedRef} {...rest}>
       <Flex fill className={styles.base}>
         {children}
       </Flex>

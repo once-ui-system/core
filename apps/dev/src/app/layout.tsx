@@ -74,9 +74,9 @@ export default function RootLayout({
         />
       </head>
       <Providers>
-        <Column background="page" as="body" fillWidth margin="0" padding="0" minHeight="100vh">
-          <Flex fillWidth padding="l" horizontal="center" flex={1}>
-            <Flex fillWidth horizontal="center">
+        <Column background="page" as="body" fillWidth margin="0" padding="0" minHeight="100vh" style={{ overflowX: "hidden", maxWidth: "100vw" }}>
+          <Flex fillWidth padding="l" horizontal="center" flex={1} style={{ maxWidth: "100vw", overflowX: "hidden" }}>
+            <Flex fillWidth horizontal="center" style={{ maxWidth: "100%", minWidth: 0 }}>
               {children}
             </Flex>
           </Flex>

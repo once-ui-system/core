@@ -970,6 +970,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       <Flex
         ref={containerRef}
         fill
+        position="relative"
         overflow="hidden"
         onMouseEnter={handleMouseEnter}
         onMouseMove={handleMouseMove}

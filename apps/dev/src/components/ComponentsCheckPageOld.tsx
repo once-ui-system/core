@@ -74,7 +74,6 @@ import {
   SegmentedControl,
   ToggleButton,
   ScrollToTop,
-  CompareImage,
   InteractiveDetails,
   InfiniteScroll,
   PasswordInput,
@@ -88,7 +87,6 @@ import {
   NavIcon,
   CursorCard,
   FlipFx,
-  GlitchFx,
   HoloFx,
   MatrixFx,
   ShineFx,
@@ -506,15 +504,6 @@ export default function ComponentsCheckOld() {
           ),
         },
         {
-          name: "CompareImage",
-          element: (
-            <CompareImage
-              leftContent={{ src: "/images/cover-01.jpg" }}
-              rightContent={{ src: "/images/cover-02.jpg" }}
-            />
-          ),
-        },
-        {
           name: "Logo",
           element: (
             <Row gap="m" vertical="center">
@@ -820,14 +809,6 @@ export default function ComponentsCheckOld() {
             >
               <Text>Flip Effect</Text>
             </FlipFx>
-          ),
-        },
-        {
-          name: "GlitchFx",
-          element: (
-            <GlitchFx>
-              <Text>Glitch Effect</Text>
-            </GlitchFx>
           ),
         },
         {
