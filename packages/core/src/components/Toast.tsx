@@ -1,21 +1,45 @@
 "use client";
 
-import React, { useEffect, useState, forwardRef } from "react";
-import { IconButton, Icon, Flex, Row } from ".";
-import classNames from "clsx";
-import styles from "./Toast.module.scss";
-import { IconName } from "../icons";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef, useEffect, useState } from "react";
+import { cn } from "../classes/utils";
+import type { IconName } from "../icons";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { Row } from "./Row";
 
-interface ToastProps {
+export const toastVariants = cva("transition-[opacity,transform] duration-300", {
+  variants: {
+    variant: {
+      success: "",
+      danger: "",
+      warning: "",
+      info: "",
+    },
+    visible: {
+      true: "opacity-100",
+      false: "opacity-0 pointer-events-none",
+    },
+  },
+  defaultVariants: {
+    variant: "info",
+    visible: true,
+  },
+});
+
+export interface ToastProps extends Omit<FlexComponentProps, "children"> {
   className?: string;
   variant: "success" | "danger" | "warning" | "info";
   icon?: boolean;
   onClose?: () => void;
-  action?: React.ReactNode;
-  children: React.ReactNode;
+  action?: ReactNode;
+  children: ReactNode;
+  style?: CSSProperties;
 }
 
-const iconMap: { [key in ToastProps["variant"]]: IconName } = {
+const iconMap: Record<ToastProps["variant"], IconName> = {
   success: "check",
   danger: "danger",
   warning: "warning",
@@ -23,7 +47,7 @@ const iconMap: { [key in ToastProps["variant"]]: IconName } = {
 };
 
 const Toast = forwardRef<HTMLDivElement, ToastProps>(
-  ({ variant, className, icon = true, onClose, action, children }, ref) => {
+  ({ variant, className, style, icon = true, onClose, action, children, ...rest }, ref) => {
     const [visible, setVisible] = useState(true);
 
     useEffect(() => {
@@ -48,10 +72,9 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
         border="neutral-medium"
         role="alert"
         aria-live="assertive"
-        className={classNames(className, styles.toast, styles[variant], {
-          [styles.visible]: visible,
-          [styles.hidden]: !visible,
-        })}
+        className={cn(toastVariants({ variant, visible }), className)}
+        style={style}
+        {...rest}
       >
         <Flex fillWidth vertical="center" gap="8">
           {icon && <Icon size="s" onBackground={`${variant}-medium`} name={iconMap[variant]} />}

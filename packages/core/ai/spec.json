@@ -2176,13 +2176,25 @@
   },
   "Toast": {
    "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
    "props": {
     "className": "string",
     "variant": "!\"success\" | \"danger\" | \"warning\" | \"info\"",
     "icon": "boolean = true",
     "onClose": "() => void",
-    "action": "React.ReactNode",
-    "children": "!React.ReactNode"
+    "action": "ReactNode",
+    "children": "!ReactNode",
+    "style": "CSSProperties"
    }
   },
   "Toaster": {

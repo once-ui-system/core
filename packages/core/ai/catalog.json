@@ -939,6 +939,9 @@
   },
   "Toast": {
    "group": "components",
+   "extends": [
+    "Flex"
+   ],
    "purpose": "Toast component",
    "tags": [
     "components"
