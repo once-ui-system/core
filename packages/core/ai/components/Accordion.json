@@ -18,7 +18,7 @@
   "icon": "string = chevronDown",
   "iconRotation": "number = 180",
   "size": "CondensedTShirtSizes = m",
-  "radius": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" | \"full\" = m",
+  "radius": "RadiusSize = m",
   "open": "boolean = false",
   "onToggle": "() => void",
   "className": "string",

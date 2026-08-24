@@ -160,5 +160,66 @@ describe("Accordion", () => {
     fireEvent.click(buttons[1]);
     expect(buttons[0]).toHaveAttribute("aria-expanded", "false");
     expect(buttons[1]).toHaveAttribute("aria-expanded", "true");
+
+    // Clicking the already open accordion closes it
+    fireEvent.click(buttons[1]);
+    expect(buttons[1]).toHaveAttribute("aria-expanded", "false");
+  });
+
+  it("returns null when items is empty in AccordionGroup", () => {
+    const { container } = render(<AccordionGroup items={[]} />);
+    expect(container.firstChild).toBeNull();
+  });
+
+  it("supports autoCollapse={false} allowing multiple accordions open", () => {
+    const items = [
+      { title: "Item 1", content: "Content 1" },
+      { title: "Item 2", content: "Content 2" },
+    ];
+
+    render(<AccordionGroup items={items} autoCollapse={false} />);
+
+    const buttons = screen.getAllByRole("button");
+    fireEvent.click(buttons[0]);
+    expect(buttons[0]).toHaveAttribute("aria-expanded", "true");
+    expect(buttons[1]).toHaveAttribute("aria-expanded", "false");
+
+    fireEvent.click(buttons[1]);
+    expect(buttons[0]).toHaveAttribute("aria-expanded", "true");
+    expect(buttons[1]).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("passes custom props and item headerProps in AccordionGroup", () => {
+    const headerClick = vi.fn();
+    const items = [
+      {
+        title: "Item 1",
+        content: "Content 1",
+        headerProps: {
+          className: "custom-item-header",
+          onClick: headerClick,
+        },
+      },
+    ];
+
+    const { container } = render(
+      <AccordionGroup
+        items={items}
+        radius="l"
+        border="brand-alpha-medium"
+        className="custom-group"
+      />,
+    );
+
+    const group = container.firstChild as HTMLElement;
+    expect(group).toHaveClass("custom-group");
+    expect(group).toHaveClass("rounded-l");
+
+    const button = screen.getByRole("button", { name: /Item 1/i });
+    expect(button).toHaveClass("custom-item-header");
+
+    fireEvent.click(button);
+    expect(headerClick).toHaveBeenCalledTimes(1);
+    expect(button).toHaveAttribute("aria-expanded", "true");
   });
 });

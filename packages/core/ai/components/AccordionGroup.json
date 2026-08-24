@@ -17,7 +17,11 @@
   "size": "CondensedTShirtSizes = m",
   "autoCollapse": "boolean = true",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties",
+  "fillWidth": "boolean = true",
+  "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-medium",
+  "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}` = m",
+  "overflow": "CSSProperties[\"overflow\"] = hidden"
  },
  "mixinsRef": [
   "CommonProps",

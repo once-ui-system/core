@@ -3,7 +3,7 @@
 import type { CSSProperties, KeyboardEvent, MouseEvent, MutableRefObject, ReactNode } from "react";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { cn } from "../classes/utils";
-import type { CondensedTShirtSizes } from "../types";
+import type { CondensedTShirtSizes, RadiusSize } from "../types";
 import { Column } from "./Column";
 import type { Flex } from "./Flex";
 import { Grid } from "./Grid";
@@ -22,7 +22,7 @@ export interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, 
   icon?: string;
   iconRotation?: number;
   size?: CondensedTShirtSizes;
-  radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
+  radius?: RadiusSize;
   open?: boolean;
   onToggle?: () => void;
   className?: string;
