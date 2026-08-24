@@ -16,7 +16,7 @@
   "size": "TShirtSizes = m",
   "ariaLabel": "string = Loading",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",

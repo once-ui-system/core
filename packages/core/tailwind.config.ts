@@ -293,6 +293,21 @@ const config: Config = {
             backgroundColor: "var(--neutral-background-strong)",
           },
         },
+        spin: {
+          "0%": {
+            transform: "rotate(0deg)",
+            animationTimingFunction: "cubic-bezier(0.5, 0.2, 0.7, 0.5)",
+            opacity: "0",
+          },
+          "80%": {
+            opacity: "1",
+          },
+          "100%": {
+            transform: "rotate(360deg)",
+            animationTimingFunction: "cubic-bezier(0.5, 0.2, 0.7, 0.5)",
+            opacity: "0",
+          },
+        },
       },
       animation: {
         fadeIn: "fadeIn 0.2s ease-in-out",
@@ -300,6 +315,7 @@ const config: Config = {
         shineDefault: "shineDefault 9s ease-in-out infinite",
         shineHover: "shineHover 3s ease-in-out infinite",
         skeleton: "skeleton 1.5s infinite",
+        spin: "spin 1.5s infinite",
       },
     },
   },
