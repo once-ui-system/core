@@ -14,10 +14,10 @@
  ],
  "props": {
   "size": "CondensedTShirtSizes = m",
-  "color": "!\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\" | \"gray\" = blue",
+  "color": "Schemes | \"gray\" = blue",
   "ariaLabel": "string = `${color} status indicator`",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
