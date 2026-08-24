@@ -1,9 +1,31 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
-import { IconButton, Icon, Flex, Text, Column } from ".";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import type { IconName } from "../icons";
+import { Column } from "./Column";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { Text } from "./Text";
 
-interface FeedbackProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
+export const feedbackVariants = cva("flex w-full items-start rounded-l", {
+  variants: {
+    variant: {
+      info: "border border-solid border-info-border-medium bg-info-background-medium",
+      danger: "border border-solid border-danger-border-medium bg-danger-background-medium",
+      warning: "border border-solid border-warning-border-medium bg-warning-background-medium",
+      success: "border border-solid border-success-border-medium bg-success-background-medium",
+    },
+  },
+  defaultVariants: {
+    variant: "info",
+  },
+});
+
+export interface FeedbackProps extends Omit<FlexComponentProps, "title"> {
   variant?: "info" | "danger" | "warning" | "success";
   icon?: boolean;
   title?: string;
@@ -11,13 +33,11 @@ interface FeedbackProps extends Omit<React.ComponentProps<typeof Flex>, "title">
   showCloseButton?: boolean;
   onClose?: () => void;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   children?: ReactNode;
 }
 
-const variantIconMap: {
-  [key in "info" | "danger" | "warning" | "success"]: string;
-} = {
+const variantIconMap: Record<"info" | "danger" | "warning" | "success", IconName> = {
   info: "info",
   danger: "danger",
   warning: "warning",
@@ -50,7 +70,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
         vertical="start"
         role="alert"
         aria-live="assertive"
-        className={className}
+        className={cn(feedbackVariants({ variant }), className)}
         style={style}
         {...rest}
       >
@@ -94,11 +114,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
                 </Flex>
               )}
               {description && (
-                <Text
-                  marginBottom="2"
-                  variant="body-default-s"
-                  onBackground={`${variant}-strong`}
-                >
+                <Text marginBottom="2" variant="body-default-s" onBackground={`${variant}-strong`}>
                   {description}
                 </Text>
               )}
@@ -112,4 +128,5 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
 );
 
 Feedback.displayName = "Feedback";
+
 export { Feedback };

@@ -20,7 +20,7 @@
   "showCloseButton": "boolean = false",
   "onClose": "() => void",
   "className": "string",
-  "style": "React.CSSProperties",
+  "style": "CSSProperties",
   "children": "ReactNode"
  },
  "mixinsRef": [
