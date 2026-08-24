@@ -15,12 +15,12 @@
  "props": {
   "title": "string",
   "icon": "IconName",
-  "arrow": "boolean = href ? true : false",
-  "children": "React.ReactNode",
+  "arrow": "boolean = Boolean(href)",
+  "children": "ReactNode",
   "href": "string",
   "effect": "boolean = true",
   "className": "string",
-  "style": "React.CSSProperties",
+  "style": "CSSProperties",
   "id": "string"
  },
  "mixinsRef": [

@@ -1,21 +1,36 @@
 "use client";
 
-import React, { forwardRef } from "react";
-import { Arrow, Flex, Icon, SmartLink } from ".";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode, Ref } from "react";
+import { cloneElement, forwardRef } from "react";
+import { cn } from "../classes/utils";
+import type { IconName } from "../icons";
+import { Arrow } from "./Arrow";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { Icon } from "./Icon";
+import { SmartLink } from "./SmartLink";
 
-import styles from "./Badge.module.scss";
-import { IconName } from "../icons";
-import classNames from "clsx";
+export const badgeVariants = cva("relative inline-flex items-center", {
+  variants: {
+    effect: {
+      true: "overflow-hidden before:content-[''] before:opacity-0 before:rounded-full before:absolute before:w-full before:h-full before:bg-[linear-gradient(120deg,transparent_20%,var(--brand-alpha-medium)_50%,transparent_80%)] before:-skew-x-[20deg] before:animate-shineDefault hover:before:animate-shineHover",
+      false: "",
+    },
+  },
+  defaultVariants: {
+    effect: true,
+  },
+});
 
-export interface BadgeProps extends React.ComponentProps<typeof Flex> {
+export interface BadgeProps extends FlexComponentProps {
   title?: string;
   icon?: IconName;
   arrow?: boolean;
-  children?: React.ReactNode;
+  children?: ReactNode;
   href?: string;
   effect?: boolean;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   id?: string;
 }
 
@@ -25,7 +40,7 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
       title,
       icon,
       href,
-      arrow = href ? true : false,
+      arrow = Boolean(href),
       children,
       effect = true,
       className,
@@ -35,13 +50,15 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
     },
     ref,
   ) => {
+    const badgeId = id || "badge";
+
     const content = (
       <Flex
-        id={id || "badge"}
+        id={badgeId}
         paddingX="20"
         paddingY="12"
         fitWidth
-        className={classNames(effect ? styles.animation : undefined, className)}
+        className={cn(badgeVariants({ effect }), className)}
         style={style}
         vertical="center"
         radius="full"
@@ -54,7 +71,7 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
         {icon && <Icon marginRight="8" size="s" name={icon} onBackground="brand-medium" />}
         {title}
         {children}
-        {arrow && <Arrow trigger={`#${id || "badge"}`} />}
+        {arrow && <Arrow trigger={`#${badgeId}`} />}
       </Flex>
     );
 
@@ -68,18 +85,19 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
             ...style,
           }}
           href={href}
-          ref={ref as React.Ref<HTMLAnchorElement>}
+          ref={ref as Ref<HTMLAnchorElement>}
         >
           {content}
         </SmartLink>
       );
     }
 
-    return React.cloneElement(content, {
-      ref: ref as React.Ref<HTMLDivElement>,
+    return cloneElement(content, {
+      ref: ref as Ref<HTMLDivElement>,
     });
   },
 );
 
 Badge.displayName = "Badge";
+
 export { Badge };

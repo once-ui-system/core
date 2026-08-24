@@ -258,9 +258,25 @@ const config: Config = {
           from: { opacity: "0" },
           to: { opacity: "1" },
         },
+        shineDefault: {
+          "0%": { left: "-100%" },
+          "1%": { left: "-100%", opacity: "1" },
+          "15%": { left: "100%", opacity: "1" },
+          "16%": { opacity: "0" },
+          "100%": { left: "-100%" },
+        },
+        shineHover: {
+          "0%": { left: "-100%" },
+          "1%": { left: "-100%", opacity: "1" },
+          "45%": { left: "100%", opacity: "1" },
+          "46%": { opacity: "0" },
+          "100%": { left: "-100%" },
+        },
       },
       animation: {
         fadeIn: "fadeIn 0.2s ease-in-out",
+        shineDefault: "shineDefault 9s ease-in-out infinite",
+        shineHover: "shineHover 3s ease-in-out infinite",
       },
     },
   },
@@ -289,11 +305,13 @@ const config: Config = {
       variants: ["xs", "s", "m", "l", "xl"],
     },
     {
-      pattern: /^flex-(row|col|row-reverse|col-reverse|wrap|nowrap|wrap-reverse|1|auto|initial|none)$/,
+      pattern:
+        /^flex-(row|col|row-reverse|col-reverse|wrap|nowrap|wrap-reverse|1|auto|initial|none)$/,
       variants: ["xs", "s", "m", "l", "xl"],
     },
     {
-      pattern: /^(justify|items|self)-(start|end|center|between|around|evenly|stretch|baseline|auto)$/,
+      pattern:
+        /^(justify|items|self)-(start|end|center|between|around|evenly|stretch|baseline|auto)$/,
       variants: ["xs", "s", "m", "l", "xl"],
     },
     {
