@@ -2,8 +2,7 @@
  "name": "Banner",
  "group": "components",
  "extends": [
-  "Flex",
-  "Row"
+  "Flex"
  ],
  "mixins": [
   "CommonProps",
@@ -13,6 +12,18 @@
   "SpacingProps",
   "StyleProps"
  ],
+ "props": {
+  "children": "ReactNode",
+  "center": "boolean = true",
+  "paddingX": "SpacingToken | number = 16",
+  "paddingY": "SpacingToken | number = 8",
+  "gap": "SpacingToken | number | \"-1\" = 12",
+  "fillWidth": "boolean = true",
+  "textVariant": "TextVariant = label-default-s",
+  "solid": "Colors = brand-medium",
+  "onSolid": "Colors = brand-strong",
+  "align": "CSSProperties[\"textAlign\"] = center"
+ },
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",

@@ -96,8 +96,7 @@
   "Banner": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Flex"
    ],
    "purpose": "Banner component",
    "tags": [
