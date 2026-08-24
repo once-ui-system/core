@@ -282,12 +282,24 @@ const config: Config = {
           "46%": { opacity: "0" },
           "100%": { left: "-100%" },
         },
+        skeleton: {
+          "0%": {
+            backgroundColor: "var(--neutral-background-strong)",
+          },
+          "50%": {
+            backgroundColor: "var(--neutral-background-medium)",
+          },
+          "100%": {
+            backgroundColor: "var(--neutral-background-strong)",
+          },
+        },
       },
       animation: {
         fadeIn: "fadeIn 0.2s ease-in-out",
         pulse: "pulse 2s infinite ease-out",
         shineDefault: "shineDefault 9s ease-in-out infinite",
         shineHover: "shineHover 3s ease-in-out infinite",
+        skeleton: "skeleton 1.5s infinite",
       },
     },
   },

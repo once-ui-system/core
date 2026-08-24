@@ -1890,11 +1890,11 @@
     "StyleProps"
    ],
    "props": {
-    "shape": "!\"line\" | \"circle\" | \"block\" = line",
+    "shape": "\"line\" | \"circle\" | \"block\" = line",
     "width": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
     "height": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
     "delay": "\"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\"",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "className": "string"
    }
   },
