@@ -1680,7 +1680,7 @@
     "labelPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = bottom",
     "barBackground": "StyleProps[\"solid\"] = brand-strong",
     "className": "string",
-    "style": "React.CSSProperties"
+    "style": "CSSProperties"
    }
   },
   "Pulse": {

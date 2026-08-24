@@ -1,11 +1,31 @@
 "use client";
 
-import React, { forwardRef } from "react";
-import classNames from "clsx";
-import { Column, CountFx, Flex, Row, Text } from ".";
-import { StyleProps } from "../interfaces";
+import { cva } from "class-variance-authority";
+import type { CSSProperties } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import type { StyleProps } from "../interfaces";
+import { Column } from "./Column";
+import { CountFx } from "./CountFx";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { Row } from "./Row";
+import { Text } from "./Text";
 
-interface ProgressBarProps extends React.ComponentProps<typeof Flex> {
+export const progressBarVariants = cva("w-full", {
+  variants: {
+    labelPosition: {
+      top: "flex-col items-center",
+      bottom: "flex-col items-center",
+      left: "flex-row items-center",
+      right: "flex-row items-center",
+    },
+  },
+  defaultVariants: {
+    labelPosition: "bottom",
+  },
+});
+
+export interface ProgressBarProps extends FlexComponentProps {
   value: number;
   min?: number;
   max?: number;
@@ -13,7 +33,7 @@ interface ProgressBarProps extends React.ComponentProps<typeof Flex> {
   labelPosition?: "top" | "bottom" | "left" | "right";
   barBackground?: StyleProps["solid"];
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
@@ -31,7 +51,8 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
     },
     ref,
   ) => {
-    const percent = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
+    const range = max - min;
+    const percent = range > 0 ? Math.max(0, Math.min(100, ((value - min) / range) * 100)) : 0;
     const isHorizontal = labelPosition === "left" || labelPosition === "right";
 
     const bar = (
@@ -58,7 +79,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
 
     const labelEl = label ? (
       <Text align={isHorizontal ? undefined : "center"}>
-        <CountFx value={value} speed={1000} duration={1000} easing="ease-in-out" />%
+        <CountFx value={value} speed={1000} easing="ease-in-out" />%
       </Text>
     ) : null;
 
@@ -70,7 +91,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
           vertical="center"
           ref={ref}
           style={style}
-          className={classNames(className)}
+          className={cn(progressBarVariants({ labelPosition }), className)}
           {...rest}
         >
           {labelPosition === "left" && labelEl}
@@ -87,7 +108,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
         fillWidth
         ref={ref}
         style={style}
-        className={classNames(className)}
+        className={cn(progressBarVariants({ labelPosition }), className)}
         {...rest}
       >
         {labelPosition === "top" && labelEl}
@@ -99,4 +120,5 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
 );
 
 ProgressBar.displayName = "ProgressBar";
+
 export { ProgressBar };
