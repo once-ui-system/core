@@ -2053,6 +2053,7 @@
   "Table": {
    "group": "components",
    "extends": [
+    "Column",
     "Flex"
    ],
    "mixins": [
@@ -2075,12 +2076,15 @@
     "emptyState": "ReactNode",
     "actions": "TableAction[]",
     "stickyHeader": "boolean = false",
+    "maxHeight": "string",
     "rowClassName": "(rowIndex: number) => string",
     "cellClassName": "(rowIndex: number, cellIndex: number) => string",
     "paginated": "boolean = false",
     "defaultPageSize": "number = 10",
     "pageSizeOptions": "number[] = [5, 10, 20, 50]",
-    "loadingState": "ReactNode"
+    "loadingState": "ReactNode",
+    "className": "string",
+    "style": "CSSProperties"
    }
   },
   "Tag": {

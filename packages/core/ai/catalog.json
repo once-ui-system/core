@@ -876,6 +876,7 @@
   "Table": {
    "group": "components",
    "extends": [
+    "Column",
     "Flex"
    ],
    "purpose": "Table component",
