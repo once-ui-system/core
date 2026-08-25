@@ -2296,22 +2296,43 @@
   },
   "User": {
    "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
    "props": {
     "name": "string",
-    "children": "React.ReactNode",
-    "subline": "React.ReactNode",
+    "children": "ReactNode",
+    "subline": "ReactNode",
     "tag": "string",
     "tagProps": "TagProps = {}",
     "loading": "boolean = false",
     "avatarProps": "AvatarProps = {}",
-    "className": "string"
+    "className": "string",
+    "style": "CSSProperties"
    }
   },
   "UserMenu": {
    "group": "components",
    "extends": [
     "User",
+    "Flex",
     "DropdownWrapper"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
    ],
    "props": {
     "selected": "boolean = false",

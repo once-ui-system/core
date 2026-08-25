@@ -1,31 +1,59 @@
 "use client";
 
-import React, { forwardRef } from "react";
-import classNames from "clsx";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import { Avatar, type AvatarProps } from "./Avatar";
+import { Column } from "./Column";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { Skeleton } from "./Skeleton";
+import { Tag, type TagProps } from "./Tag";
+import { Text } from "./Text";
 
-import { Flex, Text, Skeleton, Tag, TagProps, Avatar, AvatarProps, Column } from ".";
+export const userVariants = cva("");
 
-interface UserProps {
+export interface UserProps extends Omit<FlexComponentProps, "children"> {
   name?: string;
-  children?: React.ReactNode;
-  subline?: React.ReactNode;
+  children?: ReactNode;
+  subline?: ReactNode;
   tag?: string;
   tagProps?: TagProps;
   loading?: boolean;
   avatarProps?: AvatarProps;
   className?: string;
+  style?: CSSProperties;
 }
 
 const User = forwardRef<HTMLDivElement, UserProps>(
   (
-    { name, children, subline, tagProps = {}, loading = false, avatarProps = {}, className },
+    {
+      name,
+      children,
+      subline,
+      tag,
+      tagProps = {},
+      loading = false,
+      avatarProps = {},
+      className,
+      style,
+      ...rest
+    },
     ref,
   ) => {
     const { src, value, empty, ...restAvatarProps } = avatarProps;
     const isEmpty = empty || (!src && !value);
+    const resolvedTagProps = tag && !tagProps.label ? { label: tag, ...tagProps } : tagProps;
 
     return (
-      <Flex ref={ref} vertical="center" gap="8" className={classNames(className)}>
+      <Flex
+        ref={ref}
+        vertical="center"
+        gap="8"
+        className={cn(userVariants(), className)}
+        style={style}
+        {...rest}
+      >
         <Avatar
           size="m"
           src={src}
@@ -46,9 +74,9 @@ const User = forwardRef<HTMLDivElement, UserProps>(
                 <Text variant="label-default-m" onBackground="neutral-strong">
                   {name}
                 </Text>
-                {tagProps.label && (
-                  <Tag size="s" {...tagProps}>
-                    {tagProps.label}
+                {resolvedTagProps.label && (
+                  <Tag size="s" {...resolvedTagProps}>
+                    {resolvedTagProps.label}
                   </Tag>
                 )}
               </Flex>
@@ -72,4 +100,3 @@ const User = forwardRef<HTMLDivElement, UserProps>(
 User.displayName = "User";
 
 export { User };
-export type { UserProps };

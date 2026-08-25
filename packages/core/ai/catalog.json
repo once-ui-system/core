@@ -993,6 +993,9 @@
   },
   "User": {
    "group": "components",
+   "extends": [
+    "Flex"
+   ],
    "purpose": "User component",
    "tags": [
     "components"
@@ -1002,6 +1005,7 @@
    "group": "components",
    "extends": [
     "User",
+    "Flex",
     "DropdownWrapper"
    ],
    "purpose": "UserMenu component",

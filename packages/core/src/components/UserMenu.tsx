@@ -23,7 +23,7 @@ export const userMenuVariants = cva("border border-solid transition-colors durat
 });
 
 export interface UserMenuProps
-  extends UserProps,
+  extends Omit<UserProps, "minHeight" | "minWidth" | "maxWidth">,
     Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
   selected?: boolean;
   placement?: Placement;
