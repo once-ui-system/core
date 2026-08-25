@@ -1,21 +1,31 @@
-"use client";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import { cn } from "../classes/utils";
+import type { DisplayProps } from "../interfaces";
+import type { SpacingToken } from "../types";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { Mask, type MaskProps } from "./Mask";
 
-import React, { forwardRef, useEffect, useRef } from "react";
-import { Flex, Mask, MaskProps } from ".";
-import styles from "./Background.module.scss";
-import classNames from "clsx";
-import { DisplayProps } from "../interfaces";
-import { SpacingToken } from "../types";
+export const backgroundVariants = cva("overflow-hidden z-0");
 
-function setRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
-  if (typeof ref === "function") {
-    ref(value);
-  } else if (ref && "current" in ref) {
-    (ref as React.RefObject<T | null>).current = value;
-  }
-}
+export const backgroundGradientVariants = cva(
+  "pointer-events-none absolute w-[400%] h-[400%] -top-[150%] -left-[150%] origin-center [transform:rotate(var(--gradient-tilt))] [background:radial-gradient(ellipse_var(--gradient-width)_var(--gradient-height)_at_var(--gradient-position-x)_var(--gradient-position-y),var(--gradient-color-start),var(--gradient-color-end))]",
+);
 
-interface GradientProps {
+export const backgroundDotsVariants = cva(
+  "pointer-events-none absolute top-0 left-0 w-full h-full [background-image:radial-gradient(var(--dots-color)_1px,var(--static-transparent)_1px)] [background-size:var(--dots-size)_var(--dots-size)]",
+);
+
+export const backgroundLinesVariants = cva(
+  "pointer-events-none absolute top-0 left-0 w-full h-full bg-center",
+);
+
+export const backgroundGridVariants = cva(
+  "pointer-events-none absolute top-0 left-0 w-full h-full",
+);
+
+export interface BackgroundGradientProps {
   display?: boolean;
   opacity?: DisplayProps["opacity"];
   x?: number;
@@ -27,14 +37,14 @@ interface GradientProps {
   colorEnd?: string;
 }
 
-interface DotsProps {
+export interface BackgroundDotsProps {
   display?: boolean;
   opacity?: DisplayProps["opacity"];
   color?: string;
   size?: SpacingToken;
 }
 
-interface GridProps {
+export interface BackgroundGridProps {
   display?: boolean;
   opacity?: DisplayProps["opacity"];
   color?: string;
@@ -42,7 +52,7 @@ interface GridProps {
   height?: string;
 }
 
-interface LinesProps {
+export interface BackgroundLinesProps {
   display?: boolean;
   opacity?: DisplayProps["opacity"];
   size?: SpacingToken;
@@ -51,30 +61,28 @@ interface LinesProps {
   color?: string;
 }
 
-interface BackgroundProps extends React.ComponentProps<typeof Flex> {
-  gradient?: GradientProps;
-  dots?: DotsProps;
-  grid?: GridProps;
-  lines?: LinesProps;
+export type GradientProps = BackgroundGradientProps;
+export type DotsProps = BackgroundDotsProps;
+export type LinesProps = BackgroundLinesProps;
+
+export interface BackgroundProps extends FlexComponentProps {
+  gradient?: BackgroundGradientProps;
+  dots?: BackgroundDotsProps;
+  grid?: BackgroundGridProps;
+  lines?: BackgroundLinesProps;
   mask?: MaskProps;
   className?: string;
-  style?: React.CSSProperties;
-  children?: React.ReactNode;
+  style?: CSSProperties;
+  children?: ReactNode;
 }
 
 const Background = forwardRef<HTMLDivElement, BackgroundProps>(
   (
     { gradient = {}, dots = {}, grid = {}, lines = {}, mask, children, className, style, ...rest },
-    forwardedRef,
+    ref,
   ) => {
     const dotsColor = dots.color ?? "brand-on-background-weak";
-    const dotsSize = "var(--static-space-" + (dots.size ?? "24") + ")";
-
-    const backgroundRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-      setRef(forwardedRef, backgroundRef.current);
-    }, [forwardedRef]);
+    const dotsSize = `var(--static-space-${dots.size ?? "24"})`;
 
     const remap = (
       value: number,
@@ -94,7 +102,7 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
         {gradient.display && (
           <Flex
             position="absolute"
-            className={styles.gradient}
+            className={backgroundGradientVariants()}
             opacity={gradient.opacity}
             pointerEvents="none"
             style={{
@@ -121,40 +129,41 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
             left="0"
             fill
             pointerEvents="none"
-            className={styles.dots}
+            className={backgroundDotsVariants()}
             opacity={dots.opacity}
             style={
               {
                 "--dots-color": `var(--${dotsColor})`,
                 "--dots-size": dotsSize,
-              } as React.CSSProperties
+              } as CSSProperties
             }
           />
         )}
-        {lines.display && (() => {
-          const angle = lines.angle ?? -45;
-          const angleRad = (angle * Math.PI) / 180;
-          // Adjust spacing to maintain uniform perpendicular distance
-          // For diagonal lines, multiply by the secant of the angle
-          const adjustmentFactor = 1 / Math.cos(angleRad);
-          const baseSpacing = lines.size ?? "8";
-          
-          return (
-            <Flex
-              position="absolute"
-              top="0"
-              left="0"
-              fill
-              pointerEvents="none"
-              className={styles.lines}
-              opacity={lines.opacity}
-              style={
-                {
-                  "--lines-angle": `${angle}deg`,
-                  "--lines-color": `var(--${lines.color ?? "brand-on-background-weak"})`,
-                  "--lines-thickness": `${lines.thickness ?? 1}px`,
-                  "--lines-spacing": `calc(var(--static-space-${baseSpacing}) * ${adjustmentFactor})`,
-                  background: `
+        {lines.display &&
+          (() => {
+            const angle = lines.angle ?? -45;
+            const angleRad = (angle * Math.PI) / 180;
+            // Adjust spacing to maintain uniform perpendicular distance
+            // For diagonal lines, multiply by the secant of the angle
+            const adjustmentFactor = 1 / Math.cos(angleRad);
+            const baseSpacing = lines.size ?? "8";
+
+            return (
+              <Flex
+                position="absolute"
+                top="0"
+                left="0"
+                fill
+                pointerEvents="none"
+                className={backgroundLinesVariants()}
+                opacity={lines.opacity}
+                style={
+                  {
+                    "--lines-angle": `${angle}deg`,
+                    "--lines-color": `var(--${lines.color ?? "brand-on-background-weak"})`,
+                    "--lines-thickness": `${lines.thickness ?? 1}px`,
+                    "--lines-spacing": `calc(var(--static-space-${baseSpacing}) * ${adjustmentFactor})`,
+                    background: `
                   repeating-linear-gradient(
                     var(--lines-angle),
                     var(--static-transparent),
@@ -163,11 +172,11 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
                     var(--lines-color) var(--lines-spacing)
                   )
                 `,
-                } as React.CSSProperties
-              }
-            />
-          );
-        })()}
+                  } as CSSProperties
+                }
+              />
+            );
+          })()}
         {grid.display && (
           <Flex
             position="absolute"
@@ -175,6 +184,7 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
             left="0"
             fill
             pointerEvents="none"
+            className={backgroundGridVariants()}
             opacity={grid.opacity}
             style={{
               backgroundImage: `linear-gradient(to right, var(--${grid.color ?? "brand-on-background-weak"}) 1px, transparent 1px), linear-gradient(to bottom, var(--${grid.color ?? "brand-on-background-weak"}) 1px, transparent 1px)`,
@@ -188,9 +198,9 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
 
     return (
       <Flex
-        ref={backgroundRef}
+        ref={ref}
         fill
-        className={classNames(className)}
+        className={cn(backgroundVariants(), className)}
         zIndex={0}
         overflow="hidden"
         style={style}
@@ -204,6 +214,7 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
             radius={mask.radius}
             x={mask.x}
             y={mask.y}
+            reducedMotion={mask.reducedMotion}
           >
             {renderContent()}
           </Mask>
@@ -216,4 +227,5 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
 );
 
 Background.displayName = "Background";
+
 export { Background };

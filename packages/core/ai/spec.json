@@ -400,14 +400,14 @@
     "StyleProps"
    ],
    "props": {
-    "gradient": "GradientProps = {}",
-    "dots": "DotsProps = {}",
-    "grid": "GridProps = {}",
-    "lines": "LinesProps = {}",
+    "gradient": "BackgroundGradientProps = {}",
+    "dots": "BackgroundDotsProps = {}",
+    "grid": "BackgroundGridProps = {}",
+    "lines": "BackgroundLinesProps = {}",
     "mask": "MaskProps",
     "className": "string",
-    "style": "React.CSSProperties",
-    "children": "React.ReactNode"
+    "style": "CSSProperties",
+    "children": "ReactNode"
    }
   },
   "BlockQuote": {
