@@ -1,8 +1,9 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import type React from "react";
+import { createContext, type ReactNode, useContext, useState } from "react";
 import { Toaster } from "../components";
-import { ToastPosition } from "../types";
+import type { ToastPosition } from "../types";
 
 interface Toast {
   id: string;
@@ -17,7 +18,7 @@ interface ToastContextProps {
   removeToast: (id: string) => void;
 }
 
-const ToastContext = createContext<ToastContextProps | undefined>(undefined);
+export const ToastContext = createContext<ToastContextProps | undefined>(undefined);
 
 export const useToast = () => {
   const context = useContext(ToastContext);
@@ -65,4 +66,5 @@ const ToastProvider: React.FC<{
 };
 
 ToastProvider.displayName = "ToastProvider";
+
 export { ToastProvider };

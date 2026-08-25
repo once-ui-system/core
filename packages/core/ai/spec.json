@@ -1400,7 +1400,7 @@
    "props": {
     "className": "string",
     "size": "TShirtSizes = m",
-    "style": "React.CSSProperties",
+    "style": "CSSProperties",
     "icon": "string",
     "wordmark": "string",
     "href": "string",
