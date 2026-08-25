@@ -1,17 +1,31 @@
 "use client";
 
-import React, { forwardRef, useState, useEffect } from "react";
-import classNames from "clsx";
-import { Grid, Flex, Logo } from ".";
-import styles from "./LogoCloud.module.scss";
-import type { ComponentProps } from "react";
+import { cva } from "class-variance-authority";
+import type { CSSProperties } from "react";
+import { forwardRef, useEffect, useState } from "react";
+import { cn } from "../classes/utils";
+import { Flex } from "./Flex";
+import { Grid, type GridComponentProps } from "./Grid";
+import { Logo, type LogoProps } from "./Logo";
 
-type LogoProps = ComponentProps<typeof Logo>;
+export const logoCloudVariants = cva("");
 
-interface LogoCloudProps extends React.ComponentProps<typeof Grid> {
+export const logoCloudItemVariants = cva("origin-center will-change-[opacity,filter,transform]", {
+  variants: {
+    rotating: {
+      true: "animate-logoFadeInOut",
+      false: "animate-logoFadeIn",
+    },
+  },
+  defaultVariants: {
+    rotating: false,
+  },
+});
+
+export interface LogoCloudProps extends GridComponentProps {
   logos: LogoProps[];
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   limit?: number;
   rotationInterval?: number;
 }
@@ -34,7 +48,7 @@ const LogoCloud = forwardRef<HTMLDivElement, LogoCloudProps>(
       const interval = setInterval(
         () => {
           setVisibleLogos((currentLogos) => {
-            const currentIndices = currentLogos.map((logo) => logos.findIndex((l) => l === logo));
+            const currentIndices = currentLogos.map((logo) => logos.indexOf(logo));
 
             const nextIndices = currentIndices
               .map((index) => (index + 1) % logos.length)
@@ -52,9 +66,10 @@ const LogoCloud = forwardRef<HTMLDivElement, LogoCloudProps>(
     }, [logos, limit, rotationInterval, shouldRotate]);
 
     return (
-      <Grid ref={ref} className={classNames(styles.container, className)} style={style} {...rest}>
+      <Grid ref={ref} className={cn(logoCloudVariants(), className)} style={style} {...rest}>
         {visibleLogos.map((logo, index) => (
           <Flex
+            // biome-ignore lint/suspicious/noArrayIndexKey: Logo slots are positional with rotating keys
             key={`${key}-${index}`}
             vertical="center"
             horizontal="center"
@@ -63,12 +78,12 @@ const LogoCloud = forwardRef<HTMLDivElement, LogoCloudProps>(
             radius="l"
           >
             <Logo
-              className={shouldRotate ? styles.logo : styles.staticLogo}
+              {...logo}
+              className={cn(logoCloudItemVariants({ rotating: shouldRotate }), logo.className)}
               style={{
                 ...logo.style,
                 animationDelay: `${index * STAGGER_DELAY}ms`,
               }}
-              {...logo}
             />
           </Flex>
         ))}
@@ -78,4 +93,5 @@ const LogoCloud = forwardRef<HTMLDivElement, LogoCloudProps>(
 );
 
 LogoCloud.displayName = "LogoCloud";
+
 export { LogoCloud };

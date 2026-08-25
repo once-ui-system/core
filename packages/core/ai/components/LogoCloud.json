@@ -15,7 +15,7 @@
  "props": {
   "logos": "!LogoProps[]",
   "className": "string",
-  "style": "React.CSSProperties",
+  "style": "CSSProperties",
   "limit": "number = 6",
   "rotationInterval": "number = ANIMATION_DURATION"
  },

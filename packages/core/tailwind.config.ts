@@ -278,6 +278,35 @@ const config: Config = {
             transform: "translateY(0)",
           },
         },
+        logoFadeIn: {
+          "0%": {
+            opacity: "0",
+            filter: "blur(1.5rem)",
+            transform: "scale(0.2)",
+          },
+          "100%": {
+            opacity: "1",
+            filter: "blur(0)",
+            transform: "scale(1)",
+          },
+        },
+        logoFadeInOut: {
+          "0%": {
+            opacity: "0",
+            filter: "blur(1.5rem)",
+            transform: "scale(0.2)",
+          },
+          "4%, 96%": {
+            opacity: "1",
+            filter: "blur(0)",
+            transform: "scale(1)",
+          },
+          "100%": {
+            opacity: "0",
+            filter: "blur(1.5rem)",
+            transform: "scale(0.2)",
+          },
+        },
         pulse: {
           "0%": {
             transform: "scale(0)",
@@ -333,6 +362,8 @@ const config: Config = {
         fadeIn: "fadeIn 0.2s ease-in-out",
         fadeInBottom: "fadeInBottom 0.3s ease-out forwards",
         fadeInTop: "fadeInTop 0.3s ease-out forwards",
+        logoFadeIn: "logoFadeIn 1s ease-out forwards",
+        logoFadeInOut: "logoFadeInOut 5s ease-out both",
         pulse: "pulse 2s infinite ease-out",
         shineDefault: "shineDefault 9s ease-in-out infinite",
         shineHover: "shineHover 3s ease-in-out infinite",
