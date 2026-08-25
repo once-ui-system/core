@@ -12,7 +12,12 @@ describe("Mask", () => {
       }
       observe = vi.fn((el: HTMLElement) => {
         this.callback(
-          [{ isIntersecting: true, target: el } as IntersectionObserverEntry],
+          [
+            {
+              isIntersecting: true,
+              target: el,
+            } as unknown as IntersectionObserverEntry,
+          ],
           this as unknown as IntersectionObserver,
         );
       });
