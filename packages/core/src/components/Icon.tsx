@@ -1,15 +1,33 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
-import classNames from "clsx";
-import { IconType } from "react-icons";
-import { IconName } from "../icons";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef } from "react";
+import type { IconType } from "react-icons";
+import { cn } from "../classes/utils";
 import { useIcons } from "../contexts/IconProvider";
-import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
-import { Flex, Tooltip, HoverCard } from ".";
-import styles from "./Icon.module.scss";
+import type { IconName } from "../icons";
+import type { ColorScheme, ColorWeight, TShirtSizes } from "../types";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { HoverCard } from "./HoverCard";
+import { Tooltip } from "./Tooltip";
 
-interface IconProps extends React.ComponentProps<typeof Flex> {
+export const iconVariants = cva("inline-flex items-center justify-center", {
+  variants: {
+    size: {
+      xs: "text-[length:var(--static-space-16)]",
+      s: "text-[length:var(--static-space-20)]",
+      m: "text-[length:var(--static-space-24)]",
+      l: "text-[length:var(--static-space-32)]",
+      xl: "text-[length:var(--static-space-40)]",
+    },
+  },
+  defaultVariants: {
+    size: "m",
+  },
+});
+
+export interface IconProps extends FlexComponentProps {
   name: IconName;
   onBackground?: `${ColorScheme}-${ColorWeight}`;
   onSolid?: `${ColorScheme}-${ColorWeight}`;
@@ -18,7 +36,7 @@ interface IconProps extends React.ComponentProps<typeof Flex> {
   tooltip?: ReactNode;
   tooltipPosition?: "top" | "bottom" | "left" | "right";
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 }
 
 const Icon = forwardRef<HTMLDivElement, IconProps>(
@@ -51,22 +69,15 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
       );
     }
 
-    let colorClass = "color-inherit";
-    if (onBackground) {
-      const [scheme, weight] = onBackground.split("-") as [ColorScheme, ColorWeight];
-      colorClass = `${scheme}-on-background-${weight}`;
-    } else if (onSolid) {
-      const [scheme, weight] = onSolid.split("-") as [ColorScheme, ColorWeight];
-      colorClass = `${scheme}-on-solid-${weight}`;
-    }
-
     const icon = (
       <Flex
         inline
         fit
         as="span"
         ref={ref}
-        className={classNames(colorClass, styles.icon, styles[size], className)}
+        onBackground={onBackground}
+        onSolid={onSolid}
+        className={cn(iconVariants({ size }), className)}
         aria-hidden={decorative ? "true" : undefined}
         aria-label={decorative ? undefined : name}
         style={style}
@@ -78,11 +89,7 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
 
     if (tooltip) {
       return (
-        <HoverCard
-          trigger={icon}
-          placement={tooltipPosition}
-          offsetDistance="4"
-        >
+        <HoverCard trigger={icon} placement={tooltipPosition} offsetDistance="4">
           <Tooltip label={tooltip} />
         </HoverCard>
       );

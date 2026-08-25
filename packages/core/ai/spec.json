@@ -1207,7 +1207,7 @@
     "tooltip": "ReactNode",
     "tooltipPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = top",
     "className": "string",
-    "style": "React.CSSProperties"
+    "style": "CSSProperties"
    }
   },
   "IconButton": {
