@@ -23,8 +23,10 @@
   "sizes": "string",
   "unoptimized": "boolean = false",
   "revealedByDefault": "boolean = false",
-  "thumbnail": "ThumbnailItem = { scaling: 1, height: \"80\", sizes: \"120px\" }",
-  "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; } = { auto: false, interval: 3000, controls: true }"
+  "thumbnail": "ThumbnailItem = defaultThumbnail",
+  "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; } = defaultPlay",
+  "className": "string",
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
