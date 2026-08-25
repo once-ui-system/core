@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "1.8.2",
- "generated": "2026-08-24",
+ "generated": "2026-08-25",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -291,7 +291,7 @@
     "empty": "boolean",
     "icon": "IconName",
     "statusIndicator": "{ color: \"green\" | \"yellow\" | \"red\" | \"gray\"; }",
-    "style": "React.CSSProperties = {}",
+    "style": "CSSProperties = {}",
     "className": "string"
    }
   },
@@ -314,7 +314,7 @@
     "reverse": "boolean = false",
     "limit": "number",
     "className": "string",
-    "style": "React.CSSProperties"
+    "style": "CSSProperties"
    }
   },
   "Badge": {

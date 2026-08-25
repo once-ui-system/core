@@ -18,7 +18,7 @@
   "reverse": "boolean = false",
   "limit": "number",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
