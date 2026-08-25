@@ -1,19 +1,35 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import { Flex, Media, IconButton } from ".";
-import styles from "./CompareImage.module.scss";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { cn } from "../classes/utils";
+import { Flex, type FlexComponentProps } from "./Flex";
+import { IconButton } from "./IconButton";
+import { Media } from "./Media";
 
-interface SideContent {
-  src: string | React.ReactNode;
+export const compareImageVariants = cva("relative select-none", {
+  variants: {},
+});
+
+export const compareImageHitAreaVariants = cva("-translate-x-1/2 cursor-col-resize");
+
+export const compareImageDragIconVariants = cva(
+  "absolute top-1/2 -translate-x-1/2 -translate-y-1/2 z-[2] transition-none pointer-events-auto",
+);
+
+export interface SideContent {
+  src: string | ReactNode;
   alt?: string;
 }
 
-interface CompareImageProps extends React.ComponentProps<typeof Flex> {
+export interface CompareImageProps extends Omit<FlexComponentProps, "children"> {
   leftContent: SideContent;
   rightContent: SideContent;
   aspectRatio?: string;
   unoptimized?: boolean;
+  className?: string;
+  style?: CSSProperties;
 }
 
 const renderContent = (
@@ -43,100 +59,109 @@ const renderContent = (
   );
 };
 
-const CompareImage = ({
-  leftContent,
-  rightContent,
-  aspectRatio,
-  unoptimized,
-  ...rest
-}: CompareImageProps) => {
-  const [position, setPosition] = useState(50);
-  const isDraggingRef = useRef(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+const CompareImage = forwardRef<HTMLDivElement, CompareImageProps>(
+  ({ leftContent, rightContent, aspectRatio, unoptimized, className, style, ...rest }, ref) => {
+    const [position, setPosition] = useState(50);
+    const isDraggingRef = useRef(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown = useCallback(() => {
-    isDraggingRef.current = true;
-  }, []);
+    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
 
-  const handleMouseUp = useCallback(() => {
-    isDraggingRef.current = false;
-  }, []);
+    const handleMouseDown = useCallback(() => {
+      isDraggingRef.current = true;
+    }, []);
 
-  const handleMouseMove = useCallback((e: MouseEvent) => {
-    if (!isDraggingRef.current || !containerRef.current) return;
+    const handleMouseUp = useCallback(() => {
+      isDraggingRef.current = false;
+    }, []);
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const containerWidth = rect.width;
+    const handleMouseMove = useCallback((e: MouseEvent) => {
+      if (!isDraggingRef.current || !containerRef.current) return;
 
-    setPosition(Math.max(0, Math.min(100, (x / containerWidth) * 100)));
-  }, []);
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerWidth = rect.width;
+      if (containerWidth === 0) return;
+      const x = e.clientX - rect.left;
 
-  const handleTouchMove = useCallback((e: TouchEvent) => {
-    if (!isDraggingRef.current || !containerRef.current) return;
+      setPosition(Math.max(0, Math.min(100, (x / containerWidth) * 100)));
+    }, []);
 
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = e.touches[0].clientX - rect.left;
-    const containerWidth = rect.width;
+    const handleTouchMove = useCallback((e: TouchEvent) => {
+      if (!isDraggingRef.current || !containerRef.current) return;
 
-    setPosition(Math.max(0, Math.min(100, (x / containerWidth) * 100)));
-  }, []);
+      const rect = containerRef.current.getBoundingClientRect();
+      const containerWidth = rect.width;
+      if (containerWidth === 0) return;
+      const x = e.touches[0].clientX - rect.left;
 
-  useEffect(() => {
-    document.addEventListener("mousemove", handleMouseMove);
-    document.addEventListener("mouseup", handleMouseUp);
-    document.addEventListener("touchmove", handleTouchMove);
-    document.addEventListener("touchend", handleMouseUp);
+      setPosition(Math.max(0, Math.min(100, (x / containerWidth) * 100)));
+    }, []);
 
-    return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("touchmove", handleTouchMove);
-      document.removeEventListener("touchend", handleMouseUp);
-    };
-  }, [handleMouseMove, handleMouseUp, handleTouchMove]);
+    useEffect(() => {
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+      document.addEventListener("touchmove", handleTouchMove);
+      document.addEventListener("touchend", handleMouseUp);
 
-  return (
-    <Flex ref={containerRef} aspectRatio={aspectRatio || "16/9"} fillWidth style={{ touchAction: "none" }} {...rest}>
-      {renderContent(leftContent, `inset(0 ${100 - position}% 0 0)`, aspectRatio, unoptimized)}
-      {renderContent(rightContent, `inset(0 0 0 ${position}%)`, aspectRatio, unoptimized)}
+      return () => {
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.removeEventListener("touchmove", handleTouchMove);
+        document.removeEventListener("touchend", handleMouseUp);
+      };
+    }, [handleMouseMove, handleMouseUp, handleTouchMove]);
 
-      {/* Hit area and visible line */}
+    return (
       <Flex
-        position="absolute"
-        horizontal="center"
-        width={3}
-        className={styles.hitArea}
-        top="0"
-        bottom="0"
-        style={{
-          left: `${position}%`,
-          cursor: "col-resize",
-        }}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleMouseDown}
+        ref={containerRef}
+        aspectRatio={aspectRatio || "16/9"}
+        fillWidth
+        className={cn(compareImageVariants(), className)}
+        style={{ touchAction: "none", ...style }}
+        {...rest}
       >
-        <Flex width="1" fillHeight background="neutral-strong" zIndex={2} />
-      </Flex>
-      <Flex
-        radius="l"
-        background="surface"
-        fitHeight
-        className={styles.dragIcon}
-        style={{
-          left: `${position}%`,
-        }}>
-        <IconButton
-          icon="chevronsLeftRight"
-          variant="secondary"
+        {renderContent(leftContent, `inset(0 ${100 - position}% 0 0)`, aspectRatio, unoptimized)}
+        {renderContent(rightContent, `inset(0 0 0 ${position}%)`, aspectRatio, unoptimized)}
+
+        {/* Hit area and visible line */}
+        <Flex
+          position="absolute"
+          horizontal="center"
+          width={3}
+          className={compareImageHitAreaVariants()}
+          top="0"
+          bottom="0"
+          style={{
+            left: `${position}%`,
+          }}
           onMouseDown={handleMouseDown}
           onTouchStart={handleMouseDown}
-          style={{ cursor: "grab" }}
-        />
+        >
+          <Flex width="1" fillHeight background="neutral-strong" zIndex={2} />
+        </Flex>
+        <Flex
+          radius="l"
+          background="surface"
+          fitHeight
+          className={compareImageDragIconVariants()}
+          style={{
+            left: `${position}%`,
+          }}
+        >
+          <IconButton
+            icon="chevronsLeftRight"
+            variant="secondary"
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleMouseDown}
+            style={{ cursor: "grab" }}
+            aria-label="Drag to compare"
+          />
+        </Flex>
       </Flex>
-    </Flex>
-  );
-};
+    );
+  },
+);
 
 CompareImage.displayName = "CompareImage";
+
 export { CompareImage };

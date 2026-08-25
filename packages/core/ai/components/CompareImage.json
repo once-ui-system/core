@@ -16,7 +16,9 @@
   "leftContent": "!SideContent",
   "rightContent": "!SideContent",
   "aspectRatio": "string",
-  "unoptimized": "boolean"
+  "unoptimized": "boolean",
+  "className": "string",
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
