@@ -2179,7 +2179,7 @@
     "StyleProps"
    ],
    "props": {
-    "items": "!TimelineItem[]",
+    "items": "!TimelineItem[] = []",
     "alignment": "\"left\" | \"right\" = left",
     "size": "TShirtSizes = m"
    }
