@@ -20,7 +20,9 @@
   "aspectRatio": "string = 16 / 9",
   "sizes": "string",
   "unoptimized": "boolean = false",
-  "indicator": "boolean = true"
+  "indicator": "boolean = true",
+  "className": "string",
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
