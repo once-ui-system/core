@@ -1,43 +1,53 @@
 "use client";
 
-import React, { CSSProperties, forwardRef, useCallback, useEffect, useRef } from "react";
-import { Flex } from ".";
-import styles from "./Mask.module.scss";
-import classNames from "clsx";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
+import { cn } from "../classes/utils";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { Flex, type FlexComponentProps } from "./Flex";
 
-export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radius" | "cursor"> {
+export const maskVariants = cva(
+  "[mask-size:100%_100%] [-webkit-mask-size:100%_100%] [mask-image:radial-gradient(var(--mask-radius)_at_var(--mask-position-x)_var(--mask-position-y),black_0%,transparent_100%)] [-webkit-mask-image:radial-gradient(var(--mask-radius)_at_var(--mask-position-x)_var(--mask-position-y),black_0%,transparent_100%)]",
+);
+
+export interface MaskProps extends Omit<FlexComponentProps, "radius" | "cursor"> {
   cursor?: boolean;
   x?: number;
   y?: number;
   radius?: number;
   reducedMotion?: boolean | "auto";
   className?: string;
-  style?: React.CSSProperties;
-  children?: React.ReactNode;
+  style?: CSSProperties;
+  children?: ReactNode;
 }
 
 const Mask = forwardRef<HTMLDivElement, MaskProps>(
-  ({ cursor = false, x, y, radius = 50, reducedMotion = "auto", children, className, style, ...rest }, forwardedRef) => {
+  (
+    {
+      cursor = false,
+      x,
+      y,
+      radius = 50,
+      reducedMotion = "auto",
+      children,
+      className,
+      style,
+      ...rest
+    },
+    ref,
+  ) => {
     const maskRef = useRef<HTMLDivElement>(null);
     const cursorPosRef = useRef({ x: 0, y: 0 });
     const smoothPosRef = useRef({ x: 0, y: 0 });
     const rafIdRef = useRef<number | null>(null);
 
+    useImperativeHandle(ref, () => maskRef.current as HTMLDivElement);
+
     const isInViewport = useInViewport(maskRef);
     const { shouldAnimate } = useReducedMotion(reducedMotion);
     const isActive = cursor && isInViewport && shouldAnimate;
-
-    useEffect(() => {
-      if (forwardedRef) {
-        if (typeof forwardedRef === "function") {
-          forwardedRef(maskRef.current);
-        } else if (forwardedRef && "current" in forwardedRef) {
-          (forwardedRef as React.RefObject<HTMLDivElement | null>).current = maskRef.current;
-        }
-      }
-    }, [forwardedRef]);
 
     const writeCssVars = useCallback((px: number, py: number) => {
       const el = maskRef.current;
@@ -129,11 +139,11 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
       <Flex
         ref={maskRef}
         fill
-        className={classNames(styles.mask, className)}
         top="0"
         left="0"
         zIndex={0}
         overflow="hidden"
+        className={cn(maskVariants(), className)}
         style={{
           ...maskStyle(),
           ...style,
@@ -147,4 +157,5 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
 );
 
 Mask.displayName = "Mask";
+
 export { Mask };

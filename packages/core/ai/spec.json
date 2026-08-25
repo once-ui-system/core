@@ -1450,8 +1450,8 @@
     "radius": "number = 50",
     "reducedMotion": "boolean | \"auto\" = auto",
     "className": "string",
-    "style": "React.CSSProperties",
-    "children": "React.ReactNode"
+    "style": "CSSProperties",
+    "children": "ReactNode"
    }
   },
   "MasonryGrid": {
