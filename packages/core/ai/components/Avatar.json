@@ -21,7 +21,7 @@
   "empty": "boolean",
   "icon": "IconName",
   "statusIndicator": "{ color: \"green\" | \"yellow\" | \"red\" | \"gray\"; }",
-  "style": "React.CSSProperties = {}",
+  "style": "CSSProperties = {}",
   "className": "string"
  },
  "mixinsRef": [
