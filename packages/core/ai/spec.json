@@ -1734,13 +1734,14 @@
     "StyleProps"
    ],
    "props": {
-    "children": "!React.ReactNode",
-    "speed": "\"slow\" | \"medium\" | \"fast\" | number = medium",
+    "children": "ReactNode",
+    "speed": "RevealFxSpeed = medium",
     "delay": "number = 0",
     "revealedByDefault": "boolean = false",
     "translateY": "number | SpacingToken",
     "trigger": "boolean",
-    "style": "React.CSSProperties",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "style": "CSSProperties",
     "className": "string"
    }
   },
