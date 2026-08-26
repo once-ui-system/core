@@ -1,19 +1,33 @@
-import Link from "next/link";
-import React, { ReactNode, forwardRef } from "react";
-import { Flex } from ".";
-import { sanitizeHref } from "../utils/safe-html";
+"use client";
 
-type ElementTypeProps = {
+import Link from "next/link";
+import {
+  type AnchorHTMLAttributes,
+  type ButtonHTMLAttributes,
+  type CSSProperties,
+  forwardRef,
+  type HTMLAttributes,
+  type MouseEvent,
+  type ReactNode,
+  type Ref,
+} from "react";
+import { sanitizeHref } from "../utils/safe-html";
+import { Flex } from "./Flex";
+
+export type ElementTypeProps = {
   href?: string;
-  onClick?: (event: React.MouseEvent<any>) => void;
+  // biome-ignore lint/suspicious/noExplicitAny: polymorphic onClick handler must accept mouse events from button, anchor, and div elements
+  onClick?: (event: MouseEvent<any>) => void;
   onLinkClick?: () => void;
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   type?: string;
-} & (Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "type" | "onClick">
-  | Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "type" | "onClick">
-  | React.HTMLAttributes<HTMLDivElement>);
+} & (
+  | Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "type" | "onClick">
+  | Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type" | "onClick">
+  | HTMLAttributes<HTMLDivElement>
+);
 
 const isExternalLink = (url: string) => /^https?:\/\//.test(url);
 
@@ -29,11 +43,14 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
             href={safeHref}
             target="_blank"
             rel="noreferrer"
-            ref={ref as React.Ref<HTMLAnchorElement>}
+            ref={ref as Ref<HTMLAnchorElement>}
             className={className}
             style={style}
-            onClick={() => onLinkClick?.()}
-            {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+            onClick={(event) => {
+              onClick?.(event);
+              onLinkClick?.();
+            }}
+            {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
           >
             {children}
           </a>
@@ -42,26 +59,29 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
       return (
         <Link
           href={safeHref}
-          ref={ref as React.Ref<HTMLAnchorElement>}
+          ref={ref as Ref<HTMLAnchorElement>}
           className={className}
           style={style}
-          onClick={() => onLinkClick?.()}
-          {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+          onClick={(event) => {
+            onClick?.(event);
+            onLinkClick?.();
+          }}
+          {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
         >
           {children}
         </Link>
       );
     }
 
-    if (onClick || type === "submit" || type === "button") {
+    if (onClick || type === "submit" || type === "button" || type === "reset") {
       return (
         <button
-          ref={ref as React.Ref<HTMLButtonElement>}
+          ref={ref as Ref<HTMLButtonElement>}
           className={className}
           onClick={onClick}
           style={style}
-          type={type as React.ButtonHTMLAttributes<HTMLButtonElement>["type"]}
-          {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+          type={type as ButtonHTMLAttributes<HTMLButtonElement>["type"]}
+          {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
         >
           {children}
         </button>
@@ -70,10 +90,10 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
 
     return (
       <Flex
-        ref={ref as React.Ref<HTMLDivElement>}
+        ref={ref as Ref<HTMLDivElement>}
         className={className}
         style={style}
-        {...(props as React.HTMLAttributes<HTMLDivElement>)}
+        {...(props as HTMLAttributes<HTMLDivElement>)}
       >
         {children}
       </Flex>
@@ -82,4 +102,5 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
 );
 
 ElementType.displayName = "ElementType";
+
 export { ElementType };
