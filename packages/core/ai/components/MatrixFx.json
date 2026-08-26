@@ -14,17 +14,17 @@
  ],
  "props": {
   "speed": "number = 1",
-  "colors": "string[] = [\"brand-solid-medium\"]",
+  "colors": "string[] = DEFAULT_COLORS",
   "size": "number = 3",
   "spacing": "number = 3",
-  "revealFrom": "\"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = center",
-  "trigger": "\"hover\" | \"instant\" | \"mount\" | \"click\" | \"manual\" = instant",
+  "revealFrom": "MatrixFxRevealFrom = center",
+  "trigger": "MatrixFxTrigger = instant",
   "active": "boolean = false",
   "flicker": "boolean = false",
   "bulge": "BulgeConfig",
   "fps": "number = 60",
   "reducedMotion": "boolean | \"auto\" = auto",
-  "children": "React.ReactNode"
+  "children": "ReactNode"
  },
  "mixinsRef": [
   "CommonProps",
