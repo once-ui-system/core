@@ -13,7 +13,7 @@
   "StyleProps"
  ],
  "props": {
-  "children": "!React.ReactNode",
+  "children": "ReactNode",
   "reducedMotion": "boolean | \"auto\" = auto",
   "shine": "{ opacity?: number; filter?: string; blending?: CSSProperties[\"mixBlendMode\"]; mask?: MaskOptions; }",
   "burn": "{ opacity?: number; filter?: string; blending?: CSSProperties[\"mixBlendMode\"]; mask?: MaskOptions; }",
