@@ -1,13 +1,19 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { SpacingToken } from "../types";
-import { DisplayProps } from "../interfaces";
-import { Flex } from ".";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useMemo, useRef } from "react";
+import { cn } from "../classes/utils";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import type { DisplayProps } from "../interfaces";
+import type { SpacingToken } from "../types";
+import { Flex, type FlexComponentProps } from "./Flex";
 
-interface ParticleProps extends React.ComponentProps<typeof Flex> {
+export const particleVariants = cva("relative w-full h-full [container-type:size]");
+const PARTICLE_BASE = particleVariants();
+
+export interface ParticleProps extends FlexComponentProps {
   density?: number;
   color?: string;
   size?: SpacingToken;
@@ -18,11 +24,11 @@ interface ParticleProps extends React.ComponentProps<typeof Flex> {
   opacity?: DisplayProps["opacity"];
   reducedMotion?: boolean | "auto";
   className?: string;
-  style?: React.CSSProperties;
-  children?: React.ReactNode;
+  style?: CSSProperties;
+  children?: ReactNode;
 }
 
-const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
+const Particle = forwardRef<HTMLDivElement, ParticleProps>(
   (
     {
       density = 100,
@@ -39,19 +45,13 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
       style,
       ...rest
     },
-    forwardedRef,
+    ref,
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const isInViewport = useInViewport(containerRef);
     const { shouldAnimate } = useReducedMotion(reducedMotion);
 
-    useEffect(() => {
-      if (forwardedRef && "current" in forwardedRef) {
-        forwardedRef.current = containerRef.current;
-      } else if (typeof forwardedRef === "function") {
-        forwardedRef(containerRef.current);
-      }
-    }, [forwardedRef]);
+    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
 
     useEffect(() => {
       const container = containerRef.current;
@@ -80,10 +80,12 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
 
       const handleMouseMove = (e: MouseEvent) => {
         const rect = container.getBoundingClientRect();
-        mousePosition = {
-          x: ((e.clientX - rect.left) / rect.width) * 100,
-          y: ((e.clientY - rect.top) / rect.height) * 100,
-        };
+        if (rect.width > 0 && rect.height > 0) {
+          mousePosition = {
+            x: ((e.clientX - rect.left) / rect.width) * 100,
+            y: ((e.clientY - rect.top) / rect.height) * 100,
+          };
+        }
       };
 
       // Create particles using translate3d instead of left/top
@@ -184,15 +186,36 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
       }
 
       function cleanup() {
-        container!.removeEventListener("mousemove", handleMouseMove);
+        container?.removeEventListener("mousemove", handleMouseMove);
         if (animationFrameId != null) {
           cancelAnimationFrame(animationFrameId);
         }
-        particleEls.forEach((el) => el.remove());
+        particleEls.forEach((el) => {
+          el.remove();
+        });
       }
 
       return () => cleanup();
-    }, [color, size, speed, interactive, intensity, opacity, density, mode, shouldAnimate, isInViewport]);
+    }, [
+      color,
+      size,
+      speed,
+      interactive,
+      intensity,
+      opacity,
+      density,
+      mode,
+      shouldAnimate,
+      isInViewport,
+    ]);
+
+    const containerStyle = useMemo<CSSProperties>(
+      () => ({
+        containerType: "size",
+        ...style,
+      }),
+      [style],
+    );
 
     return (
       <Flex
@@ -200,8 +223,8 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
         fill
         position="relative"
         pointerEvents={interactive ? "auto" : "none"}
-        className={className}
-        style={{ containerType: "size", ...style }}
+        className={cn(PARTICLE_BASE, className)}
+        style={containerStyle}
         {...rest}
       >
         {children}
@@ -211,4 +234,5 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
 );
 
 Particle.displayName = "Particle";
+
 export { Particle };

@@ -1653,8 +1653,8 @@
     "opacity": "DisplayProps[\"opacity\"] = 100",
     "reducedMotion": "boolean | \"auto\" = auto",
     "className": "string",
-    "style": "React.CSSProperties",
-    "children": "React.ReactNode"
+    "style": "CSSProperties",
+    "children": "ReactNode"
    }
   },
   "PasswordInput": {
