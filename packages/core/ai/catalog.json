@@ -846,7 +846,8 @@
   "StylePanel": {
    "group": "components",
    "extends": [
-    "Flex"
+    "Flex",
+    "Column"
    ],
    "purpose": "StylePanel component",
    "tags": [

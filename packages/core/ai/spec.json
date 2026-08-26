@@ -2002,7 +2002,8 @@
   "StylePanel": {
    "group": "components",
    "extends": [
-    "Flex"
+    "Flex",
+    "Column"
    ],
    "mixins": [
     "CommonProps",
@@ -2013,8 +2014,8 @@
     "StyleProps"
    ],
    "props": {
-    "style": "React.CSSProperties",
-    "className": "string"
+    "gap": "SpacingToken | number | \"-1\" = 16",
+    "fillWidth": "boolean = true"
    }
   },
   "StyleOverlay": {
