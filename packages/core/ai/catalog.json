@@ -782,6 +782,9 @@
   },
   "ShineFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "purpose": "ShineFx component",
    "tags": [
     "components"

@@ -139,3 +139,12 @@
     clip-path: inset(0 0 20% 50%);
   }
 }
+
+@keyframes shine {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: -100%;
+  }
+}

@@ -1872,13 +1872,22 @@
   },
   "ShineFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "SpacingProps",
+    "TextProps"
+   ],
    "props": {
     "speed": "number = 1",
     "disabled": "boolean = false",
     "inverse": "boolean = false",
     "baseOpacity": "number = 0.3",
     "reducedMotion": "boolean | \"auto\" = auto",
-    "children": "React.ReactNode"
+    "children": "ReactNode"
    }
   },
   "Skeleton": {

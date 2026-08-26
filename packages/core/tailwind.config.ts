@@ -331,6 +331,14 @@ const config: Config = {
           "46%": { opacity: "0" },
           "100%": { left: "-100%" },
         },
+        shine: {
+          "0%": {
+            backgroundPosition: "100%",
+          },
+          "100%": {
+            backgroundPosition: "-100%",
+          },
+        },
         skeleton: {
           "0%": {
             backgroundColor: "var(--neutral-background-strong)",
@@ -460,6 +468,7 @@ const config: Config = {
         pulse: "pulse 2s infinite ease-out",
         shineDefault: "shineDefault 9s ease-in-out infinite",
         shineHover: "shineHover 3s ease-in-out infinite",
+        shine: "shine 5s linear infinite",
         skeleton: "skeleton 1.5s infinite",
         spin: "spin 1.5s infinite",
         "blob-fx-1": "blob-fx-1 8s ease-in-out infinite",
