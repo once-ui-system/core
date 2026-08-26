@@ -72,23 +72,22 @@
     "components"
    ]
   },
+  "Background": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Background component",
+   "tags": [
+    "components"
+   ]
+  },
   "Badge": {
    "group": "components",
    "extends": [
     "Flex"
    ],
    "purpose": "Badge component",
-   "tags": [
-    "components"
-   ]
-  },
-  "BlobFx": {
-   "group": "components",
-   "extends": [
-    "Flex",
-    "Row"
-   ],
-   "purpose": "BlobFx component",
    "tags": [
     "components"
    ]
@@ -103,12 +102,13 @@
     "components"
    ]
   },
-  "Background": {
+  "BlobFx": {
    "group": "components",
    "extends": [
-    "Flex"
+    "Flex",
+    "Row"
    ],
-   "purpose": "Background component",
+   "purpose": "BlobFx component",
    "tags": [
     "components"
    ]
@@ -130,22 +130,12 @@
     "components"
    ]
   },
-  "MatrixFx": {
+  "Card": {
    "group": "components",
    "extends": [
     "Flex"
    ],
-   "purpose": "MatrixFx component",
-   "tags": [
-    "components"
-   ]
-  },
-  "WeatherFx": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "purpose": "WeatherFx component",
+   "purpose": "Card component",
    "tags": [
     "components"
    ]
@@ -160,66 +150,12 @@
     "components"
    ]
   },
-  "Swiper": {
+  "CelebrationFx": {
    "group": "components",
    "extends": [
     "Flex"
    ],
-   "purpose": "Swiper component",
-   "tags": [
-    "components"
-   ]
-  },
-  "Card": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "purpose": "Card component",
-   "tags": [
-    "components"
-   ]
-  },
-  "CursorCard": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "purpose": "CursorCard component",
-   "tags": [
-    "components"
-   ]
-  },
-  "Cursor": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "purpose": "Cursor component",
-   "tags": [
-    "components"
-   ]
-  },
-  "CountFx": {
-   "group": "components",
-   "purpose": "CountFx component",
-   "tags": [
-    "components"
-   ]
-  },
-  "CountdownFx": {
-   "group": "components",
-   "purpose": "CountdownFx component",
-   "tags": [
-    "components"
-   ]
-  },
-  "Column": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "purpose": "Column component",
+   "purpose": "CelebrationFx component",
    "tags": [
     "components"
    ]
@@ -254,6 +190,16 @@
     "components"
    ]
   },
+  "Column": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Column component",
+   "tags": [
+    "components"
+   ]
+  },
   "CompareImage": {
    "group": "components",
    "extends": [
@@ -267,6 +213,40 @@
   "ContextMenu": {
    "group": "components",
    "purpose": "ContextMenu component",
+   "tags": [
+    "components"
+   ]
+  },
+  "CountdownFx": {
+   "group": "components",
+   "purpose": "CountdownFx component",
+   "tags": [
+    "components"
+   ]
+  },
+  "CountFx": {
+   "group": "components",
+   "purpose": "CountFx component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Cursor": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Cursor component",
+   "tags": [
+    "components"
+   ]
+  },
+  "CursorCard": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "CursorCard component",
    "tags": [
     "components"
    ]
@@ -371,6 +351,13 @@
     "Flex"
    ],
    "purpose": "Fade component",
+   "tags": [
+    "components"
+   ]
+  },
+  "FadingLettersFx": {
+   "group": "components",
+   "purpose": "FadingLettersFx component",
    "tags": [
     "components"
    ]
@@ -594,6 +581,16 @@
     "components"
    ]
   },
+  "MatrixFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "MatrixFx component",
+   "tags": [
+    "components"
+   ]
+  },
   "Media": {
    "group": "components",
    "extends": [
@@ -729,22 +726,22 @@
     "components"
    ]
   },
-  "Scroller": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "purpose": "Scroller component",
-   "tags": [
-    "components"
-   ]
-  },
   "ScrollContainer": {
    "group": "components",
    "extends": [
     "Flex"
    ],
    "purpose": "ScrollContainer component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Scroller": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Scroller component",
    "tags": [
     "components"
    ]
@@ -843,6 +840,16 @@
     "components"
    ]
   },
+  "StyleOverlay": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "StyleOverlay component",
+   "tags": [
+    "components"
+   ]
+  },
   "StylePanel": {
    "group": "components",
    "extends": [
@@ -854,12 +861,12 @@
     "components"
    ]
   },
-  "StyleOverlay": {
+  "Swiper": {
    "group": "components",
    "extends": [
     "Flex"
    ],
-   "purpose": "StyleOverlay component",
+   "purpose": "Swiper component",
    "tags": [
     "components"
    ]
@@ -915,6 +922,17 @@
   "Textarea": {
    "group": "components",
    "purpose": "Textarea component",
+   "tags": [
+    "components"
+   ]
+  },
+  "ThemeSwitcher": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "purpose": "ThemeSwitcher component",
    "tags": [
     "components"
    ]
@@ -981,17 +999,6 @@
     "components"
    ]
   },
-  "ThemeSwitcher": {
-   "group": "components",
-   "extends": [
-    "Flex",
-    "Row"
-   ],
-   "purpose": "ThemeSwitcher component",
-   "tags": [
-    "components"
-   ]
-  },
   "User": {
    "group": "components",
    "extends": [
@@ -1014,19 +1021,12 @@
     "components"
    ]
   },
-  "CelebrationFx": {
+  "WeatherFx": {
    "group": "components",
    "extends": [
     "Flex"
    ],
-   "purpose": "CelebrationFx component",
-   "tags": [
-    "components"
-   ]
-  },
-  "FadingLettersFx": {
-   "group": "components",
-   "purpose": "FadingLettersFx component",
+   "purpose": "WeatherFx component",
    "tags": [
     "components"
    ]

@@ -1,23 +1,35 @@
 "use client";
 
-import React, { createContext, useContext, useRef, ReactNode, useEffect, forwardRef } from "react";
-import { useArrowNavigation, ArrowNavigationOptions } from "../hooks/useArrowNavigation";
+import type { ComponentType, CSSProperties, FC, KeyboardEvent, ReactNode } from "react";
+import {
+  createContext,
+  forwardRef,
+  useContext,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
+import { cn } from "../classes/utils";
+import type { ArrowNavigationOptions } from "../hooks/useArrowNavigation";
+import { useArrowNavigation } from "../hooks/useArrowNavigation";
+import { Column, type ColumnProps } from "./Column";
 import { FocusTrap } from "./FocusTrap";
-import { Column } from "./Column";
 
-interface ArrowNavigationContextType {
+export interface ArrowNavigationContextType {
   focusedIndex: number;
   setFocusedIndex: (index: number) => void;
-  handleKeyDown: (e: React.KeyboardEvent<HTMLElement>) => void;
+  handleKeyDown: (e: KeyboardEvent<HTMLElement>) => void;
   applyHighlightedState: () => void;
 }
 
 const ArrowNavigationContext = createContext<ArrowNavigationContextType | null>(null);
 
-export interface ArrowNavigationProps extends Omit<ArrowNavigationOptions, "containerRef"> {
+export interface ArrowNavigationProps
+  extends Omit<ArrowNavigationOptions, "containerRef">,
+    Omit<ColumnProps, "onSelect" | "wrap"> {
   children: ReactNode;
   className?: string;
-  style?: React.CSSProperties;
+  style?: CSSProperties;
   role?: string;
   "aria-label"?: string;
   trapFocus?: boolean;
@@ -27,96 +39,108 @@ export interface ArrowNavigationProps extends Omit<ArrowNavigationOptions, "cont
   restoreFocus?: boolean;
 }
 
-const ArrowNavigation = forwardRef<HTMLDivElement, ArrowNavigationProps>(({
-  layout,
-  itemCount,
-  columns,
-  onSelect,
-  onFocusChange,
-  wrap,
-  initialFocusedIndex,
-  itemSelector,
-  autoFocus,
-  disabled,
-  children,
-  className,
-  style,
-  role,
-  "aria-label": ariaLabel,
-  trapFocus = false,
-  focusTrapActive = true,
-  onEscape,
-  autoFocusTrap = true,
-  restoreFocus = true,
-}, ref) => {
-  const containerRef = useRef<HTMLDivElement>(null);
+const ArrowNavigation = forwardRef<HTMLDivElement, ArrowNavigationProps>(
+  (
+    {
+      layout,
+      itemCount,
+      columns,
+      onSelect,
+      onFocusChange,
+      wrap,
+      initialFocusedIndex,
+      itemSelector,
+      autoFocus,
+      disabled,
+      disableHighlighting,
+      children,
+      className,
+      style,
+      role,
+      "aria-label": ariaLabel,
+      trapFocus = false,
+      focusTrapActive = true,
+      onEscape,
+      autoFocusTrap = true,
+      restoreFocus = true,
+      ...rest
+    },
+    ref,
+  ) => {
+    const containerRef = useRef<HTMLDivElement>(null);
 
-  const navigation = useArrowNavigation({
-    layout,
-    itemCount,
-    columns,
-    containerRef,
-    onSelect,
-    onFocusChange,
-    wrap,
-    initialFocusedIndex,
-    itemSelector,
-    autoFocus,
-    disabled,
-  });
+    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
 
-  // Focus the container when autoFocus is enabled
-  useEffect(() => {
-    if (autoFocus && containerRef.current && !disabled) {
-      // Small delay to ensure the component is fully mounted
-      const timer = setTimeout(() => {
-        if (containerRef.current) {
-          containerRef.current.focus({ preventScroll: true });
-        }
-      }, 0);
-      return () => clearTimeout(timer);
-    }
-  }, [autoFocus, disabled]);
+    const navigation = useArrowNavigation({
+      layout,
+      itemCount,
+      columns,
+      containerRef,
+      onSelect,
+      onFocusChange,
+      wrap,
+      initialFocusedIndex,
+      itemSelector,
+      autoFocus,
+      disabled,
+      disableHighlighting,
+    });
 
-  // Determine the appropriate role based on layout if not provided
-  const defaultRole = layout === "grid" ? "grid" : "listbox";
+    // Focus the container when autoFocus is enabled
+    useEffect(() => {
+      if (autoFocus && containerRef.current && !disabled) {
+        // Small delay to ensure the component is fully mounted
+        const timer = setTimeout(() => {
+          if (containerRef.current) {
+            containerRef.current.focus({ preventScroll: true });
+          }
+        }, 0);
+        return () => clearTimeout(timer);
+      }
+    }, [autoFocus, disabled]);
 
-  // Create the navigation container
-  const navigationContainer = (
-    <Column
-      ref={containerRef}
-      className={className}
-      style={{ ...style, maxHeight: "100%", outline: "none" }}
-      onKeyDown={(e) => {
-        navigation.handleKeyDown(e);
-      }}
-      role={role || defaultRole}
-      aria-label={ariaLabel}
-      tabIndex={-1}
-    >
-      {children}
-    </Column>
-  );
+    // Determine the appropriate role based on layout if not provided
+    const defaultRole = layout === "grid" ? "grid" : "listbox";
 
-  return (
-    <ArrowNavigationContext.Provider value={navigation}>
-      {trapFocus ? (
-        <FocusTrap
-          active={focusTrapActive}
-          onEscape={onEscape}
-          autoFocus={autoFocusTrap}
-          restoreFocus={restoreFocus}
-        >
-          {navigationContainer}
-        </FocusTrap>
-      ) : (
-        navigationContainer
-      )}
-    </ArrowNavigationContext.Provider>
-  );
-})
+    // Create the navigation container
+    const navigationContainer = (
+      <Column
+        ref={containerRef}
+        className={cn("max-h-full outline-none", className)}
+        style={style}
+        onKeyDown={(e) => {
+          navigation.handleKeyDown(e);
+        }}
+        role={role || defaultRole}
+        aria-label={ariaLabel}
+        tabIndex={-1}
+        {...rest}
+      >
+        {children}
+      </Column>
+    );
+
+    return (
+      <ArrowNavigationContext.Provider value={navigation}>
+        {trapFocus ? (
+          <FocusTrap
+            active={focusTrapActive}
+            onEscape={onEscape}
+            autoFocus={autoFocusTrap}
+            restoreFocus={restoreFocus}
+          >
+            {navigationContainer}
+          </FocusTrap>
+        ) : (
+          navigationContainer
+        )}
+      </ArrowNavigationContext.Provider>
+    );
+  },
+);
 
 ArrowNavigation.displayName = "ArrowNavigation";
+
 export { ArrowNavigation };
 
 /**
@@ -134,9 +158,9 @@ export const useArrowNavigationContext = () => {
  * Higher-order component to make a component navigable with arrow keys
  */
 export function withArrowNavigation<P extends object>(
-  Component: React.ComponentType<P>,
+  Component: ComponentType<P>,
   options: Omit<ArrowNavigationProps, "children">,
-): React.FC<P & { children?: ReactNode }> {
+): FC<P & { children?: ReactNode }> {
   return ({ children, ...props }) => (
     <ArrowNavigation {...options}>
       <Component {...(props as P)}>{children}</Component>

@@ -317,6 +317,30 @@
     "style": "CSSProperties"
    }
   },
+  "Background": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "gradient": "BackgroundGradientProps = {}",
+    "dots": "BackgroundDotsProps = {}",
+    "grid": "BackgroundGridProps = {}",
+    "lines": "BackgroundLinesProps = {}",
+    "mask": "MaskProps",
+    "className": "string",
+    "style": "CSSProperties",
+    "children": "ReactNode"
+   }
+  },
   "Badge": {
    "group": "components",
    "extends": [
@@ -340,24 +364,6 @@
     "className": "string",
     "style": "CSSProperties",
     "id": "string"
-   }
-  },
-  "BlobFx": {
-   "group": "components",
-   "extends": [
-    "Flex",
-    "Row"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "seed": "number = 0"
    }
   },
   "Banner": {
@@ -386,10 +392,11 @@
     "align": "CSSProperties[\"textAlign\"] = center"
    }
   },
-  "Background": {
+  "BlobFx": {
    "group": "components",
    "extends": [
-    "Flex"
+    "Flex",
+    "Row"
    ],
    "mixins": [
     "CommonProps",
@@ -400,14 +407,7 @@
     "StyleProps"
    ],
    "props": {
-    "gradient": "BackgroundGradientProps = {}",
-    "dots": "BackgroundDotsProps = {}",
-    "grid": "BackgroundGridProps = {}",
-    "lines": "BackgroundLinesProps = {}",
-    "mask": "MaskProps",
-    "className": "string",
-    "style": "CSSProperties",
-    "children": "ReactNode"
+    "seed": "number = 0"
    }
   },
   "BlockQuote": {
@@ -459,7 +459,7 @@
     "color": "`${ColorScheme}-${ColorWeight}`"
    }
   },
-  "MatrixFx": {
+  "Card": {
    "group": "components",
    "extends": [
     "Flex"
@@ -473,44 +473,19 @@
     "StyleProps"
    ],
    "props": {
-    "speed": "number = 1",
-    "colors": "string[] = [\"brand-solid-medium\"]",
-    "size": "number = 3",
-    "spacing": "number = 3",
-    "revealFrom": "\"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = center",
-    "trigger": "\"hover\" | \"instant\" | \"mount\" | \"click\" | \"manual\" = instant",
-    "active": "boolean = false",
-    "flicker": "boolean = false",
-    "bulge": "BulgeConfig",
-    "fps": "number = 60",
-    "reducedMotion": "boolean | \"auto\" = auto",
-    "children": "React.ReactNode"
-   }
-  },
-  "WeatherFx": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "type": "WeatherType = rain",
-    "speed": "number = 1",
-    "colors": "string[] = [\"brand-solid-medium\"]",
-    "intensity": "number = 50",
-    "angle": "number = 0",
-    "duration": "number",
-    "trigger": "\"mount\" | \"hover\" | \"click\" | \"manual\" = mount",
-    "active": "boolean = false",
-    "reducedMotion": "boolean | \"auto\" = auto",
-    "children": "React.ReactNode"
+    "children": "ReactNode",
+    "href": "string",
+    "onClick": "() => void",
+    "fillHeight": "boolean",
+    "style": "CSSProperties",
+    "className": "string",
+    "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\" = surface",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-medium",
+    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}` = l",
+    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode = interactive",
+    "onBackground": "Colors = neutral-strong",
+    "align": "CSSProperties[\"textAlign\"] = left",
+    "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\" = macro-medium"
    }
   },
   "Carousel": {
@@ -543,7 +518,7 @@
     "style": "CSSProperties"
    }
   },
-  "Swiper": {
+  "CelebrationFx": {
    "group": "components",
    "extends": [
     "Flex"
@@ -557,131 +532,16 @@
     "StyleProps"
    ],
    "props": {
-    "items": "!SwiperItem[] = []",
-    "controls": "boolean | \"contained\" = true",
-    "priority": "boolean = false",
-    "fill": "boolean = false",
-    "aspectRatio": "string = 16 / 9",
-    "sizes": "string",
-    "unoptimized": "boolean = false",
-    "indicator": "boolean = true",
-    "className": "string",
-    "style": "CSSProperties"
-   }
-  },
-  "Card": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "children": "ReactNode",
-    "href": "string",
-    "onClick": "() => void",
-    "fillHeight": "boolean",
-    "style": "CSSProperties",
-    "className": "string",
-    "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\" = surface",
-    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-medium",
-    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}` = l",
-    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode = interactive",
-    "onBackground": "Colors = neutral-strong",
-    "align": "CSSProperties[\"textAlign\"] = left",
-    "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\" = macro-medium"
-   }
-  },
-  "CursorCard": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "trigger": "ReactNode",
-    "overlay": "ReactNode",
-    "placement": "Placement = bottom-left",
-    "className": "string",
-    "style": "CSSProperties"
-   }
-  },
-  "Cursor": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "cursor": "!ReactNode",
-    "elementRef": "RefObject<HTMLElement | null>",
-    "className": "string",
-    "style": "CSSProperties",
-    "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\" = 10"
-   }
-  },
-  "CountFx": {
-   "group": "components",
-   "props": {
-    "value": "!number",
-    "speed": "number = 1000",
-    "easing": "\"linear\" | \"ease-out\" | \"ease-in-out\" = ease-out",
-    "format": "(value: number) => string",
-    "separator": "string",
-    "decimals": "number",
-    "effect": "\"simple\" | \"wheel\" | \"smooth\" = simple",
+    "type": "CelebrationType = confetti",
+    "speed": "number = 1",
+    "colors": "string[] = [\"brand-solid-medium\", \"accent-solid-medium\"]",
+    "intensity": "number = 50",
+    "duration": "number",
+    "trigger": "\"mount\" | \"hover\" | \"manual\" | \"click\" = mount",
+    "active": "boolean = true",
+    "reducedMotion": "boolean | \"auto\" = auto",
     "children": "React.ReactNode"
    }
-  },
-  "CountdownFx": {
-   "group": "components",
-   "props": {
-    "targetDate": "!Date | string",
-    "format": "\"HH:MM:SS\" | \"DD:HH:MM:SS\" | \"MM:SS\" = HH:MM:SS",
-    "effect": "CountFxProps['effect'] = wheel",
-    "onComplete": "() => void"
-   }
-  },
-  "Column": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "children": "React.ReactNode"
-   },
-   "preset": {
-    "direction": "column"
-   },
-   "preferOver": "Flex with direction=\"column\""
   },
   "Checkbox": {
    "group": "components",
@@ -731,6 +591,27 @@
     "supportAlpha": "boolean = false"
    }
   },
+  "Column": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "React.ReactNode"
+   },
+   "preset": {
+    "direction": "column"
+   },
+   "preferOver": "Flex with direction=\"column\""
+  },
   "CompareImage": {
    "group": "components",
    "extends": [
@@ -771,6 +652,70 @@
     "onOpenChange": "(open: boolean) => void",
     "selectedOption": "string",
     "disabled": "boolean = false"
+   }
+  },
+  "CountdownFx": {
+   "group": "components",
+   "props": {
+    "targetDate": "!Date | string",
+    "format": "\"HH:MM:SS\" | \"DD:HH:MM:SS\" | \"MM:SS\" = HH:MM:SS",
+    "effect": "CountFxProps['effect'] = wheel",
+    "onComplete": "() => void"
+   }
+  },
+  "CountFx": {
+   "group": "components",
+   "props": {
+    "value": "!number",
+    "speed": "number = 1000",
+    "easing": "\"linear\" | \"ease-out\" | \"ease-in-out\" = ease-out",
+    "format": "(value: number) => string",
+    "separator": "string",
+    "decimals": "number",
+    "effect": "\"simple\" | \"wheel\" | \"smooth\" = simple",
+    "children": "React.ReactNode"
+   }
+  },
+  "Cursor": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "cursor": "!ReactNode",
+    "elementRef": "RefObject<HTMLElement | null>",
+    "className": "string",
+    "style": "CSSProperties",
+    "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\" = 10"
+   }
+  },
+  "CursorCard": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "trigger": "ReactNode",
+    "overlay": "ReactNode",
+    "placement": "Placement = bottom-left",
+    "className": "string",
+    "style": "CSSProperties"
    }
   },
   "DateInput": {
@@ -1007,6 +952,14 @@
     "pattern": "{ display?: boolean; size?: SpacingToken; } = {\n        display: false,\n        size: \"4\",\n      }",
     "style": "React.CSSProperties",
     "children": "ReactNode"
+   }
+  },
+  "FadingLettersFx": {
+   "group": "components",
+   "props": {
+    "text": "!string",
+    "animationState": "!AnimationState",
+    "messageIdx": "number = 0"
    }
   },
   "Feedback": {
@@ -1480,6 +1433,34 @@
     "xs": "MasonryBreakpointProps"
    }
   },
+  "MatrixFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "speed": "number = 1",
+    "colors": "string[] = [\"brand-solid-medium\"]",
+    "size": "number = 3",
+    "spacing": "number = 3",
+    "revealFrom": "\"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = center",
+    "trigger": "\"hover\" | \"instant\" | \"mount\" | \"click\" | \"manual\" = instant",
+    "active": "boolean = false",
+    "flicker": "boolean = false",
+    "bulge": "BulgeConfig",
+    "fps": "number = 60",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "children": "React.ReactNode"
+   }
+  },
   "Media": {
    "group": "components",
    "extends": [
@@ -1767,6 +1748,26 @@
    },
    "preferOver": "Flex with direction=\"row\""
   },
+  "ScrollContainer": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!ReactNode[] = []",
+    "controlPlacement": "\"top-start\" | \"top-center\" | \"top-end\" | \"top-between\" | \"bottom-start\" | \"bottom-center\" | \"bottom-end\" | \"bottom-between\" = top-start",
+    "className": "string",
+    "style": "CSSProperties"
+   }
+  },
   "Scroller": {
    "group": "components",
    "extends": [
@@ -1786,26 +1787,6 @@
     "fadeColor": "BaseColor = transparent",
     "onItemClick": "(index: number) => void",
     "radius": "RadiusSize",
-    "className": "string",
-    "style": "CSSProperties"
-   }
-  },
-  "ScrollContainer": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "items": "!ReactNode[] = []",
-    "controlPlacement": "\"top-start\" | \"top-center\" | \"top-end\" | \"top-between\" | \"bottom-start\" | \"bottom-center\" | \"bottom-end\" | \"bottom-between\" = top-start",
     "className": "string",
     "style": "CSSProperties"
    }
@@ -1999,6 +1980,25 @@
     "style": "CSSProperties"
    }
   },
+  "StyleOverlay": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "iconButtonProps": "Partial<IconButtonProps>",
+    "children": "!React.ReactNode",
+    "zIndex": "DisplayProps[\"zIndex\"] = 2"
+   }
+  },
   "StylePanel": {
    "group": "components",
    "extends": [
@@ -2018,7 +2018,7 @@
     "fillWidth": "boolean = true"
    }
   },
-  "StyleOverlay": {
+  "Swiper": {
    "group": "components",
    "extends": [
     "Flex"
@@ -2032,9 +2032,16 @@
     "StyleProps"
    ],
    "props": {
-    "iconButtonProps": "Partial<IconButtonProps>",
-    "children": "!React.ReactNode",
-    "zIndex": "DisplayProps[\"zIndex\"] = 2"
+    "items": "!SwiperItem[] = []",
+    "controls": "boolean | \"contained\" = true",
+    "priority": "boolean = false",
+    "fill": "boolean = false",
+    "aspectRatio": "string = 16 / 9",
+    "sizes": "string",
+    "unoptimized": "boolean = false",
+    "indicator": "boolean = true",
+    "className": "string",
+    "style": "CSSProperties"
    }
   },
   "Switch": {
@@ -2146,6 +2153,21 @@
     "validate": "(value: ReactNode) => ReactNode | null",
     "disabled": "boolean = false"
    }
+  },
+  "ThemeSwitcher": {
+   "group": "components",
+   "extends": [
+    "Flex",
+    "Row"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
   },
   "TiltFx": {
    "group": "components",
@@ -2280,21 +2302,6 @@
     "children": "React.ReactNode"
    }
   },
-  "ThemeSwitcher": {
-   "group": "components",
-   "extends": [
-    "Flex",
-    "Row"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ]
-  },
   "User": {
    "group": "components",
    "extends": [
@@ -2343,7 +2350,7 @@
     "style": "CSSProperties"
    }
   },
-  "CelebrationFx": {
+  "WeatherFx": {
    "group": "components",
    "extends": [
     "Flex"
@@ -2357,23 +2364,16 @@
     "StyleProps"
    ],
    "props": {
-    "type": "CelebrationType = confetti",
+    "type": "WeatherType = rain",
     "speed": "number = 1",
-    "colors": "string[] = [\"brand-solid-medium\", \"accent-solid-medium\"]",
+    "colors": "string[] = [\"brand-solid-medium\"]",
     "intensity": "number = 50",
+    "angle": "number = 0",
     "duration": "number",
-    "trigger": "\"mount\" | \"hover\" | \"manual\" | \"click\" = mount",
-    "active": "boolean = true",
+    "trigger": "\"mount\" | \"hover\" | \"click\" | \"manual\" = mount",
+    "active": "boolean = false",
     "reducedMotion": "boolean | \"auto\" = auto",
     "children": "React.ReactNode"
-   }
-  },
-  "FadingLettersFx": {
-   "group": "components",
-   "props": {
-    "text": "!string",
-    "animationState": "!AnimationState",
-    "messageIdx": "number = 0"
    }
   },
   "Kbar": {
