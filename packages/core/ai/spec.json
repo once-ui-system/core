@@ -955,8 +955,8 @@
     "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
     "base": "BaseColor = page",
     "blur": "number = 0.5",
-    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\n        display: false,\n        size: \"4\",\n      }",
-    "style": "React.CSSProperties",
+    "pattern": "FadePatternProps = {\n        display: false,\n        size: \"4\",\n      }",
+    "style": "CSSProperties",
     "children": "ReactNode"
    }
   },
