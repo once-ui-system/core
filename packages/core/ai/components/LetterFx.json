@@ -3,12 +3,12 @@
  "group": "components",
  "props": {
   "children": "!ReactNode",
-  "trigger": "\"hover\" | \"instant\" | \"custom\" = hover",
-  "speed": "\"fast\" | \"medium\" | \"slow\" = medium",
-  "charset": "string[] = defaultCharset",
+  "trigger": "LetterFxTrigger = hover",
+  "speed": "LetterFxSpeed = medium",
+  "charset": "string[] | string | readonly string[] = defaultCharset",
   "onTrigger": "(triggerFn: () => void) => void",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": []
 }
