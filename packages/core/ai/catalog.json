@@ -105,8 +105,7 @@
   "BlobFx": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Flex"
    ],
    "purpose": "BlobFx component",
    "tags": [

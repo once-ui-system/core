@@ -21,3 +21,39 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+@keyframes blob-fx-1 {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  33% {
+    transform: translateX(var(--blob-1-33));
+  }
+  66% {
+    transform: translateX(var(--blob-1-66));
+  }
+}
+
+@keyframes blob-fx-2 {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  33% {
+    transform: translateX(var(--blob-2-33));
+  }
+  66% {
+    transform: translateX(var(--blob-2-66));
+  }
+}
+
+@keyframes blob-fx-3 {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  33% {
+    transform: translateX(var(--blob-3-33));
+  }
+  66% {
+    transform: translateX(var(--blob-3-66));
+  }
+}

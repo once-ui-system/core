@@ -397,8 +397,7 @@
   "BlobFx": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Row"
+    "Flex"
    ],
    "mixins": [
     "CommonProps",
@@ -409,7 +408,10 @@
     "StyleProps"
    ],
    "props": {
-    "seed": "number = 0"
+    "seed": "number = 0",
+    "className": "string",
+    "style": "CSSProperties",
+    "children": "ReactNode"
    }
   },
   "BlockQuote": {

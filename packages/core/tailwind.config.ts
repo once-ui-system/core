@@ -357,6 +357,21 @@ const config: Config = {
             opacity: "0",
           },
         },
+        "blob-fx-1": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "33%": { transform: "translateX(var(--blob-1-33))" },
+          "66%": { transform: "translateX(var(--blob-1-66))" },
+        },
+        "blob-fx-2": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "33%": { transform: "translateX(var(--blob-2-33))" },
+          "66%": { transform: "translateX(var(--blob-2-66))" },
+        },
+        "blob-fx-3": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "33%": { transform: "translateX(var(--blob-3-33))" },
+          "66%": { transform: "translateX(var(--blob-3-66))" },
+        },
       },
       animation: {
         fadeIn: "fadeIn 0.2s ease-in-out",
@@ -369,6 +384,9 @@ const config: Config = {
         shineHover: "shineHover 3s ease-in-out infinite",
         skeleton: "skeleton 1.5s infinite",
         spin: "spin 1.5s infinite",
+        "blob-fx-1": "blob-fx-1 8s ease-in-out infinite",
+        "blob-fx-2": "blob-fx-2 12s ease-in-out infinite",
+        "blob-fx-3": "blob-fx-3 10s ease-in-out infinite",
       },
     },
   },
