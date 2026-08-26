@@ -1,9 +1,19 @@
 "use client";
 
-import React, { useState, useEffect, useRef, forwardRef } from "react";
-import { Text } from ".";
+import { cva } from "class-variance-authority";
+import type { CSSProperties, ReactNode } from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "../classes/utils";
+import type { TextComponentProps } from "./Text";
+import { Text } from "./Text";
 
-export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, 'children'> {
+export const typeFxVariants = cva("inline-block");
+const TYPE_FX_BASE = typeFxVariants();
+
+export const typeFxCursorVariants = cva("opacity-50 select-none");
+const TYPE_FX_CURSOR_BASE = typeFxCursorVariants();
+
+export interface TypeFxProps extends Omit<TextComponentProps<"span">, "children"> {
   words: string | string[];
   speed?: number;
   delay?: number;
@@ -11,114 +21,156 @@ export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, 'ch
   trigger?: "instant" | "custom";
   onTrigger?: (triggerFn: () => void) => void;
   loop?: boolean;
-  children?: React.ReactNode;
+  className?: string;
+  style?: CSSProperties;
+  children?: ReactNode;
 }
 
-const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(({
-  words,
-  speed = 100,
-  delay = 0,
-  hold = 2000,
-  trigger = "instant",
-  onTrigger,
-  loop = true,
-  children,
-  ...text
-}, ref) => {
-  const [displayText, setDisplayText] = useState("");
-  const [isComplete, setIsComplete] = useState(false);
-  const [triggered, setTriggered] = useState(trigger === "instant");
-  const timeoutRef = useRef<number | null>(null);
+const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
+  (
+    {
+      words,
+      speed = 100,
+      delay = 0,
+      hold = 2000,
+      trigger = "instant",
+      onTrigger,
+      loop = true,
+      className,
+      style,
+      children,
+      ...textProps
+    },
+    ref,
+  ) => {
+    const [displayText, setDisplayText] = useState("");
+    const [isComplete, setIsComplete] = useState(false);
+    const [hasStarted, setHasStarted] = useState(trigger === "instant");
 
-  const wordsHash = JSON.stringify(Array.isArray(words) ? words : [words]);
+    const runIdRef = useRef(0);
+    const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
-    if (trigger === "instant") setTriggered(true);
-  }, [trigger]);
+    const wordsHash = JSON.stringify(Array.isArray(words) ? words : [words]);
 
-  useEffect(() => {
-    if (trigger === "custom" && onTrigger) {
-      onTrigger(() => setTriggered(true));
-    }
-  }, [trigger, onTrigger]);
-
-  useEffect(() => {
-    if (!triggered) return;
-
-    let active = true;
-    let pendingResolve: (() => void) | null = null;
-
-    setDisplayText("");
-    setIsComplete(false);
-
-    const sleep = (ms: number) =>
-      new Promise<void>((resolve) => {
-        pendingResolve = resolve;
-        timeoutRef.current = window.setTimeout(resolve, ms);
-      });
-
-    const run = async () => {
-      const wordsArray: string[] = JSON.parse(wordsHash);
-      const isSingleWord = wordsArray.length === 1;
-
-      if (delay > 0) {
-        await sleep(delay);
-        if (!active) return;
-      }
-
-      let currentIndex = 0;
-
-      while (active) {
-        const currentWord = wordsArray[currentIndex];
-
-        for (let i = 0; i <= currentWord.length; i++) {
-          if (!active) return;
-          setDisplayText(currentWord.substring(0, i));
-          await sleep(speed);
-        }
-
-        if (isSingleWord) {
-          if (active) setIsComplete(true);
-          return;
-        }
-
-        if (!active) return;
-        await sleep(hold);
-
-        for (let i = currentWord.length; i >= 0; i--) {
-          if (!active) return;
-          setDisplayText(currentWord.substring(0, i));
-          await sleep(speed / 2);
-        }
-
-        currentIndex = (currentIndex + 1) % wordsArray.length;
-
-        if (!loop && currentIndex === 0) return;
-
-        if (!active) return;
-        await sleep(speed);
-      }
-    };
-
-    run();
-
-    return () => {
-      active = false;
+    const startTyping = useCallback(() => {
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
-      if (pendingResolve) pendingResolve();
-    };
-  }, [triggered, wordsHash, speed, delay, hold, loop]);
 
-  return (
-    <Text {...text}>
-      {children}
-      {displayText}
-      {!isComplete && <span style={{ opacity: 0.5 }}>|</span>}
-    </Text>
-  );
-});
+      const currentRunId = ++runIdRef.current;
+      setHasStarted(true);
+      setIsComplete(false);
+      setDisplayText("");
+
+      const wordsArray: string[] = JSON.parse(wordsHash);
+      if (wordsArray.length === 0) {
+        setIsComplete(true);
+        return;
+      }
+
+      const isSingleWord = wordsArray.length === 1;
+
+      const sleep = (ms: number) =>
+        new Promise<boolean>((resolve) => {
+          timeoutRef.current = setTimeout(() => {
+            resolve(runIdRef.current === currentRunId);
+          }, ms);
+        });
+
+      const run = async () => {
+        if (delay > 0) {
+          const ok = await sleep(delay);
+          if (!ok) return;
+        }
+
+        let currentIndex = 0;
+
+        while (runIdRef.current === currentRunId) {
+          const currentWord = wordsArray[currentIndex] ?? "";
+
+          for (let i = 0; i <= currentWord.length; i++) {
+            if (runIdRef.current !== currentRunId) return;
+            setDisplayText(currentWord.substring(0, i));
+            const ok = await sleep(speed);
+            if (!ok) return;
+          }
+
+          if (isSingleWord) {
+            if (runIdRef.current === currentRunId) {
+              setIsComplete(true);
+            }
+            return;
+          }
+
+          const okHold = await sleep(hold);
+          if (!okHold) return;
+
+          for (let i = currentWord.length; i >= 0; i--) {
+            if (runIdRef.current !== currentRunId) return;
+            setDisplayText(currentWord.substring(0, i));
+            const ok = await sleep(speed / 2);
+            if (!ok) return;
+          }
+
+          currentIndex = (currentIndex + 1) % wordsArray.length;
+
+          if (!loop && currentIndex === 0) {
+            if (runIdRef.current === currentRunId) {
+              setIsComplete(true);
+            }
+            return;
+          }
+
+          const okPause = await sleep(speed);
+          if (!okPause) return;
+        }
+      };
+
+      run();
+    }, [wordsHash, speed, delay, hold, loop]);
+
+    useEffect(() => {
+      if (trigger === "instant") {
+        startTyping();
+      } else {
+        setHasStarted(false);
+        setIsComplete(false);
+        setDisplayText("");
+      }
+    }, [trigger, startTyping]);
+
+    useEffect(() => {
+      if (trigger === "custom" && onTrigger) {
+        onTrigger(startTyping);
+      }
+    }, [trigger, onTrigger, startTyping]);
+
+    useEffect(() => {
+      return () => {
+        runIdRef.current++;
+        if (timeoutRef.current !== null) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+      };
+    }, []);
+
+    const showCursor = hasStarted && !isComplete;
+
+    return (
+      <Text ref={ref} className={cn(TYPE_FX_BASE, className)} style={style} {...textProps}>
+        {children}
+        {displayText}
+        {showCursor && (
+          <span className={TYPE_FX_CURSOR_BASE} aria-hidden="true">
+            |
+          </span>
+        )}
+      </Text>
+    );
+  },
+);
 
 TypeFx.displayName = "TypeFx";
 

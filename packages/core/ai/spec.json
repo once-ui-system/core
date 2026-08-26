@@ -2320,6 +2320,15 @@
   },
   "TypeFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "SpacingProps",
+    "TextProps"
+   ],
    "props": {
     "words": "!string | string[]",
     "speed": "number = 100",
@@ -2328,7 +2337,9 @@
     "trigger": "\"instant\" | \"custom\" = instant",
     "onTrigger": "(triggerFn: () => void) => void",
     "loop": "boolean = true",
-    "children": "React.ReactNode"
+    "className": "string",
+    "style": "CSSProperties",
+    "children": "ReactNode"
    }
   },
   "User": {

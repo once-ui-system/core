@@ -999,6 +999,9 @@
   },
   "TypeFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "purpose": "TypeFx component",
    "tags": [
     "components"
