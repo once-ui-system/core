@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "1.8.1",
- "generated": "2026-07-30",
+ "version": "1.8.3",
+ "generated": "2026-08-26",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -962,7 +962,7 @@
     "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
     "base": "BaseColor = page",
     "blur": "number = 0.5",
-    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\r\n        display: false,\r\n        size: \"4\",\r\n      }",
+    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\n        display: false,\n        size: \"4\",\n      }",
     "style": "React.CSSProperties",
     "children": "ReactNode"
    }
@@ -2557,7 +2557,7 @@
     "line": "{ count?: number; width?: number; length?: number; }",
     "unit": "React.ReactNode",
     "value": "number = 7",
-    "angle": "{ start: number; sweep: number; } = {\r\n    start: 0,\r\n    sweep: 360,\r\n  }",
+    "angle": "{ start: number; sweep: number; } = {\n    start: 0,\n    sweep: 360,\n  }",
     "direction": "'cw' | 'ccw' = cw",
     "edgePad": "number = 0",
     "children": "React.ReactNode",

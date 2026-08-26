@@ -13,6 +13,40 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [1.8.3] — 2026-08-26
+
+Classified **patch** per [RELEASING.md](RELEASING.md): restores documented behavior
+(broken subpath resolution) and AI-harness validity, with no API surface changes.
+
+### Fixed
+
+- The `./icons`, `./types`, and `./interfaces` subpath exports pointed at
+  `dist/<name>/index.js` while the build emits `dist/<name>.js`, leaving all three
+  unresolvable for every consumer (bundlers included) in the published 1.8.0–1.8.2.
+  The exports map now points at the emitted files, and a new
+  `package-exports.test.ts` fails on any exports path the build does not produce.
+- The AI harness shipped in 1.8.2 was still stamped 1.8.1 (`ai/manifest.json`,
+  `ai/catalog.json`, generated 2026-07-30). Artifacts are regenerated at 1.8.3, and a
+  new `ai-manifest-sync.test.ts` enforces the AI-consumer rule from RELEASING.md —
+  harness version must match package version — so this drift class now fails tests.
+- `apps/docs/public/ai/` claimed to be "synced from @once-ui-system/core on build"
+  but no sync step existed, so `docs.once-ui.com/ai/*` could serve stale or missing
+  artifacts. A `sync-ai` script now runs before every docs dev/build.
+
+### Changed
+
+- Backfilled changelog for 1.8.2 (below), which was published without an entry.
+
+## [1.8.2] — 2026-08-02
+
+Classified **patch**: single bug fix, no API surface changes. Published without a
+changelog entry; backfilled in 1.8.3.
+
+### Fixed
+
+- Removed the forced 320px default min-width on content-sized dropdowns
+  (`DropdownWrapper`), restoring content-driven sizing.
+
 ## [1.8.1] — 2026-07-30
 
 Classified **patch** per [RELEASING.md](RELEASING.md): bug fixes restoring documented

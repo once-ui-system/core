@@ -4,7 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "predev": "node scripts/sync-ai.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/sync-ai.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "biome check .",
