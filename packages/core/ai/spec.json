@@ -962,6 +962,15 @@
   },
   "FadingLettersFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "SpacingProps",
+    "TextProps"
+   ],
    "props": {
     "text": "!string",
     "animationState": "!AnimationState",

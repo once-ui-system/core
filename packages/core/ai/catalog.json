@@ -356,6 +356,9 @@
   },
   "FadingLettersFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "purpose": "FadingLettersFx component",
    "tags": [
     "components"

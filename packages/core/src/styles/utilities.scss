@@ -57,3 +57,29 @@
     transform: translateX(var(--blob-3-66));
   }
 }
+
+@keyframes letterFadeIn {
+  from {
+    opacity: 0;
+    filter: blur(25px);
+    transform: scale(0.1);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
+}
+
+@keyframes letterFadeOut {
+  from {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    filter: blur(20px);
+    transform: scale(4);
+  }
+}

@@ -1,67 +1,104 @@
 "use client";
 
-import { Text } from "./Text";
-import { ComponentProps } from "react";
-import styles from "./FadingLettersFx.module.scss";
+import { cva } from "class-variance-authority";
+import type { CSSProperties } from "react";
+import { forwardRef, memo, useMemo } from "react";
+import { cn } from "../classes/utils";
+import { Text, type TextComponentProps } from "./Text";
 
-type AnimationState = "entering" | "visible" | "exiting";
+export type AnimationState = "entering" | "visible" | "exiting";
 
-interface FadingLettersFxProps extends ComponentProps<typeof Text> {
+export const fadingLettersFxVariants = cva("contents");
+const FADING_LETTERS_FX_BASE = fadingLettersFxVariants();
+
+export const fadingLettersWordVariants = cva("inline-flex mr-[0.35em]");
+const FADING_LETTERS_WORD_BASE = fadingLettersWordVariants();
+
+export const fadingLettersLetterVariants = cva("inline-block will-change-transform", {
+  variants: {
+    state: {
+      entering: "animate-letterFadeIn [animation-delay:var(--entry-delay,0s)]",
+      visible: "",
+      exiting: "animate-letterFadeOut [animation-delay:var(--exit-delay,0s)]",
+    },
+  },
+  defaultVariants: {
+    state: "visible",
+  },
+});
+
+const LETTER_CLASSES: Record<AnimationState, string> = {
+  entering: fadingLettersLetterVariants({ state: "entering" }),
+  visible: fadingLettersLetterVariants({ state: "visible" }),
+  exiting: fadingLettersLetterVariants({ state: "exiting" }),
+};
+
+export interface FadingLettersFxProps extends TextComponentProps<"span"> {
   text: string;
   animationState: AnimationState;
   messageIdx?: number;
 }
 
-function FadingLettersFx({
-  text,
-  animationState,
-  messageIdx = 0,
-  ...textProps
-}: FadingLettersFxProps) {
-  const renderTextWithLetters = () => {
-    const words = text.split(" ");
-    const lineBaseDelay = messageIdx * 2500;
+const FadingLettersFx = forwardRef<HTMLSpanElement, FadingLettersFxProps>(
+  ({ text, animationState, messageIdx = 0, className, style, ...textProps }, ref) => {
+    const wordsData = useMemo(() => {
+      const words = text.split(" ");
+      const lineBaseDelay = messageIdx * 2500;
 
-    return words.map((word, wordIdx) => {
-      const letters = word.split("");
-      const wordLetters = letters.map((letter, letterIdx) => {
+      return words.map((word, wordIdx) => {
+        const letters = word.split("");
         const wordBaseDelay = lineBaseDelay + wordIdx * 200;
-        const entryDelay = wordBaseDelay + letterIdx * 40;
-        const exitDelay = Math.random() * 400;
 
-        return (
-          <span
-            key={`${wordIdx}-${letterIdx}`}
-            className={`${styles.letter} ${
-              animationState === "entering" ? styles.entering : ""
-            } ${animationState === "exiting" ? styles.exiting : ""}`}
-            style={{
+        return letters.map((letter, letterIdx) => {
+          const entryDelay = wordBaseDelay + letterIdx * 40;
+          const exitDelay = Math.random() * 400;
+
+          return {
+            letter,
+            key: `${wordIdx}-${letterIdx}`,
+            style: {
               "--entry-delay": `${entryDelay}ms`,
               "--exit-delay": `${exitDelay}ms`,
-            } as React.CSSProperties}
-            suppressHydrationWarning
-          >
-            {letter}
-          </span>
-        );
+            } as CSSProperties,
+          };
+        });
       });
+    }, [text, messageIdx]);
 
-      return (
-        <span key={wordIdx} className={styles.word}>
-          {wordLetters}
-        </span>
-      );
-    });
-  };
+    const letterClass = LETTER_CLASSES[animationState] || LETTER_CLASSES.visible;
 
-  return (
-    <Text {...textProps} style={{ display: "contents", ...textProps.style }}>
-      {renderTextWithLetters()}
-    </Text>
-  );
-}
+    const renderedWords = useMemo(
+      () =>
+        wordsData.map((letters, wordIdx) => (
+          <span
+            // biome-ignore lint/suspicious/noArrayIndexKey: fixed word position in text rendering
+            key={`word-${wordIdx}`}
+            className={FADING_LETTERS_WORD_BASE}
+          >
+            {letters.map(({ letter, key, style: letterStyle }) => (
+              <span key={key} className={letterClass} style={letterStyle} suppressHydrationWarning>
+                {letter}
+              </span>
+            ))}
+          </span>
+        )),
+      [wordsData, letterClass],
+    );
+
+    return (
+      <Text
+        ref={ref}
+        className={cn(FADING_LETTERS_FX_BASE, className)}
+        style={{ display: "contents", ...style }}
+        {...textProps}
+      >
+        {renderedWords}
+      </Text>
+    );
+  },
+);
 
 FadingLettersFx.displayName = "FadingLettersFx";
 
+export default memo(FadingLettersFx);
 export { FadingLettersFx };
-export type { FadingLettersFxProps, AnimationState };

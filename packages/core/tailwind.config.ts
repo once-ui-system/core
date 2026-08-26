@@ -372,6 +372,30 @@ const config: Config = {
           "33%": { transform: "translateX(var(--blob-3-33))" },
           "66%": { transform: "translateX(var(--blob-3-66))" },
         },
+        letterFadeIn: {
+          from: {
+            opacity: "0",
+            filter: "blur(25px)",
+            transform: "scale(0.1)",
+          },
+          to: {
+            opacity: "1",
+            filter: "blur(0px)",
+            transform: "scale(1)",
+          },
+        },
+        letterFadeOut: {
+          from: {
+            opacity: "1",
+            filter: "blur(0px)",
+            transform: "scale(1)",
+          },
+          to: {
+            opacity: "0",
+            filter: "blur(20px)",
+            transform: "scale(4)",
+          },
+        },
       },
       animation: {
         fadeIn: "fadeIn 0.2s ease-in-out",
@@ -387,6 +411,8 @@ const config: Config = {
         "blob-fx-1": "blob-fx-1 8s ease-in-out infinite",
         "blob-fx-2": "blob-fx-2 12s ease-in-out infinite",
         "blob-fx-3": "blob-fx-3 10s ease-in-out infinite",
+        letterFadeIn: "letterFadeIn 1200ms ease-out both",
+        letterFadeOut: "letterFadeOut 1600ms ease-in-out forwards",
       },
     },
   },
