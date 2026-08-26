@@ -13,16 +13,16 @@
   "StyleProps"
  ],
  "props": {
-  "flipDirection": "\"horizontal\" | \"vertical\"",
-  "timing": "number",
+  "flipDirection": "FlipDirection = horizontal",
+  "timing": "number = 2000",
   "flipped": "boolean",
   "onFlip": "(flipped: boolean) => void",
-  "disableClickFlip": "boolean",
+  "disableClickFlip": "boolean = false",
   "autoFlipInterval": "number",
-  "front": "!React.ReactNode",
-  "back": "!React.ReactNode",
+  "front": "!ReactNode",
+  "back": "!ReactNode",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
