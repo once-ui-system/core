@@ -1,7 +1,7 @@
-import React, { useRef } from "react";
 import { render } from "@testing-library/react";
-import { vi, describe, it, expect, beforeEach } from "vitest";
-import { ScrollLock, resetScrollLockState } from "../components/ScrollLock";
+import { useRef } from "react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { resetScrollLockState, ScrollLock } from "../components/ScrollLock";
 
 const defineScrollMetrics = (
   element: HTMLElement,
@@ -63,7 +63,10 @@ const ScrollLockHarness = ({
         </div>
       )}
       <button type="button">Outside child</button>
-      <ScrollLock enabled={enabled} allowScrollInElement={includeAllowedElement ? allowedRef : undefined} />
+      <ScrollLock
+        enabled={enabled}
+        allowScrollInElement={includeAllowedElement ? allowedRef : undefined}
+      />
     </>
   );
 };
@@ -131,9 +134,7 @@ describe("ScrollLock", () => {
   });
 
   it("prevents wheel events outside the allowed element", () => {
-    const { getByRole } = render(
-      <ScrollLockHarness enabled includeAllowedElement scrollable />,
-    );
+    const { getByRole } = render(<ScrollLockHarness enabled includeAllowedElement scrollable />);
     const outside = getByRole("button", { name: "Outside child" });
     const event = new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaY: 80 });
 
@@ -185,7 +186,9 @@ describe("ScrollLock", () => {
   });
 
   it("prevents wheel events inside a non-scrollable allowed element", () => {
-    const { getByRole } = render(<ScrollLockHarness enabled includeAllowedElement scrollable={false} />);
+    const { getByRole } = render(
+      <ScrollLockHarness enabled includeAllowedElement scrollable={false} />,
+    );
     const allowedChild = getByRole("button", { name: "Allowed child" });
 
     const event = new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaY: 80 });
@@ -218,9 +221,7 @@ describe("ScrollLock", () => {
   });
 
   it("prevents touch scroll outside the allowed element", () => {
-    const { getByRole } = render(
-      <ScrollLockHarness enabled includeAllowedElement scrollable />,
-    );
+    const { getByRole } = render(<ScrollLockHarness enabled includeAllowedElement scrollable />);
     const outside = getByRole("button", { name: "Outside child" });
 
     outside.dispatchEvent(createTouchEvent("touchstart", 100));
@@ -248,9 +249,7 @@ describe("ScrollLock", () => {
   it.each(["ArrowUp", "ArrowDown", "PageUp", "PageDown", "Home", "End", " "])(
     'prevents keyboard scroll key "%s" outside the allowed element',
     (key) => {
-      const { getByRole } = render(
-        <ScrollLockHarness enabled includeAllowedElement scrollable />,
-      );
+      const { getByRole } = render(<ScrollLockHarness enabled includeAllowedElement scrollable />);
       const outside = getByRole("button", { name: "Outside child" });
       const event = new KeyboardEvent("keydown", { bubbles: true, cancelable: true, key });
 
@@ -261,11 +260,13 @@ describe("ScrollLock", () => {
   );
 
   it("allows keyboard scroll keys inside the allowed element", () => {
-    const { getByRole } = render(
-      <ScrollLockHarness enabled includeAllowedElement scrollable />,
-    );
+    const { getByRole } = render(<ScrollLockHarness enabled includeAllowedElement scrollable />);
     const allowedChild = getByRole("button", { name: "Allowed child" });
-    const event = new KeyboardEvent("keydown", { bubbles: true, cancelable: true, key: "ArrowDown" });
+    const event = new KeyboardEvent("keydown", {
+      bubbles: true,
+      cancelable: true,
+      key: "ArrowDown",
+    });
 
     allowedChild.dispatchEvent(event);
 
@@ -279,9 +280,18 @@ describe("ScrollLock", () => {
 
     unmount();
 
-    expect(addSpy).toHaveBeenCalledWith("wheel", expect.any(Function), { passive: false, capture: true });
-    expect(addSpy).toHaveBeenCalledWith("touchstart", expect.any(Function), { passive: true, capture: true });
-    expect(addSpy).toHaveBeenCalledWith("touchmove", expect.any(Function), { passive: false, capture: true });
+    expect(addSpy).toHaveBeenCalledWith("wheel", expect.any(Function), {
+      passive: false,
+      capture: true,
+    });
+    expect(addSpy).toHaveBeenCalledWith("touchstart", expect.any(Function), {
+      passive: true,
+      capture: true,
+    });
+    expect(addSpy).toHaveBeenCalledWith("touchmove", expect.any(Function), {
+      passive: false,
+      capture: true,
+    });
     expect(addSpy).toHaveBeenCalledWith("keydown", expect.any(Function), { capture: true });
     expect(removeSpy).toHaveBeenCalledWith("wheel", expect.any(Function), { capture: true });
     expect(removeSpy).toHaveBeenCalledWith("touchstart", expect.any(Function), { capture: true });
