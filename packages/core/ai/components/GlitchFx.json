@@ -13,11 +13,13 @@
   "StyleProps"
  ],
  "props": {
-  "children": "!React.ReactNode",
+  "children": "!ReactNode",
   "speed": "\"slow\" | \"medium\" | \"fast\" = medium",
   "interval": "number = 2500",
   "trigger": "\"instant\" | \"hover\" | \"custom\" = instant",
-  "continuous": "boolean = true"
+  "continuous": "boolean = true",
+  "className": "string",
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",

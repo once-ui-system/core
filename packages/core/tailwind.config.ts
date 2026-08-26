@@ -396,6 +396,60 @@ const config: Config = {
             transform: "scale(4)",
           },
         },
+        "glitch-blue": {
+          "6%, 14%, 70%, 78%": {
+            transform: "none",
+            opacity: "0.25",
+            clipPath: "inset(0 0 0 0)",
+          },
+          "10%, 12%": {
+            transform: "translate(-5px, -3px) skew(1deg, -2deg)",
+            opacity: "0.5",
+            clipPath: "inset(50% 0 25% 0)",
+          },
+          "11%, 13%": {
+            transform: "translate(4px, -7px) skew(-1deg) scaleX(1.5) scaleY(1.25)",
+            opacity: "0.7",
+            clipPath: "inset(0 35% 40% 0)",
+          },
+          "14%, 82%": {
+            transform: "translate(-5px, -3px) skew(1deg, -1deg)",
+            opacity: "0.3",
+            clipPath: "inset(30% 5% 25% 40%)",
+          },
+          "75%, 83%": {
+            transform: "translate(-9px, 2px) skew(-1deg, 0)",
+            opacity: "0.2",
+            clipPath: "inset(0 35% 45% 10%)",
+          },
+        },
+        "glitch-red": {
+          "6%, 14%, 70%, 78%": {
+            transform: "none",
+            opacity: "0",
+            clipPath: "inset(0 0 0 0)",
+          },
+          "10%, 12%": {
+            transform: "translate(6px, 4px) skew(1deg)",
+            opacity: "0.5",
+            clipPath: "inset(5% 0 10% 0)",
+          },
+          "11%, 13%": {
+            transform: "translate(-4px, 5px) skew(0, -1deg)",
+            opacity: "0.7",
+            clipPath: "inset(5% 0 10% 0)",
+          },
+          "14%, 82%": {
+            transform: "translate(-7px, -4px) skew(1deg, -1deg)",
+            opacity: "0.2",
+            clipPath: "inset(50% 25% 25% 0)",
+          },
+          "75%, 80%": {
+            transform: "translate(4px, -6px) skew(-1deg) scaleX(2) scaleY(1.25)",
+            opacity: "0.3",
+            clipPath: "inset(0 0 20% 50%)",
+          },
+        },
       },
       animation: {
         fadeIn: "fadeIn 0.2s ease-in-out",
@@ -413,6 +467,8 @@ const config: Config = {
         "blob-fx-3": "blob-fx-3 10s ease-in-out infinite",
         letterFadeIn: "letterFadeIn 1200ms ease-out both",
         letterFadeOut: "letterFadeOut 1600ms ease-in-out forwards",
+        "glitch-blue": "glitch-blue var(--glitch-duration, 2.5s) infinite",
+        "glitch-red": "glitch-red var(--glitch-duration, 2.5s) infinite",
       },
     },
   },
