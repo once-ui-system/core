@@ -1,14 +1,17 @@
 "use client";
 
-import React, { forwardRef } from "react";
-import { Row, IconButton } from ".";
+import { forwardRef, useEffect, useState } from "react";
 import { useTheme } from "../contexts";
+import { IconButton } from "./IconButton";
+import { Row } from "./Row";
 
-const ThemeSwitcher = forwardRef<HTMLDivElement, React.ComponentProps<typeof Row>>((flex, ref) => {
+export interface ThemeSwitcherProps extends React.ComponentProps<typeof Row> {}
+
+export const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>((props, ref) => {
   const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = React.useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     setMounted(true);
   }, []);
 
@@ -25,7 +28,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, React.ComponentProps<typeof Row
       border="neutral-alpha-weak"
       radius="full"
       suppressHydrationWarning
-      {...flex}
+      {...props}
     >
       <IconButton
         icon="computer"
@@ -53,4 +56,3 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, React.ComponentProps<typeof Row
 });
 
 ThemeSwitcher.displayName = "ThemeSwitcher";
-export { ThemeSwitcher };

@@ -33,6 +33,21 @@ describe("ThemeSwitcher", () => {
     fireEvent.click(lightButton);
 
     expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+
+    const systemButton = screen.getByLabelText("System theme");
+    fireEvent.click(systemButton);
+  });
+
+  it("merges custom className, style, and Row props", () => {
+    const { container } = render(
+      <ThemeProvider>
+        <ThemeSwitcher className="custom-switcher" style={{ opacity: 0.9 }} padding="4" />
+      </ThemeProvider>,
+    );
+
+    const row = container.firstElementChild;
+    expect(row).toHaveClass("custom-switcher", "p-4", "rounded-full");
+    expect((row as HTMLElement).style.opacity).toBe("0.9");
   });
 
   it("forwards ref to container Row element", () => {
