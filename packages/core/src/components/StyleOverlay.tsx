@@ -1,18 +1,37 @@
 "use client";
 
+import { cva } from "class-variance-authority";
 import { forwardRef, useState } from "react";
-import { IconButton, StylePanel, Flex, Background } from ".";
-import styles from "./StyleOverlay.module.scss";
-import { DisplayProps } from "../interfaces";
+import { cn } from "../classes/utils";
+import type { DisplayProps } from "../interfaces";
+import { Background } from "./Background";
+import { Flex } from "./Flex";
+import { IconButton, type IconButtonProps } from "./IconButton";
+import { StylePanel } from "./StylePanel";
 
-interface StyleOverlayProps extends React.ComponentProps<typeof Flex> {
-  iconButtonProps?: Partial<React.ComponentProps<typeof IconButton>>;
+export interface StyleOverlayProps extends React.ComponentProps<typeof Flex> {
+  iconButtonProps?: Partial<IconButtonProps>;
   children: React.ReactNode;
   zIndex?: DisplayProps["zIndex"];
 }
 
-const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
-  ({ iconButtonProps, children, zIndex = 2, ...rest }, ref) => {
+export const styleOverlayPanelVariants = cva(
+  "origin-top-right transition-all duration-macro-medium ease-out max-h-[calc(100%-var(--static-space-4))]",
+  {
+    variants: {
+      open: {
+        true: "visible opacity-100 z-[3] scale-100 blur-none",
+        false: "invisible opacity-0 -z-[1] scale-[0.2] blur-[0.25rem] pointer-events-none",
+      },
+    },
+    defaultVariants: {
+      open: false,
+    },
+  },
+);
+
+export const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
+  ({ iconButtonProps, children, zIndex = 2, className, ...rest }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const togglePanel = () => {
@@ -21,21 +40,31 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
 
     return (
       <Flex ref={ref} position="static" zIndex={zIndex}>
-        {!isOpen && <Flex onClick={togglePanel}>{children}</Flex>}
+        {!isOpen && (
+          <Flex
+            onClick={togglePanel}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                togglePanel();
+              }
+            }}
+          >
+            {children}
+          </Flex>
+        )}
         <Flex
           as="aside"
           zIndex={3}
-          className={`${styles.panel} ${isOpen && styles.open}`}
+          className={cn(styleOverlayPanelVariants({ open: isOpen }), className)}
           maxWidth={28}
-          style={{
-            maxHeight: "calc(100% - var(--static-space-4))",
-          }}
           fillHeight
           position="absolute"
           shadow="xl"
           top="2"
           right="2"
-          transition="macro-medium"
           background="page"
           overflow="hidden"
           radius="xl"
@@ -56,9 +85,13 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
             />
             <IconButton
               variant="secondary"
-              onClick={togglePanel}
               icon="close"
+              aria-label="Close style panel"
               {...iconButtonProps}
+              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                togglePanel();
+                iconButtonProps?.onClick?.(e);
+              }}
             />
           </Flex>
         </Flex>
@@ -68,4 +101,3 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
 );
 
 StyleOverlay.displayName = "StyleOverlay";
-export { StyleOverlay };

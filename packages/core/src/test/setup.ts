@@ -8,6 +8,12 @@ class ResizeObserverMock {
   disconnect() {}
 }
 
+class IntersectionObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
 const createStorageMock = () => {
   let store: Record<string, string> = {};
   return {
@@ -34,6 +40,19 @@ const installBrowserMocks = () => {
       configurable: true,
       writable: true,
       value: ResizeObserverMock,
+    });
+  }
+
+  if (!("IntersectionObserver" in globalThis)) {
+    Object.defineProperty(globalThis, "IntersectionObserver", {
+      configurable: true,
+      writable: true,
+      value: IntersectionObserverMock,
+    });
+    Object.defineProperty(window, "IntersectionObserver", {
+      configurable: true,
+      writable: true,
+      value: IntersectionObserverMock,
     });
   }
 

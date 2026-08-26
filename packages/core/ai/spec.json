@@ -2032,7 +2032,7 @@
     "StyleProps"
    ],
    "props": {
-    "iconButtonProps": "Partial<React.ComponentProps<typeof IconButton>>",
+    "iconButtonProps": "Partial<IconButtonProps>",
     "children": "!React.ReactNode",
     "zIndex": "DisplayProps[\"zIndex\"] = 2"
    }
