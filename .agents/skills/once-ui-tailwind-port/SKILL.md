@@ -45,7 +45,17 @@ For interactive or style-heavy components with distinct visual states and size m
    - Always destructure component-specific props (`variant`, `size`, `radius`, `weight`, `color`) before passing `...props` to `generateClasses`.
    - This prevents `generateClasses` from mistaking component variants for typography variants (like `heading-strong-xl`).
 
-4. **Standard CVA + Generator Pattern**:
+4. **Cache `cva` Base Classes at Module Scope**:
+   - If a component has no runtime-variant arguments to `cva()` (e.g., only a static base class), call it once at module scope and reuse the result. Do **not** invoke `cva()` inside the render path.
+   ```tsx
+   // ✅ Good — evaluated once, reused forever
+   const BLOB_FX_BASE = blobFxVariants();
+
+   // ❌ Bad — creates a new function call on every render
+   className={cn(blobFxVariants(), className)}
+   ```
+
+5. **Standard CVA + Generator Pattern**:
 ```tsx
 import { cva } from "class-variance-authority";
 import { generateClasses } from "../classes/generator";
@@ -171,6 +181,7 @@ useEffect(() => {
   - Interactive callbacks (`onClick`, `href`, drag handlers).
   - Styling props, gaps, dimensions, responsive props.
   - Whether the component has multi-variant style matrices (`variant`, `size`) requiring `cva`.
+  - **Whether the component generates per-instance dynamic CSS (keyframes, random values, seed-based styles).** If yes, plan for the CSS-custom-properties optimization (see Section 8).
 
 ### Step 2: Implement the Ported Component
 1. For complex/interactive components with variants (`Button`, `IconButton`, `ToggleButton`, `Chip`, `Tag`, `Badge`, etc.), define `export const [component]Variants = cva(...)`.
@@ -179,29 +190,11 @@ useEffect(() => {
 4. Remove inline `parsePosition`, `parseToken`, `translateXValue`, or manual string dimensions.
 5. If the component has an obsolete `.module.scss` file, remove it (`rm src/components/[Component].module.scss`).
 6. For consolidated 3-file components (`Flex`, `Grid`), re-export backward compatibility aliases (`Server*`, `Client*`).
-
-### Step 3: Wrapper Components (`Row`, `Column`, etc.)
-For convenience wrapper components that extend `Flex` or `Grid`:
-- Extend `React.ComponentProps<typeof Flex>` (or `[Component]Props`).
-- Forward `ref` and spread props cleanly:
-```tsx
-import { forwardRef } from "react";
-import { Flex } from "./Flex";
-
-export interface RowProps extends React.ComponentProps<typeof Flex> {
-  children?: React.ReactNode;
-}
-
-export const Row = forwardRef<HTMLDivElement, RowProps>(({ children, ...rest }, ref) => {
-  return (
-    <Flex ref={ref} {...rest}>
-      {children}
-    </Flex>
-  );
-});
-
-Row.displayName = "Row";
-```
+7. **Apply runtime optimizations** (Section 8):
+   - Wrap seed-derived or expensive computations in `useMemo`.
+   - Replace per-instance `<style dangerouslySetInnerHTML>` with CSS custom properties + static keyframes.
+   - Cache static `cva()` results at module scope.
+   - Wrap pure presentation components in `React.memo`.
 
 ---
 
@@ -238,3 +231,108 @@ Always run the following steps in sequence:
    git add packages/core/src/components/[Component].tsx packages/core/src/__tests__/[Component].test.tsx packages/core/ai
    git commit -m "refactor(core): port [Component] to Tailwind CSS and generator"
    ```
+
+---
+
+## 8. Runtime Optimization & Anti-Patterns
+
+When a component computes values from props (especially `seed`, `id`, or random offsets) and injects dynamic CSS, follow these rules to avoid re-computation, DOM pollution, and unnecessary re-renders.
+
+### 8.1 Memoize Seed-Derived / Expensive Values
+Never recalculate deterministic pseudo-random values inside the render body. Wrap them in `useMemo` keyed to the seed (or whichever prop drives the computation).
+
+```tsx
+// ❌ Bad — values jump on every parent re-render
+const random1 = ((seed * 9301 + 49297) % 233280) / 233280;
+
+// ✅ Good — stable for the lifetime of this seed
+const { durations, offsets } = useMemo(() => {
+  const random1 = ((seed * 9301 + 49297) % 233280) / 233280;
+  const random2 = ((seed * 4877 + 37991) % 233280) / 233280;
+  const random3 = ((seed * 7919 + 28411) % 233280) / 233280;
+  return {
+    durations: { d1: 8 + (random1 - 0.5) * 3.2, /* ... */ },
+    offsets:   { o1: 1 + (random1 - 0.5) * 0.6, /* ... */ },
+  };
+}, [seed]);
+```
+
+### 8.2 Never Inject Per-Instance `<style>` Tags
+Do **not** use `dangerouslySetInnerHTML` to inject unique `@keyframes` per `seed` or per mount. It bloats the DOM and forces React to reconcile style nodes.
+
+**Preferred approach:** Define **static** keyframes once in a global CSS file (or CSS module), then drive per-instance variation through **CSS custom properties**.
+
+**Global CSS / Tailwind `@layer`:**
+```css
+@keyframes blob-fx-1 {
+  0%, 100% { transform: translateX(0); }
+  33%      { transform: translateX(var(--blob-1-33)); }
+  66%      { transform: translateX(var(--blob-1-66)); }
+}
+/* repeat for blob-fx-2, blob-fx-3, etc. */
+```
+
+**Component:**
+```tsx
+const cssVars = useMemo<CSSProperties>(() => ({
+  "--blob-1-33": `${4 * offsets.o1}rem`,
+  "--blob-1-66": `${-3 * offsets.o1}rem`,
+  /* ... */
+}), [offsets]);
+
+<Background
+  style={{
+    ...cssVars,
+    animation: `blob-fx-1 ${durations.d1}s ease-in-out infinite`,
+  }}
+/>
+```
+
+If global stylesheets are not an option, inject the keyframes **once per application** via `useInsertionEffect` in a dedicated hook — never inside the component render.
+
+### 8.3 Cache Static `cva()` Results
+If `cva()` is called with no runtime-variant arguments (only base classes), evaluate it once at module scope and reuse the string.
+
+```tsx
+// ✅ Good
+const BLOB_FX_BASE = blobFxVariants();
+className={cn(BLOB_FX_BASE, className)}
+
+// ❌ Bad
+className={cn(blobFxVariants(), className)}
+```
+
+### 8.4 Wrap Pure Presentation Components in `React.memo`
+If a component only renders props and children (no internal state), export it wrapped in `memo` so parent re-renders don't force unnecessary subtree work.
+
+```tsx
+import { forwardRef, memo } from "react";
+
+const BlobFx = forwardRef<HTMLDivElement, BlobFxProps>(...);
+BlobFx.displayName = "BlobFx";
+
+export default memo(BlobFx);
+export { BlobFx };
+```
+
+### 8.5 Keep `style` Objects Stable
+When spreading dynamic `style` objects into children, memoize them so React's diffing sees referential equality across renders.
+
+```tsx
+// ❌ Bad — new object every render
+style={{ animation: `...`, ...cssVars }}
+
+// ✅ Good
+const mergedStyle = useMemo(() => ({ ...cssVars, animation: `...` }), [cssVars, duration]);
+```
+
+### 8.6 Checklist for Dynamic-CSS Components
+Before committing a port that involves animations, random values, or seed-based styles, verify:
+
+- [ ] No `dangerouslySetInnerHTML` injecting `<style>` inside the component.
+- [ ] No `cva()` invocation on every render for static base classes.
+- [ ] Expensive / deterministic computations wrapped in `useMemo`.
+- [ ] CSS custom properties used for per-instance animation variation.
+- [ ] Component exported with `memo` if it has no internal state.
+- [ ] `style` objects are memoized or constructed from stable references.
+```
