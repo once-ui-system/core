@@ -544,7 +544,7 @@
     "trigger": "\"mount\" | \"hover\" | \"manual\" | \"click\" = mount",
     "active": "boolean = true",
     "reducedMotion": "boolean | \"auto\" = auto",
-    "children": "React.ReactNode"
+    "children": "ReactNode"
    }
   },
   "Checkbox": {

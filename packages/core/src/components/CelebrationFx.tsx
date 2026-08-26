@@ -1,21 +1,27 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Flex } from ".";
+import { cva } from "class-variance-authority";
+import type { MouseEvent, ReactNode } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import { cn } from "../classes/utils";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { Flex, type FlexComponentProps } from "./Flex";
 
-type CelebrationType = "confetti" | "fireworks";
+export type CelebrationType = "confetti" | "fireworks";
 
-interface CelebrationFxProps extends React.ComponentProps<typeof Flex> {
+export const celebrationFxVariants = cva("relative overflow-hidden w-full h-full");
+const CELEBRATION_FX_BASE = celebrationFxVariants();
+
+export interface CelebrationFxProps extends FlexComponentProps {
   type?: CelebrationType;
   speed?: number;
   colors?: string[];
   intensity?: number;
   duration?: number;
   trigger?: "mount" | "hover" | "manual" | "click";
-  active?: boolean; // For manual trigger
+  active?: boolean;
   reducedMotion?: boolean | "auto";
-  children?: React.ReactNode;
+  children?: ReactNode;
 }
 
 interface ConfettiPiece {
@@ -55,7 +61,7 @@ interface FireworkParticle {
   maxLife: number;
 }
 
-const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
+const CelebrationFx = forwardRef<HTMLDivElement, CelebrationFxProps>(
   (
     {
       type = "confetti",
@@ -66,10 +72,16 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
       trigger = "mount",
       active = true,
       reducedMotion = "auto",
+      cursor,
+      className,
+      style,
       children,
+      onClick,
+      onMouseEnter,
+      onMouseLeave,
       ...rest
     },
-    forwardedRef,
+    ref,
   ) => {
     const { shouldAnimate } = useReducedMotion(reducedMotion);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -82,15 +94,7 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
     const fireworkTimerRef = useRef<number>(0);
     const clickPositionRef = useRef<{ x: number; y: number } | null>(null);
 
-    useEffect(() => {
-      if (forwardedRef) {
-        if ("current" in forwardedRef) {
-          forwardedRef.current = containerRef.current;
-        } else if (typeof forwardedRef === "function") {
-          forwardedRef(containerRef.current);
-        }
-      }
-    }, [forwardedRef]);
+    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
 
     // Handle manual trigger
     useEffect(() => {
@@ -112,7 +116,6 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
       const ctx = canvas.getContext("2d");
       if (!ctx) return;
 
-      // Set canvas size
       let canvasWidth = 0;
       let canvasHeight = 0;
 
@@ -120,33 +123,43 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
         const rect = container.getBoundingClientRect();
         canvasWidth = rect.width;
         canvasHeight = rect.height;
-        canvas.width = rect.width * 2; // 2x for retina
-        canvas.height = rect.height * 2;
-        canvas.style.width = `${rect.width}px`;
-        canvas.style.height = `${rect.height}px`;
-        ctx.scale(2, 2); // Scale for retina
+        canvas.width = Math.floor(rect.width * 2); // 2x for retina
+        canvas.height = Math.floor(rect.height * 2);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.scale(2, 2);
       };
 
       updateSize();
       window.addEventListener("resize", updateSize);
 
+      let resizeObserver: ResizeObserver | null = null;
+      if (typeof ResizeObserver !== "undefined") {
+        resizeObserver = new ResizeObserver(() => {
+          updateSize();
+        });
+        resizeObserver.observe(container);
+      }
+
       // Parse colors - convert token names to CSS variables
       const parsedColors = colors.map((color) => {
         const computedColor = getComputedStyle(container).getPropertyValue(`--${color}`);
-        return computedColor || color;
+        const trimmed = computedColor?.trim();
+        return trimmed || color;
       });
 
       // Initialize confetti
       const initializeConfetti = () => {
         const particles: ConfettiPiece[] = [];
         const shapes: ("rectangle" | "circle" | "triangle")[] = ["rectangle", "circle", "triangle"];
+        const effectiveHeight = canvasHeight > 0 ? canvasHeight : 400;
+        const effectiveWidth = canvasWidth > 0 ? canvasWidth : 400;
 
         for (let i = 0; i < intensity; i++) {
           // Stagger particles more dramatically over a larger vertical range
-          const stagger = (i / intensity) * canvasHeight * 2;
+          const stagger = (i / intensity) * effectiveHeight * 2;
           particles.push({
-            x: Math.random() * canvasWidth,
-            y: -canvasHeight - Math.random() * canvasHeight - stagger,
+            x: Math.random() * effectiveWidth,
+            y: -effectiveHeight - Math.random() * effectiveHeight - stagger,
             width: 8 + Math.random() * 8,
             height: 6 + Math.random() * 6,
             color: parsedColors[Math.floor(Math.random() * parsedColors.length)],
@@ -161,22 +174,6 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
         }
 
         return particles;
-      };
-
-      // Create a new firework (explodes immediately at random or click position)
-      const createFirework = (clickPos?: { x: number; y: number }) => {
-        const firework: Firework = {
-          x: clickPos ? clickPos.x : Math.random() * canvasWidth,
-          y: clickPos ? clickPos.y : canvasHeight * (0.2 + Math.random() * 0.4),
-          targetY: 0, // Not used anymore
-          velocityY: 0,
-          color: parsedColors[Math.floor(Math.random() * parsedColors.length)],
-          exploded: true, // Start already exploded
-          particles: [],
-        };
-        // Explode immediately
-        explodeFirework(firework);
-        return firework;
       };
 
       // Explode firework into particles
@@ -200,6 +197,23 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
         firework.exploded = true;
       };
 
+      // Create a new firework (explodes immediately at random or click position)
+      const createFirework = (clickPos?: { x: number; y: number }) => {
+        const effectiveHeight = canvasHeight > 0 ? canvasHeight : 400;
+        const effectiveWidth = canvasWidth > 0 ? canvasWidth : 400;
+        const firework: Firework = {
+          x: clickPos ? clickPos.x : Math.random() * effectiveWidth,
+          y: clickPos ? clickPos.y : effectiveHeight * (0.2 + Math.random() * 0.4),
+          targetY: 0,
+          velocityY: 0,
+          color: parsedColors[Math.floor(Math.random() * parsedColors.length)],
+          exploded: true,
+          particles: [],
+        };
+        explodeFirework(firework);
+        return firework;
+      };
+
       // Initialize particles only if not already initialized
       if (particlesRef.current.length === 0 && type === "confetti") {
         particlesRef.current = initializeConfetti();
@@ -211,10 +225,13 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
 
         // Check if we should still be emitting new particles
         const shouldEmit =
-          trigger === "hover" ? isHoveredRef.current : 
-          trigger === "manual" ? active : 
-          trigger === "click" ? clickPositionRef.current !== null :
-          isEmittingRef.current;
+          trigger === "hover"
+            ? isHoveredRef.current
+            : trigger === "manual"
+              ? active
+              : trigger === "click"
+                ? clickPositionRef.current !== null
+                : isEmittingRef.current;
 
         // Check duration limit
         if (duration && isEmittingRef.current && trigger !== "manual") {
@@ -227,13 +244,10 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
         if (type === "confetti") {
           // Update and draw confetti
           (particlesRef.current as ConfettiPiece[]).forEach((piece) => {
-            // Update physics
             piece.velocityY += piece.gravity;
             piece.x += piece.velocityX;
             piece.y += piece.velocityY;
             piece.rotation += piece.rotationSpeed;
-
-            // Add some air resistance
             piece.velocityX *= 0.99;
 
             // Only respawn if we're still emitting
@@ -247,7 +261,6 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
 
             // Only draw if still on screen
             if (piece.y < canvasHeight + 100) {
-              // Draw confetti piece
               ctx.save();
               ctx.translate(piece.x, piece.y);
               ctx.rotate(piece.rotation);
@@ -275,13 +288,11 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
         } else if (type === "fireworks") {
           // Launch new fireworks
           if (trigger === "click" && clickPositionRef.current) {
-            // Fire from click position
             particlesRef.current.push(createFirework(clickPositionRef.current));
             clickPositionRef.current = null;
           } else {
             fireworkTimerRef.current++;
             if (shouldEmit && fireworkTimerRef.current > 20 / speed) {
-              // Launch new firework every ~20 frames
               fireworkTimerRef.current = 0;
               particlesRef.current.push(createFirework());
             }
@@ -289,21 +300,16 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
 
           // Update and draw fireworks (explosion particles only)
           (particlesRef.current as Firework[]).forEach((firework) => {
-            // Update and draw explosion particles
             firework.particles.forEach((particle) => {
               particle.life++;
 
               if (particle.life < particle.maxLife) {
-                // Update position
                 particle.x += particle.velocityX;
                 particle.y += particle.velocityY;
                 particle.velocityY += 0.1; // Gravity
-
-                // Fade out
                 particle.opacity = 1 - particle.life / particle.maxLife;
 
-                // Draw particle
-                ctx.globalAlpha = particle.opacity;
+                ctx.globalAlpha = Math.max(0, particle.opacity);
                 ctx.fillStyle = particle.color;
                 ctx.beginPath();
                 ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
@@ -311,13 +317,12 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
               }
             });
           });
-          
+
           // Clean up dead fireworks (only when not emitting)
           if (!shouldEmit) {
-            particlesRef.current = (particlesRef.current as Firework[]).filter((firework) => {
-              // Keep if any particles are still alive
-              return firework.particles.some(p => p.life < p.maxLife);
-            });
+            particlesRef.current = (particlesRef.current as Firework[]).filter((firework) =>
+              firework.particles.some((p) => p.life < p.maxLife),
+            );
           }
         }
 
@@ -331,13 +336,17 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
 
       return () => {
         window.removeEventListener("resize", updateSize);
+        if (resizeObserver) {
+          resizeObserver.disconnect();
+        }
         if (animationRef.current) {
           cancelAnimationFrame(animationRef.current);
         }
       };
-    }, [type, colors, speed, intensity, duration, trigger, shouldAnimate]);
+    }, [type, colors, speed, intensity, duration, trigger, active, shouldAnimate]);
 
-    const handleMouseEnter = () => {
+    const handleMouseEnter = (e: MouseEvent<HTMLDivElement>) => {
+      onMouseEnter?.(e);
       if (trigger === "hover" && !isHoveredRef.current) {
         isHoveredRef.current = true;
         isEmittingRef.current = true;
@@ -345,29 +354,36 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
       }
     };
 
-    const handleMouseLeave = () => {
+    const handleMouseLeave = (e: MouseEvent<HTMLDivElement>) => {
+      onMouseLeave?.(e);
       if (trigger === "hover" && isHoveredRef.current) {
         isHoveredRef.current = false;
       }
     };
 
-    const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (trigger === "click" && containerRef.current) {
-        const rect = containerRef.current.getBoundingClientRect();
+    const handleClick = (e: MouseEvent<HTMLDivElement>) => {
+      onClick?.(e);
+      const container = containerRef.current;
+      if (trigger === "click" && container) {
+        const rect = container.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
+
         if (type === "confetti") {
-          // For confetti, add burst of particles from click position
-          const shapes: ("rectangle" | "circle" | "triangle")[] = ["rectangle", "circle", "triangle"];
+          const shapes: ("rectangle" | "circle" | "triangle")[] = [
+            "rectangle",
+            "circle",
+            "triangle",
+          ];
           const canvas = canvasRef.current;
           if (!canvas) return;
-          
+
           const parsedColors = colors.map((color) => {
-            const computedColor = getComputedStyle(containerRef.current!).getPropertyValue(`--${color}`);
-            return computedColor || color;
+            const computedColor = getComputedStyle(container).getPropertyValue(`--${color}`);
+            const trimmed = computedColor?.trim();
+            return trimmed || color;
           });
-          
+
           for (let i = 0; i < intensity; i++) {
             const angle = (Math.PI * 2 * i) / intensity;
             const velocity = 2 + Math.random() * 3;
@@ -399,26 +415,15 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
         fill
         position="relative"
         overflow="hidden"
+        cursor={trigger === "click" ? (cursor ?? "interactive") : cursor}
+        className={cn(CELEBRATION_FX_BASE, className)}
+        style={style}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
-        style={{
-          cursor: trigger === "click" ? "pointer" : undefined,
-          ...rest.style,
-        }}
         {...rest}
       >
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            pointerEvents: "none",
-          }}
-        />
+        <canvas ref={canvasRef} className="pointer-events-none absolute inset-0 size-full" />
         {children}
       </Flex>
     );
@@ -426,4 +431,5 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
 );
 
 CelebrationFx.displayName = "CelebrationFx";
+
 export { CelebrationFx };
