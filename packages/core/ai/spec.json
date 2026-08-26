@@ -221,7 +221,9 @@
     "touch": "\"disable\" | \"enable\" | \"display\" = enable",
     "portal": "boolean = false",
     "placement": "Placement = top",
-    "offsetDistance": "SpacingToken = 8"
+    "offsetDistance": "SpacingToken = 8",
+    "className": "string",
+    "style": "CSSProperties"
    }
   },
   "Arrow": {
@@ -1126,8 +1128,8 @@
   "HoverCard": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Animation"
+    "Animation",
+    "Flex"
    ],
    "mixins": [
     "CommonProps",

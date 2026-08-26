@@ -1,29 +1,25 @@
 "use client";
 
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  ReactNode,
+import type { Placement } from "@floating-ui/react-dom";
+import { autoUpdate, flip, shift, useFloating } from "@floating-ui/react-dom";
+import {
+  type CSSProperties,
   forwardRef,
-  useImperativeHandle,
+  type ReactNode,
   useCallback,
-  CSSProperties,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
 import { createPortal } from "react-dom";
-import {
-  useFloating,
-  shift,
-  flip,
-  autoUpdate,
-  Placement,
-} from "@floating-ui/react-dom";
-import { Flex } from ".";
-import { SpacingToken } from "../types";
+import { cn } from "../classes/utils";
+import type { SpacingToken } from "../types";
+import { Flex, type FlexComponentProps } from "./Flex";
 
-type TriggerType = "hover" | "click" | "manual";
+export type TriggerType = "hover" | "click" | "manual";
 
-type EasingCurve = 
+export type EasingCurve =
   | "linear"
   | "ease"
   | "ease-in"
@@ -32,7 +28,7 @@ type EasingCurve =
   | "spring"
   | "bounce";
 
-export interface AnimationProps extends React.ComponentProps<typeof Flex> {
+export interface AnimationProps extends FlexComponentProps {
   trigger?: ReactNode;
   children: ReactNode;
   fade?: number;
@@ -57,6 +53,8 @@ export interface AnimationProps extends React.ComponentProps<typeof Flex> {
   portal?: boolean;
   placement?: Placement;
   offsetDistance?: SpacingToken;
+  className?: string;
+  style?: CSSProperties;
 }
 
 const easingCurves: Record<EasingCurve, string> = {
@@ -95,17 +93,19 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
       portal = false,
       placement = "top",
       offsetDistance = "8",
+      className,
+      style,
       ...flex
     },
     ref,
   ) => {
     const [internalActive, setInternalActive] = useState(false);
-    const [isClicked, setIsClicked] = useState(false);
+    const [_isClicked, setIsClicked] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [isBrowser, setIsBrowser] = useState(false);
     const [isPositioned, setIsPositioned] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    
+
     const wrapperRef = useRef<HTMLDivElement>(null);
     const floatingRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -113,10 +113,26 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
     useEffect(() => {
+      const checkTouchDevice = () => {
+        const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+        const hasPointer = window.matchMedia("(pointer: fine)").matches;
+        return hasTouch && !hasPointer;
+      };
+
+      setIsTouchDevice(checkTouchDevice());
+
+      const mediaQuery = window.matchMedia("(pointer: fine)");
+      const handlePointerChange = () => setIsTouchDevice(checkTouchDevice());
+
+      mediaQuery.addEventListener("change", handlePointerChange);
+
+      return () => {
+        mediaQuery.removeEventListener("change", handlePointerChange);
+      };
+    }, []);
+
+    useEffect(() => {
       setMounted(true);
-      setIsTouchDevice(
-        "ontouchstart" in window || navigator.maxTouchPoints > 0
-      );
       if (portal) {
         setIsBrowser(true);
       }
@@ -124,30 +140,33 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 
     const isControlled = controlledActive !== undefined;
     const rawActive = isControlled ? controlledActive : internalActive;
-    
+
     // Determine if animation should be active based on touch mode
     const isActive = (() => {
       // If on touch device, handle based on touch prop
       if (isTouchDevice && triggerType === "hover") {
-        if (touch === 'disable') return false;
-        if (touch === 'display') return true;
-        // touch === 'enable', fall through to normal logic
+        if (touch === "disable") return false;
+        if (touch === "display") return true;
+        // touch === "enable", fall through to normal logic
       }
-      
+
       // For non-touch or when mounted, use the raw active state
       if (!mounted && !isTouchDevice) return false;
-      
+
       return rawActive;
     })();
 
     // Floating UI for portal positioning
-    const { x, y, strategy, placement: finalPlacement, refs: floatingRefs } = useFloating({
+    const {
+      x,
+      y,
+      strategy,
+      placement: finalPlacement,
+      refs: floatingRefs,
+    } = useFloating({
       placement,
       open: isActive,
-      middleware: [
-        flip(),
-        shift(),
-      ],
+      middleware: [flip(), shift()],
       whileElementsMounted: portal ? autoUpdate : undefined,
     });
 
@@ -155,8 +174,8 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
       if (portal && wrapperRef.current) {
         floatingRefs.setReference(wrapperRef.current);
       }
-    }, [portal, floatingRefs, mounted]);
-    
+    }, [portal, floatingRefs]);
+
     useEffect(() => {
       if (portal && isActive && mounted) {
         setIsPositioned(false);
@@ -172,9 +191,8 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
           }
         }, 0);
         return () => clearTimeout(timeoutId);
-      } else {
-        setIsPositioned(false);
       }
+      setIsPositioned(false);
     }, [portal, isActive, mounted, floatingRefs]);
 
     const handleMouseEnter = useCallback(() => {
@@ -213,10 +231,13 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 
     const handleClick = useCallback(() => {
       if (triggerType === "click") {
-        setIsClicked(!isClicked);
-        setInternalActive(!isClicked);
+        setIsClicked((prev) => {
+          const next = !prev;
+          setInternalActive(next);
+          return next;
+        });
       }
-    }, [triggerType, isClicked, setInternalActive]);
+    }, [triggerType]);
 
     useEffect(() => {
       return () => {
@@ -226,82 +247,86 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
       };
     }, []);
 
-    const getAnimationStyle = (): React.CSSProperties => {
+    const getAnimationStyle = (): CSSProperties => {
       // For portals, always use center origin for consistent animations
-      const calculatedTransformOrigin = portal ? 'center center' : transformOrigin;
-      
+      const calculatedTransformOrigin = portal ? "center center" : transformOrigin;
+
       // For portals, don't transition position (top/left) - only animate opacity, transform, filter
-      const transitionProps = portal 
+      const transitionProps = portal
         ? `opacity ${duration}ms ${easingCurves[easing]}, transform ${duration}ms ${easingCurves[easing]}, filter ${duration}ms ${easingCurves[easing]}`
         : `all ${duration}ms ${easingCurves[easing]}`;
-      
-      const baseStyle: React.CSSProperties = {
+
+      const baseStyle: CSSProperties = {
         transition: transitionProps,
         transformOrigin: calculatedTransformOrigin,
       };
 
       // For portals, animation should trigger based on isPositioned, not isActive
       // For touch="display", wait until mounted to determine state
-      const effectiveActive = portal ? isPositioned : (touch === 'display' && !mounted ? false : isActive);
+      const effectiveActive = portal
+        ? isPositioned
+        : touch === "display" && !mounted
+          ? false
+          : isActive;
       const shouldAnimate = reverse ? !effectiveActive : effectiveActive;
 
       // Combine styles from multiple animations
-      let combinedStyle: React.CSSProperties = { ...baseStyle };
+      const combinedStyle: CSSProperties = { ...baseStyle };
       const transforms: string[] = [];
-      
+
       if (fade !== undefined) {
         combinedStyle.opacity = shouldAnimate ? 1 : fade;
       }
-      
+
       if (scale !== undefined) {
         transforms.push(shouldAnimate ? "scale(1)" : `scale(${scale})`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (blur !== undefined) {
         combinedStyle.filter = shouldAnimate ? "blur(0px)" : `blur(${blur}px)`;
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (slideUp !== undefined) {
         transforms.push(shouldAnimate ? "translateY(0)" : `translateY(${slideUp}rem)`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (slideDown !== undefined) {
         transforms.push(shouldAnimate ? "translateY(0)" : `translateY(-${slideDown}rem)`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (slideLeft !== undefined) {
         transforms.push(shouldAnimate ? "translateX(0)" : `translateX(${slideLeft}rem)`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (slideRight !== undefined) {
         transforms.push(shouldAnimate ? "translateX(0)" : `translateX(-${slideRight}rem)`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (zoomIn !== undefined) {
         transforms.push(shouldAnimate ? `scale(${zoomIn})` : "scale(1)");
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (zoomOut !== undefined) {
         transforms.push(shouldAnimate ? `scale(${zoomOut})` : "scale(1)");
         if (combinedStyle.opacity === undefined) {
@@ -335,40 +360,46 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
             >
               {trigger}
             </Flex>
-            {isActive && isBrowser && createPortal(
-              <Flex
-                ref={floatingRef}
-                zIndex={10}
-                paddingTop={finalPlacement.includes("bottom") ? offsetDistance : undefined}
-                paddingBottom={finalPlacement.includes("top") ? offsetDistance : undefined}
-                paddingLeft={finalPlacement.includes("right") ? offsetDistance : undefined}
-                paddingRight={finalPlacement.includes("left") ? offsetDistance : undefined}
-                style={{
-                  position: strategy,
-                  top: y ?? 0,
-                  left: x ?? 0,
-                  ...animationStyle,
-                  visibility: isPositioned ? 'visible' : 'hidden',
-                  pointerEvents: isActive ? "auto" : "none",
-                }}
-                onMouseEnter={triggerType === "hover" ? handleMouseEnter : undefined}
-                onMouseLeave={triggerType === "hover" ? handleMouseLeave : undefined}
-                aria-hidden={!isActive}
-                {...flex}
-              >
-                {children}
-              </Flex>,
-              document.body
-            )}
+            {isActive &&
+              isBrowser &&
+              createPortal(
+                <Flex
+                  ref={floatingRef}
+                  zIndex={10}
+                  paddingTop={finalPlacement.includes("bottom") ? offsetDistance : undefined}
+                  paddingBottom={finalPlacement.includes("top") ? offsetDistance : undefined}
+                  paddingLeft={finalPlacement.includes("right") ? offsetDistance : undefined}
+                  paddingRight={finalPlacement.includes("left") ? offsetDistance : undefined}
+                  className={cn(className)}
+                  style={{
+                    position: strategy,
+                    top: y ?? 0,
+                    left: x ?? 0,
+                    ...animationStyle,
+                    visibility: isPositioned ? "visible" : "hidden",
+                    pointerEvents: isActive ? "auto" : "none",
+                    ...style,
+                  }}
+                  onMouseEnter={triggerType === "hover" ? handleMouseEnter : undefined}
+                  onMouseLeave={triggerType === "hover" ? handleMouseLeave : undefined}
+                  aria-hidden={!isActive}
+                  {...flex}
+                >
+                  {children}
+                </Flex>,
+                document.body,
+              )}
           </>
         );
       }
-      
+
       // Normal mode: absolute positioning
       return (
         <Flex
           ref={wrapperRef}
           onMouseLeave={triggerType === "hover" ? handleMouseLeave : undefined}
+          className={cn(className)}
+          style={style}
           {...flex}
         >
           <Flex
@@ -404,7 +435,11 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
         onFocus={triggerType === "hover" ? handleFocus : undefined}
         onBlur={triggerType === "hover" ? handleBlur : undefined}
         onClick={triggerType === "click" ? handleClick : undefined}
-        style={animationStyle}
+        className={cn(className)}
+        style={{
+          ...animationStyle,
+          ...style,
+        }}
         {...flex}
       >
         {children}
@@ -414,4 +449,5 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 );
 
 Animation.displayName = "Animation";
+
 export { Animation };

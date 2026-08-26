@@ -437,8 +437,8 @@
   "HoverCard": {
    "group": "components",
    "extends": [
-    "Flex",
-    "Animation"
+    "Animation",
+    "Flex"
    ],
    "purpose": "HoverCard component",
    "tags": [

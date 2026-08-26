@@ -1135,14 +1135,6 @@
       "tags": []
     },
     {
-      "char": "💕",
-      "description": "two hearts",
-      "aliases": [
-        "two_hearts"
-      ],
-      "tags": []
-    },
-    {
       "char": "💟",
       "description": "heart decoration",
       "aliases": [
@@ -14028,14 +14020,6 @@
       "description": "flag: Antigua & Barbuda",
       "aliases": [
         "antigua_barbuda"
-      ],
-      "tags": []
-    },
-    {
-      "char": "🇦🇮",
-      "description": "flag: Anguilla",
-      "aliases": [
-        "anguilla"
       ],
       "tags": []
     },
