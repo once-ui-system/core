@@ -9,7 +9,9 @@
   "separator": "string",
   "decimals": "number",
   "effect": "\"simple\" | \"wheel\" | \"smooth\" = simple",
-  "children": "React.ReactNode"
+  "className": "string",
+  "style": "CSSProperties",
+  "children": "ReactNode"
  },
  "mixinsRef": []
 }
