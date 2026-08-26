@@ -13,9 +13,11 @@
   "StyleProps"
  ],
  "props": {
-  "children": "!React.ReactNode",
+  "children": "ReactNode",
   "intensity": "number = 1",
-  "reducedMotion": "boolean | \"auto\" = auto"
+  "reducedMotion": "boolean | \"auto\" = auto",
+  "className": "string",
+  "style": "CSSProperties"
  },
  "mixinsRef": [
   "CommonProps",
