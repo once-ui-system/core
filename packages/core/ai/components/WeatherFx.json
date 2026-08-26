@@ -22,7 +22,7 @@
   "trigger": "\"mount\" | \"hover\" | \"click\" | \"manual\" = mount",
   "active": "boolean = false",
   "reducedMotion": "boolean | \"auto\" = auto",
-  "children": "React.ReactNode"
+  "children": "ReactNode"
  },
  "mixinsRef": [
   "CommonProps",
