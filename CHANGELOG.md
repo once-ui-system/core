@@ -13,19 +13,31 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
-Tracking toward **1.9.0**, classified **minor** per [RELEASING.md](RELEASING.md):
-additive only — a new package consumers may adopt, new resolution paths, and
-internals changes that keep observable behavior identical. Nothing is removed,
-narrowed, or deprecated, and no peer-dependency floor moves.
+## [1.9.0] — 2026-08-27
+
+Classified **minor** per [RELEASING.md](RELEASING.md). The trigger is the
+shared-internals change: core no longer imports `next/*` at runtime, and the
+build now emits foundations' SCSS/CSS into `dist` as deprecated compat entries.
+Both are intended as improvements that keep observable behavior identical, and
+RELEASING.md puts that class in a minor so it is visible in release notes rather
+than buried in a patch. Everything else is additive or internal.
+
+**Consumers change nothing.** No component, prop, export, token, or CSS class is
+removed or renamed; no type union narrows; no peer-dependency floor moves; the
+package installs exactly the same dependency set as 1.8.3. `^1.8.x` ranges
+resolve to this release, so the ThemeInit fix reaches existing projects on their
+next install without a version bump.
 
 ### Added
 
 - `@once-ui-system/foundations` — tokens, styles, and token-value types extracted
-  into their own package (RFC Phase 1). Core depends on it at build time only and
-  inlines its SCSS/CSS into `dist`, so every existing import and CSS entry
+  into their own package (RFC Phase 1). It is **not published to npm** and is not a
+  dependency of this release: core consumes it at build time only and inlines its
+  SCSS/CSS into `dist`, so every existing import and CSS entry
   (`@once-ui-system/core/css/tokens.css`) keeps working and consumers install
-  nothing new. This is the package a non-React consumer can adopt directly and the
-  base the planned Tailwind token bridge maps onto.
+  nothing new. Publishing it — so a non-React consumer can adopt it directly, and
+  as the base the planned Tailwind token bridge maps onto — is a separate decision
+  on its own timeline.
 - Package-contract and boundary test infrastructure (RFC Phase 0): `check:package`
   (publint + arethetypeswrong), the exports-integrity test, a framework-boundary
   guard (core may not import `next/*`), CSS API-surface snapshots, token
