@@ -17,14 +17,20 @@ For the full directory layout and conventions, see [ARCHITECTURE.md](./ARCHITECT
 
 ## Requirements
 
-**Node `^20.19.0` or `>=22.12.0`** (`.nvmrc` pins 22), and pnpm 10.
+**Node `>=22.12.0`** (`.nvmrc` pins 22), and pnpm 10.
 
-The floor is not cosmetic. Sass depends on chokidar 5, which is ESM-only, and
-loads it through `require()` — that only works on the Node releases where
-`require()` of an ESM module landed: 20.19.0 and 22.12.0. Node 21.x satisfies a
-naive `>=20` range but was retired before that backport, so it fails the
-foundations build with a `ERR_REQUIRE_ESM` stack trace from inside Sass rather
-than anything that names the real problem.
+Two separate reasons for that floor:
+
+- **22.12.0 is where `require()` of an ESM module landed.** Sass depends on
+  chokidar 5, which is ESM-only, and loads it through `require()`. On an older
+  Node the foundations build dies with an `ERR_REQUIRE_ESM` stack trace from
+  inside Sass that names neither Node nor the real constraint. Node 21.x is the
+  nastiest case — it satisfies a naive `>=20` range but was retired before the
+  backport, so it passes the check and still cannot build.
+- **Node 20 reached end of life on 2026-04-30**, and Vercel stops building
+  projects on Node 20 or older from 2026-10-01. The 20.19 line could technically
+  run the build, but there is no reason to keep a dead runtime in the supported
+  set.
 
 ```bash
 nvm use          # picks up .nvmrc
