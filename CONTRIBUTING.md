@@ -9,10 +9,27 @@ This repo uses a monorepo layout with pnpm workspaces and Turborepo:
 | Path | Description |
 |------|-------------|
 | `packages/core` | The Once UI package [@once-ui-system/core](https://www.npmjs.com/package/@once-ui-system/core) — all components, tokens, and utilities |
+| `packages/foundations` | Tokens, styles, and token-value types. Core consumes it at build time and inlines its SCSS/CSS into `dist`; it is not published to npm |
 | `apps/dev` | Local sandbox app for testing components (Next.js 16, port 3001) |
 | `apps/docs` | Documentation site at [docs.once-ui.com](https://docs.once-ui.com) (Next.js 16, port 3000) |
 
 For the full directory layout and conventions, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+
+## Requirements
+
+**Node `^20.19.0` or `>=22.12.0`** (`.nvmrc` pins 22), and pnpm 10.
+
+The floor is not cosmetic. Sass depends on chokidar 5, which is ESM-only, and
+loads it through `require()` — that only works on the Node releases where
+`require()` of an ESM module landed: 20.19.0 and 22.12.0. Node 21.x satisfies a
+naive `>=20` range but was retired before that backport, so it fails the
+foundations build with a `ERR_REQUIRE_ESM` stack trace from inside Sass rather
+than anything that names the real problem.
+
+```bash
+nvm use          # picks up .nvmrc
+node --version   # expect v22.x
+```
 
 ## Running the dev environment
 
