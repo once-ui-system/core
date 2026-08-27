@@ -11,7 +11,7 @@ import pkg from "../../package.json";
  * runs publint + arethetypeswrong against the packed tarball). It exists
  * because the `./icons`, `./types` and `./interfaces` subpaths shipped
  * pointing at `dist/<name>/index.js` while the build emits `dist/<name>.js`,
- * so all three were unresolvable for every consumer until fixed.
+ * so all three were unresolvable for every consumer until fixed in 1.8.3.
  *
  * Requires `dist/` (turbo wires `test` to depend on `build`; locally run
  * `pnpm build` first if this suite errors on a missing dist).

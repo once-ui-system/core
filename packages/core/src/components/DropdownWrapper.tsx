@@ -158,8 +158,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             const floatingStyle = elements.floating.style;
 
             if (fillWidth && triggerRef.current) {
-              const triggerWidth = triggerRef.current.getBoundingClientRect().width;
-              const w = `${Math.max(triggerWidth, 200)}px`;
+              // fillWidth means exactly the trigger's width — no hidden floor.
+              // A wider floor pushes the panel past the trigger on "-end"
+              // placements, which reads as broken positioning.
+              const w = `${triggerRef.current.getBoundingClientRect().width}px`;
               floatingStyle.width = w;
               floatingStyle.minWidth = minWidth ? `${minWidth}rem` : w;
             } else {
@@ -674,6 +676,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                     }}
                   >
                     <Dropdown
+                      // The size() middleware sets the portal's width; the
+                      // visible panel must fill it or it sits detached at the
+                      // portal's left edge on "-end" placements.
+                      fillWidth
                       minWidth={minWidth}
                       radius="l"
                       padding="0"
@@ -768,6 +774,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                   }}
                 >
                   <Dropdown
+                    fillWidth
                     minWidth={minWidth}
                     radius="l"
                     padding="0"
