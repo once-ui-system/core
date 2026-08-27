@@ -3,12 +3,20 @@
 import { Button, Column, DropdownWrapper, Option, Row, Text } from "@once-ui-system/core";
 
 /**
- * Repro page for the DropdownWrapper regressions reported against 1.8.x:
- * 1. fillWidth dropdown not matching trigger width (org-switcher case)
- * 2. placement detaching from the trigger inside a scrollable panel
- *    (Adjustable "Collection layouts" case: fillWidth + bottom-end)
+ * DropdownWrapper check page — permanent regression fixture.
+ *
+ * Anchors the three sizing/placement cases that regressed across 1.8.x
+ * (320px content floor, 200px fillWidth floor, panel not filling the
+ * floating container). Intended target for the planned Playwright
+ * visual-regression suite (see rfcs/2026-08-once-ui-2-architecture.md §5.6).
+ *
+ * Expected behavior:
+ * 1. fillWidth: the visible panel exactly matches the trigger width.
+ * 2. fillWidth + bottom-end in a scrollable panel: panel sits flush under
+ *    the trigger, no overhang, tracks scroll while open.
+ * 3. No fillWidth: panel stays content-sized.
  */
-export default function DropdownRepro() {
+export default function DropdownCheck() {
   return (
     <Row fillWidth gap="24" padding="24" data-testid="root">
       {/* Case 1: org-switcher style — wide fillWidth trigger */}
