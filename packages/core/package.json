@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "description": "Once UI for Next.js NPM package",
   "keywords": [
     "once-ui",
@@ -68,19 +68,19 @@
       "require": "./dist/modules/index.js"
     },
     "./icons": {
-      "types": "./dist/icons/index.d.ts",
-      "import": "./dist/icons/index.js",
-      "require": "./dist/icons/index.js"
+      "types": "./dist/icons.d.ts",
+      "import": "./dist/icons.js",
+      "require": "./dist/icons.js"
     },
     "./types": {
-      "types": "./dist/types/index.d.ts",
-      "import": "./dist/types/index.js",
-      "require": "./dist/types/index.js"
+      "types": "./dist/types.d.ts",
+      "import": "./dist/types.js",
+      "require": "./dist/types.js"
     },
     "./interfaces": {
-      "types": "./dist/interfaces/index.d.ts",
-      "import": "./dist/interfaces/index.js",
-      "require": "./dist/interfaces/index.js"
+      "types": "./dist/interfaces.d.ts",
+      "import": "./dist/interfaces.js",
+      "require": "./dist/interfaces.js"
     },
     "./css/styles.css": "./dist/css/styles.css",
     "./css/tokens.css": "./dist/css/tokens.css",
