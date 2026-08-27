@@ -3,9 +3,9 @@
   "name": "once-ui-monorepo",
   "scripts": {
     "dev": "turbo dev",
-    "dev:core": "pnpm --filter @once-ui-system/core dev",
-    "dev:docs": "pnpm --filter @once-ui-system/docs dev",
-    "dev:dev": "pnpm --filter @once-ui-system/dev dev",
+    "dev:core": "turbo dev --filter=@once-ui-system/core...",
+    "dev:docs": "turbo dev --filter=@once-ui-system/docs...",
+    "dev:dev": "turbo dev --filter=@once-ui-system/dev...",
     "build": "turbo build",
     "build:core": "pnpm --filter @once-ui-system/core build",
     "build:docs": "turbo build --filter=@once-ui-system/docs...",
