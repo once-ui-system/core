@@ -2,6 +2,52 @@ import { SmartLink, InlineCode } from "@once-ui-system/core";
 
 const changelog = [
   {
+    date: "2026-08-26",
+    title: "Once UI 1.8.3",
+    sections: [
+      {
+        title: "Fixes",
+        bullets: [
+          <>Package exports: the <InlineCode>./icons</InlineCode>, <InlineCode>./types</InlineCode> and <InlineCode>./interfaces</InlineCode> subpaths pointed at files the build does not emit, so all three were unresolvable in 1.8.0–1.8.2. Deep imports from those paths now work again</>,
+          <><SmartLink unstyled href="/once-ui/components/dropdownWrapper">DropdownWrapper</SmartLink> with <InlineCode>fillWidth</InlineCode>: the visible panel now fills the trigger&apos;s width. It previously stayed content-sized inside a wider container and rendered detached at the container&apos;s left edge on <InlineCode>-end</InlineCode> placements</>,
+          <><SmartLink unstyled href="/once-ui/components/dropdownWrapper">DropdownWrapper</SmartLink>: removed the hidden 200px width floor on <InlineCode>fillWidth</InlineCode>. It now means exactly the trigger&apos;s width, so small triggers no longer get a dropdown overhanging past their edge</>,
+          <>AI harness: <InlineCode>ai/manifest.json</InlineCode> and <InlineCode>ai/catalog.json</InlineCode> shipped in 1.8.2 still stamped 1.8.1. Artifacts are regenerated and version-stamped, and <InlineCode>docs.once-ui.com/ai/*</InlineCode> now syncs from the package on every build</>,
+        ],
+      },
+    ],
+  },
+  {
+    date: "2026-08-02",
+    title: "Once UI 1.8.2",
+    sections: [
+      {
+        title: "Fixes",
+        bullets: [
+          <><SmartLink unstyled href="/once-ui/components/dropdownWrapper">DropdownWrapper</SmartLink>: removed the forced 320px default min-width on content-sized dropdowns, restoring content-driven sizing</>,
+        ],
+      },
+    ],
+  },
+  {
+    date: "2026-07-30",
+    title: "Once UI 1.8.1",
+    sections: [
+      {
+        title: "Fixes",
+        bullets: [
+          <><SmartLink unstyled href="/once-ui/components/table">Table</SmartLink>: corrected CSS module classes and design tokens so sortable headers, column alignment, striped and hover rows, and the sticky header all render as intended</>,
+          <>AI harness: <InlineCode>ai/gotchas.json</InlineCode> was invalid JSON in 1.8.0 — the <InlineCode>Icon.names</InlineCode> entry had lost its key line, so any consumer parsing the file failed. All 21 gotcha entries are reachable again</>,
+        ],
+      },
+      {
+        title: "Security",
+        bullets: [
+          <>Patched 7 transitive dependency advisories via overrides, and pinned <InlineCode>sharp</InlineCode> to <InlineCode>^0.35.3</InlineCode> for the libvips CVEs (within the package&apos;s declared peer range). None of the package&apos;s own runtime dependencies were affected</>,
+        ],
+      },
+    ],
+  },
+  {
     date: "2026-07-29",
     title: "Once UI 1.8",
     sections: [
@@ -165,7 +211,7 @@ const changelog = [
           <><SmartLink unstyled href="/once-ui/components/card">Card</SmartLink>: Improved border radius, removed hover effect on tap</>,
           <><SmartLink unstyled href="/once-ui/form-controls/input">Input</SmartLink>, <SmartLink unstyled href="/once-ui/form-controls/textarea">Textarea</SmartLink>: Native char count support for maxLength</>,
           <><SmartLink unstyled href="/once-ui/modules/megaMenu">MegaMenu</SmartLink>: Better animations, custom content support, less re-rendering</>,
-          <><SmartLink unstyled href="/once-ui/components/icon">Icon</SmartLink>, <SmartLink unstyled href="/once-ui/components/iconButton">IconButton</SmartLink>, <SmartLink unstyled href="/once-ui/components/headingLink">HeadingLink</SmartLink>: Refactored with Animation component</>,
+          <><SmartLink unstyled href="/once-ui/components/icon">Icon</SmartLink>, <SmartLink unstyled href="/once-ui/components/iconButton">IconButton</SmartLink>, <SmartLink unstyled href="/once-ui/modules/headingLink">HeadingLink</SmartLink>: Refactored with Animation component</>,
           <><SmartLink unstyled href="/once-ui/modules/headingNav">HeadingNav</SmartLink>: Default heading for element</>,
           <><SmartLink unstyled href="/once-ui/components/tooltip">Tooltip</SmartLink>: Fadein animation support</>,
           <><SmartLink unstyled href="/once-ui/components/heading">Heading</SmartLink>, <SmartLink unstyled href="/once-ui/components/text">Text</SmartLink>: Display size line-height adjustments and support for <InlineCode>xs</InlineCode> and <InlineCode>xl</InlineCode> label sizes</>,

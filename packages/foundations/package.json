@@ -1,0 +1,48 @@
+{
+  "name": "@once-ui-system/foundations",
+  "version": "2.0.0-alpha.0",
+  "description": "Once UI design foundations — design tokens and utility styles. Framework-agnostic: no React, no JS runtime.",
+  "keywords": [
+    "once-ui",
+    "design-tokens",
+    "design system",
+    "css",
+    "scss"
+  ],
+  "author": "Once UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/once-ui-system/core.git",
+    "directory": "packages/foundations"
+  },
+  "bugs": {
+    "url": "https://github.com/once-ui-system/core/issues"
+  },
+  "homepage": "https://docs.once-ui.com",
+  "exports": {
+    "./css/tokens.css": "./dist/css/tokens.css",
+    "./css/styles.css": "./dist/css/styles.css",
+    "./scss/*": "./scss/*",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "scss"
+  ],
+  "scripts": {
+    "build": "rimraf dist && sass scss/styles/index.scss:dist/css/styles.css scss/tokens/index.scss:dist/css/tokens.css --style=compressed",
+    "clean": "rimraf dist",
+    "prepare": "pnpm build",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.6",
+    "rimraf": "^6.1.3",
+    "sass": "^1.102.0",
+    "vitest": "^4.1.10"
+  }
+}

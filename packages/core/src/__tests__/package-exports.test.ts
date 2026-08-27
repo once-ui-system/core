@@ -5,14 +5,16 @@ import pkg from "../../package.json";
 
 /**
  * Asserts every non-wildcard path in the package.json `exports` map points at
- * a file that the build actually emits.
+ * a file that the build actually emits (rfcs/2026-08-once-ui-2-architecture.md §5.1).
  *
- * Exists because the `./icons`, `./types` and `./interfaces` subpaths shipped
+ * This is the in-repo half of the package-contract checks (`pnpm check:package`
+ * runs publint + arethetypeswrong against the packed tarball). It exists
+ * because the `./icons`, `./types` and `./interfaces` subpaths shipped
  * pointing at `dist/<name>/index.js` while the build emits `dist/<name>.js`,
  * so all three were unresolvable for every consumer until fixed in 1.8.3.
  *
- * Requires `dist/` — locally run `pnpm build` first if this suite errors on a
- * missing dist.
+ * Requires `dist/` (turbo wires `test` to depend on `build`; locally run
+ * `pnpm build` first if this suite errors on a missing dist).
  */
 
 const PKG_ROOT = join(__dirname, "..", "..");
