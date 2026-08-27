@@ -82,8 +82,12 @@
       "import": "./dist/interfaces/index.js",
       "require": "./dist/interfaces/index.js"
     },
+    "./styles.css": "./dist/css/styles.css",
+    "./tokens.css": "./dist/css/tokens.css",
+    "./theme.css": "./dist/css/theme.css",
     "./css/styles.css": "./dist/css/styles.css",
     "./css/tokens.css": "./dist/css/tokens.css",
+    "./css/theme.css": "./dist/css/theme.css",
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",

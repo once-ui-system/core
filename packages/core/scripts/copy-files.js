@@ -78,12 +78,6 @@ if (fs.existsSync(path.resolve(__dirname, "../tailwind.config.ts"))) {
     path.resolve(destDir, "tailwind.config.ts"),
   );
 }
-if (fs.existsSync(path.resolve(__dirname, "../postcss.config.js"))) {
-  fs.copyFileSync(
-    path.resolve(__dirname, "../postcss.config.js"),
-    path.resolve(destDir, "postcss.config.js"),
-  );
-}
 
 // Copy CLI scripts and agent templates for npm publish
 const scriptsDir = path.resolve(destDir, "scripts");
@@ -100,6 +94,14 @@ if (fs.existsSync(agentSrc)) {
 // Copy style files
 console.log("Copying style files and other assets...");
 copyDir(srcDir, destDir);
+
+// Copy theme.css to dist/css for clean export path
+const cssDistDir = path.resolve(destDir, "css");
+fs.mkdirSync(cssDistDir, { recursive: true });
+const themeSrc = path.resolve(srcDir, "styles/theme.css");
+if (fs.existsSync(themeSrc)) {
+  fs.copyFileSync(themeSrc, path.resolve(cssDistDir, "theme.css"));
+}
 
 // Copy AI harness artifacts for npm publish
 const aiDir = path.resolve(__dirname, "../ai");

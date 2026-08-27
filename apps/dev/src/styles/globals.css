@@ -1,6 +1,11 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@import "@once-ui-system/core/styles.css";
+@import "@once-ui-system/core/theme.css";
+
+@source "../../src";
+@source "../../node_modules/@once-ui-system/core";
+@source "../../../packages/core/src";
+@source "../../../packages/core/dist";
 
 html,
 body {

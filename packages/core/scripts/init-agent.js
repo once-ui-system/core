@@ -21,6 +21,15 @@ Before generating Once UI code, load the harness from your installed package (no
 3. Match intent via \`ai/tasks/index.json\` → fetch task bundle + component slices
 4. Validate: \`npx once-ui-validate-ai-code path/to/file.tsx\`
 
+### Tailwind CSS v4 Setup
+In your global CSS file (e.g. \`globals.css\`):
+\`\`\`css
+@import "tailwindcss";
+@import "@once-ui-system/core/styles.css";
+@import "@once-ui-system/core/theme.css";
+@source "../node_modules/@once-ui-system/core";
+\`\`\`
+
 npm exports: \`@once-ui-system/core/ai/manifest.json\`
 
 Remote fallback: https://docs.once-ui.com/ai/manifest.json
@@ -63,7 +72,11 @@ function findProjectRoot(startDir = process.cwd()) {
 function upsertMarkedSection(existing, section, force) {
   if (existing.includes(MARKER_START) && existing.includes(MARKER_END)) {
     if (!force) {
-      return { content: existing, changed: false, reason: "AGENTS.md already contains Once UI harness section" };
+      return {
+        content: existing,
+        changed: false,
+        reason: "AGENTS.md already contains Once UI harness section",
+      };
     }
 
     const start = existing.indexOf(MARKER_START);
@@ -126,9 +139,7 @@ function main() {
   const results = [];
 
   if (agentsResult.changed) {
-    results.push(
-      writeFile(projectRoot, "AGENTS.md", agentsResult.content, options),
-    );
+    results.push(writeFile(projectRoot, "AGENTS.md", agentsResult.content, options));
   } else {
     results.push({
       path: agentsPath,
@@ -149,7 +160,9 @@ function main() {
   }
 
   if (!options.dryRun) {
-    console.log("\nNext: open a .tsx file and ask your agent to build Once UI — it should load the harness from node_modules/@once-ui-system/core/ai/");
+    console.log(
+      "\nNext: open a .tsx file and ask your agent to build Once UI — it should load the harness from node_modules/@once-ui-system/core/ai/",
+    );
   }
 }
 
