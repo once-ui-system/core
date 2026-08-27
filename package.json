@@ -2,6 +2,7 @@
   "private": true,
   "name": "once-ui-monorepo",
   "scripts": {
+    "preinstall": "node scripts/check-node.mjs",
     "dev": "turbo dev",
     "dev:core": "turbo dev --filter=@once-ui-system/core...",
     "dev:docs": "turbo dev --filter=@once-ui-system/docs...",

@@ -32,10 +32,28 @@ Two separate reasons for that floor:
   run the build, but there is no reason to keep a dead runtime in the supported
   set.
 
+**macOS / Linux** (nvm reads `.nvmrc`):
+
 ```bash
-nvm use          # picks up .nvmrc
+nvm install && nvm use
 node --version   # expect v22.x
 ```
+
+**Windows** — nvm-windows does *not* read `.nvmrc`, so name the version:
+
+```powershell
+nvm install 22
+nvm use 22
+node --version   # expect v22.x
+```
+
+Switching Node in one terminal does not affect terminals that are already
+open, and some editors spawn their own shell — if a build still reports the
+old version, reopen it.
+
+`pnpm install` and the foundations build both run `scripts/check-node.mjs`,
+which fails with the version it found and how to fix it rather than letting
+Sass throw `ERR_REQUIRE_ESM` from somewhere deep in `node_modules`.
 
 ## Running the dev environment
 
