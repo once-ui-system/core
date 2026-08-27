@@ -32,6 +32,14 @@ Classified **patch** per [RELEASING.md](RELEASING.md): restores documented behav
 - `apps/docs/public/ai/` claimed to be "synced from @once-ui-system/core on build"
   but no sync step existed, so `docs.once-ui.com/ai/*` could serve stale or missing
   artifacts. A `sync-ai` script now runs before every docs dev/build.
+- `DropdownWrapper` with `fillWidth`: the size middleware widened only the invisible
+  floating container while the visible panel (`Dropdown`) stayed content-sized —
+  on `-end` placements the panel rendered detached at the container's left edge,
+  reading as broken positioning. The panel now fills the container.
+- `DropdownWrapper` with `fillWidth`: removed the hidden 200px width floor
+  (`Math.max(triggerWidth, 200)`). `fillWidth` now means exactly the trigger's
+  width; small triggers no longer get a dropdown overhanging past their edge.
+  Same class of fix as 1.8.2's removal of the 320px content-dropdown floor.
 
 ### Changed
 
