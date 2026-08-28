@@ -13,12 +13,18 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
-## [1.9.0] — 2026-08-27
+Heading to **2.0**, not to 1.9. `package.json` carries `2.0.0-alpha.0` so
+nothing here can be published as a version nobody chose — 1.9.0 was a working
+number bumped ahead of any release decision, and it is now skipped entirely.
 
-Classified **minor** per [RELEASING.md](RELEASING.md). The trigger is the
-shared-internals change: core no longer imports `next/*` at runtime, and the
-build now emits foundations' SCSS/CSS into `dist` as deprecated compat entries.
-Everything else is additive or internal.
+The `ThemeInit` fix that briefly lived under a 1.9.0 heading ships instead as
+**1.8.4**, cut from the tree that produced the published 1.8.3 so it reaches
+`^1.8.x` consumers with nothing to migrate. Its entry belongs to that release;
+when 1.8.4 publishes and lands on `main`, merge it back here so this file keeps
+an unbroken history.
+
+Classification is **open**. The framework adapter below is a migration step for
+Next.js apps, which is not a minor — see the release PR for the options.
 
 **One migration step for Next.js apps.** No component, prop, export, token, or
 CSS class is removed or renamed; no type union narrows; no peer-dependency floor
@@ -36,10 +42,6 @@ import { NextAdapterProvider } from "@once-ui-system/core/next";
 Without it, internal links full-page reload and images skip `next/image`
 optimization. The DOM fallbacks are what make core usable outside Next, and are
 covered by `adapter-fallbacks.test.tsx`.
-
-`^1.8.x` ranges resolve to this release, so the ThemeInit fix reaches existing
-projects on their next install without a version bump — and so does the adapter
-change, which is why it needs the provider added at the same time.
 
 ### Added
 
@@ -81,38 +83,12 @@ change, which is why it needs the provider added at the same time.
 
 ### Fixed
 
-- `ThemeInit`: the inline theme-bootstrap script threw
-  `ReferenceError: ThemeInit is not defined` on every page load in every consumer
-  app. A `ThemeInit.displayName = "ThemeInit"` assignment had been injected *inside*
-  the script's template literal (and the arrow function above it de-indented),
-  so the emitted `<script>` referenced a module-scope binding that does not exist
-  in the browser. The throw was swallowed by the script's own `try/catch`, which
-  then hard-set `data-theme="dark"`.
-
-  Effect: the script's whole point — applying the saved theme and style overrides
-  *before* first paint — never ran. A visitor with `data-theme=light` saved got a
-  dark flash on every navigation, and saved `data-brand`/`data-neutral` overrides
-  flashed the config defaults until React hydrated and the provider corrected them.
-  Present in source, so every published version carrying this file is affected.
-
-  The `catch` fallback no longer hardcodes `dark` either: it resolves
-  `prefers-color-scheme`, since forcing dark on a light-mode visitor is a worse
-  failure than the one it is recovering from.
-
-  A new `theme-init.test.tsx` parses *and executes* the emitted script against
-  jsdom — asserting it references nothing from module scope, throws nothing, and
-  actually applies saved theme and style overrides — so this class of corruption
-  fails tests instead of shipping. Verified end-to-end in a consumer app: with
-  a saved `light` theme and `cyan` brand on a dark-preferring OS, first paint went
-  from `theme=dark, brand=blue` (plus the console error) to `theme=light,
-  brand=cyan` with a clean console.
-
 - `@once-ui-system/foundations` was declared in core's **`dependencies`** as
   `workspace:*`. `pnpm publish` rewrites that protocol to the depended-on package's
-  literal version, so the 1.9.0 tarball declared a hard runtime dependency on
+  literal version, so the packed tarball declared a hard runtime dependency on
   `@once-ui-system/foundations@2.0.0-alpha.0` — an unpublished package. Every
-  `npm install @once-ui-system/core@1.9.0` would have failed with E404, and a stable
-  minor would have pinned consumers to an alpha. Core has no runtime import of
+  `npm install @once-ui-system/core` would have failed with E404, and a stable
+  release would have pinned consumers to an alpha. Core has no runtime import of
   foundations (the build inlines its SCSS/CSS into `dist`), so it moves to
   `devDependencies`, which consumers never install. A new
   `publishable-dependencies.test.ts` fails on any workspace-protocol or pre-release
