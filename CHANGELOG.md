@@ -43,6 +43,22 @@ change, which is why it needs the provider added at the same time.
 
 ### Added
 
+- **Core installs and runs without Next.js.** `next` (along with `sass` and
+  `sharp`) is now an optional peer dependency, and the last runtime `next/*`
+  imports are gone: `Schema` emits a plain `<script type="application/ld+json">`
+  instead of `next/script`, `server/og-utils` returns a standard `Response`
+  instead of `NextResponse`, and `Meta.generate` declares its own return type
+  rather than importing Next's `Metadata`. The only file in the package that
+  touches `next/*` is the opt-in `@once-ui-system/core/next` adapter, and the
+  framework-boundary test now pins the allowlist to that one file.
+
+  Verified by packing the tarball and server-rendering `SmartLink`, `Button`,
+  `Media`, `Row`, `Column`, `Text` and `Schema` in a React app with no `next`
+  in `node_modules`.
+
+  Next.js apps are unaffected in every respect except the adapter step above —
+  the peer range is unchanged when Next *is* present.
+
 - `@once-ui-system/foundations` — tokens, styles, and token-value types extracted
   into their own package (RFC Phase 1). It is **not published to npm** and is not a
   dependency of this release: core consumes it at build time only and inlines its
