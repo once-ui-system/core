@@ -31,19 +31,39 @@ moves; the package installs exactly the same dependency set as 1.8.3. But
 `ElementType` (which backs `SmartLink` and any `Button` / `Card` /
 `ToggleButton` with `href`), `Media`, `Logo`, `MegaMenu` and `Kbar` now render
 through the adapter layer, whose defaults are plain DOM — `<a>`, `<img>`,
-`window.location.assign`. To keep 1.8.x behavior, install the Next adapter once
-in the root layout:
+`window.location.assign`. Keeping 1.8.x behavior is a one-line change — the
+import path for `LayoutProvider`:
 
-```tsx
-import { NextAdapterProvider } from "@once-ui-system/core/next";
+```diff
+- import { LayoutProvider } from "@once-ui-system/core";
++ import { LayoutProvider } from "@once-ui-system/core/next";
 ```
 
-Without it, internal links full-page reload and images skip `next/image`
+That provider is core's `LayoutProvider` with the Next adapters already
+installed. No provider is added to the tree and no props change. Apps that
+compose `AdapterProvider` themselves can keep using `NextAdapterProvider`
+directly.
+
+Without either, internal links full-page reload and images skip `next/image`
 optimization. The DOM fallbacks are what make core usable outside Next, and are
 covered by `adapter-fallbacks.test.tsx`.
 
+Automatic detection was investigated and rejected on evidence rather than
+taste. The bundler half works — a guarded `await import("next/link")` builds
+clean under esbuild and Vite with no Next installed, and degrades to the DOM
+fallback. React is the blocker: the DOM `useNavigate` returns a closure while
+the Next one calls `useRouter` and `useCallback`, so swapping implementations
+after mount breaks the rules of hooks. Resolution must therefore settle before
+the first render, and a browser bundle has no synchronous way to conditionally
+resolve an optional module.
+
 ### Added
 
+- `LayoutProvider` is now also exported from `@once-ui-system/core/next`, with the
+  Next adapters pre-installed. It makes the adapter migration a single import-path
+  change rather than a new provider in the tree, and it is what a codemod can apply
+  mechanically. `NextAdapterProvider` is unchanged and still exported for apps that
+  compose their own adapters.
 - **Core installs and runs without Next.js.** `next` (along with `sass` and
   `sharp`) is now an optional peer dependency, and the last runtime `next/*`
   imports are gone: `Schema` emits a plain `<script type="application/ld+json">`
