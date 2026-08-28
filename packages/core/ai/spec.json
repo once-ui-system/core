@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "1.9.0",
- "generated": "2026-08-27",
+ "version": "2.0.0-alpha.0",
+ "generated": "2026-08-28",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
