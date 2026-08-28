@@ -40,9 +40,7 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config }) => {
                   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
                 }
                 return themeValue;
-};
-
-ThemeInit.displayName = "ThemeInit";
+              };
 
               // Priority:
               // 1. localStorage
@@ -62,7 +60,11 @@ ThemeInit.displayName = "ThemeInit";
 
             } catch (e) {
               console.error('Failed to initialize theme:', e);
-              document.documentElement.setAttribute('data-theme', 'dark');
+              // Fall back to the system preference, not a hardcoded theme: forcing
+              // dark on a light-mode visitor is a worse failure than doing nothing.
+              var prefersDark = window.matchMedia
+                && window.matchMedia('(prefers-color-scheme: dark)').matches;
+              document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
             }
           })();
         `,

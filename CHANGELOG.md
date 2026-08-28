@@ -13,6 +13,42 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [1.8.4] — 2026-08-28
+
+Classified **patch** per [RELEASING.md](RELEASING.md): a single bug fix, no
+API change of any kind. Cut from the tree that produced the published 1.8.3
+rather than from `main`, so it carries none of the 2.0 architecture work in
+flight on the release branch — the fix reaches `^1.8.x` consumers on their
+next install, with nothing to migrate.
+
+### Fixed
+
+- `ThemeInit`: the inline theme-bootstrap script threw
+  `ReferenceError: ThemeInit is not defined` on every page load in every consumer
+  app. A `ThemeInit.displayName = "ThemeInit"` assignment had been injected *inside*
+  the script's template literal (and the arrow function above it de-indented),
+  so the emitted `<script>` referenced a module-scope binding that does not exist
+  in the browser. The throw was swallowed by the script's own `try/catch`, which
+  then hard-set `data-theme="dark"`.
+
+  Effect: the script's whole point — applying the saved theme and style overrides
+  *before* first paint — never ran. A visitor with `data-theme=light` saved got a
+  dark flash on every navigation, and saved `data-brand`/`data-neutral` overrides
+  flashed the config defaults until React hydrated and the provider corrected them.
+  Present in source, so every published version carrying this file is affected.
+
+  The `catch` fallback no longer hardcodes `dark` either: it resolves
+  `prefers-color-scheme`, since forcing dark on a light-mode visitor is a worse
+  failure than the one it is recovering from.
+
+  A new `theme-init.test.tsx` parses *and executes* the emitted script against
+  jsdom — asserting it references nothing from module scope, throws nothing, and
+  actually applies saved theme and style overrides — so this class of corruption
+  fails tests instead of shipping. Verified end-to-end in a consumer app: with
+  a saved `light` theme and `cyan` brand on a dark-preferring OS, first paint went
+  from `theme=dark, brand=blue` (plus the console error) to `theme=light,
+  brand=cyan` with a clean console.
+
 ## [1.8.3] — 2026-08-26
 
 Classified **patch** per [RELEASING.md](RELEASING.md): restores documented behavior
