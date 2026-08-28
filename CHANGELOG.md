@@ -18,15 +18,28 @@ item (see `ROADMAP.md`, Week 4).
 Classified **minor** per [RELEASING.md](RELEASING.md). The trigger is the
 shared-internals change: core no longer imports `next/*` at runtime, and the
 build now emits foundations' SCSS/CSS into `dist` as deprecated compat entries.
-Both are intended as improvements that keep observable behavior identical, and
-RELEASING.md puts that class in a minor so it is visible in release notes rather
-than buried in a patch. Everything else is additive or internal.
+Everything else is additive or internal.
 
-**Consumers change nothing.** No component, prop, export, token, or CSS class is
-removed or renamed; no type union narrows; no peer-dependency floor moves; the
-package installs exactly the same dependency set as 1.8.3. `^1.8.x` ranges
-resolve to this release, so the ThemeInit fix reaches existing projects on their
-next install without a version bump.
+**One migration step for Next.js apps.** No component, prop, export, token, or
+CSS class is removed or renamed; no type union narrows; no peer-dependency floor
+moves; the package installs exactly the same dependency set as 1.8.3. But
+`ElementType` (which backs `SmartLink` and any `Button` / `Card` /
+`ToggleButton` with `href`), `Media`, `Logo`, `MegaMenu` and `Kbar` now render
+through the adapter layer, whose defaults are plain DOM — `<a>`, `<img>`,
+`window.location.assign`. To keep 1.8.x behavior, install the Next adapter once
+in the root layout:
+
+```tsx
+import { NextAdapterProvider } from "@once-ui-system/core/next";
+```
+
+Without it, internal links full-page reload and images skip `next/image`
+optimization. The DOM fallbacks are what make core usable outside Next, and are
+covered by `adapter-fallbacks.test.tsx`.
+
+`^1.8.x` ranges resolve to this release, so the ThemeInit fix reaches existing
+projects on their next install without a version bump — and so does the adapter
+change, which is why it needs the provider added at the same time.
 
 ### Added
 
@@ -45,8 +58,10 @@ next install without a version bump.
 
 ### Changed
 
-- Core no longer imports `next/*` at runtime; Next.js users keep identical behavior
-  through installed defaults. Flipping peer dependencies stays a 2.0 concern.
+- Core no longer imports `next/*` at runtime. Next.js apps keep 1.8.x behavior by
+  installing `NextAdapterProvider` from `@once-ui-system/core/next` in the root
+  layout; without it the five components listed above fall back to plain DOM.
+  Flipping peer dependencies stays a 2.0 concern.
 
 ### Fixed
 
