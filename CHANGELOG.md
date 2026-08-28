@@ -38,6 +38,29 @@ narrowed, or deprecated, and no peer-dependency floor moves.
 
 ### Fixed
 
+- `@once-ui-system/foundations` was declared in core's **`dependencies`** as
+  `workspace:*`. `pnpm publish` rewrites that protocol to the depended-on package's
+  literal version, so the 1.9.0 tarball declared a hard runtime dependency on
+  `@once-ui-system/foundations@2.0.0-alpha.0` — an unpublished package. Every
+  `npm install @once-ui-system/core@1.9.0` would have failed with E404, and a stable
+  minor would have pinned consumers to an alpha. Core has no runtime import of
+  foundations (the build inlines its SCSS/CSS into `dist`), so it moves to
+  `devDependencies`, which consumers never install. A new
+  `publishable-dependencies.test.ts` fails on any workspace-protocol or pre-release
+  range in `dependencies`; `publint` and `arethetypeswrong` both pass on the broken
+  tarball, because they inspect the package's own structure rather than whether its
+  dependency graph resolves.
+
+## [1.8.4] — 2026-08-28
+
+Classified **patch** per [RELEASING.md](RELEASING.md): a single bug fix, no
+API change of any kind. Cut from the tree that produced the published 1.8.3
+rather than from `main`, so it carries none of the 2.0 architecture work in
+flight on the release branch — the fix reaches `^1.8.x` consumers on their
+next install, with nothing to migrate.
+
+### Fixed
+
 - `ThemeInit`: the inline theme-bootstrap script threw
   `ReferenceError: ThemeInit is not defined` on every page load in every consumer
   app. A `ThemeInit.displayName = "ThemeInit"` assignment had been injected *inside*
@@ -63,19 +86,6 @@ narrowed, or deprecated, and no peer-dependency floor moves.
   a saved `light` theme and `cyan` brand on a dark-preferring OS, first paint went
   from `theme=dark, brand=blue` (plus the console error) to `theme=light,
   brand=cyan` with a clean console.
-
-- `@once-ui-system/foundations` was declared in core's **`dependencies`** as
-  `workspace:*`. `pnpm publish` rewrites that protocol to the depended-on package's
-  literal version, so the 1.9.0 tarball declared a hard runtime dependency on
-  `@once-ui-system/foundations@2.0.0-alpha.0` — an unpublished package. Every
-  `npm install @once-ui-system/core@1.9.0` would have failed with E404, and a stable
-  minor would have pinned consumers to an alpha. Core has no runtime import of
-  foundations (the build inlines its SCSS/CSS into `dist`), so it moves to
-  `devDependencies`, which consumers never install. A new
-  `publishable-dependencies.test.ts` fails on any workspace-protocol or pre-release
-  range in `dependencies`; `publint` and `arethetypeswrong` both pass on the broken
-  tarball, because they inspect the package's own structure rather than whether its
-  dependency graph resolves.
 
 ## [1.8.3] — 2026-08-26
 

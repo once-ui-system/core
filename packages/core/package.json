@@ -1,7 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "1.9.0",
-  "description": "Once UI for Next.js NPM package",
+  "version": "1.9.0",  "description": "Once UI for Next.js NPM package",
   "keywords": [
     "once-ui",
     "react",
