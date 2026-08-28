@@ -2,6 +2,21 @@ import { SmartLink, InlineCode } from "@once-ui-system/core";
 
 const changelog = [
   {
+    date: "2026-08-28",
+    title: "Once UI 1.8.4",
+    sections: [
+      {
+        title: "Fixes",
+        bullets: [
+          <><SmartLink unstyled href="/once-ui/contexts/themeProvider">ThemeInit</SmartLink>: the inline theme-bootstrap script threw <InlineCode>ReferenceError: ThemeInit is not defined</InlineCode> on every page load, in every app. A <InlineCode>displayName</InlineCode> assignment had been injected inside the script&apos;s template literal, so the browser evaluated a binding that does not exist there. The script&apos;s own <InlineCode>try/catch</InlineCode> swallowed the throw and hard-set <InlineCode>data-theme=&quot;dark&quot;</InlineCode>, which is why it survived to npm with only a console error to show for it</>,
+          <>What it actually broke: the script exists to apply your saved theme and style overrides <i>before</i> first paint, and none of that ran. A visitor with <InlineCode>light</InlineCode> saved got a dark flash on every navigation, and saved <InlineCode>data-brand</InlineCode> / <InlineCode>data-neutral</InlineCode> overrides flashed the config defaults until React hydrated</>,
+          <>The <InlineCode>catch</InlineCode> fallback no longer hardcodes dark either — it resolves <InlineCode>prefers-color-scheme</InlineCode>, since forcing dark on a light-mode visitor is a worse failure than the one it is recovering from</>,
+          <>Every published version carrying this file was affected. Upgrading is enough: <InlineCode>^1.8.x</InlineCode> ranges resolve to 1.8.4 on your next install, with nothing to migrate</>,
+        ],
+      },
+    ],
+  },
+  {
     date: "2026-08-26",
     title: "Once UI 1.8.3",
     sections: [
