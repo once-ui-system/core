@@ -15,24 +15,24 @@ The Logo component is used to display brand logos with consistent styling and si
   marginBottom="24"
   preview={
     <Column fillWidth center gap="40">
-      <Row dark>
-        <Logo icon="/trademarks/icon-dark.svg" wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
-      </Row>
-      <Row light>
-        <Logo icon="/trademarks/icon-light.svg" wordmark="/trademarks/type-light.svg" size="s" href="/"/>
-      </Row>
+      <Logo
+        icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+        wordmark={{ light: "/trademarks/type-light.svg", dark: "/trademarks/type-dark.svg" }}
+        size="s"
+        href="/"
+      />
       <ThemeSwitcher/>
     </Column>
   }
   codes={[
     {
       code:
-`<Row dark>
-    <Logo icon="/trademarks/icon-dark.svg" wordmark="/trademarks/type-dark.svg" size="s" href="https://once-ui.com"/>
-</Row>
-<Row light>
-    <Logo icon="/trademarks/icon-light.svg" wordmark="/trademarks/type-light.svg" size="s" href="https://once-ui.com"/>
-</Row>`,
+`<Logo
+    icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+    wordmark={{ light: "/trademarks/type-light.svg", dark: "/trademarks/type-dark.svg" }}
+    size="s"
+    href="https://once-ui.com"
+/>`,
       language: "tsx",
       label: "Logo"
     }
@@ -202,11 +202,11 @@ The `brand` prop provides a `copy` option for allowing the icon and wordmark to 
 <PropsTable
   content={[
     ["size", ["xs", "s", "m", "l", "xl"], "m"],
-    ["wordmark", "boolean", "true"],
-    ["icon", "boolean", "true"],
-    ["iconSrc", "string"],
-    ["wordmarkSrc", "string"],
+    ["icon", "string | { light, dark }"],
+    ["wordmark", "string | { light, dark }"],
     ["href", "string"],
+    ["light", "boolean"],
+    ["dark", "boolean"],
     ["brand", "object"],
     ["className"],
     ["style"]

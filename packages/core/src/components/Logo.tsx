@@ -15,12 +15,22 @@ const sizeMap: Record<string, SpacingToken> = {
   xl: "48",
 };
 
+/**
+ * A single asset, or one per theme.
+ *
+ * Passing `{ light, dark }` renders both and lets CSS pick, so one `<Logo>`
+ * covers both themes. Before this you had to render the component twice —
+ * once with `light`, once with `dark` — which meant eight elements for four
+ * client logos in a row, and two places to keep in sync for every change.
+ */
+type LogoSource = string | { light: string; dark: string };
+
 interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   className?: string;
   size?: TShirtSizes;
   style?: React.CSSProperties;
-  icon?: string;
-  wordmark?: string;
+  icon?: LogoSource;
+  wordmark?: LogoSource;
   href?: string;
   dark?: boolean;
   light?: boolean;
@@ -37,28 +47,41 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
       }
     }, [icon, wordmark]);
 
+    /**
+     * One <img> for a plain source; for a per-theme source, both, each gated by
+     * the same light-flex / dark-flex classes the `light` and `dark` props use.
+     * Rendering both rather than reading the theme at runtime keeps the
+     * component server-renderable and avoids a flash on first paint.
+     */
+    /**
+     * The copy-to-clipboard actions need one concrete file. A per-theme source
+     * has two, so they take the light asset — the one a brand page shows by
+     * default and the one someone pasting a logo almost always wants.
+     */
+    const resolveSource = (source: LogoSource | undefined): string | undefined =>
+      typeof source === "string" ? source : source?.light;
+
+    const renderSource = (source: LogoSource | undefined) => {
+      if (!source) return null;
+      const imgStyle = {
+        height: `var(--static-space-${sizeMap[size]})`,
+        width: "auto",
+      };
+      if (typeof source === "string") {
+        return <img style={imgStyle} alt="Trademark" src={source} />;
+      }
+      return (
+        <>
+          <img className="light-flex" style={imgStyle} alt="Trademark" src={source.light} />
+          <img className="dark-flex" style={imgStyle} alt="Trademark" src={source.dark} />
+        </>
+      );
+    };
+
     const content = (
       <>
-        {icon && (
-          <img
-            style={{
-              height: `var(--static-space-${sizeMap[size]})`,
-              width: "auto",
-            }}
-            alt="Trademark"
-            src={icon as string}
-          />
-        )}
-        {wordmark && (
-          <img
-            style={{
-              height: `var(--static-space-${sizeMap[size]})`,
-              width: "auto",
-            }}
-            alt="Trademark"
-            src={wordmark as string}
-          />
-        )}
+        {renderSource(icon)}
+        {renderSource(wordmark)}
       </>
     );
 
@@ -75,7 +98,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
       }
 
       try {
-        const response = await fetch(icon);
+        const response = await fetch(resolveSource(icon) as string);
         const svgText = await response.text();
         await navigator.clipboard.writeText(svgText);
 
@@ -102,7 +125,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
       }
 
       try {
-        const response = await fetch(wordmark);
+        const response = await fetch(resolveSource(wordmark) as string);
         const svgText = await response.text();
         await navigator.clipboard.writeText(svgText);
 

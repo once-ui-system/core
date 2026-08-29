@@ -186,6 +186,15 @@ codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
 
 ### Added
 
+- **`Logo` takes per-theme sources.** `icon` and `wordmark` now accept
+  `{ light, dark }` as well as a plain string, so one element covers both
+  themes instead of two rendered side by side with the `light` and `dark`
+  props hiding one of them. A row of four client logos was eight elements and
+  two places to keep in sync for every change; it is now four and one. Both
+  assets are rendered and CSS picks, rather than reading the theme at runtime —
+  that keeps `Logo` server-renderable and avoids a flash of the wrong mark on
+  first paint. Plain strings are unchanged, and the whole-element `light` /
+  `dark` props still work for gating a logo to one theme deliberately.
 - **`Book`** — a book with a real 3D cover: perspective on the wrapper, a
   `preserve-3d` context shared by cover and page block, and pages hinged onto
   the cover's right edge, so the hover turn reads correctly from any angle
