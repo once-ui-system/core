@@ -625,6 +625,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronLeft"
+            aria-label="Previous month"
                   onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -790,6 +791,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronRight"
+            aria-label="Next month"
                   onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();

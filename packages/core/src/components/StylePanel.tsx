@@ -103,6 +103,9 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={radius}
                 center
                 tabIndex={0}
+                role="button"
+                aria-label={`Corner style: ${radius}`}
+                aria-pressed={mounted && borderValue === radius}
                 className={classNames(
                   styles.select,
                   mounted && borderValue === radius ? styles.selected : "",
@@ -112,7 +115,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                   setBorderValue(radius as BorderStyle);
                 }}
               >
-                <IconButton variant="ghost" size="m">
+                {/* Decorative: the parent Flex is the control. */}
+                <IconButton variant="ghost" size="m" aria-hidden>
                   <div className={classNames(styles.neutral, styles.swatch)}></div>
                 </IconButton>
               </Flex>
@@ -149,6 +153,9 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={color}
                 center
                 tabIndex={0}
+                role="button"
+                aria-label={`Brand colour: ${color}`}
+                aria-pressed={mounted && brandValue === color}
                 className={classNames(
                   styles.select,
                   mounted && brandValue === color ? styles.selected : "",
@@ -158,7 +165,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                   setBrandValue(color as Schemes);
                 }}
               >
-                <IconButton variant="ghost" size="m">
+                {/* Decorative: the parent Flex is the control. */}
+                <IconButton variant="ghost" size="m" aria-hidden>
                   <div className={`${styles[color]} ${styles.swatch}`}></div>
                 </IconButton>
               </Flex>
@@ -185,6 +193,9 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={color}
                 center
                 tabIndex={0}
+                role="button"
+                aria-label={`Accent colour: ${color}`}
+                aria-pressed={mounted && accentValue === color}
                 className={classNames(
                   styles.select,
                   mounted && accentValue === color ? styles.selected : "",
@@ -194,7 +205,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                   setAccentValue(color as Schemes);
                 }}
               >
-                <IconButton variant="ghost" size="m">
+                {/* Decorative: the parent Flex is the control. */}
+                <IconButton variant="ghost" size="m" aria-hidden>
                   <div className={`${styles[color]} ${styles.swatch}`}></div>
                 </IconButton>
               </Flex>
@@ -213,6 +225,9 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={color}
                 center
                 tabIndex={0}
+                role="button"
+                aria-label={`Neutral colour: ${color}`}
+                aria-pressed={mounted && neutralValue === color}
                 className={classNames(
                   styles.select,
                   mounted && neutralValue === color ? styles.selected : "",
@@ -222,7 +237,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                   setNeutralValue(color as NeutralColor);
                 }}
               >
-                <IconButton variant="ghost" size="m">
+                {/* Decorative: the parent Flex is the control. */}
+                <IconButton variant="ghost" size="m" aria-hidden>
                   <div className={`${styles[color]} ${styles.swatch}`}></div>
                 </IconButton>
               </Flex>

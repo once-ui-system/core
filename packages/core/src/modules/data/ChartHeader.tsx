@@ -181,6 +181,7 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
             trigger={
               <IconButton
                 icon="calendar"
+              aria-label="Choose a date range"
                 onClick={() => setDateRangeOpen(!dateRangeOpen)}
                 variant="secondary"
                 size="m"

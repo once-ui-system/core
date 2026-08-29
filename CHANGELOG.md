@@ -175,6 +175,23 @@ codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
 
 ### Fixed
 
+- **Icon-only controls announce what they do, not which glyph they use.**
+  `IconButton` falls back to the icon *name* as its accessible label when given
+  no `tooltip` and no `aria-label` — so a carousel control announced
+  "chevronRight button" and table pagination announced "chevronDoubleLeft
+  button". The fallback stays, because an unnamed button is worse than a badly
+  named one, but core's own components no longer rely on it: 21 call sites
+  across `Table`, `Carousel`, `DatePicker`, `ScrollContainer`, `CompareImage`,
+  `PasswordInput`, `InteractiveDetails`, `StyleOverlay`, `CodeBlock` and
+  `ChartHeader` now carry real labels, and a test fails the build if a new one
+  appears.
+
+  `StylePanel`'s four swatch pickers were worse than mislabelled: the click
+  handler and `tabIndex` sit on a wrapping `Flex`, so the focusable element was
+  a div with no role and no name at all, while the `IconButton` inside was
+  decorative. The label, `role="button"` and `aria-pressed` now sit on the
+  element that is actually the control.
+
 - **`opacity={0}` and `zIndex={0}` now work.** Both are legal values — `Opacity`
   includes `0`, `zIndex` includes `-1` and `0` — and `.opacity-0` / `.z-index-0`
   ship in the stylesheet, but the class list guarded them on truthiness rather

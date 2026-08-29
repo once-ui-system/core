@@ -128,6 +128,7 @@ const CompareImage = ({
         }}>
         <IconButton
           icon="chevronsLeftRight"
+          aria-label="Drag to compare"
           variant="secondary"
           onMouseDown={handleMouseDown}
           onTouchStart={handleMouseDown}

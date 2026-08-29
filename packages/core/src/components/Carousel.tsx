@@ -219,6 +219,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
               }}
               variant="secondary"
               icon={isPlaying ? "pause" : "play"}
+              aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
             />
           </Flex>
         </Flex>
@@ -338,6 +339,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
                       onClick={handlePrevClick}
                       variant="secondary"
                       icon="chevronLeft"
+              aria-label="Previous slide"
                     />
                   </Flex>
                 </>
@@ -384,6 +386,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
                       onClick={handleNextClick}
                       variant="secondary"
                       icon="chevronRight"
+              aria-label="Next slide"
                     />
                   </Flex>
                 </>
