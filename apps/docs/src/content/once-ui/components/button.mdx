@@ -231,9 +231,9 @@ Customize the corner radius of buttons for different design needs.
   marginBottom="24"
   preview={
     <Row gap="16" horizontal="center">
-      <Button weight="default" radius="top-left">Top left</Button>
+      <Button weight="default" corners="top-left">Top left</Button>
       <Button weight="default" radius="none">No radius</Button>
-      <Button weight="default" radius="bottom-right">Bottom right</Button>
+      <Button weight="default" corners="bottom-right">Bottom right</Button>
     </Row>
   }
   codes={[
@@ -245,10 +245,10 @@ Customize the corner radius of buttons for different design needs.
   <Button weight="default">
     Default radius
   </Button>
-  <Button weight="default" radius="top-left">
+  <Button weight="default" corners="top-left">
     Top left
   </Button>
-  <Button weight="default" radius="bottom-right">
+  <Button weight="default" corners="bottom-right">
     Bottom right
 </Button>`,
       language: "tsx",
@@ -415,7 +415,7 @@ Use the `color` prop to apply a specific color scheme to the button. Accepts a `
   content={[
     ["variant", ["primary", "secondary", "tertiary", "quaternary", "subtle", "danger", "success", "warning", "ghost", "link"], "primary"],
     ["size", ["xs", "s", "m", "l", "xl"], "m"],
-    ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
+    ["corners", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
     ["label", "string"],
     ["weight", ["default", "strong"], "strong"],
     ["color", "`${ColorScheme}-${ColorWeight}`"],

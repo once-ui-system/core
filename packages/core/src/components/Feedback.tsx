@@ -5,7 +5,7 @@ import { IconButton, Icon, Flex, Text, Column } from ".";
 
 interface FeedbackProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   variant?: "info" | "danger" | "warning" | "success";
-  icon?: boolean;
+  showIcon?: boolean;
   title?: string;
   description?: string;
   showCloseButton?: boolean;
@@ -28,7 +28,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
   (
     {
       variant = "info",
-      icon = true,
+      showIcon = true,
       title,
       description,
       showCloseButton = false,
@@ -54,7 +54,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
         style={style}
         {...rest}
       >
-        {icon && (
+        {showIcon && (
           <Flex paddingY="16" paddingLeft="16">
             <Icon
               padding="2"

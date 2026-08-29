@@ -9,7 +9,7 @@ import { IconName } from "../icons";
 interface ToastProps {
   className?: string;
   variant: "success" | "danger" | "warning" | "info";
-  icon?: boolean;
+  showIcon?: boolean;
   onClose?: () => void;
   action?: React.ReactNode;
   children: React.ReactNode;
@@ -23,7 +23,7 @@ const iconMap: { [key in ToastProps["variant"]]: IconName } = {
 };
 
 const Toast = forwardRef<HTMLDivElement, ToastProps>(
-  ({ variant, className, icon = true, onClose, action, children }, ref) => {
+  ({ variant, className, showIcon = true, onClose, action, children }, ref) => {
     const [visible, setVisible] = useState(true);
 
     useEffect(() => {
@@ -54,7 +54,7 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
         })}
       >
         <Flex fillWidth vertical="center" gap="8">
-          {icon && <Icon size="s" onBackground={`${variant}-medium`} name={iconMap[variant]} />}
+          {showIcon && <Icon size="s" onBackground={`${variant}-medium`} name={iconMap[variant]} />}
           <Row fillWidth textVariant="body-default-s">
             {children}
           </Row>

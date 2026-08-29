@@ -41,7 +41,7 @@ The `RadioButton` component provides a selectable control for mutually exclusive
 
 ## State
 
-Use the `isChecked` prop to control the radio button state externally.
+Use the `checked` prop to control the radio button state externally.
 
 <CodeBlock
   marginTop="16"
@@ -62,7 +62,7 @@ const handleToggle = (value: string) => {
       value="monthly"
       label="Monthly subscription"
       description="Billed monthly at $9.99"
-      isChecked={selectedPlan === "monthly"}
+      checked={selectedPlan === "monthly"}
       onToggle={() => handleToggle("monthly")}
     />
     <RadioButton
@@ -70,7 +70,7 @@ const handleToggle = (value: string) => {
       value="annual"
       label="Annual subscription"
       description="Billed annually at $99.99"
-      isChecked={selectedPlan === "annual"}
+      checked={selectedPlan === "annual"}
       onToggle={() => handleToggle("annual")}
     />
     <RadioButton
@@ -78,7 +78,7 @@ const handleToggle = (value: string) => {
       value="lifetime"
       label="Lifetime access"
       description="One-time payment of $299.99"
-      isChecked={selectedPlan === "lifetime"}
+      checked={selectedPlan === "lifetime"}
       onToggle={() => handleToggle("lifetime")}
     />
 </Column>`,
@@ -144,7 +144,7 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
 
 <PropsTable
   content={[
-    ["isChecked", "boolean", "false"],
+    ["checked", "boolean", "false"],
     ["onToggle", "() => void"],
     ["name", "string"],
     ["value", "string"],

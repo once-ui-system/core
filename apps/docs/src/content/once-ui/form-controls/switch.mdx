@@ -20,7 +20,7 @@ The `Switch` component provides a toggle control for binary states, featuring a 
 `<Switch
     label="Enable notifications"
     description="Receive updates about new features and improvements"
-    isChecked={isChecked}
+    checked={isChecked}
     onToggle={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
@@ -31,7 +31,7 @@ The `Switch` component provides a toggle control for binary states, featuring a 
 
 ## State
 
-Control the switch state with the `isChecked` prop.
+Control the switch state with the `checked` prop.
 
 <CodeBlock
   marginTop="16"
@@ -44,7 +44,7 @@ Control the switch state with the `isChecked` prop.
 
 <Switch
     label={isChecked ? "Feature is now enabled" : "Feature is currently disabled"}
-    isChecked={isChecked}
+    checked={isChecked}
     onToggle={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
@@ -79,7 +79,7 @@ const handleToggle = () => {
 
 <Switch
     label="Processing"
-    isChecked={isChecked}
+    checked={isChecked}
     loading={isLoading}
     onToggle={handleToggle}
 />`,
@@ -108,7 +108,7 @@ Disable the switch to prevent user interaction.
 `<Switch
     label="Disabled switch"
     disabled
-    isChecked={isChecked}
+    checked={isChecked}
     onToggle={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
@@ -134,7 +134,7 @@ Place the switch on the right side of the label.
     label="Align switch to the right"
     description="This places the switch after the label text"
     reverse
-    isChecked={isChecked}
+    checked={isChecked}
     onToggle={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
@@ -147,7 +147,7 @@ Place the switch on the right side of the label.
 
 <PropsTable
   content={[
-    ["isChecked", "boolean"],
+    ["checked", "boolean"],
     ["onToggle", "() => void"],
     ["loading", "boolean", "false"],
     ["disabled", "boolean", "false"],

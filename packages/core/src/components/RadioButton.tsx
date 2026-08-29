@@ -7,10 +7,10 @@ import styles from "./SharedInteractiveStyles.module.scss";
 
 interface RadioButtonProps
   extends Omit<InteractiveDetailsProps, "onClick">,
-    React.InputHTMLAttributes<HTMLInputElement> {
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked"> {
   style?: React.CSSProperties;
   className?: string;
-  isChecked?: boolean;
+  checked?: boolean;
   name?: string;
   value?: string;
   disabled?: boolean;
@@ -20,7 +20,7 @@ interface RadioButtonProps
 
 const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
-    { style, className, isChecked: controlledIsChecked, name, value, onToggle, disabled, hoverable = true, ...props },
+    { style, className, checked: controlledIsChecked, name, value, onToggle, disabled, hoverable = true, ...props },
     ref,
   ) => {
     const [isChecked, setIsChecked] = useState(controlledIsChecked || false);

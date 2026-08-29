@@ -62,7 +62,7 @@ const SearchInput: React.FC<{
       id={`select-search-${searchInputId}`}
       placeholder="Search"
       height="s"
-      hasSuffix={
+      suffix={
         searchQuery ? (
           <IconButton
             tooltip="Clear"
@@ -74,7 +74,7 @@ const SearchInput: React.FC<{
           />
         ) : undefined
       }
-      hasPrefix={<Icon name="search" size="xs" />}
+      prefix={<Icon name="search" size="xs" />}
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
       onClick={(e) => {
@@ -265,7 +265,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           if (typeof ref === "function") ref(node);
           else if (ref) ref.current = node;
         }}
-        isOpen={isDropdownOpen}
+        open={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
         placement={placement}
         closeAfterClick={false}
@@ -335,7 +335,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                         : option.value === currentValue
                     }
                     tabIndex={-1}
-                    hasPrefix={
+                    prefix={
                       multiple ? (
                         Array.isArray(currentValue) && currentValue.includes(option.value) ? (
                           <Icon name="check" size="xs" onBackground="neutral-weak" />

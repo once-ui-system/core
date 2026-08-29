@@ -179,18 +179,18 @@ Set the `lines` prop to "auto" to make the textarea automatically resize based o
 
 ## Height
 
-Use the `height` prop to set the height of the input.
+Use the `size` prop to set the height of the input.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column fillWidth gap="4">
-      <Textarea height="xs" label="Extra small textarea" />
-      <Textarea height="s" label="Small textarea" />
-      <Textarea height="m" label="Medium textarea" />
-      <Textarea height="l" label="Large textarea" />
-      <Textarea height="xl" label="Extra large textarea" />
+      <Textarea size="xs" label="Extra small textarea" />
+      <Textarea size="s" label="Small textarea" />
+      <Textarea size="m" label="Medium textarea" />
+      <Textarea size="l" label="Large textarea" />
+      <Textarea size="xl" label="Extra large textarea" />
     </Column>
   }
   codes={[
@@ -207,7 +207,7 @@ const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     placeholder="Height"
     value={value}
     onChange={handleChange}
-    height="l"
+    size="l"
 />`,
       language: "tsx",
       label: "Height"
@@ -217,7 +217,7 @@ const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 
 ## Radius
 
-You can use the `radius` prop to apply custom radius to sides or corners. It works well with the `Column` component's `-1` gap to create a seamless connection between textareas.
+You can use the `corners` prop to apply custom radius to sides or corners. It works well with the `Column` component's `-1` gap to create a seamless connection between textareas.
 
 <CodeBlock
   marginTop="16"
@@ -228,13 +228,13 @@ You can use the `radius` prop to apply custom radius to sides or corners. It wor
         id="custom-top"
         label="Top Radius"
         placeholder="This textarea has top radius"
-        radius="top"
+        corners="top"
       />
       <Textarea
         id="custom-bottom"
         label="Bottom Radius"
         placeholder="This textarea has bottom radius"
-        radius="bottom"
+        corners="bottom"
       />
     </Column>
   }
@@ -246,13 +246,13 @@ You can use the `radius` prop to apply custom radius to sides or corners. It wor
       id="custom-top"
       label="Top Radius"
       placeholder="This textarea has top radius"
-      radius="top"
+      corners="top"
     />
     <Textarea
       id="custom-bottom"
       label="Bottom Radius"
       placeholder="This textarea has bottom radius"
-      radius="bottom"
+      corners="bottom"
     />
 </Column>`,
       language: "tsx",
@@ -305,21 +305,21 @@ The Textarea component supports five sizes: extra small, small, medium, large, a
   marginBottom="24"
   preview={
     <Column fillWidth gap="16">
-      <Textarea id="size-xs" placeholder="Extra Small" height="xs" />
-      <Textarea id="size-s" placeholder="Small" height="s" />
-      <Textarea id="size-m" placeholder="Medium" height="m" />
-      <Textarea id="size-l" placeholder="Large" height="l" />
-      <Textarea id="size-xl" placeholder="Extra Large" height="xl" />
+      <Textarea id="size-xs" placeholder="Extra Small" size="xs" />
+      <Textarea id="size-s" placeholder="Small" size="s" />
+      <Textarea id="size-m" placeholder="Medium" size="m" />
+      <Textarea id="size-l" placeholder="Large" size="l" />
+      <Textarea id="size-xl" placeholder="Extra Large" size="xl" />
     </Column>
   }
   codes={[
     {
       code:
-`<Textarea placeholder="Extra Small" height="xs" />
-<Textarea placeholder="Small" height="s" />
-<Textarea placeholder="Medium" height="m" />
-<Textarea placeholder="Large" height="l" />
-<Textarea placeholder="Extra Large" height="xl" />`,
+`<Textarea placeholder="Extra Small" size="xs" />
+<Textarea placeholder="Small" size="s" />
+<Textarea placeholder="Medium" size="m" />
+<Textarea placeholder="Large" size="l" />
+<Textarea placeholder="Extra Large" size="xl" />`,
       language: "tsx",
       label: "Sizes"
     }
@@ -397,14 +397,14 @@ const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     ["id", "string"],
     ["label", "string"],
     ["placeholder", "string"],
-    ["height", ["xs", "s", "m", "l", "xl"], "m"],
+    ["size", ["xs", "s", "m", "l", "xl"], "m"],
     ["lines", ["number", "auto"], "3"],
     ["error", "boolean", "false"],
     ["errorMessage", "ReactNode"],
     ["description", "ReactNode"],
-    ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"], "none"],
-    ["hasPrefix", "ReactNode"],
-    ["hasSuffix", "ReactNode"],
+    ["corners", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"], "none"],
+    ["prefix", "ReactNode"],
+    ["suffix", "ReactNode"],
     ["characterCount", "boolean", "false"],
     ["resize", ["horizontal", "vertical", "both", "none"], "vertical"],
     ["validate", "(value: string) => ReactNode | null"],

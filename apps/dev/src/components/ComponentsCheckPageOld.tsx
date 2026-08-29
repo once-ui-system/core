@@ -343,7 +343,7 @@ export default function ComponentsCheckOld() {
           name: "Switch",
           element: (
             <Switch
-              isChecked={switchOn}
+              checked={switchOn}
               onToggle={() => setSwitchOn(!switchOn)}
               label="Dark mode"
             />
@@ -378,8 +378,8 @@ export default function ComponentsCheckOld() {
           name: "SegmentedControl",
           element: (
             <SegmentedControl
-              selected={segmentValue}
-              onToggle={setSegmentValue}
+              value={segmentValue}
+              onChange={setSegmentValue}
               buttons={[
                 { value: "one", label: "One" },
                 { value: "two", label: "Two" },
@@ -599,7 +599,7 @@ export default function ComponentsCheckOld() {
           name: "Feedback",
           element: (
             <Feedback
-              icon
+              showIcon
               title="Changes saved"
               description="Your settings have been updated successfully."
             />
@@ -618,7 +618,7 @@ export default function ComponentsCheckOld() {
             <>
               <Button onClick={() => setDialogOpen(true)}>Open Dialog</Button>
               <Dialog
-                isOpen={dialogOpen}
+                open={dialogOpen}
                 onClose={() => setDialogOpen(false)}
                 title="Confirm action"
                 description="Are you sure you want to continue?"

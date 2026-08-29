@@ -196,7 +196,7 @@ function NavIconMenu() {
     return (
       <Animation
         trigger={
-          <NavIcon onClick={() => setIsActive(!isActive)} isActive={isActive} />
+          <NavIcon onClick={() => setIsActive(!isActive)} active={isActive} />
         }
         slideDown={1}
         triggerType="manual"

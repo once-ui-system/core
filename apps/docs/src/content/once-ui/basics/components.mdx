@@ -72,6 +72,15 @@ export { Component };
   - Filenames are `PascalCase` (e.g. `CursorCard.tsx`)
 - State conventions
   - Use `loading` instead of `isLoading`, `open` instead of `isOpen`
+  - The exception is a name the DOM already declares on the element the
+    component renders. `checked`, `prefix` and `size` are all inherited from
+    React's HTML attribute types, so a component that wants them must
+    `Omit` the inherited one and redeclare — as `Checkbox`, `Input` and
+    `Textarea` do. Never reach for an `is`/`has` prefix to dodge the
+    collision; that is what produced `isChecked`, `hasPrefix` and the
+    `height`-that-meant-`size` before 2.0
+  - Boolean props that toggle *visibility* read `showX` (`showLabel`,
+    `showIcon`), so the unprefixed name stays free for the thing itself
 - Layout primitives
   - Structure built with `Flex` and `Grid`
   - Interactive styles live in `*.module.scss`

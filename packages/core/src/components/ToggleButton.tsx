@@ -12,7 +12,7 @@ interface ToggleButtonCommonProps {
   selected?: boolean;
   variant?: "ghost" | "outline" | "subtle";
   size?: TShirtSizes;
-  radius?:
+  corners?:
     | "none"
     | "top"
     | "right"
@@ -45,7 +45,7 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
       selected = false,
       variant = "ghost",
       size = "m",
-      radius,
+      corners,
       rounded = false,
       horizontal = "center",
       fillWidth = false,
@@ -74,10 +74,10 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
           styles[variant],
           styles[size],
           selected && styles.selected,
-          radius === "none"
+          corners === "none"
             ? "radius-none"
-            : radius
-              ? `radius-${size}-${radius}`
+            : corners
+              ? `radius-${size}-${corners}`
               : `radius-${size}`,
           "text-decoration-none",
           "button",

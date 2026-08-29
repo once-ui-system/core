@@ -41,9 +41,9 @@ export interface DropdownWrapperProps {
   onSelect?: (value: string) => void;
   closeAfterClick?: boolean;
   handleArrowNavigation?: boolean;
-  isOpen?: boolean;
-  onOpenChange?: (isOpen: boolean) => void;
-  isNested?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  nested?: boolean;
   navigationLayout?: NavigationLayout;
   columns?: number | string;
   optionsCount?: number;
@@ -63,7 +63,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       minHeight,
       onSelect,
       closeAfterClick = true,
-      isOpen: controlledIsOpen,
+      open: controlledIsOpen,
       handleArrowNavigation = true,
       onOpenChange,
       minWidth,
@@ -72,7 +72,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       placement = "bottom-start",
       className,
       style,
-      isNested = false,
+      nested = false,
       navigationLayout: propNavigationLayout,
       columns = 8,
       optionsCount: propOptionsCount,
@@ -131,7 +131,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
         onOpenChange?.(newIsOpen);
       },
-      [onOpenChange, isControlled, isNested],
+      [onOpenChange, isControlled, nested],
     );
 
     // State to track if we're in a browser environment for portal rendering
@@ -338,7 +338,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
       // Listen for close-nested-dropdowns events if this is a nested dropdown
       const handleCloseNestedDropdowns = () => {
-        if (isNested && isOpen) {
+        if (nested && isOpen) {
           handleOpenChange(false);
           setFocusedIndex(-1);
         }
@@ -368,7 +368,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         document.removeEventListener("close-nested-dropdowns", handleCloseNestedDropdowns);
         document.removeEventListener("close-other-dropdowns", handleCloseOtherDropdowns as EventListener);
       };
-    }, [handleClickOutside, handleFocusOut, isNested, isOpen, handleOpenChange]);
+    }, [handleClickOutside, handleFocusOut, nested, isOpen, handleOpenChange]);
 
     // Get options from the dropdown
     const getOptions = useCallback(() => {

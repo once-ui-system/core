@@ -57,6 +57,81 @@ after mount breaks the rules of hooks. Resolution must therefore settle before
 the first render, and a browser bundle has no synchronous way to conditionally
 resolve an optional module.
 
+### Breaking
+
+**Prop API standardisation.** Every place where one prop name carried two
+meanings, or one meaning went by two names, is resolved. All of it is
+mechanical: `scripts/codemod-2.0.mjs` applies the renames component-scoped,
+and running it twice is a no-op.
+
+```bash
+node scripts/codemod-2.0.mjs src
+```
+
+Boolean props that toggle visibility now read `showX`, leaving the plain name
+for the thing itself:
+
+| Component | 1.8.x | 2.0 |
+| --- | --- | --- |
+| `ProgressBar` | `label?: boolean` | `showLabel` |
+| `Feedback`, `Toast` | `icon?: boolean` | `showIcon` |
+| `DataTooltip` | `colors?: boolean` | `showSwatches` |
+
+State props drop the `is`/`has` prefix, restoring the convention the docs
+already prescribed (`basics/components` — "use `open` instead of `isOpen`"):
+
+| Component | 1.8.x | 2.0 |
+| --- | --- | --- |
+| `Dialog`, `Modal`, `DatePicker`, `DropdownWrapper`, `EmojiPickerDropdown`, `KbarContent` | `isOpen` | `open` |
+| `Checkbox`, `RadioButton`, `Switch` | `isChecked` | `checked` |
+| `Checkbox` | `isIndeterminate` | `indeterminate` |
+| `DatePicker`, `DropdownWrapper` | `isNested` | `nested` |
+| `NavIcon` | `isActive` | `active` |
+| `Input`, `Textarea`, `Option` | `hasPrefix` / `hasSuffix` | `prefix` / `suffix` |
+
+Four of those names were held by React's own DOM attribute types — `checked`
+and `size` on `InputHTMLAttributes`, `prefix` on the base `HTMLAttributes` (the
+RDFa attribute) — which is why the prefixes existed at all. Those components
+now `Omit` the inherited declaration and declare their own. The cost is that
+the native attribute can no longer be forwarded: `<Input size>` is the token
+scale, not the HTML character-width attribute.
+
+`radius` now means one thing everywhere — the roundness scale that
+`StyleProps` has always defined. Corner selection, which had been overloading
+the same name on five components, moves to `corners`:
+
+```diff
+- <Button radius="top-left" />
++ <Button corners="top-left" />
+  <Button radius="none" />   // unchanged — "none" is roundness, not a corner
+```
+
+Affects `Button`, `IconButton`, `Input`, `Textarea`, `ToggleButton`. This is
+the one rename the codemod decides by value rather than by name; a computed
+`radius={expr}` is reported rather than rewritten.
+
+Other divergences resolved:
+
+- `Input` and `Textarea` take `size` instead of `height`. It was always a
+  t-shirt scale rather than a dimension, and only spelled `height` because
+  `size` was inherited from the DOM.
+- `SegmentedControl` becomes an ordinary controlled input: `selected` → `value`,
+  `onToggle` → `onChange`, `defaultSelected` → `defaultValue`. `selected` is a
+  boolean on the five other components that have it, and `onToggle` is
+  `() => void` on the other four.
+- `RevealFx` takes `revealed` instead of `trigger`. It is controlled state;
+  `trigger` elsewhere is either the element that opens something or a mode union.
+- `ColorInput`'s `onChange` hands back the value, `(value: string) => void`,
+  like every other `onChange` in the library, instead of a hand-built
+  `ChangeEvent`. **The codemod flags this one but cannot rewrite the callback
+  body** — the signature changed, so the handler needs a human.
+
+Components deriving their props from `Input` (`Select`, `NumberInput`,
+`TagInput`, `ColorInput`, `DateInput`, `DateRangeInput`, `PasswordInput`) and
+from `DropdownWrapper` (`EmojiPickerDropdown`) inherit these renames; the
+codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
+(`props.isChecked`) are not JSX and are surfaced by `tsc`, not rewritten.
+
 ### Added
 
 - `LayoutProvider` is now also exported from `@once-ui-system/core/next`, with the

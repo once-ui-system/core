@@ -127,7 +127,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
               <Option
                 value="copy-icon"
                 label="Copy icon as SVG"
-                hasPrefix={<Logo size="xs" icon={icon} style={{ opacity: 0.5 }} />}
+                prefix={<Logo size="xs" icon={icon} style={{ opacity: 0.5 }} />}
                 onClick={copyIconToClipboard}
               />
             )}
@@ -135,7 +135,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
               <Option
                 value="copy-wordmark"
                 label="Copy wordmark as SVG"
-                hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="wordmark" />}
+                prefix={<Icon size="xs" onBackground="neutral-weak" name="wordmark" />}
                 onClick={copyWordmarkToClipboard}
               />
             )}
@@ -147,7 +147,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
                 <Option
                   value="brand-guidelines"
                   label="Visit brand guidelines"
-                  hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="arrowUpRight" />}
+                  prefix={<Icon size="xs" onBackground="neutral-weak" name="arrowUpRight" />}
                   href={brand.url}
                 />
               </Column>

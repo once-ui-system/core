@@ -65,8 +65,8 @@ export function DashboardExample() {
             </Heading>
           </Column>
           <SegmentedControl
-            selected={range}
-            onToggle={setRange}
+            value={range}
+            onChange={setRange}
             buttons={[
               { value: "7d", label: "7 days" },
               { value: "30d", label: "30 days" },

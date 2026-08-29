@@ -102,8 +102,8 @@ export function PricingExample() {
               Three plans, one decision
             </Heading>
             <SegmentedControl
-              selected={billing}
-              onToggle={(value) => setBilling(value as Billing)}
+              value={billing}
+              onChange={(value) => setBilling(value as Billing)}
               buttons={[
                 { value: "monthly", label: "Monthly" },
                 { value: "yearly", label: "Yearly −20%" },

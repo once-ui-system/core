@@ -103,12 +103,12 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(({
           minDate={minDate}
           maxDate={maxDate}
           autoFocus={true}
-          isOpen={isOpen}
+          open={isOpen}
         />
       }
       fillWidth={false}
       minHeight={minHeight}
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       className={className}
       closeAfterClick={!timePicker}

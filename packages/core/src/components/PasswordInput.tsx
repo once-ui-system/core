@@ -11,7 +11,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, InputProps>((props, re
       {...props}
       ref={ref}
       type={showPassword ? "text" : "password"}
-      hasSuffix={
+      suffix={
         <IconButton
           onClick={() => {
             setShowPassword(!showPassword);

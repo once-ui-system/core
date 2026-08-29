@@ -15,10 +15,10 @@
  ],
  "props": {
   "buttons": "!ButtonOption[]",
-  "onToggle": "!(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
-  "defaultSelected": "string",
+  "onChange": "!(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
+  "defaultValue": "string",
   "fillWidth": "boolean = true",
-  "selected": "string",
+  "value": "string",
   "compact": "boolean = false",
   "className": "string",
   "style": "React.CSSProperties"

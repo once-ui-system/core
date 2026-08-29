@@ -28,7 +28,7 @@ vi.mock("../components", async () => {
 });
 
 const defaultProps = {
-  isOpen: true,
+  open: true,
   onClose: vi.fn(),
   title: "Dialog title",
   children: <button type="button">Primary action</button>,
@@ -63,14 +63,14 @@ afterEach(() => {
 
 describe("Dialog", () => {
   describe("rendering and visibility", () => {
-    it("renders nothing when isOpen is false", () => {
-      renderDialog({ isOpen: false });
+    it("renders nothing when open is false", () => {
+      renderDialog({ open: false });
 
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
       expect(screen.queryByText("Dialog title")).not.toBeInTheDocument();
     });
 
-    it("renders into the portal when isOpen is true", () => {
+    it("renders into the portal when open is true", () => {
       renderDialog();
 
       expect(getOverlay()).toBeInTheDocument();
@@ -166,9 +166,9 @@ describe("Dialog", () => {
     });
 
     it("opens visible immediately and animates after a tick", () => {
-      const { rerender } = renderDialog({ isOpen: false });
+      const { rerender } = renderDialog({ open: false });
 
-      rerender(<Dialog {...defaultProps} isOpen />);
+      rerender(<Dialog {...defaultProps} open />);
 
       expect(getOverlay()).toBeInTheDocument();
       expect(getOverlay()).not.toHaveClass(styles.open);
@@ -184,7 +184,7 @@ describe("Dialog", () => {
       advanceTimers(0);
       expect(getOverlay()).toHaveClass(styles.open);
 
-      rerender(<Dialog {...defaultProps} isOpen={false} />);
+      rerender(<Dialog {...defaultProps} open={false} />);
 
       expect(getOverlay()).not.toHaveClass(styles.open);
 
@@ -196,11 +196,11 @@ describe("Dialog", () => {
     });
 
     it("handles rapid open-close-open without leaving the dialog hidden", () => {
-      const { rerender } = renderDialog({ isOpen: false });
+      const { rerender } = renderDialog({ open: false });
 
-      rerender(<Dialog {...defaultProps} isOpen />);
-      rerender(<Dialog {...defaultProps} isOpen={false} />);
-      rerender(<Dialog {...defaultProps} isOpen />);
+      rerender(<Dialog {...defaultProps} open />);
+      rerender(<Dialog {...defaultProps} open={false} />);
+      rerender(<Dialog {...defaultProps} open />);
 
       advanceTimers(0);
       advanceTimers(300);
@@ -213,9 +213,9 @@ describe("Dialog", () => {
       const { rerender } = renderDialog();
 
       advanceTimers(0);
-      rerender(<Dialog {...defaultProps} isOpen={false} />);
-      rerender(<Dialog {...defaultProps} isOpen />);
-      rerender(<Dialog {...defaultProps} isOpen={false} />);
+      rerender(<Dialog {...defaultProps} open={false} />);
+      rerender(<Dialog {...defaultProps} open />);
+      rerender(<Dialog {...defaultProps} open={false} />);
 
       expect(getOverlay()).not.toHaveClass(styles.open);
 
@@ -432,7 +432,7 @@ describe("Dialog", () => {
         const { rerender } = renderDialog();
         expect(document.activeElement).toBe(screen.getByRole("button", { name: /close/i }));
 
-        rerender(<Dialog {...defaultProps} isOpen={false} />);
+        rerender(<Dialog {...defaultProps} open={false} />);
 
         expect(document.activeElement).not.toBe(opener);
 
@@ -480,7 +480,7 @@ describe("Dialog", () => {
       document.body.appendChild(sibling);
       const { rerender } = renderDialog();
 
-      rerender(<Dialog {...defaultProps} isOpen={false} />);
+      rerender(<Dialog {...defaultProps} open={false} />);
       advanceTimers(300);
 
       expect(sibling.inert).toBe(false);
@@ -503,7 +503,7 @@ describe("Dialog", () => {
       const [baseOverlay] = screen.getAllByRole("dialog");
       const basePanel = getDialogPanel(baseOverlay) as HTMLElement;
 
-      stacked.rerender(<Dialog {...defaultProps} title="Stacked dialog" isOpen={false} stack />);
+      stacked.rerender(<Dialog {...defaultProps} title="Stacked dialog" open={false} stack />);
       advanceTimers(300);
 
       expect(basePanel.inert).toBe(false);
@@ -525,12 +525,12 @@ describe("Dialog", () => {
       vi.useFakeTimers();
       const sibling = document.createElement("div");
       document.body.appendChild(sibling);
-      const { rerender } = renderDialog({ isOpen: false });
+      const { rerender } = renderDialog({ open: false });
 
-      rerender(<Dialog {...defaultProps} isOpen />);
-      rerender(<Dialog {...defaultProps} isOpen={false} />);
-      rerender(<Dialog {...defaultProps} isOpen />);
-      rerender(<Dialog {...defaultProps} isOpen={false} />);
+      rerender(<Dialog {...defaultProps} open />);
+      rerender(<Dialog {...defaultProps} open={false} />);
+      rerender(<Dialog {...defaultProps} open />);
+      rerender(<Dialog {...defaultProps} open={false} />);
       advanceTimers(300);
 
       expect(sibling.inert).toBe(false);
@@ -550,7 +550,7 @@ describe("Dialog", () => {
     it("does not prevent wheel scroll after the dialog closes", () => {
       const { rerender } = renderDialog();
 
-      rerender(<Dialog {...defaultProps} isOpen={false} />);
+      rerender(<Dialog {...defaultProps} open={false} />);
 
       const event = new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaY: 80 });
       document.body.dispatchEvent(event);
@@ -586,7 +586,7 @@ describe("Dialog", () => {
     it("does not call onHeightChange when the dialog is not visible", () => {
       const onHeightChange = vi.fn();
 
-      renderDialog({ isOpen: false, onHeightChange });
+      renderDialog({ open: false, onHeightChange });
 
       expect(onHeightChange).not.toHaveBeenCalled();
     });
@@ -647,7 +647,7 @@ describe("Dialog", () => {
       expect(() => {
         renderToString(
           <LayoutProvider>
-            <Dialog {...defaultProps} isOpen={false} />
+            <Dialog {...defaultProps} open={false} />
           </LayoutProvider>,
         );
       }).not.toThrow();

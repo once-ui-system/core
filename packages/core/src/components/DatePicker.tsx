@@ -36,7 +36,7 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
     minutes: number;
   };
   size?: CondensedTShirtSizes;
-  isNested?: boolean;
+  nested?: boolean;
   className?: string;
   style?: React.CSSProperties;
   currentMonth?: number;
@@ -48,7 +48,7 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
   };
   onHover?: (date: Date | null) => void;
   autoFocus?: boolean;
-  isOpen?: boolean;
+  open?: boolean;
 }
 
 const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
@@ -64,7 +64,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       defaultDate,
       defaultTime,
       size = "m",
-      isNested = false,
+      nested = false,
       className,
       style,
       currentMonth: propCurrentMonth,
@@ -73,7 +73,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       range,
       onHover,
       autoFocus = false,
-      isOpen,
+      open,
       ...rest
     },
     ref,
@@ -247,7 +247,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           return () => clearTimeout(timer);
         }
       }
-    }, [selectedDate, isTimeSelector, isReady, currentMonth, currentYear, isOpen]);
+    }, [selectedDate, isTimeSelector, isReady, currentMonth, currentYear, open]);
 
     const monthNames = [
       "January",
@@ -394,7 +394,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               fillWidth
               weight="default"
               variant="tertiary"
-              radius={
+              corners={
                 firstDay === 1
                   ? undefined
                   : i === 0
@@ -505,7 +505,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               fillWidth
               weight={isSelected ? "strong" : "default"}
               variant={isSelected ? "primary" : isHovered ? "secondary" : "tertiary"}
-              radius={disabledRadius}
+              corners={disabledRadius}
               tabIndex={-1}
               size={size}
               data-value={currentDate.toISOString()}
@@ -548,7 +548,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               fillWidth
               weight="default"
               variant="tertiary"
-              radius={
+              corners={
                 remainingDays === 1
                   ? undefined
                   : i === 1
@@ -635,9 +635,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               <Column fillWidth horizontal="center" gap="8">
                 <Row gap="4" horizontal="center">
                   <DropdownWrapper
-                    isNested={isNested}
+                    nested={nested}
                     placement="bottom-start"
-                    isOpen={isMonthOpen}
+                    open={isMonthOpen}
                     dropdownId="month-dropdown"
                     onOpenChange={(open) => {
                       setIsMonthOpen(open);
@@ -705,8 +705,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   />
 
                   <DropdownWrapper
-                    isNested={isNested}
-                    isOpen={isYearOpen}
+                    nested={nested}
+                    open={isYearOpen}
                     dropdownId="year-dropdown"
                     onOpenChange={(open) => {
                       setIsYearOpen(open);
@@ -805,7 +805,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           fillWidth
           center
           key={isTimeSelector ? "time" : "date"}
-          trigger={isTransitioning}
+          revealed={isTransitioning}
           speed={250}
         >
           {isTimeSelector ? (
@@ -821,8 +821,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                     label: "PM",
                   },
                 ]}
-                selected={isPM ? "PM" : "AM"}
-                onToggle={(value) =>
+                value={isPM ? "PM" : "AM"}
+                onChange={(value) =>
                   handleTimeChange(
                     selectedTime?.hours ?? 0,
                     selectedTime?.minutes ?? 0,

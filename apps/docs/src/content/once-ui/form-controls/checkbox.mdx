@@ -36,7 +36,7 @@ The `Checkbox` component provides a selectable control that can be toggled betwe
 
 ## State
 
-Use the `isChecked` prop with React state to create controlled checkboxes.
+Use the `checked` prop with React state to create controlled checkboxes.
 
 <CodeBlock
   marginTop="16"
@@ -53,7 +53,7 @@ Use the `isChecked` prop with React state to create controlled checkboxes.
 
 <Checkbox
     label="Controlled checkbox"
-    isChecked={checked}
+    checked={checked}
     onToggle={() => setChecked(!checked)}
 />
 
@@ -96,8 +96,8 @@ const toggleAll = () => {
 
 <Checkbox
     label="Select all items"
-    isChecked={allChecked || isIndeterminate}
-    isIndeterminate={isIndeterminate}
+    checked={allChecked || isIndeterminate}
+    indeterminate={isIndeterminate}
     onToggle={toggleAll}
 />
 
@@ -105,7 +105,7 @@ const toggleAll = () => {
     <Checkbox
       key={item.id}
       label={item.label}
-      isChecked={item.checked}
+      checked={item.checked}
       onToggle={() => {
         setItems(items.map(i => 
           i.id === item.id ? { ...i, checked: !i.checked } : i
@@ -175,8 +175,8 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
 
 <PropsTable
   content={[
-    ["isChecked", "boolean", "false"],
-    ["isIndeterminate", "boolean", "false"],
+    ["checked", "boolean", "false"],
+    ["indeterminate", "boolean", "false"],
     ["onToggle", "() => void"],
     ["label", "ReactNode"],
     ["description", "ReactNode"],

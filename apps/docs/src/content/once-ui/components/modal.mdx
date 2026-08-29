@@ -29,7 +29,7 @@ return (
       Open Modal
     </Button>
     <Modal
-      isOpen={isOpen}
+      open={isOpen}
       onClose={() => setIsOpen(false)}
       title="Modal Title"
     >
@@ -62,7 +62,7 @@ Add custom backdrop content behind the modal dialog using the `backdrop` prop.
     {
       code:
 `<Modal
-  isOpen={isOpen}
+  open={isOpen}
   onClose={() => setIsOpen(false)}
   title="Modal with Backdrop"
   backdrop={
@@ -102,7 +102,7 @@ The Modal component includes several built-in features:
 
 <PropsTable
   content={[
-    ["isOpen", "boolean", "Controls modal visibility"],
+    ["open", "boolean", "Controls modal visibility"],
     ["onClose", "() => void", "Callback when modal should close"],
     ["title", "ReactNode", "Modal title displayed at the top"],
     ["children", "ReactNode", "Modal content"],

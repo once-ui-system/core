@@ -227,7 +227,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
         fillWidth
         fillHeight={fill}
         radius={flex.radius || "l"}
-        trigger={isTransitioning}
+        revealed={isTransitioning}
         translateY={translateY}
         aspectRatio={aspectRatio === "original" ? undefined : aspectRatio}
         speed={300}

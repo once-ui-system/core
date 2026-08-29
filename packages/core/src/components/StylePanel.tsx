@@ -306,13 +306,13 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 value: "contrast",
               },
             ]}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ solid: value as SolidType });
               setSolidValue(value as SolidType);
               localStorage.setItem("data-solid", value);
             }}
-            selected={mounted ? solidValue : undefined}
-            defaultSelected="contrast"
+            value={mounted ? solidValue : undefined}
+            defaultValue="contrast"
           />
         </Flex>
         <Flex horizontal="between" vertical="center" fillWidth paddingX="24" paddingY="16" gap="24">
@@ -358,13 +358,13 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 value: "plastic",
               },
             ]}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ solidStyle: value as SolidStyle });
               setSolidStyleValue(value as SolidStyle);
               localStorage.setItem("data-solid-style", value);
             }}
-            selected={mounted ? solidStyleValue : undefined}
-            defaultSelected="flat"
+            value={mounted ? solidStyleValue : undefined}
+            defaultValue="flat"
           />
         </Flex>
       </Column>
@@ -390,12 +390,12 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           <SegmentedControl
             maxWidth={22}
             minWidth={0}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ surface: value as SurfaceStyle });
               setSurfaceValue(value as SurfaceStyle);
             }}
-            selected={mounted ? surfaceValue : undefined}
-            defaultSelected="filled"
+            value={mounted ? surfaceValue : undefined}
+            defaultValue="filled"
             buttons={[
               {
                 size: "l",
@@ -423,12 +423,12 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           <SegmentedControl
             maxWidth={22}
             minWidth={0}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ scaling: value as ScalingSize });
               setScalingValue(value as ScalingSize);
             }}
-            selected={mounted ? scalingValue : undefined}
-            defaultSelected="100"
+            value={mounted ? scalingValue : undefined}
+            defaultValue="100"
             buttons={[
               {
                 size: "l",
@@ -471,12 +471,12 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           <SegmentedControl
             maxWidth={22}
             minWidth={0}
-            onToggle={(value) => {
+            onChange={(value) => {
               setChartOptions({ mode: value as ChartMode });
               setChartModeValue(value as ChartMode);
             }}
-            selected={mounted ? chartModeValue : undefined}
-            defaultSelected="categorical"
+            value={mounted ? chartModeValue : undefined}
+            defaultValue="categorical"
             buttons={[
               {
                 size: "l",
@@ -501,12 +501,12 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           <SegmentedControl
             maxWidth={22}
             minWidth={0}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ transition: value as TransitionStyle });
               setTransitionValue(value as TransitionStyle);
             }}
-            selected={mounted ? transitionValue : undefined}
-            defaultSelected="all"
+            value={mounted ? transitionValue : undefined}
+            defaultValue="all"
             buttons={[
               {
                 size: "l",

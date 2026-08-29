@@ -215,8 +215,8 @@ export default function PricingPage() {
             </Column>
             <SegmentedControl
               fillWidth={false}
-              selected={billing}
-              onToggle={(value) => setBilling(value as Billing)}
+              value={billing}
+              onChange={(value) => setBilling(value as Billing)}
               buttons={[
                 { value: "monthly", label: "Monthly" },
                 { value: "yearly", label: "Yearly −20%" },
@@ -226,7 +226,7 @@ export default function PricingPage() {
 
           <Grid ref={tiersRef} columns="3" gap="24" s={{ columns: 1 }}>
             {tiers.map((tier, index) => (
-              <RevealFx key={tier.name} fill trigger={tiersSeen} translateY="8" delay={index * 0.1}>
+              <RevealFx key={tier.name} fill revealed={tiersSeen} translateY="8" delay={index * 0.1}>
                 <Column
                   fill
                   background="surface"

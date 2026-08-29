@@ -73,7 +73,7 @@ const KbarSearchInput: React.FC<{
       onKeyDown={handleKeyDown}
       ref={inputRef}
       height={inputSize}
-      hasPrefix={<Icon marginLeft="4" onBackground="neutral-weak" name="search" size="xs" />}
+      prefix={<Icon marginLeft="4" onBackground="neutral-weak" name="search" size="xs" />}
       autoComplete="off"
     />
   );
@@ -92,7 +92,7 @@ export const KbarTrigger: React.FC<KbarTriggerProps> = ({ onClick, children, ...
 };
 
 export interface KbarContentProps {
-  isOpen: boolean;
+  open: boolean;
   onClose: () => void;
   items: KbarItem[];
   placeholder?: string;
@@ -100,7 +100,7 @@ export interface KbarContentProps {
 }
 
 export const KbarContent: React.FC<KbarContentProps> = ({
-  isOpen,
+  open,
   onClose,
   items,
   placeholder = "Search",
@@ -156,10 +156,10 @@ export const KbarContent: React.FC<KbarContentProps> = ({
         result.push({
           value: item.id,
           label: item.name,
-          hasPrefix: item.icon ? (
+          prefix: item.icon ? (
             <Icon name={item.icon} size="xs" onBackground="neutral-weak" />
           ) : undefined,
-          hasSuffix:
+          suffix:
             item.shortcut && item.shortcut.length > 0 ? (
               <Row gap="2" style={{ transform: "scale(0.9)", transformOrigin: "right" }}>
                 {item.shortcut.map((key, i) => (
@@ -220,25 +220,25 @@ export const KbarContent: React.FC<KbarContentProps> = ({
       }
     };
 
-    if (isOpen) {
+    if (open) {
       document.addEventListener("keydown", handleEscapeKey);
     }
 
     return () => {
       document.removeEventListener("keydown", handleEscapeKey);
     };
-  }, [isOpen, handleClose]);
+  }, [open, handleClose]);
 
   // Clear search query when kbar is closed
   useEffect(() => {
-    if (!isOpen) {
+    if (!open) {
       setSearchQuery("");
     }
-  }, [isOpen]);
+  }, [open]);
 
   // Focus search input when kbar is opened
   useEffect(() => {
-    if (isOpen && inputRef.current) {
+    if (open && inputRef.current) {
       // Use a small timeout to ensure the component is fully rendered
       const timer = setTimeout(() => {
         inputRef.current?.focus();
@@ -246,7 +246,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
 
       return () => clearTimeout(timer);
     }
-  }, [isOpen]);
+  }, [open]);
 
   // Handle search input change
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -254,12 +254,12 @@ export const KbarContent: React.FC<KbarContentProps> = ({
   };
 
   // Render nothing if not open
-  if (!isOpen) return null;
+  if (!open) return null;
 
   // Create portal for the kbar
   return (
     <>
-      <ScrollLock enabled={isOpen} allowScrollInElement={scrollContainerRef} />
+      <ScrollLock enabled={open} allowScrollInElement={scrollContainerRef} />
       <Row
         position="fixed"
         top="0"
@@ -327,8 +327,8 @@ export const KbarContent: React.FC<KbarContentProps> = ({
                     key={option.value}
                     label={option.label}
                     value={option.value}
-                    hasPrefix={option.hasPrefix}
-                    hasSuffix={option.hasSuffix}
+                    prefix={option.prefix}
+                    suffix={option.suffix}
                     description={option.description}
                     {...(option.href
                       ? {
@@ -397,21 +397,21 @@ export interface KbarProps {
 }
 
 export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const { usePathname } = useAdapters();
   const pathname = usePathname();
 
   const handleOpen = () => {
-    setIsOpen(true);
+    setOpen(true);
   };
 
   const handleClose = () => {
-    setIsOpen(false);
+    setOpen(false);
   };
 
   // Close Kbar when pathname changes
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       handleClose();
     }
   }, [pathname]);
@@ -422,7 +422,7 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest 
       // Check for Command+K (Mac) or Control+K (Windows/Linux)
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault(); // Prevent default browser behavior
-        setIsOpen((prev) => !prev); // Toggle Kbar open/close
+        setOpen((prev) => !prev); // Toggle Kbar open/close
       }
     };
 
@@ -450,9 +450,9 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest 
       >
         {children}
       </KbarTrigger>
-      {isOpen &&
+      {open &&
         createPortal(
-          <KbarContent isOpen={isOpen} onClose={handleClose} items={items} inputSize={inputSize} />,
+          <KbarContent open={open} onClose={handleClose} items={items} inputSize={inputSize} />,
           document.body,
         )}
     </>
