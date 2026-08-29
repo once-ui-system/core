@@ -110,6 +110,47 @@ Affects `Button`, `IconButton`, `Input`, `Textarea`, `ToggleButton`. This is
 the one rename the codemod decides by value rather than by name; a computed
 `radius={expr}` is reported rather than rewritten.
 
+`variant` now means appearance everywhere. `Pulse` and `Tag` were using it
+for a **colour scheme**, which is why the prop had seven incompatible value
+spaces across thirteen components; both now take `scheme`.
+
+**Timing props are milliseconds, consistently.** An audit found the library was
+split three ways: most timings were already ms (`Animation.duration` and
+`.delay`, `TypeFx.speed`/`.delay`, `Hover.delay`/`.hideDelay`,
+`GlitchFx.interval`, `Carousel.play.interval`, `CountFx.speed`,
+`RevealFx.speed`), two were seconds, and four `speed` props on
+`CelebrationFx`, `WeatherFx`, `MatrixFx` and `Particle` are unitless
+multipliers that are not durations at all and are unchanged. The two outliers
+move to ms:
+
+```diff
+- <RevealFx delay={0.2} />        <ShineFx speed={0.75} />
++ <RevealFx delay={200} />        <ShineFx speed={750} />
+```
+
+`RevealFx` was the sharpest case: its `delay` was seconds while its own
+`speed`, on the next line of the same interface, was already milliseconds.
+
+**`Skeleton` drops its second size scale.** It extends `Flex`, so width is now
+expressed the way it is on any other element — `width="80%"`, `maxWidth={24}` —
+instead of a five-step scale that only ever meant percentages. What remains is
+`size`: the height of a `line`, the diameter of a `circle`. `delay` becomes
+milliseconds rather than a `"1".."6"` index into six fixed classes.
+
+```diff
+- <Skeleton shape="line" height="s" width="l" delay="3" />
++ <Skeleton shape="line" size="s" width="75%" delay={300} />
+```
+
+**Colour props that paint into SVG accept tokens again.** `color` on
+`LinearGauge`, `RadialGauge`, `Particle` and the chart module, and
+`colorStart` / `colorEnd` / `color` on `Background`'s gradient, dots, grid and
+lines, were typed as bare `string` — so a design token was accepted but never
+suggested, and a typo in one was never caught. They now take `ColorValue`,
+which is `Colors | (string & {})`: tokens autocomplete, and a raw `#fff`,
+`rgb(...)` or `var(...)` still passes, because these values are painted into
+SVG rather than applied through a class.
+
 Other divergences resolved:
 
 - `Input` and `Textarea` take `size` instead of `height`. It was always a

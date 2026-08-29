@@ -1620,7 +1620,7 @@
    ],
    "props": {
     "density": "number = 100",
-    "color": "string = brand-on-background-weak",
+    "color": "ColorValue = brand-on-background-weak",
     "size": "SpacingToken = 2",
     "speed": "number = 0.3",
     "interactive": "boolean = false",
@@ -1677,7 +1677,7 @@
     "StyleProps"
    ],
    "props": {
-    "variant": "ColorScheme = brand",
+    "scheme": "ColorScheme = brand",
     "size": "CondensedTShirtSizes = m",
     "pulseSize": "string | number",
     "children": "ReactNode",
@@ -1856,7 +1856,7 @@
     "TextProps"
    ],
    "props": {
-    "speed": "number = 1",
+    "speed": "number = 1000",
     "disabled": "boolean = false",
     "inverse": "boolean = false",
     "baseOpacity": "number = 0.3",
@@ -1879,9 +1879,8 @@
    ],
    "props": {
     "shape": "!\"line\" | \"circle\" | \"block\" = line",
-    "width": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
-    "height": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
-    "delay": "\"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\"",
+    "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
+    "delay": "number",
     "style": "React.CSSProperties",
     "className": "string"
    }
@@ -2081,7 +2080,7 @@
     "StyleProps"
    ],
    "props": {
-    "variant": "ColorScheme | \"gradient\" = neutral",
+    "scheme": "ColorScheme | \"gradient\" = neutral",
     "size": "CondensedTShirtSizes = m",
     "label": "string = ",
     "prefixIcon": "IconName",
@@ -2583,7 +2582,7 @@
     "edgePad": "number = 0",
     "children": "React.ReactNode",
     "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
-    "color": "string = contrast"
+    "color": "ColorValue = contrast"
    }
   },
   "LinearGauge": {
@@ -2606,7 +2605,7 @@
     "value": "number = 50",
     "labels": "\"none\" | \"percentage\" | string[] = none",
     "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
-    "color": "string = contrast"
+    "color": "ColorValue = contrast"
    }
   },
   "CodeBlock": {

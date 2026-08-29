@@ -361,7 +361,7 @@ Extend the label and description with custom React nodes. Use the `children` pro
       items={[
         {
           state: "completed",
-          label: <Row vertical="center" gap="8">Dispatched<Tag variant="success">Done</Tag></Row>,
+          label: <Row vertical="center" gap="8">Dispatched<Tag scheme="success">Done</Tag></Row>,
           description: "Order #123456789",
           children: (
             <Row fitWidth radius="full" paddingY="4" paddingX="8" border="neutral-alpha-medium" textVariant="label-default-xs" onBackground="neutral-weak" marginTop="8">
@@ -371,7 +371,7 @@ Extend the label and description with custom React nodes. Use the `children` pro
         },
         {
           state: "active",
-          label: <Row vertical="center" gap="8">Shipped to distribution<Tag variant="brand">In Progress</Tag></Row>,
+          label: <Row vertical="center" gap="8">Shipped to distribution<Tag scheme="brand">In Progress</Tag></Row>,
           description: "Order #123456789",
           children: (
             <Row fitWidth radius="full" paddingY="4" paddingX="8" border="neutral-alpha-medium" textVariant="label-default-xs" onBackground="neutral-weak" marginTop="8">
@@ -381,7 +381,7 @@ Extend the label and description with custom React nodes. Use the `children` pro
         },
         {
           state: "default",
-          label: <Row vertical="center" gap="8">Shipped to customer<Tag variant="neutral">Planned</Tag></Row>,
+          label: <Row vertical="center" gap="8">Shipped to customer<Tag scheme="neutral">Planned</Tag></Row>,
           description: "Waiting for carrier",
           children: (
             <Row fitWidth radius="full" paddingY="4" paddingX="8" border="neutral-alpha-medium" textVariant="label-default-xs" onBackground="neutral-weak" marginTop="8">
@@ -399,7 +399,7 @@ Extend the label and description with custom React nodes. Use the `children` pro
     items={[
       {
         state: "completed",
-        label: <Row vertical="center" gap="8">Dispatched<Tag variant="success">Done</Tag></Row>,
+        label: <Row vertical="center" gap="8">Dispatched<Tag scheme="success">Done</Tag></Row>,
         description: "Order #123456789",
         children: (
           <Row fitWidth radius="full" paddingY="4" paddingX="8" border="neutral-alpha-medium" textVariant="label-default-xs" onBackground="neutral-weak" marginTop="8">

@@ -8,6 +8,7 @@ import { Flex } from ".";
 interface RevealFxProps extends React.ComponentProps<typeof Flex> {
   children: React.ReactNode;
   speed?: "slow" | "medium" | "fast" | number;
+  /** Milliseconds before the reveal starts. Was seconds until 2.0. */
   delay?: number;
   revealedByDefault?: boolean;
   translateY?: number | SpacingToken;
@@ -65,7 +66,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
         transitionTimeoutRef.current = setTimeout(() => {
           setMaskRemoved(true);
         }, getSpeedDurationMs());
-      }, delay * 1000);
+      }, delay);
 
       return () => {
         clearTimeout(timer);

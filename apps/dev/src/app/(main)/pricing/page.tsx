@@ -186,7 +186,7 @@ export default function PricingPage() {
               </Heading>
             </Column>
           </RevealFx>
-          <RevealFx delay={0.1} translateY="16">
+          <RevealFx delay={100} translateY="16">
             <Text variant="body-default-l" onBackground="neutral-weak" align="center">
               Start free, scale when you're ready. Every plan includes unlimited viewers and our
               full component library.
@@ -226,7 +226,7 @@ export default function PricingPage() {
 
           <Grid ref={tiersRef} columns="3" gap="24" s={{ columns: 1 }}>
             {tiers.map((tier, index) => (
-              <RevealFx key={tier.name} fill revealed={tiersSeen} translateY="8" delay={index * 0.1}>
+              <RevealFx key={tier.name} fill revealed={tiersSeen} translateY="8" delay={index * 100}>
                 <Column
                   fill
                   background="surface"
@@ -259,7 +259,7 @@ export default function PricingPage() {
                       <Heading as="h3" variant="heading-strong-m">
                         {tier.name}
                       </Heading>
-                      {tier.highlighted && <Tag variant="brand" size="s" label="Most popular" />}
+                      {tier.highlighted && <Tag scheme="brand" size="s" label="Most popular" />}
                     </Row>
                     <Text variant="body-default-s" onBackground="neutral-weak">
                       {tier.description}

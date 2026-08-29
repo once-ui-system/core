@@ -83,6 +83,19 @@ export type ColorWeight = "weak" | "medium" | "strong";
 
 export type Colors = `${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`;
 
+/**
+ * A design token, or any CSS colour.
+ *
+ * The `(string & {})` arm is what keeps token autocomplete alive: a bare
+ * `Colors | string` collapses to `string` and the editor stops suggesting
+ * anything, whereas this keeps the literal union suggestible while still
+ * accepting `#fff`, `rgb(...)` or `var(...)`.
+ *
+ * Used where a value is painted into SVG or canvas rather than through a class,
+ * so a raw CSS colour is a legitimate escape hatch rather than a mistake.
+ */
+export type ColorValue = Colors | (string & {});
+
 export type RadiusSize = TShirtSizes | "full" | "none";
 
 export type RadiusNest = "4" | "8";

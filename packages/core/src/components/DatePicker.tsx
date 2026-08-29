@@ -806,7 +806,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           center
           key={isTimeSelector ? "time" : "date"}
           revealed={isTransitioning}
-          speed={250}
+          speed={250000}
         >
           {isTimeSelector ? (
             <Column maxWidth={24} center padding="32" gap="32">

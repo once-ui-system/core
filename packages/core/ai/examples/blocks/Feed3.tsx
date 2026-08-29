@@ -116,7 +116,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
             style={{padding: "0.75rem"}}
             lines="auto"
             value={message}
-            hasPrefix={
+            prefix={
               <EmojiPickerDropdown
                 onSelect={(emoji) => setMessage(message + emoji)}
                 trigger={
@@ -126,7 +126,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                 }
               />
             }
-            hasSuffix={
+            suffix={
               <Row
                 style={{ opacity: message.length > 0 ? 1 : 0, marginRight: "-0.25rem" }}
                 transition="micro-medium">

@@ -83,7 +83,7 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
                         {item.label}
                       </Text>
                       {item.tag && (
-                        <Tag style={{ transform: "scale(0.9)" }} variant="brand" size="s">
+                        <Tag style={{ transform: "scale(0.9)" }} scheme="brand" size="s">
                           {item.tag}
                         </Tag>
                       )}

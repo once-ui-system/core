@@ -47,6 +47,9 @@ const TRANSFORMS = {
   // Docs-site wrappers that forward props verbatim to the component they wrap.
   ClientOption:     { hasPrefix: "prefix", hasSuffix: "suffix" },
   ClientSwitch:     { isChecked: "checked" },
+  Pulse:            { variant: "scheme" },
+  Tag:              { variant: "scheme" },
+  Skeleton:         { height: "size" },
   Button:           { radius: "corners" },
   IconButton:       { radius: "corners" },
   ToggleButton:     { radius: "corners" },
@@ -54,6 +57,54 @@ const TRANSFORMS = {
 
 /** `radius="none"` is roundness, not a corner — it keeps its name. */
 const VALUE_AWARE = { radius: (raw) => raw === '"none"' || raw === "{'none'}" };
+
+/**
+ * Props whose VALUE changed, not their name. A rename cannot express these, so
+ * they are reported for a human rather than rewritten:
+ *
+ *   RevealFx.delay   seconds → milliseconds   (delay={0.2}  → delay={200})
+ *   ShineFx.speed    seconds → milliseconds   (speed={0.75} → speed={750})
+ *   Skeleton.delay   "1".."6" step → milliseconds
+ *   Skeleton.width   five-step scale → a Flex width (width="80%")
+ *
+ * A bare literal is mechanical, but `delay={index * 0.1}` is not: the caller
+ * owns the multiplier, so guessing would silently change timing.
+ */
+
+/**
+ * Heuristic: a duration literal under this many units was almost certainly
+ * written as seconds (0.2, 1, 5) and a larger one as milliseconds (200, 1500).
+ * It is a guess, but it is the difference between flagging only what still
+ * needs changing and re-flagging every already-migrated call site forever.
+ * Non-numeric values always warn, because an expression cannot be judged.
+ */
+const SECONDS_CEILING = 50;
+
+const looksLikeSeconds = (raw) => {
+  const n = Number(String(raw).replace(/[{}"']/g, "").trim());
+  return Number.isNaN(n) ? true : n > 0 && n < SECONDS_CEILING;
+};
+
+const VALUE_CHANGED = {
+  RevealFx: {
+    delay: { note: "seconds → milliseconds (multiply by 1000)", when: looksLikeSeconds },
+  },
+  ShineFx: {
+    speed: { note: "seconds → milliseconds (multiply by 1000)", when: looksLikeSeconds },
+  },
+  Skeleton: {
+    delay: {
+      note: 'step "1".."6" → milliseconds',
+      when: (raw) => /^["']?[1-6]["']?$/.test(String(raw).replace(/[{}]/g, "").trim()),
+    },
+    // Only the five old scale values; a Flex width like "80%" is the migrated
+    // form and must not be re-flagged.
+    width: {
+      note: 'scale → a Flex width, e.g. width="80%"',
+      when: (raw) => /^["'](xs|s|m|l|xl)["']$/.test(String(raw).trim()),
+    },
+  },
+};
 
 /** Find the end of the opening tag, skipping strings and nested {...}. */
 function openingTagEnd(src, from) {
@@ -127,8 +178,13 @@ function attributesOf(src, from, to) {
 
 export function transform(src) {
   const hits = [];
+  const warnings = [];
   let out = src;
-  for (const [tag, map] of Object.entries(TRANSFORMS)) {
+  // Union of both maps: a tag can have only a value change (ShineFx) and would
+  // otherwise never be visited, so its warning would silently never fire.
+  const tags = new Set([...Object.keys(TRANSFORMS), ...Object.keys(VALUE_CHANGED)]);
+  for (const tag of tags) {
+    const map = TRANSFORMS[tag] ?? {};
     const open = new RegExp(`<${tag}(?=[\\s/>])`, "g");
     let m;
     const edits = [];
@@ -137,6 +193,10 @@ export function transform(src) {
       if (end < 0) continue;
       const body = out.slice(m.index, end);
       for (const a of attributesOf(out, m.index + tag.length + 1, end)) {
+        const changed = VALUE_CHANGED[tag]?.[a.name];
+        if (changed && changed.when(a.value ?? "")) {
+          warnings.push(`<${tag}> ${a.name}: ${changed.note}`);
+        }
         const newP = map[a.name];
         if (!newP) continue;
         if (VALUE_AWARE[a.name] && a.value !== null && VALUE_AWARE[a.name](a.value)) continue;
@@ -149,7 +209,7 @@ export function transform(src) {
       hits.push(`<${e.tag}> ${e.oldP} → ${e.to}`);
     }
   }
-  return { out, hits };
+  return { out, hits, warnings };
 }
 
 // Importable as a module (for tests); the CLI below runs only when invoked directly.
@@ -168,15 +228,25 @@ const files = [];
   }
 })(dir);
 
-let total = 0, touched = 0;
+let total = 0, touched = 0, totalWarnings = 0;
 for (const f of files) {
   const src = fs.readFileSync(f, "utf8");
-  const { out, hits } = transform(src);
-  if (!hits.length) continue;
+  const { out, hits, warnings } = transform(src);
+  if (!hits.length && !warnings.length) continue;
+  if (warnings.length) {
+    console.log(`${f}`);
+    for (const w of [...new Set(warnings)]) console.log(`   ! ${w}  — value changed, fix by hand`);
+    totalWarnings += warnings.length;
+    if (!hits.length) continue;
+  }
   touched++; total += hits.length;
-  console.log(`${f}`);
+  if (!warnings.length) console.log(`${f}`);
   for (const h of [...new Set(hits)]) console.log(`   ${h}  ×${hits.filter((x) => x === h).length}`);
   if (!dry) fs.writeFileSync(f, out);
 }
-console.log(`\n${total} rename${total === 1 ? "" : "s"} across ${touched} file${touched === 1 ? "" : "s"}${dry ? " (dry run)" : ""}`);
+console.log(
+  `\n${total} rename${total === 1 ? "" : "s"} across ${touched} file${touched === 1 ? "" : "s"}` +
+    (totalWarnings ? `, ${totalWarnings} value change${totalWarnings === 1 ? "" : "s"} to fix by hand` : "") +
+    (dry ? " (dry run)" : ""),
+);
 }

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Column, CountFx, Text } from "../../";
 import styles from "./Gauge.module.css";
+import { ColorValue } from "../../types";
 
 export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Column>, 'direction'> {
   width?: number;
@@ -22,7 +23,7 @@ export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Colum
   edgePad?: number;        // default 0, number of ticks to trim at both ends
   children?: React.ReactNode;
   hue?: "success" | "neutral" | "danger" | [number, number];
-  color?: string;
+  color?: ColorValue;
 }
 
 const resolveHueRange = (hue: RadialGaugeProps["hue"]): [number, number] => {

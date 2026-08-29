@@ -14,7 +14,7 @@ ShineFx creates a smooth, animated shine effect that sweeps across text. The eff
   marginTop="16"
   marginBottom="24"
   preview={
-    <ShineFx variant="heading-default-xl" speed={0.75}>
+    <ShineFx variant="heading-default-xl" speed={750}>
       Thinking...
     </ShineFx>
   }
@@ -32,20 +32,20 @@ ShineFx creates a smooth, animated shine effect that sweeps across text. The eff
 
 ## Speed
 
-Adjust the animation speed with the `speed` prop. Higher values create slower animations, while lower values make the shine effect faster.
+Adjust the animation speed with the `speed` (milliseconds) prop. Higher values create slower animations, while lower values make the shine effect faster.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column gap="16">
-      <ShineFx variant="heading-default-l" speed={1}>
+      <ShineFx variant="heading-default-l" speed={1000}>
         Fast shine - default (1s)
       </ShineFx>
-      <ShineFx variant="heading-default-l" speed={5}>
+      <ShineFx variant="heading-default-l" speed={5000}>
         Medium shine (5s)
       </ShineFx>
-      <ShineFx variant="heading-default-l" speed={10}>
+      <ShineFx variant="heading-default-l" speed={10000}>
         Slow shine (10s)
       </ShineFx>
     </Column>
@@ -53,15 +53,15 @@ Adjust the animation speed with the `speed` prop. Higher values create slower an
   codes={[
     {
       code:
-`<ShineFx speed={1}>
+`<ShineFx speed={1000}>
     Fast shine - default (1s)
 </ShineFx>
 
-<ShineFx speed={3}>
+<ShineFx speed={3000}>
     Medium shine (3s)
 </ShineFx>
 
-<ShineFx speed={5}>
+<ShineFx speed={5000}>
     Slow shine (5s)
 </ShineFx>`,
       language: "tsx",
@@ -226,7 +226,7 @@ See [useReducedMotion](/once-ui/hooks/useReducedMotion) for details.
 
 <PropsTable
   content={[
-    ["speed", "number", "5"],
+    ["speed", "number (ms)", "5"],
     ["baseOpacity", "number", "0.3"],
     ["disabled", "boolean", "false"],
     ["inverse", "boolean", "false"],

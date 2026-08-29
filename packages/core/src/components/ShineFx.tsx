@@ -7,6 +7,7 @@ import classNames from "clsx";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 export interface ShineFxProps extends React.ComponentProps<typeof Text> {
+  /** Sweep duration in milliseconds. Was seconds until 2.0. */
   speed?: number;
   disabled?: boolean;
   inverse?: boolean;
@@ -16,7 +17,7 @@ export interface ShineFxProps extends React.ComponentProps<typeof Text> {
 }
 
 const ShineFx = forwardRef<HTMLSpanElement, ShineFxProps>(({
-  speed = 1,
+  speed = 1000,
   disabled = false,
   inverse = false,
   baseOpacity = 0.3,
@@ -28,7 +29,7 @@ const ShineFx = forwardRef<HTMLSpanElement, ShineFxProps>(({
 }, ref) => {
   const { shouldAnimate } = useReducedMotion(reducedMotion);
   const isDisabled = disabled || !shouldAnimate;
-  const animationDuration = `${speed}s`;
+  const animationDuration = `${speed}ms`;
 
   return (
     <Text

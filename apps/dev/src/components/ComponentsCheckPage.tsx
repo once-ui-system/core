@@ -1480,9 +1480,9 @@ export default function ComponentsCheck() {
               label: "Lines",
               element: (
                 <Column gap="s" fillWidth>
-                  <Skeleton shape="line" width="xl" />
-                  <Skeleton shape="line" width="l" />
-                  <Skeleton shape="line" width="m" />
+                  <Skeleton shape="line" width="100%" />
+                  <Skeleton shape="line" width="75%" />
+                  <Skeleton shape="line" width="50%" />
                 </Column>
               ),
             },
@@ -1492,7 +1492,7 @@ export default function ComponentsCheck() {
               element: (
                 <Row gap="s" vertical="center">
                   <Skeleton shape="circle" />
-                  <Skeleton shape="block" width="l" height="m" />
+                  <Skeleton shape="block" size="m" />
                 </Row>
               ),
             },

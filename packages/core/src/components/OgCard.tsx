@@ -188,7 +188,7 @@ const OgCard = ({
             />
             {resolvedUrl &&
               (loading ? (
-                <Skeleton shape="line" width="xs" height="xs" />
+                <Skeleton shape="line" width="25%" height="xs" />
               ) : (
                 <Text variant="label-default-s" onBackground="neutral-weak">
                   {formatDisplayUrl(resolvedUrl)}
@@ -199,7 +199,7 @@ const OgCard = ({
         <Column fillWidth gap={size === "s" ? "4" : size === "m" ? "8" : "12"}>
           {resolvedTitle !== null &&
             (loading ? (
-              <Skeleton shape="line" width="s" height="s" />
+              <Skeleton shape="line" width="33%" height="s" />
             ) : (
               resolvedTitle && (
                 <Text
@@ -218,8 +218,8 @@ const OgCard = ({
           {resolvedDescription !== null &&
             (loading ? (
               <Column fillWidth paddingY="8" gap="8">
-                <Skeleton shape="line" width="xl" height="xs" />
-                <Skeleton shape="line" width="l" height="xs" />
+                <Skeleton shape="line" width="100%" height="xs" />
+                <Skeleton shape="line" width="75%" height="xs" />
               </Column>
             ) : resolvedDescription ? (
               <Text

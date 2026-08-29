@@ -19,7 +19,7 @@
   "value": "number = 50",
   "labels": "\"none\" | \"percentage\" | string[] = none",
   "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
-  "color": "string = contrast"
+  "color": "ColorValue = contrast"
  },
  "mixinsRef": [
   "CommonProps",

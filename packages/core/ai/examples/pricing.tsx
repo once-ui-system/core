@@ -113,7 +113,7 @@ export function PricingExample() {
 
           <Grid ref={tiersRef} columns="3" gap="24" s={{ columns: 1 }}>
             {tiers.map((tier, index) => (
-              <RevealFx key={tier.name} fill trigger={tiersSeen} translateY="8" delay={index * 0.1}>
+              <RevealFx key={tier.name} fill revealed={tiersSeen} translateY="8" delay={index * 100}>
                 <Column
                   fill
                   background="surface"
@@ -146,7 +146,7 @@ export function PricingExample() {
                       <Heading as="h3" variant="heading-strong-m">
                         {tier.name}
                       </Heading>
-                      {tier.highlighted && <Tag variant="brand" size="s" label="Most popular" />}
+                      {tier.highlighted && <Tag scheme="brand" size="s" label="Most popular" />}
                     </Row>
                     <Text variant="body-default-s" onBackground="neutral-weak">
                       {tier.description}

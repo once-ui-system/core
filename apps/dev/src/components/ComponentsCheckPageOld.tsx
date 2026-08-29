@@ -570,9 +570,9 @@ export default function ComponentsCheckOld() {
           name: "Skeleton",
           element: (
             <Column gap="s" fillWidth>
-              <Skeleton shape="line" width="xl" />
-              <Skeleton shape="line" width="l" />
-              <Skeleton shape="line" width="m" />
+              <Skeleton shape="line" width="100%" />
+              <Skeleton shape="line" width="75%" />
+              <Skeleton shape="line" width="50%" />
             </Column>
           ),
         },
