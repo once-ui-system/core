@@ -132,6 +132,17 @@ from `DropdownWrapper` (`EmojiPickerDropdown`) inherit these renames; the
 codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
 (`props.isChecked`) are not JSX and are surfaced by `tsc`, not rewritten.
 
+### Fixed
+
+- **`opacity={0}` and `zIndex={0}` now work.** Both are legal values — `Opacity`
+  includes `0`, `zIndex` includes `-1` and `0` — and `.opacity-0` / `.z-index-0`
+  ship in the stylesheet, but the class list guarded them on truthiness rather
+  than presence, so the single most useful value of each prop (hide a layer, pin
+  to the base stacking level) silently did nothing. The responsive `opacity`
+  variants already had the correct check; the base value and all four `zIndex`
+  breakpoints did not. Found while building a hover cross-fade, where both
+  images rendered at full opacity, stacked.
+
 ### Added
 
 - `LayoutProvider` is now also exported from `@once-ui-system/core/next`, with the
