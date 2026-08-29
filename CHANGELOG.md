@@ -145,6 +145,18 @@ codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
 
 ### Added
 
+- **`Book`** — a book with a real 3D cover: perspective on the wrapper, a
+  `preserve-3d` context shared by cover and page block, and pages hinged onto
+  the cover's right edge, so the hover turn reads correctly from any angle
+  rather than only head-on. Motion is hover-gated and disabled under
+  `prefers-reduced-motion`; on touch the cover stays square-on. Links through
+  `ElementType`, so it routes via the adapter like every other core link.
+- **`MediaAudioPlayer`** — play/pause, a scrubbable progress bar and
+  elapsed/total time, the audio counterpart to `MediaVideoPlayer` and imported
+  from the same `./components/*` subpath rather than the root barrel. It takes
+  an `onTimeUpdate` callback so a caller can synchronise something with
+  playback — narration highlighting, a transcript, chapter markers — without
+  the player needing to know what is being synchronised.
 - `LayoutProvider` is now also exported from `@once-ui-system/core/next`, with the
   Next adapters pre-installed. It makes the adapter migration a single import-path
   change rather than a new provider in the tree, and it is what a codemod can apply

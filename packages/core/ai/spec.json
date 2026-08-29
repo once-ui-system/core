@@ -394,6 +394,27 @@
     "children": "React.ReactNode"
    }
   },
+  "Book": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "src": "string",
+    "alt": "string",
+    "sizes": "string",
+    "href": "string",
+    "children": "React.ReactNode"
+   }
+  },
   "BlockQuote": {
    "group": "components",
    "extends": [

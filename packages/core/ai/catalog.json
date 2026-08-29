@@ -114,6 +114,16 @@
     "components"
    ]
   },
+  "Book": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Book component",
+   "tags": [
+    "components"
+   ]
+  },
   "BlockQuote": {
    "group": "components",
    "extends": [

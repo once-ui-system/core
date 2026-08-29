@@ -10,6 +10,7 @@ export * from "./Badge";
 export * from "./BlobFx";
 export * from "./Banner";
 export * from "./Background";
+export * from "./Book";
 export * from "./BlockQuote";
 export * from "./Button";
 export * from "./MatrixFx";
