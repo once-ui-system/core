@@ -24,6 +24,7 @@ export * from "./PageList";
 export * from "./ProgressBarExample";
 export * from "./PropsTable";
 export * from "./RadioButtonExample";
+export * from "./ScrubberExamples";
 export * from "./SettingExamples";
 export * from "./SwitchExample";
 export * from "./TextareaExamples";

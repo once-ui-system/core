@@ -117,5 +117,6 @@ export * from "./UserMenu";
 export * from "./CelebrationFx";
 export * from "./Effect";
 export * from "./InfoTip";
+export * from "./Scrubber";
 export * from "./Setting";
 export * from "./FadingLettersFx";

@@ -1040,6 +1040,16 @@
     "components"
    ]
   },
+  "Scrubber": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Scrubber component",
+   "tags": [
+    "components"
+   ]
+  },
   "Setting": {
    "group": "components",
    "extends": [

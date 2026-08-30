@@ -2361,6 +2361,35 @@
     "size": "React.ComponentProps<typeof Icon>[\"size\"] = xs"
    }
   },
+  "Scrubber": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "duration": "!number",
+    "value": "!number",
+    "onChange": "!(time: number) => void",
+    "tracks": "ScrubberTrack[] = []",
+    "selected": "string | null = null",
+    "onSelect": "(blockId: string | null) => void",
+    "onBlockChange": "(trackId: string, blockId: string, next: { start: number; end: number }) => void",
+    "onGestureStart": "() => void",
+    "onBlockContextMenu": "(event: React.MouseEvent, trackId: string, blockId: string) => void",
+    "showTime": "boolean = true",
+    "formatTime": "(time: number) => string = defaultFormatTime",
+    "step": "number",
+    "ariaLabel": "string = Seek"
+   }
+  },
   "Setting": {
    "group": "components",
    "extends": [

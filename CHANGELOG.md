@@ -296,6 +296,25 @@ codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
   seeded rather than timed); per-effect blocks — `matrix={{ ... }}`,
   `weather={{ ... }}` — configure one without disturbing the others, so all of
   them can be set up front and still switched with one prop.
+- **`Scrubber`** — a playhead over time, extracted from Scenetic's editor. With
+  no tracks it is a seek bar; with tracks it is an editor timeline: stacked
+  layers of blocks sharing one playhead, each selectable, movable and
+  trimmable, with pointer events throughout so it works with a finger as well
+  as a mouse, and a `role="slider"` track so the playhead is reachable without
+  one. It is deliberately not `Timeline`, which lays out a sequence of steps
+  down the page — the two were the same word for unrelated things, which is
+  why this one is named for the gesture instead.
+
+  Editing is offered, not applied: `onBlockChange` reports absolute times
+  clamped to the timeline and measured from where the gesture started (not
+  accumulated per pointer move, so a block cannot drift away from the pointer
+  over a long drag), and the block renders wherever the caller puts it. A
+  minimum length, overlap rules and snapping stay with the application, and
+  refusing a change is simply not applying it. `onGestureStart` fires once per
+  drag, which is one undo entry per gesture rather than one per pointer move.
+  `onChange` and `onSelect` are both DOM handlers on the inherited
+  `HTMLAttributes`, so they are omitted and redeclared — the same resolution
+  the rest of 2.0 uses for `checked`, `size` and `prefix`.
 - **`Setting`, `SettingGroup`, `SettingAxes` and `InfoTip`** — the settings row
   that Aveiro, Frametic and Scenetic had each grown a private copy of. Label
   (with an optional hover explainer and description) on the left, one control on
