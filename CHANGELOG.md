@@ -175,6 +175,25 @@ codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
 
 ### Fixed
 
+- **The date-and-time picker no longer corrupts the time as you edit it.** Two
+  faults compounded into what looked like the field flipping between AM and PM
+  while typing. `handleTimeChange` takes a 1–12 hour, but the minutes field and
+  the AM/PM control both passed `selectedTime.hours`, which is 24-hour — so at
+  9:31 PM, editing the minutes re-applied the PM offset (21 + 12 = 33),
+  `setHours(33)` rolled the date forward a day, and the hour came back as 09.
+  Every further edit compounded it. Verified in a browser: before, editing the
+  minutes at `Aug 15, 21:31` produced `Aug 16, 09:45`; after, `Aug 15, 21:45`.
+- **The time panel no longer disappears mid-edit.** `DateInput` keyed the picker
+  on `value.getTime()`, so every hour, minute or AM/PM change altered the key
+  and React unmounted and remounted the whole picker — resetting it to the
+  calendar view while the dropdown stayed open, which reads as the picker
+  closing itself. The key now depends only on open state; the picker already
+  syncs to a changed `value` in an effect.
+- **A dropdown no longer closes when a click lands on something unfocusable
+  inside it.** `focusout` treated a null `relatedTarget` — the padding of a
+  field, the gap between two stepper buttons, a label — as focus leaving the
+  panel. A genuine outside click is already handled separately.
+
 - **Icon-only controls announce what they do, not which glyph they use.**
   `IconButton` falls back to the icon *name* as its accessible label when given
   no `tooltip` and no `aria-label` — so a carousel control announced

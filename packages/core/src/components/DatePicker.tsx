@@ -347,11 +347,18 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       return hour24;
     };
 
-    const handleTimeChange = (hours: number, minutes: number, pm: boolean = isPM) => {
+    /**
+     * `hours12` is the 1–12 value the hour input shows, NOT `selectedTime.hours`,
+     * which is 24-hour. Passing the 24-hour value in re-applies the PM offset:
+     * 15 becomes 27, the date rolls to the next day, and the hour input — capped
+     * at 12 — starts showing 15. Every subsequent edit compounds it, which is
+     * what made the field appear to flip between AM and PM while typing.
+     */
+    const handleTimeChange = (hours12: number, minutes: number, pm: boolean = isPM) => {
       if (!selectedDate) return;
 
       const newTime = {
-        hours: pm ? (hours === 12 ? 12 : hours + 12) : hours === 12 ? 0 : hours,
+        hours: pm ? (hours12 === 12 ? 12 : hours12 + 12) : hours12 === 12 ? 0 : hours12,
         minutes,
       };
       setSelectedTime(newTime);
@@ -826,7 +833,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 value={isPM ? "PM" : "AM"}
                 onChange={(value) =>
                   handleTimeChange(
-                    selectedTime?.hours ?? 0,
+                    convert24to12(selectedTime?.hours ?? 0),
                     selectedTime?.minutes ?? 0,
                     value === "PM",
                   )
@@ -856,7 +863,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   value={selectedTime?.minutes ?? 0}
                   onChange={(value) => {
                     if (value >= 0 && value <= 59) {
-                      handleTimeChange(selectedTime?.hours ?? 0, value);
+                      handleTimeChange(convert24to12(selectedTime?.hours ?? 0), value);
                     }
                   }}
                   aria-label="Minutes"

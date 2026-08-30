@@ -315,7 +315,18 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     const handleFocusOut = useCallback(
       (event: FocusEvent) => {
-        // Check if focus moved to the dropdown or stayed in the wrapper
+        // `relatedTarget` is null whenever focus is lost to something that
+        // cannot take it — the padding of a field, the gap between two stepper
+        // buttons, a label. Treating that as "focus left the dropdown" closed
+        // the panel on any click that missed a focusable target, which is what
+        // made NumberInput inside a DatePicker feel like it dismissed the
+        // picker. A genuine click outside is already handled by
+        // handleClickOutside, so there is nothing to catch here.
+        if (event.relatedTarget === null) return;
+
+        // Check if focus moved to the dropdown or stayed in the wrapper. The
+        // dropdown is portalled, so it is not a descendant of the wrapper and
+        // both have to be checked.
         const isFocusInDropdown =
           dropdownRef.current && dropdownRef.current.contains(event.relatedTarget as Node);
         const isFocusInWrapper =
