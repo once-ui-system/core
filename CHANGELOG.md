@@ -175,6 +175,24 @@ codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
 
 ### Fixed
 
+- **`SplitView` works on touch, and collapses to tabs on small screens.** The
+  divider listened for `mousedown` and `mousemove` only, so on a touch device it
+  could not be dragged at all — no amount of changing direction helped, because
+  no drag ever started. It uses pointer events now, which cover mouse, pen and
+  touch in one path, with pointer capture so the drag survives the finger
+  leaving the handle.
+
+  Below `collapseBelow` (default `s`) the split becomes tabs showing one panel
+  at a time, since a resizable split is a poor pattern on a phone in either
+  orientation: neither pane is usable at any ratio, and a drag handle competes
+  with page scrolling. Pass `labels` to name the tabs.
+
+  Two further faults fixed on the way: `defaultSplit`, `minSplit` and `maxSplit`
+  were accepted and then ignored — the hook hardcoded 0.3, 0.2 and 0.8 — and the
+  divider was pointer-only despite the docs claiming it was keyboard
+  accessible. It is now a focusable `role="separator"` that arrow keys move in
+  5% steps and that reports its position through `aria-valuenow`.
+
 - **The date-and-time picker no longer corrupts the time as you edit it.** Two
   faults compounded into what looked like the field flipping between AM and PM
   while typing. `handleTimeChange` takes a 1–12 hour, but the minutes field and

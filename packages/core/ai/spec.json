@@ -1952,6 +1952,8 @@
    "props": {
     "leftPanel": "!ReactNode",
     "rightPanel": "!ReactNode",
+    "labels": "{ left: string; right: string }",
+    "collapseBelow": "BreakpointKey | false = s",
     "defaultSplit": "number = 0.3",
     "minSplit": "number = 0.2",
     "maxSplit": "number = 0.8"
