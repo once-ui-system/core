@@ -142,6 +142,19 @@ milliseconds rather than a `"1".."6"` index into six fixed classes.
 + <Skeleton shape="line" size="s" width="75%" delay={300} />
 ```
 
+**`fill` means layout everywhere.** `Media`, `Carousel` and `Swiper` each
+declared a `fill` of their own, shadowing the `StyleProps` layout prop of the
+same name that every Flex-derived component has (`fillWidth` + `fillHeight`).
+So `<Media fill />` did not fill anything — it dropped the intrinsic aspect
+ratio and handed sizing to the parent, which is a reasonable thing to want and
+not remotely what the name says. That behaviour is now `stretch`, and `fill` on
+those three means what it means on everything else.
+
+```diff
+- <Media fill />        <Carousel fill />        <Swiper fill />
++ <Media stretch />     <Carousel stretch />     <Swiper stretch />
+```
+
 **Colour props that paint into SVG accept tokens again.** `color` on
 `LinearGauge`, `RadialGauge`, `Particle` and the chart module, and
 `colorStart` / `colorEnd` / `color` on `Background`'s gradient, dots, grid and
@@ -175,6 +188,9 @@ codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
 
 ### Fixed
 
+- **`Media` honours `fillWidth={false}`.** It accepted the prop, destructured
+  it, and then hardcoded `fillWidth` on the element anyway, so the value was
+  silently discarded. Found while renaming `fill` above.
 - **`SplitView` works on touch, and collapses to tabs on small screens.** The
   divider listened for `mousedown` and `mousemove` only, so on a touch device it
   could not be dragged at all — no amount of changing direction helped, because
@@ -261,6 +277,36 @@ codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
   an `onTimeUpdate` callback so a caller can synchronise something with
   playback — narration highlighting, a transcript, chapter markers — without
   the player needing to know what is being synchronised.
+- **`Card` takes `selected`.** Picking one card out of a set — a plan, a
+  template, an option in a multi-select list — was every app repainting the
+  border and background by hand, each landing on slightly different tokens. The
+  prop paints both from the brand scheme, keeps them through hover (the hover
+  rule out-specified the background utility class, so a hand-rolled selected
+  card went neutral the moment the pointer touched it), and, on a card that is
+  actually clickable, announces the state as `aria-pressed`. Both colours are
+  defaults: pass `background` or `border` to override either.
+- **`Effect`** — one slot for the interchangeable ambient layers. `BlobFx`,
+  `MatrixFx`, `WeatherFx`, `Particle` and `CelebrationFx` all paint a
+  full-bleed decorative surface behind their content and are, in practice,
+  alternatives to each other; swapping one for another meant changing an import
+  and rewriting the positioning. `<Effect type="matrix" />` picks between them
+  by value, so a template can expose its aesthetic as a single setting, and
+  `type="none"` renders the content with no layer at all. `colors` and `speed`
+  are shared across the set (`Particle` takes the first colour, `blob` is
+  seeded rather than timed); per-effect blocks — `matrix={{ ... }}`,
+  `weather={{ ... }}` — configure one without disturbing the others, so all of
+  them can be set up front and still switched with one prop.
+- **`Setting`, `SettingGroup`, `SettingAxes` and `InfoTip`** — the settings row
+  that Aveiro, Frametic and Scenetic had each grown a private copy of. Label
+  (with an optional hover explainer and description) on the left, one control on
+  the right, in a bordered row that stacks into a panel. Aveiro's version took
+  every control as a typed prop — `switch`, `slider`, `dropdown`, `media` — so
+  the component had to know about every control that would ever sit in it; this
+  one takes the control as children and composes with anything, including
+  controls that do not exist yet. `SettingGroup` nests sub-settings *inside* its
+  box so the relationship survives a long scrolling panel, and `SettingAxes`
+  carries the axes of one property side by side rather than as two rows that
+  read as unrelated settings.
 - `LayoutProvider` is now also exported from `@once-ui-system/core/next`, with the
   Next adapters pre-installed. It makes the adapter migration a single import-path
   change rather than a new provider in the tree, and it is what a codemod can apply

@@ -115,4 +115,7 @@ export * from "./ThemeSwitcher";
 export * from "./User";
 export * from "./UserMenu";
 export * from "./CelebrationFx";
+export * from "./Effect";
+export * from "./InfoTip";
+export * from "./Setting";
 export * from "./FadingLettersFx";

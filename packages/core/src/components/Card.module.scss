@@ -5,3 +5,13 @@
         }
     }
 }
+
+// The hover rule above out-specifies the `background-*` utility class, so a
+// selected card would drop back to neutral the moment the pointer touched it.
+.selected {
+    @media (hover: hover) {
+        &:hover {
+            background-color: var(--brand-alpha-medium);
+        }
+    }
+}

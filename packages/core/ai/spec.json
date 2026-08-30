@@ -535,7 +535,7 @@
     "items": "!CarouselItem[] = []",
     "controls": "boolean = true",
     "priority": "boolean = false",
-    "fill": "boolean = false",
+    "stretch": "boolean = false",
     "indicator": "\"line\" | \"thumbnail\" | false = line",
     "translateY": "SpacingToken | number",
     "aspectRatio": "string = original",
@@ -563,7 +563,7 @@
     "items": "!SwiperItem[] = []",
     "controls": "boolean | \"contained\" = true",
     "priority": "boolean = false",
-    "fill": "boolean = false",
+    "stretch": "boolean = false",
     "aspectRatio": "string = 16 / 9",
     "sizes": "string",
     "unoptimized": "boolean = false",
@@ -588,6 +588,7 @@
     "href": "string",
     "onClick": "() => void",
     "fillHeight": "boolean",
+    "selected": "boolean",
     "style": "React.CSSProperties",
     "className": "string"
    }
@@ -1481,7 +1482,7 @@
     "sizes": "string | number = 100vw",
     "priority": "boolean",
     "caption": "ReactNode",
-    "fill": "boolean = false",
+    "stretch": "boolean = false",
     "fillWidth": "boolean = true",
     "loop": "boolean = true",
     "autoplay": "boolean = true",
@@ -2313,6 +2314,113 @@
     "trigger": "\"mount\" | \"hover\" | \"manual\" | \"click\" = mount",
     "active": "boolean = true",
     "reducedMotion": "boolean | \"auto\" = auto",
+    "children": "React.ReactNode"
+   }
+  },
+  "Effect": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "type": "EffectType = none",
+    "colors": "string[]",
+    "speed": "number",
+    "reducedMotion": "boolean | \"auto\"",
+    "blob": "Omit<React.ComponentProps<typeof BlobFx>, \"children\">",
+    "matrix": "Omit<React.ComponentProps<typeof MatrixFx>, \"children\">",
+    "weather": "Omit<React.ComponentProps<typeof WeatherFx>, \"children\">",
+    "particle": "Omit<React.ComponentProps<typeof Particle>, \"children\">",
+    "celebration": "Omit<React.ComponentProps<typeof CelebrationFx>, \"children\">",
+    "children": "React.ReactNode"
+   }
+  },
+  "InfoTip": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "React.ReactNode",
+    "size": "React.ComponentProps<typeof Icon>[\"size\"] = xs"
+   }
+  },
+  "Setting": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "React.ReactNode",
+    "description": "React.ReactNode",
+    "info": "React.ReactNode",
+    "controlWidth": "number = 14",
+    "children": "React.ReactNode"
+   }
+  },
+  "SettingAxes": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "React.ReactNode",
+    "info": "React.ReactNode",
+    "axes": "!{ label: React.ReactNode; control: React.ReactNode }[]",
+    "axisWidth": "number = 13"
+   }
+  },
+  "SettingGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "React.ReactNode",
+    "description": "React.ReactNode",
+    "info": "React.ReactNode",
+    "control": "React.ReactNode",
+    "open": "boolean",
     "children": "React.ReactNode"
    }
   },

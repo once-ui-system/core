@@ -16,7 +16,7 @@
   "items": "!SwiperItem[] = []",
   "controls": "boolean | \"contained\" = true",
   "priority": "boolean = false",
-  "fill": "boolean = false",
+  "stretch": "boolean = false",
   "aspectRatio": "string = 16 / 9",
   "sizes": "string",
   "unoptimized": "boolean = false",

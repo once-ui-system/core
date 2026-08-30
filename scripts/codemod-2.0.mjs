@@ -50,6 +50,12 @@ const TRANSFORMS = {
   Pulse:            { variant: "scheme" },
   Tag:              { variant: "scheme" },
   Skeleton:         { height: "size" },
+  // `fill` shadowed the Flex layout prop of the same name on all three, so
+  // `<Media fill />` filled nothing. The shadow is now `stretch` and `fill`
+  // means on these what it means everywhere else.
+  Media:            { fill: "stretch" },
+  Carousel:         { fill: "stretch" },
+  Swiper:           { fill: "stretch" },
   Button:           { radius: "corners" },
   IconButton:       { radius: "corners" },
   ToggleButton:     { radius: "corners" },

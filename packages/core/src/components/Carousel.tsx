@@ -29,7 +29,13 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   items: CarouselItem[];
   controls?: boolean;
   priority?: boolean;
-  fill?: boolean;
+  /**
+   * Drop the intrinsic aspect ratio and let the slides stretch to whatever box
+   * they are in. Named `stretch` rather than `fill` because `fill` is a layout
+   * prop on every Flex-derived component, and shadowing it here meant `fill`
+   * did not do the one thing its name promised.
+   */
+  stretch?: boolean;
   indicator?: "line" | "thumbnail" | false;
   translateY?: SpacingToken | number;
   aspectRatio?: string;
@@ -47,7 +53,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
 
 const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
   items = [],
-  fill = false,
+  stretch = false,
   controls = true,
   priority = false,
   indicator = "line",
@@ -203,7 +209,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
   return (
     <Column
       fillWidth
-      fillHeight={fill}
+      fillHeight={stretch}
       gap="8"
       {...flex}
       aspectRatio={undefined}
@@ -226,7 +232,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
       )}
       <RevealFx
         fillWidth
-        fillHeight={fill}
+        fillHeight={stretch}
         radius={flex.radius || "l"}
         revealed={isTransitioning}
         translateY={translateY}
@@ -258,7 +264,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
       >
         {typeof items[activeIndex]?.slide === "string" ? (
           <Media
-            fill={fill}
+            stretch={stretch}
             sizes={sizes}
             unoptimized={unoptimized}
             priority={priority}
@@ -266,7 +272,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
             border={flex.border || "neutral-alpha-weak"}
             overflow="hidden"
             aspectRatio={
-              fill
+              stretch
                 ? undefined
                 : aspectRatio === "auto"
                   ? undefined
@@ -282,7 +288,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
             radius={flex.radius || "l"}
             border={flex.border || "neutral-alpha-weak"}
             aspectRatio={
-              fill
+              stretch
                 ? undefined
                 : aspectRatio === "auto"
                   ? undefined

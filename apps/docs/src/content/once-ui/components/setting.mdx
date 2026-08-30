@@ -1,0 +1,178 @@
+---
+title: "Setting"
+summary: "The settings row: a label on the left, one control on the right, in a panel that stacks."
+updatedAt: "2026-08-30"
+docs: "once-ui/components/setting.mdx"
+github: "components/Setting.tsx"
+navLabel: "Setting"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+Every editor UI grows the same row: a label, sometimes a description, sometimes
+an explainer, and one control on the right. `Setting` is that row.
+
+The control is passed as **children** rather than as a typed prop, so the
+component never has to know what can sit in it — including controls that do not
+exist yet.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={<SettingBasicExample />}
+  codes={[
+    {
+      code:
+`<Setting label="Autoplay" description="Start playing on load">
+    <Switch checked={autoplay} onToggle={toggleAutoplay} />
+</Setting>
+<Setting label="Loop" info="Restarts from the beginning when it reaches the end.">
+    <Switch checked={loop} onToggle={toggleLoop} />
+</Setting>`,
+      language: "tsx",
+      label: "Setting"
+    }
+  ]}
+/>
+
+## Info
+
+`info` puts a sentence of context behind a small icon beside the label, so a
+setting can explain itself without spending a line of the panel on a description
+that is only read once. It renders an `InfoTip`, which is also exported on its
+own for use anywhere else.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <Row gap="8" vertical="center">
+      <Text variant="label-default-s">Bitrate</Text>
+      <InfoTip>Higher bitrates keep more detail in fast motion, at a larger file size.</InfoTip>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<InfoTip>
+    Higher bitrates keep more detail in fast motion, at a larger file size.
+</InfoTip>`,
+      language: "tsx",
+      label: "InfoTip"
+    }
+  ]}
+/>
+
+## Groups
+
+`SettingGroup` nests sub-settings **inside** its own box rather than beside it,
+so the relationship survives a panel with ten groups in it. The header control
+is what usually gates the body.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={<SettingGroupExample />}
+  codes={[
+    {
+      code:
+`<SettingGroup
+  label="Watermark"
+  control={<Switch checked={enabled} onToggle={toggleEnabled} />}
+  open={enabled}
+>
+    <Setting label="Opacity">
+      <Slider value={opacity} onChange={setOpacity} />
+    </Setting>
+    <Setting label="Position">
+      <SegmentedControl value={position} onChange={setPosition} buttons={positions} />
+    </Setting>
+</SettingGroup>`,
+      language: "tsx",
+      label: "SettingGroup"
+    }
+  ]}
+/>
+
+## Axes
+
+A property with more than one axis belongs in one row. `SettingAxes` puts them
+side by side, and wraps when the panel is too narrow, instead of splitting into
+two rows that read as unrelated settings.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={<SettingAxesExample />}
+  codes={[
+    {
+      code:
+`<SettingAxes
+  label="Tilt"
+  info="Rotates the frame in 3D. Both axes are degrees."
+  axes={[
+    { label: "X", control: <Slider value={x} min={-45} max={45} onChange={setX} /> },
+    { label: "Y", control: <Slider value={y} min={-45} max={45} onChange={setY} /> },
+  ]}
+/>`,
+      language: "tsx",
+      label: "SettingAxes"
+    }
+  ]}
+/>
+
+## API reference
+
+### Setting
+
+<PropsTable
+  content={[
+    ["label", "ReactNode"],
+    ["description", "ReactNode"],
+    ["info", "ReactNode"],
+    ["controlWidth", "number", "14"],
+    ["children", "ReactNode"],
+    ["...flex"]
+  ]}
+/>
+
+### SettingGroup
+
+<PropsTable
+  content={[
+    ["label", "ReactNode"],
+    ["description", "ReactNode"],
+    ["info", "ReactNode"],
+    ["control", "ReactNode"],
+    ["open", "boolean"],
+    ["children", "ReactNode"],
+    ["...flex"]
+  ]}
+/>
+
+### SettingAxes
+
+<PropsTable
+  content={[
+    ["label", "ReactNode"],
+    ["info", "ReactNode"],
+    ["axes", "{ label: ReactNode; control: ReactNode }[]"],
+    ["axisWidth", "number", "13"],
+    ["...flex"]
+  ]}
+/>
+
+### InfoTip
+
+<PropsTable
+  content={[
+    ["children", "ReactNode"],
+    ["size", ["xs", "s", "m", "l", "xl"], "xs"],
+    ["...flex"]
+  ]}
+/>

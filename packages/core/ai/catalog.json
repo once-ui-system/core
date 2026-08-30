@@ -1020,6 +1020,56 @@
     "components"
    ]
   },
+  "Effect": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Effect component",
+   "tags": [
+    "components"
+   ]
+  },
+  "InfoTip": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "InfoTip component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Setting": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Setting component",
+   "tags": [
+    "components"
+   ]
+  },
+  "SettingAxes": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "SettingAxes component",
+   "tags": [
+    "components"
+   ]
+  },
+  "SettingGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "SettingGroup component",
+   "tags": [
+    "components"
+   ]
+  },
   "FadingLettersFx": {
    "group": "components",
    "purpose": "FadingLettersFx component",

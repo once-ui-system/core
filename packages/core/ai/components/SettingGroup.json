@@ -1,5 +1,5 @@
 {
- "name": "Media",
+ "name": "SettingGroup",
  "group": "components",
  "extends": [
   "Flex"
@@ -13,25 +13,12 @@
   "StyleProps"
  ],
  "props": {
-  "aspectRatio": "string = original",
-  "height": "number",
-  "alt": "string = ",
-  "loading": "boolean = false",
-  "objectFit": "CSSProperties[\"objectFit\"] = cover",
-  "enlarge": "boolean = false",
-  "src": "!string",
-  "unoptimized": "boolean = false",
-  "sizes": "string | number = 100vw",
-  "priority": "boolean",
-  "caption": "ReactNode",
-  "stretch": "boolean = false",
-  "fillWidth": "boolean = true",
-  "loop": "boolean = true",
-  "autoplay": "boolean = true",
-  "sound": "boolean = false",
-  "controls": "boolean = false",
-  "style": "CSSProperties",
-  "className": "string"
+  "label": "React.ReactNode",
+  "description": "React.ReactNode",
+  "info": "React.ReactNode",
+  "control": "React.ReactNode",
+  "open": "boolean",
+  "children": "React.ReactNode"
  },
  "mixinsRef": [
   "CommonProps",
