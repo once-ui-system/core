@@ -71,7 +71,7 @@ The `BarChart` component provides a way to display bar charts with interactive f
 <BarChart
   marginTop="16"
   marginBottom="24"
-  data-viz="divergent"
+  data-viz-style="divergent"
   title="Wealth distribution"
   description="Global share of wealth held by Top 1% vs Bottom 99%, 2000–2025"
   barWidth="s"
@@ -89,5 +89,90 @@ The `BarChart` component provides a way to display bar charts with interactive f
     { name: "2015", "Top 1%": 45.0, "Bottom 99%": 55.0 },
     { name: "2020", "Top 1%": 50.0, "Bottom 99%": 50.0 },
     { name: "2025 (est.)", "Top 1%": 52.5, "Bottom 99%": 47.5 }
+  ]}
+/>
+## Bar width
+
+`barWidth` takes a t-shirt token, a pixel number, or `"fill"` to let the bars
+consume the whole band with no gap between them. Wider bars read better for a
+handful of categories; `"s"` or a number keeps a long series legible.
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  title="Same data, three widths"
+  description="barWidth: fill"
+  barWidth="fill"
+  legend={{ display: false }}
+  series={{ key: "Minutes", color: "cyan" }}
+  data={[
+    { name: "Mon", Minutes: 40 },
+    { name: "Tue", Minutes: 65 },
+    { name: "Wed", Minutes: 55 },
+    { name: "Thu", Minutes: 80 },
+    { name: "Fri", Minutes: 95 }
+  ]}
+/>
+
+## Moving an axis
+
+`reverseX` and `reverseY` move an axis to the opposite side of the plot — the x
+axis to the top, the y axis to the right. They reposition the labels; they do
+not reverse the scale, and the data is untouched.
+
+Reach for `reverseY` when the chart sits at the left edge of a layout and the
+labels read better on the inside, or when two charts are placed side by side
+and you want their axes on the outer edges.
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  title="Y axis on the right"
+  description="reverseY"
+  reverseY
+  barWidth="l"
+  legend={{ display: false }}
+  series={{ key: "Signups", color: "magenta" }}
+  data={[
+    { name: "Jan", Signups: 180 },
+    { name: "Feb", Signups: 240 },
+    { name: "Mar", Signups: 220 },
+    { name: "Apr", Signups: 310 },
+    { name: "May", Signups: 420 }
+  ]}
+/>
+
+## Hover
+
+`hover` paints the whole band behind the bar on pointer-over, which makes a
+dense chart easier to read across — the row you are pointing at is the one
+lighting up, rather than just the bar you happened to hit.
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  title="Hover the bands"
+  description="hover"
+  hover
+  series={[{ key: "Income" }, { key: "Expenses" }]}
+  data={[
+    { name: "Q1", Income: 35000, Expenses: 45000 },
+    { name: "Q2", Income: 42000, Expenses: 48000 },
+    { name: "Q3", Income: 55000, Expenses: 51000 },
+    { name: "Q4", Income: 75000, Expenses: 52000 }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["barWidth", ["xs", "s", "m", "l", "xl", "fill", "number"], "\"l\"", "Bar thickness. \"fill\" removes the gap between bands."],
+    ["hover", "boolean", "false", "Highlight the whole band on pointer-over."],
+    ["reverseX", "boolean", "false", "Move the x axis to the top."],
+    ["reverseY", "boolean", "false", "Move the y axis to the right."],
+    ["grid", ["x", "y", "both", "none"], "\"y\"", "Which grid lines to draw."],
+    ["axis", ["x", "y", "both", "none"], "\"both\"", "Which axes to label."],
+    ["...chart"],
   ]}
 />

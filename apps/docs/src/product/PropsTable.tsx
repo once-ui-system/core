@@ -34,6 +34,7 @@ const SPREADS: Record<string, { type: string; href?: string }> = {
   scroller: { type: "ScrollerProps", href: "/once-ui/components/scroller" },
   animation: { type: "AnimationProps", href: "/once-ui/components/animation" },
   user: { type: "UserProps", href: "/once-ui/components/user" },
+  chart: { type: "ChartProps", href: "/once-ui/data/setup" },
   dropdownWrapper: {
     type: "DropdownWrapperProps",
     href: "/once-ui/components/dropdownWrapper",
