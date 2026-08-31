@@ -409,6 +409,8 @@ const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     ["resize", ["horizontal", "vertical", "both", "none"], "vertical"],
     ["validate", "(value: string) => ReactNode | null"],
     ["className"],
-    ["style"]
+    ["style"],
+    ["variant", ["default", "ghost"], "\"default\"", "Ghost drops the border and background."],
+    ["...TextareaHTMLAttributes"]
   ]}
 />

@@ -67,6 +67,10 @@ GlitchFx applies a glitch animation to any nested content. You can control the s
     ["children"],
     ["className"],
     ["style"],
+    ["trigger", ["instant", "hover", "custom"], "\"instant\"", "What starts the effect."],
+    ["continuous", "boolean", "true", "Keep glitching rather than running once."],
+    ["interval", "number", "2500", "Time between bursts, in milliseconds."],
+    ["speed", ["slow", "medium", "fast"], "\"medium\"", "Pace of a single burst."],
     ["...flex"],
   ]}
 />

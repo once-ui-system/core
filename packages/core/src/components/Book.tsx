@@ -48,7 +48,7 @@ const Book = forwardRef<HTMLDivElement, BookProps>(
                 src={src}
                 alt={alt || "Book cover"}
                 sizes={sizes || "(max-width: 768px) 100vw, 480px"}
-                fill
+                stretch
               />
             )}
             {children && (

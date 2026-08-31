@@ -183,3 +183,30 @@ inserting icons through this component.
       <Icon name="search" size="m" />
     </Row>}
 />
+## useIcons
+
+`useIcons()` returns the merged icon library — the defaults plus whatever the
+nearest `IconProvider` added. Use it when you need to resolve a name to a
+component yourself; for rendering, prefer
+[`Icon`](/once-ui/components/icon), which does this for you.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const { icons } = useIcons();
+const known = Object.keys(icons);
+
+// Fall back rather than rendering nothing for an unregistered name.
+<Icon name={known.includes(name) ? name : "info"} />`,
+      language: "tsx",
+      label: "useIcons"
+    }
+  ]}
+/>
+
+Unlike the other context hooks, `useIcons()` does not throw outside a provider —
+it returns the default library, so a component that only needs built-in icons
+works with no provider in the tree.

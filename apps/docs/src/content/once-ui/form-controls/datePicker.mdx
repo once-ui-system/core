@@ -67,8 +67,8 @@ The DatePicker component provides an interactive calendar interface for selectin
     ["defaultDate", "Date"],
     ["defaultTime", "{ hours: number; minutes: number }"],
     ["size", ["s", "m", "l"], "m"],
-    ["currentMonth", "number", "Current month"],
-    ["currentYear", "number", "Current year"],
+    ["currentMonth", "number", "-", "Current month"],
+    ["currentYear", "number", "-", "Current year"],
     ["onMonthChange", "(increment: number) => void"],
     ["range", "{ startDate?: Date; endDate?: Date }"],
     ["onHover", "(date: Date | null) => void"],
@@ -76,7 +76,8 @@ The DatePicker component provides an interactive calendar interface for selectin
     ["open", "boolean"],
     ["nested", "boolean", "false"],
     ["className"],
-    ["style"]
+    ["style"],
+    ["...flex"]
   ]}
 />
 
