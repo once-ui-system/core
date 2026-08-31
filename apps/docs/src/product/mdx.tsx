@@ -19,6 +19,13 @@ import {
   Background,
   BlobFx,
   BlockQuote,
+  Book,
+  Effect,
+  InfoTip,
+  Scrubber,
+  Setting,
+  SettingAxes,
+  SettingGroup,
   Button,
   Card,
   Carousel,
@@ -190,6 +197,11 @@ import {
   TagInputExample,
   ValidationTextareaExample,
   TextareaCharacterCountExample,
+  ScrubberSeekExample,
+  ScrubberTracksExample,
+  SettingBasicExample,
+  SettingGroupExample,
+  SettingAxesExample,
   BasicSwitch,
   SwitchWithFeedback,
   SwitchWithLoading,
@@ -273,8 +285,24 @@ function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
   );
 }
 
-function slugify(str: string): string {
-  return str
+/**
+ * A heading is not always a string: `## Why not \`overflow: hidden\`` reaches
+ * this as an array of a string and an `<InlineCode>` element. Flatten it before
+ * slugifying, or the first heading with any inline markup takes the build down
+ * with "toLowerCase is not a function".
+ */
+function nodeToText(node: React.ReactNode): string {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(nodeToText).join("");
+  if (React.isValidElement(node)) {
+    return nodeToText((node.props as { children?: React.ReactNode }).children);
+  }
+  return "";
+}
+
+function slugify(node: React.ReactNode): string {
+  return nodeToText(node)
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/&/g, "-and-")
@@ -287,7 +315,7 @@ function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
     children,
     ...props
   }: Omit<React.ComponentProps<typeof HeadingLink>, "as" | "id">) => {
-    const slug = slugify(children as string);
+    const slug = slugify(children);
     return (
       <HeadingLink
         marginTop="24"
@@ -441,6 +469,7 @@ const mdxComponents = {
   User,
   UserMenu,
   BlockQuote,
+  Book,
   Line,
   ProgressBar,
   StatusIndicator,
@@ -526,6 +555,12 @@ const mdxComponents = {
   MatrixFx,
   WeatherFx,
   CelebrationFx,
+  Effect,
+  InfoTip,
+  Scrubber,
+  Setting,
+  SettingAxes,
+  SettingGroup,
 
   // ─── Core data visualization ───
   BarChart,
@@ -585,6 +620,11 @@ const mdxComponents = {
   TagInputExample,
   ValidationTextareaExample,
   TextareaCharacterCountExample,
+  ScrubberSeekExample,
+  ScrubberTracksExample,
+  SettingBasicExample,
+  SettingGroupExample,
+  SettingAxesExample,
   BasicSwitch,
   SwitchWithFeedback,
   SwitchWithLoading,

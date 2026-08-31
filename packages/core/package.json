@@ -155,6 +155,12 @@
     "sharp": "^0.33.4 || ^0.34 || ^0.35"
   },
   "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    },
+    "sass": {
+      "optional": true
+    },
     "sharp": {
       "optional": true
     }

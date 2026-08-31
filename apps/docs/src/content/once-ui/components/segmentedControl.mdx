@@ -33,7 +33,7 @@ Use this component for toggle-style selection between discrete options. It suppo
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onToggle={(value) => console.log(value)}
+    onChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Basic usage"
@@ -52,7 +52,7 @@ Use `selected` to manage the selected state from the parent.
     <Row fillWidth horizontal="center">
       <SegmentedControl
         fillWidth={false}
-        selected="month"
+        value="month"
         buttons={[
           { value: "day", label: "Day" },
           { value: "week", label: "Week" },
@@ -66,13 +66,13 @@ Use `selected` to manage the selected state from the parent.
       code:
 `<SegmentedControl
     fillWidth={false}
-    selected="month"
+    value="month"
     buttons={[
       { value: "day", label: "Day" },
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onToggle={(value) => console.log(value)}
+    onChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "External state"
@@ -82,7 +82,7 @@ Use `selected` to manage the selected state from the parent.
 
 ## Internal state
 
-Use `defaultSelected` to define an initial active button in uncontrolled mode. Don't use it along with the `selected` prop.
+Use `defaultValue` to define an initial active button in uncontrolled mode. Don't use it along with the `value` prop.
 
 <CodeBlock
   marginTop="16"
@@ -91,7 +91,7 @@ Use `defaultSelected` to define an initial active button in uncontrolled mode. D
     <Row fillWidth horizontal="center">
       <SegmentedControl
         fillWidth={false}
-        defaultSelected="week"
+        defaultValue="week"
         buttons={[
           { value: "day", label: "Day" },
           { value: "week", label: "Week" },
@@ -105,13 +105,13 @@ Use `defaultSelected` to define an initial active button in uncontrolled mode. D
       code:
 `<SegmentedControl
     fillWidth={false}
-    defaultSelected="week"
+    defaultValue="week"
     buttons={[
       { value: "day", label: "Day" },
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onToggle={(value) => console.log(value)}
+    onChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Internal state"
@@ -130,7 +130,7 @@ Use `compact` to create a compact variant.
     <Row fillWidth horizontal="center">
       <SegmentedControl
         compact
-        defaultSelected="week"
+        defaultValue="week"
         buttons={[
           { value: "day", label: "Day" },
           { value: "week", label: "Week" },
@@ -144,13 +144,13 @@ Use `compact` to create a compact variant.
       code:
 `<SegmentedControl
     compact
-    defaultSelected="week"
+    defaultValue="week"
     buttons={[
       { value: "day", label: "Day" },
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onToggle={(value) => console.log(value)}
+    onChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Compact"
@@ -160,7 +160,7 @@ Use `compact` to create a compact variant.
 
 ## Controlled state
 
-Control the selected value externally with the `selected` prop.
+Control the selected value externally with the `value` prop.
 
 <CodeBlock
   marginTop="16"
@@ -169,7 +169,7 @@ Control the selected value externally with the `selected` prop.
     <Row fillWidth horizontal="center">
       <SegmentedControl
         fillWidth={false}
-        selected="month"
+        value="month"
         buttons={[
           { value: "day", label: "Day" },
           { value: "week", label: "Week" },
@@ -183,13 +183,13 @@ Control the selected value externally with the `selected` prop.
       code:
 `<SegmentedControl
   fillWidth={false}
-  selected="month"
+  value="month"
   buttons={[
     { value: "day", label: "Day" },
     { value: "week", label: "Week" },
     { value: "month", label: "Month" },
   ]}
-  onToggle={(value) => console.log(value)}
+  onChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Controlled"
@@ -222,7 +222,7 @@ Distribute the button widths evenly across the container.
     { value: "b", label: "B" },
     { value: "c", label: "C" },
   ]}
-  onToggle={(value) => console.log(value)}
+  onChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Fill width"
@@ -235,12 +235,13 @@ Distribute the button widths evenly across the container.
 <PropsTable
   content={[
     ["buttons", "ButtonOption[]"],
-    ["onToggle", "(value: string, event?) => void"],
-    ["defaultSelected", "string"],
-    ["selected", "string"],
+    ["onChange", "(value: string, event?) => void"],
+    ["defaultValue", "string"],
+    ["value", "string"],
     ["fillWidth", "boolean", "true"],
     ["className"],
     ["style"],
+    ["compact", "boolean", "false", "Tighter padding, for dense toolbars."],
     ["...scroller", "ScrollerProps"]
   ]}
 />

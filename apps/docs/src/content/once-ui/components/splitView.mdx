@@ -181,16 +181,39 @@ You can customize the resize handle size, appearance, and set minimum/maximum sp
   content={[
     ["leftPanel", "ReactNode"],
     ["rightPanel", "ReactNode"],
+    ["labels", "{ left: string, right: string }"],
+    ["collapseBelow", ["xs", "s", "m", "l", "xl", "false"], "s"],
     ["defaultSplit", "number", 0.3],
-    ["minSplit", "number", 0.1],
-    ["maxSplit", "number", 0.9],
+    ["minSplit", "number", 0.2],
+    ["maxSplit", "number", 0.8],
+    ["...flex"]
   ]}
 />
 
+## Small screens
+
+At or below `collapseBelow` (default `s`) the split becomes tabs showing one
+panel at a time, and the drag handle is not rendered. A drag-resizable split is
+a poor pattern on a phone whichever way it is oriented: neither pane is usable
+at any ratio, and a drag handle competes with page scrolling. Pass `labels` so
+the tabs are named, or `collapseBelow={false}` to keep the split at every size.
+
+```tsx
+<SplitView
+  leftPanel={<Editor />}
+  rightPanel={<Preview />}
+  labels={{ left: "Editor", right: "Preview" }}
+/>
+```
+
 ## Usage Guidelines
 
-- **Accessibility**: The resize handle is keyboard accessible and provides proper cursor feedback
-- **Performance**: Uses efficient event handling with proper cleanup
-- **Responsive**: Works well with responsive layouts and breakpoints
+- **Accessibility**: the divider is a focusable `role="separator"` — arrow keys
+  move it in 5% steps within `minSplit`/`maxSplit`, and it reports its position
+  through `aria-valuenow`
+- **Input**: dragging uses pointer events, so it works with a mouse, a pen and
+  touch alike
+- **Responsive**: collapses to tabs on small screens rather than shrinking two
+  panes past usefulness
 - **Constraints**: Set min/max split ratios to prevent panels from becoming too small
 - **Visual Feedback**: Handle changes color when being dragged for better UX

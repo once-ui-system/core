@@ -14,7 +14,7 @@
  ],
  "props": {
   "variant": "\"info\" | \"danger\" | \"warning\" | \"success\" = info",
-  "icon": "boolean = true",
+  "showIcon": "boolean = true",
   "title": "string",
   "description": "string",
   "showCloseButton": "boolean = false",

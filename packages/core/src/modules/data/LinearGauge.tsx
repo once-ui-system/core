@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Column, Flex, Row, Text } from "../../";
 import styles from "./Gauge.module.css";
+import { ColorValue } from "../../types";
 
 export interface LinearGaugeProps extends React.ComponentProps<typeof Flex> {
   width?: number;
@@ -15,7 +16,7 @@ export interface LinearGaugeProps extends React.ComponentProps<typeof Flex> {
   value?: number;
   labels?: "none" | "percentage" | string[];
   hue?: "success" | "neutral" | "danger" | [number, number];
-  color?: string;
+  color?: ColorValue;
 }
 
 const resolveHueRange = (hue: LinearGaugeProps["hue"]): [number, number] => {

@@ -79,7 +79,7 @@ Feedback components can include an icon to enhance visual communication.
         description="This feedback includes an icon for better visual communication."
       />
       <Feedback 
-        icon={false}
+        showIcon={false}
         variant="warning"
         title="Without Icon" 
         description="This feedback does not include an icon."
@@ -94,7 +94,7 @@ Feedback components can include an icon to enhance visual communication.
     description="This feedback includes an icon for better visual communication."
 />
 <Feedback
-    icon={false}
+    showIcon={false}
     variant="warning"
     title="Without Icon"
     description="This feedback does not include an icon."
@@ -172,7 +172,7 @@ Add custom content to the feedback component.
 <PropsTable
   content={[
     ["variant", ["info", "danger", "warning", "success"], "info"],
-    ["icon", "boolean", "true"],
+    ["showIcon", "boolean", "true"],
     ["title", "string"],
     ["description", "string"],
     ["showCloseButton", "boolean", "false"],

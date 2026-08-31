@@ -1,0 +1,139 @@
+---
+title: "Media players"
+summary: "MediaAudioPlayer and MediaVideoPlayer — the two players behind Media, usable on their own."
+updatedAt: "2026-08-31"
+docs: "once-ui/components/mediaPlayers.mdx"
+github: "components/MediaAudioPlayer.tsx"
+navLabel: "Media players"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+[`Media`](/once-ui/components/media) decides what to render by looking at the
+file extension, and hands video off to a player. `MediaVideoPlayer` and
+`MediaAudioPlayer` are those players, and you can reach for either directly.
+
+You need them directly in two situations: when the source has **no usable
+extension** — a `blob:` URL from `MediaRecorder`, a signed URL with the type in
+a query string — so `Media` cannot sniff it; and when the media **is** the
+component, as in an audio player that has no visual counterpart at all.
+
+## Importing
+
+Both live on the `./components/*` subpath rather than the root barrel, so they
+are not pulled into every bundle that imports something from Once UI.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import { MediaAudioPlayer } from "@once-ui-system/core/components/MediaAudioPlayer";
+import { MediaVideoPlayer } from "@once-ui-system/core/components/MediaVideoPlayer";`,
+      language: "tsx",
+      label: "Import"
+    }
+  ]}
+/>
+
+## MediaVideoPlayer
+
+A video surface with play/pause, a scrubbable progress bar and elapsed time.
+It is the right component for an extension-less source:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const [url, setUrl] = useState<string>();
+
+// MediaRecorder output has no extension, so Media cannot sniff it.
+recorder.ondataavailable = (event) => {
+  setUrl(URL.createObjectURL(event.data));
+};
+
+{url && <MediaVideoPlayer src={url} objectFit="contain" />}`,
+      language: "tsx",
+      label: "Recorder output"
+    }
+  ]}
+/>
+
+<PropsTable
+  label="MediaVideoPlayer"
+  content={[
+    ["src", "string", "-", "Video source. Required."],
+    ["autoplay", "boolean", "false", "Start playing as soon as the video can play."],
+    ["loop", "boolean", "false", "Restart when playback reaches the end."],
+    ["muted", "boolean", "true", "Start muted. Autoplay is blocked with sound in most browsers."],
+    ["objectFit", "CSSProperties[\"objectFit\"]", "\"cover\"", "How the frame fits its box."],
+    ["className", "string"],
+  ]}
+/>
+
+## MediaAudioPlayer
+
+Play/pause, a scrubbable progress bar and elapsed/total time, laid out as a
+row rather than a surface. It takes every `Column` prop, so it sits in a layout
+like any other block.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<MediaAudioPlayer
+  src="/audio/chapter-one.mp3"
+  label="Chapter one"
+  border="neutral-alpha-weak"
+  radius="m"
+  padding="12"
+/>`,
+      language: "tsx",
+      label: "Audio player"
+    }
+  ]}
+/>
+
+### Synchronising with playback
+
+`onTimeUpdate` fires on every `timeupdate` with the position in seconds. The
+player owns playback; the caller owns what that position means — highlighting
+the paragraph being narrated, advancing a transcript, moving a chapter marker.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const [time, setTime] = useState(0);
+const current = chapters.findLast((chapter) => chapter.start <= time);
+
+<MediaAudioPlayer src={audio} onTimeUpdate={setTime} />
+<Text onBackground={current ? "neutral-strong" : "neutral-weak"}>
+  {current?.title ?? "Not started"}
+</Text>`,
+      language: "tsx",
+      label: "Narration sync"
+    }
+  ]}
+/>
+
+<PropsTable
+  label="MediaAudioPlayer"
+  content={[
+    ["src", "string", "-", "Audio source. Required."],
+    ["autoplay", "boolean", "false", "Start playing as soon as the audio can play."],
+    ["loop", "boolean", "false", "Restart when playback reaches the end."],
+    ["label", "string", "\"Audio player\"", "Accessible name for the player group."],
+    ["onTimeUpdate", "(currentTime: number) => void", "-", "Fires on every timeupdate with the position in seconds."],
+    ["onPlayingChange", "(playing: boolean) => void", "-", "Fires when playback starts or stops."],
+    ["...flex"],
+  ]}
+/>

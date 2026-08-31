@@ -33,7 +33,7 @@ return (
         Open Dialog
       </Button>
       <Dialog
-        isOpen={isOpen}
+        open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Basic dialog"
         description="This is a simple dialog with a title and description."
@@ -78,7 +78,7 @@ return (
         Dialog with footer
       </Button>
       <Dialog
-        isOpen={isOpen}
+        open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Dialog with footer"
         footer={
@@ -147,7 +147,7 @@ return (
       </Button>
       
       <Dialog
-        isOpen={isBaseOpen}
+        open={isBaseOpen}
         onClose={() => setIsBaseOpen(false)}
         title="Base dialog"
         base={isStackedOpen}
@@ -168,7 +168,7 @@ return (
       </Dialog>
       
       <Dialog
-        isOpen={isStackedOpen}
+        open={isStackedOpen}
         onClose={() => setIsStackedOpen(false)}
         title="Stacked dialog"
         stack
@@ -210,7 +210,7 @@ return (
         Customized dialog
       </Button>
       <Dialog
-        isOpen={isOpen}
+        open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Customized dialog"
         maxWidth={48}
@@ -259,7 +259,7 @@ return (
         Flush dialog
       </Button>
       <Dialog
-        isOpen={isOpen}
+        open={isOpen}
         onClose={() => setIsOpen(false)}
         flush
         hideClose
@@ -311,7 +311,7 @@ return (
       Dialog without clickaway
     </Button>
     <Dialog
-      isOpen={isOpen}
+      open={isOpen}
       onClose={() => setIsOpen(false)}
       title="Confirm action"
       closeOnClickaway={false}
@@ -343,7 +343,7 @@ The Dialog component follows accessibility best practices:
 
 <PropsTable
   content={[
-    ["isOpen", "boolean", "false"],
+    ["open", "boolean", "false"],
     ["onClose", "() => void"],
     ["title", "ReactNode | string"],
     ["description", "ReactNode"],

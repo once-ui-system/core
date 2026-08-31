@@ -13,6 +13,7 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "typecheck": "tsc --noEmit",
+    "check:urls": "node scripts/check-urls.mjs",
     "clean": "rimraf .next"
   },
   "dependencies": {

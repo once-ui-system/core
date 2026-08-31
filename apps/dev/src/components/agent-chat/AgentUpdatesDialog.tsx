@@ -17,7 +17,7 @@ export function AgentUpdatesDialog({
   title = "Activity log",
 }: AgentUpdatesDialogProps) {
   return (
-    <Dialog isOpen={isOpen} onClose={onClose} title={title} minHeight={24}>
+    <Dialog open={isOpen} onClose={onClose} title={title} minHeight={24}>
       <Column gap="8" paddingTop="4">
         {updates.length === 0 ? (
           <Text variant="body-default-s" onBackground="neutral-weak">

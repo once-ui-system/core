@@ -84,13 +84,13 @@ export function MarketingHeroExample() {
               </Heading>
             </Column>
           </RevealFx>
-          <RevealFx delay={0.1} translateY="16">
+          <RevealFx delay={100} translateY="16">
             <Text variant="body-default-l" onBackground="neutral-weak" align="center">
               Build semantic layouts with Row, Column and Grid. Add 100+ pre-styled components.
               Manage themes in a single file.
             </Text>
           </RevealFx>
-          <RevealFx delay={0.2} translateY="16">
+          <RevealFx delay={200} translateY="16">
             <Row gap="12" s={{ direction: "column" }}>
               <Button arrowIcon>View docs</Button>
               <Button variant="secondary" suffixIcon="arrowUpRight">

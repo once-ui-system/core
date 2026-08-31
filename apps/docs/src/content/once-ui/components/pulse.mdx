@@ -18,15 +18,15 @@ The `Pulse` component is used to display a colored dot with a pulsing animation 
   preview={
     <Row gap="40" fillWidth center>
       <Pulse size="s" />
-      <Pulse size="m" variant="danger" />
-      <Pulse size="l" variant="success" />
+      <Pulse size="m" scheme="danger" />
+      <Pulse size="l" scheme="success" />
     </Row>
   }
   codes={[
     {
       code: `<Pulse size="s"/>
-<Pulse size="m" variant="danger"/>
-<Pulse size="l" variant="success"/>`,
+<Pulse size="m" scheme="danger"/>
+<Pulse size="l" scheme="success"/>`,
       language: "tsx",
       label: "Pulse",
     },
@@ -35,31 +35,31 @@ The `Pulse` component is used to display a colored dot with a pulsing animation 
 
 ## Color
 
-Set the color of the pulse using the `variant` prop.
+Set the color of the pulse using the `scheme` prop.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row gap="40" fillWidth center>
-      <Pulse variant="brand" />
-      <Pulse variant="accent" />
-      <Pulse variant="neutral" />
-      <Pulse variant="info" />
-      <Pulse variant="warning" />
-      <Pulse variant="danger" />
-      <Pulse variant="success" />
+      <Pulse scheme="brand" />
+      <Pulse scheme="accent" />
+      <Pulse scheme="neutral" />
+      <Pulse scheme="info" />
+      <Pulse scheme="warning" />
+      <Pulse scheme="danger" />
+      <Pulse scheme="success" />
     </Row>
   }
   codes={[
     {
-      code: `<Pulse variant="brand"/>
-<Pulse variant="accent"/>
-<Pulse variant="neutral"/>
-<Pulse variant="info"/>
-<Pulse variant="warning"/>
-<Pulse variant="danger"/>
-<Pulse variant="success"/>`,
+      code: `<Pulse scheme="brand"/>
+<Pulse scheme="accent"/>
+<Pulse scheme="neutral"/>
+<Pulse scheme="info"/>
+<Pulse scheme="warning"/>
+<Pulse scheme="danger"/>
+<Pulse scheme="success"/>`,
       language: "tsx",
       label: "Color",
     },
@@ -118,7 +118,7 @@ Customize the pulse ring dimensions with the `pulseSize` prop, accepting a numbe
 
 <PropsTable
   content={[
-    ["variant", "ColorScheme", "brand"],
+    ["scheme", "ColorScheme", "brand"],
     ["size", "CondensedTShirtSizes", "s"],
     ["pulseSize", ["number", "string"]],
     ["children"],

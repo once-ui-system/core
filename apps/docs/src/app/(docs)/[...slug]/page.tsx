@@ -4,6 +4,7 @@ import { formatDate } from "@/app/utils/formatDate";
 import { Column, Heading, Icon, Row, Media, Text, Card, HeadingNav, Meta, Schema, Button, SmartLink, Line } from "@once-ui-system/core";
 import { baseURL, layout, schema } from "@/resources";
 import { CustomMDX } from "@/product/mdx";
+import { CopyPage } from "@/product/CopyPage";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
@@ -83,11 +84,14 @@ export default async function Docs({
             <Text variant="body-default-s" onBackground="neutral-weak">
               Updated: {formatDate(doc.metadata.updatedAt)}
             </Text>
-            {doc.metadata.github && (
-              <Button className="mt-20" href={"https://github.com/once-ui-system/core/blob/main/packages/core/src/" + doc.metadata.github} size="s" variant="secondary" prefixIcon="github" weight="default" data-border="rounded">
-                View on GitHub
-              </Button>
-            )}
+            <Row marginTop="20" gap="8" vertical="center" wrap>
+              <CopyPage path={`/${doc.slug}`} />
+              {doc.metadata.github && (
+                <Button href={"https://github.com/once-ui-system/core/blob/main/packages/core/src/" + doc.metadata.github} size="s" variant="secondary" prefixIcon="github" weight="default" data-border="rounded">
+                  View on GitHub
+                </Button>
+              )}
+            </Row>
           </Column>
           {doc.metadata.image && (
             <Media marginY="24" border="neutral-alpha-weak" enlarge src={doc.metadata.image} alt={"Thumbnail of " + doc.metadata.title} aspectRatio="16 / 9" radius="m" sizes={768} priority />

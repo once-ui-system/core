@@ -94,7 +94,7 @@ const MobileMegaMenu: React.FC<MobileMegaMenuProps> = ({ menuGroups, onClose, ..
                             label={link.label}
                             description={link.description}
                             value={link.href}
-                            hasPrefix={
+                            prefix={
                               link.icon ? (
                                 <Icon name={link.icon} size="s" onBackground="neutral-weak" />
                               ) : undefined
@@ -115,7 +115,7 @@ const MobileMegaMenu: React.FC<MobileMegaMenuProps> = ({ menuGroups, onClose, ..
                           label={link.label}
                           description={link.description}
                           value={link.href}
-                          hasPrefix={
+                          prefix={
                             link.icon ? (
                               <Icon name={link.icon} size="s" onBackground="neutral-weak" />
                             ) : undefined

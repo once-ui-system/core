@@ -1,12 +1,11 @@
 "use client";
 
-import { BorderStyle, ChartMode, ChartVariant, DataThemeProvider, IconProvider, LayoutProvider, NeutralColor, ScalingSize, Schemes, SolidStyle, SolidType, SurfaceStyle, Theme, ThemeProvider, ToastProvider, TransitionStyle } from "@once-ui-system/core";
-import { NextAdapterProvider } from "@once-ui-system/core/next";
+import { BorderStyle, ChartMode, ChartVariant, DataThemeProvider, IconProvider, NeutralColor, ScalingSize, Schemes, SolidStyle, SolidType, SurfaceStyle, Theme, ThemeProvider, ToastProvider, TransitionStyle } from "@once-ui-system/core";
+import { LayoutProvider } from "@once-ui-system/core/next";
 import { style, dataStyle } from "@/resources/once-ui.config";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <NextAdapterProvider>
     <ThemeProvider
       theme={style.theme as Theme}
         brand={style.brand as Schemes}
@@ -42,6 +41,5 @@ export function Providers({ children }: { children: React.ReactNode }) {
         </DataThemeProvider>
       </LayoutProvider>
     </ThemeProvider>
-    </NextAdapterProvider>
   );
 }

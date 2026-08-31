@@ -1,5 +1,5 @@
 import { Flex, DateRange } from "../../components";
-import { TShirtSizes } from "../../types";
+import { ColorValue, TShirtSizes } from "../../types";
 import { CurveType } from "recharts/types/shape/Curve";
 
 type ChartVariant = "flat" | "gradient" | "outline";
@@ -14,7 +14,7 @@ interface DataPoint {
 
 interface SeriesConfig {
   key: string;
-  color?: string;
+  color?: ColorValue;
 }
 
 interface PresetsConfig {

@@ -24,7 +24,7 @@
   "sizes": "string | number = 100vw",
   "priority": "boolean",
   "caption": "ReactNode",
-  "fill": "boolean = false",
+  "stretch": "boolean = false",
   "fillWidth": "boolean = true",
   "loop": "boolean = true",
   "autoplay": "boolean = true",

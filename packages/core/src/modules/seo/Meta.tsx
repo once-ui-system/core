@@ -1,4 +1,36 @@
-import type { Metadata as NextMetadata } from "next";
+/**
+ * The metadata object `Meta.generate` returns.
+ *
+ * Declared structurally rather than imported from `next` so that core's
+ * published types resolve without Next installed. It is assignable to Next's
+ * `Metadata`, so `export const metadata: Metadata = Meta.generate(...)` and
+ * `generateMetadata(): Promise<Metadata>` keep type-checking unchanged.
+ */
+export interface GeneratedMetadata {
+  metadataBase: URL;
+  title: string;
+  description: string;
+  openGraph: {
+    title: string;
+    description: string;
+    type: "website" | "article";
+    publishedTime?: string;
+    url: string;
+    images: { url: string; alt: string }[];
+  };
+  twitter: {
+    card: "summary_large_image";
+    title: string;
+    description: string;
+    images: string[];
+  };
+  authors?: { name: string; url?: string }[];
+  robots?: string;
+  alternates?: {
+    canonical: string;
+    languages: Record<string, string>;
+  };
+}
 
 export interface Alternate {
   href: string;
@@ -38,7 +70,7 @@ export function generateMetadata({
   noindex,
   nofollow,
   alternates,
-}: MetaProps): NextMetadata {
+}: MetaProps): GeneratedMetadata {
   const normalizedBaseURL = baseURL.endsWith("/") ? baseURL.slice(0, -1) : baseURL;
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
 

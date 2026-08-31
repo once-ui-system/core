@@ -19,7 +19,7 @@ The `Input` component provides a text entry field with floating labels, validati
     <Input
       id="basic-input"
       label="Email"
-      hasPrefix={<Icon marginLeft="4" onBackground="neutral-weak" name="email" size="xs" />}
+      prefix={<Icon marginLeft="4" onBackground="neutral-weak" name="email" size="xs" />}
     />
   }
   codes={[
@@ -28,7 +28,7 @@ The `Input` component provides a text entry field with floating labels, validati
 `<Input
     id="input-1"
     label="Email"
-    hasPrefix={
+    prefix={
       <Icon marginLeft="4" onBackground="neutral-weak" name="email" size="xs" />
     }
 />`,
@@ -148,8 +148,8 @@ const handleClear = () => {
     label="Search"
     value={searchValue}
     onChange={handleChange}
-    hasPrefix={<Icon name="search" size="xs" />}
-    hasSuffix={
+    prefix={<Icon name="search" size="xs" />}
+    suffix={
       searchValue.length > 0 ? (
         <IconButton 
           variant="ghost" 
@@ -261,21 +261,21 @@ The Input component supports five sizes: extra small, small, medium, large, and 
   marginBottom="24"
   preview={
     <Column fillWidth gap="16">
-      <Input id="size-xs" label="Extra Small" height="xs" />
-      <Input id="size-s" label="Small" height="s" />
-      <Input id="size-m" label="Medium" height="m" />
-      <Input id="size-l" label="Large" height="l" />
-      <Input id="size-xl" label="Extra Large" height="xl" />
+      <Input id="size-xs" label="Extra Small" size="xs" />
+      <Input id="size-s" label="Small" size="s" />
+      <Input id="size-m" label="Medium" size="m" />
+      <Input id="size-l" label="Large" size="l" />
+      <Input id="size-xl" label="Extra Large" size="xl" />
     </Column>
   }
   codes={[
     {
       code:
-`<Input placeholder="Extra Small" height="xs" />
-<Input placeholder="Small" height="s" />
-<Input placeholder="Medium" height="m" />
-<Input placeholder="Large" height="l" />
-<Input placeholder="Extra Large" height="xl" />`,
+`<Input placeholder="Extra Small" size="xs" />
+<Input placeholder="Small" size="s" />
+<Input placeholder="Medium" size="m" />
+<Input placeholder="Large" size="l" />
+<Input placeholder="Extra Large" size="xl" />`,
       language: "tsx",
       label: "Sizes"
     }
@@ -447,7 +447,7 @@ const handleChange = (newTags: string[]) => {
     value={tags}
     onChange={handleChange}
     placeholder="Add interest"
-    hasSuffix={<Kbd position="absolute" top="12" right="12">Enter</Kbd>}
+    suffix={<Kbd position="absolute" top="12" right="12">Enter</Kbd>}
 />`,
       language: "tsx",
       label: "TagInput"
@@ -462,20 +462,20 @@ const handleChange = (newTags: string[]) => {
     ["id", "string"],
     ["label", "string"],
     ["placeholder", "string"],
-    ["height", ["xs", "s", "m", "l", "xl"], "m"],
+    ["size", ["xs", "s", "m", "l", "xl"], "m"],
     ["error", "boolean", "false"],
     ["errorMessage", "ReactNode"],
     ["description", "ReactNode"],
-    ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
+    ["corners", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
     ["variant", ["default", "ghost"], "default"],
-    ["hasPrefix", "ReactNode"],
-    ["hasSuffix", "ReactNode"],
+    ["prefix", "ReactNode"],
+    ["suffix", "ReactNode"],
     ["characterCount", "boolean", "false"],
     ["cursor", ["interactive"]],
     ["validate", "(value: string) => ReactNode | null"],
     ["loading", "boolean", "false"],
     ["className"],
     ["style"],
-    ["...input"]
+    ["...InputHTMLAttributes"]
   ]}
 />

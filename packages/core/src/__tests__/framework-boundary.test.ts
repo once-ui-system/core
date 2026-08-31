@@ -16,14 +16,17 @@ import { describe, expect, it } from "vitest";
 const SRC_ROOT = join(__dirname, "..");
 
 const NEXT_IMPORT_ALLOWLIST = [
-  // Next-only surfaces that move wholesale to the nextjs package in Phase 4.
-  "modules/seo/Meta.tsx",
-  "modules/seo/Schema.tsx",
-  // Adapter bindings behind the ./next subpath (never the root barrel) —
-  // becomes @once-ui-system/nextjs in Phase 4. Runtime components consume
+  // The ONLY file in core allowed to import next/*. It sits behind the ./next
+  // subpath (never the root barrel), so a non-Next bundler never resolves it,
+  // and it becomes @once-ui-system/nextjs in Phase 4. Runtime components read
   // the AdapterProvider context instead of importing next/* directly.
+  //
+  // This list is one entry on purpose. Meta.tsx, Schema.tsx and
+  // server/og-utils.ts were removed from it when core became installable
+  // without Next (`next` is an optional peer): Meta declares its own return
+  // type, Schema emits a plain <script>, og-utils returns a standard Response.
+  // Adding a file back here means Next is a hard requirement again.
   "next/index.tsx",
-  "server/og-utils.ts",
 ];
 
 const RECHARTS_ALLOWED_DIR = "modules/data";

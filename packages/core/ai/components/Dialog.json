@@ -13,7 +13,7 @@
   "StyleProps"
  ],
  "props": {
-  "isOpen": "!boolean",
+  "open": "!boolean",
   "onClose": "!() => void",
   "title": "!ReactNode | string",
   "description": "ReactNode",

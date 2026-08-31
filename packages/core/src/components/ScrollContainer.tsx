@@ -70,12 +70,14 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(({ item
       <Row fillWidth gap="8" paddingX="24" horizontal={horizontalAlignment}>
         <IconButton
           icon="chevronLeft"
+          aria-label="Scroll backward"
           onClick={() => scroll("left")}
           disabled={!canScrollLeft}
           style={{ border: "none" }}
         />
         <IconButton
           icon="chevronRight"
+          aria-label="Scroll forward"
           onClick={() => scroll("right")}
           disabled={!canScrollRight}
           style={{ border: "none" }}

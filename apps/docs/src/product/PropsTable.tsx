@@ -1,68 +1,155 @@
 "use client";
 
-import React from "react";
-import { Table, Row, InlineCode, Text } from "@once-ui-system/core";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
+import { Column, InlineCode, Row, SmartLink, Table, Text } from "@once-ui-system/core";
 
 type PropType = string | string[] | ReactNode;
-type PropData = [string, PropType, string?];
+
+/**
+ * `[name, type, default?, description?]`.
+ *
+ * `name` may also be a spread token (`"...flex"`), which stands for every prop
+ * the component inherits from another type. The registry below is the whole
+ * vocabulary — an unknown token renders as a plain row so a typo is visible
+ * rather than silently swallowed.
+ */
+type PropData = [string, PropType?, string?, ReactNode?];
 
 interface PropsTableProps {
   content: PropData[];
+  /** Column heading for the first column. Defaults to "Prop". */
+  label?: string;
 }
 
-function PropsTable({ content }: PropsTableProps) {
-  const tableData = {
+/**
+ * Spread shorthands. `type` is what the cell prints; `href` links to the page
+ * that documents those props, so "and everything else" stops being a dead end.
+ * React's own attribute types have no page of their own and link out to MDN.
+ */
+const SPREADS: Record<string, { type: string; href?: string }> = {
+  flex: { type: "FlexProps", href: "/once-ui/components/flex" },
+  grid: { type: "GridProps", href: "/once-ui/components/grid" },
+  text: { type: "TextProps", href: "/once-ui/components/text" },
+  card: { type: "CardProps", href: "/once-ui/components/card" },
+  scroller: { type: "ScrollerProps", href: "/once-ui/components/scroller" },
+  animation: { type: "AnimationProps", href: "/once-ui/components/animation" },
+  user: { type: "UserProps", href: "/once-ui/components/user" },
+  chart: { type: "ChartProps", href: "/once-ui/data/setup" },
+  dropdownWrapper: {
+    type: "DropdownWrapperProps",
+    href: "/once-ui/components/dropdownWrapper",
+  },
+  input: { type: "InputProps", href: "/once-ui/form-controls/input" },
+  HTMLAttributes: {
+    type: "React.HTMLAttributes",
+    href: "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes",
+  },
+  InputHTMLAttributes: {
+    type: "React.InputHTMLAttributes",
+    href: "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#attributes",
+  },
+  ButtonHTMLAttributes: {
+    type: "React.ButtonHTMLAttributes",
+    href: "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button#attributes",
+  },
+  AnchorHTMLAttributes: {
+    type: "React.AnchorHTMLAttributes",
+    href: "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/a#attributes",
+  },
+  TextareaHTMLAttributes: {
+    type: "React.TextareaHTMLAttributes",
+    href: "https://developer.mozilla.org/en-US/docs/Web/HTML/Element/textarea#attributes",
+  },
+};
+
+/** Props every component takes, so a page never has to spell them out. */
+const IMPLICIT: Record<string, string> = {
+  children: "React.ReactNode",
+  style: "React.CSSProperties",
+  className: "string",
+};
+
+function renderType(name: string, type: PropType): ReactNode {
+  if (IMPLICIT[name]) return <InlineCode>{IMPLICIT[name]}</InlineCode>;
+
+  if (Array.isArray(type)) {
+    return (
+      <Row gap="4" vertical="center" wrap>
+        {type.map((value, index) => (
+          <React.Fragment key={index}>
+            <InlineCode>{value}</InlineCode>
+            {index < type.length - 1 && (
+              <Text onBackground="neutral-weak" aria-hidden="true">
+                •
+              </Text>
+            )}
+          </React.Fragment>
+        ))}
+      </Row>
+    );
+  }
+
+  return type ? <InlineCode>{type}</InlineCode> : <Text onBackground="neutral-weak">—</Text>;
+}
+
+function PropsTable({ content, label = "Prop" }: PropsTableProps) {
+  const data = {
     headers: [
-      { content: "Prop", key: "prop", sortable: true },
-      { content: "Type", key: "type", sortable: false },
-      { content: "Default", key: "default", sortable: false },
+      { content: label, key: "prop", sortable: true, width: "40%" },
+      { content: "Type", key: "type", sortable: false, width: "40%" },
+      { content: "Default", key: "default", sortable: false, width: "20%" },
     ],
-    rows: content.map((propData) => {
-      // First item is always the prop name
-      const propName = propData[0];
-      
-      // Second item is the type
-      const propType = propData[1];
-      
-      // Third item (if exists) is the default value
-      const defaultValue = propData.length > 2 ? propData[2] : "-";
-      
-      // Render type differently based on special props or data type
-      let typeDisplay: ReactNode;
-      
-      // Special case for common props
-      if (propName === "children") {
-        typeDisplay = <InlineCode>React.ReactNode</InlineCode>;
-      } else if (propName === "style") {
-        typeDisplay = <InlineCode>React.CSSProperties</InlineCode>;
-      } else if (propName === "className") {
-        typeDisplay = <InlineCode>string</InlineCode>;
-      } else if (propName === "...flex") {
-        typeDisplay = <InlineCode>FlexProps</InlineCode>;
-      } else if (propName === "...grid") {
-        typeDisplay = <InlineCode>GridProps</InlineCode>;
-      } else if (propName === "...input") {
-        typeDisplay = <InlineCode>InputHTMLAttributes</InlineCode>;
-      } else if (Array.isArray(propType)) {
-        typeDisplay = (
-          <Row gap="4" wrap>
-            {(propType as string[]).map((value, index) => (
-              <React.Fragment key={index}><InlineCode>{value}</InlineCode> {index < (propType as string[]).length - 1 && <Text onBackground="neutral-weak" marginX="2">•</Text>}</React.Fragment>
-            ))}
-          </Row>
-        );
-      } else {
-        typeDisplay = <InlineCode>{propType}</InlineCode>;
+    rows: content.map(([name, type, defaultValue, description]) => {
+      const spread = name.startsWith("...") ? SPREADS[name.slice(3)] : undefined;
+
+      if (spread) {
+        // An inherited-props row is not a prop, so it does not get a name cell
+        // pretending to be one — it reads as the sentence it actually is.
+        return [
+          <Text key="prop" onBackground="neutral-weak" variant="body-default-s">
+            …and every{" "}
+            {spread.href ? (
+              <SmartLink href={spread.href}>{spread.type}</SmartLink>
+            ) : (
+              <InlineCode>{spread.type}</InlineCode>
+            )}{" "}
+            prop
+          </Text>,
+          <Text key="type" onBackground="neutral-weak">
+            inherited
+          </Text>,
+          <Text key="default" onBackground="neutral-weak">
+            —
+          </Text>,
+        ];
       }
-      
-      const defaultDisplay = defaultValue === "-" ? <Text onBackground="neutral-weak">—</Text> : <InlineCode>{defaultValue}</InlineCode>;
-      
-      return [propName, typeDisplay, defaultDisplay];
+
+      return [
+        <Column key="prop" gap="4" paddingY="2">
+          <Row>
+            <InlineCode>{name}</InlineCode>
+          </Row>
+          {description && (
+            <Text variant="body-default-xs" onBackground="neutral-weak" wrap="pretty">
+              {description}
+            </Text>
+          )}
+        </Column>,
+        renderType(name, type),
+        // Pages predate the optional fourth column and spell "no default" as
+        // a literal dash, which must not render as a default of `-`.
+        defaultValue && defaultValue !== "-" ? (
+          <InlineCode key="default">{defaultValue}</InlineCode>
+        ) : (
+          <Text key="default" onBackground="neutral-weak">
+            —
+          </Text>
+        ),
+      ];
     }),
   };
 
-  return <Table marginTop="16" marginBottom="24" data={tableData} />;
+  return <Table marginTop="16" marginBottom="24" data={data} />;
 }
 
 export { PropsTable };

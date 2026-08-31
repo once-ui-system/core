@@ -108,7 +108,7 @@ export function SettingsExample() {
                     Release notes and changelog
                   </Text>
                 </Column>
-                <Switch isChecked onToggle={() => {}} />
+                <Switch checked onToggle={() => {}} />
               </Row>
               <Line />
               <Row fillWidth horizontal="between" vertical="center">
@@ -118,9 +118,9 @@ export function SettingsExample() {
                     Tips, templates, and community highlights
                   </Text>
                 </Column>
-                <Switch isChecked={false} onToggle={() => {}} />
+                <Switch checked={false} onToggle={() => {}} />
               </Row>
-              <Checkbox label="Weekly digest" isChecked />
+              <Checkbox label="Weekly digest" checked />
             </Column>
 
             <Column background="surface" border="danger-alpha-medium" radius="l" padding="24" gap="16">

@@ -23,7 +23,7 @@
   "defaultDate": "Date",
   "defaultTime": "{ hours: number; minutes: number; }",
   "size": "CondensedTShirtSizes = m",
-  "isNested": "boolean = false",
+  "nested": "boolean = false",
   "className": "string",
   "style": "React.CSSProperties",
   "currentMonth": "number",
@@ -32,7 +32,7 @@
   "range": "{ startDate?: Date; endDate?: Date; }",
   "onHover": "(date: Date | null) => void",
   "autoFocus": "boolean = false",
-  "isOpen": "boolean"
+  "open": "boolean"
  },
  "mixinsRef": [
   "CommonProps",

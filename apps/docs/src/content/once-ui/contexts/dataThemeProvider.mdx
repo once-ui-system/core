@@ -126,3 +126,34 @@ export function Providers({ children }: {
     ["tick", "{ fill: string; fontSize: number; line: boolean }"],
   ]}
 />
+
+## useDataTheme
+
+`useDataTheme()` returns the current chart options plus a setter, so a control
+can change how every chart on the page draws without each chart being rewired.
+It throws outside a `DataThemeProvider`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const { mode, setChartOptions } = useDataTheme();
+
+<SegmentedControl
+  value={mode}
+  buttons={[
+    { value: "categorical", label: "Categorical" },
+    { value: "divergent", label: "Divergent" },
+  ]}
+  onChange={(value) => setChartOptions({ mode: value as ChartOptions["mode"] })}
+/>`,
+      language: "tsx",
+      label: "useDataTheme"
+    }
+  ]}
+/>
+
+`setChartOptions` takes a partial: anything you leave out keeps its current
+value.

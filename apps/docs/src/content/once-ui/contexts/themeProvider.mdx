@@ -291,9 +291,9 @@ Returns `{ theme, resolvedTheme, setTheme }`.
 
 <PropsTable
   content={[
-    ["theme", "Theme", "Current theme setting"],
-    ["resolvedTheme", "\"light\" | \"dark\"", "Actual resolved theme"],
-    ["setTheme", "(theme: Theme) => void", "Update theme"],
+    ["theme", "Theme", "-", "Current theme setting"],
+    ["resolvedTheme", "\"light\" | \"dark\"", "-", "Actual resolved theme"],
+    ["setTheme", "(theme: Theme) => void", "-", "Update theme"],
   ]}
 />
 
@@ -392,7 +392,7 @@ Returns all style options plus `setStyle`.
               value: "Media",
             },
           ]}
-          defaultSelected="For you"
+          defaultValue="For you"
         />
         <Column
           paddingX="8"

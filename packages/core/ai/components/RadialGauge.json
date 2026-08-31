@@ -23,7 +23,7 @@
   "edgePad": "number = 0",
   "children": "React.ReactNode",
   "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
-  "color": "string = contrast"
+  "color": "ColorValue = contrast"
  },
  "mixinsRef": [
   "CommonProps",

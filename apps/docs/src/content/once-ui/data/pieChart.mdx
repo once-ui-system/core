@@ -49,3 +49,77 @@ The `PieChart` component provides a way to display pie charts with interactive f
     { name: 'Category D', value: 200 }
   ]}
 />
+## Ring
+
+`ring` sets the inner and outer radius as percentages of the available space.
+`inner: 0` is a solid pie; anything above it is a donut, and the hole is where a
+total or a label goes.
+
+<PieChart
+  marginTop="16"
+  marginBottom="24"
+  title="A thin donut"
+  description="ring={{ inner: 60, outer: 70 }}"
+  ring={{ inner: 60, outer: 70 }}
+  legend={{ display: true, position: "top-left", direction: "column" }}
+  series={{ key: "value" }}
+  data={[
+    { name: "Direct", value: 4200 },
+    { name: "Search", value: 3100 },
+    { name: "Social", value: 1800 },
+    { name: "Referral", value: 900 }
+  ]}
+/>
+
+Keep `outer` under 100 — the arc is drawn inside the panel, and a value at 100
+leaves no room for the labels around it.
+
+## Naming the slices
+
+A pie reads two fields per row: the number that sizes the slice and the string
+that names it. Those default to `value` and `name`, and `dataKey` / `nameKey`
+point them at different fields when your data is already shaped some other way.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`// Rows from an API, unchanged.
+const rows = [
+  { channel: "Direct", sessions: 4200 },
+  { channel: "Search", sessions: 3100 },
+];
+
+<PieChart
+  dataKey="sessions"
+  nameKey="channel"
+  series={{ key: "sessions" }}
+  data={rows}
+/>`,
+      language: "tsx",
+      label: "Custom keys"
+    }
+  ]}
+/>
+
+## Position
+
+`origo` moves the centre of the pie within the panel, as percentages. Shift it
+when the legend sits along one side and the default centring leaves the arc
+crowded against it.
+
+## API reference
+
+`PieChart` has no axes or grid, so `axis` and `grid` do not apply.
+
+<PropsTable
+  content={[
+    ["ring", "{ inner: number; outer: number }", "{ inner: 0, outer: 80 }", "Inner and outer radius as percentages. inner: 0 is a solid pie."],
+    ["dataKey", "string", "\"value\"", "Field holding the number that sizes each slice."],
+    ["nameKey", "string", "\"name\"", "Field holding the slice label."],
+    ["origo", "{ x: number; y: number }", "{ x: 50, y: 50 }", "Centre of the pie within the panel, as percentages."],
+    ["...chart"],
+  ]}
+/>

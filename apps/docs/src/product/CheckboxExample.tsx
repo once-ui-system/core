@@ -36,8 +36,8 @@ export function IndeterminateCheckboxExample() {
     <Column gap="16">
       <Checkbox
         label="Select all items"
-        isChecked={allChecked || isIndeterminate}
-        isIndeterminate={isIndeterminate}
+        checked={allChecked || isIndeterminate}
+        indeterminate={isIndeterminate}
         onToggle={toggleAll}
       />
       
@@ -46,7 +46,7 @@ export function IndeterminateCheckboxExample() {
           <Checkbox
             key={item.id}
             label={item.label}
-            isChecked={item.checked}
+            checked={item.checked}
             onToggle={() => toggleItem(item.id)}
           />
         ))}

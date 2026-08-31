@@ -188,7 +188,7 @@ Customize the dropdown background color.
 
 ## Controlled state
 
-Control the open/close state externally using `isOpen` and `onOpenChange`.
+Control the open/close state externally using `open` and `onOpenChange`.
 
 <CodeBlock
   marginTop="16"
@@ -206,7 +206,7 @@ const [selectedEmoji, setSelectedEmoji] = useState("");
   <EmojiPickerDropdown
     trigger={<Button label="Controlled Dropdown" />}
     onSelect={(emoji) => setSelectedEmoji(emoji)}
-    isOpen={isOpen}
+    open={isOpen}
     onOpenChange={setIsOpen}
   />
   <Button 
@@ -230,15 +230,15 @@ const [selectedEmoji, setSelectedEmoji] = useState("");
 
 <PropsTable
   content={[
-    ["trigger", "ReactElement", "The element that triggers the dropdown (required)"],
-    ["onSelect", "(emoji: string) => void", "Callback when an emoji is selected (required)"],
-    ["columns", "GridSize", "Number of columns in the emoji grid", "8"],
-    ["background", "StyleProps['background']", "Background color of the dropdown", "surface"],
-    ["closeAfterClick", "boolean", "Whether to close dropdown after selecting emoji", "true"],
-    ["placement", "Placement", "Position of dropdown relative to trigger", "bottom"],
-    ["isOpen", "boolean", "Controlled open state"],
-    ["onOpenChange", "(open: boolean) => void", "Callback when open state changes"],
-    ["fillWidth", "boolean", "Whether dropdown matches trigger width"],
-    ["minDropdownWidth", "number", "Minimum width of dropdown in pixels"]
+    ["trigger", "ReactElement", "-", "The element that triggers the dropdown (required)"],
+    ["onSelect", "(emoji: string) => void", "-", "Callback when an emoji is selected (required)"],
+    ["columns", "GridSize", "8", "Number of columns in the emoji grid"],
+    ["background", "StyleProps['background']", "surface", "Background color of the dropdown"],
+    ["closeAfterClick", "boolean", "true", "Whether to close dropdown after selecting emoji"],
+    ["placement", "Placement", "bottom", "Position of dropdown relative to trigger"],
+    ["open", "boolean", "-", "Controlled open state"],
+    ["onOpenChange", "(open: boolean) => void", "-", "Callback when open state changes"],
+    ["fillWidth", "boolean", "-", "Whether dropdown matches trigger width"],
+    ["...dropdownWrapper"],
   ]}
 />

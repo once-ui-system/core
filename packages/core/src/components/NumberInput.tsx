@@ -67,7 +67,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         min={min}
         max={max}
         step={step}
-        hasSuffix={
+        suffix={
           <>
             <Flex position="static" minWidth={1.25}></Flex>
             <Column

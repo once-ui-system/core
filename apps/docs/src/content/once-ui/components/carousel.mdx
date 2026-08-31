@@ -228,6 +228,10 @@ You can place custom content inside the slides as `ReactNode`.
     ["unoptimized", "boolean", "false"],
     ["revealedByDefault", "boolean", "false"],
     ["auto", "boolean", "false"],
+    ["priority", "boolean", "false", "Eager-load the first slide. Use it when the carousel is above the fold."],
+    ["stretch", "boolean", "false", "Drop the intrinsic aspect ratio and let slides fill their box."],
+    ["thumbnail", "ThumbnailItem", "{ scaling: 1 }", "Sizing of the thumbnail strip when indicator is \"thumbnail\"."],
+    ["play", "{ auto, interval, controls, progress }", "{ auto: false }", "Autoplay behaviour and the controls shown for it."],
     ["...flex"]
   ]}
 />

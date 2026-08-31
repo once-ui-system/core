@@ -825,6 +825,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     <IconButton
                       variant="tertiary"
                       icon="sparkle"
+              aria-label="Explain this code"
                       color="neutral-weak"
                     />
                   </Flex>

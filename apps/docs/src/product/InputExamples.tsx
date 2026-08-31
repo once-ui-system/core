@@ -35,8 +35,8 @@ export function SearchInput() {
       placeholder="Search"
       value={searchValue}
       onChange={handleChange}
-      hasPrefix={<Icon name="search" size="xs" />}
-      hasSuffix={
+      prefix={<Icon name="search" size="xs" />}
+      suffix={
         searchValue.length > 0 ? (
           <IconButton
             variant="ghost"
@@ -101,8 +101,8 @@ export function CharacterCountExample() {
 export function ColorInputExample() {
   const [colorValue, setColorValue] = useState("#4287f5");
   
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setColorValue(e.target.value);
+  const handleColorChange = (value: string) => {
+    setColorValue(value);
   };
   
   return (
@@ -119,8 +119,8 @@ export function ColorInputExample() {
 export function ColorInputAlphaExample() {
   const [colorValue, setColorValue] = useState("rgba(66, 135, 245, 0.8)");
   
-  const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setColorValue(e.target.value);
+  const handleColorChange = (value: string) => {
+    setColorValue(value);
   };
   
   return (
@@ -144,7 +144,7 @@ export function DateInputExample() {
   
   return (
     <DateInput
-      hasPrefix={<Icon marginLeft="4" name="calendar" size="xs" />}
+      prefix={<Icon marginLeft="4" name="calendar" size="xs" />}
       id="date-input-example"
       placeholder="Select date"
       value={date}
@@ -184,7 +184,7 @@ export function NumberInputExample() {
     <NumberInput
       id="number-input-example"
       label="Quantity"
-      height="xl"
+      size="xl"
       value={value}
       onChange={handleChange}
       min={0}
@@ -251,7 +251,7 @@ export function TagInputExample() {
       value={tags}
       onChange={handleChange}
       placeholder="Add interest"
-      hasSuffix={<Kbd position="absolute" top="16" right="12">Enter</Kbd>}
+      suffix={<Kbd position="absolute" top="16" right="12">Enter</Kbd>}
     />
   );
 }

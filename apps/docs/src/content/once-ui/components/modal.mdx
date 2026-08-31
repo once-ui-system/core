@@ -29,7 +29,7 @@ return (
       Open Modal
     </Button>
     <Modal
-      isOpen={isOpen}
+      open={isOpen}
       onClose={() => setIsOpen(false)}
       title="Modal Title"
     >
@@ -62,7 +62,7 @@ Add custom backdrop content behind the modal dialog using the `backdrop` prop.
     {
       code:
 `<Modal
-  isOpen={isOpen}
+  open={isOpen}
   onClose={() => setIsOpen(false)}
   title="Modal with Backdrop"
   backdrop={
@@ -88,7 +88,36 @@ The Modal component includes several built-in features:
 - **Keyboard navigation**: Press Escape to close
 - **Click outside**: Click outside the modal to dismiss
 - **Auto-scroll reset**: Content scrolls to top when modal opens
-- **Accessibility**: Proper ARIA attributes for screen readers
+- **Accessibility**: `role="dialog"` and `aria-modal="true"` on the overlay
+
+### Focus is not trapped
+
+`Modal` does not currently contain focus: Tab from the last control inside it
+moves to the page behind, and focus is not returned to the trigger on close.
+`aria-modal="true"` tells a screen reader the rest of the page is inert, which
+is not yet enforced.
+
+Until that is fixed, wrap the contents in a
+[`FocusTrap`](/once-ui/components/focusTrap) when the modal is a real modal
+step rather than an aside — or use [`Dialog`](/once-ui/components/dialog),
+which traps focus and restores it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Modal open={open} onClose={close} title="Rename project">
+  <FocusTrap active={open} style={{ display: "contents" }}>
+    {children}
+  </FocusTrap>
+</Modal>`,
+      language: "tsx",
+      label: "Workaround"
+    }
+  ]}
+/>
 
 ## Behavior
 
@@ -102,10 +131,10 @@ The Modal component includes several built-in features:
 
 <PropsTable
   content={[
-    ["isOpen", "boolean", "Controls modal visibility"],
-    ["onClose", "() => void", "Callback when modal should close"],
-    ["title", "ReactNode", "Modal title displayed at the top"],
-    ["children", "ReactNode", "Modal content"],
-    ["backdrop", "ReactNode", "Optional backdrop content behind the modal"]
+    ["open", "boolean", "-", "Controls modal visibility"],
+    ["onClose", "() => void", "-", "Callback when modal should close"],
+    ["title", "ReactNode", "-", "Modal title displayed at the top"],
+    ["children", "ReactNode", "-", "Modal content"],
+    ["backdrop", "ReactNode", "-", "Optional backdrop content behind the modal"]
   ]}
 />

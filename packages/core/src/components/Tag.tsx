@@ -9,7 +9,7 @@ import { IconName } from "../icons";
 import { ColorScheme, CondensedTShirtSizes } from "../types";
 
 interface TagProps extends React.ComponentProps<typeof Flex> {
-  variant?: ColorScheme | "gradient";
+  scheme?: ColorScheme | "gradient";
   size?: CondensedTShirtSizes;
   label?: string;
   prefixIcon?: IconName;
@@ -20,7 +20,7 @@ interface TagProps extends React.ComponentProps<typeof Flex> {
 const Tag = forwardRef<HTMLDivElement, TagProps>(
   (
     {
-      variant = "neutral",
+      scheme = "neutral",
       size = "m",
       label = "",
       prefixIcon,
@@ -37,15 +37,15 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
     return (
       <Row
         fitWidth
-        background={variant !== "gradient" ? `${variant}-weak` as const : undefined}
-        border={variant !== "gradient" ? `${variant}-alpha-medium` as const : "brand-medium"}
-        onBackground={variant !== "gradient" ? `${variant}-medium` as const : undefined}
+        background={scheme !== "gradient" ? `${scheme}-weak` as const : undefined}
+        border={scheme !== "gradient" ? `${scheme}-alpha-medium` as const : "brand-medium"}
+        onBackground={scheme !== "gradient" ? `${scheme}-medium` as const : undefined}
         paddingX={paddingX} paddingY={paddingY}
         vertical="center"
         radius="s"
         gap="4"
         ref={ref}
-        className={classNames(styles.tag, variant === "gradient" ? styles.gradient : undefined, className)}
+        className={classNames(styles.tag, scheme === "gradient" ? styles.gradient : undefined, className)}
         {...rest}
       >
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}
