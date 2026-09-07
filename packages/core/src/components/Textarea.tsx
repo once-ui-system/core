@@ -14,16 +14,17 @@ import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
 
-interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextareaProps
+  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix"> {
   id: string;
   label?: string;
   placeholder?: string;
   lines?: number | "auto";
-  height?: TShirtSizes;
+  size?: TShirtSizes;
   error?: boolean;
   errorMessage?: ReactNode;
   description?: ReactNode;
-  radius?:
+  corners?:
     | "none"
     | "top"
     | "right"
@@ -34,8 +35,8 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     | "bottom-right"
     | "bottom-left";
   className?: string;
-  hasPrefix?: ReactNode;
-  hasSuffix?: ReactNode;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
   variant?: "default" | "ghost";
   characterCount?: boolean;
   resize?: "horizontal" | "vertical" | "both" | "none";
@@ -50,14 +51,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       label,
       placeholder,
       lines = 3,
-      height = "m",
+      size = "m",
       error = false,
       errorMessage,
       description,
-      radius,
+      corners,
       className,
-      hasPrefix,
-      hasSuffix,
+      prefix,
+      suffix,
       variant = "default",
       characterCount,
       resize = "vertical",
@@ -152,12 +153,12 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       styles.textarea,
       "font-body",
       "font-default",
-      fontSizeMap[height],
+      fontSizeMap[size],
       {
         [styles.filled]: isFilled,
         [styles.focused]: isFocused,
-        [styles.withPrefix]: hasPrefix,
-        [styles.withSuffix]: hasSuffix,
+        [styles.withPrefix]: prefix,
+        [styles.withSuffix]: suffix,
         [styles.placeholder]: placeholder,
         [styles.hasChildren]: children,
       },
@@ -181,15 +182,15 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           vertical="stretch"
           className={classNames(
             styles.base,
-            height && styles[height],
+            size && styles[size],
             lines !== "auto" && resize !== "none" && styles.resizeHandle,
-            radius === "none" ? "radius-none" : radius ? `radius-l-${radius}` : "radius-l",
+            corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",
             lines !== "auto" && resize !== "none" && "radius-s-bottom-right",
           )}
         >
-          {hasPrefix && (
+          {prefix && (
             <Row paddingLeft="12" className={styles.prefix}>
-              {hasPrefix}
+              {prefix}
             </Row>
           )}
           <Column fillWidth padding="4">
@@ -248,9 +249,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               </Row>
             )}
           </Column>
-          {hasSuffix && (
+          {suffix && (
             <Row paddingRight="12" className={styles.suffix}>
-              {hasSuffix}
+              {suffix}
             </Row>
           )}
         </Row>

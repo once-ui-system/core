@@ -1,0 +1,111 @@
+---
+title: "InfoTip"
+summary: "The 'what is this?' affordance: an info icon that reveals a sentence on hover."
+updatedAt: "2026-08-31"
+docs: "once-ui/components/infoTip.mdx"
+github: "components/InfoTip.tsx"
+navLabel: "InfoTip"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`InfoTip` is a small info icon that reveals a sentence of context on hover. It
+lets a control carry an explanation without spending a permanent line of the
+layout on something most readers only need once.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="8" vertical="center" paddingY="24" horizontal="center" fillWidth>
+      <Text variant="label-default-s">Bitrate</Text>
+      <InfoTip>Higher bitrates keep more detail in fast motion, at a larger file size.</InfoTip>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="8" vertical="center">
+  <Text variant="label-default-s">Bitrate</Text>
+  <InfoTip>
+    Higher bitrates keep more detail in fast motion, at a larger file size.
+  </InfoTip>
+</Row>`,
+      language: "tsx",
+      label: "InfoTip"
+    }
+  ]}
+/>
+
+## Sizing
+
+`size` takes the same tokens as [`Icon`](/once-ui/components/icon). Match it to
+the text it sits beside — `xs` next to a label, `s` next to body copy — so the
+icon reads as part of the line rather than an object dropped into it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" vertical="center" paddingY="24" horizontal="center" fillWidth>
+      <InfoTip size="xs">Extra small</InfoTip>
+      <InfoTip size="s">Small</InfoTip>
+      <InfoTip size="m">Medium</InfoTip>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<InfoTip size="xs">Extra small</InfoTip>
+<InfoTip size="s">Small</InfoTip>
+<InfoTip size="m">Medium</InfoTip>`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+## When not to use it
+
+Hover-only content is invisible on touch and to anyone scanning rather than
+pointing, so an `InfoTip` must never carry information the reader needs in order
+to make the choice in front of them. That belongs in a visible description —
+[`Setting`](/once-ui/components/setting) has a `description` prop for exactly
+this. Reserve `InfoTip` for the second sentence: the caveat, the unit, the
+reason a default is what it is.
+
+Anything longer than a sentence or two wants a link to a page, not a tip.
+
+## In a Setting
+
+[`Setting`](/once-ui/components/setting) renders an `InfoTip` for you when you
+pass its `info` prop, which is the usual way you will meet this component.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Setting
+  label="Bitrate"
+  info="Higher bitrates keep more detail in fast motion, at a larger file size."
+>
+  <Select id="bitrate" options={options} />
+</Setting>`,
+      language: "tsx",
+      label: "Via Setting"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["children", "React.ReactNode", "-", "The explanation. A sentence or two."],
+    ["size", ["xs", "s", "m", "l", "xl"], "\"xs\"", "Icon size, matched to the text it sits beside."],
+    ["...flex"],
+  ]}
+/>

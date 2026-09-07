@@ -9,10 +9,51 @@ This repo uses a monorepo layout with pnpm workspaces and Turborepo:
 | Path | Description |
 |------|-------------|
 | `packages/core` | The Once UI package [@once-ui-system/core](https://www.npmjs.com/package/@once-ui-system/core) — all components, tokens, and utilities |
+| `packages/foundations` | Tokens, styles, and token-value types. Core consumes it at build time and inlines its SCSS/CSS into `dist`; it is not published to npm |
 | `apps/dev` | Local sandbox app for testing components (Next.js 16, port 3001) |
 | `apps/docs` | Documentation site at [docs.once-ui.com](https://docs.once-ui.com) (Next.js 16, port 3000) |
 
 For the full directory layout and conventions, see [ARCHITECTURE.md](./ARCHITECTURE.md).
+
+## Requirements
+
+**Node `>=22.12.0`** (`.nvmrc` pins 22), and pnpm 10.
+
+Two separate reasons for that floor:
+
+- **22.12.0 is where `require()` of an ESM module landed.** Sass depends on
+  chokidar 5, which is ESM-only, and loads it through `require()`. On an older
+  Node the foundations build dies with an `ERR_REQUIRE_ESM` stack trace from
+  inside Sass that names neither Node nor the real constraint. Node 21.x is the
+  nastiest case — it satisfies a naive `>=20` range but was retired before the
+  backport, so it passes the check and still cannot build.
+- **Node 20 reached end of life on 2026-04-30**, and Vercel stops building
+  projects on Node 20 or older from 2026-10-01. The 20.19 line could technically
+  run the build, but there is no reason to keep a dead runtime in the supported
+  set.
+
+**macOS / Linux** (nvm reads `.nvmrc`):
+
+```bash
+nvm install && nvm use
+node --version   # expect v22.x
+```
+
+**Windows** — nvm-windows does *not* read `.nvmrc`, so name the version:
+
+```powershell
+nvm install 22
+nvm use 22
+node --version   # expect v22.x
+```
+
+Switching Node in one terminal does not affect terminals that are already
+open, and some editors spawn their own shell — if a build still reports the
+old version, reopen it.
+
+`pnpm install` and the foundations build both run `scripts/check-node.mjs`,
+which fails with the version it found and how to fix it rather than letting
+Sass throw `ERR_REQUIRE_ESM` from somewhere deep in `node_modules`.
 
 ## Running the dev environment
 

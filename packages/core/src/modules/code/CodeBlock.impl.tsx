@@ -24,6 +24,7 @@ import {
   Fade,
 } from "../../components";
 import { escapeHtml } from "../../utils/safe-html";
+import type { IconName } from "../../icons";
 
 let Prism: any;
 
@@ -477,7 +478,7 @@ type CodeInstance = {
   language: string | ["diff", string];
   label: string;
   highlight?: string;
-  prefixIcon?: string;
+  prefixIcon?: IconName;
   startLineNumber?: number;
 };
 
@@ -659,7 +660,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     }
   }, [codeInstance, codes]);
 
-  const [copyIcon, setCopyIcon] = useState<string>("clipboard");
+  const [copyIcon, setCopyIcon] = useState<IconName>("clipboard");
   const handleCopy = () => {
     if (codes.length > 0 && code) {
       navigator.clipboard
@@ -825,6 +826,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     <IconButton
                       variant="tertiary"
                       icon="sparkle"
+              aria-label="Explain this code"
                       color="neutral-weak"
                     />
                   </Flex>

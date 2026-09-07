@@ -80,7 +80,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(({
         style={{
           textOverflow: "ellipsis",
         }}
-        radius={"left"}
+        corners={"left"}
         id={id}
         placeholder={startLabel}
         value={inputValue.startDate ?? ""}
@@ -94,7 +94,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(({
         style={{
           textOverflow: "ellipsis",
         }}
-        radius={"right"}
+        corners={"right"}
         id={id}
         placeholder={endLabel}
         value={inputValue.endDate ?? ""}
@@ -118,7 +118,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(({
       trigger={trigger}
       minHeight={minHeight}
       dropdown={dropdown}
-      isOpen={isOpen}
+      open={isOpen}
       closeAfterClick={false}
       disableTriggerClick={true}
       className={className}

@@ -93,7 +93,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           <Media
             radius="full"
             src={src}
-            fill
+            stretch
             alt="Avatar"
             aspectRatio="1"
             sizes={typeof size === "string" ? `${sizeMapping[size]}px` : `${size * 16}px`}

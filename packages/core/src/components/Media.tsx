@@ -19,7 +19,13 @@ export interface MediaProps extends React.ComponentProps<typeof Flex> {
   sizes?: string | number;
   priority?: boolean;
   caption?: ReactNode;
-  fill?: boolean;
+  /**
+   * Drop the intrinsic aspect ratio and let the media stretch to whatever box
+   * it is in. Named `stretch` rather than `fill` because `fill` is a layout
+   * prop on every Flex-derived component (fillWidth + fillHeight) and shadowing
+   * it here meant `<Media fill />` did not do the one thing its name promised.
+   */
+  stretch?: boolean;
   fillWidth?: boolean;
   loop?: boolean;
   autoplay?: boolean;
@@ -35,7 +41,7 @@ const Media = forwardRef<HTMLDivElement, MediaProps>(
       src,
       alt = "",
       fillWidth = true,
-      fill = false,
+      stretch = false,
       loading = false,
       enlarge = false,
       unoptimized = false,
@@ -180,7 +186,7 @@ const Media = forwardRef<HTMLDivElement, MediaProps>(
           <Column
             as={caption ? "figure" : undefined}
             ref={imageRef}
-            fillWidth
+            fillWidth={fillWidth}
             overflow="hidden"
             zIndex={0}
             margin="0"
@@ -255,12 +261,12 @@ const Media = forwardRef<HTMLDivElement, MediaProps>(
                 sizes={isEnlarged ? "100vw" : resolvedSizes}
                 priority={priority}
                 unoptimized={unoptimized}
-                fill={fill || !aspectRatio}
-                width={fill ? undefined : 0}
-                height={fill ? undefined : 0}
+                fill={stretch || !aspectRatio}
+                width={stretch ? undefined : 0}
+                height={stretch ? undefined : 0}
                 style={{
                   objectFit: objectFit,
-                  aspectRatio: fill ? undefined : aspectRatio,
+                  aspectRatio: stretch ? undefined : aspectRatio,
                   width: aspectRatio ? "100%" : undefined,
                   height: aspectRatio ? "100%" : undefined,
                 }}

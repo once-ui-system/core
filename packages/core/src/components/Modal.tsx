@@ -8,18 +8,18 @@ export interface ModalProps {
   children: React.ReactNode;
   backdrop?: React.ReactNode;
   title: React.ReactNode;
-  isOpen: boolean;
+  open: boolean;
   onClose: () => void;
 }
 
-const Modal = forwardRef<HTMLDivElement, ModalProps>(({ children, backdrop, title, isOpen, onClose }, ref) => {
+const Modal = forwardRef<HTMLDivElement, ModalProps>(({ children, backdrop, title, open, onClose }, ref) => {
   const [visible, setVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (isOpen) {
+    if (open) {
       setMounted(true);
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -31,10 +31,10 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(({ children, backdrop, titl
       const timeout = setTimeout(() => setMounted(false), 300);
       return () => clearTimeout(timeout);
     }
-  }, [isOpen]);
+  }, [open]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!open) return;
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         onClose();
@@ -42,10 +42,10 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(({ children, backdrop, titl
     };
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [open, onClose]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!open) return;
 
     const handleClickOutside = (e: MouseEvent) => {
       if (dialogRef.current && !dialogRef.current.contains(e.target as Node)) {
@@ -61,19 +61,19 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(({ children, backdrop, titl
       clearTimeout(timeoutId);
       document.removeEventListener("mousedown", handleClickOutside, { capture: true });
     };
-  }, [isOpen, onClose]);
+  }, [open, onClose]);
 
   useEffect(() => {
-    if (isOpen && contentRef.current) {
+    if (open && contentRef.current) {
       contentRef.current.scrollTop = 0;
     }
-  }, [isOpen, children]);
+  }, [open, children]);
 
   if (!mounted) return null;
 
   return ReactDOM.createPortal(
     <>
-      <ScrollLock enabled={isOpen} allowScrollInElement={contentRef} />
+      <ScrollLock enabled={open} allowScrollInElement={contentRef} />
       <Row
         fill
         horizontal="center"

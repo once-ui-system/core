@@ -1,7 +1,8 @@
 # RFC: Once UI 2.0 — package architecture
 
-- **Status:** Draft — needs Lorant's go/no-go (Roadmap Week 3 gate)
-- **Date:** 2026-08-12
+- **Status:** Accepted, with the package split narrowed — see §11. Built on
+  `claude/once-ui-2-release-prep-6dkl9v`; the remaining gate is the 2.0 publish.
+- **Date:** 2026-08-12 · package shape revised 2026-09-07
 - **Owner:** Lorant (sign-off) · drafted from verified repo state at `packages/core` v1.8.2
 - **Supersedes:** the Week 3 sketch in `ROADMAP.md` ("core / blocks / server") — see §9 for how the two reconcile
 
@@ -15,7 +16,7 @@ packages so that:
 2. **Data-viz is opt-in** — `recharts` stops being a dependency for consumers
    who never render a chart.
 3. **Next.js becomes optional** — components fall back to standard DOM
-   (`<a>`, `<img>`, History API) when Next is absent; a thin bindings package
+   (`<a>`, `<img>`, History API) when Next is absent; a thin bindings subpath
    restores the Next-optimized behavior.
 4. **Test coverage becomes a release gate**, not an afterthought — including
    the package-resolution tests that would have caught the 1.8.0 `exports`
@@ -44,17 +45,33 @@ dependency (recharts) is already behind a loader.
 
 ## 3. Target package layout
 
-All packages live in this monorepo (`packages/*`), versioned in lockstep
-(see §7).
+**Revised 2026-09-07 (Lorant).** Two published packages, not five. A package
+earns its own name only if it is worth installing without the others, and
+only foundations is: tokens and styles are framework-agnostic and useful to
+anyone theming alongside the components rather than with them. Charts, the
+Next bindings and the codemod are all meaningless without core, so they ship
+as subpaths and a repo script rather than as packages with their own
+versions, release notes and support matrix.
 
 ```
 packages/
 ├── foundations/   @once-ui-system/foundations   tokens + styles + token types
-├── core/          @once-ui-system/core          React components, hooks, contexts (framework-agnostic)
-├── data/          @once-ui-system/data          charts, gauges (owns recharts)
-├── nextjs/        @once-ui-system/nextjs        Next.js bindings + server utils (owns next peer)
-└── codemod/       @once-ui-system/codemod       1.x → 2.0 import rewriter (dev-time only)
+└── core/          @once-ui-system/core          React components, hooks, contexts
+                     ├── /data     charts, gauges         (optional peer: recharts)
+                     ├── /code     CodeBlock              (optional peer: prismjs)
+                     ├── /media    MediaUpload            (optional peer: compressorjs)
+                     └── /next     Next.js bindings       (optional peer: next)
+
+scripts/codemod-2.0.mjs                          1.x → 2.0 rewriter (repo script)
 ```
+
+Subpaths are what make the heavy dependencies optional at all. A bundler
+resolves `await import("recharts")` when it walks a barrel, so while `data`,
+`code` and `media` were re-exported from the root, every consumer had all
+three specifiers in its module graph — an app that rendered no chart still
+failed to build without recharts installed, and the lazy import's `catch()`
+never got the chance to run. Reaching them by subpath keeps the specifier out
+of the graph of everyone who does not ask for it.
 
 ### `@once-ui-system/foundations`
 
@@ -76,32 +93,37 @@ packages/
 - Keeps the existing subpath exports map shape (`./components`, `./hooks`,
   `./contexts`, …) — the barrel structure survives the split.
 
-### `@once-ui-system/data`
+### `@once-ui-system/core/data`
 
-- Everything in `modules/data/` today. Owns the `recharts` dependency
-  (kept behind the existing lazy loader so SSR/code-splitting behavior is
-  unchanged). Depends on `core` for chart chrome (`ChartHeader`, `Legend`
-  compose core primitives).
-- Consumers who don't chart never download recharts (~430 kB before
-  compression) or its d3 tree.
+- Everything in `modules/data/` today, reached at
+  `@once-ui-system/core/data`. `recharts` is an **optional peer**: consumers
+  who chart install it, and the existing lazy loader keeps SSR and
+  code-splitting behaviour unchanged. `code` (prismjs) and `media`
+  (compressorjs) follow the same shape.
+- Consumers who don't chart never resolve recharts, never download it
+  (~430 kB before compression, 9.5M installed) and never carry its d3 tree.
+- Not a package: the chart chrome composes core primitives, so it has no
+  meaning installed on its own.
 
-### `@once-ui-system/nextjs`
+### `@once-ui-system/core/next`
 
 - The 8 Next-coupled surfaces, re-exported with their Next behavior:
   `Media` (next/image), link adapter (next/link), navigation adapter
   (next/navigation for `Kbar`/`MegaMenu`), `Schema`/`Meta` (next/script,
   App Router metadata helpers), and today's `./server` og-utils.
-- Owns the `next >=15.5` peer dependency and the optional `sharp` peer.
-- Primary export is `OnceUINextProvider` (or provider props) that plugs the
-  Next adapters into core — one line in `layout.tsx` and every core
-  component silently upgrades to next/image + next/link.
+- Carries the `next` peer (optional) and the optional `sharp` peer.
+- Primary export is a `LayoutProvider` with the Next adapters pre-installed —
+  one import swap in `layout.tsx` and every core component upgrades to
+  next/image + next/link.
+- Not a package: Next bindings for Once UI are worthless without Once UI.
 
-### `@once-ui-system/codemod`
+### The codemod
 
-- jscodeshift/ts-morph transform: rewrites 1.x imports to 2.0 packages,
-  flags chart usages (add `data` dep), flags server-util usages (add
-  `nextjs` dep). magic's 556 root-entry imports are exactly the shape this
-  handles mechanically.
+- `scripts/codemod-2.0.mjs`, run from this repo — a dev-time tool, not
+  something anyone installs. It renames the changed props, migrates Skeleton's
+  shape-dependent values, moves the relocated imports onto their subpaths, and
+  points the stylesheet imports at foundations. Its own tests live beside it
+  and run in `pnpm test`.
 
 ## 4. Framework adapter design (the "fallback from Next" mechanism)
 
@@ -128,8 +150,8 @@ interface OnceUIAdapters {
 - `Kbar`/`MegaMenu` consume `usePathname`/`useNavigate` from the adapter
   instead of importing next/navigation. They move back from "Next-only" to
   core, which is where they belong once decoupled.
-- `@once-ui-system/nextjs` ships the four Next implementations and a
-  provider that installs them.
+- `@once-ui-system/core/next` ships the four Next implementations and a
+  `LayoutProvider` that installs them.
 
 **Hard rule:** core must never `import "next/*"`, enforced by a lint rule
 and a CI check (§6), so the boundary cannot silently regress the way
@@ -210,17 +232,29 @@ protection-per-effort:
 
 - **`@once-ui-system/core` keeps its name** as the React package — the
   2.0 root import surface stays close to 1.x, so most consumers upgrade by
-  (a) installing `foundations` (or letting core's dependency pull it),
-  (b) adding `nextjs` + provider if they're on Next, (c) adding `data` if
-  they chart. The codemod automates all three.
+  (a) installing `foundations` for the stylesheets, (b) importing
+  `@once-ui-system/core/next` in `layout.tsx` if they're on Next, and
+  (c) installing `recharts`/`prismjs`/`compressorjs` only if they use the
+  subpath that needs one. The codemod does every import edit; it cannot add
+  a dependency to `package.json`, and says so.
 - Core 2.0 re-exports foundations' token types (`SpacingToken` etc.) so
   type imports don't break.
-- CSS entry compatibility: `@once-ui-system/core/css/tokens.css` remains as
-  a re-export of foundations' CSS for one major, marked deprecated.
+- CSS entry compatibility: `@once-ui-system/core/css/tokens.css` remains for
+  one major, serving byte-identical copies vendored from foundations at build
+  time. The codemod repoints these imports at
+  `@once-ui-system/foundations/css/*`; `apps/dev` and `apps/docs` migrated
+  first, and the docs page that teaches the import teaches the new path.
 - Migration guide ships with the release (roadmap Week 7 already reserves
-  this); in-org proof: run the codemod on **chirio** first (35 imports,
-  uses `./server` — exercises the `nextjs` move), then magic (556 imports,
-  scale test), before publishing 2.0.
+  this). In-org proof, measured 2026-09-07 by installing the packed 2.0
+  tarball into each app and running the codemod: **1149 type errors across
+  six apps → 27**, three of them to zero, with production builds green.
+  What remains is app design rather than migration — wrappers republishing
+  the old `delay` string union as their own prop type, and the `ColorInput`
+  handler signature. Two breaking changes are invisible to the compiler and
+  belong in the guide: Skeleton's `width` default (a line that never named a
+  width was 50% wide in 1.8.x and collapses to nothing in 2.0), and the
+  images-and-links regression for a Next app that skips
+  `@once-ui-system/core/next`.
 
 ## 8. Sequencing
 
@@ -231,9 +265,9 @@ Each phase is shippable and reversible; only Phase 5 is breaking.
 | 0 | 1.x CI | Test infrastructure first: publint/attw + tarball fixtures, interaction tests for top-20 components, CSS snapshot guard, boundary lint rules | this RFC approved |
 | 1 | 1.9 minor | Extract `foundations` (tokens/styles/token types); core depends on it and re-exports everything — zero consumer change | Phase 0 green |
 | 2 | 1.9/1.10 minor | Adapter provider inside core with DOM defaults; Next imports become the *installed defaults* when `next` resolves (behavior identical for Next users); adapter-fallback tests | Phase 1 |
-| 3 | 1.10 minor | Extract `data` package; core's chart exports become deprecated re-exports; recharts stays a core dep until 2.0 (non-breaking) | Phase 2 |
-| 4 | prerelease | Extract `nextjs` package; codemod written; chirio + magic migrated as canaries on 2.0.0-rc | Phase 3 |
-| 5 | **2.0.0** | Flip: core drops `next`/`recharts`/`sass` peers+deps, deprecated re-exports removed, migration guide + changelog published | Lorant's release sign-off |
+| 3 | **2.0** | `data`/`code`/`media` move to subpaths and their dependencies become optional peers. Breaking, so it lands in 2.0 rather than a minor: the root barrel is what put the specifiers in every consumer's graph, and nothing short of removing them from it makes the dependencies optional | Phase 2 |
+| 4 | prerelease | `next` bindings on the `/next` subpath; codemod written and tested; the whole fleet migrated as canaries on the packed tarball | Phase 3 |
+| 5 | **2.0.0** | Flip: `sass` peer dropped, deprecated CSS entries kept for one major, migration guide + changelog published. **Publish `foundations` alongside core** — the fleet cannot move off the vendored CSS shim until it exists on npm | Lorant's release sign-off |
 
 Estimated effort respects the existing 8-week roadmap: Phases 0–1 fit
 Weeks 3–5 alongside the planned a11y/regression work (the test items are
@@ -250,16 +284,36 @@ it inside 2.0 doubles the migration surface for no consumer benefit. It
 remains a candidate for 2.x once Studio's registry work makes the
 primitives/compositions boundary load-bearing.
 
-## 10. Open decisions (need input)
+## 10. Decisions
 
-1. **Package naming:** `foundations` vs `tokens`; `nextjs` vs `next`
-   (npm allows `@once-ui-system/next` but it reads ambiguously in imports).
-2. **Icons:** `react-icons` stays a core dependency (tree-shakeable) or
-   splits into an optional icons package. Recommendation: stay in core for
-   2.0; revisit if size-limit data argues otherwise.
-3. **Lockstep vs independent versions.** Recommendation: lockstep through
-   2.x — the support matrix of independent versions isn't worth it at
-   this team size.
-4. **Sass sources in foundations:** ship SCSS sources for theme authors
-   (recommended) or compiled CSS only.
+Resolved 2026-09-07 (Lorant), recorded here so the RFC stops contradicting
+what is built:
+
+1. **Package naming and count — settled.** Two packages: `foundations` and
+   `core`. `nextjs` vs `next` is moot; the Next bindings are the
+   `@once-ui-system/core/next` subpath. See §3.
+2. **Sass sources in foundations — settled: ship them.** Already the case:
+   `files` includes `scss`, and `./scss/*` is exported, so theme authors get
+   sources and CSS-only consumers need no sass peer.
+3. **Lockstep vs independent versions — settled: lockstep.** With two
+   packages there is no support matrix worth maintaining; foundations and
+   core both sit at `2.0.0-alpha.0`.
+
+Still open, and blocking nothing yet:
+
+4. **Icons.** `react-icons` stays a core dependency (tree-shakeable) or
+   splits into an optional peer. It is **85M installed** — by far the
+   largest thing a consumer downloads, dwarfing the 13.5M just made optional,
+   though it tree-shakes to almost nothing in the bundle. Roadmap Week 7's
+   "install → first component in under 5 minutes" is the frame for deciding.
+   Same question, smaller, for `date-fns` (21M).
 5. **RSC posture** per §6 — confirm "no RSC re-architecture in 2.0".
+
+## 11. What changed since the draft
+
+The draft proposed five packages. The build settled on two, for one reason
+learned by running it: a package boundary is not what makes a dependency
+optional — keeping the specifier out of the consumer's module graph is, and
+a subpath does that just as well while costing no extra version, release
+note or support matrix. `foundations` remains a package because it is the
+one piece that means something without the rest.

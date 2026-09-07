@@ -33,3 +33,61 @@ The `LineBarChart` component provides a way to display line charts with interact
     { name: "Sun", Traffic: 3900, Conversions: 3170 },
   ]}
 />
+## Which series is which
+
+Order decides the shape: **the first series is drawn as the line, the second as
+the bars.** There is no prop for it, and only the first two series are drawn —
+a third is ignored.
+
+## Both series share one y axis
+
+There is a single y axis, so the two measures are plotted against the same
+scale. That makes the chart a comparison of two quantities of **comparable
+magnitude** — sessions against conversions, budget against spend — not a way to
+overlay a rate on a volume.
+
+Pair a percentage with a count and the percentage collapses onto the baseline:
+it is not missing, it is drawn at 4 on an axis that runs to 8000. If that is
+the chart you want, normalise the small series into the same units first, or
+put the two measures in separate charts.
+
+<LineBarChart
+  marginTop="16"
+  marginBottom="24"
+  title="Budget against spend"
+  description="Two measures on one scale — which is what this chart is for"
+  axis="both"
+  legend={{ position: "bottom-center" }}
+  series={[
+    { key: "Budget", color: "cyan" },
+    { key: "Spend", color: "indigo" }
+  ]}
+  data={[
+    { name: "Jan", Budget: 52000, Spend: 41000 },
+    { name: "Feb", Budget: 52000, Spend: 47000 },
+    { name: "Mar", Budget: 52000, Spend: 55000 },
+    { name: "Apr", Budget: 60000, Spend: 58000 },
+    { name: "May", Budget: 60000, Spend: 62000 },
+    { name: "Jun", Budget: 60000, Spend: 51000 }
+  ]}
+/>
+
+## API reference
+
+The line's shape comes from `curve` and the bars' thickness from `barWidth` —
+the same props as [`LineChart`](/once-ui/data/lineChart) and
+[`BarChart`](/once-ui/data/barChart), which is what makes swapping between the
+three cheap.
+
+<PropsTable
+  content={[
+    ["series", "SeriesConfig[]", "-", "First entry is drawn as the line, second as the bars. Further entries are ignored. Both share one y axis."],
+    ["curve", "CurveType", "\"natural\"", "Recharts interpolation: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants."],
+    ["barWidth", ["xs", "s", "m", "l", "xl", "fill", "number"], "\"l\"", "Bar thickness."],
+    ["reverseX", "boolean", "false", "Move the x axis to the top."],
+    ["reverseY", "boolean", "false", "Move the y axis to the right."],
+    ["grid", ["x", "y", "both", "none"], "\"y\"", "Which grid lines to draw."],
+    ["axis", ["x", "y", "both", "none"], "\"both\"", "Which axes to label."],
+    ["...chart"],
+  ]}
+/>

@@ -1,4 +1,10 @@
-import { NextResponse } from 'next/server';
+/**
+ * Open Graph fetch/proxy handlers.
+ *
+ * Uses the standard `Response` rather than `NextResponse`: `NextResponse`
+ * extends `Response`, so Next route handlers accept these return values
+ * unchanged, and the module no longer pulls `next/server` into core.
+ */
 import {
   fetchValidatedUrl,
   OGUrlValidationError,
@@ -73,11 +79,11 @@ async function fetchWithTimeout(
   }
 }
 
-function validationErrorResponse(): NextResponse {
-  return NextResponse.json({ error: 'URL is not allowed' }, { status: 400 });
+function validationErrorResponse(): Response {
+  return Response.json({ error: 'URL is not allowed' }, { status: 400 });
 }
 
-export async function handleOGFetch(request: Request, options: OGFetchOptions = {}): Promise<NextResponse> {
+export async function handleOGFetch(request: Request, options: OGFetchOptions = {}): Promise<Response> {
   const {
     timeout = 5000,
     userAgent = 'Mozilla/5.0 (compatible; OG-Fetcher/1.0)',
@@ -88,7 +94,7 @@ export async function handleOGFetch(request: Request, options: OGFetchOptions = 
   const url = searchParams.get('url');
 
   if (!url) {
-    return NextResponse.json({ error: 'URL parameter is required' }, { status: 400 });
+    return Response.json({ error: 'URL parameter is required' }, { status: 400 });
   }
 
   const validationOptions = { allowedDomains };
@@ -151,10 +157,10 @@ export async function handleOGFetch(request: Request, options: OGFetchOptions = 
       ogData.description = decodeHTMLEntities(ogData.description);
     }
 
-    return NextResponse.json(ogData);
+    return Response.json(ogData);
   } catch (error) {
     console.error('Error fetching OG data:', error);
-    return NextResponse.json(
+    return Response.json(
       { error: 'Failed to fetch Open Graph data' },
       { status: 500 }
     );
@@ -166,7 +172,7 @@ export interface OGProxyOptions extends OGUrlValidationOptions {
   cacheMaxAge?: number;
 }
 
-export async function handleOGProxy(request: Request, options: OGProxyOptions = {}): Promise<NextResponse> {
+export async function handleOGProxy(request: Request, options: OGProxyOptions = {}): Promise<Response> {
   const {
     userAgent = 'Mozilla/5.0 (compatible; OG-Proxy/1.0)',
     cacheMaxAge = 3600,
@@ -176,7 +182,7 @@ export async function handleOGProxy(request: Request, options: OGProxyOptions = 
   const url = searchParams.get('url');
 
   if (!url) {
-    return NextResponse.json({ error: 'URL parameter is required' }, { status: 400 });
+    return Response.json({ error: 'URL parameter is required' }, { status: 400 });
   }
 
   const validationOptions = { allowedDomains };
@@ -202,7 +208,7 @@ export async function handleOGProxy(request: Request, options: OGProxyOptions = 
     );
 
     if (!response.ok) {
-      return NextResponse.json(
+      return Response.json(
         { error: 'Failed to fetch image' },
         { status: response.status >= 400 && response.status < 600 ? response.status : 502 }
       );
@@ -211,7 +217,7 @@ export async function handleOGProxy(request: Request, options: OGProxyOptions = 
     const contentType = response.headers.get('content-type') || 'image/jpeg';
     const buffer = await response.arrayBuffer();
 
-    return new NextResponse(buffer, {
+    return new Response(buffer, {
       headers: {
         'Content-Type': contentType,
         'Cache-Control': `public, max-age=${cacheMaxAge}`,
@@ -219,7 +225,7 @@ export async function handleOGProxy(request: Request, options: OGProxyOptions = 
     });
   } catch (error) {
     console.error('Error proxying image:', error);
-    return NextResponse.json(
+    return Response.json(
       { error: 'Failed to proxy image' },
       { status: 500 }
     );

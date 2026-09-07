@@ -16,7 +16,7 @@
   "items": "!CarouselItem[] = []",
   "controls": "boolean = true",
   "priority": "boolean = false",
-  "fill": "boolean = false",
+  "stretch": "boolean = false",
   "indicator": "\"line\" | \"thumbnail\" | false = line",
   "translateY": "SpacingToken | number",
   "aspectRatio": "string = original",

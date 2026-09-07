@@ -14,15 +14,16 @@ import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   id: string;
   label?: string;
   placeholder?: string;
-  height?: TShirtSizes;
+  size?: TShirtSizes;
   error?: boolean;
   errorMessage?: ReactNode;
   description?: ReactNode;
-  radius?:
+  corners?:
     | "none"
     | "top"
     | "right"
@@ -34,8 +35,8 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     | "bottom-left";
   className?: string;
   style?: React.CSSProperties;
-  hasPrefix?: ReactNode;
-  hasSuffix?: ReactNode;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
   variant?: "default" | "ghost";
   characterCount?: boolean;
   cursor?: undefined | "interactive";
@@ -49,15 +50,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       id,
       label,
       placeholder,
-      height = "m",
+      size = "m",
       error = false,
       errorMessage,
       description,
-      radius,
+      corners,
       className,
       style,
-      hasPrefix,
-      hasSuffix,
+      prefix,
+      suffix,
       variant = "default",
       characterCount,
       loading = false,
@@ -130,13 +131,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       styles.input,
       "font-body",
       "font-default",
-      fontSizeMap[height],
+      fontSizeMap[size],
       cursor === "interactive" ? "cursor-interactive" : undefined,
       {
         [styles.filled]: isFilled,
         [styles.focused]: isFocused,
-        [styles.withPrefix]: hasPrefix,
-        [styles.withSuffix]: hasSuffix,
+        [styles.withPrefix]: prefix,
+        [styles.withSuffix]: suffix,
         [styles.placeholder]: placeholder,
         [styles.hasChildren]: children,
         [styles.error]: displayError && debouncedValue !== "",
@@ -161,13 +162,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           vertical="stretch"
           className={classNames(
             styles.base,
-            height && styles[height],
-            radius === "none" ? "radius-none" : radius ? `radius-l-${radius}` : "radius-l",
+            size && styles[size],
+            corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",
           )}
         >
-          {hasPrefix && (
+          {prefix && (
             <Row paddingLeft="12" className={styles.prefix} position="static">
-              {hasPrefix}
+              {prefix}
             </Row>
           )}
           <Column fillWidth padding="4">
@@ -217,9 +218,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               <Spinner size="s" />
             </Row>
           )}
-          {hasSuffix && !loading && (
+          {suffix && !loading && (
             <Row paddingRight="12" className={styles.suffix} position="static">
-              {hasSuffix}
+              {suffix}
             </Row>
           )}
         </Row>

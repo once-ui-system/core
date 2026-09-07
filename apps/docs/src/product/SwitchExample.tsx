@@ -15,7 +15,7 @@ export function BasicSwitch() {
     <Switch
       label="Enable notifications"
       description="Receive updates about new features and improvements"
-      isChecked={isChecked}
+      checked={isChecked}
       onToggle={handleToggle}
     />
   );
@@ -33,7 +33,7 @@ export function SwitchWithFeedback() {
     <Flex fillWidth gap="8">
       <Switch
         label={isChecked ? "Feature is now enabled" : "Feature is currently disabled"}
-        isChecked={isChecked}
+        checked={isChecked}
         onToggle={handleToggle}
       />
     </Flex>
@@ -58,7 +58,7 @@ export function SwitchWithLoading() {
   return (
     <Switch
       label="Processing"
-      isChecked={isChecked}
+      checked={isChecked}
       loading={isLoading}
       onToggle={handleToggle}
     />
@@ -78,7 +78,7 @@ export function ReversedSwitch() {
       label="Align switch to the right"
       description="This places the switch after the label text"
       reverse
-      isChecked={isChecked}
+      checked={isChecked}
       onToggle={handleToggle}
     />
   );
@@ -86,7 +86,7 @@ export function ReversedSwitch() {
 
 // Client-side wrapper for Switch to be used directly in MDX
 export function ClientSwitch(props: React.ComponentProps<typeof Switch>) {
-  const [isChecked, setIsChecked] = useState(props.isChecked || false);
+  const [isChecked, setIsChecked] = useState(props.checked || false);
   
   const handleToggle = () => {
     setIsChecked(!isChecked);
@@ -95,7 +95,7 @@ export function ClientSwitch(props: React.ComponentProps<typeof Switch>) {
   return (
     <Switch
       {...props}
-      isChecked={isChecked}
+      checked={isChecked}
       onToggle={props.onToggle || handleToggle}
     />
   );

@@ -380,6 +380,7 @@ function Table({
                 size="s"
                 variant="secondary"
                 icon="chevronDoubleLeft"
+              aria-label="First page"
                 onClick={() => setPage(1)}
                 disabled={currentPage === 1}
               />
@@ -387,6 +388,7 @@ function Table({
                 size="s"
                 variant="secondary"
                 icon="chevronLeft"
+              aria-label="Previous page"
                 onClick={() => setPage(currentPage - 1)}
                 disabled={currentPage === 1}
               />
@@ -419,11 +421,13 @@ function Table({
                 size="s"
                 variant="secondary"
                 icon="chevronRight"
+              aria-label="Next page"
                 onClick={() => setPage(currentPage + 1)}
                 disabled={currentPage === totalPages}
               />
               <IconButton
                 icon="chevronDoubleRight"
+              aria-label="Last page"
                 size="s"
                 variant="secondary"
                 onClick={() => setPage(totalPages)}

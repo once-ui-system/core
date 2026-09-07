@@ -63,3 +63,87 @@ This example uses the `useStreamingViewport` hook to smoothly pan the x-axis dom
     { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
   ]}
 />
+## Curve
+
+`curve` is Recharts' interpolation, and it is a claim about the data between
+your points. `natural` and `monotone` draw a smooth line, which implies the
+value moved continuously; `step` holds each value until the next reading, which
+is honest for something that changes in jumps — a price tier, a headcount, a
+setting. `linear` sits between the two.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Same data, held between readings"
+  description="curve: step"
+  curve="step"
+  axis="x"
+  legend={{ display: false }}
+  series={{ key: "Seats", color: "cyan" }}
+  data={[
+    { name: "Jan", Seats: 5 },
+    { name: "Feb", Seats: 5 },
+    { name: "Mar", Seats: 12 },
+    { name: "Apr", Seats: 12 },
+    { name: "May", Seats: 30 }
+  ]}
+/>
+
+## Numeric x axis
+
+By default the x axis is categorical: each data point gets an equal slot,
+whatever its value. For readings that are not evenly spaced — samples arriving
+at irregular times, a measurement against a continuous quantity — set
+`xAxisType="number"` so the spacing reflects the actual values, and pass
+`xDomain` to pin the visible range.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<LineChart
+  xAxisType="number"
+  xDomain={[0, 100]}
+  series={{ key: "Response" }}
+  data={samples}
+/>`,
+      language: "tsx",
+      label: "Numeric axis"
+    }
+  ]}
+/>
+
+A fixed `xDomain` is also what keeps a streaming chart from rescaling on every
+sample — see the live example above, which drives it from
+[`useStreamingViewport`](/once-ui/hooks/useStreamingViewport).
+
+## Animation
+
+Animation is on by default. The three `animation*` props are passed through to
+Recharts, so they take its values.
+
+Turn animation **off** for a chart that updates faster than the animation runs:
+each new sample restarts the transition, so a streaming line spends its time
+animating rather than showing the data. The second live example above is the
+same chart with `animation={false}`.
+
+## API reference
+
+<PropsTable
+  content={[
+    ["curve", "CurveType", "\"natural\"", "Recharts interpolation: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants."],
+    ["xAxisType", ["number", "category"], "\"category\"", "Treat x values as numbers rather than equally spaced categories."],
+    ["xDomain", "[number, number]", "-", "Visible x range. Requires xAxisType=\"number\"."],
+    ["animation", "boolean", "true", "Animate the line on data change."],
+    ["animationBegin", "number", "-", "Delay before the animation starts, in milliseconds."],
+    ["animationDuration", "number", "-", "Animation length, in milliseconds."],
+    ["animationEasing", "string", "-", "Recharts easing name."],
+    ["reverseX", "boolean", "false", "Move the x axis to the top."],
+    ["reverseY", "boolean", "false", "Move the y axis to the right."],
+    ["grid", ["x", "y", "both", "none"], "\"both\"", "Which grid lines to draw."],
+    ["axis", ["x", "y", "both", "none"], "\"both\"", "Which axes to label."],
+    ["...chart"],
+  ]}
+/>

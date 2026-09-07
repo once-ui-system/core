@@ -112,12 +112,12 @@ export const Table1: React.FC<Table1Props> = ({
         {showSearch && (
           <Row maxWidth={16}>
             <Input
-              height="s"
+              size="s"
               id="search"
               placeholder="Search..."
               value={search}
-              hasPrefix={<Icon name="search" size="s" onBackground="neutral-weak"/>}
-              hasSuffix={search.length > 0 && <IconButton tooltip="Clear" tooltipPosition="left" icon="close" size="s" variant="ghost" onClick={() => setSearch("")}/>}
+              prefix={<Icon name="search" size="s" onBackground="neutral-weak"/>}
+              suffix={search.length > 0 && <IconButton tooltip="Clear" tooltipPosition="left" icon="close" size="s" variant="ghost" onClick={() => setSearch("")}/>}
               onChange={(e) => setSearch(e.target.value)}
             />
           </Row>
@@ -129,8 +129,8 @@ export const Table1: React.FC<Table1Props> = ({
             {selectable && (
               <Row textVariant="label-default-s" vertical="center" gap="16">
                 <Checkbox
-                  isChecked={allCurrentSelected || (someCurrentSelected && !allCurrentSelected)}
-                  isIndeterminate={someCurrentSelected && !allCurrentSelected}
+                  checked={allCurrentSelected || (someCurrentSelected && !allCurrentSelected)}
+                  indeterminate={someCurrentSelected && !allCurrentSelected}
                   onToggle={toggleSelectAllCurrent}
                 />
               </Row>
@@ -161,7 +161,7 @@ export const Table1: React.FC<Table1Props> = ({
                         <Row vertical="center" gap="16">
                           <Checkbox
                             key={`cb-${id}`}
-                            isChecked={isSelected(id)}
+                            checked={isSelected(id)}
                             onToggle={() => toggleSelect(id)}
                           />
                         </Row>

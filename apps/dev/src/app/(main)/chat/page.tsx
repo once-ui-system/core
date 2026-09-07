@@ -409,9 +409,9 @@ export default function ChatPage() {
               <Input
                 id="chat-search"
                 placeholder="Search conversations"
-                height="s"
+                size="s"
                 variant="ghost"
-                hasPrefix={<Icon name="search" size="xs" onBackground="neutral-weak" />}
+                prefix={<Icon name="search" size="xs" onBackground="neutral-weak" />}
               />
             </Column>
             <Column flex={1} overflowY="auto" paddingBottom="8" gap="1">
@@ -459,7 +459,7 @@ export default function ChatPage() {
               <Row gap="2">
                 <IconButton icon="search" variant="tertiary" size="s" tooltip="Search in thread" />
                 <IconButton icon="bell" variant="tertiary" size="s" tooltip="Mute thread" />
-                <IconButton icon="more" variant="tertiary" size="s" tooltip="Thread options" />
+                <IconButton icon="moreHorizontal" variant="tertiary" size="s" tooltip="Thread options" />
               </Row>
             </Row>
 
@@ -530,7 +530,7 @@ export default function ChatPage() {
                   <Input
                     id="chat-message"
                     placeholder={threadPlaceholder(activeConversation)}
-                    height="s"
+                    size="s"
                     variant="ghost"
                     value={draft}
                     onChange={(e) => setDraft(e.target.value)}

@@ -1,0 +1,173 @@
+---
+title: "ArrowNavigation"
+summary: "Arrow-key movement over a row, column or grid of items, with optional focus trapping."
+updatedAt: "2026-08-31"
+docs: "once-ui/components/arrowNavigation.mdx"
+github: "components/ArrowNavigationContext.tsx"
+navLabel: "ArrowNavigation"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`ArrowNavigation` wraps a set of items and moves focus between them with the
+arrow keys. It is the component form of
+[`useArrowNavigation`](/once-ui/hooks/useArrowNavigation): the hook when you own
+the container and its key handler, this when you would rather not write either.
+
+Arrow keys are the expected way to move within a *composite* widget — a menu, a
+listbox, a toolbar, an emoji grid — where Tab should reach the widget once and
+then hand over. [`Select`](/once-ui/form-controls/select),
+[`DropdownWrapper`](/once-ui/components/dropdownWrapper),
+[`DatePicker`](/once-ui/form-controls/datePicker) and
+[`Kbar`](/once-ui/modules/kbar) are built on it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<ArrowNavigation
+  layout="column"
+  itemCount={options.length}
+  onSelect={(index) => choose(options[index])}
+  role="listbox"
+  aria-label="Projects"
+>
+  {options.map((option) => (
+    <Option key={option.value} value={option.value} label={option.label} />
+  ))}
+</ArrowNavigation>`,
+      language: "tsx",
+      label: "ArrowNavigation"
+    }
+  ]}
+/>
+
+## Layouts
+
+`layout` decides which keys move focus:
+
+- `"row"` — Left and Right.
+- `"column"` — Up and Down.
+- `"grid"` — all four, with `columns` giving the row width so Up and Down step
+  a whole row at a time.
+
+`wrap` (on by default) carries focus from the last item back to the first.
+Turn it off for a list where hitting the end should feel like an end.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<ArrowNavigation layout="grid" columns={8} itemCount={emojis.length} onSelect={pick}>
+  <Grid columns={8}>
+    {emojis.map((emoji) => <IconButton key={emoji} ... />)}
+  </Grid>
+</ArrowNavigation>`,
+      language: "tsx",
+      label: "Grid"
+    }
+  ]}
+/>
+
+## Which children are navigable
+
+Items are found with
+`[role="option"], [data-value], button, [tabindex]:not([tabindex="-1"])`.
+Override `itemSelector` when your items are none of those, and keep
+`itemCount` in step with what the selector actually matches — the count drives
+wrapping and the bounds, so a mismatch shows up as arrow keys that stop one
+item early.
+
+## Trapping focus too
+
+Set `trapFocus` to wrap the region in a
+[`FocusTrap`](/once-ui/components/focusTrap). The two divide the keyboard
+cleanly: the trap owns Tab and Escape, `ArrowNavigation` owns the arrows.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<ArrowNavigation
+  layout="column"
+  itemCount={items.length}
+  trapFocus
+  focusTrapActive={open}
+  onEscape={close}
+  onSelect={select}
+>
+  {children}
+</ArrowNavigation>`,
+      language: "tsx",
+      label: "With focus trapping"
+    }
+  ]}
+/>
+
+## Reading the state
+
+`useArrowNavigationContext()` returns the navigation state from inside the
+subtree, for an item that needs to know it is the focused one — to paint a
+highlight, or to scroll itself into view.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`function Item({ index, children }) {
+  const { focusedIndex, setFocusedIndex } = useArrowNavigationContext();
+  return (
+    <Option
+      value={String(index)}
+      highlighted={focusedIndex === index}
+      onMouseEnter={() => setFocusedIndex(index)}
+    >
+      {children}
+    </Option>
+  );
+}`,
+      language: "tsx",
+      label: "useArrowNavigationContext"
+    }
+  ]}
+/>
+
+Syncing `setFocusedIndex` from hover is worth doing: it keeps the keyboard
+highlight and the pointer from disagreeing about which item is current.
+
+## API reference
+
+<PropsTable
+  content={[
+    ["layout", ["row", "column", "grid"], "-", "Which arrow keys move focus. Required."],
+    ["itemCount", "number", "-", "How many items the selector matches. Required."],
+    ["columns", "number", "8", "Row width for the grid layout."],
+    ["onSelect", "(index: number) => void", "-", "Called on Enter or Space."],
+    ["onFocusChange", "(index: number) => void", "-", "Called whenever focus moves."],
+    ["wrap", "boolean", "true", "Carry focus from the last item to the first."],
+    ["initialFocusedIndex", "number", "-1", "Index focused on mount. -1 means none."],
+    ["itemSelector", "string", "role=option, data-value, button, tabindex", "How navigable children are found."],
+    ["autoFocus", "boolean", "false", "Focus the first item on mount."],
+    ["disabled", "boolean", "false", "Stop handling keys."],
+    ["disableHighlighting", "boolean", "false", "Skip applying the highlighted state to items."],
+    ["trapFocus", "boolean", "false", "Wrap the region in a FocusTrap."],
+    ["focusTrapActive", "boolean", "true", "Whether that trap is active."],
+    ["onEscape", "() => void", "-", "Escape handler, passed to the trap."],
+    ["autoFocusTrap", "boolean", "true", "Let the trap move focus in when it activates."],
+    ["restoreFocus", "boolean", "true", "Let the trap return focus when it deactivates."],
+    ["role", "string", "-", "ARIA role for the container, e.g. listbox or menu."],
+    ["aria-label", "string"],
+    ["children", "React.ReactNode"],
+    ["className", "string"],
+    ["style", "React.CSSProperties"],
+  ]}
+/>

@@ -123,17 +123,17 @@ Customize rounding for each side or corner.
   marginBottom="24"
   preview={
     <Row gap="12">
-      <ToggleButton variant="outline" label="Left radius" radius="left" />
+      <ToggleButton variant="outline" label="Left radius" corners="left" />
       <ToggleButton variant="outline" label="No radius" radius="none" />
-      <ToggleButton variant="outline" label="Top right radius" radius="top-right" />
+      <ToggleButton variant="outline" label="Top right radius" corners="top-right" />
     </Row>
   }
   codes={[
     {
       code:
-`<ToggleButton variant="outline" label="Left radius" radius="left" />
+`<ToggleButton variant="outline" label="Left radius" corners="left" />
 <ToggleButton variant="outline" label="No radius" radius="none" />
-<ToggleButton variant="outline" label="Top right radius" radius="top-right" />`,
+<ToggleButton variant="outline" label="Top right radius" corners="top-right" />`,
       language: "tsx",
       label: "Radius"
     }
@@ -208,7 +208,7 @@ You can pass custom content to the toggle button.
     ["selected", "boolean", "false"],
     ["variant", ["ghost", "outline", "subtle"], "ghost"],
     ["size", ["xs", "s", "m", "l", "xl"], "m"],
-    ["radius", [
+    ["corners", [
       "none", "top", "right", "bottom", "left",
       "top-left", "top-right", "bottom-right", "bottom-left"
     ]],
@@ -222,6 +222,7 @@ You can pass custom content to the toggle button.
     ["children"],
     ["className"],
     ["style"],
+    ["rounded", "boolean", "false", "Fully rounded corners."],
     ["...ButtonHTMLAttributes", "ButtonAttributes"],
   ]}
  />

@@ -103,6 +103,9 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={radius}
                 center
                 tabIndex={0}
+                role="button"
+                aria-label={`Corner style: ${radius}`}
+                aria-pressed={mounted && borderValue === radius}
                 className={classNames(
                   styles.select,
                   mounted && borderValue === radius ? styles.selected : "",
@@ -112,7 +115,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                   setBorderValue(radius as BorderStyle);
                 }}
               >
-                <IconButton variant="ghost" size="m">
+                {/* Decorative: the parent Flex is the control. */}
+                <IconButton variant="ghost" size="m" aria-hidden>
                   <div className={classNames(styles.neutral, styles.swatch)}></div>
                 </IconButton>
               </Flex>
@@ -149,6 +153,9 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={color}
                 center
                 tabIndex={0}
+                role="button"
+                aria-label={`Brand colour: ${color}`}
+                aria-pressed={mounted && brandValue === color}
                 className={classNames(
                   styles.select,
                   mounted && brandValue === color ? styles.selected : "",
@@ -158,7 +165,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                   setBrandValue(color as Schemes);
                 }}
               >
-                <IconButton variant="ghost" size="m">
+                {/* Decorative: the parent Flex is the control. */}
+                <IconButton variant="ghost" size="m" aria-hidden>
                   <div className={`${styles[color]} ${styles.swatch}`}></div>
                 </IconButton>
               </Flex>
@@ -185,6 +193,9 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={color}
                 center
                 tabIndex={0}
+                role="button"
+                aria-label={`Accent colour: ${color}`}
+                aria-pressed={mounted && accentValue === color}
                 className={classNames(
                   styles.select,
                   mounted && accentValue === color ? styles.selected : "",
@@ -194,7 +205,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                   setAccentValue(color as Schemes);
                 }}
               >
-                <IconButton variant="ghost" size="m">
+                {/* Decorative: the parent Flex is the control. */}
+                <IconButton variant="ghost" size="m" aria-hidden>
                   <div className={`${styles[color]} ${styles.swatch}`}></div>
                 </IconButton>
               </Flex>
@@ -213,6 +225,9 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 key={color}
                 center
                 tabIndex={0}
+                role="button"
+                aria-label={`Neutral colour: ${color}`}
+                aria-pressed={mounted && neutralValue === color}
                 className={classNames(
                   styles.select,
                   mounted && neutralValue === color ? styles.selected : "",
@@ -222,7 +237,8 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                   setNeutralValue(color as NeutralColor);
                 }}
               >
-                <IconButton variant="ghost" size="m">
+                {/* Decorative: the parent Flex is the control. */}
+                <IconButton variant="ghost" size="m" aria-hidden>
                   <div className={`${styles[color]} ${styles.swatch}`}></div>
                 </IconButton>
               </Flex>
@@ -306,13 +322,13 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 value: "contrast",
               },
             ]}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ solid: value as SolidType });
               setSolidValue(value as SolidType);
               localStorage.setItem("data-solid", value);
             }}
-            selected={mounted ? solidValue : undefined}
-            defaultSelected="contrast"
+            value={mounted ? solidValue : undefined}
+            defaultValue="contrast"
           />
         </Flex>
         <Flex horizontal="between" vertical="center" fillWidth paddingX="24" paddingY="16" gap="24">
@@ -358,13 +374,13 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
                 value: "plastic",
               },
             ]}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ solidStyle: value as SolidStyle });
               setSolidStyleValue(value as SolidStyle);
               localStorage.setItem("data-solid-style", value);
             }}
-            selected={mounted ? solidStyleValue : undefined}
-            defaultSelected="flat"
+            value={mounted ? solidStyleValue : undefined}
+            defaultValue="flat"
           />
         </Flex>
       </Column>
@@ -390,12 +406,12 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           <SegmentedControl
             maxWidth={22}
             minWidth={0}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ surface: value as SurfaceStyle });
               setSurfaceValue(value as SurfaceStyle);
             }}
-            selected={mounted ? surfaceValue : undefined}
-            defaultSelected="filled"
+            value={mounted ? surfaceValue : undefined}
+            defaultValue="filled"
             buttons={[
               {
                 size: "l",
@@ -423,12 +439,12 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           <SegmentedControl
             maxWidth={22}
             minWidth={0}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ scaling: value as ScalingSize });
               setScalingValue(value as ScalingSize);
             }}
-            selected={mounted ? scalingValue : undefined}
-            defaultSelected="100"
+            value={mounted ? scalingValue : undefined}
+            defaultValue="100"
             buttons={[
               {
                 size: "l",
@@ -471,12 +487,12 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           <SegmentedControl
             maxWidth={22}
             minWidth={0}
-            onToggle={(value) => {
+            onChange={(value) => {
               setChartOptions({ mode: value as ChartMode });
               setChartModeValue(value as ChartMode);
             }}
-            selected={mounted ? chartModeValue : undefined}
-            defaultSelected="categorical"
+            value={mounted ? chartModeValue : undefined}
+            defaultValue="categorical"
             buttons={[
               {
                 size: "l",
@@ -501,12 +517,12 @@ const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ ...rest }, ref
           <SegmentedControl
             maxWidth={22}
             minWidth={0}
-            onToggle={(value) => {
+            onChange={(value) => {
               styleContext.setStyle({ transition: value as TransitionStyle });
               setTransitionValue(value as TransitionStyle);
             }}
-            selected={mounted ? transitionValue : undefined}
-            defaultSelected="all"
+            value={mounted ? transitionValue : undefined}
+            defaultValue="all"
             buttons={[
               {
                 size: "l",

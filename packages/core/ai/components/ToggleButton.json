@@ -6,7 +6,7 @@
   "selected": "boolean = false",
   "variant": "\"ghost\" | \"outline\" | \"subtle\" = ghost",
   "size": "TShirtSizes = m",
-  "radius": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
   "rounded": "boolean = false",
   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = center",
   "fillWidth": "boolean = false",

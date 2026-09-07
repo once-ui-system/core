@@ -107,7 +107,7 @@ Hide the default variant icon by setting `icon={false}`.
   marginBottom="24"
   preview={
     <Column gap="16" fillWidth>
-      <Toast variant="success" icon={false}>
+      <Toast variant="success" showIcon={false}>
         Task completed
       </Toast>
     </Column>
@@ -115,7 +115,7 @@ Hide the default variant icon by setting `icon={false}`.
   codes={[
     {
       code:
-`<Toast variant="success" icon={false}>
+`<Toast variant="success" showIcon={false}>
     Task completed
 </Toast>`,
       language: "tsx",
@@ -150,7 +150,7 @@ Toast components include proper ARIA attributes:
 <PropsTable
   content={[
     ["variant", ["success", "danger", "warning", "info"]],
-    ["icon", "boolean", "true"],
+    ["showIcon", "boolean", "true"],
     ["onClose", "() => void"],
     ["action", "ReactNode"],
     ["children", "ReactNode"],

@@ -8,7 +8,7 @@
   "TextProps"
  ],
  "props": {
-  "speed": "number = 1",
+  "speed": "number = 1000",
   "disabled": "boolean = false",
   "inverse": "boolean = false",
   "baseOpacity": "number = 0.3",

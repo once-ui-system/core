@@ -15,17 +15,17 @@ navIcon: "components"
   marginBottom="24"
   preview={
     <Row gap="12">
-      <Tag variant="brand" label="New" />
-      <Tag variant="success" label="Passed" prefixIcon="check" />
-      <Tag variant="danger" label="Error" suffixIcon="x" />
+      <Tag scheme="brand" label="New" />
+      <Tag scheme="success" label="Passed" prefixIcon="check" />
+      <Tag scheme="danger" label="Error" suffixIcon="x" />
     </Row>
   }
   codes={[
     {
       code:
-`<Tag variant="brand" label="New" />
-<Tag variant="success" label="Passed" prefixIcon="check" />
-<Tag variant="danger" label="Error" suffixIcon="x" />`,
+`<Tag scheme="brand" label="New" />
+<Tag scheme="success" label="Passed" prefixIcon="check" />
+<Tag scheme="danger" label="Error" suffixIcon="x" />`,
       language: "tsx",
       label: "Tag"
     }
@@ -67,27 +67,27 @@ Supports all Once UI design tokens including brand, neutral, danger, success, an
   marginBottom="24"
   preview={
     <Row wrap gap="8">
-      <Tag variant="brand">Brand</Tag>
-      <Tag variant="accent">Accent</Tag>
-      <Tag variant="info">Info</Tag>
-      <Tag variant="warning">Warning</Tag>
-      <Tag variant="success">Success</Tag>
-      <Tag variant="danger">Danger</Tag>
-      <Tag variant="neutral">Neutral</Tag>
-      <Tag variant="gradient">Gradient</Tag>
+      <Tag scheme="brand">Brand</Tag>
+      <Tag scheme="accent">Accent</Tag>
+      <Tag scheme="info">Info</Tag>
+      <Tag scheme="warning">Warning</Tag>
+      <Tag scheme="success">Success</Tag>
+      <Tag scheme="danger">Danger</Tag>
+      <Tag scheme="neutral">Neutral</Tag>
+      <Tag scheme="gradient">Gradient</Tag>
     </Row>
   }
   codes={[
     {
       code:
-`<Tag variant="brand">Brand</Tag>
-<Tag variant="accent">Accent</Tag>
-<Tag variant="info">Info</Tag>
-<Tag variant="warning">Warning</Tag>
-<Tag variant="success">Success</Tag>
-<Tag variant="danger">Danger</Tag>
-<Tag variant="neutral">Neutral</Tag>
-<Tag variant="gradient">Gradient</Tag>`,
+`<Tag scheme="brand">Brand</Tag>
+<Tag scheme="accent">Accent</Tag>
+<Tag scheme="info">Info</Tag>
+<Tag scheme="warning">Warning</Tag>
+<Tag scheme="success">Success</Tag>
+<Tag scheme="danger">Danger</Tag>
+<Tag scheme="neutral">Neutral</Tag>
+<Tag scheme="gradient">Gradient</Tag>`,
       language: "tsx",
       label: "Variants"
     }
@@ -98,7 +98,7 @@ Supports all Once UI design tokens including brand, neutral, danger, success, an
 
 <PropsTable
   content={[
-    ["variant", ["brand", "accent", "warning", "success", "danger", "neutral", "info", "gradient"], "neutral"],
+    ["scheme", ["brand", "accent", "warning", "success", "danger", "neutral", "info", "gradient"], "neutral"],
     ["size", ["s", "m", "l"], "m"],
     ["label", "string"],
     ["prefixIcon", "IconName"],

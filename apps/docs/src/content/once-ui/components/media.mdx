@@ -166,9 +166,11 @@ The `Media` component will automatically detect the aspect ratio of the image an
   ]}
 />
 
-## Fill
+## Stretch
 
-Use the `fill` prop to make the media fill its container.
+Use the `stretch` prop to drop the intrinsic aspect ratio and let the media
+take whatever box it is in. (`fill` is the layout prop every component has —
+`fillWidth` and `fillHeight` together.)
 
 <CodeBlock
   marginTop="16"
@@ -177,7 +179,7 @@ Use the `fill` prop to make the media fill its container.
   preview={
     <Row maxWidth={18} height={8}>
       <Media
-        fill
+        stretch
         radius="l"
         sizes="240px"
         src="/images/docs/once-ui/vibe-coding-light.jpg"
@@ -189,13 +191,13 @@ Use the `fill` prop to make the media fill its container.
       code:
 `<Row maxWidth={18} height={8}>
     <Media
-      fill
+      stretch
       radius="l"
       src="/image.jpg"
     />
 </Row>`,
       language: "tsx",
-      label: "Fill"
+      label: "Stretch"
     }
   ]}
 />
@@ -327,6 +329,7 @@ For MP4 and other file-based video, set `controls` to render a minimal custom pl
     ["caption", "ReactNode"],
     ["className"],
     ["style"],
+    ["stretch", "boolean", "false", "Drop the intrinsic aspect ratio and let the media fill its box."],
     ["...flex"]
   ]}
 />

@@ -1,0 +1,168 @@
+---
+title: "AdapterProvider"
+summary: "The framework seam: how Once UI renders links and images without importing your framework."
+updatedAt: "2026-08-31"
+docs: "once-ui/contexts/adapterProvider.mdx"
+github: "contexts/AdapterProvider.tsx"
+navLabel: "AdapterProvider"
+navIcon: "settings"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+Core no longer imports `next/*` at runtime. Four things a framework owns —
+rendering a link, rendering an image, reading the current path, and navigating —
+are read through **adapters** instead, and the defaults are plain DOM. That is
+what lets Once UI install and run in a Vite app, a Remix app, or a plain React
+app with no Next.js present.
+
+Everything that routes or loads an image goes through this seam:
+[`SmartLink`](/once-ui/components/smartLink),
+[`ElementType`](/once-ui/components/elementType) — and so any
+[`Button`](/once-ui/components/button),
+[`Card`](/once-ui/components/card) or
+[`ToggleButton`](/once-ui/components/toggleButton) with an `href` —
+[`Media`](/once-ui/components/media), [`Logo`](/once-ui/components/logo),
+[`MegaMenu`](/once-ui/modules/megaMenu) and [`Kbar`](/once-ui/modules/kbar).
+
+## In a Next.js app
+
+Import `LayoutProvider` from `@once-ui-system/core/next` instead of the root.
+That is the entire migration: same props, same tree, and the Next adapters
+(`next/link`, `next/image`, `next/navigation`) are installed for you.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`- import { LayoutProvider } from "@once-ui-system/core";
++ import { LayoutProvider } from "@once-ui-system/core/next";`,
+      language: "diff",
+      label: "The migration"
+    }
+  ]}
+/>
+
+Miss this and nothing crashes — which is the trap. The DOM defaults take over,
+so internal links become full page loads and images stop being optimized. The
+app still works, just worse. If routing suddenly feels heavy after upgrading,
+this import is the first thing to check.
+
+Apps that compose their own provider tree can keep using `NextAdapterProvider`
+directly; `LayoutProvider` from `/next` only removes the boilerplate.
+
+## In any other React app
+
+Do nothing. The defaults render `<a>` and `<img>`, read
+`window.location.pathname` (popstate-aware, `""` on the server) and navigate
+with `window.location.assign`.
+
+## Supplying your own
+
+Pass `adapters` to `AdapterProvider`. It is a **partial** override merged onto
+whatever the nearest provider already supplies, so you can replace only the
+piece your framework does differently.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import { AdapterProvider } from "@once-ui-system/core";
+import { Link, useLocation, useNavigate } from "react-router";
+
+<AdapterProvider
+  adapters={{
+    Link: ({ href, ...props }) => <Link to={href} {...props} />,
+    usePathname: () => useLocation().pathname,
+    useNavigate,
+  }}
+>
+  {children}
+</AdapterProvider>`,
+      language: "tsx",
+      label: "React Router"
+    }
+  ]}
+/>
+
+Because providers merge rather than replace, nesting one inside another is a
+legitimate way to override a single adapter for one subtree.
+
+## Why detection is not attempted
+
+The obvious wish is for core to notice Next.js and wire itself up. It cannot,
+and the reason is worth knowing before you try it in your own app.
+
+Two of the four adapters are hooks, and the two implementations call **different
+numbers of hooks**: the DOM `useNavigate` returns a closure and calls none, the
+Next one calls `useRouter` and `useCallback`. Swapping them after mount raises
+*"Rendered more hooks than during the previous render."* So resolution has to
+settle before the first render — and a browser bundle has no synchronous way to
+conditionally resolve an optional module. An explicit import is the
+bundler-independent version of the same thing.
+
+## Reading the adapters
+
+`useAdapters()` returns the resolved set. Use it when you are building a
+component of your own that should route the same way core's do.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const { Link, usePathname } = useAdapters();
+const pathname = usePathname();
+
+<Link href="/pricing" aria-current={pathname === "/pricing" ? "page" : undefined}>
+  Pricing
+</Link>`,
+      language: "tsx",
+      label: "useAdapters"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  label="AdapterProvider"
+  content={[
+    ["adapters", "Partial<OnceUIAdapters>", "-", "Overrides. Anything omitted keeps the value from the nearest provider, or the DOM default."],
+    ["children", "React.ReactNode"],
+  ]}
+/>
+
+### OnceUIAdapters
+
+<PropsTable
+  label="Adapter"
+  content={[
+    ["Link", "ComponentType<AdapterLinkProps>", "<a>", "Renders internal links."],
+    ["Image", "ComponentType<AdapterImageProps>", "<img>", "Renders images. Lazy unless priority is set."],
+    ["usePathname", "() => string", "window.location.pathname", "Current pathname. Popstate-aware; \"\" on the server."],
+    ["useNavigate", "() => (href: string) => void", "window.location.assign", "Imperative navigation."],
+  ]}
+/>
+
+### AdapterImageProps
+
+The image adapter's contract follows `next/image` semantics so the Next
+implementation is a pass-through rather than a translation layer.
+
+<PropsTable
+  content={[
+    ["src", "string", "-", "Image source. Required."],
+    ["alt", "string", "-", "Alternative text. Required."],
+    ["fill", "boolean", "false", "Absolutely fill the nearest positioned ancestor."],
+    ["priority", "boolean", "false", "Eager-load and raise fetch priority."],
+    ["unoptimized", "boolean", "false", "Skip framework image optimization. No-op for the DOM default."],
+    ["width", "number"],
+    ["height", "number"],
+  ]}
+/>

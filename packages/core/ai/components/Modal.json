@@ -5,7 +5,7 @@
   "children": "!React.ReactNode",
   "backdrop": "React.ReactNode",
   "title": "!React.ReactNode",
-  "isOpen": "!boolean",
+  "open": "!boolean",
   "onClose": "!() => void"
  },
  "mixinsRef": []

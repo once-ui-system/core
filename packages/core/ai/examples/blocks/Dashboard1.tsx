@@ -1,20 +1,9 @@
 "use client";
 
 import React from "react";
-import {
-  Column,
-  Row,
-  Card,
-  Heading,
-  Text,
-  Grid,
-  Avatar,
-  Button,
-  Scroller,
-  StatusIndicator,
-  Icon,
-  LineChart
-} from "@once-ui-system/core";
+import { Column, Row, Card, Heading, Text, Grid, Avatar, Button, Scroller, StatusIndicator, Icon } from "@once-ui-system/core";
+import type { IconName } from "@once-ui-system/core";
+import { LineChart } from "@once-ui-system/core/data";
 import { Sidebar1 } from "./Sidebar1";
 import { Header1 } from "./Header1";
 import { Table1 } from "./Table1";
@@ -89,7 +78,7 @@ interface ActivityItemProps {
   action: string;
   time: string;
   href?: string;
-  icon: string;
+  icon: IconName;
 }
 
 const ActivityItem: React.FC<ActivityItemProps> = ({ avatar, action, time, href, icon }) => (
@@ -117,7 +106,7 @@ interface StatusItemProps {
   name: string;
   status: string;
   href?: string;
-  icon: string;
+  icon: IconName;
 }
 
 const StatusItem: React.FC<StatusItemProps> = ({ name, status, icon, href = "#" }) => (
@@ -308,12 +297,12 @@ export const Dashboard1: React.FC = () => {
                     
                     <Column fillWidth border="neutral-alpha-weak" topRadius="l" overflowY="auto">
                       {[
-                        { name: "Mobile App Development", status: "At Risk", icon: "code" },
-                        { name: "Marketing Campaign", status: "On Track", icon: "sparkle" },
-                        { name: "Database Migration", status: "On Track", icon: "code" },
-                        { name: "Website Redesign", status: "On Track", icon: "sparkle" },
-                        { name: "Product Launch", status: "Delayed", icon: "sparkle" },
-                        { name: "Server Upgrade", status: "Delayed", icon: "code" },
+                        { name: "Mobile App Development", status: "At Risk", icon: "code" as IconName },
+                        { name: "Marketing Campaign", status: "On Track", icon: "sparkle" as IconName },
+                        { name: "Database Migration", status: "On Track", icon: "code" as IconName },
+                        { name: "Website Redesign", status: "On Track", icon: "sparkle" as IconName },
+                        { name: "Product Launch", status: "Delayed", icon: "sparkle" as IconName },
+                        { name: "Server Upgrade", status: "Delayed", icon: "code" as IconName },
                       ].map((project, index) => (
                         <StatusItem
                           key={index}
@@ -340,37 +329,37 @@ export const Dashboard1: React.FC = () => {
                           avatar: "/images/creators/lorant.jpg",
                           action: "Completed the Website Redesign task",
                           time: "2 hours ago",
-                          icon: "check"
+                          icon: "check" as IconName
                         },
                         {
                           avatar: "/images/creators/vincent.jpg",
                           action: "Commented on Mobile App Development",
                           time: "4 hours ago",
-                          icon: "chat"
+                          icon: "chat" as IconName
                         },
                         {
                           avatar: "/images/creators/zsofia.jpg",
                           action: "Created a new task in Marketing Campaign",
                           time: "Yesterday",
-                          icon: "plus"
+                          icon: "plus" as IconName
                         },
                         {
                           avatar: "/images/creators/texz.jpg",
                           action: "Completed 3 tasks in Product Launch",
                           time: "Yesterday",
-                          icon: "check"
+                          icon: "check" as IconName
                         },
                         {
                           avatar: "/images/creators/justin.jpg",
                           action: "Created a new task in Marketing Campaign",
                           time: "2 days ago",
-                          icon: "plus"
+                          icon: "plus" as IconName
                         },
                         {
                           avatar: "/images/creators/zsofia.jpg",
                           action: "Completed 3 tasks in Product Launch",
                           time: "4 days ago",
-                          icon: "check"
+                          icon: "check" as IconName
                         }
                       ].map((activity, index) => (
                         <ActivityItem 

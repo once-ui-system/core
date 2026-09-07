@@ -4,8 +4,9 @@
   "pages": {
     "themeProvider": 1,
     "layoutProvider": 2,
-    "dataThemeProvider": 3,
-    "iconProvider": 4,
-    "toastProvider": 5
+    "adapterProvider": 3,
+    "dataThemeProvider": 4,
+    "iconProvider": 5,
+    "toastProvider": 6
   }
 }

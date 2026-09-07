@@ -46,7 +46,7 @@ function NavIconToggle() {
         >
           <Logo wordmark={false}/>
           <NavIcon 
-            isActive={isActive} 
+            active={isActive} 
             onClick={handleClick} 
             aria-label="Toggle navigation menu"
             aria-expanded={isActive}
@@ -90,7 +90,7 @@ function NavIconToggle() {
 
 ## States
 
-NavIcon has two states: `active` and `inactive`, controlled by the `isActive` prop.
+NavIcon has two states: `active` and `inactive`, controlled by the `active` prop.
 
 <CodeBlock
   marginTop="16"
@@ -101,8 +101,8 @@ NavIcon has two states: `active` and `inactive`, controlled by the `isActive` pr
   codes={[
     {
       code:
-`<NavIcon isActive={false} />
-<NavIcon isActive={true} />`,
+`<NavIcon active={false} />
+<NavIcon active={true} />`,
       language: "tsx",
       label: "States"
     }
@@ -123,7 +123,7 @@ The NavIcon component accepts all the props of the `Flex` component, allowing fo
     {
       code:
 `<NavIcon 
-    isActive={isActive} 
+    active={isActive} 
     onClick={handleClick}
     width="48"
     height="48"
@@ -142,7 +142,7 @@ The NavIcon component accepts all the props of the `Flex` component, allowing fo
 
 <PropsTable
   content={[
-    ["isActive", "boolean", "false"],
+    ["active", "boolean", "false"],
     ["onClick", "() => void"],
     ["className"],
     ["style"],
@@ -165,7 +165,7 @@ The NavIcon component includes a `tabIndex={0}` by default, making it keyboard a
     {
       code:
 `<NavIcon 
-    isActive={isMenuOpen} 
+    active={isMenuOpen} 
     onClick={toggleMenu}
     aria-label="Toggle navigation menu"
     aria-expanded={isMenuOpen}

@@ -25,7 +25,7 @@ export function NavIconToggle() {
         <Flex dark><Logo icon="/trademarks/icon-dark.svg"/></Flex>
         <Flex light><Logo icon="/trademarks/icon-light.svg"/></Flex>
         <NavIcon 
-          isActive={isActive} 
+          active={isActive} 
           onClick={handleClick} 
           aria-label="Toggle navigation menu"
           aria-expanded={isActive}
@@ -57,8 +57,8 @@ export function NavIconToggle() {
 export function NavIconStates() {
   return (
     <Flex horizontal="center" gap="16">
-      <NavIcon isActive={false} />
-      <NavIcon isActive={true} />
+      <NavIcon active={false} />
+      <NavIcon active={true} />
     </Flex>
   );
 }
@@ -72,7 +72,7 @@ export function CustomNavIcon() {
 
   return (
     <NavIcon 
-      isActive={isActive} 
+      active={isActive} 
       onClick={handleClick}
       width="48"
       height="48"

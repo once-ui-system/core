@@ -79,7 +79,7 @@ describe("Checkbox", () => {
   it("calls onToggle without mutating state when controlled", async () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
-    renderWithProviders(<Checkbox label="Controlled" isChecked={false} onToggle={onToggle} />);
+    renderWithProviders(<Checkbox label="Controlled" checked={false} onToggle={onToggle} />);
 
     const checkbox = screen.getByRole("checkbox", { name: /controlled/i });
     await user.click(checkbox);
@@ -103,7 +103,7 @@ describe("Switch", () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
     renderWithProviders(
-      <Switch isChecked={false} onToggle={onToggle} ariaLabel="Enable feature" />,
+      <Switch checked={false} onToggle={onToggle} ariaLabel="Enable feature" />,
     );
 
     const control = screen.getByRole("switch", { name: /enable feature/i });
@@ -119,11 +119,11 @@ describe("Switch", () => {
 
   it("reflects the controlled isChecked value", () => {
     const { rerender } = renderWithProviders(
-      <Switch isChecked={false} onToggle={() => {}} ariaLabel="State" />,
+      <Switch checked={false} onToggle={() => {}} ariaLabel="State" />,
     );
     expect(screen.getByRole("switch", { name: /state/i })).not.toBeChecked();
 
-    rerender(<Switch isChecked onToggle={() => {}} ariaLabel="State" />);
+    rerender(<Switch checked onToggle={() => {}} ariaLabel="State" />);
     expect(screen.getByRole("switch", { name: /state/i })).toBeChecked();
   });
 
@@ -131,7 +131,7 @@ describe("Switch", () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
     renderWithProviders(
-      <Switch isChecked={false} onToggle={onToggle} disabled ariaLabel="Locked" />,
+      <Switch checked={false} onToggle={onToggle} disabled ariaLabel="Locked" />,
     );
 
     await user.click(screen.getByRole("switch", { name: /locked/i }));

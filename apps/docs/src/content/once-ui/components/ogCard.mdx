@@ -303,8 +303,8 @@ Use `serviceConfig` to point `OgCard` at custom API routes or to transform proxi
   content={[
     ["fetchOgUrl", "string", "'/api/og/fetch'", "Endpoint for fetching OG metadata."],
     ["proxyOgUrl", "string", "'/api/og/proxy'", "Endpoint for proxying external assets."],
-    ["proxyImageUrl", "(url: string) => string", "Transform OG image URLs before rendering."],
-    ["proxyFaviconUrl", "(url: string) => string", "Transform favicon URLs before rendering."]
+    ["proxyImageUrl", "(url: string) => string", "-", "Transform OG image URLs before rendering."],
+    ["proxyFaviconUrl", "(url: string) => string", "-", "Transform favicon URLs before rendering."]
   ]}
 />
 

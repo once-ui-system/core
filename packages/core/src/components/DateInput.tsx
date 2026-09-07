@@ -95,7 +95,15 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(({
       }
       dropdown={
         <DatePicker
-          key={`datepicker-${isOpen ? "open" : "closed"}-${value?.getTime() || 0}`}
+          /*
+           * Keyed on open state ONLY. Including value.getTime() here remounted
+           * the whole picker on every time edit — each hour, minute or AM/PM
+           * change fires onChange, which changes value, which changed the key.
+           * The remount reset isTimeSelector, so the time panel vanished and
+           * the calendar came back mid-edit. DatePicker already syncs to a
+           * changed `value` in an effect, so the key never needed it.
+           */
+          key={`datepicker-${isOpen ? "open" : "closed"}`}
           padding="20"
           value={value}
           onChange={handleDateChange}
@@ -103,12 +111,12 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(({
           minDate={minDate}
           maxDate={maxDate}
           autoFocus={true}
-          isOpen={isOpen}
+          open={isOpen}
         />
       }
       fillWidth={false}
       minHeight={minHeight}
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       className={className}
       closeAfterClick={!timePicker}

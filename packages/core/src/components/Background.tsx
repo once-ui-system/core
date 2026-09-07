@@ -5,7 +5,7 @@ import { Flex, Mask, MaskProps } from ".";
 import styles from "./Background.module.scss";
 import classNames from "clsx";
 import { DisplayProps } from "../interfaces";
-import { SpacingToken } from "../types";
+import { ColorValue, SpacingToken } from "../types";
 
 function setRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
   if (typeof ref === "function") {
@@ -23,21 +23,21 @@ interface GradientProps {
   width?: number;
   height?: number;
   tilt?: number;
-  colorStart?: string;
-  colorEnd?: string;
+  colorStart?: ColorValue;
+  colorEnd?: ColorValue;
 }
 
 interface DotsProps {
   display?: boolean;
   opacity?: DisplayProps["opacity"];
-  color?: string;
+  color?: ColorValue;
   size?: SpacingToken;
 }
 
 interface GridProps {
   display?: boolean;
   opacity?: DisplayProps["opacity"];
-  color?: string;
+  color?: ColorValue;
   width?: string;
   height?: string;
 }
@@ -48,7 +48,7 @@ interface LinesProps {
   size?: SpacingToken;
   thickness?: number;
   angle?: number;
-  color?: string;
+  color?: ColorValue;
 }
 
 interface BackgroundProps extends React.ComponentProps<typeof Flex> {

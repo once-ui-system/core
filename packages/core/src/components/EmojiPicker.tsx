@@ -82,6 +82,7 @@ const fallbackEmojiData: EmojiData = {
 
 import generatedEmojiData from "../data/emoji-data.json";
 import { StyleProps, GridSize } from "../";
+import type { IconName } from "../icons";
 
 const emojiData: EmojiData =
   Object.keys(generatedEmojiData).length > 0
@@ -144,7 +145,7 @@ const EmojiPicker = ({
   const [focusedEmojiIndex, setFocusedEmojiIndex] = useState<number>(-1);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  const getCategoryIcon = (category: string): string => {
+  const getCategoryIcon = (category: string): IconName => {
     switch (category) {
       case "smileys":
         return "smiley";
@@ -276,7 +277,7 @@ const EmojiPicker = ({
         value={inputValue}
         height="s"
         onChange={(e) => setInputValue(e.target.value)}
-        hasPrefix={<Icon size="s" onBackground="neutral-weak" name="search" />}
+        prefix={<Icon size="s" onBackground="neutral-weak" name="search" />}
         aria-label="Search emojis"
       />
 
@@ -313,8 +314,8 @@ const EmojiPicker = ({
       {!searchQuery && (
         <SegmentedControl
           buttons={categoryButtons}
-          onToggle={handleCategoryChange}
-          defaultSelected={activeCategory}
+          onChange={handleCategoryChange}
+          defaultValue={activeCategory}
           fillWidth
         />
       )}

@@ -1,0 +1,306 @@
+{
+  "adjustments": {
+    "family": "hi2",
+    "symbol": "HiOutlineAdjustmentsHorizontal"
+  },
+  "arrowRight": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowRight"
+  },
+  "arrowUpRight": {
+    "family": "hi2",
+    "symbol": "HiArrowUpRight"
+  },
+  "ball": {
+    "family": "io5",
+    "symbol": "IoFootballOutline"
+  },
+  "bell": {
+    "family": "hi2",
+    "symbol": "HiOutlineBell"
+  },
+  "book": {
+    "family": "hi2",
+    "symbol": "HiOutlineBookOpen"
+  },
+  "calendar": {
+    "family": "hi2",
+    "symbol": "HiOutlineCalendar"
+  },
+  "cart": {
+    "family": "hi2",
+    "symbol": "HiOutlineShoppingCart"
+  },
+  "check": {
+    "family": "hi2",
+    "symbol": "HiOutlineCheckCircle"
+  },
+  "checkbox": {
+    "family": "hi2",
+    "symbol": "HiOutlineCheck"
+  },
+  "chevronDoubleLeft": {
+    "family": "hi2",
+    "symbol": "HiChevronDoubleLeft"
+  },
+  "chevronDoubleRight": {
+    "family": "hi2",
+    "symbol": "HiChevronDoubleRight"
+  },
+  "chevronDown": {
+    "family": "hi2",
+    "symbol": "HiChevronDown"
+  },
+  "chevronLeft": {
+    "family": "hi2",
+    "symbol": "HiChevronLeft"
+  },
+  "chevronRight": {
+    "family": "hi2",
+    "symbol": "HiChevronRight"
+  },
+  "chevronUp": {
+    "family": "hi2",
+    "symbol": "HiChevronUp"
+  },
+  "chevronsLeftRight": {
+    "family": "lu",
+    "symbol": "LuChevronsLeftRight"
+  },
+  "clipboard": {
+    "family": "hi2",
+    "symbol": "HiOutlineClipboard"
+  },
+  "close": {
+    "family": "hi2",
+    "symbol": "HiOutlineXMark"
+  },
+  "code": {
+    "family": "hi2",
+    "symbol": "HiOutlineCodeBracket"
+  },
+  "computer": {
+    "family": "hi2",
+    "symbol": "HiOutlineComputerDesktop"
+  },
+  "copy": {
+    "family": "hi2",
+    "symbol": "HiOutlineDocumentDuplicate"
+  },
+  "danger": {
+    "family": "hi2",
+    "symbol": "HiOutlineExclamationCircle"
+  },
+  "dark": {
+    "family": "hi2",
+    "symbol": "HiOutlineMoon"
+  },
+  "dislike": {
+    "family": "hi2",
+    "symbol": "HiOutlineHandThumbDown"
+  },
+  "document": {
+    "family": "hi2",
+    "symbol": "HiOutlineBars3BottomLeft"
+  },
+  "download": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowDownTray"
+  },
+  "edit": {
+    "family": "hi2",
+    "symbol": "HiOutlinePencil"
+  },
+  "enter": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowTurnDownLeft"
+  },
+  "eye": {
+    "family": "hi2",
+    "symbol": "HiOutlineEye"
+  },
+  "eyeDropper": {
+    "family": "hi2",
+    "symbol": "HiOutlineEyeDropper"
+  },
+  "eyeOff": {
+    "family": "hi2",
+    "symbol": "HiOutlineEyeSlash"
+  },
+  "flag": {
+    "family": "io5",
+    "symbol": "IoFlagOutline"
+  },
+  "food": {
+    "family": "io5",
+    "symbol": "IoFastFoodOutline"
+  },
+  "gift": {
+    "family": "io5",
+    "symbol": "IoGiftOutline"
+  },
+  "help": {
+    "family": "hi2",
+    "symbol": "HiOutlineQuestionMarkCircle"
+  },
+  "inbox": {
+    "family": "hi2",
+    "symbol": "HiOutlineInbox"
+  },
+  "info": {
+    "family": "hi2",
+    "symbol": "HiOutlineInformationCircle"
+  },
+  "light": {
+    "family": "hi2",
+    "symbol": "HiOutlineSun"
+  },
+  "like": {
+    "family": "hi2",
+    "symbol": "HiOutlineHandThumbUp"
+  },
+  "linearGauge": {
+    "family": "pi",
+    "symbol": "PiBatteryFull"
+  },
+  "link": {
+    "family": "hi2",
+    "symbol": "HiOutlineLink"
+  },
+  "logout": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowLeftOnRectangle"
+  },
+  "mail": {
+    "family": "hi2",
+    "symbol": "HiOutlineEnvelope"
+  },
+  "maximize": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowsPointingOut"
+  },
+  "minimize": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowsPointingIn"
+  },
+  "minus": {
+    "family": "hi2",
+    "symbol": "HiOutlineMinus"
+  },
+  "moreHorizontal": {
+    "family": "hi2",
+    "symbol": "HiOutlineEllipsisHorizontal"
+  },
+  "opacity": {
+    "family": "pi",
+    "symbol": "PiCircleHalfTilt"
+  },
+  "pause": {
+    "family": "hi2",
+    "symbol": "HiOutlinePause"
+  },
+  "paw": {
+    "family": "io5",
+    "symbol": "IoPawOutline"
+  },
+  "payment": {
+    "family": "hi2",
+    "symbol": "HiOutlineCreditCard"
+  },
+  "person": {
+    "family": "hi2",
+    "symbol": "HiOutlineUser"
+  },
+  "personRemove": {
+    "family": "hi2",
+    "symbol": "HiOutlineUserMinus"
+  },
+  "play": {
+    "family": "hi2",
+    "symbol": "HiOutlinePlay"
+  },
+  "plus": {
+    "family": "hi2",
+    "symbol": "HiOutlinePlus"
+  },
+  "radialGauge": {
+    "family": "pi",
+    "symbol": "PiGauge"
+  },
+  "refresh": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowPath"
+  },
+  "return": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowUturnLeft"
+  },
+  "screen": {
+    "family": "hi2",
+    "symbol": "HiOutlineComputerDesktop"
+  },
+  "search": {
+    "family": "hi2",
+    "symbol": "HiOutlineMagnifyingGlass"
+  },
+  "security": {
+    "family": "hi2",
+    "symbol": "HiOutlineShieldCheck"
+  },
+  "send": {
+    "family": "hi2",
+    "symbol": "HiOutlinePaperAirplane"
+  },
+  "settings": {
+    "family": "hi2",
+    "symbol": "HiOutlineCog6Tooth"
+  },
+  "smiley": {
+    "family": "hi2",
+    "symbol": "HiOutlineFaceSmile"
+  },
+  "sparkle": {
+    "family": "hi2",
+    "symbol": "HiOutlineSparkles"
+  },
+  "symbol": {
+    "family": "io5",
+    "symbol": "IoAtOutline"
+  },
+  "trash": {
+    "family": "hi2",
+    "symbol": "HiOutlineTrash"
+  },
+  "trend": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowTrendingUp"
+  },
+  "trendDown": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowTrendingDown"
+  },
+  "trendUp": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowTrendingUp"
+  },
+  "volume": {
+    "family": "hi2",
+    "symbol": "HiOutlineSpeakerWave"
+  },
+  "volumeOff": {
+    "family": "hi2",
+    "symbol": "HiOutlineSpeakerXMark"
+  },
+  "warning": {
+    "family": "hi2",
+    "symbol": "HiOutlineExclamationTriangle"
+  },
+  "wordmark": {
+    "family": "lu",
+    "symbol": "LuTextCursorInput"
+  },
+  "world": {
+    "family": "io5",
+    "symbol": "IoGlobeOutline"
+  }
+}

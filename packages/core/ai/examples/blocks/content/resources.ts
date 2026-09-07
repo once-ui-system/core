@@ -1,4 +1,6 @@
-export const social = [
+import type { IconName } from "@once-ui-system/core";
+
+export const social: { icon: IconName; label: string; href: string }[] = [
   { icon: "link", label: "Discord", href: "https://discord.com/invite/5EyAQ4eNdS" },
   { icon: "link", label: "GitHub", href: "https://github.com/once-ui-system" },
   { icon: "document", label: "Email", href: "mailto:demo@email.com" },

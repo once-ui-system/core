@@ -1,0 +1,150 @@
+---
+title: "Scrubber"
+summary: "A playhead over time: a seek bar on its own, an editor timeline once you give it tracks."
+updatedAt: "2026-08-30"
+docs: "once-ui/components/scrubber.mdx"
+github: "components/Scrubber.tsx"
+navLabel: "Scrubber"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`Scrubber` positions things by **time** rather than by layout. With no tracks it
+is a seek bar. Give it tracks and it is an editor timeline: stacked layers of
+blocks sharing one playhead, each block selectable, movable and trimmable.
+
+It is not [`Timeline`](/once-ui/components/timeline), which lays out a sequence
+of steps or events down the page.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={<ScrubberSeekExample />}
+  codes={[
+    {
+      code:
+`<Scrubber duration={125000} value={time} onChange={setTime} />`,
+      language: "tsx",
+      label: "Seek bar"
+    }
+  ]}
+/>
+
+Times are in whatever unit you and the component agree on — milliseconds by
+convention, which is what the default `m:ss` formatter assumes. Pass
+`formatTime` for anything else, including frames or bars.
+
+## Tracks
+
+Each track is a row of blocks. `movable` lets the body be dragged along the
+track, `resizable` puts trim handles on the edges, and `onAdd` turns a click on
+empty track space into a new block. Blocks colour themselves from a `scheme`,
+so layers stay distinguishable.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={<ScrubberTracksExample />}
+  codes={[
+    {
+      code:
+`<Scrubber
+  duration={40000}
+  value={time}
+  onChange={setTime}
+  selected={selected}
+  onSelect={setSelected}
+  onBlockChange={(trackId, blockId, next) => moveBlock(blockId, next)}
+  tracks={[
+    { id: "zooms", height: "32", movable: true, resizable: true, blocks: zooms },
+    { id: "scenes", height: "48", blocks: scenes },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Editor timeline"
+    }
+  ]}
+/>
+
+## Editing is yours to accept
+
+`onBlockChange` hands back **absolute** times, already clamped to
+`[0, duration]` and measured from where the gesture started — not accumulated
+per pointer move, so a block cannot drift away from the pointer over a long
+drag. Everything past that is your rule: a minimum length, no overlap with the
+next block, snapping to a grid. The block renders wherever you put it, so
+refusing a change is simply not applying it.
+
+```tsx
+onBlockChange={(trackId, blockId, next) => {
+  if (next.end - next.start < MIN_MS) return;  // refuse: nothing moves
+  setBlocks((current) =>
+    current.map((b) => (b.id === blockId ? { ...b, ...next } : b)),
+  );
+}}
+```
+
+`onGestureStart` fires once when a drag begins, which is the moment to snapshot
+for undo — one entry per gesture rather than one per pointer move.
+
+## Keyboard and pointer
+
+The track is a `role="slider"`: <Kbd>←</Kbd> and <Kbd>→</Kbd> step the playhead
+by `step` (a hundredth of the duration by default), <Kbd>Home</Kbd> and
+<Kbd>End</Kbd> jump to either edge. Dragging uses pointer events, so blocks and
+playhead work with a mouse, a pen or a finger.
+
+Block gestures stay pointer-driven. Right-clicking a block calls
+`onBlockContextMenu` with the event and the ids — build the menu yourself, since
+what belongs in it is entirely your application's business.
+
+## API reference
+
+<PropsTable
+  content={[
+    ["duration", "number"],
+    ["value", "number"],
+    ["onChange", "(time: number) => void"],
+    ["tracks", "ScrubberTrack[]", "[]"],
+    ["selected", "string | null", "null"],
+    ["onSelect", "(blockId: string | null) => void"],
+    ["onBlockChange", "(trackId: string, blockId: string, next: { start: number; end: number }) => void"],
+    ["onGestureStart", "() => void"],
+    ["onBlockContextMenu", "(event: MouseEvent, trackId: string, blockId: string) => void"],
+    ["showTime", "boolean", "true"],
+    ["formatTime", "(time: number) => string"],
+    ["step", "number"],
+    ["ariaLabel", "string", "Seek"],
+    ["...flex"]
+  ]}
+/>
+
+### ScrubberTrack
+
+<PropsTable
+  content={[
+    ["id", "string"],
+    ["blocks", "ScrubberBlock[]"],
+    ["height", "SpacingToken", "40"],
+    ["scheme", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
+    ["movable", "boolean", "false"],
+    ["resizable", "boolean", "false"],
+    ["onAdd", "(time: number) => void"]
+  ]}
+/>
+
+### ScrubberBlock
+
+<PropsTable
+  content={[
+    ["id", "string"],
+    ["start", "number"],
+    ["end", "number"],
+    ["label", "ReactNode"],
+    ["scheme", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
+    ["locked", "boolean", "false"]
+  ]}
+/>

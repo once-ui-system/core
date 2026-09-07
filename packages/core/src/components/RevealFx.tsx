@@ -8,10 +8,11 @@ import { Flex } from ".";
 interface RevealFxProps extends React.ComponentProps<typeof Flex> {
   children: React.ReactNode;
   speed?: "slow" | "medium" | "fast" | number;
+  /** Milliseconds before the reveal starts. Was seconds until 2.0. */
   delay?: number;
   revealedByDefault?: boolean;
   translateY?: number | SpacingToken;
-  trigger?: boolean;
+  revealed?: boolean;
   style?: React.CSSProperties;
   className?: string;
 }
@@ -24,7 +25,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
       delay = 0,
       revealedByDefault = false,
       translateY,
-      trigger,
+      revealed,
       style,
       className,
       ...rest
@@ -65,7 +66,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
         transitionTimeoutRef.current = setTimeout(() => {
           setMaskRemoved(true);
         }, getSpeedDurationMs());
-      }, delay * 1000);
+      }, delay);
 
       return () => {
         clearTimeout(timer);
@@ -76,14 +77,14 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
     }, [delay]);
 
     useEffect(() => {
-      if (trigger !== undefined) {
-        setIsRevealed(trigger);
+      if (revealed !== undefined) {
+        setIsRevealed(revealed);
 
-        // Reset mask removal state when trigger changes
+        // Reset mask removal state when revealed changes
         setMaskRemoved(false);
 
-        // If trigger is true, set timeout to remove mask after transition
-        if (trigger) {
+        // If revealed is true, set timeout to remove mask after transition
+        if (revealed) {
           if (transitionTimeoutRef.current) {
             clearTimeout(transitionTimeoutRef.current);
           }
@@ -93,7 +94,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
           }, getSpeedDurationMs());
         }
       }
-    }, [trigger]);
+    }, [revealed]);
 
     const getTranslateYValue = () => {
       if (typeof translateY === "number") {

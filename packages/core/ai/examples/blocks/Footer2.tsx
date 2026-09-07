@@ -83,9 +83,9 @@ export const Footer2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
           <Row paddingX="4" marginBottom="8">
             Social
           </Row>
-          <Button href="#" size="s" variant="secondary" weight="default" prefixIcon="github" label="GitHub" />
-          <Button href="#" size="s" variant="secondary" weight="default" prefixIcon="linkedin" label="LinkedIn" />
-          <Button href="#" size="s" variant="secondary" weight="default" prefixIcon="threads" label="Threads" />
+          <Button href="#" size="s" variant="secondary" weight="default" label="GitHub" />
+          <Button href="#" size="s" variant="secondary" weight="default" label="LinkedIn" />
+          <Button href="#" size="s" variant="secondary" weight="default" label="Threads" />
         </Column>
       </Row>
       <Row fillWidth textVariant="label-default-s" gap="12">

@@ -90,7 +90,7 @@ const OverlayIntegrationHarness = () => (
       Outside all overlays
     </button>
     <Dialog
-      isOpen
+      open
       onClose={() => undefined}
       title="Dialog overlay"
       stack
@@ -101,7 +101,7 @@ const OverlayIntegrationHarness = () => (
       }
     />
     <DropdownWrapper
-      isOpen
+      open
       trigger={<button type="button">Open dropdown</button>}
       dropdown={
         <div data-testid="dropdown-scroll-region" style={{ overflowY: "auto", maxHeight: "80px" }}>
@@ -120,7 +120,7 @@ const OverlayIntegrationHarness = () => (
     >
       <button type="button">Context anchor</button>
     </ContextMenu>
-    <KbarContent isOpen onClose={() => undefined} items={kbarItems} />
+    <KbarContent open onClose={() => undefined} items={kbarItems} />
   </LayoutProvider>
 );
 

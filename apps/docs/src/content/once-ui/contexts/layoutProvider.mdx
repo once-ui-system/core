@@ -85,3 +85,58 @@ export function Providers({ children }: {
     ["breakpoints", "{ xs?: number; s?: number; m?: number; l?: number; xl?: number }"],
   ]}
 />
+## useLayout
+
+`useLayout()` reads the resolved breakpoint state. Use it when a decision cannot
+be expressed with the responsive props — mounting a different component per
+breakpoint, say, rather than styling one. It throws outside a `LayoutProvider`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const { currentBreakpoint, maxWidth } = useLayout();
+
+// Below the m breakpoint, render the sheet instead of the popover.
+return maxWidth("s") ? <Sheet {...props} /> : <Popover {...props} />;`,
+      language: "tsx",
+      label: "useLayout"
+    }
+  ]}
+/>
+
+`width` is `0` on the server and on the first client render, so branch on it
+only inside an effect — or branch on `currentBreakpoint`, which is resolved
+before paint.
+
+<PropsTable
+  label="Returns"
+  content={[
+    ["currentBreakpoint", ["xs", "s", "m", "l", "xl"], "-", "The breakpoint the viewport currently sits in."],
+    ["width", "number", "0", "Viewport width in pixels. 0 until measured."],
+    ["breakpoints", "Record<BreakpointKey, number>", "DEFAULT_BREAKPOINTS", "The active breakpoint map."],
+    ["isBreakpoint", "(key: BreakpointKey) => boolean", "-", "True when the viewport is exactly at that breakpoint."],
+    ["maxWidth", "(key: BreakpointKey) => boolean", "-", "True at or below that breakpoint."],
+    ["minWidth", "(key: BreakpointKey) => boolean", "-", "True at or above that breakpoint."],
+    ["isDefaultBreakpoints", "() => boolean", "-", "True when no custom breakpoints were supplied."],
+  ]}
+/>
+
+### DEFAULT_BREAKPOINTS
+
+Exported so a custom map can be derived from it rather than retyped.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`{ xs: 480, s: 768, m: 1024, l: 1440, xl: Infinity }`,
+      language: "ts",
+      label: "DEFAULT_BREAKPOINTS"
+    }
+  ]}
+/>

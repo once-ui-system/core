@@ -7,7 +7,7 @@
  "props": {
   "style": "React.CSSProperties",
   "className": "string",
-  "isChecked": "boolean",
+  "checked": "boolean",
   "name": "string",
   "value": "string",
   "disabled": "boolean",

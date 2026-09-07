@@ -13,7 +13,7 @@ export const Sidebar4: React.FC<React.ComponentProps<typeof Column> & {
   return (
     <Column fillHeight maxWidth={18} background="surface" {...flex}>
       <Row fillWidth aspectRatio="2/1">
-        <Media src="/images/blocks/vibe-coding-dark.jpg" fill sizes="240px"/>
+        <Media src="/images/blocks/vibe-coding-dark.jpg" stretch sizes="240px"/>
         <Fade position="absolute" top="0" to="bottom" fillWidth height={6} opacity={70}/>
         <Row fillWidth paddingY="12" paddingX="24" position="absolute" top="0" textVariant="label-strong-s" horizontal="center" align="center">
           Design Engineers Club

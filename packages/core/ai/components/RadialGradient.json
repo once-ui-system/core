@@ -1,6 +1,7 @@
 {
  "name": "RadialGradient",
- "group": "modules",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
  "props": {
   "id": "!string",
   "color": "!string",

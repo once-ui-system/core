@@ -1,0 +1,134 @@
+---
+title: "Effect"
+summary: "One slot for the interchangeable ambient effects, so a template's aesthetic is a single setting."
+updatedAt: "2026-08-30"
+docs: "once-ui/effects/effect.mdx"
+github: "components/Effect.tsx"
+navLabel: "Effect"
+navIcon: "sparkle"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`BlobFx`, `MatrixFx`, `WeatherFx`, `Particle` and `CelebrationFx` all do the same
+structural job: paint a full-bleed decorative layer behind their content. In
+practice they are alternatives to each other, but swapping one for another meant
+changing an import and rewriting the positioning at every call site.
+
+`Effect` picks between them **by value**. A template can expose its aesthetic as
+one setting, and `type="none"` renders the content with no layer at all.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Row fillWidth gap="16" m={{direction: "column"}}>
+      <Effect type="blob" height={12} radius="l" />
+      <Effect type="matrix" height={12} radius="l" />
+      <Effect type="particle" height={12} radius="l" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Effect type={theme.effect} height={12} radius="l" />`,
+      language: "tsx",
+      label: "Effect"
+    }
+  ]}
+/>
+
+## Content sits above the layer
+
+Children render on top of the effect, and the wrapper is identical for every
+`type` — including `"none"`. That is what makes the swap safe: changing the
+effect changes the look and nothing else about the layout.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Effect type="matrix" height={20} radius="l" colors={["brand-solid-medium"]}>
+      <Column fillWidth center gap="8">
+        <Heading variant="display-strong-l" onBackground="neutral-strong">
+          One setting
+        </Heading>
+        <Text variant="body-default-m" onBackground="neutral-weak">
+          Swap the aesthetic without touching the page
+        </Text>
+      </Column>
+    </Effect>
+  }
+  codes={[
+    {
+      code:
+`<Effect type="matrix" height={20} radius="l" colors={["brand-solid-medium"]}>
+    <Column fillWidth center gap="8">
+      <Heading variant="display-strong-l">One setting</Heading>
+      <Text variant="body-default-m">
+        Swap the aesthetic without touching the page
+      </Text>
+    </Column>
+</Effect>`,
+      language: "tsx",
+      label: "Layered content"
+    }
+  ]}
+/>
+
+## Shared and per-effect settings
+
+`colors` and `speed` apply across the set: `Particle` takes a single colour, so
+it uses the first entry, and `blob` is seeded rather than timed and ignores both.
+Anything an individual effect needs goes in its own block, which is only read
+when that effect is the one showing — so all of them can be configured up front
+and still switched with one prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Effect
+      type="weather"
+      height={16}
+      radius="l"
+      colors={["accent-solid-medium"]}
+      weather={{ type: "snow", intensity: 0.6 }}
+      matrix={{ flicker: true }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Effect
+  type="weather"
+  colors={["accent-solid-medium"]}
+  weather={{ type: "snow", intensity: 0.6 }}
+  matrix={{ flicker: true }}
+/>`,
+      language: "tsx",
+      label: "Per-effect settings"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["type", ["none", "blob", "matrix", "weather", "particle", "celebration"], "none"],
+    ["colors", "string[]"],
+    ["speed", "number"],
+    ["reducedMotion", ["boolean", "auto"]],
+    ["blob", "BlobFxProps"],
+    ["matrix", "MatrixFxProps"],
+    ["weather", "WeatherFxProps"],
+    ["particle", "ParticleProps"],
+    ["celebration", "CelebrationFxProps"],
+    ["children", "ReactNode"],
+    ["...flex"]
+  ]}
+/>

@@ -1,6 +1,7 @@
 {
  "name": "DataTooltip",
- "group": "modules",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
  "props": {
   "active": "boolean",
   "payload": "readonly Record<string, any>[]",
@@ -8,7 +9,7 @@
   "dataKey": "string = name",
   "DataTooltip": "React.ReactNode",
   "date": "DateConfig = { format: \"MMM d\" }",
-  "colors": "boolean = true",
+  "showSwatches": "boolean = true",
   "variant": "ChartVariant = gradient"
  },
  "mixinsRef": []

@@ -261,7 +261,8 @@ For interactive demos or dashboards, you can animate the `value` over time on th
 `"use client";
 
 import React, { useEffect, useState } from "react";
-import { RadialGauge, Column, Text } from "@once-ui-system/core";
+import { Column, Text } from "@once-ui-system/core";
+import { RadialGauge } from "@once-ui-system/core/data";
 
 export function RadialGaugeSpeedDemo() {
   const [value, setValue] = useState(20);

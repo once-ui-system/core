@@ -7,9 +7,9 @@ import styles from "./SharedInteractiveStyles.module.scss";
 
 interface CheckboxProps
   extends Omit<InteractiveDetailsProps, "onClick">,
-    React.InputHTMLAttributes<HTMLInputElement> {
-  isChecked?: boolean;
-  isIndeterminate?: boolean;
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked"> {
+  checked?: boolean;
+  indeterminate?: boolean;
   onToggle?: () => void;
   hoverable?: boolean;
 }
@@ -19,8 +19,8 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
     {
       style,
       className,
-      isChecked: controlledIsChecked,
-      isIndeterminate = false,
+      checked: controlledIsChecked,
+      indeterminate = false,
       onToggle,
       disabled,
       hoverable = true,
@@ -68,7 +68,7 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
           type="checkbox"
           ref={ref}
           aria-checked={
-            isIndeterminate
+            indeterminate
               ? "mixed"
               : controlledIsChecked !== undefined
                 ? controlledIsChecked
@@ -91,7 +91,7 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
           vertical="center"
           radius="xs"
           aria-checked={
-            isIndeterminate
+            indeterminate
               ? "mixed"
               : controlledIsChecked !== undefined
                 ? controlledIsChecked
@@ -103,18 +103,18 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
           className={classNames(styles.element, {
             [styles.checked]:
               controlledIsChecked !== undefined
-                ? controlledIsChecked || isIndeterminate
+                ? controlledIsChecked || indeterminate
                 : isChecked,
             [styles.disabled]: disabled,
           })}
         >
           {(controlledIsChecked !== undefined ? controlledIsChecked : isChecked) &&
-            !isIndeterminate && (
+            !indeterminate && (
               <Flex className={styles.icon}>
                 <Icon onSolid="brand-strong" name="checkbox" size="xs" />
               </Flex>
             )}
-          {isIndeterminate && (
+          {indeterminate && (
             <Flex className={styles.icon}>
               <Icon onSolid="brand-strong" name="minus" size="xs" />
             </Flex>

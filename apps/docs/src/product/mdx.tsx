@@ -4,141 +4,14 @@ type MDXComponents = React.ComponentProps<typeof MDXRemote>["components"];
 import React, { ReactNode } from "react";
 
 // ─── Core components (explicit imports to avoid Turbopack frozen module proxy) ───
-import {
-  Accordion,
-  AccordionGroup,
-  Banner,
-  Animation,
-  Arrow,
-  AutoScroll,
-  Avatar,
-  HeadingNav,
-  MediaUpload,
-  AvatarGroup,
-  Badge,
-  Background,
-  BlobFx,
-  BlockQuote,
-  Button,
-  Card,
-  Carousel,
-  CelebrationFx,
-  Checkbox,
-  Chip,
-  ClientFlex,
-  ClientGrid,
-  ColorInput,
-  Column,
-  CompareImage,
-  ContextMenu,
-  CountFx,
-  CountdownFx,
-  Cursor,
-  CursorCard,
-  DateInput,
-  DatePicker,
-  DateRangeInput,
-  DateRangePicker,
-  Dialog,
-  Dropdown,
-  DropdownWrapper,
-  ElementType,
-  EmojiPicker,
-  EmojiPickerDropdown,
-  Fade,
-  FadingLettersFx,
-  Feedback,
-  Flex,
-  FlipFx,
-  FocusTrap,
-  GlitchFx,
-  Grid,
-  Heading,
-  HoloFx,
-  Hover,
-  HoverCard,
-  Icon,
-  IconButton,
-  InfiniteScroll,
-  InlineCode,
-  Input,
-  InteractiveDetails,
-  Kbd,
-  LetterFx,
-  Line,
-  List,
-  ListItem,
-  Logo,
-  LogoCloud,
-  Mask,
-  MasonryGrid,
-  MatrixFx,
-  Media,
-  Modal,
-  NavIcon,
-  NumberInput,
-  OgCard,
-  Option,
-  OTPInput,
-  Particle,
-  PasswordInput,
-  ProgressBar,
-  Pulse,
-  RadioButton,
-  RevealFx,
-  Row,
-  ScrollContainer,
-  ScrollLock,
-  ScrollToTop,
-  Scroller,
-  SegmentedControl,
-  Select,
-  ShineFx,
-  Skeleton,
-  Slider,
-  SmartLink,
-  Spinner,
-  SplitView,
-  StatusIndicator,
-  StyleOverlay,
-  StylePanel,
-  Swiper,
-  Switch,
-  Table,
-  Tag,
-  TagInput,
-  Text,
-  Textarea,
-  ThemeInit,
-  ThemeSwitcher,
-  TiltFx,
-  Timeline,
-  Toast,
-  Toaster,
-  ToggleButton,
-  Tooltip,
-  TypeFx,
-  User,
-  UserMenu,
-  WeatherFx,
-} from "@once-ui-system/core";
+import { Accordion, AccordionGroup, Banner, Animation, Arrow, AutoScroll, Avatar, HeadingNav, AvatarGroup, Badge, Background, BlobFx, BlockQuote, Book, Effect, InfoTip, Scrubber, Setting, SettingAxes, SettingGroup, Button, Card, Carousel, CelebrationFx, Checkbox, Chip, ClientFlex, ClientGrid, ColorInput, Column, CompareImage, ContextMenu, CountFx, CountdownFx, Cursor, CursorCard, DateInput, DatePicker, DateRangeInput, DateRangePicker, Dialog, Dropdown, DropdownWrapper, ElementType, EmojiPicker, EmojiPickerDropdown, Fade, FadingLettersFx, Feedback, Flex, FlipFx, FocusTrap, GlitchFx, Grid, Heading, HoloFx, Hover, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, InteractiveDetails, Kbd, LetterFx, Line, List, ListItem, Logo, LogoCloud, Mask, MasonryGrid, MatrixFx, Media, Modal, NavIcon, NumberInput, OgCard, Option, OTPInput, Particle, PasswordInput, ProgressBar, Pulse, RadioButton, RevealFx, Row, ScrollContainer, ScrollLock, ScrollToTop, Scroller, SegmentedControl, Select, ShineFx, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, StyleOverlay, StylePanel, Swiper, Switch, Table, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, TiltFx, Timeline, Toast, Toaster, ToggleButton, Tooltip, TypeFx, User, UserMenu, WeatherFx } from "@once-ui-system/core";
+import { MediaUpload } from "@once-ui-system/core/media";
 import type { MediaProps, TextProps } from "@once-ui-system/core";
 
 // Modules (CodeBlock, HeadingLink, charts, etc.)
-import {
-  CodeBlock,
-  HeadingLink,
-  BarChart,
-  LineChart,
-  PieChart,
-  LineBarChart,
-  RadialGauge,
-  LinearGauge,
-  ChartHeader,
-  Kbar,
-  MegaMenu,
-  MobileMegaMenu,
-} from "@once-ui-system/core";
+import { HeadingLink, Kbar, MegaMenu, MobileMegaMenu } from "@once-ui-system/core";
+import { BarChart, LineChart, PieChart, LineBarChart, RadialGauge, LinearGauge, ChartHeader } from "@once-ui-system/core/data";
+import { CodeBlock } from "@once-ui-system/core/code";
 
 // ─── Product components (explicit imports, skip `Modal` which conflicts with core) ───
 import {
@@ -190,6 +63,11 @@ import {
   TagInputExample,
   ValidationTextareaExample,
   TextareaCharacterCountExample,
+  ScrubberSeekExample,
+  ScrubberTracksExample,
+  SettingBasicExample,
+  SettingGroupExample,
+  SettingAxesExample,
   BasicSwitch,
   SwitchWithFeedback,
   SwitchWithLoading,
@@ -273,8 +151,24 @@ function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
   );
 }
 
-function slugify(str: string): string {
-  return str
+/**
+ * A heading is not always a string: `## Why not \`overflow: hidden\`` reaches
+ * this as an array of a string and an `<InlineCode>` element. Flatten it before
+ * slugifying, or the first heading with any inline markup takes the build down
+ * with "toLowerCase is not a function".
+ */
+function nodeToText(node: React.ReactNode): string {
+  if (node == null || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number") return String(node);
+  if (Array.isArray(node)) return node.map(nodeToText).join("");
+  if (React.isValidElement(node)) {
+    return nodeToText((node.props as { children?: React.ReactNode }).children);
+  }
+  return "";
+}
+
+function slugify(node: React.ReactNode): string {
+  return nodeToText(node)
     .toLowerCase()
     .replace(/\s+/g, "-")
     .replace(/&/g, "-and-")
@@ -287,7 +181,7 @@ function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
     children,
     ...props
   }: Omit<React.ComponentProps<typeof HeadingLink>, "as" | "id">) => {
-    const slug = slugify(children as string);
+    const slug = slugify(children);
     return (
       <HeadingLink
         marginTop="24"
@@ -441,6 +335,7 @@ const mdxComponents = {
   User,
   UserMenu,
   BlockQuote,
+  Book,
   Line,
   ProgressBar,
   StatusIndicator,
@@ -526,6 +421,12 @@ const mdxComponents = {
   MatrixFx,
   WeatherFx,
   CelebrationFx,
+  Effect,
+  InfoTip,
+  Scrubber,
+  Setting,
+  SettingAxes,
+  SettingGroup,
 
   // ─── Core data visualization ───
   BarChart,
@@ -585,6 +486,11 @@ const mdxComponents = {
   TagInputExample,
   ValidationTextareaExample,
   TextareaCharacterCountExample,
+  ScrubberSeekExample,
+  ScrubberTracksExample,
+  SettingBasicExample,
+  SettingGroupExample,
+  SettingAxesExample,
   BasicSwitch,
   SwitchWithFeedback,
   SwitchWithLoading,

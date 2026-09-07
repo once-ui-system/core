@@ -1,6 +1,7 @@
 {
  "name": "CodeBlock",
- "group": "modules",
+ "group": "code",
+ "importFrom": "@once-ui-system/core/code",
  "extends": [
   "CodeBlock.impl",
   "Flex"

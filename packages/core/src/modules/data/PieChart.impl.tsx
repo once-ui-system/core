@@ -2,11 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { getRechartsComponents } from "./rechartsLoader";
+import { Column, Row, DateRange } from "../../components";
 import {
-  schemes,
-  Column,
-  Row,
-  DateRange,
   ChartProps,
   ChartVariant,
   ChartStatus,
@@ -14,9 +11,9 @@ import {
   DataTooltip,
   Legend,
   ChartHeader,
-  useDataTheme,
-  RadiusSize,
-} from "../../";
+} from ".";
+import { RadiusSize, schemes } from "../../types";
+import { useDataTheme } from "../../contexts/DataThemeProvider";
 
 import { getDistributedColor } from "./utils/colorDistribution";
 

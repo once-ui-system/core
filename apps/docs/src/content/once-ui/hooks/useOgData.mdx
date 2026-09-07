@@ -115,7 +115,7 @@ For cases where you only need the image:
 function LinkThumbnail({ url }: { url: string }) {
   const { ogImage, loading } = useOgImage(url);
 
-  if (loading) return <Skeleton width={200} height={200} />;
+  if (loading) return <Skeleton width={200} size={200} />;
   if (!ogImage) return <DefaultThumbnail />;
 
   return (

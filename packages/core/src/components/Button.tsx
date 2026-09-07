@@ -12,7 +12,7 @@ import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 interface ButtonCommonProps {
   variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
   size?: TShirtSizes;
-  radius?:
+  corners?:
     | "none"
     | "top"
     | "right"
@@ -48,7 +48,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
     {
       variant = "primary",
       size = "m",
-      radius,
+      corners,
       rounded,
       label,
       weight = "strong",
@@ -84,10 +84,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
           styles.button,
           styles[variant],
           styles[size],
-          radius === "none"
+          corners === "none"
             ? "radius-none"
-            : radius
-              ? `radius-${radiusSize}-${radius}`
+            : corners
+              ? `radius-${radiusSize}-${corners}`
               : `radius-${radiusSize}`,
           "text-decoration-none",
           "button",

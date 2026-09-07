@@ -18,7 +18,7 @@
   "delay": "number = 0",
   "revealedByDefault": "boolean = false",
   "translateY": "number | SpacingToken",
-  "trigger": "boolean",
+  "revealed": "boolean",
   "style": "React.CSSProperties",
   "className": "string"
  },

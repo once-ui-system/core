@@ -647,7 +647,7 @@ Set the `variant` prop to `gradient`, `flat`, or `outline` to change the chart's
 
 ## Color modes
 
-Use the `data-viz` prop to change the chart's color mode to `categorical`, `divergent`, or `sequential`.
+Use the `data-viz-style` prop to change the chart's color mode to `categorical`, `divergent`, or `sequential`.
 
 <LineChart
   marginTop="16"
@@ -777,7 +777,7 @@ When using `data-viz-style="divergent"` or `data-viz-style="sequential"`, we rec
 
 <PropsTable
   content={[
-    ["data-viz", ["categorical", "divergent", "sequential"], "categorical"],
+    ["data-viz-style", ["categorical", "divergent", "sequential"], "-", "Overrides the DataThemeProvider mode for this chart only. Falls back to the provider value."],
   ]}
 />
 
@@ -853,3 +853,58 @@ You can override the default container styles with `Flex` props.
     ["...flex"]
   ]}
 />
+## State
+
+Charts fetch nothing themselves, so the four states of a request are props you
+set from wherever the data comes from. Handle them and a chart degrades into a
+readable panel rather than an empty frame.
+
+<PropsTable
+  content={[
+    ["loading", "boolean", "false", "Show the loading state instead of the chart."],
+    ["error", "boolean", "false", "Show the error state instead of the chart."],
+    ["emptyState", "ReactNode", "-", "Replaces the default message when data is empty."],
+    ["errorState", "ReactNode", "-", "Replaces the default message when error is set."],
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const { data, isLoading, error } = useMetrics();
+
+<LineChart
+  title="Revenue"
+  loading={isLoading}
+  error={Boolean(error)}
+  errorState={<Text onBackground="danger-weak">{error?.message}</Text>}
+  emptyState={<Text onBackground="neutral-weak">No revenue in this range yet.</Text>}
+  series={{ key: "Revenue" }}
+  data={data ?? []}
+/>`,
+      language: "tsx",
+      label: "Request states"
+    }
+  ]}
+/>
+
+An empty `data` array is not an error — it means the query ran and matched
+nothing, which is why `emptyState` is separate from `errorState`. Passing
+`loading` rather than withholding the chart keeps the panel's height stable, so
+the page does not jump when the data lands.
+
+## Grid and tooltip
+
+<PropsTable
+  content={[
+    ["grid", ["x", "y", "both", "none"], "varies", "Which grid lines to draw. Bar charts default to y, line charts to both."],
+    ["tooltip", "boolean", "true", "Show the hover tooltip."],
+  ]}
+/>
+
+`grid` and `axis` are separate on purpose: a bar chart usually wants horizontal
+guides to compare heights against (`grid="y"`) while still labelling both axes,
+and a sparkline-style chart wants `axis="none"` with the grid left on.

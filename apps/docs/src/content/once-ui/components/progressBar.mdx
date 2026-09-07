@@ -49,18 +49,18 @@ return (
 
 ## Label
 
-You can disable the label by setting the `label` prop to `false`.
+You can disable the label by setting the `showLabel` prop to `false`.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <ProgressBar value={50} label={false} />
+    <ProgressBar value={50} showLabel={false} />
   }
   codes={[
     {
       code:
-`<ProgressBar value={50} label={false} />`,
+`<ProgressBar value={50} showLabel={false} />`,
       language: "tsx",
       label: "Label"
     }
@@ -122,7 +122,7 @@ Control where the percentage label appears using the `labelPosition` prop.
     ["value", "number", "0-100"],
     ["min", "number", "0"],
     ["max", "number", "100"],
-    ["label", "boolean", "true"],
+    ["showLabel", "boolean", "true"],
     ["labelPosition", ["top", "bottom", "left", "right"], "bottom"],
     ["barBackground", "StyleProps['solid']", "brand-strong"],
     ["className"],

@@ -10,30 +10,6 @@
     }
 }
 
-.delay-1 {
-    animation-delay: 0.1s;
-}
-
-.delay-2 {
-    animation-delay: 0.2s;
-}
-
-.delay-3 {
-    animation-delay: 0.3s;
-}
-
-.delay-4 {
-    animation-delay: 0.4s;
-}
-
-.delay-5 {
-    animation-delay: 0.5s;
-}
-
-.delay-6 {
-    animation-delay: 0.6s;
-}
-
 .skeleton {
     animation-name: skeleton-loading;
     animation-duration: 1.5s;
@@ -44,73 +20,60 @@
         height: 100%;
     }
 
+    /* For a line the scale is height; width is a layout concern and comes from
+       Flex, so a caller writes width="80%" rather than picking from a scale. */
     &.line {
-        &.h-xs {
+        &.size-xs {
             height: var(--static-space-8);
             min-height: var(--static-space-8);
         }
-        &.h-s {
+        &.size-s {
             height: var(--static-space-12);
             min-height: var(--static-space-12);
         }
-        &.h-m {
+        &.size-m {
             height: var(--static-space-16);
             min-height: var(--static-space-16);
         }
-        &.h-l {
+        &.size-l {
             height: var(--static-space-20);
             min-height: var(--static-space-20);
         }
-        &.h-xl {
+        &.size-xl {
             height: var(--static-space-24);
             min-height: var(--static-space-24);
         }
-
-        &.w-xs {
-            width: 25%;
-        }
-        &.w-s {
-            width: 33%;
-        }
-        &.w-m {
-            width: 50%;
-        }
-        &.w-l {
-            width: 75%;
-        }
-        &.w-xl {
-            width: 100%;
-        }
     }
 
+    /* For a circle the scale is the diameter, so it drives both axes. */
     &.circle {
         border-radius: var(--radius-full);
 
-        &.w-xs {
+        &.size-xs {
             width: var(--static-space-20);
             min-width: var(--static-space-20);
             height: var(--static-space-20);
             min-height: var(--static-space-20);
         }
-        &.w-s {
+        &.size-s {
             width: var(--static-space-24);
             min-width: var(--static-space-24);
             height: var(--static-space-24);
             min-height: var(--static-space-24);
         }
-        &.w-m {
+        &.size-m {
             width: var(--static-space-32);
             min-width: var(--static-space-32);
             height: var(--static-space-32);
             min-height: var(--static-space-32);
         }
-        &.w-l {
+        &.size-l {
             width: var(--static-space-40);
             min-width: var(--static-space-40);
             height: var(--static-space-40);
             min-height: var(--static-space-40);
         }
-        &.w-xl {
+        &.size-xl {
             width: var(--static-space-160);
             min-width: var(--static-space-160);
             height: var(--static-space-160);

@@ -12,7 +12,7 @@ export function ModalExample() {
         Open Modal
       </Button>
       <Modal
-        isOpen={isOpen}
+        open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Modal Title"
       >
@@ -36,7 +36,7 @@ export function ModalWithBackdrop() {
         Modal with Backdrop
       </Button>
       <Modal
-        isOpen={isOpen}
+        open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Modal with Backdrop"
         backdrop={

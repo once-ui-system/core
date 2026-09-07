@@ -72,12 +72,12 @@ Add icons or other elements before or after the option text.
       <ClientOption 
         label="With prefix"
         value="with-prefix"
-        hasPrefix={<Icon icon="check" />}
+        prefix={<Icon icon="check" />}
       />
       <ClientOption
         label="With suffix"
         value="with-suffix"
-        hasSuffix={<Kbd><Text wrap="nowrap">⌘ + K</Text></Kbd>}
+        suffix={<Kbd><Text wrap="nowrap">⌘ + K</Text></Kbd>}
       />
     </Column>
   }
@@ -87,13 +87,13 @@ Add icons or other elements before or after the option text.
 `<Option 
     label="With prefix"
     value="with-prefix"
-    hasPrefix={<Icon icon="check" />}
+    prefix={<Icon icon="check" />}
 />
 
 <Option 
     label="With suffix"
     value="with-suffix"
-    hasSuffix={<Kbd label="⌘ + K" />}
+    suffix={<Kbd label="⌘ + K" />}
 />`,
       language: "tsx",
       label: "Prefix / Suffix"
@@ -188,14 +188,16 @@ Options can function as links by providing the `href` prop.
     ["label", "React.ReactNode"],
     ["value", "string"],
     ["description", "React.ReactNode"],
-    ["hasPrefix", "React.ReactNode"],
-    ["hasSuffix", "React.ReactNode"],
+    ["prefix", "React.ReactNode"],
+    ["suffix", "React.ReactNode"],
     ["href", "string"],
     ["selected", "boolean"],
     ["highlighted", "boolean", "false"],
     ["danger", "boolean", "false"],
     ["onClick", "(value: string) => void"],
     ["onLinkClick", "() => void"],
-    ["tabIndex", "number"]
+    ["tabIndex", "number"],
+    ["disabled", "boolean", "false", "Prevent selection and dim the option."],
+    ["...flex"]
   ]}
 />

@@ -66,7 +66,7 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
                 key="cart-option"
                 label="Cart"
                 value="cart"
-                hasPrefix={
+                prefix={
                   <Icon
                     size="xs"
                     onBackground="neutral-weak"
@@ -79,7 +79,7 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
                 key="order-history-option"
                 label="Order history"
                 value="orders"
-                hasPrefix={
+                prefix={
                   <Icon size="xs" onBackground="neutral-weak" name="payment" />
                 }
               />
@@ -87,7 +87,7 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
                 key="returned-orders-option"
                 label="Returned orders"
                 value="returns"
-                hasPrefix={
+                prefix={
                   <Icon size="xs" onBackground="neutral-weak" name="return" />
                 }
               />
@@ -95,7 +95,7 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
               <Option
                 key="settings-option"
                 label="Settings"
-                hasPrefix={
+                prefix={
                   <Icon size="xs" onBackground="neutral-weak" name="settings" />
                 }
                 value="settings"
@@ -103,7 +103,7 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
               <Option
                 key="help-option"
                 label="Help"
-                hasPrefix={<Icon size="xs" onBackground="neutral-weak" name="help" />}
+                prefix={<Icon size="xs" onBackground="neutral-weak" name="help" />}
                 value="help"
               />
               <Line key="line-3" marginY="2" />

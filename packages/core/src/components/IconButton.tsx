@@ -13,7 +13,7 @@ interface IconButtonCommonProps {
   icon?: IconName;
   id?: string;
   size?: TShirtSizes;
-  radius?:
+  corners?:
     | "none"
     | "top"
     | "right"
@@ -45,7 +45,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
       icon = "refresh",
       size = "m",
       id,
-      radius,
+      corners,
       rounded = false,
       tooltip,
       tooltipPosition = "top",
@@ -75,10 +75,10 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
           buttonStyles.button,
           buttonStyles[variant],
           iconStyles[size],
-          radius === "none"
+          corners === "none"
             ? "radius-none"
-            : radius
-              ? `radius-${radiusSize}-${radius}`
+            : corners
+              ? `radius-${radiusSize}-${corners}`
               : `radius-${radiusSize}`,
           "text-decoration-none",
           "button",

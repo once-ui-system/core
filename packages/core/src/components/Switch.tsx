@@ -9,10 +9,10 @@ import commonStyles from "./SharedInteractiveStyles.module.scss";
 
 interface SwitchProps
   extends Omit<InteractiveDetailsProps, "onClick">,
-    React.InputHTMLAttributes<HTMLInputElement> {
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked"> {
   style?: React.CSSProperties;
   className?: string;
-  isChecked: boolean;
+  checked: boolean;
   loading?: boolean;
   name?: string;
   value?: string;
@@ -26,7 +26,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       className,
-      isChecked,
+      checked,
       reverse = false,
       loading = false,
       onToggle,
@@ -63,7 +63,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
         })}
         onClick={handleClick}
         role="switch"
-        aria-checked={isChecked}
+        aria-checked={checked}
         aria-label={ariaLabel}
         aria-disabled={disabled}
         tabIndex={-1}
@@ -73,7 +73,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
           type="checkbox"
           name={name}
           value={value}
-          checked={isChecked}
+          checked={checked}
           onChange={onToggle}
           className={commonStyles.hidden}
           tabIndex={-1}
@@ -81,7 +81,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
         <Flex
           cursor={disabled ? "not-allowed" : undefined}
           className={classNames(styles.switch, {
-            [styles.checked]: isChecked,
+            [styles.checked]: checked,
             [styles.disabled]: disabled,
           })}
         >
@@ -89,7 +89,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
             onKeyDown={handleKeyDown}
             tabIndex={disabled ? -1 : 0}
             className={classNames(styles.element, {
-              [styles.checked]: isChecked,
+              [styles.checked]: checked,
               [styles.disabled]: disabled,
             })}
           >

@@ -192,7 +192,7 @@ const NavigationItemComponent: React.FC<{
         </Row>
         {item.navTag && (() => {
           if (!item.updatedAt) {
-            return <Pulse variant={item.navTagVariant} size="s" />;
+            return <Pulse scheme={item.navTagVariant} size="s" />;
           }
           const age = Date.now() - new Date(item.updatedAt).getTime();
           if (age > 60 * 24 * 60 * 60 * 1000) return null;
@@ -201,7 +201,7 @@ const NavigationItemComponent: React.FC<{
             : age > 20 * 24 * 60 * 60 * 1000
               ? "warning"
               : item.navTagVariant;
-          return <Pulse variant={variant} size="s" />;
+          return <Pulse scheme={variant} size="s" />;
         })()}
       </Row>
     </ToggleButton>

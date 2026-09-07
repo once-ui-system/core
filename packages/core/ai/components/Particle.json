@@ -14,7 +14,7 @@
  ],
  "props": {
   "density": "number = 100",
-  "color": "string = brand-on-background-weak",
+  "color": "ColorValue = brand-on-background-weak",
   "size": "SpacingToken = 2",
   "speed": "number = 0.3",
   "interactive": "boolean = false",

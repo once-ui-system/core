@@ -196,7 +196,7 @@ function NavIconMenu() {
     return (
       <Animation
         trigger={
-          <NavIcon onClick={() => setIsActive(!isActive)} isActive={isActive} />
+          <NavIcon onClick={() => setIsActive(!isActive)} active={isActive} />
         }
         slideDown={1}
         triggerType="manual"
@@ -558,6 +558,8 @@ Stack multiple animations by providing multiple props. Each value represents the
     ["blur", "number"],
     ["reverse", "boolean"],
     ["children"],
+    ["childrenPosition", "CSSProperties[\"position\"]", "\"absolute\"", "How the animated children are positioned inside the wrapper."],
+    ["touch", ["disable", "enable", "display"], "\"enable\"", "Behaviour on touch devices, where there is no hover to drive the effect."],
     ["...flex"]
   ]}
 />

@@ -1,106 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Heading,
-  Text,
-  Button,
-  Column,
-  Badge,
-  Logo,
-  Line,
-  LetterFx,
-  StylePanel,
-  Carousel,
-  Media,
-  EmojiPicker,
-  EmojiPickerDropdown,
-  Flex,
-  OgCard,
-  Icon,
-  Textarea,
-  Row,
-  IconButton,
-  Select,
-  Option,
-  DropdownWrapper,
-  AutoScroll,
-  User,
-  Table,
-  ContextMenu,
-  BlockQuote,
-  RevealFx,
-  DatePicker,
-  DateInput,
-  DateRangeInput,
-  Grid,
-  AccordionGroup,
-  Accordion,
-  Kbar,
-  Spinner,
-  BarChart,
-  ListItem,
-  List,
-  ProgressBar,
-  LineChart,
-  CountFx,
-  Feedback,
-  MasonryGrid,
-  TagInput,
-  Avatar,
-  Background,
-  Card,
-  Chip,
-  Fade,
-  Hover,
-  Pulse,
-  Tooltip,
-  Checkbox,
-  Switch,
-  RadioButton,
-  Skeleton,
-  HoverCard,
-  LogoCloud,
-  SmartLink,
-  Swiper,
-  Scroller,
-  Particle,
-  Arrow,
-  Mask,
-  Tag,
-  Kbd,
-  InlineCode,
-  StatusIndicator,
-  SegmentedControl,
-  ToggleButton,
-  ScrollToTop,
-  CompareImage,
-  InteractiveDetails,
-  InfiniteScroll,
-  PasswordInput,
-  NumberInput,
-  ColorInput,
-  OTPInput,
-  AvatarGroup,
-  UserMenu,
-  ThemeSwitcher,
-  Timeline,
-  NavIcon,
-  CursorCard,
-  FlipFx,
-  GlitchFx,
-  HoloFx,
-  MatrixFx,
-  ShineFx,
-  TiltFx,
-  TypeFx,
-  WeatherFx,
-  CountdownFx,
-  Input,
-  Dialog,
-  FadingLettersFx,
-  useToast,
-} from "@once-ui-system/core";
+import { Heading, Text, Button, Column, Badge, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, EmojiPickerDropdown, Flex, OgCard, Icon, Textarea, Row, IconButton, Select, Option, DropdownWrapper, AutoScroll, User, Table, ContextMenu, BlockQuote, RevealFx, DatePicker, DateInput, DateRangeInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, MasonryGrid, TagInput, Avatar, Background, Card, Chip, Fade, Hover, Pulse, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Swiper, Scroller, Particle, Arrow, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ToggleButton, ScrollToTop, CompareImage, InteractiveDetails, InfiniteScroll, PasswordInput, NumberInput, ColorInput, OTPInput, AvatarGroup, UserMenu, ThemeSwitcher, Timeline, NavIcon, CursorCard, FlipFx, GlitchFx, HoloFx, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, FadingLettersFx, useToast } from "@once-ui-system/core";
+import { BarChart, LineChart } from "@once-ui-system/core/data";
 
 interface ComponentDemo {
   name: string;
@@ -343,7 +245,7 @@ export default function ComponentsCheckOld() {
           name: "Switch",
           element: (
             <Switch
-              isChecked={switchOn}
+              checked={switchOn}
               onToggle={() => setSwitchOn(!switchOn)}
               label="Dark mode"
             />
@@ -378,8 +280,8 @@ export default function ComponentsCheckOld() {
           name: "SegmentedControl",
           element: (
             <SegmentedControl
-              selected={segmentValue}
-              onToggle={setSegmentValue}
+              value={segmentValue}
+              onChange={setSegmentValue}
               buttons={[
                 { value: "one", label: "One" },
                 { value: "two", label: "Two" },
@@ -570,9 +472,9 @@ export default function ComponentsCheckOld() {
           name: "Skeleton",
           element: (
             <Column gap="s" fillWidth>
-              <Skeleton shape="line" width="xl" />
-              <Skeleton shape="line" width="l" />
-              <Skeleton shape="line" width="m" />
+              <Skeleton shape="line" width="100%" />
+              <Skeleton shape="line" width="75%" />
+              <Skeleton shape="line" width="50%" />
             </Column>
           ),
         },
@@ -599,7 +501,7 @@ export default function ComponentsCheckOld() {
           name: "Feedback",
           element: (
             <Feedback
-              icon
+              showIcon
               title="Changes saved"
               description="Your settings have been updated successfully."
             />
@@ -618,7 +520,7 @@ export default function ComponentsCheckOld() {
             <>
               <Button onClick={() => setDialogOpen(true)}>Open Dialog</Button>
               <Dialog
-                isOpen={dialogOpen}
+                open={dialogOpen}
                 onClose={() => setDialogOpen(false)}
                 title="Confirm action"
                 description="Are you sure you want to continue?"

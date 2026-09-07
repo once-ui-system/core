@@ -1,0 +1,118 @@
+---
+title: "FocusTrap"
+summary: "Keeps Tab inside a region while it is open, and gives focus back when it closes."
+updatedAt: "2026-08-31"
+docs: "once-ui/components/focusTrap.mdx"
+github: "components/FocusTrap.tsx"
+navLabel: "FocusTrap"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`FocusTrap` cycles Tab and Shift+Tab within its subtree while `active`, and
+returns focus to wherever it came from when deactivated. It is the piece that
+makes a dialog keyboard-safe: without it Tab walks straight out of the panel
+into the page behind, which for a screen-reader or keyboard user means the
+dialog effectively is not modal.
+
+[`DropdownWrapper`](/once-ui/components/dropdownWrapper) uses it, and so does
+[`ArrowNavigation`](/once-ui/components/arrowNavigation) when you set
+`trapFocus`. Reach for it directly when you are building an overlay of your
+own.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const [open, setOpen] = useState(false);
+
+<FocusTrap active={open} onEscape={() => setOpen(false)}>
+  <Column background="surface" radius="l" padding="24" gap="16">
+    <Heading variant="heading-strong-m">Rename project</Heading>
+    <Input id="name" label="Name" />
+    <Row gap="8" horizontal="end">
+      <Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+      <Button onClick={save}>Save</Button>
+    </Row>
+  </Column>
+</FocusTrap>`,
+      language: "tsx",
+      label: "FocusTrap"
+    }
+  ]}
+/>
+
+## What it traps
+
+Focusable elements are found with
+`button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])`, in
+DOM order. Two consequences worth knowing:
+
+- A region with **no** focusable elements focuses the container itself, so focus
+  is still inside rather than left on the page behind.
+- Arrow keys are deliberately **not** handled — they pass through, so
+  [`ArrowNavigation`](/once-ui/components/arrowNavigation) can own them. The two
+  compose: `FocusTrap` decides what Tab may reach, `ArrowNavigation` decides
+  what the arrows move between.
+
+## Controlling where focus lands
+
+By default the trap focuses the first focusable element on activation and
+restores the previously focused element on deactivation. Both ends can be
+pointed somewhere specific.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const input = useRef<HTMLInputElement>(null);
+const trigger = useRef<HTMLButtonElement>(null);
+
+// Open on the field rather than the first button, and hand focus back to the
+// trigger even if it was not what opened the panel.
+<FocusTrap
+  active={open}
+  initialFocusRef={input}
+  returnFocusRef={trigger}
+  onEscape={close}
+>
+  {children}
+</FocusTrap>`,
+      language: "tsx",
+      label: "Focus targets"
+    }
+  ]}
+/>
+
+Set `autoFocus={false}` when the region should open without stealing focus —
+an inline editor revealed under the cursor, say. Set `restoreFocus={false}`
+when the element that opened the region is gone by the time it closes, and
+returning focus to it would throw the user to the top of the document.
+
+## Escape
+
+`onEscape` fires on the Escape key and nothing else — the trap never closes
+itself. Owning the open state in the caller is what lets a confirm step or an
+unsaved-changes prompt sit in between.
+
+## API reference
+
+<PropsTable
+  content={[
+    ["active", "boolean", "-", "Whether the trap is on. Required."],
+    ["children", "React.ReactNode"],
+    ["onEscape", "() => void", "-", "Called on the Escape key. The trap does not close itself."],
+    ["initialFocusRef", "RefObject<HTMLElement>", "-", "Element to focus on activation, instead of the first focusable one."],
+    ["returnFocusRef", "RefObject<HTMLElement>", "-", "Element to focus on deactivation, instead of the previously focused one."],
+    ["containerRef", "RefObject<HTMLDivElement>", "-", "Supply the container ref when the caller also needs it."],
+    ["autoFocus", "boolean", "true", "Move focus into the region when it activates."],
+    ["restoreFocus", "boolean", "true", "Return focus when it deactivates."],
+    ["className", "string"],
+    ["style", "React.CSSProperties"],
+  ]}
+/>

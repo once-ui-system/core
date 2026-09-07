@@ -104,6 +104,45 @@ The `Card` component is a versatile, fluid container for content with a hover ef
   ]}
 />
 
+## Selected
+
+Use `selected` to mark the chosen card in a set — a plan picker, a template
+gallery, a multi-select list. It repaints the border and background from the
+brand scheme, and a card that is also clickable announces the state as a
+pressed toggle. Both colours are defaults, so passing `background` or `border`
+still wins.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <Row fillWidth gap="12" s={{direction: "column"}}>
+      <Card selected radius="l" padding="20" direction="column" gap="4">
+        <Text variant="label-strong-s">Pro</Text>
+        <Text variant="body-default-s" onBackground="neutral-weak">Everything, unlimited</Text>
+      </Card>
+      <Card radius="l" padding="20" direction="column" gap="4">
+        <Text variant="label-strong-s">Starter</Text>
+        <Text variant="body-default-s" onBackground="neutral-weak">One project</Text>
+      </Card>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Card selected onClick={() => setPlan("pro")}>
+    Pro
+</Card>
+<Card selected={false} onClick={() => setPlan("starter")}>
+    Starter
+</Card>`,
+      language: "tsx",
+      label: "Selected"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -112,6 +151,7 @@ The `Card` component is a versatile, fluid container for content with a hover ef
     ["href", "string"],
     ["onClick", "() => void"],
     ["fillHeight", "boolean"],
+    ["selected", "boolean", "false"],
     ["className"],
     ["style"],
     ["...flex"]

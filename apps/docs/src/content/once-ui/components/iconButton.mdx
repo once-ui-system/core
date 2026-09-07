@@ -115,17 +115,17 @@ Customize the border radius of the `IconButton` for different design needs.
   marginBottom="24"
   preview={
     <Row gap="1" horizontal="center">
-      <IconButton icon="chevronLeft" radius="top-left" />
+      <IconButton icon="chevronLeft" corners="top-left" />
       <IconButton icon="chevronDown" radius="none" />
-      <IconButton icon="chevronRight" radius="bottom-right" />
+      <IconButton icon="chevronRight" corners="bottom-right" />
     </Row>
   }
   codes={[
     {
       code:
-`<IconButton icon="chevronLeft" radius="top-left" />
+`<IconButton icon="chevronLeft" corners="top-left" />
 <IconButton icon="chevronDown" radius="none" />
-<IconButton icon="chevronRight" radius="bottom-right" />`,
+<IconButton icon="chevronRight" corners="bottom-right" />`,
       language: "tsx",
       label: "Radius"
     }
@@ -201,7 +201,7 @@ Use the children prop to add custom content to the IconButton.
     ["icon", "IconName", "refresh"],
     ["size", ["xs", "s", "m", "l", "xl"], "m"],
     ["variant", ["primary", "secondary", "tertiary", "quaternary", "subtle", "danger", "success", "warning", "ghost", "link"], "primary"],
-    ["radius", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
+    ["corners", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
     ["tooltip", "string"],
     ["tooltipPosition", ["top", "bottom", "left", "right"], "top"],
     ["href", "string"],
@@ -209,5 +209,8 @@ Use the children prop to add custom content to the IconButton.
     ["children"],
     ["className"],
     ["style"],
+    ["loading", "boolean", "false", "Swap the icon for a spinner and block interaction."],
+    ["rounded", "boolean", "false", "Fully rounded corners."],
+    ["...ButtonHTMLAttributes"]
   ]}
 />

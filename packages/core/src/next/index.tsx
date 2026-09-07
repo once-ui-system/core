@@ -11,6 +11,7 @@ import {
   AdapterProvider,
   type OnceUIAdapters,
 } from "../contexts/AdapterProvider";
+import { LayoutProvider as BaseLayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * Next.js adapter bindings — the ONLY runtime `next/*` imports in core
@@ -51,4 +52,38 @@ export interface NextAdapterProviderProps {
 
 export const NextAdapterProvider: React.FC<NextAdapterProviderProps> = ({ children }) => (
   <AdapterProvider adapters={nextAdapters}>{children}</AdapterProvider>
+);
+
+/**
+ * Drop-in replacement for core's `LayoutProvider`, with the Next adapters
+ * already installed.
+ *
+ * This is the whole migration for a Next.js app on 1.8.x: change the import
+ * path for `LayoutProvider`, and `SmartLink`, `Button`/`Card`/`ToggleButton`
+ * with an `href`, `Media`, `Logo`, `MegaMenu` and `Kbar` keep routing through
+ * next/link and next/image exactly as before. No provider is added to the tree
+ * and no props change.
+ *
+ *     - import { LayoutProvider } from "@once-ui-system/core";
+ *     + import { LayoutProvider } from "@once-ui-system/core/next";
+ *
+ * Detection is deliberately not attempted. The adapters include two hooks whose
+ * implementations call different numbers of hooks — the DOM `useNavigate`
+ * returns a closure, the Next one calls `useRouter` and `useCallback` — so
+ * swapping them after mount breaks the rules of hooks. Resolution has to be
+ * settled before the first render, and a browser bundle has no synchronous way
+ * to conditionally resolve an optional module. An explicit import is the
+ * honest, bundler-independent version of the same thing.
+ *
+ * Apps that already compose `AdapterProvider` themselves can keep using
+ * `NextAdapterProvider` directly; this only removes the boilerplate for the
+ * common case.
+ */
+export const LayoutProvider: React.FC<React.ComponentProps<typeof BaseLayoutProvider>> = ({
+  children,
+  ...props
+}) => (
+  <NextAdapterProvider>
+    <BaseLayoutProvider {...props}>{children}</BaseLayoutProvider>
+  </NextAdapterProvider>
 );

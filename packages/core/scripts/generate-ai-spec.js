@@ -20,9 +20,17 @@ const SRC = path.join(ROOT, "src");
 const OUT_DIR = path.join(ROOT, "ai");
 const OUT_FILE = path.join(OUT_DIR, "spec.json");
 
+// The three subpath barrels are listed separately because they are no longer
+// re-exported from the root: their implementations pull in recharts, prismjs
+// and compressorjs, which a bundler resolves whenever it walks the root
+// barrel. Without them here an agent would never learn these components exist,
+// so each carries the specifier to import it from.
 const BARRELS = [
   { file: path.join(SRC, "components", "index.ts"), group: "components" },
   { file: path.join(SRC, "modules", "index.ts"), group: "modules" },
+  { file: path.join(SRC, "modules", "data", "index.ts"), group: "data", importFrom: "@once-ui-system/core/data" },
+  { file: path.join(SRC, "modules", "code", "index.ts"), group: "code", importFrom: "@once-ui-system/core/code" },
+  { file: path.join(SRC, "modules", "media", "index.ts"), group: "media", importFrom: "@once-ui-system/core/media" },
 ];
 
 // Internal/low-level exports that AI should not use directly
@@ -183,7 +191,7 @@ async function main() {
     return out;
   }
 
-  function processExport(name, symbol, group) {
+  function processExport(name, symbol, group, importFrom) {
     if (EXCLUDE.has(name)) return;
     if (!/^[A-Z]/.test(name)) return; // components only
 
@@ -253,6 +261,7 @@ async function main() {
     }
 
     const entry = { group };
+    if (importFrom) entry.importFrom = importFrom;
     if (extendsComponents.size) entry.extends = [...extendsComponents];
     if (mixins.size) entry.mixins = [...mixins].sort();
     if (Object.keys(props).length) entry.props = props;
@@ -266,7 +275,7 @@ async function main() {
     const moduleSymbol = checker.getSymbolAtLocation(sf);
     if (!moduleSymbol) continue;
     for (const exp of checker.getExportsOfModule(moduleSymbol)) {
-      processExport(exp.getName(), exp, barrel.group);
+      processExport(exp.getName(), exp, barrel.group, barrel.importFrom);
     }
   }
 
@@ -333,6 +342,14 @@ async function main() {
   }
 
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"));
+  // `IconName` reaches the spec as an opaque type name, so an agent had no way
+  // to know which icons exist and guessed — which is how the shipped examples
+  // ended up asking for "email", "loading" and "github", none of which were
+  // registered, each rendering nothing. The vocabulary is listed explicitly.
+  const iconNames = Object.keys(
+    JSON.parse(fs.readFileSync(path.join(__dirname, "icon-manifest.json"), "utf8")),
+  ).sort();
+
   const spec = {
     name: pkg.name,
     version: pkg.version,
@@ -341,6 +358,7 @@ async function main() {
       "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
     tokens,
     mixins,
+    iconNames,
     components,
   };
 

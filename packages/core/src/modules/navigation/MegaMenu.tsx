@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+import type { IconName } from "../../icons";
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Column, Flex, Icon, Row, Text, ToggleButton } from "../../";
 import { useAdapters } from "../../contexts/AdapterProvider";
@@ -9,7 +10,7 @@ import styles from "./MegaMenu.module.scss";
 export interface MenuLink {
   label: ReactNode;
   href: string;
-  icon?: string;
+  icon?: IconName;
   description?: ReactNode;
   selected?: boolean;
 }
@@ -22,7 +23,7 @@ export interface MenuSection {
 export interface MenuGroup {
   id: string;
   label: ReactNode;
-  suffixIcon?: string;
+  suffixIcon?: IconName;
   href?: string;
   selected?: boolean;
   sections?: MenuSection[];

@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 import withMDX from '@next/mdx'
+import { movedPageRedirects } from './src/resources/redirects.js'
 
 const withMDXConfig = withMDX({
   extension: /\.mdx?$/,
@@ -50,6 +51,8 @@ const nextConfig = {
   // Add redirects from /docs/slug to /slug
   async redirects() {
     return [
+      // Pages that moved within the docs. See src/resources/redirects.js.
+      ...movedPageRedirects,
       {
         source: '/docs/:slug*',
         destination: '/:slug*',

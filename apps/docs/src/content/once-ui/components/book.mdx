@@ -1,0 +1,125 @@
+---
+title: "Book"
+summary: "A cover with real depth: a spine, a page block and a tilt on hover."
+updatedAt: "2026-08-31"
+docs: "once-ui/components/book.mdx"
+github: "components/Book.tsx"
+navLabel: "Book"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`Book` renders artwork as a physical book rather than a flat image: a cover, a
+blurred spine shadow, and a visible block of pages hinged on the cover's right
+edge. On hover the whole object turns, and because the rotation is a real 3D
+transform the page block turns with it instead of sliding behind it.
+
+Use it wherever a cover is the subject — a library, a reading list, a chapter
+index. For a plain image in a frame, use [`Media`](/once-ui/components/media).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center" paddingY="24">
+      <Row maxWidth={12}>
+        <Book src="/images/cover.jpg" alt="Once UI" />
+      </Row>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row maxWidth={12}>
+  <Book src="/images/cover.jpg" alt="Once UI" />
+</Row>`,
+      language: "tsx",
+      label: "Book"
+    }
+  ]}
+/>
+
+## Sizing
+
+`Book` fills the box you give it and keeps its own cover proportions, so size it
+from the outside — a `maxWidth` on the parent, or a grid cell. It takes every
+`Flex` prop, so `aspectRatio`, `radius` and the spacing tokens work as usual.
+
+## As a link
+
+Pass `href` to make the whole book a link. It renders through
+[`ElementType`](/once-ui/components/elementType), so internal routes get
+client-side navigation and external ones get the right `rel`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Book
+  href="/library/once-ui"
+  src="/images/cover.jpg"
+  alt="Once UI"
+/>`,
+      language: "tsx",
+      label: "Linked book"
+    }
+  ]}
+/>
+
+## Overlaying a title
+
+`children` render above the artwork, inside a dark-themed column, so text sits
+legibly on top of a cover. Leave `src` off entirely to get a blank cover you
+compose yourself.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center" paddingY="24">
+      <Row maxWidth={12}>
+        <Book src="/images/cover.jpg" alt="Once UI">
+          <Column fill vertical="end" padding="20" gap="4">
+            <Text variant="heading-strong-m" onBackground="neutral-strong">Once UI</Text>
+            <Text variant="label-default-s" onBackground="neutral-medium">A design system</Text>
+          </Column>
+        </Book>
+      </Row>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Book src="/images/cover.jpg" alt="Once UI">
+  <Column fill vertical="end" padding="20" gap="4">
+    <Text variant="heading-strong-m" onBackground="neutral-strong">Once UI</Text>
+    <Text variant="label-default-s" onBackground="neutral-medium">A design system</Text>
+  </Column>
+</Book>`,
+      language: "tsx",
+      label: "Overlay"
+    }
+  ]}
+/>
+
+## Motion
+
+The tilt is hover-gated and switched off under `prefers-reduced-motion`. On
+touch devices the cover stays square-on: there is no hover to return from, and a
+permanently rotated cover reads as a rendering fault rather than a style.
+
+## API reference
+
+<PropsTable
+  content={[
+    ["src", "string", "-", "Cover artwork. Omit it for a blank cover you fill with children."],
+    ["alt", "string", "\"Book cover\"", "Alternative text for the cover artwork."],
+    ["sizes", "string", "\"(max-width: 768px) 100vw, 480px\"", "Responsive sizes hint passed to the underlying image."],
+    ["href", "string", "-", "Renders the whole book as a link."],
+    ["children", "React.ReactNode", "-", "Overlaid on the cover, above the artwork."],
+    ["...flex"],
+  ]}
+/>

@@ -43,7 +43,7 @@ const handleSelect = (value: string) => {
 
 return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 
@@ -95,7 +95,7 @@ Control the placement of the dropdown relative to its trigger element.
 return (
   <Row horizontal="center">
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       placement="top"
       trigger={
@@ -169,7 +169,7 @@ const filteredOptions = options.filter(option =>
 
 return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       minHeight={200}
       trigger={
@@ -185,10 +185,10 @@ return (
         <Column fillWidth minWidth={12}>
           <Column padding="4" fillWidth position="sticky" top="0" background="surface" zIndex={1}>
             <Input
-              height="s"
+              size="s"
               id="search-dropdown"
               placeholder="Search"
-              hasPrefix={<Icon name="search" size="xs" />}
+              prefix={<Icon name="search" size="xs" />}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onClick={(e) => e.stopPropagation()}
@@ -228,7 +228,7 @@ return (
   content={[
     ["trigger", "ReactNode"],
     ["dropdown", "ReactNode"],
-    ["isOpen", "boolean", "false"],
+    ["open", "boolean", "false"],
     ["onOpenChange", "(open: boolean) => void"],
     ["placement", "Placement", "bottom-start"],
     ["minWidth", "number"],
@@ -239,7 +239,7 @@ return (
     ["onSelect", "(value: string) => void"],
     ["closeAfterClick", "boolean", "true"],
     ["handleArrowNavigation", "boolean", "true"],
-    ["isNested", "boolean", "false"],
+    ["nested", "boolean", "false"],
     ["navigationLayout", "NavigationLayout"],
     ["columns", "number", "8"],
     ["optionsCount", "number"],

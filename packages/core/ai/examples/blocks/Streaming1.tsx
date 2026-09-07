@@ -75,7 +75,7 @@ const MediaList = ({ image, progress, title, description, categories }: { image:
       ref={referenceRef}
     >
       <Media aspectRatio="16/9" src={image} alt={title} sizes="400px" radius="l" />
-      {progress > 0 && <ProgressBar label={false} value={progress} paddingX="l" />}
+      {progress > 0 && <ProgressBar showLabel={false} value={progress} paddingX="l" />}
       
       {(portalContainer && (isHovered || isVisible)) && (
         createPortal(
@@ -104,7 +104,7 @@ const MediaList = ({ image, progress, title, description, categories }: { image:
             }}
           >
             <Media aspectRatio="16/9" src={image} alt={title} sizes="400px" radius="l" />
-            {progress > 0 && <ProgressBar label={false} value={progress} paddingX="l" />}
+            {progress > 0 && <ProgressBar showLabel={false} value={progress} paddingX="l" />}
             <Column fillWidth paddingX="16" paddingBottom="20" paddingTop="8" gap="8">
               <Row fillWidth horizontal="between" paddingBottom="12">
                 <Row gap="8" data-border="rounded">
