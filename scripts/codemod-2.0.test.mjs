@@ -106,3 +106,127 @@ describe("value changes are reported, never guessed", () => {
     ]);
   });
 });
+
+describe("Skeleton, whose props meant different things per shape", () => {
+  const sk = (jsx) => transform(`${core("Skeleton")}${jsx}`);
+
+  it("turns a delay step into the milliseconds the stylesheet applied", () => {
+    // .delay-2 was animation-delay: 0.2s, so the step is × 100, not × 1000.
+    assert.match(sk(`<Skeleton delay="2" />`).out, /delay=\{200\}/);
+  });
+
+  it("maps a line's width scale to the percentage it already rendered", () => {
+    const { out } = sk(`<Skeleton shape="line" width="l" height="xs" />`);
+    assert.match(out, /width="75%"/);
+    assert.match(out, /size="xs"/);
+  });
+
+  it("defaults to line when shape is not given", () => {
+    assert.match(sk(`<Skeleton width="m" />`).out, /width="50%"/);
+  });
+
+  it("takes a circle's diameter from width, not height", () => {
+    // .circle only ever used w-*; renaming height → size would silently
+    // resize every circle whose two values differed.
+    const { out, warnings } = sk(`<Skeleton shape="circle" width="l" height="xs" />`);
+    assert.match(out, /size="l"/);
+    assert.doesNotMatch(out, /height=/);
+    assert.equal(warnings.length, 1);
+  });
+
+  it("drops width and height on a block, which ignored both", () => {
+    const { out } = sk(`<Skeleton shape="block" width="m" height="m" />`);
+    assert.equal(out.split("\n")[1], `<Skeleton shape="block" />`);
+  });
+
+  it("leaves a computed shape alone and says so", () => {
+    const { hits, warnings } = sk(`<Skeleton shape={s} width="m" />`);
+    assert.deepEqual(hits, []);
+    assert.equal(warnings.length, 1);
+  });
+
+  it("migrates a computed step rather than reporting it", () => {
+    const { out, warnings } = sk(`<Skeleton delay={String(i + 1) as SkeletonDelay} />`);
+    assert.match(out, /delay=\{\(i \+ 1\) \* 100\}/);
+    assert.deepEqual(warnings, []);
+  });
+
+  it("is idempotent: a second run is a no-op", () => {
+    const once = sk(`<Skeleton shape="circle" width="m" height="m" delay="1" />`).out;
+    const twice = transform(once);
+    assert.deepEqual(twice.hits, []);
+    assert.deepEqual(twice.warnings, []);
+    assert.equal(twice.out, once);
+  });
+});
+
+describe("Skeleton delay written as a stringified step", () => {
+  const delayOf = (v) => {
+    const { out } = transform(`${core("Skeleton")}<Skeleton shape="line" delay=${v} />`);
+    return out.match(/delay=\{[^}]*\}/)[0];
+  };
+
+  // The old union forced every computed step through String()+cast; that
+  // wrapper is what 2.0 removes, and the step was x 0.1s.
+  for (const [from, to] of [
+    ['{i.toString() as "1" | "2" | "3"}', "delay={i * 100}"],
+    ["{String(i + 1) as SkeletonDelay}", "delay={(i + 1) * 100}"],
+    ["{String(i + 1) as any}", "delay={(i + 1) * 100}"],
+    ['{(i + 1).toString() as "1" | "2"}', "delay={(i + 1) * 100}"],
+    ['{index.toString() as "1" | "2"}', "delay={index * 100}"],
+  ]) {
+    it(`rewrites ${from}`, () => assert.equal(delayOf(from), to));
+  }
+
+  it("leaves a bare variable to a warning — its own type is what must change", () => {
+    const { out, warnings } = transform(
+      `${core("Skeleton")}<Skeleton shape="line" delay={d as "1" | "2"} />`,
+    );
+    assert.match(out, /delay=\{d as "1" \| "2"\}/);
+    assert.equal(warnings.length, 1);
+  });
+
+  it("does not multiply a step that may be undefined", () => {
+    // (undefined) * 100 is NaN, so this one needs a human.
+    const { out } = transform(
+      `${core("Skeleton")}<Skeleton shape="line" delay={String(x) as "1" | undefined} />`,
+    );
+    assert.match(out, /delay=\{String\(x\) as "1" \| undefined\}/);
+  });
+
+  it("stays idempotent over the rewritten form", () => {
+    const once = transform(`${core("Skeleton")}<Skeleton shape="line" delay={i.toString() as "1"} />`).out;
+    assert.deepEqual(transform(once).hits, []);
+    assert.deepEqual(transform(once).warnings, []);
+  });
+});
+
+describe("the width default a line used to get for free", () => {
+  const sk = (jsx) => transform(`${core("Skeleton")}${jsx}`);
+
+  it("makes the old 50% explicit, so the skeleton stays visible", () => {
+    // 1.8.x defaulted width to "m" (.w-m { width: 50% }). 2.0 has no default
+    // and the element is an inline flex with no content, so without this the
+    // skeleton renders at zero width.
+    assert.match(sk(`<Skeleton shape="line" height="xl" />`).out, /width="50%"/);
+  });
+
+  it("applies to a line that never named its shape either", () => {
+    assert.match(sk(`<Skeleton height="l" />`).out, /width="50%"/);
+  });
+
+  it("leaves a line that already sizes itself alone", () => {
+    assert.doesNotMatch(sk(`<Skeleton shape="line" fillWidth height="l" />`).out, /width=/);
+    assert.match(sk(`<Skeleton shape="line" width="l" />`).out, /width="75%"/);
+  });
+
+  it("does not touch a circle or a block, whose widths never came from w-*", () => {
+    assert.doesNotMatch(sk(`<Skeleton shape="circle" width="m" height="m" />`).out, /width=/);
+    assert.doesNotMatch(sk(`<Skeleton shape="block" />`).out, /width=/);
+  });
+
+  it("does not add the width twice on a second run", () => {
+    const once = sk(`<Skeleton shape="line" height="xl" />`).out;
+    assert.equal(transform(once).out, once);
+  });
+});

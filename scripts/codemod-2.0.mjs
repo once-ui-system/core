@@ -49,7 +49,6 @@ const TRANSFORMS = {
   ClientSwitch:     { isChecked: "checked" },
   Pulse:            { variant: "scheme" },
   Tag:              { variant: "scheme" },
-  Skeleton:         { height: "size" },
   // `fill` shadowed the Flex layout prop of the same name on all three, so
   // `<Media fill />` filled nothing. The shadow is now `stretch` and `fill`
   // means on these what it means everywhere else.
@@ -116,19 +115,158 @@ const VALUE_CHANGED = {
   ShineFx: {
     speed: { note: "seconds → milliseconds (multiply by 1000)", when: looksLikeSeconds },
   },
-  Skeleton: {
-    delay: {
-      note: 'step "1".."6" → milliseconds',
-      when: (raw) => /^["']?[1-6]["']?$/.test(String(raw).replace(/[{}]/g, "").trim()),
-    },
-    // Only the five old scale values; a Flex width like "80%" is the migrated
-    // form and must not be re-flagged.
-    width: {
-      note: 'scale → a Flex width, e.g. width="80%"',
-      when: (raw) => /^["'](xs|s|m|l|xl)["']$/.test(String(raw).trim()),
-    },
-  },
 };
+
+/**
+ * Skeleton's 1.8.x props cannot be migrated by renaming, because what they
+ * meant depended on `shape`. Read straight off the old stylesheet:
+ *
+ *   .line   uses  w-* for width (25/33/50/75/100%)  and h-* for height
+ *   .circle uses  w-* for the diameter — `height` never applied at all
+ *   .block  is 100%×100% — neither `width` nor `height` applied
+ *   .delay-N is animation-delay: N × 0.1s
+ *
+ * 2.0 keeps one `size` scale (line height, or circle diameter), takes width
+ * from Flex like any other element, and takes `delay` in milliseconds. So a
+ * circle's `size` has to come from its old `width` while its `height` is
+ * dropped, and a line's `height` becomes `size` while its `width` becomes the
+ * percentage the stylesheet was already applying. Renaming `height` → `size`
+ * unconditionally would give a circle the wrong diameter whenever the two
+ * differed, which is why this is a pass of its own.
+ */
+const SKELETON_LINE_WIDTH = { xs: "25%", s: "33%", m: "50%", l: "75%", xl: "100%" };
+const SCALE = /^["'](xs|s|m|l|xl)["']$/;
+
+/** The literal behind `"m"` or `{"m"}`, or null when it is not a literal. */
+function literal(raw) {
+  if (raw === null || raw === undefined) return null;
+  const inner = String(raw).trim().replace(/^\{|\}$/g, "").trim();
+  return SCALE.test(inner) || /^["'][^"']*["']$/.test(inner) ? inner.slice(1, -1) : null;
+}
+
+/** Widen an edit's start to swallow the whitespace before it, so removing an
+ *  attribute does not leave a double space or a dangling newline. */
+const withLeadingSpace = (src, at) => {
+  let i = at;
+  while (i > 0 && /[ \t]/.test(src[i - 1])) i--;
+  if (src[i - 1] === "\n" && /^\s*$/.test(src.slice(i, at))) i--;
+  return i;
+};
+
+/**
+ * `{String(i + 1) as SkeletonDelay}` / `{i.toString() as "1" | "2"}` → the
+ * expression in milliseconds.
+ *
+ * The old prop was a string union, so every computed step had to be stringified
+ * and cast back to it. That wrapper is exactly what 2.0 removes, and the step
+ * was × 0.1s, so the inner expression × 100 is the same animation — including
+ * at i = 0, which named a `.delay-0` class that never existed and so meant no
+ * delay either way. Only this shape is rewritten; a bare variable is left to a
+ * warning, because its own type is what has to change.
+ */
+function delayFromStringifiedStep(raw) {
+  const inner = String(raw).trim().replace(/^\{|\}$/g, "").trim();
+  const cast = inner.match(/\s+as\s+(any|[A-Za-z_]\w*|(?:\s*["'][1-6]["']\s*\|?)+(?:\s*\|\s*undefined)?)\s*$/);
+  if (!cast) return null;
+  if (/\bundefined\b/.test(cast[1])) return null;      // the value may be absent; × 100 would be NaN
+  let expr = inner.slice(0, cast.index).trim();
+
+  const asString = expr.match(/^String\s*\(([\s\S]*)\)$/);
+  if (asString) expr = asString[1].trim();
+  else if (/\.toString\s*\(\s*\)$/.test(expr)) expr = expr.replace(/\.toString\s*\(\s*\)$/, "").trim();
+  else return null;                                     // not a stringified step
+
+  if (!expr) return null;
+  const atomic = /^[A-Za-z_]\w*$/.test(expr) || /^\([\s\S]*\)$/.test(expr);
+  return `${atomic ? expr : `(${expr})`} * 100`;
+}
+
+function rewriteSkeleton(src, attrs, nameEnd) {
+  const edits = [];
+  const warnings = [];
+  const by = Object.fromEntries(attrs.map((a) => [a.name, a]));
+  const shape = by.shape ? literal(by.shape.value) : "line";  // the component's default
+
+  if (by.shape && shape === null) {
+    warnings.push("shape is computed — width/height/size need checking by hand");
+    return { edits, warnings };
+  }
+
+  if (by.delay) {
+    const raw = String(by.delay.value ?? "").trim();
+    const step = literal(by.delay.value);
+    const ms = delayFromStringifiedStep(by.delay.value);
+    if (step && /^[1-6]$/.test(step)) {
+      const value = Number(step) * 100;
+      edits.push({ at: by.delay.at, end: by.delay.end, text: `delay={${value}}`, hit: `delay "${step}" → {${value}}` });
+    } else if (ms) {
+      edits.push({ at: by.delay.at, end: by.delay.end, text: `delay={${ms}}`, hit: `delay step → {${ms}}` });
+    } else if (/^["']/.test(raw) || /\bas\s+(\w*Delay\b|["'][1-6]["'])/.test(raw)) {
+      // Only warn on something still wearing the old shape. Everything else
+      // the compiler catches anyway — `delay` is typed `number` in 2.0 — so a
+      // blanket warning would just re-flag values this pass already migrated.
+      warnings.push('delay: step "1".."6" → milliseconds (step × 100)');
+    }
+  }
+
+  const drop = (a, note) => {
+    edits.push({ at: withLeadingSpace(src, a.at), end: a.end, text: "", hit: `${a.name} removed (had no effect)` });
+    if (note) warnings.push(note);
+  };
+
+  if (shape === "circle") {
+    const w = by.width ? literal(by.width.value) : null;
+    const h = by.height ? literal(by.height.value) : null;
+    if (by.width && w && SCALE.test(`"${w}"`)) {
+      edits.push({ at: by.width.at, end: by.width.end, text: `size="${w}"`, hit: `circle width="${w}" → size="${w}"` });
+      // `height` never reached a circle in 1.8.x, so it carries no meaning to keep.
+      if (by.height) {
+        if (h && h !== w) warnings.push(`height="${h}" was ignored on a circle; diameter comes from width="${w}"`);
+        drop(by.height);
+      }
+    } else if (by.width) {
+      warnings.push("circle: diameter now comes from size, not width");
+    }
+  } else if (shape === "block") {
+    // Neither applied to a block, and 2.0's width is a real Flex width, so
+    // leaving one behind would silently start changing the layout.
+    if (by.width) drop(by.width, 'width was ignored on a block (it fills its container)');
+    if (by.height) drop(by.height, 'height was ignored on a block (it fills its container)');
+  } else {
+    // 1.8.x defaulted `width` to "m", i.e. `.w-m { width: 50% }`. 2.0 has no
+    // width default, and the element is an inline flex with no content, so a
+    // line that never named a width would collapse to nothing at all. Make the
+    // old default explicit rather than let every such skeleton disappear.
+    if (!by.width && !by.fillWidth && !by.maxWidth && !by.minWidth) {
+      edits.push({
+        at: nameEnd, end: nameEnd, text: ' width="50%"',
+        hit: 'width="50%" added (was the 1.8.x default)',
+      });
+    }
+    if (by.height) {
+      const h = literal(by.height.value);
+      if (h && SCALE.test(`"${h}"`))
+        edits.push({ at: by.height.at, end: by.height.end, text: `size="${h}"`, hit: `height="${h}" → size="${h}"` });
+      else warnings.push("height → size");
+    }
+    if (by.width) {
+      const w = literal(by.width.value);
+      if (w && SKELETON_LINE_WIDTH[w]) {
+        edits.push({
+          at: by.width.at, end: by.width.end,
+          text: `width="${SKELETON_LINE_WIDTH[w]}"`,
+          hit: `width="${w}" → width="${SKELETON_LINE_WIDTH[w]}"`,
+        });
+      } else if (w === null) {
+        warnings.push("width: scale → a Flex width, e.g. width=\"80%\"");
+      }
+    }
+  }
+  return { edits, warnings };
+}
+
+/** component → (src, attrs) => { edits, warnings } for changes a rename cannot express */
+const REWRITES = { Skeleton: rewriteSkeleton };
 
 /**
  * If a JS comment starts at `i`, return the index just past it, else `i`.
@@ -228,10 +366,10 @@ function attributesOf(src, from, to) {
       let v = k + 1;
       while (v < to && /\s/.test(src[v])) v++;
       const { raw, end } = readValue(src, v);
-      attrs.push({ name, at: i, value: raw });
+      attrs.push({ name, at: i, value: raw, end });
       i = end;
     } else {
-      attrs.push({ name, at: i, value: null });               // boolean shorthand
+      attrs.push({ name, at: i, value: null, end: j });       // boolean shorthand
       i = j;
     }
   }
@@ -290,34 +428,56 @@ export function transform(src) {
   const warnings = [];
   const bindings = importBindings(src);
   let out = src;
-  // Union of both maps: a tag can have only a value change (ShineFx) and would
-  // otherwise never be visited, so its warning would silently never fire.
-  const tags = new Set([...Object.keys(TRANSFORMS), ...Object.keys(VALUE_CHANGED)]);
+  // Union of all three maps: a tag can have only a value change (ShineFx) or
+  // only a rewrite (Skeleton) and would otherwise never be visited, so its
+  // warning would silently never fire.
+  const tags = new Set([
+    ...Object.keys(TRANSFORMS),
+    ...Object.keys(VALUE_CHANGED),
+    ...Object.keys(REWRITES),
+  ]);
   for (const tag of tags) {
     const map = TRANSFORMS[tag] ?? {};
     const edits = [];
     for (const name of localNamesFor(tag, bindings)) {
-    const open = new RegExp(`<${name}(?=[\\s/>])`, "g");
-    let m;
-    while ((m = open.exec(out))) {
-      const end = openingTagEnd(out, m.index + name.length + 1);
-      if (end < 0) continue;
-      for (const a of attributesOf(out, m.index + name.length + 1, end)) {
-        const changed = VALUE_CHANGED[tag]?.[a.name];
-        if (changed && changed.when(a.value ?? "")) {
-          warnings.push(`<${tag}> ${a.name}: ${changed.note}`);
+      const open = new RegExp(`<${name}(?=[\\s/>])`, "g");
+      let m;
+      while ((m = open.exec(out))) {
+        const end = openingTagEnd(out, m.index + name.length + 1);
+        if (end < 0) continue;
+        const attrs = attributesOf(out, m.index + name.length + 1, end);
+        for (const a of attrs) {
+          const changed = VALUE_CHANGED[tag]?.[a.name];
+          if (changed && changed.when(a.value ?? "")) {
+            warnings.push(`<${tag}> ${a.name}: ${changed.note}`);
+          }
+          const newP = map[a.name];
+          if (!newP) continue;
+          if (VALUE_AWARE[a.name] && a.value !== null && VALUE_AWARE[a.name](a.value)) continue;
+          edits.push({
+            at: a.at,
+            end: a.at + a.name.length,
+            text: newP,
+            hit: `<${tag}> ${a.name} → ${newP}`,
+          });
         }
-        const newP = map[a.name];
-        if (!newP) continue;
-        if (VALUE_AWARE[a.name] && a.value !== null && VALUE_AWARE[a.name](a.value)) continue;
-        edits.push({ at: a.at, len: a.name.length, to: newP, tag, oldP: a.name });
+        const rewrite = REWRITES[tag]?.(out, attrs, m.index + name.length + 1);
+        if (rewrite) {
+          for (const e of rewrite.edits) edits.push({ ...e, hit: `<${tag}> ${e.hit}` });
+          for (const w of rewrite.warnings) warnings.push(`<${tag}> ${w}`);
+        }
       }
     }
-    }
+    // Right to left, so an earlier edit's offsets stay valid. Overlaps cannot
+    // both be applied; the first one wins and the second is dropped rather
+    // than corrupting the span.
     edits.sort((x, y) => y.at - x.at);
+    let lastAt = Number.POSITIVE_INFINITY;
     for (const e of edits) {
-      out = out.slice(0, e.at) + e.to + out.slice(e.at + e.len);
-      hits.push(`<${e.tag}> ${e.oldP} → ${e.to}`);
+      if (e.end > lastAt) continue;
+      out = out.slice(0, e.at) + e.text + out.slice(e.end);
+      hits.push(e.hit);
+      lastAt = e.at;
     }
   }
   return { out, hits, warnings };
