@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { useAdapters, warnIfFrameworkUnadapted } from "./AdapterProvider";
 
 // Default breakpoints
 export const DEFAULT_BREAKPOINTS = {
@@ -43,6 +44,14 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
 
   const [width, setWidth] = useState<number>(0);
   const [currentBreakpoint, setCurrentBreakpoint] = useState<BreakpointKey>("l");
+
+  // Every app renders this provider, and by the time it runs the adapters are
+  // either installed or they are not — so this is where a Next app that never
+  // switched to `@once-ui-system/core/next` can be told, once, in development.
+  const adapters = useAdapters();
+  useEffect(() => {
+    warnIfFrameworkUnadapted(adapters);
+  }, [adapters]);
 
   // Determine current breakpoint based on width
   const getCurrentBreakpoint = (width: number): BreakpointKey => {
