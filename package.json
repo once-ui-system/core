@@ -19,8 +19,9 @@
     "format:check": "turbo format:check",
     "typecheck": "turbo typecheck",
     "typecheck:core": "pnpm --filter @once-ui-system/core typecheck",
-    "test": "turbo test",
+    "test": "pnpm test:codemod && turbo test",
     "test:core": "pnpm --filter @once-ui-system/core test",
+    "test:codemod": "node --test scripts/codemod-2.0.test.mjs",
     "clean": "turbo clean",
     "clean:core": "pnpm --filter @once-ui-system/core clean",
     "start": "turbo start"

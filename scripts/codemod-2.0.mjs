@@ -61,8 +61,17 @@ const TRANSFORMS = {
   ToggleButton:     { radius: "corners" },
 };
 
-/** `radius="none"` is roundness, not a corner — it keeps its name. */
-const VALUE_AWARE = { radius: (raw) => raw === '"none"' || raw === "{'none'}" };
+/**
+ * Props that keep their old name for particular values.
+ *
+ * `radius` used to be exempted here on the theory that `radius="none"` meant
+ * roundness rather than a corner. It does not: `radius` is only ever renamed
+ * inside the button and input families, and on those `radius` is gone in 2.0
+ * while `corners` accepts "none" like any other value. The exemption left
+ * every `radius="none"` in those components as a type error the codemod had
+ * silently declined to fix, so it is empty until a real case appears.
+ */
+const VALUE_AWARE = {};
 
 /**
  * Props whose VALUE changed, not their name. A rename cannot express these, so
@@ -92,6 +101,15 @@ const looksLikeSeconds = (raw) => {
 };
 
 const VALUE_CHANGED = {
+  ColorInput: {
+    // Not a value change but a signature change: onChange now receives the
+    // colour string instead of the DOM event, so `e.target.value` in the
+    // handler becomes the value itself. There is no way to tell a migrated
+    // handler from an unmigrated one when it is passed by name, so this warns
+    // on every call site rather than staying silent on the ones it cannot
+    // read — a handful of noisy lines beat a type error found after release.
+    onChange: { note: "now receives (value: string), not the change event", when: () => true },
+  },
   RevealFx: {
     delay: { note: "seconds → milliseconds (multiply by 1000)", when: looksLikeSeconds },
   },
@@ -112,14 +130,42 @@ const VALUE_CHANGED = {
   },
 };
 
-/** Find the end of the opening tag, skipping strings and nested {...}. */
+/**
+ * If a JS comment starts at `i`, return the index just past it, else `i`.
+ *
+ * Comments are legal in JSX attribute position and inside `{...}` values, and
+ * their prose is not code: an apostrophe in `they're` would otherwise open a
+ * string that never closes, so the scanner would run off the end of the file
+ * and the whole element would be skipped without a word. Every scanner that
+ * tracks quotes or braces must therefore skip comments first.
+ */
+function skipComment(src, i) {
+  if (src[i] !== "/") return i;
+  if (src[i + 1] === "/") {
+    let j = i + 2;
+    while (j < src.length && src[j] !== "\n") j++;
+    return j;
+  }
+  if (src[i + 1] === "*") {
+    const close = src.indexOf("*/", i + 2);
+    return close < 0 ? src.length : close + 2;
+  }
+  return i;
+}
+
+/** Find the end of the opening tag, skipping strings, comments and nested {...}. */
 function openingTagEnd(src, from) {
   let i = from, depth = 0, quote = null;
   while (i < src.length) {
     const c = src[i];
     if (quote) {
       if (c === quote && src[i - 1] !== "\\") quote = null;
-    } else if (c === '"' || c === "'" || c === "`") quote = c;
+      i++;
+      continue;
+    }
+    const past = skipComment(src, i);
+    if (past !== i) { i = past; continue; }
+    if (c === '"' || c === "'" || c === "`") quote = c;
     else if (c === "{") depth++;
     else if (c === "}") depth--;
     else if (c === ">" && depth === 0) return i;
@@ -137,9 +183,17 @@ function readValue(src, i) {
     return { raw: src.slice(i, j + 1), end: j + 1 };
   }
   if (src[i] === "{") {
-    let depth = 0, j = i;
+    let depth = 0, j = i, quote = null;
     while (j < src.length) {
-      if (src[j] === "{") depth++;
+      if (quote) {
+        if (src[j] === quote && src[j - 1] !== "\\") quote = null;
+        j++;
+        continue;
+      }
+      const past = skipComment(src, j);
+      if (past !== j) { j = past; continue; }
+      if (src[j] === '"' || src[j] === "'" || src[j] === "`") quote = src[j];
+      else if (src[j] === "{") depth++;
       else if (src[j] === "}" && --depth === 0) return { raw: src.slice(i, j + 1), end: j + 1 };
       j++;
     }
@@ -161,6 +215,8 @@ function attributesOf(src, from, to) {
   while (i < to) {
     const c = src[i];
     if (/\s/.test(c)) { i++; continue; }
+    const past = skipComment(src, i);
+    if (past !== i) { i = past; continue; }                   // // or /* */ between attributes
     if (c === "{") { i = readValue(src, i).end; continue; }   // spread {...props}
     if (!/[A-Za-z_]/.test(c)) { i++; continue; }
     let j = i;
@@ -182,23 +238,71 @@ function attributesOf(src, from, to) {
   return attrs;
 }
 
+/**
+ * Where each JSX name in this file comes from: `local name → { source, canonical }`.
+ *
+ * A transform keyed on the bare tag name cannot tell Once UI's `<Modal>` from
+ * an app's own `<Modal>`, and renaming a prop on someone else's component turns
+ * working code into a type error. Import bindings are what tells them apart,
+ * and they also carry aliases: `{ Modal as Sheet }` means `<Sheet>` is the
+ * element to migrate and `<Modal>` is not.
+ */
+function importBindings(src) {
+  const bindings = new Map();
+  const re = /import\s+(?:type\s+)?(?:\{([^}]*)\}|(\w+)|\*\s+as\s+(\w+))\s*from\s*["']([^"']+)["']/g;
+  let m;
+  while ((m = re.exec(src))) {
+    const [, named, def, ns, source] = m;
+    if (named) {
+      for (const part of named.split(",")) {
+        const [canonical, alias] = part.trim().split(/\s+as\s+/).map((x) => x?.trim());
+        if (canonical) bindings.set(alias || canonical, { source, canonical });
+      }
+    } else if (def || ns) {
+      const name = def || ns;
+      bindings.set(name, { source, canonical: name });
+    }
+  }
+  return bindings;
+}
+
+const isCoreSource = (source) => /^@once-ui-system\/core(\/|$)/.test(source);
+
+/**
+ * The element names in this file that mean Once UI's `tag`.
+ *
+ * Three cases, in order: the file imports `tag` from core (migrate it, under
+ * whatever local alias it was given); the file binds that name to something
+ * else (leave it alone — it is the app's own component); the name is not
+ * imported at all (migrate it by name, which is what MDX depends on, since
+ * there components arrive through the provider rather than an import).
+ */
+function localNamesFor(tag, bindings) {
+  const aliases = [];
+  for (const [local, { source, canonical }] of bindings)
+    if (canonical === tag && isCoreSource(source)) aliases.push(local);
+  if (aliases.length) return aliases;
+  return bindings.has(tag) ? [] : [tag];
+}
+
 export function transform(src) {
   const hits = [];
   const warnings = [];
+  const bindings = importBindings(src);
   let out = src;
   // Union of both maps: a tag can have only a value change (ShineFx) and would
   // otherwise never be visited, so its warning would silently never fire.
   const tags = new Set([...Object.keys(TRANSFORMS), ...Object.keys(VALUE_CHANGED)]);
   for (const tag of tags) {
     const map = TRANSFORMS[tag] ?? {};
-    const open = new RegExp(`<${tag}(?=[\\s/>])`, "g");
-    let m;
     const edits = [];
+    for (const name of localNamesFor(tag, bindings)) {
+    const open = new RegExp(`<${name}(?=[\\s/>])`, "g");
+    let m;
     while ((m = open.exec(out))) {
-      const end = openingTagEnd(out, m.index + tag.length + 1);
+      const end = openingTagEnd(out, m.index + name.length + 1);
       if (end < 0) continue;
-      const body = out.slice(m.index, end);
-      for (const a of attributesOf(out, m.index + tag.length + 1, end)) {
+      for (const a of attributesOf(out, m.index + name.length + 1, end)) {
         const changed = VALUE_CHANGED[tag]?.[a.name];
         if (changed && changed.when(a.value ?? "")) {
           warnings.push(`<${tag}> ${a.name}: ${changed.note}`);
@@ -208,6 +312,7 @@ export function transform(src) {
         if (VALUE_AWARE[a.name] && a.value !== null && VALUE_AWARE[a.name](a.value)) continue;
         edits.push({ at: a.at, len: a.name.length, to: newP, tag, oldP: a.name });
       }
+    }
     }
     edits.sort((x, y) => y.at - x.at);
     for (const e of edits) {
