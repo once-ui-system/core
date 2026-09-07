@@ -27,6 +27,9 @@ importers:
       '@once-ui-system/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@once-ui-system/foundations':
+        specifier: workspace:*
+        version: link:../../packages/foundations
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -67,6 +70,9 @@ importers:
       '@once-ui-system/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@once-ui-system/foundations':
+        specifier: workspace:*
+        version: link:../../packages/foundations
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.2.12(@types/node@26.1.2)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(sass@1.102.0))(react@19.2.8)

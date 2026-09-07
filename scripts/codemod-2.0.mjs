@@ -493,10 +493,45 @@ export function rewriteImports(src) {
   return { out, hits };
 }
 
+/**
+ * The stylesheets moved to `@once-ui-system/foundations`.
+ *
+ * Core still serves byte-identical copies at `@once-ui-system/core/css/*`,
+ * vendored at build time so 1.8.x imports keep working for one major. That
+ * shim is the only thing anyone uses today, which is why foundations exists
+ * as a package but has no consumers: tokens and styles are framework-agnostic
+ * and are the half of Once UI worth installing on its own.
+ *
+ * The import moves; the CSS does not change. A consumer that takes this also
+ * needs `@once-ui-system/foundations` in its dependencies, which a codemod
+ * cannot add for it — hence the note.
+ */
+const CSS_MOVES = {
+  "@once-ui-system/core/css/styles.css": "@once-ui-system/foundations/css/styles.css",
+  "@once-ui-system/core/css/tokens.css": "@once-ui-system/foundations/css/tokens.css",
+};
+
+export function rewriteCssImports(src) {
+  const hits = [];
+  const warnings = [];
+  let out = src;
+  for (const [from, to] of Object.entries(CSS_MOVES)) {
+    const re = new RegExp(`(["'])${from.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\1`, "g");
+    if (!re.test(out)) continue;
+    out = out.replace(re, (_m, q) => `${q}${to}${q}`);
+    hits.push(`${from} → ${to}`);
+  }
+  if (hits.length) warnings.push("add @once-ui-system/foundations to this app's dependencies");
+  return { out, hits, warnings };
+}
+
 export function transform(src) {
   const hits = [];
   const warnings = [];
-  const moved = rewriteImports(src);
+  const css = rewriteCssImports(src);
+  hits.push(...css.hits);
+  warnings.push(...css.warnings);
+  const moved = rewriteImports(css.out);
   hits.push(...moved.hits);
   const bindings = importBindings(moved.out);
   let out = moved.out;
