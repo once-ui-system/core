@@ -1,17 +1,18 @@
 import { Avatar, Background, Button, Column, IconButton, Logo, Mask, Particle, Row, SmartLink, Tag, Text, TypeFx } from "@once-ui-system/core";
+import type { IconName } from "@once-ui-system/core";
 
-const social = [
+const social: { icon: IconName; label: string; href: string }[] = [
   {
-    icon: "discord",
+    icon: "link",
     label: "Discord",
     href: "https://discord.com/invite/5EyAQ4eNdS" },
   {
-    icon: "github",
+    icon: "link",
     label: "GitHub",
     href: "https://github.com/once-ui-system",
   },
   {
-    icon: "email",
+    icon: "mail",
     label: "Email",
     href: "mailto:demo@email.com",
   },

@@ -459,7 +459,7 @@ export default function ChatPage() {
               <Row gap="2">
                 <IconButton icon="search" variant="tertiary" size="s" tooltip="Search in thread" />
                 <IconButton icon="bell" variant="tertiary" size="s" tooltip="Mute thread" />
-                <IconButton icon="more" variant="tertiary" size="s" tooltip="Thread options" />
+                <IconButton icon="moreHorizontal" variant="tertiary" size="s" tooltip="Thread options" />
               </Row>
             </Row>
 

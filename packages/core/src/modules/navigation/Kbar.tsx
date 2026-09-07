@@ -1,6 +1,7 @@
 "use client";
 
 import React, { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { IconName } from "../../icons";
 import { createPortal } from "react-dom";
 import {
   ArrowNavigation,
@@ -27,7 +28,7 @@ export interface KbarItem {
   keywords: string;
   href?: string;
   perform?: () => void;
-  icon?: string;
+  icon?: IconName;
   description?: ReactNode;
   placeholder?: string;
 }

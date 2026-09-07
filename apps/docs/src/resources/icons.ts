@@ -158,3 +158,9 @@ export const iconLibrary: Record<string, IconType> = {
 
 export type IconLibrary = typeof iconLibrary;
 export type IconName = keyof IconLibrary;
+// Teach Once UI the names registered above, so `<Icon name="rocket" />` and
+// friends type-check instead of silently rendering nothing. Derived from the
+// object itself, so it cannot drift.
+declare module "@once-ui-system/core" {
+  interface IconLibraryOverrides extends Record<keyof typeof iconLibrary, true> {}
+}

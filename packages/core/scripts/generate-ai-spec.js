@@ -342,6 +342,14 @@ async function main() {
   }
 
   const pkg = JSON.parse(fs.readFileSync(path.join(ROOT, "package.json"), "utf8"));
+  // `IconName` reaches the spec as an opaque type name, so an agent had no way
+  // to know which icons exist and guessed — which is how the shipped examples
+  // ended up asking for "email", "loading" and "github", none of which were
+  // registered, each rendering nothing. The vocabulary is listed explicitly.
+  const iconNames = Object.keys(
+    JSON.parse(fs.readFileSync(path.join(__dirname, "icon-manifest.json"), "utf8")),
+  ).sort();
+
   const spec = {
     name: pkg.name,
     version: pkg.version,
@@ -350,6 +358,7 @@ async function main() {
       "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
     tokens,
     mixins,
+    iconNames,
     components,
   };
 

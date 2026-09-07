@@ -9,4 +9,14 @@
 // of the graph of everyone who does not ask for it.
 export * from "./seo";
 export { Kbar, MobileMegaMenu, MegaMenu, HeadingNav } from "./navigation";
+// The types these components take, so consumers can annotate their own nav
+// data instead of letting the literals widen to `string`.
+export type {
+  KbarItem,
+  MegaMenuProps,
+  MenuGroup,
+  MenuLink,
+  MenuSection,
+  MobileMegaMenuProps,
+} from "./navigation";
 export { HeadingLink } from "./navigation/HeadingLink";

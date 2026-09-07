@@ -17,6 +17,7 @@ import {
   ToggleButton,
   UserMenu,
 } from "@once-ui-system/core";
+import type { KbarItem, MenuGroup } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
@@ -29,7 +30,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
   const pathname = usePathname() ?? "";
   const isMac = typeof window !== "undefined" && /Mac/i.test(navigator.platform);
 
-  const kbar = [
+  const kbar: KbarItem[] = [
     {
       id: "dashboard",
       name: "Dashboard",
@@ -68,7 +69,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     },
   ];
 
-  const nav = [
+  const nav: MenuGroup[] = [
     {
       id: "products",
       label: "Products",

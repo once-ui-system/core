@@ -1,12 +1,13 @@
 "use client";
 
 import React from "react";
+import type { IconName } from "../../icons";
 import { Icon, Column, Flex, Option, Accordion, ElementType, Text } from "../../";
 
 export interface MenuLink {
   label: React.ReactNode;
   href: string;
-  icon?: string;
+  icon?: IconName;
   description?: React.ReactNode;
   selected?: boolean;
 }
@@ -19,7 +20,7 @@ export interface MenuSection {
 export interface MenuGroup {
   id: string;
   label: React.ReactNode;
-  suffixIcon?: string;
+  suffixIcon?: IconName;
   href?: string;
   selected?: boolean;
   sections?: MenuSection[];
