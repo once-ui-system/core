@@ -230,3 +230,53 @@ describe("the width default a line used to get for free", () => {
     assert.equal(transform(once).out, once);
   });
 });
+
+describe("imports that moved to a subpath", () => {
+  const out = (src) => transform(src).out;
+
+  it("splits a statement that mixes core and relocated names", () => {
+    assert.equal(
+      out(`import { Column, LineChart, Text, PieChart } from "@once-ui-system/core";`),
+      'import { Column, Text } from "@once-ui-system/core";\n' +
+        'import { LineChart, PieChart } from "@once-ui-system/core/data";',
+    );
+  });
+
+  it("drops the original statement when everything moved", () => {
+    assert.equal(
+      out(`import { MediaUpload } from "@once-ui-system/core";`),
+      'import { MediaUpload } from "@once-ui-system/core/media";',
+    );
+  });
+
+  it("sends each name to its own subpath", () => {
+    const result = out(`import { CodeBlock, MediaUpload, BarChart } from "@once-ui-system/core";`);
+    assert.match(result, /\{ BarChart \} from "@once-ui-system\/core\/data"/);
+    assert.match(result, /\{ CodeBlock \} from "@once-ui-system\/core\/code"/);
+    assert.match(result, /\{ MediaUpload \} from "@once-ui-system\/core\/media"/);
+  });
+
+  it("keeps an alias pointing at the same local name", () => {
+    assert.match(
+      out(`import { LineChart as Chart } from "@once-ui-system/core";`),
+      /\{ LineChart as Chart \} from "@once-ui-system\/core\/data"/,
+    );
+  });
+
+  it("keeps a type-only import type-only", () => {
+    assert.match(
+      out(`import type { ChartProps } from "@once-ui-system/core";`),
+      /^import type \{ ChartProps \} from "@once-ui-system\/core\/data";$/,
+    );
+  });
+
+  it("leaves an import with nothing relocated untouched", () => {
+    const src = `import { Row, Button } from "@once-ui-system/core";`;
+    assert.equal(out(src), src);
+  });
+
+  it("leaves an already-migrated subpath import alone", () => {
+    const src = `import { LineChart } from "@once-ui-system/core/data";`;
+    assert.equal(out(src), src);
+  });
+});

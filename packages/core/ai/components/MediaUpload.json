@@ -1,6 +1,7 @@
 {
  "name": "MediaUpload",
- "group": "modules",
+ "group": "media",
+ "importFrom": "@once-ui-system/core/media",
  "extends": [
   "MediaUpload.impl",
   "Flex"

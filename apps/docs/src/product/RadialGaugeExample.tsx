@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { RadialGauge } from "@once-ui-system/core";
+import { RadialGauge } from "@once-ui-system/core/data";
 
 // Animated speed meter demo for RadialGauge docs
 export function RadialGaugeSpeedDemo() {

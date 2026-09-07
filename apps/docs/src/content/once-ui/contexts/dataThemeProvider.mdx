@@ -59,7 +59,8 @@ You can create a single source of truth for all style configuration in a separat
     {
       code:
 `import { dataStyle } from "@/resources/once-ui.config";
-import { DataThemeProvider, ThemeProvider, IconProvider, ToastProvider, ChartVariant, ChartMode } from "@once-ui-system/core";
+import { DataThemeProvider, ThemeProvider, IconProvider, ToastProvider } from "@once-ui-system/core";
+import { ChartVariant, ChartMode } from "@once-ui-system/core/data";
 
 export function Providers({ children }: {
     children: React.ReactNode

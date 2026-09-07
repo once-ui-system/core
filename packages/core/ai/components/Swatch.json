@@ -1,15 +1,10 @@
 {
- "name": "LinearGradient",
+ "name": "Swatch",
  "group": "data",
  "importFrom": "@once-ui-system/core/data",
  "props": {
-  "id": "!string",
   "color": "!string",
-  "x1": "string = 0",
-  "y1": "string = 0",
-  "x2": "string = 0",
-  "y2": "string = 1",
-  "stops": "GradientStop[]",
+  "size": "\"s\" | \"m\" = m",
   "variant": "ChartVariant = useDataTheme().variant"
  },
  "mixinsRef": []

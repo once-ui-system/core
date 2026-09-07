@@ -1,20 +1,8 @@
 "use client";
 
 import React from "react";
-import {
-  Column,
-  Row,
-  Card,
-  Heading,
-  Text,
-  Grid,
-  Avatar,
-  Button,
-  Scroller,
-  StatusIndicator,
-  Icon,
-  LineChart
-} from "@once-ui-system/core";
+import { Column, Row, Card, Heading, Text, Grid, Avatar, Button, Scroller, StatusIndicator, Icon } from "@once-ui-system/core";
+import { LineChart } from "@once-ui-system/core/data";
 import { Sidebar1 } from "./Sidebar1";
 import { Header1 } from "./Header1";
 import { Table1 } from "./Table1";

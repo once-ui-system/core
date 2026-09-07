@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Column, CountFx, Text } from "../../";
+import { Column, CountFx, Text } from "../../components";
 import styles from "./Gauge.module.css";
 import { ColorValue } from "../../types";
 

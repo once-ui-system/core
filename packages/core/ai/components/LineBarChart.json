@@ -1,6 +1,7 @@
 {
  "name": "LineBarChart",
- "group": "modules",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
  "extends": [
   "LineBarChart.impl",
   "interfaces",

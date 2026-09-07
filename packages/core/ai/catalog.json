@@ -1,6 +1,6 @@
 {
  "version": "2.0.0-alpha.0",
- "generated": "2026-08-30",
+ "generated": "2026-09-07",
  "components": {
   "Accordion": {
    "group": "components",
@@ -1134,52 +1134,15 @@
     "modules"
    ]
   },
-  "ChartHeader": {
+  "Schema": {
    "group": "modules",
-   "extends": [
-    "Column",
-    "Flex"
-   ],
-   "purpose": "ChartHeader component",
-   "tags": [
-    "modules"
-   ]
-  },
-  "ChartStatus": {
-   "group": "modules",
-   "purpose": "ChartStatus component",
-   "tags": [
-    "modules"
-   ]
-  },
-  "LinearGradient": {
-   "group": "modules",
-   "purpose": "LinearGradient component",
-   "tags": [
-    "modules"
-   ]
-  },
-  "RadialGradient": {
-   "group": "modules",
-   "purpose": "RadialGradient component",
-   "tags": [
-    "modules"
-   ]
-  },
-  "BarChart": {
-   "group": "modules",
-   "extends": [
-    "BarChart.impl",
-    "interfaces",
-    "Flex"
-   ],
-   "purpose": "BarChart component",
+   "purpose": "Schema component",
    "tags": [
     "modules"
    ]
   },
   "LineChart": {
-   "group": "modules",
+   "group": "data",
    "extends": [
     "LineChart.impl",
     "interfaces",
@@ -1187,11 +1150,23 @@
    ],
    "purpose": "LineChart component",
    "tags": [
-    "modules"
+    "data"
+   ]
+  },
+  "BarChart": {
+   "group": "data",
+   "extends": [
+    "BarChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "purpose": "BarChart component",
+   "tags": [
+    "data"
    ]
   },
   "PieChart": {
-   "group": "modules",
+   "group": "data",
    "extends": [
     "PieChart.impl",
     "interfaces",
@@ -1199,11 +1174,11 @@
    ],
    "purpose": "PieChart component",
    "tags": [
-    "modules"
+    "data"
    ]
   },
   "LineBarChart": {
-   "group": "modules",
+   "group": "data",
    "extends": [
     "LineBarChart.impl",
     "interfaces",
@@ -1211,70 +1186,102 @@
    ],
    "purpose": "LineBarChart component",
    "tags": [
-    "modules"
-   ]
-  },
-  "DataTooltip": {
-   "group": "modules",
-   "purpose": "DataTooltip component",
-   "tags": [
-    "modules"
-   ]
-  },
-  "Legend": {
-   "group": "modules",
-   "purpose": "Legend component",
-   "tags": [
-    "modules"
+    "data"
    ]
   },
   "RadialGauge": {
-   "group": "modules",
+   "group": "data",
    "extends": [
     "Flex"
    ],
    "purpose": "RadialGauge component",
    "tags": [
-    "modules"
+    "data"
    ]
   },
   "LinearGauge": {
-   "group": "modules",
+   "group": "data",
    "extends": [
     "Flex"
    ],
    "purpose": "LinearGauge component",
    "tags": [
-    "modules"
+    "data"
+   ]
+  },
+  "ChartHeader": {
+   "group": "data",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "purpose": "ChartHeader component",
+   "tags": [
+    "data"
+   ]
+  },
+  "ChartStatus": {
+   "group": "data",
+   "purpose": "ChartStatus component",
+   "tags": [
+    "data"
+   ]
+  },
+  "LinearGradient": {
+   "group": "data",
+   "purpose": "LinearGradient component",
+   "tags": [
+    "data"
+   ]
+  },
+  "RadialGradient": {
+   "group": "data",
+   "purpose": "RadialGradient component",
+   "tags": [
+    "data"
+   ]
+  },
+  "DataTooltip": {
+   "group": "data",
+   "purpose": "DataTooltip component",
+   "tags": [
+    "data"
+   ]
+  },
+  "Legend": {
+   "group": "data",
+   "purpose": "Legend component",
+   "tags": [
+    "data"
+   ]
+  },
+  "Swatch": {
+   "group": "data",
+   "purpose": "Swatch component",
+   "tags": [
+    "data"
    ]
   },
   "CodeBlock": {
-   "group": "modules",
+   "group": "code",
    "extends": [
     "CodeBlock.impl",
     "Flex"
    ],
    "purpose": "CodeBlock component",
    "tags": [
-    "modules"
+    "code"
    ]
   },
   "MediaUpload": {
-   "group": "modules",
+   "group": "media",
    "extends": [
     "MediaUpload.impl",
     "Flex"
    ],
    "purpose": "MediaUpload component",
    "tags": [
-    "modules"
-   ]
-  },
-  "Schema": {
-   "group": "modules",
-   "purpose": "Schema component",
-   "tags": [
-    "modules"
+    "media"
    ]
   }
  }

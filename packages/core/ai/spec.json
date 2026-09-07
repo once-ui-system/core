@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "2.0.0-alpha.0",
- "generated": "2026-08-30",
+ "generated": "2026-09-07",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -2548,84 +2548,24 @@
     "style": "React.CSSProperties"
    }
   },
-  "ChartHeader": {
-   "group": "modules",
-   "extends": [
-    "Column",
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "title": "React.ReactNode",
-    "description": "React.ReactNode",
-    "dateRange": "DateRange",
-    "date": "DateConfig",
-    "onDateRangeChange": "(range: DateRange) => void",
-    "presets": "PresetsConfig = { display: true, granularity: \"week\" }"
-   }
-  },
-  "ChartStatus": {
+  "Schema": {
    "group": "modules",
    "props": {
-    "loading": "boolean = false",
-    "empty": "boolean = false",
-    "error": "boolean = false",
-    "emptyState": "React.ReactNode = No data available for the selected period",
-    "errorState": "React.ReactNode = An error occurred while fetching data"
+    "as": "!\"website\" | \"article\" | \"blogPosting\" | \"techArticle\" | \"webPage\" | \"organization\"",
+    "title": "!string",
+    "description": "!string",
+    "baseURL": "!string",
+    "path": "!string",
+    "datePublished": "string",
+    "dateModified": "string",
+    "image": "string",
+    "sameAs": "string[] = []",
+    "author": "{ name: string; url?: string; image?: string; }"
    }
-  },
-  "LinearGradient": {
-   "group": "modules",
-   "props": {
-    "id": "!string",
-    "color": "!string",
-    "x1": "string = 0",
-    "y1": "string = 0",
-    "x2": "string = 0",
-    "y2": "string = 1",
-    "stops": "GradientStop[]",
-    "variant": "ChartVariant = useDataTheme().variant"
-   }
-  },
-  "RadialGradient": {
-   "group": "modules",
-   "props": {
-    "id": "!string",
-    "color": "!string",
-    "cx": "string = 50%",
-    "cy": "string = 50%",
-    "r": "string = 50%",
-    "fx": "string = 50%",
-    "fy": "string = 50%",
-    "stops": "GradientStop[]",
-    "variant": "ChartVariant = useDataTheme().variant"
-   }
-  },
-  "BarChart": {
-   "group": "modules",
-   "extends": [
-    "BarChart.impl",
-    "interfaces",
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ]
   },
   "LineChart": {
-   "group": "modules",
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
    "extends": [
     "LineChart.impl",
     "interfaces",
@@ -2640,8 +2580,26 @@
     "StyleProps"
    ]
   },
+  "BarChart": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "extends": [
+    "BarChart.impl",
+    "interfaces",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
   "PieChart": {
-   "group": "modules",
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
    "extends": [
     "PieChart.impl",
     "interfaces",
@@ -2657,7 +2615,8 @@
    ]
   },
   "LineBarChart": {
-   "group": "modules",
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
    "extends": [
     "LineBarChart.impl",
     "interfaces",
@@ -2672,33 +2631,9 @@
     "StyleProps"
    ]
   },
-  "DataTooltip": {
-   "group": "modules",
-   "props": {
-    "active": "boolean",
-    "payload": "readonly Record<string, any>[]",
-    "label": "string | number",
-    "dataKey": "string = name",
-    "DataTooltip": "React.ReactNode",
-    "date": "DateConfig = { format: \"MMM d\" }",
-    "showSwatches": "boolean = true",
-    "variant": "ChartVariant = gradient"
-   }
-  },
-  "Legend": {
-   "group": "modules",
-   "props": {
-    "payload": "readonly Record<string, any>[]",
-    "labels": "\"x\" | \"y\" | \"both\" | \"none\" = both",
-    "colors": "string[]",
-    "reverseY": "boolean",
-    "direction": "\"row\" | \"column\"",
-    "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\" = top-left",
-    "variant": "ChartVariant = useDataTheme().variant"
-   }
-  },
   "RadialGauge": {
-   "group": "modules",
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
    "extends": [
     "Flex"
    ],
@@ -2725,7 +2660,8 @@
    }
   },
   "LinearGauge": {
-   "group": "modules",
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
    "extends": [
     "Flex"
    ],
@@ -2747,8 +2683,109 @@
     "color": "ColorValue = contrast"
    }
   },
+  "ChartHeader": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "React.ReactNode",
+    "description": "React.ReactNode",
+    "dateRange": "DateRange",
+    "date": "DateConfig",
+    "onDateRangeChange": "(range: DateRange) => void",
+    "presets": "PresetsConfig = { display: true, granularity: \"week\" }"
+   }
+  },
+  "ChartStatus": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "loading": "boolean = false",
+    "empty": "boolean = false",
+    "error": "boolean = false",
+    "emptyState": "React.ReactNode = No data available for the selected period",
+    "errorState": "React.ReactNode = An error occurred while fetching data"
+   }
+  },
+  "LinearGradient": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "id": "!string",
+    "color": "!string",
+    "x1": "string = 0",
+    "y1": "string = 0",
+    "x2": "string = 0",
+    "y2": "string = 1",
+    "stops": "GradientStop[]",
+    "variant": "ChartVariant = useDataTheme().variant"
+   }
+  },
+  "RadialGradient": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "id": "!string",
+    "color": "!string",
+    "cx": "string = 50%",
+    "cy": "string = 50%",
+    "r": "string = 50%",
+    "fx": "string = 50%",
+    "fy": "string = 50%",
+    "stops": "GradientStop[]",
+    "variant": "ChartVariant = useDataTheme().variant"
+   }
+  },
+  "DataTooltip": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "active": "boolean",
+    "payload": "readonly Record<string, any>[]",
+    "label": "string | number",
+    "dataKey": "string = name",
+    "DataTooltip": "React.ReactNode",
+    "date": "DateConfig = { format: \"MMM d\" }",
+    "showSwatches": "boolean = true",
+    "variant": "ChartVariant = gradient"
+   }
+  },
+  "Legend": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "payload": "readonly Record<string, any>[]",
+    "labels": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+    "colors": "string[]",
+    "reverseY": "boolean",
+    "direction": "\"row\" | \"column\"",
+    "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\" = top-left",
+    "variant": "ChartVariant = useDataTheme().variant"
+   }
+  },
+  "Swatch": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "color": "!string",
+    "size": "\"s\" | \"m\" = m",
+    "variant": "ChartVariant = useDataTheme().variant"
+   }
+  },
   "CodeBlock": {
-   "group": "modules",
+   "group": "code",
+   "importFrom": "@once-ui-system/core/code",
    "extends": [
     "CodeBlock.impl",
     "Flex"
@@ -2763,7 +2800,8 @@
    ]
   },
   "MediaUpload": {
-   "group": "modules",
+   "group": "media",
+   "importFrom": "@once-ui-system/core/media",
    "extends": [
     "MediaUpload.impl",
     "Flex"
@@ -2776,21 +2814,6 @@
     "SpacingProps",
     "StyleProps"
    ]
-  },
-  "Schema": {
-   "group": "modules",
-   "props": {
-    "as": "!\"website\" | \"article\" | \"blogPosting\" | \"techArticle\" | \"webPage\" | \"organization\"",
-    "title": "!string",
-    "description": "!string",
-    "baseURL": "!string",
-    "path": "!string",
-    "datePublished": "string",
-    "dateModified": "string",
-    "image": "string",
-    "sameAs": "string[] = []",
-    "author": "{ name: string; url?: string; image?: string; }"
-   }
   }
  },
  "shorthands": {

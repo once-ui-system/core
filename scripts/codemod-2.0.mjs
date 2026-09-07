@@ -7,6 +7,12 @@
  * several of the old names (`height`, `radius`, `label`, `icon`, `fill`) are
  * legitimate props on OTHER components and must survive untouched.
  *
+ * Run it once, on a 1.8.x tree. Re-running over its own output is a no-op,
+ * but running it over code authored against 2.0 is not: the Skeleton width
+ * default cannot tell a line that never named a width in 1.8.x (where the
+ * default made it 50% wide) from one deliberately left unset in 2.0, and will
+ * add a width the author did not want.
+ *
  * Usage:  node scripts/codemod-2.0.mjs <dir> [--dry]
  */
 import fs from "node:fs";
@@ -423,11 +429,77 @@ function localNamesFor(tag, bindings) {
   return bindings.has(tag) ? [] : [tag];
 }
 
+/**
+ * Names that left the root barrel for a subpath in 2.0.
+ *
+ * `code`, `media` and `data` pull in prismjs, compressorjs and recharts. A
+ * bundler resolves those specifiers when it walks the root barrel, so while
+ * they were re-exported there every consumer had all three in its module
+ * graph — an app that never rendered a chart still failed to build without
+ * recharts installed, because the failure is at resolution and the dynamic
+ * import's catch() never got the chance to run. Reaching them through their
+ * own subpath is what makes them genuinely optional.
+ *
+ * Only the names the root barrel actually re-exported are listed; anything
+ * else in those modules was already subpath-only and no import can name it.
+ */
+const MOVED_EXPORTS = {
+  "@once-ui-system/core/data": [
+    "BarChart", "ChartHeader", "ChartMode", "ChartProps", "ChartStatus", "ChartVariant",
+    "DataPoint", "DataTooltip", "Legend", "LineBarChart", "LineChart", "LinearGauge",
+    "LinearGradient", "PieChart", "RadialGauge", "RadialGradient",
+  ],
+  "@once-ui-system/core/code": ["CodeBlock", "CodeBlockProps"],
+  "@once-ui-system/core/media": ["MediaUpload", "MediaUploadProps"],
+};
+
+const MOVED_TO = new Map(
+  Object.entries(MOVED_EXPORTS).flatMap(([target, names]) => names.map((n) => [n, target])),
+);
+
+/** Split one `{ a, b as c }` clause into its specifiers, keeping the text. */
+function specifiersOf(clause) {
+  return clause
+    .split(",")
+    .map((raw) => raw.trim())
+    .filter(Boolean)
+    .map((text) => ({ text, name: text.split(/\s+as\s+/)[0].trim() }));
+}
+
+/**
+ * Move root-barrel imports of relocated names onto their subpath, leaving
+ * everything else in place. A statement importing both kinds is split in two.
+ */
+export function rewriteImports(src) {
+  const hits = [];
+  const re = /import\s+(type\s+)?\{([^}]*)\}\s*from\s*["']@once-ui-system\/core["'];?/g;
+  const out = src.replace(re, (whole, typeOnly, clause) => {
+    const specs = specifiersOf(clause);
+    const moved = specs.filter((s) => MOVED_TO.has(s.name));
+    if (!moved.length) return whole;
+    const stays = specs.filter((s) => !MOVED_TO.has(s.name));
+
+    const kw = `import ${typeOnly ? "type " : ""}`;
+    const lines = [];
+    if (stays.length) lines.push(`${kw}{ ${stays.map((s) => s.text).join(", ")} } from "@once-ui-system/core";`);
+    for (const target of Object.keys(MOVED_EXPORTS)) {
+      const here = moved.filter((s) => MOVED_TO.get(s.name) === target);
+      if (!here.length) continue;
+      lines.push(`${kw}{ ${here.map((s) => s.text).join(", ")} } from "${target}";`);
+      for (const s of here) hits.push(`${s.name} → ${target}`);
+    }
+    return lines.join("\n");
+  });
+  return { out, hits };
+}
+
 export function transform(src) {
   const hits = [];
   const warnings = [];
-  const bindings = importBindings(src);
-  let out = src;
+  const moved = rewriteImports(src);
+  hits.push(...moved.hits);
+  const bindings = importBindings(moved.out);
+  let out = moved.out;
   // Union of all three maps: a tag can have only a value change (ShineFx) or
   // only a rewrite (Skeleton) and would otherwise never be visited, so its
   // warning would silently never fire.

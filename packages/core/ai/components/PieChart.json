@@ -1,6 +1,7 @@
 {
  "name": "PieChart",
- "group": "modules",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
  "extends": [
   "PieChart.impl",
   "interfaces",
