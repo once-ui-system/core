@@ -114,12 +114,14 @@ permanently rotated cover reads as a rendering fault rather than a style.
 ## API reference
 
 <PropsTable
+  component="Book"
+  describe={{
+    src: "Cover artwork. Omit it for a blank cover you fill with children.",
+    alt: "Alternative text for the cover artwork.",
+    sizes: "Responsive sizes hint passed to the underlying image.",
+    href: "Renders the whole book as a link.",
+  }}
   content={[
-    ["src", "string", "-", "Cover artwork. Omit it for a blank cover you fill with children."],
-    ["alt", "string", "\"Book cover\"", "Alternative text for the cover artwork."],
-    ["sizes", "string", "\"(max-width: 768px) 100vw, 480px\"", "Responsive sizes hint passed to the underlying image."],
-    ["href", "string", "-", "Renders the whole book as a link."],
-    ["children", "React.ReactNode", "-", "Overlaid on the cover, above the artwork."],
-    ["...flex"],
+    ["children", "React.ReactNode", "-", "Overlaid on the cover, above the artwork."]
   ]}
 />

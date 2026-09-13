@@ -97,15 +97,13 @@ You can override the default layout using `children`. This is useful for inline 
 ## API reference
 
 <PropsTable
+  component="User"
+  describe={{
+    tag: "Short label shown next to the name.",
+  }}
   content={[
-    ["name", "string"],
-    ["subline", "ReactNode"],
-    ["tagProps", "TagProps"],
-    ["loading", "boolean", "false"],
-    ["avatarProps", "AvatarProps"],
     ["children"],
     ["className"],
-    ["style"],
-    ["tag", "string", "-", "Short label shown next to the name."],
+    ["style"]
   ]}
 />

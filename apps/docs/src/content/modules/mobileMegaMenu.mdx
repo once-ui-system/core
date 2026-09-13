@@ -370,12 +370,13 @@ The `MobileMegaMenu` component is designed for mobile screens. You can hide it a
 ## API reference
 
 <PropsTable
+  component="MobileMegaMenu"
+  describe={{
+    onClose: "Called when the menu asks to be dismissed.",
+  }}
   content={[
-    ["menuGroups", "MenuGroup[]"],
     ["className"],
-    ["style"],
-    ["onClose", "() => void", "-", "Called when the menu asks to be dismissed."],
-    ["...flex"]
+    ["style"]
   ]}
 />
 

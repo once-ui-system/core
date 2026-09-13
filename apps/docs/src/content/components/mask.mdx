@@ -209,15 +209,13 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
 ## API reference
 
 <PropsTable
+  component="Mask"
+  describe={{
+    reducedMotion: "Controls motion reduction for cursor tracking. Auto detects device capability and prefers-reduced-motion.",
+  }}
   content={[
-    ["cursor", "boolean", "false"],
-    ["x", "number"],
-    ["y", "number"],
-    ["radius", "number", "50"],
-    ["reducedMotion", ['true', 'false', '"auto"'], '"auto"', "Controls motion reduction for cursor tracking. Auto detects device capability and prefers-reduced-motion."],
     ["className"],
     ["style"],
-    ["children"],
-    ["...flex"]
+    ["children"]
   ]}
 />

@@ -534,32 +534,12 @@ Stack multiple animations by providing multiple props. Each value represents the
 ## API reference
 
 <PropsTable
+  component="Animation"
+  describe={{
+    childrenPosition: "How the animated children are positioned inside the wrapper.",
+    touch: "Behaviour on touch devices, where there is no hover to drive the effect.",
+  }}
   content={[
-    ["trigger", "ReactNode"],
-    ["fade", "number"],
-    ["scale", "number"],
-    ["blur", "number"],
-    ["slideUp", "number"],
-    ["slideDown", "number"],
-    ["slideLeft", "number"],
-    ["slideRight", "number"],
-    ["zoomIn", "number"],
-    ["zoomOut", "number"],
-    ["triggerType", ["hover", "click", "manual"], "manual"],
-    ["active", "boolean", "false"],
-    ["delay", "number", "0"],
-    ["duration", "number", "300"],
-    ["easing", "EasingCurve", "ease-out"],
-    ["transformOrigin", "string", "center"],
-    ["portal", "boolean", "false"],
-    ["placement", "Placement", "top"],
-    ["offsetDistance", "number", "8"],
-    ["scale", "number"],
-    ["blur", "number"],
-    ["reverse", "boolean"],
-    ["children"],
-    ["childrenPosition", "CSSProperties[\"position\"]", "\"absolute\"", "How the animated children are positioned inside the wrapper."],
-    ["touch", ["disable", "enable", "display"], "\"enable\"", "Behaviour on touch devices, where there is no hover to drive the effect."],
-    ["...flex"]
+    ["children"]
   ]}
 />

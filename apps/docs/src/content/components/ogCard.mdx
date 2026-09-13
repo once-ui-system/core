@@ -280,21 +280,7 @@ Use `serviceConfig` to point `OgCard` at custom API routes or to transform proxi
 ## API reference
 
 <PropsTable
-  content={[
-    ["url", "string"],
-    ["ogData", "Partial<OgData> | null"],
-    ["serviceConfig", "OgServiceConfig", "{}"],
-    ["size", ["s", "m", "l"], "m"],
-    ["sizes", "string", "320px"],
-    ["unoptimized", "boolean", "false"],
-    ["direction", ["column", "row", "column-reverse", "row-reverse"], "column"],
-    ["title", ["string", "false"]],
-    ["description", ["string", "false"]],
-    ["image", ["string", "false"]],
-    ["favicon", ["string", "false"]],
-    ["cardUrl", ["string", "false"]],
-    ["...card", "CardProps"]
-  ]}
+  component="OgCard"
 />
 
 ### OgServiceConfig

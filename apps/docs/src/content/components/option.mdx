@@ -184,20 +184,8 @@ Options can function as links by providing the `href` prop.
 ## API reference
 
 <PropsTable
-  content={[
-    ["label", "React.ReactNode"],
-    ["value", "string"],
-    ["description", "React.ReactNode"],
-    ["prefix", "React.ReactNode"],
-    ["suffix", "React.ReactNode"],
-    ["href", "string"],
-    ["selected", "boolean"],
-    ["highlighted", "boolean", "false"],
-    ["danger", "boolean", "false"],
-    ["onClick", "(value: string) => void"],
-    ["onLinkClick", "() => void"],
-    ["tabIndex", "number"],
-    ["disabled", "boolean", "false", "Prevent selection and dim the option."],
-    ["...flex"]
-  ]}
+  component="Option"
+  describe={{
+    disabled: "Prevent selection and dim the option.",
+  }}
 />

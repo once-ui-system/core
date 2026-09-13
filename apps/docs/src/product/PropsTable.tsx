@@ -148,15 +148,19 @@ function resolve(
 function PropsTable({ component, describe, only, exclude, content, label }: PropsTableProps) {
   const resolved = component ? resolve(component, describe ?? {}, only, exclude) : [];
 
-  // A page that lists `...input` by hand next to a component whose spec already
-  // extends Input would otherwise print the inherited-props row twice.
-  const seen = new Set<string>();
-  const rows = [...resolved, ...(content ?? [])].filter(([name]) => {
-    if (!name.startsWith("...")) return true;
-    if (seen.has(name)) return false;
-    seen.add(name);
-    return true;
+  // A hand-written row wins over the generated one with the same name, in the
+  // generated row's position. That keeps a page's own wording for a prop the
+  // spec describes poorly, and means a page listing `children` or `...input`
+  // by hand cannot print it twice.
+  const overrides = new Map((content ?? []).map((row) => [row[0], row]));
+  const used = new Set<string>();
+  const rows: PropData[] = resolved.map(([name, ...rest]) => {
+    const override = overrides.get(name);
+    if (!override) return [name, ...rest] as PropData;
+    used.add(name);
+    return override;
   });
+  for (const row of content ?? []) if (!used.has(row[0])) rows.push(row);
 
   return <PropsTableView content={rows} label={label} />;
 }

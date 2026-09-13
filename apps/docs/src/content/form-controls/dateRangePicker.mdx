@@ -30,18 +30,13 @@ The `DateRangePicker` component provides a standalone calendar interface for sel
 ## API reference
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
+  component="DateRangePicker"
+  describe={{
+    dual: "Show two months side by side.",
+  }}
   content={[
-    ["value", "{ startDate: Date | undefined, endDate: Date | undefined }"],
-    ["onChange", "(range: { startDate: Date | undefined, endDate: Date | undefined }) => void"],
-    ["minDate", "Date"],
-    ["maxDate", "Date"],
-    ["size", ["s", "m", "l"], "'m'"],
     ["className"],
-    ["style"],
-    ["dual", "boolean", "false", "Show two months side by side."],
-    ["...flex"]
+    ["style"]
   ]}
 />
 

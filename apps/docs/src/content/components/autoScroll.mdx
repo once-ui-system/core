@@ -122,14 +122,13 @@ Combine with the `<Fade>` component to create a fade-in and fade-out effect.
 ## API Reference
 
 <PropsTable
+  component="AutoScroll"
+  describe={{
+    scrollGap: "Gap between the repeated copies of the track.",
+  }}
   content={[
-    ["speed", ["slow", "medium", "fast"], "medium"],
-    ["hover", ["slow", "pause", "none"], "slow"],
-    ["reverse", "boolean", "false"],
     ["children"],
     ["className"],
-    ["style"],
-    ["scrollGap", "number | string", "-", "Gap between the repeated copies of the track."],
-    ["...flex"]
+    ["style"]
   ]}
 />

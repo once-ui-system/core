@@ -241,13 +241,12 @@ The Dropdown component follows accessibility best practices:
 ## API reference
 
 <PropsTable
+  component="Dropdown"
+  describe={{
+    disabled: "Prevent interaction with the dropdown.",
+  }}
   content={[
-    ["selectedOption", "string"],
-    ["onSelect", "(value: string) => void"],
-    ["onEscape", "() => void"],
-    ["children", "ReactNode"],
-    ["disabled", "boolean", "false", "Prevent interaction with the dropdown."],
-    ["...flex"]
+    ["children", "ReactNode"]
   ]}
 />
 

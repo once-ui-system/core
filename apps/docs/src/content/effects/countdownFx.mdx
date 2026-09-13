@@ -149,11 +149,8 @@ Execute a function when the countdown reaches zero.
 ## API reference
 
 <PropsTable
+  component="CountdownFx"
   content={[
-    ["targetDate", "Date | string", "required"],
-    ["format", ["HH:MM:SS","DD:HH:MM:SS","MM:SS"], "HH:MM:SS"],
-    ["effect", ["simple","wheel","smooth"], "wheel"],
-    ["onComplete", "() => void", "undefined"],
     ["speed", "number", "1000"],
     ["easing", ["linear","ease-out","ease-in-out"], "ease-out"],
     ["...text"]

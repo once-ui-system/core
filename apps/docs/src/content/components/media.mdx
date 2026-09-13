@@ -311,25 +311,12 @@ For MP4 and other file-based video, set `controls` to render a minimal custom pl
 ## API reference
 
 <PropsTable
+  component="Media"
+  describe={{
+    stretch: "Drop the intrinsic aspect ratio and let the media fill its box.",
+  }}
   content={[
-    ["src", "string"],
-    ["alt", "string", `""`],
-    ["aspectRatio", "string"],
-    ["height", "number"],
-    ["objectFit", ["contain", "cover", "fill", "none", "scale-down"], "cover"],
-    ["loading", "boolean", "false"],
-    ["enlarge", "boolean", "false"],
-    ["priority", "boolean"],
-    ["unoptimized", "boolean"],
-    ["sizes", ["string", "number"], "100vw"],
-    ["loop", "boolean", "true"],
-    ["autoplay", "boolean", "true"],
-    ["sound", "boolean", "false"],
-    ["controls", "boolean", "false"],
-    ["caption", "ReactNode"],
     ["className"],
-    ["style"],
-    ["stretch", "boolean", "false", "Drop the intrinsic aspect ratio and let the media fill its box."],
-    ["...flex"]
+    ["style"]
   ]}
 />

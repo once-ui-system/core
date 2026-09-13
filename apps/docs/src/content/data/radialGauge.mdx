@@ -340,18 +340,9 @@ export function RadialGaugeSpeedDemo() {
 The `RadialGauge` component accepts all layout props from `Column` (except `direction`) plus the following gauge-specific props:
 
 <PropsTable
+  component="RadialGauge"
   content={[
-    ["width", "number", "300"],
-    ["height", "number", "300"],
-    ["line", "object", "{{ count: 60, width: 3, length: 40 }}"],
-    ["value", "0–100", "7"],
-    ["unit", "ReactNode"],
-    ["angle", "object", "{{ start: 0, sweep: 360 }}"],
-    ["direction", ["cw", "ccw"], "cw"],
-    ["edgePad", "number", "0"],
-    ["hue", ["success", "neutral", "danger"], "success"],
-    ["children"],
-    ["...flex"],
+    ["children"]
   ]}
 />
 

@@ -130,11 +130,14 @@ which traps focus and restores it.
 ## API reference
 
 <PropsTable
+  component="Modal"
+  describe={{
+    open: "Controls modal visibility",
+    onClose: "Callback when modal should close",
+    title: "Modal title displayed at the top",
+    backdrop: "Optional backdrop content behind the modal",
+  }}
   content={[
-    ["open", "boolean", "-", "Controls modal visibility"],
-    ["onClose", "() => void", "-", "Callback when modal should close"],
-    ["title", "ReactNode", "-", "Modal title displayed at the top"],
-    ["children", "ReactNode", "-", "Modal content"],
-    ["backdrop", "ReactNode", "-", "Optional backdrop content behind the modal"]
+    ["children", "ReactNode", "-", "Modal content"]
   ]}
 />

@@ -83,19 +83,14 @@ const handleDateTimeChange = (newDateTime: Date) => {
 ## API reference
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
+  component="DateInput"
+  describe={{
+    minDate: "Earliest date the calendar allows.",
+    maxDate: "Latest date the calendar allows.",
+    minHeight: "Minimum height of the calendar popover.",
+  }}
   content={[
-    ["id", "string"],
-    ["label", "string"],
-    ["value", "Date", "undefined"],
-    ["onChange", "(date: Date) => void"],
-    ["timePicker", "boolean", "false"],
     ["className"],
-    ["style"],
-    ["minDate", "Date", "-", "Earliest date the calendar allows."],
-    ["maxDate", "Date", "-", "Latest date the calendar allows."],
-    ["minHeight", "number", "-", "Minimum height of the calendar popover."],
-    ["...input"]
+    ["style"]
   ]}
 />

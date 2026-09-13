@@ -300,17 +300,14 @@ Adjust the alignment of the quote text by setting `align` to `left`, `center` or
 ## API Reference
 
 <PropsTable
+  component="BlockQuote"
+  describe={{
+    preline: "Content rendered above the quote, such as a label or eyebrow.",
+  }}
   content={[
     ["children"],
-    ["subline", "ReactNode.ReactNode"],
-    ["author", "{ name?: string; avatar?: string }"],
-    ["link", "{ href?: string; label?: string }"],
-    ["separator", ["top", "bottom", "both", "none"], "both"],
-    ["align", ["left", "center", "right"], "center"],
     ["className"],
-    ["style"],
-    ["preline", "React.ReactNode", "-", "Content rendered above the quote, such as a label or eyebrow."],
-    ["...flex"]
+    ["style"]
   ]}
 />
 

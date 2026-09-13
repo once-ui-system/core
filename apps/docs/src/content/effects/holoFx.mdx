@@ -93,15 +93,16 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
 ### HoloFx Props
 
 <PropsTable
+  component="HoloFx"
+  describe={{
+    shine: "The specular highlight layer. See Shine Props below.",
+    burn: "The blown-out highlight layer. See Burn Props below.",
+    texture: "The overlaid texture layer. See Texture Props below.",
+  }}
   content={[
-    ["reducedMotion", ['true', 'false', '"auto"'], '"auto"'],
     ["children"],
     ["className"],
-    ["style"],
-    ["shine", "ShineOptions", "-", "The specular highlight layer. See Shine Props below."],
-    ["burn", "BurnOptions", "-", "The blown-out highlight layer. See Burn Props below."],
-    ["texture", "TextureOptions", "-", "The overlaid texture layer. See Texture Props below."],
-    ["...flex"],
+    ["style"]
   ]}
 />
 

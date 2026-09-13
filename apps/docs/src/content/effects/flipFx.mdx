@@ -143,17 +143,17 @@ Use the `flipDirection` prop to control the flip direction.
 ## API reference
 
 <PropsTable
+  component="FlipFx"
+  describe={{
+    flipped: "Controlled face. Omit it to let the component manage its own state.",
+    onFlip: "Called whenever the face changes.",
+    flipDirection: "Axis the card turns on.",
+    timing: "Duration of the flip, in milliseconds.",
+    autoFlipInterval: "Flip on a timer, in milliseconds. Omit for manual flipping only.",
+    disableClickFlip: "Stop clicks from flipping the card.",
+  }}
   content={[
-    ["front", "React.ReactNode"],
-    ["back", "React.ReactNode"],
     ["className"],
-    ["style"],
-    ["flipped", "boolean", "-", "Controlled face. Omit it to let the component manage its own state."],
-    ["onFlip", "(flipped: boolean) => void", "-", "Called whenever the face changes."],
-    ["flipDirection", ["horizontal", "vertical"], "\"horizontal\"", "Axis the card turns on."],
-    ["timing", "number", "2000", "Duration of the flip, in milliseconds."],
-    ["autoFlipInterval", "number", "-", "Flip on a timer, in milliseconds. Omit for manual flipping only."],
-    ["disableClickFlip", "boolean", "false", "Stop clicks from flipping the card."],
-    ["...flex"],
+    ["style"]
   ]}
 />

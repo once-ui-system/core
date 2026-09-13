@@ -49,20 +49,16 @@ A collapsible container that allows users to expand and collapse sections of con
 ## API reference
 
 <PropsTable
+  component="Accordion"
+  describe={{
+    toggleOnHeaderClick: "Whether clicking anywhere in the header toggles the panel.",
+    headerProps: "Props forwarded to the header row.",
+    contentProps: "Props forwarded to the content column.",
+  }}
   content={[
-    ["title", "ReactNode"],
     ["children", "ReactNode"],
-    ["icon", "string", "chevronDown"],
-    ["iconRotation", "number", "180"],
-    ["size", "CondensedTShirtSizes", "m"],
-    ["radius", ["xs", "s", "m", "l", "xl", "full"]],
-    ["open", "boolean", "false"],
     ["style"],
-    ["className"],
-    ["toggleOnHeaderClick", "boolean", "true", "Whether clicking anywhere in the header toggles the panel."],
-    ["headerProps", "RowProps", "-", "Props forwarded to the header row."],
-    ["contentProps", "ColumnProps", "-", "Props forwarded to the content column."],
-    ["...flex"]
+    ["className"]
   ]}
 />
 

@@ -401,26 +401,13 @@ const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
 ## API reference
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
+  component="Textarea"
+  describe={{
+    variant: "Ghost drops the border and background.",
+  }}
   content={[
-    ["id", "string"],
-    ["label", "string"],
-    ["placeholder", "string"],
-    ["size", ["xs", "s", "m", "l", "xl"], "m"],
-    ["lines", ["number", "auto"], "3"],
-    ["error", "boolean", "false"],
-    ["errorMessage", "ReactNode"],
-    ["description", "ReactNode"],
-    ["corners", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"], "none"],
-    ["prefix", "ReactNode"],
-    ["suffix", "ReactNode"],
-    ["characterCount", "boolean", "false"],
-    ["resize", ["horizontal", "vertical", "both", "none"], "vertical"],
-    ["validate", "(value: string) => ReactNode | null"],
     ["className"],
     ["style"],
-    ["variant", ["default", "ghost"], "\"default\"", "Ghost drops the border and background."],
     ["...TextareaHTMLAttributes"]
   ]}
 />

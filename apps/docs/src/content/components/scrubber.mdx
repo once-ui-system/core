@@ -104,22 +104,7 @@ what belongs in it is entirely your application's business.
 ## API reference
 
 <PropsTable
-  content={[
-    ["duration", "number"],
-    ["value", "number"],
-    ["onChange", "(time: number) => void"],
-    ["tracks", "ScrubberTrack[]", "[]"],
-    ["selected", "string | null", "null"],
-    ["onSelect", "(blockId: string | null) => void"],
-    ["onBlockChange", "(trackId: string, blockId: string, next: { start: number; end: number }) => void"],
-    ["onGestureStart", "() => void"],
-    ["onBlockContextMenu", "(event: MouseEvent, trackId: string, blockId: string) => void"],
-    ["showTime", "boolean", "true"],
-    ["formatTime", "(time: number) => string"],
-    ["step", "number"],
-    ["ariaLabel", "string", "Seek"],
-    ["...flex"]
-  ]}
+  component="Scrubber"
 />
 
 ### ScrubberTrack

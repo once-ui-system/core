@@ -203,26 +203,14 @@ You can pass custom content to the toggle button.
 ## API reference
 
 <PropsTable
+  component="ToggleButton"
+  describe={{
+    rounded: "Fully rounded corners.",
+  }}
   content={[
-    ["label", "ReactNode"],
-    ["selected", "boolean", "false"],
-    ["variant", ["ghost", "outline", "subtle"], "ghost"],
-    ["size", ["xs", "s", "m", "l", "xl"], "m"],
-    ["corners", [
-      "none", "top", "right", "bottom", "left",
-      "top-left", "top-right", "bottom-right", "bottom-left"
-    ]],
-    ["horizontal", ["start", "center", "end", "between"], "center"],
-    ["fillWidth", "boolean", "false"],
-    ["weight", ["default", "strong"], "default"],
-    ["truncate", "boolean", "false"],
-    ["prefixIcon", "IconName"],
-    ["suffixIcon", "IconName"],
-    ["href", "string"],
     ["children"],
     ["className"],
     ["style"],
-    ["rounded", "boolean", "false", "Fully rounded corners."],
-    ["...ButtonHTMLAttributes", "ButtonAttributes"],
+    ["...ButtonHTMLAttributes", "ButtonAttributes"]
   ]}
- />
+/>

@@ -233,15 +233,12 @@ Distribute the button widths evenly across the container.
 ## API reference
 
 <PropsTable
+  component="SegmentedControl"
+  describe={{
+    compact: "Tighter padding, for dense toolbars.",
+  }}
   content={[
-    ["buttons", "ButtonOption[]"],
-    ["onChange", "(value: string, event?) => void"],
-    ["defaultValue", "string"],
-    ["value", "string"],
-    ["fillWidth", "boolean", "true"],
     ["className"],
-    ["style"],
-    ["compact", "boolean", "false", "Tighter padding, for dense toolbars."],
-    ["...scroller", "ScrollerProps"]
+    ["style"]
   ]}
 />

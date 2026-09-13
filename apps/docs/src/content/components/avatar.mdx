@@ -183,17 +183,12 @@ Use the T-shirt size model or set sizes with numbers (REM).
 ## API reference
 
 <PropsTable
+  component="Avatar"
+  describe={{
+    unoptimized: "Bypass the image optimizer, for sources it cannot process.",
+  }}
   content={[
-    ["size", ["xs", "s", "m", "l", "xl", "number"], "m"],
-    ["value", "string"],
-    ["src", "string"],
-    ["icon", "string"],
-    ["loading", "boolean", "false"],
-    ["empty", "boolean", "false"],
-    ["statusIndicator", "object"],
     ["style"],
-    ["className"],
-    ["unoptimized", "boolean", "false", "Bypass the image optimizer, for sources it cannot process."],
-    ["...flex"]
+    ["className"]
   ]}
 />

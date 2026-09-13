@@ -375,17 +375,9 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
 The `CelebrationFx` component extends all layout props from `Flex` plus the following celebration-specific props:
 
 <PropsTable
+  component="CelebrationFx"
   content={[
-    ["type", ["confetti", "fireworks"], "confetti"],
-    ["speed", "number", "1"],
-    ["colors", "string[]", '["brand-solid-medium", "accent-solid-medium"]'],
-    ["intensity", "number", "50"],
-    ["duration", "number (s)", "undefined (infinite)"],
-    ["trigger", ["mount", "hover", "click", "manual"], "mount"],
-    ["active", "boolean", "true (for manual trigger)"],
-    ["reducedMotion", ['true', 'false', '"auto"'], '"auto"'],
-    ["children"],
-    ["...flex"],
+    ["children"]
   ]}
 />
 
