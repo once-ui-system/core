@@ -1,7 +1,7 @@
 ---
 title: "Input"
 summary: "Input provides a flexible text entry field with support for labels, validation, and custom styling."
-updatedAt: "2025-05-12"
+updatedAt: "2026-09-13"
 docs: "once-ui/form-controls/input.mdx"
 github: "components/Input.tsx"
 navLabel: "Input"
@@ -281,6 +281,34 @@ The Input component supports five sizes: extra small, small, medium, large, and 
     }
   ]}
  />
+
+## On touch devices
+
+iOS Safari zooms the page when a focused control computes below 16px, and it
+does not reliably zoom back out — the page is left scrolled somewhere else.
+Once UI's mobile base is 15px, which put three of the five sizes under that
+threshold, `size="m"` among them.
+
+On touch pointers only, the value is therefore clamped:
+
+| | clamp |
+| --- | --- |
+| font-size | `max(token, 16px)` |
+| line-height | `max(token, 1.3 × font-size)` |
+| min-height (`xs`, `s`) | `40px` and `48px` |
+
+Line-height is clamped alongside the font because `xs` and `s` resolve
+`--line-height-body-s` to 16.88px on mobile — 16px glyphs would otherwise sit
+in a line box barely taller than themselves.
+
+Nothing changes on a mouse pointer, and `l` and `xl` are untouched either way:
+they already cleared 16px. The visible consequence is that `xs`, `s` and `m`
+render the same text size on a phone and differ by height alone, which is how
+iOS treats its own text fields.
+
+The floating label and the value are positioned from where their ink falls —
+cap height, baseline and descender — so the pair stays optically centred at
+whatever size and height the clamps produce.
 
 ## Variants
 

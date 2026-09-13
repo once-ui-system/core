@@ -1,7 +1,7 @@
 ---
 title: "Icon"
 summary: "The Icon component displays an icon with various styles and sizes."
-updatedAt: "2025-05-09"
+updatedAt: "2026-09-13"
 docs: "once-ui/components/icon.mdx"
 github: "components/Icon.tsx"
 navLabel: "Icon"
@@ -149,7 +149,15 @@ By default, icons are considered decorative and hidden from screen readers. Use 
 
 ## Icon library
 
-The Icon component uses icons from the [react-icons](https://react-icons.github.io/react-icons/) library. The available icons are defined in the icon library file. Learn how to import new icons on the [IconProvider](/once-ui/contexts/iconProvider) page.
+Once UI ships its own icons — the SVG data is inlined in the package, so no
+icon dependency is installed with it. 76 names are built in, covering
+everything the components themselves render.
+
+`name` is typed as `IconName`, a union of those names, so a typo is a build
+error rather than a blank space at runtime. To add your own icons — from
+[react-icons](https://react-icons.github.io/react-icons/), another set, or
+hand-written SVG — and to extend that union with them, see
+[IconProvider](/once-ui/contexts/iconProvider).
 
 <CodeBlock
   marginTop="16"

@@ -1,7 +1,7 @@
 ---
 title: "Textarea"
 summary: "A multi-line text input component for collecting longer form text content."
-updatedAt: "2025-05-13"
+updatedAt: "2026-09-13"
 docs: "once-ui/form-controls/textarea.mdx"
 github: "components/Textarea.tsx"
 navLabel: "Textarea"
@@ -325,6 +325,16 @@ The Textarea component supports five sizes: extra small, small, medium, large, a
     }
   ]}
  />
+
+## On touch devices
+
+The same 16px font and 1.3 line-height clamps that `Input` applies on touch
+pointers apply here, for the same reason: below 16px, iOS Safari zooms on
+focus and does not reliably zoom back. A textarea grows with its content, so
+it anchors its floating label to a fixed top inset rather than centring the
+pair, but the gap between label and text is the one `Input` uses.
+
+See [Input](/once-ui/form-controls/input) for the full table.
 
 ## Validation
 

@@ -1,14 +1,22 @@
 ---
 title: "IconProvider"
 summary: "Once UI's icon provider component allows you to pass an object of icon instances to your application."
-updatedAt: "2025-06-08"
+updatedAt: "2026-09-13"
 docs: "once-ui/contexts/iconProvider.mdx"
 github: "contexts/IconProvider.tsx"
 navLabel: "IconProvider"
 navIcon: "chip"
 ---
 
-The `IconProvider` component is a context provider that allows you to pass an object of icon instances to your application. Add any icon from the [react-icons](https://react-icons.github.io/react-icons/) library to the provider.
+The `IconProvider` component is a context provider that allows you to pass an
+object of icon instances to your application, merged with the 76 icons Once UI
+ships built in.
+
+An icon is anything that renders an SVG and needs no props — Once UI never
+passes any. So icons from [react-icons](https://react-icons.github.io/react-icons/),
+lucide, heroicons, or a component you wrote yourself all satisfy it. The
+registry is typed structurally, so no icon library appears in your app's types
+because of Once UI.
 
 ## Simple setup
 
@@ -70,9 +78,7 @@ export function Providers({ children }: {
     },
     {
     code:
-`// This is the default iconset used by Once UI
-import { IconType } from "react-icons";
-
+`// Your own icons, merged with the ones Once UI ships
 import {
     HiChevronUp,
     HiChevronDown,
@@ -107,7 +113,7 @@ import {
     HiOutlineArrowsPointingOut,
 } from "react-icons/hi2";
 
-export const iconLibrary: Record<string, IconType> = {
+export const iconLibrary = {
     chevronUp: HiChevronUp,
     chevronDown: HiChevronDown,
     chevronRight: HiChevronRight,
@@ -141,8 +147,11 @@ export const iconLibrary: Record<string, IconType> = {
     maximize: HiOutlineArrowsPointingOut,
 };
 
-export type IconLibrary = typeof iconLibrary;
-export type IconName = keyof IconLibrary;
+// Teach Once UI these names, so <Icon name="chevronUp" /> type-checks.
+// Derived from the object above, so the two cannot drift apart.
+declare module "@once-ui-system/core" {
+  interface IconLibraryOverrides extends Record<keyof typeof iconLibrary, true> {}
+}
 `,
     language: "tsx",
     label: "icons.ts",
@@ -150,7 +159,43 @@ export type IconName = keyof IconLibrary;
   ]}
 />
 
+## Type-checking your own names
+
+`IconName` is a union of the built-in names, and `Icon` accepts nothing else.
+Registering icons at runtime does not by itself teach TypeScript about them, so
+extend the union by merging into `IconLibraryOverrides`:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`export const iconLibrary = {
+  rocket: HiOutlineRocketLaunch,
+  github: FaGithub,
+};
+
+declare module "@once-ui-system/core" {
+  interface IconLibraryOverrides extends Record<keyof typeof iconLibrary, true> {}
+}`,
+      language: "tsx",
+      label: "icons.ts"
+    }
+  ]}
+/>
+
+Deriving the interface from the object means the two cannot drift: add an icon
+to the registry and its name type-checks immediately, remove one and every use
+of it becomes a build error.
+
+Two things to avoid. Do not annotate the registry as
+`Record<string, IconType>` — that widens the keys to `string`, which collapses
+`IconName` and lets every typo through. And do not list the names by hand; the
+list will fall out of date.
+
 ## Default icons
+
 
 Overwrite the default icons used in Once UI components (for example the chevron in the `Select` component) by providing new icons with the same keys to the `IconProvider`.
 
