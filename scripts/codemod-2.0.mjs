@@ -13,7 +13,7 @@
  * default made it 50% wide) from one deliberately left unset in 2.0, and will
  * add a width the author did not want.
  *
- * Usage:  node scripts/codemod-2.0.mjs <dir> [--dry]
+ * Usage:  node scripts/codemod-2.0.mjs <dir> [--dry] [--css]
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -505,6 +505,12 @@ export function rewriteImports(src) {
  * The import moves; the CSS does not change. A consumer that takes this also
  * needs `@once-ui-system/foundations` in its dependencies, which a codemod
  * cannot add for it — hence the note.
+ *
+ * So this pass is **opt-in** (`--css`), and off by default. foundations is not
+ * on npm yet, and rewriting an app's stylesheet import to a package that
+ * 404s is worse than leaving it on a shim that works: the app would not build,
+ * and nothing it could do would fix it. Once foundations publishes, the flag
+ * becomes the recommended step and the default can flip with it.
  */
 const CSS_MOVES = {
   "@once-ui-system/core/css/styles.css": "@once-ui-system/foundations/css/styles.css",
@@ -525,10 +531,10 @@ export function rewriteCssImports(src) {
   return { out, hits, warnings };
 }
 
-export function transform(src) {
+export function transform(src, { css: migrateCss = false } = {}) {
   const hits = [];
   const warnings = [];
-  const css = rewriteCssImports(src);
+  const css = migrateCss ? rewriteCssImports(src) : { out: src, hits: [], warnings: [] };
   hits.push(...css.hits);
   warnings.push(...css.warnings);
   const moved = rewriteImports(css.out);
@@ -594,8 +600,9 @@ export function transform(src) {
 const invokedDirectly = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (!invokedDirectly) { /* imported */ } else {
 const [dir, ...flags] = process.argv.slice(2);
-if (!dir) { console.error("usage: codemod-2.0.mjs <dir> [--dry]"); process.exit(1); }
+if (!dir) { console.error("usage: codemod-2.0.mjs <dir> [--dry] [--css]"); process.exit(1); }
 const dry = flags.includes("--dry");
+const css = flags.includes("--css");
 const files = [];
 (function walk(d) {
   for (const e of fs.readdirSync(d, { withFileTypes: true })) {
@@ -609,7 +616,7 @@ const files = [];
 let total = 0, touched = 0, totalWarnings = 0;
 for (const f of files) {
   const src = fs.readFileSync(f, "utf8");
-  const { out, hits, warnings } = transform(src);
+  const { out, hits, warnings } = transform(src, { css });
   if (!hits.length && !warnings.length) continue;
   if (warnings.length) {
     console.log(`${f}`);

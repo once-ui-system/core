@@ -282,9 +282,18 @@ describe("imports that moved to a subpath", () => {
 });
 
 describe("stylesheets that moved to foundations", () => {
+  it("is off unless asked for, because foundations is not on npm yet", () => {
+    const src = `import "@once-ui-system/core/css/styles.css";`;
+    const { out, hits, warnings } = transform(src);
+    assert.equal(out, src);
+    assert.deepEqual(hits, []);
+    assert.deepEqual(warnings, []);
+  });
+
   it("moves both entries and keeps the quote style", () => {
     const { out } = transform(
       `import "@once-ui-system/core/css/styles.css";\nimport '@once-ui-system/core/css/tokens.css';`,
+      { css: true },
     );
     assert.equal(
       out,
@@ -293,13 +302,13 @@ describe("stylesheets that moved to foundations", () => {
   });
 
   it("says the package has to be added, which it cannot do itself", () => {
-    const { warnings } = transform(`import "@once-ui-system/core/css/tokens.css";`);
+    const { warnings } = transform(`import "@once-ui-system/core/css/tokens.css";`, { css: true });
     assert.deepEqual(warnings, ["add @once-ui-system/foundations to this app's dependencies"]);
   });
 
   it("leaves an already-migrated import alone", () => {
     const src = `import "@once-ui-system/foundations/css/tokens.css";`;
-    const { out, hits, warnings } = transform(src);
+    const { out, hits, warnings } = transform(src, { css: true });
     assert.equal(out, src);
     assert.deepEqual(hits, []);
     assert.deepEqual(warnings, []);
