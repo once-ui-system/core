@@ -42,7 +42,7 @@ const layout = {
   },
   sidebar: {
     width: 17, // width of the sidebar
-    collapsible: false, // accordion or static render
+    collapsible: true, // accordion or static render
   },
   content: {
     width: 44, // width of the main content block
