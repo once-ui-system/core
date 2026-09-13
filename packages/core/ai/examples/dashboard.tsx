@@ -6,6 +6,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import {
+  Button,
   Column,
   CountFx,
   Grid,
@@ -137,9 +138,7 @@ export function DashboardExample() {
             <Heading as="h2" variant="heading-strong-s">
               Recent activity
             </Heading>
-            <Text variant="label-default-s" onBackground="brand-medium" style={{ cursor: "pointer" }}>
-              View all
-            </Text>
+            <Button variant="tertiary" size="s" label="View all" />
           </Row>
           <Line />
           <Table fillWidth data={activity} />

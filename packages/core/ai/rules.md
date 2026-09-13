@@ -47,7 +47,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 ## Spacing and sizing
 
-4. Use spacing tokens, never raw CSS: `gap`, `padding`, `margin`, `paddingX/Y`, `marginX/Y` accept tokens (`"2" "4" "8" "12" "16" "20" "24" "32" "40" "48" "64"` or `"xs" "s" "m" "l" "xl"`).
+4. Use spacing tokens, never raw CSS: `gap`, `padding`, `margin`, `paddingX/Y`, `marginX/Y` accept the full `SpacingToken` scale (`"0" "1" "2" "4" "8" "12" "16" "20" "24" "32" "40" "48" "56" "64" "80" "104" "128" "160"`, or `"xs" "s" "m" "l" "xl"`). The top of the scale is what rule 17 calls for between sections — it is not an extension, it is part of the same list.
 
 ```tsx
 // Good
@@ -109,9 +109,9 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
     - `CursorCard`, `HoverCard`, `ContextMenu`, `EmojiPicker`, `CompareImage`, `OgCard`, `Timeline`, `MasonryGrid`, `InfiniteScroll`, `SegmentedControl`, `Kbar` (command palette)
     - Forms: `Input`, `PasswordInput`, `OTPInput`, `NumberInput`, `TagInput`, `Select`, `DatePicker`, `DateRangePicker`, `ColorInput`, `Slider`, `Switch`, `Checkbox`, `Chip`
 
-14. Buttons: `variant` = `primary | secondary | tertiary | danger`; pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
+14. Buttons: `variant` = `primary | secondary | tertiary | quaternary | subtle | danger | success | warning | ghost | link` (the slice is authoritative; `primary` is the default); pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
 
-14b. Icon names must come from the `IconName` list in spec.json — never invent names (`more`, `bell`, and `arrowRight` don't exist; `close`, `chevronRight`, and `smiley` do). If no icon fits, omit the icon.
+14b. Icon names must come from `iconNames` in spec.json. In 2.0 `IconName` is a real union, so an unregistered name is a type error rather than a blank space — do not guess a plausible one, and never reach for `as IconName` to silence the check. If no registered icon fits, omit the icon. (There is no chat, comment or message icon; `smiley`, `edit` and `send` are the nearest registered names.)
 
 14c. Components with a text prop render it — never pass the same text as both prop and children, it renders twice:
 

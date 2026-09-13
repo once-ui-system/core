@@ -335,7 +335,7 @@ export const Dashboard1: React.FC = () => {
                           avatar: "/images/creators/vincent.jpg",
                           action: "Commented on Mobile App Development",
                           time: "4 hours ago",
-                          icon: "chat" as IconName
+                          icon: "edit" as IconName
                         },
                         {
                           avatar: "/images/creators/zsofia.jpg",

@@ -6,7 +6,6 @@
  */
 import { useEffect, useRef, useState } from "react";
 import {
-  AccordionGroup,
   Background,
   BlobFx,
   Button,
