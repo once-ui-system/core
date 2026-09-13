@@ -145,7 +145,7 @@ Before submitting a PR:
 
 ### Code conventions
 
-- Follow our [component conventions](https://docs.once-ui.com/once-ui/basics/components) and file structure.
+- Follow our [component conventions](https://docs.once-ui.com/basics/components) and file structure.
 - Use the naming system and design tokens already defined in the project.
 - Components should be server-compatible or marked `"use client"`.
 - Use `forwardRef` and accept `className`/`style` overrides.

@@ -29,10 +29,10 @@ there was none. What remains is the maintainer's publish decision — whether 2.
 ships as scoped here, or whether any of it waits.
 
 **What a 1.8.x app has to do.** Five things, in the order it makes sense to do
-them:
+them — [MIGRATING.md](MIGRATING.md) walks each one:
 
-1. Run `node scripts/codemod-2.0.mjs src`. It applies every prop rename below,
-   component-scoped, and is a no-op on its own output.
+1. Run the codemod. It applies every prop rename below, component-scoped, and is
+   a no-op on its own output.
 2. Move chart, `CodeBlock` and `MediaUpload` imports to the `/data`, `/code` and
    `/media` subpaths, and install the peer each one names. The codemod does this
    too.
@@ -80,11 +80,13 @@ resolve an optional module.
 
 **Prop API standardisation.** Every place where one prop name carried two
 meanings, or one meaning went by two names, is resolved. All of it is
-mechanical: `scripts/codemod-2.0.mjs` applies the renames component-scoped,
-and running it twice is a no-op.
+mechanical: the codemod applies the renames component-scoped, following import
+aliases, and running it twice is a no-op.
 
 ```bash
-node scripts/codemod-2.0.mjs src
+curl -O https://raw.githubusercontent.com/once-ui-system/core/main/scripts/codemod-2.0.mjs
+node codemod-2.0.mjs src --dry   # report only
+node codemod-2.0.mjs src
 ```
 
 Boolean props that toggle visibility now read `showX`, leaving the plain name
