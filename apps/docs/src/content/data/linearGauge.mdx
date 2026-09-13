@@ -264,16 +264,7 @@ Customize tick count, width, and length for different visual densities.
 The `LinearGauge` component accepts all layout props from `Flex` (except `direction`) plus the following gauge-specific props:
 
 <PropsTable
-  content={[
-    ["width", "number", "400"],
-    ["height", "number", "80"],
-    ["line", "object", "{{ count: 48, width: 3, length: 40 }}"],
-    ["value", "0–100", "50"],
-    ["labels", ["none", "percentage", "string[]"], "none"],
-    ["hue", ["success", "neutral", "danger", "[number, number]"]],
-    ["color", "string", "contrast"],
-    ["...flex"],
-  ]}
-/>
+  component="LinearGauge"
+  />
 
 Use `LinearGauge` for horizontal metrics displays, progress tracking, or any scenario where a linear representation is more appropriate than a radial one.

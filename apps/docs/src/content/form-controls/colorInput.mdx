@@ -19,8 +19,8 @@ The `ColorInput` component provides an enhanced color picker that displays the s
       code:
 `const [colorValue, setColorValue] = useState("#4287f5");
   
-const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setColorValue(e.target.value);
+const handleColorChange = (value: string) => {
+    setColorValue(value);
 };
 
 <ColorInput
@@ -56,8 +56,8 @@ Enable alpha channel (transparency) control by setting `supportAlpha` to true. T
       code:
 `const [colorValue, setColorValue] = useState("rgba(66, 135, 245, 0.8)");
   
-const handleColorChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setColorValue(e.target.value);
+const handleColorChange = (value: string) => {
+    setColorValue(value);
 };
 
 <ColorInput
@@ -85,10 +85,10 @@ When `supportAlpha` is enabled:
 The `ColorInput` component extends the standard `Input` component props with the following modifications:
 
 <PropsTable
-  marginTop="16"
-  marginBottom="24"
-  content={[
-    ["supportAlpha", "boolean", "false"],
-    ["...input"]
-  ]}
+  component="ColorInput"
+  describe={{
+    value: "The current colour, as hex or rgba. Controlled — pair it with onChange.",
+    onChange: "Receives the colour string directly, not a DOM event.",
+    supportAlpha: "Adds an opacity slider and switches the value to rgba().",
+  }}
 />

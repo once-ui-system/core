@@ -147,7 +147,18 @@ function resolve(
 
 function PropsTable({ component, describe, only, exclude, content, label }: PropsTableProps) {
   const resolved = component ? resolve(component, describe ?? {}, only, exclude) : [];
-  return <PropsTableView content={[...resolved, ...(content ?? [])]} label={label} />;
+
+  // A page that lists `...input` by hand next to a component whose spec already
+  // extends Input would otherwise print the inherited-props row twice.
+  const seen = new Set<string>();
+  const rows = [...resolved, ...(content ?? [])].filter(([name]) => {
+    if (!name.startsWith("...")) return true;
+    if (seen.has(name)) return false;
+    seen.add(name);
+    return true;
+  });
+
+  return <PropsTableView content={rows} label={label} />;
 }
 
 export { PropsTable };

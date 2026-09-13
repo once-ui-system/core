@@ -251,28 +251,11 @@ Use `loading` to show a spinner while data is fetched. Provide `emptyState` or `
 ## API reference
 
 <PropsTable
+  component="Table"
   content={[
-    ["data", `{ headers: { content: ReactNode; key: string; sortable?: boolean; width?: string; align?: "left" | "center" | "right"; }[]; rows: ReactNode[][]; }`],
-    ["onRowClick", "(rowIndex: number) => void"],
-    ["searchable", "boolean", "false"],
-    ["searchPlaceholder", "string", "Search..."],
-    ["striped", "boolean", "false"],
-    ["hoverable", "boolean", "true"],
-    ["compact", "boolean", "false"],
-    ["loading", "boolean", "false"],
-    ["emptyState", "ReactNode"],
-    ["loadingState", "ReactNode"],
-    ["actions", "TableAction[]"],
-    ["stickyHeader", "boolean", "false"],
     ["maxHeight", "string"],
-    ["rowClassName", "(rowIndex: number) => string"],
-    ["cellClassName", "(rowIndex: number, cellIndex: number) => string"],
-    ["paginated", "boolean", "false"],
-    ["defaultPageSize", "number", "10"],
-    ["pageSizeOptions", "number[]", "[5, 10, 20, 50]"],
     ["className"],
-    ["style"],
-    ["...flex"]
+    ["style"]
   ]}
 />
 
