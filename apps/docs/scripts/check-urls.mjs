@@ -31,7 +31,9 @@ function slugs(dir = CONTENT) {
   return out.sort();
 }
 
-const { movedPages } = await import(pathToFileURL(join(root, "src/resources/redirects.js")).href);
+const { movedPages, applyPrefixMoves } = await import(
+  pathToFileURL(join(root, "src/resources/redirects.js")).href,
+);
 
 const current = slugs();
 
@@ -52,7 +54,13 @@ const redirected = new Map(movedPages.map(({ from, to }) => [from, to]));
 
 const added = current.filter((s) => !previous.includes(s));
 const gone = previous.filter((s) => !live.has(s));
-const unredirected = gone.filter((s) => !redirected.has(s));
+// A page counts as redirected when it has its own entry, or when a prefix
+// move covers it and lands somewhere that exists.
+const coveredByPrefix = (s) => {
+  const target = applyPrefixMoves(s);
+  return target !== null && live.has(target);
+};
+const unredirected = gone.filter((s) => !redirected.has(s) && !coveredByPrefix(s));
 // A redirect that points at a page which does not exist is worse than none:
 // it turns one 404 into a redirect chain ending in a 404.
 const danglingTargets = [...redirected.entries()].filter(([, to]) => !live.has(to));

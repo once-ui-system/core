@@ -52,7 +52,7 @@ const layout = {
 
 const social = [
   // Links are automatically displayed.
-  // Import new icons in /once-ui/icons.ts
+  // Import new icons in /icons.ts
   {
     name: "GitHub",
     icon: "github",
@@ -61,7 +61,7 @@ const social = [
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
+    link: "https://www.linkedin.com/company/",
   },
   {
     name: "Discord",

@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 import withMDX from '@next/mdx'
-import { movedPageRedirects, retiredPageRedirects } from './src/resources/redirects.js'
+import { movedPageRedirects, prefixMoveRedirects, retiredPageRedirects } from './src/resources/redirects.js'
 
 const withMDXConfig = withMDX({
   extension: /\.mdx?$/,
@@ -53,6 +53,8 @@ const nextConfig = {
     return [
       // Pages that moved within the docs. See src/resources/redirects.js.
       ...movedPageRedirects,
+      // Whole sections that moved. See prefixMoves.
+      ...prefixMoveRedirects,
       // Pages retired in favour of an off-site canonical source.
       ...retiredPageRedirects,
       {

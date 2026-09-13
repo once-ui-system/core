@@ -61,7 +61,7 @@ const NavigationItemComponent: React.FC<{
   const pathSegments = pathname.split("/").filter(Boolean);
 
   // For top-level directories, check if their name is in the pathname segments
-  // This will match routes like "/once-ui/quick-start" for the "once-ui" parent
+  // This will match routes like "/quick-start" for the "once-ui" parent
   const isTopLevelMatch =
     depth === 0 &&
     pathSegments.length >= 2 &&

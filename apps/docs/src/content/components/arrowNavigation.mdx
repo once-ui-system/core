@@ -12,15 +12,15 @@ navTagVariant: "cyan"
 
 `ArrowNavigation` wraps a set of items and moves focus between them with the
 arrow keys. It is the component form of
-[`useArrowNavigation`](/once-ui/hooks/useArrowNavigation): the hook when you own
+[`useArrowNavigation`](/hooks/useArrowNavigation): the hook when you own
 the container and its key handler, this when you would rather not write either.
 
 Arrow keys are the expected way to move within a *composite* widget — a menu, a
 listbox, a toolbar, an emoji grid — where Tab should reach the widget once and
-then hand over. [`Select`](/once-ui/form-controls/select),
-[`DropdownWrapper`](/once-ui/components/dropdownWrapper),
-[`DatePicker`](/once-ui/form-controls/datePicker) and
-[`Kbar`](/once-ui/modules/kbar) are built on it.
+then hand over. [`Select`](/form-controls/select),
+[`DropdownWrapper`](/components/dropdownWrapper),
+[`DatePicker`](/form-controls/datePicker) and
+[`Kbar`](/modules/kbar) are built on it.
 
 <CodeBlock
   marginTop="16"
@@ -86,7 +86,7 @@ item early.
 ## Trapping focus too
 
 Set `trapFocus` to wrap the region in a
-[`FocusTrap`](/once-ui/components/focusTrap). The two divide the keyboard
+[`FocusTrap`](/components/focusTrap). The two divide the keyboard
 cleanly: the trap owns Tab and Escape, `ArrowNavigation` owns the arrows.
 
 <CodeBlock

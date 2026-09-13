@@ -13,8 +13,39 @@
  * page.
  */
 export const movedPages = [
-  // { from: "once-ui/components/foo", to: "once-ui/layout/foo" },
+  // { from: "components/foo", to: "layout/foo" },
 ];
+
+/**
+ * Whole sections that moved, as a prefix swap.
+ *
+ * A reorganisation that re-homes every page under a folder would otherwise
+ * need one `movedPages` entry per page — 150-odd lines that say the same
+ * thing and can fall out of step with each other. One entry here covers the
+ * section, expands to a single wildcard redirect, and `check-urls.mjs`
+ * counts a page as redirected when a prefix covers it.
+ *
+ * `from` and `to` are slug prefixes without a leading slash. `to` may be
+ * empty, which lifts the section to the root.
+ */
+export const prefixMoves = [
+  // The docs are Once UI's docs; saying so again in every URL earned nothing.
+  { from: "once-ui/", to: "" },
+];
+
+export const prefixMoveRedirects = prefixMoves.map(({ from, to }) => ({
+  source: `/${from}:path*`,
+  destination: `/${to}:path*`,
+  permanent: true,
+}));
+
+/** The new slug for an old one, or null when no prefix covers it. */
+export function applyPrefixMoves(slug) {
+  for (const { from, to } of prefixMoves) {
+    if (slug.startsWith(from)) return `${to}${slug.slice(from.length)}`;
+  }
+  return null;
+}
 
 /**
  * Pages that were retired rather than moved, and the off-site page that now

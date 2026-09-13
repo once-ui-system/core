@@ -27,19 +27,19 @@ interface PropsTableProps {
  * React's own attribute types have no page of their own and link out to MDN.
  */
 const SPREADS: Record<string, { type: string; href?: string }> = {
-  flex: { type: "FlexProps", href: "/once-ui/components/flex" },
-  grid: { type: "GridProps", href: "/once-ui/components/grid" },
-  text: { type: "TextProps", href: "/once-ui/components/text" },
-  card: { type: "CardProps", href: "/once-ui/components/card" },
-  scroller: { type: "ScrollerProps", href: "/once-ui/components/scroller" },
-  animation: { type: "AnimationProps", href: "/once-ui/components/animation" },
-  user: { type: "UserProps", href: "/once-ui/components/user" },
-  chart: { type: "ChartProps", href: "/once-ui/data/setup" },
+  flex: { type: "FlexProps", href: "/components/flex" },
+  grid: { type: "GridProps", href: "/components/grid" },
+  text: { type: "TextProps", href: "/components/text" },
+  card: { type: "CardProps", href: "/components/card" },
+  scroller: { type: "ScrollerProps", href: "/components/scroller" },
+  animation: { type: "AnimationProps", href: "/components/animation" },
+  user: { type: "UserProps", href: "/components/user" },
+  chart: { type: "ChartProps", href: "/data/setup" },
   dropdownWrapper: {
     type: "DropdownWrapperProps",
-    href: "/once-ui/components/dropdownWrapper",
+    href: "/components/dropdownWrapper",
   },
-  input: { type: "InputProps", href: "/once-ui/form-controls/input" },
+  input: { type: "InputProps", href: "/form-controls/input" },
   HTMLAttributes: {
     type: "React.HTMLAttributes",
     href: "https://developer.mozilla.org/en-US/docs/Web/HTML/Global_attributes",

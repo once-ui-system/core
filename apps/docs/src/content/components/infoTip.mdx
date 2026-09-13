@@ -40,7 +40,7 @@ layout on something most readers only need once.
 
 ## Sizing
 
-`size` takes the same tokens as [`Icon`](/once-ui/components/icon). Match it to
+`size` takes the same tokens as [`Icon`](/components/icon). Match it to
 the text it sits beside — `xs` next to a label, `s` next to body copy — so the
 icon reads as part of the line rather than an object dropped into it.
 
@@ -71,7 +71,7 @@ icon reads as part of the line rather than an object dropped into it.
 Hover-only content is invisible on touch and to anyone scanning rather than
 pointing, so an `InfoTip` must never carry information the reader needs in order
 to make the choice in front of them. That belongs in a visible description —
-[`Setting`](/once-ui/components/setting) has a `description` prop for exactly
+[`Setting`](/components/setting) has a `description` prop for exactly
 this. Reserve `InfoTip` for the second sentence: the caveat, the unit, the
 reason a default is what it is.
 
@@ -79,7 +79,7 @@ Anything longer than a sentence or two wants a link to a page, not a tip.
 
 ## In a Setting
 
-[`Setting`](/once-ui/components/setting) renders an `InfoTip` for you when you
+[`Setting`](/components/setting) renders an `InfoTip` for you when you
 pass its `info` prop, which is the usual way you will meet this component.
 
 <CodeBlock

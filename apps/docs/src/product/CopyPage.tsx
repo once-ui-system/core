@@ -12,7 +12,7 @@ import {
 } from "@once-ui-system/core";
 
 interface CopyPageProps {
-  /** Route of the page being read, e.g. `/once-ui/components/card`. */
+  /** Route of the page being read, e.g. `/components/card`. */
   path: string;
 }
 

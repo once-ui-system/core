@@ -23,7 +23,7 @@ function:
       label: "Meta",
       language: "tsx",
       code:
-`import { Meta } from "@/once-ui/modules";
+`import { Meta } from "@/modules";
 
 export async function generateMetadata() {
     return Meta.generate({
@@ -89,7 +89,7 @@ Reference the configuration in your pages:
       label: "app/{page}/page.tsx",
       language: "tsx",
       code:
-`import { Meta } from '@/once-ui/modules';
+`import { Meta } from '@/modules';
 import { meta } from '@/app/resources/seo';
 
 export async function generateMetadata() {
