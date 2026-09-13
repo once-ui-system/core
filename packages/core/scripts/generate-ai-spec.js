@@ -100,6 +100,50 @@ function typeText(node) {
     .replace(/^\|\s*/, "");
 }
 
+/**
+ * Resolve the type aliases that props refer to by name.
+ *
+ * A prop typed `TShirtSizes = m` tells a reader — human or model — nothing
+ * about which sizes exist, and guessing is how wrong values get written. Any
+ * alias that resolves to a union of string literals is therefore listed with
+ * its members, so the values are in the spec rather than a type name that
+ * only helps if you already have the source open.
+ */
+function collectTypeAliases(ts, program, checker, used) {
+  const types = {};
+  for (const file of program.getSourceFiles()) {
+    if (file.isDeclarationFile || !normalize(file.fileName).startsWith(SRC)) continue;
+    ts.forEachChild(file, (node) => {
+      if (!ts.isTypeAliasDeclaration(node)) return;
+      const name = node.name.getText();
+      if (!used.has(name) || types[name]) return;
+      const symbol = checker.getSymbolAtLocation(node.name);
+      if (!symbol) return;
+      const type = checker.getDeclaredTypeOfSymbol(symbol);
+      if (!type.isUnion()) return;
+      const members = type.types.map((t) => (t.isStringLiteral() ? t.value : null));
+      if (members.some((m) => m === null)) return;
+      types[name] = members;
+    });
+  }
+  return Object.fromEntries(Object.entries(types).sort(([a], [b]) => a.localeCompare(b)));
+}
+
+/** Every capitalised identifier a prop type mentions. */
+function typeNamesUsed(components, mixins) {
+  const used = new Set();
+  const scan = (value) => {
+    for (const match of String(value).matchAll(/\b[A-Z][A-Za-z0-9_]*\b/g)) used.add(match[0]);
+  };
+  for (const component of Object.values(components)) {
+    for (const value of Object.values(component.props ?? {})) scan(value);
+  }
+  for (const mixin of Object.values(mixins)) {
+    for (const value of Object.values(mixin ?? {})) scan(value);
+  }
+  return used;
+}
+
 async function main() {
   const ts = await import("typescript");
   const options = loadTsConfig(ts);
@@ -153,6 +197,24 @@ async function main() {
         return checker.getTypeFromTypeNode(call.typeArguments[1]);
       }
     }
+    // Object.assign(Component, parts) — a compound component such as
+    // StylePanel, whose props are the props of the component it wraps. Without
+    // this the export resolves to an intersection with no call signature the
+    // branches above recognise, and the component drops out of the spec
+    // silently: the docs still build, and only an agent reading the spec
+    // notices it is gone.
+    if (ts.isVariableDeclaration(decl) && decl.initializer && ts.isCallExpression(decl.initializer)) {
+      const call = decl.initializer;
+      if (call.expression.getText() === "Object.assign" && call.arguments.length) {
+        const base = checker.getSymbolAtLocation(call.arguments[0]);
+        const baseDecl = base?.valueDeclaration ?? base?.declarations?.[0];
+        if (baseDecl) {
+          const resolved = getPropsType(baseDecl);
+          if (resolved) return resolved;
+        }
+      }
+    }
+
     // const X: React.FC<Props> = ...
     if (ts.isVariableDeclaration(decl) && decl.type && ts.isTypeReferenceNode(decl.type)) {
       const typeName = decl.type.typeName.getText();
@@ -350,6 +412,8 @@ async function main() {
     JSON.parse(fs.readFileSync(path.join(__dirname, "icon-manifest.json"), "utf8")),
   ).sort();
 
+  const types = collectTypeAliases(ts, program, checker, typeNamesUsed(components, mixins));
+
   const spec = {
     name: pkg.name,
     version: pkg.version,
@@ -359,6 +423,7 @@ async function main() {
     tokens,
     mixins,
     iconNames,
+    types,
     components,
   };
 

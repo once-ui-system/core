@@ -412,26 +412,13 @@ Use the `color` prop to apply a specific color scheme to the button. Accepts a `
 ## API reference
 
 <PropsTable
+  component="Button"
+  describe={{
+    loading: "Swaps the label for a spinner and blocks further clicks.",
+    arrowIcon: "Adds a trailing arrow that slides on hover, for links that lead somewhere.",
+    href: "Renders an anchor instead of a button.",
+  }}
   content={[
-    ["variant", ["primary", "secondary", "tertiary", "quaternary", "subtle", "danger", "success", "warning", "ghost", "link"], "primary"],
-    ["size", ["xs", "s", "m", "l", "xl"], "m"],
-    ["corners", ["none", "top", "right", "bottom", "left", "top-left", "top-right", "bottom-right", "bottom-left"]],
-    ["label", "string"],
-    ["weight", ["default", "strong"], "strong"],
-    ["color", "`${ColorScheme}-${ColorWeight}`"],
-    ["prefixIcon", "IconName"],
-    ["suffixIcon", "IconName"],
-    ["loading", "boolean", "false"],
-    ["disabled", "boolean", "false"],
-    ["fillWidth", "boolean", "false"],
-    ["horizontal", ["start", "center", "end", "between"], "center"],
-    ["children", "ReactNode"],
-    ["href", "string"],
-    ["arrowIcon", "boolean", "false"],
-    ["rounded", "boolean"],
-    ["id", "string"],
-    ["className"],
-    ["style"],
     ["...ButtonHTMLAttributes"]
   ]}
 />

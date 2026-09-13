@@ -15,6 +15,13 @@ export { useStylePanel } from "./StylePanelSections";
 export interface StylePanelProps extends StylePanelRootProps {
   /** Hide whole sections or individual rows. Omitted keys stay visible. */
   visibility?: StylePanelVisibility;
+  /**
+   * Restated from `StylePanelRootProps` — indexed so the types stay tied to
+   * one declaration — because this is the component's public surface, and an
+   * inherited prop is invisible to anything reading the generated spec.
+   */
+  value?: StylePanelRootProps["value"];
+  onChange?: StylePanelRootProps["onChange"];
 }
 
 const visible = (section: { section?: boolean } | undefined) => section?.section !== false;

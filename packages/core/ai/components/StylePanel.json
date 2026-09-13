@@ -2,6 +2,7 @@
  "name": "StylePanel",
  "group": "components",
  "extends": [
+  "Column",
   "Flex"
  ],
  "mixins": [
@@ -13,8 +14,9 @@
   "StyleProps"
  ],
  "props": {
-  "style": "React.CSSProperties",
-  "className": "string"
+  "visibility": "StylePanelVisibility",
+  "value": "StylePanelRootProps[\"value\"]",
+  "onChange": "StylePanelRootProps[\"onChange\"]"
  },
  "mixinsRef": [
   "CommonProps",

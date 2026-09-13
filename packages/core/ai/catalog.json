@@ -848,6 +848,17 @@
     "components"
    ]
   },
+  "StylePanel": {
+   "group": "components",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "purpose": "StylePanel component",
+   "tags": [
+    "components"
+   ]
+  },
   "StyleOverlay": {
    "group": "components",
    "extends": [
