@@ -287,7 +287,7 @@ export const Streaming1: React.FC = () => {
       <Column fillWidth style={{marginTop: "calc(-1 * var(--static-space-64))"}}>
         <Row fillWidth style={{height: "80vh"}} paddingBottom="xl">
           <Carousel
-            fill
+            stretch
             border="transparent"
             radius="none"
             position="absolute"
@@ -306,7 +306,7 @@ export const Streaming1: React.FC = () => {
             pattern={{ display: true, size: "2" }}
           />
           <Carousel
-            fill
+            stretch
             pointerEvents="none"
             border="transparent"
             radius="none"

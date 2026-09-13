@@ -307,6 +307,28 @@ that way. The ramps themselves are untouched.
   can no longer leave a border on the last one; and only the `DataStyle` row
   reaches for `DataThemeProvider`, where the whole panel used to require one in
   the tree.
+- **An operable `Card` with no explicit `radius` got the class
+  `radius-undefined`.** The fallback was written `` `radius-${flex.radius}` ||
+  "radius-l" ``, and a template literal is a string — truthy even when the value
+  inside it is `undefined` — so the `||` never ran and the focus ring had no
+  radius to follow. A static `Card` also painted `cursor: interactive`, promising
+  a click it had no handler for; the cursor is now tied to `href` / `onClick`
+  like the focus ring and the role already were.
+- **The AI harness's validator was telling agents to write 1.8.x timings.** Its
+  `RevealFx.delay` rule read "delay is in seconds — use index * 0.1", which 2.0
+  inverts; it now flags seconds and asks for milliseconds. Two of its rules also
+  fired on correct code, which is the worse failure for a tool agents are meant
+  to trust: `color.tokens` matched any string shaped like hex, so a table of
+  order ids (`"#1024"` is a valid #RGBA literal) failed, as did the `fill` and
+  `stroke` of an inline `<svg>` — the exact values 2.0 types as `ColorValue`
+  because no token can express them. And `Card.interactive` fired on a `Card`
+  handed to a `trigger` prop, which its owner operates. Six of the 26 shipped
+  example blocks failed their own validator before this; three do now, and those
+  three are judgement calls rather than defects. The rules are covered by tests.
+- **The shipped AI examples still used `fill` on `Media` and `Carousel`**, which
+  2.0 renames to `stretch` — a rename `tsc` cannot catch, because `fill` stayed
+  valid as the layout prop it now means. Corrected in `auth.tsx` and
+  `blocks/Streaming1.tsx`.
 - **`Media` honours `fillWidth={false}`.** It accepted the prop, destructured
   it, and then hardcoded `fillWidth` on the element anyway, so the value was
   silently discarded. Found while renaming `fill` above.

@@ -58,6 +58,36 @@ describe("Card selected", () => {
   });
 });
 
+describe("Card interactivity", () => {
+  it("falls back to radius-l when an operable card names no radius", () => {
+    const { container } = render(<Card onClick={() => {}}>Pick</Card>, { wrapper: wrap });
+    const operable = container.querySelector(".focus-ring") as HTMLElement;
+    expect(operable.className).toContain("radius-l");
+    expect(operable.className).not.toContain("radius-undefined");
+  });
+
+  it("keeps an explicit radius", () => {
+    const { container } = render(
+      <Card onClick={() => {}} radius="m">
+        Pick
+      </Card>,
+      { wrapper: wrap },
+    );
+    const operable = container.querySelector(".focus-ring") as HTMLElement;
+    expect(operable.className).toContain("radius-m");
+  });
+
+  it("does not promise a click on a card that has none", () => {
+    render(<Card>Panel</Card>, { wrapper: wrap });
+    expect(screen.getByText("Panel").className).not.toContain("cursor-interactive");
+  });
+
+  it("still shows the pointer on one that does", () => {
+    render(<Card onClick={() => {}}>Panel</Card>, { wrapper: wrap });
+    expect(screen.getByText("Panel").className).toContain("cursor-interactive");
+  });
+});
+
 describe("Effect", () => {
   it("renders its content with no layer when switched off", () => {
     const { container } = render(<Effect type="none">Hero</Effect>, { wrapper: wrap });

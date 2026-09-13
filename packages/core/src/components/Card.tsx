@@ -36,7 +36,11 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           fillHeight ? "fill-height" : undefined,
           "min-width-0",
           interactive && "focus-ring",
-          interactive && (`radius-${flex.radius}` || "radius-l"),
+          // `\`radius-${flex.radius}\` || "radius-l"` never reached the
+          // fallback: a template literal is a string, so it is truthy even
+          // when the value inside it is `undefined`, and an interactive card
+          // with no explicit radius got the class `radius-undefined`.
+          interactive && `radius-${flex.radius ?? "l"}`,
         )}
         href={href}
         onClick={onClick && onClick}
@@ -52,7 +56,8 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           onBackground="neutral-strong"
           transition="macro-medium"
           border={selected ? "brand-medium" : "neutral-medium"}
-          cursor="interactive"
+          // A card with nothing to click should not promise a click.
+          cursor={interactive ? "interactive" : undefined}
           align="left"
           onClick={onClick && onClick}
           className={classNames(styles.card, selected && styles.selected, className)}

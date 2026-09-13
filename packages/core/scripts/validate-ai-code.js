@@ -34,6 +34,54 @@ function readInput(argv) {
   return { source: fs.readFileSync(fileArg, "utf8"), file: fileArg };
 }
 
+/**
+ * A literal colour in a styling position.
+ *
+ * The rule used to be a bare `#[0-9a-fA-F]{3,8}` over the whole file, which
+ * flagged two things that are not colours at all: any string that happens to
+ * look like hex (an order id `"#1024"` is a valid #RGBA literal), and the
+ * `fill` / `stroke` of an inline `<svg>`, where a raw value is the only thing
+ * that works — which is why 2.0 types those props `ColorValue` rather than
+ * `Colors`. So it looks at where the value sits, not only at its shape.
+ */
+function hasLiteralColor(source) {
+  const LITERAL = /#[0-9a-fA-F]{3,8}\b|rgba?\s*\(/;
+  const SVG_PAINT =
+    /^(?:fill|stroke|stopColor|stop-color|floodColor|flood-color|lightingColor|lighting-color)$/;
+
+  for (const block of source.match(/style=\{\{[\s\S]*?\}\}/g) || []) {
+    if (LITERAL.test(block)) return true;
+  }
+
+  for (const [, name, value] of source.matchAll(/([A-Za-z-]+)=\{?["']([^"']*)["']/g)) {
+    if (SVG_PAINT.test(name)) continue;
+    if (!/colou?r|background|border|shadow|gradient/i.test(name)) continue;
+    if (LITERAL.test(value)) return true;
+  }
+  return false;
+}
+
+/**
+ * Is `index` inside the braces of a `<prop>={ ... }` value?
+ *
+ * Counts braces forward from each occurrence of the prop, which is enough for
+ * JSX: a `{` inside a string would have to be unbalanced to fool it, and the
+ * answer is only used to suppress a warning.
+ */
+function insidePropValue(source, index, prop) {
+  for (const m of source.matchAll(new RegExp(`\\b${prop}=\\{`, "g"))) {
+    if (m.index > index) return false;
+    let depth = 1;
+    let i = m.index + m[0].length;
+    for (; i < source.length && depth > 0; i++) {
+      if (source[i] === "{") depth++;
+      else if (source[i] === "}") depth--;
+    }
+    if (index > m.index && index < i) return true;
+  }
+  return false;
+}
+
 function validate(source, spec, iconNames) {
   const issues = [];
 
@@ -63,7 +111,7 @@ function validate(source, spec, iconNames) {
     add("layout.defaults", "variant=\"primary\" is the Button default — omit it");
   }
 
-  if (/#[0-9a-fA-F]{3,8}\b|rgb\s*\(|rgba\s*\(/.test(source)) {
+  if (hasLiteralColor(source)) {
     add("color.tokens", "Use semantic color tokens, not hex/rgb");
   }
 
@@ -71,12 +119,14 @@ function validate(source, spec, iconNames) {
     add("components.primitives", "Use Once UI components (Media, SmartLink, Button) instead of raw HTML");
   }
 
-  const cardMatches = source.match(/<Card\b[^>]*>/g) || [];
-  for (const tag of cardMatches) {
-    if (!/\b(href|onClick)=/.test(tag)) {
-      add("Card.interactive", "Card without href/onClick — use Column + surface recipe for static panels");
-      break;
-    }
+  for (const match of source.matchAll(/<Card\b[^>]*>/g)) {
+    if (/\b(href|onClick)=/.test(match[0])) continue;
+    // A card handed to a `trigger` prop is operated by whatever owns it
+    // (DropdownWrapper, Dialog), so it carries no handler of its own and is
+    // not the static-panel misuse this rule is looking for.
+    if (insidePropValue(source, match.index, "trigger")) continue;
+    add("Card.interactive", "Card without href/onClick — use Column + surface recipe for static panels");
+    break;
   }
 
   const iconPropRe = /(?:prefixIcon|suffixIcon|name)=["']([^"']+)["']/g;
@@ -88,8 +138,14 @@ function validate(source, spec, iconNames) {
     }
   }
 
-  if (/delay=\{[^}]*\*\s*80/.test(source)) {
-    add("RevealFx.delay", "RevealFx delay is in seconds — use index * 0.1, not index * 80");
+  if (
+    /\b(?:delay|speed)=\{[^}]*\*\s*0?\.\d+/.test(source) ||
+    /\b(?:delay|speed)=\{\s*0?\.\d+\s*\}/.test(source)
+  ) {
+    add(
+      "RevealFx.delay",
+      "RevealFx delay and ShineFx speed are milliseconds — use index * 100, not index * 0.1",
+    );
   }
 
   if (/<Fade[^>]*>[\s\S]*<(Column|Row)[^>]*overflowY/.test(source)) {
@@ -146,4 +202,7 @@ function main() {
   process.exit(1);
 }
 
-main();
+// Importable for tests; the CLI runs only when this file is invoked directly.
+if (require.main === module) main();
+
+module.exports = { validate, loadSpec, parseIconNames, hasLiteralColor, insidePropValue };
