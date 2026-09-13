@@ -14,7 +14,8 @@ import {
   MatrixFx,
   Background,
   Pulse,
-  Card
+  Card,
+  BlobFx
 } from "@once-ui-system/core";
 import { baseURL, meta, schema, changelog, roadmap, layout } from "@/resources";
 import { formatDate } from "./utils/formatDate";
@@ -68,8 +69,9 @@ const latestChangelogEntry = changelog[0];
 
 export default function Home() {
   return (
-    <Row fillWidth>
+    <Row fillWidth horizontal="center">
       <Row fillWidth horizontal="center" padding="l">
+      <BlobFx maxWidth="l" data-solid="color" height={32} fillWidth position="absolute" translateY="-60%" />
         <Column fillWidth gap="xl" horizontal="center">
           <Schema
             as="webPage"
@@ -84,23 +86,6 @@ export default function Home() {
           
           {/* Hero Section */}
           <Column maxWidth={96} minHeight="s" gap="12" center overflow="hidden">
-            <MatrixFx
-              data-solid="color"
-              position="absolute"
-              top="0"
-              left="0"
-              size={1.5}
-              spacing={8}
-              flicker
-              colors={["brand-solid-strong"]}
-              bulge={{
-                type: "wave",
-                duration: 3,
-                intensity: 20,
-                repeat: true
-              }}
-            />
-            <Background position="absolute" gradient={{display: true, colorStart: "page-background", x: 0, y: 50, height: 300, width: 150}}></Background>
             <Column maxWidth="m" horizontal="center" align="center" gap="16" padding="48">
               <Badge
                 background="overlay"
@@ -361,8 +346,6 @@ export default function Home() {
             gap="8">
             <Column fill />
             <Card radius="l" href="https://once-ui.com/pricing?ref=docs" fillWidth background="transparent" overflow="hidden">
-              <MatrixFx minWidth={12} minHeight={8} position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-solid-strong", "static-transparent"]}/>
-              <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
               <Column fillWidth padding="20" gap="16">
                 <Text variant="heading-strong-xs">Support the project and get access to exclusive features!</Text>
                 <Button rounded size="s" id="get-pro-banner" prefixIcon="bolt">Get Pro</Button>

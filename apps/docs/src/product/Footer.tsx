@@ -34,16 +34,16 @@ const navigation = [
       { label: "Documentation", href: "/" },
       { label: "Changelog", href: "/changelog" },
       { label: "Roadmap", href: "/roadmap" },
-      { label: "Handbook", href: "https://once-ui.com/handbook", tag: "New" }
+      { label: "Handbook", href: "https://handbook.once-ui.com", tag: "New" }
     ],
   },
   {
     title: "Resources",
     items: [
-      { label: "Blog", href: "https://once-ui.com/blog" },
+      { label: "Blog", href: "https://blog.once-ui.com" },
       { label: "About us", href: "https://once-ui.com/about" },
       { label: "Contact us", href: "https://once-ui.com/contact" },
-      { label: "Sponsor us", href: "https://once-ui.com/blog/open-source" },
+      { label: "Sponsor us", href: "https://once-ui.com/support" },
       { label: "Merch store", href: "https://store.dopler.app" },
       { label: "Brand assets", href: "https://once-ui.com/brand" },
     ],

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Button,
   Column,
@@ -69,23 +69,21 @@ function CopyPage({ path }: CopyPageProps) {
         open={open}
         onOpenChange={setOpen}
         placement="bottom-end"
-        minWidth={16}
         // The trigger drives the open state itself: an IconButton without an
         // `onClick` renders a div, which is not focusable, and letting the
         // wrapper handle the click would leave the control mouse-only.
         disableTriggerClick
         trigger={
           <IconButton
-            size="s"
             variant="secondary"
             icon="chevronDown"
-            tooltip="More ways to use this page"
+            tooltip="More"
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
           />
         }
         dropdown={
-          <Column fillWidth padding="4" gap="2">
+          <Column maxWidth={12} padding="4" gap="2">
             <Option
               value="markdown"
               label="View as Markdown"

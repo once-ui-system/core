@@ -85,12 +85,12 @@ export default async function Docs({
               Updated: {formatDate(doc.metadata.updatedAt)}
             </Text>
             <Row marginTop="20" gap="8" vertical="center" wrap>
-              <CopyPage path={`/${doc.slug}`} />
               {doc.metadata.github && (
                 <Button href={"https://github.com/once-ui-system/core/blob/main/packages/core/src/" + doc.metadata.github} size="s" variant="secondary" prefixIcon="github" weight="default" data-border="rounded">
                   View on GitHub
                 </Button>
               )}
+              <CopyPage path={`/${doc.slug}`} />
             </Row>
           </Column>
           {doc.metadata.image && (
