@@ -11,7 +11,6 @@ import {
   Row,
   ToggleButton,
   Skeleton,
-  StatusIndicator,
   Pulse,
   ColorScheme,
 } from "@once-ui-system/core";
@@ -56,7 +55,7 @@ const NAV_RHYTHM = {
   /** Space between sibling items. */
   itemGap: "4",
   /** Height of a leaf item. `m` is the component default and reads roomier. */
-  itemSize: "s",
+  itemSize: "m",
 } as const;
 
 interface SidebarProps extends Omit<
@@ -148,25 +147,25 @@ const NavigationItemComponent: React.FC<{
         transition="micro-medium"
         background={shouldBeOpen ? "neutral-alpha-weak" : undefined}
       >
-        <Column fillWidth marginTop="2">
+        <Column fillWidth>
           {layout.sidebar.collapsible ? (
             <Accordion
               gap="4"
               icon="chevronRight"
               iconRotation={90}
+              style={{ height: "var(--static-space-40)" }}
+              paddingX={undefined}
+              paddingLeft="8"
+              paddingRight="16"
               size="s"
               radius="s"
-              paddingX={undefined}
-              paddingBottom={undefined}
-              paddingLeft="4"
-              paddingTop="4"
               open={shouldBeOpen}
               title={
                 <Row
                   fillWidth
                   vertical="center"
-                  textVariant="label-strong-xs"
-                  onBackground="neutral-weak"
+                  textVariant="label-default-m"
+                  paddingLeft="4"
                 >
                   {item.title}
                 </Row>
@@ -267,6 +266,7 @@ const ResourceLinkComponent: React.FC<{
   return (
     <ToggleButton
       fillWidth
+      size="m"
       horizontal="between"
       selected={isSelected}
       className={styles.navigation}
@@ -275,7 +275,7 @@ const ResourceLinkComponent: React.FC<{
       <Row
         gap="8"
         onBackground={isSelected ? "neutral-strong" : "neutral-weak"}
-        textVariant={isSelected ? "label-strong-s" : "label-default-s"}
+        textVariant={isSelected ? "label-strong-m" : "label-default-m"}
       >
         <Icon size="xs" name={icon} />
         {label}
