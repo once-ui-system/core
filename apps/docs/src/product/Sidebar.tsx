@@ -7,6 +7,7 @@ import {
   Column,
   Flex,
   Icon,
+  Line,
   Row,
   ToggleButton,
   Skeleton,
@@ -40,6 +41,23 @@ export interface NavigationItem extends Omit<
   navLabel?: string;
   navTagVariant?: ColorScheme;
 }
+
+/**
+ * The sidebar's spacing, in one place because it is the part most likely to
+ * want tuning. `rail*` control the indent that carries nesting: a vertical
+ * rule plus its gap, which reads as hierarchy at a glance but costs
+ * horizontal space, and this sidebar has a lot of items to fit.
+ */
+const NAV_RHYTHM = {
+  /** Inset of the hierarchy rule from the group's left edge. */
+  railInset: "12",
+  /** Space between the rule and the child items. */
+  railGap: "8",
+  /** Space between sibling items. */
+  itemGap: "4",
+  /** Height of a leaf item. `m` is the component default and reads roomier. */
+  itemSize: "s",
+} as const;
 
 interface SidebarProps extends Omit<
   React.ComponentProps<typeof Flex>,
@@ -126,7 +144,9 @@ const NavigationItemComponent: React.FC<{
     return (
       <Row
         fillWidth
-        style={{ paddingLeft: `calc(${depth} * var(--static-space-8))` }}
+        radius="m"
+        transition="micro-medium"
+        background={shouldBeOpen ? "neutral-alpha-weak" : undefined}
       >
         <Column fillWidth marginTop="2">
           {layout.sidebar.collapsible ? (
@@ -152,10 +172,15 @@ const NavigationItemComponent: React.FC<{
                 </Row>
               }
             >
-              {renderNavigation(item.children, depth + 1)}
+              <Row fillWidth gap={NAV_RHYTHM.railGap} paddingX={NAV_RHYTHM.railInset}>
+                <Line vert background="neutral-alpha-medium" />
+                <Column fillWidth gap={NAV_RHYTHM.itemGap}>
+                  {renderNavigation(item.children, depth + 1)}
+                </Column>
+              </Row>
             </Accordion>
           ) : (
-            <Column gap="4" paddingLeft="4" paddingTop="12">
+            <Column gap={NAV_RHYTHM.itemGap} paddingLeft="4" paddingTop="12">
               <Row
                 paddingY="12"
                 paddingLeft="8"
@@ -164,7 +189,12 @@ const NavigationItemComponent: React.FC<{
               >
                 {item.title}
               </Row>
-              {renderNavigation(item.children, depth + 1)}
+              <Row fillWidth gap={NAV_RHYTHM.railGap} paddingX={NAV_RHYTHM.railInset}>
+                <Line vert background="neutral-alpha-medium" />
+                <Column fillWidth gap={NAV_RHYTHM.itemGap}>
+                  {renderNavigation(item.children, depth + 1)}
+                </Column>
+              </Row>
             </Column>
           )}
         </Column>
@@ -175,6 +205,7 @@ const NavigationItemComponent: React.FC<{
   return (
     <ToggleButton
       fillWidth
+      size={NAV_RHYTHM.itemSize}
       horizontal="between"
       selected={isSelected}
       className={depth === 0 ? styles.navigation : undefined}
