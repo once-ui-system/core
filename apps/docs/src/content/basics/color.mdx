@@ -45,3 +45,54 @@ Beyond the semantic and function token systems, Once UI provides several
 specialized color token groups for specific UI concerns.
 
 <AdditionalTokens />
+
+## Colour format
+
+Scheme tokens are `oklch()`. The values are the same colours the palette has
+always used — every one round-trips to the hex it replaced — but expressed in
+a space where the numbers mean something: `oklch(0.6743 0.1670 261.54)` reads
+as "two thirds as light as white, moderately saturated, blue", where
+`#5A93FC` reads as nothing.
+
+That needs Chrome 111, Safari 15.4 or Firefox 113, all from 2022–23. There is
+no fallback: a browser that does not understand `oklch()` drops the
+declaration rather than approximating it.
+
+## Custom schemes
+
+`data-brand="custom"` reads `--scheme-brand-*`, which your app supplies.
+Rather than hand-picking twelve steps that sit evenly against each other,
+generate them from one colour:
+
+```tsx
+import { generateColorScheme, schemeAlphaVariants } from "@once-ui-system/core/utils";
+
+const scheme = generateColorScheme("#5A93FC");
+
+if (scheme) {
+  for (const [weight, value] of Object.entries(scheme)) {
+    document.documentElement.style.setProperty(`--function-brand-${weight}`, value);
+  }
+  for (const [suffix, value] of Object.entries(schemeAlphaVariants(scheme))) {
+    document.documentElement.style.setProperty(`--function-brand-${suffix}`, value);
+  }
+  document.documentElement.setAttribute("data-brand", "custom");
+}
+```
+
+The seed can be hex, `rgb()`/`rgba()` or `oklch()` — which covers what
+[ColorInput](/form-controls/colorInput) produces with and without
+`supportAlpha`. An unparseable seed returns `null` rather than something
+wrong, so you can leave the current scheme in place.
+
+Steps are anchored to a contrast ratio against black, not to fixed lightness
+values, so a generated ramp holds the same contrast relationships as the
+built-in schemes whichever hue it starts from. Hue and chroma come from the
+seed and stay put; only lightness moves.
+
+One thing it does not do is copy the built-in schemes' hand-tuning. Those were
+drawn by eye, and at the saturated dark end — step 400 especially — several
+carry more chroma than their own step 600. A ramp built from a single seed
+cannot know that. Regenerating each built-in scheme from its own step 600
+lands within 0.11 OKLab ΔE at the worst step, and inside 0.05 for most.
+
