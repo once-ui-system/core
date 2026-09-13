@@ -1,7 +1,6 @@
 export * from "./Header";
 export * from "./Footer";
 export * from "./Sidebar";
-export * from "./RouteGuard";
 export * from "./Providers";
 export * from "./AnimationExample";
 export * from "./CheckboxExample";

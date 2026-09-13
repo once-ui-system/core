@@ -130,7 +130,8 @@
       "types": "./dist/modules/media/index.d.ts",
       "import": "./dist/modules/media/index.js",
       "require": "./dist/modules/media/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "pnpm clean && pnpm sync-foundations && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",

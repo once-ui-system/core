@@ -32,8 +32,7 @@ const navigation = [
       { label: "Pricing", href: "https://once-ui.com/pricing" },
       { label: "Canvas", href: "https://once-ui.com/canvas", tag: "New" },
       { label: "Documentation", href: "/" },
-      { label: "Changelog", href: "/changelog" },
-      { label: "Roadmap", href: "/roadmap" },
+      { label: "Changelog", href: "https://github.com/once-ui-system/core/releases" },
       { label: "Handbook", href: "https://handbook.once-ui.com", tag: "New" }
     ],
   },

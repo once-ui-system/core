@@ -1,10 +1,5 @@
 const baseURL = "https://docs.once-ui.com";
 
-const routes = {
-  '/changelog':  true,
-  '/roadmap':    true,
-}
-
 const style = {
   theme: "system", // dark | light
   neutral: "gray", // sand | gray | slate
@@ -91,18 +86,6 @@ const meta = {
     path: "/",
     image: "/api/og/generate?title=The open-source design system for the AI-native web"
   },
-  roadmap: {
-    title: `Roadmap – ${schema.name}`,
-    description: schema.description,
-    path: "/roadmap",
-    image: "/api/og/generate?title=Roadmap"
-  },
-  changelog: {
-    title: `Changelog – ${schema.name}`,
-    description: schema.description,
-    path: "/changelog",
-    image: "/api/og/generate?title=Changelog"
-  }
 };
 
-export { dataStyle, style, layout, baseURL, social, schema, meta, routes };
+export { dataStyle, style, layout, baseURL, social, schema, meta };

@@ -15,7 +15,7 @@ import {
   ColorScheme,
 } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
-import { routes, layout } from "@/resources";
+import { layout } from "@/resources";
 
 import styles from "./Sidebar.module.scss";
 
@@ -294,10 +294,8 @@ const SidebarContent: React.FC<{
       );
     };
 
-    // Create resources section
-    const resourcesSection = !(
-      routes["/roadmap"] || routes["/changelog"]
-    ) ? null : (
+    // Release history lives on GitHub, generated from CHANGELOG.md.
+    const resourcesSection = (
       <Column gap="4" marginTop="32" paddingLeft="4">
         <Row
           textVariant="label-strong-s"
@@ -307,23 +305,12 @@ const SidebarContent: React.FC<{
         >
           Resources
         </Row>
-        {routes["/roadmap"] && (
-          <ResourceLink
-            href="/roadmap"
-            icon="roadmap"
-            label="Roadmap"
-            pathname={pathname}
-          />
-        )}
-
-        {routes["/changelog"] && (
-          <ResourceLink
-            href="/changelog"
-            icon="changelog"
-            label="Changelog"
-            pathname={pathname}
-          />
-        )}
+        <ResourceLink
+          href="https://github.com/once-ui-system/core/releases"
+          icon="github"
+          label="Changelog"
+          pathname={pathname}
+        />
       </Column>
     );
 

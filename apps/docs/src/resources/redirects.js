@@ -16,6 +16,26 @@ export const movedPages = [
   // { from: "once-ui/components/foo", to: "once-ui/layout/foo" },
 ];
 
+/**
+ * Pages that were retired rather than moved, and the off-site page that now
+ * carries their content. Same reasoning as `movedPages` — the URL was public,
+ * so it redirects instead of 404ing — but the destination is absolute.
+ *
+ * Release history lives on GitHub, generated from the repo's CHANGELOG.md,
+ * which is the source of truth. The docs held a hand-maintained second copy
+ * that drifted from it.
+ */
+export const retiredPages = [
+  { from: "changelog", to: "https://github.com/once-ui-system/core/releases" },
+  { from: "roadmap", to: "https://github.com/once-ui-system/core/blob/main/ROADMAP.md" },
+];
+
+export const retiredPageRedirects = retiredPages.map(({ from, to }) => ({
+  source: `/${from}`,
+  destination: to,
+  permanent: true,
+}));
+
 /** Shape the map into the objects `next.config.mjs` needs. */
 export const movedPageRedirects = movedPages.map(({ from, to }) => ({
   source: `/${from}`,
