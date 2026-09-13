@@ -55,11 +55,81 @@ Applies the following `data-*` attributes to the `<html>` element:
 - `data-transition`
 - `data-scaling`
 - `data-surface`
+- `data-body-size`
+- `data-body-line-height`
+
+## Composing your own panel
+
+`StylePanel` is a plain composition of its own parts. When you need a
+different arrangement, or only some of the sections, drop it and compose the
+pieces inside `StylePanel.Root`:
+
+```tsx
+<StylePanel.Root>
+  <StylePanel.Group title="Brand">
+    <StylePanel.Brand />
+    <StylePanel.Accent />
+  </StylePanel.Group>
+</StylePanel.Root>
+```
+
+Rows: `Theme`, `Shape`, `Brand`, `Accent`, `Neutral`, `Solid`, `Effect`,
+`Surface`, `Scaling`, `Transition`, `DataStyle`, `BodySize`, `BodyLineHeight`.
+Groups: `Page`, `Color`, `SolidStyle`, `BodyText`, `Advanced`.
+
+Only `DataStyle` needs a `DataThemeProvider` in the tree, so a panel without
+it has no such requirement.
+
+Every row takes a `label`, and every group a `title` and `description`. Pass a
+node to replace the default, or `false` to drop it — which is how you localise
+the panel:
+
+```tsx
+<StylePanel.Brand label={t("style.brand")} />
+<StylePanel.Color title={false} description={false} />
+```
+
+To keep the default arrangement and hide parts of it, use `visibility`.
+Omitted keys stay visible; `section: false` hides a whole group.
+
+```tsx
+<StylePanel visibility={{ advanced: { section: false }, color: { neutral: false } }} />
+```
+
+`bodyText` is the exception: it is opt-in, so pass `{ bodyText: { section: true } }`
+to show it.
+
+## Owning the state
+
+By default the panel reads and writes `ThemeProvider`, which persists to
+`localStorage`. Pass `value` and `onChange` to take that over — the panel then
+writes nothing to the providers or to storage, and you decide what a change
+means:
+
+```tsx
+<StylePanel
+  value={draft}
+  onChange={(next, changed) => {
+    setDraft(next);
+    saveToDatabase(changed);
+  }}
+/>
+```
+
+`changed` holds only the keys this interaction touched, which is what you want
+to send to a server; `next` is the whole state.
+
+To keep the panel bound to `ThemeProvider` but change where choices are
+stored, set `persistence` on the provider instead — see
+[ThemeProvider](/once-ui/contexts/themeProvider).
 
 ## API reference
 
 <PropsTable
   content={[
+    ["visibility", "StylePanelVisibility", "Hide sections or rows in the default arrangement."],
+    ["value", "StylePanelValue", "Take ownership of the state. Requires onChange."],
+    ["onChange", "(next, changed) => void", "Called with the full state and the keys that changed."],
     ["className"],
     ["style"],
     ["...flex"]

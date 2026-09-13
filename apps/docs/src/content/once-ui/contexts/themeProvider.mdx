@@ -265,6 +265,30 @@ semantic HTML element, providing simple, seamless style overrides.
 
 Just add the `data-theme`, `data-neutral`, `data-brand`, `data-accent`, `data-border`, `data-surface`, `data-solid`, `data-solid-style`, `data-transition` or `data-scaling` attributes to any semantic HTML element to override its default style.
 
+## Persistence
+
+Style choices are mirrored into `localStorage` under `data-<kebab-key>`. Set
+`persistence` to change that:
+
+- `"local"` — the default described above.
+- `"none"` — choices apply to the document but are not stored. Use this when
+  a host owns the state, such as an editor holding an unsaved draft.
+- an adapter — route persistence somewhere else, such as a database.
+
+```tsx
+<ThemeProvider
+  brand={site.brand}
+  persistence={{
+    set: (key, value) => saveSiteStyle(site.id, key, value),
+  }}
+>
+```
+
+`get` runs during hydration, so it must be synchronous — an await there would
+show a flash of the wrong theme. When the values live somewhere async, omit
+`get` and seed the provider through its props from the server instead. `set`
+and `remove` may return a promise; nothing waits on them.
+
 ## API reference
 
 ### ThemeProvider

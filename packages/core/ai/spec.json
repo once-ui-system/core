@@ -2058,24 +2058,6 @@
     "style": "React.CSSProperties"
    }
   },
-  "StylePanel": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "style": "React.CSSProperties",
-    "className": "string"
-   }
-  },
   "StyleOverlay": {
    "group": "components",
    "extends": [
