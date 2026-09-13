@@ -129,7 +129,7 @@ useEffect(() => {
 
 <Grid ref={ref} columns="3" gap="16" s={{ columns: 1 }}>
   {items.map((item, index) => (
-    <RevealFx key={item.id} trigger={seen} translateY="8" delay={index * 0.1}>
+    <RevealFx key={item.id} revealed={seen} translateY="8" delay={index * 100}>
       <Card ... />
     </RevealFx>
   ))}

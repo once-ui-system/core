@@ -155,7 +155,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 // Good eyebrow
 <Text variant="label-default-s" onBackground="brand-medium">Pricing</Text>
 // Bad eyebrow
-<Tag variant="neutral" prefixIcon="sparkle">Pricing</Tag>
+<Tag scheme="neutral" prefixIcon="sparkle">Pricing</Tag>
 ```
 
 ## Decorative layers
@@ -184,7 +184,7 @@ Siblings holding content get `zIndex={1}`. `overflow="hidden"` goes on the paren
 
 ## Effect units
 
-24. `RevealFx`: `delay` is in **seconds** — stagger with `delay={index * 0.1}`, never `index * 80`. `translateY` as a number is in **rem** — use `translateY={1}` or a token like `"16"` (1rem); `16` means 16rem.
+24. `RevealFx`: `delay` is in **milliseconds** — stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). `ShineFx.speed` is milliseconds for the same reason. `translateY` as a number is in **rem** — use `translateY={1}` or a token like `"16"` (1rem); `16` means 16rem.
 
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
 
@@ -192,13 +192,13 @@ Siblings holding content get `zIndex={1}`. `overflow="hidden"` goes on the paren
 
 ## Motion
 
-27. Animations are **eye-leading, not eye-grabbing**: they direct attention to the one thing that should be read next, they don't announce themselves. Small distances (`translateY="8"`–`"16"`, i.e. 0.5–1rem), short staggers (`delay={index * 0.1}` max), and only on elements worth leading the eye to — the hero heading, stat numbers, the highlighted card in a set.
+27. Animations are **eye-leading, not eye-grabbing**: they direct attention to the one thing that should be read next, they don't announce themselves. Small distances (`translateY="8"`–`"16"`, i.e. 0.5–1rem), short staggers (`delay={index * 100}` max), and only on elements worth leading the eye to — the hero heading, stat numbers, the highlighted card in a set.
 
 28. Do **not** wrap every section in `RevealFx` — uniform entrance animation on everything reads dated and makes scrolling feel slow. Entry-animation budget per page: the hero, plus at most one or two key moments (stats, a card set). Everything else just renders.
 
-28b. Animate **coherent blocks, all-or-none**. Within a sibling set (cards, list items), either every sibling animates with a stagger or none do — never a single item out of the set (e.g. only the highlighted pricing card). For a hero, reveal it as 1–3 stacked chunks with increasing delay (`0 / 0.1 / 0.2`), not individual text fragments. One entrance moment per viewport: if the hero animates, the cards below it don't.
+28b. Animate **coherent blocks, all-or-none**. Within a sibling set (cards, list items), either every sibling animates with a stagger or none do — never a single item out of the set (e.g. only the highlighted pricing card). For a hero, reveal it as 1–3 stacked chunks with increasing delay (`0 / 100 / 200`), not individual text fragments. One entrance moment per viewport: if the hero animates, the cards below it don't.
 
-29. Trigger below-the-fold animations with `useInViewport`, latched so they play once. `RevealFx` takes `trigger`; `CountFx` has no trigger prop — drive its `value` instead:
+29. Trigger below-the-fold animations with `useInViewport`, latched so they play once. `RevealFx` takes `revealed`; `CountFx` has no trigger prop — drive its `value` instead:
 
 ```tsx
 const ref = useRef<HTMLDivElement>(null);
@@ -209,9 +209,29 @@ useEffect(() => {
 }, [inViewport]);
 
 <Column ref={ref} gap="16">
-  <RevealFx trigger={seen} translateY="8">...</RevealFx>
+  <RevealFx revealed={seen} translateY="8">...</RevealFx>
   <CountFx value={seen ? 2400 : 0} speed={1500} separator="," variant="display-strong-m" />
 </Column>
 ```
 
 Without this, mount-timed animations play while still off-screen and the user scrolls into an already-finished state.
+
+## Imports
+
+30. Most things come from the package root, but three modules do not, because
+their dependencies are optional peers and a root re-export would drag the
+specifier into every consumer's module graph:
+
+| Import | From | Peer the app installs |
+|--------|------|-----------------------|
+| charts, gauges, chart chrome | `@once-ui-system/core/data` | `recharts` |
+| `CodeBlock` | `@once-ui-system/core/code` | `prismjs` |
+| `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
+
+Naming one of these from the root does not resolve. Each component slice in
+`ai/components/` carries the specifier to import it from.
+
+31. `IconName` is a real union, not `string`. An unregistered name is a type
+error now, where it used to render a blank space with a console warning — so
+take icon names from `spec.json`'s `iconNames` rather than guessing a plausible
+one. An app registers its own by augmenting `IconLibraryOverrides`.
