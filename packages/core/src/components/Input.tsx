@@ -119,19 +119,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const displayError = validationError || errorMessage;
 
-    const fontSizeMap = {
-      xs: "font-s",
-      s: "font-s",
-      m: "font-m",
-      l: "font-l",
-      xl: "font-xl",
-    };
 
     const inputClassNames = classNames(
       styles.input,
       "font-body",
       "font-default",
-      fontSizeMap[size],
       cursor === "interactive" ? "cursor-interactive" : undefined,
       {
         [styles.filled]: isFilled,
