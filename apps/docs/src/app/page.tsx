@@ -18,7 +18,7 @@ import {
   BlobFx
 } from "@once-ui-system/core";
 import corePackage from "@once-ui-system/core/package.json";
-import { CodeBlock } from "@once-ui-system/core/code";
+import { PromptLibrary } from "@/product/PromptLibrary";
 import { baseURL, meta, schema, layout } from "@/resources";
 import { PromoCard } from "@/components/PromoCard";
 
@@ -107,36 +107,7 @@ export default function Home() {
             </Card>
           </Grid>
 
-          {/* Set an agent up in two commands, then hand it the prompt */}
-          <Column maxWidth={56} gap="16" fillWidth>
-            <Column gap="4">
-              <Heading as="h2" variant="display-default-xs">Set up your agent</Heading>
-              <Text onBackground="neutral-weak" variant="body-default-s">
-                One command writes AGENTS.md and a Cursor rule into your app. Then paste the
-                prompt.
-              </Text>
-            </Column>
-            <CodeBlock
-              copyButton
-              codes={[
-                {
-                  code: "npm install @once-ui-system/core\nnpx once-ui-init-agent",
-                  language: "bash",
-                  label: "Install"
-                }
-              ]}
-            />
-            <CodeBlock
-              copyButton
-              codes={[
-                {
-                  code: 'Use @once-ui-system/core for all UI in this project.\n\nBefore writing any component, read these, in order:\n\n  docs.once-ui.com/ai/rules.compact.md   — the rules\n  docs.once-ui.com/ai/catalog.json       — pick components\n  docs.once-ui.com/ai/tasks/index.json    — match the task\n\nCompose with Once UI primitives and token props for\nspacing, colour and radius. Do not emit raw div/span\nlayout, Tailwind classes, or custom CSS.',
-                  language: "markdown",
-                  label: "Prompt"
-                }
-              ]}
-            />
-          </Column>
+          <PromptLibrary />
 
           {/* The dozen components most builds actually use */}
           <Column maxWidth={56} gap="16" fillWidth>
