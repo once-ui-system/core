@@ -16,16 +16,17 @@ import {
   ArrowNavigation,
   useArrowNavigationContext,
 } from ".";
-import inputStyles from "./Input.module.scss";
 import { Placement } from "@floating-ui/react-dom";
 
 type SelectOptionType = Omit<OptionProps, "selected">;
 
 interface SelectProps
-  // `focusRing` is Input's, and Select cannot honour it yet: focus moves from
-  // the trigger into the dropdown, so the trigger's blur is guarded away and
-  // `isFocused` latches true — the ring would light on first focus and never
-  // go out. Omitted rather than accepted and ignored.
+  // `focusRing` is Input's, and Select cannot honour it yet: focus moves off
+  // the trigger and into the dropdown, so the trigger is not the focused
+  // element for most of the interaction and a ring keyed to it would light on
+  // first focus and then go out with the menu still open. Giving Select a
+  // focus ring means tracking focus across the whole control first. Omitted
+  // rather than accepted and ignored.
   extends Omit<InputProps, "onSelect" | "value" | "focusRing">,
     Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
   options: SelectOptionType[];
@@ -142,8 +143,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     },
     ref,
   ) => {
-    const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(false);
 
     const [internalValue, setInternalValue] = useState(multiple ? [] : value);
 
@@ -165,14 +164,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     const handleFocus = () => {
       // Allow reopening the dropdown even after selection
-      setIsFocused(true);
       setIsDropdownOpen(true);
-      // Set highlighted index to first option or current selection
-      const currentIndex = options.findIndex((option) =>
-        multiple
-          ? Array.isArray(currentValue) && currentValue.includes(option.value)
-          : option.value === currentValue,
-      );
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -183,7 +175,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           event.relatedTarget && (event.relatedTarget as Element).closest("[data-dropdown]");
 
         if (!isMovingToDropdown) {
-          setIsFocused(false);
           setIsDropdownOpen(false);
         }
       }
@@ -288,11 +279,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
             value={getDisplayText()}
             onFocus={handleFocus}
             readOnly
-            className={classNames("fill-width", {
-              [inputStyles.filled]: isFilled,
-              [inputStyles.focused]: isFocused,
-              className,
-            })}
+            // `{ className }` in the object put the literal string "className"
+            // on the element when the prop was truthy and dropped the caller's
+            // class entirely. It is a value, not a condition.
+            className={classNames("fill-width", className)}
             aria-haspopup="listbox"
             aria-expanded={isDropdownOpen}
           />

@@ -500,6 +500,22 @@ that way. The ramps themselves are untouched.
 
 ### Added
 
+- **`focusRing` on `Input` and `Textarea`.** A field draws no focus ring —
+  deliberately, that borderless native look is the point — but that leaves a
+  keyboard user with nothing to go on, while `Card` and `SmartLink` in this
+  same library do show one. `focusRing` opts a field in, using the same
+  outline as the `.focus-ring` utility so it matches every other focusable
+  thing on the page. Off by default, so nothing changes unless asked. It
+  shows on a mouse click too: `:focus-visible` always matches a field that
+  takes keyboard input, however that field was focused.
+
+  Not available on `Select`, and omitted from its props rather than accepted
+  and ignored: `Select` moves focus off the trigger and into the dropdown, so
+  the trigger is not the focused element for most of the interaction and a
+  ring keyed to it would light on first focus and then go out with the menu
+  still open. Giving `Select` a focus ring means tracking focus across the
+  whole control first.
+
 - **`StylePanel` is composable, and its state can be host-owned.** The panel had
   been forked twice — once in Magic's site editor, once on Studio's brand page —
   and both forks diverged on the same three axes, so those are the ones it opens
@@ -535,6 +551,12 @@ that way. The ramps themselves are untouched.
   ΔE, and about five-fold on the lightest steps. Seventeen tests regenerate each
   built-in scheme from its own step 600 and assert the worst step stays in
   tolerance.
+- **`Select` dropped the `className` it was given.** The caller's class sat
+  inside `classNames`' object argument, where clsx reads a key as the class
+  and its value as a condition — so a truthy `className` put the literal
+  string `"className"` on the element and the caller's own class never
+  reached the DOM at all.
+
 - **Browser autofill left the label on top of the filled text.** Autofill
   fires no focus, blur or change event, so nothing in `Input` or `Textarea`
   ever learned the field had stopped being empty — the same overlap as the
@@ -723,22 +745,21 @@ that way. The ramps themselves are untouched.
   guard (core may not import `next/*`), CSS API-surface snapshots, token
   custom-property/attribute-selector snapshots, and seed interaction tests.
 
-### Added
+### Removed
 
-- **`focusRing` on `Input` and `Textarea`.** A field draws no focus ring —
-  deliberately, that borderless native look is the point — but that leaves a
-  keyboard user with nothing to go on, while `Card` and `SmartLink` in this
-  same library do show one. `focusRing` opts a field in, using the same
-  outline as the `.focus-ring` utility so it matches every other focusable
-  thing on the page. Off by default, so nothing changes unless asked. It
-  shows on a mouse click too: `:focus-visible` always matches a field that
-  takes keyboard input, however that field was focused.
+- **The field `focused` / `filled` styling, which never applied.** The rule was
+  `.base.focused, .base.filled` — a compound selector needing all three classes
+  on one element — but `focused` and `filled` went on the control, and on
+  `Select` onto a wrapper, never onto `.base`. It could not match, and the
+  border colour it set was the one `.base` already carried, so it was inert
+  twice over. Measured in Chromium: the border is identical across empty,
+  filled, focused and `Select`. Gone, along with the classes that fed it and
+  `Select`'s `isFilled`, which had no call site to set it, its write-only
+  `isFocused`, and a `findIndex` in `handleFocus` whose result was discarded
+  under a comment promising a highlight it never set.
 
-  Not available on `Select`, and omitted from its props rather than accepted
-  and ignored: `Select` moves focus off the trigger and into the dropdown, so
-  the trigger's blur is guarded away and its `isFocused` latches true — the
-  ring would light on first focus and never go out. Giving `Select` a focus
-  ring means fixing that focus lifecycle first.
+  Nothing changes visually. A field still shows no focus indicator by default;
+  `focusRing` above is the way to ask for one.
 
 ### Changed
 

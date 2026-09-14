@@ -101,11 +101,6 @@
   &:has(.textarea) {
     --fld-anchor: var(--static-space-8);
   }
-
-  &.focused,
-  &.filled {
-    border-color: var(--neutral-border-medium);
-  }
 }
 
 @media (hover: none) and (pointer: coarse) {

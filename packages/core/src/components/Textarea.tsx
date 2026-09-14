@@ -181,8 +181,6 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       "font-body",
       "font-default",
       {
-        [styles.filled]: isFilled,
-        [styles.focused]: isFocused,
         [styles.withPrefix]: prefix,
         [styles.withSuffix]: suffix,
         [styles.placeholder]: placeholder,

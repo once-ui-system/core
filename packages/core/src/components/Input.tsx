@@ -158,8 +158,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       "font-default",
       cursor === "interactive" ? "cursor-interactive" : undefined,
       {
-        [styles.filled]: isFilled,
-        [styles.focused]: isFocused,
         [styles.withPrefix]: prefix,
         [styles.withSuffix]: suffix,
         [styles.placeholder]: placeholder,
