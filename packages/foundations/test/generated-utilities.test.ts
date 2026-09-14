@@ -112,21 +112,40 @@ describe("generated utilities", () => {
    */
   it("is the source breakpoints.scss is generated from", () => {
     const scss = readFileSync(join(ROOT, "scss/styles/breakpoints.scss"), "utf8");
-    for (const { key, maxWidth } of BREAKPOINTS) {
-      expect(scss, `$breakpoint-${key}`).toContain(`$breakpoint-${key}: ${maxWidth};`);
+    for (const { key, query } of BREAKPOINTS) {
+      expect(scss, `@media ${key}`).toContain(`@media ${query}`);
       // Ten call sites `@include` these by name, core components included.
       expect(scss, `mixin ${key}`).toContain(`@mixin ${key} {`);
     }
   });
 
+  /**
+   * `xl` is the one min-width step. It means "above all the other steps" — the
+   * layout context resolves it as `Infinity` — so a max-width query cannot
+   * express it, and as min-width it matches the context exactly at every width
+   * without inventing a sixth bucket for the widest screens.
+   */
+  it("makes xl the only min-width step, one past l", () => {
+    const xl = BREAKPOINTS.find((b) => b.key === "xl");
+    const l = BREAKPOINTS.find((b) => b.key === "l");
+    expect(xl?.query).toBe("(min-width: 1441px)");
+    expect(l?.query).toBe("(max-width: 1440px)");
+    // No width falls in both, and none falls in neither.
+    expect(Number(xl?.query.match(/\d+/)?.[0])).toBe(Number(l?.query.match(/\d+/)?.[0]) + 1);
+    for (const b of BREAKPOINTS.filter((x) => x.key !== "xl")) {
+      expect(b.query, b.key).toContain("max-width");
+    }
+  });
+
   it("emits breakpoint rules widest first so the narrow one wins", () => {
-    // Every step is a max-width query, so all of them match on a phone and the
-    // last one in the file decides. Ascending order would let `.l-` overrule
-    // `.xs-` — backwards, and only visible on a small screen.
+    // The max-width steps all match on a phone, so the last one in the file
+    // decides. Ascending order would let `.l-` overrule `.xs-` — backwards, and
+    // only visible on a small screen. `xl` leads: it is min-width and never
+    // overlaps the rest, so its position is free.
     const css = readFileSync(join(ROOT, "scss/styles/position.generated.scss"), "utf8");
     const order = [...css.matchAll(/@media \(max-width: (\d+)px\)/g)].map((m) => Number(m[1]));
     expect(order).toEqual([...order].sort((a, b) => b - a));
-    expect(BREAKPOINTS_CASCADE.map((b) => b.key)).toEqual(["l", "m", "s", "xs"]);
+    expect(BREAKPOINTS_CASCADE.map((b) => b?.key)).toEqual(["xl", "l", "m", "s", "xs"]);
   });
 
   it("repeats every position rule at every breakpoint", () => {

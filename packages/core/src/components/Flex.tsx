@@ -69,18 +69,13 @@ const Flex = forwardRef<HTMLDivElement, SmartFlexProps>(
       // Custom cursor requires client-side
       if (typeof cursor === "object" && cursor) return true;
 
-      // `xl` is `Infinity` — the base state, not a media query — and
-      // ServerFlex's cascade starts at `l`, so an `xl` object is dropped
-      // there. It stays on the client component, which does read it.
-      if (xl) return true;
-
       // Every other breakpoint value is a class if it has one. A token gap is
       // `.s-g-4`; a numeric gap is a rem value with no class behind it, and
       // `width`/`aspectRatio`/`style` are inline by nature. Only those need
       // the runtime pass, so only those pay for it — the rest of the tree
       // stays a server component and is laid out correctly in the first paint
       // rather than after an effect.
-      if ([l, m, s, xs].some((bp) => bp && !isClassExpressible(bp))) return true;
+      if ([xl, l, m, s, xs].some((bp) => bp && !isClassExpressible(bp))) return true;
 
       // Dynamic styles require client-side
       if (
@@ -114,7 +109,17 @@ const Flex = forwardRef<HTMLDivElement, SmartFlexProps>(
     // The breakpoint objects go through explicitly: they are destructured out
     // of `props` above, so a spread would not carry them.
     return (
-      <ServerFlex ref={ref} cursor={cursor} hide={hide} l={l} m={m} s={s} xs={xs} {...props} />
+      <ServerFlex
+        ref={ref}
+        cursor={cursor}
+        hide={hide}
+        xl={xl}
+        l={l}
+        m={m}
+        s={s}
+        xs={xs}
+        {...props}
+      />
     );
   },
 );

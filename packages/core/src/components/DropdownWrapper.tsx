@@ -49,6 +49,11 @@ export interface DropdownWrapperProps {
   optionsCount?: number;
   dropdownId?: string;
   disableTriggerClick?: boolean;
+  /** Capture-phase focus on the whole control, trigger and dropdown alike —
+   *  the only place a consumer can see focus enter and leave the widget,
+   *  since it moves between the two during a normal interaction. */
+  onFocusCapture?: React.FocusEventHandler<HTMLDivElement>;
+  onBlurCapture?: React.FocusEventHandler<HTMLDivElement>;
 }
 
 // Global state to track the last opened dropdown
@@ -58,6 +63,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
   (
     {
       trigger,
+      onFocusCapture,
+      onBlurCapture,
       dropdown,
       selectedOption,
       minHeight,
@@ -560,6 +567,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           }}
           className={className}
           ref={wrapperRef}
+          onFocusCapture={onFocusCapture}
+          onBlurCapture={onBlurCapture}
         onClick={
           disableTriggerClick
             ? undefined

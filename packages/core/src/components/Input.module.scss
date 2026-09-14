@@ -41,11 +41,15 @@
    selector — it is what the rest of the library uses, and it is what keeps
    the ring off a field focused programmatically.
 
-   Same outline as the `.focus-ring` utility, so an opted-in field matches
-   every other focusable thing on the page. `Select` does not take the prop:
-   it moves focus off the trigger and into the dropdown, so this would light
-   and then go out while the menu is open. */
-.base.focusRing:has(.input:focus-visible) {
+   Two selectors, because focus lands in two places. A plain field focuses its
+   own control. `Select` moves focus off the trigger and into the dropdown, so
+   for most of the interaction the control is not the focused element at all —
+   it tracks focus across the whole widget instead and marks the wrapper, the
+   same descendant shape `.error .base` uses below. Same outline as the
+   `.focus-ring` utility either way, so an opted-in field matches every other
+   focusable thing on the page. */
+.base.focusRing:has(.input:focus-visible),
+.focused .base.focusRing {
   outline: var(--static-space-2) solid var(--brand-solid-strong);
   outline-offset: 2px;
 }

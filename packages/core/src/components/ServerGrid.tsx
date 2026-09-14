@@ -119,7 +119,9 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
   ) => {
     // Cascade breakpoints: larger breakpoint styles flow down to smaller ones
     // Order: xl > l > m > s > xs
-    const cascadedL = l ? { ...l } : undefined;
+    // `xl` leads the cascade; the code used to start at `l` and drop it.
+    const cascadedXl = xl ? { ...xl } : undefined;
+    const cascadedL = l || cascadedXl ? { ...cascadedXl, ...l } : undefined;
     const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
     const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;

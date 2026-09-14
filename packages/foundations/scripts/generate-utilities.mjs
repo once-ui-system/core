@@ -82,7 +82,7 @@ function spacing() {
   // to nothing at all: no class existed for it, and ClientFlex's inline path
   // guards on `typeof value === "number"`, so the string fell through both.
   // Numbers worked, tokens did not, and neither said so.
-  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
+  for (const { key, query } of BREAKPOINTS_CASCADE) {
     const body = SPACING_FAMILIES.flatMap(({ prefix, props }) =>
       SPACING_TOKENS.map((token) =>
         rule(`.${key}-${prefix}-${token}`, props.map((p) => `${p}: ${spacingVar(token)};`)),
@@ -91,7 +91,7 @@ function spacing() {
       .join("\n")
       .replace(/^/gm, "  ")
       .replace(/^\s+$/gm, "");
-    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+    out.push(`@media ${query} {\n${body}}\n`);
   }
   return out.join("\n");
 }
@@ -119,13 +119,13 @@ function position() {
   const rules = positionRules();
   const out = [rules.map(([sel, decls]) => rule(`.${sel}`, decls)).join("\n")];
 
-  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
+  for (const { key, query } of BREAKPOINTS_CASCADE) {
     const body = rules
       .map(([sel, decls]) => rule(`.${key}-${sel}`, decls))
       .join("\n")
       .replace(/^/gm, "  ")
       .replace(/^\s+$/gm, "");
-    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+    out.push(`@media ${query} {\n${body}}\n`);
   }
   return out.join("\n");
 }
@@ -140,9 +140,14 @@ function position() {
  * reach it through the synced copy, and renaming buys nothing.
  */
 function breakpoints() {
-  const vars = BREAKPOINTS.map(({ key, maxWidth }) => `$breakpoint-${key}: ${maxWidth};`).join("\n");
+  // The variables carry the raw widths, as they always have — component modules
+  // interpolate them. The mixins carry the whole query, because `xl` is a
+  // min-width step and cannot be rebuilt from a width alone.
+  const vars = BREAKPOINTS.map(
+    ({ key, query }) => `$breakpoint-${key}: ${query.match(/(\d+)px/)[1]}px;`,
+  ).join("\n");
   const mixins = BREAKPOINTS.map(
-    ({ key }) => `@mixin ${key} {\n  @media (max-width: #{$breakpoint-${key}}) {\n    @content;\n  }\n}`,
+    ({ key, query }) => `@mixin ${key} {\n  @media ${query} {\n    @content;\n  }\n}`,
   ).join("\n\n");
   return `${vars}\n\n${mixins}\n`;
 }
@@ -204,13 +209,13 @@ function flex() {
   out.push(rule(".flex-show", ["display: flex;"]));
 
   const responsive = flexResponsiveRules();
-  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
+  for (const { key, query } of BREAKPOINTS_CASCADE) {
     const body = responsive
       .map(([sel, decls]) => rule(`.${key}-${sel}`, decls))
       .join("\n")
       .replace(/^/gm, "  ")
       .replace(/^\s+$/gm, "");
-    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+    out.push(`@media ${query} {\n${body}}\n`);
   }
   return out.join("\n");
 }
@@ -308,7 +313,7 @@ function display() {
   );
   for (const { selector, decls } of SCROLLBAR_RULES) out.push(rule(selector, decls));
 
-  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
+  for (const { key, query } of BREAKPOINTS_CASCADE) {
     const rules = [
       ...OVERFLOW_RULES.map(({ suffix, prop, value }) => [suffix, [`${prop}: ${value};`]]),
       // ServerFlex emits all four of these for a breakpoint prop, and none of
@@ -331,7 +336,7 @@ function display() {
       .join("\n")
       .replace(/^/gm, "  ")
       .replace(/^\s+$/gm, "");
-    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+    out.push(`@media ${query} {\n${body}}\n`);
   }
 
   // These follow the breakpoint blocks, as they did in the hand-written file.
@@ -369,7 +374,7 @@ function grid() {
   out.push(rule(".grid-hide", ["display: none;"]));
   out.push(rule(".grid-show", ["display: grid;"]));
 
-  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
+  for (const { key, query } of BREAKPOINTS_CASCADE) {
     const rules = [
       ...GRID_COLUMNS.map((n) => [`columns-${n}`, [`grid-template-columns: ${gridTemplate(n)};`]]),
       ["grid-hide", ["display: none;"]],
@@ -380,7 +385,7 @@ function grid() {
       .join("\n")
       .replace(/^/gm, "  ")
       .replace(/^\s+$/gm, "");
-    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+    out.push(`@media ${query} {\n${body}}\n`);
   }
   return out.join("\n");
 }
@@ -451,8 +456,8 @@ function typography() {
   }
 
   for (const { key, value } of FONT_SCALING) {
-    const width = BREAKPOINTS.find((b) => b.key === key).maxWidth;
-    out.push(`@media (max-width: ${width}) {\n  html {\n    font-size: ${value};\n  }\n}\n`);
+    const { query } = BREAKPOINTS.find((b) => b.key === key);
+    out.push(`@media ${query} {\n  html {\n    font-size: ${value};\n  }\n}\n`);
   }
   return out.join("\n");
 }

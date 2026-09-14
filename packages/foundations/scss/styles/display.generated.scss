@@ -62,6 +62,196 @@
   background-color: var(--static-transparent);
 }
 
+@media (min-width: 1441px) {
+  .xl-overflow-auto {
+    overflow: auto;
+  }
+
+  .xl-overflow-x-scroll {
+    overflow-x: scroll;
+  }
+
+  .xl-overflow-x-auto {
+    overflow-x: auto;
+  }
+
+  .xl-overflow-y-auto {
+    overflow-y: auto;
+  }
+
+  .xl-overflow-y-scroll {
+    overflow-y: scroll;
+  }
+
+  .xl-overflow-hidden {
+    overflow: hidden;
+  }
+
+  .xl-overflow-scroll {
+    overflow: scroll;
+  }
+
+  .xl-overflow-x-hidden {
+    overflow-x: hidden;
+  }
+
+  .xl-overflow-y-hidden {
+    overflow-y: hidden;
+  }
+
+  .xl-opacity-0 {
+    opacity: 0;
+  }
+
+  .xl-opacity-10 {
+    opacity: 0.1;
+  }
+
+  .xl-opacity-20 {
+    opacity: 0.2;
+  }
+
+  .xl-opacity-30 {
+    opacity: 0.3;
+  }
+
+  .xl-opacity-40 {
+    opacity: 0.4;
+  }
+
+  .xl-opacity-50 {
+    opacity: 0.5;
+  }
+
+  .xl-opacity-60 {
+    opacity: 0.6;
+  }
+
+  .xl-opacity-70 {
+    opacity: 0.7;
+  }
+
+  .xl-opacity-80 {
+    opacity: 0.8;
+  }
+
+  .xl-opacity-90 {
+    opacity: 0.9;
+  }
+
+  .xl-opacity-100 {
+    opacity: 1;
+  }
+
+  .xl-z-index--1 {
+    z-index: -1;
+  }
+
+  .xl-z-index-0 {
+    z-index: 0;
+  }
+
+  .xl-z-index-1 {
+    z-index: 1;
+  }
+
+  .xl-z-index-2 {
+    z-index: 2;
+  }
+
+  .xl-z-index-3 {
+    z-index: 3;
+  }
+
+  .xl-z-index-4 {
+    z-index: 4;
+  }
+
+  .xl-z-index-5 {
+    z-index: 5;
+  }
+
+  .xl-z-index-6 {
+    z-index: 6;
+  }
+
+  .xl-z-index-7 {
+    z-index: 7;
+  }
+
+  .xl-z-index-8 {
+    z-index: 8;
+  }
+
+  .xl-z-index-9 {
+    z-index: 9;
+  }
+
+  .xl-z-index-10 {
+    z-index: 10;
+  }
+
+  .xl-transition-micro-short {
+    transition: var(--transition-micro-short);
+  }
+
+  .xl-transition-micro-medium {
+    transition: var(--transition-micro-medium);
+  }
+
+  .xl-transition-micro-long {
+    transition: var(--transition-micro-long);
+  }
+
+  .xl-transition-macro-short {
+    transition: var(--transition-macro-short);
+  }
+
+  .xl-transition-macro-medium {
+    transition: var(--transition-macro-medium);
+  }
+
+  .xl-transition-macro-long {
+    transition: var(--transition-macro-long);
+  }
+
+  .xl-pointer-events-none {
+    pointer-events: none;
+  }
+
+  .xl-pointer-events-auto {
+    pointer-events: auto;
+  }
+
+  .xl-pointer-events-all {
+    pointer-events: all;
+  }
+
+  .xl-scrollbar-minimal::-webkit-scrollbar {
+    background: var(--static-transparent);
+    width: var(--static-space-4);
+    height: var(--static-space-4);
+  }
+
+  .xl-scrollbar-minimal::-webkit-scrollbar-track {
+    background: var(--static-transparent);
+  }
+
+  .xl-scrollbar-minimal::-webkit-scrollbar-thumb {
+    background: var(--neutral-alpha-medium);
+    transition: var(--transition-micro-medium);
+    border-radius: var(--radius-full);
+  }
+
+  .xl-scrollbar-minimal::-webkit-scrollbar-thumb:hover {
+    background: var(--neutral-alpha-strong);
+  }
+
+  .xl-scrollbar-minimal::-webkit-scrollbar-corner {
+    background-color: var(--static-transparent);
+  }
+}
+
 @media (max-width: 1440px) {
   .l-overflow-auto {
     overflow: auto;

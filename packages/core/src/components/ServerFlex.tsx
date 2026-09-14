@@ -184,7 +184,11 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
 
     // Cascade breakpoints: larger breakpoint styles flow down to smaller ones
     // Order: xl > l > m > s > xs
-    const cascadedL = l ? { direction, ...l } : { direction };
+    // `xl` leads the cascade, as the comment above always claimed it did — the
+    // code used to start at `l` and drop it on the floor, so an `xl` object
+    // only ever reached the client component.
+    const cascadedXl = xl ? { direction, ...xl } : { direction };
+    const cascadedL = l ? { ...cascadedXl, ...l } : cascadedXl;
     const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
     const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
@@ -378,15 +382,19 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     classes +=
       " " +
       classNames(
+        ...spacingClasses("xl", cascadedXl),
         ...spacingClasses("l", cascadedL),
         ...spacingClasses("m", cascadedM),
         ...spacingClasses("s", cascadedS),
         ...spacingClasses("xs", cascadedXs),
-        cascadedL?.position && `l-position-${cascadedL.position}`,
+        cascadedXl?.position && `xl-position-${cascadedXl.position}`,
+          cascadedL?.position && `l-position-${cascadedL.position}`,
         cascadedM?.position && `m-position-${cascadedM.position}`,
         cascadedS?.position && `s-position-${cascadedS.position}`,
         cascadedXs?.position && `xs-position-${cascadedXs.position}`,
-        cascadedL?.hide === true && "l-flex-hide",
+        cascadedXl?.hide === true && "xl-flex-hide",
+          cascadedXl?.hide === false && "xl-flex-show",
+          cascadedL?.hide === true && "l-flex-hide",
         cascadedL?.hide === false && "l-flex-show",
         cascadedM?.hide === true && "m-flex-hide",
         cascadedM?.hide === false && "m-flex-show",
@@ -394,7 +402,8 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedS?.hide === false && "s-flex-show",
         cascadedXs?.hide === true && "xs-flex-hide",
         cascadedXs?.hide === false && "xs-flex-show",
-        l?.direction && `l-flex-${l.direction}`,
+        xl?.direction && `xl-flex-${xl.direction}`,
+          l?.direction && `l-flex-${l.direction}`,
         m?.direction && `m-flex-${m.direction}`,
         s?.direction && `s-flex-${s.direction}`,
         xs?.direction && `xs-flex-${xs.direction}`,

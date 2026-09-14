@@ -62,14 +62,33 @@ describe("breakpoint spacing", () => {
   });
 
   it("keeps the values a class cannot express on the client", () => {
-    // A rem gap, a free-form width, and `xl` — which is Infinity, the base
-    // state, and which ServerFlex's cascade does not read.
+    // A rem gap and a free-form width: neither has a class to reach for.
     for (const el of [
       <Flex key="n" s={{ gap: 0.25 }}>x</Flex>,
       <Flex key="w" s={{ width: 20 }}>x</Flex>,
-      <Flex key="x" xl={{ gap: "4" }}>x</Flex>,
     ]) {
       expect(() => renderToStaticMarkup(el)).toThrow(/LayoutProvider/);
     }
+  });
+
+  /**
+   * `xl` completes the scale. It means "above all the other steps" — the layout
+   * context resolves it as `Infinity` — so in CSS it is the one min-width
+   * query, and it leads the cascade rather than being dropped, which is what
+   * the code did while its own comment claimed otherwise.
+   */
+  it("renders xl on the server and cascades it down", () => {
+    const html = renderToStaticMarkup(<Flex xl={{ gap: "4" }}>x</Flex>);
+    expect(html).toContain("xl-g-4");
+    // Top of the cascade, so it reaches every narrower step too.
+    for (const bp of ["l", "m", "s", "xs"]) expect(html).toContain(`${bp}-g-4`);
+  });
+
+  it("lets a narrower step override xl", () => {
+    const html = renderToStaticMarkup(<Flex xl={{ gap: "4" }} s={{ gap: "16" }}>x</Flex>);
+    expect(html).toContain("xl-g-4");
+    expect(html).toContain("l-g-4");
+    expect(html).toContain("s-g-16");
+    expect(html).toContain("xs-g-16");
   });
 });

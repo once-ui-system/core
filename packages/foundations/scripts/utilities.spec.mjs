@@ -67,21 +67,34 @@ export const SPACING_EXTRAS = [
  * widths, tearing the layout mid-resize.
  */
 export const BREAKPOINTS = [
-  { key: "xs", maxWidth: "480px" },
-  { key: "s", maxWidth: "768px" },
-  { key: "m", maxWidth: "1024px" },
-  { key: "l", maxWidth: "1440px" },
+  { key: "xs", query: "(max-width: 480px)" },
+  { key: "s", query: "(max-width: 768px)" },
+  { key: "m", query: "(max-width: 1024px)" },
+  { key: "l", query: "(max-width: 1440px)" },
+  // The one min-width step, and the reason the scale is complete.
+  //
+  // `xl` has always meant "above all the others" — the layout context resolves
+  // it as `Infinity` — so a max-width query cannot express it; it is the space
+  // past `l`, not a narrower slice. As a min-width query it means exactly what
+  // the context already says it means, which keeps CSS and JS agreeing at
+  // every width without inventing a sixth bucket for the widest screens.
+  { key: "xl", query: "(min-width: 1441px)" },
 ];
 
 /**
- * Widest first — the order rules must be *emitted* in.
+ * The order rules must be *emitted* in: `xl` first, then widest max-width down
+ * to narrowest.
  *
- * Every step is a `max-width` query, so they all match on a narrow viewport and
- * the last one in the file wins. Emit ascending and `.xs-` would be overruled
- * by `.l-` on a phone, which is exactly backwards. Reversed here once, with a
- * name, rather than left as a literal ordering nobody can see the reason for.
+ * The max-width steps all match on a narrow viewport, so the last one in the
+ * file wins — emit ascending and `.xs-` would be overruled by `.l-` on a
+ * phone, exactly backwards. `xl` leads because it is the only min-width step
+ * and never overlaps the rest: at any width, either it matches or some max-width
+ * step does, never both.
  */
-export const BREAKPOINTS_CASCADE = [...BREAKPOINTS].reverse();
+export const BREAKPOINTS_CASCADE = [
+  BREAKPOINTS.find((b) => b.key === "xl"),
+  ...[...BREAKPOINTS].reverse().filter((b) => b.key !== "xl"),
+];
 
 export const POSITION_VALUES = ["relative", "fixed", "absolute", "sticky", "static"];
 

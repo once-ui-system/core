@@ -54,6 +54,10 @@
   grid-template-columns: repeat(12, 1fr);
 }
 
+.xl-grid-show {
+  display: none;
+}
+
 .l-grid-show {
   display: none;
 }
@@ -76,6 +80,64 @@
 
 .grid-show {
   display: grid;
+}
+
+@media (min-width: 1441px) {
+  .xl-columns-1 {
+    grid-template-columns: 1fr;
+  }
+
+  .xl-columns-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .xl-columns-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .xl-columns-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .xl-columns-5 {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .xl-columns-6 {
+    grid-template-columns: repeat(6, 1fr);
+  }
+
+  .xl-columns-7 {
+    grid-template-columns: repeat(7, 1fr);
+  }
+
+  .xl-columns-8 {
+    grid-template-columns: repeat(8, 1fr);
+  }
+
+  .xl-columns-9 {
+    grid-template-columns: repeat(9, 1fr);
+  }
+
+  .xl-columns-10 {
+    grid-template-columns: repeat(10, 1fr);
+  }
+
+  .xl-columns-11 {
+    grid-template-columns: repeat(11, 1fr);
+  }
+
+  .xl-columns-12 {
+    grid-template-columns: repeat(12, 1fr);
+  }
+
+  .xl-grid-hide {
+    display: none;
+  }
+
+  .xl-grid-show {
+    display: grid;
+  }
 }
 
 @media (max-width: 1440px) {

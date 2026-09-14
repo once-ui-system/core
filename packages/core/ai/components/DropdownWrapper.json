@@ -22,7 +22,9 @@
   "columns": "number | string = 8",
   "optionsCount": "number",
   "dropdownId": "string",
-  "disableTriggerClick": "boolean = false"
+  "disableTriggerClick": "boolean = false",
+  "onFocusCapture": "React.FocusEventHandler<HTMLDivElement>",
+  "onBlurCapture": "React.FocusEventHandler<HTMLDivElement>"
  },
  "mixinsRef": []
 }

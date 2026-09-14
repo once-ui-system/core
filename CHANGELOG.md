@@ -889,6 +889,38 @@ that way. The ramps themselves are untouched.
 
 ### Fixed
 
+- **`xl` completes the breakpoint scale.** It is the one min-width step,
+  `(min-width: 1441px)`, and that is not an exception so much as the only
+  honest reading: `xl` has always meant "above all the others" — the layout
+  context resolves it as `Infinity` — so a max-width query cannot express it.
+  As min-width it matches the context exactly at every width, with no sixth
+  bucket invented for the widest screens and no change to what `xl` means.
+
+  `ServerFlex` and `ServerGrid` now start their cascade at `xl`, as their own
+  comment had claimed for as long as the code started at `l` and dropped it —
+  which is why an `xl` object only ever reached the client component. It
+  renders on the server like every other step now, and flows down into the
+  narrower ones:
+
+  ```
+  <Flex gap="16" xl={{ gap: "4" }} />
+  class="… g-16 xl-g-4 l-g-4 m-g-4 s-g-4 xs-g-4"
+  ```
+
+- **`Select` tracks focus across the whole control, and takes `focusRing`.**
+  Focus moves off the trigger and into the dropdown during a normal
+  interaction, so anything keyed to the trigger latched on and never came off.
+  Traced in Chromium: `focusin INPUT`, `focusout INPUT -> BUTTON`, and then
+  nothing at all while `document.activeElement` quietly became `body` — because
+  picking an option removes the focused button from the document, and removing
+  a focused element fires no `focusout`. No blur listener, on the trigger or
+  the wrapper, can see that.
+
+  Focus is watched at the document instead, on the two events that do fire:
+  focus landing elsewhere, and a pointer going down elsewhere. Only mounted
+  while focused, so an unfocused `Select` costs nothing. `focusRing` is back in
+  `SelectProps` now that the state behind it is honest.
+
 - **A token in a breakpoint prop did nothing.** `s={{ gap: "4" }}` is what the
   docs and every example teach, and it resolved to nothing at all: no `.s-g-4`
   class existed, `ServerFlex` emitted no breakpoint spacing classes, and

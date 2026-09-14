@@ -17,17 +17,12 @@ import {
   useArrowNavigationContext,
 } from ".";
 import { Placement } from "@floating-ui/react-dom";
+import inputStyles from "./Input.module.scss";
 
 type SelectOptionType = Omit<OptionProps, "selected">;
 
 interface SelectProps
-  // `focusRing` is Input's, and Select cannot honour it yet: focus moves off
-  // the trigger and into the dropdown, so the trigger is not the focused
-  // element for most of the interaction and a ring keyed to it would light on
-  // first focus and then go out with the menu still open. Giving Select a
-  // focus ring means tracking focus across the whole control first. Omitted
-  // rather than accepted and ignored.
-  extends Omit<InputProps, "onSelect" | "value" | "focusRing">,
+  extends Omit<InputProps, "onSelect" | "value">,
     Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
   options: SelectOptionType[];
   value?: string | string[];
@@ -144,6 +139,18 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     ref,
   ) => {
 
+    /**
+     * Focus for the whole control, not the trigger.
+     *
+     * Opening the dropdown moves focus off the trigger and into the menu, so
+     * the trigger's own blur fires mid-interaction with `relatedTarget` inside
+     * the dropdown — which the handler below correctly ignores, leaving any
+     * state keyed to the trigger stuck on. Capture-phase listeners on the
+     * wrapper see focus enter and leave the control as a whole, which is the
+     * thing a focus ring should actually track.
+     */
+    const [isFocused, setIsFocused] = useState(false);
+
     const [internalValue, setInternalValue] = useState(multiple ? [] : value);
 
     useEffect(() => {
@@ -179,6 +186,35 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         }
       }
     };
+
+    /**
+     * Focus leaves this control without ever firing a blur it can hear.
+     *
+     * Picking an option moves focus onto a button inside the dropdown, and
+     * closing the menu removes that button from the document — and removing a
+     * focused element fires no `focusout`, it just resets focus to `body`.
+     * Traced in Chromium: `focusin INPUT`, `focusout INPUT -> BUTTON`, and then
+     * nothing at all while `document.activeElement` quietly became `BODY`. A
+     * blur listener, on the trigger or on the wrapper, cannot see that.
+     *
+     * So the exit is watched at the document instead, on the two events that do
+     * fire: focus landing somewhere else, and a pointer going down somewhere
+     * else. Only mounted while focused, so an unfocused Select costs nothing.
+     */
+    useEffect(() => {
+      if (!isFocused) return;
+      const leaveIfOutside = (event: Event) => {
+        const target = event.target as Node | null;
+        if (target && selectRef.current?.contains(target)) return;
+        setIsFocused(false);
+      };
+      document.addEventListener("focusin", leaveIfOutside);
+      document.addEventListener("pointerdown", leaveIfOutside);
+      return () => {
+        document.removeEventListener("focusin", leaveIfOutside);
+        document.removeEventListener("pointerdown", leaveIfOutside);
+      };
+    }, [isFocused]);
 
     const handleSelect = (value: string) => {
       if (multiple) {
@@ -260,6 +296,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           if (typeof ref === "function") ref(node);
           else if (ref) ref.current = node;
         }}
+        onFocusCapture={() => setIsFocused(true)}
         open={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
         placement={placement}
@@ -282,7 +319,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
             // `{ className }` in the object put the literal string "className"
             // on the element when the prop was truthy and dropped the caller's
             // class entirely. It is a value, not a condition.
-            className={classNames("fill-width", className)}
+            className={classNames("fill-width", className, isFocused && inputStyles.focused)}
             aria-haspopup="listbox"
             aria-expanded={isDropdownOpen}
           />
