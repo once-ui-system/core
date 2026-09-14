@@ -764,12 +764,26 @@ that way. The ramps themselves are untouched.
   `.mx-48` and `.mx-56`, the drift. The CSS API-surface snapshot, which guards
   all 809 public class names, shows the same two lines and nothing else.
 
-  `pnpm check:utilities` fails if the checked-in file does not match a fresh
-  run, so the output cannot drift from the spec that describes it, and `build`
-  regenerates before compiling. This is the groundwork for generating the
-  responsive variants: only 121 of 809 utilities have breakpoint variants
-  today, which is why `Flex` falls back to a client component and a runtime
-  style pass whenever a responsive prop is set.
+  `position.scss` follows, and it is the clearer case: 1,548 lines because it
+  wrote its matrix out five times, once for the base and once inside each of
+  the four breakpoints. Generated it is one list of rules and a loop over the
+  viewport steps. That file had not drifted — the compiled output matches rule
+  for rule, inside every media query, 385 to 385, nothing added, nothing
+  dropped, no declaration changed, and the compiled stylesheet is identical to
+  the byte.
+
+  Between them, 3,052 hand-written lines become a 94-line spec and a 119-line
+  generator. `pnpm check:utilities` fails if the checked-in output does not
+  match a fresh run, so it cannot drift from the spec that describes it, and
+  `build` regenerates before compiling. A separate test pins the generator's
+  breakpoint widths to `breakpoints.scss`, since a generator cannot read a Sass
+  variable and the two stating different numbers would tear the layout
+  mid-resize.
+
+  This is the groundwork for generating the responsive variants: only 121 of
+  809 utilities have breakpoint variants today, which is why `Flex` falls back
+  to a client component and a runtime style pass whenever a responsive prop is
+  set.
 
 ### Removed
 

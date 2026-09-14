@@ -2,7 +2,16 @@ import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { SPACING_FAMILIES, SPACING_TOKENS, spacingVar } from "../scripts/utilities.spec.mjs";
+import {
+  BREAKPOINTS,
+  OFFSET_SIDES,
+  OFFSET_TOKENS,
+  POSITION_VALUES,
+  SPACING_FAMILIES,
+  SPACING_TOKENS,
+  offsetValue,
+  spacingVar,
+} from "../scripts/utilities.spec.mjs";
 
 const ROOT = join(__dirname, "..");
 const GENERATED = join(ROOT, "scss/styles/spacing.generated.scss");
@@ -49,5 +58,46 @@ describe("generated utilities", () => {
     const index = readFileSync(join(ROOT, "scss/styles/index.scss"), "utf8");
     expect(index).toContain('@use "./spacing.generated.scss";');
     expect(index).not.toMatch(/@use "\.\/spacing\.scss"/);
+    expect(index).toContain('@use "./position.generated.scss";');
+    expect(index).not.toMatch(/@use "\.\/position\.scss"/);
+  });
+
+  /**
+   * A generator cannot read a Sass variable, so the breakpoint widths are
+   * stated twice — in the spec and in breakpoints.scss, which components still
+   * `@include`. If they drift, generated utilities and component styles switch
+   * at different widths and the layout tears mid-resize.
+   */
+  it("agrees with breakpoints.scss on every width", () => {
+    const scss = readFileSync(join(ROOT, "scss/styles/breakpoints.scss"), "utf8");
+    for (const { key, maxWidth } of BREAKPOINTS) {
+      expect(scss, `$breakpoint-${key}`).toContain(`$breakpoint-${key}: ${maxWidth};`);
+    }
+  });
+
+  it("repeats every position rule at every breakpoint", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/position.generated.scss"), "utf8");
+    const expected = POSITION_VALUES.length + OFFSET_SIDES.length * OFFSET_TOKENS.length;
+    for (const { key } of BREAKPOINTS) {
+      const found = (css.match(new RegExp(`\\.${key}-(position|top|left|bottom|right)-`, "g")) || []).length;
+      expect(found, `breakpoint ${key}`).toBe(expected);
+    }
+  });
+
+  it("writes a bare 0 for offsets and a token for spacing", () => {
+    // position.scss wrote `top: 0`, spacing.scss wrote `var(--static-space-0)`.
+    // Identical in the browser, but reproducing each exactly is what made the
+    // switch to generated output provable rather than merely plausible.
+    expect(offsetValue("0")).toBe("0");
+    expect(offsetValue("16")).toBe("var(--static-space-16)");
+    expect(spacingVar("0")).toBe("var(--static-space-0)");
+  });
+
+  it("gives offsets the numeric steps only", () => {
+    // A t-shirt size scales with the viewport; an offset that moved when the
+    // viewport did would fight the breakpoint variants around it.
+    expect(OFFSET_TOKENS).not.toContain("m");
+    expect(OFFSET_TOKENS.every((t) => /^\d+$/.test(t))).toBe(true);
+    expect(SPACING_TOKENS).toContain("m");
   });
 });

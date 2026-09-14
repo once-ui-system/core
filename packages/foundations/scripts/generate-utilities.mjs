@@ -10,9 +10,14 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  BREAKPOINTS,
+  OFFSET_SIDES,
+  OFFSET_TOKENS,
+  POSITION_VALUES,
   SPACING_EXTRAS,
   SPACING_FAMILIES,
   SPACING_TOKENS,
+  offsetValue,
   spacingVar,
 } from "./utilities.spec.mjs";
 
@@ -40,7 +45,44 @@ function spacing() {
   return out.join("\n");
 }
 
-const TARGETS = [{ file: "scss/styles/spacing.generated.scss", build: spacing }];
+/**
+ * Every rule a breakpoint repeats, as `[selectorSuffix, declarations]`. The
+ * base pass emits them unprefixed; each breakpoint pass emits the same list
+ * prefixed and wrapped in its media query. Writing the matrix once is the
+ * whole point — position.scss was 1,548 lines because it wrote it five times.
+ */
+function positionRules() {
+  const rules = [];
+  for (const value of POSITION_VALUES) {
+    rules.push([`position-${value}`, [`position: ${value};`]]);
+  }
+  for (const side of OFFSET_SIDES) {
+    for (const token of OFFSET_TOKENS) {
+      rules.push([`${side}-${token}`, [`${side}: ${offsetValue(token)};`]]);
+    }
+  }
+  return rules;
+}
+
+function position() {
+  const rules = positionRules();
+  const out = [rules.map(([sel, decls]) => rule(`.${sel}`, decls)).join("\n")];
+
+  for (const { key, maxWidth } of BREAKPOINTS) {
+    const body = rules
+      .map(([sel, decls]) => rule(`.${key}-${sel}`, decls))
+      .join("\n")
+      .replace(/^/gm, "  ")
+      .replace(/^\s+$/gm, "");
+    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+  }
+  return out.join("\n");
+}
+
+const TARGETS = [
+  { file: "scss/styles/spacing.generated.scss", build: spacing },
+  { file: "scss/styles/position.generated.scss", build: position },
+];
 
 const check = process.argv.includes("--check");
 let drift = false;

@@ -8,7 +8,7 @@
 @use "./shadow.scss";
 @use "./size.scss";
 @use "./display.scss";
-@use "./position.scss";
+@use "./position.generated.scss";
 @use "./grid.scss";
 @use "./flex.scss";
 @use "./utilities.scss";

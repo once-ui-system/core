@@ -59,3 +59,36 @@ export const SPACING_EXTRAS = [
   { selector: ".g-horizontal--1 > *:not(:first-child)", decls: ["margin-left: -1px;"] },
   { selector: ".g-vertical--1 > *:not(:first-child)", decls: ["margin-top: -1px;"] },
 ];
+
+/**
+ * The viewport steps, largest first, as `max-width` queries — the order the
+ * hand-written files emitted them in, and the order a cascade needs: a narrower
+ * query must come later to win.
+ *
+ * These live here rather than in `breakpoints.scss` because a generator cannot
+ * read a Sass variable. The two must agree; `scss/styles/breakpoints.scss` is
+ * the one a human edits by hand today, so a test pins them together.
+ */
+export const BREAKPOINTS = [
+  { key: "l", maxWidth: "1440px" },
+  { key: "m", maxWidth: "1024px" },
+  { key: "s", maxWidth: "768px" },
+  { key: "xs", maxWidth: "480px" },
+];
+
+export const POSITION_VALUES = ["relative", "fixed", "absolute", "sticky", "static"];
+
+/** Offsets take the numeric steps only — no t-shirt sizes, unlike spacing. */
+export const OFFSET_TOKENS = SPACING_TOKENS.filter((t) => /^\d+$/.test(t));
+
+export const OFFSET_SIDES = ["top", "left", "bottom", "right"];
+
+/**
+ * `0` is emitted bare rather than as `var(--static-space-0)`.
+ *
+ * The token resolves to `0` either way, so this changes nothing in the
+ * browser — but spacing.scss wrote the var and position.scss wrote the
+ * literal, and reproducing each file exactly is what makes the switch to
+ * generated output provable instead of merely plausible.
+ */
+export const offsetValue = (token) => (token === "0" ? "0" : `var(--static-space-${token})`);
