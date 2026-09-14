@@ -1,0 +1,47 @@
+---
+title: "TagInput"
+summary: "Collect a list of values as removable chips inside a single field."
+updatedAt: "2026-09-14"
+docs: "once-ui/form-controls/tagInput.mdx"
+github: "components/TagInput.tsx"
+navLabel: "TagInput"
+navIcon: "switch"
+---
+
+`TagInput` holds an array rather than a string. Each entry renders as a chip
+that can be removed on its own, and typing a new one appends to the array.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<TagInputExample />}
+  codes={[
+    {
+      code:
+`const [tags, setTags] = useState<string[]>(["React", "Next.js"]);
+
+<TagInput
+    id="interests"
+    value={tags}
+    onChange={setTags}
+    placeholder="Add interest"
+    suffix={<Kbd position="absolute" top="12" right="12">Enter</Kbd>}
+/>`,
+      language: "tsx",
+      label: "TagInput"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="TagInput"
+  describe={{
+    value: "The tags, as an array of strings. Required — this input has no uncontrolled mode.",
+    onChange: "Receives the whole new array, after an add or a remove.",
+  }}
+/>
+
+Everything on [Input](/form-controls/input) — `label`, `description`, `error`,
+`size`, `prefix`, `suffix` — works here too.
