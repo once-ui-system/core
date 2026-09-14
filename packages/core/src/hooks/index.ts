@@ -6,4 +6,3 @@ export * from "./useStreamingViewport";
 export * from "./useInViewport";
 export * from "./useReducedMotion";
 export * from "./useArrowNavigation";
-export * from "./useResponsiveClasses";

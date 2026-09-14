@@ -48,11 +48,28 @@ describe("breakpoint spacing", () => {
     expect(classes).not.toMatch(/s-g-/);
   });
 
-  it("still sends a responsive Flex to the client component", () => {
-    // The class matrix ships with fixed widths, but an app can configure its
-    // own breakpoints, and only a client component can read that context. Until
-    // the CSS is generated against the app's own values, the routing decision
-    // has to stay where the context is.
-    expect(() => renderToStaticMarkup(<Flex s={{ gap: "4" }}>x</Flex>)).toThrow(/LayoutProvider/);
+  /**
+   * The point of the whole exercise: a responsive Flex renders on the server.
+   * No `use client` boundary, no LayoutProvider, and the layout is right in
+   * the first paint rather than after an effect. This works only because the
+   * breakpoints are fixed — a stylesheet cannot carry a width the app picks at
+   * runtime, since `@media` does not read custom properties.
+   */
+  it("renders a responsive Flex on the server, with no provider", () => {
+    const html = renderToStaticMarkup(<Flex direction="row" gap="16" s={{ direction: "column", gap: "4" }}>x</Flex>);
+    expect(html).toContain("s-flex-column");
+    expect(html).toContain("s-g-4");
+  });
+
+  it("keeps the values a class cannot express on the client", () => {
+    // A rem gap, a free-form width, and `xl` — which is Infinity, the base
+    // state, and which ServerFlex's cascade does not read.
+    for (const el of [
+      <Flex key="n" s={{ gap: 0.25 }}>x</Flex>,
+      <Flex key="w" s={{ width: 20 }}>x</Flex>,
+      <Flex key="x" xl={{ gap: "4" }}>x</Flex>,
+    ]) {
+      expect(() => renderToStaticMarkup(el)).toThrow(/LayoutProvider/);
+    }
   });
 });

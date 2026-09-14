@@ -19,7 +19,6 @@ interface LayoutContextType {
   currentBreakpoint: BreakpointKey;
   width: number;
   breakpoints: Breakpoints;
-  isDefaultBreakpoints: () => boolean;
   isBreakpoint: (key: BreakpointKey) => boolean;
   maxWidth: (key: BreakpointKey) => boolean;
   minWidth: (key: BreakpointKey) => boolean;
@@ -29,18 +28,15 @@ const LayoutContext = createContext<LayoutContextType | null>(null);
 
 interface LayoutProviderProps {
   children: ReactNode;
-  breakpoints?: Partial<Breakpoints>;
 }
 
-const LayoutProvider: React.FC<LayoutProviderProps> = ({
-  children,
-  breakpoints: customBreakpoints,
-}) => {
-  // Merge custom breakpoints with defaults
-  const breakpoints: Breakpoints = {
-    ...DEFAULT_BREAKPOINTS,
-    ...customBreakpoints,
-  };
+const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
+  // Fixed, and deliberately so. The utility classes carry these widths inside
+  // their media queries, and a prebuilt stylesheet cannot honour a width the
+  // app picks at runtime — `@media` does not read custom properties. Letting
+  // an app move them meant the CSS said one thing and the JS another, which is
+  // why `Flex` had two code paths and a runtime style pass to reconcile them.
+  const breakpoints: Breakpoints = DEFAULT_BREAKPOINTS;
 
   const [width, setWidth] = useState<number>(0);
   const [currentBreakpoint, setCurrentBreakpoint] = useState<BreakpointKey>("l");
@@ -75,10 +71,6 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
   // Check if current width is above the given breakpoint (min-width)
   const minWidth = (key: BreakpointKey): boolean => {
     return width > breakpoints[key];
-  };
-
-  const isDefaultBreakpoints = (): boolean => {
-    return JSON.stringify(breakpoints) === JSON.stringify(DEFAULT_BREAKPOINTS);
   };
 
   useEffect(() => {
@@ -120,7 +112,6 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     currentBreakpoint,
     width,
     breakpoints,
-    isDefaultBreakpoints,
     isBreakpoint,
     maxWidth,
     minWidth,

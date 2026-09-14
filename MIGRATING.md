@@ -196,6 +196,34 @@ fallback. The floor is **Chrome 111, Safari 15.4, Firefox 113** (2022–23).
 If you support anything older, 2.0 is not for that app yet. Say so in an issue;
 a fallback layer is possible, it just has no demand behind it.
 
+### 7. Breakpoints are fixed
+
+`LayoutProvider` no longer takes a `breakpoints` prop.
+
+```diff
+- <LayoutProvider breakpoints={{ xs: 420, s: 560, m: 960, l: 1280, xl: 1600 }}>
++ <LayoutProvider>
+```
+
+The five steps are now the only ones: **xs 480, s 768, m 1024, l 1440**, and
+`xl` above all of them — `xl` was always `Infinity`, the base state rather than
+a media query, which is why no `.xl-` class has ever existed.
+
+This is what lets a responsive `Flex` be a server component. The utility
+classes carry those widths inside their `@media` queries, and a prebuilt
+stylesheet cannot honour a width the app picks at runtime, because `@media`
+does not read custom properties. Supporting both meant two code paths — CSS
+classes when your breakpoints matched the defaults, a 450-line runtime hook
+that mutated `element.style` when they did not — and the runtime path could
+only run after hydration, so a page laid out at desktop widths and then
+corrected itself. Fixing the widths removes the second path entirely.
+
+If you were passing custom breakpoints, the nearest equivalent is a media
+query of your own in a CSS module. If the defaults genuinely do not fit your
+app, open an issue: making them configurable again means generating the CSS in
+your build rather than ours, which is a real feature and worth doing for a real
+need.
+
 ### What did not change
 
 Worth knowing so you do not go looking:

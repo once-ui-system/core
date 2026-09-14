@@ -18,7 +18,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
         surface={style.surface as SurfaceStyle}
         transition={style.transition as TransitionStyle}
         scaling={style.scaling as ScalingSize}>
-      <LayoutProvider breakpoints={{xs: 420, s: 560, m: 960, l: 1280, xl: 1600}}>
+      <LayoutProvider>
         <DataThemeProvider
           variant={dataStyle.variant as ChartVariant}
           mode={dataStyle.mode as ChartMode}

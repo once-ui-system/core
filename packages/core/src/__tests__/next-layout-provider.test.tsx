@@ -83,7 +83,7 @@ describe("LayoutProvider from @once-ui-system/core/next", () => {
 
   it("still accepts LayoutProvider's own props", () => {
     render(
-      <LayoutProvider breakpoints={{ s: 600 }}>
+      <LayoutProvider>
         <ElementType href="/x" data-testid="link">
           x
         </ElementType>

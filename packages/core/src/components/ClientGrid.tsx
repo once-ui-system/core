@@ -5,7 +5,6 @@ import { ServerGrid, Cursor } from ".";
 import { GridProps, StyleProps, DisplayProps, GridBreakpointProps } from "../interfaces";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
 import { useLayout } from "..";
-import { useResponsiveClasses } from "../hooks/useResponsiveClasses";
 
 interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];
@@ -21,12 +20,8 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
   ({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
     const elementRef = useRef<HTMLDivElement>(null);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    const { currentBreakpoint, isDefaultBreakpoints } = useLayout();
+    const { currentBreakpoint } = useLayout();
 
-    if (!isDefaultBreakpoints()) {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useResponsiveClasses(elementRef, "row", { xl, l, m, s, xs }, currentBreakpoint);
-    }
 
     // Combine refs
     const combinedRef = (node: HTMLDivElement) => {
@@ -140,7 +135,6 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
           m={m}
           s={s}
           xs={xs}
-          isDefaultBreakpoints={isDefaultBreakpoints()}
           hide={hide}
           ref={combinedRef}
           style={{

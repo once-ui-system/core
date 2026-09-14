@@ -853,6 +853,40 @@ that way. The ramps themselves are untouched.
   them and not a matrix in sight; generating those would add indirection and
   save nothing.
 
+### Breaking (continued)
+
+- **`LayoutProvider` no longer takes a `breakpoints` prop.** The five steps are
+  fixed: xs 480, s 768, m 1024, l 1440, and `xl` above all of them — `xl` was
+  always `Infinity`, the base state rather than a media query, which is why no
+  `.xl-` class has ever existed.
+
+  This is what lets a responsive `Flex` be a server component. The utility
+  classes carry those widths inside their `@media` queries, and a prebuilt
+  stylesheet cannot honour a width an app picks at runtime, because `@media`
+  does not read custom properties. Supporting both meant two code paths — CSS
+  classes when an app's breakpoints matched the defaults, and a 450-line hook
+  that read a React context and mutated `element.style` when they did not. The
+  second could only run after hydration, so a responsive page was laid out at
+  desktop widths in the server's HTML and corrected itself once JavaScript
+  arrived.
+
+  Both paths are now one. `useResponsiveClasses` is deleted, `isDefaultBreakpoints`
+  is gone from the layout context, and `Flex` and `Grid` render on the server
+  whenever every breakpoint value maps to a class — which is all of them except
+  free-form sizes, rem numbers, the `style` escape hatch, and `xl`. The
+  responsive layout is now in the first paint:
+
+  ```html
+  <div class="display-flex position-relative g-16 flex-row s-g-4 xs-g-4" id="gap">
+  ```
+
+  That also removes a conditional `useResponsiveClasses` call that sat behind
+  an `if` with an eslint-disable on it — a rules-of-hooks violation that would
+  have broken the moment the condition changed between renders.
+
+  Only one app in the fleet passed custom breakpoints, and it was this repo's
+  own dev harness. `MIGRATING.md` §7 covers the change.
+
 ### Fixed
 
 - **A token in a breakpoint prop did nothing.** `s={{ gap: "4" }}` is what the
