@@ -120,7 +120,20 @@ async function generateEmojiData() {
       console.log(`${category}: ${categorizedEmojis[category].length} emojis`);
     });
   } catch (error) {
-    console.error("Error generating emoji data:", error);
+    // This runs inside `pnpm build`, and `prepack` runs `pnpm build` — so a
+    // failed fetch here used to fail `npm publish` itself, on a proxy, a TLS
+    // interception, or no network at all. The categorised output is committed,
+    // so a fetch failure is not a reason to lose the release: keep the file on
+    // disk, say so loudly, and let the build carry on. It only exits non-zero
+    // when there is genuinely nothing to fall back to.
+    const outputPath = path.join(__dirname, "../src/data/emoji-data.json");
+    if (fs.existsSync(outputPath)) {
+      console.warn(
+        `Could not fetch emoji data (${error.code || error.message}); keeping the committed src/data/emoji-data.json.`,
+      );
+      return;
+    }
+    console.error("Error generating emoji data and no committed file to fall back to:", error);
     process.exit(1);
   }
 }

@@ -323,6 +323,13 @@ that way. The ramps themselves are untouched.
 
 ### Fixed
 
+- **A failed emoji fetch no longer fails the build — or the publish.**
+  `prepack` runs `pnpm build`, and the build regenerates
+  `src/data/emoji-data.json` from GitHub. Behind a proxy, a TLS-intercepting
+  network, or offline, that fetch threw and `process.exit(1)` took
+  `npm publish` down with it. The categorised file is committed, so a fetch
+  failure now keeps it, warns, and lets the build continue; the script exits
+  non-zero only when there is genuinely no file to fall back to.
 - **Inputs no longer zoom iOS Safari on focus, and the floating label and value
   are placed by ink.** Three separate things were wrong with a field on a phone.
   iOS Safari zooms when a focused control computes below 16px, and
