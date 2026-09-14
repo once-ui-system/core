@@ -112,6 +112,12 @@ describe("spec types", () => {
     expect(types.AvatarProps).toBe("Avatar props");
   });
 
+  it("emits the same text whatever the checkout's line endings are", () => {
+    // A multi-line object default kept its source newlines, so the committed
+    // artifacts flip-flopped between a CRLF checkout and an LF one.
+    expect(JSON.stringify(spec)).not.toMatch(/\\r|\\n {2,}/);
+  });
+
   it("leaves no prop naming a type the spec cannot resolve", () => {
     const unresolved = referenced().filter(
       (name) => !NOT_A_TYPE.has(name) && !types[name] && !components[name] && !mixins[name],

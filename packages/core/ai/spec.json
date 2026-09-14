@@ -2223,7 +2223,7 @@
     "to": "\"bottom\" | \"top\" | \"left\" | \"right\" = bottom",
     "base": "BaseColor = page",
     "blur": "number = 0.5",
-    "pattern": "{ display?: boolean; size?: SpacingToken; } = {\n        display: false,\n        size: \"4\",\n      }",
+    "pattern": "{ display?: boolean; size?: SpacingToken; } = { display: false, size: \"4\", }",
     "style": "React.CSSProperties",
     "children": "ReactNode"
    }
@@ -3948,7 +3948,7 @@
     "line": "{ count?: number; width?: number; length?: number; }",
     "unit": "React.ReactNode",
     "value": "number = 7",
-    "angle": "{ start: number; sweep: number; } = {\n    start: 0,\n    sweep: 360,\n  }",
+    "angle": "{ start: number; sweep: number; } = { start: 0, sweep: 360, }",
     "direction": "'cw' | 'ccw' = cw",
     "edgePad": "number = 0",
     "children": "React.ReactNode",

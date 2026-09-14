@@ -568,6 +568,12 @@ that way. The ramps themselves are untouched.
   and the snapshot picks up the nine `data-body-size` / `data-body-line-height`
   selectors that `bodySize` and `bodyLineHeight` had added without it — the
   guard had been failing since the foundations extraction.
+- **The generated AI artifacts depended on the checkout's line endings.** A
+  multi-line object default (`Fade`'s `pattern`, `RadialGauge`'s `angle`) kept
+  its source newlines verbatim, so the committed JSON read `{\r\n ... }` when
+  regenerated on a CRLF checkout and `{\n ... }` on an LF one and flip-flopped
+  between machines. Defaults are collapsed the way type text already was, and a
+  test asserts no artifact carries a carriage return.
 - **`KbarItem` and the `MegaMenu` types are exported.** Components took them as
   props but consumers could not name them.
 - **`Logo` takes per-theme sources.** `icon` and `wordmark` now accept

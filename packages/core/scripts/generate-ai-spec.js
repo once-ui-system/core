@@ -97,7 +97,15 @@ function normalize(p) {
 
 /** Strip quotes from string literal default values */
 function cleanDefault(text) {
-  const t = text.trim();
+  // A multi-line object default kept its source newlines and indentation,
+  // which made the output depend on the checkout's line endings: the same
+  // `pattern` default read `{\r\n  display: false ... }` when generated on a
+  // CRLF checkout and `{\n  ... }` on an LF one, so the committed artifacts
+  // flip-flopped between machines. Collapse it the way `typeText` does.
+  const t = text
+    .replace(/\s*\r?\n\s*/g, " ")
+    .replace(/\s{2,}/g, " ")
+    .trim();
   if (/^["'].*["']$/.test(t)) return t.slice(1, -1);
   return t;
 }
