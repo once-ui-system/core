@@ -32,7 +32,9 @@
   ],
   "scripts": {
     "prebuild": "node ../../scripts/check-node.mjs",
-    "build": "rimraf dist && sass scss/styles/index.scss:dist/css/styles.css scss/tokens/index.scss:dist/css/tokens.css --style=compressed",
+    "generate:utilities": "node scripts/generate-utilities.mjs",
+    "check:utilities": "node scripts/generate-utilities.mjs --check",
+    "build": "rimraf dist && pnpm generate:utilities && sass scss/styles/index.scss:dist/css/styles.css scss/tokens/index.scss:dist/css/tokens.css --style=compressed",
     "clean": "rimraf dist",
     "prepare": "pnpm build",
     "lint": "biome check .",

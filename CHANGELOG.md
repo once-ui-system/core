@@ -745,6 +745,32 @@ that way. The ramps themselves are untouched.
   guard (core may not import `next/*`), CSS API-surface snapshots, token
   custom-property/attribute-selector snapshots, and seed interaction tests.
 
+### Changed
+
+- **Spacing utilities are generated, not typed out.** `scss/styles/` was 5,789
+  lines of hand-written classes with not one loop in the whole directory —
+  every `.p-16`, `.mt-24` and `.g-8` written out in full, `spacing.scss` alone
+  1,504 lines of it. The cost was never the typing; it was that a
+  hand-maintained matrix drifts silently. Every spacing family carried all 23
+  tokens except `mx`, which was missing 48 and 56, and nobody reading 1,504
+  lines was going to notice. The matrix now lives in
+  `scripts/utilities.spec.mjs` and `scss/styles/spacing.generated.scss` is
+  emitted from it — 15 families × 23 tokens, plus the two `g-horizontal--1` / `g-vertical--1` hairline
+  helpers that take a child selector and so stay stated explicitly.
+
+  Verified equivalent rather than assumed: comparing the compiled declarations
+  of the old and new files selector by selector gives 343 shared rules, **zero
+  declaration mismatches**, nothing dropped, and exactly two additions —
+  `.mx-48` and `.mx-56`, the drift. The CSS API-surface snapshot, which guards
+  all 809 public class names, shows the same two lines and nothing else.
+
+  `pnpm check:utilities` fails if the checked-in file does not match a fresh
+  run, so the output cannot drift from the spec that describes it, and `build`
+  regenerates before compiling. This is the groundwork for generating the
+  responsive variants: only 121 of 809 utilities have breakpoint variants
+  today, which is why `Flex` falls back to a client component and a runtime
+  style pass whenever a responsive prop is set.
+
 ### Removed
 
 - **The field `focused` / `filled` styling, which never applied.** The rule was
