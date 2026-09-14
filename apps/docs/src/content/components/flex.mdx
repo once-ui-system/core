@@ -1,11 +1,256 @@
 ---
 title: "Flex"
-summary: "A layout component that arranges its children in a flex container."
-updatedAt: "2026-07-27"
+summary: "The layout primitive every other component is built on: one element, a direction, and token-driven spacing, size and surface."
+updatedAt: "2026-09-14"
 docs: "once-ui/components/flex.mdx"
 github: "components/Flex.tsx"
 navLabel: "Flex"
 navIcon: "components"
 ---
 
-Learn more about the `Flex` component usage in the [Structure](/basics/structure) section.
+`Flex` is the element the rest of Once UI is made of. It renders a flex
+container and takes every layout, spacing, size and surface prop in the system,
+so a page is composed by nesting it rather than by writing CSS.
+
+You will rarely write `Flex` itself. `Row` and `Column` are the same component
+with `direction` preset, and reading `<Column gap="16">` beats reading
+`<Flex direction="column" gap="16">`:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Column gap="16">   // Flex, direction: column
+<Row gap="16">      // Flex, direction: row
+<Flex s={{ direction: "column" }}>  // Flex, when the direction changes`,
+      language: "tsx",
+      label: "Prefer Row and Column"
+    }
+  ]}
+/>
+
+Reach for `Flex` directly when the direction is conditional — a row on desktop
+that stacks on a phone — since that is the one thing a preset cannot express.
+
+## Direction and alignment
+
+`horizontal` and `vertical` are named for the axis you see, not for flexbox's
+main and cross axis, so they mean the same thing whichever way the container
+runs.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="8" horizontal="center" vertical="center" padding="16" radius="m" border="neutral-alpha-weak">
+      <Flex width="40" height="40" radius="m" background="brand-alpha-medium" />
+      <Flex width="40" height="24" radius="m" background="brand-alpha-medium" />
+      <Flex width="40" height="56" radius="m" background="brand-alpha-medium" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row gap="8" horizontal="center" vertical="center">
+    ...
+</Row>`,
+      language: "tsx",
+      label: "Alignment"
+    }
+  ]}
+/>
+
+<PropsTable
+  mixin="FlexProps"
+  describe={{
+    direction: "Which way children run. Row and Column preset this.",
+    horizontal: "Alignment along the horizontal axis, whatever the direction.",
+    vertical: "Alignment along the vertical axis, whatever the direction.",
+    center: "Shorthand for horizontal and vertical both centred.",
+    wrap: "Let children flow onto another line instead of shrinking.",
+    flex: "This element's own grow/shrink value inside its parent.",
+  }}
+/>
+
+## Size
+
+Sizes take a spacing token, a number (read as rem), or any CSS unit. `fill` and
+`fit` are the two you want most: fill the parent, or shrink to the content.
+
+<PropsTable
+  mixin="SizeProps"
+  describe={{
+    width: "Fixed width. A token, a number in rem, or a CSS unit.",
+    height: "Fixed height. A token, a number in rem, or a CSS unit.",
+    maxWidth: "Upper bound. The usual way to cap a text column.",
+    minWidth: "Lower bound.",
+    minHeight: "Lower bound.",
+    maxHeight: "Upper bound. Pair with overflowY for a scroll area.",
+    fit: "Shrink to the content on both axes.",
+    fitWidth: "Shrink to the content horizontally.",
+    fitHeight: "Shrink to the content vertically.",
+    fill: "Fill the parent on both axes.",
+    fillWidth: "Fill the parent horizontally.",
+    fillHeight: "Fill the parent vertically.",
+    aspectRatio: "Hold a ratio as the element resizes, e.g. 16 / 9.",
+  }}
+/>
+
+## Spacing
+
+Space between siblings is `gap` on the parent; space inside an element is
+`padding`. Prefer both over `margin` — a layout built from gaps stays correct
+when a child is added, removed or reordered.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Column gap="16" padding="24">    // space between children, space inside
+<Column marginBottom="16">        // last resort: space against a sibling`,
+      language: "tsx",
+      label: "Gap over margin"
+    }
+  ]}
+/>
+
+<PropsTable
+  mixin="SpacingProps"
+  describe={{
+    padding: "Space inside, all four sides.",
+    paddingX: "Space inside, left and right.",
+    paddingY: "Space inside, top and bottom.",
+    margin: "Space outside, all four sides.",
+    marginX: "Space outside, left and right.",
+    marginY: "Space outside, top and bottom.",
+    gap: "Space between children. \"-1\" collapses the gap to overlap borders.",
+    top: "Offset, with position set.",
+    right: "Offset, with position set.",
+    bottom: "Offset, with position set.",
+    left: "Offset, with position set.",
+    translateX: "Shift without affecting layout.",
+    translateY: "Shift without affecting layout.",
+  }}
+/>
+
+## Surface
+
+Background, border, radius and shadow are all tokens. A colour is a scheme and a
+weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="12" wrap>
+      <Flex width="80" height="56" radius="m" background="surface" border="neutral-alpha-medium" />
+      <Flex width="80" height="56" radius="m" background="brand-alpha-weak" border="brand-alpha-medium" />
+      <Flex width="80" height="56" radius="l" background="surface" shadow="l" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Flex radius="m" background="surface" border="neutral-alpha-medium" />
+<Flex radius="m" background="brand-alpha-weak" border="brand-alpha-medium" />
+<Flex radius="l" background="surface" shadow="l" />`,
+      language: "tsx",
+      label: "Surface"
+    }
+  ]}
+/>
+
+<PropsTable
+  mixin="StyleProps"
+  describe={{
+    background: "Surface colour. A token, or surface / page / overlay / transparent.",
+    solid: "Solid fill, for a control that sits on top of a surface.",
+    border: "Border colour on all four sides. true uses the neutral default.",
+    borderStyle: "Solid or dashed.",
+    borderWidth: "Border thickness in pixels.",
+    radius: "Corner roundness. Add a nest value to match an inner element.",
+    shadow: "Elevation.",
+    cursor: "Pointer style. \"interactive\" is the one to use for anything clickable.",
+    textVariant: "Set the text style for everything inside in one prop.",
+  }}
+/>
+
+## Display and behaviour
+
+<PropsTable
+  mixin="DisplayProps"
+  describe={{
+    as: "Render a different element — section, article, nav, ul.",
+    inline: "Lay out inline rather than as a block.",
+    hide: "Remove from the layout. Most useful per breakpoint.",
+    position: "relative is the default, so it never needs writing.",
+    overflow: "Clip or scroll the content.",
+    overflowX: "Clip or scroll horizontally.",
+    overflowY: "Clip or scroll vertically. Pair with maxHeight.",
+    scrollbar: "\"minimal\" for a thin scrollbar inside a panel.",
+    transition: "Named duration and easing for whatever changes.",
+    opacity: "In steps of 10.",
+    zIndex: "Stacking order.",
+    pointerEvents: "\"none\" lets clicks fall through a decorative layer.",
+    dark: "Render only in the dark theme.",
+    light: "Render only in the light theme.",
+  }}
+/>
+
+## Text
+
+Text colour is inherited, so it is set on the container rather than on every
+label inside it.
+
+<PropsTable
+  mixin="CommonProps"
+  describe={{
+    onBackground: "Text colour for content on a background surface.",
+    onSolid: "Text colour for content on a solid fill.",
+    align: "Text alignment.",
+  }}
+/>
+
+## Responsive
+
+Every prop above can be overridden per breakpoint. Pass an object to `xl`, `l`,
+`m`, `s` or `xs` — they cascade down, so `s` also applies at `xs` unless `xs`
+says otherwise. This is how layout adapts; media queries are never needed.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Row gap="24" s={{ direction: "column", gap: "16" }}>
+    <Column fillWidth m={{ hide: true }}>Sidebar</Column>
+    <Column fill>Content</Column>
+</Row>`,
+      language: "tsx",
+      label: "Breakpoints"
+    }
+  ]}
+/>
+
+<PropsTable
+  component="Flex"
+  describe={{
+    xl: "Overrides applied at the xl breakpoint and below.",
+    l: "Overrides applied at the l breakpoint and below.",
+    m: "Overrides applied at the m breakpoint and below.",
+    s: "Overrides applied at the s breakpoint and below.",
+    xs: "Overrides applied at the xs breakpoint.",
+  }}
+/>
+
+## Related
+
+- [Row and Column](/basics/structure) — the presets you will use instead
+- [Grid](/components/grid) — for two-dimensional layout
+- [Spacing](/basics/spacing) — the token scale behind `gap` and `padding`
+- [Color](/basics/color) — the scheme and weight behind `background` and `border`

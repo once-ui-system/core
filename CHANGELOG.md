@@ -625,6 +625,21 @@ that way. The ramps themselves are untouched.
 
 ### Changed (docs site, not published code)
 
+- **`basics/structure` was 1,724 lines and four headings.** `## Flex` ran from
+  line 12 to line 1,643, absorbing colour, radius, shadow, opacity, cursor,
+  zIndex, position and text along the way — a prop reference wearing a concepts
+  page's title, while `components/flex` and `components/grid` were 10-line stubs
+  pointing back at it. Structure is 162 lines now and describes the model: two
+  primitives, the page skeleton, gaps over margins, tokens, breakpoints. The
+  reference moved to Flex and Grid, which are real pages with real tables —
+  seven of them on Flex, 95 rows. The colour-usage examples the split would have
+  dropped moved to `basics/color`, which documented the tokens but never how to
+  apply them.
+- **Props tables can document a mixin.** `Flex` has 5 props of its own and 83
+  across six shared mixins, so the layout pages needed those spelled out rather
+  than collapsed into `...flex`. `<PropsTable mixin="SpacingProps" />` resolves
+  from the same generated spec, a group at a time, and every other page keeps the
+  short spread row. A component no longer lists a spread row pointing at itself.
 - **Every page URL loses its `/once-ui/` prefix**, and the nav is restructured
   around it. The old paths 308-redirect from a generated map, so nothing that
   links to them breaks; `scripts/check-urls.mjs` fails the build on an internal

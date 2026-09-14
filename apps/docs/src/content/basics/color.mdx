@@ -46,6 +46,56 @@ specialized color token groups for specific UI concerns.
 
 <AdditionalTokens />
 
+## Applying colour
+
+Colour arrives in pairs. `background` sets a surface and `onBackground` sets the
+text that sits on it; `solid` sets a filled control and `onSolid` the text on
+that. Setting the text colour on the container means every label inside inherits
+it, so it is written once rather than on each child.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="12">
+      <Row fillWidth padding="16" radius="m" background="brand-medium" onBackground="brand-medium" horizontal="center">
+        <Text variant="label-default-s">background + onBackground</Text>
+      </Row>
+      <Row fillWidth padding="16" radius="m" solid="brand-strong" onSolid="brand-strong" horizontal="center">
+        <Text variant="label-default-s">solid + onSolid</Text>
+      </Row>
+      <Row fillWidth padding="16" radius="m" background="brand-alpha-weak" onBackground="brand-strong" horizontal="center">
+        <Text variant="label-default-s">alpha over whatever is behind</Text>
+      </Row>
+      <Row fillWidth padding="16" radius="m" background="surface" border="neutral-alpha-medium" onBackground="neutral-strong" horizontal="center">
+        <Text variant="label-default-s">surface</Text>
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row background="brand-medium" onBackground="brand-medium">
+<Row solid="brand-strong" onSolid="brand-strong">
+<Row background="brand-alpha-weak" onBackground="brand-strong">
+<Row background="surface" border="neutral-alpha-medium">`,
+      language: "tsx",
+      label: "The four pairings"
+    }
+  ]}
+/>
+
+Which to reach for:
+
+- **`background`** for a panel, a section, a page area.
+- **`solid`** for something interactive that has to read as pressable — a
+  button, a checkbox, a filled badge.
+- **an alpha weight** when the colour should tint whatever is behind it rather
+  than replace it. This is what keeps a layer working over both an image and a
+  plain surface.
+- **`surface`** for the neutral raised panel, which follows the theme without
+  naming a scheme at all.
+
 ## Colour format
 
 Scheme tokens are `oklch()`. The values are the same colours the palette has

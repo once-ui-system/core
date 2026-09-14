@@ -23,6 +23,13 @@ import { PropsTableView, type PropData, type PropType } from "./PropsTableView";
 interface PropsTableProps {
   /** Resolve rows from the generated spec. */
   component?: string;
+  /**
+   * Resolve rows from a shared mixin instead — `SpacingProps`, `StyleProps`,
+   * `FlexProps`. Flex mixes in 83 props across six of these, so the layout
+   * primitives document them a group at a time rather than as one wall, and
+   * every other page keeps the short `...flex` row.
+   */
+  mixin?: string;
   /** Prose per prop, keyed by name. Only meaningful with `component`. */
   describe?: Record<string, ReactNode>;
   /** Show only these props, in this order. */
@@ -142,6 +149,32 @@ function parseProp(raw: string): { type: PropType; defaultValue?: string; requir
   return { type: expandable ? [...alias] : rest, defaultValue, required };
 }
 
+const MIXINS = (spec as { mixins?: Record<string, Record<string, string>> }).mixins ?? {};
+
+function resolveMixin(
+  name: string,
+  describe: Record<string, ReactNode>,
+  only?: string[],
+  exclude?: string[],
+): PropData[] {
+  const entry = MIXINS[name];
+  if (!entry) {
+    throw new Error(
+      `PropsTable: "${name}" is not a mixin in ai/spec.json. Known mixins: ${Object.keys(MIXINS).join(", ")}.`,
+    );
+  }
+  const skip = new Set(exclude ?? []);
+  const names = (only ?? Object.keys(entry)).filter((p) => !skip.has(p));
+  return names.map((prop) => {
+    const raw = entry[prop];
+    if (raw === undefined) {
+      throw new Error(`PropsTable: mixin "${name}" has no prop "${prop}" in ai/spec.json.`);
+    }
+    const { type, defaultValue, required } = parseProp(raw);
+    return [prop, type, defaultValue, describe[prop], required];
+  });
+}
+
 type SpecComponent = {
   props?: Record<string, string>;
   mixins?: string[];
@@ -182,11 +215,24 @@ function resolve(
   const ext = entry.extends;
   for (const base of Array.isArray(ext) ? ext : ext ? [ext] : []) record(EXTENDS_SPREAD[base]);
 
-  return [...rows, ...inherited.map((token) => [`...${token}`] as PropData)];
+  // `Flex` listing `...flex` among its own props says nothing.
+  const self = EXTENDS_SPREAD[name];
+
+  return [
+    ...rows,
+    ...inherited.filter((token) => token !== self).map((token) => [`...${token}`] as PropData),
+  ];
 }
 
-function PropsTable({ component, describe, only, exclude, content, label }: PropsTableProps) {
-  const resolved = component ? resolve(component, describe ?? {}, only, exclude) : [];
+function PropsTable({ component, mixin, describe, only, exclude, content, label }: PropsTableProps) {
+  if (component && mixin) {
+    throw new Error("PropsTable: pass either `component` or `mixin`, not both.");
+  }
+  const resolved = mixin
+    ? resolveMixin(mixin, describe ?? {}, only, exclude)
+    : component
+      ? resolve(component, describe ?? {}, only, exclude)
+      : [];
 
   // A hand-written row wins over the generated one with the same name, in the
   // generated row's position. That keeps a page's own wording for a prop the

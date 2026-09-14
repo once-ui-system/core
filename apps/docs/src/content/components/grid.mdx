@@ -1,11 +1,84 @@
 ---
 title: "Grid"
-summary: "A layout component that arranges its children in a grid container."
-updatedAt: "2026-07-27"
+summary: "Two-dimensional layout: a column count that changes per breakpoint, and every spacing, size and surface prop Flex has."
+updatedAt: "2026-09-14"
 docs: "once-ui/components/grid.mdx"
 github: "components/Grid.tsx"
 navLabel: "Grid"
 navIcon: "components"
 ---
 
-Learn more about the `Grid` component usage in the [Structure](/basics/structure) section.
+`Grid` is the two-dimensional counterpart to [Flex](/components/flex). Reach for
+it when children should line up in both directions — a card gallery, a pricing
+table, a stat row — rather than flow along one.
+
+Everything that is not flex-specific works exactly as it does on `Flex`: the
+same spacing, size, surface, display and text props, and the same breakpoint
+objects. Only the two below are its own.
+
+## Columns
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Grid fillWidth columns="3" m={{ columns: 2 }} s={{ columns: 1 }} gap="12">
+      {["1", "2", "3", "4", "5", "6"].map((n) => (
+        <Flex key={n} height="64" radius="m" background="neutral-alpha-weak" border="neutral-alpha-medium" center>
+          <Text variant="label-default-s" onBackground="neutral-weak">{n}</Text>
+        </Flex>
+      ))}
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<Grid fillWidth columns="3" m={{ columns: 2 }} s={{ columns: 1 }} gap="12">
+    ...
+</Grid>`,
+      language: "tsx",
+      label: "Columns"
+    }
+  ]}
+/>
+
+Three across, two on a tablet, one on a phone. The breakpoint objects cascade
+down, so `m` also covers `s` and `xs` unless one of them says otherwise.
+
+<PropsTable
+  mixin="GridProps"
+  describe={{
+    columns: "How many equal columns. Set it per breakpoint to reflow.",
+    rows: "How many equal rows. Usually left alone — rows follow from the content.",
+  }}
+/>
+
+## Responsive
+
+<PropsTable
+  component="Grid"
+  describe={{
+    xl: "Overrides applied at the xl breakpoint and below.",
+    l: "Overrides applied at the l breakpoint and below.",
+    m: "Overrides applied at the m breakpoint and below.",
+    s: "Overrides applied at the s breakpoint and below.",
+    xs: "Overrides applied at the xs breakpoint.",
+  }}
+/>
+
+## Everything else
+
+`Grid` takes the same shared props as `Flex`. They are documented once, on the
+[Flex page](/components/flex):
+
+- [Size](/components/flex#size) — `fill`, `maxWidth`, `aspectRatio`
+- [Spacing](/components/flex#spacing) — `gap`, `padding`, `margin`
+- [Surface](/components/flex#surface) — `background`, `border`, `radius`, `shadow`
+- [Display and behaviour](/components/flex#display-and-behaviour) — `as`, `hide`, `overflow`, `zIndex`
+- [Text](/components/flex#text) — `onBackground`, `align`
+
+## Related
+
+- [Flex](/components/flex) — one-dimensional layout, and the shared prop reference
+- [MasonryGrid](/components/masonryGrid) — for items of uneven height
+- [Structure](/basics/structure) — how a page is composed from these
