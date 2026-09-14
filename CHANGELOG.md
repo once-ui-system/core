@@ -13,6 +13,32 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+Nothing yet — everything below shipped in the alpha.
+
+## [2.0.0-alpha.0] — 2026-09-15
+
+Published to the **`alpha`** dist-tag, not `latest`. `npm install
+@once-ui-system/core` keeps resolving 1.8.4, and every `^1.8.x` range in the
+wild is unaffected — a prerelease does not satisfy a stable range, not even
+`^2.0.0` or `*`. Getting it is deliberate:
+
+```bash
+npm i @once-ui-system/core@alpha
+```
+
+This is a preview of 2.0, not 2.0. The API below is what we intend to ship,
+but the point of an alpha is to find out where that is wrong, so treat it as
+open to change and please report what breaks. Three things are known and
+deliberate:
+
+- **The published package is bundler-only.** `dist` is ESM syntax in `.js`
+  files without `"type": "module"`, so Next.js, Vite and friends load it and
+  plain Node `require`/`import` does not. That predates this release; fixing
+  the module format is a 2.0 decision that has not been made yet.
+- **`@once-ui-system/foundations` is not published.** Core inlines its SCSS and
+  CSS at build time, so consumers install nothing new.
+- **Breakpoints are fixed.** See `MIGRATING.md` §7.
+
 Heading to **2.0**, not to 1.9. `package.json` carries `2.0.0-alpha.0` so
 nothing here can be published as a version nobody chose — 1.9.0 was a working
 number bumped ahead of any release decision, and it is now skipped entirely.

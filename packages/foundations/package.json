@@ -1,6 +1,7 @@
 {
   "name": "@once-ui-system/foundations",
   "version": "2.0.0-alpha.0",
+  "private": true,
   "description": "Once UI design foundations \u2014 design tokens and utility styles. Framework-agnostic: no React, no JS runtime.",
   "keywords": [
     "once-ui",
