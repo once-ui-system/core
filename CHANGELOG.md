@@ -838,6 +838,21 @@ that way. The ramps themselves are untouched.
   only ever worked by falling back to the initial `0px`. It says `0` now and
   renders exactly as it did.
 
+  `grid`, `typography`, `color`, `shadow` and `size` complete the sweep, and
+  turned up the last two gaps. Grid had the `xs-flex-show` bug at every
+  breakpoint rather than one: none of `.l-grid-show`, `.m-grid-show`,
+  `.s-grid-show` or `.xs-grid-show` had the base rule that hides them outside
+  their own query, so a `Grid` told to show only at one width showed at all of
+  them. And `.font-family-display` pointed at `--font-display`, which does not
+  exist anywhere in the token layer, so the declaration was invalid and the
+  class applied nothing — measured in Chromium, an element carrying it kept
+  its inherited font while every sibling class applied the real one. Both
+  display classes now read `--font-heading`, which `.font-display` already did.
+
+  `global.scss` and `utilities.scss` stay hand-written. Eleven rules between
+  them and not a matrix in sight; generating those would add indirection and
+  save nothing.
+
   This is the groundwork for generating the responsive variants: only 121 of
   809 utilities have breakpoint variants today, which is why `Flex` falls back
   to a client component and a runtime style pass whenever a responsive prop is

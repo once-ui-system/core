@@ -6,6 +6,7 @@ import {
   BREAKPOINTS,
   BREAKPOINTS_CASCADE,
   ALIGN_ALIGNMENTS,
+  FONT_TYPES,
   RADIUS_CORNERS,
   RADIUS_SIZES,
   SCHEMES,
@@ -219,6 +220,35 @@ describe("generated utilities", () => {
       }
     }
     expect(missing).toEqual([]);
+  });
+
+  /**
+   * There is no `--font-display` token. `.font-family-display` referenced it
+   * and so applied nothing — measured in Chromium, the element kept its
+   * inherited font while every sibling class applied the real one. Both
+   * display classes read `--font-heading`, as `.font-display` already did.
+   */
+  it("points every font family at a token that exists", () => {
+    const tokens = readFileSync(join(ROOT, "scss/tokens/theme.scss"), "utf8");
+    const css = readFileSync(join(ROOT, "scss/styles/typography.generated.scss"), "utf8");
+    for (const { name, family } of FONT_TYPES) {
+      expect(tokens, `--font-${family}`).toContain(`--font-${family}:`);
+      expect(css, `.font-family-${name}`).toContain(
+        `.font-family-${name} {\n  font-family: var(--font-${family});`,
+      );
+    }
+    expect(css).not.toContain("var(--font-display)");
+  });
+
+  it("tracks display type tighter as it grows, and only display", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/typography.generated.scss"), "utf8");
+    expect(css).toContain("letter-spacing: -0.05em;");
+    expect(css).toContain("letter-spacing: -0.02em;");
+    // xs is small enough that tightening would start closing the counters.
+    const xs = css.slice(css.indexOf(".font-display > .font-xs"));
+    expect(xs.slice(0, xs.indexOf("}"))).not.toContain("letter-spacing");
+    const heading = css.slice(css.indexOf(".font-heading.font-xl"));
+    expect(heading.slice(0, heading.indexOf("}"))).not.toContain("letter-spacing");
   });
 
   it("writes a bare 0 for offsets and a token for spacing", () => {

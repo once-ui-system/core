@@ -300,3 +300,87 @@ export const CURSORS = [
 
 export const cursorValue = (name) =>
   name === "interactive" ? "var(--cursor-interactive)" : name;
+
+/* ---------------------------------------------------------------- grid --- */
+
+/** A twelve-column grid; `columns-1` is a single `1fr` rather than a repeat. */
+export const GRID_COLUMNS = Array.from({ length: 12 }, (_, i) => String(i + 1));
+
+export const gridTemplate = (n) => (n === "1" ? "1fr" : `repeat(${n}, 1fr)`);
+
+/* ------------------------------------------------- colour, shadow, size --- */
+
+/** Foreground ramps: text on a tinted background, and text on a solid fill. */
+export const ON_RAMPS = ["on-background", "on-solid"];
+
+export const SHADOW_SIZES = ["xs", "s", "m", "l", "xl"];
+
+/** Max-width steps track the viewport, so they read the responsive scale. */
+export const MAX_WIDTH_SIZES = ["xs", "s", "m", "l", "xl"];
+
+/**
+ * Sizing rules with no matrix behind them — a handful of fixed pairs, stated
+ * rather than looped, because inventing a family for six rules would obscure
+ * more than it saves.
+ */
+export const SIZE_RULES = [
+  { selector: ".fill-width", decls: ["width: 100%;"] },
+  { selector: ".fill-height", decls: ["height: 100%;"] },
+  { selector: ".fill", decls: ["width: 100%;", "height: 100%;"] },
+  { selector: ".fit-width", decls: ["width: fit-content;"] },
+  { selector: ".fit-height", decls: ["height: fit-content;"] },
+  { selector: ".fit", decls: ["width: fit-content;", "height: fit-content;"] },
+];
+
+/* ---------------------------------------------------------- typography --- */
+
+export const FONT_SIZES = ["xl", "l", "m", "s", "xs"];
+
+export const FONT_WEIGHTS = ["default", "normal", "medium", "strong"];
+
+/**
+ * Optical tracking for display type: the larger the size, the tighter it sets.
+ * Only `display` carries it — headings and body text keep their natural
+ * spacing — and `xs` gets none, being small enough that tightening would start
+ * closing up the counters.
+ */
+export const DISPLAY_TRACKING = {
+  xl: "-0.05em",
+  l: "-0.04em",
+  m: "-0.03em",
+  s: "-0.02em",
+};
+
+/**
+ * The five type families.
+ *
+ * `family` is the font each one asks for; `scale` is the size ramp it measures
+ * against, and the two part company for `code`, which uses its own monospace
+ * face at the label scale so an inline snippet matches the label beside it
+ * rather than setting its own rhythm.
+ */
+export const FONT_TYPES = [
+  // `display` sets the heading face, not a face of its own: there is no
+  // `--font-display` token anywhere in the token layer. `.font-display` already
+  // read `--font-heading`; `.font-family-display` read the undefined
+  // `--font-display` and so applied nothing at all, leaving the element on
+  // whatever it inherited. Both read the same token here, which is what the
+  // two classes sharing a name always implied.
+  { name: "display", family: "heading", scale: "display", tracking: DISPLAY_TRACKING },
+  { name: "heading", family: "heading", scale: "heading" },
+  { name: "body", family: "body", scale: "body" },
+  { name: "label", family: "label", scale: "label" },
+  { name: "code", family: "code", scale: "label" },
+];
+
+/**
+ * Root font-size per viewport. The three steps are deliberately two values:
+ * `xs` repeats the mobile scaling rather than shrinking again, so the smallest
+ * screens do not end up with text smaller than the phone the scale was tuned
+ * for.
+ */
+export const FONT_SCALING = [
+  { key: "m", value: "var(--font-scaling-tablet)" },
+  { key: "s", value: "var(--font-scaling-mobile)" },
+  { key: "xs", value: "var(--font-scaling-mobile)" },
+];

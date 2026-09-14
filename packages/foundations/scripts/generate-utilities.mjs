@@ -18,6 +18,9 @@ import {
   BORDER_STYLES,
   BORDER_WIDTHS,
   CURSORS,
+  GRID_COLUMNS,
+  MAX_WIDTH_SIZES,
+  ON_RAMPS,
   OPACITY_STEPS,
   OVERFLOW_RULES,
   POINTER_EVENTS,
@@ -26,14 +29,21 @@ import {
   RADIUS_SIZES,
   SCHEMES,
   SCROLLBAR_RULES,
+  SHADOW_SIZES,
+  SIZE_RULES,
   SELECTION_GROUPS,
   TRANSITIONS,
   Z_INDEX_STEPS,
   cursorValue,
+  gridTemplate,
   WEIGHTS,
   JUSTIFY_ALIGNMENTS,
   FLEX_DIRECTIONS,
   FLEX_VALUES,
+  FONT_SCALING,
+  FONT_SIZES,
+  FONT_TYPES,
+  FONT_WEIGHTS,
   FLEX_WRAP,
   OFFSET_SIDES,
   OFFSET_TOKENS,
@@ -299,8 +309,122 @@ function display() {
   return out.join("\n");
 }
 
+function grid() {
+  const out = [rule(".display-grid", ["display: grid;"])];
+
+  for (const n of GRID_COLUMNS) {
+    out.push(rule(`.columns-${n}`, [`grid-template-columns: ${gridTemplate(n)};`]));
+  }
+
+  // The same pairing `flex.scss` uses: hidden by a base rule, revealed inside
+  // its own query, so `.<bp>-grid-show` means "show only at this width". The
+  // hand-written file had none of these four base rules, so every
+  // `.<bp>-grid-show` was visible at every width — measured in Chromium, all
+  // four computed `block` above their breakpoint where they should have
+  // computed `none`. Flex had the same hole at xs alone; grid had it at all of
+  // them, and no call site in the fleet had noticed.
+  for (const { key } of BREAKPOINTS_CASCADE) {
+    out.push(rule(`.${key}-grid-show`, ["display: none;"]));
+  }
+
+  out.push(rule(".grid-hide", ["display: none;"]));
+  out.push(rule(".grid-show", ["display: grid;"]));
+
+  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
+    const rules = [
+      ...GRID_COLUMNS.map((n) => [`columns-${n}`, [`grid-template-columns: ${gridTemplate(n)};`]]),
+      ["grid-hide", ["display: none;"]],
+      ["grid-show", ["display: grid;"]],
+    ];
+    const body = rules
+      .map(([sel, decls]) => rule(`.${key}-${sel}`, decls))
+      .join("\n")
+      .replace(/^/gm, "  ")
+      .replace(/^\s+$/gm, "");
+    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+  }
+  return out.join("\n");
+}
+
+function color() {
+  const out = [rule(".color-inherit", ["color: inherit;"])];
+  for (const scheme of SCHEMES) {
+    for (const ramp of ON_RAMPS) {
+      for (const weight of WEIGHTS) {
+        out.push(rule(`.${scheme}-${ramp}-${weight}`, [`color: var(--${scheme}-${ramp}-${weight});`]));
+      }
+    }
+  }
+  return out.join("\n");
+}
+
+function shadow() {
+  return SHADOW_SIZES.map((size) => rule(`.shadow-${size}`, [`box-shadow: var(--shadow-${size});`])).join("\n");
+}
+
+function size() {
+  const out = SIZE_RULES.map(({ selector, decls }) => rule(selector, decls));
+  for (const s of MAX_WIDTH_SIZES) {
+    out.push(rule(`.max-width-${s}`, [`max-width: var(--responsive-width-${s});`]));
+  }
+  // Flex and grid children refuse to shrink below their content without these.
+  out.push(rule(".min-width-0", ["min-width: 0;"]));
+  out.push(rule(".min-height-0", ["min-height: 0;"]));
+  return out.join("\n");
+}
+
+function typography() {
+  const out = [
+    rule("html", [
+      "font-size: var(--font-scaling-desktop);",
+      "font-family: var(--font-body);",
+      "font-weight: var(--font-weight-normal);",
+      "color: var(--neutral-on-background-strong);",
+    ]),
+    rule("h1, h2, h3, h4, h5, h6, p", ["margin: 0;"]),
+    rule(".font-size-inherit", ["font-size: inherit;"]),
+    rule(".font-weight-inherit", ["font-weight: inherit;"]),
+  ];
+
+  // All four weights read the display ramp, whatever family they land on.
+  for (const w of FONT_WEIGHTS) {
+    out.push(rule(`.font-${w}`, [`font-weight: var(--font-weight-display-${w});`]));
+  }
+
+  for (const { name, family, scale, tracking } of FONT_TYPES) {
+    out.push(rule(`.font-${name}`, [`font-family: var(--font-${family});`]));
+    for (const size of FONT_SIZES) {
+      const decls = [
+        `font-size: calc(var(--font-size-${scale}-${size}) * var(--font-size-${scale}-multiplier));`,
+      ];
+      if (tracking?.[size]) decls.push(`letter-spacing: ${tracking[size]};`);
+      decls.push(
+        `line-height: calc(var(--line-height-${scale}-${size}) * var(--line-height-${scale}-multiplier));`,
+      );
+      // Both a combined and a descendant selector, so the size can sit on the
+      // same element as the family or on a child of it.
+      out.push(rule(`.font-${name}.font-${size},\n.font-${name} > .font-${size}`, decls));
+    }
+  }
+
+  for (const { name, family } of FONT_TYPES) {
+    out.push(rule(`.font-family-${name}`, [`font-family: var(--font-${family});`]));
+  }
+
+  for (const { key, value } of FONT_SCALING) {
+    const width = BREAKPOINTS.find((b) => b.key === key).maxWidth;
+    out.push(`@media (max-width: ${width}) {\n  html {\n    font-size: ${value};\n  }\n}\n`);
+  }
+  return out.join("\n");
+}
+
 const TARGETS = [
   { file: "scss/styles/breakpoints.scss", build: breakpoints },
+  { file: "scss/styles/typography.generated.scss", build: typography },
+  { file: "scss/styles/color.generated.scss", build: color },
+  { file: "scss/styles/shadow.generated.scss", build: shadow },
+  { file: "scss/styles/size.generated.scss", build: size },
+  { file: "scss/styles/grid.generated.scss", build: grid },
   { file: "scss/styles/display.generated.scss", build: display },
   { file: "scss/styles/background.generated.scss", build: background },
   { file: "scss/styles/border.generated.scss", build: border },
