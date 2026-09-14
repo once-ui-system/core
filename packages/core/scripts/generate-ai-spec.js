@@ -174,6 +174,20 @@ async function main() {
   }
 
   /** Extract destructuring defaults from a component function's first param */
+  /** The variable/function declaration exporting `name` from `sf`, if any. */
+  function findComponentDecl(sf, name) {
+    for (const st of sf.statements) {
+      if (ts.isVariableStatement(st)) {
+        for (const d of st.declarationList.declarations) {
+          if (ts.isIdentifier(d.name) && d.name.getText() === name) return d;
+        }
+      } else if (ts.isFunctionDeclaration(st) && st.name && st.name.getText() === name) {
+        return st;
+      }
+    }
+    return undefined;
+  }
+
   function getDefaults(fn) {
     const defaults = {};
     if (!fn || !fn.parameters.length) return defaults;
@@ -280,10 +294,19 @@ async function main() {
       }
     }
 
-    const fn = getComponentFunction(decl);
-    const defaults = getDefaults(fn);
-
     const ownFile = normalize(decl.getSourceFile().fileName);
+
+    // A component split across `X.tsx` (a lazy shell guarding an optional peer)
+    // and `X.impl.tsx` (the real thing) is one component to a consumer. The
+    // shell only forwards props, so both the types and the defaults live next
+    // door — read them from there and let the shell override.
+    const implFile = ownFile.replace(/\.tsx$/, ".impl.tsx");
+    const implSf = program.getSourceFile(implFile);
+    const implDecl = implSf ? findComponentDecl(implSf, name) : undefined;
+    const implDefaults = implDecl ? getDefaults(getComponentFunction(implDecl)) : {};
+
+    const fn = getComponentFunction(decl);
+    const defaults = { ...implDefaults, ...getDefaults(fn) };
     const mixins = new Set();
     const extendsComponents = new Set();
     const props = {};
@@ -295,7 +318,11 @@ async function main() {
 
       const declFile = normalize(pDecl.getSourceFile().fileName);
 
-      if (declFile === interfacesFile) {
+      // `src/interfaces.ts` holds the shared style mixins; a module folder's
+      // own `interfaces.ts` (data/, code/) holds what that module's components
+      // share. Both are mixins. Only the global one used to be recognised, so
+      // ChartProps came out as a phantom `extends: ["interfaces"]`.
+      if (declFile === interfacesFile || path.basename(declFile) === "interfaces.ts") {
         // shared mixin prop: attribute to parent interface, emit once globally
         const parent = pDecl.parent && ts.isInterfaceDeclaration(pDecl.parent) ? pDecl.parent.name.getText() : null;
         if (parent) {
@@ -310,6 +337,11 @@ async function main() {
           }
           continue;
         }
+      }
+
+      if (declFile === implFile) {
+        props[propName] = propString(propSym, pDecl, defaults);
+        continue;
       }
 
       if (declFile !== ownFile && declFile.includes("/src/")) {

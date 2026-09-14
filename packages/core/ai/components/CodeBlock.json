@@ -3,7 +3,6 @@
  "group": "code",
  "importFrom": "@once-ui-system/core/code",
  "extends": [
-  "CodeBlock.impl",
   "Flex"
  ],
  "mixins": [
@@ -14,6 +13,27 @@
   "SpacingProps",
   "StyleProps"
  ],
+ "props": {
+  "codeHeight": "number",
+  "fillHeight": "boolean",
+  "previewPadding": "SpacingToken = l",
+  "codes": "CodeInstance[] = []",
+  "preview": "ReactNode",
+  "copyButton": "boolean = true",
+  "styleButton": "boolean = false",
+  "reloadButton": "boolean = false",
+  "fullscreenButton": "boolean = false",
+  "compact": "boolean = false",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "background": "React.ComponentProps<typeof Flex>[\"background\"] = surface",
+  "onInstanceChange": "(index: number) => void",
+  "lineNumbers": "boolean = false",
+  "highlight": "string",
+  "maxLines": "number = 5",
+  "isCollapsible": "boolean = false",
+  "hideCode": "boolean = false"
+ },
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",

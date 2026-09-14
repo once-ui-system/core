@@ -347,6 +347,27 @@ that way. The ramps themselves are untouched.
   2.0 renames to `stretch` — a rename `tsc` cannot catch, because `fill` stayed
   valid as the layout prop it now means. Corrected in `auth.tsx` and
   `blocks/Streaming1.tsx`.
+- **The chart, `CodeBlock` and `MediaUpload` APIs were missing from the spec
+  entirely.** Each of these ships as a lazy shell (`X.tsx`) in front of the real
+  implementation (`X.impl.tsx`), which is what lets their dependency stay an
+  optional peer. The spec generator read the shell only, saw props declared in
+  another file, and recorded a wrapper relationship — so all six came out with
+  `props: {}` and a phantom `extends: ["X.impl", "interfaces"]` naming types the
+  spec never defined. `series` and `data` appeared nowhere in it. The generator
+  now treats an `X.impl` sibling as the same component (reading its defaults
+  too, since the shell only forwards props) and a module-local `interfaces.ts`
+  as a mixin like the global one. `LineChart` goes from 0 to 17 props, `BarChart`
+  and `LineBarChart` to 12, `PieChart` to 10, `CodeBlock` to 19, `MediaUpload` to
+  17, and `ChartProps` joins the shared mixins rather than being copied four
+  times. No other component's props changed. This is what left agents
+  extrapolating a chart API from examples — and `BarChart` had no example to
+  extrapolate from.
+- **A props table printed a mixed union as one unreadable blob.** The docs' table
+  split a union into separate values only when *every* member was a quoted
+  literal, so `"none" | "percentage" | string[]` on the gauges, or
+  `Colors | "surface" | boolean`, fell through and printed raw. Any union splits
+  now, on its top-level `|` only — the old naive split would have cut through
+  `Record<string, A | B>`.
 - **A collapsed `CodeBlock` faded to the wrong colour, and put its button in the
   wrong place.** The fade over a collapsed block was `base="page"` while the
   block paints `surface`, so wherever the two tokens differ — dark mode, where

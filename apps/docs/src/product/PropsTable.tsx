@@ -76,6 +76,37 @@ const ALIASES = (spec as { types?: Record<string, string[]> }).types ?? {};
  */
 const MAX_EXPANDED_MEMBERS = 12;
 
+/**
+ * Split a union on its top-level `|` only.
+ *
+ * `rest.split(" | ")` was close enough while the rule only fired on unions of
+ * bare string literals, but it cuts straight through `Record<string, A | B>`
+ * and `{ a: 1 } | { b: 2 }`. This tracks bracket depth and quotes instead.
+ */
+function splitUnion(type: string): string[] {
+  const members: string[] = [];
+  let depth = 0;
+  let quote: string | null = null;
+  let start = 0;
+
+  for (let i = 0; i < type.length; i++) {
+    const ch = type[i];
+    if (quote) {
+      if (ch === quote && type[i - 1] !== "\\") quote = null;
+      continue;
+    }
+    if (ch === '"' || ch === "'" || ch === "`") quote = ch;
+    else if ("<{([".includes(ch)) depth++;
+    else if (">})]".includes(ch)) depth--;
+    else if (ch === "|" && depth === 0) {
+      members.push(type.slice(start, i).trim());
+      start = i + 1;
+    }
+  }
+  members.push(type.slice(start).trim());
+  return members.filter(Boolean);
+}
+
 /** `"a" | "b" = a` and `!Type` into the parts the table renders. */
 function parseProp(raw: string): { type: PropType; defaultValue?: string; required: boolean } {
   let rest = raw;
@@ -90,11 +121,20 @@ function parseProp(raw: string): { type: PropType; defaultValue?: string; requir
     rest = rest.slice(0, split);
   }
 
-  // A union of string literals renders as separate values, which is how the
-  // hand-written tables have always shown an enum.
-  const members = rest.split(" | ");
-  const literals = members.length > 1 && members.every((m) => /^".*"$/.test(m));
-  if (literals) return { type: members.map((m) => m.slice(1, -1)), defaultValue, required };
+  // Any union renders as separate values, which is how the hand-written tables
+  // have always shown a choice. This used to require *every* member to be a
+  // quoted literal, so a union that mixed one in with a real type —
+  // `"none" | "percentage" | string[]`, `Colors | "surface" | boolean` — fell
+  // through and printed as one unreadable blob. Quotes come off the literals;
+  // everything else prints as written.
+  const members = splitUnion(rest);
+  if (members.length > 1) {
+    return {
+      type: members.map((m) => (/^(".*"|'.*')$/.test(m) ? m.slice(1, -1) : m)),
+      defaultValue,
+      required,
+    };
+  }
 
   // A bare alias expands to its members; anything else prints as written.
   const alias = ALIASES[rest];

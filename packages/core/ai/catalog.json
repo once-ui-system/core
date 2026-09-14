@@ -1145,8 +1145,6 @@
   "LineChart": {
    "group": "data",
    "extends": [
-    "LineChart.impl",
-    "interfaces",
     "Flex"
    ],
    "purpose": "LineChart component",
@@ -1157,8 +1155,6 @@
   "BarChart": {
    "group": "data",
    "extends": [
-    "BarChart.impl",
-    "interfaces",
     "Flex"
    ],
    "purpose": "BarChart component",
@@ -1169,8 +1165,6 @@
   "PieChart": {
    "group": "data",
    "extends": [
-    "PieChart.impl",
-    "interfaces",
     "Flex"
    ],
    "purpose": "PieChart component",
@@ -1181,8 +1175,6 @@
   "LineBarChart": {
    "group": "data",
    "extends": [
-    "LineBarChart.impl",
-    "interfaces",
     "Flex"
    ],
    "purpose": "LineBarChart component",
@@ -1266,7 +1258,6 @@
   "CodeBlock": {
    "group": "code",
    "extends": [
-    "CodeBlock.impl",
     "Flex"
    ],
    "purpose": "CodeBlock component",
@@ -1277,7 +1268,6 @@
   "MediaUpload": {
    "group": "media",
    "extends": [
-    "MediaUpload.impl",
     "Flex"
    ],
    "purpose": "MediaUpload component",

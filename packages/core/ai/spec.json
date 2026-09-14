@@ -20,6 +20,22 @@
   "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`"
  },
  "mixins": {
+  "ChartProps": {
+   "title": "React.ReactNode",
+   "description": "React.ReactNode",
+   "series": "!SeriesConfig | SeriesConfig[]",
+   "data": "!DataPoint[]",
+   "legend": "LegendConfig",
+   "date": "DateConfig",
+   "emptyState": "React.ReactNode",
+   "errorState": "React.ReactNode",
+   "error": "boolean",
+   "tooltip": "boolean",
+   "grid": "\"x\" | \"y\" | \"both\" | \"none\"",
+   "axis": "\"x\" | \"y\" | \"both\" | \"none\"",
+   "variant": "ChartVariant",
+   "loading": "boolean"
+  },
   "CommonProps": {
    "onBackground": "Colors",
    "onSolid": "Colors",
@@ -3069,69 +3085,124 @@
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
    "extends": [
-    "LineChart.impl",
-    "interfaces",
     "Flex"
    ],
    "mixins": [
+    "ChartProps",
     "CommonProps",
     "DisplayProps",
     "FlexProps",
     "SizeProps",
     "SpacingProps",
     "StyleProps"
-   ]
+   ],
+   "props": {
+    "curve": "curveType = natural",
+    "reverseY": "boolean = false",
+    "reverseX": "boolean = false",
+    "animation": "boolean = true",
+    "animationBegin": "number",
+    "animationDuration": "number",
+    "animationEasing": "unknown",
+    "xAxisType": "\"number\" | \"category\"",
+    "xDomain": "[number, number]",
+    "data-viz-style": "string",
+    "legend": "LegendConfig = {}",
+    "error": "boolean = false",
+    "tooltip": "boolean = true",
+    "grid": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+    "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+    "loading": "boolean = false",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+   }
   },
   "BarChart": {
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
    "extends": [
-    "BarChart.impl",
-    "interfaces",
     "Flex"
    ],
    "mixins": [
+    "ChartProps",
     "CommonProps",
     "DisplayProps",
     "FlexProps",
     "SizeProps",
     "SpacingProps",
     "StyleProps"
-   ]
+   ],
+   "props": {
+    "barWidth": "BarWidth = l",
+    "hover": "boolean = false",
+    "reverseY": "boolean = false",
+    "reverseX": "boolean = false",
+    "data-viz-style": "string",
+    "legend": "LegendConfig = {}",
+    "error": "boolean = false",
+    "tooltip": "boolean = true",
+    "grid": "\"x\" | \"y\" | \"both\" | \"none\" = y",
+    "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+    "loading": "boolean = false",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+   }
   },
   "PieChart": {
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
    "extends": [
-    "PieChart.impl",
-    "interfaces",
     "Flex"
    ],
    "mixins": [
+    "ChartProps",
     "CommonProps",
     "DisplayProps",
     "FlexProps",
     "SizeProps",
     "SpacingProps",
     "StyleProps"
-   ]
+   ],
+   "props": {
+    "data-viz-style": "string",
+    "ring": "{ inner: number; outer: number } = { inner: 0, outer: 80 }",
+    "dataKey": "string = value",
+    "nameKey": "string = name",
+    "origo": "{ x: number; y: number } = { x: 50, y: 50 }",
+    "legend": "LegendConfig = {}",
+    "error": "boolean = false",
+    "tooltip": "boolean = true",
+    "loading": "boolean = false",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+   }
   },
   "LineBarChart": {
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
    "extends": [
-    "LineBarChart.impl",
-    "interfaces",
     "Flex"
    ],
    "mixins": [
+    "ChartProps",
     "CommonProps",
     "DisplayProps",
     "FlexProps",
     "SizeProps",
     "SpacingProps",
     "StyleProps"
-   ]
+   ],
+   "props": {
+    "barWidth": "BarWidth = l",
+    "curve": "curveType = natural",
+    "reverseY": "boolean = false",
+    "reverseX": "boolean = false",
+    "data-viz-style": "string",
+    "legend": "LegendConfig = {}",
+    "error": "boolean = false",
+    "tooltip": "boolean = true",
+    "grid": "\"x\" | \"y\" | \"both\" | \"none\" = y",
+    "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+    "loading": "boolean = false",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+   }
   },
   "RadialGauge": {
    "group": "data",
@@ -3289,7 +3360,6 @@
    "group": "code",
    "importFrom": "@once-ui-system/core/code",
    "extends": [
-    "CodeBlock.impl",
     "Flex"
    ],
    "mixins": [
@@ -3299,13 +3369,33 @@
     "SizeProps",
     "SpacingProps",
     "StyleProps"
-   ]
+   ],
+   "props": {
+    "codeHeight": "number",
+    "fillHeight": "boolean",
+    "previewPadding": "SpacingToken = l",
+    "codes": "CodeInstance[] = []",
+    "preview": "ReactNode",
+    "copyButton": "boolean = true",
+    "styleButton": "boolean = false",
+    "reloadButton": "boolean = false",
+    "fullscreenButton": "boolean = false",
+    "compact": "boolean = false",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "background": "React.ComponentProps<typeof Flex>[\"background\"] = surface",
+    "onInstanceChange": "(index: number) => void",
+    "lineNumbers": "boolean = false",
+    "highlight": "string",
+    "maxLines": "number = 5",
+    "isCollapsible": "boolean = false",
+    "hideCode": "boolean = false"
+   }
   },
   "MediaUpload": {
    "group": "media",
    "importFrom": "@once-ui-system/core/media",
    "extends": [
-    "MediaUpload.impl",
     "Flex"
    ],
    "mixins": [
@@ -3315,7 +3405,26 @@
     "SizeProps",
     "SpacingProps",
     "StyleProps"
-   ]
+   ],
+   "props": {
+    "onFileUpload": "(file: File) => Promise<void>",
+    "compress": "boolean = true",
+    "aspectRatio": "string = 16 / 9",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "initialPreviewImage": "string | null = null",
+    "emptyState": "React.ReactNode = Drag and drop or click to browse",
+    "quality": "number = 0.8",
+    "sizes": "string",
+    "children": "React.ReactNode",
+    "convertTypes": "string[] = [\"image/png\", \"image/webp\", \"image/jpg\"]",
+    "resizeMaxWidth": "number = 1920",
+    "resizeMaxHeight": "number = 1920",
+    "resizeWidth": "number = 1200",
+    "resizeHeight": "number = 1200",
+    "loading": "boolean = false",
+    "accept": "string = image/*"
+   }
   }
  },
  "shorthands": {
