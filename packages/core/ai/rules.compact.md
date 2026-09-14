@@ -1,6 +1,6 @@
 # Once UI — compact codegen rules
 
-Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For production-quality composition, read matching Pro blocks from `examples/blocks/manifest.json`. Fetch component slices on demand.
+Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For an app shell, a sidebar nav or an editor, read `ai/layouts.md` first — those are the shapes that are hard to get right from props alone. For production-quality composition, read matching Pro blocks from `examples/blocks/manifest.json`. Fetch component slices on demand.
 
 ## Layout
 

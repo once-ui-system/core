@@ -188,7 +188,7 @@ Siblings holding content get `zIndex={1}`. `overflow="hidden"` goes on the paren
 
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
 
-26. Use decoration recipes from `recipes.md` verbatim, then adjust. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
+26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
 
 ## Motion
 

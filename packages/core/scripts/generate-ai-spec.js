@@ -544,6 +544,7 @@ function emitArtifacts(spec, version) {
       rules: "rules.compact.md",
       rulesFull: "rules.md",
       recipes: "recipes.md",
+      layouts: "layouts.md",
       gotchas: "gotchas.json",
       tasks: "tasks/index.json",
       examples: "examples/",

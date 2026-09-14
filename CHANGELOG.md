@@ -580,6 +580,14 @@ that way. The ramps themselves are untouched.
   seeded rather than timed); per-effect blocks — `matrix={{ ... }}`,
   `weather={{ ... }}` — configure one without disturbing the others, so all of
   them can be set up front and still switched with one prop.
+- **`ai/layouts.md`** — application shells for the harness, where `recipes.md`
+  covers decoration. Three: a dashboard whose pane scrolls rather than its
+  document, a data-driven nav, and a two-pane editor with a timeline. Each is the
+  shape a working product converged on, and the notes say which values matter —
+  `dvh` not `vh`, the sticky offset matching the header, `overflowY` on the
+  panels rather than the SplitView. All three also ship as
+  `ai/examples/app-shell.tsx` so `pnpm typecheck` covers them: a renamed prop
+  breaks the recipe instead of leaving it quietly wrong.
 - **`NavItem`, `NavGroup` and `selectNavHref`** — the two rows a product
   sidebar is made of. Every product on Once UI grew its own: Aveiro's is 566
   lines, the docs' 456, Frametic's 52, and all three converged on the same
