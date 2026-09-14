@@ -159,6 +159,16 @@ function ScrollCountExample() {
 
 <PropsTable
   component="CountFx"
+  describe={{
+    value: "The number to count to. Change it and the count runs again — there is no trigger prop.",
+    speed: "How long the count takes, in milliseconds.",
+    easing: "How the count accelerates and settles.",
+    effect: "How the digits change: a plain count, a wheel, or a smooth blur.",
+    format: "Turn the number into the string shown, for a currency or a unit.",
+    separator: "Thousands separator.",
+    decimals: "Decimal places to hold.",
+    children: "Rendered after the number.",
+  }}
   content={[
     ["className"],
     ["style"]

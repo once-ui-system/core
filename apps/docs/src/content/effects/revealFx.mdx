@@ -50,6 +50,14 @@ RevealFx animates content into view using a vertical translateY motion. You can 
 
 <PropsTable
   component="RevealFx"
+  describe={{
+    children: "What is revealed.",
+    revealed: "Whether it has played. Latch this off useInViewport for a below-the-fold reveal.",
+    revealedByDefault: "Start revealed, for content that is already on screen.",
+    speed: "Named duration, or a number of milliseconds.",
+    delay: "Milliseconds before it starts. Stagger a set with index * 100.",
+    translateY: "How far it travels. A number is rem, a token is a spacing step.",
+  }}
   content={[
     ["children"],
     ["className"],

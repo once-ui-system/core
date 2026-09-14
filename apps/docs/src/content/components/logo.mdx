@@ -201,6 +201,15 @@ The `brand` prop provides a `copy` option for allowing the icon and wordmark to 
 
 <PropsTable
   component="Logo"
+  describe={{
+    icon: "The mark. Takes one source, or { light, dark } for a per-theme pair.",
+    wordmark: "The wordmark. Same shape as icon.",
+    size: "Scale of whichever parts are shown.",
+    href: "Makes it a link, usually home.",
+    dark: "Render only in the dark theme.",
+    light: "Render only in the light theme.",
+    brand: "Turns the logo into a brand menu: copy the assets as SVG, and link to a brand page.",
+  }}
   content={[
     ["className"],
     ["style"],

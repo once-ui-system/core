@@ -262,6 +262,18 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
 
 <PropsTable
   component="Particle"
+  describe={{
+    density: "How many particles.",
+    color: "Particle colour. Takes a token or any CSS colour.",
+    size: "Particle size, on the spacing scale.",
+    speed: "Drift multiplier. Not a duration.",
+    interactive: "React to the pointer.",
+    mode: "Whether the pointer pushes particles away or pulls them in.",
+    intensity: "How strongly the pointer acts, when interactive.",
+    opacity: "Layer opacity, in steps of 10.",
+    reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
+    children: "Content drawn above the particles.",
+  }}
   content={[
     ["className"],
     ["style"],

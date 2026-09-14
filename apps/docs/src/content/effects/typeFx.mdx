@@ -119,6 +119,16 @@ Use the `custom` trigger to programmatically control when the typing animation s
 
 <PropsTable
   component="TypeFx"
+  describe={{
+    words: "One string to type, or several to cycle through.",
+    speed: "Milliseconds per character.",
+    delay: "Milliseconds before typing starts.",
+    hold: "Milliseconds a finished word stays before the next one.",
+    loop: "Cycle back to the first word instead of stopping.",
+    trigger: "\"custom\" waits for the function handed to onTrigger.",
+    onTrigger: "Receives a function that starts it, when trigger is \"custom\".",
+    children: "Rendered after the typed text.",
+  }}
   content={[
     ["...text", "TextProps"]
   ]}

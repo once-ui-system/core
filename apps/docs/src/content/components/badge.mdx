@@ -158,6 +158,15 @@ Badges can contain custom content using children instead of the `title` prop.
 
 <PropsTable
   component="Badge"
+  describe={{
+    title: "The label. Use this or children, not both — they render the same text twice.",
+    children: "The label, when it needs markup rather than a string.",
+    icon: "Icon before the label.",
+    href: "Makes it a link.",
+    arrow: "Trailing arrow. On by default once href is set.",
+    effect: "The shine that runs across it. Turn it off for a static badge.",
+    id: "Element id.",
+  }}
   content={[
     ["children"],
     ["className"],

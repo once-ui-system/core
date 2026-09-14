@@ -144,6 +144,14 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
 
 <PropsTable
   component="RadioButton"
+  describe={{
+    checked: "Whether this one is chosen.",
+    onToggle: "Called when it is picked.",
+    name: "Group name. Radios sharing one are mutually exclusive.",
+    value: "Form field value.",
+    disabled: "Block interaction.",
+    hoverable: "Highlight the row on hover.",
+  }}
   content={[
     ["label", "ReactNode"],
     ["description", "ReactNode"],

@@ -376,6 +376,17 @@ The `CelebrationFx` component extends all layout props from `Flex` plus the foll
 
 <PropsTable
   component="CelebrationFx"
+  describe={{
+    type: "Which celebration to render.",
+    speed: "Motion multiplier. Not a duration.",
+    colors: "Palette for the pieces.",
+    intensity: "How much of it there is.",
+    duration: "Stop after this long, in milliseconds. Runs indefinitely if unset.",
+    trigger: "What starts it. \"manual\" hands control to active.",
+    active: "Run it, when trigger is \"manual\".",
+    reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
+    children: "Content drawn above the celebration.",
+  }}
   content={[
     ["children"]
   ]}

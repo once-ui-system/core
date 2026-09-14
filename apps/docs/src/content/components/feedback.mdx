@@ -171,6 +171,15 @@ Add custom content to the feedback component.
 
 <PropsTable
   component="Feedback"
+  describe={{
+    variant: "Severity, which sets the colour and the icon.",
+    title: "Headline of the message.",
+    description: "The message itself.",
+    showIcon: "Show the icon for the variant.",
+    showCloseButton: "Let the reader dismiss it.",
+    onClose: "Called when it is dismissed.",
+    children: "Extra content under the description — an action, a list.",
+  }}
   content={[
     ["children"],
     ["className"],

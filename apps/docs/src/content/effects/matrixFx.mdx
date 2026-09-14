@@ -606,6 +606,20 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
 
 <PropsTable
   component="MatrixFx"
+  describe={{
+    speed: "Animation multiplier. Not a duration.",
+    colors: "Palette for the dots.",
+    size: "Dot size, in pixels.",
+    spacing: "Gap between dots, in pixels.",
+    revealFrom: "Where the reveal starts before spreading out.",
+    trigger: "What starts it. \"manual\" hands control to active.",
+    active: "Run it, when trigger is \"manual\".",
+    flicker: "Randomise dot brightness, for a noisier look.",
+    bulge: "A ripple or wave distortion: its type, duration, intensity, delay and whether it repeats.",
+    fps: "Frame cap. Lower it on a large surface.",
+    reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
+    children: "Content drawn above the dots.",
+  }}
   content={[
     ["children"]
   ]}
