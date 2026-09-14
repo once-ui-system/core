@@ -347,6 +347,14 @@ that way. The ramps themselves are untouched.
   2.0 renames to `stretch` — a rename `tsc` cannot catch, because `fill` stayed
   valid as the layout prop it now means. Corrected in `auth.tsx` and
   `blocks/Streaming1.tsx`.
+- **A collapsed `CodeBlock` faded to the wrong colour, and put its button in the
+  wrong place.** The fade over a collapsed block was `base="page"` while the
+  block paints `surface`, so wherever the two tokens differ — dark mode, where
+  page is `lab(2.7%)` and surface `lab(6.8%)` — it laid a band of page colour
+  across the bottom of the code. It takes the block's own `background` now, and
+  an explicit `style.backgroundColor` carries through to it. `View code` also sat
+  dead-centre of the collapsed area, over the code it was covering; it is
+  anchored 12px above the bottom edge instead.
 - **`Media` honours `fillWidth={false}`.** It accepted the prop, destructured
   it, and then hardcoded `fillWidth` on the element anyway, so the value was
   silently discarded. Found while renaming `fill` above.

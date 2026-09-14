@@ -961,19 +961,25 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       left="0"
                       right="0"
                       zIndex={1}
-                      base="page"
+                      // The block paints its own surface, so fading to the page
+                      // colour left a band of the wrong colour over the code.
+                      base={background ?? "surface"}
+                      style={
+                        styleBackgroundColor
+                          ? ({ "--base-color": styleBackgroundColor } as React.CSSProperties)
+                          : undefined
+                      }
                       to="top"
                       height={"100%"}
                       blur={100}
                     />
                     <Flex
                       position="absolute"
-                      top="0"
                       left="0"
                       right="0"
                       bottom="0"
                       zIndex={2}
-                      vertical="center"
+                      paddingBottom="12"
                       horizontal="center"
                       pointerEvents="none"
                       background="transparent"
