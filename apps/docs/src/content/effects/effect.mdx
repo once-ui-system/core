@@ -119,6 +119,18 @@ and still switched with one prop.
 
 <PropsTable
   component="Effect"
+  describe={{
+    type: "Which ambient layer to render. \"none\" renders the children alone.",
+    children: "Content drawn above the layer.",
+    colors: "Palette for the layer, when it takes one.",
+    speed: "Multiplier on the layer's own motion. Not a duration.",
+    reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
+    blob: "Props passed through when type is \"blob\".",
+    matrix: "Props passed through when type is \"matrix\".",
+    weather: "Props passed through when type is \"weather\".",
+    particle: "Props passed through when type is \"particle\".",
+    celebration: "Props passed through when type is \"celebration\".",
+  }}
   content={[
     ["children", "ReactNode"]
   ]}

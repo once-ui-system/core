@@ -105,6 +105,21 @@ A component for providing users with contextual options / information on right c
 
 <PropsTable
   component="ContextMenu"
+  describe={{
+    children: "The region that opens the menu on right-click.",
+    dropdown: "The menu itself.",
+    placement: "Where the menu opens relative to the pointer.",
+    onSelect: "Called with the value of the Option that was picked.",
+    selectedOption: "Value of the Option to mark as current.",
+    closeAfterClick: "Close on selection.",
+    open: "Controlled open state.",
+    onOpenChange: "Called whenever it opens or closes.",
+    disabled: "Stop the menu opening at all.",
+    fillWidth: "Match the trigger's width.",
+    minWidth: "Lower bound on the menu's width, in rem.",
+    maxWidth: "Upper bound on the menu's width, in rem.",
+    minHeight: "Lower bound on the menu's height, in rem.",
+  }}
   content={[
     ["children"],
     ["className"],

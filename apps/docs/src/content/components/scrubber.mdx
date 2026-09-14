@@ -105,6 +105,21 @@ what belongs in it is entirely your application's business.
 
 <PropsTable
   component="Scrubber"
+  describe={{
+    duration: "Total length of the timeline, in seconds.",
+    value: "Where the playhead is, in seconds.",
+    onChange: "Called as the playhead is dragged or the track is clicked.",
+    tracks: "The lanes under the playhead, each with its own blocks.",
+    selected: "Id of the currently selected block.",
+    onSelect: "Called when a block is selected, or with null when it is deselected.",
+    onBlockChange: "Called when a block is moved or resized, with its new start and end.",
+    onGestureStart: "Called once when a drag begins — the place to pause playback.",
+    onBlockContextMenu: "Right-click on a block, with the event and what was hit.",
+    showTime: "Show the current time next to the playhead.",
+    formatTime: "Turn seconds into the label shown. Defaults to m:ss.",
+    step: "Snap the playhead to this interval, in seconds.",
+    ariaLabel: "Label for the playhead handle.",
+  }}
 />
 
 ### ScrubberTrack

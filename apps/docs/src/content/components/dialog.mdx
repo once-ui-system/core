@@ -343,6 +343,21 @@ The Dialog component follows accessibility best practices:
 
 <PropsTable
   component="Dialog"
+  describe={{
+    open: "Whether it is showing.",
+    onClose: "Called on the close button, Escape, or a click outside.",
+    title: "Heading. Required — a dialog with no title is hard to place.",
+    description: "Supporting line under the title.",
+    children: "The body.",
+    footer: "Pinned below the body, for the actions.",
+    stack: "Marks this as a dialog opened on top of another one.",
+    base: "Marks the dialog underneath a stack, which then ignores Escape and click-away while the one above it is open.",
+    flush: "Drop the padding and the top radius, for content that should meet the edges.",
+    hideClose: "Remove the close button, when only an action should dismiss it.",
+    closeOnClickaway: "Close on a click outside.",
+    onHeightChange: "Called when the body resizes — useful for animating a stack.",
+    minHeight: "Lower bound on the body height, in rem.",
+  }}
   content={[
     ["children"]
   ]}

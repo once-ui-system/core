@@ -112,6 +112,16 @@ Apply underline when `selected` is true.
 
 <PropsTable
   component="SmartLink"
+  describe={{
+    href: "Where it goes. Internal paths route through the framework adapter; external ones do not.",
+    children: "The link text.",
+    prefixIcon: "Icon before the text.",
+    suffixIcon: "Icon after the text — an arrow for an outbound link, say.",
+    iconSize: "Size of either icon.",
+    selected: "Mark as the current page, for navigation.",
+    unstyled: "Drop the link styling, when the child carries its own.",
+    fillWidth: "Fill the parent's width rather than hugging the text.",
+  }}
   content={[
     ["children"],
     ["className"],

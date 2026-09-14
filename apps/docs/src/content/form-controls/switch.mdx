@@ -147,6 +147,16 @@ Place the switch on the right side of the label.
 
 <PropsTable
   component="Switch"
+  describe={{
+    checked: "Whether it is on. Controlled — there is no uncontrolled mode.",
+    onToggle: "Called when it is flipped, by pointer or keyboard.",
+    loading: "Show a spinner in the track while something resolves.",
+    disabled: "Block interaction.",
+    reverse: "Put the label before the switch instead of after it.",
+    name: "Form field name.",
+    value: "Form field value.",
+    ariaLabel: "Label for a switch with no visible one.",
+  }}
   content={[
     ["label", "ReactNode"],
     ["description", "ReactNode"],

@@ -191,6 +191,16 @@ Set `multiple` to allow selecting more than one option. The `value` and `onSelec
 
 <PropsTable
   component="Select"
+  describe={{
+    options: "The choices, as value and label pairs.",
+    value: "The selection. An array when multiple is set.",
+    onSelect: "Called with the new selection.",
+    multiple: "Allow more than one choice.",
+    searchable: "Add a filter field above the options.",
+    emptyState: "Shown when a search matches nothing.",
+    placement: "Which side the list opens on.",
+    fillWidth: "Match the parent's width.",
+  }}
   content={[
     ["id", "string"],
     ["label", "string"],

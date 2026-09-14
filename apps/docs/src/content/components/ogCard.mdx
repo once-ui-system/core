@@ -281,6 +281,20 @@ Use `serviceConfig` to point `OgCard` at custom API routes or to transform proxi
 
 <PropsTable
   component="OgCard"
+  describe={{
+    url: "The page to preview. Its Open Graph data is fetched and rendered.",
+    ogData: "Supply the data yourself instead of fetching it.",
+    title: "Override the fetched title, or false to hide it.",
+    description: "Override the fetched description, or false to hide it.",
+    favicon: "Override the fetched favicon, or false to hide it.",
+    image: "Override the fetched image, or false to hide it.",
+    cardUrl: "Override the displayed link text, or false to hide it.",
+    direction: "Image above the text, or beside it.",
+    size: "Card scale.",
+    sizes: "The sizes attribute for the preview image.",
+    unoptimized: "Skip the framework image optimizer.",
+    serviceConfig: "Where to fetch the Open Graph data from.",
+  }}
 />
 
 ### OgServiceConfig
