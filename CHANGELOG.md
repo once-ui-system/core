@@ -797,6 +797,28 @@ that way. The ramps themselves are untouched.
   its plain filename, since renaming it would churn every one of those call
   sites for nothing. Generating it changed not one byte of compiled output.
 
+  `flex.scss` follows, and generating it surfaced a third gap — this one with
+  teeth. `.<bp>-flex-show` is hidden by a base rule and revealed inside its own
+  media query, so the pair reads as "show only at this width". `l`, `m` and `s`
+  each had that base rule; `xs` did not, so `.xs-flex-show` was visible at
+  every width instead of only the narrowest. Measured in Chromium across five
+  viewports, the three siblings computed `none` above their breakpoint and
+  `xs` computed `block` at all of them. The class name existed either way, so
+  the class-name snapshot could never have caught it; only comparing the four
+  rules side by side could, which is exactly what a matrix in a loop does and
+  1,500 lines of hand-written CSS does not.
+
+  Generated, that rule exists and the staircase is even. The fix changes
+  rendering only for `xs={{ hide: false }}` used *without* a base `hide` —
+  which was a silent no-op before — and the fleet's one call site pairs the
+  two, so it was correct before and is correct now.
+
+  Left alone deliberately: `.align-between`, `.align-around` and `.align-even`
+  compute to `normal` and do nothing, because `space-between` and its siblings
+  are `align-content` values and not valid for `align-items`. Whether they
+  should map to `align-content` or stop existing is a design decision, so the
+  generator reproduces them exactly rather than quietly repairing them.
+
   This is the groundwork for generating the responsive variants: only 121 of
   809 utilities have breakpoint variants today, which is why `Flex` falls back
   to a client component and a runtime style pass whenever a responsive prop is

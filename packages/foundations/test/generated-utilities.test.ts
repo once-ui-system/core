@@ -5,6 +5,8 @@ import { describe, expect, it } from "vitest";
 import {
   BREAKPOINTS,
   BREAKPOINTS_CASCADE,
+  FLEX_ALIGNMENTS,
+  FLEX_DIRECTIONS,
   OFFSET_SIDES,
   OFFSET_TOKENS,
   POSITION_VALUES,
@@ -74,6 +76,8 @@ describe("generated utilities", () => {
     expect(index).not.toMatch(/@use "\.\/spacing\.scss"/);
     expect(index).toContain('@use "./position.generated.scss";');
     expect(index).not.toMatch(/@use "\.\/position\.scss"/);
+    expect(index).toContain('@use "./flex.generated.scss";');
+    expect(index).not.toMatch(/@use "\.\/flex\.scss"/);
   });
 
   /**
@@ -107,6 +111,39 @@ describe("generated utilities", () => {
     for (const { key } of BREAKPOINTS) {
       const found = (css.match(new RegExp(`\\.${key}-(position|top|left|bottom|right)-`, "g")) || []).length;
       expect(found, `breakpoint ${key}`).toBe(expected);
+    }
+  });
+
+  /**
+   * `.<bp>-flex-show` is hidden by a base rule and revealed inside its own
+   * query, so the pair reads as "show only at this width". l, m and s had the
+   * base rule; xs did not, which left `.xs-flex-show` visible at every width
+   * instead of only the narrowest. Measured in Chromium before the fix:
+   * l/m/s computed `none` above their breakpoint, xs computed `block`.
+   *
+   * The class name existed either way, so the class-name snapshot could never
+   * have caught this. Only the rule count can.
+   */
+  it("hides every flex-show variant outside its own breakpoint", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/flex.generated.scss"), "utf8");
+    const base = css.split("@media")[0];
+    for (const { key } of BREAKPOINTS) {
+      expect(base, `base .${key}-flex-show`).toMatch(
+        new RegExp(`\\.${key}-flex-show \\{\\s*display: none;`),
+      );
+    }
+  });
+
+  it("repeats direction and alignment at every breakpoint", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/flex.generated.scss"), "utf8");
+    for (const { key } of BREAKPOINTS) {
+      for (const dir of FLEX_DIRECTIONS) {
+        expect(css, `.${key}-flex-${dir}`).toContain(`.${key}-flex-${dir} {`);
+      }
+      for (const { suffix } of FLEX_ALIGNMENTS) {
+        expect(css, `.${key}-justify-${suffix}`).toContain(`.${key}-justify-${suffix} {`);
+        expect(css, `.${key}-align-${suffix}`).toContain(`.${key}-align-${suffix} {`);
+      }
     }
   });
 

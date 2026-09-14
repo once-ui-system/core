@@ -99,3 +99,35 @@ export const OFFSET_SIDES = ["top", "left", "bottom", "right"];
  * generated output provable instead of merely plausible.
  */
 export const offsetValue = (token) => (token === "0" ? "0" : `var(--static-space-${token})`);
+
+/* ---------------------------------------------------------------- flex --- */
+
+export const FLEX_DIRECTIONS = ["column", "row", "column-reverse", "row-reverse"];
+
+export const FLEX_WRAP = [
+  { suffix: "flex-wrap", value: "wrap" },
+  { suffix: "flex-nowrap", value: "nowrap" },
+  { suffix: "flex-wrap-reverse", value: "wrap-reverse" },
+];
+
+/** `flex: 0` through `flex: 12`. */
+export const FLEX_VALUES = Array.from({ length: 13 }, (_, i) => String(i));
+
+/**
+ * Shared by `justify-*` and `align-*`.
+ *
+ * Note that `between`, `around` and `even` are not valid `align-items` values —
+ * they belong to `align-content` — so `.align-between` and its two siblings
+ * compute to `normal` and do nothing at all. That is reproduced exactly here
+ * rather than quietly repaired: whether they should map to `align-content`, or
+ * stop existing, is a design decision and not the generator's to make.
+ */
+export const FLEX_ALIGNMENTS = [
+  { suffix: "start", value: "flex-start" },
+  { suffix: "center", value: "center" },
+  { suffix: "end", value: "flex-end" },
+  { suffix: "between", value: "space-between" },
+  { suffix: "around", value: "space-around" },
+  { suffix: "even", value: "space-evenly" },
+  { suffix: "stretch", value: "stretch" },
+];

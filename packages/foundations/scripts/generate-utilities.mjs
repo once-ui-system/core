@@ -12,6 +12,10 @@ import { fileURLToPath } from "node:url";
 import {
   BREAKPOINTS,
   BREAKPOINTS_CASCADE,
+  FLEX_ALIGNMENTS,
+  FLEX_DIRECTIONS,
+  FLEX_VALUES,
+  FLEX_WRAP,
   OFFSET_SIDES,
   OFFSET_TOKENS,
   POSITION_VALUES,
@@ -97,8 +101,71 @@ function breakpoints() {
   return `${vars}\n\n${mixins}\n`;
 }
 
+/** The rules every breakpoint repeats — direction, alignment, and show/hide. */
+function flexResponsiveRules() {
+  const rules = [
+    ["flex-hide", ["display: none;"]],
+    ["flex-show", ["display: flex;"]],
+  ];
+  for (const dir of FLEX_DIRECTIONS) rules.push([`flex-${dir}`, [`flex-direction: ${dir};`]]);
+  for (const { suffix, value } of FLEX_ALIGNMENTS) {
+    rules.push([`justify-${suffix}`, [`justify-content: ${value};`]]);
+  }
+  for (const { suffix, value } of FLEX_ALIGNMENTS) {
+    rules.push([`align-${suffix}`, [`align-items: ${value};`]]);
+  }
+  rules.push(["center", ["align-items: center;", "justify-content: center;"]]);
+  return rules;
+}
+
+function flex() {
+  const out = [];
+
+  out.push(rule(".display-flex", ["display: flex;"]));
+  out.push(rule(".display-inline-flex", ["display: inline-flex;"]));
+
+  for (const dir of FLEX_DIRECTIONS) {
+    out.push(rule(`.flex-${dir}`, [`flex-direction: ${dir};`]));
+  }
+
+  // `.<bp>-flex-show` is hidden by default and revealed inside its own query,
+  // so the pair reads as "show only at this width". The hand-written file had
+  // this for l, m and s and omitted it for xs, which left `.xs-flex-show`
+  // visible at every width instead of only the narrowest — the one place the
+  // four siblings disagreed, and invisible without comparing them side by side.
+  for (const { key } of BREAKPOINTS_CASCADE) {
+    out.push(rule(`.${key}-flex-show`, ["display: none;"]));
+  }
+
+  for (const { suffix, value } of FLEX_ALIGNMENTS) {
+    out.push(rule(`.justify-${suffix}`, [`justify-content: ${value};`]));
+  }
+  for (const { suffix, value } of FLEX_ALIGNMENTS) {
+    out.push(rule(`.align-${suffix}`, [`align-items: ${value};`]));
+  }
+  out.push(rule(".center", ["align-items: center;", "justify-content: center;"]));
+
+  for (const { suffix, value } of FLEX_WRAP) out.push(rule(`.${suffix}`, [`flex-wrap: ${value};`]));
+  for (const value of FLEX_VALUES) out.push(rule(`.flex-${value}`, [`flex: ${value};`]));
+
+  out.push(rule(".flex-hide", ["display: none;"]));
+  out.push(rule(".flex-show", ["display: flex;"]));
+
+  const responsive = flexResponsiveRules();
+  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
+    const body = responsive
+      .map(([sel, decls]) => rule(`.${key}-${sel}`, decls))
+      .join("\n")
+      .replace(/^/gm, "  ")
+      .replace(/^\s+$/gm, "");
+    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+  }
+  return out.join("\n");
+}
+
 const TARGETS = [
   { file: "scss/styles/breakpoints.scss", build: breakpoints },
+  { file: "scss/styles/flex.generated.scss", build: flex },
   { file: "scss/styles/spacing.generated.scss", build: spacing },
   { file: "scss/styles/position.generated.scss", build: position },
 ];
