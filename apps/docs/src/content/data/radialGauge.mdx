@@ -341,9 +341,19 @@ The `RadialGauge` component accepts all layout props from `Column` (except `dire
 
 <PropsTable
   component="RadialGauge"
-  content={[
-    ["children"]
-  ]}
+  describe={{
+    width: "Overall width, in pixels.",
+    height: "Overall height, in pixels.",
+    line: "The tick marks around the arc: how many, how thick, how long.",
+    value: "Where the gauge reads, 0\u2013100.",
+    unit: "Rendered after the value \u2014 a percent sign, a unit, anything.",
+    angle: "Where the arc starts and how far it sweeps, in degrees. 360 is a full ring.",
+    direction: "Which way the sweep runs from the start angle.",
+    edgePad: "Inset between the arc and the edge of the box, in pixels.",
+    children: "Rendered in the middle of the gauge, in place of the value.",
+    hue: "Colour the arc by its value \u2014 a named ramp, or a [from, to] pair of hue degrees to interpolate between.",
+    color: "A single colour for the arc, when it should not vary with the value. Takes a token or any CSS colour.",
+  }}
 />
 
 Use `RadialGauge` when you need a compact, highly legible representation of a single metric that can be scanned quickly, such as system health, SLO burn rate, or real-time utilization.

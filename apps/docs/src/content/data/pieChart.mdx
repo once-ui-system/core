@@ -115,11 +115,17 @@ crowded against it.
 `PieChart` has no axes or grid, so `axis` and `grid` do not apply.
 
 <PropsTable
-  content={[
-    ["ring", "{ inner: number; outer: number }", "{ inner: 0, outer: 80 }", "Inner and outer radius as percentages. inner: 0 is a solid pie."],
-    ["dataKey", "string", "\"value\"", "Field holding the number that sizes each slice."],
-    ["nameKey", "string", "\"name\"", "Field holding the slice label."],
-    ["origo", "{ x: number; y: number }", "{ x: 50, y: 50 }", "Centre of the pie within the panel, as percentages."],
-    ["...chart"],
-  ]}
+  component="PieChart"
+  exclude={["data-viz-style"]}
+  describe={{
+    ring: "Inner and outer radius as percentages. inner: 0 is a solid pie.",
+    dataKey: "Field holding the number that sizes each slice.",
+    nameKey: "Field holding the slice label.",
+    origo: "Centre of the pie within the panel, as percentages.",
+    legend: "Legend position and visibility.",
+    tooltip: "Show a tooltip on hover.",
+    loading: "Render the loading state instead of the chart.",
+    error: "Render the error state instead of the chart.",
+    border: "Panel border colour. false removes it.",
+  }}
 />

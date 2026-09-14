@@ -57,6 +57,7 @@ const MIXIN_SPREAD: Record<string, string> = {
   StyleProps: "flex",
   GridProps: "grid",
   TextProps: "text",
+  ChartProps: "chart",
 };
 
 const EXTENDS_SPREAD: Record<string, string> = {

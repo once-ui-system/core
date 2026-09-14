@@ -635,6 +635,14 @@ that way. The ramps themselves are untouched.
   seven of them on Flex, 95 rows. The colour-usage examples the split would have
   dropped moved to `basics/color`, which documented the tokens but never how to
   apply them.
+- **The chart pages document themselves now.** `lineChart`, `barChart`,
+  `pieChart` and `lineBarChart` carried hand-written tables because the spec had
+  nothing to generate from; with the generator fixed they resolve from it, so a
+  renamed prop or a changed default cannot drift past them. Defaults come from
+  the source rather than from whoever last edited the page. The gauges, which
+  were already generated, gained the prose they were missing — the thing that
+  made them look unfinished next to their neighbours. `data/setup` gained the
+  full `ChartProps` table, which is where every chart's `...chart` row points.
 - **Props tables can document a mixin.** `Flex` has 5 props of its own and 83
   across six shared mixins, so the layout pages needed those spelled out rather
   than collapsed into `...flex`. `<PropsTable mixin="SpacingProps" />` resolves

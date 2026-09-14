@@ -265,6 +265,15 @@ The `LinearGauge` component accepts all layout props from `Flex` (except `direct
 
 <PropsTable
   component="LinearGauge"
-  />
+  describe={{
+    width: "Track length, in pixels.",
+    height: "Track thickness, in pixels.",
+    line: "The tick marks along the track: how many, how thick, how long.",
+    value: "Where the gauge reads, 0\u2013100.",
+    labels: "\"percentage\" prints the value, or pass your own strings to label the ticks. \"none\" hides them.",
+    hue: "Colour the fill by its value \u2014 a named ramp, or a [from, to] pair of hue degrees to interpolate between.",
+    color: "A single colour for the fill, when it should not vary with the value. Takes a token or any CSS colour.",
+  }}
+/>
 
 Use `LinearGauge` for horizontal metrics displays, progress tracking, or any scenario where a linear representation is more appropriate than a radial one.

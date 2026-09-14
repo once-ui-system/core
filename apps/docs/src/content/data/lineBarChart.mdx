@@ -80,14 +80,22 @@ the same props as [`LineChart`](/data/lineChart) and
 three cheap.
 
 <PropsTable
+  component="LineBarChart"
+  exclude={["data-viz-style"]}
+  describe={{
+    barWidth: "Bar thickness.",
+    curve: "Recharts interpolation for the line: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants.",
+    reverseX: "Move the x axis to the top.",
+    reverseY: "Move the y axis to the right.",
+    grid: "Which grid lines to draw.",
+    axis: "Which axes to label.",
+    legend: "Legend position and visibility.",
+    tooltip: "Show a tooltip on hover.",
+    loading: "Render the loading state instead of the chart.",
+    error: "Render the error state instead of the chart.",
+    border: "Panel border colour. false removes it.",
+  }}
   content={[
     ["series", "SeriesConfig[]", "-", "First entry is drawn as the line, second as the bars. Further entries are ignored. Both share one y axis."],
-    ["curve", "CurveType", "\"natural\"", "Recharts interpolation: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants."],
-    ["barWidth", ["xs", "s", "m", "l", "xl", "fill", "number"], "\"l\"", "Bar thickness."],
-    ["reverseX", "boolean", "false", "Move the x axis to the top."],
-    ["reverseY", "boolean", "false", "Move the y axis to the right."],
-    ["grid", ["x", "y", "both", "none"], "\"y\"", "Which grid lines to draw."],
-    ["axis", ["x", "y", "both", "none"], "\"both\"", "Which axes to label."],
-    ["...chart"],
   ]}
 />

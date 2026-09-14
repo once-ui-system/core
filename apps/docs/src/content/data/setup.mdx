@@ -89,6 +89,29 @@ tickLine: false,`,
 
 All charts share the same props for common settings, so it's easy to swap between different chart types with minimal code changes. Each chart may have additional, chart-specific props.
 
+Every chart takes these. The sections below walk through the ones worth
+explaining; this is the whole list.
+
+<PropsTable
+  mixin="ChartProps"
+  describe={{
+    series: "Which keys in `data` to plot, and optionally what colour each is.",
+    data: "The rows. Each needs the keys named in `series`, plus whatever the x axis reads.",
+    title: "Heading above the chart.",
+    description: "Supporting line under the title.",
+    date: "Format and range for a time axis.",
+    legend: "Legend position and visibility.",
+    tooltip: "Show a tooltip on hover.",
+    grid: "Which grid lines to draw. Chart types differ in what they default to.",
+    axis: "Which axes to label.",
+    variant: "Fill treatment for the plotted area.",
+    loading: "Render the loading state instead of the chart.",
+    error: "Render the error state instead of the chart.",
+    emptyState: "What to show when `data` is empty.",
+    errorState: "What to show when `error` is set.",
+  }}
+/>
+
 ### Data
 
 Use the `series` and `data` props to define the chart data to render, and assign colors to override defaults.

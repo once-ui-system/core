@@ -132,18 +132,24 @@ same chart with `animation={false}`.
 ## API reference
 
 <PropsTable
-  content={[
-    ["curve", "CurveType", "\"natural\"", "Recharts interpolation: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants."],
-    ["xAxisType", ["number", "category"], "\"category\"", "Treat x values as numbers rather than equally spaced categories."],
-    ["xDomain", "[number, number]", "-", "Visible x range. Requires xAxisType=\"number\"."],
-    ["animation", "boolean", "true", "Animate the line on data change."],
-    ["animationBegin", "number", "-", "Delay before the animation starts, in milliseconds."],
-    ["animationDuration", "number", "-", "Animation length, in milliseconds."],
-    ["animationEasing", "string", "-", "Recharts easing name."],
-    ["reverseX", "boolean", "false", "Move the x axis to the top."],
-    ["reverseY", "boolean", "false", "Move the y axis to the right."],
-    ["grid", ["x", "y", "both", "none"], "\"both\"", "Which grid lines to draw."],
-    ["axis", ["x", "y", "both", "none"], "\"both\"", "Which axes to label."],
-    ["...chart"],
-  ]}
+  component="LineChart"
+  exclude={["data-viz-style"]}
+  describe={{
+    curve: "Recharts interpolation: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants.",
+    xAxisType: "Treat x values as numbers rather than equally spaced categories.",
+    xDomain: "Visible x range. Requires xAxisType=\"number\".",
+    animation: "Animate the line on data change. Turn it off for a chart that updates faster than the animation runs.",
+    animationBegin: "Delay before the animation starts, in milliseconds.",
+    animationDuration: "Animation length, in milliseconds.",
+    animationEasing: "Recharts easing name.",
+    reverseX: "Move the x axis to the top.",
+    reverseY: "Move the y axis to the right.",
+    grid: "Which grid lines to draw.",
+    axis: "Which axes to label.",
+    legend: "Legend position and visibility.",
+    tooltip: "Show a tooltip on hover.",
+    loading: "Render the loading state instead of the chart.",
+    error: "Render the error state instead of the chart.",
+    border: "Panel border colour. false removes it.",
+  }}
 />
