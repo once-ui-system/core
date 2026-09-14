@@ -14,6 +14,10 @@ const Kbd = forwardRef<HTMLDivElement, KbdProps>(
     <Flex
       as="kbd"
       ref={ref}
+      // A <kbd> belongs in a sentence. Flex is display: flex, so without this
+      // one every Kbd in prose broke the line and filled the column.
+      inline
+      fit
       horizontal="center"
       minWidth="32"
       background="neutral-strong"
