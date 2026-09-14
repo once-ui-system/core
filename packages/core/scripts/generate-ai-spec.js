@@ -28,9 +28,21 @@ const OUT_FILE = path.join(OUT_DIR, "spec.json");
 const BARRELS = [
   { file: path.join(SRC, "components", "index.ts"), group: "components" },
   { file: path.join(SRC, "modules", "index.ts"), group: "modules" },
-  { file: path.join(SRC, "modules", "data", "index.ts"), group: "data", importFrom: "@once-ui-system/core/data" },
-  { file: path.join(SRC, "modules", "code", "index.ts"), group: "code", importFrom: "@once-ui-system/core/code" },
-  { file: path.join(SRC, "modules", "media", "index.ts"), group: "media", importFrom: "@once-ui-system/core/media" },
+  {
+    file: path.join(SRC, "modules", "data", "index.ts"),
+    group: "data",
+    importFrom: "@once-ui-system/core/data",
+  },
+  {
+    file: path.join(SRC, "modules", "code", "index.ts"),
+    group: "code",
+    importFrom: "@once-ui-system/core/code",
+  },
+  {
+    file: path.join(SRC, "modules", "media", "index.ts"),
+    group: "media",
+    importFrom: "@once-ui-system/core/media",
+  },
 ];
 
 // Internal/low-level exports that AI should not use directly
@@ -109,39 +121,160 @@ function typeText(node) {
  * its members, so the values are in the spec rather than a type name that
  * only helps if you already have the source open.
  */
-function collectTypeAliases(ts, program, checker, used) {
-  const types = {};
+function collectTypeAliases(ts, program, checker, seedBlob, components) {
+  /** Every type alias and interface declared in src, by name. */
+  const declared = new Map();
   for (const file of program.getSourceFiles()) {
-    if (file.isDeclarationFile || !normalize(file.fileName).startsWith(SRC)) continue;
+    const own = !file.isDeclarationFile && normalize(file.fileName).startsWith(SRC);
+    // A vendored type is indexed too, but only a string union of it is ever
+    // emitted — `Placement` comes from floating-ui and its twelve values are
+    // exactly what a caller needs; React's object types are not.
+    const vendored = file.fileName.includes("node_modules");
+    if (!own && !vendored) continue;
     ts.forEachChild(file, (node) => {
-      if (!ts.isTypeAliasDeclaration(node)) return;
-      const name = node.name.getText();
-      if (!used.has(name) || types[name]) return;
-      const symbol = checker.getSymbolAtLocation(node.name);
-      if (!symbol) return;
-      const type = checker.getDeclaredTypeOfSymbol(symbol);
-      if (!type.isUnion()) return;
-      const members = type.types.map((t) => (t.isStringLiteral() ? t.value : null));
-      if (members.some((m) => m === null)) return;
-      types[name] = members;
+      if (ts.isTypeAliasDeclaration(node) || ts.isInterfaceDeclaration(node)) {
+        const name = node.name.getText();
+        // A name declared in both src and node_modules resolves to ours:
+        // recharts also ships a `DotsProps`, and its shape is not the one a
+        // caller of `<Background dots={...} />` needs.
+        const seen = declared.get(name);
+        if (!seen || (own && !seen.own)) declared.set(name, { node, own });
+      }
     });
+  }
+
+  /** A union renders as its members; a non-literal member prints its type text. */
+  const unionMembers = (node) => {
+    const symbol = checker.getSymbolAtLocation(node.name);
+    if (!symbol) return null;
+    const type = checker.getDeclaredTypeOfSymbol(symbol);
+    if (!type.isUnion()) return null;
+    const members = type.types.map((t) =>
+      t.isStringLiteral() ? t.value : checker.typeToString(t),
+    );
+    return [...new Set(members)];
+  };
+
+  /**
+   * An object type renders as its fields, like a mixin.
+   *
+   * Resolved through the checker rather than read off the syntax, so a type
+   * built with `Omit<...>` (`SelectOptionType`) or one that extends another
+   * (`ButtonOption`) comes out with the fields it actually has rather than
+   * nothing at all. Index signatures come with it: `DataPoint`'s whole point
+   * is `[key: string]`, and reading only property signatures dropped it and
+   * left the shape looking like it holds one optional label.
+   */
+  const objectShape = (node) => {
+    const symbol = checker.getSymbolAtLocation(node.name);
+    if (!symbol) return null;
+    const type = checker.getDeclaredTypeOfSymbol(symbol);
+    if (type.isUnion()) return null;
+
+    const shape = {};
+    for (const index of checker.getIndexInfosOfType(type) ?? []) {
+      shape[`[key: ${checker.typeToString(index.keyType)}]`] = checker.typeToString(index.type);
+    }
+    for (const prop of checker.getPropertiesOfType(type)) {
+      const decl = prop.valueDeclaration ?? (prop.declarations && prop.declarations[0]);
+      if (!decl || isInNodeModules(decl)) continue; // React/DOM inherited noise
+      const t =
+        (ts.isPropertySignature(decl) || ts.isPropertyDeclaration(decl)) && decl.type
+          ? typeText(decl.type)
+          : checker.typeToString(checker.getTypeOfSymbol(prop));
+      const optional = (prop.flags & ts.SymbolFlags.Optional) !== 0;
+      shape[prop.getName()] = optional ? t : `!${t}`;
+    }
+    // Past this, the type is a component's whole prop surface rather than a
+    // value shape — `SelectOptionType` resolves to 101 fields because Option
+    // extends Flex. Inlining that is useless; the alias text is not, because
+    // it names the component whose props the spec already documents.
+    const keys = Object.keys(shape);
+    if (keys.length && keys.length <= 40) return shape;
+
+    if (ts.isTypeAliasDeclaration(node) && node.type) {
+      // `AllFlexProps = FlexProps & StyleProps & ...` says everything in one
+      // line. `FlexBreakpointProps = BreakpointProps<AllFlexProps, 'gap' | ...>`
+      // does not: its text is sixty lines of union members and section
+      // comments. The mapped type's own keys are the same information in the
+      // form the question actually takes — which props accept a breakpoint
+      // object — so emit those instead of the declaration text.
+      const text = node.type
+        .getText()
+        .replace(/\/\/.*$/gm, "")
+        .replace(/\s+/g, " ")
+        .trim();
+      if (text.length <= 120) return text;
+      const mapped = checker.getPropertiesOfType(type).map((p) => p.getName());
+      if (mapped.length && mapped.length <= 80) return mapped;
+      return text;
+    }
+
+    // An interface over the cap is one that extends a component's props —
+    // `StylePanelRootProps extends Omit<ComponentProps<typeof Column>, ...>`.
+    // Its own two members are the whole reason a caller names it; the
+    // inherited hundred are already documented on that component. So fall
+    // back to what the interface itself declares rather than dropping the
+    // type and leaving `StylePanelRootProps["value"]` pointing at nothing.
+    if (ts.isInterfaceDeclaration(node)) {
+      const own = {};
+      for (const member of node.members) {
+        if (!ts.isPropertySignature(member) || !member.name) continue;
+        const t = member.type ? typeText(member.type) : "unknown";
+        own[member.name.getText()] = member.questionToken ? t : `!${t}`;
+      }
+      if (Object.keys(own).length) return own;
+    }
+    return null;
+  };
+
+  // Resolve to a fixed point: a shape's own fields name further types, and
+  // those are exactly the ones an agent needs next. Without this pass
+  // `series: SeriesConfig | SeriesConfig[]` named a type the spec never
+  // defined, which is how a chart API came out unusable even once its props
+  // resolved.
+  const types = {};
+  let blob = seedBlob;
+  for (let pass = 0; pass < 6; pass++) {
+    const before = Object.keys(types).length;
+    for (const [name, { node, own }] of declared) {
+      if (types[name]) continue;
+      if (!new RegExp(`\\b${name}\\b`).test(blob)) continue;
+
+      // `ButtonProps` is a component's own surface, already in `components`.
+      // Say so rather than inlining it twice or dropping it silently.
+      const component = /Props$/.test(name) ? name.replace(/Props$/, "") : null;
+      if (component && components[component]) {
+        types[name] = `${component} props`;
+        continue;
+      }
+
+      const union = unionMembers(node);
+      const resolved = union ?? (own ? objectShape(node) : null);
+      if (!resolved) continue;
+      types[name] = resolved;
+      blob += "\n" + JSON.stringify(resolved);
+    }
+    if (Object.keys(types).length === before) break;
   }
   return Object.fromEntries(Object.entries(types).sort(([a], [b]) => a.localeCompare(b)));
 }
 
-/** Every capitalised identifier a prop type mentions. */
+/**
+ * Every prop type in the spec, as one string to scan type names out of.
+ *
+ * This used to collect capitalised identifiers only, which silently dropped
+ * `curveType` and anything else not starting with a capital.
+ */
 function typeNamesUsed(components, mixins) {
-  const used = new Set();
-  const scan = (value) => {
-    for (const match of String(value).matchAll(/\b[A-Z][A-Za-z0-9_]*\b/g)) used.add(match[0]);
-  };
+  const parts = [];
   for (const component of Object.values(components)) {
-    for (const value of Object.values(component.props ?? {})) scan(value);
+    parts.push(...Object.values(component.props ?? {}).map(String));
   }
   for (const mixin of Object.values(mixins)) {
-    for (const value of Object.values(mixin ?? {})) scan(value);
+    parts.push(...Object.values(mixin ?? {}).map(String));
   }
-  return used;
+  return parts.join("\n");
 }
 
 async function main() {
@@ -205,7 +338,11 @@ async function main() {
   /** Get the props type for a component declaration */
   function getPropsType(decl) {
     // forwardRef<Ref, Props>(...)
-    if (ts.isVariableDeclaration(decl) && decl.initializer && ts.isCallExpression(decl.initializer)) {
+    if (
+      ts.isVariableDeclaration(decl) &&
+      decl.initializer &&
+      ts.isCallExpression(decl.initializer)
+    ) {
       const call = decl.initializer;
       if (call.typeArguments && call.typeArguments.length >= 2) {
         return checker.getTypeFromTypeNode(call.typeArguments[1]);
@@ -217,7 +354,11 @@ async function main() {
     // branches above recognise, and the component drops out of the spec
     // silently: the docs still build, and only an agent reading the spec
     // notices it is gone.
-    if (ts.isVariableDeclaration(decl) && decl.initializer && ts.isCallExpression(decl.initializer)) {
+    if (
+      ts.isVariableDeclaration(decl) &&
+      decl.initializer &&
+      ts.isCallExpression(decl.initializer)
+    ) {
       const call = decl.initializer;
       if (call.expression.getText() === "Object.assign" && call.arguments.length) {
         const base = checker.getSymbolAtLocation(call.arguments[0]);
@@ -251,10 +392,7 @@ async function main() {
   function propString(propSymbol, decl, defaults) {
     const name = propSymbol.getName();
     let type = "unknown";
-    if (
-      (ts.isPropertySignature(decl) || ts.isPropertyDeclaration(decl)) &&
-      decl.type
-    ) {
+    if ((ts.isPropertySignature(decl) || ts.isPropertyDeclaration(decl)) && decl.type) {
       type = typeText(decl.type);
     } else {
       type = checker.typeToString(checker.getTypeOfSymbol(propSymbol));
@@ -324,7 +462,10 @@ async function main() {
       // ChartProps came out as a phantom `extends: ["interfaces"]`.
       if (declFile === interfacesFile || path.basename(declFile) === "interfaces.ts") {
         // shared mixin prop: attribute to parent interface, emit once globally
-        const parent = pDecl.parent && ts.isInterfaceDeclaration(pDecl.parent) ? pDecl.parent.name.getText() : null;
+        const parent =
+          pDecl.parent && ts.isInterfaceDeclaration(pDecl.parent)
+            ? pDecl.parent.name.getText()
+            : null;
         if (parent) {
           mixins.add(parent);
           if (!mixinsUsed.has(parent)) mixinsUsed.set(parent, new Map());
@@ -444,14 +585,20 @@ async function main() {
     JSON.parse(fs.readFileSync(path.join(__dirname, "icon-manifest.json"), "utf8")),
   ).sort();
 
-  const types = collectTypeAliases(ts, program, checker, typeNamesUsed(components, mixins));
+  const types = collectTypeAliases(
+    ts,
+    program,
+    checker,
+    typeNamesUsed(components, mixins),
+    components,
+  );
 
   const spec = {
     name: pkg.name,
     version: pkg.version,
     generated: new Date().toISOString().split("T")[0],
     format:
-      "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
+      "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed.",
     tokens,
     mixins,
     iconNames,
@@ -498,9 +645,7 @@ function emitArtifacts(spec, version) {
   fs.writeFileSync(OUT_FILE, JSON.stringify(spec, null, 1));
 
   const seedPath = path.join(OUT_DIR, "catalog.seed.json");
-  const seed = fs.existsSync(seedPath)
-    ? JSON.parse(fs.readFileSync(seedPath, "utf8"))
-    : {};
+  const seed = fs.existsSync(seedPath) ? JSON.parse(fs.readFileSync(seedPath, "utf8")) : {};
 
   const catalog = { version, generated: spec.generated, components: {} };
   for (const [name, entry] of Object.entries(spec.components)) {
@@ -577,4 +722,7 @@ function copyDir(src, dest) {
   }
 }
 
-main().catch((e) => { console.error(e); process.exit(1); });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

@@ -75,7 +75,7 @@ const EXTENDS_SPREAD: Record<string, string> = {
  * Alias names resolved to their members, from the same generated spec. A prop
  * typed `TShirtSizes` is correct but unhelpful; the reader wants the sizes.
  */
-const ALIASES = (spec as { types?: Record<string, string[]> }).types ?? {};
+const ALIASES = (spec as { types?: Record<string, unknown> }).types ?? {};
 
 /**
  * Past this many members an expansion stops helping and starts burying the
@@ -145,9 +145,15 @@ function parseProp(raw: string): { type: PropType; defaultValue?: string; requir
   }
 
   // A bare alias expands to its members; anything else prints as written.
+  // The spec also resolves object shapes (`SeriesConfig`) and aliases of one
+  // other type (`SelectOptionType`); a table cell is the wrong place for
+  // either, so only unions expand and the rest print as the alias name.
   const alias = ALIASES[rest];
-  const expandable = alias && alias.length <= MAX_EXPANDED_MEMBERS;
-  return { type: expandable ? [...alias] : rest, defaultValue, required };
+  const expandable =
+    Array.isArray(alias) && alias.length <= MAX_EXPANDED_MEMBERS
+      ? (alias as string[])
+      : null;
+  return { type: expandable ? [...expandable] : rest, defaultValue, required };
 }
 
 const MIXINS = (spec as { mixins?: Record<string, Record<string, string>> }).mixins ?? {};

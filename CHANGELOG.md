@@ -538,6 +538,36 @@ that way. The ramps themselves are untouched.
 - **The AI spec lists `iconNames`.** `IconName` reached it as an opaque type
   name, so an agent had no way to know what exists and guessed — which is exactly
   how those fifteen example blocks came to name icons that render as nothing.
+- **The AI spec resolves the types its props name.** `series: SeriesConfig |
+  SeriesConfig[]` pointed at a shape `spec.json` never defined, so the chart API
+  was visible but not usable: two clean-context agents hit it independently and
+  reverse-engineered the row shape from an example instead. `types` now resolves
+  to a fixed point — a shape's own fields name further types, and those are
+  exactly the ones needed next — and carries object shapes and aliases beside
+  the string unions it already had, 25 entries to 93. `DataPoint` comes with its
+  `[key: string]` index signature, which is where a chart's series keys actually
+  live and which reading only property signatures had dropped. Resolution goes
+  through the type checker rather than the syntax, so `Omit<...>` and `extends`
+  resolve to the fields a type has rather than to nothing. Three cases are
+  deliberately not inlined: a component's own props say `"Avatar props"` and
+  point at the entry that already lists them; a type over 40 fields (because it
+  extends a component's whole surface) falls back to its own declared members;
+  and `FlexBreakpointProps` lists the 71 prop names that accept a breakpoint
+  object, which is the question that type is asked, rather than sixty lines of
+  declaration text. A test asserts no prop names a type the spec cannot resolve.
+- **The spec preferred a vendored type over ours when the names collided.**
+  recharts ships its own `DotsProps`, and indexing `node_modules` for types like
+  floating-ui's `Placement` let it shadow `Background`'s — which then dropped out
+  entirely, since a vendored type is only ever emitted as a string union. A name
+  declared in both places now resolves to ours.
+- **The CSS API-surface snapshot recorded a selector that does not exist.**
+  Sass keeps `/* */` comments in its output and the extractor matched raw text,
+  so a comment in `theme.scss` mentioning `[data-scaling]` was snapshotted as
+  part of the public selector surface alongside the four real
+  `[data-scaling="90"]`-style rules. Comments are stripped before extraction,
+  and the snapshot picks up the nine `data-body-size` / `data-body-line-height`
+  selectors that `bodySize` and `bodyLineHeight` had added without it — the
+  guard had been failing since the foundations extraction.
 - **`KbarItem` and the `MegaMenu` types are exported.** Components took them as
   props but consumers could not name them.
 - **`Logo` takes per-theme sources.** `icon` and `wordmark` now accept

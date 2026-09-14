@@ -2,7 +2,7 @@
  "name": "@once-ui-system/core",
  "version": "2.0.0-alpha.0",
  "generated": "2026-09-14",
- "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted.",
+ "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"80\" | \"104\" | \"128\" | \"160\"",
   "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\"",
@@ -247,10 +247,24 @@
   "world"
  ],
  "types": {
+  "AccordionItem": {
+   "title": "!React.ReactNode",
+   "content": "!React.ReactNode"
+  },
   "AnimationState": [
    "entering",
    "visible",
    "exiting"
+  ],
+  "AvatarProps": "Avatar props",
+  "BarWidth": [
+   "number",
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs",
+   "fill"
   ],
   "BaseColor": [
    "neutral-weak",
@@ -300,6 +314,24 @@
    "overlay",
    "transparent"
   ],
+  "BodyLineHeight": [
+   "90",
+   "100",
+   "110",
+   "120"
+  ],
+  "BodySize": [
+   "90",
+   "95",
+   "100",
+   "105",
+   "110"
+  ],
+  "BorderStyle": [
+   "rounded",
+   "playful",
+   "conservative"
+  ],
   "BreakpointKey": [
    "xl",
    "l",
@@ -307,15 +339,59 @@
    "s",
    "xs"
   ],
+  "BulgeConfig": {
+   "type": "\"ripple\" | \"wave\"",
+   "duration": "number",
+   "intensity": "number",
+   "repeat": "boolean",
+   "delay": "number"
+  },
+  "ButtonOption": {
+   "value": "!string",
+   "style": "React.CSSProperties",
+   "className": "string",
+   "children": "ReactNode",
+   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\"",
+   "radius": "RadiusSize",
+   "fillWidth": "boolean",
+   "label": "ReactNode",
+   "variant": "\"ghost\" | \"outline\" | \"subtle\"",
+   "size": "TShirtSizes",
+   "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+   "rounded": "boolean",
+   "weight": "\"default\" | \"strong\"",
+   "truncate": "boolean",
+   "disabled": "boolean",
+   "prefixIcon": "IconName",
+   "suffixIcon": "IconName",
+   "href": "string"
+  },
+  "CarouselItem": {
+   "slide": "!string | React.ReactNode",
+   "alt": "string"
+  },
   "CelebrationType": [
    "confetti",
    "fireworks"
+  ],
+  "ChartMode": [
+   "categorical",
+   "divergent",
+   "sequential"
   ],
   "ChartVariant": [
    "flat",
    "outline",
    "gradient"
   ],
+  "CodeInstance": {
+   "code": "!string | { content: string; error: string | null }",
+   "language": "!string | [\"diff\", string]",
+   "label": "!string",
+   "highlight": "string",
+   "prefixIcon": "IconName",
+   "startLineNumber": "number"
+  },
   "Colors": [
    "neutral-weak",
    "neutral-medium",
@@ -369,6 +445,51 @@
    "warning",
    "success"
   ],
+  "ColorValue": [
+   "string & {}",
+   "neutral-weak",
+   "neutral-medium",
+   "neutral-strong",
+   "brand-weak",
+   "brand-medium",
+   "brand-strong",
+   "accent-weak",
+   "accent-medium",
+   "accent-strong",
+   "info-weak",
+   "info-medium",
+   "info-strong",
+   "danger-weak",
+   "danger-medium",
+   "danger-strong",
+   "warning-weak",
+   "warning-medium",
+   "warning-strong",
+   "success-weak",
+   "success-medium",
+   "success-strong",
+   "neutral-alpha-weak",
+   "neutral-alpha-medium",
+   "neutral-alpha-strong",
+   "brand-alpha-weak",
+   "brand-alpha-medium",
+   "brand-alpha-strong",
+   "accent-alpha-weak",
+   "accent-alpha-medium",
+   "accent-alpha-strong",
+   "info-alpha-weak",
+   "info-alpha-medium",
+   "info-alpha-strong",
+   "danger-alpha-weak",
+   "danger-alpha-medium",
+   "danger-alpha-strong",
+   "warning-alpha-weak",
+   "warning-alpha-medium",
+   "warning-alpha-strong",
+   "success-alpha-weak",
+   "success-alpha-medium",
+   "success-alpha-strong"
+  ],
   "ColorWeight": [
    "weak",
    "medium",
@@ -379,6 +500,72 @@
    "m",
    "s"
   ],
+  "CountFxProps": "CountFx props",
+  "CSSUnit": [
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}dvh`",
+   "`${number}vw`",
+   "`calc(${string})`"
+  ],
+  "curveType": [
+   "step",
+   "linear",
+   "basis",
+   "basisClosed",
+   "basisOpen",
+   "bumpX",
+   "bumpY",
+   "bump",
+   "linearClosed",
+   "natural",
+   "monotoneX",
+   "monotoneY",
+   "monotone",
+   "stepBefore",
+   "stepAfter"
+  ],
+  "DataPoint": {
+   "[key: string]": "string | number | Date | undefined",
+   "label": "string"
+  },
+  "DateConfig": {
+   "start": "Date",
+   "end": "Date",
+   "max": "Date",
+   "min": "Date",
+   "dual": "boolean",
+   "format": "string",
+   "presets": "PresetsConfig",
+   "selector": "boolean",
+   "onChange": "(range: DateRange) => void"
+  },
+  "DateRange": {
+   "startDate": "!Date | undefined",
+   "endDate": "!Date | undefined"
+  },
+  "DisplayProps": {
+   "as": "ElementType",
+   "inline": "boolean",
+   "hide": "boolean",
+   "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "position": "CSSProperties[\"position\"]",
+   "overflow": "CSSProperties[\"overflow\"]",
+   "overflowX": "CSSProperties[\"overflowX\"]",
+   "overflowY": "CSSProperties[\"overflowY\"]",
+   "scrollbar": "\"default\" | \"minimal\"",
+   "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\"",
+   "opacity": "Opacity",
+   "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\"",
+   "dark": "boolean",
+   "light": "boolean"
+  },
+  "DotsProps": {
+   "display": "boolean",
+   "opacity": "DisplayProps[\"opacity\"]",
+   "color": "ColorValue",
+   "size": "SpacingToken"
+  },
   "EasingCurve": [
    "linear",
    "ease",
@@ -396,6 +583,195 @@
    "particle",
    "celebration"
   ],
+  "FlexBreakpointProps": [
+   "style",
+   "direction",
+   "horizontal",
+   "vertical",
+   "center",
+   "wrap",
+   "flex",
+   "textVariant",
+   "textSize",
+   "textType",
+   "textWeight",
+   "background",
+   "solid",
+   "borderTop",
+   "borderRight",
+   "borderBottom",
+   "borderLeft",
+   "borderX",
+   "borderY",
+   "border",
+   "borderStyle",
+   "borderWidth",
+   "radius",
+   "shadow",
+   "padding",
+   "paddingLeft",
+   "paddingRight",
+   "paddingTop",
+   "paddingBottom",
+   "paddingX",
+   "paddingY",
+   "margin",
+   "marginLeft",
+   "marginRight",
+   "marginTop",
+   "marginBottom",
+   "marginX",
+   "marginY",
+   "gap",
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "width",
+   "height",
+   "maxWidth",
+   "minWidth",
+   "minHeight",
+   "maxHeight",
+   "fit",
+   "fitWidth",
+   "fitHeight",
+   "fill",
+   "fillWidth",
+   "fillHeight",
+   "aspectRatio",
+   "onBackground",
+   "onSolid",
+   "align",
+   "hide",
+   "pointerEvents",
+   "position",
+   "overflow",
+   "overflowX",
+   "overflowY",
+   "scrollbar",
+   "transition",
+   "opacity",
+   "zIndex",
+   "dark",
+   "light"
+  ],
+  "FlexValue": [
+   "0",
+   "1",
+   "10",
+   "2",
+   "3",
+   "4",
+   "8",
+   "12",
+   "5",
+   "6",
+   "7",
+   "9",
+   "11"
+  ],
+  "GradientProps": {
+   "display": "boolean",
+   "opacity": "DisplayProps[\"opacity\"]",
+   "x": "number",
+   "y": "number",
+   "width": "number",
+   "height": "number",
+   "tilt": "number",
+   "colorStart": "ColorValue",
+   "colorEnd": "ColorValue"
+  },
+  "GradientStop": {
+   "offset": "!string",
+   "opacity": "!number",
+   "variant": "ChartVariant"
+  },
+  "GridBreakpointProps": [
+   "style",
+   "textVariant",
+   "textSize",
+   "textType",
+   "textWeight",
+   "background",
+   "solid",
+   "borderTop",
+   "borderRight",
+   "borderBottom",
+   "borderLeft",
+   "borderX",
+   "borderY",
+   "border",
+   "borderStyle",
+   "borderWidth",
+   "radius",
+   "shadow",
+   "padding",
+   "paddingLeft",
+   "paddingRight",
+   "paddingTop",
+   "paddingBottom",
+   "paddingX",
+   "paddingY",
+   "margin",
+   "marginLeft",
+   "marginRight",
+   "marginTop",
+   "marginBottom",
+   "marginX",
+   "marginY",
+   "gap",
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "width",
+   "height",
+   "maxWidth",
+   "minWidth",
+   "minHeight",
+   "maxHeight",
+   "fit",
+   "fitWidth",
+   "fitHeight",
+   "fill",
+   "fillWidth",
+   "fillHeight",
+   "aspectRatio",
+   "onBackground",
+   "onSolid",
+   "align",
+   "hide",
+   "pointerEvents",
+   "position",
+   "overflow",
+   "overflowX",
+   "overflowY",
+   "scrollbar",
+   "transition",
+   "opacity",
+   "zIndex",
+   "dark",
+   "light",
+   "columns",
+   "rows"
+  ],
+  "GridProps": "Grid props",
+  "GridSize": [
+   "1",
+   "10",
+   "2",
+   "3",
+   "4",
+   "8",
+   "12",
+   "5",
+   "6",
+   "7",
+   "9",
+   "11"
+  ],
+  "IconButtonProps": "IconButton props",
   "IconName": [
    "symbol",
    "security",
@@ -497,11 +873,119 @@
    "wordmark",
    "world"
   ],
+  "KbarItem": {
+   "id": "!string",
+   "name": "!string",
+   "section": "!string",
+   "shortcut": "!string[]",
+   "keywords": "!string",
+   "href": "string",
+   "perform": "() => void",
+   "icon": "IconName",
+   "description": "ReactNode",
+   "placeholder": "string"
+  },
+  "LegendConfig": {
+   "display": "boolean",
+   "direction": "\"row\" | \"column\"",
+   "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\""
+  },
+  "LinesProps": {
+   "display": "boolean",
+   "opacity": "DisplayProps[\"opacity\"]",
+   "size": "SpacingToken",
+   "thickness": "number",
+   "angle": "number",
+   "color": "ColorValue"
+  },
+  "LogoProps": "Logo props",
+  "LogoSource": [
+   "string",
+   "{ light: string; dark: string; }"
+  ],
+  "MaskOptions": {
+   "maskPosition": "string"
+  },
+  "MaskProps": "Mask props",
+  "MasonryBreakpointProps": {
+   "columns": "number",
+   "hide": "boolean"
+  },
+  "MenuGroup": {
+   "id": "!string",
+   "label": "!ReactNode",
+   "suffixIcon": "IconName",
+   "href": "string",
+   "selected": "boolean",
+   "sections": "MenuSection[]",
+   "content": "ReactNode"
+  },
+  "MenuLink": {
+   "label": "!ReactNode",
+   "href": "!string",
+   "icon": "IconName",
+   "description": "ReactNode",
+   "selected": "boolean"
+  },
+  "MenuSection": {
+   "title": "ReactNode",
+   "links": "!MenuLink[]"
+  },
   "NavigationLayout": [
    "grid",
    "row",
    "column"
   ],
+  "NeutralColor": [
+   "sand",
+   "gray",
+   "slate"
+  ],
+  "OgData": {
+   "title": "!string",
+   "description": "!string",
+   "image": "!string",
+   "url": "!string",
+   "faviconUrl": "string"
+  },
+  "OgServiceConfig": {
+   "proxyImageUrl": "(url: string) => string",
+   "proxyFaviconUrl": "(url: string) => string",
+   "fetchOgUrl": "string",
+   "proxyOgUrl": "string"
+  },
+  "Opacity": [
+   "0",
+   "10",
+   "20",
+   "30",
+   "40",
+   "50",
+   "60",
+   "70",
+   "80",
+   "90",
+   "100"
+  ],
+  "OptionProps": "Option props",
+  "Placement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-start",
+   "top-end",
+   "right-start",
+   "right-end",
+   "bottom-start",
+   "bottom-end",
+   "left-start",
+   "left-end"
+  ],
+  "PresetsConfig": {
+   "display": "!boolean",
+   "granularity": "!\"year\" | \"month\" | \"week\""
+  },
   "RadiusNest": [
    "4",
    "8"
@@ -515,12 +999,69 @@
    "none",
    "full"
   ],
+  "ScalingSize": [
+   "90",
+   "95",
+   "100",
+   "105",
+   "110"
+  ],
+  "Schemes": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan"
+  ],
+  "ScrubberBlock": {
+   "id": "!string",
+   "start": "!number",
+   "end": "!number",
+   "label": "React.ReactNode",
+   "scheme": "ColorScheme",
+   "locked": "boolean"
+  },
+  "ScrubberTrack": {
+   "id": "!string",
+   "blocks": "!ScrubberBlock[]",
+   "height": "SpacingToken",
+   "scheme": "ColorScheme",
+   "movable": "boolean",
+   "resizable": "boolean",
+   "onAdd": "(time: number) => void"
+  },
+  "SelectOptionType": "Omit<OptionProps, \"selected\">",
+  "SeriesConfig": {
+   "key": "!string",
+   "color": "ColorValue"
+  },
   "ShadowSize": [
    "xl",
    "l",
    "m",
    "s",
    "xs"
+  ],
+  "SideContent": {
+   "src": "!string | React.ReactNode",
+   "alt": "string"
+  },
+  "SolidStyle": [
+   "flat",
+   "plastic"
+  ],
+  "SolidType": [
+   "color",
+   "contrast",
+   "inverse"
   ],
   "SpacingToken": [
    "xl",
@@ -547,6 +1088,84 @@
    "104",
    "128"
   ],
+  "StylePanelRootProps": {
+   "value": "StylePanelValue",
+   "onChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void"
+  },
+  "StylePanelValue": {
+   "theme": "Theme",
+   "border": "BorderStyle",
+   "brand": "Schemes | \"custom\"",
+   "accent": "Schemes | \"custom\"",
+   "neutral": "NeutralColor | \"custom\"",
+   "solid": "SolidType",
+   "solidStyle": "SolidStyle",
+   "surface": "SurfaceStyle",
+   "scaling": "ScalingSize",
+   "transition": "TransitionStyle",
+   "bodySize": "BodySize",
+   "bodyLineHeight": "BodyLineHeight",
+   "chartMode": "ChartMode"
+  },
+  "StylePanelVisibility": {
+   "page": "{ section?: boolean; theme?: boolean; shape?: boolean }",
+   "color": "{ section?: boolean; brand?: boolean; accent?: boolean; neutral?: boolean }",
+   "solidStyle": "{ section?: boolean; solid?: boolean; effect?: boolean }",
+   "bodyText": "{ section?: boolean; size?: boolean; lineHeight?: boolean }",
+   "advanced": "{ section?: boolean; surface?: boolean; scaling?: boolean; dataStyle?: boolean; transition?: boolean; }"
+  },
+  "StyleProps": {
+   "textVariant": "TextVariant",
+   "textSize": "TextSize",
+   "textType": "TextType",
+   "textWeight": "TextWeight",
+   "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
+   "solid": "Colors",
+   "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderRight": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderBottom": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderLeft": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderX": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderY": "Colors | \"surface\" | \"transparent\" | boolean",
+   "border": "Colors | \"surface\" | \"transparent\" | boolean",
+   "borderStyle": "\"solid\" | \"dashed\"",
+   "borderWidth": "1 | 2 | 4 | 8 | \"1\" | \"2\" | \"4\" | \"8\"",
+   "topRadius": "RadiusSize",
+   "rightRadius": "RadiusSize",
+   "bottomRadius": "RadiusSize",
+   "leftRadius": "RadiusSize",
+   "topLeftRadius": "RadiusSize",
+   "topRightRadius": "RadiusSize",
+   "bottomLeftRadius": "RadiusSize",
+   "bottomRightRadius": "RadiusSize",
+   "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`",
+   "shadow": "ShadowSize",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode"
+  },
+  "SurfaceStyle": [
+   "filled",
+   "translucent"
+  ],
+  "SwiperItem": {
+   "slide": "!string | React.ReactNode",
+   "alt": "string"
+  },
+  "TableAction": {
+   "icon": "!string",
+   "label": "string",
+   "tooltip": "string",
+   "variant": "\"primary\" | \"secondary\" | \"tertiary\" | \"danger\"",
+   "onClick": "!(rowIndex: number) => void",
+   "disabled": "(rowIndex: number) => boolean"
+  },
+  "TableHeader": {
+   "content": "!ReactNode",
+   "key": "!string",
+   "sortable": "boolean",
+   "width": "string",
+   "align": "\"left\" | \"center\" | \"right\""
+  },
+  "TagProps": "Tag props",
   "TextSize": [
    "xl",
    "l",
@@ -669,9 +1288,32 @@
    "strong",
    "normal"
   ],
+  "Theme": [
+   "dark",
+   "light",
+   "system"
+  ],
+  "ThumbnailItem": {
+   "scaling": "number",
+   "height": "SpacingToken | number",
+   "sizes": "string"
+  },
+  "TimelineItem": {
+   "label": "React.ReactNode",
+   "description": "React.ReactNode",
+   "state": "\"default\" | \"active\" | \"success\" | \"danger\"",
+   "marker": "React.ReactNode",
+   "children": "React.ReactNode"
+  },
   "ToastPosition": [
    "top",
    "bottom"
+  ],
+  "TransitionStyle": [
+   "none",
+   "all",
+   "micro",
+   "macro"
   ],
   "TriggerType": [
    "manual",
