@@ -347,6 +347,34 @@ that way. The ramps themselves are untouched.
   2.0 renames to `stretch` — a rename `tsc` cannot catch, because `fill` stayed
   valid as the layout prop it now means. Corrected in `auth.tsx` and
   `blocks/Streaming1.tsx`.
+- **The icon registry was too small for the products built on it.** An audit of
+  every `Icon`, `prefixIcon`, `suffixIcon` and `arrowIcon` call across magic,
+  motion, studio, scenetic and magic-convert found **127 distinct unregistered
+  names over 531 call sites** — every one rendering a blank space today, and
+  every one becoming a type error under 2.0's `IconName` union. The registry goes
+  **76 to 99**, adding the product-UI glyphs the fleet actually asks for: `home`,
+  `folder`, `file`, `image`, `video`, `chat`, `time`, `lock`, `heart`, `tag`,
+  `bolt`, `globe`, `star`, `starFill`, `bookmark`, `filter`, `upload`,
+  `arrowLeft`, `forward`, `barChart`, `banknotes`, `store` and `organization`.
+  That clears 207 of the 531. The parity test covers all 99. Brand marks stay
+  out, as they were: they are trademarks, and an app registers its own.
+- **The codemod renames six icon names that were only misspelled.** `email`,
+  `more`, `conversation`, `sparkles`, `externalLink` and `shop` are not missing
+  icons — they are `mail`, `moreHorizontal`, `chat`, `sparkle`, `arrowUpRight`
+  and `store` under a name someone guessed, about 46 more call sites. The `name`
+  rewrite is scoped to `<Icon>`, since `name` means something else on nearly
+  every other component; `window`, `split`, `stop` and `description` are each
+  plausibly several things and stay type errors for a human.
+- **`ToggleButton` takes a `radius`.** Roundness followed `size`, and `corners`
+  could only scope it — so a tall row with modest corners, which is what every
+  sidebar in the fleet wants, had no prop at all. Aveiro and Studio both reached
+  for `style={{ borderRadius: "var(--radius-m)" }}` instead, five call sites
+  between them. It falls back to `size` when unset, so nothing changes for
+  anyone not asking.
+- **`Kbd` belongs in a sentence.** It renders a `Flex`, and `Flex` is
+  `display: flex`, so every key in prose broke the line and stretched to the
+  column width. The Scrubber page showed four of them stacked as full-width bars
+  between the words describing them. `inline` and `fit` now, both overridable.
 - **`Carousel` and `Swiper` blurred the edges of their own images.** Both put a
   `Fade` down each side with `base="transparent"` — a gradient from transparent
   to transparent, which paints nothing. The only thing those elements ever

@@ -5,13 +5,20 @@ import classNames from "clsx";
 import { Flex, Icon, ElementType } from ".";
 import styles from "./ToggleButton.module.scss";
 import { IconName } from "../icons";
-import { TShirtSizes } from "../types";
+import { RadiusSize, TShirtSizes } from "../types";
 
 interface ToggleButtonCommonProps {
   label?: ReactNode;
   selected?: boolean;
   variant?: "ghost" | "outline" | "subtle";
   size?: TShirtSizes;
+  /**
+   * Corner roundness. Defaults to the button's `size`, which is right for a
+   * standalone control and wrong for a tall row in a sidebar — that wants the
+   * height of an `l` and the corners of an `m`. Every fleet sidebar was
+   * reaching for an inline `borderRadius` to get it.
+   */
+  radius?: RadiusSize;
   corners?:
     | "none"
     | "top"
@@ -45,6 +52,7 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
       selected = false,
       variant = "ghost",
       size = "m",
+      radius,
       corners,
       rounded = false,
       horizontal = "center",
@@ -74,11 +82,11 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
           styles[variant],
           styles[size],
           selected && styles.selected,
-          corners === "none"
+          corners === "none" || radius === "none"
             ? "radius-none"
             : corners
-              ? `radius-${size}-${corners}`
-              : `radius-${size}`,
+              ? `radius-${radius ?? size}-${corners}`
+              : `radius-${radius ?? size}`,
           "text-decoration-none",
           "button",
           disabled ? "cursor-not-allowed" : "cursor-interactive",

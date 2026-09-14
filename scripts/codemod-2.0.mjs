@@ -560,6 +560,48 @@ export function rewriteCssImports(src) {
   return { out, hits, warnings };
 }
 
+/**
+ * Icon names the fleet guesses, and what they are actually called.
+ *
+ * `IconName` was `string` in 1.8.x, so a wrong name rendered a blank space and
+ * a console warning. An audit of magic, motion, studio, scenetic and
+ * magic-convert found 127 distinct unregistered names across 531 call sites.
+ * Most were genuinely missing icons, and 2.0 adds them. These six are not
+ * missing """ + DASH + """ they are the same icon under a name someone guessed, and the
+ * union turns each one into a type error on upgrade.
+ *
+ * Only confident renames are listed. `window`, `split`, `stop` and `description`
+ * are all plausibly several things, so they stay type errors for a human.
+ */
+const ICON_RENAMES = {
+  email: "mail",
+  more: "moreHorizontal",
+  conversation: "chat",
+  sparkles: "sparkle",
+  externalLink: "arrowUpRight",
+  shop: "store",
+};
+
+/** Props whose value is an icon name, wherever they appear. */
+const ICON_PROPS = /\b(prefixIcon|suffixIcon|arrowIcon|navIcon|icon)=(\{?)(["'])([A-Za-z0-9_]+)\3(\}?)/g;
+/** `name` is only an icon name on Icon itself. */
+const ICON_NAME = /(<Icon\b[^>]*?\bname=)(\{?)(["'])([A-Za-z0-9_]+)\3(\}?)/g;
+
+export function rewriteIconNames(src) {
+  const hits = [];
+  const swap = (whole, head, open, quote, name, close) => {
+    const to = ICON_RENAMES[name];
+    if (!to) return whole;
+    hits.push(`icon "${name}" \u2192 "${to}"`);
+    return `${head}${open}${quote}${to}${quote}${close}`;
+  };
+  let out = src.replace(ICON_PROPS, (m, prop, open, q, name, close) =>
+    swap(m, `${prop}=`, open, q, name, close),
+  );
+  out = out.replace(ICON_NAME, (m, head, open, q, name, close) => swap(m, head, open, q, name, close));
+  return { out, hits };
+}
+
 export function transform(src, { css: migrateCss = false } = {}) {
   const hits = [];
   const warnings = [];
@@ -568,6 +610,9 @@ export function transform(src, { css: migrateCss = false } = {}) {
   warnings.push(...css.warnings);
   const moved = rewriteImports(css.out);
   hits.push(...moved.hits);
+  const icons = rewriteIconNames(moved.out);
+  hits.push(...icons.hits);
+  moved.out = icons.out;
   const bindings = importBindings(moved.out);
   let out = moved.out;
   // Union of all three maps: a tag can have only a value change (ShineFx) or

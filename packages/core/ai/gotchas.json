@@ -57,7 +57,7 @@
     ]
   },
   "Icon.names": {
-    "rule": "Icon names must come from iconNames in spec.json, which is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check.",
+    "rule": "Icon names must come from iconNames in spec.json, which is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.",
     "components": [
       "Icon",
       "Button",

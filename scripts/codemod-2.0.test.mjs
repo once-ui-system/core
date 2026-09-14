@@ -361,3 +361,30 @@ describe("Textarea lines, now that auto is the default", () => {
     assert.equal(transform(src).out, src);
   });
 });
+
+describe("icon names the registry now answers to", () => {
+  it("renames on Icon itself", () => {
+    assert.equal(transform(`<Icon name="email" />`).out, `<Icon name="mail" />`);
+  });
+
+  it("renames through a brace", () => {
+    assert.equal(transform(`<Icon name={"more"} />`).out, `<Icon name={"moreHorizontal"} />`);
+  });
+
+  it("renames the icon props any component takes", () => {
+    const { out } = transform(`<Button prefixIcon="conversation" suffixIcon="externalLink" />`);
+    assert.equal(out, `<Button prefixIcon="chat" suffixIcon="arrowUpRight" />`);
+  });
+
+  // `name` means something else on nearly every other component, so the Icon
+  // rewrite has to be scoped to the tag or it renames people.
+  it("does not touch name on anything but Icon", () => {
+    const src = `<User name="more" />\n<Author name="email" />`;
+    assert.equal(transform(src).out, src);
+  });
+
+  it("leaves a name that is already right, or that it cannot judge", () => {
+    const src = `<Icon name="mail" />\n<Icon name="window" />`;
+    assert.equal(transform(src).out, src);
+  });
+});

@@ -3,6 +3,10 @@
     "family": "hi2",
     "symbol": "HiOutlineAdjustmentsHorizontal"
   },
+  "arrowLeft": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowLeft"
+  },
   "arrowRight": {
     "family": "hi2",
     "symbol": "HiOutlineArrowRight"
@@ -15,13 +19,29 @@
     "family": "io5",
     "symbol": "IoFootballOutline"
   },
+  "banknotes": {
+    "family": "hi2",
+    "symbol": "HiOutlineBanknotes"
+  },
+  "barChart": {
+    "family": "hi2",
+    "symbol": "HiOutlineChartBar"
+  },
   "bell": {
     "family": "hi2",
     "symbol": "HiOutlineBell"
   },
+  "bolt": {
+    "family": "hi2",
+    "symbol": "HiOutlineBolt"
+  },
   "book": {
     "family": "hi2",
     "symbol": "HiOutlineBookOpen"
+  },
+  "bookmark": {
+    "family": "hi2",
+    "symbol": "HiOutlineBookmark"
   },
   "calendar": {
     "family": "hi2",
@@ -30,6 +50,10 @@
   "cart": {
     "family": "hi2",
     "symbol": "HiOutlineShoppingCart"
+  },
+  "chat": {
+    "family": "hi2",
+    "symbol": "HiOutlineChatBubbleLeftRight"
   },
   "check": {
     "family": "hi2",
@@ -127,21 +151,53 @@
     "family": "hi2",
     "symbol": "HiOutlineEyeSlash"
   },
+  "file": {
+    "family": "hi2",
+    "symbol": "HiOutlineDocument"
+  },
+  "filter": {
+    "family": "hi2",
+    "symbol": "HiOutlineFunnel"
+  },
   "flag": {
     "family": "io5",
     "symbol": "IoFlagOutline"
+  },
+  "folder": {
+    "family": "hi2",
+    "symbol": "HiOutlineFolder"
   },
   "food": {
     "family": "io5",
     "symbol": "IoFastFoodOutline"
   },
+  "forward": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowUturnRight"
+  },
   "gift": {
     "family": "io5",
     "symbol": "IoGiftOutline"
   },
+  "globe": {
+    "family": "hi2",
+    "symbol": "HiOutlineGlobeAlt"
+  },
+  "heart": {
+    "family": "hi2",
+    "symbol": "HiOutlineHeart"
+  },
   "help": {
     "family": "hi2",
     "symbol": "HiOutlineQuestionMarkCircle"
+  },
+  "home": {
+    "family": "hi2",
+    "symbol": "HiOutlineHome"
+  },
+  "image": {
+    "family": "hi2",
+    "symbol": "HiOutlinePhoto"
   },
   "inbox": {
     "family": "hi2",
@@ -166,6 +222,10 @@
   "link": {
     "family": "hi2",
     "symbol": "HiOutlineLink"
+  },
+  "lock": {
+    "family": "hi2",
+    "symbol": "HiOutlineLockClosed"
   },
   "logout": {
     "family": "hi2",
@@ -194,6 +254,10 @@
   "opacity": {
     "family": "pi",
     "symbol": "PiCircleHalfTilt"
+  },
+  "organization": {
+    "family": "hi2",
+    "symbol": "HiOutlineBuildingOffice2"
   },
   "pause": {
     "family": "hi2",
@@ -263,9 +327,29 @@
     "family": "hi2",
     "symbol": "HiOutlineSparkles"
   },
+  "star": {
+    "family": "hi2",
+    "symbol": "HiOutlineStar"
+  },
+  "starFill": {
+    "family": "hi2",
+    "symbol": "HiStar"
+  },
+  "store": {
+    "family": "hi2",
+    "symbol": "HiOutlineBuildingStorefront"
+  },
   "symbol": {
     "family": "io5",
     "symbol": "IoAtOutline"
+  },
+  "tag": {
+    "family": "hi2",
+    "symbol": "HiOutlineTag"
+  },
+  "time": {
+    "family": "hi2",
+    "symbol": "HiOutlineClock"
   },
   "trash": {
     "family": "hi2",
@@ -282,6 +366,14 @@
   "trendUp": {
     "family": "hi2",
     "symbol": "HiOutlineArrowTrendingUp"
+  },
+  "upload": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowUpTray"
+  },
+  "video": {
+    "family": "hi2",
+    "symbol": "HiOutlineVideoCamera"
   },
   "volume": {
     "family": "hi2",
