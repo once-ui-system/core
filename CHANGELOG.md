@@ -347,6 +347,21 @@ that way. The ramps themselves are untouched.
   2.0 renames to `stretch` — a rename `tsc` cannot catch, because `fill` stayed
   valid as the layout prop it now means. Corrected in `auth.tsx` and
   `blocks/Streaming1.tsx`.
+- **`Carousel` and `Swiper` blurred the edges of their own images.** Both put a
+  `Fade` down each side with `base="transparent"` — a gradient from transparent
+  to transparent, which paints nothing. The only thing those elements ever
+  rendered was `Fade`'s `backdrop-filter: blur(0.5rem)`, so what reached the
+  screen was a 6rem blurred strip over the artwork and no fade at all. Swiper's
+  was not even gated: Carousel's at least waited for hover, Swiper's was on the
+  whole time. Removed. The chevron already carries its own surface, which is the
+  affordance those strips were reaching for; an edge treatment that is wanted can
+  come back with a real `base` and a radius.
+- **The carousel chevrons had their borders shaved.** Each sits in a wrapper that
+  paints an opaque surface behind it, and the wrapper was `radius="l"` with
+  `overflow="hidden"` while `IconButton` at size `m` is `radius-m`. The larger
+  corner cut into the smaller one, clipping the button's border at all four
+  corners. The wrapper matches the button's radius now, and with the radii equal
+  there is nothing left to clip.
 - **The chart, `CodeBlock` and `MediaUpload` APIs were missing from the spec
   entirely.** Each of these ships as a lazy shell (`X.tsx`) in front of the real
   implementation (`X.impl.tsx`), which is what lets their dependency stay an

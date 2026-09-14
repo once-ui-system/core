@@ -16,10 +16,6 @@
 
 .controls {
   &:hover, &:focus-within {
-    .fade {
-      opacity: 0.5;
-    }
-
     .button {
       opacity: 1;
       transform: translateX(0);
@@ -27,11 +23,8 @@
   }
 }
 
-.fade, .button {
-  opacity: 0;
-}
-
 .button {
+  opacity: 0;
   animation-delay: 0.2s;
 }
 

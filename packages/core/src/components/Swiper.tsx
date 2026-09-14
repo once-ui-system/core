@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Media, Column, Row, IconButton, Fade } from ".";
+import { Flex, Media, Column, Row, IconButton } from ".";
 import { useEffect, useState, useRef, useCallback, forwardRef } from "react";
 import styles from "./Swiper.module.scss";
 
@@ -273,17 +273,6 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
               {/* Previous Button */}
               {activeIndex > 0 && (
                 <>
-                  <Fade
-                    transition="micro-medium"
-                    position="absolute"
-                    left="0"
-                    top="0"
-                    base="transparent"
-                    to="right"
-                    fillHeight
-                    maxWidth={6}
-                    zIndex={1}
-                  />
                   <Flex
                     position="absolute"
                     left="16"
@@ -291,7 +280,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
                     className={styles.navButton}
                     style={{ top: "50%", transform: "translateY(-50%)" }}
                   >
-                    <Flex radius="l" background="surface" overflow="hidden">
+                    <Flex radius="m" background="surface">
                       <IconButton
                         onClick={handlePrevClick}
                         variant="secondary"
@@ -306,17 +295,6 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
               {/* Next Button */}
               {activeIndex < items.length - 1 && (
                 <>
-                  <Fade
-                    transition="micro-medium"
-                    position="absolute"
-                    right="0"
-                    top="0"
-                    base="transparent"
-                    to="left"
-                    fillHeight
-                    zIndex={1}
-                    maxWidth={6}
-                  />
                   <Flex
                     position="absolute"
                     right="16"
@@ -324,7 +302,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
                     className={styles.navButton}
                     style={{ top: "50%", transform: "translateY(-50%)" }}
                   >
-                    <Flex radius="l" background="surface" overflow="hidden">
+                    <Flex radius="m" background="surface">
                       <IconButton
                         onClick={handleNextClick}
                         variant="secondary"

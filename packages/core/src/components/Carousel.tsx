@@ -9,7 +9,6 @@ import {
   Column,
   Row,
   IconButton,
-  Fade,
 } from ".";
 import { useEffect, useState, useRef, forwardRef } from "react";
 import styles from "./Carousel.module.scss";
@@ -319,25 +318,12 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
             >
               {controls && (
                 <>
-                  <Fade
-                    m={{ hide: true }}
-                    transition="micro-medium"
-                    className={styles.fade}
-                    position="absolute"
-                    left="0"
-                    base="transparent"
-                    top="0"
-                    to="right"
-                    fillHeight
-                    maxWidth={6}
-                  />
                   <Flex
                     m={{ hide: true }}
                     transition="micro-medium"
                     className={styles.button}
                     marginLeft="m"
-                    radius="l"
-                    overflow="hidden"
+                    radius="m"
                     background="surface"
                   >
                     <IconButton
@@ -366,25 +352,12 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
             >
               {controls && (
                 <>
-                  <Fade
-                    m={{ hide: true }}
-                    transition="micro-medium"
-                    className={styles.fade}
-                    position="absolute"
-                    right="0"
-                    top="0"
-                    base="transparent"
-                    to="left"
-                    fillHeight
-                    maxWidth={6}
-                  />
                   <Flex
                     m={{ hide: true }}
                     transition="micro-medium"
                     className={styles.button}
                     marginRight="m"
-                    radius="l"
-                    overflow="hidden"
+                    radius="m"
                     background="surface"
                   >
                     <IconButton
