@@ -319,3 +319,45 @@ describe("stylesheets that moved to foundations", () => {
     assert.equal(transform(src).out, src);
   });
 });
+
+describe("Textarea lines, now that auto is the default", () => {
+  const ta = (attrs) => core("Textarea") + `<Textarea id="a"${attrs} />`;
+
+  it("drops the redundant literal", () => {
+    const { out } = transform(ta(` lines="auto"`));
+    assert.equal(out, ta(""));
+  });
+
+  it("drops it written as an expression too", () => {
+    const { out } = transform(ta(` lines={"auto"}`));
+    assert.equal(out, ta(""));
+  });
+
+  it("keeps a fixed row count, which still means something", () => {
+    const src = ta(` lines={3}`);
+    assert.equal(transform(src).out, src);
+  });
+
+  it("keeps a computed value, which could be either", () => {
+    const src = ta(` lines={rows}`);
+    assert.equal(transform(src).out, src);
+  });
+
+  it("leaves the surrounding attributes and spacing intact", () => {
+    const { out } = transform(core("Textarea") + `<Textarea id="a" lines="auto" label="Notes" />`);
+    assert.equal(out, core("Textarea") + `<Textarea id="a" label="Notes" />`);
+  });
+
+  // `lines` is a different prop on both of these, and a bare attribute-name
+  // rewrite would have eaten them.
+  it("does not touch lines on Background", () => {
+    const src =
+      core("Background") + `<Background lines={{ display: true, color: "neutral-alpha-weak" }} />`;
+    assert.equal(transform(src).out, src);
+  });
+
+  it("does not touch lines on CodeBlock", () => {
+    const src = `<CodeBlock lines={{ display: true }} codes={[]} />`;
+    assert.equal(transform(src).out, src);
+  });
+});

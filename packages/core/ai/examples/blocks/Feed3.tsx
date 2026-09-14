@@ -115,7 +115,6 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
             id="comment-input"
             placeholder="Message 👋 | intro"
             style={{padding: "0.75rem"}}
-            lines="auto"
             value={message}
             prefix={
               <EmojiPickerDropdown

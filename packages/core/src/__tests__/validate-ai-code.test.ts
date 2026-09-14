@@ -56,3 +56,21 @@ describe("Card.interactive", () => {
     ).not.toContain("Card.interactive");
   });
 });
+
+describe("layout.defaults", () => {
+  it("flags lines=\"auto\" on Textarea, which is now the default", () => {
+    expect(rules(`<Textarea id="a" lines="auto" />`)).toContain("layout.defaults");
+    expect(rules(`<Textarea id="a" lines={"auto"} />`)).toContain("layout.defaults");
+  });
+
+  it("leaves a fixed row count alone", () => {
+    expect(rules(`<Textarea id="a" lines={3} />`)).not.toContain("layout.defaults");
+  });
+
+  it("does not reach lines on Background or CodeBlock", () => {
+    expect(rules(`<Background lines={{ display: true }} />`)).not.toContain("layout.defaults");
+    expect(rules(`<CodeBlock lines={{ display: true }} codes={[]} />`)).not.toContain(
+      "layout.defaults",
+    );
+  });
+});

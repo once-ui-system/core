@@ -5,7 +5,7 @@
   "id": "!string",
   "label": "string",
   "placeholder": "string",
-  "lines": "number | \"auto\" = 3",
+  "lines": "number | \"auto\" = auto",
   "size": "TShirtSizes = m",
   "error": "boolean = false",
   "errorMessage": "ReactNode",

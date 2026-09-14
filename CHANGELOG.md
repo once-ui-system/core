@@ -265,6 +265,24 @@ registered where they were sensible (**76 icons**, up from 54) and corrected
 where they were not. Brand marks stay out: they are trademarks, they date, and
 every app in the fleet already registers its own.
 
+**`Textarea` grows with its content by default.** `lines` was `3`, so every
+textarea that never named one was a fixed three-row box with a resize handle.
+It is `"auto"` now: the field sizes itself to what is in it, and the handle
+appears only on a fixed height, since a textarea that manages its own height has
+nothing to hand over.
+
+```diff
+- <Textarea id="notes" label="Notes" />              // three fixed rows
++ <Textarea id="notes" label="Notes" />              // grows with content
++ <Textarea id="notes" label="Notes" lines={3} />    // the old behaviour
+```
+
+The wrapper keeps `min-height: var(--fld-h)`, so an empty one is still a full
+field tall rather than collapsing to a single line. `resize` now only applies
+alongside a numeric `lines`. The codemod strips `lines="auto"` where it was
+written explicitly, since it says nothing 2.0 does not already do; a numeric or
+computed `lines` is left alone.
+
 **Scheme tokens are `oklch()`, which sets a browser floor.** All 285 scheme
 values are expressed in OKLCH. Nothing renders differently where the function is
 supported — every value round-trips to the hex it replaced, verified by building

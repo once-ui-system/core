@@ -272,7 +272,36 @@ function rewriteSkeleton(src, attrs, nameEnd) {
 }
 
 /** component → (src, attrs) => { edits, warnings } for changes a rename cannot express */
-const REWRITES = { Skeleton: rewriteSkeleton };
+/**
+ * `lines="auto"` is the `Textarea` default in 2.0, so writing it is noise —
+ * the same redundant-default the rules already call out for `position="relative"`
+ * and `variant="primary"`.
+ *
+ * Only the literal goes. `lines={3}` still means three fixed rows and keeps the
+ * resize handle, and a computed `lines={n}` could be either, so both are left
+ * alone.
+ *
+ * Scoped to `Textarea` deliberately: `lines` is also a prop on `Background`
+ * (the line-pattern object) and on `CodeBlock`, where it means something else
+ * entirely and must survive untouched.
+ */
+function rewriteTextarea(src, attrs) {
+  const a = attrs.find((x) => x.name === "lines");
+  if (!a || literal(a.value) !== "auto") return { edits: [], warnings: [] };
+  return {
+    edits: [
+      {
+        at: withLeadingSpace(src, a.at),
+        end: a.end,
+        text: "",
+        hit: 'lines="auto" removed (now the default)',
+      },
+    ],
+    warnings: [],
+  };
+}
+
+const REWRITES = { Skeleton: rewriteSkeleton, Textarea: rewriteTextarea };
 
 /**
  * If a JS comment starts at `i`, return the index just past it, else `i`.

@@ -111,6 +111,11 @@ function validate(source, spec, iconNames) {
     add("layout.defaults", "variant=\"primary\" is the Button default — omit it");
   }
 
+  // Scoped to the tag: `lines` is a different prop on Background and CodeBlock.
+  if (/<Textarea[^>]*\blines=\{?["']auto["']/.test(source)) {
+    add("layout.defaults", "lines=\"auto\" is the Textarea default — omit it");
+  }
+
   if (hasLiteralColor(source)) {
     add("color.tokens", "Use semantic color tokens, not hex/rgb");
   }

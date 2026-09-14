@@ -19,6 +19,10 @@ interface TextareaProps
   id: string;
   label?: string;
   placeholder?: string;
+  /**
+   * How tall the field is. `"auto"` (the default) grows with the content and
+   * drops the resize handle; a number fixes that many rows and keeps it.
+   */
   lines?: number | "auto";
   size?: TShirtSizes;
   error?: boolean;
@@ -50,7 +54,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       id,
       label,
       placeholder,
-      lines = 3,
+      lines = "auto",
       size = "m",
       error = false,
       errorMessage,

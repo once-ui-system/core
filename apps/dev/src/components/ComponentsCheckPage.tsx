@@ -578,20 +578,19 @@ export default function ComponentsCheck() {
                 <Textarea
                   id="ta-msg"
                   label="Message"
-                  placeholder="Write something..."
-                  lines={3}
+                  placeholder="Type more to expand..."
                 />
               ),
             },
             {
-              value: "auto",
-              label: "Auto lines",
+              value: "fixed",
+              label: "Fixed lines",
               element: (
                 <Textarea
-                  id="ta-auto"
-                  label="Auto height"
-                  placeholder="Type more to expand..."
-                  lines="auto"
+                  id="ta-fixed"
+                  label="Message"
+                  placeholder="Write something..."
+                  lines={3}
                 />
               ),
             },

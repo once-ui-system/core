@@ -122,6 +122,21 @@ reports computed ones:
 `line` or the diameter of a `circle`, and `delay` is milliseconds. A `shape` the
 codemod cannot resolve to a literal is reported rather than rewritten.
 
+**`Textarea` heights need a decision.** `lines` defaulted to `3` and now defaults
+to `"auto"`, so every textarea that never named one changes from a fixed
+three-row box to one that grows with its content. Nothing errors; it just looks
+different. Add `lines={3}` where the fixed box was wanted:
+
+```diff
+- <Textarea id="notes" label="Notes" />
++ <Textarea id="notes" label="Notes" lines={3} />
+```
+
+The codemod cannot make this call for you — a textarea with no `lines` is
+indistinguishable from one that wanted the default — so grep for `<Textarea`
+and decide per field. It does strip an explicit `lines="auto"`, which is now
+redundant. Note that `resize` only applies alongside a numeric `lines`.
+
 **Property accesses are not JSX.** `props.isChecked` on a
 `ComponentProps<typeof Checkbox>` is invisible to a regex and is surfaced by
 `tsc`. Run `tsc --noEmit` before you call step 3 done.
