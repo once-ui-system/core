@@ -273,7 +273,8 @@ const ResourceLinkComponent: React.FC<{
       href={href}
     >
       <Row
-        gap="8"
+        gap="12"
+        vertical="center"
         onBackground={isSelected ? "neutral-strong" : "neutral-weak"}
         textVariant={isSelected ? "label-strong-m" : "label-default-m"}
       >
