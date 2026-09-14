@@ -78,7 +78,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(!!props.value);
+    // Seeded from `defaultValue` too: an uncontrolled field — how a settings
+    // form normally renders saved data — has no `value`, so the label never
+    // floated and sat on top of the text until the first focus and blur.
+    const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
     const [validationError, setValidationError] = useState<ReactNode | null>(null);
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
     const debouncedValue = useDebounce(props.value, 1000);
@@ -133,6 +136,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }, [debouncedValue, validateInput]);
 
     useEffect(() => {
+      // Only a controlled field's `value` is authoritative. Uncontrolled it is
+      // `undefined` forever, and syncing to it clobbered the seed back to false.
+      if (props.value === undefined) return;
       setIsFilled(!!props.value);
     }, [props.value]);
 

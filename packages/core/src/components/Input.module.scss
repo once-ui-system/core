@@ -14,6 +14,14 @@
    padding. Both are named below — if either changes in the TSX, change it
    here too.
 
+   `--fld-gap` is the label-to-value distance in em of the value. xs and s keep
+   the base 0.25; m, l and xl take 0.375, which reads about 2px looser at each
+   of those sizes (m 4px to 6px, l 4.5 to 6.75, xl 5 to 7.5). The pair was
+   optically tight once the label actually floated — at the small sizes the
+   label is scaled down far enough that the base ratio still reads open. The
+   field height does not change: a taller ink block re-centres, so the label
+   rises by half the increase and the value drops by half.
+
    On touch the value is clamped to 16px so iOS Safari does not zoom on focus,
    and its line-height is clamped with it at 1.3 — Once UI's own body-s ratio is
    1.286, and any looser a floor would also lift sizes that never had a problem.
@@ -23,7 +31,7 @@
 .base {
   --fld-border: 1px;
   --fld-well: var(--static-space-4); /* Column padding="4" in the TSX */
-  --fld-gap: 0.25; /* label to value, in em of the value */
+  --fld-gap: var(--fld-gap-loose, 0.25); /* label to value, in em of the value */
 
   --fld-label-fs: calc(var(--font-size-label-m) * var(--font-size-label-multiplier));
   --fld-label-lh: calc(var(--line-height-label-m) * var(--line-height-label-multiplier));
@@ -110,6 +118,7 @@
   --fld-h-base: var(--static-space-56);
   --fld-h-touch: 0px;
   --fld-label-scale: 0.75;
+  --fld-gap-loose: 0.375;
   --fld-inset: var(--static-space-16);
 }
 
@@ -119,6 +128,7 @@
   --fld-h-base: var(--static-space-64);
   --fld-h-touch: 0px;
   --fld-label-scale: 0.75;
+  --fld-gap-loose: 0.375;
   --fld-inset: var(--static-space-16);
 }
 
@@ -128,6 +138,7 @@
   --fld-h-base: var(--static-space-72);
   --fld-h-touch: 0px;
   --fld-label-scale: 0.75;
+  --fld-gap-loose: 0.375;
   --fld-inset: var(--static-space-16);
 }
 

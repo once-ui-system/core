@@ -535,6 +535,17 @@ that way. The ramps themselves are untouched.
   ΔE, and about five-fold on the lightest steps. Seventeen tests regenerate each
   built-in scheme from its own step 600 and assert the worst step stays in
   tolerance.
+- **A prefilled field rendered its label on top of its value.** `Input` and
+  `Textarea` derived `isFilled` from `props.value` alone, so an uncontrolled
+  field — `defaultValue`, which is how a settings form normally renders saved
+  data — never floated its label: a profile form came up with every prefilled
+  row overlapped at once, and only corrected itself field by field as the user
+  focused and blurred each one. `isFilled` is seeded from `defaultValue` too,
+  and the effect that syncs it now ignores an `undefined` value instead of
+  clobbering that seed back to false on the first render. Browser autofill is
+  still not covered — it fires neither focus nor blur — and wants the float
+  keyed off CSS rather than React state.
+
 - **The AI spec lists `iconNames`.** `IconName` reached it as an opaque type
   name, so an agent had no way to know what exists and guessed — which is exactly
   how those fifteen example blocks came to name icons that render as nothing.
@@ -704,6 +715,14 @@ that way. The ramps themselves are untouched.
 
 ### Changed
 
+- **Fields sit their label and value 2px further apart at m, l and xl.**
+  `--fld-gap`, the label-to-value distance in em of the value, was one ratio
+  (0.25) for every size; m, l and xl now take 0.375 — 4px to 6px at m, 4.5 to
+  6.75 at l, 5 to 7.5 at xl. The pair read tight once the label actually
+  floated. xs and s are unchanged: their label is scaled down far enough that
+  the base ratio still reads open. Field heights do not change — the ink block
+  re-centres, so the label rises by half the increase and the value drops by
+  half.
 - Core no longer imports `next/*` at runtime. Next.js apps keep 1.8.x behavior by
   installing `NextAdapterProvider` from `@once-ui-system/core/next` in the root
   layout; without it the five components listed above fall back to plain DOM.
