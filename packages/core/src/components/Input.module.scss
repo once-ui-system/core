@@ -28,6 +28,28 @@
    Flooring font-size alone would put
    16px glyphs in the 16.88px line box that body-s resolves to on mobile. */
 
+/* Opt-in via the `focusRing` prop. Fields ship without one on purpose — the
+   look is the borderless native field Apple and Revolut settled on — but that
+   leaves a keyboard user with no indication of where they are, while `Card`
+   and `SmartLink` in this same library do show one. The ring is drawn on the
+   field rather than the control because the control sits inside the border and
+   the Column's padding, so its own outline would fall within the field.
+
+   Note that a text field matches `:focus-visible` however it was focused: the
+   pseudo-class always matches an element that takes keyboard input, so the
+   ring appears on a mouse click too. `:focus-visible` is still the right
+   selector — it is what the rest of the library uses, and it is what keeps
+   the ring off a field focused programmatically.
+
+   Same outline as the `.focus-ring` utility, so an opted-in field matches
+   every other focusable thing on the page. `Select` does not take the prop:
+   it moves focus off the trigger and into the dropdown, so this would light
+   and then go out while the menu is open. */
+.base.focusRing:has(.input:focus-visible) {
+  outline: var(--static-space-2) solid var(--brand-solid-strong);
+  outline-offset: 2px;
+}
+
 .base {
   --fld-border: 1px;
   --fld-well: var(--static-space-4); /* Column padding="4" in the TSX */

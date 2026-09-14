@@ -22,7 +22,11 @@ import { Placement } from "@floating-ui/react-dom";
 type SelectOptionType = Omit<OptionProps, "selected">;
 
 interface SelectProps
-  extends Omit<InputProps, "onSelect" | "value">,
+  // `focusRing` is Input's, and Select cannot honour it yet: focus moves from
+  // the trigger into the dropdown, so the trigger's blur is guarded away and
+  // `isFocused` latches true — the ring would light on first focus and never
+  // go out. Omitted rather than accepted and ignored.
+  extends Omit<InputProps, "onSelect" | "value" | "focusRing">,
     Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
   options: SelectOptionType[];
   value?: string | string[];

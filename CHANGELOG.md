@@ -723,6 +723,23 @@ that way. The ramps themselves are untouched.
   guard (core may not import `next/*`), CSS API-surface snapshots, token
   custom-property/attribute-selector snapshots, and seed interaction tests.
 
+### Added
+
+- **`focusRing` on `Input` and `Textarea`.** A field draws no focus ring —
+  deliberately, that borderless native look is the point — but that leaves a
+  keyboard user with nothing to go on, while `Card` and `SmartLink` in this
+  same library do show one. `focusRing` opts a field in, using the same
+  outline as the `.focus-ring` utility so it matches every other focusable
+  thing on the page. Off by default, so nothing changes unless asked. It
+  shows on a mouse click too: `:focus-visible` always matches a field that
+  takes keyboard input, however that field was focused.
+
+  Not available on `Select`, and omitted from its props rather than accepted
+  and ignored: `Select` moves focus off the trigger and into the dropdown, so
+  the trigger's blur is guarded away and its `isFocused` latches true — the
+  ring would light on first focus and never go out. Giving `Select` a focus
+  ring means fixing that focus lifecycle first.
+
 ### Changed
 
 - **Fields sit their label and value 2px further apart at m, l and xl.**
@@ -739,6 +756,10 @@ that way. The ramps themselves are untouched.
   Flipping peer dependencies stays a 2.0 concern.
 
 ### Changed (docs site, not published code)
+
+- **`Input` had two `## Variants` headings**, one for the `variant` prop and one
+  for the four components built on it, which put two identical entries in the
+  page's own table of contents. The second is now `## Built on Input`.
 
 - **`basics/structure` was 1,724 lines and four headings.** `## Flex` ran from
   line 12 to line 1,643, absorbing colour, radius, shadow, opacity, cursor,

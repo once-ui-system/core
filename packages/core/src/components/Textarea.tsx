@@ -42,6 +42,12 @@ interface TextareaProps
   prefix?: ReactNode;
   suffix?: ReactNode;
   variant?: "default" | "ghost";
+  /** Draw the standard focus ring around the field while it has focus. Off by
+   *  default — the quiet, borderless native look is deliberate — but a form a
+   *  keyboard user has to get through wants it on. Note this shows on a mouse
+   *  click too: `:focus-visible` always matches a field that takes keyboard
+   *  input, however it was focused. */
+  focusRing?: boolean;
   characterCount?: boolean;
   resize?: "horizontal" | "vertical" | "both" | "none";
   validate?: (value: ReactNode) => ReactNode | null;
@@ -64,6 +70,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       prefix,
       suffix,
       variant = "default",
+      focusRing = false,
       characterCount,
       resize = "vertical",
       validate,
@@ -201,6 +208,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           vertical="stretch"
           className={classNames(
             styles.base,
+            focusRing && styles.focusRing,
             size && styles[size],
             lines !== "auto" && resize !== "none" && styles.resizeHandle,
             corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",

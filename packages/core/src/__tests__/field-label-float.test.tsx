@@ -56,6 +56,33 @@ describe("floating label", () => {
     }
   });
 
+  /**
+   * Opt-in, because a field ships without a ring on purpose. The CSS is the
+   * part that decides when it shows; what is checkable here is that the class
+   * only ever appears when asked for.
+   */
+  it.each([
+    ["Input", (on: boolean) => <Input id="r" label="Email" focusRing={on} />],
+    ["Textarea", (on: boolean) => <Textarea id="r" label="About" focusRing={on} />],
+  ])("%s takes the focus ring only when asked", (_n, make) => {
+    const off = render(make(false));
+    expect(off.container.querySelector('[class*="base"]')?.className).not.toMatch(/focusRing/);
+    off.unmount();
+
+    const on = render(make(true));
+    expect(on.container.querySelector('[class*="base"]')?.className).toMatch(/focusRing/);
+  });
+
+  it("scopes the ring to keyboard-style focus, on the field not the control", () => {
+    const scss = readFileSync(join(SRC, "Input.module.scss"), "utf8");
+    // On `.base`: the control is inset by the border and the Column's padding,
+    // so its own outline would be drawn inside the field.
+    expect(scss).toMatch(/\.base\.focusRing:has\(\.input:focus-visible\)/);
+    // `:focus-visible`, never `:focus-within` — the latter would also fire for
+    // a field focused programmatically.
+    expect(scss).not.toMatch(/\.focusRing[^{]*:focus-within/);
+  });
+
   it("leaves an empty field's label centred", () => {
     const { container } = render(<Input id="e" label="Full name" />);
     expect(labelOf(container)).not.toMatch(/floating/);

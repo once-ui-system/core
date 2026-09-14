@@ -403,6 +403,28 @@ const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
   ]}
 />
 
+## Focus ring
+
+Like `Input`, a textarea draws no focus ring by default. Set `focusRing` to
+outline the field on focus — see [Input](/form-controls/input#focus-ring) for
+the whole story.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea id="ta-focus-ring" label="About" focusRing placeholder="Click or tab in" />
+  }
+  codes={[
+    {
+      code:
+`<Textarea id="about" label="About" focusRing />`,
+      language: "tsx",
+      label: "Focus ring"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable

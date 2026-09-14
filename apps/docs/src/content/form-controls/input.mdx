@@ -359,7 +359,36 @@ Set `loading` to show a spinner in the input suffix while async validation or da
   ]}
 />
 
-## Variants
+## Focus ring
+
+Fields draw no focus ring by default — the quiet, borderless look modern native
+inputs have settled on. Set `focusRing` to outline the field on focus, using the
+same ring `Card` and `SmartLink` use, so a keyboard user can see where they are.
+Worth turning on for any form someone has to tab through.
+
+Note it shows on a mouse click too: `:focus-visible` always matches a field that
+takes keyboard input, however that field was focused.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <Input id="ring-off" label="Default" placeholder="Click or tab in" />
+      <Input id="ring-on" label="focusRing" focusRing placeholder="Click or tab in" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Input id="email" label="Email" focusRing />`,
+      language: "tsx",
+      label: "Focus ring"
+    }
+  ]}
+/>
+
+## Built on Input
 
 Four components build on `Input`. They keep everything on this page and add one
 thing each, so they live on pages of their own:

@@ -15,6 +15,7 @@
   "prefix": "ReactNode",
   "suffix": "ReactNode",
   "variant": "\"default\" | \"ghost\" = default",
+  "focusRing": "boolean = false",
   "characterCount": "boolean",
   "resize": "\"horizontal\" | \"vertical\" | \"both\" | \"none\" = vertical",
   "validate": "(value: ReactNode) => ReactNode | null",
