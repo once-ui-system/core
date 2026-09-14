@@ -27,6 +27,52 @@ interface ServerFlexProps
   isDefaultBreakpoints?: boolean;
 }
 
+/**
+ * Spacing prop to utility prefix. The class matrix behind these is generated
+ * from `@once-ui-system/foundations`' spec, which emits every prefix at every
+ * token for every breakpoint.
+ */
+const SPACING_PREFIX = {
+  padding: "p",
+  paddingLeft: "pl",
+  paddingRight: "pr",
+  paddingTop: "pt",
+  paddingBottom: "pb",
+  paddingX: "px",
+  paddingY: "py",
+  margin: "m",
+  marginLeft: "ml",
+  marginRight: "mr",
+  marginTop: "mt",
+  marginBottom: "mb",
+  marginX: "mx",
+  marginY: "my",
+  gap: "g",
+} as const;
+
+/**
+ * Breakpoint spacing, as classes.
+ *
+ * Nothing emitted these before, so a token in a breakpoint prop — `s={{ gap: "4" }}`,
+ * which is what the docs and every example teach — resolved to nothing at all:
+ * no class was written, and ClientFlex's inline path guards on
+ * `typeof value === "number"`, so the string fell through both. Numbers worked,
+ * tokens did not, and neither said so.
+ *
+ * Numbers still go to the inline path, since `gap: 0.25` is a rem value with no
+ * class behind it; `Flex` keeps those on the client component.
+ */
+function spacingClasses(
+  breakpoint: string,
+  props: Record<string, unknown> | undefined,
+): (string | false)[] {
+  if (!props) return [];
+  return Object.entries(SPACING_PREFIX).map(([prop, prefix]) => {
+    const value = props[prop];
+    return typeof value === "string" && value !== "" && `${breakpoint}-${prefix}-${value}`;
+  });
+}
+
 const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
   (
     {
@@ -335,6 +381,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       classes +=
         " " +
         classNames(
+          ...spacingClasses("l", cascadedL),
+          ...spacingClasses("m", cascadedM),
+          ...spacingClasses("s", cascadedS),
+          ...spacingClasses("xs", cascadedXs),
           cascadedL?.position && `l-position-${cascadedL.position}`,
           cascadedM?.position && `m-position-${cascadedM.position}`,
           cascadedS?.position && `s-position-${cascadedS.position}`,

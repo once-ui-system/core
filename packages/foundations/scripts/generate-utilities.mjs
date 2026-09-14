@@ -76,6 +76,23 @@ function spacing() {
   for (const { selector, decls } of SPACING_EXTRAS) {
     out.push(rule(selector, decls));
   }
+
+  // The responsive matrix. Until this existed, a token in a breakpoint prop —
+  // `s={{ gap: "4" }}`, which is what every doc and example teaches — resolved
+  // to nothing at all: no class existed for it, and ClientFlex's inline path
+  // guards on `typeof value === "number"`, so the string fell through both.
+  // Numbers worked, tokens did not, and neither said so.
+  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
+    const body = SPACING_FAMILIES.flatMap(({ prefix, props }) =>
+      SPACING_TOKENS.map((token) =>
+        rule(`.${key}-${prefix}-${token}`, props.map((p) => `${p}: ${spacingVar(token)};`)),
+      ),
+    )
+      .join("\n")
+      .replace(/^/gm, "  ")
+      .replace(/^\s+$/gm, "");
+    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+  }
   return out.join("\n");
 }
 
@@ -144,6 +161,12 @@ function flexResponsiveRules() {
     rules.push([`align-${suffix}`, [`align-items: ${value};`]]);
   }
   rules.push(["center", ["align-items: center;", "justify-content: center;"]]);
+
+  // ServerFlex emits `.<bp>-flex-<n>` and `.<bp>-flex-wrap` for a breakpoint
+  // `flex` or `wrap`, and neither class existed — the prop reached the DOM as
+  // a class name with no rule behind it.
+  for (const { suffix, value } of FLEX_WRAP) rules.push([suffix, [`flex-wrap: ${value};`]]);
+  for (const value of FLEX_VALUES) rules.push([`flex-${value}`, [`flex: ${value};`]]);
   return rules;
 }
 
@@ -286,9 +309,25 @@ function display() {
   for (const { selector, decls } of SCROLLBAR_RULES) out.push(rule(selector, decls));
 
   for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
-    const body = OVERFLOW_RULES.map(({ suffix, prop, value }) =>
-      rule(`.${key}-${suffix}`, [`${prop}: ${value};`]),
-    )
+    const rules = [
+      ...OVERFLOW_RULES.map(({ suffix, prop, value }) => [suffix, [`${prop}: ${value};`]]),
+      // ServerFlex emits all four of these for a breakpoint prop, and none of
+      // the classes existed: `s={{ opacity: 50 }}` and its siblings reached the
+      // DOM as a class name with no rule behind it, in both the class path and
+      // the inline one, which guards on other prop names entirely.
+      ...OPACITY_STEPS.map((step) => [`opacity-${step}`, [`opacity: ${Number(step) / 100};`]]),
+      ...Z_INDEX_STEPS.map((z) => [`z-index-${z}`, [`z-index: ${z};`]]),
+      ...TRANSITIONS.map((t) => [`transition-${t}`, [`transition: var(--transition-${t});`]]),
+      ...POINTER_EVENTS.map((pe) => [`pointer-events-${pe}`, [`pointer-events: ${pe};`]]),
+    ];
+    const body = [
+      ...rules.map(([sel, decls]) => rule(`.${key}-${sel}`, decls)),
+      // The scrollbar is a set of pseudo-elements, so its breakpoint variant
+      // has to carry all five rather than one class.
+      ...SCROLLBAR_RULES.map(({ selector, decls }) =>
+        rule(selector.replace(".scrollbar-minimal", `.${key}-scrollbar-minimal`), decls),
+      ),
+    ]
       .join("\n")
       .replace(/^/gm, "  ")
       .replace(/^\s+$/gm, "");

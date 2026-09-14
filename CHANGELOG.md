@@ -853,10 +853,25 @@ that way. The ramps themselves are untouched.
   them and not a matrix in sight; generating those would add indirection and
   save nothing.
 
-  This is the groundwork for generating the responsive variants: only 121 of
-  809 utilities have breakpoint variants today, which is why `Flex` falls back
-  to a client component and a runtime style pass whenever a responsive prop is
-  set.
+### Fixed
+
+- **A token in a breakpoint prop did nothing.** `s={{ gap: "4" }}` is what the
+  docs and every example teach, and it resolved to nothing at all: no `.s-g-4`
+  class existed, `ServerFlex` emitted no breakpoint spacing classes, and
+  `ClientFlex`'s inline path guards on `typeof value === "number"`, so the
+  string fell through all three. Numbers worked, tokens did not, and neither
+  said so. Measured in Chromium at 600px before the fix: gap stayed at its
+  base 15px and padding at 22.5px; after, both resolve to the 4 token.
+
+  The same hole ran wider than spacing. `ServerFlex` was already writing
+  `.<bp>-opacity-*`, `.<bp>-z-index-*`, `.<bp>-transition-*`,
+  `.<bp>-pointer-events-*`, `.<bp>-scrollbar-minimal`, `.<bp>-flex-<n>` and
+  `.<bp>-flex-wrap` into the DOM, and not one of those classes existed — seven
+  more families of breakpoint prop that reached the page as a class name with
+  no rule behind it. They exist now.
+
+  The utility sheet grows from 8.6 KB to 14.4 KB gzipped for the whole
+  responsive matrix, which is the price of the props working at all.
 
 ### Removed
 
