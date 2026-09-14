@@ -161,6 +161,11 @@ The LogoCloud component extends the Grid component, so you can use all Grid prop
 
 <PropsTable
   component="LogoCloud"
+  describe={{
+    logos: "The marks to show.",
+    limit: "How many are visible at once. The rest rotate through.",
+    rotationInterval: "Milliseconds each set stays before the next rotates in.",
+  }}
   content={[
     ["className"],
     ["style"]

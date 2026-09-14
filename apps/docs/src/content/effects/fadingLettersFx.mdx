@@ -149,6 +149,11 @@ The animation timing follows a precise formula:
 
 <PropsTable
   component="FadingLettersFx"
+  describe={{
+    text: "The string to animate, letter by letter.",
+    animationState: "Which phase to play: entering, visible or exiting. The parent drives it.",
+    messageIdx: "Which message this is in a sequence, used to offset the stagger.",
+  }}
   content={[
     ["variant", "TextVariant", "body-default-m"],
     ["onBackground", "ColorToken", "neutral-strong"],

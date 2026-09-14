@@ -43,6 +43,13 @@ LetterFx animates text character-by-character using randomized symbols that reso
 
 <PropsTable
   component="LetterFx"
+  describe={{
+    children: "The text to resolve into.",
+    trigger: "What starts it. \"custom\" waits for the function handed to onTrigger.",
+    speed: "How fast the letters settle.",
+    charset: "Characters it scrambles through on the way.",
+    onTrigger: "Receives a function that starts it, when trigger is \"custom\".",
+  }}
   content={[
     ["children"],
     ["className"],

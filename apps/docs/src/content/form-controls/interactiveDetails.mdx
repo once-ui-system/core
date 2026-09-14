@@ -98,6 +98,15 @@ Add a help tooltip to provide additional information about the form control.
 
 <PropsTable
   component="InteractiveDetails"
+  describe={{
+    label: "The main text.",
+    description: "Supporting text under it.",
+    info: "Extra detail behind an InfoTip.",
+    disabled: "Dim it and block the click.",
+    iconButtonProps: "Passed through to the info control.",
+    onClick: "Called when the text is clicked, so the label activates the control it belongs to.",
+    id: "Element id, for wiring to a control.",
+  }}
   content={[
     ["className"]
   ]}

@@ -129,6 +129,13 @@ You can customize the color of the fade effect that appears behind the scroll bu
 
 <PropsTable
   component="Scroller"
+  describe={{
+    children: "The items in the strip.",
+    direction: "Which way it scrolls.",
+    fadeColor: "Colour of the fade at each end. Match the surface behind it.",
+    onItemClick: "Called with the index of the item clicked.",
+    radius: "Corner roundness of the strip.",
+  }}
   content={[
     ["children"],
     ["className"],

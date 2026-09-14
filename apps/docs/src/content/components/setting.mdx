@@ -132,6 +132,13 @@ two rows that read as unrelated settings.
 
 <PropsTable
   component="Setting"
+  describe={{
+    label: "Name of the setting.",
+    description: "What it does, under the label.",
+    info: "Extra detail behind an InfoTip.",
+    controlWidth: "Width reserved for the control, in rem, so a column of settings lines up.",
+    children: "The control itself.",
+  }}
   content={[
     ["children", "ReactNode"]
   ]}

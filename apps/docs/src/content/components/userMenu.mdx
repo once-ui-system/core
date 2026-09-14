@@ -72,6 +72,11 @@ You can show skeleton content while loading profile data by setting `loading={tr
 
 <PropsTable
   component="UserMenu"
+  describe={{
+    selected: "Mark the trigger as active while the menu is open.",
+    placement: "Which side the menu opens on.",
+    dropdown: "The menu contents.",
+  }}
   content={[
     ["name", "string"],
     ["subline", "ReactNode"],

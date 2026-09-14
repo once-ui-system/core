@@ -149,6 +149,13 @@ Toast components include proper ARIA attributes:
 
 <PropsTable
   component="Toast"
+  describe={{
+    variant: "Severity, which sets the colour and the icon.",
+    children: "The message.",
+    showIcon: "Show the icon for the variant.",
+    action: "A control in the toast — undo, retry, view.",
+    onClose: "Called when it is dismissed.",
+  }}
   content={[
     ["children", "ReactNode"],
     ["className", "string"]

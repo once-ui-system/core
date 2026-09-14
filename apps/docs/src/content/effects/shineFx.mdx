@@ -226,6 +226,14 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
 
 <PropsTable
   component="ShineFx"
+  describe={{
+    speed: "How long one pass takes, in milliseconds. This was seconds before 2.0.",
+    disabled: "Stop the shine.",
+    inverse: "Run it the other way.",
+    baseOpacity: "Opacity of the content the shine passes over.",
+    reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
+    children: "What shines.",
+  }}
   content={[
     ["children", "ReactNode"]
   ]}

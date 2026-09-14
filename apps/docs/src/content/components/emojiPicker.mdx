@@ -76,6 +76,12 @@ You can pass a `style` prop to the component to override the default styles.
 
 <PropsTable
   component="EmojiPicker"
+  describe={{
+    onSelect: "Called with the chosen emoji.",
+    onClose: "Called when the picker is dismissed.",
+    background: "Surface colour behind the grid.",
+    columns: "Emoji per row.",
+  }}
   content={[
     ["style"],
     ["className"]

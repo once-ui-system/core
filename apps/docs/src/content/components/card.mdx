@@ -147,6 +147,13 @@ still wins.
 
 <PropsTable
   component="Card"
+  describe={{
+    children: "The contents.",
+    href: "Makes it a link.",
+    onClick: "Makes it a button. Without either, it is a static panel and a Column may suit better.",
+    selected: "Mark as the chosen one in a set. Repaints the border and background, and announces a clickable card as a pressed toggle.",
+    fillHeight: "Fill the parent's height, for cards that should match in a row.",
+  }}
   content={[
     ["children", "ReactNode"],
     ["className"],

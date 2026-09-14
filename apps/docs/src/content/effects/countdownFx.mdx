@@ -150,6 +150,12 @@ Execute a function when the countdown reaches zero.
 
 <PropsTable
   component="CountdownFx"
+  describe={{
+    targetDate: "What it counts down to.",
+    format: "Which units to show.",
+    effect: "How the digits change.",
+    onComplete: "Called once the target passes.",
+  }}
   content={[
     ["speed", "number", "1000"],
     ["easing", ["linear","ease-out","ease-in-out"], "ease-out"],

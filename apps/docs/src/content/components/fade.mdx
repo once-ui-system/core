@@ -232,6 +232,13 @@ Add a blur effect to the fade.
 
 <PropsTable
   component="Fade"
+  describe={{
+    to: "Which way it fades out.",
+    base: "The colour it fades from. Match the surface behind it, or the fade shows as a band of the wrong colour.",
+    blur: "Backdrop blur behind the fade, in rem.",
+    pattern: "Overlay a dot pattern in the base colour, and at what spacing.",
+    children: "Content drawn above the fade.",
+  }}
   content={[
     ["children"],
     ["className"],

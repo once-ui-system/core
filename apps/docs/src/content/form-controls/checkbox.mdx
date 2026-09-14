@@ -175,6 +175,12 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
 
 <PropsTable
   component="Checkbox"
+  describe={{
+    checked: "Whether it is ticked.",
+    indeterminate: "The third state, for a parent whose children are partly ticked.",
+    onToggle: "Called when it is flipped.",
+    hoverable: "Highlight the row on hover.",
+  }}
   content={[
     ["label", "ReactNode"],
     ["description", "ReactNode"],

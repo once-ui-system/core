@@ -127,6 +127,11 @@ stored, set `persistence` on the provider instead — see
 
 <PropsTable
   component="StylePanel"
+  describe={{
+    visibility: "Which sections and rows to show.",
+    value: "Take ownership of the state. The panel then writes nothing to the providers or to storage.",
+    onChange: "Called with the whole state and just the keys that changed — the latter being what you send to a server.",
+  }}
   content={[
     ["className"],
     ["style"]

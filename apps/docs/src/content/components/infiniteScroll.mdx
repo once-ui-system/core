@@ -65,6 +65,13 @@ function InfiniteScrollExample() {
 
 <PropsTable
   component="InfiniteScroll"
+  describe={{
+    items: "What has been loaded so far.",
+    renderItem: "How to render one.",
+    loadMore: "Fetch the next page. Resolve false when there is nothing left.",
+    loading: "Whether a fetch is in flight.",
+    threshold: "How many pixels from the bottom to start loading.",
+  }}
   content={[
     ["className"],
     ["style"]

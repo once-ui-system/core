@@ -38,6 +38,14 @@ The `DateRangeInput` component provides a user-friendly interface for selecting 
 
 <PropsTable
   component="DateRangeInput"
+  describe={{
+    id: "Ties the labels to the fields.",
+    startLabel: "Label on the start field.",
+    endLabel: "Label on the end field.",
+    value: "The range, as start and end.",
+    onChange: "Called with the new range.",
+    minHeight: "Lower bound on the picker's height, in rem.",
+  }}
   content={[
     ["className"],
     ["style"]
