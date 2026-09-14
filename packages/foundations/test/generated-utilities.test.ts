@@ -1,11 +1,15 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   BREAKPOINTS,
   BREAKPOINTS_CASCADE,
   ALIGN_ALIGNMENTS,
+  RADIUS_CORNERS,
+  RADIUS_SIZES,
+  SCHEMES,
+  WEIGHTS,
   JUSTIFY_ALIGNMENTS,
   FLEX_DIRECTIONS,
   OFFSET_SIDES,
@@ -79,6 +83,24 @@ describe("generated utilities", () => {
     expect(index).not.toMatch(/@use "\.\/position\.scss"/);
     expect(index).toContain('@use "./flex.generated.scss";');
     expect(index).not.toMatch(/@use "\.\/flex\.scss"/);
+    expect(index).toContain('@use "./border.generated.scss";');
+    expect(index).not.toMatch(/@use "\.\/border\.scss"/);
+    for (const name of ["background", "display"]) {
+      expect(index).toContain(`@use "./${name}.generated.scss";`);
+      expect(index).not.toMatch(new RegExp(`@use "\\./${name}\\.scss"`));
+    }
+  });
+
+  it("leaves no hand-written file behind for a generated one", () => {
+    // A stray original still sitting next to its generated replacement is an
+    // invitation to edit the wrong file and wonder why nothing changed.
+    const dir = join(ROOT, "scss/styles");
+    const files = readdirSync(dir);
+    const generated = files.filter((f) => f.endsWith(".generated.scss"));
+    expect(generated.length).toBeGreaterThan(0);
+    for (const g of generated) {
+      expect(files, g).not.toContain(g.replace(".generated", ""));
+    }
   });
 
   /**
@@ -163,6 +185,40 @@ describe("generated utilities", () => {
       expect(css, `.justify-${suffix}`).toContain(`.justify-${suffix} {`);
     }
     expect(ALIGN_ALIGNMENTS.map((a) => a.suffix)).toEqual(["start", "center", "end", "stretch"]);
+  });
+
+  /**
+   * `border-radius: none` is not a valid declaration — the parser rejects it,
+   * and the element fell back to the initial 0px, so the class only ever
+   * worked by accident. Rendering is unchanged; the rule is now real.
+   */
+  it("gives radius-none a valid zero", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/border.generated.scss"), "utf8");
+    expect(css).toMatch(/\.radius-none \{\s*border-radius: 0;/);
+    expect(css).not.toContain("border-radius: none");
+  });
+
+  it("carries every scheme at every weight, plain and alpha", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/border.generated.scss"), "utf8");
+    const missing: string[] = [];
+    for (const scheme of SCHEMES) {
+      for (const weight of WEIGHTS) {
+        if (!css.includes(`.${scheme}-border-${weight} {`)) missing.push(`${scheme}-${weight}`);
+        if (!css.includes(`.${scheme}-border-alpha-${weight} {`)) missing.push(`${scheme}-alpha-${weight}`);
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+
+  it("rounds every corner group at every radius step, full included", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/border.generated.scss"), "utf8");
+    const missing: string[] = [];
+    for (const { suffix } of RADIUS_CORNERS) {
+      for (const size of [...RADIUS_SIZES, "full"]) {
+        if (!css.includes(`.radius-${size}-${suffix} {`)) missing.push(`.radius-${size}-${suffix}`);
+      }
+    }
+    expect(missing).toEqual([]);
   });
 
   it("writes a bare 0 for offsets and a token for spacing", () => {

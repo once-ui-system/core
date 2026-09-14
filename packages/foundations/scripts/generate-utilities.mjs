@@ -13,6 +13,24 @@ import {
   BREAKPOINTS,
   BREAKPOINTS_CASCADE,
   ALIGN_ALIGNMENTS,
+  BACKGROUND_RAMPS,
+  BORDER_SIDES,
+  BORDER_STYLES,
+  BORDER_WIDTHS,
+  CURSORS,
+  OPACITY_STEPS,
+  OVERFLOW_RULES,
+  POINTER_EVENTS,
+  RADIUS_CORNERS,
+  RADIUS_NESTS,
+  RADIUS_SIZES,
+  SCHEMES,
+  SCROLLBAR_RULES,
+  SELECTION_GROUPS,
+  TRANSITIONS,
+  Z_INDEX_STEPS,
+  cursorValue,
+  WEIGHTS,
   JUSTIFY_ALIGNMENTS,
   FLEX_DIRECTIONS,
   FLEX_VALUES,
@@ -164,8 +182,128 @@ function flex() {
   return out.join("\n");
 }
 
+function border() {
+  const out = [];
+
+  // `border-radius: none` is not a valid declaration — the parser rejects it
+  // and the element falls back to the initial 0px, so this class only ever
+  // worked by accident. It is emitted as `0`, which renders identically and is
+  // actually a rule. It stays first, as it was, so nothing about which class
+  // wins a collision changes.
+  out.push(rule(".radius-none", ["border-radius: 0;"]));
+
+  for (const size of RADIUS_SIZES) {
+    out.push(rule(`.radius-${size}`, [`border-radius: var(--radius-${size});`]));
+    for (const nest of RADIUS_NESTS) {
+      out.push(rule(`.radius-${size}-${nest}`, [`border-radius: var(--radius-${size}-nest-${nest});`]));
+    }
+  }
+  out.push(rule(".radius-full", ["border-radius: var(--radius-full);"]));
+
+  // `full` rounds corners like any other step, so it joins the sized ones here.
+  const cornerSizes = [...[...RADIUS_SIZES].reverse(), "full"];
+  for (const { suffix, corners } of RADIUS_CORNERS) {
+    for (const size of cornerSizes) {
+      out.push(
+        rule(
+          `.radius-${size}-${suffix}`,
+          corners.map((c) => `border-${c}-radius: var(--radius-${size});`),
+        ),
+      );
+    }
+  }
+
+  for (const style of BORDER_STYLES) out.push(rule(`.border-${style}`, [`border-style: ${style};`]));
+  for (const w of BORDER_WIDTHS) out.push(rule(`.border-${w}`, [`border-width: ${w}px;`]));
+  out.push(
+    rule(".border-reset", [
+      "border-top-width: 0;",
+      "border-right-width: 0;",
+      "border-bottom-width: 0;",
+      "border-left-width: 0;",
+    ]),
+  );
+  for (const { suffix, props } of BORDER_SIDES) {
+    out.push(rule(`.border-${suffix}-1`, props.map((p) => `${p}: 1px;`)));
+  }
+
+  out.push(rule(".surface-border", ["border-color: var(--surface-border);"]));
+  out.push(rule(".transparent-border", ["border-color: var(--static-transparent);"]));
+  out.push(rule(".default-border", ["border-color: var(--default-border);"]));
+
+  for (const scheme of SCHEMES) {
+    for (const weight of WEIGHTS) {
+      out.push(rule(`.${scheme}-border-${weight}`, [`border-color: var(--${scheme}-border-${weight});`]));
+    }
+    // The alpha ramp is named `--<scheme>-alpha-<weight>`, not `-border-alpha-`.
+    for (const weight of WEIGHTS) {
+      out.push(rule(`.${scheme}-border-alpha-${weight}`, [`border-color: var(--${scheme}-alpha-${weight});`]));
+    }
+  }
+  return out.join("\n");
+}
+
+function background() {
+  const out = [
+    rule(".page-background", ["background-color: var(--page-background);"]),
+    rule(".surface-background", [
+      "background-color: var(--surface-background);",
+      "backdrop-filter: var(--backdrop-filter);",
+    ]),
+    rule(".overlay-background", ["background-color: var(--backdrop);"]),
+  ];
+
+  for (const scheme of SCHEMES) {
+    for (const { ramps, decls } of SELECTION_GROUPS) {
+      const selectors = ramps.flatMap((ramp) =>
+        WEIGHTS.map((w) => `.${scheme}-${ramp}-${w} ::selection`),
+      );
+      out.push(rule(selectors.join(",\n"), decls(scheme)));
+    }
+    for (const { suffix, token } of BACKGROUND_RAMPS) {
+      for (const w of WEIGHTS) {
+        out.push(rule(`.${scheme}-${suffix}-${w}`, [`background-color: var(${token(scheme, w)});`]));
+      }
+    }
+  }
+  return out.join("\n");
+}
+
+function display() {
+  const out = OVERFLOW_RULES.map(({ suffix, prop, value }) =>
+    rule(`.${suffix}`, [`${prop}: ${value};`]),
+  );
+  for (const { selector, decls } of SCROLLBAR_RULES) out.push(rule(selector, decls));
+
+  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
+    const body = OVERFLOW_RULES.map(({ suffix, prop, value }) =>
+      rule(`.${key}-${suffix}`, [`${prop}: ${value};`]),
+    )
+      .join("\n")
+      .replace(/^/gm, "  ")
+      .replace(/^\s+$/gm, "");
+    out.push(`@media (max-width: ${maxWidth}) {\n${body}}\n`);
+  }
+
+  // These follow the breakpoint blocks, as they did in the hand-written file.
+  for (const step of OPACITY_STEPS) {
+    out.push(rule(`.opacity-${step}`, [`opacity: ${Number(step) / 100};`]));
+  }
+  for (const z of Z_INDEX_STEPS) out.push(rule(`.z-index-${z}`, [`z-index: ${z};`]));
+  for (const t of TRANSITIONS) {
+    out.push(rule(`.transition-${t}`, [`transition: var(--transition-${t});`]));
+  }
+  for (const pe of POINTER_EVENTS) out.push(rule(`.pointer-events-${pe}`, [`pointer-events: ${pe};`]));
+  for (const c of CURSORS) out.push(rule(`.cursor-${c}`, [`cursor: ${cursorValue(c)};`]));
+
+  return out.join("\n");
+}
+
 const TARGETS = [
   { file: "scss/styles/breakpoints.scss", build: breakpoints },
+  { file: "scss/styles/display.generated.scss", build: display },
+  { file: "scss/styles/background.generated.scss", build: background },
+  { file: "scss/styles/border.generated.scss", build: border },
   { file: "scss/styles/flex.generated.scss", build: flex },
   { file: "scss/styles/spacing.generated.scss", build: spacing },
   { file: "scss/styles/position.generated.scss", build: position },

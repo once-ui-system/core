@@ -829,6 +829,15 @@ that way. The ramps themselves are untouched.
   work; exactly one lands on `align-*`, in Studio's `ThemeTile`
   (`<Column horizontal="between">`), and that one was already a no-op.
 
+  `border.scss`, `background.scss` and `display.scss` follow, on the same
+  terms: compiled rule for rule against the originals, inside every media
+  query, with selector lists compared as sets so grouping order is not mistaken
+  for behaviour. 124 to 124, 80 to 80, 94 to 94; nothing dropped, nothing
+  added, and one declaration changed on purpose — `.radius-none` set
+  `border-radius: none`, which the CSS parser rejects outright, so the class
+  only ever worked by falling back to the initial `0px`. It says `0` now and
+  renders exactly as it did.
+
   This is the groundwork for generating the responsive variants: only 121 of
   809 utilities have breakpoint variants today, which is why `Flex` falls back
   to a client component and a runtime style pass whenever a responsive prop is

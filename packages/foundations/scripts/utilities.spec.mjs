@@ -142,3 +142,161 @@ export const JUSTIFY_ALIGNMENTS = [
 export const ALIGN_ALIGNMENTS = JUSTIFY_ALIGNMENTS.filter(
   ({ suffix }) => !["between", "around", "even"].includes(suffix),
 );
+
+/* -------------------------------------------------------------- border --- */
+
+/** The colour families every scheme-keyed utility repeats over. */
+export const SCHEMES = ["neutral", "brand", "accent", "info", "danger", "warning", "success"];
+
+export const WEIGHTS = ["weak", "medium", "strong"];
+
+/** Radius steps, in the source order the hand-written file used. */
+export const RADIUS_SIZES = ["xl", "l", "m", "s", "xs"];
+
+/** Nesting radii: an inner corner inset by 4 or 8 from its parent. */
+export const RADIUS_NESTS = ["4", "8"];
+
+/**
+ * Corner groups and the physical corners each one rounds. `full` joins the
+ * sized steps here but has no nesting variants.
+ */
+export const RADIUS_CORNERS = [
+  { suffix: "top", corners: ["top-right", "top-left"] },
+  { suffix: "right", corners: ["bottom-right", "top-right"] },
+  { suffix: "bottom", corners: ["bottom-right", "bottom-left"] },
+  { suffix: "left", corners: ["bottom-left", "top-left"] },
+  { suffix: "top-left", corners: ["top-left"] },
+  { suffix: "top-right", corners: ["top-right"] },
+  { suffix: "bottom-right", corners: ["bottom-right"] },
+  { suffix: "bottom-left", corners: ["bottom-left"] },
+];
+
+export const BORDER_STYLES = ["solid", "dashed"];
+
+export const BORDER_WIDTHS = ["1", "2", "4", "6", "8"];
+
+/** Only 1px exists per side; the wider steps are whole-border only. */
+export const BORDER_SIDES = [
+  { suffix: "top", props: ["border-top-width"] },
+  { suffix: "bottom", props: ["border-bottom-width"] },
+  { suffix: "left", props: ["border-left-width"] },
+  { suffix: "right", props: ["border-right-width"] },
+  { suffix: "x", props: ["border-left-width", "border-right-width"] },
+  { suffix: "y", props: ["border-top-width", "border-bottom-width"] },
+];
+
+/* ---------------------------------------------------------- background --- */
+
+/**
+ * The three background ramps a scheme offers. `background` and `solid` take
+ * their own token of the same name; the alpha ramp is named
+ * `--<scheme>-alpha-<weight>`, without the `background` in the middle.
+ */
+export const BACKGROUND_RAMPS = [
+  { suffix: "background", token: (scheme, w) => `--${scheme}-background-${w}` },
+  { suffix: "solid", token: (scheme, w) => `--${scheme}-solid-${w}` },
+  { suffix: "background-alpha", token: (scheme, w) => `--${scheme}-alpha-${w}` },
+];
+
+/**
+ * Text selection inside a tinted surface, so the highlight stays legible
+ * against whatever the surface is rather than falling back to the browser's
+ * blue. Both rules pin the pair to the scheme's `weak` step regardless of the
+ * surface's own weight — a selection that changed colour with the surface
+ * would be the thing that needs the contrast checking, not the thing that
+ * provides it.
+ */
+export const SELECTION_GROUPS = [
+  {
+    // Every background and alpha step shares one selection treatment.
+    ramps: ["background", "background-alpha"],
+    decls: (scheme) => [
+      `background-color: var(--${scheme}-on-background-weak);`,
+      `color: var(--${scheme}-background-weak);`,
+    ],
+  },
+  {
+    // Solid surfaces invert it: the selection reads as the page behind them.
+    ramps: ["solid"],
+    decls: (scheme) => [
+      `background-color: var(--${scheme}-background-weak);`,
+      `color: var(--${scheme}-on-background-medium);`,
+    ],
+  },
+];
+
+/* ------------------------------------------------------------- display --- */
+
+/** Overflow utilities, repeated at every breakpoint. */
+export const OVERFLOW_RULES = [
+  { suffix: "overflow-auto", prop: "overflow", value: "auto" },
+  { suffix: "overflow-x-scroll", prop: "overflow-x", value: "scroll" },
+  { suffix: "overflow-x-auto", prop: "overflow-x", value: "auto" },
+  { suffix: "overflow-y-auto", prop: "overflow-y", value: "auto" },
+  { suffix: "overflow-y-scroll", prop: "overflow-y", value: "scroll" },
+  { suffix: "overflow-hidden", prop: "overflow", value: "hidden" },
+  { suffix: "overflow-scroll", prop: "overflow", value: "scroll" },
+  { suffix: "overflow-x-hidden", prop: "overflow-x", value: "hidden" },
+  { suffix: "overflow-y-hidden", prop: "overflow-y", value: "hidden" },
+];
+
+/**
+ * The minimal scrollbar, WebKit only — pseudo-elements with no matrix to them,
+ * so they are stated rather than looped. They stay in this file because they
+ * are what `scrollbar="minimal"` reaches for, alongside the overflow classes.
+ */
+export const SCROLLBAR_RULES = [
+  {
+    selector: ".scrollbar-minimal::-webkit-scrollbar",
+    decls: [
+      "background: var(--static-transparent);",
+      "width: var(--static-space-4);",
+      "height: var(--static-space-4);",
+    ],
+  },
+  {
+    selector: ".scrollbar-minimal::-webkit-scrollbar-track",
+    decls: ["background: var(--static-transparent);"],
+  },
+  {
+    selector: ".scrollbar-minimal::-webkit-scrollbar-thumb",
+    decls: [
+      "background: var(--neutral-alpha-medium);",
+      "transition: var(--transition-micro-medium);",
+      "border-radius: var(--radius-full);",
+    ],
+  },
+  {
+    selector: ".scrollbar-minimal::-webkit-scrollbar-thumb:hover",
+    decls: ["background: var(--neutral-alpha-strong);"],
+  },
+  {
+    selector: ".scrollbar-minimal::-webkit-scrollbar-corner",
+    decls: ["background-color: var(--static-transparent);"],
+  },
+];
+
+/** `opacity: 0` through `1`, in tenths, named by percentage. */
+export const OPACITY_STEPS = Array.from({ length: 11 }, (_, i) => String(i * 10));
+
+/** `-1` parks an element behind its siblings; the rest stack forward. */
+export const Z_INDEX_STEPS = ["-1", ...Array.from({ length: 11 }, (_, i) => String(i))];
+
+export const TRANSITIONS = ["micro", "macro"].flatMap((scale) =>
+  ["short", "medium", "long"].map((length) => `${scale}-${length}`),
+);
+
+export const POINTER_EVENTS = ["none", "auto", "all"];
+
+/**
+ * `interactive` is the odd one out: it reads `--cursor-interactive`, which a
+ * theme can point at a custom cursor. Every other value is the plain CSS
+ * keyword of the same name.
+ */
+export const CURSORS = [
+  "interactive", "pointer", "default", "text", "move", "not-allowed",
+  "wait", "help", "grab", "grabbing", "zoom-in", "zoom-out",
+];
+
+export const cursorValue = (name) =>
+  name === "interactive" ? "var(--cursor-interactive)" : name;

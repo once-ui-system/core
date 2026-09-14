@@ -1,13 +1,13 @@
 @use "./breakpoints.scss";
 @use "./spacing.generated.scss";
-@use "./border.scss";
+@use "./border.generated.scss";
 @use "./color.scss";
-@use "./background.scss";
+@use "./background.generated.scss";
 @use "./typography.scss";
 @use "./global.scss";
 @use "./shadow.scss";
 @use "./size.scss";
-@use "./display.scss";
+@use "./display.generated.scss";
 @use "./position.generated.scss";
 @use "./grid.scss";
 @use "./flex.generated.scss";
