@@ -65,6 +65,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       children,
       onFocus,
       onBlur,
+      onAnimationStart,
       validate,
       cursor,
       ...props
@@ -82,6 +83,24 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(true);
       if (onFocus) onFocus(event);
+    };
+
+    /**
+     * Autofill fires no focus, blur or change event, so nothing else here ever
+     * learns the field stopped being empty — the label stayed sitting on top
+     * of the filled text. The one thing the browser does emit is an animation
+     * start, which Input.module.scss hangs off `:-webkit-autofill` for exactly
+     * this. The name is matched loosely because CSS Modules hashes it, and
+     * bundlers differ on whether they export keyframe names at all.
+     */
+    const handleAnimationStart = (event: React.AnimationEvent<HTMLInputElement>) => {
+      // `styles.onAutoFill` is the exported hashed name; the substring check is
+      // the fallback for bundlers that scope keyframes without exporting them.
+      const name = event.animationName ?? "";
+      if (name === styles.onAutoFill || name.includes("onAutoFill")) {
+        setIsFilled(true);
+      }
+      if (onAnimationStart) onAnimationStart(event);
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -177,6 +196,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               placeholder={placeholder}
               onFocus={handleFocus}
               onBlur={handleBlur}
+              onAnimationStart={handleAnimationStart}
               className={inputClassNames}
               aria-describedby={displayError ? `${id}-error` : undefined}
               aria-invalid={!!displayError}

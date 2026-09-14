@@ -226,6 +226,11 @@
     background-color: var(--static-transparent) !important;
     -webkit-box-shadow: 0 0 0 var(--static-space-32) var(--neutral-background-medium) inset !important;
     -webkit-text-fill-color: var(--neutral-on-background-strong) !important;
+    /* The browser fills the field without firing focus, blur or change, so
+       React never learns the field is no longer empty and the label stayed on
+       top of the filled text. An animation is the one event autofill does
+       emit: Input.tsx listens for it by name and sets the filled state. */
+    animation: onAutoFill 1ms;
   }
 }
 
@@ -270,4 +275,18 @@
 
 .input[type="color"] {
   opacity: 0;
+}
+
+/* Inert by design — the animation exists only so autofill announces itself,
+   and nothing reads `--fld-autofill`. A custom property is animated rather
+   than a real one so the keyframes cannot fight any declared style, and the
+   duration is non-zero so `animationstart` is guaranteed to fire. */
+@keyframes onAutoFill {
+  from {
+    --fld-autofill: 0;
+  }
+
+  to {
+    --fld-autofill: 1;
+  }
 }

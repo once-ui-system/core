@@ -535,6 +535,16 @@ that way. The ramps themselves are untouched.
   ΔE, and about five-fold on the lightest steps. Seventeen tests regenerate each
   built-in scheme from its own step 600 and assert the worst step stays in
   tolerance.
+- **Browser autofill left the label on top of the filled text.** Autofill
+  fires no focus, blur or change event, so nothing in `Input` or `Textarea`
+  ever learned the field had stopped being empty — the same overlap as the
+  `defaultValue` case below, on the one path a user cannot work around by
+  clicking into the field. The one thing the browser does emit is an
+  animation: an inert keyframe hangs off `:-webkit-autofill` and the
+  components listen for it by name, so the label floats the moment the
+  browser fills the field. A consumer's own `onAnimationStart` is chained
+  rather than dropped.
+
 - **A prefilled field rendered its label on top of its value.** `Input` and
   `Textarea` derived `isFilled` from `props.value` alone, so an uncontrolled
   field — `defaultValue`, which is how a settings form normally renders saved

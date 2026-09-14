@@ -72,6 +72,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       onFocus,
       onBlur,
       onChange,
+      onAnimationStart,
       style,
       ...props
     },
@@ -105,6 +106,22 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const handleFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
       setIsFocused(true);
       if (onFocus) onFocus(event);
+    };
+
+    /**
+     * Autofill fires no focus, blur or change event — Chrome does fill a
+     * street-address textarea — so the label would sit on top of the filled
+     * text. An animation start is the one thing the browser does emit; see
+     * Input.module.scss, which hangs it off `:-webkit-autofill`.
+     */
+    const handleAnimationStart = (event: React.AnimationEvent<HTMLTextAreaElement>) => {
+      // `styles.onAutoFill` is the exported hashed name; the substring check is
+      // the fallback for bundlers that scope keyframes without exporting them.
+      const name = event.animationName ?? "";
+      if (name === styles.onAutoFill || name.includes("onAutoFill")) {
+        setIsFilled(true);
+      }
+      if (onAnimationStart) onAnimationStart(event);
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
@@ -212,6 +229,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               disabled={disabled}
               onFocus={handleFocus}
               onBlur={handleBlur}
+              onAnimationStart={handleAnimationStart}
               className={textareaClassNames + " scrollbar-minimal"}
               aria-describedby={displayError ? `${id}-error` : undefined}
               aria-invalid={!!displayError}
