@@ -580,6 +580,20 @@ that way. The ramps themselves are untouched.
   seeded rather than timed); per-effect blocks — `matrix={{ ... }}`,
   `weather={{ ... }}` — configure one without disturbing the others, so all of
   them can be set up front and still switched with one prop.
+- **`NavItem`, `NavGroup` and `selectNavHref`** — the two rows a product
+  sidebar is made of. Every product on Once UI grew its own: Aveiro's is 566
+  lines, the docs' 456, Frametic's 52, and all three converged on the same
+  grammar — a link that knows whether it is the current page, and a collapsible
+  group of those indented behind a vertical rail. `NavItem` carries the icon,
+  the label and either a capped count or an unread dot; `NavGroup` is the
+  accordion and the rail, uncontrolled until you pass `open`.
+  They are rows, not a sidebar: headers, footers, org switchers and storage
+  meters differ per product and stay the host's to compose.
+
+  `selectNavHref` is the part worth taking rather than writing again.
+  `pathname === href` misses a nested route and `startsWith` lights the parent
+  up alongside its child; the answer is the longest href that matches, and it
+  existed in exactly one repo.
 - **`Scrubber`** — a playhead over time, extracted from Scenetic's editor. With
   no tracks it is a seek bar; with tracks it is an editor timeline: stacked
   layers of blocks sharing one playhead, each selectable, movable and

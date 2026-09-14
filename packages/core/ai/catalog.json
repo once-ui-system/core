@@ -151,6 +151,26 @@
     "components"
    ]
   },
+  "NavGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "NavGroup component",
+   "tags": [
+    "components"
+   ]
+  },
+  "NavItem": {
+   "group": "components",
+   "extends": [
+    "ToggleButton"
+   ],
+   "purpose": "NavItem component",
+   "tags": [
+    "components"
+   ]
+  },
   "WeatherFx": {
    "group": "components",
    "extends": [

@@ -14,6 +14,8 @@ export * from "./Book";
 export * from "./BlockQuote";
 export * from "./Button";
 export * from "./MatrixFx";
+export * from "./NavGroup";
+export * from "./NavItem";
 export * from "./WeatherFx";
 export * from "./Carousel";
 export * from "./Swiper";
