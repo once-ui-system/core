@@ -12,7 +12,8 @@ import { fileURLToPath } from "node:url";
 import {
   BREAKPOINTS,
   BREAKPOINTS_CASCADE,
-  FLEX_ALIGNMENTS,
+  ALIGN_ALIGNMENTS,
+  JUSTIFY_ALIGNMENTS,
   FLEX_DIRECTIONS,
   FLEX_VALUES,
   FLEX_WRAP,
@@ -108,10 +109,10 @@ function flexResponsiveRules() {
     ["flex-show", ["display: flex;"]],
   ];
   for (const dir of FLEX_DIRECTIONS) rules.push([`flex-${dir}`, [`flex-direction: ${dir};`]]);
-  for (const { suffix, value } of FLEX_ALIGNMENTS) {
+  for (const { suffix, value } of JUSTIFY_ALIGNMENTS) {
     rules.push([`justify-${suffix}`, [`justify-content: ${value};`]]);
   }
-  for (const { suffix, value } of FLEX_ALIGNMENTS) {
+  for (const { suffix, value } of ALIGN_ALIGNMENTS) {
     rules.push([`align-${suffix}`, [`align-items: ${value};`]]);
   }
   rules.push(["center", ["align-items: center;", "justify-content: center;"]]);
@@ -137,10 +138,10 @@ function flex() {
     out.push(rule(`.${key}-flex-show`, ["display: none;"]));
   }
 
-  for (const { suffix, value } of FLEX_ALIGNMENTS) {
+  for (const { suffix, value } of JUSTIFY_ALIGNMENTS) {
     out.push(rule(`.justify-${suffix}`, [`justify-content: ${value};`]));
   }
-  for (const { suffix, value } of FLEX_ALIGNMENTS) {
+  for (const { suffix, value } of ALIGN_ALIGNMENTS) {
     out.push(rule(`.align-${suffix}`, [`align-items: ${value};`]));
   }
   out.push(rule(".center", ["align-items: center;", "justify-content: center;"]));

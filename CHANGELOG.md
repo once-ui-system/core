@@ -813,11 +813,21 @@ that way. The ramps themselves are untouched.
   which was a silent no-op before — and the fleet's one call site pairs the
   two, so it was correct before and is correct now.
 
-  Left alone deliberately: `.align-between`, `.align-around` and `.align-even`
-  compute to `normal` and do nothing, because `space-between` and its siblings
-  are `align-content` values and not valid for `align-items`. Whether they
-  should map to `align-content` or stop existing is a design decision, so the
-  generator reproduces them exactly rather than quietly repairing them.
+- **`.align-between`, `.align-around` and `.align-even` are gone.** They set
+  `align-items: space-between` and its siblings, which are `align-content`
+  values and not valid for `align-items`, so the browser dropped the
+  declaration and computed `normal` — fifteen classes, counting breakpoints,
+  that did nothing at all. Measured before removing them, and again after:
+  nothing renders differently, because an element that used to get a class
+  doing nothing now gets no class.
+
+  `horizontal` and `vertical` keep their full unions. Which CSS property a
+  value reaches depends on `direction` — on a row `horizontal` is
+  `justify-content` and `vertical` is `align-items`, and on a column they swap
+  — so the same value is meaningful on one axis and meaningless on the other.
+  Across the fleet, 275 uses of a distribution value land on `justify-*` and
+  work; exactly one lands on `align-*`, in Studio's `ThemeTile`
+  (`<Column horizontal="between">`), and that one was already a no-op.
 
   This is the groundwork for generating the responsive variants: only 121 of
   809 utilities have breakpoint variants today, which is why `Flex` falls back

@@ -113,16 +113,8 @@ export const FLEX_WRAP = [
 /** `flex: 0` through `flex: 12`. */
 export const FLEX_VALUES = Array.from({ length: 13 }, (_, i) => String(i));
 
-/**
- * Shared by `justify-*` and `align-*`.
- *
- * Note that `between`, `around` and `even` are not valid `align-items` values —
- * they belong to `align-content` — so `.align-between` and its two siblings
- * compute to `normal` and do nothing at all. That is reproduced exactly here
- * rather than quietly repaired: whether they should map to `align-content`, or
- * stop existing, is a design decision and not the generator's to make.
- */
-export const FLEX_ALIGNMENTS = [
+/** `justify-content` takes the distribution values as well as the positional ones. */
+export const JUSTIFY_ALIGNMENTS = [
   { suffix: "start", value: "flex-start" },
   { suffix: "center", value: "center" },
   { suffix: "end", value: "flex-end" },
@@ -131,3 +123,22 @@ export const FLEX_ALIGNMENTS = [
   { suffix: "even", value: "space-evenly" },
   { suffix: "stretch", value: "stretch" },
 ];
+
+/**
+ * `align-items` takes only the positional values.
+ *
+ * `space-between` and its siblings belong to `align-content`, so the browser
+ * dropped `align-items: space-between` and computed `normal` — `.align-between`,
+ * `.align-around` and `.align-even` were fifteen classes, counting breakpoints,
+ * that did nothing at all.
+ *
+ * They are not emitted. Nothing renders differently: an element that used to
+ * get a class doing nothing now gets no class. `horizontal` and `vertical` keep
+ * their full unions, because which of the two properties a value reaches
+ * depends on `direction` — on a row `horizontal` is `justify-content`, on a
+ * column it is `align-items` — so the same value is meaningful on one axis and
+ * meaningless on the other.
+ */
+export const ALIGN_ALIGNMENTS = JUSTIFY_ALIGNMENTS.filter(
+  ({ suffix }) => !["between", "around", "even"].includes(suffix),
+);

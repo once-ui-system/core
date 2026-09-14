@@ -5,7 +5,8 @@ import { describe, expect, it } from "vitest";
 import {
   BREAKPOINTS,
   BREAKPOINTS_CASCADE,
-  FLEX_ALIGNMENTS,
+  ALIGN_ALIGNMENTS,
+  JUSTIFY_ALIGNMENTS,
   FLEX_DIRECTIONS,
   OFFSET_SIDES,
   OFFSET_TOKENS,
@@ -140,11 +141,28 @@ describe("generated utilities", () => {
       for (const dir of FLEX_DIRECTIONS) {
         expect(css, `.${key}-flex-${dir}`).toContain(`.${key}-flex-${dir} {`);
       }
-      for (const { suffix } of FLEX_ALIGNMENTS) {
+      for (const { suffix } of JUSTIFY_ALIGNMENTS) {
         expect(css, `.${key}-justify-${suffix}`).toContain(`.${key}-justify-${suffix} {`);
+      }
+      for (const { suffix } of ALIGN_ALIGNMENTS) {
         expect(css, `.${key}-align-${suffix}`).toContain(`.${key}-align-${suffix} {`);
       }
     }
+  });
+
+  /**
+   * `align-items: space-between` is not valid — those are `align-content`
+   * values — so the browser dropped the declaration and computed `normal`.
+   * Fifteen classes, counting breakpoints, that did nothing at all.
+   */
+  it("emits no align-items rule for a distribution value", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/flex.generated.scss"), "utf8");
+    for (const suffix of ["between", "around", "even"]) {
+      expect(css, `.align-${suffix}`).not.toMatch(new RegExp(`\\.(\\w+-)?align-${suffix} \\{`));
+      // Still valid on justify-content, where they mean what they say.
+      expect(css, `.justify-${suffix}`).toContain(`.justify-${suffix} {`);
+    }
+    expect(ALIGN_ALIGNMENTS.map((a) => a.suffix)).toEqual(["start", "center", "end", "stretch"]);
   });
 
   it("writes a bare 0 for offsets and a token for spacing", () => {
