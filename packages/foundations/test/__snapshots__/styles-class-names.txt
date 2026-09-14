@@ -56,6 +56,7 @@
 .bottom-48
 .bottom-56
 .bottom-64
+.bottom-72
 .bottom-8
 .bottom-80
 .brand-background-alpha-medium
@@ -197,6 +198,7 @@
 .g-48
 .g-56
 .g-64
+.g-72
 .g-8
 .g-80
 .g-horizontal--1
@@ -259,6 +261,7 @@
 .l-bottom-48
 .l-bottom-56
 .l-bottom-64
+.l-bottom-72
 .l-bottom-8
 .l-bottom-80
 .l-center
@@ -305,6 +308,7 @@
 .l-left-48
 .l-left-56
 .l-left-64
+.l-left-72
 .l-left-8
 .l-left-80
 .l-overflow-auto
@@ -337,6 +341,7 @@
 .l-right-48
 .l-right-56
 .l-right-64
+.l-right-72
 .l-right-8
 .l-right-80
 .l-top-0
@@ -355,6 +360,7 @@
 .l-top-48
 .l-top-56
 .l-top-64
+.l-top-72
 .l-top-8
 .l-top-80
 .left-0
@@ -373,6 +379,7 @@
 .left-48
 .left-56
 .left-64
+.left-72
 .left-8
 .left-80
 .m-0
@@ -391,6 +398,7 @@
 .m-48
 .m-56
 .m-64
+.m-72
 .m-8
 .m-80
 .m-align-around
@@ -416,6 +424,7 @@
 .m-bottom-48
 .m-bottom-56
 .m-bottom-64
+.m-bottom-72
 .m-bottom-8
 .m-bottom-80
 .m-center
@@ -463,6 +472,7 @@
 .m-left-48
 .m-left-56
 .m-left-64
+.m-left-72
 .m-left-8
 .m-left-80
 .m-m
@@ -496,6 +506,7 @@
 .m-right-48
 .m-right-56
 .m-right-64
+.m-right-72
 .m-right-8
 .m-right-80
 .m-s
@@ -515,6 +526,7 @@
 .m-top-48
 .m-top-56
 .m-top-64
+.m-top-72
 .m-top-8
 .m-top-80
 .m-xl
@@ -540,6 +552,7 @@
 .mb-48
 .mb-56
 .mb-64
+.mb-72
 .mb-8
 .mb-80
 .mb-l
@@ -565,6 +578,7 @@
 .ml-48
 .ml-56
 .ml-64
+.ml-72
 .ml-8
 .ml-80
 .ml-l
@@ -588,6 +602,7 @@
 .mr-48
 .mr-56
 .mr-64
+.mr-72
 .mr-8
 .mr-80
 .mr-l
@@ -611,6 +626,7 @@
 .mt-48
 .mt-56
 .mt-64
+.mt-72
 .mt-8
 .mt-80
 .mt-l
@@ -634,6 +650,7 @@
 .mx-48
 .mx-56
 .mx-64
+.mx-72
 .mx-8
 .mx-80
 .mx-l
@@ -657,6 +674,7 @@
 .my-48
 .my-56
 .my-64
+.my-72
 .my-8
 .my-80
 .my-l
@@ -722,6 +740,7 @@
 .p-48
 .p-56
 .p-64
+.p-72
 .p-8
 .p-80
 .p-l
@@ -746,6 +765,7 @@
 .pb-48
 .pb-56
 .pb-64
+.pb-72
 .pb-8
 .pb-80
 .pb-l
@@ -769,6 +789,7 @@
 .pl-48
 .pl-56
 .pl-64
+.pl-72
 .pl-8
 .pl-80
 .pl-l
@@ -800,6 +821,7 @@
 .pr-48
 .pr-56
 .pr-64
+.pr-72
 .pr-8
 .pr-80
 .pr-l
@@ -823,6 +845,7 @@
 .pt-48
 .pt-56
 .pt-64
+.pt-72
 .pt-8
 .pt-80
 .pt-l
@@ -846,6 +869,7 @@
 .px-48
 .px-56
 .px-64
+.px-72
 .px-8
 .px-80
 .px-l
@@ -869,6 +893,7 @@
 .py-48
 .py-56
 .py-64
+.py-72
 .py-8
 .py-80
 .py-l
@@ -958,6 +983,7 @@
 .right-48
 .right-56
 .right-64
+.right-72
 .right-8
 .right-80
 .s-align-around
@@ -983,6 +1009,7 @@
 .s-bottom-48
 .s-bottom-56
 .s-bottom-64
+.s-bottom-72
 .s-bottom-8
 .s-bottom-80
 .s-center
@@ -1029,6 +1056,7 @@
 .s-left-48
 .s-left-56
 .s-left-64
+.s-left-72
 .s-left-8
 .s-left-80
 .s-overflow-auto
@@ -1061,6 +1089,7 @@
 .s-right-48
 .s-right-56
 .s-right-64
+.s-right-72
 .s-right-8
 .s-right-80
 .s-top-0
@@ -1079,6 +1108,7 @@
 .s-top-48
 .s-top-56
 .s-top-64
+.s-top-72
 .s-top-8
 .s-top-80
 .scrollbar-minimal
@@ -1127,6 +1157,7 @@
 .top-48
 .top-56
 .top-64
+.top-72
 .top-8
 .top-80
 .transition-macro-long
@@ -1181,6 +1212,7 @@
 .xs-bottom-48
 .xs-bottom-56
 .xs-bottom-64
+.xs-bottom-72
 .xs-bottom-8
 .xs-bottom-80
 .xs-center
@@ -1227,6 +1259,7 @@
 .xs-left-48
 .xs-left-56
 .xs-left-64
+.xs-left-72
 .xs-left-8
 .xs-left-80
 .xs-overflow-auto
@@ -1259,6 +1292,7 @@
 .xs-right-48
 .xs-right-56
 .xs-right-64
+.xs-right-72
 .xs-right-8
 .xs-right-80
 .xs-top-0
@@ -1277,6 +1311,7 @@
 .xs-top-48
 .xs-top-56
 .xs-top-64
+.xs-top-72
 .xs-top-8
 .xs-top-80
 .z-index--1

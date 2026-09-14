@@ -13,6 +13,7 @@ export type StaticSpacingToken =
   | "48"
   | "56"
   | "64"
+  | "72"
   | "80"
   | "104"
   | "128"

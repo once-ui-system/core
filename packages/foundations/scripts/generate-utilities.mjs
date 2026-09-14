@@ -11,6 +11,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   BREAKPOINTS,
+  BREAKPOINTS_CASCADE,
   OFFSET_SIDES,
   OFFSET_TOKENS,
   POSITION_VALUES,
@@ -68,7 +69,7 @@ function position() {
   const rules = positionRules();
   const out = [rules.map(([sel, decls]) => rule(`.${sel}`, decls)).join("\n")];
 
-  for (const { key, maxWidth } of BREAKPOINTS) {
+  for (const { key, maxWidth } of BREAKPOINTS_CASCADE) {
     const body = rules
       .map(([sel, decls]) => rule(`.${key}-${sel}`, decls))
       .join("\n")
@@ -79,7 +80,25 @@ function position() {
   return out.join("\n");
 }
 
+/**
+ * Sass cannot be read by a generator, so the widths used to be written twice —
+ * here and in breakpoints.scss — and a test pinned them together. Generating
+ * the Sass from the same list removes the second copy instead.
+ *
+ * This one keeps its plain filename rather than taking a `.generated` suffix:
+ * ten call sites `@use` it by name, including core component modules that
+ * reach it through the synced copy, and renaming buys nothing.
+ */
+function breakpoints() {
+  const vars = BREAKPOINTS.map(({ key, maxWidth }) => `$breakpoint-${key}: ${maxWidth};`).join("\n");
+  const mixins = BREAKPOINTS.map(
+    ({ key }) => `@mixin ${key} {\n  @media (max-width: #{$breakpoint-${key}}) {\n    @content;\n  }\n}`,
+  ).join("\n\n");
+  return `${vars}\n\n${mixins}\n`;
+}
+
 const TARGETS = [
+  { file: "scss/styles/breakpoints.scss", build: breakpoints },
   { file: "scss/styles/spacing.generated.scss", build: spacing },
   { file: "scss/styles/position.generated.scss", build: position },
 ];

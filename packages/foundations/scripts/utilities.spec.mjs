@@ -18,7 +18,7 @@
 /** Static spacing steps, then the five viewport-responsive ones. */
 export const SPACING_TOKENS = [
   "0", "1", "2", "4", "8", "12", "16", "20", "24", "32",
-  "40", "48", "56", "64", "80", "104", "128", "160",
+  "40", "48", "56", "64", "72", "80", "104", "128", "160",
   "xs", "s", "m", "l", "xl",
 ];
 
@@ -61,20 +61,27 @@ export const SPACING_EXTRAS = [
 ];
 
 /**
- * The viewport steps, largest first, as `max-width` queries — the order the
- * hand-written files emitted them in, and the order a cascade needs: a narrower
- * query must come later to win.
- *
- * These live here rather than in `breakpoints.scss` because a generator cannot
- * read a Sass variable. The two must agree; `scss/styles/breakpoints.scss` is
- * the one a human edits by hand today, so a test pins them together.
+ * The viewport steps, narrowest first. This is the single source: `breakpoints.scss`
+ * is generated from it, so the widths cannot be stated twice and drift — which
+ * would have generated utilities and component styles switching at different
+ * widths, tearing the layout mid-resize.
  */
 export const BREAKPOINTS = [
-  { key: "l", maxWidth: "1440px" },
-  { key: "m", maxWidth: "1024px" },
-  { key: "s", maxWidth: "768px" },
   { key: "xs", maxWidth: "480px" },
+  { key: "s", maxWidth: "768px" },
+  { key: "m", maxWidth: "1024px" },
+  { key: "l", maxWidth: "1440px" },
 ];
+
+/**
+ * Widest first — the order rules must be *emitted* in.
+ *
+ * Every step is a `max-width` query, so they all match on a narrow viewport and
+ * the last one in the file wins. Emit ascending and `.xs-` would be overruled
+ * by `.l-` on a phone, which is exactly backwards. Reversed here once, with a
+ * name, rather than left as a literal ordering nobody can see the reason for.
+ */
+export const BREAKPOINTS_CASCADE = [...BREAKPOINTS].reverse();
 
 export const POSITION_VALUES = ["relative", "fixed", "absolute", "sticky", "static"];
 

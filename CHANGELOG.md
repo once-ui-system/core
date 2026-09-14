@@ -780,6 +780,23 @@ that way. The ramps themselves are untouched.
   variable and the two stating different numbers would tear the layout
   mid-resize.
 
+  With the scale in one place, two gaps in it closed. `--static-space-72`
+  (4.5rem) had shipped as a token since the layout layer was written, with no
+  utility class in any family and no entry in `StaticSpacingToken` — a step of
+  the scale that existed in CSS and was unreachable from either the class names
+  or the `padding=` prop. It is now in all three, adding 35 classes: fifteen
+  spacing families and four offsets at each of the five viewport steps. A test
+  pins `StaticSpacingToken` to the generator's token list in both directions,
+  because a class with no token is dead CSS and a token with no class is a prop
+  that type-checks and then does nothing.
+
+  `breakpoints.scss` is generated from the same spec rather than pinned to it by
+  a test. The widths were stated twice — once for the generator, once in Sass
+  for the ten call sites that `@include` the mixins, core component modules
+  included — and two copies of a number are a drift waiting to happen. It keeps
+  its plain filename, since renaming it would churn every one of those call
+  sites for nothing. Generating it changed not one byte of compiled output.
+
   This is the groundwork for generating the responsive variants: only 121 of
   809 utilities have breakpoint variants today, which is why `Flex` falls back
   to a client component and a runtime style pass whenever a responsive prop is

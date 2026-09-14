@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   BREAKPOINTS,
+  BREAKPOINTS_CASCADE,
   OFFSET_SIDES,
   OFFSET_TOKENS,
   POSITION_VALUES,
@@ -42,7 +43,20 @@ describe("generated utilities", () => {
   });
 
   it("gives the whole matrix its expected size", () => {
-    expect(SPACING_FAMILIES.length * SPACING_TOKENS.length).toBe(345);
+    // A tripwire, not a tautology: the numbers are the public class surface,
+    // so growing or shrinking the matrix should be a deliberate, visible edit.
+    expect(SPACING_FAMILIES.length).toBe(15);
+    expect(SPACING_TOKENS.length).toBe(24);
+    expect(SPACING_FAMILIES.length * SPACING_TOKENS.length).toBe(360);
+  });
+
+  it("carries every token the layout layer defines", () => {
+    // `--static-space-72` shipped as a token with no utility class in any
+    // family — the mirror of the `mx-48` drift, and just as invisible.
+    const layout = readFileSync(join(ROOT, "scss/tokens/layout.scss"), "utf8");
+    const defined = [...layout.matchAll(/--static-space-(\d+):/g)].map((m) => m[1]);
+    const missing = defined.filter((t) => !SPACING_TOKENS.includes(t));
+    expect(missing).toEqual([]);
   });
 
   it("scales t-shirt sizes with the viewport and never a numeric step", () => {
@@ -68,11 +82,23 @@ describe("generated utilities", () => {
    * `@include`. If they drift, generated utilities and component styles switch
    * at different widths and the layout tears mid-resize.
    */
-  it("agrees with breakpoints.scss on every width", () => {
+  it("is the source breakpoints.scss is generated from", () => {
     const scss = readFileSync(join(ROOT, "scss/styles/breakpoints.scss"), "utf8");
     for (const { key, maxWidth } of BREAKPOINTS) {
       expect(scss, `$breakpoint-${key}`).toContain(`$breakpoint-${key}: ${maxWidth};`);
+      // Ten call sites `@include` these by name, core components included.
+      expect(scss, `mixin ${key}`).toContain(`@mixin ${key} {`);
     }
+  });
+
+  it("emits breakpoint rules widest first so the narrow one wins", () => {
+    // Every step is a max-width query, so all of them match on a phone and the
+    // last one in the file decides. Ascending order would let `.l-` overrule
+    // `.xs-` — backwards, and only visible on a small screen.
+    const css = readFileSync(join(ROOT, "scss/styles/position.generated.scss"), "utf8");
+    const order = [...css.matchAll(/@media \(max-width: (\d+)px\)/g)].map((m) => Number(m[1]));
+    expect(order).toEqual([...order].sort((a, b) => b - a));
+    expect(BREAKPOINTS_CASCADE.map((b) => b.key)).toEqual(["l", "m", "s", "xs"]);
   });
 
   it("repeats every position rule at every breakpoint", () => {
