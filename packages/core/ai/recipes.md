@@ -1,7 +1,8 @@
-# Once UI — decoration recipes
+# Once UI — decoration and restraint recipes
 
-Curated decorative patterns that keep pages premium without going over the top.
-Use them verbatim, then adjust values. All units follow rules.md #21–24.
+Curated patterns that keep pages premium without going over the top: decorative
+layers that carry a section, and controls that earn their room back. Use them
+verbatim, then adjust values. All units follow rules.md #21–24.
 
 ## Budget (hard limits)
 
@@ -138,7 +139,51 @@ useEffect(() => {
 
 For stats, drive `CountFx` value from the same latch: `<CountFx value={seen ? 2400 : 0} separator="," />`.
 
+## 8. Reveal on hover (controls that earn their room back)
+
+A control that must be reachable from every page but is used once a session does
+not need permanent width. Show its current state; reveal the options on hover or
+focus.
+
+`ThemeSwitcher` ships this as a prop:
+
+```tsx
+<ThemeSwitcher collapsed />
+```
+
+For any other toggle group, the pattern is the same three rules — and all three
+are load-bearing, because hover-to-reveal is one of the easiest ways to ship an
+inaccessible control:
+
+- **Open on `:focus-within` as well as `:hover`,** and keep the hidden options
+  focusable. Collapse them with `max-width: 0` and `overflow: hidden`, never
+  `display: none` or `visibility: hidden` — those remove the tab stops, and then
+  the only way to reach the options is with a mouse.
+- **Stay open under `@media (hover: none)`.** On a touch device the first tap
+  lands on the visible control, which means the tap that was meant to open the
+  group has already committed to an option.
+- **Animate width only, and drop it under `prefers-reduced-motion`.** The
+  control must do exactly the same thing with the transition off.
+
+```scss
+.group { overflow: hidden; }
+.group .option { overflow: hidden; max-width: var(--static-space-40); transition: max-width var(--transition-duration-micro-medium) ease; }
+.group .option.inactive { max-width: 0; opacity: 0; }
+.group:hover .option.inactive,
+.group:focus-within .option.inactive { max-width: var(--static-space-40); opacity: 1; }
+
+@media (hover: none) { .group .option.inactive { max-width: var(--static-space-40); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .group .option { transition: none; } }
+```
+
+Use it for theme, density, or view-mode switchers in a header or a footer. Do
+not use it for anything a visitor needs to *see* the state of at a glance across
+options, for primary navigation, or for a destructive action — a control that
+hides until pointed at is a control nobody finds.
+
 ## Anti-patterns
+
+- **Hover-only reveals.** A group that opens on `:hover` but not `:focus-within`, or that collapses with `display: none`, is unreachable by keyboard and unusable by touch. See #8.
 
 - Glow with `colorStart: "brand-background-weak"` — invisible against the page; use alpha tokens.
 - `width: 500` gradients — that's 125% of the container blown past its edges; stay ≤ 200 for glows.

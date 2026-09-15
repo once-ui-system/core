@@ -13,7 +13,37 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
-Nothing yet — everything below shipped in the alpha.
+### Added
+
+- **`ThemeSwitcher` gains `collapsed`.** The control shows only the active theme
+  and reveals the rest on hover or focus, for headers and footers where it has
+  to be reachable from every page without spending three slots on itself.
+
+  It stays a real toggle group rather than a hover trick: every option keeps its
+  tab stop (collapsed with `max-width: 0`, not `display: none`), `:focus-within`
+  opens the group so a keyboard visitor can reach all three, and any device
+  without hover gets the expanded group from the start — otherwise the only way
+  in would be to tap the visible button, which would have already changed the
+  theme. The width transition is the only motion and `prefers-reduced-motion`
+  removes it.
+
+  ```tsx
+  <ThemeSwitcher collapsed />
+  ```
+
+### Fixed
+
+- **`ThemeSwitcher` now exposes which theme is active.** The active option was
+  marked only by its `"primary"` variant, so assistive technology had no way to
+  tell the three buttons apart. Each now carries `aria-pressed`.
+
+### Changed
+
+- **Agent guidance.** `ai/rules.md` gains a rule on proportion — two columns in
+  a row finish at roughly the same place, and the fix for a half-empty column is
+  content in the thin side, not more whitespace. `ai/recipes.md` gains the
+  reveal-on-hover pattern with the three rules that keep it accessible, and the
+  matching anti-pattern.
 
 ## [2.0.0-alpha.0] — 2026-09-15
 

@@ -158,6 +158,44 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 <Tag scheme="neutral" prefixIcon="sparkle">Pricing</Tag>
 ```
 
+20b. **Proportion is a decision, not a leftover.** Two columns in a row finish at
+roughly the same place, or one of them is wrong. A tall card beside a strip of
+small controls leaves a column of dead space that reads as an unfinished page —
+and the fix is almost never more whitespace tokens.
+
+Give the thin side real content instead. Tiles grow to carry their own height,
+with a placeholder, a preview, a swatch, a count — something true about the
+thing they stand for. Then keep them quiet: low-contrast surfaces, small labels,
+no competing headline. A grid of twenty loud tiles takes the section away from
+the card it was meant to support.
+
+```tsx
+// Bad: a tall card and 20 chips, most of the row empty
+<Row fillWidth gap="32">
+  <Column flex={1} maxWidth={26}><FeatureCard /></Column>
+  <Column flex={1}><Row wrap gap="4">{items.map(i => <Button key={i} size="s">{i}</Button>)}</Row></Column>
+</Row>
+
+// Good: both sides carry weight, the card still leads
+<Row fillWidth gap="32">
+  <Column flex={2}><FeatureCard /></Column>
+  <Column flex={3}>
+    <Grid columns={5} s={{ columns: 3 }} gap="8" fillWidth>
+      {items.map(i => (
+        <Column key={i} aspectRatio="1 / 1" padding="12" radius="l"
+                background="page" border="neutral-alpha-weak" vertical="between">
+          {/* a preview of the thing, not just its name */}
+        </Column>
+      ))}
+    </Grid>
+  </Column>
+</Row>
+```
+
+Check it by squinting at the two columns' bottom edges. If one ends halfway up
+the other, change the flex ratio, the tile size, or what the tiles contain —
+in that order.
+
 ## Decorative layers
 
 21. Every absolute decorative layer uses the full recipe — `top="0" left="0"` are required or the layer gets offset by parent padding:
