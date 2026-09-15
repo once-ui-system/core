@@ -1,0 +1,45 @@
+.wrapper {
+  perspective: 2000px;
+}
+
+.book {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover-only: on touch the cover stays square-on, since there is no hover to
+   return from and a permanently rotated cover reads as a rendering fault. */
+@media (hover: hover) {
+  .wrapper:hover .book {
+    transform: rotateY(-25deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .book {
+    transition: none;
+  }
+
+  .wrapper:hover .book {
+    transform: none;
+  }
+}
+
+.cover {
+  transform-style: preserve-3d;
+}
+
+/* The page block is rotated onto the cover's right edge, so it is only visible
+   once the book turns. transform-origin is what keeps it hinged there. */
+.pages {
+  transform-origin: left;
+  transform: translateX(100%) rotateY(90deg);
+}
+
+.spine {
+  filter: blur(0.125rem);
+}
+
+.pageEdge {
+  background: var(--static-white);
+}

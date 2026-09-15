@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { SpacingToken } from "../types";
+import { ColorValue, SpacingToken } from "../types";
 import { DisplayProps } from "../interfaces";
 import { Flex } from ".";
 import { useInViewport } from "../hooks/useInViewport";
@@ -9,7 +9,7 @@ import { useReducedMotion } from "../hooks/useReducedMotion";
 
 interface ParticleProps extends React.ComponentProps<typeof Flex> {
   density?: number;
-  color?: string;
+  color?: ColorValue;
   size?: SpacingToken;
   speed?: number;
   interactive?: boolean;

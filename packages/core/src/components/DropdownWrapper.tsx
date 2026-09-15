@@ -41,14 +41,19 @@ export interface DropdownWrapperProps {
   onSelect?: (value: string) => void;
   closeAfterClick?: boolean;
   handleArrowNavigation?: boolean;
-  isOpen?: boolean;
-  onOpenChange?: (isOpen: boolean) => void;
-  isNested?: boolean;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  nested?: boolean;
   navigationLayout?: NavigationLayout;
   columns?: number | string;
   optionsCount?: number;
   dropdownId?: string;
   disableTriggerClick?: boolean;
+  /** Capture-phase focus on the whole control, trigger and dropdown alike —
+   *  the only place a consumer can see focus enter and leave the widget,
+   *  since it moves between the two during a normal interaction. */
+  onFocusCapture?: React.FocusEventHandler<HTMLDivElement>;
+  onBlurCapture?: React.FocusEventHandler<HTMLDivElement>;
 }
 
 // Global state to track the last opened dropdown
@@ -58,12 +63,14 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
   (
     {
       trigger,
+      onFocusCapture,
+      onBlurCapture,
       dropdown,
       selectedOption,
       minHeight,
       onSelect,
       closeAfterClick = true,
-      isOpen: controlledIsOpen,
+      open: controlledIsOpen,
       handleArrowNavigation = true,
       onOpenChange,
       minWidth,
@@ -72,7 +79,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       placement = "bottom-start",
       className,
       style,
-      isNested = false,
+      nested = false,
       navigationLayout: propNavigationLayout,
       columns = 8,
       optionsCount: propOptionsCount,
@@ -131,7 +138,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
         onOpenChange?.(newIsOpen);
       },
-      [onOpenChange, isControlled, isNested],
+      [onOpenChange, isControlled, nested],
     );
 
     // State to track if we're in a browser environment for portal rendering
@@ -315,7 +322,18 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     const handleFocusOut = useCallback(
       (event: FocusEvent) => {
-        // Check if focus moved to the dropdown or stayed in the wrapper
+        // `relatedTarget` is null whenever focus is lost to something that
+        // cannot take it — the padding of a field, the gap between two stepper
+        // buttons, a label. Treating that as "focus left the dropdown" closed
+        // the panel on any click that missed a focusable target, which is what
+        // made NumberInput inside a DatePicker feel like it dismissed the
+        // picker. A genuine click outside is already handled by
+        // handleClickOutside, so there is nothing to catch here.
+        if (event.relatedTarget === null) return;
+
+        // Check if focus moved to the dropdown or stayed in the wrapper. The
+        // dropdown is portalled, so it is not a descendant of the wrapper and
+        // both have to be checked.
         const isFocusInDropdown =
           dropdownRef.current && dropdownRef.current.contains(event.relatedTarget as Node);
         const isFocusInWrapper =
@@ -338,7 +356,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
       // Listen for close-nested-dropdowns events if this is a nested dropdown
       const handleCloseNestedDropdowns = () => {
-        if (isNested && isOpen) {
+        if (nested && isOpen) {
           handleOpenChange(false);
           setFocusedIndex(-1);
         }
@@ -368,7 +386,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         document.removeEventListener("close-nested-dropdowns", handleCloseNestedDropdowns);
         document.removeEventListener("close-other-dropdowns", handleCloseOtherDropdowns as EventListener);
       };
-    }, [handleClickOutside, handleFocusOut, isNested, isOpen, handleOpenChange]);
+    }, [handleClickOutside, handleFocusOut, nested, isOpen, handleOpenChange]);
 
     // Get options from the dropdown
     const getOptions = useCallback(() => {
@@ -549,6 +567,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           }}
           className={className}
           ref={wrapperRef}
+          onFocusCapture={onFocusCapture}
+          onBlurCapture={onBlurCapture}
         onClick={
           disableTriggerClick
             ? undefined

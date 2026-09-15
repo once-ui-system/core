@@ -9,7 +9,6 @@ import {
   Column,
   Row,
   IconButton,
-  Fade,
 } from ".";
 import { useEffect, useState, useRef, forwardRef } from "react";
 import styles from "./Carousel.module.scss";
@@ -29,7 +28,13 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   items: CarouselItem[];
   controls?: boolean;
   priority?: boolean;
-  fill?: boolean;
+  /**
+   * Drop the intrinsic aspect ratio and let the slides stretch to whatever box
+   * they are in. Named `stretch` rather than `fill` because `fill` is a layout
+   * prop on every Flex-derived component, and shadowing it here meant `fill`
+   * did not do the one thing its name promised.
+   */
+  stretch?: boolean;
   indicator?: "line" | "thumbnail" | false;
   translateY?: SpacingToken | number;
   aspectRatio?: string;
@@ -47,7 +52,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
 
 const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
   items = [],
-  fill = false,
+  stretch = false,
   controls = true,
   priority = false,
   indicator = "line",
@@ -203,7 +208,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
   return (
     <Column
       fillWidth
-      fillHeight={fill}
+      fillHeight={stretch}
       gap="8"
       {...flex}
       aspectRatio={undefined}
@@ -219,18 +224,19 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
               }}
               variant="secondary"
               icon={isPlaying ? "pause" : "play"}
+              aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
             />
           </Flex>
         </Flex>
       )}
       <RevealFx
         fillWidth
-        fillHeight={fill}
+        fillHeight={stretch}
         radius={flex.radius || "l"}
-        trigger={isTransitioning}
+        revealed={isTransitioning}
         translateY={translateY}
         aspectRatio={aspectRatio === "original" ? undefined : aspectRatio}
-        speed={300}
+        speed={300000}
         onTouchStart={(e: React.TouchEvent) => {
           touchStartXRef.current = e.touches[0].clientX;
         }}
@@ -257,7 +263,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
       >
         {typeof items[activeIndex]?.slide === "string" ? (
           <Media
-            fill={fill}
+            stretch={stretch}
             sizes={sizes}
             unoptimized={unoptimized}
             priority={priority}
@@ -265,7 +271,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
             border={flex.border || "neutral-alpha-weak"}
             overflow="hidden"
             aspectRatio={
-              fill
+              stretch
                 ? undefined
                 : aspectRatio === "auto"
                   ? undefined
@@ -281,7 +287,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
             radius={flex.radius || "l"}
             border={flex.border || "neutral-alpha-weak"}
             aspectRatio={
-              fill
+              stretch
                 ? undefined
                 : aspectRatio === "auto"
                   ? undefined
@@ -312,25 +318,12 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
             >
               {controls && (
                 <>
-                  <Fade
-                    m={{ hide: true }}
-                    transition="micro-medium"
-                    className={styles.fade}
-                    position="absolute"
-                    left="0"
-                    base="transparent"
-                    top="0"
-                    to="right"
-                    fillHeight
-                    maxWidth={6}
-                  />
                   <Flex
                     m={{ hide: true }}
                     transition="micro-medium"
                     className={styles.button}
                     marginLeft="m"
-                    radius="l"
-                    overflow="hidden"
+                    radius="m"
                     background="surface"
                   >
                     <IconButton
@@ -338,6 +331,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
                       onClick={handlePrevClick}
                       variant="secondary"
                       icon="chevronLeft"
+              aria-label="Previous slide"
                     />
                   </Flex>
                 </>
@@ -358,25 +352,12 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
             >
               {controls && (
                 <>
-                  <Fade
-                    m={{ hide: true }}
-                    transition="micro-medium"
-                    className={styles.fade}
-                    position="absolute"
-                    right="0"
-                    top="0"
-                    base="transparent"
-                    to="left"
-                    fillHeight
-                    maxWidth={6}
-                  />
                   <Flex
                     m={{ hide: true }}
                     transition="micro-medium"
                     className={styles.button}
                     marginRight="m"
-                    radius="l"
-                    overflow="hidden"
+                    radius="m"
                     background="surface"
                   >
                     <IconButton
@@ -384,6 +365,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
                       onClick={handleNextClick}
                       variant="secondary"
                       icon="chevronRight"
+              aria-label="Next slide"
                     />
                   </Flex>
                 </>

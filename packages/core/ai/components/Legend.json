@@ -1,6 +1,7 @@
 {
  "name": "Legend",
- "group": "modules",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
  "props": {
   "payload": "readonly Record<string, any>[]",
   "labels": "\"x\" | \"y\" | \"both\" | \"none\" = both",

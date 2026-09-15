@@ -1,0 +1,159 @@
+---
+title: "FlipFx"
+summary: "FlipFx simulates a flipping card on click."
+updatedAt: "2025-05-11"
+docs: "once-ui/effects/flipFx.mdx"
+github: "components/FlipFx.tsx"
+navLabel: "FlipFx"
+navIcon: "sparkle"
+---
+
+FlipFx simulates a flipping card on click.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <FlipFx
+      minHeight={24}
+      aspectRatio={3 / 4}
+      front={
+        <Media
+          fill
+          sizes="640px"
+          src="/images/docs/once-ui/proxima-b.jpg"
+          radius="l"
+          border="brand-alpha-weak"
+        />}
+      back={
+        <Flex fill background="surface" center
+          radius="l"
+          border="brand-alpha-weak">
+          <Text
+            align="center"
+            variant="display-default-xs"
+          >
+            Proxima B
+          </Text>
+        </Flex>}
+    />
+  }
+  codes={[
+    {
+      code:
+`<FlipFx
+    minHeight={24}
+    aspectRatio={3 / 4}
+    front={
+      <Media
+        fill
+        sizes="640px"
+        src="/images/docs/once-ui/proxima-b.jpg"
+        radius="l"
+        border="brand-alpha-weak"
+      />
+    }
+    back={
+      <Flex fill background="surface" center
+        radius="l"
+        border="brand-alpha-weak">
+        <Text
+          align="center"
+          variant="display-default-xs"
+        >
+          Proxima B
+        </Text>
+      </Flex>
+    }
+/>`,
+      language: "tsx",
+      label: "FlipFx"
+    }
+  ]}
+/>
+
+## Direction
+
+Use the `flipDirection` prop to control the flip direction.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <FlipFx
+      minHeight={24}
+      aspectRatio={3 / 4}
+      flipDirection="vertical"
+      front={
+        <Media
+          fill
+          sizes="640px"
+          src="/images/docs/once-ui/proxima-b.jpg"
+          radius="l"
+          border="brand-alpha-weak"
+        />}
+      back={
+        <Flex fill background="surface" center
+          radius="l"
+          border="brand-alpha-weak">
+          <Text
+            align="center"
+            variant="display-default-xs"
+          >
+            Proxima B
+          </Text>
+        </Flex>}
+    />
+  }
+  codes={[
+    {
+      code:
+`<FlipFx
+    minHeight={24}
+    aspectRatio={3 / 4}
+    flipDirection="vertical"
+    front={
+      <Media
+        fill
+        sizes="640px"
+        src="/images/docs/once-ui/proxima-b.jpg"
+        radius="l"
+        border="brand-alpha-weak"
+      />
+    }
+    back={
+      <Flex fill background="surface" center
+        radius="l"
+        border="brand-alpha-weak">
+        <Text
+          align="center"
+          variant="display-default-xs"
+        >
+          Proxima B
+        </Text>
+      </Flex>
+    }
+/>`,
+      language: "tsx",
+      label: "Direction"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="FlipFx"
+  describe={{
+    flipped: "Controlled face. Omit it to let the component manage its own state.",
+    onFlip: "Called whenever the face changes.",
+    flipDirection: "Axis the card turns on.",
+    timing: "Duration of the flip, in milliseconds.",
+    autoFlipInterval: "Flip on a timer, in milliseconds. Omit for manual flipping only.",
+    disableClickFlip: "Stop clicks from flipping the card.",
+  }}
+  content={[
+    ["className"],
+    ["style"]
+  ]}
+/>

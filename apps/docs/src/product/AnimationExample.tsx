@@ -17,7 +17,7 @@ export function AnimationNavIconExample() {
   return (
     <Animation
       trigger={
-        <NavIcon onClick={handleToggle} isActive={isActive} />
+        <NavIcon onClick={handleToggle} active={isActive} />
       }
       slideDown={1}
       triggerType="manual"

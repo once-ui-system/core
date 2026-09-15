@@ -8,12 +8,33 @@ class ResizeObserverMock {
   disconnect() {}
 }
 
+/** jsdom ships no IntersectionObserver; the canvas effects gate their animation loop on it. */
+class IntersectionObserverMock {
+  readonly root = null;
+  readonly rootMargin = "";
+  readonly thresholds: number[] = [];
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords(): IntersectionObserverEntry[] {
+    return [];
+  }
+}
+
 const installBrowserMocks = () => {
   if (!("ResizeObserver" in globalThis)) {
     Object.defineProperty(globalThis, "ResizeObserver", {
       configurable: true,
       writable: true,
       value: ResizeObserverMock,
+    });
+  }
+
+  if (!("IntersectionObserver" in globalThis)) {
+    Object.defineProperty(globalThis, "IntersectionObserver", {
+      configurable: true,
+      writable: true,
+      value: IntersectionObserverMock,
     });
   }
 

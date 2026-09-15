@@ -1,6 +1,18 @@
 {
   "name": "@once-ui-system/core",
   "version": "2.0.0-alpha.0",
+  "publishConfig": {
+    "access": "public",
+    "tag": "alpha"
+  },
+  "files": [
+    "dist",
+    "ai",
+    "agent",
+    "AGENTS.md",
+    "scripts/init-agent.js",
+    "scripts/validate-ai-code.js"
+  ],
   "description": "Once UI for Next.js NPM package",
   "keywords": [
     "once-ui",
@@ -111,11 +123,28 @@
     "./ai/rules.compact.md": "./ai/rules.compact.md",
     "./ai/rules.md": "./ai/rules.md",
     "./ai/recipes.md": "./ai/recipes.md",
+    "./ai/layouts.md": "./ai/layouts.md",
     "./ai/tasks/*": "./ai/tasks/*",
     "./ai/components/*": "./ai/components/*",
     "./ai/examples/*": "./ai/examples/*",
     "./ai/examples/blocks/*": "./ai/examples/blocks/*",
-    "./AGENTS.md": "./AGENTS.md"
+    "./AGENTS.md": "./AGENTS.md",
+    "./data": {
+      "types": "./dist/modules/data/index.d.ts",
+      "import": "./dist/modules/data/index.js",
+      "require": "./dist/modules/data/index.js"
+    },
+    "./code": {
+      "types": "./dist/modules/code/index.d.ts",
+      "import": "./dist/modules/code/index.js",
+      "require": "./dist/modules/code/index.js"
+    },
+    "./media": {
+      "types": "./dist/modules/media/index.d.ts",
+      "import": "./dist/modules/media/index.js",
+      "require": "./dist/modules/media/index.js"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build": "pnpm clean && pnpm sync-foundations && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",
@@ -136,26 +165,41 @@
     "generate-emoji-data": "node scripts/generate-emoji-data.js",
     "generate-ai-spec": "node scripts/generate-ai-spec.js",
     "init-agent": "node scripts/init-agent.js",
-    "validate-ai-code": "node scripts/validate-ai-code.js"
+    "validate-ai-code": "node scripts/validate-ai-code.js",
+    "generate-icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
     "@floating-ui/react-dom": "^2.1.9",
     "clsx": "^2.1.1",
-    "compressorjs": "^1.3.0",
-    "date-fns": "^4.4.0",
-    "prismjs": "^1.30.0",
-    "react-icons": "^5.7.0",
-    "recharts": "^3.10.1"
+    "date-fns": "^4.4.0"
   },
   "peerDependencies": {
     "next": ">=15.5",
     "react": ">=18",
     "react-dom": ">=18",
     "sass": "^1.77.6",
-    "sharp": "^0.33.4 || ^0.34 || ^0.35"
+    "sharp": "^0.33.4 || ^0.34 || ^0.35",
+    "recharts": "^3.10.1",
+    "prismjs": "^1.30.0",
+    "compressorjs": "^1.3.0"
   },
   "peerDependenciesMeta": {
+    "next": {
+      "optional": true
+    },
+    "sass": {
+      "optional": true
+    },
     "sharp": {
+      "optional": true
+    },
+    "recharts": {
+      "optional": true
+    },
+    "prismjs": {
+      "optional": true
+    },
+    "compressorjs": {
       "optional": true
     }
   },
@@ -172,6 +216,7 @@
     "@vitest/ui": "^4.1.10",
     "jsdom": "^30.0.0",
     "publint": "^0.3.23",
+    "react-icons": "^5.7.0",
     "rimraf": "^6.1.3",
     "typescript": "6.0.3",
     "vitest": "^4.1.10"

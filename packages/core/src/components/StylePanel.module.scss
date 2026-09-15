@@ -125,3 +125,8 @@
     background: var(--neutral-solid-medium);
     border-color: var(--neutral-alpha-strong);
 }
+/* Dividers belong to the group rather than to each row: a host that hides or
+   reorders rows would otherwise leave a border on the last one. */
+.group > .row:not(:last-child) {
+    border-bottom: 1px solid var(--neutral-alpha-medium);
+}

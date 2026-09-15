@@ -1,0 +1,132 @@
+---
+title: "Skeleton"
+summary: "The Skeleton component is used to display loading placeholders for content that hasn't yet loaded. It supports different shapes, sizes, and delay animations."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/skeleton.mdx"
+github: "components/Skeleton.tsx"
+navLabel: "Skeleton"
+navIcon: "components"
+---
+
+Use `Skeleton` to maintain layout consistency and improve perceived performance during data loading states.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth fitHeight>
+      <Skeleton shape="circle" size="l" />
+      <Skeleton shape="line" delay={100} width="50%" size="xs" />
+      <Skeleton shape="line" delay={200} width="75%" size="s" />
+      <Skeleton shape="block" delay={300} minHeight="80" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Skeleton shape="circle" size="l" />
+<Skeleton shape="line" delay={100} width="50%" size="xs" />
+<Skeleton shape="line" delay={200} width="75%" size="s" />
+<Skeleton shape="block" delay={300} minHeight="80" />`,
+      language: "tsx",
+      label: "Skeleton"
+    }
+  ]}
+/>
+
+## Shape
+
+Skeletons can be shaped as lines, circles, or blocks.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth horizontal="center">
+      <Skeleton shape="circle" />
+      <Skeleton shape="line" size="xs" />
+      <Skeleton shape="block" minHeight="48"/>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Skeleton shape="line" size="xs" />
+<Skeleton shape="circle" />
+<Skeleton shape="block" minHeight="48" />`,
+      language: "tsx",
+      label: "Shapes"
+    }
+  ]}
+/>
+
+## Size
+
+Control the visual dimensions using predefined size tokens.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Skeleton shape="line" size="xl" width="100%" />
+      <Skeleton shape="line" size="l" width="75%" />
+      <Skeleton shape="line" size="m" width="50%" />
+      <Skeleton shape="line" size="s" width="33%" />
+      <Skeleton shape="line" size="xs" width="25%" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Skeleton shape="line" size="xl" width="100%" />
+<Skeleton shape="line" size="l" width="75%" />
+<Skeleton shape="line" size="m" width="50%" />
+<Skeleton shape="line" size="s" width="33%" />
+<Skeleton shape="line" size="xs" width="25%" />`,
+      language: "tsx",
+      label: "Size"
+    }
+  ]}
+/>
+
+## Animation delay
+
+Apply delay classes to stagger loading effects for multiple items.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Skeleton shape="line" width="75%" delay={100} />
+      <Skeleton shape="line" width="50%" delay={200} />
+      <Skeleton shape="line" width="33%" delay={300} />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Skeleton shape="line" width="75%" delay={100} />
+<Skeleton shape="line" width="50%" delay={200} />
+<Skeleton shape="line" width="33%" delay={300} />`,
+      language: "tsx",
+      label: "Delay"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Skeleton"
+  describe={{
+    shape: "A line of text, a circle, or a filled block.",
+    size: "Height of a line, or diameter of a circle. Width comes from Flex.",
+    delay: "Milliseconds before the shimmer starts, to stagger a set.",
+  }}
+  content={[
+    ["className"],
+    ["style"]
+  ]}
+/>

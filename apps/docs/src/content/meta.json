@@ -1,8 +1,19 @@
-{ 
+{
+  "title": "Once UI",
+  "order": 1,
   "pages": {
-    "once-ui": 1,
-    "magic-portfolio": 2,
-    "magic-docs": 3,
-    "magic-bio": 4
+    "about": 1,
+    "quick-start": 2,
+    "ai-coding": 3,
+    "config": 4,
+    "basics": 5,
+    "contexts": 6,
+    "modules": 7,
+    "form-controls": 8,
+    "components": 9,
+    "data": 10,
+    "effects": 11,
+    "utils": 12,
+    "hooks": 13
   }
 }

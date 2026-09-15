@@ -1,12 +1,12 @@
 {
  "name": "PieChart",
- "group": "modules",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
  "extends": [
-  "PieChart.impl",
-  "interfaces",
   "Flex"
  ],
  "mixins": [
+  "ChartProps",
   "CommonProps",
   "DisplayProps",
   "FlexProps",
@@ -14,7 +14,20 @@
   "SpacingProps",
   "StyleProps"
  ],
+ "props": {
+  "data-viz-style": "string",
+  "ring": "{ inner: number; outer: number } = { inner: 0, outer: 80 }",
+  "dataKey": "string = value",
+  "nameKey": "string = name",
+  "origo": "{ x: number; y: number } = { x: 50, y: 50 }",
+  "legend": "LegendConfig = {}",
+  "error": "boolean = false",
+  "tooltip": "boolean = true",
+  "loading": "boolean = false",
+  "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+ },
  "mixinsRef": [
+  "ChartProps",
   "CommonProps",
   "DisplayProps",
   "FlexProps",
@@ -24,6 +37,22 @@
  ],
  "tokensRef": "see spec.json mixins",
  "resolvedMixins": {
+  "ChartProps": {
+   "title": "React.ReactNode",
+   "description": "React.ReactNode",
+   "series": "!SeriesConfig | SeriesConfig[]",
+   "data": "!DataPoint[]",
+   "legend": "LegendConfig",
+   "date": "DateConfig",
+   "emptyState": "React.ReactNode",
+   "errorState": "React.ReactNode",
+   "error": "boolean",
+   "tooltip": "boolean",
+   "grid": "\"x\" | \"y\" | \"both\" | \"none\"",
+   "axis": "\"x\" | \"y\" | \"both\" | \"none\"",
+   "variant": "ChartVariant",
+   "loading": "boolean"
+  },
   "CommonProps": {
    "onBackground": "Colors",
    "onSolid": "Colors",

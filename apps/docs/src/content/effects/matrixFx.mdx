@@ -1,0 +1,626 @@
+---
+title: "MatrixFx"
+summary: "The MatrixFx component creates an animated dot matrix reveal effect using native Canvas 2D API."
+updatedAt: "2025-10-13"
+docs: "once-ui/effects/MatrixFx.mdx"
+github: "components/MatrixFx.tsx"
+navLabel: "MatrixFx"
+navIcon: "sparkle"
+---
+
+The `MatrixFx` component creates an animated dot matrix reveal effect using the native Canvas 2D API. It supports instant reveal, progressive reveal on mount, or hover-triggered animations with smooth transitions. Perfect for hero sections, backgrounds, or interactive hover cards.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      fps={30}
+      colors={["accent-solid-strong", "accent-solid-weak"]}
+      trigger="mount"
+      flicker
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["brand-solid-strong", "accent-solid-strong"]}
+    trigger="mount"
+    flicker
+/>`,
+      language: "tsx",
+      label: "MatrixFx"
+    }
+  ]}
+/>
+
+## Speed
+
+Control the reveal animation speed with the `speed` prop. Higher values make the reveal faster.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  reloadButton
+  preview={
+    <MatrixFx
+      height={24}
+      trigger="mount"
+      speed={2}
+      colors={["accent-solid-medium"]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    trigger="mount"
+    speed={2}
+    colors={["accent-solid-medium"]}
+/>`,
+      language: "tsx",
+      label: "Speed"
+    }
+  ]}
+/>
+
+## Colors
+
+Use multiple colors for variety. Supports CSS variables and any valid color format.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={[
+        "brand-solid-strong",
+        "brand-background-strong",
+        "success-solid-strong"
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={[
+      "brand-solid-medium",
+      "accent-solid-medium",
+      "danger-solid-medium"
+    ]}
+/>`,
+      language: "tsx",
+      label: "Colors"
+    }
+  ]}
+/>
+
+## Size & Spacing
+
+Customize the size of dots and spacing between them.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      fill
+      height={24}
+      size={6}
+      spacing={8}
+      colors={["accent-solid-strong"]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    fill
+    height={24}
+    size={6}
+    spacing={8}
+    colors={["brand-solid-strong"]}
+/>`,
+      language: "tsx",
+      label: "Size & Spacing"
+    }
+  ]}
+/>
+
+## Direction
+
+Control where the reveal animation starts from.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  reloadButton
+  preview={
+    <MatrixFx
+      height={24}
+      revealFrom="top"
+      trigger="mount"
+      colors={["brand-solid-strong"]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    revealFrom="top"
+    colors={["brand-solid-strong"]}
+/>`,
+      language: "tsx",
+      label: "Direction"
+    }
+  ]}
+/>
+
+## Content
+
+Place content inside the reveal effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["neutral-solid-medium"]}
+    >
+      <Column gap="16" fill center>
+        <Heading variant="display-strong-xl" onBackground="neutral-strong" align="center">
+          Canvas Reveal
+        </Heading>
+        <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+          Animated dot matrix effect with native Canvas 2D
+        </Text>
+      </Column>
+    </MatrixFx>
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["neutral-solid-medium"]}
+>
+    <Column gap="16" fill center>
+      <Heading variant="display-strong-xl">
+        Canvas Reveal
+      </Heading>
+      <Text variant="body-default-l">
+        Animated dot matrix effect
+      </Text>
+    </Column>
+</MatrixFx>`,
+      language: "tsx",
+      label: "Content"
+    }
+  ]}
+/>
+
+## Flicker
+
+Add a subtle animated flicker to create a dynamic, alive feeling.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["danger-solid-strong"]}
+      fps={30}
+      flicker
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["danger-solid-strong"]}
+    flicker
+/>`,
+      language: "tsx",
+      label: "Flicker"
+    }
+  ]}
+/>
+
+## Bulge
+
+Add dynamic wave effects to create fluid, organic motion. Choose between `ripple` (circular waves from center) or `wave` (S-curve flowing diagonally). Tiles are displaced, scale up at the wave front, and fade at the edges.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["accent-solid-strong"]}
+      bulge={{
+        type: "ripple",
+        duration: 4,
+        intensity: 15,
+        repeat: true
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["accent-solid-strong"]}
+    bulge={{
+      type: "ripple",   // Circular wave from center
+      duration: 4,      // Wave duration in seconds
+      intensity: 15,    // Displacement strength
+      repeat: true      // Continuous cycles
+    }}
+/>`,
+      language: "tsx",
+      label: "Ripple"
+    }
+  ]}
+/>
+
+The `wave` type creates an organic, flowing S-curve that travels diagonally from bottom-left to top-right. The curve rotates and morphs as it moves, straightening at the edges for a natural liquid motion.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["success-solid-strong"]}
+      bulge={{
+        type: "wave",
+        duration: 3,
+        intensity: 20,
+        repeat: true
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["success-solid-strong"]}
+    bulge={{
+      type: "wave",     // S-curve diagonal flow
+      duration: 3,
+      intensity: 20,
+      repeat: true
+    }}
+/>`,
+      language: "tsx",
+      label: "Wave"
+    }
+  ]}
+/>
+
+Use `repeat: false` for a single wave that plays once. Add `delay` for a pause before starting or between cycles (useful for sequencing multiple effects).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  reloadButton
+  preview={
+    <MatrixFx
+      height={24}
+      colors={["danger-solid-strong"]}
+      bulge={{
+        duration: 3,
+        intensity: 12,
+        repeat: false
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={24}
+    colors={["danger-solid-strong"]}
+    bulge={{
+      duration: 3,
+      intensity: 12,
+      repeat: false   // Single wave only
+    }}
+/>`,
+      language: "tsx",
+      label: "Single Wave"
+    }
+  ]}
+/>
+
+## Trigger
+
+Use `trigger="hover"` for native hover support. Dots progressively appear on hover and smoothly reverse when you move away.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  codeHeight={24}
+  preview={
+    <Row gap="16" fillWidth height={24}>
+      <Row
+        fill
+        center
+        padding="24"
+        border="neutral-alpha-weak"
+        radius="l"
+        overflow="hidden"
+      >
+        <MatrixFx
+          position="absolute"
+          top="0"
+          left="0"
+          trigger="hover"
+          size={2}
+          spacing={2}
+          speed={1}
+          flicker
+          fps={30}
+          bulge={{
+            duration: 2,
+            intensity: 10,
+            repeat: false
+          }}
+        />
+        <Background
+          fill
+          position="absolute"
+          left="0"
+          top="0"
+          x="0"
+          y="0"
+          gradient={{
+            display: true,
+            colorStart: "neutral-background-weak",
+          }}
+          pointerEvents="none"/>
+        <Column align="center" horizontal="center" pointerEvents="none">
+          <Logo dark icon="/trademarks/icon-dark.svg" />
+          <Logo light icon="/trademarks/icon-light.svg" />
+        </Column>
+      </Row>
+      <Row
+        fill
+        center
+        padding="24"
+        border="neutral-alpha-weak"
+        radius="l"
+        overflow="hidden"
+      >
+        <MatrixFx
+          position="absolute"
+          top="0"
+          left="0"
+          trigger="hover"
+          size={2}
+          spacing={2}
+          flicker
+          fps={30}
+          revealFrom="bottom"
+        />
+        <Background
+          fill
+          position="absolute"
+          left="0"
+          top="0"
+          x="0"
+          y="0"
+          gradient={{
+            display: true,
+            colorStart: "neutral-background-weak",
+          }}
+          pointerEvents="none"/>
+        <Column align="center" horizontal="center" pointerEvents="none">
+          <Logo dark icon="/trademarks/icon-dark.svg" />
+          <Logo light icon="/trademarks/icon-light.svg" />
+        </Column>
+      </Row>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`
+<Row
+    fill
+    center
+    padding="24"
+    border="neutral-alpha-weak"
+    radius="l"
+    overflow="hidden"
+>
+    <MatrixFx
+      position="absolute"
+      top="0"
+      left="0"
+      trigger="hover"
+      size={2}
+      spacing={2}
+      flicker
+      bulge={{
+        duration: 3,
+        intensity: 12,
+        repeat: false
+      }}
+    />
+    <Background
+      fill
+      position="absolute"
+      left="0"
+      top="0"
+      x="0"
+      y="0"
+      gradient={{
+        display: true,
+        colorStart: "neutral-background-weak",
+      }}
+      pointerEvents="none"/>
+    <Column align="center" horizontal="center" pointerEvents="none">
+      <Logo dark icon="/trademarks/icon-dark.svg" />
+      <Logo light icon="/trademarks/icon-light.svg" />
+    </Column>
+</Row>
+<Row
+    fill
+    center
+    padding="24"
+    border="neutral-alpha-weak"
+    radius="l"
+    overflow="hidden"
+>
+    <MatrixFx
+      position="absolute"
+      top="0"
+      left="0"
+      trigger="hover"
+      size={2}
+      spacing={2}
+      flicker
+      revealFrom="bottom"
+    />
+    <Background
+      fill
+      position="absolute"
+      left="0"
+      top="0"
+      x="0"
+      y="0"
+      gradient={{
+        display: true,
+        colorStart: "neutral-background-weak",
+      }}
+      pointerEvents="none"/>
+    <Column align="center" horizontal="center" pointerEvents="none">
+      <Logo dark icon="/trademarks/icon-dark.svg" />
+      <Logo light icon="/trademarks/icon-light.svg" />
+    </Column>
+</Row>`,
+      language: "tsx",
+      label: "Hover"
+    }
+  ]}
+/>
+
+Use `trigger="click"` to toggle the effect on click.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFx
+      height={16}
+      trigger="click"
+      colors={["brand-solid-medium"]}
+    >
+      <Column fill center padding="16">
+        <Text variant="label-default-s" onBackground="neutral-weak">Click to toggle</Text>
+      </Column>
+    </MatrixFx>
+  }
+  codes={[
+    {
+      code:
+`<MatrixFx
+    height={16}
+    trigger="click"
+    colors={["brand-solid-medium"]}
+/>`,
+      language: "tsx",
+      label: "Click Trigger"
+    }
+  ]}
+/>
+
+Use `trigger="manual"` with the `active` prop to control the effect from parent state.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <MatrixFxExample />
+  }
+  codes={[
+    {
+      code:
+`"use client";
+
+import React from "react";
+import { MatrixFx, Row, ToggleButton } from "@once-ui-system/core";
+
+export function Demo() {
+    const [on, setOn] = React.useState(false);
+    return (
+      <Row gap="8" fillWidth>
+        <ToggleButton onClick={() => setOn((v) => !v)}>
+          {on ? "Stop" : "Start"}
+        </ToggleButton>
+        <MatrixFx height={16} trigger="manual" active={on} colors={["brand-solid-medium"]} />
+      </Row>
+    );
+}
+`,
+      language: "tsx",
+      label: "Manual Trigger"
+    }
+  ]}
+/>
+
+## Performance
+
+MatrixFx automatically detects low-end devices and the `prefers-reduced-motion` system setting. When either is detected, the animation renders a single static frame (no flicker, no bulge animation). You can override this with the `reducedMotion` prop.
+
+See [useReducedMotion](/hooks/useReducedMotion) for details.
+
+## API reference
+
+<PropsTable
+  component="MatrixFx"
+  describe={{
+    speed: "Animation multiplier. Not a duration.",
+    colors: "Palette for the dots.",
+    size: "Dot size, in pixels.",
+    spacing: "Gap between dots, in pixels.",
+    revealFrom: "Where the reveal starts before spreading out.",
+    trigger: "What starts it. \"manual\" hands control to active.",
+    active: "Run it, when trigger is \"manual\".",
+    flicker: "Randomise dot brightness, for a noisier look.",
+    bulge: "A ripple or wave distortion: its type, duration, intensity, delay and whether it repeats.",
+    fps: "Frame cap. Lower it on a large surface.",
+    reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
+    children: "Content drawn above the dots.",
+  }}
+  content={[
+    ["children"]
+  ]}
+/>

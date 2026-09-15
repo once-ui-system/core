@@ -16,8 +16,8 @@ import {
   ArrowNavigation,
   useArrowNavigationContext,
 } from ".";
-import inputStyles from "./Input.module.scss";
 import { Placement } from "@floating-ui/react-dom";
+import inputStyles from "./Input.module.scss";
 
 type SelectOptionType = Omit<OptionProps, "selected">;
 
@@ -62,7 +62,7 @@ const SearchInput: React.FC<{
       id={`select-search-${searchInputId}`}
       placeholder="Search"
       height="s"
-      hasSuffix={
+      suffix={
         searchQuery ? (
           <IconButton
             tooltip="Clear"
@@ -74,7 +74,7 @@ const SearchInput: React.FC<{
           />
         ) : undefined
       }
-      hasPrefix={<Icon name="search" size="xs" />}
+      prefix={<Icon name="search" size="xs" />}
       value={searchQuery}
       onChange={(e) => setSearchQuery(e.target.value)}
       onClick={(e) => {
@@ -138,8 +138,18 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     },
     ref,
   ) => {
+
+    /**
+     * Focus for the whole control, not the trigger.
+     *
+     * Opening the dropdown moves focus off the trigger and into the menu, so
+     * the trigger's own blur fires mid-interaction with `relatedTarget` inside
+     * the dropdown — which the handler below correctly ignores, leaving any
+     * state keyed to the trigger stuck on. Capture-phase listeners on the
+     * wrapper see focus enter and leave the control as a whole, which is the
+     * thing a focus ring should actually track.
+     */
     const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(false);
 
     const [internalValue, setInternalValue] = useState(multiple ? [] : value);
 
@@ -161,14 +171,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     const handleFocus = () => {
       // Allow reopening the dropdown even after selection
-      setIsFocused(true);
       setIsDropdownOpen(true);
-      // Set highlighted index to first option or current selection
-      const currentIndex = options.findIndex((option) =>
-        multiple
-          ? Array.isArray(currentValue) && currentValue.includes(option.value)
-          : option.value === currentValue,
-      );
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -179,11 +182,39 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           event.relatedTarget && (event.relatedTarget as Element).closest("[data-dropdown]");
 
         if (!isMovingToDropdown) {
-          setIsFocused(false);
           setIsDropdownOpen(false);
         }
       }
     };
+
+    /**
+     * Focus leaves this control without ever firing a blur it can hear.
+     *
+     * Picking an option moves focus onto a button inside the dropdown, and
+     * closing the menu removes that button from the document — and removing a
+     * focused element fires no `focusout`, it just resets focus to `body`.
+     * Traced in Chromium: `focusin INPUT`, `focusout INPUT -> BUTTON`, and then
+     * nothing at all while `document.activeElement` quietly became `BODY`. A
+     * blur listener, on the trigger or on the wrapper, cannot see that.
+     *
+     * So the exit is watched at the document instead, on the two events that do
+     * fire: focus landing somewhere else, and a pointer going down somewhere
+     * else. Only mounted while focused, so an unfocused Select costs nothing.
+     */
+    useEffect(() => {
+      if (!isFocused) return;
+      const leaveIfOutside = (event: Event) => {
+        const target = event.target as Node | null;
+        if (target && selectRef.current?.contains(target)) return;
+        setIsFocused(false);
+      };
+      document.addEventListener("focusin", leaveIfOutside);
+      document.addEventListener("pointerdown", leaveIfOutside);
+      return () => {
+        document.removeEventListener("focusin", leaveIfOutside);
+        document.removeEventListener("pointerdown", leaveIfOutside);
+      };
+    }, [isFocused]);
 
     const handleSelect = (value: string) => {
       if (multiple) {
@@ -265,7 +296,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           if (typeof ref === "function") ref(node);
           else if (ref) ref.current = node;
         }}
-        isOpen={isDropdownOpen}
+        onFocusCapture={() => setIsFocused(true)}
+        open={isDropdownOpen}
         onOpenChange={setIsDropdownOpen}
         placement={placement}
         closeAfterClick={false}
@@ -284,11 +316,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
             value={getDisplayText()}
             onFocus={handleFocus}
             readOnly
-            className={classNames("fill-width", {
-              [inputStyles.filled]: isFilled,
-              [inputStyles.focused]: isFocused,
-              className,
-            })}
+            // `{ className }` in the object put the literal string "className"
+            // on the element when the prop was truthy and dropped the caller's
+            // class entirely. It is a value, not a condition.
+            className={classNames("fill-width", className, isFocused && inputStyles.focused)}
             aria-haspopup="listbox"
             aria-expanded={isDropdownOpen}
           />
@@ -335,7 +366,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                         : option.value === currentValue
                     }
                     tabIndex={-1}
-                    hasPrefix={
+                    prefix={
                       multiple ? (
                         Array.isArray(currentValue) && currentValue.includes(option.value) ? (
                           <Icon name="check" size="xs" onBackground="neutral-weak" />

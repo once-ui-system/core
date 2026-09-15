@@ -1,7 +1,8 @@
 {
   "name": "@once-ui-system/foundations",
   "version": "2.0.0-alpha.0",
-  "description": "Once UI design foundations — design tokens and utility styles. Framework-agnostic: no React, no JS runtime.",
+  "private": true,
+  "description": "Once UI design foundations \u2014 design tokens and utility styles. Framework-agnostic: no React, no JS runtime.",
   "keywords": [
     "once-ui",
     "design-tokens",
@@ -31,7 +32,10 @@
     "scss"
   ],
   "scripts": {
-    "build": "rimraf dist && sass scss/styles/index.scss:dist/css/styles.css scss/tokens/index.scss:dist/css/tokens.css --style=compressed",
+    "prebuild": "node ../../scripts/check-node.mjs",
+    "generate:utilities": "node scripts/generate-utilities.mjs",
+    "check:utilities": "node scripts/generate-utilities.mjs --check",
+    "build": "rimraf dist && pnpm generate:utilities && sass scss/styles/index.scss:dist/css/styles.css scss/tokens/index.scss:dist/css/tokens.css --style=compressed",
     "clean": "rimraf dist",
     "prepare": "pnpm build",
     "lint": "biome check .",

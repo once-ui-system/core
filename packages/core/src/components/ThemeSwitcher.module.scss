@@ -1,0 +1,54 @@
+/*
+ * Collapsed mode: the active option is the only one with width, and the group
+ * opens on hover or focus.
+ *
+ * Three things keep this from being a hover trap.
+ *
+ * `:focus-within` opens it, and the hidden buttons keep their tab stops — they
+ * are zero-width, not `display: none` — so tabbing into the group opens it and
+ * a keyboard visitor sees every option.
+ *
+ * Any device without hover gets the expanded group, always. A pointer that
+ * cannot hover would otherwise have to tap the visible button to reach the
+ * others, and that tap would have already changed the theme.
+ *
+ * And the width transition is the only motion, so `prefers-reduced-motion`
+ * turns it off without changing what the control does.
+ */
+.collapsed {
+  overflow: hidden;
+
+  .option {
+    /* The button keeps its own size and is clipped by this wrapper, rather than
+       being squashed into an ellipse on the way out. */
+    overflow: hidden;
+    transition:
+      max-width var(--transition-duration-micro-medium, 0.15s) ease,
+      opacity var(--transition-duration-micro-short, 0.1s) ease;
+    max-width: var(--static-space-40, 2.5rem);
+  }
+
+  .option.inactive {
+    max-width: 0;
+    opacity: 0;
+  }
+
+  &:hover .option.inactive,
+  &:focus-within .option.inactive {
+    max-width: var(--static-space-40, 2.5rem);
+    opacity: 1;
+  }
+}
+
+@media (hover: none) {
+  .collapsed .option.inactive {
+    max-width: var(--static-space-40, 2.5rem);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collapsed .option {
+    transition: none;
+  }
+}

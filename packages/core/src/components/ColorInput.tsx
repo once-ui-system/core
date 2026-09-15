@@ -12,7 +12,7 @@ import {
 } from ".";
 interface ColorInputProps extends Omit<InputProps, "onChange" | "value"> {
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (value: string) => void;
   supportAlpha?: boolean;
 }
 const hexToRgba = (hex: string, alpha: number): string => {
@@ -53,11 +53,9 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
         setHexValue(newHex);
         if (supportAlpha) {
           const rgbaValue = hexToRgba(newHex, alpha);
-          onChange({
-            target: { value: rgbaValue },
-          } as React.ChangeEvent<HTMLInputElement>);
+          onChange(rgbaValue);
         } else {
-          onChange(e);
+          onChange(newHex);
         }
       },
       [alpha, supportAlpha, onChange],
@@ -67,9 +65,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
         setAlpha(newAlpha);
         if (hexValue) {
           const rgbaValue = hexToRgba(hexValue, newAlpha);
-          onChange({
-            target: { value: rgbaValue },
-          } as React.ChangeEvent<HTMLInputElement>);
+          onChange(rgbaValue);
         }
       },
       [hexValue, onChange],
@@ -77,9 +73,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
     const handleReset = () => {
       setHexValue("");
       setAlpha(100);
-      onChange({
-        target: { value: "" },
-      } as React.ChangeEvent<HTMLInputElement>);
+      onChange("");
     };
     return (
       <Input
@@ -90,7 +84,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
         type="color"
         value={hexValue}
         {...props}
-        hasPrefix={
+        prefix={
           <Flex>
             {" "}
             <Flex
@@ -128,7 +122,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
             />{" "}
           </Flex>
         }
-        hasSuffix={
+        suffix={
           <Flex
             className={`suffix ${hexValue ? "" : "hidden"}`}
             position="absolute"
@@ -158,7 +152,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                 {" "}
                 {supportAlpha && (
                   <DropdownWrapper
-                    isOpen={isAlphaDropdownOpen}
+                    open={isAlphaDropdownOpen}
                     onOpenChange={setIsAlphaDropdownOpen}
                     placement="top-end"
                     trigger={

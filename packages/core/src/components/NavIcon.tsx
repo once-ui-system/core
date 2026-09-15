@@ -7,11 +7,11 @@ interface NavIconProps extends React.ComponentProps<typeof Flex> {
   className?: string;
   style?: React.CSSProperties;
   onClick?: () => void;
-  isActive: boolean;
+  active: boolean;
 }
 
 const NavIcon = forwardRef<HTMLDivElement, Partial<NavIconProps>>(
-  ({ className, isActive, style, onClick, ...rest }, ref) => {
+  ({ className, active, style, onClick, ...rest }, ref) => {
     return (
       <Flex
         ref={ref}
@@ -27,8 +27,8 @@ const NavIcon = forwardRef<HTMLDivElement, Partial<NavIconProps>>(
         onClick={onClick}
         {...rest}
       >
-        <div className={classNames(styles.line, isActive && styles.active)} />
-        <div className={classNames(styles.line, isActive && styles.active)} />
+        <div className={classNames(styles.line, active && styles.active)} />
+        <div className={classNames(styles.line, active && styles.active)} />
       </Flex>
     );
   },

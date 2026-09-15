@@ -68,18 +68,18 @@ export const Waitlist1 = () => {
           </Badge>
         </RevealFx>
         <Column horizontal="center" align="center" gap="24">
-          <RevealFx horizontal="center" delay={0.4}>
+          <RevealFx horizontal="center" delay={400}>
             <Heading variant="display-strong-xl" onBackground="neutral-strong">
               The all-in-one course platform
             </Heading>
           </RevealFx>
-          <RevealFx horizontal="center" delay={0.6}>
+          <RevealFx horizontal="center" delay={600}>
             <Text onBackground="neutral-medium" variant="heading-default-xl">
               Launch and sell your courses with ease. We handle enrollment, payments and analytics. You focus on creating.
             </Text>
           </RevealFx>
         </Column>
-        <RevealFx horizontal="center" delay={0.8}>
+        <RevealFx horizontal="center" delay={800}>
           <AvatarGroup
             reverse
             size="m"
@@ -110,14 +110,14 @@ export const Waitlist1 = () => {
               </Row>
             </RevealFx>
           ) : (
-            <RevealFx key="subscribed" direction="column" horizontal="center" delay={1} gap="16" data-border="rounded">
+            <RevealFx key="subscribed" direction="column" horizontal="center" delay={1000} gap="16" data-border="rounded">
               <Input
                 id="email"
                 placeholder="Enter email"
                 value={email}
                 validate={(value) => validateEmail(value as string)}
                 onChange={(e) => setEmail(e.target.value)}
-                hasSuffix={
+                suffix={
                   <IconButton size="l" style={{marginRight: "-0.5rem"}} icon="send" onClick={() => subscribe()}/>
                 }
               />

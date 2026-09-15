@@ -29,7 +29,7 @@ export function BasicDropdown() {
   
   return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 
@@ -74,7 +74,7 @@ export function DropdownWithIcons() {
   
   return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 
@@ -92,7 +92,7 @@ export function DropdownWithIcons() {
               key={option.value}
               label={option.label}
               value={option.value}
-              hasPrefix={<Icon name={option.icon as any} size="s" />}
+              prefix={<Icon name={option.icon as any} size="s" />}
               danger={option.danger}
               selected={option.value === selected}
               onClick={handleSelect}
@@ -121,7 +121,7 @@ export function CustomPositionDropdown() {
   
   return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       placement="right-start"
       trigger={
@@ -172,7 +172,7 @@ export function SearchableDropdown() {
   
   return (
     <DropdownWrapper
-      isOpen={isOpen}
+      open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
         <Button 
@@ -187,10 +187,10 @@ export function SearchableDropdown() {
         <Column fillWidth minWidth={12}>
           <Column padding="4" fillWidth position="sticky" top="0" background="surface" zIndex={1}>
             <Input
-              height="s"
+              size="s"
               id="search-dropdown"
               placeholder="Search"
-              hasPrefix={<Icon name="search" size="xs" />}
+              prefix={<Icon name="search" size="xs" />}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onClick={(e) => e.stopPropagation()}

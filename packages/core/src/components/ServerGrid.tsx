@@ -24,7 +24,6 @@ interface ServerGridProps
   m?: GridBreakpointProps;
   s?: GridBreakpointProps;
   xs?: GridBreakpointProps;
-  isDefaultBreakpoints?: boolean;
 }
 
 const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
@@ -40,7 +39,6 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       m,
       s,
       xs,
-      isDefaultBreakpoints = true,
       hide,
       aspectRatio,
       align,
@@ -121,7 +119,9 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
   ) => {
     // Cascade breakpoints: larger breakpoint styles flow down to smaller ones
     // Order: xl > l > m > s > xs
-    const cascadedL = l ? { ...l } : undefined;
+    // `xl` leads the cascade; the code used to start at `l` and drop it.
+    const cascadedXl = xl ? { ...xl } : undefined;
+    const cascadedL = l || cascadedXl ? { ...cascadedXl, ...l } : undefined;
     const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
     const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
@@ -315,56 +315,56 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       className,
     );
 
-    if (isDefaultBreakpoints) {
-      classes +=
-        " " +
-        classNames(
-          cascadedL?.position && `l-position-${cascadedL.position}`,
-          cascadedM?.position && `m-position-${cascadedM.position}`,
-          cascadedS?.position && `s-position-${cascadedS.position}`,
-          cascadedXs?.position && `xs-position-${cascadedXs.position}`,
-          cascadedL?.hide === true && "l-grid-hide",
-          cascadedL?.hide === false && "l-grid-show",
-          cascadedM?.hide === true && "m-grid-hide",
-          cascadedM?.hide === false && "m-grid-show",
-          cascadedS?.hide === true && "s-grid-hide",
-          cascadedS?.hide === false && "s-grid-show",
-          cascadedXs?.hide === true && "xs-grid-hide",
-          cascadedXs?.hide === false && "xs-grid-show",
-          cascadedL?.columns && `l-columns-${cascadedL.columns}`,
-          cascadedM?.columns && `m-columns-${cascadedM.columns}`,
-          cascadedS?.columns && `s-columns-${cascadedS.columns}`,
-          cascadedXs?.columns && `xs-columns-${cascadedXs.columns}`,
-          cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
-          cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
-          cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
-          cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
-          cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
-          cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
-          cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
-          cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
-          cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
-          cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
-          cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
-          cascadedXs?.overflowY && `xs-overflow-y-${cascadedXs.overflowY}`,
-          cascadedL?.top && `l-top-${cascadedL.top}`,
-          cascadedM?.top && `m-top-${cascadedM.top}`,
-          cascadedS?.top && `s-top-${cascadedS.top}`,
-          cascadedXs?.top && `xs-top-${cascadedXs.top}`,
-          cascadedL?.right && `l-right-${cascadedL.right}`,
-          cascadedM?.right && `m-right-${cascadedM.right}`,
-          cascadedS?.right && `s-right-${cascadedS.right}`,
-          cascadedXs?.right && `xs-right-${cascadedXs.right}`,
-          cascadedL?.bottom && `l-bottom-${cascadedL.bottom}`,
-          cascadedM?.bottom && `m-bottom-${cascadedM.bottom}`,
-          cascadedS?.bottom && `s-bottom-${cascadedS.bottom}`,
-          cascadedXs?.bottom && `xs-bottom-${cascadedXs.bottom}`,
-          cascadedL?.left && `l-left-${cascadedL.left}`,
-          cascadedM?.left && `m-left-${cascadedM.left}`,
-          cascadedS?.left && `s-left-${cascadedS.left}`,
-          cascadedXs?.left && `xs-left-${cascadedXs.left}`,
-        );
-    }
+    classes +=
+      " " +
+      classNames(
+        cascadedL?.position && `l-position-${cascadedL.position}`,
+        cascadedM?.position && `m-position-${cascadedM.position}`,
+        cascadedS?.position && `s-position-${cascadedS.position}`,
+        cascadedXs?.position && `xs-position-${cascadedXs.position}`,
+        cascadedL?.hide === true && "l-grid-hide",
+        cascadedL?.hide === false && "l-grid-show",
+        cascadedM?.hide === true && "m-grid-hide",
+        cascadedM?.hide === false && "m-grid-show",
+        cascadedS?.hide === true && "s-grid-hide",
+        cascadedS?.hide === false && "s-grid-show",
+        cascadedXs?.hide === true && "xs-grid-hide",
+        cascadedXs?.hide === false && "xs-grid-show",
+        cascadedL?.columns && `l-columns-${cascadedL.columns}`,
+        cascadedM?.columns && `m-columns-${cascadedM.columns}`,
+        cascadedS?.columns && `s-columns-${cascadedS.columns}`,
+        cascadedXs?.columns && `xs-columns-${cascadedXs.columns}`,
+        cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
+        cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
+        cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
+        cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
+        cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
+        cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
+        cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
+        cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
+        cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
+        cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
+        cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
+        cascadedXs?.overflowY && `xs-overflow-y-${cascadedXs.overflowY}`,
+        cascadedL?.top && `l-top-${cascadedL.top}`,
+        cascadedM?.top && `m-top-${cascadedM.top}`,
+        cascadedS?.top && `s-top-${cascadedS.top}`,
+        cascadedXs?.top && `xs-top-${cascadedXs.top}`,
+        cascadedL?.right && `l-right-${cascadedL.right}`,
+        cascadedM?.right && `m-right-${cascadedM.right}`,
+        cascadedS?.right && `s-right-${cascadedS.right}`,
+        cascadedXs?.right && `xs-right-${cascadedXs.right}`,
+        cascadedL?.bottom && `l-bottom-${cascadedL.bottom}`,
+        cascadedM?.bottom && `m-bottom-${cascadedM.bottom}`,
+        cascadedS?.bottom && `s-bottom-${cascadedS.bottom}`,
+        cascadedXs?.bottom && `xs-bottom-${cascadedXs.bottom}`,
+        cascadedL?.left && `l-left-${cascadedL.left}`,
+        cascadedM?.left && `m-left-${cascadedM.left}`,
+        cascadedS?.left && `s-left-${cascadedS.left}`,
+        cascadedXs?.left && `xs-left-${cascadedXs.left}`,
+      );
+  
+
 
     const parsePosition = (value: number | string | undefined): string | undefined => {
       if (value === undefined) return undefined;

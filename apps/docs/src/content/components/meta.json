@@ -1,0 +1,16 @@
+{
+  "title": "Components",
+  "order": 5,
+  "pages": {
+    "overview": 1,
+    "flex": 2,
+    "grid": 3,
+    "button": 4,
+    "card": 5,
+    "text": 6,
+    "heading": 7,
+    "icon": 8,
+    "media": 9,
+    "dialog": 10
+  }
+}

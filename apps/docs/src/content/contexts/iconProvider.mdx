@@ -1,0 +1,257 @@
+---
+title: "IconProvider"
+summary: "Once UI's icon provider component allows you to pass an object of icon instances to your application."
+updatedAt: "2026-09-13"
+docs: "once-ui/contexts/iconProvider.mdx"
+github: "contexts/IconProvider.tsx"
+navLabel: "IconProvider"
+navIcon: "chip"
+---
+
+The `IconProvider` component is a context provider that allows you to pass an
+object of icon instances to your application, merged with the 76 icons Once UI
+ships built in.
+
+An icon is anything that renders an SVG and needs no props — Once UI never
+passes any. So icons from [react-icons](https://react-icons.github.io/react-icons/),
+lucide, heroicons, or a component you wrote yourself all satisfy it. The
+registry is typed structurally, so no icon library appears in your app's types
+because of Once UI.
+
+## Simple setup
+
+Wrap your app with `IconProvider` and pass it the icons as props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { HiHome } from "react-icons/hi2";
+
+<IconProvider icons={{home: HiHome}}>
+    {children}
+</IconProvider>`,
+      language: "tsx",
+      label: "layout.tsx"
+    }
+  ]}
+/>
+
+## Advanced setup
+
+You can create a separate file for all icons, for example `icons.ts`. We also recommend using a `Providers` component to wrap your app.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={32}  isCollapsible={false}
+
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { iconLibrary } from "../resources/icons.ts";
+import { IconProvider, ToastProvider, ThemeProvider, DataThemeProvider } from "@once-ui-system/core";
+
+export function Providers({ children }: {
+    children: React.ReactNode
+}) {
+    return (
+      <ThemeProvider>
+        <DataThemeProvider>
+          <ToastProvider>
+            <IconProvider icons={iconLibrary}>
+              {children}
+            </IconProvider>
+          </ToastProvider>
+        </DataThemeProvider>
+      </ThemeProvider>
+    );
+}`,
+      language: "tsx",
+      highlight: "1,11,13",
+      label: "Providers.tsx",
+    },
+    {
+    code:
+`// Your own icons, merged with the ones Once UI ships
+import {
+    HiChevronUp,
+    HiChevronDown,
+    HiChevronRight,
+    HiChevronLeft,
+    HiOutlineArrowPath,
+    HiOutlineSun,
+    HiOutlineMoon,
+    HiOutlineEye,
+    HiOutlineEyeSlash,
+    HiOutlineClipboard,
+    HiOutlineMagnifyingGlass,
+    HiOutlineLink,
+    HiArrowUpRight,
+    HiOutlineShieldCheck,
+    HiOutlineSparkles,
+    HiOutlineComputerDesktop,
+    HiOutlineQuestionMarkCircle,
+    HiOutlineInformationCircle,
+    HiOutlineExclamationTriangle,
+    HiOutlineExclamationCircle,
+    HiOutlineCheckCircle,
+    HiOutlineXMark,
+    HiOutlineUser,
+    HiOutlineEyeDropper,
+    HiOutlineMinus,
+    HiOutlinePlus,
+    HiOutlineCalendar,
+    HiOutlineDocumentDuplicate,
+    HiOutlineCheck,
+    HiOutlineArrowsPointingIn,
+    HiOutlineArrowsPointingOut,
+} from "react-icons/hi2";
+
+export const iconLibrary = {
+    chevronUp: HiChevronUp,
+    chevronDown: HiChevronDown,
+    chevronRight: HiChevronRight,
+    chevronLeft: HiChevronLeft,
+    refresh: HiOutlineArrowPath,
+    light: HiOutlineSun,
+    dark: HiOutlineMoon,
+    help: HiOutlineQuestionMarkCircle,
+    info: HiOutlineInformationCircle,
+    warning: HiOutlineExclamationTriangle,
+    danger: HiOutlineExclamationCircle,
+    checkbox: HiOutlineCheck,
+    check: HiOutlineCheckCircle,
+    copy: HiOutlineDocumentDuplicate,
+    eyeDropper: HiOutlineEyeDropper,
+    clipboard: HiOutlineClipboard,
+    person: HiOutlineUser,
+    close: HiOutlineXMark,
+    openLink: HiOutlineLink,
+    arrowUpRight: HiArrowUpRight,
+    minus: HiOutlineMinus,
+    plus: HiOutlinePlus,
+    calendar: HiOutlineCalendar,
+    eye: HiOutlineEye,
+    eyeOff: HiOutlineEyeSlash,
+    search: HiOutlineMagnifyingGlass,
+    security: HiOutlineShieldCheck,
+    sparkle: HiOutlineSparkles,
+    computer: HiOutlineComputerDesktop,
+    minimize: HiOutlineArrowsPointingIn,
+    maximize: HiOutlineArrowsPointingOut,
+};
+
+// Teach Once UI these names, so <Icon name="chevronUp" /> type-checks.
+// Derived from the object above, so the two cannot drift apart.
+declare module "@once-ui-system/core" {
+  interface IconLibraryOverrides extends Record<keyof typeof iconLibrary, true> {}
+}
+`,
+    language: "tsx",
+    label: "icons.ts",
+  }
+  ]}
+/>
+
+## Type-checking your own names
+
+`IconName` is a union of the built-in names, and `Icon` accepts nothing else.
+Registering icons at runtime does not by itself teach TypeScript about them, so
+extend the union by merging into `IconLibraryOverrides`:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`export const iconLibrary = {
+  rocket: HiOutlineRocketLaunch,
+  github: FaGithub,
+};
+
+declare module "@once-ui-system/core" {
+  interface IconLibraryOverrides extends Record<keyof typeof iconLibrary, true> {}
+}`,
+      language: "tsx",
+      label: "icons.ts"
+    }
+  ]}
+/>
+
+Deriving the interface from the object means the two cannot drift: add an icon
+to the registry and its name type-checks immediately, remove one and every use
+of it becomes a build error.
+
+Two things to avoid. Do not annotate the registry as
+`Record<string, IconType>` — that widens the keys to `string`, which collapses
+`IconName` and lets every typo through. And do not list the names by hand; the
+list will fall out of date.
+
+## Default icons
+
+
+Overwrite the default icons used in Once UI components (for example the chevron in the `Select` component) by providing new icons with the same keys to the `IconProvider`.
+
+## Icon component
+
+The <SmartLink suffixIcon="arrowUpRight" href="/components/icon">`Icon`</SmartLink> component is a wrapper around icon instances to control their size and color. We recommend
+inserting icons through this component.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`<Icon
+    name="help"
+    onBackground="neutral-medium"
+    size="m"/>`,
+    language: "tsx",
+    label: "Example",}
+  ]}
+  preview={<Row gap="24" wrap>
+      <Icon name="rocket" size="m" />
+      <Icon name="close" size="m" />
+      <Icon name="check" size="m" />
+      <Icon name="info" size="m" />
+      <Icon name="warning" size="m" />
+      <Icon name="chevronDown" size="m" />
+      <Icon name="search" size="m" />
+    </Row>}
+/>
+## useIcons
+
+`useIcons()` returns the merged icon library — the defaults plus whatever the
+nearest `IconProvider` added. Use it when you need to resolve a name to a
+component yourself; for rendering, prefer
+[`Icon`](/components/icon), which does this for you.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const { icons } = useIcons();
+const known = Object.keys(icons);
+
+// Fall back rather than rendering nothing for an unregistered name.
+<Icon name={known.includes(name) ? name : "info"} />`,
+      language: "tsx",
+      label: "useIcons"
+    }
+  ]}
+/>
+
+Unlike the other context hooks, `useIcons()` does not throw outside a provider —
+it returns the default library, so a component that only needs built-in icons
+works with no provider in the tree.

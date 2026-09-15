@@ -4,14 +4,6 @@ import { getPages } from "@/app/utils/utils";
 import { baseURL, schema } from "@/resources";
 
 const STATIC_MARKDOWN: Record<string, string> = {
-  "/changelog": `# Changelog
-
-Release history for ${schema.name}. Open ${baseURL}/changelog in a browser for the full interactive changelog.
-`,
-  "/roadmap": `# Roadmap
-
-Planned features and progress for ${schema.name}. Open ${baseURL}/roadmap in a browser for the full roadmap.
-`,
 };
 
 export function getMarkdownForPath(pathname: string): string | null {

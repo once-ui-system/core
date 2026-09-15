@@ -14,15 +14,16 @@ import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+interface InputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   id: string;
   label?: string;
   placeholder?: string;
-  height?: TShirtSizes;
+  size?: TShirtSizes;
   error?: boolean;
   errorMessage?: ReactNode;
   description?: ReactNode;
-  radius?:
+  corners?:
     | "none"
     | "top"
     | "right"
@@ -34,9 +35,15 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     | "bottom-left";
   className?: string;
   style?: React.CSSProperties;
-  hasPrefix?: ReactNode;
-  hasSuffix?: ReactNode;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
   variant?: "default" | "ghost";
+  /** Draw the standard focus ring around the field while it has focus. Off by
+   *  default — the quiet, borderless native look is deliberate — but a form a
+   *  keyboard user has to get through wants it on. Note this shows on a mouse
+   *  click too: `:focus-visible` always matches a field that takes keyboard
+   *  input, however it was focused. */
+  focusRing?: boolean;
   characterCount?: boolean;
   cursor?: undefined | "interactive";
   validate?: (value: ReactNode) => ReactNode | null;
@@ -49,21 +56,23 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       id,
       label,
       placeholder,
-      height = "m",
+      size = "m",
       error = false,
       errorMessage,
       description,
-      radius,
+      corners,
       className,
       style,
-      hasPrefix,
-      hasSuffix,
+      prefix,
+      suffix,
       variant = "default",
+      focusRing = false,
       characterCount,
       loading = false,
       children,
       onFocus,
       onBlur,
+      onAnimationStart,
       validate,
       cursor,
       ...props
@@ -71,13 +80,34 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(!!props.value);
+    // Seeded from `defaultValue` too: an uncontrolled field — how a settings
+    // form normally renders saved data — has no `value`, so the label never
+    // floated and sat on top of the text until the first focus and blur.
+    const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
     const [validationError, setValidationError] = useState<ReactNode | null>(null);
     const debouncedValue = useDebounce(props.value, 1000);
 
     const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(true);
       if (onFocus) onFocus(event);
+    };
+
+    /**
+     * Autofill fires no focus, blur or change event, so nothing else here ever
+     * learns the field stopped being empty — the label stayed sitting on top
+     * of the filled text. The one thing the browser does emit is an animation
+     * start, which Input.module.scss hangs off `:-webkit-autofill` for exactly
+     * this. The name is matched loosely because CSS Modules hashes it, and
+     * bundlers differ on whether they export keyframe names at all.
+     */
+    const handleAnimationStart = (event: React.AnimationEvent<HTMLInputElement>) => {
+      // `styles.onAutoFill` is the exported hashed name; the substring check is
+      // the fallback for bundlers that scope keyframes without exporting them.
+      const name = event.animationName ?? "";
+      if (name === styles.onAutoFill || name.includes("onAutoFill")) {
+        setIsFilled(true);
+      }
+      if (onAnimationStart) onAnimationStart(event);
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -91,6 +121,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     };
 
     useEffect(() => {
+      // Only a controlled field's `value` is authoritative. Uncontrolled it is
+      // `undefined` forever, and syncing to it clobbered the seed back to false.
+      if (props.value === undefined) return;
       setIsFilled(!!props.value);
     }, [props.value]);
 
@@ -118,25 +151,15 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const displayError = validationError || errorMessage;
 
-    const fontSizeMap = {
-      xs: "font-s",
-      s: "font-s",
-      m: "font-m",
-      l: "font-l",
-      xl: "font-xl",
-    };
 
     const inputClassNames = classNames(
       styles.input,
       "font-body",
       "font-default",
-      fontSizeMap[height],
       cursor === "interactive" ? "cursor-interactive" : undefined,
       {
-        [styles.filled]: isFilled,
-        [styles.focused]: isFocused,
-        [styles.withPrefix]: hasPrefix,
-        [styles.withSuffix]: hasSuffix,
+        [styles.withPrefix]: prefix,
+        [styles.withSuffix]: suffix,
         [styles.placeholder]: placeholder,
         [styles.hasChildren]: children,
         [styles.error]: displayError && debouncedValue !== "",
@@ -161,13 +184,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           vertical="stretch"
           className={classNames(
             styles.base,
-            height && styles[height],
-            radius === "none" ? "radius-none" : radius ? `radius-l-${radius}` : "radius-l",
+            focusRing && styles.focusRing,
+            size && styles[size],
+            corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",
           )}
         >
-          {hasPrefix && (
+          {prefix && (
             <Row paddingLeft="12" className={styles.prefix} position="static">
-              {hasPrefix}
+              {prefix}
             </Row>
           )}
           <Column fillWidth padding="4">
@@ -178,6 +202,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               placeholder={placeholder}
               onFocus={handleFocus}
               onBlur={handleBlur}
+              onAnimationStart={handleAnimationStart}
               className={inputClassNames}
               aria-describedby={displayError ? `${id}-error` : undefined}
               aria-invalid={!!displayError}
@@ -217,9 +242,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               <Spinner size="s" />
             </Row>
           )}
-          {hasSuffix && !loading && (
+          {suffix && !loading && (
             <Row paddingRight="12" className={styles.suffix} position="static">
-              {hasSuffix}
+              {suffix}
             </Row>
           )}
         </Row>

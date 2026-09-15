@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar, Button, Column, EmojiPickerDropdown, IconButton, Media, OgCard, Row, Text, Textarea } from "@once-ui-system/core";
+import type { IconName } from "@once-ui-system/core";
 import { useState } from "react";
 import { chatMessages } from "./content/chat1content";
 
@@ -114,9 +115,8 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
             id="comment-input"
             placeholder="Message 👋 | intro"
             style={{padding: "0.75rem"}}
-            lines="auto"
             value={message}
-            hasPrefix={
+            prefix={
               <EmojiPickerDropdown
                 onSelect={(emoji) => setMessage(message + emoji)}
                 trigger={
@@ -126,12 +126,12 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                 }
               />
             }
-            hasSuffix={
+            suffix={
               <Row
                 style={{ opacity: message.length > 0 ? 1 : 0, marginRight: "-0.25rem" }}
                 transition="micro-medium">
                 <IconButton
-                  icon={isSubmitting ? "loading" : "send"}
+                  icon={isSubmitting ? "refresh" : "send"}
                   size="m"
                   onClick={handleSubmitMessage}
                   disabled={!message || isSubmitting}

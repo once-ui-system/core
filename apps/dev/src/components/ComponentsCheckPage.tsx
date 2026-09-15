@@ -1,106 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  Heading,
-  Text,
-  Button,
-  Column,
-  Badge,
-  Logo,
-  Line,
-  LetterFx,
-  StylePanel,
-  Carousel,
-  Media,
-  EmojiPicker,
-  EmojiPickerDropdown,
-  OgCard,
-  Icon,
-  Textarea,
-  Row,
-  IconButton,
-  Select,
-  Option,
-  DropdownWrapper,
-  AutoScroll,
-  User,
-  Table,
-  ContextMenu,
-  BlockQuote,
-  RevealFx,
-  DatePicker,
-  DateInput,
-  DateRangeInput,
-  Grid,
-  AccordionGroup,
-  Accordion,
-  Kbar,
-  Spinner,
-  BarChart,
-  ListItem,
-  List,
-  ProgressBar,
-  LineChart,
-  CountFx,
-  Feedback,
-  MasonryGrid,
-  TagInput,
-  Avatar,
-  Background,
-  Flex,
-  Chip,
-  Fade,
-  Hover,
-  Pulse,
-  Tooltip,
-  Checkbox,
-  Switch,
-  RadioButton,
-  Skeleton,
-  HoverCard,
-  LogoCloud,
-  SmartLink,
-  Swiper,
-  Scroller,
-  Particle,
-  Arrow,
-  Mask,
-  Tag,
-  Kbd,
-  InlineCode,
-  StatusIndicator,
-  SegmentedControl,
-  ScrollToTop,
-  CompareImage,
-  InteractiveDetails,
-  InfiniteScroll,
-  PasswordInput,
-  NumberInput,
-  ColorInput,
-  OTPInput,
-  AvatarGroup,
-  UserMenu,
-  ThemeSwitcher,
-  Timeline,
-  NavIcon,
-  CodeBlock,
-  CursorCard,
-  FlipFx,
-  GlitchFx,
-  HoloFx,
-  Card,
-  MatrixFx,
-  ShineFx,
-  TiltFx,
-  TypeFx,
-  WeatherFx,
-  CountdownFx,
-  Input,
-  Dialog,
-  FadingLettersFx,
-  useToast,
-} from "@once-ui-system/core";
+import { Heading, Text, Button, Column, Badge, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, EmojiPickerDropdown, OgCard, Icon, Textarea, Row, IconButton, Select, Option, DropdownWrapper, AutoScroll, User, Table, ContextMenu, BlockQuote, RevealFx, DatePicker, DateInput, DateRangeInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, MasonryGrid, TagInput, Avatar, Background, Flex, Chip, Fade, Hover, Pulse, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Swiper, Scroller, Particle, Arrow, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ScrollToTop, CompareImage, InteractiveDetails, InfiniteScroll, PasswordInput, NumberInput, ColorInput, OTPInput, AvatarGroup, UserMenu, ThemeSwitcher, Timeline, NavIcon, CursorCard, FlipFx, GlitchFx, HoloFx, Card, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, FadingLettersFx, useToast } from "@once-ui-system/core";
+import { BarChart, LineChart } from "@once-ui-system/core/data";
+import { CodeBlock } from "@once-ui-system/core/code";
 
 interface ComponentVariation {
   value: string;
@@ -656,10 +559,10 @@ export default function ComponentsCheck() {
               label: "Heights",
               element: (
                 <Column gap="s" fillWidth>
-                  <Input id="h-xs" height="xs" label="XS" placeholder="xs" />
-                  <Input id="h-s" height="s" label="S" placeholder="s" />
-                  <Input id="h-m" height="m" label="M" placeholder="m" />
-                  <Input id="h-l" height="l" label="L" placeholder="l" />
+                  <Input id="h-xs" size="xs" label="XS" placeholder="xs" />
+                  <Input id="h-s" size="s" label="S" placeholder="s" />
+                  <Input id="h-m" size="m" label="M" placeholder="m" />
+                  <Input id="h-l" size="l" label="L" placeholder="l" />
                 </Column>
               ),
             },
@@ -675,20 +578,19 @@ export default function ComponentsCheck() {
                 <Textarea
                   id="ta-msg"
                   label="Message"
-                  placeholder="Write something..."
-                  lines={3}
+                  placeholder="Type more to expand..."
                 />
               ),
             },
             {
-              value: "auto",
-              label: "Auto lines",
+              value: "fixed",
+              label: "Fixed lines",
               element: (
                 <Textarea
-                  id="ta-auto"
-                  label="Auto height"
-                  placeholder="Type more to expand..."
-                  lines="auto"
+                  id="ta-fixed"
+                  label="Message"
+                  placeholder="Write something..."
+                  lines={3}
                 />
               ),
             },
@@ -791,12 +693,12 @@ export default function ComponentsCheck() {
             {
               value: "checked",
               label: "Checked",
-              element: <Checkbox isChecked label="Remember me" />,
+              element: <Checkbox checked label="Remember me" />,
             },
             {
               value: "indeterminate",
               label: "Indeterminate",
-              element: <Checkbox isIndeterminate label="Select all" />,
+              element: <Checkbox indeterminate label="Select all" />,
             },
             {
               value: "disabled",
@@ -804,7 +706,7 @@ export default function ComponentsCheck() {
               element: (
                 <Column gap="s">
                   <Checkbox disabled label="Disabled off" />
-                  <Checkbox disabled isChecked label="Disabled on" />
+                  <Checkbox disabled checked label="Disabled on" />
                 </Column>
               ),
             },
@@ -823,7 +725,7 @@ export default function ComponentsCheck() {
               label: "Off",
               element: (
                 <Switch
-                  isChecked={false}
+                  checked={false}
                   onToggle={() => {}}
                   label="Notifications"
                 />
@@ -833,7 +735,7 @@ export default function ComponentsCheck() {
               value: "on",
               label: "On",
               element: (
-                <Switch isChecked onToggle={() => {}} label="Dark mode" />
+                <Switch checked onToggle={() => {}} label="Dark mode" />
               ),
             },
             {
@@ -841,7 +743,7 @@ export default function ComponentsCheck() {
               label: "Controlled",
               element: (
                 <Switch
-                  isChecked={switchOn}
+                  checked={switchOn}
                   onToggle={() => setSwitchOn(!switchOn)}
                   label="Toggle me"
                 />
@@ -967,8 +869,8 @@ export default function ComponentsCheck() {
               label: "Default",
               element: (
                 <SegmentedControl
-                  selected="one"
-                  onToggle={() => {}}
+                  value="one"
+                  onChange={() => {}}
                   buttons={[
                     { value: "one", label: "One" },
                     { value: "two", label: "Two" },
@@ -983,8 +885,8 @@ export default function ComponentsCheck() {
               element: (
                 <SegmentedControl
                   compact
-                  selected="a"
-                  onToggle={() => {}}
+                  value="a"
+                  onChange={() => {}}
                   buttons={[
                     { value: "a", label: "A" },
                     { value: "b", label: "B" },
@@ -1480,9 +1382,9 @@ export default function ComponentsCheck() {
               label: "Lines",
               element: (
                 <Column gap="s" fillWidth>
-                  <Skeleton shape="line" width="xl" />
-                  <Skeleton shape="line" width="l" />
-                  <Skeleton shape="line" width="m" />
+                  <Skeleton shape="line" width="100%" />
+                  <Skeleton shape="line" width="75%" />
+                  <Skeleton shape="line" width="50%" />
                 </Column>
               ),
             },
@@ -1492,7 +1394,7 @@ export default function ComponentsCheck() {
               element: (
                 <Row gap="s" vertical="center">
                   <Skeleton shape="circle" />
-                  <Skeleton shape="block" width="l" height="m" />
+                  <Skeleton shape="block" size="m" />
                 </Row>
               ),
             },
@@ -1542,7 +1444,7 @@ export default function ComponentsCheck() {
               label: "Default",
               element: (
                 <Feedback
-                  icon
+                  showIcon
                   title="Changes saved"
                   description="Your settings have been updated successfully."
                 />
@@ -1600,7 +1502,7 @@ export default function ComponentsCheck() {
                     Open Dialog
                   </Button>
                   <Dialog
-                    isOpen={dialogOpen}
+                    open={dialogOpen}
                     onClose={() => setDialogOpen(false)}
                     title="Confirm action"
                     description="Are you sure you want to continue?"
@@ -1633,7 +1535,7 @@ export default function ComponentsCheck() {
                     Dialog with media
                   </Button>
                   <Dialog
-                    isOpen={mediaDialogOpen}
+                    open={mediaDialogOpen}
                     onClose={() => setMediaDialogOpen(false)}
                     title="Featured article"
                     description="A preview of the latest design thinking."
@@ -3237,8 +3139,8 @@ export default function ComponentsCheck() {
                     <Column gap="s" fillWidth>
                       <Flex gap="s" fillWidth>
                         <SegmentedControl
-                          selected={currentVar}
-                          onToggle={(value: string) =>
+                          value={currentVar}
+                          onChange={(value: string) =>
                             selectVar(comp.name, value)
                           }
                           buttons={comp.variations.map((v) => ({

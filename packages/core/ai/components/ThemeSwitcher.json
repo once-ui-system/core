@@ -13,6 +13,9 @@
   "SpacingProps",
   "StyleProps"
  ],
+ "props": {
+  "collapsed": "boolean"
+ },
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",

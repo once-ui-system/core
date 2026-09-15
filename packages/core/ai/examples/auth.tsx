@@ -33,7 +33,7 @@ export function AuthExample() {
       >
         <Column minHeight={40} s={{ hide: true }}>
           <Media
-            fill
+            stretch
             fillHeight
             aspectRatio="4 / 5"
             src="/images/cover.jpg"

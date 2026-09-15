@@ -1,0 +1,38 @@
+.progressTrack {
+  height: 0.25rem;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--brand-solid-strong);
+  transition: width 0.1s linear;
+}
+
+/* The scrub handle only appears on hover or while seeking, so the resting
+   state is a plain bar rather than a control begging to be dragged. */
+.progressHandle {
+  width: 0.75rem;
+  height: 0.75rem;
+  background: var(--brand-solid-strong);
+  opacity: 0;
+  transition: opacity var(--transition-micro-medium);
+}
+
+.progressTrack:hover .progressHandle,
+.progressTrack:focus-visible .progressHandle,
+.seeking .progressHandle {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressFill,
+  .progressHandle {
+    transition: none;
+  }
+}
+
+.time {
+  font-variant-numeric: tabular-nums;
+}

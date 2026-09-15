@@ -1,0 +1,162 @@
+---
+title: "Card"
+summary: "Once UI's card component is a versatile, fluid container for content with a simple hover effect."
+updatedAt: "2026-07-27"
+docs: "once-ui/components/card.mdx"
+github: "components/Card.tsx"
+navLabel: "Card"
+navIcon: "components"
+---
+
+The `Card` component is a versatile, fluid container for content with a hover effect. It handles click events and href attributes.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  preview={
+    <Row fillWidth horizontal="center">
+      <Row maxWidth={24}>
+        <Card radius="l-4" direction="column" border="neutral-alpha-medium">
+          <Row fillWidth paddingX="20" paddingY="12" gap="8" vertical="center">
+            <Avatar size="xs" src="/images/avatar.jpg"/>
+            <Text variant="label-default-s">Lorant One</Text>
+          </Row>
+          <Media
+            border="neutral-alpha-weak"
+            sizes="400px"
+            fillWidth
+            aspectRatio="4 / 3"
+            radius="l"
+            alt="Proxima b"
+            src="/images/docs/once-ui/vibe-coding-light.jpg"
+          />
+          <Column fillWidth paddingX="20" paddingY="24" gap="8">
+            <Text variant="body-default-xl">Proxima b</Text>
+            <Text onBackground="neutral-weak" variant="body-default-s">
+              A planet so cruel on the surface, but once you explore what's underneath, you'll question
+              everything you know. Yet, you vibe with it.
+            </Text>
+          </Column>
+          <Line background="neutral-alpha-medium" />
+          <Row
+            paddingX="20"
+            paddingY="12"
+            gap="8"
+            vertical="center"
+            textVariant="label-default-s"
+            onBackground="neutral-medium"
+          >
+            <Icon name="like" size="s" onBackground="neutral-strong" />
+            34
+            <Icon
+              name="chat"
+              size="s"
+              onBackground="neutral-strong"
+              marginLeft="24"
+            />
+            5
+          </Row>
+        </Card>
+      </Row>
+    </Row>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Card",
+      code:
+`<Row maxWidth={24}>
+    <Card radius="l-4" direction="column" border="neutral-alpha-medium">
+      <Row fillWidth paddingX="20" paddingY="12" gap="8" vertical="center">
+        <Avatar size="xs" src="/images/avatar.jpg"/>
+        <Text variant="label-default-s">Lorant One</Text>
+      </Row>
+      <Media
+        border="neutral-alpha-weak"
+        sizes="400px"
+        fillWidth
+        aspectRatio="4 / 3"
+        radius="l"
+        alt="Proxima b"
+        src="/images/docs/once-ui/proxima-b.jpg"
+      />
+      <Column fillWidth paddingX="20" paddingY="24" gap="8">
+        <Text variant="body-default-xl">Proxima b</Text>
+        <Text onBackground="neutral-weak" variant="body-default-s">
+          A planet so cruel on the surface, but once you explore what's underneath, you'll question
+          everything you know. Yet, you vibe with it.
+        </Text>
+      </Column>
+      <Line background="neutral-alpha-medium" />
+      <Row
+        paddingX="20" paddingY="12" gap="8" vertical="center"
+        textVariant="label-default-s" onBackground="neutral-medium"
+      >
+        <Icon name="like" size="s" onBackground="neutral-strong" />
+        34
+        <Icon name="chat" size="s" onBackground="neutral-strong" marginLeft="24" />
+        5
+      </Row>
+    </Card>
+</Row>`,
+    }
+  ]}
+/>
+
+## Selected
+
+Use `selected` to mark the chosen card in a set — a plan picker, a template
+gallery, a multi-select list. It repaints the border and background from the
+brand scheme, and a card that is also clickable announces the state as a
+pressed toggle. Both colours are defaults, so passing `background` or `border`
+still wins.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="24"
+  preview={
+    <Row fillWidth gap="12" s={{direction: "column"}}>
+      <Card selected radius="l" padding="20" direction="column" gap="4">
+        <Text variant="label-strong-s">Pro</Text>
+        <Text variant="body-default-s" onBackground="neutral-weak">Everything, unlimited</Text>
+      </Card>
+      <Card radius="l" padding="20" direction="column" gap="4">
+        <Text variant="label-strong-s">Starter</Text>
+        <Text variant="body-default-s" onBackground="neutral-weak">One project</Text>
+      </Card>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Card selected onClick={() => setPlan("pro")}>
+    Pro
+</Card>
+<Card selected={false} onClick={() => setPlan("starter")}>
+    Starter
+</Card>`,
+      language: "tsx",
+      label: "Selected"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Card"
+  describe={{
+    children: "The contents.",
+    href: "Makes it a link.",
+    onClick: "Makes it a button. Without either, it is a static panel and a Column may suit better.",
+    selected: "Mark as the chosen one in a set. Repaints the border and background, and announces a clickable card as a pressed toggle.",
+    fillHeight: "Fill the parent's height, for cards that should match in a row.",
+  }}
+  content={[
+    ["children", "ReactNode"],
+    ["className"],
+    ["style"]
+  ]}
+/>

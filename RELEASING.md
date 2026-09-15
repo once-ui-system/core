@@ -70,7 +70,50 @@ downstream (Studio, Aveiro/Magic, Chirio) key off these files.
 5. **After publish:** create the GitHub release from the changelog entry, and notify
    downstream projects that pin the package (see cross-project notes in `ROADMAP.md`).
 
+## Pre-releases
+
+A pre-release goes to the **same package** on a **different dist-tag**. There is
+no second package, and there does not need to be: `npm install` resolves the
+`latest` tag, and a prerelease version does not satisfy a stable semver range —
+not `^1.8.2`, not `^2.0.0`, not even `*`. Someone has to ask for it by name.
+
+```bash
+# from packages/core, with the release PR merged and the tree clean
+pnpm build && pnpm typecheck && pnpm test
+npm publish            # publishConfig.tag pins this to `alpha`
+```
+
+`packages/core/package.json` carries `publishConfig.tag`, so a bare
+`npm publish` cannot set `latest` by accident — which it otherwise would,
+whatever the version string says. **Do not pass `--tag latest` to a prerelease**,
+and when 2.0.0 final is ready, remove `publishConfig.tag` in the same PR that
+sets the version.
+
+Verify the tag landed where you meant it:
+
+```bash
+npm view @once-ui-system/core dist-tags
+# latest: 1.8.4   alpha: 2.0.0-alpha.0
+```
+
+If it goes to `latest` by mistake, `npm dist-tag add @once-ui-system/core@1.8.4
+latest` restores it immediately — the bad version stays published but stops
+being what anyone installs.
+
+### What ships
+
+`files` in `packages/core/package.json` is an allowlist, so a new directory
+ships nothing until it is named there. Check it before a release:
+
+```bash
+npm pack --dry-run
+```
+
+`@once-ui-system/foundations` is `private` and must stay that way while core
+inlines its SCSS and CSS at build time. Publishing core with a dependency on an
+unpublished package is the one failure that breaks every consumer at once.
+
 ## Out of scope for this document
 
-Marketing names for releases, npm dist-tags, and pre-release channels (`next`, `beta`)
+Marketing names for releases
 — none are in use today; introducing them is a maintainer decision.

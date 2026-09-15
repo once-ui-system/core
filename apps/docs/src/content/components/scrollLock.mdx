@@ -1,0 +1,74 @@
+---
+title: "ScrollLock"
+summary: "Freezes the page behind an overlay without moving it, while one region stays scrollable."
+updatedAt: "2026-08-31"
+docs: "once-ui/components/scrollLock.mdx"
+github: "components/ScrollLock.tsx"
+navLabel: "ScrollLock"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`ScrollLock` stops the page scrolling while an overlay is open. It renders
+nothing — drop it in the tree and toggle `enabled`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const panel = useRef<HTMLDivElement>(null);
+
+<>
+  <ScrollLock enabled={open} allowScrollInElement={panel} />
+  <Column ref={panel} overflowY="auto" maxHeight={24}>
+    {items.map(...)}
+  </Column>
+</>`,
+      language: "tsx",
+      label: "ScrollLock"
+    }
+  ]}
+/>
+
+## Why not `overflow: hidden`
+
+The usual fix — setting `overflow: hidden` on the body — reflows the page when
+the scrollbar disappears and drops the scroll position on some browsers, so
+closing the overlay puts the reader somewhere other than where they left. This
+component instead cancels the scroll *events* in the capture phase and records
+the position on lock, so the page stays exactly where it was and comes back
+untouched.
+
+It covers all three ways a page scrolls: `wheel`, touch drag, and the keyboard
+(arrows, Page Up/Down, Home, End, Space).
+
+## Keeping one region scrollable
+
+`allowScrollInElement` takes a ref to a region that should still scroll — the
+overlay's own body. Scrolling inside it works normally; scrolling anywhere else
+does nothing.
+
+Two details make this reliable in practice:
+
+- The **ref** is registered rather than the element, because the target is
+  usually mounted a commit later than the lock (portals, `open &&` subtrees).
+  A container that attaches late is still scrollable.
+- The registry is **shared across instances**, so a dropdown opened inside a
+  modal does not fight the modal's lock. Each allowed region stays scrollable
+  while every other lock is in force.
+
+Within the allowed region the nearest scrollable ancestor is resolved per
+event, and only if it can actually move in that direction — so a list scrolled
+to its end hands the gesture back rather than swallowing it.
+
+## API reference
+
+<PropsTable
+  content={[
+    ["enabled", "boolean", "-", "Whether the lock is on. Required."],
+    ["allowScrollInElement", "RefObject<HTMLElement | null>", "-", "A region that stays scrollable while locked."],
+  ]}
+/>

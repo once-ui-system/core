@@ -1,0 +1,170 @@
+---
+title: "FadingLettersFx"
+summary: "Creates sophisticated letter-by-letter fading animations with staggered timing. Perfect for elegant text reveals and transitions."
+updatedAt: "2025-04-23"
+docs: "once-ui/effects/fadingLettersFx.mdx"
+github: "components/FadingLettersFx.tsx"
+navLabel: "FadingLettersFx"
+navIcon: "sparkle"
+navTag: "New"
+navTagVariant: "success"
+---
+
+FadingLettersFx creates beautiful letter-by-letter animations with precise timing control. Each letter animates independently with customizable delays, creating organic and engaging text reveals.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <FadingLettersFx
+      align="center"
+      text="Welcome to Once UI"
+      animationState="entering"
+      variant="display-strong-m"
+    />
+  }
+  codes={[
+    {
+      code:
+`<FadingLettersFx
+    align="center"
+    text="Welcome to Once UI"
+    animationState="entering"
+    variant="display-strong-l" />`,
+      language: "tsx",
+      label: "FadingLettersFx"
+    }
+  ]}
+/>
+
+## Animation States
+
+The component supports three distinct animation states: `entering`, `visible`, and `exiting`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <Column fillWidth gap="16">
+      <Row fillWidth><FadingLettersFx text="Entering Animation" animationState="entering" variant="heading-strong-m" /></Row>
+      <Row fillWidth><FadingLettersFx text="Visible State" animationState="visible" variant="heading-strong-m" /></Row>
+      <Row fillWidth><FadingLettersFx text="Exiting Animation" animationState="exiting" variant="heading-strong-m" /></Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column gap="16">
+    <FadingLettersFx text="Entering Animation" animationState="entering" variant="heading-strong-m" />
+    <FadingLettersFx text="Visible State" animationState="visible" variant="heading-strong-m" />
+    <FadingLettersFx text="Exiting Animation" animationState="exiting" variant="heading-strong-m" />
+</Column>`,
+      language: "tsx",
+      label: "Animation States"
+    }
+  ]}
+/>
+
+### Entering
+Letters fade in sequentially with a blur-to-focus effect and scale transformation. Each letter has a calculated delay based on its position in the word and message.
+
+### Visible
+Letters remain static without animation. Use this state when no animation is active.
+
+### Exiting
+Letters fade out with blur and scale effects. Each letter has a random exit delay for an organic dissolution effect.
+
+## Staggering
+
+Use the `messageIdx` prop to create staggered animations across multiple messages. Each increment adds 2500ms of base delay.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <Column fillWidth gap="12">
+      <Row fillWidth><FadingLettersFx text="First message appears" animationState="entering" messageIdx={0} variant="body-default-l" /></Row>
+      <Row fillWidth><FadingLettersFx text="Second message appears" animationState="entering" messageIdx={1} variant="body-default-l" /></Row>
+      <Row fillWidth><FadingLettersFx text="Third message appears" animationState="entering" messageIdx={2} variant="body-default-l" /></Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column gap="12">
+    <FadingLettersFx text="First message appears" animationState="entering" messageIdx={0} variant="body-default-l" />
+    <FadingLettersFx text="Second message appears" animationState="entering" messageIdx={1} variant="body-default-l" />
+    <FadingLettersFx text="Third message appears" animationState="entering" messageIdx={2} variant="body-default-l" />
+</Column>`,
+      language: "tsx",
+      label: "Staggering"
+    }
+  ]}
+/>
+
+## Custom Styling
+
+FadingLettersFx extends the Once UI Text component, so you can use all Text props including variants, colors, and custom styles.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <FadingLettersFx
+      text="Custom styled text"
+      animationState="entering"
+      variant="display-strong-s"
+      onBackground="brand-weak"
+    />
+  }
+  codes={[
+    {
+      code:
+`<FadingLettersFx
+    text="Custom styled text"
+    animationState="entering"
+    variant="display-strong-s"
+    onBackground="brand-weak" />`,
+      language: "tsx",
+      label: "Custom Styling"
+    }
+  ]}
+/>
+
+## Timing Configuration
+
+The animation timing follows a precise formula:
+
+- **Message Base Delay**: `messageIdx × 2500ms`
+- **Word Delay**: `wordIdx × 200ms`  
+- **Letter Delay**: `letterIdx × 40ms`
+- **Total Entry Delay**: Message Base + Word Delay + Letter Delay
+- **Exit Delay**: Random between 0-400ms per letter
+
+## API reference
+
+<PropsTable
+  component="FadingLettersFx"
+  describe={{
+    text: "The string to animate, letter by letter.",
+    animationState: "Which phase to play: entering, visible or exiting. The parent drives it.",
+    messageIdx: "Which message this is in a sequence, used to offset the stagger.",
+  }}
+  content={[
+    ["variant", "TextVariant", "body-default-m"],
+    ["onBackground", "ColorToken", "neutral-strong"],
+    ["children", "React.ReactNode"]
+  ]}
+/>
+
+## Usage Tips
+
+- Use `messageIdx` for sequential message animations
+- Combine with other effects for complex animations
+- Perfect for hero sections, loading states, and transitions
+- Works with all Once UI Text variants and styling
+- Consider `prefers-reduced-motion` for accessibility in production

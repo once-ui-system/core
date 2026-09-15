@@ -1,5 +1,5 @@
-import '@once-ui-system/core/css/styles.css';
-import '@once-ui-system/core/css/tokens.css';
+import '@once-ui-system/foundations/css/styles.css';
+import '@once-ui-system/foundations/css/tokens.css';
 import '../resources/custom.scss';
 
 import classNames from "clsx";
@@ -12,7 +12,6 @@ import { Analytics } from "@vercel/analytics/react"
 import { Background, Column, Flex, Meta, Row, ThemeInit } from "@once-ui-system/core";
 import { dataStyle, layout, schema, style } from "../resources/once-ui.config";
 import { meta } from "@/resources";
-import { RouteGuard } from "@/product/RouteGuard";
 import { Providers } from '@/product/Providers';
 
 import { Geist } from "next/font/google";
@@ -125,12 +124,10 @@ export default function RootLayout({
               flex={1}
             >
               <Flex horizontal="center" maxWidth={layout.body.width} minHeight="0">
-                <RouteGuard>
-                  <Sidebar m={{hide: true}} paddingRight="2" />
-                  <Row fillWidth>
-                    {children}
-                  </Row>
-                </RouteGuard>
+                <Sidebar m={{hide: true}} paddingRight="2" />
+                <Row fillWidth>
+                  {children}
+                </Row>
               </Flex>
             </Flex>
             <Footer />

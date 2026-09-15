@@ -1,0 +1,292 @@
+---
+title: "Table"
+summary: "The Table component displays structured tabular data with optional sorting and click interactions. It supports custom cell rendering and dynamic row behavior."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/table.mdx"
+github: "components/Table.tsx"
+navLabel: "Table"
+navIcon: "components"
+---
+
+`Table` is used to organize and render lists of information in a column/row format. It supports sorting, optional click handlers, and flexible cell content using `ReactNode`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      data={{
+        headers: [
+          { content: "Name", key: "name", sortable: true },
+          { content: "Role", key: "role", sortable: true },
+        ],
+        rows: [
+          ["Alice", "Engineer"],
+          ["Bob", "Designer"],
+          ["Carol", "Product"],
+        ],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+    data={{
+      headers: [
+        { content: "Name", key: "name" },
+        { content: "Role", key: "role" },
+      ],
+      rows: [
+        ["Alice", "Engineer"],
+        ["Bob", "Designer"],
+        ["Carol", "Product"],
+      ],
+    }}
+/>`,
+      language: "tsx",
+      label: "Table"
+    }
+  ]}
+/>
+
+## Sorting
+
+Enable sorting per column by setting `sortable: true` on the corresponding header. Click toggles between ascending and descending.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      data={{
+        headers: [
+          { content: "Name", key: "name", sortable: true },
+          { content: "Role", key: "role", sortable: true },
+        ],
+        rows: [
+          ["Alice", "Engineer"],
+          ["Bob", "Designer"],
+          ["Carol", "Product"],
+        ],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+    data={{
+      headers: [
+        { content: "Name", key: "name", sortable: true },
+        { content: "Role", key: "role", sortable: true },
+      ],
+      rows: [
+        ["Alice", "Engineer"],
+        ["Bob", "Designer"],
+        ["Carol", "Product"],
+      ],
+    }}
+/>`,
+      language: "tsx",
+      label: "Sorting"
+    }
+  ]}
+/>
+
+## Row actions
+
+Add `onRowClick` to make rows interactive. A hover state is applied automatically.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Table
+    onRowClick={(index) => alert(\`Clicked row \${index}\`)}
+    data={{
+      headers: [
+        { content: "Task", key: "task" },
+        { content: "Status", key: "status" },
+      ],
+      rows: [
+        ["Launch", "In progress"],
+        ["Prototype", "Done"],
+      ],
+    }}
+/>`,
+      language: "tsx",
+      label: "Row actions"
+    }
+  ]}
+/>
+
+## Search
+
+Enable `searchable` to filter rows by cell content. Use `searchPlaceholder` to customize the input label.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      searchable
+      searchPlaceholder="Filter by name..."
+      data={{
+        headers: [
+          { content: "Name", key: "name", sortable: true },
+          { content: "Role", key: "role" },
+        ],
+        rows: [
+          ["Alice", "Engineer"],
+          ["Bob", "Designer"],
+          ["Carol", "Product"],
+          ["Dan", "Marketing"],
+        ],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+    searchable
+    searchPlaceholder="Filter by name..."
+    data={{
+      headers: [
+        { content: "Name", key: "name", sortable: true },
+        { content: "Role", key: "role" },
+      ],
+      rows: [
+        ["Alice", "Engineer"],
+        ["Bob", "Designer"],
+        ["Carol", "Product"],
+      ],
+    }}
+/>`,
+      language: "tsx",
+      label: "Search"
+    }
+  ]}
+/>
+
+## Pagination
+
+Set `paginated` to split large datasets into pages. Control the default page size with `defaultPageSize` and `pageSizeOptions`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      paginated
+      defaultPageSize={3}
+      data={{
+        headers: [
+          { content: "Name", key: "name" },
+          { content: "Role", key: "role" },
+        ],
+        rows: [
+          ["Alice", "Engineer"],
+          ["Bob", "Designer"],
+          ["Carol", "Product"],
+          ["Dan", "Marketing"],
+          ["Eve", "Support"],
+          ["Frank", "Sales"],
+        ],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+  paginated
+  defaultPageSize={5}
+  pageSizeOptions={[5, 10, 20, 50]}
+  data={{ headers, rows }}
+/>`,
+      language: "tsx",
+      label: "Pagination"
+    }
+  ]}
+/>
+
+## Loading and empty states
+
+Use `loading` to show a spinner while data is fetched. Provide `emptyState` or `loadingState` for custom placeholders.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      loading
+      data={{
+        headers: [
+          { content: "Name", key: "name" },
+          { content: "Role", key: "role" },
+        ],
+        rows: [],
+      }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table
+  loading
+  loadingState={<Text>Fetching records...</Text>}
+  emptyState={<Text>No results found.</Text>}
+  data={{ headers, rows }}
+/>`,
+      language: "tsx",
+      label: "Loading"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Table"
+  describe={{
+    data: "Headers and rows. Cells are ReactNodes, so anything can go in one.",
+    onRowClick: "Called with the row index. Rows become focusable when set.",
+    searchable: "Add a search field that filters rows.",
+    searchPlaceholder: "Placeholder for that field.",
+    striped: "Alternate row backgrounds.",
+    hoverable: "Highlight the row under the pointer.",
+    compact: "Tighter row height, for dense data.",
+    loading: "Swap the rows for the loading state.",
+    loadingState: "What to render while loading.",
+    emptyState: "What to render when there are no rows.",
+    actions: "Row actions, rendered in a trailing column.",
+    stickyHeader: "Keep the header visible while the body scrolls.",
+    rowClassName: "Per-row class, by index.",
+    cellClassName: "Per-cell class, by row and column index.",
+    paginated: "Page the rows instead of rendering all of them.",
+    defaultPageSize: "Rows per page before the reader changes it.",
+    pageSizeOptions: "The sizes offered in the page-size control.",
+  }}
+  content={[
+    ["maxHeight", "string"],
+    ["className"],
+    ["style"]
+  ]}
+/>
+
+### TableAction
+
+<PropsTable
+  content={[
+    ["icon", "string"],
+    ["label", "string"],
+    ["tooltip", "string"],
+    ["variant", ["primary", "secondary", "tertiary", "danger"], "secondary"],
+    ["onClick", "(rowIndex: number) => void"],
+    ["disabled", "(rowIndex: number) => boolean"]
+  ]}
+/>

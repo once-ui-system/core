@@ -1,12 +1,12 @@
 {
  "name": "LineBarChart",
- "group": "modules",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
  "extends": [
-  "LineBarChart.impl",
-  "interfaces",
   "Flex"
  ],
  "mixins": [
+  "ChartProps",
   "CommonProps",
   "DisplayProps",
   "FlexProps",
@@ -14,7 +14,22 @@
   "SpacingProps",
   "StyleProps"
  ],
+ "props": {
+  "barWidth": "BarWidth = l",
+  "curve": "curveType = natural",
+  "reverseY": "boolean = false",
+  "reverseX": "boolean = false",
+  "data-viz-style": "string",
+  "legend": "LegendConfig = {}",
+  "error": "boolean = false",
+  "tooltip": "boolean = true",
+  "grid": "\"x\" | \"y\" | \"both\" | \"none\" = y",
+  "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+  "loading": "boolean = false",
+  "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+ },
  "mixinsRef": [
+  "ChartProps",
   "CommonProps",
   "DisplayProps",
   "FlexProps",
@@ -24,6 +39,22 @@
  ],
  "tokensRef": "see spec.json mixins",
  "resolvedMixins": {
+  "ChartProps": {
+   "title": "React.ReactNode",
+   "description": "React.ReactNode",
+   "series": "!SeriesConfig | SeriesConfig[]",
+   "data": "!DataPoint[]",
+   "legend": "LegendConfig",
+   "date": "DateConfig",
+   "emptyState": "React.ReactNode",
+   "errorState": "React.ReactNode",
+   "error": "boolean",
+   "tooltip": "boolean",
+   "grid": "\"x\" | \"y\" | \"both\" | \"none\"",
+   "axis": "\"x\" | \"y\" | \"both\" | \"none\"",
+   "variant": "ChartVariant",
+   "loading": "boolean"
+  },
   "CommonProps": {
    "onBackground": "Colors",
    "onSolid": "Colors",

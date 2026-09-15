@@ -6,6 +6,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 import {
+  Button,
   Column,
   CountFx,
   Grid,
@@ -37,9 +38,9 @@ const activity = {
     { content: "Time", key: "time" },
   ],
   rows: [
-    ["Plan upgraded to Pro", "jane@acme.co", <Tag size="s" variant="success">Completed</Tag>, "2m ago"],
-    ["New signup", "alex@studio.io", <Tag size="s" variant="brand">New</Tag>, "14m ago"],
-    ["Payment failed", "ops@build.dev", <Tag size="s" variant="danger">Action</Tag>, "1h ago"],
+    ["Plan upgraded to Pro", "jane@acme.co", <Tag size="s" scheme="success">Completed</Tag>, "2m ago"],
+    ["New signup", "alex@studio.io", <Tag size="s" scheme="brand">New</Tag>, "14m ago"],
+    ["Payment failed", "ops@build.dev", <Tag size="s" scheme="danger">Action</Tag>, "1h ago"],
   ],
 };
 
@@ -65,8 +66,8 @@ export function DashboardExample() {
             </Heading>
           </Column>
           <SegmentedControl
-            selected={range}
-            onToggle={setRange}
+            value={range}
+            onChange={setRange}
             buttons={[
               { value: "7d", label: "7 days" },
               { value: "30d", label: "30 days" },
@@ -77,7 +78,7 @@ export function DashboardExample() {
 
         <Grid ref={statsRef} columns="4" gap="16" m={{ columns: 2 }} s={{ columns: 1 }}>
           {stats.map((stat, index) => (
-            <RevealFx key={stat.label} fill trigger={seen} translateY="8" delay={index * 0.1}>
+            <RevealFx key={stat.label} fill revealed={seen} translateY="8" delay={index * 100}>
               <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16">
                 <Row fillWidth horizontal="between" vertical="center">
                   <Text variant="label-default-s" onBackground="neutral-weak">
@@ -137,9 +138,7 @@ export function DashboardExample() {
             <Heading as="h2" variant="heading-strong-s">
               Recent activity
             </Heading>
-            <Text variant="label-default-s" onBackground="brand-medium" style={{ cursor: "pointer" }}>
-              View all
-            </Text>
+            <Button variant="tertiary" size="s" label="View all" />
           </Row>
           <Line />
           <Table fillWidth data={activity} />

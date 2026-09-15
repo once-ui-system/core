@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState, forwardRef, useEffect } from "react";
-import { Flex, Icon, Media, Spinner, Text } from "../../";
+import { Flex, Icon, Media, Spinner, Text } from "../../components";
 import styles from "./MediaUpload.module.scss";
 
 let Compressor: any;

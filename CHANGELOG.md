@@ -13,19 +13,796 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
-Tracking toward **1.9.0**, classified **minor** per [RELEASING.md](RELEASING.md):
-additive only — a new package consumers may adopt, new resolution paths, and
-internals changes that keep observable behavior identical. Nothing is removed,
-narrowed, or deprecated, and no peer-dependency floor moves.
+### Added
+
+- **`ThemeSwitcher` gains `collapsed`.** The control shows only the active theme
+  and reveals the rest on hover or focus, for headers and footers where it has
+  to be reachable from every page without spending three slots on itself.
+
+  It stays a real toggle group rather than a hover trick: every option keeps its
+  tab stop (collapsed with `max-width: 0`, not `display: none`), `:focus-within`
+  opens the group so a keyboard visitor can reach all three, and any device
+  without hover gets the expanded group from the start — otherwise the only way
+  in would be to tap the visible button, which would have already changed the
+  theme. The width transition is the only motion and `prefers-reduced-motion`
+  removes it.
+
+  ```tsx
+  <ThemeSwitcher collapsed />
+  ```
+
+### Fixed
+
+- **`ThemeSwitcher` now exposes which theme is active.** The active option was
+  marked only by its `"primary"` variant, so assistive technology had no way to
+  tell the three buttons apart. Each now carries `aria-pressed`.
+
+### Changed
+
+- **Agent guidance.** `ai/rules.md` gains a rule on proportion — two columns in
+  a row finish at roughly the same place, and the fix for a half-empty column is
+  content in the thin side, not more whitespace. `ai/recipes.md` gains the
+  reveal-on-hover pattern with the three rules that keep it accessible, and the
+  matching anti-pattern.
+
+## [2.0.0-alpha.0] — 2026-09-15
+
+Published to the **`alpha`** dist-tag, not `latest`. `npm install
+@once-ui-system/core` keeps resolving 1.8.4, and every `^1.8.x` range in the
+wild is unaffected — a prerelease does not satisfy a stable range, not even
+`^2.0.0` or `*`. Getting it is deliberate:
+
+```bash
+npm i @once-ui-system/core@alpha
+```
+
+This is a preview of 2.0, not 2.0. The API below is what we intend to ship,
+but the point of an alpha is to find out where that is wrong, so treat it as
+open to change and please report what breaks. Three things are known and
+deliberate:
+
+- **The published package is bundler-only.** `dist` is ESM syntax in `.js`
+  files without `"type": "module"`, so Next.js, Vite and friends load it and
+  plain Node `require`/`import` does not. That predates this release; fixing
+  the module format is a 2.0 decision that has not been made yet.
+- **`@once-ui-system/foundations` is not published.** Core inlines its SCSS and
+  CSS at build time, so consumers install nothing new.
+- **Breakpoints are fixed.** See `MIGRATING.md` §7.
+
+Heading to **2.0**, not to 1.9. `package.json` carries `2.0.0-alpha.0` so
+nothing here can be published as a version nobody chose — 1.9.0 was a working
+number bumped ahead of any release decision, and it is now skipped entirely.
+
+The `ThemeInit` fix that briefly lived under a 1.9.0 heading shipped instead as
+**1.8.4** (published 2026-08-28), cut from the tree that produced the published
+1.8.3 so it reached `^1.8.x` consumers with nothing to migrate. Its entry is
+below, in its own release.
+
+Classification is **major** by [RELEASING.md](RELEASING.md)'s own criteria, and
+no longer open: props are renamed, three modules leave the root barrel for
+subpaths, a type union narrows from `string`, and a browser floor appears where
+there was none. What remains is the maintainer's publish decision — whether 2.0
+ships as scoped here, or whether any of it waits.
+
+**What a 1.8.x app has to do.** Five things, in the order it makes sense to do
+them — [MIGRATING.md](MIGRATING.md) walks each one:
+
+1. Run the codemod. It applies every prop rename below, component-scoped, and is
+   a no-op on its own output.
+2. Move chart, `CodeBlock` and `MediaUpload` imports to the `/data`, `/code` and
+   `/media` subpaths, and install the peer each one names. The codemod does this
+   too.
+3. Rewrite `ColorInput`'s `onChange` body by hand — the signature changed, and a
+   rename cannot express that.
+4. Import `LayoutProvider` from `@once-ui-system/core/next`, if the app is a Next
+   app, to keep 1.8.x link and image behavior.
+5. Check the browser floor: scheme tokens are `oklch()` now, which needs Chrome
+   111 / Safari 15.4 / Firefox 113.
+
+Nothing else is required to build. `IconName` is a real union rather than
+`string`, so a name that used to render a blank space is now a type error — that
+surfaces bugs an app already had, it does not create work.
+
+**The Next.js step in detail.** `ElementType` (which backs `SmartLink` and any
+`Button` / `Card` / `ToggleButton` with `href`), `Media`, `Logo`, `MegaMenu` and
+`Kbar` now render through the adapter layer, whose defaults are plain DOM —
+`<a>`, `<img>`, `window.location.assign`. Keeping 1.8.x behavior is a one-line
+change — the import path for `LayoutProvider`:
+
+```diff
+- import { LayoutProvider } from "@once-ui-system/core";
++ import { LayoutProvider } from "@once-ui-system/core/next";
+```
+
+That provider is core's `LayoutProvider` with the Next adapters already
+installed. No provider is added to the tree and no props change. Apps that
+compose `AdapterProvider` themselves can keep using `NextAdapterProvider`
+directly.
+
+Without either, internal links full-page reload and images skip `next/image`
+optimization. The DOM fallbacks are what make core usable outside Next, and are
+covered by `adapter-fallbacks.test.tsx`.
+
+Automatic detection was investigated and rejected on evidence rather than
+taste. The bundler half works — a guarded `await import("next/link")` builds
+clean under esbuild and Vite with no Next installed, and degrades to the DOM
+fallback. React is the blocker: the DOM `useNavigate` returns a closure while
+the Next one calls `useRouter` and `useCallback`, so swapping implementations
+after mount breaks the rules of hooks. Resolution must therefore settle before
+the first render, and a browser bundle has no synchronous way to conditionally
+resolve an optional module.
+
+### Breaking
+
+**Prop API standardisation.** Every place where one prop name carried two
+meanings, or one meaning went by two names, is resolved. All of it is
+mechanical: the codemod applies the renames component-scoped, following import
+aliases, and running it twice is a no-op.
+
+```bash
+curl -O https://raw.githubusercontent.com/once-ui-system/core/main/scripts/codemod-2.0.mjs
+node codemod-2.0.mjs src --dry   # report only
+node codemod-2.0.mjs src
+```
+
+Boolean props that toggle visibility now read `showX`, leaving the plain name
+for the thing itself:
+
+| Component | 1.8.x | 2.0 |
+| --- | --- | --- |
+| `ProgressBar` | `label?: boolean` | `showLabel` |
+| `Feedback`, `Toast` | `icon?: boolean` | `showIcon` |
+| `DataTooltip` | `colors?: boolean` | `showSwatches` |
+
+State props drop the `is`/`has` prefix, restoring the convention the docs
+already prescribed (`basics/components` — "use `open` instead of `isOpen`"):
+
+| Component | 1.8.x | 2.0 |
+| --- | --- | --- |
+| `Dialog`, `Modal`, `DatePicker`, `DropdownWrapper`, `EmojiPickerDropdown`, `KbarContent` | `isOpen` | `open` |
+| `Checkbox`, `RadioButton`, `Switch` | `isChecked` | `checked` |
+| `Checkbox` | `isIndeterminate` | `indeterminate` |
+| `DatePicker`, `DropdownWrapper` | `isNested` | `nested` |
+| `NavIcon` | `isActive` | `active` |
+| `Input`, `Textarea`, `Option` | `hasPrefix` / `hasSuffix` | `prefix` / `suffix` |
+
+Four of those names were held by React's own DOM attribute types — `checked`
+and `size` on `InputHTMLAttributes`, `prefix` on the base `HTMLAttributes` (the
+RDFa attribute) — which is why the prefixes existed at all. Those components
+now `Omit` the inherited declaration and declare their own. The cost is that
+the native attribute can no longer be forwarded: `<Input size>` is the token
+scale, not the HTML character-width attribute.
+
+`radius` now means one thing everywhere — the roundness scale that
+`StyleProps` has always defined. Corner selection, which had been overloading
+the same name on five components, moves to `corners`:
+
+```diff
+- <Button radius="top-left" />
++ <Button corners="top-left" />
+  <Button radius="none" />   // unchanged — "none" is roundness, not a corner
+```
+
+Affects `Button`, `IconButton`, `Input`, `Textarea`, `ToggleButton`. This is
+the one rename the codemod decides by value rather than by name; a computed
+`radius={expr}` is reported rather than rewritten.
+
+`variant` now means appearance everywhere. `Pulse` and `Tag` were using it
+for a **colour scheme**, which is why the prop had seven incompatible value
+spaces across thirteen components; both now take `scheme`.
+
+**Timing props are milliseconds, consistently.** An audit found the library was
+split three ways: most timings were already ms (`Animation.duration` and
+`.delay`, `TypeFx.speed`/`.delay`, `Hover.delay`/`.hideDelay`,
+`GlitchFx.interval`, `Carousel.play.interval`, `CountFx.speed`,
+`RevealFx.speed`), two were seconds, and four `speed` props on
+`CelebrationFx`, `WeatherFx`, `MatrixFx` and `Particle` are unitless
+multipliers that are not durations at all and are unchanged. The two outliers
+move to ms:
+
+```diff
+- <RevealFx delay={0.2} />        <ShineFx speed={0.75} />
++ <RevealFx delay={200} />        <ShineFx speed={750} />
+```
+
+`RevealFx` was the sharpest case: its `delay` was seconds while its own
+`speed`, on the next line of the same interface, was already milliseconds.
+
+**`Skeleton` drops its second size scale.** It extends `Flex`, so width is now
+expressed the way it is on any other element — `width="80%"`, `maxWidth={24}` —
+instead of a five-step scale that only ever meant percentages. What remains is
+`size`: the height of a `line`, the diameter of a `circle`. `delay` becomes
+milliseconds rather than a `"1".."6"` index into six fixed classes.
+
+```diff
+- <Skeleton shape="line" height="s" width="l" delay="3" />
++ <Skeleton shape="line" size="s" width="75%" delay={300} />
+```
+
+**`fill` means layout everywhere.** `Media`, `Carousel` and `Swiper` each
+declared a `fill` of their own, shadowing the `StyleProps` layout prop of the
+same name that every Flex-derived component has (`fillWidth` + `fillHeight`).
+So `<Media fill />` did not fill anything — it dropped the intrinsic aspect
+ratio and handed sizing to the parent, which is a reasonable thing to want and
+not remotely what the name says. That behaviour is now `stretch`, and `fill` on
+those three means what it means on everything else.
+
+```diff
+- <Media fill />        <Carousel fill />        <Swiper fill />
++ <Media stretch />     <Carousel stretch />     <Swiper stretch />
+```
+
+**Colour props that paint into SVG accept tokens again.** `color` on
+`LinearGauge`, `RadialGauge`, `Particle` and the chart module, and
+`colorStart` / `colorEnd` / `color` on `Background`'s gradient, dots, grid and
+lines, were typed as bare `string` — so a design token was accepted but never
+suggested, and a typo in one was never caught. They now take `ColorValue`,
+which is `Colors | (string & {})`: tokens autocomplete, and a raw `#fff`,
+`rgb(...)` or `var(...)` still passes, because these values are painted into
+SVG rather than applied through a class.
+
+Other divergences resolved:
+
+- `Input` and `Textarea` take `size` instead of `height`. It was always a
+  t-shirt scale rather than a dimension, and only spelled `height` because
+  `size` was inherited from the DOM.
+- `SegmentedControl` becomes an ordinary controlled input: `selected` → `value`,
+  `onToggle` → `onChange`, `defaultSelected` → `defaultValue`. `selected` is a
+  boolean on the five other components that have it, and `onToggle` is
+  `() => void` on the other four.
+- `RevealFx` takes `revealed` instead of `trigger`. It is controlled state;
+  `trigger` elsewhere is either the element that opens something or a mode union.
+- `ColorInput`'s `onChange` hands back the value, `(value: string) => void`,
+  like every other `onChange` in the library, instead of a hand-built
+  `ChangeEvent`. **The codemod flags this one but cannot rewrite the callback
+  body** — the signature changed, so the handler needs a human.
+
+Components deriving their props from `Input` (`Select`, `NumberInput`,
+`TagInput`, `ColorInput`, `DateInput`, `DateRangeInput`, `PasswordInput`) and
+from `DropdownWrapper` (`EmojiPickerDropdown`) inherit these renames; the
+codemod knows their tags. Property accesses on `ComponentProps<typeof X>`
+(`props.isChecked`) are not JSX and are surfaced by `tsc`, not rewritten.
+
+**Charts, `CodeBlock` and `MediaUpload` move to their own subpaths.** The lazy
+`await import()` and its `catch()` never made `recharts`, `prismjs` and
+`compressorjs` optional. A bundler resolves the specifier when it walks the
+module graph, so the failure came at resolution and the fallback never ran — and
+the root barrel re-exported `code`, `media` and `data`, which put all three
+specifiers into every consumer's graph. Reproduced on an app rendering no chart,
+no `CodeBlock` and no `MediaUpload`: it still could not build without all three
+installed. The plumbing was there; it had never worked.
+
+```diff
+- import { LineChart, CodeBlock, MediaUpload } from "@once-ui-system/core";
++ import { LineChart } from "@once-ui-system/core/data";
++ import { CodeBlock } from "@once-ui-system/core/code";
++ import { MediaUpload } from "@once-ui-system/core/media";
+```
+
+An app that never imports a subpath never has the specifier, so the three are
+optional peers for real — 13.5M of install weight nobody pays for by default —
+and the `MissingDependency` fallback finally means what it says. The codemod
+moves the imports; 53 files across the fleet named these from the root. Core's
+published types no longer import `CurveType` from recharts either, so skipping
+the peer no longer breaks typechecking in an app that never touches a chart.
+
+**Icon names are a union, and the registry is not typed against react-icons.**
+Core rendered 54 icons through `react-icons`, so every consumer installed 85M for
+about 4 kB gzipped of SVG — 68M of it icon families core never touched. It was
+never a bundle problem; it was an install problem and a typing problem. The data
+is inlined now (`src/icons/data.ts`, generated by `scripts/generate-icons.mjs`
+from `icon-manifest.json`), `react-icons` is a devDependency used only to
+regenerate it, and a parity test renders all 76 against their originals and
+asserts identical markup. A fresh consumer install of core goes from **513M to
+47M**.
+
+The type change matters more than the megabytes. `Icon` renders its component
+with no props at all, so all core ever needed was "something that returns an
+SVG" — yet the registry was typed against react-icons' `IconType`, putting one
+vendor in the public API of every app that registered an icon. It is structural
+now: react-icons, lucide, heroicons or a hand-written SVG all satisfy it. And
+because of that annotation `IconName` collapsed to `string`, so every name
+compiled, typos included, and a wrong one meant a console warning and a blank
+space. It is a real union now, extended by declaration merging:
+
+```ts
+declare module "@once-ui-system/core" {
+  interface IconLibraryOverrides {
+    rocket: true;
+  }
+}
+```
+
+Turning that on immediately found icons core was already rendering as nothing:
+`opacity` and `inbox` in components, `chevronDoubleLeft` and `chevronDoubleRight`
+in `Table`'s pagination, and `email`, `loading` plus seventeen more across
+fifteen shipped AI example blocks — the blocks agents copy. Those names are
+registered where they were sensible (**76 icons**, up from 54) and corrected
+where they were not. Brand marks stay out: they are trademarks, they date, and
+every app in the fleet already registers its own.
+
+**`Textarea` grows with its content by default.** `lines` was `3`, so every
+textarea that never named one was a fixed three-row box with a resize handle.
+It is `"auto"` now: the field sizes itself to what is in it, and the handle
+appears only on a fixed height, since a textarea that manages its own height has
+nothing to hand over.
+
+```diff
+- <Textarea id="notes" label="Notes" />              // three fixed rows
++ <Textarea id="notes" label="Notes" />              // grows with content
++ <Textarea id="notes" label="Notes" lines={3} />    // the old behaviour
+```
+
+The wrapper keeps `min-height: var(--fld-h)`, so an empty one is still a full
+field tall rather than collapsing to a single line. `resize` now only applies
+alongside a numeric `lines`. The codemod strips `lines="auto"` where it was
+written explicitly, since it says nothing 2.0 does not already do; a numeric or
+computed `lines` is left alone.
+
+**Scheme tokens are `oklch()`, which sets a browser floor.** All 285 scheme
+values are expressed in OKLCH. Nothing renders differently where the function is
+supported — every value round-trips to the hex it replaced, verified by building
+the docs and painting each token to a canvas in a real browser, 228 of 228
+pixel-identical against the hex at HEAD. What it buys is that the numbers mean
+something: `oklch(0.6743 0.1670 261.54)` says "two thirds as light as white,
+moderately saturated, blue" where `#5A93FC` says nothing. The cost is that an
+older browser drops the declaration rather than approximating it, so the floor is
+**Chrome 111, Safari 15.4, Firefox 113** (2022–23), with no fallback. The
+`--static-*` values stay hex, because black, white and transparent are clearer
+that way. The ramps themselves are untouched.
+
+### Fixed
+
+- **A failed emoji fetch no longer fails the build — or the publish.**
+  `prepack` runs `pnpm build`, and the build regenerates
+  `src/data/emoji-data.json` from GitHub. Behind a proxy, a TLS-intercepting
+  network, or offline, that fetch threw and `process.exit(1)` took
+  `npm publish` down with it. The categorised file is committed, so a fetch
+  failure now keeps it, warns, and lets the build continue; the script exits
+  non-zero only when there is genuinely no file to fall back to.
+- **Inputs no longer zoom iOS Safari on focus, and the floating label and value
+  are placed by ink.** Three separate things were wrong with a field on a phone.
+  iOS Safari zooms when a focused control computes below 16px, and
+  `--font-scaling-mobile: 15px` put xs, s and m under it — m being the default.
+  Raising the mobile root does not fix it (xs and s use `font-s`, still 14px at a
+  16px root; clearing 16px that way needs a root of 18.3px, which is no longer a
+  dense product UI), so the clamp goes on the focusable control alone, on touch
+  only, with a line-height floor of 1.3 beside it — otherwise xs and s would put
+  16px glyphs in a 16.88px line box. `l` and `xl` compute identically on touch and
+  desktop, as they always did. Placement was the older bug and has nothing to do
+  with zoom: every size shared one `padding-top: 1rem` and a hand-picked label
+  offset while heights ran 2.5rem to 4.5rem, so at m the gap between the label's
+  baseline and the value's cap height was 1.4px, and at xl it was negative — the
+  value overlapped the label while 28px of dead space collected underneath. Both
+  are derived per size now from where the ink falls (cap height, baseline,
+  descender) centred in the box the value really gets; the worst top-to-bottom
+  imbalance across the whole scale is under a pixel. xs and s gain a touch-only
+  height floor of 40 and 48px — both were under the tap-target minimum, and a
+  flat 48 would have cleared it but collapsed the two sizes into each other.
+  `fontSizeMap` is gone from both components: the stylesheet owns font-size and
+  line-height now, so the clamps can reach them.
+- **`StylePanel` wrote two settings straight to `localStorage`.** `data-solid`
+  and `data-solid-style` bypassed `ThemeProvider` entirely, so they ignored any
+  persistence setting. They go through the provider now. Row dividers also move
+  from a per-row border prop to one stylesheet rule, so hiding or reordering rows
+  can no longer leave a border on the last one; and only the `DataStyle` row
+  reaches for `DataThemeProvider`, where the whole panel used to require one in
+  the tree.
+- **An operable `Card` with no explicit `radius` got the class
+  `radius-undefined`.** The fallback was written `` `radius-${flex.radius}` ||
+  "radius-l" ``, and a template literal is a string — truthy even when the value
+  inside it is `undefined` — so the `||` never ran and the focus ring had no
+  radius to follow. A static `Card` also painted `cursor: interactive`, promising
+  a click it had no handler for; the cursor is now tied to `href` / `onClick`
+  like the focus ring and the role already were.
+- **The AI harness's validator was telling agents to write 1.8.x timings.** Its
+  `RevealFx.delay` rule read "delay is in seconds — use index * 0.1", which 2.0
+  inverts; it now flags seconds and asks for milliseconds. Two of its rules also
+  fired on correct code, which is the worse failure for a tool agents are meant
+  to trust: `color.tokens` matched any string shaped like hex, so a table of
+  order ids (`"#1024"` is a valid #RGBA literal) failed, as did the `fill` and
+  `stroke` of an inline `<svg>` — the exact values 2.0 types as `ColorValue`
+  because no token can express them. And `Card.interactive` fired on a `Card`
+  handed to a `trigger` prop, which its owner operates. Six of the 26 shipped
+  example blocks failed their own validator before this; three do now, and those
+  three are judgement calls rather than defects. The rules are covered by tests.
+- **The shipped AI examples still used `fill` on `Media` and `Carousel`**, which
+  2.0 renames to `stretch` — a rename `tsc` cannot catch, because `fill` stayed
+  valid as the layout prop it now means. Corrected in `auth.tsx` and
+  `blocks/Streaming1.tsx`.
+- **The icon registry was too small for the products built on it.** An audit of
+  every `Icon`, `prefixIcon`, `suffixIcon` and `arrowIcon` call across magic,
+  motion, studio, scenetic and magic-convert found **127 distinct unregistered
+  names over 531 call sites** — every one rendering a blank space today, and
+  every one becoming a type error under 2.0's `IconName` union. The registry goes
+  **76 to 99**, adding the product-UI glyphs the fleet actually asks for: `home`,
+  `folder`, `file`, `image`, `video`, `chat`, `time`, `lock`, `heart`, `tag`,
+  `bolt`, `globe`, `star`, `starFill`, `bookmark`, `filter`, `upload`,
+  `arrowLeft`, `forward`, `barChart`, `banknotes`, `store` and `organization`.
+  That clears 207 of the 531. The parity test covers all 99. Brand marks stay
+  out, as they were: they are trademarks, and an app registers its own.
+- **The codemod renames six icon names that were only misspelled.** `email`,
+  `more`, `conversation`, `sparkles`, `externalLink` and `shop` are not missing
+  icons — they are `mail`, `moreHorizontal`, `chat`, `sparkle`, `arrowUpRight`
+  and `store` under a name someone guessed, about 46 more call sites. The `name`
+  rewrite is scoped to `<Icon>`, since `name` means something else on nearly
+  every other component; `window`, `split`, `stop` and `description` are each
+  plausibly several things and stay type errors for a human.
+- **`ToggleButton` takes a `radius`.** Roundness followed `size`, and `corners`
+  could only scope it — so a tall row with modest corners, which is what every
+  sidebar in the fleet wants, had no prop at all. Aveiro and Studio both reached
+  for `style={{ borderRadius: "var(--radius-m)" }}` instead, five call sites
+  between them. It falls back to `size` when unset, so nothing changes for
+  anyone not asking.
+- **`Kbd` belongs in a sentence.** It renders a `Flex`, and `Flex` is
+  `display: flex`, so every key in prose broke the line and stretched to the
+  column width. The Scrubber page showed four of them stacked as full-width bars
+  between the words describing them. `inline` and `fit` now, both overridable.
+- **`Carousel` and `Swiper` blurred the edges of their own images.** Both put a
+  `Fade` down each side with `base="transparent"` — a gradient from transparent
+  to transparent, which paints nothing. The only thing those elements ever
+  rendered was `Fade`'s `backdrop-filter: blur(0.5rem)`, so what reached the
+  screen was a 6rem blurred strip over the artwork and no fade at all. Swiper's
+  was not even gated: Carousel's at least waited for hover, Swiper's was on the
+  whole time. Removed. The chevron already carries its own surface, which is the
+  affordance those strips were reaching for; an edge treatment that is wanted can
+  come back with a real `base` and a radius.
+- **The carousel chevrons had their borders shaved.** Each sits in a wrapper that
+  paints an opaque surface behind it, and the wrapper was `radius="l"` with
+  `overflow="hidden"` while `IconButton` at size `m` is `radius-m`. The larger
+  corner cut into the smaller one, clipping the button's border at all four
+  corners. The wrapper matches the button's radius now, and with the radii equal
+  there is nothing left to clip.
+- **The chart, `CodeBlock` and `MediaUpload` APIs were missing from the spec
+  entirely.** Each of these ships as a lazy shell (`X.tsx`) in front of the real
+  implementation (`X.impl.tsx`), which is what lets their dependency stay an
+  optional peer. The spec generator read the shell only, saw props declared in
+  another file, and recorded a wrapper relationship — so all six came out with
+  `props: {}` and a phantom `extends: ["X.impl", "interfaces"]` naming types the
+  spec never defined. `series` and `data` appeared nowhere in it. The generator
+  now treats an `X.impl` sibling as the same component (reading its defaults
+  too, since the shell only forwards props) and a module-local `interfaces.ts`
+  as a mixin like the global one. `LineChart` goes from 0 to 17 props, `BarChart`
+  and `LineBarChart` to 12, `PieChart` to 10, `CodeBlock` to 19, `MediaUpload` to
+  17, and `ChartProps` joins the shared mixins rather than being copied four
+  times. No other component's props changed. This is what left agents
+  extrapolating a chart API from examples — and `BarChart` had no example to
+  extrapolate from.
+- **A props table printed a mixed union as one unreadable blob.** The docs' table
+  split a union into separate values only when *every* member was a quoted
+  literal, so `"none" | "percentage" | string[]` on the gauges, or
+  `Colors | "surface" | boolean`, fell through and printed raw. Any union splits
+  now, on its top-level `|` only — the old naive split would have cut through
+  `Record<string, A | B>`.
+- **A collapsed `CodeBlock` faded to the wrong colour, and put its button in the
+  wrong place.** The fade over a collapsed block was `base="page"` while the
+  block paints `surface`, so wherever the two tokens differ — dark mode, where
+  page is `lab(2.7%)` and surface `lab(6.8%)` — it laid a band of page colour
+  across the bottom of the code. It takes the block's own `background` now, and
+  an explicit `style.backgroundColor` carries through to it. `View code` also sat
+  dead-centre of the collapsed area, over the code it was covering; it is
+  anchored 12px above the bottom edge instead.
+- **`Media` honours `fillWidth={false}`.** It accepted the prop, destructured
+  it, and then hardcoded `fillWidth` on the element anyway, so the value was
+  silently discarded. Found while renaming `fill` above.
+- **`SplitView` works on touch, and collapses to tabs on small screens.** The
+  divider listened for `mousedown` and `mousemove` only, so on a touch device it
+  could not be dragged at all — no amount of changing direction helped, because
+  no drag ever started. It uses pointer events now, which cover mouse, pen and
+  touch in one path, with pointer capture so the drag survives the finger
+  leaving the handle.
+
+  Below `collapseBelow` (default `s`) the split becomes tabs showing one panel
+  at a time, since a resizable split is a poor pattern on a phone in either
+  orientation: neither pane is usable at any ratio, and a drag handle competes
+  with page scrolling. Pass `labels` to name the tabs.
+
+  Two further faults fixed on the way: `defaultSplit`, `minSplit` and `maxSplit`
+  were accepted and then ignored — the hook hardcoded 0.3, 0.2 and 0.8 — and the
+  divider was pointer-only despite the docs claiming it was keyboard
+  accessible. It is now a focusable `role="separator"` that arrow keys move in
+  5% steps and that reports its position through `aria-valuenow`.
+
+- **The date-and-time picker no longer corrupts the time as you edit it.** Two
+  faults compounded into what looked like the field flipping between AM and PM
+  while typing. `handleTimeChange` takes a 1–12 hour, but the minutes field and
+  the AM/PM control both passed `selectedTime.hours`, which is 24-hour — so at
+  9:31 PM, editing the minutes re-applied the PM offset (21 + 12 = 33),
+  `setHours(33)` rolled the date forward a day, and the hour came back as 09.
+  Every further edit compounded it. Verified in a browser: before, editing the
+  minutes at `Aug 15, 21:31` produced `Aug 16, 09:45`; after, `Aug 15, 21:45`.
+- **The time panel no longer disappears mid-edit.** `DateInput` keyed the picker
+  on `value.getTime()`, so every hour, minute or AM/PM change altered the key
+  and React unmounted and remounted the whole picker — resetting it to the
+  calendar view while the dropdown stayed open, which reads as the picker
+  closing itself. The key now depends only on open state; the picker already
+  syncs to a changed `value` in an effect.
+- **A dropdown no longer closes when a click lands on something unfocusable
+  inside it.** `focusout` treated a null `relatedTarget` — the padding of a
+  field, the gap between two stepper buttons, a label — as focus leaving the
+  panel. A genuine outside click is already handled separately.
+
+- **Icon-only controls announce what they do, not which glyph they use.**
+  `IconButton` falls back to the icon *name* as its accessible label when given
+  no `tooltip` and no `aria-label` — so a carousel control announced
+  "chevronRight button" and table pagination announced "chevronDoubleLeft
+  button". The fallback stays, because an unnamed button is worse than a badly
+  named one, but core's own components no longer rely on it: 21 call sites
+  across `Table`, `Carousel`, `DatePicker`, `ScrollContainer`, `CompareImage`,
+  `PasswordInput`, `InteractiveDetails`, `StyleOverlay`, `CodeBlock` and
+  `ChartHeader` now carry real labels, and a test fails the build if a new one
+  appears.
+
+  `StylePanel`'s four swatch pickers were worse than mislabelled: the click
+  handler and `tabIndex` sit on a wrapping `Flex`, so the focusable element was
+  a div with no role and no name at all, while the `IconButton` inside was
+  decorative. The label, `role="button"` and `aria-pressed` now sit on the
+  element that is actually the control.
+
+- **`opacity={0}` and `zIndex={0}` now work.** Both are legal values — `Opacity`
+  includes `0`, `zIndex` includes `-1` and `0` — and `.opacity-0` / `.z-index-0`
+  ship in the stylesheet, but the class list guarded them on truthiness rather
+  than presence, so the single most useful value of each prop (hide a layer, pin
+  to the base stacking level) silently did nothing. The responsive `opacity`
+  variants already had the correct check; the base value and all four `zIndex`
+  breakpoints did not. Found while building a hover cross-fade, where both
+  images rendered at full opacity, stacked.
+
+- `@once-ui-system/foundations` was declared in core's **`dependencies`** as
+  `workspace:*`. `pnpm publish` rewrites that protocol to the depended-on package's
+  literal version, so the packed tarball declared a hard runtime dependency on
+  `@once-ui-system/foundations@2.0.0-alpha.0` — an unpublished package. Every
+  `npm install @once-ui-system/core` would have failed with E404, and a stable
+  release would have pinned consumers to an alpha. Core has no runtime import of
+  foundations (the build inlines its SCSS/CSS into `dist`), so it moves to
+  `devDependencies`, which consumers never install. A new
+  `publishable-dependencies.test.ts` fails on any workspace-protocol or pre-release
+  range in `dependencies`; `publint` and `arethetypeswrong` both pass on the broken
+  tarball, because they inspect the package's own structure rather than whether its
+  dependency graph resolves.
 
 ### Added
 
+- **`focusRing` on `Input` and `Textarea`.** A field draws no focus ring —
+  deliberately, that borderless native look is the point — but that leaves a
+  keyboard user with nothing to go on, while `Card` and `SmartLink` in this
+  same library do show one. `focusRing` opts a field in, using the same
+  outline as the `.focus-ring` utility so it matches every other focusable
+  thing on the page. Off by default, so nothing changes unless asked. It
+  shows on a mouse click too: `:focus-visible` always matches a field that
+  takes keyboard input, however that field was focused.
+
+  Not available on `Select`, and omitted from its props rather than accepted
+  and ignored: `Select` moves focus off the trigger and into the dropdown, so
+  the trigger is not the focused element for most of the interaction and a
+  ring keyed to it would light on first focus and then go out with the menu
+  still open. Giving `Select` a focus ring means tracking focus across the
+  whole control first.
+
+- **`StylePanel` is composable, and its state can be host-owned.** The panel had
+  been forked twice — once in Magic's site editor, once on Studio's brand page —
+  and both forks diverged on the same three axes, so those are the ones it opens
+  up. Every row and group is reachable as a part (`StylePanel.Brand`,
+  `StylePanel.Page`, and so on) and the default `StylePanel` is a plain
+  composition of them, so a host needing a different arrangement composes the
+  parts inside `StylePanel.Root` instead of reimplementing them; one keeping the
+  default arrangement hides parts of it with `visibility`. Passing `value` and
+  `onChange` takes ownership of the state — the panel then writes nothing to
+  `ThemeProvider`, `DataThemeProvider` or storage, and `onChange` receives both
+  the whole state and just the keys that changed, the latter being what a caller
+  sends to a server. Every row takes a `label` and every group a `title` and
+  `description`: a node replaces the default, `false` drops it.
+- **`ThemeProvider` takes `persistence`.** `"local"` (the default, unchanged),
+  `"none"`, or an adapter that routes storage elsewhere, such as a database.
+  `get` stays synchronous because it runs during hydration, where an await would
+  show a flash of the wrong theme; `set` and `remove` may return promises.
+- **Body text scales without touching headings.** `data-body-size` and
+  `data-body-line-height` drive `--font-size-body-multiplier` and
+  `--line-height-body-multiplier` — five steps (90–110) and four (90–120)
+  respectively, read as percentages. Both multipliers already existed and nothing
+  exposed them; `data-scaling` covers the root size, this covers running text.
+  `StylePanel`'s new body-text group is opt-in.
+- **`generateColorScheme` and `schemeAlphaVariants`.** Studio's brand page has
+  had a scheme generator for a while and it already worked in OKLCH internally;
+  it moves to core so every app gets it, without chroma-js — the conversions are
+  about forty lines of published matrices, and core having just shed react-icons
+  is no place to take a dependency for colour maths. One thing changes on the way
+  across: holding chroma fixed while lightness climbs asks for a colour that does
+  not exist at the light end, and converting that clamps R, G and B separately,
+  shifting the hue as it clips. Reducing chroma until the colour fits instead
+  cuts the worst error against the built-in schemes from 0.168 to 0.110 OKLab
+  ΔE, and about five-fold on the lightest steps. Seventeen tests regenerate each
+  built-in scheme from its own step 600 and assert the worst step stays in
+  tolerance.
+- **`Select` dropped the `className` it was given.** The caller's class sat
+  inside `classNames`' object argument, where clsx reads a key as the class
+  and its value as a condition — so a truthy `className` put the literal
+  string `"className"` on the element and the caller's own class never
+  reached the DOM at all.
+
+- **Browser autofill left the label on top of the filled text.** Autofill
+  fires no focus, blur or change event, so nothing in `Input` or `Textarea`
+  ever learned the field had stopped being empty — the same overlap as the
+  `defaultValue` case below, on the one path a user cannot work around by
+  clicking into the field. The one thing the browser does emit is an
+  animation: an inert keyframe hangs off `:-webkit-autofill` and the
+  components listen for it by name, so the label floats the moment the
+  browser fills the field. A consumer's own `onAnimationStart` is chained
+  rather than dropped.
+
+- **A prefilled field rendered its label on top of its value.** `Input` and
+  `Textarea` derived `isFilled` from `props.value` alone, so an uncontrolled
+  field — `defaultValue`, which is how a settings form normally renders saved
+  data — never floated its label: a profile form came up with every prefilled
+  row overlapped at once, and only corrected itself field by field as the user
+  focused and blurred each one. `isFilled` is seeded from `defaultValue` too,
+  and the effect that syncs it now ignores an `undefined` value instead of
+  clobbering that seed back to false on the first render. Browser autofill is
+  still not covered — it fires neither focus nor blur — and wants the float
+  keyed off CSS rather than React state.
+
+- **The AI spec lists `iconNames`.** `IconName` reached it as an opaque type
+  name, so an agent had no way to know what exists and guessed — which is exactly
+  how those fifteen example blocks came to name icons that render as nothing.
+- **The AI spec resolves the types its props name.** `series: SeriesConfig |
+  SeriesConfig[]` pointed at a shape `spec.json` never defined, so the chart API
+  was visible but not usable: two clean-context agents hit it independently and
+  reverse-engineered the row shape from an example instead. `types` now resolves
+  to a fixed point — a shape's own fields name further types, and those are
+  exactly the ones needed next — and carries object shapes and aliases beside
+  the string unions it already had, 25 entries to 93. `DataPoint` comes with its
+  `[key: string]` index signature, which is where a chart's series keys actually
+  live and which reading only property signatures had dropped. Resolution goes
+  through the type checker rather than the syntax, so `Omit<...>` and `extends`
+  resolve to the fields a type has rather than to nothing. Three cases are
+  deliberately not inlined: a component's own props say `"Avatar props"` and
+  point at the entry that already lists them; a type over 40 fields (because it
+  extends a component's whole surface) falls back to its own declared members;
+  and `FlexBreakpointProps` lists the 71 prop names that accept a breakpoint
+  object, which is the question that type is asked, rather than sixty lines of
+  declaration text. A test asserts no prop names a type the spec cannot resolve.
+- **The spec preferred a vendored type over ours when the names collided.**
+  recharts ships its own `DotsProps`, and indexing `node_modules` for types like
+  floating-ui's `Placement` let it shadow `Background`'s — which then dropped out
+  entirely, since a vendored type is only ever emitted as a string union. A name
+  declared in both places now resolves to ours.
+- **The CSS API-surface snapshot recorded a selector that does not exist.**
+  Sass keeps `/* */` comments in its output and the extractor matched raw text,
+  so a comment in `theme.scss` mentioning `[data-scaling]` was snapshotted as
+  part of the public selector surface alongside the four real
+  `[data-scaling="90"]`-style rules. Comments are stripped before extraction,
+  and the snapshot picks up the nine `data-body-size` / `data-body-line-height`
+  selectors that `bodySize` and `bodyLineHeight` had added without it — the
+  guard had been failing since the foundations extraction.
+- **The generated AI artifacts depended on the checkout's line endings.** A
+  multi-line object default (`Fade`'s `pattern`, `RadialGauge`'s `angle`) kept
+  its source newlines verbatim, so the committed JSON read `{\r\n ... }` when
+  regenerated on a CRLF checkout and `{\n ... }` on an LF one and flip-flopped
+  between machines. Defaults are collapsed the way type text already was, and a
+  test asserts no artifact carries a carriage return.
+- **`KbarItem` and the `MegaMenu` types are exported.** Components took them as
+  props but consumers could not name them.
+- **`Logo` takes per-theme sources.** `icon` and `wordmark` now accept
+  `{ light, dark }` as well as a plain string, so one element covers both
+  themes instead of two rendered side by side with the `light` and `dark`
+  props hiding one of them. A row of four client logos was eight elements and
+  two places to keep in sync for every change; it is now four and one. Both
+  assets are rendered and CSS picks, rather than reading the theme at runtime —
+  that keeps `Logo` server-renderable and avoids a flash of the wrong mark on
+  first paint. Plain strings are unchanged, and the whole-element `light` /
+  `dark` props still work for gating a logo to one theme deliberately.
+- **`Book`** — a book with a real 3D cover: perspective on the wrapper, a
+  `preserve-3d` context shared by cover and page block, and pages hinged onto
+  the cover's right edge, so the hover turn reads correctly from any angle
+  rather than only head-on. Motion is hover-gated and disabled under
+  `prefers-reduced-motion`; on touch the cover stays square-on. Links through
+  `ElementType`, so it routes via the adapter like every other core link.
+- **`MediaAudioPlayer`** — play/pause, a scrubbable progress bar and
+  elapsed/total time, the audio counterpart to `MediaVideoPlayer` and imported
+  from the same `./components/*` subpath rather than the root barrel. It takes
+  an `onTimeUpdate` callback so a caller can synchronise something with
+  playback — narration highlighting, a transcript, chapter markers — without
+  the player needing to know what is being synchronised.
+- **`Card` takes `selected`.** Picking one card out of a set — a plan, a
+  template, an option in a multi-select list — was every app repainting the
+  border and background by hand, each landing on slightly different tokens. The
+  prop paints both from the brand scheme, keeps them through hover (the hover
+  rule out-specified the background utility class, so a hand-rolled selected
+  card went neutral the moment the pointer touched it), and, on a card that is
+  actually clickable, announces the state as `aria-pressed`. Both colours are
+  defaults: pass `background` or `border` to override either.
+- **`Effect`** — one slot for the interchangeable ambient layers. `BlobFx`,
+  `MatrixFx`, `WeatherFx`, `Particle` and `CelebrationFx` all paint a
+  full-bleed decorative surface behind their content and are, in practice,
+  alternatives to each other; swapping one for another meant changing an import
+  and rewriting the positioning. `<Effect type="matrix" />` picks between them
+  by value, so a template can expose its aesthetic as a single setting, and
+  `type="none"` renders the content with no layer at all. `colors` and `speed`
+  are shared across the set (`Particle` takes the first colour, `blob` is
+  seeded rather than timed); per-effect blocks — `matrix={{ ... }}`,
+  `weather={{ ... }}` — configure one without disturbing the others, so all of
+  them can be set up front and still switched with one prop.
+- **`ai/layouts.md`** — application shells for the harness, where `recipes.md`
+  covers decoration. Three: a dashboard whose pane scrolls rather than its
+  document, a data-driven nav, and a two-pane editor with a timeline. Each is the
+  shape a working product converged on, and the notes say which values matter —
+  `dvh` not `vh`, the sticky offset matching the header, `overflowY` on the
+  panels rather than the SplitView. All three also ship as
+  `ai/examples/app-shell.tsx` so `pnpm typecheck` covers them: a renamed prop
+  breaks the recipe instead of leaving it quietly wrong.
+- **`NavItem`, `NavGroup` and `selectNavHref`** — the two rows a product
+  sidebar is made of. Every product on Once UI grew its own: Aveiro's is 566
+  lines, the docs' 456, Frametic's 52, and all three converged on the same
+  grammar — a link that knows whether it is the current page, and a collapsible
+  group of those indented behind a vertical rail. `NavItem` carries the icon,
+  the label and either a capped count or an unread dot; `NavGroup` is the
+  accordion and the rail, uncontrolled until you pass `open`.
+  They are rows, not a sidebar: headers, footers, org switchers and storage
+  meters differ per product and stay the host's to compose.
+
+  `selectNavHref` is the part worth taking rather than writing again.
+  `pathname === href` misses a nested route and `startsWith` lights the parent
+  up alongside its child; the answer is the longest href that matches, and it
+  existed in exactly one repo.
+- **`Scrubber`** — a playhead over time, extracted from Scenetic's editor. With
+  no tracks it is a seek bar; with tracks it is an editor timeline: stacked
+  layers of blocks sharing one playhead, each selectable, movable and
+  trimmable, with pointer events throughout so it works with a finger as well
+  as a mouse, and a `role="slider"` track so the playhead is reachable without
+  one. It is deliberately not `Timeline`, which lays out a sequence of steps
+  down the page — the two were the same word for unrelated things, which is
+  why this one is named for the gesture instead.
+
+  Editing is offered, not applied: `onBlockChange` reports absolute times
+  clamped to the timeline and measured from where the gesture started (not
+  accumulated per pointer move, so a block cannot drift away from the pointer
+  over a long drag), and the block renders wherever the caller puts it. A
+  minimum length, overlap rules and snapping stay with the application, and
+  refusing a change is simply not applying it. `onGestureStart` fires once per
+  drag, which is one undo entry per gesture rather than one per pointer move.
+  `onChange` and `onSelect` are both DOM handlers on the inherited
+  `HTMLAttributes`, so they are omitted and redeclared — the same resolution
+  the rest of 2.0 uses for `checked`, `size` and `prefix`.
+- **`Setting`, `SettingGroup`, `SettingAxes` and `InfoTip`** — the settings row
+  that Aveiro, Frametic and Scenetic had each grown a private copy of. Label
+  (with an optional hover explainer and description) on the left, one control on
+  the right, in a bordered row that stacks into a panel. Aveiro's version took
+  every control as a typed prop — `switch`, `slider`, `dropdown`, `media` — so
+  the component had to know about every control that would ever sit in it; this
+  one takes the control as children and composes with anything, including
+  controls that do not exist yet. `SettingGroup` nests sub-settings *inside* its
+  box so the relationship survives a long scrolling panel, and `SettingAxes`
+  carries the axes of one property side by side rather than as two rows that
+  read as unrelated settings.
+- `LayoutProvider` is now also exported from `@once-ui-system/core/next`, with the
+  Next adapters pre-installed. It makes the adapter migration a single import-path
+  change rather than a new provider in the tree, and it is what a codemod can apply
+  mechanically. `NextAdapterProvider` is unchanged and still exported for apps that
+  compose their own adapters.
+- **Core installs and runs without Next.js.** `next` (along with `sass` and
+  `sharp`) is now an optional peer dependency, and the last runtime `next/*`
+  imports are gone: `Schema` emits a plain `<script type="application/ld+json">`
+  instead of `next/script`, `server/og-utils` returns a standard `Response`
+  instead of `NextResponse`, and `Meta.generate` declares its own return type
+  rather than importing Next's `Metadata`. The only file in the package that
+  touches `next/*` is the opt-in `@once-ui-system/core/next` adapter, and the
+  framework-boundary test now pins the allowlist to that one file.
+
+  Verified by packing the tarball and server-rendering `SmartLink`, `Button`,
+  `Media`, `Row`, `Column`, `Text` and `Schema` in a React app with no `next`
+  in `node_modules`.
+
+  Next.js apps are unaffected in every respect except the adapter step above —
+  the peer range is unchanged when Next *is* present.
+
 - `@once-ui-system/foundations` — tokens, styles, and token-value types extracted
-  into their own package (RFC Phase 1). Core depends on it at build time only and
-  inlines its SCSS/CSS into `dist`, so every existing import and CSS entry
+  into their own package (RFC Phase 1). It is **not published to npm** and is not a
+  dependency of this release: core consumes it at build time only and inlines its
+  SCSS/CSS into `dist`, so every existing import and CSS entry
   (`@once-ui-system/core/css/tokens.css`) keeps working and consumers install
-  nothing new. This is the package a non-React consumer can adopt directly and the
-  base the planned Tailwind token bridge maps onto.
+  nothing new. Publishing it — so a non-React consumer can adopt it directly, and
+  as the base the planned Tailwind token bridge maps onto — is a separate decision
+  on its own timeline.
 - Package-contract and boundary test infrastructure (RFC Phase 0): `check:package`
   (publint + arethetypeswrong), the exports-integrity test, a framework-boundary
   guard (core may not import `next/*`), CSS API-surface snapshots, token
@@ -33,23 +810,271 @@ narrowed, or deprecated, and no peer-dependency floor moves.
 
 ### Changed
 
-- Core no longer imports `next/*` at runtime; Next.js users keep identical behavior
-  through installed defaults. Flipping peer dependencies stays a 2.0 concern.
+- **Spacing utilities are generated, not typed out.** `scss/styles/` was 5,789
+  lines of hand-written classes with not one loop in the whole directory —
+  every `.p-16`, `.mt-24` and `.g-8` written out in full, `spacing.scss` alone
+  1,504 lines of it. The cost was never the typing; it was that a
+  hand-maintained matrix drifts silently. Every spacing family carried all 23
+  tokens except `mx`, which was missing 48 and 56, and nobody reading 1,504
+  lines was going to notice. The matrix now lives in
+  `scripts/utilities.spec.mjs` and `scss/styles/spacing.generated.scss` is
+  emitted from it — 15 families × 23 tokens, plus the two `g-horizontal--1` / `g-vertical--1` hairline
+  helpers that take a child selector and so stay stated explicitly.
+
+  Verified equivalent rather than assumed: comparing the compiled declarations
+  of the old and new files selector by selector gives 343 shared rules, **zero
+  declaration mismatches**, nothing dropped, and exactly two additions —
+  `.mx-48` and `.mx-56`, the drift. The CSS API-surface snapshot, which guards
+  all 809 public class names, shows the same two lines and nothing else.
+
+  `position.scss` follows, and it is the clearer case: 1,548 lines because it
+  wrote its matrix out five times, once for the base and once inside each of
+  the four breakpoints. Generated it is one list of rules and a loop over the
+  viewport steps. That file had not drifted — the compiled output matches rule
+  for rule, inside every media query, 385 to 385, nothing added, nothing
+  dropped, no declaration changed, and the compiled stylesheet is identical to
+  the byte.
+
+  Between them, 3,052 hand-written lines become a 94-line spec and a 119-line
+  generator. `pnpm check:utilities` fails if the checked-in output does not
+  match a fresh run, so it cannot drift from the spec that describes it, and
+  `build` regenerates before compiling. A separate test pins the generator's
+  breakpoint widths to `breakpoints.scss`, since a generator cannot read a Sass
+  variable and the two stating different numbers would tear the layout
+  mid-resize.
+
+  With the scale in one place, two gaps in it closed. `--static-space-72`
+  (4.5rem) had shipped as a token since the layout layer was written, with no
+  utility class in any family and no entry in `StaticSpacingToken` — a step of
+  the scale that existed in CSS and was unreachable from either the class names
+  or the `padding=` prop. It is now in all three, adding 35 classes: fifteen
+  spacing families and four offsets at each of the five viewport steps. A test
+  pins `StaticSpacingToken` to the generator's token list in both directions,
+  because a class with no token is dead CSS and a token with no class is a prop
+  that type-checks and then does nothing.
+
+  `breakpoints.scss` is generated from the same spec rather than pinned to it by
+  a test. The widths were stated twice — once for the generator, once in Sass
+  for the ten call sites that `@include` the mixins, core component modules
+  included — and two copies of a number are a drift waiting to happen. It keeps
+  its plain filename, since renaming it would churn every one of those call
+  sites for nothing. Generating it changed not one byte of compiled output.
+
+  `flex.scss` follows, and generating it surfaced a third gap — this one with
+  teeth. `.<bp>-flex-show` is hidden by a base rule and revealed inside its own
+  media query, so the pair reads as "show only at this width". `l`, `m` and `s`
+  each had that base rule; `xs` did not, so `.xs-flex-show` was visible at
+  every width instead of only the narrowest. Measured in Chromium across five
+  viewports, the three siblings computed `none` above their breakpoint and
+  `xs` computed `block` at all of them. The class name existed either way, so
+  the class-name snapshot could never have caught it; only comparing the four
+  rules side by side could, which is exactly what a matrix in a loop does and
+  1,500 lines of hand-written CSS does not.
+
+  Generated, that rule exists and the staircase is even. The fix changes
+  rendering only for `xs={{ hide: false }}` used *without* a base `hide` —
+  which was a silent no-op before — and the fleet's one call site pairs the
+  two, so it was correct before and is correct now.
+
+- **`.align-between`, `.align-around` and `.align-even` are gone.** They set
+  `align-items: space-between` and its siblings, which are `align-content`
+  values and not valid for `align-items`, so the browser dropped the
+  declaration and computed `normal` — fifteen classes, counting breakpoints,
+  that did nothing at all. Measured before removing them, and again after:
+  nothing renders differently, because an element that used to get a class
+  doing nothing now gets no class.
+
+  `horizontal` and `vertical` keep their full unions. Which CSS property a
+  value reaches depends on `direction` — on a row `horizontal` is
+  `justify-content` and `vertical` is `align-items`, and on a column they swap
+  — so the same value is meaningful on one axis and meaningless on the other.
+  Across the fleet, 275 uses of a distribution value land on `justify-*` and
+  work; exactly one lands on `align-*`, in Studio's `ThemeTile`
+  (`<Column horizontal="between">`), and that one was already a no-op.
+
+  `border.scss`, `background.scss` and `display.scss` follow, on the same
+  terms: compiled rule for rule against the originals, inside every media
+  query, with selector lists compared as sets so grouping order is not mistaken
+  for behaviour. 124 to 124, 80 to 80, 94 to 94; nothing dropped, nothing
+  added, and one declaration changed on purpose — `.radius-none` set
+  `border-radius: none`, which the CSS parser rejects outright, so the class
+  only ever worked by falling back to the initial `0px`. It says `0` now and
+  renders exactly as it did.
+
+  `grid`, `typography`, `color`, `shadow` and `size` complete the sweep, and
+  turned up the last two gaps. Grid had the `xs-flex-show` bug at every
+  breakpoint rather than one: none of `.l-grid-show`, `.m-grid-show`,
+  `.s-grid-show` or `.xs-grid-show` had the base rule that hides them outside
+  their own query, so a `Grid` told to show only at one width showed at all of
+  them. And `.font-family-display` pointed at `--font-display`, which does not
+  exist anywhere in the token layer, so the declaration was invalid and the
+  class applied nothing — measured in Chromium, an element carrying it kept
+  its inherited font while every sibling class applied the real one. Both
+  display classes now read `--font-heading`, which `.font-display` already did.
+
+  `global.scss` and `utilities.scss` stay hand-written. Eleven rules between
+  them and not a matrix in sight; generating those would add indirection and
+  save nothing.
+
+### Breaking (continued)
+
+- **`LayoutProvider` no longer takes a `breakpoints` prop.** The five steps are
+  fixed: xs 480, s 768, m 1024, l 1440, and `xl` above all of them — `xl` was
+  always `Infinity`, the base state rather than a media query, which is why no
+  `.xl-` class has ever existed.
+
+  This is what lets a responsive `Flex` be a server component. The utility
+  classes carry those widths inside their `@media` queries, and a prebuilt
+  stylesheet cannot honour a width an app picks at runtime, because `@media`
+  does not read custom properties. Supporting both meant two code paths — CSS
+  classes when an app's breakpoints matched the defaults, and a 450-line hook
+  that read a React context and mutated `element.style` when they did not. The
+  second could only run after hydration, so a responsive page was laid out at
+  desktop widths in the server's HTML and corrected itself once JavaScript
+  arrived.
+
+  Both paths are now one. `useResponsiveClasses` is deleted, `isDefaultBreakpoints`
+  is gone from the layout context, and `Flex` and `Grid` render on the server
+  whenever every breakpoint value maps to a class — which is all of them except
+  free-form sizes, rem numbers, the `style` escape hatch, and `xl`. The
+  responsive layout is now in the first paint:
+
+  ```html
+  <div class="display-flex position-relative g-16 flex-row s-g-4 xs-g-4" id="gap">
+  ```
+
+  That also removes a conditional `useResponsiveClasses` call that sat behind
+  an `if` with an eslint-disable on it — a rules-of-hooks violation that would
+  have broken the moment the condition changed between renders.
+
+  Only one app in the fleet passed custom breakpoints, and it was this repo's
+  own dev harness. `MIGRATING.md` §7 covers the change.
 
 ### Fixed
 
-- `@once-ui-system/foundations` was declared in core's **`dependencies`** as
-  `workspace:*`. `pnpm publish` rewrites that protocol to the depended-on package's
-  literal version, so the 1.9.0 tarball declared a hard runtime dependency on
-  `@once-ui-system/foundations@2.0.0-alpha.0` — an unpublished package. Every
-  `npm install @once-ui-system/core@1.9.0` would have failed with E404, and a stable
-  minor would have pinned consumers to an alpha. Core has no runtime import of
-  foundations (the build inlines its SCSS/CSS into `dist`), so it moves to
-  `devDependencies`, which consumers never install. A new
-  `publishable-dependencies.test.ts` fails on any workspace-protocol or pre-release
-  range in `dependencies`; `publint` and `arethetypeswrong` both pass on the broken
-  tarball, because they inspect the package's own structure rather than whether its
-  dependency graph resolves.
+- **`xl` completes the breakpoint scale.** It is the one min-width step,
+  `(min-width: 1441px)`, and that is not an exception so much as the only
+  honest reading: `xl` has always meant "above all the others" — the layout
+  context resolves it as `Infinity` — so a max-width query cannot express it.
+  As min-width it matches the context exactly at every width, with no sixth
+  bucket invented for the widest screens and no change to what `xl` means.
+
+  `ServerFlex` and `ServerGrid` now start their cascade at `xl`, as their own
+  comment had claimed for as long as the code started at `l` and dropped it —
+  which is why an `xl` object only ever reached the client component. It
+  renders on the server like every other step now, and flows down into the
+  narrower ones:
+
+  ```
+  <Flex gap="16" xl={{ gap: "4" }} />
+  class="… g-16 xl-g-4 l-g-4 m-g-4 s-g-4 xs-g-4"
+  ```
+
+- **`Select` tracks focus across the whole control, and takes `focusRing`.**
+  Focus moves off the trigger and into the dropdown during a normal
+  interaction, so anything keyed to the trigger latched on and never came off.
+  Traced in Chromium: `focusin INPUT`, `focusout INPUT -> BUTTON`, and then
+  nothing at all while `document.activeElement` quietly became `body` — because
+  picking an option removes the focused button from the document, and removing
+  a focused element fires no `focusout`. No blur listener, on the trigger or
+  the wrapper, can see that.
+
+  Focus is watched at the document instead, on the two events that do fire:
+  focus landing elsewhere, and a pointer going down elsewhere. Only mounted
+  while focused, so an unfocused `Select` costs nothing. `focusRing` is back in
+  `SelectProps` now that the state behind it is honest.
+
+- **A token in a breakpoint prop did nothing.** `s={{ gap: "4" }}` is what the
+  docs and every example teach, and it resolved to nothing at all: no `.s-g-4`
+  class existed, `ServerFlex` emitted no breakpoint spacing classes, and
+  `ClientFlex`'s inline path guards on `typeof value === "number"`, so the
+  string fell through all three. Numbers worked, tokens did not, and neither
+  said so. Measured in Chromium at 600px before the fix: gap stayed at its
+  base 15px and padding at 22.5px; after, both resolve to the 4 token.
+
+  The same hole ran wider than spacing. `ServerFlex` was already writing
+  `.<bp>-opacity-*`, `.<bp>-z-index-*`, `.<bp>-transition-*`,
+  `.<bp>-pointer-events-*`, `.<bp>-scrollbar-minimal`, `.<bp>-flex-<n>` and
+  `.<bp>-flex-wrap` into the DOM, and not one of those classes existed — seven
+  more families of breakpoint prop that reached the page as a class name with
+  no rule behind it. They exist now.
+
+  The utility sheet grows from 8.6 KB to 14.4 KB gzipped for the whole
+  responsive matrix, which is the price of the props working at all.
+
+### Removed
+
+- **The field `focused` / `filled` styling, which never applied.** The rule was
+  `.base.focused, .base.filled` — a compound selector needing all three classes
+  on one element — but `focused` and `filled` went on the control, and on
+  `Select` onto a wrapper, never onto `.base`. It could not match, and the
+  border colour it set was the one `.base` already carried, so it was inert
+  twice over. Measured in Chromium: the border is identical across empty,
+  filled, focused and `Select`. Gone, along with the classes that fed it and
+  `Select`'s `isFilled`, which had no call site to set it, its write-only
+  `isFocused`, and a `findIndex` in `handleFocus` whose result was discarded
+  under a comment promising a highlight it never set.
+
+  Nothing changes visually. A field still shows no focus indicator by default;
+  `focusRing` above is the way to ask for one.
+
+### Changed
+
+- **Fields sit their label and value 2px further apart at m, l and xl.**
+  `--fld-gap`, the label-to-value distance in em of the value, was one ratio
+  (0.25) for every size; m, l and xl now take 0.375 — 4px to 6px at m, 4.5 to
+  6.75 at l, 5 to 7.5 at xl. The pair read tight once the label actually
+  floated. xs and s are unchanged: their label is scaled down far enough that
+  the base ratio still reads open. Field heights do not change — the ink block
+  re-centres, so the label rises by half the increase and the value drops by
+  half.
+- Core no longer imports `next/*` at runtime. Next.js apps keep 1.8.x behavior by
+  installing `NextAdapterProvider` from `@once-ui-system/core/next` in the root
+  layout; without it the five components listed above fall back to plain DOM.
+  Flipping peer dependencies stays a 2.0 concern.
+
+### Changed (docs site, not published code)
+
+- **`Input` had two `## Variants` headings**, one for the `variant` prop and one
+  for the four components built on it, which put two identical entries in the
+  page's own table of contents. The second is now `## Built on Input`.
+
+- **`basics/structure` was 1,724 lines and four headings.** `## Flex` ran from
+  line 12 to line 1,643, absorbing colour, radius, shadow, opacity, cursor,
+  zIndex, position and text along the way — a prop reference wearing a concepts
+  page's title, while `components/flex` and `components/grid` were 10-line stubs
+  pointing back at it. Structure is 162 lines now and describes the model: two
+  primitives, the page skeleton, gaps over margins, tokens, breakpoints. The
+  reference moved to Flex and Grid, which are real pages with real tables —
+  seven of them on Flex, 95 rows. The colour-usage examples the split would have
+  dropped moved to `basics/color`, which documented the tokens but never how to
+  apply them.
+- **The chart pages document themselves now.** `lineChart`, `barChart`,
+  `pieChart` and `lineBarChart` carried hand-written tables because the spec had
+  nothing to generate from; with the generator fixed they resolve from it, so a
+  renamed prop or a changed default cannot drift past them. Defaults come from
+  the source rather than from whoever last edited the page. The gauges, which
+  were already generated, gained the prose they were missing — the thing that
+  made them look unfinished next to their neighbours. `data/setup` gained the
+  full `ChartProps` table, which is where every chart's `...chart` row points.
+- **Props tables can document a mixin.** `Flex` has 5 props of its own and 83
+  across six shared mixins, so the layout pages needed those spelled out rather
+  than collapsed into `...flex`. `<PropsTable mixin="SpacingProps" />` resolves
+  from the same generated spec, a group at a time, and every other page keeps the
+  short spread row. A component no longer lists a spread row pointing at itself.
+- **Every page URL loses its `/once-ui/` prefix**, and the nav is restructured
+  around it. The old paths 308-redirect from a generated map, so nothing that
+  links to them breaks; `scripts/check-urls.mjs` fails the build on an internal
+  link no redirect covers.
+- **The changelog and roadmap pages are retired.** This file and `ROADMAP.md` are
+  the source of truth, and the docs pages drifted from them; the changelog entry
+  in the nav points at GitHub releases, which are generated from here.
+- **Props tables are generated from `ai/spec.json`** rather than maintained by
+  hand, so a table cannot go stale against the type it documents. A page can
+  still override or append a row where the generated text needs help.
+- **The home page is rebuilt around intent** — learn, or build — with a prompt
+  library of copy-pasteable task prompts that point at the AI harness and the
+  block catalog, and a curated twelve-component entry path for a first visit.
 
 ## [1.8.4] — 2026-08-28
 

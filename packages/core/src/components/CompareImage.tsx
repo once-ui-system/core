@@ -27,7 +27,7 @@ const renderContent = (
       <Media
         src={content.src}
         alt={content.alt || ""}
-        fill
+        stretch
         unoptimized={unoptimized}
         aspectRatio={aspectRatio || "16/9"}
         position="absolute"
@@ -128,6 +128,7 @@ const CompareImage = ({
         }}>
         <IconButton
           icon="chevronsLeftRight"
+          aria-label="Drag to compare"
           variant="secondary"
           onMouseDown={handleMouseDown}
           onTouchStart={handleMouseDown}

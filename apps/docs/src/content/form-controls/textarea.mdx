@@ -1,0 +1,440 @@
+---
+title: "Textarea"
+summary: "A multi-line text input component for collecting longer form text content."
+updatedAt: "2026-09-14"
+docs: "once-ui/form-controls/textarea.mdx"
+github: "components/Textarea.tsx"
+navLabel: "Textarea"
+navIcon: "switch"
+---
+
+import { ValidationTextareaExample, TextareaCharacterCountExample } from "../../product/TextareaExamples"
+
+The `Textarea` component provides a multi-line text input field for collecting longer form text content from users. It grows with its content by default; pass `lines` a number to fix it at that many rows instead.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea
+      id="basic-textarea"
+      label="Comments"
+      placeholder="Enter your comments here"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="basic-textarea"
+    label="Comments"
+    placeholder="Enter your comments here"
+/>`,
+      language: "tsx",
+      label: "Textarea"
+    }
+  ]}
+/>
+
+## Description
+
+Add a description to provide additional context or instructions for the textarea.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea
+      id="bio-textarea"
+      label="Bio"
+      placeholder="Tell us about yourself"
+      description="Your bio will be displayed on your public profile"
+      lines={5}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="bio-textarea"
+    label="Bio"
+    placeholder="Tell us about yourself"
+    description="Your bio will be displayed on your public profile"
+    lines={5}
+/>`,
+      language: "tsx",
+      label: "Description"
+    }
+  ]}
+/>
+
+## Error state
+
+Display error messages by setting the `error` and `errorMessage` props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea
+      id="error-textarea"
+      label="Description"
+      placeholder="Enter a description"
+      error={true}
+      errorMessage="This field is required"
+    />
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="error-textarea"
+    label="Description"
+    placeholder="Enter a description"
+    error={true}
+    errorMessage="This field is required"
+/>`,
+      language: "tsx",
+      label: "Error state"
+    }
+  ]}
+/>
+
+## Resize
+
+Control how the textarea can be resized using the `resize` prop. It applies only
+to a fixed height — a textarea left on the default `lines="auto"` sizes itself,
+so it has no resize handle to give you.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" fillWidth>
+      <Textarea
+        id="resize-vertical"
+        label="Vertical Resize"
+        placeholder="This textarea can be resized vertically"
+        lines={4}
+        resize="vertical"
+      />
+      <Textarea
+        id="resize-none"
+        label="No Resize"
+        placeholder="This textarea cannot be resized"
+        lines={4}
+        resize="none"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="resize-vertical"
+    label="Vertical Resize"
+    placeholder="This textarea can be resized vertically"
+    lines={4}
+    resize="vertical"
+/>
+
+<Textarea
+    id="resize-none"
+    label="No Resize"
+    placeholder="This textarea cannot be resized"
+    lines={4}
+    resize="none"
+/>`,
+      language: "tsx",
+      label: "Resize"
+    }
+  ]}
+/>
+
+## Fixed height
+
+A textarea resizes itself to fit its content. Pass `lines` a number to fix it at
+that many rows instead, which is also what gives it a resize handle.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea
+      id="fixed-height-textarea"
+      label="Notes"
+      placeholder="Enter your notes"
+      lines={4}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Textarea
+    id="fixed-height-textarea"
+    label="Notes"
+    placeholder="Enter your notes"
+    lines={4}
+/>`,
+      language: "tsx",
+      label: "Fixed height"
+    }
+  ]}
+/>
+
+## Height
+
+Use the `size` prop to set the height of the input.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="4">
+      <Textarea size="xs" label="Extra small textarea" />
+      <Textarea size="s" label="Small textarea" />
+      <Textarea size="m" label="Medium textarea" />
+      <Textarea size="l" label="Large textarea" />
+      <Textarea size="xl" label="Extra large textarea" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`const [value, setValue] = useState<string>("");
+
+const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setValue(e.target.value);
+};
+
+<Textarea
+    id="height-textarea"
+    placeholder="Height"
+    value={value}
+    onChange={handleChange}
+    size="l"
+/>`,
+      language: "tsx",
+      label: "Height"
+    }
+  ]}
+/>
+
+## Radius
+
+You can use the `corners` prop to apply custom radius to sides or corners. It works well with the `Column` component's `-1` gap to create a seamless connection between textareas.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="-1" fillWidth>
+      <Textarea
+        id="custom-top"
+        label="Top Radius"
+        placeholder="This textarea has top radius"
+        corners="top"
+      />
+      <Textarea
+        id="custom-bottom"
+        label="Bottom Radius"
+        placeholder="This textarea has bottom radius"
+        corners="bottom"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column gap="-1" fillWidth>
+    <Textarea
+      id="custom-top"
+      label="Top Radius"
+      placeholder="This textarea has top radius"
+      corners="top"
+    />
+    <Textarea
+      id="custom-bottom"
+      label="Bottom Radius"
+      placeholder="This textarea has bottom radius"
+      corners="bottom"
+    />
+</Column>`,
+      language: "tsx",
+      label: "Styling"
+    }
+  ]}
+/>
+
+## State
+
+Manage the `Textarea` state with React's useState hook.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<Textarea
+    id="state-textarea"
+    label="Message"
+    value=""
+    placeholder="Type your message"
+/>}
+  codes={[
+    {
+      code:
+`const [value, setValue] = useState('');
+
+const handleChange = (e) => {
+    setValue(e.target.value);
+};
+
+<Textarea
+    id="state-textarea"
+    label="Message"
+    value={value}
+    onChange={handleChange}
+    placeholder="Type your message"
+/>`,
+      language: "tsx",
+      label: "State"
+    }
+  ]}
+/>
+
+## Sizes
+
+The Textarea component supports five sizes: extra small, small, medium, large, and extra large.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <Textarea id="size-xs" placeholder="Extra Small" size="xs" />
+      <Textarea id="size-s" placeholder="Small" size="s" />
+      <Textarea id="size-m" placeholder="Medium" size="m" />
+      <Textarea id="size-l" placeholder="Large" size="l" />
+      <Textarea id="size-xl" placeholder="Extra Large" size="xl" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Textarea placeholder="Extra Small" size="xs" />
+<Textarea placeholder="Small" size="s" />
+<Textarea placeholder="Medium" size="m" />
+<Textarea placeholder="Large" size="l" />
+<Textarea placeholder="Extra Large" size="xl" />`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+ />
+
+## On touch devices
+
+The same 16px font and 1.3 line-height clamps that `Input` applies on touch
+pointers apply here, for the same reason: below 16px, iOS Safari zooms on
+focus and does not reliably zoom back. A textarea grows with its content, so
+it anchors its floating label to a fixed top inset rather than centring the
+pair, but the gap between label and text is the one `Input` uses.
+
+See [Input](/form-controls/input) for the full table.
+
+## Validation
+
+Use the `validate` prop to add custom validation to the `Textarea`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ValidationTextareaExample />}
+  codes={[
+    {
+      code:
+`const validateContent = (value) => {
+    if (value && value.length < 20) {
+        return "Please enter at least 20 characters";
+    }
+    return null;
+};
+
+<Textarea
+    id="validation-textarea"
+    label="Review"
+    placeholder="Write your review"
+    validate={validateContent}
+/>`,
+      language: "tsx",
+      label: "Validation"
+    }
+  ]}
+/>
+
+## Character count
+
+Display a character counter with color-coded feedback based on remaining characters. The counter changes color when approaching the limit.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<TextareaCharacterCountExample />}
+  codes={[
+    {
+      code:
+`const [bio, setBio] = useState<string>("");
+
+const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setBio(e.target.value);
+};
+
+<Textarea
+    id="bio-textarea"
+    placeholder="Bio"
+    value={bio}
+    onChange={handleChange}
+    maxLength={200}
+    characterCount
+    lines={4}
+/>`,
+      language: "tsx",
+      label: "Character count"
+    }
+  ]}
+/>
+
+## Focus ring
+
+Like `Input`, a textarea draws no focus ring by default. Set `focusRing` to
+outline the field on focus — see [Input](/form-controls/input#focus-ring) for
+the whole story.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Textarea id="ta-focus-ring" label="About" focusRing placeholder="Click or tab in" />
+  }
+  codes={[
+    {
+      code:
+`<Textarea id="about" label="About" focusRing />`,
+      language: "tsx",
+      label: "Focus ring"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Textarea"
+  describe={{
+    variant: "Ghost drops the border and background.",
+  }}
+  content={[
+    ["className"],
+    ["style"],
+    ["...TextareaHTMLAttributes"]
+  ]}
+/>

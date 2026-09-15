@@ -1,0 +1,649 @@
+---
+title: "CodeBlock"
+summary: "A versatile component for displaying and formatting code snippets with syntax highlighting, copy functionality, and interactive previews."
+updatedAt: "2026-07-27"
+github: "modules/code/CodeBlock.tsx"
+docs: "once-ui/modules/codeBlock.mdx"
+navLabel: "CodeBlock"
+navIcon: "modules"
+navTag: "Update"
+navTagVariant: "success"
+---
+
+The `CodeBlock` component provides a way to display code snippets with syntax highlighting, interactive tabs for multiple code examples, and optional live previews. It supports various customization options including copy buttons, fullscreen mode, and line numbers.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Button size="s" weight="default" prefixIcon="sparkle">Click me</Button>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "CodeBlock",
+      code:
+`<CodeBlock
+    copyButton
+    preview={
+      <Button size="s" weight="default" prefixIcon="sparkle">
+        Click me
+      </Button>
+    }
+    codes={[
+      {
+        language: "javascript",
+        label: "Example",
+        code: "const greeting = 'Hello, world!';"
+      }
+    ]}
+/>`,
+    }
+  ]}
+  copyButton
+/>
+
+## Preview
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+	previewPadding="0"
+  preview={
+    <Row fillWidth center padding="16">
+      <Background
+        background="neutral-alpha-weak"
+        lines={{display: true, color: "neutral-alpha-weak"}}
+        shadow="m"
+        fillWidth
+        radius="m"
+        height={12}
+        border="neutral-alpha-medium"
+      />
+    </Row>
+  }
+	codes={[
+		{
+			language: "tsx",
+			label: "Preview",
+			code:
+`<CodeBlock
+		copyButton
+		previewPadding="0"
+		preview={
+			<Row fillWidth center padding="16">
+				<Background
+					background="neutral-alpha-weak"
+					lines={{display: true, color: "neutral-alpha-weak"}}
+					shadow="m"
+					fillWidth
+					radius="m"
+					height={12}
+					border="neutral-alpha-medium"
+				/>
+			</Row>
+		}
+		codes={[
+			{
+				language: "tsx",
+				label: "Preview",
+				code: "..."
+			}
+		]}
+/>`
+		}
+	]}
+/>
+
+## Multiple code
+
+The `CodeBlock` can display multiple code examples with tabs for easy navigation.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}
+  preview={
+    <CodeBlock
+        copyButton={false}
+      codes={[
+        {
+          language: "javascript",
+          label: "JavaScript",
+          code:
+`// JavaScript
+const button = document.createElement('button');
+button.textContent = 'Example Button';
+button.classList.add('secondary');
+document.body.appendChild(button);`
+        },
+        {
+          language: "html",
+          label: "HTML",
+          code:
+`<!-- HTML -->
+<button class="secondary">
+    Example Button
+</button>`
+        },
+        {
+          language: "css",
+          label: "CSS",
+          code:
+`/* CSS */
+button.secondary {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 16px;
+}`
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CodeBlock
+    copyButton={false}
+    codes={[
+      {
+        language: "javascript",
+        label: "JavaScript",
+        code:
+"// JavaScript
+const button = document.createElement('button');
+button.textContent = 'Example Button';
+button.classList.add('secondary');
+document.body.appendChild(button);",
+      },
+      {
+        language: "html",
+        label: "HTML",
+        code:
+"<!-- HTML -->
+<button class="secondary">
+    Example Button
+</button>"
+    },
+    {
+        language: "css",
+        label: "CSS",
+        code:
+"/* CSS */
+button.secondary {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 8px 16px;
+}"
+      }
+    ]}
+/>`,
+      language: "tsx",
+      label: "Multiple code"
+    }
+  ]}
+/>
+
+## Compact mode
+
+Use the `compact` prop for a more condensed display.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CodeBlock
+			compact
+			copyButton={false}
+			codes={[
+				{
+					code: "console.log('Compact mode example');",
+					language: "javascript",
+					label: "Compact"
+				}
+			]}
+    />
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Compact",
+      code:
+`<CodeBlock
+		compact
+		copyButton={false}
+		codes={[
+			{
+				code: "console.log('Compact mode example');",
+				language: "javascript",
+				label: "Compact"
+			}
+		]}
+/>`
+    }
+  ]}
+/>
+
+## Line numbers
+
+Use the `lineNumbers` prop to display line numbers for better code readability and reference.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CodeBlock
+        lineNumbers
+				compact
+        codes={[
+          {
+            language: "tsx",
+            label: "Line numbers",
+            code:
+`function greet() {
+		console.log('Hello!')
+		return 'Greeting sent'
+}`,
+          }
+        ]}
+    />
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Line numbers",
+      code:
+`<CodeBlock
+		lineNumbers
+		compact
+		codes={[
+    {
+      language: "tsx",
+      label: "Line numbers",
+      code:
+"function greet() {
+		console.log('Hello!')
+		return 'Greeting sent'
+}"
+    }
+  ]}
+/>`
+    }
+  ]}
+/>
+
+## Highlight
+
+Use the `highlight` prop to highlight specific lines of code. The value should be a string with line numbers or ranges (e.g., "1,3-5").
+
+<CodeBlock
+  marginTop="16"
+  isCollapsible={false}
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<CodeBlock
+		codes={[
+			{
+				language: "tsx",
+				highlight: "2,4-6",
+				label: "Highlight",
+				code:
+"function calculateTotal(items) {
+let total = 0;
+	
+for (let i = 0; i < items.length; i++) {
+		const item = items[i];
+		total += item.price * item.quantity;
+}
+	
+return total;
+}"
+			}
+		]}
+/>`,
+      language: "tsx",
+      highlight: "2,4-6",
+      label: "Highlight"
+    }
+  ]}
+/>
+
+## Code Diff
+
+Display Git-style diffs by setting the language to "diff". Numbering can be used from coordinates, also specified manually by setting the `startLineNumber` parameter. Numbering prioritizes as follows: `coordinates` > `startLineNumber` > `0` (fallback)
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <CodeBlock
+      copyButton={false}
+      isCollapsible={false}
+      codes={[
+        {
+          language: "diff",
+          label: "Diff",
+          code:
+`diff --git a/src/utils/math.ts b/src/utils/math.ts
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/utils/math.ts
++++ b/src/utils/math.ts
+@@ -10,7 +10,10 @@
+export function add(a: number, b: number): number {
+   return a + b;
+}
+
+- export function multiply(a: number, b: number): number {
+-  return a * b;
+- }
++ export function multiply(a: number, b: number): number {
++  if (a === 0 || b === 0) {
++    return 0;
++  }
++  return a * b;
++ }
+
+  export function subtract(a: number, b: number): number {
+    return a - b;
+  }`
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CodeBlock
+  codes={[
+    {
+      language: "diff",
+      label: "Diff",
+      startLineNumber: 1,
+      code:
+"diff --git a/src/utils/math.ts b/src/utils/math.ts\nindex 1a2b3c4..5d6e7f8 100644\n--- a/src/utils/math.ts\n+++ b/src/utils/math.ts\n@@ -10,7 +10,10 @@\n export function add(a: number, b: number): number {\n  return a + b;\n}\n\n-export function multiply(a: number, b: number): number {\n-  return a * b;\n-}\n+export function multiply(a: number, b: number): number {\n+  if (a === 0 || b === 0) {\n+    return 0;\n+  }\n+  return a * b;\n+}\n\n export function subtract(a: number, b: number): number {\n  return a - b;\n}",
+    }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Code Diff"
+    }
+  ]}
+  copyButton
+/>
+
+You can enable syntax highlighting by specifying a similar array as the language parameter: `[ “diff”, “typescript” ]`
+
+<CodeBlock
+    marginTop="16"
+    marginBottom="24"
+    preview={
+        <CodeBlock
+            copyButton={false}
+            isCollapsible={false}
+            codes={[
+                {
+                    language: [ "diff", "typescript" ],
+                    label: "Diff",
+                    code:
+                        `diff --git a/src/utils/math.ts b/src/utils/math.ts
+index 1a2b3c4..5d6e7f8 100644
+--- a/src/utils/math.ts
++++ b/src/utils/math.ts
+@@ -10,7 +10,10 @@
+export function add(a: number, b: number): number {
+   return a + b;
+}
+
+- export function multiply(a: number, b: number): number {
+-  return a * b;
+- }
++ export function multiply(a: number, b: number): number {
++  if (a === 0 || b === 0) {
++    return 0;
++  }
++  return a * b;
++ }
+
+export function subtract(a: number, b: number): number {
+  return a - b;
+}`
+                }
+            ]}
+        />
+    }
+    codes={[
+        {
+            code:
+                `<CodeBlock
+  codes={[
+    {
+      language:  [ "diff", "typescript" ],
+      label: "Diff",
+      startLineNumber: 1,
+      code:
+"diff --git a/src/utils/math.ts b/src/utils/math.ts\nindex 1a2b3c4..5d6e7f8 100644\n--- a/src/utils/math.ts\n+++ b/src/utils/math.ts\n@@ -10,7 +10,10 @@\n export function add(a: number, b: number): number {\n  return a + b;\n}\n\n-export function multiply(a: number, b: number): number {\n-  return a * b;\n-}\n+export function multiply(a: number, b: number): number {\n+  if (a === 0 || b === 0) {\n+    return 0;\n+  }\n+  return a * b;\n+}\n\n export function subtract(a: number, b: number): number {\n  return a - b;\n}",
+    }
+  ]}
+/>`,
+            language: "tsx",
+            label: "Code Diff"
+        }
+    ]}
+    copyButton
+/>
+
+## Extras
+
+The `CodeBlock` component supports additional features like fullscreen mode and style customization.
+
+<CodeBlock
+  marginTop="16"
+  isCollapsible={false}
+  marginBottom="24"
+  fullscreenButton
+  styleButton
+  codes={[
+    {
+      language: "tsx",
+      label: "Extras",
+      code:
+`<CodeBlock
+		fullscreenButton
+		styleButton
+		reloadButton
+		codes={[
+			{
+				language: "javascript",
+				label: "Extras",
+				code:
+"const data = fetchData();
+console.log('Processing data...');
+renderResults(data);"
+			}
+		]}
+/>`
+    }
+  ]}
+/>
+
+## Collapsible
+
+Use `maxLines` to limit code height and show a "View code" overlay for expandable code blocks. `isCollapsible` must be enabled for the overlay to appear.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  isCollapsible
+  preview={
+    <CodeBlock
+      isCollapsible
+      maxLines={3}
+      codes={[
+        {
+          language: "tsx",
+          label: "Collapsible",
+          code: "function greet(name: string) {\n  return `Hello, ${name}!`;\n}\n\nfunction farewell(name: string) {\n  return `Goodbye, ${name}!`;\n}\n\nconst result = greet('World');\nconsole.log(result);"
+        }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<CodeBlock
+    isCollapsible
+    maxLines={3}
+    codes={[
+      {
+        language: "tsx",
+        label: "Collapsible",
+        code: "function greet(name) {\n  return \`Hello, \${name}!\`;\n}"
+      }
+    ]}
+/>`,
+      language: "tsx",
+      label: "Collapsible"
+    }
+  ]}
+/>
+
+## Custom background
+
+Use the `background` prop to change the CodeBlock's outer background. Combine with alpha tokens for transparency effects.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  background="brand-alpha-weak"
+  codes={[
+    {
+      language: "tsx",
+      label: "Custom background",
+      code:
+`<CodeBlock
+    background="brand-alpha-weak"
+    codes={[
+      {
+        language: "tsx",
+        label: "Custom background",
+        code: "console.log('Styled code block');"
+      }
+    ]}
+/>`
+    }
+  ]}
+/>
+
+### Custom colors
+
+Pass any color via `style.backgroundColor` &mdash; the button wrappers automatically pick it up.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  style={{ backgroundColor: "rgba(255, 0, 128, 0.2)" }}
+  codes={[
+    {
+      language: "tsx",
+      label: "Magenta (50%)",
+      code:
+`<CodeBlock
+    style={{ backgroundColor: "rgba(255, 0, 128, 0.2)" }}
+    codes={[
+      {
+        language: "tsx",
+        label: "Magenta",
+        code: "console.log('magenta');"
+      }
+    ]}
+/>`
+    }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  style={{ backgroundColor: "rgba(255, 192, 203, 0.2)" }}
+  codes={[
+    {
+      language: "tsx",
+      label: "Pink (50%)",
+      code:
+`<CodeBlock
+    style={{ backgroundColor: "rgba(255, 192, 203, 0.2)" }}
+    codes={[
+      {
+        language: "tsx",
+        label: "Pink",
+        code: "console.log('pink');"
+      }
+    ]}
+/>`
+    }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  style={{ backgroundColor: "rgba(0, 188, 212, 0.2)" }}
+  codes={[
+    {
+      language: "tsx",
+      label: "Cyan (50%)",
+      code:
+`<CodeBlock
+    style={{ backgroundColor: "rgba(0, 188, 212, 0.2)" }}
+    codes={[
+      {
+        language: "tsx",
+        label: "Cyan",
+        code: "console.log('cyan');"
+      }
+    ]}
+/>`
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["codes", "CodeInstance[]", "[]"],
+    ["preview", "ReactNode"],
+    ["copyButton", "boolean", "true"],
+    ["styleButton", "boolean", "false"],
+    ["reloadButton", "boolean", "false"],
+    ["fullscreenButton", "boolean", "false"],
+    ["compact", "boolean", "false"],
+    ["isCollapsible", "boolean", "false"],
+    ["lineNumbers", "boolean", "false"],
+    ["codeHeight", "number"],
+    ["maxLines", "number"],
+    ["fillHeight", "boolean", "false"],
+    ["previewPadding", "SpacingToken", "'l'"],
+    ["background", "Colors | 'surface' | 'overlay' | 'page' | 'transparent'", "'surface'"],
+    ["onInstanceChange", "(index: number) => void"],
+    ["hideCode", "boolean", "false", "Render only the preview, without the code panel."],
+    ["...flex"]
+  ]}
+/>
+
+<PropsTable
+    content={[
+        ["code", ["string", `{ content: string; error: string | null }`]],
+        ["language", ["Language", `[ "diff" , Language ]`]],
+        ["label", "string"],
+        ["highlight", "string"],
+        ["prefixIcon", "string"],
+        ["startLineNumber", "number", "0"]
+    ]}
+/>
+
+

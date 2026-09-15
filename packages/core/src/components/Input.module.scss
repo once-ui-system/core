@@ -1,1 +1,313 @@
-.base {     backdrop-filter: var(--backdrop-filter);     min-height: var(--static-space-56);      &.focused, &.filled {         border-color: var(--neutral-border-medium);     }      &:has(.placeholder):has(.floating) {         .placeholder {             padding-top: var(--static-space-12);         }     } }  .resizeHandle {     &::after {         pointer-events: none;         content: '';         position: absolute;         right: 0;         bottom: 0;         width: var(--static-space-32);         height: var(--static-space-32);         border: 1px solid var(--neutral-border-strong);         transform: translateX(50%) translateY(50%) rotate(45deg);         background-color: var(--neutral-alpha-weak);     }      ::-webkit-resizer {         display: none;     } }  .label {     position: absolute;     left: var(--static-space-16);     transition: transform 0.3s, top 0.3s, left 0.3s;     color: var(--neutral-on-background-medium);     pointer-events: none;     transform-origin: left;      &.floating {         transform: scale(0.75);     } }  .inputLabel {     top: 50%;     transform: translateY(-50%); }  .textareaLabel {     top: calc(var(--static-space-16) + var(--static-space-2)); }  .xs {     min-height: var(--static-space-40);      .label, .textareaLabel {         &.floating {             top: calc(var(--static-space-4) - var(--static-space-1));         }     }      .inputLabel, .textareaLabel {         &.floating {             transform: scale(0.6);         }     } }  .s {     min-height: var(--static-space-48);      .label, .textareaLabel {         &.floating {             top: calc(var(--static-space-4) - var(--static-space-1));         }     } }  .m {     min-height: var(--static-space-56);          .label, .textareaLabel {         &.floating {             top: calc(var(--static-space-8) - var(--static-space-2));         }     } }  .l {     min-height: var(--static-space-64);          .label {         &.floating {             top: calc(var(--static-space-8) - var(--static-space-2));         }     }      .textareaLabel {         &.floating {             top: var(--static-space-4);         }     } }  .xl {     min-height: var(--static-space-72);          .label {         &.floating {             top: calc(var(--static-space-12) - var(--static-space-2));         }     }          .textareaLabel {         &.floating {             top: var(--static-space-4);         }     } }  .input {     width: 100%;     height: 100%;     border: none;     background: none;     color: var(--neutral-on-background-strong);     padding: 0 var(--static-space-12);     outline: none;     border-radius: var(--radius-s);      &.placeholder {         padding-top: 0;     }      &.textarea.placeholder {         padding-top: var(--static-space-12);         padding-bottom: var(--static-space-12);     }      &:not(.placeholder) {         padding-top: var(--static-space-16);     }      &.placeholder.hasChildren {         padding-top: var(--static-space-16);     }      &::placeholder {         color: var(--neutral-on-background-weak);     }      &:disabled {         color: var(--neutral-on-background-weak);         cursor: not-allowed;     }      &:autofill, &:-webkit-autofill {         background-color: var(--static-transparent) !important;         -webkit-box-shadow: 0 0 0 var(--static-space-32) var(--neutral-background-medium) inset !important;         -webkit-text-fill-color: var(--neutral-on-background-strong) !important;     } }  .error {     .base {         background-color: var(--danger-background-medium);         border-color: var(--danger-border-medium);     }      .input, .prefix, .suffix {         color: var(--danger-on-background-medium);     }      .label {         color: var(--danger-on-background-weak);     }      .resizeHandle {         &::after {             border-color: var(--danger-border-medium);             background-color: var(--danger-alpha-weak);         }     } }  .prefix, .suffix {     align-self: center; }  .input[type="color"] {     opacity: 0; }
+/* Field metrics
+   ----------------------------------------------------------------------------
+   The floating label and the value are placed by where their INK falls — cap
+   height down to descender — rather than by their line boxes. A line box
+   carries invisible leading on both sides, so centring line boxes pays for
+   that leading twice: the pair drifts apart and the block rides high in the
+   field. Ratios below (cap 0.72em, ascender 0.80em, descender 0.20em) are
+   approximations that hold for Geist and most UI sans faces.
+
+   Two offsets here are structural rather than typographic. `.base` carries a
+   1px border, and Input.tsx / Textarea.tsx render the inner Column with
+   padding="4". The label is absolutely positioned against that Column, so it
+   measures from the border edge; the value additionally clears the Column's
+   padding. Both are named below — if either changes in the TSX, change it
+   here too.
+
+   `--fld-gap` is the label-to-value distance in em of the value. xs and s keep
+   the base 0.25; m, l and xl take 0.375, which reads about 2px looser at each
+   of those sizes (m 4px to 6px, l 4.5 to 6.75, xl 5 to 7.5). The pair was
+   optically tight once the label actually floated — at the small sizes the
+   label is scaled down far enough that the base ratio still reads open. The
+   field height does not change: a taller ink block re-centres, so the label
+   rises by half the increase and the value drops by half.
+
+   On touch the value is clamped to 16px so iOS Safari does not zoom on focus,
+   and its line-height is clamped with it at 1.3 — Once UI's own body-s ratio is
+   1.286, and any looser a floor would also lift sizes that never had a problem.
+   Flooring font-size alone would put
+   16px glyphs in the 16.88px line box that body-s resolves to on mobile. */
+
+/* Opt-in via the `focusRing` prop. Fields ship without one on purpose — the
+   look is the borderless native field Apple and Revolut settled on — but that
+   leaves a keyboard user with no indication of where they are, while `Card`
+   and `SmartLink` in this same library do show one. The ring is drawn on the
+   field rather than the control because the control sits inside the border and
+   the Column's padding, so its own outline would fall within the field.
+
+   Note that a text field matches `:focus-visible` however it was focused: the
+   pseudo-class always matches an element that takes keyboard input, so the
+   ring appears on a mouse click too. `:focus-visible` is still the right
+   selector — it is what the rest of the library uses, and it is what keeps
+   the ring off a field focused programmatically.
+
+   Two selectors, because focus lands in two places. A plain field focuses its
+   own control. `Select` moves focus off the trigger and into the dropdown, so
+   for most of the interaction the control is not the focused element at all —
+   it tracks focus across the whole widget instead and marks the wrapper, the
+   same descendant shape `.error .base` uses below. Same outline as the
+   `.focus-ring` utility either way, so an opted-in field matches every other
+   focusable thing on the page. */
+.base.focusRing:has(.input:focus-visible),
+.focused .base.focusRing {
+  outline: var(--static-space-2) solid var(--brand-solid-strong);
+  outline-offset: 2px;
+}
+
+.base {
+  --fld-border: 1px;
+  --fld-well: var(--static-space-4); /* Column padding="4" in the TSX */
+  --fld-gap: var(--fld-gap-loose, 0.25); /* label to value, in em of the value */
+
+  --fld-label-fs: calc(var(--font-size-label-m) * var(--font-size-label-multiplier));
+  --fld-label-lh: calc(var(--line-height-label-m) * var(--line-height-label-multiplier));
+
+  --fld-fs: var(--fld-fs-base);
+  --fld-lh: var(--fld-lh-base);
+  --fld-h: var(--fld-h-base);
+
+  --fld-cap-label: calc(var(--fld-label-fs) * 0.72 * var(--fld-label-scale));
+  --fld-cap-value: calc(var(--fld-fs) * 0.72);
+  --fld-desc-value: calc(var(--fld-fs) * 0.2);
+  --fld-gap-size: calc(var(--fld-fs) * var(--fld-gap));
+
+  --fld-ink: calc(
+    var(--fld-cap-label) + var(--fld-gap-size) + var(--fld-cap-value) + var(--fld-desc-value)
+  );
+
+  /* The box the value actually gets: the field less its border and the well. */
+  --fld-box: calc(var(--fld-h) - 2 * var(--fld-border) - 2 * var(--fld-well));
+  --fld-ink-top: calc((var(--fld-box) - var(--fld-ink)) / 2);
+
+  /* Inputs centre their ink in a fixed box; textareas grow, so they anchor to a
+     fixed top inset and share only the gap below the label. */
+  --fld-anchor: var(--fld-ink-top);
+
+  /* Distance from a text box's top edge to the cap height of its first line. */
+  --fld-lead-value: calc((var(--fld-lh) - var(--fld-fs)) / 2 + var(--fld-fs) * 0.08);
+  --fld-lead-label: calc(
+    ((var(--fld-label-lh) - var(--fld-label-fs)) / 2 + var(--fld-label-fs) * 0.08) *
+      var(--fld-label-scale)
+  );
+
+  --fld-label-top: calc(var(--fld-well) + var(--fld-anchor) - var(--fld-lead-label));
+  --fld-value-top: calc(
+    var(--fld-anchor) + var(--fld-cap-label) + var(--fld-gap-size) - var(--fld-lead-value)
+  );
+  /* A single-line <input> centres its text in its content box, so the box is
+     pinched to exactly one line — otherwise the padding above would only move
+     the text by half of itself and the ink would sit low. */
+  --fld-value-bottom: max(0px, calc(var(--fld-box) - var(--fld-value-top) - var(--fld-lh)));
+
+  backdrop-filter: var(--backdrop-filter);
+  min-height: var(--fld-h);
+
+  &:has(.textarea) {
+    --fld-anchor: var(--static-space-8);
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .base {
+    --fld-fs: max(var(--fld-fs-base), 16px);
+    --fld-lh: max(var(--fld-lh-base), calc(var(--fld-fs) * 1.3));
+    --fld-h: max(var(--fld-h-base), var(--fld-h-touch));
+  }
+}
+
+.xs {
+  --fld-fs-base: calc(var(--font-size-body-s) * var(--font-size-body-multiplier));
+  --fld-lh-base: calc(var(--line-height-body-s) * var(--line-height-body-multiplier));
+  --fld-h-base: var(--static-space-40);
+  --fld-h-touch: 40px;
+  --fld-label-scale: 0.6;
+  --fld-inset: var(--static-space-12);
+}
+
+.s {
+  --fld-fs-base: calc(var(--font-size-body-s) * var(--font-size-body-multiplier));
+  --fld-lh-base: calc(var(--line-height-body-s) * var(--line-height-body-multiplier));
+  --fld-h-base: var(--static-space-48);
+  --fld-h-touch: 48px;
+  --fld-label-scale: 0.75;
+  --fld-inset: var(--static-space-12);
+}
+
+.m {
+  --fld-fs-base: calc(var(--font-size-body-m) * var(--font-size-body-multiplier));
+  --fld-lh-base: calc(var(--line-height-body-m) * var(--line-height-body-multiplier));
+  --fld-h-base: var(--static-space-56);
+  --fld-h-touch: 0px;
+  --fld-label-scale: 0.75;
+  --fld-gap-loose: 0.375;
+  --fld-inset: var(--static-space-16);
+}
+
+.l {
+  --fld-fs-base: calc(var(--font-size-body-l) * var(--font-size-body-multiplier));
+  --fld-lh-base: calc(var(--line-height-body-l) * var(--line-height-body-multiplier));
+  --fld-h-base: var(--static-space-64);
+  --fld-h-touch: 0px;
+  --fld-label-scale: 0.75;
+  --fld-gap-loose: 0.375;
+  --fld-inset: var(--static-space-16);
+}
+
+.xl {
+  --fld-fs-base: calc(var(--font-size-body-xl) * var(--font-size-body-multiplier));
+  --fld-lh-base: calc(var(--line-height-body-xl) * var(--line-height-body-multiplier));
+  --fld-h-base: var(--static-space-72);
+  --fld-h-touch: 0px;
+  --fld-label-scale: 0.75;
+  --fld-gap-loose: 0.375;
+  --fld-inset: var(--static-space-16);
+}
+
+.resizeHandle {
+  &::after {
+    pointer-events: none;
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: var(--static-space-32);
+    height: var(--static-space-32);
+    border: 1px solid var(--neutral-border-strong);
+    transform: translateX(50%) translateY(50%) rotate(45deg);
+    background-color: var(--neutral-alpha-weak);
+  }
+
+  ::-webkit-resizer {
+    display: none;
+  }
+}
+
+.label {
+  position: absolute;
+  left: var(--fld-inset);
+  transition: transform 0.3s, top 0.3s, left 0.3s;
+  color: var(--neutral-on-background-medium);
+  pointer-events: none;
+  /* `left top`, not the default `left center`: scaling about the top edge makes
+     the floating label's `top` its visual top, so the placement maths above can
+     be read directly off the value. */
+  transform-origin: left top;
+
+  &.floating {
+    transform: scale(var(--fld-label-scale));
+  }
+}
+
+.inputLabel {
+  top: 50%;
+  transform: translateY(-50%);
+
+  &.floating {
+    top: var(--fld-label-top);
+  }
+}
+
+.textareaLabel {
+  top: calc(var(--static-space-16) + var(--static-space-2));
+
+  &.floating {
+    top: var(--fld-label-top);
+  }
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none;
+  color: var(--neutral-on-background-strong);
+  font-size: var(--fld-fs);
+  line-height: var(--fld-lh);
+  /* The Column's padding already supplies `--fld-well` of the inset. */
+  padding: 0 calc(var(--fld-inset) - var(--fld-well));
+  outline: none;
+  border-radius: var(--radius-s);
+
+  &.textarea {
+    height: auto;
+    padding-bottom: var(--static-space-12);
+  }
+
+  &::placeholder {
+    color: var(--neutral-on-background-weak);
+  }
+
+  &:disabled {
+    color: var(--neutral-on-background-weak);
+    cursor: not-allowed;
+  }
+
+  &:autofill,
+  &:-webkit-autofill {
+    background-color: var(--static-transparent) !important;
+    -webkit-box-shadow: 0 0 0 var(--static-space-32) var(--neutral-background-medium) inset !important;
+    -webkit-text-fill-color: var(--neutral-on-background-strong) !important;
+    /* The browser fills the field without firing focus, blur or change, so
+       React never learns the field is no longer empty and the label stayed on
+       top of the filled text. An animation is the one event autofill does
+       emit: Input.tsx listens for it by name and sets the filled state. */
+    animation: onAutoFill 1ms;
+  }
+}
+
+/* The value only clears room for the label once the label is actually floating
+   above it — an input with no label keeps its text centred by the UA. */
+.base:has(.label.floating) .input {
+  padding-top: var(--fld-value-top);
+
+  &:not(.textarea) {
+    padding-bottom: var(--fld-value-bottom);
+  }
+}
+
+.error {
+  .base {
+    background-color: var(--danger-background-medium);
+    border-color: var(--danger-border-medium);
+  }
+
+  .input,
+  .prefix,
+  .suffix {
+    color: var(--danger-on-background-medium);
+  }
+
+  .label {
+    color: var(--danger-on-background-weak);
+  }
+
+  .resizeHandle {
+    &::after {
+      border-color: var(--danger-border-medium);
+      background-color: var(--danger-alpha-weak);
+    }
+  }
+}
+
+.prefix,
+.suffix {
+  align-self: center;
+}
+
+.input[type="color"] {
+  opacity: 0;
+}
+
+/* Inert by design — the animation exists only so autofill announces itself,
+   and nothing reads `--fld-autofill`. A custom property is animated rather
+   than a real one so the keyframes cannot fight any declared style, and the
+   duration is non-zero so `animationstart` is guaranteed to fire. */
+@keyframes onAutoFill {
+  from {
+    --fld-autofill: 0;
+  }
+
+  to {
+    --fld-autofill: 1;
+  }
+}

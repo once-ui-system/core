@@ -13,7 +13,7 @@
   "StyleProps"
  ],
  "props": {
-  "variant": "ColorScheme = brand",
+  "scheme": "ColorScheme = brand",
   "size": "CondensedTShirtSizes = m",
   "pulseSize": "string | number",
   "children": "ReactNode",

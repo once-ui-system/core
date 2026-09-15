@@ -1,0 +1,14 @@
+{
+ "name": "NavItem",
+ "group": "components",
+ "extends": [
+  "ToggleButton"
+ ],
+ "props": {
+  "label": "!ReactNode",
+  "icon": "IconName",
+  "badge": "number",
+  "indicator": "boolean"
+ },
+ "mixinsRef": []
+}

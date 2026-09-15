@@ -41,6 +41,12 @@ next-env.d.ts
 .opencode.bak/
 .playwright-mcp/
 
+# Scratch typecheck project for the ai/eval-tasks.md benchmark runs. Generated
+# output plus a tsconfig that resolves @once-ui-system/core from the workspace;
+# it has to live inside the repo for module resolution to walk up to
+# node_modules, but nothing in it belongs in history.
+.bench/
+
 # node compile cache
 node-compile-cache/
 

@@ -15,7 +15,7 @@
  "props": {
   "title": "!React.ReactNode",
   "children": "!React.ReactNode",
-  "icon": "string = chevronDown",
+  "icon": "IconName = chevronDown",
   "iconRotation": "number = 180",
   "size": "CondensedTShirtSizes = m",
   "radius": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" | \"full\" = m",

@@ -10,7 +10,7 @@ export function Products() {
             title: "Once UI Core",
             description: "Open-source design system for Next.js",
             image: "/images/docs/once-ui.jpg",
-            href: "/once-ui/quick-start"
+            href: "/quick-start"
           },
           {
             title: "Magic Portfolio",

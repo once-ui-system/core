@@ -1,0 +1,509 @@
+---
+title: "MegaMenu"
+summary: "MegaMenu displays a top-level navigation bar with expandable dropdowns for organized access to grouped links. It supports dynamic sizing and contextual visibility."
+updatedAt: "2025-10-06"
+docs: "once-ui/modules/megaMenu.mdx"
+github: "modules/navigation/MegaMenu.tsx"
+navLabel: "MegaMenu"
+navIcon: "modules"
+---
+
+Use `MegaMenu` for complex navigational layouts where primary sections include sub-links, descriptions, and icons. Ideal for app headers and multi-level SaaS interfaces.
+
+<CodeBlock
+  marginTop="16"  isCollapsible={false}
+
+  marginBottom="24"
+  codeHeight={24}
+  preview={
+    <Row fillWidth height={20} overflow="hidden">
+    <MegaMenu
+      menuGroups={[
+        {
+      id: "products",
+      label: "Products",
+      suffixIcon: "chevronDown",
+      sections: [
+        {
+          title: "Featured",
+          links: [
+            {
+              label: "Analytics",
+              href: "#",
+              icon: "analytics",
+              description: "Get insights into your data",
+            },
+            {
+              label: "Security",
+              href: "#",
+              icon: "security",
+              description: "Protect your assets",
+            },
+          ],
+        },
+        {
+          title: "Tools",
+          links: [
+            {
+              label: "Dashboard",
+              href: "#",
+              icon: "apps",
+              description: "Monitor your metrics",
+            },
+            {
+              label: "Settings",
+              href: "#",
+              icon: "settings",
+              description: "Configure your preferences",
+            },
+            {
+              label: "Monitor",
+              href: "#",
+              icon: "screen",
+              description: "Monitor your metrics",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "solutions",
+      label: "Solutions",
+      suffixIcon: "chevronDown",
+      sections: [
+        {
+          title: "By industry",
+          links: [
+            {
+              label: "Enterprise",
+              href: "#",
+              icon: "components",
+              description: "Solutions for large organizations",
+            },
+            {
+              label: "Startups",
+              href: "#",
+              icon: "rocket",
+              description: "Perfect for growing companies",
+            },
+          ],
+        },
+        {
+          title: "By team",
+          links: [
+            {
+              label: "Developers",
+              href: "#",
+              icon: "code",
+              description: "Tools and APIs",
+            },
+            {
+              label: "Design teams",
+              href: "#",
+              icon: "sparkle",
+              description: "Creative solutions",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "resources",
+      label: "Resources",
+      suffixIcon: "chevronDown",
+      sections: [
+        {
+          title: "Documentation",
+          links: [
+            {
+              label: "Guides",
+              href: "#",
+              icon: "pages",
+              description: "Learn how to use our platform",
+            },
+            {
+              label: "API reference",
+              href: "#",
+              icon: "code",
+              description: "Technical documentation",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "company",
+      label: "Company",
+      suffixIcon: "chevronDown",
+      sections: [
+        {
+          title: "About",
+          links: [
+            {
+              label: "Our story",
+              href: "#",
+              icon: "pages",
+              description: "Learn about our journey",
+            },
+            {
+              label: "Careers",
+              href: "#",
+              icon: "rocket",
+              description: "Join our team",
+            },
+          ],
+        },
+        {
+          title: "Connect",
+          links: [
+            {
+              label: "Blog",
+              href: "#",
+              icon: "document",
+              description: "Latest updates and news",
+            },
+            {
+              label: "Contact",
+              href: "#",
+              icon: "email",
+              description: "Get in touch with us",
+            },
+          ],
+        },
+      ],
+    },
+      ]}
+    />
+  </Row>
+  }
+  codes={[
+    {
+      code:
+`<MegaMenu
+    menuGroups={[
+      {
+        id: "products",
+        label: "Products",
+        suffixIcon: "chevronDown",
+        sections: [
+          {
+            title: "Featured",
+            links: [
+              {
+                label: "Analytics",
+                href: "/analytics",
+                icon: "HiOutlineDocumentChartBar",
+                description: "Get insights into your data",
+              },
+              {
+                label: "Security",
+                href: "/security",
+                icon: "HiOutlineShieldCheck",
+                description: "Protect your assets",
+              },
+            ],
+          },
+          {
+            title: "Tools",
+            links: [
+              {
+                label: "Dashboard",
+                href: "/dashboard",
+                icon: "HiOutlineSquares2X2",
+                description: "Monitor your metrics",
+              },
+              {
+                label: "Settings",
+                href: "/settings",
+                icon: "HiCog8Tooth",
+                description: "Configure your preferences",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "solutions",
+        label: "Solutions",
+        suffixIcon: "chevronDown",
+        sections: [
+          {
+            title: "By industry",
+            links: [
+              {
+                label: "Enterprise",
+                href: "/enterprise",
+                icon: "cube",
+                description: "Solutions for large organizations",
+              },
+              {
+                label: "Startups",
+                href: "/startups",
+                icon: "rocket",
+                description: "Perfect for growing companies",
+              },
+            ],
+          },
+          {
+            title: "By team",
+            links: [
+              {
+                label: "Developers",
+                href: "/developers",
+                icon: "code",
+                description: "Tools and APIs",
+              },
+              {
+                label: "Design teams",
+                href: "/design",
+                icon: "sparkle",
+                description: "Creative solutions",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "resources",
+        label: "Resources",
+        suffixIcon: "chevronDown",
+        sections: [
+          {
+            title: "Documentation",
+            links: [
+              {
+                label: "Guides",
+                href: "/guides",
+                icon: "book",
+                description: "Learn how to use our platform",
+              },
+              {
+                label: "API reference",
+                href: "/api",
+                icon: "code",
+                description: "Technical documentation",
+              },
+            ],
+          },
+          {
+            title: "Support",
+            links: [
+              {
+                label: "Help center",
+                href: "/help",
+                icon: "infoCircle",
+                description: "Get your questions answered",
+              },
+              {
+                label: "Community",
+                href: "/community",
+                icon: "people",
+                description: "Connect with other users",
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: "company",
+        label: "Company",
+        suffixIcon: "chevronDown",
+        sections: [
+          {
+            title: "About",
+            links: [
+              {
+                label: "Our story",
+                href: "/about",
+                icon: "book",
+                description: "Learn about our journey",
+              },
+              {
+                label: "Careers",
+                href: "/careers",
+                icon: "rocket",
+                description: "Join our team",
+              },
+            ],
+          },
+          {
+            title: "Connect",
+            links: [
+              {
+                label: "Blog",
+                href: "/blog",
+                icon: "document",
+                description: "Latest updates and news",
+              },
+              {
+                label: "Contact",
+                href: "/contact",
+                icon: "email",
+                description: "Get in touch with us",
+              },
+            ],
+          },
+        ],
+      },
+    ]}
+/>`,
+      language: "tsx",
+      label: "MegaMenu"
+    }
+  ]}
+/>
+
+## Custom content
+
+You can use the `content` prop to render custom JSX instead of the default sections layout:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={20}  isCollapsible={false}
+
+  preview={
+    <Row fillWidth height={20} overflow="hidden">
+      <MegaMenu
+        menuGroups={[
+          {
+            id: "featured",
+            label: "Featured",
+            suffixIcon: "chevronDown",
+            content: (
+              <Column gap="16" padding="8">
+                <Text variant="heading-strong-s" marginLeft="16">
+                  New Release
+                </Text>
+                <Row gap="12">
+                  <Card
+                    padding="16"
+                    radius="m"
+                    width={12}
+                    border="neutral-alpha-weak"
+                    href="#"
+                  >
+                    <Column gap="8">
+                      <Icon name="sparkle" size="s" onBackground="neutral-weak" marginBottom="8" />
+                      <Text variant="label-strong-m">AI Features</Text>
+                      <Text variant="body-default-s" onBackground="neutral-weak">
+                        Agents and Chatbots
+                      </Text>
+                    </Column>
+                  </Card>
+                  <Card
+                    padding="16"
+                    radius="m"
+                    width={12}
+                    border="neutral-alpha-weak"
+                    href="#"
+                  >
+                    <Column gap="8">
+                      <Icon name="rocket" size="s" onBackground="neutral-weak" marginBottom="8" />
+                      <Text variant="label-strong-m">Performance</Text>
+                      <Text variant="body-default-s" onBackground="neutral-weak">
+                        10x faster than before
+                      </Text>
+                    </Column>
+                  </Card>
+                </Row>
+              </Column>
+            ),
+          },
+          {
+            id: "products",
+            label: "Products",
+            href: "/products",
+          },
+        ]}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<MegaMenu
+    menuGroups={[
+      {
+        id: "featured",
+        label: "Featured",
+        suffixIcon: "chevronDown",
+        content: (
+          <Column gap="16" padding="8">
+            <Text variant="heading-strong-l" marginBottom="8">
+              New Release
+            </Text>
+            <Row gap="12">
+              <Card padding="16" radius="m" border="neutral-alpha-medium">
+                <Column gap="8">
+                  <Icon name="sparkle" size="l" onBackground="brand-medium" />
+                  <Text variant="label-strong-m">AI Features</Text>
+                  <Text variant="body-default-s" onBackground="neutral-weak">
+                    Explore our new AI-powered tools
+                  </Text>
+                </Column>
+              </Card>
+              <Card padding="16" radius="m" border="neutral-alpha-medium">
+                <Column gap="8">
+                  <Icon name="rocket" size="l" onBackground="accent-medium" />
+                  <Text variant="label-strong-m">Performance</Text>
+                  <Text variant="body-default-s" onBackground="neutral-weak">
+                    10x faster than before
+                  </Text>
+                </Column>
+              </Card>
+            </Row>
+          </Column>
+        ),
+      },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Custom content"
+    }
+  ]}
+/>
+
+## Usage
+
+The `MegaMenu` component is designed for desktop screens. You can hide it at the medium breakpoint by adding the `m={{hide: true}}` prop directly to the component.
+
+## API reference
+
+<PropsTable
+  component="MegaMenu"
+  describe={{
+    menuGroups: "The top-level items, each with the sections and links underneath it.",
+  }}
+  content={[
+    ["className"],
+    ["style"]
+  ]}
+/>
+
+### Types
+
+```tsx
+interface MenuGroup {
+  id: string;
+  label: ReactNode;
+  suffixIcon?: string;
+  href?: string;
+  selected?: boolean;
+  sections?: MenuSection[];
+  content?: ReactNode; // Custom content slot for dropdown
+}
+
+interface MenuSection {
+  title?: ReactNode;
+  links: MenuLink[];
+}
+
+interface MenuLink {
+  label: ReactNode;
+  href: string;
+  icon?: string;
+  description?: ReactNode;
+  selected?: boolean;
+}
+```

@@ -14,16 +14,21 @@ import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
 
-interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+interface TextareaProps
+  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix"> {
   id: string;
   label?: string;
   placeholder?: string;
+  /**
+   * How tall the field is. `"auto"` (the default) grows with the content and
+   * drops the resize handle; a number fixes that many rows and keeps it.
+   */
   lines?: number | "auto";
-  height?: TShirtSizes;
+  size?: TShirtSizes;
   error?: boolean;
   errorMessage?: ReactNode;
   description?: ReactNode;
-  radius?:
+  corners?:
     | "none"
     | "top"
     | "right"
@@ -34,9 +39,15 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     | "bottom-right"
     | "bottom-left";
   className?: string;
-  hasPrefix?: ReactNode;
-  hasSuffix?: ReactNode;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
   variant?: "default" | "ghost";
+  /** Draw the standard focus ring around the field while it has focus. Off by
+   *  default — the quiet, borderless native look is deliberate — but a form a
+   *  keyboard user has to get through wants it on. Note this shows on a mouse
+   *  click too: `:focus-visible` always matches a field that takes keyboard
+   *  input, however it was focused. */
+  focusRing?: boolean;
   characterCount?: boolean;
   resize?: "horizontal" | "vertical" | "both" | "none";
   validate?: (value: ReactNode) => ReactNode | null;
@@ -49,16 +60,17 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       id,
       label,
       placeholder,
-      lines = 3,
-      height = "m",
+      lines = "auto",
+      size = "m",
       error = false,
       errorMessage,
       description,
-      radius,
+      corners,
       className,
-      hasPrefix,
-      hasSuffix,
+      prefix,
+      suffix,
       variant = "default",
+      focusRing = false,
       characterCount,
       resize = "vertical",
       validate,
@@ -67,13 +79,17 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       onFocus,
       onBlur,
       onChange,
+      onAnimationStart,
       style,
       ...props
     },
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(!!props.value);
+    // Seeded from `defaultValue` too: an uncontrolled field — how a settings
+    // form normally renders saved data — has no `value`, so the label never
+    // floated and sat on top of the text until the first focus and blur.
+    const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
     const [validationError, setValidationError] = useState<ReactNode | null>(null);
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
     const debouncedValue = useDebounce(props.value, 1000);
@@ -97,6 +113,22 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const handleFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
       setIsFocused(true);
       if (onFocus) onFocus(event);
+    };
+
+    /**
+     * Autofill fires no focus, blur or change event — Chrome does fill a
+     * street-address textarea — so the label would sit on top of the filled
+     * text. An animation start is the one thing the browser does emit; see
+     * Input.module.scss, which hangs it off `:-webkit-autofill`.
+     */
+    const handleAnimationStart = (event: React.AnimationEvent<HTMLTextAreaElement>) => {
+      // `styles.onAutoFill` is the exported hashed name; the substring check is
+      // the fallback for bundlers that scope keyframes without exporting them.
+      const name = event.animationName ?? "";
+      if (name === styles.onAutoFill || name.includes("onAutoFill")) {
+        setIsFilled(true);
+      }
+      if (onAnimationStart) onAnimationStart(event);
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
@@ -128,6 +160,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }, [debouncedValue, validateInput]);
 
     useEffect(() => {
+      // Only a controlled field's `value` is authoritative. Uncontrolled it is
+      // `undefined` forever, and syncing to it clobbered the seed back to false.
+      if (props.value === undefined) return;
       setIsFilled(!!props.value);
     }, [props.value]);
 
@@ -139,25 +174,15 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const displayError = validationError || errorMessage;
 
-    const fontSizeMap = {
-      xs: "font-s",
-      s: "font-s",
-      m: "font-m",
-      l: "font-l",
-      xl: "font-xl",
-    };
 
     const textareaClassNames = classNames(
       styles.input,
       styles.textarea,
       "font-body",
       "font-default",
-      fontSizeMap[height],
       {
-        [styles.filled]: isFilled,
-        [styles.focused]: isFocused,
-        [styles.withPrefix]: hasPrefix,
-        [styles.withSuffix]: hasSuffix,
+        [styles.withPrefix]: prefix,
+        [styles.withSuffix]: suffix,
         [styles.placeholder]: placeholder,
         [styles.hasChildren]: children,
       },
@@ -181,15 +206,16 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           vertical="stretch"
           className={classNames(
             styles.base,
-            height && styles[height],
+            focusRing && styles.focusRing,
+            size && styles[size],
             lines !== "auto" && resize !== "none" && styles.resizeHandle,
-            radius === "none" ? "radius-none" : radius ? `radius-l-${radius}` : "radius-l",
+            corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",
             lines !== "auto" && resize !== "none" && "radius-s-bottom-right",
           )}
         >
-          {hasPrefix && (
+          {prefix && (
             <Row paddingLeft="12" className={styles.prefix}>
-              {hasPrefix}
+              {prefix}
             </Row>
           )}
           <Column fillWidth padding="4">
@@ -209,6 +235,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               disabled={disabled}
               onFocus={handleFocus}
               onBlur={handleBlur}
+              onAnimationStart={handleAnimationStart}
               className={textareaClassNames + " scrollbar-minimal"}
               aria-describedby={displayError ? `${id}-error` : undefined}
               aria-invalid={!!displayError}
@@ -248,9 +275,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               </Row>
             )}
           </Column>
-          {hasSuffix && (
+          {suffix && (
             <Row paddingRight="12" className={styles.suffix}>
-              {hasSuffix}
+              {suffix}
             </Row>
           )}
         </Row>
