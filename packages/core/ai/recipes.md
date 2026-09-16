@@ -87,7 +87,7 @@ For the emphasized item in a set (e.g. "most popular" pricing tier). Border + to
 Self-contained drifting brand/accent blobs (already blurred and pointer-transparent). Use behind a final CTA or feature visual — counts as continuous motion:
 
 ```tsx
-<Card fillWidth radius="l" border="neutral-alpha-weak" overflow="hidden" padding="48">
+<Card fillWidth radius="l" border overflow="hidden" padding="48">
   <BlobFx position="absolute" top="0" left="0" fill opacity={60} seed={2} />
   <Column zIndex={1} center gap="24">
     {/* CTA content */}

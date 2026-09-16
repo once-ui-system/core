@@ -29,7 +29,7 @@ const sections = [
 export function SettingsExample() {
   return (
     <Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24">
-      <Column fillWidth maxWidth="l" gap="40">
+      <Column maxWidth="l" gap="40">
         <Column gap="12">
           <Text variant="label-default-s" onBackground="brand-medium">
             Settings
@@ -46,7 +46,7 @@ export function SettingsExample() {
               gap="4"
               padding="16"
               background="surface"
-              border="neutral-alpha-weak"
+              border
               radius="l"
               s={{ hide: true }}
             >
@@ -66,7 +66,7 @@ export function SettingsExample() {
           }
           rightPanel={
             <Column flex={1} gap="24">
-            <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="24">
+            <Column background="surface" border radius="l" padding="24" gap="24">
               <Heading as="h2" variant="heading-strong-m">
                 Profile
               </Heading>
@@ -97,7 +97,7 @@ export function SettingsExample() {
               </Row>
             </Column>
 
-            <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="24">
+            <Column background="surface" border radius="l" padding="24" gap="24">
               <Heading as="h2" variant="heading-strong-m">
                 Notifications
               </Heading>

@@ -13,7 +13,25 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
-Nothing yet.
+### Changed
+
+- **Agent guidance: a prop another prop already implies is a default too.** The
+  harness told agents to omit `position="relative"` and then shipped examples
+  writing `fillWidth` beside `maxWidth` (which already fills the width),
+  `minWidth={0}` beside `fillWidth` (which already sets `min-width: 0`), and
+  `border="neutral-alpha-weak"` where bare `border` draws the default border —
+  the surface recipe itself was written that way, in the rules, the compact
+  rules, a task bundle, `AGENTS.md` and 15 example files. All of them now use
+  the short forms, and the rules gain the principle behind them plus one on
+  `zIndex`: it belongs to an isolated stacking group (a decorative layer and
+  its content sibling, a sticky header over its pane), not to a lone element
+  or a page-wide ladder.
+
+  `validate-ai-code` enforces the three mechanically, per element rather than
+  per file, with `--fix` for each; it also flags a `zIndex` in a file with
+  nothing positioned absolute, fixed or sticky. Tag scanning is brace-aware
+  now, so a `>` inside an arrow function in a prop no longer ends the tag
+  early. Covered by tests.
 
 ## [2.0.0-alpha.0] — 2026-09-16
 

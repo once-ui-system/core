@@ -25,7 +25,8 @@ is found in the wild.
 Mechanical (count occurrences):
 
 - [ ] Compiles / no invented props or components
-- [ ] Redundant-default props (`position="relative"`, `variant="primary"` on Button, ...) — target: 0
+- [ ] Redundant-default props (`position="relative"`, `variant="primary"` on Button, `fillWidth` beside `maxWidth`, `minWidth={0}` beside `fillWidth`, `border="neutral-alpha-weak"` for the default border, ...) — target: 0
+- [ ] `zIndex` outside an isolated stacking group (nothing absolute/fixed/sticky nearby) — target: 0
 - [ ] Shorthand violations (`fillWidth fillHeight` instead of `fill`, `horizontal+vertical center` instead of `center`, `Flex direction=` instead of `Row`/`Column`) — target: 0
 - [ ] `style={{}}` uses where a token prop exists — target: 0
 - [ ] Raw HTML elements where a component exists (`img`, `a`, `button`) — target: 0

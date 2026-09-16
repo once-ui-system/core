@@ -237,7 +237,7 @@ export const Productivity1 = () => {
             <Column
               key={index}
               minWidth={20}
-              border="neutral-alpha-weak"
+              border
               fillWidth
               paddingX="4"
               radius="m-4"

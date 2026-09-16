@@ -11,6 +11,9 @@ Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For an
 | `fill` | `fillWidth fillHeight` |
 | `fit` | `fitWidth fitHeight` |
 | `center` | `horizontal="center" vertical="center"` |
+| `maxWidth="l"` | `fillWidth maxWidth="l"` |
+| `fillWidth` | `fillWidth minWidth={0}` |
+| `border` | `border="neutral-alpha-weak"` |
 
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
@@ -22,9 +25,10 @@ Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For an
 Static panel recipe (pricing tiers, stats, settings sections):
 
 ```tsx
-<Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16">
+<Column background="surface" border radius="l" padding="24" gap="16">
 ```
 
+- Bare `border` (and `borderTop`, `borderBottom`, …) = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
 - Colors: `{scheme}-{weight}` or `{scheme}-alpha-{weight}`. Never hex/rgb.
 - `background` also: `surface | overlay | page | transparent`
@@ -39,6 +43,8 @@ Static panel recipe (pricing tiers, stats, settings sections):
 ## Decoration
 
 Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents="none"`, content `zIndex={1}`.
+
+- `zIndex` only inside that layer group (or on a sticky header over its pane). Never on a lone element, never a page-wide ladder.
 
 - Gradient `width`: quarter-percent (400 = 100%). Glows: 100–200.
 - Glow colors: `brand-alpha-medium`, not `brand-background-weak`
@@ -81,7 +87,7 @@ from `spec.json`.
 
 ## Defaults — omit these
 
-`position="relative"`, `direction` on Row/Column, `variant="primary"` on Button, `size="m"` when default.
+`position="relative"`, `direction` on Row/Column, `variant="primary"` on Button, `size="m"` when default, `fillWidth` beside `maxWidth`, `minWidth={0}` beside `fillWidth`, a border colour that restates the default.
 
 ## Before building
 
