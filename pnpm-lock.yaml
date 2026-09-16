@@ -119,9 +119,6 @@ importers:
       '@floating-ui/react-dom':
         specifier: ^2.1.9
         version: 2.1.9(react-dom@19.2.8(react@19.2.8))(react@19.2.8)
-      '@once-ui-system/foundations':
-        specifier: workspace:*
-        version: link:../foundations
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -162,6 +159,9 @@ importers:
       '@biomejs/biome':
         specifier: 2.5.6
         version: 2.5.6
+      '@once-ui-system/foundations':
+        specifier: workspace:*
+        version: link:../foundations
       '@testing-library/jest-dom':
         specifier: ^7.0.0
         version: 7.0.0(@testing-library/dom@10.4.1)
