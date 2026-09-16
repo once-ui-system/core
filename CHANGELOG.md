@@ -13,6 +13,37 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [1.8.5] — 2026-09-16
+
+Classified **patch** per [RELEASING.md](RELEASING.md): one bug fix and one
+packaging correction, no API change of any kind. Cut from the 1.8.4 tree, so
+it carries none of the 2.0 work — the fix reaches `^1.8.x` consumers on their
+next install, with nothing to migrate. The same fix is on `main` for 2.0.
+
+### Fixed
+
+- **`CountFx` no longer freezes when `value` reverts mid-animation.** A run
+  started from the last *completed* value, which was recorded only when an
+  animation reached its end. Changing `value` back while one was still in
+  flight therefore hit the `value === previousValueRef.current` early return
+  after the effect cleanup had already cancelled the frame: nothing was left
+  driving the number, and the display stayed on whatever intermediate value it
+  happened to be showing until some third value came along. A monthly/annual
+  pricing toggle clicked twice in quick succession was enough to trigger it.
+  Runs now start from whatever is on screen, so an interrupted transition
+  reverses from where it got to and always settles exactly on the target. The
+  `smooth` effect renders its digit wheels from the same origin, which now
+  tracks the run in flight instead of the last one that finished. Reported and
+  diagnosed by @chanderlud in
+  [#134](https://github.com/once-ui-system/core/issues/134).
+
+- **The published package now carries its license text.** `package.json` has
+  declared `"license": "MIT"` all along, which is what license scanners read,
+  but the grant itself never shipped: the MIT file lived only at the monorepo
+  root, and npm includes a license only when it finds one in the package
+  directory. Every tarball up to and including 1.8.4 went out without it. The
+  notice also now names Dopler, the entity, rather than Once UI, the product.
+
 ## [1.8.4] — 2026-08-28
 
 Classified **patch** per [RELEASING.md](RELEASING.md): a single bug fix, no

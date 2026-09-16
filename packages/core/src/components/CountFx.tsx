@@ -28,6 +28,14 @@ const CountFx = forwardRef<HTMLDivElement, CountFxProps>(({
   const [displayValue, setDisplayValue] = useState(value);
   const [animationProgress, setAnimationProgress] = useState(1);
   const animationRef = useRef<number | undefined>(undefined);
+  // What the display currently reads, mirrored on every frame. A run starts
+  // from here rather than from the last *completed* value: when `value` is
+  // changed back mid-flight, the old code saw `value === previousValueRef`
+  // and returned early, having already cancelled the frame, stranding the
+  // number at whatever it happened to be showing.
+  const displayValueRef = useRef<number>(value);
+  // Where the run in flight started. `smooth` renders its digit wheels from
+  // this origin, so it has to track the current run, not the last finished one.
   const previousValueRef = useRef<number>(value);
 
   // Default format function with separator and decimals support
@@ -223,13 +231,19 @@ const CountFx = forwardRef<HTMLDivElement, CountFxProps>(({
   };
 
   useEffect(() => {
-    if (value === previousValueRef.current) return;
+    if (value === displayValueRef.current) return;
 
-    const startValue = previousValueRef.current;
+    const startValue = displayValueRef.current;
+    previousValueRef.current = startValue;
     const endValue = value;
     const difference = endValue - startValue;
 
     let startTime: number;
+
+    const commit = (next: number) => {
+      displayValueRef.current = next;
+      setDisplayValue(next);
+    };
 
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
@@ -243,29 +257,28 @@ const CountFx = forwardRef<HTMLDivElement, CountFxProps>(({
         const currentValue = decimals !== undefined 
           ? parseFloat((startValue + difference * easedProgress).toFixed(decimals))
           : Math.floor(startValue + difference * easedProgress);
-        setDisplayValue(currentValue);
+        commit(currentValue);
       } else if (effect === "smooth") {
         // For smooth animation, we track progress and animate digits independently
         setAnimationProgress(easedProgress);
         const currentValue = decimals !== undefined 
           ? parseFloat((startValue + difference * easedProgress).toFixed(decimals))
           : Math.floor(startValue + difference * easedProgress);
-        setDisplayValue(currentValue);
+        commit(currentValue);
       } else {
         // Simple animation
         const currentValue = startValue + difference * easedProgress;
         const currentStepValue = decimals !== undefined 
           ? parseFloat(currentValue.toFixed(decimals))
           : Math.floor(currentValue);
-        setDisplayValue(currentStepValue);
+        commit(currentStepValue);
       }
 
       if (progress < 1) {
         animationRef.current = requestAnimationFrame(animate);
       } else {
-        setDisplayValue(endValue);
+        commit(endValue);
         setAnimationProgress(1);
-        previousValueRef.current = endValue;
       }
     };
 
