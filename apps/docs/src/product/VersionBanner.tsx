@@ -31,16 +31,38 @@ export function VersionBanner() {
   return (
     <Row
       fillWidth
-      horizontal="center"
-      vertical="center"
-      gap="12"
-      wrap
-      paddingX="16"
-      paddingY="8"
-      background="neutral-alpha-weak"
+      /*
+       * Opaque, and above the page, because of what sits behind it.
+       *
+       * The tint below is `neutral-alpha-weak` — 15% — which is right for the
+       * banner's weight but lets whatever is underneath through. The docs home
+       * page draws a `BlobFx` at `position="absolute"` with `translateY="-60%"`,
+       * so it reaches up out of its own container and lands squarely behind
+       * this strip. Two separate problems follow, and only doing both fixes it:
+       * the colour bled through the tint, and — because the blob is positioned
+       * and an in-flow strip is not — it painted *over* the banner as well.
+       * `page` gives the tint something opaque to sit on; `relative` + `zIndex`
+       * puts the strip back on top.
+       *
+       * Compositing the tint over `page` is also exactly what the measured
+       * contrast assumed, so the AA figures are unchanged by this.
+       */
+      background="page"
+      position="relative"
+      zIndex={1}
       borderBottom="neutral-alpha-medium"
-      s={{ direction: "column" }}
     >
+      <Row
+        fillWidth
+        horizontal="center"
+        vertical="center"
+        gap="12"
+        wrap
+        paddingX="16"
+        paddingY="8"
+        background="neutral-alpha-weak"
+        s={{ direction: "column" }}
+      >
       <Row gap="8" vertical="center" wrap horizontal="center">
         <Tag scheme="brand" size="s">
           2.0 alpha
@@ -58,7 +80,8 @@ export function VersionBanner() {
         <SmartLink href={V1_DOCS_URL} suffixIcon="arrowUpRight" iconSize="xs">
           Read the 1.x docs
         </SmartLink>
-      </Text>
+        </Text>
+      </Row>
     </Row>
   );
 }
