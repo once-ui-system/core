@@ -15,6 +15,14 @@
   background-color: var(--backdrop);
 }
 
+.transparent-background {
+  background-color: var(--static-transparent);
+}
+
+.transparent-solid {
+  background-color: var(--static-transparent);
+}
+
 .neutral-background-weak ::selection,
 .neutral-background-medium ::selection,
 .neutral-background-strong ::selection,

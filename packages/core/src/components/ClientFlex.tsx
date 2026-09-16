@@ -52,7 +52,7 @@ const parseSpacing = (value: SpacingToken | number | undefined): string | undefi
 };
 
 const generateBackgroundClass = (type: "background" | "solid", value: string): string | undefined => {
-  if (value === "transparent") return undefined;
+  if (value === "transparent") return `transparent-${type}`;
   if (["surface", "page", "overlay"].includes(value)) return `${value}-${type}`;
   const parts = value.split("-");
   if (parts.includes("alpha")) {

@@ -289,6 +289,12 @@ function background() {
       "backdrop-filter: var(--backdrop-filter);",
     ]),
     rule(".overlay-background", ["background-color: var(--backdrop);"]),
+    // `background="transparent"` and `solid="transparent"` are in the prop
+    // types and had no class to resolve to, so they fell through to
+    // `transparent-border` — which did nothing to the background and quietly
+    // cleared the author's border. These are the two that were missing.
+    rule(".transparent-background", ["background-color: var(--static-transparent);"]),
+    rule(".transparent-solid", ["background-color: var(--static-transparent);"]),
   ];
 
   for (const scheme of SCHEMES) {

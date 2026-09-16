@@ -129,11 +129,13 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
     const generateDynamicClass = (type: string, value: string | "-1" | undefined) => {
       if (!value) return undefined;
 
+      // See ServerFlex: `transparent` is a value of background and solid as
+      // well as border, so the class has to follow the type.
       if (value === "transparent") {
-        return `transparent-border`;
+        return `transparent-${type}`;
       }
 
-      if (value === "surface" || value === "page" || value === "transparent") {
+      if (value === "surface" || value === "page") {
         return `${value}-${type}`;
       }
 

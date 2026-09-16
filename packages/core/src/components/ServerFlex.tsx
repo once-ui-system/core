@@ -218,8 +218,11 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     const generateDynamicClass = (type: string, value: string | undefined) => {
       if (!value) return undefined;
 
+      // Not hardcoded to `border`: this helper is called for background and
+      // solid too, and returning the border class for them applied nothing to
+      // the background while clearing the border the author asked for.
       if (value === "transparent") {
-        return `transparent-border`;
+        return `transparent-${type}`;
       }
 
       if (["surface", "page", "overlay"].includes(value)) {

@@ -2381,7 +2381,9 @@
 .transition-micro-long
 .transition-micro-medium
 .transition-micro-short
+.transparent-background
 .transparent-border
+.transparent-solid
 .truncate
 .warning-background-alpha-medium
 .warning-background-alpha-strong
