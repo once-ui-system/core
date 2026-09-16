@@ -63,23 +63,23 @@ export function VersionBanner() {
         background="neutral-alpha-weak"
         s={{ direction: "column" }}
       >
-      <Row gap="8" vertical="center" wrap horizontal="center">
-        <Tag scheme="brand" size="s">
-          2.0 alpha
-        </Tag>
-        <Text variant="label-default-s" onBackground="neutral-strong">
-          These docs describe 2.0. Install it with{" "}
-          <Text variant="code-default-s" onBackground="neutral-strong">
-            @once-ui-system/core@alpha
+        <Row gap="8" vertical="center" wrap horizontal="center">
+          <Tag scheme="brand" size="s">
+            2.0 alpha
+          </Tag>
+          <Text variant="label-default-s" onBackground="neutral-strong">
+            These docs describe 2.0. Install it with{" "}
+            <Text variant="code-default-s" onBackground="neutral-strong">
+              @once-ui-system/core@alpha
+            </Text>
+            .
           </Text>
-          .
-        </Text>
-      </Row>
-      <Text variant="label-default-s" onBackground="neutral-weak">
-        On 1.8.x?{" "}
-        <SmartLink href={V1_DOCS_URL} suffixIcon="arrowUpRight" iconSize="xs">
-          Read the 1.x docs
-        </SmartLink>
+        </Row>
+        <Text variant="label-default-s" onBackground="neutral-weak">
+          On 1.8.x?{" "}
+          <SmartLink href={V1_DOCS_URL} suffixIcon="arrowUpRight" iconSize="xs">
+            Read the 1.x docs
+          </SmartLink>
         </Text>
       </Row>
     </Row>
