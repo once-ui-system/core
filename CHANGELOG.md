@@ -13,39 +13,9 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
-### Added
+Nothing yet.
 
-- **`ThemeSwitcher` gains `collapsed`.** The control shows only the active theme
-  and reveals the rest on hover or focus, for headers and footers where it has
-  to be reachable from every page without spending three slots on itself.
-
-  It stays a real toggle group rather than a hover trick: every option keeps its
-  tab stop (collapsed with `max-width: 0`, not `display: none`), `:focus-within`
-  opens the group so a keyboard visitor can reach all three, and any device
-  without hover gets the expanded group from the start — otherwise the only way
-  in would be to tap the visible button, which would have already changed the
-  theme. The width transition is the only motion and `prefers-reduced-motion`
-  removes it.
-
-  ```tsx
-  <ThemeSwitcher collapsed />
-  ```
-
-### Fixed
-
-- **`ThemeSwitcher` now exposes which theme is active.** The active option was
-  marked only by its `"primary"` variant, so assistive technology had no way to
-  tell the three buttons apart. Each now carries `aria-pressed`.
-
-### Changed
-
-- **Agent guidance.** `ai/rules.md` gains a rule on proportion — two columns in
-  a row finish at roughly the same place, and the fix for a half-empty column is
-  content in the thin side, not more whitespace. `ai/recipes.md` gains the
-  reveal-on-hover pattern with the three rules that keep it accessible, and the
-  matching anti-pattern.
-
-## [2.0.0-alpha.0] — 2026-09-15
+## [2.0.0-alpha.0] — 2026-09-16
 
 Published to the **`alpha`** dist-tag, not `latest`. `npm install
 @once-ui-system/core` keeps resolving 1.8.4, and every `^1.8.x` range in the
@@ -353,6 +323,29 @@ that way. The ramps themselves are untouched.
 
 ### Fixed
 
+- **The mega menu's dropdown shadow is no longer clipped.** `MegaMenu` put
+  `overflow: hidden` on the positioned box that holds the panel and `shadow="xl"`
+  on the surface inside it, so the shadow — drawn outside the surface's border
+  box — was cut off at the panel's own edge. The clip is not the mistake: it is
+  what keeps the contents inside the box while its width and height animate
+  between two groups of different size. An element's own box-shadow, unlike its
+  descendants, is not clipped by its own overflow, so the two belong on the same
+  element. The clipping box now takes the radius and the shadow and the surface
+  gives them up; the 8px top padding moves into `top` in exchange, because the
+  two boxes have to coincide exactly for their rounded corners to.
+
+- **`background="transparent"` and `solid="transparent"` do something.** Both
+  values were in the prop types with no class behind them: the class helper
+  returned `transparent-border` whatever type it was given, so they applied
+  nothing to the background and quietly cleared the author's border instead, and
+  on the client path the background case returned no class at all. The helper
+  now follows its `type` argument, and the two missing utilities
+  (`transparent-background`, `transparent-solid`) are generated.
+
+- **`ThemeSwitcher` now exposes which theme is active.** The active option was
+  marked only by its `"primary"` variant, so assistive technology had no way to
+  tell the three buttons apart. Each now carries `aria-pressed`.
+
 - **A failed emoji fetch no longer fails the build — or the publish.**
   `prepack` runs `pnpm build`, and the build regenerates
   `src/data/emoji-data.json` from GitHub. Behind a proxy, a TLS-intercepting
@@ -562,6 +555,22 @@ that way. The ramps themselves are untouched.
   dependency graph resolves.
 
 ### Added
+
+- **`ThemeSwitcher` gains `collapsed`.** The control shows only the active theme
+  and reveals the rest on hover or focus, for headers and footers where it has
+  to be reachable from every page without spending three slots on itself.
+
+  It stays a real toggle group rather than a hover trick: every option keeps its
+  tab stop (collapsed with `max-width: 0`, not `display: none`), `:focus-within`
+  opens the group so a keyboard visitor can reach all three, and any device
+  without hover gets the expanded group from the start — otherwise the only way
+  in would be to tap the visible button, which would have already changed the
+  theme. The width transition is the only motion and `prefers-reduced-motion`
+  removes it.
+
+  ```tsx
+  <ThemeSwitcher collapsed />
+  ```
 
 - **`focusRing` on `Input` and `Textarea`.** A field draws no focus ring —
   deliberately, that borderless native look is the point — but that leaves a
@@ -809,6 +818,12 @@ that way. The ramps themselves are untouched.
   custom-property/attribute-selector snapshots, and seed interaction tests.
 
 ### Changed
+
+- **Agent guidance.** `ai/rules.md` gains a rule on proportion — two columns in
+  a row finish at roughly the same place, and the fix for a half-empty column is
+  content in the thin side, not more whitespace. `ai/recipes.md` gains the
+  reveal-on-hover pattern with the three rules that keep it accessible, and the
+  matching anti-pattern.
 
 - **Spacing utilities are generated, not typed out.** `scss/styles/` was 5,789
   lines of hand-written classes with not one loop in the whole directory —
