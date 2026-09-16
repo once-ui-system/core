@@ -16,7 +16,7 @@ import { Column, Flex, Heading, IconButton, ScrollLock, Text } from ".";
 import styles from "./Dialog.module.scss";
 
 interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
-  isOpen: boolean;
+  open: boolean;
   onClose: () => void;
   title: ReactNode | string;
   description?: ReactNode;
@@ -60,7 +60,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
   (
     {
       closeOnClickaway = true,
-      isOpen,
+      open,
       onClose,
       title,
       description,
@@ -83,16 +83,16 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
     const dialogId = useId();
     const dialogTitleId = `${dialogId}-title`;
-    const [isVisible, setIsVisible] = useState(isOpen);
+    const [isVisible, setIsVisible] = useState(open);
     const [isAnimating, setIsAnimating] = useState(false);
     const { stackedDialogOpen, setStackedDialogOpen } =
       useContext(DialogContext);
 
     useEffect(() => {
       if (stack) {
-        setStackedDialogOpen(isOpen);
+        setStackedDialogOpen(open);
       }
-    }, [stack, isOpen, setStackedDialogOpen]);
+    }, [stack, open, setStackedDialogOpen]);
 
     useEffect(() => {
       if (dialogRef.current && isVisible) {
@@ -107,7 +107,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
         animationTimerRef.current = null;
       }
 
-      if (isOpen) {
+      if (open) {
         previouslyFocusedElementRef.current =
           document.activeElement instanceof HTMLElement
             ? document.activeElement
@@ -133,7 +133,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
           animationTimerRef.current = null;
         }
       };
-    }, [isOpen]);
+    }, [open]);
 
     // Restore focus on unmount while the dialog was still open
     useEffect(() => {
@@ -176,13 +176,13 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     );
 
     useEffect(() => {
-      if (isOpen) {
+      if (open) {
         document.addEventListener("keydown", handleKeyDown);
         return () => {
           document.removeEventListener("keydown", handleKeyDown);
         };
       }
-    }, [isOpen, handleKeyDown]);
+    }, [open, handleKeyDown]);
 
     useEffect(() => {
       // Find the portal container (direct child of body that contains the dialog)
@@ -217,7 +217,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
         }
       };
 
-      if (isOpen) {
+      if (open) {
         const portalContainer = getPortalContainer();
 
         // Make everything outside the dialog inert, except the dialog's own portal container
@@ -240,7 +240,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
           });
         }
 
-        // Return cleanup function for when component unmounts or isOpen changes
+        // Return cleanup function for when component unmounts or open changes
         return cleanup;
       } else {
         // If this is a stacked dialog closing, restore interactivity to base dialog
@@ -260,10 +260,10 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
           });
         }
       }
-    }, [isOpen, stack]);
+    }, [open, stack]);
 
     useEffect(() => {
-      if (isOpen && dialogRef.current) {
+      if (open && dialogRef.current) {
         const focusableElements =
           dialogRef.current.querySelectorAll<HTMLElement>(
             'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
@@ -273,7 +273,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
           firstElement.focus();
         }
       }
-    }, [isOpen]);
+    }, [open]);
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
@@ -316,7 +316,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
 
     return ReactDOM.createPortal(
       <>
-        <ScrollLock enabled={isOpen} allowScrollInElement={dialogRef} />
+        <ScrollLock enabled={open} allowScrollInElement={dialogRef} />
         <Flex
           ref={ref}
           transition="macro-medium"

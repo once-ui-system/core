@@ -1,6 +1,6 @@
 {
  "version": "2.0.0-alpha.0",
- "generated": "2026-08-28",
+ "generated": "2026-09-16",
  "components": {
   "Accordion": {
    "group": "components",
@@ -114,6 +114,16 @@
     "components"
    ]
   },
+  "Book": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Book component",
+   "tags": [
+    "components"
+   ]
+  },
   "BlockQuote": {
    "group": "components",
    "extends": [
@@ -137,6 +147,26 @@
     "Flex"
    ],
    "purpose": "MatrixFx component",
+   "tags": [
+    "components"
+   ]
+  },
+  "NavGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "NavGroup component",
+   "tags": [
+    "components"
+   ]
+  },
+  "NavItem": {
+   "group": "components",
+   "extends": [
+    "ToggleButton"
+   ],
+   "purpose": "NavItem component",
    "tags": [
     "components"
    ]
@@ -841,6 +871,7 @@
   "StylePanel": {
    "group": "components",
    "extends": [
+    "Column",
     "Flex"
    ],
    "purpose": "StylePanel component",
@@ -1010,6 +1041,66 @@
     "components"
    ]
   },
+  "Effect": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Effect component",
+   "tags": [
+    "components"
+   ]
+  },
+  "InfoTip": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "InfoTip component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Scrubber": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Scrubber component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Setting": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "Setting component",
+   "tags": [
+    "components"
+   ]
+  },
+  "SettingAxes": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "SettingAxes component",
+   "tags": [
+    "components"
+   ]
+  },
+  "SettingGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "SettingGroup component",
+   "tags": [
+    "components"
+   ]
+  },
   "FadingLettersFx": {
    "group": "components",
    "purpose": "FadingLettersFx component",
@@ -1064,147 +1155,144 @@
     "modules"
    ]
   },
-  "ChartHeader": {
+  "Schema": {
    "group": "modules",
+   "purpose": "Schema component",
+   "tags": [
+    "modules"
+   ]
+  },
+  "LineChart": {
+   "group": "data",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "LineChart component",
+   "tags": [
+    "data"
+   ]
+  },
+  "BarChart": {
+   "group": "data",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "BarChart component",
+   "tags": [
+    "data"
+   ]
+  },
+  "PieChart": {
+   "group": "data",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "PieChart component",
+   "tags": [
+    "data"
+   ]
+  },
+  "LineBarChart": {
+   "group": "data",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "LineBarChart component",
+   "tags": [
+    "data"
+   ]
+  },
+  "RadialGauge": {
+   "group": "data",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "RadialGauge component",
+   "tags": [
+    "data"
+   ]
+  },
+  "LinearGauge": {
+   "group": "data",
+   "extends": [
+    "Flex"
+   ],
+   "purpose": "LinearGauge component",
+   "tags": [
+    "data"
+   ]
+  },
+  "ChartHeader": {
+   "group": "data",
    "extends": [
     "Column",
     "Flex"
    ],
    "purpose": "ChartHeader component",
    "tags": [
-    "modules"
+    "data"
    ]
   },
   "ChartStatus": {
-   "group": "modules",
+   "group": "data",
    "purpose": "ChartStatus component",
    "tags": [
-    "modules"
+    "data"
    ]
   },
   "LinearGradient": {
-   "group": "modules",
+   "group": "data",
    "purpose": "LinearGradient component",
    "tags": [
-    "modules"
+    "data"
    ]
   },
   "RadialGradient": {
-   "group": "modules",
+   "group": "data",
    "purpose": "RadialGradient component",
    "tags": [
-    "modules"
-   ]
-  },
-  "BarChart": {
-   "group": "modules",
-   "extends": [
-    "BarChart.impl",
-    "interfaces",
-    "Flex"
-   ],
-   "purpose": "BarChart component",
-   "tags": [
-    "modules"
-   ]
-  },
-  "LineChart": {
-   "group": "modules",
-   "extends": [
-    "LineChart.impl",
-    "interfaces",
-    "Flex"
-   ],
-   "purpose": "LineChart component",
-   "tags": [
-    "modules"
-   ]
-  },
-  "PieChart": {
-   "group": "modules",
-   "extends": [
-    "PieChart.impl",
-    "interfaces",
-    "Flex"
-   ],
-   "purpose": "PieChart component",
-   "tags": [
-    "modules"
-   ]
-  },
-  "LineBarChart": {
-   "group": "modules",
-   "extends": [
-    "LineBarChart.impl",
-    "interfaces",
-    "Flex"
-   ],
-   "purpose": "LineBarChart component",
-   "tags": [
-    "modules"
+    "data"
    ]
   },
   "DataTooltip": {
-   "group": "modules",
+   "group": "data",
    "purpose": "DataTooltip component",
    "tags": [
-    "modules"
+    "data"
    ]
   },
   "Legend": {
-   "group": "modules",
+   "group": "data",
    "purpose": "Legend component",
    "tags": [
-    "modules"
+    "data"
    ]
   },
-  "RadialGauge": {
-   "group": "modules",
-   "extends": [
-    "Flex"
-   ],
-   "purpose": "RadialGauge component",
+  "Swatch": {
+   "group": "data",
+   "purpose": "Swatch component",
    "tags": [
-    "modules"
-   ]
-  },
-  "LinearGauge": {
-   "group": "modules",
-   "extends": [
-    "Flex"
-   ],
-   "purpose": "LinearGauge component",
-   "tags": [
-    "modules"
+    "data"
    ]
   },
   "CodeBlock": {
-   "group": "modules",
+   "group": "code",
    "extends": [
-    "CodeBlock.impl",
     "Flex"
    ],
    "purpose": "CodeBlock component",
    "tags": [
-    "modules"
+    "code"
    ]
   },
   "MediaUpload": {
-   "group": "modules",
+   "group": "media",
    "extends": [
-    "MediaUpload.impl",
     "Flex"
    ],
    "purpose": "MediaUpload component",
    "tags": [
-    "modules"
-   ]
-  },
-  "Schema": {
-   "group": "modules",
-   "purpose": "Schema component",
-   "tags": [
-    "modules"
+    "media"
    ]
   }
  }

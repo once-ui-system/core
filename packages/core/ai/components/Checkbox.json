@@ -5,8 +5,8 @@
   "InteractiveDetails"
  ],
  "props": {
-  "isChecked": "boolean",
-  "isIndeterminate": "boolean = false",
+  "checked": "boolean",
+  "indeterminate": "boolean = false",
   "onToggle": "() => void",
   "hoverable": "boolean = true"
  },

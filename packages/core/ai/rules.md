@@ -47,7 +47,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 ## Spacing and sizing
 
-4. Use spacing tokens, never raw CSS: `gap`, `padding`, `margin`, `paddingX/Y`, `marginX/Y` accept tokens (`"2" "4" "8" "12" "16" "20" "24" "32" "40" "48" "64"` or `"xs" "s" "m" "l" "xl"`).
+4. Use spacing tokens, never raw CSS: `gap`, `padding`, `margin`, `paddingX/Y`, `marginX/Y` accept the full `SpacingToken` scale (`"0" "1" "2" "4" "8" "12" "16" "20" "24" "32" "40" "48" "56" "64" "80" "104" "128" "160"`, or `"xs" "s" "m" "l" "xl"`). The top of the scale is what rule 17 calls for between sections — it is not an extension, it is part of the same list.
 
 ```tsx
 // Good
@@ -109,9 +109,9 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
     - `CursorCard`, `HoverCard`, `ContextMenu`, `EmojiPicker`, `CompareImage`, `OgCard`, `Timeline`, `MasonryGrid`, `InfiniteScroll`, `SegmentedControl`, `Kbar` (command palette)
     - Forms: `Input`, `PasswordInput`, `OTPInput`, `NumberInput`, `TagInput`, `Select`, `DatePicker`, `DateRangePicker`, `ColorInput`, `Slider`, `Switch`, `Checkbox`, `Chip`
 
-14. Buttons: `variant` = `primary | secondary | tertiary | danger`; pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
+14. Buttons: `variant` = `primary | secondary | tertiary | quaternary | subtle | danger | success | warning | ghost | link` (the slice is authoritative; `primary` is the default); pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
 
-14b. Icon names must come from the `IconName` list in spec.json — never invent names (`more`, `bell`, and `arrowRight` don't exist; `close`, `chevronRight`, and `smiley` do). If no icon fits, omit the icon.
+14b. Icon names must come from `iconNames` in spec.json. In 2.0 `IconName` is a real union, so an unregistered name is a type error rather than a blank space — do not guess a plausible one, and never reach for `as IconName` to silence the check. If no registered icon fits, omit the icon. The registry is 99 icons; brand marks (github, discord, google) are deliberately not among them, so an app registers its own.
 
 14c. Components with a text prop render it — never pass the same text as both prop and children, it renders twice:
 
@@ -155,8 +155,46 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 // Good eyebrow
 <Text variant="label-default-s" onBackground="brand-medium">Pricing</Text>
 // Bad eyebrow
-<Tag variant="neutral" prefixIcon="sparkle">Pricing</Tag>
+<Tag scheme="neutral" prefixIcon="sparkle">Pricing</Tag>
 ```
+
+20b. **Proportion is a decision, not a leftover.** Two columns in a row finish at
+roughly the same place, or one of them is wrong. A tall card beside a strip of
+small controls leaves a column of dead space that reads as an unfinished page —
+and the fix is almost never more whitespace tokens.
+
+Give the thin side real content instead. Tiles grow to carry their own height,
+with a placeholder, a preview, a swatch, a count — something true about the
+thing they stand for. Then keep them quiet: low-contrast surfaces, small labels,
+no competing headline. A grid of twenty loud tiles takes the section away from
+the card it was meant to support.
+
+```tsx
+// Bad: a tall card and 20 chips, most of the row empty
+<Row fillWidth gap="32">
+  <Column flex={1} maxWidth={26}><FeatureCard /></Column>
+  <Column flex={1}><Row wrap gap="4">{items.map(i => <Button key={i} size="s">{i}</Button>)}</Row></Column>
+</Row>
+
+// Good: both sides carry weight, the card still leads
+<Row fillWidth gap="32">
+  <Column flex={2}><FeatureCard /></Column>
+  <Column flex={3}>
+    <Grid columns={5} s={{ columns: 3 }} gap="8" fillWidth>
+      {items.map(i => (
+        <Column key={i} aspectRatio="1 / 1" padding="12" radius="l"
+                background="page" border="neutral-alpha-weak" vertical="between">
+          {/* a preview of the thing, not just its name */}
+        </Column>
+      ))}
+    </Grid>
+  </Column>
+</Row>
+```
+
+Check it by squinting at the two columns' bottom edges. If one ends halfway up
+the other, change the flex ratio, the tile size, or what the tiles contain —
+in that order.
 
 ## Decorative layers
 
@@ -184,21 +222,21 @@ Siblings holding content get `zIndex={1}`. `overflow="hidden"` goes on the paren
 
 ## Effect units
 
-24. `RevealFx`: `delay` is in **seconds** — stagger with `delay={index * 0.1}`, never `index * 80`. `translateY` as a number is in **rem** — use `translateY={1}` or a token like `"16"` (1rem); `16` means 16rem.
+24. `RevealFx`: `delay` is in **milliseconds** — stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). `ShineFx.speed` is milliseconds for the same reason. `translateY` as a number is in **rem** — use `translateY={1}` or a token like `"16"` (1rem); `16` means 16rem.
 
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
 
-26. Use decoration recipes from `recipes.md` verbatim, then adjust. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
+26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
 
 ## Motion
 
-27. Animations are **eye-leading, not eye-grabbing**: they direct attention to the one thing that should be read next, they don't announce themselves. Small distances (`translateY="8"`–`"16"`, i.e. 0.5–1rem), short staggers (`delay={index * 0.1}` max), and only on elements worth leading the eye to — the hero heading, stat numbers, the highlighted card in a set.
+27. Animations are **eye-leading, not eye-grabbing**: they direct attention to the one thing that should be read next, they don't announce themselves. Small distances (`translateY="8"`–`"16"`, i.e. 0.5–1rem), short staggers (`delay={index * 100}` max), and only on elements worth leading the eye to — the hero heading, stat numbers, the highlighted card in a set.
 
 28. Do **not** wrap every section in `RevealFx` — uniform entrance animation on everything reads dated and makes scrolling feel slow. Entry-animation budget per page: the hero, plus at most one or two key moments (stats, a card set). Everything else just renders.
 
-28b. Animate **coherent blocks, all-or-none**. Within a sibling set (cards, list items), either every sibling animates with a stagger or none do — never a single item out of the set (e.g. only the highlighted pricing card). For a hero, reveal it as 1–3 stacked chunks with increasing delay (`0 / 0.1 / 0.2`), not individual text fragments. One entrance moment per viewport: if the hero animates, the cards below it don't.
+28b. Animate **coherent blocks, all-or-none**. Within a sibling set (cards, list items), either every sibling animates with a stagger or none do — never a single item out of the set (e.g. only the highlighted pricing card). For a hero, reveal it as 1–3 stacked chunks with increasing delay (`0 / 100 / 200`), not individual text fragments. One entrance moment per viewport: if the hero animates, the cards below it don't.
 
-29. Trigger below-the-fold animations with `useInViewport`, latched so they play once. `RevealFx` takes `trigger`; `CountFx` has no trigger prop — drive its `value` instead:
+29. Trigger below-the-fold animations with `useInViewport`, latched so they play once. `RevealFx` takes `revealed`; `CountFx` has no trigger prop — drive its `value` instead:
 
 ```tsx
 const ref = useRef<HTMLDivElement>(null);
@@ -209,9 +247,29 @@ useEffect(() => {
 }, [inViewport]);
 
 <Column ref={ref} gap="16">
-  <RevealFx trigger={seen} translateY="8">...</RevealFx>
+  <RevealFx revealed={seen} translateY="8">...</RevealFx>
   <CountFx value={seen ? 2400 : 0} speed={1500} separator="," variant="display-strong-m" />
 </Column>
 ```
 
 Without this, mount-timed animations play while still off-screen and the user scrolls into an already-finished state.
+
+## Imports
+
+30. Most things come from the package root, but three modules do not, because
+their dependencies are optional peers and a root re-export would drag the
+specifier into every consumer's module graph:
+
+| Import | From | Peer the app installs |
+|--------|------|-----------------------|
+| charts, gauges, chart chrome | `@once-ui-system/core/data` | `recharts` |
+| `CodeBlock` | `@once-ui-system/core/code` | `prismjs` |
+| `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
+
+Naming one of these from the root does not resolve. Each component slice in
+`ai/components/` carries the specifier to import it from.
+
+31. `IconName` is a real union, not `string`. An unregistered name is a type
+error now, where it used to render a blank space with a console warning — so
+take icon names from `spec.json`'s `iconNames` rather than guessing a plausible
+one. An app registers its own by augmenting `IconLibraryOverrides`.

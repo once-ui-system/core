@@ -1,0 +1,114 @@
+---
+title: "Tag"
+summary: "Tag displays a compact label with optional icons, used to annotate content with status, metadata, or category information."
+updatedAt: "2025-05-11"
+docs: "once-ui/components/tag.mdx"
+github: "components/Tag.tsx"
+navLabel: "Tag"
+navIcon: "components"
+---
+
+`Tag` is a flexible label component that supports color variants, sizes, and optional icons on either side. Useful for tokens, filters, statuses, and tags.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12">
+      <Tag scheme="brand" label="New" />
+      <Tag scheme="success" label="Passed" prefixIcon="check" />
+      <Tag scheme="danger" label="Error" suffixIcon="x" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Tag scheme="brand" label="New" />
+<Tag scheme="success" label="Passed" prefixIcon="check" />
+<Tag scheme="danger" label="Error" suffixIcon="x" />`,
+      language: "tsx",
+      label: "Tag"
+    }
+  ]}
+/>
+
+## Sizes
+
+Tag is available in three sizes for flexibility in dense or prominent layouts.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" vertical="center">
+      <Tag size="s" label="Small" />
+      <Tag size="m" label="Medium" />
+      <Tag size="l" label="Large" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Tag size="s" label="Small" />
+<Tag size="m" label="Medium" />
+<Tag size="l" label="Large" />`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+## Variants
+
+Supports all Once UI design tokens including brand, neutral, danger, success, and info.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row wrap gap="8">
+      <Tag scheme="brand">Brand</Tag>
+      <Tag scheme="accent">Accent</Tag>
+      <Tag scheme="info">Info</Tag>
+      <Tag scheme="warning">Warning</Tag>
+      <Tag scheme="success">Success</Tag>
+      <Tag scheme="danger">Danger</Tag>
+      <Tag scheme="neutral">Neutral</Tag>
+      <Tag scheme="gradient">Gradient</Tag>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Tag scheme="brand">Brand</Tag>
+<Tag scheme="accent">Accent</Tag>
+<Tag scheme="info">Info</Tag>
+<Tag scheme="warning">Warning</Tag>
+<Tag scheme="success">Success</Tag>
+<Tag scheme="danger">Danger</Tag>
+<Tag scheme="neutral">Neutral</Tag>
+<Tag scheme="gradient">Gradient</Tag>`,
+      language: "tsx",
+      label: "Variants"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Tag"
+  describe={{
+    scheme: "Colour scheme. This was called variant before 2.0.",
+    size: "Tag size.",
+    label: "The text.",
+    prefixIcon: "Icon before the label.",
+    suffixIcon: "Icon after the label.",
+    children: "The text, when it needs markup.",
+  }}
+  content={[
+    ["children"],
+    ["className"],
+    ["style"]
+  ]}
+/>

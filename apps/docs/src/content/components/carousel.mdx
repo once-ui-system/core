@@ -1,0 +1,232 @@
+---
+title: "Carousel"
+summary: "The Carousel component displays a collection of images with navigation controls and transition effects."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/carousel.mdx"
+github: "components/Carousel.tsx"
+navLabel: "Carousel"
+navIcon: "components"
+---
+
+An interactive component for displaying a collection of images with smooth transitions and navigation controls. The Carousel supports both line and thumbnail indicators for navigation between images.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Carousel
+      radius="l"
+      items={[
+        { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+        { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Carousel
+    items={[
+      { slide: "/images/1.jpg", alt: "Image 1" },
+      { slide: "/images/2.jpg", alt: "Image 2" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Carousel"
+    }
+  ]}
+/>
+
+## Indicator
+
+The Carousel supports two types of indicators for navigation: line (default) and thumbnail.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="32" fillWidth>
+      <Carousel
+        indicator="line"
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+      <Carousel
+        indicator="thumbnail"
+        items={[
+          { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+          { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+        ]}
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Carousel
+    indicator="line"
+    items={[
+      { slide: "/images/1.jpg", alt: "Image 1" },
+      { slide: "/images/2.jpg", alt: "Image 2" },
+    ]}
+/>
+
+<Carousel
+    indicator="thumbnail"
+    items={[
+      { slide: "/images/1.jpg", alt: "Image 1" },
+      { slide: "/images/2.jpg", alt: "Image 2" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Indicator"
+    }
+  ]}
+/>
+
+## Controls
+
+You can hide the controls with the `controls` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Carousel
+      controls={false}
+      items={[
+        { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+        { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Carousel
+    controls={false}
+    items={[
+      { slide: "/images/1.jpg", alt: "Image 1" },
+      { slide: "/images/2.jpg", alt: "Image 2" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Controls"
+    }
+  ]}
+/>
+
+## Aspect ratio
+
+You can customize the aspect ratio of the carousel to fit your design needs.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Carousel
+      aspectRatio="4 / 3"
+      items={[
+        { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+        { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Carousel
+    aspectRatio="4 / 3"
+    items={[
+      { slide: "/images/1.jpg", alt: "Image 1" },
+      { slide: "/images/2.jpg", alt: "Image 2" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Aspect ratio"
+    }
+  ]}
+/>
+
+## Auto Play
+
+You can enable auto play with the `play` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Carousel
+      controls={false}
+      indicator={false}
+      play={{auto: true, interval: 5000, controls: true, progress: true}}
+      items={[
+        { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
+        { slide: "/images/docs/once-ui/vibe-coding-dark.jpg", alt: "Vibe coding dark theme" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Carousel
+    controls={false}
+    indicator={false}
+    play={{auto: true, interval: 5000, controls: true, progress: true}}
+    items={[
+      { slide: "/images/1.jpg", alt: "Image 1" },
+      { slide: "/images/2.jpg", alt: "Image 2" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Auto Play"
+    }
+  ]}
+/>
+
+## Custom content
+
+You can place custom content inside the slides as `ReactNode`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Carousel
+      items={[
+        { slide: <Row height={20} fill center radius="s" background="brand-strong"><Text>Slide 1</Text></Row> },
+        { slide: <Row height={20} fill center radius="s" background="accent-strong"><Text>Slide 2</Text></Row> },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Carousel
+    items={[
+      { slide: <Row height={20} fill center radius="s" background="brand-strong"><Text>Slide 1</Text></Row> },
+      { slide: <Row height={20} fill center radius="s" background="accent-strong"><Text>Slide 2</Text></Row> },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Custom content"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Carousel"
+  describe={{
+    priority: "Eager-load the first slide. Use it when the carousel is above the fold.",
+    stretch: "Drop the intrinsic aspect ratio and let slides fill their box.",
+    thumbnail: "Sizing of the thumbnail strip when indicator is \"thumbnail\".",
+    play: "Autoplay behaviour and the controls shown for it.",
+  }}
+  content={[
+    ["auto", "boolean", "false"]
+  ]}
+/>

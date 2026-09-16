@@ -15,7 +15,7 @@ import {
   ThemeSwitcher,
   Line,
 } from "@once-ui-system/core";
-import { layout, routes } from "@/resources/once-ui.config";
+import { layout } from "@/resources/once-ui.config";
 import { Sidebar, NavigationItem } from "./Sidebar";
 
 export function Header() {
@@ -97,29 +97,15 @@ export function Header() {
     },
   ];
 
-  if (routes["/changelog"]) {
-    navigationKbarItems.push({
-      id: "changelog",
-      name: "Changelog",
-      section: "Navigation",
-      shortcut: [],
-      keywords: "changelog, changelog page",
-      href: "/changelog",
-      icon: "changelog",
-    });
-  }
-
-  if (routes["/roadmap"]) {
-    navigationKbarItems.push({
-      id: "roadmap",
-      name: "Roadmap",
-      section: "Navigation",
-      shortcut: [],
-      keywords: "roadmap, roadmap page",
-      href: "/roadmap",
-      icon: "roadmap",
-    });
-  }
+  navigationKbarItems.push({
+    id: "changelog",
+    name: "Changelog",
+    section: "Navigation",
+    shortcut: [],
+    keywords: "changelog, releases, versions, what changed",
+    href: "https://github.com/once-ui-system/core/releases",
+    icon: "github",
+  });
 
   const kbar = [
     ...navigationKbarItems,
@@ -198,7 +184,7 @@ export function Header() {
                   hide
                   m={{ hide: false }}
                   onClick={toggleSidebar}
-                  isActive={sidebarVisible}
+                  active={sidebarVisible}
                 />
               }
             >

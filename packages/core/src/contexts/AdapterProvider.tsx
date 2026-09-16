@@ -110,6 +110,62 @@ const defaultAdapters: OnceUIAdapters = {
   useNavigate: defaultUseNavigate,
 };
 
+/**
+ * Dev-only guard against the silent half of the adapter migration.
+ *
+ * A Next.js app that keeps importing `LayoutProvider` from the package root
+ * gets the DOM fallbacks, and nothing says so: internal links stop doing
+ * client-side routing and images stop reaching the image optimizer, while the
+ * page still looks correct. Measured on a real consumer, that is every image
+ * losing its srcset and every nav becoming a full document load.
+ *
+ * Next is detected from runtime markers rather than by resolving `next` — core
+ * must not import it (framework-boundary.test.ts), and a bundler-time check
+ * would not survive into the browser anyway. All three markers are set by Next
+ * itself: the App Router flight stream, the Pages Router data blob, and the
+ * `/_next/` script URLs every Next build emits.
+ */
+const isNextRuntime = (): boolean => {
+  if (typeof window === "undefined" || typeof document === "undefined") return false;
+  const w = window as unknown as Record<string, unknown>;
+  return (
+    Array.isArray(w.__next_f) ||
+    w.__NEXT_DATA__ !== undefined ||
+    document.querySelector('script[src*="/_next/"]') !== null
+  );
+};
+
+let hasWarnedAboutAdapters = false;
+
+/** Exported for tests; resets the once-per-session latch. */
+const resetAdapterWarning = (): void => {
+  hasWarnedAboutAdapters = false;
+};
+
+const warnIfFrameworkUnadapted = (adapters: OnceUIAdapters): void => {
+  if (hasWarnedAboutAdapters) return;
+  if (process.env.NODE_ENV === "production") return;
+  // Anything installed means the app made a choice — say nothing.
+  if (adapters.Link !== DefaultLink) return;
+  // Not a Next app: the DOM fallbacks are the correct behaviour, not a mistake.
+  if (!isNextRuntime()) return;
+
+  hasWarnedAboutAdapters = true;
+  console.warn(
+    [
+      "[Once UI] Next.js was detected, but the Next adapters are not installed.",
+      "Internal links are rendering as plain <a> (full page loads, no client-side routing)",
+      "and images as plain <img> (no next/image optimization or srcset).",
+      "",
+      '  - import { LayoutProvider } from "@once-ui-system/core";',
+      '  + import { LayoutProvider } from "@once-ui-system/core/next";',
+      "",
+      "Apps composing AdapterProvider themselves can install `nextAdapters` directly.",
+      "This warning is development-only.",
+    ].join("\n"),
+  );
+};
+
 const AdapterContext = createContext<OnceUIAdapters>(defaultAdapters);
 
 export interface AdapterProviderProps {
@@ -126,4 +182,10 @@ const AdapterProvider: React.FC<AdapterProviderProps> = ({ adapters, children })
 
 const useAdapters = (): OnceUIAdapters => useContext(AdapterContext);
 
-export { AdapterProvider, defaultAdapters, useAdapters };
+export {
+  AdapterProvider,
+  defaultAdapters,
+  resetAdapterWarning,
+  useAdapters,
+  warnIfFrameworkUnadapted,
+};

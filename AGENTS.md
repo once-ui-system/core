@@ -65,7 +65,7 @@ Before generating or editing Once UI UI code in `packages/core` or `apps/*`:
 
 Consumer apps: run `npx once-ui-init-agent` once after install to scaffold project `AGENTS.md` + `.cursor/rules/once-ui-codegen.mdc`.
 
-Do not use full MDX doc pages for codegen — use the harness (~6–10KB per task). Guide: https://docs.once-ui.com/once-ui/ai-coding
+Do not use full MDX doc pages for codegen — use the harness (~6–10KB per task). Guide: https://docs.once-ui.com/ai-coding
 
 ## Social distribution (daily cloud agent)
 

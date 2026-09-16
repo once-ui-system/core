@@ -26,7 +26,7 @@
     --backdrop-filter:       none;
     --surface-border:        var(--static-transparent);
     --surface-background:    var(--neutral-background-medium);
-    --default-border:        var(--neutral-border-medium);
+    --default-border:        var(--neutral-border-weak);
 }
 
 [data-cursor-interactive="pointer"] {
@@ -107,6 +107,47 @@
 
 [data-mobile-size="13"] {
     --font-scaling-mobile: 13px;
+}
+
+/* Body text scale. `--font-size-body-multiplier` and
+   `--line-height-body-multiplier` are applied by every `.font-body` size class,
+   so these scale running text without touching headings, labels or the root
+   font size — which `--font-scaling-*` and `[data-scaling]` already cover. */
+
+[data-body-size="90"] {
+    --font-size-body-multiplier: 0.9;
+}
+
+[data-body-size="95"] {
+    --font-size-body-multiplier: 0.95;
+}
+
+[data-body-size="100"] {
+    --font-size-body-multiplier: 1;
+}
+
+[data-body-size="105"] {
+    --font-size-body-multiplier: 1.05;
+}
+
+[data-body-size="110"] {
+    --font-size-body-multiplier: 1.1;
+}
+
+[data-body-line-height="90"] {
+    --line-height-body-multiplier: 0.9;
+}
+
+[data-body-line-height="100"] {
+    --line-height-body-multiplier: 1;
+}
+
+[data-body-line-height="110"] {
+    --line-height-body-multiplier: 1.1;
+}
+
+[data-body-line-height="120"] {
+    --line-height-body-multiplier: 1.2;
 }
 
 [data-theme="dark"] {

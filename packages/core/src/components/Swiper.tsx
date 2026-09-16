@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Media, Column, Row, IconButton, Fade } from ".";
+import { Flex, Media, Column, Row, IconButton } from ".";
 import { useEffect, useState, useRef, useCallback, forwardRef } from "react";
 import styles from "./Swiper.module.scss";
 
@@ -13,7 +13,13 @@ interface SwiperProps extends React.ComponentProps<typeof Flex> {
   items: SwiperItem[];
   controls?: boolean | "contained";
   priority?: boolean;
-  fill?: boolean;
+  /**
+   * Drop the intrinsic aspect ratio and let the slides stretch to whatever box
+   * they are in. Named `stretch` rather than `fill` because `fill` is a layout
+   * prop on every Flex-derived component, and shadowing it here meant `fill`
+   * did not do the one thing its name promised.
+   */
+  stretch?: boolean;
   aspectRatio?: string;
   sizes?: string;
   unoptimized?: boolean;
@@ -22,7 +28,7 @@ interface SwiperProps extends React.ComponentProps<typeof Flex> {
 
 const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
   items = [],
-  fill = false,
+  stretch = false,
   controls = true,
   priority = false,
   indicator = true,
@@ -183,17 +189,17 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
   }
 
   return (
-    <Column ref={ref} fillWidth fillHeight={fill} aspectRatio={undefined} style={{ isolation: "isolate" }} {...rest}>
+    <Column ref={ref} fillWidth fillHeight={stretch} aspectRatio={undefined} style={{ isolation: "isolate" }} {...rest}>
       <Flex
         fillWidth
-        fillHeight={fill}
+        fillHeight={stretch}
         aspectRatio={aspectRatio === "original" ? undefined : aspectRatio}
         className={styles.carouselContainer}
       >
         {/* Container wrapper with radius and border */}
         <Flex
           fillWidth
-          fillHeight={fill}
+          fillHeight={stretch}
           radius={rest.radius || "l"}
           border={rest.border || "neutral-alpha-weak"}
           overflow="hidden"
@@ -203,7 +209,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
           <Row
             ref={scrollContainerRef}
             fillWidth
-            fillHeight={fill}
+            fillHeight={stretch}
             className={styles.scrollContainer}
             onMouseDown={handleMouseDown}
             overflowX="auto"
@@ -223,7 +229,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
                 slideRefs.current[index] = el;
               }}
               fillWidth
-              fillHeight={fill}
+              fillHeight={stretch}
               className={styles.slide}
               style={{
                 scrollSnapAlign: "start",
@@ -233,11 +239,11 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
             >
               {typeof item.slide === "string" ? (
                 <Media
-                  fill={fill}
+                  stretch={stretch}
                   sizes={sizes}
                   unoptimized={unoptimized}
                   priority={priority && index === 0}
-                  aspectRatio={fill ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
+                  aspectRatio={stretch ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
                   src={item.slide as string}
                   alt={item.alt || ""}
                   onDragStart={(e) => e.preventDefault()}
@@ -248,7 +254,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
               ) : (
                 <Flex
                   fill
-                  aspectRatio={fill ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
+                  aspectRatio={stretch ? undefined : aspectRatio === "auto" ? undefined : aspectRatio}
                   onDragStart={(e) => e.preventDefault()}
                   style={{
                     userSelect: "none",
@@ -267,17 +273,6 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
               {/* Previous Button */}
               {activeIndex > 0 && (
                 <>
-                  <Fade
-                    transition="micro-medium"
-                    position="absolute"
-                    left="0"
-                    top="0"
-                    base="transparent"
-                    to="right"
-                    fillHeight
-                    maxWidth={6}
-                    zIndex={1}
-                  />
                   <Flex
                     position="absolute"
                     left="16"
@@ -285,7 +280,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
                     className={styles.navButton}
                     style={{ top: "50%", transform: "translateY(-50%)" }}
                   >
-                    <Flex radius="l" background="surface" overflow="hidden">
+                    <Flex radius="m" background="surface">
                       <IconButton
                         onClick={handlePrevClick}
                         variant="secondary"
@@ -300,17 +295,6 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
               {/* Next Button */}
               {activeIndex < items.length - 1 && (
                 <>
-                  <Fade
-                    transition="micro-medium"
-                    position="absolute"
-                    right="0"
-                    top="0"
-                    base="transparent"
-                    to="left"
-                    fillHeight
-                    zIndex={1}
-                    maxWidth={6}
-                  />
                   <Flex
                     position="absolute"
                     right="16"
@@ -318,7 +302,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(({
                     className={styles.navButton}
                     style={{ top: "50%", transform: "translateY(-50%)" }}
                   >
-                    <Flex radius="l" background="surface" overflow="hidden">
+                    <Flex radius="m" background="surface">
                       <IconButton
                         onClick={handleNextClick}
                         variant="secondary"

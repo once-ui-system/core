@@ -24,7 +24,52 @@ interface ServerFlexProps
   m?: FlexBreakpointProps;
   s?: FlexBreakpointProps;
   xs?: FlexBreakpointProps;
-  isDefaultBreakpoints?: boolean;
+}
+
+/**
+ * Spacing prop to utility prefix. The class matrix behind these is generated
+ * from `@once-ui-system/foundations`' spec, which emits every prefix at every
+ * token for every breakpoint.
+ */
+const SPACING_PREFIX = {
+  padding: "p",
+  paddingLeft: "pl",
+  paddingRight: "pr",
+  paddingTop: "pt",
+  paddingBottom: "pb",
+  paddingX: "px",
+  paddingY: "py",
+  margin: "m",
+  marginLeft: "ml",
+  marginRight: "mr",
+  marginTop: "mt",
+  marginBottom: "mb",
+  marginX: "mx",
+  marginY: "my",
+  gap: "g",
+} as const;
+
+/**
+ * Breakpoint spacing, as classes.
+ *
+ * Nothing emitted these before, so a token in a breakpoint prop — `s={{ gap: "4" }}`,
+ * which is what the docs and every example teach — resolved to nothing at all:
+ * no class was written, and ClientFlex's inline path guards on
+ * `typeof value === "number"`, so the string fell through both. Numbers worked,
+ * tokens did not, and neither said so.
+ *
+ * Numbers still go to the inline path, since `gap: 0.25` is a rem value with no
+ * class behind it; `Flex` keeps those on the client component.
+ */
+function spacingClasses(
+  breakpoint: string,
+  props: Record<string, unknown> | undefined,
+): (string | false)[] {
+  if (!props) return [];
+  return Object.entries(SPACING_PREFIX).map(([prop, prefix]) => {
+    const value = props[prop];
+    return typeof value === "string" && value !== "" && `${breakpoint}-${prefix}-${value}`;
+  });
 }
 
 const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
@@ -41,7 +86,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       m,
       s,
       xs,
-      isDefaultBreakpoints = true,
       wrap = false,
       horizontal,
       vertical,
@@ -140,7 +184,11 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
 
     // Cascade breakpoints: larger breakpoint styles flow down to smaller ones
     // Order: xl > l > m > s > xs
-    const cascadedL = l ? { direction, ...l } : { direction };
+    // `xl` leads the cascade, as the comment above always claimed it did — the
+    // code used to start at `l` and drop it on the floor, so an `xl` object
+    // only ever reached the client component.
+    const cascadedXl = xl ? { direction, ...xl } : { direction };
+    const cascadedL = l ? { ...cascadedXl, ...l } : cascadedXl;
     const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
     const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
@@ -170,8 +218,11 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     const generateDynamicClass = (type: string, value: string | undefined) => {
       if (!value) return undefined;
 
+      // Not hardcoded to `border`: this helper is called for background and
+      // solid too, and returning the border class for them applied nothing to
+      // the background while clearing the border the author asked for.
       if (value === "transparent") {
-        return `transparent-border`;
+        return `transparent-${type}`;
       }
 
       if (["surface", "page", "overlay"].includes(value)) {
@@ -290,7 +341,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       direction && `flex-${direction}`,
       pointerEvents && `pointer-events-${pointerEvents}`,
       transition && `transition-${transition}`,
-      opacity && `opacity-${opacity}`,
+      opacity !== undefined && `opacity-${opacity}`,
       wrap && "flex-wrap",
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
@@ -321,7 +372,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       maxWidth && ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) && `max-width-${maxWidth}`,
       (fillHeight || maxHeight) && "fill-height",
       shadow && `shadow-${shadow}`,
-      zIndex && `z-index-${zIndex}`,
+      zIndex !== undefined && `z-index-${zIndex}`,
       textType && `font-${textType}`,
       typeof cursor === "string" && `cursor-${cursor}`,
       dark && "dark-flex",
@@ -331,121 +382,130 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       ...variantClasses,
     );
 
-    if (isDefaultBreakpoints) {
-      classes +=
-        " " +
-        classNames(
+    classes +=
+      " " +
+      classNames(
+        ...spacingClasses("xl", cascadedXl),
+        ...spacingClasses("l", cascadedL),
+        ...spacingClasses("m", cascadedM),
+        ...spacingClasses("s", cascadedS),
+        ...spacingClasses("xs", cascadedXs),
+        cascadedXl?.position && `xl-position-${cascadedXl.position}`,
           cascadedL?.position && `l-position-${cascadedL.position}`,
-          cascadedM?.position && `m-position-${cascadedM.position}`,
-          cascadedS?.position && `s-position-${cascadedS.position}`,
-          cascadedXs?.position && `xs-position-${cascadedXs.position}`,
+        cascadedM?.position && `m-position-${cascadedM.position}`,
+        cascadedS?.position && `s-position-${cascadedS.position}`,
+        cascadedXs?.position && `xs-position-${cascadedXs.position}`,
+        cascadedXl?.hide === true && "xl-flex-hide",
+          cascadedXl?.hide === false && "xl-flex-show",
           cascadedL?.hide === true && "l-flex-hide",
-          cascadedL?.hide === false && "l-flex-show",
-          cascadedM?.hide === true && "m-flex-hide",
-          cascadedM?.hide === false && "m-flex-show",
-          cascadedS?.hide === true && "s-flex-hide",
-          cascadedS?.hide === false && "s-flex-show",
-          cascadedXs?.hide === true && "xs-flex-hide",
-          cascadedXs?.hide === false && "xs-flex-show",
+        cascadedL?.hide === false && "l-flex-show",
+        cascadedM?.hide === true && "m-flex-hide",
+        cascadedM?.hide === false && "m-flex-show",
+        cascadedS?.hide === true && "s-flex-hide",
+        cascadedS?.hide === false && "s-flex-show",
+        cascadedXs?.hide === true && "xs-flex-hide",
+        cascadedXs?.hide === false && "xs-flex-show",
+        xl?.direction && `xl-flex-${xl.direction}`,
           l?.direction && `l-flex-${l.direction}`,
-          m?.direction && `m-flex-${m.direction}`,
-          s?.direction && `s-flex-${s.direction}`,
-          xs?.direction && `xs-flex-${xs.direction}`,
-          cascadedL?.horizontal &&
-            (cascadedL?.direction === "row" ||
-            cascadedL?.direction === "row-reverse" ||
-            cascadedL?.direction === undefined
-              ? `l-justify-${cascadedL.horizontal}`
-              : `l-align-${cascadedL.horizontal}`),
-          cascadedL?.vertical &&
-            (cascadedL?.direction === "row" ||
-            cascadedL?.direction === "row-reverse" ||
-            cascadedL?.direction === undefined
-              ? `l-align-${cascadedL.vertical}`
-              : `l-justify-${cascadedL.vertical}`),
-          cascadedM?.horizontal &&
-            (cascadedM?.direction === "row" ||
-            cascadedM?.direction === "row-reverse" ||
-            cascadedM?.direction === undefined
-              ? `m-justify-${cascadedM.horizontal}`
-              : `m-align-${cascadedM.horizontal}`),
-          cascadedM?.vertical &&
-            (cascadedM?.direction === "row" ||
-            cascadedM?.direction === "row-reverse" ||
-            cascadedM?.direction === undefined
-              ? `m-align-${cascadedM.vertical}`
-              : `m-justify-${cascadedM.vertical}`),
-          cascadedS?.horizontal &&
-            (cascadedS?.direction === "row" ||
-            cascadedS?.direction === "row-reverse" ||
-            cascadedS?.direction === undefined
-              ? `s-justify-${cascadedS.horizontal}`
-              : `s-align-${cascadedS.horizontal}`),
-          cascadedS?.vertical &&
-            (cascadedS?.direction === "row" ||
-            cascadedS?.direction === "row-reverse" ||
-            cascadedS?.direction === undefined
-              ? `s-align-${cascadedS.vertical}`
-              : `s-justify-${cascadedS.vertical}`),
-          cascadedXs?.horizontal &&
-            (cascadedXs?.direction === "row" ||
-            cascadedXs?.direction === "row-reverse" ||
-            cascadedXs?.direction === undefined
-              ? `xs-justify-${cascadedXs.horizontal}`
-              : `xs-align-${cascadedXs.horizontal}`),
-          cascadedXs?.vertical &&
-            (cascadedXs?.direction === "row" ||
-            cascadedXs?.direction === "row-reverse" ||
-            cascadedXs?.direction === undefined
-              ? `xs-align-${cascadedXs.vertical}`
-              : `xs-justify-${cascadedXs.vertical}`),
-          // Additional class-based properties
-          cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
-          cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
-          cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
-          cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
-          cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
-          cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
-          cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
-          cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
-          cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
-          cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
-          cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
-          cascadedXs?.overflowY && `xs-overflow-y-${cascadedXs.overflowY}`,
-          cascadedL?.wrap && `l-flex-${cascadedL.wrap}`,
-          cascadedM?.wrap && `m-flex-${cascadedM.wrap}`,
-          cascadedS?.wrap && `s-flex-${cascadedS.wrap}`,
-          cascadedXs?.wrap && `xs-flex-${cascadedXs.wrap}`,
-          cascadedL?.flex && `l-flex-${cascadedL.flex}`,
-          cascadedM?.flex && `m-flex-${cascadedM.flex}`,
-          cascadedS?.flex && `s-flex-${cascadedS.flex}`,
-          cascadedXs?.flex && `xs-flex-${cascadedXs.flex}`,
-          cascadedL?.align && `l-align-${cascadedL.align}`,
-          cascadedM?.align && `m-align-${cascadedM.align}`,
-          cascadedS?.align && `s-align-${cascadedS.align}`,
-          cascadedXs?.align && `xs-align-${cascadedXs.align}`,
-          cascadedL?.scrollbar && `l-scrollbar-${cascadedL.scrollbar}`,
-          cascadedM?.scrollbar && `m-scrollbar-${cascadedM.scrollbar}`,
-          cascadedS?.scrollbar && `s-scrollbar-${cascadedS.scrollbar}`,
-          cascadedXs?.scrollbar && `xs-scrollbar-${cascadedXs.scrollbar}`,
-          cascadedL?.pointerEvents && `l-pointer-events-${cascadedL.pointerEvents}`,
-          cascadedM?.pointerEvents && `m-pointer-events-${cascadedM.pointerEvents}`,
-          cascadedS?.pointerEvents && `s-pointer-events-${cascadedS.pointerEvents}`,
-          cascadedXs?.pointerEvents && `xs-pointer-events-${cascadedXs.pointerEvents}`,
-          cascadedL?.opacity !== undefined && `l-opacity-${cascadedL.opacity}`,
-          cascadedM?.opacity !== undefined && `m-opacity-${cascadedM.opacity}`,
-          cascadedS?.opacity !== undefined && `s-opacity-${cascadedS.opacity}`,
-          cascadedXs?.opacity !== undefined && `xs-opacity-${cascadedXs.opacity}`,
-          cascadedL?.zIndex && `l-z-index-${cascadedL.zIndex}`,
-          cascadedM?.zIndex && `m-z-index-${cascadedM.zIndex}`,
-          cascadedS?.zIndex && `s-z-index-${cascadedS.zIndex}`,
-          cascadedXs?.zIndex && `xs-z-index-${cascadedXs.zIndex}`,
-          cascadedL?.transition && `l-transition-${cascadedL.transition}`,
-          cascadedM?.transition && `m-transition-${cascadedM.transition}`,
-          cascadedS?.transition && `s-transition-${cascadedS.transition}`,
-          cascadedXs?.transition && `xs-transition-${cascadedXs.transition}`,
-        );
-    }
+        m?.direction && `m-flex-${m.direction}`,
+        s?.direction && `s-flex-${s.direction}`,
+        xs?.direction && `xs-flex-${xs.direction}`,
+        cascadedL?.horizontal &&
+          (cascadedL?.direction === "row" ||
+          cascadedL?.direction === "row-reverse" ||
+          cascadedL?.direction === undefined
+            ? `l-justify-${cascadedL.horizontal}`
+            : `l-align-${cascadedL.horizontal}`),
+        cascadedL?.vertical &&
+          (cascadedL?.direction === "row" ||
+          cascadedL?.direction === "row-reverse" ||
+          cascadedL?.direction === undefined
+            ? `l-align-${cascadedL.vertical}`
+            : `l-justify-${cascadedL.vertical}`),
+        cascadedM?.horizontal &&
+          (cascadedM?.direction === "row" ||
+          cascadedM?.direction === "row-reverse" ||
+          cascadedM?.direction === undefined
+            ? `m-justify-${cascadedM.horizontal}`
+            : `m-align-${cascadedM.horizontal}`),
+        cascadedM?.vertical &&
+          (cascadedM?.direction === "row" ||
+          cascadedM?.direction === "row-reverse" ||
+          cascadedM?.direction === undefined
+            ? `m-align-${cascadedM.vertical}`
+            : `m-justify-${cascadedM.vertical}`),
+        cascadedS?.horizontal &&
+          (cascadedS?.direction === "row" ||
+          cascadedS?.direction === "row-reverse" ||
+          cascadedS?.direction === undefined
+            ? `s-justify-${cascadedS.horizontal}`
+            : `s-align-${cascadedS.horizontal}`),
+        cascadedS?.vertical &&
+          (cascadedS?.direction === "row" ||
+          cascadedS?.direction === "row-reverse" ||
+          cascadedS?.direction === undefined
+            ? `s-align-${cascadedS.vertical}`
+            : `s-justify-${cascadedS.vertical}`),
+        cascadedXs?.horizontal &&
+          (cascadedXs?.direction === "row" ||
+          cascadedXs?.direction === "row-reverse" ||
+          cascadedXs?.direction === undefined
+            ? `xs-justify-${cascadedXs.horizontal}`
+            : `xs-align-${cascadedXs.horizontal}`),
+        cascadedXs?.vertical &&
+          (cascadedXs?.direction === "row" ||
+          cascadedXs?.direction === "row-reverse" ||
+          cascadedXs?.direction === undefined
+            ? `xs-align-${cascadedXs.vertical}`
+            : `xs-justify-${cascadedXs.vertical}`),
+        // Additional class-based properties
+        cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
+        cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
+        cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
+        cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
+        cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
+        cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
+        cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
+        cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
+        cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
+        cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
+        cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
+        cascadedXs?.overflowY && `xs-overflow-y-${cascadedXs.overflowY}`,
+        cascadedL?.wrap && `l-flex-${cascadedL.wrap}`,
+        cascadedM?.wrap && `m-flex-${cascadedM.wrap}`,
+        cascadedS?.wrap && `s-flex-${cascadedS.wrap}`,
+        cascadedXs?.wrap && `xs-flex-${cascadedXs.wrap}`,
+        cascadedL?.flex && `l-flex-${cascadedL.flex}`,
+        cascadedM?.flex && `m-flex-${cascadedM.flex}`,
+        cascadedS?.flex && `s-flex-${cascadedS.flex}`,
+        cascadedXs?.flex && `xs-flex-${cascadedXs.flex}`,
+        cascadedL?.align && `l-align-${cascadedL.align}`,
+        cascadedM?.align && `m-align-${cascadedM.align}`,
+        cascadedS?.align && `s-align-${cascadedS.align}`,
+        cascadedXs?.align && `xs-align-${cascadedXs.align}`,
+        cascadedL?.scrollbar && `l-scrollbar-${cascadedL.scrollbar}`,
+        cascadedM?.scrollbar && `m-scrollbar-${cascadedM.scrollbar}`,
+        cascadedS?.scrollbar && `s-scrollbar-${cascadedS.scrollbar}`,
+        cascadedXs?.scrollbar && `xs-scrollbar-${cascadedXs.scrollbar}`,
+        cascadedL?.pointerEvents && `l-pointer-events-${cascadedL.pointerEvents}`,
+        cascadedM?.pointerEvents && `m-pointer-events-${cascadedM.pointerEvents}`,
+        cascadedS?.pointerEvents && `s-pointer-events-${cascadedS.pointerEvents}`,
+        cascadedXs?.pointerEvents && `xs-pointer-events-${cascadedXs.pointerEvents}`,
+        cascadedL?.opacity !== undefined && `l-opacity-${cascadedL.opacity}`,
+        cascadedM?.opacity !== undefined && `m-opacity-${cascadedM.opacity}`,
+        cascadedS?.opacity !== undefined && `s-opacity-${cascadedS.opacity}`,
+        cascadedXs?.opacity !== undefined && `xs-opacity-${cascadedXs.opacity}`,
+        cascadedL?.zIndex !== undefined && `l-z-index-${cascadedL.zIndex}`,
+        cascadedM?.zIndex !== undefined && `m-z-index-${cascadedM.zIndex}`,
+        cascadedS?.zIndex !== undefined && `s-z-index-${cascadedS.zIndex}`,
+        cascadedXs?.zIndex !== undefined && `xs-z-index-${cascadedXs.zIndex}`,
+        cascadedL?.transition && `l-transition-${cascadedL.transition}`,
+        cascadedM?.transition && `m-transition-${cascadedM.transition}`,
+        cascadedS?.transition && `s-transition-${cascadedS.transition}`,
+        cascadedXs?.transition && `xs-transition-${cascadedXs.transition}`,
+      );
+  
+
 
     const parseDimension = (
       value: number | SpacingToken | string | undefined,

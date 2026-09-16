@@ -58,6 +58,7 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
               variant="secondary"
               onClick={togglePanel}
               icon="close"
+          aria-label="Close style panel"
               {...iconButtonProps}
             />
           </Flex>

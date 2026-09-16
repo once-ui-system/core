@@ -61,14 +61,14 @@ export function IconsRawDropdown() {
       <Option
         label="Edit"
         value="edit"
-        hasPrefix={<Icon name="edit" size="xs" />}
+        prefix={<Icon name="edit" size="xs" />}
         selected={selected === "edit"}
         onClick={handleSelect}
       />
       <Option
         label="Duplicate"
         value="duplicate"
-        hasPrefix={<Icon name="copy" size="xs" />}
+        prefix={<Icon name="copy" size="xs" />}
         selected={selected === "duplicate"}
         onClick={handleSelect}
       />
@@ -76,7 +76,7 @@ export function IconsRawDropdown() {
       <Option
         label="Delete"
         value="delete"
-        hasPrefix={<Icon name="delete" size="xs" />}
+        prefix={<Icon name="delete" size="xs" />}
         danger
         selected={selected === "delete"}
         onClick={handleSelect}

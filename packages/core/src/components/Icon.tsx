@@ -2,8 +2,7 @@
 
 import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
-import { IconType } from "react-icons";
-import { IconName } from "../icons";
+import { IconName, type IconComponent } from "../icons";
 import { useIcons } from "../contexts/IconProvider";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 import { Flex, Tooltip, HoverCard } from ".";
@@ -38,7 +37,7 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
     ref,
   ) => {
     const { icons } = useIcons();
-    const IconComponent: IconType | undefined = icons[name];
+    const IconComponent: IconComponent | undefined = icons[name];
 
     if (!IconComponent) {
       console.warn(`Icon "${name}" does not exist in the library.`);

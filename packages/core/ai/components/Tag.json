@@ -13,7 +13,7 @@
   "StyleProps"
  ],
  "props": {
-  "variant": "ColorScheme | \"gradient\" = neutral",
+  "scheme": "ColorScheme | \"gradient\" = neutral",
   "size": "CondensedTShirtSizes = m",
   "label": "string = ",
   "prefixIcon": "IconName",

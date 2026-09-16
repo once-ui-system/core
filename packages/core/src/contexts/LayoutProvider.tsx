@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { useAdapters, warnIfFrameworkUnadapted } from "./AdapterProvider";
 
 // Default breakpoints
 export const DEFAULT_BREAKPOINTS = {
@@ -18,7 +19,6 @@ interface LayoutContextType {
   currentBreakpoint: BreakpointKey;
   width: number;
   breakpoints: Breakpoints;
-  isDefaultBreakpoints: () => boolean;
   isBreakpoint: (key: BreakpointKey) => boolean;
   maxWidth: (key: BreakpointKey) => boolean;
   minWidth: (key: BreakpointKey) => boolean;
@@ -28,21 +28,26 @@ const LayoutContext = createContext<LayoutContextType | null>(null);
 
 interface LayoutProviderProps {
   children: ReactNode;
-  breakpoints?: Partial<Breakpoints>;
 }
 
-const LayoutProvider: React.FC<LayoutProviderProps> = ({
-  children,
-  breakpoints: customBreakpoints,
-}) => {
-  // Merge custom breakpoints with defaults
-  const breakpoints: Breakpoints = {
-    ...DEFAULT_BREAKPOINTS,
-    ...customBreakpoints,
-  };
+const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
+  // Fixed, and deliberately so. The utility classes carry these widths inside
+  // their media queries, and a prebuilt stylesheet cannot honour a width the
+  // app picks at runtime — `@media` does not read custom properties. Letting
+  // an app move them meant the CSS said one thing and the JS another, which is
+  // why `Flex` had two code paths and a runtime style pass to reconcile them.
+  const breakpoints: Breakpoints = DEFAULT_BREAKPOINTS;
 
   const [width, setWidth] = useState<number>(0);
   const [currentBreakpoint, setCurrentBreakpoint] = useState<BreakpointKey>("l");
+
+  // Every app renders this provider, and by the time it runs the adapters are
+  // either installed or they are not — so this is where a Next app that never
+  // switched to `@once-ui-system/core/next` can be told, once, in development.
+  const adapters = useAdapters();
+  useEffect(() => {
+    warnIfFrameworkUnadapted(adapters);
+  }, [adapters]);
 
   // Determine current breakpoint based on width
   const getCurrentBreakpoint = (width: number): BreakpointKey => {
@@ -66,10 +71,6 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
   // Check if current width is above the given breakpoint (min-width)
   const minWidth = (key: BreakpointKey): boolean => {
     return width > breakpoints[key];
-  };
-
-  const isDefaultBreakpoints = (): boolean => {
-    return JSON.stringify(breakpoints) === JSON.stringify(DEFAULT_BREAKPOINTS);
   };
 
   useEffect(() => {
@@ -111,7 +112,6 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({
     currentBreakpoint,
     width,
     breakpoints,
-    isDefaultBreakpoints,
     isBreakpoint,
     maxWidth,
     minWidth,

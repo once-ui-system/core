@@ -7,12 +7,12 @@ interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
   value: string;
 }
 
-interface SegmentedControlProps extends Omit<React.ComponentProps<typeof Scroller>, "onToggle"> {
+interface SegmentedControlProps extends Omit<React.ComponentProps<typeof Scroller>, "onChange" | "defaultValue"> {
   buttons: ButtonOption[];
-  onToggle: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void;
-  defaultSelected?: string;
+  onChange: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void;
+  defaultValue?: string;
   fillWidth?: boolean;
-  selected?: string;
+  value?: string;
   compact?: boolean;
   className?: string;
   style?: React.CSSProperties;
@@ -20,28 +20,28 @@ interface SegmentedControlProps extends Omit<React.ComponentProps<typeof Scrolle
 
 const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(({
   buttons,
-  onToggle,
-  defaultSelected,
+  onChange,
+  defaultValue,
   fillWidth = true,
-  selected,
+  value,
   compact = false,
   className,
   style,
   ...scrollerProps
 }, ref) => {
   const [internalSelected, setInternalSelected] = useState<string>(() => {
-    if (selected !== undefined) return selected;
-    if (defaultSelected !== undefined) return defaultSelected;
+    if (value !== undefined) return value;
+    if (defaultValue !== undefined) return defaultValue;
     return buttons[0]?.value || "";
   });
 
   const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
-    if (selected !== undefined) {
-      setInternalSelected(selected);
+    if (value !== undefined) {
+      setInternalSelected(value);
     }
-  }, [selected]);
+  }, [value]);
 
   const handleButtonClick = (
     clickedButton: ButtonOption,
@@ -50,7 +50,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(({
     event.stopPropagation();
     const newSelected = clickedButton.value;
     setInternalSelected(newSelected);
-    onToggle(newSelected, event);
+    onChange(newSelected, event);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -85,7 +85,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(({
         if (focusedIndex >= 0 && focusedIndex < buttons.length) {
           const focusedButton = buttons[focusedIndex];
           setInternalSelected(focusedButton.value);
-          onToggle(focusedButton.value);
+          onChange(focusedButton.value);
         }
         break;
       default:
@@ -119,7 +119,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(({
                 buttonRefs.current[index] = el as HTMLButtonElement;
               }}
               variant={compact ? "outline" : "ghost"}
-              radius={compact ? (index === 0 ? "left" : index === buttons.length - 1 ? "right" : "none") : undefined}
+              corners={compact ? (index === 0 ? "left" : index === buttons.length - 1 ? "right" : "none") : undefined}
               key={button.value}
               selected={index === selectedIndex}
               onClick={(event) => handleButtonClick(button, event)}

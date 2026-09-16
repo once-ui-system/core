@@ -69,3 +69,11 @@ Record every recurring failure here; each entry should become a rule in
 | 2026-06-12 | Invented icon names (`more`, `bell`, `arrowRight`) | rules.md #14b, IconName list in spec.json |
 | 2026-06-12 | `Badge title` + children rendered same text twice ("2 unread2") | rules.md #14c |
 | 2026-06-12 | `Fade` wrapped the whole message list → washed-out content | rules.md #14d |
+| 2026-09-13 | `gotchas.json` still said `RevealFx.delay` is seconds after 2.0 made it ms — and the task bundles point at it, so an agent trusting the bundle got the wrong answer | `gotchas.json` `RevealFx.delay` |
+| 2026-09-13 | `bell` and `arrowRight` named as non-existent icons; both are registered. Reversed from the 06-12 entry above — the registry grew, the prose didn't | rules.md #14b, `gotchas.json` `Icon.names` |
+| 2026-09-13 | `Dashboard1.tsx` shipped `icon: "chat" as IconName` — unregistered, and the cast defeats the 2.0 union that would have caught it. No chat/comment icon exists | Dashboard1 uses `edit`; #14b names the gap |
+| 2026-09-13 | Gold `examples/pricing.tsx` imported `AccordionGroup` and never rendered it, leaving the FAQ component of the FAQ task with no call site to copy | import removed; `AccordionItem` shape still undocumented |
+| 2026-09-13 | Gold `examples/dashboard.tsx` used `style={{ cursor: "pointer" }}` on a `Text` — the exact defect the checklist scores, in the file agents copy | now a `Button variant="tertiary"` |
+| 2026-09-13 | rules.md #4's spacing list stopped at `"64"` while #17 requires `"80"`–`"160"` | #4 lists the full `SpacingToken` scale |
+| 2026-09-13 | rules.md #14 listed 4 Button variants; the slice has 10 | #14 matches the slice |
+| 2026-09-13 | **Open:** `LineChart`, `BarChart`, `MediaUpload` and `CodeBlock` have `props: {}` and extend `*.impl` / `interfaces`, neither of which the spec defines — the whole chart and upload API is invisible to the harness, and `BarChart` has no example either. Agents extrapolate or fall back | generator change, not yet made |

@@ -1,0 +1,11 @@
+{
+ "name": "Swatch",
+ "group": "data",
+ "importFrom": "@once-ui-system/core/data",
+ "props": {
+  "color": "!string",
+  "size": "\"s\" | \"m\" = m",
+  "variant": "ChartVariant = useDataTheme().variant"
+ },
+ "mixinsRef": []
+}

@@ -16,7 +16,7 @@
   "className": "string",
   "style": "React.CSSProperties",
   "onClick": "() => void",
-  "isActive": "boolean"
+  "active": "boolean"
  },
  "mixinsRef": [
   "CommonProps",

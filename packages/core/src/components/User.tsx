@@ -39,7 +39,7 @@ const User = forwardRef<HTMLDivElement, UserProps>(
           <Column paddingLeft="4" paddingRight="12">
             {loading ? (
               <Flex minWidth={6} paddingY="4">
-                <Skeleton width="xl" height="m" shape="line" aria-label="Loading name" />
+                <Skeleton width="100%" height="m" shape="line" aria-label="Loading name" />
               </Flex>
             ) : (
               <Flex gap="8" vertical="center">
@@ -55,7 +55,7 @@ const User = forwardRef<HTMLDivElement, UserProps>(
             )}
             {loading ? (
               <Flex paddingY="2">
-                <Skeleton width="l" height="xs" shape="line" aria-label="Loading subline" />
+                <Skeleton width="75%" height="xs" shape="line" aria-label="Loading subline" />
               </Flex>
             ) : (
               <Text wrap="nowrap" variant="body-default-xs" onBackground="neutral-weak">

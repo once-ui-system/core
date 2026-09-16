@@ -12,6 +12,42 @@ export type BorderStyle = "rounded" | "playful" | "conservative";
 export type SurfaceStyle = "filled" | "translucent";
 export type TransitionStyle = "all" | "micro" | "macro" | "none";
 export type ScalingSize = "90" | "95" | "100" | "105" | "110";
+export type BodySize = "90" | "95" | "100" | "105" | "110";
+export type BodyLineHeight = "90" | "100" | "110" | "120";
+
+/**
+ * Where style choices are read from and written to.
+ *
+ * `"local"` keeps today's behaviour: every change is mirrored into
+ * localStorage under `data-<kebab-key>`. `"none"` applies choices to the
+ * document but persists nothing — the right setting when a host owns the
+ * state, for example an editor holding an unsaved draft.
+ *
+ * An adapter routes persistence somewhere else entirely, such as a database.
+ * `get` is synchronous because it runs during hydration, where an await would
+ * show a flash of the wrong theme; when the values live somewhere async, omit
+ * it and seed the provider through its props from the server instead. `set`
+ * and `remove` may return a promise — nothing waits on them.
+ */
+export type StylePersistenceAdapter = {
+  get?: (key: string) => string | null;
+  set: (key: string, value: string) => void | Promise<void>;
+  remove?: (key: string) => void | Promise<void>;
+};
+
+export type StylePersistence = "local" | "none" | StylePersistenceAdapter;
+
+const localAdapter: StylePersistenceAdapter = {
+  get: (key) => localStorage.getItem(key),
+  set: (key, value) => localStorage.setItem(key, value),
+  remove: (key) => localStorage.removeItem(key),
+};
+
+function resolvePersistence(persistence: StylePersistence = "local") {
+  if (persistence === "none") return null;
+  if (persistence === "local") return localAdapter;
+  return persistence;
+}
 export type DataStyle = "categorical" | "divergent" | "sequential";
 
 interface StyleOptions {
@@ -25,6 +61,8 @@ interface StyleOptions {
   surface: SurfaceStyle;
   transition: TransitionStyle;
   scaling: ScalingSize;
+  bodySize: BodySize;
+  bodyLineHeight: BodyLineHeight;
 }
 
 type ThemeProviderState = {
@@ -49,6 +87,10 @@ type ThemeProviderProps = {
   surface?: SurfaceStyle;
   transition?: TransitionStyle;
   scaling?: ScalingSize;
+  bodySize?: BodySize;
+  bodyLineHeight?: BodyLineHeight;
+  /** Defaults to `"local"`. See {@link StylePersistence}. */
+  persistence?: StylePersistence;
 };
 
 const initialThemeState: ThemeProviderState = {
@@ -68,6 +110,8 @@ const defaultStyleOptions: StyleOptions = {
   surface: "filled",
   transition: "all",
   scaling: "100",
+  bodySize: "100",
+  bodyLineHeight: "100",
 };
 
 const initialStyleState: StyleProviderState = {
@@ -78,8 +122,8 @@ const initialStyleState: StyleProviderState = {
 const ThemeProviderContext = createContext<ThemeProviderState>(initialThemeState);
 const StyleProviderContext = createContext<StyleProviderState>(initialStyleState);
 
-function getStoredStyleValues() {
-  if (typeof window === "undefined") return {};
+function getStoredStyleValues(store: StylePersistenceAdapter | null) {
+  if (typeof window === "undefined" || !store?.get) return {};
 
   try {
     const storedStyle: Partial<StyleOptions> = {};
@@ -93,6 +137,8 @@ function getStoredStyleValues() {
       "surface",
       "transition",
       "scaling",
+      "body-size",
+      "body-line-height",
     ];
 
     styleKeys.forEach((key) => {
@@ -100,7 +146,7 @@ function getStoredStyleValues() {
       const camelKey = kebabKey.replace(/-([a-z])/g, (_, letter) =>
         letter.toUpperCase(),
       ) as keyof StyleOptions;
-      const value = localStorage.getItem(`data-${kebabKey}`);
+      const value = store.get!(`data-${kebabKey}`);
 
       if (value) {
         if (camelKey === "border") {
@@ -121,6 +167,10 @@ function getStoredStyleValues() {
           storedStyle.accent = value as Schemes;
         } else if (camelKey === "solid") {
           storedStyle.solid = value as SolidType;
+        } else if (camelKey === "bodySize") {
+          storedStyle.bodySize = value as BodySize;
+        } else if (camelKey === "bodyLineHeight") {
+          storedStyle.bodyLineHeight = value as BodyLineHeight;
         }
       }
     });
@@ -132,10 +182,10 @@ function getStoredStyleValues() {
   }
 }
 
-const getInitialTheme = (): Theme => {
+const getInitialTheme = (store: StylePersistenceAdapter | null): Theme => {
   if (typeof window === "undefined") return "system";
 
-  const savedTheme = localStorage.getItem("data-theme") as Theme | null;
+  const savedTheme = (store?.get?.("data-theme") ?? null) as Theme | null;
   if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
     return savedTheme;
   }
@@ -167,10 +217,14 @@ export function ThemeProvider({
   surface,
   transition,
   scaling,
+  bodySize,
+  bodyLineHeight,
+  persistence = "local",
 }: ThemeProviderProps) {
+  const store = useMemo(() => resolvePersistence(persistence), [persistence]);
   // If propTheme is light/dark, use it directly (forced mode)
   // Otherwise, use the stored preference from localStorage/DOM
-  const initialThemeValue = propTheme !== "system" ? propTheme : getInitialTheme();
+  const initialThemeValue = propTheme !== "system" ? propTheme : getInitialTheme(store);
 
   // For resolvedTheme, if propTheme is light/dark, use that directly
   // Otherwise, get from DOM
@@ -223,12 +277,12 @@ export function ThemeProvider({
               : "light"
             : newTheme;
 
-        // Only update localStorage if not in forced mode
+        // Only persist if not in forced mode
         if (!isForced) {
           if (newTheme === "system") {
-            localStorage.removeItem("data-theme");
+            store?.remove?.("data-theme");
           } else {
-            localStorage.setItem("data-theme", newTheme);
+            store?.set("data-theme", newTheme);
           }
         }
 
@@ -247,7 +301,7 @@ export function ThemeProvider({
     [propTheme],
   );
 
-  const storedValues = typeof window !== "undefined" ? getStoredStyleValues() : {};
+  const storedValues = typeof window !== "undefined" ? getStoredStyleValues(store) : {};
 
   const directProps: Partial<StyleOptions> = {};
   if (neutral) directProps.neutral = neutral;
@@ -259,6 +313,8 @@ export function ThemeProvider({
   if (surface) directProps.surface = surface;
   if (transition) directProps.transition = transition;
   if (scaling) directProps.scaling = scaling;
+  if (bodySize) directProps.bodySize = bodySize;
+  if (bodyLineHeight) directProps.bodyLineHeight = bodyLineHeight;
 
   const [style, setStyleState] = useState<StyleOptions>({
     ...defaultStyleOptions,
@@ -298,18 +354,18 @@ export function ThemeProvider({
 
           if (key === "theme") {
             if (value === "system") {
-              localStorage.removeItem("data-theme");
+              store?.remove?.("data-theme");
               const resolvedValue = window.matchMedia("(prefers-color-scheme: dark)").matches
                 ? "dark"
                 : "light";
               document.documentElement.setAttribute(attrName, resolvedValue);
             } else {
-              localStorage.setItem("data-theme", value.toString());
+              store?.set("data-theme", value.toString());
               document.documentElement.setAttribute(attrName, value.toString());
             }
           } else {
             document.documentElement.setAttribute(attrName, value.toString());
-            localStorage.setItem(`data-${camelToKebab(key)}`, value.toString());
+            store?.set(attrName, value.toString());
           }
         }
       });

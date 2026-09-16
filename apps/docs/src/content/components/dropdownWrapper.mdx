@@ -1,0 +1,254 @@
+---
+title: "DropdownWrapper"
+summary: "The DropdownWrapper component provides a floating container that appears when triggered, allowing for custom dropdown menus and selectors."
+updatedAt: "2026-07-27"
+docs: "once-ui/components/dropdownWrapper.mdx"
+github: "components/DropdownWrapper.tsx"
+navLabel: "DropdownWrapper"
+navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
+---
+
+DropdownWrapper is a container component that handles the positioning and state management of dropdown menus. It provides a flexible way to create custom dropdown interfaces with various trigger elements and dropdown contents. It supports keyboard navigation when used with `Option` components.
+
+## Basic usage
+
+A simple dropdown with a button trigger and custom content.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth height={10} horizontal="center" vertical="start">
+      <BasicDropdown />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+const [selected, setSelected] = useState("");
+
+const options = [
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+    { label: "Option 3", value: "option3" }
+];
+
+const handleSelect = (value: string) => {
+    setSelected(value);
+    setIsOpen(false);
+};
+
+return (
+    <DropdownWrapper
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      trigger={
+        <Button 
+          variant="secondary" 
+          suffixIcon="chevronDown"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {selected ? options.find(opt => opt.value === selected)?.label : "Select an option"}
+        </Button>
+      }
+      dropdown={
+        <Column minWidth={10} padding="4" gap="2">
+          {options.map((option) => (
+            <Option
+              key={option.value}
+              label={option.label}
+              value={option.value}
+              selected={option.value === selected}
+              onClick={handleSelect}
+            />
+          ))}
+        </Column>
+      }
+    />
+);`,
+      language: "tsx",
+      label: "DropdownWrapper"
+    }
+  ]}
+/>
+
+## Placement
+
+Control the placement of the dropdown relative to its trigger element.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth height={10} horizontal="center" vertical="start">
+      <CustomPositionDropdown />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+
+return (
+  <Row horizontal="center">
+    <DropdownWrapper
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      placement="top"
+      trigger={
+        <Button onClick={() => setIsOpen(!isOpen)}>
+          Open Upward
+        </Button>
+      }
+      dropdown={
+        <Column fillWidth padding="4" gap="2">
+          <Option
+            label="Top option"
+            value="top"
+            onClick={() => setIsOpen(false)}
+          />
+          <Option
+            label="Middle option"
+            value="middle"
+            onClick={() => setIsOpen(false)}
+          />
+          <Option
+            label="Bottom option"
+            value="bottom"
+            onClick={() => setIsOpen(false)}
+          />
+        </Column>
+      }
+    />
+  </Row>
+);`,
+      language: "tsx",
+      label: "Placement"
+    }
+  ]}
+/>
+
+## Custom
+
+Control the dimensions of the dropdown menu.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth height={10} horizontal="center" vertical="start">
+      <SearchableDropdown />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+const [selected, setSelected] = useState("");
+const [searchQuery, setSearchQuery] = useState("");
+
+const options = [
+    { label: "Apple", value: "apple", description: "Fruit" },
+    { label: "Banana", value: "banana", description: "Fruit" },
+    { label: "Carrot", value: "carrot", description: "Vegetable" },
+    { label: "Broccoli", value: "broccoli", description: "Vegetable" },
+    { label: "Orange", value: "orange", description: "Fruit" }
+];
+
+const handleSelect = (value: string) => {
+    setSelected(value);
+    setIsOpen(false);
+};
+
+const filteredOptions = options.filter(option => 
+    option.label.toLowerCase().includes(searchQuery.toLowerCase())
+);
+
+return (
+    <DropdownWrapper
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      minHeight={200}
+      trigger={
+        <Button 
+          variant="secondary" 
+          suffixIcon="chevronDown"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {selected ? options.find(opt => opt.value === selected)?.label : "Search items"}
+        </Button>
+      }
+      dropdown={
+        <Column fillWidth minWidth={12}>
+          <Column padding="4" fillWidth position="sticky" top="0" background="surface" zIndex={1}>
+            <Input
+              size="s"
+              id="search-dropdown"
+              placeholder="Search"
+              prefix={<Icon name="search" size="xs" />}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </Column>
+          <Column fillWidth gap="2" padding="4">
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => (
+                <Option
+                  key={option.value}
+                  label={option.label}
+                  value={option.value}
+                  description={option.description}
+                  selected={option.value === selected}
+                  onClick={handleSelect}
+                />
+              ))
+            ) : (
+              <Flex fillWidth center paddingX="16" paddingY="32">
+                <Text>No results found</Text>
+              </Flex>
+            )}
+          </Column>
+        </Column>
+      }
+    />
+);`,
+      language: "tsx",
+      label: "Custom"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="DropdownWrapper"
+  describe={{
+    trigger: "The element that opens the dropdown.",
+    dropdown: "What opens. Usually a Column of Options.",
+    placement: "Which side of the trigger it opens on, and how it aligns.",
+    open: "Controlled open state. Leave it out to let the component manage its own.",
+    onOpenChange: "Called whenever it opens or closes, controlled or not.",
+    onSelect: "Called with the value of the Option that was picked.",
+    selectedOption: "Value of the Option to mark as current.",
+    closeAfterClick: "Close on selection. Turn it off for a multi-select.",
+    handleArrowNavigation: "Move through options with the arrow keys.",
+    navigationLayout: "Whether arrow keys walk a row, a column or a grid.",
+    columns: "Grid width, for a grid navigation layout.",
+    optionsCount: "How many options there are, when the component cannot count them itself.",
+    nested: "Marks a dropdown opened from inside another one.",
+    disableTriggerClick: "Stop the trigger opening it, when something else does.",
+    dropdownId: "Id for the dropdown element, to reference from a label.",
+    fillWidth: "Match the trigger's width.",
+    minWidth: "Lower bound on the dropdown's width, in rem.",
+    maxWidth: "Upper bound on the dropdown's width, in rem.",
+    minHeight: "Lower bound on the dropdown's height, in rem.",
+  }}
+  content={[
+    ["style", "React.CSSProperties"],
+    ["className", "string"]
+  ]}
+/>

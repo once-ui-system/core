@@ -1,0 +1,58 @@
+---
+title: "NumberInput"
+summary: "A numeric field with increment and decrement controls, bounded by min, max and step."
+updatedAt: "2026-09-14"
+docs: "once-ui/form-controls/numberInput.mdx"
+github: "components/NumberInput.tsx"
+navLabel: "NumberInput"
+navIcon: "switch"
+---
+
+`NumberInput` is [Input](/form-controls/input) for numbers. It adds stepper
+controls and clamps what can be typed, so the value reaching `onChange` is
+already a number within range — no parsing, no `NaN`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<NumberInputExample />}
+  codes={[
+    {
+      code:
+`const [value, setValue] = useState<number>(0);
+
+const handleChange = (newValue: number) => {
+    setValue(newValue);
+};
+
+<NumberInput
+    id="quantity"
+    label="Quantity"
+    value={value}
+    onChange={handleChange}
+    min={0}
+    max={100}
+    step={1}
+/>`,
+      language: "tsx",
+      label: "NumberInput"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="NumberInput"
+  describe={{
+    value: "The current number. Controlled, like every other input here.",
+    onChange: "Receives the number itself, not a change event.",
+    min: "Lower bound. The decrement control stops here.",
+    max: "Upper bound. The increment control stops here.",
+    step: "How much each press moves the value.",
+    padStart: "Pad to this many digits with leading zeros — 7 shown as 007.",
+  }}
+/>
+
+Everything on [Input](/form-controls/input) — `label`, `description`, `error`,
+`size`, `prefix`, `suffix` — works here too.

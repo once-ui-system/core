@@ -1,0 +1,132 @@
+---
+title: "Pulse"
+summary: "A colored dot with a pulsing animation effect."
+updatedAt: "2026-06-30"
+docs: "once-ui/components/pulse.mdx"
+github: "components/Pulse.tsx"
+navLabel: "Pulse"
+navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
+---
+
+The `Pulse` component is used to display a colored dot with a pulsing animation effect.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <Pulse size="s" />
+      <Pulse size="m" scheme="danger" />
+      <Pulse size="l" scheme="success" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Pulse size="s"/>
+<Pulse size="m" scheme="danger"/>
+<Pulse size="l" scheme="success"/>`,
+      language: "tsx",
+      label: "Pulse",
+    },
+  ]}
+/>
+
+## Color
+
+Set the color of the pulse using the `scheme` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <Pulse scheme="brand" />
+      <Pulse scheme="accent" />
+      <Pulse scheme="neutral" />
+      <Pulse scheme="info" />
+      <Pulse scheme="warning" />
+      <Pulse scheme="danger" />
+      <Pulse scheme="success" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Pulse scheme="brand"/>
+<Pulse scheme="accent"/>
+<Pulse scheme="neutral"/>
+<Pulse scheme="info"/>
+<Pulse scheme="warning"/>
+<Pulse scheme="danger"/>
+<Pulse scheme="success"/>`,
+      language: "tsx",
+      label: "Color",
+    },
+  ]}
+/>
+
+## Size
+
+Set the size of the pulse using the `size` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <Pulse size="s" />
+      <Pulse size="m" />
+      <Pulse size="l" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Pulse size="s"/>
+<Pulse size="m"/>
+<Pulse size="l"/>`,
+      language: "tsx",
+      label: "Size",
+    },
+  ]}
+/>
+
+## Pulse size
+
+Customize the pulse ring dimensions with the `pulseSize` prop, accepting a number or string value.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <Pulse size="m" pulseSize={80} />
+      <Pulse size="m" pulseSize="4rem" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<Pulse size="m" pulseSize={80} />
+<Pulse size="m" pulseSize="4rem" />`,
+      language: "tsx",
+      label: "Pulse size",
+    },
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Pulse"
+  describe={{
+    scheme: "Colour scheme of the dot and its ring.",
+    size: "Dot size.",
+    pulseSize: "How far the ring travels.",
+    children: "Content next to the dot.",
+  }}
+  content={[
+    ["children"],
+    ["className"],
+    ["style"]
+  ]}
+/>

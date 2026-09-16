@@ -1,10 +1,5 @@
 const baseURL = "https://docs.once-ui.com";
 
-const routes = {
-  '/changelog':  true,
-  '/roadmap':    true,
-}
-
 const style = {
   theme: "system", // dark | light
   neutral: "gray", // sand | gray | slate
@@ -42,7 +37,7 @@ const layout = {
   },
   sidebar: {
     width: 17, // width of the sidebar
-    collapsible: false, // accordion or static render
+    collapsible: true, // accordion or static render
   },
   content: {
     width: 44, // width of the main content block
@@ -57,7 +52,7 @@ const layout = {
 
 const social = [
   // Links are automatically displayed.
-  // Import new icons in /once-ui/icons.ts
+  // Import new icons in /icons.ts
   {
     name: "GitHub",
     icon: "github",
@@ -66,7 +61,7 @@ const social = [
   {
     name: "LinkedIn",
     icon: "linkedin",
-    link: "https://www.linkedin.com/company/once-ui/",
+    link: "https://www.linkedin.com/company/",
   },
   {
     name: "Discord",
@@ -91,18 +86,6 @@ const meta = {
     path: "/",
     image: "/api/og/generate?title=The open-source design system for the AI-native web"
   },
-  roadmap: {
-    title: `Roadmap – ${schema.name}`,
-    description: schema.description,
-    path: "/roadmap",
-    image: "/api/og/generate?title=Roadmap"
-  },
-  changelog: {
-    title: `Changelog – ${schema.name}`,
-    description: schema.description,
-    path: "/changelog",
-    image: "/api/og/generate?title=Changelog"
-  }
 };
 
-export { dataStyle, style, layout, baseURL, social, schema, meta, routes };
+export { dataStyle, style, layout, baseURL, social, schema, meta };

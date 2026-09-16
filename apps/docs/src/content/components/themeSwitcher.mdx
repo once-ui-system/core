@@ -1,0 +1,94 @@
+---
+title: "ThemeSwitcher"
+summary: "ThemeSwitcher is a compact toggle group for switching between light, dark, and system themes using icon buttons. It can collapse to the active theme and reveal the rest on hover."
+updatedAt: "2026-09-15"
+docs: "once-ui/components/themeSwitcher.mdx"
+github: "components/ThemeSwitcher.tsx"
+navLabel: "Theme Switcher"
+navIcon: "components"
+---
+
+Use `ThemeSwitcher` to provide users with a quick way to toggle between themes. It integrates with `ThemeProvider` and uses `useTheme()` under the hood.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ThemeSwitcher />
+  }
+  codes={[
+    {
+      code:
+`<ThemeSwitcher />`,
+      language: "tsx",
+      label: "ThemeSwitcher"
+    }
+  ]}
+/>
+
+## Behavior
+
+- Highlights the active theme using the `"primary"` variant, and exposes it to
+  assistive technology with `aria-pressed`.
+- Automatically updates the global theme via `useTheme().setTheme`.
+- Renders a row of three icons: `system`, `dark`, `light`.
+
+## Collapsed
+
+`collapsed` shows only the active theme and reveals the rest on hover or focus.
+Use it where the control has to be reachable from every page but should not
+spend three slots of a header on itself.
+
+It stays a real toggle group. Every option keeps its tab stop, so tabbing into
+the group opens it; and a device that cannot hover gets all three from the
+start, because otherwise the only way in would be to tap the visible button —
+which would have already changed the theme. The width transition is the only
+motion, and `prefers-reduced-motion` turns it off.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ThemeSwitcher collapsed />
+  }
+  codes={[
+    {
+      code:
+`<ThemeSwitcher collapsed />`,
+      language: "tsx",
+      label: "Collapsed"
+    }
+  ]}
+/>
+
+## Custom layout
+
+Pass any valid `Row` props to control spacing, padding, layout, etc.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ThemeSwitcher direction="column" padding="4" gap="8" background="surface" border="surface" radius="full" />
+  }
+  codes={[
+    {
+      code:
+`<ThemeSwitcher direction="column" padding="4" gap="8" background="surface" border="surface" radius="full" />`,
+      language: "tsx",
+      label: "Custom style"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  content={[
+    ["collapsed", "boolean"],
+    ["ref", "HTMLDivElement"],
+    ["className"],
+    ["style"],
+    ["...flex"]
+  ]}
+/>

@@ -1,0 +1,58 @@
+---
+title: "LetterFx"
+summary: "Animates text by cycling through random characters before revealing the final string. Great for futuristic or tech-themed UI effects."
+updatedAt: "2025-05-11"
+docs: "once-ui/effects/letterFx.mdx"
+github: "components/LetterFx.tsx"
+navLabel: "LetterFx"
+navIcon: "sparkle"
+---
+
+LetterFx animates text character-by-character using randomized symbols that resolve into the final message. It supports multiple trigger types and speeds.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <span style={{ fontFamily: "var(--font-code)" }}>
+      <LetterFx
+        speed="medium"
+        trigger="instant"
+        charset="X$@aHz0y#?*01+"
+      >
+        Spice up your landing page with special effects
+      </LetterFx>
+    </span>
+  }
+  codes={[
+    {
+      code:
+`<LetterFx
+    speed="medium"
+    trigger="instant"
+    charset="X$@aHz0y#?*01+">
+      Spice up your landing page with special effects
+</LetterFx>`,
+      language: "tsx",
+      label: "LetterFx"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="LetterFx"
+  describe={{
+    children: "The text to resolve into.",
+    trigger: "What starts it. \"custom\" waits for the function handed to onTrigger.",
+    speed: "How fast the letters settle.",
+    charset: "Characters it scrambles through on the way.",
+    onTrigger: "Receives a function that starts it, when trigger is \"custom\".",
+  }}
+  content={[
+    ["children"],
+    ["className"],
+    ["style"]
+  ]}
+/>

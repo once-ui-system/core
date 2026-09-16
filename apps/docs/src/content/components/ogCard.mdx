@@ -1,0 +1,316 @@
+---
+title: "OgCard"
+summary: "A component that displays rich link previews with Open Graph metadata for URLs."
+updatedAt: "2025-05-09"
+docs: "once-ui/components/ogCard.mdx"
+github: "components/OgCard.tsx"
+navLabel: "OgCard"
+navIcon: "components"
+---
+
+The `OgCard` component displays rich link previews for URLs by fetching and rendering Open Graph metadata. It's perfect for showcasing external links with preview images, titles, and descriptions.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <OgCard 
+      url="https://once-ui.com"
+    />
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "OgCard",
+      code:
+`<OgCard 
+    url="https://once-ui.com"
+/>`,
+    }
+  ]}
+/>
+
+## Mock data
+
+Instead of fetching Open Graph data from a URL, you can directly provide the data to display.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <OgCard 
+      title="Design Engineers Club"
+      description="The Design Engineers Club is a community of vibe coders."
+      image="/images/docs/once-ui/vibe-coding-dark.jpg"
+      favicon="/images/avatar.jpg"
+      url="https://designengineers.club"
+    />
+  }
+  codes={[
+    {
+      code:
+`<OgCard 
+    title="Design Engineers Club"
+    description="The Design Engineers Club is a community of vibe coders."
+    image="/images/docs/once-ui/vibe-coding-dark.jpg"
+    favicon="/images/avatar.jpg"
+    url="https://designengineers.club"
+/>`,
+      language: "tsx",
+      label: "Mock data"
+    }
+  ]}
+/>
+
+## Direction
+
+The OgCard component supports different layout directions.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <OgCard 
+        url="https://once-ui.com/about"
+        direction="row"
+      />
+      <OgCard 
+        url="https://once-ui.com/products"
+        direction="row-reverse"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<OgCard 
+    url="https://once-ui.com/about"
+    direction="row"
+/>
+
+<OgCard 
+    url="https://once-ui.com/products"
+    direction="row-reverse"
+/>`,
+      language: "tsx",
+      label: "Direction"
+    }
+  ]}
+/>
+
+## Size
+
+The OgCard component supports different sizes.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <OgCard
+        size="s"
+        url="https://once-ui.com/about"
+      />
+      <OgCard
+        size="m"
+        url="https://once-ui.com/products"
+      />
+      <OgCard
+        size="l"
+        url="https://once-ui.com/customize"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<OgCard 
+    size="s"
+    url="https://once-ui.com/about"
+/>
+<OgCard 
+    size="m"
+    url="https://once-ui.com/products"
+/>
+<OgCard 
+    size="l"
+    url="https://once-ui.com/customize"
+/>`,
+      language: "tsx",
+      label: "Size"
+    }
+  ]}
+/>
+
+## Conditional rendering
+
+You can hide each element of the `OgCard` component by setting its prop value to `false`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <OgCard
+        description={false}
+        url="https://once-ui.com/about"
+      />
+    </Column>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Conditional rendering",
+      code:
+`<OgCard 
+    description={false}
+    url="https://once-ui.com/about"
+/>`
+    }
+  ]}
+/>
+
+## Custom style
+
+The `OgCard` extends the `Card` component, so you can use all `Card` props to customize its appearance.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <OgCard 
+      url="https://once-ui.com/customize"
+      background="brand-alpha-weak"
+      border="brand-alpha-medium"
+      shadow="l"
+    />
+  }
+  codes={[
+    {
+      code:
+`<OgCard 
+    url="https://once-ui.com/customize"
+    direction="column"
+    background="brand-alpha-weak"
+    border="brand-alpha-medium"
+    shadow="l"
+/>`,
+      language: "tsx",
+      label: "Custom style"
+    }
+  ]}
+/>
+
+## Required API routes
+
+To use `OgCard` with automatic Open Graph fetching, your application must expose the following API routes.
+
+These routes are used internally by the component to fetch metadata and safely load external assets.
+
+### 1. OG metadata fetch
+
+`/api/og/fetch`
+
+This endpoint retrieves Open Graph metadata (title, description, image, favicon) from a given URL.
+
+It is used when `OgCard` receives only a `url` prop.
+
+You can refer to the implementation in:
+- `handleOGFetch.mdx`
+
+---
+
+### 2. OG image proxy
+
+`/api/og/proxy`
+
+This endpoint proxies external images to avoid CORS restrictions when rendering preview images inside the card.
+
+You can refer to the implementation in:
+- `handleOGProxy.mdx`
+
+---
+
+### 3. (Optional) OG generate endpoint
+
+`/api/og/generate`
+
+Used in advanced setups where OG images are dynamically generated server-side.
+
+This is optional depending on your configuration.
+
+## Service configuration
+
+Use `serviceConfig` to point `OgCard` at custom API routes or to transform proxied image and favicon URLs. Pass pre-fetched data with `ogData` to skip the fetch entirely.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codeHeight={24}
+  lineNumbers
+  codes={[
+    {
+      code:
+`<OgCard
+  url="https://example.com"
+  serviceConfig={{
+    fetchOgUrl: '/api/og/fetch',
+    proxyOgUrl: '/api/og/proxy',
+    proxyImageUrl: (url) => \`/api/og/proxy?url=\${encodeURIComponent(url)}\`,
+    proxyFaviconUrl: (url) => \`/api/og/proxy?url=\${encodeURIComponent(url)}\`,
+  }}
+/>
+
+<OgCard
+  ogData={{
+    url: 'https://example.com',
+    title: 'Example',
+    description: 'Pre-fetched metadata',
+    image: 'https://example.com/og.png',
+    faviconUrl: 'https://example.com/favicon.ico',
+  }}
+/>`,
+      language: "tsx",
+      label: "Service configuration"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="OgCard"
+  describe={{
+    url: "The page to preview. Its Open Graph data is fetched and rendered.",
+    ogData: "Supply the data yourself instead of fetching it.",
+    title: "Override the fetched title, or false to hide it.",
+    description: "Override the fetched description, or false to hide it.",
+    favicon: "Override the fetched favicon, or false to hide it.",
+    image: "Override the fetched image, or false to hide it.",
+    cardUrl: "Override the displayed link text, or false to hide it.",
+    direction: "Image above the text, or beside it.",
+    size: "Card scale.",
+    sizes: "The sizes attribute for the preview image.",
+    unoptimized: "Skip the framework image optimizer.",
+    serviceConfig: "Where to fetch the Open Graph data from.",
+  }}
+/>
+
+### OgServiceConfig
+
+<PropsTable
+  content={[
+    ["fetchOgUrl", "string", "'/api/og/fetch'", "Endpoint for fetching OG metadata."],
+    ["proxyOgUrl", "string", "'/api/og/proxy'", "Endpoint for proxying external assets."],
+    ["proxyImageUrl", "(url: string) => string", "-", "Transform OG image URLs before rendering."],
+    ["proxyFaviconUrl", "(url: string) => string", "-", "Transform favicon URLs before rendering."]
+  ]}
+/>
+
+## Notes
+
+- The component automatically fetches favicons for the domain
+- Images are proxied through an API endpoint to avoid CORS issues
+- You can overwrite the default props by providing static values
+- You can set any value to `false` to disable it

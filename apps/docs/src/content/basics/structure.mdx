@@ -1,0 +1,162 @@
+---
+title: "Structure"
+summary: "How a page is composed: two layout primitives, spacing that comes from gaps, and props instead of CSS."
+updatedAt: "2026-09-14"
+docs: "once-ui/basics/structure.mdx"
+navLabel: "Structure"
+navIcon: "lightbulb"
+---
+
+Layout in Once UI is composition, not stylesheets. You nest a handful of
+primitives and set props on them; there is no CSS file, no class names, and no
+media queries.
+
+There are only two primitives. `Flex` lays children out along one axis, `Grid`
+along two. Everything else — a `Card`, a `Button`, a `Dialog` — is built from
+them and accepts the same props.
+
+## Row and Column
+
+You will almost always write `Row` or `Column` rather than `Flex`. They are the
+same component with `direction` preset, and they say what they mean:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="8">
+      <Row fillWidth gap="8">
+        <Flex fillWidth height="40" radius="m" background="brand-alpha-weak" border="brand-alpha-medium" />
+        <Flex fillWidth height="40" radius="m" background="brand-alpha-weak" border="brand-alpha-medium" />
+      </Row>
+      <Flex fillWidth height="40" radius="m" background="neutral-alpha-weak" border="neutral-alpha-medium" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column gap="8">
+    <Row gap="8">
+        <Flex fillWidth/>
+        <Flex fillWidth/>
+    </Row>
+    <Flex fillWidth/>
+</Column>`,
+      language: "tsx",
+      label: "Row and Column"
+    }
+  ]}
+/>
+
+Reach for `Flex` itself only when the direction changes at a breakpoint, which
+is the one thing a preset cannot express: `<Flex s={{ direction: "column" }}>`.
+
+## The page skeleton
+
+Nearly every page is the same three layers — a full-width main element, a
+centred column that caps the reading width, and the sections inside it:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Column as="main" fillWidth horizontal="center">
+    <Column maxWidth="m" gap="104" padding="24">
+        <Column gap="24">  // a section
+            ...
+        </Column>
+        <Column gap="24">  // another
+            ...
+        </Column>
+    </Column>
+</Column>`,
+      language: "tsx",
+      label: "Page skeleton"
+    }
+  ]}
+/>
+
+`maxWidth` caps the line length, `horizontal="center"` centres that cap in the
+viewport, and the gaps do the rest. Sections sit far apart (`"80"`–`"160"`),
+content inside them sits close (`"24"`–`"40"`).
+
+## Space comes from gaps
+
+Space **between** siblings is `gap` on the parent. Space **inside** an element is
+`padding`. Between them they cover almost everything:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Column gap="16" padding="24">   // between children, and inside the box
+<Column marginBottom="16">       // last resort`,
+      language: "tsx",
+      label: "Gap and padding"
+    }
+  ]}
+/>
+
+Prefer both over `margin`. A layout built from gaps stays correct when a child
+is added, removed or reordered; one built from margins has to be re-tuned each
+time, and margins collapse into each other in ways gaps do not.
+
+## Everything is a token
+
+Sizes, colours, radii and shadows are named values, not numbers you invent:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Column gap="16" padding="24" radius="l"
+    background="surface" border="neutral-alpha-medium" onBackground="neutral-strong">`,
+      language: "tsx",
+      label: "Tokens"
+    }
+  ]}
+/>
+
+`gap="16"` is a step on the spacing scale, not 16 pixels — it moves with the
+`data-scaling` setting. `neutral-alpha-medium` is a scheme and a weight, so it
+follows the theme instead of being re-picked for dark mode. If a value cannot be
+expressed as a token, that is usually a sign the design has drifted from the
+system rather than a reason to reach for `style`.
+
+## Responsive without media queries
+
+Every layout prop can be overridden per breakpoint. Pass an object to `xl`, `l`,
+`m`, `s` or `xs`; they cascade downward, so `s` also covers `xs`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Row gap="24" s={{ direction: "column", gap: "16" }}>
+    <Column maxWidth={20} m={{ hide: true }}>Sidebar</Column>
+    <Column fill>Content</Column>
+</Row>`,
+      language: "tsx",
+      label: "Breakpoints"
+    }
+  ]}
+/>
+
+## Where to go next
+
+That is the whole model. The full prop reference lives on the two primitives:
+
+- [Flex](/components/flex) — direction, alignment, size, spacing, surface,
+  display and text, each with its table
+- [Grid](/components/grid) — columns and rows, plus everything Flex has
+- [Spacing](/basics/spacing) — the scale behind `gap` and `padding`
+- [Color](/basics/color) — schemes, weights and alpha
+- [Responsive](/basics/responsive) — the breakpoints themselves

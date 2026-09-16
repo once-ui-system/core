@@ -17,6 +17,7 @@ import {
   ToggleButton,
   UserMenu,
 } from "@once-ui-system/core";
+import type { KbarItem, MenuGroup } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import React, { useState } from "react";
 
@@ -29,7 +30,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
   const pathname = usePathname() ?? "";
   const isMac = typeof window !== "undefined" && /Mac/i.test(navigator.platform);
 
-  const kbar = [
+  const kbar: KbarItem[] = [
     {
       id: "dashboard",
       name: "Dashboard",
@@ -68,7 +69,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     },
   ];
 
-  const nav = [
+  const nav: MenuGroup[] = [
     {
       id: "products",
       label: "Products",
@@ -257,7 +258,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     >
       <Row gap="4" vertical="center" maxWidth={10}>
         <NavIcon
-          isActive={isActive} 
+          active={isActive} 
           onClick={handleClick} 
           aria-label="Toggle navigation menu"
           aria-expanded={isActive}
@@ -303,10 +304,10 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
               }}
               dropdown={
                 <Column padding="4" gap="2" minWidth={10}>
-                  <Option hasPrefix={<Icon onBackground="neutral-weak" size="s" name="person" />} label="Profile" value="profile" />
-                  <Option hasPrefix={<Icon onBackground="neutral-weak" size="s" name="settings" />} label="Settings" value="settings" />
+                  <Option prefix={<Icon onBackground="neutral-weak" size="s" name="person" />} label="Profile" value="profile" />
+                  <Option prefix={<Icon onBackground="neutral-weak" size="s" name="settings" />} label="Settings" value="settings" />
                   <Line marginY="2" />
-                  <Option hasPrefix={<Icon onBackground="neutral-weak" size="s" name="logout" />} label="Log out" value="logout" />
+                  <Option prefix={<Icon onBackground="neutral-weak" size="s" name="logout" />} label="Log out" value="logout" />
                 </Column>
               }
             />

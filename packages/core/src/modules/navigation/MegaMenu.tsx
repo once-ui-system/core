@@ -1,6 +1,7 @@
 "use client";
 
 import type React from "react";
+import type { IconName } from "../../icons";
 import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Column, Flex, Icon, Row, Text, ToggleButton } from "../../";
 import { useAdapters } from "../../contexts/AdapterProvider";
@@ -9,7 +10,7 @@ import styles from "./MegaMenu.module.scss";
 export interface MenuLink {
   label: ReactNode;
   href: string;
-  icon?: string;
+  icon?: IconName;
   description?: ReactNode;
   selected?: boolean;
 }
@@ -22,7 +23,7 @@ export interface MenuSection {
 export interface MenuGroup {
   id: string;
   label: ReactNode;
-  suffixIcon?: string;
+  suffixIcon?: IconName;
   href?: string;
   selected?: boolean;
   sections?: MenuSection[];
@@ -109,11 +110,13 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                 dropdown.style.width = originalWidth;
                 dropdown.style.overflow = originalOverflow;
 
-                // Add padding for the wrapper (12px on each side) + paddingTop (8px) + border (1px each side)
+                // The clipping box is now exactly the surface, so it is the
+                // wrapper's own padding (12px a side) and border (1px a side)
+                // and nothing else.
                 setDropdownPosition({
                   left: rect.left - parentRect.left,
                   width: contentWidth + 26, // Add wrapper padding (24) + border (2)
-                  height: contentHeight + 34, // Add wrapper padding (24) + paddingTop (8) + border (2)
+                  height: contentHeight + 26, // Add wrapper padding (24) + border (2)
                 });
               }
             }
@@ -212,15 +215,29 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
         </Row>
       ))}
 
+      {/*
+          This element both clips and casts the shadow, and that pairing is
+          deliberate. `overflow: hidden` is what keeps the panel's contents
+          inside the box while its width and height animate between two groups
+          of different size; an element's own `box-shadow`, unlike its
+          descendants, is not clipped by its own overflow. Put the shadow on
+          the surface inside instead and this box cuts it off at the panel's
+          edge, which is what it used to do.
+
+          That is also why there is no `paddingTop` here any more and `top` is
+          the full 40 instead: the clipping box has to be exactly the surface
+          for their rounded corners to coincide.
+      */}
       {activeDropdown && (
         <Row
-          paddingTop="8"
           ref={dropdownRef}
           position="absolute"
           pointerEvents="auto"
           opacity={100}
           overflow="hidden"
-          top="32"
+          radius="l"
+          shadow="xl"
+          top="40"
           className={isFirstAppearance ? styles.dropdown : ""}
           style={{
             left: `${dropdownPosition.left}px`,
@@ -246,7 +263,6 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
             background="surface"
             radius="l"
             border="neutral-alpha-weak"
-            shadow="xl"
             padding="12"
             gap="32"
             data-dropdown-wrapper

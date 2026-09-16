@@ -1,0 +1,144 @@
+---
+title: "NavItem and NavGroup"
+summary: "The two rows a product sidebar is made of, plus the route matcher that decides which one is current."
+updatedAt: "2026-09-14"
+docs: "once-ui/components/nav.mdx"
+github: "components/NavItem.tsx"
+navLabel: "Nav"
+navIcon: "components"
+---
+
+Every product built on Once UI grew its own sidebar, and they all converged on
+the same two rows: a link that knows whether it is the current page, and a
+collapsible group of those links indented behind a rail. These are those two.
+
+They are rows, not a sidebar. Headers, footers, org switchers and storage meters
+differ per product and stay yours to compose.
+
+## A row
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column maxWidth={20} gap="4" padding="8" radius="l" border="neutral-alpha-weak">
+      <NavItem href="#" icon="home" label="Projects" selected />
+      <NavItem href="#" icon="sparkle" label="Presets" />
+      <NavItem href="#" icon="inbox" label="Inbox" badge={42} />
+      <NavItem href="#" icon="bell" label="Activity" indicator />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<NavItem href="/projects" icon="home" label="Projects" selected />
+<NavItem href="/presets" icon="sparkle" label="Presets" />
+<NavItem href="/inbox" icon="inbox" label="Inbox" badge={42} />
+<NavItem href="/activity" icon="bell" label="Activity" indicator />`,
+      language: "tsx",
+      label: "NavItem"
+    }
+  ]}
+/>
+
+`badge` prints a count and caps it at `9+`; `indicator` is the dot for unread
+with no number worth showing.
+
+<PropsTable
+  component="NavItem"
+  describe={{
+    label: "The text.",
+    icon: "Leading icon. Leave it off inside a NavGroup, where the rail carries the hierarchy instead.",
+    badge: "A count in a pill at the end of the row. Above 9 it prints 9+, with the real number on the label for assistive tech.",
+    indicator: "A dot at the end of the row, when there is no number worth showing.",
+  }}
+/>
+
+## A group
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column maxWidth={20} gap="4" padding="8" radius="l" border="neutral-alpha-weak">
+      <NavItem href="#" icon="home" label="Projects" />
+      <NavGroup label="Settings" icon="settings" defaultOpen>
+        <NavItem href="#" label="Profile" selected />
+        <NavItem href="#" label="Billing" badge={2} />
+        <NavItem href="#" label="Members" />
+      </NavGroup>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<NavGroup label="Settings" icon="settings" defaultOpen>
+    <NavItem href="/settings/profile" label="Profile" selected />
+    <NavItem href="/settings/billing" label="Billing" badge={2} />
+    <NavItem href="/settings/members" label="Members" />
+</NavGroup>`,
+      language: "tsx",
+      label: "NavGroup"
+    }
+  ]}
+/>
+
+The rail is a vertical `Line`, not padding — indentation alone stops reading as
+hierarchy the moment a label wraps. A group manages its own open state unless
+you pass `open` and `onToggle`, which is what you do to open the group holding
+the current route.
+
+<PropsTable
+  component="NavGroup"
+  describe={{
+    label: "The group's own text.",
+    icon: "Leading icon, matching the NavItems beside it.",
+    children: "The rows inside.",
+    open: "Open state, when the host owns it — to keep one group open at a time, say.",
+    onToggle: "Called on the header. Only needed alongside open.",
+    defaultOpen: "Starting state when the group manages its own.",
+    selected: "Mark the header itself as current, for a group that is also a link.",
+  }}
+/>
+
+## Which row is current
+
+This is the part worth taking from here rather than writing again.
+
+`pathname === href` misses a nested route: on `/settings/billing/invoices/42`
+nothing is highlighted. `pathname.startsWith(href)` overshoots the other way:
+`/settings` is a prefix of every child, so the parent lights up alongside them.
+The answer is the **longest** href that matches.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`import { selectNavHref } from "@once-ui-system/core";
+
+const items = [
+    { href: "/settings", label: "General" },
+    { href: "/settings/billing", label: "Billing" },
+];
+
+const current = selectNavHref(pathname, items.map((i) => i.href));
+
+{items.map((item) => (
+    <NavItem key={item.href} {...item} selected={item.href === current} />
+))}`,
+      language: "tsx",
+      label: "selectNavHref"
+    }
+  ]}
+/>
+
+It returns `null` when nothing matches, and will not match a sibling that merely
+shares a prefix — `/settings-v2` is not inside `/settings`.
+
+## Related
+
+- [ToggleButton](/components/toggleButton) — what a NavItem is underneath
+- [Accordion](/components/accordion) — what a NavGroup is underneath
+- [SplitView](/components/splitView) — the other half of an app shell

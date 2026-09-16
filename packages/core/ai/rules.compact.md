@@ -1,6 +1,6 @@
 # Once UI — compact codegen rules
 
-Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For production-quality composition, read matching Pro blocks from `examples/blocks/manifest.json`. Fetch component slices on demand.
+Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For an app shell, a sidebar nav or an editor, read `ai/layouts.md` first — those are the shapes that are hard to get right from props alone. For production-quality composition, read matching Pro blocks from `examples/blocks/manifest.json`. Fetch component slices on demand.
 
 ## Layout
 
@@ -47,9 +47,9 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 
 ## Motion
 
-- `RevealFx delay` in **seconds**: `delay={index * 0.1}`
+- `RevealFx delay` (and `ShineFx speed`) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x
 - `RevealFx translateY`: number = rem; prefer `"8"`–`"16"` tokens
-- Viewport-trigger with `useInViewport` + latch; `CountFx` driven by `value`, no trigger prop
+- Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
 - Animate all siblings in a set or none — never one lone animated card
 
 ## Components
@@ -63,6 +63,21 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Scroll fade | `Fade` as edge strip, not wrapper |
 | Icons | `IconName` from spec only |
 | Logos grid | `LogoCloud` with `columns` set |
+
+## Imports
+
+Most things come from the package root. Three modules do not, because their
+dependencies are optional peers:
+
+| Import | From |
+|--------|------|
+| charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
+| `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
+| `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
+
+Naming one of these from the root does not resolve. `IconName` is a real union,
+so an unregistered icon name is a type error, not a blank space — take names
+from `spec.json`.
 
 ## Defaults — omit these
 

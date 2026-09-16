@@ -6,7 +6,6 @@ import { FlexProps, StyleProps, DisplayProps, FlexBreakpointProps } from "../int
 import { SpacingToken, CSSUnit, Colors, RadiusSize, RadiusNest, ShadowSize, Opacity, TextVariant, TextSize, TextWeight, TextType, FlexValue } from "../types";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
 import { useLayout } from "..";
-import { useResponsiveClasses } from "../hooks/useResponsiveClasses";
 
 interface ClientFlexProps extends FlexProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];
@@ -53,7 +52,7 @@ const parseSpacing = (value: SpacingToken | number | undefined): string | undefi
 };
 
 const generateBackgroundClass = (type: "background" | "solid", value: string): string | undefined => {
-  if (value === "transparent") return undefined;
+  if (value === "transparent") return `transparent-${type}`;
   if (["surface", "page", "overlay"].includes(value)) return `${value}-${type}`;
   const parts = value.split("-");
   if (parts.includes("alpha")) {
@@ -76,7 +75,7 @@ const generateBorderClass = (value: string | boolean): string | undefined => {
   return `${scheme}-border-${weight}`;
 };
 
-// Properties handled by CSS classes via useResponsiveClasses
+// Properties the server component already writes as classes.
 const CLASS_BASED_PROPS = new Set([
   "direction", "horizontal", "vertical", "center", "wrap", "flex",
   "position", "hide", "overflow", "overflowX", "overflowY",
@@ -87,12 +86,8 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
   ({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
     const elementRef = useRef<HTMLDivElement>(null);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    const { currentBreakpoint, isDefaultBreakpoints } = useLayout();
+    const { currentBreakpoint } = useLayout();
 
-    if (!isDefaultBreakpoints()) {
-      // eslint-disable-next-line react-hooks/rules-of-hooks
-      useResponsiveClasses(elementRef, props.direction, { xl, l, m, s, xs }, currentBreakpoint);
-    }
 
     // Combine refs
     const combinedRef = (node: HTMLDivElement) => {
@@ -176,7 +171,7 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
         if (currentResponsiveProps.minHeight !== undefined) setStyle("minHeight", parseDimension(currentResponsiveProps.minHeight, "height"));
         if (currentResponsiveProps.maxHeight !== undefined) setStyle("maxHeight", parseDimension(currentResponsiveProps.maxHeight, "height"));
 
-        // Handle numeric spacing (token-based spacing is handled by CSS classes in ServerFlex/useResponsiveClasses)
+        // Numeric spacing only: a token is a class, written by ServerFlex.
         if (typeof currentResponsiveProps.padding === "number") setStyle("padding", `${currentResponsiveProps.padding}rem`);
         if (typeof currentResponsiveProps.paddingLeft === "number") setStyle("paddingLeft", `${currentResponsiveProps.paddingLeft}rem`);
         if (typeof currentResponsiveProps.paddingRight === "number") setStyle("paddingRight", `${currentResponsiveProps.paddingRight}rem`);
@@ -233,7 +228,6 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
           m={m}
           s={s}
           xs={xs}
-          isDefaultBreakpoints={isDefaultBreakpoints()}
           hide={hide}
           ref={combinedRef}
           style={{

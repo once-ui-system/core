@@ -1,8 +1,8 @@
 {
  "name": "MediaUpload",
- "group": "modules",
+ "group": "media",
+ "importFrom": "@once-ui-system/core/media",
  "extends": [
-  "MediaUpload.impl",
   "Flex"
  ],
  "mixins": [
@@ -13,6 +13,25 @@
   "SpacingProps",
   "StyleProps"
  ],
+ "props": {
+  "onFileUpload": "(file: File) => Promise<void>",
+  "compress": "boolean = true",
+  "aspectRatio": "string = 16 / 9",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "initialPreviewImage": "string | null = null",
+  "emptyState": "React.ReactNode = Drag and drop or click to browse",
+  "quality": "number = 0.8",
+  "sizes": "string",
+  "children": "React.ReactNode",
+  "convertTypes": "string[] = [\"image/png\", \"image/webp\", \"image/jpg\"]",
+  "resizeMaxWidth": "number = 1920",
+  "resizeMaxHeight": "number = 1920",
+  "resizeWidth": "number = 1200",
+  "resizeHeight": "number = 1200",
+  "loading": "boolean = false",
+  "accept": "string = image/*"
+ },
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",

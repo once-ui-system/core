@@ -15,8 +15,16 @@ import { describe, expect, it } from "vitest";
 
 const SCSS_ROOT = join(__dirname, "..", "scss");
 
+/**
+ * Sass keeps `/* *\/` comments in the compiled output, and the extractors below
+ * match on raw text. A comment in theme.scss mentioning `[data-scaling]` was
+ * therefore recorded as part of the public selector surface, alongside the
+ * four real `[data-scaling="90"]`-style rules. Prose is not API; strip it.
+ */
+const stripComments = (css: string): string => css.replace(/\/\*[\s\S]*?\*\//g, "");
+
 const compileEntry = (entry: string): string =>
-  compile(join(SCSS_ROOT, entry), { style: "expanded" }).css;
+  stripComments(compile(join(SCSS_ROOT, entry), { style: "expanded" }).css);
 
 const unique = (values: string[]): string[] => [...new Set(values)].sort();
 

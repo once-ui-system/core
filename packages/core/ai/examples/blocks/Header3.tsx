@@ -81,13 +81,13 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
                     <Option
                       label="Profile 1"
                       value="profile"
-                      hasPrefix={
+                      prefix={
                         <Avatar src="/images/creators/justin.jpg"/>
                       }/>
                     <Option
                       label="Profile 2"
                       value="profile"
-                      hasPrefix={
+                      prefix={
                         <Avatar src="/images/creators/light.jpg"/>
                       }/>
                   </Column>
@@ -96,29 +96,29 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
                     <Option
                       label="Account"
                       value="account"
-                      hasPrefix={
+                      prefix={
                         <Icon padding="4" margin="2" size="s" name="person" onBackground="neutral-weak"/>
                       } />
                     <Option
                       label="Settings"
                       value="settings"
-                      hasPrefix={
+                      prefix={
                         <Icon padding="4" margin="2" size="s" name="settings" onBackground="neutral-weak"/>
                       } />
                     <Option
                       label="Subscription"
                       value="subscription"
-                      hasPrefix={
+                      prefix={
                         <Icon padding="4" margin="2" size="s" name="payment" onBackground="neutral-weak"/>
                       } />
                     <Option label="Help" value="help"
-                      hasPrefix={
+                      prefix={
                         <Icon padding="4" margin="2" size="s" name="help" onBackground="neutral-weak"/>
                     } />
                   </Column>
                   <Line />
                   <Column fillWidth padding="4">
-                    <Option padding="4" label="Log out" value="logout" hasPrefix={
+                    <Option padding="4" label="Log out" value="logout" prefix={
                       <Icon padding="4" margin="2" size="s" name="logout" onBackground="neutral-weak"/>
                     } />
                   </Column>

@@ -1,0 +1,176 @@
+---
+title: "CountFx"
+summary: "CountFx is a wrapper for numbers with different animation effects."
+updatedAt: "2025-05-11"
+docs: "once-ui/effects/countFx.mdx"
+github: "components/CountFx.tsx"
+navLabel: "CountFx"
+navIcon: "sparkle"
+---
+
+CountFx is a wrapper for numbers with different animation effects.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <CountFxExample />
+  }
+  codes={[
+    {
+      code:
+`const [value, setValue] = useState<number>(0);
+
+useEffect(() => {
+    const targetValue = Math.floor(Math.random() * 9000) + 1000;
+    setValue(targetValue);
+}, []);
+
+<CountFx
+    variant="display-strong-m"
+    value={value}
+    speed={5000}
+    effect="wheel"
+    easing="ease-out"
+/>
+
+<CountFx
+    variant="display-strong-m"
+    value={value}
+    speed={5000}
+    effect="smooth"
+    easing="ease-out"
+/>
+
+<CountFx
+    variant="display-strong-m"
+    value={value}
+    speed={5000}
+    separator=","
+    effect="simple"
+    easing="ease-out"
+/>`,
+      language: "tsx",
+      label: "CountFx"
+    }
+  ]}
+/>
+
+## Decimals
+
+CountFx supports decimal values with the `decimals` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  reloadButton
+  preview={
+    <CountFxDecimalExample />
+  }
+  codes={[
+    {
+      code:
+`const [value1, setValue1] = useState<number>(0);
+const [value2, setValue2] = useState<number>(0);
+
+useEffect(() => {
+    const targetValue1 = parseFloat((Math.random() * 200 + 50).toFixed(2));
+    const targetValue2 = parseFloat((Math.random() * 150 + 25).toFixed(2));
+
+    setValue1(targetValue1);
+    setValue2(targetValue2);
+}, []);
+
+<CountFx
+    variant="display-strong-m"
+    value={value1}
+    decimals={2}
+    speed={2000}
+    effect="simple"
+    easing="ease-out"
+/>
+
+<CountFx
+    variant="display-strong-m"
+    value={value2}
+    decimals={2}
+    speed={2000}
+    separator=","
+    effect="simple"
+    easing="ease-out"
+    children=" USD"
+/>`,
+      language: "tsx",
+      label: "Decimals"
+    }
+  ]}
+/>
+
+## Trigger on scroll
+
+Use the [useInViewport](/hooks/useInViewport) hook to trigger the count animation when the element enters the viewport. This example starts counting when the element reaches the center of the screen.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ScrollCountExample />
+  }
+  codes={[
+    {
+      code:
+`import { useRef, useState, useEffect } from "react";
+import { CountFx, useInViewport } from "@once-ui-system/core";
+
+function ScrollCountExample() {
+    const ref = useRef<HTMLDivElement>(null);
+    const [value, setValue] = useState<number>(0);
+    
+    // Trigger when element reaches center of viewport
+    // rootMargin: "-50% 0px" creates a line at the vertical center
+    const isInViewport = useInViewport(ref, { 
+        rootMargin: "-50% 0px" 
+    });
+    
+    useEffect(() => {
+        if (isInViewport) {
+            setValue(9876);
+        }
+    }, [isInViewport]);
+    
+    return (
+      <CountFx
+        variant="display-strong-l"
+        value={value}
+        speed={2000}
+        effect="wheel"
+        easing="ease-out"
+      />
+    );
+}`,
+      language: "tsx",
+      label: "Scroll trigger"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="CountFx"
+  describe={{
+    value: "The number to count to. Change it and the count runs again — there is no trigger prop.",
+    speed: "How long the count takes, in milliseconds.",
+    easing: "How the count accelerates and settles.",
+    effect: "How the digits change: a plain count, a wheel, or a smooth blur.",
+    format: "Turn the number into the string shown, for a currency or a unit.",
+    separator: "Thousands separator.",
+    decimals: "Decimal places to hold.",
+    children: "Rendered after the number.",
+  }}
+  content={[
+    ["className"],
+    ["style"]
+  ]}
+/>

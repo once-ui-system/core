@@ -35,7 +35,8 @@ const InteractiveDetails: React.FC<InteractiveDetailsProps> = forwardRef<
         </Text>
         {iconButtonProps?.tooltip && (
           <div onClick={(e) => e.stopPropagation()}>
-            <IconButton size="s" variant="ghost" icon="help" {...iconButtonProps} />
+            <IconButton size="s" variant="ghost" icon="help"
+          aria-label="More information" {...iconButtonProps} />
           </div>
         )}
       </Row>

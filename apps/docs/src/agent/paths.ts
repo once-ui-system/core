@@ -7,7 +7,7 @@ export const agentDiscoveryPaths = {
   agentSkills: "/.well-known/agent-skills/index.json",
   mcpServerCard: "/.well-known/mcp/server-card.json",
   llmsTxt: "/llms.txt",
-  aiCoding: "/once-ui/ai-coding",
+  aiCoding: "/ai-coding",
   aiManifest: "/ai/manifest.json",
   aiCatalog: "/ai/catalog.json",
   aiRules: "/ai/rules.compact.md",

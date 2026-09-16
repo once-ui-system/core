@@ -19,9 +19,11 @@ export const Footer1: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
           <Text onBackground="neutral-weak">/ All rights reserved</Text>
         </Text>
         <Row gap="16">
-          <IconButton size="s" variant="ghost" href="#" icon="github" tooltip="GitHub" />
-          <IconButton size="s" variant="ghost" href="#" icon="linkedin" tooltip="LinkedIn" />
-          <IconButton size="s" variant="ghost" href="#" icon="threads" tooltip="Threads" />
+          {/* Brand marks are not part of Once UI — register the ones you need on
+              IconProvider and declare their names, then use them here as usual. */}
+          <IconButton size="s" variant="ghost" href="#" icon="link" tooltip="GitHub" />
+          <IconButton size="s" variant="ghost" href="#" icon="link" tooltip="LinkedIn" />
+          <IconButton size="s" variant="ghost" href="#" icon="link" tooltip="Threads" />
         </Row>
       </Row>
       <Row hide height="80" s={{hide: false}}/>

@@ -9,7 +9,7 @@ interface ProgressBarProps extends React.ComponentProps<typeof Flex> {
   value: number;
   min?: number;
   max?: number;
-  label?: boolean;
+  showLabel?: boolean;
   labelPosition?: "top" | "bottom" | "left" | "right";
   barBackground?: StyleProps["solid"];
   className?: string;
@@ -22,7 +22,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
       value,
       min = 0,
       max = 100,
-      label = true,
+      showLabel = true,
       labelPosition = "bottom",
       barBackground = "brand-strong",
       className,
@@ -56,7 +56,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
       </Flex>
     );
 
-    const labelEl = label ? (
+    const labelEl = showLabel ? (
       <Text align={isHorizontal ? undefined : "center"}>
         <CountFx value={value} speed={1000} duration={1000} easing="ease-in-out" />%
       </Text>

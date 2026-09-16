@@ -1,0 +1,83 @@
+---
+title: "Installation"
+docs: "once-ui/quick-start.mdx"
+github: "packages/core/src/quick-start.mdx"
+navLabel: "Quick start"
+updatedAt: "2026-06-02"
+summary: "Once UI is the open-source design system for the AI-native era. Deploy fully functional apps in minutes or build custom solutions with less code and token usage."
+navIcon: "rocket"
+---
+
+## Starter template
+
+Create a new Once UI app with our starter repository. It will install dependencies and set up the recommended structure:
+
+<CodeBlock marginBottom="32" marginTop="8"
+codes={[
+  {
+    code: "npx create-once-ui-app@latest my-app",
+    language: "bash",
+    label: "CLI"
+  },
+  {
+    code: "git clone https://github.com/once-ui-system/nextjs-starter.git",
+    language: "bash",
+    label: "Manual"
+  }
+]} />
+
+Or add Once UI to an existing project:
+
+<CodeBlock compact marginBottom="32" marginTop="8"
+ codes={[
+  {
+    code: "npm install @once-ui-system/core@alpha",
+    language: "bash"
+  }
+]} />
+
+## Required dependencies
+
+The following dependencies are installed with Once UI Core:
+
+<Table
+  marginBottom="32"
+  data={{
+    headers: [
+      { content: "Package", key: "package" },
+      { content: "Version", key: "version" },
+      { content: "Purpose", key: "purpose" },
+    ],
+    rows: [
+      ["next", ">=15.5", "Next.js framework"],
+      ["react", ">=18", "React library"],
+      ["react-dom", ">=18", "React DOM library"],
+      ["sass", "^1.77.6", "CSS preprocessor for styling"],
+      ["@floating-ui/react-dom", "^2.1.8", "Positioning for dropdowns"],
+      ["classnames", "^2.5.1", "Utility for conditional CSS classes"],
+      ["compressorjs", ">=1.2.0", "Image compression in MediaUpload"],
+      ["date-fns", "^4.1.0", "Date utility library"],
+      ["prismjs", ">=1.27.0", "Code syntax highlighting in CodeBlock"],
+      ["react-icons", "^5.6.0", "Icon library"],
+      ["recharts", ">=3.0.0", "Data visualization components"],
+    ]
+  }}
+/>
+
+## Optional dependencies
+
+The following dependencies are only needed if you use specific features:
+
+<Table
+  marginBottom="32"
+  data={{
+    headers: [
+      { content: "Package", key: "package" },
+      { content: "Version", key: "version" },
+      { content: "Used for", key: "usedFor" },
+    ],
+    rows: [
+      ["sharp", "^0.33.4", "Image optimization in Next.js"],
+    ]
+  }}
+/>

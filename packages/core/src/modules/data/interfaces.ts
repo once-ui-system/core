@@ -1,6 +1,30 @@
 import { Flex, DateRange } from "../../components";
-import { TShirtSizes } from "../../types";
-import { CurveType } from "recharts/types/shape/Curve";
+import { ColorValue, TShirtSizes } from "../../types";
+/**
+ * Recharts' own CurveType, inlined.
+ *
+ * Importing it left `recharts` in core's published .d.ts, so anyone who did
+ * not install the optional peer failed to typecheck even when their bundle
+ * never touched a chart. The interpolation names are a stable part of d3's
+ * shape API; the CurveFactory arm of recharts' union is deliberately dropped,
+ * as passing a factory was never part of this component's surface.
+ */
+type CurveType =
+  | "basis"
+  | "basisClosed"
+  | "basisOpen"
+  | "bumpX"
+  | "bumpY"
+  | "bump"
+  | "linear"
+  | "linearClosed"
+  | "natural"
+  | "monotoneX"
+  | "monotoneY"
+  | "monotone"
+  | "step"
+  | "stepBefore"
+  | "stepAfter";
 
 type ChartVariant = "flat" | "gradient" | "outline";
 type ChartMode = "categorical" | "divergent" | "sequential";
@@ -14,7 +38,7 @@ interface DataPoint {
 
 interface SeriesConfig {
   key: string;
-  color?: string;
+  color?: ColorValue;
 }
 
 interface PresetsConfig {

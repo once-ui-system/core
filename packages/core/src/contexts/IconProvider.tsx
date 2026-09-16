@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { iconLibrary as defaultIcons, IconLibrary } from "../icons";
+import { iconLibrary as defaultIcons, type IconComponent, type IconLibrary, type IconName } from "../icons";
 
 export const IconContext = createContext<{
   icons: IconLibrary;
@@ -13,17 +13,17 @@ export const IconProvider = ({
   icons,
   children,
 }: {
-  icons?: Partial<IconLibrary>;
+  icons?: Partial<IconLibrary> | Record<string, IconComponent>;
   children: React.ReactNode;
 }) => {
-  const mergedIcons = { ...defaultIcons };
+  const mergedIcons = { ...defaultIcons } as IconLibrary;
 
   if (icons) {
-    Object.entries(icons).forEach(([key, icon]) => {
+    for (const [key, icon] of Object.entries(icons)) {
       if (icon !== undefined) {
-        mergedIcons[key as keyof IconLibrary] = icon;
+        mergedIcons[key as IconName] = icon;
       }
-    });
+    }
   }
 
   return <IconContext.Provider value={{ icons: mergedIcons }}>{children}</IconContext.Provider>;

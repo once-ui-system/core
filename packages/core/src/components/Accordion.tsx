@@ -9,6 +9,7 @@ import React, {
   useRef,
 } from "react";
 import { Flex, Icon, Column, Grid, Row } from ".";
+import type { IconName } from "../icons";
 import styles from "./Accordion.module.scss";
 import classNames from "clsx";
 import { CondensedTShirtSizes } from "../types";
@@ -22,7 +23,7 @@ export interface AccordionHandle {
 interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   title: React.ReactNode;
   children: React.ReactNode;
-  icon?: string;
+  icon?: IconName;
   iconRotation?: number;
   size?: CondensedTShirtSizes;
   radius?: "xs" | "s" | "m" | "l" | "xl" | "full";

@@ -17,6 +17,7 @@
   "href": "string",
   "onClick": "() => void",
   "fillHeight": "boolean",
+  "selected": "boolean",
   "style": "React.CSSProperties",
   "className": "string"
  },

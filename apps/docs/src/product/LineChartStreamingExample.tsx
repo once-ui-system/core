@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Button, Column, LineChart, Row, useStreamingViewport } from "@once-ui-system/core";
+import { Button, Column, Row, useStreamingViewport } from "@once-ui-system/core";
+import { LineChart } from "@once-ui-system/core/data";
 
 type Point = {
   t: number;

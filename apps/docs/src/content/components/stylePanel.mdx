@@ -1,0 +1,139 @@
+---
+title: "StylePanel"
+summary: "StylePanel provides a live theming interface that allows users to customize global design tokens such as theme, shape, color, and visual density."
+updatedAt: "2025-05-11"
+docs: "once-ui/components/stylePanel.mdx"
+github: "components/StylePanel.tsx"
+navLabel: "StylePanel"
+navIcon: "components"
+---
+
+`StylePanel` is a component to set global styling options. It writes to the root HTML element’s `data-*` attributes to affect global styles in real time. It doesn't persist settings by default.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <StylePanel />
+  }
+  codes={[
+    {
+      code:
+`<StylePanel />`,
+      language: "tsx",
+      label: "StylePanel"
+    }
+  ]}
+/>
+
+## Themes and shape
+
+Choose between light/dark mode and various border radius presets.
+
+## Color systems
+
+Change brand, accent, and neutral palettes. These affect buttons, links, surfaces, and other themed elements.
+
+## Solid style and effects
+
+Adjust the visual language of interactive elements (e.g., plastic vs flat button styling).
+
+## Advanced options
+
+Modify surface behavior (translucent vs filled), scale intensity, and transition timing.
+
+## Global output
+
+Applies the following `data-*` attributes to the `<html>` element:
+- `data-border`
+- `data-brand`
+- `data-accent`
+- `data-neutral`
+- `data-solid`
+- `data-solid-style`
+- `data-theme`
+- `data-transition`
+- `data-scaling`
+- `data-surface`
+- `data-body-size`
+- `data-body-line-height`
+
+## Composing your own panel
+
+`StylePanel` is a plain composition of its own parts. When you need a
+different arrangement, or only some of the sections, drop it and compose the
+pieces inside `StylePanel.Root`:
+
+```tsx
+<StylePanel.Root>
+  <StylePanel.Group title="Brand">
+    <StylePanel.Brand />
+    <StylePanel.Accent />
+  </StylePanel.Group>
+</StylePanel.Root>
+```
+
+Rows: `Theme`, `Shape`, `Brand`, `Accent`, `Neutral`, `Solid`, `Effect`,
+`Surface`, `Scaling`, `Transition`, `DataStyle`, `BodySize`, `BodyLineHeight`.
+Groups: `Page`, `Color`, `SolidStyle`, `BodyText`, `Advanced`.
+
+Only `DataStyle` needs a `DataThemeProvider` in the tree, so a panel without
+it has no such requirement.
+
+Every row takes a `label`, and every group a `title` and `description`. Pass a
+node to replace the default, or `false` to drop it — which is how you localise
+the panel:
+
+```tsx
+<StylePanel.Brand label={t("style.brand")} />
+<StylePanel.Color title={false} description={false} />
+```
+
+To keep the default arrangement and hide parts of it, use `visibility`.
+Omitted keys stay visible; `section: false` hides a whole group.
+
+```tsx
+<StylePanel visibility={{ advanced: { section: false }, color: { neutral: false } }} />
+```
+
+`bodyText` is the exception: it is opt-in, so pass `{ bodyText: { section: true } }`
+to show it.
+
+## Owning the state
+
+By default the panel reads and writes `ThemeProvider`, which persists to
+`localStorage`. Pass `value` and `onChange` to take that over — the panel then
+writes nothing to the providers or to storage, and you decide what a change
+means:
+
+```tsx
+<StylePanel
+  value={draft}
+  onChange={(next, changed) => {
+    setDraft(next);
+    saveToDatabase(changed);
+  }}
+/>
+```
+
+`changed` holds only the keys this interaction touched, which is what you want
+to send to a server; `next` is the whole state.
+
+To keep the panel bound to `ThemeProvider` but change where choices are
+stored, set `persistence` on the provider instead — see
+[ThemeProvider](/contexts/themeProvider).
+
+## API reference
+
+<PropsTable
+  component="StylePanel"
+  describe={{
+    visibility: "Which sections and rows to show.",
+    value: "Take ownership of the state. The panel then writes nothing to the providers or to storage.",
+    onChange: "Called with the whole state and just the keys that changed — the latter being what you send to a server.",
+  }}
+  content={[
+    ["className"],
+    ["style"]
+  ]}
+/>

@@ -1,0 +1,143 @@
+---
+title: "Modal"
+summary: "A full-screen modal component with smooth animations and optional backdrop content."
+updatedAt: "2026-07-27"
+docs: "once-ui/components/modal.mdx"
+github: "components/Modal.tsx"
+navLabel: "Modal"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+The `Modal` component creates a full-screen overlay with a slide-up animation from the bottom. It features automatic scroll locking, keyboard navigation, and click-outside-to-close functionality.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ModalExample />
+  }
+  codes={[
+    {
+      code:
+`const [isOpen, setIsOpen] = useState(false);
+
+return (
+  <>
+    <Button onClick={() => setIsOpen(true)}>
+      Open Modal
+    </Button>
+    <Modal
+      open={isOpen}
+      onClose={() => setIsOpen(false)}
+      title="Modal Title"
+    >
+      <Column fillWidth gap="16" marginTop="12">
+        <Text>
+          Modal content goes here. This area can contain any React components.
+        </Text>
+        <Input id="example" label="Example input" />
+      </Column>
+    </Modal>
+  </>
+);`,
+      language: "tsx",
+      label: "Modal"
+    }
+  ]}
+/>
+
+## With Backdrop
+
+Add custom backdrop content behind the modal dialog using the `backdrop` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ModalWithBackdrop />
+  }
+  codes={[
+    {
+      code:
+`<Modal
+  open={isOpen}
+  onClose={() => setIsOpen(false)}
+  title="Modal with Backdrop"
+  backdrop={
+    <BlobFx position="absolute" fill seed={42} />
+  }
+>
+  <Text>
+    The backdrop appears behind the modal content.
+  </Text>
+</Modal>`,
+      language: "tsx",
+      label: "With Backdrop"
+    }
+  ]}
+/>
+
+## Features
+
+The Modal component includes several built-in features:
+
+- **Smooth animations**: Fade-in overlay with slide-up modal transition
+- **Scroll lock**: Prevents body scrolling while modal is open
+- **Keyboard navigation**: Press Escape to close
+- **Click outside**: Click outside the modal to dismiss
+- **Auto-scroll reset**: Content scrolls to top when modal opens
+- **Accessibility**: `role="dialog"` and `aria-modal="true"` on the overlay
+
+### Focus is not trapped
+
+`Modal` does not currently contain focus: Tab from the last control inside it
+moves to the page behind, and focus is not returned to the trigger on close.
+`aria-modal="true"` tells a screen reader the rest of the page is inert, which
+is not yet enforced.
+
+Until that is fixed, wrap the contents in a
+[`FocusTrap`](/components/focusTrap) when the modal is a real modal
+step rather than an aside — or use [`Dialog`](/components/dialog),
+which traps focus and restores it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Modal open={open} onClose={close} title="Rename project">
+  <FocusTrap active={open} style={{ display: "contents" }}>
+    {children}
+  </FocusTrap>
+</Modal>`,
+      language: "tsx",
+      label: "Workaround"
+    }
+  ]}
+/>
+
+## Behavior
+
+- Modal slides up from the bottom with a 600ms ease transition
+- Overlay fades in with a 300ms transition
+- Close button is positioned in the top-right corner
+- Content area is scrollable if it exceeds viewport height
+- Modal is rendered in a portal to `document.body`
+
+## API reference
+
+<PropsTable
+  component="Modal"
+  describe={{
+    open: "Controls modal visibility",
+    onClose: "Callback when modal should close",
+    title: "Modal title displayed at the top",
+    backdrop: "Optional backdrop content behind the modal",
+  }}
+  content={[
+    ["children", "ReactNode", "-", "Modal content"]
+  ]}
+/>

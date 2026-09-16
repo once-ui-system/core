@@ -5,12 +5,12 @@ import { Text, ElementType, Column, Row } from ".";
 import styles from "./Option.module.scss";
 import React, { forwardRef, KeyboardEvent, useRef, useEffect, useState } from "react";
 
-export interface OptionProps extends Omit<React.ComponentProps<typeof Row>, "onClick"> {
+export interface OptionProps extends Omit<React.ComponentProps<typeof Row>, "onClick" | "prefix"> {
   label?: React.ReactNode;
   href?: string;
   value: string;
-  hasPrefix?: React.ReactNode;
-  hasSuffix?: React.ReactNode;
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
   description?: React.ReactNode;
   danger?: boolean;
   selected?: boolean;
@@ -28,8 +28,8 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
       label,
       value,
       href,
-      hasPrefix,
-      hasSuffix,
+      prefix,
+      suffix,
       description,
       danger,
       selected,
@@ -163,7 +163,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           })}
           {...flex}
         >
-          {hasPrefix && <Row className={styles.prefix}>{hasPrefix}</Row>}
+          {prefix && <Row className={styles.prefix}>{prefix}</Row>}
           <Column fillWidth align="left">
             <Text
               onBackground="neutral-strong"
@@ -182,7 +182,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
               </Text>
             )}
           </Column>
-          {hasSuffix && <Row className={styles.suffix}>{hasSuffix}</Row>}
+          {suffix && <Row className={styles.suffix}>{suffix}</Row>}
         </Row>
       </ElementType>
     );

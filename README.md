@@ -27,13 +27,18 @@
 
 ## Documentation
 
-Learn how to set up and build with Once UI at [docs.once-ui.com](https://docs.once-ui.com/once-ui/quick-start).
+Learn how to set up and build with Once UI at [docs.once-ui.com](https://docs.once-ui.com/quick-start).
 
 ## Installation
 
 ```bash
 npm install @once-ui-system/core
 ```
+
+## Upgrading
+
+Coming from 1.8.x? See [MIGRATING.md](./MIGRATING.md) — a codemod does most of
+it, and the rest is six short steps.
 
 ## Getting started
 
@@ -88,7 +93,7 @@ Individual workspace commands:
 
 ## AI codegen harness
 
-The library ships an AI codegen harness in `packages/core/ai/` — a manifest, task bundles, component slices, and validation scripts. This powers the [Freebuff](https://freebuff.com) integration and enables AI agents to generate Once UI code correctly. See [AI Coding docs](https://docs.once-ui.com/once-ui/ai-coding) for details.
+The library ships an AI codegen harness in `packages/core/ai/` — a manifest, task bundles, component slices, and validation scripts. This powers the [Freebuff](https://freebuff.com) integration and enables AI agents to generate Once UI code correctly. See [AI Coding docs](https://docs.once-ui.com/ai-coding) for details.
 
 ## Authors
 

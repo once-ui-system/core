@@ -14,11 +14,12 @@ import {
   MatrixFx,
   Background,
   Pulse,
-  Card
+  Card,
+  BlobFx
 } from "@once-ui-system/core";
-import { baseURL, meta, schema, changelog, roadmap, layout } from "@/resources";
-import { formatDate } from "./utils/formatDate";
-import { getQuarterLabel } from "./utils/getQuarter";
+import corePackage from "@once-ui-system/core/package.json";
+import { PromptLibrary } from "@/product/PromptLibrary";
+import { baseURL, meta, schema, layout } from "@/resources";
 import { PromoCard } from "@/components/PromoCard";
 
 export async function generateMetadata() {
@@ -31,45 +32,12 @@ export async function generateMetadata() {
   });
 }
 
-// Calculate roadmap progress stats
-const calculateRoadmapStats = () => {
-  let totalTasks = 0;
-  let inProgressTasks = 0;
-  let completedTasks = 0;
-  
-  roadmap.forEach(product => {
-    product.columns.forEach(column => {
-      totalTasks += column.tasks.length;
-      
-      if (column.title === "In Progress") {
-        inProgressTasks += column.tasks.length;
-      }
-      
-      if (column.title === "Done") {
-        completedTasks += column.tasks.length;
-      }
-    });
-  });
-  
-  const progressPercentage = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
-  
-  return {
-    totalTasks,
-    inProgressTasks,
-    completedTasks,
-    progressPercentage
-  };
-};
-
-const roadmapStats = calculateRoadmapStats();
-
-// Get the latest changelog entry
-const latestChangelogEntry = changelog[0];
 
 export default function Home() {
   return (
-    <Row fillWidth>
+    <Row fillWidth horizontal="center">
       <Row fillWidth horizontal="center" padding="l">
+      <BlobFx maxWidth="l" data-solid="color" height={32} fillWidth position="absolute" translateY="-60%" />
         <Column fillWidth gap="xl" horizontal="center">
           <Schema
             as="webPage"
@@ -84,23 +52,6 @@ export default function Home() {
           
           {/* Hero Section */}
           <Column maxWidth={96} minHeight="s" gap="12" center overflow="hidden">
-            <MatrixFx
-              data-solid="color"
-              position="absolute"
-              top="0"
-              left="0"
-              size={1.5}
-              spacing={8}
-              flicker
-              colors={["brand-solid-strong"]}
-              bulge={{
-                type: "wave",
-                duration: 3,
-                intensity: 20,
-                repeat: true
-              }}
-            />
-            <Background position="absolute" gradient={{display: true, colorStart: "page-background", x: 0, y: 50, height: 300, width: 150}}></Background>
             <Column maxWidth="m" horizontal="center" align="center" gap="16" padding="48">
               <Badge
                 background="overlay"
@@ -110,7 +61,7 @@ export default function Home() {
                 border="brand-alpha-weak"
                 arrow={false}
                 paddingY="8"
-                href="/changelog"
+                href="https://github.com/once-ui-system/core/releases"
               >
                 <Row vertical="center">
                   <Pulse size="s"/>
@@ -121,19 +72,136 @@ export default function Home() {
                     gap="12"
                     vertical="center"
                   >
-                    <Text onBackground="brand-strong">v1.7</Text> Form with intent
+                    <Text onBackground="brand-strong">{`v${corePackage.version}`}</Text> Form with intent
                   </Row>
                 </Row>
               </Badge>
               <Heading variant="display-strong-m" marginTop="12" marginBottom="24">
                 Open-source frontend infrastructure for the AI-native web
               </Heading>
-              <Button data-border="rounded" size="l" href="/once-ui/quick-start" id="quick-start">Install Once UI</Button>
+              <Button data-border="rounded" size="l" href="/quick-start" id="quick-start">Install Once UI</Button>
             </Column>
           </Column>
 
+          {/* Two ways in: an agent writes the code, or you do */}
+          <Grid maxWidth={56} columns="2" s={{columns: 1}} gap="8">
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="/ai-coding">
+              <Column fillWidth gap="12">
+                <Text variant="heading-strong-xs">Build with an agent</Text>
+                <Text onBackground="neutral-weak" variant="body-default-s">
+                  A harness built for codegen: compact rules, a component catalog and task
+                  bundles, all under ~10KB per task. Point your agent at it once and it writes
+                  Once UI properly.
+                </Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="/quick-start">
+              <Column fillWidth gap="12">
+                <Text variant="heading-strong-xs">Build by hand</Text>
+                <Text onBackground="neutral-weak" variant="body-default-s">
+                  Install, learn the token props, and reach for the reference when you need a
+                  prop name. Start with structure, spacing and typography — the rest composes
+                  from those.
+                </Text>
+              </Column>
+            </Card>
+          </Grid>
+
+          <PromptLibrary />
+
+          {/* The dozen components most builds actually use */}
+          <Column maxWidth={56} gap="16" fillWidth>
+            <Column gap="4">
+              <Heading as="h2" variant="display-default-xs">Start here</Heading>
+              <Text onBackground="neutral-weak" variant="body-default-s">
+                There are 80-odd components. These twelve carry most of a build — everything
+                else composes from them.
+              </Text>
+            </Column>
+            <Grid fillWidth columns="3" m={{columns: 2}} s={{columns: 1}} gap="8">
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/flex">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Column</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Stack things vertically</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/flex">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Row</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Stack things horizontally</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/grid">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Grid</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Responsive columns</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/text">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Text</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Body copy and labels</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/heading">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Heading</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Page and section titles</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/button">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Button</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Primary actions</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/form-controls/input">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Input</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Text entry and forms</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/card">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Card</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Grouped, clickable blocks</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/media">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Media</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Images and video</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/icon">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Icon</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">The built-in icon set</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/dialog">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Dialog</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Modals and sheets</Text>
+              </Column>
+            </Card>
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/table">
+              <Column fillWidth gap="4">
+                <Text variant="label-strong-s">Table</Text>
+                <Text onBackground="neutral-weak" variant="body-default-xs">Tabular data</Text>
+              </Column>
+            </Card>
+          </Grid>
+            <Row fillWidth horizontal="center" paddingTop="8">
+              <Button data-border="rounded" weight="default" variant="secondary" size="s" href="/basics/components" suffixIcon="chevronRight">
+                Browse all components
+              </Button>
+            </Row>
+          </Column>
+
+          {/* Templates and products */}
           <Grid maxWidth={56} columns="3" s={{columns: 1}} gap="8">
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="/once-ui/about">
+            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="/about">
               <Column fillWidth gap="16">
                 <Text variant="heading-strong-xs">About Once UI</Text>
                 <Text onBackground="neutral-weak" variant="body-default-s">Comprehensive design system and component library for your next project</Text>
@@ -148,204 +216,10 @@ export default function Home() {
             <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="https://once-ui.com/products">
               <Column fillWidth gap="16">
                 <Text variant="heading-strong-xs">Premium app templates</Text>
-                <Text onBackground="neutral-weak" variant="body-default-s">Ready-to-deploy app templates for your next project: store, landing page, founder site, and more</Text>
+                <Text onBackground="neutral-weak" variant="body-default-s">Ready-to-deploy templates: store, landing page, founder site, and more</Text>
               </Column>
             </Card>
           </Grid>
-          
-          {/* Latest Update Section */}
-          <Column 
-            maxWidth={56}
-            background="overlay"
-            radius="l"
-            border="neutral-alpha-weak"
-          >
-            <Column paddingX="32" paddingY="24" fillWidth horizontal="between" s={{direction: "column"}} gap="4">
-              <Row fillWidth vertical="center" horizontal="between" gap="16" wrap>
-                <Heading as="h2" variant="display-default-xs">
-                  Latest Update
-                </Heading>
-                <Button data-border="rounded" weight="default" variant="secondary" href="/changelog" size="s" suffixIcon="chevronRight">
-                  All changes
-                </Button>
-              </Row>
-              <Text variant="label-default-s" onBackground="neutral-weak">
-                {formatDate(latestChangelogEntry.date)}
-              </Text>
-            </Column>
-            
-            <Column fillWidth paddingX="4">
-              {latestChangelogEntry.image && (
-                <Media
-                  priority
-                  sizes="(max-width: 768px) 100vw, 768px"
-                  radius="m"
-                  src={latestChangelogEntry.image} 
-                  alt={`Illustration for ${latestChangelogEntry.title}`}
-                  border="neutral-alpha-weak"
-                  aspectRatio="16 / 9"
-                />
-              )}
-              <Column fillWidth gap="4" paddingX="32" paddingY="24">
-                <Heading as="h3">
-                  {latestChangelogEntry.title}
-                </Heading>
-
-                {latestChangelogEntry.description && (
-                  <Text variant="body-default-m" onBackground="neutral-weak">
-                    {latestChangelogEntry.description}
-                  </Text>
-                )}
-              </Column>
-            </Column>
-          </Column>
-          
-          {/* Roadmap Progress Section */}
-          <Column 
-            maxWidth={56}
-            background="overlay"
-            radius="l"
-            border="neutral-alpha-weak"
-          >
-            <Column paddingX="32" paddingY="24" fillWidth horizontal="between" s={{direction: "column"}} gap="4">
-              <Row fillWidth vertical="center" horizontal="between" gap="16" wrap>
-                <Heading as="h2" variant="display-default-xs">
-                  {`Roadmap ${getQuarterLabel()}`}
-                </Heading>
-                <Button data-border="rounded" weight="default" variant="secondary" href="/roadmap" size="s" suffixIcon="chevronRight">
-                View Roadmap
-              </Button>
-              </Row>
-              <Text variant="label-default-s" onBackground="neutral-weak">
-                Progress and task status
-              </Text>
-            </Column>
-            
-            <Row fillWidth padding="32" gap="20" position="relative" s={{direction: "column"}} border="neutral-alpha-weak" radius="l">
-              <Row fillWidth gap="12">
-                {/* Overall Progress */}
-                <Column fillWidth gap="8" paddingTop="8">
-                  <Column fillWidth gap="20">
-                    <Column fillWidth horizontal="center" gap="4">
-                      <Text 
-                        variant="display-strong-l" 
-                        onBackground="neutral-strong"
-                      >
-                        {roadmapStats.progressPercentage}%
-                      </Text>
-                      <Text 
-                        align="center"
-                        variant="label-default-s" 
-                        onBackground="neutral-weak"
-                        marginTop="8"
-                      >
-                        Overall progress
-                      </Text>
-                    </Column>
-                    
-                    <Row
-                      height="8"
-                      fillWidth
-                      overflow="hidden"
-                      radius="full"
-                      background="neutral-alpha-weak"
-                      border="neutral-alpha-weak"
-                    >
-                      <Row
-                        fillHeight
-                        radius="full"
-                        transition="micro-medium"
-                        solid="brand-strong"
-                        style={{ 
-                        width: `${roadmapStats.progressPercentage}%`,
-                      }} />
-                    </Row>
-                  </Column>
-                  
-                  {/* Task Status */}
-                  <Grid fillWidth columns="3" m={{columns: 1}} gap="8" marginTop="24">
-                    {/* Planned Tasks */}
-                    <Column 
-                      padding="l" 
-                      horizontal="center"
-                      radius="m" 
-                      border="neutral-alpha-weak" 
-                      background="overlay"
-                      gap="s"
-                    >
-                      <Text 
-                        variant="display-default-m" 
-                        onBackground="neutral-strong"
-                      >
-                        {roadmapStats.totalTasks - roadmapStats.completedTasks - roadmapStats.inProgressTasks}
-                      </Text>
-                      <Row vertical="center" gap="8">
-                        <StatusIndicator color="blue" />
-                        <Text 
-                          variant="label-default-s" 
-                          onBackground="neutral-weak"
-                        >
-                          Planned
-                        </Text>
-                      </Row>
-                    </Column>
-                    
-                    {/* In Progress Tasks */}
-                    <Column 
-                      padding="l" 
-                      horizontal="center"
-                      radius="m" 
-                      border="neutral-alpha-weak" 
-                      background="overlay"
-                      gap="s"
-                    >
-                      <Text 
-                        variant="display-default-m" 
-                        onBackground="neutral-strong"
-                      >
-                        {roadmapStats.inProgressTasks}
-                      </Text>
-                      <Row vertical="center" gap="8">
-                        <StatusIndicator color="yellow" />
-                        <Text 
-                          variant="label-default-s" 
-                          onBackground="neutral-weak"
-                        >
-                          In progress
-                        </Text>
-                      </Row>
-                    </Column>
-
-                    {/* Completed Tasks */}
-                    <Column 
-                      padding="l" 
-                      horizontal="center"
-                      radius="m" 
-                      border="neutral-alpha-weak" 
-                      background="overlay"
-                      gap="s"
-                    >
-                      <Text 
-                        variant="display-default-m" 
-                        onBackground="neutral-strong"
-                      >
-                        {roadmapStats.completedTasks}
-                      </Text>
-                      <Row vertical="center" gap="8">
-                        <StatusIndicator color="green" />
-                        <Text 
-                          variant="label-default-s" 
-                          onBackground="neutral-weak"
-                        >
-                          Completed
-                        </Text>
-                      </Row>
-                    </Column>
-                  </Grid>
-                </Column>
-              </Row>
-            </Row>
-          </Column>
         </Column>
       </Row>
       <Row
@@ -361,8 +235,6 @@ export default function Home() {
             gap="8">
             <Column fill />
             <Card radius="l" href="https://once-ui.com/pricing?ref=docs" fillWidth background="transparent" overflow="hidden">
-              <MatrixFx minWidth={12} minHeight={8} position="absolute" flicker revealFrom="top" size={2} spacing={2} colors={["brand-solid-strong", "static-transparent"]}/>
-              <Background position="absolute" fill gradient={{display: true, colorStart: "neutral-background-weak", y: 0, width: 300, height: 300}} pointerEvents="none"/>
               <Column fillWidth padding="20" gap="16">
                 <Text variant="heading-strong-xs">Support the project and get access to exclusive features!</Text>
                 <Button rounded size="s" id="get-pro-banner" prefixIcon="bolt">Get Pro</Button>

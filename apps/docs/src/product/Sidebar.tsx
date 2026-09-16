@@ -7,15 +7,15 @@ import {
   Column,
   Flex,
   Icon,
+  Line,
   Row,
   ToggleButton,
   Skeleton,
-  StatusIndicator,
   Pulse,
   ColorScheme,
 } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
-import { routes, layout } from "@/resources";
+import { layout } from "@/resources";
 
 import styles from "./Sidebar.module.scss";
 
@@ -41,6 +41,23 @@ export interface NavigationItem extends Omit<
   navTagVariant?: ColorScheme;
 }
 
+/**
+ * The sidebar's spacing, in one place because it is the part most likely to
+ * want tuning. `rail*` control the indent that carries nesting: a vertical
+ * rule plus its gap, which reads as hierarchy at a glance but costs
+ * horizontal space, and this sidebar has a lot of items to fit.
+ */
+const NAV_RHYTHM = {
+  /** Inset of the hierarchy rule from the group's left edge. */
+  railInset: "12",
+  /** Space between the rule and the child items. */
+  railGap: "8",
+  /** Space between sibling items. */
+  itemGap: "4",
+  /** Height of a leaf item. `m` is the component default and reads roomier. */
+  itemSize: "m",
+} as const;
+
 interface SidebarProps extends Omit<
   React.ComponentProps<typeof Flex>,
   "children"
@@ -61,7 +78,7 @@ const NavigationItemComponent: React.FC<{
   const pathSegments = pathname.split("/").filter(Boolean);
 
   // For top-level directories, check if their name is in the pathname segments
-  // This will match routes like "/once-ui/quick-start" for the "once-ui" parent
+  // This will match routes like "/quick-start" for the "once-ui" parent
   const isTopLevelMatch =
     depth === 0 &&
     pathSegments.length >= 2 &&
@@ -126,36 +143,43 @@ const NavigationItemComponent: React.FC<{
     return (
       <Row
         fillWidth
-        style={{ paddingLeft: `calc(${depth} * var(--static-space-8))` }}
+        radius="m"
+        transition="micro-medium"
+        background={shouldBeOpen ? "neutral-alpha-weak" : undefined}
       >
-        <Column fillWidth marginTop="2">
+        <Column fillWidth>
           {layout.sidebar.collapsible ? (
             <Accordion
               gap="4"
               icon="chevronRight"
               iconRotation={90}
+              style={{ height: "var(--static-space-40)" }}
+              paddingX={undefined}
+              paddingLeft="8"
+              paddingRight="16"
               size="s"
               radius="s"
-              paddingX={undefined}
-              paddingBottom={undefined}
-              paddingLeft="4"
-              paddingTop="4"
               open={shouldBeOpen}
               title={
                 <Row
                   fillWidth
                   vertical="center"
-                  textVariant="label-strong-xs"
-                  onBackground="neutral-weak"
+                  textVariant="label-default-m"
+                  paddingLeft="4"
                 >
                   {item.title}
                 </Row>
               }
             >
-              {renderNavigation(item.children, depth + 1)}
+              <Row fillWidth gap={NAV_RHYTHM.railGap} paddingX={NAV_RHYTHM.railInset}>
+                <Line vert background="neutral-alpha-medium" />
+                <Column fillWidth gap={NAV_RHYTHM.itemGap}>
+                  {renderNavigation(item.children, depth + 1)}
+                </Column>
+              </Row>
             </Accordion>
           ) : (
-            <Column gap="4" paddingLeft="4" paddingTop="12">
+            <Column gap={NAV_RHYTHM.itemGap} paddingLeft="4" paddingTop="12">
               <Row
                 paddingY="12"
                 paddingLeft="8"
@@ -164,7 +188,12 @@ const NavigationItemComponent: React.FC<{
               >
                 {item.title}
               </Row>
-              {renderNavigation(item.children, depth + 1)}
+              <Row fillWidth gap={NAV_RHYTHM.railGap} paddingX={NAV_RHYTHM.railInset}>
+                <Line vert background="neutral-alpha-medium" />
+                <Column fillWidth gap={NAV_RHYTHM.itemGap}>
+                  {renderNavigation(item.children, depth + 1)}
+                </Column>
+              </Row>
             </Column>
           )}
         </Column>
@@ -175,6 +204,7 @@ const NavigationItemComponent: React.FC<{
   return (
     <ToggleButton
       fillWidth
+      size={NAV_RHYTHM.itemSize}
       horizontal="between"
       selected={isSelected}
       className={depth === 0 ? styles.navigation : undefined}
@@ -192,7 +222,7 @@ const NavigationItemComponent: React.FC<{
         </Row>
         {item.navTag && (() => {
           if (!item.updatedAt) {
-            return <Pulse variant={item.navTagVariant} size="s" />;
+            return <Pulse scheme={item.navTagVariant} size="s" />;
           }
           const age = Date.now() - new Date(item.updatedAt).getTime();
           if (age > 60 * 24 * 60 * 60 * 1000) return null;
@@ -201,7 +231,7 @@ const NavigationItemComponent: React.FC<{
             : age > 20 * 24 * 60 * 60 * 1000
               ? "warning"
               : item.navTagVariant;
-          return <Pulse variant={variant} size="s" />;
+          return <Pulse scheme={variant} size="s" />;
         })()}
       </Row>
     </ToggleButton>
@@ -236,15 +266,17 @@ const ResourceLinkComponent: React.FC<{
   return (
     <ToggleButton
       fillWidth
+      size="m"
       horizontal="between"
       selected={isSelected}
       className={styles.navigation}
       href={href}
     >
       <Row
-        gap="8"
+        gap="12"
+        vertical="center"
         onBackground={isSelected ? "neutral-strong" : "neutral-weak"}
-        textVariant={isSelected ? "label-strong-s" : "label-default-s"}
+        textVariant={isSelected ? "label-strong-m" : "label-default-m"}
       >
         <Icon size="xs" name={icon} />
         {label}
@@ -294,10 +326,8 @@ const SidebarContent: React.FC<{
       );
     };
 
-    // Create resources section
-    const resourcesSection = !(
-      routes["/roadmap"] || routes["/changelog"]
-    ) ? null : (
+    // Release history lives on GitHub, generated from CHANGELOG.md.
+    const resourcesSection = (
       <Column gap="4" marginTop="32" paddingLeft="4">
         <Row
           textVariant="label-strong-s"
@@ -307,23 +337,12 @@ const SidebarContent: React.FC<{
         >
           Resources
         </Row>
-        {routes["/roadmap"] && (
-          <ResourceLink
-            href="/roadmap"
-            icon="roadmap"
-            label="Roadmap"
-            pathname={pathname}
-          />
-        )}
-
-        {routes["/changelog"] && (
-          <ResourceLink
-            href="/changelog"
-            icon="changelog"
-            label="Changelog"
-            pathname={pathname}
-          />
-        )}
+        <ResourceLink
+          href="https://github.com/once-ui-system/core/releases"
+          icon="github"
+          label="Changelog"
+          pathname={pathname}
+        />
       </Column>
     );
 

@@ -4,7 +4,7 @@
  "props": {
   "className": "string",
   "variant": "!\"success\" | \"danger\" | \"warning\" | \"info\"",
-  "icon": "boolean = true",
+  "showIcon": "boolean = true",
   "onClose": "() => void",
   "action": "React.ReactNode",
   "children": "!React.ReactNode"

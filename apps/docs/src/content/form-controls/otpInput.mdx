@@ -1,0 +1,55 @@
+---
+title: "OTPInput"
+summary: "One field per digit for verification codes, with paste, keyboard navigation and a completion callback."
+updatedAt: "2026-09-14"
+docs: "once-ui/form-controls/otpInput.mdx"
+github: "components/OTPInput.tsx"
+navLabel: "OTPInput"
+navIcon: "switch"
+---
+
+`OTPInput` collects a one-time code as separate boxes rather than one field. It
+moves focus as digits are typed, accepts a pasted code into all boxes at once,
+and calls `onComplete` the moment the last one is filled.
+
+Unlike the other inputs here it does not extend [Input](/form-controls/input) —
+it is a group of fields, not one, so it has its own small surface.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<OTPInputExample autoFocus={false} />}
+  codes={[
+    {
+      code:
+`const { addToast } = useToast();
+
+const handleComplete = (code: string) => {
+    addToast({ variant: "success", message: "Submitted " + code });
+};
+
+<OTPInput
+    id="verification-code"
+    length={6}
+    onComplete={handleComplete}
+    autoFocus
+/>`,
+      language: "tsx",
+      label: "OTPInput"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="OTPInput"
+  describe={{
+    length: "How many digits, and so how many boxes.",
+    onComplete: "Called with the full code once the last box is filled.",
+    error: "Put the group in its error state.",
+    errorMessage: "Message shown under the boxes when error is set.",
+    disabled: "Block input across every box.",
+    autoFocus: "Focus the first box on mount. Leave it off if the code is not the first thing on the page.",
+  }}
+/>
