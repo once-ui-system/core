@@ -2,6 +2,9 @@
   "name": "@once-ui-system/docs",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "type": "module",
   "scripts": {
     "predev": "node scripts/sync-ai.mjs",
