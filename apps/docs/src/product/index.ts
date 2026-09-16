@@ -1,5 +1,6 @@
 export * from "./PromptLibrary";
 export * from "./Header";
+export * from "./VersionBanner";
 export * from "./Footer";
 export * from "./Sidebar";
 export * from "./Providers";
