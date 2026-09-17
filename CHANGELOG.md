@@ -13,6 +13,21 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+Nothing yet.
+
+## [2.0.0-alpha.1] — 2026-09-17
+
+The second alpha preview, on the same **`alpha`** dist-tag. `npm install
+@once-ui-system/core` still resolves the 1.8 line; asking for this one stays
+deliberate:
+
+```bash
+npm i @once-ui-system/core@alpha
+```
+
+Mostly regressions the first alpha shipped and the first alpha found — which
+is what an alpha is for.
+
 ### Fixed
 
 - **`CountFx` no longer freezes when `value` reverts mid-animation.** A run
@@ -55,6 +70,12 @@ item (see `ROADMAP.md`, Week 4).
   loading.
 - **The time picker's header showed `13:14 PM`.** It printed the 24-hour value
   and then appended the meridiem; it prints `01:14 PM` now.
+- **The published package now carries its license text.** `package.json` has
+  declared `"license": "MIT"` all along, which is what license scanners read,
+  but the grant itself never shipped: the MIT file lived only at the monorepo
+  root, and npm includes a license only when it finds one in the package
+  directory. No tarball up to and including 2.0.0-alpha.0 carried one. The
+  notice also now names Dopler, the entity, rather than Once UI, the product.
 
 ### Fixed (docs site, not published code)
 
