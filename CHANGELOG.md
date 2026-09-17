@@ -15,6 +15,20 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`CountFx` no longer freezes when `value` reverts mid-animation.** A run
+  started from the last *completed* value, which was recorded only when an
+  animation reached its end. Changing `value` back while one was still in
+  flight therefore hit the `value === previousValueRef.current` early return
+  after the effect cleanup had already cancelled the frame: nothing was left
+  driving the number, and the display stayed on whatever intermediate value it
+  happened to be showing until some third value came along. A monthly/annual
+  pricing toggle clicked twice in quick succession was enough to trigger it.
+  Runs now start from whatever is on screen rather than from a completion
+  guarded ref, so an interrupted transition reverses from where it got to and
+  always settles exactly on the target. The `smooth` effect renders its digit
+  wheels from the same origin, which now tracks the run in flight instead of
+  the last one that finished. Reported and diagnosed by @chanderlud in
+  [#134](https://github.com/once-ui-system/core/issues/134).
 - **`DatePicker` and `Carousel` rendered invisible, but interactive, for four
   minutes.** The 2.0 pass that moved `RevealFx.delay` to milliseconds also
   multiplied the two `speed` values in core by a thousand — and `speed` was
