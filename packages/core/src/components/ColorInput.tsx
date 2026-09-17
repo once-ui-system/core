@@ -138,9 +138,11 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
               transition="micro-medium"
             >
               {" "}
-              {supportAlpha
-                ? `rgba(${hexValue ? hexToRgba(hexValue, alpha).match(/\d+/g)?.join(", ") : ""})`
-                : hexValue}{" "}
+              {hexValue
+                ? supportAlpha && alpha < 100
+                  ? `${hexValue} ${alpha}%`
+                  : hexValue
+                : ""}{" "}
             </Flex>{" "}
             {hexValue && (
               <Flex
