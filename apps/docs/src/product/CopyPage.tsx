@@ -5,6 +5,7 @@ import {
   Button,
   Column,
   DropdownWrapper,
+  Icon,
   IconButton,
   Option,
   Row,
@@ -86,12 +87,14 @@ function CopyPage({ path }: CopyPageProps) {
           <Column maxWidth={12} padding="4" gap="2">
             <Option
               value="markdown"
+              prefix={<Icon name="document" size="xs" onBackground="neutral-weak" />}
               label="View as Markdown"
               href={markdownUrl}
               onLinkClick={() => setOpen(false)}
             />
             <Option
               value="chatgpt"
+              prefix={<Icon name="openai" size="xs" onBackground="neutral-weak" />}
               label="Open in ChatGPT"
               onClick={() => {
                 setOpen(false);
@@ -100,6 +103,7 @@ function CopyPage({ path }: CopyPageProps) {
             />
             <Option
               value="claude"
+              prefix={<Icon name="claude" size="xs" onBackground="neutral-weak" />}
               label="Open in Claude"
               onClick={() => {
                 setOpen(false);

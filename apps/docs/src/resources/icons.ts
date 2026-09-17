@@ -67,12 +67,15 @@ import {
 
 import { LiaCubesSolid } from "react-icons/lia";
 
-import { RiDiscountPercentLine, RiVisaLine } from "react-icons/ri";
+import { RiDiscountPercentLine, RiOpenaiFill, RiVisaLine } from "react-icons/ri";
+import { SiClaude } from "react-icons/si";
 import { PiRuler, PiToggleLeft, PiTShirt } from "react-icons/pi";
 import { FaDiscord, FaGithub, FaGoogle, FaLinkedin, FaMailchimp, FaThreads } from "react-icons/fa6";
 import { LuChevronsLeftRight } from "react-icons/lu";
 
 export const iconLibrary: Record<string, IconType> = {
+  openai: RiOpenaiFill,
+  claude: SiClaude,
   chevronsLeftRight: LuChevronsLeftRight,
   email: HiOutlineEnvelope,
   computer: HiOutlineComputerDesktop,

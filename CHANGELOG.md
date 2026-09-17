@@ -54,6 +54,9 @@ item (see `ROADMAP.md`, Week 4).
   on-solid token over a brand solid, which is near-white on the docs' contrast
   solids. A button already sets the text colour for its own surface, so the
   example inherits it.
+- **The "Copy for LLM" menu's three options carry prefix icons** (document,
+  OpenAI, Claude). The two brand marks come from `react-icons`, registered in
+  the docs app's own icon library as the harness rules prescribe.
 - **The `Option` prefix example rendered nothing:** it passed `icon` to `Icon`,
   whose prop is `name`.
 

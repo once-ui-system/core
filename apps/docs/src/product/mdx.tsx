@@ -580,7 +580,16 @@ export function CustomMDX(props: CustomMDXProps) {
   return (
     <MDXRemote
       {...props}
-      options={{ ...(props.options ?? {}), mdxOptions: { ...(props.options?.mdxOptions ?? {}), remarkPlugins: [remarkGfm, ...(props.options?.mdxOptions?.remarkPlugins ?? [])] } }}
+      // `blockJS: false` is load-bearing: next-mdx-remote 6 blocks JS expressions
+      // in MDX by default, and every doc page passes props like `codes={[…]}`.
+      options={{
+        blockJS: false,
+        ...(props.options ?? {}),
+        mdxOptions: {
+          ...(props.options?.mdxOptions ?? {}),
+          remarkPlugins: [remarkGfm, ...(props.options?.mdxOptions?.remarkPlugins ?? [])],
+        },
+      }}
       components={{
         ...mdxComponents,
         ...(props.components || {}),
