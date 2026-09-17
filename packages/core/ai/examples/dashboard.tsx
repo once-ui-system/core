@@ -55,7 +55,7 @@ export function DashboardExample() {
 
   return (
     <Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24" gap="40">
-      <Column fillWidth maxWidth="l" gap="40">
+      <Column maxWidth="l" gap="40">
         <Row fillWidth horizontal="between" vertical="end" gap="24" s={{ direction: "column", horizontal: "start" }}>
           <Column gap="8">
             <Text variant="label-default-s" onBackground="brand-medium">
@@ -79,7 +79,7 @@ export function DashboardExample() {
         <Grid ref={statsRef} columns="4" gap="16" m={{ columns: 2 }} s={{ columns: 1 }}>
           {stats.map((stat, index) => (
             <RevealFx key={stat.label} fill revealed={seen} translateY="8" delay={index * 100}>
-              <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16">
+              <Column background="surface" border radius="l" padding="24" gap="16">
                 <Row fillWidth horizontal="between" vertical="center">
                   <Text variant="label-default-s" onBackground="neutral-weak">
                     {stat.label}
@@ -109,7 +109,7 @@ export function DashboardExample() {
         </Grid>
 
         <Grid columns="2" gap="24" s={{ columns: 1 }}>
-          <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16" minHeight={32}>
+          <Column background="surface" border radius="l" padding="24" gap="16" minHeight={32}>
             <Heading as="h2" variant="heading-strong-s">
               Revenue trend
             </Heading>
@@ -120,7 +120,7 @@ export function DashboardExample() {
               </Text>
             </Column>
           </Column>
-          <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16" minHeight={32}>
+          <Column background="surface" border radius="l" padding="24" gap="16" minHeight={32}>
             <Heading as="h2" variant="heading-strong-s">
               Signups by channel
             </Heading>
@@ -133,7 +133,7 @@ export function DashboardExample() {
           </Column>
         </Grid>
 
-        <Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="24">
+        <Column background="surface" border radius="l" padding="24" gap="24">
           <Row fillWidth horizontal="between" vertical="center">
             <Heading as="h2" variant="heading-strong-s">
               Recent activity

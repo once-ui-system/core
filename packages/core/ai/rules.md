@@ -40,10 +40,22 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 <Row fillWidth fillHeight horizontal="center" vertical="center">...</Row>
 ```
 
-3. Never write a prop that equals its default. The spec marks defaults with `= value`. Common offenders:
+3. Never write a prop that equals its default, or one that another prop on the same element already implies. The spec marks defaults with `= value`. Common offenders:
    - `position="relative"` (default on all layout components)
    - `direction="row"` on `Row`, `direction="column"` on `Column`
    - `variant="primary"`, `size="m"` on `Button`
+   - `fillWidth` beside `maxWidth` — `maxWidth` already fills the width up to the cap
+   - `minWidth={0}` beside `fillWidth` — `fillWidth` already sets `min-width: 0`
+   - a colour on `border` (or `borderTop`, `borderBottom`, `borderX`, …) that only restates the default — bare `border` draws the default border; name a colour only to deviate from it
+
+```tsx
+// Good
+<Column maxWidth="l" border radius="l">
+// Bad
+<Column fillWidth maxWidth="l" minWidth={0} position="relative" border="neutral-alpha-weak" radius="l">
+```
+
+3b. `zIndex` belongs to a stacking group, not to a page. Use it only inside an isolated group that needs an order — a decorative absolute layer and the content sibling above it (rule 21), a sticky header over the pane it covers — and keep the values small within that group. A `zIndex` on a lone element, or a page-wide ladder of `zIndex={3}`, `{5}`, `{9}`, means the hierarchy is being managed by hand; restructure the tree instead.
 
 ## Spacing and sizing
 
@@ -66,10 +78,10 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
    - `background` also accepts `surface | overlay | page | transparent`
    - `onBackground` colors text/icons on a background
 
-8. Standard surface recipe: `background="surface"` (or `"overlay"` over imagery) + `border="neutral-alpha-weak"` (or `-medium`) + `radius="l"`.
+8. Standard surface recipe: `background="surface"` (or `"overlay"` over imagery) + `border` + `radius="l"`. Bare `border` is the default border; name a colour (`border="neutral-alpha-medium"`, `border="brand-alpha-medium"`) only when the surface should differ from it.
 
 ```tsx
-<Column background="surface" border="neutral-alpha-weak" radius="l" padding="24" gap="16">
+<Column background="surface" border radius="l" padding="24" gap="16">
 ```
 
 ## Text
@@ -183,7 +195,7 @@ the card it was meant to support.
     <Grid columns={5} s={{ columns: 3 }} gap="8" fillWidth>
       {items.map(i => (
         <Column key={i} aspectRatio="1 / 1" padding="12" radius="l"
-                background="page" border="neutral-alpha-weak" vertical="between">
+                background="page" border vertical="between">
           {/* a preview of the thing, not just its name */}
         </Column>
       ))}
@@ -204,7 +216,7 @@ in that order.
 <Background position="absolute" top="0" left="0" fill pointerEvents="none" ... />
 ```
 
-Siblings holding content get `zIndex={1}`. `overflow="hidden"` goes on the parent **only when it has a radius** (cards, panels) — clipping a full-bleed section turns the glow into a hard-edged band.
+Siblings holding content get `zIndex={1}`. That layer and its content sibling are the whole stacking group — nothing else in the section needs a `zIndex` (rule 3b). `overflow="hidden"` goes on the parent **only when it has a radius** (cards, panels) — clipping a full-bleed section turns the glow into a hard-edged band.
 
 21b. Ambient section layers (hero glows) live on the **full-width section wrapper**, outside the `maxWidth` content column, with generous room (`paddingY="80"`+). Inside a narrow container the gradient gets clipped at the container edge and reads as a misplaced card:
 

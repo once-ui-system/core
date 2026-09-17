@@ -301,7 +301,7 @@ function Table({
             id="table-search"
             placeholder={searchPlaceholder}
             value={searchQuery}
-            height="xs"
+            size="xs"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
           />
           {sortedRows.length !== data.rows.length && (
@@ -353,12 +353,12 @@ function Table({
       {paginated && !loading && sortedRows.length > 0 && (
         <Row horizontal="between" vertical="center" paddingX="s" gap="m" wrap>
           <Row gap="8" vertical="center">
-            <Row maxWidth={2}>
+            <Row maxWidth={5}>
               <Select
                 id="page-size"
                 placeholder="Select page size"
                 value={String(pageSize)}
-                height="xs"
+                size="xs"
                 onSelect={(value) => {
                   setPageSize(Number(value));
                   setPage(1);

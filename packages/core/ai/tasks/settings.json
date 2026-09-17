@@ -28,7 +28,7 @@
     "layout.defaults"
   ],
   "quality": {
-    "surfaceRecipe": "background=\"surface\" border=\"neutral-alpha-weak\" radius=\"l\" padding=\"24\"",
+    "surfaceRecipe": "background=\"surface\" border radius=\"l\" padding=\"24\"",
     "dangerZone": "border=\"danger-alpha-medium\" on danger actions only"
   }
 }

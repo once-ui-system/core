@@ -34,7 +34,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
 
   return (
     <Column fill {...flex}>
-      <Row fillWidth paddingX="24" paddingY="8" background="surface" borderBottom="neutral-alpha-weak" vertical="center" gap="12">
+      <Row fillWidth paddingX="24" paddingY="8" background="surface" borderBottom vertical="center" gap="12">
         <Text variant="label-default-s">👋 | intro</Text>
         <Row minWidth="4" minHeight="4" background="neutral-strong" radius="full"/>
         <Text variant="body-default-xs" onBackground="neutral-weak">Let us know a bit about you!</Text>
@@ -65,7 +65,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                               key={aIdx}
                               maxWidth={20}
                               src={att.media}
-                              border="neutral-alpha-weak"
+                              border
                               radius="l"
                               sizes="320px"
                             />
@@ -75,9 +75,9 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                     ) : (
                       messages.attachments[0]?.media && (
                         messages.attachments[0].media.includes("youtube.com") || messages.attachments[0].media.includes("youtu.be") ? (
-                          <Media maxWidth={32} border="neutral-alpha-weak" aspectRatio="16/9" marginTop="16" src={messages.attachments[0].media} radius="l" sizes="320px"/>
+                          <Media maxWidth={32} border aspectRatio="16/9" marginTop="16" src={messages.attachments[0].media} radius="l" sizes="320px"/>
                         ) : (messages.attachments[0].media.match(/\.(png|jpg|jpeg|gif|webp)$/i)) ? (
-                          <Media maxWidth={32} border="neutral-alpha-weak" marginTop="16" src={messages.attachments[0].media} radius="l" sizes="320px"/>
+                          <Media maxWidth={32} border marginTop="16" src={messages.attachments[0].media} radius="l" sizes="320px"/>
                         ) : (
                           <Row maxWidth={24} marginTop="16">
                             <OgCard url={messages.attachments[0].media} description={false} />

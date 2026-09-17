@@ -37,7 +37,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
   }, [positive]);
 
   return (
-    <Card minWidth={12} href={href} paddingX="20" paddingTop="20" paddingBottom="80" radius="l" fillWidth direction="column" border="neutral-alpha-weak" background="transparent">
+    <Card minWidth={12} href={href} paddingX="20" paddingTop="20" paddingBottom="80" radius="l" fillWidth direction="column" border background="transparent">
       <LineChart
         pointerEvents="none"
         position="absolute"
@@ -82,7 +82,7 @@ interface ActivityItemProps {
 }
 
 const ActivityItem: React.FC<ActivityItemProps> = ({ avatar, action, time, href, icon }) => (
-  <Row fillWidth borderBottom="neutral-alpha-weak">
+  <Row fillWidth borderBottom>
     <Card direction="column" fitHeight href={href} background="transparent" border="transparent" fillWidth>
       <Row fillWidth horizontal="between" paddingX="24" height="64" vertical="center">
         <Column fillWidth gap="8">
@@ -110,7 +110,7 @@ interface StatusItemProps {
 }
 
 const StatusItem: React.FC<StatusItemProps> = ({ name, status, icon, href = "#" }) => (
-  <Row fillWidth borderBottom="neutral-alpha-weak">
+  <Row fillWidth borderBottom>
     <Card direction="column" background="transparent" href={href} border="transparent" fillWidth>
       <Row fillWidth horizontal="between" height="64" vertical="center" paddingX="24">
         <Row vertical="center" gap="12">
@@ -240,7 +240,7 @@ export const Dashboard1: React.FC = () => {
 
                 <LineChart
                   minHeight={20}
-                  border="neutral-alpha-weak"
+                  border
                   axis="x"
                   grid="y"
                   title="Revenue growth"
@@ -277,7 +277,7 @@ export const Dashboard1: React.FC = () => {
                 />
 
                 <Grid columns="2" m={{columns: 1}} gap="m" fillWidth>
-                  <Column fillWidth border="neutral-alpha-weak" radius="l" overflow="hidden" height={20}>
+                  <Column fillWidth border radius="l" overflow="hidden" height={20}>
                     <Row vertical="center" horizontal="between" fillWidth paddingLeft="24" paddingRight="12" paddingY="12" gap="m" wrap>
                       <Heading wrap="nowrap" variant="heading-strong-s">
                         Project status
@@ -295,7 +295,7 @@ export const Dashboard1: React.FC = () => {
                       </Row>
                     </Row>
                     
-                    <Column fillWidth border="neutral-alpha-weak" topRadius="l" overflowY="auto">
+                    <Column fillWidth border topRadius="l" overflowY="auto">
                       {[
                         { name: "Mobile App Development", status: "At Risk", icon: "code" as IconName },
                         { name: "Marketing Campaign", status: "On Track", icon: "sparkle" as IconName },
@@ -314,7 +314,7 @@ export const Dashboard1: React.FC = () => {
                     </Column>
                   </Column>
 
-                  <Column border="neutral-alpha-weak" radius="l" fillWidth overflow="hidden" height={20}>
+                  <Column border radius="l" fillWidth overflow="hidden" height={20}>
                     <Row fillWidth vertical="center" horizontal="between" paddingLeft="24" paddingRight="12" paddingY="12" gap="16" wrap>
                       <Heading wrap="nowrap" variant="heading-strong-s">
                         Recent activity
@@ -323,7 +323,7 @@ export const Dashboard1: React.FC = () => {
                         View all
                       </Button>
                     </Row>
-                    <Column fillWidth border="neutral-alpha-weak" topRadius="l" overflowY="auto">
+                    <Column fillWidth border topRadius="l" overflowY="auto">
                       {[
                         {
                           avatar: "/images/creators/lorant.jpg",

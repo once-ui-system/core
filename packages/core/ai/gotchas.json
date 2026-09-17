@@ -20,7 +20,7 @@
     ]
   },
   "Card.interactive": {
-    "rule": "Card is for interactive surfaces only (href or onClick). Static panels use Column + background=\"surface\" border=\"neutral-alpha-weak\" radius=\"l\".",
+    "rule": "Card is for interactive surfaces only (href or onClick). Static panels use Column + background=\"surface\" border radius=\"l\".",
     "components": [
       "Card"
     ]
@@ -101,11 +101,28 @@
     ]
   },
   "layout.defaults": {
-    "rule": "Never write props equal to defaults: position=\"relative\", direction on Row/Column, variant=\"primary\" on Button.",
+    "rule": "Never write props equal to defaults or implied by another prop on the element: position=\"relative\", direction on Row/Column, variant=\"primary\" on Button, fillWidth beside maxWidth (maxWidth already fills the width), minWidth={0} beside fillWidth (fillWidth already sets min-width: 0).",
     "components": [
       "Row",
       "Column",
+      "Grid",
       "Button"
+    ]
+  },
+  "border.default": {
+    "rule": "Bare border (and borderTop, borderBottom, borderX, …) draws the default border. Do not write border=\"neutral-alpha-weak\" to get it; name a colour only to deviate, e.g. border=\"brand-alpha-medium\".",
+    "components": [
+      "Row",
+      "Column",
+      "Card"
+    ]
+  },
+  "zIndex.scope": {
+    "rule": "zIndex is for an isolated stacking group: an absolute decorative layer and its content sibling (zIndex={1}), or a sticky header over its pane. Never on a lone element, never a page-wide ladder of 3 / 5 / 9 — restructure the tree instead.",
+    "components": [
+      "Row",
+      "Column",
+      "Background"
     ]
   },
   "section.gaps": {

@@ -29,7 +29,7 @@ export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
       />
       <Row
         as="header"
-        border="neutral-alpha-weak"
+        border
         maxWidth="m"
         paddingX="m"
         radius="l"

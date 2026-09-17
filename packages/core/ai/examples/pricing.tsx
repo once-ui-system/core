@@ -95,7 +95,7 @@ export function PricingExample() {
       </Column>
 
       <Column fillWidth horizontal="center">
-        <Column fillWidth maxWidth="l" gap="40">
+        <Column maxWidth="l" gap="40">
           <Row fillWidth horizontal="between" vertical="end" gap="24" s={{ direction: "column", horizontal: "start" }}>
             <Heading as="h2" variant="display-strong-xs">
               Three plans, one decision
@@ -181,7 +181,7 @@ export function PricingExample() {
       </Column>
 
       <Column fillWidth horizontal="center" background="neutral-alpha-weak" paddingY="80" paddingX="24">
-        <Column fillWidth maxWidth="l" gap="40">
+        <Column maxWidth="l" gap="40">
           <Heading as="h2" variant="display-strong-xs">
             Every feature, side by side
           </Heading>
@@ -203,7 +203,7 @@ export function PricingExample() {
       </Column>
 
       <Column fillWidth horizontal="center">
-        <Column fillWidth maxWidth="l" radius="xl" border="neutral-alpha-weak" overflow="hidden" padding="64" center>
+        <Column maxWidth="l" radius="xl" border overflow="hidden" padding="64" center>
           <BlobFx position="absolute" top="0" left="0" fill opacity={60} seed={2} />
           <Column zIndex={1} center gap="24" maxWidth={40}>
             <Heading as="h2" variant="display-strong-s" align="center">

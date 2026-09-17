@@ -79,7 +79,7 @@ export function Roadmap1() {
           
           <Row gap="4" fillWidth overflowX="auto" paddingBottom="16">
             {product.columns.map((column, columnIndex) => (
-              <Column key={columnIndex} padding="4" gap="4" radius="s-4" border="neutral-alpha-weak" background="overlay" fillWidth minWidth={20}>
+              <Column key={columnIndex} padding="4" gap="4" radius="s-4" border background="overlay" fillWidth minWidth={20}>
                 <Row fillWidth vertical="center" gap="8" paddingY="8" paddingX="16">
                   <Text variant="label-default-m">
                     {column.title}
@@ -99,7 +99,7 @@ export function Roadmap1() {
                     return typedTask.href ? (
                       <Card
                         onBackground="neutral-strong"
-                        border="neutral-alpha-weak"
+                        border
                         fillWidth
                         radius="s"
                         key={taskIndex} 
@@ -111,7 +111,7 @@ export function Roadmap1() {
                     ) : (
                       <Column
                         onBackground="neutral-strong"
-                        border="neutral-alpha-weak"
+                        border
                         fillWidth
                         radius="s"
                         key={taskIndex}

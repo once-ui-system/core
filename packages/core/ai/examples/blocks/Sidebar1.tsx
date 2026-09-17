@@ -16,7 +16,7 @@ export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
     fillHeight
     maxWidth={18}
     background="surface"
-    borderRight="neutral-alpha-weak"
+    borderRight
     padding="8"
     gap="4"
     {...flex}

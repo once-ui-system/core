@@ -94,7 +94,7 @@ export const Table1: React.FC<Table1Props> = ({
   };
 
   return (
-    <Column fillWidth radius="l" border="neutral-alpha-weak" {...flex}>
+    <Column fillWidth radius="l" border {...flex}>
       <Row fillWidth horizontal="between" paddingY="12" paddingRight="12" paddingLeft="24" gap="16" vertical="center" s={{direction: "column",}}>
         <Row fillWidth gap="12" vertical="center" horizontal="between">
           {selectable && someCurrentSelected ? (
@@ -124,8 +124,8 @@ export const Table1: React.FC<Table1Props> = ({
         )}
       </Row>
       <Column fillWidth overflowX="auto">
-        <Column fillWidth radius="l" border="neutral-alpha-weak" overflow="hidden">
-          <Row fillWidth gap="16" paddingX="24" paddingY="12" borderBottom="neutral-alpha-weak">
+        <Column fillWidth radius="l" border overflow="hidden">
+          <Row fillWidth gap="16" paddingX="24" paddingY="12" borderBottom>
             {selectable && (
               <Row textVariant="label-default-s" vertical="center" gap="16">
                 <Checkbox

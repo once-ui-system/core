@@ -47,7 +47,7 @@ If you cannot read `node_modules`, use the docs host (may not match your install
 
 - Use `Column` / `Row`, not `Flex` unless direction changes at breakpoints
 - Use `fill`, not `fillWidth fillHeight`; use `center`, not `horizontal="center" vertical="center"`
-- Static panels: `Column background="surface" border="neutral-alpha-weak" radius="l" padding="24"`
+- Static panels: `Column background="surface" border radius="l" padding="24"`
 - `Card` is interactive only (`href` or `onClick`)
 
 Full rules: `@once-ui-system/core/ai/rules.compact.md`

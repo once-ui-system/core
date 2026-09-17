@@ -39,8 +39,7 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
             <Row
               data-scaling="90"
               position="absolute"
-              vertical="center"
-              horizontal="center"
+              center
               textVariant="body-default-xs"
               solid="brand-strong"
               onSolid="brand-strong"

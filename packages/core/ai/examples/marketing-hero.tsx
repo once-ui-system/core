@@ -103,7 +103,7 @@ export function MarketingHeroExample() {
 
       {/* Feature grid — left-aligned section header, not repeated centered blocks */}
       <Column fillWidth horizontal="center">
-        <Column fillWidth maxWidth="l" gap="40">
+        <Column maxWidth="l" gap="40">
           <Column gap="12" maxWidth={32}>
             <Text variant="label-default-s" onBackground="brand-medium">
               Components
@@ -117,7 +117,7 @@ export function MarketingHeroExample() {
               <Column
                 key={feature.title}
                 background="surface"
-                border="neutral-alpha-weak"
+                border
                 radius="l"
                 padding="24"
                 gap="16"

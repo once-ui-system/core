@@ -22,11 +22,10 @@ export function AuthExample() {
   return (
     <Column as="main" fillWidth center padding="24" minHeight="100vh">
       <Grid
-        fillWidth
         maxWidth="l"
         columns="2"
         radius="xl"
-        border="neutral-alpha-weak"
+        border
         overflow="hidden"
         background="surface"
         s={{ columns: 1 }}
