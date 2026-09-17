@@ -13,6 +13,50 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **`DatePicker` and `Carousel` rendered invisible, but interactive, for four
+  minutes.** The 2.0 pass that moved `RevealFx.delay` to milliseconds also
+  multiplied the two `speed` values in core by a thousand — and `speed` was
+  already milliseconds, so the calendar's reveal became a 250-second opacity
+  transition and the carousel slide's a 300-second one. The buttons were
+  mounted, focusable and clickable underneath; you just could not see them.
+  Both are back to 250 and 300, and a test fails on any core component that
+  asks `RevealFx` for a reveal slower than five seconds.
+- **`Table`'s page-size select was a 2rem sliver, `User`, `UserMenu`, `OgCard`
+  and `Avatar` skeletons filled their container.** 2.0 renamed `height` to
+  `size` on the field components and replaced `Skeleton`'s own `width` /
+  `height` scale with `size`, and the codemod applied that to consumer trees —
+  but core's own call sites were never run through it. `height="xs"` on the
+  pagination `Select` and the table search, `height="m"` on the `User`
+  skeleton and four on `OgCard`'s all landed on the Flex layout prop of the
+  same name, where `xs` and `m` are spacing tokens; `Avatar`'s loading circle
+  passed `width` / `height` tokens instead of `size`. All are on the 2.0 names,
+  the page-size select gets 5rem to show its value, and a test scans every
+  component for the 1.8 spellings.
+- **`OgCard` showed a loading skeleton over data it was handed.** With both
+  `url` and `ogData` set, the fetch for the URL still ran and `loading` stayed
+  true until it finished, so the mock-data card drew skeletons over content it
+  could already render. Provided data is never fetched for now, and never
+  loading.
+- **The time picker's header showed `13:14 PM`.** It printed the 24-hour value
+  and then appended the meridiem; it prints `01:14 PM` now.
+
+### Fixed (docs site, not published code)
+
+- **Markdown tables rendered as raw pipes.** The docs pipeline had no GFM, so
+  the harness table on the AI coding page and the clamp table on the Input page
+  printed their source. `remark-gfm` is in the pipeline now and a markdown
+  table renders through the design system's `Table`, like every other table in
+  the docs. Two harness links pointed at the wrong files on the way.
+- **The `IconButton` custom-content example lost its label on the primary
+  button.** The `Text` inside forced `onSolid="neutral-medium"`, a neutral
+  on-solid token over a brand solid, which is near-white on the docs' contrast
+  solids. A button already sets the text colour for its own surface, so the
+  example inherits it.
+- **The `Option` prefix example rendered nothing:** it passed `icon` to `Icon`,
+  whose prop is `name`.
+
 ### Changed
 
 - **Agent guidance: a prop another prop already implies is a default too.** The

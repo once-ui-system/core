@@ -3,7 +3,7 @@ import path from "node:path";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { DateInput } from "../components";
+import { DateInput, DatePicker } from "../components";
 import { LayoutProvider } from "../contexts";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
@@ -57,5 +57,46 @@ describe("DateInput time picker", () => {
     const src = fs.readFileSync(source, "utf8");
     const key = src.match(/key=\{`datepicker-[^`]*`\}/)?.[0] ?? "";
     expect(key).not.toMatch(/getTime/);
+  });
+});
+
+/**
+ * The 2.0 "ms timings" pass multiplied every RevealFx `speed` it found by a
+ * thousand — including the two that were already milliseconds. DatePicker's
+ * calendar and Carousel's slide sat inside a RevealFx with a 250 s / 300 s
+ * transition: mounted, focusable, clickable, and at opacity 0 for four minutes.
+ */
+describe("DatePicker reveal and time header", () => {
+  it("reveals the calendar in a fraction of a second", () => {
+    const { container } = render(
+      <DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onChange={() => {}} />,
+      { wrapper: wrap },
+    );
+    const reveal = Array.from(container.querySelectorAll<HTMLElement>("[style]")).find(
+      (el) => el.style.transitionDuration !== "",
+    );
+    expect(reveal).toBeDefined();
+    expect(Number.parseFloat(reveal?.style.transitionDuration ?? "0")).toBeLessThanOrEqual(1);
+  });
+
+  it("shows the header time as 12-hour, not 24-hour with an AM/PM suffix", () => {
+    render(<DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onChange={() => {}} />, {
+      wrapper: wrap,
+    });
+    expect(screen.getByText("01:14 PM")).toBeInTheDocument();
+    expect(screen.queryByText("13:14 PM")).toBeNull();
+  });
+
+  it("no core component asks RevealFx for a reveal slower than five seconds", () => {
+    const dir = path.resolve(__dirname, "..", "components");
+    const slow: string[] = [];
+    for (const file of fs.readdirSync(dir)) {
+      if (!file.endsWith(".tsx")) continue;
+      const src = fs.readFileSync(path.join(dir, file), "utf8");
+      for (const m of src.matchAll(/<RevealFx[\s\S]*?speed=\{(\d+)\}/g)) {
+        if (Number(m[1]) > 5000) slow.push(`${file}: speed={${m[1]}}`);
+      }
+    }
+    expect(slow).toEqual([]);
   });
 });

@@ -236,7 +236,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({
         revealed={isTransitioning}
         translateY={translateY}
         aspectRatio={aspectRatio === "original" ? undefined : aspectRatio}
-        speed={300000}
+        speed={300}
         onTouchStart={(e: React.TouchEvent) => {
           touchStartXRef.current = e.touches[0].clientX;
         }}

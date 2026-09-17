@@ -61,7 +61,7 @@ const SearchInput: React.FC<{
       data-scaling="90"
       id={`select-search-${searchInputId}`}
       placeholder="Search"
-      height="s"
+      size="s"
       suffix={
         searchQuery ? (
           <IconButton

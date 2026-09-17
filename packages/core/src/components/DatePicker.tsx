@@ -789,7 +789,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 </Row>
                 {timePicker && selectedTime && (
                   <Text variant="label-default-s" onBackground="neutral-weak">
-                    {`${selectedTime.hours.toString().padStart(2, "0")}:${selectedTime.minutes.toString().padStart(2, "0")} ${isPM ? "PM" : "AM"}`}
+                    {`${convert24to12(selectedTime.hours).toString().padStart(2, "0")}:${selectedTime.minutes.toString().padStart(2, "0")} ${isPM ? "PM" : "AM"}`}
                   </Text>
                 )}
               </Column>
@@ -815,7 +815,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           center
           key={isTimeSelector ? "time" : "date"}
           revealed={isTransitioning}
-          speed={250000}
+          speed={250}
         >
           {isTimeSelector ? (
             <Column maxWidth={24} center padding="32" gap="32">

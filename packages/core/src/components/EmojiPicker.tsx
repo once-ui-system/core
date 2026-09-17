@@ -275,7 +275,7 @@ const EmojiPicker = ({
         id={`emoji-search-${searchInputId}`}
         placeholder="Search emojis"
         value={inputValue}
-        height="s"
+        size="s"
         onChange={(e) => setInputValue(e.target.value)}
         prefix={<Icon size="s" onBackground="neutral-weak" name="search" />}
         aria-label="Search emojis"

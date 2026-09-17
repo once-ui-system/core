@@ -87,12 +87,15 @@ const OgCard = ({
   cardUrl,
   ...card
 }: OgCardProps) => {
-  const { ogData: fetchedOgData, loading } = useOgData(
-    url || null,
+  const { ogData: fetchedOgData, loading: fetching } = useOgData(
+    providedOgData ? null : url || null,
     serviceConfig.fetchOgUrl,
     serviceConfig.proxyOgUrl,
   );
   const data = providedOgData || fetchedOgData;
+  // Data handed in directly is never loading: nothing is fetched for it, so
+  // the skeleton would only cover a card that could already be drawn.
+  const loading = !providedOgData && fetching;
 
   // Resolve content based on props
   const resolvedTitle = useMemo(() => {
@@ -188,7 +191,7 @@ const OgCard = ({
             />
             {resolvedUrl &&
               (loading ? (
-                <Skeleton shape="line" width="25%" height="xs" />
+                <Skeleton shape="line" width="25%" size="xs" />
               ) : (
                 <Text variant="label-default-s" onBackground="neutral-weak">
                   {formatDisplayUrl(resolvedUrl)}
@@ -199,7 +202,7 @@ const OgCard = ({
         <Column fillWidth gap={size === "s" ? "4" : size === "m" ? "8" : "12"}>
           {resolvedTitle !== null &&
             (loading ? (
-              <Skeleton shape="line" width="33%" height="s" />
+              <Skeleton shape="line" width="33%" size="s" />
             ) : (
               resolvedTitle && (
                 <Text
@@ -218,8 +221,8 @@ const OgCard = ({
           {resolvedDescription !== null &&
             (loading ? (
               <Column fillWidth paddingY="8" gap="8">
-                <Skeleton shape="line" width="100%" height="xs" />
-                <Skeleton shape="line" width="75%" height="xs" />
+                <Skeleton shape="line" width="100%" size="xs" />
+                <Skeleton shape="line" width="75%" size="xs" />
               </Column>
             ) : resolvedDescription ? (
               <Text
