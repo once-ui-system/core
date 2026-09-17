@@ -1,7 +1,8 @@
 import { MDXRemote } from "next-mdx-remote/rsc";
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 type MDXComponents = React.ComponentProps<typeof MDXRemote>["components"];
-import React, { ReactNode } from "react";
+import React, { Children, isValidElement, ReactNode } from "react";
+import remarkGfm from "remark-gfm";
 
 // ─── Core components (explicit imports to avoid Turbopack frozen module proxy) ───
 import { Accordion, AccordionGroup, Banner, Animation, Arrow, AutoScroll, Avatar, HeadingNav, AvatarGroup, Badge, Background, BlobFx, BlockQuote, Book, Effect, InfoTip, Scrubber, Setting, SettingAxes, SettingGroup, Button, Card, Carousel, CelebrationFx, Checkbox, Chip, ClientFlex, ClientGrid, ColorInput, Column, CompareImage, ContextMenu, CountFx, CountdownFx, Cursor, CursorCard, DateInput, DatePicker, DateRangeInput, DateRangePicker, Dialog, Dropdown, DropdownWrapper, ElementType, EmojiPicker, EmojiPickerDropdown, Fade, FadingLettersFx, Feedback, Flex, FlipFx, FocusTrap, GlitchFx, Grid, Heading, HoloFx, Hover, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, InteractiveDetails, Kbd, LetterFx, Line, List, ListItem, Logo, LogoCloud, Mask, MasonryGrid, MatrixFx, Media, Modal, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Particle, PasswordInput, ProgressBar, Pulse, RadioButton, RevealFx, Row, ScrollContainer, ScrollLock, ScrollToTop, Scroller, SegmentedControl, Select, ShineFx, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, StyleOverlay, StylePanel, Swiper, Switch, Table, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, TiltFx, Timeline, Toast, Toaster, ToggleButton, Tooltip, TypeFx, User, UserMenu, WeatherFx } from "@once-ui-system/core";
@@ -263,6 +264,37 @@ function createHr() {
   return <Line />;
 }
 
+/**
+ * A GFM table rendered through the design system's `Table`. MDX hands us the
+ * `thead` / `tbody` / `tr` / `th` / `td` elements; the cells are lifted out
+ * into `data`, so a markdown table in a doc looks like every other table in it.
+ */
+function cellsOf(row: ReactNode): ReactNode[] {
+  if (!isValidElement<{ children?: ReactNode }>(row)) return [];
+  return Children.toArray(row.props.children)
+    .filter(isValidElement)
+    .map((cell) => (cell as React.ReactElement<{ children?: ReactNode }>).props.children);
+}
+
+function rowsOf(section: ReactNode): ReactNode[] {
+  if (!isValidElement<{ children?: ReactNode }>(section)) return [];
+  return Children.toArray(section.props.children).filter(isValidElement);
+}
+
+function createTable({ children }: { children?: ReactNode }) {
+  const sections = Children.toArray(children).filter(isValidElement) as React.ReactElement<{
+    children?: ReactNode;
+  }>[];
+  const head = sections.find((s) => s.type === "thead");
+  const bodies = sections.filter((s) => s.type === "tbody");
+  const headers = cellsOf(rowsOf(head)[0]).map((content, index) => ({
+    content,
+    key: `col-${index}`,
+  }));
+  const rows = bodies.flatMap((body) => rowsOf(body).map(cellsOf));
+  return <Table marginY="16" data={{ headers, rows }} />;
+}
+
 const mdxComponents = {
   // ─── MDX element overrides ───
   p: createParagraph,
@@ -281,6 +313,7 @@ const mdxComponents = {
   ol: createList,
   li: createListItem,
   hr: createHr,
+  table: createTable,
 
   // ─── Core layout ───
   Flex,
@@ -547,7 +580,7 @@ export function CustomMDX(props: CustomMDXProps) {
   return (
     <MDXRemote
       {...props}
-      options={{ blockJS: false }}
+      options={{ ...(props.options ?? {}), mdxOptions: { ...(props.options?.mdxOptions ?? {}), remarkPlugins: [remarkGfm, ...(props.options?.mdxOptions?.remarkPlugins ?? [])] } }}
       components={{
         ...mdxComponents,
         ...(props.components || {}),
