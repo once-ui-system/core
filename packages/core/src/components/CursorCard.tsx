@@ -10,7 +10,7 @@ import React, {
   useCallback,
 } from "react";
 import { createPortal } from "react-dom";
-import { Placement } from "@floating-ui/react-dom";
+import type { Placement } from "../types";
 import { Flex } from ".";
 import styles from "./CursorCard.module.scss";
 
