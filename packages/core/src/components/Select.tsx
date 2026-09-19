@@ -16,7 +16,7 @@ import {
   ArrowNavigation,
   useArrowNavigationContext,
 } from ".";
-import { Placement } from "@floating-ui/react-dom";
+import type { Placement } from "../types";
 import inputStyles from "./Input.module.scss";
 
 type SelectOptionType = Omit<OptionProps, "selected">;

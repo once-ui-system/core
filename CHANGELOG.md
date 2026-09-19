@@ -13,7 +13,18 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
-Nothing yet.
+### Added
+
+- **`Placement`, `Side` and `Alignment` are exported from the package.** The
+  `placement` prop of `Select`, `UserMenu`, `ContextMenu`, `CursorCard`,
+  `DropdownWrapper` and `Animation` is now typed by our own union rather than
+  the positioning library's. Previously all six emitted
+  `import { Placement } from "@floating-ui/react-dom"` into their published
+  declarations, so consumers resolved a dependency of ours to type a prop of
+  ours, and changing positioning library would have been a breaking release
+  over twelve string literals. The type is structurally identical, so existing
+  code keeps compiling; `@floating-ui/react-dom` is unchanged and still does
+  the positioning.
 
 ## [2.0.0-alpha.1] — 2026-09-17
 

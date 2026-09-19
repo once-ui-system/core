@@ -10,7 +10,7 @@ import React, {
   useCallback,
   useEffect,
 } from "react";
-import { Placement } from "@floating-ui/react-dom";
+import type { Placement } from "../types";
 import { createPortal } from "react-dom";
 import { Flex, Dropdown, ScrollLock } from ".";
 import styles from "./ContextMenu.module.scss";
