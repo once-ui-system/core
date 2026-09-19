@@ -464,3 +464,18 @@ export type Language =
   | "zig";
 
 export type ToastPosition = "top" | "bottom";
+
+/**
+ * Where a floating element sits relative to its trigger.
+ *
+ * Declared here rather than re-exported from the positioning library so the
+ * public API names no vendor: `placement` is part of the contract of Select,
+ * UserMenu, ContextMenu, CursorCard, DropdownWrapper and Animation, and a
+ * consumer's types should not have to resolve @floating-ui to use them.
+ * Structurally identical to that library's `Placement`, so it still passes
+ * straight into `useFloating` while the implementation stays an internal
+ * detail we can change without a breaking release.
+ */
+export type Side = "top" | "right" | "bottom" | "left";
+export type Alignment = "start" | "end";
+export type Placement = Side | `${Side}-${Alignment}`;

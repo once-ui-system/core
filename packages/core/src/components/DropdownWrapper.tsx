@@ -13,17 +13,10 @@ import React, {
   FocusEvent,
 } from "react";
 import { createPortal } from "react-dom";
-import {
-  useFloating,
-  shift,
-  offset,
-  flip,
-  size,
-  autoUpdate,
-  Placement,
-} from "@floating-ui/react-dom";
+import { useFloating, shift, offset, flip, size, autoUpdate } from "@floating-ui/react-dom";
 import { Flex, Dropdown, Column, Row, FocusTrap, ArrowNavigation, ScrollLock } from ".";
 import styles from "./DropdownWrapper.module.scss";
+import type { Placement } from "../types";
 import { NavigationLayout } from "../hooks/useArrowNavigation";
 import { getLastOpenedDropdown, setLastOpenedDropdown, clearLastOpenedDropdown } from "../utils";
 
