@@ -26,6 +26,14 @@ item (see `ROADMAP.md`, Week 4).
   code keeps compiling; `@floating-ui/react-dom` is unchanged and still does
   the positioning.
 
+### Fixed
+
+- **`ThemeSwitcher collapsed` was wider than the one button it showed.** The
+  two hidden options collapse to zero width, but each still owned its share of
+  the group's `gap`, so the pill carried a few pixels of empty space after the
+  active theme. A hidden option now takes one gap with it, and the margin
+  animates back with the width when the group opens.
+
 ## [2.0.0-alpha.1] — 2026-09-17
 
 The second alpha preview, on the same **`alpha`** dist-tag. `npm install

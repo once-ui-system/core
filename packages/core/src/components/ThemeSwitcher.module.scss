@@ -24,19 +24,31 @@
     overflow: hidden;
     transition:
       max-width var(--transition-duration-micro-medium, 0.15s) ease,
+      margin var(--transition-duration-micro-medium, 0.15s) ease,
       opacity var(--transition-duration-micro-short, 0.1s) ease;
     max-width: var(--static-space-40, 2.5rem);
   }
 
+  /* A zero-width option still owns its share of the group's gap, which left
+     the pill a few pixels wider than the one button it shows. Each hidden
+     option takes one gap with it: the gap before it, or, for the first
+     option, the gap after it. The value is the group's `gap="2"`. */
   .option.inactive {
     max-width: 0;
     opacity: 0;
+    margin-left: calc(-1 * var(--static-space-2, 0.125rem));
+  }
+
+  .option.inactive:first-child {
+    margin-left: 0;
+    margin-right: calc(-1 * var(--static-space-2, 0.125rem));
   }
 
   &:hover .option.inactive,
   &:focus-within .option.inactive {
     max-width: var(--static-space-40, 2.5rem);
     opacity: 1;
+    margin: 0;
   }
 }
 
@@ -44,6 +56,7 @@
   .collapsed .option.inactive {
     max-width: var(--static-space-40, 2.5rem);
     opacity: 1;
+    margin: 0;
   }
 }
 
