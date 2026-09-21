@@ -12,10 +12,13 @@ import {
   ToggleButton,
   Skeleton,
   Pulse,
+  Tag,
+  Text,
   ColorScheme,
 } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import { layout } from "@/resources";
+import { AVAILABILITY, type Availability } from "./availability";
 
 import styles from "./Sidebar.module.scss";
 
@@ -39,6 +42,7 @@ export interface NavigationItem extends Omit<
   navTag?: string;
   navLabel?: string;
   navTagVariant?: ColorScheme;
+  status?: Availability;
 }
 
 /**
@@ -220,18 +224,48 @@ const NavigationItemComponent: React.FC<{
         >
           {item.label || item.title}
         </Row>
-        {item.navTag && (() => {
-          if (!item.updatedAt) {
-            return <Pulse scheme={item.navTagVariant} size="s" />;
+        {(() => {
+          /* Availability outranks recency. Something can be both new and
+             unreleased, and in a column this narrow only one of the two fits —
+             "you cannot install this yet" is the one worth the space. Unlike
+             the recency tag below it never expires, because it stops being
+             true only when a release makes it false. */
+          if (item.status) {
+            const { tag, scheme } = AVAILABILITY[item.status];
+            return (
+              <Tag scheme={scheme} size="s">
+                {tag}
+              </Tag>
+            );
           }
+
+          if (!item.navTag) return null;
+
+          /* The label was authored all along and thrown away here: every page
+             writes `navTag: "New"` or `"Update"` and the sidebar rendered a
+             bare dot, so the two were told apart only by hue — cyan against
+             green, which is both unreadable and the whole meaning resting on
+             colour. The dot stays as the thing that catches the eye; the word
+             says which it is. */
+          const recency = (variant: ColorScheme | undefined) => (
+            <Row gap="4" vertical="center" flex={0}>
+              <Pulse scheme={variant} size="s" />
+              <Text variant="label-default-xs" onBackground="neutral-weak">
+                {item.navTag}
+              </Text>
+            </Row>
+          );
+
+          if (!item.updatedAt) return recency(item.navTagVariant);
           const age = Date.now() - new Date(item.updatedAt).getTime();
           if (age > 60 * 24 * 60 * 60 * 1000) return null;
-          const variant = age > 30 * 24 * 60 * 60 * 1000
-            ? "neutral"
-            : age > 20 * 24 * 60 * 60 * 1000
-              ? "warning"
-              : item.navTagVariant;
-          return <Pulse scheme={variant} size="s" />;
+          return recency(
+            age > 30 * 24 * 60 * 60 * 1000
+              ? "neutral"
+              : age > 20 * 24 * 60 * 60 * 1000
+                ? "warning"
+                : item.navTagVariant,
+          );
         })()}
       </Row>
     </ToggleButton>
