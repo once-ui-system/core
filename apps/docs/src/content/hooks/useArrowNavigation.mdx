@@ -163,6 +163,15 @@ Navigate horizontally:
   ]}
 />
 
+## When it takes focus
+
+`initialFocusedIndex` says which item is *current*, not that focus should move
+there. The hook takes focus on its first pass only when `autoFocus` is set, or
+when nothing else holds it — the case right after a keyed remount, where the
+element that had focus has just been removed and focusing it again restores
+rather than steals. Every later pass follows a keystroke, so it always moves
+focus.
+
 ## API Reference
 
 <PropsTable

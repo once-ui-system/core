@@ -70,9 +70,16 @@ const ArrowNavigation = forwardRef<HTMLDivElement, ArrowNavigationProps>(({
     if (autoFocus && containerRef.current && !disabled) {
       // Small delay to ensure the component is fully mounted
       const timer = setTimeout(() => {
-        if (containerRef.current) {
-          containerRef.current.focus({ preventScroll: true });
-        }
+        if (!containerRef.current) return;
+        // This is the fallback for a list with no focusable item — the hook
+        // focuses the item at `focusedIndex` itself as soon as there is one.
+        // Both happen on mount and a 0ms timer wins or loses that race
+        // depending on how much layout work lands in between: measured in
+        // Chromium, a DatePicker's month list settled on its first option
+        // while its year list settled on this container instead. Bailing out
+        // once focus is already inside makes the outcome the same either way.
+        if (containerRef.current.contains(document.activeElement)) return;
+        containerRef.current.focus({ preventScroll: true });
       }, 0);
       return () => clearTimeout(timer);
     }

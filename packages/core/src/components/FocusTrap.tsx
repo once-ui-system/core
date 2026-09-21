@@ -6,11 +6,11 @@ interface FocusTrapProps {
   children: ReactNode;
   active: boolean;
   onEscape?: () => void;
-  containerRef?: RefObject<HTMLDivElement>;
+  containerRef?: RefObject<HTMLDivElement | null>;
   className?: string;
   style?: React.CSSProperties;
-  initialFocusRef?: RefObject<HTMLElement>;
-  returnFocusRef?: RefObject<HTMLElement>;
+  initialFocusRef?: RefObject<HTMLElement | null>;
+  returnFocusRef?: RefObject<HTMLElement | null>;
   restoreFocus?: boolean;
   autoFocus?: boolean;
 }

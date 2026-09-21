@@ -91,6 +91,11 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     const wrapperRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    /** The portal's outermost element — FocusTrap's container. `dropdownRef`
+     *  sits two levels below it (FocusTrap > ArrowNavigation > panel), and
+     *  both of those levels are focusable and get focused by this component
+     *  when the panel opens, so containment has to be tested from the top. */
+    const portalRef = useRef<HTMLDivElement>(null);
 
     const isControlled = controlledIsOpen !== undefined;
     const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
@@ -351,8 +356,17 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         // Check if focus moved to the dropdown or stayed in the wrapper. The
         // dropdown is portalled, so it is not a descendant of the wrapper and
         // both have to be checked.
+        //
+        // Tested from `portalRef`, not `dropdownRef`: the panel is wrapped by
+        // FocusTrap and ArrowNavigation, each of which renders a focusable
+        // container above it and focuses that container itself as the panel
+        // opens. Measured in Chromium, ArrowNavigation's autoFocus timer moved
+        // focus from the trigger to its container 20ms after a DatePicker's
+        // month selector opened; read against `dropdownRef` that container is
+        // "outside", so the panel closed itself before the user could aim at
+        // anything in it.
         const isFocusInDropdown =
-          dropdownRef.current && dropdownRef.current.contains(event.relatedTarget as Node);
+          portalRef.current && portalRef.current.contains(event.relatedTarget as Node);
         const isFocusInWrapper =
           wrapperRef.current && wrapperRef.current.contains(event.relatedTarget as Node);
 
@@ -635,7 +649,11 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           isBrowser &&
           createPortal(
             <FocusTrap
-              active={isOpen}
+              containerRef={portalRef}
+              // Not `isOpen`: the panel is `visibility: hidden` until Floating
+              // UI has measured it, and a hidden element cannot take focus, so
+              // autofocusing before then silently lands nowhere.
+              active={isOpen && isPositioned}
               onEscape={() => handleOpenChange(false)}
               autoFocus
               restoreFocus
@@ -648,7 +666,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                   onSelect={handleOptionSelect}
                   onFocusChange={handleFocusChange}
                   wrap
-                  autoFocus
+                  autoFocus={isPositioned}
                   initialFocusedIndex={focusedIndex}
                   itemSelector='.option, [role="option"], [data-value]'
                   role={navigationLayout === "grid" ? "grid" : "listbox"}
