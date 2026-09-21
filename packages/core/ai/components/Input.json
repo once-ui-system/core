@@ -5,7 +5,7 @@
   "id": "!string",
   "label": "string",
   "placeholder": "string",
-  "size": "TShirtSizes = m",
+  "size": "TShirtSizes",
   "error": "boolean = false",
   "errorMessage": "ReactNode",
   "description": "ReactNode",
@@ -19,7 +19,8 @@
   "characterCount": "boolean",
   "cursor": "undefined | \"interactive\"",
   "validate": "(value: ReactNode) => ReactNode | null",
-  "loading": "boolean = false"
+  "loading": "boolean = false",
+  "span": "number"
  },
  "mixinsRef": []
 }

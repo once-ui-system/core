@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "2.0.0-alpha.1",
- "generated": "2026-09-19",
+ "generated": "2026-09-21",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -671,6 +671,7 @@
    "9",
    "11"
   ],
+  "FormColumns": "number | { xl?: number; l?: number; m?: number; s?: number; xs?: number }",
   "GradientProps": {
    "display": "boolean",
    "opacity": "DisplayProps[\"opacity\"]",
@@ -2504,7 +2505,7 @@
     "id": "!string",
     "label": "string",
     "placeholder": "string",
-    "size": "TShirtSizes = m",
+    "size": "TShirtSizes",
     "error": "boolean = false",
     "errorMessage": "ReactNode",
     "description": "ReactNode",
@@ -2518,7 +2519,8 @@
     "characterCount": "boolean",
     "cursor": "undefined | \"interactive\"",
     "validate": "(value: ReactNode) => ReactNode | null",
-    "loading": "boolean = false"
+    "loading": "boolean = false",
+    "span": "number"
    }
   },
   "InteractiveDetails": {
@@ -3363,7 +3365,7 @@
     "label": "string",
     "placeholder": "string",
     "lines": "number | \"auto\" = auto",
-    "size": "TShirtSizes = m",
+    "size": "TShirtSizes",
     "error": "boolean = false",
     "errorMessage": "ReactNode",
     "description": "ReactNode",
@@ -3376,7 +3378,8 @@
     "characterCount": "boolean",
     "resize": "\"horizontal\" | \"vertical\" | \"both\" | \"none\" = vertical",
     "validate": "(value: ReactNode) => ReactNode | null",
-    "disabled": "boolean = false"
+    "disabled": "boolean = false",
+    "span": "number"
    }
   },
   "TiltFx": {
@@ -4157,6 +4160,19 @@
     "resizeHeight": "number = 1200",
     "loading": "boolean = false",
     "accept": "string = image/*"
+   }
+  },
+  "Form": {
+   "group": "components",
+   "props": {
+    "density": "\"stacked\" | \"tight\" | \"spacious\" = tight",
+    "columns": "FormColumns",
+    "size": "TShirtSizes",
+    "as": "\"div\" | \"form\" = div",
+    "onSubmit": "React.FormEventHandler<HTMLFormElement>",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "children": "React.ReactNode"
    }
   }
  },

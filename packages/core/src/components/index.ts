@@ -47,6 +47,7 @@ export * from "./ClientFlex";
 export * from "./Flex";
 export * from "./FlipFx";
 export * from "./FocusTrap";
+export * from "./Form";
 export * from "./GlitchFx";
 export * from "./ServerGrid";
 export * from "./ClientGrid";

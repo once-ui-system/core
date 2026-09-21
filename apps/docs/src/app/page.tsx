@@ -72,7 +72,7 @@ export default function Home() {
                     gap="12"
                     vertical="center"
                   >
-                    <Text onBackground="brand-strong">{`v${corePackage.version}`}</Text> Form with intent
+                    <Text onBackground="brand-strong">{`v${corePackage.version}`}</Text> Measured, not assumed
                   </Row>
                 </Row>
               </Badge>

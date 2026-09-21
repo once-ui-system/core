@@ -13,6 +13,7 @@ import { Column, Row, Text, Spinner } from ".";
 import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
+import { useFieldSize } from "./FormContext";
 
 interface InputProps
   extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
@@ -48,6 +49,9 @@ interface InputProps
   cursor?: undefined | "interactive";
   validate?: (value: ReactNode) => ReactNode | null;
   loading?: boolean;
+  /** How many columns to occupy inside a `Form` grid. `Form` reads this off
+   *  the child and strips it; outside a `Form` it does nothing. */
+  span?: number;
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -56,7 +60,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       id,
       label,
       placeholder,
-      size = "m",
+      size,
       error = false,
       errorMessage,
       description,
@@ -69,6 +73,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       focusRing = false,
       characterCount,
       loading = false,
+      // Consumed by `Form`, never rendered. Destructured so it cannot reach
+      // the DOM when an `Input` carrying it is used on its own.
+      span,
       children,
       onFocus,
       onBlur,
@@ -79,6 +86,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref,
   ) => {
+    // A `Form` can set the size for every field in it; the field's own
+    // prop still wins, and `"m"` is still the default on its own.
+    const resolvedSize = useFieldSize(size);
     const [isFocused, setIsFocused] = useState(false);
     // Seeded from `defaultValue` too: an uncontrolled field — how a settings
     // form normally renders saved data — has no `value`, so the label never
@@ -177,6 +187,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         })}
       >
         <Row
+          // The element that actually carries the border and the radius, two
+          // levels below what a parent lays out. `Form` needs to reach it to
+          // fuse a group's corners, and `> *` only reaches the Column above.
+          data-surface="field"
           transition="micro-medium"
           border={variant === "ghost" ? "transparent" : "neutral-medium"}
           background={variant === "ghost" ? "transparent" : "neutral-alpha-weak"}
@@ -185,7 +199,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           className={classNames(
             styles.base,
             focusRing && styles.focusRing,
-            size && styles[size],
+            styles[resolvedSize],
             corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",
           )}
         >

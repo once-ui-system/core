@@ -1,0 +1,15 @@
+{
+ "name": "Form",
+ "group": "components",
+ "props": {
+  "density": "\"stacked\" | \"tight\" | \"spacious\" = tight",
+  "columns": "FormColumns",
+  "size": "TShirtSizes",
+  "as": "\"div\" | \"form\" = div",
+  "onSubmit": "React.FormEventHandler<HTMLFormElement>",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "children": "React.ReactNode"
+ },
+ "mixinsRef": []
+}
