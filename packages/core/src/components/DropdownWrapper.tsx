@@ -146,7 +146,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     // We'll measure the width directly in the floating UI middleware
 
-    const { x, y, strategy, refs, update } = useFloating({
+    const { x, y, strategy, refs, update, isPositioned } = useFloating({
       placement: placement,
       open: isOpen,
       middleware: [
@@ -640,6 +640,13 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                       position: strategy,
                       top: y ?? 0,
                       left: x ?? 0,
+                      // Floating UI reports 0,0 until it has measured, so the
+                      // panel would paint once at the edge of the positioning
+                      // context and jump to the trigger on the next frame --
+                      // a visible horizontal flick, made worse by fadeIn
+                      // animating during it. Hidden rather than unmounted:
+                      // it has to be in the DOM to be measured at all.
+                      visibility: isPositioned ? "visible" : "hidden",
                     }}
                     data-role="dropdown-portal"
                     data-is-dropdown="true"
@@ -745,6 +752,9 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                     position: strategy,
                     top: y ?? 0,
                     left: x ?? 0,
+                    // See the portal above: hidden until Floating UI has
+                    // measured, so it cannot paint at 0,0 first.
+                    visibility: isPositioned ? "visible" : "hidden",
                   }}
                   data-role="dropdown-portal"
                   data-is-dropdown="true"
