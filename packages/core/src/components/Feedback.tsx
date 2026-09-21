@@ -7,6 +7,9 @@ import type { IconName } from "../icons";
 interface FeedbackProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   variant?: "info" | "danger" | "warning" | "success";
   showIcon?: boolean;
+  /** Overrides the variant's icon. Custom names work once registered through
+   *  the `IconLibraryOverrides` interface, which is what widens `IconName`. */
+  icon?: IconName;
   title?: string;
   description?: string;
   showCloseButton?: boolean;
@@ -30,6 +33,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
     {
       variant = "info",
       showIcon = true,
+      icon,
       title,
       description,
       showCloseButton = false,
@@ -48,7 +52,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
         ref={ref}
         border={`${variant}-medium`}
         background={`${variant}-medium`}
-        vertical="start"
+        vertical={title || children ? "start" : "center"}
         role="alert"
         aria-live="assertive"
         className={className}
@@ -61,7 +65,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
               padding="2"
               radius="m"
               onBackground={`${variant}-medium`}
-              name={variantIconMap[variant]}
+              name={icon ?? variantIconMap[variant]}
               aria-hidden="true"
             />
           </Flex>

@@ -146,7 +146,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     // We'll measure the width directly in the floating UI middleware
 
-    const { x, y, strategy, refs, update } = useFloating({
+    const { x, y, strategy, refs, update, isPositioned, placement: resolvedPlacement } = useFloating({
       placement: placement,
       open: isOpen,
       middleware: [
@@ -178,6 +178,30 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       ],
       whileElementsMounted: autoUpdate,
     });
+
+    /**
+     * Where the open animation grows from. The panel scales 0.9 -> 1, so the
+     * corner this names stays put while the opposite one travels by 10% of the
+     * panel's size. It has to be the edge anchored to the trigger, or the
+     * panel visibly slides as it opens: measured in a browser, a 480px panel
+     * on a "-start" placement drifted 48px sideways with this hardcoded to
+     * "top right" in the stylesheet.
+     *
+     * Derived from the RESOLVED placement, not the requested one, because
+     * `flip()` is in the middleware — a panel that flips above its trigger has
+     * to scale from its bottom edge instead.
+     */
+    const transformOrigin = (() => {
+      const [side, align] = (resolvedPlacement || "bottom").split("-");
+      if (side === "top" || side === "bottom") {
+        const y = side === "bottom" ? "top" : "bottom";
+        const x = align === "start" ? "left" : align === "end" ? "right" : "center";
+        return `${x} ${y}`;
+      }
+      const x = side === "right" ? "left" : "right";
+      const y = align === "start" ? "top" : align === "end" ? "bottom" : "center";
+      return `${x} ${y}`;
+    })();
 
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
@@ -640,6 +664,13 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                       position: strategy,
                       top: y ?? 0,
                       left: x ?? 0,
+                      // Floating UI reports 0,0 until it has measured, so the
+                      // panel would otherwise paint once at the edge of the
+                      // positioning context before jumping to the trigger.
+                      // Hidden rather than unmounted: it has to be in the DOM
+                      // to be measured at all.
+                      visibility: isPositioned ? "visible" : "hidden",
+                      transformOrigin,
                     }}
                     data-role="dropdown-portal"
                     data-is-dropdown="true"
@@ -745,6 +776,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                     position: strategy,
                     top: y ?? 0,
                     left: x ?? 0,
+                    // See the portal above: hidden until Floating UI has
+                    // measured, so it cannot paint at 0,0 first.
+                    visibility: isPositioned ? "visible" : "hidden",
+                    transformOrigin,
                   }}
                   data-role="dropdown-portal"
                   data-is-dropdown="true"
