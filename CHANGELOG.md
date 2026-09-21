@@ -15,6 +15,11 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`Feedback` takes an `icon`.** It was locked to the variant's glyph, with
+  `showIcon` only able to turn it off. `icon` accepts any `IconName`, so a
+  custom name registered through `IconLibraryOverrides` works here too; leaving
+  it out keeps the variant's icon.
+
 - **`Placement`, `Side` and `Alignment` are exported from the package.** The
   `placement` prop of `Select`, `UserMenu`, `ContextMenu`, `CursorCard`,
   `DropdownWrapper` and `Animation` is now typed by our own union rather than
@@ -25,6 +30,15 @@ item (see `ROADMAP.md`, Week 4).
   over twelve string literals. The type is structurally identical, so existing
   code keeps compiling; `@floating-ui/react-dom` is unchanged and still does
   the positioning.
+
+### Fixed
+
+- **`Feedback` centres its icon when there is nothing to align it with.** The
+  root element hardcoded top alignment, which is right beside a heading and
+  wrong beside a single line of text — the icon and the message shared only
+  their top padding and sat top-flush. It now top-aligns when there is a
+  `title` or `children` and centres otherwise. An explicit `vertical` prop
+  still overrides the default, as before.
 
 ## [2.0.0-alpha.1] — 2026-09-17
 
