@@ -1,7 +1,7 @@
 ---
 title: "Timeline"
-summary: "Display events or steps in chronological order with flexible layouts and states."
-updatedAt: "2025-10-14"
+summary: "Display events or steps in chronological order. For a video editor's timeline, see Scrubber."
+updatedAt: "2026-09-21"
 docs: "once-ui/components/timeline.mdx"
 github: "components/Timeline.tsx"
 navLabel: "Timeline"
@@ -11,6 +11,12 @@ navTagVariant: "success"
 ---
 
 Timeline helps visualize sequences of events, process steps, or historical data. Configure items via an object array with simple props or custom React nodes.
+
+It lays a sequence out **down the page**, one item after another. If you are
+building a video or audio editor, the component you want is
+[`Scrubber`](/components/scrubber): a playhead over time, with stacked tracks
+of blocks that are selectable, movable and trimmable. The two share a name in
+spirit and nothing in purpose.
 
 ## Basic usage
 

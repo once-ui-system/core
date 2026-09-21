@@ -76,6 +76,13 @@
       "Tag"
     ]
   },
+  "Timeline.notScrubber": {
+    "rule": "Timeline lays a sequence of steps down the page. For a video or audio editor's timeline — a playhead over stacked tracks of movable, trimmable blocks — use Scrubber. Do not build one out of Flex and absolute positioning.",
+    "components": [
+      "Timeline",
+      "Scrubber"
+    ]
+  },
   "color.tokens": {
     "rule": "Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.",
     "components": [
