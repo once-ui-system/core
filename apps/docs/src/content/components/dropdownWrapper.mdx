@@ -222,6 +222,17 @@ return (
   ]}
 />
 
+## Where it opens
+
+A panel opens on the option marked `aria-selected="true"`, scrolled into view
+inside the panel, the way a native select opens on the value it is already
+showing. `Option` sets that attribute from its `selected` prop, so a list built
+from `Option` needs nothing further. With no selection the panel opens on its
+first enabled option; a selected option that is disabled is skipped.
+
+A panel that leads with something other than its list — a searchable `Select`
+and its query field — opens on that instead.
+
 ## API reference
 
 <PropsTable

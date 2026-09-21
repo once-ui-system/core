@@ -34,6 +34,16 @@ const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(({
   // Store the previously focused element when the trap becomes active
   useEffect(() => {
     if (active) {
+      // Focus already inside means someone placed it there deliberately and
+      // more precisely than "the first focusable element" — DropdownWrapper
+      // opens a list on its selected option, not its first. This effect can
+      // run before or after that, depending on when the panel finishes
+      // positioning, so it defers instead of racing: a trap's job is to keep
+      // focus in, not to reset where it sits. The element outside is likewise
+      // only worth remembering when focus is actually coming from out there.
+      const alreadyInside = containerRef.current?.contains(document.activeElement) ?? false;
+      if (alreadyInside) return;
+
       previouslyFocusedElement.current = document.activeElement;
 
       if (autoFocus) {

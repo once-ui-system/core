@@ -157,6 +157,21 @@ would pull focus off it. A `DatePicker` does exactly that: it remounts its
 calendar whenever the month or year selector closes, and focus used to land on
 a day button instead of staying on the trigger the user had just used.
 
+## Where it takes focus
+
+When `autoFocus` does take focus and you have not named an
+`initialFocusedIndex`, it goes to the item marked `aria-selected="true"`, the
+way a native select opens on the value it is already showing. A list with no
+selection — a menu, a command palette — starts at its first enabled item, as
+before. A selected item that is disabled is skipped: focus has to land
+somewhere usable.
+
+`aria-selected` is yours to author; `Option` sets it from its `selected` prop.
+Do not drive it from the focused index — that is what `data-highlighted` and
+the `highlighted` class are for. Conflating the two makes a screen reader
+announce whichever item the arrow keys have reached as the selected one, and
+leaves this with nothing to open on.
+
 ## API reference
 
 <PropsTable
@@ -169,7 +184,7 @@ a day button instead of staying on the trigger the user had just used.
     ["wrap", "boolean", "true", "Carry focus from the last item to the first."],
     ["initialFocusedIndex", "number", "-1", "Which item starts current. -1 means none; see above for when it takes focus."],
     ["itemSelector", "string", "role=option, data-value, button, tabindex", "How navigable children are found."],
-    ["autoFocus", "boolean", "false", "Take focus on mount, at initialFocusedIndex when one is set."],
+    ["autoFocus", "boolean", "false", "Take focus on mount — at initialFocusedIndex if set, else the selected item."],
     ["disabled", "boolean", "false", "Stop handling keys."],
     ["disableHighlighting", "boolean", "false", "Skip applying the highlighted state to items."],
     ["trapFocus", "boolean", "false", "Wrap the region in a FocusTrap."],

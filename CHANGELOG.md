@@ -78,6 +78,34 @@ item (see `ROADMAP.md`, Week 4).
   code keeps compiling; `@floating-ui/react-dom` is unchanged and still does
   the positioning.
 
+### Changed
+
+- **A dropdown opens on the option it is already showing.** Every
+  `DropdownWrapper`-based list — `Select`, `DatePicker`'s month and year
+  selectors, an org switcher — opened focused on its *first* option regardless
+  of the current value. On a long list that hides the answer: the year picker
+  opened on 2001 with the chosen 2025 scrolled out of sight, and the arrow keys
+  then walked from the top rather than from the selection. The panel now opens
+  on the option marked `aria-selected="true"`, scrolled into view within the
+  panel and never by scrolling the page, and falls back to the first enabled
+  option for a list with no selection — a menu or a command palette behaves
+  exactly as before. A selected option that is disabled is skipped, and a panel
+  that leads with something other than its list, such as a searchable
+  `Select`'s query field, still opens on that.
+
+  `Option` already sets `aria-selected` from its `selected` prop, so lists
+  built from `Option` need no change.
+
+- **`useArrowNavigation` no longer writes `aria-selected`.** It set the
+  attribute from `focusedIndex` on every keystroke, so a screen reader
+  announced whichever option the arrow keys had reached as the selected one and
+  the option the user had actually chosen as unselected. Highlighting is
+  `data-highlighted` and the `highlighted` class, which are unchanged;
+  `aria-selected` is the consumer's to author, and is now also what a panel
+  reads to decide where to open. Anything that was relying on the hook to
+  write it — the pattern the hook's own docs showed — should set it from its
+  own selected value instead.
+
 ### Fixed
 
 - **`Textarea` measures like the input beside it.** It pinned its own height
@@ -156,6 +184,26 @@ item (see `ROADMAP.md`, Week 4).
   container depending on how much layout work landed in between; it now defers
   to the item. `apps/dev/src/app/(main)/datepicker-check` is the browser
   fixture these were measured against.
+- **`FocusTrap` no longer pulls focus back to the first focusable element.**
+  Its `autoFocus` ran whether or not focus was already inside the trap, so it
+  competed with whoever had placed focus more precisely: measured in Chromium,
+  reopening a `DatePicker`'s year list landed on 2024 and was then dragged back
+  to 2001 two milliseconds later, and which one won depended on whether
+  Floating UI had to measure the panel again. It now defers when focus is
+  already inside, which is what a trap is for — keeping focus in, not deciding
+  where it sits.
+
+- **A `DropdownWrapper` forgets its focused index when it closes.** The index
+  seeds `ArrowNavigation`'s `initialFocusedIndex`, which is read once at mount,
+  so the next open started from the last session's index and never resolved the
+  current selection at all.
+
+- **Scrolling an option into view no longer moves the page, or lands short.**
+  It called `scrollIntoView`, which walks every scrollable ancestor. It now
+  scrolls only the nearest scroller inside the panel, measured in layout pixels
+  rather than through `getBoundingClientRect` — the panel scales from 0.9 to 1
+  as it opens, so rects taken during that animation are up to a tenth short and
+  left the selected row 35px below the scrollport, just off the bottom edge.
 
 ## [2.0.0-alpha.1] — 2026-09-17
 
