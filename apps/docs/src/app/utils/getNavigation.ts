@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import frontMatter from 'front-matter';
 import { Schemes } from '@once-ui-system/core';
+import { toAvailability, type Availability } from '@/product/availability';
 
 interface NavigationItem {
     slug: string;
@@ -11,6 +12,8 @@ interface NavigationItem {
     navLabel?: string;
     navIcon?: string;
     navTagVariant?: Schemes;
+    /** Whether this can be installed today. See product/availability.ts. */
+    status?: Availability;
     keywords?: string;
     children?: NavigationItem[];
     order?: number;
@@ -136,6 +139,7 @@ export default function getNavigation(dirPath = path.join(process.cwd(), 'src/co
         navLabel: attributes.navLabel,
         navIcon: attributes.navIcon,
         navTagVariant: attributes.navTagVariant,
+        status: toAvailability(attributes.status),
         keywords: attributes.keywords,
         order: pageOrder !== undefined ? pageOrder : attributes.order,
         updatedAt: attributes.updatedAt,

@@ -15,6 +15,28 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Docs pages say whether you can install what they describe.** A `status`
+  frontmatter field — `"alpha"` or `"unreleased"`, absent meaning available on
+  `latest` — puts a tag in the sidebar and a notice under the page title.
+  `VersionBanner` already said the site documents 2.0, but it says one thing to
+  every page, and it cannot tell "shipped in the alpha" from "not published
+  anywhere yet": it told both to install `@alpha`, which is wrong for the
+  second. It is also above the sidebar, far from where someone arriving from a
+  search result starts reading.
+
+  Deliberately a separate axis from `navTag`. That one says *when something
+  changed* and decays on a timer — grey at 30 days, gone at 60 — while
+  availability stops being true only when a release makes it false, and a page
+  can be both new and unreleased at once. Where both apply the sidebar shows
+  availability, because in a column that narrow it is the more useful of the
+  two.
+
+  Applied to the six pages documenting components that do not exist in 1.8.5:
+  `Book`, `Effect`, `InfoTip`, `NavItem`/`NavGroup`, `Scrubber` and `Setting`,
+  verified against the published dist-tags rather than assumed. The media
+  players page is left alone on purpose — its video half shipped in 1.8.5 and
+  only the audio player is new, so the page as a whole is not alpha-only.
+
 - **`Feedback` takes an `icon`.** It was locked to the variant's glyph, with
   `showIcon` only able to turn it off. `icon` accepts any `IconName`, so a
   custom name registered through `IconLibraryOverrides` works here too; leaving
@@ -32,6 +54,17 @@ item (see `ROADMAP.md`, Week 4).
   the positioning.
 
 ### Fixed
+
+- **The docs sidebar shows which tag a page carries, not just a dot.** Every
+  tagged page writes `navTag: "New"` or `"Update"` in its frontmatter, and the
+  sidebar rendered only a coloured `Pulse` — so the two were distinguishable
+  only as cyan against green, with the authored word thrown away and the whole
+  meaning resting on hue. The dot stays; the word is now beside it.
+
+- **`getPages` read frontmatter keys no page writes.** It took `navTag` and
+  `navLabel` from `attributes.tag` and `attributes.tagLabel`, so both were
+  always `undefined` on that path while `getNavigation` read the same
+  frontmatter correctly.
 
 - **`Feedback` centres its icon when there is nothing to align it with.** The
   root element hardcoded top alignment, which is right beside a heading and

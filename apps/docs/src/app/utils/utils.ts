@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import frontMatter from "front-matter";
 import { Schemes } from "@once-ui-system/core";
+import { toAvailability, type Availability } from "@/product/availability";
 
 interface Post {
   slug: string;
@@ -18,6 +19,8 @@ interface Post {
     updatedAt: string;
     image?: string;
     order?: number;
+    /** Whether this can be installed today. See product/availability.ts. */
+    status?: Availability;
   };
 }
 
@@ -72,8 +75,8 @@ export function getPages(customPath = ["src", "content"]): Post[] {
         posts.push({
           slug,
           content: body,
-          navTag: attributes.tag,
-          navLabel: attributes.tagLabel,
+          navTag: attributes.navTag,
+          navLabel: attributes.navLabel,
           navIcon: attributes.navIcon,
           navTagVariant: attributes.navTagVariant,
           metadata: {
@@ -83,6 +86,7 @@ export function getPages(customPath = ["src", "content"]): Post[] {
             github: attributes.github,
             updatedAt: attributes.updatedAt || '',
             image: attributes.image,
+            status: toAvailability(attributes.status),
             // Priority: 1. Frontmatter order, 2. meta.json order, 3. undefined
             order: attributes.order !== undefined ? Number(attributes.order) : (metaOrder !== undefined ? Number(metaOrder) : undefined),
           },

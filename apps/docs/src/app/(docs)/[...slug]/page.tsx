@@ -5,6 +5,7 @@ import { Column, Heading, Icon, Row, Media, Text, Card, HeadingNav, Meta, Schema
 import { baseURL, layout, schema } from "@/resources";
 import { CustomMDX } from "@/product/mdx";
 import { CopyPage } from "@/product/CopyPage";
+import { AvailabilityNotice } from "@/product/AvailabilityNotice";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
@@ -92,6 +93,9 @@ export default async function Docs({
               )}
               <CopyPage path={`/${doc.slug}`} />
             </Row>
+            {doc.metadata.status && (
+              <AvailabilityNotice status={doc.metadata.status} />
+            )}
           </Column>
           {doc.metadata.image && (
             <Media marginY="24" border="neutral-alpha-weak" enlarge src={doc.metadata.image} alt={"Thumbnail of " + doc.metadata.title} aspectRatio="16 / 9" radius="m" sizes={768} priority />
