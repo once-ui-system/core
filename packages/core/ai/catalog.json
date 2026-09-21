@@ -1,6 +1,6 @@
 {
  "version": "2.0.0-alpha.1",
- "generated": "2026-09-19",
+ "generated": "2026-09-21",
  "components": {
   "Accordion": {
    "group": "components",
@@ -426,6 +426,13 @@
     "Flex"
    ],
    "purpose": "FlipFx component",
+   "tags": [
+    "components"
+   ]
+  },
+  "Form": {
+   "group": "components",
+   "purpose": "Form component",
    "tags": [
     "components"
    ]

@@ -1,0 +1,194 @@
+---
+title: "Form"
+summary: "Form lays fields out in a grid and carries their spacing density and grouping as one decision."
+updatedAt: "2026-09-21"
+docs: "once-ui/form-controls/form.mdx"
+github: "components/Form.tsx"
+navLabel: "Form"
+navIcon: "switch"
+---
+
+The `Form` component lays a set of fields out and decides how they read together. `density` carries the gap and the grouping as one choice, because they are one choice: `"stacked"` fuses the fields into a single control, while `"tight"` and `"spacious"` leave each one its own.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Form density="stacked">
+      <Input id="form-email" placeholder="Email" />
+      <Input id="form-password" placeholder="Password" type="password" />
+      <Input id="form-workspace" placeholder="Workspace" />
+    </Form>
+  }
+  codes={[
+    {
+      code:
+`<Form density="stacked">
+    <Input id="email" placeholder="Email" />
+    <Input id="password" placeholder="Password" type="password" />
+    <Input id="workspace" placeholder="Workspace" />
+</Form>`,
+      language: "tsx",
+      label: "Form"
+    }
+  ]}
+/>
+
+## Why not assign corners by hand
+
+A stacked group is often built by passing `corners="top"`, `"none"` and `"bottom"` down a list. That is positional bookkeeping, and it breaks the moment the list changes: hide the third of four fields behind a condition and the group ends on a square edge, because the field that was told it was in the middle is now last.
+
+`Form` works the other way round. It looks at which children actually rendered, works out where each one lands in the grid, and rounds only the corners that end up on the outside of the group. Nothing has to be told its position.
+
+## Density
+
+`"stacked"` collapses the gap to nothing and pulls adjacent borders onto a single shared hairline. `"tight"` and `"spacious"` are ordinary gaps, and every field keeps its own border and radius.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="24" s={{ direction: "column" }}>
+      <Form density="tight">
+        <Input id="d-tight-1" placeholder="First name" />
+        <Input id="d-tight-2" placeholder="Last name" />
+      </Form>
+      <Form density="spacious">
+        <Input id="d-spacious-1" placeholder="First name" />
+        <Input id="d-spacious-2" placeholder="Last name" />
+      </Form>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Form density="tight">...</Form>
+<Form density="spacious">...</Form>`,
+      language: "tsx",
+      label: "Density"
+    }
+  ]}
+/>
+
+## Columns and spans
+
+`columns` lays the fields out in a grid. A field can take more than one column with `span`, which `Form` reads off the child and strips before it reaches the DOM.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Form density="stacked" columns={2}>
+      <Input id="g-first" placeholder="First name" />
+      <Input id="g-last" placeholder="Last name" />
+      <Input id="g-email" placeholder="Email" span={2} />
+      <Textarea id="g-note" placeholder="Note" span={2} />
+    </Form>
+  }
+  codes={[
+    {
+      code:
+`<Form density="stacked" columns={2}>
+    <Input id="first" placeholder="First name" />
+    <Input id="last" placeholder="Last name" />
+    <Input id="email" placeholder="Email" span={2} />
+    <Textarea id="note" placeholder="Note" span={2} />
+</Form>`,
+      language: "tsx",
+      label: "Columns"
+    }
+  ]}
+/>
+
+A last row that does not fill is handled too. Three fields in two columns make an L, and the second field keeps its bottom-right corner because that corner is on the outside of the group — even though it is not the last child.
+
+## Responsive columns
+
+`columns` also takes a per-breakpoint map. The column count changes with the viewport, and so does which field sits in a corner — so `Form` works the placement out for every breakpoint and lets CSS pick. Nothing is measured and nothing re-renders on resize.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Form density="stacked" columns={{ xs: 1, m: 2 }}>
+      <Input id="r-first" placeholder="First name" />
+      <Input id="r-last" placeholder="Last name" />
+      <Input id="r-email" placeholder="Email" span={2} />
+    </Form>
+  }
+  codes={[
+    {
+      code:
+`<Form density="stacked" columns={{ xs: 1, m: 2 }}>
+    <Input id="first" placeholder="First name" />
+    <Input id="last" placeholder="Last name" />
+    <Input id="email" placeholder="Email" span={2} />
+</Form>`,
+      language: "tsx",
+      label: "Responsive"
+    }
+  ]}
+/>
+
+## Size
+
+`size` sets the size of every field in the group. A field that sets its own `size` keeps it. It travels by context rather than being cloned onto the children, so a child that is not a field picks up nothing.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Form density="stacked" size="s">
+      <Input id="s-email" placeholder="Email" />
+      <Input id="s-workspace" placeholder="Workspace" />
+    </Form>
+  }
+  codes={[
+    {
+      code:
+`<Form density="stacked" size="s">
+    <Input id="email" placeholder="Email" />
+    <Input id="workspace" placeholder="Workspace" />
+</Form>`,
+      language: "tsx",
+      label: "Size"
+    }
+  ]}
+/>
+
+## Focus
+
+In a stacked group the fields overlap by a pixel, so a focused field has to paint above its neighbours — all four of them in two dimensions. `Form` lifts the focused cell for you. Turn the ring itself on with `focusRing` on the fields, which is worth doing for a form a keyboard user has to get through.
+
+## What fuses, and what does not
+
+`Form` rounds the corners of children that mark their own bordered box as a fusable surface. `Input`, `Textarea` and the fields built on them do. Anything else is laid out in the grid and spaced normally, but keeps its own corners — so a `Button` or a block of text can sit in a form without being absorbed into the group.
+
+## Submitting
+
+Pass `as="form"` to render a real `<form>` and take `onSubmit`.
+
+```tsx
+<Form as="form" density="stacked" onSubmit={handleSubmit}>
+  <Input id="email" placeholder="Email" />
+</Form>
+```
+
+## API reference
+
+<PropsTable
+  component="Form"
+  describe={{
+    density: "Gap and grouping as one decision. \"stacked\" fuses the fields into a single control; \"tight\" and \"spacious\" leave each its own border and radius.",
+    columns: "Grid columns — a number, or a per-breakpoint map like { xs: 1, m: 2 }.",
+    size: "Size for every field in the group. A field that sets its own size keeps it.",
+    as: "Render a real <form> rather than a <div>.",
+    onSubmit: "Submit handler. Only attached when as is \"form\".",
+    className: "",
+    style: "",
+    children: "The fields. Conditional children that render nothing are ignored, and the corners follow.",
+  }}
+  content={[
+    ["...HTMLAttributes"]
+  ]}
+/>

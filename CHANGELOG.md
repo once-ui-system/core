@@ -15,6 +15,31 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`Form`, a layout for a set of fields.** `density` carries the gap and the
+  grouping as one decision, because they are one decision: `"stacked"` fuses
+  the fields into a single control, with the borders of neighbours collapsed
+  onto one hairline and only the outside of the group left round, while
+  `"tight"` and `"spacious"` are ordinary gaps that leave every field its own
+  border and radius. `columns` lays the fields out in a grid and takes a
+  per-breakpoint map; a field can occupy more than one column with `span`;
+  `size` sets the size of every field in the group, and a field that sets its
+  own still wins.
+
+  The corners are the point. Passing `corners="top" | "none" | "bottom"` down
+  a stack is positional bookkeeping that breaks the moment a field is
+  conditionally rendered or reordered — hide the third of four and the group
+  ends on a square edge. `Form` derives them from the children that actually
+  rendered and from where each one lands in the grid, so a ragged last row, a
+  spanning field and a column count that changes with the viewport all come
+  out right. A focused field is lifted above its neighbours, and nothing in
+  the component clips, so the focus ring stays whole.
+
+  `Input` and `Textarea` gained a `span` prop, read by `Form` and stripped
+  before it reaches the DOM, and mark their bordered box with
+  `data-surface="field"` so `Form` can reach the element that actually carries
+  the radius. Children that do not mark a surface are laid out and spaced but
+  keep their own corners.
+
 - **Docs pages say whether you can install what they describe.** A `status`
   frontmatter field — `"alpha"` or `"unreleased"`, absent meaning available on
   `latest` — puts a tag in the sidebar and a notice under the page title.
@@ -54,6 +79,17 @@ item (see `ROADMAP.md`, Week 4).
   the positioning.
 
 ### Fixed
+
+- **`Textarea` measures like the input beside it.** It pinned its own height
+  inline — 48px with a placeholder, 56px without — which ignored `size`
+  entirely and left a placeholder-only textarea 8px shorter than an `m`
+  `Input`. Its first line then sat at the top of the content box while an
+  input centres its value, an 11px step that reads as a misplaced placeholder.
+  The height now comes from the size token like every other field, and the
+  block is padded symmetrically so its first line lands where an input's
+  single line does and the rest grows downwards from there. A field with a
+  floating label is unaffected; that case still places the value under the
+  label.
 
 - **The docs sidebar shows which tag a page carries, not just a dot.** Every
   tagged page writes `navTag: "New"` or `"Update"` in its frontmatter, and the

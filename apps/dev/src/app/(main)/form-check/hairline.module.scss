@@ -1,0 +1,64 @@
+/* Mechanism B prototype — "hairline lattice".
+   ----------------------------------------------------------------------------
+   Kept in the dev app rather than in the library on purpose: this is the
+   mechanism Form did NOT ship, retained so the comparison in
+   docs/rfcs can be re-checked against something running rather than
+   against a description of it.
+
+   The idea: instead of pulling borders together with negative margins, leave a
+   1px gap and let the container paint through it. The fields have to be
+   ghosted, because the line is the container's, not theirs.
+
+   The catch this page exists to show: Once UI fields default to a translucent
+   `neutral-alpha-weak` background (15% alpha). Over a container painted the
+   border colour, every field composites against the line rather than against
+   the page, so the whole group picks up a tint — not just the 1px gaps. The
+   cell below has to re-establish an opaque backdrop to undo it, and that
+   backdrop is a guess at what is behind the form. */
+
+.lattice {
+  display: grid;
+  background: var(--neutral-border-medium);
+  gap: 1px;
+  border: 1px solid var(--neutral-border-medium);
+  border-radius: var(--radius-l);
+}
+
+.cell {
+  position: relative;
+  min-width: 0;
+  /* The opaque backdrop. Guessing `--page-background` is the flaw: drop this
+     group onto a Card or any tinted surface and the fields stop matching what
+     surrounds them. */
+  background: var(--page-background);
+}
+
+.cell:focus-within {
+  z-index: 1;
+}
+
+/* Outer corners have to be clipped or restated. `overflow: hidden` on the
+   container is the obvious move and is exactly what cannot be used — it clips
+   the focus ring, which is an outline with a 2px offset. So the corner cells
+   restate the radius themselves, which means the mechanism needs the same
+   per-cell geometry as mechanism A anyway, and buys nothing for it. */
+.cell:first-child {
+  border-top-left-radius: calc(var(--radius-l) - 1px);
+}
+
+.cell:nth-child(2) {
+  border-top-right-radius: calc(var(--radius-l) - 1px);
+}
+
+.cell:last-child {
+  border-bottom-right-radius: calc(var(--radius-l) - 1px);
+  border-bottom-left-radius: calc(var(--radius-l) - 1px);
+}
+
+.twoCol {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.span2 {
+  grid-column: span 2;
+}

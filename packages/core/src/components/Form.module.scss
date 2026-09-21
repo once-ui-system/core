@@ -1,0 +1,160 @@
+@use "../styles/breakpoints.scss" as breakpoints;
+
+/* Form — density and grouping
+   ----------------------------------------------------------------------------
+   Two things are worth knowing before editing this file.
+
+   1. The element that carries the border and the radius is not Form's child.
+      `Input` and `Textarea` render an outer `Column` — which also holds the
+      error and description rows — wrapping the bordered `Row`. So Form's cell
+      is the grandparent of the surface, and every rule here reaches it through
+      `[data-surface]`, a hook those components set on that `Row`, rather than
+      through `> *`. Bounded to two levels on purpose: a field nested deeper
+      inside a cell belongs to somebody else's group, not this one's.
+
+   2. Nothing here relies on source order to win. The utility already on the
+      surface is `.radius-l`, specificity (0,1,0); every rule below that has to
+      beat it is at least (0,3,0). Where a breakpoint has to undo what a wider
+      one set, it does so through a reset class that is strictly *less*
+      specific than the rules re-applying over it, so the cascade resolves the
+      same way whichever order a bundler emits them in. */
+
+/* The two shapes a cell can hold: a surface that is the cell's own child, and
+   the field case, where an outer Column sits in between. */
+@mixin surface {
+  > [data-surface],
+  > * > [data-surface] {
+    @content;
+  }
+}
+
+.form {
+  /* Corners travel as custom properties rather than going straight to
+     `border-radius`, so a breakpoint can move one corner without restating
+     the other three. */
+  --form-radius: var(--radius-l);
+}
+
+.cell {
+  position: relative;
+  /* A grid item's default `min-width: auto` refuses to shrink below its
+     content, so one long placeholder would widen the whole column. */
+  min-width: 0;
+}
+
+.stacked {
+  .cell {
+    --form-tl: 0px;
+    --form-tr: 0px;
+    --form-bl: 0px;
+    --form-br: 0px;
+
+    @include surface {
+      border-radius: var(--form-tl) var(--form-tr) var(--form-br) var(--form-bl);
+    }
+  }
+
+  /* A focused field has to paint over its neighbours — all four of them in two
+     dimensions. `SegmentedControl` omits this in compact mode, and its focused
+     button loses an edge to the next one; the fix belongs here, where the
+     overlap is created. Note there is no `overflow: hidden` anywhere in this
+     file, for the same reason: the focus ring is an `outline` with a 2px
+     offset, and clipping the cell would clip the ring. */
+  .cell:focus-within {
+    z-index: 1;
+  }
+}
+
+/* Placement rules, emitted once bare and once inside each breakpoint.
+   `$p` is the class prefix; the bare pass has none. */
+@mixin placement($p: "") {
+  $sep: if($p == "", "", "-");
+
+  /* Every breakpoint clears the wider one's answer before giving its own,
+     because at 375px the `l`, `m`, `s` and `xs` queries all match at once and
+     only the narrowest should be heard.
+
+     Reset and rules sit at the same specificity, (0,3,0), with the reset
+     written first — the same way `grid.generated.scss` orders its own
+     breakpoint classes, and the reason `placement()` is invoked below in
+     cascade order. What is deliberately NOT left to order is the fight
+     against the surface's own `.radius-l` utility from another file: that is
+     (0,1,0), and everything here outranks it outright.
+
+     Split in two because a span has to reset at every density, while corners
+     and collapsed margins exist only when stacked. */
+  @if $p != "" {
+    .form .cell.#{$p}#{$sep}reset {
+      grid-column: auto;
+    }
+
+    .stacked .cell.#{$p}#{$sep}reset {
+      --form-tl: 0px;
+      --form-tr: 0px;
+      --form-bl: 0px;
+      --form-br: 0px;
+      margin-top: 0;
+      margin-left: 0;
+    }
+  }
+
+  .stacked .cell.#{$p}#{$sep}corner-tl {
+    --form-tl: var(--form-radius);
+  }
+
+  .stacked .cell.#{$p}#{$sep}corner-tr {
+    --form-tr: var(--form-radius);
+  }
+
+  .stacked .cell.#{$p}#{$sep}corner-bl {
+    --form-bl: var(--form-radius);
+  }
+
+  .stacked .cell.#{$p}#{$sep}corner-br {
+    --form-br: var(--form-radius);
+  }
+
+  /* Two adjacent 1px borders pulled together by -1px collapse onto exactly one
+     line — the trick `gap="-1"` plays for flex, which has no grid equivalent.
+     `g--1` does not exist, and the flex classes key off `:not(:first-child)`,
+     which in a grid would drag the first cell of every row after the first
+     sideways. Applied per cell, because Form knows the row and the column that
+     a utility class cannot. */
+  .stacked .cell.#{$p}#{$sep}fuse-top {
+    margin-top: -1px;
+  }
+
+  .stacked .cell.#{$p}#{$sep}fuse-left {
+    margin-left: -1px;
+  }
+
+  @for $n from 2 through 12 {
+    .form .cell.#{$p}#{$sep}span-#{$n} {
+      grid-column: span #{$n};
+    }
+  }
+}
+
+@include placement();
+
+/* Order matches grid.generated.scss: xl leads, then the max-width queries from
+   widest to narrowest, so the narrowest one that matches wins. */
+@include breakpoints.xl {
+  @include placement("xl");
+}
+
+@include breakpoints.l {
+  @include placement("l");
+}
+
+@include breakpoints.m {
+  @include placement("m");
+}
+
+@include breakpoints.s {
+  @include placement("s");
+}
+
+@include breakpoints.xs {
+  @include placement("xs");
+}
