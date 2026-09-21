@@ -10,6 +10,8 @@
 }
 
 .fadeIn {
-  transform-origin: top right;
+  /* transform-origin is set inline from the RESOLVED placement — see
+     DropdownWrapper.tsx. Hardcoding it to `top right` here made every
+     left-anchored panel slide sideways as it scaled open. */
   animation: fadeIn var(--transition-duration-micro-medium) var(--transition-eased);
 }
