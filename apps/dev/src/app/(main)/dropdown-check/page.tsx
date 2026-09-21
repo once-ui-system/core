@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Column, DropdownWrapper, Option, Row, Text } from "@once-ui-system/core";
+import { useState } from "react";
+import { Button, Column, DropdownWrapper, Option, Row, Select, Text } from "@once-ui-system/core";
 
 /**
  * DropdownWrapper check page — permanent regression fixture.
@@ -15,8 +16,17 @@ import { Button, Column, DropdownWrapper, Option, Row, Text } from "@once-ui-sys
  * 2. fillWidth + bottom-end in a scrollable panel: panel sits flush under
  *    the trigger, no overhang, tracks scroll while open.
  * 3. No fillWidth: panel stays content-sized.
+ * 4. A list with a selection opens on it, not at the top, and a searchable
+ *    Select still opens on its query field.
  */
+const LETTERS = Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i));
+
 export default function DropdownCheck() {
+  // Far enough down the list to be scrolled out of sight when it opens at the
+  // top, which is the case worth anchoring.
+  const [plain, setPlain] = useState("T");
+  const [searchable, setSearchable] = useState("T");
+
   return (
     <Row fillWidth gap="24" padding="24" data-testid="root">
       {/* Case 1: org-switcher style — wide fillWidth trigger */}
@@ -93,6 +103,28 @@ export default function DropdownCheck() {
             </Row>
           </Row>
         ))}
+      </Column>
+
+      {/* Case 4: where a list opens */}
+      <Column width={20} gap="12" data-testid="case-select">
+        <Text variant="label-strong-s">Case 4: opens on the selection</Text>
+        <Select
+          id="select-plain"
+          label="Plain"
+          value={plain}
+          onSelect={(value) => setPlain(String(value))}
+          data-testid="select-plain"
+          options={LETTERS.map((value) => ({ value, label: value }))}
+        />
+        <Select
+          id="select-searchable"
+          label="Searchable"
+          searchable
+          value={searchable}
+          onSelect={(value) => setSearchable(String(value))}
+          data-testid="select-searchable"
+          options={LETTERS.map((value) => ({ value, label: value }))}
+        />
       </Column>
 
       {/* Case 3: content-sized (no fillWidth) — must stay content width */}

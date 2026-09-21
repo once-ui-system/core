@@ -52,6 +52,9 @@ export interface DropdownWrapperProps {
 // Global state to track the last opened dropdown
 let dropdownCounter = 0;
 
+const isEnabledOption = (el: Element) =>
+  !el.hasAttribute("disabled") && el.getAttribute("aria-disabled") !== "true";
+
 const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
   (
     {
@@ -241,6 +244,69 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       }
     }, [isOpen, mounted, update]);
 
+    /**
+     * Which option the panel opens on: the selected one, else the first
+     * enabled one. Deliberately the same rule `useArrowNavigation` applies to
+     * its own `autoFocus` — see the long form there — so the two agree
+     * instead of fighting over where focus lands. Kept here rather than
+     * shared through `utils`, which is published: this is an internal detail
+     * of how a panel opens, not API.
+     */
+    const resolveOpenIndex = useCallback((options: HTMLElement[]) => {
+      const selected = options.findIndex(
+        (el) => el.getAttribute("aria-selected") === "true" && isEnabledOption(el),
+      );
+      if (selected >= 0) return selected;
+      const first = options.findIndex(isEnabledOption);
+      return first >= 0 ? first : 0;
+    }, []);
+
+    /** The nearest scrollable ancestor of an option, no higher than the panel. */
+    const findScroller = useCallback((option: HTMLElement | undefined) => {
+      const panel = dropdownRef.current;
+      if (!option || !panel) return null;
+      for (let el = option.parentElement; el && panel.contains(el); el = el.parentElement) {
+        if (el.scrollHeight > el.clientHeight) return el;
+      }
+      return null;
+    }, []);
+
+    /**
+     * Bring an option into view by scrolling the panel, never the page.
+     * `scrollIntoView` walks every scrollable ancestor, so opening a long
+     * list on its selection would drag the document with it; this moves only
+     * the nearest scroller inside the panel.
+     *
+     * Measured in layout pixels — `offsetTop` and `clientHeight` — rather than
+     * through `getBoundingClientRect`. The panel scales from 0.9 to 1 as it
+     * opens, so rects taken during that animation are up to a tenth short
+     * while `scrollTop` is always layout pixels: mixing the two left the
+     * selected row 35px below the scrollport, just off the bottom edge.
+     */
+    const scrollOptionIntoView = useCallback(
+      (option: HTMLElement) => {
+        const scroller = findScroller(option);
+        if (!scroller) return;
+
+        let top = option.offsetTop;
+        for (
+          let parent = option.offsetParent as HTMLElement | null;
+          parent && parent !== scroller && scroller.contains(parent);
+          parent = parent.offsetParent as HTMLElement | null
+        ) {
+          top += parent.offsetTop;
+        }
+
+        const bottom = top + option.offsetHeight;
+        if (bottom > scroller.scrollTop + scroller.clientHeight) {
+          scroller.scrollTop = bottom - scroller.clientHeight;
+        } else if (top < scroller.scrollTop) {
+          scroller.scrollTop = top;
+        }
+      },
+      [findScroller],
+    );
+
     useEffect(() => {
       if (isOpen && mounted) {
         // Store the currently focused element before focusing the dropdown
@@ -253,39 +319,54 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             // Reset focus index when opening
             setFocusedIndex(-1);
 
-            const focusableElements = dropdownRef.current.querySelectorAll(
-              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-            );
+            const focusableElements = Array.from(
+              dropdownRef.current.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+              ),
+            ) as HTMLElement[];
 
-            if (focusableElements.length > 0) {
-              (focusableElements[0] as HTMLElement).focus({ preventScroll: true });
-            }
+            const optionElements = Array.from(
+              dropdownRef.current.querySelectorAll('.option, [role="option"], [data-value]'),
+            ) as HTMLElement[];
 
-            const optionElements = dropdownRef.current
-              ? Array.from(
-                  dropdownRef.current.querySelectorAll('.option, [role="option"], [data-value]'),
-                )
-              : [];
+            const openIndex = resolveOpenIndex(optionElements);
+
+            // A panel that leads with something other than its list — a
+            // searchable Select's query field — still opens on that. Only a
+            // plain list opens on its selection.
+            const leadsWithOptions =
+              focusableElements.length > 0 && optionElements.includes(focusableElements[0]);
+            const target = leadsWithOptions ? optionElements[openIndex] : focusableElements[0];
+
+            target?.focus({ preventScroll: true });
 
             if (optionElements.length > 0) {
-              setFocusedIndex(0);
+              setFocusedIndex(openIndex);
               optionElements.forEach((el, i) => {
-                if (i === 0) {
-                  (el as HTMLElement).classList.add("highlighted");
+                if (i === openIndex) {
+                  el.classList.add("highlighted");
                 } else {
-                  (el as HTMLElement).classList.remove("highlighted");
+                  el.classList.remove("highlighted");
                 }
               });
             }
           }
         });
-      } else if (!isOpen && previouslyFocusedElement.current) {
-        // Only try to focus if the element is still in the document
-        if (document.contains(previouslyFocusedElement.current)) {
-          (previouslyFocusedElement.current as HTMLElement).focus({ preventScroll: true });
+      } else if (!isOpen) {
+        // Forget where focus was. `focusedIndex` seeds ArrowNavigation's
+        // `initialFocusedIndex`, which is read once at mount — leaving the
+        // last session's index behind meant the next open started from it and
+        // never resolved the current selection at all.
+        setFocusedIndex(-1);
+
+        if (previouslyFocusedElement.current) {
+          // Only try to focus if the element is still in the document
+          if (document.contains(previouslyFocusedElement.current)) {
+            (previouslyFocusedElement.current as HTMLElement).focus({ preventScroll: true });
+          }
         }
       }
-    }, [isOpen, mounted, refs, update]);
+    }, [isOpen, mounted, refs, update, resolveOpenIndex]);
 
     const handleClickOutside = useCallback(
       (event: MouseEvent) => {
@@ -428,6 +509,47 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       ) as HTMLElement[];
     }, []);
 
+    /**
+     * Keep the current option in view — on open, and as the arrow keys move.
+     *
+     * How far to scroll depends on how tall the scrollport is, and that is
+     * still settling: Floating UI's `size` middleware caps the panel's height
+     * from its own measurements, and `autoUpdate` can revise that again a
+     * frame later. Scrolling once, at any single moment, lands short by
+     * however much the panel shrinks afterwards — measured on a 51-row year
+     * list, the selected row ended up 90px below the scrollport, invisible.
+     *
+     * The rows move too: a web font swapping in grew each one by 3px, which
+     * over the 24 rows above the selection added up to 72px of drift after
+     * the scroll had already run.
+     *
+     * So the scroll is tied to the geometry it depends on rather than to a
+     * guess about when that stops changing: the scrollport for its height,
+     * the row for the content's. Either resizing re-runs it. It is
+     * idempotent, scrolls nothing once everything fits, and stops as soon as
+     * the panel closes.
+     */
+    useEffect(() => {
+      if (!isOpen || !isPositioned) return;
+
+      const bring = () => {
+        const options = getOptions();
+        if (focusedIndex >= 0 && focusedIndex < options.length) {
+          scrollOptionIntoView(options[focusedIndex]);
+        }
+      };
+      bring();
+
+      const option = getOptions()[focusedIndex];
+      const scroller = findScroller(option);
+      if (!scroller || typeof ResizeObserver === "undefined") return;
+
+      const observer = new ResizeObserver(bring);
+      observer.observe(scroller);
+      if (option) observer.observe(option);
+      return () => observer.disconnect();
+    }, [isOpen, isPositioned, focusedIndex, getOptions, scrollOptionIntoView, findScroller]);
+
     // Track hover on options to sync with keyboard navigation
     useEffect(() => {
       if (!isOpen || !dropdownRef.current) return;
@@ -500,28 +622,12 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       [getOptions, closeAfterClick, handleOpenChange],
     );
 
-    // Handle focus change
-    const handleFocusChange = useCallback(
-      (index: number) => {
-        setFocusedIndex(index);
-        const options = getOptions();
-        if (index >= 0 && index < options.length && dropdownRef.current) {
-          // Scroll within the dropdown container only, not the page
-          const option = options[index];
-          const container = dropdownRef.current;
-          const optionRect = option.getBoundingClientRect();
-          const containerRect = container.getBoundingClientRect();
-          
-          // Check if option is outside visible area of container
-          if (optionRect.bottom > containerRect.bottom) {
-            option.scrollIntoView({ block: "nearest", behavior: "auto" });
-          } else if (optionRect.top < containerRect.top) {
-            option.scrollIntoView({ block: "nearest", behavior: "auto" });
-          }
-        }
-      },
-      [getOptions],
-    );
+    // Handle focus change. Scrolling the new option into view is the effect
+    // above, which is tied to the scrollport's size; recording the index is
+    // all this has to do.
+    const handleFocusChange = useCallback((index: number) => {
+      setFocusedIndex(index);
+    }, []);
 
     // Handle keyboard navigation
     const handleKeyDown = useCallback(

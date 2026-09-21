@@ -149,7 +149,7 @@ Navigate horizontally:
         <Button
           key={tab.id}
           role="tab"
-          aria-selected={focusedIndex === index}
+          aria-selected={activeTab === tab.id}
         >
           {tab.label}
         </Button>
@@ -171,6 +171,17 @@ when nothing else holds it — the case right after a keyed remount, where the
 element that had focus has just been removed and focusing it again restores
 rather than steals. Every later pass follows a keystroke, so it always moves
 focus.
+
+When it does take focus on that first pass and `initialFocusedIndex` is left at
+`-1`, it goes to the item marked `aria-selected="true"` — a native select opens
+on the value it is already showing, and a long list told from the top hides it.
+With no selection it starts at the first enabled item; a selected item that is
+disabled is skipped.
+
+`aria-selected` is yours to author. Do not drive it from `focusedIndex`: that
+is what the hook's own `data-highlighted` and `highlighted` class are for, and
+conflating the two makes a screen reader announce whichever item the arrow keys
+have reached as the selected one.
 
 ## API Reference
 
@@ -293,7 +304,7 @@ For best accessibility, add appropriate ARIA attributes:
     <div
       key={index}
       role="option"
-      aria-selected={focusedIndex === index}
+      aria-selected={item === selectedItem}
       tabIndex={focusedIndex === index ? 0 : -1}
     >
       {item}

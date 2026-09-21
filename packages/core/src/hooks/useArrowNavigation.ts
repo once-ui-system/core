@@ -45,12 +45,41 @@ export const useArrowNavigation = ({
     }
   }, [itemCount, focusedIndex]);
 
-  // Auto-focus first item if enabled
+  /**
+   * Where `autoFocus` starts. A native select opens on the value it is already
+   * showing, so a list that carries a selection starts there rather than at
+   * the top: opening a year picker on 2001 with the chosen 2025 scrolled out
+   * of sight is the same list, told from the wrong end.
+   *
+   * The selection is read from `aria-selected`, which is the consumer's to
+   * author — `Option` sets it from its `selected` prop. A list with no
+   * selection, a menu or a command palette, has none set and starts at its
+   * first enabled item, as before. Disabled items are skipped either way,
+   * including a selected one: focus has to land somewhere usable.
+   */
+  const resolveInitialIndex = useCallback(() => {
+    const items = containerRef?.current
+      ? (Array.from(containerRef.current.querySelectorAll(itemSelector)) as HTMLElement[])
+      : [];
+    const enabled = (item: HTMLElement | undefined) =>
+      !!item && !item.hasAttribute("disabled") && item.getAttribute("aria-disabled") !== "true";
+
+    const selected = items.findIndex(
+      (item) => item.getAttribute("aria-selected") === "true" && enabled(item),
+    );
+    if (selected >= 0) return selected;
+
+    const first = items.findIndex((item) => enabled(item));
+    return first >= 0 ? first : 0;
+  }, [containerRef, itemSelector]);
+
+
+  // Auto-focus on mount if enabled
   useEffect(() => {
     if (autoFocus && itemCount > 0 && focusedIndex === -1) {
-      setFocusedIndex(0);
+      setFocusedIndex(resolveInitialIndex());
     }
-  }, [autoFocus, itemCount, focusedIndex]);
+  }, [autoFocus, itemCount, focusedIndex, resolveInitialIndex]);
 
   // Update focus when focusedIndex changes
   useEffect(() => {
@@ -275,14 +304,18 @@ export const useArrowNavigation = ({
       const isDisabled =
         item.hasAttribute("disabled") || item.getAttribute("aria-disabled") === "true";
 
+      // `aria-selected` is deliberately not touched here. It says which option
+      // is *chosen*, which is the consumer's to author and ours to read when
+      // deciding where to open; writing it from `focusedIndex` conflated the
+      // two, so a screen reader announced whichever option the arrow keys had
+      // reached as the selected one and the real selection as unselected.
+      // Highlighting is `data-highlighted` and the class.
       if (index === focusedIndex && !isDisabled) {
         item.setAttribute("data-highlighted", "true");
         item.classList.add("highlighted");
-        item.setAttribute("aria-selected", "true");
       } else {
         item.removeAttribute("data-highlighted");
         item.classList.remove("highlighted");
-        item.setAttribute("aria-selected", "false");
       }
     });
   }, [containerRef, itemSelector, focusedIndex, disableHighlighting]);
