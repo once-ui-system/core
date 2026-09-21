@@ -24,14 +24,13 @@ const panel = (id: "month-dropdown" | "year-dropdown") =>
  *  - It asserts only the year-then-month direction. Under jsdom the year
  *    trigger opens and the month trigger does not, on identical code paths,
  *    and that is equally true of the component before this change.
- *  - The first click on either trigger is swallowed, again both before and
- *    after. So without the fix this fails on the FIRST assertion rather than
- *    the second, which means part of what makes it pass afterwards is the
- *    extra state update forcing a render, not purely the handler pair.
- *
- * The swallowed first click is a separate, pre-existing fault and is the
- * better explanation of "doesn't feel native" than the double-open is. It is
- * not fixed here and wants its own diagnosis.
+ *  - Under jsdom the first click on either trigger appears to be swallowed,
+ *    both before and after, so without the fix this fails on the FIRST
+ *    assertion rather than the second: part of what makes it pass afterwards
+ *    is the extra state update forcing a render, not purely the handler pair.
+ *    That swallowed click is a jsdom artifact and not a product fault —
+ *    measured in Chromium against apps/dev/.../datepicker-check, the first
+ *    real pointer click opens the panel at 63ms and it stays open.
  */
 describe("DatePicker month/year selectors", () => {
   it("closes the year list when the month selector is clicked", async () => {

@@ -46,6 +46,48 @@ item (see `ROADMAP.md`, Week 4).
   active theme. A hidden option now takes one gap with it, and the margin
   animates back with the width when the group opens.
 
+- **A `DropdownWrapper` panel no longer slides or flashes as it opens.** The
+  open animation scales the panel from 0.9 to 1 about a `transform-origin` that
+  the stylesheet hardcoded to `top right`, so on every other placement the edge
+  anchored to the trigger travelled by a tenth of the panel's size — measured
+  in Chromium, a 480px panel on `bottom-start` drifted 48px sideways while
+  opening. The origin is now derived from the placement Floating UI actually
+  resolved, which matters because `flip()` is in the middleware: a panel that
+  flips above its trigger has to grow from its bottom edge. Separately, Floating
+  UI reports `0, 0` until it has measured, so the panel painted one frame at the
+  corner of its positioning context before jumping to the trigger. It is now
+  `visibility: hidden` for that frame — in the DOM and measurable, just not
+  drawn.
+
+- **`DatePicker`'s month and year selectors stay open, and stop throwing focus
+  onto the calendar.** Three faults behind the same report, that the picker
+  "doesn't feel native":
+
+  - Both selectors could be open at once, stacked over the calendar. Each
+    trigger calls `stopPropagation`, so opening one never reached the other's
+    outside-click handler. They are now mutually exclusive, the way a native
+    select is.
+  - Opening either one closed it again about 20ms later. `DropdownWrapper`
+    tested "did focus leave the panel?" against the panel element, but the
+    panel is wrapped by `FocusTrap` and `ArrowNavigation`, each of which
+    renders a focusable container *above* it and focuses that container itself
+    as the panel opens. Focus arriving on one of those read as focus leaving.
+    Containment is now tested from the portal's outermost element. Autofocus
+    also now waits for Floating UI to measure, since a `visibility: hidden`
+    element cannot take focus and the attempt was landing nowhere.
+  - Closing a selector jumped focus onto a day button instead of leaving it on
+    the trigger. `useArrowNavigation` focused `initialFocusedIndex` on every
+    mount, and the picker remounts its calendar whenever a selector closes. A
+    mount pass now takes focus only when the consumer passed `autoFocus`, or
+    when nothing else holds it — after a keyed remount the element that had
+    focus is gone, so focusing restores rather than steals.
+
+  `ArrowNavigation`'s own container autofocus was racing the hook's item
+  autofocus on a 0ms timer, so a list settled on its first option or on the
+  container depending on how much layout work landed in between; it now defers
+  to the item. `apps/dev/src/app/(main)/datepicker-check` is the browser
+  fixture these were measured against.
+
 ## [2.0.0-alpha.1] — 2026-09-17
 
 The second alpha preview, on the same **`alpha`** dist-tag. `npm install

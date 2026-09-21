@@ -144,6 +144,19 @@ highlight, or to scroll itself into view.
 Syncing `setFocusedIndex` from hover is worth doing: it keeps the keyboard
 highlight and the pointer from disagreeing about which item is current.
 
+## When it takes focus
+
+`initialFocusedIndex` says which item is *current*, not that focus should move
+there. On mount the component takes focus only when you passed `autoFocus`, or
+when nothing else holds it — which is the case right after a keyed remount,
+where the element that had focus has just been removed and focusing it again is
+a restore. Every later move follows a keystroke, so it always takes focus.
+
+Without that rule a list remounting beside a control the user is already on
+would pull focus off it. A `DatePicker` does exactly that: it remounts its
+calendar whenever the month or year selector closes, and focus used to land on
+a day button instead of staying on the trigger the user had just used.
+
 ## API reference
 
 <PropsTable
@@ -154,9 +167,9 @@ highlight and the pointer from disagreeing about which item is current.
     ["onSelect", "(index: number) => void", "-", "Called on Enter or Space."],
     ["onFocusChange", "(index: number) => void", "-", "Called whenever focus moves."],
     ["wrap", "boolean", "true", "Carry focus from the last item to the first."],
-    ["initialFocusedIndex", "number", "-1", "Index focused on mount. -1 means none."],
+    ["initialFocusedIndex", "number", "-1", "Which item starts current. -1 means none; see above for when it takes focus."],
     ["itemSelector", "string", "role=option, data-value, button, tabindex", "How navigable children are found."],
-    ["autoFocus", "boolean", "false", "Focus the first item on mount."],
+    ["autoFocus", "boolean", "false", "Take focus on mount, at initialFocusedIndex when one is set."],
     ["disabled", "boolean", "false", "Stop handling keys."],
     ["disableHighlighting", "boolean", "false", "Skip applying the highlighted state to items."],
     ["trapFocus", "boolean", "false", "Wrap the region in a FocusTrap."],

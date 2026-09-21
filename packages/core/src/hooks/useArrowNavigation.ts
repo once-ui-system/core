@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, KeyboardEvent, RefObject, useEffect } from "react";
+import { useState, useCallback, KeyboardEvent, RefObject, useEffect, useRef } from "react";
 
 export type NavigationLayout = "row" | "column" | "grid";
 
@@ -34,6 +34,9 @@ export const useArrowNavigation = ({
   disableHighlighting = false,
 }: ArrowNavigationOptions) => {
   const [focusedIndex, setFocusedIndex] = useState<number>(initialFocusedIndex);
+  /** The index this effect last acted on. Seeded with `initialFocusedIndex` so
+   *  the mount pass reads as "nothing moved". */
+  const lastFocusedIndex = useRef(initialFocusedIndex);
 
   // Reset focused index when item count changes
   useEffect(() => {
@@ -51,7 +54,24 @@ export const useArrowNavigation = ({
 
   // Update focus when focusedIndex changes
   useEffect(() => {
+    const indexMoved = lastFocusedIndex.current !== focusedIndex;
+    lastFocusedIndex.current = focusedIndex;
+
     if (focusedIndex >= 0 && containerRef?.current) {
+      // Nothing moved: this pass is only reacting to `initialFocusedIndex` on
+      // mount. Taking focus there steals it from whatever the user is actually
+      // on — a DatePicker remounts its calendar when the month selector
+      // closes, and focus jumped off the month trigger onto a day button.
+      // Take focus anyway when the consumer asked for it, or when nothing
+      // holds it: after a keyed remount the element that had focus is gone and
+      // the browser has fallen back to <body>, so focusing restores rather
+      // than steals. Compared against the index rather than a "first run" flag
+      // because StrictMode runs mount effects twice and a flag would let the
+      // second pass through.
+      const focusIsNowhere =
+        !document.activeElement || document.activeElement === document.body;
+      if (!indexMoved && !autoFocus && !focusIsNowhere) return;
+
       const items = Array.from(
         containerRef.current.querySelectorAll(itemSelector),
       ) as HTMLElement[];
@@ -74,7 +94,7 @@ export const useArrowNavigation = ({
         }
       }
     }
-  }, [focusedIndex, containerRef, itemSelector, onFocusChange]);
+  }, [focusedIndex, containerRef, itemSelector, onFocusChange, autoFocus]);
 
   // Helper function to find the next non-disabled item
   const findNextEnabledItem = useCallback(
