@@ -662,8 +662,13 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
+                          // Mutually exclusive, the way a native select is:
+                          // these triggers stopPropagation, so the sibling's
+                          // outside-click handler never fires and both panels
+                          // would sit open over the calendar at once.
+                          setIsYearOpen(false);
                           setIsMonthOpen(true);
-                           setLastOpenedDropdown("month-dropdown");
+                          setLastOpenedDropdown("month-dropdown");
                         }}
                         variant="secondary"
                         size="s"
@@ -733,6 +738,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
+                          // See the month trigger: one at a time.
+                          setIsMonthOpen(false);
                           setIsYearOpen(true);
                           setLastOpenedDropdown("year-dropdown");
                         }}
