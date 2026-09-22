@@ -3068,7 +3068,8 @@
     "markers": "boolean | \"top\" | \"bottom\" = false",
     "draggable": "boolean = true",
     "step": "number = 1",
-    "clip": "boolean = false"
+    "clip": "boolean = false",
+    "proximity": "boolean | number = false"
    }
   },
   "ScrollToTop": {

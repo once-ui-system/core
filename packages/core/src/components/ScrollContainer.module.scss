@@ -71,6 +71,19 @@
   /* A track item that can shrink is a track item that has no width of its own
      once the row is wider than its parent. */
   flex-shrink: 0;
+
+  /*
+   * For `proximity`. The scale itself is set per tile from the distance to the
+   * front, which only the component can know; the easing belongs here so it
+   * matches the track's, and so a tile settles into its new size on the same
+   * curve the track settles onto its new offset. During a drag the component
+   * turns this off inline and the size follows the pointer.
+   *
+   * `transform-origin: center` keeps a shrinking tile in its own slot instead
+   * of pulling away from one side of the gap.
+   */
+  transform-origin: center;
+  transition: transform var(--transition-duration-macro-long) var(--transition-eased);
 }
 
 .marker {
@@ -105,6 +118,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   .track {
+    transition: none;
+  }
+
+  .tile {
     transition: none;
   }
 
