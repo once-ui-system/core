@@ -332,6 +332,13 @@
    "playful",
    "conservative"
   ],
+  "Breakpoint": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs"
+  ],
   "BreakpointKey": [
    "xl",
    "l",
@@ -671,7 +678,10 @@
    "9",
    "11"
   ],
-  "FormColumns": "number | { xl?: number; l?: number; m?: number; s?: number; xs?: number }",
+  "FormColumns": [
+   "number",
+   "Partial<Record<Breakpoint, number>>"
+  ],
   "GradientProps": {
    "display": "boolean",
    "opacity": "DisplayProps[\"opacity\"]",
@@ -2310,6 +2320,19 @@
     "back": "!React.ReactNode",
     "className": "string",
     "style": "React.CSSProperties"
+   }
+  },
+  "Form": {
+   "group": "components",
+   "props": {
+    "density": "\"stacked\" | \"tight\" | \"spacious\" = tight",
+    "columns": "FormColumns",
+    "size": "TShirtSizes",
+    "as": "\"div\" | \"form\" = div",
+    "onSubmit": "React.FormEventHandler<HTMLFormElement>",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "children": "React.ReactNode"
    }
   },
   "GlitchFx": {
@@ -4175,19 +4198,6 @@
     "resizeHeight": "number = 1200",
     "loading": "boolean = false",
     "accept": "string = image/*"
-   }
-  },
-  "Form": {
-   "group": "components",
-   "props": {
-    "density": "\"stacked\" | \"tight\" | \"spacious\" = tight",
-    "columns": "FormColumns",
-    "size": "TShirtSizes",
-    "as": "\"div\" | \"form\" = div",
-    "onSubmit": "React.FormEventHandler<HTMLFormElement>",
-    "className": "string",
-    "style": "React.CSSProperties",
-    "children": "React.ReactNode"
    }
   }
  },
