@@ -2,7 +2,7 @@
 title: "Setting"
 status: "alpha"
 summary: "The settings row: a label on the left, one control on the right, in a panel that stacks."
-updatedAt: "2026-08-30"
+updatedAt: "2026-09-21"
 docs: "once-ui/components/setting.mdx"
 github: "components/Setting.tsx"
 navLabel: "Setting"
@@ -72,6 +72,11 @@ own for use anywhere else.
 `SettingGroup` nests sub-settings **inside** its own box rather than beside it,
 so the relationship survives a panel with ten groups in it. The header control
 is what usually gates the body.
+
+The group is a single surface — the header and the body it reveals share one
+background, separated by a hairline — so opening one grows the panel instead of
+stacking a second panel inside it. Its border is an alpha, which reads against
+whatever the group is nested in.
 
 <CodeBlock
   marginTop="16"

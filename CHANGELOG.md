@@ -80,6 +80,15 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Changed
 
+- **`SettingGroup` is one surface.** The header sat on whatever was behind it
+  while the body it reveals painted `surface` on top, so opening a group read
+  as a second panel stacked inside the first, and the border around it was the
+  default opaque one. The background moves to the group itself, the body stops
+  painting its own, and the outer border is `neutral-alpha-weak` — which is
+  what a group nested in a panel needs, since it sits on whatever the panel is
+  rather than on one assumed backdrop. The hairline between the header and the
+  body stays: it is what separates the setting from the settings it gates.
+
 - **A dropdown opens on the option it is already showing.** Every
   `DropdownWrapper`-based list — `Select`, `DatePicker`'s month and year
   selectors, an org switcher — opened focused on its *first* option regardless

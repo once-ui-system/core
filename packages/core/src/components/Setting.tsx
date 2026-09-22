@@ -111,7 +111,18 @@ const SettingGroup: React.FC<SettingGroupProps> = ({
   children,
   ...flex
 }) => (
-  <Column fillWidth radius="l" border overflow="hidden" {...flex}>
+  <Column
+    fillWidth
+    radius="l"
+    // The group is one surface: the header and the body it reveals share a
+    // background, so opening it grows the panel rather than stacking a second
+    // one inside the first. An alpha border sits on whatever is behind it,
+    // which is what a group nested in a panel needs.
+    background="surface"
+    border="neutral-alpha-weak"
+    overflow="hidden"
+    {...flex}
+  >
     <Row fillWidth padding="8" gap="12" vertical="center" horizontal="between" wrap>
       <Column gap="4" paddingLeft="8" paddingY="4">
         <Row vertical="center" gap="8">
@@ -131,7 +142,7 @@ const SettingGroup: React.FC<SettingGroupProps> = ({
       )}
     </Row>
     {open && children && (
-      <Column fillWidth gap="8" padding="8" borderTop="neutral-alpha-weak" background="surface">
+      <Column fillWidth gap="8" padding="8" borderTop="neutral-alpha-weak">
         {children}
       </Column>
     )}

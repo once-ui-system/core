@@ -145,6 +145,26 @@ describe("Setting", () => {
     expect(screen.getByText("Opacity")).toBeInTheDocument();
   });
 
+  it("is one surface: the header and the revealed body share the group's background", () => {
+    render(
+      <SettingGroup label="Watermark" control={<span>toggle</span>} open>
+        <Setting label="Opacity" />
+      </SettingGroup>,
+      { wrapper: wrap },
+    );
+    const group = screen.getByText("Watermark").closest(".surface-background");
+    expect(group).not.toBeNull();
+    // The alpha border reads against whatever the group is nested in, rather
+    // than against one assumed backdrop.
+    expect(group?.className).toContain("neutral-border-alpha-weak");
+
+    // The body must not paint its own surface on top of the group's — that is
+    // what made an open group look like a panel inside a panel.
+    const body = screen.getByText("Opacity").closest(".border-top-1");
+    expect(body).not.toBeNull();
+    expect(body?.className).not.toContain("surface-background");
+  });
+
   it("renders one row per axis", () => {
     render(
       <SettingAxes
