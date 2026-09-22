@@ -1,7 +1,7 @@
 ---
 title: "ScrollContainer"
-summary: "A horizontal scrolling container with navigation controls for displaying collections of items."
-updatedAt: "2026-07-27"
+summary: "A horizontal run of items with controls, drag, optional wrap-around and optional markers."
+updatedAt: "2026-09-22"
 docs: "once-ui/components/scrollContainer.mdx"
 github: "components/ScrollContainer.tsx"
 navLabel: "ScrollContainer"
@@ -10,7 +10,11 @@ navTag: "New"
 navTagVariant: "cyan"
 ---
 
-The `ScrollContainer` component creates a horizontal scrolling area with navigation buttons for browsing through collections of items. It features smooth scrolling, scroll snapping, and customizable control placement.
+The `ScrollContainer` component moves a track of items horizontally, with navigation buttons, pointer drag, optional wrap-around and optional markers.
+
+It moves a track with a transform rather than scrolling a box. That is what lets tiles paint past the container's edges — the items either side of the ones in front stay visible, so the run reads as something continuous rather than a window with two hard cuts in it. Pass `clip` to keep everything inside the component's own box instead.
+
+Because the browser is no longer doing the scrolling, a trackpad's horizontal gesture does not move the track. `draggable` is on by default and the controls are always shown, so there is never an invisible affordance.
 
 <CodeBlock
   marginTop="16"
@@ -43,6 +47,69 @@ The `ScrollContainer` component creates a horizontal scrolling area with navigat
 />`,
       language: "tsx",
       label: "ScrollContainer"
+    }
+  ]}
+/>
+
+## Infinite
+
+Past the last item the track continues into the first, in the same direction, with no rewind. Both controls stay enabled.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<ScrollContainer
+  items={items}
+  infinite
+/>`,
+      language: "tsx",
+      label: "Infinite"
+    }
+  ]}
+/>
+
+## Markers
+
+Markers show how many items there are and which one is in front, and jump to one when pressed. `markers` takes `true` to put them opposite the controls, or `"top"` / `"bottom"` to name the side.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<ScrollContainer
+  items={items}
+  markers="bottom"
+  controlPlacement="top-end"
+/>`,
+      language: "tsx",
+      label: "Markers"
+    }
+  ]}
+/>
+
+## Drag
+
+The track follows a pointer — mouse, pen or finger. A gesture is claimed for one axis on its first movement and never reassigned, so a vertical swipe still scrolls the page. Let go past a fifth of a tile, or flick, and the track advances; anything shorter settles back. Without `infinite` the track resists being pulled past either end and springs back.
+
+A drag that ends on a tile does not also open it — the click is swallowed before it reaches the item.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<ScrollContainer
+  items={items}
+  draggable={false}
+/>`,
+      language: "tsx",
+      label: "Disable drag"
     }
   ]}
 />
@@ -110,7 +177,9 @@ Position navigation controls at the top or bottom with different horizontal alig
 
 ## Custom Styling
 
-Apply custom styling to item containers using flex props.
+Every prop other than the ones listed below is applied to each tile, so a tile is styled from out here.
+
+Tiles carry no appearance of their own: no border, no radius, no aspect ratio. The only sizing they arrive with is a `minWidth` floor, so a carousel of anything that fills its parent has something to fill. Give them whatever shape the content needs.
 
 <CodeBlock
   marginTop="16"
@@ -139,6 +208,11 @@ Apply custom styling to item containers using flex props.
   component="ScrollContainer"
   describe={{
     items: "The items in the scroll area.",
-    controlPlacement: "Where the scroll controls sit relative to the content.",
+    controlPlacement: "Where the controls sit relative to the content.",
+    infinite: "Wrap around: past the last item the track continues into the first.",
+    markers: "Show markers for the item count and the one in front. true puts them opposite the controls.",
+    draggable: "Drag the track with a pointer. On by default.",
+    step: "Items moved per control press.",
+    clip: "Clip the track at its edges instead of letting tiles paint past them.",
   }}
 />
