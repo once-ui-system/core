@@ -1,0 +1,114 @@
+/*
+ * The track paints past the viewport by default.
+ *
+ * This is the point of moving a transform instead of scrolling a box: tiles
+ * either side of the ones in front stay visible, so the run reads as something
+ * continuous that has been moved along rather than a window with two hard cuts
+ * in it.
+ *
+ * `overflow: clip` with a large `overflow-clip-margin` rather than
+ * `overflow: visible`, because visible overflow is not confined to the
+ * direction it is wanted in: a track wider than the page would extend the
+ * document's scrollable area and give the whole page a horizontal scrollbar,
+ * which is a page-level bug produced by a component that cannot see the page.
+ * A clip margin is the same effect with a boundary — tiles paint well past the
+ * edges, and nothing reaches far enough to push the document out.
+ *
+ * `clip` is not `hidden`: `hidden` makes the element a scroll container, which
+ * would let a stray focus or a wheel gesture scroll the track sideways and put
+ * the transform and the scroll offset into disagreement about where the track
+ * is. `clip` cannot scroll, which is what this needs.
+ */
+.viewport {
+  overflow: clip;
+  overflow-clip-margin: 100vw;
+}
+
+/* Self-contained: nothing paints outside the component's own box. */
+.viewportClipped {
+  overflow: clip;
+}
+
+.viewport,
+.viewportClipped {
+  /*
+   * Horizontal gestures belong to the track and vertical ones to the page.
+   * Without this the browser claims the whole gesture before the pointer
+   * handler can decide, and a carousel becomes a place where the page stops
+   * scrolling.
+   */
+  touch-action: pan-y;
+  cursor: grab;
+
+  &:focus-visible {
+    outline: var(--static-space-2) solid var(--brand-border-strong);
+    outline-offset: var(--static-space-2);
+    border-radius: var(--radius-m);
+  }
+
+  &[data-dragging="true"] {
+    cursor: grabbing;
+    /* A drag across tiles selects their text otherwise, and the selection
+       highlight follows the pointer across the whole run. */
+    user-select: none;
+  }
+}
+
+.track {
+  /*
+   * `width: max-content` is what makes a transform track possible at all:
+   * the row lays out at the sum of its tiles rather than at the width of its
+   * parent, so there is something to move. Without it the tiles would be
+   * squeezed into one viewport's width and the transform would move an
+   * already-complete layout off the screen.
+   */
+  width: max-content;
+  will-change: transform;
+  transition: transform var(--transition-duration-macro-long) var(--transition-eased);
+}
+
+.tile {
+  /* A track item that can shrink is a track item that has no width of its own
+     once the row is wider than its parent. */
+  flex-shrink: 0;
+}
+
+.marker {
+  appearance: none;
+  border: 0;
+  padding: 0;
+  width: var(--static-space-8);
+  height: var(--static-space-8);
+  border-radius: var(--radius-full);
+  background: var(--neutral-alpha-medium);
+  cursor: pointer;
+  transition:
+    background var(--transition-duration-micro-medium) var(--transition-eased),
+    width var(--transition-duration-micro-medium) var(--transition-eased);
+
+  &:hover {
+    background: var(--neutral-alpha-strong);
+  }
+
+  &:focus-visible {
+    outline: var(--static-space-2) solid var(--brand-border-strong);
+    outline-offset: var(--static-space-2);
+  }
+
+  /* The one in front is a bar rather than a brighter dot: the difference
+     survives being small, and being colour-blind. */
+  &[data-active="true"] {
+    width: var(--static-space-20);
+    background: var(--brand-solid-strong);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    transition: none;
+  }
+
+  .marker {
+    transition: none;
+  }
+}

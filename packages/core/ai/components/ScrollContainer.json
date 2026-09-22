@@ -15,7 +15,12 @@
  ],
  "props": {
   "items": "!React.ReactNode[]",
-  "controlPlacement": "\"top-start\" | \"top-center\" | \"top-end\" | \"top-between\" | \"bottom-start\" | \"bottom-center\" | \"bottom-end\" | \"bottom-between\" = top-start"
+  "controlPlacement": "ScrollContainerControlPlacement = top-start",
+  "infinite": "boolean = false",
+  "markers": "boolean | \"top\" | \"bottom\" = false",
+  "draggable": "boolean = true",
+  "step": "number = 1",
+  "clip": "boolean = false"
  },
  "mixinsRef": [
   "CommonProps",
