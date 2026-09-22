@@ -430,6 +430,13 @@
     "components"
    ]
   },
+  "Form": {
+   "group": "components",
+   "purpose": "Form component",
+   "tags": [
+    "components"
+   ]
+  },
   "GlitchFx": {
    "group": "components",
    "extends": [

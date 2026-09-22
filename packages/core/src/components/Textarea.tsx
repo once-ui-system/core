@@ -13,6 +13,7 @@ import { Column, Row, Text } from ".";
 import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
+import { useFieldSize } from "./FormContext";
 
 interface TextareaProps
   extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix"> {
@@ -52,6 +53,9 @@ interface TextareaProps
   resize?: "horizontal" | "vertical" | "both" | "none";
   validate?: (value: ReactNode) => ReactNode | null;
   disabled?: boolean;
+  /** How many columns to occupy inside a `Form` grid. `Form` reads this off
+   *  the child and strips it; outside a `Form` it does nothing. */
+  span?: number;
 }
 
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
@@ -61,7 +65,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       label,
       placeholder,
       lines = "auto",
-      size = "m",
+      size,
       error = false,
       errorMessage,
       description,
@@ -75,6 +79,8 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       resize = "vertical",
       validate,
       disabled = false,
+      // Consumed by `Form`, never rendered. See Input.tsx.
+      span,
       children,
       onFocus,
       onBlur,
@@ -85,6 +91,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref,
   ) => {
+    // A `Form` can set the size for every field in it; the field's own
+    // prop still wins, and `"m"` is still the default on its own.
+    const resolvedSize = useFieldSize(size);
     const [isFocused, setIsFocused] = useState(false);
     // Seeded from `defaultValue` too: an uncontrolled field — how a settings
     // form normally renders saved data — has no `value`, so the label never
@@ -198,7 +207,12 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         })}
       >
         <Row
-          minHeight={placeholder ? "48" : "56"}
+          // See Input.tsx: the surface `Form` fuses, two levels down.
+          data-surface="field"
+          // Height comes from the size token via `.base`, the same as an
+          // input's. This used to be a hardcoded 48 or 56, which ignored
+          // `size` entirely and left a placeholder-only textarea 8px shorter
+          // than the input beside it.
           transition="micro-medium"
           border={variant === "ghost" ? "transparent" : "neutral-medium"}
           background={variant === "ghost" ? "transparent" : "neutral-alpha-weak"}
@@ -207,7 +221,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           className={classNames(
             styles.base,
             focusRing && styles.focusRing,
-            size && styles[size],
+            styles[resolvedSize],
             lines !== "auto" && resize !== "none" && styles.resizeHandle,
             corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",
             lines !== "auto" && resize !== "none" && "radius-s-bottom-right",

@@ -230,7 +230,24 @@
 
   &.textarea {
     height: auto;
-    padding-bottom: var(--static-space-12);
+    /* A textarea grows, so it cannot centre its value the way an input does by
+       pinching the box to one line. Left to itself its first line sits at the
+       top of the content box while an input's sits in the middle of it — an
+       11px step at size m, which reads as a misaligned placeholder and is
+       impossible to miss once a `Form` fuses the two into one control.
+
+       Padding the block symmetrically puts the first line exactly where an
+       input's single line falls, and lets the rest grow downwards from there.
+       Floored so the inset never collapses on a field whose content has
+       already outgrown one line. Note the floating-label rule below overrides
+       `padding-top` when there is a label, because then the value has to clear
+       the label rather than centre. */
+    --fld-textarea-inset: max(
+      var(--static-space-8),
+      calc((var(--fld-box) - var(--fld-lh)) / 2)
+    );
+    padding-top: var(--fld-textarea-inset);
+    padding-bottom: var(--fld-textarea-inset);
   }
 
   &::placeholder {
