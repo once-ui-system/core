@@ -14,6 +14,8 @@
  */
 export const movedPages = [
   // { from: "components/foo", to: "layout/foo" },
+  // Renamed to ParticleFx in 2.0 and filed with the other effects.
+  { from: "components/particle", to: "effects/particleFx" },
 ];
 
 /**

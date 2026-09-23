@@ -78,7 +78,7 @@ export * from "./NumberInput";
 export * from "./OgCard";
 export * from "./Option";
 export * from "./OTPInput";
-export * from "./Particle";
+export * from "./ParticleFx";
 export * from "./PasswordInput";
 export * from "./ProgressBar";
 export * from "./Pulse";

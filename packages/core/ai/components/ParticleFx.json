@@ -1,5 +1,5 @@
 {
- "name": "Particle",
+ "name": "ParticleFx",
  "group": "components",
  "extends": [
   "Flex"

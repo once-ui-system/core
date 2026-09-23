@@ -228,9 +228,12 @@ need.
 
 Worth knowing so you do not go looking:
 
-- **No component was removed or renamed.** Every rename in 2.0 is a prop. The
-  only three that moved are the subpaths in step 2, and they moved rather than
-  went away.
+- **No component was removed.** Every rename in 2.0 is a prop, with one
+  exception that needs no migration: `Particle` is now `ParticleFx`, named like
+  the other effects, and `Particle` stays exported as a deprecated alias of it
+  until 3.0. Existing imports keep working; switch when convenient. The only
+  three that moved are the subpaths in step 2, and they moved rather than went
+  away.
 - **Stylesheet imports.** `@once-ui-system/core/css/styles.css` and
   `/css/tokens.css` still work, and the CSS behind them is byte-identical. The
   codemod can point them at `@once-ui-system/foundations` with `--css`, but that
@@ -238,7 +241,7 @@ Worth knowing so you do not go looking:
 - **`radius="none"`.** Only corner *selection* moved to `corners`; `radius` still
   means roundness, and `none` is a roundness.
 - **The four unitless `speed` props** on `CelebrationFx`, `WeatherFx`, `MatrixFx`
-  and `Particle`. They are multipliers, not durations, and are unchanged.
+  and `ParticleFx`. They are multipliers, not durations, and are unchanged.
 - **Peer floors.** React, Next and sharp ranges are what they were.
 
 ### Reference: every prop rename

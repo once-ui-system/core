@@ -57,6 +57,8 @@ const EXCLUDE = new Set([
   "ThemeInit",
   "ArrowNavigation",
   "Meta",
+  // Deprecated alias of ParticleFx, kept for 2.x consumers; not for new code.
+  "Particle",
 ]);
 
 // Token aliases worth defining once in the spec (read from types.ts source)

@@ -117,7 +117,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 13. Use the distinctive features when the design calls for them — they exist and are cheap:
     - `Dialog` supports `stack` (stacked dialogs) and `base` props
-    - Effects: `RevealFx`, `LetterFx`, `TypeFx`, `CountFx`, `GlitchFx`, `HoloFx`, `TiltFx`, `FlipFx`, `MatrixFx`, `BlobFx`, `Particle`, `ShineFx`, `CelebrationFx`
+    - Effects: `RevealFx`, `LetterFx`, `TypeFx`, `CountFx`, `GlitchFx`, `HoloFx`, `TiltFx`, `FlipFx`, `MatrixFx`, `BlobFx`, `ParticleFx`, `ShineFx`, `CelebrationFx`
     - `CursorCard`, `HoverCard`, `ContextMenu`, `EmojiPicker`, `CompareImage`, `OgCard`, `Timeline`, `MasonryGrid`, `InfiniteScroll`, `SegmentedControl`, `Kbar` (command palette)
     - Forms: `Input`, `PasswordInput`, `OTPInput`, `NumberInput`, `TagInput`, `Select`, `DatePicker`, `DateRangePicker`, `ColorInput`, `Slider`, `Switch`, `Checkbox`, `Chip`
 

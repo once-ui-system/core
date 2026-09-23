@@ -7,7 +7,7 @@ import { Flex } from ".";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
-interface ParticleProps extends React.ComponentProps<typeof Flex> {
+interface ParticleFxProps extends React.ComponentProps<typeof Flex> {
   density?: number;
   color?: ColorValue;
   size?: SpacingToken;
@@ -22,7 +22,7 @@ interface ParticleProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
 }
 
-const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
+const ParticleFx = React.forwardRef<HTMLDivElement, ParticleFxProps>(
   (
     {
       density = 100,
@@ -210,5 +210,12 @@ const Particle = React.forwardRef<HTMLDivElement, ParticleProps>(
   },
 );
 
-Particle.displayName = "Particle";
-export { Particle };
+ParticleFx.displayName = "ParticleFx";
+
+/**
+ * @deprecated Renamed to `ParticleFx`, in line with the other effects. This
+ * name keeps working through 2.x and is removed in 3.0.
+ */
+const Particle = ParticleFx;
+
+export { ParticleFx, Particle };

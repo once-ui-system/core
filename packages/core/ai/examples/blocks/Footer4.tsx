@@ -1,4 +1,4 @@
-import { Avatar, Background, Button, Column, IconButton, Logo, Mask, Particle, Row, SmartLink, Tag, Text, TypeFx } from "@once-ui-system/core";
+import { Avatar, Background, Button, Column, IconButton, Logo, Mask, ParticleFx, Row, SmartLink, Tag, Text, TypeFx } from "@once-ui-system/core";
 import type { IconName } from "@once-ui-system/core";
 
 const social: { icon: IconName; label: string; href: string }[] = [
@@ -147,7 +147,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 y={50}
                 radius={25}
                 >
-                <Particle style={{transform: "scale(1.1)"}} opacity={70} position="absolute" top="0" left="0" fill interactive speed={1.5} density={100} size="2" intensity={20} mode="attract"/>
+                <ParticleFx style={{transform: "scale(1.1)"}} opacity={70} position="absolute" top="0" left="0" fill interactive speed={1.5} density={100} size="2" intensity={20} mode="attract"/>
               </Mask>
             </Row>
             <Column horizontal="center" gap="20">
