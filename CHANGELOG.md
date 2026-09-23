@@ -251,6 +251,26 @@ have rejected all of them.
   off for the measurement too, so the numbers describe the panel's layout
   rather than whichever frame of the transition the measuring pass landed on.
 
+- **A labelled `Textarea` no longer grows a scrollbar when you focus it.** The
+  floating-label rule set `padding-top` on the value for every field but
+  `padding-bottom` only on non-textareas, so a textarea's padding stopped
+  adding up to its box. Focusing one floated the label, moved the top padding
+  from the centring inset to the label offset, and left the bottom where it
+  was: at size m the content needed 51.7px of a 46px box. The box cannot
+  absorb it — the textarea is stretched to `--fld-h` by its parent — so the
+  extra came off the bottom and the field scrolled its own single line, with a
+  scrollbar down the side. Measured at every size: xs through l overflowed by
+  up to 5.7px, and xl by 1px, which is still enough for a scrollbar.
+
+  The exclusion is gone, so a floating label sets both paddings on a textarea
+  exactly as it does on an input. Nothing without a label changes, because the
+  rule only applies once a label is actually floating: a single-line textarea
+  still centres its one line at every size, and a multi-line one still has
+  equal space above and below. A labelled textarea's bottom padding is now the
+  same `--fld-value-bottom` an input uses, which is tight at the smallest
+  sizes — 0 at xs — because that is what the token scale leaves once the label
+  has taken its share of a one-line box.
+
 - **`Textarea` keeps its label when it also has a placeholder.** It rendered the
   label only when there was no placeholder — `{!placeholder && …}` — so
   `<Textarea label="…" placeholder="…" />` dropped the label from the markup

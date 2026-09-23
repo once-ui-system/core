@@ -273,13 +273,17 @@
 }
 
 /* The value only clears room for the label once the label is actually floating
-   above it — an input with no label keeps its text centred by the UA. */
+   above it — an input with no label keeps its text centred by the UA.
+
+   Both paddings, textareas included. Setting only the top used to push a
+   textarea's content past the bottom of a box that cannot grow to meet it: the
+   field is stretched to `--fld-h` by its parent, so the extra top padding came
+   straight off the bottom and the textarea scrolled its own single line. At
+   size m the content box needed 51.7px of a 46px box, and focusing a labelled
+   textarea put a scrollbar down the side of it. */
 .base:has(.label.floating) .input {
   padding-top: var(--fld-value-top);
-
-  &:not(.textarea) {
-    padding-bottom: var(--fld-value-bottom);
-  }
+  padding-bottom: var(--fld-value-bottom);
 }
 
 .error {
