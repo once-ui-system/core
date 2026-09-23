@@ -67,6 +67,22 @@ have rejected all of them.
   gesture no longer moves the track, which is why drag is on by default and the
   controls are never hidden.
 
+- **`ScrollContainer` takes `active` and `onActiveChange`.** `active` brings an
+  item to the front by its index, by the shorter way round when `infinite`;
+  `onActiveChange` reports the item that arrived there, however it got there.
+  Together they let something outside the component stand in for the markers —
+  a row of names, a set of thumbnails, a table of contents — which previously
+  was not possible at all: the index was internal state, and the forwarded ref
+  was never attached to anything, so there was no handle on the run from
+  outside.
+
+  `active` is a command rather than a lock, and the effect that reads it is
+  keyed on the prop alone. Were it to depend on where the run actually is,
+  every drag would be undone a frame after it ended by an effect insisting on
+  the last value the caller passed, and the run would fight the pointer. An
+  `active` that never changes therefore does not pin the run in place;
+  `onActiveChange` is how a caller stays level with it.
+
 - **`ScrollContainer` takes `proximity`.** Tiles scale by their distance from
   the one in front, so the run has a focus that moves with it. It is continuous
   rather than stepped — the scale is computed from the live drag offset divided

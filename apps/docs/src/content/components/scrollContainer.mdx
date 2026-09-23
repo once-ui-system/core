@@ -10,7 +10,7 @@ navTag: "New"
 navTagVariant: "cyan"
 ---
 
-The `ScrollContainer` component moves a track of items horizontally, with navigation buttons, pointer drag, optional wrap-around, optional proximity scaling and optional markers.
+The `ScrollContainer` component moves a track of items horizontally, with navigation buttons, pointer drag, optional wrap-around, optional proximity scaling, optional markers, and an index you can drive from outside.
 
 It moves a track with a transform rather than scrolling a box. That is what lets tiles paint past the container's edges — the items either side of the ones in front stay visible, so the run reads as something continuous rather than a window with two hard cuts in it. Pass `clip` to keep everything inside the component's own box instead.
 
@@ -160,6 +160,44 @@ Pass `true` for a gentle default, or a number for how much smaller each whole st
   ]}
 />
 
+## Driving it from your own UI
+
+`active` brings an item to the front by its index, and `onActiveChange` reports the item that arrived there, however it got there — a control, a marker or a drag. Together they let something outside the component stand in for the markers: a row of names, a set of thumbnails, a table of contents.
+
+`active` is a command, not a lock. The run still moves on its own, and it is `onActiveChange` that keeps the caller's own state level with it. An `active` that never changes does not pin the run in place.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const [active, setActive] = useState(0);
+
+<Row gap="8">
+  {names.map((name, i) => (
+    <Button
+      key={name}
+      variant={i === active ? "primary" : "tertiary"}
+      onClick={() => setActive(i)}
+    >
+      {name}
+    </Button>
+  ))}
+</Row>
+
+<ScrollContainer
+  items={items}
+  active={active}
+  onActiveChange={setActive}
+  infinite
+/>`,
+      language: "tsx",
+      label: "Driving it from your own UI"
+    }
+  ]}
+/>
+
 ## Control Placement
 
 Position navigation controls at the top or bottom with different horizontal alignments.
@@ -261,5 +299,7 @@ Tiles carry no appearance of their own: no border, no radius, no aspect ratio. T
     step: "Items moved per control press.",
     clip: "Clip the track at its edges instead of letting tiles paint past them.",
     proximity: "Scale tiles by their distance from the one in front. true is a gentle default; a number is the drop per whole step.",
+    active: "Bring this item to the front. A command, not a lock — the run still moves on its own.",
+    onActiveChange: "Called with the index of the item that came to the front, however it got there.",
   }}
 />

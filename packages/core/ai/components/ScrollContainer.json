@@ -21,7 +21,9 @@
   "draggable": "boolean = true",
   "step": "number = 1",
   "clip": "boolean = false",
-  "proximity": "boolean | number = false"
+  "proximity": "boolean | number = false",
+  "active": "number",
+  "onActiveChange": "(index: number) => void"
  },
  "mixinsRef": [
   "CommonProps",

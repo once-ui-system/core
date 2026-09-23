@@ -41,6 +41,21 @@ export interface ScrollContainerProps extends React.ComponentProps<typeof Row> {
    * `0.08` makes the neighbour 92%.
    */
   proximity?: boolean | number;
+  /**
+   * The item to bring to the front, by its index in `items`.
+   *
+   * Changing it moves the run, by the shorter way round when `infinite`. It
+   * is a command rather than a lock: the run still moves on its own from the
+   * controls, the markers and a drag, and `onActiveChange` is how the caller
+   * keeps up with that. Pair the two to drive the run from your own UI — a
+   * row of names beside it, say — without the two disagreeing.
+   */
+  active?: number;
+  /**
+   * Called with the index of the item that has come to the front, however it
+   * got there. Not called on mount.
+   */
+  onActiveChange?: (index: number) => void;
 }
 
 const getHorizontalAlignment = (placement: ScrollContainerControlPlacement) => {
@@ -102,6 +117,8 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
       step = 1,
       clip = false,
       proximity = false,
+      active,
+      onActiveChange,
       ...tile
     },
     ref,
@@ -199,6 +216,46 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
       },
       [count, infinite, maxIndex],
     );
+
+    /**
+     * Which item is in front, counted in `items` rather than in the track.
+     *
+     * With wrap-around the internal index is free to run past either end —
+     * that is what makes the motion continuous — so it is not a number any
+     * caller could use. This folds it back into the range of the real run,
+     * and it is the only index this component reports or accepts.
+     */
+    const activeIndex = count > 0 ? ((index % count) + count) % count : 0;
+
+    /**
+     * Report the front item, but never on mount.
+     *
+     * The callback is read through a ref so that a caller passing a fresh
+     * arrow function on every render — which is most of them — does not make
+     * this fire again for an index that has not moved.
+     */
+    const onActiveChangeRef = useRef(onActiveChange);
+    onActiveChangeRef.current = onActiveChange;
+    const reportedRef = useRef(activeIndex);
+    useEffect(() => {
+      if (reportedRef.current === activeIndex) return;
+      reportedRef.current = activeIndex;
+      onActiveChangeRef.current?.(activeIndex);
+    }, [activeIndex]);
+
+    /**
+     * Move when `active` changes.
+     *
+     * Deliberately keyed on `active` alone. Were it to depend on where the run
+     * actually is, every drag would be undone a frame after it finished by an
+     * effect insisting on the last value the caller passed — the run would
+     * fight the pointer. `active` says go here; it does not say stay here.
+     */
+    // biome-ignore lint/correctness/useExhaustiveDependencies: see above — reacting to the caller's command, not to our own position
+    useEffect(() => {
+      if (active === undefined || count === 0) return;
+      goTo(active);
+    }, [active, count]);
 
     /**
      * Put the index back inside the real copy once the motion has finished.
@@ -362,7 +419,6 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
       }
     };
 
-    const active = count > 0 ? ((index % count) + count) % count : 0;
     const canGoBack = infinite || index > 0;
     const canGoForward = infinite || index < maxIndex;
 
@@ -398,9 +454,9 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
             key={i}
             type="button"
             className={styles.marker}
-            data-active={i === active ? "true" : undefined}
+            data-active={i === activeIndex ? "true" : undefined}
             aria-label={`Go to item ${i + 1} of ${count}`}
-            aria-current={i === active ? "true" : undefined}
+            aria-current={i === activeIndex ? "true" : undefined}
             onClick={() => goTo(i)}
           />
         ))}
