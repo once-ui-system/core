@@ -13,7 +13,70 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.0.0-alpha.2] — 2026-09-23
+
+The third alpha preview, on the same **`alpha`** dist-tag. `npm install
+@once-ui-system/core` still resolves the 1.8 line; asking for this one stays
+deliberate:
+
+```bash
+npm i @once-ui-system/core@alpha
+```
+
+Classified as a pre-release of the 2.0 major. The `ScrollContainer` tile
+defaults are removed rather than deprecated, which is a major-criteria change
+("removing or renaming components, props, tokens, or CSS classes", and
+"changing default behavior in ways that alter rendered output for existing
+code") — it rides the 2.0 line rather than a minor, and existing carousels need
+their shape passed in explicitly. Everything else here is additive or a fix.
+
+Per the AI-consumer rule, `ai/manifest.json`, `ai/catalog.json` and
+`ai/spec.json` are regenerated in this release: `ScrollContainer` gained six
+props since alpha.1, so an agent validating against the previous harness would
+have rejected all of them.
+
 ### Added
+
+- **`ScrollContainer` moves a track instead of scrolling a box.** A scroll box
+  cannot do any of the three things asked of a carousel: its contents are
+  clipped at its own edge by definition, so no tile can peek past it; its
+  scroll range has two hard ends, so there is nowhere for a wrap-around to go;
+  and the browser owns the easing, so a drag can only set `scrollLeft` and
+  hope. The track is now laid out once and moved with a transform, which
+  removes all three limits at once and makes the motion a CSS transition the
+  component controls.
+
+  New with it: `infinite` continues past the last item into the first in the
+  same direction, with no rewind and both controls always enabled; `markers`
+  (`true`, `"top"` or `"bottom"`) shows how many items there are and which is
+  in front, and jumps to one when pressed; `draggable` (on by default) has the
+  track follow a mouse, pen or finger, claiming a gesture for one axis on its
+  first movement so a vertical swipe still scrolls the page, and swallowing the
+  click at the end of a drag so it does not also open the tile; `step` sets how
+  many items a control press moves; and `clip` keeps everything inside the
+  component's own box for callers who want the old edges back.
+
+  **This changes existing carousels.** Tiles used to arrive with
+  `aspectRatio="3/4"`, `border`, `radius="xl"` and a width range already set,
+  so anything that was not a tall bordered portrait card had to override four
+  properties before it could begin. A tile now contributes only what a track
+  item cannot do without — refusing to shrink, and a `minWidth` floor so a
+  carousel of fill-width content has something to fill. Shape and size come
+  from the caller, through the same rest props that always landed on the tile.
+  Because the browser is no longer doing the scrolling, a trackpad's horizontal
+  gesture no longer moves the track, which is why drag is on by default and the
+  controls are never hidden.
+
+- **`ScrollContainer` takes `proximity`.** Tiles scale by their distance from
+  the one in front, so the run has a focus that moves with it. It is continuous
+  rather than stepped — the scale is computed from the live drag offset divided
+  by the tile pitch, so halfway through a drag the outgoing and incoming tiles
+  are the same size and the emphasis crosses between them as the pointer moves,
+  instead of snapping when the track settles. `true` is a gentle default; a
+  number is how much smaller each whole step away is, as a fraction. Tiles stop
+  shrinking at 72% so a long run does not trail off into nothing. Off — the
+  default — a tile carries no transform at all, not `scale(1)`, so it never
+  becomes a containing block for anything the caller positioned inside it.
 
 - **`Form`, a layout for a set of fields.** `density` carries the gap and the
   grouping as one decision, because they are one decision: `"stacked"` fuses
@@ -116,6 +179,29 @@ item (see `ROADMAP.md`, Week 4).
   own selected value instead.
 
 ### Fixed
+
+- **A `ScrollContainer` drag follows the pointer.** The effect that restores
+  the track's transition one frame after the wrap-around jump ran for any
+  `animated === false`, and a drag is the other thing that sets it false. One
+  frame into a drag the transition came back on, so every offset update after
+  that was eased over `--transition-duration-macro-long` instead of applied:
+  the track crawled toward the pointer rather than following it. A 164px drag
+  moved the track 46px, in increments of 40, 1, 2, 3. It read as sluggish
+  rather than broken because the release is computed from the raw pointer
+  delta, not from where the track had got to — the landing was right and the
+  journey was not. Tracking is now exact 1:1.
+
+- **A `MegaMenu` panel is measured at the width it is displayed at.** The
+  dropdown was measured in one pass: every `fillWidth` child forced to
+  `max-content`, the panel set to `width: max-content`, then both the width and
+  the height read from that single unconstrained layout. The height that came
+  back described a layout the panel is never shown in, and since the box is
+  locked to it and clips, whatever the content grew by came off the bottom —
+  measured at 14px on a two-column panel, enough to slice the last row. The
+  width is now measured first, applied with the children restored, and the
+  height read after the reflow. The open animation's `scale(0.9)` is switched
+  off for the measurement too, so the numbers describe the panel's layout
+  rather than whichever frame of the transition the measuring pass landed on.
 
 - **`Textarea` measures like the input beside it.** It pinned its own height
   inline — 48px with a placeholder, 56px without — which ignored `size`
