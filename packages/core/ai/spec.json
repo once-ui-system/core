@@ -1,6 +1,6 @@
 {
  "name": "@once-ui-system/core",
- "version": "2.0.0-alpha.1",
+ "version": "2.0.0-alpha.2",
  "generated": "2026-09-23",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed.",
  "tokens": {
@@ -3068,7 +3068,10 @@
     "markers": "boolean | \"top\" | \"bottom\" = false",
     "draggable": "boolean = true",
     "step": "number = 1",
-    "clip": "boolean = false"
+    "clip": "boolean = false",
+    "proximity": "boolean | number = false",
+    "active": "number",
+    "onActiveChange": "(index: number) => void"
    }
   },
   "ScrollToTop": {
@@ -3554,7 +3557,8 @@
     "StyleProps"
    ],
    "props": {
-    "collapsed": "boolean"
+    "collapsed": "boolean",
+    "direction": "\"row\" | \"column\" = row"
    }
   },
   "User": {
