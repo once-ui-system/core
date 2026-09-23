@@ -35,6 +35,14 @@ export interface MegaMenuProps extends React.ComponentProps<typeof Flex> {
   className?: string;
 }
 
+/**
+ * What the panel adds around its content: the surface wrapper's `padding="12"`
+ * on each side and its 1px border on each side. The clipping box is exactly the
+ * surface, so this is all of it — anything else that ends up between the two
+ * belongs here too, or the panel will be short by that much.
+ */
+const DROPDOWN_CHROME = 26;
+
 export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...rest }) => {
   const { usePathname } = useAdapters();
   const pathname = usePathname();
@@ -73,7 +81,28 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
               const activeContent = contentRefs.current[activeDropdown];
 
               if (activeContent) {
-                // Find all fillWidth buttons and temporarily override their width
+                /*
+                 * Two passes, because the height depends on the width.
+                 *
+                 * This used to be one: everything was set to `max-content` and
+                 * both dimensions were read together. At `max-content` nothing
+                 * wraps, so the height that came back was the height of text
+                 * laid out on one line — but the panel is then locked to the
+                 * measured *width*, where that text does wrap. The content grew,
+                 * the box did not, and `overflow: hidden` took the difference off
+                 * the bottom. The last section of a tall panel disappeared.
+                 *
+                 * Restoring the fill-width children reaches the same failure by
+                 * its own route. They are forced to `max-content` for the
+                 * measurement and put back afterwards, so a button measured at
+                 * its natural width can come back narrower, wrap its label, and
+                 * add a line that the recorded height never included.
+                 *
+                 * So: measure the width with everything unconstrained, put the
+                 * panel at that width with the children back as they were, let
+                 * it reflow, and only then read the height. The second read sees
+                 * the layout the panel will actually be displayed in.
+                 */
                 const fillWidthButtons = activeContent.querySelectorAll(
                   '[class*="fill-width"]',
                 ) as NodeListOf<HTMLElement>;
@@ -88,6 +117,25 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                 const originalHeight = dropdown.style.height;
                 const originalWidth = dropdown.style.width;
                 const originalOverflow = dropdown.style.overflow;
+                const originalTransition = activeContent.style.transition;
+                const originalTransform = activeContent.style.transform;
+
+                /*
+                 * Measure the panel's layout, not the frame of the open
+                 * animation this happens to land on.
+                 *
+                 * A panel animates in from `scale(0.9)`, and this runs a couple
+                 * of frames into that transition — so the box the panel draws
+                 * right now is around nine tenths of the box it is going to
+                 * settle at. Anything read from `getBoundingClientRect` is
+                 * scaled with it, and which fraction you get depends on where
+                 * the frame lands, which is not a thing to size a panel from.
+                 * Switching the transform off for the measurement makes the
+                 * numbers describe the layout; the transition goes off with it
+                 * so putting the transform back does not re-run the animation.
+                 */
+                activeContent.style.transition = "none";
+                activeContent.style.transform = "none";
 
                 dropdown.style.height = "auto";
                 dropdown.style.width = "max-content";
@@ -96,27 +144,57 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                 // Force reflow
                 dropdown.offsetHeight;
 
-                // Measure the active content
-                const contentWidth = activeContent.scrollWidth; // Use scrollWidth for full content
-                const contentHeight = activeContent.offsetHeight;
+                /*
+                 * Pass one: width, with everything unconstrained.
+                 *
+                 * `scrollWidth` is rounded to an integer and a max-content width
+                 * is rarely whole, so on its own it can hand the content a
+                 * fraction of a pixel less than it asked for. Taking the larger
+                 * of it and the ceiling of the real box rounds the panel up
+                 * instead of down.
+                 */
+                const contentWidth = Math.max(
+                  activeContent.scrollWidth,
+                  Math.ceil(activeContent.getBoundingClientRect().width),
+                );
+                const width = contentWidth + DROPDOWN_CHROME;
 
-                // Restore button widths
+                // Restore the children before the height is read rather than
+                // after: their real widths are part of what the height is.
                 fillWidthButtons.forEach((button, index) => {
                   button.style.width = originalWidths[index];
                 });
+
+                /*
+                 * Pass two: height, at the width the panel is about to be given
+                 * and with its children back as they were. `height` is still
+                 * `auto`, so the content is free to be as tall as that makes it.
+                 */
+                dropdown.style.width = `${width}px`;
+
+                // Force reflow
+                dropdown.offsetHeight;
+
+                const contentHeight = Math.max(
+                  activeContent.offsetHeight,
+                  Math.ceil(activeContent.getBoundingClientRect().height),
+                );
 
                 // Restore original dimensions
                 dropdown.style.height = originalHeight;
                 dropdown.style.width = originalWidth;
                 dropdown.style.overflow = originalOverflow;
 
-                // The clipping box is now exactly the surface, so it is the
-                // wrapper's own padding (12px a side) and border (1px a side)
-                // and nothing else.
+                // Put the transform back and flush it while the transition is
+                // still off, so the panel does not animate a second time.
+                activeContent.style.transform = originalTransform;
+                activeContent.offsetHeight;
+                activeContent.style.transition = originalTransition;
+
                 setDropdownPosition({
                   left: rect.left - parentRect.left,
-                  width: contentWidth + 26, // Add wrapper padding (24) + border (2)
-                  height: contentHeight + 26, // Add wrapper padding (24) + border (2)
+                  width,
+                  height: contentHeight + DROPDOWN_CHROME,
                 });
               }
             }
