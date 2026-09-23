@@ -69,9 +69,9 @@
     {
       "id": "Footer4",
       "file": "Footer4.tsx",
-      "title": "Premium footer with TypeFx + Particle",
+      "title": "Premium footer with TypeFx + ParticleFx",
       "tags": ["footer", "marketing", "effect"],
-      "components": ["Background", "Particle", "TypeFx", "Mask", "Avatar", "Tag"],
+      "components": ["Background", "ParticleFx", "TypeFx", "Mask", "Avatar", "Tag"],
       "patterns": ["animated wordmark", "particle decoration", "masked gradient"],
       "tasks": ["marketing-hero"],
       "standalone": true

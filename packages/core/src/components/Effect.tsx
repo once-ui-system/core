@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { BlobFx, CelebrationFx, Flex, MatrixFx, Particle, WeatherFx } from ".";
+import { BlobFx, CelebrationFx, Flex, MatrixFx, ParticleFx, WeatherFx } from ".";
 
 /**
  * The ambient effects that are interchangeable with one another: each paints a
@@ -35,7 +35,7 @@ interface EffectProps extends React.ComponentProps<typeof Flex> {
   blob?: Omit<React.ComponentProps<typeof BlobFx>, "children">;
   matrix?: Omit<React.ComponentProps<typeof MatrixFx>, "children">;
   weather?: Omit<React.ComponentProps<typeof WeatherFx>, "children">;
-  particle?: Omit<React.ComponentProps<typeof Particle>, "children">;
+  particle?: Omit<React.ComponentProps<typeof ParticleFx>, "children">;
   celebration?: Omit<React.ComponentProps<typeof CelebrationFx>, "children">;
   children?: React.ReactNode;
 }
@@ -73,7 +73,7 @@ const Effect = forwardRef<HTMLDivElement, EffectProps>(
         case "celebration":
           return <CelebrationFx {...layer} {...shared} colors={colors} {...celebration} />;
         case "particle":
-          return <Particle {...layer} {...shared} color={colors?.[0]} {...particle} />;
+          return <ParticleFx {...layer} {...shared} color={colors?.[0]} {...particle} />;
         default:
           return null;
       }

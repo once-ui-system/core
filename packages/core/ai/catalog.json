@@ -1,5 +1,5 @@
 {
- "version": "2.0.0-alpha.2",
+ "version": "2.0.0-alpha.1",
  "generated": "2026-09-23",
  "components": {
   "Accordion": {
@@ -690,12 +690,12 @@
     "components"
    ]
   },
-  "Particle": {
+  "ParticleFx": {
    "group": "components",
    "extends": [
     "Flex"
    ],
-   "purpose": "Particle component",
+   "purpose": "ParticleFx component",
    "tags": [
     "components"
    ]

@@ -1,4 +1,4 @@
-import { Row, Button, Mask, Particle, Column, TypeFx, Background } from "@once-ui-system/core";
+import { Row, Button, Mask, ParticleFx, Column, TypeFx, Background } from "@once-ui-system/core";
 
 export const Cta = () => {
   return (
@@ -90,7 +90,7 @@ export const Cta = () => {
           border="neutral-alpha-medium"
         >
           <Mask fill position="absolute" x={50} y={50} radius={25}>
-            <Particle
+            <ParticleFx
               style={{ transform: "scale(1.1)" }}
               opacity={70}
               position="absolute"

@@ -1,6 +1,6 @@
 {
  "name": "@once-ui-system/core",
- "version": "2.0.0-alpha.2",
+ "version": "2.0.0-alpha.1",
  "generated": "2026-09-23",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed.",
  "tokens": {
@@ -2885,7 +2885,7 @@
     "autoFocus": "boolean = false"
    }
   },
-  "Particle": {
+  "ParticleFx": {
    "group": "components",
    "extends": [
     "Flex"
@@ -3068,10 +3068,7 @@
     "markers": "boolean | \"top\" | \"bottom\" = false",
     "draggable": "boolean = true",
     "step": "number = 1",
-    "clip": "boolean = false",
-    "proximity": "boolean | number = false",
-    "active": "number",
-    "onActiveChange": "(index: number) => void"
+    "clip": "boolean = false"
    }
   },
   "ScrollToTop": {
@@ -3557,8 +3554,7 @@
     "StyleProps"
    ],
    "props": {
-    "collapsed": "boolean",
-    "direction": "\"row\" | \"column\" = row"
+    "collapsed": "boolean"
    }
   },
   "User": {
@@ -3634,7 +3630,7 @@
     "blob": "Omit<React.ComponentProps<typeof BlobFx>, \"children\">",
     "matrix": "Omit<React.ComponentProps<typeof MatrixFx>, \"children\">",
     "weather": "Omit<React.ComponentProps<typeof WeatherFx>, \"children\">",
-    "particle": "Omit<React.ComponentProps<typeof Particle>, \"children\">",
+    "particle": "Omit<React.ComponentProps<typeof ParticleFx>, \"children\">",
     "celebration": "Omit<React.ComponentProps<typeof CelebrationFx>, \"children\">",
     "children": "React.ReactNode"
    }

@@ -20,7 +20,7 @@
   "blob": "Omit<React.ComponentProps<typeof BlobFx>, \"children\">",
   "matrix": "Omit<React.ComponentProps<typeof MatrixFx>, \"children\">",
   "weather": "Omit<React.ComponentProps<typeof WeatherFx>, \"children\">",
-  "particle": "Omit<React.ComponentProps<typeof Particle>, \"children\">",
+  "particle": "Omit<React.ComponentProps<typeof ParticleFx>, \"children\">",
   "celebration": "Omit<React.ComponentProps<typeof CelebrationFx>, \"children\">",
   "children": "React.ReactNode"
  },

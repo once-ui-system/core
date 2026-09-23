@@ -11,7 +11,7 @@ navTag: "New"
 navTagVariant: "cyan"
 ---
 
-`BlobFx`, `MatrixFx`, `WeatherFx`, `Particle` and `CelebrationFx` all do the same
+`BlobFx`, `MatrixFx`, `WeatherFx`, `ParticleFx` and `CelebrationFx` all do the same
 structural job: paint a full-bleed decorative layer behind their content. In
 practice they are alternatives to each other, but swapping one for another meant
 changing an import and rewriting the positioning at every call site.
@@ -81,7 +81,7 @@ effect changes the look and nothing else about the layout.
 
 ## Shared and per-effect settings
 
-`colors` and `speed` apply across the set: `Particle` takes a single colour, so
+`colors` and `speed` apply across the set: `ParticleFx` takes a single colour, so
 it uses the first entry, and `blob` is seeded rather than timed and ignores both.
 Anything an individual effect needs goes in its own block, which is only read
 when that effect is the one showing — so all of them can be configured up front

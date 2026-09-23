@@ -191,6 +191,16 @@ have rejected all of them.
 
 ### Changed
 
+- **`Particle` is now `ParticleFx`.** It was the one ambient effect without the
+  `Fx` suffix, although `Effect` switches between it and `BlobFx`, `MatrixFx`,
+  `WeatherFx` and `CelebrationFx`, and its docs page sat under Components. The
+  page is now `/effects/particleFx`, and `/components/particle` redirects there.
+  `Particle` is still exported as a `@deprecated` alias of the same component,
+  so nothing breaks; it is removed in 3.0. The AI harness lists only
+  `ParticleFx`, so generated code uses the new name. `Effect`'s
+  `type="particle"` and `particle` props are unchanged: they are effect keys,
+  like `blob` and `matrix`.
+
 - **`SettingGroup` is one surface.** The header sat on whatever was behind it
   while the body it reveals painted `surface` on top, so opening a group read
   as a second panel stacked inside the first, and the border around it was the
