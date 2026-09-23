@@ -1,0 +1,39 @@
+.chapterContainer {
+  position: relative;
+}
+
+.chapterProgress {
+  left: 0;
+  top: 50%;
+  bottom: 0;
+  transition: width 0.1s linear;
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.chapterOverlay {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  margin-top: 0.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease-in-out;
+  z-index: 10;
+}
+
+.chapterContainer:hover .chapterOverlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Create invisible bridge between bar and overlay to maintain hover */
+.chapterContainer::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  height: 1rem;
+  pointer-events: auto;
+}

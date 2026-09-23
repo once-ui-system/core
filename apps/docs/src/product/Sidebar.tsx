@@ -407,6 +407,17 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
   const [hasLoaded, setHasLoaded] = useState(false);
   const pathname = usePathname();
 
+  /**
+   * The blocks surface brings its own catalogue.
+   *
+   * It lives under the same root layout as the documentation, so without this
+   * a reader browsing blocks would get a nav for the component reference
+   * beside a nav for the thing they are actually looking at. Standing down
+   * here keeps the decision in one place rather than making the root layout
+   * aware of which section it is rendering, which a server layout cannot ask.
+   */
+  const isBlocks = pathname?.startsWith("/blocks");
+
   // Load navigation data only once, using global cache
   useEffect(() => {
     // Use initialNavigation if provided
@@ -439,6 +450,8 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
         });
     }
   }, [initialNavigation, hasLoaded]);
+
+  if (isBlocks) return null;
 
   return (
     <Column

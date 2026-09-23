@@ -41,6 +41,7 @@
   ],
   "exclude": [
     "node_modules",
-    "public/ai/**/*.tsx"
+    "public/ai/**/*.tsx",
+    "public/blocks/**/*"
   ]
 }

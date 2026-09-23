@@ -37,3 +37,6 @@ next-env.d.ts
 
 # AI harness — synced from @once-ui-system/core on build
 /public/ai/
+
+# Block sources, copied from src/blocks/modules by scripts/copy-blocks.mjs
+/public/blocks/
