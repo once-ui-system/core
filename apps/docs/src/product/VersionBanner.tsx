@@ -50,17 +50,15 @@ export function VersionBanner() {
       background="page"
       position="relative"
       zIndex={1}
-      borderBottom="neutral-alpha-medium"
+      borderBottom
     >
       <Row
         fillWidth
-        horizontal="center"
-        vertical="center"
+        center
         gap="12"
         wrap
         paddingX="16"
         paddingY="8"
-        background="neutral-alpha-weak"
         s={{ direction: "column" }}
       >
         <Row gap="8" vertical="center" wrap horizontal="center">
