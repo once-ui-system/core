@@ -67,6 +67,38 @@ have rejected all of them.
   gesture no longer moves the track, which is why drag is on by default and the
   controls are never hidden.
 
+- **`ThemeSwitcher collapsed` can open downwards, with `direction="column"`.**
+  The collapsed group grew sideways, in the flow of the layout, which works
+  where it has room beside it and not where it has neighbours: the group
+  widening pushes them along, and the option the pointer is resting on slides
+  out from under it. In a header that is every time it opens.
+
+  `direction="column"` splits the control into an anchor and a panel. The
+  anchor is what the layout sees and stays the size of one option however many
+  are showing; the panel is taken out of the flow and hung from the anchor, so
+  it grows over the page instead of through the header. Measured in a 56px
+  sticky header with neighbours on both sides: nothing beside it moves and the
+  header does not change height.
+
+  It opens downwards rather than centring on the active option. An open panel
+  is 124px against a 56px header, so anchoring it on the second or third option
+  would put its top edge 34px and 76px above the viewport.
+
+  The active option leads. In fixed order the panel's first slot belongs to
+  whichever theme is listed first, so the icon already under the pointer
+  changes identity as the panel unrolls — hover the moon and the computer
+  arrives under your cursor, and a click without looking sets the wrong theme.
+  Leading with the active option keeps the invariant that the theme in force is
+  the one in the anchor slot, before opening and after choosing. The reorder is
+  done in the markup rather than with CSS `order`, so tab order and visual
+  order stay the same thing, and stable keys mean a focused button keeps focus
+  across the move.
+
+  `direction` defaults to `"row"` and is ignored when the group is not
+  collapsed, so nothing that already uses `ThemeSwitcher` changes. Devices that
+  cannot hover still get the group always open, and there it takes its space in
+  the layout rather than hanging over what is underneath.
+
 - **`ScrollContainer` takes `active` and `onActiveChange`.** `active` brings an
   item to the front by its index, by the shorter way round when `infinite`;
   `onActiveChange` reports the item that arrived there, however it got there.
