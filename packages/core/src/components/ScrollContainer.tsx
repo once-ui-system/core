@@ -34,6 +34,28 @@ export interface ScrollContainerProps extends React.ComponentProps<typeof Row> {
   step?: number;
   /** Clip the track at its edges instead of letting tiles paint past them. */
   clip?: boolean;
+  /**
+   * Scale tiles by how far they are from the one in front, so the run has a
+   * focus that follows the track as it moves. `true` uses a gentle default;
+   * a number is how much smaller each whole step away is, as a fraction —
+   * `0.08` makes the neighbour 92%.
+   */
+  proximity?: boolean | number;
+  /**
+   * The item to bring to the front, by its index in `items`.
+   *
+   * Changing it moves the run, by the shorter way round when `infinite`. It
+   * is a command rather than a lock: the run still moves on its own from the
+   * controls, the markers and a drag, and `onActiveChange` is how the caller
+   * keeps up with that. Pair the two to drive the run from your own UI — a
+   * row of names beside it, say — without the two disagreeing.
+   */
+  active?: number;
+  /**
+   * Called with the index of the item that has come to the front, however it
+   * got there. Not called on mount.
+   */
+  onActiveChange?: (index: number) => void;
 }
 
 const getHorizontalAlignment = (placement: ScrollContainerControlPlacement) => {
@@ -51,10 +73,14 @@ const COMMIT_RATIO = 0.2;
 const FLICK_VELOCITY = 0.5;
 /** How far a track can be pulled past its own end before it stops following. */
 const RUBBER_BAND = 0.35;
+/** How much smaller each whole step from the front is, when `proximity` is on. */
+const PROXIMITY_FALLOFF = 0.08;
+/** Tiles stop shrinking here, so a long run does not trail off into nothing. */
+const PROXIMITY_FLOOR = 0.72;
 
 /**
- * A horizontal run of items with controls, drag, optional wrap-around and
- * optional markers.
+ * A horizontal run of items with controls, drag, optional wrap-around,
+ * optional proximity scaling and optional markers.
  *
  * This moves a track with a transform rather than scrolling a box, which is
  * the decision the rest of the component follows from. The previous version
@@ -90,6 +116,9 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
       draggable = true,
       step = 1,
       clip = false,
+      proximity = false,
+      active,
+      onActiveChange,
       ...tile
     },
     ref,
@@ -189,6 +218,46 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
     );
 
     /**
+     * Which item is in front, counted in `items` rather than in the track.
+     *
+     * With wrap-around the internal index is free to run past either end —
+     * that is what makes the motion continuous — so it is not a number any
+     * caller could use. This folds it back into the range of the real run,
+     * and it is the only index this component reports or accepts.
+     */
+    const activeIndex = count > 0 ? ((index % count) + count) % count : 0;
+
+    /**
+     * Report the front item, but never on mount.
+     *
+     * The callback is read through a ref so that a caller passing a fresh
+     * arrow function on every render — which is most of them — does not make
+     * this fire again for an index that has not moved.
+     */
+    const onActiveChangeRef = useRef(onActiveChange);
+    onActiveChangeRef.current = onActiveChange;
+    const reportedRef = useRef(activeIndex);
+    useEffect(() => {
+      if (reportedRef.current === activeIndex) return;
+      reportedRef.current = activeIndex;
+      onActiveChangeRef.current?.(activeIndex);
+    }, [activeIndex]);
+
+    /**
+     * Move when `active` changes.
+     *
+     * Deliberately keyed on `active` alone. Were it to depend on where the run
+     * actually is, every drag would be undone a frame after it finished by an
+     * effect insisting on the last value the caller passed — the run would
+     * fight the pointer. `active` says go here; it does not say stay here.
+     */
+    // biome-ignore lint/correctness/useExhaustiveDependencies: see above — reacting to the caller's command, not to our own position
+    useEffect(() => {
+      if (active === undefined || count === 0) return;
+      goTo(active);
+    }, [active, count]);
+
+    /**
      * Put the index back inside the real copy once the motion has finished.
      *
      * Switching the transition off for one frame is what makes the jump
@@ -208,11 +277,24 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
       [count, index, infinite],
     );
 
+    /**
+     * Put the transition back one frame after the wrap-around jump — but not
+     * while a drag is in progress.
+     *
+     * Without the `dragging` guard this fires for any `animated === false`,
+     * and a drag is the other thing that sets it false. One frame in, the
+     * transition came back on, and every `dragPx` update after that was eased
+     * over `--transition-duration-macro-long` instead of applied: the track
+     * crawled toward the pointer at 0.6s a step and never caught up. Measured
+     * before the guard — a 164px drag moved the track 46px, in increments of
+     * 40, 1, 2, 3. It only looked right on release because the commit works
+     * from the raw pointer delta, not from where the track had got to.
+     */
     useEffect(() => {
-      if (animated) return;
+      if (animated || dragging) return;
       const frame = requestAnimationFrame(() => setAnimated(true));
       return () => cancelAnimationFrame(frame);
-    }, [animated]);
+    }, [animated, dragging]);
 
     const drag = useRef({
       active: false,
@@ -337,7 +419,6 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
       }
     };
 
-    const active = count > 0 ? ((index % count) + count) % count : 0;
     const canGoBack = infinite || index > 0;
     const canGoForward = infinite || index < maxIndex;
 
@@ -373,14 +454,29 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
             key={i}
             type="button"
             className={styles.marker}
-            data-active={i === active ? "true" : undefined}
+            data-active={i === activeIndex ? "true" : undefined}
             aria-label={`Go to item ${i + 1} of ${count}`}
-            aria-current={i === active ? "true" : undefined}
+            aria-current={i === activeIndex ? "true" : undefined}
             onClick={() => goTo(i)}
           />
         ))}
       </Row>
     ) : null;
+
+    /**
+     * Where the track really is, between two indices, while it is being moved.
+     *
+     * The settled `index` is a whole number and would step the scaling from
+     * one tile to the next, which is the opposite of what this is for: the
+     * point is that a tile grows as you drag it towards the front rather than
+     * snapping when it arrives. `dragPx` is the live offset, so dividing it by
+     * the tile pitch gives the fraction of a step the track has travelled, and
+     * the sign is negative because dragging right shows earlier items.
+     */
+    const falloff =
+      proximity === true ? PROXIMITY_FALLOFF : typeof proximity === "number" ? proximity : 0;
+    const scaling = falloff > 0 && tileStep > 0;
+    const front = index - (tileStep > 0 ? dragPx / tileStep : 0);
 
     const offset = -(index + origin) * tileStep + dragPx;
 
@@ -430,28 +526,49 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
               ...(animated ? {} : { transition: "none" }),
             }}
           >
-            {rendered.map((item, i) => (
-              <Column
-                // Same as above, and with wrap-around the same item appears in
-                // three copies, so its own identity would not be unique either.
-                // biome-ignore lint/suspicious/noArrayIndexKey: no stable id exists
-                key={i}
-                className={styles.tile}
-                // The one sizing default that stays. A tile with no width of
-                // its own sizes to its content, which is fine for a card of
-                // text and collapses to nothing for anything that fills its
-                // parent — so the out-of-the-box carousel would depend on what
-                // was put in it. `minWidth` is a floor, not a shape: content
-                // wider than this still sets the tile's width.
-                minWidth={20}
-                // Only the middle copy is the real run; the other two are
-                // scenery and must not be read out or tabbed into.
-                aria-hidden={infinite && (i < origin || i >= origin + count) ? "true" : undefined}
-                {...tile}
-              >
-                {item}
-              </Column>
-            ))}
+            {rendered.map((item, i) => {
+              const scale = scaling
+                ? Math.max(PROXIMITY_FLOOR, 1 - falloff * Math.abs(i - origin - front))
+                : 1;
+              return (
+                <Column
+                  // Same as above, and with wrap-around the same item appears in
+                  // three copies, so its own identity would not be unique either.
+                  // biome-ignore lint/suspicious/noArrayIndexKey: no stable id exists
+                  key={i}
+                  className={styles.tile}
+                  // The one sizing default that stays. A tile with no width of
+                  // its own sizes to its content, which is fine for a card of
+                  // text and collapses to nothing for anything that fills its
+                  // parent — so the out-of-the-box carousel would depend on what
+                  // was put in it. `minWidth` is a floor, not a shape: content
+                  // wider than this still sets the tile's width.
+                  minWidth={20}
+                  // Only the middle copy is the real run; the other two are
+                  // scenery and must not be read out or tabbed into.
+                  aria-hidden={infinite && (i < origin || i >= origin + count) ? "true" : undefined}
+                  {...tile}
+                  style={{
+                    ...tile.style,
+                    // Only when asked. Off, a tile carries no transform at all,
+                    // so it never becomes a containing block for whatever the
+                    // caller positioned inside it.
+                    ...(scaling
+                      ? {
+                          transform: `scale(${scale})`,
+                          // Follows the pointer during a drag and eases with the
+                          // track afterwards, the same rule the track itself
+                          // uses — and for the same reason, spread rather than
+                          // set to `undefined`.
+                          ...(animated ? {} : { transition: "none" }),
+                        }
+                      : {}),
+                  }}
+                >
+                  {item}
+                </Column>
+              );
+            })}
           </Row>
         </Flex>
 

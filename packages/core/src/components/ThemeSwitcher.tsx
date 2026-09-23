@@ -2,8 +2,8 @@
 
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { IconButton, Row } from ".";
 import { useTheme } from "../contexts";
+import { Column, IconButton, Row } from ".";
 import styles from "./ThemeSwitcher.module.scss";
 
 const THEMES = [
@@ -23,10 +23,26 @@ interface ThemeSwitcherProps extends React.ComponentProps<typeof Row> {
    * when it was tapped to open something.
    */
   collapsed?: boolean;
+  /**
+   * Which way a collapsed group opens. Ignored when not `collapsed`.
+   *
+   * `"row"` grows sideways in the flow of the layout, which is right when the
+   * control has room beside it and wrong when it has neighbours: the group
+   * widening pushes them along, and the option you were pointing at moves out
+   * from under the pointer.
+   *
+   * `"column"` lifts the options into a panel over the page and opens it
+   * downwards, so the control keeps a one-option footprint whatever it is
+   * doing and nothing around it moves. Downwards rather than centred on the
+   * active option: the open panel is taller than a typical header, so
+   * anchoring it on the second or third option would put its top edge above
+   * the viewport.
+   */
+  direction?: "row" | "column";
 }
 
 const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
-  ({ collapsed, className, ...flex }, ref) => {
+  ({ collapsed, direction = "row", className, ...flex }, ref) => {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = React.useState(false);
 
@@ -35,6 +51,90 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
     React.useEffect(() => {
       setMounted(true);
     }, []);
+
+    /*
+     * Opening downwards, the active option leads.
+     *
+     * The shut control is the active option — that is what a collapsed group
+     * is. Open it in fixed order and the panel's first slot belongs to
+     * whichever theme happens to be listed first, so the icon the pointer is
+     * already resting on changes identity as the panel unrolls: you hover the
+     * moon and the computer arrives underneath your cursor. Click without
+     * looking and you have set the wrong theme.
+     *
+     * Leading with the active option keeps one invariant instead — the theme
+     * in force is always the one in the anchor slot, before opening and again
+     * after choosing. The other two keep their order relative to each other,
+     * so the list is still predictable.
+     *
+     * Reordered here rather than with CSS `order` so that the tab order and
+     * the visual order stay the same thing. Keys are stable, so React moves
+     * the existing nodes and a focused button keeps its focus.
+     */
+    const ordered =
+      collapsed && direction === "column" && mounted
+        ? [...THEMES].sort((a, b) => Number(theme === b.value) - Number(theme === a.value))
+        : THEMES;
+
+    const options = ordered.map(({ value, icon, label }) => {
+      const active = mounted && theme === value;
+      return (
+        <Row
+          key={value}
+          fit
+          // Collapsed, an unresolved theme would hide all three and leave an
+          // empty pill, so before mount the group renders open.
+          className={classNames(styles.option, mounted && !active && styles.inactive)}
+          suppressHydrationWarning
+        >
+          <IconButton
+            icon={icon}
+            variant={active ? "primary" : "tertiary"}
+            onClick={() => setTheme(value)}
+            aria-label={label}
+            aria-pressed={active}
+            suppressHydrationWarning
+          />
+        </Row>
+      );
+    });
+
+    /*
+     * Opening downwards needs two elements, not one.
+     *
+     * The outer box is what the layout sees, and it stays the size of a single
+     * option however many are showing — that is the whole point of the
+     * collapsed control, and a group that grows in the flow would push its
+     * neighbours along every time it opened. The panel is taken out of the
+     * flow and hung from the outer box's top-left, so it grows over the page
+     * instead of through the header.
+     *
+     * The border and the radius move to the panel with the options, because
+     * they belong to the thing that is actually visible.
+     */
+    if (collapsed && direction === "column") {
+      return (
+        <Row
+          data-border="rounded"
+          ref={ref}
+          fit
+          className={classNames(styles.anchor, className)}
+          suppressHydrationWarning
+          {...flex}
+        >
+          <Column
+            gap="2"
+            border="neutral-alpha-weak"
+            radius="full"
+            background="page"
+            className={classNames(styles.collapsed, styles.panel)}
+            suppressHydrationWarning
+          >
+            {options}
+          </Column>
+        </Row>
+      );
+    }
 
     return (
       <Row
@@ -47,32 +147,12 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
         className={classNames(collapsed && styles.collapsed, className)}
         {...flex}
       >
-        {THEMES.map(({ value, icon, label }) => {
-          const active = mounted && theme === value;
-          return (
-            <Row
-              key={value}
-              fit
-              // Collapsed, an unresolved theme would hide all three and leave an
-              // empty pill, so before mount the group renders open.
-              className={classNames(styles.option, mounted && !active && styles.inactive)}
-              suppressHydrationWarning
-            >
-              <IconButton
-                icon={icon}
-                variant={active ? "primary" : "tertiary"}
-                onClick={() => setTheme(value)}
-                aria-label={label}
-                aria-pressed={active}
-                suppressHydrationWarning
-              />
-            </Row>
-          );
-        })}
+        {options}
       </Row>
     );
   },
 );
 
 ThemeSwitcher.displayName = "ThemeSwitcher";
+
 export { ThemeSwitcher };

@@ -14,7 +14,8 @@
   "StyleProps"
  ],
  "props": {
-  "collapsed": "boolean"
+  "collapsed": "boolean",
+  "direction": "\"row\" | \"column\" = row"
  },
  "mixinsRef": [
   "CommonProps",

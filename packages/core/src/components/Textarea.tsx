@@ -192,7 +192,6 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       {
         [styles.withPrefix]: prefix,
         [styles.withSuffix]: suffix,
-        [styles.placeholder]: placeholder,
         [styles.hasChildren]: children,
       },
     );
@@ -250,7 +249,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               onFocus={handleFocus}
               onBlur={handleBlur}
               onAnimationStart={handleAnimationStart}
-              className={textareaClassNames + " scrollbar-minimal"}
+              className={`${textareaClassNames} scrollbar-minimal`}
               aria-describedby={displayError ? `${id}-error` : undefined}
               aria-invalid={!!displayError}
               style={{
@@ -259,13 +258,17 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               }}
               onChange={handleChange}
             />
-            {!placeholder && (
+            {label && (
               <Text
                 as="label"
                 variant="label-default-m"
                 htmlFor={id}
                 className={classNames(styles.label, styles.textareaLabel, {
-                  [styles.floating]: isFocused || isFilled,
+                  // `|| placeholder` is the whole point of the pairing: a
+                  // placeholder is visible immediately, so the label has to be
+                  // out of its way from the first paint rather than waiting
+                  // for focus. Identical to `Input`.
+                  [styles.floating]: isFocused || isFilled || placeholder,
                 })}
               >
                 {label}

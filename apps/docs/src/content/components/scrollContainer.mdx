@@ -1,6 +1,6 @@
 ---
 title: "ScrollContainer"
-summary: "A horizontal run of items with controls, drag, optional wrap-around and optional markers."
+summary: "A horizontal run of items with controls, drag, optional wrap-around, proximity scaling and optional markers."
 updatedAt: "2026-09-22"
 docs: "once-ui/components/scrollContainer.mdx"
 github: "components/ScrollContainer.tsx"
@@ -10,7 +10,7 @@ navTag: "New"
 navTagVariant: "cyan"
 ---
 
-The `ScrollContainer` component moves a track of items horizontally, with navigation buttons, pointer drag, optional wrap-around and optional markers.
+The `ScrollContainer` component moves a track of items horizontally, with navigation buttons, pointer drag, optional wrap-around, optional proximity scaling, optional markers, and an index you can drive from outside.
 
 It moves a track with a transform rather than scrolling a box. That is what lets tiles paint past the container's edges — the items either side of the ones in front stay visible, so the run reads as something continuous rather than a window with two hard cuts in it. Pass `clip` to keep everything inside the component's own box instead.
 
@@ -110,6 +110,90 @@ A drag that ends on a tile does not also open it — the click is swallowed befo
 />`,
       language: "tsx",
       label: "Disable drag"
+    }
+  ]}
+/>
+
+## Proximity
+
+`proximity` scales each tile by how far it is from the one in front, so the run has a focus that moves with it. It is continuous rather than stepped: halfway through a drag the outgoing and incoming tiles are the same size, so the emphasis crosses between them as the pointer moves instead of snapping when the track settles.
+
+Pass `true` for a gentle default, or a number for how much smaller each whole step away is, as a fraction — `0.08` makes the immediate neighbour 92%. Tiles stop shrinking at 72%, so a long run does not trail off into nothing.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ScrollContainer
+      aspectRatio="16/9"
+      proximity
+      infinite
+      items={Array(8).fill(0).map((_, i) => (
+        <Column key={i} fill padding="8">
+          <Background
+            fill
+            background="neutral-alpha-weak"
+            border="neutral-alpha-medium"
+            radius="l"
+            lines={{ display: true, color: "neutral-alpha-weak" }}
+          />
+        </Column>
+      ))}
+    />
+  }
+  codes={[
+    {
+      code:
+`<ScrollContainer
+  items={items}
+  proximity
+  infinite
+/>
+
+<ScrollContainer
+  items={items}
+  proximity={0.12}
+/>`,
+      language: "tsx",
+      label: "Proximity"
+    }
+  ]}
+/>
+
+## Driving it from your own UI
+
+`active` brings an item to the front by its index, and `onActiveChange` reports the item that arrived there, however it got there — a control, a marker or a drag. Together they let something outside the component stand in for the markers: a row of names, a set of thumbnails, a table of contents.
+
+`active` is a command, not a lock. The run still moves on its own, and it is `onActiveChange` that keeps the caller's own state level with it. An `active` that never changes does not pin the run in place.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const [active, setActive] = useState(0);
+
+<Row gap="8">
+  {names.map((name, i) => (
+    <Button
+      key={name}
+      variant={i === active ? "primary" : "tertiary"}
+      onClick={() => setActive(i)}
+    >
+      {name}
+    </Button>
+  ))}
+</Row>
+
+<ScrollContainer
+  items={items}
+  active={active}
+  onActiveChange={setActive}
+  infinite
+/>`,
+      language: "tsx",
+      label: "Driving it from your own UI"
     }
   ]}
 />
@@ -214,5 +298,8 @@ Tiles carry no appearance of their own: no border, no radius, no aspect ratio. T
     draggable: "Drag the track with a pointer. On by default.",
     step: "Items moved per control press.",
     clip: "Clip the track at its edges instead of letting tiles paint past them.",
+    proximity: "Scale tiles by their distance from the one in front. true is a gentle default; a number is the drop per whole step.",
+    active: "Bring this item to the front. A command, not a lock — the run still moves on its own.",
+    onActiveChange: "Called with the index of the item that came to the front, however it got there.",
   }}
 />

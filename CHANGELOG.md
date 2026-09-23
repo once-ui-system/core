@@ -13,7 +13,118 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.0.0-alpha.2] — 2026-09-23
+
+The third alpha preview, on the same **`alpha`** dist-tag. `npm install
+@once-ui-system/core` still resolves the 1.8 line; asking for this one stays
+deliberate:
+
+```bash
+npm i @once-ui-system/core@alpha
+```
+
+Classified as a pre-release of the 2.0 major. The `ScrollContainer` tile
+defaults are removed rather than deprecated, which is a major-criteria change
+("removing or renaming components, props, tokens, or CSS classes", and
+"changing default behavior in ways that alter rendered output for existing
+code") — it rides the 2.0 line rather than a minor, and existing carousels need
+their shape passed in explicitly. Everything else here is additive or a fix.
+
+Per the AI-consumer rule, `ai/manifest.json`, `ai/catalog.json` and
+`ai/spec.json` are regenerated in this release: `ScrollContainer` gained six
+props since alpha.1, so an agent validating against the previous harness would
+have rejected all of them.
+
 ### Added
+
+- **`ScrollContainer` moves a track instead of scrolling a box.** A scroll box
+  cannot do any of the three things asked of a carousel: its contents are
+  clipped at its own edge by definition, so no tile can peek past it; its
+  scroll range has two hard ends, so there is nowhere for a wrap-around to go;
+  and the browser owns the easing, so a drag can only set `scrollLeft` and
+  hope. The track is now laid out once and moved with a transform, which
+  removes all three limits at once and makes the motion a CSS transition the
+  component controls.
+
+  New with it: `infinite` continues past the last item into the first in the
+  same direction, with no rewind and both controls always enabled; `markers`
+  (`true`, `"top"` or `"bottom"`) shows how many items there are and which is
+  in front, and jumps to one when pressed; `draggable` (on by default) has the
+  track follow a mouse, pen or finger, claiming a gesture for one axis on its
+  first movement so a vertical swipe still scrolls the page, and swallowing the
+  click at the end of a drag so it does not also open the tile; `step` sets how
+  many items a control press moves; and `clip` keeps everything inside the
+  component's own box for callers who want the old edges back.
+
+  **This changes existing carousels.** Tiles used to arrive with
+  `aspectRatio="3/4"`, `border`, `radius="xl"` and a width range already set,
+  so anything that was not a tall bordered portrait card had to override four
+  properties before it could begin. A tile now contributes only what a track
+  item cannot do without — refusing to shrink, and a `minWidth` floor so a
+  carousel of fill-width content has something to fill. Shape and size come
+  from the caller, through the same rest props that always landed on the tile.
+  Because the browser is no longer doing the scrolling, a trackpad's horizontal
+  gesture no longer moves the track, which is why drag is on by default and the
+  controls are never hidden.
+
+- **`ThemeSwitcher collapsed` can open downwards, with `direction="column"`.**
+  The collapsed group grew sideways, in the flow of the layout, which works
+  where it has room beside it and not where it has neighbours: the group
+  widening pushes them along, and the option the pointer is resting on slides
+  out from under it. In a header that is every time it opens.
+
+  `direction="column"` splits the control into an anchor and a panel. The
+  anchor is what the layout sees and stays the size of one option however many
+  are showing; the panel is taken out of the flow and hung from the anchor, so
+  it grows over the page instead of through the header. Measured in a 56px
+  sticky header with neighbours on both sides: nothing beside it moves and the
+  header does not change height.
+
+  It opens downwards rather than centring on the active option. An open panel
+  is 124px against a 56px header, so anchoring it on the second or third option
+  would put its top edge 34px and 76px above the viewport.
+
+  The active option leads. In fixed order the panel's first slot belongs to
+  whichever theme is listed first, so the icon already under the pointer
+  changes identity as the panel unrolls — hover the moon and the computer
+  arrives under your cursor, and a click without looking sets the wrong theme.
+  Leading with the active option keeps the invariant that the theme in force is
+  the one in the anchor slot, before opening and after choosing. The reorder is
+  done in the markup rather than with CSS `order`, so tab order and visual
+  order stay the same thing, and stable keys mean a focused button keeps focus
+  across the move.
+
+  `direction` defaults to `"row"` and is ignored when the group is not
+  collapsed, so nothing that already uses `ThemeSwitcher` changes. Devices that
+  cannot hover still get the group always open, and there it takes its space in
+  the layout rather than hanging over what is underneath.
+
+- **`ScrollContainer` takes `active` and `onActiveChange`.** `active` brings an
+  item to the front by its index, by the shorter way round when `infinite`;
+  `onActiveChange` reports the item that arrived there, however it got there.
+  Together they let something outside the component stand in for the markers —
+  a row of names, a set of thumbnails, a table of contents — which previously
+  was not possible at all: the index was internal state, and the forwarded ref
+  was never attached to anything, so there was no handle on the run from
+  outside.
+
+  `active` is a command rather than a lock, and the effect that reads it is
+  keyed on the prop alone. Were it to depend on where the run actually is,
+  every drag would be undone a frame after it ended by an effect insisting on
+  the last value the caller passed, and the run would fight the pointer. An
+  `active` that never changes therefore does not pin the run in place;
+  `onActiveChange` is how a caller stays level with it.
+
+- **`ScrollContainer` takes `proximity`.** Tiles scale by their distance from
+  the one in front, so the run has a focus that moves with it. It is continuous
+  rather than stepped — the scale is computed from the live drag offset divided
+  by the tile pitch, so halfway through a drag the outgoing and incoming tiles
+  are the same size and the emphasis crosses between them as the pointer moves,
+  instead of snapping when the track settles. `true` is a gentle default; a
+  number is how much smaller each whole step away is, as a fraction. Tiles stop
+  shrinking at 72% so a long run does not trail off into nothing. Off — the
+  default — a tile carries no transform at all, not `scale(1)`, so it never
+  becomes a containing block for anything the caller positioned inside it.
 
 - **`Form`, a layout for a set of fields.** `density` carries the gap and the
   grouping as one decision, because they are one decision: `"stacked"` fuses
@@ -116,6 +227,66 @@ item (see `ROADMAP.md`, Week 4).
   own selected value instead.
 
 ### Fixed
+
+- **A `ScrollContainer` drag follows the pointer.** The effect that restores
+  the track's transition one frame after the wrap-around jump ran for any
+  `animated === false`, and a drag is the other thing that sets it false. One
+  frame into a drag the transition came back on, so every offset update after
+  that was eased over `--transition-duration-macro-long` instead of applied:
+  the track crawled toward the pointer rather than following it. A 164px drag
+  moved the track 46px, in increments of 40, 1, 2, 3. It read as sluggish
+  rather than broken because the release is computed from the raw pointer
+  delta, not from where the track had got to — the landing was right and the
+  journey was not. Tracking is now exact 1:1.
+
+- **A `MegaMenu` panel is measured at the width it is displayed at.** The
+  dropdown was measured in one pass: every `fillWidth` child forced to
+  `max-content`, the panel set to `width: max-content`, then both the width and
+  the height read from that single unconstrained layout. The height that came
+  back described a layout the panel is never shown in, and since the box is
+  locked to it and clips, whatever the content grew by came off the bottom —
+  measured at 14px on a two-column panel, enough to slice the last row. The
+  width is now measured first, applied with the children restored, and the
+  height read after the reflow. The open animation's `scale(0.9)` is switched
+  off for the measurement too, so the numbers describe the panel's layout
+  rather than whichever frame of the transition the measuring pass landed on.
+
+- **A labelled `Textarea` no longer grows a scrollbar when you focus it.** The
+  floating-label rule set `padding-top` on the value for every field but
+  `padding-bottom` only on non-textareas, so a textarea's padding stopped
+  adding up to its box. Focusing one floated the label, moved the top padding
+  from the centring inset to the label offset, and left the bottom where it
+  was: at size m the content needed 51.7px of a 46px box. The box cannot
+  absorb it — the textarea is stretched to `--fld-h` by its parent — so the
+  extra came off the bottom and the field scrolled its own single line, with a
+  scrollbar down the side. Measured at every size: xs through l overflowed by
+  up to 5.7px, and xl by 1px, which is still enough for a scrollbar.
+
+  The exclusion is gone, so a floating label sets both paddings on a textarea
+  exactly as it does on an input. Nothing without a label changes, because the
+  rule only applies once a label is actually floating: a single-line textarea
+  still centres its one line at every size, and a multi-line one still has
+  equal space above and below. A labelled textarea's bottom padding is now the
+  same `--fld-value-bottom` an input uses, which is tight at the smallest
+  sizes — 0 at xs — because that is what the token scale leaves once the label
+  has taken its share of a one-line box.
+
+- **`Textarea` keeps its label when it also has a placeholder.** It rendered the
+  label only when there was no placeholder — `{!placeholder && …}` — so
+  `<Textarea label="…" placeholder="…" />` dropped the label from the markup
+  entirely. Not mispositioned: absent. And since nothing fell back to
+  `aria-label`, the field had no accessible name at all, which a screen reader
+  reports as an unlabelled text box.
+
+  `Input` never did this. It renders the label whenever one is given and floats
+  it when `isFocused || isFilled || placeholder`, so the two sit together: the
+  label above, the placeholder below it. `Textarea` now does the same, and the
+  stylesheet needed nothing — `.base:has(.label.floating) .input` already
+  clears the room, so the value drops to the floating-label offset on its own.
+
+  Also removed a `[styles.placeholder]: placeholder` class that had no rule
+  behind it in `Input.module.scss`, which resolved to `undefined` and put a
+  literal `undefined` class on every textarea with a placeholder.
 
 - **`Textarea` measures like the input beside it.** It pinned its own height
   inline — 48px with a placeholder, 56px without — which ignored `size`

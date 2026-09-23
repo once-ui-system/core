@@ -65,3 +65,102 @@
     transition: none;
   }
 }
+
+/*
+ * Opening downwards, over the page.
+ *
+ * The anchor is what the surrounding layout sees, and it is exactly one option
+ * — so a header reserves one slot whether the group is open or shut, and
+ * nothing beside it moves when it opens. `overflow: visible` matters: the
+ * panel is taller than a typical header and has to be allowed out of it.
+ */
+.anchor {
+  position: relative;
+  width: var(--static-space-40, 2.5rem);
+  height: var(--static-space-40, 2.5rem);
+  overflow: visible;
+}
+
+.panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Above the page, and above a sticky header's own content. */
+  z-index: 1;
+
+  /* Shut, the panel is the size of the one option it shows and has no edges of
+     its own to draw: a pill border around a single icon button is a second
+     outline around the button's own. They arrive with the panel opening. */
+  border-color: transparent;
+  background: transparent;
+  transition:
+    border-color var(--transition-duration-micro-medium, 0.15s) ease,
+    background var(--transition-duration-micro-medium, 0.15s) ease,
+    box-shadow var(--transition-duration-micro-medium, 0.15s) ease;
+
+  &:hover,
+  &:focus-within {
+    border-color: var(--neutral-alpha-weak);
+    background: var(--page-background);
+    box-shadow: var(--shadow-m);
+  }
+
+  /*
+   * Vertical clipping, where the row variant clips horizontally.
+   *
+   * `max-height` rather than `height` so the option is never squashed on the
+   * way out, and the margin trick is the row variant's, turned ninety degrees:
+   * a zero-height option still owns its share of the column's `gap="2"`, which
+   * would leave the shut panel a few pixels taller than the button it shows.
+   */
+  .option {
+    max-width: none;
+    max-height: var(--static-space-40, 2.5rem);
+    transition:
+      max-height var(--transition-duration-micro-medium, 0.15s) ease,
+      margin var(--transition-duration-micro-medium, 0.15s) ease,
+      opacity var(--transition-duration-micro-short, 0.1s) ease;
+  }
+
+  .option.inactive {
+    max-width: none;
+    max-height: 0;
+    opacity: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: calc(-1 * var(--static-space-2, 0.125rem));
+  }
+
+  .option.inactive:first-child {
+    margin-top: 0;
+    margin-bottom: calc(-1 * var(--static-space-2, 0.125rem));
+  }
+
+  &:hover .option.inactive,
+  &:focus-within .option.inactive {
+    max-height: var(--static-space-40, 2.5rem);
+    opacity: 1;
+    margin: 0;
+  }
+}
+
+@media (hover: none) {
+  .panel .option.inactive {
+    max-height: var(--static-space-40, 2.5rem);
+    opacity: 1;
+    margin: 0;
+  }
+
+  /* Always open on a touch device, so it must carry its edges and reserve its
+     height rather than hanging over whatever is under it. */
+  .panel {
+    position: relative;
+    border-color: var(--neutral-alpha-weak);
+    background: var(--page-background);
+  }
+
+  .anchor {
+    width: auto;
+    height: auto;
+  }
+}

@@ -61,6 +61,34 @@ motion, and `prefers-reduced-motion` turns it off.
   ]}
 />
 
+## Opening downwards
+
+A collapsed group grows sideways by default, which is right when it has room beside it and wrong when it has neighbours: the group widening pushes them along, and the option the pointer was resting on slides out from under it. `direction="column"` lifts the options into a panel over the page instead. The control keeps a one-option footprint whatever it is doing, so nothing around it moves, and a sticky header does not change height when the panel opens.
+
+It opens downwards rather than centring itself on the active option. An open panel is taller than a typical header, so anchoring it on the second or third option would put its top edge above the viewport.
+
+The active option leads. Open in fixed order and the panel's first slot belongs to whichever theme is listed first, so the icon already under the pointer changes identity as the panel unrolls — hover the moon, and the computer arrives under your cursor. Leading with the active option keeps one invariant instead: the theme in force is the one in the anchor slot, before opening and again after choosing. The reorder is done in the markup, not with CSS `order`, so the tab order and the visual order stay the same thing.
+
+On a device that cannot hover the panel is always open, and it takes its space in the layout rather than hanging over what is underneath.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="end" paddingRight="16" paddingBottom="80">
+      <ThemeSwitcher collapsed direction="column" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<ThemeSwitcher collapsed direction="column" />`,
+      language: "tsx",
+      label: "Opening downwards"
+    }
+  ]}
+/>
+
 ## Custom layout
 
 Pass any valid `Row` props to control spacing, padding, layout, etc.
@@ -86,6 +114,7 @@ Pass any valid `Row` props to control spacing, padding, layout, etc.
 <PropsTable
   content={[
     ["collapsed", "boolean"],
+    ["direction", "row | column"],
     ["ref", "HTMLDivElement"],
     ["className"],
     ["style"],
