@@ -251,6 +251,23 @@ have rejected all of them.
   off for the measurement too, so the numbers describe the panel's layout
   rather than whichever frame of the transition the measuring pass landed on.
 
+- **`Textarea` keeps its label when it also has a placeholder.** It rendered the
+  label only when there was no placeholder — `{!placeholder && …}` — so
+  `<Textarea label="…" placeholder="…" />` dropped the label from the markup
+  entirely. Not mispositioned: absent. And since nothing fell back to
+  `aria-label`, the field had no accessible name at all, which a screen reader
+  reports as an unlabelled text box.
+
+  `Input` never did this. It renders the label whenever one is given and floats
+  it when `isFocused || isFilled || placeholder`, so the two sit together: the
+  label above, the placeholder below it. `Textarea` now does the same, and the
+  stylesheet needed nothing — `.base:has(.label.floating) .input` already
+  clears the room, so the value drops to the floating-label offset on its own.
+
+  Also removed a `[styles.placeholder]: placeholder` class that had no rule
+  behind it in `Input.module.scss`, which resolved to `undefined` and put a
+  literal `undefined` class on every textarea with a placeholder.
+
 - **`Textarea` measures like the input beside it.** It pinned its own height
   inline — 48px with a placeholder, 56px without — which ignored `size`
   entirely and left a placeholder-only textarea 8px shorter than an `m`
