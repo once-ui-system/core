@@ -30,6 +30,15 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A clickable `Card` runs its handler once, and its label names the link.**
+  `onClick` was set on both the card's button and the surface inside it, so
+  a click on the content bubbled and ran the handler twice; a card that
+  toggled its own `selected` state flipped and flipped back. The handler now
+  sits on the focusable element only (through `onLinkClick` for an `href`
+  card). `aria-label`, `aria-labelledby` and `aria-describedby` also went to
+  the inner surface, leaving the link or button named by whatever text the
+  card contained; they now land on the element that takes focus.
+
 - **`FadingLettersFx` no longer stalls while the page is busy.** It animated
   `filter: blur()`, which browsers cannot hand to the compositor (a changing
   blur radius moves pixels), so the letters ran on the main thread and froze
