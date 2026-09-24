@@ -13,6 +13,20 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Numeric `padding` and `margin` no longer vanish on the client.** `Flex`,
+  `Grid`, `Text` and `Heading` wrote a number as the CSS shorthand next to the
+  four longhands, leaving the unset longhands `undefined`. The server skips
+  those, so server-rendered pages were fine. On the client React writes an
+  undefined longhand as `''` after the shorthand, which clears it:
+  `<Column padding={1}>` mounted in the browser had `style=""`, and a box that
+  went from four numeric sides to one `padding` lost all of it on the update.
+  Found in Aveiro's editor, where a block's spacing collapsed as soon as all
+  four sides matched. Numbers are now written as the four sides, resolved
+  side → axis → all, the same precedence as before. Tokens are unchanged:
+  they are classes, not inline styles.
+
 ## [2.0.0-alpha.2] — 2026-09-23
 
 The third alpha preview, on the same **`alpha`** dist-tag. `npm install
