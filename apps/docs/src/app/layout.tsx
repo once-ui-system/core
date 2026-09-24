@@ -4,7 +4,7 @@ import '../resources/custom.scss';
 
 import classNames from "clsx";
 
-import { Footer, Header, Sidebar, VersionBanner } from "@/product";
+import { Footer, Header, Sidebar } from "@/product";
 import { baseURL } from "@/resources";
 
 import { Analytics } from "@vercel/analytics/react"
@@ -118,7 +118,6 @@ export default function RootLayout({
         <Providers>
           <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}
             scrollbar="default">
-            <VersionBanner />
             <Header />
             <Flex
               fillWidth
