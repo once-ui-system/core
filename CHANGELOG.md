@@ -23,16 +23,29 @@ deliberate:
 npm i @once-ui-system/core@alpha
 ```
 
-Classified as a pre-release of the 2.0 major. No prop, export or token is added,
-removed or renamed; everything here is a fix, plus an internal import refactor
-that leaves the public entry points as they were. Two fixes change rendered
-output for code that already works around the old behaviour, which is worth
-checking on upgrade: a titled `BarChart` no longer grows past its `height` (its
+Classified as a pre-release of the 2.0 major. No prop, export or token is
+removed or renamed. One prop type widens — `sizes` on the components that pass
+it to `Media` now takes a number, as `Media`'s does — and the rest is fixes,
+plus an internal import refactor that leaves the public entry points as they
+were. Two fixes change rendered output for code that already works around the
+old behaviour, which is worth checking on upgrade: a titled `BarChart` no longer grows past its `height` (its
 card is `height` tall, like the other charts, with the plot fitting under the
 header), and a caller that padded a chart's `height` to make room for the
 header will now get a taller plot rather than a clipped one.
 
-The `ai/` harness is regenerated for the version; no component's props changed.
+Per the AI-consumer rule, the `ai/` harness is regenerated in this release:
+`sizes` reads `string | number` on `Carousel`, `Swiper`, `OgCard`, `Book` and
+`MediaUpload`, so an agent validating against the alpha.2 harness would have
+rejected the shorthand on them.
+
+### Added
+
+- **`sizes` takes the `Media` shorthand everywhere it reaches `Media`.**
+  `<Media sizes={1200}>` stands for `(max-width: 1200px) 100vw, 1200px`, but
+  `Carousel` (its slides and `thumbnail.sizes`), `Swiper`, `OgCard`, `Book` and
+  `MediaUpload` typed their `sizes` as `string` while passing it straight to
+  `Media` — so the number worked at runtime and failed to type-check. They take
+  `string | number` now, resolved by `Media` as before.
 
 ### Changed
 

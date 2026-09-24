@@ -15,7 +15,7 @@
  ],
  "props": {
   "url": "string",
-  "sizes": "string = 320px",
+  "sizes": "string | number = 320px",
   "unoptimized": "boolean = false",
   "size": "CondensedTShirtSizes = m",
   "ogData": "Partial<OgData> | null",

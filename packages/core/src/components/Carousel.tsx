@@ -19,7 +19,8 @@ interface CarouselItem {
 interface ThumbnailItem {
   scaling?: number;
   height?: SpacingToken | number;
-  sizes?: string;
+  /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
+  sizes?: string | number;
 }
 
 interface CarouselProps extends React.ComponentProps<typeof Flex> {
@@ -36,7 +37,8 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   indicator?: "line" | "thumbnail" | false;
   translateY?: SpacingToken | number;
   aspectRatio?: string;
-  sizes?: string;
+  /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
+  sizes?: string | number;
   unoptimized?: boolean;
   revealedByDefault?: boolean;
   thumbnail?: ThumbnailItem;

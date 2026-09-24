@@ -25,7 +25,8 @@ interface SwiperProps extends React.ComponentProps<typeof Flex> {
    */
   stretch?: boolean;
   aspectRatio?: string;
-  sizes?: string;
+  /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
+  sizes?: string | number;
   unoptimized?: boolean;
   indicator?: boolean;
 }

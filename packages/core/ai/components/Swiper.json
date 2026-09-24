@@ -18,7 +18,7 @@
   "priority": "boolean = false",
   "stretch": "boolean = false",
   "aspectRatio": "string = 16 / 9",
-  "sizes": "string",
+  "sizes": "string | number",
   "unoptimized": "boolean = false",
   "indicator": "boolean = true"
  },
