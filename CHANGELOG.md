@@ -26,6 +26,17 @@ item (see `ROADMAP.md`, Week 4).
   a light one, then the sharp letter, on the same timings and delays. Each
   letter now wraps its character in an inner span; the copies are generated
   content, so the text is still in the DOM once.
+- **A collapsed `ThemeSwitcher` no longer loads open and then snaps shut.**
+  The server cannot know the visitor's theme, so the group used to render
+  with every option showing and collapse on hydration. It now renders at its
+  one-option size, invisible, and appears once the active option is in place,
+  with the swap unanimated. Touch devices, which always show every option,
+  are unchanged.
+- **`ThemeSwitcher direction="column"` reserves the space it draws.** The
+  anchor was a hard-coded 40px square, but the options are 32px `IconButton`s
+  in a 1px border: 34px. The extra 6px pushed the control off-centre in its
+  row. The anchor, and the caps the options open and close to, now follow
+  the button size.
 
 ## [2.0.0-alpha.2] — 2026-09-23
 

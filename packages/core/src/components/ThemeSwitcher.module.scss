@@ -26,7 +26,7 @@
       max-width var(--transition-duration-micro-medium, 0.15s) ease,
       margin var(--transition-duration-micro-medium, 0.15s) ease,
       opacity var(--transition-duration-micro-short, 0.1s) ease;
-    max-width: var(--static-space-40, 2.5rem);
+    max-width: var(--static-space-32, 2rem);
   }
 
   /* A zero-width option still owns its share of the group's gap, which left
@@ -46,7 +46,7 @@
 
   &:hover .option.inactive,
   &:focus-within .option.inactive {
-    max-width: var(--static-space-40, 2.5rem);
+    max-width: var(--static-space-32, 2rem);
     opacity: 1;
     margin: 0;
   }
@@ -54,7 +54,7 @@
 
 @media (hover: none) {
   .collapsed .option.inactive {
-    max-width: var(--static-space-40, 2.5rem);
+    max-width: var(--static-space-32, 2rem);
     opacity: 1;
     margin: 0;
   }
@@ -76,8 +76,11 @@
  */
 .anchor {
   position: relative;
-  width: var(--static-space-40, 2.5rem);
-  height: var(--static-space-40, 2.5rem);
+  /* One option's footprint: the option buttons are `IconButton`s at their
+     default size (32px), inside the panel's 1px border. Sized to what is
+     drawn, so the control centres in its row and reserves no dead space. */
+  width: calc(var(--static-space-32, 2rem) + 2px);
+  height: calc(var(--static-space-32, 2rem) + 2px);
   overflow: visible;
 }
 
@@ -115,7 +118,7 @@
    */
   .option {
     max-width: none;
-    max-height: var(--static-space-40, 2.5rem);
+    max-height: var(--static-space-32, 2rem);
     transition:
       max-height var(--transition-duration-micro-medium, 0.15s) ease,
       margin var(--transition-duration-micro-medium, 0.15s) ease,
@@ -138,7 +141,7 @@
 
   &:hover .option.inactive,
   &:focus-within .option.inactive {
-    max-height: var(--static-space-40, 2.5rem);
+    max-height: var(--static-space-32, 2rem);
     opacity: 1;
     margin: 0;
   }
@@ -146,7 +149,7 @@
 
 @media (hover: none) {
   .panel .option.inactive {
-    max-height: var(--static-space-40, 2.5rem);
+    max-height: var(--static-space-32, 2rem);
     opacity: 1;
     margin: 0;
   }
@@ -162,5 +165,27 @@
   .anchor {
     width: auto;
     height: auto;
+  }
+}
+
+/*
+ * Before the client knows the theme.
+ *
+ * The server cannot tell which option is active, so the collapsed group is
+ * rendered at its one-option size (the options after the first are marked
+ * inactive) and invisible, and it appears once the active option is known.
+ * Rendering it open instead drew the whole group and then snapped it shut on
+ * hydration. Transitions are off while pending: the reveal comes a frame after
+ * the classes settle, so the swap to the right option is never animated.
+ *
+ * Last in the file, and naming the panel, so it outranks the `.panel .option`
+ * transition above rather than tying with it.
+ */
+.pending {
+  visibility: hidden;
+
+  .option,
+  .panel .option {
+    transition: none;
   }
 }

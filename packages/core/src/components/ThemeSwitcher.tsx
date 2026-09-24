@@ -45,12 +45,28 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
   ({ collapsed, direction = "row", className, ...flex }, ref) => {
     const { theme, setTheme } = useTheme();
     const [mounted, setMounted] = React.useState(false);
+    // Two frames after `mounted` has committed, so a collapsed group appears
+    // only once the browser has laid it out showing the right option (see
+    // `.pending`). One frame is not enough: its callback runs before that
+    // frame's style pass, which would see the new classes and the reveal
+    // together and animate the swap.
+    const [ready, setReady] = React.useState(false);
 
     // The server does not know the visitor's theme, so nothing is marked active
     // until the client says which one it is.
     React.useEffect(() => {
       setMounted(true);
     }, []);
+
+    React.useEffect(() => {
+      if (!mounted) return;
+      let frame = requestAnimationFrame(() => {
+        frame = requestAnimationFrame(() => setReady(true));
+      });
+      return () => cancelAnimationFrame(frame);
+    }, [mounted]);
+
+    const pending = collapsed && !ready;
 
     /*
      * Opening downwards, the active option leads.
@@ -76,15 +92,16 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
         ? [...THEMES].sort((a, b) => Number(theme === b.value) - Number(theme === a.value))
         : THEMES;
 
-    const options = ordered.map(({ value, icon, label }) => {
+    const options = ordered.map(({ value, icon, label }, index) => {
       const active = mounted && theme === value;
       return (
         <Row
           key={value}
           fit
-          // Collapsed, an unresolved theme would hide all three and leave an
-          // empty pill, so before mount the group renders open.
-          className={classNames(styles.option, mounted && !active && styles.inactive)}
+          // Before mount no option is known to be active, so a collapsed group
+          // keeps just its first slot open: the one-option footprint it will
+          // have, held invisible by `.pending` until the right option is in it.
+          className={classNames(styles.option, (mounted ? !active : index > 0) && styles.inactive)}
           suppressHydrationWarning
         >
           <IconButton
@@ -118,7 +135,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
           data-border="rounded"
           ref={ref}
           fit
-          className={classNames(styles.anchor, className)}
+          className={classNames(styles.anchor, pending && styles.pending, className)}
           suppressHydrationWarning
           {...flex}
         >
@@ -144,7 +161,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
         border="neutral-alpha-weak"
         radius="full"
         suppressHydrationWarning
-        className={classNames(collapsed && styles.collapsed, className)}
+        className={classNames(collapsed && styles.collapsed, pending && styles.pending, className)}
         {...flex}
       >
         {options}
