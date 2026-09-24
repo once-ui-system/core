@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Book } from "../components";
-import { LayoutProvider } from "../contexts";
+import { Book } from "../components/Book";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>

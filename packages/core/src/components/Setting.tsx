@@ -1,7 +1,11 @@
 "use client";
 
 import React from "react";
-import { Column, Flex, InfoTip, Row, Text } from ".";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { InfoTip } from "./InfoTip";
+import { Row } from "./Row";
+import { Text } from "./Text";
 
 /**
  * The settings row that Aveiro, Frametic and Scenetic each grew their own copy

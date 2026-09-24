@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 type WeatherType = "rain" | "snow" | "leaves" | "lightning";

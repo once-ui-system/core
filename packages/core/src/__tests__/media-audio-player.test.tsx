@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { MediaAudioPlayer } from "../components/MediaAudioPlayer";
-import { LayoutProvider } from "../contexts";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 // Column/Row route through ClientFlex, which requires the provider.
 const wrap = ({ children }: { children: React.ReactNode }) => (

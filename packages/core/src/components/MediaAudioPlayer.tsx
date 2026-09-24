@@ -3,7 +3,10 @@
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import classNames from "clsx";
-import { Column, IconButton, Row, Text } from ".";
+import { Column } from "./Column";
+import { IconButton } from "./IconButton";
+import { Row } from "./Row";
+import { Text } from "./Text";
 import styles from "./MediaAudioPlayer.module.scss";
 
 interface MediaAudioPlayerProps extends Omit<React.ComponentProps<typeof Column>, "onTimeUpdate"> {

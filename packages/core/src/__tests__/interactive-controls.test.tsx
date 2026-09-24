@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Accordion } from "../components/Accordion";
 import { Checkbox } from "../components/Checkbox";
 import { Switch } from "../components/Switch";
-import { LayoutProvider } from "../contexts";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * Interaction tests for the shared toggle-style controls

@@ -1,7 +1,12 @@
 "use client";
 
 import { CondensedTShirtSizes } from "../types";
-import { Column, Media, Text, Row, Card, Skeleton } from ".";
+import { Column } from "./Column";
+import { Media } from "./Media";
+import { Text } from "./Text";
+import { Row } from "./Row";
+import { Card } from "./Card";
+import { Skeleton } from "./Skeleton";
 import { useOgData } from "../hooks/useFetchOg";
 import { useMemo } from "react";
 

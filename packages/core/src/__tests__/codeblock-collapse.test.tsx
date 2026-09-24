@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { LayoutProvider } from "../contexts";
-import { CodeBlock } from "../modules/code";
+import { LayoutProvider } from "../contexts/LayoutProvider";
+import { CodeBlock } from "../modules/code/CodeBlock";
 
 /**
  * The collapsed state's fade used to blend to `--page-background` while the

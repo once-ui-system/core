@@ -10,7 +10,13 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { Column, Flex, IconButton, Scroller, SegmentedControl, Text, ThemeSwitcher } from ".";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { IconButton } from "./IconButton";
+import { Scroller } from "./Scroller";
+import { SegmentedControl } from "./SegmentedControl";
+import { Text } from "./Text";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 import {
   type BodyLineHeight,
   type BodySize,
@@ -26,7 +32,7 @@ import {
 } from "../contexts/ThemeProvider";
 import { useDataTheme } from "../contexts/DataThemeProvider";
 import { type Schemes, schemes } from "../types";
-import type { ChartMode } from "../modules/data";
+import type { ChartMode } from "../modules/data/interfaces";
 import styles from "./StylePanel.module.scss";
 import classNames from "clsx";
 

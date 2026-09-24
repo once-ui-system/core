@@ -1,7 +1,9 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Pulse, Skeleton, Tag } from "../components";
-import { LayoutProvider } from "../contexts";
+import { Pulse } from "../components/Pulse";
+import { Skeleton } from "../components/Skeleton";
+import { Tag } from "../components/Tag";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>

@@ -5,7 +5,9 @@ import classNames from "clsx";
 import { IconName, type IconComponent } from "../icons";
 import { useIcons } from "../contexts/IconProvider";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
-import { Flex, Tooltip, HoverCard } from ".";
+import { Flex } from "./Flex";
+import { Tooltip } from "./Tooltip";
+import { HoverCard } from "./HoverCard";
 import styles from "./Icon.module.scss";
 
 interface IconProps extends React.ComponentProps<typeof Flex> {

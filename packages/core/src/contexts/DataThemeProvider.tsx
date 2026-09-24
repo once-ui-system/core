@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { ChartMode, ChartVariant } from "../modules/data";
+import { ChartMode, ChartVariant } from "../modules/data/interfaces";
 
 interface ChartOptions {
   variant: ChartVariant;

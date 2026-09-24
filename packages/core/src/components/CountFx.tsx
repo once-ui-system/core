@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useEffect, useState, useRef, forwardRef } from "react";
-import { Row, Text } from ".";
+import { Row } from "./Row";
+import { Text } from "./Text";
 
 export interface CountFxProps extends React.ComponentProps<typeof Text> {
   value: number;

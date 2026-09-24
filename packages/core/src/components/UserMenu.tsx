@@ -1,8 +1,11 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import type React from "react";
+import { forwardRef } from "react";
 import classNames from "clsx";
-import { DropdownWrapper, User, UserProps, DropdownWrapperProps, Column } from ".";
+import { DropdownWrapper, type DropdownWrapperProps } from "./DropdownWrapper";
+import { User, type UserProps } from "./User";
+import { Column } from "./Column";
 import styles from "./UserMenu.module.scss";
 import type { Placement } from "../types";
 

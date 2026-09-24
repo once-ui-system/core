@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, forwardRef } from "react";
-import { Text } from ".";
+import { Text } from "./Text";
 
 export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, 'children'> {
   words: string | string[];

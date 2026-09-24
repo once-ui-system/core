@@ -1,18 +1,15 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, KeyboardEvent, useId, memo, useMemo } from "react";
-import {
-  SegmentedControl,
-  ButtonOption,
-  IconButton,
-  Grid,
-  Flex,
-  Text,
-  Input,
-  Icon,
-  Column,
-  Row,
-} from ".";
+import { useState, useCallback, useRef, useEffect, type KeyboardEvent, useId, memo, useMemo } from "react";
+import { SegmentedControl, type ButtonOption } from "./SegmentedControl";
+import { IconButton } from "./IconButton";
+import { Grid } from "./Grid";
+import type { Flex } from "./Flex";
+import { Text } from "./Text";
+import { Input } from "./Input";
+import { Icon } from "./Icon";
+import { Column } from "./Column";
+import { Row } from "./Row";
 import { useDebounce } from "../hooks/useDebounce";
 import styles from "./EmojiPicker.module.scss";
 
@@ -81,7 +78,8 @@ const fallbackEmojiData: EmojiData = {
 };
 
 import generatedEmojiData from "../data/emoji-data.json";
-import { StyleProps, GridSize } from "../";
+import type { StyleProps } from "../interfaces";
+import type { GridSize } from "../types";
 import type { IconName } from "../icons";
 
 const emojiData: EmojiData =

@@ -1,7 +1,7 @@
 "use client";
 
 import { ReactNode, forwardRef } from "react";
-import { Row } from ".";
+import { Row } from "./Row";
 import styles from "./Pulse.module.scss";
 import { CondensedTShirtSizes, ColorScheme, TShirtSizes } from "../types";
 

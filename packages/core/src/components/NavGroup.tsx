@@ -1,7 +1,11 @@
 "use client";
 
 import React, { forwardRef, ReactNode, useState } from "react";
-import { Accordion, Column, Icon, Line, Row } from ".";
+import { Accordion } from "./Accordion";
+import { Column } from "./Column";
+import { Icon } from "./Icon";
+import { Line } from "./Line";
+import { Row } from "./Row";
 import { IconName } from "../icons";
 
 interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" | "onToggle"> {

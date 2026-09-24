@@ -1,6 +1,6 @@
 "use client";
 
-import { Row } from ".";
+import { Row } from "./Row";
 import styles from "./AutoScroll.module.scss";
 import React, { forwardRef, useState, useRef, useEffect, useMemo } from "react";
 

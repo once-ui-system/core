@@ -2,7 +2,8 @@
 
 import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
-import { Icon, ElementType } from ".";
+import { Icon } from "./Icon";
+import { ElementType } from "./ElementType";
 import { IconName } from "../icons";
 import { TShirtSizes } from "../types";
 

@@ -1,7 +1,10 @@
 "use client";
 
 import React from "react";
-import { Column, HoverCard, Icon, Text } from ".";
+import { Column } from "./Column";
+import { HoverCard } from "./HoverCard";
+import { Icon } from "./Icon";
+import { Text } from "./Text";
 
 interface InfoTipProps extends Omit<React.ComponentProps<typeof Column>, "children"> {
   /** The explanation. A sentence or two — anything longer wants a doc link. */

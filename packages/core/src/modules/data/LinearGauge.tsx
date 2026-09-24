@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Column, Flex, Row, Text } from "../../components";
+import { Column } from "../../components/Column";
+import { Flex } from "../../components/Flex";
+import { Row } from "../../components/Row";
+import { Text } from "../../components/Text";
 import styles from "./Gauge.module.css";
 import { ColorValue } from "../../types";
 

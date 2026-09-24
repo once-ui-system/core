@@ -11,18 +11,16 @@ import ReactDOM from "react-dom";
 import classNames from "clsx";
 import { SpacingToken } from "../../types";
 import styles from "./CodeBlock.module.scss";
-import {
-  Flex,
-  IconButton,
-  Scroller,
-  Row,
-  StyleOverlay,
-  ToggleButton,
-  Column,
-  Text,
-  Button,
-  Fade,
-} from "../../components";
+import { Flex } from "../../components/Flex";
+import { IconButton } from "../../components/IconButton";
+import { Scroller } from "../../components/Scroller";
+import { Row } from "../../components/Row";
+import { StyleOverlay } from "../../components/StyleOverlay";
+import { ToggleButton } from "../../components/ToggleButton";
+import { Column } from "../../components/Column";
+import { Text } from "../../components/Text";
+import { Button } from "../../components/Button";
+import { Fade } from "../../components/Fade";
 import { escapeHtml } from "../../utils/safe-html";
 import type { IconName } from "../../icons";
 

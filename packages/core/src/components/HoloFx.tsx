@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useCallback, forwardRef } from "react";
 import styles from "./HoloFx.module.scss";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import { CSSProperties } from "react";
 import classNames from "clsx";
 import { useInViewport } from "../hooks/useInViewport";

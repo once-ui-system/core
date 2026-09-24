@@ -1,11 +1,11 @@
 import { render } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, type MockInstance, vi } from "vitest";
-import { LayoutProvider } from "../contexts";
 import {
   type AdapterLinkProps,
   AdapterProvider,
   resetAdapterWarning,
 } from "../contexts/AdapterProvider";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * The adapter migration has a silent failure mode: a Next app that keeps the

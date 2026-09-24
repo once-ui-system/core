@@ -1,7 +1,10 @@
 "use client";
 
 import classNames from "clsx";
-import { Text, ElementType, Column, Row } from ".";
+import { Text } from "./Text";
+import { ElementType } from "./ElementType";
+import { Column } from "./Column";
+import { Row } from "./Row";
 import styles from "./Option.module.scss";
 import React, { forwardRef, KeyboardEvent, useRef, useEffect, useState } from "react";
 

@@ -2,7 +2,13 @@
 
 import React from "react";
 import type { IconName } from "../../icons";
-import { Icon, Column, Flex, Option, Accordion, ElementType, Text } from "../../";
+import { Icon } from "../../components/Icon";
+import { Column } from "../../components/Column";
+import { Flex } from "../../components/Flex";
+import { Option } from "../../components/Option";
+import { Accordion } from "../../components/Accordion";
+import { ElementType } from "../../components/ElementType";
+import { Text } from "../../components/Text";
 
 export interface MenuLink {
   label: React.ReactNode;

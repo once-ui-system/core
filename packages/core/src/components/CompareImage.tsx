@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
-import { Flex, Media, IconButton } from ".";
+import { Flex } from "./Flex";
+import { Media } from "./Media";
+import { IconButton } from "./IconButton";
 import styles from "./CompareImage.module.scss";
 
 interface SideContent {

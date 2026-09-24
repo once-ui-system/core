@@ -9,7 +9,10 @@ import React, {
   ReactNode,
 } from "react";
 import classNames from "clsx";
-import { Column, Row, Text, Spinner } from ".";
+import { Column } from "./Column";
+import { Row } from "./Row";
+import { Text } from "./Text";
+import { Spinner } from "./Spinner";
 import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";

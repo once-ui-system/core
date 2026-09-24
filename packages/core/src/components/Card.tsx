@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import styles from "./Card.module.scss";
 import { ElementType } from "./ElementType";
 import classNames from "clsx";

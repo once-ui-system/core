@@ -1,8 +1,10 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { Dialog, DropdownWrapper, ContextMenu } from ".";
-import { LayoutProvider } from "../contexts";
+import { Dialog } from "./Dialog";
+import { DropdownWrapper } from "./DropdownWrapper";
+import { ContextMenu } from "./ContextMenu";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 import { KbarContent } from "../modules/navigation/Kbar";
 import { resetScrollLockTestState } from "../internal/scrollLockState";
 import { resetScrollLockState } from "../components/ScrollLock";

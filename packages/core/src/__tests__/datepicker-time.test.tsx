@@ -3,8 +3,9 @@ import path from "node:path";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { DateInput, DatePicker } from "../components";
-import { LayoutProvider } from "../contexts";
+import { DateInput } from "../components/DateInput";
+import { DatePicker } from "../components/DatePicker";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>

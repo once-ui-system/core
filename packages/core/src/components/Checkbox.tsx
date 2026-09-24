@@ -2,7 +2,9 @@
 
 import React, { useState, useEffect, forwardRef, useId } from "react";
 import classNames from "clsx";
-import { Flex, Icon, InteractiveDetails, InteractiveDetailsProps } from ".";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface CheckboxProps

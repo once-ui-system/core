@@ -3,7 +3,10 @@
 import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
 
-import { Flex, Text, Icon, Row } from ".";
+import { Flex } from "./Flex";
+import { Text } from "./Text";
+import { Icon } from "./Icon";
+import { Row } from "./Row";
 import styles from "./Tag.module.scss";
 import { IconName } from "../icons";
 import { ColorScheme, CondensedTShirtSizes } from "../types";

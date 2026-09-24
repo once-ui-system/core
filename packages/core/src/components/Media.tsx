@@ -4,8 +4,12 @@ import classNames from "clsx";
 import type React from "react";
 import { type CSSProperties, forwardRef, type ReactNode, useEffect, useRef, useState } from "react";
 import { useAdapters } from "../contexts/AdapterProvider";
-import { Column, Flex, Row, ScrollLock, Skeleton } from ".";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
 import { MediaVideoPlayer } from "./MediaVideoPlayer";
+import { Row } from "./Row";
+import { ScrollLock } from "./ScrollLock";
+import { Skeleton } from "./Skeleton";
 
 export interface MediaProps extends React.ComponentProps<typeof Flex> {
   aspectRatio?: string;

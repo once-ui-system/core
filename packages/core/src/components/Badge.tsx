@@ -1,7 +1,10 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Arrow, Flex, Icon, SmartLink } from ".";
+import { Arrow } from "./Arrow";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { SmartLink } from "./SmartLink";
 
 import styles from "./Badge.module.scss";
 import { IconName } from "../icons";

@@ -1,6 +1,7 @@
 import React, { ReactNode, forwardRef } from "react";
 
-import { Flex, Text } from ".";
+import { Flex } from "./Flex";
+import { Text } from "./Text";
 
 interface KbdProps extends React.ComponentProps<typeof Flex> {
   label?: string;

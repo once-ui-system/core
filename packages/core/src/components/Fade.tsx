@@ -1,7 +1,7 @@
 import React, { forwardRef, ReactNode } from "react";
 import styles from "./Fade.module.scss";
 
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import { ColorScheme, ColorWeight, SpacingToken } from "../types";
 import classNames from "clsx";
 

@@ -2,7 +2,9 @@
 
 import React, { forwardRef, useRef, useState, useEffect } from "react";
 import classNames from "clsx";
-import { Column, Row, Text } from ".";
+import { Column } from "./Column";
+import { Row } from "./Row";
+import { Text } from "./Text";
 import styles from "./Slider.module.scss";
 
 interface SliderProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "onChange"> {

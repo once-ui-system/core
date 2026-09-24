@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { Row } from "../../components";
+import { Row } from "../../components/Row";
 import { RadiusSize, SpacingToken } from "../../types";
-import { useDataTheme } from "../../contexts";
+import { useDataTheme } from "../../contexts/DataThemeProvider";
 import { ChartVariant } from "./interfaces";
 
 export interface SwatchProps {

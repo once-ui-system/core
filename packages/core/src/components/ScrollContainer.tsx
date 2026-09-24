@@ -2,7 +2,10 @@
 
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Column, Flex, IconButton, Row } from ".";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { IconButton } from "./IconButton";
+import { Row } from "./Row";
 import styles from "./ScrollContainer.module.scss";
 
 export type ScrollContainerControlPlacement =

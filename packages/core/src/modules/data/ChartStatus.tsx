@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
-import { Column, Text, Spinner } from "../../components";
+import { Column } from "../../components/Column";
+import { Text } from "../../components/Text";
+import { Spinner } from "../../components/Spinner";
 
 export interface ChartStatusProps {
   loading?: boolean;

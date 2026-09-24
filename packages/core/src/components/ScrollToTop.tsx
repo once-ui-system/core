@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import styles from "./ScrollToTop.module.scss";
 import classNames from "clsx";
 

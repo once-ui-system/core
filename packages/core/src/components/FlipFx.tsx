@@ -8,7 +8,7 @@ import React, {
   useCallback,
   forwardRef,
 } from "react";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 
 export interface FlipFxProps extends React.ComponentProps<typeof Flex> {
   flipDirection?: "horizontal" | "vertical";

@@ -1,6 +1,6 @@
 import { act, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { CountFx } from "../components";
+import { CountFx } from "../components/CountFx";
 
 /**
  * jsdom has no frame loop, so drive one by hand: each rAF callback lands in

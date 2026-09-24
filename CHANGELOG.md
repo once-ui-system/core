@@ -13,6 +13,21 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Changed
+
+- **Core's own files import from the file that defines a symbol, never from a
+  barrel.** 195 imports across 160 files went through a directory `index.ts`
+  (`"."`, `"../components"`, `"../../contexts"`…), so importing any one
+  component pulled in every module that barrel re-exports. In a Next.js app
+  that put all 130 client components on every page, the 150 KB emoji dataset
+  among them. The public barrels are unchanged, and
+  `import { Button } from "@once-ui-system/core"` works exactly as before. What
+  this unlocks is per-component imports
+  (`@once-ui-system/core/components/Button`), which now ship only what they
+  name: on the Once UI site they cut the JavaScript every page loads from
+  542 KB to 472 KB gzipped. A test fails if an internal barrel import comes
+  back.
+
 ### Fixed
 
 - **`FadingLettersFx` no longer stalls while the page is busy.** It animated

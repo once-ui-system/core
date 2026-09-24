@@ -2,16 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { getRechartsComponents } from "./rechartsLoader";
-import { Column, Row, DateRange } from "../../components";
-import {
-  ChartProps,
-  ChartVariant,
-  ChartStatus,
-  RadialGradient,
-  DataTooltip,
-  Legend,
-  ChartHeader,
-} from ".";
+import { Column } from "../../components/Column";
+import { Row } from "../../components/Row";
+import { DateRange } from "../../components/DateRangePicker";
+import { ChartProps, ChartVariant } from "./interfaces";
+import { ChartStatus } from "./ChartStatus";
+import { RadialGradient } from "./Gradient";
+import { DataTooltip } from "./DataTooltip";
+import { Legend } from "./Legend";
+import { ChartHeader } from "./ChartHeader";
 import { RadiusSize, schemes } from "../../types";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 

@@ -1,21 +1,16 @@
 "use client";
 
-import React, { useState, useRef, useEffect, forwardRef, ReactNode, useId } from "react";
+import type React from "react";
+import { useState, useRef, useEffect, forwardRef, type ReactNode, useId } from "react"
 import classNames from "clsx";
-import {
-  DropdownWrapper,
-  Flex,
-  Icon,
-  IconButton,
-  Input,
-  InputProps,
-  Option,
-  OptionProps,
-  DropdownWrapperProps,
-  Column,
-  ArrowNavigation,
-  useArrowNavigationContext,
-} from ".";
+import { DropdownWrapper, type DropdownWrapperProps } from "./DropdownWrapper";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { Input, type InputProps } from "./Input";
+import { Option, type OptionProps } from "./Option";
+import { Column } from "./Column";
+import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationContext";
 import type { Placement } from "../types";
 import inputStyles from "./Input.module.scss";
 

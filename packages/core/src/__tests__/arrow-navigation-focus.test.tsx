@@ -1,7 +1,8 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { ArrowNavigation, Option } from "../components";
-import { LayoutProvider } from "../contexts";
+import { ArrowNavigation } from "../components/ArrowNavigationContext";
+import { Option } from "../components/Option";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>

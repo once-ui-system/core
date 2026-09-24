@@ -1,7 +1,10 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { Column, Flex, Row, Text } from ".";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { Row } from "./Row";
+import { Text } from "./Text";
 import type { ColorScheme, SpacingToken } from "../types";
 
 /**

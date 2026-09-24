@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import type { Placement } from "../types";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import styles from "./CursorCard.module.scss";
 
 export interface CursorCardProps extends React.ComponentProps<typeof Flex> {

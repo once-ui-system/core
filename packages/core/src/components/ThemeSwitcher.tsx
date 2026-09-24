@@ -2,8 +2,10 @@
 
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { useTheme } from "../contexts";
-import { Column, IconButton, Row } from ".";
+import { useTheme } from "../contexts/ThemeProvider";
+import { Column } from "./Column";
+import { IconButton } from "./IconButton";
+import { Row } from "./Row";
 import styles from "./ThemeSwitcher.module.scss";
 
 const THEMES = [

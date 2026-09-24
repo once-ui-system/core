@@ -1,15 +1,13 @@
 "use client";
 
 import { SpacingToken } from "../types";
-import {
-  Flex,
-  RevealFx,
-  Scroller,
-  Media,
-  Column,
-  Row,
-  IconButton,
-} from ".";
+import { Flex } from "./Flex";
+import { RevealFx } from "./RevealFx";
+import { Scroller } from "./Scroller";
+import { Media } from "./Media";
+import { Column } from "./Column";
+import { Row } from "./Row";
+import { IconButton } from "./IconButton";
 import { useEffect, useState, useRef, forwardRef } from "react";
 import styles from "./Carousel.module.scss";
 

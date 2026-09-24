@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, forwardRef } from "react";
-import { Flex, DatePicker } from ".";
+import { Flex } from "./Flex";
+import { DatePicker } from "./DatePicker";
 import { CondensedTShirtSizes } from "../types";
 
 export interface DateRange {

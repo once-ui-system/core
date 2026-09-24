@@ -1,8 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { NavGroup, NavItem } from "../components";
-import { LayoutProvider } from "../contexts";
+import { NavGroup } from "../components/NavGroup";
+import { NavItem } from "../components/NavItem";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 import { selectNavHref } from "../utils/navMatch";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (

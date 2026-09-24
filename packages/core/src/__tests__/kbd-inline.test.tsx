@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Kbd } from "../components/Kbd";
-import { LayoutProvider } from "../contexts";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * A <kbd> is part of a sentence. Kbd renders a Flex, which is display: flex,

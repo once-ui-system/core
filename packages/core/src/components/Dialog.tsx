@@ -12,7 +12,12 @@ import React, {
 } from "react";
 import ReactDOM from "react-dom";
 import classNames from "clsx";
-import { Column, Flex, Heading, IconButton, ScrollLock, Text } from ".";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { Heading } from "./Heading";
+import { IconButton } from "./IconButton";
+import { ScrollLock } from "./ScrollLock";
+import { Text } from "./Text";
 import styles from "./Dialog.module.scss";
 
 interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {

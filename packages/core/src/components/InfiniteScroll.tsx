@@ -1,7 +1,9 @@
 "use client";
 
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { Column, Row, Spinner } from ".";
+import { Column } from "./Column";
+import { Row } from "./Row";
+import { Spinner } from "./Spinner";
 
 export interface InfiniteScrollProps<T> extends React.ComponentProps<typeof Row> {
   items: T[];

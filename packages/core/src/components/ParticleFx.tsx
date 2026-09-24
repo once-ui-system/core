@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from "react";
 import { ColorValue, SpacingToken } from "../types";
 import { DisplayProps } from "../interfaces";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 

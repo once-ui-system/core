@@ -2,7 +2,11 @@
 
 import type React from "react";
 import { forwardRef } from "react";
-import { Column, ElementType, Flex, Media, Row } from ".";
+import { Column } from "./Column";
+import { ElementType } from "./ElementType";
+import { Flex } from "./Flex";
+import { Media } from "./Media";
+import { Row } from "./Row";
 import styles from "./Book.module.scss";
 
 interface BookProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {

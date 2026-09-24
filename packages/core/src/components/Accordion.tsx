@@ -8,7 +8,11 @@ import React, {
   useCallback,
   useRef,
 } from "react";
-import { Flex, Icon, Column, Grid, Row } from ".";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { Column } from "./Column";
+import { Grid } from "./Grid";
+import { Row } from "./Row";
 import type { IconName } from "../icons";
 import styles from "./Accordion.module.scss";
 import classNames from "clsx";

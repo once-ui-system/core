@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 
 import styles from "./Spinner.module.scss";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import classNames from "clsx";
 import { TShirtSizes } from "../types";
 
