@@ -1,0 +1,23 @@
+.bookWrapper {
+  perspective: 2000px;
+}
+
+.book {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (hover: hover) {
+  .bookWrapper:hover .book {
+    transform: rotateY(-25deg);
+  }
+}
+
+.bookCover {
+  transform-style: preserve-3d;
+}
+
+.bookPages {
+  transform-origin: left;
+  transform: translateX(100%) rotateY(90deg);
+}
