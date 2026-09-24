@@ -27,7 +27,8 @@ export interface OgData {
 
 interface OgCardProps extends Omit<React.ComponentProps<typeof Card>, "title"> {
   url?: string;
-  sizes?: string;
+  /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
+  sizes?: string | number;
   unoptimized?: boolean;
   size?: CondensedTShirtSizes;
   ogData?: Partial<OgData> | null;

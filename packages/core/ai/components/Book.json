@@ -15,7 +15,7 @@
  "props": {
   "src": "string",
   "alt": "string",
-  "sizes": "string",
+  "sizes": "string | number",
   "href": "string",
   "children": "React.ReactNode"
  },

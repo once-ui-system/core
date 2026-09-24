@@ -13,6 +13,17 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **`sizes` takes the `Media` shorthand everywhere it reaches `Media`.**
+  `<Media sizes={1200}>` stands for `(max-width: 1200px) 100vw, 1200px`, but
+  `Carousel` (its slides and `thumbnail.sizes`), `Swiper`, `OgCard`, `Book` and
+  `MediaUpload` typed their `sizes` as `string` while passing it straight to
+  `Media` — so the number worked at runtime and failed to type-check. They take
+  `string | number` now, resolved by `Media` as before. The `ai/` harness lists
+  the wider type, so an agent validating against the alpha.3 harness would
+  reject the shorthand on these five.
+
 ## [2.0.0-alpha.3] — 2026-09-24
 
 The fourth alpha preview, on the same **`alpha`** dist-tag. `npm install

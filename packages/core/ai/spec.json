@@ -1318,7 +1318,7 @@
   "ThumbnailItem": {
    "scaling": "number",
    "height": "SpacingToken | number",
-   "sizes": "string"
+   "sizes": "string | number"
   },
   "TimelineItem": {
    "label": "React.ReactNode",
@@ -1636,7 +1636,7 @@
    "props": {
     "src": "string",
     "alt": "string",
-    "sizes": "string",
+    "sizes": "string | number",
     "href": "string",
     "children": "React.ReactNode"
    }
@@ -1800,7 +1800,7 @@
     "indicator": "\"line\" | \"thumbnail\" | false = line",
     "translateY": "SpacingToken | number",
     "aspectRatio": "string = original",
-    "sizes": "string",
+    "sizes": "string | number",
     "unoptimized": "boolean = false",
     "revealedByDefault": "boolean = false",
     "thumbnail": "ThumbnailItem = { scaling: 1, height: \"80\", sizes: \"120px\" }",
@@ -1826,7 +1826,7 @@
     "priority": "boolean = false",
     "stretch": "boolean = false",
     "aspectRatio": "string = 16 / 9",
-    "sizes": "string",
+    "sizes": "string | number",
     "unoptimized": "boolean = false",
     "indicator": "boolean = true"
    }
@@ -2831,7 +2831,7 @@
    ],
    "props": {
     "url": "string",
-    "sizes": "string = 320px",
+    "sizes": "string | number = 320px",
     "unoptimized": "boolean = false",
     "size": "CondensedTShirtSizes = m",
     "ogData": "Partial<OgData> | null",
@@ -4193,7 +4193,7 @@
     "initialPreviewImage": "string | null = null",
     "emptyState": "React.ReactNode = Drag and drop or click to browse",
     "quality": "number = 0.8",
-    "sizes": "string",
+    "sizes": "string | number",
     "children": "React.ReactNode",
     "convertTypes": "string[] = [\"image/png\", \"image/webp\", \"image/jpg\"]",
     "resizeMaxWidth": "number = 1920",

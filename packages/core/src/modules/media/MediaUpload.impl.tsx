@@ -33,7 +33,8 @@ export interface MediaUploadProps extends React.ComponentProps<typeof Flex> {
   initialPreviewImage?: string | null;
   emptyState?: React.ReactNode;
   quality?: number;
-  sizes?: string;
+  /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
+  sizes?: string | number;
   children?: React.ReactNode;
   convertTypes?: string[];
   resizeMaxWidth?: number;

@@ -13,7 +13,8 @@ interface BookProps extends Omit<React.ComponentProps<typeof Flex>, "children"> 
   /** Cover artwork. Omit to render a blank cover you can fill with children. */
   src?: string;
   alt?: string;
-  sizes?: string;
+  /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
+  sizes?: string | number;
   /** Renders the book as a link. */
   href?: string;
   /** Overlaid on the cover, above the artwork — a title block, a badge. */
