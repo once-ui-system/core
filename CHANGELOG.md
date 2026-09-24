@@ -13,6 +13,27 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.0.0-alpha.3] — 2026-09-24
+
+The fourth alpha preview, on the same **`alpha`** dist-tag. `npm install
+@once-ui-system/core` still resolves the 1.8 line; asking for this one stays
+deliberate:
+
+```bash
+npm i @once-ui-system/core@alpha
+```
+
+Classified as a pre-release of the 2.0 major. No prop, export or token is added,
+removed or renamed; everything here is a fix, plus an internal import refactor
+that leaves the public entry points as they were. Two fixes change rendered
+output for code that already works around the old behaviour, which is worth
+checking on upgrade: a titled `BarChart` no longer grows past its `height` (its
+card is `height` tall, like the other charts, with the plot fitting under the
+header), and a caller that padded a chart's `height` to make room for the
+header will now get a taller plot rather than a clipped one.
+
+The `ai/` harness is regenerated for the version; no component's props changed.
+
 ### Changed
 
 - **Core's own files import from the file that defines a symbol, never from a
