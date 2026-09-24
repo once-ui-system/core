@@ -30,6 +30,17 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A chart's plot fits inside its card again.** `LineChart`, `BarChart`,
+  `LineBarChart` and `PieChart` used `height` twice: as the card's height and
+  as a `min-height` on the plot row under the header (added in 1.8.0). A chart
+  with a title therefore asked for header + `height` inside a card that is
+  `height` tall, and the plot hung past the card by the header's height —
+  measured at 45px with a title and 65px with a description — clipped by its
+  own `overflow: hidden`, with the axis labels and legend spilling onto
+  whatever came next. `BarChart` grew instead, because its card used
+  `minHeight`. `height` now sizes the card once, on all four, and the plot
+  takes the height the header leaves.
+
 - **Numeric `padding` and `margin` no longer vanish on the client.** `Flex`,
   `Grid`, `Text` and `Heading` wrote a number as the CSS shorthand next to the
   four longhands, leaving the unset longhands `undefined`. The server skips
