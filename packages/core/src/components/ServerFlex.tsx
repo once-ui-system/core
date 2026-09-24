@@ -11,6 +11,7 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerFlexProps
   extends FlexProps,
@@ -594,56 +595,22 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       aspectRatio: aspectRatio,
       textAlign: align,
       cursor: typeof cursor === "string" ? cursor : undefined,
-      padding: typeof padding === "number" ? `${padding}rem` : undefined,
-      paddingLeft:
-        typeof paddingLeft === "number"
-          ? `${paddingLeft}rem`
-          : typeof paddingX === "number"
-            ? `${paddingX}rem`
-            : undefined,
-      paddingRight:
-        typeof paddingRight === "number"
-          ? `${paddingRight}rem`
-          : typeof paddingX === "number"
-            ? `${paddingX}rem`
-            : undefined,
-      paddingTop:
-        typeof paddingTop === "number"
-          ? `${paddingTop}rem`
-          : typeof paddingY === "number"
-            ? `${paddingY}rem`
-            : undefined,
-      paddingBottom:
-        typeof paddingBottom === "number"
-          ? `${paddingBottom}rem`
-          : typeof paddingY === "number"
-            ? `${paddingY}rem`
-            : undefined,
-      margin: typeof margin === "number" ? `${margin}rem` : undefined,
-      marginLeft:
-        typeof marginLeft === "number"
-          ? `${marginLeft}rem`
-          : typeof marginX === "number"
-            ? `${marginX}rem`
-            : undefined,
-      marginRight:
-        typeof marginRight === "number"
-          ? `${marginRight}rem`
-          : typeof marginX === "number"
-            ? `${marginX}rem`
-            : undefined,
-      marginTop:
-        typeof marginTop === "number"
-          ? `${marginTop}rem`
-          : typeof marginY === "number"
-            ? `${marginY}rem`
-            : undefined,
-      marginBottom:
-        typeof marginBottom === "number"
-          ? `${marginBottom}rem`
-          : typeof marginY === "number"
-            ? `${marginY}rem`
-            : undefined,
+      ...numericSpacingStyle({
+        padding,
+        paddingX,
+        paddingY,
+        paddingTop,
+        paddingRight,
+        paddingBottom,
+        paddingLeft,
+        margin,
+        marginX,
+        marginY,
+        marginTop,
+        marginRight,
+        marginBottom,
+        marginLeft,
+      }),
       gap: typeof gap === "number" ? `${gap}rem` : undefined,
       top: parsePosition(top),
       right: parsePosition(right),
