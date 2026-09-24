@@ -233,7 +233,8 @@ const LineChart: React.FC<LineChartProps> = ({
         onDateRangeChange={handleDateRangeChange}
         presets={date?.presets}
       />
-      <Row fill borderTop={(title || description || date?.selector) ? (border || "neutral-alpha-weak") : undefined} topRadius={flex.radius as RadiusSize || "l"} overflow="hidden" style={{ minHeight: height ? `${height}rem` : undefined }}>
+      {/* The plot takes the height the header leaves: `height` sizes the card once. */}
+      <Row fillWidth flex={1} borderTop={(title || description || date?.selector) ? (border || "neutral-alpha-weak") : undefined} topRadius={flex.radius as RadiusSize || "l"} overflow="hidden">
         <ChartStatus
           loading={loading}
           empty={!filteredData || filteredData.length === 0}

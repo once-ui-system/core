@@ -13,6 +13,27 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.0.0-alpha.3] — 2026-09-24
+
+The fourth alpha preview, on the same **`alpha`** dist-tag. `npm install
+@once-ui-system/core` still resolves the 1.8 line; asking for this one stays
+deliberate:
+
+```bash
+npm i @once-ui-system/core@alpha
+```
+
+Classified as a pre-release of the 2.0 major. No prop, export or token is added,
+removed or renamed; everything here is a fix, plus an internal import refactor
+that leaves the public entry points as they were. Two fixes change rendered
+output for code that already works around the old behaviour, which is worth
+checking on upgrade: a titled `BarChart` no longer grows past its `height` (its
+card is `height` tall, like the other charts, with the plot fitting under the
+header), and a caller that padded a chart's `height` to make room for the
+header will now get a taller plot rather than a clipped one.
+
+The `ai/` harness is regenerated for the version; no component's props changed.
+
 ### Changed
 
 - **Core's own files import from the file that defines a symbol, never from a
@@ -29,6 +50,17 @@ item (see `ROADMAP.md`, Week 4).
   back.
 
 ### Fixed
+
+- **A chart's plot fits inside its card again.** `LineChart`, `BarChart`,
+  `LineBarChart` and `PieChart` used `height` twice: as the card's height and
+  as a `min-height` on the plot row under the header (added in 1.8.0). A chart
+  with a title therefore asked for header + `height` inside a card that is
+  `height` tall, and the plot hung past the card by the header's height —
+  measured at 45px with a title and 65px with a description — clipped by its
+  own `overflow: hidden`, with the axis labels and legend spilling onto
+  whatever came next. `BarChart` grew instead, because its card used
+  `minHeight`. `height` now sizes the card once, on all four, and the plot
+  takes the height the header leaves.
 
 - **Numeric `padding` and `margin` no longer vanish on the client.** `Flex`,
   `Grid`, `Text` and `Heading` wrote a number as the CSS shorthand next to the
