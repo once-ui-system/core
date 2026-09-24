@@ -1,9 +1,15 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import type React from "react";
+import { forwardRef } from "react";
 import classNames from "clsx";
 
-import { Flex, Text, Skeleton, Tag, TagProps, Avatar, AvatarProps, Column } from ".";
+import { Flex } from "./Flex";
+import { Text } from "./Text";
+import { Skeleton } from "./Skeleton";
+import { Tag, type TagProps } from "./Tag";
+import { Avatar, type AvatarProps } from "./Avatar";
+import { Column } from "./Column";
 
 interface UserProps {
   name?: string;

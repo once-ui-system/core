@@ -3,9 +3,15 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef, useEffect } from "react";
-import { useAdapters, useToast } from "../contexts";
+import { useAdapters } from "../contexts/AdapterProvider";
+import { useToast } from "../contexts/ToastProvider";
 import type { SpacingToken, TShirtSizes } from "../types";
-import { Column, ContextMenu, Flex, Icon, Line, Option } from ".";
+import { Column } from "./Column";
+import { ContextMenu } from "./ContextMenu";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { Line } from "./Line";
+import { Option } from "./Option";
 
 const sizeMap: Record<string, SpacingToken> = {
   xs: "20",

@@ -13,16 +13,13 @@ import {
   subWeeks,
   isSameDay,
 } from "date-fns";
-import {
-  Column,
-  Text,
-  Row,
-  DateRange,
-  DateRangePicker,
-  DropdownWrapper,
-  IconButton,
-  ToggleButton,
-} from "../../components";
+import { Column } from "../../components/Column";
+import { Text } from "../../components/Text";
+import { Row } from "../../components/Row";
+import { DateRange, DateRangePicker } from "../../components/DateRangePicker";
+import { DropdownWrapper } from "../../components/DropdownWrapper";
+import { IconButton } from "../../components/IconButton";
+import { ToggleButton } from "../../components/ToggleButton";
 import { DateConfig, PresetsConfig } from "./interfaces";
 
 interface ChartHeaderProps

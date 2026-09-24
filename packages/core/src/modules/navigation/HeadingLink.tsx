@@ -1,8 +1,11 @@
 "use client";
 
 import React, { useCallback } from "react";
-import { Animation, Heading, IconButton, Row } from "../../components";
-import { useToast } from "../../contexts";
+import { Animation } from "../../components/Animation";
+import { Heading } from "../../components/Heading";
+import { IconButton } from "../../components/IconButton";
+import { Row } from "../../components/Row";
+import { useToast } from "../../contexts/ToastProvider";
 import styles from "./HeadingLink.module.scss";
 
 export interface HeadingLinkProps extends React.ComponentProps<typeof Row> {

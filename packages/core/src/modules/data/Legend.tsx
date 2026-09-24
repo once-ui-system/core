@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
-import { Row, Text } from "../../components";
-import { Swatch } from ".";
+import { Row } from "../../components/Row";
+import { Text } from "../../components/Text";
+import { Swatch } from "./Swatch";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import { ChartVariant } from "./interfaces";
 

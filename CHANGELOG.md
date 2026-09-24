@@ -13,6 +13,21 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Changed
+
+- **Core's own files import from the file that defines a symbol, never from a
+  barrel.** 195 imports across 160 files went through a directory `index.ts`
+  (`"."`, `"../components"`, `"../../contexts"`…), so importing any one
+  component pulled in every module that barrel re-exports. In a Next.js app
+  that put all 130 client components on every page, the 150 KB emoji dataset
+  among them. The public barrels are unchanged, and
+  `import { Button } from "@once-ui-system/core"` works exactly as before. What
+  this unlocks is per-component imports
+  (`@once-ui-system/core/components/Button`), which now ship only what they
+  name: on the Once UI site they cut the JavaScript every page loads from
+  542 KB to 472 KB gzipped. A test fails if an internal barrel import comes
+  back.
+
 ### Fixed
 
 - **Numeric `padding` and `margin` no longer vanish on the client.** `Flex`,
@@ -26,6 +41,50 @@ item (see `ROADMAP.md`, Week 4).
   four sides matched. Numbers are now written as the four sides, resolved
   side → axis → all, the same precedence as before. Tokens are unchanged:
   they are classes, not inline styles.
+
+- **A clickable `Card` runs its handler once, and its label names the link.**
+  `onClick` was set on both the card's button and the surface inside it, so
+  a click on the content bubbled and ran the handler twice; a card that
+  toggled its own `selected` state flipped and flipped back. The handler now
+  sits on the focusable element only (through `onLinkClick` for an `href`
+  card). `aria-label`, `aria-labelledby` and `aria-describedby` also went to
+  the inner surface, leaving the link or button named by whatever text the
+  card contained; they now land on the element that takes focus.
+
+- **`FadingLettersFx` no longer stalls while the page is busy.** It animated
+  `filter: blur()`, which browsers cannot hand to the compositor (a changing
+  blur radius moves pixels), so the letters ran on the main thread and froze
+  mid-blur whenever script ran during their entrance: hydration, a chunk
+  loading, a WebGL context starting. The blur is now fixed, on two copies of
+  each letter drawn with `::before` and `::after` from a `data-letter`
+  attribute, and only `opacity` and `transform` animate, so the whole effect
+  runs on the compositor. The look is the old curve, sampled: a heavy blur,
+  a light one, then the sharp letter, on the same timings and delays. Each
+  letter now wraps its character in an inner span; the copies are generated
+  content, so the text is still in the DOM once.
+
+- **A collapsed `ThemeSwitcher` no longer loads open and then snaps shut.**
+  The server cannot know the visitor's theme, so the group used to render
+  with every option showing and collapse on hydration. It now renders at its
+  one-option size, invisible, and appears once the active option is in place,
+  with the swap unanimated. Touch devices, which always show every option,
+  are unchanged.
+
+- **`ThemeSwitcher direction="column"` reserves the space it draws.** The
+  anchor was a hard-coded 40px square, but the options are 32px `IconButton`s
+  in a 1px border: 34px. The extra 6px pushed the control off-centre in its
+  row. The anchor, and the caps the options open and close to, now follow
+  the button size.
+
+- **`MegaMenu` works from the keyboard.** A group with a dropdown and no
+  `href` rendered its trigger as a `div`, so it was not in the tab order at
+  all, and every panel opened on hover only. Those triggers are now buttons
+  with `aria-expanded` and `aria-controls` that toggle on Enter or Space; a
+  trigger that is also a link opens its panel on keyboard focus. Tab moves
+  from an open trigger into its panel and on to the next trigger, Shift+Tab
+  comes back, ArrowDown opens a panel and the arrows move within it, and
+  Escape closes it and returns focus to the trigger. Pointer behaviour is
+  unchanged.
 
 ## [2.0.0-alpha.2] — 2026-09-23
 

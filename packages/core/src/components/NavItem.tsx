@@ -1,7 +1,10 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
-import { Icon, Row, Text, ToggleButton } from ".";
+import { Icon } from "./Icon";
+import { Row } from "./Row";
+import { Text } from "./Text";
+import { ToggleButton } from "./ToggleButton";
 import { IconName } from "../icons";
 
 interface NavItemProps

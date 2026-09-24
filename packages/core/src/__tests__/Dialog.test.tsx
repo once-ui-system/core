@@ -5,7 +5,7 @@ import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
 import { Dialog, DialogProvider } from "../components/Dialog";
 import { resetDialogState } from "../test/dialogTestUtils";
 import { resetScrollLockState } from "../components/ScrollLock";
-import { LayoutProvider } from "../contexts";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 import styles from "../components/Dialog.module.scss";
 
 vi.mock("../components", async () => {

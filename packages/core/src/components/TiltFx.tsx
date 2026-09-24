@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useCallback, forwardRef } from "react";
 import styles from "./TiltFx.module.scss";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 
 interface TiltFxProps extends React.ComponentProps<typeof Flex> {

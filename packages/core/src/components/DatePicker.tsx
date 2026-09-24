@@ -2,24 +2,22 @@
 
 import React, { useState, forwardRef, useEffect, useCallback } from "react";
 import classNames from "clsx";
-import {
-  Flex,
-  Text,
-  Button,
-  Grid,
-  SegmentedControl,
-  IconButton,
-  RevealFx,
-  NumberInput,
-  DropdownWrapper,
-  Option,
-  Column,
-  Icon,
-  Row,
-  ArrowNavigation,
-} from ".";
+import { Flex } from "./Flex";
+import { Text } from "./Text";
+import { Button } from "./Button";
+import { Grid } from "./Grid";
+import { SegmentedControl } from "./SegmentedControl";
+import { IconButton } from "./IconButton";
+import { RevealFx } from "./RevealFx";
+import { NumberInput } from "./NumberInput";
+import { DropdownWrapper } from "./DropdownWrapper";
+import { Option } from "./Option";
+import { Column } from "./Column";
+import { Icon } from "./Icon";
+import { Row } from "./Row";
+import { ArrowNavigation } from "./ArrowNavigationContext";
 import { CondensedTShirtSizes } from "../types";
-import { getLastOpenedDropdown, setLastOpenedDropdown, clearLastOpenedDropdown } from "../utils";
+import { getLastOpenedDropdown, setLastOpenedDropdown, clearLastOpenedDropdown } from "../utils/dropdownState";
 import styles from "./DatePicker.module.scss";
 
 export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {

@@ -1,54 +1,24 @@
-@keyframes fadeInFromDistance {
-  from {
-    opacity: 0;
-    filter: blur(20px);
-    transform: scale(0) translateZ(-100px);
-  }
-  to {
-    opacity: 1;
-    filter: blur(0px);
-    transform: scale(1) translateZ(0);
-  }
-}
-
-@keyframes fadeOutPastViewer {
-  from {
-    opacity: 1;
-    filter: blur(0px);
-    transform: scale(1) translateZ(0);
-  }
-  to {
-    opacity: 0;
-    filter: blur(30px);
-    transform: scale(8) translateZ(100px);
-  }
-}
-
-@keyframes letterFadeIn {
-  from {
-    opacity: 0;
-    filter: blur(25px);
-    transform: scale(0.1);
-  }
-  to {
-    opacity: 1;
-    filter: blur(0px);
-    transform: scale(1);
-  }
-}
-
-@keyframes letterFadeOut {
-  from {
-    opacity: 1;
-    filter: blur(0px);
-    transform: scale(1);
-  }
-  to {
-    opacity: 0;
-    filter: blur(20px);
-    transform: scale(4);
-  }
-}
+/*
+ * Every animated property here is one the compositor can run on its own:
+ * `transform` and `opacity`, nothing else.
+ *
+ * The effect used to animate `filter: blur()`. A changing blur radius moves
+ * pixels, so browsers keep that animation on the main thread, and any script
+ * that ran while the letters were arriving (hydration, a chunk loading, a
+ * WebGL context starting) froze them mid-blur. The blur is now fixed, on two
+ * copies of the letter: a heavy one (`::before`) and a light one (`::after`).
+ * Only their opacity moves. The heavy copy carries the start, the light one
+ * the middle, and the sharp letter the end, which steps the blur down the way
+ * the old radius shrank. Nothing a busy main thread does can stall that.
+ *
+ * The keyframes are the old curve (ease-out over 1200ms, opacity rising as
+ * the blur fell) sampled at tenths, so they run on a linear timing function;
+ * an easing on top would apply per segment and bend it twice.
+ *
+ * The copies come from `data-letter` and are generated content, so the letter
+ * is in the DOM once: it copies, reads and indexes as itself. The `/ ""`
+ * form gives the copies an empty accessible name where it is supported.
+ */
 
 .word {
   display: inline-flex;
@@ -57,15 +27,222 @@
 
 .letter {
   display: inline-block;
+  position: relative;
   will-change: transform;
 }
 
+/* Above both copies: positioned, so it paints after them, not under. */
+.glyph {
+  display: inline-block;
+  position: relative;
+  z-index: 1;
+}
+
+.entering::before,
+.entering::after,
+.exiting::before,
+.exiting::after {
+  content: attr(data-letter);
+  content: attr(data-letter) / "";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+.entering::before,
+.exiting::before {
+  filter: blur(0.3em);
+}
+
+.entering::after,
+.exiting::after {
+  filter: blur(0.09em);
+}
+
+/* Entering: 1200ms, from a tenth of the size. */
+
+@keyframes letterScaleIn {
+  from {
+    transform: scale(0.1);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes heavyIn {
+  0% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.16;
+  }
+  20% {
+    opacity: 0.31;
+  }
+  30% {
+    opacity: 0.44;
+  }
+  40% {
+    opacity: 0.42;
+  }
+  50% {
+    opacity: 0.22;
+  }
+  60% {
+    opacity: 0.05;
+  }
+  70%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes lightIn {
+  0%,
+  30% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  60% {
+    opacity: 0.7;
+  }
+  70% {
+    opacity: 0.72;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes glyphIn {
+  0%,
+  50% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 0.06;
+  }
+  70% {
+    opacity: 0.3;
+  }
+  80% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.86;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .letter.entering {
-  animation: letterFadeIn 1200ms ease-out both;
-  animation-delay: var(--entry-delay, 0s), var(--entry-delay, 0s);
+  animation: letterScaleIn 1200ms ease-out both;
+  animation-delay: var(--entry-delay, 0s);
+
+  .glyph {
+    animation: glyphIn 1200ms linear both;
+    animation-delay: var(--entry-delay, 0s);
+  }
+
+  &::before {
+    animation: heavyIn 1200ms linear both;
+    animation-delay: var(--entry-delay, 0s);
+  }
+
+  &::after {
+    animation: lightIn 1200ms linear both;
+    animation-delay: var(--entry-delay, 0s);
+  }
+}
+
+/* Exiting: 1600ms, growing past the viewer as it blurs away. */
+
+@keyframes letterScaleOut {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(4);
+  }
+}
+
+@keyframes glyphOut {
+  0% {
+    opacity: 1;
+  }
+  20% {
+    opacity: 0.8;
+  }
+  35% {
+    opacity: 0.3;
+  }
+  45%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes lightOut {
+  0%,
+  10% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  65%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes heavyOut {
+  0%,
+  35% {
+    opacity: 0;
+  }
+  55% {
+    opacity: 0.35;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .letter.exiting {
-  animation: letterFadeOut 1600ms ease-in-out forwards;
+  animation: letterScaleOut 1600ms ease-in-out forwards;
   animation-delay: var(--exit-delay, 0s);
+
+  .glyph {
+    animation: glyphOut 1600ms linear forwards;
+    animation-delay: var(--exit-delay, 0s);
+  }
+
+  &::before {
+    animation: heavyOut 1600ms linear forwards;
+    animation-delay: var(--exit-delay, 0s);
+  }
+
+  &::after {
+    animation: lightOut 1600ms linear forwards;
+    animation-delay: var(--exit-delay, 0s);
+  }
 }

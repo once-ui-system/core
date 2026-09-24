@@ -2,7 +2,11 @@
 
 import React, { forwardRef } from "react";
 import classNames from "clsx";
-import { Column, CountFx, Flex, Row, Text } from ".";
+import { Column } from "./Column";
+import { CountFx } from "./CountFx";
+import { Flex } from "./Flex";
+import { Row } from "./Row";
+import { Text } from "./Text";
 import { StyleProps } from "../interfaces";
 
 interface ProgressBarProps extends React.ComponentProps<typeof Flex> {

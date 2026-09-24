@@ -1,7 +1,12 @@
 "use client";
 
 import { forwardRef } from "react";
-import { Avatar, Column, Line, Row, SmartLink, Text } from ".";
+import { Avatar } from "./Avatar";
+import { Column } from "./Column";
+import { Line } from "./Line";
+import { Row } from "./Row";
+import { SmartLink } from "./SmartLink";
+import { Text } from "./Text";
 
 interface BlockQuoteProps extends React.ComponentProps<typeof Column> {
   children: React.ReactNode;

@@ -2,7 +2,10 @@
 
 import React, { ReactNode, MouseEventHandler, forwardRef } from "react";
 import classNames from "clsx";
-import { Text, Icon, IconButton, IconButtonProps, Flex } from ".";
+import { Text } from "./Text";
+import { Icon } from "./Icon";
+import { IconButton, IconButtonProps } from "./IconButton";
+import { Flex } from "./Flex";
 import styles from "./Chip.module.scss";
 import { IconName } from "../icons";
 

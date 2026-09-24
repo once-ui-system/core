@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Select } from "../components/Select";
-import { LayoutProvider } from "../contexts";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * `classNames("fill-width", { ...flags, className })` read the caller's class

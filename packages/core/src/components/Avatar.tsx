@@ -2,7 +2,12 @@
 
 import React, { forwardRef } from "react";
 
-import { Skeleton, Icon, Text, StatusIndicator, Flex, Media } from ".";
+import { Skeleton } from "./Skeleton";
+import { Icon } from "./Icon";
+import { Text } from "./Text";
+import { StatusIndicator } from "./StatusIndicator";
+import { Flex } from "./Flex";
+import { Media } from "./Media";
 import styles from "./Avatar.module.scss";
 import { IconName } from "../icons";
 import { TShirtSizes, CondensedTShirtSizes } from "../types";

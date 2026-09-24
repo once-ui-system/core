@@ -1,7 +1,11 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
-import { IconButton, Icon, Flex, Text, Column } from ".";
+import { IconButton } from "./IconButton";
+import { Icon } from "./Icon";
+import { Flex } from "./Flex";
+import { Text } from "./Text";
+import { Column } from "./Column";
 import type { IconName } from "../icons";
 
 interface FeedbackProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {

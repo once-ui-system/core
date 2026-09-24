@@ -1,6 +1,10 @@
 "use client";
 
-import { Flex, Media, Column, Row, IconButton } from ".";
+import { Flex } from "./Flex";
+import { Media } from "./Media";
+import { Column } from "./Column";
+import { Row } from "./Row";
+import { IconButton } from "./IconButton";
 import { useEffect, useState, useRef, useCallback, forwardRef } from "react";
 import styles from "./Swiper.module.scss";
 

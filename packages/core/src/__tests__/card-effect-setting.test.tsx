@@ -1,7 +1,10 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Card, Effect, Media, Setting, SettingAxes, SettingGroup } from "../components";
-import { LayoutProvider } from "../contexts";
+import { Card } from "../components/Card";
+import { Effect } from "../components/Effect";
+import { Media } from "../components/Media";
+import { Setting, SettingAxes, SettingGroup } from "../components/Setting";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>

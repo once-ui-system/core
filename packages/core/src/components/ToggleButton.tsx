@@ -2,7 +2,9 @@
 
 import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
-import { Flex, Icon, ElementType } from ".";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { ElementType } from "./ElementType";
 import styles from "./ToggleButton.module.scss";
 import { IconName } from "../icons";
 import { RadiusSize, TShirtSizes } from "../types";

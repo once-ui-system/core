@@ -1,10 +1,11 @@
 "use client";
 
 import { forwardRef } from "react";
-import { ServerGrid, Cursor } from ".";
+import { ServerGrid } from "./ServerGrid";
+import { Cursor } from "./Cursor";
 import { GridProps, StyleProps, DisplayProps, GridBreakpointProps } from "../interfaces";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
-import { useLayout } from "..";
+import { useLayout } from "../contexts/LayoutProvider";
 
 interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];

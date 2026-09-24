@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState, forwardRef } from "react";
 import { createPortal } from "react-dom";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 
 interface CursorProps {
   cursor: React.ReactNode;

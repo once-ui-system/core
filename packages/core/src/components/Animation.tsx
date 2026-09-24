@@ -12,7 +12,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { useFloating, shift, flip, autoUpdate } from "@floating-ui/react-dom";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import type { Placement, SpacingToken } from "../types";
 
 type TriggerType = "hover" | "click" | "manual";

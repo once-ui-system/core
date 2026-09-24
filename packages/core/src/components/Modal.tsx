@@ -2,7 +2,11 @@
 
 import React, { useEffect, useState, useRef, forwardRef } from "react";
 import ReactDOM from "react-dom";
-import { Column, Heading, IconButton, Row, ScrollLock } from ".";
+import { Column } from "./Column";
+import { Heading } from "./Heading";
+import { IconButton } from "./IconButton";
+import { Row } from "./Row";
+import { ScrollLock } from "./ScrollLock";
 
 export interface ModalProps {
   children: React.ReactNode;

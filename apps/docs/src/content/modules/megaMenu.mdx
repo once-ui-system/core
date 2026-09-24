@@ -468,6 +468,18 @@ You can use the `content` prop to render custom JSX instead of the default secti
 
 The `MegaMenu` component is designed for desktop screens. You can hide it at the medium breakpoint by adding the `m={{hide: true}}` prop directly to the component.
 
+## Accessibility
+
+The menu follows the disclosure navigation pattern, so every panel is reachable without a pointer.
+
+- A group with a dropdown and no `href` renders its trigger as a button with `aria-expanded` and `aria-controls`. Enter or Space toggles its panel.
+- A group with both an `href` and a dropdown stays a link, so Enter still navigates. Its panel opens when the link receives keyboard focus.
+- ArrowDown on a trigger opens its panel and focuses the first item. ArrowDown and ArrowUp move between items inside a panel.
+- Tab from an open trigger moves into its panel. Shift+Tab from the first item returns to the trigger, and Tab from the last item moves on to the next trigger.
+- Escape closes the panel and returns focus to its trigger. Moving focus anywhere outside the menu closes it too.
+
+Custom `content` takes part as well: any link, button or form field inside it is part of the panel's keyboard order.
+
 ## API reference
 
 <PropsTable

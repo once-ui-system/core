@@ -2,7 +2,9 @@
 
 import React, { forwardRef, useState, useEffect } from "react";
 import classNames from "clsx";
-import { Grid, Flex, Logo } from ".";
+import { Grid } from "./Grid";
+import { Flex } from "./Flex";
+import { Logo } from "./Logo";
 import styles from "./LogoCloud.module.scss";
 import type { ComponentProps } from "react";
 

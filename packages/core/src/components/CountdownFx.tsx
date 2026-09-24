@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useEffect, useState, forwardRef } from "react";
-import { Row, Text, CountFx, CountFxProps } from ".";
+import { Row } from "./Row";
+import { Text } from "./Text";
+import { CountFx, CountFxProps } from "./CountFx";
 
 export interface CountdownFxProps extends Omit<CountFxProps, 'value' | 'format' | 'separator' | 'effect'> {
   targetDate: Date | string;

@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Column } from "../components";
-import { LayoutProvider } from "../contexts";
+import { Column } from "../components/Column";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * `opacity={0}` and `zIndex={0}` are legal values — `Opacity` includes 0 and

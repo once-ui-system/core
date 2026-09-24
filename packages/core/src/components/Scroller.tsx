@@ -2,7 +2,9 @@
 
 import React, { useEffect, useRef, useState, forwardRef } from "react";
 import classNames from "clsx";
-import { Flex, IconButton, BaseColor, Fade } from ".";
+import { Flex } from "./Flex";
+import { IconButton } from "./IconButton";
+import { BaseColor, Fade } from "./Fade";
 import styles from "./Scroller.module.scss";
 import { RadiusSize } from "../types";
 

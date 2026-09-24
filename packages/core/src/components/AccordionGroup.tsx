@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState, useCallback, forwardRef } from "react";
-import { Column, Accordion, Line, Flex } from ".";
+import { Column } from "./Column";
+import { Accordion } from "./Accordion";
+import { Line } from "./Line";
+import { Flex } from "./Flex";
 import { CondensedTShirtSizes } from "../types";
 
 export type AccordionItem = {

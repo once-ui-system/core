@@ -1,11 +1,12 @@
 "use client";
 
 import { forwardRef } from "react";
-import { ServerFlex, Cursor } from ".";
+import { ServerFlex } from "./ServerFlex";
+import { Cursor } from "./Cursor";
 import { FlexProps, StyleProps, DisplayProps, FlexBreakpointProps } from "../interfaces";
 import { SpacingToken, CSSUnit, Colors, RadiusSize, RadiusNest, ShadowSize, Opacity, TextVariant, TextSize, TextWeight, TextType, FlexValue } from "../types";
 import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
-import { useLayout } from "..";
+import { useLayout } from "../contexts/LayoutProvider";
 
 interface ClientFlexProps extends FlexProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];

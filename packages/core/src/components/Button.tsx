@@ -4,7 +4,10 @@ import React, { ReactNode, forwardRef } from "react";
 import { ElementType } from "./ElementType";
 import classNames from "clsx";
 
-import { Spinner, Icon, Arrow, Flex } from ".";
+import { Spinner } from "./Spinner";
+import { Icon } from "./Icon";
+import { Arrow } from "./Arrow";
+import { Flex } from "./Flex";
 import styles from "./Button.module.scss";
 import { IconName } from "../icons";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";

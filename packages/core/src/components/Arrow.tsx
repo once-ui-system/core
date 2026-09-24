@@ -3,7 +3,7 @@
 import { useEffect, useRef, forwardRef } from "react";
 import classNames from "clsx";
 import styles from "./Arrow.module.scss";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 
 interface ArrowProps extends React.ComponentProps<typeof Flex> {
   trigger: string;

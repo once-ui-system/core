@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Textarea } from "../components/Textarea";
-import { LayoutProvider } from "../contexts";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * `lines` defaults to "auto" in 2.0 (it was 3). The three things that hang off

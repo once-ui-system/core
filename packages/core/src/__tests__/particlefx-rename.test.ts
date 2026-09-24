@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { Particle, ParticleFx } from "../components";
+import { Particle, ParticleFx } from "../components/ParticleFx";
 
 /**
  * 2.0 renamed `Particle` to `ParticleFx`, like the other effects, and kept the

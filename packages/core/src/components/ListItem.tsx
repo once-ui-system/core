@@ -3,7 +3,7 @@
 import React, { forwardRef } from "react";
 import classNames from "clsx";
 import styles from "./List.module.scss";
-import { Text } from ".";
+import { Text } from "./Text";
 
 interface ListItemProps extends React.ComponentProps<typeof Text> {
   children?: React.ReactNode;

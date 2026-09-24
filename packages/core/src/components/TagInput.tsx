@@ -8,7 +8,9 @@ import {
   forwardRef,
 } from "react";
 
-import { Flex, Chip, Input, InputProps } from ".";
+import { Flex } from "./Flex";
+import { Chip } from "./Chip";
+import { Input, InputProps } from "./Input";
 
 interface TagInputProps extends Omit<InputProps, "onChange" | "value"> {
   value: string[];

@@ -1,7 +1,8 @@
 "use client";
 
 import React, { forwardRef, useEffect, useRef } from "react";
-import { Flex, Mask, MaskProps } from ".";
+import { Flex } from "./Flex";
+import { Mask, MaskProps } from "./Mask";
 import styles from "./Background.module.scss";
 import classNames from "clsx";
 import { DisplayProps } from "../interfaces";

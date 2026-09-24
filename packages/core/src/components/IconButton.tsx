@@ -2,7 +2,11 @@
 
 import React, { forwardRef, ReactNode } from "react";
 import { ElementType } from "./ElementType";
-import { Flex, Icon, Tooltip, HoverCard, Spinner } from ".";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { Tooltip } from "./Tooltip";
+import { HoverCard } from "./HoverCard";
+import { Spinner } from "./Spinner";
 import buttonStyles from "./Button.module.scss";
 import iconStyles from "./IconButton.module.scss";
 import classNames from "clsx";

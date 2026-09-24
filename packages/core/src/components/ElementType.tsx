@@ -4,7 +4,7 @@ import type React from "react";
 import { forwardRef, type ReactNode } from "react";
 import { useAdapters } from "../contexts/AdapterProvider";
 import { sanitizeHref } from "../utils/safe-html";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 
 type ElementTypeProps = {
   href?: string;

@@ -1,7 +1,10 @@
 "use client";
 
 import { forwardRef, useState } from "react";
-import { IconButton, StylePanel, Flex, Background } from ".";
+import { IconButton } from "./IconButton";
+import { StylePanel } from "./StylePanel";
+import { Flex } from "./Flex";
+import { Background } from "./Background";
 import styles from "./StyleOverlay.module.scss";
 import { DisplayProps } from "../interfaces";
 

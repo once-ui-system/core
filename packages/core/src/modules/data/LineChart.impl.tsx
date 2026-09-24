@@ -4,18 +4,15 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { isWithinInterval, parseISO } from "date-fns";
 import { formatDate } from "./utils/formatDate";
 import { getRechartsComponents } from "./rechartsLoader";
-import { Column, Row, DateRange } from "../../components";
-import {
-  LinearGradient,
-  ChartHeader,
-  DataTooltip,
-  Legend,
-  SeriesConfig,
-  ChartProps,
-  ChartStatus,
-  ChartVariant,
-  curveType,
-} from ".";
+import { Column } from "../../components/Column";
+import { Row } from "../../components/Row";
+import { DateRange } from "../../components/DateRangePicker";
+import { LinearGradient } from "./Gradient";
+import { ChartHeader } from "./ChartHeader";
+import { DataTooltip } from "./DataTooltip";
+import { Legend } from "./Legend";
+import { SeriesConfig, ChartProps, ChartVariant, curveType } from "./interfaces";
+import { ChartStatus } from "./ChartStatus";
 import { RadiusSize, schemes } from "../../types";
 import { getDistributedColor } from "./utils/colorDistribution";
 import { useDataTheme } from "../../contexts/DataThemeProvider";

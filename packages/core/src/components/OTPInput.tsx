@@ -1,7 +1,10 @@
 "use client";
 
 import React, { useState, useRef, forwardRef, useEffect } from "react";
-import { Column, Flex, Input, Text } from ".";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { Input } from "./Input";
+import { Text } from "./Text";
 import styles from "./OTPInput.module.scss";
 
 interface OTPInputProps extends React.HTMLAttributes<HTMLDivElement> {

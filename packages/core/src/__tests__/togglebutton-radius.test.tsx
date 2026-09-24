@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { ToggleButton } from "../components/ToggleButton";
-import { LayoutProvider } from "../contexts";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * Roundness followed `size`, and `corners` could only scope it — so a tall row

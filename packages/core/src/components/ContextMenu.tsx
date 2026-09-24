@@ -12,7 +12,9 @@ import React, {
 } from "react";
 import type { Placement } from "../types";
 import { createPortal } from "react-dom";
-import { Flex, Dropdown, ScrollLock } from ".";
+import { Flex } from "./Flex";
+import { Dropdown } from "./Dropdown";
+import { ScrollLock } from "./ScrollLock";
 import styles from "./ContextMenu.module.scss";
 
 export interface ContextMenuProps {

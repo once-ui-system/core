@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Column } from ".";
+import { Column } from "./Column";
 
 interface ListProps extends React.ComponentProps<typeof Column> {
   as?: "ul" | "ol";

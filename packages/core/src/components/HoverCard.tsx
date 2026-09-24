@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import { Animation, AnimationProps } from ".";
+import { Animation, AnimationProps } from "./Animation";
 
 type HoverCardProps = Omit<AnimationProps, 'triggerType' | 'portal'>;
 

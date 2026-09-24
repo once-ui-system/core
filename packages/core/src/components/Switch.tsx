@@ -3,7 +3,9 @@
 import React, { forwardRef } from "react";
 import classNames from "clsx";
 
-import { Flex, InteractiveDetails, InteractiveDetailsProps, Spinner } from ".";
+import { Flex } from "./Flex";
+import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
+import { Spinner } from "./Spinner";
 import styles from "./Switch.module.scss";
 import commonStyles from "./SharedInteractiveStyles.module.scss";
 

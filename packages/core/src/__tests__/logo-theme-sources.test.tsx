@@ -1,7 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Logo } from "../components";
-import { LayoutProvider, ToastProvider } from "../contexts";
+import { Logo } from "../components/Logo";
+import { LayoutProvider } from "../contexts/LayoutProvider";
+import { ToastProvider } from "../contexts/ToastProvider";
 
 // Logo calls useToast for its copy-to-clipboard actions, so it needs both.
 const wrap = ({ children }: { children: React.ReactNode }) => (

@@ -9,7 +9,8 @@ import React, {
   useImperativeHandle,
   useCallback,
 } from "react";
-import { Flex, Row } from ".";
+import { Flex } from "./Flex";
+import { Row } from "./Row";
 import styles from "./Hover.module.scss";
 
 export interface HoverProps extends React.ComponentProps<typeof Flex> {

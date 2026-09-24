@@ -1,7 +1,10 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Column, Flex, Line, Text } from ".";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { Line } from "./Line";
+import { Text } from "./Text";
 import { TShirtSizes } from "../types";
 
 export interface TimelineItem {

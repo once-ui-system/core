@@ -2,7 +2,10 @@
 
 import React, { CSSProperties, useCallback, useEffect, useRef, useState, forwardRef } from "react";
 import classNames from "clsx";
-import { Flex, IconButton, Row, Text } from ".";
+import { Flex } from "./Flex";
+import { IconButton } from "./IconButton";
+import { Row } from "./Row";
+import { Text } from "./Text";
 import styles from "./MediaVideoPlayer.module.scss";
 
 interface MediaVideoPlayerProps {

@@ -3,8 +3,8 @@ import type React from "react";
 import { describe, expect, it } from "vitest";
 import { ElementType } from "../components/ElementType";
 import { Media } from "../components/Media";
-import { LayoutProvider } from "../contexts";
 import { type AdapterLinkProps, AdapterProvider, useAdapters } from "../contexts/AdapterProvider";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * Adapter-fallback tests (rfcs/2026-08-once-ui-2-architecture.md §5.3).

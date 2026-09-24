@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Text } from ".";
+import { Text } from "./Text";
 import styles from "./ShineFx.module.scss";
 import classNames from "clsx";
 import { useReducedMotion } from "../hooks/useReducedMotion";

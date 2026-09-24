@@ -2,7 +2,10 @@
 
 import React from "react";
 import { formatDate } from "./utils/formatDate";
-import { Column, Text, Row, CountFx } from "../../components";
+import { Column } from "../../components/Column";
+import { Text } from "../../components/Text";
+import { Row } from "../../components/Row";
+import { CountFx } from "../../components/CountFx";
 import { Swatch } from "./Swatch";
 import { ChartVariant, DateConfig } from "./interfaces";
 

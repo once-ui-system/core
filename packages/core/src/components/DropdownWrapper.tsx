@@ -14,11 +14,17 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { useFloating, shift, offset, flip, size, autoUpdate } from "@floating-ui/react-dom";
-import { Flex, Dropdown, Column, Row, FocusTrap, ArrowNavigation, ScrollLock } from ".";
+import { Flex } from "./Flex";
+import { Dropdown } from "./Dropdown";
+import { Column } from "./Column";
+import { Row } from "./Row";
+import { FocusTrap } from "./FocusTrap";
+import { ArrowNavigation } from "./ArrowNavigationContext";
+import { ScrollLock } from "./ScrollLock";
 import styles from "./DropdownWrapper.module.scss";
 import type { Placement } from "../types";
 import { NavigationLayout } from "../hooks/useArrowNavigation";
-import { getLastOpenedDropdown, setLastOpenedDropdown, clearLastOpenedDropdown } from "../utils";
+import { getLastOpenedDropdown, setLastOpenedDropdown, clearLastOpenedDropdown } from "../utils/dropdownState";
 
 export interface DropdownWrapperProps {
   fillWidth?: boolean;

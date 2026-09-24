@@ -1,6 +1,16 @@
 "use client";
 
-import {Flex, Row, Column, Icon, Text, IconButton, Input, Spinner, Select, Button, ShineFx} from ".";
+import { Flex } from "./Flex";
+import { Row } from "./Row";
+import { Column } from "./Column";
+import { Icon } from "./Icon";
+import { Text } from "./Text";
+import { IconButton } from "./IconButton";
+import { Input } from "./Input";
+import { Spinner } from "./Spinner";
+import { Select } from "./Select";
+import { Button } from "./Button";
+import { ShineFx } from "./ShineFx";
 import { useState, useMemo, ReactNode } from "react";
 import styles from "./Table.module.scss";
 import classNames from "clsx";

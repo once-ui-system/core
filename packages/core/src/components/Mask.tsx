@@ -1,7 +1,7 @@
 "use client";
 
 import React, { CSSProperties, forwardRef, useCallback, useEffect, useRef } from "react";
-import { Flex } from ".";
+import { Flex } from "./Flex";
 import styles from "./Mask.module.scss";
 import classNames from "clsx";
 import { useInViewport } from "../hooks/useInViewport";

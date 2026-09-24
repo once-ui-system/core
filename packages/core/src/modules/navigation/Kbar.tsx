@@ -5,17 +5,17 @@ import type { IconName } from "../../icons";
 import { createPortal } from "react-dom";
 import {
   ArrowNavigation,
-  Column,
-  Flex,
-  Icon,
-  Input,
-  Kbd,
-  Option,
-  Row,
-  ScrollLock,
-  Text,
   useArrowNavigationContext,
-} from "../../components";
+} from "../../components/ArrowNavigationContext";
+import { Column } from "../../components/Column";
+import { Flex } from "../../components/Flex";
+import { Icon } from "../../components/Icon";
+import { Input } from "../../components/Input";
+import { Kbd } from "../../components/Kbd";
+import { Option } from "../../components/Option";
+import { Row } from "../../components/Row";
+import { ScrollLock } from "../../components/ScrollLock";
+import { Text } from "../../components/Text";
 import { useAdapters } from "../../contexts/AdapterProvider";
 import type { TShirtSizes } from "../../types";
 import styles from "./Kbar.module.scss";

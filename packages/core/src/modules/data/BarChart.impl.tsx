@@ -3,18 +3,16 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { formatDate } from "./utils/formatDate";
 import { getRechartsComponents } from "./rechartsLoader";
-import { Column, Row, DateRange } from "../../components";
+import { Column } from "../../components/Column";
+import { Row } from "../../components/Row";
+import { DateRange } from "../../components/DateRangePicker";
 import { getDistributedColor } from "./utils/colorDistribution";
-import {
-  ChartProps,
-  LinearGradient,
-  DataTooltip,
-  Legend,
-  ChartVariant,
-  ChartStatus,
-  ChartHeader,
-  BarWidth,
-} from ".";
+import { ChartProps, ChartVariant, BarWidth } from "./interfaces";
+import { LinearGradient } from "./Gradient";
+import { DataTooltip } from "./DataTooltip";
+import { Legend } from "./Legend";
+import { ChartStatus } from "./ChartStatus";
+import { ChartHeader } from "./ChartHeader";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import { RadiusSize } from "@/types";
 

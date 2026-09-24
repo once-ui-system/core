@@ -2,8 +2,13 @@
 
 import type React from "react";
 import type { IconName } from "../../icons";
-import { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Column, Flex, Icon, Row, Text, ToggleButton } from "../../";
+import { type ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import { Column } from "../../components/Column";
+import { Flex } from "../../components/Flex";
+import { Icon } from "../../components/Icon";
+import { Row } from "../../components/Row";
+import { Text } from "../../components/Text";
+import { ToggleButton } from "../../components/ToggleButton";
 import { useAdapters } from "../../contexts/AdapterProvider";
 import styles from "./MegaMenu.module.scss";
 
@@ -43,6 +48,10 @@ export interface MegaMenuProps extends React.ComponentProps<typeof Flex> {
  */
 const DROPDOWN_CHROME = 26;
 
+/** What a keyboard can land on inside a panel, custom `content` included. */
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...rest }) => {
   const { usePathname } = useAdapters();
   const pathname = usePathname();
@@ -56,6 +65,11 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
   const contentRefs = useRef<Record<string, HTMLDivElement | null>>({});
   const measureTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const rootRef = useRef<HTMLDivElement>(null);
+  /** A group whose first link should take focus once its panel has rendered. */
+  const focusOnOpenRef = useRef<string | null>(null);
+  const idBase = useId();
+  const panelId = (groupId: string) => `${idBase}-panel-${groupId}`;
 
   useEffect(() => {
     if (activeDropdown && buttonRefs.current[activeDropdown]) {
@@ -249,8 +263,121 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
     setActiveDropdown(null);
   }, []);
 
+  /*
+   * Keyboard access.
+   *
+   * The panel is one shared element rendered after every trigger, so it is
+   * never next to the trigger that opened it in the tab order. The handlers
+   * below stitch the two together, following the disclosure navigation
+   * pattern: a trigger without an `href` is a real button that toggles its
+   * panel; Tab from an open trigger goes into the panel, Shift+Tab from its
+   * first item comes back, Tab from its last item moves on to the next
+   * trigger, and Escape closes it and returns focus to the trigger. ArrowDown
+   * opens a panel and focuses its first item; the arrows move within one.
+   */
+  const triggerOf = useCallback(
+    (groupId: string) =>
+      buttonRefs.current[groupId]?.querySelector<HTMLElement>("a[href], button") ?? null,
+    [],
+  );
+
+  const panelItems = useCallback((groupId: string) => {
+    const content = contentRefs.current[groupId];
+    if (!content) return [];
+    return Array.from(content.querySelectorAll<HTMLElement>(FOCUSABLE)).filter(
+      (item) => item.getClientRects().length > 0 && getComputedStyle(item).visibility !== "hidden",
+    );
+  }, []);
+
+  // Focus the first item once a panel opened from the keyboard has rendered.
+  useEffect(() => {
+    if (!activeDropdown || focusOnOpenRef.current !== activeDropdown) return;
+    const frame = requestAnimationFrame(() => {
+      focusOnOpenRef.current = null;
+      panelItems(activeDropdown)[0]?.focus();
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [activeDropdown, panelItems]);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    const inPanel = Boolean(dropdownRef.current?.contains(target));
+
+    if (event.key === "Escape" && activeDropdown) {
+      event.preventDefault();
+      const groupId = activeDropdown;
+      setActiveDropdown(null);
+      if (inPanel) triggerOf(groupId)?.focus();
+      return;
+    }
+
+    const group = menuGroups.find((g) => buttonRefs.current[g.id]?.contains(target));
+    if (group) {
+      if (!(group.sections || group.content)) return;
+      if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (activeDropdown === group.id) {
+          panelItems(group.id)[0]?.focus();
+        } else {
+          focusOnOpenRef.current = group.id;
+          setActiveDropdown(group.id);
+        }
+      } else if (event.key === "Tab" && !event.shiftKey && activeDropdown === group.id) {
+        const first = panelItems(group.id)[0];
+        if (first) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+      return;
+    }
+
+    if (!inPanel || !activeDropdown) return;
+    const items = panelItems(activeDropdown);
+    const index = items.findIndex((item) => item === target || item.contains(target));
+
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+      event.preventDefault();
+      const step = event.key === "ArrowDown" ? 1 : -1;
+      items[(index + step + items.length) % items.length]?.focus();
+    } else if (event.key === "Tab") {
+      if (event.shiftKey && index === 0) {
+        event.preventDefault();
+        triggerOf(activeDropdown)?.focus();
+      } else if (!event.shiftKey && index === items.length - 1) {
+        const position = menuGroups.findIndex((g) => g.id === activeDropdown);
+        const next = menuGroups
+          .slice(position + 1)
+          .map((g) => triggerOf(g.id))
+          .find(Boolean);
+        setActiveDropdown(null);
+        // The panel is last in the DOM, so with no trigger after this one the
+        // browser's own Tab already leaves the menu for whatever follows it.
+        if (next) {
+          event.preventDefault();
+          next.focus();
+        }
+      }
+    }
+  };
+
+  // Close when focus moves somewhere else on the page. A null `relatedTarget`
+  // is a click on something unfocusable, often inside the panel itself, and is
+  // left to the pointer handlers.
+  const handleBlur = (event: React.FocusEvent<HTMLDivElement>) => {
+    const next = event.relatedTarget as Node | null;
+    if (next && !rootRef.current?.contains(next)) setActiveDropdown(null);
+  };
+
   return (
-    <Flex fitHeight className={className} {...rest}>
+    <Flex
+      ref={rootRef}
+      fitHeight
+      className={className}
+      onKeyDown={handleKeyDown}
+      onBlur={handleBlur}
+      {...rest}
+    >
       {menuGroups.map((group, index) => (
         <Row
           key={`menu-group-${index}`}
@@ -258,6 +385,20 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
             buttonRefs.current[group.id] = el;
           }}
           paddingRight="8"
+          onFocus={(event) => {
+            const hasDropdown = Boolean(group.sections || group.content);
+            // Moving to another trigger shuts the panel that is open.
+            if (activeDropdown && activeDropdown !== group.id) setActiveDropdown(null);
+            // A trigger that is also a link cannot toggle on Enter, which
+            // navigates, so it opens its panel when the keyboard reaches it.
+            if (
+              hasDropdown &&
+              group.href &&
+              (event.target as HTMLElement).matches?.(":focus-visible")
+            ) {
+              setActiveDropdown(group.id);
+            }
+          }}
           onMouseEnter={() => {
             // Cancel any pending close
             if (closeTimeoutRef.current) {
@@ -284,6 +425,29 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
           <ToggleButton
             selected={group.selected !== undefined ? group.selected : isSelected(group.href)}
             href={group.href}
+            {...(group.sections || group.content
+              ? {
+                  "aria-expanded": activeDropdown === group.id,
+                  "aria-controls": activeDropdown === group.id ? panelId(group.id) : undefined,
+                  /*
+                   * Without an `href` the trigger has to be a button, or it
+                   * renders as a div that no keyboard can reach. A click from
+                   * the keyboard (`detail` 0) toggles; a pointer click only
+                   * opens, because hovering has usually opened the panel
+                   * already and a toggle would shut it again.
+                   */
+                  ...(group.href
+                    ? {}
+                    : {
+                        type: "button" as const,
+                        onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
+                          if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+                          const open = activeDropdown === group.id;
+                          setActiveDropdown(event.detail === 0 && open ? null : group.id);
+                        },
+                      }),
+                }
+              : {})}
           >
             {group.label}
             {(group.sections || group.content) && group.suffixIcon && (
@@ -367,6 +531,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
               return (
                 <Row
                   key={`dropdown-content-${groupIndex}`}
+                  id={panelId(group.id)}
                   gap="16"
                   position={isActive ? "relative" : "absolute"}
                   data-dropdown-content

@@ -2,8 +2,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { IconButton } from "../components";
-import { LayoutProvider } from "../contexts";
+import { IconButton } from "../components/IconButton";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
