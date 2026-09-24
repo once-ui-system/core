@@ -13,6 +13,20 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **`FadingLettersFx` no longer stalls while the page is busy.** It animated
+  `filter: blur()`, which browsers cannot hand to the compositor (a changing
+  blur radius moves pixels), so the letters ran on the main thread and froze
+  mid-blur whenever script ran during their entrance: hydration, a chunk
+  loading, a WebGL context starting. The blur is now fixed, on two copies of
+  each letter drawn with `::before` and `::after` from a `data-letter`
+  attribute, and only `opacity` and `transform` animate, so the whole effect
+  runs on the compositor. The look is the old curve, sampled: a heavy blur,
+  a light one, then the sharp letter, on the same timings and delays. Each
+  letter now wraps its character in an inner span; the copies are generated
+  content, so the text is still in the DOM once.
+
 ## [2.0.0-alpha.2] — 2026-09-23
 
 The third alpha preview, on the same **`alpha`** dist-tag. `npm install

@@ -39,9 +39,10 @@ function FadingLettersFx({
               "--entry-delay": `${entryDelay}ms`,
               "--exit-delay": `${exitDelay}ms`,
             } as React.CSSProperties}
+            data-letter={letter}
             suppressHydrationWarning
           >
-            {letter}
+            <span className={styles.glyph}>{letter}</span>
           </span>
         );
       });
