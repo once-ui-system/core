@@ -31,24 +31,7 @@ export function VersionBanner() {
   return (
     <Row
       fillWidth
-      /*
-       * Opaque, and above the page, because of what sits behind it.
-       *
-       * The tint below is `neutral-alpha-weak` — 15% — which is right for the
-       * banner's weight but lets whatever is underneath through. The docs home
-       * page draws a `BlobFx` at `position="absolute"` with `translateY="-60%"`,
-       * so it reaches up out of its own container and lands squarely behind
-       * this strip. Two separate problems follow, and only doing both fixes it:
-       * the colour bled through the tint, and — because the blob is positioned
-       * and an in-flow strip is not — it painted *over* the banner as well.
-       * `page` gives the tint something opaque to sit on; `relative` + `zIndex`
-       * puts the strip back on top.
-       *
-       * Compositing the tint over `page` is also exactly what the measured
-       * contrast assumed, so the AA figures are unchanged by this.
-       */
       background="page"
-      position="relative"
       zIndex={1}
       borderBottom
     >
