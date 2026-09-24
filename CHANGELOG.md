@@ -37,6 +37,15 @@ item (see `ROADMAP.md`, Week 4).
   in a 1px border: 34px. The extra 6px pushed the control off-centre in its
   row. The anchor, and the caps the options open and close to, now follow
   the button size.
+- **`MegaMenu` works from the keyboard.** A group with a dropdown and no
+  `href` rendered its trigger as a `div`, so it was not in the tab order at
+  all, and every panel opened on hover only. Those triggers are now buttons
+  with `aria-expanded` and `aria-controls` that toggle on Enter or Space; a
+  trigger that is also a link opens its panel on keyboard focus. Tab moves
+  from an open trigger into its panel and on to the next trigger, Shift+Tab
+  comes back, ArrowDown opens a panel and the arrows move within it, and
+  Escape closes it and returns focus to the trigger. Pointer behaviour is
+  unchanged.
 
 ## [2.0.0-alpha.2] — 2026-09-23
 
