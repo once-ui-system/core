@@ -11,8 +11,8 @@ The changelog is the record of *what* changed and why
 
 ## 1.8.x → 2.0
 
-Six steps. Most apps finish in the first two, and the codemod does the bulk of
-the work in step 1.
+Eight steps. Most apps finish in the first two, and the codemod does the bulk
+of the work in step 1.
 
 ### 0. Before you start
 
@@ -223,6 +223,40 @@ query of your own in a CSS module. If the defaults genuinely do not fit your
 app, open an issue: making them configurable again means generating the CSS in
 your build rather than ours, which is a real feature and worth doing for a real
 need.
+
+### 8. `ScrollContainer` is a track now
+
+Only for apps that use it. In 1.8 it was a scroll box; in 2.0 the track is laid
+out once and moved with a transform, so tiles can peek past the edge, `infinite`
+can wrap, and dragging is built in. Three things change for an existing
+carousel, and none of them is a type error:
+
+- **Tiles no longer come shaped.** They used to arrive as tall bordered
+  portrait cards. Now a tile only refuses to shrink and keeps a `minWidth`
+  floor. Props you pass to `ScrollContainer` beyond its own land on every tile,
+  so the 1.8 look is these, passed back in:
+
+  ```diff
+  - <ScrollContainer items={items} />
+  + <ScrollContainer
+  +   items={items}
+  +   aspectRatio="3/4"
+  +   border
+  +   radius="xl"
+  +   overflow="hidden"
+  +   minWidth={28}
+  +   maxWidth={48}
+  + />
+  ```
+
+- **Tiles paint past its edge.** That paint counts toward the page's width, so
+  a carousel near the side of the viewport can make a phone scroll sideways.
+  Pass `clip` to keep everything inside the component's box, as in 1.8, or clip
+  horizontally on an ancestor that spans the viewport.
+
+- **A trackpad's sideways swipe no longer moves it**, because the browser is
+  not scrolling anything. Drag (on by default, `draggable={false}` to turn it
+  off) and the controls, which are never hidden now, replace it.
 
 ### What did not change
 

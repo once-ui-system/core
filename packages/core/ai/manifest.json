@@ -1,6 +1,6 @@
 {
- "version": "2.0.0-alpha.3",
- "generated": "2026-09-24",
+ "version": "2.0.0",
+ "generated": "2026-09-25",
  "files": {
   "spec": "spec.json",
   "catalog": "catalog.json",

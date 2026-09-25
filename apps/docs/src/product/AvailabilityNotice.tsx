@@ -5,16 +5,11 @@ import { AVAILABILITY, type Availability } from "./availability";
  * Says, on the page itself, whether the reader can install what they are
  * reading about.
  *
- * `VersionBanner` already says the site documents 2.0, but it says one thing
- * to every page, and it cannot tell "shipped in the alpha" from "not published
- * anywhere yet" — it tells both to install `@alpha`, which is wrong for the
- * second. It also sits above the sidebar, far from the prose someone arriving
- * from a search result starts reading.
+ * Per page, under the title, in the column the content is in: that is where
+ * someone arriving from a search result starts reading.
  *
- * So this is per page, under the title, in the column the content is in.
- * Tinted rather than `solid` for the reason `VersionBanner` documents at
- * length: a solid inverts the surface but nothing inside inherits the
- * inversion, so links and buttons land on their own opposite.
+ * Tinted rather than `solid`: a solid inverts the surface but nothing inside
+ * inherits the inversion, so links and buttons land on their own opposite.
  */
 export function AvailabilityNotice({ status }: { status: Availability }) {
   const copy = AVAILABILITY[status];

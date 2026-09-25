@@ -93,7 +93,7 @@ const Docs: React.FC = () => {
               <Button arrowIcon onClick={scrollToBlocks}>
                 Browse blocks
               </Button>
-              <Button variant="secondary" href="/pro">
+              <Button variant="secondary" href="https://once-ui.com/pricing">
                 View Pro
               </Button>
             </Row>

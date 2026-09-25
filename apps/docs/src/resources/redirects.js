@@ -75,3 +75,30 @@ export const movedPageRedirects = movedPages.map(({ from, to }) => ({
   destination: `/${to}`,
   permanent: true,
 }));
+
+/**
+ * Whole sections that were retired: the product quick-starts that lived at
+ * `/<product>/…` and then `/products/<product>/…`. The pages went in the June
+ * design overhaul, but the redirects kept pointing at `/products/…`, so every
+ * old link ended on a 404. Each now lands on the product's page on once-ui.com;
+ * the seven templates Stack absorbed land on Stack.
+ *
+ * Both prefixes are listed because the old `/<product>` → `/products/<product>`
+ * redirect was permanent, so browsers and crawlers still hold the second one.
+ */
+export const retiredSections = [
+  { from: "magic-portfolio", to: "https://once-ui.com/products/magic-portfolio" },
+  { from: "magic-docs", to: "https://once-ui.com/products/magic-docs" },
+  { from: "magic-bio", to: "https://once-ui.com/stack" },
+  { from: "magic-agent", to: "https://once-ui.com/stack" },
+  { from: "magic-convert", to: "https://once-ui.com/stack" },
+  { from: "magic-store", to: "https://once-ui.com/stack" },
+  { from: "supabase-starter", to: "https://once-ui.com/stack" },
+];
+
+export const retiredSectionRedirects = retiredSections.flatMap(({ from, to }) =>
+  [`/${from}`, `/products/${from}`].flatMap((prefix) => [
+    { source: prefix, destination: to, permanent: true },
+    { source: `${prefix}/:path*`, destination: to, permanent: true },
+  ]),
+);

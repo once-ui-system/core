@@ -1,48 +1,47 @@
 import { social } from "@/resources";
 import { Column, Grid, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
 
+// The product set mirrors the once-ui.com footer. Seven templates became
+// surfaces of Stack and Supa Social became Orbit Core; their old product URLs
+// only redirect now.
 const navigation = [
   {
-    title: "Free",
+    title: "Products",
     items: [
-      { label: "All Products", href: "https://once-ui.com/products" },
+      { label: "Stack", href: "https://once-ui.com/stack", tag: "New" },
       { label: "Once UI Core", href: "https://once-ui.com/products/once-ui-core" },
-      { label: "Magic Portfolio", href: "https://once-ui.com/products/magic-portfolio" },
-      { label: "Magic Docs", href: "https://once-ui.com/products/magic-docs" },
-      { label: "Magic Bio", href: "https://once-ui.com/products/magic-bio" },
-      { label: "Once UI Figma", href: "https://once-ui.com/figma" },
+      { label: "Once UI Blocks", href: "/blocks/quickStart" },
+      { label: "Orbit Core", href: "https://once-ui.com/products/orbit-core" },
     ],
   },
   {
-    title: "Pro",
+    title: "Free",
     items: [
-      { label: "Supa Social", href: "https://once-ui.com/products/supa-social", tag: "New" },
-      { label: "Supabase Starter", href: "https://once-ui.com/products/supabase-starter" },
-      { label: "Magic Convert", href: "https://once-ui.com/products/magic-convert" },
-      { label: "Magic Spotlight", href: "https://once-ui.com/products/magic-spotlight" },
-      { label: "Magic Journal", href: "https://once-ui.com/products/magic-journal", tag: "New" },
-      { label: "Magic Store", href: "https://once-ui.com/products/magic-store" },
-      { label: "Magic Agent", href: "https://once-ui.com/products/magic-agent" },
-      { label: "Once UI Blocks", href: "https://once-ui.com/blocks/quickStart" },
-    ]
+      { label: "Magic Portfolio", href: "https://once-ui.com/products/magic-portfolio" },
+      { label: "Magic Docs", href: "https://once-ui.com/products/magic-docs" },
+      { label: "Once UI Starter", href: "https://once-ui.com/products/once-ui-starter" },
+      { label: "Once UI Figma", href: "https://once-ui.com/figma" },
+    ],
   },
   {
     title: "Learn",
     items: [
       { label: "Pricing", href: "https://once-ui.com/pricing" },
-      { label: "Canvas", href: "https://once-ui.com/canvas", tag: "New" },
+      { label: "Canvas", href: "https://once-ui.com/canvas" },
       { label: "Documentation", href: "/" },
-      { label: "Changelog", href: "https://github.com/once-ui-system/core/releases" },
-      { label: "Handbook", href: "https://handbook.once-ui.com", tag: "New" }
+      { label: "Changelog", href: "/changelog" },
+      { label: "Handbook", href: "https://handbook.once-ui.com" },
+      // 1.8.x is the archive now that 2.0 is `latest`.
+      { label: "1.x docs", href: "https://v1.docs.once-ui.com" },
     ],
   },
   {
     title: "Resources",
     items: [
       { label: "Blog", href: "https://blog.once-ui.com" },
+      { label: "Sponsor Once UI", href: "https://once-ui.com/support" },
       { label: "About us", href: "https://once-ui.com/about" },
       { label: "Contact us", href: "https://once-ui.com/contact" },
-      { label: "Sponsor us", href: "https://once-ui.com/support" },
       { label: "Merch store", href: "https://store.dopler.app" },
       { label: "Brand assets", href: "https://once-ui.com/brand" },
     ],
@@ -53,7 +52,7 @@ const navigation = [
       { label: "Terms of Use", href: "https://once-ui.com/terms-of-use" },
       { label: "Privacy Policy", href: "https://once-ui.com/privacy-policy" },
       { label: "License Agreement", href: "https://once-ui.com/license-agreement" },
-    ]
+    ],
   },
 ];
 

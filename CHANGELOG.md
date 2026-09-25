@@ -13,6 +13,40 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.0.0] — 2026-09-25
+
+Once UI 2.0 is on `latest`:
+
+```bash
+npm i @once-ui-system/core
+```
+
+2.0 is the release where Once UI becomes a system an AI can build with
+correctly. One spec drives the docs, the `ai/` harness, the validator and the
+codemod, so what an agent reads is what the package accepts. Utilities and
+responsive classes are generated, and breakpoints are fixed, so CSS and
+JavaScript agree on every width and a responsive `Flex` can be a server
+component.
+
+**Upgrading from 1.8.x.** [MIGRATING.md](MIGRATING.md) is the checklist, in the
+order that keeps the app building: run the codemod, install the peers for the
+subpaths you use, fix what the codemod reports, import `LayoutProvider` from
+`@once-ui-system/core/next` in a Next app, check the browser floor (Chrome 111,
+Safari 15.4, Firefox 113), drop custom breakpoints, and re-shape any
+`ScrollContainer`. Most apps finish in the first two steps.
+
+**What is in it.** 2.0.0 is `2.0.0-alpha.3` plus the entry below. The four
+alpha entries that follow are the full record of what changed from 1.8.x and
+why; read them together, oldest first. Two things are by design rather than
+open questions:
+
+- **A bundler is required.** Components import their own `.module.scss` files,
+  so Once UI runs in apps built by a bundler that compiles Sass modules
+  (Next.js, Vite and the like), as it always has. Plain Node `require`/`import`
+  of the package is not supported.
+- **`@once-ui-system/foundations` stays private.** Core inlines its SCSS and CSS
+  at build time, so there is nothing extra to install.
+
 ### Added
 
 - **`sizes` takes the `Media` shorthand everywhere it reaches `Media`.**
