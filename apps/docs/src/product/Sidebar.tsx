@@ -294,7 +294,9 @@ const ResourceLinkComponent: React.FC<{
   icon: string;
   label: string;
   pathname: string;
-}> = ({ href, icon, label, pathname }) => {
+  /** A recency label, drawn like a page's `navTag`: a brand dot and the word. */
+  tag?: string;
+}> = ({ href, icon, label, pathname, tag }) => {
   const isSelected = pathname === href;
 
   return (
@@ -315,6 +317,14 @@ const ResourceLinkComponent: React.FC<{
         <Icon size="xs" name={icon} />
         {label}
       </Row>
+      {tag && (
+        <Row gap="4" vertical="center" flex={0}>
+          <Pulse scheme="brand" size="s" />
+          <Text variant="label-default-xs" onBackground="neutral-weak">
+            {tag}
+          </Text>
+        </Row>
+      )}
     </ToggleButton>
   );
 };
@@ -328,9 +338,11 @@ const ResourceLink = React.memo(
       return false; // Different pathname means we should re-render
     }
 
-    // Otherwise, only re-render if the href or icon changes
+    // Otherwise, only re-render if the href, icon or tag changes
     return (
-      prevProps.href === nextProps.href && prevProps.icon === nextProps.icon
+      prevProps.href === nextProps.href &&
+      prevProps.icon === nextProps.icon &&
+      prevProps.tag === nextProps.tag
     );
   },
 );
@@ -371,6 +383,15 @@ const SidebarContent: React.FC<{
         >
           Resources
         </Row>
+        {/* The blocks surface has its own catalogue and hides this sidebar,
+            so this is the way into it from the reference. Free with 2.0. */}
+        <ResourceLink
+          href="/blocks/quickStart"
+          icon="apps"
+          label="Blocks"
+          tag="New"
+          pathname={pathname}
+        />
         <ResourceLink
           href="https://github.com/once-ui-system/core/releases"
           icon="github"
