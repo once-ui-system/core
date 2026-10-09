@@ -13,6 +13,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- `List` takes `start`, the first item's number on a numbered list
+  (`<List as="ol" start={4}>`). It goes to the `ol` element as its own `start`
+  attribute and is ignored on `ul`. Before, a numbered list could only count
+  from 1: Column's props do not type `start`, so it could not be passed
+  through either.
+
 ## [2.0.0] — 2026-09-25
 
 Once UI 2.0 is on `latest`:

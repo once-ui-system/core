@@ -1,7 +1,7 @@
 ---
 title: "List"
 summary: "Create an ordered or unordered list of items."
-updatedAt: "2025-07-31"
+updatedAt: "2026-10-09"
 docs: "once-ui/components/list.mdx"
 github: "components/List.tsx"
 navLabel: "List"
@@ -62,12 +62,39 @@ A component for creating an ordered or unordered list of items. The `List` compo
   ]}
 />
 
+## Starting number
+
+A numbered list counts from 1. Pass `start` to count from another number, for example to continue a list that a paragraph interrupted. It applies to `as="ol"` only.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <List as="ol" start={4} textVariant="body-default-m" gap="4">
+      <ListItem>Item 4</ListItem>
+      <ListItem>Item 5</ListItem>
+    </List>
+  }
+  codes={[
+    {
+      code:
+`<List as="ol" start={4} gap="4">
+  <ListItem>Item 4</ListItem>
+  <ListItem>Item 5</ListItem>
+</List>`,
+      language: "tsx",
+      label: "List"
+    }
+  ]}
+/>
+
 ## List API reference
 
 <PropsTable
   component="List"
   describe={{
     as: "Bulleted or numbered.",
+    start: "The first item's number on a numbered list. Ignored on `ul`.",
     children: "The items.",
   }}
   content={[

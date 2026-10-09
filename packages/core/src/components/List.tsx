@@ -5,17 +5,22 @@ import { Column } from "./Column";
 
 interface ListProps extends React.ComponentProps<typeof Column> {
   as?: "ul" | "ol";
+  /** The first item's number, for a numbered list that does not count from 1. Ignored on `ul`. */
+  start?: number;
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }
 
 const List = forwardRef<HTMLDivElement, ListProps>(
-  ({ as = "ul", className, children, style, ...props }, ref) => {
+  ({ as = "ul", start, className, children, style, ...props }, ref) => {
     if (as === "ol") {
       return (
         <Column
           as="ol"
+          // `start` is an `ol` attribute, outside the props Column types; Flex
+          // passes it through to the element.
+          {...{ start }}
           fillWidth
           margin="0"
           paddingY="0"
