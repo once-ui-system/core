@@ -1,0 +1,96 @@
+/*
+ * A sheet from one edge of the viewport. It floats a step in from the edge,
+ * as Dialog does on small screens, and slides in from beyond it. The panel is
+ * `position="fixed"` through its Flex prop, so the utility class and this
+ * module cannot disagree about it.
+ */
+.overlay {
+  opacity: 0;
+
+  &.open {
+    opacity: 1;
+  }
+}
+
+.panel {
+  --drawer-inset: var(--static-space-8);
+  --drawer-size: 28rem;
+  max-width: calc(100% - 2 * var(--drawer-inset));
+  max-height: calc(100% - 2 * var(--drawer-inset));
+
+  &.open {
+    transform: none;
+  }
+}
+
+.s {
+  --drawer-size: 20rem;
+}
+
+.m {
+  --drawer-size: 28rem;
+}
+
+.l {
+  --drawer-size: 40rem;
+}
+
+.full {
+  --drawer-size: 100%;
+}
+
+/* Left and right: full height, `size` is the width. */
+.left,
+.right {
+  top: var(--drawer-inset);
+  bottom: var(--drawer-inset);
+  width: var(--drawer-size);
+}
+
+.left {
+  left: var(--drawer-inset);
+  transform: translateX(calc(-100% - var(--drawer-inset)));
+}
+
+.right {
+  right: var(--drawer-inset);
+  transform: translateX(calc(100% + var(--drawer-inset)));
+}
+
+/* Top and bottom: full width, as tall as the content up to `size`. */
+.top,
+.bottom {
+  left: var(--drawer-inset);
+  right: var(--drawer-inset);
+  max-height: min(var(--drawer-size), calc(100% - 2 * var(--drawer-inset)));
+
+  &.full {
+    height: calc(100% - 2 * var(--drawer-inset));
+  }
+}
+
+.top {
+  top: var(--drawer-inset);
+  transform: translateY(calc(-100% - var(--drawer-inset)));
+}
+
+.bottom {
+  bottom: var(--drawer-inset);
+  transform: translateY(calc(100% + var(--drawer-inset)));
+}
+
+/* FocusTrap's wrapper, laid out as the panel's column. */
+.trap {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  outline: none;
+}
+
+/* Fade only: no travel across the screen for people who asked for less motion. */
+@media (prefers-reduced-motion: reduce) {
+  .panel.panel {
+    transform: none;
+  }
+}

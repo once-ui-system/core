@@ -33,6 +33,7 @@ export * from "./DatePicker";
 export * from "./DateRangeInput";
 export * from "./DateRangePicker";
 export * from "./Dialog";
+export * from "./Drawer";
 export * from "./Dropdown";
 export * from "./DropdownWrapper";
 export * from "./Effect";

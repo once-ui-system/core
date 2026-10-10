@@ -13,6 +13,7 @@ export * from "./CountdownFxExample";
 export * from "./DatePickerExamples";
 export * from "./DateRangeInputExamples";
 export * from "./DialogExample";
+export * from "./DrawerExamples";
 export * from "./DropdownExample";
 export * from "./DropdownWrapperExample";
 export * from "./EmojiPickerDropdownExample";
