@@ -1,7 +1,7 @@
 ---
 title: "Breakpoints"
 summary: "Per-component responsive breakpoint system with type-safe prop selection."
-updatedAt: "2026-07-27"
+updatedAt: "2026-10-10"
 docs: "once-ui/basics/responsive.mdx"
 github: "interfaces.ts"
 navLabel: "Responsive"
@@ -18,7 +18,7 @@ Once UI provides a type-safe responsive breakpoint system where each component o
 
 ## Breakpoint values
 
-Breakpoints are managed by the `LayoutProvider` component. You can override default breakpoints by passing a `breakpoints` prop to the `LayoutProvider`.
+The breakpoints are fixed, and each one applies at its width and below. `xl` is the base state above all of them, not a media query. `LayoutProvider` reports the current one through `useLayout`; it no longer takes a `breakpoints` prop (removed in 2.0, see the [migration guide](https://github.com/once-ui-system/core/blob/main/MIGRATING.md)).
 
 <Table
   marginTop="16"
@@ -26,15 +26,15 @@ Breakpoints are managed by the `LayoutProvider` component. You can override defa
   data={{
     headers: [
       { content: "Breakpoint", key: "breakpoint" },
-      { content: "Min Width", key: "width" },
+      { content: "Applies at", key: "width" },
       { content: "Typical Device", key: "device" },
     ],
     rows: [
-      ["xs", <InlineCode>480px</InlineCode>, "Mobile portrait"],
-      ["s", <InlineCode>768px</InlineCode>, "Mobile landscape / Tablet portrait"],
-      ["m", <InlineCode>1024px</InlineCode>, "Tablet landscape / Small laptop"],
-      ["l", <InlineCode>1440px</InlineCode>, "Desktop"],
-      ["xl", <InlineCode>1920px</InlineCode>, "Large desktop"],
+      ["xs", <InlineCode>≤ 480px</InlineCode>, "Mobile portrait"],
+      ["s", <InlineCode>≤ 768px</InlineCode>, "Mobile landscape / Tablet portrait"],
+      ["m", <InlineCode>≤ 1024px</InlineCode>, "Tablet landscape / Small laptop"],
+      ["l", <InlineCode>≤ 1440px</InlineCode>, "Desktop"],
+      ["xl", <InlineCode>above 1440px</InlineCode>, "Large desktop (the base)"],
     ],
   }}
 />
@@ -234,9 +234,9 @@ type GridBreakpointProps = BreakpointProps<AllGridProps,
 
 ### Runtime behavior
 
-1. **Default breakpoints (server-rendered):** When using the default breakpoint system, `ServerFlex`/`ServerGrid` generate CSS classes at build time (e.g., `m-padding-l`, `s-flex-column`).
+1. **Values with a class (server-rendered):** a breakpoint value that maps to a utility class — a spacing token, a direction, an alignment — renders as that class on the server (e.g. `m-padding-l`, `s-flex-column`), so the layout is right in the first paint.
 
-2. **Custom breakpoints (client-rendered):** When using custom breakpoints via `LayoutProvider`, `ClientFlex`/`ClientGrid` apply responsive styles client-side using `useResponsiveClasses` for CSS classes and `applyResponsiveStyles` for inline styles.
+2. **Values without a class (client-rendered):** `width`, `height` and their min/max siblings, `aspectRatio`, `style`, and spacing given as a number (rem) have no class behind them. An element that sets one of these at a breakpoint renders through `ClientFlex`/`ClientGrid`, which applies it as an inline style after hydration, for the breakpoint `LayoutProvider` reports. Prefer tokens where you can.
 
 3. **Cascade order:** `xl` → `l` → `m` → `s` → `xs`. Larger breakpoints flow down to smaller ones. Setting `xl={{ padding: "32" }}` applies `padding: 32` at all sizes unless a smaller breakpoint overrides it.
 
@@ -311,19 +311,7 @@ type GridBreakpointProps = BreakpointProps<AllGridProps,
 
 ## Custom breakpoints
 
-To use non-default breakpoints, wrap your app in a `LayoutProvider`:
-
-```tsx
-import { LayoutProvider } from "@once-ui-system/core";
-
-<LayoutProvider
-  breakpoints={{ xs: 480, s: 768, m: 1024, l: 1440, xl: 1920 }}
->
-  <App />
-</LayoutProvider>
-```
-
-With custom breakpoints, responsive styles are applied client-side via JavaScript rather than server-rendered CSS classes.
+Breakpoints are not configurable since 2.0: the utility classes carry the widths inside their `@media` queries, and a prebuilt stylesheet cannot follow a width an app picks at runtime. If you need a different width for one layout, write a media query in a CSS module for it.
 
 ## TypeScript API
 
