@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { IconName } from "../icons";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -16,7 +16,15 @@ interface ToastProps {
   onClose?: () => void;
   action?: React.ReactNode;
   children: React.ReactNode;
+  /**
+   * Milliseconds before the toast hides itself. Defaults to 6000. The
+   * countdown pauses while the toast is hovered or holds focus; `Infinity`
+   * keeps it up until it is closed.
+   */
+  duration?: number;
 }
+
+const DEFAULT_DURATION = 6000;
 
 const iconMap: { [key in ToastProps["variant"]]: IconName } = {
   success: "check",
@@ -26,13 +34,34 @@ const iconMap: { [key in ToastProps["variant"]]: IconName } = {
 };
 
 const Toast = forwardRef<HTMLDivElement, ToastProps>(
-  ({ variant, className, showIcon = true, onClose, action, children }, ref) => {
+  (
+    { variant, className, showIcon = true, onClose, action, children, duration = DEFAULT_DURATION },
+    ref,
+  ) => {
     const [visible, setVisible] = useState(true);
+    const [hovered, setHovered] = useState(false);
+    const [focused, setFocused] = useState(false);
+    // What is left of the countdown. A pause keeps it rather than restarting
+    // the full duration, so reading a toast never extends it past what the
+    // caller asked for plus the time spent on it.
+    const remaining = useRef(duration);
 
     useEffect(() => {
-      const timer = setTimeout(() => setVisible(false), 6000);
-      return () => clearTimeout(timer);
-    }, []);
+      remaining.current = duration;
+    }, [duration]);
+
+    // Paused while the pointer is on the toast or focus is inside it: someone
+    // reading the message, or tabbing to its action, should not have it
+    // disappear under them (WCAG 2.2.1).
+    useEffect(() => {
+      if (!visible || hovered || focused || !Number.isFinite(duration)) return;
+      const startedAt = Date.now();
+      const timer = setTimeout(() => setVisible(false), Math.max(0, remaining.current));
+      return () => {
+        clearTimeout(timer);
+        remaining.current -= Date.now() - startedAt;
+      };
+    }, [visible, hovered, focused, duration]);
 
     useEffect(() => {
       if (!visible && onClose) {
@@ -49,8 +78,20 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
         paddingY="12"
         paddingX="20"
         border="neutral-medium"
-        role="alert"
-        aria-live="assertive"
+        // Only a danger toast interrupts. Everything else waits for the screen
+        // reader to finish what it is saying: a "saved" confirmation announced
+        // assertively cuts off whatever the user was listening to.
+        role={variant === "danger" ? "alert" : "status"}
+        aria-live={variant === "danger" ? "assertive" : "polite"}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        onFocus={() => setFocused(true)}
+        onBlur={(event: React.FocusEvent<HTMLDivElement>) => {
+          // Moving between the action and the close button stays inside.
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+            setFocused(false);
+          }
+        }}
         className={classNames(className, styles.toast, styles[variant], {
           [styles.visible]: visible,
           [styles.hidden]: !visible,
