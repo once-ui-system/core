@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import pkg from "../../package.json";
@@ -44,5 +44,29 @@ describe("package exports integrity", () => {
           .map((target) => `${subpath} -> ${target}`),
     );
     expect(missing).toEqual([]);
+  });
+});
+
+describe("the ./mdx subpath", () => {
+  it("resolves to the mdx module for every condition", () => {
+    expect(pkg.exports["./mdx"]).toEqual({
+      types: "./dist/modules/mdx/index.d.ts",
+      import: "./dist/modules/mdx/index.js",
+      require: "./dist/modules/mdx/index.js",
+    });
+  });
+
+  it("ships the stylesheet its heading anchors import", () => {
+    expect(existsSync(join(PKG_ROOT, "dist", "modules", "mdx", "MdxElements.module.scss"))).toBe(
+      true,
+    );
+  });
+
+  it("is not re-exported from the root or modules barrels", () => {
+    // The map renders code through CodeBlock; reaching it from the root would
+    // put `prismjs` back in the graph of every app that never renders MDX.
+    for (const barrel of ["index.ts", join("modules", "index.ts")]) {
+      expect(readFileSync(join(PKG_ROOT, "src", barrel), "utf8")).not.toMatch(/mdx/);
+    }
   });
 });

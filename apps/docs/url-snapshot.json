@@ -145,6 +145,7 @@
   "modules/headingLink",
   "modules/headingNav",
   "modules/kbar",
+  "modules/mdx",
   "modules/mediaUpload",
   "modules/megaMenu",
   "modules/meta",

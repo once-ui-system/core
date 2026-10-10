@@ -143,6 +143,11 @@
       "import": "./dist/modules/media/index.js",
       "require": "./dist/modules/media/index.js"
     },
+    "./mdx": {
+      "types": "./dist/modules/mdx/index.d.ts",
+      "import": "./dist/modules/mdx/index.js",
+      "require": "./dist/modules/mdx/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {

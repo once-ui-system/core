@@ -1,0 +1,162 @@
+---
+title: "MDX"
+summary: "One component map that renders MDX content with Once UI: headings with anchor links, body text, links, images, code, quotes, lists and tables, plus the common components as tags."
+updatedAt: "2026-10-10"
+docs: "once-ui/modules/mdx.mdx"
+github: "modules/mdx/index.ts"
+navLabel: "MDX"
+navIcon: "modules"
+navTag: "New"
+navTagVariant: "success"
+---
+
+`@once-ui-system/core/mdx` exports a component map for MDX content. Hand it to `next-mdx-remote` or `@next/mdx` and Markdown renders through Once UI: headings get an id and a link to themselves, links go through `SmartLink`, images through `Media`, fenced code through `CodeBlock`, and GFM tables through `Table`. Common components such as `Feedback`, `Accordion`, `Card` and `OgCard` are available in the content by name.
+
+The map is typed against the props MDX passes for each element, so an override is checked when you write it, without casts.
+
+<Feedback
+  marginTop="16"
+  marginBottom="24"
+  title="Its own entry point"
+  description={<>The map renders fenced code through <InlineCode>CodeBlock</InlineCode>, so it lives on its own subpath, like <InlineCode>/code</InlineCode>, and never adds <InlineCode>prismjs</InlineCode> to an app that does not import it. Install <InlineCode>prismjs</InlineCode> if your content has code blocks. No other dependency is needed.</>}
+/>
+
+## next-mdx-remote
+
+Pass `mdxComponents` as the `components` prop. The map works in server components, so it can be used with `next-mdx-remote/rsc`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      label: "app/blog/[slug]/page.tsx",
+      language: "tsx",
+      code:
+`import { MDXRemote } from "next-mdx-remote/rsc";
+import { mdxComponents } from "@once-ui-system/core/mdx";
+
+export default async function Post({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const source = await getPostSource(slug);
+
+  return <MDXRemote source={source} components={mdxComponents} />;
+}`,
+    },
+  ]}
+/>
+
+next-mdx-remote 6 blocks JavaScript expressions in MDX by default. If your content passes props such as `codes={[...]}`, set `options={{ blockJS: false }}`.
+
+## @next/mdx
+
+`@next/mdx` reads the map from `mdx-components.tsx` at the project root (or in `src/`). Spread the Once UI map first, so the components passed in can override it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      label: "mdx-components.tsx",
+      language: "tsx",
+      code:
+`import type { MDXComponents } from "mdx/types";
+import { mdxComponents } from "@once-ui-system/core/mdx";
+
+export function useMDXComponents(components: MDXComponents): MDXComponents {
+  return { ...mdxComponents, ...components };
+}`,
+    },
+  ]}
+/>
+
+## Override or extend tags
+
+`createMdxComponents` returns the default map with your entries applied. An HTML tag key (`h2`, `a`, `hr` and so on) replaces what Markdown renders for that element. Any other key registers a component the content can use by name.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      label: "components/mdx.tsx",
+      language: "tsx",
+      code:
+`import { BlockQuote, Logo, Row } from "@once-ui-system/core";
+import { createMdxComponents, MdxHeading } from "@once-ui-system/core/mdx";
+import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
+import { Pricing } from "./Pricing";
+
+const components = createMdxComponents({
+  // Replace an element. \`props\` is typed as what MDX passes for an <hr>.
+  hr: () => (
+    <Row fillWidth horizontal="center" paddingY="64">
+      <Logo icon="/trademark.svg" />
+    </Row>
+  ),
+  blockquote: ({ children }) => (
+    <BlockQuote separator="none" marginY="64">
+      {children}
+    </BlockQuote>
+  ),
+  // Keep the element, change its margins.
+  h2: (props) => <MdxHeading as="h2" marginTop="64" {...props} />,
+  // Register your own component as a tag: <Pricing /> in the content.
+  Pricing,
+});
+
+export function CustomMDX(props: MDXRemoteProps) {
+  return (
+    <MDXRemote
+      {...props}
+      options={{ blockJS: false, ...props.options }}
+      components={{ ...components, ...props.components }}
+    />
+  );
+}`,
+    },
+  ]}
+/>
+
+- To keep the plain HTML element, map the tag to its own name: `createMdxComponents({ hr: "hr" })`.
+- An entry set to `undefined` is skipped, so a conditional override cannot remove an element by accident.
+- The element components (`MdxHeading`, `MdxParagraph`, `MdxLink`, `MdxImage`, `MdxInlineCode`, `MdxCodeBlock`, `MdxBlockQuote`, `MdxList`, `MdxListItem`, `MdxTable`, `MdxHr`) are exported for wrapping. Each takes its element's MDX props plus margins. Setting any margin replaces the element's default margins.
+- An override that needs a prop Markdown can never supply does not compile. For example, `h3: ({ level }: { level: number }) => ...` is rejected.
+
+## What each element renders
+
+| Markdown | Renders | Notes |
+| --- | --- | --- |
+| `# Heading` to `###### Heading` | `Heading` with a link to itself | The id is a slug of the heading's text, or the id MDX passes, for example from `rehype-slug`. |
+| Paragraph | `Text` as a `<p>` | A paragraph that is only an image renders the image on its own. Text around an inline image renders as a `<div>`. |
+| `[text](href)` | `SmartLink` | Internal paths use your router's link; external URLs open in a new tab. |
+| `![alt](src)` | `Media` | Goes through the image adapter and enlarges on click. |
+| `` `code` `` | `InlineCode` | |
+| Fenced code | `CodeBlock` | The language comes from the fence (`ts`, `tsx`, `bash` and so on). Without one, the code renders as plain text. Needs `prismjs`. |
+| `> quote` | `BlockQuote` | |
+| `-` and `1.` lists | `List`, `ListItem` | An ordered list keeps its start number. |
+| GFM table | `Table` | Needs `remark-gfm`. Column alignment carries over. |
+| `---` | `Line` | Has the `separator` role. |
+
+Tags available by name: `Accordion`, `AccordionGroup`, `BlockQuote`, `Button`, `Card`, `CodeBlock`, `Column`, `Feedback`, `Grid`, `Heading`, `Icon`, `InlineCode`, `Line`, `List`, `ListItem`, `Media`, `OgCard`, `Row`, `SmartLink`, `Table` and `Text`.
+
+## Headings and anchors
+
+Each heading renders with an anchor link next to it. The link shows on hover, on focus, and always on touch screens. It is a real link to the section, so it works without JavaScript and can be reached with the keyboard. Activating it also copies the section's URL and confirms with a toast, so the content must render inside a `ToastProvider`, as it does in the standard Once UI provider setup. `HeadingNav` picks up the ids.
+
+For links and images to use `next/link` and `next/image`, import `LayoutProvider` from `@once-ui-system/core/next`. Without it, they render as a plain `<a>` and `<img>`.
+
+Ids are slugged from the text the same way Studio and this site do it: "Get started & deploy" becomes `get-started-and-deploy`. Two headings with the same text get the same id. To make them unique, add `rehype-slug`, whose ids take precedence.
+
+## API reference
+
+<PropsTable
+  label="Export"
+  content={[
+    ["mdxComponents", "MdxComponents", "-", "The default map."],
+    ["createMdxComponents", "(overrides?: Partial<MdxComponents>) => MdxComponents", "-", "The default map with overrides applied."],
+    ["MdxComponents", "type", "-", "Tag keys typed against MDX's props; other keys are components used by name."],
+    ["MdxElementProps", "type", "-", "The props MDX passes for an element: MdxElementProps<\"h2\">."],
+    ["MdxHeading", "MdxHeadingProps", "-", "A heading with an id and an anchor link. Takes as: \"h1\" to \"h6\"."],
+  ]}
+/>
