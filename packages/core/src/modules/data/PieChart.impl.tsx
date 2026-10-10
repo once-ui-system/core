@@ -5,6 +5,7 @@ import { Column } from "../../components/Column";
 import { DateRange } from "../../components/DateRangePicker";
 import { Row } from "../../components/Row";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
+import type { DataStyle } from "../../contexts/ThemeProvider";
 import { RadiusSize, schemes } from "../../types";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
@@ -17,7 +18,12 @@ import { getRechartsComponents } from "./rechartsLoader";
 import { getDistributedColor } from "./utils/colorDistribution";
 
 export interface PieChartProps extends ChartProps {
-  "data-viz-style"?: string;
+  /**
+   * This chart's colour mode, overriding DataThemeProvider's `mode`. Typed as
+   * `DataStyle`; any other string still compiles, for 2.0 callers, and draws
+   * categorical.
+   */
+  "data-viz-style"?: DataStyle | (string & {});
   ring?: { inner: number; outer: number };
   dataKey?: string;
   nameKey?: string;

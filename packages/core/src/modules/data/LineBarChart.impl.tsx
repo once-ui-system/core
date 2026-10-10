@@ -7,6 +7,7 @@ import { Column } from "../../components/Column";
 import { DateRange } from "../../components/DateRangePicker";
 import { Row } from "../../components/Row";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
+import type { DataStyle } from "../../contexts/ThemeProvider";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
@@ -21,7 +22,12 @@ export interface LineBarChartProps extends ChartProps {
   curve?: curveType;
   reverseY?: boolean;
   reverseX?: boolean;
-  "data-viz-style"?: string;
+  /**
+   * This chart's colour mode, overriding DataThemeProvider's `mode`. Typed as
+   * `DataStyle`; any other string still compiles, for 2.0 callers, and draws
+   * categorical.
+   */
+  "data-viz-style"?: DataStyle | (string & {});
 }
 
 const LineBarChart: React.FC<LineBarChartProps> = ({
