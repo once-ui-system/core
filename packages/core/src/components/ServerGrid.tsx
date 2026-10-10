@@ -11,7 +11,7 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken } from "../types";
-import { BELOW_HEADER, scrollsOn, spacingClasses } from "../utils/layoutClasses";
+import { BELOW_HEADER, scrollsOn, spacingClasses, themeAttributes } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerGridProps
@@ -164,6 +164,10 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       blendMode,
       blur,
       backdropBlur,
+      theme,
+      themeBorder,
+      themeSolid,
+      themeSurface,
       className,
       style,
       children,
@@ -463,7 +467,13 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
     };
 
     return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...rest}>
+      <Component
+        ref={ref}
+        className={classes}
+        style={combinedStyle}
+        {...rest}
+        {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
+      >
         {children}
       </Component>
     );

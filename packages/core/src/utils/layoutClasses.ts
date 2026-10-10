@@ -109,3 +109,29 @@ export function isClassExpressible(breakpointProps: Record<string, unknown>): bo
     return typeof value !== "number" || NUMERIC_CLASS_PROPS.has(prop);
   });
 }
+
+/**
+ * The typed theme props as the `data-*` attributes the theme tokens key off.
+ *
+ * Only the props that are set are written, and they are spread after the
+ * caller's own attributes, so a typed prop wins over a raw `data-theme` beside
+ * it and an unset one leaves a raw attribute alone.
+ */
+export function themeAttributes({
+  theme,
+  themeBorder,
+  themeSolid,
+  themeSurface,
+}: {
+  theme?: string;
+  themeBorder?: string;
+  themeSolid?: string;
+  themeSurface?: string;
+}): Record<string, string> {
+  const attributes: Record<string, string> = {};
+  if (theme) attributes["data-theme"] = theme;
+  if (themeBorder) attributes["data-border"] = themeBorder;
+  if (themeSolid) attributes["data-solid"] = themeSolid;
+  if (themeSurface) attributes["data-surface"] = themeSurface;
+  return attributes;
+}

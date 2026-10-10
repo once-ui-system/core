@@ -1,4 +1,5 @@
 import { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
+import type { BorderStyle, SolidType, SurfaceStyle } from "./contexts/ThemeProvider";
 import {
   BlendMode,
   BlurSize,
@@ -194,6 +195,27 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
    * blur `background="surface"` brings with a translucent theme.
    */
   backdropBlur?: BlurSize | number;
+  /**
+   * Render this subtree in the light or dark theme, whatever the page is in:
+   * `data-theme` on this element, typed. Not the same as the `dark` and
+   * `light` booleans, which show or hide an element depending on the theme
+   * around it and change nothing about its colours.
+   *
+   * @example <Column theme="dark" background="page">…</Column>
+   */
+  theme?: "light" | "dark";
+  /**
+   * The subtree's corner style — `ThemeProvider`'s `border`, as `data-border`.
+   * Named apart from `border`, which on a layout primitive is a border colour.
+   */
+  themeBorder?: BorderStyle;
+  /**
+   * The subtree's solid fill style — `ThemeProvider`'s `solid`, as
+   * `data-solid`. Named apart from `solid`, which here is a fill colour.
+   */
+  themeSolid?: SolidType;
+  /** The subtree's surface style — `ThemeProvider`'s `surface`, as `data-surface`. */
+  themeSurface?: SurfaceStyle;
 }
 
 export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
@@ -252,7 +274,16 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
     | "8"
     | "9"
     | "10";
+  /**
+   * Show this element only while the theme around it is dark. It changes
+   * nothing about the element's colours: to render a subtree dark, use
+   * `theme="dark"`.
+   */
   dark?: boolean;
+  /**
+   * Show this element only while the theme around it is light. To render a
+   * subtree light, use `theme="light"`.
+   */
   light?: boolean;
 }
 

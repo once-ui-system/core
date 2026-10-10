@@ -11,7 +11,7 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
-import { BELOW_HEADER, scrollsOn, spacingClasses } from "../utils/layoutClasses";
+import { BELOW_HEADER, scrollsOn, spacingClasses, themeAttributes } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerFlexProps
@@ -123,6 +123,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       blendMode,
       blur,
       backdropBlur,
+      theme,
+      themeBorder,
+      themeSolid,
+      themeSurface,
       className,
       style,
       children,
@@ -598,7 +602,13 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     };
 
     return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...rest}>
+      <Component
+        ref={ref}
+        className={classes}
+        style={combinedStyle}
+        {...rest}
+        {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
+      >
         {children}
       </Component>
     );

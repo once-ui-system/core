@@ -179,6 +179,10 @@ weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
     blendMode: "mix-blend-mode, as a class. color-dodge and plus-lighter are the glow modes.",
     blur: "filter: blur(). xs (0.25rem) to xl (3rem) is a class; a number is rem.",
     backdropBlur: "backdrop-filter: blur(), for what shows through a translucent fill. Same scale as blur.",
+    theme: "Render this subtree light or dark: data-theme, typed.",
+    themeBorder: "The subtree's corner style (ThemeProvider's border): data-border.",
+    themeSolid: "The subtree's solid fill style (ThemeProvider's solid): data-solid.",
+    themeSurface: "The subtree's surface style (ThemeProvider's surface): data-surface.",
   }}
 />
 
@@ -210,6 +214,29 @@ function still goes in `style`.
 frame, so it stays in `style`; for a static shift, `translateX` and
 `translateY` do the same without leaving the server.
 
+### A themed subtree
+
+`theme`, `themeBorder`, `themeSolid` and `themeSurface` restyle everything
+inside, the way `ThemeProvider` restyles the page: they write `data-theme`,
+`data-border`, `data-solid` and `data-surface`, typed with the provider's own
+values. `theme="dark"` renders the subtree dark; the `dark` boolean only shows
+or hides an element depending on the theme around it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Column theme="dark" background="page" padding="40">...</Column>
+<Row themeBorder="rounded" gap="8">...</Row>
+<Row themeSolid="contrast">...</Row>`,
+      language: "tsx",
+      label: "Themed subtree"
+    }
+  ]}
+/>
+
 ## Display and behaviour
 
 <PropsTable
@@ -228,8 +255,8 @@ frame, so it stays in `style`; for a static shift, `translateX` and
     zIndex: "Stacking order.",
     pointerEvents: "\"none\" lets clicks fall through a decorative layer.",
     userSelect: "\"none\" keeps a handle or a timeline label from being selected mid-drag.",
-    dark: "Render only in the dark theme.",
-    light: "Render only in the light theme.",
+    dark: "Show only while the theme around it is dark. To make a subtree dark, use theme=\"dark\".",
+    light: "Show only while the theme around it is light.",
   }}
 />
 
