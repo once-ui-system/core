@@ -240,9 +240,21 @@ export const SELECTION_GROUPS = [
 
 /* ------------------------------------------------------------- display --- */
 
-/** Overflow utilities, repeated at every breakpoint. */
+/**
+ * Overflow utilities, repeated at every breakpoint.
+ *
+ * `clip` and `visible` type-check on every `overflow` prop (they are
+ * `CSSProperties["overflow"]`) and had no class, so they reached the DOM as a
+ * class name with nothing behind it. They are placed so that, like the rest of
+ * the list, a shorthand never beats a longhand set beside it: the two new
+ * shorthands sit before every `-x`/`-y` rule, the four new longhands after
+ * every shorthand. The existing rules keep their relative order, so nothing
+ * that already collides resolves differently.
+ */
 export const OVERFLOW_RULES = [
   { suffix: "overflow-auto", prop: "overflow", value: "auto" },
+  { suffix: "overflow-clip", prop: "overflow", value: "clip" },
+  { suffix: "overflow-visible", prop: "overflow", value: "visible" },
   { suffix: "overflow-x-scroll", prop: "overflow-x", value: "scroll" },
   { suffix: "overflow-x-auto", prop: "overflow-x", value: "auto" },
   { suffix: "overflow-y-auto", prop: "overflow-y", value: "auto" },
@@ -251,6 +263,10 @@ export const OVERFLOW_RULES = [
   { suffix: "overflow-scroll", prop: "overflow", value: "scroll" },
   { suffix: "overflow-x-hidden", prop: "overflow-x", value: "hidden" },
   { suffix: "overflow-y-hidden", prop: "overflow-y", value: "hidden" },
+  { suffix: "overflow-x-clip", prop: "overflow-x", value: "clip" },
+  { suffix: "overflow-x-visible", prop: "overflow-x", value: "visible" },
+  { suffix: "overflow-y-clip", prop: "overflow-y", value: "clip" },
+  { suffix: "overflow-y-visible", prop: "overflow-y", value: "visible" },
 ];
 
 /**

@@ -270,6 +270,23 @@ describe("generated utilities", () => {
     expect(heading.slice(0, heading.indexOf("}"))).not.toContain("letter-spacing");
   });
 
+  /**
+   * `overflow="clip"` and `"visible"` type-check on every layout primitive and
+   * had no class, so the prop reached the DOM as a class name with no rule.
+   */
+  it("carries every overflow value on every axis, at every breakpoint", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/display.generated.scss"), "utf8");
+    const missing: string[] = [];
+    for (const bp of ["", ...BREAKPOINTS.map((b) => `${b.key}-`)]) {
+      for (const axis of ["overflow", "overflow-x", "overflow-y"]) {
+        for (const value of ["auto", "scroll", "hidden", "clip", "visible"]) {
+          if (!css.includes(`.${bp}${axis}-${value} {`)) missing.push(`.${bp}${axis}-${value}`);
+        }
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+
   it("writes a bare 0 for offsets and a token for spacing", () => {
     // position.scss wrote `top: 0`, spacing.scss wrote `var(--static-space-0)`.
     // Identical in the browser, but reproducing each exactly is what made the

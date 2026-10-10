@@ -11,6 +11,7 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import { scrollsOn } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerFlexProps
@@ -347,9 +348,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
-      ((overflow && overflow !== "hidden") ||
-        (overflowX && overflowX !== "hidden") ||
-        (overflowY && overflowY !== "hidden")) &&
+      (scrollsOn(overflow) || scrollsOn(overflowX) || scrollsOn(overflowY)) &&
         `scrollbar-${scrollbar}`,
       flex && `flex-${flex}`,
       horizontal &&
@@ -461,15 +460,20 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
           cascadedXs?.direction === undefined
             ? `xs-align-${cascadedXs.vertical}`
             : `xs-justify-${cascadedXs.vertical}`),
-        // Additional class-based properties
+        // Additional class-based properties. `xl` leads, as it does for spacing:
+        // without it an `xl={{ overflow }}` reached every narrower step and
+        // missed its own.
+        cascadedXl?.overflow && `xl-overflow-${cascadedXl.overflow}`,
         cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
         cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
         cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
         cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
+        cascadedXl?.overflowX && `xl-overflow-x-${cascadedXl.overflowX}`,
         cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
         cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
         cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
         cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
+        cascadedXl?.overflowY && `xl-overflow-y-${cascadedXl.overflowY}`,
         cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
         cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
         cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,

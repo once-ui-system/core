@@ -148,8 +148,16 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
   hide?: boolean;
   pointerEvents?: "none" | "all" | "auto";
   position?: CSSProperties["position"];
+  /**
+   * `auto`, `scroll`, `hidden`, `clip` and `visible` each map to a utility
+   * class, at the base and in every breakpoint object, so they stay
+   * server-rendered. `clip` cuts the content off without making the element a
+   * scroll container, which keeps `position: sticky` working inside it.
+   */
   overflow?: CSSProperties["overflow"];
+  /** The horizontal axis of `overflow`; the same five values have classes. */
   overflowX?: CSSProperties["overflowX"];
+  /** The vertical axis of `overflow`; the same five values have classes. */
   overflowY?: CSSProperties["overflowY"];
   scrollbar?: "default" | "minimal";
   transition?:

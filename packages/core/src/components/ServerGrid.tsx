@@ -11,6 +11,7 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken } from "../types";
+import { scrollsOn } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerGridProps
@@ -217,9 +218,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
-      ((overflow && overflow !== "hidden") ||
-        (overflowX && overflowX !== "hidden") ||
-        (overflowY && overflowY !== "hidden")) &&
+      (scrollsOn(overflow) || scrollsOn(overflowX) || scrollsOn(overflowY)) &&
         `scrollbar-${scrollbar}`,
       typeof padding !== "number" && padding && `p-${padding}`,
       typeof paddingLeft !== "number" && paddingLeft && `pl-${paddingLeft}`,
