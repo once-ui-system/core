@@ -204,45 +204,57 @@ The `OgCard` extends the `Card` component, so you can use all `Card` props to cu
 
 ## Required API routes
 
-To use `OgCard` with automatic Open Graph fetching, your application must expose the following API routes.
+To use `OgCard` with automatic Open Graph fetching, your application must expose two routes: one that fetches a page's metadata, and one that serves its image from your origin. In a Next.js app, both are ready-made in `@once-ui-system/core/next`, with SSRF protection built in:
 
-These routes are used internally by the component to fetch metadata and safely load external assets.
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { createOgFetchRoute } from "@once-ui-system/core/next";
 
-### 1. OG metadata fetch
+export const { GET } = createOgFetchRoute();`,
+      language: "tsx",
+      label: "app/api/og/fetch/route.ts"
+    },
+    {
+      code:
+`import { createOgProxyRoute } from "@once-ui-system/core/next";
 
-`/api/og/fetch`
+export const { GET } = createOgProxyRoute();`,
+      language: "tsx",
+      label: "app/api/og/proxy/route.ts"
+    }
+  ]}
+/>
 
-This endpoint retrieves Open Graph metadata (title, description, image, favicon) from a given URL.
+See [OG route handlers](/utils/ogRoutes) for their options. Outside Next.js, build the routes on [`handleOGFetch`](/utils/handleOGFetch) and [`handleOGProxy`](/utils/handleOGProxy).
 
-It is used when `OgCard` receives only a `url` prop.
+`OgCard` calls `/api/og/fetch` and `/api/og/proxy` by default. If your routes live elsewhere, wrap the app in `OgRoutesProvider`:
 
-You can refer to the implementation in:
-- `handleOGFetch.mdx`
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`<OgRoutesProvider routes={{ fetch: "/og/fetch", proxy: "/og/proxy" }}>
+  {children}
+</OgRoutesProvider>`,
+      language: "tsx",
+      label: "Custom routes"
+    }
+  ]}
+/>
 
----
-
-### 2. OG image proxy
-
-`/api/og/proxy`
-
-This endpoint proxies external images to avoid CORS restrictions when rendering preview images inside the card.
-
-You can refer to the implementation in:
-- `handleOGProxy.mdx`
-
----
-
-### 3. (Optional) OG generate endpoint
-
-`/api/og/generate`
-
-Used in advanced setups where OG images are dynamically generated server-side.
-
-This is optional depending on your configuration.
+The optional `/api/og/generate` route renders social images for `Meta.generate`; it is not needed by `OgCard`.
 
 ## Service configuration
 
-Use `serviceConfig` to point `OgCard` at custom API routes or to transform proxied image and favicon URLs. Pass pre-fetched data with `ogData` to skip the fetch entirely.
+Use `serviceConfig` to point a single `OgCard` at custom API routes (it takes precedence over `OgRoutesProvider`) or to transform proxied image and favicon URLs. Pass pre-fetched data with `ogData` to skip the fetch entirely.
 
 <CodeBlock
   marginTop="16"
@@ -301,8 +313,8 @@ Use `serviceConfig` to point `OgCard` at custom API routes or to transform proxi
 
 <PropsTable
   content={[
-    ["fetchOgUrl", "string", "'/api/og/fetch'", "Endpoint for fetching OG metadata."],
-    ["proxyOgUrl", "string", "'/api/og/proxy'", "Endpoint for proxying external assets."],
+    ["fetchOgUrl", "string", "OgRoutesProvider's fetch, or '/api/og/fetch'", "Endpoint for fetching OG metadata."],
+    ["proxyOgUrl", "string", "OgRoutesProvider's proxy, or '/api/og/proxy'", "Endpoint for proxying external assets."],
     ["proxyImageUrl", "(url: string) => string", "-", "Transform OG image URLs before rendering."],
     ["proxyFaviconUrl", "(url: string) => string", "-", "Transform favicon URLs before rendering."]
   ]}

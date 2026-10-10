@@ -2,9 +2,10 @@
   "title": "Utils",
   "order": 8,
   "pages": {
-    "handleOGFetch": 1,
-    "handleOGProxy": 2,
-    "devLogger": 3,
-    "dropdownState": 4
+    "ogRoutes": 1,
+    "handleOGFetch": 2,
+    "handleOGProxy": 3,
+    "devLogger": 4,
+    "dropdownState": 5
   }
 }

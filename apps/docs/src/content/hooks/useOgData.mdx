@@ -170,8 +170,8 @@ function RichLinkPreview({ url }: { url: string }) {
 <PropsTable
   content={[
     ["url", ["string", "null"], "-"],
-    ["customFetchUrl", "string", "'/api/og/fetch'"],
-    ["customProxyUrl", "string", "'/api/og/proxy'"]
+    ["customFetchUrl", "string", "OgRoutesProvider's fetch, or '/api/og/fetch'"],
+    ["customProxyUrl", "string", "OgRoutesProvider's proxy, or '/api/og/proxy'"]
   ]}
 />
 
@@ -208,8 +208,8 @@ function RichLinkPreview({ url }: { url: string }) {
 <PropsTable
   content={[
     ["url", ["string", "null"], "-"],
-    ["customFetchUrl", "string", "'/api/og/fetch'"],
-    ["customProxyUrl", "string", "'/api/og/proxy'"]
+    ["customFetchUrl", "string", "OgRoutesProvider's fetch, or '/api/og/fetch'"],
+    ["customProxyUrl", "string", "OgRoutesProvider's proxy, or '/api/og/proxy'"]
   ]}
 />
 
@@ -235,7 +235,7 @@ function RichLinkPreview({ url }: { url: string }) {
 
 ## Required API routes
 
-This hook requires server-side API routes to function. Use the `handleOGFetch` and `handleOGProxy` utilities:
+This hook requires two server routes. In a Next.js app, use the ready-made [OG route handlers](/utils/ogRoutes):
 
 <CodeBlock
   marginTop="16"
@@ -246,20 +246,38 @@ This hook requires server-side API routes to function. Use the `handleOGFetch` a
     {
       code:
 `// app/api/og/fetch/route.ts
-import { handleOGFetch } from '@once-ui-system/core/server';
+import { createOgFetchRoute } from "@once-ui-system/core/next";
 
-export async function GET(request: Request) {
-  return handleOGFetch(request);
-}
+export const { GET } = createOgFetchRoute();
 
 // app/api/og/proxy/route.ts
-import { handleOGProxy } from '@once-ui-system/core/server';
+import { createOgProxyRoute } from "@once-ui-system/core/next";
 
-export async function GET(request: Request) {
-  return handleOGProxy(request);
-}`,
+export const { GET } = createOgProxyRoute();`,
       language: "tsx",
       label: "API routes"
+    }
+  ]}
+/>
+
+Elsewhere, build them on [`handleOGFetch`](/utils/handleOGFetch) and [`handleOGProxy`](/utils/handleOGProxy) from `@once-ui-system/core/server`.
+
+The hook calls `/api/og/fetch` and `/api/og/proxy` unless told otherwise: by its `customFetchUrl` and `customProxyUrl` arguments, or for every caller below it, by `OgRoutesProvider`:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { OgRoutesProvider } from "@once-ui-system/core";
+
+<OgRoutesProvider routes={{ fetch: "/og/fetch", proxy: "/og/proxy" }}>
+  {children}
+</OgRoutesProvider>`,
+      language: "tsx",
+      label: "Custom routes"
     }
   ]}
 />
