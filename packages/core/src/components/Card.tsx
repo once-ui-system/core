@@ -1,10 +1,10 @@
 "use client";
 
+import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { Flex } from "./Flex";
 import styles from "./Card.module.scss";
 import { ElementType } from "./ElementType";
-import classNames from "clsx";
+import { Flex } from "./Flex";
 
 interface CardProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
@@ -86,7 +86,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           cursor={interactive ? "interactive" : undefined}
           align="left"
           className={classNames(styles.card, selected && styles.selected, className)}
-          style={{...style}}
+          style={{ ...style }}
           {...flex}
         >
           {children}
@@ -97,4 +97,5 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
 );
 
 Card.displayName = "Card";
+
 export { Card };

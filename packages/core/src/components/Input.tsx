@@ -1,25 +1,24 @@
 "use client";
 
+import classNames from "clsx";
 import React, {
-  useState,
-  useEffect,
   forwardRef,
   InputHTMLAttributes,
-  useCallback,
   ReactNode,
+  useCallback,
+  useEffect,
+  useState,
 } from "react";
-import classNames from "clsx";
-import { Column } from "./Column";
-import { Row } from "./Row";
-import { Text } from "./Text";
-import { Spinner } from "./Spinner";
-import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
+import { Column } from "./Column";
 import { useFieldSize } from "./FormContext";
+import styles from "./Input.module.scss";
+import { Row } from "./Row";
+import { Spinner } from "./Spinner";
+import { Text } from "./Text";
 
-interface InputProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   id: string;
   label?: string;
   placeholder?: string;
@@ -164,7 +163,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
     const displayError = validationError || errorMessage;
 
-
     const inputClassNames = classNames(
       styles.input,
       "font-body",
@@ -243,14 +241,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               <Text
                 variant="label-default-s"
                 onBackground={
-                  props.maxLength - String(props.value || '').length <= 5
+                  props.maxLength - String(props.value || "").length <= 5
                     ? "danger-weak"
-                    : props.maxLength - String(props.value || '').length <= 10
+                    : props.maxLength - String(props.value || "").length <= 10
                       ? "warning-weak"
                       : "neutral-weak"
                 }
               >
-                {props.maxLength - String(props.value || '').length}
+                {props.maxLength - String(props.value || "").length}
               </Text>
             </Row>
           )}
@@ -266,12 +264,22 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </Row>
         {displayError && errorMessage !== false && (
-          <Row paddingX="16" id={`${id}-error`} textVariant="body-default-s" onBackground="danger-weak">
+          <Row
+            paddingX="16"
+            id={`${id}-error`}
+            textVariant="body-default-s"
+            onBackground="danger-weak"
+          >
             {validationError || errorMessage}
           </Row>
         )}
         {description && (
-          <Row paddingX="16" id={`${id}-description`} textVariant="body-default-s" onBackground="neutral-weak">
+          <Row
+            paddingX="16"
+            id={`${id}-description`}
+            textVariant="body-default-s"
+            onBackground="neutral-weak"
+          >
             {description}
           </Row>
         )}
@@ -282,5 +290,5 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
 
 Input.displayName = "Input";
 
-export { Input };
 export type { InputProps };
+export { Input };

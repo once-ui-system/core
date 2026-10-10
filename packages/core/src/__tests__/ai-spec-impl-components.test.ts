@@ -1,5 +1,5 @@
-import spec from "../../ai/spec.json";
 import { describe, expect, it } from "vitest";
+import spec from "../../ai/spec.json";
 
 /**
  * Components whose dependency is an optional peer ship as a lazy shell
@@ -29,7 +29,8 @@ describe("components split across an impl file", () => {
   });
 
   it("carries the chart contract as a shared mixin, not four copies", () => {
-    const chartProps = (spec.mixins as unknown as Record<string, Record<string, string>>).ChartProps;
+    const chartProps = (spec.mixins as unknown as Record<string, Record<string, string>>)
+      .ChartProps;
     expect(chartProps).toBeDefined();
     expect(chartProps.series).toMatch(/SeriesConfig/);
     expect(chartProps.data).toMatch(/DataPoint/);

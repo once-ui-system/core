@@ -1,17 +1,26 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect, type KeyboardEvent, useId, memo, useMemo } from "react";
-import { SegmentedControl, type ButtonOption } from "./SegmentedControl";
-import { IconButton } from "./IconButton";
-import { Grid } from "./Grid";
-import type { Flex } from "./Flex";
-import { Text } from "./Text";
-import { Input } from "./Input";
-import { Icon } from "./Icon";
-import { Column } from "./Column";
-import { Row } from "./Row";
+import {
+  type KeyboardEvent,
+  memo,
+  useCallback,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useDebounce } from "../hooks/useDebounce";
+import { Column } from "./Column";
 import styles from "./EmojiPicker.module.scss";
+import type { Flex } from "./Flex";
+import { Grid } from "./Grid";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { Input } from "./Input";
+import { Row } from "./Row";
+import { type ButtonOption, SegmentedControl } from "./SegmentedControl";
+import { Text } from "./Text";
 
 type EmojiItem = {
   char: string;
@@ -78,9 +87,9 @@ const fallbackEmojiData: EmojiData = {
 };
 
 import generatedEmojiData from "../data/emoji-data.json";
+import type { IconName } from "../icons";
 import type { StyleProps } from "../interfaces";
 import type { GridSize } from "../types";
-import type { IconName } from "../icons";
 
 const emojiData: EmojiData =
   Object.keys(generatedEmojiData).length > 0
@@ -185,13 +194,15 @@ const EmojiPicker = ({
     setActiveCategory(value);
   }, []);
 
-  const filteredEmojis = useMemo(() => 
-    searchQuery
-      ? Object.values(emojiData)
-          .flat()
-          .filter((emoji: EmojiItem) => emoji.description.includes(searchQuery.toLowerCase()))
-      : emojiData[activeCategory as keyof typeof emojiData] || []
-  , [searchQuery, activeCategory]);
+  const filteredEmojis = useMemo(
+    () =>
+      searchQuery
+        ? Object.values(emojiData)
+            .flat()
+            .filter((emoji: EmojiItem) => emoji.description.includes(searchQuery.toLowerCase()))
+        : emojiData[activeCategory as keyof typeof emojiData] || [],
+    [searchQuery, activeCategory],
+  );
 
   // Reset focused index when filtered emojis change
   useEffect(() => {

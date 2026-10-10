@@ -38,5 +38,5 @@ const InfoTip: React.FC<InfoTipProps> = ({ children, size = "xs", ...flex }) => 
 
 InfoTip.displayName = "InfoTip";
 
-export { InfoTip };
 export type { InfoTipProps };
+export { InfoTip };

@@ -23,5 +23,5 @@ const BarChart: React.FC<BarChartProps> = (props) => (
 
 BarChart.displayName = "BarChart";
 
-export { BarChart };
 export type { BarChartProps };
+export { BarChart };

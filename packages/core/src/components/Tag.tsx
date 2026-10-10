@@ -1,15 +1,14 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
-
+import React, { forwardRef, ReactNode } from "react";
+import { IconName } from "../icons";
+import { ColorScheme, CondensedTShirtSizes } from "../types";
 import { Flex } from "./Flex";
-import { Text } from "./Text";
 import { Icon } from "./Icon";
 import { Row } from "./Row";
 import styles from "./Tag.module.scss";
-import { IconName } from "../icons";
-import { ColorScheme, CondensedTShirtSizes } from "../types";
+import { Text } from "./Text";
 
 interface TagProps extends React.ComponentProps<typeof Flex> {
   scheme?: ColorScheme | "gradient";
@@ -40,22 +39,25 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
     return (
       <Row
         fitWidth
-        background={scheme !== "gradient" ? `${scheme}-weak` as const : undefined}
-        border={scheme !== "gradient" ? `${scheme}-alpha-medium` as const : "brand-medium"}
-        onBackground={scheme !== "gradient" ? `${scheme}-medium` as const : undefined}
-        paddingX={paddingX} paddingY={paddingY}
+        background={scheme !== "gradient" ? (`${scheme}-weak` as const) : undefined}
+        border={scheme !== "gradient" ? (`${scheme}-alpha-medium` as const) : "brand-medium"}
+        onBackground={scheme !== "gradient" ? (`${scheme}-medium` as const) : undefined}
+        paddingX={paddingX}
+        paddingY={paddingY}
         vertical="center"
         radius="s"
         gap="4"
         ref={ref}
-        className={classNames(styles.tag, scheme === "gradient" ? styles.gradient : undefined, className)}
+        className={classNames(
+          styles.tag,
+          scheme === "gradient" ? styles.gradient : undefined,
+          className,
+        )}
         {...rest}
       >
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}
         <Row style={{ userSelect: "none" }} vertical="center">
-          <Text variant="label-default-s">
-            {label || children}
-          </Text>
+          <Text variant="label-default-s">{label || children}</Text>
         </Row>
         {suffixIcon && <Icon name={suffixIcon} size="xs" />}
       </Row>
@@ -65,5 +67,5 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
 
 Tag.displayName = "Tag";
 
-export { Tag };
 export type { TagProps };
+export { Tag };

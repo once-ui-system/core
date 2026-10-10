@@ -1,8 +1,8 @@
-import React, { forwardRef } from "react";
 import classNames from "clsx";
-import styles from "./StatusIndicator.module.scss";
-import { Flex } from "./Flex";
+import React, { forwardRef } from "react";
 import { CondensedTShirtSizes } from "../types";
+import { Flex } from "./Flex";
+import styles from "./StatusIndicator.module.scss";
 
 interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
   size?: CondensedTShirtSizes;

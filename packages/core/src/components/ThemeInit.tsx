@@ -1,5 +1,5 @@
-import React from 'react';
-import { safeScriptJson } from '../utils/safe-html';
+import React from "react";
+import { safeScriptJson } from "../utils/safe-html";
 
 interface ThemeConfig {
   theme: string;
@@ -7,12 +7,12 @@ interface ThemeConfig {
   accent: string;
   neutral: string;
   solid: string;
-  'solid-style': string;
+  "solid-style": string;
   border: string;
   surface: string;
   transition: string;
   scaling: string;
-  'viz-style': string;
+  "viz-style": string;
 }
 
 interface ThemeInitProps {

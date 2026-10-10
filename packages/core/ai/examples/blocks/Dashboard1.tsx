@@ -1,14 +1,25 @@
 "use client";
 
-import React from "react";
-import { Column, Row, Card, Heading, Text, Grid, Avatar, Button, Scroller, StatusIndicator, Icon } from "@once-ui-system/core";
 import type { IconName } from "@once-ui-system/core";
+import {
+  Avatar,
+  Button,
+  Card,
+  Column,
+  Grid,
+  Heading,
+  Icon,
+  Row,
+  Scroller,
+  StatusIndicator,
+  Text,
+} from "@once-ui-system/core";
 import { LineChart } from "@once-ui-system/core/data";
-import { Sidebar1 } from "./Sidebar1";
+import React, { useMemo } from "react";
 import { Header1 } from "./Header1";
-import { Table1 } from "./Table1";
+import { Sidebar1 } from "./Sidebar1";
 import type { TableColumn } from "./Table1";
-import { useMemo } from "react";
+import { Table1 } from "./Table1";
 
 interface StatCardProps {
   title: string;
@@ -30,14 +41,28 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
       "2025-01-07",
     ];
     const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
-    return dates.map((date) => ({
-      date,
-      "Current period": rand(0, 1500),
-    } as { date: string; "Current period": number }));
+    return dates.map(
+      (date) =>
+        ({
+          date,
+          "Current period": rand(0, 1500),
+        }) as { date: string; "Current period": number },
+    );
   }, [positive]);
 
   return (
-    <Card minWidth={12} href={href} paddingX="20" paddingTop="20" paddingBottom="80" radius="l" fillWidth direction="column" border background="transparent">
+    <Card
+      minWidth={12}
+      href={href}
+      paddingX="20"
+      paddingTop="20"
+      paddingBottom="80"
+      radius="l"
+      fillWidth
+      direction="column"
+      border
+      background="transparent"
+    >
       <LineChart
         pointerEvents="none"
         position="absolute"
@@ -48,11 +73,9 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
         border="transparent"
         axis="none"
         tooltip={false}
-        legend={{display: false}}
+        legend={{ display: false }}
         grid="none"
-        series={[
-          { key: "Current period", color: positive ? "green" : "red" },
-        ]}
+        series={[{ key: "Current period", color: positive ? "green" : "red" }]}
         data={sparkData}
       />
       <Column fillWidth gap="12">
@@ -61,13 +84,11 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
             {title}
           </Row>
           <Row gap="8" vertical="center" onBackground={positive ? "success-weak" : "danger-weak"}>
-            <Icon size="xs" name={positive ? "trendUp" : "trendDown"}/>
+            <Icon size="xs" name={positive ? "trendUp" : "trendDown"} />
             <Text variant="body-default-xs">{change}</Text>
           </Row>
         </Row>
-        <Heading variant="display-strong-xs">
-          {value}
-        </Heading>
+        <Heading variant="display-strong-xs">{value}</Heading>
       </Column>
     </Card>
   );
@@ -83,12 +104,17 @@ interface ActivityItemProps {
 
 const ActivityItem: React.FC<ActivityItemProps> = ({ avatar, action, time, href, icon }) => (
   <Row fillWidth borderBottom>
-    <Card direction="column" fitHeight href={href} background="transparent" border="transparent" fillWidth>
+    <Card
+      direction="column"
+      fitHeight
+      href={href}
+      background="transparent"
+      border="transparent"
+      fillWidth
+    >
       <Row fillWidth horizontal="between" paddingX="24" height="64" vertical="center">
         <Column fillWidth gap="8">
-          <Text variant="body-default-s">
-            {action}
-          </Text>
+          <Text variant="body-default-s">{action}</Text>
           <Row vertical="center" gap="12" data-scaling="90">
             <Avatar size="xs" src={avatar} />
             <Text variant="label-default-s" onBackground="neutral-weak">
@@ -96,7 +122,7 @@ const ActivityItem: React.FC<ActivityItemProps> = ({ avatar, action, time, href,
             </Text>
           </Row>
         </Column>
-        <Icon name={icon} size="xs" onBackground="neutral-weak"/>
+        <Icon name={icon} size="xs" onBackground="neutral-weak" />
       </Row>
     </Card>
   </Row>
@@ -114,14 +140,14 @@ const StatusItem: React.FC<StatusItemProps> = ({ name, status, icon, href = "#" 
     <Card direction="column" background="transparent" href={href} border="transparent" fillWidth>
       <Row fillWidth horizontal="between" height="64" vertical="center" paddingX="24">
         <Row vertical="center" gap="12">
-          <Icon name={icon} size="xs" onBackground="neutral-weak"/>
-          <Text variant="body-default-s">
-            {name}
-          </Text>
+          <Icon name={icon} size="xs" onBackground="neutral-weak" />
+          <Text variant="body-default-s">{name}</Text>
         </Row>
         <Row vertical="center" gap="12">
-          <Text variant="body-default-xs" onBackground="neutral-weak">{status}</Text>
-          <StatusIndicator color={getStatusVariant(status)}/>
+          <Text variant="body-default-xs" onBackground="neutral-weak">
+            {status}
+          </Text>
+          <StatusIndicator color={getStatusVariant(status)} />
         </Row>
       </Row>
     </Card>
@@ -143,11 +169,46 @@ const getStatusVariant = (status: string): "green" | "yellow" | "red" | "gray" =
 
 export const Dashboard1: React.FC = () => {
   const ordersData = [
-    { id: "#1024", customer: { name: "Lorant", avatar: "/images/creators/lorant.jpg" }, date: "2025-01-18", total: "$129.00", shipping: "Shipped", method: "UPS Ground" },
-    { id: "#1023", customer: { name: "Divyanshu", avatar: "/images/creators/div.jpg" }, date: "2025-01-17", total: "$349.00", shipping: "Processing", method: "DHL Express" },
-    { id: "#1022", customer: { name: "Justin", avatar: "/images/creators/justin.jpg" }, date: "2025-01-16", total: "$79.00", shipping: "Delivered", method: "USPS" },
-    { id: "#1021", customer: { name: "Vincent", avatar: "/images/creators/vincent.jpg" }, date: "2025-01-15", total: "$559.00", shipping: "Cancelled", method: "—" },
-    { id: "#1020", customer: { name: "Texz", avatar: "/images/creators/texz.jpg" }, date: "2025-01-14", total: "$219.00", shipping: "Pending", method: "FedEx" },
+    {
+      id: "#1024",
+      customer: { name: "Lorant", avatar: "/images/creators/lorant.jpg" },
+      date: "2025-01-18",
+      total: "$129.00",
+      shipping: "Shipped",
+      method: "UPS Ground",
+    },
+    {
+      id: "#1023",
+      customer: { name: "Divyanshu", avatar: "/images/creators/div.jpg" },
+      date: "2025-01-17",
+      total: "$349.00",
+      shipping: "Processing",
+      method: "DHL Express",
+    },
+    {
+      id: "#1022",
+      customer: { name: "Justin", avatar: "/images/creators/justin.jpg" },
+      date: "2025-01-16",
+      total: "$79.00",
+      shipping: "Delivered",
+      method: "USPS",
+    },
+    {
+      id: "#1021",
+      customer: { name: "Vincent", avatar: "/images/creators/vincent.jpg" },
+      date: "2025-01-15",
+      total: "$559.00",
+      shipping: "Cancelled",
+      method: "—",
+    },
+    {
+      id: "#1020",
+      customer: { name: "Texz", avatar: "/images/creators/texz.jpg" },
+      date: "2025-01-14",
+      total: "$219.00",
+      shipping: "Pending",
+      method: "FedEx",
+    },
   ];
 
   const orderColumns: TableColumn<any>[] = [
@@ -173,7 +234,11 @@ export const Dashboard1: React.FC = () => {
     {
       key: "date",
       title: <Text variant="label-default-s">Date</Text>,
-      render: (item: any) => <Text variant="label-default-s" onBackground="neutral-weak">{item.date}</Text>,
+      render: (item: any) => (
+        <Text variant="label-default-s" onBackground="neutral-weak">
+          {item.date}
+        </Text>
+      ),
     },
     {
       key: "shipping",
@@ -181,7 +246,9 @@ export const Dashboard1: React.FC = () => {
       render: (item: any) => (
         <Row gap="8" vertical="center">
           <Text variant="label-default-s">{item.shipping}</Text>
-          <Text variant="body-default-xs" onBackground="neutral-weak">{item.method}</Text>
+          <Text variant="body-default-xs" onBackground="neutral-weak">
+            {item.method}
+          </Text>
         </Row>
       ),
     },
@@ -195,22 +262,30 @@ export const Dashboard1: React.FC = () => {
 
   return (
     <Column fill>
-      <Header1 authenticated avatar="/images/creators/lorant.jpg" borderBottom="transparent"/>
+      <Header1 authenticated avatar="/images/creators/lorant.jpg" borderBottom="transparent" />
       <Row fill>
-        <Row m={{hide: true}} maxWidth={16} horizontal="center">
+        <Row m={{ hide: true }} maxWidth={16} horizontal="center">
           <Sidebar1 background="transparent" radius={undefined} fitHeight />
         </Row>
         <Row fill padding="8">
           <Row fill radius="l" overflow="hidden">
-            <Row fill overflowY="auto" horizontal="center" paddingX="l" paddingBottom="l" background="surface">
+            <Row
+              fill
+              overflowY="auto"
+              horizontal="center"
+              paddingX="l"
+              paddingBottom="l"
+              background="surface"
+            >
               <Column fitHeight gap="m" maxWidth="xl">
                 <Column fillWidth gap="4" paddingTop="l" paddingX="16">
                   <Row vertical="center" fillWidth horizontal="between" gap="8" wrap>
-                    <Heading variant="display-strong-s">
-                      Dashboard
-                    </Heading>
+                    <Heading variant="display-strong-s">Dashboard</Heading>
                     <Button prefixIcon="plus" size="s" data-border="rounded">
-                      New <Row s={{hide: true}} marginLeft="4">Project</Row>
+                      New{" "}
+                      <Row s={{ hide: true }} marginLeft="4">
+                        Project
+                      </Row>
                     </Button>
                   </Row>
                   <Text variant="body-default-m" onBackground="neutral-medium">
@@ -248,11 +323,11 @@ export const Dashboard1: React.FC = () => {
                   date={{
                     start: new Date("2024-12-31"),
                     end: new Date("2025-01-31"),
-                    format: "MMM dd"
+                    format: "MMM dd",
                   }}
                   series={[
                     { key: "Current period", color: "blue" },
-                    { key: "Previous period", color: "gray" }
+                    { key: "Previous period", color: "gray" },
                   ]}
                   data={[
                     { date: "2025-01-01", "Current period": 4654, "Previous period": 1365 },
@@ -272,13 +347,22 @@ export const Dashboard1: React.FC = () => {
                     { date: "2025-01-15", "Current period": 4234, "Previous period": 2023 },
                     { date: "2025-01-16", "Current period": 3423, "Previous period": 1142 },
                     { date: "2025-01-17", "Current period": 2312, "Previous period": 231 },
-                    { date: "2025-01-18", "Current period": 1234, "Previous period": 3423 }
+                    { date: "2025-01-18", "Current period": 1234, "Previous period": 3423 },
                   ]}
                 />
 
-                <Grid columns="2" m={{columns: 1}} gap="m" fillWidth>
+                <Grid columns="2" m={{ columns: 1 }} gap="m" fillWidth>
                   <Column fillWidth border radius="l" overflow="hidden" height={20}>
-                    <Row vertical="center" horizontal="between" fillWidth paddingLeft="24" paddingRight="12" paddingY="12" gap="m" wrap>
+                    <Row
+                      vertical="center"
+                      horizontal="between"
+                      fillWidth
+                      paddingLeft="24"
+                      paddingRight="12"
+                      paddingY="12"
+                      gap="m"
+                      wrap
+                    >
                       <Heading wrap="nowrap" variant="heading-strong-s">
                         Project status
                       </Heading>
@@ -294,13 +378,29 @@ export const Dashboard1: React.FC = () => {
                         </Button>
                       </Row>
                     </Row>
-                    
+
                     <Column fillWidth border topRadius="l" overflowY="auto">
                       {[
-                        { name: "Mobile App Development", status: "At Risk", icon: "code" as IconName },
-                        { name: "Marketing Campaign", status: "On Track", icon: "sparkle" as IconName },
-                        { name: "Database Migration", status: "On Track", icon: "code" as IconName },
-                        { name: "Website Redesign", status: "On Track", icon: "sparkle" as IconName },
+                        {
+                          name: "Mobile App Development",
+                          status: "At Risk",
+                          icon: "code" as IconName,
+                        },
+                        {
+                          name: "Marketing Campaign",
+                          status: "On Track",
+                          icon: "sparkle" as IconName,
+                        },
+                        {
+                          name: "Database Migration",
+                          status: "On Track",
+                          icon: "code" as IconName,
+                        },
+                        {
+                          name: "Website Redesign",
+                          status: "On Track",
+                          icon: "sparkle" as IconName,
+                        },
                         { name: "Product Launch", status: "Delayed", icon: "sparkle" as IconName },
                         { name: "Server Upgrade", status: "Delayed", icon: "code" as IconName },
                       ].map((project, index) => (
@@ -315,11 +415,25 @@ export const Dashboard1: React.FC = () => {
                   </Column>
 
                   <Column border radius="l" fillWidth overflow="hidden" height={20}>
-                    <Row fillWidth vertical="center" horizontal="between" paddingLeft="24" paddingRight="12" paddingY="12" gap="16" wrap>
+                    <Row
+                      fillWidth
+                      vertical="center"
+                      horizontal="between"
+                      paddingLeft="24"
+                      paddingRight="12"
+                      paddingY="12"
+                      gap="16"
+                      wrap
+                    >
                       <Heading wrap="nowrap" variant="heading-strong-s">
                         Recent activity
                       </Heading>
-                      <Button size="s" weight="default" variant="secondary" suffixIcon="chevronRight">
+                      <Button
+                        size="s"
+                        weight="default"
+                        variant="secondary"
+                        suffixIcon="chevronRight"
+                      >
                         View all
                       </Button>
                     </Row>
@@ -329,40 +443,40 @@ export const Dashboard1: React.FC = () => {
                           avatar: "/images/creators/lorant.jpg",
                           action: "Completed the Website Redesign task",
                           time: "2 hours ago",
-                          icon: "check" as IconName
+                          icon: "check" as IconName,
                         },
                         {
                           avatar: "/images/creators/vincent.jpg",
                           action: "Commented on Mobile App Development",
                           time: "4 hours ago",
-                          icon: "edit" as IconName
+                          icon: "edit" as IconName,
                         },
                         {
                           avatar: "/images/creators/zsofia.jpg",
                           action: "Created a new task in Marketing Campaign",
                           time: "Yesterday",
-                          icon: "plus" as IconName
+                          icon: "plus" as IconName,
                         },
                         {
                           avatar: "/images/creators/texz.jpg",
                           action: "Completed 3 tasks in Product Launch",
                           time: "Yesterday",
-                          icon: "check" as IconName
+                          icon: "check" as IconName,
                         },
                         {
                           avatar: "/images/creators/justin.jpg",
                           action: "Created a new task in Marketing Campaign",
                           time: "2 days ago",
-                          icon: "plus" as IconName
+                          icon: "plus" as IconName,
                         },
                         {
                           avatar: "/images/creators/zsofia.jpg",
                           action: "Completed 3 tasks in Product Launch",
                           time: "4 days ago",
-                          icon: "check" as IconName
-                        }
+                          icon: "check" as IconName,
+                        },
                       ].map((activity, index) => (
-                        <ActivityItem 
+                        <ActivityItem
                           key={index}
                           avatar={activity.avatar}
                           action={activity.action}
@@ -381,7 +495,18 @@ export const Dashboard1: React.FC = () => {
                   selectable
                   getId={(i: any) => i.id}
                   showSearch
-                  filterFn={(item: any, q: string) => [item.id, item.customer?.name, item.date, item.total, item.shipping, item.method].filter(Boolean).some((v: string) => v.toLowerCase().includes(q))}
+                  filterFn={(item: any, q: string) =>
+                    [
+                      item.id,
+                      item.customer?.name,
+                      item.date,
+                      item.total,
+                      item.shipping,
+                      item.method,
+                    ]
+                      .filter(Boolean)
+                      .some((v: string) => v.toLowerCase().includes(q))
+                  }
                 />
               </Column>
             </Row>

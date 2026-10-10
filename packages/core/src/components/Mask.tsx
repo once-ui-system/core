@@ -1,11 +1,11 @@
 "use client";
 
-import React, { CSSProperties, forwardRef, useCallback, useEffect, useRef } from "react";
-import { Flex } from "./Flex";
-import styles from "./Mask.module.scss";
 import classNames from "clsx";
+import React, { CSSProperties, forwardRef, useCallback, useEffect, useRef } from "react";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { Flex } from "./Flex";
+import styles from "./Mask.module.scss";
 
 export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radius" | "cursor"> {
   cursor?: boolean;
@@ -19,7 +19,20 @@ export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radi
 }
 
 const Mask = forwardRef<HTMLDivElement, MaskProps>(
-  ({ cursor = false, x, y, radius = 50, reducedMotion = "auto", children, className, style, ...rest }, forwardedRef) => {
+  (
+    {
+      cursor = false,
+      x,
+      y,
+      radius = 50,
+      reducedMotion = "auto",
+      children,
+      className,
+      style,
+      ...rest
+    },
+    forwardedRef,
+  ) => {
     const maskRef = useRef<HTMLDivElement>(null);
     const cursorPosRef = useRef({ x: 0, y: 0 });
     const smoothPosRef = useRef({ x: 0, y: 0 });
@@ -147,4 +160,5 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
 );
 
 Mask.displayName = "Mask";
+
 export { Mask };

@@ -1,13 +1,13 @@
 "use client";
 
+import classNames from "clsx";
 import type React from "react";
 import { forwardRef } from "react";
-import classNames from "clsx";
+import type { Placement } from "../types";
+import { Column } from "./Column";
 import { DropdownWrapper, type DropdownWrapperProps } from "./DropdownWrapper";
 import { User, type UserProps } from "./User";
-import { Column } from "./Column";
 import styles from "./UserMenu.module.scss";
-import type { Placement } from "../types";
 
 interface UserMenuProps
   extends UserProps,
@@ -19,47 +19,53 @@ interface UserMenuProps
   style?: React.CSSProperties;
 }
 
-const UserMenu = forwardRef<HTMLDivElement, UserMenuProps>(({
-  selected = false,
-  dropdown,
-  minWidth,
-  maxWidth,
-  minHeight,
-  placement,
-  className,
-  style,
-  loading,
-  ...userProps
-}, ref) => {
-  return (
-    <DropdownWrapper
-      minWidth={minWidth}
-      maxWidth={maxWidth}
-      minHeight={minHeight}
-      placement={placement}
-      disableTriggerClick={loading}
-      style={{
-        borderRadius: "var(--radius-full)",
-      }}
-      trigger={
-        <Column
-          tabIndex={loading ? -1 : 0}
-          padding="4"
-          radius="full"
-          cursor={loading ? "default" : "interactive"}
-          border={selected ? "neutral-medium" : "transparent"}
-          background={selected ? "neutral-strong" : "transparent"}
-          pointerEvents={loading ? "none" : "auto"}
-          className={classNames(className || "", selected ? styles.selected : "", styles.wrapper)}
-          style={style}
-        >
-          <User loading={loading} {...userProps} />
-        </Column>
-      }
-      dropdown={dropdown}
-    />
+const UserMenu = forwardRef<HTMLDivElement, UserMenuProps>(
+  (
+    {
+      selected = false,
+      dropdown,
+      minWidth,
+      maxWidth,
+      minHeight,
+      placement,
+      className,
+      style,
+      loading,
+      ...userProps
+    },
+    ref,
+  ) => {
+    return (
+      <DropdownWrapper
+        minWidth={minWidth}
+        maxWidth={maxWidth}
+        minHeight={minHeight}
+        placement={placement}
+        disableTriggerClick={loading}
+        style={{
+          borderRadius: "var(--radius-full)",
+        }}
+        trigger={
+          <Column
+            tabIndex={loading ? -1 : 0}
+            padding="4"
+            radius="full"
+            cursor={loading ? "default" : "interactive"}
+            border={selected ? "neutral-medium" : "transparent"}
+            background={selected ? "neutral-strong" : "transparent"}
+            pointerEvents={loading ? "none" : "auto"}
+            className={classNames(className || "", selected ? styles.selected : "", styles.wrapper)}
+            style={style}
+          >
+            <User loading={loading} {...userProps} />
+          </Column>
+        }
+        dropdown={dropdown}
+      />
+    );
+  },
 );
-});
 
 UserMenu.displayName = "UserMenu";
+
 export { UserMenu };

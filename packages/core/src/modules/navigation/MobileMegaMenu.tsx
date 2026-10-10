@@ -1,14 +1,14 @@
 "use client";
 
 import React from "react";
-import type { IconName } from "../../icons";
-import { Icon } from "../../components/Icon";
-import { Column } from "../../components/Column";
-import { Flex } from "../../components/Flex";
-import { Option } from "../../components/Option";
 import { Accordion } from "../../components/Accordion";
+import { Column } from "../../components/Column";
 import { ElementType } from "../../components/ElementType";
+import { Flex } from "../../components/Flex";
+import { Icon } from "../../components/Icon";
+import { Option } from "../../components/Option";
 import { Text } from "../../components/Text";
+import type { IconName } from "../../icons";
 
 export interface MenuLink {
   label: React.ReactNode;
@@ -142,4 +142,5 @@ const MobileMegaMenu: React.FC<MobileMegaMenuProps> = ({ menuGroups, onClose, ..
 };
 
 MobileMegaMenu.displayName = "MobileMegaMenu";
+
 export { MobileMegaMenu };

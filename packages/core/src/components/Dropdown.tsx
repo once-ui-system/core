@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, forwardRef, SyntheticEvent } from "react";
+import React, { forwardRef, ReactNode, SyntheticEvent } from "react";
 import { Column } from "./Column";
 import { Row } from "./Row";
 
@@ -16,7 +16,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
   ({ selectedOption, className, children, onEscape, onSelect, disabled = false, ...flex }, ref) => {
     const handleSelect = (event: SyntheticEvent<HTMLDivElement>) => {
       if (disabled) return;
-      
+
       // Only handle clicks on elements that have a data-value attribute
       const target = event.target as HTMLElement;
       const value =
@@ -50,5 +50,5 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
 Dropdown.displayName = "Dropdown";
 
-export { Dropdown };
 export type { DropdownProps };
+export { Dropdown };

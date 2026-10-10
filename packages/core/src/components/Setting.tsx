@@ -197,5 +197,5 @@ const SettingAxes: React.FC<SettingAxesProps> = ({
 
 SettingAxes.displayName = "SettingAxes";
 
-export { Setting, SettingAxes, SettingGroup };
 export type { SettingAxesProps, SettingGroupProps, SettingProps };
+export { Setting, SettingAxes, SettingGroup };

@@ -1,13 +1,13 @@
 "use client";
 
+import classNames from "clsx";
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import classNames from "clsx";
 import { Column } from "./Column";
 import { IconButton } from "./IconButton";
+import styles from "./MediaAudioPlayer.module.scss";
 import { Row } from "./Row";
 import { Text } from "./Text";
-import styles from "./MediaAudioPlayer.module.scss";
 
 interface MediaAudioPlayerProps extends Omit<React.ComponentProps<typeof Column>, "onTimeUpdate"> {
   src: string;
@@ -186,11 +186,7 @@ const MediaAudioPlayer = forwardRef<HTMLDivElement, MediaAudioPlayerProps>(
             }}
             onPointerCancel={() => setSeeking(false)}
           >
-            <Row
-              className={styles.progressFill}
-              radius="full"
-              style={{ width: `${progress}%` }}
-            />
+            <Row className={styles.progressFill} radius="full" style={{ width: `${progress}%` }} />
             <Row
               className={styles.progressHandle}
               radius="full"
@@ -214,5 +210,5 @@ const MediaAudioPlayer = forwardRef<HTMLDivElement, MediaAudioPlayerProps>(
 
 MediaAudioPlayer.displayName = "MediaAudioPlayer";
 
-export { MediaAudioPlayer };
 export type { MediaAudioPlayerProps };
+export { MediaAudioPlayer };

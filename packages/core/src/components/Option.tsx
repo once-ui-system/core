@@ -1,12 +1,12 @@
 "use client";
 
 import classNames from "clsx";
-import { Text } from "./Text";
-import { ElementType } from "./ElementType";
+import React, { forwardRef, KeyboardEvent, useEffect, useRef, useState } from "react";
 import { Column } from "./Column";
-import { Row } from "./Row";
+import { ElementType } from "./ElementType";
 import styles from "./Option.module.scss";
-import React, { forwardRef, KeyboardEvent, useRef, useEffect, useState } from "react";
+import { Row } from "./Row";
+import { Text } from "./Text";
 
 export interface OptionProps extends Omit<React.ComponentProps<typeof Row>, "onClick" | "prefix"> {
   label?: React.ReactNode;
@@ -63,13 +63,14 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           ) {
             if (mutation.target instanceof HTMLElement) {
               const element = mutation.target;
-              const hasHighlighted = element.classList.contains("highlighted") ||
+              const hasHighlighted =
+                element.classList.contains("highlighted") ||
                 element.getAttribute("data-highlighted") === "true";
-              
+
               // If highlighted class was just added but element is being hovered, remove it immediately
-              if (hasHighlighted && element.matches(':hover')) {
-                element.classList.remove('highlighted');
-                element.removeAttribute('data-highlighted');
+              if (hasHighlighted && element.matches(":hover")) {
+                element.classList.remove("highlighted");
+                element.removeAttribute("data-highlighted");
                 setIsHighlightedByClass(false);
               } else {
                 setIsHighlightedByClass(hasHighlighted);
@@ -85,13 +86,14 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
       });
 
       // Initial check
-      const hasHighlighted = elementRef.current.classList.contains("highlighted") ||
+      const hasHighlighted =
+        elementRef.current.classList.contains("highlighted") ||
         elementRef.current.getAttribute("data-highlighted") === "true";
-      
+
       // Check if element is being hovered on initial check too
-      if (hasHighlighted && elementRef.current.matches(':hover')) {
-        elementRef.current.classList.remove('highlighted');
-        elementRef.current.removeAttribute('data-highlighted');
+      if (hasHighlighted && elementRef.current.matches(":hover")) {
+        elementRef.current.classList.remove("highlighted");
+        elementRef.current.removeAttribute("data-highlighted");
         setIsHighlightedByClass(false);
       } else {
         setIsHighlightedByClass(hasHighlighted);
@@ -107,8 +109,8 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         if (elementRef.current?.parentElement) {
           const allOptions = elementRef.current.parentElement.querySelectorAll('[role="option"]');
           allOptions.forEach((option) => {
-            option.classList.remove('highlighted');
-            option.removeAttribute('data-highlighted');
+            option.classList.remove("highlighted");
+            option.removeAttribute("data-highlighted");
           });
         }
       }
@@ -168,19 +170,11 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         >
           {prefix && <Row className={styles.prefix}>{prefix}</Row>}
           <Column fillWidth align="left">
-            <Text
-              onBackground="neutral-strong"
-              variant="label-default-s"
-              truncate
-            >
+            <Text onBackground="neutral-strong" variant="label-default-s" truncate>
               {label || children}
             </Text>
             {description && (
-              <Text
-                variant="body-default-xs"
-                onBackground="neutral-weak"
-                truncate
-              >
+              <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
                 {description}
               </Text>
             )}
@@ -193,4 +187,5 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
 );
 
 Option.displayName = "Option";
+
 export { Option };

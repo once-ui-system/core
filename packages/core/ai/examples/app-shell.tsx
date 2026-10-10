@@ -9,10 +9,17 @@
  * sticky offset, why nav selection needs the longest match rather than an
  * equality check.
  */
-import {
-  Column, Row, SplitView, Scrubber, NavGroup, NavItem, selectNavHref,
-} from "@once-ui-system/core";
+
 import type { IconName } from "@once-ui-system/core";
+import {
+  Column,
+  NavGroup,
+  NavItem,
+  Row,
+  Scrubber,
+  SplitView,
+  selectNavHref,
+} from "@once-ui-system/core";
 
 const Header = () => <Row height="56" fillWidth />;
 const Sidebar = (p: React.ComponentProps<typeof Column>) => <Column {...p} />;
@@ -29,7 +36,8 @@ export const Shell = ({ children }: { children: React.ReactNode }) => (
           topRadius="l"
           horizontal="center"
           fillWidth
-          background="surface">
+          background="surface"
+        >
           <Column maxWidth="xl" gap="m" paddingY="32" fitHeight>
             {children}
           </Column>
@@ -55,7 +63,8 @@ export const Nav = ({ nav, pathname }: { nav: Item[]; pathname: string }) => {
             key={item.key}
             label={item.label}
             icon={item.icon}
-            defaultOpen={item.items.some((s) => s.href === current)}>
+            defaultOpen={item.items.some((s) => s.href === current)}
+          >
             {item.items.map((sub) => (
               <NavItem
                 key={sub.href}
@@ -81,7 +90,11 @@ export const Nav = ({ nav, pathname }: { nav: Item[]; pathname: string }) => {
 };
 
 export const Editor = ({
-  duration, time, setTime, tracks, pause,
+  duration,
+  time,
+  setTime,
+  tracks,
+  pause,
 }: {
   duration: number;
   time: number;

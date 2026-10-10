@@ -102,9 +102,7 @@ describe("Switch", () => {
   it("fires onToggle from pointer and keyboard", async () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
-    renderWithProviders(
-      <Switch checked={false} onToggle={onToggle} ariaLabel="Enable feature" />,
-    );
+    renderWithProviders(<Switch checked={false} onToggle={onToggle} ariaLabel="Enable feature" />);
 
     const control = screen.getByRole("switch", { name: /enable feature/i });
     await user.click(control);
@@ -130,9 +128,7 @@ describe("Switch", () => {
   it("does not fire onToggle when disabled", async () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
-    renderWithProviders(
-      <Switch checked={false} onToggle={onToggle} disabled ariaLabel="Locked" />,
-    );
+    renderWithProviders(<Switch checked={false} onToggle={onToggle} disabled ariaLabel="Locked" />);
 
     await user.click(screen.getByRole("switch", { name: /locked/i }));
     expect(onToggle).not.toHaveBeenCalled();

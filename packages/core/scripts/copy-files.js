@@ -77,10 +77,7 @@ if (fs.existsSync(path.resolve(__dirname, "../AGENTS.md"))) {
 const scriptsDir = path.resolve(destDir, "scripts");
 fs.mkdirSync(scriptsDir, { recursive: true });
 for (const script of ["init-agent.js", "validate-ai-code.js"]) {
-  fs.copyFileSync(
-    path.resolve(__dirname, script),
-    path.join(scriptsDir, script),
-  );
+  fs.copyFileSync(path.resolve(__dirname, script), path.join(scriptsDir, script));
 }
 const agentSrc = path.resolve(__dirname, "../agent");
 const agentDest = path.resolve(destDir, "agent");

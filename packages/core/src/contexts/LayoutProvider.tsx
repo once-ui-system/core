@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { useAdapters, warnIfFrameworkUnadapted } from "./AdapterProvider";
 
 // Default breakpoints

@@ -1,18 +1,18 @@
 "use client";
 
-import type React from "react";
-import { useState, useRef, useEffect, forwardRef, type ReactNode, useId } from "react"
 import classNames from "clsx";
+import type React from "react";
+import { forwardRef, type ReactNode, useEffect, useId, useRef, useState } from "react";
+import type { Placement } from "../types";
+import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationContext";
+import { Column } from "./Column";
 import { DropdownWrapper, type DropdownWrapperProps } from "./DropdownWrapper";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Input, type InputProps } from "./Input";
-import { Option, type OptionProps } from "./Option";
-import { Column } from "./Column";
-import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationContext";
-import type { Placement } from "../types";
 import inputStyles from "./Input.module.scss";
+import { Option, type OptionProps } from "./Option";
 
 type SelectOptionType = Omit<OptionProps, "selected">;
 
@@ -87,15 +87,13 @@ const SearchInput: React.FC<{
           navKeyDown(e as any);
           return;
         }
-        
+
         if (e.key === "Escape") {
           e.preventDefault();
           e.stopPropagation();
           setIsDropdownOpen(false);
           setSearchQuery("");
-          const mainInput = selectRef.current?.querySelector(
-            "input:not([id^='select-search'])",
-          );
+          const mainInput = selectRef.current?.querySelector("input:not([id^='select-search'])");
           if (mainInput instanceof HTMLInputElement) {
             mainInput.focus();
           }
@@ -103,8 +101,7 @@ const SearchInput: React.FC<{
       }}
       onBlur={(e) => {
         const relatedTarget = e.relatedTarget as Node;
-        const isClickInDropdown =
-          selectRef.current && selectRef.current.contains(relatedTarget);
+        const isClickInDropdown = selectRef.current && selectRef.current.contains(relatedTarget);
         if (!isClickInDropdown) {
           handleBlur(e);
         }
@@ -133,7 +130,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     },
     ref,
   ) => {
-
     /**
      * Focus for the whole control, not the trigger.
      *
@@ -344,7 +340,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                   selectRef={selectRef}
                 />
               )}
-            
+
               <Column fillWidth paddingTop="4" gap="2">
                 {filteredOptions.map((option, index) => (
                   <Option
@@ -387,4 +383,5 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 );
 
 Select.displayName = "Select";
+
 export { Select };

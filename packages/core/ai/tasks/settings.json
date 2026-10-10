@@ -21,12 +21,7 @@
   ],
   "recipes": [],
   "example": "examples/settings.tsx",
-  "gotchas": [
-    "Card.interactive",
-    "layout.shorthands",
-    "color.tokens",
-    "layout.defaults"
-  ],
+  "gotchas": ["Card.interactive", "layout.shorthands", "color.tokens", "layout.defaults"],
   "quality": {
     "surfaceRecipe": "background=\"surface\" border radius=\"l\" padding=\"24\"",
     "dangerZone": "border=\"danger-alpha-medium\" on danger actions only"

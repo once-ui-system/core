@@ -18,8 +18,15 @@ interface HeaderProps extends React.ComponentProps<typeof Row> {
 
 export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex }) => {
   return (
-    <Row paddingX="8" paddingTop="8" fillWidth position="sticky" horizontal="center" top="0" 
-      zIndex={2}>
+    <Row
+      paddingX="8"
+      paddingTop="8"
+      fillWidth
+      position="sticky"
+      horizontal="center"
+      top="0"
+      zIndex={2}
+    >
       <Fade
         fillWidth
         position="absolute"
@@ -38,11 +45,11 @@ export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
         background="page"
         {...flex}
       >
-        <Row s={{hide: true}}>
+        <Row s={{ hide: true }}>
           <Logo dark wordmark="/trademarks/wordmark-dark.svg" size="s" href="/" />
           <Logo light wordmark="/trademarks/wordmark-light.svg" size="s" href="/" />
         </Row>
-        <Row hide s={{hide: false}} gap="4" vertical="center" fillWidth>
+        <Row hide s={{ hide: false }} gap="4" vertical="center" fillWidth>
           <NavIcon />
           <Logo dark icon="/trademarks/icon-dark.svg" size="s" href="/" />
           <Logo light icon="/trademarks/icon-light.svg" size="s" href="/" />
@@ -50,7 +57,7 @@ export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
         {authenticated ? (
           <Row fillWidth vertical="center" horizontal="between">
             <Row fillWidth>
-              <Row s={{hide: true}} fillWidth gap="4" paddingX="l" vertical="center">
+              <Row s={{ hide: true }} fillWidth gap="4" paddingX="l" vertical="center">
                 <ToggleButton selected={true} label="Dashboard" />
                 <ToggleButton label="Apps" />
                 <ToggleButton label="Resources" />
@@ -74,7 +81,7 @@ export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
         ) : (
           <Row fillWidth vertical="center" horizontal="end">
             <Row
-              s={{hide: true}}
+              s={{ hide: true }}
               textVariant="label-default-s"
               fillWidth
               gap="16"

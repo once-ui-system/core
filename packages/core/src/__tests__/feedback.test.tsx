@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Icon } from "../components/Icon";
 import { Feedback } from "../components/Feedback";
+import { Icon } from "../components/Icon";
 
 /**
  * The root Flex used to hardcode `vertical="start"`, which is right when there

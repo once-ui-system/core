@@ -13,10 +13,7 @@ type StreamingOptions<T extends Record<string, any>> = {
   stepMs?: number;
   xKey: Extract<keyof T, string>;
   numericKeys: NumericKeys<T>;
-  getNextTarget: (ctx: {
-    lastPoint: T;
-    nextX: number;
-  }) => StreamingTarget<T>;
+  getNextTarget: (ctx: { lastPoint: T; nextX: number }) => StreamingTarget<T>;
 };
 
 type StreamingResult<T> = {
@@ -100,7 +97,8 @@ export function useStreamingData<T extends Record<string, any>>(
 
             const newPoint: T = { ...lastPoint, [xKey]: nextX };
             numericKeys.forEach((k) => {
-              const fromVal = typeof lastPoint[k] === "number" ? (lastPoint[k] as number) : Number(lastPoint[k]);
+              const fromVal =
+                typeof lastPoint[k] === "number" ? (lastPoint[k] as number) : Number(lastPoint[k]);
               (newPoint as any)[k] = fromVal;
             });
 

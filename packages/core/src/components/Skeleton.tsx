@@ -1,10 +1,9 @@
 "use client";
 
-import React, { forwardRef } from "react";
 import classNames from "clsx";
-
-import styles from "./Skeleton.module.scss";
+import React, { forwardRef } from "react";
 import { Flex } from "./Flex";
+import styles from "./Skeleton.module.scss";
 
 interface SkeletonProps extends React.ComponentProps<typeof Flex> {
   shape: "line" | "circle" | "block";

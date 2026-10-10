@@ -1,12 +1,4 @@
-import {
-  Button,
-  Column,
-  Icon,
-  Logo,
-  Row,
-  SmartLink,
-  Text,
-} from "@once-ui-system/core";
+import { Button, Column, Icon, Logo, Row, SmartLink, Text } from "@once-ui-system/core";
 
 export const Footer2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -57,7 +49,16 @@ export const Footer2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
           </Row>
           <Row vertical="center" gap="8">
             <SmartLink href="#">Join</SmartLink>
-            <Row textVariant="body-default-xs" onBackground="brand-weak" background="brand-alpha-weak" border="brand-alpha-medium" radius="s" padding="1" paddingX="8" center>
+            <Row
+              textVariant="body-default-xs"
+              onBackground="brand-weak"
+              background="brand-alpha-weak"
+              border="brand-alpha-medium"
+              radius="s"
+              padding="1"
+              paddingX="8"
+              center
+            >
               Hiring!
             </Row>
           </Row>
@@ -89,7 +90,8 @@ export const Footer2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         </Column>
       </Row>
       <Row fillWidth textVariant="label-default-s" gap="12">
-        {new Date().getFullYear()} <Text>•</Text> Once UI <Text onBackground="neutral-weak">// All rights reserved</Text>
+        {new Date().getFullYear()} <Text>•</Text> Once UI{" "}
+        <Text onBackground="neutral-weak">// All rights reserved</Text>
       </Row>
     </Column>
   );

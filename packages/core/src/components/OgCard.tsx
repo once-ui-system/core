@@ -1,14 +1,14 @@
 "use client";
 
+import { useMemo } from "react";
+import { useOgData } from "../hooks/useFetchOg";
 import { CondensedTShirtSizes } from "../types";
+import { Card } from "./Card";
 import { Column } from "./Column";
 import { Media } from "./Media";
-import { Text } from "./Text";
 import { Row } from "./Row";
-import { Card } from "./Card";
 import { Skeleton } from "./Skeleton";
-import { useOgData } from "../hooks/useFetchOg";
-import { useMemo } from "react";
+import { Text } from "./Text";
 
 export interface OgServiceConfig {
   proxyImageUrl?: (url: string) => string;
@@ -251,4 +251,5 @@ const OgCard = ({
 };
 
 OgCard.displayName = "OgCard";
+
 export { OgCard };

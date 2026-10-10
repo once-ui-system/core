@@ -1,9 +1,8 @@
-import React, { forwardRef, ReactNode } from "react";
-import styles from "./Fade.module.scss";
-
-import { Flex } from "./Flex";
-import { ColorScheme, ColorWeight, SpacingToken } from "../types";
 import classNames from "clsx";
+import React, { forwardRef, ReactNode } from "react";
+import { ColorScheme, ColorWeight, SpacingToken } from "../types";
+import styles from "./Fade.module.scss";
+import { Flex } from "./Flex";
 
 export type BaseColor =
   | `${ColorScheme}-${ColorWeight}`
@@ -89,4 +88,5 @@ const Fade = forwardRef<HTMLDivElement, FadeProps>(
 );
 
 Fade.displayName = "Fade";
+
 export { Fade };

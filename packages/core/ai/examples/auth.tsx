@@ -60,15 +60,12 @@ export function AuthExample() {
               Create your account
             </Heading>
             <Text variant="body-default-s" onBackground="neutral-weak" align="center">
-              Already have an account?{" "}
-              <SmartLink href="/login">Sign in</SmartLink>
+              Already have an account? <SmartLink href="/login">Sign in</SmartLink>
             </Text>
           </Column>
 
           <Column fillWidth gap="12">
-            <Button fillWidth>
-              Continue with GitHub
-            </Button>
+            <Button fillWidth>Continue with GitHub</Button>
             <Button fillWidth variant="secondary">
               Continue with Google
             </Button>

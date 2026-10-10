@@ -1,22 +1,17 @@
 "use client";
 
+import classNames from "clsx";
 import {
   createContext,
   forwardRef,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
   useMemo,
   useState,
-  type ReactNode,
 } from "react";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { IconButton } from "./IconButton";
-import { Scroller } from "./Scroller";
-import { SegmentedControl } from "./SegmentedControl";
-import { Text } from "./Text";
-import { ThemeSwitcher } from "./ThemeSwitcher";
+import { useDataTheme } from "../contexts/DataThemeProvider";
 import {
   type BodyLineHeight,
   type BodySize,
@@ -30,11 +25,16 @@ import {
   type TransitionStyle,
   useStyle,
 } from "../contexts/ThemeProvider";
-import { useDataTheme } from "../contexts/DataThemeProvider";
-import { type Schemes, schemes } from "../types";
 import type { ChartMode } from "../modules/data/interfaces";
+import { type Schemes, schemes } from "../types";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { IconButton } from "./IconButton";
+import { Scroller } from "./Scroller";
+import { SegmentedControl } from "./SegmentedControl";
 import styles from "./StylePanel.module.scss";
-import classNames from "clsx";
+import { Text } from "./Text";
+import { ThemeSwitcher } from "./ThemeSwitcher";
 
 /** Every style choice the panel can edit, including the chart mode, which is
  *  owned by DataThemeProvider rather than ThemeProvider. */
@@ -93,7 +93,9 @@ const StylePanelContext = createContext<StylePanelContextValue | null>(null);
 function useStylePanel(): StylePanelContextValue {
   const context = useContext(StylePanelContext);
   if (!context) {
-    throw new Error("StylePanel sections must be rendered inside a <StylePanel> or <StylePanel.Root>");
+    throw new Error(
+      "StylePanel sections must be rendered inside a <StylePanel> or <StylePanel.Root>",
+    );
   }
   return context;
 }

@@ -28,4 +28,5 @@ const Line = forwardRef<HTMLDivElement, LineProps>(({ vert, className, style, ..
 });
 
 Line.displayName = "Line";
+
 export { Line };

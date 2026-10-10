@@ -21,15 +21,35 @@
  */
 
 export type SchemeRampWeight =
-  | 100 | 200 | 300 | 400 | 500 | 600
-  | 700 | 800 | 900 | 1000 | 1100 | 1200;
+  | 100
+  | 200
+  | 300
+  | 400
+  | 500
+  | 600
+  | 700
+  | 800
+  | 900
+  | 1000
+  | 1100
+  | 1200;
 
 export type SchemeRamp = Record<SchemeRampWeight, string>;
 
 /** Contrast against black for each step, matching the built-in schemes. */
 export const defaultContrastRatios: [SchemeRampWeight, number][] = [
-  [100, 1.05], [200, 1.15], [300, 2], [400, 3], [500, 4.5], [600, 7],
-  [700, 10], [800, 14], [900, 16], [1000, 18], [1100, 19], [1200, 20],
+  [100, 1.05],
+  [200, 1.15],
+  [300, 2],
+  [400, 3],
+  [500, 4.5],
+  [600, 7],
+  [700, 10],
+  [800, 14],
+  [900, 16],
+  [1000, 18],
+  [1100, 19],
+  [1200, 20],
 ];
 
 type Lch = { l: number; c: number; h: number };
@@ -49,12 +69,19 @@ function parseSeed(input: string): Lch | null {
 
   const rgb = value.match(/^rgba?\(([^)]+)\)$/i);
   if (rgb) {
-    const parts = rgb[1].split(/[\s,/]+/).filter(Boolean).map(parseFloat);
+    const parts = rgb[1]
+      .split(/[\s,/]+/)
+      .filter(Boolean)
+      .map(parseFloat);
     if (parts.length >= 3) return srgbToOklch(parts[0] / 255, parts[1] / 255, parts[2] / 255);
   }
 
   let hex = value.replace(/^#/, "");
-  if (hex.length === 3 || hex.length === 4) hex = hex.split("").map((d) => d + d).join("");
+  if (hex.length === 3 || hex.length === 4)
+    hex = hex
+      .split("")
+      .map((d) => d + d)
+      .join("");
   if (hex.length === 6 || hex.length === 8) {
     const n = Number.parseInt(hex.slice(0, 6), 16);
     if (!Number.isNaN(n)) {

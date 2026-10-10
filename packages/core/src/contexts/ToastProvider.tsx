@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, ReactNode, useContext, useState } from "react";
 import { Toaster } from "../components/Toaster";
 import { ToastPosition } from "../types";
 
@@ -65,4 +65,5 @@ const ToastProvider: React.FC<{
 };
 
 ToastProvider.displayName = "ToastProvider";
+
 export { ToastProvider };

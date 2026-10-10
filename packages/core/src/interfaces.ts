@@ -229,32 +229,88 @@ export type BreakpointProps<Source, Keys extends keyof Source> = {
 // Flex Breakpoint Props
 // Supports: layout, spacing, sizing, colors, typography, effects, position
 // ============================================================================
-export type FlexBreakpointProps = BreakpointProps<AllFlexProps,
+export type FlexBreakpointProps = BreakpointProps<
+  AllFlexProps,
   // Layout
-  | 'direction' | 'horizontal' | 'vertical' | 'center' | 'wrap' | 'flex'
+  | "direction"
+  | "horizontal"
+  | "vertical"
+  | "center"
+  | "wrap"
+  | "flex"
   // Spacing
-  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
-  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
-  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  | "padding"
+  | "paddingLeft"
+  | "paddingRight"
+  | "paddingTop"
+  | "paddingBottom"
+  | "paddingX"
+  | "paddingY"
+  | "margin"
+  | "marginLeft"
+  | "marginRight"
+  | "marginTop"
+  | "marginBottom"
+  | "marginX"
+  | "marginY"
+  | "gap"
   // Position offsets
-  | 'top' | 'right' | 'bottom' | 'left'
+  | "top"
+  | "right"
+  | "bottom"
+  | "left"
   // Sizing
-  | 'width' | 'height' | 'maxWidth' | 'minWidth' | 'minHeight' | 'maxHeight'
-  | 'fit' | 'fitWidth' | 'fitHeight' | 'fill' | 'fillWidth' | 'fillHeight'
-  | 'aspectRatio'
+  | "width"
+  | "height"
+  | "maxWidth"
+  | "minWidth"
+  | "minHeight"
+  | "maxHeight"
+  | "fit"
+  | "fitWidth"
+  | "fitHeight"
+  | "fill"
+  | "fillWidth"
+  | "fillHeight"
+  | "aspectRatio"
   // Colors
-  | 'background' | 'solid' | 'border' | 'borderTop' | 'borderRight' | 'borderBottom' | 'borderLeft'
-  | 'borderX' | 'borderY' | 'borderStyle' | 'borderWidth' | 'radius' | 'shadow'
-  | 'onBackground' | 'onSolid'
+  | "background"
+  | "solid"
+  | "border"
+  | "borderTop"
+  | "borderRight"
+  | "borderBottom"
+  | "borderLeft"
+  | "borderX"
+  | "borderY"
+  | "borderStyle"
+  | "borderWidth"
+  | "radius"
+  | "shadow"
+  | "onBackground"
+  | "onSolid"
   // Typography
-  | 'align' | 'textVariant' | 'textSize' | 'textWeight' | 'textType'
+  | "align"
+  | "textVariant"
+  | "textSize"
+  | "textWeight"
+  | "textType"
   // Effects / state
-  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
-  | 'dark' | 'light'
+  | "opacity"
+  | "zIndex"
+  | "pointerEvents"
+  | "transition"
+  | "scrollbar"
+  | "dark"
+  | "light"
   // Display / position
-  | 'position' | 'hide' | 'overflow' | 'overflowX' | 'overflowY'
+  | "position"
+  | "hide"
+  | "overflow"
+  | "overflowX"
+  | "overflowY"
   // Escape hatch
-  | 'style'
+  | "style"
 >;
 
 // ============================================================================
@@ -262,32 +318,84 @@ export type FlexBreakpointProps = BreakpointProps<AllFlexProps,
 // Supports: grid-specific, spacing, sizing, colors, typography, effects, position
 // Does NOT support: direction, horizontal, vertical, center, wrap, flex
 // ============================================================================
-export type GridBreakpointProps = BreakpointProps<AllGridProps,
+export type GridBreakpointProps = BreakpointProps<
+  AllGridProps,
   // Grid-specific
-  | 'columns' | 'rows'
+  | "columns"
+  | "rows"
   // Spacing
-  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
-  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
-  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  | "padding"
+  | "paddingLeft"
+  | "paddingRight"
+  | "paddingTop"
+  | "paddingBottom"
+  | "paddingX"
+  | "paddingY"
+  | "margin"
+  | "marginLeft"
+  | "marginRight"
+  | "marginTop"
+  | "marginBottom"
+  | "marginX"
+  | "marginY"
+  | "gap"
   // Position offsets
-  | 'top' | 'right' | 'bottom' | 'left'
+  | "top"
+  | "right"
+  | "bottom"
+  | "left"
   // Sizing
-  | 'width' | 'height' | 'maxWidth' | 'minWidth' | 'minHeight' | 'maxHeight'
-  | 'fit' | 'fitWidth' | 'fitHeight' | 'fill' | 'fillWidth' | 'fillHeight'
-  | 'aspectRatio'
+  | "width"
+  | "height"
+  | "maxWidth"
+  | "minWidth"
+  | "minHeight"
+  | "maxHeight"
+  | "fit"
+  | "fitWidth"
+  | "fitHeight"
+  | "fill"
+  | "fillWidth"
+  | "fillHeight"
+  | "aspectRatio"
   // Colors
-  | 'background' | 'solid' | 'border' | 'borderTop' | 'borderRight' | 'borderBottom' | 'borderLeft'
-  | 'borderX' | 'borderY' | 'borderStyle' | 'borderWidth' | 'radius' | 'shadow'
-  | 'onBackground' | 'onSolid'
+  | "background"
+  | "solid"
+  | "border"
+  | "borderTop"
+  | "borderRight"
+  | "borderBottom"
+  | "borderLeft"
+  | "borderX"
+  | "borderY"
+  | "borderStyle"
+  | "borderWidth"
+  | "radius"
+  | "shadow"
+  | "onBackground"
+  | "onSolid"
   // Typography
-  | 'align' | 'textVariant' | 'textSize' | 'textWeight' | 'textType'
+  | "align"
+  | "textVariant"
+  | "textSize"
+  | "textWeight"
+  | "textType"
   // Effects / state
-  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
-  | 'dark' | 'light'
+  | "opacity"
+  | "zIndex"
+  | "pointerEvents"
+  | "transition"
+  | "scrollbar"
+  | "dark"
+  | "light"
   // Display / position
-  | 'position' | 'hide' | 'overflow' | 'overflowX' | 'overflowY'
+  | "position"
+  | "hide"
+  | "overflow"
+  | "overflowX"
+  | "overflowY"
   // Escape hatch
-  | 'style'
+  | "style"
 >;
 
 // ============================================================================
@@ -295,22 +403,52 @@ export type GridBreakpointProps = BreakpointProps<AllGridProps,
 // Supports: typography, spacing, display effects, position
 // Does NOT support: layout (direction, horizontal, etc.), sizing, colors, border
 // ============================================================================
-export type TextBreakpointProps = BreakpointProps<AllTextProps,
+export type TextBreakpointProps = BreakpointProps<
+  AllTextProps,
   // Typography
-  | 'variant' | 'size' | 'weight' | 'family' | 'align' | 'wrap'
+  | "variant"
+  | "size"
+  | "weight"
+  | "family"
+  | "align"
+  | "wrap"
   // Spacing
-  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
-  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
-  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  | "padding"
+  | "paddingLeft"
+  | "paddingRight"
+  | "paddingTop"
+  | "paddingBottom"
+  | "paddingX"
+  | "paddingY"
+  | "margin"
+  | "marginLeft"
+  | "marginRight"
+  | "marginTop"
+  | "marginBottom"
+  | "marginX"
+  | "marginY"
+  | "gap"
   // Position offsets
-  | 'top' | 'right' | 'bottom' | 'left'
+  | "top"
+  | "right"
+  | "bottom"
+  | "left"
   // Effects / state
-  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
-  | 'dark' | 'light'
+  | "opacity"
+  | "zIndex"
+  | "pointerEvents"
+  | "transition"
+  | "scrollbar"
+  | "dark"
+  | "light"
   // Display / position
-  | 'position' | 'hide' | 'overflow' | 'overflowX' | 'overflowY'
+  | "position"
+  | "hide"
+  | "overflow"
+  | "overflowX"
+  | "overflowY"
   // Escape hatch
-  | 'style'
+  | "style"
 >;
 
 // ============================================================================
@@ -318,22 +456,56 @@ export type TextBreakpointProps = BreakpointProps<AllTextProps,
 // Supports: spacing, colors, typography, border/radius, effects
 // Does NOT support: layout, sizing, overflow
 // ============================================================================
-export type ButtonBreakpointProps = BreakpointProps<SpacingProps & StyleProps & CommonProps & DisplayProps,
+export type ButtonBreakpointProps = BreakpointProps<
+  SpacingProps & StyleProps & CommonProps & DisplayProps,
   // Spacing
-  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
-  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
-  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  | "padding"
+  | "paddingLeft"
+  | "paddingRight"
+  | "paddingTop"
+  | "paddingBottom"
+  | "paddingX"
+  | "paddingY"
+  | "margin"
+  | "marginLeft"
+  | "marginRight"
+  | "marginTop"
+  | "marginBottom"
+  | "marginX"
+  | "marginY"
+  | "gap"
   // Colors
-  | 'background' | 'solid' | 'border' | 'borderTop' | 'borderRight' | 'borderBottom' | 'borderLeft'
-  | 'borderX' | 'borderY' | 'borderStyle' | 'borderWidth' | 'radius' | 'shadow'
-  | 'onBackground' | 'onSolid'
+  | "background"
+  | "solid"
+  | "border"
+  | "borderTop"
+  | "borderRight"
+  | "borderBottom"
+  | "borderLeft"
+  | "borderX"
+  | "borderY"
+  | "borderStyle"
+  | "borderWidth"
+  | "radius"
+  | "shadow"
+  | "onBackground"
+  | "onSolid"
   // Typography
-  | 'align' | 'textVariant' | 'textSize' | 'textWeight' | 'textType'
+  | "align"
+  | "textVariant"
+  | "textSize"
+  | "textWeight"
+  | "textType"
   // Effects / state
-  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
-  | 'dark' | 'light'
+  | "opacity"
+  | "zIndex"
+  | "pointerEvents"
+  | "transition"
+  | "scrollbar"
+  | "dark"
+  | "light"
   // Escape hatch
-  | 'style'
+  | "style"
 >;
 
 // ============================================================================
@@ -341,22 +513,56 @@ export type ButtonBreakpointProps = BreakpointProps<SpacingProps & StyleProps & 
 // Supports: spacing, colors, border, typography, effects
 // Does NOT support: layout, sizing, overflow
 // ============================================================================
-export type InputBreakpointProps = BreakpointProps<SpacingProps & StyleProps & CommonProps & DisplayProps,
+export type InputBreakpointProps = BreakpointProps<
+  SpacingProps & StyleProps & CommonProps & DisplayProps,
   // Spacing
-  | 'padding' | 'paddingLeft' | 'paddingRight' | 'paddingTop' | 'paddingBottom'
-  | 'paddingX' | 'paddingY' | 'margin' | 'marginLeft' | 'marginRight'
-  | 'marginTop' | 'marginBottom' | 'marginX' | 'marginY' | 'gap'
+  | "padding"
+  | "paddingLeft"
+  | "paddingRight"
+  | "paddingTop"
+  | "paddingBottom"
+  | "paddingX"
+  | "paddingY"
+  | "margin"
+  | "marginLeft"
+  | "marginRight"
+  | "marginTop"
+  | "marginBottom"
+  | "marginX"
+  | "marginY"
+  | "gap"
   // Colors
-  | 'background' | 'solid' | 'border' | 'borderTop' | 'borderRight' | 'borderBottom' | 'borderLeft'
-  | 'borderX' | 'borderY' | 'borderStyle' | 'borderWidth' | 'radius' | 'shadow'
-  | 'onBackground' | 'onSolid'
+  | "background"
+  | "solid"
+  | "border"
+  | "borderTop"
+  | "borderRight"
+  | "borderBottom"
+  | "borderLeft"
+  | "borderX"
+  | "borderY"
+  | "borderStyle"
+  | "borderWidth"
+  | "radius"
+  | "shadow"
+  | "onBackground"
+  | "onSolid"
   // Typography
-  | 'align' | 'textVariant' | 'textSize' | 'textWeight' | 'textType'
+  | "align"
+  | "textVariant"
+  | "textSize"
+  | "textWeight"
+  | "textType"
   // Effects / state
-  | 'opacity' | 'zIndex' | 'pointerEvents' | 'transition' | 'scrollbar'
-  | 'dark' | 'light'
+  | "opacity"
+  | "zIndex"
+  | "pointerEvents"
+  | "transition"
+  | "scrollbar"
+  | "dark"
+  | "light"
   // Escape hatch
-  | 'style'
+  | "style"
 >;
 
 // ============================================================================

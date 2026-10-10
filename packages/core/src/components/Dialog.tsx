@@ -1,24 +1,24 @@
 "use client";
 
+import classNames from "clsx";
 import React, {
-  ReactNode,
-  useEffect,
-  useCallback,
-  useRef,
   forwardRef,
-  useState,
+  ReactNode,
+  useCallback,
   useContext,
+  useEffect,
   useId,
+  useRef,
+  useState,
 } from "react";
 import ReactDOM from "react-dom";
-import classNames from "clsx";
 import { Column } from "./Column";
+import styles from "./Dialog.module.scss";
 import { Flex } from "./Flex";
 import { Heading } from "./Heading";
 import { IconButton } from "./IconButton";
 import { ScrollLock } from "./ScrollLock";
 import { Text } from "./Text";
-import styles from "./Dialog.module.scss";
 
 interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   open: boolean;
@@ -82,16 +82,13 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
     ref,
   ) => {
     const dialogRef = useRef<HTMLDivElement>(null);
-    const animationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-      null,
-    );
+    const animationTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
     const dialogId = useId();
     const dialogTitleId = `${dialogId}-title`;
     const [isVisible, setIsVisible] = useState(open);
     const [isAnimating, setIsAnimating] = useState(false);
-    const { stackedDialogOpen, setStackedDialogOpen } =
-      useContext(DialogContext);
+    const { stackedDialogOpen, setStackedDialogOpen } = useContext(DialogContext);
 
     useEffect(() => {
       if (stack) {
@@ -114,9 +111,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
 
       if (open) {
         previouslyFocusedElementRef.current =
-          document.activeElement instanceof HTMLElement
-            ? document.activeElement
-            : null;
+          document.activeElement instanceof HTMLElement ? document.activeElement : null;
         setIsVisible(true);
         animationTimerRef.current = setTimeout(() => {
           setIsAnimating(true);
@@ -160,17 +155,12 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
 
           if (focusableElements.length > 0) {
             const firstElement = focusableElements[0] as HTMLElement;
-            const lastElement = focusableElements[
-              focusableElements.length - 1
-            ] as HTMLElement;
+            const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
             if (event.shiftKey && document.activeElement === firstElement) {
               event.preventDefault();
               lastElement.focus();
-            } else if (
-              !event.shiftKey &&
-              document.activeElement === lastElement
-            ) {
+            } else if (!event.shiftKey && document.activeElement === lastElement) {
               event.preventDefault();
               firstElement.focus();
             }
@@ -193,10 +183,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
       // Find the portal container (direct child of body that contains the dialog)
       const getPortalContainer = (): HTMLElement | null => {
         let portalContainer: HTMLElement | null = dialogRef.current;
-        while (
-          portalContainer &&
-          portalContainer.parentElement !== document.body
-        ) {
+        while (portalContainer && portalContainer.parentElement !== document.body) {
           portalContainer = portalContainer.parentElement;
         }
         return portalContainer;
@@ -236,10 +223,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
         if (stack) {
           const dialogs = document.querySelectorAll('[role="dialog"]');
           dialogs.forEach((dialog) => {
-            if (
-              dialog instanceof HTMLElement &&
-              !dialog.contains(dialogRef.current)
-            ) {
+            if (dialog instanceof HTMLElement && !dialog.contains(dialogRef.current)) {
               dialog.inert = true;
             }
           });
@@ -269,10 +253,9 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
 
     useEffect(() => {
       if (open && dialogRef.current) {
-        const focusableElements =
-          dialogRef.current.querySelectorAll<HTMLElement>(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-          );
+        const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
         const firstElement = focusableElements[0];
         if (firstElement) {
           firstElement.focus();
@@ -384,10 +367,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
                   if (e.shiftKey && document.activeElement === firstElement) {
                     e.preventDefault();
                     lastElement.focus();
-                  } else if (
-                    !e.shiftKey &&
-                    document.activeElement === lastElement
-                  ) {
+                  } else if (!e.shiftKey && document.activeElement === lastElement) {
                     e.preventDefault();
                     firstElement.focus();
                   }
@@ -396,13 +376,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
               {...rest}
             >
               {!flush && (
-                <Column
-                  as="header"
-                  paddingX="24"
-                  paddingTop="24"
-                  paddingBottom="s"
-                  gap="4"
-                >
+                <Column as="header" paddingX="24" paddingTop="24" paddingBottom="s" gap="4">
                   <Flex fillWidth horizontal="between" gap="8">
                     {typeof title === "string" ? (
                       <Heading id={dialogTitleId} variant="heading-strong-l">
@@ -456,13 +430,7 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
                 {children}
               </Column>
               {footer && (
-                <Flex
-                  borderTop="neutral-medium"
-                  as="footer"
-                  horizontal="end"
-                  padding="12"
-                  gap="8"
-                >
+                <Flex borderTop="neutral-medium" as="footer" horizontal="end" padding="12" gap="8">
                   {footer}
                 </Flex>
               )}
@@ -476,4 +444,5 @@ const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
 );
 
 Dialog.displayName = "Dialog";
+
 export { Dialog };

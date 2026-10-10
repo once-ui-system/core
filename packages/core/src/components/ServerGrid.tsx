@@ -1,16 +1,16 @@
-import { CSSProperties, forwardRef } from "react";
 import classNames from "clsx";
+import { CSSProperties, forwardRef } from "react";
 
 import {
-  GridProps,
-  SpacingProps,
-  SizeProps,
-  StyleProps,
   CommonProps,
   DisplayProps,
   GridBreakpointProps,
+  GridProps,
+  SizeProps,
+  SpacingProps,
+  StyleProps,
 } from "../interfaces";
-import { SpacingToken, ColorScheme, ColorWeight } from "../types";
+import { ColorScheme, ColorWeight, SpacingToken } from "../types";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerGridProps
@@ -209,7 +209,9 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       fitHeight && "fit-height",
       fill && "fill",
       (fillWidth || maxWidth) && "fill-width",
-      maxWidth && ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) && `max-width-${maxWidth}`,
+      maxWidth &&
+        ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) &&
+        `max-width-${maxWidth}`,
       (fillHeight || maxHeight) && "fill-height",
       columns && `columns-${columns}`,
       overflow && `overflow-${overflow}`,
@@ -366,8 +368,6 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
         cascadedS?.left && `s-left-${cascadedS.left}`,
         cascadedXs?.left && `xs-left-${cascadedXs.left}`,
       );
-  
-
 
     const parsePosition = (value: number | string | undefined): string | undefined => {
       if (value === undefined) return undefined;
@@ -394,7 +394,9 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
         : undefined;
 
     const combinedStyle: CSSProperties = {
-      maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) ? undefined : parseDimension(maxWidth, "width"),
+      maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
+        ? undefined
+        : parseDimension(maxWidth, "width"),
       minWidth: parseDimension(minWidth, "width"),
       minHeight: parseDimension(minHeight, "height"),
       maxHeight: parseDimension(maxHeight, "height"),
@@ -439,5 +441,5 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
 
 ServerGrid.displayName = "ServerGrid";
 
-export { ServerGrid };
 export type { GridProps };
+export { ServerGrid };

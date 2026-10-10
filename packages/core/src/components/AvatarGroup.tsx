@@ -1,12 +1,11 @@
 "use client";
 
-import React, { forwardRef } from "react";
-
-import { Avatar, AvatarProps } from "./Avatar";
-import { Flex } from "./Flex";
-import styles from "./AvatarGroup.module.scss";
 import classNames from "clsx";
+import React, { forwardRef } from "react";
 import { TShirtSizes } from "../types";
+import { Avatar, AvatarProps } from "./Avatar";
+import styles from "./AvatarGroup.module.scss";
+import { Flex } from "./Flex";
 
 interface AvatarGroupProps extends React.ComponentProps<typeof Flex> {
   avatars: AvatarProps[];
@@ -61,5 +60,5 @@ const AvatarGroup = forwardRef<HTMLDivElement, AvatarGroupProps>(
 
 AvatarGroup.displayName = "AvatarGroup";
 
-export { AvatarGroup };
 export type { AvatarGroupProps };
+export { AvatarGroup };

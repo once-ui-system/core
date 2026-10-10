@@ -1,8 +1,8 @@
-import { ElementType, ComponentPropsWithoutRef } from "react";
 import classNames from "clsx";
+import { ComponentPropsWithoutRef, ElementType } from "react";
 
-import { TextProps, CommonProps, SpacingProps, DisplayProps } from "../interfaces";
-import { ColorScheme, ColorWeight, TextVariant, SpacingToken } from "../types";
+import { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
+import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 type TypeProps<T extends ElementType> = TextProps<T> &
@@ -126,11 +126,7 @@ const Text = <T extends ElementType = "span">({
   };
 
   return (
-    <Component
-      className={combinedClasses}
-      style={combinedStyle}
-      {...props}
-    >
+    <Component className={combinedClasses} style={combinedStyle} {...props}>
       {children}
     </Component>
   );

@@ -1,14 +1,14 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
-import { IconName, type IconComponent } from "../icons";
+import React, { forwardRef, ReactNode } from "react";
 import { useIcons } from "../contexts/IconProvider";
+import { type IconComponent, IconName } from "../icons";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 import { Flex } from "./Flex";
-import { Tooltip } from "./Tooltip";
 import { HoverCard } from "./HoverCard";
 import styles from "./Icon.module.scss";
+import { Tooltip } from "./Tooltip";
 
 interface IconProps extends React.ComponentProps<typeof Flex> {
   name: IconName;
@@ -79,11 +79,7 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
 
     if (tooltip) {
       return (
-        <HoverCard
-          trigger={icon}
-          placement={tooltipPosition}
-          offsetDistance="4"
-        >
+        <HoverCard trigger={icon} placement={tooltipPosition} offsetDistance="4">
           <Tooltip label={tooltip} />
         </HoverCard>
       );

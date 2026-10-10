@@ -39,7 +39,9 @@ export function SettingsExample() {
           </Heading>
         </Column>
 
-        <SplitView fillWidth minHeight={48}
+        <SplitView
+          fillWidth
+          minHeight={48}
           leftPanel={
             <Column
               width={20}
@@ -66,78 +68,83 @@ export function SettingsExample() {
           }
           rightPanel={
             <Column flex={1} gap="24">
-            <Column background="surface" border radius="l" padding="24" gap="24">
-              <Heading as="h2" variant="heading-strong-m">
-                Profile
-              </Heading>
-              <Row gap="16" vertical="center">
-                <Avatar size="l" value="LO" />
-                <Column gap="8">
-                  <Button size="s" variant="secondary">
-                    Upload photo
-                  </Button>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
-                    JPG or PNG, max 2 MB
-                  </Text>
-                </Column>
-              </Row>
-              <Input id="name" label="Display name" placeholder="Lorant One" />
-              <Input id="email" label="Email" placeholder="you@company.com" />
-              <Select
-                id="timezone"
-                label="Timezone"
-                options={[
-                  { value: "utc", label: "UTC" },
-                  { value: "est", label: "Eastern Time" },
-                ]}
-              />
-              <Row gap="12">
-                <Button>Save changes</Button>
-                <Button variant="secondary">Cancel</Button>
-              </Row>
-            </Column>
+              <Column background="surface" border radius="l" padding="24" gap="24">
+                <Heading as="h2" variant="heading-strong-m">
+                  Profile
+                </Heading>
+                <Row gap="16" vertical="center">
+                  <Avatar size="l" value="LO" />
+                  <Column gap="8">
+                    <Button size="s" variant="secondary">
+                      Upload photo
+                    </Button>
+                    <Text variant="label-default-s" onBackground="neutral-weak">
+                      JPG or PNG, max 2 MB
+                    </Text>
+                  </Column>
+                </Row>
+                <Input id="name" label="Display name" placeholder="Lorant One" />
+                <Input id="email" label="Email" placeholder="you@company.com" />
+                <Select
+                  id="timezone"
+                  label="Timezone"
+                  options={[
+                    { value: "utc", label: "UTC" },
+                    { value: "est", label: "Eastern Time" },
+                  ]}
+                />
+                <Row gap="12">
+                  <Button>Save changes</Button>
+                  <Button variant="secondary">Cancel</Button>
+                </Row>
+              </Column>
 
-            <Column background="surface" border radius="l" padding="24" gap="24">
-              <Heading as="h2" variant="heading-strong-m">
-                Notifications
-              </Heading>
-              <Row fillWidth horizontal="between" vertical="center">
-                <Column gap="4">
-                  <Text variant="body-default-s">Product updates</Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
-                    Release notes and changelog
-                  </Text>
-                </Column>
-                <Switch checked onToggle={() => {}} />
-              </Row>
-              <Line />
-              <Row fillWidth horizontal="between" vertical="center">
-                <Column gap="4">
-                  <Text variant="body-default-s">Marketing emails</Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
-                    Tips, templates, and community highlights
-                  </Text>
-                </Column>
-                <Switch checked={false} onToggle={() => {}} />
-              </Row>
-              <Checkbox label="Weekly digest" checked />
-            </Column>
+              <Column background="surface" border radius="l" padding="24" gap="24">
+                <Heading as="h2" variant="heading-strong-m">
+                  Notifications
+                </Heading>
+                <Row fillWidth horizontal="between" vertical="center">
+                  <Column gap="4">
+                    <Text variant="body-default-s">Product updates</Text>
+                    <Text variant="label-default-s" onBackground="neutral-weak">
+                      Release notes and changelog
+                    </Text>
+                  </Column>
+                  <Switch checked onToggle={() => {}} />
+                </Row>
+                <Line />
+                <Row fillWidth horizontal="between" vertical="center">
+                  <Column gap="4">
+                    <Text variant="body-default-s">Marketing emails</Text>
+                    <Text variant="label-default-s" onBackground="neutral-weak">
+                      Tips, templates, and community highlights
+                    </Text>
+                  </Column>
+                  <Switch checked={false} onToggle={() => {}} />
+                </Row>
+                <Checkbox label="Weekly digest" checked />
+              </Column>
 
-            <Column background="surface" border="danger-alpha-medium" radius="l" padding="24" gap="16">
-              <Heading as="h2" variant="heading-strong-m" onBackground="danger-medium">
-                Danger zone
-              </Heading>
-              <Text variant="body-default-s" onBackground="neutral-weak">
-                Permanently delete your workspace and all associated data.
-              </Text>
-              <Button variant="danger" size="s">
-                Delete workspace
-              </Button>
-            </Column>
+              <Column
+                background="surface"
+                border="danger-alpha-medium"
+                radius="l"
+                padding="24"
+                gap="16"
+              >
+                <Heading as="h2" variant="heading-strong-m" onBackground="danger-medium">
+                  Danger zone
+                </Heading>
+                <Text variant="body-default-s" onBackground="neutral-weak">
+                  Permanently delete your workspace and all associated data.
+                </Text>
+                <Button variant="danger" size="s">
+                  Delete workspace
+                </Button>
+              </Column>
             </Column>
           }
-        >
-        </SplitView>
+        ></SplitView>
       </Column>
     </Column>
   );

@@ -1,18 +1,10 @@
 export const sidebar = [
   {
-    items: [
-      { label: "Members" },
-      { label: "Files" },
-      { label: "Pins" },
-    ],
+    items: [{ label: "Members" }, { label: "Files" }, { label: "Pins" }],
   },
   {
     title: "Channels",
-    rooms: [
-      { label: "👋 ┃ intro" },
-      { label: "general" },
-      { label: "design-system" },
-    ],
+    rooms: [{ label: "👋 ┃ intro" }, { label: "general" }, { label: "design-system" }],
   },
 ];
 
@@ -52,9 +44,7 @@ export const chatMessages = [
     author: { name: "Lorant K.", avatar: "/images/creators/lorant.jpg" },
     postedAt: new Date("2025-01-18T09:40:00"),
     message: "On it — Discord sidebar + Linear message rhythm.",
-    attachments: [
-      { media: "/images/blocks/vibe-coding-dark.jpg" },
-    ],
+    attachments: [{ media: "/images/blocks/vibe-coding-dark.jpg" }],
     reactions: [],
   },
   {

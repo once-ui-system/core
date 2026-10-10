@@ -1,24 +1,24 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import {
-  startOfYear,
-  endOfYear,
-  startOfMonth,
   endOfMonth,
-  startOfWeek,
   endOfWeek,
-  subYears,
+  endOfYear,
+  isSameDay,
+  startOfMonth,
+  startOfWeek,
+  startOfYear,
   subMonths,
   subWeeks,
-  isSameDay,
+  subYears,
 } from "date-fns";
+import React, { useEffect, useState } from "react";
 import { Column } from "../../components/Column";
-import { Text } from "../../components/Text";
-import { Row } from "../../components/Row";
 import { DateRange, DateRangePicker } from "../../components/DateRangePicker";
 import { DropdownWrapper } from "../../components/DropdownWrapper";
 import { IconButton } from "../../components/IconButton";
+import { Row } from "../../components/Row";
+import { Text } from "../../components/Text";
 import { ToggleButton } from "../../components/ToggleButton";
 import { DateConfig, PresetsConfig } from "./interfaces";
 
@@ -178,7 +178,7 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
             trigger={
               <IconButton
                 icon="calendar"
-              aria-label="Choose a date range"
+                aria-label="Choose a date range"
                 onClick={() => setDateRangeOpen(!dateRangeOpen)}
                 variant="secondary"
                 size="m"

@@ -101,9 +101,7 @@ describe("ThemeInit emitted script", () => {
     const storage = vi.spyOn(Storage.prototype, "getItem").mockImplementation(() => {
       throw new Error("localStorage unavailable");
     });
-    vi.spyOn(window, "matchMedia").mockImplementation(
-      () => ({ matches: false }) as MediaQueryList,
-    );
+    vi.spyOn(window, "matchMedia").mockImplementation(() => ({ matches: false }) as MediaQueryList);
 
     expect(runScript).not.toThrow();
     expect(document.documentElement.getAttribute("data-theme")).toBe("light");

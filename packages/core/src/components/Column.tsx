@@ -14,4 +14,5 @@ const Column = forwardRef<HTMLDivElement, ColumnProps>(({ children, ...rest }, r
 });
 
 Column.displayName = "Column";
+
 export { Column };

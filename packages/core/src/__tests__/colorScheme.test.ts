@@ -1,14 +1,11 @@
-import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { describe, expect, it } from "vitest";
 import { generateColorScheme, schemeAlphaVariants } from "../utils/colorScheme";
 
 /** Parse the shipped token file so the test measures against real schemes. */
 function builtInSchemes() {
-  const src = readFileSync(
-    join(__dirname, "../../../foundations/scss/tokens/scheme.scss"),
-    "utf8",
-  );
+  const src = readFileSync(join(__dirname, "../../../foundations/scss/tokens/scheme.scss"), "utf8");
   const out: Record<string, Record<number, [number, number, number]>> = {};
   const re = /--scheme-([a-z]+)-(\d+):\s*oklch\(([\d.]+) ([\d.]+) ([\d.]+)\)\s*;/g;
   for (const m of src.matchAll(re)) {

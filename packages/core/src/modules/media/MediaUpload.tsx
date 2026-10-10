@@ -25,5 +25,5 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>((props, ref) 
 
 MediaUpload.displayName = "MediaUpload";
 
-export { MediaUpload };
 export type { MediaUploadProps };
+export { MediaUpload };

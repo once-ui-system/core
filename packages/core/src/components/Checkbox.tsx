@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, forwardRef, useId } from "react";
 import classNames from "clsx";
+import React, { forwardRef, useEffect, useId, useState } from "react";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
@@ -104,9 +104,7 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
           onKeyDown={handleKeyDown}
           className={classNames(styles.element, {
             [styles.checked]:
-              controlledIsChecked !== undefined
-                ? controlledIsChecked || indeterminate
-                : isChecked,
+              controlledIsChecked !== undefined ? controlledIsChecked || indeterminate : isChecked,
             [styles.disabled]: disabled,
           })}
         >
@@ -132,5 +130,5 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
 
 Checkbox.displayName = "Checkbox";
 
-export { Checkbox };
 export type { CheckboxProps };
+export { Checkbox };

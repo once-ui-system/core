@@ -1,6 +1,6 @@
 "use client";
 
-import { useLayoutEffect, useRef, RefObject } from "react";
+import { RefObject, useLayoutEffect, useRef } from "react";
 
 interface ScrollLockProps {
   enabled: boolean;
@@ -48,16 +48,16 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
     const canScroll = (el: HTMLElement, deltaY: number): boolean => {
       const style = window.getComputedStyle(el);
       const overflowY = style.overflowY;
-      
+
       // Element must have scrollable overflow
-      if (overflowY !== 'auto' && overflowY !== 'scroll') {
+      if (overflowY !== "auto" && overflowY !== "scroll") {
         return false;
       }
-      
+
       const { scrollTop, scrollHeight, clientHeight } = el;
       const hasOverflow = scrollHeight > clientHeight;
       if (!hasOverflow) return false;
-      
+
       // Check if we can scroll in the direction of the wheel
       if (deltaY > 0) {
         // Scrolling down - can we scroll more?
@@ -69,7 +69,11 @@ export const ScrollLock = ({ enabled, allowScrollInElement }: ScrollLockProps) =
     };
 
     // Find the scrollable parent of a target element within the allowed container
-    const findScrollableParent = (target: HTMLElement, container: HTMLElement, deltaY: number): HTMLElement | null => {
+    const findScrollableParent = (
+      target: HTMLElement,
+      container: HTMLElement,
+      deltaY: number,
+    ): HTMLElement | null => {
       let current: HTMLElement | null = target;
       while (current && container.contains(current)) {
         if (canScroll(current, deltaY)) {

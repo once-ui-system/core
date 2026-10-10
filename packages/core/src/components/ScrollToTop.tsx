@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import classNames from "clsx";
+import { useEffect, useState } from "react";
 import { Flex } from "./Flex";
 import styles from "./ScrollToTop.module.scss";
-import classNames from "clsx";
 
 interface ScrollToTopProps extends React.ComponentProps<typeof Flex> {
   offset?: number;

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, KeyboardEvent, RefObject, useEffect, useRef } from "react";
+import { KeyboardEvent, RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 export type NavigationLayout = "row" | "column" | "grid";
 
@@ -73,7 +73,6 @@ export const useArrowNavigation = ({
     return first >= 0 ? first : 0;
   }, [containerRef, itemSelector]);
 
-
   // Auto-focus on mount if enabled
   useEffect(() => {
     if (autoFocus && itemCount > 0 && focusedIndex === -1) {
@@ -97,8 +96,7 @@ export const useArrowNavigation = ({
       // than steals. Compared against the index rather than a "first run" flag
       // because StrictMode runs mount effects twice and a flag would let the
       // second pass through.
-      const focusIsNowhere =
-        !document.activeElement || document.activeElement === document.body;
+      const focusIsNowhere = !document.activeElement || document.activeElement === document.body;
       if (!indexMoved && !autoFocus && !focusIsNowhere) return;
 
       const items = Array.from(
@@ -271,9 +269,9 @@ export const useArrowNavigation = ({
           e.preventDefault();
           newIndex = itemCount - 1;
           break;
-          
-        case 'Enter':
-        case ' ':
+
+        case "Enter":
+        case " ":
           if (focusedIndex >= 0 && focusedIndex < itemCount) {
             e.preventDefault();
             onSelect?.(focusedIndex);

@@ -24,4 +24,5 @@ const Banner = forwardRef<HTMLDivElement, BannerProps>(({ children, ...flex }, r
 ));
 
 Banner.displayName = "Banner";
+
 export { Banner };

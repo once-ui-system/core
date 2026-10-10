@@ -62,9 +62,12 @@ describe("SplitView", () => {
 
   it("collapses to tabs below the breakpoint, showing one panel at a time", async () => {
     const user = userEvent.setup();
-    render(<SplitView {...panels} collapseBelow="l" labels={{ left: "Editor", right: "Preview" }} />, {
-      wrapper: wrap,
-    });
+    render(
+      <SplitView {...panels} collapseBelow="l" labels={{ left: "Editor", right: "Preview" }} />,
+      {
+        wrapper: wrap,
+      },
+    );
     // No draggable divider on a phone — that is the point of the collapse.
     expect(screen.queryByRole("separator")).toBeNull();
     expect(screen.getByText("Left content")).toBeInTheDocument();

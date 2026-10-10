@@ -1,22 +1,22 @@
 "use client";
 
-import React, {
-  useState,
-  forwardRef,
-  useImperativeHandle,
-  useEffect,
-  useCallback,
-  useRef,
-} from "react";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { Column } from "./Column";
-import { Grid } from "./Grid";
-import { Row } from "./Row";
-import type { IconName } from "../icons";
-import styles from "./Accordion.module.scss";
 import classNames from "clsx";
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
+import type { IconName } from "../icons";
 import { CondensedTShirtSizes } from "../types";
+import styles from "./Accordion.module.scss";
+import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { Grid } from "./Grid";
+import { Icon } from "./Icon";
+import { Row } from "./Row";
 
 export interface AccordionHandle {
   toggle: () => void;
@@ -77,18 +77,14 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       }
     }, [onToggle]);
 
-    useImperativeHandle(
-      ref,
-      () => {
-        const node = headerRef.current ?? document.createElement("div");
-        return Object.assign(node, {
-          toggle: toggleAccordion,
-          open: () => setIsOpen(true),
-          close: () => setIsOpen(false),
-        }) as HTMLDivElement & AccordionHandle;
-      },
-      [toggleAccordion],
-    );
+    useImperativeHandle(ref, () => {
+      const node = headerRef.current ?? document.createElement("div");
+      return Object.assign(node, {
+        toggle: toggleAccordion,
+        open: () => setIsOpen(true),
+        close: () => setIsOpen(false),
+      }) as HTMLDivElement & AccordionHandle;
+    }, [toggleAccordion]);
 
     const {
       className: headerClassName,
@@ -99,10 +95,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       ...headerRest
     } = headerProps ?? {};
 
-    const {
-      className: contentClassName,
-      ...contentRest
-    } = contentProps ?? {};
+    const { className: contentClassName, ...contentRest } = contentProps ?? {};
 
     const setHeaderRef = useCallback(
       (node: HTMLDivElement | null) => {
@@ -204,4 +197,5 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
 );
 
 Accordion.displayName = "Accordion";
+
 export { Accordion };

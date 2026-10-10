@@ -1,7 +1,7 @@
 export class OGUrlValidationError extends Error {
-  constructor(message = 'URL is not allowed') {
+  constructor(message = "URL is not allowed") {
     super(message);
-    this.name = 'OGUrlValidationError';
+    this.name = "OGUrlValidationError";
   }
 }
 
@@ -10,13 +10,9 @@ export interface OGUrlValidationOptions {
   allowedDomains?: string[];
 }
 
-const BLOCKED_HOSTNAMES = new Set([
-  'localhost',
-  'metadata.google.internal',
-  'metadata.google',
-]);
+const BLOCKED_HOSTNAMES = new Set(["localhost", "metadata.google.internal", "metadata.google"]);
 
-const BLOCKED_HOSTNAME_SUFFIXES = ['.localhost', '.local', '.internal'];
+const BLOCKED_HOSTNAME_SUFFIXES = [".localhost", ".local", ".internal"];
 
 interface IPv4Range {
   network: number;
@@ -41,7 +37,7 @@ const BLOCKED_IPV4_RANGES: IPv4Range[] = [
 ];
 
 function ipv4ToInt(ip: string): number | null {
-  const parts = ip.split('.');
+  const parts = ip.split(".");
   if (parts.length !== 4) {
     return null;
   }
@@ -67,25 +63,23 @@ function isBlockedIPv4(ip: string): boolean {
     return true;
   }
 
-  return BLOCKED_IPV4_RANGES.some(
-    (range) => (value & range.mask) === (range.network & range.mask),
-  );
+  return BLOCKED_IPV4_RANGES.some((range) => (value & range.mask) === (range.network & range.mask));
 }
 
 function expandIPv6(ip: string): bigint | null {
   const lower = ip.toLowerCase();
 
-  if (lower.includes('%')) {
+  if (lower.includes("%")) {
     return null;
   }
 
-  const [head, tail = ''] = lower.split('::');
-  if (lower.split('::').length > 2) {
+  const [head, tail = ""] = lower.split("::");
+  if (lower.split("::").length > 2) {
     return null;
   }
 
-  const headGroups = head ? head.split(':') : [];
-  const tailGroups = tail ? tail.split(':') : [];
+  const headGroups = head ? head.split(":") : [];
+  const tailGroups = tail ? tail.split(":") : [];
   const missingGroups = 8 - (headGroups.length + tailGroups.length);
 
   if (missingGroups < 0) {
@@ -94,7 +88,7 @@ function expandIPv6(ip: string): bigint | null {
 
   const groups = [
     ...headGroups,
-    ...Array.from({ length: missingGroups }, () => '0'),
+    ...Array.from({ length: missingGroups }, () => "0"),
     ...tailGroups,
   ];
 
@@ -116,7 +110,7 @@ function expandIPv6(ip: string): bigint | null {
 function isBlockedIPv6(ip: string): boolean {
   const normalized = ip.toLowerCase();
 
-  if (normalized === '::1') {
+  if (normalized === "::1") {
     return true;
   }
 
@@ -126,17 +120,26 @@ function isBlockedIPv6(ip: string): boolean {
   }
 
   // Unique local addresses (fc00::/7)
-  if ((value & 0xfe00_0000_0000_0000_0000_0000_0000_0000n) === 0xfc00_0000_0000_0000_0000_0000_0000_0000n) {
+  if (
+    (value & 0xfe00_0000_0000_0000_0000_0000_0000_0000n) ===
+    0xfc00_0000_0000_0000_0000_0000_0000_0000n
+  ) {
     return true;
   }
 
   // Link-local addresses (fe80::/10)
-  if ((value & 0xffc0_0000_0000_0000_0000_0000_0000_0000n) === 0xfe80_0000_0000_0000_0000_0000_0000_0000n) {
+  if (
+    (value & 0xffc0_0000_0000_0000_0000_0000_0000_0000n) ===
+    0xfe80_0000_0000_0000_0000_0000_0000_0000n
+  ) {
     return true;
   }
 
   // IPv4-mapped IPv6 addresses (::ffff:x.x.x.x)
-  if ((value & 0xffff_ffff_ffff_ffff_0000_0000_0000_0000n) === 0x0000_0000_0000_0000_0000_ffff_0000_0000n) {
+  if (
+    (value & 0xffff_ffff_ffff_ffff_0000_0000_0000_0000n) ===
+    0x0000_0000_0000_0000_0000_ffff_0000_0000n
+  ) {
     const mappedIpv4 =
       `${Number((value >> 24n) & 0xffn)}.` +
       `${Number((value >> 16n) & 0xffn)}.` +
@@ -151,7 +154,7 @@ function isBlockedIPv6(ip: string): boolean {
 function parseIpAddress(hostname: string): string | null {
   let candidate = hostname;
 
-  if (candidate.startsWith('[') && candidate.endsWith(']')) {
+  if (candidate.startsWith("[") && candidate.endsWith("]")) {
     candidate = candidate.slice(1, -1);
   }
 
@@ -167,7 +170,7 @@ function parseIpAddress(hostname: string): string | null {
 }
 
 function isBlockedIpAddress(ip: string): boolean {
-  if (ip.includes(':')) {
+  if (ip.includes(":")) {
     return isBlockedIPv6(ip);
   }
 
@@ -175,7 +178,7 @@ function isBlockedIpAddress(ip: string): boolean {
 }
 
 function isBlockedHostname(hostname: string): boolean {
-  const normalized = hostname.toLowerCase().replace(/\.$/, '');
+  const normalized = hostname.toLowerCase().replace(/\.$/, "");
 
   if (BLOCKED_HOSTNAMES.has(normalized)) {
     return true;
@@ -190,7 +193,7 @@ function isBlockedHostname(hostname: string): boolean {
 }
 
 function isDomainAllowed(hostname: string, allowedDomains: string[]): boolean {
-  const normalized = hostname.toLowerCase().replace(/\.$/, '');
+  const normalized = hostname.toLowerCase().replace(/\.$/, "");
 
   return allowedDomains.some((domain) => {
     const allowed = domain.toLowerCase();
@@ -201,24 +204,30 @@ function isDomainAllowed(hostname: string, allowedDomains: string[]): boolean {
 async function resolveHostnameAddresses(hostname: string): Promise<string[]> {
   // Use the bare specifier instead of "node:dns": webpack cannot handle the
   // "node:" URI scheme when this package is processed via transpilePackages.
-  const dns = await import('dns');
+  const dns = await import("dns");
   const addresses = new Set<string>();
 
   await Promise.all([
-    dns.promises.resolve4(hostname).then((ips) => {
-      for (const ip of ips) {
-        addresses.add(ip);
-      }
-    }).catch(() => undefined),
-    dns.promises.resolve6(hostname).then((ips) => {
-      for (const ip of ips) {
-        addresses.add(ip);
-      }
-    }).catch(() => undefined),
+    dns.promises
+      .resolve4(hostname)
+      .then((ips) => {
+        for (const ip of ips) {
+          addresses.add(ip);
+        }
+      })
+      .catch(() => undefined),
+    dns.promises
+      .resolve6(hostname)
+      .then((ips) => {
+        for (const ip of ips) {
+          addresses.add(ip);
+        }
+      })
+      .catch(() => undefined),
   ]);
 
   if (addresses.size === 0) {
-    throw new OGUrlValidationError('URL hostname could not be resolved');
+    throw new OGUrlValidationError("URL hostname could not be resolved");
   }
 
   return [...addresses];
@@ -230,19 +239,19 @@ function parsePublicUrl(urlString: string): URL {
   try {
     parsed = new URL(urlString);
   } catch {
-    throw new OGUrlValidationError('URL is malformed');
+    throw new OGUrlValidationError("URL is malformed");
   }
 
-  if (parsed.protocol !== 'https:') {
-    throw new OGUrlValidationError('Only HTTPS URLs are allowed');
+  if (parsed.protocol !== "https:") {
+    throw new OGUrlValidationError("Only HTTPS URLs are allowed");
   }
 
   if (parsed.username || parsed.password) {
-    throw new OGUrlValidationError('URL credentials are not allowed');
+    throw new OGUrlValidationError("URL credentials are not allowed");
   }
 
   if (!parsed.hostname) {
-    throw new OGUrlValidationError('URL hostname is required');
+    throw new OGUrlValidationError("URL hostname is required");
   }
 
   return parsed;
@@ -257,12 +266,12 @@ export async function validateOgUrl(
 
   if (options.allowedDomains?.length) {
     if (!isDomainAllowed(hostname, options.allowedDomains)) {
-      throw new OGUrlValidationError('URL domain is not allowed');
+      throw new OGUrlValidationError("URL domain is not allowed");
     }
   }
 
   if (isBlockedHostname(hostname)) {
-    throw new OGUrlValidationError('URL hostname is not allowed');
+    throw new OGUrlValidationError("URL hostname is not allowed");
   }
 
   const ipAddress = parseIpAddress(hostname);
@@ -270,7 +279,7 @@ export async function validateOgUrl(
     const resolvedAddresses = await resolveHostnameAddresses(hostname);
     for (const address of resolvedAddresses) {
       if (isBlockedIpAddress(address)) {
-        throw new OGUrlValidationError('URL resolves to a blocked address');
+        throw new OGUrlValidationError("URL resolves to a blocked address");
       }
     }
   }
@@ -292,13 +301,13 @@ export async function fetchValidatedUrl(
 
     const response = await fetch(currentUrl, {
       ...init,
-      redirect: 'manual',
+      redirect: "manual",
     });
 
     if (response.status >= 300 && response.status < 400) {
-      const location = response.headers.get('location');
+      const location = response.headers.get("location");
       if (!location) {
-        throw new OGUrlValidationError('Redirect response missing location');
+        throw new OGUrlValidationError("Redirect response missing location");
       }
 
       currentUrl = new URL(location, currentUrl).href;
@@ -308,5 +317,5 @@ export async function fetchValidatedUrl(
     return response;
   }
 
-  throw new OGUrlValidationError('Too many redirects');
+  throw new OGUrlValidationError("Too many redirects");
 }

@@ -1,14 +1,18 @@
 "use client";
 
 import { forwardRef } from "react";
-import { sections, type StylePanelRootProps, type StylePanelVisibility } from "./StylePanelSections";
+import {
+  type StylePanelRootProps,
+  type StylePanelVisibility,
+  sections,
+} from "./StylePanelSections";
 
 export type {
+  StyleGroupProps,
+  StylePanelRootProps,
   StylePanelValue,
   StylePanelVisibility,
-  StylePanelRootProps,
   StyleRowProps,
-  StyleGroupProps,
 } from "./StylePanelSections";
 export { useStylePanel } from "./StylePanelSections";
 

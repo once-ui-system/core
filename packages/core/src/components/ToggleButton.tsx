@@ -1,13 +1,13 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { ElementType } from "./ElementType";
-import styles from "./ToggleButton.module.scss";
+import React, { forwardRef, ReactNode } from "react";
 import { IconName } from "../icons";
 import { RadiusSize, TShirtSizes } from "../types";
+import { ElementType } from "./ElementType";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import styles from "./ToggleButton.module.scss";
 
 interface ToggleButtonCommonProps {
   label?: ReactNode;
@@ -45,7 +45,8 @@ interface ToggleButtonCommonProps {
   href?: string;
 }
 
-export type ToggleButtonProps = ToggleButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
+export type ToggleButtonProps = ToggleButtonCommonProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
   (
@@ -102,7 +103,9 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
         style={style}
         {...props}
       >
-        {prefixIcon && <Icon name={prefixIcon} size={size === "xl" ? "m" : size === "l" ? "s" : "xs"} />}
+        {prefixIcon && (
+          <Icon name={prefixIcon} size={size === "xl" ? "m" : size === "l" ? "s" : "xs"} />
+        )}
         {(label || children) && (
           <Flex
             fillWidth={fillWidth}
@@ -116,11 +119,14 @@ const ToggleButton = forwardRef<HTMLElement, ToggleButtonProps>(
             {label || children}
           </Flex>
         )}
-        {suffixIcon && <Icon name={suffixIcon} size={size === "xl" ? "m" : size === "l" ? "s" : "xs"} />}
+        {suffixIcon && (
+          <Icon name={suffixIcon} size={size === "xl" ? "m" : size === "l" ? "s" : "xs"} />
+        )}
       </ElementType>
     );
   },
 );
 
 ToggleButton.displayName = "ToggleButton";
+
 export { ToggleButton };

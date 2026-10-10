@@ -1,9 +1,8 @@
-import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
-
+import React, { forwardRef, ReactNode } from "react";
+import { IconName } from "../icons";
 import { Icon } from "./Icon";
 import { Row } from "./Row";
-import { IconName } from "../icons";
 import styles from "./Tooltip.module.scss";
 
 interface TooltipProps extends React.ComponentProps<typeof Row> {

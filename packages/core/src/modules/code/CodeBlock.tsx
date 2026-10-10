@@ -23,5 +23,5 @@ const CodeBlock: React.FC<CodeBlockProps> = (props) => (
 
 CodeBlock.displayName = "CodeBlock";
 
-export { CodeBlock };
 export type { CodeBlockProps };
+export { CodeBlock };

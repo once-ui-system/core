@@ -14,22 +14,36 @@ interface BlockQuoteProps extends React.ComponentProps<typeof Column> {
   subline?: React.ReactNode;
   separator?: "top" | "bottom" | "both" | "none";
   author?: {
-    name?: React.ReactNode,
-    avatar?: string,
+    name?: React.ReactNode;
+    avatar?: string;
   };
-  link?: { href: string, label: string };
+  link?: { href: string; label: string };
   style?: React.CSSProperties;
   className?: string;
   align?: "center" | "left" | "right";
 }
 
 const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
-  ({ children, className, style, preline, subline, author, link, align = "center", separator = "both", ...flex }, ref) => {
+  (
+    {
+      children,
+      className,
+      style,
+      preline,
+      subline,
+      author,
+      link,
+      align = "center",
+      separator = "both",
+      ...flex
+    },
+    ref,
+  ) => {
     return (
       <Column fillWidth horizontal="center" gap="24">
         {(separator === "top" || separator === "both") && (
           <Row fillWidth horizontal="center">
-            <Line width="40"/>
+            <Line width="40" />
           </Row>
         )}
         <Column
@@ -59,18 +73,16 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
           )}
           {(author || link) && (
             <Row gap="12" center marginTop="32">
-              —
-              {author?.avatar && (
-                <Avatar size="s" src={author?.avatar} />
-              )}
-              {author?.name && (
-                <Text variant="label-default-s">{author?.name}</Text>
-              )}
+              —{author?.avatar && <Avatar size="s" src={author?.avatar} />}
+              {author?.name && <Text variant="label-default-s">{author?.name}</Text>}
               {link?.href && (
                 <Row as="cite">
                   <SmartLink
                     unstyled
-                    href={link?.href && (/^https?:\/\//.test(link.href) ? link.href : `https://${link.href}`)}
+                    href={
+                      link?.href &&
+                      (/^https?:\/\//.test(link.href) ? link.href : `https://${link.href}`)
+                    }
                   >
                     <Text variant="label-default-s">{link?.label || link?.href}</Text>
                   </SmartLink>
@@ -81,7 +93,7 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
         </Column>
         {(separator === "bottom" || separator === "both") && (
           <Row fillWidth horizontal="center">
-            <Line width="40"/>
+            <Line width="40" />
           </Row>
         )}
       </Column>
@@ -90,4 +102,5 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
 );
 
 BlockQuote.displayName = "BlockQuote";
+
 export { BlockQuote };

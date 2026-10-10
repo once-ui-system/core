@@ -1,24 +1,28 @@
 "use client";
 
-import React, { useState, forwardRef, useEffect, useCallback } from "react";
 import classNames from "clsx";
-import { Flex } from "./Flex";
-import { Text } from "./Text";
-import { Button } from "./Button";
-import { Grid } from "./Grid";
-import { SegmentedControl } from "./SegmentedControl";
-import { IconButton } from "./IconButton";
-import { RevealFx } from "./RevealFx";
-import { NumberInput } from "./NumberInput";
-import { DropdownWrapper } from "./DropdownWrapper";
-import { Option } from "./Option";
-import { Column } from "./Column";
-import { Icon } from "./Icon";
-import { Row } from "./Row";
-import { ArrowNavigation } from "./ArrowNavigationContext";
+import React, { forwardRef, useCallback, useEffect, useState } from "react";
 import { CondensedTShirtSizes } from "../types";
-import { getLastOpenedDropdown, setLastOpenedDropdown, clearLastOpenedDropdown } from "../utils/dropdownState";
+import {
+  clearLastOpenedDropdown,
+  getLastOpenedDropdown,
+  setLastOpenedDropdown,
+} from "../utils/dropdownState";
+import { ArrowNavigation } from "./ArrowNavigationContext";
+import { Button } from "./Button";
+import { Column } from "./Column";
 import styles from "./DatePicker.module.scss";
+import { DropdownWrapper } from "./DropdownWrapper";
+import { Flex } from "./Flex";
+import { Grid } from "./Grid";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { NumberInput } from "./NumberInput";
+import { Option } from "./Option";
+import { RevealFx } from "./RevealFx";
+import { Row } from "./Row";
+import { SegmentedControl } from "./SegmentedControl";
+import { Text } from "./Text";
 
 export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
   value?: Date;
@@ -630,7 +634,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronLeft"
-            aria-label="Previous month"
+                  aria-label="Previous month"
                   onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -803,7 +807,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronRight"
-            aria-label="Next month"
+                  aria-label="Next month"
                   onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -951,4 +955,5 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 );
 
 DatePicker.displayName = "DatePicker";
+
 export { DatePicker };

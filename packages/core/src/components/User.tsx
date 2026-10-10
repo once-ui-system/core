@@ -1,15 +1,14 @@
 "use client";
 
+import classNames from "clsx";
 import type React from "react";
 import { forwardRef } from "react";
-import classNames from "clsx";
-
-import { Flex } from "./Flex";
-import { Text } from "./Text";
-import { Skeleton } from "./Skeleton";
-import { Tag, type TagProps } from "./Tag";
 import { Avatar, type AvatarProps } from "./Avatar";
 import { Column } from "./Column";
+import { Flex } from "./Flex";
+import { Skeleton } from "./Skeleton";
+import { Tag, type TagProps } from "./Tag";
+import { Text } from "./Text";
 
 interface UserProps {
   name?: string;
@@ -77,5 +76,5 @@ const User = forwardRef<HTMLDivElement, UserProps>(
 
 User.displayName = "User";
 
-export { User };
 export type { UserProps };
+export { User };

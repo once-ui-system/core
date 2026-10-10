@@ -2,8 +2,8 @@
 
 import React from "react";
 import { Row } from "../../components/Row";
-import { RadiusSize, SpacingToken } from "../../types";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
+import { RadiusSize, SpacingToken } from "../../types";
 import { ChartVariant } from "./interfaces";
 
 export interface SwatchProps {

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { forwardRef, useState, useEffect } from "react";
 import classNames from "clsx";
-import { Grid } from "./Grid";
+import type { ComponentProps } from "react";
+import React, { forwardRef, useEffect, useState } from "react";
 import { Flex } from "./Flex";
+import { Grid } from "./Grid";
 import { Logo } from "./Logo";
 import styles from "./LogoCloud.module.scss";
-import type { ComponentProps } from "react";
 
 type LogoProps = ComponentProps<typeof Logo>;
 
@@ -80,4 +80,5 @@ const LogoCloud = forwardRef<HTMLDivElement, LogoCloudProps>(
 );
 
 LogoCloud.displayName = "LogoCloud";
+
 export { LogoCloud };

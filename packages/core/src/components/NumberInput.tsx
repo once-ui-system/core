@@ -1,12 +1,12 @@
 "use client";
 
+import classNames from "clsx";
 import React, { forwardRef, useState } from "react";
-import { Input } from "./Input";
+import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { IconButton } from "./IconButton";
-import { Column } from "./Column";
+import { Input } from "./Input";
 import styles from "./NumberInput.module.scss";
-import classNames from "clsx";
 
 interface NumberInputProps
   extends Omit<React.ComponentProps<typeof Input>, "type" | "value" | "onChange"> {
@@ -124,4 +124,5 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 );
 
 NumberInput.displayName = "NumberInput";
+
 export { NumberInput };

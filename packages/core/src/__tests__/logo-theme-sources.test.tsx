@@ -28,8 +28,8 @@ describe("Logo theme-aware sources", () => {
       { wrapper: wrap },
     );
     expect(screen.getAllByAltText("Trademark")).toHaveLength(2);
-    expect(container.querySelector('img.light-flex')).toHaveAttribute("src", "/mark-light.svg");
-    expect(container.querySelector('img.dark-flex')).toHaveAttribute("src", "/mark-dark.svg");
+    expect(container.querySelector("img.light-flex")).toHaveAttribute("src", "/mark-light.svg");
+    expect(container.querySelector("img.dark-flex")).toHaveAttribute("src", "/mark-dark.svg");
   });
 
   it("supports a per-theme wordmark alongside a plain icon", () => {

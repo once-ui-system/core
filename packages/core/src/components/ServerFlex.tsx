@@ -2,9 +2,9 @@ import classNames from "clsx";
 import { CSSProperties, forwardRef } from "react";
 
 import {
-  FlexBreakpointProps,
   CommonProps,
   DisplayProps,
+  FlexBreakpointProps,
   FlexProps,
   SizeProps,
   SpacingProps,
@@ -370,7 +370,9 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       fill && "min-height-0",
       fill && "min-width-0",
       (fillWidth || maxWidth) && "fill-width",
-      maxWidth && ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) && `max-width-${maxWidth}`,
+      maxWidth &&
+        ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) &&
+        `max-width-${maxWidth}`,
       (fillHeight || maxHeight) && "fill-height",
       shadow && `shadow-${shadow}`,
       zIndex !== undefined && `z-index-${zIndex}`,
@@ -392,13 +394,13 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         ...spacingClasses("s", cascadedS),
         ...spacingClasses("xs", cascadedXs),
         cascadedXl?.position && `xl-position-${cascadedXl.position}`,
-          cascadedL?.position && `l-position-${cascadedL.position}`,
+        cascadedL?.position && `l-position-${cascadedL.position}`,
         cascadedM?.position && `m-position-${cascadedM.position}`,
         cascadedS?.position && `s-position-${cascadedS.position}`,
         cascadedXs?.position && `xs-position-${cascadedXs.position}`,
         cascadedXl?.hide === true && "xl-flex-hide",
-          cascadedXl?.hide === false && "xl-flex-show",
-          cascadedL?.hide === true && "l-flex-hide",
+        cascadedXl?.hide === false && "xl-flex-show",
+        cascadedL?.hide === true && "l-flex-hide",
         cascadedL?.hide === false && "l-flex-show",
         cascadedM?.hide === true && "m-flex-hide",
         cascadedM?.hide === false && "m-flex-show",
@@ -407,7 +409,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedXs?.hide === true && "xs-flex-hide",
         cascadedXs?.hide === false && "xs-flex-show",
         xl?.direction && `xl-flex-${xl.direction}`,
-          l?.direction && `l-flex-${l.direction}`,
+        l?.direction && `l-flex-${l.direction}`,
         m?.direction && `m-flex-${m.direction}`,
         s?.direction && `s-flex-${s.direction}`,
         xs?.direction && `xs-flex-${xs.direction}`,
@@ -505,8 +507,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedS?.transition && `s-transition-${cascadedS.transition}`,
         cascadedXs?.transition && `xs-transition-${cascadedXs.transition}`,
       );
-  
-
 
     const parseDimension = (
       value: number | SpacingToken | string | undefined,
@@ -586,7 +586,9 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         : undefined;
 
     const combinedStyle: CSSProperties = {
-      maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) ? undefined : parseDimension(maxWidth, "width"),
+      maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
+        ? undefined
+        : parseDimension(maxWidth, "width"),
       minWidth: parseDimension(minWidth, "width"),
       minHeight: parseDimension(minHeight, "height"),
       maxHeight: parseDimension(maxHeight, "height"),
@@ -629,4 +631,5 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
 );
 
 ServerFlex.displayName = "ServerFlex";
+
 export { ServerFlex };

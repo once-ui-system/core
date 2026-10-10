@@ -1,13 +1,14 @@
 "use client";
 
-import React, { forwardRef, useRef, useState, useEffect } from "react";
 import classNames from "clsx";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { Column } from "./Column";
 import { Row } from "./Row";
-import { Text } from "./Text";
 import styles from "./Slider.module.scss";
+import { Text } from "./Text";
 
-interface SliderProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "onChange"> {
+interface SliderProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "onChange"> {
   value: number;
   onChange: (value: number) => void;
   min?: number;
@@ -56,12 +57,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
     }, [isDragging]);
 
     return (
-      <Column
-        fillWidth
-        gap="8"
-        className={classNames(styles.container, className)}
-        style={style}
-      >
+      <Column fillWidth gap="8" className={classNames(styles.container, className)} style={style}>
         {(label || showValue) && (
           <Row fillWidth horizontal="between" vertical="center">
             {label && (
@@ -85,10 +81,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
           })}
         >
           <div className={styles.track}>
-            <div
-              className={styles.fill}
-              style={{ width: `${percentage}%` }}
-            />
+            <div className={styles.fill} style={{ width: `${percentage}%` }} />
           </div>
           <input
             ref={ref || sliderRef}
@@ -103,10 +96,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
             className={styles.input}
             {...props}
           />
-          <div
-            className={styles.thumb}
-            style={{ left: `${percentage}%` }}
-          />
+          <div className={styles.thumb} style={{ left: `${percentage}%` }} />
         </Row>
       </Column>
     );
@@ -115,5 +105,5 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
 
 Slider.displayName = "Slider";
 
-export { Slider };
 export type { SliderProps };
+export { Slider };

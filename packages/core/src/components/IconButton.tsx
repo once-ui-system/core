@@ -1,17 +1,17 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
-import { ElementType } from "./ElementType";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { Tooltip } from "./Tooltip";
-import { HoverCard } from "./HoverCard";
-import { Spinner } from "./Spinner";
-import buttonStyles from "./Button.module.scss";
-import iconStyles from "./IconButton.module.scss";
 import classNames from "clsx";
+import React, { forwardRef, ReactNode } from "react";
 import { IconName } from "../icons";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
+import buttonStyles from "./Button.module.scss";
+import { ElementType } from "./ElementType";
+import { Flex } from "./Flex";
+import { HoverCard } from "./HoverCard";
+import { Icon } from "./Icon";
+import iconStyles from "./IconButton.module.scss";
+import { Spinner } from "./Spinner";
+import { Tooltip } from "./Tooltip";
 
 interface IconButtonCommonProps {
   icon?: IconName;
@@ -30,7 +30,17 @@ interface IconButtonCommonProps {
   rounded?: boolean;
   tooltip?: ReactNode;
   tooltipPosition?: "top" | "bottom" | "left" | "right";
-  variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "quaternary"
+    | "subtle"
+    | "danger"
+    | "success"
+    | "warning"
+    | "ghost"
+    | "link";
   loading?: boolean;
   disabled?: boolean;
   className?: string;
@@ -126,4 +136,5 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
 );
 
 IconButton.displayName = "IconButton";
+
 export { IconButton };

@@ -1,9 +1,9 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
-import styles from "./InlineCode.module.scss";
-import { Flex } from "./Flex";
 import classNames from "clsx";
+import React, { forwardRef, ReactNode } from "react";
+import { Flex } from "./Flex";
+import styles from "./InlineCode.module.scss";
 
 interface InlineCodeProps extends React.ComponentProps<typeof Flex> {
   children: ReactNode;

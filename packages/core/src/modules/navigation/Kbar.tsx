@@ -1,7 +1,6 @@
 "use client";
 
 import React, { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { IconName } from "../../icons";
 import { createPortal } from "react-dom";
 import {
   ArrowNavigation,
@@ -17,6 +16,7 @@ import { Row } from "../../components/Row";
 import { ScrollLock } from "../../components/ScrollLock";
 import { Text } from "../../components/Text";
 import { useAdapters } from "../../contexts/AdapterProvider";
+import type { IconName } from "../../icons";
 import type { TShirtSizes } from "../../types";
 import styles from "./Kbar.module.scss";
 

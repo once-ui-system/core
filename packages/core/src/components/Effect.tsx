@@ -95,5 +95,5 @@ const Effect = forwardRef<HTMLDivElement, EffectProps>(
 
 Effect.displayName = "Effect";
 
-export { Effect };
 export type { EffectProps, EffectType };
+export { Effect };

@@ -1,13 +1,13 @@
-import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
+import React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { resetScrollLockState } from "../components/ScrollLock";
+import { LayoutProvider } from "../contexts/LayoutProvider";
+import { resetScrollLockTestState } from "../internal/scrollLockState";
+import { KbarContent } from "../modules/navigation/Kbar";
+import { ContextMenu } from "./ContextMenu";
 import { Dialog } from "./Dialog";
 import { DropdownWrapper } from "./DropdownWrapper";
-import { ContextMenu } from "./ContextMenu";
-import { LayoutProvider } from "../contexts/LayoutProvider";
-import { KbarContent } from "../modules/navigation/Kbar";
-import { resetScrollLockTestState } from "../internal/scrollLockState";
-import { resetScrollLockState } from "../components/ScrollLock";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -167,7 +167,11 @@ describe("ScrollLock integration with concurrent overlays", () => {
     const topEvent = new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaY: 80 });
     topTarget.dispatchEvent(topEvent);
 
-    const backgroundEvent = new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaY: 80 });
+    const backgroundEvent = new WheelEvent("wheel", {
+      bubbles: true,
+      cancelable: true,
+      deltaY: 80,
+    });
     backgroundTarget.dispatchEvent(backgroundEvent);
 
     const outsideEvent = new WheelEvent("wheel", { bubbles: true, cancelable: true, deltaY: 80 });

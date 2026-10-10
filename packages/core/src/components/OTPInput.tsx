@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useRef, forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Input } from "./Input";
-import { Text } from "./Text";
 import styles from "./OTPInput.module.scss";
+import { Text } from "./Text";
 
 interface OTPInputProps extends React.HTMLAttributes<HTMLDivElement> {
   length?: number;
@@ -130,5 +130,5 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
 
 OTPInput.displayName = "OTPInput";
 
-export { OTPInput };
 export type { OTPInputProps };
+export { OTPInput };

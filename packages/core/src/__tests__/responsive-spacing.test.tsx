@@ -36,7 +36,11 @@ describe("breakpoint spacing", () => {
   });
 
   it("lets a narrower breakpoint override a wider one", () => {
-    const classes = classesOf(<ServerFlex s={{ gap: "4" }} xs={{ gap: "16" }}>x</ServerFlex>);
+    const classes = classesOf(
+      <ServerFlex s={{ gap: "4" }} xs={{ gap: "16" }}>
+        x
+      </ServerFlex>,
+    );
     expect(classes).toContain("s-g-4");
     expect(classes).toContain("xs-g-16");
     expect(classes).not.toContain("xs-g-4");
@@ -56,7 +60,11 @@ describe("breakpoint spacing", () => {
    * runtime, since `@media` does not read custom properties.
    */
   it("renders a responsive Flex on the server, with no provider", () => {
-    const html = renderToStaticMarkup(<Flex direction="row" gap="16" s={{ direction: "column", gap: "4" }}>x</Flex>);
+    const html = renderToStaticMarkup(
+      <Flex direction="row" gap="16" s={{ direction: "column", gap: "4" }}>
+        x
+      </Flex>,
+    );
     expect(html).toContain("s-flex-column");
     expect(html).toContain("s-g-4");
   });
@@ -64,8 +72,12 @@ describe("breakpoint spacing", () => {
   it("keeps the values a class cannot express on the client", () => {
     // A rem gap and a free-form width: neither has a class to reach for.
     for (const el of [
-      <Flex key="n" s={{ gap: 0.25 }}>x</Flex>,
-      <Flex key="w" s={{ width: 20 }}>x</Flex>,
+      <Flex key="n" s={{ gap: 0.25 }}>
+        x
+      </Flex>,
+      <Flex key="w" s={{ width: 20 }}>
+        x
+      </Flex>,
     ]) {
       expect(() => renderToStaticMarkup(el)).toThrow(/LayoutProvider/);
     }
@@ -85,7 +97,11 @@ describe("breakpoint spacing", () => {
   });
 
   it("lets a narrower step override xl", () => {
-    const html = renderToStaticMarkup(<Flex xl={{ gap: "4" }} s={{ gap: "16" }}>x</Flex>);
+    const html = renderToStaticMarkup(
+      <Flex xl={{ gap: "4" }} s={{ gap: "16" }}>
+        x
+      </Flex>,
+    );
     expect(html).toContain("xl-g-4");
     expect(html).toContain("l-g-4");
     expect(html).toContain("s-g-16");

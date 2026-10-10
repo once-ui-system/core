@@ -1,12 +1,13 @@
 "use client";
-import React, { useRef, forwardRef, useState, useCallback } from "react";
-import { Flex } from "./Flex";
-import { Input, InputProps } from "./Input";
-import { IconButton } from "./IconButton";
-import { Icon } from "./Icon";
-import { DropdownWrapper } from "./DropdownWrapper";
-import { Slider } from "./Slider";
+import React, { forwardRef, useCallback, useRef, useState } from "react";
 import { Column } from "./Column";
+import { DropdownWrapper } from "./DropdownWrapper";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { Input, InputProps } from "./Input";
+import { Slider } from "./Slider";
+
 interface ColorInputProps extends Omit<InputProps, "onChange" | "value"> {
   value: string;
   onChange: (value: string) => void;
@@ -111,9 +112,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
               opacity={hexValue ? 100 : 0}
               transition="micro-medium"
               style={{
-                backgroundColor: supportAlpha
-                  ? hexToRgba(hexValue, alpha)
-                  : hexValue,
+                backgroundColor: supportAlpha ? hexToRgba(hexValue, alpha) : hexValue,
                 transform: hexValue ? "scale(1)" : "scale(0)",
               }}
             />{" "}
@@ -193,5 +192,6 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
   },
 );
 ColorInput.displayName = "ColorInput";
-export { ColorInput };
+
 export type { ColorInputProps };
+export { ColorInput };

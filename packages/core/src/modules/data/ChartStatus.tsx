@@ -2,8 +2,8 @@
 
 import React from "react";
 import { Column } from "../../components/Column";
-import { Text } from "../../components/Text";
 import { Spinner } from "../../components/Spinner";
+import { Text } from "../../components/Text";
 
 export interface ChartStatusProps {
   loading?: boolean;

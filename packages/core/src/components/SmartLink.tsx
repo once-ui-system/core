@@ -1,11 +1,11 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
-import { Icon } from "./Icon";
-import { ElementType } from "./ElementType";
+import React, { forwardRef, ReactNode } from "react";
 import { IconName } from "../icons";
 import { TShirtSizes } from "../types";
+import { ElementType } from "./ElementType";
+import { Icon } from "./Icon";
 
 interface SmartLinkCommonProps {
   prefixIcon?: IconName;

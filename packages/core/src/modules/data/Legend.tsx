@@ -3,9 +3,9 @@
 import React from "react";
 import { Row } from "../../components/Row";
 import { Text } from "../../components/Text";
-import { Swatch } from "./Swatch";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import { ChartVariant } from "./interfaces";
+import { Swatch } from "./Swatch";
 
 interface LegendProps {
   payload?: readonly Record<string, any>[];
@@ -122,5 +122,5 @@ const Legend: React.FC<LegendProps> = ({
   );
 };
 
-export { Legend };
 export type { LegendProps };
+export { Legend };

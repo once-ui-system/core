@@ -1,13 +1,13 @@
 "use client";
 
-import React, { useEffect, useState, forwardRef } from "react";
-import { IconButton } from "./IconButton";
-import { Icon } from "./Icon";
-import { Flex } from "./Flex";
-import { Row } from "./Row";
 import classNames from "clsx";
-import styles from "./Toast.module.scss";
+import React, { forwardRef, useEffect, useState } from "react";
 import { IconName } from "../icons";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { Row } from "./Row";
+import styles from "./Toast.module.scss";
 
 interface ToastProps {
   className?: string;

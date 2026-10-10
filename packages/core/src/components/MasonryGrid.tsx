@@ -1,10 +1,10 @@
-import React, { forwardRef } from "react";
+import classNames from "clsx";
 import type { CSSProperties, ReactNode } from "react";
+import React, { forwardRef } from "react";
 import { SpacingToken } from "../types";
 import { Column } from "./Column";
-import classNames from "clsx";
-import styles from "./MasonryGrid.module.scss";
 import { Flex } from "./Flex";
+import styles from "./MasonryGrid.module.scss";
 
 interface MasonryBreakpointProps {
   columns?: number;
@@ -44,7 +44,7 @@ function parseToken(value: SpacingToken | "-1" | number | undefined, type: "widt
   return undefined;
 }
 
-interface MasonryGridProps extends Omit<React.ComponentProps<typeof Flex>, 'l' | 'm' | 's' | 'xs'> {
+interface MasonryGridProps extends Omit<React.ComponentProps<typeof Flex>, "l" | "m" | "s" | "xs"> {
   children: ReactNode;
   gap?: SpacingToken | "-1" | undefined;
   columns?: number;
@@ -70,7 +70,7 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
     );
 
     return (
-      <Flex   
+      <Flex
         fillWidth
         className={classes}
         ref={ref}
@@ -79,7 +79,8 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
           display: "block",
           columnGap: gapValue,
           ...style,
-        }}>
+        }}
+      >
         {React.Children.map(children, (child, idx) => (
           <Column
             key={idx}
@@ -99,4 +100,5 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
 );
 
 export { MasonryGrid };
+
 MasonryGrid.displayName = "MasonryGrid";

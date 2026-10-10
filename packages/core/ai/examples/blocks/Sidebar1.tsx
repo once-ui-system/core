@@ -12,15 +12,7 @@ const nav = [
 
 /** App sidebar shell — compose with Header1 + Table1 in Dashboard1 */
 export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => (
-  <Column
-    fillHeight
-    maxWidth={18}
-    background="surface"
-    borderRight
-    padding="8"
-    gap="4"
-    {...flex}
-  >
+  <Column fillHeight maxWidth={18} background="surface" borderRight padding="8" gap="4" {...flex}>
     <Text variant="label-default-s" onBackground="neutral-weak" padding="12">
       Dashboard
     </Text>

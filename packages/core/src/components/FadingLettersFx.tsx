@@ -1,8 +1,8 @@
 "use client";
 
-import { Text } from "./Text";
 import { ComponentProps } from "react";
 import styles from "./FadingLettersFx.module.scss";
+import { Text } from "./Text";
 
 type AnimationState = "entering" | "visible" | "exiting";
 
@@ -35,10 +35,12 @@ function FadingLettersFx({
             className={`${styles.letter} ${
               animationState === "entering" ? styles.entering : ""
             } ${animationState === "exiting" ? styles.exiting : ""}`}
-            style={{
-              "--entry-delay": `${entryDelay}ms`,
-              "--exit-delay": `${exitDelay}ms`,
-            } as React.CSSProperties}
+            style={
+              {
+                "--entry-delay": `${entryDelay}ms`,
+                "--exit-delay": `${exitDelay}ms`,
+              } as React.CSSProperties
+            }
             data-letter={letter}
             suppressHydrationWarning
           >
@@ -64,5 +66,5 @@ function FadingLettersFx({
 
 FadingLettersFx.displayName = "FadingLettersFx";
 
+export type { AnimationState, FadingLettersFxProps };
 export { FadingLettersFx };
-export type { FadingLettersFxProps, AnimationState };

@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
+import { IconName } from "../icons";
 import { Icon } from "./Icon";
 import { Row } from "./Row";
 import { Text } from "./Text";
 import { ToggleButton } from "./ToggleButton";
-import { IconName } from "../icons";
 
 interface NavItemProps
   extends Omit<React.ComponentProps<typeof ToggleButton>, "label" | "prefixIcon"> {
@@ -30,14 +30,7 @@ const NavItem = forwardRef<HTMLElement, NavItemProps>(
   ({ label, icon, badge, indicator, ...toggle }, ref) => {
     const trailing = indicator || (badge !== undefined && badge > 0);
     return (
-      <ToggleButton
-        ref={ref}
-        fillWidth
-        horizontal="start"
-        size="l"
-        radius="m"
-        {...toggle}
-      >
+      <ToggleButton ref={ref} fillWidth horizontal="start" size="l" radius="m" {...toggle}>
         <Row
           fillWidth
           gap="12"
@@ -76,5 +69,5 @@ const NavItem = forwardRef<HTMLElement, NavItemProps>(
 
 NavItem.displayName = "NavItem";
 
-export { NavItem };
 export type { NavItemProps };
+export { NavItem };

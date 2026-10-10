@@ -1,16 +1,15 @@
 "use client";
 
 import React, { forwardRef } from "react";
-
-import { Skeleton } from "./Skeleton";
-import { Icon } from "./Icon";
-import { Text } from "./Text";
-import { StatusIndicator } from "./StatusIndicator";
-import { Flex } from "./Flex";
-import { Media } from "./Media";
-import styles from "./Avatar.module.scss";
 import { IconName } from "../icons";
-import { TShirtSizes, CondensedTShirtSizes } from "../types";
+import { CondensedTShirtSizes, TShirtSizes } from "../types";
+import styles from "./Avatar.module.scss";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { Media } from "./Media";
+import { Skeleton } from "./Skeleton";
+import { StatusIndicator } from "./StatusIndicator";
+import { Text } from "./Text";
 
 interface AvatarProps extends React.ComponentProps<typeof Flex> {
   size?: TShirtSizes | number;
@@ -45,7 +44,19 @@ const statusIndicatorSizeMapping: Record<TShirtSizes, CondensedTShirtSizes> = {
 
 const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   (
-    { size = "m", value, src, unoptimized, loading, empty, icon, statusIndicator, className, style = {}, ...rest },
+    {
+      size = "m",
+      value,
+      src,
+      unoptimized,
+      loading,
+      empty,
+      icon,
+      statusIndicator,
+      className,
+      style = {},
+      ...rest
+    },
     ref,
   ) => {
     const sizeInRem = typeof size === "number" ? `${size}rem` : undefined;
@@ -154,5 +165,5 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 
 Avatar.displayName = "Avatar";
 
-export { Avatar };
 export type { AvatarProps };
+export { Avatar };

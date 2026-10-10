@@ -63,7 +63,11 @@ function findProjectRoot(startDir = process.cwd()) {
 function upsertMarkedSection(existing, section, force) {
   if (existing.includes(MARKER_START) && existing.includes(MARKER_END)) {
     if (!force) {
-      return { content: existing, changed: false, reason: "AGENTS.md already contains Once UI harness section" };
+      return {
+        content: existing,
+        changed: false,
+        reason: "AGENTS.md already contains Once UI harness section",
+      };
     }
 
     const start = existing.indexOf(MARKER_START);
@@ -126,9 +130,7 @@ function main() {
   const results = [];
 
   if (agentsResult.changed) {
-    results.push(
-      writeFile(projectRoot, "AGENTS.md", agentsResult.content, options),
-    );
+    results.push(writeFile(projectRoot, "AGENTS.md", agentsResult.content, options));
   } else {
     results.push({
       path: agentsPath,
@@ -149,7 +151,9 @@ function main() {
   }
 
   if (!options.dryRun) {
-    console.log("\nNext: open a .tsx file and ask your agent to build Once UI — it should load the harness from node_modules/@once-ui-system/core/ai/");
+    console.log(
+      "\nNext: open a .tsx file and ask your agent to build Once UI — it should load the harness from node_modules/@once-ui-system/core/ai/",
+    );
   }
 }
 

@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import type { IconName } from "../../icons";
 import { type ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import { Column } from "../../components/Column";
 import { Flex } from "../../components/Flex";
@@ -10,6 +9,7 @@ import { Row } from "../../components/Row";
 import { Text } from "../../components/Text";
 import { ToggleButton } from "../../components/ToggleButton";
 import { useAdapters } from "../../contexts/AdapterProvider";
+import type { IconName } from "../../icons";
 import styles from "./MegaMenu.module.scss";
 
 export interface MenuLink {

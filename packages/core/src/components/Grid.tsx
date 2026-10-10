@@ -1,12 +1,12 @@
 import { forwardRef } from "react";
 import {
-  GridProps,
-  StyleProps,
-  SpacingProps,
-  SizeProps,
   CommonProps,
   DisplayProps,
   GridBreakpointProps,
+  GridProps,
+  SizeProps,
+  SpacingProps,
+  StyleProps,
 } from "../interfaces";
 import { ClientGrid } from "./ClientGrid";
 import { ServerGrid } from "./ServerGrid";
@@ -71,4 +71,5 @@ const Grid = forwardRef<HTMLDivElement, SmartGridProps>(
 );
 
 Grid.displayName = "Grid";
+
 export { Grid };

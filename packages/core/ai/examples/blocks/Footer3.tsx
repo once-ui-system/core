@@ -1,5 +1,5 @@
-import { social } from "./content/resources";
 import { Column, Grid, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
+import { social } from "./content/resources";
 
 const navigation = [
   {
@@ -25,7 +25,7 @@ const navigation = [
       { label: "Magic Store", href: "#" },
       { label: "Magic Agent", href: "#" },
       { label: "Once UI Blocks", href: "#" },
-    ]
+    ],
   },
   {
     title: "Learn",
@@ -56,7 +56,7 @@ const navigation = [
       { label: "Terms of Use", href: "#" },
       { label: "Privacy Policy", href: "#" },
       { label: "License Agreement", href: "#" },
-    ]
+    ],
   },
 ];
 
@@ -64,18 +64,11 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" paddingTop="80" paddingBottom="16" {...flex}>
       <Column maxWidth="xl" paddingX="l" horizontal="center" gap="48">
-        <Grid
-          fillWidth
-          columns={5}
-          m={{columns: 3}}
-          s={{columns: 2}}
-          gap="32">
+        <Grid fillWidth columns={5} m={{ columns: 3 }} s={{ columns: 2 }} gap="32">
           {navigation.map((section) => (
             <Column key={section.title} gap="24" paddingY="8">
-              <Text variant="label-default-s">
-                {section.title}
-              </Text>
-              <Row fillWidth s={{direction: "column"}} gap="24">
+              <Text variant="label-default-s">{section.title}</Text>
+              <Row fillWidth s={{ direction: "column" }} gap="24">
                 <Column fillWidth key={`${section.title}-${section.title}`} gap="16">
                   {section.items.map((item: any) => (
                     <SmartLink key={`${item.label}-${item.href}`} href={item.href} unstyled>
@@ -94,7 +87,15 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
             </Column>
           ))}
         </Grid>
-        <Row fillWidth inline gap="8" vertical="center" textVariant="label-default-s" onBackground="neutral-weak" s={{direction: "column", horizontal: "start"}}>
+        <Row
+          fillWidth
+          inline
+          gap="8"
+          vertical="center"
+          textVariant="label-default-s"
+          onBackground="neutral-weak"
+          s={{ direction: "column", horizontal: "start" }}
+        >
           <Row paddingRight="8">
             <Logo size="s" href="/" dark icon="/trademarks/icon-dark.svg" />
             <Logo size="s" href="/" light icon="/trademarks/icon-light.svg" />
@@ -103,7 +104,8 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
             Built with curiosity by{" "}
             <SmartLink href="#" unstyled>
               Lorant One
-            </SmartLink> and the{" "}
+            </SmartLink>{" "}
+            and the{" "}
             <SmartLink href="#" unstyled>
               Design Engineers Club
             </SmartLink>

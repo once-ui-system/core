@@ -1,12 +1,12 @@
 import { forwardRef } from "react";
 import {
-  FlexProps,
-  StyleProps,
-  SpacingProps,
-  SizeProps,
   CommonProps,
   DisplayProps,
   FlexBreakpointProps,
+  FlexProps,
+  SizeProps,
+  SpacingProps,
+  StyleProps,
 } from "../interfaces";
 import { ClientFlex } from "./ClientFlex";
 import { ServerFlex } from "./ServerFlex";
@@ -125,4 +125,5 @@ const Flex = forwardRef<HTMLDivElement, SmartFlexProps>(
 );
 
 Flex.displayName = "Flex";
+
 export { Flex };

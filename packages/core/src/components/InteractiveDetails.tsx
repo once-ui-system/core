@@ -1,10 +1,10 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Text } from "./Text";
 import { Column } from "./Column";
 import { IconButton, IconButtonProps } from "./IconButton";
 import { Row } from "./Row";
+import { Text } from "./Text";
 
 interface InteractiveDetailsProps {
   label?: React.ReactNode;
@@ -38,8 +38,13 @@ const InteractiveDetails: React.FC<InteractiveDetailsProps> = forwardRef<
         </Text>
         {iconButtonProps?.tooltip && (
           <div onClick={(e) => e.stopPropagation()}>
-            <IconButton size="s" variant="ghost" icon="help"
-          aria-label="More information" {...iconButtonProps} />
+            <IconButton
+              size="s"
+              variant="ghost"
+              icon="help"
+              aria-label="More information"
+              {...iconButtonProps}
+            />
           </div>
         )}
       </Row>
@@ -54,5 +59,5 @@ const InteractiveDetails: React.FC<InteractiveDetailsProps> = forwardRef<
 
 InteractiveDetails.displayName = "InteractiveDetails";
 
-export { InteractiveDetails };
 export type { InteractiveDetailsProps };
+export { InteractiveDetails };

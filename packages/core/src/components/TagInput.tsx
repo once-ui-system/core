@@ -1,15 +1,14 @@
 "use client";
 
 import {
-  useState,
-  KeyboardEventHandler,
   ChangeEventHandler,
   FocusEventHandler,
   forwardRef,
+  KeyboardEventHandler,
+  useState,
 } from "react";
-
-import { Flex } from "./Flex";
 import { Chip } from "./Chip";
+import { Flex } from "./Flex";
 import { Input, InputProps } from "./Input";
 
 interface TagInputProps extends Omit<InputProps, "onChange" | "value"> {
@@ -90,5 +89,5 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
 
 TagInput.displayName = "TagInput";
 
-export { TagInput };
 export type { TagInputProps };
+export { TagInput };

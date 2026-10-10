@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, forwardRef, useId } from "react";
 import classNames from "clsx";
+import React, { forwardRef, useEffect, useId, useState } from "react";
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
 import styles from "./SharedInteractiveStyles.module.scss";
@@ -21,7 +21,17 @@ interface RadioButtonProps
 
 const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
-    { style, className, checked: controlledIsChecked, name, value, onToggle, disabled, hoverable = true, ...props },
+    {
+      style,
+      className,
+      checked: controlledIsChecked,
+      name,
+      value,
+      onToggle,
+      disabled,
+      hoverable = true,
+      ...props
+    },
     ref,
   ) => {
     const [isChecked, setIsChecked] = useState(controlledIsChecked || false);
@@ -112,5 +122,5 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
 
 RadioButton.displayName = "RadioButton";
 
-export { RadioButton };
 export type { RadioButtonProps };
+export { RadioButton };

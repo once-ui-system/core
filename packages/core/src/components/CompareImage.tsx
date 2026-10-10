@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
-import { Flex } from "./Flex";
-import { Media } from "./Media";
-import { IconButton } from "./IconButton";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./CompareImage.module.scss";
+import { Flex } from "./Flex";
+import { IconButton } from "./IconButton";
+import { Media } from "./Media";
 
 interface SideContent {
   src: string | React.ReactNode;
@@ -99,7 +99,13 @@ const CompareImage = ({
   }, [handleMouseMove, handleMouseUp, handleTouchMove]);
 
   return (
-    <Flex ref={containerRef} aspectRatio={aspectRatio || "16/9"} fillWidth style={{ touchAction: "none" }} {...rest}>
+    <Flex
+      ref={containerRef}
+      aspectRatio={aspectRatio || "16/9"}
+      fillWidth
+      style={{ touchAction: "none" }}
+      {...rest}
+    >
       {renderContent(leftContent, `inset(0 ${100 - position}% 0 0)`, aspectRatio, unoptimized)}
       {renderContent(rightContent, `inset(0 0 0 ${position}%)`, aspectRatio, unoptimized)}
 
@@ -127,7 +133,8 @@ const CompareImage = ({
         className={styles.dragIcon}
         style={{
           left: `${position}%`,
-        }}>
+        }}
+      >
         <IconButton
           icon="chevronsLeftRight"
           aria-label="Drag to compare"
@@ -142,4 +149,5 @@ const CompareImage = ({
 };
 
 CompareImage.displayName = "CompareImage";
+
 export { CompareImage };

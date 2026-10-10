@@ -1,11 +1,10 @@
 "use client";
 
-import { forwardRef } from "react";
-import { ServerGrid } from "./ServerGrid";
-import { Cursor } from "./Cursor";
-import { GridProps, StyleProps, DisplayProps, GridBreakpointProps } from "../interfaces";
-import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
+import { CSSProperties, forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { useLayout } from "../contexts/LayoutProvider";
+import { DisplayProps, GridBreakpointProps, GridProps, StyleProps } from "../interfaces";
+import { Cursor } from "./Cursor";
+import { ServerGrid } from "./ServerGrid";
 
 interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];
@@ -22,7 +21,6 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
     const elementRef = useRef<HTMLDivElement>(null);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const { currentBreakpoint } = useLayout();
-
 
     // Combine refs
     const combinedRef = (node: HTMLDivElement) => {
@@ -152,4 +150,5 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
 );
 
 ClientGrid.displayName = "ClientGrid";
+
 export { ClientGrid };

@@ -1,13 +1,13 @@
 "use client";
 
-import React, { ReactNode, MouseEventHandler, forwardRef } from "react";
 import classNames from "clsx";
-import { Text } from "./Text";
+import React, { forwardRef, MouseEventHandler, ReactNode } from "react";
+import { IconName } from "../icons";
+import styles from "./Chip.module.scss";
+import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton, IconButtonProps } from "./IconButton";
-import { Flex } from "./Flex";
-import styles from "./Chip.module.scss";
-import { IconName } from "../icons";
+import { Text } from "./Text";
 
 interface ChipProps extends React.ComponentProps<typeof Flex> {
   label: string;

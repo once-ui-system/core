@@ -1,12 +1,12 @@
 import {
-  Row,
+  AvatarGroup,
+  Button,
+  Card,
+  Column,
   Icon,
   IconButton,
-  Button,
+  Row,
   Text,
-  AvatarGroup,
-  Column,
-  Card,
 } from "@once-ui-system/core";
 import { Sidebar2 } from "./Sidebar2";
 
@@ -145,7 +145,7 @@ const issues = [
 export const Productivity1 = () => {
   return (
     <Row fillWidth paddingX="8" gap="m">
-      <Sidebar2 position="sticky"/>
+      <Sidebar2 position="sticky" />
       <Column fillWidth>
         <Row
           as="header"
@@ -204,13 +204,7 @@ export const Productivity1 = () => {
             <Button size="s" variant="secondary" label="New project" prefixIcon="plus" />
           </Row>
         </Row>
-        <Row
-          fillWidth
-          paddingBottom="12"
-          paddingRight="8"
-          paddingLeft="16"
-          horizontal="between"
-        >
+        <Row fillWidth paddingBottom="12" paddingRight="8" paddingLeft="16" horizontal="between">
           <AvatarGroup
             avatars={[
               { src: "/images/avatars/01.png", size: "s" },
@@ -222,14 +216,9 @@ export const Productivity1 = () => {
             ]}
             reverse
           />
-          <Row gap="8" s={{hide: true}}>
+          <Row gap="8" s={{ hide: true }}>
             <Button variant="tertiary" size="s" label="Filter" prefixIcon="trend" />
-            <Button
-              variant="tertiary"
-              size="s"
-              label="Display"
-              prefixIcon="adjustments"
-            />
+            <Button variant="tertiary" size="s" label="Display" prefixIcon="adjustments" />
           </Row>
         </Row>
         <Row fillWidth gap="8" overflowX="auto">

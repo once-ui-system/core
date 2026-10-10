@@ -12,9 +12,9 @@
  * Run: pnpm generate-icons   (after editing scripts/icon-manifest.json)
  */
 import fs from "node:fs";
+import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { createRequire } from "node:module";
 
 const require = createRequire(import.meta.url);
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -32,10 +32,14 @@ function extract(family) {
     const start = src.indexOf("(", re.lastIndex - 1);
     // Walk the JSON argument, which is a balanced object literal with no
     // strings containing braces — machine-generated, so this is safe.
-    let depth = 0, i = start;
+    let depth = 0,
+      i = start;
     for (; i < src.length; i++) {
       if (src[i] === "{") depth++;
-      else if (src[i] === "}" && --depth === 0) { i++; break; }
+      else if (src[i] === "}" && --depth === 0) {
+        i++;
+        break;
+      }
     }
     out.set(m[1], JSON.parse(src.slice(src.indexOf("{", start), i)));
   }
@@ -52,9 +56,7 @@ for (const name of Object.keys(manifest).sort()) {
   entries.push([name, data]);
 }
 
-const body = entries
-  .map(([name, data]) => `  ${name}: ${JSON.stringify(data)},`)
-  .join("\n");
+const body = entries.map(([name, data]) => `  ${name}: ${JSON.stringify(data)},`).join("\n");
 
 fs.writeFileSync(
   path.join(ROOT, "..", "src", "icons", "data.ts"),

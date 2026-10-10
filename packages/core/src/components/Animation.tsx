@@ -1,30 +1,23 @@
 "use client";
 
+import { autoUpdate, flip, shift, useFloating } from "@floating-ui/react-dom";
 import React, {
-  useState,
-  useRef,
-  useEffect,
-  ReactNode,
-  forwardRef,
-  useImperativeHandle,
-  useCallback,
   CSSProperties,
+  forwardRef,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { useFloating, shift, flip, autoUpdate } from "@floating-ui/react-dom";
-import { Flex } from "./Flex";
 import type { Placement, SpacingToken } from "../types";
+import { Flex } from "./Flex";
 
 type TriggerType = "hover" | "click" | "manual";
 
-type EasingCurve = 
-  | "linear"
-  | "ease"
-  | "ease-in"
-  | "ease-out"
-  | "ease-in-out"
-  | "spring"
-  | "bounce";
+type EasingCurve = "linear" | "ease" | "ease-in" | "ease-out" | "ease-in-out" | "spring" | "bounce";
 
 export interface AnimationProps extends React.ComponentProps<typeof Flex> {
   trigger?: ReactNode;
@@ -99,7 +92,7 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
     const [isBrowser, setIsBrowser] = useState(false);
     const [isPositioned, setIsPositioned] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    
+
     const wrapperRef = useRef<HTMLDivElement>(null);
     const floatingRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -108,9 +101,7 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 
     useEffect(() => {
       setMounted(true);
-      setIsTouchDevice(
-        "ontouchstart" in window || navigator.maxTouchPoints > 0
-      );
+      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
       if (portal) {
         setIsBrowser(true);
       }
@@ -118,30 +109,33 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 
     const isControlled = controlledActive !== undefined;
     const rawActive = isControlled ? controlledActive : internalActive;
-    
+
     // Determine if animation should be active based on touch mode
     const isActive = (() => {
       // If on touch device, handle based on touch prop
       if (isTouchDevice && triggerType === "hover") {
-        if (touch === 'disable') return false;
-        if (touch === 'display') return true;
+        if (touch === "disable") return false;
+        if (touch === "display") return true;
         // touch === 'enable', fall through to normal logic
       }
-      
+
       // For non-touch or when mounted, use the raw active state
       if (!mounted && !isTouchDevice) return false;
-      
+
       return rawActive;
     })();
 
     // Floating UI for portal positioning
-    const { x, y, strategy, placement: finalPlacement, refs: floatingRefs } = useFloating({
+    const {
+      x,
+      y,
+      strategy,
+      placement: finalPlacement,
+      refs: floatingRefs,
+    } = useFloating({
       placement,
       open: isActive,
-      middleware: [
-        flip(),
-        shift(),
-      ],
+      middleware: [flip(), shift()],
       whileElementsMounted: portal ? autoUpdate : undefined,
     });
 
@@ -150,7 +144,7 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
         floatingRefs.setReference(wrapperRef.current);
       }
     }, [portal, floatingRefs, mounted]);
-    
+
     useEffect(() => {
       if (portal && isActive && mounted) {
         setIsPositioned(false);
@@ -222,13 +216,13 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 
     const getAnimationStyle = (): React.CSSProperties => {
       // For portals, always use center origin for consistent animations
-      const calculatedTransformOrigin = portal ? 'center center' : transformOrigin;
-      
+      const calculatedTransformOrigin = portal ? "center center" : transformOrigin;
+
       // For portals, don't transition position (top/left) - only animate opacity, transform, filter
-      const transitionProps = portal 
+      const transitionProps = portal
         ? `opacity ${duration}ms ${easingCurves[easing]}, transform ${duration}ms ${easingCurves[easing]}, filter ${duration}ms ${easingCurves[easing]}`
         : `all ${duration}ms ${easingCurves[easing]}`;
-      
+
       const baseStyle: React.CSSProperties = {
         transition: transitionProps,
         transformOrigin: calculatedTransformOrigin,
@@ -236,66 +230,70 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 
       // For portals, animation should trigger based on isPositioned, not isActive
       // For touch="display", wait until mounted to determine state
-      const effectiveActive = portal ? isPositioned : (touch === 'display' && !mounted ? false : isActive);
+      const effectiveActive = portal
+        ? isPositioned
+        : touch === "display" && !mounted
+          ? false
+          : isActive;
       const shouldAnimate = reverse ? !effectiveActive : effectiveActive;
 
       // Combine styles from multiple animations
       let combinedStyle: React.CSSProperties = { ...baseStyle };
       const transforms: string[] = [];
-      
+
       if (fade !== undefined) {
         combinedStyle.opacity = shouldAnimate ? 1 : fade;
       }
-      
+
       if (scale !== undefined) {
         transforms.push(shouldAnimate ? "scale(1)" : `scale(${scale})`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (blur !== undefined) {
         combinedStyle.filter = shouldAnimate ? "blur(0px)" : `blur(${blur}px)`;
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (slideUp !== undefined) {
         transforms.push(shouldAnimate ? "translateY(0)" : `translateY(${slideUp}rem)`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (slideDown !== undefined) {
         transforms.push(shouldAnimate ? "translateY(0)" : `translateY(-${slideDown}rem)`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (slideLeft !== undefined) {
         transforms.push(shouldAnimate ? "translateX(0)" : `translateX(${slideLeft}rem)`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (slideRight !== undefined) {
         transforms.push(shouldAnimate ? "translateX(0)" : `translateX(-${slideRight}rem)`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (zoomIn !== undefined) {
         transforms.push(shouldAnimate ? `scale(${zoomIn})` : "scale(1)");
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
-      
+
       if (zoomOut !== undefined) {
         transforms.push(shouldAnimate ? `scale(${zoomOut})` : "scale(1)");
         if (combinedStyle.opacity === undefined) {
@@ -329,35 +327,37 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
             >
               {trigger}
             </Flex>
-            {isActive && isBrowser && createPortal(
-              <Flex
-                ref={floatingRef}
-                zIndex={10}
-                paddingTop={finalPlacement.includes("bottom") ? offsetDistance : undefined}
-                paddingBottom={finalPlacement.includes("top") ? offsetDistance : undefined}
-                paddingLeft={finalPlacement.includes("right") ? offsetDistance : undefined}
-                paddingRight={finalPlacement.includes("left") ? offsetDistance : undefined}
-                style={{
-                  position: strategy,
-                  top: y ?? 0,
-                  left: x ?? 0,
-                  ...animationStyle,
-                  visibility: isPositioned ? 'visible' : 'hidden',
-                  pointerEvents: isActive ? "auto" : "none",
-                }}
-                onMouseEnter={triggerType === "hover" ? handleMouseEnter : undefined}
-                onMouseLeave={triggerType === "hover" ? handleMouseLeave : undefined}
-                aria-hidden={!isActive}
-                {...flex}
-              >
-                {children}
-              </Flex>,
-              document.body
-            )}
+            {isActive &&
+              isBrowser &&
+              createPortal(
+                <Flex
+                  ref={floatingRef}
+                  zIndex={10}
+                  paddingTop={finalPlacement.includes("bottom") ? offsetDistance : undefined}
+                  paddingBottom={finalPlacement.includes("top") ? offsetDistance : undefined}
+                  paddingLeft={finalPlacement.includes("right") ? offsetDistance : undefined}
+                  paddingRight={finalPlacement.includes("left") ? offsetDistance : undefined}
+                  style={{
+                    position: strategy,
+                    top: y ?? 0,
+                    left: x ?? 0,
+                    ...animationStyle,
+                    visibility: isPositioned ? "visible" : "hidden",
+                    pointerEvents: isActive ? "auto" : "none",
+                  }}
+                  onMouseEnter={triggerType === "hover" ? handleMouseEnter : undefined}
+                  onMouseLeave={triggerType === "hover" ? handleMouseLeave : undefined}
+                  aria-hidden={!isActive}
+                  {...flex}
+                >
+                  {children}
+                </Flex>,
+                document.body,
+              )}
           </>
         );
       }
-      
+
       // Normal mode: absolute positioning
       return (
         <Flex
@@ -408,4 +408,5 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 );
 
 Animation.displayName = "Animation";
+
 export { Animation };

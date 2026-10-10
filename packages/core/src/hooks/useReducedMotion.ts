@@ -24,9 +24,7 @@ function detectLowEndDevice(): boolean {
   return false;
 }
 
-export function useReducedMotion(
-  override?: boolean | "auto",
-): MotionCapability {
+export function useReducedMotion(override?: boolean | "auto"): MotionCapability {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [isLowEnd] = useState(() => detectLowEndDevice());
 
