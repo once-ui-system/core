@@ -111,6 +111,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
       formatTime = defaultFormatTime,
       step,
       ariaLabel = "Seek",
+      "aria-label": nativeAriaLabel,
       ...flex
     },
     ref,
@@ -212,7 +213,9 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
           // the range. Blocks stay pointer-driven, which is what they are.
           role="slider"
           tabIndex={0}
-          aria-label={ariaLabel}
+          // The slider is what gets named, not the outer column the rest of
+          // the props land on. Native aria-label wins over ariaLabel.
+          aria-label={nativeAriaLabel ?? ariaLabel}
           aria-valuemin={0}
           aria-valuemax={duration}
           aria-valuenow={value}
