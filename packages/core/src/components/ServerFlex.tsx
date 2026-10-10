@@ -119,6 +119,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       zIndex,
       shadow,
       cursor,
+      userSelect,
+      blendMode,
+      blur,
+      backdropBlur,
       className,
       style,
       children,
@@ -331,6 +335,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       zIndex !== undefined && `z-index-${zIndex}`,
       textType && `font-${textType}`,
       typeof cursor === "string" && `cursor-${cursor}`,
+      userSelect && `user-select-${userSelect}`,
+      blendMode && `blend-mode-${blendMode}`,
+      typeof blur === "string" && `blur-${blur}`,
+      typeof backdropBlur === "string" && `backdrop-blur-${backdropBlur}`,
       dark && "dark-flex",
       light && "light-flex",
       colorClass,
@@ -577,6 +585,12 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       bottom: parsePosition(bottom),
       left: parsePosition(left),
       transform,
+      // A size is a class; a number is rem, and has no class to reach for.
+      filter: typeof blur === "number" ? `blur(${blur}rem)` : undefined,
+      ...(typeof backdropBlur === "number" && {
+        WebkitBackdropFilter: `blur(${backdropBlur}rem)`,
+        backdropFilter: `blur(${backdropBlur}rem)`,
+      }),
       ...style,
     };
 

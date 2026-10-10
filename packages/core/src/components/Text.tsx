@@ -40,6 +40,7 @@ const Text = <T extends ElementType = "span">({
   className,
   truncate,
   opacity,
+  userSelect,
   ...props
 }: TypeProps<T>) => {
   const Component = as || "span";
@@ -100,6 +101,7 @@ const Text = <T extends ElementType = "span">({
     generateClassName("my", marginY),
     opacity && `opacity-${opacity}`,
     truncate && "truncate",
+    userSelect && `user-select-${userSelect}`,
     family && `font-family-${family}`,
   );
 

@@ -14,6 +14,8 @@ import {
   BREAKPOINTS_CASCADE,
   ALIGN_ALIGNMENTS,
   BACKGROUND_RAMPS,
+  BLEND_MODES,
+  BLUR_SIZES,
   BORDER_SIDES,
   BORDER_STYLES,
   BORDER_WIDTHS,
@@ -34,6 +36,7 @@ import {
   SIZE_RULES,
   SELECTION_GROUPS,
   TRANSITIONS,
+  USER_SELECT,
   Z_INDEX_STEPS,
   cursorValue,
   gridTemplate,
@@ -356,6 +359,22 @@ function display() {
   }
   for (const pe of POINTER_EVENTS) out.push(rule(`.pointer-events-${pe}`, [`pointer-events: ${pe};`]));
   for (const c of CURSORS) out.push(rule(`.cursor-${c}`, [`cursor: ${cursorValue(c)};`]));
+
+  // Last in the file, after `.surface-background` (which sets its own
+  // backdrop-filter), so an explicit `backdropBlur` on a surface wins.
+  for (const v of USER_SELECT) {
+    out.push(rule(`.user-select-${v}`, [`-webkit-user-select: ${v};`, `user-select: ${v};`]));
+  }
+  for (const mode of BLEND_MODES) out.push(rule(`.blend-mode-${mode}`, [`mix-blend-mode: ${mode};`]));
+  for (const { size, space } of BLUR_SIZES) {
+    out.push(rule(`.blur-${size}`, [`filter: blur(var(--static-space-${space}));`]));
+  }
+  for (const { size, space } of BLUR_SIZES) {
+    const blur = `blur(var(--static-space-${space}))`;
+    out.push(
+      rule(`.backdrop-blur-${size}`, [`-webkit-backdrop-filter: ${blur};`, `backdrop-filter: ${blur};`]),
+    );
+  }
 
   return out.join("\n");
 }

@@ -1331,3 +1331,136 @@
 .cursor-zoom-out {
   cursor: zoom-out;
 }
+
+.user-select-none {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.user-select-text {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.user-select-all {
+  -webkit-user-select: all;
+  user-select: all;
+}
+
+.user-select-auto {
+  -webkit-user-select: auto;
+  user-select: auto;
+}
+
+.blend-mode-normal {
+  mix-blend-mode: normal;
+}
+
+.blend-mode-multiply {
+  mix-blend-mode: multiply;
+}
+
+.blend-mode-screen {
+  mix-blend-mode: screen;
+}
+
+.blend-mode-overlay {
+  mix-blend-mode: overlay;
+}
+
+.blend-mode-darken {
+  mix-blend-mode: darken;
+}
+
+.blend-mode-lighten {
+  mix-blend-mode: lighten;
+}
+
+.blend-mode-color-dodge {
+  mix-blend-mode: color-dodge;
+}
+
+.blend-mode-color-burn {
+  mix-blend-mode: color-burn;
+}
+
+.blend-mode-hard-light {
+  mix-blend-mode: hard-light;
+}
+
+.blend-mode-soft-light {
+  mix-blend-mode: soft-light;
+}
+
+.blend-mode-difference {
+  mix-blend-mode: difference;
+}
+
+.blend-mode-exclusion {
+  mix-blend-mode: exclusion;
+}
+
+.blend-mode-hue {
+  mix-blend-mode: hue;
+}
+
+.blend-mode-saturation {
+  mix-blend-mode: saturation;
+}
+
+.blend-mode-color {
+  mix-blend-mode: color;
+}
+
+.blend-mode-luminosity {
+  mix-blend-mode: luminosity;
+}
+
+.blend-mode-plus-lighter {
+  mix-blend-mode: plus-lighter;
+}
+
+.blur-xs {
+  filter: blur(var(--static-space-4));
+}
+
+.blur-s {
+  filter: blur(var(--static-space-8));
+}
+
+.blur-m {
+  filter: blur(var(--static-space-16));
+}
+
+.blur-l {
+  filter: blur(var(--static-space-32));
+}
+
+.blur-xl {
+  filter: blur(var(--static-space-48));
+}
+
+.backdrop-blur-xs {
+  -webkit-backdrop-filter: blur(var(--static-space-4));
+  backdrop-filter: blur(var(--static-space-4));
+}
+
+.backdrop-blur-s {
+  -webkit-backdrop-filter: blur(var(--static-space-8));
+  backdrop-filter: blur(var(--static-space-8));
+}
+
+.backdrop-blur-m {
+  -webkit-backdrop-filter: blur(var(--static-space-16));
+  backdrop-filter: blur(var(--static-space-16));
+}
+
+.backdrop-blur-l {
+  -webkit-backdrop-filter: blur(var(--static-space-32));
+  backdrop-filter: blur(var(--static-space-32));
+}
+
+.backdrop-blur-xl {
+  -webkit-backdrop-filter: blur(var(--static-space-48));
+  backdrop-filter: blur(var(--static-space-48));
+}

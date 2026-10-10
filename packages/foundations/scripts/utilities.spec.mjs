@@ -330,6 +330,42 @@ export const CURSORS = [
 export const cursorValue = (name) =>
   name === "interactive" ? "var(--cursor-interactive)" : name;
 
+/**
+ * Enumerable effect properties, as classes, so a layout primitive can take
+ * them as props and stay a server component. Before these, the only way to
+ * write any of them was a `style` object, which is what moves `Flex` to the
+ * client. Base only: none of them is a layout decision that changes per
+ * breakpoint, and five copies would be most of their weight.
+ *
+ * `transform` is deliberately absent: it is what animations drive, frame by
+ * frame, so it stays in `style`.
+ */
+
+/** `user-select`. Safari still needs the prefix, so both are written. */
+export const USER_SELECT = ["none", "text", "all", "auto"];
+
+/** Every `mix-blend-mode` keyword, plus `plus-lighter` for additive glows. */
+export const BLEND_MODES = [
+  "normal", "multiply", "screen", "overlay", "darken", "lighten",
+  "color-dodge", "color-burn", "hard-light", "soft-light", "difference",
+  "exclusion", "hue", "saturation", "color", "luminosity", "plus-lighter",
+];
+
+/**
+ * The blur scale, on the static spacing steps rather than a token family of
+ * its own: the t-shirt sizes match `radius` and `shadow`, and the radii they
+ * resolve to are the ones the apps reached for by hand — 0.25rem behind a
+ * popover, 1rem for a translucent surface (what `data-surface="translucent"`
+ * uses), 3rem for an ambient glow.
+ */
+export const BLUR_SIZES = [
+  { size: "xs", space: "4" },
+  { size: "s", space: "8" },
+  { size: "m", space: "16" },
+  { size: "l", space: "32" },
+  { size: "xl", space: "48" },
+];
+
 /* ---------------------------------------------------------------- grid --- */
 
 /** A twelve-column grid; `columns-1` is a single `1fr` rather than a repeat. */

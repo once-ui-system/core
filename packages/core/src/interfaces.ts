@@ -1,5 +1,7 @@
 import { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
 import {
+  BlendMode,
+  BlurSize,
   Colors,
   CSSUnit,
   FlexValue,
@@ -13,6 +15,7 @@ import {
   TextType,
   TextVariant,
   TextWeight,
+  UserSelect,
 } from "./types";
 
 export interface ResponsiveProps extends HTMLAttributes<HTMLDivElement> {
@@ -128,6 +131,15 @@ export interface SpacingProps extends HTMLAttributes<HTMLDivElement> {
   translateY?: SpacingToken | number | CSSUnit;
 }
 
+/**
+ * Surface and effect props. Each resolves to a utility class (or, for a
+ * number, an inline value the server writes), so none of them moves `Flex` or
+ * `Grid` to the client the way a `style` object does.
+ *
+ * `transform` is deliberately not among them: it is what animations drive, so
+ * it stays in `style`. For a static offset, `translateX`/`translateY` do the
+ * same job without one.
+ */
 export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   textVariant?: TextVariant;
   textSize?: TextSize;
@@ -155,6 +167,23 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`;
   shadow?: ShadowSize;
   cursor?: CSSProperties["cursor"] | "interactive" | ReactNode;
+  /**
+   * `mix-blend-mode`, as a class: how the element composites with what is
+   * behind it. `color-dodge` and `plus-lighter` are the ones a glow wants.
+   */
+  blendMode?: BlendMode;
+  /**
+   * `filter: blur()`. A size (`xs` 0.25rem to `xl` 3rem) is a class; a number
+   * is rem, written inline by the server. It sets the whole `filter`, so
+   * combine it with other filter functions in `style` instead.
+   */
+  blur?: BlurSize | number;
+  /**
+   * `backdrop-filter: blur()` — frosts what shows through a translucent
+   * background. Same scale as `blur`; a number is rem. Wins over the backdrop
+   * blur `background="surface"` brings with a translucent theme.
+   */
+  backdropBlur?: BlurSize | number;
 }
 
 export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
@@ -162,6 +191,11 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
   inline?: boolean;
   hide?: boolean;
   pointerEvents?: "none" | "all" | "auto";
+  /**
+   * `user-select`, as a class: `none` keeps a drag handle, a timeline label or
+   * a control's text from being selected mid-gesture.
+   */
+  userSelect?: UserSelect;
   position?: CSSProperties["position"];
   /**
    * `auto`, `scroll`, `hidden`, `clip` and `visible` each map to a utility
