@@ -96,6 +96,52 @@ Which to reach for:
 - **`surface`** for the neutral raised panel, which follows the theme without
   naming a scheme at all.
 
+## The brand colour
+
+`solid="contrast"`, the default solid style, draws filled controls in neutral:
+near-white in dark mode, near-black in light. So under it
+`--brand-solid-strong` is not the brand colour, by design, and anything that
+reads it for "the brand colour" loses its hue.
+
+When something needs the brand hue whatever the solid style, such as an
+effect, an illustration, a gradient or a highlight, use `--brand-color-strong`,
+`--brand-color-medium` or `--brand-color-weak`. They are the brand solids as
+`data-solid="color"` draws them, in both themes, and no solid style changes
+them.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="12" data-solid="contrast">
+      <Column flex={1} gap="8" horizontal="center">
+        <Row fillWidth height="64" radius="m" style={{ background: "var(--brand-solid-strong)" }} />
+        <Text variant="label-default-s" onBackground="neutral-weak">brand-solid-strong</Text>
+      </Column>
+      <Column flex={1} gap="8" horizontal="center">
+        <Row fillWidth height="64" radius="m" style={{ background: "var(--brand-color-strong)" }} />
+        <Text variant="label-default-s" onBackground="neutral-weak">brand-color-strong</Text>
+      </Column>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`// Follows the solid style: neutral under data-solid="contrast"
+<Background gradient={{ display: true, colorStart: "brand-solid-strong" }} />
+
+// Always the brand hue
+<Background gradient={{ display: true, colorStart: "brand-color-strong" }} />`,
+      language: "tsx",
+      label: "Under data-solid=\"contrast\""
+    }
+  ]}
+/>
+
+Keep `--brand-solid-*` for what it is for: filled, pressable things that
+should follow the solid style. `--brand-on-background-*` keeps the hue too,
+but is tuned for text on a background, so it runs light in dark mode.
+
 ## Colour format
 
 Scheme tokens are `oklch()`. The values are the same colours the palette has
