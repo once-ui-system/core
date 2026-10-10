@@ -1,7 +1,7 @@
 ---
 title: "Grid"
 summary: "Two-dimensional layout: a column count that changes per breakpoint, and every spacing, size and surface prop Flex has."
-updatedAt: "2026-09-14"
+updatedAt: "2026-10-10"
 docs: "once-ui/components/grid.mdx"
 github: "components/Grid.tsx"
 navLabel: "Grid"
@@ -44,6 +44,14 @@ objects. Only the two below are its own.
 
 Three across, two on a tablet, one on a phone. The breakpoint objects cascade
 down, so `m` also covers `s` and `xs` unless one of them says otherwise.
+
+A responsive `Grid` is a server component, the same as a responsive `Flex`:
+every breakpoint value that has a utility class — a column count, a spacing
+token, `hide`, `position`, `overflow`, `opacity`, `zIndex` — is written as one,
+so the layout is right in the first paint and no `LayoutProvider` is needed.
+Only a value a class cannot hold (a `width`, a number of rems for spacing,
+`aspectRatio` or `style`) moves the grid to the client, exactly where `Flex`
+moves too.
 
 <PropsTable
   mixin="GridProps"
