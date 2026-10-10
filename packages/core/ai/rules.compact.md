@@ -53,7 +53,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 
 ## Motion
 
-- `RevealFx delay` (and `ShineFx speed`) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x
+- `RevealFx delay` (and `ShineFx`/`CountFx`/`TypeFx speed`) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx` is a multiplier
 - `RevealFx translateY`: number = rem; prefer `"8"`–`"16"` tokens
 - Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
 - Animate all siblings in a set or none — never one lone animated card
@@ -80,10 +80,13 @@ dependencies are optional peers:
 | charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
+| `MediaAudioPlayer`, `MediaVideoPlayer` | `@once-ui-system/core/components/<Name>` |
+| `LayoutProvider` in a **Next.js** app | `@once-ui-system/core/next` |
 
-Naming one of these from the root does not resolve. `IconName` is a real union,
-so an unregistered icon name is a type error, not a blank space — take names
-from `spec.json`.
+Naming one of these from the root does not resolve — except `LayoutProvider`,
+which resolves and then silently renders links and images as plain `<a>` and
+`<img>` in a Next.js app. `IconName` is a real union, so an unregistered icon
+name is a type error, not a blank space — take names from `spec.json`.
 
 ## Defaults — omit these
 
