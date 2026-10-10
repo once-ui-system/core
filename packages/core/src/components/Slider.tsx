@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
 import { Column } from "./Column";
 import { Row } from "./Row";
 import styles from "./Slider.module.scss";
@@ -40,6 +40,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
   ) => {
     const sliderRef = useRef<HTMLInputElement>(null);
     const [isDragging, setIsDragging] = useState(false);
+    const labelId = useId();
 
     const percentage = ((value - min) / (max - min)) * 100;
 
@@ -61,7 +62,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
         {(label || showValue) && (
           <Row fillWidth horizontal="between" vertical="center">
             {label && (
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text id={labelId} variant="label-default-s" onBackground="neutral-weak">
                 {label}
               </Text>
             )}
@@ -94,6 +95,9 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
             onMouseDown={() => setIsDragging(true)}
             disabled={disabled}
             className={styles.input}
+            // The visible label names the input, unless the caller named it
+            // another way: aria-labelledby would override an aria-label.
+            aria-labelledby={label && !props["aria-label"] ? labelId : undefined}
             {...props}
           />
           <div className={styles.thumb} style={{ left: `${percentage}%` }} />

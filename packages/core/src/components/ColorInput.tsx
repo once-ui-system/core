@@ -1,5 +1,5 @@
 "use client";
-import React, { forwardRef, useCallback, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
 import { Column } from "./Column";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Flex } from "./Flex";
@@ -33,6 +33,9 @@ const rgbaToHex = (rgba: string): { hex: string; alpha: number } => {
 const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
   ({ label, id, value, onChange, supportAlpha = false, ...props }, ref) => {
     const colorInputRef = useRef<HTMLInputElement>(null);
+    // The input needs its own ref to open the picker from the swatch; this
+    // hands the same element to the caller's ref.
+    useImperativeHandle(ref, () => colorInputRef.current as HTMLInputElement);
     const [isAlphaDropdownOpen, setIsAlphaDropdownOpen] = useState(false);
     const isRgba = value.startsWith("rgba");
     const { hex: currentHex, alpha: currentAlpha } = isRgba

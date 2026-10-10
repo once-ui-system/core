@@ -41,9 +41,9 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
   presets = { display: true, granularity: "week" },
   ...flex
 }) => {
-  if (!title && !description && !dateRange && !date) {
-    return null;
-  }
+  // Hooks first, the empty check after them: returning before a hook drops the
+  // hook state whenever the header goes empty, including the cleanup of the
+  // Escape listener below, which then stays on `document`.
   const [dateRangeOpen, setDateRangeOpen] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
 

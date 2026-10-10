@@ -153,6 +153,7 @@
     "clean": "rimraf dist",
     "prepare": "pnpm build",
     "lint": "biome check .",
+    "lint:gate": "node scripts/lint-gate.mjs",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "test": "vitest run",

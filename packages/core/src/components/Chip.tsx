@@ -31,6 +31,7 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
       onClick,
       children,
       iconButtonProps = {},
+      className,
       ...rest
     },
     ref,
@@ -77,10 +78,14 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
         aria-pressed={selected}
         cursor="interactive"
         transition="micro-medium"
-        className={classNames(styles.chip, {
-          [styles.selected]: selected,
-          [styles.unselected]: !selected,
-        })}
+        className={classNames(
+          styles.chip,
+          {
+            [styles.selected]: selected,
+            [styles.unselected]: !selected,
+          },
+          className,
+        )}
         {...rest}
       >
         {prefixIcon && <Icon name={prefixIcon} size="s" />}

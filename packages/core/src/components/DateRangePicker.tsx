@@ -102,7 +102,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
     };
 
     return (
-      <Flex gap="24" {...rest}>
+      <Flex ref={ref} gap="24" {...rest}>
         <DatePicker
           value={internalValue.startDate}
           onChange={handleDateChange}

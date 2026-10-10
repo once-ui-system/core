@@ -30,8 +30,13 @@ const Legend: React.FC<LegendProps> = ({
   reverseY,
   direction,
   colors,
-  variant = useDataTheme().variant,
+  variant,
 }) => {
+  // Read the theme on every render: as a default parameter the hook ran only
+  // when `variant` was omitted.
+  const theme = useDataTheme();
+  const chartVariant = variant ?? theme.variant;
+
   if (!payload || !payload.length) {
     return null;
   }
@@ -111,7 +116,7 @@ const Legend: React.FC<LegendProps> = ({
         const color = colors && colors[index] ? colors[index] : entry.stroke || entry.color;
         return (
           <Row key={index} vertical="center" gap="8">
-            <Swatch color={color} size="m" variant={variant as ChartVariant} />
+            <Swatch color={color} size="m" variant={chartVariant} />
             <Text variant="label-default-s" wrap="nowrap">
               {entry.value}
             </Text>

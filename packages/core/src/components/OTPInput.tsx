@@ -106,6 +106,7 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
               placeholder=" "
               inputMode="numeric"
               maxLength={1}
+              disabled={disabled}
               error={error}
               value={values[index]}
               onChange={(e) => handleChange(index, e.target.value)}
