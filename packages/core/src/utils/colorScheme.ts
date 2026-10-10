@@ -190,3 +190,42 @@ export function schemeAlphaVariants(scheme: SchemeRamp): Record<string, string> 
     "600-50": format(base, 0.5),
   };
 }
+
+/** The schemes tokens.css lets an app supply with `data-<scheme>="custom"`. */
+export type CustomScheme = "brand" | "accent" | "neutral";
+
+/** One seed colour per custom scheme; hex, `rgb()` or `oklch()`. */
+export type CustomSchemeSeeds = Partial<Record<CustomScheme, string | undefined>>;
+
+/**
+ * The custom properties `data-<scheme>="custom"` reads — `--scheme-brand-100`
+ * through `-1200` and the three `-600-*` alphas — generated from each seed.
+ *
+ * Pure, with no DOM access, so the same values come out on the server (where
+ * `ThemeInit` renders them into a `<style>`) and on the client (where
+ * `ThemeProvider` writes them onto `<html>` when a seed changes). A seed that
+ * cannot be parsed contributes nothing rather than something wrong.
+ *
+ * ```ts
+ * for (const [property, value] of Object.entries(customSchemeProperties({ brand: "#5A93FC" }))) {
+ *   document.documentElement.style.setProperty(property, value);
+ * }
+ * document.documentElement.setAttribute("data-brand", "custom");
+ * ```
+ */
+export function customSchemeProperties(seeds: CustomSchemeSeeds): Record<string, string> {
+  const properties: Record<string, string> = {};
+  for (const name of ["brand", "accent", "neutral"] as const) {
+    const seed = seeds[name];
+    if (!seed) continue;
+    const scheme = generateColorScheme(seed);
+    if (!scheme) continue;
+    for (const [weight, value] of Object.entries(scheme)) {
+      properties[`--scheme-${name}-${weight}`] = value;
+    }
+    for (const [suffix, value] of Object.entries(schemeAlphaVariants(scheme))) {
+      properties[`--scheme-${name}-${suffix}`] = value;
+    }
+  }
+  return properties;
+}

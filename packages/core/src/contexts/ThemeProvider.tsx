@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Schemes } from "../types";
+import { customSchemeProperties } from "../utils/colorScheme";
 import { dev } from "../utils/devLogger";
 
 export type Theme = "dark" | "light" | "system";
@@ -90,6 +91,17 @@ export interface OnceUIStyleConfig {
   mobileSize?: DeviceFontSize;
   /** `data-cursor-interactive`. */
   cursorInteractive?: InteractiveCursor;
+  /**
+   * A colour to generate the brand scheme from — hex, `rgb()` or `oklch()` —
+   * for `brand: "custom"`, which it implies when `brand` is not set.
+   * `ThemeInit` renders the scheme on the server, so it is there before the
+   * first paint.
+   */
+  brandSeed?: string;
+  /** As {@link OnceUIStyleConfig.brandSeed}, for `accent: "custom"`. */
+  accentSeed?: string;
+  /** As {@link OnceUIStyleConfig.brandSeed}, for `neutral: "custom"`. */
+  neutralSeed?: string;
 }
 
 interface StyleOptions {
@@ -237,6 +249,9 @@ export function ThemeProvider({
   tabletSize,
   mobileSize,
   cursorInteractive,
+  brandSeed,
+  accentSeed,
+  neutralSeed,
   persistence = "local",
 }: ThemeProviderProps) {
   const store = useMemo(() => resolvePersistence(persistence), [persistence]);
@@ -338,6 +353,20 @@ export function ThemeProvider({
   if (mobileSize) directProps.mobileSize = mobileSize;
   if (cursorInteractive) directProps.cursorInteractive = cursorInteractive;
 
+  // A seed's scheme, written as the `--scheme-<name>-*` properties that
+  // `data-<name>="custom"` reads. ThemeInit puts the same values in a server-
+  // rendered <style>; writing them here as well is what lets a seed change
+  // after load, and what makes a seed work in an app without ThemeInit.
+  const schemeProperties = useMemo(
+    () => customSchemeProperties({ brand: brandSeed, accent: accentSeed, neutral: neutralSeed }),
+    [brandSeed, accentSeed, neutralSeed],
+  );
+  // A seed implies "custom" when the scheme is not named — but only a seed
+  // that parsed, or the scheme would point at properties that do not exist.
+  if (!brand && schemeProperties["--scheme-brand-600"]) directProps.brand = "custom";
+  if (!accent && schemeProperties["--scheme-accent-600"]) directProps.accent = "custom";
+  if (!neutral && schemeProperties["--scheme-neutral-600"]) directProps.neutral = "custom";
+
   const [style, setStyleState] = useState<StyleOptions>({
     ...defaultStyleOptions,
     ...directProps,
@@ -417,6 +446,16 @@ export function ThemeProvider({
       });
     }
   }, [style, propTheme]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    for (const [property, value] of Object.entries(schemeProperties)) {
+      root.style.setProperty(property, value);
+    }
+    return () => {
+      for (const property of Object.keys(schemeProperties)) root.style.removeProperty(property);
+    };
+  }, [schemeProperties]);
 
   return (
     <ThemeProviderContext.Provider value={themeValue}>

@@ -60,9 +60,13 @@ const installBrowserMocks = () => {
   });
 };
 
-installBrowserMocks();
+// A file can opt into `// @vitest-environment node` to test a server render,
+// where there is no window to mock.
+const isBrowserLike = typeof window !== "undefined";
 
-if (!("inert" in HTMLElement.prototype)) {
+if (isBrowserLike) installBrowserMocks();
+
+if (isBrowserLike && !("inert" in HTMLElement.prototype)) {
   Object.defineProperty(HTMLElement.prototype, "inert", {
     configurable: true,
     get() {
@@ -81,5 +85,5 @@ if (!("inert" in HTMLElement.prototype)) {
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
-  installBrowserMocks();
+  if (isBrowserLike) installBrowserMocks();
 });

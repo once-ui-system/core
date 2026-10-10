@@ -1,6 +1,11 @@
 import type React from "react";
 import type { OnceUIDataStyleConfig } from "../contexts/DataThemeProvider";
 import type { OnceUIStyleConfig } from "../contexts/ThemeProvider";
+import {
+  type CustomScheme,
+  type CustomSchemeSeeds,
+  customSchemeProperties,
+} from "../utils/colorScheme";
 import { safeScriptJson } from "../utils/safe-html";
 
 /**
@@ -38,25 +43,52 @@ export interface ThemeInitProps {
 
 const toKebab = (key: string) => key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 
+/** Style keys that seed a custom scheme rather than naming an attribute. */
+const SEED_KEYS: Record<string, CustomScheme> = {
+  brandSeed: "brand",
+  accentSeed: "accent",
+  neutralSeed: "neutral",
+};
+
 /**
  * The attributes the inline script writes, keyed without the `data-` prefix.
  * Resolved here, on the server, so the script stays a dumb copy loop.
  */
 function themeInitAttributes(
   config: ThemeInitConfig,
-  dataStyle?: ThemeInitProps["dataStyle"],
+  dataStyle: ThemeInitProps["dataStyle"],
+  schemeProperties: Record<string, string>,
 ): Record<string, string> {
   const attributes: Record<string, string> = {};
   for (const [key, value] of Object.entries(config)) {
-    if (value === undefined || value === null || value === "") continue;
+    if (value === undefined || value === null || value === "" || key in SEED_KEYS) continue;
     attributes[toKebab(key)] = String(value);
+  }
+  // A seed implies "custom" when the scheme is not named, as on
+  // ThemeProvider — and only a seed that parsed.
+  for (const scheme of Object.values(SEED_KEYS)) {
+    if (!attributes[scheme] && schemeProperties[`--scheme-${scheme}-600`]) {
+      attributes[scheme] = "custom";
+    }
   }
   if (dataStyle?.mode) attributes["viz-style"] = dataStyle.mode;
   return attributes;
 }
 
 export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
-  return (
+  const seeds: CustomSchemeSeeds = {};
+  for (const [key, scheme] of Object.entries(SEED_KEYS)) {
+    const seed = (config as Record<string, unknown>)[key];
+    if (typeof seed === "string") seeds[scheme] = seed;
+  }
+  // Generated here, on the server, so a custom scheme is in the document
+  // before anything paints: no flash of a page with no brand colour.
+  const schemeProperties = customSchemeProperties(seeds);
+  const schemeCss = Object.entries(schemeProperties)
+    .map(([property, value]) => `${property}:${value};`)
+    .join("");
+
+  const script = (
     <script
       id="theme-init"
       // biome-ignore lint/security/noDangerouslySetInnerHtml: a pre-paint theme script cannot be a React effect, and the payload is serialised with safeScriptJson
@@ -65,7 +97,7 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
           (function() {
             try {
               const root = document.documentElement;
-              const config = ${safeScriptJson(themeInitAttributes(config, dataStyle))};
+              const config = ${safeScriptJson(themeInitAttributes(config, dataStyle, schemeProperties))};
 
               // Apply config defaults FIRST (prevents FOUC)
               Object.entries(config).forEach(([key, value]) => {
@@ -107,6 +139,20 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
         `,
       }}
     />
+  );
+
+  // Without a seed the output is the script alone, exactly as before.
+  if (!schemeCss) return script;
+
+  return (
+    <>
+      <style
+        id="theme-init-schemes"
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: generated oklch() values only; the seed itself never reaches the CSS
+        dangerouslySetInnerHTML={{ __html: `:root{${schemeCss}}` }}
+      />
+      {script}
+    </>
   );
 };
 

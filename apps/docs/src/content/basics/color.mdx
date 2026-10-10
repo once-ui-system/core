@@ -1,7 +1,7 @@
 ---
 title: "Color"
 summary: "Design harmonious and accessible interfaces with Once UI's flexible color system."
-updatedAt: "2026-07-01"
+updatedAt: "2026-10-10"
 docs: "once-ui/basics/color.mdx"
 navLabel: "Color"
 navIcon: "lightbulb"
@@ -110,25 +110,37 @@ declaration rather than approximating it.
 
 ## Custom schemes
 
-`data-brand="custom"` reads `--scheme-brand-*`, which your app supplies.
-Rather than hand-picking twelve steps that sit evenly against each other,
-generate them from one colour:
+`data-brand="custom"` reads `--scheme-brand-*` (and `data-accent` and
+`data-neutral` the same way), which your app supplies. Rather than
+hand-picking twelve steps that sit evenly against each other, generate them
+from one colour. In the config, that is a seed:
 
 ```tsx
-import { generateColorScheme, schemeAlphaVariants } from "@once-ui-system/core/utils";
-
-const scheme = generateColorScheme("#5A93FC");
-
-if (scheme) {
-  for (const [weight, value] of Object.entries(scheme)) {
-    document.documentElement.style.setProperty(`--function-brand-${weight}`, value);
-  }
-  for (const [suffix, value] of Object.entries(schemeAlphaVariants(scheme))) {
-    document.documentElement.style.setProperty(`--function-brand-${suffix}`, value);
-  }
-  document.documentElement.setAttribute("data-brand", "custom");
-}
+export const { style } = defineConfig({
+  style: { brandSeed: "#5A93FC" },
+});
 ```
+
+`ThemeInit` generates the scheme on the server and renders it in a `<style>`,
+so it is there before the first paint; `ThemeProvider` applies the same values
+on the client when the seed changes. See
+[ThemeProvider](/contexts/themeProvider#custom-color).
+
+To apply a scheme yourself at runtime, `customSchemeProperties` returns the
+properties to write, from the same pure function both of those use:
+
+```tsx
+import { customSchemeProperties } from "@once-ui-system/core/utils";
+
+for (const [property, value] of Object.entries(customSchemeProperties({ brand: "#5A93FC" }))) {
+  document.documentElement.style.setProperty(property, value);
+}
+document.documentElement.setAttribute("data-brand", "custom");
+```
+
+`generateColorScheme` and `schemeAlphaVariants` underneath it return the raw
+twelve steps and the three alphas, if you need the values for something other
+than the page's scheme.
 
 The seed can be hex, `rgb()`/`rgba()` or `oklch()` — which covers what
 [ColorInput](/form-controls/colorInput) produces with and without
