@@ -214,6 +214,26 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
       };
     }, []);
 
+    // Content that appears on hover or focus must be dismissible without
+    // moving the pointer or focus away (WCAG 1.4.13), or a tooltip can sit
+    // over the very thing someone is trying to read. Escape closes it; it
+    // reopens the next time the pointer or focus comes back to the trigger.
+    useEffect(() => {
+      if (triggerType !== "hover" || isControlled || !internalActive) return;
+
+      const handleEscape = (event: KeyboardEvent) => {
+        if (event.key !== "Escape") return;
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+        setInternalActive(false);
+      };
+
+      document.addEventListener("keydown", handleEscape);
+      return () => document.removeEventListener("keydown", handleEscape);
+    }, [triggerType, isControlled, internalActive]);
+
     const getAnimationStyle = (): React.CSSProperties => {
       // For portals, always use center origin for consistent animations
       const calculatedTransformOrigin = portal ? "center center" : transformOrigin;
