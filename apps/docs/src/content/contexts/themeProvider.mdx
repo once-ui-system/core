@@ -27,10 +27,10 @@ Wrap your app with `ThemeProvider` and pass the style configuration as props.
     theme="system" // system | dark | light
     brand="blue" // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
     accent="indigo" // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
-    neutral="gray" // sand | gray | slate
+    neutral="gray" // sand | gray | slate | rose | mint | dusk
     solid="contrast" // color | contrast
     solidStyle="flat" // flat | plastic
-    border="playful" // rounded | playful | conservative
+    border="playful" // rounded | playful | conservative | sharp
     surface="translucent" // filled | translucent
     transition="all" // all | micro | macro
     scaling="100" // 90 | 95 | 100 | 105 | 110
@@ -85,12 +85,12 @@ export function Providers({ children }: {
 export const { style, dataStyle } = defineConfig({
   style: {
     theme: "system", // system | dark | light
-    neutral: "gray", // sand | gray | slate
+    neutral: "gray", // sand | gray | slate | rose | mint | dusk
     brand: "blue", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
     accent: "indigo", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
     solid: "contrast", // color | contrast | inverse
     solidStyle: "flat", // flat | plastic
-    border: "playful", // rounded | playful | conservative
+    border: "playful", // rounded | playful | conservative | sharp
     surface: "translucent", // filled | translucent
     transition: "all", // all | micro | macro | none
     scaling: "100", // 90 | 95 | 100 | 105 | 110
@@ -300,10 +300,10 @@ and `remove` may return a promise; nothing waits on them.
     ["theme", ["system", "dark", "light"], "system"],
     ["brand", ["blue", "indigo", "violet", "magenta", "pink", "red", "orange", "yellow", "moss", "green", "emerald", "aqua", "cyan", "custom"], "blue"],
     ["accent", ["blue", "indigo", "violet", "magenta", "pink", "red", "orange", "yellow", "moss", "green", "emerald", "aqua", "cyan", "custom"], "indigo"],
-    ["neutral", ["sand", "gray", "slate", "custom"], "gray"],
+    ["neutral", ["sand", "gray", "slate", "rose", "mint", "dusk", "custom"], "gray"],
     ["solid", ["color", "contrast", "inverse"], "contrast"],
     ["solidStyle", ["flat", "plastic"], "flat"],
-    ["border", ["rounded", "playful", "conservative"], "playful"],
+    ["border", ["rounded", "playful", "conservative", "sharp"], "playful"],
     ["surface", ["filled", "translucent"], "translucent"],
     ["transition", ["all", "micro", "macro", "none"], "all"],
     ["scaling", ["90", "95", "100", "105", "110"], "100"],

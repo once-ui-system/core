@@ -7,12 +7,12 @@ const { baseURL, style, dataStyle } = defineConfig({
   baseURL: "https://docs.once-ui.com",
   style: {
     theme: "system", // dark | light
-    neutral: "gray", // sand | gray | slate
+    neutral: "gray", // sand | gray | slate | rose | mint | dusk
     brand: "emerald", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
     accent: "orange", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
     solid: "contrast", // color | contrast
     solidStyle: "flat", // flat | plastic
-    border: "conservative", // rounded | playful | conservative
+    border: "conservative", // rounded | playful | conservative | sharp
     surface: "filled", // filled | translucent
     transition: "all", // all | micro | macro
     scaling: "100",

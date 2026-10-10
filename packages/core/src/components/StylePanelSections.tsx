@@ -291,8 +291,8 @@ function ShapeRow({ label = "Shape", ...rest }: StyleRowProps) {
     <Row label={label} {...rest}>
       <Swatches
         options={shapes}
-        selected={mounted ? (value.border as (typeof shapes)[number]) : undefined}
-        onSelect={(border) => set({ border: border as BorderStyle })}
+        selected={mounted ? value.border : undefined}
+        onSelect={(border) => set({ border })}
         ariaLabel={(shape) => `Corner style: ${shape}`}
         dataBorder
       />
@@ -327,8 +327,8 @@ function NeutralRow({ label = "Neutral", ...rest }: StyleRowProps) {
     <Row label={label} {...rest}>
       <Swatches
         options={neutrals}
-        selected={mounted ? (value.neutral as (typeof neutrals)[number]) : undefined}
-        onSelect={(neutral) => set({ neutral: neutral as NeutralColor })}
+        selected={mounted ? value.neutral : undefined}
+        onSelect={(neutral) => set({ neutral })}
         ariaLabel={(neutral) => `Neutral colour: ${neutral}`}
         swatchClass={(neutral) => styles[neutral]}
         scroll
