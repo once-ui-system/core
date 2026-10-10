@@ -1,0 +1,147 @@
+---
+title: "Breadcrumbs"
+summary: "Where the current page sits in the site: a navigation landmark with an ordered list of links."
+updatedAt: "2026-10-10"
+docs: "once-ui/components/breadcrumbs.mdx"
+github: "components/Breadcrumbs.tsx"
+navLabel: "Breadcrumbs"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`Breadcrumbs` renders the trail from the site's root to the current page as a `nav`
+landmark named "Breadcrumb", holding an ordered list. The last item is the current
+page and carries `aria-current="page"`. The separators are drawn but hidden from
+screen readers, which announce the list and its length instead.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Breadcrumbs
+      items={[
+        { label: "Docs", href: "/", prefixIcon: "home" },
+        { label: "Components", href: "/components/overview" },
+        { label: "Breadcrumbs" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Breadcrumbs
+  items={[
+    { label: "Docs", href: "/", prefixIcon: "home" },
+    { label: "Components", href: "/components/overview" },
+    { label: "Breadcrumbs" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Breadcrumbs"
+    }
+  ]}
+/>
+
+Each crumb with an `href` is a [`SmartLink`](/components/smartLink), so an internal
+path goes through the app's Link adapter: with `LayoutProvider` from
+`@once-ui-system/core/next` it is a client-side navigation. A crumb without one is
+plain text, for a section that has no page of its own. The current page links only
+if you give it an `href`.
+
+## Long trails
+
+`maxItems` collapses a longer trail to the first crumb, a "more" button and the last
+`maxItems - 1` crumbs. The button expands the whole trail in place and moves focus to
+the first crumb it revealed. The minimum is 2: the root and the current page.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Breadcrumbs
+      maxItems={3}
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Acme", href: "/components/overview" },
+        { label: "Design", href: "/components/overview" },
+        { label: "Website", href: "/components/overview" },
+        { label: "Assets", href: "/components/overview" },
+        { label: "Hero.png" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Breadcrumbs
+  maxItems={3}
+  items={[
+    { label: "Home", href: "/" },
+    { label: "Acme", href: "/acme" },
+    { label: "Design", href: "/acme/design" },
+    { label: "Website", href: "/acme/design/website" },
+    { label: "Assets", href: "/acme/design/website/assets" },
+    { label: "Hero.png" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "maxItems"
+    }
+  ]}
+/>
+
+## Separator
+
+The default separator is a small chevron. Pass any node as `separator`; it is hidden
+from screen readers wherever it is drawn.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Breadcrumbs
+      separator="/"
+      items={[
+        { label: "once-ui-system", href: "/" },
+        { label: "core", href: "/components/overview" },
+        { label: "packages" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Breadcrumbs separator="/" items={items} />`,
+      language: "tsx",
+      label: "Separator"
+    }
+  ]}
+/>
+
+The landmark is named "Breadcrumb". Pass `aria-label` only to translate it.
+`Breadcrumbs` is a Row and takes every Flex prop, such as `marginBottom` or a
+different `textVariant`.
+
+## API reference
+
+<PropsTable
+  component="Breadcrumbs"
+  describe={{
+    items: "The trail, from the root to the current page.",
+    separator: "Drawn between crumbs, hidden from screen readers.",
+    maxItems: "Collapse a longer trail to the first crumb, a more button and the last maxItems - 1.",
+  }}
+/>
+
+### BreadcrumbItem
+
+<PropsTable
+  label="Field"
+  content={[
+    ["label", "React.ReactNode", "-", "The crumb's text.", true],
+    ["href", "string", "-", "Where the crumb links. Without it the crumb is plain text."],
+    ["prefixIcon", "IconName", "-", "A leading icon."],
+  ]}
+/>

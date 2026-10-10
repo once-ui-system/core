@@ -12,6 +12,7 @@ export * from "./Banner";
 export * from "./BlobFx";
 export * from "./BlockQuote";
 export * from "./Book";
+export * from "./Breadcrumbs";
 export * from "./Button";
 export * from "./Card";
 export * from "./Carousel";
