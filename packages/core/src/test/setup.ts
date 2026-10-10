@@ -60,26 +60,31 @@ const installBrowserMocks = () => {
   });
 };
 
-installBrowserMocks();
+// Server-side suites run with `// @vitest-environment node`: no DOM to patch.
+if (typeof window !== "undefined") {
+  installBrowserMocks();
 
-if (!("inert" in HTMLElement.prototype)) {
-  Object.defineProperty(HTMLElement.prototype, "inert", {
-    configurable: true,
-    get() {
-      return this.hasAttribute("inert");
-    },
-    set(value: boolean) {
-      if (value) {
-        this.setAttribute("inert", "");
-      } else {
-        this.removeAttribute("inert");
-      }
-    },
-  });
+  if (!("inert" in HTMLElement.prototype)) {
+    Object.defineProperty(HTMLElement.prototype, "inert", {
+      configurable: true,
+      get() {
+        return this.hasAttribute("inert");
+      },
+      set(value: boolean) {
+        if (value) {
+          this.setAttribute("inert", "");
+        } else {
+          this.removeAttribute("inert");
+        }
+      },
+    });
+  }
 }
 
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
-  installBrowserMocks();
+  if (typeof window !== "undefined") {
+    installBrowserMocks();
+  }
 });
