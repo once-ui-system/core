@@ -266,6 +266,16 @@ semantic HTML element, providing simple, seamless style overrides.
 
 Just add the `data-theme`, `data-neutral`, `data-brand`, `data-accent`, `data-border`, `data-surface`, `data-solid`, `data-solid-style`, `data-transition` or `data-scaling` attributes to any semantic HTML element to override its default style.
 
+## Root font size and cursor
+
+`desktopSize`, `tabletSize` and `mobileSize` set the root font size, in px, for each width range, which is what every `rem` in the system resolves to. `cursorInteractive` sets the cursor over buttons, links and other interactive elements. They have no defaults of their own: left unset, nothing is written to `<html>` and the stylesheet's values apply (16px, 16px, 15px and `pointer`).
+
+```tsx
+<ThemeProvider desktopSize="17" mobileSize="14" cursorInteractive="default">
+```
+
+They belong in the `style` section of the config like any other key, so `ThemeInit` applies them before the first paint.
+
 ## Persistence
 
 Style choices are mirrored into `localStorage` under `data-<kebab-key>`. Set
@@ -304,9 +314,16 @@ and `remove` may return a promise; nothing waits on them.
     ["solid", ["color", "contrast", "inverse"], "contrast"],
     ["solidStyle", ["flat", "plastic"], "flat"],
     ["border", ["rounded", "playful", "conservative", "sharp"], "playful"],
-    ["surface", ["filled", "translucent"], "translucent"],
+    ["surface", ["filled", "translucent"], "filled"],
     ["transition", ["all", "micro", "macro", "none"], "all"],
     ["scaling", ["90", "95", "100", "105", "110"], "100"],
+    ["bodySize", ["90", "95", "100", "105", "110"], "100"],
+    ["bodyLineHeight", ["90", "100", "110", "120"], "100"],
+    ["desktopSize", ["13", "14", "15", "16", "17", "18"], "16", "Root font size in px above 1024px."],
+    ["tabletSize", ["13", "14", "15", "16", "17", "18"], "16", "Root font size in px from 769px to 1024px."],
+    ["mobileSize", ["13", "14", "15", "16", "17", "18"], "15", "Root font size in px at 768px and below."],
+    ["cursorInteractive", ["pointer", "default"], "pointer", "The cursor over interactive elements."],
+    ["persistence", "\"local\" | \"none\" | StylePersistenceAdapter", "\"local\""],
   ]}
 />
 
@@ -338,6 +355,12 @@ Returns all style options plus `setStyle`.
     ["surface", "SurfaceStyle"],
     ["transition", "TransitionStyle"],
     ["scaling", "ScalingSize"],
+    ["bodySize", "BodySize"],
+    ["bodyLineHeight", "BodyLineHeight"],
+    ["desktopSize", "DeviceFontSize | undefined"],
+    ["tabletSize", "DeviceFontSize | undefined"],
+    ["mobileSize", "DeviceFontSize | undefined"],
+    ["cursorInteractive", "InteractiveCursor | undefined"],
     ["setStyle", "(style: Partial<StyleOptions>) => void"],
   ]}
 />

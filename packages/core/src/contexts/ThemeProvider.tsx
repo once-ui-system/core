@@ -16,6 +16,14 @@ export type TransitionStyle = "all" | "micro" | "macro" | "none";
 export type ScalingSize = "90" | "95" | "100" | "105" | "110";
 export type BodySize = "90" | "95" | "100" | "105" | "110";
 export type BodyLineHeight = "90" | "100" | "110" | "120";
+/**
+ * The root font size, in px, for one width range — what `rem` resolves to,
+ * so everything sized in rem follows it. Defaults: 16 on desktop and tablet,
+ * 15 on mobile.
+ */
+export type DeviceFontSize = "13" | "14" | "15" | "16" | "17" | "18";
+/** The cursor over interactive elements. Defaults to `"pointer"`. */
+export type InteractiveCursor = "pointer" | "default";
 
 /**
  * Where style choices are read from and written to.
@@ -74,6 +82,14 @@ export interface OnceUIStyleConfig {
   scaling?: ScalingSize;
   bodySize?: BodySize;
   bodyLineHeight?: BodyLineHeight;
+  /** Root font size above 1024px: `data-desktop-size`. */
+  desktopSize?: DeviceFontSize;
+  /** Root font size from 769px to 1024px: `data-tablet-size`. */
+  tabletSize?: DeviceFontSize;
+  /** Root font size at 768px and below: `data-mobile-size`. */
+  mobileSize?: DeviceFontSize;
+  /** `data-cursor-interactive`. */
+  cursorInteractive?: InteractiveCursor;
 }
 
 interface StyleOptions {
@@ -89,6 +105,12 @@ interface StyleOptions {
   scaling: ScalingSize;
   bodySize: BodySize;
   bodyLineHeight: BodyLineHeight;
+  // No defaults: the CSS already has them, and writing them onto <html>
+  // would override an app that sets the custom properties itself.
+  desktopSize?: DeviceFontSize;
+  tabletSize?: DeviceFontSize;
+  mobileSize?: DeviceFontSize;
+  cursorInteractive?: InteractiveCursor;
 }
 
 type ThemeProviderState = {
@@ -140,7 +162,9 @@ function getStoredStyleValues(store: StylePersistenceAdapter | null) {
   if (typeof window === "undefined" || !store?.get) return {};
 
   try {
-    const storedStyle: Partial<StyleOptions> = {};
+    // Stored values are whatever an earlier visit wrote; they are trusted to
+    // be one of the union's members, as they always have been.
+    const storedStyle: Record<string, string> = {};
     const styleKeys = [
       "neutral",
       "brand",
@@ -153,43 +177,19 @@ function getStoredStyleValues(store: StylePersistenceAdapter | null) {
       "scaling",
       "body-size",
       "body-line-height",
+      "desktop-size",
+      "tablet-size",
+      "mobile-size",
+      "cursor-interactive",
     ];
 
-    styleKeys.forEach((key) => {
-      const kebabKey = key;
-      const camelKey = kebabKey.replace(/-([a-z])/g, (_, letter) =>
-        letter.toUpperCase(),
-      ) as keyof StyleOptions;
-      const value = store.get!(`data-${kebabKey}`);
+    for (const kebabKey of styleKeys) {
+      const camelKey = kebabKey.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+      const value = store.get(`data-${kebabKey}`);
+      if (value) storedStyle[camelKey] = value;
+    }
 
-      if (value) {
-        if (camelKey === "border") {
-          storedStyle[camelKey] = value as BorderStyle;
-        } else if (camelKey === "solidStyle") {
-          storedStyle[camelKey] = value as SolidStyle;
-        } else if (camelKey === "transition") {
-          storedStyle[camelKey] = value as TransitionStyle;
-        } else if (camelKey === "scaling") {
-          storedStyle[camelKey] = value as ScalingSize;
-        } else if (camelKey === "surface") {
-          storedStyle[camelKey] = value as SurfaceStyle;
-        } else if (camelKey === "neutral") {
-          storedStyle.neutral = value as NeutralColor;
-        } else if (camelKey === "brand") {
-          storedStyle.brand = value as Schemes;
-        } else if (camelKey === "accent") {
-          storedStyle.accent = value as Schemes;
-        } else if (camelKey === "solid") {
-          storedStyle.solid = value as SolidType;
-        } else if (camelKey === "bodySize") {
-          storedStyle.bodySize = value as BodySize;
-        } else if (camelKey === "bodyLineHeight") {
-          storedStyle.bodyLineHeight = value as BodyLineHeight;
-        }
-      }
-    });
-
-    return storedStyle;
+    return storedStyle as Partial<StyleOptions>;
   } catch (e) {
     dev.error("Error reading stored style values:", e);
     return {};
@@ -233,6 +233,10 @@ export function ThemeProvider({
   scaling,
   bodySize,
   bodyLineHeight,
+  desktopSize,
+  tabletSize,
+  mobileSize,
+  cursorInteractive,
   persistence = "local",
 }: ThemeProviderProps) {
   const store = useMemo(() => resolvePersistence(persistence), [persistence]);
@@ -329,6 +333,10 @@ export function ThemeProvider({
   if (scaling) directProps.scaling = scaling;
   if (bodySize) directProps.bodySize = bodySize;
   if (bodyLineHeight) directProps.bodyLineHeight = bodyLineHeight;
+  if (desktopSize) directProps.desktopSize = desktopSize;
+  if (tabletSize) directProps.tabletSize = tabletSize;
+  if (mobileSize) directProps.mobileSize = mobileSize;
+  if (cursorInteractive) directProps.cursorInteractive = cursorInteractive;
 
   const [style, setStyleState] = useState<StyleOptions>({
     ...defaultStyleOptions,

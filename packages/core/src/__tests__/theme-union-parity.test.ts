@@ -43,6 +43,10 @@ const cases: [type: string, attribute: string, unstyledDefaults: string[]][] = [
   ["ScalingSize", "scaling", ["100"]],
   ["BodySize", "body-size", []],
   ["BodyLineHeight", "body-line-height", []],
+  ["DeviceFontSize", "desktop-size", []],
+  ["DeviceFontSize", "tablet-size", []],
+  ["DeviceFontSize", "mobile-size", []],
+  ["InteractiveCursor", "cursor-interactive", []],
 ];
 
 describe("ThemeProvider unions match the CSS", () => {
