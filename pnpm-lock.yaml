@@ -196,7 +196,7 @@ importers:
         specifier: ^4.1.10
         version: 4.1.10(vitest@4.1.10)
       axe-core:
-        specifier: 4.10.3
+        specifier: ^4.10.3
         version: 4.10.3
       jsdom:
         specifier: ^30.0.0
