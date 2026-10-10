@@ -92,6 +92,7 @@
 .columns-7
 .columns-8
 .columns-9
+.columns-auto-fit
 .cursor-default
 .cursor-grab
 .cursor-grabbing

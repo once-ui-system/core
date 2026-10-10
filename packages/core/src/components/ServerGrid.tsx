@@ -81,6 +81,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       as: Component = "div",
       inline,
       columns,
+      minColumnWidth,
       gap,
       position = "relative",
       xl,
@@ -248,6 +249,11 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       return undefined;
     };
 
+    // Auto-fit: one class, with the width as a custom property beside it, so
+    // any rem or CSS length works without a class per size and the grid stays
+    // a server component.
+    const minColumnWidthValue = parseDimension(minColumnWidth, "width");
+
     let classes = classNames(
       position && `position-${position}`,
       inline ? "display-inline-grid" : "display-grid",
@@ -261,7 +267,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
         ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) &&
         `max-width-${maxWidth}`,
       (fillHeight || maxHeight) && "fill-height",
-      columns && `columns-${columns}`,
+      minColumnWidthValue ? "columns-auto-fit" : columns && `columns-${columns}`,
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
@@ -435,6 +441,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       bottom: parsePosition(bottom),
       left: parsePosition(left),
       transform,
+      ...(minColumnWidthValue && { "--grid-min-column-width": minColumnWidthValue }),
       ...style,
     };
 

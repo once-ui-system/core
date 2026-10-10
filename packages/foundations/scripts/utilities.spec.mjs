@@ -337,6 +337,23 @@ export const GRID_COLUMNS = Array.from({ length: 12 }, (_, i) => String(i + 1));
 
 export const gridTemplate = (n) => (n === "1" ? "1fr" : `repeat(${n}, 1fr)`);
 
+/**
+ * "As many columns as fit, each at least this wide" — the one grid the apps
+ * kept writing by hand as `repeat(auto-fit, minmax(13rem, 1fr))`.
+ *
+ * The width is a custom property rather than a class per size, since any rem
+ * or CSS length is valid; `Grid minColumnWidth` sets it inline on the same
+ * element. `min(…, 100%)` keeps a single column from overflowing a container
+ * narrower than the minimum. `auto-fit` rather than `auto-fill`: with fewer
+ * items than tracks, the items stretch to fill the row instead of leaving
+ * empty tracks at its end.
+ */
+export const GRID_AUTO_FIT = {
+  selector: ".columns-auto-fit",
+  property: "--grid-min-column-width",
+  template: "repeat(auto-fit, minmax(min(var(--grid-min-column-width), 100%), 1fr))",
+};
+
 /* ------------------------------------------------- colour, shadow, size --- */
 
 /** Foreground ramps: text on a tinted background, and text on a solid fill. */

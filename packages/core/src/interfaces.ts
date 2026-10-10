@@ -42,7 +42,22 @@ export interface ResponsiveGridProps extends ResponsiveProps {
 }
 
 export interface GridProps extends HTMLAttributes<HTMLDivElement> {
+  /** How many equal columns. Set it per breakpoint to reflow. */
   columns?: GridSize;
+  /**
+   * As many columns as fit, each at least this wide: the grid reflows on its
+   * own, with no breakpoint objects. Takes the same values as `minWidth` — a
+   * number is rem, a string is a spacing token or a CSS unit
+   * (`%`, `vw`, `calc(…)`).
+   *
+   * Renders on the server: a `.columns-auto-fit` class plus the
+   * `--grid-min-column-width` custom property on the same element. It takes
+   * precedence over `columns`; a breakpoint `columns` still overrides it at
+   * that width, e.g. `minColumnWidth={16} s={{ columns: 1 }}`.
+   *
+   * @example <Grid minColumnWidth={13} gap="8">…</Grid>
+   */
+  minColumnWidth?: number | SpacingToken | CSSUnit;
   rows?: GridSize;
   l?: GridBreakpointProps;
   m?: GridBreakpointProps;

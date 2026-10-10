@@ -54,6 +54,10 @@
   grid-template-columns: repeat(12, 1fr);
 }
 
+.columns-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(min(var(--grid-min-column-width), 100%), 1fr));
+}
+
 .xl-grid-show {
   display: none;
 }

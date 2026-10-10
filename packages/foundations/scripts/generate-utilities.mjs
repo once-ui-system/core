@@ -18,6 +18,7 @@ import {
   BORDER_STYLES,
   BORDER_WIDTHS,
   CURSORS,
+  GRID_AUTO_FIT,
   GRID_COLUMNS,
   MAX_WIDTH_SIZES,
   ON_RAMPS,
@@ -365,6 +366,9 @@ function grid() {
   for (const n of GRID_COLUMNS) {
     out.push(rule(`.columns-${n}`, [`grid-template-columns: ${gridTemplate(n)};`]));
   }
+  // Base only, and ahead of every breakpoint block, so a breakpoint column
+  // count (`s={{ columns: 1 }}`) still overrides the auto-fit track list.
+  out.push(rule(GRID_AUTO_FIT.selector, [`grid-template-columns: ${GRID_AUTO_FIT.template};`]));
 
   // The same pairing `flex.scss` uses: hidden by a base rule, revealed inside
   // its own query, so `.<bp>-grid-show` means "show only at this width". The
