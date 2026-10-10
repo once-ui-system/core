@@ -142,7 +142,9 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
                 className={className}
                 style={{ opacity: index !== selectedIndex && !compact ? 0.6 : 1, ...style }}
                 aria-selected={index === selectedIndex}
-                aria-controls={`panel-${button.value}`}
+                // No made-up `aria-controls`: it pointed at `panel-<value>`,
+                // which nothing renders. A button that does control a panel
+                // passes the panel's id as `aria-controls`, spread below.
                 tabIndex={index === selectedIndex ? 0 : -1}
                 fillWidth={fillWidth}
                 {...button}
