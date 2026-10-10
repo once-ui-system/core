@@ -2,10 +2,18 @@
 /**
  * Scaffold agent harness pointers in a consumer project.
  * Usage: npx once-ui-init-agent [--force] [--dry-run]
+ *
+ * Writes the Once UI harness section into AGENTS.md (read by Codex, Cursor,
+ * Copilot, Gemini CLI, Zed and most other agents) and CLAUDE.md (read by
+ * Claude Code, which does not read AGENTS.md), plus a Cursor rule. The section
+ * sits between markers, so an existing file keeps everything else and a rerun
+ * changes nothing; `--force` replaces a section already there. A CLAUDE.md
+ * that already imports AGENTS.md (`@AGENTS.md`) is left alone, since it would
+ * load the section twice.
  */
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const PACKAGE_ROOT = path.join(__dirname, "..");
 const MARKER_START = "<!-- once-ui-agent-harness:start -->";
@@ -20,6 +28,9 @@ Before generating Once UI code, load the harness from your installed package (no
 2. Load bootstrap: \`ai/rules.compact.md\` + \`ai/catalog.json\`
 3. Match intent via \`ai/tasks/index.json\` → fetch task bundle + component slices
 4. Validate: \`npx once-ui-validate-ai-code path/to/file.tsx\`
+
+In a Next.js app, import \`LayoutProvider\` from \`@once-ui-system/core/next\`, not the package root —
+the root export renders links and images as plain \`<a>\` and \`<img>\`.
 
 npm exports: \`@once-ui-system/core/ai/manifest.json\`
 
@@ -60,47 +71,62 @@ function findProjectRoot(startDir = process.cwd()) {
   return path.resolve(startDir);
 }
 
-function upsertMarkedSection(existing, section, force) {
+function upsertMarkedSection(existing, section, force, title = "AGENTS.md") {
   if (existing.includes(MARKER_START) && existing.includes(MARKER_END)) {
     if (!force) {
       return {
         content: existing,
         changed: false,
-        reason: "AGENTS.md already contains Once UI harness section",
+        reason: `${title} already contains Once UI harness section`,
       };
     }
 
     const start = existing.indexOf(MARKER_START);
     const end = existing.indexOf(MARKER_END) + MARKER_END.length;
+    // The section ends in a newline and so did what followed the old one;
+    // keep one of them, or every --force run adds a blank line.
+    const rest = existing.slice(end).replace(/^\r?\n/, "");
     return {
-      content: `${existing.slice(0, start)}${section}${existing.slice(end)}`,
+      content: `${existing.slice(0, start)}${section}${rest}`,
       changed: true,
     };
   }
 
   if (existing.trim().length === 0) {
     return {
-      content: `# AGENTS.md\n\n${section}\n`,
+      content: `# ${title}\n\n${section}`,
       changed: true,
     };
   }
 
   return {
-    content: `${existing.trimEnd()}\n\n${section}\n`,
+    content: `${existing.trimEnd()}\n\n${section}`,
     changed: true,
   };
 }
 
-function writeFile(root, relativePath, content, { dryRun, force }) {
+/** Does this CLAUDE.md already pull AGENTS.md in through an import? */
+function importsAgentsMd(content) {
+  return /^\s*@(?:\.\/)?AGENTS\.md\s*$/m.test(content);
+}
+
+/**
+ * Write `content` to `relativePath`. A whole file the tool owns (the Cursor
+ * rule) is never overwritten without `--force`; a marked-section upsert
+ * (`upsert: true`) only ever adds or replaces its own section, so it writes.
+ */
+function writeFile(root, relativePath, content, { dryRun, force, upsert = false }) {
   const target = path.join(root, relativePath);
   const exists = fs.existsSync(target);
 
-  if (exists && !force) {
+  if (exists) {
     const current = fs.readFileSync(target, "utf8");
     if (current === content) {
       return { path: target, status: "unchanged" };
     }
-    return { path: target, status: "skipped", reason: "already exists (use --force)" };
+    if (!force && !upsert) {
+      return { path: target, status: "skipped", reason: "already exists (use --force)" };
+    }
   }
 
   if (dryRun) {
@@ -112,36 +138,41 @@ function writeFile(root, relativePath, content, { dryRun, force }) {
   return { path: target, status: exists ? "updated" : "created" };
 }
 
-function main() {
-  const options = parseArgs(process.argv.slice(2));
-  const projectRoot = findProjectRoot();
+/** Upsert the harness section into one instructions file at the project root. */
+function writeInstructions(projectRoot, file, options) {
+  const target = path.join(projectRoot, file);
+  const existing = fs.existsSync(target) ? fs.readFileSync(target, "utf8") : "";
+
+  if (file === "CLAUDE.md" && importsAgentsMd(existing)) {
+    return { path: target, status: "unchanged", reason: "CLAUDE.md already imports AGENTS.md" };
+  }
+
+  const result = upsertMarkedSection(existing, PROJECT_AGENTS_SECTION, options.force, file);
+  if (!result.changed) {
+    return { path: target, status: "unchanged", reason: result.reason };
+  }
+  return writeFile(projectRoot, file, result.content, { ...options, upsert: true });
+}
+
+function run({ cwd = process.cwd(), force = false, dryRun = false } = {}) {
+  const options = { force, dryRun };
+  const projectRoot = findProjectRoot(cwd);
   const cursorRuleTemplate = fs.readFileSync(
     path.join(PACKAGE_ROOT, "agent", "once-ui-codegen.mdc"),
     "utf8",
   );
 
-  const agentsPath = path.join(projectRoot, "AGENTS.md");
-  let agentsContent = "";
-  if (fs.existsSync(agentsPath)) {
-    agentsContent = fs.readFileSync(agentsPath, "utf8");
-  }
-
-  const agentsResult = upsertMarkedSection(agentsContent, PROJECT_AGENTS_SECTION, options.force);
-  const results = [];
-
-  if (agentsResult.changed) {
-    results.push(writeFile(projectRoot, "AGENTS.md", agentsResult.content, options));
-  } else {
-    results.push({
-      path: agentsPath,
-      status: "unchanged",
-      reason: agentsResult.reason,
-    });
-  }
-
-  results.push(
+  const results = [
+    writeInstructions(projectRoot, "AGENTS.md", options),
+    writeInstructions(projectRoot, "CLAUDE.md", options),
     writeFile(projectRoot, ".cursor/rules/once-ui-codegen.mdc", cursorRuleTemplate, options),
-  );
+  ];
+  return { projectRoot, results };
+}
+
+function main() {
+  const options = parseArgs(process.argv.slice(2));
+  const { projectRoot, results } = run(options);
 
   console.log(`Once UI agent harness setup (${options.dryRun ? "dry run" : "applied"})`);
   console.log(`Project root: ${projectRoot}`);
@@ -157,4 +188,16 @@ function main() {
   }
 }
 
-main();
+// Importable for tests; the CLI runs only when this file is invoked directly.
+if (require.main === module) main();
+
+module.exports = {
+  MARKER_START,
+  MARKER_END,
+  PROJECT_AGENTS_SECTION,
+  findProjectRoot,
+  importsAgentsMd,
+  run,
+  upsertMarkedSection,
+  writeFile,
+};

@@ -32,7 +32,7 @@ For **writing UI code**, use the harness — not full doc pages. It keeps contex
 
 ```bash
 npm install @once-ui-system/core
-npx once-ui-init-agent   # writes AGENTS.md + Cursor rule in your app (one-time)
+npx once-ui-init-agent   # writes AGENTS.md, CLAUDE.md and a Cursor rule in your app (one-time)
 ```
 
 ```tsx
@@ -52,7 +52,7 @@ Machine-readable discovery: `onceUi` field in `@once-ui-system/core` `package.js
 3. Fetch component slices listed in the task bundle
 4. Read the gold example for structure; for production fidelity, read matching **Pro blocks** from `examples/blocks/manifest.json`
 5. Generate code
-6. Validate: `pnpm validate-ai-code path/to/file.tsx`
+6. Validate: `npx once-ui-validate-ai-code path/to/file.tsx` (in a Next.js app it also checks that `LayoutProvider` comes from `@once-ui-system/core/next`)
 
 ## MCP Server (exploratory docs)
 
