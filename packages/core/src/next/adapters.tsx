@@ -15,10 +15,13 @@ import { LayoutProvider as BaseLayoutProvider } from "../contexts/LayoutProvider
 
 /**
  * Next.js adapter bindings — the ONLY runtime `next/*` imports in core
- * outside modules/seo and server/ (enforced by framework-boundary.test.ts).
- * Imported via the `@once-ui-system/core/next` subpath, never the root
- * barrel, so non-Next bundlers never resolve `next/*`. This module becomes
- * the seed of `@once-ui-system/nextjs` in 2.0 Phase 4.
+ * (enforced by framework-boundary.test.ts). Imported via the
+ * `@once-ui-system/core/next` subpath, never the root barrel, so non-Next
+ * bundlers never resolve `next/*`. This module becomes the seed of
+ * `@once-ui-system/nextjs` in 2.0 Phase 4.
+ *
+ * The `"use client"` directive lives here rather than on the subpath's
+ * index, so the same entry can also export server route handlers.
  */
 
 const NextAdapterLink = forwardRef<HTMLAnchorElement, AdapterLinkProps>(

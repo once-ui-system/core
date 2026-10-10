@@ -47,6 +47,7 @@ vi.mock("../server/og-address", async (importOriginal) => {
   };
 });
 
+import { createOgFetchRoute, createOgProxyRoute, DEFAULT_OG_IMAGE_TYPES } from "../next";
 import { handleOGFetch, handleOGProxy, type OGFetchOptions, type OGProxyOptions } from "../server";
 import { OGUrlValidationError } from "../server/og-errors";
 import { fetchValidatedUrl } from "../server/og-url-validation";
@@ -452,6 +453,59 @@ describe("handleOGProxy", () => {
     );
 
     expect(response.status).toBe(504);
+  });
+});
+
+describe("route factories from @once-ui-system/core/next", () => {
+  it("createOgFetchRoute returns a GET for app/api/og/fetch/route.ts", async () => {
+    const { GET } = createOgFetchRoute({ allowHttp: true });
+    const response = await GET(
+      new Request(`https://app.example/api/og/fetch?url=${encodeURIComponent(`${origin}/page`)}`),
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({
+      url: `${origin}/page`,
+      title: 'Tom & Jerry \u2014 "Live"',
+      description: "A page about cats & dogs",
+      image: `${origin}/img/og.png?w=1200&h=630`,
+      faviconUrl: `${origin}/favicon.ico`,
+    });
+  });
+
+  it("createOgProxyRoute returns a GET for app/api/og/proxy/route.ts", async () => {
+    const { GET } = createOgProxyRoute({ allowHttp: true, cacheMaxAge: 86400 });
+    const response = await GET(
+      new Request(
+        `https://app.example/api/og/proxy?url=${encodeURIComponent(`${origin}/image.png`)}`,
+      ),
+    );
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("image/png");
+    expect(response.headers.get("cache-control")).toBe("public, max-age=86400");
+    expect(Buffer.from(await response.arrayBuffer())).toEqual(PNG);
+  });
+
+  it("refuses private targets with the defaults", async () => {
+    const fetchResponse = await call(createOgFetchRoute(), "https://169.254.169.254/");
+    const proxyResponse = await call(createOgProxyRoute(), "https://[::ffff:7f00:1]/a.png");
+
+    expect(fetchResponse.status).toBe(400);
+    expect(proxyResponse.status).toBe(400);
+  });
+
+  it("reads its options once, when the route is created", async () => {
+    const options: OGFetchOptions = { allowHttp: true };
+    const route = createOgFetchRoute(options);
+    options.allowHttp = false;
+
+    expect((await call(route, `${origin}/page`)).status).toBe(200);
+  });
+
+  it("re-exports the default image types", () => {
+    expect(DEFAULT_OG_IMAGE_TYPES).toContain("image/png");
+    expect(DEFAULT_OG_IMAGE_TYPES).not.toContain("image/svg+xml");
   });
 });
 
