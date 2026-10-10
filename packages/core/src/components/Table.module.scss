@@ -104,6 +104,18 @@
   background: var(--neutral-alpha-weak);
 }
 
+// The sort button fills its header cell and takes on the cell's look: a
+// button's own font, colour, alignment and cursor would otherwise leak in.
+.thButton {
+  display: block;
+  width: 100%;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: inherit;
+}
+
 .thActions {
   white-space: nowrap;
 }

@@ -173,43 +173,64 @@ function Table({
       [styles.thActive]: isActive,
     });
 
+    const content = (
+      <Row
+        gap="8"
+        vertical="center"
+        horizontal={
+          header.align === "center" ? "center" : header.align === "right" ? "end" : "start"
+        }
+      >
+        <Text
+          variant="label-strong-s"
+          onBackground={isActive ? "neutral-strong" : "neutral-medium"}
+        >
+          {header.content}
+        </Text>
+        {header.sortable && (
+          <Icon
+            name={
+              isActive
+                ? sortConfig.direction === "asc"
+                  ? "chevronUp"
+                  : "chevronDown"
+                : "chevronUp"
+            }
+            size="xs"
+            onBackground={isActive ? "neutral-strong" : "neutral-weak"}
+            style={{
+              transform: !isActive ? "rotate(90deg)" : undefined,
+            }}
+          />
+        )}
+      </Row>
+    );
+
     return (
       <th
         key={header.key}
         className={thClasses}
         style={{ width: header.width }}
+        // Only the sorted column says so: ARIA wants aria-sort on one header
+        // at a time, and an unsorted column is the default.
+        aria-sort={
+          isActive ? (sortConfig.direction === "asc" ? "ascending" : "descending") : undefined
+        }
         onClick={() => handleSort(header.key, header.sortable)}
       >
-        <Row
-          gap="8"
-          vertical="center"
-          horizontal={
-            header.align === "center" ? "center" : header.align === "right" ? "end" : "start"
-          }
-        >
-          <Text
-            variant="label-strong-s"
-            onBackground={isActive ? "neutral-strong" : "neutral-medium"}
+        {header.sortable ? (
+          // A real button gives the column a tab stop, a role and Enter/Space.
+          // Its click bubbles to the cell, so the whole cell, padding
+          // included, stays the pointer target it always was.
+          <button
+            type="button"
+            className={classNames("reset-button-styles", "focus-ring", styles.thButton)}
           >
-            {header.content}
-          </Text>
-          {header.sortable && (
-            <Icon
-              name={
-                isActive
-                  ? sortConfig.direction === "asc"
-                    ? "chevronUp"
-                    : "chevronDown"
-                  : "chevronUp"
-              }
-              size="xs"
-              onBackground={isActive ? "neutral-strong" : "neutral-weak"}
-              style={{
-                transform: !isActive ? "rotate(90deg)" : undefined,
-              }}
-            />
-          )}
-        </Row>
+            {content}
+          </button>
+        ) : (
+          content
+        )}
       </th>
     );
   };
