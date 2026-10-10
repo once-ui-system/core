@@ -8,7 +8,7 @@ import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetail
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface CheckboxProps
-  extends Omit<InteractiveDetailsProps, "onClick">,
+  extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked"> {
   checked?: boolean;
   indeterminate?: boolean;
@@ -26,12 +26,17 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
       onToggle,
       disabled,
       hoverable = true,
+      name,
+      value,
+      "aria-label": ariaLabel,
       ...props
     },
     ref,
   ) => {
     const [isChecked, setIsChecked] = useState(controlledIsChecked || false);
-    const checkboxId = useId();
+    const labelId = useId();
+    const descriptionId = useId();
+    const hasLabel = Boolean(props.label);
 
     useEffect(() => {
       if (controlledIsChecked !== undefined) {
@@ -66,9 +71,15 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
         })}
         style={style}
       >
+        {/* Carries the value for form submission only. The box below is the
+            control people reach, so this stays out of the accessibility tree
+            rather than standing beside it as a second, unlabelled checkbox. */}
         <input
           type="checkbox"
           ref={ref}
+          name={name}
+          value={value}
+          aria-hidden="true"
           aria-checked={
             indeterminate
               ? "mixed"
@@ -99,7 +110,12 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
                 ? controlledIsChecked
                 : isChecked
           }
-          aria-labelledby={checkboxId}
+          // Named by the label text alone (not the description or help
+          // button beside it); `aria-label` only when there is no label.
+          aria-labelledby={hasLabel ? labelId : undefined}
+          aria-label={hasLabel ? undefined : ariaLabel}
+          aria-describedby={hasLabel && props.description ? descriptionId : undefined}
+          aria-disabled={disabled}
           onClick={toggleItem}
           onKeyDown={handleKeyDown}
           className={classNames(styles.element, {
@@ -121,7 +137,13 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
           )}
         </Flex>
         {props.label && (
-          <InteractiveDetails disabled={disabled} id={checkboxId} {...props} onClick={toggleItem} />
+          <InteractiveDetails
+            disabled={disabled}
+            {...props}
+            labelId={labelId}
+            descriptionId={descriptionId}
+            onClick={toggleItem}
+          />
         )}
       </Flex>
     );

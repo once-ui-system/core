@@ -7,7 +7,7 @@ import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetail
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface RadioButtonProps
-  extends Omit<InteractiveDetailsProps, "onClick">,
+  extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked"> {
   style?: React.CSSProperties;
   className?: string;
@@ -30,12 +30,15 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
       onToggle,
       disabled,
       hoverable = true,
+      "aria-label": ariaLabel,
       ...props
     },
     ref,
   ) => {
     const [isChecked, setIsChecked] = useState(controlledIsChecked || false);
-    const radioId = useId();
+    const labelId = useId();
+    const descriptionId = useId();
+    const hasLabel = Boolean(props.label);
 
     useEffect(() => {
       if (controlledIsChecked !== undefined) {
@@ -71,6 +74,9 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
         })}
         style={style}
       >
+        {/* Carries the value for form submission only. The circle below is
+            the control people reach, so this stays out of the accessibility
+            tree rather than standing beside it as a second, unlabelled radio. */}
         <input
           type="radio"
           ref={ref}
@@ -81,11 +87,16 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
           disabled={disabled}
           className={styles.hidden}
           tabIndex={-1}
+          aria-hidden="true"
         />
         <Flex
           role="radio"
           aria-checked={controlledIsChecked !== undefined ? controlledIsChecked : isChecked}
-          aria-labelledby={radioId}
+          // Named by the label text alone (not the description or help
+          // button beside it); `aria-label` only when there is no label.
+          aria-labelledby={hasLabel ? labelId : undefined}
+          aria-label={hasLabel ? undefined : ariaLabel}
+          aria-describedby={hasLabel && props.description ? descriptionId : undefined}
           aria-disabled={disabled}
           horizontal="center"
           vertical="center"
@@ -113,7 +124,13 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
           )}
         </Flex>
         {props.label && (
-          <InteractiveDetails disabled={disabled} id={radioId} {...props} onClick={toggleItem} />
+          <InteractiveDetails
+            disabled={disabled}
+            {...props}
+            labelId={labelId}
+            descriptionId={descriptionId}
+            onClick={toggleItem}
+          />
         )}
       </Flex>
     );
