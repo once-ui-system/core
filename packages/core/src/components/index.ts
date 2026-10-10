@@ -107,6 +107,7 @@ export * from "./StylePanel";
 export * from "./Swiper";
 export * from "./Switch";
 export * from "./Table";
+export * from "./Tabs";
 export * from "./Tag";
 export * from "./TagInput";
 export * from "./Text";

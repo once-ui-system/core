@@ -1,0 +1,221 @@
+---
+title: "Tabs"
+summary: "A list of tabs and the panel each one shows, horizontal or vertical, with the keyboard behaviour screen readers expect."
+updatedAt: "2026-10-10"
+docs: "once-ui/components/tabs.mdx"
+github: "components/Tabs.tsx"
+navLabel: "Tabs"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`Tabs` shows one panel of content at a time and a list of tabs to switch between
+them. It is four parts matched by `value`: `Tabs` holds the state, `TabList` holds
+the `Tab` buttons, and each `TabPanel` holds the content for one tab. The parts are
+separate so the list and the panels can sit in any layout.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Tabs defaultValue="overview" padding="24">
+      <TabList aria-label="Project">
+        <Tab value="overview">Overview</Tab>
+        <Tab value="activity">Activity</Tab>
+        <Tab value="settings">Settings</Tab>
+      </TabList>
+      <TabPanel value="overview" radius="l" border padding="24">
+        <Text onBackground="neutral-weak">Overview: what the project is and who works on it.</Text>
+      </TabPanel>
+      <TabPanel value="activity" radius="l" border padding="24">
+        <Text onBackground="neutral-weak">Activity: the latest changes, newest first.</Text>
+      </TabPanel>
+      <TabPanel value="settings" radius="l" border padding="24">
+        <Text onBackground="neutral-weak">Settings: name, visibility and members.</Text>
+      </TabPanel>
+    </Tabs>
+  }
+  codes={[
+    {
+      code:
+`<Tabs defaultValue="overview">
+  <TabList aria-label="Project">
+    <Tab value="overview">Overview</Tab>
+    <Tab value="activity">Activity</Tab>
+    <Tab value="settings">Settings</Tab>
+  </TabList>
+  <TabPanel value="overview">…</TabPanel>
+  <TabPanel value="activity">…</TabPanel>
+  <TabPanel value="settings">…</TabPanel>
+</Tabs>`,
+      language: "tsx",
+      label: "Tabs"
+    }
+  ]}
+/>
+
+Each `Tab` is a [`ToggleButton`](/components/toggleButton) with the `tab` role, so it
+takes the same props: `prefixIcon`, `suffixIcon`, `size`, `variant`, `disabled`.
+`Tabs`, `TabList` and `TabPanel` are Flex containers and take every Flex prop.
+
+## Vertical
+
+`orientation="vertical"` puts the list beside the panels and switches the arrow keys
+to Up and Down. Tabs in a vertical list fill its width and align their label to the
+start, which is the settings-sidebar layout. Change the direction at a breakpoint
+with the usual responsive props: here the list moves above the panel on small
+screens.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Tabs defaultValue="general" orientation="vertical" padding="24" gap="24" s={{ direction: "column" }}>
+      <TabList aria-label="Settings" minWidth={12} s={{ direction: "row" }}>
+        <Tab value="general" size="l" prefixIcon="person">General</Tab>
+        <Tab value="style" size="l" prefixIcon="sparkle">Style</Tab>
+        <Tab value="security" size="l" prefixIcon="security">Security</Tab>
+      </TabList>
+      <TabPanel value="general" gap="8">
+        <Heading variant="heading-strong-m">General</Heading>
+        <Text onBackground="neutral-weak">Your name, email and avatar.</Text>
+      </TabPanel>
+      <TabPanel value="style" gap="8">
+        <Heading variant="heading-strong-m">Style</Heading>
+        <Text onBackground="neutral-weak">Theme, brand colour and density.</Text>
+      </TabPanel>
+      <TabPanel value="security" gap="8">
+        <Heading variant="heading-strong-m">Security</Heading>
+        <Text onBackground="neutral-weak">Password, sessions and two-factor sign-in.</Text>
+      </TabPanel>
+    </Tabs>
+  }
+  codes={[
+    {
+      code:
+`<Tabs defaultValue="general" orientation="vertical" gap="24" s={{ direction: "column" }}>
+  <TabList aria-label="Settings" minWidth={12} s={{ direction: "row" }}>
+    <Tab value="general" size="l" prefixIcon="person">General</Tab>
+    <Tab value="style" size="l" prefixIcon="sparkle">Style</Tab>
+    <Tab value="security" size="l" prefixIcon="security">Security</Tab>
+  </TabList>
+  <TabPanel value="general"><General /></TabPanel>
+  <TabPanel value="style"><StylePanel /></TabPanel>
+  <TabPanel value="security"><Security /></TabPanel>
+</Tabs>`,
+      language: "tsx",
+      label: "Vertical"
+    }
+  ]}
+/>
+
+## Controlled
+
+Pass `value` and `onChange` when something else owns the selection: a URL search
+param, say, so a reload opens the same tab. `onChange` is not called for the tab
+that is already selected. Without `value`, Tabs keeps its own state and starts on
+`defaultValue`, or on the first enabled tab if there is none.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const [tab, setTab] = useState("general");
+
+<Tabs value={tab} onChange={setTab}>
+  …
+</Tabs>`,
+      language: "tsx",
+      label: "Controlled"
+    }
+  ]}
+/>
+
+<Feedback
+  marginTop="16"
+  marginBottom="24"
+  description="In a page that renders on the server, pass defaultValue (or value). Without it the first tab is chosen when the list mounts in the browser, so the server HTML has no panel in it."
+/>
+
+## Keyboard
+
+Only the selected tab is in the page's Tab order, so Tab moves from the list to the
+panel rather than through every tab.
+
+| Key | Does |
+| --- | --- |
+| Left / Right | Previous and next tab, wrapping at the ends (Up / Down when vertical). Swapped in a right-to-left layout. |
+| Home / End | First and last tab. |
+| Enter / Space | Select the focused tab, when `activation="manual"`. |
+
+By default a tab is selected as soon as the arrow keys reach it. Set
+`activation="manual"` when showing a panel is slow, such as one that fetches: the
+arrow keys then only move focus, and Enter or Space selects.
+
+Disabled tabs stay visible and the arrow keys skip them.
+
+## Panels
+
+An unselected panel renders nothing inside it, so its effects stop and its state
+resets. Pass `keepMounted` to keep a panel's content mounted and hidden instead:
+a form with unsaved input, a video that should keep its position.
+
+Every tab is wired to its panel with `aria-controls`, and every panel is labelled
+by its tab, so a screen reader announces "Security, tab panel". A panel is
+focusable, so a keyboard user can reach one that has no controls of its own. A tab
+with no `TabPanel` (a list of tabs that changes the route, for instance) gets no
+`aria-controls`.
+
+Give the list a name with `aria-label` (or `aria-labelledby`) when no heading on the
+page names it.
+
+## API reference
+
+### Tabs
+
+<PropsTable
+  component="Tabs"
+  describe={{
+    value: "The selected tab's value, when the host owns the state. Pair with onChange.",
+    defaultValue: "The tab selected first when Tabs keeps its own state. Without it, the first enabled tab.",
+    onChange: "Called with the newly selected tab's value.",
+    orientation: "Which arrow keys move between tabs, and whether the list sits above or beside the panels.",
+    activation: "automatic selects a tab when the arrow keys reach it; manual waits for Enter or Space.",
+    children: "A TabList and its TabPanels, in any layout.",
+  }}
+/>
+
+### TabList
+
+<PropsTable
+  component="TabList"
+  describe={{
+    children: "The Tab buttons.",
+  }}
+/>
+
+### Tab
+
+<PropsTable
+  component="Tab"
+  describe={{
+    value: "Matches the TabPanel this tab shows, and is what onChange reports.",
+    children: "The tab's text.",
+    disabled: "Visible, not selectable, skipped by the arrow keys.",
+  }}
+/>
+
+### TabPanel
+
+<PropsTable
+  component="TabPanel"
+  describe={{
+    value: "The value of the Tab that shows this panel.",
+    keepMounted: "Keep the content mounted, hidden, while another tab is selected.",
+    children: "The panel's content.",
+  }}
+/>
