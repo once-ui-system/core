@@ -2,6 +2,7 @@ export * from "./useArrowNavigation";
 export * from "./useDebounce";
 export * from "./useFetchOg";
 export * from "./useHeadingLinks";
+export * from "./useHotkeys";
 export * from "./useInViewport";
 export * from "./useReducedMotion";
 export * from "./useStreamingData";
