@@ -10,6 +10,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -24,6 +25,7 @@ import {
 import { ArrowNavigation } from "./ArrowNavigationContext";
 import { Column } from "./Column";
 import { Dropdown } from "./Dropdown";
+import { DropdownTriggerContext, type DropdownTriggerState } from "./DropdownTriggerContext";
 import styles from "./DropdownWrapper.module.scss";
 import { Flex } from "./Flex";
 import { FocusTrap } from "./FocusTrap";
@@ -112,6 +114,20 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     const isControlled = controlledIsOpen !== undefined;
     const isOpen = isControlled ? controlledIsOpen : internalIsOpen;
+
+    /**
+     * How many Buttons in the trigger render as real buttons (see
+     * DropdownTriggerContext). While one does, it is the control and carries
+     * `aria-haspopup`/`aria-expanded` itself, so the two wrappers below stop
+     * claiming `role="button"`: a button inside a button is nested
+     * interactive content, and announces the trigger twice.
+     */
+    const [buttonTriggers, setButtonTriggers] = useState(0);
+    const registerButtonTrigger = useCallback(() => {
+      setButtonTriggers((count) => count + 1);
+      return () => setButtonTriggers((count) => count - 1);
+    }, []);
+    const wrapperIsTrigger = buttonTriggers === 0;
 
     const handleOpenChange = useCallback(
       (newIsOpen: boolean) => {
@@ -614,6 +630,19 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     );
     const [optionsCount, setOptionsCount] = useState(propOptionsCount || 0);
 
+    const triggerState = useMemo<DropdownTriggerState>(
+      () => ({
+        expanded: isOpen,
+        haspopup: !handleArrowNavigation
+          ? "dialog"
+          : navigationLayout === "grid"
+            ? "grid"
+            : "listbox",
+        register: registerButtonTrigger,
+      }),
+      [isOpen, handleArrowNavigation, navigationLayout, registerButtonTrigger],
+    );
+
     // Update options count when dropdown opens or content changes
     useEffect(() => {
       if (isOpen) {
@@ -742,9 +771,9 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           }
           onKeyDown={handleKeyDown}
           tabIndex={-1}
-          role="button"
-          aria-haspopup="listbox"
-          aria-expanded={isOpen}
+          role={wrapperIsTrigger ? "button" : undefined}
+          aria-haspopup={wrapperIsTrigger ? "listbox" : undefined}
+          aria-expanded={wrapperIsTrigger ? isOpen : undefined}
           data-role="dropdown-wrapper"
         >
           <Row
@@ -766,13 +795,15 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             onKeyDown={(e) => {
               handleKeyDown(e);
             }}
-            role="button"
+            role={wrapperIsTrigger ? "button" : undefined}
             data-is-dropdown="true"
-            aria-haspopup="true"
-            aria-expanded={isOpen}
+            aria-haspopup={wrapperIsTrigger ? "true" : undefined}
+            aria-expanded={wrapperIsTrigger ? isOpen : undefined}
             className="dropdown-trigger"
           >
-            {trigger}
+            <DropdownTriggerContext.Provider value={triggerState}>
+              {trigger}
+            </DropdownTriggerContext.Provider>
           </Row>
           {isOpen &&
             dropdown &&

@@ -5,6 +5,7 @@ import React, { forwardRef, ReactNode } from "react";
 import { IconName } from "../icons";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 import buttonStyles from "./Button.module.scss";
+import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext";
 import { ElementType } from "./ElementType";
 import { Flex } from "./Flex";
 import { HoverCard } from "./HoverCard";
@@ -76,12 +77,14 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
     ref,
   ) => {
     const radiusSize = size === "s" || size === "m" ? "m" : "l";
+    const trigger = useDropdownTrigger();
 
     const button = (
       <ElementType
         id={id}
         href={href}
         ref={ref}
+        {...dropdownTriggerProps(trigger, href, props.onClick)}
         disabled={disabled}
         data-disabled={disabled ? true : undefined}
         data-border={rounded ? "rounded" : undefined}
