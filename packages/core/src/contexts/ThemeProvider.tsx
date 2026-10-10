@@ -50,6 +50,30 @@ function resolvePersistence(persistence: StylePersistence = "local") {
 }
 export type DataStyle = "categorical" | "divergent" | "sequential";
 
+/**
+ * The `style` section of `once-ui.config`, exactly as the file writes it.
+ *
+ * Every key is optional and named the way `ThemeProvider` takes it, so the
+ * object goes to the providers as written — `<ThemeProvider {...style}>` and
+ * `<ThemeInit config={style} />` — with no casts and no renaming. Each key
+ * becomes the `data-<kebab-key>` attribute on `<html>` (`solidStyle` →
+ * `data-solid-style`).
+ */
+export interface OnceUIStyleConfig {
+  theme?: Theme;
+  neutral?: NeutralColor | "custom";
+  brand?: Schemes | "custom";
+  accent?: Schemes | "custom";
+  solid?: SolidType;
+  solidStyle?: SolidStyle;
+  border?: BorderStyle;
+  surface?: SurfaceStyle;
+  transition?: TransitionStyle;
+  scaling?: ScalingSize;
+  bodySize?: BodySize;
+  bodyLineHeight?: BodyLineHeight;
+}
+
 interface StyleOptions {
   theme: Theme;
   neutral: NeutralColor | "custom";
@@ -75,20 +99,8 @@ type StyleProviderState = StyleOptions & {
   setStyle: (style: Partial<StyleOptions>) => void;
 };
 
-type ThemeProviderProps = {
+export type ThemeProviderProps = OnceUIStyleConfig & {
   children: React.ReactNode;
-  theme?: Theme;
-  neutral?: NeutralColor | "custom";
-  brand?: Schemes | "custom";
-  accent?: Schemes | "custom";
-  solid?: SolidType;
-  solidStyle?: SolidStyle;
-  border?: BorderStyle;
-  surface?: SurfaceStyle;
-  transition?: TransitionStyle;
-  scaling?: ScalingSize;
-  bodySize?: BodySize;
-  bodyLineHeight?: BodyLineHeight;
   /** Defaults to `"local"`. See {@link StylePersistence}. */
   persistence?: StylePersistence;
 };

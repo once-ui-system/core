@@ -1,31 +1,36 @@
-const baseURL = "https://docs.once-ui.com";
+// @ts-check
+import { defineConfig } from "@once-ui-system/core/config";
 
-const style = {
-  theme: "system", // dark | light
-  neutral: "gray", // sand | gray | slate
-  brand: "emerald", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
-  accent: "orange", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
-  solid: "contrast", // color | contrast
-  solidStyle: "flat", // flat | plastic
-  border: "conservative", // rounded | playful | conservative
-  surface: "filled", // filled | translucent
-  transition: "all", // all | micro | macro
-  scaling: "100"
-};
-
-const dataStyle = {
-  variant: "gradient", // flat | gradient | outline
-  mode: "categorical", // categorical | divergent | sequential
-  height: 24, // default chart height
-  axis: {
-    stroke: "var(--neutral-alpha-weak)",
+// Typed by defineConfig, so `style` and `dataStyle` go to ThemeInit and the
+// providers as written: no casts, no renamed keys.
+const { baseURL, style, dataStyle } = defineConfig({
+  baseURL: "https://docs.once-ui.com",
+  style: {
+    theme: "system", // dark | light
+    neutral: "gray", // sand | gray | slate
+    brand: "emerald", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+    accent: "orange", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+    solid: "contrast", // color | contrast
+    solidStyle: "flat", // flat | plastic
+    border: "conservative", // rounded | playful | conservative
+    surface: "filled", // filled | translucent
+    transition: "all", // all | micro | macro
+    scaling: "100",
   },
-  tick: {
-    fill: "var(--neutral-on-background-weak)",
-    fontSize: 11,
-    line: false
+  dataStyle: {
+    variant: "gradient", // flat | gradient | outline
+    mode: "categorical", // categorical | divergent | sequential
+    height: 24, // default chart height
+    axis: {
+      stroke: "var(--neutral-alpha-weak)",
+    },
+    tick: {
+      fill: "var(--neutral-on-background-weak)",
+      fontSize: 11,
+      line: false,
+    },
   },
-};
+});
 
 const layout = {
   // units are set in REM
