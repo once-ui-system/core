@@ -1,8 +1,16 @@
 #!/usr/bin/env node
 /**
  * Mechanical Once UI codegen validator.
- * Usage: node scripts/validate-ai-code.js <file.tsx> [--fix]
- *        node scripts/validate-ai-code.js --stdin < file.tsx
+ * Usage: node scripts/validate-ai-code.js <file.tsx> [--fix] [--next | --no-next]
+ *        node scripts/validate-ai-code.js --stdin [--next] < file.tsx
+ *
+ * `--next` and `--no-next` say whether the file belongs to a Next.js app, for
+ * the rules that only apply there. Without either, the file counts as Next
+ * when it imports from `next` or `next/*` itself, or when the nearest
+ * package.json above it (above the working directory, for `--stdin`) lists
+ * `next` in `dependencies` or `devDependencies`. A peer dependency does not
+ * count: a library that supports Next is not a Next app. Neither does
+ * `"use client"`, which every React Server Components framework shares.
  */
 
 const fs = require("node:fs");
@@ -214,6 +222,7 @@ function parseFlags(argv) {
   return {
     stdin: argv.includes("--stdin"),
     fix: argv.includes("--fix"),
+    next: argv.includes("--next") ? true : argv.includes("--no-next") ? false : undefined,
     file: argv.find((a) => !a.startsWith("-")),
   };
 }
@@ -223,10 +232,39 @@ function readInput(flags) {
     return { source: fs.readFileSync(0, "utf8"), file: "<stdin>" };
   }
   if (!flags.file) {
-    console.error("Usage: validate-ai-code.js <file.tsx> [--fix] | --stdin");
+    console.error("Usage: validate-ai-code.js <file.tsx> [--fix] [--next | --no-next] | --stdin");
     process.exit(2);
   }
   return { source: fs.readFileSync(flags.file, "utf8"), file: flags.file };
+}
+
+/**
+ * Does the nearest package.json at or above `dir` depend on `next`?
+ *
+ * Only the nearest one: in a monorepo the app's own manifest is the one that
+ * says what the app is, and the workspace root's says nothing about it.
+ */
+function isNextProject(dir) {
+  let current = path.resolve(dir);
+  for (;;) {
+    const manifest = path.join(current, "package.json");
+    if (fs.existsSync(manifest)) {
+      try {
+        const pkg = JSON.parse(fs.readFileSync(manifest, "utf8"));
+        return Boolean(pkg.dependencies?.next || pkg.devDependencies?.next);
+      } catch {
+        return false;
+      }
+    }
+    const parent = path.dirname(current);
+    if (parent === current) return false;
+    current = parent;
+  }
+}
+
+/** The file itself imports from `next` or a `next/*` subpath. */
+function importsNext(source) {
+  return /\bfrom\s*["']next(?:\/[^"']*)?["']|\bimport\s*["']next\/[^"']*["']/.test(source);
 }
 
 /**
@@ -579,6 +617,27 @@ function looksLikeSeconds(value) {
 
 const POSITIONED = /(?:^|\s)position=\{?\s*["'](?:absolute|fixed|sticky)["']\s*\}?/;
 
+/**
+ * `LayoutProvider` named in an import or re-export from the package root (or
+ * `/contexts`), as a value rather than a type.
+ */
+const CORE_ROOT_SPECIFIERS =
+  /\b(import|export)\s+(type\s+)?\{([^}]*)\}\s*from\s*(["'])@once-ui-system\/core(?:\/contexts)?\4;?/g;
+
+function namesLayoutProvider(specifiers) {
+  return specifiers
+    .split(",")
+    .map((s) => s.trim())
+    .some((s) => /^LayoutProvider(?:\s+as\s+[\w$]+)?$/.test(s));
+}
+
+function rootLayoutProviderImport(source) {
+  for (const m of source.matchAll(CORE_ROOT_SPECIFIERS)) {
+    if (!m[2] && namesLayoutProvider(m[3])) return m;
+  }
+  return null;
+}
+
 function validate(source, spec, iconNames, options = {}) {
   const issues = [];
 
@@ -769,6 +828,23 @@ function validate(source, spec, iconNames, options = {}) {
     );
   }
 
+  // Without the Next adapters, SmartLink, Button href, Media and the rest
+  // render a plain <a> and <img>: no client navigation, no image
+  // optimisation, and nothing fails to tell you so. An app that composes the
+  // adapters itself has already done what the /next export does.
+  const nextApp = options.next ?? importsNext(source);
+  if (
+    nextApp &&
+    rootLayoutProviderImport(source) &&
+    !/\b(?:NextAdapterProvider|nextAdapters|AdapterProvider)\b/.test(source)
+  ) {
+    add(
+      "LayoutProvider.next",
+      'In a Next.js app, import LayoutProvider from "@once-ui-system/core/next" — the root export renders links and images as plain <a> and <img>',
+      "next-layout-provider",
+    );
+  }
+
   if (/<Fade[^>]*>[\s\S]*<(Column|Row)[^>]*overflowY/.test(source)) {
     add("Fade.edge", "Fade wrapping scroll content — use as absolute edge strip instead");
   }
@@ -791,6 +867,45 @@ function rewriteTags(source, edit) {
     if (!tag) return out;
     out = out.slice(0, tag.start) + edit(tag.attrs, tag.name) + out.slice(tag.end);
   }
+}
+
+const NEXT_IMPORT = /\bimport\s+\{([^}]*)\}\s*from\s*(["'])@once-ui-system\/core\/next\2/;
+
+/**
+ * Move `LayoutProvider` from the root import to `@once-ui-system/core/next`,
+ * keeping any alias, and leave every other specifier where it was.
+ */
+function moveLayoutProviderToNext(source) {
+  const m = rootLayoutProviderImport(source);
+  if (m?.[1] !== "import") return source;
+  const specifiers = m[3]
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const moved = specifiers.find((s) => /^LayoutProvider\b/.test(s));
+  const kept = specifiers.filter((s) => s !== moved);
+  const quote = m[4];
+  const semi = m[0].endsWith(";") ? ";" : "";
+  const from = m[0].match(/@once-ui-system\/core(?:\/contexts)?/)[0];
+  const rootImport = `import { ${kept.join(", ")} } from ${quote}${from}${quote}${semi}`;
+
+  // An existing `/next` import takes the specifier; otherwise a new one goes
+  // where the root import was.
+  if (NEXT_IMPORT.test(source)) {
+    const without = kept.length
+      ? source.slice(0, m.index) + rootImport + source.slice(m.index + m[0].length)
+      : source.slice(0, m.index) + source.slice(m.index + m[0].length).replace(/^\r?\n/, "");
+    return without.replace(NEXT_IMPORT, (whole, list) => {
+      const names = list
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+      return whole.replace(`{${list}}`, `{ ${[...names, moved].join(", ")} }`);
+    });
+  }
+  const nextImport = `import { ${moved} } from ${quote}@once-ui-system/core/next${quote}${semi}`;
+  const replacement = kept.length ? `${rootImport}\n${nextImport}` : nextImport;
+  return source.slice(0, m.index) + replacement + source.slice(m.index + m[0].length);
 }
 
 function applyFixes(source, issues) {
@@ -827,6 +942,9 @@ function applyFixes(source, issues) {
         ),
       );
     }
+    if (issue.fix === "next-layout-provider") {
+      out = moveLayoutProviderToNext(out);
+    }
   }
   return out;
 }
@@ -838,9 +956,10 @@ function main() {
   const { source, file } = readInput(flags);
 
   const dir = flags.stdin ? process.cwd() : path.dirname(path.resolve(file));
+  const next = flags.next ?? (importsNext(source) || isNextProject(dir));
   const icons = projectIconNames(projectRoot(dir));
 
-  const issues = validate(source, spec, iconNames, { icons });
+  const issues = validate(source, spec, iconNames, { next, icons });
 
   if (issues.length === 0) {
     console.log(`✓ ${file}: no mechanical issues`);
@@ -875,6 +994,7 @@ module.exports = {
   registeredIconNames,
   projectIconNames,
   projectRoot,
+  isNextProject,
   hasLiteralColor,
   insidePropValue,
   openingTags,

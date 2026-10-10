@@ -14,10 +14,11 @@ const {
   jsxElements,
   registeredIconNames,
   projectIconNames,
+  isNextProject,
 } = require("../../scripts/validate-ai-code.js");
 
 type Issue = { rule: string; message: string; fix?: string };
-type Options = { icons?: { names: Set<string>; unresolved: boolean } };
+type Options = { next?: boolean; icons?: { names: Set<string>; unresolved: boolean } };
 
 const spec = loadSpec();
 const iconNames = parseIconNames(spec);
@@ -457,5 +458,72 @@ describe("Icon.names", () => {
     expect(
       rules(`<Icon name="anything" />`, { icons: { names: new Set(), unresolved: true } }),
     ).not.toContain("Icon.names");
+  });
+});
+
+describe("LayoutProvider.next", () => {
+  const rootImport = `import { Column, LayoutProvider } from "@once-ui-system/core";\n`;
+
+  it("flags LayoutProvider from the package root in a Next.js app", () => {
+    expect(rules(rootImport, { next: true })).toContain("LayoutProvider.next");
+    expect(
+      rules(`export { LayoutProvider } from "@once-ui-system/core";`, { next: true }),
+    ).toContain("LayoutProvider.next");
+  });
+
+  it("treats a file that imports from next as a Next.js app", () => {
+    expect(rules(`${rootImport}import type { Metadata } from "next";`)).toContain(
+      "LayoutProvider.next",
+    );
+    expect(rules(`${rootImport}import { Inter } from "next/font/google";`)).toContain(
+      "LayoutProvider.next",
+    );
+  });
+
+  it("leaves other apps alone", () => {
+    expect(rules(rootImport)).not.toContain("LayoutProvider.next");
+    expect(rules(rootImport, { next: false })).not.toContain("LayoutProvider.next");
+  });
+
+  it("accepts the /next import, a type-only import, and composed adapters", () => {
+    const opts = { next: true };
+    expect(
+      rules(`import { LayoutProvider } from "@once-ui-system/core/next";`, opts),
+    ).not.toContain("LayoutProvider.next");
+    expect(
+      rules(`import type { LayoutProvider } from "@once-ui-system/core";`, opts),
+    ).not.toContain("LayoutProvider.next");
+    expect(
+      rules(`${rootImport}import { NextAdapterProvider } from "@once-ui-system/core/next";`, opts),
+    ).not.toContain("LayoutProvider.next");
+  });
+
+  it("moves the import under --fix and keeps the rest of the root import", () => {
+    expect(fixed(rootImport, { next: true })).toBe(
+      `import { Column } from "@once-ui-system/core";\nimport { LayoutProvider } from "@once-ui-system/core/next";\n`,
+    );
+    expect(fixed(`import { LayoutProvider } from "@once-ui-system/core";\n`, { next: true })).toBe(
+      `import { LayoutProvider } from "@once-ui-system/core/next";\n`,
+    );
+  });
+
+  it("merges into an existing /next import and keeps an alias", () => {
+    const src = `import { LayoutProvider as Layout } from "@once-ui-system/core";\nimport { nextAdapters } from "@once-ui-system/core/next";\n`;
+    // Composing the adapters by hand already does what /next does, so this
+    // one is not flagged; force the fix to check the merge itself.
+    expect(applyFixes(src, [{ rule: "LayoutProvider.next", fix: "next-layout-provider" }])).toBe(
+      `import { nextAdapters, LayoutProvider as Layout } from "@once-ui-system/core/next";\n`,
+    );
+  });
+
+  it("detects a Next.js project from the nearest package.json", () => {
+    const app = project({
+      "package.json": JSON.stringify({ dependencies: { next: "16.0.0" } }),
+      "src/app/layout.tsx": "",
+    });
+    expect(isNextProject(path.join(app, "src", "app"))).toBe(true);
+    // A library that supports Next lists it as a peer; that is not a Next app.
+    const lib = project({ "package.json": JSON.stringify({ peerDependencies: { next: ">=15" } }) });
+    expect(isNextProject(lib)).toBe(false);
   });
 });
