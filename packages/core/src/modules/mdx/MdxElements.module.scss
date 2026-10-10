@@ -1,0 +1,19 @@
+// The heading anchor stays out of the way until the heading is hovered or the
+// anchor itself has focus, as HeadingLink's does. It is only faded, never
+// removed or made inert, so keyboard and screen-reader users always reach it.
+.anchor {
+  opacity: 0;
+  transition: opacity var(--transition-duration-micro-medium) var(--transition-eased);
+}
+
+.heading:hover .anchor,
+.heading:focus-within .anchor {
+  opacity: 1;
+}
+
+// Touch screens have no hover to reveal it.
+@media (hover: none) {
+  .anchor {
+    opacity: 1;
+  }
+}
