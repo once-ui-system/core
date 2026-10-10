@@ -45,6 +45,13 @@ export interface OGFetchOptions extends OGRequestOptions {
   /** Decode HTML entities in the title and description. Default `true`. */
   decodeEntities?: boolean;
   /**
+   * Include `faviconUrl` when the page declares an icon. Default `true`.
+   * `OgCard` renders it as given, so with `next/image` its host must be
+   * allowed in `images.remotePatterns`; set `false` to leave the field out
+   * and let `OgCard` use its own favicon source instead.
+   */
+  favicon?: boolean;
+  /**
    * Default 1 MiB. Only HTML is read, and only up to this many bytes; Open
    * Graph tags live in `<head>`, so a longer page is parsed from what was read.
    */
@@ -168,6 +175,7 @@ function extractOgData(
   requestedUrl: string,
   pageUrl: URL,
   decodeEntities: boolean,
+  includeFavicon: boolean,
 ): OGData {
   const metas = collectTags(html, "meta");
   const meta = (...keys: string[]): string | undefined => {
@@ -194,9 +202,11 @@ function extractOgData(
     pageUrl,
   );
 
-  const icon = collectTags(html, "link").find((attributes) =>
-    (attributes.rel ?? "").toLowerCase().split(/\s+/).includes("icon"),
-  );
+  const icon = includeFavicon
+    ? collectTags(html, "link").find((attributes) =>
+        (attributes.rel ?? "").toLowerCase().split(/\s+/).includes("icon"),
+      )
+    : undefined;
   const faviconUrl = resolveHttpUrl(icon?.href, pageUrl);
 
   const data: OGData = { url: requestedUrl, title, description, image };
@@ -404,6 +414,7 @@ export async function handleOGFetch(
     timeout = 5000,
     userAgent = DEFAULT_FETCH_USER_AGENT,
     decodeEntities = true,
+    favicon = true,
     maxBytes = MIB,
     cacheControl = "public, max-age=3600",
     sameOrigin = false,
@@ -437,7 +448,7 @@ export async function handleOGFetch(
       }
 
       const html = decodeText(await readBody(response, maxBytes, true), charsetOf(contentType));
-      const data = extractOgData(html, handled.target, url, decodeEntities);
+      const data = extractOgData(html, handled.target, url, decodeEntities, favicon);
 
       return Response.json(data, {
         headers: {

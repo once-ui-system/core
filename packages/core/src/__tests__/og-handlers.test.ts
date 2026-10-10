@@ -249,6 +249,15 @@ describe("handleOGFetch", () => {
     expect(seen[0].headers["user-agent"]).toBe("Mozilla/5.0 (compatible; OG-Fetcher/1.0)");
   });
 
+  it("leaves faviconUrl out with favicon: false", async () => {
+    const data = await (
+      await call(fetchRoute({ allowHttp: true, favicon: false }), `${origin}/page`)
+    ).json();
+
+    expect(data).not.toHaveProperty("faviconUrl");
+    expect(data.image).toBe(`${origin}/img/og.png?w=1200&h=630`);
+  });
+
   it("decodes gzip, brotli and the declared charset", async () => {
     for (const path of ["/page-gzip", "/page-br"]) {
       const data = await (await call(route, `${origin}${path}`)).json();
