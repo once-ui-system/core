@@ -32,8 +32,8 @@ What it is not: no removals, no renames, no module-format or peer-floor changes.
 Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 
 ### W0 · Base (P0)
-- [ ] Mechanical Biome sweep of `packages/core`: formatting and import order only, no lint autofixes; typecheck and the full test suite unchanged.
-- [ ] Test tooling for accessibility assertions (axe) in the existing Vitest + jsdom setup.
+- [x] Mechanical Biome sweep of `packages/core`: formatting and import order only, no lint autofixes; typecheck and the full test suite unchanged. Lint errors 519 → 173.
+- [x] Test tooling for accessibility assertions (axe) in the existing Vitest + jsdom setup: `src/test/axe.ts`.
 - [ ] Release PR open, with this roadmap as its checklist.
 
 ### W1 · CI and quality gates (P0)
@@ -51,6 +51,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 
 ### W3 · Accessibility (P0)
 - [ ] `Switch`: the focusable element carries `role="switch"` and is labelled by the visible label.
+- [ ] `Checkbox` and `RadioButton`: the hidden native input is a second, unlabelled control in the accessibility tree (axe `label`); one control, one name.
 - [ ] `Modal`: focus trap, initial and restored focus, `aria-labelledby`, forwarded ref.
 - [ ] `Kbar`: dialog semantics; combobox and listbox for the search and results.
 - [ ] `Table`: sortable headers are buttons with `aria-sort`.

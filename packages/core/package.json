@@ -173,14 +173,14 @@
     "date-fns": "^4.4.0"
   },
   "peerDependencies": {
+    "compressorjs": "^1.3.0",
     "next": ">=15.5",
+    "prismjs": "^1.30.0",
     "react": ">=18",
     "react-dom": ">=18",
-    "sass": "^1.77.6",
-    "sharp": "^0.33.4 || ^0.34 || ^0.35",
     "recharts": "^3.10.1",
-    "prismjs": "^1.30.0",
-    "compressorjs": "^1.3.0"
+    "sass": "^1.77.6",
+    "sharp": "^0.33.4 || ^0.34 || ^0.35"
   },
   "peerDependenciesMeta": {
     "next": {
@@ -213,6 +213,7 @@
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "@vitest/ui": "^4.1.10",
+    "axe-core": "^4.10.3",
     "jsdom": "^30.0.0",
     "publint": "^0.3.23",
     "react-icons": "^5.7.0",
