@@ -1,6 +1,6 @@
 import { fireEvent, render, screen, within } from "@testing-library/react";
 import { createElement, type ReactNode } from "react";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { Line } from "../components/Line";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { ToastProvider } from "../contexts/ToastProvider";
@@ -66,6 +66,14 @@ const article = () => (
     {h("Feedback", { title: "Heads up", description: "Tags work by name." })}
   </main>
 );
+
+// CodeBlock is React.lazy: warm its module once so the first test to render
+// one is not racing a cold import under a loaded suite.
+beforeAll(async () => {
+  await import("../modules/code/CodeBlock.impl");
+});
+
+const codeBlockRendered = () => screen.findByText("const answer = 42;", {}, { timeout: 5000 });
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -165,7 +173,7 @@ describe("mdxComponents", () => {
   it("renders fenced code through CodeBlock with its language", async () => {
     render(article(), { wrapper: Providers });
 
-    expect(await screen.findByText("const answer = 42;")).toBeInTheDocument();
+    expect(await codeBlockRendered()).toBeInTheDocument();
     expect(screen.getByText("Ts")).toBeInTheDocument();
   });
 
@@ -180,7 +188,7 @@ describe("mdxComponents", () => {
 
   it("has no axe violations", async () => {
     const { container } = render(article(), { wrapper: Providers });
-    await screen.findByText("const answer = 42;");
+    await codeBlockRendered();
     await expectNoAxeViolations(container);
   });
 });
