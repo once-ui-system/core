@@ -234,6 +234,7 @@
 --function-warning-700
 --function-warning-800
 --function-warning-900
+--header-height
 --info-alpha-medium
 --info-alpha-strong
 --info-alpha-weak

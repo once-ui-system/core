@@ -11,7 +11,7 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken } from "../types";
-import { scrollsOn, spacingClasses } from "../utils/layoutClasses";
+import { BELOW_HEADER, scrollsOn, spacingClasses } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerGridProps
@@ -271,6 +271,9 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
         ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) &&
         `max-width-${maxWidth}`,
       (fillHeight || maxHeight) && "fill-height",
+      height === BELOW_HEADER && "height-below-header",
+      minHeight === BELOW_HEADER && "min-height-below-header",
+      maxHeight === BELOW_HEADER && "max-height-below-header",
       minColumnWidthValue ? "columns-auto-fit" : columns && `columns-${columns}`,
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,

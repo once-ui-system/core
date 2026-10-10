@@ -31,7 +31,7 @@ export const Shell = ({ children }: { children: React.ReactNode }) => (
       <Sidebar s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56" />
       <Row fill horizontal="center" topRadius="l" overflow="hidden">
         <Row
-          height="calc(100dvh - var(--static-space-56))"
+          height="below-header"
           overflowY="auto"
           topRadius="l"
           horizontal="center"

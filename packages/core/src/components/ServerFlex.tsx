@@ -11,7 +11,7 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
-import { scrollsOn, spacingClasses } from "../utils/layoutClasses";
+import { BELOW_HEADER, scrollsOn, spacingClasses } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerFlexProps
@@ -331,6 +331,9 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) &&
         `max-width-${maxWidth}`,
       (fillHeight || maxHeight) && "fill-height",
+      height === BELOW_HEADER && "height-below-header",
+      minHeight === BELOW_HEADER && "min-height-below-header",
+      maxHeight === BELOW_HEADER && "max-height-below-header",
       shadow && `shadow-${shadow}`,
       zIndex !== undefined && `z-index-${zIndex}`,
       textType && `font-${textType}`,

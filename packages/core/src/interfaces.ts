@@ -93,11 +93,21 @@ export interface TextProps<T extends ElementType = "span"> extends HTMLAttribute
 
 export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
   width?: number | SpacingToken | CSSUnit;
-  height?: number | SpacingToken | CSSUnit;
+  /**
+   * A number is rem; a string is a spacing token or a CSS unit.
+   * `"below-header"` is the viewport below the app header,
+   * `calc(100dvh - var(--header-height))`, for an app shell's scrolling pane.
+   */
+  height?: number | SpacingToken | CSSUnit | "below-header";
   maxWidth?: number | SpacingToken | CSSUnit;
   minWidth?: number | SpacingToken | CSSUnit;
-  minHeight?: number | SpacingToken | CSSUnit;
-  maxHeight?: number | SpacingToken | CSSUnit;
+  /** As `height`, including `"below-header"`. */
+  minHeight?: number | SpacingToken | CSSUnit | "below-header";
+  /**
+   * As `height`. `"below-header"` caps a panel that hangs from the header (a
+   * mobile menu, a dropdown) at the viewport below it.
+   */
+  maxHeight?: number | SpacingToken | CSSUnit | "below-header";
   fit?: boolean;
   fitWidth?: boolean;
   fitHeight?: boolean;

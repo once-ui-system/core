@@ -14,6 +14,7 @@ import {
   BREAKPOINTS_CASCADE,
   ALIGN_ALIGNMENTS,
   BACKGROUND_RAMPS,
+  BELOW_HEADER_PROPERTIES,
   BLEND_MODES,
   BLUR_SIZES,
   BORDER_SIDES,
@@ -41,6 +42,7 @@ import {
   cursorValue,
   gridTemplate,
   WEIGHTS,
+  belowHeaderValue,
   JUSTIFY_ALIGNMENTS,
   FLEX_DIRECTIONS,
   FLEX_VALUES,
@@ -443,6 +445,10 @@ function size() {
   // Flex and grid children refuse to shrink below their content without these.
   out.push(rule(".min-width-0", ["min-width: 0;"]));
   out.push(rule(".min-height-0", ["min-height: 0;"]));
+  // After `.fill-height`, so `height="below-header"` beside `fillHeight` wins.
+  for (const prop of BELOW_HEADER_PROPERTIES) {
+    out.push(rule(`.${prop}-below-header`, [`${prop}: ${belowHeaderValue};`]));
+  }
   return out.join("\n");
 }
 

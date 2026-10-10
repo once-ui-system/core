@@ -83,11 +83,11 @@ Sizes take a spacing token, a number (read as rem), or any CSS unit. `fill` and
   mixin="SizeProps"
   describe={{
     width: "Fixed width. A token, a number in rem, or a CSS unit.",
-    height: "Fixed height. A token, a number in rem, or a CSS unit.",
+    height: "Fixed height. A token, a number in rem, or a CSS unit. \"below-header\" is the viewport below the app header.",
     maxWidth: "Upper bound. The usual way to cap a text column.",
     minWidth: "Lower bound.",
     minHeight: "Lower bound.",
-    maxHeight: "Upper bound. Pair with overflowY for a scroll area.",
+    maxHeight: "Upper bound. Pair with overflowY for a scroll area. Takes \"below-header\" too.",
     fit: "Shrink to the content on both axes.",
     fitWidth: "Shrink to the content horizontally.",
     fitHeight: "Shrink to the content vertically.",

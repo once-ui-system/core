@@ -60,6 +60,13 @@
     --responsive-space-m:  var(--static-space-24);
     --responsive-space-s:  var(--static-space-16);
     --responsive-space-xs: var(--static-space-12);
+
+    /* The app shell's header. 56px is the header every Once UI app shell
+       uses, so most apps never set this; one with a different header sets it
+       once on `:root`, and every `height="below-header"` and
+       `calc(var(--header-height))` offset follows. The utilities read it on
+       the element itself, so it can also be set on a subtree. */
+    --header-height: var(--static-space-56);
 }
 
 @include breakpoints.m {

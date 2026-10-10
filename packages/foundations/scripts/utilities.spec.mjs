@@ -414,6 +414,19 @@ export const SIZE_RULES = [
   { selector: ".fit", decls: ["width: fit-content;", "height: fit-content;"] },
 ];
 
+/**
+ * "The viewport below the app header", for the scrolling pane of an app shell
+ * and the panels that hang from its header. The apps wrote
+ * `calc(100dvh - var(--static-space-56))` by hand, 25 times across five apps,
+ * with the header height restated in each. `--header-height` is a token
+ * (tokens/layout.scss); these read it where they are applied, so an app sets
+ * it once. `dvh`, not `vh`: on mobile `vh` ignores the browser chrome and the
+ * pane runs off-screen.
+ */
+export const BELOW_HEADER_PROPERTIES = ["height", "min-height", "max-height"];
+
+export const belowHeaderValue = "calc(100dvh - var(--header-height))";
+
 /* ---------------------------------------------------------- typography --- */
 
 export const FONT_SIZES = ["xl", "l", "m", "s", "xs"];

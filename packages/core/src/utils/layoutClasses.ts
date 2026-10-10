@@ -6,6 +6,14 @@
  */
 
 /**
+ * The size keyword for "the viewport below the app header". At the base it is
+ * a class (`.height-below-header` and its min/max siblings); in a breakpoint
+ * object, where every size is inline, it is the same value written out.
+ */
+export const BELOW_HEADER = "below-header";
+export const BELOW_HEADER_VALUE = "calc(100dvh - var(--header-height))";
+
+/**
  * Overflow values that never scroll. `clip` and `visible` joined `hidden` when
  * their classes were added: none of the three shows a scrollbar, so none needs
  * the scrollbar styling that `auto` and `scroll` get.

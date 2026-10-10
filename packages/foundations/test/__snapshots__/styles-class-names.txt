@@ -235,6 +235,7 @@
 .g-xs
 .grid-hide
 .grid-show
+.height-below-header
 .info-background-alpha-medium
 .info-background-alpha-strong
 .info-background-alpha-weak
@@ -1380,6 +1381,7 @@
 .m-z-index-7
 .m-z-index-8
 .m-z-index-9
+.max-height-below-header
 .max-width-l
 .max-width-m
 .max-width-s
@@ -1410,6 +1412,7 @@
 .mb-xl
 .mb-xs
 .min-height-0
+.min-height-below-header
 .min-width-0
 .ml-0
 .ml-1
