@@ -37,10 +37,10 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [ ] Release PR open, with this roadmap as its checklist.
 
 ### W1 · CI and quality gates (P0)
-- [ ] GitHub Actions on every PR and push to `main`: install, build, typecheck, test, lint with a no-regression gate against a recorded error count, `check:package` (advisory).
-- [ ] Axe assertions available to every component test; required for every component added or changed in 2.1.
-- [ ] Rules-of-hooks bugs in the charts: `ChartHeader` returns before `useState`; `Legend`, `Swatch` and `Gradient` call hooks as default parameters.
-- [ ] Tests for the untested interactive core: Button, Slider, NumberInput, Select, ContextMenu, HoverCard, Tooltip, Toast, Modal, Table, MegaMenu keyboard.
+- [x] GitHub Actions on every PR and push to `main`: install, build, typecheck, test, lint with a no-regression gate against a recorded error count, `check:package` (advisory).
+- [x] Axe assertions available to every component test; required for every component added or changed in 2.1.
+- [x] Rules-of-hooks bugs in the charts: `ChartHeader` returns before `useState`; `Legend`, `Swatch` and `Gradient` call hooks as default parameters.
+- [~] Tests for the untested interactive core: Slider, Tooltip, MegaMenu keyboard, Chip, TagInput, PasswordInput, OTPInput, ColorInput, ThemeSwitcher, DateRangePicker done (W1); Modal, Table, HoverCard done (W3); Button, NumberInput, Select, ContextMenu, Toast come with W2.
 
 ### W2 · Behaviour fixes the apps work around (P0)
 - [ ] `ToastProvider`: memoised context and callbacks (a toast must never re-run a consumer's effects). `addToast` returns an id; `removeToast(id)`; `duration`; pause on hover and focus; `role="status"` for non-errors.
@@ -50,15 +50,17 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [ ] `ContextMenu`: opens at the pointer; no wrapping `Flex` around the trigger; `menu`/`menuitem` roles.
 
 ### W3 · Accessibility (P0)
-- [ ] `Switch`: the focusable element carries `role="switch"` and is labelled by the visible label.
-- [ ] `Checkbox` and `RadioButton`: the hidden native input is a second, unlabelled control in the accessibility tree (axe `label`); one control, one name.
-- [ ] `Modal`: focus trap, initial and restored focus, `aria-labelledby`, forwarded ref.
-- [ ] `Kbar`: dialog semantics; combobox and listbox for the search and results.
-- [ ] `Table`: sortable headers are buttons with `aria-sort`.
-- [ ] `InfoTip`: a focusable trigger. `HoverCard`: Escape dismisses.
-- [ ] `SegmentedControl`: no `aria-controls` pointing at panels that do not exist.
-- [ ] `IconButton`: accessible name from `aria-label`/`ariaLabel` or a string tooltip, never the icon key.
-- [ ] Native `aria-label` accepted alongside `ariaLabel` on Spinner, StatusIndicator, Switch, Scrubber.
+- [x] `Switch`: the focusable element carries `role="switch"` and is labelled by the visible label.
+- [x] `Checkbox` and `RadioButton`: the hidden native input is a second, unlabelled control in the accessibility tree (axe `label`); one control, one name.
+- [x] `Modal`: focus trap, initial and restored focus, `aria-labelledby`, forwarded ref.
+- [x] `Kbar`: dialog semantics; combobox and listbox for the search and results.
+- [x] `Table`: sortable headers are buttons with `aria-sort`.
+- [x] `InfoTip`: a focusable trigger. `HoverCard`: Escape dismisses.
+- [x] `SegmentedControl`: no `aria-controls` pointing at panels that do not exist.
+- [x] `IconButton`: accessible name from `aria-label`/`ariaLabel` or a string tooltip, never the icon key.
+- [x] Native `aria-label` accepted alongside `ariaLabel` on Spinner, StatusIndicator, Switch, Scrubber.
+
+- [ ] Found by W1's tests (each pinned by a skipped test naming it): `Chip`'s remove button nested in its own `role="button"`; `TagInput`'s remove buttons all named "Remove", and `aria-haspopup`/`aria-expanded` on a textbox with no listbox; `OTPInput`'s hard-coded ids repeat across instances and its error state is never exposed; `ColorInput` ignores `value` after mount; a `dual` `DateRangePicker` shows the same month twice for a range inside one month; `DatePicker`'s `role="grid"` has no rows or cells, and its month and year triggers are nested in another interactive element.
 
 ### W4 · Agent harness and docs (P0)
 - [ ] Validator: the icon-name check reads `spec.iconNames` and looks only at icon props; no false positives on a `Flex` that changes direction at a breakpoint, on `speed` for multiplier effects, or on spread props; element-scoped `position`/`zIndex` rules; regression tests for each.

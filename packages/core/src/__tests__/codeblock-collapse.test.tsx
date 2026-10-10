@@ -27,8 +27,9 @@ const collapsed = async (background?: string) => {
     { wrapper: wrap },
   );
   // findByText, not findByRole: jsdom cannot parse the oklch/lab token values
-  // the role query resolves through getComputedStyle.
-  await screen.findByText("View code");
+  // the role query resolves through getComputedStyle. The highlighter loads
+  // asynchronously, which can take past the 1 s default on a busy runner.
+  await screen.findByText("View code", {}, { timeout: 5000 });
   return container.querySelector('[class*="mask"]') as HTMLElement;
 };
 

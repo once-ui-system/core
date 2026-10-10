@@ -13,6 +13,77 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+2.1 is a minor release: additive only, nothing removed or renamed. The plan
+and its checklist are in [ROADMAP.md](ROADMAP.md).
+
+### Added
+
+- **`IconButton` takes `ariaLabel`**, like the other components that take
+  one; a native `aria-label` wins over it.
+- **`InteractiveDetails` takes `labelId` and `descriptionId`**: ids on the
+  label text and the description text alone, so a control can be named by
+  its label without its description or help button.
+
+### Fixed
+
+- **`Switch` is one named, focusable control.** `role="switch"` sat on a
+  wrapper that couldn't take focus, so focus landed on an unnamed element,
+  and the `ariaLabel` default ("Toggle switch") overrode the visible label.
+  The focused thumb is now the switch, named by its label; `aria-label` or
+  `ariaLabel` name it only when there is no label.
+- **`Checkbox` and `RadioButton` expose one control.** The hidden input that
+  submits the value was a second, unlabelled control for assistive tech; it
+  is hidden from it now, and the visible control is named by its label alone
+  (not its description and help button). `Checkbox` now submits its `name`
+  and `value` with a form, which it never did.
+- **`Modal` traps and restores focus.** Focus moves into it on open, Tab and
+  Shift+Tab cycle inside it, and focus returns to the opener on close. It is
+  labelled by its title and forwards its ref to the dialog element.
+- **`Kbar` is a dialog with a combobox and a listbox.** Focus stays in the
+  search while the arrow keys move the active option, results are grouped by
+  section, and focus returns to the opener on close. Spaces can be typed in
+  the search again; its scroll lock swallowed them.
+- **`Table`'s sortable headers are buttons with `aria-sort`.** They were
+  clickable `<th>` cells, unreachable by keyboard; the header content is now
+  a button (reachable by Tab, operable with Enter and Space), and the sorted
+  column announces its direction.
+- **`InfoTip` is reachable by keyboard, and hover content closes on Escape.**
+  The icon is a named tab stop whose tip opens on focus and describes it;
+  `HoverCard` and every hover tooltip close on Escape without moving the
+  pointer (WCAG 1.4.13).
+- **`SegmentedControl` no longer points `aria-controls` at panels that don't
+  exist.** A value you pass still applies.
+- **`IconButton` is never named after its icon key** (or "[object Object]"
+  for a tooltip that isn't a string). Its name comes from `aria-label`, then
+  `ariaLabel`, then a string `tooltip`; an unnamed one warns in development.
+- **A native `aria-label` reaches the element it names** on `Spinner`,
+  `Scrubber` and `Switch`, instead of an outer wrapper. `StatusIndicator` is
+  `role="img"`, so its label is announced at all.
+- **`Slider`'s `label` names it.** It was plain text, so a Slider with only a
+  label had no accessible name; an explicit `aria-label` still wins.
+- **A disabled `OTPInput` disables its fields**, which stayed focusable and
+  editable to assistive tech.
+- **`Chip` keeps its own styling when given a `className`.**
+- **`ColorInput` and `DateRangePicker` forward their refs.**
+- **Charts call their hooks on every render.** An empty `ChartHeader`
+  returned before its hooks, so a header that went empty and came back lost
+  its state and left its Escape listener on `document`. `Legend`, `Swatch`,
+  `LinearGradient` and `RadialGradient` read the data theme in a default
+  parameter. Rendered output is unchanged.
+
+### Internal
+
+- **CI on every pull request.** GitHub Actions builds, typechecks and tests
+  the package on each pull request and push to `main`, and runs
+  `check:package` as an advisory step.
+- **A lint no-regression gate.** `pnpm lint:gate` fails when Biome reports
+  more errors than `lint-baseline.json` records. The count only goes down:
+  `--update` records a lower number and refuses a higher one. It stands at
+  164, from 519 before 2.1: a mechanical format and import-order sweep
+  (no behaviour change) took it to 173.
+- **Accessibility assertions in tests.** `src/test/axe.ts` runs axe on a
+  rendered tree; every component added or changed in 2.1 is tested with it.
+
 ## [2.0.0] — 2026-09-25
 
 Once UI 2.0 is on `latest`:

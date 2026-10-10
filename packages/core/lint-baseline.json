@@ -1,9 +1,9 @@
 {
   "$comment": "Biome error count for packages/core. CI fails if it rises. After fixing errors, run `pnpm lint:gate --update` to record the lower count.",
-  "errors": 165,
+  "errors": 164,
   "rules": {
     "lint/a11y/noNoninteractiveTabindex": 1,
-    "lint/a11y/noStaticElementInteractions": 4,
+    "lint/a11y/noStaticElementInteractions": 3,
     "lint/a11y/noSvgWithoutTitle": 3,
     "lint/a11y/useIframeTitle": 1,
     "lint/a11y/useKeyWithClickEvents": 1,
