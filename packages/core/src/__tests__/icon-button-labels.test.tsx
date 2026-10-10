@@ -1,9 +1,10 @@
 import fs from "node:fs";
 import path from "node:path";
 import { render, screen } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { IconButton } from "../components/IconButton";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { axeViolations, expectNoAxeViolations } from "../test/axe";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -15,26 +16,100 @@ describe("IconButton accessible names", () => {
   // button, which is the case an accessible name actually matters for.
   const noop = () => {};
 
-  it("uses an explicit aria-label over the icon name", () => {
-    render(<IconButton icon="chevronRight" aria-label="Next slide" onClick={noop} />, {
-      wrapper: wrap,
-    });
-    expect(screen.getByRole("button", { name: "Next slide" })).toBeInTheDocument();
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
-  it("uses the tooltip when there is no aria-label", () => {
-    render(<IconButton icon="close" tooltip="Remove" onClick={noop} />, { wrapper: wrap });
+  it("uses an explicit aria-label over the icon name", async () => {
+    const { container } = render(
+      <IconButton icon="chevronRight" aria-label="Next slide" onClick={noop} />,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("button", { name: "Next slide" })).toBeInTheDocument();
+    await expectNoAxeViolations(container);
+  });
+
+  it("takes ariaLabel too, with native aria-label winning when both are given", () => {
+    const { rerender } = render(<IconButton icon="close" ariaLabel="Dismiss" onClick={noop} />, {
+      wrapper: wrap,
+    });
+    expect(screen.getByRole("button", { name: "Dismiss" })).toBeInTheDocument();
+
+    rerender(
+      <IconButton
+        icon="close"
+        aria-label="Close banner"
+        ariaLabel="Dismiss"
+        tooltip="Close"
+        onClick={noop}
+      />,
+    );
+    expect(screen.getByRole("button", { name: "Close banner" })).toBeInTheDocument();
+  });
+
+  it("uses the tooltip when there is no aria-label", async () => {
+    const { container } = render(<IconButton icon="close" tooltip="Remove" onClick={noop} />, {
+      wrapper: wrap,
+    });
     expect(screen.getByRole("button", { name: "Remove" })).toBeInTheDocument();
+    await expectNoAxeViolations(container);
   });
 
   /**
-   * The icon-name fallback stays: an unnamed button is worse than a badly named
-   * one. It is a safety net for consumers, not a licence for core's own
-   * components to skip labelling — which is what the sweep below enforces.
+   * A name is something a person wrote. The icon key ("close", "chevronRight")
+   * used to stand in, and a node tooltip was cast to a string and read out as
+   * "[object Object]"; both are gone. An unnamed button is left unnamed — axe
+   * and the development warning point at it — rather than hidden behind a
+   * name that only looks like one.
    */
-  it("still falls back to the icon name so a button is never unnamed", () => {
-    render(<IconButton icon="close" onClick={noop} />, { wrapper: wrap });
-    expect(screen.getByRole("button", { name: "close" })).toBeInTheDocument();
+  it("never falls back to the icon key, and warns in development", async () => {
+    vi.stubEnv("NODE_ENV", "development");
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    const { container } = render(<IconButton icon="close" onClick={noop} />, { wrapper: wrap });
+
+    const button = screen.getByRole("button");
+    expect(button).not.toHaveAttribute("aria-label");
+    expect(button).toHaveAccessibleName("");
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("has no accessible name"));
+    expect((await axeViolations(container)).some((line) => line.startsWith("button-name"))).toBe(
+      true,
+    );
+  });
+
+  it("does not read a node tooltip as its name", () => {
+    vi.stubEnv("NODE_ENV", "development");
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(
+      <IconButton
+        icon="info"
+        tooltip={
+          <span>
+            Rich <strong>tip</strong>
+          </span>
+        }
+        onClick={noop}
+      />,
+      { wrapper: wrap },
+    );
+
+    expect(screen.getByRole("button")).not.toHaveAttribute("aria-label");
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining("has no accessible name"));
+  });
+
+  it("does not warn when the name comes from somewhere else", () => {
+    vi.stubEnv("NODE_ENV", "development");
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(
+      <>
+        <span id="external-name">Settings</span>
+        <IconButton icon="settings" aria-labelledby="external-name" onClick={noop} />
+        <IconButton icon="close" tooltip="Close" onClick={noop} />
+      </>,
+      { wrapper: wrap },
+    );
+
+    expect(screen.getByRole("button", { name: "Settings" })).toBeInTheDocument();
+    expect(warn).not.toHaveBeenCalledWith(expect.stringContaining("has no accessible name"));
   });
 });
 
