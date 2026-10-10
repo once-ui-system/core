@@ -32,6 +32,7 @@ const StatusIndicator = forwardRef<HTMLDivElement, StatusIndicatorProps>(
       size = "m",
       color = "blue",
       ariaLabel = `${color} status indicator`,
+      "aria-label": nativeAriaLabel,
       className,
       style,
       ...rest
@@ -43,7 +44,11 @@ const StatusIndicator = forwardRef<HTMLDivElement, StatusIndicatorProps>(
         ref={ref}
         style={style}
         className={classNames(styles.statusIndicator, styles[size], styles[color], className)}
-        aria-label={ariaLabel}
+        // A label on a plain div is not exposed (axe: aria-prohibited-attr);
+        // as an image the dot is announced by it. Native aria-label wins over
+        // ariaLabel, and `role` can still be overridden through the rest.
+        role="img"
+        aria-label={nativeAriaLabel ?? ariaLabel}
         radius="full"
         {...rest}
       />

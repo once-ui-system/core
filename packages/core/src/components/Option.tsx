@@ -42,6 +42,12 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
       onClick,
       onLinkClick,
       children,
+      // These describe the option, so they go on the role="option" element
+      // rather than the surface inside it: `aria-activedescendant` has to
+      // point at the option, and a combobox marks its active option selected
+      // without giving it the chosen-value look that `selected` draws.
+      id,
+      "aria-selected": ariaSelected,
       ...flex
     },
     ref,
@@ -118,6 +124,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
 
     return (
       <ElementType
+        id={id}
         tabIndex={tabIndex}
         ref={(el) => {
           // Forward the ref
@@ -137,7 +144,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         onMouseEnter={handleMouseEnter}
         data-value={value}
         role="option"
-        aria-selected={selected}
+        aria-selected={ariaSelected ?? selected}
         aria-disabled={disabled}
         onKeyDown={(e: KeyboardEvent<HTMLElement>) => {
           if ((e.key === "Enter" || e.key === " ") && !disabled) {
