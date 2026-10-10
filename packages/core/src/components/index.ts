@@ -62,6 +62,7 @@ export * from "./InlineCode";
 export * from "./Input";
 export * from "./InteractiveDetails";
 export * from "./Kbd";
+export * from "./KeyTip";
 export * from "./LetterFx";
 export * from "./Line";
 export * from "./List";
