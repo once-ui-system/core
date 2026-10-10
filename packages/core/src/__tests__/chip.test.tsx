@@ -96,9 +96,9 @@ describe("Chip", () => {
     expect(await axeViolations(container)).toEqual([]);
   });
 
-  // BUG: `className` is spread after the chip's own classes and replaces them,
-  // so a custom class drops the chip and selected/unselected styling.
-  it.skip("keeps its own classes when given a className", () => {
+  // `className` used to be spread after the chip's own classes and replace
+  // them, dropping the chip and selected/unselected styling.
+  it("keeps its own classes when given a className", () => {
     render(<Chip label="Design" className="custom" selected={false} />, { wrapper });
     const chip = screen.getByRole("button", { name: "Design" });
     expect(chip).toHaveClass("custom");

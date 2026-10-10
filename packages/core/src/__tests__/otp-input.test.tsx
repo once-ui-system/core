@@ -130,9 +130,9 @@ describe("OTPInput", () => {
     await expectNoAxeViolations(container);
   });
 
-  // BUG: `disabled` only makes the change handler return early; it never
-  // reaches the inputs, which stay focusable and announced as editable.
-  it.skip("disables every field", () => {
+  // `disabled` used to stop only the change handler; the fields stayed
+  // focusable and were announced as editable.
+  it("disables every field", () => {
     render(<OTPInput disabled />, { wrapper });
     for (let n = 1; n <= 4; n++) expect(digit(n)).toBeDisabled();
   });

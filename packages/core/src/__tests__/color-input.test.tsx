@@ -110,9 +110,8 @@ describe("ColorInput", () => {
     await expectNoAxeViolations(filled.container);
   });
 
-  // BUG: the forwarded ref is never attached; the input gets an internal ref
-  // instead, so `ref.current` stays null.
-  it.skip("forwards its ref to the input", () => {
+  // The forwarded ref used to be ignored in favour of an internal one.
+  it("forwards its ref to the input", () => {
     const ref = createRef<HTMLInputElement>();
     render(<ColorInput ref={ref} id="brand" label="Brand colour" value="" onChange={vi.fn()} />, {
       wrapper,

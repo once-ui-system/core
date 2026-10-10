@@ -195,9 +195,8 @@ describe("DateRangePicker", () => {
     expect(await day(new Date(2026, 1, 28))).toBeInTheDocument();
   });
 
-  // BUG: DateRangePicker is a forwardRef component but never attaches the ref,
-  // so `ref.current` stays null.
-  it.skip("forwards its ref to the root", async () => {
+  // DateRangePicker took a ref through forwardRef but never attached it.
+  it("forwards its ref to the root", async () => {
     const ref = createRef<HTMLDivElement>();
     render(<DateRangePicker ref={ref} value={january} onChange={vi.fn()} />, { wrapper });
     expect(ref.current).toContainElement(await day(jan(5)));

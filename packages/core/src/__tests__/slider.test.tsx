@@ -101,11 +101,20 @@ describe("Slider", () => {
     await expectNoAxeViolations(container);
   });
 
-  // BUG: `label` renders as a plain Text beside the input, not a <label> or
-  // aria-labelledby target, so a Slider given only `label` has no accessible
-  // name (axe: "label"). Callers have to repeat it as `aria-label`.
-  it.skip("names the input with its `label`", () => {
-    render(<Slider label="Volume" value={30} onChange={vi.fn()} />, { wrapper });
+  // `label` used to render as plain text beside the input, so a Slider given
+  // only `label` had no accessible name (axe: "label").
+  it("names the input with its `label`", async () => {
+    const { container } = render(<Slider label="Volume" value={30} onChange={vi.fn()} />, {
+      wrapper,
+    });
     expect(screen.getByRole("slider", { name: "Volume" })).toBeInTheDocument();
+    await expectNoAxeViolations(container);
+  });
+
+  it("lets an aria-label win over the visible label", () => {
+    render(<Slider label="Volume" aria-label="Master volume" value={30} onChange={vi.fn()} />, {
+      wrapper,
+    });
+    expect(screen.getByRole("slider", { name: "Master volume" })).toBeInTheDocument();
   });
 });
