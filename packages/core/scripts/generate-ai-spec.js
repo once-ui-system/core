@@ -708,14 +708,32 @@ function emitArtifacts(spec, version) {
 
   fs.writeFileSync(OUT_FILE, JSON.stringify(spec, null, 1));
 
+  // The catalog's purposes, tags and pairings are written by hand in the
+  // seed; everything else comes from the spec. The seed was deleted once and
+  // the fallback below quietly turned all 140 purposes into "X component" —
+  // a catalog that tells an agent nothing — so a missing seed entry is now
+  // reported, as is an entry for a component that no longer exists.
   const seedPath = path.join(OUT_DIR, "catalog.seed.json");
   const seed = fs.existsSync(seedPath) ? JSON.parse(fs.readFileSync(seedPath, "utf8")) : {};
+  const unseeded = Object.keys(spec.components).filter((name) => !seed[name]?.purpose);
+  const stale = Object.keys(seed).filter((name) => !spec.components[name]);
+  if (unseeded.length) {
+    console.warn(`catalog.seed.json has no purpose for: ${unseeded.join(", ")}`);
+  }
+  if (stale.length) {
+    console.warn(
+      `catalog.seed.json describes components the spec does not have: ${stale.join(", ")}`,
+    );
+  }
 
   const catalog = { version, generated: spec.generated, components: {} };
   for (const [name, entry] of Object.entries(spec.components)) {
     const meta = seed[name] || {};
     catalog.components[name] = {
       group: entry.group,
+      // A component that does not come from the package root says where it
+      // does come from, since naming it from the root does not resolve.
+      ...(entry.importFrom ? { importFrom: entry.importFrom } : {}),
       extends: entry.extends,
       purpose: meta.purpose || `${name} component`,
       tags: meta.tags || [entry.group],
@@ -724,7 +742,16 @@ function emitArtifacts(spec, version) {
       ...(meta.pairsWith ? { pairsWith: meta.pairsWith } : {}),
     };
   }
-  fs.writeFileSync(path.join(OUT_DIR, "catalog.json"), JSON.stringify(catalog, null, 1));
+  // One component per line. The catalog is half of the bootstrap every agent
+  // loads, and spreading each tag and pairing over its own line cost a
+  // quarter of its size in whitespace; one line each still diffs per component.
+  const entries = Object.entries(catalog.components).map(
+    ([name, entry]) => `  ${JSON.stringify(name)}: ${JSON.stringify(entry)}`,
+  );
+  fs.writeFileSync(
+    path.join(OUT_DIR, "catalog.json"),
+    `{\n "version": ${JSON.stringify(catalog.version)},\n "generated": ${JSON.stringify(catalog.generated)},\n "components": {\n${entries.join(",\n")}\n }\n}`,
+  );
 
   const componentsDir = path.join(OUT_DIR, "components");
   fs.mkdirSync(componentsDir, { recursive: true });
