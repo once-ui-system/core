@@ -122,4 +122,5 @@ export * from "./Tooltip";
 export * from "./TypeFx";
 export * from "./User";
 export * from "./UserMenu";
+export * from "./VisuallyHidden";
 export * from "./WeatherFx";
