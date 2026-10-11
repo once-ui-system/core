@@ -4,10 +4,12 @@ import classNames from "clsx";
 import {
   createContext,
   forwardRef,
+  type KeyboardEvent,
   type ReactNode,
   useCallback,
   useContext,
   useEffect,
+  useId,
   useMemo,
   useState,
 } from "react";
@@ -28,8 +30,10 @@ import {
 import { mergeLabels } from "../internal/labels";
 import type { ChartMode } from "../modules/data/interfaces";
 import { type Schemes, schemes } from "../types";
+import { ColorInput } from "./ColorInput";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
+import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Scroller } from "./Scroller";
 import { SegmentedControl } from "./SegmentedControl";
@@ -53,6 +57,16 @@ export interface StylePanelValue {
   bodySize?: BodySize;
   bodyLineHeight?: BodyLineHeight;
   chartMode?: ChartMode;
+  /**
+   * The colour `brand: "custom"` is generated from — hex, `rgb()` or
+   * `oklch()`, named as on ThemeProvider. Edited by the Brand row's custom
+   * swatch (`custom`). The panel only reports it: the host renders the
+   * scheme, with `ThemeInit`/`ThemeProvider`'s `brandSeed` or
+   * `customSchemeProperties`.
+   */
+  brandSeed?: string;
+  /** As `brandSeed`, for `accent: "custom"` and the Accent row. */
+  accentSeed?: string;
 }
 
 /** Per-section and per-row visibility. Omitted keys default to visible. */
@@ -73,6 +87,20 @@ export interface StylePanelVisibility {
 /** `label={false}` drops the row's label; any node replaces it. */
 export interface StyleRowProps extends Omit<React.ComponentProps<typeof Flex>, "label"> {
   label?: ReactNode | false;
+}
+
+/** Brand and Accent take one more prop than the other rows. */
+export interface StyleSchemeRowProps extends StyleRowProps {
+  /**
+   * End the swatches with one for a colour of the host's own, painted with
+   * the current seed, and edit the seed in a colour field while it is
+   * chosen. Choosing it reports `{ brand: "custom", brandSeed }` (or the
+   * accent pair) through `onChange`.
+   *
+   * Controlled mode only. Bound to ThemeProvider, whose `setStyle` takes no
+   * seed, the panel has nowhere to put one, so the swatch does not render.
+   */
+  custom?: boolean;
 }
 
 export interface StyleGroupProps extends Omit<React.ComponentProps<typeof Column>, "title"> {
@@ -178,6 +206,18 @@ export interface StylePanelSwatchLabels {
   neutral?: (name: string) => string;
 }
 
+/** The custom colour on the Brand and Accent rows (`custom`). */
+export interface StylePanelCustomLabels {
+  /** The custom swatch's accessible name. Defaults to `Brand colour: custom` (`Accent colour: custom`). */
+  swatch?: (row: StylePanelSchemeRow) => string;
+  /** The colour field's label. Defaults to `Custom brand colour` (`Custom accent colour`). */
+  picker?: (row: StylePanelSchemeRow) => string;
+  /** Text under the colour field, from the current seed: a contrast hint, say. None by default. */
+  description?: (seed: string, row: StylePanelSchemeRow) => ReactNode;
+  /** The colour field's clear button. Defaults to ColorInput's `"Remove"`. */
+  remove?: string;
+}
+
 /**
  * Every string the panel shows or announces, for a translated interface.
  *
@@ -193,6 +233,7 @@ export interface StylePanelLabels {
   swatches?: StylePanelSwatchLabels;
   /** The Theme row's options, passed to its `ThemeSwitcher`. */
   themeSwitcher?: ThemeSwitcherLabels;
+  custom?: StylePanelCustomLabels;
 }
 
 /** A labels type with every field filled in, at every depth. */
@@ -204,9 +245,15 @@ type Complete<T> = {
       : NonNullable<T[K]>;
 };
 
-/** The theme switcher keeps its own English defaults, so they live in one place. */
-type ResolvedLabels = Complete<Omit<StylePanelLabels, "themeSwitcher">> & {
+/**
+ * What is passed straight through stays partial: the theme switcher and the
+ * colour field keep their own English defaults, so they live in one place.
+ * The custom colour has no description unless the host gives one.
+ */
+type ResolvedLabels = Complete<Omit<StylePanelLabels, "themeSwitcher" | "custom">> & {
   themeSwitcher: ThemeSwitcherLabels;
+  custom: Complete<Pick<StylePanelCustomLabels, "swatch" | "picker">> &
+    Pick<StylePanelCustomLabels, "description" | "remove">;
 };
 
 const shapes = ["sharp", "conservative", "playful", "rounded"] as const;
@@ -265,6 +312,10 @@ const DEFAULT_LABELS: ResolvedLabels = {
     neutral: (name) => `Neutral colour: ${name}`,
   },
   themeSwitcher: {},
+  custom: {
+    swatch: (row) => `${row === "brand" ? "Brand" : "Accent"} colour: custom`,
+    picker: (row) => `Custom ${row} colour`,
+  },
 };
 
 /**
@@ -385,6 +436,14 @@ const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
 
 /* ---- primitives ---------------------------------------------------------- */
 
+function RowLabel({ children }: { children: ReactNode }) {
+  return (
+    <Flex textVariant="label-default-s" minWidth={3} onBackground="neutral-strong">
+      {children}
+    </Flex>
+  );
+}
+
 /** One labelled row. Dividers come from the group's stylesheet rather than a
  *  prop, so cherry-picking rows never leaves a dangling border. */
 function Row({ label, children, ...rest }: StyleRowProps) {
@@ -399,11 +458,7 @@ function Row({ label, children, ...rest }: StyleRowProps) {
       gap="24"
       {...rest}
     >
-      {label !== false && (
-        <Flex textVariant="label-default-s" minWidth={3} onBackground="neutral-strong">
-          {label}
-        </Flex>
-      )}
+      {label !== false && <RowLabel>{label}</RowLabel>}
       {children}
     </Flex>
   );
@@ -433,6 +488,50 @@ function Group({ title, description, children, ...rest }: StyleGroupProps) {
   );
 }
 
+/** Enter and Space choose a swatch, as they would a native button. */
+function activateOnKey(event: KeyboardEvent<HTMLElement>, activate: () => void) {
+  if (event.key !== "Enter" && event.key !== " ") return;
+  event.preventDefault();
+  activate();
+}
+
+/** One swatch: a toggle button, named and pressed, with a decorative face. */
+function Swatch({
+  label,
+  pressed,
+  onSelect,
+  scroll,
+  dataBorder,
+  children,
+}: {
+  label: string;
+  pressed: boolean;
+  onSelect: () => void;
+  scroll?: boolean;
+  dataBorder?: string;
+  children: ReactNode;
+}) {
+  return (
+    <Flex
+      {...(dataBorder ? { "data-border": dataBorder } : {})}
+      marginRight={scroll ? "2" : undefined}
+      center
+      tabIndex={0}
+      role="button"
+      aria-label={label}
+      aria-pressed={pressed}
+      className={classNames(styles.select, pressed ? styles.selected : "")}
+      onClick={onSelect}
+      onKeyDown={(event) => activateOnKey(event, onSelect)}
+    >
+      {/* Decorative: the parent Flex is the control. */}
+      <IconButton variant="ghost" size="m" aria-hidden>
+        {children}
+      </IconButton>
+    </Flex>
+  );
+}
+
 function Swatches<T extends string>({
   options,
   selected,
@@ -441,6 +540,7 @@ function Swatches<T extends string>({
   scroll,
   swatchClass,
   dataBorder,
+  trailing,
 }: {
   options: readonly T[];
   selected: T | undefined;
@@ -449,35 +549,34 @@ function Swatches<T extends string>({
   scroll?: boolean;
   swatchClass?: (value: T) => string;
   dataBorder?: boolean;
+  /** One more swatch after the options, in the same strip. */
+  trailing?: ReactNode;
 }) {
   const items = options.map((option) => (
-    <Flex
+    <Swatch
       key={option}
-      {...(dataBorder ? { "data-border": option } : {})}
-      marginRight={scroll ? "2" : undefined}
-      center
-      tabIndex={0}
-      role="button"
-      aria-label={ariaLabel(option)}
-      aria-pressed={selected === option}
-      className={classNames(styles.select, selected === option ? styles.selected : "")}
-      onClick={() => onSelect(option)}
+      label={ariaLabel(option)}
+      pressed={selected === option}
+      onSelect={() => onSelect(option)}
+      scroll={scroll}
+      dataBorder={dataBorder ? option : undefined}
     >
-      {/* Decorative: the parent Flex is the control. */}
-      <IconButton variant="ghost" size="m" aria-hidden>
-        <div
-          className={classNames(swatchClass ? swatchClass(option) : styles.neutral, styles.swatch)}
-        />
-      </IconButton>
-    </Flex>
+      <div
+        className={classNames(swatchClass ? swatchClass(option) : styles.neutral, styles.swatch)}
+      />
+    </Swatch>
   ));
 
   return scroll ? (
     <Scroller minWidth={0} fitWidth>
       {items}
+      {trailing}
     </Scroller>
   ) : (
-    <Flex gap="4">{items}</Flex>
+    <Flex gap="4">
+      {items}
+      {trailing}
+    </Flex>
   );
 }
 
@@ -508,22 +607,101 @@ function ShapeRow({ label, ...rest }: StyleRowProps) {
   );
 }
 
+const SEED_KEYS = { brand: "brandSeed", accent: "accentSeed" } as const;
+
+/** Where a custom colour starts when the host has not given one: the docs' own blue. */
+const DEFAULT_SEED = "#5a93fc";
+
+/** What the colour field reports for a colour: `#rrggbb`. Its clear button reports "". */
+const isFieldColor = (color: string) => /^#[0-9a-f]{6}$/i.test(color);
+
+/**
+ * The seed as the `#rrggbb` a native colour field holds. A seed in another
+ * format (`rgb()`, `oklch()`) leaves the field empty rather than showing a
+ * wrong colour; the swatch, which CSS paints, still shows it.
+ */
+function fieldColor(seed: string | undefined): string {
+  const hex = seed?.trim().match(/^#?([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i)?.[1];
+  if (!hex) return "";
+  const rgb = hex.length <= 4 ? [...hex.slice(0, 3)].map((d) => d + d).join("") : hex.slice(0, 6);
+  return `#${rgb.toLowerCase()}`;
+}
+
 function schemeRow(key: StylePanelSchemeRow) {
-  return function SchemeRow({ label, ...rest }: StyleRowProps) {
-    const { value, set, mounted } = useStylePanel();
+  return function SchemeRow({ label, custom = false, ...rest }: StyleSchemeRowProps) {
+    const { value, set, mounted, controlled } = useStylePanel();
     const labels = useStylePanelLabels();
+    const pickerId = useId();
+    const current = mounted ? value[key] : undefined;
+    const rowLabel = prefer(label, labels.rows[key]);
+
+    const swatches = (trailing?: ReactNode) => (
+      <Swatches
+        options={schemes}
+        selected={current as Schemes}
+        onSelect={(scheme) => set({ [key]: scheme as Schemes })}
+        ariaLabel={(scheme) => labels.swatches.scheme(labels.names.schemes[scheme as Schemes], key)}
+        swatchClass={(scheme) => styles[scheme]}
+        scroll
+        trailing={trailing}
+      />
+    );
+
+    // Bound to ThemeProvider there is nowhere to keep a seed, so the custom
+    // colour is a controlled-mode feature and the row renders as it always has.
+    if (!custom || !controlled) {
+      return (
+        <Row label={rowLabel} {...rest}>
+          {swatches()}
+        </Row>
+      );
+    }
+
+    const seedKey = SEED_KEYS[key];
+    const seed = value[seedKey] || undefined;
+    const chosen = current === "custom";
+    const description = chosen && seed ? labels.custom.description?.(seed, key) : undefined;
+
+    // The picker spans the row under the label and the swatches. The strip
+    // stays where it is in the tree whether or not the picker shows, so
+    // choosing the last swatch does not reset its scroll.
     return (
-      <Row label={prefer(label, labels.rows[key])} {...rest}>
-        <Swatches
-          options={schemes}
-          selected={mounted ? (value[key] as Schemes) : undefined}
-          onSelect={(scheme) => set({ [key]: scheme as Schemes })}
-          ariaLabel={(scheme) =>
-            labels.swatches.scheme(labels.names.schemes[scheme as Schemes], key)
-          }
-          swatchClass={(scheme) => styles[scheme]}
-          scroll
-        />
+      <Row label={false} {...rest}>
+        <Column fillWidth gap="16">
+          <Flex horizontal="between" vertical="center" fillWidth gap="24">
+            {rowLabel !== false && <RowLabel>{rowLabel}</RowLabel>}
+            {swatches(
+              <Swatch
+                label={labels.custom.swatch(key)}
+                pressed={chosen}
+                onSelect={() => set({ [key]: "custom", [seedKey]: seed ?? DEFAULT_SEED })}
+                scroll
+              >
+                <div
+                  className={classNames(styles.swatch, styles.custom, !seed && styles.empty)}
+                  style={seed ? { background: seed } : undefined}
+                >
+                  {!seed && <Icon name="plus" size="xs" onBackground="neutral-medium" />}
+                </div>
+              </Swatch>,
+            )}
+          </Flex>
+          {chosen && (
+            <ColorInput
+              id={pickerId}
+              label={labels.custom.picker(key)}
+              value={fieldColor(seed)}
+              onChange={(next) => {
+                // The clear button reports "": keep the seed rather than
+                // leave the scheme pointing at nothing.
+                if (isFieldColor(next)) set({ [key]: "custom", [seedKey]: next });
+              }}
+              description={description}
+              aria-describedby={description ? `${pickerId}-description` : undefined}
+              labels={{ remove: labels.custom.remove }}
+            />
+          )}
+        </Column>
       </Row>
     );
   };
@@ -732,12 +910,16 @@ function ColorGroup({
   title,
   description,
   rows,
+  customColors,
   ...rest
-}: GroupProps<"brand" | "accent" | "neutral">) {
+}: GroupProps<"brand" | "accent" | "neutral"> & {
+  /** Offer a custom colour on Brand and Accent: their `custom`. Controlled mode only. */
+  customColors?: boolean;
+}) {
   return (
     <Group {...useGroupHeading("color", { title, description })} {...rest}>
-      {show(rows, "brand") && <BrandRow />}
-      {show(rows, "accent") && <AccentRow />}
+      {show(rows, "brand") && <BrandRow custom={customColors} />}
+      {show(rows, "accent") && <AccentRow custom={customColors} />}
       {show(rows, "neutral") && <NeutralRow />}
     </Group>
   );

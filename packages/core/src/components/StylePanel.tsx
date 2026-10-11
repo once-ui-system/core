@@ -10,6 +10,7 @@ import {
 
 export type {
   StyleGroupProps,
+  StylePanelCustomLabels,
   StylePanelGroupLabels,
   StylePanelHeading,
   StylePanelLabels,
@@ -22,6 +23,7 @@ export type {
   StylePanelValue,
   StylePanelVisibility,
   StyleRowProps,
+  StyleSchemeRowProps,
 } from "./StylePanelSections";
 export { useStylePanel } from "./StylePanelSections";
 
@@ -41,6 +43,14 @@ export interface StylePanelProps extends StylePanelRootProps {
    * so the spec points at the shape a translation fills in.
    */
   labels?: StylePanelLabels;
+  /**
+   * End the Brand and Accent swatches with one for a colour of the host's
+   * own, edited in a colour field and reported as `brandSeed`/`accentSeed`.
+   * Controlled mode only: bound to ThemeProvider, which takes no seed from
+   * the panel, the swatch does not render. The panel never generates the
+   * scheme; the host renders it from the seed.
+   */
+  customColors?: boolean;
 }
 
 const visible = (section: { section?: boolean } | undefined) => section?.section !== false;
@@ -55,15 +65,19 @@ const visible = (section: { section?: boolean } | undefined) => section?.section
  * which case nothing is written to ThemeProvider or storage, and `labels` to
  * translate it.
  */
-const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ visibility, ...rest }, ref) => (
-  <sections.Root ref={ref} {...rest}>
-    {visible(visibility?.page) && <sections.Page rows={visibility?.page} />}
-    {visible(visibility?.color) && <sections.Color rows={visibility?.color} />}
-    {visible(visibility?.solidStyle) && <sections.SolidStyle rows={visibility?.solidStyle} />}
-    {visibility?.bodyText?.section === true && <sections.BodyText rows={visibility?.bodyText} />}
-    {visible(visibility?.advanced) && <sections.Advanced rows={visibility?.advanced} />}
-  </sections.Root>
-));
+const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(
+  ({ visibility, customColors, ...rest }, ref) => (
+    <sections.Root ref={ref} {...rest}>
+      {visible(visibility?.page) && <sections.Page rows={visibility?.page} />}
+      {visible(visibility?.color) && (
+        <sections.Color rows={visibility?.color} customColors={customColors} />
+      )}
+      {visible(visibility?.solidStyle) && <sections.SolidStyle rows={visibility?.solidStyle} />}
+      {visibility?.bodyText?.section === true && <sections.BodyText rows={visibility?.bodyText} />}
+      {visible(visibility?.advanced) && <sections.Advanced rows={visibility?.advanced} />}
+    </sections.Root>
+  ),
+);
 
 StylePanel.displayName = "StylePanel";
 

@@ -1,5 +1,6 @@
 "use client";
 import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
+import { mergeLabels } from "../internal/labels";
 import { Column } from "./Column";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Flex } from "./Flex";
@@ -8,10 +9,28 @@ import { IconButton } from "./IconButton";
 import { Input, InputProps } from "./Input";
 import { Slider } from "./Slider";
 
+/** The field's own controls. Omitted fields keep the English default. */
+interface ColorInputLabels {
+  /** The clear button's name and tooltip. Defaults to `"Remove"`. */
+  remove?: string;
+  /** The opacity button's name and tooltip, with `supportAlpha`. Defaults to `"Adjust opacity"`. */
+  adjustOpacity?: string;
+  /** The opacity slider's label, with `supportAlpha`. Defaults to `"Opacity"`. */
+  opacity?: string;
+}
+
+const DEFAULT_LABELS: Required<ColorInputLabels> = {
+  remove: "Remove",
+  adjustOpacity: "Adjust opacity",
+  opacity: "Opacity",
+};
+
 interface ColorInputProps extends Omit<InputProps, "onChange" | "value"> {
   value: string;
   onChange: (value: string) => void;
   supportAlpha?: boolean;
+  /** The clear and opacity controls' text, for a translated interface. */
+  labels?: ColorInputLabels;
 }
 const hexToRgba = (hex: string, alpha: number): string => {
   if (!hex) return "";
@@ -34,7 +53,8 @@ const rgbaToHex = (rgba: string): { hex: string; alpha: number } => {
 const parseValue = (value: string): { hex: string; alpha: number } =>
   value.startsWith("rgba") ? rgbaToHex(value) : { hex: value, alpha: 100 };
 const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
-  ({ label, id, value, onChange, supportAlpha = false, ...props }, ref) => {
+  ({ label, id, value, onChange, supportAlpha = false, labels, ...props }, ref) => {
+    const text = mergeLabels(DEFAULT_LABELS, labels);
     const colorInputRef = useRef<HTMLInputElement>(null);
     // The input needs its own ref to open the picker from the swatch; this
     // hands the same element to the caller's ref.
@@ -173,7 +193,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                     trigger={
                       <IconButton
                         variant="secondary"
-                        tooltip="Adjust opacity"
+                        tooltip={text.adjustOpacity}
                         tooltipPosition="left"
                         icon="opacity"
                       />
@@ -187,7 +207,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                           min={0}
                           max={100}
                           step={1}
-                          label="Opacity"
+                          label={text.opacity}
                           showValue
                         />{" "}
                       </Column>
@@ -197,7 +217,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                 <IconButton
                   onClick={handleReset}
                   variant="secondary"
-                  tooltip="Remove"
+                  tooltip={text.remove}
                   tooltipPosition={supportAlpha ? "bottom" : "left"}
                   icon="close"
                 />{" "}
@@ -212,5 +232,5 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
 );
 ColorInput.displayName = "ColorInput";
 
-export type { ColorInputProps };
+export type { ColorInputLabels, ColorInputProps };
 export { ColorInput };
