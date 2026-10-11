@@ -34,7 +34,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 ### W0 · Base (P0)
 - [x] Mechanical Biome sweep of `packages/core`: formatting and import order only, no lint autofixes; typecheck and the full test suite unchanged. Lint errors 519 → 173.
 - [x] Test tooling for accessibility assertions (axe) in the existing Vitest + jsdom setup: `src/test/axe.ts`.
-- [ ] Release PR open, with this roadmap as its checklist.
+- [x] Release PR open (#164), with this roadmap as its checklist.
 
 ### W1 · CI and quality gates (P0)
 - [x] GitHub Actions on every PR and push to `main`: install, build, typecheck, test, lint with a no-regression gate against a recorded error count, `check:package` (advisory).
