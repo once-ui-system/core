@@ -46,7 +46,8 @@ describe("ThemeInit renders a seeded scheme on the server", () => {
     );
     const css = styleOf(markup);
     expect(css).not.toBeNull();
-    expect(css?.startsWith(":root{")).toBe(true);
+    // html:root outranks an app's static custom palette on a plain :root.
+    expect(css?.startsWith("html:root{")).toBe(true);
     expect(markup.indexOf("<style")).toBeLessThan(markup.indexOf("<script"));
 
     const scheme = generateColorScheme(SEED);

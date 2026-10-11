@@ -148,8 +148,11 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
     <>
       <style
         id="theme-init-schemes"
+        // `html:root` rather than `:root`: a seed is the page's own choice, so
+        // it outranks a static custom palette declared on a plain `:root`
+        // (an app's own brand scheme) whatever order the stylesheets load in.
         // biome-ignore lint/security/noDangerouslySetInnerHtml: generated oklch() values only; the seed itself never reaches the CSS
-        dangerouslySetInnerHTML={{ __html: `:root{${schemeCss}}` }}
+        dangerouslySetInnerHTML={{ __html: `html:root{${schemeCss}}` }}
       />
       {script}
     </>
