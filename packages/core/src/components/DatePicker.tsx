@@ -352,12 +352,30 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       }
     };
 
-    const handleMonthSelect = (monthIndex: number) => {
+    /**
+     * Shows the month picked from the month or year list. A caller that owns
+     * the month (`monthIsControlled`) is asked to move it, by the increment
+     * its arrows ask for: setting it here moved this calendar alone, so a
+     * dual DateRangePicker's two calendars came apart (or showed one month
+     * twice), and the caller's next arrow jumped back from the month it
+     * still had.
+     */
+    const showMonth = (year: number, monthIndex: number) => {
+      if (monthIsControlled) {
+        const increment = (year - currentYear) * 12 + (monthIndex - currentMonth);
+        if (increment !== 0) onMonthChange?.(increment);
+        return;
+      }
       setCurrentMonth(monthIndex);
+      setCurrentYear(year);
+    };
+
+    const handleMonthSelect = (monthIndex: number) => {
+      showMonth(currentYear, monthIndex);
     };
 
     const handleYearSelect = (year: number) => {
-      setCurrentYear(year);
+      showMonth(year, currentMonth);
     };
 
     const generateYearOptions = () => {
