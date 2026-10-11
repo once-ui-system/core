@@ -96,11 +96,28 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const [isReady, setIsReady] = useState(false);
     const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
 
-    const [currentMonth, setCurrentMonth] = useState<number>(
-      value ? value.getMonth() : today.getMonth(),
+    /**
+     * The month is the caller's when it passes `currentMonth`, `currentYear`
+     * and `onMonthChange`, as DateRangePicker does for each of its calendars:
+     * the caller moves it, and `value` does not. A dual DateRangePicker gives
+     * its second calendar the month after the first and the range's end as
+     * its value, and letting that value move the month put both calendars on
+     * the same month whenever the range sat inside one.
+     */
+    const monthIsControlled =
+      propCurrentMonth !== undefined &&
+      propCurrentYear !== undefined &&
+      onMonthChange !== undefined;
+
+    const [currentMonth, setCurrentMonth] = useState<number>(() =>
+      monthIsControlled && propCurrentMonth !== undefined
+        ? propCurrentMonth
+        : (value ?? today).getMonth(),
     );
-    const [currentYear, setCurrentYear] = useState<number>(
-      value ? value.getFullYear() : today.getFullYear(),
+    const [currentYear, setCurrentYear] = useState<number>(() =>
+      monthIsControlled && propCurrentYear !== undefined
+        ? propCurrentYear
+        : (value ?? today).getFullYear(),
     );
 
     /** The day grid, so its keys act on its own day buttons and not another calendar's. */
@@ -126,8 +143,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       setIsCalendarSynced(false);
 
       if (value) {
-        setCurrentMonth(value.getMonth());
-        setCurrentYear(value.getFullYear());
+        if (!monthIsControlled) {
+          setCurrentMonth(value.getMonth());
+          setCurrentYear(value.getFullYear());
+        }
         // Small delay to ensure state updates are processed
         const timer = setTimeout(() => {
           setIsCalendarSynced(true);
@@ -136,16 +155,18 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       } else {
         setIsCalendarSynced(true);
       }
-    }, [value]);
+    }, [value, monthIsControlled]);
 
     // Additional sync effect that runs when the component becomes ready
     useEffect(() => {
       if (isReady && value && !isCalendarSynced) {
-        setCurrentMonth(value.getMonth());
-        setCurrentYear(value.getFullYear());
+        if (!monthIsControlled) {
+          setCurrentMonth(value.getMonth());
+          setCurrentYear(value.getFullYear());
+        }
         setIsCalendarSynced(true);
       }
-    }, [isReady, value, isCalendarSynced]);
+    }, [isReady, value, isCalendarSynced, monthIsControlled]);
 
     useEffect(() => {
       setSelectedDate(value);
@@ -157,10 +178,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         setIsPM(value.getHours() >= 12);
 
         // Update current month/year to match the selected date
-        setCurrentMonth(value.getMonth());
-        setCurrentYear(value.getFullYear());
+        if (!monthIsControlled) {
+          setCurrentMonth(value.getMonth());
+          setCurrentYear(value.getFullYear());
+        }
       }
-    }, [value]);
+    }, [value, monthIsControlled]);
 
     useEffect(() => {
       const timer = setTimeout(() => {
@@ -451,14 +474,18 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           currentDate.getDate(),
         );
 
-        const isSelected = selectedDate
-          ? (selectedDate.getDate() === day &&
-              selectedDate.getMonth() === currentMonth &&
-              selectedDate.getFullYear() === currentYear) ||
-            (value instanceof Date && value.getTime() === normalizedCurrentDate.getTime()) ||
-            range?.startDate?.getTime() === normalizedCurrentDate.getTime() ||
-            range?.endDate?.getTime() === normalizedCurrentDate.getTime()
-          : false;
+        // A range's ends are selected in whichever calendar shows them: a
+        // dual picker's second calendar has no value of its own until the
+        // range ends in it, and its month no longer jumps to the first's.
+        const isSelected =
+          (selectedDate
+            ? (selectedDate.getDate() === day &&
+                selectedDate.getMonth() === currentMonth &&
+                selectedDate.getFullYear() === currentYear) ||
+              (value instanceof Date && value.getTime() === normalizedCurrentDate.getTime())
+            : false) ||
+          range?.startDate?.getTime() === normalizedCurrentDate.getTime() ||
+          range?.endDate?.getTime() === normalizedCurrentDate.getTime();
 
         // Check if this date is being hovered
         const isHovered = hoveredDate
