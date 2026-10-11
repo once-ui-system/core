@@ -149,11 +149,11 @@ describe("OTPInput", () => {
     }
   });
 
-  // BUG: the fields' ids are hard-coded `otp-0`…`otp-N`, so two OTPInputs on
-  // one page repeat them, and a label or script that finds a field by id gets
+  // The fields' ids were hard-coded `otp-0`…`otp-N`, so two OTPInputs on one
+  // page repeated them, and a label or script that found a field by id got
   // the first group's.
-  it.skip("gives two instances distinct field ids", () => {
-    render(
+  it("gives two instances distinct field ids", async () => {
+    const { container } = render(
       <>
         <OTPInput />
         <OTPInput />
@@ -161,6 +161,9 @@ describe("OTPInput", () => {
       { wrapper },
     );
     const ids = screen.getAllByRole("textbox").map((field) => field.id);
+    expect(ids).toHaveLength(8);
+    expect(ids.every(Boolean)).toBe(true);
     expect(new Set(ids).size).toBe(ids.length);
+    await expectNoAxeViolations(container);
   });
 });

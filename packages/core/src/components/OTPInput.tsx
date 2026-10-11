@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Input } from "./Input";
@@ -32,6 +32,9 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
   ) => {
     const [values, setValues] = useState<string[]>(Array(length).fill(""));
     const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
+    // The fields' ids were `otp-0`…`otp-N`, the same in every OTPInput on a
+    // page, so a label or script that found a field by id got the first one.
+    const idPrefix = useId();
 
     useEffect(() => {
       if (autoFocus && inputsRef.current[0]) {
@@ -101,7 +104,7 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
               ref={(el) => {
                 inputsRef.current[index] = el;
               }}
-              id={`otp-${index}`}
+              id={`${idPrefix}otp-${index}`}
               type="text"
               placeholder=" "
               inputMode="numeric"
