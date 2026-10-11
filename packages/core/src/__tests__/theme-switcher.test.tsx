@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { createRef } from "react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { ThemeSwitcher } from "../components/ThemeSwitcher";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { ThemeProvider } from "../contexts/ThemeProvider";
@@ -116,6 +116,33 @@ describe("ThemeSwitcher", () => {
     expect(order()).toEqual(["Dark theme", "System theme", "Light theme"]);
     // The button that was clicked moved, and kept its focus.
     expect(option("Dark theme")).toHaveFocus();
+  });
+
+  it("controlled, shows the host's theme and reports a choice without setting it", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    localStorage.setItem("data-theme", "light");
+    const { rerender } = render(<ThemeSwitcher value="dark" onChange={onChange} />, { wrapper });
+    expect(pressed()).toEqual(["Dark theme"]);
+
+    await user.click(option("Light theme"));
+    expect(onChange).toHaveBeenCalledWith("light");
+    // The host has not accepted it yet, and nothing outside the switcher moved.
+    expect(pressed()).toEqual(["Dark theme"]);
+    expect(localStorage.getItem("data-theme")).toBe("light");
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+
+    rerender(<ThemeSwitcher value="system" onChange={onChange} />);
+    expect(pressed()).toEqual(["System theme"]);
+  });
+
+  it("uncontrolled, sets the theme and then reports it", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<ThemeSwitcher onChange={onChange} />, { wrapper });
+    await user.click(option("Dark theme"));
+    expect(onChange).toHaveBeenCalledWith("dark");
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
   });
 
   it("forwards its ref to the group", () => {

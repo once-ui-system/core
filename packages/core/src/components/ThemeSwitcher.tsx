@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { useTheme } from "../contexts/ThemeProvider";
+import { type Theme, useTheme } from "../contexts/ThemeProvider";
 import { mergeLabels } from "../internal/labels";
 import { Column } from "./Column";
 import { IconButton } from "./IconButton";
@@ -31,7 +31,15 @@ const DEFAULT_LABELS: Required<ThemeSwitcherLabels> = {
   light: "Light theme",
 };
 
-interface ThemeSwitcherProps extends React.ComponentProps<typeof Row> {
+interface ThemeSwitcherProps extends Omit<React.ComponentProps<typeof Row>, "onChange"> {
+  /**
+   * The theme to show as active, when the host owns the state. Pair with
+   * `onChange`. The switcher then never sets the theme or stores it, which is
+   * what an editor previewing someone else's theme needs.
+   */
+  value?: Theme;
+  /** Called with the chosen theme. Without `value`, after it has been set. */
+  onChange?: (theme: Theme) => void;
   /**
    * Show only the active theme, and reveal the rest on hover or focus.
    *
@@ -66,8 +74,10 @@ interface ThemeSwitcherProps extends React.ComponentProps<typeof Row> {
 }
 
 const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
-  ({ collapsed, direction = "row", labels, className, ...flex }, ref) => {
-    const { theme, setTheme } = useTheme();
+  ({ collapsed, direction = "row", labels, value, onChange, className, ...flex }, ref) => {
+    const { theme: providerTheme, setTheme } = useTheme();
+    const controlled = value !== undefined;
+    const theme = controlled ? value : providerTheme;
     const names = mergeLabels(DEFAULT_LABELS, labels);
     const [mounted, setMounted] = React.useState(false);
     // Two frames after `mounted` has committed, so a collapsed group appears
@@ -78,10 +88,11 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
     const [ready, setReady] = React.useState(false);
 
     // The server does not know the visitor's theme, so nothing is marked active
-    // until the client says which one it is.
+    // until the client says which one it is. A host's value is known on both.
     React.useEffect(() => {
       setMounted(true);
     }, []);
+    const known = mounted || controlled;
 
     React.useEffect(() => {
       if (!mounted) return;
@@ -113,27 +124,32 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
      * the existing nodes and a focused button keeps its focus.
      */
     const ordered =
-      collapsed && direction === "column" && mounted
+      collapsed && direction === "column" && known
         ? [...THEMES].sort((a, b) => Number(theme === b.value) - Number(theme === a.value))
         : THEMES;
 
-    const options = ordered.map(({ value, icon }, index) => {
-      const active = mounted && theme === value;
+    const choose = (next: Theme) => {
+      if (!controlled) setTheme(next);
+      onChange?.(next);
+    };
+
+    const options = ordered.map(({ value: option, icon }, index) => {
+      const active = known && theme === option;
       return (
         <Row
-          key={value}
+          key={option}
           fit
           // Before mount no option is known to be active, so a collapsed group
           // keeps just its first slot open: the one-option footprint it will
           // have, held invisible by `.pending` until the right option is in it.
-          className={classNames(styles.option, (mounted ? !active : index > 0) && styles.inactive)}
+          className={classNames(styles.option, (known ? !active : index > 0) && styles.inactive)}
           suppressHydrationWarning
         >
           <IconButton
             icon={icon}
             variant={active ? "primary" : "tertiary"}
-            onClick={() => setTheme(value)}
-            aria-label={names[value]}
+            onClick={() => choose(option)}
+            aria-label={names[option]}
             aria-pressed={active}
             suppressHydrationWarning
           />

@@ -121,6 +121,9 @@ means:
 `changed` holds only the keys this interaction touched, which is what you want
 to send to a server; `next` is the whole state.
 
+That includes the Theme row: it shows `value.theme`, reading an unset theme as
+`"system"`, and reports a choice as `{ theme }` without switching the page.
+
 To keep the panel bound to `ThemeProvider` but change where choices are
 stored, set `persistence` on the provider instead — see
 [ThemeProvider](/contexts/themeProvider).
@@ -194,12 +197,12 @@ export function SiteStylePanel({ saved, save }: {
 
 A row's `label` and a group's `title` and `description` still win over
 `labels`, so one composed row can say something else:
-`<StylePanel.Brand label={t("rows.venueColour")} />`.
+`<StylePanel.Brand label={t("rows.siteColour")} />`.
 
 ## Custom colour
 
 `customColors` ends the Brand and Accent swatches with one more: a colour of
-your own, such as a venue's brand colour. It is painted with the current seed,
+your own, such as a site's brand colour. It is painted with the current seed,
 and shows a plus while there is none. Choosing it reports
 `{ brand: "custom", brandSeed }` — the seed already in `value`, or `#5a93fc`
 if there is none — and while it is chosen a colour field under the swatches
@@ -209,7 +212,7 @@ edits the seed. Every colour picked there comes through `onChange`, in both
 ```tsx
 const [draft, setDraft] = useState<StylePanelValue>({
   brand: "custom",
-  brandSeed: venue.brandColor,
+  brandSeed: site.brandColor,
 });
 
 <StylePanel
@@ -217,12 +220,12 @@ const [draft, setDraft] = useState<StylePanelValue>({
   value={draft}
   onChange={(next, changed) => {
     setDraft(next); // { ...draft, brand: "custom", brandSeed: "#c2410c" }
-    saveVenueStyle(changed);
+    saveSiteStyle(changed);
   }}
   labels={{
     custom: {
       // Shown under the field and read with it.
-      description: (seed) => (tooPaleForWhiteText(seed) ? t("custom.tooPale") : undefined),
+      description: () => t("custom.hint"), // "Buttons and links use this colour."
     },
   }}
 />
@@ -256,12 +259,13 @@ The panel never generates CSS. It reports the seed, and your app renders the
 scheme from it with the same pure function Once UI uses everywhere. On the
 published site, give the seed to `ThemeInit`: it generates the scheme on the
 server and renders it into a `<style>` beside its script, so the page paints
-in the venue's colour from the first frame, with no flash. `ThemeProvider`
+in the site's colour from the first frame, with no flash. `ThemeProvider`
 takes the same seed and applies it on the client.
 
 ```tsx
-// app/[venue]/layout.tsx: a server component
-const { brandSeed } = await getVenueStyle(params.venue);
+// app/[site]/layout.tsx: a server component
+const { site } = await params;
+const { brandSeed } = await getSiteStyle(site);
 
 <html suppressHydrationWarning>
   <head>

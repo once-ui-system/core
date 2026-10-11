@@ -416,7 +416,7 @@ const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
   const context = useMemo<StylePanelContextValue>(
     () =>
       controlled
-        ? { value: value!, set: controlledSet, mounted: true, controlled: true }
+        ? { value: value ?? {}, set: controlledSet, mounted: true, controlled: true }
         : { ...bound, controlled: false },
     [controlled, value, controlledSet, bound],
   );
@@ -584,9 +584,15 @@ function Swatches<T extends string>({
 
 function ThemeRow({ label, ...rest }: StyleRowProps) {
   const labels = useStylePanelLabels();
+  // Optional: the row needs no state when bound, so it still renders outside a Root.
+  const panel = useContext(StylePanelContext);
+  // Controlled, an unset theme is the system one, as it is for ThemeProvider.
+  const controlled = panel?.controlled
+    ? { value: panel.value.theme ?? "system", onChange: (theme: Theme) => panel.set({ theme }) }
+    : {};
   return (
     <Row label={prefer(label, labels.rows.theme)} {...rest}>
-      <ThemeSwitcher labels={labels.themeSwitcher} />
+      <ThemeSwitcher labels={labels.themeSwitcher} {...controlled} />
     </Row>
   );
 }

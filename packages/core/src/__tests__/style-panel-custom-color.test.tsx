@@ -26,7 +26,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   </LayoutProvider>
 );
 
-/** A host that owns the state, as Tavilio will. */
+/** A host that owns the state, like a site editor previewing a saved style. */
 function Host({
   initial = {},
   onChange,
@@ -268,5 +268,41 @@ describe("StylePanel custom colour", () => {
       "true",
     );
     await expectNoAxeViolations(container);
+  });
+});
+
+describe("StylePanel controlled Theme row", () => {
+  it("shows value.theme and reports a choice, writing nothing to ThemeProvider or storage", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    localStorage.clear();
+    document.documentElement.setAttribute("data-theme", "light");
+    render(<Host initial={{ theme: "dark" }} onChange={onChange} />, { wrapper });
+
+    const dark = screen.getByRole("button", { name: "Dark theme" });
+    const light = screen.getByRole("button", { name: "Light theme" });
+    expect(dark).toHaveAttribute("aria-pressed", "true");
+
+    await user.click(light);
+    expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ theme: "light" }), {
+      theme: "light",
+    });
+    expect(light).toHaveAttribute("aria-pressed", "true");
+    expect(dark).toHaveAttribute("aria-pressed", "false");
+
+    await user.click(dark);
+    expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ theme: "dark" }), {
+      theme: "dark",
+    });
+    expect(localStorage.getItem("data-theme")).toBeNull();
+    expect(document.documentElement.getAttribute("data-theme")).toBe("light");
+  });
+
+  it("treats an unset theme as the system one", () => {
+    render(<StylePanel value={{}} onChange={vi.fn()} />, { wrapper });
+    expect(screen.getByRole("button", { name: "System theme" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
   });
 });
