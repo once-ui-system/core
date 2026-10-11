@@ -6,6 +6,7 @@ import { IconName } from "../icons";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 import { dev } from "../utils/devLogger";
 import buttonStyles from "./Button.module.scss";
+import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext";
 import { ElementType } from "./ElementType";
 import { Flex } from "./Flex";
 import { HoverCard } from "./HoverCard";
@@ -82,6 +83,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
     ref,
   ) => {
     const radiusSize = size === "s" || size === "m" ? "m" : "l";
+    const trigger = useDropdownTrigger();
 
     // The name is what the caller wrote for people: aria-label, ariaLabel, or
     // a tooltip that is plain text. Never the icon key ("chevronRight" is not
@@ -107,6 +109,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
         id={id}
         href={href}
         ref={ref}
+        {...dropdownTriggerProps(trigger, href, props.onClick)}
         disabled={disabled}
         data-disabled={disabled ? true : undefined}
         data-border={rounded ? "rounded" : undefined}

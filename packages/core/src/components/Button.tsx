@@ -6,6 +6,7 @@ import { IconName } from "../icons";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
 import { Arrow } from "./Arrow";
 import styles from "./Button.module.scss";
+import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext";
 import { ElementType } from "./ElementType";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -83,12 +84,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
   ) => {
     const iconSize = size === "l" || size === "xl" ? "s" : size === "m" ? "s" : "xs";
     const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
+    const trigger = useDropdownTrigger();
 
     return (
       <ElementType
         id={id}
         href={href}
         ref={ref}
+        {...dropdownTriggerProps(trigger, href, props.onClick)}
         disabled={disabled}
         data-disabled={disabled ? true : undefined}
         data-border={rounded ? "rounded" : undefined}

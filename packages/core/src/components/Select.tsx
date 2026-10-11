@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, type ReactNode, useEffect, useId, useRef, useState } from "react";
+import { forwardRef, type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
 import type { Placement } from "../types";
 import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationContext";
 import { Column } from "./Column";
@@ -155,14 +155,59 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     const selectRef = useRef<HTMLDivElement | null>(null);
     const clearButtonRef = useRef<HTMLButtonElement>(null);
 
-    // Track if we should skip the next focus event
-    const skipNextFocusRef = useRef(false);
-    // Track if we just selected an option to prevent reopening
-    const justSelectedRef = useRef(false);
+    /**
+     * Set while focus is on its way back to the trigger from a dropdown that
+     * just closed.
+     *
+     * Closing hands focus back to the field (DropdownWrapper and FocusTrap
+     * both restore it), and the field opens on focus, so every pick, Escape
+     * and outside click reopened the list it had just closed. This replaced
+     * a `justSelectedRef` that was written on every pick and never read.
+     *
+     * The flag is consumed by that returning focus. If focus goes elsewhere
+     * instead, the next key or pointer press anywhere clears it, so a later
+     * Tab or click into the field still opens it. Those listeners exist only
+     * while the flag is set, and they are added after the press that closed
+     * the list has passed the document, so that press cannot clear it.
+     */
+    const returningFocusRef = useRef(false);
+    const stopExpectingFocusRef = useRef<(() => void) | null>(null);
+    const isOpenRef = useRef(isDropdownOpen);
+    isOpenRef.current = isDropdownOpen;
+
+    const expectReturningFocus = useCallback(() => {
+      stopExpectingFocusRef.current?.();
+      returningFocusRef.current = true;
+      const stop = () => {
+        returningFocusRef.current = false;
+        stopExpectingFocusRef.current = null;
+        document.removeEventListener("keydown", stop, true);
+        document.removeEventListener("pointerdown", stop, true);
+      };
+      document.addEventListener("keydown", stop, true);
+      document.addEventListener("pointerdown", stop, true);
+      stopExpectingFocusRef.current = stop;
+    }, []);
+
+    useEffect(() => () => stopExpectingFocusRef.current?.(), []);
+
+    /** Every open and close goes through here, so no close path can miss the flag. */
+    const setOpen = useCallback(
+      (open: boolean) => {
+        if (!open && isOpenRef.current) {
+          expectReturningFocus();
+        }
+        setIsDropdownOpen(open);
+      },
+      [expectReturningFocus],
+    );
 
     const handleFocus = () => {
-      // Allow reopening the dropdown even after selection
-      setIsDropdownOpen(true);
+      if (returningFocusRef.current) {
+        stopExpectingFocusRef.current?.();
+        return;
+      }
+      setOpen(true);
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -173,7 +218,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           event.relatedTarget && (event.relatedTarget as Element).closest("[data-dropdown]");
 
         if (!isMovingToDropdown) {
-          setIsDropdownOpen(false);
+          setOpen(false);
         }
       }
     };
@@ -218,9 +263,8 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       } else {
         setInternalValue(value);
         onSelect?.(value);
-        setIsDropdownOpen(false);
+        setOpen(false);
       }
-      justSelectedRef.current = true;
     };
 
     const handleClearSearch = (e: React.MouseEvent) => {
@@ -253,9 +297,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     useEffect(() => {
       if (isDropdownOpen) {
-        // Reset skip flag when dropdown opens
-        skipNextFocusRef.current = false;
-
         // If searchable is true, focus the search input
         if (searchable) {
           setTimeout(() => {
@@ -289,7 +330,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         }}
         onFocusCapture={() => setIsFocused(true)}
         open={isDropdownOpen}
-        onOpenChange={setIsDropdownOpen}
+        onOpenChange={setOpen}
         placement={placement}
         closeAfterClick={false}
         disableTriggerClick={true}
@@ -306,6 +347,13 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
             cursor="interactive"
             value={getDisplayText()}
             onFocus={handleFocus}
+            // Focus alone cannot reopen a field that already has it: after a
+            // pick, focus is back on the field with the list closed, and a
+            // click there fires no focus event.
+            onClick={(event: React.MouseEvent<HTMLInputElement>) => {
+              rest.onClick?.(event);
+              setOpen(true);
+            }}
             readOnly
             // `{ className }` in the object put the literal string "className"
             // on the element when the prop was truthy and dropped the caller's
@@ -325,7 +373,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                   handleSelect(filteredOptions[index].value);
                 }
               }}
-              onEscape={() => setIsDropdownOpen(false)}
+              onEscape={() => setOpen(false)}
               autoFocus={!searchable}
               disabled={false}
             >
@@ -334,7 +382,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                   searchInputId={searchInputId}
                   searchQuery={searchQuery}
                   setSearchQuery={setSearchQuery}
-                  setIsDropdownOpen={setIsDropdownOpen}
+                  setIsDropdownOpen={setOpen}
                   handleClearSearch={handleClearSearch}
                   handleBlur={handleBlur}
                   selectRef={selectRef}
@@ -346,10 +394,13 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                   <Option
                     key={option.value}
                     {...option}
+                    // handleSelect closes a single Select. A multiple one stays
+                    // open to pick more, as it already did from the keyboard;
+                    // a click used to close it too, and only looked open
+                    // because the returning focus reopened it at once.
                     onClick={() => {
                       option.onClick?.(option.value);
                       handleSelect(option.value);
-                      setIsDropdownOpen(false);
                     }}
                     selected={
                       multiple

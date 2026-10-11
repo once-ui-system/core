@@ -1,10 +1,11 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, KeyboardEvent, useEffect, useRef, useState } from "react";
+import React, { forwardRef, KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
 import { Column } from "./Column";
 import { ElementType } from "./ElementType";
 import styles from "./Option.module.scss";
+import { OptionRoleContext } from "./OptionRoleContext";
 import { Row } from "./Row";
 import { Text } from "./Text";
 
@@ -56,6 +57,8 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
     const [isHighlightedByClass, setIsHighlightedByClass] = useState(false);
     // Use a more generic type that works with ElementType
     const elementRef = useRef<HTMLElement>(null);
+    // "menuitem" inside a ContextMenu, "option" everywhere else.
+    const role = useContext(OptionRoleContext);
 
     // Check for highlighted class applied by ArrowNavigation
     useEffect(() => {
@@ -113,7 +116,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
       if (!disabled) {
         // Remove highlighted class from ALL options (including self) to let CSS :hover take over
         if (elementRef.current?.parentElement) {
-          const allOptions = elementRef.current.parentElement.querySelectorAll('[role="option"]');
+          const allOptions = elementRef.current.parentElement.querySelectorAll(`[role="${role}"]`);
           allOptions.forEach((option) => {
             option.classList.remove("highlighted");
             option.removeAttribute("data-highlighted");
@@ -146,6 +149,8 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         role="option"
         aria-selected={ariaSelected ?? selected}
         aria-disabled={disabled}
+        // In a menu: a menu item, which cannot carry aria-selected.
+        {...(role === "menuitem" && { role, "aria-selected": undefined })}
         onKeyDown={(e: KeyboardEvent<HTMLElement>) => {
           if ((e.key === "Enter" || e.key === " ") && !disabled) {
             e.preventDefault();

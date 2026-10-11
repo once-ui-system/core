@@ -16,6 +16,7 @@ interface ToasterProps {
     variant: "success" | "danger" | "warning" | "info";
     message: React.ReactNode;
     action?: React.ReactNode;
+    duration?: number;
   }[];
   removeToast: (id: string) => void;
   xl?: ToastPosition;
@@ -89,6 +90,7 @@ const Toaster = forwardRef<HTMLDivElement, ToasterProps>(
                 variant={toast.variant}
                 onClose={() => removeToast(toast.id)}
                 action={toast.action}
+                duration={toast.duration}
               >
                 {toast.message}
               </Toast>
