@@ -138,6 +138,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [ ] Every app adopts the W5 handlers.
 - [ ] Workarounds removed once fixed upstream: toast refs, NumberInput remount keys, local Picker/Select replacements, local SplitView/ScrollContainer/Book copies, local mobile-nav drawers.
 - [ ] Each app gets agent rules from `once-ui-init-agent`.
+- [ ] From the RC smoke test (11 Oct: studio, stack, shorty and motion build and render the same on 2.1; nothing to fix in core): studio's pricing button passes `onClick` alongside a signed-out `href`, which 2.1 now runs; studio's die-faces test checks `BorderStyle` against a three-member list; studio's `pnpm-lock.yaml` is stale; studio and motion need env vars to build or render, against the zero-env rule.
 
 ## 4. Parked
 

@@ -206,7 +206,9 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **Non-danger toasts are polite `status` regions**, not assertive alerts.
 - **A `multiple` `Select` stays open while you pick.**
 - **`NeutralColor` accepts rose, mint and dusk, and `BorderStyle` accepts
-  sharp.** The CSS already shipped all four.
+  sharp.** The CSS already shipped all four. Code that checks one of these
+  values against a narrower `as const` list (`list.includes(value)`) needs
+  the new member or a wider list type.
 - **Charts type `data-viz-style` as `DataStyle | (string & {})`** instead of
   `string`: autocomplete without narrowing.
 
@@ -307,7 +309,9 @@ Each keeps working until 3.0.
   headings, and copies the URL (with a toast when there is a provider).
 - **Links run their `onClick`.** `Button`, `IconButton`, `ToggleButton`,
   `SmartLink` and `Option` with an `href` dropped it, and `MobileMegaMenu`'s
-  links never closed the menu.
+  links never closed the menu. If a component gets an `href` and an
+  `onClick` meant only for when there is no `href`, pass `onClick` only in
+  that case: it now runs on the link too.
 - **`Media`'s `figcaption` is inside its `figure`.** Layout is unchanged.
 - **`BlockQuote` can hold paragraphs** (its content was a `span`), and it
   renders as a server component.
