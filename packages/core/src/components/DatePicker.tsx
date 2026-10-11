@@ -73,14 +73,18 @@ const FollowFocusedDay = ({ gridRef }: { gridRef: React.RefObject<HTMLDivElement
   useEffect(() => {
     const grid = gridRef.current;
     if (!grid) return;
-    const follow = (event: FocusEvent) => {
-      const index = Array.from(grid.querySelectorAll(DAY_SELECTOR)).indexOf(
-        event.target as Element,
-      );
+    const follow = (target: EventTarget | null) => {
+      const index = Array.from(grid.querySelectorAll(DAY_SELECTOR)).indexOf(target as Element);
       if (index >= 0) setFocusedIndex(index);
     };
-    grid.addEventListener("focusin", follow);
-    return () => grid.removeEventListener("focusin", follow);
+    const onFocusIn = (event: FocusEvent) => follow(event.target);
+    grid.addEventListener("focusin", onFocusIn);
+    // A day can take focus between the grid reaching the page and this
+    // effect running: a quick Tab as the picker opens. Its focusin has
+    // already fired, so pick the day up here, or the keys start from no
+    // day and ArrowDown lands a week after the first.
+    follow(document.activeElement);
+    return () => grid.removeEventListener("focusin", onFocusIn);
   }, [gridRef, setFocusedIndex]);
   return null;
 };

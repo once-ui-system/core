@@ -123,6 +123,29 @@ describe("DatePicker focus", () => {
     await waitFor(async () => expect(await day(jan(13))).toHaveFocus());
   });
 
+  it("starts the keys from a day that took focus before the grid was listening", async () => {
+    // A quick Tab can focus a day after the grid reaches the page but before
+    // its effects run, so the day's focusin has gone by unheard. This focuses
+    // the 5th in the same task that adds it, which is that window exactly;
+    // a loaded CI runner hit it from the test above, landing on the 7th.
+    const user = userEvent.setup();
+    const early = new MutationObserver(() => {
+      const fifth = document.querySelector<HTMLButtonElement>(
+        `button[data-value="${jan(5).toISOString()}"]`,
+      );
+      if (!fifth) return;
+      fifth.focus();
+      early.disconnect();
+    });
+    early.observe(document.body, { childList: true, subtree: true });
+    render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    await waitFor(async () => expect(await day(jan(5))).toHaveFocus());
+    await settle();
+
+    await user.keyboard("{ArrowDown}");
+    await waitFor(async () => expect(await day(jan(12))).toHaveFocus());
+  });
+
   it("with autoFocus, focuses the selected day as it appears", async () => {
     render(<DatePicker value={jan(5)} onChange={vi.fn()} autoFocus />, { wrapper });
     const fifth = await day(jan(5));

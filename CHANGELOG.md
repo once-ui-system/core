@@ -288,6 +288,10 @@ Each keeps working until 3.0.
   buttons that a tablist may not own.
 - **`Scroller` and `SegmentedControl` forward their refs.** Both took a `ref`
   and dropped it.
+- **`DatePicker`'s arrow keys start from a day focused as the grid appears.**
+  A day that took focus after the grid reached the page but before its
+  focus tracking attached, such as a quick Tab as the picker opens, was not
+  recorded, so ArrowDown went to the 7th rather than a week after that day.
 - **`SplitView`'s handle shows.** It filled the width of a gutter whose own
   padding left it zero wide, so only the handle's 2px border drew and its
   fill never did, not even while dragging. It is a 4px pill now, in both
