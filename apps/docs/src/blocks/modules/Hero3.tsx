@@ -23,7 +23,7 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         dots={{ display: true, color: "neutral-alpha-weak", size: "2" }}
       />
       <Column maxWidth="xs" gap="32" fitHeight horizontal="center" {...flex}>
-        <Column horizontal="center" gap="24" marginBottom="32">
+        <Column fillWidth horizontal="center" gap="24" marginBottom="32">
           <Badge
             href="#"
             id="badge-3"
@@ -70,8 +70,24 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               <Logo wordmark="/trademarks/wordmark-light.svg" />
               <Logo wordmark="/trademarks/wordmark-light.svg" />
             </AutoScroll>
-            <Fade position="absolute" top="0" left="0" fillHeight width={12} to="right" />
-            <Fade position="absolute" top="0" right="0" fillHeight width={12} to="left" />
+            <Fade
+              position="absolute"
+              top="0"
+              left="0"
+              fillHeight
+              width={12}
+              s={{ width: 4 }}
+              to="right"
+            />
+            <Fade
+              position="absolute"
+              top="0"
+              right="0"
+              fillHeight
+              width={12}
+              s={{ width: 4 }}
+              to="left"
+            />
           </Row>
           <Text onBackground="neutral-weak" variant="label-strong-s">
             Trusted by top brands around the globe

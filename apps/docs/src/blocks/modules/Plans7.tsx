@@ -109,9 +109,9 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
           </Mask>
           <Tag
             position="absolute"
-            top="0"
-            left="l"
-            translateY="-50%"
+            top="16"
+            right="16"
+            zIndex={1}
             themeBorder="rounded"
             scheme="brand"
           >

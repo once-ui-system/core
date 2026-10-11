@@ -172,7 +172,7 @@ export function Table1<T = Record<string, unknown>>({
         )}
       </Row>
       <Column fillWidth overflowX="auto">
-        <Column fillWidth radius="l" border overflow="hidden">
+        <Column fitWidth minWidth="100%" radius="l" border overflow="hidden">
           <Row fillWidth gap="16" paddingX="24" paddingY="12" borderBottom>
             {selectable && (
               <Row textVariant="label-default-s" vertical="center" gap="16">

@@ -41,7 +41,7 @@ export const Contact4 = (flex: React.ComponentProps<typeof Row>) => {
 
   return (
     <Row fillWidth gap="xl" m={{ direction: "column" }} {...flex}>
-      <Column fill minWidth={28} gap="24">
+      <Column fill minWidth={28} m={{ minWidth: 0 }} gap="24">
         <Column gap="8">
           <Tag scheme="brand" size="s">
             Sales

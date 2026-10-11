@@ -5,6 +5,7 @@ export const Cookie2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
     <Column
       padding="20"
       maxWidth={28}
+      fitWidth
       background="surface"
       border="neutral-medium"
       radius="l"

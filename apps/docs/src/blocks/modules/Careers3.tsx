@@ -140,7 +140,15 @@ export const Careers3 = () => {
         </Row>
 
         <Row fillWidth s={{ direction: "column" }}>
-          <Column fill minWidth={24} padding="l" gap="24" background="page" overflow="hidden">
+          <Column
+            fillWidth
+            flex={1}
+            minWidth={24}
+            padding="l"
+            gap="24"
+            background="page"
+            overflow="hidden"
+          >
             <BlobFx position="absolute" top="0" left="0" translateY="50%" />
             <Column gap="12">
               <Heading as="h2" variant="display-strong-s">
@@ -194,7 +202,7 @@ export const Careers3 = () => {
 
           <Line vert background="neutral-alpha-weak" s={{ hide: true }} />
 
-          <Column fill minWidth={24} padding="l" gap="16">
+          <Column fillWidth flex={1} minWidth={24} padding="l" gap="16">
             <Column gap="8">
               <Heading as="h3" variant="heading-strong-m">
                 Open positions
