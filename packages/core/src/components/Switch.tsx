@@ -11,7 +11,9 @@ import styles from "./Switch.module.scss";
 
 interface SwitchProps
   extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked"> {
+    // `onToggle` is this component's own; the DOM's is the `toggle` event of
+    // popovers and `<details>`, which an input never fires.
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onToggle"> {
   style?: React.CSSProperties;
   className?: string;
   checked: boolean;
@@ -21,7 +23,9 @@ interface SwitchProps
   disabled?: boolean;
   reverse?: boolean;
   ariaLabel?: string;
-  onToggle: () => void;
+  /** Called with the state the switch moves to: `true` when it turns on.
+   *  A callback that takes no argument still works. */
+  onToggle?: (checked: boolean) => void;
 }
 
 const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
@@ -45,16 +49,15 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
     const descriptionId = useId();
     const hasLabel = Boolean(props.label);
 
+    const toggle = () => {
+      if (disabled) return;
+      onToggle?.(!checked);
+    };
+
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (!disabled && (event.key === "Enter" || event.key === " ")) {
         event.preventDefault();
-        onToggle();
-      }
-    };
-
-    const handleClick = () => {
-      if (!disabled) {
-        onToggle();
+        toggle();
       }
     };
 
@@ -68,7 +71,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
           [styles.reverse]: reverse,
           [styles.disabled]: disabled,
         })}
-        onClick={handleClick}
+        onClick={toggle}
       >
         {/* Carries the value for form submission only. The thumb below is the
             control people reach, so this stays out of the accessibility tree
@@ -79,7 +82,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
           name={name}
           value={value}
           checked={checked}
-          onChange={onToggle}
+          onChange={toggle}
           className={commonStyles.hidden}
           tabIndex={-1}
           aria-hidden="true"

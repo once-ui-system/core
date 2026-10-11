@@ -1,7 +1,7 @@
 ---
 title: "Switch"
 summary: "Switch provides a toggle control for binary states with a sliding animation and optional loading state."
-updatedAt: "2025-05-12"
+updatedAt: "2026-10-11"
 docs: "once-ui/form-controls/switch.mdx"
 github: "components/Switch.tsx"
 navLabel: "Switch"
@@ -31,7 +31,7 @@ The `Switch` component provides a toggle control for binary states, featuring a 
 
 ## State
 
-Control the switch state with the `checked` prop.
+Control the switch state with the `checked` prop. `onToggle` receives the state the switch moves to, so the setter can be passed straight in.
 
 <CodeBlock
   marginTop="16"
@@ -45,7 +45,7 @@ Control the switch state with the `checked` prop.
 <Switch
     label={isChecked ? "Feature is now enabled" : "Feature is currently disabled"}
     checked={isChecked}
-    onToggle={() => setIsChecked(!isChecked)}
+    onToggle={setIsChecked}
 />`,
       language: "tsx",
       label: "State"
@@ -149,7 +149,7 @@ Place the switch on the right side of the label.
   component="Switch"
   describe={{
     checked: "Whether it is on. Controlled — there is no uncontrolled mode.",
-    onToggle: "Called when it is flipped, by pointer or keyboard.",
+    onToggle: "Called with the new state when it is flipped, by pointer or keyboard: true when it turns on.",
     loading: "Show a spinner in the track while something resolves.",
     disabled: "Block interaction.",
     reverse: "Put the label before the switch instead of after it.",

@@ -8,14 +8,18 @@ import styles from "./SharedInteractiveStyles.module.scss";
 
 interface RadioButtonProps
   extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked"> {
+    // `onToggle` is this component's own; the DOM's is the `toggle` event of
+    // popovers and `<details>`, which an input never fires.
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onToggle"> {
   style?: React.CSSProperties;
   className?: string;
   checked?: boolean;
   name?: string;
   value?: string;
   disabled?: boolean;
-  onToggle?: () => void;
+  /** Called with the state the radio moves to: `true` when it becomes the
+   *  chosen one. A callback that takes no argument still works. */
+  onToggle?: (checked: boolean) => void;
   hoverable?: boolean;
 }
 
@@ -48,10 +52,11 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
 
     const toggleItem = () => {
       if (disabled) return;
+      const next = !(controlledIsChecked !== undefined ? controlledIsChecked : isChecked);
       if (onToggle) {
-        onToggle();
+        onToggle(next);
       } else {
-        setIsChecked(!isChecked);
+        setIsChecked(next);
       }
     };
 

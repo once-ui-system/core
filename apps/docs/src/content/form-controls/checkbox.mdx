@@ -1,7 +1,7 @@
 ---
 title: "Checkbox"
 summary: "Checkbox provides a selectable control for binary or indeterminate states with customizable labels and styling."
-updatedAt: "2026-07-27"
+updatedAt: "2026-10-11"
 docs: "once-ui/form-controls/checkbox.mdx"
 github: "components/Checkbox.tsx"
 navLabel: "Checkbox"
@@ -36,7 +36,7 @@ The `Checkbox` component provides a selectable control that can be toggled betwe
 
 ## State
 
-Use the `checked` prop with React state to create controlled checkboxes.
+Use the `checked` prop with React state to create controlled checkboxes. `onToggle` receives the state the checkbox moves to, so the setter can be passed straight in.
 
 <CodeBlock
   marginTop="16"
@@ -54,7 +54,7 @@ Use the `checked` prop with React state to create controlled checkboxes.
 <Checkbox
     label="Controlled checkbox"
     checked={checked}
-    onToggle={() => setChecked(!checked)}
+    onToggle={setChecked}
 />
 
 // You can also update the state programmatically
@@ -178,7 +178,7 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
   describe={{
     checked: "Whether it is ticked.",
     indeterminate: "The third state, for a parent whose children are partly ticked.",
-    onToggle: "Called when it is flipped.",
+    onToggle: "Called with the new state when it is flipped: true when it becomes ticked.",
     hoverable: "Highlight the row on hover.",
   }}
   content={[

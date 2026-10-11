@@ -9,10 +9,14 @@ import styles from "./SharedInteractiveStyles.module.scss";
 
 interface CheckboxProps
   extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked"> {
+    // `onToggle` is this component's own; the DOM's is the `toggle` event of
+    // popovers and `<details>`, which an input never fires.
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onToggle"> {
   checked?: boolean;
   indeterminate?: boolean;
-  onToggle?: () => void;
+  /** Called with the state the checkbox moves to: `true` when it becomes
+   *  ticked. A callback that takes no argument still works. */
+  onToggle?: (checked: boolean) => void;
   hoverable?: boolean;
 }
 
@@ -46,10 +50,11 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
 
     const toggleItem = () => {
       if (disabled) return;
+      const next = !(controlledIsChecked !== undefined ? controlledIsChecked : isChecked);
       if (onToggle) {
-        onToggle();
+        onToggle(next);
       } else {
-        setIsChecked(!isChecked);
+        setIsChecked(next);
       }
     };
 
