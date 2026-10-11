@@ -71,6 +71,11 @@
     "tags": ["media", "marketing"],
     "pairsWith": ["Grid", "Text"]
   },
+  "Breadcrumbs": {
+    "purpose": "Trail of links to the current page, in a nav landmark, with the last item marked current and long trails collapsed",
+    "tags": ["navigation"],
+    "pairsWith": ["Heading", "Column", "SmartLink"]
+  },
   "Button": {
     "purpose": "Action or link button with variants, sizes, prefix/suffix icons and a loading state",
     "tags": ["action", "basics"],
@@ -192,6 +197,11 @@
     "purpose": "Context that lets a stacked Dialog dim and disable the base Dialog beneath it",
     "tags": ["overlay", "provider"],
     "pairsWith": ["Dialog"]
+  },
+  "Drawer": {
+    "purpose": "Modal sheet that slides in from any edge, with focus trap and scroll lock — mobile navigation, filters and side panels",
+    "tags": ["overlay", "navigation"],
+    "pairsWith": ["NavItem", "Column", "Button"]
   },
   "Dropdown": {
     "purpose": "The panel inside a dropdown: a list of options with selection and Escape handling",
@@ -338,6 +348,11 @@
     "purpose": "Keyboard key or shortcut rendered as a key cap",
     "tags": ["typography"],
     "pairsWith": ["Row", "Text", "Kbar"]
+  },
+  "KeyTip": {
+    "purpose": "A keyboard shortcut drawn as keycaps, with ⌘ on Apple platforms and Ctrl elsewhere — hints next to actions and in menus",
+    "tags": ["content", "keyboard"],
+    "pairsWith": ["Kbd", "Button", "Tooltip"]
   },
   "Legend": {
     "purpose": "Chart legend: series swatches and labels, as a row or column",
@@ -653,10 +668,30 @@
     "tags": ["form", "settings"],
     "pairsWith": ["Setting", "Row", "Column"]
   },
+  "Tab": {
+    "purpose": "One tab in a TabList, matched to its TabPanel by value",
+    "tags": ["navigation", "tabs"],
+    "pairsWith": ["Tabs", "TabList", "TabPanel"]
+  },
   "Table": {
     "purpose": "Data table with sortable headers, search, pagination, row actions and empty/loading states",
     "tags": ["data", "dashboard"],
     "pairsWith": ["Column", "Tag", "Icon"]
+  },
+  "TabList": {
+    "purpose": "The row or column of Tabs inside Tabs, with arrow-key focus",
+    "tags": ["navigation", "tabs"],
+    "pairsWith": ["Tabs", "Tab", "TabPanel"]
+  },
+  "TabPanel": {
+    "purpose": "The content shown while its Tab is selected",
+    "tags": ["navigation", "tabs"],
+    "pairsWith": ["Tabs", "TabList", "Tab"]
+  },
+  "Tabs": {
+    "purpose": "Horizontal or vertical tabs that switch between panels by value — settings sections and grouped views",
+    "tags": ["navigation", "tabs"],
+    "pairsWith": ["TabList", "Tab", "TabPanel"]
   },
   "Tag": {
     "purpose": "Compact label for status, category or metadata, with scheme colour and icons",
@@ -734,6 +769,11 @@
     "purpose": "User identity that opens an account dropdown",
     "tags": ["overlay", "navigation", "profile"],
     "pairsWith": ["Avatar", "Option", "Column"]
+  },
+  "VisuallyHidden": {
+    "purpose": "Content for screen readers only; focusable makes it a skip link that shows on focus",
+    "tags": ["accessibility"],
+    "pairsWith": ["Button", "SmartLink"]
   },
   "WeatherFx": {
     "purpose": "Canvas rain, snow, leaves or lightning as an ambient layer",
