@@ -223,19 +223,21 @@ function parseFlags(argv) {
     stdin: argv.includes("--stdin"),
     fix: argv.includes("--fix"),
     next: argv.includes("--next") ? true : argv.includes("--no-next") ? false : undefined,
-    file: argv.find((a) => !a.startsWith("-")),
+    // Every file named, not only the first: `validate-ai-code a.tsx b.tsx`
+    // used to check a.tsx and silently skip the rest.
+    files: argv.filter((a) => !a.startsWith("-")),
   };
 }
 
-function readInput(flags) {
+function readInputs(flags) {
   if (flags.stdin) {
-    return { source: fs.readFileSync(0, "utf8"), file: "<stdin>" };
+    return [{ source: fs.readFileSync(0, "utf8"), file: "<stdin>" }];
   }
-  if (!flags.file) {
-    console.error("Usage: validate-ai-code.js <file.tsx> [--fix] [--next | --no-next] | --stdin");
+  if (flags.files.length === 0) {
+    console.error("Usage: validate-ai-code.js <file.tsx…> [--fix] [--next | --no-next] | --stdin");
     process.exit(2);
   }
-  return { source: fs.readFileSync(flags.file, "utf8"), file: flags.file };
+  return flags.files.map((file) => ({ source: fs.readFileSync(file, "utf8"), file }));
 }
 
 /**
@@ -599,7 +601,11 @@ const VERTICAL_CENTER = /(?:^|\s)vertical=["']center["']/;
 const LITERAL_MAX_WIDTH =
   /(?:^|\s)maxWidth=(?:"[^"]*"|\{\s*(?:\d+(?:\.\d+)?|"[^"]*"|'[^']*')\s*\})(?=[\s/]|$)/;
 const MIN_WIDTH_ZERO = /(?:^|\s)minWidth=(?:\{\s*0\s*\}|\{?["']0["']\}?)(?=[\s/]|$)/;
-const DEFAULT_BORDER = /(?:^|\s)(border(?:Top|Right|Bottom|Left|X|Y)?)=["']neutral-alpha-weak["']/;
+// A bare `border` draws `--default-border`, which is `--neutral-border-weak`:
+// the `neutral-weak` value. `neutral-alpha-weak` is a different, translucent
+// colour, and this rule used to call it the default and rewrite it to a bare
+// border, which changed what rendered.
+const DEFAULT_BORDER = /(?:^|\s)(border(?:Top|Right|Bottom|Left|X|Y)?)=["']neutral-weak["']/;
 const BREAKPOINTS = ["xl", "l", "m", "s", "xs"];
 
 /** The layout primitives whose `position` defaults to `relative`. */
@@ -903,7 +909,7 @@ function validate(source, spec, iconNames, options = {}) {
   if (named) {
     add(
       "border.default",
-      `${named[1]}="neutral-alpha-weak" restates the default border — write bare ${named[1]}, and name a colour only to deviate`,
+      `${named[1]}="neutral-weak" restates the default border — write bare ${named[1]}, and name a colour only to deviate`,
       "default-border",
     );
   }
@@ -1276,7 +1282,7 @@ function applyFixes(source, issues, spec = loadSpec()) {
       out = rewriteTags(out, (attrs) =>
         replaceOwnProps(
           attrs,
-          /(border(?:Top|Right|Bottom|Left|X|Y)?)=["']neutral-alpha-weak["']/g,
+          /(border(?:Top|Right|Bottom|Left|X|Y)?)=["']neutral-weak["']/g,
           "$1",
         ),
       );
@@ -1292,33 +1298,36 @@ function main() {
   const spec = loadSpec();
   const iconNames = parseIconNames(spec);
   const flags = parseFlags(process.argv.slice(2));
-  const { source, file } = readInput(flags);
 
-  const dir = flags.stdin ? process.cwd() : path.dirname(path.resolve(file));
-  const next = flags.next ?? (importsNext(source) || isNextProject(dir));
-  const icons = projectIconNames(projectRoot(dir));
+  let failed = false;
+  for (const { source, file } of readInputs(flags)) {
+    const dir = flags.stdin ? process.cwd() : path.dirname(path.resolve(file));
+    const next = flags.next ?? (importsNext(source) || isNextProject(dir));
+    const icons = projectIconNames(projectRoot(dir));
 
-  const issues = validate(source, spec, iconNames, { next, icons });
+    const issues = validate(source, spec, iconNames, { next, icons });
 
-  if (issues.length === 0) {
-    console.log(`✓ ${file}: no mechanical issues`);
-    process.exit(0);
-  }
+    if (issues.length === 0) {
+      console.log(`✓ ${file}: no mechanical issues`);
+      continue;
+    }
 
-  console.log(`✗ ${file}: ${issues.length} issue(s)`);
-  for (const issue of issues) {
-    console.log(`  [${issue.rule}] ${issue.message}`);
-  }
+    failed = true;
+    console.log(`✗ ${file}: ${issues.length} issue(s)`);
+    for (const issue of issues) {
+      console.log(`  [${issue.rule}] ${issue.message}`);
+    }
 
-  if (flags.fix) {
-    const fixed = applyFixes(source, issues, spec);
-    if (fixed !== source && !flags.stdin) {
-      fs.writeFileSync(file, fixed);
-      console.log(`Applied auto-fixes to ${file}`);
+    if (flags.fix) {
+      const fixed = applyFixes(source, issues, spec);
+      if (fixed !== source && !flags.stdin) {
+        fs.writeFileSync(file, fixed);
+        console.log(`Applied auto-fixes to ${file}`);
+      }
     }
   }
 
-  process.exit(1);
+  process.exit(failed ? 1 : 0);
 }
 
 // Importable for tests; the CLI runs only when this file is invoked directly.

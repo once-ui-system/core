@@ -122,7 +122,7 @@
     "components": ["Row", "Column", "Grid", "Button"]
   },
   "border.default": {
-    "rule": "Bare border (and borderTop, borderBottom, borderX, …) draws the default border. Do not write border=\"neutral-alpha-weak\" to get it; name a colour only to deviate, e.g. border=\"brand-alpha-medium\".",
+    "rule": "Bare border (and borderTop, borderBottom, borderX, …) draws the default border, neutral-weak. Do not write border=\"neutral-weak\" to get it; name a colour only to deviate, e.g. border=\"neutral-alpha-weak\" (translucent, not the default) or border=\"brand-alpha-medium\".",
     "components": ["Row", "Column", "Card"]
   },
   "zIndex.scope": {

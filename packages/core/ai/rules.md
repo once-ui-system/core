@@ -46,13 +46,13 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
    - `variant="primary"`, `size="m"` on `Button`
    - `fillWidth` beside `maxWidth` — `maxWidth` already fills the width up to the cap
    - `minWidth={0}` beside `fillWidth` — `fillWidth` already sets `min-width: 0`
-   - a colour on `border` (or `borderTop`, `borderBottom`, `borderX`, …) that only restates the default — bare `border` draws the default border; name a colour only to deviate from it
+   - a colour on `border` (or `borderTop`, `borderBottom`, `borderX`, …) that only restates the default — bare `border` draws the default border, `neutral-weak`; name a colour only to deviate from it (`neutral-alpha-weak` is one: translucent, not the default)
 
 ```tsx
 // Good
 <Column maxWidth="l" border radius="l">
 // Bad
-<Column fillWidth maxWidth="l" minWidth={0} position="relative" border="neutral-alpha-weak" radius="l">
+<Column fillWidth maxWidth="l" minWidth={0} position="relative" border="neutral-weak" radius="l">
 ```
 
 3b. `zIndex` belongs to a stacking group, not to a page. Use it only inside an isolated group that needs an order — a decorative absolute layer and the content sibling above it (rule 21), a sticky header over the pane it covers — and keep the values small within that group. A `zIndex` on a lone element, or a page-wide ladder of `zIndex={3}`, `{5}`, `{9}`, means the hierarchy is being managed by hand; restructure the tree instead.

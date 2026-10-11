@@ -12,7 +12,7 @@ const examples: BlockExampleDef[] = [
     render: () => (
       <Column fill padding="8" horizontal="center" background="page">
         <Row maxWidth="m" fillHeight background="surface" radius="xl" />
-        <Cookie1 position="absolute" left="24" bottom="24" />
+        <Cookie1 position="absolute" left="24" right="24" bottom="24" />
       </Column>
     ),
   },
@@ -22,7 +22,7 @@ const examples: BlockExampleDef[] = [
     render: () => (
       <Column fill padding="8" horizontal="center" background="page">
         <Row maxWidth="m" fillHeight background="surface" radius="xl" />
-        <Cookie2 position="absolute" left="24" bottom="24" />
+        <Cookie2 position="absolute" left="24" right="24" bottom="24" />
       </Column>
     ),
   },

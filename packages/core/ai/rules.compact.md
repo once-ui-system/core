@@ -13,7 +13,7 @@ Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For an
 | `center` | `horizontal="center" vertical="center"` |
 | `maxWidth="l"` | `fillWidth maxWidth="l"` |
 | `fillWidth` | `fillWidth minWidth={0}` |
-| `border` | `border="neutral-alpha-weak"` |
+| `border` | `border="neutral-weak"` (`neutral-alpha-weak` is a different, translucent colour) |
 
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`

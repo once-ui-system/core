@@ -222,12 +222,15 @@ describe("layout.defaults — props another prop implies", () => {
 
 describe("border.default", () => {
   it("flags a border colour that restates the default, on any side", () => {
-    expect(rules(`<Column border="neutral-alpha-weak" radius="l" />`)).toContain("border.default");
-    expect(rules(`<Row borderBottom="neutral-alpha-weak" />`)).toContain("border.default");
-    expect(rules(`<Column borderRight="neutral-alpha-weak" />`)).toContain("border.default");
+    expect(rules(`<Column border="neutral-weak" radius="l" />`)).toContain("border.default");
+    expect(rules(`<Row borderBottom="neutral-weak" />`)).toContain("border.default");
+    expect(rules(`<Column borderRight="neutral-weak" />`)).toContain("border.default");
   });
 
   it("leaves a colour that deviates from the default alone", () => {
+    // A bare border is --neutral-border-weak. neutral-alpha-weak is a
+    // different, translucent colour, which this rule used to call the default.
+    expect(rules(`<Column border="neutral-alpha-weak" />`)).not.toContain("border.default");
     expect(rules(`<Column border="neutral-alpha-medium" />`)).not.toContain("border.default");
     expect(rules(`<Column border="brand-alpha-medium" />`)).not.toContain("border.default");
     expect(rules(`<Column border />`)).not.toContain("border.default");
@@ -241,10 +244,8 @@ describe("border.default", () => {
   });
 
   it("rewrites to the bare prop under --fix", () => {
-    expect(fixed(`<Column border="neutral-alpha-weak" radius="l">`)).toBe(
-      `<Column border radius="l">`,
-    );
-    expect(fixed(`<Row fillWidth borderBottom="neutral-alpha-weak">`)).toBe(
+    expect(fixed(`<Column border="neutral-weak" radius="l">`)).toBe(`<Column border radius="l">`);
+    expect(fixed(`<Row fillWidth borderBottom="neutral-weak">`)).toBe(
       `<Row fillWidth borderBottom>`,
     );
   });

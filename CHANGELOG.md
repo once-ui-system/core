@@ -304,6 +304,14 @@ Each keeps working until 3.0.
   A day that took focus after the grid reached the page but before its
   focus tracking attached, such as a quick Tab as the picker opens, was not
   recorded, so ArrowDown went to the 7th rather than a week after that day.
+- **The validator's `border.default` rule named the wrong colour.** It
+  called `border="neutral-alpha-weak"` the default border and its `--fix`
+  rewrote it to a bare `border`, which changed what rendered: a bare border
+  is `neutral-weak`, and `neutral-alpha-weak` is a different, translucent
+  colour. The rule, its fix, the gotcha and the rules now name
+  `neutral-weak`.
+- **`validate-ai-code` checks every file it is given**, not only the first:
+  `validate-ai-code a.tsx b.tsx` silently skipped `b.tsx`.
 - **A single `Select` shows each option's `prefix`.** It overwrote the
   prefix with the check-mark slot a multiple Select uses, so a swatch or icon
   set on an option never showed; a multiple Select now shows it after the
@@ -504,6 +512,11 @@ Each keeps working until 3.0.
   (no behaviour change) took it to 173.
 - **Accessibility assertions in tests.** `src/test/axe.ts` runs axe on a
   rendered tree; every component added or changed in 2.1 is tested with it.
+- **The docs blocks use 2.x syntax and fit a phone.** 138 blocks drop
+  props that restate defaults and use `fill`, `center`, `Row`/`Column` and
+  typed theme props, with no visible change; ten overflowed or overlapped at
+  390px (Contact3/4, Cookie1/2, Careers3, Hero3, Hero12, Plans7, Header4 and
+  the blocks built on it, Table1 and Dashboard1).
 - **The build no longer downloads emoji data.** It used the committed
   `src/data/emoji-data.json` only when gemoji's moving `master` could not be
   fetched, so two builds minutes apart could differ, and `npm publish`
