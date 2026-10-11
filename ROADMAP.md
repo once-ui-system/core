@@ -114,6 +114,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] The docs app's own MDX map (`apps/docs/src/product/mdx.tsx`) moves to `/mdx`; the harness generator and `rules.md` learn the `/mdx` and `/config` entries.
 - [x] `ListItem`, `ShineFx` and `TypeFx` pass their refs on (`Text` and `Heading` forward refs).
 - [ ] `useToast` and the providers aren't in the spec (the contexts barrel isn't walked).
+- [ ] 2.2: `generate-emoji-data` downloads gemoji's `master` on every build, so the emoji set depends on the network and the CDN at build time (two builds minutes apart differed); pin it to a tagged commit or vendor the source.
 - [x] Docs blocks use `ParticleFx`, not the deprecated `Particle`.
 - [ ] Dropdown leftovers (2.2, non-breaking): `DateInput`/`DateRangeInput` still wrap their read-only input in `role="button"` (needs a combobox with `aria-haspopup="dialog"`); DatePicker still focuses the selected day on mount and month change; in a `dual` picker the month/year list moves one calendar only; "Options"/"Dropdown options" labels are hard-coded English.
 - [x] Layout leftovers: `Grid inline` has a rule; `translateX`/`translateY` read spacing tokens; `ClientGrid` applies a breakpoint `width` and numeric spacing.
