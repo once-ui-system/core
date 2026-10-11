@@ -60,7 +60,8 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] `IconButton`: accessible name from `aria-label`/`ariaLabel` or a string tooltip, never the icon key.
 - [x] Native `aria-label` accepted alongside `ariaLabel` on Spinner, StatusIndicator, Switch, Scrubber.
 
-- [ ] Found by W1's tests (each pinned by a skipped test naming it): `Chip`'s remove button nested in its own `role="button"`; `TagInput`'s remove buttons all named "Remove", and `aria-haspopup`/`aria-expanded` on a textbox with no listbox; `OTPInput`'s hard-coded ids repeat across instances and its error state is never exposed; `ColorInput` ignores `value` after mount; a `dual` `DateRangePicker` shows the same month twice for a range inside one month; `DatePicker`'s `role="grid"` has no rows or cells, and its month and year triggers are nested in another interactive element.
+- [x] Found by W1's tests, fixed: `Chip`'s remove button nested in its own `role="button"`; `TagInput`'s remove buttons all named "Remove", and `aria-haspopup`/`aria-expanded` on a textbox with no listbox; `OTPInput`'s hard-coded ids repeat across instances and its error state is never exposed; `ColorInput` ignores `value` after mount.
+- [ ] Found by W1's tests, open (dropdown stream): a `dual` `DateRangePicker` shows the same month twice for a range inside one month; `DatePicker`'s `role="grid"` has no rows or cells, and its month and year triggers are nested in another interactive element.
 
 ### W4 · Agent harness and docs (P0)
 - [x] Validator: the icon-name check reads `spec.iconNames` and looks only at icon props; no false positives on a `Flex` that changes direction at a breakpoint, on `speed` for multiplier effects, or on spread props; element-scoped `position`/`zIndex` rules; regression tests for each.
@@ -105,9 +106,9 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 ### Found while building (P1, wave 3)
 - [ ] `Select` still fails axe: `aria-expanded` on a non-combobox input, `role="button"` wrappers around it, nested listboxes when open (needs `role="combobox"` and a DropdownWrapper rework; may slip to 2.2).
 - [ ] `ContextMenu`'s `fillWidth` and `placement` props are declared but never applied.
-- [ ] `HeadingLink` fails axe (focusable div with a prohibited `aria-label`, `inert` until hovered, throws without a ToastProvider); `ElementType` drops `onClick` on links; `Media`'s `caption` renders its `figcaption` outside the `figure`; `BlockQuote` wraps children in a `span`.
+- [x] `HeadingLink` fails axe (focusable div with a prohibited `aria-label`, `inert` until hovered, throws without a ToastProvider); `ElementType` drops `onClick` on links; `Media`'s `caption` renders its `figcaption` outside the `figure`; `BlockQuote` wraps children in a `span`.
 - [x] `Grid`'s `rows` prop has no classes and leaks to the DOM; `Text`/`Heading` pass display props to the DOM as attributes; the size parsers miss the `"72"` spacing token; `Flex` writes no breakpoint classes for `top`/`left`/`right`/`bottom`.
-- [ ] `NavIcon` has no button role or Enter/Space handling.
+- [x] `NavIcon` has no button role or Enter/Space handling.
 - [ ] The docs' blocks use about 40 icon names that aren't registered (the docs type `iconLibrary` as `Record<string, IconType>`, so typos compile).
 - [ ] The docs app's `next/image` needs `images.localPatterns` for proxied OG images on Next 16.
 - [ ] The docs app's own MDX map (`apps/docs/src/product/mdx.tsx`) moves to `/mdx`; the harness generator and `rules.md` learn the `/mdx` and `/config` entries.

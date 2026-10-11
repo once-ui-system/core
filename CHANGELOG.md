@@ -191,6 +191,31 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **A responsive `Grid` renders on the server.** Any breakpoint prop used to
   switch it to the client and require a `LayoutProvider`, and breakpoint
   spacing on Grid did nothing.
+- **`Chip`'s remove button sits beside the chip's control, not inside it.**
+  It was nested in the chip's `role="button"`, and Enter on it clicked the
+  chip. A removable chip is now a box holding both, with the same look;
+  `aria-*` props name the chip's control. `ref` is typed and `ChipProps` is
+  exported.
+- **`TagInput` names each remove button after its tag** ("Remove tag
+  react"), and its field no longer claims a listbox popup (`aria-haspopup`,
+  `aria-expanded`).
+- **`OTPInput`'s field ids are unique per instance**, and its error state is
+  announced: each field is invalid and described by the message.
+- **`Input` is invalid when given `error`**, not only `errorMessage`. It
+  points `aria-describedby` at its message only when the message renders, and
+  keeps the caller's own.
+- **`ColorInput` follows its `value` prop** after mount.
+- **`NavIcon` is a button:** named "Menu" unless given `aria-label`, pressed
+  with Enter and Space, with `aria-expanded` following `active`.
+- **`HeadingLink`'s link is reachable by keyboard and works without a
+  `ToastProvider`.** It is a real link to the section, shared with the `/mdx`
+  headings, and copies the URL (with a toast when there is a provider).
+- **Links run their `onClick`.** `Button`, `IconButton`, `ToggleButton`,
+  `SmartLink` and `Option` with an `href` dropped it, and `MobileMegaMenu`'s
+  links never closed the menu.
+- **`Media`'s `figcaption` is inside its `figure`.** Layout is unchanged.
+- **`BlockQuote` can hold paragraphs** (its content was a `span`), and it
+  renders as a server component.
 - **`Grid`'s `rows` sets the rows.** It had no class and reached the DOM as
   a `rows` attribute; it is now a class at the base and every breakpoint,
   like `columns`, and renders on the server.
