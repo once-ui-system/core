@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Button } from "../components/Button";
 import { Column } from "../components/Column";
 import { DropdownWrapper } from "../components/DropdownWrapper";
+import { IconButton } from "../components/IconButton";
 import { Option } from "../components/Option";
 import { Select } from "../components/Select";
 import { LayoutProvider } from "../contexts/LayoutProvider";
@@ -302,6 +303,47 @@ describe("a DropdownWrapper list", () => {
     await settle();
 
     expect(screen.getAllByRole("listbox")).toHaveLength(1);
+    await expectNoAxeViolations(document.body);
+  });
+
+  // Every list was named "Dropdown options", in English, whatever its
+  // trigger said. It is labelled by its trigger, as a menu by its button.
+  const openList = async (trigger: React.ReactElement, name: string) => {
+    const user = userEvent.setup();
+    render(
+      <DropdownWrapper
+        trigger={trigger}
+        dropdown={
+          <Column padding="4" gap="2">
+            <Option value="rename" label="Rename" />
+          </Column>
+        }
+      />,
+      { wrapper: wrap },
+    );
+    const button = screen.getByRole("button", { name });
+    await user.click(button);
+    const option = await screen.findByRole("option", { name: "Rename" });
+    const listbox = screen.getByRole("listbox");
+    expect(listbox).toContainElement(option);
+    expect(listbox).not.toHaveAttribute("aria-label");
+    // The element it is labelled by is the trigger, the button in it.
+    const label = document.getElementById(listbox.getAttribute("aria-labelledby") ?? "");
+    expect(label).toContainElement(button);
+    return listbox;
+  };
+
+  it("is named after a Button trigger's text", async () => {
+    await openList(<Button>Sort by</Button>, "Sort by");
+    expect(screen.getByRole("listbox", { name: "Sort by" })).toBeInTheDocument();
+  });
+
+  it("is named after an IconButton trigger's label", async () => {
+    await openList(<IconButton icon="chevronDown" aria-label="More actions" />, "More actions");
+    // Testing Library's name engine skips a button's aria-label inside the
+    // element a name is taken from; axe, like the browsers, reads it, and
+    // fails a listbox it finds no name for.
+    await settle();
     await expectNoAxeViolations(document.body);
   });
 });
