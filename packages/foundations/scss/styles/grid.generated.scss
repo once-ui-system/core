@@ -6,6 +6,10 @@
   display: grid;
 }
 
+.display-inline-grid {
+  display: inline-grid;
+}
+
 .columns-1 {
   grid-template-columns: 1fr;
 }
