@@ -294,6 +294,34 @@ function hasLiteralColor(source) {
   return false;
 }
 
+const LITERAL_PAINT = /#[0-9a-fA-F]{3,8}\b|(?:rgb|hsl)a?\s*\(/;
+const SVG_PAINT_ATTR =
+  /(?:^|\s)(fill|stroke|stopColor|stop-color|floodColor|flood-color|lightingColor|lighting-color|color)=\{?\s*(["'`])([^"'`]*)\2/g;
+
+/**
+ * A literal colour painted onto an inline SVG element: `<path fill="#15D9EF">`.
+ *
+ * `hasLiteralColor` leaves SVG paint alone because a raw value is the only
+ * thing those attributes take — but the raw value can still be a token:
+ * `currentColor`, coloured from the wrapper with `onBackground`, or
+ * `var(--brand-solid-strong)`. A hex there never follows the theme. Only
+ * lower-case (intrinsic) elements: a component's `fill` is its own prop.
+ * Returns the first offender and how many there are, or null.
+ */
+function literalSvgPaint(source) {
+  let first = null;
+  let count = 0;
+  for (const el of jsxElements(source)) {
+    if (!/^[a-z]/.test(el.name)) continue;
+    for (const [, attr, , value] of ownProps(el.attrs).matchAll(SVG_PAINT_ATTR)) {
+      if (!LITERAL_PAINT.test(value)) continue;
+      count++;
+      first ??= { element: el.name, attr, value };
+    }
+  }
+  return first && { ...first, count };
+}
+
 /**
  * Is `index` inside the braces of a `<prop>={ ... }` value?
  *
@@ -578,6 +606,102 @@ const BREAKPOINTS = ["xl", "l", "m", "s", "xs"];
 const RELATIVE_BY_DEFAULT = new Set(["Flex", "Row", "Column", "Grid"]);
 
 /**
+ * What a `<Flex>` is when its direction never changes, from its own props:
+ * `{ to: "Row" | "Column", direction }`, or null when it is a real Flex — a
+ * breakpoint sets a direction, the direction is computed or reversed — or
+ * when there is no telling. `direction` is the literal it sets, or null when
+ * it sets none (Flex defaults to row, and `Row` is a Flex with nothing added).
+ * `exact` says the props show everything that decides it: no spread, and
+ * every breakpoint value an object literal this can read.
+ */
+function staticFlex(attrs) {
+  const breakpoints = BREAKPOINTS.map((bp) => propValue(attrs, bp)).filter(Boolean);
+  if (breakpoints.some((value) => /\bdirection\s*:/.test(value))) return null;
+  const readable = breakpoints.every(
+    (value) => /^\{\s*\{[\s\S]*\}\s*\}$/.test(value) && !value.includes("..."),
+  );
+  const exact = readable && !hasSpread(attrs);
+  if (!hasProp(attrs, "direction")) {
+    // A spread or an opaque breakpoint object may carry the direction.
+    return exact ? { to: "Row", direction: null, exact } : null;
+  }
+  const direction = stringValue(propValue(attrs, "direction"));
+  if (direction === "row") return { to: "Row", direction, exact };
+  if (direction === "column") return { to: "Column", direction, exact };
+  return null;
+}
+
+/**
+ * The typed theme props and the attribute each one writes, as
+ * `themeAttributes` in src/utils/layoutClasses.ts maps them.
+ */
+const THEME_ATTRIBUTES = {
+  "data-theme": "theme",
+  "data-border": "themeBorder",
+  "data-solid": "themeSolid",
+  "data-surface": "themeSurface",
+};
+
+/**
+ * Every prop `name` accepts per the spec — its own, its mixins' and those of
+ * what it extends — with each prop's type.
+ */
+function acceptedProps(spec, name, seen = new Set()) {
+  const entry = spec.components?.[name];
+  if (!entry || seen.has(name)) return {};
+  seen.add(name);
+  const props = {};
+  for (const base of entry.extends || []) Object.assign(props, acceptedProps(spec, base, seen));
+  for (const mixin of entry.mixins || []) Object.assign(props, spec.mixins?.[mixin]);
+  return Object.assign(props, entry.props);
+}
+
+/**
+ * The values a prop type allows when it is a union of string literals —
+ * written out (`"light" | "dark"`) or named in `spec.types` (`BorderStyle`) —
+ * or null when it is anything else.
+ */
+function literalValues(spec, type) {
+  const text = String(type ?? "")
+    .replace(/\s*=.*$/, "")
+    .trim();
+  const named = spec.types?.[text];
+  if (Array.isArray(named)) return named.map(String);
+  if (/^"[^"]*"(?:\s*\|\s*"[^"]*")*$/.test(text)) {
+    return [...text.matchAll(/"([^"]*)"/g)].map((m) => m[1]);
+  }
+  return null;
+}
+
+/**
+ * Raw `data-theme` / `data-border` / `data-solid` / `data-surface` on a
+ * component that takes the typed prop for it, per the spec, with a value that
+ * prop accepts. `Button` and `IconButton` take none of them, so their
+ * `data-border="rounded"` is the only way to round them and is left alone.
+ */
+function rawThemeAttributes(spec, tags) {
+  const typed = spec.mixins?.StyleProps ?? {};
+  const found = [];
+  for (const tag of tags) {
+    const own = ownProps(tag.attrs);
+    if (!/(?:^|\s)data-(?:theme|border|solid|surface)=/.test(own)) continue;
+    const accepted = acceptedProps(spec, tag.name);
+    for (const [attribute, prop] of Object.entries(THEME_ATTRIBUTES)) {
+      // The StyleProps prop itself, not a component's own prop of the same
+      // name: ThemeProvider's `theme` sets the app's theme, not a subtree's.
+      if (!(prop in typed) || accepted[prop] !== typed[prop]) continue;
+      const raw = propValue(tag.attrs, attribute);
+      if (!raw) continue;
+      const value = stringValue(raw);
+      const allowed = literalValues(spec, accepted[prop]);
+      if (value !== null && allowed && !allowed.includes(value)) continue;
+      found.push({ tag, attribute, prop, raw, value });
+    }
+  }
+  return found;
+}
+
+/**
  * Timing props measured in milliseconds, per component. Everything else named
  * `speed` is a multiplier (`MatrixFx`, `WeatherFx`, `ParticleFx`,
  * `CelebrationFx`, `Effect`), where `0.5` is exactly right, or a named pace
@@ -705,16 +829,35 @@ function validate(source, spec, iconNames, options = {}) {
 
   // `Flex` is the right component exactly when the direction changes at a
   // breakpoint, so a Flex that sets one at `m` or `s` is not a Row or a
-  // Column written the long way.
-  const fixedDirection = (t, direction) =>
-    t.name === "Flex" &&
-    stringValue(propValue(t.attrs, "direction")) === direction &&
-    !BREAKPOINTS.some((bp) => /\bdirection\s*:/.test(propValue(t.attrs, bp) || ""));
-  if (tags.some((t) => fixedDirection(t, "column"))) {
+  // Column written the long way. One that sets none is a Row: Flex defaults
+  // to row, and Row is a Flex with nothing added.
+  const flexes = tags.filter((t) => t.name === "Flex").map((t) => staticFlex(t.attrs));
+  if (flexes.some((f) => f?.direction === "column")) {
     add("layout.shorthands", 'Use Column instead of Flex direction="column"', "Column");
   }
-  if (tags.some((t) => fixedDirection(t, "row"))) {
+  if (flexes.some((f) => f?.direction === "row")) {
     add("layout.shorthands", 'Use Row instead of Flex direction="row"', "Row");
+  }
+  if (flexes.some((f) => f && f.direction === null)) {
+    add(
+      "layout.shorthands",
+      "Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint",
+      "Row",
+    );
+  }
+
+  // One issue per component, naming the prop for each attribute it carries.
+  const themed = new Map();
+  for (const t of rawThemeAttributes(spec, tags)) {
+    if (!themed.has(t.tag.name)) themed.set(t.tag.name, new Set());
+    themed.get(t.tag.name).add(`${t.prop}=${t.raw} for ${t.attribute}=${t.raw}`);
+  }
+  for (const [name, pairs] of themed) {
+    add(
+      "theme.typedProps",
+      `<${name}> takes the typed theme props — write ${[...pairs].join(", ")}`,
+      "typed-theme-props",
+    );
   }
   if (tags.some((t) => isCentered(t.attrs))) {
     add(
@@ -811,6 +954,15 @@ function validate(source, spec, iconNames, options = {}) {
     add("color.tokens", "Use semantic color tokens, not hex/rgb");
   }
 
+  const paint = literalSvgPaint(source);
+  if (paint) {
+    const more = paint.count > 1 ? ` (and ${paint.count - 1} more)` : "";
+    add(
+      "color.svgPaint",
+      `Literal colour in inline SVG: <${paint.element} ${paint.attr}="${paint.value}">${more} — paint with currentColor (set the colour with onBackground on the wrapper) or a token, var(--brand-solid-strong)`,
+    );
+  }
+
   if (/<img[\s>/]|<a[\s>/]|<button[\s>/]/.test(source)) {
     add(
       "components.primitives",
@@ -832,6 +984,17 @@ function validate(source, spec, iconNames, options = {}) {
       "Card without href/onClick — use Column + surface recipe for static panels",
     );
     break;
+  }
+
+  // A cast is how an unregistered name gets past the type check that 2.0's
+  // IconName union exists for (rules.md 14b) — and it also hides the name
+  // from the check below whenever the value is not a plain literal.
+  const casts = stripComments(source).match(/\bas\s+IconName\b/g);
+  if (casts) {
+    add(
+      "Icon.cast",
+      `${casts.length} \`as IconName\` cast${casts.length > 1 ? "s" : ""} — never cast an icon name: use a registered one from iconNames (type the field as IconName, or write the literal \`as const\`), or register the icon by augmenting IconLibraryOverrides`,
+    );
   }
 
   // The project's own registrations (`options.icons`, which the CLI reads
@@ -960,9 +1123,133 @@ function moveLayoutProviderToNext(source) {
   return source.slice(0, m.index) + replacement + source.slice(m.index + m[0].length);
 }
 
-function applyFixes(source, issues) {
+const CORE_IMPORT = /\bimport\s*\{([^}]*)\}\s*from\s*(["'])@once-ui-system\/core\2;?/;
+
+/** Where `Flex` comes from: "core" (the package root), "elsewhere", or null when it is not imported. */
+function flexImport(source) {
+  let where = null;
+  for (const m of source.matchAll(/\bimport\s+(type\s+)?([^;]*?)\s*from\s*(["'])([^"']+)\3/g)) {
+    const [, typeOnly, clause, , from] = m;
+    const named = /\{([^}]*)\}/.exec(clause)?.[1] ?? "";
+    const local = named
+      .split(",")
+      .map((s) => s.trim().replace(/^type\s+/, ""))
+      .filter((s) => /(?:^|\sas\s+)Flex$/.test(s));
+    const isDefault = /^Flex\b/.test(clause.trim());
+    if (!local.length && !isDefault) continue;
+    if (!typeOnly && from === "@once-ui-system/core" && local.every((s) => s === "Flex")) {
+      where ??= "core";
+    } else {
+      return "elsewhere";
+    }
+  }
+  return where;
+}
+
+/**
+ * Add `names` to the package-root import and drop `Flex` from it once nothing
+ * else uses it, keeping the import's own layout (one line or one per line).
+ */
+function updateCoreImport(source, add) {
+  const m = CORE_IMPORT.exec(source);
+  if (!m) return source;
+  const rest = source.slice(0, m.index) + source.slice(m.index + m[0].length);
+  const specifiers = m[1]
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  const name = (s) => s.replace(/^type\s+/, "").split(/\s+as\s+/)[0];
+  let next = specifiers.filter((s) => s !== "Flex" || /\bFlex\b/.test(rest));
+  const sorted = next.every((s, i) => i === 0 || name(next[i - 1]) <= name(s));
+  for (const extra of add) {
+    if (next.some((s) => name(s) === extra)) continue;
+    next = sorted
+      ? [...next, extra].sort((a, b) => (name(a) < name(b) ? -1 : 1))
+      : [...next, extra];
+  }
+  const semi = m[0].endsWith(";") ? ";" : "";
+  const quote = m[2];
+  const list = m[1].includes("\n")
+    ? `{\n${next.map((s) => `  ${s},\n`).join("")}}`
+    : `{ ${next.join(", ")} }`;
+  const statement = `import ${list} from ${quote}@once-ui-system/core${quote}${semi}`;
+  return source.slice(0, m.index) + statement + source.slice(m.index + m[0].length);
+}
+
+/**
+ * The index just past the `</Flex>` that closes the element whose opening
+ * tag ends at `from`, counting the Flex elements nested inside it.
+ */
+function closingFlex(source, from) {
+  let depth = 1;
+  for (const m of source.slice(from).matchAll(/<\/Flex\s*>|<Flex\b/g)) {
+    const at = from + m.index;
+    if (m[0].startsWith("</")) {
+      if (--depth === 0) return { start: at, end: at + m[0].length };
+    } else if (!/[\w$.)\]]/.test(source[at - 1])) {
+      const end = tagEnd(source, at + m[0].length);
+      if (!/\/\s*$/.test(source.slice(at + m[0].length, end))) depth++;
+    }
+  }
+  return null;
+}
+
+/**
+ * Rename every `<Flex>` whose direction never changes to the `Row` or
+ * `Column` it is, closing tag included, dropping the literal direction that
+ * is now the component's own, and fix the import. Only where the rewrite is
+ * exact: the tag's props show everything (no spread, readable breakpoints)
+ * and `Flex` is the package's, not a local component or an alias.
+ */
+function flexToRowColumn(source) {
+  if (flexImport(source) === "elsewhere") return source;
+  let out = source;
+  const added = new Set();
+  for (;;) {
+    const tag = openingTags(out).find((t) => t.name === "Flex" && staticFlex(t.attrs)?.exact);
+    if (!tag) break;
+    const { to } = staticFlex(tag.attrs);
+    const attrs = replaceOwnProps(
+      tag.attrs,
+      /\s+direction=(?:"(?:row|column)"|'(?:row|column)'|\{\s*["'`](?:row|column)["'`]\s*\})(?=[\s/]|$)/,
+      "",
+    );
+    const open = tag.start - "Flex".length;
+    const selfClosing = /\/\s*$/.test(tag.attrs);
+    const close = selfClosing ? null : closingFlex(out, tag.end + 1);
+    if (!selfClosing && !close) break;
+    let next = out;
+    if (close) next = `${next.slice(0, close.start)}</${to}>${next.slice(close.end)}`;
+    next = next.slice(0, open) + to + attrs + next.slice(tag.end);
+    out = next;
+    added.add(to);
+  }
+  return added.size && flexImport(source) === "core" ? updateCoreImport(out, [...added]) : out;
+}
+
+/**
+ * Typed theme props for the raw attributes `rawThemeAttributes` finds — the
+ * same attribute in the DOM, written through the prop the component types.
+ */
+function typedThemeProps(source, spec) {
+  return rewriteTags(source, (attrs, name) => {
+    let out = attrs;
+    for (const { attribute, prop } of rawThemeAttributes(spec, [{ name, attrs }])) {
+      out = replaceOwnProps(out, new RegExp(`(^|\\s)${attribute}=`), `$1${prop}=`);
+    }
+    return out;
+  });
+}
+
+function applyFixes(source, issues, spec = loadSpec()) {
   let out = source;
   for (const issue of issues) {
+    if (issue.fix === "Row" || issue.fix === "Column") {
+      out = flexToRowColumn(out);
+    }
+    if (issue.fix === "typed-theme-props") {
+      out = typedThemeProps(out, spec);
+    }
     if (issue.fix === "fill") {
       out = rewriteTags(out, (attrs) => collapsePair(attrs, FILL_WIDTH, FILL_HEIGHT, "fill"));
     }
@@ -1024,7 +1311,7 @@ function main() {
   }
 
   if (flags.fix) {
-    const fixed = applyFixes(source, issues);
+    const fixed = applyFixes(source, issues, spec);
     if (fixed !== source && !flags.stdin) {
       fs.writeFileSync(file, fixed);
       console.log(`Applied auto-fixes to ${file}`);
@@ -1049,6 +1336,8 @@ module.exports = {
   projectRoot,
   isNextProject,
   hasLiteralColor,
+  literalSvgPaint,
+  rawThemeAttributes,
   insidePropValue,
   openingTags,
   jsxElements,

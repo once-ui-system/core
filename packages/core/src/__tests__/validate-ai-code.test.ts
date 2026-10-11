@@ -57,9 +57,41 @@ describe("color.tokens", () => {
     );
   });
 
-  it("does not flag SVG paint, which has no token form", () => {
-    expect(rules(`<path d="M0 0" fill="#15D9EF" stroke="#15AAEF" />`)).not.toContain(
-      "color.tokens",
+  it("leaves SVG paint to color.svgPaint", () => {
+    const src = `<path d="M0 0" fill="#15D9EF" stroke="#15AAEF" />`;
+    expect(rules(src)).not.toContain("color.tokens");
+    expect(rules(src)).toContain("color.svgPaint");
+  });
+});
+
+describe("color.svgPaint", () => {
+  it("flags a literal colour painted onto inline SVG", () => {
+    expect(rules(`<svg><path d="M0 0" fill="#15D9EF" /></svg>`)).toContain("color.svgPaint");
+    expect(rules(`<svg><circle r="4" stroke={"#fff"} /></svg>`)).toContain("color.svgPaint");
+    expect(rules(`<linearGradient><stop stopColor="rgb(1, 2, 3)" /></linearGradient>`)).toContain(
+      "color.svgPaint",
+    );
+  });
+
+  it("names the first offender and counts the rest", () => {
+    const [issue] = issues(`<svg><path fill="#15D9EF" /><path stroke="#15AAEF" /></svg>`);
+    expect(issue.message).toMatch(
+      /^Literal colour in inline SVG: <path fill="#15D9EF"> \(and 1 more\)/,
+    );
+  });
+
+  it("accepts currentColor, a token and the values that are not colours", () => {
+    expect(
+      rules(
+        `<svg fill="none"><path fill="currentColor" stroke="var(--brand-solid-strong)" /><rect fill="url(#g)" /></svg>`,
+      ),
+    ).not.toContain("color.svgPaint");
+  });
+
+  it("looks only at intrinsic elements, not at a component's props", () => {
+    expect(rules(`<Media fill src="/a.jpg" />`)).not.toContain("color.svgPaint");
+    expect(rules(`<Background gradient={{ colorStart: "brand-solid-strong" }} />`)).not.toContain(
+      "color.svgPaint",
     );
   });
 });
@@ -376,10 +408,166 @@ describe("layout.shorthands — Flex direction", () => {
   });
 
   it("does not read a direction off a nested tag or a breakpoint of another prop", () => {
-    expect(rules(`<Flex trigger={<Column />} onClick={() => a > b} gap="8" />`)).not.toContain(
+    // The nested tag's direction is not this Flex's: it has none, so it is a Row.
+    const found = issues(`<Flex trigger={<Card direction="column" />} onClick={() => a > b} />`)
+      .filter((i) => i.rule === "layout.shorthands")
+      .map((i) => i.message);
+    expect(found).toEqual([expect.stringMatching(/^Use Row instead of a Flex with no direction/)]);
+    expect(rules(`<Flex direction="column" m={{ gap: "8" }} />`)).toContain("layout.shorthands");
+  });
+});
+
+describe("layout.shorthands — a Flex with no direction", () => {
+  it("flags it as a Row, since Flex defaults to row", () => {
+    const found = issues(`<Flex gap="8" vertical="center">a</Flex>`).filter(
+      (i) => i.rule === "layout.shorthands",
+    );
+    expect(found).toHaveLength(1);
+    expect(found[0].message).toMatch(/^Use Row instead of a Flex with no direction/);
+    expect(found[0].fix).toBe("Row");
+  });
+
+  it("accepts one whose direction changes at a breakpoint", () => {
+    expect(rules(`<Flex gap="8" s={{ direction: "column" }} />`)).not.toContain(
       "layout.shorthands",
     );
-    expect(rules(`<Flex direction="column" m={{ gap: "8" }} />`)).toContain("layout.shorthands");
+  });
+
+  it("does not guess when spread props or an opaque breakpoint may carry a direction", () => {
+    expect(rules(`<Flex gap="8" {...flex} />`)).not.toContain("layout.shorthands");
+    expect(rules(`<Flex gap="8" s={responsive} />`)).not.toContain("layout.shorthands");
+    expect(rules(`<Flex gap="8" s={{ ...mobile, gap: "4" }} />`)).not.toContain(
+      "layout.shorthands",
+    );
+  });
+
+  it("leaves a computed or reversed direction alone", () => {
+    expect(rules(`<Flex direction={isMobile ? "column" : "row"} />`)).not.toContain(
+      "layout.shorthands",
+    );
+    expect(rules(`<Flex direction="row-reverse" />`)).not.toContain("layout.shorthands");
+  });
+});
+
+describe("layout.shorthands — Flex direction under --fix", () => {
+  it("renames the element, closing tag included, and drops the literal direction", () => {
+    expect(fixed(`<Flex direction="column" gap="16"><Text>a</Text></Flex>`)).toBe(
+      `<Column gap="16"><Text>a</Text></Column>`,
+    );
+    expect(fixed(`<Flex direction={"row"} gap="16" />`)).toBe(`<Row gap="16" />`);
+    expect(fixed(`<Flex gap="8">a</Flex>`)).toBe(`<Row gap="8">a</Row>`);
+  });
+
+  it("matches each closing tag to its own Flex, and leaves a real Flex as it is", () => {
+    expect(
+      fixed(
+        `<Flex direction="column"><Flex direction="row" s={{ direction: "column" }}><Flex>a</Flex></Flex><Flex gap="4" /></Flex>`,
+      ),
+    ).toBe(
+      `<Column><Flex direction="row" s={{ direction: "column" }}><Row>a</Row></Flex><Row gap="4" /></Column>`,
+    );
+  });
+
+  it("keeps the report but not the rewrite when spread props might change the result", () => {
+    const src = `<Flex direction="column" {...rest}>a</Flex>`;
+    expect(rules(src)).toContain("layout.shorthands");
+    expect(fixed(src)).toBe(src);
+  });
+
+  it("imports what it writes and drops Flex once nothing uses it", () => {
+    expect(
+      fixed(
+        `import { Flex, Text } from "@once-ui-system/core";\n<Flex direction="column"><Text>a</Text></Flex>`,
+      ),
+    ).toBe(`import { Column, Text } from "@once-ui-system/core";\n<Column><Text>a</Text></Column>`);
+    expect(
+      fixed(
+        `import {\n  Flex,\n  Text,\n} from "@once-ui-system/core";\n<Flex {...p}><Flex direction="row" /></Flex>`,
+      ),
+    ).toBe(
+      `import {\n  Flex,\n  Row,\n  Text,\n} from "@once-ui-system/core";\n<Flex {...p}><Row /></Flex>`,
+    );
+  });
+
+  it("does not rename a Flex that is not the package's", () => {
+    const local = `import { Flex } from "./Flex";\n<Flex direction="column" />`;
+    expect(fixed(local)).toBe(local);
+    const aliased = `import { Row as Flex } from "@once-ui-system/core";\n<Flex direction="column" />`;
+    expect(fixed(aliased)).toBe(aliased);
+  });
+});
+
+describe("theme.typedProps", () => {
+  it("flags a raw theme attribute where the component types the prop, and names it", () => {
+    const [issue] = issues(`<Row data-border="rounded" gap="8" />`);
+    expect(issue.rule).toBe("theme.typedProps");
+    expect(issue.message).toBe(
+      '<Row> takes the typed theme props — write themeBorder="rounded" for data-border="rounded"',
+    );
+    expect(rules(`<Column data-theme="dark" />`)).toContain("theme.typedProps");
+    expect(rules(`<Background data-solid="color" fill />`)).toContain("theme.typedProps");
+    expect(rules(`<Grid data-surface="translucent" columns="2" />`)).toContain("theme.typedProps");
+  });
+
+  it("leaves components without the typed props alone", () => {
+    expect(rules(`<Button data-border="rounded" label="Go" />`)).not.toContain("theme.typedProps");
+    expect(rules(`<IconButton data-border="rounded" icon="plus" />`)).not.toContain(
+      "theme.typedProps",
+    );
+  });
+
+  it("reads the StyleProps prop, not a component's own prop of the same name", () => {
+    // ThemeProvider's `theme` is the app's theme, not a subtree's data-theme.
+    expect(rules(`<ThemeProvider data-theme="dark" />`)).not.toContain("theme.typedProps");
+    expect(rules(`<Tag data-border="rounded" label="New" />`)).toContain("theme.typedProps");
+  });
+
+  it("leaves a value the typed prop does not take, and attributes with no prop", () => {
+    expect(rules(`<Row data-theme="system" />`)).not.toContain("theme.typedProps");
+    expect(rules(`<Row data-brand="emerald" data-scaling="90" />`)).not.toContain(
+      "theme.typedProps",
+    );
+  });
+
+  it("does not read a nested tag's attributes as the parent's", () => {
+    expect(rules(`<DropdownWrapper trigger={<Button data-border="rounded" />} />`)).not.toContain(
+      "theme.typedProps",
+    );
+  });
+
+  it("writes the typed prop under --fix and nothing else", () => {
+    expect(fixed(`<Row data-border="rounded" gap="8"><Button data-border="rounded" /></Row>`)).toBe(
+      `<Row themeBorder="rounded" gap="8"><Button data-border="rounded" /></Row>`,
+    );
+    expect(fixed(`<Background data-solid="color" data-theme={mode} fill />`)).toBe(
+      `<Background themeSolid="color" theme={mode} fill />`,
+    );
+  });
+});
+
+describe("Icon.cast", () => {
+  it("flags an icon name cast to IconName, however it is written", () => {
+    expect(rules(`<Icon name={"rocketShip" as IconName} />`)).toContain("Icon.cast");
+    expect(rules(`const items = [{ icon: kind as IconName }];`)).toContain("Icon.cast");
+    expect(rules(`const icons = names as unknown as IconName[];`)).toContain("Icon.cast");
+  });
+
+  it("counts the casts", () => {
+    const src = `const a = [{ icon: "code" as IconName }, { icon: "plus" as IconName }];`;
+    expect(issues(src).find((i) => i.rule === "Icon.cast")?.message).toMatch(
+      /^2 `as IconName` casts/,
+    );
+  });
+
+  it("leaves typing alone: annotations, as const, satisfies, imports and comments", () => {
+    const src = `
+      import { type IconName } from "@once-ui-system/core";
+      const links: { icon: IconName }[] = [{ icon: "book" }];
+      const more = [{ icon: "code" as const }];
+      const one = "home" satisfies IconName;
+      // never write "x" as IconName
+      /* "y" as IconName */`;
+    expect(rules(src)).not.toContain("Icon.cast");
   });
 });
 

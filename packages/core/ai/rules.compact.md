@@ -7,7 +7,7 @@ Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For an
 | Write | Never write |
 |-------|-------------|
 | `<Column gap="16">` | `<Flex direction="column">` |
-| `<Row gap="16">` | `<Flex direction="row">` |
+| `<Row gap="16">` | `<Flex direction="row">`, or `<Flex>` with no direction |
 | `fill` | `fillWidth fillHeight` |
 | `fit` | `fitWidth fitHeight` |
 | `center` | `horizontal="center" vertical="center"` |
@@ -16,6 +16,7 @@ Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For an
 | `border` | `border="neutral-alpha-weak"` |
 
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
+- Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
 - Section gaps: `"104"` between sections, `"24"`–`"40"` inside. Never `"48"` between major sections.
 - Responsive: breakpoint props `xl l m s xs` — never media queries for layout
@@ -30,7 +31,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 
 - Bare `border` (and `borderTop`, `borderBottom`, …) = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
-- Colors: `{scheme}-{weight}` or `{scheme}-alpha-{weight}`. Never hex/rgb.
+- Colors: `{scheme}-{weight}` or `{scheme}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
 
 ## Typography

@@ -48,6 +48,10 @@
     "rule": "Icon names must come from iconNames in catalog.json (spec.json has the same list), and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.",
     "components": ["Icon", "Button", "IconButton"]
   },
+  "Icon.cast": {
+    "rule": "Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.",
+    "components": ["Icon", "IconButton", "Button"]
+  },
   "LayoutProvider.next": {
     "rule": "In a Next.js app, import LayoutProvider from \"@once-ui-system/core/next\", not the package root. The root export installs the plain DOM adapters, so SmartLink, Button/Card/ToggleButton with href, Media, Logo, MegaMenu and Kbar render a plain <a> and <img>: no client-side navigation, no next/image, and no error to say so. An app that composes NextAdapterProvider (or AdapterProvider with nextAdapters) itself is already covered.",
     "components": ["LayoutProvider", "SmartLink", "Media", "Button", "Card"]
@@ -84,6 +88,10 @@
     "rule": "Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.",
     "components": ["Column", "Row", "Text", "Button"]
   },
+  "color.svgPaint": {
+    "rule": "Inline SVG paint is not a hex or rgb literal either: write fill or stroke as currentColor and set the colour with onBackground on the wrapper, or name a token as var(--brand-solid-strong). A literal never follows the theme.",
+    "components": ["Icon", "Row", "Column"]
+  },
   "color.background-weak": {
     "rule": "*-background-weak is nearly the page color — invisible as accent. Use alpha tokens (brand-alpha-medium) for glows.",
     "components": ["Background"]
@@ -102,8 +110,12 @@
     ]
   },
   "layout.shorthands": {
-    "rule": "Use fill not fillWidth fillHeight; center not horizontal=\"center\" vertical=\"center\"; Row/Column not Flex direction=.",
+    "rule": "Use fill not fillWidth fillHeight; center not horizontal=\"center\" vertical=\"center\"; Row/Column not Flex direction=, and Row for a Flex with no direction (Flex defaults to row). Flex is for a direction that changes at a breakpoint.",
     "components": ["Row", "Column", "Flex", "Grid"]
+  },
+  "theme.typedProps": {
+    "rule": "Theme a subtree with the typed props theme, themeBorder, themeSolid and themeSurface — on Flex, Row, Column, Grid and every component built on them (Background, Tag, Badge, the effects) — not raw data-theme, data-border, data-solid or data-surface. Keep the raw attribute only where no prop exists: data-border=\"rounded\" on Button and IconButton, data-brand anywhere.",
+    "components": ["Row", "Column", "Flex", "Grid", "Background"]
   },
   "layout.defaults": {
     "rule": "Never write props equal to defaults or implied by another prop on the element: position=\"relative\", direction on Row/Column, variant=\"primary\" on Button, fillWidth beside maxWidth (maxWidth already fills the width), minWidth={0} beside fillWidth (fillWidth already sets min-width: 0).",

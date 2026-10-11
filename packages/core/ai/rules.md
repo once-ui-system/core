@@ -16,7 +16,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 ## Layout primitives
 
-1. Use `Row` and `Column` for layout. `Flex` with `direction` is only for dynamic direction.
+1. Use `Row` and `Column` for layout. `Flex` with `direction` is only for dynamic direction. A `Flex` with no direction at all is a `Row` (`Flex` defaults to row).
 
 ```tsx
 // Good
@@ -77,6 +77,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 7. Colors are semantic tokens, never hex/rgb: `{scheme}-{weight}` or `{scheme}-alpha-{weight}` where scheme = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`.
    - `background` also accepts `surface | overlay | page | transparent`
    - `onBackground` colors text/icons on a background
+   - Inline SVG paint too: `fill="currentColor"` (colour the wrapper with `onBackground`) or a token, `stroke="var(--brand-solid-strong)"` — never `fill="#15D9EF"`
 
 8. Standard surface recipe: `background="surface"` (or `"overlay"` over imagery) + `border` + `radius="l"`. Bare `border` is the default border; name a colour (`border="neutral-alpha-medium"`, `border="brand-alpha-medium"`) only when the surface should differ from it.
 
@@ -157,7 +158,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
     `maxWidth` conventions: primary page containers `"xl"`–`"m"` (marketing/landing toward `"xl"`/`"l"`, app and docs content `"m"`). `"s"` is only for narrow reading content (about, legal); `"xs"` for special surfaces (drawers, popovers).
 
-16. One-off theme overrides on a subtree, not custom CSS. On `Flex`/`Row`/`Column`/`Grid` use the typed props: `theme="dark"`, `themeBorder="rounded"`, `themeSolid="contrast"`, `themeSurface="translucent"` (they write `data-theme`, `data-border`, `data-solid`, `data-surface`). Attributes without a prop stay raw: `data-brand="emerald"`. `theme="dark"` makes a subtree dark; the `dark` boolean only shows an element in a dark theme.
+16. One-off theme overrides on a subtree, not custom CSS. On `Flex`/`Row`/`Column`/`Grid`, and on every component built on them whose slice lists the typed props (`Background`, `Tag`, `Badge`, `RevealFx`, `BlobFx`, …), use the typed props: `theme="dark"`, `themeBorder="rounded"`, `themeSolid="contrast"`, `themeSurface="translucent"` (they write `data-theme`, `data-border`, `data-solid`, `data-surface`). Attributes without a prop stay raw: `data-brand="emerald"`, and `data-border="rounded"` on `Button` and `IconButton`, which have no typed prop. `theme="dark"` makes a subtree dark; the `dark` boolean only shows an element in a dark theme.
 
 ## Scale and hierarchy (marketing/landing pages)
 
