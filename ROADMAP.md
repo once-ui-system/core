@@ -82,8 +82,8 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] `Drawer` (sheet from any edge, on the Dialog focus and scroll-lock machinery).
 - [x] `VisuallyHidden`.
 - [x] `Breadcrumbs`.
-- [ ] `Pagination` (extracted from Table so both use one).
-- [ ] `RadioGroup`; range `Slider` (two thumbs).
+- [x] `Pagination` (Table draws its page buttons with it).
+- [x] `RadioGroup`; `RangeSlider` (two thumbs); `Slider` uncontrolled with `defaultValue`.
 - [x] `useHotkeys` (skips while the user is typing) and `KeyTip`.
 
 ### W7 · Layout and styling (P1)
@@ -124,7 +124,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [ ] Deprecation notices for the overlaps 3.0 will consolidate (no behaviour change).
 
 ### W11 · Stretch
-- [ ] `DataTable`: column definitions, selection, pagination, empty state.
+- [x] `DataTable`: column definitions, selection, pagination, empty state.
 - [ ] Precompiled CSS so `sass` becomes optional (verified in Next 15, Next 16, Vite and Remotion).
 - [ ] Proposal: an `fx` package for the effects, one `speed` convention.
 - [ ] The `once-ui` CLI (#160) published alongside, if its npm name is settled.

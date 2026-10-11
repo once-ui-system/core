@@ -33,6 +33,35 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **`Breadcrumbs`.** A `nav` landmark with an ordered list, `aria-current`
   on the last item, separators hidden from assistive tech, links through the
   adapter, and `maxItems` collapsing the middle behind a button.
+- **`RadioGroup`.** One choice from a set of radios as a single field: a
+  `radiogroup` named by `label` (or `aria-label`) and described by
+  `description`. Controlled with `value`/`onChange(value)` or uncontrolled
+  with `defaultValue`; `name` submits the selected value. Only the selected
+  radio is in the Tab order; the arrow keys move focus and selection, wrapping
+  and skipping disabled radios. Takes `options`, or `RadioButton` children in
+  any layout, plus `disabled` and `orientation`.
+- **`RangeSlider`.** Two thumbs selecting a `[start, end]` range. Each thumb
+  is a `slider` named "Minimum" and "Maximum" (`thumbLabels`) and bounded by
+  the other, so they never cross; `minDistance` keeps them apart.
+  `formatValue` drives the readout and `aria-valuetext`. Arrows, Page Up/Down,
+  Home/End and pointer drag move a thumb; `name` submits both values.
+  Controlled or uncontrolled.
+- **`Slider` works uncontrolled.** `defaultValue` starts it (falling back to
+  `min`); `value` and `onChange` are optional.
+- **`Pagination`.** Previous/next, `boundaries` and `siblings` pages, an
+  ellipsis for each run left out, and optional first/last buttons
+  (`showFirstLast`). A `nav` landmark of real buttons with
+  `aria-current="page"` and a fixed item count, so it never changes width.
+  `page`/`onChange` or `defaultPage`; `total` pages, or `count` plus
+  `perPage`; an optional per-page select (`perPageOptions`); `labels`
+  translates it. `Table` draws its page buttons with it.
+- **`DataTable`.** Typed rows from column definitions (`key`, `header`,
+  `cell`, `sortable`, `sort`, `align`, `width`): sortable header buttons with
+  `aria-sort`, a checkbox selection column with a mixed-state select-all,
+  client-side or server-side (`count`/`total`) pagination through
+  `Pagination`, an `emptyState` slot, and skeleton rows with `aria-busy` while
+  `loading`. Sorting, selection and page each work controlled or
+  uncontrolled.
 - **`useHotkeys` and `KeyTip`.** `useHotkeys("mod+k", fn)` takes combos,
   alternatives and sequences with exact modifiers, skips text fields,
   selects and contenteditable unless `allowWhileTyping`, and is safe on the
@@ -121,6 +150,13 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   `allowHttp` is set.
 - **`@once-ui-system/core/next`'s index is no longer a client module.** The
   adapters keep `"use client"` in their own file; imports don't change.
+- **`Table`'s page buttons are `Pagination`:** first/previous/next/last and
+  ellipsis ranges replace the three-button window, which never showed the
+  current page near the end. Its props, page-size select and "x / y" text
+  are unchanged.
+- **`Slider`'s `defaultValue` is typed `number`.** It was inherited from the
+  input's attributes (`string | number | readonly string[]`) and did nothing;
+  it now sets the starting value, so it takes what `value` takes.
 - **Non-danger toasts are polite `status` regions**, not assertive alerts.
 - **A `multiple` `Select` stays open while you pick.**
 - **`NeutralColor` accepts rose, mint and dusk, and `BorderStyle` accepts
