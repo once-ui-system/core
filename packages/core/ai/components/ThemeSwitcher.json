@@ -14,8 +14,11 @@
   "StyleProps"
  ],
  "props": {
+  "value": "Theme",
+  "onChange": "(theme: Theme) => void",
   "collapsed": "boolean",
-  "direction": "\"row\" | \"column\" = row"
+  "direction": "\"row\" | \"column\" = row",
+  "labels": "ThemeSwitcherLabels"
  },
  "mixinsRef": [
   "CommonProps",

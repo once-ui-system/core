@@ -108,7 +108,22 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **A seed colour for custom schemes, with no flash.** `brandSeed`,
   `accentSeed` and `neutralSeed` generate the whole scheme; `ThemeInit`
   renders it on the server and `ThemeProvider` follows changes on the client.
-  `customSchemeProperties()` exposes the same values.
+  `customSchemeProperties()` exposes the same values. The rendered rule is
+  scoped to `html:root`, so it wins over a static palette an app sets on
+  `:root`.
+- **`StylePanel` speaks your language.** `labels` translates every string the
+  panel shows or announces: group titles, row labels, option names, and the
+  swatches' accessible names, built by functions so a translation can order
+  its words. It reaches composed parts through `StylePanel.Root`, and a row's
+  own `label` still wins. `ThemeSwitcher` and `ColorInput` take `labels` for
+  their built-in names too.
+- **A custom colour on `StylePanel`'s Brand and Accent rows.** `customColors`
+  (or `custom` on `StylePanel.Brand` and `StylePanel.Accent`) adds a swatch
+  for a colour of your own and a field to pick it, reported as `brandSeed` or
+  `accentSeed` through `onChange`. Controlled mode only; render the seed with
+  `ThemeInit` and `ThemeProvider` for a first paint in that colour.
+- **`ThemeSwitcher` can be controlled.** With `value`, it shows that theme and
+  reports a choice through `onChange` without setting or storing it.
 - **Root font size per device and the interactive cursor.** `desktopSize`,
   `tabletSize`, `mobileSize` and `cursorInteractive` set the attributes
   `tokens.css` always styled. No defaults, so output is unchanged unless set.
@@ -236,6 +251,12 @@ Each keeps working until 3.0.
 
 ### Fixed
 
+- **A controlled `StylePanel` changed the page's theme.** With `value` and
+  `onChange`, the Theme row still set the theme through `ThemeProvider` and
+  stored it, and ignored `value.theme`. It now shows `value.theme` (unset
+  reads as `"system"`) and reports a choice as `{ theme }`, like every other
+  row.
+- **`StylePanel` swatches respond to Enter and Space**, not only to a click.
 - **`Switch` is one named, focusable control.** `role="switch"` sat on a
   wrapper that couldn't take focus, so focus landed on an unnamed element,
   and the `ariaLabel` default ("Toggle switch") overrode the visible label.

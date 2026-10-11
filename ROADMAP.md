@@ -99,6 +99,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] A brand seed colour that `ThemeProvider`/`ThemeInit` apply server-side (no flash).
 - [x] `data-viz-style` typed as `DataStyle`.
 - [x] A token for "the brand colour" that keeps its hue under `solid="contrast"`: shipped as `--brand-color-strong|medium|weak` in its own commit; the name is Lorant's call (§7).
+- [x] `StylePanel` for a host-owned style editor: `labels` for every string it shows or announces, an opt-in custom colour on Brand and Accent reported as a seed, and a controlled Theme row that reads `value.theme` instead of setting the page's theme. `ThemeInit`'s seeded scheme is scoped to `html:root` so it beats an app's static `:root` palette.
 
 ### W9 · MDX (P1)
 - [x] `@once-ui-system/core/mdx`: one component map for MDX content, replacing the five app copies.
@@ -142,6 +143,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [ ] Every app adopts the W5 handlers.
 - [ ] Workarounds removed once fixed upstream: toast refs, NumberInput remount keys, local Picker/Select replacements, local SplitView/ScrollContainer/Book copies, local mobile-nav drawers.
 - [ ] Each app gets agent rules from `once-ui-init-agent`.
+- [ ] A product that edits a site's style with its own panel and colour ramp moves to `StylePanel` (controlled, `labels`, `customColors`) and the seed ramp, rendering the seed with `ThemeInit` and `ThemeProvider`. Built and checked against the RC tarball; its PR opens once the RC is on `next`.
 - [ ] From the RC smoke test (11 Oct: studio, stack, shorty and motion build and render the same on 2.1; nothing to fix in core): studio's pricing button passes `onClick` alongside a signed-out `href`, which 2.1 now runs; studio's die-faces test checks `BorderStyle` against a three-member list; studio's `pnpm-lock.yaml` is stale; studio and motion need env vars to build or render, against the zero-env rule.
 
 ## 4. Parked
@@ -182,6 +184,7 @@ Unchanged from the 2.0 cycle (archived §3), with one release branch instead of 
 - **2026-10-11:** The brand-in-contrast tokens keep the name `--brand-color-strong`, `--brand-color-medium` and `--brand-color-weak` (Lorant).
 - **2026-10-11:** The CLI publishes as `@once-ui-system/cli`, with the command `once-ui` (Lorant). An unscoped `once-ui` would very likely be refused by npm's rule against names that differ from an existing package only by punctuation (`onceui` exists); the scoped name is ours and can't be impersonated. Run once with `npx @once-ui-system/cli <command>`; installed globally, the command is `once-ui`.
 - **2026-10-11:** MDX body text stays `neutral-medium`, the `/mdx` default and what every product's MDX map already uses; the docs follow it (Lorant).
+- **2026-10-11:** `StylePanel` gains `labels` and an opt-in custom colour in 2.1, before the freeze, so a product's site style editor can use the core panel and seed ramp instead of keeping its own (Lorant).
 
 ## 9. Guardrails
 

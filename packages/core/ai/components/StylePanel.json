@@ -16,7 +16,9 @@
  "props": {
   "visibility": "StylePanelVisibility",
   "value": "StylePanelRootProps[\"value\"]",
-  "onChange": "StylePanelRootProps[\"onChange\"]"
+  "onChange": "StylePanelRootProps[\"onChange\"]",
+  "labels": "StylePanelLabels",
+  "customColors": "boolean"
  },
  "mixinsRef": [
   "CommonProps",

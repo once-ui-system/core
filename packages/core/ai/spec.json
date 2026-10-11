@@ -471,6 +471,11 @@
    "prefixIcon": "IconName",
    "startLineNumber": "number"
   },
+  "ColorInputLabels": {
+   "remove": "string",
+   "adjustOpacity": "string",
+   "opacity": "string"
+  },
   "Colors": [
    "neutral-weak",
    "neutral-medium",
@@ -1395,9 +1400,75 @@
    "mounted": "!boolean",
    "controlled": "!boolean"
   },
+  "StylePanelCustomLabels": {
+   "swatch": "(row: StylePanelSchemeRow) => string",
+   "picker": "(row: StylePanelSchemeRow) => string",
+   "description": "(seed: string, row: StylePanelSchemeRow) => ReactNode",
+   "remove": "string"
+  },
+  "StylePanelGroupLabels": {
+   "page": "StylePanelHeading",
+   "color": "StylePanelHeading",
+   "solidStyle": "StylePanelHeading",
+   "bodyText": "StylePanelHeading",
+   "advanced": "StylePanelHeading"
+  },
+  "StylePanelHeading": {
+   "title": "ReactNode",
+   "description": "ReactNode"
+  },
+  "StylePanelLabels": {
+   "groups": "StylePanelGroupLabels",
+   "rows": "StylePanelRowLabels",
+   "options": "StylePanelOptionLabels",
+   "names": "StylePanelNameLabels",
+   "swatches": "StylePanelSwatchLabels",
+   "themeSwitcher": "ThemeSwitcherLabels",
+   "custom": "StylePanelCustomLabels"
+  },
+  "StylePanelNameLabels": {
+   "shapes": "Partial<Record<BorderStyle, string>>",
+   "schemes": "Partial<Record<Schemes, string>>",
+   "neutrals": "Partial<Record<NeutralColor, string>>"
+  },
+  "StylePanelOptionLabels": {
+   "solid": "Partial<Record<SolidType, ReactNode>>",
+   "effect": "Partial<Record<SolidStyle, ReactNode>>",
+   "surface": "Partial<Record<SurfaceStyle, ReactNode>>",
+   "transition": "Partial<Record<TransitionStyle, ReactNode>>",
+   "dataStyle": "Partial<Record<ChartMode, ReactNode>>",
+   "scaling": "(value: ScalingSize) => ReactNode",
+   "bodySize": "(value: BodySize) => ReactNode",
+   "bodyLineHeight": "(value: BodyLineHeight) => ReactNode"
+  },
   "StylePanelRootProps": {
    "value": "StylePanelValue",
-   "onChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void"
+   "onChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
+   "labels": "StylePanelLabels"
+  },
+  "StylePanelRowLabels": {
+   "theme": "ReactNode",
+   "shape": "ReactNode",
+   "brand": "ReactNode",
+   "accent": "ReactNode",
+   "neutral": "ReactNode",
+   "solid": "ReactNode",
+   "effect": "ReactNode",
+   "surface": "ReactNode",
+   "scaling": "ReactNode",
+   "transition": "ReactNode",
+   "dataStyle": "ReactNode",
+   "bodySize": "ReactNode",
+   "bodyLineHeight": "ReactNode"
+  },
+  "StylePanelSchemeRow": [
+   "brand",
+   "accent"
+  ],
+  "StylePanelSwatchLabels": {
+   "shape": "(name: string) => string",
+   "scheme": "(name: string, row: StylePanelSchemeRow) => string",
+   "neutral": "(name: string) => string"
   },
   "StylePanelValue": {
    "theme": "Theme",
@@ -1412,7 +1483,9 @@
    "transition": "TransitionStyle",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
-   "chartMode": "ChartMode"
+   "chartMode": "ChartMode",
+   "brandSeed": "string",
+   "accentSeed": "string"
   },
   "StylePanelVisibility": {
    "page": "{ section?: boolean; theme?: boolean; shape?: boolean }",
@@ -1624,6 +1697,11 @@
    "OnceUIStyleConfig",
    "ThemeInitAttributeConfig"
   ],
+  "ThemeSwitcherLabels": {
+   "system": "string",
+   "dark": "string",
+   "light": "string"
+  },
   "ThumbnailItem": {
    "scaling": "number",
    "height": "SpacingToken | number",
@@ -2154,7 +2232,8 @@
    "props": {
     "value": "!string",
     "onChange": "!(value: string) => void",
-    "supportAlpha": "boolean = false"
+    "supportAlpha": "boolean = false",
+    "labels": "ColorInputLabels"
    }
   },
   "Column": {
@@ -3994,7 +4073,9 @@
    "props": {
     "visibility": "StylePanelVisibility",
     "value": "StylePanelRootProps[\"value\"]",
-    "onChange": "StylePanelRootProps[\"onChange\"]"
+    "onChange": "StylePanelRootProps[\"onChange\"]",
+    "labels": "StylePanelLabels",
+    "customColors": "boolean"
    }
   },
   "Swiper": {
@@ -4230,8 +4311,11 @@
     "StyleProps"
    ],
    "props": {
+    "value": "Theme",
+    "onChange": "(theme: Theme) => void",
     "collapsed": "boolean",
-    "direction": "\"row\" | \"column\" = row"
+    "direction": "\"row\" | \"column\" = row",
+    "labels": "ThemeSwitcherLabels"
    }
   },
   "TiltFx": {
