@@ -1,10 +1,17 @@
-# once-ui
+# @once-ui-system/cli
 
 The Once UI command line. It scaffolds apps from [Stack](https://once-ui.com/stack) surfaces and adds Once UI blocks to a project.
 
 ```bash
-npx once-ui create my-app --surfaces landing,docs
-npx once-ui add hero1
+npx @once-ui-system/cli create my-app --surfaces landing,docs
+npx @once-ui-system/cli add hero1
+```
+
+Installed globally, the command is `once-ui`:
+
+```bash
+npm install -g @once-ui-system/cli
+once-ui add hero1
 ```
 
 ## Commands
@@ -33,7 +40,7 @@ npx once-ui add hero1
 ## Development
 
 ```bash
-pnpm --filter once-ui build
-pnpm --filter once-ui test
+pnpm --filter @once-ui-system/cli build
+pnpm --filter @once-ui-system/cli test
 node packages/cli/dist/index.js list --api http://localhost:3000
 ```

@@ -1,5 +1,5 @@
 {
-  "name": "once-ui",
+  "name": "@once-ui-system/cli",
   "version": "0.1.0",
   "description": "The Once UI command line: scaffold apps from Stack surfaces and add blocks to a project.",
   "keywords": [
@@ -27,6 +27,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "engines": {
     "node": ">=20"
   },

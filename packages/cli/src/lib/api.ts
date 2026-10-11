@@ -33,7 +33,10 @@ export async function failureFrom(res: Response): Promise<CliError> {
   } catch {
     // not JSON — keep the status line
   }
-  if (res.status === 401) return new CliError(`${message}\nRun \`once-ui login\` first.`);
+  if (res.status === 401)
+    return new CliError(
+      `${message}\nRun \`once-ui login\` (or \`npx @once-ui-system/cli login\`) first.`,
+    );
   if (res.status === 402) {
     return new CliError(`${message}\nSee plans at https://once-ui.com/pricing`);
   }
