@@ -116,7 +116,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
     }, [triggered, wordsHash, speed, delay, hold, loop]);
 
     return (
-      <Text {...text}>
+      <Text {...text} ref={ref}>
         {children}
         {displayText}
         {!isComplete && <span style={{ opacity: 0.5 }}>|</span>}

@@ -152,6 +152,9 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **Harness:** a `docs-page` task bundle; vertical `Tabs` in the settings
   example; a `Drawer` for mobile nav in the app-shell recipe; "fixed in 2.1"
   gotchas for Toast, NumberInput, Select, Button triggers and ContextMenu.
+- **`Text` and `Heading` take a ref**, typed to the element `as` renders
+  (`HTMLLIElement` for `as="li"`); they stay generic over `as`. `ListItem`,
+  `ShineFx` and `TypeFx` pass theirs on, which they dropped.
 - **`IconButton` takes `ariaLabel`**, like the other components that take
   one; a native `aria-label` wins over it.
 - **`InteractiveDetails` takes `labelId` and `descriptionId`**: ids on the
@@ -343,6 +346,14 @@ Each keeps working until 3.0.
 - **A `dual` `DateRangePicker` shows two consecutive months**, including for
   a range inside one month, and marks the range's ends in whichever calendar
   shows them.
+- **`Grid inline` renders an inline grid.** `.display-inline-grid` had no
+  rule, so the grid stayed a block.
+- **`translateX`/`translateY` read spacing tokens** on `Flex`, `Grid`,
+  `Text` and `Heading`: `translateY="16"` wrote no transform. A number is
+  still rem and a CSS unit is written as given.
+- **A responsive `Grid` applies a breakpoint `width`, size or numeric
+  spacing**, as `Flex` does; a t-shirt `maxWidth` in a breakpoint object now
+  applies on both.
 - **`Grid`'s `rows` sets the rows.** It had no class and reached the DOM as
   a `rows` attribute; it is now a class at the base and every breakpoint,
   like `columns`, and renders on the server.

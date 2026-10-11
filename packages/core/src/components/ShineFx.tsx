@@ -38,6 +38,7 @@ const ShineFx = forwardRef<HTMLSpanElement, ShineFxProps>(
     return (
       <Text
         {...text}
+        ref={ref}
         className={classNames(
           styles.shineFx,
           isDisabled ? styles.disabled : "",

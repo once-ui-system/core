@@ -112,10 +112,12 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] The docs' blocks use about 40 icon names that aren't registered (the docs type `iconLibrary` as `Record<string, IconType>`, so typos compile).
 - [x] The docs app's `next/image` needs `images.localPatterns` for proxied OG images on Next 16.
 - [x] The docs app's own MDX map (`apps/docs/src/product/mdx.tsx`) moves to `/mdx`; the harness generator and `rules.md` learn the `/mdx` and `/config` entries.
-- [ ] `ListItem` declares `forwardRef` but never passes the ref on (`Text` takes no ref; fix with `Text` in 2.2); `useToast` and the providers aren't in the spec (the contexts barrel isn't walked).
+- [x] `ListItem`, `ShineFx` and `TypeFx` pass their refs on (`Text` and `Heading` forward refs).
+- [ ] `useToast` and the providers aren't in the spec (the contexts barrel isn't walked).
 - [x] Docs blocks use `ParticleFx`, not the deprecated `Particle`.
 - [ ] Dropdown leftovers (2.2, non-breaking): `DateInput`/`DateRangeInput` still wrap their read-only input in `role="button"` (needs a combobox with `aria-haspopup="dialog"`); DatePicker still focuses the selected day on mount and month change; in a `dual` picker the month/year list moves one calendar only; "Options"/"Dropdown options" labels are hard-coded English.
-- [ ] Layout leftovers: `Grid inline` emits `display-inline-grid`, which has no rule; `translateX`/`translateY` ignore spacing tokens; `ClientGrid` doesn't apply a breakpoint `width` or numeric spacing.
+- [x] Layout leftovers: `Grid inline` has a rule; `translateX`/`translateY` read spacing tokens; `ClientGrid` applies a breakpoint `width` and numeric spacing.
+- [ ] 2.2: leaving a breakpoint clears a base inline value it had overridden (`ClientFlex`, `ClientGrid`); TiltFx, FlipFx, Arrow and CursorCard's own `transform` overrides a translate prop; `FadingLettersFx` types `ref` without forwarding it.
 
 ### W10 · API hygiene, additive (P1)
 - [x] `onToggle` passes the new checked state (Checkbox, RadioButton, Switch); `defaultChecked`/`defaultValue` for uncontrolled use on Switch, Slider, TagInput.
