@@ -13,7 +13,7 @@
     "$comment": "claude-sonnet-5-5 rejects thinking {type:'disabled'} and non-default sampling params (400). 'between_tools' is the documented thinking-off setting (valid at effort high or below); temperature is left at the API default. Amended 2026-10-11 before any full-run generation (METHODOLOGY.md \u00a711)."
   },
   "repair_rounds": 3,
-  "runs_per_task": 3,
+  "runs_per_task": 5,
   "pilot": {
     "tasks": [
       3,
@@ -118,6 +118,12 @@
       "commit": "c2a67849be260701852b0977ba15eb5f3a0ce2a4",
       "style": "new-york-v4 (radix)",
       "base_color": "neutral"
+    },
+    "once_ui_full_run": {
+      "npm": "@once-ui-system/core@2.1.0-rc.0",
+      "dist_tag": "next",
+      "then": "@once-ui-system/core@2.1.0 for the claim run",
+      "$comment": "The pilot used the RC tree pinned in sources.once_ui. The full run installs the published package; setup.mjs --once-version records the tarball sha256 in work/context-manifest.json and the results folder."
     }
   },
   "versions": {
@@ -129,5 +135,22 @@
     "prettier": "3.9.10",
     "playwright-core": "1.56.1",
     "axe-core": "4.14.0"
+  },
+  "rater": {
+    "model": "claude-sonnet-5-5",
+    "thinking": {
+      "type": "between_tools"
+    },
+    "effort": "high",
+    "$comment": "One call per blinded packet (runner/rate-api.mjs). The pre-registered 'temperature 0' is rejected by claude-sonnet-5-5 (non-default sampling parameters return 400); default sampling is used instead (METHODOLOGY.md \u00a711)."
+  },
+  "pricing_usd_per_mtok": {
+    "model": "claude-sonnet-5-5",
+    "input": 2.0,
+    "output": 10.0,
+    "cache_read": 0.2,
+    "cache_write_5m": 2.5,
+    "source": "Anthropic list prices as of 2026-10-11 (claude-api reference); cache write assumed at 1.25x input",
+    "$comment": "Used only for the secondary cache-aware cost metric (METHODOLOGY.md \u00a74.1a)."
   }
 }

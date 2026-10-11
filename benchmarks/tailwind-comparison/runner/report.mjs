@@ -66,11 +66,13 @@ for (const f of listFiles(path.join(resultsDir, "raw")).filter((f) => f.endsWith
     code_lines: metrics?.normalised.lines ?? null,
     code_chars: metrics?.normalised.chars ?? null,
     code_bytes: metrics?.normalised.bytes ?? null,
-    code_tokens: metrics?.normalised.tokens_o200k ?? null,
+    code_tokens: metrics?.normalised.tokens_exact ?? metrics?.normalised.tokens_o200k ?? null,
+    code_tokens_exact: metrics?.normalised.tokens_exact != null,
     code_tokens_legacy: metrics?.normalised.tokens_claudeLegacy ?? null,
     raw_lines: metrics?.raw.lines ?? null,
     vendored_lines: metrics?.vendored?.lines ?? null,
-    vendored_tokens: metrics?.vendored?.tokens_o200k ?? null,
+    vendored_tokens: metrics?.vendored?.tokens_exact ?? metrics?.vendored?.tokens_o200k ?? null,
+    ...cost(usage, acc),
     vendored_files: metrics?.vendored?.files.length ?? null,
     components: metrics?.components?.length ?? null,
     axe_rules: accGates?.gates.render?.axe?.rules ?? null,
@@ -78,6 +80,28 @@ for (const f of listFiles(path.join(resultsDir, "raw")).filter((f) => f.endsWith
     overflow_phone: accGates?.gates.render?.viewports?.phone?.horizontal_overflow ?? null,
     validate_issues: accGates?.validate_ai_code ? countValidate(accGates.validate_ai_code.output) : null,
   });
+}
+
+// Secondary metric (METHODOLOGY.md §4.1a): what the run would cost at list prices
+// if every call's re-sent prefix (the previous call's input + output) were a cache
+// read, next to the uncached cost the pre-registered metrics describe. Exact
+// (API) runs only; the pilot's transcripts already include Claude Code's caching.
+function cost(usage, acc) {
+  if (!usage?.exact) return { cost_uncached_usd: null, cost_cached_usd: null };
+  const P = config.pricing_usd_per_mtok;
+  const calls = usage.calls.filter((c) => c.usage && (acc == null || c.attempt <= acc));
+  let prev = 0;
+  let uncached = 0;
+  let cached = 0;
+  for (const c of calls) {
+    const input = c.usage.input_tokens + (c.usage.cache_creation_input_tokens ?? 0) + (c.usage.cache_read_input_tokens ?? 0);
+    const out = c.usage.output_tokens;
+    const hit = Math.min(prev, input);
+    uncached += (input * P.input + out * P.output) / 1e6;
+    cached += (hit * P.cache_read + (input - hit) * P.cache_write_5m + out * P.output) / 1e6;
+    prev = input + out;
+  }
+  return { cost_uncached_usd: uncached, cost_cached_usd: cached };
 }
 
 function countValidate(out) {
@@ -137,7 +161,7 @@ function compare(x, y, k, exclude = []) {
   };
 }
 
-const METRICS = ["out_visible", "total_net", "code_tokens", "code_lines", "code_bytes"];
+const METRICS = ["out_visible", "total_net", "code_tokens", "code_lines", "code_bytes", "cost_cached_usd"];
 const pairs = [config.primary_comparison, ...config.secondary_comparisons];
 const comparisons = pairs.flatMap(([x, y]) => METRICS.map((k) => compare(x, y, k)));
 const sensitivity = METRICS.map((k) => compare(...config.primary_comparison, k, config.sensitivity_exclude_tasks));
@@ -165,14 +189,15 @@ fs.writeFileSync(arg("json", path.join(resultsDir, "summary.json")), JSON.string
 
 // ---- markdown ---------------------------------------------------------------------
 const pct = (x) => (x == null ? "–" : `${Math.round(x * 100)}%`);
-const num = (x) => (x == null ? "–" : Math.round(x).toLocaleString("en-US"));
+const num = (x) =>
+  x == null ? "–" : Math.abs(x) < 10 && !Number.isInteger(x) ? x.toFixed(Math.abs(x) < 1 ? 4 : 2) : Math.round(x).toLocaleString("en-US");
 const iqr = (c) => (c ? `${num(c.median)} (${num(c.q1)}–${num(c.q3)})` : "–");
 const NAMES = { A: "A Once UI + harness", B: "B Once UI, memory", C: "C Tailwind + shadcn/ui + docs", D: "D Tailwind, memory" };
 const LABEL = {
   out_visible: "Visible output tokens (proxy)",
   total_net: "Total tokens, net of Claude Code overhead (exact input + proxy output)",
   input_net: "Input tokens, net of overhead (exact)",
-  code_tokens: "Code tokens, normalised (proxy o200k)",
+  code_tokens: "Code tokens, normalised (exact count_tokens where measured, else proxy o200k)",
   code_tokens_legacy: "Code tokens, normalised (proxy legacy-Claude)",
   code_lines: "Code lines, normalised",
   code_bytes: "Code bytes, normalised",
@@ -180,6 +205,8 @@ const LABEL = {
   docs_reads: "Docs files read per run",
   repairs: "Repair rounds to acceptance",
   vendored_lines: "Vendored component lines (C)",
+  cost_uncached_usd: "Cost per run, USD, list prices, no caching (exact runs only)",
+  cost_cached_usd: "Cost per run, USD, list prices, prefix caching assumed (secondary; exact runs only)",
   components: "Distinct library components imported",
   axe_rules: "axe violation rules (1440 px)",
 };
@@ -209,6 +236,28 @@ for (const c of [...comparisons, ...sensitivity.map((s) => ({ ...s, pair: `${s.p
   lines.push(
     `| ${c.pair} | ${LABEL[c.metric]} | ${c.tasks_compared} | ${pct(c.median_reduction)} | ${pct(c.min)} to ${pct(c.max)} | ${c.tasks_favouring_x}/${c.tasks_compared} | ${c.ci95 ? `${pct(c.ci95[0])} to ${pct(c.ci95[1])}` : "n/a (< 2 tasks)"} |`,
   );
+}
+// Pre-registered claim conditions (METHODOLOGY.md §5.1) for the primary pair.
+{
+  const [X, Y] = config.primary_comparison;
+  const pr = (a) => passRate[a].accepted / Math.max(1, passRate[a].runs);
+  const axes = ["polish", "completeness", "responsiveness", "restraint"];
+  const medAxis = (a, k) => median(rows.filter((r) => r.arm === a && r[k] != null).map((r) => r[k]));
+  const ratingOk = ratings ? axes.every((k) => medAxis(X, k) >= medAxis(Y, k) - 0.5) : null;
+  lines.push(`\n### Claim conditions, ${X} vs ${Y} (METHODOLOGY.md §5.1)\n`);
+  lines.push("| Metric | 1. CI lower bound > 0 | 2. X < Y on ≥ 9 tasks | 3. holds without tasks 1, 5, 8 | 4. pass rate within 10 pp | 5. ratings within 0.5 | Claim allowed |");
+  lines.push("|---|---|---|---|---|---|---|");
+  for (const k of METRICS.filter((m) => m !== "cost_cached_usd")) {
+    const c = comparisons.find((x) => x.pair === `${X} vs ${Y}` && x.metric === k);
+    const sens = sensitivity.find((x) => x.metric === k);
+    const c1 = c.ci95 ? c.ci95[0] > 0 : false;
+    const c2 = c.tasks_favouring_x >= 9;
+    const c3 = (sens.median_reduction ?? 0) > 0;
+    const c4 = pr(X) >= pr(Y) - 0.1;
+    const c5 = ratingOk;
+    const yes = (b) => (b == null ? "n/a" : b ? "yes" : "**no**");
+    lines.push(`| ${LABEL[k]} | ${yes(c1)} | ${yes(c2)} (${c.tasks_favouring_x}/${c.tasks_compared}) | ${yes(c3)} | ${yes(c4)} | ${yes(c5)} | ${c1 && c2 && c3 && c4 && c5 ? "**yes**" : "no"} |`);
+  }
 }
 if (ratings) {
   lines.push("\n### Blinded rating (1–5): median over accepted runs, pooled across tasks\n");

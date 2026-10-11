@@ -4,14 +4,16 @@
 //   node runner/metrics.mjs --results results/pilot
 //
 // Normalisation: strip comments (TypeScript printer), then Prettier defaults.
-// Tokens here are PROXY counts (lib.mjs). The full run replaces them with
-// count_tokens results when ANTHROPIC_API_KEY is set (--exact).
+// Tokens are PROXY counts (lib.mjs) unless --exact is passed: then each text is
+// also counted with the count_tokens endpoint (needs ANTHROPIC_API_KEY), as
+// count(text as one user message) − count(one-character message).
 
 import fs from "node:fs";
 import path from "node:path";
 import * as prettier from "prettier";
 import ts from "typescript";
-import { ROOT, armById, listFiles, proxyTokens } from "./lib.mjs";
+import Anthropic from "@anthropic-ai/sdk";
+import { ROOT, armById, config, listFiles, proxyTokens } from "./lib.mjs";
 
 const arg = (k, d) => {
   const i = process.argv.indexOf(`--${k}`);
@@ -72,8 +74,23 @@ function importedNames(code, letter) {
   return [...names].sort();
 }
 
+let client;
+let baseline;
+async function exactTokens(text) {
+  client ??= new Anthropic();
+  const count = async (t) =>
+    (await client.messages.countTokens({ model: config.model, messages: [{ role: "user", content: t }] })).input_tokens;
+  baseline ??= await count(".");
+  return (await count(text)) - baseline + 1;
+}
+
 if (import.meta.url === `file://${process.argv[1]}`) {
   const resultsDir = path.resolve(arg("results", "results/pilot"));
+  const exact = process.argv.includes("--exact");
+  if (exact && !process.env.ANTHROPIC_API_KEY) {
+    console.error("--exact needs ANTHROPIC_API_KEY (count_tokens endpoint).");
+    process.exit(2);
+  }
   const runs = listFiles(path.join(resultsDir, "raw"))
     .filter((f) => f.endsWith("run.json"))
     .map((f) => path.join(resultsDir, "raw", path.dirname(f)));
@@ -97,6 +114,12 @@ if (import.meta.url === `file://${process.argv[1]}`) {
         files: files.map((f) => path.relative(path.join(ROOT, "arms", scaffold), f)),
         ...sizes(parts.join("\n")),
       };
+      if (exact) out.vendored.tokens_exact = await exactTokens(parts.join("\n"));
+    }
+    if (exact) {
+      out.tokenizer = "exact (count_tokens) + proxy";
+      out.normalised.tokens_exact = await exactTokens(norm);
+      out.raw.tokens_exact = await exactTokens(raw);
     }
     fs.writeFileSync(path.join(dir, "metrics.json"), JSON.stringify(out, null, 2));
     console.log(

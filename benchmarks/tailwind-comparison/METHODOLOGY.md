@@ -151,6 +151,15 @@ Taken from the API `usage` fields of every call in the run, up to the accepted a
 - **Cost per accepted result** = total tokens of all runs for a task and arm, including
   failed runs, ÷ accepted runs.
 
+### 4.1a Cache-aware cost (secondary; added 2026-10-11, §11)
+
+Real agents cache the re-sent prefix of a conversation, and the uncached "total tokens"
+above charges every re-read of documentation at full price. Next to it, and never instead
+of it, the report gives each run's **cost at list prices** two ways: uncached, and with
+prefix caching assumed. With caching, each call's input up to the previous call's input +
+output is priced as a cache read and the rest as a cache write; output is unchanged.
+Prices are in `config.json` → `pricing_usd_per_mtok`. No claim is made from this metric.
+
 ### 4.2 Context tokens (cost of each arm's harness or docs)
 
 - **Corpus:** exact token count (`count_tokens`) of every readable docs file, summed.
@@ -199,8 +208,21 @@ neutral:
 | Responsiveness | **Responsiveness:** layout adapts sensibly across the three widths |
 | Restraint | **Restraint:** effects and decoration support the content rather than dominate it |
 
-**Rater:** a separate `claude-sonnet-5-5` call per result, with images only (three
-widths) plus the task text, at temperature 0, prompt in `prompts/rater.md`. Stack
+**Interaction screenshots (added 2026-10-11, §11).** A static screenshot cannot show a
+dialog, an OTP step, a hover state or a sorted table. Each task has one scripted
+interaction in `prompts/interactions.json`, written before the full run and identical
+for every arm: a click or hover on the first control found by accessible role and name
+(or plain semantic HTML), e.g. "the first button named Sign in". After the gate's own
+checks, the gate performs it at phone and desktop width and takes a viewport screenshot.
+A missing control is recorded and told to the rater. Errors during the interaction are
+recorded, not gated.
+
+**Rater:** a separate `claude-sonnet-5-5` call per result (`runner/rate-api.mjs`), with
+images only (three widths, plus the interaction screenshots) and the task text, prompt in
+`prompts/rater.md`. The prompt tells the rater that content scrolling sideways inside its
+own container, like a wide table on a phone, is acceptable and isn't clipping (added
+2026-10-11). Sampling is the API default: the pre-registered temperature 0 is rejected by
+`claude-sonnet-5-5` (§11). Stack
 fingerprints such as default fonts or colour palettes can't be fully hidden, which is
 a known limit of the blinding. A blinded human pass over a random 25% sample is
 recommended. If one is done, it gets reported next to the model rater, never
@@ -208,8 +230,8 @@ instead of it.
 
 ## 5. Runs and statistics
 
-- **n = 3 runs per task per arm** (12 × 4 × 3 = 144 runs). n is fixed in `config.json`
-  before the full run starts and can't be raised partway through.
+- **n = 5 runs per task per arm** (12 × 4 × 5 = 240 runs; raised from 3 on 2026-10-11, §11).
+  n is fixed in `config.json` before the full run starts and can't be raised partway through.
 - Per task and arm: the **median** and **IQR** (type-7 quantiles) of each metric over
   accepted runs.
 - Per task and arm pair (X vs Y), for tasks where both have ≥ 1 accepted run:
@@ -244,7 +266,7 @@ published, in the same format.
 
 > **Output tokens:** "Across 12 UI tasks, `claude-sonnet-5-5` used a median **X%** fewer
 > output tokens to build a working page with Once UI 2.1 and its AI harness than with
-> Tailwind CSS v4 + shadcn/ui and its docs (per-task range **a%** to **b%**, 3 runs per
+> Tailwind CSS v4 + shadcn/ui and its docs (per-task range **a%** to **b%**, 5 runs per
 > task; every counted page type-checks, builds and renders without console errors)."
 
 > **Code:** "…and wrote a median **X%** less code: tokens of the formatted page,
@@ -346,15 +368,17 @@ can't support public claims.
 
 ## 9. Reproducing
 
-See `README.md`. In short: build the Once UI tarball at the pinned commit; clone shadcn/ui
-at the pinned commit; `npm ci` here; `node runner/setup.mjs --shadcn-src <clone>`; then
-`node runner/generate-api.mjs` (full run) or the pilot steps; `node runner/report.mjs`.
+The full run: [`RUN.md`](./RUN.md), step by step. The pilot and the general layout:
+`README.md`.
 
 ## 10. Planned follow-ups
 
-- Full run (needs an API key and a budget, see the pilot report).
+- Full run on `@once-ui-system/core@2.1.0-rc.0` (planned Wed 14 Oct 2026) → `results/full-rc0/`.
 - Re-run against the published `@once-ui-system/core@2.1.0` (planned publish Fri 16 Oct
   2026). This is the run any public claim should cite.
+- Not needed: a separate arm for a revised harness. The pilot's harness findings
+  (`spec.json` reads for icon names; `SegmentedControl` inheriting the DOM `onToggle`) are
+  being fixed in 2.1.0 itself, so arm A on rc.0 is the shipped harness.
 - Optional replication on a second model. Optional blinded human rating sample.
 
 ## 11. Change log
@@ -366,4 +390,7 @@ at the pinned commit; `npm ci` here; `node runner/setup.mjs --shadcn-src <clone>
 | 2026-10-11 | Generation settings: thinking `between_tools`, effort `high`, default temperature (was: temperature 1.0, thinking disabled) | `claude-sonnet-5-5` returns 400 for `thinking: disabled` and for non-default sampling parameters | before full run |
 | 2026-10-11 | Pilot audit: reading back the run's own attempt files is allowed; pilot repair prompt restates "no shell commands"; four runs voided for shell use during repairs and regenerated | Shell patches understate output tokens; the void rule was applied as written | during pilot |
 | 2026-10-11 | Pilot output tokens measured from generated content (proxy) instead of transcript usage | Transcript output usage is recorded at stream start, not at the end | during pilot |
-| pending | Proposed, not adopted: interaction screenshots per task, rater note on horizontal scroll, cache-aware cost as a secondary metric, n = 5, harness revisions as a separate arm | See `results/pilot.md` → Method changes | needs sign-off before full run |
+| 2026-10-11 | **Approved by Lorant** (2026-10-11 ≈ 20:16 UTC, on the release session's proposal; relayed to this session): (3) one scripted interaction state per task, identical for all arms and fixed before the run (`prompts/interactions.json`); (4) rater told that horizontally scrollable regions are acceptable; (5) cache-aware cost at list prices as a secondary metric (§4.1a); (6) n = 5 | Pilot: static screenshots could not show dialogs or interaction states; phone tables were called "clipped" in every arm; uncached totals price re-sent docs at full rate; n = 3 leaves one-point rating gaps unresolved | before full run |
+| 2026-10-11 | (7) "harness revision as a separate arm" dropped as moot | The `spec.json` and `SegmentedControl` fixes ship in 2.1.0 itself, so the rc.0 harness is the shipped one | before full run |
+| 2026-10-11 | Rater sampling: API default (was: temperature 0) | `claude-sonnet-5-5` rejects non-default sampling parameters | before full run |
+| 2026-10-11 | Full run installs the published `@once-ui-system/core@2.1.0-rc.0` (`setup.mjs --once-version`), not the pinned RC tree; its tarball sha256 is recorded | The full run measures what users can install | before full run |

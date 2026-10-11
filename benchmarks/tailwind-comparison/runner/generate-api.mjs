@@ -128,7 +128,7 @@ async function runOne(client, letter, task, run) {
     fs.writeFileSync(path.join(dir, `attempt-${attempt}.reply.md`), reply);
     const code = extractCode(reply);
     if (code) fs.writeFileSync(path.join(dir, `attempt-${attempt}.tsx`), code);
-    const g = await runGates(letter, code, path.join(dir, `attempt-${attempt}`));
+    const g = await runGates(letter, code, path.join(dir, `attempt-${attempt}`), task);
     fs.renameSync(path.join(dir, `attempt-${attempt}`, "gates.json"), path.join(dir, `attempt-${attempt}.gates.json`));
     if (g.passed) {
       status = "accepted";

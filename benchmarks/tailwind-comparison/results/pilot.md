@@ -95,6 +95,10 @@ selected`, `Tag variant`), the same era drift the 2026-08-26 baseline found.
 
 ## Method changes the pilot suggests (for sign-off before the full run)
 
+> **Update 2026-10-11:** Lorant approved changes 3–6. They are implemented and logged in
+> METHODOLOGY §11. Change 7 is moot: the `spec.json` and `SegmentedControl` fixes ship in
+> 2.1.0 itself. The full run is on `2.1.0-rc.0`; see [`../RUN.md`](../RUN.md).
+
 Already applied, because they are harness bugs or API constraints, not judgement calls (logged
 in METHODOLOGY §11):
 

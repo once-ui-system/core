@@ -59,7 +59,8 @@ async function gateRun(dir) {
     const code = fs.readFileSync(path.join(dir, `attempt-${n}.tsx`), "utf8");
     const out = path.join(dir, `attempt-${n}`);
     const t0 = Date.now();
-    const r = await runGates(letter, code, out);
+    const task = Number(path.basename(path.dirname(path.dirname(dir))).slice(1));
+    const r = await runGates(letter, code, out, task);
     fs.renameSync(path.join(out, "gates.json"), path.join(dir, `attempt-${n}.gates.json`));
     if (!fs.readdirSync(out).length) fs.rmdirSync(out);
     console.log(

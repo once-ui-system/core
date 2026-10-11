@@ -15,6 +15,51 @@ import { ROOT, WORK, armByLetter, config } from "./lib.mjs";
 const CHROMIUM = process.env.CHROMIUM_PATH ?? "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
 const PORTS = { A: 3101, B: 3102, C: 3103, D: 3104 };
 const AXE = fs.readFileSync(path.join(ROOT, "node_modules/axe-core/axe.min.js"), "utf8");
+const INTERACTIONS = JSON.parse(fs.readFileSync(path.join(ROOT, "prompts/interactions.json"), "utf8")).tasks;
+const INTERACTION_VIEWPORTS = ["phone", "desktop"];
+
+// The task's scripted interaction (prompts/interactions.json), on the page as it is.
+// Recorded for the rater, never gated.
+async function interact(page, task, outDir, vp, ignored) {
+  const spec = INTERACTIONS[String(task)];
+  if (!spec || spec.action === "none") return { action: "none" };
+  const locate = (t) =>
+    t.selector
+      ? page.locator(t.selector).first()
+      : page.getByRole(t.role, t.name ? { name: new RegExp(t.name, "i") } : {}).first();
+  let target = locate(spec.target);
+  let found = (await target.count()) > 0 && (await target.isVisible().catch(() => false));
+  if (!found && spec.fallback) {
+    target = locate(spec.fallback);
+    found = (await target.count()) > 0 && (await target.isVisible().catch(() => false));
+  }
+  const out = { action: spec.action, found, errors: [] };
+  if (!found) return out;
+  const onErr = (m) => {
+    if (m.type() !== "error" || ignored.has(m.location()?.url ?? "")) return;
+    out.errors.push(`console.error: ${m.text()}`);
+  };
+  const onPageErr = (e) => out.errors.push(`uncaught: ${e.message}`);
+  page.on("console", onErr);
+  page.on("pageerror", onPageErr);
+  try {
+    await target.scrollIntoViewIfNeeded({ timeout: 5000 });
+    if (spec.action === "hover") await target.hover({ timeout: 5000 });
+    else await target.click({ timeout: 5000 });
+    await page.waitForTimeout(800);
+    await page.screenshot({
+      path: path.join(outDir, `screenshot-${vp.name}-interaction.jpg`),
+      type: config.screenshot.type,
+      quality: config.screenshot.quality,
+    });
+  } catch (e) {
+    out.errors.push(`interaction failed: ${e.message.split("\n")[0]}`);
+  } finally {
+    page.off("console", onErr);
+    page.off("pageerror", onPageErr);
+  }
+  return out;
+}
 const stripAnsi = (s) => s.replace(/\x1b\[[0-9;]*[A-Za-z]/g, "");
 
 // Each arm gets its own working copy of its scaffold so arms can be gated in
@@ -67,7 +112,7 @@ async function waitForServer(url, ms = 30_000) {
   return false;
 }
 
-async function renderGate(letter, dir, outDir) {
+async function renderGate(letter, dir, outDir, task) {
   const port = PORTS[letter];
   const origin = `http://127.0.0.1:${port}`;
   const server = spawn("npx", ["next", "start", "-p", String(port), "-H", "127.0.0.1"], {
@@ -79,7 +124,7 @@ async function renderGate(letter, dir, outDir) {
   let serverLog = "";
   server.stdout.on("data", (d) => (serverLog += d));
   server.stderr.on("data", (d) => (serverLog += d));
-  const result = { ok: false, viewports: {}, errors: [], axe: null };
+  const result = { ok: false, viewports: {}, errors: [], axe: null, interaction: {} };
   try {
     if (!(await waitForServer(origin))) {
       result.errors.push(`server did not start:\n${stripAnsi(serverLog).slice(-2000)}`);
@@ -155,8 +200,12 @@ async function renderGate(letter, dir, outDir) {
             };
           });
         }
-        result.viewports[vp.name] = { ...dims, horizontal_overflow: dims.width > vp.width, errors: errs };
+        result.viewports[vp.name] = { ...dims, horizontal_overflow: dims.width > vp.width, errors: [...errs] };
         result.errors.push(...errs.map((e) => `[${vp.width}px] ${e}`));
+        // After the gate's own checks, so interaction-time errors never gate.
+        if (task != null && INTERACTION_VIEWPORTS.includes(vp.name)) {
+          result.interaction[vp.name] = await interact(page, task, outDir, vp, ignored);
+        }
         await ctx.close();
       }
     } finally {
@@ -172,7 +221,7 @@ async function renderGate(letter, dir, outDir) {
   }
 }
 
-export async function runGates(letter, code, outDir) {
+export async function runGates(letter, code, outDir, task = null) {
   fs.mkdirSync(outDir, { recursive: true });
   const dir = workdir(letter);
   const res = { arm: letter, passed: false, failed_gate: null, failure_output: null, gates: {} };
@@ -207,7 +256,7 @@ export async function runGates(letter, code, outDir) {
     Object.assign(res, { failed_gate: "build", failure_output: i > 0 ? out.slice(i) : out });
     return finish();
   }
-  const render = await renderGate(letter, dir, outDir);
+  const render = await renderGate(letter, dir, outDir, task);
   res.gates.render = render;
   if (!render.ok) {
     Object.assign(res, { failed_gate: "render", failure_output: render.errors.join("\n") });
@@ -222,7 +271,10 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   const letter = arg("arm");
   const page = arg("page");
   const out = arg("out");
-  const r = await runGates(letter, fs.readFileSync(page, "utf8"), out);
-  console.log(JSON.stringify({ passed: r.passed, failed_gate: r.failed_gate, axe: r.gates.render?.axe }, null, 2));
+  const task = process.argv.includes("--task") ? Number(arg("task")) : null;
+  const r = await runGates(letter, fs.readFileSync(page, "utf8"), out, task);
+  console.log(
+    JSON.stringify({ passed: r.passed, failed_gate: r.failed_gate, axe: r.gates.render?.axe, interaction: r.gates.render?.interaction }, null, 2),
+  );
   if (!r.passed) console.log(r.failure_output?.slice(0, 3000));
 }

@@ -6,7 +6,10 @@
 //
 // Usage:
 //   node runner/setup.mjs --shadcn-src <path to a shadcn-ui/ui clone at the pinned commit>
-//                         [--once-tarball <path>] [--skip-install]
+//                         [--once-version 2.1.0-rc.0 | --once-tarball <path>] [--skip-install]
+//
+// --once-version packs the published package from npm (the full run); --once-tarball
+// uses a local `pnpm pack` (the pilot). Either way the tarball's sha256 is recorded.
 //
 // The Once UI tarball is `pnpm pack` of packages/core at the commit pinned in
 // config.json (see README.md for the exact commands). Its sha256 is checked.
@@ -24,7 +27,20 @@ const args = Object.fromEntries(
   }, []),
 );
 
-const onceTarball = path.resolve(args["once-tarball"] ?? path.join(ROOT, "arms/once/vendor/once-ui-system-core.tgz"));
+let onceTarball = path.resolve(args["once-tarball"] ?? path.join(ROOT, "arms/once/vendor/once-ui-system-core.tgz"));
+const onceVersion = typeof args["once-version"] === "string" ? args["once-version"] : null;
+if (onceVersion) {
+  const packDir = path.join(WORK, "pack");
+  fs.rmSync(packDir, { recursive: true, force: true });
+  fs.mkdirSync(packDir, { recursive: true });
+  const file = execFileSync("npm", ["pack", `@once-ui-system/core@${onceVersion}`, "--pack-destination", packDir, "--silent"])
+    .toString()
+    .trim()
+    .split("\n")
+    .at(-1);
+  onceTarball = path.join(packDir, file);
+  console.log(`packed @once-ui-system/core@${onceVersion} -> ${path.relative(ROOT, onceTarball)}`);
+}
 const shadcnSrc = args["shadcn-src"] && path.resolve(args["shadcn-src"]);
 if (!shadcnSrc) {
   console.error("--shadcn-src is required (git clone https://github.com/shadcn-ui/ui and check out the pinned commit)");
@@ -33,7 +49,9 @@ if (!shadcnSrc) {
 
 // --- 0. verify pinned sources ------------------------------------------------
 const tarSha = sha256File(onceTarball);
-if (tarSha !== config.sources.once_ui.tarball_sha256) {
+if (onceVersion) {
+  console.log(`Once UI ${onceVersion} tarball sha256 ${tarSha}`);
+} else if (tarSha !== config.sources.once_ui.tarball_sha256) {
   console.warn(`WARNING: Once UI tarball sha256 ${tarSha} != pinned ${config.sources.once_ui.tarball_sha256}`);
 }
 const shadcnHead = execFileSync("git", ["-C", shadcnSrc, "rev-parse", "HEAD"]).toString().trim();
@@ -49,12 +67,18 @@ if (onceTarball !== vendored) {
 // --- 1. install scaffolds ----------------------------------------------------
 if (!args["skip-install"]) {
   for (const scaffold of ["once", "shadcn", "tailwind"]) {
-    console.log(`npm ci: arms/${scaffold}`);
-    execFileSync("npm", ["ci", "--no-audit", "--no-fund", "--loglevel=error"], {
+    // A different Once UI tarball changes the lockfile's integrity entry for the
+    // file: dependency, so that scaffold is re-resolved with `npm install` (commit
+    // the updated arms/once/package-lock.json with the results).
+    const cmd = scaffold === "once" && onceVersion ? "install" : "ci";
+    console.log(`npm ${cmd}: arms/${scaffold}`);
+    execFileSync("npm", [cmd, "--no-audit", "--no-fund", "--loglevel=error"], {
       cwd: path.join(ROOT, "arms", scaffold),
       stdio: "inherit",
     });
   }
+  // Gate working copies hard-link node_modules at creation; rebuild them.
+  fs.rmSync(path.join(WORK, "gate"), { recursive: true, force: true });
 }
 
 // --- 2. sandboxes -------------------------------------------------------------
@@ -136,7 +160,13 @@ for (const [letter, arm] of Object.entries(config.arms)) {
 }
 
 // --- 3. manifest ----------------------------------------------------------------
-const manifest = { generated: new Date().toISOString(), tokenizer: "proxy (see lib.mjs)", arms: {} };
+const manifest = {
+  generated: new Date().toISOString(),
+  tokenizer: "proxy (see lib.mjs)",
+  once_ui: { version: onceVersion ?? "local tarball", tarball_sha256: tarSha },
+  shadcn_commit: shadcnHead,
+  arms: {},
+};
 for (const arm of Object.values(config.arms)) {
   const base = path.join(SANDBOX, arm.id);
   const files = listFiles(base).map((rel) => {

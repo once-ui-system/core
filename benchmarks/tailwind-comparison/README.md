@@ -2,7 +2,8 @@
 
 Measures how many AI tokens, and how much code, it takes to build the same UI with
 Once UI versus Tailwind CSS (with and without shadcn/ui). Method: [METHODOLOGY.md](./METHODOLOGY.md)
-(pre-registered; read it first). Results: [`results/`](./results).
+(pre-registered; read it first). Results: [`results/`](./results). **Running the full
+benchmark: [RUN.md](./RUN.md).**
 
 This folder is standalone: it isn't a pnpm workspace package and doesn't change the
 library.
@@ -12,7 +13,7 @@ library.
 ```
 config.json         pinned model, settings, versions, sources, statistics
 prompts/            system + user prompt, the one-sentence stack lines, neutralised tasks,
-                    repair and rater prompts
+                    repair and rater prompts, scripted interaction per task (interactions.json)
 arms/{once,shadcn,tailwind}/   Next.js scaffolds (committed lockfiles)
 runner/
   setup.mjs         install scaffolds, build each arm's read-only sandbox (work/sandbox)
@@ -23,6 +24,7 @@ runner/
   pilot-usage.mjs   pilot fallback: input usage + contamination audit from subagent transcripts
   pilot-gate.mjs    gates every un-gated attempt in a results folder, keeps run.json
   blind.mjs         blinded rating packets (seeded IDs) and unsealing
+  rate-api.mjs      blinded rater for the full run (one API call per packet)
   report.mjs        tables, medians, IQR, bootstrap CI, claim gates
 results/
   pilot.md          pilot report (PRELIMINARY)
