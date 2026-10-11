@@ -172,8 +172,21 @@ Unchanged from the 2.0 cycle (archived §3), with one release branch instead of 
 
 | Need | Why | When |
 | --- | --- | --- |
-| Approve and publish `2.1.0-rc.0` on `next` | Smoke builds and early adopters | Wed 14 Oct |
+| Approve and publish `2.1.0-rc.0` on `next` | Smoke builds, the benchmark run and early adopters | Wed 14 Oct |
+| An API key for the benchmark's full run, as an environment secret (never in a repo) | The pre-registered run on the RC (#165) | Before Wed 14 Oct |
 | Approve and publish `2.1.0` | The release | Fri 16 Oct |
+
+**RC day (Wed 14 Oct).** The RC commit is prepared on the release branch:
+version `2.1.0-rc.0`, `publishConfig.tag: "next"`, `[Unreleased]` moved under
+`[2.1.0-rc.0]`, and the `ai/` harness regenerated for the version. Publishing
+is the steps in [RELEASING.md § Pre-releases](RELEASING.md#pre-releases) on that
+commit, then `npm view @once-ui-system/core dist-tags` should read
+`latest: 2.0.0`, `next: 2.1.0-rc.0`. After that, the agents:
+
+1. Re-run gates 1–6 on the published tarball, including the apps' smoke builds.
+2. Bump each app's upgrade branch to `^2.1.0-rc.0` and open its PR (W12).
+3. Start the benchmark's full run on the RC.
+4. Fix what the RC turns up before Thursday's freeze, as `2.1.0-rc.1` if needed.
 
 ## 8. Decision log
 
