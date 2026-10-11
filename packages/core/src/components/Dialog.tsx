@@ -68,7 +68,7 @@ export const DialogProvider: React.FC<{
   );
 };
 
-const Dialog: React.FC<DialogProps> = forwardRef<HTMLDivElement, DialogProps>(
+const Dialog = forwardRef<HTMLDivElement, DialogProps>(
   (
     {
       closeOnClickaway = true,

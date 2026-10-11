@@ -24,7 +24,7 @@ interface CheckboxProps
   hoverable?: boolean;
 }
 
-const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxProps>(
+const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
   (
     {
       style,

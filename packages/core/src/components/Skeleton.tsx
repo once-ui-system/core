@@ -27,7 +27,7 @@ interface SkeletonProps extends React.ComponentProps<typeof Flex> {
   className?: string;
 }
 
-const Skeleton: React.FC<SkeletonProps> = forwardRef<HTMLDivElement, SkeletonProps>(
+const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
   ({ shape = "line", size = "m", delay, style, className, ...props }, ref) => {
     return (
       <Flex

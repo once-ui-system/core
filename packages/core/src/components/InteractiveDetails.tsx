@@ -21,10 +21,7 @@ interface InteractiveDetailsProps {
   descriptionId?: string;
 }
 
-const InteractiveDetails: React.FC<InteractiveDetailsProps> = forwardRef<
-  HTMLDivElement,
-  InteractiveDetailsProps
->(
+const InteractiveDetails = forwardRef<HTMLDivElement, InteractiveDetailsProps>(
   (
     {
       label,

@@ -27,7 +27,7 @@ interface RadioButtonProps
   hoverable?: boolean;
 }
 
-const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, RadioButtonProps>(
+const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
     {
       style,

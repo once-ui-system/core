@@ -32,7 +32,7 @@ interface SwitchProps
   onToggle?: (checked: boolean) => void;
 }
 
-const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
+const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       className,
