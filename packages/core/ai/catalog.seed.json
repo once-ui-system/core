@@ -354,6 +354,11 @@
     "tags": ["content", "keyboard"],
     "pairsWith": ["Kbd", "Button", "Tooltip"]
   },
+  "LayoutProvider": {
+    "purpose": "Root provider for breakpoints, with next/link and next/image installed — the one a Next.js app imports, from core/next",
+    "tags": ["provider", "next"],
+    "pairsWith": ["ThemeProvider", "ToastProvider", "ThemeInit"]
+  },
   "Legend": {
     "purpose": "Chart legend: series swatches and labels, as a row or column",
     "tags": ["data", "chart"],
@@ -424,6 +429,66 @@
     "tags": ["decoration", "effect", "marketing"],
     "pairsWith": ["Background", "Column", "Effect"]
   },
+  "MdxBlockQuote": {
+    "purpose": "What `> quote` renders in the MDX map: BlockQuote with body-text lines; wrap it to restyle quotes",
+    "tags": ["mdx", "content"],
+    "pairsWith": ["MdxParagraph"]
+  },
+  "MdxCodeBlock": {
+    "purpose": "What a fenced code block renders in the MDX map: CodeBlock with the fence's language and a copy button",
+    "tags": ["mdx", "docs"],
+    "pairsWith": ["MdxInlineCode"]
+  },
+  "MdxHeading": {
+    "purpose": "What `#`–`######` render in the MDX map: a Heading with a slug id and a copy-link anchor; takes as and margins",
+    "tags": ["mdx", "docs", "navigation"],
+    "pairsWith": ["HeadingNav", "MdxHeadingAnchor"]
+  },
+  "MdxHeadingAnchor": {
+    "purpose": "The link to #id next to an MDX heading, shown on hover or focus; copies the section URL with a toast",
+    "tags": ["mdx", "docs"],
+    "pairsWith": ["MdxHeading"]
+  },
+  "MdxHr": {
+    "purpose": "What `---` renders in the MDX map: a Line with the separator role",
+    "tags": ["mdx", "content"],
+    "pairsWith": ["MdxParagraph"]
+  },
+  "MdxImage": {
+    "purpose": "What `![alt](src)` renders in the MDX map: Media through the image adapter, enlarge on click",
+    "tags": ["mdx", "media"],
+    "pairsWith": ["MdxParagraph"]
+  },
+  "MdxInlineCode": {
+    "purpose": "What `code` in backticks renders in the MDX map: InlineCode",
+    "tags": ["mdx", "docs"],
+    "pairsWith": ["MdxCodeBlock"]
+  },
+  "MdxLink": {
+    "purpose": "What `[text](href)` renders in the MDX map: an underlined SmartLink, router for paths, new tab for URLs",
+    "tags": ["mdx", "navigation"],
+    "pairsWith": ["MdxParagraph"]
+  },
+  "MdxList": {
+    "purpose": "What `-` and `1.` lists render in the MDX map: List as ul or ol, keeping an ordered list's start",
+    "tags": ["mdx", "content"],
+    "pairsWith": ["MdxListItem"]
+  },
+  "MdxListItem": {
+    "purpose": "A list item in the MDX map: ListItem with body line height",
+    "tags": ["mdx", "content"],
+    "pairsWith": ["MdxList"]
+  },
+  "MdxParagraph": {
+    "purpose": "Body text in the MDX map; a paragraph that is only an image renders the image, never a div inside a p",
+    "tags": ["mdx", "content"],
+    "pairsWith": ["MdxImage", "MdxLink"]
+  },
+  "MdxTable": {
+    "purpose": "What a GFM table renders in the MDX map: Table with the header row and column alignment (needs remark-gfm)",
+    "tags": ["mdx", "data"],
+    "pairsWith": ["MdxParagraph"]
+  },
   "Media": {
     "purpose": "Image, YouTube or MP4 by src, with aspect ratio, loading state, caption and enlarge",
     "tags": ["media", "basics"],
@@ -480,6 +545,11 @@
     "purpose": "One sidebar navigation row: label, icon, selected state, count badge or unread dot",
     "tags": ["navigation"],
     "pairsWith": ["NavGroup", "Column"]
+  },
+  "NextAdapterProvider": {
+    "purpose": "Installs the next/link and next/image adapters alone, for an app that composes its own LayoutProvider",
+    "tags": ["provider", "next"],
+    "pairsWith": ["LayoutProvider"]
   },
   "NumberInput": {
     "purpose": "Numeric field with increment/decrement controls, bounded by min, max and step",

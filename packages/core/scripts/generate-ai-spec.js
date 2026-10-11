@@ -53,7 +53,78 @@ const BARRELS = [
     group: "components",
     importFrom: `@once-ui-system/core/components/${name}`,
   })),
+  // The hooks are root exports, but no barrel above reaches them, so an
+  // agent never learned `useHotkeys` or `useInViewport` existed except from
+  // prose in the rules.
+  { file: path.join(SRC, "hooks", "index.ts"), group: "hooks" },
+  // 2.1's entry points. `/mdx` renders code through `/code`, so it is a
+  // subpath of its own; `/next` holds the Next.js adapters and the OG route
+  // handlers; `/config` is `defineConfig` with no component code behind it,
+  // for an app's `once-ui.config` (the root exports it too).
+  {
+    file: path.join(SRC, "modules", "mdx", "index.ts"),
+    group: "mdx",
+    importFrom: "@once-ui-system/core/mdx",
+  },
+  {
+    file: path.join(SRC, "next", "index.ts"),
+    group: "next",
+    importFrom: "@once-ui-system/core/next",
+  },
+  {
+    file: path.join(SRC, "config.ts"),
+    group: "config",
+    importFrom: "@once-ui-system/core/config",
+  },
 ];
+
+/**
+ * Every entry point an app imports from, for the manifest's `imports`. The
+ * exports of each subpath are filled in from the spec, so the table cannot
+ * name something the entry does not have. `peer` is the optional peer the
+ * app installs for it.
+ */
+const ENTRY_POINTS = [
+  {
+    specifier: "@once-ui-system/core",
+    use: "Components, hooks, providers, defineConfig and types: everything not listed below",
+  },
+  {
+    specifier: "@once-ui-system/core/data",
+    use: "Charts, gauges and chart chrome",
+    peer: "recharts",
+  },
+  { specifier: "@once-ui-system/core/code", use: "CodeBlock", peer: "prismjs" },
+  { specifier: "@once-ui-system/core/media", use: "MediaUpload", peer: "compressorjs" },
+  {
+    specifier: "@once-ui-system/core/mdx",
+    use: "MDX content through Once UI: mdxComponents for next-mdx-remote or @next/mdx, createMdxComponents(overrides) to replace elements or register tags, and the Mdx* elements to wrap",
+    peer: "prismjs",
+  },
+  {
+    specifier: "@once-ui-system/core/next",
+    use: "Next.js apps: LayoutProvider with next/link and next/image (the root one renders plain <a> and <img>), and the OG route handlers for app/api/og/*/route.ts",
+    peer: "next",
+  },
+  {
+    specifier: "@once-ui-system/core/config",
+    use: "defineConfig and the OnceUIConfig types with no component code behind them, for once-ui.config (the root exports them too)",
+  },
+  {
+    specifier: "@once-ui-system/core/components/<Name>",
+    use: "Components kept off the root so every bundle does not carry them",
+  },
+];
+
+// Lower-case exports that are plumbing rather than API: the HOC and context
+// hook behind the excluded ArrowNavigation, a test reset, and the function
+// `Meta.generate` already documents.
+const FUNCTION_EXCLUDE = new Set([
+  "withArrowNavigation",
+  "useArrowNavigationContext",
+  "resetScrollLockState",
+  "generateMetadata",
+]);
 
 // Internal/low-level exports that AI should not use directly. `ThemeInit`,
 // `Meta`, `FocusTrap` and `ScrollLock` used to be listed here as well, which
@@ -174,6 +245,12 @@ function collectTypeAliases(ts, program, checker, seedBlob, components) {
     const members = type.types.map((t) =>
       t.isStringLiteral() ? t.value : checker.typeToString(t),
     );
+    // A union this long is a key list like `keyof JSX.IntrinsicElements`
+    // (MdxTag): its text says what it is in a few words, where its members
+    // would be every HTML tag. TextVariant, the longest real vocabulary, has 100.
+    if (members.length > 150 && ts.isTypeAliasDeclaration(node) && node.type) {
+      return typeText(node.type);
+    }
     return [...new Set(members)];
   };
 
@@ -213,6 +290,14 @@ function collectTypeAliases(ts, program, checker, seedBlob, components) {
     // it names the component whose props the spec already documents.
     const keys = Object.keys(shape);
     if (keys.length && keys.length <= 40) return shape;
+
+    // A generic mapped type (`CheckedConfig<T>`, behind `defineConfig`) has
+    // no fields until it is applied, and its text is type-level machinery in
+    // terms of `T`. The parameter it constrains (`OnceUIConfig`) is what a
+    // caller needs, and that resolves on its own.
+    if (ts.isTypeAliasDeclaration(node) && node.typeParameters?.length && !keys.length) {
+      return null;
+    }
 
     if (ts.isTypeAliasDeclaration(node) && node.type) {
       // `AllFlexProps = FlexProps & StyleProps & ...` says everything in one
@@ -261,6 +346,9 @@ function collectTypeAliases(ts, program, checker, seedBlob, components) {
     const before = Object.keys(types).length;
     for (const [name, { node, own }] of declared) {
       if (types[name]) continue;
+      // `Icon` in a prop's text is the component. Next's metadata types,
+      // which `/next` brings into the program, declare an `Icon` of their own.
+      if (components[name]) continue;
       if (!new RegExp(`\\b${name}\\b`).test(blob)) continue;
 
       // `ButtonProps` is a component's own surface, already in `components`.
@@ -288,7 +376,7 @@ function collectTypeAliases(ts, program, checker, seedBlob, components) {
  * This used to collect capitalised identifiers only, which silently dropped
  * `curveType` and anything else not starting with a capital.
  */
-function typeNamesUsed(components, mixins) {
+function typeNamesUsed(components, mixins, functions = {}) {
   const parts = [];
   for (const component of Object.values(components)) {
     parts.push(...Object.values(component.props ?? {}).map(String));
@@ -296,6 +384,11 @@ function typeNamesUsed(components, mixins) {
   }
   for (const mixin of Object.values(mixins)) {
     parts.push(...Object.values(mixin ?? {}).map(String));
+  }
+  // A function's options type (`UseHotkeysOptions`, `OgFetchRouteOptions`)
+  // is as much a part of its API as a component's prop types are of its.
+  for (const fn of Object.values(functions)) {
+    parts.push(fn.signature ?? fn.type ?? "");
   }
   return parts.join("\n");
 }
@@ -311,6 +404,8 @@ async function main() {
 
   const mixinsUsed = new Map(); // mixinName -> Map<propName, propString>
   const components = {};
+  const functions = {};
+  const entryTypes = new Map(); // importFrom -> Set<type name>
   const warnings = [];
 
   /** Resolve the function node (arrow/function expr) implementing a component */
@@ -461,13 +556,95 @@ async function main() {
     return out;
   }
 
+  /** The first sentence of a symbol's JSDoc, on one line. */
+  function summaryOf(symbol) {
+    const text = ts
+      .displayPartsToString(symbol.getDocumentationComment(checker))
+      .replace(/```[\s\S]*?```/g, "")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!text) return undefined;
+    // A sentence ends where the next one starts with a capital or code, not
+    // at the `?` of `faviconUrl? }`.
+    const first = /^(.+?[.!?])(?=\s+[A-Z`]|$)/.exec(text)?.[1] ?? text;
+    return first.length > 200 ? `${first.slice(0, 197)}...` : first;
+  }
+
+  /**
+   * `(keys: string | readonly string[], callback: ..., options?: UseHotkeysOptions) => void`,
+   * written from the declaration so a parameter keeps the type name it was
+   * written with (`OgFetchRouteOptions`, not the alias it resolves to) and a
+   * destructured options object reads as `options`.
+   */
+  function signatureOf(fn) {
+    const typeParams = fn.typeParameters?.length
+      ? `<${fn.typeParameters.map((p) => p.getText()).join(", ")}>`
+      : "";
+    const params = fn.parameters.map((p) => {
+      const name = ts.isIdentifier(p.name) ? p.name.getText() : "options";
+      const optional = p.questionToken || p.initializer ? "?" : "";
+      const type = p.type ? typeText(p.type) : checker.typeToString(checker.getTypeAtLocation(p));
+      return `${p.dotDotDotToken ? "..." : ""}${name}${optional}: ${type}`;
+    });
+    const signature = checker.getSignatureFromDeclaration(fn);
+    const returns = fn.type
+      ? typeText(fn.type)
+      : signature
+        ? checker.typeToString(checker.getReturnTypeOfSignature(signature))
+        : "unknown";
+    return `${typeParams}(${params.join(", ")}) => ${returns}`;
+  }
+
+  /**
+   * A hook, a function or a constant: what `defineConfig`, `useHotkeys`,
+   * `createMdxComponents` and the OG route factories are. The spec only had
+   * components, so an agent learned these existed from prose at best, and
+   * never where to import them from.
+   */
+  function processFunction(name, target, group, importFrom) {
+    if (FUNCTION_EXCLUDE.has(name)) return;
+    const decl = target.valueDeclaration ?? (target.declarations && target.declarations[0]);
+    if (!decl) return;
+    const fn = ts.isFunctionDeclaration(decl) ? decl : getComponentFunction(decl);
+    const entry = { group };
+    if (importFrom) entry.importFrom = importFrom;
+    if (fn) {
+      entry.kind = /^use[A-Z]/.test(name) ? "hook" : "function";
+      entry.signature = signatureOf(fn);
+    } else if (ts.isVariableDeclaration(decl)) {
+      entry.kind = "value";
+      entry.type = decl.type
+        ? typeText(decl.type)
+        : checker.typeToString(checker.getTypeOfSymbol(target));
+    } else {
+      return;
+    }
+    const doc = summaryOf(target);
+    if (doc) entry.doc = doc;
+    functions[name] = entry;
+  }
+
   function processExport(name, symbol, group, importFrom) {
     if (EXCLUDE.has(name)) return;
-    if (!/^[A-Z]/.test(name)) return; // components only
 
     let target = symbol;
     if (target.flags & ts.SymbolFlags.Alias) {
       target = checker.getAliasedSymbol(target);
+    }
+
+    if (!(target.flags & ts.SymbolFlags.Value)) {
+      // A type-only export: listed with its entry point, so `OnceUIConfig`
+      // and `MdxComponents` are known to exist and where they come from.
+      if (importFrom) {
+        if (!entryTypes.has(importFrom)) entryTypes.set(importFrom, new Set());
+        entryTypes.get(importFrom).add(name);
+      }
+      return;
+    }
+    // Lower-case exports and SCREAMING_CASE constants are not components.
+    if (!/^[A-Z]/.test(name) || /^[A-Z][A-Z0-9_]+$/.test(name)) {
+      processFunction(name, target, group, importFrom);
+      return;
     }
     const decl = target.valueDeclaration ?? (target.declarations && target.declarations[0]);
     if (!decl) return;
@@ -505,6 +682,7 @@ async function main() {
     const fn = helper ? helper.fn : getComponentFunction(decl);
     const defaults = { ...implDefaults, ...getDefaults(fn) };
     const mixins = new Set();
+    const mixinMembers = new Map(); // mixin -> [propName, propString, declared member count]
     const extendsComponents = new Set();
     const props = {};
 
@@ -531,6 +709,15 @@ async function main() {
           if (!mixinsUsed.get(parent).has(propName)) {
             mixinsUsed.get(parent).set(propName, propString(propSym, pDecl, {}));
           }
+          if (!mixinMembers.has(parent)) {
+            mixinMembers.set(parent, {
+              declared: pDecl.parent.members
+                .filter((m) => ts.isPropertySignature(m) && m.name)
+                .map((m) => m.name.getText()),
+              seen: [],
+            });
+          }
+          mixinMembers.get(parent).seen.push([propName, propSym, pDecl]);
           // keep component-level default override visible
           if (defaults[propName] !== undefined) {
             props[propName] = propString(propSym, pDecl, defaults);
@@ -547,11 +734,31 @@ async function main() {
       if (declFile !== ownFile && declFile.includes("/src/")) {
         // declared in another component's file → wrapper relationship
         const base = path.basename(declFile).replace(/\.(tsx|ts)$/, "");
-        extendsComponents.add(base);
-        continue;
+        // ...unless that file is the same-named component this one re-exports
+        // with something added: `/next`'s LayoutProvider is the context's
+        // LayoutProvider with the Next adapters installed, and "LayoutProvider
+        // extends LayoutProvider" names nothing the spec documents.
+        if (base !== name) {
+          extendsComponents.add(base);
+          continue;
+        }
       }
 
       props[propName] = propString(propSym, pDecl, defaults);
+    }
+
+    // A component that takes a few props of a mixin (`Pick<SpacingProps,
+    // "marginTop" | ...>`, as the MDX elements do) lists those few. Naming
+    // the whole mixin would promise the paddings and the rest it never takes.
+    // Only a prop the type does not have at all counts as left out: a mixin's
+    // `className` shadowed by the DOM's own is still taken.
+    for (const [parent, { declared, seen: taken }] of mixinMembers) {
+      const missing = declared.filter((member) => !seen.has(member));
+      if (missing.length * 2 <= declared.length) continue;
+      mixins.delete(parent);
+      for (const [propName, propSym, pDecl] of taken) {
+        props[propName] = propString(propSym, pDecl, defaults);
+      }
     }
 
     const entry = { group };
@@ -653,7 +860,7 @@ async function main() {
     ts,
     program,
     checker,
-    typeNamesUsed(components, mixins),
+    typeNamesUsed(components, mixins, functions),
     components,
   );
 
@@ -662,21 +869,24 @@ async function main() {
     version: pkg.version,
     generated: new Date().toISOString().split("T")[0],
     format:
-      "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed.",
+      "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
     tokens,
     mixins,
     iconNames,
     types,
     components,
+    functions,
   };
 
   fs.mkdirSync(OUT_DIR, { recursive: true });
   fs.writeFileSync(OUT_FILE, JSON.stringify(spec, null, 1));
 
-  emitArtifacts(spec, pkg.version);
+  emitArtifacts(spec, pkg.version, entryTypes);
 
   const count = Object.keys(components).length;
-  console.log(`AI spec generated: ${count} components -> ${path.relative(ROOT, OUT_FILE)}`);
+  console.log(
+    `AI spec generated: ${count} components, ${Object.keys(functions).length} functions -> ${path.relative(ROOT, OUT_FILE)}`,
+  );
   if (warnings.length) {
     console.log(`Warnings (${warnings.length}):`);
     for (const w of warnings) console.log(`  - ${w}`);
@@ -684,7 +894,7 @@ async function main() {
 }
 
 /** Post-process Row/Column and emit sliced agent artifacts */
-function emitArtifacts(spec, version) {
+function emitArtifacts(spec, version, entryTypes) {
   const shorthands = {
     fill: { replaces: "fillWidth fillHeight", on: ["Row", "Column", "Flex", "Grid"] },
     fit: { replaces: "fitWidth fitHeight", on: ["Row", "Column", "Flex", "Grid"] },
@@ -771,9 +981,33 @@ function emitArtifacts(spec, version) {
     fs.writeFileSync(path.join(componentsDir, `${name}.json`), JSON.stringify(slice, null, 1));
   }
 
+  // Which specifier each export comes from. The rules say it in prose; this
+  // is the same table with the export lists generated, so a new subpath or
+  // export reaches an agent's first read without anyone editing the rules.
+  const imports = {};
+  for (const entry of ENTRY_POINTS) {
+    const { specifier, use, peer } = entry;
+    const row = { use };
+    if (peer) row.peer = peer;
+    if (specifier !== "@once-ui-system/core") {
+      const pattern = specifier.endsWith("/<Name>") ? specifier.replace("<Name>", "") : null;
+      const from = (item) =>
+        pattern ? item.importFrom?.startsWith(pattern) : item.importFrom === specifier;
+      const names = [
+        ...Object.entries(spec.components).filter(([, c]) => from(c)),
+        ...Object.entries(spec.functions ?? {}).filter(([, f]) => from(f)),
+      ].map(([name]) => name);
+      if (names.length) row.exports = names;
+      const typeNames = pattern ? [] : [...(entryTypes?.get(specifier) ?? [])];
+      if (typeNames.length) row.types = typeNames.sort();
+    }
+    imports[specifier] = row;
+  }
+
   const manifest = {
     version,
     generated: spec.generated,
+    imports,
     files: {
       spec: "spec.json",
       catalog: "catalog.json",
