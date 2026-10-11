@@ -1,4 +1,4 @@
-import { Background, Mask, Particle, Row } from "@once-ui-system/core";
+import { Background, Mask, ParticleFx, Row } from "@once-ui-system/core";
 
 export const Background6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -33,7 +33,7 @@ export const Background6: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         }}
       />
       <Mask position="absolute" top="0" left="0" x={50} y={50} radius={100}>
-        <Particle
+        <ParticleFx
           opacity={70}
           fill
           interactive

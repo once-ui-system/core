@@ -7,7 +7,7 @@ import {
   Input,
   Line,
   Logo,
-  Particle,
+  ParticleFx,
   PasswordInput,
   Row,
   SmartLink,
@@ -17,7 +17,7 @@ export const Login2 = () => {
   return (
     <Row fill padding="8">
       <Row fill radius="xl" overflow="hidden">
-        <Particle
+        <ParticleFx
           opacity={100}
           position="absolute"
           top="0"

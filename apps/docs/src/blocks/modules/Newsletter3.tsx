@@ -4,7 +4,7 @@ import {
   Column,
   HoloFx,
   Input,
-  Particle,
+  ParticleFx,
   Row,
   Text,
 } from "@once-ui-system/core";
@@ -23,7 +23,7 @@ export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...
       shadow="xl"
       {...flex}
     >
-      <Particle
+      <ParticleFx
         opacity={70}
         position="absolute"
         top="0"

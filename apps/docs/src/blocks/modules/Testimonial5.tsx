@@ -4,7 +4,7 @@ import {
   Column,
   Fade,
   Flex,
-  Particle,
+  ParticleFx,
   SmartLink,
   Text,
   User,
@@ -37,7 +37,7 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
         radius="xl"
         overflow="hidden"
       >
-        <Particle
+        <ParticleFx
           opacity={70}
           position="absolute"
           top="0"

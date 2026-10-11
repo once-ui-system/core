@@ -6,7 +6,7 @@ import {
   IconButton,
   Logo,
   Mask,
-  Particle,
+  ParticleFx,
   Row,
   SmartLink,
   Tag,
@@ -199,7 +199,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               border="neutral-alpha-medium"
             >
               <Mask fill position="absolute" x={50} y={50} radius={25}>
-                <Particle
+                <ParticleFx
                   style={{ transform: "scale(1.1)" }}
                   opacity={70}
                   position="absolute"

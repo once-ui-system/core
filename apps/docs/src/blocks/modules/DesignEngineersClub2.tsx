@@ -7,7 +7,7 @@ import {
   LetterFx,
   Mask,
   Media,
-  Particle,
+  ParticleFx,
   Row,
   SmartLink,
   Text,
@@ -45,7 +45,7 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
             />
           </Mask>
         </Row>
-        <Particle
+        <ParticleFx
           style={{ height: "30%" }}
           opacity={50}
           position="absolute"
@@ -60,7 +60,7 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
           color="brand-on-background-strong"
           pointerEvents="none"
         />
-        <Particle
+        <ParticleFx
           style={{ height: "30%" }}
           opacity={50}
           position="absolute"

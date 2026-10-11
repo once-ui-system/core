@@ -4,7 +4,7 @@ import {
   Heading,
   Mask,
   Media,
-  Particle,
+  ParticleFx,
   Row,
   Text,
 } from "@once-ui-system/core";
@@ -86,7 +86,7 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         }}
       />
       <Mask position="absolute" x={60} y={25} radius={50} fill pointerEvents="none">
-        <Particle
+        <ParticleFx
           speed={0.5}
           size="2"
           opacity={50}
