@@ -196,21 +196,20 @@ export function MdxInlineCode(props: MdxInlineCodeProps) {
 export type MdxBlockQuoteProps = MdxElementProps<"blockquote"> & MdxSpacingProps;
 
 /**
- * `> A quote` through `BlockQuote`. BlockQuote sets its content in a `<span>`,
- * so the quote's paragraphs render as block-level spans with the body text
- * style rather than as `<p>`s, which a span cannot contain.
+ * `> A quote` through `BlockQuote`. The quote's paragraphs stay `<p>`s, set in
+ * the body text style rather than BlockQuote's heading style.
  */
 export function MdxBlockQuote(props: MdxBlockQuoteProps) {
   const { spacing, rest } = splitSpacing(props, { marginTop: "16", marginBottom: "24" });
   const lines = Children.map(rest.children, (child) =>
     isValidElement<MdxParagraphProps>(child) && child.type === MdxParagraph ? (
       <Text
-        as="span"
+        as="p"
         variant="body-default-m"
         onBackground="neutral-medium"
         marginTop="8"
         marginBottom="12"
-        style={{ ...BODY_LINE_HEIGHT, display: "block" }}
+        style={BODY_LINE_HEIGHT}
       >
         {child.props.children}
       </Text>
