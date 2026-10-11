@@ -173,6 +173,20 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **Harness:** a `docs-page` task bundle; vertical `Tabs` in the settings
   example; a `Drawer` for mobile nav in the app-shell recipe; "fixed in 2.1"
   gotchas for Toast, NumberInput, Select, Button triggers and ContextMenu.
+- **The harness costs an agent less to read.** `catalog.json`, which every
+  agent loads first, now carries `iconNames`, and the rules point there. An
+  agent used to open all of `spec.json` (about 37k tokens) to find an icon
+  name: in a benchmark pilot that was most of what it read. `spec.json`
+  keeps the same list.
+- **The harness knows the providers.** `ThemeProvider`, `DataThemeProvider`,
+  `ToastProvider`, `IconProvider`, `AdapterProvider` and `OgRoutesProvider`
+  have slices and catalog entries, and `useToast`, `useTheme`, `useStyle`,
+  `useDataTheme`, `useLayout`, `useIcons` and `useOgRoutes` are in `functions`.
+- **The validator names a 2.x prop for its 1.x one.** `api.renamed` reports
+  `isOpen`, `isChecked`, SegmentedControl's `selected`/`onToggle`, Tag's
+  `variant` and the other names 2.0 renamed (the codemod's table, minus names
+  2.x reuses). TypeScript reports them as a missing prop or, for `onToggle`, a
+  `ToggleEvent` mismatch, without mentioning the rename.
 - **`Text` and `Heading` take a ref**, typed to the element `as` renders
   (`HTMLLIElement` for `as="li"`); they stay generic over `as`. `ListItem`,
   `ShineFx` and `TypeFx` pass theirs on, which they dropped.
@@ -455,6 +469,11 @@ Each keeps working until 3.0.
   (no behaviour change) took it to 173.
 - **Accessibility assertions in tests.** `src/test/axe.ts` runs axe on a
   rendered tree; every component added or changed in 2.1 is tested with it.
+- **The build no longer downloads emoji data.** It used the committed
+  `src/data/emoji-data.json` only when gemoji's moving `master` could not be
+  fetched, so two builds minutes apart could differ, and `npm publish`
+  (whose `prepack` builds) could ship a set no test had seen. The committed
+  file is used as it is; `pnpm refresh-emoji-data` refetches it on purpose.
 
 ## [2.0.0] — 2026-09-25
 

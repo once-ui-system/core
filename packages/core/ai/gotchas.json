@@ -45,7 +45,7 @@
     "components": ["StatusIndicator"]
   },
   "Icon.names": {
-    "rule": "Icon names must come from iconNames in spec.json, which is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.",
+    "rule": "Icon names must come from iconNames in catalog.json (spec.json has the same list), and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.",
     "components": ["Icon", "Button", "IconButton"]
   },
   "LayoutProvider.next": {
@@ -87,6 +87,19 @@
   "color.background-weak": {
     "rule": "*-background-weak is nearly the page color — invisible as accent. Use alpha tokens (brand-alpha-medium) for glows.",
     "components": ["Background"]
+  },
+  "api.renamed": {
+    "rule": "Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.",
+    "components": [
+      "SegmentedControl",
+      "Dialog",
+      "Checkbox",
+      "Switch",
+      "Tag",
+      "Input",
+      "Select",
+      "Button"
+    ]
   },
   "layout.shorthands": {
     "rule": "Use fill not fillWidth fillHeight; center not horizontal=\"center\" vertical=\"center\"; Row/Column not Flex direction=.",

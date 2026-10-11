@@ -129,7 +129,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 14. Buttons: `variant` = `primary | secondary | tertiary | quaternary | subtle | danger | success | warning | ghost | link` (the slice is authoritative; `primary` is the default); pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
 
-14b. Icon names must come from `iconNames` in spec.json. In 2.0 `IconName` is a real union, so an unregistered name is a type error rather than a blank space — do not guess a plausible one, and never reach for `as IconName` to silence the check. If no registered icon fits, omit the icon. The registry is 99 icons; brand marks (github, discord, google) are deliberately not among them, so an app registers its own.
+14b. Icon names must come from `iconNames` in catalog.json (spec.json carries the same list). In 2.0 `IconName` is a real union, so an unregistered name is a type error rather than a blank space — do not guess a plausible one, and never reach for `as IconName` to silence the check. If no registered icon fits, omit the icon. The registry is 99 icons; brand marks (github, discord, google) are deliberately not among them, so an app registers its own.
 
 14c. Components with a text prop render it — never pass the same text as both prop and children, it renders twice:
 
@@ -353,5 +353,5 @@ export const { style, dataStyle } = defineConfig({ style: { brand: "cyan", theme
 
 31. `IconName` is a real union, not `string`. An unregistered name is a type
 error now, where it used to render a blank space with a console warning — so
-take icon names from `spec.json`'s `iconNames` rather than guessing a plausible
+take icon names from `catalog.json`'s `iconNames` rather than guessing a plausible
 one. An app registers its own by augmenting `IconLibraryOverrides`.

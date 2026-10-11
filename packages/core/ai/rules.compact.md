@@ -95,7 +95,7 @@ entry and `spec.json` `functions` entry says `importFrom` when it is not the roo
 Naming one of these from the root does not resolve — except `defineConfig`,
 which is on both, and `LayoutProvider`, which resolves and then silently
 renders links and images as plain `<a>` and `<img>` in a Next.js app. `IconName` is a real union, so an unregistered icon
-name is a type error, not a blank space — take names from `spec.json`.
+name is a type error, not a blank space — take names from `iconNames` in `catalog.json`.
 
 ## Defaults — omit these
 

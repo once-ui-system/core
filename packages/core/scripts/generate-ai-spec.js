@@ -57,6 +57,10 @@ const BARRELS = [
   // agent never learned `useHotkeys` or `useInViewport` existed except from
   // prose in the rules.
   { file: path.join(SRC, "hooks", "index.ts"), group: "hooks" },
+  // The providers and their hooks are root exports too. Without this an
+  // agent knew `ThemeProvider` only from the layouts and never saw
+  // `useToast`, `useTheme` or `useStyle` with a signature.
+  { file: path.join(SRC, "contexts", "index.ts"), group: "contexts" },
   // 2.1's entry points. `/mdx` renders code through `/code`, so it is a
   // subpath of its own; `/next` holds the Next.js adapters and the OG route
   // handlers; `/config` is `defineConfig` with no component code behind it,
@@ -958,9 +962,13 @@ function emitArtifacts(spec, version, entryTypes) {
   const entries = Object.entries(catalog.components).map(
     ([name, entry]) => `  ${JSON.stringify(name)}: ${JSON.stringify(entry)}`,
   );
+  // The icon vocabulary rides in the catalog too. It used to live only in
+  // spec.json, so an agent that needed one icon name read the whole spec
+  // (about 37k tokens) to find it — most of what an agent read in the 2.1
+  // benchmark pilot. A hundred names on one line cost a few hundred tokens.
   fs.writeFileSync(
     path.join(OUT_DIR, "catalog.json"),
-    `{\n "version": ${JSON.stringify(catalog.version)},\n "generated": ${JSON.stringify(catalog.generated)},\n "components": {\n${entries.join(",\n")}\n }\n}`,
+    `{\n "version": ${JSON.stringify(catalog.version)},\n "generated": ${JSON.stringify(catalog.generated)},\n "iconNames": ${JSON.stringify(spec.iconNames)},\n "components": {\n${entries.join(",\n")}\n }\n}`,
   );
 
   const componentsDir = path.join(OUT_DIR, "components");

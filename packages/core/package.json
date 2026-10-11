@@ -178,6 +178,7 @@
     "dev": "tsc --watch --preserveWatchOutput",
     "prepack": "pnpm build",
     "generate-emoji-data": "node scripts/generate-emoji-data.js",
+    "refresh-emoji-data": "node scripts/generate-emoji-data.js --refresh",
     "generate-ai-spec": "node scripts/generate-ai-spec.js",
     "init-agent": "node scripts/init-agent.js",
     "validate-ai-code": "node scripts/validate-ai-code.js",

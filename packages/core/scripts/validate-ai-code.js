@@ -638,6 +638,48 @@ function rootLayoutProviderImport(source) {
   return null;
 }
 
+/**
+ * 1.x prop names that 2.x no longer accepts at all, from the 2.0 codemod
+ * (`scripts/codemod-2.0.mjs` at the repo root). Names that 2.x reuses with a
+ * new meaning are left out, because they are valid now: `fill` on Media,
+ * Carousel and Swiper, `icon` on Feedback, `radius` on ToggleButton.
+ *
+ * An agent writing from memory reaches for these. TypeScript reports one as a
+ * missing required prop or, for `onToggle`, as a mismatch with the DOM's
+ * `ToggleEvent`, which never mentions the rename, so this says it.
+ */
+const FIELD = { hasPrefix: "prefix", hasSuffix: "suffix", height: "size", radius: "corners" };
+const PRE_2_PROPS = {
+  ProgressBar: { label: "showLabel" },
+  Toast: { icon: "showIcon" },
+  DataTooltip: { colors: "showSwatches" },
+  RevealFx: { trigger: "revealed" },
+  SegmentedControl: { selected: "value", onToggle: "onChange", defaultSelected: "defaultValue" },
+  NavIcon: { isActive: "active" },
+  Checkbox: { isChecked: "checked", isIndeterminate: "indeterminate" },
+  RadioButton: { isChecked: "checked" },
+  Switch: { isChecked: "checked" },
+  Dialog: { isOpen: "open" },
+  Modal: { isOpen: "open" },
+  DatePicker: { isOpen: "open", isNested: "nested" },
+  DropdownWrapper: { isOpen: "open", isNested: "nested" },
+  EmojiPickerDropdown: { isOpen: "open", isNested: "nested" },
+  Input: FIELD,
+  Textarea: FIELD,
+  Option: { hasPrefix: "prefix", hasSuffix: "suffix" },
+  Select: FIELD,
+  NumberInput: FIELD,
+  TagInput: FIELD,
+  ColorInput: FIELD,
+  DateInput: FIELD,
+  DateRangeInput: FIELD,
+  PasswordInput: FIELD,
+  Pulse: { variant: "scheme" },
+  Tag: { variant: "scheme" },
+  Button: { radius: "corners" },
+  IconButton: { radius: "corners" },
+};
+
 function validate(source, spec, iconNames, options = {}) {
   const issues = [];
 
@@ -647,6 +689,16 @@ function validate(source, spec, iconNames, options = {}) {
   // a shorthand missed, and neither is `horizontal="center"` on a header row
   // beside `vertical="center"` on the row inside it.
   const tags = openingTags(source);
+
+  const renamed = new Set();
+  for (const t of tags) {
+    for (const [old, now] of Object.entries(PRE_2_PROPS[t.name] ?? {})) {
+      if (!hasProp(t.attrs, old) || renamed.has(`${t.name}.${old}`)) continue;
+      renamed.add(`${t.name}.${old}`);
+      add("api.renamed", `${t.name} takes ${now} in 2.x; ${old} is the 1.x name`);
+    }
+  }
+
   if (tags.some((t) => hasProp(t.attrs, "fillWidth") && hasProp(t.attrs, "fillHeight"))) {
     add("layout.shorthands", "Use fill instead of fillWidth + fillHeight", "fill");
   }
@@ -988,6 +1040,7 @@ if (require.main === module) main();
 module.exports = {
   validate,
   applyFixes,
+  PRE_2_PROPS,
   loadSpec,
   parseIconNames,
   iconPropsByComponent,

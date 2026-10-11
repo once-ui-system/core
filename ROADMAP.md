@@ -114,8 +114,9 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] The docs app's `next/image` needs `images.localPatterns` for proxied OG images on Next 16.
 - [x] The docs app's own MDX map (`apps/docs/src/product/mdx.tsx`) moves to `/mdx`; the harness generator and `rules.md` learn the `/mdx` and `/config` entries.
 - [x] `ListItem`, `ShineFx` and `TypeFx` pass their refs on (`Text` and `Heading` forward refs).
-- [ ] `useToast` and the providers aren't in the spec (the contexts barrel isn't walked).
-- [ ] 2.2: `generate-emoji-data` downloads gemoji's `master` on every build, so the emoji set depends on the network and the CDN at build time (two builds minutes apart differed); pin it to a tagged commit or vendor the source.
+- [x] `useToast` and the providers aren't in the spec (the contexts barrel isn't walked).
+- [x] From the token benchmark pilot (#165): icon names move into `catalog.json` so an agent never opens `spec.json` for one, and the validator names the 2.x prop for a 1.x one (`api.renamed`).
+- [x] `generate-emoji-data` downloaded gemoji's `master` on every build, so the emoji set depended on the network at build time (two builds minutes apart differed). The committed data is vendored: the build uses it as it is, and `pnpm refresh-emoji-data` refetches on purpose.
 - [x] Docs blocks use `ParticleFx`, not the deprecated `Particle`.
 - [x] Dropdown leftovers: `DateInput`/`DateRangeInput` are comboboxes opening a dialog; DatePicker no longer takes focus by itself; a `dual` picker's month/year lists move both calendars; dropdown lists are named after their trigger.
 - [ ] 2.2: a locale approach for DatePicker's English text and en-US formatting (month and day names, "Previous/Next month", "Hours", AM/PM) and Select's "Search"/"Clear"; `DateRangeInput` gives both fields the same `id`; month and year buttons are named by their value only.

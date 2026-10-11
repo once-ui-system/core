@@ -9,6 +9,11 @@
     "tags": ["content", "marketing", "disclosure"],
     "pairsWith": ["Column", "Text", "Heading"]
   },
+  "AdapterProvider": {
+    "purpose": "The app's link and image components for every Once UI link and image; core/next's LayoutProvider installs Next's",
+    "tags": ["provider"],
+    "pairsWith": ["LayoutProvider"]
+  },
   "Animation": {
     "purpose": "Preset enter/exit animation (fade, scale, slide, blur) on hover, click or controlled trigger; delay and duration in ms",
     "tags": ["effect", "motion", "overlay"],
@@ -168,6 +173,11 @@
     "tags": ["data", "dashboard"],
     "pairsWith": ["Pagination", "Tag", "Button"]
   },
+  "DataThemeProvider": {
+    "purpose": "App-wide defaults for the data-viz components: chart variant, mode, height, axis and ticks; read with useDataTheme",
+    "tags": ["provider", "data"],
+    "pairsWith": ["ThemeProvider", "LineChart", "BarChart"]
+  },
   "DataTooltip": {
     "purpose": "Tooltip body for charts: label, series swatches and formatted values",
     "tags": ["data", "chart"],
@@ -318,6 +328,11 @@
     "purpose": "Icon-only button with tooltip; give it an accessible label",
     "tags": ["action", "chat"],
     "pairsWith": ["Tooltip", "Row"]
+  },
+  "IconProvider": {
+    "purpose": "Adds icons to the built-in set or replaces them, by name, for Icon and every icon prop",
+    "tags": ["provider", "icons"],
+    "pairsWith": ["Icon", "LayoutProvider"]
   },
   "InfiniteScroll": {
     "purpose": "Renders items and calls loadMore as the end scrolls into view",
@@ -566,6 +581,11 @@
     "tags": ["media", "social"],
     "pairsWith": ["SmartLink", "Media"]
   },
+  "OgRoutesProvider": {
+    "purpose": "Points OgCard and useOgData at the app's OG routes, made with createOgFetchRoute and createOgProxyRoute from core/next",
+    "tags": ["provider", "og"],
+    "pairsWith": ["OgCard", "LayoutProvider"]
+  },
   "Option": {
     "purpose": "Selectable row in a menu, dropdown or select: label, description, prefix/suffix, link or click",
     "tags": ["overlay", "form"],
@@ -808,6 +828,11 @@
     "tags": ["theme", "provider"],
     "pairsWith": ["ThemeSwitcher"]
   },
+  "ThemeProvider": {
+    "purpose": "Root provider for theme and style (mode, colours, solid, shape), with persistence; read and set with useTheme and useStyle",
+    "tags": ["provider", "theme"],
+    "pairsWith": ["ThemeInit", "LayoutProvider", "StylePanel"]
+  },
   "ThemeSwitcher": {
     "purpose": "Light, dark and system theme toggle, optionally collapsed to the active one",
     "tags": ["navigation", "settings", "theme"],
@@ -829,6 +854,11 @@
     "tags": ["feedback"],
     "avoid": "Rendering it directly — call addToast from useToast",
     "pairsWith": ["Toaster", "useToast"]
+  },
+  "ToastProvider": {
+    "purpose": "Root provider for toast notifications: renders the Toaster and gives useToast its addToast",
+    "tags": ["provider", "feedback"],
+    "pairsWith": ["Toast", "LayoutProvider"]
   },
   "Toaster": {
     "purpose": "The stack ToastProvider renders its toasts into, positioned per breakpoint",

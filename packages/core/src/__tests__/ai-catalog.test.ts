@@ -31,6 +31,11 @@ describe("ai catalog", () => {
     expect(generic.map(([name]) => name)).toEqual([]);
   });
 
+  it("carries the icon names, so an agent never opens the spec for one", () => {
+    expect(catalog.iconNames).toEqual(spec.iconNames);
+    expect(catalog.iconNames.length).toBeGreaterThan(50);
+  });
+
   it("keeps each purpose to one line", () => {
     for (const entry of Object.values(entries)) {
       expect(entry.purpose).not.toMatch(/\n/);
