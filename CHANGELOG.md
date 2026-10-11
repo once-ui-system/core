@@ -187,6 +187,15 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   Next.js installs it itself.
 - **`@once-ui-system/core/next`'s index is no longer a client module.** The
   adapters keep `"use client"` in their own file; imports don't change.
+- **`Select`'s field has role `combobox`** (it was a `textbox`), and options
+  no longer take DOM focus. Tests that find the field by role `textbox`
+  should look for `combobox`.
+- **`ContextMenu`'s `placement` default is declared as `"bottom-start"`**,
+  where the menu always opened; the declared `"bottom-end"` was never
+  applied.
+- **A `DatePicker` given `currentMonth`, `currentYear` and `onMonthChange`
+  keeps that month** when `value` changes, and its grid is named after the
+  month shown ("January 2026") instead of "Calendar".
 - **`Table`'s page buttons are `Pagination`:** first/previous/next/last and
   ellipsis ranges replace the three-button window, which never showed the
   current page near the end. Its props, page-size select and "x / y" text
@@ -310,6 +319,26 @@ Each keeps working until 3.0.
   buttons link again.
 - **Docs: proxied OG images on Next 16** (`images.localPatterns`), and the
   docs render their pages through `createMdxComponents`.
+- **`Select` is an ARIA combobox.** The field is `role="combobox"` and keeps
+  focus; it controls one named listbox and points at the active option with
+  `aria-activedescendant`. Arrow keys, Home and End move the active option
+  and skip disabled ones; Tab closes the list and moves on instead of being
+  trapped. A searchable Select's query field is a combobox with
+  `aria-autocomplete="list"`. No more `role="button"` wrappers or nested
+  listboxes.
+- **`DropdownWrapper` lists are one listbox.** The panel no longer nests a
+  second one, and a `Button` or `IconButton` trigger is never wrapped in
+  `role="button"`, on the server either.
+- **`ContextMenu` applies `fillWidth` and `placement`.** `fillWidth` fills
+  the width of the region that opens the menu; `placement` is measured from
+  the pointer and flips at the screen edges.
+- **`DatePicker`'s calendar is a real grid:** rows of gridcells under named
+  column headers, one Tab stop, and arrow keys that start from the selected
+  day and stay in their own calendar. Its month and year triggers are no
+  longer nested in another control.
+- **A `dual` `DateRangePicker` shows two consecutive months**, including for
+  a range inside one month, and marks the range's ends in whichever calendar
+  shows them.
 - **`Grid`'s `rows` sets the rows.** It had no class and reached the DOM as
   a `rows` attribute; it is now a class at the base and every breakpoint,
   like `columns`, and renders on the server.
