@@ -110,15 +110,17 @@ describe("DatePicker focus", () => {
     const fifth = await day(jan(5));
     act(() => fifth.focus());
 
+    // Focus follows the keys from an effect once the grid has re-rendered,
+    // so it is waited for rather than read straight after the key.
     await user.keyboard("{ArrowDown}");
-    expect(await day(jan(12))).toHaveFocus();
+    await waitFor(async () => expect(await day(jan(12))).toHaveFocus());
     await user.keyboard("{Enter}");
     expect(onChange).toHaveBeenLastCalledWith(jan(12));
 
     // The pick redraws the grid, and focus comes back to the picked day.
     await waitFor(async () => expect(await day(jan(12))).toHaveFocus());
     await user.keyboard("{ArrowRight}");
-    expect(await day(jan(13))).toHaveFocus();
+    await waitFor(async () => expect(await day(jan(13))).toHaveFocus());
   });
 
   it("with autoFocus, focuses the selected day as it appears", async () => {
