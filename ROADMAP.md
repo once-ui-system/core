@@ -112,7 +112,8 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] The docs' blocks use about 40 icon names that aren't registered (the docs type `iconLibrary` as `Record<string, IconType>`, so typos compile).
 - [x] The docs app's `next/image` needs `images.localPatterns` for proxied OG images on Next 16.
 - [x] The docs app's own MDX map (`apps/docs/src/product/mdx.tsx`) moves to `/mdx`; the harness generator and `rules.md` learn the `/mdx` and `/config` entries.
-- [ ] `ListItem` declares `forwardRef` but never passes the ref on; four docs blocks (About3, Background4, Newsletter3, Footer4) still use the deprecated `Particle`; `useToast` and the providers aren't in the spec (the contexts barrel isn't walked).
+- [ ] `ListItem` declares `forwardRef` but never passes the ref on (`Text` takes no ref; fix with `Text` in 2.2); `useToast` and the providers aren't in the spec (the contexts barrel isn't walked).
+- [x] Docs blocks use `ParticleFx`, not the deprecated `Particle`.
 - [ ] Layout leftovers: `Grid inline` emits `display-inline-grid`, which has no rule; `translateX`/`translateY` ignore spacing tokens; `ClientGrid` doesn't apply a breakpoint `width` or numeric spacing.
 
 ### W10 · API hygiene, additive (P1)
