@@ -9,8 +9,12 @@ import { Text } from "./Text";
 
 interface SliderProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "onChange"> {
-  value: number;
-  onChange: (value: number) => void;
+  /** The value, when the host owns the state. Pair with `onChange`. */
+  value?: number;
+  /** Where the slider starts when it manages its own state. Defaults to `min`. */
+  defaultValue?: number;
+  /** Called with the new value, as a number. */
+  onChange?: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -25,6 +29,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
   (
     {
       value,
+      defaultValue,
       onChange,
       min = 0,
       max = 100,
@@ -41,12 +46,16 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
     const sliderRef = useRef<HTMLInputElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     const labelId = useId();
+    const controlled = value !== undefined;
+    const [uncontrolled, setUncontrolled] = useState(defaultValue ?? min);
+    const current = controlled ? value : uncontrolled;
 
-    const percentage = ((value - min) / (max - min)) * 100;
+    const percentage = ((current - min) / (max - min)) * 100;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = parseFloat(e.target.value);
-      onChange(newValue);
+      if (!controlled) setUncontrolled(newValue);
+      onChange?.(newValue);
     };
 
     useEffect(() => {
@@ -68,7 +77,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
             )}
             {showValue && (
               <Text variant="label-default-s" onBackground="neutral-medium">
-                {value}
+                {current}
               </Text>
             )}
           </Row>
@@ -90,7 +99,7 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
             min={min}
             max={max}
             step={step}
-            value={value}
+            value={current}
             onChange={handleChange}
             onMouseDown={() => setIsDragging(true)}
             disabled={disabled}

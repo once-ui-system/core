@@ -4,6 +4,7 @@ import classNames from "clsx";
 import React, { forwardRef, useEffect, useId, useState } from "react";
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
+import { useRadioGroupItem } from "./RadioGroupContext";
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface RadioButtonProps
@@ -24,17 +25,32 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
     {
       style,
       className,
-      checked: controlledIsChecked,
-      name,
+      checked: checkedProp,
+      name: nameProp,
       value,
-      onToggle,
-      disabled,
+      onToggle: onToggleProp,
+      disabled: disabledProp,
       hoverable = true,
       "aria-label": ariaLabel,
       ...props
     },
     ref,
   ) => {
+    // A RadioGroup around this button owns these; outside one, the props do.
+    const {
+      checked: controlledIsChecked,
+      name,
+      onToggle,
+      disabled,
+      focusProps,
+    } = useRadioGroupItem({
+      value,
+      checked: checkedProp,
+      name: nameProp,
+      disabled: disabledProp,
+      onToggle: onToggleProp,
+    });
+
     const [isChecked, setIsChecked] = useState(controlledIsChecked || false);
     const labelId = useId();
     const descriptionId = useId();
@@ -104,6 +120,7 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
           onClick={toggleItem}
           onKeyDown={handleKeyDown}
           tabIndex={disabled ? -1 : 0}
+          {...focusProps}
           cursor={disabled ? "not-allowed" : undefined}
           style={style}
           className={classNames(styles.element, {

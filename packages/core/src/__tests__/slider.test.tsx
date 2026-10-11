@@ -118,3 +118,71 @@ describe("Slider", () => {
     expect(screen.getByRole("slider", { name: "Master volume" })).toBeInTheDocument();
   });
 });
+
+/**
+ * `value` and `onChange` used to be required, so a slider in a form that only
+ * needed submitting, or one whose value was read from a ref, still had to be
+ * wired to a `useState`.
+ */
+describe("Slider: uncontrolled", () => {
+  it("starts at defaultValue and follows the input on its own", () => {
+    const onChange = vi.fn();
+    render(<Slider aria-label="Volume" defaultValue={30} onChange={onChange} showValue />, {
+      wrapper,
+    });
+    const slider = screen.getByRole("slider") as HTMLInputElement;
+    expect(slider.value).toBe("30");
+
+    fireEvent.change(slider, { target: { value: "70" } });
+    expect(onChange).toHaveBeenCalledWith(70);
+    expect(slider.value).toBe("70");
+    expect(screen.getByText("70")).toBeInTheDocument();
+  });
+
+  it("moves the drawn fill and thumb with it", () => {
+    const { container } = render(<Slider aria-label="Volume" defaultValue={20} />, { wrapper });
+    fireEvent.change(screen.getByRole("slider"), { target: { value: "60" } });
+    expect(container.querySelector("[style*='width: 60%']")).not.toBeNull();
+    expect(container.querySelector("[style*='left: 60%']")).not.toBeNull();
+  });
+
+  it("starts at `min` without a defaultValue, and needs no onChange", () => {
+    render(<Slider aria-label="Volume" min={10} max={50} />, { wrapper });
+    const slider = screen.getByRole("slider") as HTMLInputElement;
+    expect(slider.value).toBe("10");
+    fireEvent.change(slider, { target: { value: "25" } });
+    expect(slider.value).toBe("25");
+  });
+
+  it("lets `value` win over defaultValue, so a controlled slider stays controlled", () => {
+    const onChange = vi.fn();
+    render(<Slider aria-label="Volume" value={40} defaultValue={10} onChange={onChange} />, {
+      wrapper,
+    });
+    const slider = screen.getByRole("slider") as HTMLInputElement;
+    expect(slider.value).toBe("40");
+    fireEvent.change(slider, { target: { value: "90" } });
+    expect(onChange).toHaveBeenCalledWith(90);
+    expect(slider.value).toBe("40");
+  });
+
+  it("submits its value under its name", () => {
+    const { container } = render(
+      <form>
+        <Slider label="Volume" name="volume" defaultValue={35} />
+      </form>,
+      { wrapper },
+    );
+    const form = container.querySelector("form") as HTMLFormElement;
+    expect(new FormData(form).get("volume")).toBe("35");
+    fireEvent.change(screen.getByRole("slider"), { target: { value: "55" } });
+    expect(new FormData(form).get("volume")).toBe("55");
+  });
+
+  it("has no axe violations", async () => {
+    const { container } = render(<Slider label="Volume" defaultValue={50} showValue />, {
+      wrapper,
+    });
+    await expectNoAxeViolations(container);
+  });
+});

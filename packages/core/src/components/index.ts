@@ -86,6 +86,8 @@ export * from "./PasswordInput";
 export * from "./ProgressBar";
 export * from "./Pulse";
 export * from "./RadioButton";
+export * from "./RadioGroup";
+export * from "./RangeSlider";
 export * from "./RevealFx";
 export * from "./Row";
 export * from "./ScrollContainer";

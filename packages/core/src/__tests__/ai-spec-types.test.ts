@@ -38,6 +38,8 @@ const NOT_A_TYPE = new Set([
   "ReactNode",
   "Record",
   "Ref",
+  // `formatValue = String` on RangeSlider
+  "String",
   "RefObject",
   "ComponentProps",
   "File",
@@ -52,6 +54,9 @@ const NOT_A_TYPE = new Set([
   "Loading",
   "MM",
   "MMM",
+  // RangeSlider's default `thumbLabels`
+  "Maximum",
+  "Minimum",
   "No",
   "SS",
   "Search",
