@@ -100,6 +100,33 @@
       "standalone": true
     },
     {
+      "id": "Background6",
+      "file": "Background6.tsx",
+      "title": "Ambient hero background: brand floor glow + particles",
+      "tags": ["background", "effect", "marketing", "hero"],
+      "components": ["Background", "Mask", "ParticleFx"],
+      "patterns": [
+        "solid-colour gradient floor with a blurred glow over it",
+        "masked interactive particles",
+        "absolute layer anchored top/left, content sibling above it"
+      ],
+      "tasks": ["marketing-hero"],
+      "standalone": true
+    },
+    {
+      "id": "Sidebar1",
+      "file": "Sidebar1.tsx",
+      "title": "Dashboard sidebar nav",
+      "tags": ["navigation", "sidebar", "dashboard"],
+      "components": ["ToggleButton", "Icon", "Tag", "Line", "IconButton"],
+      "patterns": [
+        "labelled nav groups split by Line",
+        "ToggleButton rows with icon or dash prefix"
+      ],
+      "tasks": ["dashboard", "settings"],
+      "standalone": true
+    },
+    {
       "id": "Dashboard1",
       "file": "Dashboard1.tsx",
       "title": "Full analytics dashboard shell",
@@ -203,6 +230,15 @@
       "patterns": ["floating controls portal", "episode carousel", "hero video player"],
       "compose": ["Header3.tsx", "Footer2.tsx"],
       "standalone": false
+    },
+    {
+      "id": "Sidebar2",
+      "file": "Sidebar2.tsx",
+      "title": "Workspace sidebar with account switcher",
+      "tags": ["navigation", "sidebar", "productivity"],
+      "components": ["DropdownWrapper", "User", "Option", "Avatar", "ToggleButton"],
+      "patterns": ["account switcher dropdown", "prefixIcon ToggleButton nav"],
+      "standalone": true
     },
     {
       "id": "Productivity1",

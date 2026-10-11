@@ -1,26 +1,98 @@
-"use client";
+import { Column, Icon, IconButton, Line, Row, Tag, Text, ToggleButton } from "@once-ui-system/core";
 
-import { Column, Row, Text, ToggleButton } from "@once-ui-system/core";
+/** Dashboard sidebar: labelled nav groups. Composed into Dashboard1 beside Header1 and Table1. */
+export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
+  return (
+    <Column
+      maxWidth={16}
+      fillHeight
+      paddingX="16"
+      paddingY="24"
+      gap="m"
+      background="surface"
+      radius="l"
+      {...flex}
+    >
+      <Column fill gap="m">
+        <Column fillWidth gap="4">
+          <Text
+            variant="body-default-xs"
+            onBackground="neutral-weak"
+            marginBottom="8"
+            marginLeft="16"
+          >
+            Dashboard
+          </Text>
+          <ToggleButton fillWidth horizontal="start">
+            <Row padding="4" vertical="center" gap="12" textVariant="label-default-s">
+              <Icon name="home" onBackground="neutral-weak" size="xs" />
+              Home
+            </Row>
+          </ToggleButton>
+          <ToggleButton fillWidth horizontal="start">
+            <Row padding="4" vertical="center" gap="12" textVariant="label-default-s">
+              <Icon name="trend" onBackground="neutral-weak" size="xs" />
+              Analytics
+            </Row>
+          </ToggleButton>
+          <ToggleButton fillWidth horizontal="start">
+            <Row padding="4" vertical="center" gap="12" textVariant="label-default-s">
+              <Icon name="file" onBackground="neutral-weak" size="xs" />
+              Reports
+              <Tag size="s">New</Tag>
+            </Row>
+          </ToggleButton>
+        </Column>
 
-const nav = [
-  { label: "Overview", href: "#" },
-  { label: "Analytics", href: "#" },
-  { label: "Orders", href: "#" },
-  { label: "Customers", href: "#" },
-  { label: "Settings", href: "#" },
-];
+        <Line />
 
-/** App sidebar shell — compose with Header1 + Table1 in Dashboard1 */
-export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => (
-  <Column fillHeight maxWidth={18} background="surface" borderRight padding="8" gap="4" {...flex}>
-    <Text variant="label-default-s" onBackground="neutral-weak" padding="12">
-      Dashboard
-    </Text>
-    {nav.map((item) => (
-      <ToggleButton key={item.label} fillWidth horizontal="start">
-        {item.label}
-      </ToggleButton>
-    ))}
-    <Row flex={1} />
-  </Column>
-);
+        <Column fillWidth gap="4">
+          <Text variant="body-default-xs" onBackground="neutral-weak" marginY="8" marginLeft="16">
+            Management
+          </Text>
+          <ToggleButton fillWidth horizontal="start">
+            <Row padding="4" gap="12" vertical="center" textVariant="label-default-s">
+              <Line width="16" />
+              Users
+            </Row>
+          </ToggleButton>
+          <ToggleButton fillWidth horizontal="start">
+            <Row padding="4" vertical="center" gap="12" textVariant="label-default-s">
+              <Line width="16" />
+              Roles
+            </Row>
+          </ToggleButton>
+          <ToggleButton fillWidth horizontal="start">
+            <Row padding="4" gap="12" vertical="center" textVariant="label-default-s">
+              <Line width="16" />
+              Permissions
+            </Row>
+          </ToggleButton>
+        </Column>
+
+        <Line />
+
+        <Column fill gap="4">
+          <Row fillWidth horizontal="between" vertical="center" paddingY="8" paddingX="16">
+            <Text variant="body-default-xs" onBackground="neutral-weak">
+              Projects
+            </Text>
+            <IconButton tooltip="Create" variant="secondary" icon="plus" size="s" />
+          </Row>
+          <ToggleButton fillWidth horizontal="start">
+            <Row padding="4" gap="12" vertical="center" textVariant="label-default-s">
+              <Line width="16" />
+              Overview
+            </Row>
+          </ToggleButton>
+          <ToggleButton fillWidth horizontal="start">
+            <Row padding="4" gap="12" vertical="center" textVariant="label-default-s">
+              <Line width="16" />
+              My projects
+            </Row>
+          </ToggleButton>
+        </Column>
+      </Column>
+    </Column>
+  );
+};
