@@ -24,8 +24,6 @@ interface ToastProps {
   duration?: number;
 }
 
-const DEFAULT_DURATION = 6000;
-
 const iconMap: { [key in ToastProps["variant"]]: IconName } = {
   success: "check",
   danger: "danger",
@@ -35,7 +33,8 @@ const iconMap: { [key in ToastProps["variant"]]: IconName } = {
 
 const Toast = forwardRef<HTMLDivElement, ToastProps>(
   (
-    { variant, className, showIcon = true, onClose, action, children, duration = DEFAULT_DURATION },
+    // The default is a literal so the generated props spec (ai/) states it.
+    { variant, className, showIcon = true, onClose, action, children, duration = 6000 },
     ref,
   ) => {
     const [visible, setVisible] = useState(true);
