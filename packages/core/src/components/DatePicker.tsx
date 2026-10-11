@@ -1,14 +1,14 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { CondensedTShirtSizes } from "../types";
 import {
   clearLastOpenedDropdown,
   getLastOpenedDropdown,
   setLastOpenedDropdown,
 } from "../utils/dropdownState";
-import { ArrowNavigation } from "./ArrowNavigationContext";
+import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationContext";
 import { Button } from "./Button";
 import { Column } from "./Column";
 import styles from "./DatePicker.module.scss";
@@ -48,9 +48,42 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
     endDate?: Date;
   };
   onHover?: (date: Date | null) => void;
+  /**
+   * Moves focus onto the selected day (else the first day that can be
+   * picked) as the picker appears, and again each time `open` turns true:
+   * for a picker that has just been opened, as DateInput's is. Without it
+   * the picker never takes focus on its own.
+   */
   autoFocus?: boolean;
   open?: boolean;
 }
+
+/** The days the grid's keys move through: this month's, that can be picked. */
+const DAY_SELECTOR = "button[data-value]:not([disabled])";
+
+/**
+ * Keeps the grid's roving index on whichever day has focus, however it got
+ * there: Tab, a click, or the picker's `autoFocus`. The index otherwise only
+ * follows the arrow keys, and it no longer starts on a day when the grid
+ * mounts (see `initialFocusedIndex`), so the keys could not tell where to
+ * start from. Rendered inside the grid's ArrowNavigation, for its context.
+ */
+const FollowFocusedDay = ({ gridRef }: { gridRef: React.RefObject<HTMLDivElement | null> }) => {
+  const { setFocusedIndex } = useArrowNavigationContext();
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const follow = (event: FocusEvent) => {
+      const index = Array.from(grid.querySelectorAll(DAY_SELECTOR)).indexOf(
+        event.target as Element,
+      );
+      if (index >= 0) setFocusedIndex(index);
+    };
+    grid.addEventListener("focusin", follow);
+    return () => grid.removeEventListener("focusin", follow);
+  }, [gridRef, setFocusedIndex]);
+  return null;
+};
 
 const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   (
@@ -122,6 +155,16 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
 
     /** The day grid, so its keys act on its own day buttons and not another calendar's. */
     const gridRef = useRef<HTMLDivElement>(null);
+    /** The whole picker: its header controls as well as the grid. */
+    const rootRef = useRef<HTMLDivElement | null>(null);
+    const setRootRef = useCallback(
+      (node: HTMLDivElement | null) => {
+        rootRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
+      },
+      [ref],
+    );
     /** The day button that last had focus: the grid's tab stop follows it. */
     const [focusedDate, setFocusedDate] = useState<Date | null>(null);
 
@@ -194,48 +237,50 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       return () => clearTimeout(timer);
     }, []);
 
-    // Effect to ensure proper highlighting when component mounts or selected date changes
+    /**
+     * Focus goes into the grid only when the user is in the picker already,
+     * never because it mounted or its month changed. A timer here used to
+     * focus the selected day once the picker was ready and on every change
+     * of month, wherever focus was: an inline DatePicker took focus from the
+     * page as it loaded, from a field the user was typing in, and from the
+     * month and year controls as they were used. (It also looked the day up
+     * in whichever dropdown panel came first in the document.)
+     *
+     * Now focus moves in for `autoFocus`, once per opening: DateInput opens
+     * the picker for a keyboard user, who is put on the selected day. Focus
+     * that is already somewhere in the picker stays where the user put it.
+     * The grid's other move, restoring focus to the picked day after a pick
+     * from the keyboard remounts it, is ArrowNavigation's, and happens only
+     * when focus was in the picker (see `initialFocusedIndex`).
+     *
+     * The panel a picker opens in is hidden until it has been positioned,
+     * and a hidden button does not take focus, so this tries again until the
+     * day has it, for up to half a second.
+     */
     useEffect(() => {
-      if (selectedDate && !isTimeSelector && isReady) {
-        // Only highlight if the current month/year matches the selected date's month/year
-        if (
-          selectedDate.getMonth() === currentMonth &&
-          selectedDate.getFullYear() === currentYear
-        ) {
-          // Small delay to ensure the DOM is ready
-          const timer = setTimeout(() => {
-            // Focus already on one of this grid's days is the user's: the
-            // arrow keys put it there in the time this waited.
-            if (gridRef.current?.contains(document.activeElement)) return;
-            const container =
-              document.querySelector('[data-role="dropdown-portal"]') ||
-              document.querySelector("[data-dropdown-id]") ||
-              document.activeElement?.closest('[data-role="dropdown-portal"]') ||
-              document.activeElement?.closest('[data-role="dropdown-wrapper"]') ||
-              document.body; // Fallback for standalone DatePicker
-            if (container) {
-              // Find the selected date button and focus it
-              const enabledButtons = Array.from(
-                container.querySelectorAll("button[data-value]:not([disabled])"),
-              );
+      if (!autoFocus || open === false || !isReady) return;
 
-              // Find the button that matches the selected date
-              const selectedButton = enabledButtons.find((button) => {
-                const buttonDate = new Date(button.getAttribute("data-value") || "");
-                return buttonDate.getTime() === selectedDate.getTime();
-              });
-
-              if (selectedButton) {
-                // Focus the button without scrolling
-                (selectedButton as HTMLElement).focus({ preventScroll: true });
-              }
-            }
-          }, 50);
-
-          return () => clearTimeout(timer);
+      let tries = 0;
+      let timer: ReturnType<typeof setTimeout>;
+      const focusTheGrid = () => {
+        if (rootRef.current?.contains(document.activeElement)) return;
+        const day = gridRef.current?.querySelector<HTMLElement>(`${DAY_SELECTOR}[tabindex="0"]`);
+        day?.focus({ preventScroll: true });
+        if (document.activeElement !== day && ++tries < 10) {
+          timer = setTimeout(focusTheGrid, 50);
         }
-      }
-    }, [selectedDate, isTimeSelector, isReady, currentMonth, currentYear, open]);
+      };
+      timer = setTimeout(focusTheGrid, 50);
+      return () => clearTimeout(timer);
+    }, [autoFocus, open, isReady]);
+
+    /**
+     * Whether the user is in this picker: focus is on one of its controls.
+     * Read as the grid mounts, which it does again for each month and each
+     * pick, to decide whether it may take focus (see `initialFocusedIndex`).
+     */
+    const focusIsInside = () =>
+      typeof document !== "undefined" && !!rootRef.current?.contains(document.activeElement);
 
     const monthNames = [
       "January",
@@ -678,7 +723,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
             setIsYearOpen(false);
           }
         }}
-        ref={ref}
+        ref={setRootRef}
         className={classNames(styles.calendar, className)}
         style={style}
         fillWidth
@@ -978,27 +1023,37 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 // The pickable days, not every day of the month: the keys
                 // count enabled buttons, and End and the wrap ran past them.
                 itemCount={pickableDays.length}
-                // Read once, at mount. It used to wait for `isReady` (it was
-                // looked up in the DOM), but the grid mounts before that, so
-                // the keys always started from the 1st.
-                initialFocusedIndex={startDay !== undefined ? pickableDays.indexOf(startDay) : 0}
+                // Read once, at mount, and a day only while the user is in
+                // the picker. The grid mounts again for each month and each
+                // pick, and ArrowNavigation focuses its starting day when
+                // focus has fallen to the page, as it does when a pick from
+                // the keyboard removes the focused day: that puts focus back
+                // on the picked day. Anywhere else, the page loading or a
+                // value set from outside, it took focus from the page. Where
+                // the keys start is the day that has focus (FollowFocusedDay).
+                initialFocusedIndex={
+                  focusIsInside() && startDay !== undefined ? pickableDays.indexOf(startDay) : -1
+                }
                 wrap
-                itemSelector="button[data-value]:not([disabled])"
+                itemSelector={DAY_SELECTOR}
                 role="grid"
                 aria-label={gridLabel}
                 key={`calendar-${currentYear}-${currentMonth}-${selectedDate?.getTime() || 0}`}
                 disableHighlighting={true}
-                autoFocus={autoFocus}
+                // `autoFocus` is the effect above, once per opening: here it
+                // focused a day each time the grid mounted, every month.
+                autoFocus={false}
                 onSelect={(index) => {
                   // This grid's own button for that day: looked up in the
                   // whole document, a dual picker's second calendar picked
                   // the first one's day.
                   gridRef.current
-                    ?.querySelectorAll<HTMLButtonElement>("button[data-value]:not([disabled])")
+                    ?.querySelectorAll<HTMLButtonElement>(DAY_SELECTOR)
                     [index]?.click();
                 }}
               >
                 {renderCalendarGrid()}
+                <FollowFocusedDay gridRef={gridRef} />
               </ArrowNavigation>
             )
           )}
