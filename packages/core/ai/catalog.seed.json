@@ -546,6 +546,11 @@
     "tags": ["form", "settings"],
     "pairsWith": ["RadioButton", "Form", "Setting"]
   },
+  "RangeSlider": {
+    "purpose": "Two-thumb slider selecting a [start, end] range, such as a price filter; the thumbs never cross",
+    "tags": ["form", "settings"],
+    "pairsWith": ["Slider", "Setting", "Form"]
+  },
   "RevealFx": {
     "purpose": "Slide-and-fade entrance for a block; delay and speed in ms — one coherent set per page",
     "tags": ["effect", "motion"],

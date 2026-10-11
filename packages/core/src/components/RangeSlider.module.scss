@@ -1,0 +1,77 @@
+// The same track, fill and thumb as Slider, positioned with logical
+// properties so the range mirrors in a right-to-left layout.
+
+.container {
+  user-select: none;
+  isolation: isolate;
+}
+
+.wrapper {
+  cursor: pointer;
+  // Horizontal drags move a thumb; vertical ones still scroll the page.
+  touch-action: pan-y;
+
+  &.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  &.dragging {
+    cursor: grabbing;
+  }
+}
+
+.track {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  inset-inline: 0;
+  height: var(--static-space-4);
+  background-color: var(--neutral-alpha-medium);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.fill {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background-color: var(--brand-solid-medium);
+}
+
+.thumb {
+  position: absolute;
+  top: 50%;
+  width: var(--static-space-16);
+  height: var(--static-space-16);
+  // Centred on its value by margins rather than a translate, which would
+  // have to flip sign in a right-to-left layout.
+  margin-top: calc(var(--static-space-16) / -2);
+  margin-inline-start: calc(var(--static-space-16) / -2);
+  background-color: var(--brand-on-solid-strong);
+  border: var(--static-space-2) solid var(--brand-solid-medium);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-s);
+  transition: transform 0.1s ease-out;
+  cursor: grab;
+  outline: none;
+
+  &:focus-visible {
+    outline: var(--static-space-2) solid var(--brand-alpha-medium);
+    outline-offset: var(--static-space-2);
+  }
+
+  .dragging & {
+    cursor: grabbing;
+  }
+
+  .disabled & {
+    cursor: not-allowed;
+  }
+}
+
+.wrapper:not(.disabled):hover .thumb,
+.thumb.active {
+  transform: scale(1.2);
+}
