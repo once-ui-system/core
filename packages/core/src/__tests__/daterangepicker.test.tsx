@@ -5,7 +5,7 @@ import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { type DateRange, DateRangePicker } from "../components/DateRangePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { axeViolations } from "../test/axe";
+import { axeViolations, expectNoAxeViolations } from "../test/axe";
 
 /**
  * DateRangePicker picks a range in clicks: the first sets the start, the
@@ -184,6 +184,21 @@ describe("DateRangePicker", () => {
     });
     await day(jan(5));
     expect(await axeViolations(container)).toEqual([]);
+  });
+
+  it("has no axe violations with `dual`, mid-selection", async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <DateRangePicker
+        dual
+        value={{ startDate: jan(28), endDate: undefined }}
+        onChange={vi.fn()}
+      />,
+      { wrapper },
+    );
+    await day(jan(28));
+    await user.hover(await day(new Date(2026, 1, 3)));
+    await expectNoAxeViolations(container);
   });
 
   // With `dual`, the second calendar is given the next month as
