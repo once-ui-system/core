@@ -40,11 +40,21 @@ updates `arms/once/package-lock.json`; commit that with the results), installs t
 two scaffolds from their lockfiles, and builds every arm's read-only sandbox. It also
 prints the rc.0 tarball's sha256 and writes it to `work/context-manifest.json`.
 
-Check arm A's harness is the fixed one (icon names out of `spec.json`):
+Check arm A's harness is the fixed one (icon names out of `spec.json`), and stop if any
+check fails:
 
 ```bash
-grep -n "spec.json" work/sandbox/once-harness/docs/ai/rules.compact.md   # should no longer send agents there for icon names
+node runner/check-harness.mjs
 ```
+
+It checks:
+- `catalog.json` has a top-level `iconNames` array (99 names), equal to `spec.json`'s.
+- `rules.compact.md` sends icon names to `iconNames` in `catalog.json`. Its one remaining
+  `spec.json` mention, about `functions`/`importFrom`, is expected.
+- `rules.md` rules 14b and 31 and the `Icon.names` gotcha point at `catalog.json`.
+
+The committed `ai/` files on the release branch can lag behind; the package build
+regenerates them, so check the installed tarball (this does), not the repo.
 
 ## 2. Self-test (no API cost), then a one-run canary
 

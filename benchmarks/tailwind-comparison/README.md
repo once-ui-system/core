@@ -17,6 +17,7 @@ prompts/            system + user prompt, the one-sentence stack lines, neutrali
 arms/{once,shadcn,tailwind}/   Next.js scaffolds (committed lockfiles)
 runner/
   setup.mjs         install scaffolds, build each arm's read-only sandbox (work/sandbox)
+  check-harness.mjs checks arm A's sandbox has the 2.1.0 icon-names fix (run before paid runs)
   generate-api.mjs  full-run generator: Messages API + list_dir/read_file tools + repair loop
   gates.mjs         typecheck → next build → render (console, axe, screenshots)
   metrics.mjs       normalised code size, vendored-code closure, proxy/exact token counts
