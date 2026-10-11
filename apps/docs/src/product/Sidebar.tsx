@@ -1,22 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import {
-  Schemes,
   Accordion,
+  ColorScheme,
   Column,
   Flex,
   Icon,
+  type IconName,
   Line,
-  Row,
-  ToggleButton,
-  Skeleton,
   Pulse,
+  Row,
+  Schemes,
+  Skeleton,
   Tag,
   Text,
-  ColorScheme,
+  ToggleButton,
 } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { layout } from "@/resources";
 import { AVAILABILITY, type Availability } from "./availability";
 
@@ -25,10 +26,8 @@ import styles from "./Sidebar.module.scss";
 // Global navigation cache to prevent refetching
 let globalNavigationCache: any = null;
 
-export interface NavigationItem extends Omit<
-  React.ComponentProps<typeof Flex>,
-  "title" | "label" | "children"
-> {
+export interface NavigationItem
+  extends Omit<React.ComponentProps<typeof Flex>, "title" | "label" | "children"> {
   slug: string;
   title: string;
   label?: string;
@@ -62,10 +61,7 @@ const NAV_RHYTHM = {
   itemSize: "m",
 } as const;
 
-interface SidebarProps extends Omit<
-  React.ComponentProps<typeof Flex>,
-  "children"
-> {
+interface SidebarProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
   initialNavigation?: NavigationItem[];
 }
 
@@ -140,8 +136,7 @@ const NavigationItemComponent: React.FC<{
 
   // Check if current section should be open based on path matching
   // This ensures the section is open when arriving at a page within this section
-  const shouldBeOpen =
-    isSelected || hasActiveChild || isParentPath || isPathWithinSection;
+  const shouldBeOpen = isSelected || hasActiveChild || isParentPath || isPathWithinSection;
 
   if (item.children) {
     return (
@@ -165,12 +160,7 @@ const NavigationItemComponent: React.FC<{
               radius="s"
               open={shouldBeOpen}
               title={
-                <Row
-                  fillWidth
-                  vertical="center"
-                  textVariant="label-default-m"
-                  paddingLeft="4"
-                >
+                <Row fillWidth vertical="center" textVariant="label-default-m" paddingLeft="4">
                   {item.title}
                 </Row>
               }
@@ -273,25 +263,22 @@ const NavigationItemComponent: React.FC<{
 };
 
 // Add display name and memoize with a less aggressive comparison function
-const NavigationItem = React.memo(
-  NavigationItemComponent,
-  (prevProps, nextProps) => {
-    // Always re-render if the pathname changes - this is critical for active state updates
-    if (prevProps.pathname !== nextProps.pathname) {
-      return false; // Different pathname means we should re-render
-    }
+const NavigationItem = React.memo(NavigationItemComponent, (prevProps, nextProps) => {
+  // Always re-render if the pathname changes - this is critical for active state updates
+  if (prevProps.pathname !== nextProps.pathname) {
+    return false; // Different pathname means we should re-render
+  }
 
-    // Otherwise, only re-render if the item itself changes
-    return prevProps.item === nextProps.item;
-  },
-);
+  // Otherwise, only re-render if the item itself changes
+  return prevProps.item === nextProps.item;
+});
 
 NavigationItem.displayName = "NavigationItem";
 
 // Memoized resource link component
 const ResourceLinkComponent: React.FC<{
   href: string;
-  icon: string;
+  icon: IconName;
   label: string;
   pathname: string;
   /** A recency label, drawn like a page's `navTag`: a brand dot and the word. */
@@ -330,22 +317,19 @@ const ResourceLinkComponent: React.FC<{
 };
 
 // Add display name and memoize with a less aggressive comparison function
-const ResourceLink = React.memo(
-  ResourceLinkComponent,
-  (prevProps, nextProps) => {
-    // Always re-render if the pathname changes - this is critical for active state updates
-    if (prevProps.pathname !== nextProps.pathname) {
-      return false; // Different pathname means we should re-render
-    }
+const ResourceLink = React.memo(ResourceLinkComponent, (prevProps, nextProps) => {
+  // Always re-render if the pathname changes - this is critical for active state updates
+  if (prevProps.pathname !== nextProps.pathname) {
+    return false; // Different pathname means we should re-render
+  }
 
-    // Otherwise, only re-render if the href, icon or tag changes
-    return (
-      prevProps.href === nextProps.href &&
-      prevProps.icon === nextProps.icon &&
-      prevProps.tag === nextProps.tag
-    );
-  },
-);
+  // Otherwise, only re-render if the href, icon or tag changes
+  return (
+    prevProps.href === nextProps.href &&
+    prevProps.icon === nextProps.icon &&
+    prevProps.tag === nextProps.tag
+  );
+});
 
 ResourceLink.displayName = "ResourceLink";
 
@@ -375,12 +359,7 @@ const SidebarContent: React.FC<{
     // Release history lives on GitHub, generated from CHANGELOG.md.
     const resourcesSection = (
       <Column gap="4" marginTop="32" paddingLeft="4">
-        <Row
-          textVariant="label-strong-s"
-          onBackground="brand-strong"
-          paddingLeft="8"
-          paddingY="12"
-        >
+        <Row textVariant="label-strong-s" onBackground="brand-strong" paddingLeft="8" paddingY="12">
           Resources
         </Row>
         {/* The blocks surface has its own catalogue and hides this sidebar,
@@ -422,9 +401,7 @@ const SidebarContent: React.FC<{
 SidebarContent.displayName = "SidebarContent";
 
 const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
-  const [navigation, setNavigation] = useState<NavigationItem[]>(
-    initialNavigation || [],
-  );
+  const [navigation, setNavigation] = useState<NavigationItem[]>(initialNavigation || []);
   const [hasLoaded, setHasLoaded] = useState(false);
   const pathname = usePathname();
 
@@ -492,11 +469,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
         style={{ maxHeight: "calc(100vh - 4rem)", top: "3.875rem" }}
       >
         {hasLoaded ? (
-          <SidebarContent
-            key={pathname}
-            navigation={navigation}
-            pathname={pathname}
-          />
+          <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
         ) : (
           <Column fillWidth gap="4">
             {Array.from({ length: 7 }).map((_, i) => (

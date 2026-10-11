@@ -129,7 +129,7 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
           <Column gap="12">
             {[
               { icon: "book" as const, label: "Documentation", href: "#" },
-              { icon: "cam" as const, label: "Video walkthroughs", href: "#" },
+              { icon: "video" as const, label: "Video walkthroughs", href: "#" },
               { icon: "calendar" as const, label: "Book a call", href: "#" },
             ].map((link) => (
               <Row key={link.label} gap="12" vertical="center" cursor="interactive">
