@@ -1,0 +1,13 @@
+{
+ "name": "DataThemeProvider",
+ "group": "contexts",
+ "props": {
+  "children": "!ReactNode",
+  "variant": "ChartVariant",
+  "mode": "ChartMode",
+  "height": "number",
+  "axis": "{ stroke: string; }",
+  "tick": "{ fill: string; fontSize: number; line: boolean; }"
+ },
+ "mixinsRef": []
+}

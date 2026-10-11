@@ -1,0 +1,28 @@
+{
+ "name": "ThemeProvider",
+ "group": "contexts",
+ "props": {
+  "theme": "Theme = system",
+  "neutral": "NeutralColor | \"custom\"",
+  "brand": "Schemes | \"custom\"",
+  "accent": "Schemes | \"custom\"",
+  "solid": "SolidType",
+  "solidStyle": "SolidStyle",
+  "border": "BorderStyle",
+  "surface": "SurfaceStyle",
+  "transition": "TransitionStyle",
+  "scaling": "ScalingSize",
+  "bodySize": "BodySize",
+  "bodyLineHeight": "BodyLineHeight",
+  "desktopSize": "DeviceFontSize",
+  "tabletSize": "DeviceFontSize",
+  "mobileSize": "DeviceFontSize",
+  "cursorInteractive": "InteractiveCursor",
+  "brandSeed": "string",
+  "accentSeed": "string",
+  "neutralSeed": "string",
+  "children": "!React.ReactNode",
+  "persistence": "StylePersistence = local"
+ },
+ "mixinsRef": []
+}

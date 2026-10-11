@@ -1,0 +1,9 @@
+{
+ "name": "OgRoutesProvider",
+ "group": "contexts",
+ "props": {
+  "routes": "!Partial<OgRoutes>",
+  "children": "!ReactNode"
+ },
+ "mixinsRef": []
+}

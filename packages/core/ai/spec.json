@@ -418,6 +418,7 @@
    "s",
    "xs"
   ],
+  "Breakpoints": "Record<BreakpointKey, number>",
   "BulgeConfig": {
    "type": "\"ripple\" | \"wave\"",
    "duration": "number",
@@ -458,6 +459,13 @@
    "divergent",
    "sequential"
   ],
+  "ChartOptions": {
+   "variant": "!ChartVariant",
+   "mode": "!ChartMode",
+   "height": "!number",
+   "axis": "!{ stroke: string; }",
+   "tick": "!{ fill: string; fontSize: number; line: boolean; }"
+  },
   "ChartVariant": [
    "flat",
    "outline",
@@ -640,6 +648,14 @@
   "DataTableSort": {
    "key": "!string",
    "direction": "!\"asc\" | \"desc\""
+  },
+  "DataThemeState": {
+   "setChartOptions": "!(options: Partial<ChartOptions>) => void",
+   "variant": "!ChartVariant",
+   "mode": "!ChartMode",
+   "height": "!number",
+   "axis": "!{ stroke: string; }",
+   "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
   "DateConfig": {
    "start": "Date",
@@ -907,6 +923,11 @@
    "11"
   ],
   "IconButtonProps": "IconButton props",
+  "IconComponent": [
+   "ComponentClass<SVGProps<SVGSVGElement>, any>",
+   "FunctionComponent<SVGProps<SVGSVGElement>>"
+  ],
+  "IconLibrary": "Record<IconName, IconComponent>",
   "IconName": [
    "symbol",
    "security",
@@ -1023,6 +1044,14 @@
    "icon": "IconName",
    "description": "ReactNode",
    "placeholder": "string"
+  },
+  "LayoutContextType": {
+   "currentBreakpoint": "!BreakpointKey",
+   "width": "!number",
+   "breakpoints": "!Breakpoints",
+   "isBreakpoint": "!(key: BreakpointKey) => boolean",
+   "maxWidth": "!(key: BreakpointKey) => boolean",
+   "minWidth": "!(key: BreakpointKey) => boolean"
   },
   "LegendConfig": {
    "display": "boolean",
@@ -1398,6 +1427,24 @@
    "setRunning": "!React.Dispatch<React.SetStateAction<boolean>>",
    "reset": "!() => void"
   },
+  "StyleOptions": {
+   "theme": "!Theme",
+   "neutral": "!NeutralColor | \"custom\"",
+   "brand": "!Schemes | \"custom\"",
+   "accent": "!Schemes | \"custom\"",
+   "solid": "!SolidType",
+   "solidStyle": "!SolidStyle",
+   "border": "!BorderStyle",
+   "surface": "!SurfaceStyle",
+   "transition": "!TransitionStyle",
+   "scaling": "!ScalingSize",
+   "bodySize": "!BodySize",
+   "bodyLineHeight": "!BodyLineHeight",
+   "desktopSize": "DeviceFontSize",
+   "tabletSize": "DeviceFontSize",
+   "mobileSize": "DeviceFontSize",
+   "cursorInteractive": "InteractiveCursor"
+  },
   "StylePanelContextValue": {
    "value": "!StylePanelValue",
    "set": "!(patch: Partial<StylePanelValue>) => void",
@@ -1500,6 +1547,16 @@
    "bodyText": "{ section?: boolean; size?: boolean; lineHeight?: boolean }",
    "advanced": "{ section?: boolean; surface?: boolean; scaling?: boolean; dataStyle?: boolean; transition?: boolean; }"
   },
+  "StylePersistence": [
+   "none",
+   "local",
+   "StylePersistenceAdapter"
+  ],
+  "StylePersistenceAdapter": {
+   "get": "(key: string) => string | null",
+   "set": "!(key: string, value: string) => void | Promise<void>",
+   "remove": "(key: string) => void | Promise<void>"
+  },
   "StyleProps": {
    "textVariant": "TextVariant",
    "textSize": "TextSize",
@@ -1534,6 +1591,25 @@
    "themeBorder": "BorderStyle",
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle"
+  },
+  "StyleProviderState": {
+   "theme": "!Theme",
+   "neutral": "!NeutralColor | \"custom\"",
+   "brand": "!Schemes | \"custom\"",
+   "accent": "!Schemes | \"custom\"",
+   "solid": "!SolidType",
+   "solidStyle": "!SolidStyle",
+   "border": "!BorderStyle",
+   "surface": "!SurfaceStyle",
+   "transition": "!TransitionStyle",
+   "scaling": "!ScalingSize",
+   "bodySize": "!BodySize",
+   "bodyLineHeight": "!BodyLineHeight",
+   "desktopSize": "DeviceFontSize",
+   "tabletSize": "DeviceFontSize",
+   "mobileSize": "DeviceFontSize",
+   "cursorInteractive": "InteractiveCursor",
+   "setStyle": "!(style: Partial<StyleOptions>) => void"
   },
   "SurfaceStyle": [
    "filled",
@@ -1703,6 +1779,11 @@
    "OnceUIStyleConfig",
    "ThemeInitAttributeConfig"
   ],
+  "ThemeProviderState": {
+   "theme": "!Theme",
+   "resolvedTheme": "!\"light\" | \"dark\"",
+   "setTheme": "!(theme: Theme) => void"
+  },
   "ThemeSwitcherLabels": {
    "system": "string",
    "dark": "string",
@@ -1719,6 +1800,11 @@
    "state": "\"default\" | \"active\" | \"success\" | \"danger\"",
    "marker": "React.ReactNode",
    "children": "React.ReactNode"
+  },
+  "ToastContextProps": {
+   "toasts": "!Toast[]",
+   "addToast": "!(toast: Omit<Toast, \"id\">) => string",
+   "removeToast": "!(id: string) => void"
   },
   "ToastPosition": [
    "top",
@@ -5007,6 +5093,82 @@
     "className": "string"
    }
   },
+  "AdapterProvider": {
+   "group": "contexts",
+   "props": {
+    "adapters": "!Partial<OnceUIAdapters>",
+    "children": "!React.ReactNode"
+   }
+  },
+  "DataThemeProvider": {
+   "group": "contexts",
+   "props": {
+    "children": "!ReactNode",
+    "variant": "ChartVariant",
+    "mode": "ChartMode",
+    "height": "number",
+    "axis": "{ stroke: string; }",
+    "tick": "{ fill: string; fontSize: number; line: boolean; }"
+   }
+  },
+  "IconProvider": {
+   "group": "contexts",
+   "props": {
+    "icons": "Partial<IconLibrary> | Record<string, IconComponent>",
+    "children": "!React.ReactNode"
+   }
+  },
+  "LayoutProvider": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "props": {
+    "children": "!ReactNode"
+   }
+  },
+  "OgRoutesProvider": {
+   "group": "contexts",
+   "props": {
+    "routes": "!Partial<OgRoutes>",
+    "children": "!ReactNode"
+   }
+  },
+  "ThemeProvider": {
+   "group": "contexts",
+   "props": {
+    "theme": "Theme = system",
+    "neutral": "NeutralColor | \"custom\"",
+    "brand": "Schemes | \"custom\"",
+    "accent": "Schemes | \"custom\"",
+    "solid": "SolidType",
+    "solidStyle": "SolidStyle",
+    "border": "BorderStyle",
+    "surface": "SurfaceStyle",
+    "transition": "TransitionStyle",
+    "scaling": "ScalingSize",
+    "bodySize": "BodySize",
+    "bodyLineHeight": "BodyLineHeight",
+    "desktopSize": "DeviceFontSize",
+    "tabletSize": "DeviceFontSize",
+    "mobileSize": "DeviceFontSize",
+    "cursorInteractive": "InteractiveCursor",
+    "brandSeed": "string",
+    "accentSeed": "string",
+    "neutralSeed": "string",
+    "children": "!React.ReactNode",
+    "persistence": "StylePersistence = local"
+   }
+  },
+  "ToastProvider": {
+   "group": "contexts",
+   "props": {
+    "children": "!ReactNode",
+    "xl": "ToastPosition",
+    "l": "ToastPosition",
+    "m": "ToastPosition",
+    "s": "ToastPosition",
+    "xs": "ToastPosition"
+   }
+  },
   "MdxBlockQuote": {
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
@@ -5150,13 +5312,6 @@
     "HeadingAnchor"
    ]
   },
-  "LayoutProvider": {
-   "group": "next",
-   "importFrom": "@once-ui-system/core/next",
-   "props": {
-    "children": "!ReactNode"
-   }
-  },
   "NextAdapterProvider": {
    "group": "next",
    "importFrom": "@once-ui-system/core/next",
@@ -5222,6 +5377,78 @@
    "group": "hooks",
    "kind": "hook",
    "signature": "<T extends Record<string, any>>(options: StreamingViewportOptions<T>) => StreamingViewportResult<T>"
+  },
+  "defaultAdapters": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "OnceUIAdapters"
+  },
+  "resetAdapterWarning": {
+   "group": "contexts",
+   "kind": "function",
+   "signature": "() => void",
+   "doc": "Exported for tests; resets the once-per-session latch."
+  },
+  "useAdapters": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => OnceUIAdapters"
+  },
+  "warnIfFrameworkUnadapted": {
+   "group": "contexts",
+   "kind": "function",
+   "signature": "(adapters: OnceUIAdapters) => void"
+  },
+  "useDataTheme": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => DataThemeState"
+  },
+  "defaultChartOptions": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "ChartOptions"
+  },
+  "useIcons": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => { icons: IconLibrary; }"
+  },
+  "DEFAULT_BREAKPOINTS": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "{ readonly xs: 480; readonly s: 768; readonly m: 1024; readonly l: 1440; readonly xl: number; }"
+  },
+  "useLayout": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => LayoutContextType"
+  },
+  "useOgRoutes": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => Readonly<OgRoutes>",
+   "doc": "The Open Graph routes in effect: the nearest `OgRoutesProvider`'s, or the defaults."
+  },
+  "useTheme": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => ThemeProviderState"
+  },
+  "useStyle": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => StyleProviderState"
+  },
+  "defaultStyleOptions": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "StyleOptions"
+  },
+  "useToast": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => ToastContextProps"
   },
   "createMdxComponents": {
    "group": "mdx",

@@ -1,0 +1,9 @@
+{
+ "name": "IconProvider",
+ "group": "contexts",
+ "props": {
+  "icons": "Partial<IconLibrary> | Record<string, IconComponent>",
+  "children": "!React.ReactNode"
+ },
+ "mixinsRef": []
+}
