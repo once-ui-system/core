@@ -8,12 +8,14 @@ auth, backend, or secrets** — nothing external needs to be provisioned.
 
 Workspaces:
 - `packages/core` (`@once-ui-system/core`) — the design system library (the product). Built with `tsc` + `sass` to `dist/`.
+- `packages/foundations` (`@once-ui-system/foundations`) — tokens and utility styles; **private**, inlined into core at build time.
 - `apps/dev` — Next.js 16 sandbox for developing/testing components (primary contributor playground; see `CONTRIBUTING.md`).
-- `apps/docs` — Next.js 15 documentation site.
+- `apps/docs` — Next.js 16 documentation site.
 
 ### Environment / setup notes
-- Node: the repo declares `engines.node: 20.x`, but the VM ships Node 22 (LTS). There is **no `engine-strict`**, and Next 15/16 both support Node 22, so the harmless `Unsupported engine` warning during install can be ignored.
-- `pnpm install` builds `packages/core` automatically via the `apps/docs` `postinstall` hook, so `dist/` is ready after install. If the apps ever fail to resolve `@once-ui-system/core`, rebuild it with `pnpm --filter @once-ui-system/core build`.
+- Node: the repo requires **Node >=22.12.0** (`engines` in the root and docs `package.json`). A `preinstall` hook (`scripts/check-node.mjs`) stops an older Node with an explanation: Sass loads chokidar 5, which is ESM-only, through `require()`, and that works only from 22.12.0.
+- `pnpm install` builds `packages/foundations` and `packages/core` through their `prepare` scripts, so `dist/` and the generated `ai/` artifacts are ready after install. If the apps ever fail to resolve `@once-ui-system/core`, rebuild it with `pnpm --filter @once-ui-system/core build`.
+- The build regenerates `packages/core/ai/{spec,catalog,manifest}.json`, `ai/components/` and `src/data/emoji-data.json`. During a release cycle they are regenerated once on the merged tree, so don't commit the copies a local build leaves behind (`git checkout -- packages/core/ai packages/core/src/data` before committing).
 - To live-iterate on the library while running an app, run `pnpm --filter @once-ui-system/core dev` (tsc watch) alongside the app.
 
 ### Running the apps
@@ -48,11 +50,11 @@ The dev app has `--port 3001` baked into its `dev` script, so `turbo dev` runs b
 - `apps/docs`: `cd apps/docs && pnpm dev` - http://localhost:3000
 
 ### Tests / lint (standard commands live in each `package.json`)
-- Tests: `pnpm --filter @once-ui-system/core test` (Vitest). Baseline once PR #124 lands (verified 2026-08-12): **all 9 suites / 108 tests pass** (previously 5/92 since the 1.8.0 merge; #124 adds framework-boundary, CSS API-surface, package-exports and interactive-control suites). The historical jsdom failures and the `scrollLockState` collection error were fixed by PRs #115/#120 — a failing test is now a real regression. The CSS API-surface suite snapshots token/class *names*: an intentional rename requires `pnpm --filter @once-ui-system/core exec vitest run -u` and review of the snapshot diff.
+- Tests: `pnpm --filter @once-ui-system/core test` (Vitest + jsdom, axe helper in `src/test/axe.ts`). Baseline (2026-10-10): **54 files / 505 tests** pass at the 2.1 cycle's base commit (`f7a2897`, after the mechanical Biome sweep); the agent-harness workstream (W4) brings it to **58 files / 578 tests**. A failing test is a real regression. The one exception seen so far is load: with the CPU saturated, a few timer-driven jsdom tests (`codeblock-collapse`, `datepicker-dropdowns`) can time out, and pass on their own. The CSS API-surface suite snapshots token/class *names*: an intentional rename requires `pnpm --filter @once-ui-system/core exec vitest run -u` and review of the snapshot diff. The repo-level `pnpm test` also runs the 2.0 codemod's tests (`scripts/codemod-2.0.test.mjs`).
 - Package checks: `pnpm --filter @once-ui-system/core check:package` (publint + arethetypeswrong, advisory). Known-failing baseline (2026-08-12): dist is ESM syntax in `.js` files without `"type": "module"` and uses extensionless imports, so plain Node cannot load the package (bundler-only); fixing the module format is a 2.0 build decision (see `rfcs/2026-08-once-ui-2-architecture.md` §6) — don't "fix" it ad hoc.
 - Typecheck: `pnpm --filter @once-ui-system/core typecheck` — **0 errors** on `main` since 1.8.0 (the ~235 pre-existing errors were fixed by PR #115). A non-zero result is now a real regression.
 - Lint: all three packages run Biome 2.5.6 (`pnpm lint` = `biome check .`) with configs on the matching 2.5.6 schema, git-ignore integration on (build output like `dist`/`.next` is excluded), and generated artifacts (`ai/catalog.json`, `ai/manifest.json`, `ai/spec.json`, `ai/components/`, `src/data/emoji-data.json`) excluded from checks. ESLint was removed (Next 16 dropped `next lint`; the leftover configs/deps were dead).
-  - Known error inventory (2026-07-30, do not "fix" as part of env setup): `packages/core` 488 errors (177 import-organization + 139 formatting — mechanically fixable, held for a dedicated sweep because it touches ~209 files — plus ~172 real lint findings, largest: `noArrayIndexKey` 66, `useExhaustiveDependencies` 64), `apps/dev` 43, `apps/docs` 160. Burn-down is a scheduled roadmap item; don't introduce NEW diagnostics.
+  - Known error inventory (2026-10-10, `biome check .` per package; do not "fix" as part of env setup): `packages/core` **171** errors (519 → 173 after the mechanical format/import sweep that opened the 2.1 cycle, then 2 fewer with the W4 validator rewrite; what is left are real lint findings, largest `noArrayIndexKey` and `useExhaustiveDependencies`), `apps/dev` 47, `apps/docs` 278 (the blocks surface added most of them), `packages/foundations` 5. Burn-down is parked for 2.2 (`ROADMAP.md` §4); don't introduce NEW diagnostics — format touched files with `npx biome check --write --linter-enabled=false <files>`.
 
 ### Once UI codegen harness
 
@@ -61,9 +63,11 @@ Before generating or editing Once UI UI code in `packages/core` or `apps/*`:
 1. Read `packages/core/ai/manifest.json` (or `@once-ui-system/core/ai/manifest.json` from npm)
 2. Load bootstrap: `rules.compact.md` + `catalog.json`
 3. Match intent via `ai/tasks/index.json` - fetch task bundle + component slices
-4. Validate: `pnpm --filter @once-ui-system/core validate-ai-code path/to/file.tsx`
+4. Validate: `pnpm --filter @once-ui-system/core validate-ai-code path/to/file.tsx` (`--fix` applies the mechanical fixes; `--next`/`--no-next` override Next.js detection)
 
-Consumer apps: run `npx once-ui-init-agent` once after install to scaffold project `AGENTS.md` + `.cursor/rules/once-ui-codegen.mdc`.
+Consumer apps: run `npx once-ui-init-agent` once after install to scaffold project `AGENTS.md`, `CLAUDE.md` and `.cursor/rules/once-ui-codegen.mdc`. In a Next.js app, `LayoutProvider` comes from `@once-ui-system/core/next`.
+
+Harness sources vs. generated files: `ai/rules*.md`, `layouts.md`, `recipes.md`, `gotchas.json`, `tasks/`, `examples/` and `catalog.seed.json` (the catalog's purposes, tags and pairings — every component in the spec needs an entry, or `ai-catalog.test.ts` fails) are written by hand. `spec.json`, `catalog.json`, `manifest.json` and `components/` come from `scripts/generate-ai-spec.js`.
 
 Do not use full MDX doc pages for codegen — use the harness (~6–10KB per task). Guide: https://docs.once-ui.com/ai-coding
 
