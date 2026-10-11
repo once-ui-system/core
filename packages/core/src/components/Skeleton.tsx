@@ -1,5 +1,3 @@
-"use client";
-
 import classNames from "clsx";
 import React, { forwardRef } from "react";
 import { Flex } from "./Flex";

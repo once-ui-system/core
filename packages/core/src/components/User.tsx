@@ -1,5 +1,3 @@
-"use client";
-
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef } from "react";
