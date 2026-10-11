@@ -1,10 +1,11 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
+import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Chip } from "../components/Chip";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { axeViolations, expectNoAxeViolations } from "../test/axe";
+import { expectNoAxeViolations } from "../test/axe";
 
 /**
  * Chip is a pressable, optionally removable label. It renders as a
@@ -88,12 +89,80 @@ describe("Chip", () => {
     await expectNoAxeViolations(container);
   });
 
-  // BUG: with `onRemove`, the remove button is rendered inside the chip's own
+  // With `onRemove`, the remove button used to render inside the chip's own
   // role="button" element, an interactive control nested in another
   // (axe: "nested-interactive"); assistive tech flattens the inner one away.
-  it.skip("has no axe violations with a remove button", async () => {
+  it("has no axe violations with a remove button", async () => {
     const { container } = render(<Chip label="Design" onRemove={vi.fn()} />, { wrapper });
-    expect(await axeViolations(container)).toEqual([]);
+    await expectNoAxeViolations(container);
+  });
+
+  it("puts the chip's own control and its remove button side by side", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    render(<Chip label="Design" selected={false} onClick={onClick} onRemove={vi.fn()} />, {
+      wrapper,
+    });
+    const chip = screen.getByRole("button", { name: "Design" });
+    const remove = screen.getByRole("button", { name: "Remove" });
+
+    expect(chip).not.toContainElement(remove);
+    expect(remove).not.toContainElement(chip);
+    expect(chip).toHaveAttribute("tabindex", "0");
+    expect(chip).toHaveAttribute("aria-pressed", "false");
+
+    await user.click(chip);
+    expect(onClick).toHaveBeenCalledTimes(1);
+    chip.focus();
+    await user.keyboard("{Enter}");
+    await user.keyboard(" ");
+    expect(onClick).toHaveBeenCalledTimes(3);
+  });
+
+  // Enter on the nested remove button used to reach the chip's key handler,
+  // which clicked the chip and cancelled the button's own activation.
+  it("removes on Enter and Space without clicking the chip", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const onRemove = vi.fn();
+    render(<Chip label="Design" onClick={onClick} onRemove={onRemove} />, { wrapper });
+    screen.getByRole("button", { name: "Remove" }).focus();
+
+    await user.keyboard("{Enter}");
+    await user.keyboard(" ");
+    expect(onRemove).toHaveBeenCalledTimes(2);
+    expect(onClick).not.toHaveBeenCalled();
+  });
+
+  it("keeps the chip's look on the box and names its control with aria-label", () => {
+    const { container } = render(
+      <Chip
+        label="Design"
+        className="custom"
+        aria-label="Design filter"
+        onRemove={vi.fn()}
+        iconButtonProps={{ "aria-label": "Remove Design" }}
+      />,
+      { wrapper },
+    );
+    const box = container.querySelector(".custom");
+    expect(box?.className).toMatch(/_chip_/);
+    expect(box).not.toHaveAttribute("role");
+    expect(box).not.toHaveAttribute("aria-label");
+    expect(screen.getByRole("button", { name: "Design filter" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(screen.getByRole("button", { name: "Remove Design" }).tagName).toBe("BUTTON");
+  });
+
+  it("forwards a typed ref to the chip's box", () => {
+    const ref = createRef<HTMLDivElement>();
+    const { container } = render(<Chip ref={ref} label="Design" onRemove={vi.fn()} />, {
+      wrapper,
+    });
+    expect(ref.current).toBeInstanceOf(HTMLDivElement);
+    expect(ref.current).toBe(container.querySelector('[class*="_chip_"]'));
   });
 
   // `className` used to be spread after the chip's own classes and replace
