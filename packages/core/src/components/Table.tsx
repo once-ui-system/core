@@ -2,12 +2,12 @@
 
 import classNames from "clsx";
 import { ReactNode, useMemo, useState } from "react";
-import { Button } from "./Button";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Input } from "./Input";
+import { Pagination } from "./Pagination";
 import { Row } from "./Row";
 import { Select } from "./Select";
 import { ShineFx } from "./ShineFx";
@@ -400,65 +400,13 @@ function Table({
           </Row>
 
           {totalPages > 1 && (
-            <Row gap="4" vertical="center">
-              <IconButton
-                size="s"
-                variant="secondary"
-                icon="chevronDoubleLeft"
-                aria-label="First page"
-                onClick={() => setPage(1)}
-                disabled={currentPage === 1}
-              />
-              <IconButton
-                size="s"
-                variant="secondary"
-                icon="chevronLeft"
-                aria-label="Previous page"
-                onClick={() => setPage(currentPage - 1)}
-                disabled={currentPage === 1}
-              />
-
-              {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
-                let pageNum;
-                if (totalPages <= 5) {
-                  pageNum = i + 1;
-                } else if (currentPage <= 3) {
-                  pageNum = i + 1;
-                } else if (currentPage >= totalPages - 2) {
-                  pageNum = totalPages - 4 + i;
-                } else {
-                  pageNum = currentPage - 2 + i;
-                }
-
-                return (
-                  <Button
-                    key={pageNum}
-                    size="s"
-                    variant={pageNum === currentPage ? "primary" : "tertiary"}
-                    onClick={() => setPage(pageNum)}
-                  >
-                    {pageNum}
-                  </Button>
-                );
-              })}
-
-              <IconButton
-                size="s"
-                variant="secondary"
-                icon="chevronRight"
-                aria-label="Next page"
-                onClick={() => setPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              />
-              <IconButton
-                icon="chevronDoubleRight"
-                aria-label="Last page"
-                size="s"
-                variant="secondary"
-                onClick={() => setPage(totalPages)}
-                disabled={currentPage === totalPages}
-              />
-            </Row>
+            <Pagination
+              page={currentPage}
+              total={totalPages}
+              onChange={setPage}
+              size="s"
+              showFirstLast
+            />
           )}
         </Row>
       )}
