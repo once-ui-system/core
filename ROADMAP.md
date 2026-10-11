@@ -99,7 +99,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] A brand seed colour that `ThemeProvider`/`ThemeInit` apply server-side (no flash).
 - [x] `data-viz-style` typed as `DataStyle`.
 - [x] A token for "the brand colour" that keeps its hue under `solid="contrast"`: shipped as `--brand-color-strong|medium|weak` in its own commit; the name is Lorant's call (§7).
-- [x] `StylePanel` for a host-owned style editor: `labels` for every string it shows or announces, an opt-in custom colour on Brand and Accent reported as a seed, a controlled Theme row that reads `value.theme` instead of setting the page's theme, and a `stacked` layout for a narrow sidebar (the chosen swatch scrolls into view; `Scroller` takes `labels`). `ThemeInit`'s seeded scheme is scoped to `html:root` so it beats an app's static `:root` palette.
+- [x] `StylePanel` for a host-owned style editor: `labels` for every string it shows or announces, an opt-in custom colour on Brand and Accent reported as a seed, a controlled Theme row that reads `value.theme` instead of setting the page's theme, and a `stacked` layout for a narrow sidebar (the chosen swatch or option scrolls into view; `Scroller` takes `labels`). Found on the way: `SegmentedControl` hid its selected option, cut its border and failed axe once its options overflowed, and it and `Scroller` dropped their refs. `ThemeInit`'s seeded scheme is scoped to `html:root` so it beats an app's static `:root` palette.
 
 ### W9 · MDX (P1)
 - [x] `@once-ui-system/core/mdx`: one component map for MDX content, replacing the five app copies.

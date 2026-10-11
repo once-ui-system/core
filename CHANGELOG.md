@@ -119,9 +119,10 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   `labels` for their built-in names too, so the panel's scroll buttons are
   translated with the rest of it.
 - **`StylePanel` fits a narrow sidebar.** `stacked` puts each row's label above
-  its control. A row's own layout props still win, including on a row with a
-  custom colour. In a strip that scrolls, the chosen swatch is scrolled into
-  view, clear of the scroll buttons.
+  its control, and the option rows drop a button size. A row's own layout
+  props still win, including on a row with a custom colour. Where swatches or
+  options still overflow, the chosen one is scrolled into view, clear of the
+  scroll buttons.
 - **A custom colour on `StylePanel`'s Brand and Accent rows.** `customColors`
   (or `custom` on `StylePanel.Brand` and `StylePanel.Accent`) adds a swatch
   for a colour of your own and a field to pick it, reported as `brandSeed` or
@@ -264,6 +265,15 @@ Each keeps working until 3.0.
 - **`StylePanel` swatches respond to Enter and Space**, not only to a click.
 - **A `className` on a `StylePanel` row replaced the row's own**, which took
   its divider with it. The two are joined now.
+- **`SegmentedControl` when its options overflow.** The selected option is
+  scrolled into view at mount and on every change, instead of starting under
+  the Next button; only the strip scrolls, never the page. The border goes
+  round all the options rather than stopping at the edge of the strip. And
+  `role="tablist"` (with `aria-label` and the other naming props) is on the
+  row of tabs, not on the `Scroller` around it, which also holds the scroll
+  buttons that a tablist may not own.
+- **`Scroller` and `SegmentedControl` forward their refs.** Both took a `ref`
+  and dropped it.
 - **`Switch` is one named, focusable control.** `role="switch"` sat on a
   wrapper that couldn't take focus, so focus landed on an unnamed element,
   and the `ariaLabel` default ("Toggle switch") overrode the visible label.
