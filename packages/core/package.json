@@ -156,9 +156,10 @@
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "pnpm clean && pnpm sync-foundations && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",
+    "build": "pnpm clean && pnpm sync-foundations && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css && pnpm build:css-modules",
     "sync-foundations": "node scripts/sync-foundations.js scss",
     "build:css": "node scripts/sync-foundations.js css",
+    "build:css-modules": "node scripts/compile-css-modules.js",
     "copy-files": "node scripts/copy-files.js",
     "clean": "rimraf dist",
     "prepare": "pnpm build",
