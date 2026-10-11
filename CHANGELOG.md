@@ -155,6 +155,8 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **`Text` and `Heading` take a ref**, typed to the element `as` renders
   (`HTMLLIElement` for `as="li"`); they stay generic over `as`. `ListItem`,
   `ShineFx` and `TypeFx` pass theirs on, which they dropped.
+- **`DateRangePicker` takes `autoFocus`**, which focuses its first
+  calendar's start day.
 - **`IconButton` takes `ariaLabel`**, like the other components that take
   one; a native `aria-label` wins over it.
 - **`InteractiveDetails` takes `labelId` and `descriptionId`**: ids on the
@@ -193,6 +195,10 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **`Select`'s field has role `combobox`** (it was a `textbox`), and options
   no longer take DOM focus. Tests that find the field by role `textbox`
   should look for `combobox`.
+- **`DateInput`'s and `DateRangeInput`'s fields have role `combobox`** (it
+  was `textbox`), and focusing them with Tab no longer opens the picker;
+  click, Enter, Space or ArrowDown does. `DateRangeInput`'s fields are named
+  by `startLabel` and `endLabel`.
 - **`ContextMenu`'s `placement` default is declared as `"bottom-start"`**,
   where the menu always opened; the declared `"bottom-end"` was never
   applied.
@@ -346,6 +352,19 @@ Each keeps working until 3.0.
 - **A `dual` `DateRangePicker` shows two consecutive months**, including for
   a range inside one month, and marks the range's ends in whichever calendar
   shows them.
+- **`DateInput` and `DateRangeInput` are comboboxes that open a dialog.**
+  The field is no longer nested in `role="button"` wrappers: it has
+  `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls`, and the
+  picker is a dialog named after the field. Click, Enter, Space or ArrowDown
+  opens it with focus on the selected day; Escape or a pick returns focus to
+  the field. `DateRangeInput` forwards its ref.
+- **`DatePicker` no longer takes focus by itself.** It focused its selected
+  day on mount and on month changes; now only `autoFocus` (as `DateInput`
+  uses it) moves focus in.
+- **A `dual` `DateRangePicker`'s month and year lists move both
+  calendars.**
+- **`DropdownWrapper` lists are named after their trigger** ("Sort by"),
+  not "Dropdown options".
 - **`Grid inline` renders an inline grid.** `.display-inline-grid` had no
   rule, so the grid stayed a block.
 - **`translateX`/`translateY` read spacing tokens** on `Flex`, `Grid`,

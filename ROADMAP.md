@@ -116,7 +116,8 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [ ] `useToast` and the providers aren't in the spec (the contexts barrel isn't walked).
 - [ ] 2.2: `generate-emoji-data` downloads gemoji's `master` on every build, so the emoji set depends on the network and the CDN at build time (two builds minutes apart differed); pin it to a tagged commit or vendor the source.
 - [x] Docs blocks use `ParticleFx`, not the deprecated `Particle`.
-- [ ] Dropdown leftovers (2.2, non-breaking): `DateInput`/`DateRangeInput` still wrap their read-only input in `role="button"` (needs a combobox with `aria-haspopup="dialog"`); DatePicker still focuses the selected day on mount and month change; in a `dual` picker the month/year list moves one calendar only; "Options"/"Dropdown options" labels are hard-coded English.
+- [x] Dropdown leftovers: `DateInput`/`DateRangeInput` are comboboxes opening a dialog; DatePicker no longer takes focus by itself; a `dual` picker's month/year lists move both calendars; dropdown lists are named after their trigger.
+- [ ] 2.2: a locale approach for DatePicker's English text and en-US formatting (month and day names, "Previous/Next month", "Hours", AM/PM) and Select's "Search"/"Clear"; `DateRangeInput` gives both fields the same `id`; month and year buttons are named by their value only.
 - [x] Layout leftovers: `Grid inline` has a rule; `translateX`/`translateY` read spacing tokens; `ClientGrid` applies a breakpoint `width` and numeric spacing.
 - [ ] 2.2: leaving a breakpoint clears a base inline value it had overridden (`ClientFlex`, `ClientGrid`); TiltFx, FlipFx, Arrow and CursorCard's own `transform` overrides a translate prop; `FadingLettersFx` types `ref` without forwarding it.
 
