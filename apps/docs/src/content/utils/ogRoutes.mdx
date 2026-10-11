@@ -1,0 +1,285 @@
+---
+title: "OG route handlers"
+summary: "Ready-made Next.js routes for OgCard and useOgData: Open Graph fetching and an image proxy, with SSRF protection built in."
+updatedAt: "2026-10-10"
+docs: "once-ui/utils/ogRoutes.mdx"
+github: "next/og.ts"
+navLabel: "OG route handlers"
+navIcon: "code"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`OgCard` and `useOgData` read link previews through two routes in your app: one that fetches a page's Open Graph data, and one that serves its image from your origin. `@once-ui-system/core/next` ships both, ready-made. Each factory returns `{ GET }`, so a route file is two lines.
+
+Both routes fetch URLs that your visitors choose, from your server. That makes them a server-side request forgery target, so the handlers only ever request public addresses: every URL and every redirect is checked, and the connection goes to the exact address that was checked.
+
+## Route files
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { createOgFetchRoute } from "@once-ui-system/core/next";
+
+export const { GET } = createOgFetchRoute();`,
+      language: "tsx",
+      label: "app/api/og/fetch/route.ts"
+    },
+    {
+      code:
+`import { createOgProxyRoute } from "@once-ui-system/core/next";
+
+export const { GET } = createOgProxyRoute();`,
+      language: "tsx",
+      label: "app/api/og/proxy/route.ts"
+    }
+  ]}
+/>
+
+These are the paths `OgCard` and `useOgData` call by default, so nothing else changes. To serve them somewhere else, see Custom paths below.
+
+The handlers need the **Node.js runtime**, which is the default for route handlers. If a route file you are replacing sets `export const runtime = "edge"`, remove that line.
+
+## Responses
+
+The fetch route answers `GET /api/og/fetch?url=…` with the page's metadata as JSON. `image` and `faviconUrl` are absolute URLs, resolved against the page.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`{
+  "url": "https://example.com/post",
+  "title": "Post title",
+  "description": "What the post is about",
+  "image": "https://example.com/images/og.png",
+  "faviconUrl": "https://example.com/favicon.ico"
+}`,
+      language: "json",
+      label: "GET /api/og/fetch?url=https://example.com/post"
+    }
+  ]}
+/>
+
+The proxy route answers `GET /api/og/proxy?url=…` with the image itself, sent with `X-Content-Type-Options: nosniff` and a sandboxing `Content-Security-Policy`.
+
+Failures are JSON, `{ "error": "…" }`, and never cached:
+
+- **400**: missing or malformed `url`, or a URL that is not allowed (a private address, a blocked domain, not HTTPS)
+- **403**: a cross-origin caller, when `sameOrigin` is on
+- **413**: the image is larger than `maxBytes` (proxy)
+- **415**: not an HTML page (fetch), or not an allowed image type (proxy)
+- **502**: the upstream failed (an error status, too many redirects, a dropped connection); the proxy forwards an upstream 4xx or 5xx as is
+- **504**: the upstream did not finish within `timeout`
+- **500**: not running on the Node.js runtime
+
+## Options
+
+Both factories take the same options as [`handleOGFetch`](/utils/handleOGFetch) and [`handleOGProxy`](/utils/handleOGProxy), which they wrap. Options are read once, when the route is created.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { createOgFetchRoute } from "@once-ui-system/core/next";
+
+export const { GET } = createOgFetchRoute({
+  userAgent: "bot",
+  timeout: 8000,
+  blockedDomains: ["tracker.example"],
+});`,
+      language: "tsx",
+      label: "app/api/og/fetch/route.ts"
+    },
+    {
+      code:
+`import { createOgProxyRoute, DEFAULT_OG_IMAGE_TYPES } from "@once-ui-system/core/next";
+
+export const { GET } = createOgProxyRoute({
+  cacheMaxAge: 86400,
+  maxBytes: 8 * 1024 * 1024,
+  allowedContentTypes: [...DEFAULT_OG_IMAGE_TYPES, "image/tiff"],
+});`,
+      language: "tsx",
+      label: "app/api/og/proxy/route.ts"
+    }
+  ]}
+/>
+
+### Both routes
+
+<PropsTable
+  content={[
+    ["allowedDomains", "string[]", "-", "Only these domains and their subdomains are fetched, on every redirect too."],
+    ["blockedDomains", "string[]", "-", "These domains and their subdomains are never fetched."],
+    ["isAllowed", "(url: URL) => boolean | Promise<boolean>", "-", "Your own check, called for the first URL and every redirect target after the built-in checks pass. Return false to refuse."],
+    ["allowHttp", "boolean", "false", "Also fetch plain http: URLs. HTTPS only by default."],
+    ["maxRedirects", "number", "3", "Redirects followed, each checked like the first URL."],
+    ["userAgent", "string", "OG-Fetcher/1.0, OG-Proxy/1.0", "User-Agent sent upstream."],
+    ["cacheControl", "string", "public, max-age=3600", "Cache-Control on successful responses."],
+    ["sameOrigin", "boolean", "false", "Refuse requests whose Origin, or else Referer, names another host. Requests with neither are allowed."]
+  ]}
+/>
+
+### Fetch route
+
+<PropsTable
+  content={[
+    ["timeout", "number", "5000", "Milliseconds for the whole exchange: DNS, connection, redirects and body."],
+    ["maxBytes", "number", "1 MiB", "HTML read, after decompression. Open Graph tags live in the head, so a longer page is parsed from what was read."],
+    ["decodeEntities", "boolean", "true", "Decode HTML entities in the title and description."],
+    ["favicon", "boolean", "true", "Include faviconUrl. OgCard renders it as given, so with next/image its host must be in images.remotePatterns; false leaves it out and OgCard uses its own favicon source."]
+  ]}
+/>
+
+### Proxy route
+
+<PropsTable
+  content={[
+    ["timeout", "number", "10000", "Milliseconds for the whole exchange."],
+    ["maxBytes", "number", "5 MiB", "Largest image, after decompression. A larger one is refused, not truncated."],
+    ["allowedContentTypes", "readonly string[]", "DEFAULT_OG_IMAGE_TYPES", "Image types passed through. image/* matches any image type."],
+    ["cacheMaxAge", "number", "3600", "max-age in seconds, when cacheControl is not set."]
+  ]}
+/>
+
+`DEFAULT_OG_IMAGE_TYPES` is the raster formats: AVIF, WebP, PNG, APNG, JPEG, GIF, BMP and ICO. SVG is left out because it can carry script; add `"image/svg+xml"` only if you need it.
+
+## Custom paths
+
+Mount the routes anywhere, then tell the client where they are. `OgRoutesProvider` sets the paths for every `OgCard` and `useOgData` below it, and `Meta.generate` takes the same object for its default social image.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`export const ogRoutes = {
+  fetch: "/og/fetch",
+  proxy: "/og/proxy",
+  generate: "/og/image",
+};`,
+      language: "tsx",
+      label: "resources/og.ts"
+    },
+    {
+      code:
+`"use client";
+
+import { OgRoutesProvider } from "@once-ui-system/core";
+import { LayoutProvider } from "@once-ui-system/core/next";
+import { ogRoutes } from "@/resources/og";
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <LayoutProvider>
+      <OgRoutesProvider routes={ogRoutes}>{children}</OgRoutesProvider>
+    </LayoutProvider>
+  );
+}`,
+      language: "tsx",
+      label: "components/Providers.tsx"
+    },
+    {
+      code:
+`import { Meta } from "@once-ui-system/core";
+import { ogRoutes } from "@/resources/og";
+
+export async function generateMetadata() {
+  return Meta.generate({
+    title: "About",
+    description: "Who we are",
+    baseURL: "https://example.com",
+    path: "/about",
+    ogRoutes,
+  });
+}`,
+      language: "tsx",
+      label: "app/about/page.tsx"
+    }
+  ]}
+/>
+
+Without a provider, the paths are `/api/og/fetch`, `/api/og/proxy` and `/api/og/generate`. `OgCard`'s `serviceConfig` and `useOgData`'s explicit arguments still take precedence.
+
+## What is refused
+
+Before anything is requested, and again for every redirect:
+
+- Schemes other than `https:` (and `http:` with `allowHttp`), and URLs with credentials.
+- Internal hostnames: `localhost`, `*.local`, `*.internal`, `*.home.arpa` and single-label names such as `http://intranet/`.
+- IP addresses that are not public, written any way the URL parser accepts (`127.0.0.1`, `2130706433`, `0x7f.1`, `[::ffff:127.0.0.1]`): private, loopback, link-local, unique-local, carrier-grade NAT, multicast, unspecified, reserved and documentation ranges, and the cloud metadata endpoints (`169.254.169.254`, `fd00:ec2::254`).
+- Hostnames that resolve to any such address. Every record is checked, not only the first.
+
+The hostname is resolved and checked inside the connection itself, and the socket connects to the address that was checked. A DNS answer that changes between a check and the request (DNS rebinding) has nothing to slip through.
+
+## Adding your own checks
+
+Rate limiting, authentication or logging wrap the handler:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`import { createOgFetchRoute } from "@once-ui-system/core/next";
+import { rateLimit } from "@/lib/rate-limit";
+
+const og = createOgFetchRoute({ sameOrigin: true });
+
+export async function GET(request: Request) {
+  if (!(await rateLimit(request))) {
+    return Response.json({ error: "Too many requests" }, { status: 429 });
+  }
+  return og.GET(request);
+}`,
+      language: "tsx",
+      label: "app/api/og/fetch/route.ts"
+    }
+  ]}
+/>
+
+## Images in OgCard
+
+`useOgData` rewrites a cross-origin `image` to your proxy route, so `OgCard` renders `/api/og/proxy?url=…` through `next/image`. Since Next.js 16, a local image `src` with a query string is only optimized when `images.localPatterns` allows it:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      code:
+`const nextConfig = {
+  images: {
+    localPatterns: [
+      { pathname: "/api/og/proxy" },
+      { pathname: "/**", search: "" },
+    ],
+  },
+};`,
+      language: "js",
+      label: "next.config.mjs"
+    }
+  ]}
+/>
+
+## Notes
+
+- The handlers connect directly; they do not read `HTTP_PROXY` or `HTTPS_PROXY`.
+- Outside Next.js, use [`handleOGFetch`](/utils/handleOGFetch) and [`handleOGProxy`](/utils/handleOGProxy) from `@once-ui-system/core/server`: they take a standard `Request` and return a `Response`.
+- The social image route that `Meta.generate` points at (`/api/og/generate`) is yours to design with `next/og`; it renders text you pass it and fetches no URLs from the request.

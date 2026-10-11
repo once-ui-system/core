@@ -104,6 +104,31 @@ export async function generateMetadata() {
 This approach makes it easier to maintain consistent metadata across your site and
 update it from a single location.
 
+## Social image route
+
+Without an `image`, `Meta.generate` points the Open Graph and X images at `/api/og/generate?title=…`, a route you render with `next/og`. If yours lives elsewhere, pass `ogRoutes`; the same object can be given to `OgRoutesProvider` for `OgCard`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  lineNumbers
+  codes={[
+    {
+      label: "app/{page}/page.tsx",
+      language: "tsx",
+      code:
+`export async function generateMetadata() {
+    return Meta.generate({
+      title: "My Page Title",
+      description: "A comprehensive description of the page content",
+      baseURL: "https://example.com",
+      ogRoutes: { generate: "/og/image" },
+    });
+}
+// og:image → /og/image?title=My%20Page%20Title`}
+  ]}
+/>
+
 ## Output
 
 The `Meta.generate` function will generate all necessary meta tags for SEO and social sharing:

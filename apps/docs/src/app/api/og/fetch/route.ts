@@ -1,12 +1,3 @@
-import { NextRequest } from 'next/server';
-import { handleOGFetch } from '@once-ui-system/core/server';
+import { createOgFetchRoute } from '@once-ui-system/core/next';
 
-export const runtime = 'nodejs';
-
-export async function GET(request: NextRequest) {
-  return handleOGFetch(request, {
-    timeout: 5000,
-    userAgent: 'bot',
-    decodeEntities: true
-  });
-}
+export const { GET } = createOgFetchRoute({ userAgent: 'bot' });

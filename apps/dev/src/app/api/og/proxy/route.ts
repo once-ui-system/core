@@ -1,6 +1,3 @@
-import { NextRequest } from 'next/server';
-import { handleOGProxy } from '@once-ui-system/core/server';
+import { createOgProxyRoute } from "@once-ui-system/core/next";
 
-export async function GET(request: NextRequest) {
-  return handleOGProxy(request);
-}
+export const { GET } = createOgProxyRoute();
