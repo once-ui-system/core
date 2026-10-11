@@ -115,7 +115,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
     const handleMouseEnter = () => {
       if (!disabled) {
         // Remove highlighted class from ALL options (including self) to let CSS :hover take over
-        if (elementRef.current?.parentElement) {
+        if (role !== "none" && elementRef.current?.parentElement) {
           const allOptions = elementRef.current.parentElement.querySelectorAll(`[role="${role}"]`);
           allOptions.forEach((option) => {
             option.classList.remove("highlighted");
@@ -151,6 +151,8 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         aria-disabled={disabled}
         // In a menu: a menu item, which cannot carry aria-selected.
         {...(role === "menuitem" && { role, "aria-selected": undefined })}
+        // In a list of links: the element's own role, a link or a button.
+        {...(role === "none" && { role: undefined, "aria-selected": undefined })}
         onKeyDown={(e: KeyboardEvent<HTMLElement>) => {
           if ((e.key === "Enter" || e.key === " ") && !disabled) {
             e.preventDefault();

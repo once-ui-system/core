@@ -292,6 +292,9 @@ Each keeps working until 3.0.
   A day that took focus after the grid reached the page but before its
   focus tracking attached, such as a quick Tab as the picker opens, was not
   recorded, so ArrowDown went to the 7th rather than a week after that day.
+- **`MobileMegaMenu`'s links are links.** Its sections drew each link with
+  `Option`, a listbox option, so they rendered as `<a role="option">` with no
+  listbox around them: invalid ARIA, and not links to assistive tech.
 - **`SplitView`'s handle shows.** It filled the width of a gutter whose own
   padding left it zero wide, so only the handle's 2px border drew and its
   fill never did, not even while dragging. It is a 4px pill now, in both

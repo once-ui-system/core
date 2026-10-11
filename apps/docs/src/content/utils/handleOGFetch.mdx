@@ -152,7 +152,7 @@ The function returns a JSON response with the following structure:
 
 The function returns appropriate error responses:
 
-- **400**: Missing URL parameter or URL failed validation (blocked domain, private IP, etc.)
+- **400**: Missing URL parameter or URL failed validation (blocked domain, private IP, etc.). A hostname that does not resolve is refused the same way, so the route cannot tell a caller which internal names exist.
 - **403**: Cross-origin caller, with `sameOrigin`
 - **415**: The URL is not an HTML page
 - **502**: The upstream failed (error status, too many redirects)
