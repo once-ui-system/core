@@ -464,6 +464,10 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   background?: React.ComponentProps<typeof Flex>["background"];
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
+  /**
+   * @deprecated Set `highlight` on each entry of `codes` instead, so every tab
+   * marks its own lines. This one still applies to an entry that sets none.
+   */
   highlight?: string;
   maxLines?: number;
   isCollapsible?: boolean;

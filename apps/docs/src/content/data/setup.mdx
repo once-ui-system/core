@@ -123,7 +123,6 @@ The `series` prop is an array of objects, where each object has a `key` property
   marginBottom="24"
   previewPadding="none"
   fullscreenButton={true}
-  highlight="9-11,14"
   preview={
     <BarChart
       title="Daily Time Spent on Activities"
@@ -162,6 +161,7 @@ The `series` prop is an array of objects, where each object has a `key` property
       { label: "Minutes per day", "Reading": 16, "Sports": 36, "Doomscrolling": 128 },
     ]}
 />`,
+      highlight: "9-11,14",
       language: "tsx",
       label: "Data"
     }
@@ -180,7 +180,6 @@ When working with time series data, use the `date` prop to define the date forma
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  highlight="5"
   fullscreenButton={true}
   previewPadding="none"
   preview={
@@ -225,6 +224,7 @@ When working with time series data, use the `date` prop to define the date forma
       { date: new Date("2020-01-01"), "Median Household Income": 53000, "College Tuition": 25000 },
     ]}
 />`,
+      highlight: "5",
       language: "tsx",
       label: "Details"
     }
@@ -272,7 +272,6 @@ Render textual context above the chart with the `title` and `description` props.
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  highlight="2-3"
   compact
   codes={[
     {
@@ -292,6 +291,7 @@ Render textual context above the chart with the `title` and `description` props.
       { label: "2025 (est.)", "Top 1%": 52.5, "Bottom 99%": 47.5 }
     ]}
 />`,
+      highlight: "2-3",
       language: "tsx",
       label: "Details"
     }
@@ -353,7 +353,6 @@ Use the `axis` prop to control the visibility of the `x` and `y` axis.
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  highlight="3"
   compact
   codes={[
     {
@@ -376,6 +375,7 @@ Use the `axis` prop to control the visibility of the `x` and `y` axis.
       { date: new Date("2020-01-01"), "CEO Paycheck": 3000000, "Employee Paycheck": 40000 },
     ]}
 />`,
+      highlight: "3",
       language: "tsx",
       label: "Details"
     }
@@ -440,7 +440,6 @@ Use the `legend` prop to control the visibility, position, and direction of the 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  highlight="5"
   compact
   codes={[
     {
@@ -462,6 +461,7 @@ Use the `legend` prop to control the visibility, position, and direction of the 
       { name: "Rest of the World", value: 51 }
     ]}
 />`,
+      highlight: "5",
       language: "tsx",
       label: "Details"
     }
@@ -482,7 +482,6 @@ Use the `date` prop to define the date format and datepicker visibility and opti
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  highlight="6-14"
   previewPadding="none"
   fullscreenButton={true}
   preview={
@@ -543,6 +542,7 @@ Use the `date` prop to define the date format and datepicker visibility and opti
       { date: new Date("2020-01-01"), "Screen Time (hrs)": 7.0, "Physical Activity (hrs)": 0.8 },
     ]}
 />`,
+      highlight: "6-14",
       language: "tsx",
       label: "Details"
     }
@@ -564,7 +564,6 @@ Set the `variant` prop to `gradient`, `flat`, or `outline` to change the chart's
   marginBottom="24"
   previewPadding="none"
   fullscreenButton={true}
-  highlight="2"
   preview={
     <Row fillWidth gap="-1" radius="l" overflow="hidden">
       <LineChart
@@ -656,6 +655,7 @@ Set the `variant` prop to `gradient`, `flat`, or `outline` to change the chart's
       { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
     ]}
 />`,
+      highlight: "2",
       language: "tsx",
       label: "Details"
     }
@@ -762,7 +762,6 @@ When using `data-viz-style="divergent"` or `data-viz-style="sequential"`, we rec
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  highlight="2"
   compact
   codes={[
     {
@@ -792,6 +791,7 @@ When using `data-viz-style="divergent"` or `data-viz-style="sequential"`, we rec
       { date: "2025-01-01", "Elon Musk": 5600000000, "Tesla Employee": 8800, "Hungary": 8200000000 }
     ]}
 />`,
+      highlight: "2",
       language: "tsx",
       label: "Details"
     }
@@ -836,7 +836,6 @@ You can override the default container styles with `Flex` props.
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  highlight="2-6"
   compact
   codes={[
     {
@@ -865,6 +864,7 @@ You can override the default container styles with `Flex` props.
       { date: "2025-01-01", Minutes: 180, label: "2025 (proj.)" }
     ]}
 />`,
+      highlight: "2-6",
       language: "tsx",
       label: "Details"
     }
