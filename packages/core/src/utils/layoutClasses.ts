@@ -137,6 +137,58 @@ export function spacingClasses(
   });
 }
 
+const OFFSET_SIDES = ["top", "right", "bottom", "left"] as const;
+
+/**
+ * An offset with a class behind it. Foundations generates `top`, `right`,
+ * `bottom` and `left` for the static steps only, at the base and at every
+ * breakpoint (`.m-top-16`); a t-shirt size, a rem number and a CSS unit have
+ * none.
+ */
+export function isOffsetToken(value: unknown): value is StaticSpacingToken {
+  return STATIC_SPACING.has(value);
+}
+
+/**
+ * An offset a class cannot hold, as its inline value: a number is rem (`top: 2`
+ * is 2rem, not the 0.125rem `.top-2`), and a CSS unit passes through.
+ */
+export function offsetValue(value: unknown): string | undefined {
+  if (typeof value === "number") return `${value}rem`;
+  if (typeof value === "string" && isCSSUnit(value)) return value;
+  return undefined;
+}
+
+/**
+ * Breakpoint offsets, as classes: `m={{ top: "16" }}` is `.m-top-16`. The
+ * classes were always generated; `ServerFlex` never wrote them, so a token
+ * offset in a breakpoint object stayed on the server and did nothing.
+ */
+export function offsetClasses(
+  breakpoint: string,
+  props: Record<string, unknown> | undefined,
+): (string | false)[] {
+  if (!props) return [];
+  return OFFSET_SIDES.map(
+    (side) => isOffsetToken(props[side]) && `${breakpoint}-${side}-${props[side]}`,
+  );
+}
+
+/**
+ * Breakpoint offsets a class cannot hold, as inline style for the client
+ * components to apply at the current breakpoint.
+ */
+export function offsetStyle(
+  props: Record<string, unknown>,
+): Partial<Record<(typeof OFFSET_SIDES)[number], string>> {
+  const style: Partial<Record<(typeof OFFSET_SIDES)[number], string>> = {};
+  for (const side of OFFSET_SIDES) {
+    const value = offsetValue(props[side]);
+    if (value !== undefined) style[side] = value;
+  }
+  return style;
+}
+
 /**
  * Props whose breakpoint value cannot become a utility class.
  *
@@ -158,6 +210,8 @@ const INLINE_ONLY = new Set([
 /** Props that take a real number and still resolve to a class. */
 const NUMERIC_CLASS_PROPS = new Set(["opacity", "zIndex", "flex", "columns", "rows"]);
 
+const OFFSET_PROPS = new Set<string>(OFFSET_SIDES);
+
 /**
  * True when every value in a breakpoint object maps to a generated class, so
  * the component can stay on the server.
@@ -172,6 +226,8 @@ export function isClassExpressible(breakpointProps: Record<string, unknown>): bo
   return Object.entries(breakpointProps).every(([prop, value]) => {
     if (value === undefined) return true;
     if (INLINE_ONLY.has(prop)) return false;
+    // `top: "16"` is `.m-top-16`; `top: 2` (2rem) and `top: "50%"` are inline.
+    if (OFFSET_PROPS.has(prop)) return offsetValue(value) === undefined;
     return typeof value !== "number" || NUMERIC_CLASS_PROPS.has(prop);
   });
 }

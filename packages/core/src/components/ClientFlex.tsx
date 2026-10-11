@@ -17,7 +17,7 @@ import {
   TextVariant,
   TextWeight,
 } from "../types";
-import { BELOW_HEADER, BELOW_HEADER_VALUE, sizeValue } from "../utils/layoutClasses";
+import { BELOW_HEADER, BELOW_HEADER_VALUE, offsetStyle, sizeValue } from "../utils/layoutClasses";
 import { Cursor } from "./Cursor";
 import { ServerFlex } from "./ServerFlex";
 
@@ -220,6 +220,11 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
         }
         if (typeof currentResponsiveProps.gap === "number")
           setStyle("gap", `${currentResponsiveProps.gap}rem`);
+
+        // A rem or CSS-unit offset; a token offset is a class, from ServerFlex.
+        for (const [side, value] of Object.entries(offsetStyle(currentResponsiveProps))) {
+          setStyle(side, value);
+        }
       }
     }, [xl, l, m, s, xs, props.style, currentBreakpoint]);
 

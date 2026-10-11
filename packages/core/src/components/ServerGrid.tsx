@@ -13,6 +13,7 @@ import {
 import { ColorScheme, ColorWeight } from "../types";
 import {
   BELOW_HEADER,
+  offsetClasses,
   scrollsOn,
   sizeValue,
   spacingClasses,
@@ -33,16 +34,6 @@ interface ServerGridProps
   s?: GridBreakpointProps;
   xs?: GridBreakpointProps;
 }
-
-/** A token offset has a class; a CSS unit (`50%`, `calc(…)`) and a rem number do not. */
-const isOffsetToken = (value: unknown): value is string =>
-  typeof value === "string" &&
-  value !== "" &&
-  !value.endsWith("%") &&
-  !value.endsWith("vh") &&
-  !value.endsWith("dvh") &&
-  !value.endsWith("vw") &&
-  !value.startsWith("calc(");
 
 /**
  * Every class one breakpoint object resolves to.
@@ -71,10 +62,7 @@ function breakpointClasses(
     props.overflowX && `${breakpoint}-overflow-x-${props.overflowX}`,
     props.overflowY && `${breakpoint}-overflow-y-${props.overflowY}`,
     props.scrollbar && `${breakpoint}-scrollbar-${props.scrollbar}`,
-    isOffsetToken(props.top) && `${breakpoint}-top-${props.top}`,
-    isOffsetToken(props.right) && `${breakpoint}-right-${props.right}`,
-    isOffsetToken(props.bottom) && `${breakpoint}-bottom-${props.bottom}`,
-    isOffsetToken(props.left) && `${breakpoint}-left-${props.left}`,
+    ...offsetClasses(breakpoint, props),
     props.pointerEvents && `${breakpoint}-pointer-events-${props.pointerEvents}`,
     props.opacity !== undefined && `${breakpoint}-opacity-${props.opacity}`,
     props.zIndex !== undefined && `${breakpoint}-z-index-${props.zIndex}`,

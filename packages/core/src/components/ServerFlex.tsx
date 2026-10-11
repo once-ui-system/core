@@ -13,6 +13,7 @@ import {
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 import {
   BELOW_HEADER,
+  offsetClasses,
   scrollsOn,
   sizeValue,
   spacingClasses,
@@ -367,6 +368,13 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         ...spacingClasses("m", cascadedM),
         ...spacingClasses("s", cascadedS),
         ...spacingClasses("xs", cascadedXs),
+        // Offsets cascade with the rest. Only a static step is a class
+        // (`.m-top-16`); a rem number or a CSS unit is inline, on ClientFlex.
+        ...offsetClasses("xl", cascadedXl),
+        ...offsetClasses("l", cascadedL),
+        ...offsetClasses("m", cascadedM),
+        ...offsetClasses("s", cascadedS),
+        ...offsetClasses("xs", cascadedXs),
         cascadedXl?.position && `xl-position-${cascadedXl.position}`,
         cascadedL?.position && `l-position-${cascadedL.position}`,
         cascadedM?.position && `m-position-${cascadedM.position}`,
