@@ -13,7 +13,11 @@ interface RadioButtonProps
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onToggle"> {
   style?: React.CSSProperties;
   className?: string;
+  /** Chosen or not, controlled. Leave it out to let the radio keep its own
+   *  state, starting from `defaultChecked`. */
   checked?: boolean;
+  /** The starting state of an uncontrolled radio (no `checked`). */
+  defaultChecked?: boolean;
   name?: string;
   value?: string;
   disabled?: boolean;
@@ -29,6 +33,7 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
       style,
       className,
       checked: controlledIsChecked,
+      defaultChecked = false,
       name,
       value,
       onToggle,
@@ -39,7 +44,7 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
     },
     ref,
   ) => {
-    const [isChecked, setIsChecked] = useState(controlledIsChecked || false);
+    const [isChecked, setIsChecked] = useState(controlledIsChecked ?? defaultChecked);
     const labelId = useId();
     const descriptionId = useId();
     const hasLabel = Boolean(props.label);
@@ -53,11 +58,10 @@ const RadioButton: React.FC<RadioButtonProps> = forwardRef<HTMLInputElement, Rad
     const toggleItem = () => {
       if (disabled) return;
       const next = !(controlledIsChecked !== undefined ? controlledIsChecked : isChecked);
-      if (onToggle) {
-        onToggle(next);
-      } else {
-        setIsChecked(next);
-      }
+      // Uncontrolled, the radio keeps its own state whether or not anyone
+      // listens; controlled, the caller's `checked` is the only truth.
+      if (controlledIsChecked === undefined) setIsChecked(next);
+      onToggle?.(next);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {

@@ -53,6 +53,36 @@ Control the switch state with the `checked` prop. `onToggle` receives the state 
   ]}
 />
 
+## Uncontrolled
+
+Leave out `checked` and the switch keeps its own state, starting from `defaultChecked`. `onToggle` still reports every change, and with a `name` the switch submits its value with a form.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Switch
+      label="Email notifications"
+      name="notifications"
+      value="on"
+      defaultChecked
+    />
+  }
+  codes={[
+    {
+      code:
+`<Switch
+    label="Email notifications"
+    name="notifications"
+    value="on"
+    defaultChecked
+/>`,
+      language: "tsx",
+      label: "Uncontrolled"
+    }
+  ]}
+/>
+
 ## Loading
 
 Show a loading spinner while an action is being processed.
@@ -148,7 +178,8 @@ Place the switch on the right side of the label.
 <PropsTable
   component="Switch"
   describe={{
-    checked: "Whether it is on. Controlled — there is no uncontrolled mode.",
+    checked: "Whether it is on, controlled. Leave it out and the switch keeps its own state.",
+    defaultChecked: "The starting state when `checked` is left out.",
     onToggle: "Called with the new state when it is flipped, by pointer or keyboard: true when it turns on.",
     loading: "Show a spinner in the track while something resolves.",
     disabled: "Block interaction.",

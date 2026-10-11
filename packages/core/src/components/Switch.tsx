@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useId } from "react";
+import React, { forwardRef, useId, useState } from "react";
 
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
@@ -16,7 +16,11 @@ interface SwitchProps
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onToggle"> {
   style?: React.CSSProperties;
   className?: string;
-  checked: boolean;
+  /** On or off, controlled. Leave it out to let the switch keep its own
+   *  state, starting from `defaultChecked`. */
+  checked?: boolean;
+  /** The starting state of an uncontrolled switch (no `checked`). */
+  defaultChecked?: boolean;
   loading?: boolean;
   name?: string;
   value?: string;
@@ -32,7 +36,8 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       className,
-      checked,
+      checked: controlledChecked,
+      defaultChecked = false,
       reverse = false,
       loading = false,
       onToggle,
@@ -48,10 +53,15 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
     const labelId = useId();
     const descriptionId = useId();
     const hasLabel = Boolean(props.label);
+    const [uncontrolledChecked, setUncontrolledChecked] = useState(defaultChecked);
+    const isControlled = controlledChecked !== undefined;
+    const checked = isControlled ? controlledChecked : uncontrolledChecked;
 
     const toggle = () => {
       if (disabled) return;
-      onToggle?.(!checked);
+      const next = !checked;
+      if (!isControlled) setUncontrolledChecked(next);
+      onToggle?.(next);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {

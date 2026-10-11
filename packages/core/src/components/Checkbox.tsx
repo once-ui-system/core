@@ -12,7 +12,11 @@ interface CheckboxProps
     // `onToggle` is this component's own; the DOM's is the `toggle` event of
     // popovers and `<details>`, which an input never fires.
     Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onToggle"> {
+  /** Ticked or not, controlled. Leave it out to let the checkbox keep its
+   *  own state, starting from `defaultChecked`. */
   checked?: boolean;
+  /** The starting state of an uncontrolled checkbox (no `checked`). */
+  defaultChecked?: boolean;
   indeterminate?: boolean;
   /** Called with the state the checkbox moves to: `true` when it becomes
    *  ticked. A callback that takes no argument still works. */
@@ -26,6 +30,7 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
       style,
       className,
       checked: controlledIsChecked,
+      defaultChecked = false,
       indeterminate = false,
       onToggle,
       disabled,
@@ -37,7 +42,7 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
     },
     ref,
   ) => {
-    const [isChecked, setIsChecked] = useState(controlledIsChecked || false);
+    const [isChecked, setIsChecked] = useState(controlledIsChecked ?? defaultChecked);
     const labelId = useId();
     const descriptionId = useId();
     const hasLabel = Boolean(props.label);
@@ -51,11 +56,10 @@ const Checkbox: React.FC<CheckboxProps> = forwardRef<HTMLInputElement, CheckboxP
     const toggleItem = () => {
       if (disabled) return;
       const next = !(controlledIsChecked !== undefined ? controlledIsChecked : isChecked);
-      if (onToggle) {
-        onToggle(next);
-      } else {
-        setIsChecked(next);
-      }
+      // Uncontrolled, the checkbox keeps its own state whether or not anyone
+      // listens; controlled, the caller's `checked` is the only truth.
+      if (controlledIsChecked === undefined) setIsChecked(next);
+      onToggle?.(next);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {

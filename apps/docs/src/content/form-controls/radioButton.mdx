@@ -145,7 +145,8 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
 <PropsTable
   component="RadioButton"
   describe={{
-    checked: "Whether this one is chosen.",
+    checked: "Whether this one is chosen, controlled. Leave it out and the radio keeps its own state.",
+    defaultChecked: "The starting state when `checked` is left out.",
     onToggle: "Called with the new state when it is picked: true when it becomes the chosen one.",
     name: "Group name. Radios sharing one are mutually exclusive.",
     value: "Form field value.",
