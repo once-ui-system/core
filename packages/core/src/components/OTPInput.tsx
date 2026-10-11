@@ -35,6 +35,10 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
     // The fields' ids were `otp-0`…`otp-N`, the same in every OTPInput on a
     // page, so a label or script that found a field by id got the first one.
     const idPrefix = useId();
+    // The message is rendered here, once for every field, so each field is
+    // described by it; Input marks them invalid from `error`.
+    const errorId = `${idPrefix}otp-error`;
+    const showsErrorMessage = error && Boolean(errorMessage);
 
     useEffect(() => {
       if (autoFocus && inputsRef.current[0]) {
@@ -111,6 +115,7 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
               maxLength={1}
               disabled={disabled}
               error={error}
+              aria-describedby={showsErrorMessage ? errorId : undefined}
               value={values[index]}
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
@@ -120,8 +125,8 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
             />
           ))}
         </Flex>
-        {error && errorMessage && (
-          <Flex paddingX="8">
+        {showsErrorMessage && (
+          <Flex paddingX="8" id={errorId}>
             <Text variant="body-default-s" onBackground="danger-weak">
               {errorMessage}
             </Text>

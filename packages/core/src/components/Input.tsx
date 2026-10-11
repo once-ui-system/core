@@ -162,6 +162,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     }, [debouncedValue, validateInput]);
 
     const displayError = validationError || errorMessage;
+    // Whether the message below the field renders, and so whether there is
+    // anything to point `aria-describedby` at.
+    const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
+    // The caller's own description comes first; it used to be overwritten.
+    const describedBy =
+      [props["aria-describedby"], showsErrorMessage ? `${id}-error` : undefined]
+        .filter(Boolean)
+        .join(" ") || undefined;
 
     const inputClassNames = classNames(
       styles.input,
@@ -219,8 +227,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               onBlur={handleBlur}
               onAnimationStart={handleAnimationStart}
               className={inputClassNames}
-              aria-describedby={displayError ? `${id}-error` : undefined}
-              aria-invalid={!!displayError}
+              aria-describedby={describedBy}
+              // `error` alone marks the field invalid too: a field whose
+              // message is rendered elsewhere (OTPInput's, a form's summary)
+              // was drawn in the error state but announced as valid.
+              aria-invalid={error || !!displayError}
             />
             {label && (
               <Text
@@ -263,7 +274,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             </Row>
           )}
         </Row>
-        {displayError && errorMessage !== false && (
+        {showsErrorMessage && (
           <Row
             paddingX="16"
             id={`${id}-error`}

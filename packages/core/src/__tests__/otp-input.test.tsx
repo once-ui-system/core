@@ -137,16 +137,27 @@ describe("OTPInput", () => {
     for (let n = 1; n <= 4; n++) expect(digit(n)).toBeDisabled();
   });
 
-  // BUG: OTPInput renders its error message itself and passes the fields only
-  // `error`, but Input sets aria-invalid and aria-describedby from
-  // `errorMessage`. In the error state no field is marked invalid or
-  // described by the message, so a screen reader hears nothing wrong.
-  it.skip("marks every field invalid and described by the error message", () => {
-    render(<OTPInput error errorMessage="Wrong code" />, { wrapper });
+  // OTPInput renders its error message itself and passes the fields only
+  // `error`, but Input set aria-invalid and aria-describedby from
+  // `errorMessage` alone. In the error state no field was marked invalid or
+  // described by the message, so a screen reader heard nothing wrong.
+  it("marks every field invalid and described by the error message", async () => {
+    const { container } = render(<OTPInput error errorMessage="Wrong code" />, { wrapper });
     for (let n = 1; n <= 4; n++) {
       expect(digit(n)).toHaveAttribute("aria-invalid", "true");
       expect(digit(n)).toHaveAccessibleDescription("Wrong code");
     }
+    await expectNoAxeViolations(container);
+  });
+
+  it("marks the fields invalid without a message, and valid without `error`", () => {
+    const { rerender } = render(<OTPInput error />, { wrapper });
+    expect(digit(1)).toHaveAttribute("aria-invalid", "true");
+    expect(digit(1)).not.toHaveAttribute("aria-describedby");
+
+    rerender(<OTPInput />);
+    expect(digit(1)).toHaveAttribute("aria-invalid", "false");
+    expect(digit(1)).not.toHaveAttribute("aria-describedby");
   });
 
   // The fields' ids were hard-coded `otp-0`…`otp-N`, so two OTPInputs on one
