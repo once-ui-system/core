@@ -107,7 +107,8 @@ const current = selectNavHref(pathname, nav.flatMap((i) =>
 ## 3. Editor shell
 
 Two panes and a timeline — the shape of a video editor, a page builder, a
-diff view.
+diff view. `ai/examples/editor.tsx` (task bundle `editor`) is the whole page
+around it: toolbar, layer list, canvas and a working timeline.
 
 ```tsx
 <Column fill>

@@ -34,7 +34,7 @@ const free: Prompt[] = [
     id: "setup",
     title: "Set your agent up",
     description:
-      "Run once per project. Writes AGENTS.md and a Cursor rule so every later prompt starts from the rules instead of guessing.",
+      "Run once per project. Writes AGENTS.md, CLAUDE.md and a Cursor rule so every later prompt starts from the rules instead of guessing.",
     prompt: `npm install @once-ui-system/core
 npx once-ui-init-agent`,
   },
@@ -140,6 +140,36 @@ no Tailwind, no custom CSS.`,
 
 Build a public roadmap for <your product>. Follow the task bundle, and mimic
 the Roadmap1 block from docs.once-ui.com/ai/examples/blocks/manifest.json.
+
+Compose with Once UI primitives and token props. No raw div/span layout,
+no Tailwind, no custom CSS.`,
+  },
+  {
+    id: "list-page",
+    title: "List page",
+    description:
+      "A page of records: a filter, a searchable, sortable, paginated table with status tags and row actions, and an empty state that offers a way back.",
+    prompt: `${harness}
+  docs.once-ui.com/ai/tasks/list-page.json
+
+Build a list page for <your records>. Follow the task bundle, and mimic the
+Table1 block from docs.once-ui.com/ai/examples/blocks/manifest.json.
+
+Compose with Once UI primitives and token props. No raw div/span layout,
+no Tailwind, no custom CSS.`,
+  },
+  {
+    id: "editor",
+    title: "Editor",
+    description:
+      "Toolbar, a resizable split of layers and canvas, and a timeline across both - the shell of a video editor, a page builder or a diff view.",
+    prompt: `${harness}
+  docs.once-ui.com/ai/tasks/editor.json
+  docs.once-ui.com/ai/layouts.md
+
+Build an editor for <what is being edited>. Follow the task bundle and the
+editor shell in layouts.md: each pane scrolls on its own, and the timeline
+is a Scrubber spanning both panes.
 
 Compose with Once UI primitives and token props. No raw div/span layout,
 no Tailwind, no custom CSS.`,

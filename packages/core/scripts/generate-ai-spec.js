@@ -43,20 +43,30 @@ const BARRELS = [
     group: "media",
     importFrom: "@once-ui-system/core/media",
   },
+  // Public components that live on the `./components/*` subpath only, kept
+  // out of the root barrel so every bundle does not carry them. No barrel
+  // re-exports them, so without an entry of their own the walk above never
+  // reaches them and an agent never learns they exist — although each has a
+  // docs page.
+  ...["MediaAudioPlayer", "MediaVideoPlayer"].map((name) => ({
+    file: path.join(SRC, "components", `${name}.tsx`),
+    group: "components",
+    importFrom: `@once-ui-system/core/components/${name}`,
+  })),
 ];
 
-// Internal/low-level exports that AI should not use directly
+// Internal/low-level exports that AI should not use directly. `ThemeInit`,
+// `Meta`, `FocusTrap` and `ScrollLock` used to be listed here as well, which
+// left an agent with no slice for the script that prevents a theme flash, the
+// metadata helper every page uses, or the two primitives an overlay is built
+// from — all four are public, documented API.
 const EXCLUDE = new Set([
   "ServerFlex",
   "ClientFlex",
   "ServerGrid",
   "ClientGrid",
   "ElementType",
-  "FocusTrap",
-  "ScrollLock",
-  "ThemeInit",
   "ArrowNavigation",
-  "Meta",
   // Deprecated alias of ParticleFx, kept for 2.x consumers; not for new code.
   "Particle",
 ]);
@@ -108,6 +118,8 @@ function cleanDefault(text) {
     .replace(/\s*\r?\n\s*/g, " ")
     .replace(/\s{2,}/g, " ")
     .trim();
+  // An empty string stays visible: `string = ` read as a missing default.
+  if (/^(?:""|'')$/.test(t)) return '""';
   if (/^["'].*["']$/.test(t)) return t.slice(1, -1);
   return t;
 }
@@ -280,6 +292,7 @@ function typeNamesUsed(components, mixins) {
   const parts = [];
   for (const component of Object.values(components)) {
     parts.push(...Object.values(component.props ?? {}).map(String));
+    if (component.returns) parts.push(component.returns);
   }
   for (const mixin of Object.values(mixins)) {
     parts.push(...Object.values(mixin ?? {}).map(String));
@@ -316,7 +329,40 @@ async function main() {
     return undefined;
   }
 
-  /** Extract destructuring defaults from a component function's first param */
+  /**
+   * An exported object of helpers rather than a component — `Meta` is
+   * `{ generate: generateMetadata }` — is documented by its call: the first
+   * member that is a function with a typed argument, whose argument stands in
+   * for props. Without this it resolved no props type and was dropped.
+   */
+  function helperCall(decl) {
+    if (!ts.isVariableDeclaration(decl) || !decl.initializer) return undefined;
+    if (!ts.isObjectLiteralExpression(decl.initializer)) return undefined;
+    for (const member of decl.initializer.properties) {
+      let fn;
+      if (ts.isMethodDeclaration(member)) {
+        fn = member;
+      } else if (ts.isPropertyAssignment(member) || ts.isShorthandPropertyAssignment(member)) {
+        const value = ts.isPropertyAssignment(member) ? member.initializer : undefined;
+        if (value && (ts.isArrowFunction(value) || ts.isFunctionExpression(value))) {
+          fn = value;
+        } else {
+          const symbol = value
+            ? checker.getSymbolAtLocation(value)
+            : checker.getShorthandAssignmentValueSymbol(member);
+          const target =
+            symbol && symbol.flags & ts.SymbolFlags.Alias
+              ? checker.getAliasedSymbol(symbol)
+              : symbol;
+          const valueDecl = target?.valueDeclaration;
+          if (valueDecl && ts.isFunctionDeclaration(valueDecl)) fn = valueDecl;
+        }
+      }
+      if (fn?.parameters?.[0]?.type) return { member: member.name.getText(), fn };
+    }
+    return undefined;
+  }
+
   /** The variable/function declaration exporting `name` from `sf`, if any. */
   function findComponentDecl(sf, name) {
     for (const st of sf.statements) {
@@ -427,7 +473,10 @@ async function main() {
     if (!decl) return;
     if (!ts.isVariableDeclaration(decl) && !ts.isFunctionDeclaration(decl)) return;
 
-    const propsType = getPropsType(decl);
+    const helper = helperCall(decl);
+    const propsType = helper
+      ? checker.getTypeFromTypeNode(helper.fn.parameters[0].type)
+      : getPropsType(decl);
     if (!propsType) {
       warnings.push(`No props type resolved for ${name}; skipped`);
       return;
@@ -453,7 +502,7 @@ async function main() {
     const implDecl = implSf ? findComponentDecl(implSf, name) : undefined;
     const implDefaults = implDecl ? getDefaults(getComponentFunction(implDecl)) : {};
 
-    const fn = getComponentFunction(decl);
+    const fn = helper ? helper.fn : getComponentFunction(decl);
     const defaults = { ...implDefaults, ...getDefaults(fn) };
     const mixins = new Set();
     const extendsComponents = new Set();
@@ -507,6 +556,11 @@ async function main() {
 
     const entry = { group };
     if (importFrom) entry.importFrom = importFrom;
+    if (helper) {
+      // Not rendered: called. `props` are the argument of this call.
+      entry.call = `${name}.${helper.member}(props)`;
+      if (helper.fn.type) entry.returns = typeText(helper.fn.type);
+    }
     if (extendsComponents.size) entry.extends = [...extendsComponents];
     if (mixins.size) entry.mixins = [...mixins].sort();
     if (Object.keys(props).length) entry.props = props;
@@ -654,14 +708,32 @@ function emitArtifacts(spec, version) {
 
   fs.writeFileSync(OUT_FILE, JSON.stringify(spec, null, 1));
 
+  // The catalog's purposes, tags and pairings are written by hand in the
+  // seed; everything else comes from the spec. The seed was deleted once and
+  // the fallback below quietly turned all 140 purposes into "X component" —
+  // a catalog that tells an agent nothing — so a missing seed entry is now
+  // reported, as is an entry for a component that no longer exists.
   const seedPath = path.join(OUT_DIR, "catalog.seed.json");
   const seed = fs.existsSync(seedPath) ? JSON.parse(fs.readFileSync(seedPath, "utf8")) : {};
+  const unseeded = Object.keys(spec.components).filter((name) => !seed[name]?.purpose);
+  const stale = Object.keys(seed).filter((name) => !spec.components[name]);
+  if (unseeded.length) {
+    console.warn(`catalog.seed.json has no purpose for: ${unseeded.join(", ")}`);
+  }
+  if (stale.length) {
+    console.warn(
+      `catalog.seed.json describes components the spec does not have: ${stale.join(", ")}`,
+    );
+  }
 
   const catalog = { version, generated: spec.generated, components: {} };
   for (const [name, entry] of Object.entries(spec.components)) {
     const meta = seed[name] || {};
     catalog.components[name] = {
       group: entry.group,
+      // A component that does not come from the package root says where it
+      // does come from, since naming it from the root does not resolve.
+      ...(entry.importFrom ? { importFrom: entry.importFrom } : {}),
       extends: entry.extends,
       purpose: meta.purpose || `${name} component`,
       tags: meta.tags || [entry.group],
@@ -670,7 +742,16 @@ function emitArtifacts(spec, version) {
       ...(meta.pairsWith ? { pairsWith: meta.pairsWith } : {}),
     };
   }
-  fs.writeFileSync(path.join(OUT_DIR, "catalog.json"), JSON.stringify(catalog, null, 1));
+  // One component per line. The catalog is half of the bootstrap every agent
+  // loads, and spreading each tag and pairing over its own line cost a
+  // quarter of its size in whitespace; one line each still diffs per component.
+  const entries = Object.entries(catalog.components).map(
+    ([name, entry]) => `  ${JSON.stringify(name)}: ${JSON.stringify(entry)}`,
+  );
+  fs.writeFileSync(
+    path.join(OUT_DIR, "catalog.json"),
+    `{\n "version": ${JSON.stringify(catalog.version)},\n "generated": ${JSON.stringify(catalog.generated)},\n "components": {\n${entries.join(",\n")}\n }\n}`,
+  );
 
   const componentsDir = path.join(OUT_DIR, "components");
   fs.mkdirSync(componentsDir, { recursive: true });

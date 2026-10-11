@@ -1,0 +1,38 @@
+{
+  "id": "list-page",
+  "title": "List / table page",
+  "description": "A page of records: title with the primary action, a status filter, a searchable, sortable, paginated Table with status tags and row actions, and an empty state",
+  "components": [
+    "Column",
+    "Row",
+    "Heading",
+    "Text",
+    "Button",
+    "SegmentedControl",
+    "Select",
+    "Table",
+    "Tag",
+    "Skeleton"
+  ],
+  "recipes": [],
+  "example": "examples/list-page.tsx",
+  "blocks": {
+    "manifest": "examples/blocks/manifest.json",
+    "primary": ["Table1"],
+    "compose": ["Header4", "Sidebar1"]
+  },
+  "gotchas": [
+    "Card.interactive",
+    "layout.shorthands",
+    "layout.defaults",
+    "Icon.names",
+    "color.tokens"
+  ],
+  "quality": {
+    "pageHeader": "Title and one primary Button in a Row that stacks at s; per-record actions belong in the Table's actions, not the header",
+    "cellText": "A component cell (name with email, a status Tag) carries its text as children — Table searches and sorts by the text inside each cell",
+    "status": "Tag with a scheme and a text label, never colour alone",
+    "emptyState": "Offer the way back (clear the filter), not only 'No results'",
+    "rowActions": "Icon actions with tooltips; destructive ones take variant=\"danger\""
+  }
+}

@@ -234,7 +234,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 
 ## Effect units
 
-24. `RevealFx`: `delay` is in **milliseconds** — stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). `ShineFx.speed` is milliseconds for the same reason. `translateY` as a number is in **rem** — use `translateY={1}` or a token like `"16"` (1rem); `16` means 16rem.
+24. `RevealFx`: `delay` is in **milliseconds** — stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). The same holds for every timing prop measured in milliseconds: `RevealFx` `speed`, `ShineFx` `speed`, `CountFx` `speed`, `TypeFx` `speed` and `delay`, `Animation`/`HoverCard` `delay` and `duration`, `Hover` `delay` and `hideDelay`, `Skeleton` `delay`. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx` and `Effect` is a **multiplier** instead — `1` is normal, `0.5` half speed. `translateY` as a number is in **rem** — use `translateY={1}` or a token like `"16"` (1rem); `16` means 16rem.
 
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
 
@@ -278,8 +278,25 @@ specifier into every consumer's module graph:
 | `CodeBlock` | `@once-ui-system/core/code` | `prismjs` |
 | `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
 
-Naming one of these from the root does not resolve. Each component slice in
-`ai/components/` carries the specifier to import it from.
+Naming one of these from the root does not resolve. `MediaAudioPlayer` and
+`MediaVideoPlayer` are not on the root either: they live on the
+`./components/*` subpath (`@once-ui-system/core/components/MediaAudioPlayer`).
+Each component slice in `ai/components/`, and each catalog entry, carries the
+specifier to import it from when it is not the root.
+
+30b. In a **Next.js** app, `LayoutProvider` comes from
+`@once-ui-system/core/next`:
+
+```tsx
+import { LayoutProvider } from "@once-ui-system/core/next";
+```
+
+The root export resolves and renders, which is what makes it easy to miss: it
+installs the plain DOM adapters, so `SmartLink`, `Button`/`Card`/`ToggleButton`
+with an `href`, `Media`, `Logo`, `MegaMenu` and `Kbar` render a plain `<a>` and
+`<img>` — no client-side navigation, no `next/image`, and no error. The
+validator flags it (`LayoutProvider.next`) and `--fix` moves the import. An app
+that composes `NextAdapterProvider` itself is already covered.
 
 31. `IconName` is a real union, not `string`. An unregistered name is a type
 error now, where it used to render a blank space with a console warning — so

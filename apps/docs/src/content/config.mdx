@@ -2,7 +2,7 @@
 title: "Configuration"
 github: "packages/core/src/config.mdx"
 summary: "Configure Once UI with app-level design settings."
-updatedAt: "2026-06-02"
+updatedAt: "2026-10-10"
 docs: "once-ui/config.mdx"
 navLabel: "Configuration"
 navIcon: "settings"
@@ -18,30 +18,39 @@ Once UI manages app-level design configuration with the help of Providers and a 
     codes={[
       {
         code:
-`import '@once-ui-system/foundations/css/styles.css';
-import '@once-ui-system/foundations/css/tokens.css';
+`import "@once-ui-system/core/css/styles.css";
+import "@once-ui-system/core/css/tokens.css";
 
-import classNames from "classnames";
-import { Column, ThemeInit } from "@once-ui-system/core";
+import {
+  Column,
+  DataThemeProvider,
+  IconProvider,
+  ThemeInit,
+  ThemeProvider,
+  ToastProvider,
+} from "@once-ui-system/core";
+// In a Next.js app LayoutProvider comes from /next: the root export renders
+// links and images as plain <a> and <img>.
+import { LayoutProvider } from "@once-ui-system/core/next";
 import { fonts } from "../resources/once-ui.config";
 
 interface RootLayoutProps {
     children: React.ReactNode;
 }
 
-export default async function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: RootLayoutProps) {
     return (
       <>
         <Column
           as="html"
           lang="en"
           suppressHydrationWarning
-          className={classNames(
-            fonts.primary.variable,
-            fonts.secondary.variable,
-            fonts.tertiary.variable,
+          className={[
+            fonts.heading.variable,
+            fonts.body.variable,
+            fonts.label.variable,
             fonts.code.variable,
-          )}
+          ].join(" ")}
         >
           <head>
             <ThemeInit
@@ -65,7 +74,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
               <DataThemeProvider>
                 <ToastProvider>
                   <IconProvider>
-                    <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}>
+                    <Column background="page" as="body" fillWidth margin="0" padding="0" minHeight="100vh">
                       {children}
                     </Column>
                   </IconProvider>

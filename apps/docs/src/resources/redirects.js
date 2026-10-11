@@ -16,6 +16,9 @@ export const movedPages = [
   // { from: "components/foo", to: "layout/foo" },
   // Renamed to ParticleFx in 2.0 and filed with the other effects.
   { from: "components/particle", to: "effects/particleFx" },
+  // An internal hook removed in 2.0 with custom breakpoints; how responsive
+  // props render now is described on the Breakpoints page.
+  { from: "hooks/useResponsiveClasses", to: "basics/responsive" },
 ];
 
 /**

@@ -1,0 +1,26 @@
+{
+  "id": "editor",
+  "title": "Editor shell",
+  "description": "A toolbar, a resizable two-pane split (layers and canvas) and a timeline spanning both — video editor, page builder, diff view",
+  "components": [
+    "Column",
+    "Row",
+    "SplitView",
+    "Scrubber",
+    "ToggleButton",
+    "IconButton",
+    "Text",
+    "Media",
+    "MediaVideoPlayer"
+  ],
+  "recipes": [],
+  "layout": "layouts.md#3-editor-shell",
+  "example": "examples/editor.tsx",
+  "gotchas": ["Timeline.notScrubber", "layout.shorthands", "zIndex.scope", "Icon.names"],
+  "quality": {
+    "height": "The shell takes the viewport (height=\"100dvh\", never 100vh) and each pane scrolls on its own",
+    "panes": "overflowY=\"auto\" on each SplitView panel, never on the SplitView; set labels so the tabs it collapses into below collapseBelow are named",
+    "timeline": "Scrubber is a sibling of the SplitView, spanning both panes; onGestureStart pauses playback",
+    "toolbar": "IconButtons with tooltips in a Row with borderBottom; one primary action at most"
+  }
+}

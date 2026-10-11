@@ -44,6 +44,7 @@ const NOT_A_TYPE = new Set([
   // literal values that happen to be capitalised
   "ANIMATION_DURATION",
   "An",
+  "Audio",
   "DD",
   "Drag",
   "End",

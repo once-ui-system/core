@@ -18,7 +18,7 @@
     "Line"
   ],
   "recipes": [],
-  "example": "examples/chat.tsx",
+  "example": "examples/blocks/Chat1.tsx",
   "blocks": {
     "manifest": "examples/blocks/manifest.json",
     "primary": ["Chat1", "Feed3", "Sidebar4"],

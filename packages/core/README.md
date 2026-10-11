@@ -46,7 +46,7 @@ This package includes an agent-first harness under `ai/` for generating Once UI 
 | Component catalog | `@once-ui-system/core/ai/catalog.json` |
 | Task bundles | `@once-ui-system/core/ai/tasks/index.json` |
 
-**One-time setup in your app** (writes project `AGENTS.md` + Cursor rule):
+**One-time setup in your app** (writes project `AGENTS.md`, `CLAUDE.md` and a Cursor rule):
 
 ```bash
 npx once-ui-init-agent
