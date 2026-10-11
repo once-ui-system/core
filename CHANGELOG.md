@@ -115,8 +115,13 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   panel shows or announces: group titles, row labels, option names, and the
   swatches' accessible names, built by functions so a translation can order
   its words. It reaches composed parts through `StylePanel.Root`, and a row's
-  own `label` still wins. `ThemeSwitcher` and `ColorInput` take `labels` for
-  their built-in names too.
+  own `label` still wins. `ThemeSwitcher`, `ColorInput` and `Scroller` take
+  `labels` for their built-in names too, so the panel's scroll buttons are
+  translated with the rest of it.
+- **`StylePanel` fits a narrow sidebar.** `stacked` puts each row's label above
+  its control. A row's own layout props still win, including on a row with a
+  custom colour. In a strip that scrolls, the chosen swatch is scrolled into
+  view, clear of the scroll buttons.
 - **A custom colour on `StylePanel`'s Brand and Accent rows.** `customColors`
   (or `custom` on `StylePanel.Brand` and `StylePanel.Accent`) adds a swatch
   for a colour of your own and a field to pick it, reported as `brandSeed` or
@@ -257,6 +262,8 @@ Each keeps working until 3.0.
   reads as `"system"`) and reports a choice as `{ theme }`, like every other
   row.
 - **`StylePanel` swatches respond to Enter and Space**, not only to a click.
+- **A `className` on a `StylePanel` row replaced the row's own**, which took
+  its divider with it. The two are joined now.
 - **`Switch` is one named, focusable control.** `role="switch"` sat on a
   wrapper that couldn't take focus, so focus landed on an unnamed element,
   and the `ariaLabel` default ("Toggle switch") overrode the visible label.

@@ -17,7 +17,8 @@
   "direction": "\"row\" | \"column\" = row",
   "fadeColor": "BaseColor = transparent",
   "onItemClick": "(index: number) => void",
-  "radius": "RadiusSize"
+  "radius": "RadiusSize",
+  "labels": "ScrollerLabels"
  },
  "mixinsRef": [
   "CommonProps",

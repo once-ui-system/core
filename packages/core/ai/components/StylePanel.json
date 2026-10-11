@@ -18,7 +18,8 @@
   "value": "StylePanelRootProps[\"value\"]",
   "onChange": "StylePanelRootProps[\"onChange\"]",
   "labels": "StylePanelLabels",
-  "customColors": "boolean"
+  "customColors": "boolean",
+  "stacked": "boolean"
  },
  "mixinsRef": [
   "CommonProps",

@@ -1295,6 +1295,10 @@
    "bottom-center",
    "bottom-between"
   ],
+  "ScrollerLabels": {
+   "previous": "string",
+   "next": "string"
+  },
   "ScrubberBlock": {
    "id": "!string",
    "start": "!number",
@@ -1424,6 +1428,7 @@
    "names": "StylePanelNameLabels",
    "swatches": "StylePanelSwatchLabels",
    "themeSwitcher": "ThemeSwitcherLabels",
+   "scroller": "ScrollerLabels",
    "custom": "StylePanelCustomLabels"
   },
   "StylePanelNameLabels": {
@@ -1444,7 +1449,8 @@
   "StylePanelRootProps": {
    "value": "StylePanelValue",
    "onChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
-   "labels": "StylePanelLabels"
+   "labels": "StylePanelLabels",
+   "stacked": "boolean"
   },
   "StylePanelRowLabels": {
    "theme": "ReactNode",
@@ -3737,7 +3743,8 @@
     "direction": "\"row\" | \"column\" = row",
     "fadeColor": "BaseColor = transparent",
     "onItemClick": "(index: number) => void",
-    "radius": "RadiusSize"
+    "radius": "RadiusSize",
+    "labels": "ScrollerLabels"
    }
   },
   "ScrollLock": {
@@ -4075,7 +4082,8 @@
     "value": "StylePanelRootProps[\"value\"]",
     "onChange": "StylePanelRootProps[\"onChange\"]",
     "labels": "StylePanelLabels",
-    "customColors": "boolean"
+    "customColors": "boolean",
+    "stacked": "boolean"
    }
   },
   "Swiper": {
