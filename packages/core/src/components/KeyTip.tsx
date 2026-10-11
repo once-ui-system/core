@@ -63,7 +63,7 @@ const KeyTip = forwardRef<HTMLDivElement, KeyTipProps>(({ keys, label, ...flex }
   );
 
   return (
-    <Row ref={ref} as="span" inline gap="8" vertical="center" {...flex}>
+    <Row ref={ref} as="span" inline gap="8" vertical="center" data-keytip="" {...flex}>
       {label}
       <Row as="span" gap="4" vertical="center" aria-hidden="true">
         {alternatives.map(({ source, steps }, alternative) => (

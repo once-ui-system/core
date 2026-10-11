@@ -12,3 +12,15 @@
 .fadeIn {
   animation: tooltipFadeIn 0.15s ease-in;
 }
+
+// A label that is only a KeyTip ends in keycaps, which draw their own box:
+// beside them the text inset reads as a gap, so the right side takes the
+// vertical padding instead. In CSS rather than by checking the label's type,
+// which a server component's KeyTip doesn't keep across the client boundary.
+.tooltip:has(> .label:last-child > [data-keytip]:only-child) {
+  padding-right: var(--static-space-4);
+
+  > .label {
+    padding-right: 0;
+  }
+}

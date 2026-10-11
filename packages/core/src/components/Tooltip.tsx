@@ -33,11 +33,12 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         radius="s"
         border="neutral-medium"
         role="tooltip"
-        className={classNames(styles.fadeIn, className)}
+        className={classNames(styles.tooltip, styles.fadeIn, className)}
         {...flex}
       >
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}
         <Row
+          className={styles.label}
           paddingX="2"
           vertical="center"
           textVariant="body-default-xs"
