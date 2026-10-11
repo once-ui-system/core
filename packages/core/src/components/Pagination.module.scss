@@ -1,0 +1,18 @@
+// Page buttons are at least as wide as they are tall, so "1" and "12" sit on
+// the same square grid and the row does not shift as the window moves. The
+// ellipsis takes the same footprint as a page.
+.item {
+  justify-content: center;
+}
+
+.s {
+  min-width: var(--static-space-32);
+}
+
+.m {
+  min-width: var(--static-space-40);
+}
+
+.l {
+  min-width: var(--static-space-48);
+}

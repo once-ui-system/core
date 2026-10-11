@@ -81,6 +81,7 @@ export * from "./NumberInput";
 export * from "./OgCard";
 export * from "./Option";
 export * from "./OTPInput";
+export * from "./Pagination";
 export * from "./ParticleFx";
 export * from "./PasswordInput";
 export * from "./ProgressBar";

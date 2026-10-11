@@ -501,6 +501,11 @@
     "tags": ["form", "auth"],
     "pairsWith": ["Dialog", "Column", "Button"]
   },
+  "Pagination": {
+    "purpose": "Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select — paged lists and tables",
+    "tags": ["navigation", "data"],
+    "pairsWith": ["Table", "Row", "Text"]
+  },
   "ParticleFx": {
     "purpose": "Drifting particles that can react to the pointer, as an ambient layer",
     "tags": ["decoration", "effect"],

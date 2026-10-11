@@ -5,7 +5,7 @@ import React, { Children, isValidElement, ReactNode } from "react";
 import remarkGfm from "remark-gfm";
 
 // ─── Core components (explicit imports to avoid Turbopack frozen module proxy) ───
-import { Accordion, AccordionGroup, Banner, Animation, Arrow, AutoScroll, Avatar, HeadingNav, AvatarGroup, Badge, Background, BlobFx, BlockQuote, Book, Breadcrumbs, Effect, InfoTip, Scrubber, Setting, SettingAxes, SettingGroup, Button, Card, Carousel, CelebrationFx, Checkbox, Chip, ClientFlex, ClientGrid, ColorInput, Column, CompareImage, ContextMenu, CountFx, CountdownFx, Cursor, CursorCard, DateInput, DatePicker, DateRangeInput, DateRangePicker, Dialog, Drawer, Dropdown, DropdownWrapper, ElementType, EmojiPicker, EmojiPickerDropdown, Fade, FadingLettersFx, Feedback, Flex, FlipFx, FocusTrap, Form, GlitchFx, Grid, Heading, HoloFx, Hover, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, InteractiveDetails, Kbd, KeyTip, LetterFx, Line, List, ListItem, Logo, LogoCloud, Mask, MasonryGrid, MatrixFx, Media, Modal, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, ParticleFx, PasswordInput, ProgressBar, Pulse, RadioButton, RevealFx, Row, ScrollContainer, ScrollLock, ScrollToTop, Scroller, SegmentedControl, Select, ShineFx, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, StyleOverlay, StylePanel, Swiper, Switch, Table, Tab, TabList, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, TiltFx, Timeline, Toast, Toaster, ToggleButton, Tooltip, TypeFx, User, UserMenu, VisuallyHidden, WeatherFx } from "@once-ui-system/core";
+import { Accordion, AccordionGroup, Banner, Animation, Arrow, AutoScroll, Avatar, HeadingNav, AvatarGroup, Badge, Background, BlobFx, BlockQuote, Book, Breadcrumbs, Effect, InfoTip, Scrubber, Setting, SettingAxes, SettingGroup, Button, Card, Carousel, CelebrationFx, Checkbox, Chip, ClientFlex, ClientGrid, ColorInput, Column, CompareImage, ContextMenu, CountFx, CountdownFx, Cursor, CursorCard, DateInput, DatePicker, DateRangeInput, DateRangePicker, Dialog, Drawer, Dropdown, DropdownWrapper, ElementType, EmojiPicker, EmojiPickerDropdown, Fade, FadingLettersFx, Feedback, Flex, FlipFx, FocusTrap, Form, GlitchFx, Grid, Heading, HoloFx, Hover, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, InteractiveDetails, Kbd, KeyTip, LetterFx, Line, List, ListItem, Logo, LogoCloud, Mask, MasonryGrid, MatrixFx, Media, Modal, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ParticleFx, PasswordInput, ProgressBar, Pulse, RadioButton, RevealFx, Row, ScrollContainer, ScrollLock, ScrollToTop, Scroller, SegmentedControl, Select, ShineFx, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, StyleOverlay, StylePanel, Swiper, Switch, Table, Tab, TabList, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, TiltFx, Timeline, Toast, Toaster, ToggleButton, Tooltip, TypeFx, User, UserMenu, VisuallyHidden, WeatherFx } from "@once-ui-system/core";
 import { MediaUpload } from "@once-ui-system/core/media";
 import type { MediaProps, TextProps } from "@once-ui-system/core";
 
@@ -47,6 +47,7 @@ import {
   DrawerExample,
   DrawerSidesExample,
   DrawerNavigationExample,
+  PaginationControlledExample,
   UseHotkeysExample,
   BasicDatePickerExample,
   DateTimePickerExample,
@@ -415,6 +416,7 @@ const mdxComponents = {
 
   // ─── Core navigation ───
   Breadcrumbs,
+  Pagination,
   Tabs,
   TabList,
   Tab,
@@ -517,6 +519,7 @@ const mdxComponents = {
   DrawerExample,
   DrawerSidesExample,
   DrawerNavigationExample,
+  PaginationControlledExample,
   UseHotkeysExample,
   BasicDatePickerExample,
   DateTimePickerExample,
