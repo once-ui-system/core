@@ -278,8 +278,8 @@
    "hrefLang": "!string"
   },
   "AnimationState": [
-   "visible",
    "entering",
+   "visible",
    "exiting"
   ],
   "ArrowNavigationOptions": {
@@ -350,15 +350,15 @@
    "success-alpha-weak",
    "success-alpha-medium",
    "success-alpha-strong",
-   "overlay",
    "surface",
+   "overlay",
    "transparent"
   ],
   "BlendMode": [
    "color",
    "normal",
-   "overlay",
    "screen",
+   "overlay",
    "multiply",
    "darken",
    "lighten",
@@ -775,12 +775,12 @@
   "FlexValue": [
    "0",
    "1",
-   "2",
-   "4",
    "8",
-   "12",
    "10",
+   "2",
    "3",
+   "4",
+   "12",
    "5",
    "6",
    "7",
@@ -889,12 +889,12 @@
   "GridProps": "Grid props",
   "GridSize": [
    "1",
-   "2",
-   "4",
    "8",
-   "12",
    "10",
+   "2",
    "3",
+   "4",
+   "12",
    "5",
    "6",
    "7",
@@ -1225,14 +1225,14 @@
    "right",
    "bottom",
    "left",
-   "top-end",
    "top-start",
-   "right-end",
+   "top-end",
    "right-start",
-   "bottom-end",
+   "right-end",
    "bottom-start",
-   "left-end",
-   "left-start"
+   "bottom-end",
+   "left-start",
+   "left-end"
   ],
   "PresetsConfig": {
    "display": "!boolean",
@@ -1281,10 +1281,10 @@
    "cyan"
   ],
   "ScrollContainerControlPlacement": [
-   "top-end",
    "top-start",
-   "bottom-end",
+   "top-end",
    "bottom-start",
+   "bottom-end",
    "top-center",
    "top-between",
    "bottom-center",
@@ -1339,24 +1339,24 @@
    "s",
    "xs",
    "0",
+   "32",
    "1",
    "2",
    "4",
+   "64",
+   "160",
    "8",
    "12",
    "16",
    "20",
    "24",
-   "32",
    "40",
    "48",
    "56",
-   "64",
    "72",
    "80",
    "104",
-   "128",
-   "160"
+   "128"
   ],
   "StreamingOptions": {
    "initialData": "!T[]",
@@ -1648,8 +1648,8 @@
   ],
   "TriggerType": [
    "manual",
-   "click",
-   "hover"
+   "hover",
+   "click"
   ],
   "TShirtSizes": [
    "xl",
@@ -2230,6 +2230,9 @@
   },
   "CountFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -2612,6 +2615,9 @@
   },
   "FadingLettersFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -3066,6 +3072,9 @@
   },
   "ListItem": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -3813,6 +3822,9 @@
   },
   "ShineFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",

@@ -1,6 +1,9 @@
 {
  "name": "FadingLettersFx",
  "group": "components",
+ "extends": [
+  "Text"
+ ],
  "mixins": [
   "CommonProps",
   "DisplayProps",

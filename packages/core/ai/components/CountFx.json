@@ -1,6 +1,9 @@
 {
  "name": "CountFx",
  "group": "components",
+ "extends": [
+  "Text"
+ ],
  "mixins": [
   "CommonProps",
   "DisplayProps",
