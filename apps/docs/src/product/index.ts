@@ -28,6 +28,7 @@ export * from "./CopyPage";
 export * from "./PropsTable";
 export * from "./PropsTableView";
 export * from "./RadioButtonExample";
+export * from "./RadioGroupExamples";
 export * from "./ScrubberExamples";
 export * from "./SettingExamples";
 export * from "./SwitchExample";

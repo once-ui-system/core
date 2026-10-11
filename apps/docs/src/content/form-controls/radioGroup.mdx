@@ -1,0 +1,247 @@
+---
+title: "RadioGroup"
+summary: "One choice from a set of radio buttons, as a single labelled form field with the keyboard behaviour screen readers expect."
+updatedAt: "2026-10-11"
+docs: "once-ui/form-controls/radioGroup.mdx"
+github: "components/RadioGroup.tsx"
+navLabel: "RadioGroup"
+navIcon: "switch"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`RadioGroup` turns a set of [`RadioButton`](/form-controls/radioButton)s into one
+field: a `radiogroup` named by its `label`, one value, one `name` for the form, and
+one stop in the page's Tab order. Describe the choices with `options`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioGroup
+      label="Plan"
+      description="You can change your plan at any time."
+      defaultValue="annual"
+      options={[
+        { value: "monthly", label: "Monthly", description: "Billed every month at $9" },
+        { value: "annual", label: "Annual", description: "Billed once a year at $90" },
+        { value: "lifetime", label: "Lifetime", description: "One payment of $249" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<RadioGroup
+  label="Plan"
+  description="You can change your plan at any time."
+  defaultValue="annual"
+  options={[
+    { value: "monthly", label: "Monthly", description: "Billed every month at $9" },
+    { value: "annual", label: "Annual", description: "Billed once a year at $90" },
+    { value: "lifetime", label: "Lifetime", description: "One payment of $249" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "RadioGroup"
+    }
+  ]}
+/>
+
+Without `value` or `defaultValue`, nothing is selected until someone picks an option.
+Without a visible `label`, name the group with `aria-label`.
+
+## Controlled
+
+Pass `value` and `onChange` when something else owns the choice. `onChange` gets the
+new option's `value`, and is not called for the option already selected.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<RadioGroupControlledExample />}
+  codes={[
+    {
+      code:
+`const [plan, setPlan] = useState("annual");
+
+<RadioGroup label="Plan" name="plan" options={plans} value={plan} onChange={setPlan} />`,
+      language: "tsx",
+      label: "Controlled"
+    }
+  ]}
+/>
+
+## Horizontal
+
+`orientation="horizontal"` lays the radios out in a row that wraps. The arrow keys
+work the same way in both orientations.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioGroup
+      label="Size"
+      orientation="horizontal"
+      defaultValue="m"
+      options={[
+        { value: "s", label: "Small" },
+        { value: "m", label: "Medium" },
+        { value: "l", label: "Large" },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<RadioGroup
+  label="Size"
+  orientation="horizontal"
+  defaultValue="m"
+  options={[
+    { value: "s", label: "Small" },
+    { value: "m", label: "Medium" },
+    { value: "l", label: "Large" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Horizontal"
+    }
+  ]}
+/>
+
+## Disabled
+
+`disabled` on an option keeps it visible and skips it with the arrow keys. `disabled`
+on the group disables every radio, and a disabled group submits nothing.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioGroup
+      label="Region"
+      defaultValue="eu"
+      options={[
+        { value: "eu", label: "Europe" },
+        { value: "us", label: "United States" },
+        { value: "ap", label: "Asia Pacific", description: "Coming soon", disabled: true },
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<RadioGroup
+  label="Region"
+  defaultValue="eu"
+  options={[
+    { value: "eu", label: "Europe" },
+    { value: "us", label: "United States" },
+    { value: "ap", label: "Asia Pacific", description: "Coming soon", disabled: true },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Disabled"
+    }
+  ]}
+/>
+
+## Custom layout
+
+For a layout `options` cannot describe, such as radio cards in a grid, put
+`RadioButton`s with a `value` anywhere inside the group. The group owns their
+checked state, `name`, `disabled` and focus, and a RadioButton's own `onToggle`
+still runs when it is picked. `options`, when given too, render first.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioGroup label="Instance" defaultValue="m">
+      <Grid columns="3" gap="12" s={{ columns: "1" }}>
+        <Column border radius="l" padding="16">
+          <RadioButton value="s" label="Small" description="1 vCPU, 2 GB" />
+        </Column>
+        <Column border radius="l" padding="16">
+          <RadioButton value="m" label="Medium" description="2 vCPU, 4 GB" />
+        </Column>
+        <Column border radius="l" padding="16">
+          <RadioButton value="l" label="Large" description="4 vCPU, 8 GB" />
+        </Column>
+      </Grid>
+    </RadioGroup>
+  }
+  codes={[
+    {
+      code:
+`<RadioGroup label="Instance" defaultValue="m">
+  <Grid columns="3" gap="12" s={{ columns: "1" }}>
+    <Column border radius="l" padding="16">
+      <RadioButton value="s" label="Small" description="1 vCPU, 2 GB" />
+    </Column>
+    <Column border radius="l" padding="16">
+      <RadioButton value="m" label="Medium" description="2 vCPU, 4 GB" />
+    </Column>
+    <Column border radius="l" padding="16">
+      <RadioButton value="l" label="Large" description="4 vCPU, 8 GB" />
+    </Column>
+  </Grid>
+</RadioGroup>`,
+      language: "tsx",
+      label: "Custom layout"
+    }
+  ]}
+/>
+
+## Forms
+
+Give the group a `name` and a form submits the selected `value` under it, as a set
+of native radios would. Nothing is submitted while no option is selected.
+
+## Keyboard
+
+Only the selected radio is in the page's Tab order, or the first enabled radio
+while none is selected, so Tab moves past the whole group in one step.
+
+| Key | Does |
+| --- | --- |
+| Down / Right | Focus and select the next radio, wrapping at the end. Right and Left swap in a right-to-left layout. |
+| Up / Left | Focus and select the previous radio, wrapping at the start. |
+| Space | Select the focused radio. |
+
+Selection follows focus, as it does for native radios: a radio group is one choice,
+and moving through it is how you make it.
+
+## API reference
+
+<PropsTable
+  component="RadioGroup"
+  describe={{
+    options: "One RadioButton per option, in order.",
+    value: "The selected option's value, when the host owns the state. Pair with onChange.",
+    defaultValue: "The option selected first when the group keeps its own state.",
+    onChange: "Called with the newly selected value.",
+    name: "Submitted with the selected value inside a form.",
+    label: "Visible label that names the group.",
+    description: "Helper text under the label, read out as the group's description.",
+    disabled: "Disable every radio in the group.",
+    orientation: "Stack the radios, or lay them out in a row that wraps.",
+    children: "RadioButtons with a value, in any layout.",
+  }}
+/>
+
+### RadioGroupOption
+
+<PropsTable
+  label="Field"
+  content={[
+    ["value", "string", "-", "What value and onChange carry, and what a form submits.", true],
+    ["label", "React.ReactNode", "-", "The radio's label.", true],
+    ["description", "React.ReactNode", "-", "Helper text under the label."],
+    ["disabled", "boolean", "-", "Visible, not selectable, skipped by the arrow keys."],
+    ["iconButtonProps", "IconButtonProps", "-", "A help button beside the label, as on RadioButton."],
+  ]}
+/>

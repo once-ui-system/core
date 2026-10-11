@@ -541,6 +541,11 @@
     "tags": ["form", "settings"],
     "pairsWith": ["Column", "Form"]
   },
+  "RadioGroup": {
+    "purpose": "One choice from a set of radios as a single form field: a labelled radiogroup with arrow keys, from options or RadioButtons",
+    "tags": ["form", "settings"],
+    "pairsWith": ["RadioButton", "Form", "Setting"]
+  },
   "RevealFx": {
     "purpose": "Slide-and-fade entrance for a block; delay and speed in ms — one coherent set per page",
     "tags": ["effect", "motion"],
