@@ -47,7 +47,7 @@ const isOffsetToken = (value: unknown): value is string =>
  * breakpoint, and `ClientGrid` relied on them itself — so a breakpoint object
  * whose values all have one renders here now, under the same rule `Flex` uses.
  * This writes the same families `ServerFlex` does for its breakpoints, `xl`
- * included, plus the grid's own `columns`.
+ * included, plus the grid's own `columns` and `rows`.
  */
 function breakpointClasses(
   breakpoint: string,
@@ -60,6 +60,7 @@ function breakpointClasses(
     props.hide === true && `${breakpoint}-grid-hide`,
     props.hide === false && `${breakpoint}-grid-show`,
     props.columns && `${breakpoint}-columns-${props.columns}`,
+    props.rows && `${breakpoint}-rows-${props.rows}`,
     props.overflow && `${breakpoint}-overflow-${props.overflow}`,
     props.overflowX && `${breakpoint}-overflow-x-${props.overflowX}`,
     props.overflowY && `${breakpoint}-overflow-y-${props.overflowY}`,
@@ -81,6 +82,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       as: Component = "div",
       inline,
       columns,
+      rows,
       minColumnWidth,
       gap,
       position = "relative",
@@ -279,6 +281,9 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       minHeight === BELOW_HEADER && "min-height-below-header",
       maxHeight === BELOW_HEADER && "max-height-below-header",
       minColumnWidthValue ? "columns-auto-fit" : columns && `columns-${columns}`,
+      // Taken out of the props here, so it never reaches the DOM as a `rows`
+      // attribute, which is where it used to end up.
+      rows && `rows-${rows}`,
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
