@@ -2414,7 +2414,8 @@
     "minDate": "Date",
     "maxDate": "Date",
     "dual": "boolean",
-    "size": "CondensedTShirtSizes = m"
+    "size": "CondensedTShirtSizes = m",
+    "autoFocus": "boolean"
    }
   },
   "DialogProvider": {
