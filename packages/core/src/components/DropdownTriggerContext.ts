@@ -32,16 +32,19 @@ export const DropdownTriggerContext = createContext<DropdownTriggerState | null>
 
 /**
  * Set by a component that renders a DropdownWrapper around a combobox it owns
- * (Select), for that one wrapper: DropdownWrapper reads it and clears it again
- * for everything inside. Internal: not exported from the package.
+ * (Select, DateInput, DateRangeInput), for that one wrapper: DropdownWrapper
+ * reads it and clears it again for everything inside. Internal: not exported
+ * from the package.
  *
- * The combobox is the control, and keeps focus while the panel is open: it
- * owns the keyboard and points at the active option with
- * `aria-activedescendant`. So the wrapper neither claims `role="button"`
- * around it (an input inside a button is nested interactive content) nor
- * moves focus into the panel, and the panel adds no listbox around the
- * combobox's own. A context rather than a registration like the Button one
- * because it is known at render: the server markup is right too.
+ * The combobox is the control, and owns the keyboard. Select's keeps focus
+ * while the panel is open and points at the active option with
+ * `aria-activedescendant`; a date field's panel is a dialog, and the picker
+ * in it takes focus itself (DatePicker's `autoFocus`). So the wrapper neither
+ * claims `role="button"` around it (an input inside a button is nested
+ * interactive content) nor moves focus into the panel, and the panel adds no
+ * listbox around the combobox's own. A context rather than a registration
+ * like the Button one because it is known at render: the server markup is
+ * right too.
  */
 export const DropdownComboboxContext = createContext(false);
 

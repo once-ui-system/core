@@ -1,7 +1,8 @@
 "use client";
 
-import React, { forwardRef, useCallback, useEffect, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
 import { DateRange, DateRangePicker } from "./DateRangePicker";
+import { DropdownComboboxContext } from "./DropdownTriggerContext";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Flex } from "./Flex";
 import { Input } from "./Input";
@@ -36,6 +37,12 @@ const formatDateRange = (range: DateRange): LocalizedDateRange => {
   };
 };
 
+/**
+ * Two fields, start and end, each a combobox that opens the same range picker
+ * dialog: see DateInput. They used to sit inside DropdownWrapper's two
+ * `role="button"` wrappers (axe "nested-interactive"), and the picker inside
+ * a listbox with no options.
+ */
 const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
   (
     {
@@ -48,6 +55,8 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
       minHeight,
       className,
       style,
+      onClick,
+      onKeyDown,
       ...rest
     },
     ref,
@@ -56,6 +65,10 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
     const [inputValue, setInputValue] = useState(
       value ? formatDateRange(value) : { startDate: "", endDate: "" },
     );
+    const dialogId = `${useId()}-dialog`;
+    /** The field that opened the picker, which gets focus back when it closes. */
+    const openerRef = useRef<HTMLInputElement | null>(null);
+
     useEffect(() => {
       if (value) {
         setInputValue(formatDateRange(value));
@@ -73,66 +86,112 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
       [onChange],
     );
 
-    const handleInputClick = useCallback(() => {
+    /** Opens on a click, Enter, Space or ArrowDown, not on focus: see DateInput. */
+    const open = (field: HTMLInputElement) => {
+      openerRef.current = field;
       setIsOpen(true);
-    }, []);
+    };
 
-    const handleInputFocus = useCallback(() => {
-      setIsOpen(true);
-    }, []);
+    const handleFieldKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      onKeyDown?.(event);
+      if (event.defaultPrevented) return;
+
+      if (!isOpen && ["Enter", " ", "ArrowDown"].includes(event.key)) {
+        event.preventDefault();
+        open(event.currentTarget);
+      } else if (isOpen && event.key === "Escape") {
+        event.preventDefault();
+        event.stopPropagation();
+        setIsOpen(false);
+      }
+    };
+
+    const handleFieldClick = (event: React.MouseEvent<HTMLInputElement>) => {
+      onClick?.(event);
+      open(event.currentTarget);
+    };
+
+    /** Escape inside the picker closes it and hands focus back to the field that opened it. */
+    const handleDialogKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key !== "Escape") return;
+      event.stopPropagation();
+      // A month or year list inside the picker closed itself.
+      if (event.defaultPrevented) return;
+      event.preventDefault();
+      setIsOpen(false);
+      openerRef.current?.focus({ preventScroll: true });
+    };
+
+    const field = {
+      className: "cursor-interactive",
+      style: {
+        textOverflow: "ellipsis",
+      },
+      id,
+      error,
+      readOnly: true,
+      onClick: handleFieldClick,
+      onKeyDown: handleFieldKeyDown,
+      role: "combobox",
+      "aria-haspopup": "dialog",
+      "aria-expanded": isOpen,
+      "aria-controls": isOpen ? dialogId : undefined,
+    } as const;
 
     const trigger = (
       <Row fillWidth horizontal="center" gap="-1">
         <Input
-          className="cursor-interactive"
-          style={{
-            textOverflow: "ellipsis",
-          }}
+          {...field}
           corners={"left"}
-          id={id}
           placeholder={startLabel}
+          // The placeholder is all that shows of the label, and only while
+          // the field is empty.
+          aria-label={startLabel}
           value={inputValue.startDate ?? ""}
-          error={error}
-          readOnly
-          onFocus={handleInputFocus}
           {...rest}
         />
         <Input
-          className="cursor-interactive"
-          style={{
-            textOverflow: "ellipsis",
-          }}
+          {...field}
           corners={"right"}
-          id={id}
           placeholder={endLabel}
+          aria-label={endLabel}
           value={inputValue.endDate ?? ""}
-          error={error}
-          readOnly
-          onFocus={handleInputFocus}
           {...rest}
         />
       </Row>
     );
 
     const dropdown = (
-      <Flex padding="20" center={true}>
-        <DateRangePicker value={value} onChange={handleDateChange} />
+      <Flex
+        padding="20"
+        center={true}
+        id={dialogId}
+        role="dialog"
+        aria-modal="true"
+        aria-label={rest["aria-label"] || `${startLabel} – ${endLabel}`}
+        onKeyDown={handleDialogKeyDown}
+      >
+        <DateRangePicker value={value} onChange={handleDateChange} autoFocus />
       </Flex>
     );
 
     return (
-      <DropdownWrapper
-        fillWidth={false}
-        trigger={trigger}
-        minHeight={minHeight}
-        dropdown={dropdown}
-        open={isOpen}
-        closeAfterClick={false}
-        disableTriggerClick={true}
-        className={className}
-        style={{ ...style }}
-        onOpenChange={setIsOpen}
-      />
+      <DropdownComboboxContext.Provider value={true}>
+        <DropdownWrapper
+          ref={ref}
+          fillWidth={false}
+          trigger={trigger}
+          minHeight={minHeight}
+          dropdown={dropdown}
+          open={isOpen}
+          closeAfterClick={false}
+          disableTriggerClick={true}
+          className={className}
+          style={{ ...style }}
+          onOpenChange={setIsOpen}
+          handleArrowNavigation={false}
+        />
+      </DropdownComboboxContext.Provider>
     );
   },
 );

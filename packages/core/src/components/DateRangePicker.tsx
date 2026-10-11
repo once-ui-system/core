@@ -17,10 +17,16 @@ export interface DateRangePickerProps extends Omit<React.ComponentProps<typeof F
   maxDate?: Date;
   dual?: boolean;
   size?: CondensedTShirtSizes;
+  /**
+   * Moves focus onto the first calendar's start day (else its first day that
+   * can be picked) as it appears, like DatePicker's `autoFocus`: for a picker
+   * that has just been opened, as DateRangeInput's is.
+   */
+  autoFocus?: boolean;
 }
 
 const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
-  ({ value, onChange, minDate, maxDate, size = "m", dual, ...rest }, ref) => {
+  ({ value, onChange, minDate, maxDate, size = "m", dual, autoFocus, ...rest }, ref) => {
     const [internalValue, setInternalValue] = useState<DateRange>({
       startDate: value?.startDate || undefined,
       endDate: value?.endDate || undefined,
@@ -115,6 +121,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
           currentYear={currentYear}
           onMonthChange={handleMonthChange}
           onHover={setHoveredDate}
+          autoFocus={autoFocus}
         />
         {dual && (
           <DatePicker
