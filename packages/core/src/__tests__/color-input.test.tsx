@@ -119,15 +119,51 @@ describe("ColorInput", () => {
     expect(ref.current).toBe(field());
   });
 
-  // BUG: `value` only seeds internal state, so a parent that changes it after
-  // mount (a reset, or a value loaded later) is ignored: the same class of bug
-  // as NumberInput's (ROADMAP W2).
-  it.skip("follows its value prop after mount", () => {
+  // `value` used to only seed internal state, so a parent that changed it
+  // after mount (a reset, or a value loaded later) was ignored: the same class
+  // of bug as NumberInput's (ROADMAP W2).
+  it("follows its value prop after mount", () => {
     const { rerender } = render(
       <ColorInput id="brand" label="Brand colour" value="#336699" onChange={vi.fn()} />,
       { wrapper },
     );
     rerender(<ColorInput id="brand" label="Brand colour" value="#ff0000" onChange={vi.fn()} />);
     expect(field().value).toBe("#ff0000");
+    expect(screen.getByText("#ff0000")).toBeInTheDocument();
+
+    // A reset from outside clears it, swatch and text included.
+    rerender(<ColorInput id="brand" label="Brand colour" value="" onChange={vi.fn()} />);
+    expect(screen.queryByText("#ff0000")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Remove", hidden: true })).toBeNull();
+  });
+
+  it("follows an rgba() value's opacity", () => {
+    const onChange = vi.fn();
+    const props = { id: "brand", label: "Brand colour", supportAlpha: true, onChange };
+    const { rerender } = render(<ColorInput {...props} value="rgba(51, 102, 153, 0.5)" />, {
+      wrapper,
+    });
+    rerender(<ColorInput {...props} value="rgba(255, 0, 0, 0.25)" />);
+    expect(field().value).toBe("#ff0000");
+
+    // The next pick keeps the opacity that came in with the value.
+    fireEvent.change(field(), { target: { value: "#00ff00" } });
+    expect(onChange).toHaveBeenLastCalledWith("rgba(0, 255, 0, 0.25)");
+  });
+
+  it("keeps the user's pick when the parent passes it back, or never does", () => {
+    const onChange = vi.fn();
+    render(<ControlledColor initial="#336699" onChange={onChange} />, { wrapper });
+    fireEvent.change(field(), { target: { value: "#ff8800" } });
+    expect(field().value).toBe("#ff8800");
+
+    // A parent that ignores onChange keeps passing the same value.
+    const { container } = render(
+      <ColorInput id="other" label="Other colour" value="#336699" onChange={vi.fn()} />,
+      { wrapper },
+    );
+    const other = container.querySelector<HTMLInputElement>("#other") as HTMLInputElement;
+    fireEvent.change(other, { target: { value: "#00ff00" } });
+    expect(other.value).toBe("#00ff00");
   });
 });
