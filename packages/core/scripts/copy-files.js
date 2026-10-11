@@ -32,38 +32,15 @@ function copyDir(src, dest) {
 const srcDir = path.resolve(__dirname, "../src");
 const destDir = path.resolve(__dirname, "../dist");
 
-// Copy package.json with modifications
-const packageJson = require("../package.json");
-
-// Remove unnecessary fields for the published package
-const fieldsToRemove = ["scripts", "devDependencies", "overrides"];
-
-fieldsToRemove.forEach((field) => {
-  delete packageJson[field];
-});
-
-// Move some dependencies to peerDependencies
-const peerDeps = {
-  react: packageJson.dependencies.react,
-  "react-dom": packageJson.dependencies["react-dom"],
-  next: packageJson.dependencies.next,
-};
-
-// Add peer dependencies
-packageJson.peerDependencies = {
-  ...peerDeps,
-  react: ">=18.0.0",
-  "react-dom": ">=18.0.0",
-  next: ">=13.0.0",
-};
-
-// Remove peer deps from dependencies
-Object.keys(peerDeps).forEach((dep) => {
-  delete packageJson.dependencies[dep];
-});
-
-// Write the modified package.json to dist
-fs.writeFileSync(path.resolve(destDir, "package.json"), JSON.stringify(packageJson, null, 2));
+// No `dist/package.json`. The package is published from its root, whose
+// package.json `files` includes `dist`; a second manifest inside `dist` was a
+// leftover from publishing the folder itself. It shipped in the tarball with
+// stale peers (`next >=13`, no sass/recharts/prismjs/compressorjs) and an
+// `exports` map that only resolves from the root, and because bundlers and
+// Node read the nearest package.json for a module, it hid the root's
+// `sideEffects` (and would hide a future `type`) from every file under `dist`.
+const staleManifest = path.resolve(destDir, "package.json");
+if (fs.existsSync(staleManifest)) fs.rmSync(staleManifest);
 
 // Copy README and AGENTS.md
 if (fs.existsSync(path.resolve(__dirname, "../README.md"))) {
