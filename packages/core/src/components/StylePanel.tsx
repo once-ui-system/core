@@ -51,6 +51,8 @@ export interface StylePanelProps extends StylePanelRootProps {
    * scheme; the host renders it from the seed.
    */
   customColors?: boolean;
+  /** Put each row's label above its control, for a narrow sidebar. */
+  stacked?: boolean;
 }
 
 const visible = (section: { section?: boolean } | undefined) => section?.section !== false;

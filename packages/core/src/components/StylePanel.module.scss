@@ -145,3 +145,11 @@
 .group > .row:not(:last-child) {
     border-bottom: 1px solid var(--neutral-alpha-medium);
 }
+
+/* A swatch strip never runs wider than its row. Beside a label it shrinks as
+   a flex item; stacked under one it is sized across the line instead, where
+   its fit-content width would be all of its swatches, clipped by the group
+   rather than scrolled. */
+.strip {
+    max-width: 100%;
+}

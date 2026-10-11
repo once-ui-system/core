@@ -2,11 +2,25 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { mergeLabels } from "../internal/labels";
 import { RadiusSize } from "../types";
 import { BaseColor, Fade } from "./Fade";
 import { Flex } from "./Flex";
 import { IconButton } from "./IconButton";
 import styles from "./Scroller.module.scss";
+
+/** The scroll buttons' accessible names. Omitted fields keep the English default. */
+interface ScrollerLabels {
+  /** Defaults to `"Scroll Previous"`. */
+  previous?: string;
+  /** Defaults to `"Scroll Next"`. */
+  next?: string;
+}
+
+const DEFAULT_LABELS: Required<ScrollerLabels> = {
+  previous: "Scroll Previous",
+  next: "Scroll Next",
+};
 
 interface ScrollerProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
@@ -14,6 +28,8 @@ interface ScrollerProps extends React.ComponentProps<typeof Flex> {
   fadeColor?: BaseColor;
   onItemClick?: (index: number) => void;
   radius?: RadiusSize;
+  /** The scroll buttons' accessible names, for a translated interface. */
+  labels?: ScrollerLabels;
 }
 
 interface ScrollableChildProps {
@@ -31,10 +47,12 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
       className,
       style,
       onItemClick,
+      labels,
       ...rest
     },
     ref,
   ) => {
+    const names = mergeLabels(DEFAULT_LABELS, labels);
     const scrollerRef = useRef<HTMLDivElement>(null);
     const [showPrevButton, setShowPrevButton] = useState<boolean>(false);
     const [showNextButton, setShowNextButton] = useState<boolean>(false);
@@ -158,7 +176,7 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
               }}
               size="s"
               variant="secondary"
-              aria-label="Scroll Previous"
+              aria-label={names.previous}
             />
           </Fade>
         )}
@@ -199,7 +217,7 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
               }}
               size="s"
               variant="secondary"
-              aria-label="Scroll Next"
+              aria-label={names.next}
             />
           </Fade>
         )}
@@ -210,5 +228,5 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
 
 Scroller.displayName = "Scroller";
 
-export type { ScrollerProps };
+export type { ScrollerLabels, ScrollerProps };
 export { Scroller };

@@ -11,6 +11,7 @@ import {
   useEffect,
   useId,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { useDataTheme } from "../contexts/DataThemeProvider";
@@ -35,7 +36,7 @@ import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
-import { Scroller } from "./Scroller";
+import { Scroller, type ScrollerLabels } from "./Scroller";
 import { SegmentedControl } from "./SegmentedControl";
 import styles from "./StylePanel.module.scss";
 import { Text } from "./Text";
@@ -233,6 +234,8 @@ export interface StylePanelLabels {
   swatches?: StylePanelSwatchLabels;
   /** The Theme row's options, passed to its `ThemeSwitcher`. */
   themeSwitcher?: ThemeSwitcherLabels;
+  /** The scroll buttons of the colour swatch strips, passed to their `Scroller`. */
+  scroller?: ScrollerLabels;
   custom?: StylePanelCustomLabels;
 }
 
@@ -246,12 +249,14 @@ type Complete<T> = {
 };
 
 /**
- * What is passed straight through stays partial: the theme switcher and the
- * colour field keep their own English defaults, so they live in one place.
+ * What is passed straight through stays partial: the theme switcher, the
+ * scroller and the colour field keep their own English defaults, so they live
+ * in one place.
  * The custom colour has no description unless the host gives one.
  */
-type ResolvedLabels = Complete<Omit<StylePanelLabels, "themeSwitcher" | "custom">> & {
+type ResolvedLabels = Complete<Omit<StylePanelLabels, "themeSwitcher" | "scroller" | "custom">> & {
   themeSwitcher: ThemeSwitcherLabels;
+  scroller: ScrollerLabels;
   custom: Complete<Pick<StylePanelCustomLabels, "swatch" | "picker">> &
     Pick<StylePanelCustomLabels, "description" | "remove">;
 };
@@ -312,6 +317,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
     neutral: (name) => `Neutral colour: ${name}`,
   },
   themeSwitcher: {},
+  scroller: {},
   custom: {
     swatch: (row) => `${row === "brand" ? "Brand" : "Accent"} colour: custom`,
     picker: (row) => `Custom ${row} colour`,
@@ -326,6 +332,18 @@ const DEFAULT_LABELS: ResolvedLabels = {
 const StylePanelLabelsContext = createContext<ResolvedLabels>(DEFAULT_LABELS);
 
 const useStylePanelLabels = () => useContext(StylePanelLabelsContext);
+
+/** Whether rows put their label above their control. False outside a Root. */
+const StylePanelStackedContext = createContext(false);
+
+/** How a row lays its label against its control: beside it, or above it. */
+const INLINE_LINE = { horizontal: "between", vertical: "center", gap: "24" } as const;
+const STACKED_LINE = {
+  direction: "column",
+  horizontal: "start",
+  vertical: "start",
+  gap: "12",
+} as const;
 
 /** A prop the caller set — including `false` or `null` — wins over the label. */
 const prefer = <T,>(prop: T | undefined, label: T): T => (prop === undefined ? label : prop);
@@ -399,10 +417,13 @@ export interface StylePanelRootProps
   /** Every string the panel shows or announces, over the English defaults.
    *  Every group and row inside reads them; their own props still win. */
   labels?: StylePanelLabels;
+  /** Put each row's label above its control, for a narrow sidebar. A row's
+   *  own layout props still win. */
+  stacked?: boolean;
 }
 
 const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
-  { value, onChange, labels, children, ...rest },
+  { value, onChange, labels, stacked = false, children, ...rest },
   ref,
 ) {
   const bound = useBoundState();
@@ -426,9 +447,11 @@ const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
   return (
     <StylePanelContext.Provider value={context}>
       <StylePanelLabelsContext.Provider value={resolvedLabels}>
-        <Column fillWidth gap="16" ref={ref} {...rest}>
-          {children}
-        </Column>
+        <StylePanelStackedContext.Provider value={stacked}>
+          <Column fillWidth gap="16" ref={ref} {...rest}>
+            {children}
+          </Column>
+        </StylePanelStackedContext.Provider>
       </StylePanelLabelsContext.Provider>
     </StylePanelContext.Provider>
   );
@@ -445,17 +468,18 @@ function RowLabel({ children }: { children: ReactNode }) {
 }
 
 /** One labelled row. Dividers come from the group's stylesheet rather than a
- *  prop, so cherry-picking rows never leaves a dangling border. */
-function Row({ label, children, ...rest }: StyleRowProps) {
+ *  prop, so cherry-picking rows never leaves a dangling border. A host's
+ *  `className` joins the row's own rather than replacing it, which would
+ *  drop the divider. */
+function Row({ label, children, className, ...rest }: StyleRowProps) {
+  const stacked = useContext(StylePanelStackedContext);
   return (
     <Flex
-      className={styles.row}
-      horizontal="between"
-      vertical="center"
+      className={classNames(styles.row, className)}
       fillWidth
-      paddingX="24"
+      paddingX={stacked ? "16" : "24"}
       paddingY="16"
-      gap="24"
+      {...(stacked ? STACKED_LINE : INLINE_LINE)}
       {...rest}
     >
       {label !== false && <RowLabel>{label}</RowLabel>}
@@ -495,6 +519,27 @@ function activateOnKey(event: KeyboardEvent<HTMLElement>, activate: () => void) 
   activate();
 }
 
+/**
+ * Scroll a strip so a swatch sits clear of the fades that hold its scroll
+ * buttons. Only the strip moves: `scrollIntoView` would scroll the page too,
+ * and a panel below the fold would pull the page down to it on load.
+ */
+function revealInStrip(swatch: HTMLElement, smooth: boolean) {
+  const strip = swatch.parentElement;
+  if (!strip || strip.scrollWidth <= strip.clientWidth) return;
+  const view = strip.getBoundingClientRect();
+  const box = swatch.getBoundingClientRect();
+  // A swatch's width clears the scroll button over either end.
+  const margin = box.width;
+  const start = box.left - view.left;
+  const end = box.right - view.left;
+  const delta =
+    start < margin ? start - margin : end > view.width - margin ? end - (view.width - margin) : 0;
+  if (delta === 0) return;
+  const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  strip.scrollBy({ left: delta, behavior: smooth && !reduced ? "smooth" : "auto" });
+}
+
 /** One swatch: a toggle button, named and pressed, with a decorative face. */
 function Swatch({
   label,
@@ -511,8 +556,21 @@ function Swatch({
   dataBorder?: string;
   children: ReactNode;
 }) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  // In a strip that scrolls, the chosen swatch is brought into view when the
+  // panel mounts and whenever the choice changes. The custom swatch is last,
+  // so in a narrow panel it would otherwise start under the Next button. A
+  // choice the visitor just made glides; one that arrived from outside jumps.
+  useEffect(() => {
+    const swatch = ref.current;
+    if (!scroll || !pressed || !swatch) return;
+    revealInStrip(swatch, document.activeElement === swatch);
+  }, [scroll, pressed]);
+
   return (
     <Flex
+      ref={ref}
       {...(dataBorder ? { "data-border": dataBorder } : {})}
       marginRight={scroll ? "2" : undefined}
       center
@@ -541,12 +599,15 @@ function Swatches<T extends string>({
   swatchClass,
   dataBorder,
   trailing,
+  scrollLabels,
 }: {
   options: readonly T[];
   selected: T | undefined;
   onSelect: (value: T) => void;
   ariaLabel: (value: T) => string;
   scroll?: boolean;
+  /** The strip's scroll buttons, when `scroll` is set. */
+  scrollLabels?: ScrollerLabels;
   swatchClass?: (value: T) => string;
   dataBorder?: boolean;
   /** One more swatch after the options, in the same strip. */
@@ -568,7 +629,7 @@ function Swatches<T extends string>({
   ));
 
   return scroll ? (
-    <Scroller minWidth={0} fitWidth>
+    <Scroller minWidth={0} fitWidth className={styles.strip} labels={scrollLabels}>
       {items}
       {trailing}
     </Scroller>
@@ -633,10 +694,25 @@ function fieldColor(seed: string | undefined): string {
   return `#${rgb.toLowerCase()}`;
 }
 
+/**
+ * The props that lay a row's label out against its control. A row with a
+ * custom colour puts its picker under that line rather than in it, so they go
+ * to the line, where they mean what they mean on every other row.
+ */
+function splitLineProps({ direction, horizontal, vertical, gap, wrap, ...row }: StyleRowProps) {
+  const line = Object.fromEntries(
+    Object.entries({ direction, horizontal, vertical, gap, wrap }).filter(
+      ([, prop]) => prop !== undefined,
+    ),
+  ) as Pick<StyleRowProps, "direction" | "horizontal" | "vertical" | "gap" | "wrap">;
+  return { line, row };
+}
+
 function schemeRow(key: StylePanelSchemeRow) {
   return function SchemeRow({ label, custom = false, ...rest }: StyleSchemeRowProps) {
     const { value, set, mounted, controlled } = useStylePanel();
     const labels = useStylePanelLabels();
+    const stacked = useContext(StylePanelStackedContext);
     const pickerId = useId();
     const current = mounted ? value[key] : undefined;
     const rowLabel = prefer(label, labels.rows[key]);
@@ -649,6 +725,7 @@ function schemeRow(key: StylePanelSchemeRow) {
         ariaLabel={(scheme) => labels.swatches.scheme(labels.names.schemes[scheme as Schemes], key)}
         swatchClass={(scheme) => styles[scheme]}
         scroll
+        scrollLabels={labels.scroller}
         trailing={trailing}
       />
     );
@@ -671,10 +748,11 @@ function schemeRow(key: StylePanelSchemeRow) {
     // The picker spans the row under the label and the swatches. The strip
     // stays where it is in the tree whether or not the picker shows, so
     // choosing the last swatch does not reset its scroll.
+    const { line, row } = splitLineProps(rest);
     return (
-      <Row label={false} {...rest}>
+      <Row label={false} direction="row" {...row}>
         <Column fillWidth gap="16">
-          <Flex horizontal="between" vertical="center" fillWidth gap="24">
+          <Flex fillWidth {...(stacked ? STACKED_LINE : INLINE_LINE)} {...line}>
             {rowLabel !== false && <RowLabel>{rowLabel}</RowLabel>}
             {swatches(
               <Swatch
@@ -730,6 +808,7 @@ function NeutralRow({ label, ...rest }: StyleRowProps) {
         }
         swatchClass={(neutral) => styles[neutral]}
         scroll
+        scrollLabels={labels.scroller}
       />
     </Row>
   );

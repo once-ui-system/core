@@ -142,6 +142,7 @@ You can customize the color of the fade effect that appears behind the scroll bu
     fadeColor: "Colour of the fade at each end. Match the surface behind it.",
     onItemClick: "Called with the index of the item clicked.",
     radius: "Corner roundness of the strip.",
+    labels: "The scroll buttons' accessible names, { previous, next }, for a translated interface. Omitted fields stay English.",
   }}
   content={[
     ["children"],
@@ -154,6 +155,6 @@ You can customize the color of the fade effect that appears behind the scroll bu
 
 The Scroller component includes the following accessibility features:
 
-- Scroll buttons have appropriate aria-labels
+- Scroll buttons are named "Scroll Previous" and "Scroll Next"; `labels` translates them
 - Keyboard navigation support for the scroll buttons
 - Preserves keyboard navigation and click events of child elements
