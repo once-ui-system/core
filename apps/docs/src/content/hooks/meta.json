@@ -9,6 +9,7 @@
     "useStreamingData": 5,
     "useStreamingViewport": 6,
     "useInViewport": 7,
-    "useReducedMotion": 8
+    "useReducedMotion": 8,
+    "useHotkeys": 9
   }
 }
