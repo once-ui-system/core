@@ -1,5 +1,3 @@
-"use client";
-
 import classNames from "clsx";
 import React, { forwardRef, ReactNode } from "react";
 import { IconName } from "../icons";

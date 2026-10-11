@@ -51,6 +51,10 @@
     "once-ui-init-agent": "./scripts/init-agent.js",
     "once-ui-validate-ai-code": "./scripts/validate-ai-code.js"
   },
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
   "main": "dist/index.js",
   "exports": {
     ".": {
@@ -190,17 +194,13 @@
     "react": ">=18",
     "react-dom": ">=18",
     "recharts": "^3.10.1",
-    "sass": "^1.77.6",
-    "sharp": "^0.33.4 || ^0.34 || ^0.35"
+    "sass": "^1.77.6"
   },
   "peerDependenciesMeta": {
     "next": {
       "optional": true
     },
     "sass": {
-      "optional": true
-    },
-    "sharp": {
       "optional": true
     },
     "recharts": {

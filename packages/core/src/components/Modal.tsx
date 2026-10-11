@@ -17,6 +17,16 @@ export interface ModalProps {
   onClose: () => void;
 }
 
+/**
+ * A full-height sheet that rises from the bottom of the viewport, with a slot
+ * for a custom `backdrop` behind it.
+ *
+ * Prefer `Dialog` for dialogs, confirmations and forms: it adds a
+ * description, a footer for actions, stacking over a base dialog, and
+ * `closeOnClickaway`. For a panel from an edge, use `Drawer`. Modal is not
+ * deprecated, because neither covers its `backdrop` slot yet; 3.0 plans to
+ * fold it into `Dialog`.
+ */
 const Modal = forwardRef<HTMLDivElement, ModalProps>(
   ({ children, backdrop, title, open, onClose }, ref) => {
     const [visible, setVisible] = useState(false);

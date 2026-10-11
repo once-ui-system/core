@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useId } from "react";
+import React, { forwardRef, useId, useState } from "react";
 
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
@@ -11,24 +11,33 @@ import styles from "./Switch.module.scss";
 
 interface SwitchProps
   extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked"> {
+    // `onToggle` is this component's own; the DOM's is the `toggle` event of
+    // popovers and `<details>`, which an input never fires.
+    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onToggle"> {
   style?: React.CSSProperties;
   className?: string;
-  checked: boolean;
+  /** On or off, controlled. Leave it out to let the switch keep its own
+   *  state, starting from `defaultChecked`. */
+  checked?: boolean;
+  /** The starting state of an uncontrolled switch (no `checked`). */
+  defaultChecked?: boolean;
   loading?: boolean;
   name?: string;
   value?: string;
   disabled?: boolean;
   reverse?: boolean;
   ariaLabel?: string;
-  onToggle: () => void;
+  /** Called with the state the switch moves to: `true` when it turns on.
+   *  A callback that takes no argument still works. */
+  onToggle?: (checked: boolean) => void;
 }
 
-const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
+const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       className,
-      checked,
+      checked: controlledChecked,
+      defaultChecked = false,
       reverse = false,
       loading = false,
       onToggle,
@@ -44,17 +53,21 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
     const labelId = useId();
     const descriptionId = useId();
     const hasLabel = Boolean(props.label);
+    const [uncontrolledChecked, setUncontrolledChecked] = useState(defaultChecked);
+    const isControlled = controlledChecked !== undefined;
+    const checked = isControlled ? controlledChecked : uncontrolledChecked;
+
+    const toggle = () => {
+      if (disabled) return;
+      const next = !checked;
+      if (!isControlled) setUncontrolledChecked(next);
+      onToggle?.(next);
+    };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (!disabled && (event.key === "Enter" || event.key === " ")) {
         event.preventDefault();
-        onToggle();
-      }
-    };
-
-    const handleClick = () => {
-      if (!disabled) {
-        onToggle();
+        toggle();
       }
     };
 
@@ -68,7 +81,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
           [styles.reverse]: reverse,
           [styles.disabled]: disabled,
         })}
-        onClick={handleClick}
+        onClick={toggle}
       >
         {/* Carries the value for form submission only. The thumb below is the
             control people reach, so this stays out of the accessibility tree
@@ -79,7 +92,7 @@ const Switch: React.FC<SwitchProps> = forwardRef<HTMLInputElement, SwitchProps>(
           name={name}
           value={value}
           checked={checked}
-          onChange={onToggle}
+          onChange={toggle}
           className={commonStyles.hidden}
           tabIndex={-1}
           aria-hidden="true"

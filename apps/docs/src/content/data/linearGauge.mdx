@@ -45,7 +45,6 @@ Show percentage labels at key intervals (0%, 25%, 50%, 75%, 100%).
   marginBottom="24"
   previewPadding="l"
   fullscreenButton={true}
-  highlight="5"
   preview={
     <LinearGauge
       width={400}
@@ -63,6 +62,7 @@ Show percentage labels at key intervals (0%, 25%, 50%, 75%, 100%).
     value={75}
     labels="percentage"
 />`,
+      highlight: "5",
       language: "tsx",
       label: "Percentage"
     }
@@ -76,7 +76,6 @@ Provide an array of custom labels distributed evenly across the gauge.
   marginBottom="24"
   previewPadding="l"
   fullscreenButton={true}
-  highlight="5"
   preview={
     <LinearGauge
       width={400}
@@ -94,6 +93,7 @@ Provide an array of custom labels distributed evenly across the gauge.
     value={42}
     labels={["Low", "Med", "High", "Max"]}
 />`,
+      highlight: "5",
       language: "tsx",
       label: "Custom"
     }
@@ -109,7 +109,6 @@ Flip the order of labels and gauge by using `direction="column-reverse"`.
   marginBottom="24"
   previewPadding="l"
   fullscreenButton={true}
-  highlight="6"
   preview={
     <LinearGauge
       width={400}
@@ -129,6 +128,7 @@ Flip the order of labels and gauge by using `direction="column-reverse"`.
     labels="percentage"
     direction="column-reverse"
 />`,
+      highlight: "6",
       language: "tsx",
       label: "Reverse"
     }
@@ -225,7 +225,6 @@ Customize tick count, width, and length for different visual densities.
   marginBottom="24"
   previewPadding="l"
   fullscreenButton={true}
-  highlight="5-9"
   preview={
     <LinearGauge
       width={400}
@@ -253,6 +252,7 @@ Customize tick count, width, and length for different visual densities.
     }}
     labels="percentage"
 />`,
+      highlight: "5-9",
       language: "tsx",
       label: "Density"
     }

@@ -671,6 +671,12 @@ export type InputBreakpointProps = BreakpointProps<
 // Backward-compatible interfaces (deprecated, use types above)
 // These are kept for existing code that references them by name.
 // ============================================================================
+/**
+ * @deprecated Use the breakpoint type of the component being styled —
+ * `FlexBreakpointProps`, `GridBreakpointProps` or `TextBreakpointProps` —
+ * which carry `position` and `hide` along with everything else a breakpoint
+ * can set. Kept for code that names it; nothing in the package uses it.
+ */
 export interface BaseBreakpointProps {
   position?: CSSProperties["position"];
   hide?: boolean;
