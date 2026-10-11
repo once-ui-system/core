@@ -3,7 +3,7 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
-import { pageCount, paginationItems } from "../internal/pagination";
+import { pageCount, paginationItems, withDefaultLabels } from "../internal/pagination";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import styles from "./Pagination.module.scss";
@@ -110,7 +110,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
     },
     ref,
   ) => {
-    const text = { ...DEFAULT_LABELS, ...labels };
+    const text = withDefaultLabels(DEFAULT_LABELS, labels);
     const perPageId = useId();
     const navRef = useRef<HTMLDivElement | null>(null);
     const refocusCurrent = useRef(false);

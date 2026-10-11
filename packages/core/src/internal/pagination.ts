@@ -57,3 +57,16 @@ export function paginationItems(
 /** The page count for `count` items at `perPage` a page: at least one, so an empty list is page 1 of 1. */
 export const pageCount = (count: number, perPage: number): number =>
   Math.max(1, Math.ceil(Math.max(0, count) / Math.max(1, perPage)));
+
+/**
+ * Labels over their defaults, skipping any given as `undefined`: a wrapper
+ * that forwards `{ previous: labels?.previous }` must not blank the default
+ * and leave a button with no name.
+ */
+export function withDefaultLabels<L extends object>(defaults: L, labels?: Partial<L>): L {
+  const merged = { ...defaults };
+  for (const [key, value] of Object.entries(labels ?? {})) {
+    if (value !== undefined) (merged as Record<string, unknown>)[key] = value;
+  }
+  return merged;
+}

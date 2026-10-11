@@ -207,6 +207,15 @@ describe("Pagination", () => {
     expect(within(landmark).getByRole("button", { name: "Weiter" })).toBeInTheDocument();
   });
 
+  it("keeps a default name for a label passed as undefined", () => {
+    // A wrapper forwarding `{ previous: labels?.previous }` must not unname the button.
+    render(<Pagination total={3} labels={{ previous: undefined, next: "Weiter" }} />, {
+      wrapper: wrap,
+    });
+    expect(screen.getByRole("button", { name: "Previous page" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Weiter" })).toBeInTheDocument();
+  });
+
   it("does not submit an enclosing form", async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
