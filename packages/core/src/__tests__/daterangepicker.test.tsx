@@ -174,12 +174,11 @@ describe("DateRangePicker", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  // BUG (DatePicker, so every DateRangePicker): the day grid has
-  // role="grid" but its buttons sit straight in it, with no row or gridcell
-  // (axe: "aria-required-children"); and the month and year selectors are
-  // DropdownWrapper triggers inside another interactive element
-  // ("nested-interactive").
-  it.skip("has no axe violations", async () => {
+  // The day grid had role="grid" with its buttons straight in it, no row or
+  // gridcell (axe "aria-required-children"); and the month and year
+  // selectors were DropdownWrapper triggers inside another interactive
+  // element ("nested-interactive"). See datepicker-grid.test.tsx.
+  it("has no axe violations", async () => {
     const { container } = render(<DateRangePicker value={january} onChange={vi.fn()} />, {
       wrapper,
     });

@@ -24,6 +24,7 @@ import {
   setLastOpenedDropdown,
 } from "../utils/dropdownState";
 import { ArrowNavigation } from "./ArrowNavigationContext";
+import { Button } from "./Button";
 import { Column } from "./Column";
 import { Dropdown } from "./Dropdown";
 import {
@@ -34,6 +35,7 @@ import {
 import styles from "./DropdownWrapper.module.scss";
 import { Flex } from "./Flex";
 import { FocusTrap } from "./FocusTrap";
+import { IconButton } from "./IconButton";
 import { Row } from "./Row";
 import { ScrollLock } from "./ScrollLock";
 
@@ -144,7 +146,18 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     const isComboboxRef = useRef(isCombobox);
     isComboboxRef.current = isCombobox;
 
-    const wrapperIsTrigger = buttonTriggers === 0 && !isCombobox;
+    /**
+     * A trigger that is itself a Button or IconButton element will render as
+     * a real button, which is known at render. The registration above only
+     * runs after mount, so without this the server markup (and the first
+     * client render) nested that button in the two `role="button"` wrappers:
+     * DatePicker's month and year selectors, among others. Registration still
+     * covers a Button deeper inside the trigger.
+     */
+    const triggerIsButton =
+      React.isValidElement(trigger) && (trigger.type === Button || trigger.type === IconButton);
+
+    const wrapperIsTrigger = buttonTriggers === 0 && !triggerIsButton && !isCombobox;
 
     const handleOpenChange = useCallback(
       (newIsOpen: boolean) => {
