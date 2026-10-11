@@ -6,6 +6,7 @@
  * means, or on when a value needs the client.
  */
 
+import type { CSSProperties } from "react";
 import type { StaticSpacingToken } from "../types";
 
 /**
@@ -256,4 +257,77 @@ export function themeAttributes({
   if (themeSolid) attributes["data-solid"] = themeSolid;
   if (themeSurface) attributes["data-surface"] = themeSurface;
   return attributes;
+}
+
+/**
+ * The display, position and spacing props `Text` and `Heading` take beyond
+ * their own: the rest of `DisplayProps` and `SpacingProps`, both in their types.
+ */
+export interface TextLayoutProps {
+  gap?: unknown;
+  top?: unknown;
+  right?: unknown;
+  bottom?: unknown;
+  left?: unknown;
+  translateX?: unknown;
+  translateY?: unknown;
+  position?: string;
+  overflow?: string;
+  overflowX?: string;
+  overflowY?: string;
+  scrollbar?: string;
+  pointerEvents?: string;
+  transition?: string;
+  zIndex?: number | string;
+}
+
+/**
+ * `Text` and `Heading` resolve these the way `Flex` does: a class where
+ * foundations generates one, an inline value where a class cannot hold it.
+ *
+ * Both accepted every one of these props in their types and read none of
+ * them, so `pointerEvents`, `overflow`, `zIndex`, `top` and the rest reached
+ * the DOM as attributes that did nothing.
+ */
+export function textLayout({
+  gap,
+  top,
+  right,
+  bottom,
+  left,
+  translateX,
+  translateY,
+  position,
+  overflow,
+  overflowX,
+  overflowY,
+  scrollbar = "minimal",
+  pointerEvents,
+  transition,
+  zIndex,
+}: TextLayoutProps): { classes: (string | false | undefined)[]; style: CSSProperties } {
+  const offsets = { top, right, bottom, left };
+  const x = offsetValue(translateX);
+  const y = offsetValue(translateY);
+  return {
+    classes: [
+      position && `position-${position}`,
+      overflow && `overflow-${overflow}`,
+      overflowX && `overflow-x-${overflowX}`,
+      overflowY && `overflow-y-${overflowY}`,
+      (scrollsOn(overflow) || scrollsOn(overflowX) || scrollsOn(overflowY)) &&
+        `scrollbar-${scrollbar}`,
+      pointerEvents && `pointer-events-${pointerEvents}`,
+      transition && `transition-${transition}`,
+      zIndex !== undefined && `z-index-${zIndex}`,
+      // `-1` laps bordered children onto each other; with no direction, in a row.
+      gap === "-1" ? "g-horizontal--1" : typeof gap === "string" && gap !== "" && `g-${gap}`,
+      ...OFFSET_SIDES.map((side) => isOffsetToken(offsets[side]) && `${side}-${offsets[side]}`),
+    ],
+    style: {
+      gap: typeof gap === "number" ? `${gap}rem` : undefined,
+      ...offsetStyle(offsets),
+      transform: x || y ? `translate(${x || "0"}, ${y || "0"})` : undefined,
+    },
+  };
 }

@@ -3,6 +3,7 @@ import { ComponentPropsWithoutRef, ElementType } from "react";
 
 import { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import { textLayout } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 type HeadingProps<T extends ElementType> = TextProps<T> &
@@ -41,6 +42,28 @@ const Heading = <T extends ElementType = "h1">({
   opacity,
   className,
   userSelect,
+  gap,
+  top,
+  right,
+  bottom,
+  left,
+  translateX,
+  translateY,
+  position,
+  overflow,
+  overflowX,
+  overflowY,
+  scrollbar,
+  pointerEvents,
+  transition,
+  zIndex,
+  // Typed through `DisplayProps`, with no class that fits text: `inline`,
+  // `hide`, `dark` and `light` are display modes of Flex and Grid. Taken out
+  // so they stop reaching the DOM as attributes.
+  inline: _inline,
+  hide: _hide,
+  dark: _dark,
+  light: _light,
   ...props
 }: HeadingProps<T>) => {
   const Component = as || "h1";
@@ -81,6 +104,24 @@ const Heading = <T extends ElementType = "h1">({
     return typeof value === "string" ? `${prefix}-${value}` : undefined;
   };
 
+  const layout = textLayout({
+    gap,
+    top,
+    right,
+    bottom,
+    left,
+    translateX,
+    translateY,
+    position,
+    overflow,
+    overflowX,
+    overflowY,
+    scrollbar,
+    pointerEvents,
+    transition,
+    zIndex,
+  });
+
   const combinedClasses = classNames(
     ...classes,
     colorClass,
@@ -100,9 +141,10 @@ const Heading = <T extends ElementType = "h1">({
     generateClassName("mx", marginX),
     generateClassName("my", marginY),
     truncate && "truncate",
-    opacity && `opacity-${opacity}`,
+    opacity !== undefined && `opacity-${opacity}`,
     userSelect && `user-select-${userSelect}`,
     family && `font-family-${family}`,
+    ...layout.classes,
   );
 
   const combinedStyle = {
@@ -124,6 +166,7 @@ const Heading = <T extends ElementType = "h1">({
       marginBottom,
       marginLeft,
     }),
+    ...layout.style,
     ...style,
   };
 
