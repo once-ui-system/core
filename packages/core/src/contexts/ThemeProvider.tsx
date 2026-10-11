@@ -2,18 +2,29 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { Schemes } from "../types";
+import { customSchemeProperties } from "../utils/colorScheme";
 import { dev } from "../utils/devLogger";
 
 export type Theme = "dark" | "light" | "system";
-export type NeutralColor = "sand" | "gray" | "slate";
+/** Every neutral scheme tokens.css ships a `[data-neutral]` mapping for. */
+export type NeutralColor = "sand" | "gray" | "slate" | "rose" | "mint" | "dusk";
 export type SolidType = "color" | "contrast" | "inverse";
 export type SolidStyle = "flat" | "plastic";
-export type BorderStyle = "rounded" | "playful" | "conservative";
+/** Every corner style tokens.css ships a `[data-border]` mapping for. */
+export type BorderStyle = "rounded" | "playful" | "conservative" | "sharp";
 export type SurfaceStyle = "filled" | "translucent";
 export type TransitionStyle = "all" | "micro" | "macro" | "none";
 export type ScalingSize = "90" | "95" | "100" | "105" | "110";
 export type BodySize = "90" | "95" | "100" | "105" | "110";
 export type BodyLineHeight = "90" | "100" | "110" | "120";
+/**
+ * The root font size, in px, for one width range — what `rem` resolves to,
+ * so everything sized in rem follows it. Defaults: 16 on desktop and tablet,
+ * 15 on mobile.
+ */
+export type DeviceFontSize = "13" | "14" | "15" | "16" | "17" | "18";
+/** The cursor over interactive elements. Defaults to `"pointer"`. */
+export type InteractiveCursor = "pointer" | "default";
 
 /**
  * Where style choices are read from and written to.
@@ -50,6 +61,49 @@ function resolvePersistence(persistence: StylePersistence = "local") {
 }
 export type DataStyle = "categorical" | "divergent" | "sequential";
 
+/**
+ * The `style` section of `once-ui.config`, exactly as the file writes it.
+ *
+ * Every key is optional and named the way `ThemeProvider` takes it, so the
+ * object goes to the providers as written — `<ThemeProvider {...style}>` and
+ * `<ThemeInit config={style} />` — with no casts and no renaming. Each key
+ * becomes the `data-<kebab-key>` attribute on `<html>` (`solidStyle` →
+ * `data-solid-style`).
+ */
+export interface OnceUIStyleConfig {
+  theme?: Theme;
+  neutral?: NeutralColor | "custom";
+  brand?: Schemes | "custom";
+  accent?: Schemes | "custom";
+  solid?: SolidType;
+  solidStyle?: SolidStyle;
+  border?: BorderStyle;
+  surface?: SurfaceStyle;
+  transition?: TransitionStyle;
+  scaling?: ScalingSize;
+  bodySize?: BodySize;
+  bodyLineHeight?: BodyLineHeight;
+  /** Root font size above 1024px: `data-desktop-size`. */
+  desktopSize?: DeviceFontSize;
+  /** Root font size from 769px to 1024px: `data-tablet-size`. */
+  tabletSize?: DeviceFontSize;
+  /** Root font size at 768px and below: `data-mobile-size`. */
+  mobileSize?: DeviceFontSize;
+  /** `data-cursor-interactive`. */
+  cursorInteractive?: InteractiveCursor;
+  /**
+   * A colour to generate the brand scheme from — hex, `rgb()` or `oklch()` —
+   * for `brand: "custom"`, which it implies when `brand` is not set.
+   * `ThemeInit` renders the scheme on the server, so it is there before the
+   * first paint.
+   */
+  brandSeed?: string;
+  /** As {@link OnceUIStyleConfig.brandSeed}, for `accent: "custom"`. */
+  accentSeed?: string;
+  /** As {@link OnceUIStyleConfig.brandSeed}, for `neutral: "custom"`. */
+  neutralSeed?: string;
+}
+
 interface StyleOptions {
   theme: Theme;
   neutral: NeutralColor | "custom";
@@ -63,6 +117,12 @@ interface StyleOptions {
   scaling: ScalingSize;
   bodySize: BodySize;
   bodyLineHeight: BodyLineHeight;
+  // No defaults: the CSS already has them, and writing them onto <html>
+  // would override an app that sets the custom properties itself.
+  desktopSize?: DeviceFontSize;
+  tabletSize?: DeviceFontSize;
+  mobileSize?: DeviceFontSize;
+  cursorInteractive?: InteractiveCursor;
 }
 
 type ThemeProviderState = {
@@ -75,20 +135,8 @@ type StyleProviderState = StyleOptions & {
   setStyle: (style: Partial<StyleOptions>) => void;
 };
 
-type ThemeProviderProps = {
+export type ThemeProviderProps = OnceUIStyleConfig & {
   children: React.ReactNode;
-  theme?: Theme;
-  neutral?: NeutralColor | "custom";
-  brand?: Schemes | "custom";
-  accent?: Schemes | "custom";
-  solid?: SolidType;
-  solidStyle?: SolidStyle;
-  border?: BorderStyle;
-  surface?: SurfaceStyle;
-  transition?: TransitionStyle;
-  scaling?: ScalingSize;
-  bodySize?: BodySize;
-  bodyLineHeight?: BodyLineHeight;
   /** Defaults to `"local"`. See {@link StylePersistence}. */
   persistence?: StylePersistence;
 };
@@ -126,7 +174,9 @@ function getStoredStyleValues(store: StylePersistenceAdapter | null) {
   if (typeof window === "undefined" || !store?.get) return {};
 
   try {
-    const storedStyle: Partial<StyleOptions> = {};
+    // Stored values are whatever an earlier visit wrote; they are trusted to
+    // be one of the union's members, as they always have been.
+    const storedStyle: Record<string, string> = {};
     const styleKeys = [
       "neutral",
       "brand",
@@ -139,43 +189,19 @@ function getStoredStyleValues(store: StylePersistenceAdapter | null) {
       "scaling",
       "body-size",
       "body-line-height",
+      "desktop-size",
+      "tablet-size",
+      "mobile-size",
+      "cursor-interactive",
     ];
 
-    styleKeys.forEach((key) => {
-      const kebabKey = key;
-      const camelKey = kebabKey.replace(/-([a-z])/g, (_, letter) =>
-        letter.toUpperCase(),
-      ) as keyof StyleOptions;
-      const value = store.get!(`data-${kebabKey}`);
+    for (const kebabKey of styleKeys) {
+      const camelKey = kebabKey.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase());
+      const value = store.get(`data-${kebabKey}`);
+      if (value) storedStyle[camelKey] = value;
+    }
 
-      if (value) {
-        if (camelKey === "border") {
-          storedStyle[camelKey] = value as BorderStyle;
-        } else if (camelKey === "solidStyle") {
-          storedStyle[camelKey] = value as SolidStyle;
-        } else if (camelKey === "transition") {
-          storedStyle[camelKey] = value as TransitionStyle;
-        } else if (camelKey === "scaling") {
-          storedStyle[camelKey] = value as ScalingSize;
-        } else if (camelKey === "surface") {
-          storedStyle[camelKey] = value as SurfaceStyle;
-        } else if (camelKey === "neutral") {
-          storedStyle.neutral = value as NeutralColor;
-        } else if (camelKey === "brand") {
-          storedStyle.brand = value as Schemes;
-        } else if (camelKey === "accent") {
-          storedStyle.accent = value as Schemes;
-        } else if (camelKey === "solid") {
-          storedStyle.solid = value as SolidType;
-        } else if (camelKey === "bodySize") {
-          storedStyle.bodySize = value as BodySize;
-        } else if (camelKey === "bodyLineHeight") {
-          storedStyle.bodyLineHeight = value as BodyLineHeight;
-        }
-      }
-    });
-
-    return storedStyle;
+    return storedStyle as Partial<StyleOptions>;
   } catch (e) {
     dev.error("Error reading stored style values:", e);
     return {};
@@ -219,6 +245,13 @@ export function ThemeProvider({
   scaling,
   bodySize,
   bodyLineHeight,
+  desktopSize,
+  tabletSize,
+  mobileSize,
+  cursorInteractive,
+  brandSeed,
+  accentSeed,
+  neutralSeed,
   persistence = "local",
 }: ThemeProviderProps) {
   const store = useMemo(() => resolvePersistence(persistence), [persistence]);
@@ -315,6 +348,24 @@ export function ThemeProvider({
   if (scaling) directProps.scaling = scaling;
   if (bodySize) directProps.bodySize = bodySize;
   if (bodyLineHeight) directProps.bodyLineHeight = bodyLineHeight;
+  if (desktopSize) directProps.desktopSize = desktopSize;
+  if (tabletSize) directProps.tabletSize = tabletSize;
+  if (mobileSize) directProps.mobileSize = mobileSize;
+  if (cursorInteractive) directProps.cursorInteractive = cursorInteractive;
+
+  // A seed's scheme, written as the `--scheme-<name>-*` properties that
+  // `data-<name>="custom"` reads. ThemeInit puts the same values in a server-
+  // rendered <style>; writing them here as well is what lets a seed change
+  // after load, and what makes a seed work in an app without ThemeInit.
+  const schemeProperties = useMemo(
+    () => customSchemeProperties({ brand: brandSeed, accent: accentSeed, neutral: neutralSeed }),
+    [brandSeed, accentSeed, neutralSeed],
+  );
+  // A seed implies "custom" when the scheme is not named — but only a seed
+  // that parsed, or the scheme would point at properties that do not exist.
+  if (!brand && schemeProperties["--scheme-brand-600"]) directProps.brand = "custom";
+  if (!accent && schemeProperties["--scheme-accent-600"]) directProps.accent = "custom";
+  if (!neutral && schemeProperties["--scheme-neutral-600"]) directProps.neutral = "custom";
 
   const [style, setStyleState] = useState<StyleOptions>({
     ...defaultStyleOptions,
@@ -395,6 +446,16 @@ export function ThemeProvider({
       });
     }
   }, [style, propTheme]);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    for (const [property, value] of Object.entries(schemeProperties)) {
+      root.style.setProperty(property, value);
+    }
+    return () => {
+      for (const property of Object.keys(schemeProperties)) root.style.removeProperty(property);
+    };
+  }, [schemeProperties]);
 
   return (
     <ThemeProviderContext.Provider value={themeValue}>

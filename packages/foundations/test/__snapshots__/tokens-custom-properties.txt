@@ -27,6 +27,9 @@
 --brand-border-medium
 --brand-border-strong
 --brand-border-weak
+--brand-color-medium
+--brand-color-strong
+--brand-color-weak
 --brand-on-background-medium
 --brand-on-background-strong
 --brand-on-background-weak

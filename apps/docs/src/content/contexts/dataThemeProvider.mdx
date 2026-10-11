@@ -1,7 +1,7 @@
 ---
 title: "DataThemeProvider"
 summary: "The DataThemeProvider enables global style default configuration for Once UI's data-viz components."
-updatedAt: "2026-07-27"
+updatedAt: "2026-10-10"
 docs: "once-ui/contexts/dataThemeProvider.mdx"
 github: "contexts/DataThemeProvider.tsx"
 navLabel: "DataThemeProvider"
@@ -49,7 +49,7 @@ tick={{
 
 ## Advanced setup
 
-You can create a single source of truth for all style configuration in a separate file, for example `once-ui.config.js`. We also recommend using a `Providers` component to wrap your app.
+Keep the chart defaults in one file, typed with [defineConfig](/config#defineconfig), and spread them into the provider. The keys are the provider's prop names, so nothing is cast or renamed. We also recommend a `Providers` component to wrap your app.
 
 <CodeBlock
   marginTop="16"
@@ -58,27 +58,17 @@ You can create a single source of truth for all style configuration in a separat
   codes={[
     {
       code:
-`import { dataStyle } from "@/resources/once-ui.config";
+`"use client";
+
 import { DataThemeProvider, ThemeProvider, IconProvider, ToastProvider } from "@once-ui-system/core";
-import { ChartVariant, ChartMode } from "@once-ui-system/core/data";
+import { dataStyle, style } from "@/resources/once-ui.config";
 
 export function Providers({ children }: {
     children: React.ReactNode
 }) {
     return (
-      <ThemeProvider>
-        <DataThemeProvider
-          variant={dataStyle.variant as ChartVariant}
-          mode={dataStyle.mode as ChartMode}
-          height={dataStyle.height}
-          axis={{
-            stroke: dataStyle.axis.stroke
-          }}
-          tick={{
-            fill: dataStyle.tick.fill,
-            fontSize: dataStyle.tick.fontSize,
-            line: dataStyle.tick.line
-          }}>
+      <ThemeProvider {...style}>
+        <DataThemeProvider {...dataStyle}>
           <ToastProvider>
             <IconProvider>
               {children}
@@ -89,12 +79,16 @@ export function Providers({ children }: {
     );
 }`,
       language: "tsx",
-      highlight: "1,9-20,26",
+      highlight: "4,11",
       label: "Providers.tsx"
     },
     {
       code:
-`export const dataStyle = {
+`import { defineConfig } from "@once-ui-system/core/config";
+
+export const { style, dataStyle } = defineConfig({
+  style: { brand: "blue", accent: "indigo" },
+  dataStyle: {
     variant: "gradient", // flat | gradient | outline
     mode: "categorical", // categorical | divergent | sequential
     height: 24, // default chart height
@@ -104,14 +98,17 @@ export function Providers({ children }: {
     tick: {
       fill: "var(--neutral-on-background-weak)",
       fontSize: 11,
-      line: false
+      line: false,
     },
-};`,
+  },
+});`,
       language: "tsx",
       label: "once-ui.config.js"
     }
   ]}
 />
+
+Pass the same `dataStyle` to [ThemeInit](/contexts/themeProvider#ssr-hydration) as well, so `data-viz-style` is on `<html>` before the first paint: `<ThemeInit config={style} dataStyle={dataStyle} />`.
 
 ## API reference
 

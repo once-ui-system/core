@@ -99,21 +99,7 @@ export default function RootLayout({
         )}
       >
         <head>
-          <ThemeInit
-            config={{
-              theme: style.theme,
-              brand: style.brand,
-              accent: style.accent,
-              neutral: style.neutral,
-              solid: style.solid,
-              'solid-style': style.solidStyle,
-              border: style.border,
-              surface: style.surface,
-              transition: style.transition,
-              scaling: style.scaling,
-              'viz-style': dataStyle.variant,
-            }}
-          />
+          <ThemeInit config={style} dataStyle={dataStyle} />
         </head>
         <Providers>
           <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}
