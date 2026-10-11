@@ -1,7 +1,7 @@
 ---
 title: "Grid"
-summary: "Two-dimensional layout: a column count that changes per breakpoint, and every spacing, size and surface prop Flex has."
-updatedAt: "2026-09-14"
+summary: "Two-dimensional layout: a column count that changes per breakpoint or fits the space, and every spacing, size and surface prop Flex has."
+updatedAt: "2026-10-10"
 docs: "once-ui/components/grid.mdx"
 github: "components/Grid.tsx"
 navLabel: "Grid"
@@ -45,10 +45,60 @@ objects. Only the two below are its own.
 Three across, two on a tablet, one on a phone. The breakpoint objects cascade
 down, so `m` also covers `s` and `xs` unless one of them says otherwise.
 
+A responsive `Grid` is a server component, the same as a responsive `Flex`:
+every breakpoint value that has a utility class — a column count, a spacing
+token, `hide`, `position`, `overflow`, `opacity`, `zIndex` — is written as one,
+so the layout is right in the first paint and no `LayoutProvider` is needed.
+Only a value a class cannot hold (a `width`, a number of rems for spacing,
+`aspectRatio` or `style`) moves the grid to the client, exactly where `Flex`
+moves too.
+
+## Auto-fit
+
+When the column count should follow the space rather than the breakpoint, give
+a minimum width instead: `minColumnWidth` fits as many columns as there is room
+for, each at least that wide, and the grid reflows on its own as the container
+changes — inside a sidebar, a dialog or a full page alike.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Grid fillWidth minColumnWidth={10} gap="12">
+      {["1", "2", "3", "4", "5"].map((n) => (
+        <Flex key={n} height="64" radius="m" background="neutral-alpha-weak" border="neutral-alpha-medium" center>
+          <Text variant="label-default-s" onBackground="neutral-weak">{n}</Text>
+        </Flex>
+      ))}
+    </Grid>
+  }
+  codes={[
+    {
+      code:
+`<Grid fillWidth minColumnWidth={10} gap="12">
+    ...
+</Grid>`,
+      language: "tsx",
+      label: "Auto-fit"
+    }
+  ]}
+/>
+
+It takes what `minWidth` takes: a number is rem, a string is a spacing token or
+a CSS unit. The grid stays a server component — the value is a
+`.columns-auto-fit` class plus a `--grid-min-column-width` custom property on
+the same element, not a `style` object. A narrow container never overflows: a
+single column shrinks below the minimum rather than spilling out.
+
+`minColumnWidth` wins over `columns`, and a breakpoint `columns` still wins over
+it at that width, so `minColumnWidth={16} s={{ columns: 1 }}` is auto-fit
+everywhere except on a phone.
+
 <PropsTable
   mixin="GridProps"
   describe={{
     columns: "How many equal columns. Set it per breakpoint to reflow.",
+    minColumnWidth: "As many columns as fit, each at least this wide. A number is rem; a token or CSS unit also works. Wins over columns.",
     rows: "How many equal rows. Usually left alone — rows follow from the content.",
   }}
 />

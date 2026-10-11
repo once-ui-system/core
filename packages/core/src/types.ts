@@ -99,6 +99,35 @@ export type ColorValue = Colors | (string & {});
 
 export type RadiusSize = TShirtSizes | "full" | "none";
 
+/**
+ * A blur radius on the t-shirt scale: `xs` 0.25rem, `s` 0.5rem, `m` 1rem,
+ * `l` 2rem, `xl` 3rem (the static spacing steps 4, 8, 16, 32 and 48).
+ */
+export type BlurSize = TShirtSizes;
+
+/** `mix-blend-mode`: every keyword, plus `plus-lighter` for additive glows. */
+export type BlendMode =
+  | "normal"
+  | "multiply"
+  | "screen"
+  | "overlay"
+  | "darken"
+  | "lighten"
+  | "color-dodge"
+  | "color-burn"
+  | "hard-light"
+  | "soft-light"
+  | "difference"
+  | "exclusion"
+  | "hue"
+  | "saturation"
+  | "color"
+  | "luminosity"
+  | "plus-lighter";
+
+/** `user-select`. */
+export type UserSelect = "none" | "text" | "all" | "auto";
+
 export type RadiusNest = "4" | "8";
 
 export type TextType = "body" | "heading" | "display" | "label" | "code";

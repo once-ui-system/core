@@ -151,7 +151,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
     `maxWidth` conventions: primary page containers `"xl"`–`"m"` (marketing/landing toward `"xl"`/`"l"`, app and docs content `"m"`). `"s"` is only for narrow reading content (about, legal); `"xs"` for special surfaces (drawers, popovers).
 
-16. Data attributes for one-off theme overrides: `data-border="rounded"`, `data-brand="emerald"`, `data-solid="contrast"` — not custom CSS.
+16. One-off theme overrides on a subtree, not custom CSS. On `Flex`/`Row`/`Column`/`Grid` use the typed props: `theme="dark"`, `themeBorder="rounded"`, `themeSolid="contrast"`, `themeSurface="translucent"` (they write `data-theme`, `data-border`, `data-solid`, `data-surface`). Attributes without a prop stay raw: `data-brand="emerald"`. `theme="dark"` makes a subtree dark; the `dark` boolean only shows an element in a dark theme.
 
 ## Scale and hierarchy (marketing/landing pages)
 

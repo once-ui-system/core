@@ -40,6 +40,7 @@ const Heading = <T extends ElementType = "h1">({
   truncate,
   opacity,
   className,
+  userSelect,
   ...props
 }: HeadingProps<T>) => {
   const Component = as || "h1";
@@ -100,6 +101,7 @@ const Heading = <T extends ElementType = "h1">({
     generateClassName("my", marginY),
     truncate && "truncate",
     opacity && `opacity-${opacity}`,
+    userSelect && `user-select-${userSelect}`,
     family && `font-family-${family}`,
   );
 

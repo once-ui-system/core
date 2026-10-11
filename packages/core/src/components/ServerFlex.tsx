@@ -11,6 +11,7 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import { BELOW_HEADER, scrollsOn, spacingClasses, themeAttributes } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerFlexProps
@@ -25,52 +26,6 @@ interface ServerFlexProps
   m?: FlexBreakpointProps;
   s?: FlexBreakpointProps;
   xs?: FlexBreakpointProps;
-}
-
-/**
- * Spacing prop to utility prefix. The class matrix behind these is generated
- * from `@once-ui-system/foundations`' spec, which emits every prefix at every
- * token for every breakpoint.
- */
-const SPACING_PREFIX = {
-  padding: "p",
-  paddingLeft: "pl",
-  paddingRight: "pr",
-  paddingTop: "pt",
-  paddingBottom: "pb",
-  paddingX: "px",
-  paddingY: "py",
-  margin: "m",
-  marginLeft: "ml",
-  marginRight: "mr",
-  marginTop: "mt",
-  marginBottom: "mb",
-  marginX: "mx",
-  marginY: "my",
-  gap: "g",
-} as const;
-
-/**
- * Breakpoint spacing, as classes.
- *
- * Nothing emitted these before, so a token in a breakpoint prop — `s={{ gap: "4" }}`,
- * which is what the docs and every example teach — resolved to nothing at all:
- * no class was written, and ClientFlex's inline path guards on
- * `typeof value === "number"`, so the string fell through both. Numbers worked,
- * tokens did not, and neither said so.
- *
- * Numbers still go to the inline path, since `gap: 0.25` is a rem value with no
- * class behind it; `Flex` keeps those on the client component.
- */
-function spacingClasses(
-  breakpoint: string,
-  props: Record<string, unknown> | undefined,
-): (string | false)[] {
-  if (!props) return [];
-  return Object.entries(SPACING_PREFIX).map(([prop, prefix]) => {
-    const value = props[prop];
-    return typeof value === "string" && value !== "" && `${breakpoint}-${prefix}-${value}`;
-  });
 }
 
 const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
@@ -164,6 +119,14 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       zIndex,
       shadow,
       cursor,
+      userSelect,
+      blendMode,
+      blur,
+      backdropBlur,
+      theme,
+      themeBorder,
+      themeSolid,
+      themeSurface,
       className,
       style,
       children,
@@ -347,9 +310,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
-      ((overflow && overflow !== "hidden") ||
-        (overflowX && overflowX !== "hidden") ||
-        (overflowY && overflowY !== "hidden")) &&
+      (scrollsOn(overflow) || scrollsOn(overflowX) || scrollsOn(overflowY)) &&
         `scrollbar-${scrollbar}`,
       flex && `flex-${flex}`,
       horizontal &&
@@ -374,10 +335,17 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) &&
         `max-width-${maxWidth}`,
       (fillHeight || maxHeight) && "fill-height",
+      height === BELOW_HEADER && "height-below-header",
+      minHeight === BELOW_HEADER && "min-height-below-header",
+      maxHeight === BELOW_HEADER && "max-height-below-header",
       shadow && `shadow-${shadow}`,
       zIndex !== undefined && `z-index-${zIndex}`,
       textType && `font-${textType}`,
       typeof cursor === "string" && `cursor-${cursor}`,
+      userSelect && `user-select-${userSelect}`,
+      blendMode && `blend-mode-${blendMode}`,
+      typeof blur === "string" && `blur-${blur}`,
+      typeof backdropBlur === "string" && `backdrop-blur-${backdropBlur}`,
       dark && "dark-flex",
       light && "light-flex",
       colorClass,
@@ -461,15 +429,20 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
           cascadedXs?.direction === undefined
             ? `xs-align-${cascadedXs.vertical}`
             : `xs-justify-${cascadedXs.vertical}`),
-        // Additional class-based properties
+        // Additional class-based properties. `xl` leads, as it does for spacing:
+        // without it an `xl={{ overflow }}` reached every narrower step and
+        // missed its own.
+        cascadedXl?.overflow && `xl-overflow-${cascadedXl.overflow}`,
         cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
         cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
         cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
         cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
+        cascadedXl?.overflowX && `xl-overflow-x-${cascadedXl.overflowX}`,
         cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
         cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
         cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
         cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
+        cascadedXl?.overflowY && `xl-overflow-y-${cascadedXl.overflowY}`,
         cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
         cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
         cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
@@ -619,11 +592,23 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       bottom: parsePosition(bottom),
       left: parsePosition(left),
       transform,
+      // A size is a class; a number is rem, and has no class to reach for.
+      filter: typeof blur === "number" ? `blur(${blur}rem)` : undefined,
+      ...(typeof backdropBlur === "number" && {
+        WebkitBackdropFilter: `blur(${backdropBlur}rem)`,
+        backdropFilter: `blur(${backdropBlur}rem)`,
+      }),
       ...style,
     };
 
     return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...rest}>
+      <Component
+        ref={ref}
+        className={classes}
+        style={combinedStyle}
+        {...rest}
+        {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
+      >
         {children}
       </Component>
     );

@@ -18,12 +18,12 @@ scrolled back to.
 
 ```tsx
 <Column fill horizontal="center" flex={1}>
-  <Header />                                       {/* 56px tall */}
+  <Header />                                       {/* 56px: --header-height */}
   <Row fill paddingX="8">
     <Sidebar s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56" />
     <Row fill horizontal="center" topRadius="l" overflow="hidden">
       <Row
-        height="calc(100dvh - var(--static-space-56))"
+        height="below-header"
         overflowY="auto"
         topRadius="l"
         horizontal="center"
@@ -40,11 +40,18 @@ scrolled back to.
 
 What each part is doing:
 
-- **The pane scrolls, not the page.** `height: calc(100dvh - <header>)` plus
-  `overflowY="auto"` is what keeps the header and sidebar in place. `dvh`, not
-  `vh` — on mobile `vh` ignores the browser chrome and the pane runs off-screen.
-- **`position="sticky" top="56"`** on the sidebar, matching the header height.
-  `fitHeight` so it does not stretch and fight the sticky.
+- **The pane scrolls, not the page.** `height="below-header"` plus
+  `overflowY="auto"` is what keeps the header and sidebar in place. It is
+  `calc(100dvh - var(--header-height))`, written once as a utility class:
+  `dvh`, not `vh` — on mobile `vh` ignores the browser chrome and the pane runs
+  off-screen. Never restate the header height in a `calc()` of your own.
+- **`--header-height`** is 56px (`var(--static-space-56)`) by default, the
+  header this recipe uses. A shell with a different header sets it once on
+  `:root`; `height`, `minHeight` and `maxHeight` all take `"below-header"`,
+  and a mobile menu hanging from the header takes `maxHeight="below-header"`.
+- **`position="sticky" top="56"`** on the sidebar, matching the header height
+  (`top="calc(var(--header-height))"` follows a non-default one). `fitHeight`
+  so it does not stretch and fight the sticky.
 - **`topRadius="l"` + `background="surface"`** is what makes the content read as
   a panel sitting on the page rather than the page itself. The radius is on the
   top only, since the bottom is off-screen.

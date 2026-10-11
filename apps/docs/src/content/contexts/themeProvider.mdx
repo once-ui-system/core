@@ -265,6 +265,14 @@ semantic HTML element, providing simple, seamless style overrides.
 
 Just add the `data-theme`, `data-neutral`, `data-brand`, `data-accent`, `data-border`, `data-surface`, `data-solid`, `data-solid-style`, `data-transition` or `data-scaling` attributes to any semantic HTML element to override its default style.
 
+On `Flex`, `Row`, `Column` and `Grid`, the four you reach for most are typed props, checked against the same values as this provider: `theme` writes `data-theme`, `themeBorder` writes `data-border`, `themeSolid` writes `data-solid` and `themeSurface` writes `data-surface`. `border` and `solid` already mean colours on those components, hence the prefix.
+
+```tsx
+<Column theme="dark" themeSolid="contrast" background="page" padding="40">
+  ...
+</Column>
+```
+
 ## Persistence
 
 Style choices are mirrored into `localStorage` under `data-<kebab-key>`. Set

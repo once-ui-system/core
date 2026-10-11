@@ -14,10 +14,14 @@ import {
   BREAKPOINTS_CASCADE,
   ALIGN_ALIGNMENTS,
   BACKGROUND_RAMPS,
+  BELOW_HEADER_PROPERTIES,
+  BLEND_MODES,
+  BLUR_SIZES,
   BORDER_SIDES,
   BORDER_STYLES,
   BORDER_WIDTHS,
   CURSORS,
+  GRID_AUTO_FIT,
   GRID_COLUMNS,
   MAX_WIDTH_SIZES,
   ON_RAMPS,
@@ -33,10 +37,12 @@ import {
   SIZE_RULES,
   SELECTION_GROUPS,
   TRANSITIONS,
+  USER_SELECT,
   Z_INDEX_STEPS,
   cursorValue,
   gridTemplate,
   WEIGHTS,
+  belowHeaderValue,
   JUSTIFY_ALIGNMENTS,
   FLEX_DIRECTIONS,
   FLEX_VALUES,
@@ -356,6 +362,22 @@ function display() {
   for (const pe of POINTER_EVENTS) out.push(rule(`.pointer-events-${pe}`, [`pointer-events: ${pe};`]));
   for (const c of CURSORS) out.push(rule(`.cursor-${c}`, [`cursor: ${cursorValue(c)};`]));
 
+  // Last in the file, after `.surface-background` (which sets its own
+  // backdrop-filter), so an explicit `backdropBlur` on a surface wins.
+  for (const v of USER_SELECT) {
+    out.push(rule(`.user-select-${v}`, [`-webkit-user-select: ${v};`, `user-select: ${v};`]));
+  }
+  for (const mode of BLEND_MODES) out.push(rule(`.blend-mode-${mode}`, [`mix-blend-mode: ${mode};`]));
+  for (const { size, space } of BLUR_SIZES) {
+    out.push(rule(`.blur-${size}`, [`filter: blur(var(--static-space-${space}));`]));
+  }
+  for (const { size, space } of BLUR_SIZES) {
+    const blur = `blur(var(--static-space-${space}))`;
+    out.push(
+      rule(`.backdrop-blur-${size}`, [`-webkit-backdrop-filter: ${blur};`, `backdrop-filter: ${blur};`]),
+    );
+  }
+
   return out.join("\n");
 }
 
@@ -365,6 +387,9 @@ function grid() {
   for (const n of GRID_COLUMNS) {
     out.push(rule(`.columns-${n}`, [`grid-template-columns: ${gridTemplate(n)};`]));
   }
+  // Base only, and ahead of every breakpoint block, so a breakpoint column
+  // count (`s={{ columns: 1 }}`) still overrides the auto-fit track list.
+  out.push(rule(GRID_AUTO_FIT.selector, [`grid-template-columns: ${GRID_AUTO_FIT.template};`]));
 
   // The same pairing `flex.scss` uses: hidden by a base rule, revealed inside
   // its own query, so `.<bp>-grid-show` means "show only at this width". The
@@ -420,6 +445,10 @@ function size() {
   // Flex and grid children refuse to shrink below their content without these.
   out.push(rule(".min-width-0", ["min-width: 0;"]));
   out.push(rule(".min-height-0", ["min-height: 0;"]));
+  // After `.fill-height`, so `height="below-header"` beside `fillHeight` wins.
+  for (const prop of BELOW_HEADER_PROPERTIES) {
+    out.push(rule(`.${prop}-below-header`, [`${prop}: ${belowHeaderValue};`]));
+  }
   return out.join("\n");
 }
 

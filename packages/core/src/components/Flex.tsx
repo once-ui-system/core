@@ -8,6 +8,7 @@ import {
   SpacingProps,
   StyleProps,
 } from "../interfaces";
+import { isClassExpressible } from "../utils/layoutClasses";
 import { ClientFlex } from "./ClientFlex";
 import { ServerFlex } from "./ServerFlex";
 
@@ -23,43 +24,6 @@ interface SmartFlexProps
   m?: FlexBreakpointProps;
   s?: FlexBreakpointProps;
   xs?: FlexBreakpointProps;
-}
-
-/**
- * Props whose breakpoint value cannot become a utility class.
- *
- * `width`, `height` and their min/max siblings accept arbitrary rems and CSS
- * units, `aspectRatio` is a free-form ratio, and `style` is the escape hatch.
- * A class matrix cannot enumerate any of them.
- */
-const INLINE_ONLY = new Set([
-  "width",
-  "height",
-  "maxWidth",
-  "minWidth",
-  "maxHeight",
-  "minHeight",
-  "aspectRatio",
-  "style",
-]);
-
-/** Props that take a real number and still resolve to a class. */
-const NUMERIC_CLASS_PROPS = new Set(["opacity", "zIndex", "flex", "columns", "rows"]);
-
-/**
- * True when every value in a breakpoint object maps to a generated class.
- *
- * Numbers are the subtle case: `padding: 16` means 16rem and has no class,
- * while `padding: "16"` is the token and does. The two look alike in JSX and
- * behave differently, so this reads the value's type rather than trusting the
- * prop name.
- */
-function isClassExpressible(breakpointProps: Record<string, unknown>): boolean {
-  return Object.entries(breakpointProps).every(([prop, value]) => {
-    if (value === undefined) return true;
-    if (INLINE_ONLY.has(prop)) return false;
-    return typeof value !== "number" || NUMERIC_CLASS_PROPS.has(prop);
-  });
 }
 
 const Flex = forwardRef<HTMLDivElement, SmartFlexProps>(

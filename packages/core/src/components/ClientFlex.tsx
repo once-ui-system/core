@@ -17,6 +17,7 @@ import {
   TextVariant,
   TextWeight,
 } from "../types";
+import { BELOW_HEADER, BELOW_HEADER_VALUE } from "../utils/layoutClasses";
 import { Cursor } from "./Cursor";
 import { ServerFlex } from "./ServerFlex";
 
@@ -31,11 +32,13 @@ interface ClientFlexProps extends FlexProps, StyleProps, DisplayProps {
 }
 
 const parseDimension = (
-  value: number | SpacingToken | CSSUnit | undefined,
+  value: number | SpacingToken | CSSUnit | typeof BELOW_HEADER | undefined,
   type: "width" | "height",
 ): string | undefined => {
   if (value === undefined) return undefined;
   if (typeof value === "number") return `${value}rem`;
+  // A class at the base; here, at a breakpoint, every size is inline.
+  if (value === BELOW_HEADER) return BELOW_HEADER_VALUE;
   if (typeof value === "string") {
     if (
       value.endsWith("%") ||
