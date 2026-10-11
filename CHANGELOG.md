@@ -182,6 +182,18 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   `ToastProvider`, `IconProvider`, `AdapterProvider` and `OgRoutesProvider`
   have slices and catalog entries, and `useToast`, `useTheme`, `useStyle`,
   `useDataTheme`, `useLayout`, `useIcons` and `useOgRoutes` are in `functions`.
+- **The validator catches more of what the rules forbid.** `as IconName`
+  casts (`Icon.cast`); a `Flex` with no direction, which is a `Row`; raw
+  `data-theme`/`data-solid`/`data-border` where a typed prop exists
+  (`theme.typedProps`); and hex paint in inline SVG (`color.svgPaint`).
+  `--fix` now applies the `Flex` → `Row`/`Column` rename it reports, where
+  the rewrite is safe, and writes typed theme props.
+- **The agent example blocks are current and correct.** They had drifted
+  from their docs copies, and carried bugs an agent would copy: Waitlist1's
+  email check rejected any address containing an "s", Productivity1's
+  divider never painted, Header1's 20 menu items all used the placeholder
+  icon, Dashboard1 cast 12 icon names, Roadmap1's status dots had no colour,
+  and 19 `any` types. Every block in `ai/examples/blocks` is in the manifest.
 - **The validator names a 2.x prop for its 1.x one.** `api.renamed` reports
   `isOpen`, `isChecked`, SegmentedControl's `selected`/`onToggle`, Tag's
   `variant` and the other names 2.0 renamed (the codemod's table, minus names
@@ -488,7 +500,7 @@ Each keeps working until 3.0.
 - **A lint no-regression gate.** `pnpm lint:gate` fails when Biome reports
   more errors than `lint-baseline.json` records. The count only goes down:
   `--update` records a lower number and refuses a higher one. It stands at
-  159, from 519 before 2.1: a mechanical format and import-order sweep
+  153, from 519 before 2.1: a mechanical format and import-order sweep
   (no behaviour change) took it to 173.
 - **Accessibility assertions in tests.** `src/test/axe.ts` runs axe on a
   rendered tree; every component added or changed in 2.1 is tested with it.

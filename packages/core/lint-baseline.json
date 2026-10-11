@@ -1,24 +1,23 @@
 {
   "$comment": "Biome error count for packages/core. CI fails if it rises. After fixing errors, run `pnpm lint:gate --update` to record the lower count.",
-  "errors": 159,
+  "errors": 153,
   "rules": {
     "lint/a11y/noNoninteractiveTabindex": 1,
     "lint/a11y/noStaticElementInteractions": 3,
-    "lint/a11y/noSvgWithoutTitle": 3,
+    "lint/a11y/noSvgWithoutTitle": 2,
     "lint/a11y/useIframeTitle": 1,
     "lint/a11y/useKeyWithClickEvents": 1,
     "lint/a11y/useKeyWithMouseEvents": 1,
     "lint/a11y/useSemanticElements": 1,
     "lint/correctness/noChildrenProp": 1,
     "lint/correctness/noSwitchDeclarations": 2,
-    "lint/correctness/useExhaustiveDependencies": 63,
+    "lint/correctness/useExhaustiveDependencies": 61,
     "lint/correctness/useJsxKeyInIterable": 3,
     "lint/security/noDangerouslySetInnerHtml": 3,
     "lint/suspicious/noArrayIndexKey": 66,
     "lint/suspicious/noAssignInExpressions": 2,
-    "lint/suspicious/noCommentText": 1,
     "lint/suspicious/noControlCharactersInRegex": 2,
     "lint/suspicious/noDoubleEquals": 1,
-    "lint/suspicious/useIterableCallbackReturn": 4
+    "lint/suspicious/useIterableCallbackReturn": 2
   }
 }
