@@ -68,7 +68,7 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
               <Text variant="label-default-s">{section.title}</Text>
               <Row fillWidth s={{ direction: "column" }} gap="24">
                 <Column fillWidth key={`${section.title}-${section.title}`} gap="16">
-                  {section.items.map((item: any) => (
+                  {section.items.map((item) => (
                     <SmartLink key={`${item.label}-${item.href}`} href={item.href} unstyled>
                       <Text variant="body-default-s" onBackground="neutral-weak">
                         {item.label}

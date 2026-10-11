@@ -18,7 +18,7 @@ import { useEffect, useMemo, useState } from "react";
 
 type Align = "start" | "center" | "end";
 
-export type TableColumn<T = any> = {
+export type TableColumn<T = Record<string, unknown>> = {
   key: string;
   title: React.ReactNode;
   render: (item: T, index: number) => React.ReactNode;
@@ -26,7 +26,7 @@ export type TableColumn<T = any> = {
   width?: number; // in grid columns (optional)
 };
 
-export type Table1Props<T = any> = React.ComponentProps<typeof Column> & {
+export type Table1Props<T = Record<string, unknown>> = React.ComponentProps<typeof Column> & {
   data: T[];
   columns: TableColumn<T>[];
   selectable?: boolean;
@@ -39,7 +39,7 @@ export type Table1Props<T = any> = React.ComponentProps<typeof Column> & {
   onSelectionChange?: (ids: Set<string>) => void;
 };
 
-export const Table1: React.FC<Table1Props> = ({
+export function Table1<T = Record<string, unknown>>({
   data,
   columns,
   selectable = false,
@@ -51,7 +51,7 @@ export const Table1: React.FC<Table1Props> = ({
   filterFn,
   onSelectionChange,
   ...flex
-}) => {
+}: Table1Props<T>) {
   const [itemsPerPage, setItemsPerPage] = useState(initialItemsPerPage);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -79,7 +79,7 @@ export const Table1: React.FC<Table1Props> = ({
   }, [search, itemsPerPage]);
 
   // Selection helpers
-  const resolveId = (item: any, index: number) => (getId ? getId(item, index) : String(index));
+  const resolveId = (item: T, index: number) => (getId ? getId(item, index) : String(index));
   const isSelected = (id: string) => selectedItems.has(id);
   const toggleSelect = (id: string) => {
     setSelectedItems((prev) => {
@@ -386,4 +386,4 @@ export const Table1: React.FC<Table1Props> = ({
       </Row>
     </Column>
   );
-};
+}

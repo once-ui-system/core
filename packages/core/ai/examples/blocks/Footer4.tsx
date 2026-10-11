@@ -350,7 +350,9 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                   { key: "legal", label: "Legal" },
                   { key: "items", label: undefined },
                 ].map(({ key, label }) => {
-                  const arr = (section as any)[key] as Array<any> | undefined;
+                  const arr = (section as Record<string, unknown>)[key] as
+                    | Array<{ label: string; href: string; tag?: string }>
+                    | undefined;
                   if (!arr || arr.length === 0) return null;
                   return (
                     <Column key={`${section.title}-${key}`} gap="8">
@@ -363,7 +365,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                           {label}
                         </Text>
                       )}
-                      {arr.map((item: any) => (
+                      {arr.map((item) => (
                         <SmartLink key={`${item.label}-${item.href}`} href={item.href} unstyled>
                           <Text
                             wrap="balance"

@@ -24,12 +24,12 @@ export const Waitlist1 = () => {
 
   useEffect(() => {
     setSubscribers(1337);
-  });
+  }, []);
 
-  const validateEmail = (email: any) => {
+  const validateEmail = (email: string) => {
     if (!email) return null;
 
-    const emailRegex = /^[^s@]+@[^s@]+.[^s@]+$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return "Please enter a valid email address";
     }

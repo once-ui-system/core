@@ -5,6 +5,7 @@ import {
   Column,
   Icon,
   IconButton,
+  Line,
   Row,
   Text,
 } from "@once-ui-system/core";
@@ -179,14 +180,7 @@ export const Productivity1 = () => {
                 <Row height="12" width="12" solid="brand-strong" radius="full" />
               </Row>
             </Row>
-            <div
-              style={{
-                width: "1px",
-                margin: "0 var(--static-space-8)",
-                height: "1.5rem",
-                backgroundColor: "var(--neutral-border-medium",
-              }}
-            ></div>
+            <Line vert height="24" marginX="8" background="neutral-alpha-medium" />
             <Button size="s" variant="secondary" label="New project" prefixIcon="plus" />
           </Row>
         </Row>

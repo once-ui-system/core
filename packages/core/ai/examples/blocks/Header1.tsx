@@ -35,7 +35,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     {
       id: "dashboard",
       name: "Dashboard",
-      icon: "refresh",
+      icon: "home",
       shortcut: [],
       section: "Navigation",
       keywords: "dashboard home",
@@ -44,7 +44,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     {
       id: "analytics",
       name: "Analytics",
-      icon: "refresh",
+      icon: "barChart",
       shortcut: [],
       section: "Navigation",
       keywords: "analytics metrics",
@@ -53,7 +53,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     {
       id: "security",
       name: "Security",
-      icon: "refresh",
+      icon: "security",
       shortcut: [],
       section: "Navigation",
       keywords: "security privacy",
@@ -62,7 +62,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     {
       id: "settings",
       name: "Settings",
-      icon: "refresh",
+      icon: "settings",
       shortcut: [],
       section: "Navigation",
       keywords: "settings preferences",
@@ -82,13 +82,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Analytics",
               href: "#",
-              icon: "refresh",
+              icon: "barChart",
               description: "Get insights into your data",
             },
             {
               label: "Security",
               href: "#",
-              icon: "refresh",
+              icon: "security",
               description: "Protect your assets",
             },
           ],
@@ -99,13 +99,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Dashboard",
               href: "#",
-              icon: "refresh",
+              icon: "home",
               description: "Monitor your metrics",
             },
             {
               label: "Settings",
               href: "#",
-              icon: "refresh",
+              icon: "settings",
               description: "Configure your preferences",
             },
           ],
@@ -123,13 +123,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Enterprise",
               href: "#",
-              icon: "refresh",
+              icon: "organization",
               description: "Solutions for large organizations",
             },
             {
               label: "Startups",
               href: "#",
-              icon: "refresh",
+              icon: "bolt",
               description: "Perfect for growing companies",
             },
           ],
@@ -140,13 +140,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Developers",
               href: "#",
-              icon: "refresh",
+              icon: "code",
               description: "Tools and APIs",
             },
             {
               label: "Design teams",
               href: "#",
-              icon: "refresh",
+              icon: "eyeDropper",
               description: "Creative solutions",
             },
           ],
@@ -164,13 +164,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Guides",
               href: "#",
-              icon: "refresh",
+              icon: "book",
               description: "Learn how to use our platform",
             },
             {
               label: "API reference",
               href: "#",
-              icon: "refresh",
+              icon: "file",
               description: "Technical documentation",
             },
           ],
@@ -181,13 +181,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Help center",
               href: "#",
-              icon: "refresh",
+              icon: "help",
               description: "Get your questions answered",
             },
             {
               label: "Community",
               href: "#",
-              icon: "refresh",
+              icon: "chat",
               description: "Connect with other users",
             },
           ],
@@ -205,13 +205,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Our story",
               href: "#",
-              icon: "refresh",
+              icon: "time",
               description: "Learn about our journey",
             },
             {
               label: "Careers",
               href: "#",
-              icon: "refresh",
+              icon: "person",
               description: "Join our team",
             },
           ],
@@ -222,13 +222,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Blog",
               href: "#",
-              icon: "refresh",
+              icon: "document",
               description: "Latest updates and news",
             },
             {
               label: "Contact",
               href: "#",
-              icon: "refresh",
+              icon: "mail",
               description: "Get in touch with us",
             },
           ],

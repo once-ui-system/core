@@ -2,11 +2,14 @@
 
 import { Avatar, Column, Row, Text } from "@once-ui-system/core";
 import { useState } from "react";
+import type { ChatMember } from "./content/chat1content";
 import { chatMembers } from "./content/chat1content";
 import { Feed3 } from "./Feed3";
 import { Sidebar4 } from "./Sidebar4";
 import { Sidebar5 } from "./Sidebar5";
 import { Table1 } from "./Table1";
+
+type MemberRow = ChatMember["members"][number] & { group: string };
 
 export const Chat1 = () => {
   const [activeItem, setActiveItem] = useState<string | undefined>(undefined);
@@ -22,7 +25,7 @@ export const Chat1 = () => {
     {
       key: "member",
       title: <Text variant="label-default-s">Member</Text>,
-      render: (item: any) => (
+      render: (item: MemberRow) => (
         <Row fillWidth gap="12" vertical="center">
           <Avatar src={item.avatar || undefined} />
           <Column fillWidth>
@@ -37,7 +40,7 @@ export const Chat1 = () => {
     {
       key: "group",
       title: <Text variant="label-default-s">Role</Text>,
-      render: (item: any) => (
+      render: (item: MemberRow) => (
         <Text variant="label-default-s" onBackground="neutral-weak">
           {item.group}
         </Text>
@@ -46,7 +49,7 @@ export const Chat1 = () => {
     {
       key: "status",
       title: <Text variant="label-default-s">Bio</Text>,
-      render: (item: any) => (
+      render: (item: MemberRow) => (
         <Text variant="label-default-s" onBackground="neutral-weak" truncate>
           {item.bio || "—"}
         </Text>
@@ -65,10 +68,10 @@ export const Chat1 = () => {
             data={membersData}
             columns={membersColumns}
             selectable
-            getId={(i: any) => i.name}
+            getId={(i: MemberRow) => i.name}
             heading={<Text variant="label-default-m">Members</Text>}
             showSearch
-            filterFn={(item: any, q: string) =>
+            filterFn={(item: MemberRow, q: string) =>
               [item.name, item.status, item.bio, item.group]
                 .filter(Boolean)
                 .some((v: string) => v.toLowerCase().includes(q))

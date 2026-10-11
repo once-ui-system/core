@@ -1,13 +1,4 @@
-import {
-  Card,
-  Column,
-  Heading,
-  Row,
-  type Schemes,
-  StatusIndicator,
-  Text,
-  User,
-} from "@once-ui-system/core";
+import { Card, Column, Heading, Row, StatusIndicator, Text, User } from "@once-ui-system/core";
 import { roadmap, task } from "./content/roadmap1content";
 
 export interface Task {
@@ -50,7 +41,7 @@ const RoadmapTask = ({ task: taskItem }: { task: Task }) => (
         )}
         {taskItem.type && (
           <Row vertical="center" gap="8">
-            <StatusIndicator color={task[taskItem.type].color as Schemes} />
+            <StatusIndicator color={task[taskItem.type].color} />
             <Text onBackground="neutral-weak" variant="label-default-s">
               {task[taskItem.type].label}
             </Text>
@@ -86,7 +77,7 @@ export function Roadmap1() {
                   fillWidth
                   minHeight="4"
                   solid="brand-medium"
-                  data-brand={product.brand as Schemes}
+                  data-brand={product.brand}
                   themeSolid="inverse"
                 />
               </Row>
@@ -116,23 +107,18 @@ export function Roadmap1() {
                 </Row>
 
                 <Column gap="4" fillWidth>
-                  {column.tasks.map((taskItem, taskIndex) => {
-                    const typedTask: Task = {
-                      ...taskItem,
-                      type: taskItem.type as keyof typeof task,
-                    };
-
-                    return typedTask.href ? (
+                  {column.tasks.map((taskItem, taskIndex) =>
+                    taskItem.href ? (
                       <Card
                         onBackground="neutral-strong"
                         border
                         fillWidth
                         radius="s"
                         key={taskIndex}
-                        href={typedTask.href}
+                        href={taskItem.href}
                         padding="16"
                       >
-                        <RoadmapTask task={typedTask} />
+                        <RoadmapTask task={taskItem} />
                       </Card>
                     ) : (
                       <Column
@@ -144,10 +130,10 @@ export function Roadmap1() {
                         padding="16"
                         gap="8"
                       >
-                        <RoadmapTask task={typedTask} />
+                        <RoadmapTask task={taskItem} />
                       </Column>
-                    );
-                  })}
+                    ),
+                  )}
                 </Column>
               </Column>
             ))}

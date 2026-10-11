@@ -35,8 +35,10 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       setMessage("");
-    } catch (err: any) {
-      setSubmitError(err.message || "An error occurred while submitting your message");
+    } catch (err) {
+      setSubmitError(
+        err instanceof Error ? err.message : "An error occurred while submitting your message",
+      );
     } finally {
       setIsSubmitting(false);
     }

@@ -1,14 +1,29 @@
+import type { Schemes } from "@once-ui-system/core";
+
 export const task = {
-  planned: { label: "Planned", color: "neutral" },
-  progress: { label: "In progress", color: "brand" },
-  done: { label: "Done", color: "success" },
-  blocked: { label: "Blocked", color: "danger" },
+  planned: { label: "Planned", color: "gray" },
+  progress: { label: "In progress", color: "blue" },
+  done: { label: "Done", color: "green" },
+  blocked: { label: "Blocked", color: "red" },
 } as const;
 
-export const roadmap = [
+export const roadmap: {
+  product: string;
+  brand: Schemes;
+  columns: {
+    title: string;
+    tasks: {
+      title: string;
+      description?: string;
+      type: keyof typeof task;
+      user?: { name?: string; avatar?: string };
+      href?: string;
+    }[];
+  }[];
+}[] = [
   {
     product: "Once UI Core",
-    brand: "brand",
+    brand: "blue",
     columns: [
       {
         title: "Planned",

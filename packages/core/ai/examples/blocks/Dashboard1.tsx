@@ -1,6 +1,5 @@
 "use client";
 
-import type { IconName } from "@once-ui-system/core";
 import {
   Avatar,
   Button,
@@ -9,6 +8,7 @@ import {
   Grid,
   Heading,
   Icon,
+  type IconName,
   Row,
   Scroller,
   StatusIndicator,
@@ -168,8 +168,17 @@ const getStatusVariant = (status: string): "green" | "yellow" | "red" | "gray" =
   }
 };
 
+interface Order {
+  id: string;
+  customer: { name: string; avatar: string };
+  date: string;
+  total: string;
+  shipping: string;
+  method: string;
+}
+
 export const Dashboard1: React.FC = () => {
-  const ordersData = [
+  const ordersData: Order[] = [
     {
       id: "#1024",
       customer: { name: "Lorant", avatar: "/images/creators/lorant.jpg" },
@@ -212,11 +221,11 @@ export const Dashboard1: React.FC = () => {
     },
   ];
 
-  const orderColumns: TableColumn<any>[] = [
+  const orderColumns: TableColumn<Order>[] = [
     {
       key: "order",
       title: <Text variant="label-default-s">Order</Text>,
-      render: (item: any) => (
+      render: (item) => (
         <Row gap="12" vertical="center" textVariant="label-default-s">
           {item.id}
         </Row>
@@ -225,7 +234,7 @@ export const Dashboard1: React.FC = () => {
     {
       key: "customer",
       title: <Text variant="label-default-s">Customer</Text>,
-      render: (item: any) => (
+      render: (item) => (
         <Row gap="12" vertical="center">
           <Avatar size="xs" src={item.customer?.avatar} />
           <Text variant="label-default-s">{item.customer?.name}</Text>
@@ -235,7 +244,7 @@ export const Dashboard1: React.FC = () => {
     {
       key: "date",
       title: <Text variant="label-default-s">Date</Text>,
-      render: (item: any) => (
+      render: (item) => (
         <Text variant="label-default-s" onBackground="neutral-weak">
           {item.date}
         </Text>
@@ -244,7 +253,7 @@ export const Dashboard1: React.FC = () => {
     {
       key: "shipping",
       title: <Text variant="label-default-s">Shipping</Text>,
-      render: (item: any) => (
+      render: (item) => (
         <Row gap="8" vertical="center">
           <Text variant="label-default-s">{item.shipping}</Text>
           <Text variant="body-default-xs" onBackground="neutral-weak">
@@ -257,7 +266,7 @@ export const Dashboard1: React.FC = () => {
       key: "total",
       title: <Text variant="label-default-s">Total</Text>,
       align: "end",
-      render: (item: any) => <Text variant="label-default-s">{item.total}</Text>,
+      render: (item) => <Text variant="label-default-s">{item.total}</Text>,
     },
   ];
 
@@ -385,25 +394,25 @@ export const Dashboard1: React.FC = () => {
                         {
                           name: "Mobile App Development",
                           status: "At Risk",
-                          icon: "code" as IconName,
+                          icon: "code" as const,
                         },
                         {
                           name: "Marketing Campaign",
                           status: "On Track",
-                          icon: "sparkle" as IconName,
+                          icon: "sparkle" as const,
                         },
                         {
                           name: "Database Migration",
                           status: "On Track",
-                          icon: "code" as IconName,
+                          icon: "code" as const,
                         },
                         {
                           name: "Website Redesign",
                           status: "On Track",
-                          icon: "sparkle" as IconName,
+                          icon: "sparkle" as const,
                         },
-                        { name: "Product Launch", status: "Delayed", icon: "sparkle" as IconName },
-                        { name: "Server Upgrade", status: "Delayed", icon: "code" as IconName },
+                        { name: "Product Launch", status: "Delayed", icon: "sparkle" as const },
+                        { name: "Server Upgrade", status: "Delayed", icon: "code" as const },
                       ].map((project, index) => (
                         <StatusItem
                           key={index}
@@ -444,37 +453,37 @@ export const Dashboard1: React.FC = () => {
                           avatar: "/images/creators/lorant.jpg",
                           action: "Completed the Website Redesign task",
                           time: "2 hours ago",
-                          icon: "check" as IconName,
+                          icon: "check" as const,
                         },
                         {
                           avatar: "/images/creators/vincent.jpg",
                           action: "Commented on Mobile App Development",
                           time: "4 hours ago",
-                          icon: "edit" as IconName,
+                          icon: "chat" as const,
                         },
                         {
                           avatar: "/images/creators/zsofia.jpg",
                           action: "Created a new task in Marketing Campaign",
                           time: "Yesterday",
-                          icon: "plus" as IconName,
+                          icon: "plus" as const,
                         },
                         {
                           avatar: "/images/creators/texz.jpg",
                           action: "Completed 3 tasks in Product Launch",
                           time: "Yesterday",
-                          icon: "check" as IconName,
+                          icon: "check" as const,
                         },
                         {
                           avatar: "/images/creators/justin.jpg",
                           action: "Created a new task in Marketing Campaign",
                           time: "2 days ago",
-                          icon: "plus" as IconName,
+                          icon: "plus" as const,
                         },
                         {
                           avatar: "/images/creators/zsofia.jpg",
                           action: "Completed 3 tasks in Product Launch",
                           time: "4 days ago",
-                          icon: "check" as IconName,
+                          icon: "check" as const,
                         },
                       ].map((activity, index) => (
                         <ActivityItem
@@ -494,9 +503,9 @@ export const Dashboard1: React.FC = () => {
                   data={ordersData}
                   columns={orderColumns}
                   selectable
-                  getId={(i: any) => i.id}
+                  getId={(i) => i.id}
                   showSearch
-                  filterFn={(item: any, q: string) =>
+                  filterFn={(item, q) =>
                     [
                       item.id,
                       item.customer?.name,
