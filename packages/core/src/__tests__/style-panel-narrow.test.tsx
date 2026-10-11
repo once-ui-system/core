@@ -63,6 +63,22 @@ describe("StylePanel stacked", () => {
   });
 });
 
+describe("StylePanel's option rows", () => {
+  // The button's size shows in its radius class.
+  const scalingTab = () => screen.getByRole("tab", { name: "100" });
+
+  it("keep their size inline", () => {
+    render(<StylePanel value={{}} onChange={vi.fn()} />, { wrapper });
+    expect(scalingTab()).toHaveClass("radius-l");
+  });
+
+  it("drop a size when stacked, so a sidebar fits more of them", () => {
+    render(<StylePanel stacked value={{}} onChange={vi.fn()} />, { wrapper });
+    expect(scalingTab()).toHaveClass("radius-m");
+    expect(screen.getByRole("tab", { name: "Contrast" })).toHaveClass("radius-m");
+  });
+});
+
 describe("a custom-colour row", () => {
   it("lays out its label and swatches by the props every row takes", () => {
     const { container } = render(
@@ -215,11 +231,15 @@ describe("the scroll buttons", () => {
       <StylePanel.Root labels={{ scroller: { previous: "Előző", next: "Következő" } }}>
         <StylePanel.Brand />
         <StylePanel.Neutral />
+        <StylePanel.Solid />
+        <StylePanel.Scaling />
       </StylePanel.Root>,
       { wrapper },
     );
-    expect(await screen.findAllByRole("button", { name: "Következő" })).toHaveLength(2);
-    expect(screen.getAllByRole("button", { name: "Előző" })).toHaveLength(2);
+    // Two swatch strips and two option rows.
+    expect(await screen.findAllByRole("button", { name: "Következő" })).toHaveLength(4);
+    expect(screen.getAllByRole("button", { name: "Előző" })).toHaveLength(4);
+    expect(screen.queryByRole("button", { name: /^Scroll/ })).toBeNull();
     await expectNoAxeViolations(container);
   });
 });

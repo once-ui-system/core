@@ -148,7 +148,13 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
     });
 
     return (
-      <Flex fillWidth className={classNames(styles.container, className)} style={style} {...rest}>
+      <Flex
+        ref={ref}
+        fillWidth
+        className={classNames(styles.container, className)}
+        style={style}
+        {...rest}
+      >
         {showPrevButton && (
           <Fade
             base={fadeColor}

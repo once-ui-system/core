@@ -29,6 +29,7 @@ import {
   useStyle,
 } from "../contexts/ThemeProvider";
 import { mergeLabels } from "../internal/labels";
+import { revealInStrip } from "../internal/reveal";
 import type { ChartMode } from "../modules/data/interfaces";
 import { type Schemes, schemes } from "../types";
 import { ColorInput } from "./ColorInput";
@@ -37,7 +38,7 @@ import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Scroller, type ScrollerLabels } from "./Scroller";
-import { SegmentedControl } from "./SegmentedControl";
+import { SegmentedControl, type SegmentedControlProps } from "./SegmentedControl";
 import styles from "./StylePanel.module.scss";
 import { Text } from "./Text";
 import { ThemeSwitcher, type ThemeSwitcherLabels } from "./ThemeSwitcher";
@@ -519,27 +520,6 @@ function activateOnKey(event: KeyboardEvent<HTMLElement>, activate: () => void) 
   activate();
 }
 
-/**
- * Scroll a strip so a swatch sits clear of the fades that hold its scroll
- * buttons. Only the strip moves: `scrollIntoView` would scroll the page too,
- * and a panel below the fold would pull the page down to it on load.
- */
-function revealInStrip(swatch: HTMLElement, smooth: boolean) {
-  const strip = swatch.parentElement;
-  if (!strip || strip.scrollWidth <= strip.clientWidth) return;
-  const view = strip.getBoundingClientRect();
-  const box = swatch.getBoundingClientRect();
-  // A swatch's width clears the scroll button over either end.
-  const margin = box.width;
-  const start = box.left - view.left;
-  const end = box.right - view.left;
-  const delta =
-    start < margin ? start - margin : end > view.width - margin ? end - (view.width - margin) : 0;
-  if (delta === 0) return;
-  const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-  strip.scrollBy({ left: delta, behavior: smooth && !reduced ? "smooth" : "auto" });
-}
-
 /** One swatch: a toggle button, named and pressed, with a decorative face. */
 function Swatch({
   label,
@@ -565,7 +545,7 @@ function Swatch({
   useEffect(() => {
     const swatch = ref.current;
     if (!scroll || !pressed || !swatch) return;
-    revealInStrip(swatch, document.activeElement === swatch);
+    revealInStrip(swatch, swatch.parentElement, document.activeElement === swatch);
   }, [scroll, pressed]);
 
   return (
@@ -814,6 +794,25 @@ function NeutralRow({ label, ...rest }: StyleRowProps) {
   );
 }
 
+/**
+ * A row's segmented options. Stacked, the buttons drop a size so that the
+ * longer rows fit a sidebar; either way the scroll buttons are translated
+ * with the rest of the panel.
+ */
+function Options({ buttons, ...rest }: Omit<SegmentedControlProps, "labels">) {
+  const stacked = useContext(StylePanelStackedContext);
+  const labels = useStylePanelLabels();
+  return (
+    <SegmentedControl
+      maxWidth={22}
+      minWidth={0}
+      labels={labels.scroller}
+      buttons={buttons.map((button) => ({ size: stacked ? "m" : "l", ...button }))}
+      {...rest}
+    />
+  );
+}
+
 function solidSwatch(solid: string, fill: string, tone: ReactNode) {
   return (
     <Flex vertical="center" gap="12">
@@ -841,13 +840,11 @@ function segmentedRow<K extends keyof StylePanelValue>(
     const labels = useStylePanelLabels();
     return (
       <Row label={prefer(label, labels.rows[row])} {...rest}>
-        <SegmentedControl
-          maxWidth={22}
-          minWidth={0}
+        <Options
           onChange={(next) => set({ [key]: next } as Partial<StylePanelValue>)}
           value={mounted ? (value[key] as string | undefined) : undefined}
           defaultValue={defaultValue}
-          buttons={buttons(labels).map((button) => ({ size: "l" as const, ...button }))}
+          buttons={buttons(labels)}
         />
       </Row>
     );
@@ -920,9 +917,9 @@ const BodyLineHeightRow = segmentedRow(
 );
 
 const dataStyleButtons = ({ options: { dataStyle } }: ResolvedLabels) => [
-  { size: "l" as const, label: dataStyle.categorical, value: "categorical" },
-  { size: "l" as const, label: dataStyle.divergent, value: "divergent" },
-  { size: "l" as const, label: dataStyle.sequential, value: "sequential" },
+  { label: dataStyle.categorical, value: "categorical" },
+  { label: dataStyle.divergent, value: "divergent" },
+  { label: dataStyle.sequential, value: "sequential" },
 ];
 
 /** Split out so that only this row depends on DataThemeProvider — every other
@@ -931,9 +928,7 @@ function BoundDataStyleControl() {
   const { mode, setChartOptions } = useDataTheme();
   const labels = useStylePanelLabels();
   return (
-    <SegmentedControl
-      maxWidth={22}
-      minWidth={0}
+    <Options
       onChange={(next) => setChartOptions({ mode: next as ChartMode })}
       value={mode}
       defaultValue="categorical"
@@ -948,9 +943,7 @@ function DataStyleRow({ label, ...rest }: StyleRowProps) {
   return (
     <Row label={prefer(label, labels.rows.dataStyle)} {...rest}>
       {controlled ? (
-        <SegmentedControl
-          maxWidth={22}
-          minWidth={0}
+        <Options
           onChange={(next) => set({ chartMode: next as ChartMode })}
           value={mounted ? value.chartMode : undefined}
           defaultValue="categorical"

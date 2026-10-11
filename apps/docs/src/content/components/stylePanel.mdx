@@ -132,7 +132,9 @@ before it has been laid out: a container query would need size containment,
 which stops the panel taking its width from its content. Every row, including
 one with a [custom colour](#custom-colour), still takes the layout props of a
 `Flex` (`direction`, `horizontal`, `vertical`, `gap`), which win over
-`stacked`. In a strip that scrolls, the chosen swatch is scrolled into view.
+`stacked`. Stacked, the option rows drop a button size so that most of them
+fit a sidebar; whatever still overflows scrolls, and the chosen swatch or
+option is scrolled into view.
 
 ## Owning the state
 
@@ -226,7 +228,7 @@ export function SiteStylePanel({ saved, save }: {
 | `names` | Display names for `shapes`, `schemes` and `neutrals`. They default to the key (`"blue"`), and the swatches' names are built from them. |
 | `swatches` | The swatches' accessible names, as functions of that display name: `shape`, `scheme` (which also gets the row, `"brand"` or `"accent"`) and `neutral`. The defaults read `Corner style: sharp`, `Brand colour: blue` and `Neutral colour: gray`. |
 | `themeSwitcher` | "System theme", "Dark theme" and "Light theme". [ThemeSwitcher](/components/themeSwitcher) takes the same object as its own `labels`. |
-| `scroller` | The colour strips' scroll buttons: "Scroll Previous" and "Scroll Next". [Scroller](/components/scroller) takes the same object as its own `labels`. |
+| `scroller` | The scroll buttons of the colour strips and option rows: "Scroll Previous" and "Scroll Next". [Scroller](/components/scroller) takes the same object as its own `labels`. |
 | `custom` | The custom colour's swatch, field and hint — see [Custom colour](#custom-colour). |
 
 A row's `label` and a group's `title` and `description` still win over

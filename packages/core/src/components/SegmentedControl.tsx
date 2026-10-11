@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, useEffect, useRef, useState } from "react";
+import { revealInStrip } from "../internal/reveal";
 import { Flex } from "./Flex";
 import { Scroller } from "./Scroller";
 import { ToggleButton, ToggleButtonProps } from "./ToggleButton";
@@ -32,6 +33,10 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
       compact = false,
       className,
       style,
+      // The tablist's name and description go to the tablist, below.
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
+      "aria-describedby": ariaDescribedBy,
       ...scrollerProps
     },
     ref,
@@ -102,18 +107,42 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
 
     const selectedIndex = buttons.findIndex((button) => button.value === internalSelected);
 
+    // When the options scroll, the selected one is brought into view at mount
+    // and on every change, rather than starting under the Next button. The
+    // strip is the Scroller's scrolling row, which holds the buttons' row.
+    useEffect(() => {
+      const selected = buttonRefs.current[selectedIndex];
+      if (!selected) return;
+      revealInStrip(
+        selected,
+        selected.parentElement?.parentElement ?? null,
+        document.activeElement === selected,
+      );
+    }, [selectedIndex]);
+
     return (
       <Scroller
+        ref={ref}
         direction="row"
         fillWidth={fillWidth}
         minWidth={0}
         {...scrollerProps}
-        role="tablist"
-        aria-orientation="horizontal"
         onKeyDown={handleKeyDown}
       >
+        {/* The tablist is the row of tabs, not the Scroller around it: once
+            the options overflow, the Scroller also holds its scroll buttons,
+            and a tablist may own only tabs. */}
         <Flex
+          role="tablist"
+          aria-orientation="horizontal"
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-describedby={ariaDescribedBy}
           fillWidth={fillWidth}
+          // Never narrower than its options: when they overflow, the border
+          // goes round all of them and scrolls with them, instead of ending
+          // at the edge of the strip with the last options outside it.
+          style={{ minWidth: "max-content" }}
           gap={compact ? "-1" : "2"}
           padding={compact ? "0" : "4"}
           radius="l"
