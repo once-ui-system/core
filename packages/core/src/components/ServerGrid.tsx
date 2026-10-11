@@ -18,6 +18,7 @@ import {
   sizeValue,
   spacingClasses,
   themeAttributes,
+  translateTransform,
 } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
@@ -363,12 +364,8 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       return undefined;
     };
 
-    const translateXValue = parsePosition(translateX);
-    const translateYValue = parsePosition(translateY);
-    const transform =
-      translateXValue || translateYValue
-        ? `translate(${translateXValue || "0"}, ${translateYValue || "0"})`
-        : undefined;
+    // A spacing token as well as a number or a CSS unit, as on ServerFlex.
+    const transform = translateTransform(translateX, translateY);
 
     const combinedStyle: CSSProperties = {
       maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)

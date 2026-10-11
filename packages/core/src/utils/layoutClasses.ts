@@ -161,6 +161,35 @@ export function offsetValue(value: unknown): string | undefined {
 }
 
 /**
+ * A `translateX`/`translateY` value as a CSS length. A static step is its
+ * `--static-space-*` and a t-shirt size its `--responsive-space-*`, the values
+ * the spacing classes read; a number is rem, and a CSS unit passes through.
+ *
+ * Only the number and the CSS unit used to resolve, so `translateY="16"`, the
+ * form the props' type and the harness teach, wrote no transform at all.
+ */
+export function translateValue(value: unknown): string | undefined {
+  if (typeof value === "number") return `${value}rem`;
+  if (typeof value !== "string") return undefined;
+  if (isCSSUnit(value)) return value;
+  if (STATIC_SPACING.has(value)) return `var(--static-space-${value})`;
+  if (RESPONSIVE_SIZES.has(value)) return `var(--responsive-space-${value})`;
+  return undefined;
+}
+
+/**
+ * `translateX` and `translateY` as the one `transform` they write, the unset
+ * axis `0`. It is the only transform `Flex`, `Grid`, `Text` and `Heading`
+ * write; a `transform` in `style` replaces it, as `style` replaces any value
+ * these components resolve.
+ */
+export function translateTransform(x: unknown, y: unknown): string | undefined {
+  const tx = translateValue(x);
+  const ty = translateValue(y);
+  return tx || ty ? `translate(${tx || "0"}, ${ty || "0"})` : undefined;
+}
+
+/**
  * Breakpoint offsets, as classes: `m={{ top: "16" }}` is `.m-top-16`. The
  * classes were always generated; `ServerFlex` never wrote them, so a token
  * offset in a breakpoint object stayed on the server and did nothing.
@@ -307,8 +336,6 @@ export function textLayout({
   zIndex,
 }: TextLayoutProps): { classes: (string | false | undefined)[]; style: CSSProperties } {
   const offsets = { top, right, bottom, left };
-  const x = offsetValue(translateX);
-  const y = offsetValue(translateY);
   return {
     classes: [
       position && `position-${position}`,
@@ -327,7 +354,7 @@ export function textLayout({
     style: {
       gap: typeof gap === "number" ? `${gap}rem` : undefined,
       ...offsetStyle(offsets),
-      transform: x || y ? `translate(${x || "0"}, ${y || "0"})` : undefined,
+      transform: translateTransform(translateX, translateY),
     },
   };
 }
