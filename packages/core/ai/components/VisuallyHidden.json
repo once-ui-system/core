@@ -1,0 +1,12 @@
+{
+ "name": "VisuallyHidden",
+ "group": "components",
+ "props": {
+  "children": "ReactNode",
+  "as": "React.ElementType = span",
+  "focusable": "boolean = false",
+  "className": "string",
+  "style": "React.CSSProperties"
+ },
+ "mixinsRef": []
+}

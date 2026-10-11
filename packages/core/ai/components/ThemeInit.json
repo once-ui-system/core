@@ -1,0 +1,9 @@
+{
+ "name": "ThemeInit",
+ "group": "components",
+ "props": {
+  "config": "!ThemeInitConfig",
+  "dataStyle": "{ mode?: ChartMode }"
+ },
+ "mixinsRef": []
+}

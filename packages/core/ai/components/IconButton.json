@@ -16,7 +16,8 @@
   "style": "React.CSSProperties",
   "href": "string",
   "children": "ReactNode",
-  "color": "`${ColorScheme}-${ColorWeight}`"
+  "color": "`${ColorScheme}-${ColorWeight}`",
+  "ariaLabel": "string"
  },
  "mixinsRef": []
 }

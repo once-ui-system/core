@@ -1,0 +1,16 @@
+{
+ "name": "MdxHeading",
+ "group": "mdx",
+ "importFrom": "@once-ui-system/core/mdx",
+ "props": {
+  "as": "!MdxHeadingTag",
+  "margin": "SpacingToken | number",
+  "marginLeft": "SpacingToken | number",
+  "marginRight": "SpacingToken | number",
+  "marginTop": "SpacingToken | number",
+  "marginBottom": "SpacingToken | number",
+  "marginX": "SpacingToken | number",
+  "marginY": "SpacingToken | number"
+ },
+ "mixinsRef": []
+}

@@ -1,0 +1,9 @@
+{
+ "name": "ScrollLock",
+ "group": "components",
+ "props": {
+  "enabled": "!boolean",
+  "allowScrollInElement": "RefObject<HTMLElement | null>"
+ },
+ "mixinsRef": []
+}

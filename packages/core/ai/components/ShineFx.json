@@ -33,6 +33,7 @@
    "inline": "boolean",
    "hide": "boolean",
    "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "userSelect": "UserSelect",
    "position": "CSSProperties[\"position\"]",
    "overflow": "CSSProperties[\"overflow\"]",
    "overflowX": "CSSProperties[\"overflowX\"]",

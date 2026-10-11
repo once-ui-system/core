@@ -1,6 +1,149 @@
 {
  "version": "2.0.0",
- "generated": "2026-09-25",
+ "generated": "2026-10-11",
+ "imports": {
+  "@once-ui-system/core": {
+   "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
+  },
+  "@once-ui-system/core/data": {
+   "use": "Charts, gauges and chart chrome",
+   "peer": "recharts",
+   "exports": [
+    "BarChart",
+    "ChartHeader",
+    "ChartStatus",
+    "DataTooltip",
+    "LinearGradient",
+    "RadialGradient",
+    "Legend",
+    "LinearGauge",
+    "LineBarChart",
+    "LineChart",
+    "PieChart",
+    "RadialGauge",
+    "Swatch"
+   ],
+   "types": [
+    "BarChartProps",
+    "BarWidth",
+    "ChartHeaderProps",
+    "ChartMode",
+    "ChartProps",
+    "ChartStatusProps",
+    "ChartVariant",
+    "DataPoint",
+    "DataTooltipProps",
+    "DateConfig",
+    "LegendProps",
+    "LineBarChartProps",
+    "LineChartProps",
+    "LinearGaugeProps",
+    "PieChartProps",
+    "PresetsConfig",
+    "RadialGaugeProps",
+    "SeriesConfig",
+    "SwatchProps",
+    "curveType"
+   ]
+  },
+  "@once-ui-system/core/code": {
+   "use": "CodeBlock",
+   "peer": "prismjs",
+   "exports": [
+    "CodeBlock"
+   ],
+   "types": [
+    "CodeBlockProps"
+   ]
+  },
+  "@once-ui-system/core/media": {
+   "use": "MediaUpload",
+   "peer": "compressorjs",
+   "exports": [
+    "MediaUpload"
+   ],
+   "types": [
+    "MediaUploadProps"
+   ]
+  },
+  "@once-ui-system/core/mdx": {
+   "use": "MDX content through Once UI: mdxComponents for next-mdx-remote or @next/mdx, createMdxComponents(overrides) to replace elements or register tags, and the Mdx* elements to wrap",
+   "peer": "prismjs",
+   "exports": [
+    "MdxBlockQuote",
+    "MdxCodeBlock",
+    "MdxHeading",
+    "MdxHr",
+    "MdxImage",
+    "MdxInlineCode",
+    "MdxLink",
+    "MdxList",
+    "MdxListItem",
+    "MdxParagraph",
+    "MdxTable",
+    "MdxHeadingAnchor",
+    "createMdxComponents",
+    "mdxComponents",
+    "slugify",
+    "textOf"
+   ],
+   "types": [
+    "MdxBlockQuoteProps",
+    "MdxCodeBlockProps",
+    "MdxComponents",
+    "MdxElementProps",
+    "MdxHeadingAnchorProps",
+    "MdxHeadingProps",
+    "MdxHeadingTag",
+    "MdxHrProps",
+    "MdxImageProps",
+    "MdxInlineCodeProps",
+    "MdxListItemProps",
+    "MdxListProps",
+    "MdxParagraphProps",
+    "MdxSpacingProps",
+    "MdxTableProps",
+    "MdxTag"
+   ]
+  },
+  "@once-ui-system/core/next": {
+   "use": "Next.js apps: LayoutProvider with next/link and next/image (the root one renders plain <a> and <img>), and the OG route handlers for app/api/og/*/route.ts",
+   "peer": "next",
+   "exports": [
+    "LayoutProvider",
+    "NextAdapterProvider",
+    "nextAdapters",
+    "createOgFetchRoute",
+    "createOgProxyRoute",
+    "DEFAULT_OG_IMAGE_TYPES"
+   ],
+   "types": [
+    "NextAdapterProviderProps",
+    "OgFetchRouteOptions",
+    "OgProxyRouteOptions",
+    "OgRouteHandlers"
+   ]
+  },
+  "@once-ui-system/core/config": {
+   "use": "defineConfig and the OnceUIConfig types with no component code behind them, for once-ui.config (the root exports them too)",
+   "exports": [
+    "defineConfig"
+   ],
+   "types": [
+    "OnceUIConfig",
+    "OnceUIConfigSections",
+    "OnceUIFont",
+    "OnceUIFonts"
+   ]
+  },
+  "@once-ui-system/core/components/<Name>": {
+   "use": "Components kept off the root so every bundle does not carry them",
+   "exports": [
+    "MediaAudioPlayer",
+    "MediaVideoPlayer"
+   ]
+  }
+ },
  "files": {
   "spec": "spec.json",
   "catalog": "catalog.json",

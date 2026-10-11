@@ -8,10 +8,11 @@
   "style": "React.CSSProperties",
   "className": "string",
   "checked": "boolean",
+  "defaultChecked": "boolean = false",
   "name": "string",
   "value": "string",
   "disabled": "boolean",
-  "onToggle": "() => void",
+  "onToggle": "(checked: boolean) => void",
   "hoverable": "boolean = true"
  },
  "mixinsRef": []

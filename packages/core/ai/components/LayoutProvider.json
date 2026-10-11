@@ -1,0 +1,9 @@
+{
+ "name": "LayoutProvider",
+ "group": "next",
+ "importFrom": "@once-ui-system/core/next",
+ "props": {
+  "children": "!ReactNode"
+ },
+ "mixinsRef": []
+}

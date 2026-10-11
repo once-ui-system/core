@@ -8,7 +8,9 @@
   "iconButtonProps": "IconButtonProps",
   "onClick": "!() => void",
   "className": "string",
-  "id": "string"
+  "id": "string",
+  "labelId": "string",
+  "descriptionId": "string"
  },
  "mixinsRef": []
 }

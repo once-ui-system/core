@@ -1,0 +1,13 @@
+{
+ "name": "Tab",
+ "group": "components",
+ "extends": [
+  "ToggleButton"
+ ],
+ "props": {
+  "value": "!string",
+  "children": "ReactNode",
+  "disabled": "boolean = false"
+ },
+ "mixinsRef": []
+}

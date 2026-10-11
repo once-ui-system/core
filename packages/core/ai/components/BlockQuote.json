@@ -17,8 +17,8 @@
   "preline": "React.ReactNode",
   "subline": "React.ReactNode",
   "separator": "\"top\" | \"bottom\" | \"both\" | \"none\" = both",
-  "author": "{ name?: React.ReactNode, avatar?: string, }",
-  "link": "{ href: string, label: string }",
+  "author": "{ name?: React.ReactNode; avatar?: string; }",
+  "link": "{ href: string; label: string }",
   "style": "React.CSSProperties",
   "className": "string",
   "align": "\"center\" | \"left\" | \"right\" = center"
@@ -43,6 +43,7 @@
    "inline": "boolean",
    "hide": "boolean",
    "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "userSelect": "UserSelect",
    "position": "CSSProperties[\"position\"]",
    "overflow": "CSSProperties[\"overflow\"]",
    "overflowX": "CSSProperties[\"overflowX\"]",
@@ -64,11 +65,11 @@
   },
   "SizeProps": {
    "width": "number | SpacingToken | CSSUnit",
-   "height": "number | SpacingToken | CSSUnit",
+   "height": "number | SpacingToken | CSSUnit | \"below-header\"",
    "maxWidth": "number | SpacingToken | CSSUnit",
    "minWidth": "number | SpacingToken | CSSUnit",
-   "minHeight": "number | SpacingToken | CSSUnit",
-   "maxHeight": "number | SpacingToken | CSSUnit",
+   "minHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "maxHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
    "fit": "boolean",
    "fitWidth": "boolean",
    "fitHeight": "boolean",
@@ -126,6 +127,13 @@
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "blendMode": "BlendMode",
+   "blur": "BlurSize | number",
+   "backdropBlur": "BlurSize | number",
+   "theme": "\"light\" | \"dark\"",
+   "themeBorder": "BorderStyle",
+   "themeSolid": "SolidType",
+   "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
  }
