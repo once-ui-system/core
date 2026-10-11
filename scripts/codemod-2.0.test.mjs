@@ -73,6 +73,18 @@ describe("scoping renames to Once UI components", () => {
   });
 });
 
+describe("imports of names that moved to a subpath", () => {
+  it("moves an inline type specifier with the rest of the statement's moved names", () => {
+    const { out } = transform(
+      `import { type ChartMode, DataThemeProvider } from "@once-ui-system/core";\n`,
+    );
+    assert.equal(
+      out,
+      `import { DataThemeProvider } from "@once-ui-system/core";\nimport { type ChartMode } from "@once-ui-system/core/data";\n`,
+    );
+  });
+});
+
 describe("radius → corners", () => {
   for (const tag of ["Button", "IconButton", "Input", "Textarea"]) {
     it(`renames radius="none" on ${tag}, which has no radius in 2.0`, () => {

@@ -486,13 +486,23 @@ const MOVED_TO = new Map(
   Object.entries(MOVED_EXPORTS).flatMap(([target, names]) => names.map((n) => [n, target])),
 );
 
-/** Split one `{ a, b as c }` clause into its specifiers, keeping the text. */
+/**
+ * Split one `{ a, b as c, type d }` clause into its specifiers, keeping the
+ * text. An inline `type` modifier stays in the text but not in the name, or
+ * `{ type ChartMode, DataThemeProvider }` would never match a moved export.
+ */
 function specifiersOf(clause) {
   return clause
     .split(",")
     .map((raw) => raw.trim())
     .filter(Boolean)
-    .map((text) => ({ text, name: text.split(/\s+as\s+/)[0].trim() }));
+    .map((text) => ({
+      text,
+      name: text
+        .split(/\s+as\s+/)[0]
+        .replace(/^type\s+/, "")
+        .trim(),
+    }));
 }
 
 /**

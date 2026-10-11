@@ -288,6 +288,14 @@ Each keeps working until 3.0.
   buttons that a tablist may not own.
 - **`Scroller` and `SegmentedControl` forward their refs.** Both took a `ref`
   and dropped it.
+- **`SplitView`'s handle shows.** It filled the width of a gutter whose own
+  padding left it zero wide, so only the handle's 2px border drew and its
+  fill never did, not even while dragging. It is a 4px pill now, in both
+  orientations.
+- **The 2.0 codemod moves inline `type` imports.** `import { type ChartMode,
+  DataThemeProvider } from "@once-ui-system/core"` kept `ChartMode` on the
+  root, where it no longer resolves; it now moves to `/data` like the other
+  forms.
 - **`Switch` is one named, focusable control.** `role="switch"` sat on a
   wrapper that couldn't take focus, so focus landed on an unnamed element,
   and the `ariaLabel` default ("Toggle switch") overrode the visible label.

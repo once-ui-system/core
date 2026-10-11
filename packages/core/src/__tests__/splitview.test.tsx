@@ -26,6 +26,17 @@ describe("SplitView", () => {
     expect(screen.getByRole("separator", { name: "Resize panels" })).toBeInTheDocument();
   });
 
+  it("draws its handle 4px thick, not the width of a gutter that has none", () => {
+    // The gutter's padding leaves its content box zero wide, so a handle that
+    // filled it showed only its border. jsdom lays nothing out: check the
+    // handle's own size instead.
+    render(<SplitView {...panels} />, { wrapper: wrap });
+    const handle = screen.getByRole("separator").firstElementChild as HTMLElement;
+    expect(handle.style.width).toBe("var(--static-space-4)");
+    expect(handle.style.height).toBe("8rem");
+    expect(handle).not.toHaveClass("fill-width");
+  });
+
   it("honours defaultSplit, minSplit and maxSplit", () => {
     // These three props were accepted and then ignored: the hook hardcoded
     // 0.3 / 0.2 / 0.8 regardless of what was passed.

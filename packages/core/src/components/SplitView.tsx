@@ -195,12 +195,10 @@ function SplitView({
           touchAction: "none",
         }}
       >
-        <Row
-          fillWidth={isHorizontal}
-          fillHeight={!isHorizontal}
-          height={isHorizontal ? 8 : undefined}
-          width={!isHorizontal ? 8 : undefined}
-        >
+        {/* A pill 4px thick. It used to fill the gutter's width, which the
+            gutter's own padding leaves at zero, so only the card's border
+            showed and the fill never did — not even while dragging. */}
+        <Row width={isHorizontal ? "4" : 8} height={isHorizontal ? 8 : "4"}>
           <Card
             fill
             background={isDragging ? "neutral-strong" : "neutral-weak"}
