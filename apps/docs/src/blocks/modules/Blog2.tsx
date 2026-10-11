@@ -64,7 +64,7 @@ export const Blog2 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
-      <Column fillWidth maxWidth="l" gap="24">
+      <Column maxWidth="l" gap="24">
         <Column fillWidth gap="8" paddingX="16">
           <Heading as="h1" variant="display-strong-s">
             From the journal
@@ -83,7 +83,7 @@ export const Blog2 = (flex: React.ComponentProps<typeof Column>) => {
         </Row>
 
         <Card href="#" radius="l" border="transparent" background="transparent" fillWidth>
-          <Row fillWidth aspectRatio="16/7" radius="l" overflow="hidden" position="relative">
+          <Row fillWidth aspectRatio="16/7" radius="l" overflow="hidden">
             <Media
               stretch
               sizes="1024px"
@@ -98,15 +98,8 @@ export const Blog2 = (flex: React.ComponentProps<typeof Column>) => {
               gap="12"
               background="overlay"
             >
-              <Tag size="s" scheme="neutral">
-                {featured.tag}
-              </Tag>
-              <Heading
-                as="h2"
-                variant="display-strong-xs"
-                onBackground="neutral-strong"
-                wrap="balance"
-              >
+              <Tag size="s">{featured.tag}</Tag>
+              <Heading as="h2" variant="display-strong-xs" onBackground="neutral-strong">
                 {featured.title}
               </Heading>
               <Text onBackground="neutral-weak" variant="body-default-m" wrap="balance">
@@ -146,7 +139,7 @@ export const Blog2 = (flex: React.ComponentProps<typeof Column>) => {
                 <Text variant="label-strong-s" onBackground="neutral-weak">
                   {post.tag}
                 </Text>
-                <Heading as="h3" variant="heading-strong-m" wrap="balance">
+                <Heading as="h3" variant="heading-strong-m">
                   {post.title}
                 </Heading>
                 <Text onBackground="neutral-weak" variant="body-default-s" wrap="balance">

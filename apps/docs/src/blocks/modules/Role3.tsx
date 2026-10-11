@@ -60,7 +60,7 @@ const team = [
 export const Role3 = () => {
   return (
     <Column fillWidth horizontal="center" padding="l" gap="48">
-      <Row maxWidth="l" fillWidth gap="48" m={{ direction: "column-reverse" }}>
+      <Row maxWidth="l" gap="48" m={{ direction: "column-reverse" }}>
         <Column fillWidth gap="32">
           <Column gap="16">
             <Button
@@ -165,7 +165,6 @@ export const Role3 = () => {
         </Column>
 
         <Column
-          fillWidth
           maxWidth={28}
           fitHeight
           position="sticky"
@@ -180,7 +179,7 @@ export const Role3 = () => {
                 You will work closely with this squad on core product surfaces.
               </Text>
             </Column>
-            <AvatarGroup avatars={team.map((src) => ({ src }))} size="m" />
+            <AvatarGroup avatars={team.map((src) => ({ src }))} />
             <Column gap="12">
               <Row horizontal="between" vertical="center" paddingTop="24">
                 <Text variant="label-strong-m">Hiring manager</Text>
@@ -190,7 +189,7 @@ export const Role3 = () => {
                 </Badge>
               </Row>
               <Row gap="12" vertical="center">
-                <Avatar src="/images/creators/lorant.jpg" size="m" />
+                <Avatar src="/images/creators/lorant.jpg" />
                 <Column gap="2">
                   <Text variant="label-strong-s">Lorant One</Text>
                   <Text variant="body-default-xs" onBackground="neutral-weak">

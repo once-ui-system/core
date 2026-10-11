@@ -12,12 +12,7 @@ export const Feed1 = () => {
 
   return (
     <Row fillWidth paddingX="16" paddingTop="16">
-      <Row
-        s={{ hide: true }}
-        position="sticky"
-        fitHeight
-        style={{ top: "50%", transform: "translateY(-50%)" }}
-      >
+      <Row s={{ hide: true }} position="sticky" fitHeight top="50%" translateY="-50%">
         <Sidebar3 />
       </Row>
       <Column fillWidth horizontal="center">
@@ -51,9 +46,9 @@ export const Feed1 = () => {
                   <EmojiPickerDropdown
                     onSelect={(emoji) => setPost(post + emoji)}
                     trigger={
-                      <Row fillWidth data-border="rounded" gap="4">
-                        <IconButton icon="smiley" size="m" variant="tertiary" />
-                        <IconButton icon="camera" size="m" variant="tertiary" />
+                      <Row fillWidth themeBorder="rounded" gap="4">
+                        <IconButton icon="smiley" variant="tertiary" />
+                        <IconButton icon="camera" variant="tertiary" />
                       </Row>
                     }
                   />
@@ -61,7 +56,6 @@ export const Feed1 = () => {
                     <IconButton
                       icon="send"
                       loading={isSubmitting}
-                      size="m"
                       disabled={!post || isSubmitting}
                     />
                   </Row>

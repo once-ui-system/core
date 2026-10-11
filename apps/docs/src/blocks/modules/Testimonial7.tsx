@@ -57,11 +57,10 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
     <Row fillWidth gap="8" s={{ direction: "column" }} {...flex}>
       <Row flex={1} border="brand-medium" radius="l" overflow="hidden" center aspectRatio="3/4">
         <MatrixFx
-          data-solid="color"
+          themeSolid="color"
           position="absolute"
           fill
           colors={["brand-solid-strong"]}
-          spacing={3}
           size={2}
           flicker
           bulge={{
@@ -71,8 +70,8 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
             repeat: true,
           }}
         />
-        <Mask fill center x={70} y={20} radius={50} padding="24">
-          <Media fillWidth aspectRatio="1" src={testimonial.logo.icon} />
+        <Mask fill center x={70} y={20} padding="24">
+          <Media aspectRatio="1" src={testimonial.logo.icon} />
         </Mask>
         <Row position="absolute" left="24" bottom="24">
           <Logo wordmark={testimonial.logo.wordmark} />
@@ -94,7 +93,7 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
         }
       >
         <Background
-          data-solid="color"
+          themeSolid="color"
           position="absolute"
           fill
           gradient={{

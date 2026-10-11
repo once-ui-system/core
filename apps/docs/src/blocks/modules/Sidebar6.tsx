@@ -210,7 +210,7 @@ export function Sidebar6() {
             fillWidth
             style={{ minHeight: "var(--static-space-56)" }}
           >
-            <Row fillWidth gap="12" vertical="center" style={{ left: "-0.5rem" }}>
+            <Row fillWidth gap="12" vertical="center" left={-0.5}>
               <Avatar src="/images/creators/lorant.jpg" />
               <Column fillWidth gap="2">
                 <Text variant="label-default-m">Lorant</Text>

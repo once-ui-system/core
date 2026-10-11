@@ -53,7 +53,7 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
         padding="l"
       >
         <MatrixFx
-          data-solid="color"
+          themeSolid="color"
           position="absolute"
           left="0"
           top="0"
@@ -66,7 +66,7 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
         />
         <Background
           fill
-          data-solid="color"
+          themeSolid="color"
           position="absolute"
           left="0"
           top="0"

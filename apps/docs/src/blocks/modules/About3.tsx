@@ -87,8 +87,6 @@ export const About3 = () => {
             fill
             interactive
             speed={4}
-            size="2"
-            density={100}
             intensity={40}
             pointerEvents="none"
           />

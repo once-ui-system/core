@@ -51,8 +51,7 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
             <Row
               data-scaling="90"
               position="absolute"
-              vertical="center"
-              horizontal="center"
+              center
               textVariant="body-default-xs"
               solid="brand-strong"
               onSolid="brand-strong"
@@ -60,10 +59,8 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
               minWidth="20"
               height="20"
               border="neutral-weak"
-              style={{
-                top: "-0.125rem",
-                right: "-0.5rem",
-              }}
+              top={-0.125}
+              right={-0.5}
             >
               {cartCount}
             </Row>

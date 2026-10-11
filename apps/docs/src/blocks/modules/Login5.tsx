@@ -49,7 +49,6 @@ export const Login5 = () => {
 
       <Column
         maxWidth={36}
-        fillWidth
         gap="24"
         padding="32"
         radius="xl"
@@ -60,7 +59,7 @@ export const Login5 = () => {
         <Column horizontal="center" gap="12">
           <Logo dark icon="/trademarks/icon-dark.svg" size="l" />
           <Logo light icon="/trademarks/icon-light.svg" size="l" />
-          <Heading variant="display-strong-xs" align="center" wrap="balance" marginTop="8">
+          <Heading variant="display-strong-xs" align="center" marginTop="8">
             {step === "email" ? "Sign in with a magic link" : "Check your inbox"}
           </Heading>
           <Text variant="body-default-s" onBackground="neutral-weak" align="center" wrap="balance">

@@ -37,7 +37,7 @@ const roleDetails = {
 export const Role1 = () => {
   return (
     <Row fillWidth fitHeight horizontal="center">
-      <Column fillWidth horizontal="center" maxWidth="m">
+      <Column horizontal="center" maxWidth="m">
         <Row
           fillWidth
           horizontal="center"

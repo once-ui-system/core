@@ -65,7 +65,6 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
         />
         <Column
           maxWidth="xl"
-          fillWidth
           paddingX="xl"
           paddingY="48"
           gap="24"
@@ -88,7 +87,7 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
               Product updates, new blocks, and design system releases — delivered monthly.
             </Text>
           </Column>
-          <Row fillWidth gap="8" s={{ direction: "column" }} maxWidth={32}>
+          <Row gap="8" s={{ direction: "column" }} maxWidth={32}>
             <Input id="footer5-email" label="Email" placeholder="you@company.com" />
             <Button data-border="rounded" arrowIcon>
               Subscribe
@@ -113,7 +112,6 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
         <Row flex={1} m={{ hide: true }} borderRight="neutral-alpha-medium" />
         <Column
           maxWidth="xl"
-          fillWidth
           borderX="neutral-alpha-medium"
           paddingX="xl"
           paddingTop="40"
@@ -122,8 +120,8 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
         >
           <Row fillWidth horizontal="between" vertical="center" wrap gap="24">
             <Row gap="12" vertical="center">
-              <Logo href="#" dark icon="/trademarks/icon-dark.svg" size="m" />
-              <Logo href="#" light icon="/trademarks/icon-light.svg" size="m" />
+              <Logo href="#" dark icon="/trademarks/icon-dark.svg" />
+              <Logo href="#" light icon="/trademarks/icon-light.svg" />
             </Row>
             <Row gap="8">
               {social.map((item) => (

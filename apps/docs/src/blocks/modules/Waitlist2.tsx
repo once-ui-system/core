@@ -94,7 +94,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
               </Text>
               <Row vertical="center" gap="4" textVariant="heading-strong-m">
                 #
-                <CountFx value={position} speed={1200} effect="smooth" easing="ease-out" />
+                <CountFx value={position} speed={1200} effect="smooth" />
               </Row>
             </Row>
             <Row fillWidth vertical="center" gap="8">
@@ -111,7 +111,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
             </Text>
           </Column>
         ) : (
-          <Column fillWidth gap="12" maxWidth={22}>
+          <Column gap="12" maxWidth={22}>
             <Input
               id="waitlist-email"
               placeholder="Enter your email"
@@ -152,7 +152,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
             <Text variant="label-default-s">Live queue</Text>
           </Row>
           <Row gap="4" vertical="center" textVariant="label-strong-s">
-            <CountFx value={38} speed={2000} effect="smooth" easing="ease-out" />
+            <CountFx value={38} speed={2000} effect="smooth" />
             <Text onBackground="neutral-weak" variant="label-default-s">
               joined today
             </Text>
@@ -180,7 +180,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
               </Text>
             </Row>
           ))}
-          <Fade to="bottom" position="absolute" bottom="0" fillWidth height={5} />
+          <Fade position="absolute" bottom="0" fillWidth height={5} />
         </Column>
       </Column>
     </Row>

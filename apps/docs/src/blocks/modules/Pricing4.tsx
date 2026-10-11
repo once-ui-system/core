@@ -87,7 +87,7 @@ export const Pricing4 = (flex: React.ComponentProps<typeof Column>) => {
         <Tag scheme="brand" size="s">
           Compare plans
         </Tag>
-        <Heading as="h2" align="center" variant="display-strong-m" wrap="balance">
+        <Heading as="h2" align="center" variant="display-strong-m">
           Everything included, side by side
         </Heading>
         <Text align="center" onBackground="neutral-medium" variant="body-default-l" wrap="balance">
@@ -95,7 +95,7 @@ export const Pricing4 = (flex: React.ComponentProps<typeof Column>) => {
         </Text>
       </Column>
 
-      <Column maxWidth="l" translateY={-2} border radius="xl" background="page" fillWidth>
+      <Column maxWidth="l" translateY={-2} border radius="xl" background="page">
         <Row
           hide
           s={{ hide: false }}
@@ -181,14 +181,7 @@ export const Pricing4 = (flex: React.ComponentProps<typeof Column>) => {
 
             <Row flex={3} s={{ hide: true }}>
               {(Object.keys(plans) as PlanKey[]).map((key) => (
-                <Column
-                  key={key}
-                  fillWidth
-                  padding="24"
-                  vertical="center"
-                  horizontal="center"
-                  borderLeft="neutral-alpha-medium"
-                >
+                <Column key={key} fillWidth padding="24" center borderLeft="neutral-alpha-medium">
                   {renderCell(item[key])}
                 </Column>
               ))}

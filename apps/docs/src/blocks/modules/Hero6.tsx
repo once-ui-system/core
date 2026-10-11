@@ -26,7 +26,7 @@ export const Hero6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         <MatrixFx
           flicker
           fps={40}
-          data-solid="color"
+          themeSolid="color"
           style={{ maskImage: "linear-gradient(to bottom, black 60%, transparent 100%)" }}
           colors={["brand-solid-strong", "accent-solid-strong"]}
           size={2}
@@ -58,16 +58,11 @@ export const Hero6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             <Row>Claim your gift</Row>
           </Badge>
           <Heading variant="display-strong-l">We speak CSS natively</Heading>
-          <Heading
-            wrap="balance"
-            onBackground="neutral-weak"
-            variant="heading-default-m"
-            marginBottom="8"
-          >
+          <Heading onBackground="neutral-weak" variant="heading-default-m" marginBottom="8">
             Once UI Pro is a collection of ready-to-use templates and building blocks that you can
             use to create your next project.
           </Heading>
-          <Row gap="8" data-border="rounded" marginTop="12">
+          <Row gap="8" themeBorder="rounded" marginTop="12">
             <Button href="#">Start for free</Button>
             <Row radius="full" background="brand-weak" border="brand-alpha-weak">
               <Button href="#" variant="secondary">

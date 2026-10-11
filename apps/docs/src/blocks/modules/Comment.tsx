@@ -113,7 +113,7 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
       <Row paddingY="8">
         <SmartLink unstyled href="#">
           <Text onBackground="neutral-strong">
-            <Avatar src={comment.user.avatar} size="m" />
+            <Avatar src={comment.user.avatar} />
           </Text>
         </SmartLink>
       </Row>
@@ -210,7 +210,6 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
             trigger={
               <IconButton
                 data-border="rounded"
-                size="m"
                 icon="moreHorizontal"
                 variant="tertiary"
                 aria-label="Comment options"
@@ -254,8 +253,8 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
                   <EmojiPickerDropdown
                     onSelect={(emoji) => setReply((r) => r + emoji)}
                     trigger={
-                      <Row fillWidth data-border="rounded">
-                        <IconButton icon="smiley" size="m" variant="tertiary" />
+                      <Row fillWidth themeBorder="rounded">
+                        <IconButton icon="smiley" variant="tertiary" />
                       </Row>
                     }
                   />
@@ -269,7 +268,6 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
                     <IconButton
                       icon="send"
                       loading={isSubmitting}
-                      size="m"
                       onClick={handleSubmitReply}
                       disabled={!reply || isSubmitting}
                     />

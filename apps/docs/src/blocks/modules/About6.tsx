@@ -83,7 +83,7 @@ export const About6 = () => {
                 top="56"
                 gap="8"
               >
-                <Heading as="h2" variant="heading-strong-l" wrap="balance">
+                <Heading as="h2" variant="heading-strong-l">
                   Hall of fame
                 </Heading>
                 <Row vertical="center" gap="8" onBackground="neutral-weak">
@@ -108,19 +108,14 @@ export const About6 = () => {
                           fillWidth
                           href={contributor.href}
                           padding="24"
-                          vertical="center"
                           background="transparent"
                           gap="16"
                           align="center"
                           direction="column"
-                          horizontal="center"
+                          center
                           border="transparent"
                         >
-                          <Avatar
-                            src={contributor.avatar}
-                            size="m"
-                            style={{ filter: "grayscale(100%)" }}
-                          />
+                          <Avatar src={contributor.avatar} style={{ filter: "grayscale(100%)" }} />
                         </Card>
                       }
                       overlay={

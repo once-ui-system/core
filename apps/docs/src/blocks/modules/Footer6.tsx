@@ -50,7 +50,6 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
         />
         <Column
           maxWidth="xl"
-          fillWidth
           paddingX="xl"
           paddingY="48"
           gap="24"
@@ -70,7 +69,7 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
               Used by professionals working at leading companies worldwide.
             </Text>
           </Column>
-          <Grid columns="4" m={{ columns: 2 }} fillWidth maxWidth={48}>
+          <Grid columns="4" m={{ columns: 2 }} maxWidth={48}>
             {trademarks.map((mark) => (
               <Row key={mark.light} center padding="24">
                 <Logo wordmark={mark.dark} dark />
@@ -97,7 +96,6 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
         <Row flex={1} m={{ hide: true }} borderRight="neutral-alpha-medium" />
         <Row
           maxWidth="xl"
-          fillWidth
           borderX="neutral-alpha-medium"
           paddingX="xl"
           paddingY="24"
@@ -107,8 +105,8 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
           gap="24"
         >
           <Row gap="12" vertical="center">
-            <Logo href="#" dark icon="/trademarks/icon-dark.svg" size="m" />
-            <Logo href="#" light icon="/trademarks/icon-light.svg" size="m" />
+            <Logo href="#" dark icon="/trademarks/icon-dark.svg" />
+            <Logo href="#" light icon="/trademarks/icon-light.svg" />
           </Row>
           <Row gap="16" wrap>
             {links.map((link) => (

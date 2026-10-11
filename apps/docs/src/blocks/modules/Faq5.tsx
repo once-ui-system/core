@@ -78,7 +78,7 @@ export const Faq5 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="32" {...flex}>
-      <Column fillWidth maxWidth="xs" horizontal="center" gap="8" align="center">
+      <Column maxWidth="xs" horizontal="center" gap="8" align="center">
         <Heading as="h2" variant="display-strong-s" align="center">
           Frequently asked questions
         </Heading>
@@ -86,7 +86,7 @@ export const Faq5 = (flex: React.ComponentProps<typeof Column>) => {
           Search our knowledge base or browse by topic.
         </Text>
       </Column>
-      <Column fillWidth maxWidth="s" gap="16">
+      <Column maxWidth="s" gap="16">
         <Input
           id="faq-search"
           placeholder="Search questions..."
@@ -121,7 +121,7 @@ export const Faq5 = (flex: React.ComponentProps<typeof Column>) => {
           </Column>
         ) : (
           <Column fillWidth border radius="l" padding="40" gap="8" horizontal="center">
-            <Icon name="search" size="m" onBackground="neutral-weak" />
+            <Icon name="search" onBackground="neutral-weak" />
             <Text variant="body-default-s" onBackground="neutral-weak" align="center">
               No questions found for "{query}"
             </Text>

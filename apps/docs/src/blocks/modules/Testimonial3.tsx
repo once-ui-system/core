@@ -1,4 +1,4 @@
-import { Avatar, Column, Flex, Grid, Row, SmartLink, Text } from "@once-ui-system/core";
+import { Avatar, Column, type Flex, Grid, Row, SmartLink, Text } from "@once-ui-system/core";
 import type { ReactNode } from "react";
 
 interface Testimonial {
@@ -29,13 +29,12 @@ export const Testimonial3: React.FC<Props> = ({ testimonials, avatars, avatarTex
         borderLeft="neutral-medium"
       >
         {testimonials.map((testimonial, index) => (
-          <Flex
+          <Column
             key={index}
             fillWidth
             borderRight="neutral-medium"
             borderBottom="neutral-medium"
             vertical="between"
-            direction="column"
             padding="24"
             gap="20"
             {...rest}
@@ -43,14 +42,13 @@ export const Testimonial3: React.FC<Props> = ({ testimonials, avatars, avatarTex
             <Text wrap="balance" variant="body-default-s">
               {testimonial.content}
             </Text>
-            <Flex fillWidth>
+            <Row fillWidth>
               {(testimonial.role || testimonial.company) && (
                 <Row gap="12">
                   <Avatar
                     style={{
                       mixBlendMode: "luminosity",
                     }}
-                    size="m"
                     src={testimonial.avatar}
                   />
                   <Column>
@@ -66,8 +64,8 @@ export const Testimonial3: React.FC<Props> = ({ testimonials, avatars, avatarTex
                   </Column>
                 </Row>
               )}
-            </Flex>
-          </Flex>
+            </Row>
+          </Column>
         ))}
       </Grid>
       <Row fillWidth height="24" border="neutral-medium" bottomRadius="l" />

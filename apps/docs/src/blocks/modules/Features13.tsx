@@ -4,7 +4,6 @@ export const Features13 = (flex: React.ComponentProps<typeof Row>) => {
   return (
     <Row vertical="center" maxWidth="xl" padding="8" m={{ direction: "column-reverse" }} {...flex}>
       <Media
-        fillWidth
         sizes="640px"
         src="/images/customize/brand-01.jpg"
         aspectRatio="3/4"

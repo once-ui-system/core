@@ -31,7 +31,7 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
         </Text>
       </Column>
 
-      <Column maxWidth="m" fillWidth radius="xl" border overflow="hidden">
+      <Column maxWidth="m" radius="xl" border overflow="hidden">
         <Row fillWidth borderBottom>
           <Row flex="2" paddingX="24" paddingY="20" />
           <Column flex="1" paddingX="24" paddingY="20" horizontal="center" gap="4" borderLeft>
@@ -69,14 +69,7 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
             <Row flex="2" paddingX="24" paddingY="16" vertical="center">
               <Text variant="body-default-s">{row.label}</Text>
             </Row>
-            <Row
-              flex="1"
-              paddingX="24"
-              paddingY="16"
-              horizontal="center"
-              vertical="center"
-              borderLeft
-            >
+            <Row flex="1" paddingX="24" paddingY="16" center borderLeft>
               <Icon
                 name={row.free ? "check" : "minus"}
                 size="s"
@@ -87,8 +80,7 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
               flex="1"
               paddingX="24"
               paddingY="16"
-              horizontal="center"
-              vertical="center"
+              center
               borderLeft
               background="brand-alpha-weak"
             >
@@ -102,7 +94,7 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
         ))}
       </Column>
 
-      <Row maxWidth="m" fillWidth gap="16" s={{ direction: "column" }}>
+      <Row maxWidth="m" gap="16" s={{ direction: "column" }}>
         <Column flex="1" fillWidth padding="24" radius="l" border gap="12">
           <Text variant="label-default-s" onBackground="neutral-weak">
             Stay on Free
@@ -125,7 +117,6 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
           background="brand-alpha-weak"
           gap="12"
           overflow="hidden"
-          position="relative"
         >
           <Background
             position="absolute"

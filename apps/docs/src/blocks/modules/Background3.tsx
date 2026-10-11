@@ -13,7 +13,6 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         speed={1}
         color="brand-on-background-strong"
         size="1"
-        density={100}
       />
       <ParticleFx
         opacity={70}
@@ -24,7 +23,6 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         interactive
         speed={0.5}
         color="brand-on-background-strong"
-        size="2"
         density={40}
       />
       <Background

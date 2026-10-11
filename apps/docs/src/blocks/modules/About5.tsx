@@ -146,9 +146,7 @@ export const About5 = () => {
               <Text variant="code-default-s" onBackground="brand-weak">
                 Community
               </Text>
-              <Heading variant="display-strong-s" wrap="balance">
-                Powering creative minds.
-              </Heading>
+              <Heading variant="display-strong-s">Powering creative minds.</Heading>
               <Text variant="body-default-m" onBackground="neutral-weak" wrap="balance">
                 Used by professionals working at companies that value craft, curiosity, and
                 independent creation.

@@ -1,4 +1,4 @@
-import { Background, Button, Column, Flex, Heading, Icon, Row, Text } from "@once-ui-system/core";
+import { Background, Button, Column, Heading, Icon, Row, Text } from "@once-ui-system/core";
 
 const plans = {
   free: {
@@ -151,9 +151,9 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
 export const Plans2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
     <Row fillWidth gap="-1" overflowX="auto" {...flex}>
-      <Flex fillWidth paddingY="24" minWidth={20}>
+      <Row fillWidth paddingY="24" minWidth={20}>
         <PlanCard id="free" plan={plans.free} radius={undefined} leftRadius="l" />
-      </Flex>
+      </Row>
       <PlanCard id="pro" plan={plans.pro} zIndex={1} minWidth={20} />
     </Row>
   );

@@ -15,7 +15,9 @@ export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex
       <Row
         position="absolute"
         top="0"
-        style={{ left: "50%", transform: "translateX(-50%) translateY(-50%)" }}
+        left="50%"
+        translateX="-50%"
+        translateY="-50%"
         radius="full"
         background="surface"
         border="neutral-medium"
@@ -47,7 +49,7 @@ export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex
       </Row>
       <Row horizontal="center" borderBottom="neutral-medium">
         <Row borderRight="neutral-medium" flex={1} />
-        <Column maxWidth="s" minWidth={24} flex={3} fillWidth fitHeight background="surface">
+        <Column maxWidth="s" minWidth={24} flex={3} fitHeight background="surface">
           {content.map((item, index) => (
             <React.Fragment key={index}>
               <Accordion title={<Text variant="body-default-s">{item.title}</Text>}>

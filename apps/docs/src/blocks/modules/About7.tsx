@@ -52,7 +52,7 @@ export const About7 = () => {
         </Grid>
       </Column>
       <Column fill center paddingX="8" paddingY="24" gap="8" background="page" borderLeft>
-        <Heading align="center" as="h2" variant="display-strong-xs" wrap="balance">
+        <Heading align="center" as="h2" variant="display-strong-xs">
           Frontier benefits
         </Heading>
         <Column onBackground="neutral-weak" horizontal="center" align="center" gap="20">

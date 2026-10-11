@@ -92,8 +92,7 @@ export const Testimonial2: React.FC<Testimonial> = ({
               alt={alt}
               border="neutral-alpha-weak"
               topLeftRadius="xl"
-              fillWidth
-              fillHeight
+              fill
             />
           </Background>
         </Row>

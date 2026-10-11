@@ -48,7 +48,7 @@ const perks = [
 export const Careers4 = () => {
   return (
     <Column fillWidth horizontal="center" borderY marginTop="8">
-      <Column fillWidth maxWidth="l" borderX>
+      <Column maxWidth="l" borderX>
         <Background
           position="absolute"
           fill
@@ -63,10 +63,10 @@ export const Careers4 = () => {
 
         <Column fillWidth padding="l" gap="16" borderBottom>
           <Row gap="8" vertical="center">
-            <Pulse size="m" scheme="brand" />
+            <Pulse />
             <Text onBackground="brand-weak">Culture</Text>
           </Row>
-          <Heading as="h1" variant="display-strong-s" wrap="balance">
+          <Heading as="h1" variant="display-strong-s">
             How we work before what we ship
           </Heading>
           <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
@@ -82,15 +82,7 @@ export const Careers4 = () => {
               fillWidth
               horizontal={index === 1 ? "center" : index === 2 ? "end" : "start"}
             >
-              <Column
-                maxWidth={24}
-                fillWidth
-                border
-                radius="xl"
-                padding="8"
-                gap="8"
-                background="page"
-              >
+              <Column maxWidth={24} border radius="xl" padding="8" gap="8" background="page">
                 <Animation
                   triggerType="hover"
                   easing="spring"

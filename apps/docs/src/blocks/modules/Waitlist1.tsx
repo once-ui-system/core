@@ -117,7 +117,6 @@ export const Waitlist1 = () => {
         <RevealFx horizontal="center" delay={800}>
           <AvatarGroup
             reverse
-            size="m"
             avatars={[
               { src: "/images/creators/lorant.jpg" },
               { src: "/images/creators/justin.jpg" },
@@ -151,7 +150,6 @@ export const Waitlist1 = () => {
                   variant="code-default-xl"
                   speed={4000}
                   effect="smooth"
-                  easing="ease-out"
                 />
               </Row>
             </RevealFx>
@@ -162,7 +160,7 @@ export const Waitlist1 = () => {
               horizontal="center"
               delay={1000}
               gap="16"
-              data-border="rounded"
+              themeBorder="rounded"
             >
               <Input
                 id="email"
@@ -181,13 +179,7 @@ export const Waitlist1 = () => {
               />
               <Row vertical="center" gap="4" textVariant="label-default-s">
                 <Text>Join</Text>
-                <CountFx
-                  value={subscribers}
-                  variant="code-default-s"
-                  speed={1000}
-                  effect="smooth"
-                  easing="ease-out"
-                />
+                <CountFx value={subscribers} variant="code-default-s" effect="smooth" />
                 <Text>others</Text>
               </Row>
             </RevealFx>

@@ -45,12 +45,7 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             <br />
             <Text onBackground="brand-weak">Customize with blocks</Text>
           </Heading>
-          <Heading
-            wrap="balance"
-            onBackground="neutral-medium"
-            variant="body-default-l"
-            marginBottom="16"
-          >
+          <Heading onBackground="neutral-medium" variant="body-default-l" marginBottom="16">
             Once UI provides out-of-the-box solutions for advanced UI challenges. You can launch a
             functional business with Once UI — not just a shiny site.
           </Heading>
@@ -60,7 +55,7 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               Request a demo
             </Button>
           </Row>
-          <Row fillWidth paddingY="24" maxWidth={40}>
+          <Row paddingY="24" maxWidth={40}>
             <AutoScroll dark marginTop="xl" opacity={50}>
               <Logo wordmark="/trademarks/wordmark-dark.svg" />
               <Logo wordmark="/trademarks/wordmark-dark.svg" />

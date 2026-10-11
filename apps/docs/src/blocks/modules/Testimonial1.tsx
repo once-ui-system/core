@@ -1,4 +1,13 @@
-import { Background, Column, Flex, Scroller, SmartLink, Text, User } from "@once-ui-system/core";
+import {
+  Background,
+  Column,
+  type Flex,
+  Scroller,
+  SmartLink,
+  Text,
+  User,
+  Row,
+} from "@once-ui-system/core";
 import type { ReactNode } from "react";
 
 interface Testimonial {
@@ -30,12 +39,12 @@ export const Testimonial1: React.FC<Props> = ({ testimonials, ...flex }) => (
           minWidth={20}
           {...flex}
         >
-          <Flex padding="32" fillWidth>
+          <Row padding="32" fillWidth>
             <Text wrap="balance" variant="heading-default-m">
               {testimonial.content}
             </Text>
-          </Flex>
-          <Flex borderTop fillWidth paddingY="24" paddingX="32">
+          </Row>
+          <Row borderTop fillWidth paddingY="24" paddingX="32">
             {(testimonial.role || testimonial.company) && (
               <User
                 avatarProps={{ src: testimonial.avatar }}
@@ -52,7 +61,7 @@ export const Testimonial1: React.FC<Props> = ({ testimonials, ...flex }) => (
                 }
               />
             )}
-          </Flex>
+          </Row>
         </Background>
       ))}
     </Scroller>

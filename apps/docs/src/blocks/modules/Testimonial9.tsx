@@ -85,11 +85,11 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
-      <Column fillWidth maxWidth={48} gap="12" paddingX="l">
-        <Tag size="s" scheme="brand" data-border="rounded">
+      <Column maxWidth={48} gap="12" paddingX="l">
+        <Tag size="s" scheme="brand" themeBorder="rounded">
           Case studies
         </Tag>
-        <Heading as="h2" variant="display-strong-m" wrap="balance">
+        <Heading as="h2" variant="display-strong-m">
           Builders shipping faster with a system that scales
         </Heading>
         <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
@@ -103,7 +103,7 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
             key={study.id}
             size="l"
             data-brand={study.brand}
-            data-solid="color"
+            themeSolid="color"
             scheme={activeId === study.id ? "brand" : "neutral"}
             onClick={() => setActiveId(study.id)}
             style={{ cursor: "pointer" }}
@@ -114,7 +114,6 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
       </Row>
 
       <Row
-        fillWidth
         maxWidth="xl"
         gap="8"
         radius="xl"
@@ -125,7 +124,7 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
       >
         <Column
           data-brand={active.brand}
-          data-solid="color"
+          themeSolid="color"
           flex={1}
           minHeight={24}
           overflow="hidden"
@@ -143,16 +142,7 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
               height: 125,
             }}
           />
-          <Mask
-            pointerEvents="none"
-            position="absolute"
-            fill
-            left="0"
-            bottom="0"
-            x={0}
-            y={0}
-            radius={50}
-          >
+          <Mask pointerEvents="none" position="absolute" fill left="0" bottom="0" x={0} y={0}>
             <MatrixFx flicker fps={24} colors={["brand-solid-strong"]} size={1.5} spacing={5} />
           </Mask>
           <Column fill vertical="end" padding="24" gap="8">
@@ -165,7 +155,7 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
 
         <Column flex={2} padding="24" gap="20" vertical="center">
           <Column gap="8">
-            <Heading as="h3" variant="display-default-xs" wrap="balance">
+            <Heading as="h3" variant="display-default-xs">
               {active.title}
             </Heading>
             <Text variant="heading-default-m" onBackground="neutral-weak" wrap="balance">

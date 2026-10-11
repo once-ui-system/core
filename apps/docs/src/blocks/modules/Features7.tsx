@@ -35,7 +35,7 @@ const features = [
 export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (
     <Column fillWidth horizontal="center" {...flex}>
-      <Column maxWidth="m" align="center" fillWidth gap="20" paddingBottom="64" paddingX="20">
+      <Column maxWidth="m" align="center" gap="20" paddingBottom="64" paddingX="20">
         <Heading as="h2" variant="display-strong-m">
           {section.subtitle}
         </Heading>
@@ -52,7 +52,7 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         fill
         pointerEvents="none"
         position="absolute"
-        data-solid="color"
+        themeSolid="color"
         top="0"
         left="0"
         style={{ filter: "blur(3rem)" }}
@@ -85,14 +85,8 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           colorEnd: "static-transparent",
         }}
       />
-      <Mask position="absolute" x={60} y={25} radius={50} fill pointerEvents="none">
-        <ParticleFx
-          speed={0.5}
-          size="2"
-          opacity={50}
-          color="brand-on-background-strong"
-          density={200}
-        />
+      <Mask position="absolute" x={60} y={25} fill pointerEvents="none">
+        <ParticleFx speed={0.5} opacity={50} color="brand-on-background-strong" density={200} />
       </Mask>
       <Column
         maxWidth="l"
@@ -108,7 +102,7 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           fill
           pointerEvents="none"
           position="absolute"
-          data-solid="inverse"
+          themeSolid="inverse"
           style={{ filter: "blur(3rem)", mixBlendMode: "color-dodge" }}
           top="0"
           left="0"
@@ -144,7 +138,7 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           </Row>
         </Row>
         <Background
-          data-solid="color"
+          themeSolid="color"
           fill
           position="absolute"
           top="0"

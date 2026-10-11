@@ -30,7 +30,7 @@ export const Background2: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         position="absolute"
         top="0"
         left="0"
-        data-solid="color"
+        themeSolid="color"
         mask={{
           cursor: true,
           radius: 100,

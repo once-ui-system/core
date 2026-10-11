@@ -30,7 +30,7 @@ export const Settings1 = () => {
       >
         <Column maxWidth="s">
           <Column position="sticky" marginTop="16" top="0" zIndex={1} marginBottom="16">
-            <Fade fillWidth position="absolute" to="bottom" top="104" height={3} base="surface" />
+            <Fade fillWidth position="absolute" top="104" height={3} base="surface" />
             <Column fillWidth background="surface" paddingTop="16">
               <Column fillWidth paddingLeft="16">
                 <Heading variant="heading-strong-xl">Settings</Heading>

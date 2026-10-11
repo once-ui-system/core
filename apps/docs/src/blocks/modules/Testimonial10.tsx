@@ -149,11 +149,10 @@ function CaseStudySlideShow({
                       bottom="0"
                       x={0}
                       y={0}
-                      radius={50}
                     >
                       <MatrixFx
                         data-brand={slide.brand}
-                        data-solid="color"
+                        themeSolid="color"
                         flicker
                         fps={24}
                         colors={["brand-solid-strong"]}
@@ -186,7 +185,7 @@ function CaseStudySlideShow({
                 >
                   <Column
                     data-brand={slide.brand}
-                    data-solid="color"
+                    themeSolid="color"
                     background="page"
                     flex={1}
                     padding="8"
@@ -226,7 +225,6 @@ function CaseStudySlideShow({
                         minHeight={32}
                         x={0}
                         y={100}
-                        radius={50}
                       >
                         <MatrixFx
                           flicker

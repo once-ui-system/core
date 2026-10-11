@@ -30,7 +30,7 @@ export const Newsletter2: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
               required
             />
           </Row>
-          <Button id="newsletter-button-2" size="m" arrowIcon>
+          <Button id="newsletter-button-2" arrowIcon>
             Join the product brief
           </Button>
         </Column>

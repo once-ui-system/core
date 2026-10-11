@@ -86,7 +86,6 @@ export const Features16 = (flex: React.ComponentProps<typeof Row>) => {
             </Text>
           </Column>
           <Media
-            fillWidth
             aspectRatio="16 / 10"
             radius="l"
             sizes={640}

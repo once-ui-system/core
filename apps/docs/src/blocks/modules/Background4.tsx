@@ -67,7 +67,6 @@ export const Background4: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
             fill
             interactive
             speed={4}
-            density={100}
             size="1"
             intensity={50}
           />

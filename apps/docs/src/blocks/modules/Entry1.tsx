@@ -5,12 +5,7 @@ const Entry1 = () => {
   return (
     <Column fillWidth horizontal="center" padding="16">
       <Row fillWidth vertical="center" paddingY="l">
-        <Row
-          s={{ hide: true }}
-          position="sticky"
-          fitHeight
-          style={{ top: "50%", transform: "translateY(-50%)" }}
-        >
+        <Row s={{ hide: true }} position="sticky" fitHeight top="50%" translateY="-50%">
           <Sidebar3 />
         </Row>
         <MediaPost2

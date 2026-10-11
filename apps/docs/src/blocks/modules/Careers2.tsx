@@ -50,7 +50,7 @@ export const Careers2 = () => {
         </Text>
       </Column>
 
-      <Column maxWidth="l" padding="l" gap="32" fillWidth horizontal="center">
+      <Column maxWidth="l" padding="l" gap="32" horizontal="center">
         <Scroller fitWidth style={{ maxWidth: "100%" }}>
           <Row fitWidth gap="8">
             {departments.map((dept, index) => (
@@ -116,23 +116,9 @@ export const Careers2 = () => {
           ) : (
             <>
               <Row />
-              <Column
-                fillWidth
-                radius="l"
-                padding="l"
-                gap="16"
-                vertical="center"
-                horizontal="center"
-              >
+              <Column fillWidth radius="l" padding="l" gap="16" center>
                 <Column gap="16" horizontal="center">
-                  <Icon
-                    radius="full"
-                    border
-                    padding="16"
-                    name="search"
-                    size="m"
-                    marginBottom="16"
-                  />
+                  <Icon radius="full" border padding="16" name="search" marginBottom="16" />
                   <Heading variant="heading-strong-l">No positions found</Heading>
                   <Text
                     wrap="balance"

@@ -79,7 +79,6 @@ export const MediaPost2 = ({ user, media, content, ...flex }: MediaPost2Props) =
             <IconButton
               variant="ghost"
               tooltip={isBookmarked ? "Saved" : "Save"}
-              tooltipPosition="top"
               style={{ color: isBookmarked ? "var(--warning-on-background-weak)" : undefined }}
               size="l"
               icon={isBookmarked ? "bookmarkFilled" : "bookmark"}
@@ -88,7 +87,6 @@ export const MediaPost2 = ({ user, media, content, ...flex }: MediaPost2Props) =
             <IconButton
               variant="ghost"
               tooltip={isLiked ? "Liked" : "Like"}
-              tooltipPosition="top"
               style={{ color: isLiked ? "var(--danger-solid-strong)" : undefined }}
               size="l"
               icon={isLiked ? "heartFilled" : "heart"}

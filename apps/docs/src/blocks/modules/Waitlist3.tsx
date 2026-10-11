@@ -44,16 +44,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
   };
 
   return (
-    <Column
-      fillWidth
-      maxWidth={48}
-      gap="32"
-      padding="40"
-      radius="xl"
-      border
-      background="page"
-      {...flex}
-    >
+    <Column maxWidth={48} gap="32" padding="40" radius="xl" border background="page" {...flex}>
       <Column gap="16" horizontal="center">
         <Badge
           background="brand-alpha-weak"
@@ -90,7 +81,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
                 </Text>
                 <Row gap="4" vertical="center" textVariant="heading-strong-m">
                   #
-                  <CountFx value={847} speed={1200} effect="smooth" easing="ease-out" />
+                  <CountFx value={847} speed={1200} effect="smooth" />
                 </Row>
               </Row>
               <Text variant="body-default-xs" onBackground="neutral-weak">

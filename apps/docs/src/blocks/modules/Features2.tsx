@@ -91,7 +91,7 @@ export const Features2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
         {features.map((feature, index) => (
           <Column padding="40" borderBottom borderRight key={index} fillWidth gap="24">
             <Mask position="absolute" left="0" top="0" radius={33} x={25} y={0}>
-              <MatrixFx spacing={3} size={1.5} colors={["brand-background-strong"]} flicker />
+              <MatrixFx size={1.5} colors={["brand-background-strong"]} flicker />
             </Mask>
             <Row vertical="center" gap="16">
               <Icon

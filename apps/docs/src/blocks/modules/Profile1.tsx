@@ -23,22 +23,12 @@ export const Profile1 = () => {
 
   return (
     <Row fillWidth padding="16">
-      <Row
-        s={{ hide: true }}
-        position="sticky"
-        fitHeight
-        style={{ top: "50%", transform: "translateY(-50%)" }}
-      >
+      <Row s={{ hide: true }} position="sticky" fitHeight top="50%" translateY="-50%">
         <Sidebar3 />
       </Row>
       <Column fillWidth fitHeight horizontal="center" gap="80" paddingX="l">
         <Column maxWidth="m" height="m">
-          <Media
-            sizes="100vw"
-            src="/images/blocks/vibe-coding-dark.jpg"
-            alt="Cover image"
-            radius="xl"
-          />
+          <Media src="/images/blocks/vibe-coding-dark.jpg" alt="Cover image" radius="xl" />
           <Avatar
             style={{
               left: "50%",
@@ -95,7 +85,7 @@ export const Profile1 = () => {
             </Grid>
           )}
           {view === "about" && (
-            <Column maxWidth="xs" fillWidth gap="16" marginTop="40" paddingX="16">
+            <Column maxWidth="xs" gap="16" marginTop="40" paddingX="16">
               <Heading as="h2">About Me</Heading>
               <Text as="p" onBackground="neutral-medium" variant="body-default-m">
                 I am a passionate and versatile Data Engineer with expertise in SQL, Python, and
@@ -107,7 +97,7 @@ export const Profile1 = () => {
                 of my work. I am always seeking new challenges that push me to stay ahead in the
                 ever-evolving world of data engineering.
               </Text>
-              <Row fillWidth gap="8" wrap data-border="rounded" marginTop="24">
+              <Row fillWidth gap="8" wrap themeBorder="rounded" marginTop="24">
                 <Button
                   href="#"
                   weight="default"

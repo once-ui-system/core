@@ -65,7 +65,7 @@ export const Features12 = (flex: React.ComponentProps<typeof Column>) => {
             s={{ direction: "column" }}
           >
             <Background
-              data-solid="color"
+              themeSolid="color"
               position="absolute"
               left="0"
               top="0"

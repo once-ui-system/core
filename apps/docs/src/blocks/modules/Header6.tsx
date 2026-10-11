@@ -37,12 +37,11 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         paddingX="16"
         paddingY="8"
         gap="12"
-        vertical="center"
-        horizontal="center"
+        center
         borderBottom
         background="brand-alpha-weak"
       >
-        <Pulse size="s" scheme="brand" />
+        <Pulse size="s" />
         <Text variant="label-default-s" onBackground="brand-medium">
           Pro blocks now install via CLI
         </Text>
@@ -68,7 +67,7 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
           </Row>
         </Row>
 
-        <Row s={{ hide: true }} gap="4" vertical="center" fillWidth horizontal="center">
+        <Row s={{ hide: true }} gap="4" fillWidth center>
           {nav.map((item) => (
             <ToggleButton
               key={item.label}

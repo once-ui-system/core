@@ -282,7 +282,6 @@ export function Table1<T = Record<string, unknown>>({
             {/* Page 1 */}
             <IconButton
               key={`page-1`}
-              size="m"
               variant={currentPage === 1 ? "primary" : "secondary"}
               onClick={() => setCurrentPage(1)}
             >
@@ -293,7 +292,6 @@ export function Table1<T = Record<string, unknown>>({
             {totalitemsPerPage >= 2 && (
               <IconButton
                 key={`page-2`}
-                size="m"
                 variant={currentPage === 2 ? "primary" : "secondary"}
                 onClick={() => setCurrentPage(2)}
               >
@@ -331,7 +329,6 @@ export function Table1<T = Record<string, unknown>>({
               <>
                 <IconButton
                   key={`page-${totalitemsPerPage - 1}`}
-                  size="m"
                   variant={currentPage === totalitemsPerPage - 1 ? "primary" : "secondary"}
                   onClick={() => setCurrentPage(totalitemsPerPage - 1)}
                 >
@@ -339,7 +336,6 @@ export function Table1<T = Record<string, unknown>>({
                 </IconButton>
                 <IconButton
                   key={`page-${totalitemsPerPage}`}
-                  size="m"
                   variant={currentPage === totalitemsPerPage ? "primary" : "secondary"}
                   onClick={() => setCurrentPage(totalitemsPerPage)}
                 >
@@ -349,7 +345,6 @@ export function Table1<T = Record<string, unknown>>({
             ) : totalitemsPerPage === 3 ? (
               <IconButton
                 key={`page-3`}
-                size="m"
                 variant={currentPage === 3 ? "primary" : "secondary"}
                 onClick={() => setCurrentPage(3)}
               >

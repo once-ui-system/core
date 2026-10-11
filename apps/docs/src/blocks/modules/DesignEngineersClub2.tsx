@@ -1,7 +1,7 @@
 import {
   Button,
   Column,
-  Flex,
+  type Flex,
   Heading,
   Icon,
   LetterFx,
@@ -54,7 +54,6 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
           fillWidth
           interactive
           speed={1}
-          size="2"
           density={20}
           intensity={40}
           color="brand-on-background-strong"
@@ -94,11 +93,11 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
             children
           ) : (
             <Column fill gap="40" horizontal="center" vertical="between">
-              <Flex gap="m" vertical="center">
+              <Row gap="m" vertical="center">
                 <Icon name="discord" />
                 <Text variant="label-default-s">/</Text>
                 <Text variant="label-default-s">Once UI</Text>
-              </Flex>
+              </Row>
               <Column gap="4" fillWidth horizontal="center">
                 <Heading align="center" as="h2" variant="display-strong-xs">
                   Design Engineers Club
@@ -130,9 +129,9 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
                       pointerEvents: "all",
                     }}
                   >
-                    <Flex textVariant="code-default-s" paddingY="12">
+                    <Row textVariant="code-default-s" paddingY="12">
                       <LetterFx>Send invite</LetterFx>
-                    </Flex>
+                    </Row>
                   </SmartLink>
                 </Row>
               </Column>

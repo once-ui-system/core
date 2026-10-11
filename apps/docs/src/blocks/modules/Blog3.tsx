@@ -81,8 +81,8 @@ export const Blog3 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" paddingY="24" {...flex}>
-      <Row fillWidth maxWidth="l" gap="40" s={{ direction: "column" }} paddingX="16">
-        <Column minWidth={20} maxWidth={24} gap="24" fillWidth>
+      <Row maxWidth="l" gap="40" s={{ direction: "column" }} paddingX="16">
+        <Column minWidth={20} maxWidth={24} gap="24">
           <Column gap="8">
             <Heading as="h1" variant="display-strong-xs">
               Journal
@@ -151,13 +151,12 @@ export const Blog3 = (flex: React.ComponentProps<typeof Column>) => {
                 alt={article.title}
                 aspectRatio="16 / 10"
                 radius="m"
-                fillWidth
               />
               <Column fill gap="12" vertical="center">
                 <Text variant="label-strong-s" onBackground="brand-medium">
                   {article.topic}
                 </Text>
-                <Heading as="h3" variant="heading-strong-m" wrap="balance">
+                <Heading as="h3" variant="heading-strong-m">
                   {article.title}
                 </Heading>
                 <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">

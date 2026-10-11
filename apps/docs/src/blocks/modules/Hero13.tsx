@@ -30,14 +30,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
           colorStart: "brand-background-medium",
         }}
       />
-      <Row
-        fillWidth
-        maxWidth="xl"
-        gap="48"
-        vertical="center"
-        m={{ direction: "column" }}
-        position="relative"
-      >
+      <Row maxWidth="xl" gap="48" vertical="center" m={{ direction: "column" }}>
         <Column fill gap="24" maxWidth={48}>
           <Badge
             background="overlay"
@@ -45,7 +38,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
             paddingRight="20"
             border="brand-alpha-medium"
             paddingY="8"
-            data-border="rounded"
+            themeBorder="rounded"
           >
             <Row vertical="center" gap="8">
               <Tag scheme="brand" size="s">
@@ -56,7 +49,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
               </Text>
             </Row>
           </Badge>
-          <Heading variant="display-default-l" wrap="balance">
+          <Heading variant="display-default-l">
             Ship polished interfaces without reinventing layout every sprint
             <Text onBackground="brand-medium">.</Text>
           </Heading>
@@ -71,7 +64,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
             </Button>
             <Row padding="4" radius="l" overflow="hidden">
               <Background
-                data-solid="color"
+                themeSolid="color"
                 fill
                 position="absolute"
                 gradient={{
@@ -92,13 +85,11 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
 
         <Column fill horizontal="center">
           <Row
-            fillWidth
             maxWidth={48}
             radius="xl"
             border="brand-alpha-weak"
             overflow="hidden"
             background="page"
-            position="relative"
           >
             <Column fill borderRight="brand-alpha-weak" m={{ hide: true }}>
               <Row flex={1} borderBottom="brand-alpha-weak" />
@@ -107,7 +98,6 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
             </Column>
             <Column fill padding="4">
               <Media
-                fillWidth
                 sizes="(max-width: 768px) 100vw, 560px"
                 src="/images/products/studio-04.jpg"
                 alt="Dashboard preview"
@@ -117,7 +107,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
               />
             </Column>
           </Row>
-          <Row fillWidth maxWidth={48} paddingTop="12" gap="8" vertical="center">
+          <Row maxWidth={48} paddingTop="12" gap="8" vertical="center">
             <Line flex={1} background="neutral-alpha-weak" />
             <Text variant="label-default-s" onBackground="neutral-weak">
               Built with Once UI Pro

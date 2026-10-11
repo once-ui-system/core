@@ -56,13 +56,7 @@ export const Feed2 = () => {
 
   return (
     <Row fillWidth padding="16" gap="24">
-      <Row
-        s={{ hide: true }}
-        position="sticky"
-        fitHeight
-        zIndex={1}
-        style={{ top: "50%", transform: "translateY(-50%)" }}
-      >
+      <Row s={{ hide: true }} position="sticky" fitHeight zIndex={1} top="50%" translateY="-50%">
         <Sidebar3 />
       </Row>
       <MasonryGrid columns={4} l={{ columns: 3 }} m={{ columns: 2 }} s={{ columns: 1 }}>

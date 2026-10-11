@@ -152,22 +152,21 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
               top="0"
               left="l"
               translateY="-50%"
-              data-border="rounded"
+              themeBorder="rounded"
               scheme="brand"
             >
               Best value
             </Tag>
           )}
-          <Mask position="absolute" fill left="0" top="0" x={100} y={0} radius={50}>
+          <Mask position="absolute" fill left="0" top="0" x={100} y={0}>
             {bundle.featured && (
               <MatrixFx
-                data-solid="color"
+                themeSolid="color"
                 pointerEvents="none"
                 position="absolute"
                 fill
                 radius="xl"
                 colors={["brand-solid-strong"]}
-                spacing={3}
                 size={1.5}
                 flicker
                 bulge={{
@@ -183,7 +182,7 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
             position="absolute"
             top="0"
             left="0"
-            data-solid="color"
+            themeSolid="color"
             mask={{
               cursor: true,
               radius: 60,

@@ -11,8 +11,6 @@ export const Background1: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         fill
         interactive
         speed={1}
-        size="2"
-        density={100}
         intensity={10}
         pointerEvents="none"
       />

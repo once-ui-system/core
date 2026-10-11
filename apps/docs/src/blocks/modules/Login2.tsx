@@ -18,7 +18,6 @@ export const Login2 = () => {
     <Row fill padding="8">
       <Row fill radius="xl" overflow="hidden">
         <ParticleFx
-          opacity={100}
           position="absolute"
           top="0"
           left="0"

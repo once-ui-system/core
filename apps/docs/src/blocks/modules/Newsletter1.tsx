@@ -104,7 +104,7 @@ export const Newsletter1: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         <Row maxWidth={20}>
           <Input placeholder="Email" id="newsletter-email" type="email" required />
         </Row>
-        <Button id="newsletter-button" size="m" arrowIcon>
+        <Button id="newsletter-button" arrowIcon>
           Sign up
         </Button>
       </Row>

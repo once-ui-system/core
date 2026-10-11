@@ -82,7 +82,7 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
         overflowY="auto"
         m={{ hide: true }}
       >
-        <Column fillWidth paddingX="24" paddingY="24" gap="4" borderBottom>
+        <Column fillWidth padding="24" gap="4" borderBottom>
           <Heading variant="heading-strong-l">Account</Heading>
           <Text variant="body-default-s" onBackground="neutral-weak">
             Notifications, billing, and privacy controls
@@ -93,7 +93,6 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
             <Button
               key={item.value}
               fillWidth
-              size="m"
               variant={section === item.value ? "primary" : "tertiary"}
               prefixIcon={item.icon}
               onClick={() => setSection(item.value)}
@@ -106,7 +105,7 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
       </Column>
 
       <Column fill background="page" overflowY="auto">
-        <Column maxWidth="s" fillWidth padding="32" gap="24">
+        <Column maxWidth="s" padding="32" gap="24">
           {section !== "billing" && (
             <>
               <Column gap="8">

@@ -111,8 +111,8 @@ export const Bento1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
                 </Column>
                 <Row fillWidth height={20} paddingLeft="m">
                   <Row
-                    data-theme="light"
-                    data-solid="contrast"
+                    theme="light"
+                    themeSolid="contrast"
                     background="page"
                     fill
                     center

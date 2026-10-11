@@ -71,7 +71,7 @@ const supportTeam = [
 export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" paddingX="l" {...flex}>
-      <Row fillWidth maxWidth="l" gap="32" s={{ direction: "column" }} vertical="start">
+      <Row maxWidth="l" gap="32" s={{ direction: "column" }} vertical="start">
         <Column
           minWidth={18}
           maxWidth={22}
@@ -98,7 +98,7 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
             <Tag size="s" scheme="brand">
               Support
             </Tag>
-            <Heading as="h2" variant="display-strong-s" wrap="balance">
+            <Heading as="h2" variant="display-strong-s">
               Still have questions?
             </Heading>
             <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
@@ -142,7 +142,7 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
 
         <Column fillWidth flex={1} gap="32">
           <Column gap="8">
-            <Heading as="h2" variant="display-default-s" wrap="balance">
+            <Heading as="h2" variant="display-default-s">
               Frequently asked questions
             </Heading>
             <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">

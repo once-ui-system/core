@@ -113,7 +113,7 @@ export function Sidebar7() {
                           </Row>
                           {child.navTag && (
                             <Tag
-                              data-theme="dark"
+                              theme="dark"
                               data-brand="brand"
                               style={{
                                 marginRight: "-0.25rem",

@@ -77,7 +77,6 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
           <Logo light icon="/trademarks/icon-light.svg" size="s" href="#" />
           <Line vert height="20" background="neutral-alpha-weak" />
           <DropdownWrapper
-            placement="bottom-start"
             trigger={
               <Button size="s" variant="tertiary" weight="default" suffixIcon="chevronDown">
                 Acme Inc
@@ -105,7 +104,7 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         </Row>
       </Row>
 
-      <Row s={{ hide: true }} gap="4" vertical="center" fillWidth horizontal="center">
+      <Row s={{ hide: true }} gap="4" fillWidth center>
         <ToggleButton selected label="Overview" />
         <ToggleButton label="Projects" />
         <ToggleButton label="Reports" />
@@ -139,7 +138,7 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
             tooltipPosition="bottom"
             icon="bell"
           />
-          <Row position="absolute" style={{ top: "0.15rem", right: "0.15rem" }}>
+          <Row position="absolute" top={0.15} right={0.15}>
             <Row
               style={{ borderColor: "var(--page-background)" }}
               height="8"

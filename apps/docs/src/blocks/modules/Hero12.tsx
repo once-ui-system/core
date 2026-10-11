@@ -14,16 +14,8 @@ import {
 
 export const Hero12 = (flex: React.ComponentProps<typeof Column>) => {
   return (
-    <Column
-      fillWidth
-      horizontal="center"
-      overflow="hidden"
-      paddingTop="xl"
-      paddingX="l"
-      position="relative"
-      {...flex}
-    >
-      <BlobFx position="absolute" top="0" translateY="50%" data-solid="inverse" />
+    <Column fillWidth horizontal="center" overflow="hidden" paddingTop="xl" paddingX="l" {...flex}>
+      <BlobFx position="absolute" top="0" translateY="50%" themeSolid="inverse" />
       <Row
         s={{ hide: true }}
         position="absolute"
@@ -35,15 +27,15 @@ export const Hero12 = (flex: React.ComponentProps<typeof Column>) => {
         }}
       >
         <Row vertical="center" gap="8">
-          <Pulse size="s" scheme="brand" />
+          <Pulse size="s" />
           <Text variant="code-default-s" onBackground="brand-medium">
             Now shipping v3.0
           </Text>
         </Row>
       </Row>
-      <Column maxWidth="l" fillWidth horizontal="center" gap="32" paddingBottom="xl">
+      <Column maxWidth="l" horizontal="center" gap="32" paddingBottom="xl">
         <Column maxWidth="m" gap="16" horizontal="center">
-          <Heading variant="display-default-l" align="center" wrap="balance">
+          <Heading variant="display-default-l" align="center">
             Software that grows with your team<Text onBackground="brand-medium">.</Text>
           </Heading>
           <Text

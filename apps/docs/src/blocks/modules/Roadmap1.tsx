@@ -87,7 +87,7 @@ export function Roadmap1() {
                   minHeight="4"
                   solid="brand-medium"
                   data-brand={product.brand as Schemes}
-                  data-solid="inverse"
+                  themeSolid="inverse"
                 />
               </Row>
               <Heading as="h2" variant="display-default-xs">

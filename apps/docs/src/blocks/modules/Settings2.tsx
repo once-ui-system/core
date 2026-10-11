@@ -29,7 +29,7 @@ export const Settings2 = (flex: React.ComponentProps<typeof Row>) => {
         overflowY="auto"
         m={{ hide: true }}
       >
-        <Column fillWidth paddingX="24" paddingY="24" gap="4" borderBottom>
+        <Column fillWidth padding="24" gap="4" borderBottom>
           <Heading variant="heading-strong-l">Appearance</Heading>
           <Text variant="body-default-s" onBackground="neutral-weak">
             Changes apply instantly across your workspace
@@ -39,7 +39,7 @@ export const Settings2 = (flex: React.ComponentProps<typeof Row>) => {
           <StylePanel />
         </Column>
       </Column>
-      <Column fill background="page" overflow="hidden" position="relative">
+      <Column fill background="page" overflow="hidden">
         <Background
           position="absolute"
           top="0"
@@ -52,7 +52,6 @@ export const Settings2 = (flex: React.ComponentProps<typeof Row>) => {
           </Text>
           <Column
             maxWidth={32}
-            fillWidth
             background="surface"
             border
             radius="l"
@@ -61,7 +60,7 @@ export const Settings2 = (flex: React.ComponentProps<typeof Row>) => {
             shadow="l"
           >
             <Row fillWidth gap="12" vertical="center">
-              <Avatar size="m" src="/images/creators/lorant.jpg" />
+              <Avatar src="/images/creators/lorant.jpg" />
               <Column gap="2">
                 <Text variant="label-strong-s">Lorant One</Text>
                 <Text variant="label-default-xs" onBackground="neutral-weak">

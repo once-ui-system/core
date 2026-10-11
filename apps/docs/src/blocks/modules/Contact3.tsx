@@ -94,7 +94,7 @@ export const Contact3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
             Average response time
           </Text>
           <Row vertical="center" gap="4" textVariant="display-strong-xs">
-            <CountFx value={2} speed={1000} effect="smooth" easing="ease-out" />
+            <CountFx value={2} effect="smooth" />
             <Text variant="display-strong-xs">h</Text>
           </Row>
         </Column>

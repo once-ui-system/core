@@ -28,7 +28,7 @@ export const Features17 = (flex: React.ComponentProps<typeof Column>) => {
                 <Text variant="heading-default-xl" onBackground="brand-weak">
                   Theme once, ship everywhere
                 </Text>
-                <Heading as="h2" variant="display-default-m" marginBottom="16" wrap="balance">
+                <Heading as="h2" variant="display-default-m" marginBottom="16">
                   Manage colors, typography, and surfaces from a single semantic config.
                 </Heading>
                 <Text

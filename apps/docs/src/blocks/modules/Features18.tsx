@@ -68,7 +68,7 @@ const demoTiles: {
         />
         <Row radius="full" border="brand-medium" width={6} height={6} overflow="hidden" center>
           <Mask fill position="absolute" x={50} y={50} radius={6}>
-            <MatrixFx flicker size={1.5} spacing={3} colors={["brand-on-background-medium"]} />
+            <MatrixFx flicker size={1.5} colors={["brand-on-background-medium"]} />
           </Mask>
         </Row>
         <ShineFx variant="code-default-l">Listening...</ShineFx>
@@ -140,8 +140,8 @@ const demoTiles: {
 export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="48" paddingX="l" {...flex}>
-      <Column fillWidth maxWidth="l" gap="16">
-        <Heading as="h2" variant="display-default-s" wrap="balance">
+      <Column maxWidth="l" gap="16">
+        <Heading as="h2" variant="display-default-s">
           <Text onBackground="brand-weak">Copy and paste.</Text> Ship with 100+ open-source
           components and Pro blocks from one design system.
         </Heading>
@@ -150,7 +150,7 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
         </Text>
       </Column>
 
-      <Grid fillWidth maxWidth="l" columns="3" m={{ columns: "2" }} xs={{ columns: "1" }} gap="12">
+      <Grid maxWidth="l" columns="3" m={{ columns: "2" }} xs={{ columns: "1" }} gap="12">
         {categories.map((category) => (
           <Column
             key={category.title}
@@ -167,7 +167,7 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
         ))}
       </Grid>
 
-      <Column fillWidth maxWidth="l" padding="2" radius="xl-4" overflow="hidden">
+      <Column maxWidth="l" padding="2" radius="xl-4" overflow="hidden">
         <Background
           position="absolute"
           fill

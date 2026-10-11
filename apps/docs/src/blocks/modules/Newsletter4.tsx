@@ -22,13 +22,12 @@ export const Newsletter4: React.FC<React.ComponentProps<typeof Column>> = ({ ...
       s={{ direction: "column" }}
       {...flex}
     >
-      <Mask position="absolute" left="0" top="0" x={50} y={50} radius={50} aspectRatio="1/1" center>
+      <Mask position="absolute" left="0" top="0" x={50} y={50} aspectRatio="1/1" center>
         <MatrixFx
-          data-solid="color"
+          themeSolid="color"
           flicker
           fps={40}
           size={2}
-          spacing={3}
           colors={["brand-solid-strong"]}
           bulge={{
             duration: 4,

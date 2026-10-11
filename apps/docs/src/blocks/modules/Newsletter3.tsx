@@ -13,11 +13,10 @@ export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...
   return (
     <Column
       overflow="hidden"
-      vertical="center"
       fillWidth
       padding="32"
       radius="l"
-      horizontal="center"
+      center
       align="center"
       border
       shadow="xl"
@@ -32,7 +31,6 @@ export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         interactive
         speed={4}
         size="1"
-        density={100}
         intensity={40}
         pointerEvents="none"
       />

@@ -38,7 +38,7 @@ export const Careers1 = () => {
 
   return (
     <Row fillWidth fitHeight horizontal="center">
-      <Column fillWidth horizontal="center" maxWidth="m">
+      <Column horizontal="center" maxWidth="m">
         <Row
           fillWidth
           horizontal="center"
@@ -130,16 +130,9 @@ export const Careers1 = () => {
               </Card>
             ))
           ) : (
-            <Row
-              fillWidth
-              border="neutral-medium"
-              padding="xl"
-              gap="12"
-              vertical="center"
-              horizontal="center"
-            >
+            <Row fillWidth border="neutral-medium" padding="xl" gap="12" center>
               <Column gap="8" horizontal="center">
-                <Icon name="search" size="m" onBackground="neutral-weak" marginBottom="16" />
+                <Icon name="search" onBackground="neutral-weak" marginBottom="16" />
                 <Heading variant="heading-strong-l">No positions found</Heading>
                 <Text variant="body-default-s" onBackground="neutral-medium" align="center">
                   We currently don't have openings in the {selectedDepartment} department

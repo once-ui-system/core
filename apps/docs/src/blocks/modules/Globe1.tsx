@@ -117,7 +117,8 @@ export const Globe1 = forwardRef<Globe1Handle, WorldMapProps>(
               <Row
                 position="absolute"
                 top="8"
-                style={{ left: "50%", transform: "translateX(-50%)" }}
+                left="50%"
+                translateX="-50%"
                 textVariant="label-default-s"
               >
                 {location.name}
