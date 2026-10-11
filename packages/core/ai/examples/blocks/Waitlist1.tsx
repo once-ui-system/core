@@ -61,14 +61,15 @@ export const Waitlist1 = () => {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
+          <title>Send</title>
           <g>
             <path
               d="M7.89235 19.7113L3.33378 3.71982C3.0984 2.89409 3.95602 2.18106 4.73584 2.55413L19.8385 9.7792C20.6416 10.1634 20.5812 11.3159 19.7425 11.6131L13.5312 13.8139C13.3056 13.8938 13.1164 14.0511 12.9978 14.2574L9.73178 19.9361C9.29078 20.7029 8.13473 20.5616 7.89235 19.7113Z"
-              fill="#15D9EF"
+              fill="var(--brand-solid-medium)"
             />
             <path
               d="M2.85075 3.8544C2.49768 2.61583 3.78362 1.54674 4.95335 2.10628L20.0564 9.3314C21.2607 9.90776 21.1699 11.6359 19.9119 12.0816L13.7012 14.2825C13.5885 14.3224 13.4939 14.4012 13.4346 14.5041L10.1679 20.1829C9.50645 21.3329 7.7731 21.1214 7.40931 19.8463L2.85075 3.8544Z"
-              stroke="#15AAEF"
+              stroke="var(--brand-solid-strong)"
             />
           </g>
         </svg>
@@ -116,7 +117,6 @@ export const Waitlist1 = () => {
         <RevealFx horizontal="center" delay={800}>
           <AvatarGroup
             reverse
-            size="m"
             avatars={[
               { src: "/images/creators/lorant.jpg" },
               { src: "/images/creators/justin.jpg" },
@@ -150,7 +150,6 @@ export const Waitlist1 = () => {
                   variant="code-default-xl"
                   speed={4000}
                   effect="smooth"
-                  easing="ease-out"
                 />
               </Row>
             </RevealFx>
@@ -161,7 +160,7 @@ export const Waitlist1 = () => {
               horizontal="center"
               delay={1000}
               gap="16"
-              data-border="rounded"
+              themeBorder="rounded"
             >
               <Input
                 id="email"
@@ -180,13 +179,7 @@ export const Waitlist1 = () => {
               />
               <Row vertical="center" gap="4" textVariant="label-default-s">
                 <Text>Join</Text>
-                <CountFx
-                  value={subscribers}
-                  variant="code-default-s"
-                  speed={1000}
-                  effect="smooth"
-                  easing="ease-out"
-                />
+                <CountFx value={subscribers} variant="code-default-s" effect="smooth" />
                 <Text>others</Text>
               </Row>
             </RevealFx>

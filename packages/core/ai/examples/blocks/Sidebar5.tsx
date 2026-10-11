@@ -51,10 +51,7 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                     gap="16"
                     vertical="center"
                   >
-                    <Avatar
-                      src={member.avatar}
-                      statusIndicator={{ color: member.statusColor as "green" | "gray" }}
-                    />
+                    <Avatar src={member.avatar} statusIndicator={{ color: member.statusColor }} />
                     <Column fillWidth gap="2">
                       <Text variant="label-strong-s" truncate>
                         {member.name}
@@ -71,7 +68,7 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                   <Column maxWidth={20} fitHeight tabIndex={-1}>
                     <Row fillWidth>
                       <Media src="/images/backgrounds/1.jpg" sizes="320px" aspectRatio="2/1" />
-                      <Row position="absolute" right="12" top="12" data-border="rounded" gap="8">
+                      <Row position="absolute" right="12" top="12" themeBorder="rounded" gap="8">
                         <IconButton icon="personRemove" tooltip="Remove" tooltipPosition="bottom" />
                         <IconButton icon="settings" tooltip="Settings" tooltipPosition="bottom" />
                       </Row>
@@ -81,8 +78,8 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                         bottom="0"
                         src={member.avatar}
                         size={6}
-                        statusIndicator={{ color: member.statusColor as "green" | "gray" }}
-                        style={{ transform: "translateY(50%)" }}
+                        statusIndicator={{ color: member.statusColor }}
+                        translateY="50%"
                         borderWidth={4}
                         border="surface"
                       />
@@ -95,10 +92,8 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                         </Text>
                       </Column>
                       {member.bio && (
-                        <Row fillWidth>
-                          <Text variant="body-default-xs" onBackground="neutral-weak">
-                            {member.bio}
-                          </Text>
+                        <Row fillWidth textVariant="body-default-xs" onBackground="neutral-weak">
+                          {member.bio}
                         </Row>
                       )}
                     </Column>

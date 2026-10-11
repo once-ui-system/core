@@ -22,7 +22,7 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         position="absolute"
         pointerEvents="none"
         top="0"
-        height={12}
+        height={5}
         pattern={{ display: true, size: "2" }}
       />
       <Row as="header" fillWidth paddingX="l" height="64" vertical="center">

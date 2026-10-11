@@ -73,6 +73,7 @@ export const Table1: React.FC<Table1Props> = ({
   const paginatedItems = filteredContent.slice(startIndex, endIndex);
 
   // Reset to first page when filters or page size change
+  // biome-ignore lint/correctness/useExhaustiveDependencies: reset pagination whenever the query or page size changes
   useEffect(() => {
     setCurrentPage(1);
   }, [search, itemsPerPage]);
@@ -98,9 +99,13 @@ export const Table1: React.FC<Table1Props> = ({
     setSelectedItems((prev) => {
       const next = new Set(prev);
       if (allCurrentSelected) {
-        currentPageIds.forEach((id) => next.delete(id));
+        currentPageIds.forEach((id) => {
+          next.delete(id);
+        });
       } else {
-        currentPageIds.forEach((id) => next.add(id));
+        currentPageIds.forEach((id) => {
+          next.add(id);
+        });
       }
       onSelectionChange?.(next);
       return next;
@@ -195,7 +200,7 @@ export const Table1: React.FC<Table1Props> = ({
             ))}
           </Row>
           <Column fillWidth overflow="auto">
-            <Column fitWidth style={{ minWidth: "100%" }}>
+            <Column fitWidth minWidth="100%">
               {paginatedItems.map((item, index) => {
                 const globalIndex = startIndex + index;
                 const id = resolveId(item, globalIndex);
@@ -277,7 +282,6 @@ export const Table1: React.FC<Table1Props> = ({
             {/* Page 1 */}
             <IconButton
               key={`page-1`}
-              size="m"
               variant={currentPage === 1 ? "primary" : "secondary"}
               onClick={() => setCurrentPage(1)}
             >
@@ -288,7 +292,6 @@ export const Table1: React.FC<Table1Props> = ({
             {totalitemsPerPage >= 2 && (
               <IconButton
                 key={`page-2`}
-                size="m"
                 variant={currentPage === 2 ? "primary" : "secondary"}
                 onClick={() => setCurrentPage(2)}
               >
@@ -326,7 +329,6 @@ export const Table1: React.FC<Table1Props> = ({
               <>
                 <IconButton
                   key={`page-${totalitemsPerPage - 1}`}
-                  size="m"
                   variant={currentPage === totalitemsPerPage - 1 ? "primary" : "secondary"}
                   onClick={() => setCurrentPage(totalitemsPerPage - 1)}
                 >
@@ -334,7 +336,6 @@ export const Table1: React.FC<Table1Props> = ({
                 </IconButton>
                 <IconButton
                   key={`page-${totalitemsPerPage}`}
-                  size="m"
                   variant={currentPage === totalitemsPerPage ? "primary" : "secondary"}
                   onClick={() => setCurrentPage(totalitemsPerPage)}
                 >
@@ -344,7 +345,6 @@ export const Table1: React.FC<Table1Props> = ({
             ) : totalitemsPerPage === 3 ? (
               <IconButton
                 key={`page-3`}
-                size="m"
                 variant={currentPage === 3 ? "primary" : "secondary"}
                 onClick={() => setCurrentPage(3)}
               >

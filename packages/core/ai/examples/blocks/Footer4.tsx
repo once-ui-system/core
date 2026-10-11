@@ -41,21 +41,19 @@ const navigation = [
       { label: "Once UI Core", href: "#" },
       { label: "Magic Portfolio", href: "#" },
       { label: "Magic Docs", href: "#" },
-      { label: "Magic Bio", href: "#" },
       { label: "Once UI Figma", href: "#" },
     ],
   },
   {
     title: "Pro",
     items: [
-      { label: "Supa Social", href: "#", tag: "New" },
-      { label: "Magic Studio", href: "#", tag: "New" },
+      { label: "Orbit Core", href: "#", tag: "New" },
+      { label: "Stack", href: "#", tag: "New" },
       { label: "Supabase Starter", href: "#" },
       { label: "Magic Convert", href: "#" },
       { label: "Magic Spotlight", href: "#" },
       { label: "Magic Journal", href: "#", tag: "New" },
       { label: "Magic Store", href: "#" },
-      { label: "Magic Agent", href: "#" },
       { label: "Once UI Blocks", href: "#" },
     ],
   },
@@ -122,13 +120,14 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             center
             paddingX="l"
             gap="24"
-            s={{ direction: "column" }}
             borderLeft="neutral-alpha-medium"
             borderRight="neutral-alpha-medium"
             overflow="hidden"
           >
             <Background
               position="absolute"
+              top="0"
+              left="0"
               fill
               lines={{
                 display: true,
@@ -150,7 +149,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 position="absolute"
                 bottom="0"
                 left="0"
-                data-solid="color"
+                themeSolid="color"
                 gradient={{
                   display: true,
                   x: 50,
@@ -166,7 +165,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 position="absolute"
                 bottom="0"
                 left="0"
-                style={{ filter: "blur(1rem)", transform: "scale(1.1)" }}
+                blur={1}
+                style={{ transform: "scale(1.1)" }}
                 gradient={{
                   display: true,
                   x: 50,
@@ -211,9 +211,6 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                   fill
                   interactive
                   speed={1.5}
-                  density={100}
-                  size="2"
-                  intensity={20}
                   mode="attract"
                 />
               </Mask>
@@ -223,8 +220,6 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 variant="display-strong-m"
                 words={["Ship your product.", "Build a presence.", "Launch seamlessly."]}
                 speed={80}
-                hold={2000}
-                trigger="instant"
               />
               <Button data-border="rounded" id="hero-cta-button" href="#" arrowIcon>
                 Start now
@@ -278,7 +273,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 position="absolute"
                 bottom="0"
                 left="0"
-                data-solid="color"
+                themeSolid="color"
                 gradient={{
                   display: true,
                   x: 50,
@@ -294,7 +289,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 position="absolute"
                 bottom="0"
                 left="0"
-                style={{ filter: "blur(1rem)", transform: "scale(1.1)" }}
+                blur={1}
+                style={{ transform: "scale(1.1)" }}
                 gradient={{
                   display: true,
                   x: 50,
@@ -326,8 +322,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             horizontal="between"
             vertical="center"
           >
-            <Logo href="/" dark icon="/trademarks/icon-dark.svg" size="m" />
-            <Logo href="/" light icon="/trademarks/icon-light.svg" size="m" />
+            <Logo href="/" dark icon="/trademarks/icon-dark.svg" />
+            <Logo href="/" light icon="/trademarks/icon-light.svg" />
             <Row gap="8">
               {social.map((item, index) => (
                 <IconButton
@@ -454,7 +450,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               position="absolute"
               bottom="0"
               left="0"
-              data-solid="color"
+              themeSolid="color"
               gradient={{
                 display: true,
                 x: 0,
@@ -470,7 +466,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               position="absolute"
               bottom="0"
               left="0"
-              style={{ filter: "blur(1rem)", transform: "scale(1.1)" }}
+              blur={1}
+              style={{ transform: "scale(1.1)" }}
               gradient={{
                 display: true,
                 x: 0,

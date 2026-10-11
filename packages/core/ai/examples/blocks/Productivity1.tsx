@@ -156,10 +156,8 @@ export const Productivity1 = () => {
           vertical="center"
           horizontal="between"
         >
-          <Row fillWidth>
-            <Text variant="body-strong-m" onBackground="neutral-strong">
-              Platform Squad
-            </Text>
+          <Row fillWidth textVariant="body-strong-m" onBackground="neutral-strong">
+            Platform Squad
           </Row>
           <Row gap="12" vertical="center" horizontal="end" fillWidth zIndex={1}>
             <IconButton
@@ -177,20 +175,8 @@ export const Productivity1 = () => {
                 tooltipPosition="bottom"
                 icon="bell"
               />
-              <Row
-                position="absolute"
-                style={{
-                  top: "0.15rem",
-                  right: "0.15rem",
-                }}
-              >
-                <Row
-                  style={{ borderColor: "var(--page-background)" }}
-                  height="12"
-                  width="12"
-                  solid="brand-strong"
-                  radius="full"
-                />
+              <Row position="absolute" top={0.15} right={0.15}>
+                <Row height="12" width="12" solid="brand-strong" radius="full" />
               </Row>
             </Row>
             <div

@@ -19,7 +19,8 @@ import {
   UserMenu,
 } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 
 interface HeaderProps extends React.ComponentProps<typeof Row> {
   authenticated?: boolean;
@@ -245,7 +246,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
   return (
     <Row
       as="header"
-      borderBottom="neutral-medium"
+      borderBottom
       fillWidth
       paddingX="m"
       minHeight="56"
@@ -360,7 +361,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
           padding="8"
           fillWidth
           overflowY="auto"
-          style={{ maxHeight: "calc(100vh - var(--static-space-56))" }}
+          maxHeight="below-header"
         >
           {authenticated ? (
             <Column padding="8" background="surface" border="surface" radius="l-4" gap="4">

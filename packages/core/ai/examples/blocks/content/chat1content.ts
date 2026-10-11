@@ -1,4 +1,7 @@
-export const sidebar = [
+export type SidebarItem = { label: string };
+export type SidebarSection = { title?: string; items?: SidebarItem[]; rooms?: SidebarItem[] };
+
+export const sidebar: SidebarSection[] = [
   {
     items: [{ label: "Members" }, { label: "Files" }, { label: "Pins" }],
   },
@@ -8,7 +11,18 @@ export const sidebar = [
   },
 ];
 
-export const chatMembers = [
+export type ChatMember = {
+  title: string;
+  members: {
+    name: string;
+    avatar: string;
+    status: string;
+    statusColor: "green" | "gray";
+    bio: string;
+  }[];
+};
+
+export const chatMembers: ChatMember[] = [
   {
     title: "Online",
     members: [
@@ -17,7 +31,6 @@ export const chatMembers = [
         status: "Active now",
         bio: "Design engineer",
         avatar: "/images/creators/lorant.jpg",
-        group: "Online",
         statusColor: "green",
       },
       {
@@ -25,14 +38,30 @@ export const chatMembers = [
         status: "Coding something...",
         bio: "Building Once UI",
         avatar: "/images/creators/lorant.jpg",
-        group: "Online",
         statusColor: "green",
       },
     ],
   },
 ];
 
-export const chatMessages = [
+export type ChatMessage = {
+  postedAt: Date;
+  message: string;
+  author: {
+    name: string;
+    avatar: string;
+  };
+  attachments?: {
+    media: string;
+  }[];
+  reactions?: {
+    emoji: string;
+    count: number;
+    reacted: boolean;
+  }[];
+};
+
+export const chatMessages: ChatMessage[] = [
   {
     author: { name: "Jane Wong", avatar: "/images/creators/lorant.jpg" },
     postedAt: new Date("2025-01-18T09:38:00"),

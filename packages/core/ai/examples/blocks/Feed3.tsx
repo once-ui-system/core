@@ -1,6 +1,5 @@
 "use client";
 
-import type { IconName } from "@once-ui-system/core";
 import {
   Avatar,
   Button,
@@ -77,54 +76,52 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                 {messages.message && <Text variant="body-default-s">{messages.message}</Text>}
 
                 {/* Attachments */}
-                {messages.attachments && messages.attachments.length > 0 && (
-                  <Column>
-                    {/* If multiple media, show as a grid-like row, else handle individually */}
-                    {messages.attachments.length > 1 ? (
-                      <Row maxWidth={48} marginTop="16" gap="8" wrap>
-                        {messages.attachments.map((att, aIdx) =>
-                          att?.media ? (
-                            <Media
-                              key={aIdx}
-                              maxWidth={20}
-                              src={att.media}
-                              border
-                              radius="l"
-                              sizes="320px"
-                            />
-                          ) : null,
-                        )}
-                      </Row>
+                {/* If multiple media, show as a grid-like row, else handle individually */}
+                {messages.attachments &&
+                  messages.attachments.length > 0 &&
+                  (messages.attachments.length > 1 ? (
+                    <Row maxWidth={48} marginTop="16" gap="8" wrap>
+                      {messages.attachments.map((att, aIdx) =>
+                        att?.media ? (
+                          <Media
+                            key={aIdx}
+                            maxWidth={20}
+                            src={att.media}
+                            border
+                            radius="l"
+                            sizes="320px"
+                          />
+                        ) : null,
+                      )}
+                    </Row>
+                  ) : (
+                    messages.attachments[0]?.media &&
+                    (messages.attachments[0].media.includes("youtube.com") ||
+                    messages.attachments[0].media.includes("youtu.be") ? (
+                      <Media
+                        maxWidth={32}
+                        border
+                        aspectRatio="16/9"
+                        marginTop="16"
+                        src={messages.attachments[0].media}
+                        radius="l"
+                        sizes="320px"
+                      />
+                    ) : messages.attachments[0].media.match(/\.(png|jpg|jpeg|gif|webp)$/i) ? (
+                      <Media
+                        maxWidth={32}
+                        border
+                        marginTop="16"
+                        src={messages.attachments[0].media}
+                        radius="l"
+                        sizes="320px"
+                      />
                     ) : (
-                      messages.attachments[0]?.media &&
-                      (messages.attachments[0].media.includes("youtube.com") ||
-                      messages.attachments[0].media.includes("youtu.be") ? (
-                        <Media
-                          maxWidth={32}
-                          border
-                          aspectRatio="16/9"
-                          marginTop="16"
-                          src={messages.attachments[0].media}
-                          radius="l"
-                          sizes="320px"
-                        />
-                      ) : messages.attachments[0].media.match(/\.(png|jpg|jpeg|gif|webp)$/i) ? (
-                        <Media
-                          maxWidth={32}
-                          border
-                          marginTop="16"
-                          src={messages.attachments[0].media}
-                          radius="l"
-                          sizes="320px"
-                        />
-                      ) : (
-                        <Row maxWidth={24} marginTop="16">
-                          <OgCard url={messages.attachments[0].media} description={false} />
-                        </Row>
-                      ))
-                    )}
-                  </Column>
-                )}
+                      <Row maxWidth={24} marginTop="16">
+                        <OgCard url={messages.attachments[0].media} description={false} />
+                      </Row>
+                    ))
+                  ))}
 
                 {/* Reactions */}
                 {messages.reactions && messages.reactions.length > 0 && (
@@ -162,8 +159,8 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
               <EmojiPickerDropdown
                 onSelect={(emoji) => setMessage(message + emoji)}
                 trigger={
-                  <Row fillWidth data-border="rounded" style={{ marginLeft: "-0.25rem" }}>
-                    <IconButton icon="smiley" size="m" variant="tertiary" />
+                  <Row fillWidth themeBorder="rounded" style={{ marginLeft: "-0.25rem" }}>
+                    <IconButton icon="smiley" variant="tertiary" />
                   </Row>
                 }
               />
@@ -174,8 +171,8 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                 transition="micro-medium"
               >
                 <IconButton
-                  icon={isSubmitting ? "refresh" : "send"}
-                  size="m"
+                  icon="send"
+                  loading={isSubmitting}
                   onClick={handleSubmitMessage}
                   disabled={!message || isSubmitting}
                 />

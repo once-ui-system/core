@@ -15,7 +15,8 @@ import {
   Text,
 } from "@once-ui-system/core";
 import { LineChart } from "@once-ui-system/core/data";
-import React, { useMemo } from "react";
+import type React from "react";
+import { useMemo } from "react";
 import { Header1 } from "./Header1";
 import { Sidebar1 } from "./Sidebar1";
 import type { TableColumn } from "./Table1";
@@ -48,7 +49,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
           "Current period": rand(0, 1500),
         }) as { date: string; "Current period": number },
     );
-  }, [positive]);
+  }, []);
 
   return (
     <Card
@@ -216,8 +217,8 @@ export const Dashboard1: React.FC = () => {
       key: "order",
       title: <Text variant="label-default-s">Order</Text>,
       render: (item: any) => (
-        <Row gap="12" vertical="center">
-          <Text variant="label-default-s">{item.id}</Text>
+        <Row gap="12" vertical="center" textVariant="label-default-s">
+          {item.id}
         </Row>
       ),
     },

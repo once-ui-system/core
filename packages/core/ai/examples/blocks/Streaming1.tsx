@@ -6,7 +6,6 @@ import {
   Carousel,
   Column,
   Fade,
-  Flex,
   Heading,
   IconButton,
   Media,
@@ -133,11 +132,11 @@ const MediaList = ({
             {progress > 0 && <ProgressBar showLabel={false} value={progress} paddingX="l" />}
             <Column fillWidth paddingX="16" paddingBottom="20" paddingTop="8" gap="8">
               <Row fillWidth horizontal="between" paddingBottom="12">
-                <Row gap="8" data-border="rounded">
+                <Row gap="8" themeBorder="rounded">
                   <IconButton size="l" icon="play" />
                   <IconButton size="l" icon="plus" variant="secondary" />
                 </Row>
-                <Row gap="8" data-border="rounded">
+                <Row gap="8" themeBorder="rounded">
                   <IconButton size="l" icon="like" variant="secondary" />
                   <IconButton size="l" icon="dislike" variant="secondary" />
                 </Row>
@@ -149,17 +148,16 @@ const MediaList = ({
                 {description}
               </Text>
               <Row paddingTop="12" gap="16" vertical="center">
-                {categories &&
-                  categories.map((category, index) => (
-                    <React.Fragment key={index}>
-                      <Text variant="label-default-s" onBackground="neutral-medium">
-                        {category}
-                      </Text>
-                      {index < categories.length - 1 && (
-                        <Flex height={0.4} width={0.4} radius="full" background="neutral-strong" />
-                      )}
-                    </React.Fragment>
-                  ))}
+                {categories?.map((category, index) => (
+                  <React.Fragment key={index}>
+                    <Text variant="label-default-s" onBackground="neutral-medium">
+                      {category}
+                    </Text>
+                    {index < categories.length - 1 && (
+                      <Row height={0.4} width={0.4} radius="full" background="neutral-strong" />
+                    )}
+                  </React.Fragment>
+                ))}
               </Row>
             </Column>
           </Column>,
@@ -335,7 +333,7 @@ export const Streaming1: React.FC = () => {
     <Column fillWidth>
       <Header3 position="sticky" top="0" />
       <Column fillWidth style={{ marginTop: "calc(-1 * var(--static-space-64))" }}>
-        <Row fillWidth style={{ height: "80vh" }} paddingBottom="xl">
+        <Row fillWidth height="80vh" paddingBottom="xl">
           <Carousel
             stretch
             border="transparent"
