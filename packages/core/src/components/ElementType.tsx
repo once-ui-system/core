@@ -40,6 +40,13 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
     );
 
     if (safeHref) {
+      // A link runs the `onClick` it is given, then `onLinkClick`. It used to
+      // run `onClick` only on a button, so a Button, IconButton or SmartLink
+      // with an `href` silently dropped its handler.
+      const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+        onClick?.(event);
+        onLinkClick?.();
+      };
       const isExternal = isExternalLink(safeHref);
       if (isExternal) {
         return (
@@ -50,7 +57,7 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
             ref={ref as React.Ref<HTMLAnchorElement>}
             className={className}
             style={style}
-            onClick={() => onLinkClick?.()}
+            onClick={handleLinkClick}
             {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
           >
             {children}
@@ -63,7 +70,7 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
           ref={ref as React.Ref<HTMLAnchorElement>}
           className={className}
           style={style}
-          onClick={() => onLinkClick?.()}
+          onClick={handleLinkClick}
           {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
         >
           {children}
