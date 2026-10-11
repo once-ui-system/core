@@ -134,7 +134,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] `DataTable`: column definitions, selection, pagination, empty state.
 - [x] Precompiled CSS so `sass` becomes optional (verified in Next 15, Next 16, Vite and Remotion).
 - [ ] Proposal: an `fx` package for the effects, one `speed` convention.
-- [ ] The `once-ui` CLI (#160) published alongside, if its npm name is settled.
+- [ ] The CLI (#160) published alongside as `@once-ui-system/cli` (command `once-ui`): rename the package, then publish once its server side (studio#100) is live.
 
 ### W12 · Downstream (release day and the week after)
 - [ ] Studio, Stack, Shorty and Frametic to 2.1; Kinetic from 1.8 to 2.1 (24 renamed props).
@@ -171,8 +171,6 @@ Unchanged from the 2.0 cycle (archived §3), with one release branch instead of 
 | --- | --- | --- |
 | Approve and publish `2.1.0-rc.0` on `next` | Smoke builds and early adopters | Wed 14 Oct |
 | Approve and publish `2.1.0` | The release | Fri 16 Oct |
-| CLI npm name: `once-ui` or `@once-ui-system/cli` | Gates W11's CLI item | Before Thu 15 Oct |
-| Brand-in-contrast token name (W8) | A new public token is forever | Mon 12 Oct |
 
 ## 8. Decision log
 
@@ -180,6 +178,10 @@ Unchanged from the 2.0 cycle (archived §3), with one release branch instead of 
 - **2026-10-10:** One release branch and PR rather than one PR per workstream, so the RC is a single tree to smoke-test; workstreams stay separate as commits.
 - **2026-10-10:** The mechanical Biome sweep (format and import order) goes in first, as its own commit, so parallel work starts from formatted files instead of conflicting with the sweep at the end.
 - **2026-10-10:** The `ai/` harness is regenerated once on the merged tree, not per workstream, to keep generated files out of merge conflicts.
+
+- **2026-10-11:** The brand-in-contrast tokens keep the name `--brand-color-strong`, `--brand-color-medium` and `--brand-color-weak` (Lorant).
+- **2026-10-11:** The CLI publishes as `@once-ui-system/cli`, with the command `once-ui` (Lorant). An unscoped `once-ui` would very likely be refused by npm's rule against names that differ from an existing package only by punctuation (`onceui` exists); the scoped name is ours and can't be impersonated. Run once with `npx @once-ui-system/cli <command>`; installed globally, the command is `once-ui`.
+- **2026-10-11:** MDX body text stays `neutral-medium`, the `/mdx` default and what every product's MDX map already uses; the docs follow it (Lorant).
 
 ## 9. Guardrails
 
