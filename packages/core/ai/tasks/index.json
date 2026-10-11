@@ -9,6 +9,7 @@
     { "id": "auth", "file": "tasks/auth.json", "priority": 6 },
     { "id": "roadmap", "file": "tasks/roadmap.json", "priority": 7 },
     { "id": "list-page", "file": "tasks/list-page.json", "priority": 8 },
-    { "id": "editor", "file": "tasks/editor.json", "priority": 9 }
+    { "id": "editor", "file": "tasks/editor.json", "priority": 9 },
+    { "id": "docs-page", "file": "tasks/docs-page.json", "priority": 10 }
   ]
 }

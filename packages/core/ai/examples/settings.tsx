@@ -2,8 +2,16 @@
 
 /**
  * Gold example: settings
- * Target: section nav beside the panel, a profile form, settings rows with one
- * control each, a group whose sub-settings sit inside it, and a danger zone.
+ * Target: a vertical tab list beside the panel (above it on a phone), a
+ * profile form, settings rows with one control each, a group whose
+ * sub-settings sit inside it, and a danger zone.
+ *
+ * The section nav is `Tabs` with `orientation="vertical"`: one `TabPanel` per
+ * section, so only the chosen section renders, the list gets the tab roles
+ * and arrow keys, and a phone gets the list above the panel from one
+ * breakpoint prop. Sections that are routes of their own use `NavItem href`
+ * instead. `keepMounted` keeps the profile form's unsaved input when the
+ * user looks at another tab.
  *
  * `Setting` is the row — label and description on the left, one control on
  * the right — and stacks into a panel on its own, so a list of them needs no
@@ -17,26 +25,24 @@ import {
   Form,
   Heading,
   Input,
-  NavItem,
   NumberInput,
   Row,
   Select,
   Setting,
   SettingGroup,
   Switch,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
   Text,
+  useToast,
 } from "@once-ui-system/core";
 import { useState } from "react";
 
-const sections = [
-  { id: "profile", label: "Profile", icon: "person" },
-  { id: "notifications", label: "Notifications", icon: "bell" },
-  { id: "billing", label: "Billing", icon: "payment" },
-  { id: "security", label: "Security", icon: "security" },
-] as const;
-
 export function SettingsExample() {
-  const [section, setSection] = useState<string>("profile");
+  // addToast is stable: call it from handlers and effects directly.
+  const { addToast } = useToast();
   const [timezone, setTimezone] = useState("utc");
   const [updates, setUpdates] = useState(true);
   const [digest, setDigest] = useState(true);
@@ -54,20 +60,20 @@ export function SettingsExample() {
           </Heading>
         </Column>
 
-        <Row fillWidth gap="32" s={{ direction: "column" }}>
-          <Column as="nav" gap="4" minWidth={14}>
-            {sections.map((item) => (
-              <NavItem
-                key={item.id}
-                label={item.label}
-                icon={item.icon}
-                selected={section === item.id}
-                onClick={() => setSection(item.id)}
-              />
-            ))}
-          </Column>
+        <Tabs defaultValue="profile" orientation="vertical" gap="32" s={{ direction: "column" }}>
+          <TabList aria-label="Settings sections" minWidth={14} s={{ direction: "row" }}>
+            <Tab value="profile" size="l" prefixIcon="person">
+              Profile
+            </Tab>
+            <Tab value="notifications" size="l" prefixIcon="bell">
+              Notifications
+            </Tab>
+            <Tab value="workspace" size="l" prefixIcon="settings">
+              Workspace
+            </Tab>
+          </TabList>
 
-          <Column flex={1} gap="32">
+          <TabPanel value="profile" keepMounted>
             <Column background="surface" border radius="l" padding="24" gap="24">
               <Heading as="h2" variant="heading-strong-m">
                 Profile
@@ -103,46 +109,50 @@ export function SettingsExample() {
                 />
               </Form>
               <Row gap="12">
-                <Button>Save changes</Button>
+                <Button onClick={() => addToast({ variant: "success", message: "Profile saved" })}>
+                  Save changes
+                </Button>
                 <Button variant="secondary">Cancel</Button>
               </Row>
             </Column>
+          </TabPanel>
 
-            <Column gap="8">
-              <Heading as="h2" variant="heading-strong-m" paddingBottom="8">
-                Notifications
-              </Heading>
-              <Setting label="Product updates" description="Release notes and changelog">
+          <TabPanel value="notifications" gap="8">
+            <Heading as="h2" variant="heading-strong-m" paddingBottom="8">
+              Notifications
+            </Heading>
+            <Setting label="Product updates" description="Release notes and changelog">
+              <Switch
+                checked={updates}
+                onToggle={() => setUpdates(!updates)}
+                ariaLabel="Product updates"
+              />
+            </Setting>
+            <SettingGroup
+              label="Weekly digest"
+              info="A summary of the week's activity, sent once."
+              control={
                 <Switch
-                  checked={updates}
-                  onToggle={() => setUpdates(!updates)}
-                  ariaLabel="Product updates"
+                  checked={digest}
+                  onToggle={() => setDigest(!digest)}
+                  ariaLabel="Weekly digest"
+                />
+              }
+              open={digest}
+            >
+              <Setting label="Send at" description="Hour of the day, in your timezone">
+                <NumberInput
+                  id="digest-hour"
+                  min={0}
+                  max={23}
+                  value={digestHour}
+                  onChange={setDigestHour}
                 />
               </Setting>
-              <SettingGroup
-                label="Weekly digest"
-                info="A summary of the week's activity, sent once."
-                control={
-                  <Switch
-                    checked={digest}
-                    onToggle={() => setDigest(!digest)}
-                    ariaLabel="Weekly digest"
-                  />
-                }
-                open={digest}
-              >
-                <Setting label="Send at" description="Hour of the day, in your timezone">
-                  <NumberInput
-                    id="digest-hour"
-                    min={0}
-                    max={23}
-                    value={digestHour}
-                    onChange={setDigestHour}
-                  />
-                </Setting>
-              </SettingGroup>
-            </Column>
+            </SettingGroup>
+          </TabPanel>
 
+          <TabPanel value="workspace">
             <Column
               background="surface"
               border="danger-alpha-medium"
@@ -162,8 +172,8 @@ export function SettingsExample() {
                 </Button>
               </Row>
             </Column>
-          </Column>
-        </Row>
+          </TabPanel>
+        </Tabs>
       </Column>
     </Column>
   );

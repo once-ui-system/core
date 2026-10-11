@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * The three shells from `ai/layouts.md`, as code that compiles.
  *
@@ -6,13 +8,14 @@
  * fails with everything else rather than going quietly stale in a markdown file.
  *
  * Read `ai/layouts.md` for what each decision is for — the scrolling pane, the
- * sticky offset, why nav selection needs the longest match rather than an
- * equality check.
+ * sticky offset, the mobile drawer, why nav selection needs the longest match
+ * rather than an equality check.
  */
-
 import type { IconName } from "@once-ui-system/core";
 import {
   Column,
+  Drawer,
+  IconButton,
   NavGroup,
   NavItem,
   Row,
@@ -20,32 +23,70 @@ import {
   SplitView,
   selectNavHref,
 } from "@once-ui-system/core";
+import { useState } from "react";
 
-const Header = () => <Row height="56" fillWidth />;
-const Sidebar = (p: React.ComponentProps<typeof Column>) => <Column {...p} />;
+export const Shell = ({
+  children,
+  nav,
+  pathname,
+}: {
+  children: React.ReactNode;
+  nav: Item[];
+  pathname: string;
+}) => {
+  // The drawer is open for the path it was opened on, so following one of its
+  // links closes it with the navigation — no effect watching the pathname.
+  const [menuPath, setMenuPath] = useState<string | null>(null);
+  const menuOpen = menuPath === pathname;
 
-export const Shell = ({ children }: { children: React.ReactNode }) => (
-  <Column fill horizontal="center" flex={1}>
-    <Header />
-    <Row fill paddingX="8">
-      <Sidebar s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56" />
-      <Row fill horizontal="center" topRadius="l" overflow="hidden">
-        <Row
-          height="below-header"
-          overflowY="auto"
-          topRadius="l"
-          horizontal="center"
-          fillWidth
-          background="surface"
-        >
-          <Column maxWidth="xl" gap="m" paddingY="32" fitHeight>
-            {children}
-          </Column>
+  return (
+    <Column fill horizontal="center" flex={1}>
+      <Row height="56" fillWidth vertical="center" paddingX="16" gap="8">
+        <Row hide s={{ hide: false }}>
+          <IconButton
+            icon="moreHorizontal"
+            variant="tertiary"
+            tooltip="Menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuPath(pathname)}
+          />
+        </Row>
+        {/* logo, search, account */}
+      </Row>
+      <Row fill paddingX="8">
+        <Column s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56">
+          <Nav nav={nav} pathname={pathname} />
+        </Column>
+        <Row fill horizontal="center" topRadius="l" overflow="hidden">
+          <Row
+            height="below-header"
+            overflowY="auto"
+            topRadius="l"
+            horizontal="center"
+            fillWidth
+            background="surface"
+          >
+            <Column maxWidth="xl" gap="m" paddingY="32" fitHeight>
+              {children}
+            </Column>
+          </Row>
         </Row>
       </Row>
-    </Row>
-  </Column>
-);
+      <Drawer
+        open={menuOpen}
+        onClose={() => setMenuPath(null)}
+        side="left"
+        size="s"
+        title="Menu"
+        flush
+      >
+        <Column paddingTop="64" paddingBottom="16">
+          <Nav nav={nav} pathname={pathname} />
+        </Column>
+      </Drawer>
+    </Column>
+  );
+};
 
 type Sub = { href: string; label: string; badge?: number };
 type Item = { key: string; label: string; icon?: IconName; href?: string; items?: Sub[] };

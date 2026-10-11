@@ -16,9 +16,12 @@
     "Tag",
     "Icon",
     "RevealFx",
-    "Line"
+    "Line",
+    "Drawer",
+    "NavItem"
   ],
   "recipes": ["reveal-stagger"],
+  "layout": "layouts.md#1-app-shell-with-a-sidebar",
   "example": "examples/dashboard.tsx",
   "blocks": {
     "manifest": "examples/blocks/manifest.json",
@@ -34,6 +37,7 @@
   ],
   "quality": {
     "statCard": "Column surface recipe — not Card",
-    "kpiNumber": "CountFx or display-strong-s with viewport latch"
+    "kpiNumber": "CountFx or display-strong-s with viewport latch",
+    "shell": "Inside an app: the layouts.md shell — the pane scrolls with height=\"below-header\", the sidebar hides at s and a Drawer holds the same nav on a phone"
   }
 }
