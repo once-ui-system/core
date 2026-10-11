@@ -1,7 +1,7 @@
 ---
 title: "ColorInput"
 summary: "ColorInput provides a user-friendly color picker with hex value display and visual color preview."
-updatedAt: "2025-05-12"
+updatedAt: "2026-10-11"
 docs: "once-ui/form-controls/colorInput.mdx"
 github: "components/ColorInput.tsx"
 navLabel: "ColorInput"
@@ -80,6 +80,23 @@ When `supportAlpha` is enabled:
 - The color preview shows transparency
 - The display text shows RGBA values
 
+## Localisation
+
+`label` and `description` are yours to translate. The field's own controls
+take `labels`: `remove` for the clear button ("Remove"), `adjustOpacity` for
+the opacity button ("Adjust opacity") and `opacity` for its slider
+("Opacity"). Whatever you leave out stays English.
+
+```tsx
+<ColorInput
+  id="brand-colour"
+  label={t("brandColour")}
+  value={colour}
+  onChange={setColour}
+  labels={{ remove: t("remove") }}
+/>
+```
+
 ## Props
 
 The `ColorInput` component extends the standard `Input` component props with the following modifications:
@@ -90,5 +107,6 @@ The `ColorInput` component extends the standard `Input` component props with the
     value: "The current colour, as hex or rgba. Controlled — pair it with onChange.",
     onChange: "Receives the colour string directly, not a DOM event.",
     supportAlpha: "Adds an opacity slider and switches the value to rgba().",
+    labels: "The clear and opacity controls' text, to translate them.",
   }}
 />
