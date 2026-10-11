@@ -1,0 +1,7 @@
+/* System font stack, identical in every arm (no network font fetch at build). */
+:root {
+  --font-heading: ui-sans-serif, system-ui, sans-serif;
+  --font-body: ui-sans-serif, system-ui, sans-serif;
+  --font-label: ui-sans-serif, system-ui, sans-serif;
+  --font-code: ui-monospace, monospace;
+}

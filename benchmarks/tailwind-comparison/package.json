@@ -1,0 +1,23 @@
+{
+  "name": "once-ui-tailwind-comparison-benchmark",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Pre-registered benchmark: tokens and code needed to build the same UI with Once UI vs Tailwind (+ shadcn/ui). See METHODOLOGY.md.",
+  "scripts": {
+    "setup": "node runner/setup.mjs",
+    "gate": "node runner/gates.mjs",
+    "metrics": "node runner/metrics.mjs",
+    "report": "node runner/report.mjs",
+    "generate:api": "node runner/generate-api.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "0.133.0",
+    "@anthropic-ai/tokenizer": "0.0.4",
+    "axe-core": "4.14.0",
+    "js-tiktoken": "1.0.21",
+    "playwright-core": "1.56.1",
+    "prettier": "3.9.10",
+    "typescript": "6.0.3"
+  }
+}

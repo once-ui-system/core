@@ -1,0 +1,57 @@
+{
+  "$comment": "Pre-registered parameters. Changing anything here after the full run starts invalidates the pre-registration; log every change in METHODOLOGY.md §11.",
+  "model": "claude-sonnet-5-5",
+  "generation": {
+    "temperature": 1.0,
+    "max_tokens": 16000,
+    "thinking": "disabled",
+    "prompt_caching": false,
+    "max_tool_calls_per_attempt": 40,
+    "read_file_max_chars": 150000
+  },
+  "repair_rounds": 3,
+  "runs_per_task": 3,
+  "pilot": { "tasks": [3, 6, 9], "runs_per_task": 3 },
+  "viewports": [
+    { "name": "phone", "width": 375, "height": 812 },
+    { "name": "tablet", "width": 768, "height": 1024 },
+    { "name": "desktop", "width": 1440, "height": 900 }
+  ],
+  "screenshot": { "type": "jpeg", "quality": 70, "max_height": 6000 },
+  "arms": {
+    "A": { "id": "once-harness", "scaffold": "once", "docs": "once-harness" },
+    "B": { "id": "once-memory", "scaffold": "once", "docs": null },
+    "C": { "id": "shadcn-docs", "scaffold": "shadcn", "docs": "shadcn" },
+    "D": { "id": "tailwind-memory", "scaffold": "tailwind", "docs": null }
+  },
+  "primary_comparison": ["A", "C"],
+  "secondary_comparisons": [["A", "D"], ["B", "C"], ["B", "D"], ["A", "B"], ["C", "D"]],
+  "sensitivity_exclude_tasks": [1, 5, 8],
+  "statistics": { "bootstrap_resamples": 10000, "bootstrap_seed": 20261011, "ci": 0.95 },
+  "sources": {
+    "once_ui": {
+      "repo": "https://github.com/once-ui-system/core",
+      "branch": "claude/gifted-volta-armczp",
+      "commit": "d070802900828711bdcf44a1b2bab4754fecf3dd",
+      "package_version_field": "2.0.0 (version bump happens at release; this tree is the 2.1 release candidate)",
+      "tarball_sha256": "2f9c09712dadaa4404768da1bf0aedd8b1a13ef7141fe465de16e096a9aac2f6",
+      "excluded_from_context": ["ai/eval-tasks.md"]
+    },
+    "shadcn": {
+      "repo": "https://github.com/shadcn-ui/ui",
+      "commit": "c2a67849be260701852b0977ba15eb5f3a0ce2a4",
+      "style": "new-york-v4 (radix)",
+      "base_color": "neutral"
+    }
+  },
+  "versions": {
+    "node": "22.x",
+    "next": "16.2.12",
+    "react": "19.2.8",
+    "typescript": "6.0.3",
+    "tailwindcss": "4.3.3",
+    "prettier": "3.9.10",
+    "playwright-core": "1.56.1",
+    "axe-core": "4.14.0"
+  }
+}
