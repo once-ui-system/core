@@ -159,7 +159,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 5. `CHANGELOG.md` `[Unreleased]` covers every change, classified per `RELEASING.md`; deprecations listed.
 6. All five apps build against the packed RC tarball.
 
-Status, 11 Oct (`a5e7e68`): gates 1–5 met. Gate 6 met for the four apps on 2.0 (studio, stack, shorty, motion: same typecheck, build and rendering as on 2.0); Kinetic is on 1.8 and builds against 2.1 only after its W12 migration. All six gates are re-checked on the RC tarball.
+Status, 11 Oct (`67a3a36`, wave 3 and the leftovers merged): gates 1–5 met. Gate 6 met for the four apps on 2.0 (studio, stack, shorty, motion: same typecheck, build and rendering as on 2.0, in three smoke rounds); Kinetic is on 1.8 and builds against 2.1 only after its W12 migration. All six gates are re-checked on the RC tarball.
 
 ## 6. Agent protocol
 
