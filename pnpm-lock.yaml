@@ -161,9 +161,6 @@ importers:
       sass:
         specifier: ^1.77.6
         version: 1.102.0
-      sharp:
-        specifier: ^0.35.3
-        version: 0.35.3(@types/node@26.1.2)
     devDependencies:
       '@arethetypeswrong/cli':
         specifier: ^0.18.5
