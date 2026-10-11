@@ -34,10 +34,42 @@ const extractCustomProperties = (css: string): string[] =>
 const extractClassSelectors = (css: string): string[] =>
   unique(css.match(/\.[a-zA-Z][\w-]*/g) ?? []);
 
+/**
+ * `[data-*]` selectors, with the value in double quotes however it was written.
+ *
+ * Sass drops the quotes around a value that is a valid identifier, so
+ * `[data-theme="dark"]` in the source compiles to `[data-theme=dark]`, while
+ * `[data-scaling="90"]` keeps them. The pattern used to require quotes, so
+ * every theme, brand, accent, neutral, border, solid, surface, transition and
+ * viz-style selector fell outside the snapshot: only the numeric ones were
+ * guarded. Normalising the quotes records the selector as a consumer writes
+ * it, and keeps the snapshot still if Sass ever changes how it quotes.
+ */
+const ATTRIBUTE_SELECTOR = /\[(data-[\w-]+)(?:=(?:"([^"]*)"|'([^']*)'|([^\]"'\s]+)))?\]/g;
+
 const extractAttributeSelectors = (css: string): string[] =>
-  unique(css.match(/\[data-[\w-]+(?:=["'][^"']*["'])?\]/g) ?? []);
+  unique(
+    [...css.matchAll(ATTRIBUTE_SELECTOR)].map(([, name, double, single, bare]) => {
+      const value = double ?? single ?? bare;
+      return value === undefined ? `[${name}]` : `[${name}="${value}"]`;
+    }),
+  );
 
 describe("css api surface", () => {
+  it("reads an attribute selector whether or not its value is quoted", () => {
+    const css = `[data-theme=dark] .a, [data-scaling="90"], [data-x='y'] b, [data-open] {}`;
+    expect(extractAttributeSelectors(css)).toEqual([
+      "[data-open]",
+      '[data-scaling="90"]',
+      '[data-theme="dark"]',
+      '[data-x="y"]',
+    ]);
+    // The same selector, quoted or not, is one entry.
+    expect(extractAttributeSelectors(`[data-theme=dark], [data-theme="dark"]`)).toEqual([
+      '[data-theme="dark"]',
+    ]);
+  });
+
   it("tokens.css custom property names are stable", async () => {
     const css = compileEntry("tokens/index.scss");
     await expect(extractCustomProperties(css).join("\n")).toMatchFileSnapshot(

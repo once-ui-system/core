@@ -17,7 +17,7 @@ import {
   TextVariant,
   TextWeight,
 } from "../types";
-import { BELOW_HEADER, BELOW_HEADER_VALUE } from "../utils/layoutClasses";
+import { BELOW_HEADER, BELOW_HEADER_VALUE, offsetStyle, sizeValue } from "../utils/layoutClasses";
 import { Cursor } from "./Cursor";
 import { ServerFlex } from "./ServerFlex";
 
@@ -31,89 +31,11 @@ interface ClientFlexProps extends FlexProps, StyleProps, DisplayProps {
   hide?: boolean;
 }
 
+/** A size at a breakpoint, inline. `below-header` is a class at the base only. */
 const parseDimension = (
   value: number | SpacingToken | CSSUnit | typeof BELOW_HEADER | undefined,
   type: "width" | "height",
-): string | undefined => {
-  if (value === undefined) return undefined;
-  if (typeof value === "number") return `${value}rem`;
-  // A class at the base; here, at a breakpoint, every size is inline.
-  if (value === BELOW_HEADER) return BELOW_HEADER_VALUE;
-  if (typeof value === "string") {
-    if (
-      value.endsWith("%") ||
-      value.endsWith("vh") ||
-      value.endsWith("dvh") ||
-      value.endsWith("vw") ||
-      value.startsWith("calc(")
-    ) {
-      return value;
-    }
-    if (
-      [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "12",
-        "16",
-        "20",
-        "24",
-        "32",
-        "40",
-        "48",
-        "56",
-        "64",
-        "80",
-        "104",
-        "128",
-        "160",
-      ].includes(value)
-    ) {
-      return `var(--static-space-${value})`;
-    }
-    if (["xs", "s", "m", "l", "xl"].includes(value)) {
-      return `var(--responsive-${type}-${value})`;
-    }
-  }
-  return undefined;
-};
-
-const parseSpacing = (value: SpacingToken | number | undefined): string | undefined => {
-  if (value === undefined) return undefined;
-  if (typeof value === "number") return `${value}rem`;
-  if (typeof value === "string") {
-    if (
-      [
-        "0",
-        "1",
-        "2",
-        "4",
-        "8",
-        "12",
-        "16",
-        "20",
-        "24",
-        "32",
-        "40",
-        "48",
-        "56",
-        "64",
-        "80",
-        "104",
-        "128",
-        "160",
-      ].includes(value)
-    ) {
-      return `var(--static-space-${value})`;
-    }
-    if (["xs", "s", "m", "l", "xl"].includes(value)) {
-      return `var(--responsive-space-${value})`;
-    }
-  }
-  return undefined;
-};
+): string | undefined => (value === BELOW_HEADER ? BELOW_HEADER_VALUE : sizeValue(value, type));
 
 const generateBackgroundClass = (
   type: "background" | "solid",
@@ -298,6 +220,11 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
         }
         if (typeof currentResponsiveProps.gap === "number")
           setStyle("gap", `${currentResponsiveProps.gap}rem`);
+
+        // A rem or CSS-unit offset; a token offset is a class, from ServerFlex.
+        for (const [side, value] of Object.entries(offsetStyle(currentResponsiveProps))) {
+          setStyle(side, value);
+        }
       }
     }, [xl, l, m, s, xs, props.style, currentBreakpoint]);
 

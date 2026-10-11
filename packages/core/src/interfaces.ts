@@ -62,6 +62,10 @@ export interface GridProps extends HTMLAttributes<HTMLDivElement> {
    * @example <Grid minColumnWidth={13} gap="8">…</Grid>
    */
   minColumnWidth?: number | SpacingToken | CSSUnit;
+  /**
+   * How many equal rows, as a class (`.rows-3`). Usually left alone — rows
+   * follow from the content. Set it per breakpoint to reflow, as `columns`.
+   */
   rows?: GridSize;
   l?: GridBreakpointProps;
   m?: GridBreakpointProps;

@@ -23,6 +23,7 @@ import {
   CURSORS,
   GRID_AUTO_FIT,
   GRID_COLUMNS,
+  GRID_ROWS,
   MAX_WIDTH_SIZES,
   ON_RAMPS,
   OPACITY_STEPS,
@@ -390,6 +391,10 @@ function grid() {
   // Base only, and ahead of every breakpoint block, so a breakpoint column
   // count (`s={{ columns: 1 }}`) still overrides the auto-fit track list.
   out.push(rule(GRID_AUTO_FIT.selector, [`grid-template-columns: ${GRID_AUTO_FIT.template};`]));
+  // Ahead of the breakpoint blocks too, so `s={{ rows: 1 }}` overrides `rows`.
+  for (const n of GRID_ROWS) {
+    out.push(rule(`.rows-${n}`, [`grid-template-rows: ${gridTemplate(n)};`]));
+  }
 
   // The same pairing `flex.scss` uses: hidden by a base rule, revealed inside
   // its own query, so `.<bp>-grid-show` means "show only at this width". The
@@ -408,6 +413,7 @@ function grid() {
   for (const { key, query } of BREAKPOINTS_CASCADE) {
     const rules = [
       ...GRID_COLUMNS.map((n) => [`columns-${n}`, [`grid-template-columns: ${gridTemplate(n)};`]]),
+      ...GRID_ROWS.map((n) => [`rows-${n}`, [`grid-template-rows: ${gridTemplate(n)};`]]),
       ["grid-hide", ["display: none;"]],
       ["grid-show", ["display: grid;"]],
     ];

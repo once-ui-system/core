@@ -374,6 +374,15 @@ export const GRID_COLUMNS = Array.from({ length: 12 }, (_, i) => String(i + 1));
 export const gridTemplate = (n) => (n === "1" ? "1fr" : `repeat(${n}, 1fr)`);
 
 /**
+ * Equal rows, on the same twelve steps and the same template as the columns.
+ *
+ * `Grid rows` was typed, documented ("how many equal rows") and in every
+ * breakpoint object, and had no class: the prop fell through to the DOM as a
+ * `rows` attribute and the grid's rows followed the content regardless.
+ */
+export const GRID_ROWS = GRID_COLUMNS;
+
+/**
  * "As many columns as fit, each at least this wide" — the one grid the apps
  * kept writing by hand as `repeat(auto-fit, minmax(13rem, 1fr))`.
  *

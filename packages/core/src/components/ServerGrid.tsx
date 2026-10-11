@@ -10,8 +10,15 @@ import {
   SpacingProps,
   StyleProps,
 } from "../interfaces";
-import { ColorScheme, ColorWeight, SpacingToken } from "../types";
-import { BELOW_HEADER, scrollsOn, spacingClasses, themeAttributes } from "../utils/layoutClasses";
+import { ColorScheme, ColorWeight } from "../types";
+import {
+  BELOW_HEADER,
+  offsetClasses,
+  scrollsOn,
+  sizeValue,
+  spacingClasses,
+  themeAttributes,
+} from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerGridProps
@@ -28,16 +35,6 @@ interface ServerGridProps
   xs?: GridBreakpointProps;
 }
 
-/** A token offset has a class; a CSS unit (`50%`, `calc(…)`) and a rem number do not. */
-const isOffsetToken = (value: unknown): value is string =>
-  typeof value === "string" &&
-  value !== "" &&
-  !value.endsWith("%") &&
-  !value.endsWith("vh") &&
-  !value.endsWith("dvh") &&
-  !value.endsWith("vw") &&
-  !value.startsWith("calc(");
-
 /**
  * Every class one breakpoint object resolves to.
  *
@@ -47,7 +44,7 @@ const isOffsetToken = (value: unknown): value is string =>
  * breakpoint, and `ClientGrid` relied on them itself — so a breakpoint object
  * whose values all have one renders here now, under the same rule `Flex` uses.
  * This writes the same families `ServerFlex` does for its breakpoints, `xl`
- * included, plus the grid's own `columns`.
+ * included, plus the grid's own `columns` and `rows`.
  */
 function breakpointClasses(
   breakpoint: string,
@@ -60,14 +57,12 @@ function breakpointClasses(
     props.hide === true && `${breakpoint}-grid-hide`,
     props.hide === false && `${breakpoint}-grid-show`,
     props.columns && `${breakpoint}-columns-${props.columns}`,
+    props.rows && `${breakpoint}-rows-${props.rows}`,
     props.overflow && `${breakpoint}-overflow-${props.overflow}`,
     props.overflowX && `${breakpoint}-overflow-x-${props.overflowX}`,
     props.overflowY && `${breakpoint}-overflow-y-${props.overflowY}`,
     props.scrollbar && `${breakpoint}-scrollbar-${props.scrollbar}`,
-    isOffsetToken(props.top) && `${breakpoint}-top-${props.top}`,
-    isOffsetToken(props.right) && `${breakpoint}-right-${props.right}`,
-    isOffsetToken(props.bottom) && `${breakpoint}-bottom-${props.bottom}`,
-    isOffsetToken(props.left) && `${breakpoint}-left-${props.left}`,
+    ...offsetClasses(breakpoint, props),
     props.pointerEvents && `${breakpoint}-pointer-events-${props.pointerEvents}`,
     props.opacity !== undefined && `${breakpoint}-opacity-${props.opacity}`,
     props.zIndex !== undefined && `${breakpoint}-z-index-${props.zIndex}`,
@@ -81,6 +76,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       as: Component = "div",
       inline,
       columns,
+      rows,
       minColumnWidth,
       gap,
       position = "relative",
@@ -207,60 +203,10 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       return `${scheme}-${type}-${weight}`;
     };
 
-    const parseDimension = (
-      value: number | SpacingToken | string | undefined,
-      type: "width" | "height",
-    ): string | undefined => {
-      if (value === undefined) return undefined;
-      if (typeof value === "number") return `${value}rem`;
-      if (typeof value === "string") {
-        // Check for CSS unit values - pass through directly
-        if (
-          value.endsWith("%") ||
-          value.endsWith("vh") ||
-          value.endsWith("dvh") ||
-          value.endsWith("vw") ||
-          value.startsWith("calc(")
-        ) {
-          return value;
-        }
-        // Static spacing tokens
-        if (
-          [
-            "0",
-            "1",
-            "2",
-            "4",
-            "8",
-            "12",
-            "16",
-            "20",
-            "24",
-            "32",
-            "40",
-            "48",
-            "56",
-            "64",
-            "80",
-            "104",
-            "128",
-            "160",
-          ].includes(value)
-        ) {
-          return `var(--static-space-${value})`;
-        }
-        // Responsive tokens
-        if (["xs", "s", "m", "l", "xl"].includes(value)) {
-          return `var(--responsive-${type}-${value})`;
-        }
-      }
-      return undefined;
-    };
-
     // Auto-fit: one class, with the width as a custom property beside it, so
     // any rem or CSS length works without a class per size and the grid stays
     // a server component.
-    const minColumnWidthValue = parseDimension(minColumnWidth, "width");
+    const minColumnWidthValue = sizeValue(minColumnWidth, "width");
 
     let classes = classNames(
       position && `position-${position}`,
@@ -279,6 +225,9 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       minHeight === BELOW_HEADER && "min-height-below-header",
       maxHeight === BELOW_HEADER && "max-height-below-header",
       minColumnWidthValue ? "columns-auto-fit" : columns && `columns-${columns}`,
+      // Taken out of the props here, so it never reaches the DOM as a `rows`
+      // attribute, which is where it used to end up.
+      rows && `rows-${rows}`,
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
@@ -424,12 +373,12 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
     const combinedStyle: CSSProperties = {
       maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
         ? undefined
-        : parseDimension(maxWidth, "width"),
-      minWidth: parseDimension(minWidth, "width"),
-      minHeight: parseDimension(minHeight, "height"),
-      maxHeight: parseDimension(maxHeight, "height"),
-      width: parseDimension(width, "width"),
-      height: parseDimension(height, "height"),
+        : sizeValue(maxWidth, "width"),
+      minWidth: sizeValue(minWidth, "width"),
+      minHeight: sizeValue(minHeight, "height"),
+      maxHeight: sizeValue(maxHeight, "height"),
+      width: sizeValue(width, "width"),
+      height: sizeValue(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
       // Hide default cursor when using custom cursor
