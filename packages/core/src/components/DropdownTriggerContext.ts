@@ -20,9 +20,30 @@ export interface DropdownTriggerState {
    * announcing itself as one around it. Returns the matching unregister.
    */
   register: () => () => void;
+  /**
+   * A combobox trigger's active option (see DropdownComboboxContext), as an
+   * index into the panel's options, so the panel keeps it scrolled into view.
+   * -1 for none.
+   */
+  setActiveIndex: (index: number) => void;
 }
 
 export const DropdownTriggerContext = createContext<DropdownTriggerState | null>(null);
+
+/**
+ * Set by a component that renders a DropdownWrapper around a combobox it owns
+ * (Select), for that one wrapper: DropdownWrapper reads it and clears it again
+ * for everything inside. Internal: not exported from the package.
+ *
+ * The combobox is the control, and keeps focus while the panel is open: it
+ * owns the keyboard and points at the active option with
+ * `aria-activedescendant`. So the wrapper neither claims `role="button"`
+ * around it (an input inside a button is nested interactive content) nor
+ * moves focus into the panel, and the panel adds no listbox around the
+ * combobox's own. A context rather than a registration like the Button one
+ * because it is known at render: the server markup is right too.
+ */
+export const DropdownComboboxContext = createContext(false);
 
 /**
  * The dropdown this element is the trigger of, or null. A trigger that reads
@@ -33,6 +54,19 @@ export function useDropdownTrigger(): DropdownTriggerState | null {
   const register = trigger?.register;
   useEffect(() => register?.(), [register]);
   return trigger;
+}
+
+/**
+ * For a combobox trigger: reports its active option to the panel while it is
+ * open. Re-reported on every open, because the panel forgets it on close.
+ */
+export function useDropdownCombobox(activeIndex: number): void {
+  const trigger = useContext(DropdownTriggerContext);
+  const setActiveIndex = trigger?.setActiveIndex;
+  const expanded = trigger?.expanded ?? false;
+  useEffect(() => {
+    if (expanded) setActiveIndex?.(activeIndex);
+  }, [expanded, activeIndex, setActiveIndex]);
 }
 
 /**

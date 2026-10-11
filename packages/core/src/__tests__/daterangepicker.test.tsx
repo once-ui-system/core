@@ -5,7 +5,7 @@ import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { type DateRange, DateRangePicker } from "../components/DateRangePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { axeViolations } from "../test/axe";
+import { axeViolations, expectNoAxeViolations } from "../test/axe";
 
 /**
  * DateRangePicker picks a range in clicks: the first sets the start, the
@@ -174,12 +174,11 @@ describe("DateRangePicker", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  // BUG (DatePicker, so every DateRangePicker): the day grid has
-  // role="grid" but its buttons sit straight in it, with no row or gridcell
-  // (axe: "aria-required-children"); and the month and year selectors are
-  // DropdownWrapper triggers inside another interactive element
-  // ("nested-interactive").
-  it.skip("has no axe violations", async () => {
+  // The day grid had role="grid" with its buttons straight in it, no row or
+  // gridcell (axe "aria-required-children"); and the month and year
+  // selectors were DropdownWrapper triggers inside another interactive
+  // element ("nested-interactive"). See datepicker-grid.test.tsx.
+  it("has no axe violations", async () => {
     const { container } = render(<DateRangePicker value={january} onChange={vi.fn()} />, {
       wrapper,
     });
@@ -187,12 +186,67 @@ describe("DateRangePicker", () => {
     expect(await axeViolations(container)).toEqual([]);
   });
 
-  // BUG: with `dual`, the second calendar is given the next month as
-  // `currentMonth` but also the range's end as `value`, and DatePicker moves to
-  // its value's month. A range inside one month shows that month twice.
-  it.skip("shows the next month beside a range that ends in the same month", async () => {
+  it("has no axe violations with `dual`, mid-selection", async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <DateRangePicker
+        dual
+        value={{ startDate: jan(28), endDate: undefined }}
+        onChange={vi.fn()}
+      />,
+      { wrapper },
+    );
+    await day(jan(28));
+    await user.hover(await day(new Date(2026, 1, 3)));
+    await expectNoAxeViolations(container);
+  });
+
+  // With `dual`, the second calendar is given the next month as
+  // `currentMonth` but also the range's end as `value`, and DatePicker moved
+  // to its value's month: a range inside one month showed that month twice.
+  // A calendar whose month is the caller's (currentMonth, currentYear and
+  // onMonthChange) no longer follows its value.
+  it("shows the next month beside a range that ends in the same month", async () => {
     render(<DateRangePicker dual value={january} onChange={vi.fn()} />, { wrapper });
     expect(await day(new Date(2026, 1, 28))).toBeInTheDocument();
+    showing("January", "2026");
+    showing("February", "2026");
+    expect(screen.getByRole("grid", { name: "January 2026" })).toBeInTheDocument();
+    expect(screen.getByRole("grid", { name: "February 2026" })).toBeInTheDocument();
+    // Each day once, in its own month's calendar.
+    expect(document.querySelectorAll(`button[data-value="${jan(9).toISOString()}"]`)).toHaveLength(
+      1,
+    );
+  });
+
+  it("keeps both months of a dual picker when the start is picked in the second", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    // Not echoed back as `value`: the picker's own state moves on alone.
+    render(<DateRangePicker dual value={january} onChange={onChange} />, { wrapper });
+    await user.click(await day(new Date(2026, 1, 10)));
+
+    expect(onChange).toHaveBeenLastCalledWith({
+      startDate: new Date(2026, 1, 10),
+      endDate: undefined,
+    });
+    expect(screen.getByRole("grid", { name: "January 2026" })).toBeInTheDocument();
+    expect(screen.getByRole("grid", { name: "February 2026" })).toBeInTheDocument();
+    // The new start is marked in the calendar that shows it.
+    expect((await day(new Date(2026, 1, 10))).closest('[role="gridcell"]')).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+  });
+
+  it("moves both calendars of a dual picker together", async () => {
+    const user = userEvent.setup();
+    render(<DateRangePicker dual value={january} onChange={vi.fn()} />, { wrapper });
+    await day(jan(5));
+    await user.click(screen.getByRole("button", { name: "Next month" }));
+    expect(await day(new Date(2026, 2, 31))).toBeInTheDocument();
+    expect(screen.getByRole("grid", { name: "February 2026" })).toBeInTheDocument();
+    expect(screen.getByRole("grid", { name: "March 2026" })).toBeInTheDocument();
   });
 
   // DateRangePicker took a ref through forwardRef but never attached it.

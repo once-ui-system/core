@@ -22,7 +22,18 @@ import { ScrollLock } from "./ScrollLock";
 export interface ContextMenuProps {
   children: ReactNode;
   dropdown: ReactNode;
+  /**
+   * Where the menu opens relative to the pointer: `"bottom-start"`, the
+   * default, puts its top-left corner there, `"bottom-end"` its top-right,
+   * `"top-start"` its bottom-left, and so on. A menu that would run off
+   * screen opens on the other side of the pointer instead.
+   */
   placement?: Placement;
+  /**
+   * The region that opens the menu (the box around `children`) fills its
+   * container's width. The menu keeps its own width. No effect with
+   * `contents`, which has no box.
+   */
   fillWidth?: boolean;
   minWidth?: number;
   maxWidth?: number;
@@ -50,6 +61,41 @@ const ITEM_SELECTOR = '[role="menuitem"], [role="option"], .option, [data-value]
 const isEnabled = (item: Element) =>
   !item.hasAttribute("disabled") && item.getAttribute("aria-disabled") !== "true";
 
+/**
+ * Where the menu's top-left corner goes for a pointer at `x`,`y`.
+ *
+ * `placement` is read against the pointer as a point: the side says which
+ * side of it the menu opens on, the alignment which edge of the menu lines up
+ * with it ("start" its left or top edge, "end" its right or bottom one, none
+ * its middle). On an axis where that runs off screen the menu is mirrored to
+ * the other side of the pointer, the way native context menus open up or to
+ * the left near an edge, and then held inside the viewport.
+ */
+function menuOrigin(
+  placement: Placement,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+): { x: number; y: number } {
+  const [side, align] = placement.split("-");
+  const along = (point: number, size: number) =>
+    align === "start" ? point : align === "end" ? point - size : point - size / 2;
+
+  const vertical = side === "top" || side === "bottom";
+  const left = vertical ? along(x, width) : side === "right" ? x : x - width;
+  const top = vertical ? (side === "bottom" ? y : y - height) : along(y, height);
+
+  const fit = (start: number, size: number, point: number, room: number) => {
+    const mirrored = start + size > room || start < 0 ? 2 * point - start - size : start;
+    return Math.max(0, Math.min(mirrored, room - size));
+  };
+  return {
+    x: fit(left, width, x, window.innerWidth),
+    y: fit(top, height, y, window.innerHeight),
+  };
+}
+
 const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
   (
     {
@@ -63,7 +109,10 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       minWidth = 12,
       maxWidth,
       fillWidth = false,
-      placement = "bottom-end",
+      // "bottom-start" is where the menu has always opened: its top-left
+      // corner at the pointer. The declared default used to be "bottom-end",
+      // but the prop was never read.
+      placement = "bottom-start",
       disabled = false,
       contents = false,
       className,
@@ -152,12 +201,12 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
     );
 
     /**
-     * Keep the menu on screen. It opens with its top-left corner at the
-     * pointer, so a right-click near the bottom or right edge put most of it
-     * out of view; there it opens above or to the left of the pointer
-     * instead, the way native context menus do. Measured in layout pixels
-     * (`offsetWidth`), which the open animation's scale does not shrink, and
-     * before paint, so it never draws in the wrong place first.
+     * Place the menu at the pointer as `placement` says, and keep it on
+     * screen: a right-click near the bottom or right edge put most of it out
+     * of view, so there it opens on the other side of the pointer instead
+     * (see `menuOrigin`). Measured in layout pixels (`offsetWidth`), which the
+     * open animation's scale does not shrink, and before paint, so it never
+     * draws in the wrong place first.
      */
     useLayoutEffect(() => {
       if (!isDropdownOpen) return;
@@ -167,13 +216,8 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
         setMenuPosition({ x, y });
         return;
       }
-      const width = menu.offsetWidth;
-      const height = menu.offsetHeight;
-      setMenuPosition({
-        x: x + width > window.innerWidth ? Math.max(0, x - width) : x,
-        y: y + height > window.innerHeight ? Math.max(0, y - height) : y,
-      });
-    }, [isDropdownOpen, contextPosition]);
+      setMenuPosition(menuOrigin(placement, x, y, menu.offsetWidth, menu.offsetHeight));
+    }, [isDropdownOpen, contextPosition, placement]);
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -415,6 +459,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
           ref={containerRef}
           onContextMenu={handleContextMenu}
           onClick={handleClick}
+          fillWidth={fillWidth}
           className={className || ""}
           // `display: contents` outranks the Flex's own display class, and
           // without a box its position class contains nothing either.

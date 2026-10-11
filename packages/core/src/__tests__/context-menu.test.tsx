@@ -68,6 +68,44 @@ describe("ContextMenu position", () => {
     expect(panel.style.top).toBe(`${window.innerHeight - 40 - 150}px`);
   });
 
+  /**
+   * `placement` was declared, documented as "where the menu opens relative to
+   * the pointer", and never read. The default is where the menu has always
+   * opened, its top-left corner at the pointer: "bottom-start".
+   */
+  it.each([
+    ["bottom-end", 300, 300],
+    ["top-start", 500, 150],
+    ["top-end", 300, 150],
+    ["left", 300, 225],
+    ["right-end", 500, 150],
+  ] as const)("opens %s of the pointer", async (placement, left, top) => {
+    sizeMenusAs(200, 150);
+    render(<Target placement={placement} />, { wrapper: wrap });
+    fireEvent.contextMenu(screen.getByRole("button", { name: "Clip" }), {
+      clientX: 500,
+      clientY: 300,
+    });
+
+    const panel = await menu();
+    expect(panel.style.left).toBe(`${left}px`);
+    expect(panel.style.top).toBe(`${top}px`);
+  });
+
+  it("opens on the other side of the pointer when its placement would leave the screen", async () => {
+    sizeMenusAs(200, 150);
+    render(<Target placement="top-end" />, { wrapper: wrap });
+    // Up and to the left of a pointer near the top-left corner: no room.
+    fireEvent.contextMenu(screen.getByRole("button", { name: "Clip" }), {
+      clientX: 50,
+      clientY: 40,
+    });
+
+    const panel = await menu();
+    expect(panel.style.left).toBe("50px");
+    expect(panel.style.top).toBe("40px");
+  });
+
   it("opens at the element when the keyboard opened it", async () => {
     render(<Target />, { wrapper: wrap });
     const clip = screen.getByRole("button", { name: "Clip" });
@@ -174,6 +212,15 @@ describe("ContextMenu wrapper", () => {
     const { container } = render(<Target />, { wrapper: wrap });
     const wrapper = container.firstElementChild as HTMLElement;
     expect(wrapper).toHaveClass("display-flex");
+    expect(wrapper).not.toHaveClass("fill-width");
+  });
+
+  // `fillWidth` was declared and never applied. Stack and Shorty pass it on a
+  // timeline that has to span its column.
+  it("fills its container's width with `fillWidth`", () => {
+    const { container } = render(<Target fillWidth />, { wrapper: wrap });
+    const wrapper = container.firstElementChild as HTMLElement;
+    expect(wrapper).toHaveClass("fill-width");
   });
 
   it("adds no box with `contents`, and still opens", async () => {
