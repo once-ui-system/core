@@ -3,16 +3,33 @@
 import classNames from "clsx";
 import React, { forwardRef } from "react";
 import { useTheme } from "../contexts/ThemeProvider";
+import { mergeLabels } from "../internal/labels";
 import { Column } from "./Column";
 import { IconButton } from "./IconButton";
 import { Row } from "./Row";
 import styles from "./ThemeSwitcher.module.scss";
 
 const THEMES = [
-  { value: "system", icon: "computer", label: "System theme" },
-  { value: "dark", icon: "dark", label: "Dark theme" },
-  { value: "light", icon: "light", label: "Light theme" },
+  { value: "system", icon: "computer" },
+  { value: "dark", icon: "dark" },
+  { value: "light", icon: "light" },
 ] as const;
+
+/** Each option's accessible name. Omitted fields keep the English default. */
+interface ThemeSwitcherLabels {
+  /** Defaults to `"System theme"`. */
+  system?: string;
+  /** Defaults to `"Dark theme"`. */
+  dark?: string;
+  /** Defaults to `"Light theme"`. */
+  light?: string;
+}
+
+const DEFAULT_LABELS: Required<ThemeSwitcherLabels> = {
+  system: "System theme",
+  dark: "Dark theme",
+  light: "Light theme",
+};
 
 interface ThemeSwitcherProps extends React.ComponentProps<typeof Row> {
   /**
@@ -41,11 +58,17 @@ interface ThemeSwitcherProps extends React.ComponentProps<typeof Row> {
    * the viewport.
    */
   direction?: "row" | "column";
+  /**
+   * The options' accessible names, for a translated interface. Omitted
+   * fields keep the English: "System theme", "Dark theme", "Light theme".
+   */
+  labels?: ThemeSwitcherLabels;
 }
 
 const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
-  ({ collapsed, direction = "row", className, ...flex }, ref) => {
+  ({ collapsed, direction = "row", labels, className, ...flex }, ref) => {
     const { theme, setTheme } = useTheme();
+    const names = mergeLabels(DEFAULT_LABELS, labels);
     const [mounted, setMounted] = React.useState(false);
     // Two frames after `mounted` has committed, so a collapsed group appears
     // only once the browser has laid it out showing the right option (see
@@ -94,7 +117,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
         ? [...THEMES].sort((a, b) => Number(theme === b.value) - Number(theme === a.value))
         : THEMES;
 
-    const options = ordered.map(({ value, icon, label }, index) => {
+    const options = ordered.map(({ value, icon }, index) => {
       const active = mounted && theme === value;
       return (
         <Row
@@ -110,7 +133,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
             icon={icon}
             variant={active ? "primary" : "tertiary"}
             onClick={() => setTheme(value)}
-            aria-label={label}
+            aria-label={names[value]}
             aria-pressed={active}
             suppressHydrationWarning
           />
@@ -174,4 +197,5 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
 
 ThemeSwitcher.displayName = "ThemeSwitcher";
 
+export type { ThemeSwitcherLabels };
 export { ThemeSwitcher };

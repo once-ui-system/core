@@ -2,6 +2,7 @@
 
 import { forwardRef } from "react";
 import {
+  type StylePanelLabels,
   type StylePanelRootProps,
   type StylePanelVisibility,
   sections,
@@ -9,7 +10,15 @@ import {
 
 export type {
   StyleGroupProps,
+  StylePanelGroupLabels,
+  StylePanelHeading,
+  StylePanelLabels,
+  StylePanelNameLabels,
+  StylePanelOptionLabels,
   StylePanelRootProps,
+  StylePanelRowLabels,
+  StylePanelSchemeRow,
+  StylePanelSwatchLabels,
   StylePanelValue,
   StylePanelVisibility,
   StyleRowProps,
@@ -26,6 +35,12 @@ export interface StylePanelProps extends StylePanelRootProps {
    */
   value?: StylePanelRootProps["value"];
   onChange?: StylePanelRootProps["onChange"];
+  /**
+   * Every string the panel shows or announces, over the English defaults.
+   * Restated for the same reason; it names its type rather than indexing it,
+   * so the spec points at the shape a translation fills in.
+   */
+  labels?: StylePanelLabels;
 }
 
 const visible = (section: { section?: boolean } | undefined) => section?.section !== false;
@@ -37,7 +52,8 @@ const visible = (section: { section?: boolean } | undefined) => section?.section
  * arrangement — or only two of the sections — can drop this and compose
  * `StylePanel.Page`, `StylePanel.Brand` and the rest directly inside
  * `StylePanel.Root`. Pass `value` and `onChange` to take over the state, in
- * which case nothing is written to ThemeProvider or storage.
+ * which case nothing is written to ThemeProvider or storage, and `labels` to
+ * translate it.
  */
 const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(({ visibility, ...rest }, ref) => (
   <sections.Root ref={ref} {...rest}>

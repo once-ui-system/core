@@ -25,6 +25,7 @@ import {
   type TransitionStyle,
   useStyle,
 } from "../contexts/ThemeProvider";
+import { mergeLabels } from "../internal/labels";
 import type { ChartMode } from "../modules/data/interfaces";
 import { type Schemes, schemes } from "../types";
 import { Column } from "./Column";
@@ -34,7 +35,7 @@ import { Scroller } from "./Scroller";
 import { SegmentedControl } from "./SegmentedControl";
 import styles from "./StylePanel.module.scss";
 import { Text } from "./Text";
-import { ThemeSwitcher } from "./ThemeSwitcher";
+import { ThemeSwitcher, type ThemeSwitcherLabels } from "./ThemeSwitcher";
 
 /** Every style choice the panel can edit, including the chart mode, which is
  *  owned by DataThemeProvider rather than ThemeProvider. */
@@ -78,6 +79,207 @@ export interface StyleGroupProps extends Omit<React.ComponentProps<typeof Column
   title?: ReactNode | false;
   description?: ReactNode | false;
 }
+
+/* ---- labels -------------------------------------------------------------- */
+
+/** The two colour rows, Brand and Accent. */
+export type StylePanelSchemeRow = "brand" | "accent";
+
+/** A group's heading. */
+export interface StylePanelHeading {
+  title?: ReactNode;
+  description?: ReactNode;
+}
+
+/** Each group's heading, keyed like `visibility`. */
+export interface StylePanelGroupLabels {
+  /** Defaults to "Page" and "Customize page theme". */
+  page?: StylePanelHeading;
+  /** Defaults to "Color" and "Customize color schemes". */
+  color?: StylePanelHeading;
+  /** Defaults to "Solid style" and "Customize the appearance of interactive elements". */
+  solidStyle?: StylePanelHeading;
+  /** Defaults to "Body text" and "Scale running text without touching headings". */
+  bodyText?: StylePanelHeading;
+  /** Defaults to "Advanced" and "Customize advanced styling options". */
+  advanced?: StylePanelHeading;
+}
+
+/** Each row's label, keyed by the row's part name (`StylePanel.BodySize` → `bodySize`). */
+export interface StylePanelRowLabels {
+  /** Defaults to `"Theme"`. */
+  theme?: ReactNode;
+  /** Defaults to `"Shape"`. */
+  shape?: ReactNode;
+  /** Defaults to `"Brand"`. */
+  brand?: ReactNode;
+  /** Defaults to `"Accent"`. */
+  accent?: ReactNode;
+  /** Defaults to `"Neutral"`. */
+  neutral?: ReactNode;
+  /** Defaults to `"Style"`. */
+  solid?: ReactNode;
+  /** Defaults to `"Effect"`. */
+  effect?: ReactNode;
+  /** Defaults to `"Surface"`. */
+  surface?: ReactNode;
+  /** Defaults to `"Scaling"`. */
+  scaling?: ReactNode;
+  /** Defaults to `"Transition"`. */
+  transition?: ReactNode;
+  /** Defaults to `"Data Style"`. */
+  dataStyle?: ReactNode;
+  /** Defaults to `"Text size"`. */
+  bodySize?: ReactNode;
+  /** Defaults to `"Line height"`. */
+  bodyLineHeight?: ReactNode;
+}
+
+/** The segmented rows' option labels, keyed by row and then by value. */
+export interface StylePanelOptionLabels {
+  /** Defaults to Color, Inverse and Contrast. */
+  solid?: Partial<Record<SolidType, ReactNode>>;
+  /** Defaults to Flat and Plastic. */
+  effect?: Partial<Record<SolidStyle, ReactNode>>;
+  /** Defaults to Filled and Translucent. */
+  surface?: Partial<Record<SurfaceStyle, ReactNode>>;
+  /** Defaults to All, Micro, Macro and None. */
+  transition?: Partial<Record<TransitionStyle, ReactNode>>;
+  /** Defaults to Categorical, Divergent and Sequential. */
+  dataStyle?: Partial<Record<ChartMode, ReactNode>>;
+  /** Formats a scaling option, `"90"` to `"110"`. Defaults to the value as written. */
+  scaling?: (value: ScalingSize) => ReactNode;
+  /** Formats a text size option, `"90"` to `"110"`. Defaults to the value as written. */
+  bodySize?: (value: BodySize) => ReactNode;
+  /** Formats a line height option, `"90"` to `"120"`. Defaults to the value as written. */
+  bodyLineHeight?: (value: BodyLineHeight) => ReactNode;
+}
+
+/** Display names for the swatch rows' values, which their accessible names are built from. */
+export interface StylePanelNameLabels {
+  /** Defaults to the key: `"sharp"`, `"conservative"`, `"playful"`, `"rounded"`. */
+  shapes?: Partial<Record<BorderStyle, string>>;
+  /** Defaults to the key: `"blue"`, `"indigo"` and the rest. */
+  schemes?: Partial<Record<Schemes, string>>;
+  /** Defaults to the key: `"gray"`, `"sand"` and the rest. */
+  neutrals?: Partial<Record<NeutralColor, string>>;
+}
+
+/**
+ * The swatches' accessible names. Functions, so a translation can put the
+ * words in its own order; `name` is the display name from `names`.
+ */
+export interface StylePanelSwatchLabels {
+  /** Defaults to `` (name) => `Corner style: ${name}` ``. */
+  shape?: (name: string) => string;
+  /** Defaults to `` (name, row) => `Brand colour: ${name}` ``, or `Accent colour` on the accent row. */
+  scheme?: (name: string, row: StylePanelSchemeRow) => string;
+  /** Defaults to `` (name) => `Neutral colour: ${name}` ``. */
+  neutral?: (name: string) => string;
+}
+
+/**
+ * Every string the panel shows or announces, for a translated interface.
+ *
+ * Every field at every depth is optional: what is left out keeps its English
+ * default, so a host can translate one group at a time. A row's `label` or a
+ * group's `title`/`description` passed as a prop still wins over these.
+ */
+export interface StylePanelLabels {
+  groups?: StylePanelGroupLabels;
+  rows?: StylePanelRowLabels;
+  options?: StylePanelOptionLabels;
+  names?: StylePanelNameLabels;
+  swatches?: StylePanelSwatchLabels;
+  /** The Theme row's options, passed to its `ThemeSwitcher`. */
+  themeSwitcher?: ThemeSwitcherLabels;
+}
+
+/** A labels type with every field filled in, at every depth. */
+type Complete<T> = {
+  [K in keyof T]-?: NonNullable<T[K]> extends (...args: never[]) => unknown
+    ? NonNullable<T[K]>
+    : NonNullable<T[K]> extends object
+      ? Complete<NonNullable<T[K]>>
+      : NonNullable<T[K]>;
+};
+
+/** The theme switcher keeps its own English defaults, so they live in one place. */
+type ResolvedLabels = Complete<Omit<StylePanelLabels, "themeSwitcher">> & {
+  themeSwitcher: ThemeSwitcherLabels;
+};
+
+const shapes = ["sharp", "conservative", "playful", "rounded"] as const;
+const neutrals = ["gray", "sand", "slate", "dusk", "mint", "rose"] as const;
+const scalingSizes: ScalingSize[] = ["90", "95", "100", "105", "110"];
+const bodySizes: BodySize[] = ["90", "95", "100", "105", "110"];
+const bodyLineHeights: BodyLineHeight[] = ["90", "100", "110", "120"];
+
+const keysAsNames = <K extends string>(keys: readonly K[]) =>
+  Object.fromEntries(keys.map((key): [K, string] => [key, key])) as Record<K, string>;
+
+const DEFAULT_LABELS: ResolvedLabels = {
+  groups: {
+    page: { title: "Page", description: "Customize page theme" },
+    color: { title: "Color", description: "Customize color schemes" },
+    solidStyle: {
+      title: "Solid style",
+      description: "Customize the appearance of interactive elements",
+    },
+    bodyText: { title: "Body text", description: "Scale running text without touching headings" },
+    advanced: { title: "Advanced", description: "Customize advanced styling options" },
+  },
+  rows: {
+    theme: "Theme",
+    shape: "Shape",
+    brand: "Brand",
+    accent: "Accent",
+    neutral: "Neutral",
+    solid: "Style",
+    effect: "Effect",
+    surface: "Surface",
+    scaling: "Scaling",
+    transition: "Transition",
+    dataStyle: "Data Style",
+    bodySize: "Text size",
+    bodyLineHeight: "Line height",
+  },
+  options: {
+    solid: { color: "Color", inverse: "Inverse", contrast: "Contrast" },
+    effect: { flat: "Flat", plastic: "Plastic" },
+    surface: { filled: "Filled", translucent: "Translucent" },
+    transition: { all: "All", micro: "Micro", macro: "Macro", none: "None" },
+    dataStyle: { categorical: "Categorical", divergent: "Divergent", sequential: "Sequential" },
+    scaling: (value) => value,
+    bodySize: (value) => value,
+    bodyLineHeight: (value) => value,
+  },
+  names: {
+    shapes: keysAsNames(shapes),
+    schemes: keysAsNames(schemes as Schemes[]),
+    neutrals: keysAsNames(neutrals),
+  },
+  swatches: {
+    shape: (name) => `Corner style: ${name}`,
+    scheme: (name, row) => `${row === "brand" ? "Brand" : "Accent"} colour: ${name}`,
+    neutral: (name) => `Neutral colour: ${name}`,
+  },
+  themeSwitcher: {},
+};
+
+/**
+ * The merged labels. Its default is the English set rather than nothing, so
+ * a row rendered outside a Root — `StylePanel.Theme` needs no state — still
+ * has its text.
+ */
+const StylePanelLabelsContext = createContext<ResolvedLabels>(DEFAULT_LABELS);
+
+const useStylePanelLabels = () => useContext(StylePanelLabelsContext);
+
+/** A prop the caller set — including `false` or `null` — wins over the label. */
+const prefer = <T,>(prop: T | undefined, label: T): T => (prop === undefined ? label : prop);
+
+/* ---- state --------------------------------------------------------------- */
 
 interface StylePanelContextValue {
   value: StylePanelValue;
@@ -143,10 +345,13 @@ export interface StylePanelRootProps
    *  writes nothing to ThemeProvider, DataThemeProvider or storage. */
   value?: StylePanelValue;
   onChange?: (next: StylePanelValue, changed: Partial<StylePanelValue>) => void;
+  /** Every string the panel shows or announces, over the English defaults.
+   *  Every group and row inside reads them; their own props still win. */
+  labels?: StylePanelLabels;
 }
 
 const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
-  { value, onChange, children, ...rest },
+  { value, onChange, labels, children, ...rest },
   ref,
 ) {
   const bound = useBoundState();
@@ -165,11 +370,15 @@ const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
     [controlled, value, controlledSet, bound],
   );
 
+  const resolvedLabels = useMemo(() => mergeLabels(DEFAULT_LABELS, labels), [labels]);
+
   return (
     <StylePanelContext.Provider value={context}>
-      <Column fillWidth gap="16" ref={ref} {...rest}>
-        {children}
-      </Column>
+      <StylePanelLabelsContext.Provider value={resolvedLabels}>
+        <Column fillWidth gap="16" ref={ref} {...rest}>
+          {children}
+        </Column>
+      </StylePanelLabelsContext.Provider>
     </StylePanelContext.Provider>
   );
 });
@@ -274,42 +483,44 @@ function Swatches<T extends string>({
 
 /* ---- rows ---------------------------------------------------------------- */
 
-const shapes = ["sharp", "conservative", "playful", "rounded"] as const;
-const neutrals = ["gray", "sand", "slate", "dusk", "mint", "rose"] as const;
-
-function ThemeRow({ label = "Theme", ...rest }: StyleRowProps) {
+function ThemeRow({ label, ...rest }: StyleRowProps) {
+  const labels = useStylePanelLabels();
   return (
-    <Row label={label} {...rest}>
-      <ThemeSwitcher />
+    <Row label={prefer(label, labels.rows.theme)} {...rest}>
+      <ThemeSwitcher labels={labels.themeSwitcher} />
     </Row>
   );
 }
 
-function ShapeRow({ label = "Shape", ...rest }: StyleRowProps) {
+function ShapeRow({ label, ...rest }: StyleRowProps) {
   const { value, set, mounted } = useStylePanel();
+  const labels = useStylePanelLabels();
   return (
-    <Row label={label} {...rest}>
+    <Row label={prefer(label, labels.rows.shape)} {...rest}>
       <Swatches
         options={shapes}
         selected={mounted ? value.border : undefined}
         onSelect={(border) => set({ border })}
-        ariaLabel={(shape) => `Corner style: ${shape}`}
+        ariaLabel={(shape) => labels.swatches.shape(labels.names.shapes[shape])}
         dataBorder
       />
     </Row>
   );
 }
 
-function schemeRow(key: "brand" | "accent", fallback: string) {
-  return function SchemeRow({ label = fallback, ...rest }: StyleRowProps) {
+function schemeRow(key: StylePanelSchemeRow) {
+  return function SchemeRow({ label, ...rest }: StyleRowProps) {
     const { value, set, mounted } = useStylePanel();
+    const labels = useStylePanelLabels();
     return (
-      <Row label={label} {...rest}>
+      <Row label={prefer(label, labels.rows[key])} {...rest}>
         <Swatches
           options={schemes}
           selected={mounted ? (value[key] as Schemes) : undefined}
           onSelect={(scheme) => set({ [key]: scheme as Schemes })}
-          ariaLabel={(scheme) => `${fallback} colour: ${scheme}`}
+          ariaLabel={(scheme) =>
+            labels.swatches.scheme(labels.names.schemes[scheme as Schemes], key)
+          }
           swatchClass={(scheme) => styles[scheme]}
           scroll
         />
@@ -318,18 +529,21 @@ function schemeRow(key: "brand" | "accent", fallback: string) {
   };
 }
 
-const BrandRow = schemeRow("brand", "Brand");
-const AccentRow = schemeRow("accent", "Accent");
+const BrandRow = schemeRow("brand");
+const AccentRow = schemeRow("accent");
 
-function NeutralRow({ label = "Neutral", ...rest }: StyleRowProps) {
+function NeutralRow({ label, ...rest }: StyleRowProps) {
   const { value, set, mounted } = useStylePanel();
+  const labels = useStylePanelLabels();
   return (
-    <Row label={label} {...rest}>
+    <Row label={prefer(label, labels.rows.neutral)} {...rest}>
       <Swatches
         options={neutrals}
         selected={mounted ? value.neutral : undefined}
         onSelect={(neutral) => set({ neutral })}
-        ariaLabel={(neutral) => `Neutral colour: ${neutral}`}
+        ariaLabel={(neutral) =>
+          labels.swatches.neutral(labels.names.neutrals[neutral as NeutralColor])
+        }
         swatchClass={(neutral) => styles[neutral]}
         scroll
       />
@@ -337,7 +551,7 @@ function NeutralRow({ label = "Neutral", ...rest }: StyleRowProps) {
   );
 }
 
-function solidSwatch(solid: string, fill: string, tone: string) {
+function solidSwatch(solid: string, fill: string, tone: ReactNode) {
   return (
     <Flex vertical="center" gap="12">
       <Flex
@@ -355,21 +569,22 @@ function solidSwatch(solid: string, fill: string, tone: string) {
 
 function segmentedRow<K extends keyof StylePanelValue>(
   key: K,
-  fallback: string,
-  buttons: { label: ReactNode; value: string }[],
+  row: keyof StylePanelRowLabels,
+  buttons: (labels: ResolvedLabels) => { label: ReactNode; value: string }[],
   defaultValue: string,
 ) {
-  return function SegmentedRow({ label = fallback, ...rest }: StyleRowProps) {
+  return function SegmentedRow({ label, ...rest }: StyleRowProps) {
     const { value, set, mounted } = useStylePanel();
+    const labels = useStylePanelLabels();
     return (
-      <Row label={label} {...rest}>
+      <Row label={prefer(label, labels.rows[row])} {...rest}>
         <SegmentedControl
           maxWidth={22}
           minWidth={0}
           onChange={(next) => set({ [key]: next } as Partial<StylePanelValue>)}
           value={mounted ? (value[key] as string | undefined) : undefined}
           defaultValue={defaultValue}
-          buttons={buttons.map((button) => ({ size: "l" as const, ...button }))}
+          buttons={buttons(labels).map((button) => ({ size: "l" as const, ...button }))}
         />
       </Row>
     );
@@ -378,78 +593,80 @@ function segmentedRow<K extends keyof StylePanelValue>(
 
 const SolidRow = segmentedRow(
   "solid",
-  "Style",
-  [
-    { label: solidSwatch("color", "brand-weak", "Color"), value: "color" },
-    { label: solidSwatch("inverse", "brand-strong", "Inverse"), value: "inverse" },
-    { label: solidSwatch("contrast", "brand-strong", "Contrast"), value: "contrast" },
+  "solid",
+  ({ options: { solid } }) => [
+    { label: solidSwatch("color", "brand-weak", solid.color), value: "color" },
+    { label: solidSwatch("inverse", "brand-strong", solid.inverse), value: "inverse" },
+    { label: solidSwatch("contrast", "brand-strong", solid.contrast), value: "contrast" },
   ],
   "contrast",
 );
 
 const EffectRow = segmentedRow(
   "solidStyle",
-  "Effect",
-  [
-    { label: solidSwatch("", "brand-weak", "Flat"), value: "flat" },
-    { label: solidSwatch("", "brand-weak", "Plastic"), value: "plastic" },
+  "effect",
+  ({ options: { effect } }) => [
+    { label: solidSwatch("", "brand-weak", effect.flat), value: "flat" },
+    { label: solidSwatch("", "brand-weak", effect.plastic), value: "plastic" },
   ],
   "flat",
 );
 
 const SurfaceRow = segmentedRow(
   "surface",
-  "Surface",
-  [
-    { label: "Filled", value: "filled" },
-    { label: "Translucent", value: "translucent" },
+  "surface",
+  ({ options: { surface } }) => [
+    { label: surface.filled, value: "filled" },
+    { label: surface.translucent, value: "translucent" },
   ],
   "filled",
 );
 
 const ScalingRow = segmentedRow(
   "scaling",
-  "Scaling",
-  ["90", "95", "100", "105", "110"].map((size) => ({ label: size, value: size })),
+  "scaling",
+  ({ options }) => scalingSizes.map((size) => ({ label: options.scaling(size), value: size })),
   "100",
 );
 
 const TransitionRow = segmentedRow(
   "transition",
-  "Transition",
-  [
-    { label: "All", value: "all" },
-    { label: "Micro", value: "micro" },
-    { label: "Macro", value: "macro" },
-    { label: "None", value: "none" },
+  "transition",
+  ({ options: { transition } }) => [
+    { label: transition.all, value: "all" },
+    { label: transition.micro, value: "micro" },
+    { label: transition.macro, value: "macro" },
+    { label: transition.none, value: "none" },
   ],
   "all",
 );
 
 const BodySizeRow = segmentedRow(
   "bodySize",
-  "Text size",
-  ["90", "95", "100", "105", "110"].map((size) => ({ label: size, value: size })),
+  "bodySize",
+  ({ options }) => bodySizes.map((size) => ({ label: options.bodySize(size), value: size })),
   "100",
 );
 
 const BodyLineHeightRow = segmentedRow(
   "bodyLineHeight",
-  "Line height",
-  ["90", "100", "110", "120"].map((height) => ({ label: height, value: height })),
+  "bodyLineHeight",
+  ({ options }) =>
+    bodyLineHeights.map((height) => ({ label: options.bodyLineHeight(height), value: height })),
   "100",
 );
 
-const dataStyleButtons = [
-  { size: "l" as const, label: "Categorical", value: "categorical" },
-  { size: "l" as const, label: "Divergent", value: "divergent" },
-  { size: "l" as const, label: "Sequential", value: "sequential" },
+const dataStyleButtons = ({ options: { dataStyle } }: ResolvedLabels) => [
+  { size: "l" as const, label: dataStyle.categorical, value: "categorical" },
+  { size: "l" as const, label: dataStyle.divergent, value: "divergent" },
+  { size: "l" as const, label: dataStyle.sequential, value: "sequential" },
 ];
 
 /** Split out so that only this row depends on DataThemeProvider — every other
  *  section can be cherry-picked without one in the tree. */
 function BoundDataStyleControl() {
   const { mode, setChartOptions } = useDataTheme();
+  const labels = useStylePanelLabels();
   return (
     <SegmentedControl
       maxWidth={22}
@@ -457,15 +674,16 @@ function BoundDataStyleControl() {
       onChange={(next) => setChartOptions({ mode: next as ChartMode })}
       value={mode}
       defaultValue="categorical"
-      buttons={dataStyleButtons}
+      buttons={dataStyleButtons(labels)}
     />
   );
 }
 
-function DataStyleRow({ label = "Data Style", ...rest }: StyleRowProps) {
+function DataStyleRow({ label, ...rest }: StyleRowProps) {
   const { value, set, mounted, controlled } = useStylePanel();
+  const labels = useStylePanelLabels();
   return (
-    <Row label={label} {...rest}>
+    <Row label={prefer(label, labels.rows.dataStyle)} {...rest}>
       {controlled ? (
         <SegmentedControl
           maxWidth={22}
@@ -473,7 +691,7 @@ function DataStyleRow({ label = "Data Style", ...rest }: StyleRowProps) {
           onChange={(next) => set({ chartMode: next as ChartMode })}
           value={mounted ? value.chartMode : undefined}
           defaultValue="categorical"
-          buttons={dataStyleButtons}
+          buttons={dataStyleButtons(labels)}
         />
       ) : (
         <BoundDataStyleControl />
@@ -489,14 +707,21 @@ type GroupProps<Rows extends string> = StyleGroupProps & { rows?: Partial<Record
 const show = (rows: Record<string, boolean | undefined> | undefined, key: string) =>
   rows?.[key] !== false;
 
-function PageGroup({
-  title = "Page",
-  description = "Customize page theme",
-  rows,
-  ...rest
-}: GroupProps<"theme" | "shape">) {
+/** A group's heading: its own props, else the panel's labels. */
+function useGroupHeading(
+  group: keyof ResolvedLabels["groups"],
+  { title, description }: Pick<StyleGroupProps, "title" | "description">,
+) {
+  const labels = useStylePanelLabels().groups[group];
+  return {
+    title: prefer(title, labels.title),
+    description: prefer(description, labels.description),
+  };
+}
+
+function PageGroup({ title, description, rows, ...rest }: GroupProps<"theme" | "shape">) {
   return (
-    <Group title={title} description={description} {...rest}>
+    <Group {...useGroupHeading("page", { title, description })} {...rest}>
       {show(rows, "theme") && <ThemeRow />}
       {show(rows, "shape") && <ShapeRow />}
     </Group>
@@ -504,13 +729,13 @@ function PageGroup({
 }
 
 function ColorGroup({
-  title = "Color",
-  description = "Customize color schemes",
+  title,
+  description,
   rows,
   ...rest
 }: GroupProps<"brand" | "accent" | "neutral">) {
   return (
-    <Group title={title} description={description} {...rest}>
+    <Group {...useGroupHeading("color", { title, description })} {...rest}>
       {show(rows, "brand") && <BrandRow />}
       {show(rows, "accent") && <AccentRow />}
       {show(rows, "neutral") && <NeutralRow />}
@@ -518,28 +743,18 @@ function ColorGroup({
   );
 }
 
-function SolidStyleGroup({
-  title = "Solid style",
-  description = "Customize the appearance of interactive elements",
-  rows,
-  ...rest
-}: GroupProps<"solid" | "effect">) {
+function SolidStyleGroup({ title, description, rows, ...rest }: GroupProps<"solid" | "effect">) {
   return (
-    <Group title={title} description={description} {...rest}>
+    <Group {...useGroupHeading("solidStyle", { title, description })} {...rest}>
       {show(rows, "solid") && <SolidRow />}
       {show(rows, "effect") && <EffectRow />}
     </Group>
   );
 }
 
-function BodyTextGroup({
-  title = "Body text",
-  description = "Scale running text without touching headings",
-  rows,
-  ...rest
-}: GroupProps<"size" | "lineHeight">) {
+function BodyTextGroup({ title, description, rows, ...rest }: GroupProps<"size" | "lineHeight">) {
   return (
-    <Group title={title} description={description} {...rest}>
+    <Group {...useGroupHeading("bodyText", { title, description })} {...rest}>
       {show(rows, "size") && <BodySizeRow />}
       {show(rows, "lineHeight") && <BodyLineHeightRow />}
     </Group>
@@ -547,13 +762,13 @@ function BodyTextGroup({
 }
 
 function AdvancedGroup({
-  title = "Advanced",
-  description = "Customize advanced styling options",
+  title,
+  description,
   rows,
   ...rest
 }: GroupProps<"surface" | "scaling" | "dataStyle" | "transition">) {
   return (
-    <Group title={title} description={description} {...rest}>
+    <Group {...useGroupHeading("advanced", { title, description })} {...rest}>
       {show(rows, "surface") && <SurfaceRow />}
       {show(rows, "scaling") && <ScalingRow />}
       {show(rows, "dataStyle") && <DataStyleRow />}
