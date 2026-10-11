@@ -106,11 +106,12 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [ ] `Select` still fails axe: `aria-expanded` on a non-combobox input, `role="button"` wrappers around it, nested listboxes when open (needs `role="combobox"` and a DropdownWrapper rework; may slip to 2.2).
 - [ ] `ContextMenu`'s `fillWidth` and `placement` props are declared but never applied.
 - [ ] `HeadingLink` fails axe (focusable div with a prohibited `aria-label`, `inert` until hovered, throws without a ToastProvider); `ElementType` drops `onClick` on links; `Media`'s `caption` renders its `figcaption` outside the `figure`; `BlockQuote` wraps children in a `span`.
-- [ ] `Grid`'s `rows` prop has no classes and leaks to the DOM; `Text`/`Heading` pass display props to the DOM as attributes; the size parsers miss the `"72"` spacing token; `Flex` writes no breakpoint classes for `top`/`left`/`right`/`bottom`.
+- [x] `Grid`'s `rows` prop has no classes and leaks to the DOM; `Text`/`Heading` pass display props to the DOM as attributes; the size parsers miss the `"72"` spacing token; `Flex` writes no breakpoint classes for `top`/`left`/`right`/`bottom`.
 - [ ] `NavIcon` has no button role or Enter/Space handling.
 - [ ] The docs' blocks use about 40 icon names that aren't registered (the docs type `iconLibrary` as `Record<string, IconType>`, so typos compile).
 - [ ] The docs app's `next/image` needs `images.localPatterns` for proxied OG images on Next 16.
 - [ ] The docs app's own MDX map (`apps/docs/src/product/mdx.tsx`) moves to `/mdx`; the harness generator and `rules.md` learn the `/mdx` and `/config` entries.
+- [ ] Layout leftovers: `Grid inline` emits `display-inline-grid`, which has no rule; `translateX`/`translateY` ignore spacing tokens; `ClientGrid` doesn't apply a breakpoint `width` or numeric spacing.
 
 ### W10 · API hygiene, additive (P1)
 - [ ] `onToggle` passes the new checked state (Checkbox, RadioButton, Switch); `defaultChecked`/`defaultValue` for uncontrolled use on Switch, Slider, TagInput.

@@ -191,6 +191,20 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **A responsive `Grid` renders on the server.** Any breakpoint prop used to
   switch it to the client and require a `LayoutProvider`, and breakpoint
   spacing on Grid did nothing.
+- **`Grid`'s `rows` sets the rows.** It had no class and reached the DOM as
+  a `rows` attribute; it is now a class at the base and every breakpoint,
+  like `columns`, and renders on the server.
+- **`Text` and `Heading` apply their display props.** `pointerEvents`,
+  `overflow`, `position`, `zIndex`, `gap`, offsets and
+  `translateX`/`translateY` reached the DOM as attributes; they are classes or
+  inline values now, as on `Flex`. `inline`, `hide`, `dark` and `light` no
+  longer leak, and `opacity={0}` and `zIndex={0}` apply.
+- **The `72` spacing step works as a size.** `width="72"` and the other size
+  props (`minColumnWidth` and `MasonryGrid`'s `gap` included) rendered
+  nothing; every size reads one list of the scale now.
+- **`Flex` breakpoint offsets.** `m={{ top: "16" }}` writes `.m-top-16`; a rem
+  or CSS-unit offset at a breakpoint is applied inline on `Flex` and `Grid`
+  (on the client, under the `LayoutProvider` every app already has).
 - **`overflow="clip"` and `"visible"` apply.** They type-checked but had no
   class behind them. An `xl` overflow on `Flex` now applies at `xl` widths.
 - **The validator's icon check runs.** It read a field the spec never wrote;
