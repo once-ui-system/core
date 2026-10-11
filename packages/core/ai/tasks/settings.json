@@ -1,14 +1,17 @@
 {
   "id": "settings",
   "title": "Settings page",
-  "description": "Section nav, profile form, settings rows with one control each, grouped sub-settings, danger zone",
+  "description": "Vertical section tabs, profile form, settings rows with one control each, grouped sub-settings, danger zone",
   "components": [
     "Column",
     "Row",
     "Heading",
     "Text",
     "Button",
-    "NavItem",
+    "Tabs",
+    "TabList",
+    "Tab",
+    "TabPanel",
     "Form",
     "Input",
     "Select",
@@ -29,8 +32,16 @@
     "manifest": "examples/blocks/manifest.json",
     "compose": ["Header4"]
   },
-  "gotchas": ["Card.interactive", "layout.shorthands", "color.tokens", "layout.defaults"],
+  "gotchas": [
+    "Card.interactive",
+    "layout.shorthands",
+    "color.tokens",
+    "layout.defaults",
+    "Select.closed",
+    "NumberInput.value"
+  ],
   "quality": {
+    "sectionNav": "Tabs orientation=\"vertical\" with s={{ direction: \"column\" }} (and the TabList s={{ direction: \"row\" }}), one TabPanel per section, keepMounted on a form panel. Sections that are routes use NavItem href instead",
     "settingRow": "One Setting per control — label and description left, control right. A list of Settings needs no surface around it",
     "grouping": "SettingGroup with a header control and open={enabled}, so sub-settings sit inside its box; SettingAxes for X/Y pairs",
     "explainers": "info on a Setting (an InfoTip) instead of a description line that is only needed once",

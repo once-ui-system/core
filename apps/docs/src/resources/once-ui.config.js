@@ -55,9 +55,11 @@ const layout = {
   },
 };
 
+/**
+ * Links are automatically displayed. Register new icons in icons.ts.
+ * @type {{ name: string; icon: import("@once-ui-system/core").IconName; link: string }[]}
+ */
 const social = [
-  // Links are automatically displayed.
-  // Import new icons in /icons.ts
   {
     name: "GitHub",
     icon: "github",

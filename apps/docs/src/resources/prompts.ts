@@ -174,6 +174,22 @@ is a Scrubber spanning both panes.
 Compose with Once UI primitives and token props. No raw div/span layout,
 no Tailwind, no custom CSS.`,
   },
+  {
+    id: "docs-page",
+    title: "Docs or blog article",
+    description:
+      "An MDX article with a breadcrumb trail and an on-page heading nav, its Markdown rendered through Once UI's MDX map instead of a hand-written one.",
+    prompt: `${harness}
+  docs.once-ui.com/ai/tasks/docs-page.json
+
+Build the article page for <your docs or blog>. Follow the task bundle:
+render the MDX with mdxComponents or createMdxComponents from
+@once-ui-system/core/mdx, with Breadcrumbs above the title and HeadingNav
+beside the article.
+
+Compose with Once UI primitives and token props. No raw div/span layout,
+no Tailwind, no custom CSS.`,
+  },
 ];
 
 const pro: Prompt[] = [

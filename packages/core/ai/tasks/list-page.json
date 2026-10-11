@@ -26,7 +26,8 @@
     "layout.shorthands",
     "layout.defaults",
     "Icon.names",
-    "color.tokens"
+    "color.tokens",
+    "Select.closed"
   ],
   "quality": {
     "pageHeader": "Title and one primary Button in a Row that stacks at s; per-record actions belong in the Table's actions, not the header",

@@ -1,7 +1,7 @@
 ---
 title: "Toast"
 summary: "A notification component that displays temporary messages with auto-dismiss and optional actions."
-updatedAt: "2026-06-30"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/toast.mdx"
 github: "components/Toast.tsx"
 navLabel: "Toast"
@@ -10,7 +10,7 @@ navTag: "Update"
 navTagVariant: "success"
 ---
 
-The `Toast` component displays temporary notification messages that automatically dismiss after 6 seconds. It's typically used through the [ToastProvider](/contexts/toastProvider) context, but can also be used standalone.
+The `Toast` component displays temporary notification messages that automatically dismiss after 6 seconds, or after their `duration`. The countdown pauses while a toast is hovered or has focus. It's typically used through the [ToastProvider](/contexts/toastProvider) context, but can also be used standalone.
 
 <Feedback title="Using Toasts" description={<>For most use cases, use the <InlineCode>useToast</InlineCode> hook from <SmartLink href="/contexts/toastProvider">ToastProvider</SmartLink> instead of rendering Toast components directly. The provider handles positioning, stacking, and lifecycle management automatically.</>}/>
 
@@ -139,8 +139,9 @@ The Toaster:
 ## Accessibility
 
 Toast components include proper ARIA attributes:
-- `role="alert"` for screen reader announcements
-- `aria-live="assertive"` for immediate notification
+- `role="status"` with `aria-live="polite"` for `success`, `info` and `warning`, so the message is announced without interrupting
+- `role="alert"` (assertive) for `danger` only
+- The countdown pauses while the toast holds focus, so there is time to reach its action
 - Keyboard-accessible close button with tooltip
 
 ## API reference
@@ -155,6 +156,7 @@ Toast components include proper ARIA attributes:
     showIcon: "Show the icon for the variant.",
     action: "A control in the toast — undo, retry, view.",
     onClose: "Called when it is dismissed.",
+    duration: "Milliseconds before it closes, paused while hovered or focused. Infinity keeps it up until it is closed.",
   }}
   content={[
     ["children", "ReactNode"],
@@ -166,7 +168,7 @@ Toast components include proper ARIA attributes:
 
 <PropsTable
   content={[
-    ["toasts", "{ id: string; variant: 'success' | 'danger' | 'warning' | 'info'; message: ReactNode; action?: ReactNode }[]"],
+    ["toasts", "{ id: string; variant: 'success' | 'danger' | 'warning' | 'info'; message: ReactNode; action?: ReactNode; duration?: number }[]"],
     ["removeToast", "(id: string) => void"]
   ]}
 />

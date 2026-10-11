@@ -17,10 +17,22 @@ whole document, so the header and sidebar slide away and the nav has to be
 scrolled back to.
 
 ```tsx
+// The drawer is open for the path it was opened on: a link in it closes it.
+const [menuPath, setMenuPath] = useState<string | null>(null);
+const menuOpen = menuPath === pathname;
+
 <Column fill horizontal="center" flex={1}>
-  <Header />                                       {/* 56px: --header-height */}
+  <Row height="56" fillWidth vertical="center" paddingX="16" gap="8">  {/* 56px: --header-height */}
+    <Row hide s={{ hide: false }}>
+      <IconButton icon="moreHorizontal" variant="tertiary" tooltip="Menu"
+        aria-expanded={menuOpen} onClick={() => setMenuPath(pathname)} />
+    </Row>
+    {/* logo, search, account */}
+  </Row>
   <Row fill paddingX="8">
-    <Sidebar s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56" />
+    <Column s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56">
+      <Nav nav={nav} pathname={pathname} />
+    </Column>
     <Row fill horizontal="center" topRadius="l" overflow="hidden">
       <Row
         height="below-header"
@@ -35,6 +47,11 @@ scrolled back to.
       </Row>
     </Row>
   </Row>
+  <Drawer open={menuOpen} onClose={() => setMenuPath(null)} side="left" size="s" title="Menu" flush>
+    <Column paddingTop="64" paddingBottom="16">
+      <Nav nav={nav} pathname={pathname} />
+    </Column>
+  </Drawer>
 </Column>
 ```
 
@@ -56,7 +73,12 @@ What each part is doing:
   a panel sitting on the page rather than the page itself. The radius is on the
   top only, since the bottom is off-screen.
 - **`s={{ hide: true }}`** rather than a media query. The mobile nav is a
-  separate surface, not this one reflowed.
+  separate surface, not this one reflowed: a **`Drawer`** from the left,
+  holding the same `Nav`, opened by a header button that only shows at `s`
+  (`hide s={{ hide: false }}`). Drawer brings the focus trap, scroll lock,
+  Escape and focus return a hand-made overlay misses; `flush` keeps its
+  `title` for screen readers only. Tie it to the path it was opened on, as
+  above, and following a link closes it without an effect.
 - **`maxWidth="xl"`** inside the pane. A dashboard is wider than a document;
   `"m"` is for reading.
 
@@ -156,6 +178,7 @@ around it: toolbar, layer list, canvas and a working timeline.
   browser chrome shows or hides.
 - A sticky sidebar without `fitHeight` — it stretches to the row and the sticky
   never engages.
+- A mobile menu built from an absolute `Column` and a `zIndex`. Use `Drawer`.
 - `pathname === href` or `startsWith` for nav selection. Use `selectNavHref`.
 - Icons on both a NavGroup and its children — two columns of icons, no hierarchy.
 - `overflow` on the SplitView instead of on its panels — the divider stops

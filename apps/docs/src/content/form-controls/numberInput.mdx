@@ -1,7 +1,7 @@
 ---
 title: "NumberInput"
 summary: "A numeric field with increment and decrement controls, bounded by min, max and step."
-updatedAt: "2026-09-14"
+updatedAt: "2026-10-11"
 docs: "once-ui/form-controls/numberInput.mdx"
 github: "components/NumberInput.tsx"
 navLabel: "NumberInput"
@@ -39,6 +39,13 @@ const handleChange = (newValue: number) => {
     }
   ]}
 />
+
+## Following the value
+
+The field follows its `value` prop after mount, so a number changed somewhere
+else (an undo, a reset, a drag on a timeline) shows up in it. There is no need
+to remount it with a `key`. It does not rewrite what the user is typing: a
+partial entry such as `-` or `1.` stays as typed until it reads as a number.
 
 ## API reference
 

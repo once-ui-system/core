@@ -69,23 +69,32 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Scroll fade | `Fade` as edge strip, not wrapper |
 | Icons | `IconName` from spec only |
 | Logos grid | `LogoCloud` with `columns` set |
+| Tabs | `Tabs` > `TabList` > `Tab`, `TabPanel` (`orientation="vertical"` for a settings nav) |
+| Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
+| Page trail | `Breadcrumbs items={[...]}` |
+| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"` |
+| Screen-reader text, skip link | `VisuallyHidden` |
+| MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 
 ## Imports
 
-Most things come from the package root. Three modules do not, because their
-dependencies are optional peers:
+Most things come from the package root. These do not — the manifest's
+`imports` lists every entry point with its exports, and each slice, catalog
+entry and `spec.json` `functions` entry says `importFrom` when it is not the root:
 
 | Import | From |
 |--------|------|
 | charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
+| `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
 | `MediaAudioPlayer`, `MediaVideoPlayer` | `@once-ui-system/core/components/<Name>` |
-| `LayoutProvider` in a **Next.js** app | `@once-ui-system/core/next` |
+| `LayoutProvider` in a **Next.js** app; `createOgFetchRoute`, `createOgProxyRoute` | `@once-ui-system/core/next` |
+| `defineConfig`, `OnceUIConfig` in `once-ui.config` | `@once-ui-system/core/config` (also on the root) |
 
-Naming one of these from the root does not resolve — except `LayoutProvider`,
-which resolves and then silently renders links and images as plain `<a>` and
-`<img>` in a Next.js app. `IconName` is a real union, so an unregistered icon
+Naming one of these from the root does not resolve — except `defineConfig`,
+which is on both, and `LayoutProvider`, which resolves and then silently
+renders links and images as plain `<a>` and `<img>` in a Next.js app. `IconName` is a real union, so an unregistered icon
 name is a type error, not a blank space — take names from `spec.json`.
 
 ## Defaults — omit these

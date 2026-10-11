@@ -114,6 +114,12 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
     - Links → `SmartLink` / `Button href`, not `a`
     - Status dot → `StatusIndicator`; progress → `ProgressBar`; loading → `Spinner` / `Skeleton`
     - Labels/metadata → `Tag`, `Chip`, `Badge`, `Kbd`, `InlineCode`
+    - Tabs → `Tabs` > `TabList` > `Tab` with a `TabPanel` per value (`orientation="vertical"` for a settings nav). `SegmentedControl` picks a value; it is not a tab set
+    - Mobile nav, filters, a side sheet → `Drawer` (`side`, `size`); it brings the focus trap, scroll lock and Escape a hand-made overlay misses
+    - Where-am-I trail → `Breadcrumbs items={[{ label, href }, ...]}`; the last item is the current page
+    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `KeyTip keys="mod+k"`
+    - Text for screen readers only, skip links → `VisuallyHidden` (`focusable` for a skip link)
+    - Markdown/MDX content → `mdxComponents` or `createMdxComponents({...})` from `/mdx` (rule 30), never a hand-written element map
 
 13. Use the distinctive features when the design calls for them — they exist and are cheap:
     - `Dialog` supports `stack` (stacked dialogs) and `base` props
@@ -277,12 +283,27 @@ specifier into every consumer's module graph:
 | charts, gauges, chart chrome | `@once-ui-system/core/data` | `recharts` |
 | `CodeBlock` | `@once-ui-system/core/code` | `prismjs` |
 | `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
+| `mdxComponents`, `createMdxComponents`, the `Mdx*` elements | `@once-ui-system/core/mdx` | `prismjs` (for fenced code) |
 
 Naming one of these from the root does not resolve. `MediaAudioPlayer` and
 `MediaVideoPlayer` are not on the root either: they live on the
 `./components/*` subpath (`@once-ui-system/core/components/MediaAudioPlayer`).
-Each component slice in `ai/components/`, and each catalog entry, carries the
-specifier to import it from when it is not the root.
+Each component slice in `ai/components/`, each catalog entry, and each hook or
+function in `spec.json`'s `functions` carries the specifier to import it from
+when it is not the root; `ai/manifest.json`'s `imports` lists every entry
+point with its exports.
+
+```tsx
+// MDX through Once UI: headings with anchors, SmartLink, Media, CodeBlock, Table
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { createMdxComponents, MdxHeading } from "@once-ui-system/core/mdx";
+
+const components = createMdxComponents({
+  h2: (props) => <MdxHeading as="h2" marginTop="64" {...props} />, // typed against MDX's props
+  Pricing, // an app component, used as <Pricing /> in the content
+});
+<MDXRemote source={source} components={components} />
+```
 
 30b. In a **Next.js** app, `LayoutProvider` comes from
 `@once-ui-system/core/next`:
@@ -297,6 +318,38 @@ with an `href`, `Media`, `Logo`, `MegaMenu` and `Kbar` render a plain `<a>` and
 `<img>` — no client-side navigation, no `next/image`, and no error. The
 validator flags it (`LayoutProvider.next`) and `--fix` moves the import. An app
 that composes `NextAdapterProvider` itself is already covered.
+
+The same entry has the route handlers `OgCard` and `useOgData` call. Each
+returns `{ GET }`, checks every address and redirect is public, and answers at
+the paths the client defaults to:
+
+```ts
+// app/api/og/fetch/route.ts
+import { createOgFetchRoute } from "@once-ui-system/core/next";
+export const { GET } = createOgFetchRoute();
+
+// app/api/og/proxy/route.ts
+import { createOgProxyRoute } from "@once-ui-system/core/next";
+export const { GET } = createOgProxyRoute();
+```
+
+Do not hand-write these routes with `handleOGFetch` and a `fetch` of your own.
+
+30c. Type `once-ui.config` with `defineConfig` from
+`@once-ui-system/core/config` (the dependency-free entry; the root exports it
+too). It rejects a misspelt key or value in `style`, `dataStyle` and `fonts`
+and keeps the literal types, so the sections spread into the providers with no
+casts:
+
+```tsx
+// once-ui.config.ts
+import { defineConfig } from "@once-ui-system/core/config";
+export const { style, dataStyle } = defineConfig({ style: { brand: "cyan", theme: "system" }, dataStyle: { mode: "categorical" } });
+
+// layout.tsx
+<ThemeInit config={style} dataStyle={dataStyle} />
+<ThemeProvider {...style}><DataThemeProvider {...dataStyle}>...</DataThemeProvider></ThemeProvider>
+```
 
 31. `IconName` is a real union, not `string`. An unregistered name is a type
 error now, where it used to render a blank space with a console warning — so

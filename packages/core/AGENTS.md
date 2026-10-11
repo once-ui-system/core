@@ -49,6 +49,7 @@ If you cannot read `node_modules`, use the docs host (may not match your install
 - Use `fill`, not `fillWidth fillHeight`; use `center`, not `horizontal="center" vertical="center"`
 - Static panels: `Column background="surface" border radius="l" padding="24"`
 - `Card` is interactive only (`href` or `onClick`)
-- In a Next.js app, import `LayoutProvider` from `@once-ui-system/core/next` — the root export renders links and images as plain `<a>` and `<img>`
+- In a Next.js app, import `LayoutProvider` from `@once-ui-system/core/next` — the root export renders links and images as plain `<a>` and `<img>`; the OG route handlers (`createOgFetchRoute`, `createOgProxyRoute`) come from there too
+- Not everything is on the root: charts from `/data`, `CodeBlock` from `/code`, `MediaUpload` from `/media`, the MDX map (`mdxComponents`, `createMdxComponents`) from `/mdx`, `defineConfig` from `/config`. `ai/manifest.json` → `imports` lists every entry point with its exports
 
 Full rules: `@once-ui-system/core/ai/rules.compact.md`

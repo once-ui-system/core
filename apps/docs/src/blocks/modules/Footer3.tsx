@@ -1,14 +1,4 @@
-import {
-  Column,
-  Grid,
-  IconButton,
-  type IconName,
-  Logo,
-  Row,
-  SmartLink,
-  Tag,
-  Text,
-} from "@once-ui-system/core";
+import { Column, Grid, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
 import { social } from "@/resources";
 
 const navigation = [
@@ -122,11 +112,11 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
             {social.map((item, index) => (
               <IconButton
                 data-border="rounded"
-                icon={item.icon as IconName}
+                icon={item.icon}
                 variant="tertiary"
                 size="l"
                 key={index}
-                href={item.href}
+                href={item.link}
               />
             ))}
           </Row>
