@@ -1,5 +1,12 @@
 import classNames from "clsx";
-import { ComponentPropsWithoutRef, ElementType } from "react";
+import {
+  type ComponentPropsWithoutRef,
+  type ComponentPropsWithRef,
+  type ElementType,
+  type ForwardedRef,
+  forwardRef,
+  type ReactNode,
+} from "react";
 
 import { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
@@ -12,60 +19,79 @@ type HeadingProps<T extends ElementType> = TextProps<T> &
   Omit<DisplayProps, "as"> &
   ComponentPropsWithoutRef<T>;
 
-const Heading = <T extends ElementType = "h1">({
-  as,
-  variant,
-  size,
-  weight,
-  family,
-  onBackground,
-  onSolid,
-  align,
-  wrap = "balance",
-  padding,
-  paddingLeft,
-  paddingRight,
-  paddingTop,
-  paddingBottom,
-  paddingX,
-  paddingY,
-  margin,
-  marginLeft,
-  marginRight,
-  marginTop,
-  marginBottom,
-  marginX,
-  marginY,
-  children,
-  style,
-  truncate,
-  opacity,
-  className,
-  userSelect,
-  gap,
-  top,
-  right,
-  bottom,
-  left,
-  translateX,
-  translateY,
-  position,
-  overflow,
-  overflowX,
-  overflowY,
-  scrollbar,
-  pointerEvents,
-  transition,
-  zIndex,
-  // Typed through `DisplayProps`, with no class that fits text: `inline`,
-  // `hide`, `dark` and `light` are display modes of Flex and Grid. Taken out
-  // so they stop reaching the DOM as attributes.
-  inline: _inline,
-  hide: _hide,
-  dark: _dark,
-  light: _light,
-  ...props
-}: HeadingProps<T>) => {
+/**
+ * The ref of the element `Heading` renders: an `HTMLHeadingElement` by
+ * default, whatever `as` names otherwise.
+ */
+type HeadingRef<T extends ElementType> = ComponentPropsWithRef<T>["ref"];
+
+/**
+ * `Heading`'s public signature: generic over `as`, as it was before it took a
+ * ref, and with a ref typed to the element `as` names. `forwardRef`'s own
+ * return type is not generic, so it would pin `as` to one element.
+ */
+interface HeadingComponent {
+  <T extends ElementType = "h1">(props: HeadingProps<T> & { ref?: HeadingRef<T> }): ReactNode;
+  displayName?: string;
+}
+
+const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementType = "h1">(
+  {
+    as,
+    variant,
+    size,
+    weight,
+    family,
+    onBackground,
+    onSolid,
+    align,
+    wrap = "balance",
+    padding,
+    paddingLeft,
+    paddingRight,
+    paddingTop,
+    paddingBottom,
+    paddingX,
+    paddingY,
+    margin,
+    marginLeft,
+    marginRight,
+    marginTop,
+    marginBottom,
+    marginX,
+    marginY,
+    children,
+    style,
+    truncate,
+    opacity,
+    className,
+    userSelect,
+    gap,
+    top,
+    right,
+    bottom,
+    left,
+    translateX,
+    translateY,
+    position,
+    overflow,
+    overflowX,
+    overflowY,
+    scrollbar,
+    pointerEvents,
+    transition,
+    zIndex,
+    // Typed through `DisplayProps`, with no class that fits text: `inline`,
+    // `hide`, `dark` and `light` are display modes of Flex and Grid. Taken out
+    // so they stop reaching the DOM as attributes.
+    inline: _inline,
+    hide: _hide,
+    dark: _dark,
+    light: _light,
+    ...props
+  }: HeadingProps<T>,
+  ref: ForwardedRef<HTMLHeadingElement>,
+) {
   const Component = as || "h1";
 
   if (variant && (size || weight)) {
@@ -171,11 +197,11 @@ const Heading = <T extends ElementType = "h1">({
   };
 
   return (
-    <Component className={combinedClasses} style={combinedStyle} {...props}>
+    <Component ref={ref} className={combinedClasses} style={combinedStyle} {...props}>
       {children}
     </Component>
   );
-};
+});
 
 Heading.displayName = "Heading";
 

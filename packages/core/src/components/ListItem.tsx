@@ -16,6 +16,7 @@ const ListItem = forwardRef<HTMLLIElement, ListItemProps>(
     return (
       <Text
         as="li"
+        ref={ref}
         paddingY="0"
         paddingRight="0"
         paddingLeft="8"
