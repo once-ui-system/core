@@ -29,7 +29,14 @@
     "manifest": "examples/blocks/manifest.json",
     "compose": ["Header4"]
   },
-  "gotchas": ["Card.interactive", "layout.shorthands", "color.tokens", "layout.defaults"],
+  "gotchas": [
+    "Card.interactive",
+    "layout.shorthands",
+    "color.tokens",
+    "layout.defaults",
+    "Select.closed",
+    "NumberInput.value"
+  ],
   "quality": {
     "settingRow": "One Setting per control — label and description left, control right. A list of Settings needs no surface around it",
     "grouping": "SettingGroup with a header control and open={enabled}, so sub-settings sit inside its box; SettingAxes for X/Y pairs",

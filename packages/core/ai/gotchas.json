@@ -52,6 +52,26 @@
     "rule": "In a Next.js app, import LayoutProvider from \"@once-ui-system/core/next\", not the package root. The root export installs the plain DOM adapters, so SmartLink, Button/Card/ToggleButton with href, Media, Logo, MegaMenu and Kbar render a plain <a> and <img>: no client-side navigation, no next/image, and no error to say so. An app that composes NextAdapterProvider (or AdapterProvider with nextAdapters) itself is already covered.",
     "components": ["LayoutProvider", "SmartLink", "Media", "Button", "Card"]
   },
+  "Toast.stable": {
+    "rule": "Fixed in 2.1: useToast()'s addToast and removeToast keep one identity for the provider's lifetime, so list addToast in an effect's dependencies like any stable callback. Do not hold it in a ref, or leave it out of the deps, to stop the effect re-running when a toast appears. addToast returns the toast's id for removeToast(id); duration is in milliseconds (default 6000, Infinity until closed).",
+    "components": ["Toast", "Toaster"]
+  },
+  "NumberInput.value": {
+    "rule": "Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onChange; do not remount it with a key to push a new value in.",
+    "components": ["NumberInput"]
+  },
+  "Select.closed": {
+    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onSelect; do not build a local picker from DropdownWrapper and Options to get this.",
+    "components": ["Select"]
+  },
+  "Button.trigger": {
+    "rule": "Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type=\"button\"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type=\"button\" or a no-op onClick, or wrap it in a focusable Row, to make it one.",
+    "components": ["Button", "IconButton", "DropdownWrapper"]
+  },
+  "ContextMenu.contents": {
+    "rule": "Fixed in 2.1: ContextMenu is a real menu (menu and menuitem roles, arrow keys, Home/End, Escape returns focus) that opens at the pointer and stays on screen. Its wrapper is a box; set contents to render none (display: contents), so an absolutely positioned or grid/flex child keeps its own layout. Use ContextMenu with contents instead of a hand-made right-click menu.",
+    "components": ["ContextMenu"]
+  },
   "Badge.duplicate": {
     "rule": "Do not pass the same text as both title prop and children — it renders twice.",
     "components": ["Badge"]
