@@ -1,7 +1,7 @@
 ---
 title: "Slider"
 summary: "The Slider component provides an interactive range input for selecting numeric values with visual feedback and customizable styling."
-updatedAt: "2025-12-23"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/slider.mdx"
 github: "components/Slider.tsx"
 navLabel: "Slider"
@@ -31,6 +31,28 @@ return (
 );`,
       language: "tsx",
       label: "Slider"
+    }
+  ]}
+/>
+
+## Uncontrolled
+
+Without `value`, Slider keeps its own state and starts at `defaultValue`, or at
+`min` when there is none. `onChange` is optional then: give the slider a `name` and
+a form submits its value, or read it from a ref.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Slider label="Volume" name="volume" defaultValue={40} showValue />
+  }
+  codes={[
+    {
+      code:
+`<Slider label="Volume" name="volume" defaultValue={40} showValue />`,
+      language: "tsx",
+      label: "Uncontrolled"
     }
   ]}
 />
@@ -177,9 +199,10 @@ Disable the slider to prevent user interaction.
 <PropsTable
   component="Slider"
   describe={{
-    value: "Current value",
-    onChange: "Callback when value changes",
-    label: "Optional label text",
+    value: "The value, when the host owns the state. Pair with onChange.",
+    defaultValue: "Where the slider starts when it keeps its own state. Defaults to min.",
+    onChange: "Called with the new value, as a number.",
+    label: "Visible label that names the slider.",
   }}
   content={[
     ["className"],
