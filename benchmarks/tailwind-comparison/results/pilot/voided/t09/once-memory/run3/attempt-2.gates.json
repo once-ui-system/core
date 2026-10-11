@@ -1,0 +1,16 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(164,15): error TS2322: Type '{ key: number; \"aria-labelledby\": string; buttons: { value: \"all\" | \"paid\" | \"pending\" | \"overdue\"; label: string; onClick: () => void; }[]; defaultSelected: string; }' is not assignable to type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'defaultSelected' does not exist on type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2302
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 4 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [border.default] border=\"neutral-alpha-weak\" restates the default border — write bare border, and name a colour only to deviate\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}"
+  }
+}

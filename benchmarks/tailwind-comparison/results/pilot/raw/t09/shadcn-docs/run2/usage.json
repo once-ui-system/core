@@ -1,0 +1,76 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 4,
+      "input_total": 249595,
+      "input_uncached": 8,
+      "cache_creation": 41791,
+      "cache_read": 207796,
+      "visible_output_tokens_o200k": 6696,
+      "visible_output_tokens_claudeLegacy": 7124,
+      "thinking_blocks": 2,
+      "input_net_of_overhead": 35319
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/pagination.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/toggle-group.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/calendar.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/select.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/input-group.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t09/shadcn-docs/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "C"
+}

@@ -68,8 +68,11 @@ blamed on the setup:
 ## 2. Model and settings
 
 - **Model:** `claude-sonnet-5-5`, the same for every arm, task and run.
-- **Settings** (`config.json` → `generation`): temperature 1.0, `max_tokens` 16,000,
-  extended thinking **off**, no prompt caching (so `input_tokens` is the full input).
+- **Settings** (`config.json` → `generation`): `max_tokens` 16,000, thinking
+  `{type: "between_tools"}` (Sonnet 5.5's thinking-off mode), effort `high`, default
+  temperature, no prompt caching (so `input_tokens` is the full input). *Amended 2026-10-11,
+  before any full-run generation: the original "temperature 1.0, thinking disabled" is rejected
+  by `claude-sonnet-5-5` with a 400 (§11).*
 - **Tools:** every arm gets the same two tools, `list_dir(path)` and
   `read_file(path)`, rooted at that arm's sandbox (`project/` and, for A and C,
   `docs/`). Reads over 150,000 characters are truncated, with a marker. Each attempt
@@ -284,8 +287,9 @@ can't support public claims.
   file to a given output path rather than replying with it. Repair rounds go to the
   **same** subagent (conversation continued).
 - **Exact Claude token counts** come from the subagent transcripts (`usage` per API
-  call). **Output tokens** are clean: they include thinking, tool calls and the written
-  file. **Input/total tokens** also include Claude Code's own system prompt, tool
+  call) for **input**. *Found during the pilot:* transcripts record output usage as of the
+  start of each stream, so output is measured as proxy tokens of everything the model
+  generated (text and tool-call JSON). Thinking is redacted in transcripts and is not counted. **Input/total tokens** also include Claude Code's own system prompt, tool
   schemas and repository instructions (≈ 53.6k tokens on the first call, re-read
   from cache on every later call). That overhead is the same for every arm but grows
   with the number of turns, so pilot totals overstate the docs arms' cost compared
@@ -358,3 +362,8 @@ at the pinned commit; `npm ci` here; `node runner/setup.mjs --shadcn-src <clone>
 | Date | Change | Reason | Before/after any run? |
 |---|---|---|---|
 | 2026-10-11 | Initial pre-registration | — | before |
+| 2026-10-11 | Render gate: ignore Next.js router prefetch requests (404s for placeholder links); readiness probe accepts any HTTP response; `load` + 1.5 s instead of `networkidle` | Gate bugs found in the pilot: they penalised any page using `next/link` (Once UI's LayoutProvider uses it for every link), misreported SSR 500s as "server did not start", and timed out on pages that never go network-idle. Affected pilot results were voided and re-gated | during pilot, before full run |
+| 2026-10-11 | Generation settings: thinking `between_tools`, effort `high`, default temperature (was: temperature 1.0, thinking disabled) | `claude-sonnet-5-5` returns 400 for `thinking: disabled` and for non-default sampling parameters | before full run |
+| 2026-10-11 | Pilot audit: reading back the run's own attempt files is allowed; pilot repair prompt restates "no shell commands"; four runs voided for shell use during repairs and regenerated | Shell patches understate output tokens; the void rule was applied as written | during pilot |
+| 2026-10-11 | Pilot output tokens measured from generated content (proxy) instead of transcript usage | Transcript output usage is recorded at stream start, not at the end | during pilot |
+| pending | Proposed, not adopted: interaction screenshots per task, rater note on horizontal scroll, cache-aware cost as a secondary metric, n = 5, harness revisions as a separate arm | See `results/pilot.md` → Method changes | needs sign-off before full run |

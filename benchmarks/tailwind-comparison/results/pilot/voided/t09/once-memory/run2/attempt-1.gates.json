@@ -1,0 +1,53 @@
+{
+  "arm": "B",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2555
+    },
+    "build": {
+      "ok": true,
+      "ms": 7809
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 711,
+          "height": 873,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 711,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 711,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      }
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 3 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [border.default] border=\"neutral-alpha-weak\" restates the default border — write bare border, and name a colour only to deviate\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}"
+  }
+}

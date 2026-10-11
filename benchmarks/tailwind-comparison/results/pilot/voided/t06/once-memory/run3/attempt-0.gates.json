@@ -1,0 +1,16 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(110,9): error TS2322: Type '{ children: Element; isOpen: boolean; onClose: () => void; title: string; description: string; footer: Element; }' is not assignable to type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'isOpen' does not exist on type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'. Did you mean 'open'?\napp/page.tsx(150,9): error TS2322: Type '{ children: Element; isOpen: boolean; onClose: () => void; stack: true; title: string; description: string; footer: Element; }' is not assignable to type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'isOpen' does not exist on type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'. Did you mean 'open'?",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2637
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 2 issue(s)\n  [layout.shorthands] Use center instead of horizontal=\"center\" vertical=\"center\"\n  [layout.defaults] variant=\"primary\" is the Button default — omit it"
+  }
+}

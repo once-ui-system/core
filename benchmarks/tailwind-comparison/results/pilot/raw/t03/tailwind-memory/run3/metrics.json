@@ -1,0 +1,19 @@
+{
+  "attempt": 0,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 388,
+    "chars": 14370,
+    "bytes": 14370,
+    "tokens_o200k": 3528,
+    "tokens_claudeLegacy": 3916
+  },
+  "raw": {
+    "lines": 366,
+    "chars": 14275,
+    "bytes": 14275,
+    "tokens_o200k": 3496,
+    "tokens_claudeLegacy": 3895
+  },
+  "components": []
+}

@@ -1,0 +1,146 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 10,
+      "input_total": 698586,
+      "input_uncached": 20,
+      "cache_creation": 49690,
+      "cache_read": 648876,
+      "visible_output_tokens_o200k": 5103,
+      "visible_output_tokens_claudeLegacy": 5491,
+      "thinking_blocks": 5,
+      "input_net_of_overhead": 162896
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/rules.compact.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/DataTable.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/SegmentedControl.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/DateRangeInput.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/Pagination.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/Input.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/Badge.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/examples/blocks/Table1.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t09/once-harness/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "A"
+}

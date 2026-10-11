@@ -1,0 +1,18 @@
+Benchmark generation run. Rules: your working folder is /home/user/core/benchmarks/tailwind-comparison/work/sandbox/tailwind-memory. Paths below such as `project/` and `docs/` are relative to it. Read files only inside that folder (Read, Glob, Grep). Do not read anything outside it, do not run shell commands, and do not use any other tool, skill or connector.
+Deliver the page by writing the complete file to /home/user/core/benchmarks/tailwind-comparison/results/pilot/raw/t03/tailwind-memory/run2/attempt-0.tsx with the Write tool (instead of replying with a code block), then reply with the single word: done.
+
+You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.
+
+Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).
+
+Stack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.
+
+Task: Pricing page — three tiers, highlighted middle tier, feature comparison table, FAQ accordion.
+
+Requirements:
+- Write exactly one file, `app/page.tsx`, that default-exports the page. Put "use client" at the top if the page uses state, effects or event handlers.
+- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.
+- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.
+- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.
+- Make it responsive from phone to desktop, and accessible.
+- Reply with the complete file in a single ```tsx code block and nothing else.

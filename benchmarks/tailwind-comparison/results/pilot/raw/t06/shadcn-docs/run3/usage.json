@@ -1,0 +1,66 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 4,
+      "input_total": 237327,
+      "input_uncached": 8,
+      "cache_creation": 33307,
+      "cache_read": 204012,
+      "visible_output_tokens_o200k": 3158,
+      "visible_output_tokens_claudeLegacy": 3450,
+      "thinking_blocks": 1,
+      "input_net_of_overhead": 23051
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "project"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/input-otp.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/field.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/dialog.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t06/shadcn-docs/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "C"
+}

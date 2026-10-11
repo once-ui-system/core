@@ -1,0 +1,120 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 4,
+      "input_total": 217651,
+      "input_uncached": 8,
+      "cache_creation": 24943,
+      "cache_read": 192700,
+      "visible_output_tokens_o200k": 3325,
+      "visible_output_tokens_claudeLegacy": 3571,
+      "thinking_blocks": 2,
+      "input_net_of_overhead": 3375
+    },
+    {
+      "attempt": 1,
+      "calls": 3,
+      "input_total": 181824,
+      "input_uncached": 10,
+      "cache_creation": 1343,
+      "cache_read": 180471,
+      "visible_output_tokens_o200k": 352,
+      "visible_output_tokens_claudeLegacy": 379,
+      "thinking_blocks": 1,
+      "input_net_of_overhead": 21117
+    },
+    {
+      "attempt": 2,
+      "calls": 3,
+      "input_total": 192908,
+      "input_uncached": 6,
+      "cache_creation": 67418,
+      "cache_read": 125484,
+      "visible_output_tokens_o200k": 3515,
+      "visible_output_tokens_claudeLegacy": 3766,
+      "thinking_blocks": 3,
+      "input_net_of_overhead": 32201
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t09/once-memory/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 2,
+      "name": "Read",
+      "path": "../../../results/pilot/raw/t09/once-memory/run3/attempt-1.tsx"
+    },
+    {
+      "attempt": 2,
+      "name": "Read",
+      "path": "../../../results/pilot/raw/t09/once-memory/run3/attempt-1.tsx"
+    },
+    {
+      "attempt": 2,
+      "name": "Read",
+      "path": "../../../results/pilot/raw/t09/once-memory/run3/attempt-1.tsx"
+    },
+    {
+      "attempt": 2,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t09/once-memory/run3/attempt-2.tsx"
+    },
+    {
+      "attempt": 2,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash",
+      "Read outside sandbox: /home/user/core/benchmarks/tailwind-comparison/results/pilot/raw/t09/once-memory/run3/attempt-1.tsx",
+      "Read outside sandbox: /home/user/core/benchmarks/tailwind-comparison/results/pilot/raw/t09/once-memory/run3/attempt-1.tsx",
+      "Read outside sandbox: /home/user/core/benchmarks/tailwind-comparison/results/pilot/raw/t09/once-memory/run3/attempt-1.tsx"
+    ]
+  },
+  "arm": "B"
+}

@@ -1,33 +1,107 @@
 {
-  "$comment": "Pre-registered parameters. Changing anything here after the full run starts invalidates the pre-registration; log every change in METHODOLOGY.md §11.",
+  "$comment": "Pre-registered parameters. Changing anything here after the full run starts invalidates the pre-registration; log every change in METHODOLOGY.md \u00a711.",
   "model": "claude-sonnet-5-5",
   "generation": {
-    "temperature": 1.0,
     "max_tokens": 16000,
-    "thinking": "disabled",
+    "thinking": {
+      "type": "between_tools"
+    },
     "prompt_caching": false,
     "max_tool_calls_per_attempt": 40,
-    "read_file_max_chars": 150000
+    "read_file_max_chars": 150000,
+    "effort": "high",
+    "$comment": "claude-sonnet-5-5 rejects thinking {type:'disabled'} and non-default sampling params (400). 'between_tools' is the documented thinking-off setting (valid at effort high or below); temperature is left at the API default. Amended 2026-10-11 before any full-run generation (METHODOLOGY.md \u00a711)."
   },
   "repair_rounds": 3,
   "runs_per_task": 3,
-  "pilot": { "tasks": [3, 6, 9], "runs_per_task": 3 },
-  "viewports": [
-    { "name": "phone", "width": 375, "height": 812 },
-    { "name": "tablet", "width": 768, "height": 1024 },
-    { "name": "desktop", "width": 1440, "height": 900 }
-  ],
-  "screenshot": { "type": "jpeg", "quality": 70, "max_height": 6000 },
-  "arms": {
-    "A": { "id": "once-harness", "scaffold": "once", "docs": "once-harness" },
-    "B": { "id": "once-memory", "scaffold": "once", "docs": null },
-    "C": { "id": "shadcn-docs", "scaffold": "shadcn", "docs": "shadcn" },
-    "D": { "id": "tailwind-memory", "scaffold": "tailwind", "docs": null }
+  "pilot": {
+    "tasks": [
+      3,
+      6,
+      9
+    ],
+    "runs_per_task": 3
   },
-  "primary_comparison": ["A", "C"],
-  "secondary_comparisons": [["A", "D"], ["B", "C"], ["B", "D"], ["A", "B"], ["C", "D"]],
-  "sensitivity_exclude_tasks": [1, 5, 8],
-  "statistics": { "bootstrap_resamples": 10000, "bootstrap_seed": 20261011, "ci": 0.95 },
+  "viewports": [
+    {
+      "name": "phone",
+      "width": 375,
+      "height": 812
+    },
+    {
+      "name": "tablet",
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900
+    }
+  ],
+  "screenshot": {
+    "type": "jpeg",
+    "quality": 70,
+    "max_height": 6000
+  },
+  "arms": {
+    "A": {
+      "id": "once-harness",
+      "scaffold": "once",
+      "docs": "once-harness"
+    },
+    "B": {
+      "id": "once-memory",
+      "scaffold": "once",
+      "docs": null
+    },
+    "C": {
+      "id": "shadcn-docs",
+      "scaffold": "shadcn",
+      "docs": "shadcn"
+    },
+    "D": {
+      "id": "tailwind-memory",
+      "scaffold": "tailwind",
+      "docs": null
+    }
+  },
+  "primary_comparison": [
+    "A",
+    "C"
+  ],
+  "secondary_comparisons": [
+    [
+      "A",
+      "D"
+    ],
+    [
+      "B",
+      "C"
+    ],
+    [
+      "B",
+      "D"
+    ],
+    [
+      "A",
+      "B"
+    ],
+    [
+      "C",
+      "D"
+    ]
+  ],
+  "sensitivity_exclude_tasks": [
+    1,
+    5,
+    8
+  ],
+  "statistics": {
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20261011,
+    "ci": 0.95
+  },
   "sources": {
     "once_ui": {
       "repo": "https://github.com/once-ui-system/core",
@@ -35,7 +109,9 @@
       "commit": "d070802900828711bdcf44a1b2bab4754fecf3dd",
       "package_version_field": "2.0.0 (version bump happens at release; this tree is the 2.1 release candidate)",
       "tarball_sha256": "2f9c09712dadaa4404768da1bf0aedd8b1a13ef7141fe465de16e096a9aac2f6",
-      "excluded_from_context": ["ai/eval-tasks.md"]
+      "excluded_from_context": [
+        "ai/eval-tasks.md"
+      ]
     },
     "shadcn": {
       "repo": "https://github.com/shadcn-ui/ui",

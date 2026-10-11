@@ -1,0 +1,49 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 5951
+    },
+    "build": {
+      "ok": true,
+      "ms": 15067
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 849,
+          "height": 1028,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1289,
+          "height": 1130,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1289,
+          "height": 994,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      }
+    }
+  }
+}
