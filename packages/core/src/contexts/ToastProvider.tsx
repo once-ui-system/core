@@ -1,39 +1,9 @@
 "use client";
 
-import React, {
-  createContext,
-  ReactNode,
-  useCallback,
-  useContext,
-  useId,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { ReactNode, useCallback, useContext, useId, useMemo, useRef, useState } from "react";
 import { Toaster } from "../components/Toaster";
 import { ToastPosition } from "../types";
-
-interface Toast {
-  id: string;
-  variant: "success" | "danger" | "warning" | "info";
-  message: ReactNode;
-  action?: ReactNode;
-  /**
-   * How long the toast stays up, in milliseconds. Defaults to 6000. The
-   * countdown pauses while the toast is hovered or holds focus; `Infinity`
-   * keeps it up until it is closed.
-   */
-  duration?: number;
-}
-
-interface ToastContextProps {
-  toasts: Toast[];
-  /** Shows a toast and returns its id, which `removeToast` takes. */
-  addToast: (toast: Omit<Toast, "id">) => string;
-  removeToast: (id: string) => void;
-}
-
-const ToastContext = createContext<ToastContextProps | undefined>(undefined);
+import { type Toast, ToastContext } from "./ToastContext";
 
 export const useToast = () => {
   const context = useContext(ToastContext);
