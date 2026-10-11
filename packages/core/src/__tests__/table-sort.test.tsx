@@ -99,4 +99,15 @@ describe("Table sorting accessibility", () => {
     await user.click(screen.getByRole("button", { name: "Name" }));
     expect(onSubmit).not.toHaveBeenCalled();
   });
+
+  it("renders headers without a key, as untyped MDX tables write them", () => {
+    const keyless = {
+      headers: [{ content: "Class" }, { content: "Value" }],
+      rows: [[".m-0", "0"]],
+    } as unknown as typeof data;
+    render(<Table data={keyless} />, { wrapper: wrap });
+
+    const header = screen.getByRole("columnheader", { name: "Class" });
+    expect(header).not.toHaveAttribute("aria-sort");
+  });
 });

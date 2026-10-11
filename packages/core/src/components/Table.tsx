@@ -167,7 +167,9 @@ function Table({
   };
 
   const renderHeader = (header: TableHeader, index: number) => {
-    const isActive = sortConfig?.key === header.key;
+    // A header without a key (untyped MDX tables omit it) is never the
+    // sorted one, even before anything is sorted.
+    const isActive = sortConfig !== null && sortConfig.key === header.key;
     const thClasses = classNames(styles.th, getAlignClass(header.align, "th"), {
       [styles.thSortable]: header.sortable,
       [styles.thActive]: isActive,
