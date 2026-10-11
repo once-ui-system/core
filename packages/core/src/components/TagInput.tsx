@@ -1,12 +1,6 @@
 "use client";
 
-import {
-  ChangeEventHandler,
-  FocusEventHandler,
-  forwardRef,
-  KeyboardEventHandler,
-  useState,
-} from "react";
+import { ChangeEventHandler, forwardRef, KeyboardEventHandler, useState } from "react";
 import { Chip } from "./Chip";
 import { Flex } from "./Flex";
 import { Input, InputProps } from "./Input";
@@ -19,7 +13,6 @@ interface TagInputProps extends Omit<InputProps, "onChange" | "value"> {
 const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
   ({ value, onChange, label, placeholder, ...inputProps }, ref) => {
     const [inputValue, setInputValue] = useState("");
-    const [isFocused, setIsFocused] = useState(false);
 
     const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
       setInputValue(e.target.value);
@@ -40,14 +33,6 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
       onChange(newValue);
     };
 
-    const handleFocus: FocusEventHandler<HTMLInputElement> = () => {
-      setIsFocused(true);
-    };
-
-    const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
-      setIsFocused(false);
-    };
-
     return (
       <Input
         ref={ref}
@@ -56,10 +41,9 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        aria-haspopup="listbox"
-        aria-expanded={isFocused}
+        // No `aria-haspopup` or `aria-expanded`: they promised a listbox
+        // that never existed, and a plain text field may not carry
+        // `aria-expanded` at all.
         {...inputProps}
       >
         {value.length > 0 && (
@@ -77,7 +61,10 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
                 key={index}
                 label={tag}
                 onRemove={() => handleRemoveTag(index)}
-                aria-label={`Remove tag ${tag}`}
+                // The name goes on the button that removes the tag. On the
+                // Chip it named the chip itself, and every remove button was
+                // just "Remove".
+                iconButtonProps={{ "aria-label": `Remove tag ${tag}` }}
               />
             ))}
           </Flex>
