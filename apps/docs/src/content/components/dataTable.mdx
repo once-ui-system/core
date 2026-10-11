@@ -1,0 +1,276 @@
+---
+title: "DataTable"
+summary: "A table of typed rows from column definitions, with sorting, row selection, pagination, and empty and loading states."
+updatedAt: "2026-10-11"
+docs: "once-ui/components/dataTable.mdx"
+github: "components/DataTable.tsx"
+navLabel: "DataTable"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`DataTable` renders an array of your own rows through a list of column definitions.
+Where [`Table`](/components/table) takes cells that are already rendered,
+DataTable keeps the rows as data, so it can sort by the values rather than by the
+text on screen, select rows by id, and page through them. It draws the same table
+as `Table`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DataTableExample />}
+  codes={[
+    {
+      code:
+`type Invoice = { id: string; customer: string; status: Status; amount: number; issued: string };
+
+const columns: DataTableColumn<Invoice>[] = [
+  { key: "id", header: "Invoice", sortable: true },
+  { key: "customer", header: "Customer", sortable: true },
+  {
+    key: "status",
+    header: "Status",
+    cell: (invoice) => <Tag size="s" scheme={scheme[invoice.status]}>{invoice.status}</Tag>,
+  },
+  { key: "issued", header: "Issued", sortable: true },
+  {
+    key: "amount",
+    header: "Amount",
+    align: "right",
+    sortable: true,
+    cell: (invoice) => money(invoice.amount),
+  },
+];
+
+<DataTable aria-label="Invoices" columns={columns} rows={invoices} />`,
+      language: "tsx",
+      label: "DataTable"
+    }
+  ]}
+/>
+
+`DataTable` is generic over the row type, so `cell` and `sort` receive your rows
+typed. A column without `cell` shows `row[key]`. Name the table with `aria-label`,
+or point `aria-labelledby` at a heading above it.
+
+## Sorting
+
+A `sortable` column's header is a button. Each press cycles ascending, descending
+and back to the rows' own order, and the sorted header carries `aria-sort`. Without
+a `sort` function the column compares `row[key]`: numbers as numbers, dates by
+time, text in natural order ("Item 2" before "Item 10"), with empty values last
+in both directions. Give the column a `sort` comparator, written ascending, when
+the key is not a field of the row or its values need their own order:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const priority = { high: 0, medium: 1, low: 2 };
+
+{ key: "priority", header: "Priority", sortable: true,
+  sort: (a, b) => priority[a.priority] - priority[b.priority] }`,
+      language: "tsx",
+      label: "Comparator"
+    }
+  ]}
+/>
+
+DataTable keeps the sort itself, starting from `defaultSort`, or follows `sort` and
+`onSortChange` when the host owns it. `null` is unsorted. A new sort returns to the
+first page.
+
+## Selection and pagination
+
+`selectable` adds a checkbox column. The header checkbox selects or clears the rows
+on screen, and shows a mixed state when only some of them are selected; selection
+is kept across pages. `getRowId` gives each row the id that selection reports;
+without it a row's `id` field is used, or its index. `getRowLabel` names each
+row's checkbox for screen readers.
+
+`paginated` shows the rows a page at a time with [`Pagination`](/components/pagination)
+below; `perPageOptions` adds a page-size select.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DataTableSelectionExample />}
+  codes={[
+    {
+      code:
+`const [selected, setSelected] = useState<string[]>([]);
+
+<DataTable
+  aria-label="Invoices"
+  columns={columns}
+  rows={invoices}
+  getRowId={(invoice) => invoice.id}
+  getRowLabel={(invoice) => \`Select \${invoice.id}\`}
+  selectable
+  selected={selected}
+  onSelectionChange={setSelected}
+  paginated
+  defaultPerPage={5}
+  perPageOptions={[5, 10, 25]}
+/>`,
+      language: "tsx",
+      label: "Selection"
+    }
+  ]}
+/>
+
+## Server-side data
+
+When the server sorts and pages, pass the current page's rows with `count`, the
+number of rows on the server (or `total`, the number of pages). DataTable then
+neither sorts nor slices the rows: it reports `onPageChange`, `onPerPageChange`
+and `onSortChange`, and shows `loading` while you fetch. Give rows a `getRowId`
+here, since an index repeats from page to page.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DataTableServerExample />}
+  codes={[
+    {
+      code:
+`const [page, setPage] = useState(1);
+const [sort, setSort] = useState<DataTableSort | null>(null);
+const { rows, count, loading } = useInvoices({ page, perPage: 5, sort });
+
+<DataTable
+  aria-label="Invoices"
+  columns={columns}
+  rows={rows}
+  count={count}
+  perPage={5}
+  page={page}
+  onPageChange={setPage}
+  sort={sort}
+  onSortChange={setSort}
+  loading={loading}
+/>`,
+      language: "tsx",
+      label: "Server-side"
+    }
+  ]}
+/>
+
+## Empty and loading
+
+With no rows DataTable shows an empty state; pass your own as `emptyState`. While
+`loading`, skeleton rows stand in for the page (as many as `perPage`), the table is
+marked `aria-busy`, and sorting, selection and pagination are disabled.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <DataTable
+        aria-label="Members"
+        columns={[
+          { key: "name", header: "Name" },
+          { key: "email", header: "Email" },
+          { key: "role", header: "Role" },
+        ]}
+        rows={[]}
+      />
+      <DataTable
+        aria-label="Members loading"
+        loading
+        paginated
+        defaultPerPage={3}
+        columns={[
+          { key: "name", header: "Name" },
+          { key: "email", header: "Email" },
+          { key: "role", header: "Role" },
+        ]}
+        rows={[]}
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<DataTable columns={columns} rows={[]} emptyState={<Text>No members yet.</Text>} />
+<DataTable columns={columns} rows={rows} loading paginated defaultPerPage={3} />`,
+      language: "tsx",
+      label: "Empty and loading"
+    }
+  ]}
+/>
+
+`stickyHeader` keeps the header row in view while the rows scroll; pair it with
+`maxHeight`, which on DataTable caps the scroll area. `striped`, `hoverable` and
+`compact` work as on `Table`.
+
+## API reference
+
+<PropsTable
+  component="DataTable"
+  describe={{
+    columns: "The columns, in order. See DataTableColumn below.",
+    rows: "Your rows: every row, or with count or total only the current page.",
+    getRowId: "A stable id per row, which selection reports. Defaults to row.id, then the index.",
+    sort: "The sorted column and direction when the host owns it; null for unsorted.",
+    defaultSort: "The sort to start with.",
+    onSortChange: "Called with the new sort, or null.",
+    selectable: "Add a checkbox column with select-all.",
+    selected: "The selected rows' ids when the host owns them.",
+    defaultSelected: "The ids selected to start with.",
+    onSelectionChange: "Called with every selected id after each change.",
+    getRowLabel: "The accessible name of a row's checkbox.",
+    paginated: "Show the rows a page at a time.",
+    page: "The current page, from 1, when the host owns it.",
+    defaultPage: "The page to start on.",
+    onPageChange: "Called with the new page.",
+    perPage: "Rows per page when the host owns it.",
+    defaultPerPage: "Rows per page to start with.",
+    perPageOptions: "Page sizes to offer in a select.",
+    onPerPageChange: "Called with the new page size.",
+    count: "Rows on the server. The rows are then one page, sorted and sliced by the host.",
+    total: "Pages on the server, as count.",
+    loading: "Show skeleton rows and disable the controls.",
+    emptyState: "What to show when there are no rows.",
+    stickyHeader: "Keep the header row in view while the rows scroll.",
+    striped: "Alternate row backgrounds.",
+    hoverable: "Highlight the row under the pointer.",
+    compact: "Tighter rows.",
+    labels: "The checkbox, pagination and per-page names, to translate them.",
+    "aria-label": "The table's accessible name.",
+    "aria-labelledby": "The id of the element that names the table.",
+  }}
+/>
+
+### DataTableColumn
+
+<PropsTable
+  label="Field"
+  content={[
+    ["key", "string", "-", "The column's id, the key a sort reports, and the field shown when there is no cell.", true],
+    ["header", "React.ReactNode", "-", "The header cell's content.", true],
+    ["cell", "(row: T, index: number) => React.ReactNode", "-", "Renders the cell. Without it the cell shows row[key]."],
+    ["sortable", "boolean", "false", "Let the reader sort by this column."],
+    ["sort", "(a: T, b: T) => number", "-", "Ascending comparator. Without it rows compare by row[key]."],
+    ["align", ["left", "center", "right"], "left", "Aligns the header and the cells."],
+    ["width", "string", "-", "A CSS width for the column."],
+  ]}
+/>
+
+### DataTableLabels
+
+<PropsTable
+  label="Field"
+  content={[
+    ["selectAll", "string", "\"Select all rows\"", "The select-all checkbox's name; \"Select all rows on this page\" when paginated."],
+    ["selectRow", "string", "\"Select row\"", "Each row checkbox's name, unless getRowLabel names it."],
+    ["pagination", "string", "\"Pagination\"", "The pagination landmark's name."],
+    ["perPage", "string", "\"Rows per page\"", "The per-page select's label."],
+    ["previous, next, first, last", "string", "-", "As on Pagination."],
+  ]}
+/>

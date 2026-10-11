@@ -29,6 +29,7 @@ export * from "./CountdownFx";
 export * from "./CountFx";
 export * from "./Cursor";
 export * from "./CursorCard";
+export * from "./DataTable";
 export * from "./DateInput";
 export * from "./DatePicker";
 export * from "./DateRangeInput";

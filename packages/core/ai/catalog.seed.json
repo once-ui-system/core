@@ -163,6 +163,11 @@
     "tags": ["effect", "overlay", "marketing"],
     "pairsWith": ["Media", "Column"]
   },
+  "DataTable": {
+    "purpose": "Table of typed rows from column definitions: sorting, row selection, pagination, empty and loading states",
+    "tags": ["data", "dashboard"],
+    "pairsWith": ["Pagination", "Tag", "Button"]
+  },
   "DataTooltip": {
     "purpose": "Tooltip body for charts: label, series swatches and formatted values",
     "tags": ["data", "chart"],
@@ -504,7 +509,7 @@
   "Pagination": {
     "purpose": "Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select — paged lists and tables",
     "tags": ["navigation", "data"],
-    "pairsWith": ["Table", "Row", "Text"]
+    "pairsWith": ["Table", "DataTable", "Row"]
   },
   "ParticleFx": {
     "purpose": "Drifting particles that can react to the pointer, as an ambient layer",
