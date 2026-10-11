@@ -1,6 +1,6 @@
 import type React from "react";
-import type { OnceUIDataStyleConfig } from "../contexts/DataThemeProvider";
 import type { OnceUIStyleConfig } from "../contexts/ThemeProvider";
+import type { ChartMode } from "../modules/data/interfaces";
 import {
   type CustomScheme,
   type CustomSchemeSeeds,
@@ -38,7 +38,7 @@ export interface ThemeInitProps {
   /** The `style` section of `once-ui.config`, as written. */
   config: ThemeInitConfig;
   /** The `dataStyle` section; its `mode` becomes `data-viz-style`. */
-  dataStyle?: Pick<OnceUIDataStyleConfig, "mode">;
+  dataStyle?: { mode?: ChartMode };
 }
 
 const toKebab = (key: string) => key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);

@@ -40,14 +40,14 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] GitHub Actions on every PR and push to `main`: install, build, typecheck, test, lint with a no-regression gate against a recorded error count, `check:package` (advisory).
 - [x] Axe assertions available to every component test; required for every component added or changed in 2.1.
 - [x] Rules-of-hooks bugs in the charts: `ChartHeader` returns before `useState`; `Legend`, `Swatch` and `Gradient` call hooks as default parameters.
-- [~] Tests for the untested interactive core: Slider, Tooltip, MegaMenu keyboard, Chip, TagInput, PasswordInput, OTPInput, ColorInput, ThemeSwitcher, DateRangePicker done (W1); Modal, Table, HoverCard done (W3); Button, NumberInput, Select, ContextMenu, Toast come with W2.
+- [x] Tests for the untested interactive core: Slider, Tooltip, MegaMenu keyboard, Chip, TagInput, PasswordInput, OTPInput, ColorInput, ThemeSwitcher, DateRangePicker (W1); Modal, Table, HoverCard (W3); Button, NumberInput, Select, ContextMenu, Toast (W2).
 
 ### W2 · Behaviour fixes the apps work around (P0)
-- [ ] `ToastProvider`: memoised context and callbacks (a toast must never re-run a consumer's effects). `addToast` returns an id; `removeToast(id)`; `duration`; pause on hover and focus; `role="status"` for non-errors.
-- [ ] `NumberInput` follows its `value` prop after mount.
-- [ ] `Select` closes on pick and stays closed; the existing `justSelectedRef` guard is wired up.
-- [ ] `Button` and `IconButton` without `onClick` or `href` are reachable by keyboard when used as a trigger, without nesting interactive elements where the plain `div` render is relied on.
-- [ ] `ContextMenu`: opens at the pointer; no wrapping `Flex` around the trigger; `menu`/`menuitem` roles.
+- [x] `ToastProvider`: memoised context and callbacks (a toast must never re-run a consumer's effects). `addToast` returns an id; `removeToast(id)`; `duration`; pause on hover and focus; `role="status"` for non-errors.
+- [x] `NumberInput` follows its `value` prop after mount.
+- [x] `Select` closes on pick and stays closed; the existing `justSelectedRef` guard is wired up.
+- [x] `Button` and `IconButton` without `onClick` or `href` are reachable by keyboard when used as a trigger, without nesting interactive elements where the plain `div` render is relied on.
+- [x] `ContextMenu`: opens at the pointer; no wrapping `Flex` around the trigger; `menu`/`menuitem` roles.
 
 ### W3 · Accessibility (P0)
 - [x] `Switch`: the focusable element carries `role="switch"` and is labelled by the visible label.
@@ -63,43 +63,54 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [ ] Found by W1's tests (each pinned by a skipped test naming it): `Chip`'s remove button nested in its own `role="button"`; `TagInput`'s remove buttons all named "Remove", and `aria-haspopup`/`aria-expanded` on a textbox with no listbox; `OTPInput`'s hard-coded ids repeat across instances and its error state is never exposed; `ColorInput` ignores `value` after mount; a `dual` `DateRangePicker` shows the same month twice for a range inside one month; `DatePicker`'s `role="grid"` has no rows or cells, and its month and year triggers are nested in another interactive element.
 
 ### W4 · Agent harness and docs (P0)
-- [ ] Validator: the icon-name check reads `spec.iconNames` and looks only at icon props; no false positives on a `Flex` that changes direction at a breakpoint, on `speed` for multiplier effects, or on spread props; element-scoped `position`/`zIndex` rules; regression tests for each.
-- [ ] Rule: a Next.js app imports `LayoutProvider` from `@once-ui-system/core/next` (without it, links and images silently degrade to `<a>` and `<img>`).
-- [ ] `catalog.json` purposes restored (every component currently reads "X component").
-- [ ] Slices for the components the harness misses: MediaAudioPlayer, MediaVideoPlayer, Meta, ThemeInit, FocusTrap, ScrollLock.
-- [ ] `gotchas.json`: remove the stale `Tag.duplicate`; add the adapter rule; add every behaviour fixed in W2 as "fixed in 2.1".
-- [ ] `once-ui-init-agent` also writes `CLAUDE.md` and points at `core/next`.
-- [ ] Docs drift: foundations CSS imports, quick-start dependency list, the removed `useResponsiveClasses` page, custom breakpoints, the Dialog/Modal claim, the broken customize link; `AGENTS.md` and `ARCHITECTURE.md` brought up to date.
+- [x] Validator: the icon-name check reads `spec.iconNames` and looks only at icon props; no false positives on a `Flex` that changes direction at a breakpoint, on `speed` for multiplier effects, or on spread props; element-scoped `position`/`zIndex` rules; regression tests for each.
+- [x] Rule: a Next.js app imports `LayoutProvider` from `@once-ui-system/core/next` (without it, links and images silently degrade to `<a>` and `<img>`).
+- [x] `catalog.json` purposes restored (every component currently reads "X component").
+- [x] Slices for the components the harness misses: MediaAudioPlayer, MediaVideoPlayer, Meta, ThemeInit, FocusTrap, ScrollLock.
+- [~] `gotchas.json`: stale `Tag.duplicate` removed and the adapter rule added; the W2 "fixed in 2.1" notes land with the harness regeneration.
+- [x] `once-ui-init-agent` also writes `CLAUDE.md` and points at `core/next`.
+- [x] Docs drift: foundations CSS imports, quick-start dependency list, the removed `useResponsiveClasses` page, custom breakpoints, the Dialog/Modal claim, the broken customize link; `AGENTS.md` and `ARCHITECTURE.md` brought up to date.
 
 ### W5 · OG route handlers (P0, ships 16 Oct regardless)
-- [ ] `@once-ui-system/core/next` exports ready-made route handlers for OG fetch and image proxy, built on the existing `server` utilities: only public addresses (checked again on every redirect), an image content-type allowlist on the proxy, size and time limits.
-- [ ] `Meta` and `useFetchOg` take their route paths from config instead of hard-coding `/api/og/*`.
-- [ ] Docs page; every app replaces its own routes with these in the W12 upgrade PRs.
+- [x] `@once-ui-system/core/next` exports ready-made route handlers for OG fetch and image proxy, built on the existing `server` utilities: only public addresses (checked again on every redirect), an image content-type allowlist on the proxy, size and time limits.
+- [x] `Meta` and `useFetchOg` take their route paths from config instead of hard-coding `/api/og/*`.
+- [x] Docs page; every app replaces its own routes with these in the W12 upgrade PRs.
 
 ### W6 · Components the apps keep rebuilding (P1)
-- [ ] `Tabs` (horizontal and vertical, `tablist`/`tab`/`tabpanel`, roving focus).
-- [ ] `Drawer` (sheet from any edge, on the Dialog focus and scroll-lock machinery).
-- [ ] `VisuallyHidden`.
-- [ ] `Breadcrumbs`; `Pagination` (extracted from Table so both use one).
+- [x] `Tabs` (horizontal and vertical, `tablist`/`tab`/`tabpanel`, roving focus).
+- [x] `Drawer` (sheet from any edge, on the Dialog focus and scroll-lock machinery).
+- [x] `VisuallyHidden`.
+- [x] `Breadcrumbs`.
+- [ ] `Pagination` (extracted from Table so both use one).
 - [ ] `RadioGroup`; range `Slider` (two thumbs).
-- [ ] `useHotkeys` (skips while the user is typing) and `KeyTip`.
+- [x] `useHotkeys` (skips while the user is typing) and `KeyTip`.
 
 ### W7 · Layout and styling (P1)
-- [ ] `Grid` auto-fit with a minimum column width; responsive `Grid` renders on the server, as `Flex` does.
-- [ ] `overflow="clip"` and `"visible"` emit classes (they type-check today and emit nothing).
-- [ ] Enumerable style props as classes, so they stay server-renderable: `userSelect`, `blendMode`, backdrop and filter blur. `transform` stays in `style` (documented).
-- [ ] An app-shell header-height token for the `100dvh` minus header layouts.
-- [ ] Typed theme props on `Flex` for a themed subtree (`theme`, `border`, `solid`, `surface`) instead of raw `data-*` attributes.
+- [x] `Grid` auto-fit with a minimum column width; responsive `Grid` renders on the server, as `Flex` does.
+- [x] `overflow="clip"` and `"visible"` emit classes (they type-check today and emit nothing).
+- [x] Enumerable style props as classes, so they stay server-renderable: `userSelect`, `blendMode`, backdrop and filter blur. `transform` stays in `style` (documented).
+- [x] An app-shell header-height token for the `100dvh` minus header layouts.
+- [x] Typed theme props on `Flex` for a themed subtree (`theme`, `border`, `solid`, `surface`) instead of raw `data-*` attributes.
 
 ### W8 · Config and theming (P1)
-- [ ] `OnceUIConfig` type and `defineConfig`; providers and `ThemeInit` take the config as written, no key remapping or casts.
-- [ ] `NeutralColor` widened to the palettes the CSS already ships (rose, mint, dusk); font-size and cursor attributes exposed on `ThemeProvider`.
-- [ ] A brand seed colour that `ThemeProvider`/`ThemeInit` apply server-side (no flash).
-- [ ] `data-viz-style` typed as `DataStyle`.
-- [ ] Decide and ship a token for "the brand colour" that keeps its hue under `solid="contrast"` (today `--brand-solid-strong` resolves to neutral there, which strips brand colour from anything that defaults to it).
+- [x] `OnceUIConfig` type and `defineConfig`; providers and `ThemeInit` take the config as written, no key remapping or casts.
+- [x] `NeutralColor` widened to the palettes the CSS already ships (rose, mint, dusk); font-size and cursor attributes exposed on `ThemeProvider`.
+- [x] A brand seed colour that `ThemeProvider`/`ThemeInit` apply server-side (no flash).
+- [x] `data-viz-style` typed as `DataStyle`.
+- [x] A token for "the brand colour" that keeps its hue under `solid="contrast"`: shipped as `--brand-color-strong|medium|weak` in its own commit; the name is Lorant's call (§7).
 
 ### W9 · MDX (P1)
-- [ ] `@once-ui-system/core/mdx`: one component map for MDX content, replacing the five app copies.
+- [x] `@once-ui-system/core/mdx`: one component map for MDX content, replacing the five app copies.
+
+### Found while building (P1, wave 3)
+- [ ] `Select` still fails axe: `aria-expanded` on a non-combobox input, `role="button"` wrappers around it, nested listboxes when open (needs `role="combobox"` and a DropdownWrapper rework; may slip to 2.2).
+- [ ] `ContextMenu`'s `fillWidth` and `placement` props are declared but never applied.
+- [ ] `HeadingLink` fails axe (focusable div with a prohibited `aria-label`, `inert` until hovered, throws without a ToastProvider); `ElementType` drops `onClick` on links; `Media`'s `caption` renders its `figcaption` outside the `figure`; `BlockQuote` wraps children in a `span`.
+- [ ] `Grid`'s `rows` prop has no classes and leaks to the DOM; `Text`/`Heading` pass display props to the DOM as attributes; the size parsers miss the `"72"` spacing token; `Flex` writes no breakpoint classes for `top`/`left`/`right`/`bottom`.
+- [ ] `NavIcon` has no button role or Enter/Space handling.
+- [ ] The docs' blocks use about 40 icon names that aren't registered (the docs type `iconLibrary` as `Record<string, IconType>`, so typos compile).
+- [ ] The docs app's `next/image` needs `images.localPatterns` for proxied OG images on Next 16.
+- [ ] The docs app's own MDX map (`apps/docs/src/product/mdx.tsx`) moves to `/mdx`; the harness generator and `rules.md` learn the `/mdx` and `/config` entries.
 
 ### W10 · API hygiene, additive (P1)
 - [ ] `onToggle` passes the new checked state (Checkbox, RadioButton, Switch); `defaultChecked`/`defaultValue` for uncontrolled use on Switch, Slider, TagInput.

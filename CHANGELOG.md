@@ -18,11 +18,115 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 
 ### Added
 
+- **`Tabs`, `TabList`, `Tab` and `TabPanel`.** Horizontal or vertical tabs
+  matched by `value`, with `tablist`/`tab`/`tabpanel` roles, `aria-selected`,
+  and `aria-controls` and `aria-labelledby` when the panel is mounted. Arrow
+  keys and Home/End move focus, with one tab in the Tab order. Activation is
+  `automatic` or `manual`, controlled or uncontrolled; `keepMounted` keeps
+  hidden panels alive.
+- **`Drawer`.** A modal sheet from any edge (`side`, `size`) on Dialog's
+  pieces: portal, scroll lock, focus trap and an inert page behind. Escape,
+  an overlay click or the close button call `onClose`; focus goes in on open
+  and back on close. `flush` keeps the title for screen readers only.
+- **`VisuallyHidden`.** Content for screen readers only; `focusable` makes
+  it a skip link that appears on focus.
+- **`Breadcrumbs`.** A `nav` landmark with an ordered list, `aria-current`
+  on the last item, separators hidden from assistive tech, links through the
+  adapter, and `maxItems` collapsing the middle behind a button.
+- **`useHotkeys` and `KeyTip`.** `useHotkeys("mod+k", fn)` takes combos,
+  alternatives and sequences with exact modifiers, skips text fields,
+  selects and contenteditable unless `allowWhileTyping`, and is safe on the
+  server. `KeyTip` draws a combo as `Kbd` keycaps: ⌘ on Apple platforms,
+  Ctrl elsewhere, spelled out for screen readers.
+- **`@once-ui-system/core/mdx`: one component map for MDX content.**
+  `mdxComponents` and `createMdxComponents(overrides)` render Markdown
+  through Once UI for `next-mdx-remote` (RSC included) and `@next/mdx`:
+  headings get an id and a keyboard-reachable link to themselves, links go
+  through `SmartLink`, images through `Media`, fenced code through
+  `CodeBlock`, GFM tables through `Table`, and the common components are
+  available as tags. Each override is typed against the props MDX passes, so
+  a map needs no casts. A subpath of its own, because it renders code through
+  `/code`.
+- **Ready-made OG route handlers with SSRF protection.**
+  `@once-ui-system/core/next` exports `createOgFetchRoute()` and
+  `createOgProxyRoute()`, each returning `{ GET }`, so
+  `app/api/og/fetch/route.ts` and `app/api/og/proxy/route.ts` are two lines.
+  They answer exactly what `OgCard` and `useOgData` request.
+- **OG route paths are configurable.** `OgRoutesProvider` tells `OgCard` and
+  `useOgData` where the routes live; `Meta.generate` takes `ogRoutes`. The
+  default paths are unchanged.
+- **New options on `handleOGFetch` and `handleOGProxy`:** `blockedDomains`,
+  `isAllowed`, `allowHttp`, `maxBytes`, `maxRedirects`, `cacheControl`,
+  `sameOrigin`, `allowedContentTypes`, `favicon`, and
+  `DEFAULT_OG_IMAGE_TYPES`.
+- **`defineConfig`: the config reaches the providers as written.** It checks
+  values and misspelt keys in `style`, `dataStyle` and `fonts` and keeps
+  literal types, so the sections spread straight into `ThemeProvider`,
+  `DataThemeProvider` and `ThemeInit` with no casts or renamed keys. Also on
+  the dependency-free `@once-ui-system/core/config` entry. The 2.0
+  `ThemeInit` shape still compiles. New types: `OnceUIConfig` and its
+  sections.
+- **A seed colour for custom schemes, with no flash.** `brandSeed`,
+  `accentSeed` and `neutralSeed` generate the whole scheme; `ThemeInit`
+  renders it on the server and `ThemeProvider` follows changes on the client.
+  `customSchemeProperties()` exposes the same values.
+- **Root font size per device and the interactive cursor.** `desktopSize`,
+  `tabletSize`, `mobileSize` and `cursorInteractive` set the attributes
+  `tokens.css` always styled. No defaults, so output is unchanged unless set.
+- **`--brand-color-strong`, `--brand-color-medium` and `--brand-color-weak`:**
+  the brand hue under every solid style. `--brand-solid-*` follows the solid
+  style and is neutral under `solid="contrast"`; these tokens are for
+  anything that must stay brand-coloured, like illustrations and effects.
+- **`Grid` fits as many columns as there is room for.** `minColumnWidth`
+  takes the same values as `minWidth` and renders on the server, replacing
+  hand-written `repeat(auto-fit, minmax(…))` styles.
+- **Effects without a `style` object.** `userSelect`, `blendMode`, `blur` and
+  `backdropBlur` are classes, so `Flex` and `Grid` stay server components.
+  `transform` stays in `style` by design.
+- **An app-shell header height.** The `--header-height` token (56px by
+  default) and `height`, `minHeight` or `maxHeight="below-header"` replace
+  hand-written `calc(100dvh - …)`.
+- **Typed theme props for a subtree.** `theme`, `themeBorder`, `themeSolid`
+  and `themeSurface` on `Flex` and `Grid` write the matching `data-*`
+  attributes, checked against ThemeProvider's values.
+- **`addToast` returns the toast's id**, for `removeToast(id)`, and each
+  toast takes a `duration` (6000 ms by default; `Infinity` keeps it until
+  closed). The countdown pauses while the toast is hovered or focused.
+- **`ContextMenu`'s `contents` prop:** the wrapper adds no box
+  (`display: contents`), so positioned and grid or flex children keep their
+  own layout.
+- **`once-ui-validate-ai-code` checks the Next.js adapter.** In a Next.js
+  app, `LayoutProvider` from the package root renders links and images as
+  plain `<a>` and `<img>`; the new `LayoutProvider.next` rule flags it and
+  `--fix` moves the import to `@once-ui-system/core/next`.
+- **`once-ui-init-agent` writes `CLAUDE.md`** alongside `AGENTS.md` and the
+  Cursor rule, and points Next.js apps at `/next`.
+- **Harness:** slices for `ThemeInit`, `Meta`, `FocusTrap`, `ScrollLock`,
+  `MediaAudioPlayer` and `MediaVideoPlayer`; `list-page` and `editor` task
+  bundles.
+
 - **`IconButton` takes `ariaLabel`**, like the other components that take
   one; a native `aria-label` wins over it.
 - **`InteractiveDetails` takes `labelId` and `descriptionId`**: ids on the
   label text and the description text alone, so a control can be named by
   its label without its description or help button.
+
+### Changed
+
+- **The OG handlers only reach public addresses, and connect to the address
+  they checked.** Every redirect is checked again; fetch reads HTML only and
+  the proxy passes raster images only (SVG is opt-in); size and time limits
+  apply; status codes are specific (400, 413, 415, 502, 504); `image` and
+  `faviconUrl` come back as absolute URLs; `http://` is refused unless
+  `allowHttp` is set.
+- **`@once-ui-system/core/next`'s index is no longer a client module.** The
+  adapters keep `"use client"` in their own file; imports don't change.
+- **Non-danger toasts are polite `status` regions**, not assertive alerts.
+- **A `multiple` `Select` stays open while you pick.**
+- **`NeutralColor` accepts rose, mint and dusk, and `BorderStyle` accepts
+  sharp.** The CSS already shipped all four.
+- **Charts type `data-viz-style` as `DataStyle | (string & {})`** instead of
+  `string`: autocomplete without narrowing.
 
 ### Fixed
 
@@ -70,6 +174,39 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   its state and left its Escape listener on `document`. `Legend`, `Swatch`,
   `LinearGradient` and `RadialGradient` read the data theme in a default
   parameter. Rendered output is unchanged.
+
+- **A toast no longer re-runs consumer effects.** `useToast()` returns
+  stable callbacks, so an effect that depends on `addToast` runs once.
+- **`NumberInput` follows its `value` prop** after mount, without rewriting
+  what the user is typing ("-", "1.", "05").
+- **`Select` closes on pick and stays closed.** Focus returning to the field
+  no longer reopens it.
+- **A `Button` or `IconButton` trigger is reachable by keyboard.** As a
+  `DropdownWrapper` trigger it renders a real button with `aria-haspopup` and
+  `aria-expanded`, and the wrapper no longer nests a `role="button"` around
+  it. A disabled trigger no longer opens its dropdown.
+- **`ContextMenu` is a real menu.** `menu` and `menuitem` roles; arrow keys
+  skip disabled items and wrap; Home and End; Escape closes it and returns
+  focus; near the right or bottom edge it opens towards the screen.
+- **A responsive `Grid` renders on the server.** Any breakpoint prop used to
+  switch it to the client and require a `LayoutProvider`, and breakpoint
+  spacing on Grid did nothing.
+- **`overflow="clip"` and `"visible"` apply.** They type-checked but had no
+  class behind them. An `xl` overflow on `Flex` now applies at `xl` widths.
+- **The validator's icon check runs.** It read a field the spec never wrote;
+  it now reads `spec.iconNames`, checks only props typed `IconName`, and
+  accepts names an app registers.
+- **Validator false positives** on a `Flex` that changes direction at a
+  breakpoint, multiplier `speed` props, `Card` with spread props, and
+  file-wide `position` and `zIndex` matches.
+- **`catalog.json` purposes** read "X component" for every entry; each has a
+  written purpose again, and a missing one fails the build's tests.
+- **`once-ui-init-agent` appends to an existing `AGENTS.md`** without
+  `--force`.
+- **The docs' `ThemeInit` example set the chart mode from the chart variant**,
+  which matched no style; `dataStyle` now passes `mode`.
+- **Docs:** stylesheet imports, the dependency list, breakpoints,
+  `LayoutProvider` from `/next`, and broken links.
 
 ### Internal
 
