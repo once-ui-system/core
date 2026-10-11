@@ -36,6 +36,19 @@ const routesWrapper =
   );
 
 describe("useOgData routes", () => {
+  it("routes a cross-origin favicon through the proxy, like the image", async () => {
+    const FAVICON = "https://example.com/favicon.ico";
+    fetchMock.mockImplementationOnce(async () =>
+      Response.json({ url: PAGE, title: "Post", image: IMAGE, faviconUrl: FAVICON }),
+    );
+    const { result } = renderHook(() => useOgData(PAGE));
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.ogData?.faviconUrl).toBe(
+      `/api/og/proxy?url=${encodeURIComponent(FAVICON)}`,
+    );
+  });
+
   it("defaults to /api/og/fetch and /api/og/proxy", async () => {
     const { result } = renderHook(() => useOgData(PAGE));
 

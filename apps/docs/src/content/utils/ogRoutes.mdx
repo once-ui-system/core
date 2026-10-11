@@ -281,5 +281,5 @@ export async function GET(request: Request) {
 ## Notes
 
 - The handlers connect directly; they do not read `HTTP_PROXY` or `HTTPS_PROXY`.
-- Outside Next.js, use [`handleOGFetch`](/utils/handleOGFetch) and [`handleOGProxy`](/utils/handleOGProxy) from `@once-ui-system/core/server`: they take a standard `Request` and return a `Response`.
+- Outside Next.js, use [`handleOGFetch`](/utils/handleOGFetch) and [`handleOGProxy`](/utils/handleOGProxy) from `@once-ui-system/core/server`: they take a standard `Request` and return a `Response`. Import them through a bundler (Vite, webpack, esbuild or a framework's server build); the package is published for bundlers, and plain Node cannot load it on its own.
 - The social image route that `Meta.generate` points at (`/api/og/generate`) is yours to design with `next/og`; it renders text you pass it and fetches no URLs from the request.

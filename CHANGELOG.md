@@ -292,6 +292,14 @@ Each keeps working until 3.0.
   A day that took focus after the grid reached the page but before its
   focus tracking attached, such as a quick Tab as the picker opens, was not
   recorded, so ArrowDown went to the 7th rather than a week after that day.
+- **A single `Select` shows each option's `prefix`.** It overwrote the
+  prefix with the check-mark slot a multiple Select uses, so a swatch or icon
+  set on an option never showed; a multiple Select now shows it after the
+  check mark.
+- **`OgCard`'s favicon loads through the OG proxy, like its image.** It
+  loaded straight from the host the page named: from the visitor's browser
+  with a plain `<img>`, and not at all through `next/image` unless that host
+  was in `remotePatterns`.
 - **`MobileMegaMenu`'s links are links.** Its sections drew each link with
   `Option`, a listbox option, so they rendered as `<a role="option">` with no
   listbox around them: invalid ARIA, and not links to assistive tech.

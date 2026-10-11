@@ -14,7 +14,7 @@ interface OgData {
 
 /**
  * Fetches a page's Open Graph data through the app's OG fetch route and
- * routes a cross-origin `image` through its proxy route.
+ * routes a cross-origin `image` and `faviconUrl` through its proxy route.
  *
  * The routes come from `customFetchUrl`/`customProxyUrl` when given, else from
  * the nearest `OgRoutesProvider`, else the defaults (`/api/og/fetch`,
@@ -50,14 +50,20 @@ export function useOgData(url: string | null, customFetchUrl?: string, customPro
           throw new Error(data.message || data.error);
         }
 
-        if (data.image) {
+        // The image and the favicon both come from whatever host the page
+        // names, so both load through the proxy route. The favicon used to
+        // load directly: from the visitor's browser with a plain <img>, and
+        // not at all through next/image unless the host was in its
+        // remotePatterns.
+        for (const key of ["image", "faviconUrl"] as const) {
+          if (!data[key]) continue;
           try {
-            const imageUrl = new URL(data.image);
-            if (imageUrl.origin !== window.location.origin) {
-              data.image = buildOgRouteUrl(proxyRoute, { url: data.image });
+            const assetUrl = new URL(data[key]);
+            if (assetUrl.origin !== window.location.origin) {
+              data[key] = buildOgRouteUrl(proxyRoute, { url: data[key] });
             }
           } catch (e) {
-            console.warn("Could not parse image URL for proxying:", e);
+            console.warn(`Could not parse the ${key} URL for proxying:`, e);
           }
         }
 

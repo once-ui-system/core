@@ -378,6 +378,27 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         : option.value === currentValue;
 
     /**
+     * What leads an option: the check mark a multiple Select adds (or a
+     * spacer the mark's width, once something is checked), then the option's
+     * own prefix. The option's prefix used to be overwritten in both modes,
+     * so a swatch or icon set on an option never showed.
+     */
+    const optionPrefix = (option: SelectOptionType) => {
+      const mark = !multiple ? undefined : isSelected(option) ? (
+        <Icon name="check" size="xs" onBackground="neutral-weak" />
+      ) : Array.isArray(currentValue) && currentValue.length > 0 ? (
+        <Flex minWidth="20" />
+      ) : undefined;
+      if (!mark || !option.prefix) return mark ?? option.prefix;
+      return (
+        <Flex gap="8" vertical="center">
+          {mark}
+          {option.prefix}
+        </Flex>
+      );
+    };
+
+    /**
      * Where the list opens: on the option it is already showing, else on its
      * first enabled one — the rule DropdownWrapper applies to every list.
      */
@@ -572,15 +593,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                     selected={isSelected(option)}
                     highlighted={index === currentActive}
                     tabIndex={-1}
-                    prefix={
-                      multiple ? (
-                        isSelected(option) ? (
-                          <Icon name="check" size="xs" onBackground="neutral-weak" />
-                        ) : Array.isArray(currentValue) && currentValue.length > 0 ? (
-                          <Flex minWidth="20" />
-                        ) : undefined
-                      ) : undefined
-                    }
+                    prefix={optionPrefix(option)}
                   />
                 ))}
               </Column>

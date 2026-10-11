@@ -347,3 +347,42 @@ describe("a DropdownWrapper list", () => {
     await expectNoAxeViolations(document.body);
   });
 });
+
+describe("Select options' own prefix", () => {
+  const swatched = [
+    { value: "a", label: "Alpha", prefix: <span data-testid="swatch-a" /> },
+    { value: "b", label: "Bravo", prefix: <span data-testid="swatch-b" /> },
+  ];
+
+  it("shows each option's prefix in a single Select", async () => {
+    const user = userEvent.setup();
+    render(<Select id="s" label="Colour" value="a" onSelect={vi.fn()} options={swatched} />, {
+      wrapper: wrap,
+    });
+    await user.click(screen.getByRole("combobox"));
+    const listbox = await screen.findByRole("listbox");
+    expect(within(listbox).getByTestId("swatch-a")).toBeInTheDocument();
+    expect(within(listbox).getByTestId("swatch-b")).toBeInTheDocument();
+  });
+
+  it("keeps it after the check mark in a multiple Select", async () => {
+    const user = userEvent.setup();
+    render(
+      <Select
+        id="m"
+        label="Colours"
+        multiple
+        value={["a"]}
+        onSelect={vi.fn()}
+        options={swatched}
+      />,
+      { wrapper: wrap },
+    );
+    await user.click(screen.getByRole("combobox"));
+    const listbox = await screen.findByRole("listbox");
+    const alpha = within(listbox).getByRole("option", { name: /Alpha/ });
+    expect(within(alpha).getByTestId("swatch-a")).toBeInTheDocument();
+    expect(alpha.querySelector("svg")).not.toBeNull();
+    expect(within(listbox).getByTestId("swatch-b")).toBeInTheDocument();
+  });
+});
