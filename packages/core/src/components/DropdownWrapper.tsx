@@ -9,6 +9,7 @@ import React, {
   useCallback,
   useContext,
   useEffect,
+  useId,
   useImperativeHandle,
   useLayoutEffect,
   useMemo,
@@ -109,6 +110,13 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
 
     // Use provided dropdownId or generate a unique ID for this dropdown
     const dropdownId = useRef(propDropdownId || `dropdown-${dropdownCounter++}`);
+
+    /**
+     * The trigger's id. The open list is named after its trigger, as a menu
+     * is after its button: "Sort by", "More actions", a month. It was named
+     * "Dropdown options", in English, whatever the trigger said.
+     */
+    const triggerId = `${useId()}-trigger`;
 
     const wrapperRef = useRef<HTMLDivElement>(null);
     const triggerRef = useRef<HTMLDivElement>(null);
@@ -660,6 +668,19 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       };
     }, [isOpen, focusedIndex, getOptions]);
 
+    /**
+     * Names the open list after the trigger (see `triggerId`). The list's
+     * element is ArrowNavigation's, the panel's parent, and ArrowNavigation
+     * takes an `aria-label` but no `aria-labelledby`, so it is set here once
+     * the list is in the document. A combobox's panel, and one without arrow
+     * navigation, has no list of this wrapper's to name.
+     */
+    const listIsOurs = handleArrowNavigation && !isCombobox;
+    useEffect(() => {
+      if (!isOpen || !isBrowser || !listIsOurs) return;
+      dropdownRef.current?.parentElement?.setAttribute("aria-labelledby", triggerId);
+    }, [isOpen, isBrowser, listIsOurs, triggerId]);
+
     // Determine the appropriate navigation layout
     const determineNavigationLayout = useCallback((): NavigationLayout => {
       // Use the prop if provided, otherwise default to column
@@ -826,6 +847,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         >
           <Row
             ref={triggerRef}
+            id={triggerId}
             fillWidth={fillWidth}
             fitWidth={!fillWidth}
             onClick={
@@ -880,7 +902,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                     initialFocusedIndex={focusedIndex}
                     itemSelector='.option, [role="option"], [data-value]'
                     role={navigationLayout === "grid" ? "grid" : "listbox"}
-                    aria-label="Dropdown options"
+                    // Named after the trigger: see `triggerId`.
                     disabled={getLastOpenedDropdown() !== dropdownId.current}
                   >
                     <Flex

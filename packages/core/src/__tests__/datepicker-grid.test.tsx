@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from "@testing-library/react";
+import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { renderToString } from "react-dom/server";
@@ -37,13 +37,13 @@ const day = (date: Date) =>
 const settle = () => new Promise((resolve) => setTimeout(resolve, 200));
 
 /**
- * A picker with a value puts focus on that day itself once it is ready, on a
- * timer. Waiting for that first means it cannot move focus mid-test, however
- * slow the machine.
+ * Puts focus on a day, as Tab or a click would. The picker no longer takes
+ * focus by itself (see datepicker-focus.test.tsx), so a test has to.
  */
-const focusedOnOpen = async (date: Date) => {
+const focusDay = async (date: Date) => {
   const button = await day(date);
-  await waitFor(() => expect(button).toHaveFocus());
+  act(() => button.focus());
+  expect(button).toHaveFocus();
   return button;
 };
 
@@ -114,7 +114,13 @@ describe("DatePicker grid", () => {
       );
     expect(tabbable()).toEqual([await day(jan(5))]);
 
-    await focusedOnOpen(jan(5));
+    // Tab reaches it after the four header controls.
+    await user.tab();
+    await user.tab();
+    await user.tab();
+    await user.tab();
+    await user.tab();
+    expect(await day(jan(5))).toHaveFocus();
     await user.keyboard("{ArrowRight}");
     expect(await day(jan(6))).toHaveFocus();
     expect(tabbable()).toEqual([await day(jan(6))]);
@@ -124,7 +130,7 @@ describe("DatePicker grid", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<DatePicker value={jan(5)} onChange={onChange} />, { wrapper });
-    await focusedOnOpen(jan(5));
+    await focusDay(jan(5));
 
     await user.keyboard("{ArrowDown}");
     expect(await day(jan(12))).toHaveFocus();
@@ -137,7 +143,7 @@ describe("DatePicker grid", () => {
   it("ends on the last day that can be picked", async () => {
     const user = userEvent.setup();
     render(<DatePicker value={jan(5)} onChange={vi.fn()} maxDate={jan(25)} />, { wrapper });
-    await focusedOnOpen(jan(5));
+    await focusDay(jan(5));
 
     await user.keyboard("{End}");
     expect(await day(jan(25))).toHaveFocus();
@@ -154,12 +160,9 @@ describe("DatePicker grid", () => {
       />,
       { wrapper },
     );
-    const firstOfFebruary = await day(new Date(2026, 1, 1));
-    await focusedOnOpen(jan(28));
-
     // The second calendar starts on its first day. Enter there used to pick
     // the first calendar's day at the same position: January the 1st.
-    firstOfFebruary.focus();
+    await focusDay(new Date(2026, 1, 1));
     await user.keyboard("{Enter}");
     expect(onChange).toHaveBeenLastCalledWith({
       startDate: jan(28),

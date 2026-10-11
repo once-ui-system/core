@@ -249,6 +249,66 @@ describe("DateRangePicker", () => {
     expect(screen.getByRole("grid", { name: "March 2026" })).toBeInTheDocument();
   });
 
+  // A calendar's month and year lists set that calendar's month alone. In a
+  // dual picker the two came apart (or showed one month twice), and the
+  // arrows then moved on from the month DateRangePicker still had.
+  describe("the month and year lists of a dual picker", () => {
+    const grids = () => screen.getAllByRole("grid").map((grid) => grid.getAttribute("aria-label"));
+    const pick = async (
+      user: ReturnType<typeof userEvent.setup>,
+      trigger: HTMLElement,
+      option: string,
+    ) => {
+      await user.click(trigger);
+      await user.click(await screen.findByRole("option", { name: option }));
+      // The list closes, and the grids are drawn again.
+      await waitFor(() => expect(screen.queryByRole("listbox")).toBeNull());
+    };
+    const yearButtons = () => screen.getAllByRole("button", { name: /^\d{4}$/ });
+
+    it("move both calendars from the first calendar's lists", async () => {
+      const user = userEvent.setup();
+      render(<DateRangePicker dual value={january} onChange={vi.fn()} />, { wrapper });
+      await day(jan(5));
+
+      await pick(user, yearButtons()[0], "2027");
+      await waitFor(() => expect(grids()).toEqual(["January 2027", "February 2027"]));
+
+      await pick(user, screen.getByRole("button", { name: "January" }), "March");
+      await waitFor(() => expect(grids()).toEqual(["March 2027", "April 2027"]));
+
+      // The arrows go on from there.
+      await user.click(screen.getByRole("button", { name: "Next month" }));
+      await waitFor(() => expect(grids()).toEqual(["April 2027", "May 2027"]));
+    });
+
+    it("move the first calendar to the month before from the second calendar's lists", async () => {
+      const user = userEvent.setup();
+      render(<DateRangePicker dual value={january} onChange={vi.fn()} />, { wrapper });
+      await day(jan(5));
+
+      await pick(user, yearButtons()[1], "2025");
+      await waitFor(() => expect(grids()).toEqual(["January 2025", "February 2025"]));
+
+      await pick(user, screen.getByRole("button", { name: "February" }), "January");
+      await waitFor(() => expect(grids()).toEqual(["December 2024", "January 2025"]));
+
+      await user.click(screen.getByRole("button", { name: "Previous month" }));
+      await waitFor(() => expect(grids()).toEqual(["November 2024", "December 2024"]));
+    });
+
+    it("keep a single calendar's arrows in step with the lists", async () => {
+      const user = userEvent.setup();
+      render(<DateRangePicker value={january} onChange={vi.fn()} />, { wrapper });
+      await day(jan(5));
+
+      await pick(user, yearButtons()[0], "2028");
+      await waitFor(() => expect(grids()).toEqual(["January 2028"]));
+      await user.click(screen.getByRole("button", { name: "Next month" }));
+      await waitFor(() => expect(grids()).toEqual(["February 2028"]));
+    });
+  });
+
   // DateRangePicker took a ref through forwardRef but never attached it.
   it("forwards its ref to the root", async () => {
     const ref = createRef<HTMLDivElement>();
