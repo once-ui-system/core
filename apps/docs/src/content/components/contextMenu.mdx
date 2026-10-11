@@ -1,7 +1,7 @@
 ---
 title: "ContextMenu"
 summary: "The ContextMenu component provides contextual options / information on right click."
-updatedAt: "2025-07-31"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/contextMenu.mdx"
 github: "components/ContextMenu.tsx"
 navLabel: "ContextMenu"
@@ -101,6 +101,33 @@ A component for providing users with contextual options / information on right c
   ]}
 />
 
+## Keyboard and screen readers
+
+The menu opens at the pointer, or at the element when it is opened from the keyboard (Shift+F10 or the Menu key). Near the right or bottom edge of the screen it opens to the left of or above the pointer, so it stays on screen. It is a `menu` and its Options are `menuitem`s: the arrow keys move between them, skipping disabled ones and wrapping at the ends, Home and End jump to the first and last, and Escape closes it and returns focus to where it was.
+
+## Without a wrapper box
+
+`ContextMenu` wraps its children in a box. Set `contents` to render the wrapper with `display: contents` instead, so it adds nothing to the layout: an absolutely positioned child still positions against its own ancestors, and a grid or flex item stays one. A timeline clip or a table row can take a context menu this way without a hand-made one. With `contents` there is no box for `className`, `style` or the disabled dimming to style.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Grid columns="3" gap="8">
+  {files.map((file) => (
+    <ContextMenu key={file.id} contents dropdown={<FileMenu file={file} />}>
+      <FileTile file={file} />
+    </ContextMenu>
+  ))}
+</Grid>`,
+      language: "tsx",
+      label: "contents",
+    },
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -119,6 +146,7 @@ A component for providing users with contextual options / information on right c
     minWidth: "Lower bound on the menu's width, in rem.",
     maxWidth: "Upper bound on the menu's width, in rem.",
     minHeight: "Lower bound on the menu's height, in rem.",
+    contents: "Render no wrapper box (display: contents), so the children keep their own layout.",
   }}
   content={[
     ["children"],

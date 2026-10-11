@@ -1,7 +1,7 @@
 ---
 title: "IconButton"
 summary: "A button component that displays an icon with various styles, sizes, and interactive states."
-updatedAt: "2026-06-30"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/iconButton.mdx"
 github: "components/IconButton.tsx"
 navLabel: "IconButton"
@@ -106,6 +106,25 @@ Add tooltips to provide context for icon buttons.
   ]}
 />
 
+## Accessible name
+
+An icon button has no text, so it needs a name for screen readers. It takes the first of `aria-label`, `ariaLabel` and a `tooltip` that is plain text, so the tooltips above already name their buttons. It is never named after its icon key. Without any of them it warns in development.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<IconButton icon="close" aria-label="Close dialog" />
+<IconButton icon="search" ariaLabel="Search" />
+<IconButton icon="copy" tooltip="Copy link" />`,
+      language: "tsx",
+      label: "Accessible name"
+    }
+  ]}
+/>
+
 ## Radius
 
 Customize the border radius of the `IconButton` for different design needs.
@@ -201,6 +220,8 @@ Use the children prop to add custom content to the IconButton.
   describe={{
     loading: "Swap the icon for a spinner and block interaction.",
     rounded: "Fully rounded corners.",
+    ariaLabel: "The accessible name, as on the other components. A native aria-label wins over it.",
+    tooltip: "Hover and focus hint. A plain-text tooltip also names the button when it has no aria-label.",
   }}
   content={[
     ["children"],
