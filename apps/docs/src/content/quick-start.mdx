@@ -48,13 +48,13 @@ Installed with Once UI Core, nothing to do:
 | `clsx` | `^2.1.1` | Conditional class names |
 | `date-fns` | `^4.4.0` | Date pickers and inputs |
 
-Your app provides these. Components import their own `.module.scss` files, so the bundler has to compile Sass modules — Next.js and Vite do once `sass` is installed:
+Your app provides these. Components ship their styles as precompiled CSS modules, which Next.js, Vite and other bundlers handle with no setup; `sass` is optional (from 2.1):
 
 | Package | Version | Purpose |
 | --- | --- | --- |
 | `react` | `>=18` | React |
 | `react-dom` | `>=18` | React DOM |
-| `sass` | `^1.77.6` | Compiles the components' Sass modules |
+| `sass` | `^1.77.6` | Optional: only if your own code uses Sass |
 
 ## Optional dependencies
 

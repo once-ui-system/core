@@ -48,6 +48,16 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   Controlled or uncontrolled.
 - **`Slider` works uncontrolled.** `defaultValue` starts it (falling back to
   `min`); `value` and `onChange` are optional.
+- **`onToggle` receives the new state.** `Checkbox`, `RadioButton` and
+  `Switch` call `onToggle(checked)`, so a setter can go straight in;
+  callbacks that take no argument still compile.
+- **Uncontrolled `Switch` and `TagInput`.** Leave out `checked` or `value` and
+  the component keeps its own state, starting from `defaultChecked` or
+  `defaultValue`. `Checkbox` and `RadioButton` take `defaultChecked` too.
+- **`Dialog` takes `showClose`**, the name `Drawer` uses.
+- **Refs in the types** of `Checkbox`, `RadioButton`, `Switch`, `Dialog`,
+  `Skeleton` and `InteractiveDetails`; `ChipProps` is exported and `Chip`'s
+  ref typed.
 - **`Pagination`.** Previous/next, `boundaries` and `siblings` pages, an
   ellipsis for each run left out, and optional first/last buttons
   (`showFirstLast`). A `nav` landmark of real buttons with
@@ -133,7 +143,15 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **Harness:** slices for `ThemeInit`, `Meta`, `FocusTrap`, `ScrollLock`,
   `MediaAudioPlayer` and `MediaVideoPlayer`; `list-page` and `editor` task
   bundles.
-
+- **The harness knows 2.1's entry points.** `spec.json` lists hooks,
+  functions and constants (`useHotkeys`, `defineConfig`, `mdxComponents`,
+  `createMdxComponents`, `createOgFetchRoute`, `createOgProxyRoute`…) under
+  `functions`, each with its signature and `importFrom`; `manifest.json`'s
+  `imports` lists every entry point with its peer, exports and types. The
+  `Mdx*` elements and `/next`'s `LayoutProvider` have slices.
+- **Harness:** a `docs-page` task bundle; vertical `Tabs` in the settings
+  example; a `Drawer` for mobile nav in the app-shell recipe; "fixed in 2.1"
+  gotchas for Toast, NumberInput, Select, Button triggers and ContextMenu.
 - **`IconButton` takes `ariaLabel`**, like the other components that take
   one; a native `aria-label` wins over it.
 - **`InteractiveDetails` takes `labelId` and `descriptionId`**: ids on the
@@ -148,6 +166,25 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   apply; status codes are specific (400, 413, 415, 502, 504); `image` and
   `faviconUrl` come back as absolute URLs; `http://` is refused unless
   `allowHttp` is set.
+- **Sass is no longer needed to use Once UI.** Component styles ship
+  precompiled: `dist/` carries a `.module.css` beside every `.module.scss`,
+  and components import the CSS. Any bundler that handles CSS modules works
+  with no setup: Next.js (webpack and Turbopack), Vite, Remotion without
+  `@remotion/enable-scss`, Storybook. The CSS is what your Sass produced
+  before, so pages render the same and your imports don't change. `sass`
+  stays an optional peer; uninstall it if nothing else uses it. Generated
+  class names may change (Turbopack drops `-scss-module` from the prefix);
+  they were never stable. This updates the 2.0.0 note "A bundler is
+  required": a bundler still is, Sass is not.
+- **Twelve components render as server components:** `Line`, `Banner`,
+  `List`, `ListItem`, `InlineCode`, `Skeleton`, `ProgressBar`, `Timeline`,
+  `Badge`, `Tag`, `Avatar` and `User` (and `BlockQuote`, above). Imports are
+  unchanged.
+- **`sideEffects`:** bundlers can drop unused components; stylesheets are
+  kept. The tarball no longer carries a `dist/package.json`, which hid the
+  field from everything in `dist`.
+- **`sharp` is no longer an optional peer.** No source file imports it, and
+  Next.js installs it itself.
 - **`@once-ui-system/core/next`'s index is no longer a client module.** The
   adapters keep `"use client"` in their own file; imports don't change.
 - **`Table`'s page buttons are `Pagination`:** first/previous/next/last and
@@ -163,6 +200,19 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   sharp.** The CSS already shipped all four.
 - **Charts type `data-viz-style` as `DataStyle | (string & {})`** instead of
   `string`: autocomplete without narrowing.
+
+### Deprecated
+
+Each keeps working until 3.0.
+
+- **`Dialog`'s `hideClose`:** use `showClose={false}`.
+- **`BaseBreakpointProps`:** use `FlexBreakpointProps`, `GridBreakpointProps`
+  or `TextBreakpointProps`.
+- **`CodeBlock`'s root `highlight`:** set it on each `codes` entry.
+- **`Modal`: prefer `Dialog`** (a note, not a deprecation: Dialog has no
+  `backdrop` slot or full-height sheet yet). The docs of the overlapping
+  scrollers, Badge/Tag/Chip and Tooltip/HoverCard/InfoTip say which to use
+  for what.
 
 ### Fixed
 
@@ -252,6 +302,14 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **`Media`'s `figcaption` is inside its `figure`.** Layout is unchanged.
 - **`BlockQuote` can hold paragraphs** (its content was a `span`), and it
   renders as a server component.
+- **An uncontrolled `Checkbox` or `RadioButton` with an `onToggle` changes on
+  screen**, and `defaultChecked` is honoured; both were ignored.
+- **Docs: icons that rendered nothing.** The docs' icon library is
+  type-checked, so an unregistered name fails to compile; the names the
+  blocks and pages used are registered or corrected, and Footer3's social
+  buttons link again.
+- **Docs: proxied OG images on Next 16** (`images.localPatterns`), and the
+  docs render their pages through `createMdxComponents`.
 - **`Grid`'s `rows` sets the rows.** It had no class and reached the DOM as
   a `rows` attribute; it is now a class at the base and every breakpoint,
   like `columns`, and renders on the server.

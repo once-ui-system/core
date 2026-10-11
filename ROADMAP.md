@@ -68,7 +68,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] Rule: a Next.js app imports `LayoutProvider` from `@once-ui-system/core/next` (without it, links and images silently degrade to `<a>` and `<img>`).
 - [x] `catalog.json` purposes restored (every component currently reads "X component").
 - [x] Slices for the components the harness misses: MediaAudioPlayer, MediaVideoPlayer, Meta, ThemeInit, FocusTrap, ScrollLock.
-- [~] `gotchas.json`: stale `Tag.duplicate` removed and the adapter rule added; the W2 "fixed in 2.1" notes land with the harness regeneration.
+- [x] `gotchas.json`: stale `Tag.duplicate` removed, the adapter rule added, and "fixed in 2.1" entries for Toast, NumberInput, Select, Button triggers and ContextMenu.
 - [x] `once-ui-init-agent` also writes `CLAUDE.md` and points at `core/next`.
 - [x] Docs drift: foundations CSS imports, quick-start dependency list, the removed `useResponsiveClasses` page, custom breakpoints, the Dialog/Modal claim, the broken customize link; `AGENTS.md` and `ARCHITECTURE.md` brought up to date.
 
@@ -109,23 +109,24 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] `HeadingLink` fails axe (focusable div with a prohibited `aria-label`, `inert` until hovered, throws without a ToastProvider); `ElementType` drops `onClick` on links; `Media`'s `caption` renders its `figcaption` outside the `figure`; `BlockQuote` wraps children in a `span`.
 - [x] `Grid`'s `rows` prop has no classes and leaks to the DOM; `Text`/`Heading` pass display props to the DOM as attributes; the size parsers miss the `"72"` spacing token; `Flex` writes no breakpoint classes for `top`/`left`/`right`/`bottom`.
 - [x] `NavIcon` has no button role or Enter/Space handling.
-- [ ] The docs' blocks use about 40 icon names that aren't registered (the docs type `iconLibrary` as `Record<string, IconType>`, so typos compile).
-- [ ] The docs app's `next/image` needs `images.localPatterns` for proxied OG images on Next 16.
-- [ ] The docs app's own MDX map (`apps/docs/src/product/mdx.tsx`) moves to `/mdx`; the harness generator and `rules.md` learn the `/mdx` and `/config` entries.
+- [x] The docs' blocks use about 40 icon names that aren't registered (the docs type `iconLibrary` as `Record<string, IconType>`, so typos compile).
+- [x] The docs app's `next/image` needs `images.localPatterns` for proxied OG images on Next 16.
+- [x] The docs app's own MDX map (`apps/docs/src/product/mdx.tsx`) moves to `/mdx`; the harness generator and `rules.md` learn the `/mdx` and `/config` entries.
+- [ ] `ListItem` declares `forwardRef` but never passes the ref on; four docs blocks (About3, Background4, Newsletter3, Footer4) still use the deprecated `Particle`; `useToast` and the providers aren't in the spec (the contexts barrel isn't walked).
 - [ ] Layout leftovers: `Grid inline` emits `display-inline-grid`, which has no rule; `translateX`/`translateY` ignore spacing tokens; `ClientGrid` doesn't apply a breakpoint `width` or numeric spacing.
 
 ### W10 · API hygiene, additive (P1)
-- [ ] `onToggle` passes the new checked state (Checkbox, RadioButton, Switch); `defaultChecked`/`defaultValue` for uncontrolled use on Switch, Slider, TagInput.
-- [ ] `showClose` as the name, `hideClose` deprecated.
-- [ ] `@deprecated` JSDoc wherever a comment already says deprecated (Particle, BaseBreakpointProps, CodeBlock's root `highlight`).
-- [ ] Refs typed on the seven `React.FC` + `forwardRef` components.
-- [ ] `"use client"` removed from components with no hooks or handlers.
-- [ ] Packaging: `sideEffects`, a correct `dist/package.json`, the unused `sharp` peer dropped.
-- [ ] Deprecation notices for the overlaps 3.0 will consolidate (no behaviour change).
+- [x] `onToggle` passes the new checked state (Checkbox, RadioButton, Switch); `defaultChecked`/`defaultValue` for uncontrolled use on Switch, Slider, TagInput.
+- [x] `showClose` as the name, `hideClose` deprecated.
+- [x] `@deprecated` JSDoc wherever a comment already says deprecated (Particle, BaseBreakpointProps, CodeBlock's root `highlight`).
+- [x] Refs typed on the seven `React.FC` + `forwardRef` components.
+- [x] `"use client"` removed from components with no hooks or handlers.
+- [x] Packaging: `sideEffects`, no stale `dist/package.json`, the unused `sharp` peer dropped.
+- [x] Deprecation notices for the overlaps 3.0 will consolidate (no behaviour change; Modal gets a "prefer Dialog" note, not `@deprecated`, since Dialog lacks its `backdrop` slot and full-height sheet).
 
 ### W11 · Stretch
 - [x] `DataTable`: column definitions, selection, pagination, empty state.
-- [ ] Precompiled CSS so `sass` becomes optional (verified in Next 15, Next 16, Vite and Remotion).
+- [x] Precompiled CSS so `sass` becomes optional (verified in Next 15, Next 16, Vite and Remotion).
 - [ ] Proposal: an `fx` package for the effects, one `speed` convention.
 - [ ] The `once-ui` CLI (#160) published alongside, if its npm name is settled.
 

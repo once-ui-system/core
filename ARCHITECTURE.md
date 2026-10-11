@@ -2,7 +2,7 @@
 
 This repo is a **pnpm monorepo** managed by [Turborepo](https://turbo.build/repo). It contains one published library, the private package it builds its styles from, and two Next.js apps.
 
-The 2.0 package split (`rfcs/2026-08-once-ui-2-architecture.md`) shipped in 2.0.0 up to its last phase: tokens and utility styles live in `packages/foundations` and are inlined into core at build time; charts, `CodeBlock` and `MediaUpload` moved to the `/data`, `/code` and `/media` subpaths with optional peers; the Next.js bindings live on `@once-ui-system/core/next`, and core runs without Next. What remains — publishing `foundations`, dropping the `sass` peer, a blocks package — is parked (`ROADMAP.md` §4).
+The 2.0 package split (`rfcs/2026-08-once-ui-2-architecture.md`) shipped in 2.0.0 up to its last phase: tokens and utility styles live in `packages/foundations` and are inlined into core at build time; charts, `CodeBlock` and `MediaUpload` moved to the `/data`, `/code` and `/media` subpaths with optional peers; the Next.js bindings live on `@once-ui-system/core/next`, and core runs without Next. Since 2.1 the components' Sass modules ship precompiled, so consumers need no Sass. What remains — publishing `foundations`, dropping the now-unneeded `sass` peer, a blocks package — is parked (`ROADMAP.md` §4).
 
 ```text
 core/
@@ -98,7 +98,7 @@ pnpm install          # installs all workspaces + builds foundations and core vi
 pnpm build            # rebuild everything via Turbo
 ```
 
-The core library build: `clean` → `sync-foundations` (copies `breakpoints.scss` from `packages/foundations`; gitignored) → `generate-emoji-data` → `generate-ai-spec` → `tsc` (types + JS) → `copy-files` → `build:css` (copies foundations' compiled CSS into `dist/css` for the deprecated `@once-ui-system/core/css/*` compat entries). Tokens and utility styles compile in `packages/foundations` (`sass`), which builds first via the workspace dependency. Turborepo caches outputs across runs.
+The core library build: `clean` → `sync-foundations` (copies `breakpoints.scss` from `packages/foundations`; gitignored) → `generate-emoji-data` → `generate-ai-spec` → `tsc` (types + JS) → `copy-files` → `build:css` (copies foundations' compiled CSS into `dist/css` for the deprecated `@once-ui-system/core/css/*` compat entries) → `build:css-modules` (compiles each component's `.module.scss` to `.module.css` and points the emitted JS at it, so consumers need no Sass). Tokens and utility styles compile in `packages/foundations` (`sass`), which builds first via the workspace dependency. Turborepo caches outputs across runs.
 
 ---
 
