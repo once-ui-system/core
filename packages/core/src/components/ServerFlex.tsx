@@ -11,7 +11,13 @@ import {
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
-import { BELOW_HEADER, scrollsOn, spacingClasses, themeAttributes } from "../utils/layoutClasses";
+import {
+  BELOW_HEADER,
+  scrollsOn,
+  sizeValue,
+  spacingClasses,
+  themeAttributes,
+} from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerFlexProps
@@ -481,56 +487,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedXs?.transition && `xs-transition-${cascadedXs.transition}`,
       );
 
-    const parseDimension = (
-      value: number | SpacingToken | string | undefined,
-      type: "width" | "height",
-    ): string | undefined => {
-      if (value === undefined) return undefined;
-      if (typeof value === "number") return `${value}rem`;
-      if (typeof value === "string") {
-        // Check for CSS unit values - pass through directly
-        if (
-          value.endsWith("%") ||
-          value.endsWith("vh") ||
-          value.endsWith("dvh") ||
-          value.endsWith("vw") ||
-          value.startsWith("calc(")
-        ) {
-          return value;
-        }
-        // Static spacing tokens
-        if (
-          [
-            "0",
-            "1",
-            "2",
-            "4",
-            "8",
-            "12",
-            "16",
-            "20",
-            "24",
-            "32",
-            "40",
-            "48",
-            "56",
-            "64",
-            "80",
-            "104",
-            "128",
-            "160",
-          ].includes(value)
-        ) {
-          return `var(--static-space-${value})`;
-        }
-        // Responsive tokens
-        if (["xs", "s", "m", "l", "xl"].includes(value)) {
-          return `var(--responsive-${type}-${value})`;
-        }
-      }
-      return undefined;
-    };
-
     const parsePosition = (
       value: number | SpacingToken | string | undefined,
     ): string | undefined => {
@@ -561,12 +517,12 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     const combinedStyle: CSSProperties = {
       maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
         ? undefined
-        : parseDimension(maxWidth, "width"),
-      minWidth: parseDimension(minWidth, "width"),
-      minHeight: parseDimension(minHeight, "height"),
-      maxHeight: parseDimension(maxHeight, "height"),
-      width: parseDimension(width, "width"),
-      height: parseDimension(height, "height"),
+        : sizeValue(maxWidth, "width"),
+      minWidth: sizeValue(minWidth, "width"),
+      minHeight: sizeValue(minHeight, "height"),
+      maxHeight: sizeValue(maxHeight, "height"),
+      width: sizeValue(width, "width"),
+      height: sizeValue(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
       cursor: typeof cursor === "string" ? cursor : undefined,

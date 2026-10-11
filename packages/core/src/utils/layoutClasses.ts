@@ -1,9 +1,75 @@
 /**
  * Class-name helpers shared by the layout primitives (`Flex`, `Grid` and their
  * server components). Each one maps a prop value onto a utility class that
- * `@once-ui-system/foundations` generates, so the two components cannot drift
- * apart on what a value means, or on when a value needs the client.
+ * `@once-ui-system/foundations` generates, or onto the inline value a class
+ * cannot hold, so the two components cannot drift apart on what a value
+ * means, or on when a value needs the client.
  */
+
+import type { StaticSpacingToken } from "../types";
+
+/**
+ * The static spacing scale, as a value the size parsers can read.
+ *
+ * `ServerFlex`, `ClientFlex` and `ServerGrid` each carried their own copy of
+ * this list, and all three had dropped `"72"`: `width="72"` type-checked and
+ * then rendered no width at all. One list now, keyed by `StaticSpacingToken`
+ * so the compiler rejects it the moment the type gains or loses a step, and
+ * the type is pinned to the foundations generator by `spacing-token-parity`.
+ */
+const STATIC_SPACE: Record<StaticSpacingToken, true> = {
+  "0": true,
+  "1": true,
+  "2": true,
+  "4": true,
+  "8": true,
+  "12": true,
+  "16": true,
+  "20": true,
+  "24": true,
+  "32": true,
+  "40": true,
+  "48": true,
+  "56": true,
+  "64": true,
+  "72": true,
+  "80": true,
+  "104": true,
+  "128": true,
+  "160": true,
+};
+
+/** Every static spacing token, smallest first. */
+export const STATIC_SPACING_TOKENS = Object.keys(STATIC_SPACE) as StaticSpacingToken[];
+
+const STATIC_SPACING = new Set<unknown>(STATIC_SPACING_TOKENS);
+const RESPONSIVE_SIZES = new Set<unknown>(["xs", "s", "m", "l", "xl"]);
+
+/** A CSS length a class cannot hold, passed through as written. */
+export function isCSSUnit(value: string): boolean {
+  return (
+    value.endsWith("%") ||
+    value.endsWith("vh") ||
+    value.endsWith("dvh") ||
+    value.endsWith("vw") ||
+    value.startsWith("calc(")
+  );
+}
+
+/**
+ * A size prop (`width`, `minHeight`, `minColumnWidth`…) as a CSS value: a
+ * number is rem, a static token is its `--static-space-*` step, a t-shirt
+ * size is the responsive width or height, and a CSS unit passes through.
+ * Anything else is no value at all, as before.
+ */
+export function sizeValue(value: unknown, type: "width" | "height"): string | undefined {
+  if (typeof value === "number") return `${value}rem`;
+  if (typeof value !== "string") return undefined;
+  if (isCSSUnit(value)) return value;
+  if (STATIC_SPACING.has(value)) return `var(--static-space-${value})`;
+  if (RESPONSIVE_SIZES.has(value)) return `var(--responsive-${type}-${value})`;
+  return undefined;
+}
 
 /**
  * The size keyword for "the viewport below the app header". At the base it is
