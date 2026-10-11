@@ -292,7 +292,7 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 - **A lint no-regression gate.** `pnpm lint:gate` fails when Biome reports
   more errors than `lint-baseline.json` records. The count only goes down:
   `--update` records a lower number and refuses a higher one. It stands at
-  161, from 519 before 2.1: a mechanical format and import-order sweep
+  160, from 519 before 2.1: a mechanical format and import-order sweep
   (no behaviour change) took it to 173.
 - **Accessibility assertions in tests.** `src/test/axe.ts` runs axe on a
   rendered tree; every component added or changed in 2.1 is tested with it.
