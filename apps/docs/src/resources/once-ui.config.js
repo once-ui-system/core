@@ -79,9 +79,10 @@ const schema = {
   logo: "",
   type: "Organization",
   name: "Once UI",
-  description: "Once UI is the open-source design system for the AI-native era. We equip design engineers, founders and creatives with pre-styled, out-of-the-box solutions to ship amazing products consistently.",
+  description:
+    "Once UI is the open-source design system for the AI-native era. We equip design engineers, founders and creatives with pre-styled, out-of-the-box solutions to ship amazing products consistently.",
   email: "support@once-ui.com",
-  locale: "en_US"
+  locale: "en_US",
 };
 
 const meta = {
@@ -89,8 +90,8 @@ const meta = {
     title: "The open-source design system for the AI-native web",
     description: schema.description,
     path: "/",
-    image: "/api/og/generate?title=The open-source design system for the AI-native web"
+    image: "/api/og/generate?title=The open-source design system for the AI-native web",
   },
 };
 
-export { dataStyle, style, layout, baseURL, social, schema, meta };
+export { baseURL, dataStyle, layout, meta, schema, social, style };
