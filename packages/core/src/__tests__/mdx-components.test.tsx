@@ -160,8 +160,8 @@ describe("mdxComponents", () => {
 
     const quote = screen.getByText("Ship small.");
     expect(quote.closest("blockquote")).not.toBeNull();
-    // BlockQuote sets its content in a span, which cannot hold a <p>.
-    expect(quote.closest("p")).toBeNull();
+    // BlockQuote sets its content in a div, so the quote's paragraph is a <p>.
+    expect(quote.tagName).toBe("P");
     expect(screen.getByRole("separator")).toBeInTheDocument();
 
     const table = screen.getByRole("table");

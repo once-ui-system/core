@@ -1,5 +1,3 @@
-"use client";
-
 import { forwardRef } from "react";
 import { Avatar } from "./Avatar";
 import { Column } from "./Column";
@@ -63,7 +61,10 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
               {preline}
             </Text>
           )}
-          <Text variant="heading-strong-xl" wrap="balance">
+          {/* A div, not Text's default span, so the quote can hold
+              paragraphs: `<p>` inside a span is invalid HTML. As a flex item
+              the span was laid out as a block already. */}
+          <Text as="div" variant="heading-strong-xl" wrap="balance">
             {children}
           </Text>
           {subline && (

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useCallback } from "react";
-import { Animation } from "../../components/Animation";
+import classNames from "clsx";
+import type React from "react";
 import { Heading } from "../../components/Heading";
-import { IconButton } from "../../components/IconButton";
 import { Row } from "../../components/Row";
-import { useToast } from "../../contexts/ToastProvider";
+import { textOf } from "../mdx/text";
+import { HeadingAnchor, useCopySectionLink } from "./HeadingAnchor";
 import styles from "./HeadingLink.module.scss";
 
 export interface HeadingLinkProps extends React.ComponentProps<typeof Row> {
@@ -24,69 +24,47 @@ const variantMap = {
   h6: "heading-strong-xs",
 } as const;
 
-export const HeadingLink: React.FC<HeadingLinkProps> = ({ id, as, children, style, ...flex }) => {
-  const { addToast } = useToast();
-
-  const copyURL = useCallback(
-    (id: string) => {
-      try {
-        const url = `${window.location.origin}${window.location.pathname}#${id}`;
-        navigator.clipboard.writeText(url).then(
-          () => {
-            addToast?.({
-              variant: "success",
-              message: "Link copied to clipboard.",
-            });
-          },
-          () => {
-            addToast?.({
-              variant: "danger",
-              message: "Failed to copy link.",
-            });
-          },
-        );
-      } catch (error) {
-        console.error("Error copying to clipboard:", error);
-      }
-    },
-    [addToast],
-  );
-
-  const variant = variantMap[as];
+/**
+ * A heading with a link to itself. Clicking the heading copies the section's
+ * URL; the link beside it does the same, and is the way there by keyboard.
+ *
+ * The link used to be a focusable `div` carrying a prohibited `aria-label`,
+ * made `inert` until the heading was hovered, so a keyboard never reached
+ * it; and the component threw without a ToastProvider. It is now the anchor
+ * the `/mdx` headings use: a real link to `#id`, faded in on hover or focus
+ * but always reachable, that copies with a toast when there is a provider
+ * and without one when there is not.
+ */
+export const HeadingLink: React.FC<HeadingLinkProps> = ({
+  id,
+  as,
+  children,
+  style,
+  className,
+  ...flex
+}) => {
+  const copy = useCopySectionLink(id);
 
   return (
     <Row
       style={style}
-      onClick={() => copyURL(id)}
-      className={styles.control}
-      cursor="interactive"
+      className={classNames(styles.control, className)}
       vertical="center"
-      gap="8"
+      // 12 between heading and link, as before, when the reveal animation
+      // around them set the gap.
+      gap="12"
       {...flex}
     >
-      <Animation
-        triggerType="hover"
-        childrenPosition="relative"
-        gap="12"
-        trigger={
-          <Heading className={styles.text} id={id} variant={variant} as={as}>
-            {children}
-          </Heading>
-        }
-        fade={0}
-        scale={0.875}
-        duration={200}
-        touch="display"
+      <Heading
+        className={classNames(styles.text, "cursor-interactive")}
+        id={id}
+        variant={variantMap[as]}
+        as={as}
+        onClick={copy}
       >
-        <IconButton
-          size="m"
-          tabIndex={0}
-          icon="link"
-          variant="secondary"
-          tooltip="Copy"
-          tooltipPosition="right"
-        />
-      </Animation>
+        {children}
+      </Heading>
+      <HeadingAnchor id={id} label={textOf(children)} className={styles.anchor} />
     </Row>
   );
 };

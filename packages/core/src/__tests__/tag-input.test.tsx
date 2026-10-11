@@ -5,7 +5,7 @@ import { createRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { TagInput } from "../components/TagInput";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { axeViolations } from "../test/axe";
+import { expectNoAxeViolations } from "../test/axe";
 
 /**
  * TagInput is controlled: `value` is the tag list and every change goes
@@ -98,9 +98,8 @@ describe("TagInput", () => {
       wrapper,
     });
 
-    const removeButtons = screen.getAllByRole("button", { name: "Remove" });
-    expect(removeButtons).toHaveLength(3);
-    await user.click(removeButtons[1]);
+    expect(screen.getAllByRole("button", { name: /^Remove tag / })).toHaveLength(3);
+    await user.click(screen.getByRole("button", { name: "Remove tag vue" }));
     expect(onChange).toHaveBeenLastCalledWith(["react", "svelte"]);
     expect(screen.queryByText("vue")).toBeNull();
   });
@@ -129,20 +128,30 @@ describe("TagInput", () => {
     expect(ref.current).toBe(field());
   });
 
-  // BUG: each tag's `aria-label="Remove tag …"` is spread onto the Chip's
+  // Each tag's `aria-label="Remove tag …"` used to be spread onto the Chip's
   // role="button" root, which does nothing when pressed, while the button that
-  // removes the tag is named by its tooltip, "Remove", the same for every tag.
-  it.skip("names each remove button after its tag", () => {
+  // removes the tag was named by its tooltip, "Remove", the same for every tag.
+  it("names each remove button after its tag", () => {
     render(<ControlledTagInput initial={["react", "vue"]} />, { wrapper });
     expect(screen.getByRole("button", { name: "Remove tag vue" }).tagName).toBe("BUTTON");
+    expect(screen.getByRole("button", { name: "Remove tag react" }).tagName).toBe("BUTTON");
+    expect(screen.queryByRole("button", { name: "Remove" })).toBeNull();
   });
 
-  // BUG: the field claims `aria-haspopup="listbox"` and `aria-expanded`, but
+  // The field used to claim `aria-haspopup="listbox"` and `aria-expanded`, but
   // there is no listbox, and a plain textbox may not carry `aria-expanded`
-  // (axe: "aria-allowed-attr"). The tags also inherit Chip's nested remove
+  // (axe: "aria-allowed-attr"). The tags also inherited Chip's nested remove
   // button ("nested-interactive").
-  it.skip("has no axe violations", async () => {
+  it("has no axe violations", async () => {
     const { container } = render(<ControlledTagInput initial={["react"]} />, { wrapper });
-    expect(await axeViolations(container)).toEqual([]);
+    await expectNoAxeViolations(container);
+  });
+
+  it("does not claim a popup on the field, focused or not", async () => {
+    const user = userEvent.setup();
+    render(<ControlledTagInput />, { wrapper });
+    await user.click(field());
+    expect(field()).not.toHaveAttribute("aria-haspopup");
+    expect(field()).not.toHaveAttribute("aria-expanded");
   });
 });

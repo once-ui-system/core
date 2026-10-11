@@ -162,6 +162,98 @@ const Media = forwardRef<HTMLDivElement, MediaProps>(
     const resolvedSizes =
       typeof sizes === "number" ? `(max-width: ${sizes}px) 100vw, ${sizes}px` : sizes;
 
+    const mediaBox = (
+      <Column
+        ref={imageRef}
+        fillWidth={fillWidth}
+        overflow="hidden"
+        zIndex={0}
+        margin="0"
+        style={{
+          outline: "none",
+          isolation: "isolate",
+          height:
+            aspectRatio === "original"
+              ? undefined
+              : aspectRatio
+                ? ""
+                : height
+                  ? `${height}rem`
+                  : "100%",
+          aspectRatio: aspectRatio === "original" ? undefined : aspectRatio,
+          borderRadius: isEnlarged ? "0" : undefined,
+          ...calculateTransform(),
+          ...style,
+        }}
+        onClick={handleImageClick}
+        className={classNames(
+          canEnlarge && !isEnlarged
+            ? "cursor-zoom-in"
+            : canEnlarge && isEnlarged
+              ? "cursor-zoom-out"
+              : undefined,
+          className,
+        )}
+        {...rest}
+      >
+        {loading && <Skeleton shape="block" radius={rest.radius} />}
+        {!loading && isVideo && useCustomVideoControls && (
+          <MediaVideoPlayer
+            src={src}
+            autoplay={autoplay}
+            loop={loop}
+            muted={!sound}
+            objectFit={objectFit}
+          />
+        )}
+        {!loading && isVideo && !useCustomVideoControls && (
+          <video
+            src={src}
+            autoPlay={autoplay}
+            loop={loop}
+            muted={!sound}
+            playsInline
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: objectFit,
+            }}
+          />
+        )}
+        {!loading && isYouTube && (
+          <iframe
+            width="100%"
+            height="100%"
+            src={getYouTubeEmbedUrl(src)}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{
+              objectFit: objectFit,
+            }}
+          />
+        )}
+        {!loading && !isVideo && !isYouTube && (
+          <Image
+            src={src}
+            alt={alt}
+            sizes={isEnlarged ? "100vw" : resolvedSizes}
+            priority={priority}
+            unoptimized={unoptimized}
+            fill={stretch || !aspectRatio}
+            width={stretch ? undefined : 0}
+            height={stretch ? undefined : 0}
+            style={{
+              objectFit: objectFit,
+              aspectRatio: stretch ? undefined : aspectRatio,
+              width: aspectRatio ? "100%" : undefined,
+              height: aspectRatio ? "100%" : undefined,
+            }}
+          />
+        )}
+      </Column>
+    );
+
     return (
       <>
         <ScrollLock enabled={isEnlarged} />
@@ -186,98 +278,13 @@ const Media = forwardRef<HTMLDivElement, MediaProps>(
             }}
           />
         )}
-        <>
-          <Column
-            as={caption ? "figure" : undefined}
-            ref={imageRef}
-            fillWidth={fillWidth}
-            overflow="hidden"
-            zIndex={0}
-            margin="0"
-            style={{
-              outline: "none",
-              isolation: "isolate",
-              height:
-                aspectRatio === "original"
-                  ? undefined
-                  : aspectRatio
-                    ? ""
-                    : height
-                      ? `${height}rem`
-                      : "100%",
-              aspectRatio: aspectRatio === "original" ? undefined : aspectRatio,
-              borderRadius: isEnlarged ? "0" : undefined,
-              ...calculateTransform(),
-              ...style,
-            }}
-            onClick={handleImageClick}
-            className={classNames(
-              canEnlarge && !isEnlarged
-                ? "cursor-zoom-in"
-                : canEnlarge && isEnlarged
-                  ? "cursor-zoom-out"
-                  : undefined,
-              className,
-            )}
-            {...rest}
-          >
-            {loading && <Skeleton shape="block" radius={rest.radius} />}
-            {!loading && isVideo && useCustomVideoControls && (
-              <MediaVideoPlayer
-                src={src}
-                autoplay={autoplay}
-                loop={loop}
-                muted={!sound}
-                objectFit={objectFit}
-              />
-            )}
-            {!loading && isVideo && !useCustomVideoControls && (
-              <video
-                src={src}
-                autoPlay={autoplay}
-                loop={loop}
-                muted={!sound}
-                playsInline
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: objectFit,
-                }}
-              />
-            )}
-            {!loading && isYouTube && (
-              <iframe
-                width="100%"
-                height="100%"
-                src={getYouTubeEmbedUrl(src)}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                style={{
-                  objectFit: objectFit,
-                }}
-              />
-            )}
-            {!loading && !isVideo && !isYouTube && (
-              <Image
-                src={src}
-                alt={alt}
-                sizes={isEnlarged ? "100vw" : resolvedSizes}
-                priority={priority}
-                unoptimized={unoptimized}
-                fill={stretch || !aspectRatio}
-                width={stretch ? undefined : 0}
-                height={stretch ? undefined : 0}
-                style={{
-                  objectFit: objectFit,
-                  aspectRatio: stretch ? undefined : aspectRatio,
-                  width: aspectRatio ? "100%" : undefined,
-                  height: aspectRatio ? "100%" : undefined,
-                }}
-              />
-            )}
-          </Column>
-          {caption && (
+        {caption ? (
+          // The figure holds the media and its caption, which must sit inside
+          // it to describe it. It used to be the media box itself, with the
+          // caption rendered after it, outside. It draws no box of its own
+          // (`display: contents`), so the two lay out exactly as they did.
+          <figure style={{ display: "contents" }}>
+            {mediaBox}
             <Row
               as="figcaption"
               fillWidth
@@ -290,8 +297,10 @@ const Media = forwardRef<HTMLDivElement, MediaProps>(
             >
               {caption}
             </Row>
-          )}
-        </>
+          </figure>
+        ) : (
+          mediaBox
+        )}
       </>
     );
   },

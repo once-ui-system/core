@@ -13,3 +13,28 @@
     text-underline-offset: 0.25em;
     text-decoration-color: var(--neutral-border-strong);
 }
+
+// The link beside the heading appears as the heading is hovered or the link
+// takes focus, with the same fade and scale it had. It is only faded, never
+// removed or made inert, so keyboard and screen-reader users always reach it.
+.anchor {
+    opacity: 0;
+    transform: scale(0.875);
+    transition:
+        opacity 200ms var(--transition-eased),
+        transform 200ms var(--transition-eased);
+}
+
+.control:hover .anchor,
+.control:focus-within .anchor {
+    opacity: 1;
+    transform: scale(1);
+}
+
+// Touch screens have no hover to reveal it.
+@media (hover: none) {
+    .anchor {
+        opacity: 1;
+        transform: none;
+    }
+}

@@ -58,12 +58,10 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           interactive && `radius-${flex.radius ?? "l"}`,
         )}
         href={href}
-        // A link card runs its handler through `onLinkClick`, since
-        // ElementType does not pass `onClick` to an anchor. The surface
-        // below must not carry it too: a click on the content would bubble
-        // to this element and run it twice, which undoes a toggle.
+        // ElementType runs `onClick` on a link as well as on a button. The
+        // surface below must not carry it too: a click on the content would
+        // bubble to this element and run it twice, which undoes a toggle.
         onClick={onClick}
-        onLinkClick={href ? onClick : undefined}
         role={onClick ? "button" : href ? "link" : "none"}
         // `aria-selected` only means anything inside a listbox or grid, which
         // a Card knows nothing about. A clickable card that can be on or off
