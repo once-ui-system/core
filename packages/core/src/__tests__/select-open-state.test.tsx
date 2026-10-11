@@ -36,9 +36,16 @@ const Single = ({ onSelect }: { onSelect?: (value: string) => void }) => {
   );
 };
 
-const field = () => screen.getByRole("textbox", { name: "Pick" }) as HTMLInputElement;
+const field = () => screen.getByRole("combobox", { name: "Pick" }) as HTMLInputElement;
 const isOpen = () => field().getAttribute("aria-expanded") === "true";
 const option = (name: string) => screen.findByRole("option", { name });
+
+/** The option the field points at: focus stays in the field, on a combobox. */
+const expectActive = async (name: string) => {
+  const active = await option(name);
+  expect(field()).toHaveFocus();
+  expect(field()).toHaveAttribute("aria-activedescendant", active.id);
+};
 
 /** Long enough for every deferred focus hand-off in the dropdown to have run. */
 const settle = () => new Promise((resolve) => setTimeout(resolve, 120));
@@ -97,9 +104,9 @@ describe("Select open state", () => {
 
     screen.getByRole("button", { name: "Before" }).focus();
     await user.tab();
-    // Tabbing in opens the list and moves focus onto the selected option.
+    // Tabbing in opens the list on the selected option; focus stays in the field.
     await expectOpen();
-    expect(await option("Alpha")).toHaveFocus();
+    await expectActive("Alpha");
 
     // One step down from Alpha is Bravo.
     await user.keyboard("{ArrowDown}{Enter}");
@@ -137,7 +144,7 @@ describe("Select open state", () => {
     await user.click(screen.getByRole("button", { name: "After" }));
     await user.tab({ shift: true });
     await expectOpen();
-    expect(await option("Bravo")).toHaveFocus();
+    await expectActive("Bravo");
   });
 
   it("closes a searchable Select on pick and keeps it closed", async () => {

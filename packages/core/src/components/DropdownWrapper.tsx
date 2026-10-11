@@ -7,6 +7,7 @@ import React, {
   KeyboardEvent,
   ReactNode,
   useCallback,
+  useContext,
   useEffect,
   useImperativeHandle,
   useLayoutEffect,
@@ -25,7 +26,11 @@ import {
 import { ArrowNavigation } from "./ArrowNavigationContext";
 import { Column } from "./Column";
 import { Dropdown } from "./Dropdown";
-import { DropdownTriggerContext, type DropdownTriggerState } from "./DropdownTriggerContext";
+import {
+  DropdownComboboxContext,
+  DropdownTriggerContext,
+  type DropdownTriggerState,
+} from "./DropdownTriggerContext";
 import styles from "./DropdownWrapper.module.scss";
 import { Flex } from "./Flex";
 import { FocusTrap } from "./FocusTrap";
@@ -127,7 +132,19 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       setButtonTriggers((count) => count + 1);
       return () => setButtonTriggers((count) => count - 1);
     }, []);
-    const wrapperIsTrigger = buttonTriggers === 0;
+
+    /**
+     * Whether the trigger is a combobox (see DropdownComboboxContext). A
+     * combobox is the control too, so the wrappers drop `role="button"` for it
+     * as well; beyond that it keeps focus while the panel is open and handles
+     * its own keys, so this component stays out of both. Read through a ref
+     * in the effects, which must not re-run on it.
+     */
+    const isCombobox = useContext(DropdownComboboxContext);
+    const isComboboxRef = useRef(isCombobox);
+    isComboboxRef.current = isCombobox;
+
+    const wrapperIsTrigger = buttonTriggers === 0 && !isCombobox;
 
     const handleOpenChange = useCallback(
       (newIsOpen: boolean) => {
@@ -350,6 +367,11 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           if (dropdownRef.current) {
             refs.setFloating(dropdownRef.current);
             update();
+
+            // A combobox keeps focus in its field and reports its own active
+            // option (setActiveIndex), which resetting here would overwrite.
+            if (isComboboxRef.current) return;
+
             // Reset focus index when opening
             setFocusedIndex(-1);
 
@@ -394,8 +416,18 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
         setFocusedIndex(-1);
 
         if (previouslyFocusedElement.current) {
+          // A combobox's field had focus all along, so focus that is now
+          // somewhere else was put there by the user — Tab out of the field,
+          // a click on another control — and stays. Only focus lost with the
+          // panel (it was on an option or the search field, and fell back to
+          // <body> when they unmounted) comes back to the field.
+          const active = document.activeElement;
+          const focusWasLost = !active || active === document.body;
           // Only try to focus if the element is still in the document
-          if (document.contains(previouslyFocusedElement.current)) {
+          if (
+            document.contains(previouslyFocusedElement.current) &&
+            (!isComboboxRef.current || focusWasLost)
+          ) {
             (previouslyFocusedElement.current as HTMLElement).focus({ preventScroll: true });
           }
         }
@@ -639,6 +671,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             ? "grid"
             : "listbox",
         register: registerButtonTrigger,
+        setActiveIndex: setFocusedIndex,
       }),
       [isOpen, handleArrowNavigation, navigationLayout, registerButtonTrigger],
     );
@@ -746,7 +779,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
     );
 
     return (
-      <>
+      // The combobox flag is this wrapper's alone: a dropdown inside it is not one.
+      <DropdownComboboxContext.Provider value={false}>
         <ScrollLock enabled={isOpen} allowScrollInElement={dropdownRef} />
         <Column
           fillWidth={fillWidth}
@@ -769,7 +803,8 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                   }
                 }
           }
-          onKeyDown={handleKeyDown}
+          // A combobox handles its own keys, the panel's included.
+          onKeyDown={isCombobox ? undefined : handleKeyDown}
           tabIndex={-1}
           role={wrapperIsTrigger ? "button" : undefined}
           aria-haspopup={wrapperIsTrigger ? "listbox" : undefined}
@@ -792,9 +827,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                     handleOpenChange(true);
                   }
             }
-            onKeyDown={(e) => {
-              handleKeyDown(e);
-            }}
+            onKeyDown={isCombobox ? undefined : handleKeyDown}
             role={wrapperIsTrigger ? "button" : undefined}
             data-is-dropdown="true"
             aria-haspopup={wrapperIsTrigger ? "true" : undefined}
@@ -816,10 +849,13 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                 // autofocusing before then silently lands nowhere.
                 active={isOpen && isPositioned}
                 onEscape={() => handleOpenChange(false)}
-                autoFocus
-                restoreFocus
+                // A combobox keeps focus in its field; the trap only holds Tab
+                // inside the panel once the combobox has put focus there (a
+                // searchable Select's query field).
+                autoFocus={!isCombobox}
+                restoreFocus={!isCombobox}
               >
-                {handleArrowNavigation ? (
+                {handleArrowNavigation && !isCombobox ? (
                   <ArrowNavigation
                     layout={navigationLayout}
                     itemCount={optionsCount}
@@ -912,6 +948,10 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                         minWidth={minWidth}
                         radius="l"
                         padding="0"
+                        // ArrowNavigation above is the listbox; Dropdown's own
+                        // listbox role here nested a listbox in a listbox.
+                        // "none": a plain box, like any other in between.
+                        role="none"
                         selectedOption={selectedOption}
                         onSelect={(value) => {
                           onSelect?.(value);
@@ -971,8 +1011,9 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                     data-dropdown-id={dropdownId.current}
                     data-is-active={getLastOpenedDropdown() === dropdownId.current}
                     onKeyDown={(e) => {
-                      // If handleArrowNavigation is false, let all keyboard events pass through
-                      if (!handleArrowNavigation) {
+                      // If handleArrowNavigation is false, let all keyboard events pass through.
+                      // So does a combobox's panel: the combobox handles its keys.
+                      if (!handleArrowNavigation || isCombobox) {
                         return;
                       }
 
@@ -1017,6 +1058,11 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                       minWidth={minWidth}
                       radius="l"
                       padding="0"
+                      // Not a listbox, as Dropdown is on its own: this panel
+                      // holds whatever the caller put in it (a date grid, an
+                      // emoji picker), and a combobox brings its own listbox,
+                      // which this one would wrap.
+                      role="none"
                       selectedOption={selectedOption}
                       onSelect={(value) => {
                         onSelect?.(value);
@@ -1034,7 +1080,7 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               document.body,
             )}
         </Column>
-      </>
+      </DropdownComboboxContext.Provider>
     );
   },
 );

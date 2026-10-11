@@ -37,7 +37,10 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         background="surface"
         className={disabled ? "cursor-not-allowed" : undefined}
         style={{ opacity: disabled ? 0.6 : undefined }}
-        aria-disabled={disabled}
+        // Only when it is: "false" is the default, and on a panel with no
+        // role of its own (DropdownWrapper's is "none") the attribute would
+        // still expose it, as an element the listbox around it cannot own.
+        aria-disabled={disabled || undefined}
         {...flex}
       >
         <Column flex={1} overflowY="auto" gap="2">
