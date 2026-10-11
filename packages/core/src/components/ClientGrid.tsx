@@ -3,7 +3,7 @@
 import { CSSProperties, forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { useLayout } from "../contexts/LayoutProvider";
 import { DisplayProps, GridBreakpointProps, GridProps, StyleProps } from "../interfaces";
-import { offsetStyle } from "../utils/layoutClasses";
+import { breakpointStyle } from "../utils/layoutClasses";
 import { Cursor } from "./Cursor";
 import { ServerGrid } from "./ServerGrid";
 
@@ -82,22 +82,14 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
         });
       }
 
-      // Apply new responsive styles if we have them for current breakpoint
+      // Apply new responsive styles if we have them for current breakpoint:
+      // everything a class cannot hold, through the helper ClientFlex uses,
+      // so a breakpoint `width` or numeric spacing applies here as it does
+      // there. A token spacing or offset is a class, from ServerGrid.
       if (currentResponsiveProps) {
-        if (currentResponsiveProps.style) {
-          Object.entries(currentResponsiveProps.style).forEach(([key, value]) => {
-            (element.style as any)[key] = value;
-            appliedResponsiveStyles.current.add(key);
-          });
-        }
-        if (currentResponsiveProps.aspectRatio) {
-          element.style.aspectRatio = currentResponsiveProps.aspectRatio;
-          appliedResponsiveStyles.current.add("aspect-ratio");
-        }
-        // A rem or CSS-unit offset; a token offset is a class, from ServerGrid.
-        for (const [side, value] of Object.entries(offsetStyle(currentResponsiveProps))) {
-          element.style.setProperty(side, value);
-          appliedResponsiveStyles.current.add(side);
+        for (const [property, value] of breakpointStyle(currentResponsiveProps)) {
+          (element.style as any)[property] = value;
+          appliedResponsiveStyles.current.add(property);
         }
       }
     }, [xl, l, m, s, xs, props.style, currentBreakpoint]);
