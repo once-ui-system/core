@@ -119,7 +119,7 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
   `labels` for their built-in names too, so the panel's scroll buttons are
   translated with the rest of it.
 - **`StylePanel` fits a narrow sidebar.** `stacked` puts each row's label above
-  its control, and the option rows drop a button size. A row's own layout
+  its control, and the option rows take the whole row and drop a button size. A row's own layout
   props still win, including on a row with a custom colour. Where swatches or
   options still overflow, the chosen one is scrolled into view, clear of the
   scroll buttons.

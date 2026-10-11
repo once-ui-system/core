@@ -67,9 +67,19 @@ describe("StylePanel's option rows", () => {
   // The button's size shows in its radius class.
   const scalingTab = () => screen.getByRole("tab", { name: "100" });
 
-  it("keep their size inline", () => {
+  /** The SegmentedControl around a row's options. */
+  const optionsOf = (tab: HTMLElement) =>
+    tab.closest('[role="tablist"]')?.parentElement?.parentElement;
+
+  it("keep their size inline, and stop at 22rem beside the label", () => {
     render(<StylePanel value={{}} onChange={vi.fn()} />, { wrapper });
     expect(scalingTab()).toHaveClass("radius-l");
+    expect((optionsOf(scalingTab()) as HTMLElement).style.maxWidth).toBe("22rem");
+  });
+
+  it("take the whole row when stacked", () => {
+    render(<StylePanel stacked value={{}} onChange={vi.fn()} />, { wrapper });
+    expect((optionsOf(scalingTab()) as HTMLElement).style.maxWidth).toBe("");
   });
 
   it("drop a size when stacked, so a sidebar fits more of them", () => {

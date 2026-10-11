@@ -795,16 +795,17 @@ function NeutralRow({ label, ...rest }: StyleRowProps) {
 }
 
 /**
- * A row's segmented options. Stacked, the buttons drop a size so that the
- * longer rows fit a sidebar; either way the scroll buttons are translated
- * with the rest of the panel.
+ * A row's segmented options. Beside a label they stop at 22rem; stacked, they
+ * have the row to themselves, so they take all of it, and the buttons drop a
+ * size so that the longer rows fit a sidebar. Either way the scroll buttons
+ * are translated with the rest of the panel.
  */
 function Options({ buttons, ...rest }: Omit<SegmentedControlProps, "labels">) {
   const stacked = useContext(StylePanelStackedContext);
   const labels = useStylePanelLabels();
   return (
     <SegmentedControl
-      maxWidth={22}
+      maxWidth={stacked ? undefined : 22}
       minWidth={0}
       labels={labels.scroller}
       buttons={buttons.map((button) => ({ size: stacked ? "m" : "l", ...button }))}
