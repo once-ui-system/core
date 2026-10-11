@@ -192,3 +192,5 @@
 | B Once UI, memory | 3 | 4 | 3 | 5 |
 | C Tailwind + shadcn/ui + docs | 4 | 4 | 4 | 5 |
 | D Tailwind, memory | 5 | 5 | 4 | 5 |
+
+_Once UI `validate-ai-code` issue counts (in summary.json) come from validator pilot (2.1 RC tree d070802). They are not comparable across runs that used different validator versions._

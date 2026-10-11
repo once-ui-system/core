@@ -92,6 +92,10 @@ cp work/context-manifest.json results/full-rc0/
 node runner/report.mjs  --results results/full-rc0 > results/full-rc0/tables.md
 ```
 
+Arms A and B also record Once UI's `validate-ai-code` issues per page, with the validator
+version beside them. rc.0 ships a stricter validator than the pilot used, so don't compare
+these counts with the pilot's.
+
 `tables.md` ends with the **claim-conditions table** (METHODOLOGY §5.1) for A vs C. A
 claim is allowed only where its row says **yes**.
 

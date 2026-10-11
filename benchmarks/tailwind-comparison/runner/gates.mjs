@@ -7,6 +7,7 @@
 // CLI:      node runner/gates.mjs --arm A --page path/to/page.tsx --out dir
 
 import { spawn, spawnSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright-core";
@@ -238,7 +239,15 @@ export async function runGates(letter, code, outDir, task = null) {
 
   if (["A", "B"].includes(letter)) {
     const v = run("node", ["node_modules/@once-ui-system/core/scripts/validate-ai-code.js", "app/page.tsx"], dir, 60_000);
-    res.validate_ai_code = { exit: v.code, output: v.output.slice(0, 8000) };
+    // The validator changes between releases (rc.0 adds rules), so record which one
+    // produced the count; counts are not comparable across validator versions.
+    const pkg = JSON.parse(fs.readFileSync(path.join(dir, "node_modules/@once-ui-system/core/package.json"), "utf8"));
+    const script = fs.readFileSync(path.join(dir, "node_modules/@once-ui-system/core/scripts/validate-ai-code.js"));
+    res.validate_ai_code = {
+      exit: v.code,
+      output: v.output.slice(0, 8000),
+      validator: { package_version: pkg.version, script_sha256: createHash("sha256").update(script).digest("hex").slice(0, 16) },
+    };
   }
 
   const tsc = run("npx", ["tsc", "--noEmit", "--pretty", "false"], dir);

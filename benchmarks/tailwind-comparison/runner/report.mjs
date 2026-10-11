@@ -79,6 +79,7 @@ for (const f of listFiles(path.join(resultsDir, "raw")).filter((f) => f.endsWith
     axe_serious: accGates?.gates.render?.axe?.serious_or_critical ?? null,
     overflow_phone: accGates?.gates.render?.viewports?.phone?.horizontal_overflow ?? null,
     validate_issues: accGates?.validate_ai_code ? countValidate(accGates.validate_ai_code.output) : null,
+    validator: accGates?.validate_ai_code?.validator?.script_sha256 ?? "pilot (2.1 RC tree d070802)",
   });
 }
 
@@ -184,7 +185,8 @@ const passRate = Object.fromEntries(
   }),
 );
 
-const summary = { generated: new Date().toISOString(), rows, passRate, comparisons, sensitivity };
+const validators = [...new Set(rows.filter((r) => r.validate_issues != null).map((r) => r.validator))];
+const summary = { generated: new Date().toISOString(), rows, passRate, comparisons, sensitivity, validators };
 fs.writeFileSync(arg("json", path.join(resultsDir, "summary.json")), JSON.stringify(summary, null, 2));
 
 // ---- markdown ---------------------------------------------------------------------
@@ -268,5 +270,10 @@ if (ratings) {
     const m = (k) => median(rs.map((r) => r[k]));
     lines.push(`| ${NAMES[a]} | ${m("polish") ?? "–"} | ${m("completeness") ?? "–"} | ${m("responsiveness") ?? "–"} | ${m("restraint") ?? "–"} |`);
   }
+}
+if (validators.length) {
+  lines.push(
+    `\n_Once UI \`validate-ai-code\` issue counts (in summary.json) come from validator ${validators.join(", ")}. They are not comparable across runs that used different validator versions._`,
+  );
 }
 console.log(lines.join("\n"));
