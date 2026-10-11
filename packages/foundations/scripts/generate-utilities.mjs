@@ -383,7 +383,14 @@ function display() {
 }
 
 function grid() {
-  const out = [rule(".display-grid", ["display: grid;"])];
+  // `Grid inline` writes `.display-inline-grid`, as `Flex inline` writes
+  // `.display-inline-flex`; only the flex one had a rule, so an inline grid
+  // stayed a block. Ahead of `.grid-hide` and the breakpoint blocks, so
+  // hiding still wins.
+  const out = [
+    rule(".display-grid", ["display: grid;"]),
+    rule(".display-inline-grid", ["display: inline-grid;"]),
+  ];
 
   for (const n of GRID_COLUMNS) {
     out.push(rule(`.columns-${n}`, [`grid-template-columns: ${gridTemplate(n)};`]));

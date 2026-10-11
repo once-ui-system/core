@@ -161,6 +161,35 @@ export function offsetValue(value: unknown): string | undefined {
 }
 
 /**
+ * A `translateX`/`translateY` value as a CSS length. A static step is its
+ * `--static-space-*` and a t-shirt size its `--responsive-space-*`, the values
+ * the spacing classes read; a number is rem, and a CSS unit passes through.
+ *
+ * Only the number and the CSS unit used to resolve, so `translateY="16"`, the
+ * form the props' type and the harness teach, wrote no transform at all.
+ */
+export function translateValue(value: unknown): string | undefined {
+  if (typeof value === "number") return `${value}rem`;
+  if (typeof value !== "string") return undefined;
+  if (isCSSUnit(value)) return value;
+  if (STATIC_SPACING.has(value)) return `var(--static-space-${value})`;
+  if (RESPONSIVE_SIZES.has(value)) return `var(--responsive-space-${value})`;
+  return undefined;
+}
+
+/**
+ * `translateX` and `translateY` as the one `transform` they write, the unset
+ * axis `0`. It is the only transform `Flex`, `Grid`, `Text` and `Heading`
+ * write; a `transform` in `style` replaces it, as `style` replaces any value
+ * these components resolve.
+ */
+export function translateTransform(x: unknown, y: unknown): string | undefined {
+  const tx = translateValue(x);
+  const ty = translateValue(y);
+  return tx || ty ? `translate(${tx || "0"}, ${ty || "0"})` : undefined;
+}
+
+/**
  * Breakpoint offsets, as classes: `m={{ top: "16" }}` is `.m-top-16`. The
  * classes were always generated; `ServerFlex` never wrote them, so a token
  * offset in a breakpoint object stayed on the server and did nothing.
@@ -188,6 +217,76 @@ export function offsetStyle(
     if (value !== undefined) style[side] = value;
   }
   return style;
+}
+
+/** The size props a breakpoint object writes inline, and the axis each reads. */
+const BREAKPOINT_SIZES = [
+  ["width", "width"],
+  ["height", "height"],
+  ["maxWidth", "width"],
+  ["minWidth", "width"],
+  ["minHeight", "height"],
+  ["maxHeight", "height"],
+] as const;
+
+/**
+ * The spacing props a breakpoint object writes inline when they are numbers,
+ * and the properties each sets: the shorthand, then each side, then each axis
+ * over its two sides, the order `ClientFlex` has always applied them in.
+ */
+const BREAKPOINT_SPACING: [prop: string, properties: string[]][] = [
+  ["padding", ["padding"]],
+  ["paddingLeft", ["paddingLeft"]],
+  ["paddingRight", ["paddingRight"]],
+  ["paddingTop", ["paddingTop"]],
+  ["paddingBottom", ["paddingBottom"]],
+  ["paddingX", ["paddingLeft", "paddingRight"]],
+  ["paddingY", ["paddingTop", "paddingBottom"]],
+  ["margin", ["margin"]],
+  ["marginLeft", ["marginLeft"]],
+  ["marginRight", ["marginRight"]],
+  ["marginTop", ["marginTop"]],
+  ["marginBottom", ["marginBottom"]],
+  ["marginX", ["marginLeft", "marginRight"]],
+  ["marginY", ["marginTop", "marginBottom"]],
+  ["gap", ["gap"]],
+];
+
+/**
+ * Everything one cascaded breakpoint object sets inline, as `[property,
+ * value]` pairs in the order `ClientFlex` and `ClientGrid` apply them at the
+ * current breakpoint: the values `isClassExpressible` sends to the client.
+ *
+ * The `style` escape hatch goes first, so a resolved value wins over it; then
+ * `aspectRatio`, the sizes (a number is rem, a token its step, `below-header`
+ * written out), numeric spacing and rem or CSS-unit offsets. A token spacing
+ * or offset is a class, written by the server component, and is not here.
+ *
+ * `ClientGrid` applied only `style`, `aspectRatio` and the offsets, so a
+ * breakpoint `width` or numeric `padding` moved a Grid to the client and then
+ * did nothing there. A t-shirt `maxWidth` did nothing on either: the base
+ * writes it as `.max-width-<size>`, which has no breakpoint variant, and the
+ * breakpoint path skipped it as though it did.
+ */
+export function breakpointStyle(props: Record<string, unknown>): [string, unknown][] {
+  const entries: [string, unknown][] = [];
+  const add = (property: string, value: unknown) => {
+    if (value !== undefined) entries.push([property, value]);
+  };
+  if (props.style && typeof props.style === "object") {
+    for (const [property, value] of Object.entries(props.style)) add(property, value);
+  }
+  add("aspectRatio", props.aspectRatio);
+  for (const [prop, axis] of BREAKPOINT_SIZES) {
+    const value = props[prop];
+    add(prop, value === BELOW_HEADER ? BELOW_HEADER_VALUE : sizeValue(value, axis));
+  }
+  for (const [prop, properties] of BREAKPOINT_SPACING) {
+    const value = props[prop];
+    if (typeof value === "number") for (const property of properties) add(property, `${value}rem`);
+  }
+  for (const [side, value] of Object.entries(offsetStyle(props))) add(side, value);
+  return entries;
 }
 
 /**
@@ -307,8 +406,6 @@ export function textLayout({
   zIndex,
 }: TextLayoutProps): { classes: (string | false | undefined)[]; style: CSSProperties } {
   const offsets = { top, right, bottom, left };
-  const x = offsetValue(translateX);
-  const y = offsetValue(translateY);
   return {
     classes: [
       position && `position-${position}`,
@@ -327,7 +424,7 @@ export function textLayout({
     style: {
       gap: typeof gap === "number" ? `${gap}rem` : undefined,
       ...offsetStyle(offsets),
-      transform: x || y ? `translate(${x || "0"}, ${y || "0"})` : undefined,
+      transform: translateTransform(translateX, translateY),
     },
   };
 }
