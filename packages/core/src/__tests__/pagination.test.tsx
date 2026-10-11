@@ -7,7 +7,7 @@ import { Pagination } from "../components/Pagination";
 import { Table } from "../components/Table";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { paginationItems } from "../internal/pagination";
-import { axeViolations, expectNoAxeViolations } from "../test/axe";
+import { expectNoAxeViolations } from "../test/axe";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -253,16 +253,9 @@ describe("Pagination", () => {
 
     it("is labelled and shows the current size", async () => {
       const { container } = render(<Host />, { wrapper: wrap });
-      const field = screen.getByRole("textbox", { name: "Per page" });
+      const field = screen.getByRole("combobox", { name: "Per page" });
       expect(field).toHaveValue("10");
-      // Select's own trigger still fails axe (ROADMAP "Found while building":
-      // aria-expanded on a textbox inside role="button" wrappers). Those two
-      // rules belong to Select; everything Pagination adds must pass.
-      const selectRules = ["aria-allowed-attr", "nested-interactive"];
-      const violations = await axeViolations(container);
-      expect(
-        violations.filter((violation) => !selectRules.includes(violation.split(":")[0])),
-      ).toEqual([]);
+      await expectNoAxeViolations(container);
     });
 
     it("keeps the first item on screen in view at the new size", async () => {
@@ -272,7 +265,7 @@ describe("Pagination", () => {
       // Page 5 at 10 a page starts at item 41; at 20 a page that is page 3.
       expect(currentPage()).toHaveTextContent("5");
 
-      await user.click(screen.getByRole("textbox", { name: "Per page" }));
+      await user.click(screen.getByRole("combobox", { name: "Per page" }));
       await user.click(await screen.findByRole("option", { name: "20" }));
 
       expect(onPerPageChange).toHaveBeenCalledWith(20);

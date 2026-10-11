@@ -362,7 +362,7 @@ describe("DataTable", () => {
         { wrapper: wrap },
       );
 
-      await user.click(screen.getByRole("textbox", { name: "Rows per page" }));
+      await user.click(screen.getByRole("combobox", { name: "Rows per page" }));
       await user.click(await screen.findByRole("option", { name: "10" }));
       expect(onPerPageChange).toHaveBeenCalledWith(10);
       expect(bodyRows()).toHaveLength(10);
