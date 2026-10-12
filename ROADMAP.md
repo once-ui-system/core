@@ -199,6 +199,10 @@ commit, then `npm view @once-ui-system/core dist-tags` should read
 - **2026-10-11:** The CLI publishes as `@once-ui-system/cli`, with the command `once-ui` (Lorant). An unscoped `once-ui` would very likely be refused by npm's rule against names that differ from an existing package only by punctuation (`onceui` exists); the scoped name is ours and can't be impersonated. Run once with `npx @once-ui-system/cli <command>`; installed globally, the command is `once-ui`.
 - **2026-10-11:** MDX body text stays `neutral-medium`, the `/mdx` default and what every product's MDX map already uses; the docs follow it (Lorant).
 - **2026-10-11:** `StylePanel` gains `labels` and an opt-in custom colour in 2.1, before the freeze, so a product's site style editor can use the core panel and seed ramp instead of keeping its own (Lorant).
+- **2026-10-12:** The default border (`--default-border`, drawn by a bare `border`) is `neutral-alpha-weak`; 2.0's `neutral-weak` was an accident. Core's components and the docs write a bare `border` so they follow an app's token (Lorant).
+- **2026-10-12:** Docs blocks whose logos do not exist show the repo's wordmark as a placeholder, and the AudioPlayer demo plays a lightweight loop (Lorant).
+- **2026-10-12:** The other copy of the blocks gets the same fixes now; once `@once-ui-system/cli` ships, the shadcn-style registry and that copy are removed, so the blocks live only here (Lorant).
+- **2026-10-12:** Dated blocks: two or three redesigned exemplars first, for review, before any wider redesign (Lorant).
 
 ## 9. Guardrails
 
