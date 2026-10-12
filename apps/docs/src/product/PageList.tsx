@@ -92,7 +92,7 @@ export function PageList({
             <Media
               priority
               sizes="480px"
-              border="neutral-alpha-weak"
+              border
               cursor="interactive"
               radius="m"
               src={page.metadata.image}

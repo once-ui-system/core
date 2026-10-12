@@ -171,7 +171,7 @@ const OgCard = ({
           sizes={sizes}
           unoptimized={unoptimized}
           aspectRatio="16/9"
-          border="neutral-alpha-weak"
+          border
           src={proxiedImageUrl}
         />
       )}
@@ -193,7 +193,7 @@ const OgCard = ({
               maxWidth="16"
               fillWidth={false}
               radius="xs"
-              border="neutral-alpha-weak"
+              border
             />
             {resolvedUrl &&
               (loading ? (

@@ -292,6 +292,12 @@ Each keeps working until 3.0.
   `--default-border: var(--neutral-border-weak)`. The validator's
   `border.default` rule, the gotcha and the agent rules name
   `neutral-alpha-weak` as the default.
+- **Components that drew `neutral-alpha-weak` borders draw the default
+  border**, so they follow an app's `--default-border`: `CodeBlock`,
+  `InfoTip`, `Kbar`, `MegaMenu`, `OgCard`, `ProgressBar`, `Setting`/
+  `SettingGroup`, `SplitView`, `ThemeSwitcher` and `ChartHeader`. With the
+  default token nothing changes; an app that sets the token to another
+  colour sees these borders take it too.
 - **A controlled `StylePanel` changed the page's theme.** With `value` and
   `onChange`, the Theme row still set the theme through `ThemeProvider` and
   stored it, and ignored `value.theme`. It now shows `value.theme` (unset

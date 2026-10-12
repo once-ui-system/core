@@ -70,7 +70,7 @@ export default function DropdownCheck() {
             vertical="center"
             horizontal="between"
             radius="l"
-            border="neutral-alpha-weak"
+            border
           >
             <Column gap="2" paddingLeft="8">
               <Text variant="label-default-s">Row {i + 1}</Text>

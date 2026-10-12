@@ -504,7 +504,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
           <Row
             background="surface"
             radius="l"
-            border="neutral-alpha-weak"
+            border
             padding="12"
             gap="32"
             data-dropdown-wrapper
@@ -584,13 +584,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                             >
                               <Row gap="12">
                                 {link.icon && (
-                                  <Icon
-                                    name={link.icon}
-                                    size="s"
-                                    padding="8"
-                                    radius="s"
-                                    border="neutral-alpha-weak"
-                                  />
+                                  <Icon name={link.icon} size="s" padding="8" radius="s" border />
                                 )}
                                 <Column gap="4">
                                   {link.label && (

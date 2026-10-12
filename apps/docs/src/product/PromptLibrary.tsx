@@ -33,7 +33,7 @@ export function PromptLibrary() {
                 gap="12"
                 padding="20"
                 radius="l"
-                border="neutral-alpha-weak"
+                border
                 background="overlay"
               >
                 <Column gap="4">

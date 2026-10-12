@@ -397,7 +397,7 @@ export default function ChatPage() {
           <Column
             fill
             background="surface"
-            border="neutral-alpha-weak"
+            border
             radius="l"
             overflow="hidden"
           >
@@ -428,7 +428,7 @@ export default function ChatPage() {
           </Column>
         }
         rightPanel={
-          <Column fill overflow="hidden" radius="l" border="neutral-alpha-weak">
+          <Column fill overflow="hidden" radius="l" border>
             <Row
               paddingX="20"
               paddingY="12"
@@ -436,8 +436,8 @@ export default function ChatPage() {
               vertical="center"
               horizontal="between"
               background="surface"
-              border="neutral-alpha-weak"
-              borderBottom="neutral-alpha-weak"
+              border
+              borderBottom
             >
               <User
                 name={threadTitle(activeConversation)}
@@ -512,8 +512,8 @@ export default function ChatPage() {
               paddingY="8"
               gap="4"
               background="surface"
-              border="neutral-alpha-weak"
-              borderTop="neutral-alpha-weak"
+              border
+              borderTop
             >
               <Row
                 gap="4"
@@ -523,7 +523,7 @@ export default function ChatPage() {
                 vertical="center"
                 background="neutral-alpha-weak"
                 radius="l"
-                border="neutral-alpha-weak"
+                border
               >
                 <IconButton icon="plus" variant="tertiary" size="s" tooltip="Attach file" />
                 <Column flex={1}>

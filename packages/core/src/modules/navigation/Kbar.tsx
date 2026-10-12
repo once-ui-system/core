@@ -385,7 +385,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
             gap="2"
             overflowY="auto"
             radius="l"
-            border="neutral-alpha-weak"
+            border
             role={hasResults ? "listbox" : undefined}
             id={hasResults ? listboxId : undefined}
             aria-label={hasResults ? "Results" : undefined}

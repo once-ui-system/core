@@ -202,7 +202,7 @@ function SplitView({
           <Card
             fill
             background={isDragging ? "neutral-strong" : "neutral-weak"}
-            border="neutral-alpha-weak"
+            border
             radius="full"
             style={{
               cursor: isHorizontal ? "col-resize" : "row-resize",

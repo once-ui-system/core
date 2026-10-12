@@ -192,7 +192,7 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
                     padding="4"
                     gap="2"
                     minWidth={8}
-                    border="neutral-alpha-weak"
+                    border
                     radius="m"
                     overflowX="scroll"
                   >

@@ -672,7 +672,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     <Column
       ref={inPortal ? undefined : codeBlockRef}
       background={background ?? "surface"}
-      border="neutral-alpha-weak"
+      border
       overflow="hidden"
       vertical="center"
       fillWidth
@@ -826,7 +826,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             fill
             background="overlay"
             radius="l"
-            border="neutral-alpha-weak"
+            border
             padding={previewPadding}
             tabIndex={-1}
             horizontal="center"

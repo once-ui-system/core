@@ -39,7 +39,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
     const bar = (
       <Flex
         background="neutral-medium"
-        border="neutral-alpha-weak"
+        border
         fillWidth
         radius="full"
         overflow="hidden"

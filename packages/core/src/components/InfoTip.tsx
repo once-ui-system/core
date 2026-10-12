@@ -57,7 +57,7 @@ const InfoTip: React.FC<InfoTipProps> = ({
         paddingX="12"
         background="page"
         radius="m"
-        border="neutral-alpha-weak"
+        border
         {...flex}
       >
         <Text variant="label-default-s" onBackground="neutral-medium">

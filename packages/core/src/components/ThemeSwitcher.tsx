@@ -182,7 +182,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
         >
           <Column
             gap="2"
-            border="neutral-alpha-weak"
+            border
             radius="full"
             background="page"
             className={classNames(styles.collapsed, styles.panel)}
@@ -199,7 +199,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
         data-border="rounded"
         ref={ref}
         gap="2"
-        border="neutral-alpha-weak"
+        border
         radius="full"
         suppressHydrationWarning
         className={classNames(collapsed && styles.collapsed, pending && styles.pending, className)}
