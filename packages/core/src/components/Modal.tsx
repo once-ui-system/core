@@ -1,6 +1,7 @@
 "use client";
 
-import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { Column } from "./Column";
 import { FocusTrap } from "./FocusTrap";
@@ -68,7 +69,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
     useEffect(() => {
       if (!open) return;
       const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") {
+        if (e.key === "Escape" && !e.defaultPrevented) {
           onClose();
         }
       };

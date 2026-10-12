@@ -319,6 +319,15 @@ Each keeps working until 3.0.
   A day that took focus after the grid reached the page but before its
   focus tracking attached, such as a quick Tab as the picker opens, was not
   recorded, so ArrowDown went to the 7th rather than a week after that day.
+- **Focus traps skip what Tab cannot reach.** `Drawer`, `Modal`, `Dialog`
+  and the other focus traps counted elements under `display: none` and
+  disabled controls. A logo drawn once per theme, with the other theme's
+  copy hidden, became the trap's first element, so focus went nowhere on
+  open and Tab did not wrap.
+- **Escape closes the top layer only.** `Kbar` opened from a `Drawer`,
+  `Dialog` or `Modal` closed both on one Escape. The palette now handles
+  its Escape first and marks it handled; `FocusTrap`, `Dialog` and `Modal`,
+  like `Drawer` already, leave an Escape something inside has handled.
 - **`validate-ai-code` checks every file it is given**, not only the first:
   `validate-ai-code a.tsx b.tsx` silently skipped `b.tsx`.
 - **A single `Select` shows each option's `prefix`.** It overwrote the

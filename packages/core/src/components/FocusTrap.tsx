@@ -1,6 +1,15 @@
 "use client";
 
-import React, { forwardRef, KeyboardEvent, ReactNode, RefObject, useEffect, useRef } from "react";
+import type React from "react";
+import {
+  forwardRef,
+  type KeyboardEvent,
+  type ReactNode,
+  type RefObject,
+  useEffect,
+  useRef,
+} from "react";
+import { getFocusableElements } from "../internal/focusable";
 
 interface FocusTrapProps {
   children: ReactNode;
@@ -77,8 +86,9 @@ const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
     const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
       if (!active) return;
 
-      // Handle escape key
-      if (e.key === "Escape" && onEscape) {
+      // Handle escape key. One something inside already handled (a palette or
+      // a dropdown over this trap) is not this trap's to close on.
+      if (e.key === "Escape" && onEscape && !e.defaultPrevented) {
         e.preventDefault();
         onEscape();
         return;
@@ -119,15 +129,6 @@ const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
           }
         }
       }
-    };
-
-    // Helper function to get all focusable elements within a container
-    const getFocusableElements = (container: HTMLElement): HTMLElement[] => {
-      return Array.from(
-        container.querySelectorAll(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-        ),
-      ) as HTMLElement[];
     };
 
     return (

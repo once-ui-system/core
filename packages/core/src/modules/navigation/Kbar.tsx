@@ -272,20 +272,23 @@ export const KbarContent: React.FC<KbarContentProps> = ({
     document.getElementById(`${baseId}-option-${active}`)?.scrollIntoView?.({ block: "nearest" });
   }, [active, baseId]);
 
-  // Handle escape key
+  // Escape closes the palette, and only the palette: it is caught before
+  // anything else sees it and marked handled, so a Drawer, Dialog or Modal the
+  // palette was opened from stays open.
   useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
+        e.preventDefault();
         handleClose();
       }
     };
 
     if (open) {
-      document.addEventListener("keydown", handleEscapeKey);
+      document.addEventListener("keydown", handleEscapeKey, true);
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscapeKey);
+      document.removeEventListener("keydown", handleEscapeKey, true);
     };
   }, [open, handleClose]);
 

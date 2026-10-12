@@ -3,7 +3,7 @@
 import classNames from "clsx";
 import React, {
   forwardRef,
-  ReactNode,
+  type ReactNode,
   useCallback,
   useContext,
   useEffect,
@@ -12,6 +12,7 @@ import React, {
   useState,
 } from "react";
 import ReactDOM from "react-dom";
+import { getFocusableElements } from "../internal/focusable";
 import { Column } from "./Column";
 import styles from "./Dialog.module.scss";
 import { Flex } from "./Flex";
@@ -153,13 +154,11 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
 
     const handleKeyDown = useCallback(
       (event: KeyboardEvent) => {
-        if (event.key === "Escape" && !base) {
+        if (event.key === "Escape" && !base && !event.defaultPrevented) {
           onClose();
         }
         if (event.key === "Tab" && dialogRef.current) {
-          const focusableElements = dialogRef.current.querySelectorAll(
-            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-          );
+          const focusableElements = getFocusableElements(dialogRef.current);
 
           if (focusableElements.length > 0) {
             const firstElement = focusableElements[0] as HTMLElement;
