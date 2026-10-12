@@ -150,7 +150,7 @@ export const Careers3 = () => {
             background="page"
             overflow="hidden"
           >
-            <BlobFx position="absolute" top="0" left="0" translateY="50%" />
+            <BlobFx position="absolute" top="0" left="0" translateY="50%" s={{ hide: true }} />
             <Column gap="12">
               <Heading as="h2" variant="display-strong-s">
                 Build the future of design systems

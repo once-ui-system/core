@@ -221,9 +221,12 @@ export function Header() {
                 size="s"
                 href="/"
               />
-              <Text onBackground="neutral-weak" marginBottom="1">
-                Docs
-              </Text>
+              {/* On a phone the theme switcher and the CTA need the room. */}
+              <Row s={{ hide: true }}>
+                <Text onBackground="neutral-weak" marginBottom="1">
+                  Docs
+                </Text>
+              </Row>
             </Row>
           </Row>
           <Kbar
@@ -267,7 +270,7 @@ export function Header() {
             vertical="center"
           >
             <ThemeSwitcher style={{ scale: 0.85 }} />
-            <Line vert height="20" marginRight="8" />
+            <Line vert height="20" marginRight="8" s={{ hide: true }} />
 
             <Button href="https://once-ui.com" size="s">
               Open Once UI
