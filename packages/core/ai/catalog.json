@@ -1,6 +1,6 @@
 {
- "version": "2.0.0",
- "generated": "2026-10-11",
+ "version": "2.1.0-rc.0",
+ "generated": "2026-10-12",
  "iconNames": ["adjustments","arrowLeft","arrowRight","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","maximize","minimize","minus","moreHorizontal","opacity","organization","pause","paw","payment","person","personRemove","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "Accordion": {"group":"components","extends":["Flex"],"purpose":"One collapsible section: a clickable title row that shows and hides its content","tags":["content","disclosure"],"pairsWith":["AccordionGroup","Column","Text"]},
