@@ -25,12 +25,12 @@ const stats = [
   { label: "Countries reached", value: 64, suffix: "" },
 ];
 
-const partners = [
-  { dark: "/trademarks/brevo-dark.svg", light: "/trademarks/brevo-light.svg" },
-  { dark: "/trademarks/microsoft-dark.svg", light: "/trademarks/microsoft-light.svg" },
-  { dark: "/trademarks/nasa-dark.svg", light: "/trademarks/nasa-light.svg" },
-  { dark: "/trademarks/logmein-dark.svg", light: "/trademarks/logmein-light.svg" },
-];
+// Placeholder partners: swap in real logos.
+const partners = Array.from({ length: 4 }, (_, index) => ({
+  id: `partner-${index}`,
+  dark: "/trademarks/wordmark-dark.svg",
+  light: "/trademarks/wordmark-light.svg",
+}));
 
 const swag = [
   {
@@ -179,7 +179,7 @@ export const About5 = () => {
           <Grid columns="4" m={{ columns: 2 }} fillWidth background="page" borderBottom>
             {partners.map((partner, index) => (
               <Row
-                key={partner.dark}
+                key={partner.id}
                 fill
                 center
                 padding="24"

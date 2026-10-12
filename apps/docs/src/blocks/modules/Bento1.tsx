@@ -15,9 +15,9 @@ const tiles = {
         <AutoScroll>
           <Logo wordmark={"/trademarks/wordmark-light.svg"} />
           <Line vert />
-          <Logo wordmark={"/trademarks/agent-light.svg"} />
+          <Logo wordmark={"/trademarks/wordmark-light.svg"} />
           <Line vert />
-          <Logo wordmark={"/trademarks/convert-light.svg"} />
+          <Logo wordmark={"/trademarks/wordmark-light.svg"} />
           <Line vert />
         </AutoScroll>
       ),

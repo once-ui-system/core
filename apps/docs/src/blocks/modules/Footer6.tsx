@@ -9,12 +9,12 @@ import {
   Text,
 } from "@once-ui-system/core";
 
-const trademarks = [
-  { light: "/trademarks/brevo-light.svg", dark: "/trademarks/brevo-dark.svg" },
-  { light: "/trademarks/microsoft-light.svg", dark: "/trademarks/microsoft-dark.svg" },
-  { light: "/trademarks/nasa-light.svg", dark: "/trademarks/nasa-dark.svg" },
-  { light: "/trademarks/logmein-light.svg", dark: "/trademarks/logmein-dark.svg" },
-];
+// Placeholder trademarks: swap in real logos.
+const trademarks = Array.from({ length: 4 }, (_, index) => ({
+  id: `trademark-${index}`,
+  light: "/trademarks/wordmark-light.svg",
+  dark: "/trademarks/wordmark-dark.svg",
+}));
 
 const social = [
   { icon: "discord" as const, href: "https://discord.com/invite/5EyAQ4eNdS" },
@@ -71,7 +71,7 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
           </Column>
           <Grid columns="4" m={{ columns: 2 }} maxWidth={48}>
             {trademarks.map((mark) => (
-              <Row key={mark.light} center padding="24">
+              <Row key={mark.id} center padding="24">
                 <Logo wordmark={mark.dark} dark />
                 <Logo wordmark={mark.light} light />
               </Row>

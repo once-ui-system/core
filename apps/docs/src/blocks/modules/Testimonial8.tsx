@@ -33,11 +33,8 @@ const members: Member[] = [
   { name: "Kathrina Voss", avatar: "/images/avatars/08.png", role: "Creative Director" },
 ];
 
-const logos = [
-  "/trademarks/wordmark-light.svg",
-  "/trademarks/agent-light.svg",
-  "/trademarks/convert-light.svg",
-];
+// Placeholder logos: swap in real ones.
+const logos = Array.from({ length: 3 }, () => "/trademarks/wordmark-light.svg");
 
 export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
   const [open, setOpen] = useState(false);
