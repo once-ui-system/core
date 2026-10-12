@@ -57,7 +57,7 @@ export const Sidebar9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
         paddingY="12"
         gap="8"
         center
-        borderRight="neutral-alpha-weak"
+        borderRight
         background="neutral-alpha-weak"
       >
         <Avatar size="xs" src="/images/creators/lorant.jpg" marginBottom="8" />

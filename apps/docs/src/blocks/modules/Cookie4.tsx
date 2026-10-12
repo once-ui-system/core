@@ -58,7 +58,7 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
         </Column>
       </Row>
 
-      <Column fillWidth gap="12" padding="16" radius="m" border="neutral-alpha-weak">
+      <Column fillWidth gap="12" padding="16" radius="m" border>
         <Row fillWidth horizontal="between" vertical="center">
           <Column gap="2">
             <Text variant="label-default-s">Analytics</Text>

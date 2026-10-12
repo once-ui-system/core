@@ -114,7 +114,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
             </Column>
           )}
 
-          <Column fillWidth gap="12" padding="16" radius="l" border="neutral-alpha-weak">
+          <Column fillWidth gap="12" padding="16" radius="l" border>
             <Row horizontal="between" vertical="center">
               <Text variant="label-strong-s">Your streak</Text>
               <Text variant="label-default-s" onBackground="brand-weak">
@@ -152,7 +152,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           gap="12"
           padding="16"
           radius="l"
-          border="neutral-alpha-weak"
+          border
           background="surface"
         >
           <Row horizontal="between" vertical="center">

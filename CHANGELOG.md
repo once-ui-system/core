@@ -283,6 +283,15 @@ Each keeps working until 3.0.
 
 ### Fixed
 
+- **The default border is `neutral-alpha-weak`.** A bare `border` (and
+  `borderTop`, `borderX`, …) draws `--default-border`, which an app sets in
+  its custom CSS. 2.0 set its default to `neutral-weak` by accident; it is
+  now the translucent `neutral-alpha-weak`, the border the design language
+  uses most. An app that sets `--default-border` itself sees no
+  change. To keep 2.0's solid border, set
+  `--default-border: var(--neutral-border-weak)`. The validator's
+  `border.default` rule, the gotcha and the agent rules name
+  `neutral-alpha-weak` as the default.
 - **A controlled `StylePanel` changed the page's theme.** With `value` and
   `onChange`, the Theme row still set the theme through `ThemeProvider` and
   stored it, and ignored `value.theme`. It now shows `value.theme` (unset
@@ -304,12 +313,6 @@ Each keeps working until 3.0.
   A day that took focus after the grid reached the page but before its
   focus tracking attached, such as a quick Tab as the picker opens, was not
   recorded, so ArrowDown went to the 7th rather than a week after that day.
-- **The validator's `border.default` rule named the wrong colour.** It
-  called `border="neutral-alpha-weak"` the default border and its `--fix`
-  rewrote it to a bare `border`, which changed what rendered: a bare border
-  is `neutral-weak`, and `neutral-alpha-weak` is a different, translucent
-  colour. The rule, its fix, the gotcha and the rules now name
-  `neutral-weak`.
 - **`validate-ai-code` checks every file it is given**, not only the first:
   `validate-ai-code a.tsx b.tsx` silently skipped `b.tsx`.
 - **A single `Select` shows each option's `prefix`.** It overwrote the

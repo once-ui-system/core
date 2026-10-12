@@ -601,11 +601,10 @@ const VERTICAL_CENTER = /(?:^|\s)vertical=["']center["']/;
 const LITERAL_MAX_WIDTH =
   /(?:^|\s)maxWidth=(?:"[^"]*"|\{\s*(?:\d+(?:\.\d+)?|"[^"]*"|'[^']*')\s*\})(?=[\s/]|$)/;
 const MIN_WIDTH_ZERO = /(?:^|\s)minWidth=(?:\{\s*0\s*\}|\{?["']0["']\}?)(?=[\s/]|$)/;
-// A bare `border` draws `--default-border`, which is `--neutral-border-weak`:
-// the `neutral-weak` value. `neutral-alpha-weak` is a different, translucent
-// colour, and this rule used to call it the default and rewrite it to a bare
-// border, which changed what rendered.
-const DEFAULT_BORDER = /(?:^|\s)(border(?:Top|Right|Bottom|Left|X|Y)?)=["']neutral-weak["']/;
+// A bare `border` draws `--default-border`, which is `--neutral-alpha-weak`
+// unless the app sets it in its custom CSS: naming that colour pins it and
+// stops the border following the app's default.
+const DEFAULT_BORDER = /(?:^|\s)(border(?:Top|Right|Bottom|Left|X|Y)?)=["']neutral-alpha-weak["']/;
 const BREAKPOINTS = ["xl", "l", "m", "s", "xs"];
 
 /** The layout primitives whose `position` defaults to `relative`. */
@@ -909,7 +908,7 @@ function validate(source, spec, iconNames, options = {}) {
   if (named) {
     add(
       "border.default",
-      `${named[1]}="neutral-weak" restates the default border — write bare ${named[1]}, and name a colour only to deviate`,
+      `${named[1]}="neutral-alpha-weak" restates the default border — write bare ${named[1]}, and name a colour only to deviate`,
       "default-border",
     );
   }
@@ -1282,7 +1281,7 @@ function applyFixes(source, issues, spec = loadSpec()) {
       out = rewriteTags(out, (attrs) =>
         replaceOwnProps(
           attrs,
-          /(border(?:Top|Right|Bottom|Left|X|Y)?)=["']neutral-weak["']/g,
+          /(border(?:Top|Right|Bottom|Left|X|Y)?)=["']neutral-alpha-weak["']/g,
           "$1",
         ),
       );
