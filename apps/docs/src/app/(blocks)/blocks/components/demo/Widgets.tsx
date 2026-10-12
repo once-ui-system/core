@@ -112,22 +112,22 @@ const examples: BlockExampleDef[] = [
       <Column fill center overflow="hidden">
         <AudioPlayer
           maxWidth="s"
-          audio="/audio/study-everything.mp3"
+          audio="/audio/ambient-loop.mp3"
           chapters={[
             { start: 0, title: "The nature of knowledge" },
-            { start: 104, title: "Everything is connected" },
+            { start: 8, title: "Everything is connected" },
             {
-              start: 256,
+              start: 16,
               title: "The strength of your ideas equals to the diversity of your inputs",
             },
-            { start: 560, title: "Talent is sensitivity cultivated over time" },
-            { start: 736, title: "In the age of AI, curiosity is the new superpower" },
+            { start: 24, title: "Talent is sensitivity cultivated over time" },
+            { start: 32, title: "In the age of AI, curiosity is the new superpower" },
             {
-              start: 852,
+              start: 40,
               title: "Learning is easy when you don't try to reinvent what we already know",
             },
             {
-              start: 1090,
+              start: 48,
               title: "Learning is finding balance within ourselves regardless of the noise",
             },
           ]}
