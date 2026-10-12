@@ -525,7 +525,10 @@ Each keeps working until 3.0.
   props that restate defaults and use `fill`, `center`, `Row`/`Column` and
   typed theme props, with no visible change; ten overflowed or overlapped at
   390px (Contact3/4, Cookie1/2, Careers3, Hero3, Hero12, Plans7, Header4 and
-  the blocks built on it, Table1 and Dashboard1).
+  the blocks built on it, Table1 and Dashboard1). Ten logos that did not
+  exist (About5, Bento1, Bento2, Footer6, Testimonial8) show the Once UI
+  wordmark as a placeholder, and the AudioPlayer demo plays a one-minute
+  loop instead of a missing file.
 - **The build no longer downloads emoji data.** It used the committed
   `src/data/emoji-data.json` only when gemoji's moving `master` could not be
   fetched, so two builds minutes apart could differ, and `npm publish`
