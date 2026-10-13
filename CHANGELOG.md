@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.1.0-rc.0] — 2026-10-13
+
 2.1 is a minor release: additive only, nothing removed or renamed. The plan
 and its checklist are in [ROADMAP.md](ROADMAP.md).
 
