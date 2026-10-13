@@ -65,6 +65,17 @@ if (onceTarball !== vendored) {
 }
 
 // --- 1. install scaffolds ----------------------------------------------------
+if (!args["skip-install"] && onceVersion) {
+  // `npm install` doesn't re-resolve a file: dependency whose locked integrity no
+  // longer matches the tarball: it fails with EINTEGRITY. Drop the stale entry so
+  // npm records the new tarball's version and integrity.
+  const lockPath = path.join(ROOT, "arms/once/package-lock.json");
+  const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+  if (lock.packages?.["node_modules/@once-ui-system/core"]) {
+    delete lock.packages["node_modules/@once-ui-system/core"];
+    fs.writeFileSync(lockPath, `${JSON.stringify(lock, null, 2)}\n`);
+  }
+}
 if (!args["skip-install"]) {
   for (const scaffold of ["once", "shadcn", "tailwind"]) {
     // A different Once UI tarball changes the lockfile's integrity entry for the

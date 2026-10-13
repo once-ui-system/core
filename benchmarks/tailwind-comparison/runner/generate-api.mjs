@@ -10,9 +10,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import Anthropic from "@anthropic-ai/sdk";
 import { runGates } from "./gates.mjs";
-import { WORK, armByLetter, buildPrompt, buildRepairPrompt, config, extractCode, tasks } from "./lib.mjs";
+import { WORK, armByLetter, buildPrompt, buildRepairPrompt, config, createClient, extractCode, tasks } from "./lib.mjs";
 
 const arg = (k, d) => {
   const i = process.argv.indexOf(`--${k}`);
@@ -181,7 +180,7 @@ if (!process.env.ANTHROPIC_API_KEY) {
   console.error("ANTHROPIC_API_KEY is not set. The full run needs exact API usage counts; see METHODOLOGY.md §6.");
   process.exit(2);
 }
-const client = new Anthropic();
+const client = createClient();
 // Arms run in parallel (one gate working copy each); runs within an arm are sequential.
 await Promise.all(
   arms.map(async (letter) => {

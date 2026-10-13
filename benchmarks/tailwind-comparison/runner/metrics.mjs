@@ -12,8 +12,7 @@ import fs from "node:fs";
 import path from "node:path";
 import * as prettier from "prettier";
 import ts from "typescript";
-import Anthropic from "@anthropic-ai/sdk";
-import { ROOT, armById, config, listFiles, proxyTokens } from "./lib.mjs";
+import { ROOT, armById, config, createClient, listFiles, proxyTokens } from "./lib.mjs";
 
 const arg = (k, d) => {
   const i = process.argv.indexOf(`--${k}`);
@@ -77,7 +76,7 @@ function importedNames(code, letter) {
 let client;
 let baseline;
 async function exactTokens(text) {
-  client ??= new Anthropic();
+  client ??= createClient();
   const count = async (t) =>
     (await client.messages.countTokens({ model: config.model, messages: [{ role: "user", content: t }] })).input_tokens;
   baseline ??= await count(".");
