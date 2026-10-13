@@ -537,6 +537,10 @@ Each keeps working until 3.0.
   counted as the package's own and `pnpm build` (and so `npm publish`) wrote
   an `ai/spec.json` with no `types`, which silenced the validator's checks that
   read them.
+- **Tests pass on a Windows checkout.** A `.gitattributes` checks text files
+  out with LF on every platform, where Git for Windows' `core.autocrlf` wrote
+  CRLF and the tests that read generated stylesheets and token snapshots
+  failed; the `sideEffects` test matches `src/test/` with either separator.
 - **CI on every pull request.** GitHub Actions builds, typechecks and tests
   the package on each pull request and push to `main`, builds the docs app
   against it (which prerenders every component page on the server), and runs

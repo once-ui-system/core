@@ -1,0 +1,5 @@
+# Text files check out with LF on every platform. Git for Windows defaults to
+# `core.autocrlf=true`, which wrote CRLF into the working tree: the tests that
+# read generated stylesheets and token snapshots expect `\n`, and Biome
+# formats to LF. Binary files are detected and left alone.
+* text=auto eol=lf

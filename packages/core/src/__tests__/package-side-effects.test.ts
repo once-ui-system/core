@@ -68,7 +68,7 @@ describe("sideEffects", () => {
     // `import "./x"` with no binding is the one shape that breaks once JS is
     // side-effect free: nothing uses an export, so the bundler drops the file.
     const offenders = walk(SRC)
-      .filter((file) => /\.tsx?$/.test(file) && !/(__tests__|\/test\/|\.test\.)/.test(file))
+      .filter((file) => /\.tsx?$/.test(file) && !/(__tests__|[\\/]test[\\/]|\.test\.)/.test(file))
       .filter((file) =>
         [...readFileSync(file, "utf8").matchAll(/^import\s+["']([^"']+)["']/gm)].some(
           (match) => !/\.s?css$/.test(match[1]),
