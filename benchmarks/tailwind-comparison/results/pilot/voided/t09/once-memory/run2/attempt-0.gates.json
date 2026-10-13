@@ -1,0 +1,16 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(169,19): error TS2322: Type '{ buttons: { value: string; label: string; }[]; selected: string; onToggle: (v: ToggleEvent<HTMLDivElement>) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'selected' does not exist on type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\napp/page.tsx(171,31): error TS2345: Argument of type 'ToggleEvent<HTMLDivElement>' is not assignable to parameter of type 'SetStateAction<string>'.\napp/page.tsx(294,39): error TS2322: Type '{ children: string; size: \"s\"; variant: \"danger\" | \"warning\" | \"success\"; }' is not assignable to type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2461
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 3 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [border.default] border=\"neutral-alpha-weak\" restates the default border — write bare border, and name a colour only to deviate\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}"
+  }
+}

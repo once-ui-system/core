@@ -1,0 +1,66 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 4,
+      "input_total": 231360,
+      "input_uncached": 8,
+      "cache_creation": 65006,
+      "cache_read": 166346,
+      "visible_output_tokens_o200k": 3584,
+      "visible_output_tokens_claudeLegacy": 3890,
+      "thinking_blocks": 3,
+      "input_net_of_overhead": 17084
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/README.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/card.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/table.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/components/ui/accordion.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t03/shadcn-docs/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "C"
+}

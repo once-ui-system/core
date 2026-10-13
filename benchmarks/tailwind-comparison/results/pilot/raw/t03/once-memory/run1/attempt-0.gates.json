@@ -1,0 +1,53 @@
+{
+  "arm": "B",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2649
+    },
+    "build": {
+      "ok": true,
+      "ms": 9307
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1763,
+          "height": 2610,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1763,
+          "height": 2069,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1763,
+          "height": 2136,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      }
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 4 issue(s)\n  [layout.shorthands] Use center instead of horizontal=\"center\" vertical=\"center\"\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}"
+  }
+}

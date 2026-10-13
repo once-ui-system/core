@@ -1,0 +1,33 @@
+{
+  "attempt": 0,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 339,
+    "chars": 10624,
+    "bytes": 10630,
+    "tokens_o200k": 2321,
+    "tokens_claudeLegacy": 2408
+  },
+  "raw": {
+    "lines": 297,
+    "chars": 10187,
+    "bytes": 10193,
+    "tokens_o200k": 2264,
+    "tokens_claudeLegacy": 2368
+  },
+  "components": [
+    "AccordionGroup",
+    "Background",
+    "Button",
+    "Column",
+    "Grid",
+    "Heading",
+    "Icon",
+    "Row",
+    "SegmentedControl",
+    "Table",
+    "Tag",
+    "Text",
+    "VisuallyHidden"
+  ]
+}

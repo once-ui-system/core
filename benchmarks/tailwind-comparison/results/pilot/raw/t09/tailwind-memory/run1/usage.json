@@ -1,0 +1,51 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 4,
+      "input_total": 219176,
+      "input_uncached": 8,
+      "cache_creation": 61611,
+      "cache_read": 157557,
+      "visible_output_tokens_o200k": 5427,
+      "visible_output_tokens_claudeLegacy": 5905,
+      "thinking_blocks": 2,
+      "input_net_of_overhead": 4900
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/globals.css"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t09/tailwind-memory/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "D"
+}

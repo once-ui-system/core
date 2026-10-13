@@ -1,0 +1,116 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 9,
+      "input_total": 611870,
+      "input_uncached": 18,
+      "cache_creation": 42660,
+      "cache_read": 569192,
+      "visible_output_tokens_o200k": 3367,
+      "visible_output_tokens_claudeLegacy": 3635,
+      "thinking_blocks": 2,
+      "input_net_of_overhead": 129749
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/rules.compact.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/tasks/pricing.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/AccordionGroup.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/Table.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/examples/pricing.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t03/once-harness/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/components"
+    },
+    {
+      "attempt": 0,
+      "name": "Edit",
+      "path": "../../../results/pilot/raw/t03/once-harness/run1/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "A"
+}

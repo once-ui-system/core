@@ -1,0 +1,16 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(159,19): error TS2322: Type '{ buttons: { value: string; label: string; }[]; selected: StatusFilter; onToggle: (value: ToggleEvent<HTMLDivElement>) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'selected' does not exist on type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\napp/page.tsx(161,31): error TS2352: Conversion of type 'ToggleEvent<HTMLDivElement>' to type 'StatusFilter' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2590
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 3 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}"
+  }
+}

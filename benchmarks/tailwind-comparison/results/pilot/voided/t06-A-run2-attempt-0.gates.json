@@ -1,0 +1,28 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3101\n- Network:       http://127.0.0.1:3101\n✓ Ready in 214ms\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2493
+    },
+    "build": {
+      "ok": true,
+      "ms": 7725
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "errors": [
+        "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3101\n- Network:       http://127.0.0.1:3101\n✓ Ready in 214ms\n"
+      ],
+      "axe": null
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(149,19): error TS2322: Type '(value: string) => void' is not assignable to type 'ToggleEventHandler<HTMLDivElement>'.\n  Types of parameters 'value' and 'event' are incompatible.\n    Type 'ToggleEvent<HTMLDivElement>' is not assignable to type 'string'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2523
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 3 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [border.default] border=\"neutral-alpha-weak\" restates the default border — write bare border, and name a colour only to deviate\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}"
+  }
+}

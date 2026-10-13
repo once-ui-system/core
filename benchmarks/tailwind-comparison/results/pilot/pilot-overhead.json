@@ -1,0 +1,7 @@
+{
+  "note": "Input tokens of the first call of an agent whose whole task was 'Reply with exactly the word: ok'. Subtracted once per API call to approximate input tokens net of Claude Code's own context.",
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "input_tokens_per_call": 53569
+}

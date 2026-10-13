@@ -1,0 +1,111 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 7,
+      "input_total": 447889,
+      "input_uncached": 14,
+      "cache_creation": 38248,
+      "cache_read": 409627,
+      "visible_output_tokens_o200k": 1949,
+      "visible_output_tokens_claudeLegacy": 2183,
+      "thinking_blocks": 3,
+      "input_net_of_overhead": 72906
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/AGENTS.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/rules.compact.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/Dialog.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/Input.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/tasks/auth.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/examples/auth.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/OTPInput.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "docs/ai/components/PasswordInput.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/gotchas.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/rules.md"
+    },
+    {
+      "attempt": 0,
+      "name": "Grep",
+      "path": "docs/ai/spec.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t06/once-harness/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "A"
+}

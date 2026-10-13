@@ -1,0 +1,89 @@
+{
+  "$comment": "Neutralised from packages/core/ai/eval-tasks.md (main @ ab2e0c8). Rule: keep the title and description, drop the Once UI-specific 'Tests:' clause, replace backticked Once UI component names with plain nouns. Only tasks 10 and 11 needed a replacement. See METHODOLOGY.md §3.",
+  "tasks": [
+    {
+      "id": 1,
+      "slug": "analytics-dashboard",
+      "title": "Analytics dashboard",
+      "original": "KPI stat cards (trend indicators), a line chart, a bar chart, recent-activity list. Tests: data components, `CountFx`, grid responsiveness.",
+      "prompt": "Analytics dashboard — KPI stat cards (trend indicators), a line chart, a bar chart, recent-activity list."
+    },
+    {
+      "id": 2,
+      "slug": "settings-page",
+      "title": "Settings page",
+      "original": "sidebar sections, profile form (avatar upload, inputs, selects), danger zone. Tests: form controls, `MediaUpload`, surface recipes.",
+      "prompt": "Settings page — sidebar sections, profile form (avatar upload, inputs, selects), danger zone."
+    },
+    {
+      "id": 3,
+      "slug": "pricing-page",
+      "title": "Pricing page",
+      "original": "three tiers, highlighted middle tier, feature comparison table, FAQ accordion. Tests: `Card`, `Badge`, `Table`, `Accordion`, proportional emphasis.",
+      "prompt": "Pricing page — three tiers, highlighted middle tier, feature comparison table, FAQ accordion."
+    },
+    {
+      "id": 4,
+      "slug": "chat-ui",
+      "title": "Chat UI",
+      "original": "message list with avatars, streaming indicator, input bar with emoji picker, command palette hint. Tests: `EmojiPickerDropdown`, `Kbd`, `Spinner`, scroll containers.",
+      "prompt": "Chat UI — message list with avatars, streaming indicator, input bar with emoji picker, command palette hint."
+    },
+    {
+      "id": 5,
+      "slug": "marketing-hero",
+      "title": "Marketing hero",
+      "original": "headline with text effect, CTA pair, social proof logos, background effect. Tests: effects usage (`LetterFx`/`TypeFx`/`RevealFx`, `Background`/`MatrixFx`/`BlobFx`), restraint.",
+      "prompt": "Marketing hero — headline with text effect, CTA pair, social proof logos, background effect."
+    },
+    {
+      "id": 6,
+      "slug": "auth-flow",
+      "title": "Auth flow",
+      "original": "login with password + OTP step in a stacked dialog. Tests: `Dialog` `stack`, `OTPInput`, `PasswordInput`, validation states.",
+      "prompt": "Auth flow — login with password + OTP step in a stacked dialog."
+    },
+    {
+      "id": 7,
+      "slug": "e-commerce-product-card-grid",
+      "title": "E-commerce product card grid",
+      "original": "image, price, tag, hover actions, skeleton loading state. Tests: `Card`, `Media`, `Skeleton`, `Tag`, hover patterns.",
+      "prompt": "E-commerce product card grid — image, price, tag, hover actions, skeleton loading state."
+    },
+    {
+      "id": 8,
+      "slug": "onboarding-checklist",
+      "title": "Onboarding checklist",
+      "original": "progress bar, step list with status indicators, celebratory completion. Tests: `ProgressBar`, `StatusIndicator`, `CelebrationFx`.",
+      "prompt": "Onboarding checklist — progress bar, step list with status indicators, celebratory completion."
+    },
+    {
+      "id": 9,
+      "slug": "data-table-page",
+      "title": "Data table page",
+      "original": "sortable table, filters row (segmented control, date range, search), pagination. Tests: `Table`, `SegmentedControl`, `DateRangePicker`, toolbar composition.",
+      "prompt": "Data table page — sortable table, filters row (segmented control, date range, search), pagination."
+    },
+    {
+      "id": 10,
+      "slug": "user-profile-popover",
+      "title": "User profile popover",
+      "original": "avatar trigger, `UserMenu`/`HoverCard` with stats and actions. Tests: overlay components, `AvatarGroup`.",
+      "prompt": "User profile popover — avatar trigger, a user menu or hover card with stats and actions."
+    },
+    {
+      "id": 11,
+      "slug": "changelog-timeline-page",
+      "title": "Changelog/timeline page",
+      "original": "versioned entries on a `Timeline`, tags per release, copyable code snippets. Tests: `Timeline`, `CodeBlock`, `InlineCode`.",
+      "prompt": "Changelog/timeline page — versioned entries on a timeline, tags per release, copyable code snippets."
+    },
+    {
+      "id": 12,
+      "slug": "feedback-widget",
+      "title": "Feedback widget",
+      "original": "floating trigger, dialog with rating chips, textarea, toast on submit. Tests: `Chip` selection, `useToast`/`Feedback`, positioning.",
+      "prompt": "Feedback widget — floating trigger, dialog with rating chips, textarea, toast on submit."
+    }
+  ]
+}
