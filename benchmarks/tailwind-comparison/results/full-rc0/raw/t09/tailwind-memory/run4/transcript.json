@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Data table page — sortable table, filters row (segmented control, date range, search), pagination.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0181sV1gX8aWATan2faQAoSx",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013GPzeViXWo58Jg46q1M41R",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0181sV1gX8aWATan2faQAoSx",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013GPzeViXWo58Jg46q1M41R",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01CFvhukkBFjiCX2XYtAkVnR",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01K5WqDTeCArE7CrYzb8v146",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ERZX6JsgFshsBx3YGCWJNF",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CFvhukkBFjiCX2XYtAkVnR",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01K5WqDTeCArE7CrYzb8v146",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ERZX6JsgFshsBx3YGCWJNF",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01NXXtSaKzNDseWCPjNjqZzc",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SNUNHYNTVrFF4rRpcSJuKQ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Uj9YMAVTC7Kph2HFvdwoiT",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NXXtSaKzNDseWCPjNjqZzc",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SNUNHYNTVrFF4rRpcSJuKQ",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Uj9YMAVTC7Kph2HFvdwoiT",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useMemo, useState } from \"react\";\nimport {\n  ArrowDown,\n  ArrowUp,\n  ArrowUpDown,\n  CalendarDays,\n  ChevronLeft,\n  ChevronRight,\n  ChevronsLeft,\n  ChevronsRight,\n  Search,\n  X,\n} from \"lucide-react\";\n\ntype Status = \"Paid\" | \"Pending\" | \"Overdue\" | \"Refunded\";\ntype StatusFilter = \"All\" | Status;\n\ninterface Invoice {\n  id: string;\n  customer: string;\n  email: string;\n  plan: string;\n  amount: number;\n  status: Status;\n  date: string; // ISO yyyy-mm-dd\n}\n\ntype SortKey = \"id\" | \"customer\" | \"plan\" | \"amount\" | \"status\" | \"date\";\ntype SortDir = \"asc\" | \"desc\";\n\nconst customers: Array<[string, string]> = [\n  [\"Amara Okafor\", \"amara@northwind.example\"],\n  [\"Liam Chen\", \"liam.chen@brightloop.example\"],\n  [\"Sofia Marquez\", \"sofia@casaverde.example\"],\n  [\"Noah Fischer\", \"noah@fischerworks.example\"],\n  [\"Priya Natarajan\", \"priya@lumenlabs.example\"],\n  [\"Mateo Rossi\", \"mateo@rossi-studio.example\"],\n  [\"Hannah Kowalski\", \"hannah@polarfreight.example\"],\n  [\"Yusuf Demir\", \"yusuf@bosphorus.example\"],\n  [\"Chloe Dubois\", \"chloe@atelierdubois.example\"],\n  [\"Ethan Brooks\", \"ethan@summitpeak.example\"],\n  [\"Mei Tanaka\", \"mei@kodamasoft.example\"],\n  [\"Lucas Almeida\", \"lucas@tropicoapps.example\"],\n];\n\nconst plans = [\"Starter\", \"Team\", \"Business\", \"Enterprise\"];\nconst planPrice: Record<string, number> = {\n  Starter: 29,\n  Team: 149,\n  Business: 499,\n  Enterprise: 1890,\n};\nconst statuses: Status[] = [\"Paid\", \"Paid\", \"Pending\", \"Paid\", \"Overdue\", \"Paid\", \"Refunded\", \"Pending\"];\n\nfunction buildInvoices(): Invoice[] {\n  const rows: Invoice[] = [];\n  const start = Date.UTC(2025, 0, 6);\n  for (let i = 0; i < 64; i++) {\n    const [customer, email] = customers[(i * 5 + 3) % customers.length];\n    const plan = plans[(i * 7 + (i >> 2)) % plans.length];\n    const seats = 1 + ((i * 3) % 5);\n    const amount = Math.round(planPrice[plan] * (plan === \"Enterprise\" ? 1 : seats) * 100) / 100 + (i % 4) * 0.5;\n    const d = new Date(start + i * 4.3 * 86_400_000);\n    rows.push({\n      id: `INV-${String(2041 + i).padStart(5, \"0\")}`,\n      customer,\n      email,\n      plan,\n      amount,\n      status: statuses[(i * 3 + (i >> 1)) % statuses.length],\n      date: d.toISOString().slice(0, 10),\n    });\n  }\n  return rows;\n}\n\nconst INVOICES: Invoice[] = buildInvoices();\n\nconst statusOptions: StatusFilter[] = [\"All\", \"Paid\", \"Pending\", \"Overdue\", \"Refunded\"];\n\nconst statusStyles: Record<Status, string> = {\n  Paid: \"bg-emerald-50 text-emerald-700 ring-emerald-600/20\",\n  Pending: \"bg-amber-50 text-amber-800 ring-amber-600/20\",\n  Overdue: \"bg-rose-50 text-rose-700 ring-rose-600/20\",\n  Refunded: \"bg-slate-100 text-slate-700 ring-slate-500/20\",\n};\n\nconst statusDot: Record<Status, string> = {\n  Paid: \"bg-emerald-500\",\n  Pending: \"bg-amber-500\",\n  Overdue: \"bg-rose-500\",\n  Refunded: \"bg-slate-400\",\n};\n\nconst currency = new Intl.NumberFormat(\"en-US\", { style: \"currency\", currency: \"USD\" });\n\nfunction formatDate(iso: string): string {\n  const [y, m, d] = iso.split(\"-\").map(Number);\n  return new Intl.DateTimeFormat(\"en-US\", {\n    month: \"short\",\n    day: \"numeric\",\n    year: \"numeric\",\n    timeZone: \"UTC\",\n  }).format(new Date(Date.UTC(y, m - 1, d)));\n}\n\nconst columns: Array<{ key: SortKey; label: string; align?: \"right\"; hideBelow?: \"md\" | \"sm\" }> = [\n  { key: \"id\", label: \"Invoice\" },\n  { key: \"customer\", label: \"Customer\" },\n  { key: \"plan\", label: \"Plan\", hideBelow: \"md\" },\n  { key: \"status\", label: \"Status\" },\n  { key: \"date\", label: \"Date\", hideBelow: \"sm\" },\n  { key: \"amount\", label: \"Amount\", align: \"right\" },\n];\n\nconst PAGE_SIZES = [5, 10, 20];\n\nexport default function Page() {\n  const [query, setQuery] = useState(\"\");\n  const [status, setStatus] = useState<StatusFilter>(\"All\");\n  const [from, setFrom] = useState(\"\");\n  const [to, setTo] = useState(\"\");\n  const [sortKey, setSortKey] = useState<SortKey>(\"date\");\n  const [sortDir, setSortDir] = useState<SortDir>(\"desc\");\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState(10);\n\n  const filtered = useMemo(() => {\n    const q = query.trim().toLowerCase();\n    return INVOICES.filter((r) => {\n      if (status !== \"All\" && r.status !== status) return false;\n      if (from && r.date < from) return false;\n      if (to && r.date > to) return false;\n      if (q && !`${r.id} ${r.customer} ${r.email} ${r.plan}`.toLowerCase().includes(q)) return false;\n      return true;\n    });\n  }, [query, status, from, to]);\n\n  const sorted = useMemo(() => {\n    const dir = sortDir === \"asc\" ? 1 : -1;\n    return [...filtered].sort((a, b) => {\n      const av = a[sortKey];\n      const bv = b[sortKey];\n      if (typeof av === \"number\" && typeof bv === \"number\") return (av - bv) * dir;\n      return String(av).localeCompare(String(bv)) * dir;\n    });\n  }, [filtered, sortKey, sortDir]);\n\n  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));\n  const currentPage = Math.min(page, totalPages);\n  const startIdx = (currentPage - 1) * pageSize;\n  const pageRows = sorted.slice(startIdx, startIdx + pageSize);\n  const totalAmount = filtered.reduce((sum, r) => sum + r.amount, 0);\n\n  const hasFilters = query !== \"\" || status !== \"All\" || from !== \"\" || to !== \"\";\n  const rangeInvalid = from !== \"\" && to !== \"\" && from > to;\n\n  function toggleSort(key: SortKey) {\n    if (key === sortKey) {\n      setSortDir((d) => (d === \"asc\" ? \"desc\" : \"asc\"));\n    } else {\n      setSortKey(key);\n      setSortDir(key === \"amount\" || key === \"date\" ? \"desc\" : \"asc\");\n    }\n    setPage(1);\n  }\n\n  function clearFilters() {\n    setQuery(\"\");\n    setStatus(\"All\");\n    setFrom(\"\");\n    setTo(\"\");\n    setPage(1);\n  }\n\n  const statusCounts = useMemo(() => {\n    const counts: Record<StatusFilter, number> = { All: INVOICES.length, Paid: 0, Pending: 0, Overdue: 0, Refunded: 0 };\n    for (const r of INVOICES) counts[r.status] += 1;\n    return counts;\n  }, []);\n\n  const pageNumbers = useMemo(() => {\n    const nums: Array<number | \"gap-l\" | \"gap-r\"> = [];\n    const add = (n: number) => nums.push(n);\n    if (totalPages <= 7) {\n      for (let i = 1; i <= totalPages; i++) add(i);\n    } else {\n      add(1);\n      if (currentPage > 3) nums.push(\"gap-l\");\n      for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) add(i);\n      if (currentPage < totalPages - 2) nums.push(\"gap-r\");\n      add(totalPages);\n    }\n    return nums;\n  }, [currentPage, totalPages]);\n\n  const inputBase =\n    \"h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/40\";\n\n  const pageBtn =\n    \"inline-flex h-9 min-w-9 items-center justify-center rounded-lg border border-slate-300 bg-white px-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white\";\n\n  return (\n    <main className=\"min-h-screen bg-slate-50 px-4 py-8 text-slate-900 sm:px-6 lg:px-8\">\n      <div className=\"mx-auto max-w-6xl\">\n        <header className=\"mb-6 flex flex-col gap-1\">\n          <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">Invoices</h1>\n          <p className=\"text-sm text-slate-600\">\n            Track billing across customers, plans and payment status.\n          </p>\n        </header>\n\n        <section\n          aria-label=\"Filters\"\n          className=\"mb-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm\"\n        >\n          <div className=\"flex flex-col gap-4 lg:flex-row lg:items-end lg:gap-4\">\n            <div className=\"lg:flex-1\">\n              <label htmlFor=\"search\" className=\"mb-1.5 block text-xs font-medium text-slate-600\">\n                Search\n              </label>\n              <div className=\"relative\">\n                <Search\n                  aria-hidden=\"true\"\n                  className=\"pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400\"\n                />\n                <input\n                  id=\"search\"\n                  type=\"search\"\n                  value={query}\n                  onChange={(e) => {\n                    setQuery(e.target.value);\n                    setPage(1);\n                  }}\n                  placeholder=\"Invoice, customer, email or plan\"\n                  className={`${inputBase} pl-9`}\n                  autoComplete=\"off\"\n                />\n              </div>\n            </div>\n\n            <fieldset className=\"min-w-0\">\n              <legend className=\"mb-1.5 text-xs font-medium text-slate-600\">Date range</legend>\n              <div className=\"flex flex-col gap-2 sm:flex-row sm:items-center\">\n                <div className=\"relative\">\n                  <CalendarDays\n                    aria-hidden=\"true\"\n                    className=\"pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400\"\n                  />\n                  <input\n                    type=\"date\"\n                    aria-label=\"From date\"\n                    value={from}\n                    max={to || undefined}\n                    onChange={(e) => {\n                      setFrom(e.target.value);\n                      setPage(1);\n                    }}\n                    className={`${inputBase} pl-9 sm:w-44`}\n                  />\n                </div>\n                <span aria-hidden=\"true\" className=\"hidden text-slate-400 sm:inline\">\n                  –\n                </span>\n                <div className=\"relative\">\n                  <CalendarDays\n                    aria-hidden=\"true\"\n                    className=\"pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400\"\n                  />\n                  <input\n                    type=\"date\"\n                    aria-label=\"To date\"\n                    value={to}\n                    min={from || undefined}\n                    onChange={(e) => {\n                      setTo(e.target.value);\n                      setPage(1);\n                    }}\n                    className={`${inputBase} pl-9 sm:w-44`}\n                  />\n                </div>\n              </div>\n            </fieldset>\n          </div>\n\n          <div className=\"mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between\">\n            <div\n              role=\"radiogroup\"\n              aria-label=\"Filter by status\"\n              className=\"-mx-1 flex max-w-full gap-1 overflow-x-auto rounded-lg bg-slate-100 p-1 sm:mx-0 sm:w-fit\"\n            >\n              {statusOptions.map((opt) => {\n                const active = status === opt;\n                return (\n                  <button\n                    key={opt}\n                    type=\"button\"\n                    role=\"radio\"\n                    aria-checked={active}\n                    onClick={() => {\n                      setStatus(opt);\n                      setPage(1);\n                    }}\n                    className={`inline-flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-indigo-600 ${\n                      active\n                        ? \"bg-white text-slate-900 shadow-sm\"\n                        : \"text-slate-600 hover:text-slate-900\"\n                    }`}\n                  >\n                    {opt}\n                    <span\n                      className={`rounded-full px-1.5 text-xs tabular-nums ${\n                        active ? \"bg-slate-100 text-slate-700\" : \"bg-slate-200/70 text-slate-500\"\n                      }`}\n                    >\n                      {statusCounts[opt]}\n                    </span>\n                  </button>\n                );\n              })}\n            </div>\n\n            {hasFilters && (\n              <button\n                type=\"button\"\n                onClick={clearFilters}\n                className=\"inline-flex items-center gap-1.5 self-start rounded-lg px-2 py-1.5 text-sm font-medium text-indigo-700 hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-indigo-600 sm:self-auto\"\n              >\n                <X aria-hidden=\"true\" className=\"size-4\" />\n                Clear filters\n              </button>\n            )}\n          </div>\n          {rangeInvalid && (\n            <p role=\"alert\" className=\"mt-3 text-sm text-rose-700\">\n              The start date is after the end date, so no invoices can match.\n            </p>\n          )}\n        </section>\n\n        <section className=\"overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm\">\n          <div className=\"flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 px-4 py-3\">\n            <p className=\"text-sm text-slate-600\" role=\"status\" aria-live=\"polite\">\n              <span className=\"font-medium text-slate-900\">{filtered.length}</span>{\" \"}\n              {filtered.length === 1 ? \"invoice\" : \"invoices\"}\n              {hasFilters ? \" match your filters\" : \"\"}\n            </p>\n            <p className=\"text-sm text-slate-600\">\n              Total <span className=\"font-medium tabular-nums text-slate-900\">{currency.format(totalAmount)}</span>\n            </p>\n          </div>\n\n          <div className=\"overflow-x-auto\">\n            <table className=\"w-full min-w-full text-left text-sm\">\n              <caption className=\"sr-only\">\n                Invoices, sorted by {columns.find((c) => c.key === sortKey)?.label}{\" \"}\n                {sortDir === \"asc\" ? \"ascending\" : \"descending\"}\n              </caption>\n              <thead className=\"bg-slate-50 text-xs uppercase tracking-wide text-slate-600\">\n                <tr>\n                  {columns.map((col) => {\n                    const active = sortKey === col.key;\n                    const hide =\n                      col.hideBelow === \"md\" ? \"hidden md:table-cell\" : col.hideBelow === \"sm\" ? \"hidden sm:table-cell\" : \"\";\n                    return (\n                      <th\n                        key={col.key}\n                        scope=\"col\"\n                        aria-sort={active ? (sortDir === \"asc\" ? \"ascending\" : \"descending\") : \"none\"}\n                        className={`px-4 py-2 font-semibold ${col.align === \"right\" ? \"text-right\" : \"\"} ${hide}`}\n                      >\n                        <button\n                          type=\"button\"\n                          onClick={() => toggleSort(col.key)}\n                          className={`group -mx-2 inline-flex items-center gap-1.5 rounded-md px-2 py-1.5 uppercase tracking-wide hover:bg-slate-200/60 focus-visible:outline-2 focus-visible:outline-indigo-600 ${\n                            active ? \"text-slate-900\" : \"\"\n                          } ${col.align === \"right\" ? \"flex-row-reverse\" : \"\"}`}\n                        >\n                          {col.label}\n                          {active ? (\n                            sortDir === \"asc\" ? (\n                              <ArrowUp aria-hidden=\"true\" className=\"size-3.5\" />\n                            ) : (\n                              <ArrowDown aria-hidden=\"true\" className=\"size-3.5\" />\n                            )\n                          ) : (\n                            <ArrowUpDown aria-hidden=\"true\" className=\"size-3.5 text-slate-400 group-hover:text-slate-600\" />\n                          )}\n                          <span className=\"sr-only\">\n                            {active\n                              ? `, sorted ${sortDir === \"asc\" ? \"ascending\" : \"descending\"}. Activate to reverse.`\n                              : \", activate to sort\"}\n                          </span>\n                        </button>\n                      </th>\n                    );\n                  })}\n                </tr>\n              </thead>\n              <tbody className=\"divide-y divide-slate-100\">\n                {pageRows.length === 0 ? (\n                  <tr>\n                    <td colSpan={columns.length} className=\"px-4 py-16 text-center\">\n                      <p className=\"font-medium text-slate-900\">No invoices found</p>\n                      <p className=\"mt-1 text-slate-600\">Try a different search term, status or date range.</p>\n                      {hasFilters && (\n                        <button\n                          type=\"button\"\n                          onClick={clearFilters}\n                          className=\"mt-4 inline-flex h-9 items-center rounded-lg bg-indigo-600 px-3 text-sm font-medium text-white hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n                        >\n                          Clear filters\n                        </button>\n                      )}\n                    </td>\n                  </tr>\n                ) : (\n                  pageRows.map((r) => (\n                    <tr key={r.id} className=\"hover:bg-slate-50/70\">\n                      <td className=\"whitespace-nowrap px-4 py-3 font-mono text-xs text-slate-700\">{r.id}</td>\n                      <td className=\"px-4 py-3\">\n                        <div className=\"font-medium text-slate-900\">{r.customer}</div>\n                        <div className=\"max-w-[14rem] truncate text-xs text-slate-500 sm:max-w-none\">{r.email}</div>\n                        <div className=\"mt-0.5 text-xs text-slate-500 sm:hidden\">{formatDate(r.date)}</div>\n                      </td>\n                      <td className=\"hidden px-4 py-3 text-slate-700 md:table-cell\">{r.plan}</td>\n                      <td className=\"px-4 py-3\">\n                        <span\n                          className={`inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-xs font-medium ring-1 ring-inset ${statusStyles[r.status]}`}\n                        >\n                          <span aria-hidden=\"true\" className={`size-1.5 rounded-full ${statusDot[r.status]}`} />\n                          {r.status}\n                        </span>\n                      </td>\n                      <td className=\"hidden whitespace-nowrap px-4 py-3 text-slate-700 sm:table-cell\">\n                        <time dateTime={r.date}>{formatDate(r.date)}</time>\n                      </td>\n                      <td className=\"whitespace-nowrap px-4 py-3 text-right font-medium tabular-nums text-slate-900\">\n                        {currency.format(r.amount)}\n                      </td>\n                    </tr>\n                  ))\n                )}\n              </tbody>\n            </table>\n          </div>\n\n          <nav\n            aria-label=\"Pagination\"\n            className=\"flex flex-col gap-3 border-t border-slate-200 px-4 py-3 md:flex-row md:items-center md:justify-between\"\n          >\n            <div className=\"flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-slate-600\">\n              <p>\n                {sorted.length === 0\n                  ? \"Showing 0 results\"\n                  : `Showing ${startIdx + 1}–${Math.min(startIdx + pageSize, sorted.length)} of ${sorted.length}`}\n              </p>\n              <div className=\"flex items-center gap-2\">\n                <label htmlFor=\"page-size\">Rows per page</label>\n                <select\n                  id=\"page-size\"\n                  value={pageSize}\n                  onChange={(e) => {\n                    setPageSize(Number(e.target.value));\n                    setPage(1);\n                  }}\n                  className=\"h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm text-slate-900 shadow-sm focus-visible:outline-2 focus-visible:outline-indigo-600\"\n                >\n                  {PAGE_SIZES.map((s) => (\n                    <option key={s} value={s}>\n                      {s}\n                    </option>\n                  ))}\n                </select>\n              </div>\n            </div>\n\n            <div className=\"flex items-center gap-1.5\">\n              <button\n                type=\"button\"\n                className={pageBtn}\n                onClick={() => setPage(1)}\n                disabled={currentPage === 1}\n                aria-label=\"First page\"\n              >\n                <ChevronsLeft aria-hidden=\"true\" className=\"size-4\" />\n              </button>\n              <button\n                type=\"button\"\n                className={pageBtn}\n                onClick={() => setPage(currentPage - 1)}\n                disabled={currentPage === 1}\n                aria-label=\"Previous page\"\n              >\n                <ChevronLeft aria-hidden=\"true\" className=\"size-4\" />\n              </button>\n\n              <ul className=\"hidden items-center gap-1.5 sm:flex\">\n                {pageNumbers.map((n) =>\n                  typeof n === \"number\" ? (\n                    <li key={n}>\n                      <button\n                        type=\"button\"\n                        onClick={() => setPage(n)}\n                        aria-label={`Page ${n}`}\n                        aria-current={n === currentPage ? \"page\" : undefined}\n                        className={`${pageBtn} ${\n                          n === currentPage\n                            ? \"!border-indigo-600 !bg-indigo-600 !text-white hover:!bg-indigo-700\"\n                            : \"\"\n                        }`}\n                      >\n                        {n}\n                      </button>\n                    </li>\n                  ) : (\n                    <li key={n} aria-hidden=\"true\" className=\"px-1 text-slate-400\">\n                      …\n                    </li>\n                  ),\n                )}\n              </ul>\n              <span className=\"px-2 text-sm text-slate-600 sm:hidden\">\n                Page {currentPage} of {totalPages}\n              </span>\n\n              <button\n                type=\"button\"\n                className={pageBtn}\n                onClick={() => setPage(currentPage + 1)}\n                disabled={currentPage === totalPages}\n                aria-label=\"Next page\"\n              >\n                <ChevronRight aria-hidden=\"true\" className=\"size-4\" />\n              </button>\n              <button\n                type=\"button\"\n                className={pageBtn}\n                onClick={() => setPage(totalPages)}\n                disabled={currentPage === totalPages}\n                aria-label=\"Last page\"\n              >\n                <ChevronsRight aria-hidden=\"true\" className=\"size-4\" />\n              </button>\n            </div>\n          </nav>\n        </section>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,286 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Chat UI — message list with avatars, streaming indicator, input bar with emoji picker, command palette hint.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the project to see what's already set up."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01X4A32k6aQTkrgNHyfYPh4a",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XcBLdNKoojVWBr3k7wcd5f",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01X4A32k6aQTkrgNHyfYPh4a",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XcBLdNKoojVWBr3k7wcd5f",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Q2UshkNxxcKmZqRUULVra4",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NnZCKXgrZmCGWA99XywkeT",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Arr4s1SfYbA3Ryjx1dNFEh",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017Z63thELuK6VszpSTuHDeR",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Q2UshkNxxcKmZqRUULVra4",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NnZCKXgrZmCGWA99XywkeT",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Arr4s1SfYbA3Ryjx1dNFEh",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017Z63thELuK6VszpSTuHDeR",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01CxqLnQ2hQJB7coGse8TGob",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VGqFHkLwr9xETa1se4o7Fc",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LYXRMCheJQnZaWQD8xhg7K",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AawpD4RZ2qu2ie198bHi2r",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CxqLnQ2hQJB7coGse8TGob",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VGqFHkLwr9xETa1se4o7Fc",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LYXRMCheJQnZaWQD8xhg7K",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AawpD4RZ2qu2ie198bHi2r",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since the library isn't installed locally, I'll limit myself to Once UI components and props I'm confident about, falling back to inline-styled native elements wherever the API is uncertain.\n\n",
+          "signature": "CAQSrQcKEQgSGAI4AUIJbmFycmF0aW9uEgyDPWmzFkoN35uerbIaDDs2HQtHB/PS/dz1iiIw15EFi2ds7w1e9bzDIzMyre6eG3m/dkXcpSx+gZIAY4tAf8JbMLd0dja8UMCllwSxKskGeg0fhOSklGBglel3mY4f4WaxB6WEWRf/VCfQ5UJSUQ2gBREoAMDXDGz8G8Q5K//7aJHcXLwPXJ7/cR4dhWPM6dstvfzCIT9fLFopkQhhBYYfh4UW6Ie26AFxEMUKiBBl1F8fvrNglujcr7GmcWj/4z8lajzRUrKPaL0h/Yb4CCHfaFrgJyMlsKp5fuk9ENQ7RYq1nANdeo5sJYtIjOKZ0Ja7zFJFx9SxWy9vOSouHnORKvQvP14Rfp9dWyLLViSQ9u2lxsQmUFprRhpwDEh/3tEzTQaMsEqm24Z1ycgyYN+KMO9cq/NZMHquaTTEGmmfP/fBG/6ewEKeqOTcuJepYOzdupk7NFPcjMRYk3yH6RWZdsANgPrLGob5gOHsEPrnV1xxLRolzGX6tYTkuYp4agijwU+1yE6jLGFS6tZSpdWuGDSU4DXyqtuazZezvOsjkyLMgwN+y0j33TSUFyjtzjePkNXfa0P41q0a1Y0owEt957Dt4lJHboERYNXd7ey0cohEAi7P9PaBHgMdb6khltXflswOpsrwiXdwMQ/96XsmwvoSpOA8me/cWJPj1eLVR6JnLjeKZLm45BqVgeEXoQUj8arpvMSiQQzkVr/IWRYbrXTDNuAVsA2LUodBzsNQPRSI/DmhzjLzaVkUe2iTrGRyLw9bWnhRni0vby+DIt+o9F1FZ2udEl3pn5JNYjq9eRd0c06uxxYCNz2XwTqT9gfxx0Spzp1yv7cWSxDrRJ3YJvTdWwHMdS/3DYnwW0yOerumF9cCGRsvgg6qAwhS2N89AwWMf+K7h2UnMdVHrgy98XxHP4FF030dfKOa4keWhSAIDRbStp1P5VaE2s3bNg8TPv90hNDKMS8jG5RihzFwYZYgu+Ud6iCoyW2R0mNuz8JAwz1jgKZWBfcE2YbXK3Trejv7Q52AQaXp9c44tUOW2uRvL7mnnHQga+j6X3PHJAReaH054TqS2D6zdcm3uSrBXLAGfw6CDRgqVZk6sgYx4Ai6DIRBA6lgRo5FtqBmGxeYgBGAcTf/6zezu/mH23wnuViouioASwsl7DlJZfmRpK3rwvJsmhn0FwxmwZNErFqrPXQpo55HvAW9+oVcN7ttwYDNEvvG4BgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BbHgVcWLuBrhzLMrDAuEje",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BbHgVcWLuBrhzLMrDAuEje",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll play it safe by using native emoji/text glyphs plus only icon names I'm confident exist, and build the interactive controls with plain `<textarea>`/`<button>` elements styled with Once UI tokens rather than risking unverified components.\n\n",
+          "signature": "CAQSjQkKEQgSGAI4AUIJbmFycmF0aW9uEgwYkmdwBlHUzXxyGxgaDMoSTl7zc2MEMN3gbiIw73Rs7McM0H0T3c/zEs2w3vHhO9LaJYUKlrU534UWGEiNkvslqGZlOAE/9j6lbf72KqkIzF/1uD54bOZhUnpMvmt2HbIFJBsNkoopG777fV/SVnMVLlX2vFfIRZrmJc6iq0PmnL0EMc55zMKXlcZvUb0HrTphOat6SWCTpzJfTMQdo+AmbpYamcPltRCGArsCJDO71Apen24rilDIxe9D21xx5OKjM97UPTPCv0ZwK4rk0Vt0QmwyhDp31IkT9IAAtGFs6epqMVjxaU3o0dlGlXG1zGCxuAmN7gsyAv0oWYgllZ4ajgO88inUt+DIrz5hn63bUvfHpXvK4WtvTM1+4it/aapklNX+zUjRKm3BINdmSEfAco0dorsfX7yzJDXLI80ZCBSFZgRwNzKvXgN74QyGCvgCNyxGe+kMi/UHG/qrCNQ2d6ynTFZf0Qqcb7FL8Rd/tEwXKffdbCZa5I0VMVhv56UvbA5c7V3+tj6f13PF+/Jv1ziMIIUWRZwFyRsPnds1//cR39lGDubZThunMjwZfp1HMp3+Ohj5v9h4hFpVxpsV+1h22OwjWphSTJT/E3b4GePyLeg0SQVR7nri8Zcu+b/hsv1rZYTicwpoSFKAzOreJP3cSFDvSy/ReVZTQiNY8u1BLJTiCpQbY0gKzjfd5wwkzOWvscNttAu2Mw66X2Y4Q1Zx0wH0+wgZOk1ZOZmq0t6cc5zm5MftvkVIIA108QYDNDTd+WHLjoYJUhjGC0xrhNf2ObgWbyiuuAU5Jwo5pCa4ljPDz4n3uRAov2MZoLgQRXolGWD+sh2x3C3FELR8gDDcao+wARoVLWfuoSrXyETBGps6beD/tquRf6hw2q8OUQK0N0PW9KkLWl0UC5fgVN8xFkjY5eaZh/HgIMRKoi14w6XYGgEiEwFwyhwvcDluhD7Onk33O91IM2cCjs+satKmuhkhuNOsgD9QmjzYtyUbQRsqdwxt9dgG/XpY/43YPQTI62DizlSgs/WAZogn6lgzmYol5r+OIY1MLZLzwl9q+Unem7k1/cqISm40H0z7PbSvY1jJwNeWYoVob+9V+TlcaxCFEaKK6CBlvsM9d4edIYVFzifBoSl46XipdG3cQtabAguEaoagG5nmMpWKHB19i8Kmh66RTeyr+7lvgfjyZtfLEW+qba6CsUNwznb5C7kCsg5ual8Gxfj/DV/2seoJdfR7b3jItzmOt4JFNT+BCaM1NEA1DOZY0VPXDlg+RlrVPiEkzXETO+/SXNIzxXBtrxBuOCSGk32O3QXjgG/puJFrrL2z4dBaiEo/cBi/cDdyJlh3avcT1qbQsIq7HcLXYU9WvaxKWEx8Tq5O+7zgUbS17Nd+m1Z/frnEfEFOy9ANdcvNxRab/0R5dERi2+0nfBTS+VLi8Cu7IkoVZPcUz84C8p/kIWLKwnhaLZ5gzgxNlWcvy8RglmXe49Ky2pAZwCq1K8Z4qhEsiX5vz66vgzOvBlBMGAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Q7qrxe6cDZApd3VyEuX9LH",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Q7qrxe6cDZApd3VyEuX9LH",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport {\n  useCallback,\n  useEffect,\n  useId,\n  useMemo,\n  useRef,\n  useState,\n  type CSSProperties,\n  type KeyboardEvent,\n} from \"react\";\nimport { Avatar, Column, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype Author = \"me\" | \"maya\" | \"dev\" | \"assistant\";\n\ninterface Message {\n  id: string;\n  author: Author;\n  text: string;\n  time: string;\n}\n\ninterface Person {\n  name: string;\n  role: string;\n  initials: string;\n}\n\nconst PEOPLE: Record<Author, Person> = {\n  me: { name: \"You\", role: \"Product designer\", initials: \"YO\" },\n  maya: { name: \"Maya Okafor\", role: \"Engineering lead\", initials: \"MO\" },\n  dev: { name: \"Dev Patel\", role: \"Backend engineer\", initials: \"DP\" },\n  assistant: { name: \"Atlas\", role: \"Team assistant\", initials: \"AT\" },\n};\n\nconst INITIAL_MESSAGES: Message[] = [\n  {\n    id: \"m1\",\n    author: \"maya\",\n    text: \"Morning all! The checkout redesign is on staging now. Could someone give the mobile flow a quick pass before standup?\",\n    time: \"9:02 AM\",\n  },\n  {\n    id: \"m2\",\n    author: \"me\",\n    text: \"On it. I'll start with the address form, that's where we saw the most drop-off last sprint.\",\n    time: \"9:04 AM\",\n  },\n  {\n    id: \"m3\",\n    author: \"dev\",\n    text: \"FYI I shipped the validation fix an hour ago, so postcode errors should now show inline instead of on submit. 🎉\",\n    time: \"9:06 AM\",\n  },\n  {\n    id: \"m4\",\n    author: \"assistant\",\n    text: \"Summary so far: 3 open review items on checkout, 1 blocked ticket (payment sandbox keys), and standup moved to 10:15 AM.\",\n    time: \"9:07 AM\",\n  },\n  {\n    id: \"m5\",\n    author: \"me\",\n    text: \"Nice. Found one issue already: the keyboard covers the Continue button on smaller phones. I'll attach screenshots.\",\n    time: \"9:12 AM\",\n  },\n];\n\nconst EMOJI: { char: string; label: string }[] = [\n  { char: \"😀\", label: \"Grinning face\" },\n  { char: \"😂\", label: \"Laughing with tears\" },\n  { char: \"😍\", label: \"Heart eyes\" },\n  { char: \"🤔\", label: \"Thinking face\" },\n  { char: \"😅\", label: \"Nervous smile\" },\n  { char: \"😎\", label: \"Cool face\" },\n  { char: \"🙏\", label: \"Folded hands\" },\n  { char: \"👍\", label: \"Thumbs up\" },\n  { char: \"👏\", label: \"Clapping hands\" },\n  { char: \"🎉\", label: \"Party popper\" },\n  { char: \"🔥\", label: \"Fire\" },\n  { char: \"🚀\", label: \"Rocket\" },\n  { char: \"✅\", label: \"Check mark\" },\n  { char: \"👀\", label: \"Eyes\" },\n  { char: \"💡\", label: \"Light bulb\" },\n  { char: \"❤️\", label: \"Red heart\" },\n];\n\nconst COMMANDS: { key: string; label: string; hint: string }[] = [\n  { key: \"/summarize\", label: \"Summarize\", hint: \"Recap this thread\" },\n  { key: \"/assign\", label: \"Assign\", hint: \"Hand a task to a teammate\" },\n  { key: \"/remind\", label: \"Remind\", hint: \"Set a reminder for later\" },\n  { key: \"/poll\", label: \"Poll\", hint: \"Ask the team to vote\" },\n];\n\nconst REPLIES: string[] = [\n  \"Good catch. I've logged it as CHK-482 and tagged it for the mobile sprint. Want me to link your screenshots once you upload them?\",\n  \"Thanks for flagging that. Based on the device matrix, the issue affects screens under 700px tall. I'd suggest making the footer sticky above the keyboard.\",\n];\n\nconst styles = {\n  page: {\n    display: \"flex\",\n    justifyContent: \"center\",\n    minHeight: \"100vh\",\n    width: \"100%\",\n  } satisfies CSSProperties,\n  shell: {\n    display: \"flex\",\n    flexDirection: \"column\",\n    width: \"100%\",\n    maxWidth: 880,\n    height: \"100dvh\",\n    background: \"var(--surface-background)\",\n    borderInline: \"1px solid var(--neutral-alpha-weak)\",\n  } satisfies CSSProperties,\n  header: {\n    display: \"flex\",\n    alignItems: \"center\",\n    gap: 12,\n    padding: \"12px 16px\",\n    borderBottom: \"1px solid var(--neutral-alpha-weak)\",\n    flexShrink: 0,\n  } satisfies CSSProperties,\n  list: {\n    flex: 1,\n    minHeight: 0,\n    overflowY: \"auto\",\n    padding: \"16px\",\n    margin: 0,\n    listStyle: \"none\",\n    display: \"flex\",\n    flexDirection: \"column\",\n    gap: 16,\n  } satisfies CSSProperties,\n  composer: {\n    flexShrink: 0,\n    padding: \"12px 16px 16px\",\n    borderTop: \"1px solid var(--neutral-alpha-weak)\",\n    position: \"relative\",\n  } satisfies CSSProperties,\n  field: {\n    display: \"flex\",\n    alignItems: \"flex-end\",\n    gap: 8,\n    padding: 8,\n    borderRadius: 16,\n    border: \"1px solid var(--neutral-alpha-medium)\",\n    background: \"var(--page-background)\",\n  } satisfies CSSProperties,\n  textarea: {\n    flex: 1,\n    minWidth: 0,\n    resize: \"none\",\n    border: \"none\",\n    outline: \"none\",\n    background: \"transparent\",\n    color: \"var(--neutral-on-background-strong)\",\n    font: \"inherit\",\n    fontSize: 15,\n    lineHeight: 1.5,\n    padding: \"8px 4px\",\n    maxHeight: 140,\n  } satisfies CSSProperties,\n  iconBtn: {\n    display: \"inline-flex\",\n    alignItems: \"center\",\n    justifyContent: \"center\",\n    width: 40,\n    height: 40,\n    flexShrink: 0,\n    borderRadius: 12,\n    border: \"none\",\n    background: \"transparent\",\n    color: \"var(--neutral-on-background-strong)\",\n    cursor: \"pointer\",\n    fontSize: 20,\n  } satisfies CSSProperties,\n  sendBtn: {\n    display: \"inline-flex\",\n    alignItems: \"center\",\n    justifyContent: \"center\",\n    gap: 6,\n    height: 40,\n    padding: \"0 16px\",\n    flexShrink: 0,\n    borderRadius: 12,\n    border: \"none\",\n    background: \"var(--brand-solid-strong)\",\n    color: \"var(--brand-on-solid-strong)\",\n    cursor: \"pointer\",\n    font: \"inherit\",\n    fontSize: 14,\n    fontWeight: 600,\n  } satisfies CSSProperties,\n  kbd: {\n    display: \"inline-block\",\n    padding: \"1px 6px\",\n    borderRadius: 6,\n    border: \"1px solid var(--neutral-alpha-medium)\",\n    background: \"var(--neutral-alpha-weak)\",\n    fontFamily: \"var(--font-code)\",\n    fontSize: 12,\n    color: \"var(--neutral-on-background-strong)\",\n  } satisfies CSSProperties,\n  popover: {\n    position: \"absolute\",\n    bottom: \"calc(100% - 4px)\",\n    left: 16,\n    right: 16,\n    maxWidth: 360,\n    padding: 12,\n    borderRadius: 16,\n    border: \"1px solid var(--neutral-alpha-medium)\",\n    background: \"var(--surface-background)\",\n    boxShadow: \"0 12px 32px rgba(0,0,0,0.25)\",\n    zIndex: 10,\n  } satisfies CSSProperties,\n  emojiGrid: {\n    display: \"grid\",\n    gridTemplateColumns: \"repeat(8, minmax(0, 1fr))\",\n    gap: 4,\n  } satisfies CSSProperties,\n  emojiBtn: {\n    height: 38,\n    borderRadius: 10,\n    border: \"none\",\n    background: \"transparent\",\n    cursor: \"pointer\",\n    fontSize: 22,\n    lineHeight: 1,\n  } satisfies CSSProperties,\n  commandBtn: {\n    display: \"flex\",\n    alignItems: \"baseline\",\n    gap: 12,\n    width: \"100%\",\n    padding: \"8px 10px\",\n    borderRadius: 10,\n    border: \"none\",\n    background: \"transparent\",\n    color: \"var(--neutral-on-background-strong)\",\n    cursor: \"pointer\",\n    font: \"inherit\",\n    textAlign: \"left\",\n  } satisfies CSSProperties,\n} as const;\n\nconst keyframes = `\n@keyframes chat-dot {\n  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }\n  30% { transform: translateY(-4px); opacity: 1; }\n}\n@keyframes chat-caret {\n  0%, 100% { opacity: 1; }\n  50% { opacity: 0; }\n}\n.chat-dot { animation: chat-dot 1.2s infinite ease-in-out; }\n.chat-caret { animation: chat-caret 1s infinite steps(1); }\n.chat-btn:hover { background: var(--neutral-alpha-weak) !important; }\n.chat-btn:focus-visible, .chat-send:focus-visible {\n  outline: 2px solid var(--brand-solid-strong);\n  outline-offset: 2px;\n}\n.chat-send:disabled { opacity: 0.5; cursor: not-allowed; }\n.chat-field:focus-within { border-color: var(--brand-solid-strong) !important; }\n@media (max-width: 480px) {\n  .chat-hint-desktop { display: none !important; }\n  .chat-send-label { display: none; }\n}\n@media (prefers-reduced-motion: reduce) {\n  .chat-dot, .chat-caret { animation: none; }\n}\n`;\n\nfunction PersonAvatar({ author, size }: { author: Author; size: \"s\" | \"m\" }) {\n  return <Avatar value={PEOPLE[author].initials} size={size} aria-hidden=\"true\" />;\n}\n\nfunction MessageItem({ message }: { message: Message }) {\n  const person = PEOPLE[message.author];\n  const mine = message.author === \"me\";\n  return (\n    <li\n      style={{\n        display: \"flex\",\n        flexDirection: mine ? \"row-reverse\" : \"row\",\n        alignItems: \"flex-end\",\n        gap: 10,\n      }}\n    >\n      <PersonAvatar author={message.author} size=\"m\" />\n      <div\n        style={{\n          display: \"flex\",\n          flexDirection: \"column\",\n          alignItems: mine ? \"flex-end\" : \"flex-start\",\n          gap: 4,\n          maxWidth: \"min(80%, 560px)\",\n          minWidth: 0,\n        }}\n      >\n        <Row gap=\"8\" vertical=\"center\">\n          <Text variant=\"label-default-s\" onBackground=\"neutral-strong\">\n            {person.name}\n          </Text>\n          <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n            <time>{message.time}</time>\n          </Text>\n        </Row>\n        <div\n          style={{\n            padding: \"10px 14px\",\n            borderRadius: 16,\n            borderBottomRightRadius: mine ? 4 : 16,\n            borderBottomLeftRadius: mine ? 16 : 4,\n            background: mine ? \"var(--brand-solid-strong)\" : \"var(--neutral-alpha-weak)\",\n            color: mine ? \"var(--brand-on-solid-strong)\" : \"var(--neutral-on-background-strong)\",\n            fontSize: 15,\n            lineHeight: 1.5,\n            overflowWrap: \"anywhere\",\n          }}\n        >\n          {message.text}\n        </div>\n      </div>\n    </li>\n  );\n}\n\nfunction TypingIndicator({ partial }: { partial: string }) {\n  return (\n    <li style={{ display: \"flex\", alignItems: \"flex-end\", gap: 10 }}>\n      <PersonAvatar author=\"assistant\" size=\"m\" />\n      <div style={{ display: \"flex\", flexDirection: \"column\", gap: 4, maxWidth: \"min(80%, 560px)\", minWidth: 0 }}>\n        <Text variant=\"label-default-s\" onBackground=\"neutral-strong\">\n          Atlas{\" \"}\n          <Text as=\"span\" variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n            is typing…\n          </Text>\n        </Text>\n        <div\n          style={{\n            padding: \"10px 14px\",\n            borderRadius: 16,\n            borderBottomLeftRadius: 4,\n            background: \"var(--neutral-alpha-weak)\",\n            color: \"var(--neutral-on-background-strong)\",\n            fontSize: 15,\n            lineHeight: 1.5,\n            overflowWrap: \"anywhere\",\n          }}\n        >\n          {partial ? (\n            <>\n              {partial}\n              <span\n                className=\"chat-caret\"\n                aria-hidden=\"true\"\n                style={{\n                  display: \"inline-block\",\n                  width: 2,\n                  height: \"1em\",\n                  marginLeft: 2,\n                  verticalAlign: \"text-bottom\",\n                  background: \"currentColor\",\n                }}\n              />\n            </>\n          ) : (\n            <span style={{ display: \"inline-flex\", gap: 4, padding: \"4px 0\" }} aria-hidden=\"true\">\n              {[0, 1, 2].map((i) => (\n                <span\n                  key={i}\n                  className=\"chat-dot\"\n                  style={{\n                    width: 7,\n                    height: 7,\n                    borderRadius: \"50%\",\n                    background: \"var(--neutral-on-background-weak)\",\n                    animationDelay: `${i * 0.15}s`,\n                  }}\n                />\n              ))}\n            </span>\n          )}\n        </div>\n      </div>\n    </li>\n  );\n}\n\nexport default function Page() {\n  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);\n  const [draft, setDraft] = useState(\"\");\n  const [streaming, setStreaming] = useState(false);\n  const [partial, setPartial] = useState(\"\");\n  const [emojiOpen, setEmojiOpen] = useState(false);\n  const [commandsOpen, setCommandsOpen] = useState(false);\n\n  const replyIndex = useRef(0);\n  const timers = useRef<number[]>([]);\n  const listEndRef = useRef<HTMLDivElement | null>(null);\n  const textareaRef = useRef<HTMLTextAreaElement | null>(null);\n  const idCounter = useRef(INITIAL_MESSAGES.length);\n\n  const emojiPanelId = useId();\n  const commandPanelId = useId();\n\n  const clearTimers = useCallback(() => {\n    timers.current.forEach((t) => window.clearTimeout(t));\n    timers.current = [];\n  }, []);\n\n  useEffect(() => clearTimers, [clearTimers]);\n\n  useEffect(() => {\n    listEndRef.current?.scrollIntoView({ block: \"end\" });\n  }, [messages, partial, streaming]);\n\n  const formatTime = () =>\n    new Date().toLocaleTimeString(\"en-US\", { hour: \"numeric\", minute: \"2-digit\" });\n\n  const nextId = () => {\n    idCounter.current += 1;\n    return `m${idCounter.current}`;\n  };\n\n  const streamReply = useCallback(() => {\n    const full = REPLIES[replyIndex.current % REPLIES.length];\n    replyIndex.current += 1;\n    const words = full.split(\" \");\n    setStreaming(true);\n    setPartial(\"\");\n\n    let shown = 0;\n    const tick = () => {\n      shown += 1;\n      setPartial(words.slice(0, shown).join(\" \"));\n      if (shown < words.length) {\n        timers.current.push(window.setTimeout(tick, 70));\n      } else {\n        timers.current.push(\n          window.setTimeout(() => {\n            idCounter.current += 1;\n            setMessages((prev) => [\n              ...prev,\n              {\n                id: `m${idCounter.current}`,\n                author: \"assistant\",\n                text: full,\n                time: new Date().toLocaleTimeString(\"en-US\", { hour: \"numeric\", minute: \"2-digit\" }),\n              },\n            ]);\n            setPartial(\"\");\n            setStreaming(false);\n          }, 150),\n        );\n      }\n    };\n    timers.current.push(window.setTimeout(tick, 1100));\n  }, []);\n\n  const send = useCallback(() => {\n    const text = draft.trim();\n    if (!text || streaming) return;\n    setMessages((prev) => [...prev, { id: nextId(), author: \"me\", text, time: formatTime() }]);\n    setDraft(\"\");\n    setEmojiOpen(false);\n    setCommandsOpen(false);\n    streamReply();\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [draft, streaming, streamReply]);\n\n  const insertText = (value: string) => {\n    const el = textareaRef.current;\n    if (!el) {\n      setDraft((d) => d + value);\n      return;\n    }\n    const start = el.selectionStart ?? draft.length;\n    const end = el.selectionEnd ?? draft.length;\n    const next = draft.slice(0, start) + value + draft.slice(end);\n    setDraft(next);\n    requestAnimationFrame(() => {\n      el.focus();\n      const pos = start + value.length;\n      el.setSelectionRange(pos, pos);\n    });\n  };\n\n  const closePanels = () => {\n    setEmojiOpen(false);\n    setCommandsOpen(false);\n  };\n\n  // Global shortcut: Cmd/Ctrl + K toggles the command palette, Escape closes panels.\n  useEffect(() => {\n    const onKey = (e: globalThis.KeyboardEvent) => {\n      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === \"k\") {\n        e.preventDefault();\n        setEmojiOpen(false);\n        setCommandsOpen((o) => !o);\n      } else if (e.key === \"Escape\") {\n        setEmojiOpen(false);\n        setCommandsOpen(false);\n      }\n    };\n    window.addEventListener(\"keydown\", onKey);\n    return () => window.removeEventListener(\"keydown\", onKey);\n  }, []);\n\n  const onTextareaKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {\n    if (e.key === \"Enter\" && !e.shiftKey && !e.nativeEvent.isComposing) {\n      e.preventDefault();\n      send();\n    }\n  };\n\n  const onDraftChange = (value: string) => {\n    setDraft(value);\n    if (value === \"/\" && !commandsOpen) {\n      setEmojiOpen(false);\n      setCommandsOpen(true);\n    }\n  };\n\n  // Auto-grow textarea\n  useEffect(() => {\n    const el = textareaRef.current;\n    if (!el) return;\n    el.style.height = \"auto\";\n    el.style.height = `${Math.min(el.scrollHeight, 140)}px`;\n  }, [draft]);\n\n  const liveStatus = useMemo(() => (streaming ? \"Atlas is typing\" : \"\"), [streaming]);\n\n  return (\n    <div style={styles.page}>\n      <style>{keyframes}</style>\n      <main style={styles.shell} aria-label=\"Team chat\">\n        <header style={styles.header}>\n          <Row gap=\"12\" vertical=\"center\" style={{ minWidth: 0, flex: 1 }}>\n            <Avatar value=\"CK\" size=\"m\" aria-hidden=\"true\" />\n            <Column gap=\"2\" style={{ minWidth: 0 }}>\n              <Heading as=\"h1\" variant=\"heading-strong-m\">\n                # checkout-redesign\n              </Heading>\n              <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n                4 members · Maya, Dev, Atlas and you\n              </Text>\n            </Column>\n          </Row>\n          <span\n            className=\"chat-hint-desktop\"\n            style={{ display: \"inline-flex\", alignItems: \"center\", gap: 6, fontSize: 13, color: \"var(--neutral-on-background-weak)\" }}\n          >\n            Commands\n            <kbd style={styles.kbd}>Ctrl</kbd>\n            <kbd style={styles.kbd}>K</kbd>\n          </span>\n        </header>\n\n        <ul style={styles.list} aria-label=\"Messages\">\n          {messages.map((m) => (\n            <MessageItem key={m.id} message={m} />\n          ))}\n          {streaming && <TypingIndicator partial={partial} />}\n          <div ref={listEndRef} aria-hidden=\"true\" />\n        </ul>\n\n        <div role=\"status\" aria-live=\"polite\" style={{ position: \"absolute\", width: 1, height: 1, overflow: \"hidden\", clip: \"rect(0 0 0 0)\" }}>\n          {liveStatus}\n        </div>\n\n        <div style={styles.composer}>\n          {emojiOpen && (\n            <div id={emojiPanelId} role=\"dialog\" aria-label=\"Emoji picker\" style={styles.popover}>\n              <div style={styles.emojiGrid}>\n                {EMOJI.map((e) => (\n                  <button\n                    key={e.char}\n                    type=\"button\"\n                    className=\"chat-btn\"\n                    style={styles.emojiBtn}\n                    aria-label={e.label}\n                    onClick={() => insertText(e.char)}\n                  >\n                    <span aria-hidden=\"true\">{e.char}</span>\n                  </button>\n                ))}\n              </div>\n            </div>\n          )}\n\n          {commandsOpen && (\n            <div id={commandPanelId} role=\"dialog\" aria-label=\"Command palette\" style={styles.popover}>\n              <Text variant=\"label-default-xs\" onBackground=\"neutral-weak\" style={{ padding: \"0 10px 6px\", display: \"block\" }}>\n                Commands\n              </Text>\n              <div role=\"list\">\n                {COMMANDS.map((c) => (\n                  <div role=\"listitem\" key={c.key}>\n                    <button\n                      type=\"button\"\n                      className=\"chat-btn\"\n                      style={styles.commandBtn}\n                      onClick={() => {\n                        setCommandsOpen(false);\n                        setDraft(`${c.key} `);\n                        requestAnimationFrame(() => textareaRef.current?.focus());\n                      }}\n                    >\n                      <span style={{ fontFamily: \"var(--font-code)\", fontSize: 14, fontWeight: 600 }}>{c.key}</span>\n                      <span style={{ fontSize: 13, color: \"var(--neutral-on-background-weak)\" }}>{c.hint}</span>\n                    </button>\n                  </div>\n                ))}\n              </div>\n            </div>\n          )}\n\n          <div className=\"chat-field\" style={styles.field}>\n            <button\n              type=\"button\"\n              className=\"chat-btn\"\n              style={styles.iconBtn}\n              aria-label=\"Open emoji picker\"\n              aria-haspopup=\"dialog\"\n              aria-expanded={emojiOpen}\n              aria-controls={emojiOpen ? emojiPanelId : undefined}\n              onClick={() => {\n                setCommandsOpen(false);\n                setEmojiOpen((o) => !o);\n              }}\n            >\n              <span aria-hidden=\"true\">😊</span>\n            </button>\n            <textarea\n              ref={textareaRef}\n              rows={1}\n              style={styles.textarea}\n              value={draft}\n              placeholder=\"Message #checkout-redesign\"\n              aria-label=\"Message\"\n              onChange={(e) => onDraftChange(e.target.value)}\n              onKeyDown={onTextareaKey}\n              onFocus={() => setEmojiOpen(false)}\n            />\n            <button\n              type=\"button\"\n              className=\"chat-btn\"\n              style={styles.iconBtn}\n              aria-label=\"Open command palette\"\n              aria-haspopup=\"dialog\"\n              aria-expanded={commandsOpen}\n              aria-controls={commandsOpen ? commandPanelId : undefined}\n              onClick={() => {\n                setEmojiOpen(false);\n                setCommandsOpen((o) => !o);\n              }}\n            >\n              <span aria-hidden=\"true\" style={{ fontFamily: \"var(--font-code)\", fontWeight: 700 }}>\n                /\n              </span>\n            </button>\n            <button\n              type=\"button\"\n              className=\"chat-send\"\n              style={styles.sendBtn}\n              onClick={send}\n              disabled={!draft.trim() || streaming}\n              aria-label=\"Send message\"\n            >\n              <span className=\"chat-send-label\">Send</span>\n              <span aria-hidden=\"true\">➤</span>\n            </button>\n          </div>\n          <Text\n            variant=\"body-default-xs\"\n            onBackground=\"neutral-weak\"\n            style={{ display: \"block\", marginTop: 8 }}\n          >\n            Press <kbd style={styles.kbd}>Enter</kbd> to send, <kbd style={styles.kbd}>Shift</kbd>+\n            <kbd style={styles.kbd}>Enter</kbd> for a new line, or type <kbd style={styles.kbd}>/</kbd> for commands.\n          </Text>\n        </div>\n      </main>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

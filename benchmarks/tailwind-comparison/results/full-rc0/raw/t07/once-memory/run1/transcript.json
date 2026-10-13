@@ -1,0 +1,254 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: E-commerce product card grid — image, price, tag, hover actions, skeleton loading state.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the project's existing files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Aszd9afF1joV3DWxWh31Af",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012ys2Zb4JBvtw4Erv5NSLWv",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Aszd9afF1joV3DWxWh31Af",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012ys2Zb4JBvtw4Erv5NSLWv",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01RoVykZsX5SajCA1Tf8QJhy",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016ygFQBH75y5Uy3TELUpwAU",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018daRfSCrjeh9SRNpzEFS3U",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TriEbWbubYzM3B3DSX1skv",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RoVykZsX5SajCA1Tf8QJhy",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016ygFQBH75y5Uy3TELUpwAU",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018daRfSCrjeh9SRNpzEFS3U",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TriEbWbubYzM3B3DSX1skv",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Jy5msfaDU2yJae2zNoiku6",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ReodTAtw47o7AVAfJZ14UY",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01M5d2b2Ux3rm4ygD254EjVo",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VP2z2vbNiNCS85X9CurCqX",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Jy5msfaDU2yJae2zNoiku6",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ReodTAtw47o7AVAfJZ14UY",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01M5d2b2Ux3rm4ygD254EjVo",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VP2z2vbNiNCS85X9CurCqX",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll stick to the Once UI components and props I'm confident about (Flex, Column, Row, Grid, Text, Heading, Tag, Button, IconButton) and build product visuals with inline gradients/SVG plus a hand-rolled CSS skeleton, avoiding network images and risky prop combinations under strict TypeScript.\n\n",
+          "signature": "CAQSoQkKEQgSGAI4AUIJbmFycmF0aW9uEgzQhItbRvRAK1EsfLkaDJTAvX6oxYBree7e2SIwevlT+l1o2aQ8oLBlFllOLBVgtaa6k4pO14GsLcE2E/hnad8V+3Hiolfsglq2u/RQKr0Iv3vaC0eH3H82oSdq8uNhSivuYHXSCGJSZlgneZugZLJAyLfVHNIYzGiG2OPTSiL6diAF69RoX8EMeaDkNt87rDMjBO5wbvzXOE/+2g1PoGgkbfExCWCiwFa9vJBZJ9s6TJGGwM0VirgnXePS5211OtlpUZ2j1X5mpaCqjCPhr5useVQ/cJg9lRyBJalCkqeJ4dfvjn6aVKwoMJ1JiRWIhSrw1HmcL7gaepJVYANmhUtIad/9ECTFiHRmXNAXQs5LT74468r1ABPxfrU4llDJimeBb1dUafTRltyCQIHn55vEzp4I4r288lG5al7XMvLBZHBvh/ZVYLQcdTp57HprvBHU+FOwYN0xKm02tasoJTSGAAK98TvPY7sLTmNnXb8fk2gjFpxCyy6c064GavnEoypdNBO/sNAowgutH/wP8+8JAJ8DXdGa/3X6ck3j9u1gz/qCmpO2gbfvYyI8RVyJSm1ic53Dov1eEAllc1Ajiied3t97m0zvXxhXh5jQiPKoOqbClR+27UTQh9iQptKmENEj9bz8ZuOhcMqa3cmGA6BIdCcgFGqcapygq91gZoYU8iQH05M4AbUb6mD75tuxm1haw5XMyAThQHn4kb7XvRDsv4uqjIXY2Zk8hFjYSUE+yVVyUHtPqevPN8YB6CvbcsfXaysYMlqGyTiaAoTHpNUh+v90pcO97wOsFsEQCO8Y5tXi10UqtdvjlppaZ+4wihAj7OcqmdN3gdQFDOu7w4y7/U0eryci5K5BJQ27VRoyNcnTJeIcyQRA+/zkXIlYBu5V2wVwsgRzQh8HeOPwyeWP0FaJKsjkxP9/veoR81EnKgsWCO2dxKmGZYrieTQPLFL3wlZBdPo1trWqLd/LlUycJIC+gJmaPnlDkDdJhdK6nIXVDXkGFlWj9CeiU9g7y/sBdFGda1d1RHd/BJer3FvrPJoji4xsNr85/rmv1fXY3tMl/+Gf8Z9HULwSWqNhW2LAqZesnGWHj0J4xjyl+J8yoT0T2ij4eXDCqbRyWWj+foEg9RKjBIw6cPsCQ8EXv+91nY6qeoxu4Ro0/7eBKwXBwHr7QYse7fY2lZVZG+CWbXH3U81S3xQiGQbdmysnIf7VViA2tCV32x01Cf7JJf7y8wFocDzhDl5Oa03cgvlBp/VhP9qbGDE99C90+Ua+6tdB5hF4/2kY7z0SNlz8cqvchHtSVvukIWB/sLFCh6W2J3UWVEtCBgBu5YB1Km8eGZTbuxf2+3pvUqMNOjOX+0xCuSHiEneZYUHu4C6Y2Sc6SxqMcDaSEeEU8AmEMAaFgLaXnZ0b2Y/gCpsh0ncVhO21RxEihdnH+Fz+XSVG38SJnSa5Ehpn3fJcrmdj3H/QzA698k/FM0Bzb9pbnODAswVxvcp6XWY7AqaaxTWAyZJIIiKMDKl2sfPdK0jica6mSos9pow0hS5eA8hWTOcYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013VfKQtc86zeiaZFhgUKgKT",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013VfKQtc86zeiaZFhgUKgKT",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "No installed package to inspect, so I'll rely on well-known APIs only.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useMemo, useState } from \"react\";\nimport type { CSSProperties, ReactNode } from \"react\";\nimport { Button, Column, Flex, Grid, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype Category = \"All\" | \"Audio\" | \"Wearables\" | \"Home\" | \"Bags\";\n\ninterface Product {\n  id: string;\n  name: string;\n  category: Exclude<Category, \"All\">;\n  price: number;\n  compareAt?: number;\n  rating: number;\n  reviews: number;\n  tag?: \"New\" | \"Sale\" | \"Bestseller\" | \"Low stock\";\n  colors: [string, string];\n  shape: \"headphones\" | \"watch\" | \"lamp\" | \"bag\" | \"speaker\" | \"bottle\" | \"earbuds\" | \"mug\";\n}\n\nconst PRODUCTS: Product[] = [\n  { id: \"p1\", name: \"Halo Wireless Headphones\", category: \"Audio\", price: 189, compareAt: 229, rating: 4.7, reviews: 1284, tag: \"Sale\", colors: [\"#6d83f2\", \"#b9c4ff\"], shape: \"headphones\" },\n  { id: \"p2\", name: \"Meridian Smartwatch S2\", category: \"Wearables\", price: 249, rating: 4.5, reviews: 862, tag: \"New\", colors: [\"#f08a5d\", \"#ffd3b8\"], shape: \"watch\" },\n  { id: \"p3\", name: \"Arc Desk Lamp\", category: \"Home\", price: 74, rating: 4.8, reviews: 391, tag: \"Bestseller\", colors: [\"#f2c94c\", \"#fff1bd\"], shape: \"lamp\" },\n  { id: \"p4\", name: \"Voyager Daypack 22L\", category: \"Bags\", price: 119, rating: 4.6, reviews: 540, colors: [\"#4fb286\", \"#bfe8d3\"], shape: \"bag\" },\n  { id: \"p5\", name: \"Pebble Bluetooth Speaker\", category: \"Audio\", price: 59, compareAt: 79, rating: 4.3, reviews: 2210, tag: \"Sale\", colors: [\"#e56b9a\", \"#ffc9de\"], shape: \"speaker\" },\n  { id: \"p6\", name: \"Insulated Steel Bottle 750ml\", category: \"Home\", price: 32, rating: 4.9, reviews: 3150, tag: \"Bestseller\", colors: [\"#3fa7c4\", \"#bfe9f4\"], shape: \"bottle\" },\n  { id: \"p7\", name: \"Pulse True Wireless Earbuds\", category: \"Audio\", price: 99, rating: 4.4, reviews: 977, tag: \"Low stock\", colors: [\"#8d6fd6\", \"#d9ccff\"], shape: \"earbuds\" },\n  { id: \"p8\", name: \"Fieldnote Band 3\", category: \"Wearables\", price: 69, rating: 4.2, reviews: 418, tag: \"New\", colors: [\"#5c6b7a\", \"#c9d3dc\"], shape: \"watch\" },\n  { id: \"p9\", name: \"Stoneware Pour-Over Mug\", category: \"Home\", price: 28, rating: 4.7, reviews: 233, colors: [\"#c08a5a\", \"#f0d9c0\"], shape: \"mug\" },\n  { id: \"p10\", name: \"Commuter Tote Waxed Canvas\", category: \"Bags\", price: 134, compareAt: 160, rating: 4.6, reviews: 305, tag: \"Sale\", colors: [\"#7a8f4e\", \"#d9e4b8\"], shape: \"bag\" },\n  { id: \"p11\", name: \"Studio Monitor Headphones\", category: \"Audio\", price: 159, rating: 4.8, reviews: 702, colors: [\"#2f3a4a\", \"#9aa9bd\"], shape: \"headphones\" },\n  { id: \"p12\", name: \"Dune Table Lamp\", category: \"Home\", price: 88, rating: 4.5, reviews: 150, tag: \"New\", colors: [\"#d97757\", \"#fbd9c9\"], shape: \"lamp\" },\n];\n\nconst CATEGORIES: Category[] = [\"All\", \"Audio\", \"Wearables\", \"Home\", \"Bags\"];\n\nconst SKELETON_COUNT = 8;\n\nconst currency = new Intl.NumberFormat(\"en-US\", { style: \"currency\", currency: \"USD\", maximumFractionDigits: 0 });\n\nconst TAG_STYLES: Record<NonNullable<Product[\"tag\"]>, { bg: string; fg: string }> = {\n  New: { bg: \"#1d4ed8\", fg: \"#ffffff\" },\n  Sale: { bg: \"#b91c1c\", fg: \"#ffffff\" },\n  Bestseller: { bg: \"#15803d\", fg: \"#ffffff\" },\n  \"Low stock\": { bg: \"#b45309\", fg: \"#ffffff\" },\n};\n\nconst PAGE_CSS = `\n.pc-grid { display: grid; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr)); list-style: none; margin: 0; padding: 0; }\n.pc-card { position: relative; display: flex; flex-direction: column; border-radius: 16px; overflow: hidden;\n  background: var(--surface-background, rgba(127,127,127,0.08)); border: 1px solid var(--neutral-alpha-medium, rgba(127,127,127,0.25));\n  transition: transform .2s ease, box-shadow .2s ease; }\n.pc-card:hover, .pc-card:focus-within { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.18); }\n.pc-media { position: relative; aspect-ratio: 4 / 3; overflow: hidden; }\n.pc-actions { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; gap: 8px; justify-content: center;\n  opacity: 0; transform: translateY(8px); transition: opacity .2s ease, transform .2s ease; }\n.pc-card:hover .pc-actions, .pc-card:focus-within .pc-actions { opacity: 1; transform: none; }\n@media (hover: none) { .pc-actions { opacity: 1; transform: none; } }\n.pc-btn { appearance: none; cursor: pointer; border: 0; font: inherit; font-weight: 600; font-size: 14px; line-height: 1;\n  min-height: 40px; padding: 0 14px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; gap: 6px;\n  background: #ffffff; color: #111827; box-shadow: 0 2px 8px rgba(0,0,0,0.2); transition: background .15s ease, transform .1s ease; }\n.pc-btn:hover { background: #f3f4f6; }\n.pc-btn:active { transform: scale(0.97); }\n.pc-btn:focus-visible, .pc-chip:focus-visible, .pc-wish:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }\n.pc-btn-primary { background: #111827; color: #ffffff; flex: 1; }\n.pc-btn-primary:hover { background: #1f2937; }\n.pc-btn-icon { width: 40px; padding: 0; }\n.pc-wish { position: absolute; top: 12px; right: 12px; width: 40px; height: 40px; border-radius: 50%; border: 0; cursor: pointer;\n  display: grid; place-items: center; background: rgba(255,255,255,0.92); color: #111827; box-shadow: 0 2px 8px rgba(0,0,0,0.18); }\n.pc-wish[aria-pressed=\"true\"] { color: #dc2626; }\n.pc-chip { appearance: none; cursor: pointer; font: inherit; font-size: 14px; font-weight: 600; min-height: 40px; padding: 0 16px; border-radius: 999px;\n  border: 1px solid var(--neutral-alpha-strong, rgba(127,127,127,0.4)); background: transparent; color: inherit; }\n.pc-chip[aria-pressed=\"true\"] { background: #111827; color: #ffffff; border-color: #111827; }\n@media (prefers-color-scheme: dark) { .pc-chip[aria-pressed=\"true\"] { background: #f9fafb; color: #111827; border-color: #f9fafb; } }\n.pc-tag { position: absolute; top: 12px; left: 12px; font-size: 12px; font-weight: 700; padding: 5px 10px; border-radius: 999px; letter-spacing: .02em; }\n.pc-skel { background: linear-gradient(90deg, rgba(127,127,127,0.14) 25%, rgba(127,127,127,0.28) 50%, rgba(127,127,127,0.14) 75%);\n  background-size: 200% 100%; animation: pc-shimmer 1.4s linear infinite; border-radius: 8px; }\n@keyframes pc-shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }\n.pc-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n@media (prefers-reduced-motion: reduce) {\n  .pc-card, .pc-actions { transition: none; }\n  .pc-card:hover, .pc-card:focus-within { transform: none; }\n  .pc-skel { animation: none; }\n}\n`;\n\nfunction Illustration({ shape }: { shape: Product[\"shape\"] }): ReactNode {\n  const common = { fill: \"none\", stroke: \"rgba(17,24,39,0.78)\", strokeWidth: 5, strokeLinecap: \"round\" as const, strokeLinejoin: \"round\" as const };\n  const solid = \"rgba(255,255,255,0.85)\";\n  switch (shape) {\n    case \"headphones\":\n      return (<g><path d=\"M50 118 V100 a50 50 0 0 1 100 0 V118\" {...common} /><rect x=\"38\" y=\"112\" width=\"24\" height=\"40\" rx=\"10\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /><rect x=\"138\" y=\"112\" width=\"24\" height=\"40\" rx=\"10\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /></g>);\n    case \"watch\":\n      return (<g><path d=\"M80 40 h40 l6 30 h-52 z M74 130 h52 l-6 30 h-40 z\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" strokeLinejoin=\"round\" /><rect x=\"64\" y=\"66\" width=\"72\" height=\"68\" rx=\"18\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /><path d=\"M100 82 v18 l12 8\" {...common} /></g>);\n    case \"lamp\":\n      return (<g><path d=\"M70 90 l20 -44 h20 l20 44 z\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" strokeLinejoin=\"round\" /><path d=\"M100 90 v54\" {...common} /><ellipse cx=\"100\" cy=\"150\" rx=\"30\" ry=\"8\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /></g>);\n    case \"bag\":\n      return (<g><path d=\"M78 76 v-10 a22 22 0 0 1 44 0 v10\" {...common} /><rect x=\"56\" y=\"74\" width=\"88\" height=\"82\" rx=\"14\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /><path d=\"M56 108 h88\" {...common} /></g>);\n    case \"speaker\":\n      return (<g><rect x=\"56\" y=\"52\" width=\"88\" height=\"104\" rx=\"22\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /><circle cx=\"100\" cy=\"112\" r=\"24\" {...common} /><circle cx=\"100\" cy=\"76\" r=\"6\" fill=\"rgba(17,24,39,0.78)\" /></g>);\n    case \"bottle\":\n      return (<g><rect x=\"90\" y=\"36\" width=\"20\" height=\"16\" rx=\"4\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /><path d=\"M84 54 h32 v10 a14 14 0 0 1 8 12 v70 a12 12 0 0 1 -12 12 h-24 a12 12 0 0 1 -12 -12 v-70 a14 14 0 0 1 8 -12 z\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" strokeLinejoin=\"round\" /></g>);\n    case \"earbuds\":\n      return (<g><rect x=\"50\" y=\"110\" width=\"100\" height=\"50\" rx=\"22\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /><circle cx=\"76\" cy=\"80\" r=\"14\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /><circle cx=\"124\" cy=\"80\" r=\"14\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" /><path d=\"M76 94 v14 M124 94 v14\" {...common} /></g>);\n    case \"mug\":\n      return (<g><path d=\"M62 72 h66 v56 a24 24 0 0 1 -24 24 h-18 a24 24 0 0 1 -24 -24 z\" fill={solid} stroke=\"rgba(17,24,39,0.78)\" strokeWidth=\"5\" strokeLinejoin=\"round\" /><path d=\"M128 86 h8 a14 14 0 0 1 0 28 h-8\" {...common} /></g>);\n  }\n}\n\nfunction Stars({ rating }: { rating: number }) {\n  const full = Math.round(rating);\n  return (\n    <span aria-hidden=\"true\" style={{ color: \"#f59e0b\", letterSpacing: 1, fontSize: 14 }}>\n      {\"★\".repeat(full)}\n      <span style={{ opacity: 0.3 }}>{\"★\".repeat(5 - full)}</span>\n    </span>\n  );\n}\n\nfunction HeartIcon({ filled }: { filled: boolean }) {\n  return (\n    <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\" fill={filled ? \"currentColor\" : \"none\"} stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n      <path d=\"M12 21s-7.5-4.6-9.5-9.2C1.2 8.6 3 5 6.6 5c2 0 3.4 1 4.4 2.6C12 6 13.4 5 15.4 5 19 5 20.8 8.6 21.5 11.8 19.5 16.4 12 21 12 21z\" />\n    </svg>\n  );\n}\n\nfunction EyeIcon() {\n  return (\n    <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n      <path d=\"M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z\" />\n      <circle cx=\"12\" cy=\"12\" r=\"3\" />\n    </svg>\n  );\n}\n\nfunction CartIcon() {\n  return (\n    <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" aria-hidden=\"true\" focusable=\"false\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n      <circle cx=\"9\" cy=\"20\" r=\"1.5\" />\n      <circle cx=\"18\" cy=\"20\" r=\"1.5\" />\n      <path d=\"M2 3h3l2.7 12.4a2 2 0 0 0 2 1.6h8a2 2 0 0 0 2-1.5L21 8H6\" />\n    </svg>\n  );\n}\n\ninterface CardProps {\n  product: Product;\n  wished: boolean;\n  onToggleWish: (id: string) => void;\n  onAdd: (product: Product) => void;\n  onQuickView: (product: Product) => void;\n}\n\nfunction ProductCard({ product, wished, onToggleWish, onAdd, onQuickView }: CardProps) {\n  const { id, name, price, compareAt, rating, reviews, tag, colors, shape, category } = product;\n  const tagStyle = tag ? TAG_STYLES[tag] : undefined;\n  const discount = compareAt ? Math.round((1 - price / compareAt) * 100) : 0;\n  const labelId = `${id}-name`;\n\n  return (\n    <li>\n      <article className=\"pc-card\" aria-labelledby={labelId} style={{ height: \"100%\" }}>\n        <div className=\"pc-media\" style={{ background: `linear-gradient(135deg, ${colors[1]}, ${colors[0]})` }}>\n          <svg viewBox=\"0 0 200 200\" role=\"img\" aria-label={`${name} illustration`} style={{ width: \"100%\", height: \"100%\", display: \"block\" }} preserveAspectRatio=\"xMidYMid meet\">\n            <Illustration shape={shape} />\n          </svg>\n          {tag && tagStyle ? (\n            <span className=\"pc-tag\" style={{ background: tagStyle.bg, color: tagStyle.fg }}>\n              {tag}\n            </span>\n          ) : null}\n          <button type=\"button\" className=\"pc-wish\" aria-pressed={wished} aria-label={`${wished ? \"Remove\" : \"Add\"} ${name} ${wished ? \"from\" : \"to\"} wishlist`} onClick={() => onToggleWish(id)}>\n            <HeartIcon filled={wished} />\n          </button>\n          <div className=\"pc-actions\">\n            <button type=\"button\" className=\"pc-btn pc-btn-primary\" onClick={() => onAdd(product)} aria-label={`Add ${name} to cart`}>\n              <CartIcon />\n              Add to cart\n            </button>\n            <button type=\"button\" className=\"pc-btn pc-btn-icon\" onClick={() => onQuickView(product)} aria-label={`Quick view ${name}`}>\n              <EyeIcon />\n            </button>\n          </div>\n        </div>\n        <Column gap=\"8\" padding=\"16\" flex={1}>\n          <Text variant=\"label-default-xs\" onBackground=\"neutral-weak\">\n            {category}\n          </Text>\n          <Heading as=\"h3\" variant=\"heading-strong-s\" id={labelId}>\n            {name}\n          </Heading>\n          <Row gap=\"8\" vertical=\"center\">\n            <Stars rating={rating} />\n            <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n              <span className=\"pc-sr\">Rated {rating} out of 5 from </span>\n              {rating.toFixed(1)} ({reviews.toLocaleString(\"en-US\")})\n            </Text>\n          </Row>\n          <Row gap=\"8\" vertical=\"center\" wrap style={{ marginTop: \"auto\", paddingTop: 4 }}>\n            <Text variant=\"heading-strong-m\">{currency.format(price)}</Text>\n            {compareAt ? (\n              <>\n                <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" style={{ textDecoration: \"line-through\" }}>\n                  <span className=\"pc-sr\">Was </span>\n                  {currency.format(compareAt)}\n                </Text>\n                <Text variant=\"label-strong-xs\" style={{ color: \"#b91c1c\" }}>\n                  −{discount}%\n                </Text>\n              </>\n            ) : null}\n          </Row>\n        </Column>\n      </article>\n    </li>\n  );\n}\n\nfunction SkeletonCard() {\n  return (\n    <li aria-hidden=\"true\">\n      <div className=\"pc-card\">\n        <div className=\"pc-media pc-skel\" style={{ borderRadius: 0 }} />\n        <Column gap=\"12\" padding=\"16\">\n          <div className=\"pc-skel\" style={{ height: 12, width: \"30%\" }} />\n          <div className=\"pc-skel\" style={{ height: 18, width: \"85%\" }} />\n          <div className=\"pc-skel\" style={{ height: 12, width: \"50%\" }} />\n          <div className=\"pc-skel\" style={{ height: 24, width: \"35%\" }} />\n        </Column>\n      </div>\n    </li>\n  );\n}\n\nexport default function Page() {\n  const [loading, setLoading] = useState(true);\n  const [category, setCategory] = useState<Category>(\"All\");\n  const [wishlist, setWishlist] = useState<ReadonlySet<string>>(new Set());\n  const [cartCount, setCartCount] = useState(0);\n  const [status, setStatus] = useState(\"\");\n  const [quickView, setQuickView] = useState<Product | null>(null);\n\n  useEffect(() => {\n    const timer = window.setTimeout(() => setLoading(false), 1800);\n    return () => window.clearTimeout(timer);\n  }, []);\n\n  useEffect(() => {\n    if (!quickView) return;\n    const onKey = (e: KeyboardEvent) => {\n      if (e.key === \"Escape\") setQuickView(null);\n    };\n    window.addEventListener(\"keydown\", onKey);\n    return () => window.removeEventListener(\"keydown\", onKey);\n  }, [quickView]);\n\n  const visible = useMemo(() => (category === \"All\" ? PRODUCTS : PRODUCTS.filter((p) => p.category === category)), [category]);\n\n  const toggleWish = useCallback((id: string) => {\n    setWishlist((prev) => {\n      const next = new Set(prev);\n      const product = PRODUCTS.find((p) => p.id === id);\n      if (next.has(id)) {\n        next.delete(id);\n        setStatus(`${product?.name ?? \"Item\"} removed from wishlist`);\n      } else {\n        next.add(id);\n        setStatus(`${product?.name ?? \"Item\"} added to wishlist`);\n      }\n      return next;\n    });\n  }, []);\n\n  const addToCart = useCallback((product: Product) => {\n    setCartCount((c) => c + 1);\n    setStatus(`${product.name} added to cart`);\n  }, []);\n\n  const reload = useCallback(() => {\n    setLoading(true);\n    window.setTimeout(() => setLoading(false), 1500);\n  }, []);\n\n  const headerStyle: CSSProperties = { maxWidth: 1280, margin: \"0 auto\", width: \"100%\" };\n\n  return (\n    <Column as=\"main\" fillWidth paddingX=\"16\" paddingY=\"32\" gap=\"24\">\n      <style>{PAGE_CSS}</style>\n      <Column gap=\"24\" style={headerStyle}>\n        <Row horizontal=\"between\" vertical=\"end\" gap=\"16\" wrap>\n          <Column gap=\"8\">\n            <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n              Spring collection\n            </Text>\n            <Heading as=\"h1\" variant=\"display-strong-xs\">\n              Everyday essentials\n            </Heading>\n            <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n              Thoughtfully designed audio, wearables and home goods with free returns for 30 days.\n            </Text>\n          </Column>\n          <Row gap=\"12\" vertical=\"center\">\n            <Text variant=\"label-default-s\" aria-live=\"off\">\n              Cart: {cartCount} {cartCount === 1 ? \"item\" : \"items\"}\n            </Text>\n            <Button variant=\"secondary\" size=\"s\" onClick={reload} disabled={loading}>\n              {loading ? \"Loading…\" : \"Reload products\"}\n            </Button>\n          </Row>\n        </Row>\n\n        <div role=\"group\" aria-label=\"Filter by category\" style={{ display: \"flex\", gap: 8, flexWrap: \"wrap\" }}>\n          {CATEGORIES.map((c) => (\n            <button key={c} type=\"button\" className=\"pc-chip\" aria-pressed={category === c} onClick={() => setCategory(c)}>\n              {c}\n            </button>\n          ))}\n        </div>\n\n        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n          {loading ? \"Loading products…\" : `${visible.length} ${visible.length === 1 ? \"product\" : \"products\"}`}\n        </Text>\n\n        <ul className=\"pc-grid\" aria-label=\"Products\" aria-busy={loading}>\n          {loading\n            ? Array.from({ length: SKELETON_COUNT }, (_, i) => <SkeletonCard key={`s-${i}`} />)\n            : visible.map((p) => <ProductCard key={p.id} product={p} wished={wishlist.has(p.id)} onToggleWish={toggleWish} onAdd={addToCart} onQuickView={setQuickView} />)}\n        </ul>\n      </Column>\n\n      <div role=\"status\" aria-live=\"polite\" className=\"pc-sr\">\n        {status}\n      </div>\n\n      {quickView ? (\n        <Flex\n          position=\"fixed\"\n          top=\"0\"\n          left=\"0\"\n          fillWidth\n          fillHeight\n          center\n          padding=\"16\"\n          style={{ background: \"rgba(0,0,0,0.55)\", zIndex: 50 }}\n          onClick={() => setQuickView(null)}\n        >\n          <div\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-labelledby=\"qv-title\"\n            onClick={(e) => e.stopPropagation()}\n            style={{ background: \"var(--page-background, #fff)\", color: \"inherit\", borderRadius: 16, maxWidth: 420, width: \"100%\", overflow: \"hidden\", border: \"1px solid rgba(127,127,127,0.3)\" }}\n          >\n            <div style={{ aspectRatio: \"16 / 10\", background: `linear-gradient(135deg, ${quickView.colors[1]}, ${quickView.colors[0]})` }}>\n              <svg viewBox=\"0 0 200 200\" aria-hidden=\"true\" style={{ width: \"100%\", height: \"100%\" }}>\n                <Illustration shape={quickView.shape} />\n              </svg>\n            </div>\n            <Column gap=\"12\" padding=\"20\">\n              <Heading as=\"h2\" variant=\"heading-strong-l\" id=\"qv-title\">\n                {quickView.name}\n              </Heading>\n              <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                {quickView.category} · rated {quickView.rating.toFixed(1)} from {quickView.reviews.toLocaleString(\"en-US\")} reviews.\n              </Text>\n              <Text variant=\"heading-strong-l\">{currency.format(quickView.price)}</Text>\n              <Row gap=\"8\" horizontal=\"end\">\n                <Button variant=\"secondary\" onClick={() => setQuickView(null)} autoFocus>\n                  Close\n                </Button>\n                <Button\n                  variant=\"primary\"\n                  onClick={() => {\n                    addToCart(quickView);\n                    setQuickView(null);\n                  }}\n                >\n                  Add to cart\n                </Button>\n              </Row>\n            </Column>\n          </div>\n        </Flex>\n      ) : null}\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

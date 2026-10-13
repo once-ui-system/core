@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Feedback widget — floating trigger, dialog with rating chips, textarea, toast on submit.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BZTzX3BTeoxEmjQAZMyRrv",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PzCA2bpWN4KpBmbVVRNL4E",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BZTzX3BTeoxEmjQAZMyRrv",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PzCA2bpWN4KpBmbVVRNL4E",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01TqFpzFagN76hAZGz3LMheP",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VDr53Q2gTJPhmUzAwwAqbw",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CSqH4rCD58m3i7GdZfPdF8",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TqFpzFagN76hAZGz3LMheP",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VDr53Q2gTJPhmUzAwwAqbw",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CSqH4rCD58m3i7GdZfPdF8",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01W2LT6PBfNwMR1BGnn199mU",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01YaRGXVfWHDvHXzz8g3VZNE",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018C6gAKszwyqWZSGAx76hBd",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01W2LT6PBfNwMR1BGnn199mU",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01YaRGXVfWHDvHXzz8g3VZNE",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018C6gAKszwyqWZSGAx76hBd",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll build the page with a native `<dialog>` for focus trapping and Esc handling, and a live-region toast.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { FormEvent } from \"react\";\nimport {\n  MessageSquarePlus,\n  X,\n  CheckCircle2,\n  Frown,\n  Meh,\n  Smile,\n  Laugh,\n  Angry,\n  ArrowRight,\n  BarChart3,\n  Users,\n  Zap,\n} from \"lucide-react\";\n\ntype Rating = {\n  value: number;\n  label: string;\n  Icon: typeof Smile;\n};\n\nconst RATINGS: Rating[] = [\n  { value: 1, label: \"Terrible\", Icon: Angry },\n  { value: 2, label: \"Poor\", Icon: Frown },\n  { value: 3, label: \"Okay\", Icon: Meh },\n  { value: 4, label: \"Good\", Icon: Smile },\n  { value: 5, label: \"Great\", Icon: Laugh },\n];\n\nconst MAX_LENGTH = 500;\n\nconst STATS = [\n  { label: \"Active projects\", value: \"128\", Icon: BarChart3 },\n  { label: \"Team members\", value: \"24\", Icon: Users },\n  { label: \"Deploys this week\", value: \"312\", Icon: Zap },\n];\n\nconst ACTIVITY = [\n  { who: \"Priya Nair\", what: \"merged “Billing page redesign”\", when: \"12 min ago\" },\n  { who: \"Tomás Herrera\", what: \"opened a review on “Webhook retries”\", when: \"1 hr ago\" },\n  { who: \"Aisha Okafor\", what: \"published release v2.14.0\", when: \"3 hrs ago\" },\n  { who: \"Jonas Lindqvist\", what: \"commented on “Onboarding checklist”\", when: \"Yesterday\" },\n];\n\nexport default function Page() {\n  const dialogRef = useRef<HTMLDialogElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const [open, setOpen] = useState(false);\n  const [rating, setRating] = useState<number | null>(null);\n  const [message, setMessage] = useState(\"\");\n  const [error, setError] = useState<string | null>(null);\n  const [toast, setToast] = useState<string | null>(null);\n\n  const titleId = useId();\n  const descId = useId();\n  const ratingLabelId = useId();\n  const textId = useId();\n  const errorId = useId();\n\n  const openDialog = useCallback(() => {\n    const dialog = dialogRef.current;\n    if (dialog && !dialog.open) {\n      dialog.showModal();\n      setOpen(true);\n    }\n  }, []);\n\n  const closeDialog = useCallback(() => {\n    const dialog = dialogRef.current;\n    if (dialog?.open) dialog.close();\n  }, []);\n\n  // Sync state when the dialog closes (Esc, close button, form submit).\n  useEffect(() => {\n    const dialog = dialogRef.current;\n    if (!dialog) return;\n    const onClose = () => {\n      setOpen(false);\n      triggerRef.current?.focus();\n    };\n    dialog.addEventListener(\"close\", onClose);\n    return () => dialog.removeEventListener(\"close\", onClose);\n  }, []);\n\n  useEffect(() => {\n    return () => {\n      if (toastTimer.current) clearTimeout(toastTimer.current);\n    };\n  }, []);\n\n  const showToast = (text: string) => {\n    if (toastTimer.current) clearTimeout(toastTimer.current);\n    setToast(text);\n    toastTimer.current = setTimeout(() => setToast(null), 5000);\n  };\n\n  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    if (rating === null) {\n      setError(\"Please choose a rating before sending.\");\n      return;\n    }\n    setError(null);\n    closeDialog();\n    setRating(null);\n    setMessage(\"\");\n    showToast(\"Thanks! Your feedback was sent to the team.\");\n  };\n\n  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {\n    if (e.target === dialogRef.current) closeDialog();\n  };\n\n  // Roving keyboard support for the rating radio group.\n  const handleRatingKey = (e: React.KeyboardEvent<HTMLDivElement>) => {\n    const keys = [\"ArrowRight\", \"ArrowDown\", \"ArrowLeft\", \"ArrowUp\"];\n    if (!keys.includes(e.key)) return;\n    e.preventDefault();\n    const forward = e.key === \"ArrowRight\" || e.key === \"ArrowDown\";\n    const current = rating ?? (forward ? 0 : 6);\n    const next = forward ? (current % 5) + 1 : current <= 1 ? 5 : current - 1;\n    setRating(next);\n    setError(null);\n    const el = e.currentTarget.querySelector<HTMLButtonElement>(\n      `[data-value=\"${next}\"]`,\n    );\n    el?.focus();\n  };\n\n  return (\n    <main className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6\">\n          <div className=\"flex items-center gap-2\">\n            <span\n              aria-hidden=\"true\"\n              className=\"grid size-8 place-items-center rounded-lg bg-indigo-600 text-sm font-bold text-white\"\n            >\n              L\n            </span>\n            <span className=\"text-lg font-semibold tracking-tight\">Launchpad</span>\n          </div>\n          <nav aria-label=\"Primary\" className=\"hidden gap-6 text-sm text-slate-600 sm:flex\">\n            <a href=\"#overview\" className=\"hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\">\n              Overview\n            </a>\n            <a href=\"#activity\" className=\"hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\">\n              Activity\n            </a>\n          </nav>\n        </div>\n      </header>\n\n      <div className=\"mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12\">\n        <section id=\"overview\" aria-labelledby=\"overview-title\">\n          <p className=\"text-sm font-medium text-indigo-600\">Workspace · Acme Studio</p>\n          <h1\n            id=\"overview-title\"\n            className=\"mt-1 text-3xl font-bold tracking-tight sm:text-4xl\"\n          >\n            Good morning, Maya\n          </h1>\n          <p className=\"mt-2 max-w-2xl text-slate-600\">\n            Here is what your team shipped recently. Tell us how Launchpad is working for you\n            using the feedback button in the corner.\n          </p>\n\n          <ul className=\"mt-8 grid gap-4 sm:grid-cols-3\">\n            {STATS.map(({ label, value, Icon }) => (\n              <li\n                key={label}\n                className=\"flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm\"\n              >\n                <span className=\"grid size-11 place-items-center rounded-lg bg-indigo-50 text-indigo-600\">\n                  <Icon className=\"size-5\" aria-hidden=\"true\" />\n                </span>\n                <div>\n                  <p className=\"text-2xl font-semibold leading-none\">{value}</p>\n                  <p className=\"mt-1 text-sm text-slate-500\">{label}</p>\n                </div>\n              </li>\n            ))}\n          </ul>\n        </section>\n\n        <section id=\"activity\" aria-labelledby=\"activity-title\" className=\"mt-10\">\n          <h2 id=\"activity-title\" className=\"text-xl font-semibold\">\n            Recent activity\n          </h2>\n          <ul className=\"mt-4 divide-y divide-slate-100 rounded-xl border border-slate-200 bg-white shadow-sm\">\n            {ACTIVITY.map((item) => (\n              <li\n                key={item.what}\n                className=\"flex flex-col gap-1 px-4 py-3 sm:flex-row sm:items-center sm:justify-between\"\n              >\n                <p className=\"text-sm\">\n                  <span className=\"font-medium\">{item.who}</span>{\" \"}\n                  <span className=\"text-slate-600\">{item.what}</span>\n                </p>\n                <span className=\"text-xs text-slate-500\">{item.when}</span>\n              </li>\n            ))}\n          </ul>\n          <button\n            type=\"button\"\n            onClick={openDialog}\n            className=\"mt-6 inline-flex items-center gap-2 rounded-lg text-sm font-medium text-indigo-600 hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          >\n            Something not working? Share feedback\n            <ArrowRight className=\"size-4\" aria-hidden=\"true\" />\n          </button>\n        </section>\n      </div>\n\n      {/* Floating trigger */}\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        onClick={openDialog}\n        aria-haspopup=\"dialog\"\n        aria-expanded={open}\n        className=\"fixed bottom-4 right-4 z-30 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-3 text-sm font-medium text-white shadow-lg shadow-indigo-600/30 transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:bottom-6 sm:right-6 motion-reduce:transition-none\"\n      >\n        <MessageSquarePlus className=\"size-5\" aria-hidden=\"true\" />\n        <span>Feedback</span>\n      </button>\n\n      {/* Dialog */}\n      <dialog\n        ref={dialogRef}\n        aria-labelledby={titleId}\n        aria-describedby={descId}\n        onClick={handleBackdropClick}\n        className=\"m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border border-slate-200 bg-white p-0 text-slate-900 shadow-2xl backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm\"\n      >\n        <form onSubmit={handleSubmit} noValidate className=\"p-5 sm:p-6\">\n          <div className=\"flex items-start justify-between gap-4\">\n            <div>\n              <h2 id={titleId} className=\"text-lg font-semibold\">\n                Send us feedback\n              </h2>\n              <p id={descId} className=\"mt-1 text-sm text-slate-600\">\n                How is your experience with Launchpad so far?\n              </p>\n            </div>\n            <button\n              type=\"button\"\n              onClick={closeDialog}\n              aria-label=\"Close feedback dialog\"\n              className=\"-mr-2 -mt-2 grid size-9 shrink-0 place-items-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            >\n              <X className=\"size-5\" aria-hidden=\"true\" />\n            </button>\n          </div>\n\n          <div className=\"mt-5\">\n            <p id={ratingLabelId} className=\"text-sm font-medium\">\n              Your rating\n            </p>\n            <div\n              role=\"radiogroup\"\n              aria-labelledby={ratingLabelId}\n              aria-describedby={error ? errorId : undefined}\n              onKeyDown={handleRatingKey}\n              className=\"mt-2 grid grid-cols-5 gap-2\"\n            >\n              {RATINGS.map(({ value, label, Icon }) => {\n                const selected = rating === value;\n                const focusable = selected || (rating === null && value === 1);\n                return (\n                  <button\n                    key={value}\n                    type=\"button\"\n                    role=\"radio\"\n                    aria-checked={selected}\n                    data-value={value}\n                    tabIndex={focusable ? 0 : -1}\n                    onClick={() => {\n                      setRating(value);\n                      setError(null);\n                    }}\n                    className={`flex flex-col items-center gap-1 rounded-xl border px-1 py-2.5 text-xs font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 motion-reduce:transition-none ${\n                      selected\n                        ? \"border-indigo-600 bg-indigo-50 text-indigo-700\"\n                        : \"border-slate-200 bg-white text-slate-600 hover:border-slate-300 hover:bg-slate-50\"\n                    }`}\n                  >\n                    <Icon className=\"size-6\" aria-hidden=\"true\" />\n                    <span>{label}</span>\n                  </button>\n                );\n              })}\n            </div>\n            {error && (\n              <p id={errorId} role=\"alert\" className=\"mt-2 text-sm text-red-600\">\n                {error}\n              </p>\n            )}\n          </div>\n\n          <div className=\"mt-5\">\n            <label htmlFor={textId} className=\"text-sm font-medium\">\n              Tell us more <span className=\"font-normal text-slate-500\">(optional)</span>\n            </label>\n            <textarea\n              id={textId}\n              value={message}\n              onChange={(e) => setMessage(e.target.value.slice(0, MAX_LENGTH))}\n              rows={4}\n              maxLength={MAX_LENGTH}\n              placeholder=\"What worked well, or what could be better?\"\n              className=\"mt-2 block w-full resize-y rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm placeholder:text-slate-400 focus-visible:border-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            />\n            <p className=\"mt-1 text-right text-xs text-slate-500\" aria-live=\"off\">\n              {message.length}/{MAX_LENGTH}\n            </p>\n          </div>\n\n          <div className=\"mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\">\n            <button\n              type=\"button\"\n              onClick={closeDialog}\n              className=\"rounded-lg border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n            >\n              Cancel\n            </button>\n            <button\n              type=\"submit\"\n              className=\"rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n            >\n              Send feedback\n            </button>\n          </div>\n        </form>\n      </dialog>\n\n      {/* Toast live region (always mounted so announcements are reliable) */}\n      <div\n        role=\"status\"\n        aria-live=\"polite\"\n        className=\"pointer-events-none fixed inset-x-4 bottom-20 z-40 flex justify-center sm:inset-x-auto sm:bottom-24 sm:right-6 sm:justify-end\"\n      >\n        {toast && (\n          <div className=\"pointer-events-auto flex max-w-sm items-start gap-3 rounded-xl bg-slate-900 px-4 py-3 text-sm text-white shadow-xl\">\n            <CheckCircle2 className=\"mt-0.5 size-5 shrink-0 text-emerald-400\" aria-hidden=\"true\" />\n            <p className=\"flex-1\">{toast}</p>\n            <button\n              type=\"button\"\n              onClick={() => setToast(null)}\n              aria-label=\"Dismiss notification\"\n              className=\"-mr-1 grid size-6 shrink-0 place-items-center rounded text-slate-300 hover:text-white focus-visible:outline-2 focus-visible:outline-white\"\n            >\n              <X className=\"size-4\" aria-hidden=\"true\" />\n            </button>\n          </div>\n        )}\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

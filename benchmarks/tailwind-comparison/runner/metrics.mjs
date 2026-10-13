@@ -77,7 +77,7 @@ function importedNames(code, letter) {
 let client;
 let baseline;
 async function exactTokens(text) {
-  client ??= new Anthropic();
+  client ??= new Anthropic(process.env.ANTHROPIC_WORKSPACE_ID ? { defaultHeaders: { "anthropic-workspace-id": process.env.ANTHROPIC_WORKSPACE_ID } } : {});
   const count = async (t) =>
     (await client.messages.countTokens({ model: config.model, messages: [{ role: "user", content: t }] })).input_tokens;
   baseline ??= await count(".");

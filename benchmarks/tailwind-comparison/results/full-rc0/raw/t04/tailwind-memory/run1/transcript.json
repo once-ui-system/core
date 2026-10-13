@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Chat UI — message list with avatars, streaming indicator, input bar with emoji picker, command palette hint.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the existing project files first so the page fits the setup."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FMjf2BnffFz1B49vFaEBk9",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GrS5mJtpxwEgPyT4Goxosy",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FMjf2BnffFz1B49vFaEBk9",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GrS5mJtpxwEgPyT4Goxosy",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01WKe1CCUhnEYGqw51hKxV7m",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Eb8423J364xt5vyRMtdcsS",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019Xxb9rEB7X31T2fZZNETtG",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WKe1CCUhnEYGqw51hKxV7m",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Eb8423J364xt5vyRMtdcsS",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019Xxb9rEB7X31T2fZZNETtG",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01PSVxPeTNtzLbr4sFjC4yvF",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QVUgPE1y3TW3AD2SEDqZxt",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MdzVkgRtWKG7bKdG8V3vWY",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PSVxPeTNtzLbr4sFjC4yvF",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QVUgPE1y3TW3AD2SEDqZxt",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MdzVkgRtWKG7bKdG8V3vWY",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport {\n  useCallback,\n  useEffect,\n  useId,\n  useMemo,\n  useRef,\n  useState,\n  type KeyboardEvent,\n} from \"react\";\nimport {\n  ArrowUp,\n  Command,\n  Hash,\n  Search,\n  Smile,\n  Users,\n  Phone,\n  Video,\n  Sparkles,\n  Pin,\n  AtSign,\n  X,\n} from \"lucide-react\";\n\ntype Author = {\n  id: string;\n  name: string;\n  initials: string;\n  color: string;\n  role?: string;\n};\n\ntype Message = {\n  id: string;\n  authorId: string;\n  time: string;\n  text: string;\n  reactions?: { emoji: string; count: number }[];\n};\n\nconst AUTHORS: Record<string, Author> = {\n  me: { id: \"me\", name: \"You\", initials: \"YO\", color: \"bg-indigo-600\" },\n  maya: {\n    id: \"maya\",\n    name: \"Maya Okafor\",\n    initials: \"MO\",\n    color: \"bg-rose-500\",\n    role: \"Design\",\n  },\n  dev: {\n    id: \"dev\",\n    name: \"Devansh Rao\",\n    initials: \"DR\",\n    color: \"bg-emerald-600\",\n    role: \"Engineering\",\n  },\n  lena: {\n    id: \"lena\",\n    name: \"Lena Fischer\",\n    initials: \"LF\",\n    color: \"bg-amber-600\",\n    role: \"Product\",\n  },\n  bot: {\n    id: \"bot\",\n    name: \"Relay Assistant\",\n    initials: \"RA\",\n    color: \"bg-violet-600\",\n    role: \"Bot\",\n  },\n};\n\nconst INITIAL_MESSAGES: Message[] = [\n  {\n    id: \"m1\",\n    authorId: \"lena\",\n    time: \"9:12 AM\",\n    text: \"Morning all! Quick reminder that the 2.4 release branch gets cut at 2 PM today. Anything still in review should be flagged now.\",\n    reactions: [{ emoji: \"👍\", count: 4 }],\n  },\n  {\n    id: \"m2\",\n    authorId: \"dev\",\n    time: \"9:15 AM\",\n    text: \"The checkout retry fix is merged. I'm still waiting on a second look at the notifications migration, it touches the queue worker.\",\n  },\n  {\n    id: \"m3\",\n    authorId: \"maya\",\n    time: \"9:21 AM\",\n    text: \"I can review the migration after standup. Also, the new empty-state illustrations are in Figma, ready for handoff 🎨\",\n    reactions: [\n      { emoji: \"🎉\", count: 3 },\n      { emoji: \"🙏\", count: 1 },\n    ],\n  },\n  {\n    id: \"m4\",\n    authorId: \"me\",\n    time: \"9:24 AM\",\n    text: \"Thanks Maya! I'll pull the illustrations into the onboarding flow this afternoon. Can someone summarise the open blockers for the release?\",\n  },\n  {\n    id: \"m5\",\n    authorId: \"bot\",\n    time: \"9:24 AM\",\n    text: \"Here's the current picture for 2.4: 2 pull requests awaiting review, 1 flaky test on the billing suite (retried twice, passing), and 0 open P1 bugs. The notifications migration is the only item on the critical path.\",\n  },\n];\n\nconst EMOJIS = [\n  \"😀\", \"😂\", \"🙂\", \"😍\", \"🤔\", \"😅\", \"😎\", \"🥳\",\n  \"👍\", \"👏\", \"🙌\", \"🙏\", \"💪\", \"🔥\", \"✨\", \"🎉\",\n  \"🚀\", \"✅\", \"👀\", \"💡\", \"❤️\", \"😮\", \"😢\", \"🤝\",\n];\n\nconst COMMANDS = [\n  { cmd: \"/summarize\", desc: \"Summarize this channel\" },\n  { cmd: \"/remind\", desc: \"Set a reminder for the team\" },\n  { cmd: \"/poll\", desc: \"Create a quick poll\" },\n  { cmd: \"/status\", desc: \"Update your status\" },\n];\n\nconst BOT_REPLIES = [\n  \"Got it. I've noted that and will keep an eye on the notifications migration. I'll post here as soon as the review is approved and CI is green.\",\n  \"Sure thing. Based on the last 24 hours of activity, the team is on track for the 2 PM cut. I'll ping the reviewers if nothing moves by noon.\",\n];\n\nfunction Avatar({ author, size = \"md\" }: { author: Author; size?: \"sm\" | \"md\" }) {\n  const dims = size === \"sm\" ? \"size-7 text-[10px]\" : \"size-9 text-xs\";\n  return (\n    <span\n      aria-hidden=\"true\"\n      className={`${dims} ${author.color} inline-flex shrink-0 select-none items-center justify-center rounded-full font-semibold text-white`}\n    >\n      {author.id === \"bot\" ? <Sparkles className=\"size-4\" /> : author.initials}\n    </span>\n  );\n}\n\nfunction TypingDots() {\n  return (\n    <span className=\"inline-flex items-center gap-1\" aria-hidden=\"true\">\n      {[0, 1, 2].map((i) => (\n        <span\n          key={i}\n          className=\"size-1.5 animate-bounce rounded-full bg-slate-400 motion-reduce:animate-none\"\n          style={{ animationDelay: `${i * 150}ms` }}\n        />\n      ))}\n    </span>\n  );\n}\n\nexport default function Page() {\n  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);\n  const [draft, setDraft] = useState(\"\");\n  const [emojiOpen, setEmojiOpen] = useState(false);\n  const [streaming, setStreaming] = useState(false);\n  const [streamText, setStreamText] = useState(\"\");\n  const [paletteOpen, setPaletteOpen] = useState(false);\n  const [paletteQuery, setPaletteQuery] = useState(\"\");\n\n  const inputRef = useRef<HTMLTextAreaElement>(null);\n  const paletteInputRef = useRef<HTMLInputElement>(null);\n  const endRef = useRef<HTMLDivElement>(null);\n  const emojiWrapRef = useRef<HTMLDivElement>(null);\n  const emojiBtnRef = useRef<HTMLButtonElement>(null);\n  const timersRef = useRef<number[]>([]);\n  const replyIndex = useRef(0);\n  const idCounter = useRef(0);\n\n  const emojiPanelId = useId();\n  const paletteTitleId = useId();\n\n  const clearTimers = useCallback(() => {\n    timersRef.current.forEach((t) => window.clearTimeout(t));\n    timersRef.current = [];\n  }, []);\n\n  useEffect(() => clearTimers, [clearTimers]);\n\n  useEffect(() => {\n    endRef.current?.scrollIntoView({ block: \"end\" });\n  }, [messages, streamText, streaming]);\n\n  // Global shortcut for the command palette\n  useEffect(() => {\n    const onKey = (e: globalThis.KeyboardEvent) => {\n      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === \"k\") {\n        e.preventDefault();\n        setPaletteOpen((o) => !o);\n      }\n    };\n    window.addEventListener(\"keydown\", onKey);\n    return () => window.removeEventListener(\"keydown\", onKey);\n  }, []);\n\n  useEffect(() => {\n    if (paletteOpen) {\n      paletteInputRef.current?.focus();\n    } else {\n      setPaletteQuery(\"\");\n    }\n  }, [paletteOpen]);\n\n  // Close the emoji picker on outside click\n  useEffect(() => {\n    if (!emojiOpen) return;\n    const onDown = (e: MouseEvent) => {\n      const target = e.target as Node;\n      if (\n        !emojiWrapRef.current?.contains(target) &&\n        !emojiBtnRef.current?.contains(target)\n      ) {\n        setEmojiOpen(false);\n      }\n    };\n    document.addEventListener(\"mousedown\", onDown);\n    return () => document.removeEventListener(\"mousedown\", onDown);\n  }, [emojiOpen]);\n\n  const nextId = () => {\n    idCounter.current += 1;\n    return `local-${idCounter.current}`;\n  };\n\n  const startStreaming = useCallback(() => {\n    const reply = BOT_REPLIES[replyIndex.current % BOT_REPLIES.length];\n    replyIndex.current += 1;\n    const words = reply.split(\" \");\n    setStreaming(true);\n    setStreamText(\"\");\n\n    let i = 0;\n    const tick = () => {\n      i += 1;\n      setStreamText(words.slice(0, i).join(\" \"));\n      if (i < words.length) {\n        timersRef.current.push(window.setTimeout(tick, 60));\n      } else {\n        timersRef.current.push(\n          window.setTimeout(() => {\n            idCounter.current += 1;\n            setMessages((m) => [\n              ...m,\n              {\n                id: `local-${idCounter.current}`,\n                authorId: \"bot\",\n                time: new Date().toLocaleTimeString([], {\n                  hour: \"numeric\",\n                  minute: \"2-digit\",\n                }),\n                text: reply,\n              },\n            ]);\n            setStreaming(false);\n            setStreamText(\"\");\n          }, 150),\n        );\n      }\n    };\n    timersRef.current.push(window.setTimeout(tick, 900));\n  }, []);\n\n  const send = () => {\n    const text = draft.trim();\n    if (!text || streaming) return;\n    setMessages((m) => [\n      ...m,\n      {\n        id: nextId(),\n        authorId: \"me\",\n        time: new Date().toLocaleTimeString([], {\n          hour: \"numeric\",\n          minute: \"2-digit\",\n        }),\n        text,\n      },\n    ]);\n    setDraft(\"\");\n    setEmojiOpen(false);\n    startStreaming();\n  };\n\n  const onInputKey = (e: KeyboardEvent<HTMLTextAreaElement>) => {\n    if (e.key === \"Enter\" && !e.shiftKey) {\n      e.preventDefault();\n      send();\n    } else if (e.key === \"Escape\") {\n      setEmojiOpen(false);\n    }\n  };\n\n  const insertEmoji = (emoji: string) => {\n    const el = inputRef.current;\n    if (!el) {\n      setDraft((d) => d + emoji);\n      return;\n    }\n    const start = el.selectionStart;\n    const end = el.selectionEnd;\n    const next = draft.slice(0, start) + emoji + draft.slice(end);\n    setDraft(next);\n    requestAnimationFrame(() => {\n      el.focus();\n      const pos = start + emoji.length;\n      el.setSelectionRange(pos, pos);\n    });\n  };\n\n  const filteredCommands = useMemo(() => {\n    const q = paletteQuery.trim().toLowerCase();\n    if (!q) return COMMANDS;\n    return COMMANDS.filter(\n      (c) =>\n        c.cmd.toLowerCase().includes(q) || c.desc.toLowerCase().includes(q),\n    );\n  }, [paletteQuery]);\n\n  const runCommand = (cmd: string) => {\n    setPaletteOpen(false);\n    setDraft(cmd + \" \");\n    requestAnimationFrame(() => inputRef.current?.focus());\n  };\n\n  const onPaletteKey = (e: KeyboardEvent<HTMLDivElement>) => {\n    if (e.key === \"Escape\") {\n      e.stopPropagation();\n      setPaletteOpen(false);\n      requestAnimationFrame(() => inputRef.current?.focus());\n    }\n  };\n\n  return (\n    <div className=\"flex h-dvh w-full flex-col bg-slate-100 text-slate-900 sm:p-4 md:p-6\">\n      <div className=\"mx-auto flex min-h-0 w-full max-w-4xl flex-1 flex-col overflow-hidden bg-white shadow-xl ring-1 ring-slate-200 sm:rounded-2xl\">\n        {/* Header */}\n        <header className=\"flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-6\">\n          <div className=\"flex min-w-0 items-center gap-3\">\n            <span\n              aria-hidden=\"true\"\n              className=\"inline-flex size-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600\"\n            >\n              <Hash className=\"size-5\" />\n            </span>\n            <div className=\"min-w-0\">\n              <h1 className=\"truncate text-base font-semibold leading-tight\">\n                release-2-4\n              </h1>\n              <p className=\"flex items-center gap-1.5 truncate text-xs text-slate-500\">\n                <Users className=\"size-3.5 shrink-0\" aria-hidden=\"true\" />\n                <span>12 members · 4 online</span>\n              </p>\n            </div>\n          </div>\n          <div className=\"flex items-center gap-1\">\n            {[\n              { label: \"Start voice call\", Icon: Phone },\n              { label: \"Start video call\", Icon: Video },\n              { label: \"Pinned messages\", Icon: Pin },\n            ].map(({ label, Icon }) => (\n              <button\n                key={label}\n                type=\"button\"\n                aria-label={label}\n                className=\"hidden size-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:inline-flex\"\n              >\n                <Icon className=\"size-4\" aria-hidden=\"true\" />\n              </button>\n            ))}\n            <button\n              type=\"button\"\n              onClick={() => setPaletteOpen(true)}\n              aria-label=\"Open command palette\"\n              className=\"inline-flex size-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:hidden\"\n            >\n              <Search className=\"size-4\" aria-hidden=\"true\" />\n            </button>\n          </div>\n        </header>\n\n        {/* Messages */}\n        <div\n          className=\"min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6\"\n          role=\"log\"\n          aria-label=\"Conversation in release-2-4\"\n          aria-live=\"polite\"\n          aria-relevant=\"additions\"\n          tabIndex={0}\n        >\n          <div className=\"mb-4 flex items-center gap-3 text-xs font-medium text-slate-400\">\n            <span className=\"h-px flex-1 bg-slate-200\" />\n            Today\n            <span className=\"h-px flex-1 bg-slate-200\" />\n          </div>\n\n          <ul className=\"flex flex-col gap-4\">\n            {messages.map((m, idx) => {\n              const author = AUTHORS[m.authorId];\n              const mine = author.id === \"me\";\n              const prev = messages[idx - 1];\n              const grouped = prev?.authorId === m.authorId;\n              return (\n                <li\n                  key={m.id}\n                  className={`flex items-end gap-2.5 ${mine ? \"flex-row-reverse\" : \"\"} ${grouped ? \"-mt-2\" : \"\"}`}\n                >\n                  <div className={grouped ? \"invisible\" : \"\"}>\n                    <Avatar author={author} />\n                  </div>\n                  <div\n                    className={`flex min-w-0 max-w-[85%] flex-col sm:max-w-[75%] ${mine ? \"items-end\" : \"items-start\"}`}\n                  >\n                    {!grouped && (\n                      <p\n                        className={`mb-1 flex items-baseline gap-2 text-xs ${mine ? \"flex-row-reverse\" : \"\"}`}\n                      >\n                        <span className=\"font-semibold text-slate-800\">\n                          {author.name}\n                        </span>\n                        {author.role && (\n                          <span\n                            className={`rounded px-1.5 py-px text-[10px] font-medium ${author.id === \"bot\" ? \"bg-violet-100 text-violet-700\" : \"bg-slate-100 text-slate-600\"}`}\n                          >\n                            {author.role}\n                          </span>\n                        )}\n                        <time className=\"text-slate-500\">{m.time}</time>\n                      </p>\n                    )}\n                    <div\n                      className={`whitespace-pre-wrap break-words rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${\n                        mine\n                          ? \"rounded-br-md bg-indigo-600 text-white\"\n                          : \"rounded-bl-md bg-slate-100 text-slate-800\"\n                      }`}\n                    >\n                      {m.text}\n                    </div>\n                    {m.reactions && (\n                      <ul\n                        className=\"mt-1 flex flex-wrap gap-1\"\n                        aria-label=\"Reactions\"\n                      >\n                        {m.reactions.map((r) => (\n                          <li\n                            key={r.emoji}\n                            className=\"inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs text-slate-700\"\n                          >\n                            <span aria-hidden=\"true\">{r.emoji}</span>\n                            <span>\n                              <span className=\"sr-only\">reaction, </span>\n                              {r.count}\n                            </span>\n                          </li>\n                        ))}\n                      </ul>\n                    )}\n                  </div>\n                </li>\n              );\n            })}\n\n            {streaming && (\n              <li className=\"flex items-end gap-2.5\">\n                <Avatar author={AUTHORS.bot} />\n                <div className=\"flex min-w-0 max-w-[85%] flex-col items-start sm:max-w-[75%]\">\n                  <p className=\"mb-1 flex items-baseline gap-2 text-xs\">\n                    <span className=\"font-semibold text-slate-800\">\n                      {AUTHORS.bot.name}\n                    </span>\n                    <span className=\"rounded bg-violet-100 px-1.5 py-px text-[10px] font-medium text-violet-700\">\n                      {streamText ? \"Writing…\" : \"Thinking…\"}\n                    </span>\n                  </p>\n                  <div className=\"whitespace-pre-wrap break-words rounded-2xl rounded-bl-md bg-slate-100 px-3.5 py-2 text-sm leading-relaxed text-slate-800\">\n                    {streamText ? (\n                      <>\n                        {streamText}\n                        <span\n                          aria-hidden=\"true\"\n                          className=\"ml-0.5 inline-block h-4 w-0.5 translate-y-0.5 animate-pulse bg-violet-600 motion-reduce:animate-none\"\n                        />\n                      </>\n                    ) : (\n                      <TypingDots />\n                    )}\n                  </div>\n                </div>\n              </li>\n            )}\n          </ul>\n          <div ref={endRef} />\n        </div>\n\n        {/* Status for screen readers */}\n        <p className=\"sr-only\" role=\"status\">\n          {streaming ? \"Relay Assistant is typing\" : \"\"}\n        </p>\n\n        {/* Input bar */}\n        <div className=\"relative border-t border-slate-200 bg-white px-3 pb-3 pt-3 sm:px-6 sm:pb-4\">\n          {emojiOpen && (\n            <div\n              ref={emojiWrapRef}\n              id={emojiPanelId}\n              role=\"dialog\"\n              aria-label=\"Emoji picker\"\n              className=\"absolute bottom-full left-3 z-10 mb-2 w-[min(18rem,calc(100%-1.5rem))] rounded-xl border border-slate-200 bg-white p-2 shadow-lg sm:left-6\"\n            >\n              <ul className=\"grid grid-cols-8 gap-0.5\">\n                {EMOJIS.map((e) => (\n                  <li key={e}>\n                    <button\n                      type=\"button\"\n                      onClick={() => insertEmoji(e)}\n                      aria-label={`Insert ${e}`}\n                      className=\"inline-flex size-8 items-center justify-center rounded-md text-lg hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n                    >\n                      {e}\n                    </button>\n                  </li>\n                ))}\n              </ul>\n            </div>\n          )}\n\n          <div className=\"flex items-end gap-2 rounded-2xl border border-slate-300 bg-white p-1.5 focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-500/30\">\n            <button\n              ref={emojiBtnRef}\n              type=\"button\"\n              onClick={() => setEmojiOpen((o) => !o)}\n              aria-label=\"Choose emoji\"\n              aria-haspopup=\"dialog\"\n              aria-expanded={emojiOpen}\n              aria-controls={emojiOpen ? emojiPanelId : undefined}\n              className=\"inline-flex size-9 shrink-0 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            >\n              <Smile className=\"size-5\" aria-hidden=\"true\" />\n            </button>\n            <label htmlFor=\"chat-input\" className=\"sr-only\">\n              Message #release-2-4\n            </label>\n            <textarea\n              id=\"chat-input\"\n              ref={inputRef}\n              value={draft}\n              onChange={(e) => setDraft(e.target.value)}\n              onKeyDown={onInputKey}\n              rows={1}\n              placeholder=\"Message #release-2-4\"\n              className=\"max-h-32 min-h-9 flex-1 resize-none bg-transparent px-1 py-2 text-sm leading-5 text-slate-900 placeholder:text-slate-500 focus:outline-none\"\n            />\n            <button\n              type=\"button\"\n              onClick={send}\n              disabled={!draft.trim() || streaming}\n              aria-label=\"Send message\"\n              className=\"inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-500\"\n            >\n              <ArrowUp className=\"size-5\" aria-hidden=\"true\" />\n            </button>\n          </div>\n\n          <div className=\"mt-2 flex flex-wrap items-center justify-between gap-x-4 gap-y-1 px-1 text-xs text-slate-500\">\n            <button\n              type=\"button\"\n              onClick={() => setPaletteOpen(true)}\n              className=\"hidden items-center gap-1.5 rounded-md py-0.5 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600 sm:inline-flex\"\n            >\n              <Command className=\"size-3.5\" aria-hidden=\"true\" />\n              Press\n              <kbd className=\"rounded border border-slate-300 bg-slate-50 px-1.5 py-px font-sans text-[11px] font-medium text-slate-600\">\n                Ctrl K\n              </kbd>\n              for commands\n            </button>\n            <span className=\"inline-flex items-center gap-1.5\">\n              <AtSign className=\"size-3.5\" aria-hidden=\"true\" />\n              Enter to send · Shift+Enter for a new line\n            </span>\n          </div>\n        </div>\n      </div>\n\n      {/* Command palette */}\n      {paletteOpen && (\n        <div\n          className=\"fixed inset-0 z-50 flex items-start justify-center bg-slate-900/40 p-4 pt-[15vh]\"\n          onMouseDown={(e) => {\n            if (e.target === e.currentTarget) setPaletteOpen(false);\n          }}\n        >\n          <div\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-labelledby={paletteTitleId}\n            onKeyDown={onPaletteKey}\n            className=\"w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-slate-200\"\n          >\n            <h2 id={paletteTitleId} className=\"sr-only\">\n              Command palette\n            </h2>\n            <div className=\"flex items-center gap-2 border-b border-slate-200 px-3\">\n              <Search className=\"size-4 text-slate-500\" aria-hidden=\"true\" />\n              <input\n                ref={paletteInputRef}\n                value={paletteQuery}\n                onChange={(e) => setPaletteQuery(e.target.value)}\n                onKeyDown={(e) => {\n                  if (e.key === \"Enter\" && filteredCommands[0]) {\n                    e.preventDefault();\n                    runCommand(filteredCommands[0].cmd);\n                  }\n                }}\n                aria-label=\"Search commands\"\n                placeholder=\"Type a command…\"\n                className=\"h-12 flex-1 bg-transparent text-sm text-slate-900 placeholder:text-slate-500 focus:outline-none\"\n              />\n              <button\n                type=\"button\"\n                onClick={() => setPaletteOpen(false)}\n                aria-label=\"Close command palette\"\n                className=\"inline-flex size-8 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n              >\n                <X className=\"size-4\" aria-hidden=\"true\" />\n              </button>\n            </div>\n            {filteredCommands.length > 0 ? (\n              <ul className=\"max-h-72 overflow-y-auto p-1.5\">\n                {filteredCommands.map((c, i) => (\n                  <li key={c.cmd}>\n                    <button\n                      type=\"button\"\n                      onClick={() => runCommand(c.cmd)}\n                      className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm hover:bg-indigo-50 focus-visible:bg-indigo-50 focus-visible:outline-none ${i === 0 ? \"bg-slate-50\" : \"\"}`}\n                    >\n                      <span className=\"font-mono font-medium text-slate-900\">\n                        {c.cmd}\n                      </span>\n                      <span className=\"truncate text-xs text-slate-500\">\n                        {c.desc}\n                      </span>\n                    </button>\n                  </li>\n                ))}\n              </ul>\n            ) : (\n              <p className=\"px-4 py-6 text-center text-sm text-slate-500\">\n                No commands match “{paletteQuery}”.\n              </p>\n            )}\n          </div>\n        </div>\n      )}\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(138,17): error TS2322: Type '{ children: Element; key: string; as: \"button\"; type: string; onClick: () => void; \"aria-pressed\": boolean; \"aria-label\": string; paddingX: \"8\"; paddingY: \"2\"; gap: \"4\"; radius: \"full\"; vertical: \"center\"; border: true; background: \"brand-alpha-medium\" | \"surface\"; cursor: string; }' is not assignable to type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'type' does not exist on type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\napp/page.tsx(460,19): error TS2322: Type '{ children: Element[]; as: \"button\"; type: string; onClick: () => void; paddingX: \"12\"; paddingY: \"4\"; gap: \"8\"; radius: \"full\"; vertical: \"center\"; border: true; background: \"surface\"; cursor: string; }' is not assignable to type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'type' does not exist on type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\napp/page.tsx(479,21): error TS2322: Type '{ children: Element; key: string; as: \"button\"; type: string; onClick: () => void; paddingX: \"12\"; paddingY: \"4\"; radius: \"full\"; border: true; background: \"surface\"; cursor: string; }' is not assignable to type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'type' does not exist on type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2798
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [layout.defaults] position=\"relative\" is the default — omit it",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

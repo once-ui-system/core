@@ -34,7 +34,7 @@ for (const f of listFiles(path.join(resultsDir, "raw")).filter((f) => f.endsWith
   const att = (usage?.attempts ?? []).filter(Boolean).filter(upto);
   const sum = (k) => att.reduce((s, a) => s + (a[k] ?? 0), 0);
   const allAtt = (usage?.attempts ?? []).filter(Boolean);
-  const readsDocs = (usage?.tool_calls ?? []).filter((c) => c.name === "Read" && c.path?.startsWith("docs/")).length;
+  const readsDocs = (usage?.tool_calls ?? []).filter((c) => (c.name === "Read" || c.name === "read_file") && c.path?.startsWith("docs/")).length;
   const gates = [0, 1, 2, 3].map((n) => readJSON(path.join(dir, `attempt-${n}.gates.json`))).filter(Boolean);
   const accGates = acc != null ? gates[acc] : null;
   rows.push({

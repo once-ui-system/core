@@ -1,0 +1,33 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3101\n- Network:       http://127.0.0.1:3101\n✓ Ready in 194ms\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3018
+    },
+    "build": {
+      "ok": true,
+      "ms": 11132
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "errors": [
+        "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3101\n- Network:       http://127.0.0.1:3101\n✓ Ready in 194ms\n"
+      ],
+      "axe": null,
+      "interaction": {}
+    }
+  },
+  "validate_ai_code": {
+    "exit": 0,
+    "output": "✓ app/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

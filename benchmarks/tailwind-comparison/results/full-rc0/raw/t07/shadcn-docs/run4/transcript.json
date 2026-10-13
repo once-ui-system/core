@@ -1,0 +1,322 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: E-commerce product card grid — image, price, tag, hover actions, skeleton loading state.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and exploring the project."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0138pC66gv9CjXo7m9qvYxq4",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GYhZJsdMVYsRWMqGQ1shDN",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0138pC66gv9CjXo7m9qvYxq4",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GYhZJsdMVYsRWMqGQ1shDN",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01BW6zJZfvaWMhxSWTw4TYYH",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017v9cYqRseXfa2kGHhix4Ce",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/skeleton.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01G1VsPXamX9qkwtKTRCdDMw",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/card.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BW6zJZfvaWMhxSWTw4TYYH",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017v9cYqRseXfa2kGHhix4Ce",
+          "content": "---\ntitle: Skeleton\ndescription: Use to show a placeholder while content is loading.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add skeleton\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"skeleton\"\n  title=\"components/ui/skeleton.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { Skeleton } from \"@/components/ui/skeleton\"\n```\n\n```tsx\n<Skeleton className=\"h-[20px] w-[100px] rounded-full\" />\n```\n\n## Avatar\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-avatar\" />\n\n## Card\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"skeleton-card\"\n  previewClassName=\"h-80\"\n/>\n\n## Text\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-text\" />\n\n## Form\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-form\" />\n\n## Table\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-table\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-rtl\" direction=\"rtl\" />\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01G1VsPXamX9qkwtKTRCdDMw",
+          "content": "---\ntitle: Card\ndescription: Displays a card with header, content, and footer.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview\n  name=\"card-demo\"\n  styleName=\"radix-nova\"\n  previewClassName=\"h-[30rem]\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add card\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"card\"\n  title=\"components/ui/card.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  Card,\n  CardAction,\n  CardContent,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\"\n```\n\n```tsx showLineNumbers\n<Card>\n  <CardHeader>\n    <CardTitle>Card Title</CardTitle>\n    <CardDescription>Card Description</CardDescription>\n    <CardAction>Card Action</CardAction>\n  </CardHeader>\n  <CardContent>\n    <p>Card Content</p>\n  </CardContent>\n  <CardFooter>\n    <p>Card Footer</p>\n  </CardFooter>\n</Card>\n```\n\n## Composition\n\nUse the following composition to build a `Card`:\n\n```text\nCard\n├── CardHeader\n│   ├── CardTitle\n│   ├── CardDescription\n│   └── CardAction\n├── CardContent\n└── CardFooter\n```\n\n## Size\n\nUse the `size=\"sm\"` prop to set the size of the card to small. The small size variant uses smaller spacing.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-small\"\n  previewClassName=\"h-96\"\n/>\n\n## Spacing\n\nIn addition to the `size` prop, you can use the `--card-spacing` CSS variable to control the spacing between sections and the inset of card parts.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-spacing\"\n  previewClassName=\"h-[34rem]\"\n/>\n\nUse negative margins with `-mx-(--card-spacing)` to make content go edge to edge while keeping it aligned with the card inset. When the edge-to-edge content sits above a footer, use `-mb-(--card-spacing)` on `CardContent` to remove the section gap.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-edge-to-edge\"\n  previewClassName=\"h-[24rem]\"\n/>\n\n## Image\n\nAdd an image before the card header to create a card with an image.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-image\"\n  previewClassName=\"h-[32rem]\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-rtl\"\n  direction=\"rtl\"\n  previewClassName=\"h-[30rem]\"\n/>\n\n## API Reference\n\n### Card\n\nThe `Card` component is the root container for card content.\n\n| Prop        | Type                | Default     |\n| ----------- | ------------------- | ----------- |\n| `size`      | `\"default\" \\| \"sm\"` | `\"default\"` |\n| `className` | `string`            | -           |\n\n### CardHeader\n\nThe `CardHeader` component is used for a title, description, and optional action.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardTitle\n\nThe `CardTitle` component is used for the card title.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardDescription\n\nThe `CardDescription` component is used for helper text under the title.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardAction\n\nThe `CardAction` component places content in the top-right of the header (for example, a button or a badge).\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardContent\n\nThe `CardContent` component is used for the main card body.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardFooter\n\nThe `CardFooter` component is used for actions and secondary content at the bottom of the card.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n## Changelog\n\n### Spacing Variable\n\nIf you're upgrading from a previous version of the `Card` component, you'll need to apply the following updates to use the `--card-spacing` variable:\n\n<Steps>\n\n<Step>Update the Card root spacing classes.</Step>\n\nReplace the hard-coded gap and vertical padding with `--card-spacing`, and set the default and small size values on the root:\n\n```diff\n  className={cn(\n-   \"group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl\",\n+   \"group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl\",\n    className\n  )}\n```\n\n<Step>Update CardHeader spacing classes.</Step>\n\nReplace the horizontal padding and border spacing with the shared variable:\n\n```diff\n  className={cn(\n-   \"group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-4 group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-4 group-data-[size=sm]/card:[.border-b]:pb-3\",\n+   \"group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)\",\n    className\n  )}\n```\n\n<Step>Update CardContent and CardFooter spacing classes.</Step>\n\nUse `--card-spacing` for the content inset and footer padding:\n\n```diff\n  function CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n    return (\n      <div\n        data-slot=\"card-content\"\n-       className={cn(\"px-4 group-data-[size=sm]/card:px-3\", className)}\n+       className={cn(\"px-(--card-spacing)\", className)}\n        {...props}\n      />\n    )\n  }\n```\n\n```diff\n  className={cn(\n-   \"flex items-center rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/card:p-3\",\n+   \"flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing)\",\n    className\n  )}\n```\n\n</Steps>\n\nAfter applying these changes, you can customize card spacing by setting `--card-spacing` on the `Card` with an arbitrary property class:\n\n```tsx\nfunction Example() {\n  return <Card className=\"[--card-spacing:--spacing(6)]\">...</Card>\n}\n```\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the installed components I plan to use."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014ZcYDLABg9MzR8irK39az6",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017RRsbyEnfjEvA4mQr11ENg",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011vPPbvWPD6XVVmDwnoF9Zo",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RC3dKj5AeV3sBQKT4FGosE",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/skeleton.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014ZcYDLABg9MzR8irK39az6",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017RRsbyEnfjEvA4mQr11ENg",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011vPPbvWPD6XVVmDwnoF9Zo",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RC3dKj5AeV3sBQKT4FGosE",
+          "content": "import { cn } from \"@/lib/utils\"\n\nfunction Skeleton({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"skeleton\"\n      className={cn(\"animate-pulse rounded-md bg-accent\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Skeleton }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the Card component, the toggle, and the tsconfig/layout for conventions."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01L8b7mEUjkiEQTY9wK19CHV",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LqYc6wtGhP48QGAFohwxNH",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016hDNs1XyHaX9vV6YUMTCx1",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01L8b7mEUjkiEQTY9wK19CHV",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LqYc6wtGhP48QGAFohwxNH",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016hDNs1XyHaX9vV6YUMTCx1",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The Card here is the simple version (no `size` prop). I'll glance at the existing layout and page."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MkWqsK9sKyvKJ9qm5bhecH",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Vs6Ct3eXScTj9QUvF7suUJ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MkWqsK9sKyvKJ9qm5bhecH",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Vs6Ct3eXScTj9QUvF7suUJ",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I have what I need. Since no images can be loaded from the network, I'll build the product \"images\" as inline SVG illustrations with gradients.\n\n```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport {\n  Heart,\n  RefreshCw,\n  ShoppingBag,\n  Eye,\n  Star,\n  PackageSearch,\n} from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport { Card } from \"@/components/ui/card\";\nimport { Skeleton } from \"@/components/ui/skeleton\";\nimport { cn } from \"@/lib/utils\";\n\ntype Shape = \"lamp\" | \"mug\" | \"chair\" | \"plant\" | \"bottle\" | \"speaker\" | \"clock\" | \"blanket\";\n\ntype Product = {\n  id: string;\n  name: string;\n  category: string;\n  price: number;\n  compareAt?: number;\n  rating: number;\n  reviews: number;\n  tag?: \"New\" | \"Sale\" | \"Bestseller\" | \"Low stock\";\n  shape: Shape;\n  from: string;\n  to: string;\n  accent: string;\n};\n\nconst PRODUCTS: Product[] = [\n  {\n    id: \"p1\",\n    name: \"Arc Floor Lamp\",\n    category: \"Lighting\",\n    price: 189,\n    compareAt: 239,\n    rating: 4.7,\n    reviews: 312,\n    tag: \"Sale\",\n    shape: \"lamp\",\n    from: \"#fde8d0\",\n    to: \"#f6c9a0\",\n    accent: \"#9a4f1c\",\n  },\n  {\n    id: \"p2\",\n    name: \"Stoneware Pour-Over Mug\",\n    category: \"Kitchen\",\n    price: 28,\n    rating: 4.9,\n    reviews: 1204,\n    tag: \"Bestseller\",\n    shape: \"mug\",\n    from: \"#e3ecf5\",\n    to: \"#c3d5e8\",\n    accent: \"#2d4e73\",\n  },\n  {\n    id: \"p3\",\n    name: \"Oslo Lounge Chair\",\n    category: \"Furniture\",\n    price: 449,\n    rating: 4.6,\n    reviews: 87,\n    tag: \"New\",\n    shape: \"chair\",\n    from: \"#e6efe3\",\n    to: \"#c5d9bf\",\n    accent: \"#3c5a35\",\n  },\n  {\n    id: \"p4\",\n    name: \"Monstera in Clay Pot\",\n    category: \"Plants\",\n    price: 54,\n    rating: 4.8,\n    reviews: 640,\n    shape: \"plant\",\n    from: \"#f1ead9\",\n    to: \"#ddd0ae\",\n    accent: \"#4b6b3a\",\n  },\n  {\n    id: \"p5\",\n    name: \"Insulated Steel Bottle 750ml\",\n    category: \"Outdoors\",\n    price: 36,\n    compareAt: 45,\n    rating: 4.5,\n    reviews: 958,\n    tag: \"Sale\",\n    shape: \"bottle\",\n    from: \"#e9e4f3\",\n    to: \"#cfc6e6\",\n    accent: \"#4a3b78\",\n  },\n  {\n    id: \"p6\",\n    name: \"Cove Bluetooth Speaker\",\n    category: \"Audio\",\n    price: 129,\n    rating: 4.4,\n    reviews: 221,\n    tag: \"Low stock\",\n    shape: \"speaker\",\n    from: \"#e8e8e8\",\n    to: \"#cfcfcf\",\n    accent: \"#2b2b2b\",\n  },\n  {\n    id: \"p7\",\n    name: \"Walnut Wall Clock\",\n    category: \"Decor\",\n    price: 79,\n    rating: 4.7,\n    reviews: 145,\n    tag: \"New\",\n    shape: \"clock\",\n    from: \"#f5e3e0\",\n    to: \"#e8c3bd\",\n    accent: \"#7a3a30\",\n  },\n  {\n    id: \"p8\",\n    name: \"Chunky Knit Throw\",\n    category: \"Textiles\",\n    price: 98,\n    rating: 4.9,\n    reviews: 503,\n    tag: \"Bestseller\",\n    shape: \"blanket\",\n    from: \"#f3efe6\",\n    to: \"#e1d8c3\",\n    accent: \"#8a7448\",\n  },\n];\n\nconst currency = new Intl.NumberFormat(\"en-US\", {\n  style: \"currency\",\n  currency: \"USD\",\n  minimumFractionDigits: 0,\n});\n\nfunction tagVariant(tag: NonNullable<Product[\"tag\"]>) {\n  switch (tag) {\n    case \"Sale\":\n      return \"destructive\" as const;\n    case \"Low stock\":\n      return \"outline\" as const;\n    case \"New\":\n      return \"default\" as const;\n    default:\n      return \"secondary\" as const;\n  }\n}\n\nfunction ProductArt({ product }: { product: Product }) {\n  const { shape, accent } = product;\n  const gradientId = `bg-${product.id}`;\n  return (\n    <svg\n      viewBox=\"0 0 200 200\"\n      className=\"size-full\"\n      role=\"img\"\n      aria-label={`Illustration of ${product.name}`}\n      preserveAspectRatio=\"xMidYMid slice\"\n    >\n      <defs>\n        <linearGradient id={gradientId} x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">\n          <stop offset=\"0\" stopColor={product.from} />\n          <stop offset=\"1\" stopColor={product.to} />\n        </linearGradient>\n      </defs>\n      <rect width=\"200\" height=\"200\" fill={`url(#${gradientId})`} />\n      <ellipse cx=\"100\" cy=\"168\" rx=\"56\" ry=\"7\" fill={accent} opacity=\"0.15\" />\n      {shape === \"lamp\" && (\n        <g fill=\"none\" stroke={accent} strokeWidth=\"5\" strokeLinecap=\"round\">\n          <path d=\"M70 164 H112\" />\n          <path d=\"M91 164 V90 C91 48 140 40 148 70\" />\n          <path d=\"M132 70 H164 L158 92 H138 Z\" fill={accent} />\n        </g>\n      )}\n      {shape === \"mug\" && (\n        <g>\n          <rect x=\"62\" y=\"70\" width=\"64\" height=\"82\" rx=\"10\" fill={accent} />\n          <path\n            d=\"M126 88 H138 a14 14 0 0 1 0 38 H126\"\n            fill=\"none\"\n            stroke={accent}\n            strokeWidth=\"8\"\n          />\n          <rect x=\"62\" y=\"70\" width=\"64\" height=\"12\" rx=\"6\" fill=\"#ffffff\" opacity=\"0.25\" />\n        </g>\n      )}\n      {shape === \"chair\" && (\n        <g fill={accent}>\n          <rect x=\"62\" y=\"48\" width=\"76\" height=\"58\" rx=\"14\" />\n          <rect x=\"52\" y=\"100\" width=\"96\" height=\"26\" rx=\"10\" />\n          <rect x=\"60\" y=\"124\" width=\"7\" height=\"42\" rx=\"3\" />\n          <rect x=\"133\" y=\"124\" width=\"7\" height=\"42\" rx=\"3\" />\n        </g>\n      )}\n      {shape === \"plant\" && (\n        <g>\n          <path d=\"M100 120 C60 110 52 70 70 52 C92 62 100 90 100 120 Z\" fill={accent} />\n          <path d=\"M100 120 C140 110 148 70 130 52 C108 62 100 90 100 120 Z\" fill={accent} opacity=\"0.8\" />\n          <path d=\"M100 124 C96 90 100 66 100 44 C112 66 112 96 100 124 Z\" fill={accent} opacity=\"0.9\" />\n          <path d=\"M70 120 H130 L122 164 H78 Z\" fill=\"#b5653c\" />\n          <rect x=\"66\" y=\"114\" width=\"68\" height=\"10\" rx=\"3\" fill=\"#c97a4f\" />\n        </g>\n      )}\n      {shape === \"bottle\" && (\n        <g>\n          <rect x=\"88\" y=\"38\" width=\"24\" height=\"16\" rx=\"4\" fill={accent} />\n          <rect x=\"82\" y=\"52\" width=\"36\" height=\"14\" rx=\"5\" fill={accent} opacity=\"0.85\" />\n          <rect x=\"74\" y=\"64\" width=\"52\" height=\"100\" rx=\"16\" fill={accent} />\n          <rect x=\"84\" y=\"78\" width=\"7\" height=\"70\" rx=\"3.5\" fill=\"#ffffff\" opacity=\"0.25\" />\n        </g>\n      )}\n      {shape === \"speaker\" && (\n        <g>\n          <rect x=\"54\" y=\"62\" width=\"92\" height=\"100\" rx=\"22\" fill={accent} />\n          <circle cx=\"100\" cy=\"124\" r=\"26\" fill=\"none\" stroke=\"#ffffff\" strokeWidth=\"3\" opacity=\"0.5\" />\n          <circle cx=\"100\" cy=\"124\" r=\"12\" fill=\"#ffffff\" opacity=\"0.35\" />\n          <circle cx=\"100\" cy=\"82\" r=\"5\" fill=\"#ffffff\" opacity=\"0.5\" />\n        </g>\n      )}\n      {shape === \"clock\" && (\n        <g>\n          <circle cx=\"100\" cy=\"100\" r=\"62\" fill={accent} />\n          <circle cx=\"100\" cy=\"100\" r=\"52\" fill=\"#fbf6ee\" />\n          <g stroke={accent} strokeWidth=\"4\" strokeLinecap=\"round\">\n            <path d=\"M100 100 V64\" />\n            <path d=\"M100 100 L124 112\" />\n          </g>\n          <circle cx=\"100\" cy=\"100\" r=\"5\" fill={accent} />\n        </g>\n      )}\n      {shape === \"blanket\" && (\n        <g>\n          <rect x=\"44\" y=\"64\" width=\"112\" height=\"92\" rx=\"10\" fill={accent} />\n          <g stroke=\"#ffffff\" strokeWidth=\"3\" opacity=\"0.35\" strokeLinecap=\"round\">\n            <path d=\"M44 88 H156\" />\n            <path d=\"M44 112 H156\" />\n            <path d=\"M44 136 H156\" />\n          </g>\n          <g stroke={accent} strokeWidth=\"3\" strokeLinecap=\"round\">\n            {[52, 64, 76, 88, 100, 112, 124, 136, 148].map((x) => (\n              <path key={x} d={`M${x} 156 V170`} />\n            ))}\n          </g>\n        </g>\n      )}\n    </svg>\n  );\n}\n\nfunction Rating({ value, reviews }: { value: number; reviews: number }) {\n  return (\n    <div\n      className=\"flex items-center gap-1 text-xs text-muted-foreground\"\n      role=\"img\"\n      aria-label={`Rated ${value} out of 5 from ${reviews} reviews`}\n    >\n      <Star className=\"size-3.5 fill-amber-400 text-amber-400\" aria-hidden=\"true\" />\n      <span className=\"font-medium text-foreground\" aria-hidden=\"true\">\n        {value.toFixed(1)}\n      </span>\n      <span aria-hidden=\"true\">({reviews.toLocaleString(\"en-US\")})</span>\n    </div>\n  );\n}\n\ntype CardProps = {\n  product: Product;\n  wished: boolean;\n  onToggleWish: (product: Product) => void;\n  onAddToCart: (product: Product) => void;\n  onQuickView: (product: Product) => void;\n};\n\nfunction ProductCard({\n  product,\n  wished,\n  onToggleWish,\n  onAddToCart,\n  onQuickView,\n}: CardProps) {\n  const discount = product.compareAt\n    ? Math.round((1 - product.price / product.compareAt) * 100)\n    : null;\n\n  return (\n    <Card\n      className=\"group/product gap-0 overflow-hidden p-0 transition-shadow focus-within:shadow-md hover:shadow-md\"\n      aria-label={product.name}\n    >\n      <div className=\"relative aspect-square overflow-hidden bg-muted\">\n        <div className=\"size-full transition-transform duration-500 ease-out group-hover/product:scale-105 motion-reduce:transition-none motion-reduce:group-hover/product:scale-100\">\n          <ProductArt product={product} />\n        </div>\n\n        {product.tag && (\n          <Badge\n            variant={tagVariant(product.tag)}\n            className={cn(\n              \"absolute top-3 left-3\",\n              product.tag === \"Low stock\" && \"bg-background/90\"\n            )}\n          >\n            {product.tag}\n            {product.tag === \"Sale\" && discount ? ` −${discount}%` : null}\n          </Badge>\n        )}\n\n        <Button\n          type=\"button\"\n          variant=\"secondary\"\n          size=\"icon-sm\"\n          className=\"absolute top-3 right-3 rounded-full bg-background/90 shadow-sm hover:bg-background\"\n          aria-pressed={wished}\n          aria-label={\n            wished\n              ? `Remove ${product.name} from wishlist`\n              : `Add ${product.name} to wishlist`\n          }\n          onClick={() => onToggleWish(product)}\n        >\n          <Heart\n            className={cn(wished && \"fill-rose-500 text-rose-500\")}\n            aria-hidden=\"true\"\n          />\n        </Button>\n\n        {/* Hover / focus actions. Always visible on touch devices (no hover). */}\n        <div\n          className={cn(\n            \"absolute inset-x-3 bottom-3 flex gap-2 transition-all duration-200 motion-reduce:transition-none\",\n            \"[@media(hover:hover)]:translate-y-2 [@media(hover:hover)]:opacity-0\",\n            \"[@media(hover:hover)]:group-hover/product:translate-y-0 [@media(hover:hover)]:group-hover/product:opacity-100\",\n            \"[@media(hover:hover)]:group-focus-within/product:translate-y-0 [@media(hover:hover)]:group-focus-within/product:opacity-100\"\n          )}\n        >\n          <Button\n            type=\"button\"\n            size=\"sm\"\n            className=\"flex-1 shadow-sm\"\n            onClick={() => onAddToCart(product)}\n          >\n            <ShoppingBag aria-hidden=\"true\" />\n            Add to cart\n            <span className=\"sr-only\">: {product.name}</span>\n          </Button>\n          <Button\n            type=\"button\"\n            size=\"icon-sm\"\n            variant=\"secondary\"\n            className=\"bg-background/90 shadow-sm hover:bg-background\"\n            aria-label={`Quick view ${product.name}`}\n            onClick={() => onQuickView(product)}\n          >\n            <Eye aria-hidden=\"true\" />\n          </Button>\n        </div>\n      </div>\n\n      <div className=\"flex flex-1 flex-col gap-2 p-4\">\n        <p className=\"text-xs font-medium tracking-wide text-muted-foreground uppercase\">\n          {product.category}\n        </p>\n        <h3 className=\"line-clamp-2 text-sm leading-snug font-semibold text-balance sm:text-base\">\n          {product.name}\n        </h3>\n        <Rating value={product.rating} reviews={product.reviews} />\n        <div className=\"mt-auto flex items-baseline gap-2 pt-1\">\n          <span className=\"text-lg font-semibold tabular-nums\">\n            {currency.format(product.price)}\n          </span>\n          {product.compareAt && (\n            <>\n              <span className=\"text-sm text-muted-foreground tabular-nums line-through\">\n                <span className=\"sr-only\">Original price </span>\n                {currency.format(product.compareAt)}\n              </span>\n            </>\n          )}\n        </div>\n      </div>\n    </Card>\n  );\n}\n\nfunction ProductCardSkeleton() {\n  return (\n    <Card className=\"gap-0 overflow-hidden p-0\" aria-hidden=\"true\">\n      <Skeleton className=\"aspect-square w-full rounded-none\" />\n      <div className=\"flex flex-col gap-2 p-4\">\n        <Skeleton className=\"h-3 w-16\" />\n        <Skeleton className=\"h-4 w-4/5\" />\n        <Skeleton className=\"h-3 w-24\" />\n        <Skeleton className=\"mt-2 h-6 w-20\" />\n      </div>\n    </Card>\n  );\n}\n\nconst FILTERS = [\"All\", \"Sale\", \"New\", \"Bestseller\"] as const;\ntype Filter = (typeof FILTERS)[number];\n\nexport default function Page() {\n  const [loading, setLoading] = React.useState(true);\n  const [filter, setFilter] = React.useState<Filter>(\"All\");\n  const [wishlist, setWishlist] = React.useState<ReadonlySet<string>>(\n    () => new Set<string>()\n  );\n  const [cartCount, setCartCount] = React.useState(0);\n  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const startLoading = React.useCallback((ms: number) => {\n    if (timerRef.current) clearTimeout(timerRef.current);\n    setLoading(true);\n    timerRef.current = setTimeout(() => setLoading(false), ms);\n  }, []);\n\n  React.useEffect(() => {\n    startLoading(1600);\n    return () => {\n      if (timerRef.current) clearTimeout(timerRef.current);\n    };\n  }, [startLoading]);\n\n  const visible = React.useMemo(\n    () =>\n      filter === \"All\"\n        ? PRODUCTS\n        : PRODUCTS.filter((p) => p.tag === filter),\n    [filter]\n  );\n\n  const toggleWish = React.useCallback((product: Product) => {\n    setWishlist((prev) => {\n      const next = new Set(prev);\n      if (next.has(product.id)) {\n        next.delete(product.id);\n        toast(`Removed ${product.name} from your wishlist`);\n      } else {\n        next.add(product.id);\n        toast.success(`Saved ${product.name} to your wishlist`);\n      }\n      return next;\n    });\n  }, []);\n\n  const addToCart = React.useCallback((product: Product) => {\n    setCartCount((c) => c + 1);\n    toast.success(`Added ${product.name} to your cart`, {\n      description: currency.format(product.price),\n    });\n  }, []);\n\n  const quickView = React.useCallback((product: Product) => {\n    toast(`${product.name}`, {\n      description: `${product.category} · rated ${product.rating} from ${product.reviews.toLocaleString(\"en-US\")} reviews`,\n    });\n  }, []);\n\n  return (\n    <main className=\"mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8\">\n      <header className=\"flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between\">\n        <div className=\"space-y-1\">\n          <p className=\"text-sm font-medium text-muted-foreground\">\n            Spring home collection\n          </p>\n          <h1 className=\"text-2xl font-bold tracking-tight text-balance sm:text-3xl\">\n            Pieces for a calmer home\n          </h1>\n        </div>\n        <div className=\"flex items-center gap-2\">\n          <Button\n            type=\"button\"\n            variant=\"outline\"\n            size=\"sm\"\n            onClick={() => startLoading(1400)}\n            disabled={loading}\n          >\n            <RefreshCw className={cn(loading && \"animate-spin\")} aria-hidden=\"true\" />\n            Reload\n          </Button>\n          <div\n            className=\"inline-flex h-8 items-center gap-1.5 rounded-md border px-3 text-sm font-medium\"\n            role=\"status\"\n            aria-live=\"polite\"\n          >\n            <ShoppingBag className=\"size-4\" aria-hidden=\"true\" />\n            <span>\n              Cart: <span className=\"tabular-nums\">{cartCount}</span>\n              <span className=\"sr-only\"> {cartCount === 1 ? \"item\" : \"items\"}</span>\n            </span>\n          </div>\n        </div>\n      </header>\n\n      <div\n        className=\"mt-6 flex flex-wrap gap-2\"\n        role=\"group\"\n        aria-label=\"Filter products by tag\"\n      >\n        {FILTERS.map((f) => (\n          <Button\n            key={f}\n            type=\"button\"\n            size=\"sm\"\n            variant={filter === f ? \"default\" : \"outline\"}\n            aria-pressed={filter === f}\n            onClick={() => setFilter(f)}\n            className=\"rounded-full\"\n          >\n            {f}\n          </Button>\n        ))}\n      </div>\n\n      <p className=\"sr-only\" role=\"status\" aria-live=\"polite\">\n        {loading\n          ? \"Loading products\"\n          : `${visible.length} ${visible.length === 1 ? \"product\" : \"products\"} shown`}\n      </p>\n\n      <section\n        aria-label=\"Products\"\n        aria-busy={loading}\n        className=\"mt-6\"\n      >\n        {loading ? (\n          <ul className=\"grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4\">\n            {Array.from({ length: 8 }, (_, i) => (\n              <li key={i}>\n                <ProductCardSkeleton />\n              </li>\n            ))}\n          </ul>\n        ) : visible.length === 0 ? (\n          <div className=\"flex flex-col items-center gap-3 rounded-xl border border-dashed py-16 text-center\">\n            <PackageSearch className=\"size-8 text-muted-foreground\" aria-hidden=\"true\" />\n            <p className=\"font-medium\">No products match this filter</p>\n            <Button type=\"button\" variant=\"outline\" size=\"sm\" onClick={() => setFilter(\"All\")}>\n              Show all products\n            </Button>\n          </div>\n        ) : (\n          <ul className=\"grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4\">\n            {visible.map((product) => (\n              <li key={product.id} className=\"h-full\">\n                <ProductCard\n                  product={product}\n                  wished={wishlist.has(product.id)}\n                  onToggleWish={toggleWish}\n                  onAddToCart={addToCart}\n                  onQuickView={quickView}\n                />\n              </li>\n            ))}\n          </ul>\n        )}\n      </section>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

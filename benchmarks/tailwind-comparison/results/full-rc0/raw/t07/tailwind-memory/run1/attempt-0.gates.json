@@ -1,0 +1,63 @@
+{
+  "arm": "D",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2943
+    },
+    "build": {
+      "ok": true,
+      "ms": 10795
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 193,
+          "height": 6127,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 193,
+          "height": 3177,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 193,
+          "height": 1794,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 2,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:2"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "hover",
+          "found": false,
+          "errors": []
+        },
+        "desktop": {
+          "action": "hover",
+          "found": true,
+          "errors": []
+        }
+      }
+    }
+  }
+}

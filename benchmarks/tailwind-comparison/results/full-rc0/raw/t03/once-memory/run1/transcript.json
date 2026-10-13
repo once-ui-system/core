@@ -1,0 +1,302 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Pricing page — three tiers, highlighted middle tier, feature comparison table, FAQ accordion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files to understand the setup."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01YFK32xC5H7xCt688QjPQ3i",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01YBCZhRaGTc2w1J4wDnDBTX",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01YFK32xC5H7xCt688QjPQ3i",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01YBCZhRaGTc2w1J4wDnDBTX",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01WKhgrAt2f7xx3MBruNXA1z",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01H8XkP9H6YqPpmjG6sx1mdG",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011B293WT4uSbCiaA6U7WHxE",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019mhzFmSBhkhTXjMwfNhodt",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WKhgrAt2f7xx3MBruNXA1z",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01H8XkP9H6YqPpmjG6sx1mdG",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011B293WT4uSbCiaA6U7WHxE",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019mhzFmSBhkhTXjMwfNhodt",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01EfCY78QYGPY9fii9fGkCvj",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RdSEuov1dFDsNiDrHEuLDs",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013sPKfQzbwsWZvVwBnCoWju",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VTLxwcJf4NZQPTQUzYNyeV",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EfCY78QYGPY9fii9fGkCvj",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RdSEuov1dFDsNiDrHEuLDs",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013sPKfQzbwsWZvVwBnCoWju",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VTLxwcJf4NZQPTQUzYNyeV",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check whether the package is installed so I can verify the component APIs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JpnASpr4KdATJk45PM4k5M",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011iLUUBCiGoYM1SE7po8c99",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JpnASpr4KdATJk45PM4k5M",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011iLUUBCiGoYM1SE7po8c99",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll stick to Once UI primitives I'm confident about plus native semantic HTML (table, buttons with ARIA attributes) to build the billing toggle, tier cards, comparison table, and FAQ accordion in a type-safe way.\n\n",
+          "signature": "CAQS5woKEQgSGAI4AUIJbmFycmF0aW9uEgyKy9XNfQZ2RUuetTIaDBi9EEq3Zc++FgKZMSIwICwHjt87TI7SYMaYACc16y2WyjSDADsgj7YD5r2E9rcLI20mUO70h1nnM28mbN1/KoMK4St1N0KJA4bpd/3cGJQCRktwnYJUpwHSLIQ+5FE5TOyAbXzG6OP9o5BNaLKQTf0rzNDDnNfcKJvRWlFTMxcbToE4hTuYEvZRT8Z8LE7GR6d5/l8HyWzSkZs1CB0ZUvoG/L9/3dUasXRScPcATu+8j1+Nh5ID8/MiKS/jmjJkW/Xehz59aidge4q+lPJPfdCg3WCzfkOGVkrCDgR0O/sXa4wikbWQW9URwYc89Ico57R4GYMPXdxBy/BZk4T2Rjyvy+/TQIYPLg3gqF53kAW1p9smurwtlKMfCuPrkR3WI8QR7mY+aAnKn9vnhgX14T3jfeVCnlX6GefKUk2Cgqm893852SggL7jzkMqChLtcS6wkEKlRjA6VJB4Naz+CjbSuyWzdRzifxnPqfG0mOxsRrZX0Ue8WHF3vBpwlLXQXI6UCEq1Tcmp2ceASMjDSi36PbyeobeuPq6u35e7x0CeW7Pl1YO5s7GEkijpSbBHQwchGq4opGgBD7jPl72AFrrGrKDRcMLOuZ7fhiYK3BWFLgLMI47NyyVSUnfmGet/TY9lHFRrwUxtzMHId5fInHemfZGimVeuQjsdy7z133+orcPQLpBJV5baNVwlz7mN9gc1Nc49pJxFqYTdr/CCtAmzivZuJWZVcQJmvGC1BEp3fEeoeJqdxK5OsHJq1CxmqCBSXXxtji5yOyn0+uiVa2sN8wCmjIdkCapcfiajW2kvWW5q1VM/ILMMcENfaxkNtDnfxvp4zz+HzyO2q4ncK6zhnSRESOcCJWCQVFx9x26XZbBXyR0kP089X9SR5UXLgPEiIMBL1JOvYkmtssvKixQwonavM+Dt6oi4xI/AIJcDmpv2V9zGoyLoVzgAL+BN9N39CKCfGjhKdP81sUAFvxtfKh2HdEs0tSyy5gbnKHpLmGq93qG/LSfuDE55XUib3rnll8yrzIUGw5qQ2k6gKKCcDjgyDkZf5ULuQgppaGWEEFggE3ab9tRdzfbKWVRJaQckBbvLdruzSAMYGGJFFPr5Xe20adgBPRWzafkIPq9snXMyHisJf9fid62XR/ovO9KswVWDMNaRkdEFpuXbZUPhNPeO+uuKVuaIbY1NCSwN7TfrpHzqAAPRqxa4qo92znY34z+GkouFGLEYK5ay20P7Wqh7sLY6o96cxiIRCyXdzcAzPCkkxw8Fba4SHgfbOjf6lk5/Kan0sVcvWiilq5AYwzBqwxbrzpzErtwkcMVhp4rZIWWJhO6sKKPUT2SPTFhMHJuNzhlyeEDNeWjDjS9UfFrrMck/+gKaJIph5eOXdTHR7iaIsADgOhz49PIBJHvETjOuK0LrM5AymtFX0PwFmxxNM00RXbcIawVHbnvCSQzQMcsvI/GLWU/ImFDYS1jOBY6bVvQ7oUxddC7n3vcF9vGRxite3i9XDmDKk3NM8GyNn1nzPbE3Xji4Bhn9TMkVzZdKkn+nNF1jpuFGkP1Lxp0pPJrFZLtmwd/0CIA3ll4iGL6yENnfODDV9Sixv50nUNlWsuKrQcPKIEt7CjTMgRsVuzapfiZIGeoHFmYZepkR/GWLWA1pijYsMG0l/3X7kJsqc2qrLI35HYRZWwzgDQSsVr5gK7kcnH/4Rn86j2rw3DjXjgNoX5aOoGdqKbBu8w5X0wNAIW/ZKMua9QSoeprhN9BpyYa/R9RrWNu7sNF5iH6zD14XPz5TM10x83gy6pEYYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01R4mMZFkpHE9kjCZ1mEH4mK",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01R4mMZFkpHE9kjCZ1mEH4mK",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useState } from \"react\";\nimport type { CSSProperties } from \"react\";\nimport { Column, Row, Heading, Text } from \"@once-ui-system/core\";\n\ntype Billing = \"monthly\" | \"yearly\";\n\ninterface Tier {\n  id: string;\n  name: string;\n  tagline: string;\n  monthly: number;\n  yearly: number; // per month, billed annually\n  cta: string;\n  highlighted: boolean;\n  perks: string[];\n}\n\nconst TIERS: Tier[] = [\n  {\n    id: \"starter\",\n    name: \"Starter\",\n    tagline: \"For individuals shipping their first side project.\",\n    monthly: 12,\n    yearly: 9,\n    cta: \"Start free trial\",\n    highlighted: false,\n    perks: [\n      \"Up to 3 active projects\",\n      \"5 GB asset storage\",\n      \"Community support\",\n      \"7-day activity history\",\n    ],\n  },\n  {\n    id: \"team\",\n    name: \"Team\",\n    tagline: \"For growing teams that need to move fast together.\",\n    monthly: 36,\n    yearly: 29,\n    cta: \"Start free trial\",\n    highlighted: true,\n    perks: [\n      \"Unlimited projects\",\n      \"100 GB asset storage\",\n      \"Priority email support\",\n      \"90-day activity history\",\n      \"Roles and granular permissions\",\n    ],\n  },\n  {\n    id: \"enterprise\",\n    name: \"Enterprise\",\n    tagline: \"For organizations with advanced security needs.\",\n    monthly: 89,\n    yearly: 74,\n    cta: \"Contact sales\",\n    highlighted: false,\n    perks: [\n      \"Everything in Team\",\n      \"1 TB asset storage\",\n      \"Dedicated success manager\",\n      \"Unlimited activity history\",\n      \"SAML single sign-on and audit logs\",\n    ],\n  },\n];\n\ntype CellValue = boolean | string;\n\ninterface FeatureRow {\n  label: string;\n  values: [CellValue, CellValue, CellValue];\n}\n\ninterface FeatureGroup {\n  group: string;\n  rows: FeatureRow[];\n}\n\nconst COMPARISON: FeatureGroup[] = [\n  {\n    group: \"Workspace\",\n    rows: [\n      { label: \"Active projects\", values: [\"3\", \"Unlimited\", \"Unlimited\"] },\n      { label: \"Team members\", values: [\"1\", \"Up to 25\", \"Unlimited\"] },\n      { label: \"Asset storage\", values: [\"5 GB\", \"100 GB\", \"1 TB\"] },\n      { label: \"Custom domains\", values: [false, true, true] },\n    ],\n  },\n  {\n    group: \"Collaboration\",\n    rows: [\n      { label: \"Shared comments\", values: [true, true, true] },\n      { label: \"Roles and permissions\", values: [false, true, true] },\n      { label: \"Activity history\", values: [\"7 days\", \"90 days\", \"Unlimited\"] },\n      { label: \"Guest reviewers\", values: [false, \"10 seats\", \"Unlimited\"] },\n    ],\n  },\n  {\n    group: \"Security\",\n    rows: [\n      { label: \"Two-factor authentication\", values: [true, true, true] },\n      { label: \"SAML single sign-on\", values: [false, false, true] },\n      { label: \"Audit logs\", values: [false, false, true] },\n      { label: \"Data residency options\", values: [false, false, true] },\n    ],\n  },\n  {\n    group: \"Support\",\n    rows: [\n      { label: \"Community forum\", values: [true, true, true] },\n      { label: \"Priority email support\", values: [false, true, true] },\n      { label: \"Dedicated success manager\", values: [false, false, true] },\n      { label: \"Uptime SLA\", values: [false, \"99.9%\", \"99.99%\"] },\n    ],\n  },\n];\n\ninterface Faq {\n  q: string;\n  a: string;\n}\n\nconst FAQS: Faq[] = [\n  {\n    q: \"How does the free trial work?\",\n    a: \"Every paid plan includes a 14-day free trial with full access to its features. You don't need to enter a credit card to start, and we'll remind you three days before the trial ends.\",\n  },\n  {\n    q: \"Can I switch plans later?\",\n    a: \"Yes. You can upgrade or downgrade at any time from your billing settings. Upgrades take effect immediately and are prorated, while downgrades apply at the start of your next billing cycle.\",\n  },\n  {\n    q: \"What happens if I go over my storage limit?\",\n    a: \"We never delete your files. If you pass your plan's storage limit, uploads pause and we'll email your workspace owners so you can free up space or move to a larger plan.\",\n  },\n  {\n    q: \"Do you offer discounts for nonprofits or students?\",\n    a: \"We offer 50% off any plan for registered nonprofits, open-source maintainers and verified students. Send us a short note from your organization email and we'll apply the discount within one business day.\",\n  },\n  {\n    q: \"How does annual billing work?\",\n    a: \"Annual plans are billed once per year at a discounted monthly rate, which saves roughly 20% compared to paying month to month. You can cancel renewal at any time and keep access until the period ends.\",\n  },\n  {\n    q: \"Which payment methods do you accept?\",\n    a: \"We accept all major credit and debit cards. Enterprise customers can also pay by invoice with net-30 terms and bank transfer.\",\n  },\n];\n\nconst colors = {\n  border: \"var(--neutral-alpha-medium)\",\n  borderStrong: \"var(--neutral-alpha-strong)\",\n  surface: \"var(--surface-background)\",\n  accent: \"var(--brand-solid-strong)\",\n  accentWeak: \"var(--brand-alpha-weak)\",\n  accentText: \"var(--brand-on-background-strong)\",\n  onSolid: \"var(--brand-on-solid-strong)\",\n  muted: \"var(--neutral-on-background-weak)\",\n  text: \"var(--neutral-on-background-strong)\",\n};\n\nconst focusRing: CSSProperties = {\n  outline: \"none\",\n};\n\nfunction CheckIcon({ title }: { title: string }) {\n  return (\n    <svg\n      width=\"20\"\n      height=\"20\"\n      viewBox=\"0 0 20 20\"\n      role=\"img\"\n      aria-label={title}\n      focusable=\"false\"\n      style={{ color: colors.accent, flexShrink: 0 }}\n    >\n      <path\n        d=\"M4.5 10.5l3.5 3.5 7.5-8\"\n        fill=\"none\"\n        stroke=\"currentColor\"\n        strokeWidth=\"2\"\n        strokeLinecap=\"round\"\n        strokeLinejoin=\"round\"\n      />\n    </svg>\n  );\n}\n\nfunction DecorativeCheck() {\n  return (\n    <svg\n      width=\"18\"\n      height=\"18\"\n      viewBox=\"0 0 20 20\"\n      aria-hidden=\"true\"\n      focusable=\"false\"\n      style={{ color: colors.accent, flexShrink: 0, marginTop: 2 }}\n    >\n      <path\n        d=\"M4.5 10.5l3.5 3.5 7.5-8\"\n        fill=\"none\"\n        stroke=\"currentColor\"\n        strokeWidth=\"2\"\n        strokeLinecap=\"round\"\n        strokeLinejoin=\"round\"\n      />\n    </svg>\n  );\n}\n\nfunction DashIcon() {\n  return (\n    <svg\n      width=\"20\"\n      height=\"20\"\n      viewBox=\"0 0 20 20\"\n      role=\"img\"\n      aria-label=\"Not included\"\n      focusable=\"false\"\n      style={{ color: colors.muted, opacity: 0.6 }}\n    >\n      <path d=\"M6 10h8\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" />\n    </svg>\n  );\n}\n\nfunction Cell({ value }: { value: CellValue }) {\n  if (value === true) return <CheckIcon title=\"Included\" />;\n  if (value === false) return <DashIcon />;\n  return (\n    <Text variant=\"body-default-s\" onBackground=\"neutral-strong\">\n      {value}\n    </Text>\n  );\n}\n\nfunction PricingCard({ tier, billing }: { tier: Tier; billing: Billing }) {\n  const price = billing === \"monthly\" ? tier.monthly : tier.yearly;\n  const headingId = `tier-${tier.id}`;\n\n  const buttonStyle: CSSProperties = {\n    width: \"100%\",\n    minHeight: 44,\n    padding: \"0 20px\",\n    borderRadius: 12,\n    fontFamily: \"inherit\",\n    fontSize: 15,\n    fontWeight: 600,\n    cursor: \"pointer\",\n    border: tier.highlighted ? \"1px solid transparent\" : `1px solid ${colors.borderStrong}`,\n    background: tier.highlighted ? colors.accent : \"transparent\",\n    color: tier.highlighted ? colors.onSolid : colors.text,\n  };\n\n  return (\n    <article\n      aria-labelledby={headingId}\n      style={{\n        position: \"relative\",\n        display: \"flex\",\n        flexDirection: \"column\",\n        gap: 24,\n        padding: 28,\n        borderRadius: 20,\n        background: colors.surface,\n        border: tier.highlighted ? `2px solid ${colors.accent}` : `1px solid ${colors.border}`,\n        boxShadow: tier.highlighted ? \"0 12px 40px -12px var(--brand-alpha-strong)\" : \"none\",\n      }}\n    >\n      {tier.highlighted && (\n        <span\n          style={{\n            position: \"absolute\",\n            top: -14,\n            left: \"50%\",\n            transform: \"translateX(-50%)\",\n            padding: \"4px 14px\",\n            borderRadius: 999,\n            background: colors.accent,\n            color: colors.onSolid,\n            fontSize: 12,\n            fontWeight: 700,\n            letterSpacing: 0.4,\n            whiteSpace: \"nowrap\",\n          }}\n        >\n          Most popular\n        </span>\n      )}\n\n      <Column gap=\"8\">\n        <Heading as=\"h3\" id={headingId} variant=\"heading-strong-l\">\n          {tier.name}\n        </Heading>\n        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n          {tier.tagline}\n        </Text>\n      </Column>\n\n      <Column gap=\"4\">\n        <Row vertical=\"end\" gap=\"8\">\n          <Text variant=\"display-strong-s\" onBackground=\"neutral-strong\">\n            ${price}\n          </Text>\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" style={{ paddingBottom: 6 }}>\n            per user / month\n          </Text>\n        </Row>\n        <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n          {billing === \"yearly\"\n            ? `Billed annually ($${price * 12} per user)`\n            : \"Billed monthly, cancel anytime\"}\n        </Text>\n      </Column>\n\n      <button type=\"button\" style={buttonStyle} aria-label={`${tier.cta} – ${tier.name} plan`}>\n        {tier.cta}\n      </button>\n\n      <ul\n        style={{\n          listStyle: \"none\",\n          margin: 0,\n          padding: 0,\n          display: \"flex\",\n          flexDirection: \"column\",\n          gap: 12,\n        }}\n      >\n        {tier.perks.map((perk) => (\n          <li key={perk} style={{ display: \"flex\", gap: 10, alignItems: \"flex-start\" }}>\n            <DecorativeCheck />\n            <Text variant=\"body-default-s\" onBackground=\"neutral-strong\">\n              {perk}\n            </Text>\n          </li>\n        ))}\n      </ul>\n    </article>\n  );\n}\n\nfunction BillingToggle({\n  billing,\n  onChange,\n}: {\n  billing: Billing;\n  onChange: (b: Billing) => void;\n}) {\n  const options: { value: Billing; label: string }[] = [\n    { value: \"monthly\", label: \"Monthly\" },\n    { value: \"yearly\", label: \"Yearly\" },\n  ];\n\n  return (\n    <div\n      role=\"group\"\n      aria-label=\"Billing period\"\n      style={{\n        display: \"inline-flex\",\n        padding: 4,\n        gap: 4,\n        borderRadius: 999,\n        border: `1px solid ${colors.border}`,\n        background: colors.surface,\n      }}\n    >\n      {options.map((opt) => {\n        const active = billing === opt.value;\n        return (\n          <button\n            key={opt.value}\n            type=\"button\"\n            aria-pressed={active}\n            onClick={() => onChange(opt.value)}\n            style={{\n              minHeight: 40,\n              padding: \"0 18px\",\n              borderRadius: 999,\n              border: \"none\",\n              cursor: \"pointer\",\n              fontFamily: \"inherit\",\n              fontSize: 14,\n              fontWeight: 600,\n              background: active ? colors.accent : \"transparent\",\n              color: active ? colors.onSolid : colors.text,\n              display: \"inline-flex\",\n              alignItems: \"center\",\n              gap: 8,\n            }}\n          >\n            {opt.label}\n            {opt.value === \"yearly\" && (\n              <span\n                style={{\n                  fontSize: 11,\n                  fontWeight: 700,\n                  padding: \"2px 8px\",\n                  borderRadius: 999,\n                  background: active ? \"rgba(255,255,255,0.22)\" : colors.accentWeak,\n                  color: active ? colors.onSolid : colors.accentText,\n                }}\n              >\n                Save 20%\n              </span>\n            )}\n          </button>\n        );\n      })}\n    </div>\n  );\n}\n\nfunction ComparisonTable() {\n  const captionId = useId();\n  const tierNames = TIERS.map((t) => t.name);\n\n  const thStyle: CSSProperties = {\n    padding: \"16px 16px\",\n    textAlign: \"center\",\n    fontSize: 15,\n    fontWeight: 700,\n    color: colors.text,\n    borderBottom: `1px solid ${colors.borderStrong}`,\n    background: colors.surface,\n  };\n\n  return (\n    <div\n      role=\"region\"\n      aria-labelledby={captionId}\n      tabIndex={0}\n      style={{\n        overflowX: \"auto\",\n        borderRadius: 16,\n        border: `1px solid ${colors.border}`,\n        background: colors.surface,\n      }}\n    >\n      <table\n        style={{\n          width: \"100%\",\n          minWidth: 640,\n          borderCollapse: \"collapse\",\n        }}\n      >\n        <caption\n          id={captionId}\n          style={{\n            position: \"absolute\",\n            width: 1,\n            height: 1,\n            overflow: \"hidden\",\n            clip: \"rect(0 0 0 0)\",\n            whiteSpace: \"nowrap\",\n          }}\n        >\n          Feature comparison across Starter, Team and Enterprise plans\n        </caption>\n        <thead>\n          <tr>\n            <th scope=\"col\" style={{ ...thStyle, textAlign: \"left\", width: \"34%\" }}>\n              <span style={{ position: \"absolute\", left: -9999 }}>Feature</span>\n            </th>\n            {tierNames.map((name, i) => (\n              <th\n                key={name}\n                scope=\"col\"\n                style={{\n                  ...thStyle,\n                  background: i === 1 ? colors.accentWeak : colors.surface,\n                  color: i === 1 ? colors.accentText : colors.text,\n                }}\n              >\n                {name}\n              </th>\n            ))}\n          </tr>\n        </thead>\n        {COMPARISON.map((group) => (\n          <tbody key={group.group}>\n            <tr>\n              <th\n                scope=\"colgroup\"\n                colSpan={4}\n                style={{\n                  padding: \"20px 16px 8px\",\n                  textAlign: \"left\",\n                  fontSize: 12,\n                  fontWeight: 700,\n                  letterSpacing: 0.8,\n                  textTransform: \"uppercase\",\n                  color: colors.muted,\n                }}\n              >\n                {group.group}\n              </th>\n            </tr>\n            {group.rows.map((row) => (\n              <tr key={row.label}>\n                <th\n                  scope=\"row\"\n                  style={{\n                    padding: \"14px 16px\",\n                    textAlign: \"left\",\n                    fontSize: 14,\n                    fontWeight: 500,\n                    color: colors.text,\n                    borderTop: `1px solid ${colors.border}`,\n                  }}\n                >\n                  {row.label}\n                </th>\n                {row.values.map((value, i) => (\n                  <td\n                    key={`${row.label}-${i}`}\n                    style={{\n                      padding: \"14px 16px\",\n                      textAlign: \"center\",\n                      borderTop: `1px solid ${colors.border}`,\n                      background: i === 1 ? colors.accentWeak : \"transparent\",\n                    }}\n                  >\n                    <span style={{ display: \"inline-flex\", justifyContent: \"center\" }}>\n                      <Cell value={value} />\n                    </span>\n                  </td>\n                ))}\n              </tr>\n            ))}\n          </tbody>\n        ))}\n      </table>\n    </div>\n  );\n}\n\nfunction FaqItem({\n  faq,\n  open,\n  onToggle,\n  baseId,\n}: {\n  faq: Faq;\n  open: boolean;\n  onToggle: () => void;\n  baseId: string;\n}) {\n  const buttonId = `${baseId}-button`;\n  const panelId = `${baseId}-panel`;\n\n  return (\n    <div style={{ borderBottom: `1px solid ${colors.border}` }}>\n      <h3 style={{ margin: 0 }}>\n        <button\n          type=\"button\"\n          id={buttonId}\n          aria-expanded={open}\n          aria-controls={panelId}\n          onClick={onToggle}\n          style={{\n            width: \"100%\",\n            display: \"flex\",\n            alignItems: \"center\",\n            justifyContent: \"space-between\",\n            gap: 16,\n            minHeight: 56,\n            padding: \"16px 4px\",\n            background: \"transparent\",\n            border: \"none\",\n            cursor: \"pointer\",\n            textAlign: \"left\",\n            fontFamily: \"inherit\",\n            fontSize: 16,\n            fontWeight: 600,\n            color: colors.text,\n            ...focusRing,\n          }}\n        >\n          <span>{faq.q}</span>\n          <svg\n            width=\"20\"\n            height=\"20\"\n            viewBox=\"0 0 20 20\"\n            aria-hidden=\"true\"\n            focusable=\"false\"\n            style={{\n              flexShrink: 0,\n              transition: \"transform 150ms ease\",\n              transform: open ? \"rotate(180deg)\" : \"rotate(0deg)\",\n            }}\n          >\n            <path\n              d=\"M5 8l5 5 5-5\"\n              fill=\"none\"\n              stroke=\"currentColor\"\n              strokeWidth=\"2\"\n              strokeLinecap=\"round\"\n              strokeLinejoin=\"round\"\n            />\n          </svg>\n        </button>\n      </h3>\n      <div\n        id={panelId}\n        role=\"region\"\n        aria-labelledby={buttonId}\n        hidden={!open}\n        style={{ padding: \"0 4px 20px\" }}\n      >\n        <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n          {faq.a}\n        </Text>\n      </div>\n    </div>\n  );\n}\n\nexport default function PricingPage() {\n  const [billing, setBilling] = useState<Billing>(\"yearly\");\n  const [openIndex, setOpenIndex] = useState<number | null>(0);\n  const faqBase = useId();\n\n  return (\n    <Column as=\"main\" fillWidth horizontal=\"center\" paddingX=\"16\" paddingY=\"48\" gap=\"64\">\n      <style>{`\n        .pricing-grid {\n          display: grid;\n          grid-template-columns: 1fr;\n          gap: 32px;\n          width: 100%;\n        }\n        @media (min-width: 900px) {\n          .pricing-grid {\n            grid-template-columns: repeat(3, 1fr);\n            gap: 24px;\n            align-items: stretch;\n          }\n          .pricing-grid > .is-highlighted {\n            transform: translateY(-12px);\n          }\n        }\n        .pricing-page button:focus-visible,\n        .pricing-page [role=\"region\"]:focus-visible {\n          outline: 2px solid var(--brand-solid-strong);\n          outline-offset: 2px;\n        }\n      `}</style>\n\n      <Column\n        className=\"pricing-page\"\n        fillWidth\n        gap=\"64\"\n        horizontal=\"center\"\n        style={{ maxWidth: 1120 }}\n      >\n        <Column as=\"header\" horizontal=\"center\" gap=\"16\" align=\"center\" style={{ maxWidth: 680 }}>\n          <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n            Pricing\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-m\" align=\"center\" wrap=\"balance\">\n            Simple pricing that scales with your team\n          </Heading>\n          <Text variant=\"body-default-l\" onBackground=\"neutral-weak\" align=\"center\">\n            Start with a 14-day free trial on any plan. No credit card required, and you can change\n            or cancel whenever you like.\n          </Text>\n          <BillingToggle billing={billing} onChange={setBilling} />\n        </Column>\n\n        <section aria-labelledby=\"plans-heading\" style={{ width: \"100%\" }}>\n          <h2\n            id=\"plans-heading\"\n            style={{\n              position: \"absolute\",\n              width: 1,\n              height: 1,\n              overflow: \"hidden\",\n              clip: \"rect(0 0 0 0)\",\n              whiteSpace: \"nowrap\",\n            }}\n          >\n            Plans\n          </h2>\n          <div className=\"pricing-grid\">\n            {TIERS.map((tier) => (\n              <div key={tier.id} className={tier.highlighted ? \"is-highlighted\" : undefined}>\n                <PricingCard tier={tier} billing={billing} />\n              </div>\n            ))}\n          </div>\n          <p aria-live=\"polite\" style={{ position: \"absolute\", left: -9999 }}>\n            Showing {billing} billing prices.\n          </p>\n        </section>\n\n        <Column as=\"section\" fillWidth gap=\"24\" aria-labelledby=\"compare-heading\">\n          <Column gap=\"8\">\n            <Heading as=\"h2\" id=\"compare-heading\" variant=\"heading-strong-xl\">\n              Compare plans\n            </Heading>\n            <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n              A closer look at what is included in each plan.\n            </Text>\n          </Column>\n          <ComparisonTable />\n        </Column>\n\n        <Column\n          as=\"section\"\n          fillWidth\n          gap=\"24\"\n          aria-labelledby=\"faq-heading\"\n          style={{ maxWidth: 800 }}\n        >\n          <Column gap=\"8\">\n            <Heading as=\"h2\" id=\"faq-heading\" variant=\"heading-strong-xl\">\n              Frequently asked questions\n            </Heading>\n            <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n              Can't find what you're looking for? Reach out to our team at support@example.com.\n            </Text>\n          </Column>\n          <div style={{ borderTop: `1px solid ${colors.border}` }}>\n            {FAQS.map((faq, i) => (\n              <FaqItem\n                key={faq.q}\n                faq={faq}\n                baseId={`${faqBase}-${i}`}\n                open={openIndex === i}\n                onToggle={() => setOpenIndex(openIndex === i ? null : i)}\n              />\n            ))}\n          </div>\n        </Column>\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

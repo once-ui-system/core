@@ -1,0 +1,219 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Analytics dashboard — KPI stat cards (trend indicators), a line chart, a bar chart, recent-activity list.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Pi35fc39Uv2xkKbBApNyv4",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HUPsRgHwmp1U3Qt9uAEhLQ",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Pi35fc39Uv2xkKbBApNyv4",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HUPsRgHwmp1U3Qt9uAEhLQ",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01WExkqBRgZAHSqm1BoziEzr",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016KtTuuJVuVVWgs5JuKqkPa",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01312DPvFp8PdsRcPdiD1ZfT",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WExkqBRgZAHSqm1BoziEzr",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016KtTuuJVuVVWgs5JuKqkPa",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01312DPvFp8PdsRcPdiD1ZfT",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ka4toic7TebeyUtF2sB6Gd",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NmH6rvrpYHXW6Jq6NFtQ2Y",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CCwfWyJwKwBg9ZAUu7qdZ9",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Ka4toic7TebeyUtF2sB6Gd",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NmH6rvrpYHXW6Jq6NFtQ2Y",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CCwfWyJwKwBg9ZAUu7qdZ9",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll build the charts as hand-rolled SVG, with a small client component for hover and focus interaction."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Uhp2B4b78p1Q1pdHnauG49",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Uhp2B4b78p1Q1pdHnauG49",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useState } from \"react\";\nimport type { ComponentType, KeyboardEvent } from \"react\";\nimport {\n  ArrowDownRight,\n  ArrowUpRight,\n  BarChart3,\n  CircleDollarSign,\n  CreditCard,\n  RefreshCw,\n  ShoppingCart,\n  UserPlus,\n  Users,\n  Eye,\n  AlertTriangle,\n  Download,\n} from \"lucide-react\";\n\n/* ----------------------------- Data ----------------------------- */\n\ntype IconType = ComponentType<{ className?: string; \"aria-hidden\"?: boolean | \"true\" | \"false\" }>;\n\ninterface Kpi {\n  id: string;\n  label: string;\n  value: string;\n  change: number;\n  /** When true, a negative change is the good direction (e.g. churn). */\n  invert?: boolean;\n  comparison: string;\n  icon: IconType;\n  spark: number[];\n}\n\nconst KPIS: Kpi[] = [\n  {\n    id: \"revenue\",\n    label: \"Monthly revenue\",\n    value: \"$48,290\",\n    change: 12.4,\n    comparison: \"vs. $42,960 last month\",\n    icon: CircleDollarSign,\n    spark: [32, 35, 33, 38, 41, 40, 44, 43, 46, 48],\n  },\n  {\n    id: \"users\",\n    label: \"Active users\",\n    value: \"12,847\",\n    change: 8.1,\n    comparison: \"vs. 11,883 last month\",\n    icon: Users,\n    spark: [9.8, 10.2, 10.1, 10.9, 11.3, 11.6, 11.9, 12.2, 12.5, 12.8],\n  },\n  {\n    id: \"conversion\",\n    label: \"Conversion rate\",\n    value: \"3.62%\",\n    change: -2.3,\n    comparison: \"vs. 3.71% last month\",\n    icon: ShoppingCart,\n    spark: [3.9, 3.8, 3.85, 3.75, 3.8, 3.7, 3.72, 3.68, 3.65, 3.62],\n  },\n  {\n    id: \"churn\",\n    label: \"Churn rate\",\n    value: \"1.8%\",\n    change: -0.6,\n    invert: true,\n    comparison: \"vs. 2.4% last month\",\n    icon: RefreshCw,\n    spark: [2.6, 2.5, 2.5, 2.4, 2.3, 2.2, 2.1, 2.0, 1.9, 1.8],\n  },\n];\n\ninterface LinePoint {\n  label: string;\n  visitors: number;\n}\n\nconst VISITORS: LinePoint[] = [\n  { label: \"Jan\", visitors: 18200 },\n  { label: \"Feb\", visitors: 19800 },\n  { label: \"Mar\", visitors: 22400 },\n  { label: \"Apr\", visitors: 21100 },\n  { label: \"May\", visitors: 24900 },\n  { label: \"Jun\", visitors: 27300 },\n  { label: \"Jul\", visitors: 26200 },\n  { label: \"Aug\", visitors: 29800 },\n  { label: \"Sep\", visitors: 32100 },\n  { label: \"Oct\", visitors: 31400 },\n  { label: \"Nov\", visitors: 35600 },\n  { label: \"Dec\", visitors: 38900 },\n];\n\ninterface BarPoint {\n  label: string;\n  value: number;\n}\n\nconst CHANNELS: BarPoint[] = [\n  { label: \"Organic search\", value: 14820 },\n  { label: \"Direct\", value: 9640 },\n  { label: \"Email\", value: 7310 },\n  { label: \"Social\", value: 5490 },\n  { label: \"Referral\", value: 3875 },\n  { label: \"Paid ads\", value: 2960 },\n];\n\ntype ActivityTone = \"success\" | \"info\" | \"warning\";\n\ninterface Activity {\n  id: string;\n  title: string;\n  detail: string;\n  time: string;\n  tone: ActivityTone;\n  icon: IconType;\n}\n\nconst ACTIVITY: Activity[] = [\n  {\n    id: \"a1\",\n    title: \"New enterprise subscription\",\n    detail: \"Northwind Logistics upgraded to the Enterprise plan\",\n    time: \"4 min ago\",\n    tone: \"success\",\n    icon: CreditCard,\n  },\n  {\n    id: \"a2\",\n    title: \"New team member joined\",\n    detail: \"Priya Raman accepted an invite to the Growth workspace\",\n    time: \"26 min ago\",\n    tone: \"info\",\n    icon: UserPlus,\n  },\n  {\n    id: \"a3\",\n    title: \"Payment failed\",\n    detail: \"Invoice #INV-2041 for Lumen Studio was declined\",\n    time: \"1 hr ago\",\n    tone: \"warning\",\n    icon: AlertTriangle,\n  },\n  {\n    id: \"a4\",\n    title: \"Report exported\",\n    detail: \"Marcus Lee exported the Q3 acquisition report as CSV\",\n    time: \"2 hr ago\",\n    tone: \"info\",\n    icon: Download,\n  },\n  {\n    id: \"a5\",\n    title: \"Dashboard shared\",\n    detail: \"Sofia Alvarez shared “Retention overview” with 6 people\",\n    time: \"3 hr ago\",\n    tone: \"info\",\n    icon: Eye,\n  },\n  {\n    id: \"a6\",\n    title: \"Subscription renewed\",\n    detail: \"Harbor & Pine renewed their annual Pro plan\",\n    time: \"5 hr ago\",\n    tone: \"success\",\n    icon: RefreshCw,\n  },\n];\n\nconst TONE_STYLES: Record<ActivityTone, string> = {\n  success: \"bg-emerald-100 text-emerald-700\",\n  info: \"bg-indigo-100 text-indigo-700\",\n  warning: \"bg-amber-100 text-amber-700\",\n};\n\nconst nf = new Intl.NumberFormat(\"en-US\");\n\n/* --------------------------- Helpers ---------------------------- */\n\nfunction niceMax(max: number): number {\n  const exp = Math.pow(10, Math.floor(Math.log10(max)));\n  const n = max / exp;\n  const nice = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;\n  return nice * exp;\n}\n\nfunction formatCompact(n: number): string {\n  if (n >= 1000) return `${Math.round((n / 1000) * 10) / 10}k`;\n  return String(n);\n}\n\n/* ------------------------- Sparkline ---------------------------- */\n\nfunction Sparkline({ data, positive }: { data: number[]; positive: boolean }) {\n  const w = 96;\n  const h = 32;\n  const min = Math.min(...data);\n  const max = Math.max(...data);\n  const range = max - min || 1;\n  const pts = data.map((v, i) => {\n    const x = (i / (data.length - 1)) * w;\n    const y = h - 3 - ((v - min) / range) * (h - 6);\n    return `${x.toFixed(1)},${y.toFixed(1)}`;\n  });\n  return (\n    <svg\n      viewBox={`0 0 ${w} ${h}`}\n      className={`h-8 w-24 ${positive ? \"text-emerald-500\" : \"text-rose-500\"}`}\n      aria-hidden=\"true\"\n      focusable=\"false\"\n    >\n      <polyline\n        points={pts.join(\" \")}\n        fill=\"none\"\n        stroke=\"currentColor\"\n        strokeWidth={2}\n        strokeLinecap=\"round\"\n        strokeLinejoin=\"round\"\n      />\n    </svg>\n  );\n}\n\n/* -------------------------- KPI card ---------------------------- */\n\nfunction KpiCard({ kpi }: { kpi: Kpi }) {\n  const up = kpi.change >= 0;\n  const good = kpi.invert ? !up : up;\n  const Icon = kpi.icon;\n  const TrendIcon = up ? ArrowUpRight : ArrowDownRight;\n  const direction = up ? \"up\" : \"down\";\n  const sentiment = good ? \"improvement\" : \"decline\";\n\n  return (\n    <li className=\"rounded-2xl border border-slate-200 bg-white p-5 shadow-sm\">\n      <div className=\"flex items-start justify-between gap-3\">\n        <p className=\"text-sm font-medium text-slate-600\">{kpi.label}</p>\n        <span className=\"flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-slate-100 text-slate-600\">\n          <Icon className=\"h-5 w-5\" aria-hidden=\"true\" />\n        </span>\n      </div>\n      <p className=\"mt-3 text-3xl font-semibold tracking-tight text-slate-900\">{kpi.value}</p>\n      <div className=\"mt-3 flex items-end justify-between gap-3\">\n        <div className=\"min-w-0\">\n          <p\n            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-sm font-medium ${\n              good ? \"bg-emerald-50 text-emerald-700\" : \"bg-rose-50 text-rose-700\"\n            }`}\n          >\n            <TrendIcon className=\"h-4 w-4\" aria-hidden=\"true\" />\n            <span aria-hidden=\"true\">{Math.abs(kpi.change)}%</span>\n            <span className=\"sr-only\">\n              {`${direction} ${Math.abs(kpi.change)} percent, an ${sentiment}`.replace(\n                \"an decline\",\n                \"a decline\",\n              )}\n            </span>\n          </p>\n          <p className=\"mt-1.5 text-xs text-slate-500\">{kpi.comparison}</p>\n        </div>\n        <Sparkline data={kpi.spark} positive={good} />\n      </div>\n    </li>\n  );\n}\n\n/* ------------------------- Line chart --------------------------- */\n\nfunction LineChart({ data }: { data: LinePoint[] }) {\n  const gradId = useId();\n  const [active, setActive] = useState<number | null>(null);\n\n  const W = 720;\n  const H = 300;\n  const m = { top: 16, right: 20, bottom: 32, left: 48 };\n  const iw = W - m.left - m.right;\n  const ih = H - m.top - m.bottom;\n  const yMax = niceMax(Math.max(...data.map((d) => d.visitors)));\n  const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => t * yMax);\n\n  const x = (i: number) => m.left + (i / (data.length - 1)) * iw;\n  const y = (v: number) => m.top + ih - (v / yMax) * ih;\n\n  const line = data.map((d, i) => `${i === 0 ? \"M\" : \"L\"}${x(i).toFixed(1)},${y(d.visitors).toFixed(1)}`).join(\" \");\n  const area = `${line} L${x(data.length - 1).toFixed(1)},${m.top + ih} L${x(0).toFixed(1)},${m.top + ih} Z`;\n\n  const onKey = (e: KeyboardEvent<SVGSVGElement>) => {\n    if (e.key === \"ArrowRight\") {\n      e.preventDefault();\n      setActive((a) => (a === null ? 0 : Math.min(a + 1, data.length - 1)));\n    } else if (e.key === \"ArrowLeft\") {\n      e.preventDefault();\n      setActive((a) => (a === null ? data.length - 1 : Math.max(a - 1, 0)));\n    } else if (e.key === \"Home\") {\n      e.preventDefault();\n      setActive(0);\n    } else if (e.key === \"End\") {\n      e.preventDefault();\n      setActive(data.length - 1);\n    } else if (e.key === \"Escape\") {\n      setActive(null);\n    }\n  };\n\n  const activePoint = active !== null ? data[active] : null;\n  const tipLeft = active !== null ? (x(active) / W) * 100 : 0;\n  const tipTop = activePoint ? (y(activePoint.visitors) / H) * 100 : 0;\n\n  return (\n    <div>\n      <div className=\"relative\">\n        <svg\n          viewBox={`0 0 ${W} ${H}`}\n          className=\"h-auto w-full rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500\"\n          role=\"group\"\n          aria-label=\"Line chart of monthly visitors from January to December. Use left and right arrow keys to inspect each month.\"\n          tabIndex={0}\n          onKeyDown={onKey}\n          onBlur={() => setActive(null)}\n          onMouseLeave={() => setActive(null)}\n        >\n          <defs>\n            <linearGradient id={gradId} x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n              <stop offset=\"0%\" stopColor=\"#6366f1\" stopOpacity={0.25} />\n              <stop offset=\"100%\" stopColor=\"#6366f1\" stopOpacity={0} />\n            </linearGradient>\n          </defs>\n\n          {ticks.map((t) => (\n            <g key={t}>\n              <line x1={m.left} x2={W - m.right} y1={y(t)} y2={y(t)} stroke=\"#e2e8f0\" strokeWidth={1} />\n              <text x={m.left - 8} y={y(t)} textAnchor=\"end\" dominantBaseline=\"middle\" fontSize={11} fill=\"#64748b\">\n                {formatCompact(t)}\n              </text>\n            </g>\n          ))}\n\n          {data.map((d, i) => (\n            <text key={d.label} x={x(i)} y={H - 10} textAnchor=\"middle\" fontSize={11} fill=\"#64748b\">\n              {d.label}\n            </text>\n          ))}\n\n          <path d={area} fill={`url(#${gradId})`} />\n          <path d={line} fill=\"none\" stroke=\"#6366f1\" strokeWidth={2.5} strokeLinejoin=\"round\" strokeLinecap=\"round\" />\n\n          {active !== null && (\n            <line\n              x1={x(active)}\n              x2={x(active)}\n              y1={m.top}\n              y2={m.top + ih}\n              stroke=\"#94a3b8\"\n              strokeDasharray=\"4 4\"\n            />\n          )}\n\n          {data.map((d, i) => (\n            <g key={d.label}>\n              <circle\n                cx={x(i)}\n                cy={y(d.visitors)}\n                r={active === i ? 6 : 3.5}\n                fill=\"#fff\"\n                stroke=\"#6366f1\"\n                strokeWidth={2}\n              />\n              {/* Wide invisible hit area for pointer interaction */}\n              <rect\n                x={x(i) - iw / (data.length - 1) / 2}\n                y={m.top}\n                width={iw / (data.length - 1)}\n                height={ih}\n                fill=\"transparent\"\n                onMouseEnter={() => setActive(i)}\n                onMouseMove={() => setActive(i)}\n                onClick={() => setActive(i)}\n              />\n            </g>\n          ))}\n        </svg>\n\n        {activePoint && (\n          <div\n            className=\"pointer-events-none absolute z-10 -translate-x-1/2 -translate-y-full rounded-md bg-slate-900 px-2.5 py-1.5 text-xs text-white shadow-lg\"\n            style={{ left: `${Math.min(Math.max(tipLeft, 10), 90)}%`, top: `calc(${tipTop}% - 12px)` }}\n          >\n            <span className=\"font-medium\">{activePoint.label}</span>\n            <span className=\"ml-2 tabular-nums\">{nf.format(activePoint.visitors)} visitors</span>\n          </div>\n        )}\n      </div>\n\n      <p className=\"sr-only\" aria-live=\"polite\">\n        {activePoint ? `${activePoint.label}: ${nf.format(activePoint.visitors)} visitors` : \"\"}\n      </p>\n\n      <details className=\"mt-3 text-sm text-slate-600\">\n        <summary className=\"cursor-pointer rounded font-medium text-indigo-700 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500\">\n          View data as table\n        </summary>\n        <div className=\"mt-2 overflow-x-auto\">\n          <table className=\"w-full min-w-[20rem] text-left text-sm\">\n            <caption className=\"sr-only\">Monthly visitors</caption>\n            <thead>\n              <tr className=\"border-b border-slate-200 text-slate-500\">\n                <th scope=\"col\" className=\"py-1.5 pr-4 font-medium\">\n                  Month\n                </th>\n                <th scope=\"col\" className=\"py-1.5 text-right font-medium\">\n                  Visitors\n                </th>\n              </tr>\n            </thead>\n            <tbody>\n              {data.map((d) => (\n                <tr key={d.label} className=\"border-b border-slate-100 last:border-0\">\n                  <th scope=\"row\" className=\"py-1.5 pr-4 font-normal\">\n                    {d.label}\n                  </th>\n                  <td className=\"py-1.5 text-right tabular-nums\">{nf.format(d.visitors)}</td>\n                </tr>\n              ))}\n            </tbody>\n          </table>\n        </div>\n      </details>\n    </div>\n  );\n}\n\n/* ------------------------- Bar chart ---------------------------- */\n\nfunction BarChart({ data }: { data: BarPoint[] }) {\n  const [active, setActive] = useState<number | null>(null);\n  const max = niceMax(Math.max(...data.map((d) => d.value)));\n  const total = data.reduce((s, d) => s + d.value, 0);\n\n  return (\n    <div>\n      <ul className=\"space-y-3\" aria-label=\"Sessions by acquisition channel\">\n        {data.map((d, i) => {\n          const pct = (d.value / max) * 100;\n          const share = Math.round((d.value / total) * 100);\n          const dim = active !== null && active !== i;\n          return (\n            <li\n              key={d.label}\n              className=\"group\"\n              onMouseEnter={() => setActive(i)}\n              onMouseLeave={() => setActive(null)}\n              onFocus={() => setActive(i)}\n              onBlur={() => setActive(null)}\n            >\n              <div className=\"mb-1 flex items-baseline justify-between gap-3 text-sm\">\n                <span className=\"font-medium text-slate-700\">{d.label}</span>\n                <span className=\"tabular-nums text-slate-500\">\n                  {nf.format(d.value)} <span className=\"text-slate-400\">· {share}%</span>\n                </span>\n              </div>\n              <div\n                className=\"h-3 rounded-full bg-slate-100\"\n                role=\"img\"\n                aria-label={`${d.label}: ${nf.format(d.value)} sessions, ${share} percent of total`}\n                tabIndex={0}\n              >\n                <div\n                  className={`h-full rounded-full transition-all duration-200 ${\n                    dim ? \"bg-indigo-300\" : \"bg-indigo-500\"\n                  }`}\n                  style={{ width: `${pct}%` }}\n                />\n              </div>\n            </li>\n          );\n        })}\n      </ul>\n    </div>\n  );\n}\n\n/* --------------------------- Vertical bars ---------------------- */\n\ninterface WeekDay {\n  label: string;\n  signups: number;\n}\n\nconst SIGNUPS: WeekDay[] = [\n  { label: \"Mon\", signups: 142 },\n  { label: \"Tue\", signups: 188 },\n  { label: \"Wed\", signups: 215 },\n  { label: \"Thu\", signups: 198 },\n  { label: \"Fri\", signups: 176 },\n  { label: \"Sat\", signups: 94 },\n  { label: \"Sun\", signups: 81 },\n];\n\nfunction ColumnChart({ data }: { data: WeekDay[] }) {\n  const [active, setActive] = useState<number | null>(null);\n  const W = 480;\n  const H = 220;\n  const m = { top: 12, right: 8, bottom: 28, left: 36 };\n  const iw = W - m.left - m.right;\n  const ih = H - m.top - m.bottom;\n  const yMax = niceMax(Math.max(...data.map((d) => d.signups)));\n  const ticks = [0, 0.5, 1].map((t) => t * yMax);\n  const slot = iw / data.length;\n  const bw = slot * 0.55;\n  const y = (v: number) => m.top + ih - (v / yMax) * ih;\n\n  return (\n    <div>\n      <svg\n        viewBox={`0 0 ${W} ${H}`}\n        className=\"h-auto w-full\"\n        role=\"img\"\n        aria-label={`Bar chart of signups by weekday. ${data.map((d) => `${d.label}: ${d.signups}`).join(\", \")}.`}\n      >\n        {ticks.map((t) => (\n          <g key={t}>\n            <line x1={m.left} x2={W - m.right} y1={y(t)} y2={y(t)} stroke=\"#e2e8f0\" />\n            <text x={m.left - 6} y={y(t)} textAnchor=\"end\" dominantBaseline=\"middle\" fontSize={11} fill=\"#64748b\">\n              {t}\n            </text>\n          </g>\n        ))}\n        {data.map((d, i) => {\n          const cx = m.left + slot * i + slot / 2;\n          const top = y(d.signups);\n          const isActive = active === i;\n          return (\n            <g\n              key={d.label}\n              onMouseEnter={() => setActive(i)}\n              onMouseLeave={() => setActive(null)}\n            >\n              <rect\n                x={cx - bw / 2}\n                y={top}\n                width={bw}\n                height={m.top + ih - top}\n                rx={4}\n                fill={isActive ? \"#4338ca\" : \"#818cf8\"}\n              />\n              {isActive && (\n                <text x={cx} y={top - 5} textAnchor=\"middle\" fontSize={11} fontWeight={600} fill=\"#1e293b\">\n                  {d.signups}\n                </text>\n              )}\n              <text x={cx} y={H - 9} textAnchor=\"middle\" fontSize={11} fill=\"#64748b\">\n                {d.label}\n              </text>\n            </g>\n          );\n        })}\n      </svg>\n    </div>\n  );\n}\n\n/* --------------------------- Card shell ------------------------- */\n\nfunction Card({\n  title,\n  description,\n  headingId,\n  children,\n  className = \"\",\n}: {\n  title: string;\n  description?: string;\n  headingId: string;\n  children: React.ReactNode;\n  className?: string;\n}) {\n  return (\n    <section\n      aria-labelledby={headingId}\n      className={`rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6 ${className}`}\n    >\n      <h2 id={headingId} className=\"text-base font-semibold text-slate-900\">\n        {title}\n      </h2>\n      {description && <p className=\"mt-0.5 text-sm text-slate-500\">{description}</p>}\n      <div className=\"mt-5\">{children}</div>\n    </section>\n  );\n}\n\n/* ----------------------------- Page ----------------------------- */\n\nexport default function Page() {\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <a\n        href=\"#main\"\n        className=\"sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg\"\n      >\n        Skip to main content\n      </a>\n\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8\">\n          <div className=\"flex items-center gap-3\">\n            <span className=\"flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-white\">\n              <BarChart3 className=\"h-5 w-5\" aria-hidden=\"true\" />\n            </span>\n            <span className=\"text-lg font-semibold tracking-tight\">Pulse Analytics</span>\n          </div>\n          <p className=\"hidden text-sm text-slate-500 sm:block\">\n            Last updated <time dateTime=\"2025-12-15T09:42:00\">Dec 15, 2025 at 9:42 AM</time>\n          </p>\n        </div>\n      </header>\n\n      <main id=\"main\" className=\"mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8\">\n        <div className=\"mb-6\">\n          <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">Overview</h1>\n          <p className=\"mt-1 text-sm text-slate-600\">\n            Performance across all products for the last 30 days compared with the previous period.\n          </p>\n        </div>\n\n        <section aria-labelledby=\"kpi-heading\">\n          <h2 id=\"kpi-heading\" className=\"sr-only\">\n            Key metrics\n          </h2>\n          <ul className=\"grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4\">\n            {KPIS.map((k) => (\n              <KpiCard key={k.id} kpi={k} />\n            ))}\n          </ul>\n        </section>\n\n        <div className=\"mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3\">\n          <Card\n            title=\"Visitors over time\"\n            description=\"Unique monthly visitors, January to December 2025\"\n            headingId=\"visitors-heading\"\n            className=\"lg:col-span-2\"\n          >\n            <LineChart data={VISITORS} />\n          </Card>\n\n          <Card\n            title=\"Traffic by channel\"\n            description=\"Sessions this month\"\n            headingId=\"channels-heading\"\n          >\n            <BarChart data={CHANNELS} />\n          </Card>\n\n          <Card\n            title=\"Signups by weekday\"\n            description=\"New accounts created last week\"\n            headingId=\"signups-heading\"\n          >\n            <ColumnChart data={SIGNUPS} />\n          </Card>\n\n          <Card\n            title=\"Recent activity\"\n            description=\"Latest events across your workspace\"\n            headingId=\"activity-heading\"\n            className=\"lg:col-span-2\"\n          >\n            <ul className=\"divide-y divide-slate-100\">\n              {ACTIVITY.map((a) => {\n                const Icon = a.icon;\n                return (\n                  <li key={a.id} className=\"flex items-start gap-3 py-3 first:pt-0 last:pb-0\">\n                    <span\n                      className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${TONE_STYLES[a.tone]}`}\n                    >\n                      <Icon className=\"h-4 w-4\" aria-hidden=\"true\" />\n                    </span>\n                    <div className=\"min-w-0 flex-1\">\n                      <p className=\"text-sm font-medium text-slate-900\">{a.title}</p>\n                      <p className=\"text-sm text-slate-600\">{a.detail}</p>\n                    </div>\n                    <p className=\"shrink-0 text-xs text-slate-500\">{a.time}</p>\n                  </li>\n                );\n              })}\n            </ul>\n          </Card>\n        </div>\n      </main>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

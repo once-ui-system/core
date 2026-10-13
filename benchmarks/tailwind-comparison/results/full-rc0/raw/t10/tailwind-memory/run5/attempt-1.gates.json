@@ -1,0 +1,65 @@
+{
+  "arm": "D",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2782
+    },
+    "build": {
+      "ok": true,
+      "ms": 10764
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 388,
+          "height": 812,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 401,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 401,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 1,
+        "serious_or_critical": 1,
+        "ids": [
+          "label-content-name-mismatch:serious:1"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "errors": [
+            "interaction failed: locator.scrollIntoViewIfNeeded: Timeout 4990.889000000432ms exceeded."
+          ]
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "errors": []
+        }
+      }
+    }
+  }
+}

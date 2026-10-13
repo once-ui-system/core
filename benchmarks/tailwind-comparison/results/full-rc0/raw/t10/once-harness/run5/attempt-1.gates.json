@@ -1,0 +1,74 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2933
+    },
+    "build": {
+      "ok": true,
+      "ms": 7652
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 656,
+          "height": 1154,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 656,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 656,
+          "height": 930,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 4,
+        "nodes": 8,
+        "serious_or_critical": 4,
+        "ids": [
+          "aria-prohibited-attr:serious:2",
+          "color-contrast:serious:3",
+          "label-content-name-mismatch:serious:1",
+          "role-img-alt:serious:2"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "errors": []
+        }
+      }
+    }
+  },
+  "validate_ai_code": {
+    "exit": 0,
+    "output": "✓ app/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

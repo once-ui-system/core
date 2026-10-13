@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Data table page — sortable table, filters row (segmented control, date range, search), pagination.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll take a quick look at the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013MvfxXctA1vXfpdemhMMo6",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Key6M8XqYczHvTPabd16oi",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013MvfxXctA1vXfpdemhMMo6",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Key6M8XqYczHvTPabd16oi",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0124RUvwvbJf4FyCX2YcZeCD",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PuR73xswEBWqSJgAozZLtH",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Jx4GzonwPQTPVeRkm5zC24",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0124RUvwvbJf4FyCX2YcZeCD",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PuR73xswEBWqSJgAozZLtH",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Jx4GzonwPQTPVeRkm5zC24",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_016tycr2DDDTki9E4dx9HUb3",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FA8mSMmxzVJVDJZRPqSDxs",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UAoUGGMBrrKNYkcTACcZ5x",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016tycr2DDDTki9E4dx9HUb3",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FA8mSMmxzVJVDJZRPqSDxs",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UAoUGGMBrrKNYkcTACcZ5x",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useMemo, useState } from \"react\";\nimport {\n  ArrowDown,\n  ArrowUp,\n  ArrowUpDown,\n  ChevronLeft,\n  ChevronRight,\n  ChevronsLeft,\n  ChevronsRight,\n  Search,\n  X,\n} from \"lucide-react\";\n\ntype Status = \"Paid\" | \"Pending\" | \"Overdue\" | \"Refunded\";\n\ntype Invoice = {\n  id: string;\n  customer: string;\n  email: string;\n  plan: string;\n  amount: number;\n  status: Status;\n  date: string; // ISO yyyy-mm-dd\n};\n\nconst INVOICES: Invoice[] = [\n  { id: \"INV-1042\", customer: \"Marta Kowalski\", email: \"marta@brightloop.io\", plan: \"Business\", amount: 480, status: \"Paid\", date: \"2025-06-02\" },\n  { id: \"INV-1043\", customer: \"Daniel Okafor\", email: \"daniel@northwind.co\", plan: \"Starter\", amount: 49, status: \"Pending\", date: \"2025-06-03\" },\n  { id: \"INV-1044\", customer: \"Priya Raghavan\", email: \"priya@lumenlabs.dev\", plan: \"Enterprise\", amount: 2400, status: \"Paid\", date: \"2025-06-05\" },\n  { id: \"INV-1045\", customer: \"Tomás Herrera\", email: \"tomas@alderfield.com\", plan: \"Business\", amount: 480, status: \"Overdue\", date: \"2025-06-07\" },\n  { id: \"INV-1046\", customer: \"Hannah Lindqvist\", email: \"hannah@fjordworks.se\", plan: \"Starter\", amount: 49, status: \"Paid\", date: \"2025-06-09\" },\n  { id: \"INV-1047\", customer: \"Yusuf Demir\", email: \"yusuf@kestrelhq.com\", plan: \"Growth\", amount: 190, status: \"Refunded\", date: \"2025-06-10\" },\n  { id: \"INV-1048\", customer: \"Chloe Bennett\", email: \"chloe@paperkite.studio\", plan: \"Growth\", amount: 190, status: \"Paid\", date: \"2025-06-12\" },\n  { id: \"INV-1049\", customer: \"Kenji Watanabe\", email: \"kenji@morrowtech.jp\", plan: \"Enterprise\", amount: 2400, status: \"Pending\", date: \"2025-06-14\" },\n  { id: \"INV-1050\", customer: \"Amara Nwosu\", email: \"amara@sundial.app\", plan: \"Starter\", amount: 49, status: \"Overdue\", date: \"2025-06-15\" },\n  { id: \"INV-1051\", customer: \"Lucas Moreau\", email: \"lucas@verdant.fr\", plan: \"Business\", amount: 480, status: \"Paid\", date: \"2025-06-17\" },\n  { id: \"INV-1052\", customer: \"Sofia Petrova\", email: \"sofia@cobaltmail.eu\", plan: \"Growth\", amount: 190, status: \"Paid\", date: \"2025-06-18\" },\n  { id: \"INV-1053\", customer: \"Oliver Grant\", email: \"oliver@harborlane.co\", plan: \"Starter\", amount: 49, status: \"Pending\", date: \"2025-06-20\" },\n  { id: \"INV-1054\", customer: \"Leila Haddad\", email: \"leila@zenithgrid.io\", plan: \"Enterprise\", amount: 2400, status: \"Paid\", date: \"2025-06-21\" },\n  { id: \"INV-1055\", customer: \"Mateo Silva\", email: \"mateo@pinecrest.dev\", plan: \"Business\", amount: 480, status: \"Refunded\", date: \"2025-06-23\" },\n  { id: \"INV-1056\", customer: \"Ingrid Solberg\", email: \"ingrid@auroraops.no\", plan: \"Growth\", amount: 190, status: \"Paid\", date: \"2025-06-24\" },\n  { id: \"INV-1057\", customer: \"Ravi Menon\", email: \"ravi@tessellate.in\", plan: \"Starter\", amount: 49, status: \"Overdue\", date: \"2025-06-26\" },\n  { id: \"INV-1058\", customer: \"Grace Tan\", email: \"grace@openharvest.sg\", plan: \"Business\", amount: 480, status: \"Paid\", date: \"2025-06-27\" },\n  { id: \"INV-1059\", customer: \"Felix Baumann\", email: \"felix@riverbend.ch\", plan: \"Enterprise\", amount: 2400, status: \"Pending\", date: \"2025-06-29\" },\n  { id: \"INV-1060\", customer: \"Nadia Rossi\", email: \"nadia@calderastudio.it\", plan: \"Growth\", amount: 190, status: \"Paid\", date: \"2025-07-01\" },\n  { id: \"INV-1061\", customer: \"Ethan Brooks\", email: \"ethan@summitpath.com\", plan: \"Starter\", amount: 49, status: \"Paid\", date: \"2025-07-02\" },\n  { id: \"INV-1062\", customer: \"Zainab Ali\", email: \"zainab@crescentlogic.ae\", plan: \"Business\", amount: 480, status: \"Overdue\", date: \"2025-07-04\" },\n  { id: \"INV-1063\", customer: \"Jonas Weber\", email: \"jonas@stackhaus.de\", plan: \"Growth\", amount: 190, status: \"Pending\", date: \"2025-07-06\" },\n  { id: \"INV-1064\", customer: \"Camila Torres\", email: \"camila@solmarket.mx\", plan: \"Enterprise\", amount: 2400, status: \"Paid\", date: \"2025-07-08\" },\n  { id: \"INV-1065\", customer: \"Arjun Kapoor\", email: \"arjun@bluepeak.in\", plan: \"Starter\", amount: 49, status: \"Refunded\", date: \"2025-07-09\" },\n  { id: \"INV-1066\", customer: \"Emily Carter\", email: \"emily@maplewood.ca\", plan: \"Business\", amount: 480, status: \"Paid\", date: \"2025-07-11\" },\n  { id: \"INV-1067\", customer: \"Viktor Novak\", email: \"viktor@ironleaf.cz\", plan: \"Growth\", amount: 190, status: \"Paid\", date: \"2025-07-13\" },\n  { id: \"INV-1068\", customer: \"Aisha Khan\", email: \"aisha@tidepool.pk\", plan: \"Starter\", amount: 49, status: \"Pending\", date: \"2025-07-14\" },\n  { id: \"INV-1069\", customer: \"Noah Fischer\", email: \"noah@lanternhq.com\", plan: \"Enterprise\", amount: 2400, status: \"Overdue\", date: \"2025-07-16\" },\n  { id: \"INV-1070\", customer: \"Maya Goldberg\", email: \"maya@quillandco.com\", plan: \"Business\", amount: 480, status: \"Paid\", date: \"2025-07-18\" },\n  { id: \"INV-1071\", customer: \"Hugo Laurent\", email: \"hugo@brasserie.tech\", plan: \"Growth\", amount: 190, status: \"Paid\", date: \"2025-07-19\" },\n  { id: \"INV-1072\", customer: \"Selin Aydin\", email: \"selin@marblearch.tr\", plan: \"Starter\", amount: 49, status: \"Paid\", date: \"2025-07-21\" },\n];\n\ntype Filter = \"All\" | Status;\nconst FILTERS: Filter[] = [\"All\", \"Paid\", \"Pending\", \"Overdue\", \"Refunded\"];\nconst PAGE_SIZES = [5, 10, 20];\n\ntype SortKey = \"id\" | \"customer\" | \"plan\" | \"amount\" | \"status\" | \"date\";\ntype SortDir = \"asc\" | \"desc\";\n\nconst COLUMNS: { key: SortKey; label: string; align?: \"right\"; hideOnMobile?: boolean }[] = [\n  { key: \"id\", label: \"Invoice\" },\n  { key: \"customer\", label: \"Customer\" },\n  { key: \"plan\", label: \"Plan\", hideOnMobile: true },\n  { key: \"status\", label: \"Status\" },\n  { key: \"date\", label: \"Date\", hideOnMobile: true },\n  { key: \"amount\", label: \"Amount\", align: \"right\" },\n];\n\nconst STATUS_STYLES: Record<Status, string> = {\n  Paid: \"bg-emerald-50 text-emerald-800 ring-emerald-600/20\",\n  Pending: \"bg-amber-50 text-amber-800 ring-amber-600/20\",\n  Overdue: \"bg-red-50 text-red-800 ring-red-600/20\",\n  Refunded: \"bg-slate-100 text-slate-700 ring-slate-500/20\",\n};\n\nconst STATUS_DOT: Record<Status, string> = {\n  Paid: \"bg-emerald-500\",\n  Pending: \"bg-amber-500\",\n  Overdue: \"bg-red-500\",\n  Refunded: \"bg-slate-400\",\n};\n\nconst currency = new Intl.NumberFormat(\"en-US\", { style: \"currency\", currency: \"USD\", maximumFractionDigits: 0 });\n\nfunction formatDate(iso: string): string {\n  const [y, m, d] = iso.split(\"-\").map(Number);\n  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(\"en-US\", {\n    month: \"short\",\n    day: \"numeric\",\n    year: \"numeric\",\n    timeZone: \"UTC\",\n  });\n}\n\nfunction compare(a: Invoice, b: Invoice, key: SortKey): number {\n  switch (key) {\n    case \"amount\":\n      return a.amount - b.amount;\n    case \"id\":\n      return a.id.localeCompare(b.id, undefined, { numeric: true });\n    default:\n      return a[key].localeCompare(b[key]);\n  }\n}\n\nexport default function Page() {\n  const [filter, setFilter] = useState<Filter>(\"All\");\n  const [query, setQuery] = useState(\"\");\n  const [from, setFrom] = useState(\"\");\n  const [to, setTo] = useState(\"\");\n  const [sortKey, setSortKey] = useState<SortKey>(\"date\");\n  const [sortDir, setSortDir] = useState<SortDir>(\"desc\");\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState(10);\n\n  const uid = useId();\n  const searchId = `${uid}-search`;\n  const fromId = `${uid}-from`;\n  const toId = `${uid}-to`;\n  const sizeId = `${uid}-size`;\n\n  const rows = useMemo(() => {\n    const q = query.trim().toLowerCase();\n    const filtered = INVOICES.filter((inv) => {\n      if (filter !== \"All\" && inv.status !== filter) return false;\n      if (from && inv.date < from) return false;\n      if (to && inv.date > to) return false;\n      if (q) {\n        const hay = `${inv.id} ${inv.customer} ${inv.email} ${inv.plan}`.toLowerCase();\n        if (!hay.includes(q)) return false;\n      }\n      return true;\n    });\n    const sorted = [...filtered].sort((a, b) => {\n      const c = compare(a, b, sortKey);\n      return sortDir === \"asc\" ? c : -c;\n    });\n    return sorted;\n  }, [filter, query, from, to, sortKey, sortDir]);\n\n  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));\n  const currentPage = Math.min(page, totalPages);\n  const startIdx = (currentPage - 1) * pageSize;\n  const pageRows = rows.slice(startIdx, startIdx + pageSize);\n  const total = rows.reduce((sum, r) => sum + r.amount, 0);\n\n  const hasFilters = filter !== \"All\" || query !== \"\" || from !== \"\" || to !== \"\";\n\n  function toggleSort(key: SortKey) {\n    if (key === sortKey) {\n      setSortDir((d) => (d === \"asc\" ? \"desc\" : \"asc\"));\n    } else {\n      setSortKey(key);\n      setSortDir(key === \"amount\" || key === \"date\" ? \"desc\" : \"asc\");\n    }\n    setPage(1);\n  }\n\n  function resetFilters() {\n    setFilter(\"All\");\n    setQuery(\"\");\n    setFrom(\"\");\n    setTo(\"\");\n    setPage(1);\n  }\n\n  const pageNumbers = useMemo(() => {\n    const pages: (number | \"gap-start\" | \"gap-end\")[] = [];\n    const add = (n: number) => pages.push(n);\n    for (let i = 1; i <= totalPages; i++) {\n      if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 1) add(i);\n      else if (i < currentPage && !pages.includes(\"gap-start\")) pages.push(\"gap-start\");\n      else if (i > currentPage && !pages.includes(\"gap-end\")) pages.push(\"gap-end\");\n    }\n    return pages;\n  }, [totalPages, currentPage]);\n\n  const inputBase =\n    \"w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40\";\n\n  const pageBtn =\n    \"inline-flex h-9 min-w-9 items-center justify-center rounded-lg border border-slate-300 bg-white px-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white\";\n\n  return (\n    <main className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <div className=\"mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12\">\n        <header className=\"mb-6\">\n          <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">Invoices</h1>\n          <p className=\"mt-1 text-sm text-slate-600\">\n            Track billing across customers. Filter by status or date, search, and sort any column.\n          </p>\n        </header>\n\n        <section aria-label=\"Filters\" className=\"mb-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm\">\n          <div className=\"flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between\">\n            <div>\n              <span id={`${uid}-status-label`} className=\"mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-500\">\n                Status\n              </span>\n              <div\n                role=\"radiogroup\"\n                aria-labelledby={`${uid}-status-label`}\n                className=\"flex w-full flex-wrap gap-1 rounded-lg bg-slate-100 p-1 sm:inline-flex sm:w-auto sm:flex-nowrap\"\n              >\n                {FILTERS.map((f) => {\n                  const active = filter === f;\n                  return (\n                    <button\n                      key={f}\n                      type=\"button\"\n                      role=\"radio\"\n                      aria-checked={active}\n                      onClick={() => {\n                        setFilter(f);\n                        setPage(1);\n                      }}\n                      className={`flex-1 rounded-md px-3 py-1.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 sm:flex-none ${\n                        active ? \"bg-white text-slate-900 shadow-sm\" : \"text-slate-600 hover:text-slate-900\"\n                      }`}\n                    >\n                      {f}\n                    </button>\n                  );\n                })}\n              </div>\n            </div>\n\n            <div className=\"grid grid-cols-2 gap-3 sm:flex sm:items-end\">\n              <div>\n                <label htmlFor={fromId} className=\"mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-500\">\n                  From\n                </label>\n                <input\n                  id={fromId}\n                  type=\"date\"\n                  value={from}\n                  max={to || undefined}\n                  onChange={(e) => {\n                    setFrom(e.target.value);\n                    setPage(1);\n                  }}\n                  className={inputBase}\n                />\n              </div>\n              <div>\n                <label htmlFor={toId} className=\"mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-500\">\n                  To\n                </label>\n                <input\n                  id={toId}\n                  type=\"date\"\n                  value={to}\n                  min={from || undefined}\n                  onChange={(e) => {\n                    setTo(e.target.value);\n                    setPage(1);\n                  }}\n                  className={inputBase}\n                />\n              </div>\n            </div>\n\n            <div className=\"lg:w-72\">\n              <label htmlFor={searchId} className=\"mb-1.5 block text-xs font-medium uppercase tracking-wide text-slate-500\">\n                Search\n              </label>\n              <div className=\"relative\">\n                <Search aria-hidden=\"true\" className=\"pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400\" />\n                <input\n                  id={searchId}\n                  type=\"search\"\n                  value={query}\n                  onChange={(e) => {\n                    setQuery(e.target.value);\n                    setPage(1);\n                  }}\n                  placeholder=\"Customer, email or invoice #\"\n                  className={`${inputBase} pl-9`}\n                />\n              </div>\n            </div>\n          </div>\n\n          {hasFilters && (\n            <div className=\"mt-3 flex justify-end\">\n              <button\n                type=\"button\"\n                onClick={resetFilters}\n                className=\"inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-indigo-700 hover:bg-indigo-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500\"\n              >\n                <X aria-hidden=\"true\" className=\"size-4\" />\n                Clear filters\n              </button>\n            </div>\n          )}\n        </section>\n\n        <section className=\"overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm\">\n          <div className=\"overflow-x-auto\">\n            <table className=\"w-full min-w-full text-left text-sm\">\n              <caption className=\"sr-only\">\n                Invoices, sorted by {COLUMNS.find((c) => c.key === sortKey)?.label}{\" \"}\n                {sortDir === \"asc\" ? \"ascending\" : \"descending\"}\n              </caption>\n              <thead className=\"border-b border-slate-200 bg-slate-50\">\n                <tr>\n                  {COLUMNS.map((col) => {\n                    const active = sortKey === col.key;\n                    const Icon = !active ? ArrowUpDown : sortDir === \"asc\" ? ArrowUp : ArrowDown;\n                    return (\n                      <th\n                        key={col.key}\n                        scope=\"col\"\n                        aria-sort={active ? (sortDir === \"asc\" ? \"ascending\" : \"descending\") : \"none\"}\n                        className={`px-2 py-1 sm:px-3 ${col.align === \"right\" ? \"text-right\" : \"\"} ${\n                          col.hideOnMobile ? \"hidden md:table-cell\" : \"\"\n                        }`}\n                      >\n                        <button\n                          type=\"button\"\n                          onClick={() => toggleSort(col.key)}\n                          className={`inline-flex items-center gap-1.5 rounded-md px-2 py-2 text-xs font-semibold uppercase tracking-wide hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${\n                            active ? \"text-slate-900\" : \"text-slate-500\"\n                          }`}\n                        >\n                          {col.label}\n                          <Icon aria-hidden=\"true\" className={`size-3.5 ${active ? \"\" : \"opacity-60\"}`} />\n                        </button>\n                      </th>\n                    );\n                  })}\n                </tr>\n              </thead>\n              <tbody className=\"divide-y divide-slate-100\">\n                {pageRows.length === 0 ? (\n                  <tr>\n                    <td colSpan={COLUMNS.length} className=\"px-4 py-14 text-center\">\n                      <p className=\"font-medium text-slate-900\">No invoices match your filters</p>\n                      <p className=\"mt-1 text-slate-500\">Try a different status, widen the date range, or clear the search.</p>\n                      {hasFilters && (\n                        <button\n                          type=\"button\"\n                          onClick={resetFilters}\n                          className=\"mt-4 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500\"\n                        >\n                          Clear filters\n                        </button>\n                      )}\n                    </td>\n                  </tr>\n                ) : (\n                  pageRows.map((inv) => (\n                    <tr key={inv.id} className=\"hover:bg-slate-50/70\">\n                      <th scope=\"row\" className=\"whitespace-nowrap px-4 py-3 font-medium text-slate-900\">\n                        {inv.id}\n                        <span className=\"block text-xs font-normal text-slate-500 md:hidden\">{formatDate(inv.date)}</span>\n                      </th>\n                      <td className=\"px-4 py-3\">\n                        <span className=\"block font-medium text-slate-900\">{inv.customer}</span>\n                        <span className=\"block max-w-[11rem] truncate text-xs text-slate-500 sm:max-w-none\">{inv.email}</span>\n                      </td>\n                      <td className=\"hidden px-4 py-3 text-slate-700 md:table-cell\">{inv.plan}</td>\n                      <td className=\"px-4 py-3\">\n                        <span\n                          className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${STATUS_STYLES[inv.status]}`}\n                        >\n                          <span aria-hidden=\"true\" className={`size-1.5 rounded-full ${STATUS_DOT[inv.status]}`} />\n                          {inv.status}\n                        </span>\n                      </td>\n                      <td className=\"hidden whitespace-nowrap px-4 py-3 text-slate-700 md:table-cell\">{formatDate(inv.date)}</td>\n                      <td className=\"whitespace-nowrap px-4 py-3 text-right font-medium tabular-nums text-slate-900\">\n                        {currency.format(inv.amount)}\n                      </td>\n                    </tr>\n                  ))\n                )}\n              </tbody>\n            </table>\n          </div>\n\n          <div className=\"flex flex-col gap-3 border-t border-slate-200 bg-white px-4 py-3 lg:flex-row lg:items-center lg:justify-between\">\n            <p className=\"text-sm text-slate-600\" role=\"status\" aria-live=\"polite\">\n              {rows.length === 0 ? (\n                \"0 results\"\n              ) : (\n                <>\n                  Showing <span className=\"font-medium text-slate-900\">{startIdx + 1}</span>–\n                  <span className=\"font-medium text-slate-900\">{Math.min(startIdx + pageSize, rows.length)}</span> of{\" \"}\n                  <span className=\"font-medium text-slate-900\">{rows.length}</span> invoices ·{\" \"}\n                  <span className=\"font-medium text-slate-900\">{currency.format(total)}</span> total\n                </>\n              )}\n            </p>\n\n            <div className=\"flex flex-wrap items-center gap-3\">\n              <div className=\"flex items-center gap-2\">\n                <label htmlFor={sizeId} className=\"text-sm text-slate-600\">\n                  Rows per page\n                </label>\n                <select\n                  id={sizeId}\n                  value={pageSize}\n                  onChange={(e) => {\n                    setPageSize(Number(e.target.value));\n                    setPage(1);\n                  }}\n                  className=\"h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm text-slate-900 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500/40\"\n                >\n                  {PAGE_SIZES.map((s) => (\n                    <option key={s} value={s}>\n                      {s}\n                    </option>\n                  ))}\n                </select>\n              </div>\n\n              <nav aria-label=\"Pagination\" className=\"flex items-center gap-1\">\n                <button\n                  type=\"button\"\n                  className={pageBtn}\n                  onClick={() => setPage(1)}\n                  disabled={currentPage === 1}\n                  aria-label=\"First page\"\n                >\n                  <ChevronsLeft aria-hidden=\"true\" className=\"size-4\" />\n                </button>\n                <button\n                  type=\"button\"\n                  className={pageBtn}\n                  onClick={() => setPage(currentPage - 1)}\n                  disabled={currentPage === 1}\n                  aria-label=\"Previous page\"\n                >\n                  <ChevronLeft aria-hidden=\"true\" className=\"size-4\" />\n                </button>\n\n                <ul className=\"hidden items-center gap-1 sm:flex\">\n                  {pageNumbers.map((p) =>\n                    typeof p === \"number\" ? (\n                      <li key={p}>\n                        <button\n                          type=\"button\"\n                          onClick={() => setPage(p)}\n                          aria-label={`Page ${p}`}\n                          aria-current={p === currentPage ? \"page\" : undefined}\n                          className={`${pageBtn} ${\n                            p === currentPage ? \"border-indigo-600 bg-indigo-600 text-white hover:bg-indigo-600\" : \"\"\n                          }`}\n                        >\n                          {p}\n                        </button>\n                      </li>\n                    ) : (\n                      <li key={p} aria-hidden=\"true\" className=\"px-1 text-slate-400\">\n                        …\n                      </li>\n                    ),\n                  )}\n                </ul>\n                <span className=\"px-2 text-sm text-slate-600 sm:hidden\">\n                  Page {currentPage} of {totalPages}\n                </span>\n\n                <button\n                  type=\"button\"\n                  className={pageBtn}\n                  onClick={() => setPage(currentPage + 1)}\n                  disabled={currentPage === totalPages}\n                  aria-label=\"Next page\"\n                >\n                  <ChevronRight aria-hidden=\"true\" className=\"size-4\" />\n                </button>\n                <button\n                  type=\"button\"\n                  className={pageBtn}\n                  onClick={() => setPage(totalPages)}\n                  disabled={currentPage === totalPages}\n                  aria-label=\"Last page\"\n                >\n                  <ChevronsRight aria-hidden=\"true\" className=\"size-4\" />\n                </button>\n              </nav>\n            </div>\n          </div>\n        </section>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

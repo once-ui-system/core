@@ -1,0 +1,41 @@
+{
+  "attempt": 1,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 481,
+    "chars": 16847,
+    "bytes": 16855,
+    "tokens_o200k": 3479,
+    "tokens_claudeLegacy": 3621,
+    "tokens_exact": 5642
+  },
+  "raw": {
+    "lines": 421,
+    "chars": 16099,
+    "bytes": 16107,
+    "tokens_o200k": 3438,
+    "tokens_claudeLegacy": 3615,
+    "tokens_exact": 5602
+  },
+  "components": [
+    "Avatar",
+    "Button",
+    "Column",
+    "Dialog",
+    "Feedback",
+    "Form",
+    "Heading",
+    "Input",
+    "Row",
+    "Select",
+    "Setting",
+    "SettingGroup",
+    "Switch",
+    "Tab",
+    "TabList",
+    "TabPanel",
+    "Tabs",
+    "Text",
+    "Textarea"
+  ]
+}

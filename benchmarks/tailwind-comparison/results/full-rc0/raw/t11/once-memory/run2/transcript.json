@@ -1,0 +1,268 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Changelog/timeline page — versioned entries on a timeline, tags per release, copyable code snippets.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012kBKYx62RZLcsR7FRUpXVm",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GsPcPZudRfhgztLx8LSjxC",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012kBKYx62RZLcsR7FRUpXVm",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GsPcPZudRfhgztLx8LSjxC",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_012cresKQrjWeUQEomSgWCEp",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Tnjj734UW8zHsWMqSLftDq",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GW7MzGaYhdNQ5HFjKT9Aze",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012cresKQrjWeUQEomSgWCEp",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Tnjj734UW8zHsWMqSLftDq",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GW7MzGaYhdNQ5HFjKT9Aze",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01PbagFjS4dvyCxxPH3GGduy",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FQeS3BqmDAGJnBup3c5V9j",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016LiFJgqBxTJhfKE3Nsat1C",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WiY8yymsu43JfBUtgnZWjo",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PbagFjS4dvyCxxPH3GGduy",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FQeS3BqmDAGJnBup3c5V9j",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016LiFJgqBxTJhfKE3Nsat1C",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WiY8yymsu43JfBUtgnZWjo",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since the Once UI package isn't installed locally to inspect, I'll stick to APIs I'm confident about (Flex, Column, Row, Heading, Text, Tag, Button, Line, useToast) and use plain elements with Once UI tokens for the layout and copy button to minimize type risk.\n\n",
+          "signature": "CAQSzwcKEQgSGAI4AUIJbmFycmF0aW9uEgzQeXSmFIzc1SbWj/8aDG64ouxy0H5WDyWYMiIw/9KuzU3CbLhbNa3kTx3xxn9Lf1Xm8meGOEbxizk4qdmmMoaTTVPxiVFlkqRz4Su7KusGgyP7i8ZrcPFzWQpbfFQzthJ+04Nmj0KDD90oJc3QL7VLO7Iu2Ff9SPT+j3WE1YVVGyzGhpIqKklcIrWpNvtbMbhdu037p1whsEhVW88kRYTSlNy8zvoJXsZEeD5SrwCLglkXUpSMiKtvqOGlZaE/oofJyQ6YE8aZNpzC+ezdF6sq6l0fzXxuH/MttrceOlJ+jrbxS/5tlUfOUQE+B6WP2OJXZsyUaPlohi5s18H/57ETOH/60fM9AFA2wjBshkzPJoN3lijMuh2Bi/9JObE99aTLZxuSgSbSJFrY0BE+sbpBQ4PBK5p0pUtx/U5Emno77D5K52BkP0qVrDBSwkZuG2/TufjrJeIYZuu6fFFIeF+TZlyWSb7hO1GdmYRWqilVWXjhn4Le3gU2DejC8ChRCESIbsQtfS8hYq2JcvhxTVzllZ7pFAp/C9iBCWMk0+rzdEIgLkyY1iKPdreuayzdtwjVhFbyjYgPcVtfssLr2sF1glH/5KHd/70DEUUkH00nsrvQq6a9sDZ6dI5HfcVd8kd2QkFmy9J2/r5wCqmgrpQX5ewwODX6FsYdzwGMGYOUGkLZbhN32wOh4kwPm5TxRqlvMQdioGIJqemEjlQax+hjFsRCa0fs9BWcIpFt6MGtzA62IuzB1u7zWndpQ3th2ZTexGTY1gmoa8ryB1LUVJ6LW1bTc+t0L6HtpjfpRHdJOQ3+1eLP+07Myb6doge1NiisktAIapLrnonrQ5xDW1KrWK8jlzw08HDSPH03vzmUbwQfRwdfd8sT6zgL91l6wjVD2sy40N3mv0mNdj44RVjMaE7p6xRFeV7HKPP8FsxDbaWJtqpHxtuzI09ALIfC0j7x3hTpB+FOkLQ140yrXFNBeG2x6I8UXa/doVMUELyp7ED/c124T3zq632gHqVFqzpJ82N3vjrPiRmfHz6eqc+ZhM6vrVrFC/RAHLL83uQI7DcIVoRQ5rF5WuKmimrrY/eSo2Un8ZKS70nqGR6w/cSOnA1BoLYdZNVksc+CdMTJq/F2wJyvAXT5Tgz1JykEqtSr5/WnMQnE8Sejz9JyxUOpOuWjXBXQRpnw2eKaqM6UzXVrNF4Qyp79hrBCfUn24Gx8uan7jjkIjmz7hs80q+SpAajMXGfReovZL3BYcKAMm54exyglHvBU5vgYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Hi8P6xDoFC15pSrc9saYKT",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Hi8P6xDoFC15pSrc9saYKT",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Not installed, as expected. I'll use only the most stable props and keep the rest in native elements with inline styles and Once UI CSS variables."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017dzoasxQLVqPNfohA8uN7S",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017dzoasxQLVqPNfohA8uN7S",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useMemo, useRef, useState } from \"react\";\nimport { Column, Flex, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype TagKind = \"feature\" | \"fix\" | \"breaking\" | \"perf\" | \"security\" | \"docs\";\n\ntype Snippet = {\n  label: string;\n  language: string;\n  code: string;\n};\n\ntype Release = {\n  version: string;\n  date: string;\n  title: string;\n  summary: string;\n  tags: TagKind[];\n  highlights: string[];\n  snippet?: Snippet;\n};\n\nconst TAG_META: Record<TagKind, { label: string; color: string }> = {\n  feature: { label: \"Feature\", color: \"#2f9e6b\" },\n  fix: { label: \"Fix\", color: \"#3b82d6\" },\n  breaking: { label: \"Breaking\", color: \"#d6453b\" },\n  perf: { label: \"Performance\", color: \"#c98a0b\" },\n  security: { label: \"Security\", color: \"#8b5cd6\" },\n  docs: { label: \"Docs\", color: \"#6b7280\" },\n};\n\nconst RELEASES: Release[] = [\n  {\n    version: \"3.0.0\",\n    date: \"2025-03-18\",\n    title: \"Streaming pipelines and a new config format\",\n    summary:\n      \"Pipelines can now stream partial results to clients as steps complete. The config file moves to a typed TypeScript format, and several long-deprecated options are removed.\",\n    tags: [\"feature\", \"breaking\"],\n    highlights: [\n      \"Stream step output with the new onProgress hook.\",\n      \"Config is now defined with defineConfig() for full type inference.\",\n      \"Removed the legacy `workers` option; use `concurrency` instead.\",\n      \"Minimum supported Node.js version is now 20.\",\n    ],\n    snippet: {\n      label: \"Migrate your config\",\n      language: \"ts\",\n      code: `import { defineConfig } from \"relay-cli\";\n\nexport default defineConfig({\n  concurrency: 4,\n  stream: true,\n  onProgress(step) {\n    console.log(\\`\\${step.name}: \\${step.percent}%\\`);\n  },\n});`,\n    },\n  },\n  {\n    version: \"2.8.2\",\n    date: \"2025-02-27\",\n    title: \"Retry fixes and safer defaults\",\n    summary:\n      \"A patch release addressing retry storms under network partitions and tightening default TLS settings.\",\n    tags: [\"fix\", \"security\"],\n    highlights: [\n      \"Exponential backoff now caps at 30 seconds with jitter.\",\n      \"TLS 1.0 and 1.1 are no longer negotiated by default.\",\n      \"Fixed a crash when a step returned `undefined` during dry runs.\",\n    ],\n  },\n  {\n    version: \"2.8.0\",\n    date: \"2025-02-04\",\n    title: \"Faster cold starts\",\n    summary:\n      \"Lazy-loading of plugins and a rewritten module resolver cut cold start time by more than half on large projects.\",\n    tags: [\"perf\", \"feature\"],\n    highlights: [\n      \"Plugins load on first use instead of at startup.\",\n      \"Resolver cache persists between runs in `.relay/cache`.\",\n      \"New `relay doctor` command diagnoses slow plugins.\",\n    ],\n    snippet: {\n      label: \"Profile startup time\",\n      language: \"bash\",\n      code: `npx relay doctor --profile\n# Plugin load times\n#   @relay/git      12ms\n#   @relay/docker   48ms`,\n    },\n  },\n  {\n    version: \"2.7.1\",\n    date: \"2025-01-15\",\n    title: \"Documentation overhaul\",\n    summary:\n      \"Every command now has a reference page with runnable examples, plus a searchable recipes section.\",\n    tags: [\"docs\"],\n    highlights: [\n      \"Added 24 recipes covering CI, monorepos and caching.\",\n      \"Command reference includes exit codes and environment variables.\",\n    ],\n  },\n  {\n    version: \"2.7.0\",\n    date: \"2024-12-09\",\n    title: \"Remote caching\",\n    summary:\n      \"Share build artifacts across machines with an S3-compatible remote cache, now generally available.\",\n    tags: [\"feature\", \"perf\"],\n    highlights: [\n      \"Supports any S3-compatible storage endpoint.\",\n      \"Cache entries are content-addressed and verified on download.\",\n      \"Fixed an issue where symlinks were dereferenced on restore.\",\n    ],\n    snippet: {\n      label: \"Enable remote cache\",\n      language: \"bash\",\n      code: `relay config set cache.remote s3://team-builds/relay\nrelay config set cache.readOnly false`,\n    },\n  },\n];\n\nconst ALL = \"all\" as const;\ntype Filter = TagKind | typeof ALL;\n\nfunction formatDate(iso: string): string {\n  const [y, m, d] = iso.split(\"-\").map(Number);\n  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(\"en-US\", {\n    year: \"numeric\",\n    month: \"long\",\n    day: \"numeric\",\n    timeZone: \"UTC\",\n  });\n}\n\nfunction TagBadge({ kind }: { kind: TagKind }) {\n  const meta = TAG_META[kind];\n  return (\n    <span\n      style={{\n        display: \"inline-flex\",\n        alignItems: \"center\",\n        gap: 6,\n        padding: \"2px 10px\",\n        borderRadius: 999,\n        fontSize: 12,\n        fontWeight: 600,\n        lineHeight: \"20px\",\n        color: meta.color,\n        border: `1px solid ${meta.color}`,\n        background: `color-mix(in srgb, ${meta.color} 12%, transparent)`,\n      }}\n    >\n      <span\n        aria-hidden=\"true\"\n        style={{ width: 6, height: 6, borderRadius: 999, background: meta.color }}\n      />\n      {meta.label}\n    </span>\n  );\n}\n\nfunction CodeSnippet({ snippet, id }: { snippet: Snippet; id: string }) {\n  const [copied, setCopied] = useState(false);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(() => {\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, []);\n\n  const copy = useCallback(async () => {\n    let ok = false;\n    try {\n      await navigator.clipboard.writeText(snippet.code);\n      ok = true;\n    } catch {\n      try {\n        const ta = document.createElement(\"textarea\");\n        ta.value = snippet.code;\n        ta.setAttribute(\"readonly\", \"\");\n        ta.style.position = \"fixed\";\n        ta.style.opacity = \"0\";\n        document.body.appendChild(ta);\n        ta.select();\n        ok = document.execCommand(\"copy\");\n        document.body.removeChild(ta);\n      } catch {\n        ok = false;\n      }\n    }\n    setCopied(ok);\n    if (timer.current) clearTimeout(timer.current);\n    timer.current = setTimeout(() => setCopied(false), 2000);\n  }, [snippet.code]);\n\n  return (\n    <div\n      style={{\n        borderRadius: 12,\n        border: \"1px solid var(--neutral-alpha-medium)\",\n        background: \"var(--surface-background)\",\n        overflow: \"hidden\",\n        width: \"100%\",\n        minWidth: 0,\n      }}\n    >\n      <div\n        style={{\n          display: \"flex\",\n          alignItems: \"center\",\n          justifyContent: \"space-between\",\n          gap: 12,\n          padding: \"8px 8px 8px 14px\",\n          borderBottom: \"1px solid var(--neutral-alpha-medium)\",\n        }}\n      >\n        <span id={`${id}-label`} style={{ fontSize: 13, fontWeight: 600 }}>\n          {snippet.label}\n          <span\n            style={{\n              marginLeft: 8,\n              fontSize: 11,\n              fontWeight: 500,\n              textTransform: \"uppercase\",\n              letterSpacing: 0.5,\n              opacity: 0.6,\n            }}\n          >\n            {snippet.language}\n          </span>\n        </span>\n        <button\n          type=\"button\"\n          onClick={copy}\n          aria-label={`Copy code: ${snippet.label}`}\n          className=\"cl-copy\"\n          style={{\n            cursor: \"pointer\",\n            padding: \"6px 12px\",\n            borderRadius: 8,\n            fontSize: 13,\n            fontWeight: 600,\n            fontFamily: \"inherit\",\n            color: \"inherit\",\n            background: \"var(--neutral-alpha-weak)\",\n            border: \"1px solid var(--neutral-alpha-medium)\",\n            minHeight: 32,\n          }}\n        >\n          {copied ? \"Copied ✓\" : \"Copy\"}\n        </button>\n      </div>\n      <pre\n        tabIndex={0}\n        aria-labelledby={`${id}-label`}\n        style={{\n          margin: 0,\n          padding: 14,\n          overflowX: \"auto\",\n          fontFamily: \"var(--font-code)\",\n          fontSize: 13,\n          lineHeight: 1.6,\n        }}\n      >\n        <code>{snippet.code}</code>\n      </pre>\n      <span role=\"status\" aria-live=\"polite\" style={SR_ONLY}>\n        {copied ? \"Code copied to clipboard\" : \"\"}\n      </span>\n    </div>\n  );\n}\n\nconst SR_ONLY: React.CSSProperties = {\n  position: \"absolute\",\n  width: 1,\n  height: 1,\n  padding: 0,\n  margin: -1,\n  overflow: \"hidden\",\n  clip: \"rect(0,0,0,0)\",\n  whiteSpace: \"nowrap\",\n  border: 0,\n};\n\nexport default function Page() {\n  const [filter, setFilter] = useState<Filter>(ALL);\n\n  const filters = useMemo<Filter[]>(() => {\n    const used = new Set<TagKind>();\n    RELEASES.forEach((r) => r.tags.forEach((t) => used.add(t)));\n    return [ALL, ...(Object.keys(TAG_META) as TagKind[]).filter((t) => used.has(t))];\n  }, []);\n\n  const visible = useMemo(\n    () => (filter === ALL ? RELEASES : RELEASES.filter((r) => r.tags.includes(filter))),\n    [filter],\n  );\n\n  return (\n    <Flex fillWidth horizontal=\"center\" paddingX=\"m\" paddingY=\"xl\">\n      <style>{`\n        .cl-copy:hover { background: var(--neutral-alpha-medium) !important; }\n        .cl-copy:focus-visible,\n        .cl-filter:focus-visible,\n        .cl-code-focus:focus-visible,\n        pre:focus-visible { outline: 2px solid var(--brand-solid-strong, #3b82d6); outline-offset: 2px; }\n        .cl-filter:hover { background: var(--neutral-alpha-medium) !important; }\n        .cl-timeline { list-style: none; margin: 0; padding: 0; position: relative; }\n        .cl-item { position: relative; padding-left: 32px; padding-bottom: 40px; }\n        .cl-item:last-child { padding-bottom: 0; }\n        .cl-item::before {\n          content: \"\"; position: absolute; left: 6px; top: 20px; bottom: -4px;\n          width: 2px; background: var(--neutral-alpha-medium);\n        }\n        .cl-item:last-child::before { display: none; }\n        .cl-dot {\n          position: absolute; left: 0; top: 6px; width: 14px; height: 14px; border-radius: 999px;\n          background: var(--page-background, #fff); border: 3px solid var(--brand-solid-strong, #3b82d6);\n          box-sizing: border-box;\n        }\n        .cl-card {\n          border: 1px solid var(--neutral-alpha-medium); border-radius: 16px;\n          padding: 20px; background: var(--surface-background); min-width: 0;\n        }\n        @media (min-width: 768px) {\n          .cl-item { padding-left: 48px; }\n          .cl-item::before { left: 8px; }\n          .cl-dot { width: 18px; height: 18px; left: -1px; top: 4px; }\n          .cl-card { padding: 28px; }\n        }\n        @media (prefers-reduced-motion: no-preference) {\n          .cl-copy, .cl-filter { transition: background 0.15s ease; }\n        }\n      `}</style>\n\n      <Column fillWidth maxWidth={40} gap=\"32\" style={{ minWidth: 0 }}>\n        <Column as=\"header\" gap=\"12\">\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n            RELAY CLI\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-s\" wrap=\"balance\">\n            Changelog\n          </Heading>\n          <Text variant=\"body-default-l\" onBackground=\"neutral-weak\" wrap=\"balance\">\n            Every release of Relay, newest first. Filter by tag to find new features, fixes and\n            breaking changes.\n          </Text>\n        </Column>\n\n        <nav aria-label=\"Filter releases by tag\">\n          <div role=\"group\" aria-label=\"Tags\" style={{ display: \"flex\", flexWrap: \"wrap\", gap: 8 }}>\n            {filters.map((f) => {\n              const active = f === filter;\n              return (\n                <button\n                  key={f}\n                  type=\"button\"\n                  className=\"cl-filter\"\n                  aria-pressed={active}\n                  onClick={() => setFilter(f)}\n                  style={{\n                    cursor: \"pointer\",\n                    padding: \"6px 14px\",\n                    minHeight: 36,\n                    borderRadius: 999,\n                    fontFamily: \"inherit\",\n                    fontSize: 13,\n                    fontWeight: 600,\n                    color: active ? \"var(--page-background, #fff)\" : \"inherit\",\n                    background: active ? \"var(--neutral-solid-strong, #222)\" : \"var(--neutral-alpha-weak)\",\n                    border: \"1px solid var(--neutral-alpha-medium)\",\n                  }}\n                >\n                  {f === ALL ? \"All releases\" : TAG_META[f].label}\n                </button>\n              );\n            })}\n          </div>\n          <span role=\"status\" aria-live=\"polite\" style={SR_ONLY}>\n            Showing {visible.length} of {RELEASES.length} releases\n          </span>\n        </nav>\n\n        <ol className=\"cl-timeline\" aria-label=\"Release timeline\">\n          {visible.map((release) => {\n            const id = `v${release.version.replace(/\\./g, \"-\")}`;\n            return (\n              <li key={release.version} className=\"cl-item\">\n                <span className=\"cl-dot\" aria-hidden=\"true\" />\n                <article className=\"cl-card\" aria-labelledby={`${id}-title`}>\n                  <Column gap=\"16\" style={{ minWidth: 0 }}>\n                    <Row gap=\"12\" vertical=\"center\" wrap>\n                      <span\n                        style={{\n                          fontFamily: \"var(--font-code)\",\n                          fontSize: 14,\n                          fontWeight: 700,\n                          padding: \"2px 10px\",\n                          borderRadius: 8,\n                          background: \"var(--neutral-alpha-weak)\",\n                          border: \"1px solid var(--neutral-alpha-medium)\",\n                        }}\n                      >\n                        v{release.version}\n                      </span>\n                      <time dateTime={release.date} style={{ fontSize: 14, opacity: 0.7 }}>\n                        {formatDate(release.date)}\n                      </time>\n                    </Row>\n\n                    <Heading as=\"h2\" id={`${id}-title`} variant=\"heading-strong-l\" wrap=\"balance\">\n                      {release.title}\n                    </Heading>\n\n                    <ul\n                      aria-label={`Tags for version ${release.version}`}\n                      style={{\n                        display: \"flex\",\n                        flexWrap: \"wrap\",\n                        gap: 8,\n                        listStyle: \"none\",\n                        margin: 0,\n                        padding: 0,\n                      }}\n                    >\n                      {release.tags.map((t) => (\n                        <li key={t}>\n                          <TagBadge kind={t} />\n                        </li>\n                      ))}\n                    </ul>\n\n                    <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                      {release.summary}\n                    </Text>\n\n                    <ul style={{ margin: 0, paddingLeft: 20, display: \"grid\", gap: 6 }}>\n                      {release.highlights.map((h) => (\n                        <li key={h} style={{ fontSize: 15, lineHeight: 1.5 }}>\n                          {h}\n                        </li>\n                      ))}\n                    </ul>\n\n                    {release.snippet && <CodeSnippet snippet={release.snippet} id={`${id}-code`} />}\n                  </Column>\n                </article>\n              </li>\n            );\n          })}\n        </ol>\n\n        {visible.length === 0 && (\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            No releases match this tag.\n          </Text>\n        )}\n      </Column>\n    </Flex>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

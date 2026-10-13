@@ -1,0 +1,38 @@
+{
+  "attempt": 1,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 660,
+    "chars": 21406,
+    "bytes": 21424,
+    "tokens_o200k": 4451,
+    "tokens_claudeLegacy": 4690,
+    "tokens_exact": 7322
+  },
+  "raw": {
+    "lines": 569,
+    "chars": 19990,
+    "bytes": 20008,
+    "tokens_o200k": 4346,
+    "tokens_claudeLegacy": 4623,
+    "tokens_exact": 7113
+  },
+  "components": [
+    "Avatar",
+    "Button",
+    "Column",
+    "EmojiPickerDropdown",
+    "Fade",
+    "IconButton",
+    "IconName",
+    "Kbar",
+    "KeyTip",
+    "Line",
+    "Row",
+    "Spinner",
+    "Tag",
+    "Text",
+    "Textarea",
+    "VisuallyHidden"
+  ]
+}

@@ -1,0 +1,315 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Changelog/timeline page — versioned entries on a timeline, tags per release, copyable code snippets.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the project's existing files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018CctCDJJci6o4r65WEsgru",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01X83A6WmS7mrNQnfMTD6qc8",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018CctCDJJci6o4r65WEsgru",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01X83A6WmS7mrNQnfMTD6qc8",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_014rRXT2YjgNKzPeKnZnXKgd",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QWUpNWnKQ558YeE3JCUxw4",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015PzJQFVaoMmNFyXVpLs2RA",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014rRXT2YjgNKzPeKnZnXKgd",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QWUpNWnKQ558YeE3JCUxw4",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015PzJQFVaoMmNFyXVpLs2RA",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_014t3imhHSa4MJQUCNmZWt2c",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RCMw1AXyhumwEjYga9KZBX",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NH8yw4rUVpD45U8jV1RpcH",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Racj523D851oL51LZHx5m3",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Dd4cvf4PcFZbbQYCwp4yqJ",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014t3imhHSa4MJQUCNmZWt2c",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RCMw1AXyhumwEjYga9KZBX",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NH8yw4rUVpD45U8jV1RpcH",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Racj523D851oL51LZHx5m3",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Dd4cvf4PcFZbbQYCwp4yqJ",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check whether the package is installed locally so I can verify its types."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0176zYA2CjdvUWRRsHhxQ8rP",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RTqnA6DoaDYFBYuk1rxWFs",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0176zYA2CjdvUWRRsHhxQ8rP",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RTqnA6DoaDYFBYuk1rxWFs",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I can't inspect the package, so I'll stick to the Once UI components I'm confident about, using plain elements with token-based inline styles for anything uncertain like the timeline line and dots.\n\n",
+          "signature": "CAQS7ggKEQgSGAI4AUIJbmFycmF0aW9uEgx8U4BV8EnozXrh/AAaDD1wFaeNGLmIgTyOWSIwlG3DadQE56gxQvGg/e/VdW3nP6YcDo3Zxzi9DY9OiI+hMbtEMe4yx9hXvbqwMOd9KooI2z3FFR8+RxidlV8a+J2IixUEb0hLRStl+Zla8S8i/4Nr/2LtW4HOVK8QzKECG1U6jdaXraH2wGTFmNN4KBqVjZ0omziVlHcgO03rXtWZhZwaAJEAxEQKtRHjn0tFFKoTLUv0crZWIB3l2xX2zecKdB526koj+xq/QE8JNYyT2gEfzRvyttcn04nc2bQVLktfMNZ8wJuGwsBehFDU3+zUYQdjX5IhLWHdIR7KMEvEkt+gqvLxxkyN+dGTtCx4CZILZRDz5v1BIu/QTwC+LVPOcbsZ+DVD+i7Kus1h6wjdEu+TtzRKoUVEjDNgVyG+jA7S33P/M53NjDkuaEZtoeU3o3KBDn/DsFkOyFhe5XAkevQLRBNAbowyqG90U7xa+X/+PqQWJtDhINw7ctNSR6wrqQsCb6LHD3v+bsty+ykEYgNasFhTjoVV1wssUqNVyOsnB11b/m5OoBboRni6E4zQiOdRZASd6qvZYbqczn0jGWtknoZK5epIQ5qhOkTCOkZWqyBjv3BErk3r4CdJR5lXUA2JqMfc75fu6LMzk7KewUFRONj5y5FLiGSd7fU1zZFBUPJERct9AmmCpfYtNZWl4xspi3hV08+2DCpMLhX0bt8jAe2GnOIk/jpTH/vWxb9kW+ZMZ+v3KQiFkBllfzHClSddXtI5cvw2ktA6nCEMYbyInPNFd3OKQfykjF8abv3IH7Ui7VrHI4p6DXb3oNTiNxBKbktb2z2WWJs0FwfUDeFdxdOBh7g6dWDBVdXw/Z9l5/Nwu5YqgQH4pnuPyffavFZpgJzpP9qvplTbpo5QDbZ4tr/GX0lh7X5IIPwurgQMlu80s34bxhRHPNOHyvmhBCGd2RKrRdVynbPsAZQ2JkHJu5mloE9pEJ9vNNlxeN9lzT+XiF6RqprvcPj19u05yVQyfBAqJvY5J0HOyJtRfyD0ho/XzCNr9LfX3PbYWaN9nDuJoou7n+V6ZdZtvcx0O68JwHBgRDEnoMjg+LacI4fwUyKbC1pv/8Vpo3Pi8utEOTQjFon5/O07WE9nGL5zDWGyOsV/PTwvodY9J0zDz1PqZxTMJDdoXKaQUB0QJdcJA9/JgOp9q+Rhx8bGqcKvvV8OHeiuZco9b9gukU3cg0uZE0CxkJexbrExK7dx2vTud6U34MctnXz+8zYyfnNaGqpi8VtaPyhFHPNpBAUTOAzEo1rOv1/Hwj6poW19tH1eex1JId8kix2x7r6+4GDBkUHIAgwDrVy3XvviDSCnmqF4C/0/SUeHVJdLk5AvmhT3TBrZGZH3prJgEhPHHqknVl1/THUwrPlxfSOZSk5q1CjKrRZTqRgFtWYpI3DM+fcOwWkYx0AliaQOWZK72UkU86o+UYHx/w05Zt0YAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AbhvtERwsCSUzXndpGWF4W",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AbhvtERwsCSUzXndpGWF4W",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useMemo, useState } from \"react\";\nimport { Column, Row, Heading, Text, Tag, Button } from \"@once-ui-system/core\";\n\ntype TagKind = \"feature\" | \"fix\" | \"breaking\" | \"perf\" | \"security\" | \"docs\";\n\ninterface Snippet {\n  label: string;\n  language: string;\n  code: string;\n}\n\ninterface Release {\n  version: string;\n  date: string; // ISO date\n  title: string;\n  summary: string;\n  tags: TagKind[];\n  changes: string[];\n  snippet?: Snippet;\n}\n\nconst TAG_META: Record<TagKind, { label: string; variant: \"brand\" | \"success\" | \"danger\" | \"warning\" | \"info\" | \"neutral\" }> = {\n  feature: { label: \"Feature\", variant: \"brand\" },\n  fix: { label: \"Fix\", variant: \"success\" },\n  breaking: { label: \"Breaking\", variant: \"danger\" },\n  perf: { label: \"Performance\", variant: \"warning\" },\n  security: { label: \"Security\", variant: \"info\" },\n  docs: { label: \"Docs\", variant: \"neutral\" },\n};\n\nconst RELEASES: Release[] = [\n  {\n    version: \"3.0.0\",\n    date: \"2025-06-17\",\n    title: \"Streaming pipelines and a new config format\",\n    summary:\n      \"Pipelines can now stream results as they are produced, and configuration moves to a single typed file. This release contains breaking changes; see the migration snippet below.\",\n    tags: [\"feature\", \"breaking\"],\n    changes: [\n      \"Added createPipeline() with first-class async iterator support.\",\n      \"Replaced .relayrc.json with a typed relay.config.ts file.\",\n      \"Removed the deprecated onComplete callback in favour of the done event.\",\n      \"Minimum supported Node.js version is now 20.11.\",\n    ],\n    snippet: {\n      label: \"Migrate your config\",\n      language: \"ts\",\n      code: `// relay.config.ts\nimport { defineConfig } from \"relay-kit\";\n\nexport default defineConfig({\n  concurrency: 8,\n  retries: { attempts: 3, backoff: \"exponential\" },\n  stream: true,\n});`,\n    },\n  },\n  {\n    version: \"2.8.3\",\n    date: \"2025-05-29\",\n    title: \"Retry jitter and timeout fixes\",\n    summary: \"A patch release addressing two reports of stalled jobs under heavy load.\",\n    tags: [\"fix\", \"perf\"],\n    changes: [\n      \"Fixed a race where timed-out jobs were retried twice.\",\n      \"Added randomized jitter to exponential backoff to avoid thundering herds.\",\n      \"Reduced memory use of the in-flight job registry by roughly 18%.\",\n    ],\n  },\n  {\n    version: \"2.8.0\",\n    date: \"2025-05-06\",\n    title: \"Observability hooks\",\n    summary: \"Tap into every stage of a job with lightweight, zero-overhead hooks when unused.\",\n    tags: [\"feature\", \"docs\"],\n    changes: [\n      \"New hooks API: onStart, onRetry, onSuccess and onFailure.\",\n      \"OpenTelemetry exporter available as relay-kit/otel.\",\n      \"Rewrote the Troubleshooting guide with common failure patterns.\",\n    ],\n    snippet: {\n      label: \"Register a hook\",\n      language: \"ts\",\n      code: `import { createPipeline } from \"relay-kit\";\n\nconst pipeline = createPipeline({ name: \"invoices\" });\n\npipeline.on(\"onRetry\", ({ jobId, attempt, error }) => {\n  console.warn(\\`Job \\${jobId} retry #\\${attempt}: \\${error.message}\\`);\n});`,\n    },\n  },\n  {\n    version: \"2.7.2\",\n    date: \"2025-04-14\",\n    title: \"Security hardening\",\n    summary: \"Upgrades dependencies and tightens payload validation on the webhook receiver.\",\n    tags: [\"security\", \"fix\"],\n    changes: [\n      \"Webhook signatures are now verified using constant-time comparison.\",\n      \"Rejected payloads larger than 1 MB by default (configurable).\",\n      \"Updated transitive dependencies to resolve two moderate advisories.\",\n    ],\n  },\n  {\n    version: \"2.7.0\",\n    date: \"2025-03-03\",\n    title: \"Faster cold starts\",\n    summary: \"Lazy-loads optional adapters so serverless deployments start noticeably quicker.\",\n    tags: [\"perf\", \"feature\"],\n    changes: [\n      \"Adapters are loaded on first use rather than at import time.\",\n      \"Cold start on a 256 MB function dropped from 410 ms to 190 ms.\",\n      \"Added the relay doctor command to diagnose environment issues.\",\n    ],\n    snippet: {\n      label: \"Run diagnostics\",\n      language: \"bash\",\n      code: `npx relay-kit doctor --verbose`,\n    },\n  },\n];\n\nconst FILTERS: Array<\"all\" | TagKind> = [\"all\", \"feature\", \"fix\", \"breaking\", \"perf\", \"security\", \"docs\"];\n\nfunction formatDate(iso: string): string {\n  const [y, m, d] = iso.split(\"-\").map(Number);\n  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(\"en-US\", {\n    year: \"numeric\",\n    month: \"long\",\n    day: \"numeric\",\n    timeZone: \"UTC\",\n  });\n}\n\nfunction CodeSnippet({ snippet, id }: { snippet: Snippet; id: string }) {\n  const [copied, setCopied] = useState(false);\n  const [failed, setFailed] = useState(false);\n\n  const handleCopy = async () => {\n    try {\n      await navigator.clipboard.writeText(snippet.code);\n      setFailed(false);\n      setCopied(true);\n      window.setTimeout(() => setCopied(false), 2000);\n    } catch {\n      setCopied(false);\n      setFailed(true);\n      window.setTimeout(() => setFailed(false), 2500);\n    }\n  };\n\n  return (\n    <div\n      style={{\n        border: \"1px solid var(--neutral-alpha-medium)\",\n        borderRadius: \"var(--radius-m)\",\n        overflow: \"hidden\",\n        background: \"var(--surface-background)\",\n        maxWidth: \"100%\",\n      }}\n    >\n      <div\n        style={{\n          display: \"flex\",\n          alignItems: \"center\",\n          justifyContent: \"space-between\",\n          gap: 12,\n          padding: \"8px 8px 8px 16px\",\n          borderBottom: \"1px solid var(--neutral-alpha-medium)\",\n          background: \"var(--neutral-alpha-weak)\",\n        }}\n      >\n        <Text variant=\"label-default-s\" onBackground=\"neutral-medium\" id={`${id}-label`}>\n          {snippet.label} · {snippet.language}\n        </Text>\n        <Button size=\"s\" variant=\"secondary\" onClick={handleCopy} aria-describedby={`${id}-status`}>\n          {copied ? \"Copied\" : failed ? \"Copy failed\" : \"Copy\"}\n        </Button>\n        <span\n          id={`${id}-status`}\n          role=\"status\"\n          aria-live=\"polite\"\n          style={{\n            position: \"absolute\",\n            width: 1,\n            height: 1,\n            overflow: \"hidden\",\n            clip: \"rect(0 0 0 0)\",\n            whiteSpace: \"nowrap\",\n          }}\n        >\n          {copied ? \"Code copied to clipboard\" : failed ? \"Could not copy code\" : \"\"}\n        </span>\n      </div>\n      <pre\n        tabIndex={0}\n        aria-labelledby={`${id}-label`}\n        style={{\n          margin: 0,\n          padding: 16,\n          overflowX: \"auto\",\n          fontFamily: \"var(--font-code)\",\n          fontSize: \"var(--static-font-size-s, 13px)\",\n          lineHeight: 1.6,\n          color: \"var(--neutral-on-background-strong)\",\n          whiteSpace: \"pre\",\n        }}\n      >\n        <code>{snippet.code}</code>\n      </pre>\n    </div>\n  );\n}\n\nexport default function ChangelogPage() {\n  const [filter, setFilter] = useState<\"all\" | TagKind>(\"all\");\n\n  const visible = useMemo(\n    () => (filter === \"all\" ? RELEASES : RELEASES.filter((r) => r.tags.includes(filter))),\n    [filter],\n  );\n\n  return (\n    <Column as=\"main\" fillWidth horizontal=\"center\" paddingX=\"l\" paddingY=\"xl\" gap=\"xl\">\n      <Column maxWidth={48} fillWidth gap=\"32\">\n        <Column gap=\"12\" as=\"header\">\n          <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n            relay-kit\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-m\">\n            Changelog\n          </Heading>\n          <Text variant=\"body-default-l\" onBackground=\"neutral-weak\">\n            Every release of relay-kit, newest first. Filter by type to find what changed, and copy\n            snippets straight into your project.\n          </Text>\n        </Column>\n\n        <div role=\"group\" aria-label=\"Filter releases by tag\" style={{ display: \"flex\", flexWrap: \"wrap\", gap: 8 }}>\n          {FILTERS.map((f) => (\n            <Button\n              key={f}\n              size=\"s\"\n              variant={filter === f ? \"primary\" : \"secondary\"}\n              aria-pressed={filter === f}\n              onClick={() => setFilter(f)}\n            >\n              {f === \"all\" ? \"All\" : TAG_META[f].label}\n            </Button>\n          ))}\n        </div>\n\n        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" role=\"status\" aria-live=\"polite\">\n          Showing {visible.length} of {RELEASES.length} releases\n        </Text>\n\n        {visible.length === 0 ? (\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            No releases match this filter.\n          </Text>\n        ) : (\n          <ol\n            style={{\n              listStyle: \"none\",\n              margin: 0,\n              padding: 0,\n              position: \"relative\",\n              display: \"flex\",\n              flexDirection: \"column\",\n              gap: 40,\n            }}\n          >\n            {visible.map((release, index) => {\n              const headingId = `release-${release.version.replace(/\\./g, \"-\")}`;\n              const isLast = index === visible.length - 1;\n              return (\n                <li\n                  key={release.version}\n                  style={{ position: \"relative\", paddingLeft: 32, minWidth: 0 }}\n                >\n                  {!isLast && (\n                    <span\n                      aria-hidden=\"true\"\n                      style={{\n                        position: \"absolute\",\n                        left: 5,\n                        top: 18,\n                        bottom: -40,\n                        width: 2,\n                        background: \"var(--neutral-alpha-medium)\",\n                      }}\n                    />\n                  )}\n                  <span\n                    aria-hidden=\"true\"\n                    style={{\n                      position: \"absolute\",\n                      left: 0,\n                      top: 6,\n                      width: 12,\n                      height: 12,\n                      borderRadius: \"50%\",\n                      background: index === 0 ? \"var(--brand-solid-strong)\" : \"var(--neutral-solid-medium)\",\n                      boxShadow: \"0 0 0 4px var(--page-background)\",\n                    }}\n                  />\n                  <article aria-labelledby={headingId}>\n                    <Column gap=\"16\">\n                      <Column gap=\"8\">\n                        <div style={{ display: \"flex\", flexWrap: \"wrap\", alignItems: \"baseline\", gap: \"4px 12px\" }}>\n                          <Heading as=\"h2\" variant=\"heading-strong-xl\" id={headingId}>\n                            v{release.version}\n                          </Heading>\n                          <time dateTime={release.date}>\n                            <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                              {formatDate(release.date)}\n                            </Text>\n                          </time>\n                        </div>\n                        <Heading as=\"h3\" variant=\"heading-default-m\">\n                          {release.title}\n                        </Heading>\n                        <ul\n                          aria-label={`Tags for version ${release.version}`}\n                          style={{ listStyle: \"none\", margin: 0, padding: 0, display: \"flex\", flexWrap: \"wrap\", gap: 8 }}\n                        >\n                          {release.tags.map((t) => (\n                            <li key={t}>\n                              <Tag size=\"m\" variant={TAG_META[t].variant}>\n                                {TAG_META[t].label}\n                              </Tag>\n                            </li>\n                          ))}\n                        </ul>\n                      </Column>\n\n                      <Text variant=\"body-default-m\" onBackground=\"neutral-medium\">\n                        {release.summary}\n                      </Text>\n\n                      <ul style={{ margin: 0, paddingLeft: 20, display: \"flex\", flexDirection: \"column\", gap: 6 }}>\n                        {release.changes.map((c) => (\n                          <li key={c}>\n                            <Text variant=\"body-default-m\">{c}</Text>\n                          </li>\n                        ))}\n                      </ul>\n\n                      {release.snippet && <CodeSnippet snippet={release.snippet} id={`${headingId}-snippet`} />}\n                    </Column>\n                  </article>\n                </li>\n              );\n            })}\n          </ol>\n        )}\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(332,45): error TS2322: Type '{ children: string; size: \"m\"; variant: \"neutral\" | \"brand\" | \"info\" | \"danger\" | \"warning\" | \"success\"; }' is not assignable to type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "In Once UI, `Tag` takes a `variant` only in newer versions. The installed version doesn't have it, so I'll render the tags as styled `span` elements and avoid depending on `Tag`'s props.\n\n```tsx\n\"use client\";\n\nimport { useMemo, useState } from \"react\";\nimport { Column, Heading, Text, Button } from \"@once-ui-system/core\";\n\ntype TagKind = \"feature\" | \"fix\" | \"breaking\" | \"perf\" | \"security\" | \"docs\";\ntype ToneName = \"brand\" | \"success\" | \"danger\" | \"warning\" | \"info\" | \"neutral\";\n\ninterface Snippet {\n  label: string;\n  language: string;\n  code: string;\n}\n\ninterface Release {\n  version: string;\n  date: string; // ISO date\n  title: string;\n  summary: string;\n  tags: TagKind[];\n  changes: string[];\n  snippet?: Snippet;\n}\n\nconst TAG_META: Record<TagKind, { label: string; tone: ToneName }> = {\n  feature: { label: \"Feature\", tone: \"brand\" },\n  fix: { label: \"Fix\", tone: \"success\" },\n  breaking: { label: \"Breaking\", tone: \"danger\" },\n  perf: { label: \"Performance\", tone: \"warning\" },\n  security: { label: \"Security\", tone: \"info\" },\n  docs: { label: \"Docs\", tone: \"neutral\" },\n};\n\nconst TONE_STYLES: Record<ToneName, { bg: string; border: string }> = {\n  brand: { bg: \"var(--brand-alpha-weak)\", border: \"var(--brand-alpha-medium)\" },\n  success: { bg: \"var(--success-alpha-weak)\", border: \"var(--success-alpha-medium)\" },\n  danger: { bg: \"var(--danger-alpha-weak)\", border: \"var(--danger-alpha-medium)\" },\n  warning: { bg: \"var(--warning-alpha-weak)\", border: \"var(--warning-alpha-medium)\" },\n  info: { bg: \"var(--info-alpha-weak, var(--brand-alpha-weak))\", border: \"var(--info-alpha-medium, var(--brand-alpha-medium))\" },\n  neutral: { bg: \"var(--neutral-alpha-weak)\", border: \"var(--neutral-alpha-medium)\" },\n};\n\nconst RELEASES: Release[] = [\n  {\n    version: \"3.0.0\",\n    date: \"2025-06-17\",\n    title: \"Streaming pipelines and a new config format\",\n    summary:\n      \"Pipelines can now stream results as they are produced, and configuration moves to a single typed file. This release contains breaking changes; see the migration snippet below.\",\n    tags: [\"feature\", \"breaking\"],\n    changes: [\n      \"Added createPipeline() with first-class async iterator support.\",\n      \"Replaced .relayrc.json with a typed relay.config.ts file.\",\n      \"Removed the deprecated onComplete callback in favour of the done event.\",\n      \"Minimum supported Node.js version is now 20.11.\",\n    ],\n    snippet: {\n      label: \"Migrate your config\",\n      language: \"ts\",\n      code: `// relay.config.ts\nimport { defineConfig } from \"relay-kit\";\n\nexport default defineConfig({\n  concurrency: 8,\n  retries: { attempts: 3, backoff: \"exponential\" },\n  stream: true,\n});`,\n    },\n  },\n  {\n    version: \"2.8.3\",\n    date: \"2025-05-29\",\n    title: \"Retry jitter and timeout fixes\",\n    summary: \"A patch release addressing two reports of stalled jobs under heavy load.\",\n    tags: [\"fix\", \"perf\"],\n    changes: [\n      \"Fixed a race where timed-out jobs were retried twice.\",\n      \"Added randomized jitter to exponential backoff to avoid thundering herds.\",\n      \"Reduced memory use of the in-flight job registry by roughly 18%.\",\n    ],\n  },\n  {\n    version: \"2.8.0\",\n    date: \"2025-05-06\",\n    title: \"Observability hooks\",\n    summary: \"Tap into every stage of a job with lightweight, zero-overhead hooks when unused.\",\n    tags: [\"feature\", \"docs\"],\n    changes: [\n      \"New hooks API: onStart, onRetry, onSuccess and onFailure.\",\n      \"OpenTelemetry exporter available as relay-kit/otel.\",\n      \"Rewrote the Troubleshooting guide with common failure patterns.\",\n    ],\n    snippet: {\n      label: \"Register a hook\",\n      language: \"ts\",\n      code: `import { createPipeline } from \"relay-kit\";\n\nconst pipeline = createPipeline({ name: \"invoices\" });\n\npipeline.on(\"onRetry\", ({ jobId, attempt, error }) => {\n  console.warn(\\`Job \\${jobId} retry #\\${attempt}: \\${error.message}\\`);\n});`,\n    },\n  },\n  {\n    version: \"2.7.2\",\n    date: \"2025-04-14\",\n    title: \"Security hardening\",\n    summary: \"Upgrades dependencies and tightens payload validation on the webhook receiver.\",\n    tags: [\"security\", \"fix\"],\n    changes: [\n      \"Webhook signatures are now verified using constant-time comparison.\",\n      \"Rejected payloads larger than 1 MB by default (configurable).\",\n      \"Updated transitive dependencies to resolve two moderate advisories.\",\n    ],\n  },\n  {\n    version: \"2.7.0\",\n    date: \"2025-03-03\",\n    title: \"Faster cold starts\",\n    summary: \"Lazy-loads optional adapters so serverless deployments start noticeably quicker.\",\n    tags: [\"perf\", \"feature\"],\n    changes: [\n      \"Adapters are loaded on first use rather than at import time.\",\n      \"Cold start on a 256 MB function dropped from 410 ms to 190 ms.\",\n      \"Added the relay doctor command to diagnose environment issues.\",\n    ],\n    snippet: {\n      label: \"Run diagnostics\",\n      language: \"bash\",\n      code: `npx relay-kit doctor --verbose`,\n    },\n  },\n];\n\nconst FILTERS: Array<\"all\" | TagKind> = [\"all\", \"feature\", \"fix\", \"breaking\", \"perf\", \"security\", \"docs\"];\n\nfunction formatDate(iso: string): string {\n  const [y, m, d] = iso.split(\"-\").map(Number);\n  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(\"en-US\", {\n    year: \"numeric\",\n    month: \"long\",\n    day: \"numeric\",\n    timeZone: \"UTC\",\n  });\n}\n\nfunction TagPill({ kind }: { kind: TagKind }) {\n  const meta = TAG_META[kind];\n  const tone = TONE_STYLES[meta.tone];\n  return (\n    <span\n      style={{\n        display: \"inline-flex\",\n        alignItems: \"center\",\n        padding: \"2px 10px\",\n        borderRadius: \"var(--radius-full, 999px)\",\n        border: `1px solid ${tone.border}`,\n        background: tone.bg,\n        color: \"var(--neutral-on-background-strong)\",\n        fontSize: 12,\n        fontWeight: 600,\n        lineHeight: 1.6,\n        whiteSpace: \"nowrap\",\n      }}\n    >\n      {meta.label}\n    </span>\n  );\n}\n\nfunction CodeSnippet({ snippet, id }: { snippet: Snippet; id: string }) {\n  const [copied, setCopied] = useState(false);\n  const [failed, setFailed] = useState(false);\n\n  const handleCopy = async () => {\n    try {\n      await navigator.clipboard.writeText(snippet.code);\n      setFailed(false);\n      setCopied(true);\n      window.setTimeout(() => setCopied(false), 2000);\n    } catch {\n      setCopied(false);\n      setFailed(true);\n      window.setTimeout(() => setFailed(false), 2500);\n    }\n  };\n\n  return (\n    <div\n      style={{\n        position: \"relative\",\n        border: \"1px solid var(--neutral-alpha-medium)\",\n        borderRadius: \"var(--radius-m)\",\n        overflow: \"hidden\",\n        background: \"var(--surface-background)\",\n        maxWidth: \"100%\",\n      }}\n    >\n      <div\n        style={{\n          display: \"flex\",\n          alignItems: \"center\",\n          justifyContent: \"space-between\",\n          gap: 12,\n          padding: \"8px 8px 8px 16px\",\n          borderBottom: \"1px solid var(--neutral-alpha-medium)\",\n          background: \"var(--neutral-alpha-weak)\",\n        }}\n      >\n        <span id={`${id}-label`}>\n          <Text variant=\"label-default-s\" onBackground=\"neutral-medium\">\n            {snippet.label} · {snippet.language}\n          </Text>\n        </span>\n        <Button size=\"s\" variant=\"secondary\" onClick={handleCopy}>\n          {copied ? \"Copied\" : failed ? \"Copy failed\" : \"Copy\"}\n        </Button>\n        <span\n          role=\"status\"\n          aria-live=\"polite\"\n          style={{\n            position: \"absolute\",\n            width: 1,\n            height: 1,\n            overflow: \"hidden\",\n            clip: \"rect(0 0 0 0)\",\n            whiteSpace: \"nowrap\",\n          }}\n        >\n          {copied ? \"Code copied to clipboard\" : failed ? \"Could not copy code\" : \"\"}\n        </span>\n      </div>\n      <pre\n        tabIndex={0}\n        role=\"region\"\n        aria-labelledby={`${id}-label`}\n        style={{\n          margin: 0,\n          padding: 16,\n          overflowX: \"auto\",\n          fontFamily: \"var(--font-code)\",\n          fontSize: 13,\n          lineHeight: 1.6,\n          color: \"var(--neutral-on-background-strong)\",\n          whiteSpace: \"pre\",\n        }}\n      >\n        <code>{snippet.code}</code>\n      </pre>\n    </div>\n  );\n}\n\nexport default function ChangelogPage() {\n  const [filter, setFilter] = useState<\"all\" | TagKind>(\"all\");\n\n  const visible = useMemo(\n    () => (filter === \"all\" ? RELEASES : RELEASES.filter((r) => r.tags.includes(filter))),\n    [filter],\n  );\n\n  return (\n    <Column as=\"main\" fillWidth horizontal=\"center\" paddingX=\"l\" paddingY=\"xl\" gap=\"xl\">\n      <Column maxWidth={48} fillWidth gap=\"32\">\n        <Column gap=\"12\" as=\"header\">\n          <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n            relay-kit\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-m\">\n            Changelog\n          </Heading>\n          <Text variant=\"body-default-l\" onBackground=\"neutral-weak\">\n            Every release of relay-kit, newest first. Filter by type to find what changed, and copy\n            snippets straight into your project.\n          </Text>\n        </Column>\n\n        <div role=\"group\" aria-label=\"Filter releases by tag\" style={{ display: \"flex\", flexWrap: \"wrap\", gap: 8 }}>\n          {FILTERS.map((f) => (\n            <Button\n              key={f}\n              size=\"s\"\n              variant={filter === f ? \"primary\" : \"secondary\"}\n              aria-pressed={filter === f}\n              onClick={() => setFilter(f)}\n            >\n              {f === \"all\" ? \"All\" : TAG_META[f].label}\n            </Button>\n          ))}\n        </div>\n\n        <div role=\"status\" aria-live=\"polite\">\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n            Showing {visible.length} of {RELEASES.length} releases\n          </Text>\n        </div>\n\n        {visible.length === 0 ? (\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            No releases match this filter.\n          </Text>\n        ) : (\n          <ol\n            style={{\n              listStyle: \"none\",\n              margin: 0,\n              padding: 0,\n              position: \"relative\",\n              display: \"flex\",\n              flexDirection: \"column\",\n              gap: 40,\n            }}\n          >\n            {visible.map((release, index) => {\n              const headingId = `release-${release.version.replace(/\\./g, \"-\")}`;\n              const isLast = index === visible.length - 1;\n              return (\n                <li\n                  key={release.version}\n                  style={{ position: \"relative\", paddingLeft: 32, minWidth: 0 }}\n                >\n                  {!isLast && (\n                    <span\n                      aria-hidden=\"true\"\n                      style={{\n                        position: \"absolute\",\n                        left: 5,\n                        top: 18,\n                        bottom: -40,\n                        width: 2,\n                        background: \"var(--neutral-alpha-medium)\",\n                      }}\n                    />\n                  )}\n                  <span\n                    aria-hidden=\"true\"\n                    style={{\n                      position: \"absolute\",\n                      left: 0,\n                      top: 6,\n                      width: 12,\n                      height: 12,\n                      borderRadius: \"50%\",\n                      background: index === 0 ? \"var(--brand-solid-strong)\" : \"var(--neutral-solid-medium)\",\n                      boxShadow: \"0 0 0 4px var(--page-background)\",\n                    }}\n                  />\n                  <article aria-labelledby={headingId}>\n                    <Column gap=\"16\">\n                      <Column gap=\"8\">\n                        <div style={{ display: \"flex\", flexWrap: \"wrap\", alignItems: \"baseline\", gap: \"4px 12px\" }}>\n                          <Heading as=\"h2\" variant=\"heading-strong-xl\" id={headingId}>\n                            v{release.version}\n                          </Heading>\n                          <time dateTime={release.date}>\n                            <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                              {formatDate(release.date)}\n                            </Text>\n                          </time>\n                        </div>\n                        <Heading as=\"h3\" variant=\"heading-default-m\">\n                          {release.title}\n                        </Heading>\n                        <ul\n                          aria-label={`Tags for version ${release.version}`}\n                          style={{ listStyle: \"none\", margin: 0, padding: 0, display: \"flex\", flexWrap: \"wrap\", gap: 8 }}\n                        >\n                          {release.tags.map((t) => (\n                            <li key={t}>\n                              <TagPill kind={t} />\n                            </li>\n                          ))}\n                        </ul>\n                      </Column>\n\n                      <Text variant=\"body-default-m\" onBackground=\"neutral-medium\">\n                        {release.summary}\n                      </Text>\n\n                      <ul style={{ margin: 0, paddingLeft: 20, display: \"flex\", flexDirection: \"column\", gap: 6 }}>\n                        {release.changes.map((c) => (\n                          <li key={c}>\n                            <Text variant=\"body-default-m\">{c}</Text>\n                          </li>\n                        ))}\n                      </ul>\n\n                      {release.snippet && <CodeSnippet snippet={release.snippet} id={`${headingId}-snippet`} />}\n                    </Column>\n                  </article>\n                </li>\n              );\n            })}\n          </ol>\n        )}\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(420,23): error TS2322: Type '{ children: string; s: { hide: boolean; }; variant: \"label-default-s\"; }' is not assignable to type 'IntrinsicAttributes & TextProps<\"span\"> & CommonProps & SpacingProps & Omit<DisplayProps, \"as\"> & Omit<...> & { ...; }'.\n  Property 's' does not exist on type 'IntrinsicAttributes & TextProps<\"span\"> & CommonProps & SpacingProps & Omit<DisplayProps, \"as\"> & Omit<...> & { ...; }'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2691
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 2 issue(s)\n  [layout.defaults] position=\"relative\" is the default — omit it\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Settings page — sidebar sections, profile form (avatar upload, inputs, selects), danger zone.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files to see how things are set up."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HLsRRgwa9WeTef62Dnc91j",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AE3TyDtMRPYM4hTAeLuEoq",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HLsRRgwa9WeTef62Dnc91j",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AE3TyDtMRPYM4hTAeLuEoq",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_011dYUHUSgRKSkG5qnfCHe8h",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AQXkQi2weohUXMHEF431rv",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ULGUpvf21kUsv4fxYNFLHw",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Uff5dVyMa2J6LtXdYfwpzm",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011dYUHUSgRKSkG5qnfCHe8h",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AQXkQi2weohUXMHEF431rv",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ULGUpvf21kUsv4fxYNFLHw",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Uff5dVyMa2J6LtXdYfwpzm",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017G15fkz1ybZYwt1QJBSN8q",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0166hJSogxLToKp4pxiMaCNZ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015gYQQxH7dSPMf8hiSXVK45",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01U5TimLU99ctaKjdTbUntD5",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017G15fkz1ybZYwt1QJBSN8q",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0166hJSogxLToKp4pxiMaCNZ",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015gYQQxH7dSPMf8hiSXVK45",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01U5TimLU99ctaKjdTbUntD5",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check whether the Once UI package is installed so I can verify its API."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01R5Hxkoq6v1xvE6hWHJ9ppX",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BkQksQM9A7JXiPQ5YBLpSY",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01R5Hxkoq6v1xvE6hWHJ9ppX",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BkQksQM9A7JXiPQ5YBLpSY",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The package isn't available to inspect, so I'll stick to the Once UI APIs I'm confident about (`Flex`, `Column`, `Row`, `Heading`, `Text`, `Button`, `Input`, `Textarea`, `Select`, `Avatar`, `Switch`, `Line`, `Badge`, `useToast`) and use native elements where I'm unsure of the props.\n\nTo keep the types safe, I'll use native `<select>`, `<input>` and `<button>` elements with CSS-variable styling for the form controls, and Once UI for layout and typography.\n\n```tsx\n\"use client\";\n\nimport React, { useEffect, useId, useMemo, useRef, useState } from \"react\";\nimport { Column, Row, Flex, Heading, Text, Line } from \"@once-ui-system/core\";\n\ntype SectionId = \"profile\" | \"account\" | \"notifications\" | \"danger\";\n\ninterface SectionDef {\n  id: SectionId;\n  label: string;\n  description: string;\n}\n\nconst SECTIONS: SectionDef[] = [\n  { id: \"profile\", label: \"Profile\", description: \"Your public information\" },\n  { id: \"account\", label: \"Account\", description: \"Email and security\" },\n  { id: \"notifications\", label: \"Notifications\", description: \"How we reach you\" },\n  { id: \"danger\", label: \"Danger zone\", description: \"Irreversible actions\" },\n];\n\nconst TIMEZONES = [\n  { value: \"America/Los_Angeles\", label: \"Pacific Time (UTC−08:00)\" },\n  { value: \"America/New_York\", label: \"Eastern Time (UTC−05:00)\" },\n  { value: \"Europe/London\", label: \"London (UTC+00:00)\" },\n  { value: \"Europe/Berlin\", label: \"Central European Time (UTC+01:00)\" },\n  { value: \"Asia/Tokyo\", label: \"Tokyo (UTC+09:00)\" },\n];\n\nconst LANGUAGES = [\n  { value: \"en\", label: \"English\" },\n  { value: \"de\", label: \"Deutsch\" },\n  { value: \"es\", label: \"Español\" },\n  { value: \"fr\", label: \"Français\" },\n  { value: \"ja\", label: \"日本語\" },\n];\n\nconst VISIBILITY = [\n  { value: \"public\", label: \"Public — anyone can see my profile\" },\n  { value: \"members\", label: \"Members only\" },\n  { value: \"private\", label: \"Private — only me\" },\n];\n\ninterface ProfileState {\n  firstName: string;\n  lastName: string;\n  username: string;\n  email: string;\n  bio: string;\n  website: string;\n  timezone: string;\n  language: string;\n  visibility: string;\n}\n\nconst INITIAL_PROFILE: ProfileState = {\n  firstName: \"Maya\",\n  lastName: \"Lindqvist\",\n  username: \"mayalindqvist\",\n  email: \"maya.lindqvist@northwind.studio\",\n  bio: \"Product designer at Northwind Studio. I care about calm interfaces, good defaults and well-labelled form fields.\",\n  website: \"https://mayalindqvist.design\",\n  timezone: \"Europe/Berlin\",\n  language: \"en\",\n  visibility: \"members\",\n};\n\nconst BIO_MAX = 200;\n\nconst styles = `\n.sp-root { width: 100%; max-width: 1120px; margin: 0 auto; padding: 32px 20px 64px; box-sizing: border-box; }\n.sp-layout { display: grid; grid-template-columns: 1fr; gap: 24px; align-items: start; }\n@media (min-width: 880px) { .sp-layout { grid-template-columns: 260px minmax(0, 1fr); gap: 40px; } .sp-root { padding: 48px 32px 80px; } }\n.sp-nav { display: flex; flex-direction: row; gap: 6px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }\n@media (min-width: 880px) { .sp-nav { flex-direction: column; overflow: visible; position: sticky; top: 24px; padding-bottom: 0; } }\n.sp-nav-link { display: flex; flex-direction: column; gap: 2px; text-align: left; padding: 10px 14px; border-radius: 10px; border: 1px solid transparent; background: transparent; color: var(--neutral-on-background-strong); cursor: pointer; font: inherit; white-space: nowrap; min-height: 44px; }\n.sp-nav-link:hover { background: var(--neutral-alpha-weak); }\n.sp-nav-link:focus-visible, .sp-btn:focus-visible, .sp-field:focus-visible, .sp-switch:focus-visible, .sp-avatar-btn:focus-visible { outline: 2px solid var(--brand-solid-strong); outline-offset: 2px; }\n.sp-nav-link[aria-current=\"true\"] { background: var(--neutral-alpha-weak); border-color: var(--neutral-alpha-medium); }\n.sp-nav-desc { display: none; }\n@media (min-width: 880px) { .sp-nav-desc { display: block; } }\n.sp-card { background: var(--surface-background); border: 1px solid var(--neutral-alpha-medium); border-radius: 16px; padding: 20px; scroll-margin-top: 24px; }\n@media (min-width: 640px) { .sp-card { padding: 28px; } }\n.sp-card-danger { border-color: var(--danger-alpha-strong, #d9534f); }\n.sp-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }\n@media (min-width: 640px) { .sp-grid { grid-template-columns: 1fr 1fr; } .sp-span { grid-column: 1 / -1; } }\n.sp-label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--neutral-on-background-strong); }\n.sp-hint { font-size: 13px; color: var(--neutral-on-background-weak); margin-top: 6px; }\n.sp-error { font-size: 13px; color: var(--danger-on-background-strong, #c0392b); margin-top: 6px; }\n.sp-field { width: 100%; box-sizing: border-box; min-height: 44px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--neutral-alpha-strong); background: var(--page-background); color: var(--neutral-on-background-strong); font: inherit; font-size: 15px; }\ntextarea.sp-field { resize: vertical; min-height: 96px; line-height: 1.5; }\n.sp-field[aria-invalid=\"true\"] { border-color: var(--danger-solid-strong, #c0392b); }\n.sp-btn { min-height: 44px; padding: 10px 18px; border-radius: 10px; border: 1px solid var(--neutral-alpha-strong); background: transparent; color: var(--neutral-on-background-strong); font: inherit; font-weight: 600; cursor: pointer; }\n.sp-btn:hover:not(:disabled) { background: var(--neutral-alpha-weak); }\n.sp-btn:disabled { opacity: 0.5; cursor: not-allowed; }\n.sp-btn-primary { background: var(--brand-solid-strong); border-color: var(--brand-solid-strong); color: var(--brand-on-solid-strong, #fff); }\n.sp-btn-primary:hover:not(:disabled) { background: var(--brand-solid-medium); }\n.sp-btn-danger { background: var(--danger-solid-strong, #c0392b); border-color: var(--danger-solid-strong, #c0392b); color: #fff; }\n.sp-btn-danger:hover:not(:disabled) { background: var(--danger-solid-medium, #a93226); }\n.sp-btn-outline-danger { border-color: var(--danger-solid-strong, #c0392b); color: var(--danger-on-background-strong, #c0392b); }\n.sp-avatar { width: 88px; height: 88px; border-radius: 50%; object-fit: cover; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--brand-solid-strong); color: var(--brand-on-solid-strong, #fff); font-size: 30px; font-weight: 700; overflow: hidden; }\n.sp-avatar img { width: 100%; height: 100%; object-fit: cover; }\n.sp-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }\n.sp-row { display: flex; flex-direction: column; gap: 14px; }\n@media (min-width: 640px) { .sp-row { flex-direction: row; align-items: center; justify-content: space-between; gap: 24px; } }\n.sp-switch { position: relative; width: 48px; height: 28px; border-radius: 999px; border: 1px solid var(--neutral-alpha-strong); background: var(--neutral-alpha-medium); cursor: pointer; flex-shrink: 0; padding: 0; transition: background 0.15s; }\n.sp-switch[aria-checked=\"true\"] { background: var(--brand-solid-strong); border-color: var(--brand-solid-strong); }\n.sp-switch::after { content: \"\"; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; transition: transform 0.15s; }\n.sp-switch[aria-checked=\"true\"]::after { transform: translateX(20px); }\n.sp-status { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--neutral-solid-strong); color: var(--neutral-on-solid-strong); padding: 12px 20px; border-radius: 12px; font-size: 14px; z-index: 50; max-width: calc(100vw - 32px); }\n.sp-dialog-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; padding: 16px; z-index: 100; }\n.sp-dialog { background: var(--surface-background); border: 1px solid var(--neutral-alpha-medium); border-radius: 16px; padding: 24px; width: 100%; max-width: 440px; box-sizing: border-box; }\n.sp-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n@media (prefers-reduced-motion: reduce) { .sp-switch, .sp-switch::after { transition: none; } }\n`;\n\nfunction Field({\n  label,\n  hint,\n  error,\n  children,\n  htmlFor,\n  hintId,\n  errorId,\n  span,\n}: {\n  label: string;\n  hint?: string;\n  error?: string;\n  children: React.ReactNode;\n  htmlFor: string;\n  hintId?: string;\n  errorId?: string;\n  span?: boolean;\n}) {\n  return (\n    <div className={span ? \"sp-span\" : undefined}>\n      <label className=\"sp-label\" htmlFor={htmlFor}>\n        {label}\n      </label>\n      {children}\n      {hint && !error && (\n        <div className=\"sp-hint\" id={hintId}>\n          {hint}\n        </div>\n      )}\n      {error && (\n        <div className=\"sp-error\" id={errorId} role=\"alert\">\n          {error}\n        </div>\n      )}\n    </div>\n  );\n}\n\nfunction Toggle({\n  id,\n  checked,\n  onChange,\n  labelledBy,\n  describedBy,\n}: {\n  id: string;\n  checked: boolean;\n  onChange: (v: boolean) => void;\n  labelledBy: string;\n  describedBy: string;\n}) {\n  return (\n    <button\n      type=\"button\"\n      id={id}\n      role=\"switch\"\n      aria-checked={checked}\n      aria-labelledby={labelledBy}\n      aria-describedby={describedBy}\n      className=\"sp-switch\"\n      onClick={() => onChange(!checked)}\n    />\n  );\n}\n\nexport default function SettingsPage() {\n  const uid = useId();\n  const [active, setActive] = useState<SectionId>(\"profile\");\n  const [profile, setProfile] = useState<ProfileState>(INITIAL_PROFILE);\n  const [saved, setSaved] = useState<ProfileState>(INITIAL_PROFILE);\n  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);\n  const [avatarError, setAvatarError] = useState<string>(\"\");\n  const [touched, setTouched] = useState<Record<string, boolean>>({});\n  const [status, setStatus] = useState<string>(\"\");\n  const [notif, setNotif] = useState({ product: true, digest: false, security: true });\n  const [dialog, setDialog] = useState<null | \"deactivate\" | \"delete\">(null);\n  const [confirmText, setConfirmText] = useState(\"\");\n  const fileRef = useRef<HTMLInputElement>(null);\n  const dialogRef = useRef<HTMLDivElement>(null);\n  const lastFocus = useRef<HTMLElement | null>(null);\n  const urlRef = useRef<string | null>(null);\n\n  const refs: Record<SectionId, React.RefObject<HTMLElement | null>> = {\n    profile: useRef<HTMLElement | null>(null),\n    account: useRef<HTMLElement | null>(null),\n    notifications: useRef<HTMLElement | null>(null),\n    danger: useRef<HTMLElement | null>(null),\n  };\n\n  const errors = useMemo(() => {\n    const e: Partial<Record<keyof ProfileState, string>> = {};\n    if (!profile.firstName.trim()) e.firstName = \"First name is required.\";\n    if (!profile.lastName.trim()) e.lastName = \"Last name is required.\";\n    if (!/^[a-z0-9_]{3,20}$/.test(profile.username))\n      e.username = \"Use 3–20 lowercase letters, numbers or underscores.\";\n    if (!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(profile.email)) e.email = \"Enter a valid email address.\";\n    if (profile.website && !/^https?:\\/\\/[^\\s]+\\.[^\\s]+$/.test(profile.website))\n      e.website = \"Enter a full URL starting with http:// or https://.\";\n    if (profile.bio.length > BIO_MAX) e.bio = `Bio must be ${BIO_MAX} characters or fewer.`;\n    return e;\n  }, [profile]);\n\n  const dirty = JSON.stringify(profile) !== JSON.stringify(saved) || avatarUrl !== null;\n  const hasErrors = Object.keys(errors).length > 0;\n  const initials = `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`.toUpperCase() || \"?\";\n\n  useEffect(() => {\n    return () => {\n      if (urlRef.current) URL.revokeObjectURL(urlRef.current);\n    };\n  }, []);\n\n  useEffect(() => {\n    if (!status) return;\n    const t = window.setTimeout(() => setStatus(\"\"), 3500);\n    return () => window.clearTimeout(t);\n  }, [status]);\n\n  // Track the active section while scrolling.\n  useEffect(() => {\n    if (typeof IntersectionObserver === \"undefined\") return;\n    const obs = new IntersectionObserver(\n      (entries) => {\n        const visible = entries\n          .filter((en) => en.isIntersecting)\n          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);\n        if (visible[0]) setActive(visible[0].target.getAttribute(\"data-section\") as SectionId);\n      },\n      { rootMargin: \"-20% 0px -60% 0px\" },\n    );\n    (Object.keys(refs) as SectionId[]).forEach((k) => {\n      const el = refs[k].current;\n      if (el) obs.observe(el);\n    });\n    return () => obs.disconnect();\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, []);\n\n  // Dialog: focus management, Escape, focus trap.\n  useEffect(() => {\n    if (!dialog) return;\n    lastFocus.current = document.activeElement as HTMLElement | null;\n    const node = dialogRef.current;\n    const focusables = () =>\n      node\n        ? Array.from(\n            node.querySelectorAll<HTMLElement>(\"button:not(:disabled), input, [href], select, textarea\"),\n          )\n        : [];\n    focusables()[0]?.focus();\n    const onKey = (ev: KeyboardEvent) => {\n      if (ev.key === \"Escape\") {\n        closeDialog();\n        return;\n      }\n      if (ev.key === \"Tab\") {\n        const f = focusables();\n        if (f.length === 0) return;\n        const first = f[0];\n        const last = f[f.length - 1];\n        if (ev.shiftKey && document.activeElement === first) {\n          ev.preventDefault();\n          last.focus();\n        } else if (!ev.shiftKey && document.activeElement === last) {\n          ev.preventDefault();\n          first.focus();\n        }\n      }\n    };\n    document.addEventListener(\"keydown\", onKey);\n    return () => {\n      document.removeEventListener(\"keydown\", onKey);\n      lastFocus.current?.focus();\n    };\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n  }, [dialog]);\n\n  function closeDialog() {\n    setDialog(null);\n    setConfirmText(\"\");\n  }\n\n  function update<K extends keyof ProfileState>(key: K, value: ProfileState[K]) {\n    setProfile((p) => ({ ...p, [key]: value }));\n  }\n\n  function blur(key: string) {\n    setTouched((t) => ({ ...t, [key]: true }));\n  }\n\n  function goTo(id: SectionId) {\n    setActive(id);\n    const el = refs[id].current;\n    if (el) {\n      const reduce = window.matchMedia(\"(prefers-reduced-motion: reduce)\").matches;\n      el.scrollIntoView({ behavior: reduce ? \"auto\" : \"smooth\", block: \"start\" });\n    }\n  }\n\n  function onAvatarChange(e: React.ChangeEvent<HTMLInputElement>) {\n    const file = e.target.files?.[0];\n    if (!file) return;\n    if (![\"image/png\", \"image/jpeg\", \"image/webp\"].includes(file.type)) {\n      setAvatarError(\"Use a PNG, JPEG or WebP image.\");\n      return;\n    }\n    if (file.size > 2 * 1024 * 1024) {\n      setAvatarError(\"Image must be smaller than 2 MB.\");\n      return;\n    }\n    setAvatarError(\"\");\n    if (urlRef.current) URL.revokeObjectURL(urlRef.current);\n    const url = URL.createObjectURL(file);\n    urlRef.current = url;\n    setAvatarUrl(url);\n    e.target.value = \"\";\n  }\n\n  function removeAvatar() {\n    if (urlRef.current) URL.revokeObjectURL(urlRef.current);\n    urlRef.current = null;\n    setAvatarUrl(null);\n    setAvatarError(\"\");\n  }\n\n  function onSubmit(e: React.FormEvent) {\n    e.preventDefault();\n    setTouched({\n      firstName: true,\n      lastName: true,\n      username: true,\n      email: true,\n      website: true,\n      bio: true,\n    });\n    if (hasErrors) {\n      setStatus(\"Please fix the highlighted fields.\");\n      const firstKey = (Object.keys(errors) as (keyof ProfileState)[])[0];\n      document.getElementById(`${uid}-${firstKey}`)?.focus();\n      return;\n    }\n    setSaved(profile);\n    setStatus(\"Profile saved.\");\n  }\n\n  function onReset() {\n    setProfile(saved);\n    setTouched({});\n    setAvatarError(\"\");\n    if (avatarUrl) removeAvatar();\n  }\n\n  const err = (k: keyof ProfileState) => (touched[k] ? errors[k] : undefined);\n  const fid = (k: string) => `${uid}-${k}`;\n  const describe = (k: keyof ProfileState, hasHint: boolean) =>\n    err(k) ? `${fid(k)}-err` : hasHint ? `${fid(k)}-hint` : undefined;\n\n  const confirmTarget = dialog === \"delete\" ? \"DELETE\" : \"DEACTIVATE\";\n\n  return (\n    <Flex fillWidth horizontal=\"center\">\n      <style>{styles}</style>\n      <div className=\"sp-root\">\n        <Column gap=\"8\" paddingBottom=\"32\">\n          <Heading as=\"h1\" variant=\"display-strong-xs\">\n            Settings\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Manage your profile, account preferences and workspace security.\n          </Text>\n        </Column>\n\n        <div className=\"sp-layout\">\n          <nav aria-label=\"Settings sections\" className=\"sp-nav\">\n            {SECTIONS.map((s) => (\n              <button\n                key={s.id}\n                type=\"button\"\n                className=\"sp-nav-link\"\n                aria-current={active === s.id ? \"true\" : undefined}\n                onClick={() => goTo(s.id)}\n              >\n                <span style={{ fontWeight: 600, fontSize: 15 }}>{s.label}</span>\n                <span\n                  className=\"sp-nav-desc\"\n                  style={{ fontSize: 13, color: \"var(--neutral-on-background-weak)\" }}\n                >\n                  {s.description}\n                </span>\n              </button>\n            ))}\n          </nav>\n\n          <Column gap=\"24\" fillWidth>\n            {/* PROFILE */}\n            <section\n              className=\"sp-card\"\n              data-section=\"profile\"\n              ref={refs.profile as React.RefObject<HTMLElement>}\n              aria-labelledby={fid(\"h-profile\")}\n            >\n              <form onSubmit={onSubmit} noValidate>\n                <Column gap=\"24\">\n                  <Column gap=\"4\">\n                    <Heading as=\"h2\" variant=\"heading-strong-l\" id={fid(\"h-profile\")}>\n                      Profile\n                    </Heading>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                      This information is shown on your public profile.\n                    </Text>\n                  </Column>\n\n                  <Row gap=\"20\" vertical=\"center\" wrap>\n                    <div className=\"sp-avatar\" aria-hidden={avatarUrl ? undefined : true}>\n                      {avatarUrl ? (\n                        // eslint-disable-next-line @next/next/no-img-element\n                        <img src={avatarUrl} alt=\"Your new profile photo preview\" />\n                      ) : (\n                        initials\n                      )}\n                    </div>\n                    <Column gap=\"8\" flex={1} style={{ minWidth: 200 }}>\n                      <Text variant=\"label-default-m\" id={fid(\"avatar-label\")}>\n                        Profile photo\n                      </Text>\n                      <Row gap=\"8\" wrap>\n                        <input\n                          ref={fileRef}\n                          id={fid(\"avatar\")}\n                          type=\"file\"\n                          accept=\"image/png,image/jpeg,image/webp\"\n                          className=\"sp-sr\"\n                          onChange={onAvatarChange}\n                          aria-describedby={`${fid(\"avatar-hint\")}${avatarError ? ` ${fid(\"avatar-err\")}` : \"\"}`}\n                          tabIndex={-1}\n                        />\n                        <button\n                          type=\"button\"\n                          className=\"sp-btn\"\n                          aria-labelledby={`${fid(\"avatar-label\")} ${fid(\"avatar-btn\")}`}\n                          id={fid(\"avatar-btn\")}\n                          onClick={() => fileRef.current?.click()}\n                        >\n                          {avatarUrl ? \"Change photo\" : \"Upload photo\"}\n                        </button>\n                        {avatarUrl && (\n                          <button type=\"button\" className=\"sp-btn\" onClick={removeAvatar}>\n                            Remove\n                          </button>\n                        )}\n                      </Row>\n                      <div className=\"sp-hint\" id={fid(\"avatar-hint\")} style={{ marginTop: 0 }}>\n                        PNG, JPEG or WebP. Maximum size 2 MB.\n                      </div>\n                      {avatarError && (\n                        <div className=\"sp-error\" id={fid(\"avatar-err\")} role=\"alert\" style={{ marginTop: 0 }}>\n                          {avatarError}\n                        </div>\n                      )}\n                    </Column>\n                  </Row>\n\n                  <Line />\n\n                  <div className=\"sp-grid\">\n                    <Field label=\"First name\" htmlFor={fid(\"firstName\")} error={err(\"firstName\")} errorId={`${fid(\"firstName\")}-err`}>\n                      <input\n                        id={fid(\"firstName\")}\n                        className=\"sp-field\"\n                        value={profile.firstName}\n                        autoComplete=\"given-name\"\n                        required\n                        aria-required=\"true\"\n                        aria-invalid={err(\"firstName\") ? true : undefined}\n                        aria-describedby={describe(\"firstName\", false)}\n                        onChange={(e) => update(\"firstName\", e.target.value)}\n                        onBlur={() => blur(\"firstName\")}\n                      />\n                    </Field>\n                    <Field label=\"Last name\" htmlFor={fid(\"lastName\")} error={err(\"lastName\")} errorId={`${fid(\"lastName\")}-err`}>\n                      <input\n                        id={fid(\"lastName\")}\n                        className=\"sp-field\"\n                        value={profile.lastName}\n                        autoComplete=\"family-name\"\n                        required\n                        aria-required=\"true\"\n                        aria-invalid={err(\"lastName\") ? true : undefined}\n                        aria-describedby={describe(\"lastName\", false)}\n                        onChange={(e) => update(\"lastName\", e.target.value)}\n                        onBlur={() => blur(\"lastName\")}\n                      />\n                    </Field>\n                    <Field\n                      label=\"Username\"\n                      htmlFor={fid(\"username\")}\n                      hint=\"Your profile lives at northwind.studio/u/username.\"\n                      hintId={`${fid(\"username\")}-hint`}\n                      error={err(\"username\")}\n                      errorId={`${fid(\"username\")}-err`}\n                    >\n                      <input\n                        id={fid(\"username\")}\n                        className=\"sp-field\"\n                        value={profile.username}\n                        autoComplete=\"username\"\n                        autoCapitalize=\"none\"\n                        spellCheck={false}\n                        aria-invalid={err(\"username\") ? true : undefined}\n                        aria-describedby={describe(\"username\", true)}\n                        onChange={(e) => update(\"username\", e.target.value)}\n                        onBlur={() => blur(\"username\")}\n                      />\n                    </Field>\n                    <Field label=\"Email\" htmlFor={fid(\"email\")} error={err(\"email\")} errorId={`${fid(\"email\")}-err`}>\n                      <input\n                        id={fid(\"email\")}\n                        type=\"email\"\n                        className=\"sp-field\"\n                        value={profile.email}\n                        autoComplete=\"email\"\n                        aria-invalid={err(\"email\") ? true : undefined}\n                        aria-describedby={describe(\"email\", false)}\n                        onChange={(e) => update(\"email\", e.target.value)}\n                        onBlur={() => blur(\"email\")}\n                      />\n                    </Field>\n                    <Field\n                      label=\"Website\"\n                      htmlFor={fid(\"website\")}\n                      span\n                      error={err(\"website\")}\n                      errorId={`${fid(\"website\")}-err`}\n                    >\n                      <input\n                        id={fid(\"website\")}\n                        type=\"url\"\n                        className=\"sp-field\"\n                        value={profile.website}\n                        autoComplete=\"url\"\n                        aria-invalid={err(\"website\") ? true : undefined}\n                        aria-describedby={describe(\"website\", false)}\n                        onChange={(e) => update(\"website\", e.target.value)}\n                        onBlur={() => blur(\"website\")}\n                      />\n                    </Field>\n                    <Field\n                      label=\"Bio\"\n                      htmlFor={fid(\"bio\")}\n                      span\n                      hint={`${profile.bio.length}/${BIO_MAX} characters`}\n                      hintId={`${fid(\"bio\")}-hint`}\n                      error={err(\"bio\")}\n                      errorId={`${fid(\"bio\")}-err`}\n                    >\n                      <textarea\n                        id={fid(\"bio\")}\n                        className=\"sp-field\"\n                        rows={4}\n                        value={profile.bio}\n                        aria-invalid={err(\"bio\") ? true : undefined}\n                        aria-describedby={describe(\"bio\", true)}\n                        onChange={(e) => update(\"bio\", e.target.value)}\n                        onBlur={() => blur(\"bio\")}\n                      />\n                    </Field>\n                    <Field label=\"Time zone\" htmlFor={fid(\"timezone\")}>\n                      <select\n                        id={fid(\"timezone\")}\n                        className=\"sp-field\"\n                        value={profile.timezone}\n                        onChange={(e) => update(\"timezone\", e.target.value)}\n                      >\n                        {TIMEZONES.map((t) => (\n                          <option key={t.value} value={t.value}>\n                            {t.label}\n                          </option>\n                        ))}\n                      </select>\n                    </Field>\n                    <Field label=\"Language\" htmlFor={fid(\"language\")}>\n                      <select\n                        id={fid(\"language\")}\n                        className=\"sp-field\"\n                        value={profile.language}\n                        onChange={(e) => update(\"language\", e.target.value)}\n                      >\n                        {LANGUAGES.map((l) => (\n                          <option key={l.value} value={l.value}>\n                            {l.label}\n                          </option>\n                        ))}\n                      </select>\n                    </Field>\n                    <Field label=\"Profile visibility\" htmlFor={fid(\"visibility\")} span>\n                      <select\n                        id={fid(\"visibility\")}\n                        className=\"sp-field\"\n                        value={profile.visibility}\n                        onChange={(e) => update(\"visibility\", e.target.value)}\n                      >\n                        {VISIBILITY.map((v) => (\n                          <option key={v.value} value={v.value}>\n                            {v.label}\n                          </option>\n                        ))}\n                      </select>\n                    </Field>\n                  </div>\n\n                  <div className=\"sp-actions\">\n                    <button type=\"button\" className=\"sp-btn\" onClick={onReset} disabled={!dirty}>\n                      Discard changes\n                    </button>\n                    <button type=\"submit\" className=\"sp-btn sp-btn-primary\" disabled={!dirty}>\n                      Save changes\n                    </button>\n                  </div>\n                </Column>\n              </form>\n            </section>\n\n            {/* ACCOUNT */}\n            <section\n              className=\"sp-card\"\n              data-section=\"account\"\n              ref={refs.account as React.RefObject<HTMLElement>}\n              aria-labelledby={fid(\"h-account\")}\n            >\n              <Column gap=\"20\">\n                <Column gap=\"4\">\n                  <Heading as=\"h2\" variant=\"heading-strong-l\" id={fid(\"h-account\")}>\n                    Account\n                  </Heading>\n                  <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                    Keep your sign-in details and sessions secure.\n                  </Text>\n                </Column>\n                <div className=\"sp-row\">\n                  <Column gap=\"4\">\n                    <Text variant=\"label-strong-m\">Password</Text>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                      Last changed 4 months ago.\n                    </Text>\n                  </Column>\n                  <button type=\"button\" className=\"sp-btn\" onClick={() => setStatus(\"Password reset email sent.\")}>\n                    Change password\n                  </button>\n                </div>\n                <Line />\n                <div className=\"sp-row\">\n                  <Column gap=\"4\">\n                    <Text variant=\"label-strong-m\">Active sessions</Text>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                      3 devices are signed in, including this MacBook Pro in Berlin.\n                    </Text>\n                  </Column>\n                  <button type=\"button\" className=\"sp-btn\" onClick={() => setStatus(\"Signed out of 2 other devices.\")}>\n                    Sign out other devices\n                  </button>\n                </div>\n              </Column>\n            </section>\n\n            {/* NOTIFICATIONS */}\n            <section\n              className=\"sp-card\"\n              data-section=\"notifications\"\n              ref={refs.notifications as React.RefObject<HTMLElement>}\n              aria-labelledby={fid(\"h-notifications\")}\n            >\n              <Column gap=\"20\">\n                <Column gap=\"4\">\n                  <Heading as=\"h2\" variant=\"heading-strong-l\" id={fid(\"h-notifications\")}>\n                    Notifications\n                  </Heading>\n                  <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                    Choose which emails you would like to receive.\n                  </Text>\n                </Column>\n                {(\n                  [\n                    { key: \"product\", title: \"Product updates\", desc: \"New features and improvements, about twice a month.\" },\n                    { key: \"digest\", title: \"Weekly digest\", desc: \"A Monday summary of activity across your projects.\" },\n                    { key: \"security\", title: \"Security alerts\", desc: \"Sign-ins from new devices and password changes.\" },\n                  ] as const\n                ).map((n, i) => (\n                  <React.Fragment key={n.key}>\n                    {i > 0 && <Line />}\n                    <div className=\"sp-row\" style={{ flexDirection: \"row\", alignItems: \"center\", justifyContent: \"space-between\" }}>\n                      <Column gap=\"4\" style={{ minWidth: 0 }}>\n                        <Text variant=\"label-strong-m\" id={fid(`n-${n.key}-t`)}>\n                          {n.title}\n                        </Text>\n                        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" id={fid(`n-${n.key}-d`)}>\n                          {n.desc}\n                        </Text>\n                      </Column>\n                      <Toggle\n                        id={fid(`n-${n.key}`)}\n                        checked={notif[n.key]}\n                        onChange={(v) => setNotif((s) => ({ ...s, [n.key]: v }))}\n                        labelledBy={fid(`n-${n.key}-t`)}\n                        describedBy={fid(`n-${n.key}-d`)}\n                      />\n                    </div>\n                  </React.Fragment>\n                ))}\n              </Column>\n            </section>\n\n            {/* DANGER ZONE */}\n            <section\n              className=\"sp-card sp-card-danger\"\n              data-section=\"danger\"\n              ref={refs.danger as React.RefObject<HTMLElement>}\n              aria-labelledby={fid(\"h-danger\")}\n            >\n              <Column gap=\"20\">\n                <Column gap=\"4\">\n                  <Heading as=\"h2\" variant=\"heading-strong-l\" id={fid(\"h-danger\")}>\n                    Danger zone\n                  </Heading>\n                  <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                    These actions affect your whole account. Please proceed carefully.\n                  </Text>\n                </Column>\n                <div className=\"sp-row\">\n                  <Column gap=\"4\">\n                    <Text variant=\"label-strong-m\">Deactivate account</Text>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                      Hide your profile and pause notifications. You can reactivate by signing in again.\n                    </Text>\n                  </Column>\n                  <button type=\"button\" className=\"sp-btn sp-btn-outline-danger\" onClick={() => setDialog(\"deactivate\")}>\n                    Deactivate\n                  </button>\n                </div>\n                <Line />\n                <div className=\"sp-row\">\n                  <Column gap=\"4\">\n                    <Text variant=\"label-strong-m\">Delete account</Text>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                      Permanently remove your account, 14 projects and all uploaded files. This cannot be undone.\n                    </Text>\n                  </Column>\n                  <button type=\"button\" className=\"sp-btn sp-btn-danger\" onClick={() => setDialog(\"delete\")}>\n                    Delete account\n                  </button>\n                </div>\n              </Column>\n            </section>\n          </Column>\n        </div>\n      </div>\n\n      <div aria-live=\"polite\" role=\"status\">\n        {status && <div className=\"sp-status\">{status}</div>}\n      </div>\n\n      {dialog && (\n        <div\n          className=\"sp-dialog-backdrop\"\n          onMouseDown={(e) => {\n            if (e.target === e.currentTarget) closeDialog();\n          }}\n        >\n          <div\n            className=\"sp-dialog\"\n            role=\"alertdialog\"\n            aria-modal=\"true\"\n            aria-labelledby={fid(\"dlg-title\")}\n            aria-describedby={fid(\"dlg-desc\")}\n            ref={dialogRef}\n          >\n            <Column gap=\"16\">\n              <Heading as=\"h2\" variant=\"heading-strong-l\" id={fid(\"dlg-title\")}>\n                {dialog === \"delete\" ? \"Delete your account?\" : \"Deactivate your account?\"}\n              </Heading>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" id={fid(\"dlg-desc\")}>\n                {dialog === \"delete\"\n                  ? \"This permanently deletes your profile, projects and files. This action cannot be undone.\"\n                  : \"Your profile will be hidden until you sign in again.\"}\n              </Text>\n              <div>\n                <label className=\"sp-label\" htmlFor={fid(\"confirm\")}>\n                  Type <strong>{confirmTarget}</strong> to confirm\n                </label>\n                <input\n                  id={fid(\"confirm\")}\n                  className=\"sp-field\"\n                  value={confirmText}\n                  autoComplete=\"off\"\n                  onChange={(e) => setConfirmText(e.target.value)}\n                />\n              </div>\n              <div className=\"sp-actions\">\n                <button type=\"button\" className=\"sp-btn\" onClick={closeDialog}>\n                  Cancel\n                </button>\n                <button\n                  type=\"button\"\n                  className=\"sp-btn sp-btn-danger\"\n                  disabled={confirmText !== confirmTarget}\n                  onClick={() => {\n                    const msg = dialog === \"delete\" ? \"Account deletion requested.\" : \"Account deactivated.\";\n                    closeDialog();\n                    setStatus(msg);\n                  }}\n                >\n                  {dialog === \"delete\" ? \"Delete account\" : \"Deactivate\"}\n                </button>\n              </div>\n            </Column>\n          </div>\n        </div>\n      )}\n    </Flex>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(266,30): error TS2322: Type '\"6\"' is not assignable to type 'number | SpacingToken | \"-1\" | undefined'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3286
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [layout.defaults] position=\"relative\" is the default — omit it",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 602,
+    "chars": 23371,
+    "bytes": 23381,
+    "tokens_o200k": 4694,
+    "tokens_claudeLegacy": 5106,
+    "tokens_exact": 7836
+  },
+  "raw": {
+    "lines": 605,
+    "chars": 24328,
+    "bytes": 24338,
+    "tokens_o200k": 4783,
+    "tokens_claudeLegacy": 5214,
+    "tokens_exact": 8052
+  },
+  "components": [
+    "Alert",
+    "AlertDescription",
+    "AlertTitle",
+    "Badge",
+    "Button",
+    "Card",
+    "CardContent",
+    "CardDescription",
+    "CardHeader",
+    "CardTitle",
+    "Checkbox",
+    "Dialog",
+    "DialogContent",
+    "DialogDescription",
+    "DialogFooter",
+    "DialogHeader",
+    "DialogTitle",
+    "DialogTrigger",
+    "Input",
+    "InputOTP",
+    "InputOTPGroup",
+    "InputOTPSeparator",
+    "InputOTPSlot",
+    "Label"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/alert.tsx",
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/card.tsx",
+      "components/ui/checkbox.tsx",
+      "components/ui/dialog.tsx",
+      "components/ui/input-otp.tsx",
+      "components/ui/input.tsx",
+      "components/ui/label.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 532,
+    "chars": 17336,
+    "bytes": 17336,
+    "tokens_o200k": 4354,
+    "tokens_claudeLegacy": 5041,
+    "tokens_exact": 7418
+  }
+}

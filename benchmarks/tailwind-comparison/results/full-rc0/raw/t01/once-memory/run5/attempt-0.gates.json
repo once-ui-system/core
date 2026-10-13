@@ -1,0 +1,68 @@
+{
+  "arm": "B",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2811
+    },
+    "build": {
+      "ok": true,
+      "ms": 8495
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1064,
+          "height": 1743,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1064,
+          "height": 1684,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1064,
+          "height": 1308,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 10,
+        "serious_or_critical": 2,
+        "ids": [
+          "color-contrast:serious:4",
+          "role-img-alt:serious:6"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "none"
+        },
+        "desktop": {
+          "action": "none"
+        }
+      }
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 4 issue(s)\n  [border.default] border=\"neutral-alpha-weak\" restates the default border — write bare border, and name a colour only to deviate\n  [color.tokens] Use semantic color tokens, not hex/rgb\n  [Card.interactive] Card without href/onClick — use Column + surface recipe for static panels\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

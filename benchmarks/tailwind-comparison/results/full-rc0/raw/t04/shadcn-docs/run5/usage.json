@@ -1,0 +1,463 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 11,
+      "input_tokens": 435849,
+      "output_tokens": 12413
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQ7u8zMveCaZsfPHykD",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 963,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 116,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQ83sbs8dqjA79f3kX1",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1614,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 114,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQ8BWjR8SwRKkjc3bLF",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 2355,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 303,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQ8Pt7xhHg5TfPQb9Tf",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 18938,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 437,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQ8i8VAXQcFdaxiCCEq",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 25901,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 571,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQ959GsdB6jYkE6kzsx",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 38681,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 301,
+        "output_tokens_details": {
+          "thinking_tokens": 73
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQ9P721db7kUzV15PoQ",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 42004,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 152,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQ9augihJwC7aVwuPBz",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 65236,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 199,
+        "output_tokens_details": {
+          "thinking_tokens": 82
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQA13zRmhePALWtu6Wn",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 74842,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 136,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQAs3pWc6Ttgj5rr7LS",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 81295,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 512,
+        "output_tokens_details": {
+          "thinking_tokens": 459
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011CfzQBPQBZ6tWPg6UUTRv3",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 84020,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 9572,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/README.md",
+      "chars": 1186
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 106
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/components",
+      "chars": 850
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/message.mdx",
+      "chars": 7242
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/bubble.mdx",
+      "chars": 10318
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/message-scroller.mdx",
+      "chars": 24491
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/components/ui",
+      "chars": 785
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 31
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/package.json",
+      "chars": 1045
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/message-scroller.tsx",
+      "chars": 4022
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/message.tsx",
+      "chars": 2231
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/bubble.tsx",
+      "chars": 4698
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/marker.tsx",
+      "chars": 1863
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/layout.tsx",
+      "chars": 431
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/input-group.tsx",
+      "chars": 5065
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/command.tsx",
+      "chars": 4818
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/popover.tsx",
+      "chars": 2356
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/button.tsx",
+      "chars": 2391
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/avatar.tsx",
+      "chars": 2915
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/kbd.tsx",
+      "chars": 862
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/spinner.tsx",
+      "chars": 330
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/tooltip.tsx",
+      "chars": 1829
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/examples",
+      "chars": 5050
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/node_modules/@shadcn/react",
+      "chars": 0,
+      "error": "no such file or directory: project/node_modules/@shadcn/react"
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/examples/command-dialog.tsx",
+      "chars": 2378
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/dialog.tsx",
+      "chars": 4303
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/lib/utils.ts",
+      "chars": 166
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/examples/_registry.ts",
+      "chars": 58499
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs",
+      "chars": 69
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/skill/SKILL.md",
+      "chars": 22692
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/examples/input-group-textarea.tsx",
+      "chars": 1358
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/skill/rules/chat.md",
+      "chars": 8013
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/marker.mdx",
+      "chars": 7897
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/globals.css",
+      "chars": 4219
+    }
+  ]
+}

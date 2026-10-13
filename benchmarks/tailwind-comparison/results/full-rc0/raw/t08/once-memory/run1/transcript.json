@@ -1,0 +1,220 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Onboarding checklist — progress bar, step list with status indicators, celebratory completion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the existing project files to see how Once UI is set up."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01W8zVVh6YBiqbKHUpBbf8LF",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RU2q48Vuyw6HMC9WQpEBWf",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01W8zVVh6YBiqbKHUpBbf8LF",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RU2q48Vuyw6HMC9WQpEBWf",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01RXgp7qj8MywnyJDap5ULo2",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019R2XhvtrPqQ9x466Sn77Wd",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RXgp7qj8MywnyJDap5ULo2",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019R2XhvtrPqQ9x466Sn77Wd",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01WxsiGxPFp6VF2aZiRLQ1Zz",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ALGuTDYZ6qofixYRkoAHDr",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CE23UvbU9pXYyvKRtRBtzM",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TnUJZhcTHrsUZgh2FRy2ih",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WxsiGxPFp6VF2aZiRLQ1Zz",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ALGuTDYZ6qofixYRkoAHDr",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CE23UvbU9pXYyvKRtRBtzM",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TnUJZhcTHrsUZgh2FRy2ih",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build the component using Once UI primitives with conservative icon choices (check, chevrons, refresh, arrowUpRight), implementing expandable steps with complete/undo actions, an accessible progress bar, and a celebratory confetti panel that respects reduced-motion preferences.\n\n",
+          "signature": "CAQS+QkKEQgSGAI4AUIJbmFycmF0aW9uEgx9jAhPNi9506X2YHYaDMDJ5rj/19aTvUS9miIwWb/LEKbXvzgnK/58DqDulCoTFIFO4kG31BCqQ4b3Jf0QBsoA7Tj/bS1gIH1looPnKpUJcrNMBjW1tXqor7lqhf3GblQzAwYaOrySF6qjBmqkYTuK/a49PVPsumhV8pVBuRYc1cM8efjHUgg/Wlze3QJuQzD32Mp5dr84u4351om+3cbkgvMzpt0HjBrsm6k1fHayciS2d7U5Vig5M1RSMKF+/QXayd0muwyrUgPyGavzzdunkiTyLs96eBSR48aHuOmrHWNDPeNbQCtcKt/BOTvdoTl+yE0bcquNTPMVdm+QNZeOUuZ/o6mAPPGHl7iCfZGgi40aiMiSG/stnpQzX1cWanaCABryvQ/ONaoZ2sKwAp12GaY8uNTEP0XTD/iB+VEfOTD7rEg9uDVzpDpluilmaNUvbkJacVf2//ae8i25GOY7s7OuWBIqRg58YPXv1oCzFg/bgJA3UAmWBAIEelx/qgHstWiWSOs7R12XOEFLo8UJzN6Oei0iWuWhNvHQ2JdS9lmg04CzQNi+qc/9XdHqWzUayOEJB8RKkxwrzX93kppeW1AUa0kLljdWbPeowbWd0GrQF6285+eEqysNI/JP7rFbrbEJwp3DHnZvrNbrT+csPddUXrF28xcAqkftLMxW7MMfKttBMX23kiv+aDqS5doi1jvVUwcEGsDl2sQxW1uRJcLmKN/4Fv8FPuwC9gGm0KVPmve3I35hDml3N/f/hEr2RSkTgefLNgT2lB34wANApRbmhUWr9L09/wi9+T4OW9nsqn3qTL+wnfjbE2RAUr6x0LQvjCDrGK4OndTBgDoE8yEcPxqQASFEzg95zBzpIiff5IdRWkzCG9wtGXo/lFrKe2oud6LvfPw+Nn1cznVzvsSHYkypJ9iUbK4MXto9KQ0L4G0/bzw301wzROguxpbTL2PhtEfX6TABwnEU6k7s4e83xREiUn49oOsJGxf0pmbno7AbLZkQEpBG+o7QTAey9OhHTOTrIjs0udpvxyumA3l3ekbYQlBg1iHeYdcKTvrhv+tHpscWRv1PQV9l8PI5eiiKj580NBzFzpqCd9B9tljRbQNY0hGfRWxxdm4JsQtnxd42CI3GZg4Y8nmNKuB/8ab/dty+Cfu3f+c/N4OOqTHsq59/w7ID0PlUaF5foTkmDBnPVBKwKFw8wmFkTHcXeVK6imTjPQhuUUZ26U6nmSwrVX4RwVKMqr9veIl1nSITU3AfbyeLWszTM3ACuxv3eKDGLta30weGl4sGrjkoMsq2NdR3iP7Q1HxeM2zDaXxxE5SfEcbfqT3pvHb1DX+s0wlNKqBWMITbDIRvcdxU3AgTSdkQVJiEg8yqvxTi6Dosf7bvaxOkeJqpF71gyKmWLcdWbz4Dc35hDm5Vlz/zJjaHWzV0ZLYgAQqdA+lgqLY6Kjlb0FJIogwoUr+A9xvqRp5FDgDd79L0oHASeBEw9pWk7oet/KDJ2YWSGVtezZVEF1u0HsqqKjQSJM2kUCVKWm+BLaMU1S/9rBXdDu2xZbCG/o4PcfwQZeXneLbiUlU65B1K0tuXYZD+e36DYE8jNJW4u+FCjfjMt3XzbnGRlJOBm1NA4KlQAM+4G5tvKiJiY1OzGQ+W0kmtHjnnyp5EEg2dGAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SzStMQsUQ5zYm1nvEcPRn2",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SzStMQsUQ5zYm1nvEcPRn2",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useMemo, useState } from \"react\";\nimport { Button, Column, Flex, Heading, Icon, Row, Text } from \"@once-ui-system/core\";\n\ntype Step = {\n  id: string;\n  title: string;\n  summary: string;\n  detail: string;\n  estimate: string;\n  actionLabel: string;\n};\n\nconst STEPS: Step[] = [\n  {\n    id: \"profile\",\n    title: \"Complete your workspace profile\",\n    summary: \"Add your team name, logo and time zone.\",\n    detail:\n      \"Your workspace name appears in invites, email notifications and shared links. Pick the time zone your team works in so scheduled reports arrive at the right hour.\",\n    estimate: \"2 min\",\n    actionLabel: \"Open profile settings\",\n  },\n  {\n    id: \"invite\",\n    title: \"Invite your first teammates\",\n    summary: \"Bring in at least two people to collaborate.\",\n    detail:\n      \"Invite colleagues by email or share an invite link. Admins can manage billing and permissions, while members can create and edit projects.\",\n    estimate: \"3 min\",\n    actionLabel: \"Send invites\",\n  },\n  {\n    id: \"source\",\n    title: \"Connect a data source\",\n    summary: \"Link Postgres, BigQuery or upload a CSV.\",\n    detail:\n      \"Connections are read-only by default and credentials are encrypted at rest. You can start with a sample CSV and switch to a live source later.\",\n    estimate: \"5 min\",\n    actionLabel: \"Add a connection\",\n  },\n  {\n    id: \"dashboard\",\n    title: \"Build your first dashboard\",\n    summary: \"Start from a template or an empty canvas.\",\n    detail:\n      \"Templates for product analytics, revenue and support health are ready to use. Drag in charts, then pin the dashboard to your sidebar for quick access.\",\n    estimate: \"6 min\",\n    actionLabel: \"Browse templates\",\n  },\n  {\n    id: \"alerts\",\n    title: \"Set up a weekly digest\",\n    summary: \"Get key metrics in your inbox every Monday.\",\n    detail:\n      \"Choose which metrics to include and who receives the digest. You can pause or edit the schedule at any time from notification settings.\",\n    estimate: \"2 min\",\n    actionLabel: \"Schedule digest\",\n  },\n];\n\nconst CONFETTI_COLORS = [\"#f5b700\", \"#ef476f\", \"#06d6a0\", \"#118ab2\", \"#9b5de5\", \"#ff7b00\"];\n\nconst CONFETTI = Array.from({ length: 36 }, (_, i) => ({\n  left: `${(i * 97) % 100}%`,\n  delay: `${((i * 53) % 100) / 100}s`,\n  duration: `${2.4 + ((i * 37) % 18) / 10}s`,\n  color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],\n  rotate: `${(i * 47) % 360}deg`,\n  size: 6 + (i % 4) * 2,\n}));\n\nconst STYLES = `\n.ob-bar-track {\n  width: 100%;\n  height: 10px;\n  border-radius: 999px;\n  background: var(--neutral-alpha-medium);\n  overflow: hidden;\n}\n.ob-bar-fill {\n  height: 100%;\n  border-radius: 999px;\n  background: var(--brand-solid-strong);\n  transition: width 500ms ease;\n}\n.ob-bar-fill[data-done=\"true\"] {\n  background: var(--success-solid-strong);\n}\n.ob-indicator {\n  flex-shrink: 0;\n  width: 28px;\n  height: 28px;\n  border-radius: 999px;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  border: 2px solid var(--neutral-alpha-strong);\n  color: var(--neutral-on-background-weak);\n  font-size: 12px;\n  font-weight: 600;\n  transition: background 250ms ease, border-color 250ms ease, transform 250ms ease;\n}\n.ob-indicator[data-state=\"current\"] {\n  border-color: var(--brand-solid-strong);\n  color: var(--brand-on-background-strong);\n}\n.ob-indicator[data-state=\"done\"] {\n  background: var(--success-solid-strong);\n  border-color: var(--success-solid-strong);\n  color: #fff;\n  transform: scale(1.05);\n}\n.ob-row-toggle {\n  all: unset;\n  box-sizing: border-box;\n  flex: 1;\n  min-width: 0;\n  display: flex;\n  align-items: center;\n  gap: 12px;\n  cursor: pointer;\n  padding: 4px 0;\n  border-radius: 8px;\n}\n.ob-row-toggle:focus-visible {\n  outline: 2px solid var(--brand-solid-strong);\n  outline-offset: 4px;\n}\n.ob-title-done {\n  text-decoration: line-through;\n  opacity: 0.7;\n}\n.ob-confetti-wrap {\n  position: absolute;\n  inset: 0;\n  overflow: hidden;\n  pointer-events: none;\n}\n.ob-confetti {\n  position: absolute;\n  top: -16px;\n  border-radius: 2px;\n  opacity: 0;\n  animation-name: ob-fall;\n  animation-timing-function: linear;\n  animation-fill-mode: forwards;\n  animation-iteration-count: 2;\n}\n@keyframes ob-fall {\n  0% { transform: translateY(0) rotate(0deg); opacity: 1; }\n  100% { transform: translateY(420px) rotate(540deg); opacity: 0; }\n}\n@keyframes ob-pop {\n  0% { transform: scale(0.6); opacity: 0; }\n  70% { transform: scale(1.1); opacity: 1; }\n  100% { transform: scale(1); opacity: 1; }\n}\n.ob-trophy {\n  width: 64px;\n  height: 64px;\n  border-radius: 999px;\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  background: var(--success-solid-strong);\n  color: #fff;\n  animation: ob-pop 600ms ease-out both;\n}\n@media (prefers-reduced-motion: reduce) {\n  .ob-confetti { display: none; }\n  .ob-trophy { animation: none; }\n  .ob-bar-fill, .ob-indicator { transition: none; }\n}\n`;\n\nexport default function Page() {\n  const [done, setDone] = useState<Record<string, boolean>>({});\n  const [openId, setOpenId] = useState<string | null>(STEPS[0].id);\n\n  const completedCount = useMemo(() => STEPS.filter((s) => done[s.id]).length, [done]);\n  const total = STEPS.length;\n  const percent = Math.round((completedCount / total) * 100);\n  const allDone = completedCount === total;\n  const currentId = STEPS.find((s) => !done[s.id])?.id ?? null;\n\n  const toggleDone = useCallback((id: string) => {\n    setDone((prev) => ({ ...prev, [id]: !prev[id] }));\n  }, []);\n\n  const completeAndAdvance = useCallback((id: string) => {\n    setDone((prev) => {\n      const next = { ...prev, [id]: true };\n      const upcoming = STEPS.find((s) => !next[s.id]);\n      setOpenId(upcoming ? upcoming.id : null);\n      return next;\n    });\n  }, []);\n\n  const reset = useCallback(() => {\n    setDone({});\n    setOpenId(STEPS[0].id);\n  }, []);\n\n  return (\n    <Flex fillWidth horizontal=\"center\" paddingX=\"16\" paddingY=\"32\">\n      <style>{STYLES}</style>\n      <Column\n        as=\"main\"\n        fillWidth\n        maxWidth={40}\n        gap=\"24\"\n      >\n        <Column gap=\"8\">\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n            Getting started\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-s\">\n            Welcome to Northwind Analytics\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Finish these five steps to get your team up and running. It takes about 18 minutes, and\n            your progress is saved as you go.\n          </Text>\n        </Column>\n\n        <Column\n          fillWidth\n          gap=\"12\"\n          padding=\"20\"\n          radius=\"l\"\n          border=\"neutral-alpha-medium\"\n          background=\"surface\"\n        >\n          <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"12\">\n            <Text id=\"ob-progress-label\" variant=\"label-strong-m\">\n              {allDone ? \"All steps complete\" : `${completedCount} of ${total} steps complete`}\n            </Text>\n            <Text variant=\"label-strong-m\" onBackground={allDone ? \"success-strong\" : \"brand-strong\"}>\n              {percent}%\n            </Text>\n          </Row>\n          <div\n            className=\"ob-bar-track\"\n            role=\"progressbar\"\n            aria-labelledby=\"ob-progress-label\"\n            aria-valuemin={0}\n            aria-valuemax={100}\n            aria-valuenow={percent}\n          >\n            <div className=\"ob-bar-fill\" data-done={allDone} style={{ width: `${percent}%` }} />\n          </div>\n        </Column>\n\n        {allDone ? (\n          <Column\n            fillWidth\n            horizontal=\"center\"\n            gap=\"16\"\n            padding=\"32\"\n            radius=\"l\"\n            border=\"success-alpha-strong\"\n            background=\"success-alpha-weak\"\n            position=\"relative\"\n            style={{ position: \"relative\", overflow: \"hidden\", textAlign: \"center\" }}\n          >\n            <div className=\"ob-confetti-wrap\" aria-hidden=\"true\">\n              {CONFETTI.map((c, i) => (\n                <span\n                  key={i}\n                  className=\"ob-confetti\"\n                  style={{\n                    left: c.left,\n                    width: c.size,\n                    height: c.size * 1.6,\n                    background: c.color,\n                    rotate: c.rotate,\n                    animationDelay: c.delay,\n                    animationDuration: c.duration,\n                  }}\n                />\n              ))}\n            </div>\n            <span className=\"ob-trophy\" aria-hidden=\"true\">\n              <Icon name=\"check\" size=\"l\" />\n            </span>\n            <div role=\"status\" aria-live=\"polite\">\n              <Column gap=\"8\" horizontal=\"center\">\n                <Heading as=\"h2\" variant=\"heading-strong-xl\">\n                  You&apos;re all set!\n                </Heading>\n                <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                  Your workspace is ready. Your team can now explore dashboards, share insights and\n                  get the Monday digest.\n                </Text>\n              </Column>\n            </div>\n            <Row gap=\"12\" wrap horizontal=\"center\">\n              <Button variant=\"primary\" size=\"m\" href=\"#\">\n                Go to dashboard\n              </Button>\n              <Button variant=\"secondary\" size=\"m\" prefixIcon=\"refresh\" onClick={reset}>\n                Restart checklist\n              </Button>\n            </Row>\n          </Column>\n        ) : null}\n\n        <Column as=\"section\" gap=\"12\" fillWidth aria-labelledby=\"ob-steps-heading\">\n          <Heading as=\"h2\" variant=\"heading-strong-m\" id=\"ob-steps-heading\">\n            Your checklist\n          </Heading>\n          <ol style={{ listStyle: \"none\", margin: 0, padding: 0, display: \"flex\", flexDirection: \"column\", gap: 12 }}>\n            {STEPS.map((step, index) => {\n              const isDone = !!done[step.id];\n              const isCurrent = step.id === currentId;\n              const isOpen = openId === step.id;\n              const state = isDone ? \"done\" : isCurrent ? \"current\" : \"todo\";\n              const panelId = `ob-panel-${step.id}`;\n              const buttonId = `ob-button-${step.id}`;\n\n              return (\n                <li key={step.id}>\n                  <Column\n                    fillWidth\n                    padding=\"16\"\n                    gap=\"12\"\n                    radius=\"l\"\n                    border={isCurrent ? \"brand-alpha-strong\" : \"neutral-alpha-medium\"}\n                    background=\"surface\"\n                  >\n                    <Row fillWidth vertical=\"center\" gap=\"12\">\n                      <button\n                        type=\"button\"\n                        id={buttonId}\n                        className=\"ob-row-toggle\"\n                        aria-expanded={isOpen}\n                        aria-controls={panelId}\n                        onClick={() => setOpenId(isOpen ? null : step.id)}\n                      >\n                        <span className=\"ob-indicator\" data-state={state} aria-hidden=\"true\">\n                          {isDone ? <Icon name=\"check\" size=\"xs\" /> : index + 1}\n                        </span>\n                        <span style={{ display: \"flex\", flexDirection: \"column\", gap: 2, minWidth: 0, flex: 1 }}>\n                          <span className={isDone ? \"ob-title-done\" : undefined}>\n                            <Text variant=\"label-strong-m\" onBackground=\"neutral-strong\">\n                              {step.title}\n                            </Text>\n                          </span>\n                          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                            {step.summary}\n                          </Text>\n                        </span>\n                        <span style={{ flexShrink: 0, display: \"inline-flex\" }}>\n                          <Icon name={isOpen ? \"chevronUp\" : \"chevronDown\"} size=\"s\" onBackground=\"neutral-weak\" />\n                        </span>\n                      </button>\n                    </Row>\n\n                    <span\n                      style={{\n                        position: \"absolute\",\n                        width: 1,\n                        height: 1,\n                        overflow: \"hidden\",\n                        clip: \"rect(0 0 0 0)\",\n                        whiteSpace: \"nowrap\",\n                      }}\n                    >\n                      Status: {isDone ? \"completed\" : isCurrent ? \"up next\" : \"not started\"}\n                    </span>\n\n                    {isOpen ? (\n                      <div id={panelId} role=\"region\" aria-labelledby={buttonId}>\n                        <Column gap=\"12\" paddingLeft=\"40\">\n                          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                            {step.detail}\n                          </Text>\n                          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n                            Estimated time: {step.estimate}\n                          </Text>\n                          <Row gap=\"8\" wrap>\n                            {isDone ? (\n                              <Button variant=\"tertiary\" size=\"s\" onClick={() => toggleDone(step.id)}>\n                                Mark as not done\n                              </Button>\n                            ) : (\n                              <>\n                                <Button variant=\"secondary\" size=\"s\" href=\"#\">\n                                  {step.actionLabel}\n                                </Button>\n                                <Button variant=\"primary\" size=\"s\" onClick={() => completeAndAdvance(step.id)}>\n                                  Mark as done\n                                </Button>\n                              </>\n                            )}\n                          </Row>\n                        </Column>\n                      </div>\n                    ) : null}\n                  </Column>\n                </li>\n              );\n            })}\n          </ol>\n        </Column>\n\n        {!allDone && completedCount > 0 ? (\n          <Row horizontal=\"end\">\n            <Button variant=\"tertiary\" size=\"s\" prefixIcon=\"refresh\" onClick={reset}>\n              Reset progress\n            </Button>\n          </Row>\n        ) : null}\n      </Column>\n    </Flex>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

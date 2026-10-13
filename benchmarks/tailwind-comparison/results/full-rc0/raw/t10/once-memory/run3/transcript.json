@@ -1,0 +1,282 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: User profile popover — avatar trigger, a user menu or hover card with stats and actions.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012fhvYHTRP8QNQCiG32LPSs",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HMRuwHjCWdKnGFXmChZvFP",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012fhvYHTRP8QNQCiG32LPSs",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HMRuwHjCWdKnGFXmChZvFP",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017XLneTLCpjX7a7tpg5qAbT",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VLGJBw3x4nCsnkd1Mz2yLK",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BXe6xqLsLJ6797xCUH1hPM",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017XLneTLCpjX7a7tpg5qAbT",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VLGJBw3x4nCsnkd1Mz2yLK",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BXe6xqLsLJ6797xCUH1hPM",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_012aqr76FVk5hv1V6EnMaYTq",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Tyrurm9ivgXMzimr84pS2A",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AmUqqu7i15cspUSsS7MrjA",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01D6atNTJRAX5M4cKEwFmRbd",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012aqr76FVk5hv1V6EnMaYTq",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Tyrurm9ivgXMzimr84pS2A",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AmUqqu7i15cspUSsS7MrjA",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01D6atNTJRAX5M4cKEwFmRbd",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build the popover using Once UI primitives (Flex, Column, Row, Text, Heading, Avatar, Button, Badge, Line), adding hover/click triggers, outside-click and Escape handling, focus management, and arrow-key navigation—sticking to props I'm confident about.\n\n",
+          "signature": "CAQS7wcKEQgSGAI4AUIJbmFycmF0aW9uEgxV4Pi3b+AdI17Z0I0aDOPfsfkJAMqlyqmjwCIwU9GuPf2yuexqJ/czyFvrCQBchpMX5/PnfZi1luen9CC0ik9IS1AWSDsYaNbObwkkKosH0iGxShXtnZ72Y/nAUOp3YGzO++Ae/nfW/pyTyBntBflSskh2C/NIK0r5vs6rUMK+CD+3dyufXpwnbGb91LpRyJzSB0G9075fLMQ7raSWrM8e4g0m46mCaWLr+dLp/8068ea/hUxZxjFwnM5W7ouDaZZcMxHLZ/98d3pWH0xO3zg/DYk/vmanh5SBQW+mPXARWRlV25css1lrZ77sb0qqWXzXvSZTEdmt3k/JnYgALKuUH0BxZsKKW9PHwYZJQ5G+9wCuhv6G7r/100uf0eDOtOAT2eVWgNF7d8/LMRVzZqXJOqNXp0EwCGUIrdMc576+c3uJAoUaiJvBmIj6yd2BXV5X9tSoQUvmhRC0lDOPKrcdmPJUvj6hhHOuf9MmMBrRQyMkpPPzcLd4CxtDXiU8OQLET+Wezo+m18DOogQyTVw0kWcCo56cGZT/nbNQT+lvMlmgL4eF+6y7p8l4QB27dYEf8JNsfpm0LVcTdzEmqjB+MTSgLqHY90XOy//shwPJJyLnjYjUagyqMSBeuP0f5e+LO5B0NzzKf31f11G2ImOXuKqS6Y+PzYNR5WVPGQ/wEshR08QNUDdBqEf94lkSYkJ0jdQyLrSe2IcHw9GxsdAYhq5p2F+qtrlhChKEH4pWHOWmHYsnspFnZ3uDijj4j6EhyZRAZ4EG//kP3OxC6OMMVNP/UHfMTarO6K8YmIg/FWd7x87fCsb6HjVhS7hcwr2AieNzsUgQ8Bbt68i08e2vQu3nyY7Gmz6uXQTz7i7w82UrGJtc0PjVhmOqckX1Yv01/WEzWDeWltao1R0/DmYMshIC7I3XKzLtSEwxZYbn8m8SQxmg0EvLjCy40+guElMI/peidIif28FHSZZ7HunVElBZV4DuSxWVlwo7YudK8eY5XGeKhsg87ftXLFRB7fROmtWatFMI3vXG4gZEBy0u7hrfcumyKxCWmovUTXYUkWGFiMmgqbOlbo0RO2xTjFG6Xn0OrHzk99jOLd+zU8lNz49TsL+T5mgW4ru91YCqTI2yH8ok8XGm/AyinU8Hx7wmlreXxTsR7ZYMCtxl5iqV/QDq1f8J2ty3SahpQKeKu016cAe6QJarlX4wWI7uO0C6UAfSjyubGP6705n88mdVtwihm3YT5nyfGLi8yyGrUvk5lmABb13qTOVCw4q0PrcqDBpZNtr5cjQrEb6XD4eU8SZwzrXmMn/zuxgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RNBs8uzRcTaiMu9gYwnPTi",
+          "name": "read_file",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core/dist/components/Avatar.d.ts"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RNBs8uzRcTaiMu9gYwnPTi",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core/dist/components/Avatar.d.ts",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since types aren't available, I'll stick to well-known props for Flex/Row/Column, Text, Heading, Line, and Button, and render the avatar as styled initials instead of using the Avatar component to avoid loading a network image.\n\n",
+          "signature": "CAQS3AgKEQgSGAI4AUIJbmFycmF0aW9uEgzr/Il8LkCFiIWCxuUaDEUNuq+9h4FoQIuBtiIw8+8141vCwGXxoyRrfR/StJW9x2HvG6JDq3VQYBw0oh/5GwogQ9j3rol5i2Vr02cUKvgH+JRd2+QSGo/GlfNkRxwwZvWRhnLcWbAOlEGxi3z8lfGLTaJTDty/gZ11nf/JQ88ImtqWowdyPuz1fSkC3Blt5C9033GNTU4thWEyg8OSyBZtGx982EE+SE3JBk6bjJ37tn7k2lHSlHK7IPJxT8eQi/IoctQszXrd5udzEVyOU/nGcNzN7/8Pz1+jcAvjPzZTPm1/MuqC7qg400aSvjwcIKIvmqjtdOW0vMFIifVGAdqxPIgmafCc2YD3V/TboWE4Lwu3kinFLaYn665tgPGi8d5M6Eeeuleca7jT6b3foV/mV1FfF/5gbSIbj5PdpMrbhiXNOAzoMxGiC6LVpw7iLDS4P64bui/OPDt9IkYgiCEHHPrePx9vfqqBDuSMNHMCtf1j9q8qRTMpVwi8pQSXG8RFJi2laBim7P248s0L5ANLPtoFSU7Ot0LKSY5H4Q9LM4aABHhXPWfGppagHHfVicqz4Q5qXzCO5w8EtatYYsAMv8/eR+TQh3CdDfPfEXui+9/OtVR2trvjhRJze1fAmbHQtbhuNEyiD7BkYLI4wdl1ZtiqpXHNLbdqpDa+sjrX807tMyW+rIN5GpLwowVpyGHlhYZSZ3ZS+YFYYJZ2TnfKaww33Y/QS2+z7BC2hb6nDxIKIbNdH8djtlu0OvRRy6qxGbKJC3z1OI5eIV7qnwQ9nKuyunmAQi5hjs1QUnwV6y1VK7yG5ZcHfzw7IyQvaejv0AaKxR4dgxJvwv+zYU84qMVvQQrTH+KC+JYQ76KBxZqRVbFnn+MDt/U+Il5MNkMu1e8KDpAFctUXYODevBNAwSbWjuLRVk5sDxI3yHmdndopQG6X9qbGcJySqc4npzsdbf6oB2dk2fKM5DqDiIZOnMFJefS2d/VmgxHYQj+czy/VbLNbRTUtfDtDaBr5EyEImp8xYcKDzyHcMzDCvLm5CDm4PeeunEX/VyJQhfKy5/6zpjYkDw3yn8h50vEdfHsNck3uocsblmpSIjNxTudwGhYtDkvjm1XmmS8U3+N+8byxwpv0zfPwJ6Xn0FkV3XDJtUycayQ8Zi1CoVArcchRPp/dtBYi5PasVronAG/Ash6ld+H6yAOg9CMRjEbI16UYdskku8rbSyaw+N790mxhGO9NcfG5clYWFctioQX2IAOZQpKSYQAqwkdsGRLG4qGXgg9eUJ/LmnbdxUHwB9oql7NIERuowwTsCW+Z+WXFLRxqMhIAabLfe1dHFTS/CVAxgTcp7roYD8LlTQfYK/XDMCgnjqdc/Z4URLIHAwGvAOJNDS3rk9atFTjd4C5xnEwYhMW/BhuXvMbLvNZyhHCI/czd42LNDwSkGZhoBlWp1Khe4HKs9R0YAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ab82KpWKhWekxTTxnwKQeC",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Ab82KpWKhWekxTTxnwKQeC",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Not installed locally, so I'll write conservatively using only the props I'm sure of.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { KeyboardEvent as ReactKeyboardEvent } from \"react\";\nimport { Column, Row, Text, Heading, Line } from \"@once-ui-system/core\";\n\ntype Stat = { label: string; value: string };\ntype MenuItem = { id: string; label: string; hint?: string; danger?: boolean };\n\nconst USER = {\n  name: \"Maya Okonkwo\",\n  handle: \"@mayaok\",\n  initials: \"MO\",\n  role: \"Staff Product Designer\",\n  location: \"Lisbon, Portugal\",\n  bio: \"Designing calm, fast interfaces for logistics teams. Currently untangling our onboarding flow.\",\n  status: \"Available for reviews\",\n};\n\nconst STATS: Stat[] = [\n  { label: \"Projects\", value: \"42\" },\n  { label: \"Followers\", value: \"1.8k\" },\n  { label: \"Reviews\", value: \"317\" },\n];\n\nconst ITEMS: MenuItem[] = [\n  { id: \"profile\", label: \"View profile\", hint: \"G P\" },\n  { id: \"settings\", label: \"Account settings\", hint: \"G S\" },\n  { id: \"billing\", label: \"Billing & plans\" },\n  { id: \"invite\", label: \"Invite teammates\" },\n  { id: \"signout\", label: \"Sign out\", danger: true },\n];\n\nconst HOVER_OPEN_DELAY = 150;\nconst HOVER_CLOSE_DELAY = 200;\n\nexport default function Page() {\n  const [open, setOpen] = useState(false);\n  const [following, setFollowing] = useState(false);\n  const [lastAction, setLastAction] = useState<string>(\"No action yet\");\n  const [activeIndex, setActiveIndex] = useState(-1);\n\n  const rootRef = useRef<HTMLDivElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const panelId = useId();\n  const triggerId = useId();\n\n  const clearTimer = () => {\n    if (timer.current) {\n      clearTimeout(timer.current);\n      timer.current = null;\n    }\n  };\n\n  const close = useCallback((returnFocus: boolean) => {\n    clearTimer();\n    setOpen(false);\n    setActiveIndex(-1);\n    if (returnFocus) triggerRef.current?.focus();\n  }, []);\n\n  const scheduleOpen = () => {\n    clearTimer();\n    timer.current = setTimeout(() => setOpen(true), HOVER_OPEN_DELAY);\n  };\n\n  const scheduleClose = () => {\n    clearTimer();\n    timer.current = setTimeout(() => {\n      setOpen(false);\n      setActiveIndex(-1);\n    }, HOVER_CLOSE_DELAY);\n  };\n\n  useEffect(() => () => clearTimer(), []);\n\n  // Outside click + Escape\n  useEffect(() => {\n    if (!open) return;\n    const onPointer = (e: PointerEvent) => {\n      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {\n        close(false);\n      }\n    };\n    const onKey = (e: KeyboardEvent) => {\n      if (e.key === \"Escape\") close(true);\n    };\n    document.addEventListener(\"pointerdown\", onPointer);\n    document.addEventListener(\"keydown\", onKey);\n    return () => {\n      document.removeEventListener(\"pointerdown\", onPointer);\n      document.removeEventListener(\"keydown\", onKey);\n    };\n  }, [open, close]);\n\n  // Move focus to the active item\n  useEffect(() => {\n    if (open && activeIndex >= 0) itemRefs.current[activeIndex]?.focus();\n  }, [open, activeIndex]);\n\n  const onTriggerKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>) => {\n    if (e.key === \"ArrowDown\" || e.key === \"ArrowUp\") {\n      e.preventDefault();\n      setOpen(true);\n      setActiveIndex(e.key === \"ArrowDown\" ? 0 : ITEMS.length - 1);\n    }\n  };\n\n  const onMenuKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {\n    const count = ITEMS.length;\n    if (e.key === \"ArrowDown\") {\n      e.preventDefault();\n      setActiveIndex((i) => (i + 1) % count);\n    } else if (e.key === \"ArrowUp\") {\n      e.preventDefault();\n      setActiveIndex((i) => (i <= 0 ? count - 1 : i - 1));\n    } else if (e.key === \"Home\") {\n      e.preventDefault();\n      setActiveIndex(0);\n    } else if (e.key === \"End\") {\n      e.preventDefault();\n      setActiveIndex(count - 1);\n    } else if (e.key === \"Tab\") {\n      close(false);\n    }\n  };\n\n  const onSelect = (item: MenuItem) => {\n    setLastAction(item.label);\n    close(true);\n  };\n\n  return (\n    <Column fillWidth minHeight=\"100vh\" horizontal=\"center\" paddingX=\"16\" paddingY=\"24\" gap=\"32\">\n      <Row\n        as=\"header\"\n        fillWidth\n        maxWidth={64}\n        vertical=\"center\"\n        horizontal=\"space-between\"\n        paddingY=\"8\"\n        gap=\"16\"\n      >\n        <Column gap=\"4\">\n          <Heading as=\"h1\" variant=\"heading-strong-l\">\n            Northwind Studio\n          </Heading>\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n            Team workspace\n          </Text>\n        </Column>\n\n        <div\n          ref={rootRef}\n          className=\"profile-root\"\n          onMouseEnter={scheduleOpen}\n          onMouseLeave={scheduleClose}\n          onFocus={clearTimer}\n        >\n          <button\n            ref={triggerRef}\n            id={triggerId}\n            type=\"button\"\n            className=\"avatar-trigger\"\n            aria-haspopup=\"menu\"\n            aria-expanded={open}\n            aria-controls={open ? panelId : undefined}\n            aria-label={`Account menu for ${USER.name}`}\n            onClick={() => {\n              clearTimer();\n              setOpen((o) => !o);\n              setActiveIndex(-1);\n            }}\n            onKeyDown={onTriggerKeyDown}\n          >\n            <span className=\"avatar-initials\" aria-hidden=\"true\">\n              {USER.initials}\n            </span>\n            <span className=\"avatar-status\" aria-hidden=\"true\" />\n          </button>\n\n          {open && (\n            <div\n              id={panelId}\n              className=\"profile-panel\"\n              role=\"dialog\"\n              aria-label={`${USER.name} profile`}\n            >\n              <div className=\"panel-head\">\n                <span className=\"avatar-initials avatar-large\" aria-hidden=\"true\">\n                  {USER.initials}\n                </span>\n                <div className=\"panel-id\">\n                  <p className=\"name\">{USER.name}</p>\n                  <p className=\"muted\">\n                    {USER.handle} · {USER.role}\n                  </p>\n                </div>\n              </div>\n\n              <p className=\"bio\">{USER.bio}</p>\n              <p className=\"muted loc\">\n                <span className=\"dot\" aria-hidden=\"true\" /> {USER.status} · {USER.location}\n              </p>\n\n              <dl className=\"stats\">\n                {STATS.map((s) => (\n                  <div key={s.label} className=\"stat\">\n                    <dd>{s.value}</dd>\n                    <dt>{s.label}</dt>\n                  </div>\n                ))}\n              </dl>\n\n              <div className=\"actions\">\n                <button\n                  type=\"button\"\n                  className={following ? \"btn btn-ghost\" : \"btn btn-primary\"}\n                  aria-pressed={following}\n                  onClick={() => setFollowing((f) => !f)}\n                >\n                  {following ? \"Following\" : \"Follow\"}\n                </button>\n                <button\n                  type=\"button\"\n                  className=\"btn btn-ghost\"\n                  onClick={() => {\n                    setLastAction(\"Message sent to Maya\");\n                    close(true);\n                  }}\n                >\n                  Message\n                </button>\n              </div>\n\n              <div className=\"sep\" role=\"separator\" />\n\n              <div\n                role=\"menu\"\n                aria-label=\"Account actions\"\n                onKeyDown={onMenuKeyDown}\n                className=\"menu\"\n              >\n                {ITEMS.map((item, i) => (\n                  <button\n                    key={item.id}\n                    ref={(el) => {\n                      itemRefs.current[i] = el;\n                    }}\n                    type=\"button\"\n                    role=\"menuitem\"\n                    tabIndex={activeIndex === i ? 0 : -1}\n                    className={item.danger ? \"menu-item danger\" : \"menu-item\"}\n                    onClick={() => onSelect(item)}\n                    onFocus={() => setActiveIndex(i)}\n                  >\n                    <span>{item.label}</span>\n                    {item.hint && <kbd>{item.hint}</kbd>}\n                  </button>\n                ))}\n              </div>\n            </div>\n          )}\n        </div>\n      </Row>\n\n      <Column fillWidth maxWidth={40} gap=\"16\" paddingY=\"24\">\n        <Heading as=\"h2\" variant=\"display-strong-xs\">\n          Welcome back, Maya\n        </Heading>\n        <Text variant=\"body-default-l\" onBackground=\"neutral-weak\">\n          Hover, click or focus the avatar in the top right to open your profile card. Use the arrow\n          keys to move through the menu and Escape to close it.\n        </Text>\n        <Line />\n        <Row gap=\"8\" vertical=\"center\">\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n            Last action:\n          </Text>\n          <Text variant=\"label-strong-s\" aria-live=\"polite\">\n            {lastAction}\n          </Text>\n        </Row>\n      </Column>\n\n      <style>{`\n        .profile-root { position: relative; display: inline-block; }\n        .avatar-trigger {\n          position: relative; display: inline-flex; padding: 0; border: 2px solid transparent;\n          background: none; border-radius: 999px; cursor: pointer;\n          transition: border-color .15s ease, transform .15s ease;\n        }\n        .avatar-trigger:hover { transform: translateY(-1px); }\n        .avatar-trigger:focus-visible, .btn:focus-visible, .menu-item:focus-visible {\n          outline: 2px solid var(--brand-solid-strong, #4f6bff); outline-offset: 2px;\n        }\n        .avatar-trigger[aria-expanded=\"true\"] { border-color: var(--brand-solid-strong, #4f6bff); }\n        .avatar-initials {\n          display: inline-flex; align-items: center; justify-content: center;\n          width: 44px; height: 44px; border-radius: 999px; font-weight: 600; font-size: 15px;\n          letter-spacing: .02em; color: #fff; background: linear-gradient(135deg, #5b6cff, #b05bff);\n          font-family: var(--font-label);\n        }\n        .avatar-large { width: 56px; height: 56px; font-size: 18px; flex: none; }\n        .avatar-status {\n          position: absolute; right: 0; bottom: 0; width: 12px; height: 12px; border-radius: 999px;\n          background: #2fb36d; border: 2px solid var(--page-background, #fff);\n        }\n        .profile-panel {\n          position: absolute; top: calc(100% + 10px); right: 0; z-index: 50;\n          width: min(360px, calc(100vw - 32px)); padding: 20px; border-radius: 16px;\n          background: var(--surface-background, #fff); color: var(--neutral-on-background-strong, inherit);\n          border: 1px solid var(--neutral-alpha-medium, rgba(128,128,128,.3));\n          box-shadow: 0 16px 40px rgba(0,0,0,.18);\n          font-family: var(--font-body);\n          animation: panel-in .14s ease-out;\n        }\n        .profile-panel::before {\n          content: \"\"; position: absolute; top: -14px; left: 0; right: 0; height: 14px;\n        }\n        @keyframes panel-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }\n        @media (prefers-reduced-motion: reduce) {\n          .profile-panel { animation: none; } .avatar-trigger { transition: none; }\n        }\n        .panel-head { display: flex; gap: 14px; align-items: center; }\n        .panel-id { min-width: 0; }\n        .name { margin: 0; font-size: 17px; font-weight: 650; }\n        .muted { margin: 2px 0 0; font-size: 13px; opacity: .7; }\n        .bio { margin: 14px 0 6px; font-size: 14px; line-height: 1.5; }\n        .loc { display: flex; align-items: center; gap: 6px; margin: 0; }\n        .dot { width: 8px; height: 8px; border-radius: 999px; background: #2fb36d; display: inline-block; }\n        .stats {\n          display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0; padding: 0;\n        }\n        .stat {\n          display: flex; flex-direction: column-reverse; align-items: center; padding: 10px 4px;\n          border-radius: 12px; background: var(--neutral-alpha-weak, rgba(128,128,128,.1));\n        }\n        .stat dd { margin: 0; font-size: 18px; font-weight: 650; }\n        .stat dt { font-size: 12px; opacity: .7; }\n        .actions { display: flex; gap: 8px; }\n        .btn {\n          flex: 1; min-height: 40px; padding: 0 14px; border-radius: 10px; font: inherit;\n          font-size: 14px; font-weight: 600; cursor: pointer;\n          border: 1px solid var(--neutral-alpha-medium, rgba(128,128,128,.35));\n        }\n        .btn-primary { background: var(--brand-solid-strong, #4f6bff); color: #fff; border-color: transparent; }\n        .btn-ghost { background: transparent; color: inherit; }\n        .btn:hover { filter: brightness(1.08); }\n        .sep { height: 1px; margin: 16px 0 8px; background: var(--neutral-alpha-medium, rgba(128,128,128,.3)); }\n        .menu { display: flex; flex-direction: column; gap: 2px; }\n        .menu-item {\n          display: flex; justify-content: space-between; align-items: center; width: 100%;\n          min-height: 40px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent;\n          color: inherit; font: inherit; font-size: 14px; text-align: left; cursor: pointer;\n        }\n        .menu-item:hover, .menu-item:focus-visible { background: var(--neutral-alpha-weak, rgba(128,128,128,.14)); }\n        .menu-item.danger { color: #d64545; }\n        .menu-item kbd {\n          font-family: var(--font-code); font-size: 11px; opacity: .6; padding: 2px 6px;\n          border-radius: 6px; border: 1px solid var(--neutral-alpha-medium, rgba(128,128,128,.3));\n        }\n        @media (max-width: 480px) {\n          .profile-panel { position: fixed; top: 72px; left: 16px; right: 16px; width: auto; }\n        }\n      `}</style>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(143,9): error TS2322: Type '\"space-between\"' is not assignable to type '\"center\" | \"start\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\" | undefined'.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { KeyboardEvent as ReactKeyboardEvent } from \"react\";\nimport { Column, Row, Text, Heading, Line } from \"@once-ui-system/core\";\n\ntype Stat = { label: string; value: string };\ntype MenuItem = { id: string; label: string; hint?: string; danger?: boolean };\n\nconst USER = {\n  name: \"Maya Okonkwo\",\n  handle: \"@mayaok\",\n  initials: \"MO\",\n  role: \"Staff Product Designer\",\n  location: \"Lisbon, Portugal\",\n  bio: \"Designing calm, fast interfaces for logistics teams. Currently untangling our onboarding flow.\",\n  status: \"Available for reviews\",\n};\n\nconst STATS: Stat[] = [\n  { label: \"Projects\", value: \"42\" },\n  { label: \"Followers\", value: \"1.8k\" },\n  { label: \"Reviews\", value: \"317\" },\n];\n\nconst ITEMS: MenuItem[] = [\n  { id: \"profile\", label: \"View profile\", hint: \"G P\" },\n  { id: \"settings\", label: \"Account settings\", hint: \"G S\" },\n  { id: \"billing\", label: \"Billing & plans\" },\n  { id: \"invite\", label: \"Invite teammates\" },\n  { id: \"signout\", label: \"Sign out\", danger: true },\n];\n\nconst HOVER_OPEN_DELAY = 150;\nconst HOVER_CLOSE_DELAY = 200;\n\nexport default function Page() {\n  const [open, setOpen] = useState(false);\n  const [following, setFollowing] = useState(false);\n  const [lastAction, setLastAction] = useState<string>(\"No action yet\");\n  const [activeIndex, setActiveIndex] = useState(-1);\n\n  const rootRef = useRef<HTMLDivElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const panelId = useId();\n  const triggerId = useId();\n\n  const clearTimer = () => {\n    if (timer.current) {\n      clearTimeout(timer.current);\n      timer.current = null;\n    }\n  };\n\n  const close = useCallback((returnFocus: boolean) => {\n    if (timer.current) {\n      clearTimeout(timer.current);\n      timer.current = null;\n    }\n    setOpen(false);\n    setActiveIndex(-1);\n    if (returnFocus) triggerRef.current?.focus();\n  }, []);\n\n  const scheduleOpen = () => {\n    clearTimer();\n    timer.current = setTimeout(() => setOpen(true), HOVER_OPEN_DELAY);\n  };\n\n  const scheduleClose = () => {\n    clearTimer();\n    timer.current = setTimeout(() => {\n      setOpen(false);\n      setActiveIndex(-1);\n    }, HOVER_CLOSE_DELAY);\n  };\n\n  useEffect(\n    () => () => {\n      if (timer.current) clearTimeout(timer.current);\n    },\n    [],\n  );\n\n  // Outside click + Escape\n  useEffect(() => {\n    if (!open) return;\n    const onPointer = (e: PointerEvent) => {\n      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {\n        close(false);\n      }\n    };\n    const onKey = (e: KeyboardEvent) => {\n      if (e.key === \"Escape\") close(true);\n    };\n    document.addEventListener(\"pointerdown\", onPointer);\n    document.addEventListener(\"keydown\", onKey);\n    return () => {\n      document.removeEventListener(\"pointerdown\", onPointer);\n      document.removeEventListener(\"keydown\", onKey);\n    };\n  }, [open, close]);\n\n  // Move focus to the active item\n  useEffect(() => {\n    if (open && activeIndex >= 0) itemRefs.current[activeIndex]?.focus();\n  }, [open, activeIndex]);\n\n  const onTriggerKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>) => {\n    if (e.key === \"ArrowDown\" || e.key === \"ArrowUp\") {\n      e.preventDefault();\n      setOpen(true);\n      setActiveIndex(e.key === \"ArrowDown\" ? 0 : ITEMS.length - 1);\n    }\n  };\n\n  const onMenuKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {\n    const count = ITEMS.length;\n    if (e.key === \"ArrowDown\") {\n      e.preventDefault();\n      setActiveIndex((i) => (i + 1) % count);\n    } else if (e.key === \"ArrowUp\") {\n      e.preventDefault();\n      setActiveIndex((i) => (i <= 0 ? count - 1 : i - 1));\n    } else if (e.key === \"Home\") {\n      e.preventDefault();\n      setActiveIndex(0);\n    } else if (e.key === \"End\") {\n      e.preventDefault();\n      setActiveIndex(count - 1);\n    } else if (e.key === \"Tab\") {\n      close(false);\n    }\n  };\n\n  const onSelect = (item: MenuItem) => {\n    setLastAction(item.label);\n    close(true);\n  };\n\n  return (\n    <Column fillWidth minHeight=\"100vh\" horizontal=\"center\" paddingX=\"16\" paddingY=\"24\" gap=\"32\">\n      <Row\n        as=\"header\"\n        fillWidth\n        maxWidth={64}\n        vertical=\"center\"\n        horizontal=\"between\"\n        paddingY=\"8\"\n        gap=\"16\"\n      >\n        <Column gap=\"4\">\n          <Heading as=\"h1\" variant=\"heading-strong-l\">\n            Northwind Studio\n          </Heading>\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n            Team workspace\n          </Text>\n        </Column>\n\n        <div\n          ref={rootRef}\n          className=\"profile-root\"\n          onMouseEnter={scheduleOpen}\n          onMouseLeave={scheduleClose}\n          onFocus={clearTimer}\n        >\n          <button\n            ref={triggerRef}\n            id={triggerId}\n            type=\"button\"\n            className=\"avatar-trigger\"\n            aria-haspopup=\"menu\"\n            aria-expanded={open}\n            aria-controls={open ? panelId : undefined}\n            aria-label={`Account menu for ${USER.name}`}\n            onClick={() => {\n              clearTimer();\n              setOpen((o) => !o);\n              setActiveIndex(-1);\n            }}\n            onKeyDown={onTriggerKeyDown}\n          >\n            <span className=\"avatar-initials\" aria-hidden=\"true\">\n              {USER.initials}\n            </span>\n            <span className=\"avatar-status\" aria-hidden=\"true\" />\n          </button>\n\n          {open && (\n            <div\n              id={panelId}\n              className=\"profile-panel\"\n              role=\"dialog\"\n              aria-label={`${USER.name} profile`}\n            >\n              <div className=\"panel-head\">\n                <span className=\"avatar-initials avatar-large\" aria-hidden=\"true\">\n                  {USER.initials}\n                </span>\n                <div className=\"panel-id\">\n                  <p className=\"name\">{USER.name}</p>\n                  <p className=\"muted\">\n                    {USER.handle} · {USER.role}\n                  </p>\n                </div>\n              </div>\n\n              <p className=\"bio\">{USER.bio}</p>\n              <p className=\"muted loc\">\n                <span className=\"dot\" aria-hidden=\"true\" /> {USER.status} · {USER.location}\n              </p>\n\n              <dl className=\"stats\">\n                {STATS.map((s) => (\n                  <div key={s.label} className=\"stat\">\n                    <dd>{s.value}</dd>\n                    <dt>{s.label}</dt>\n                  </div>\n                ))}\n              </dl>\n\n              <div className=\"actions\">\n                <button\n                  type=\"button\"\n                  className={following ? \"btn btn-ghost\" : \"btn btn-primary\"}\n                  aria-pressed={following}\n                  onClick={() => setFollowing((f) => !f)}\n                >\n                  {following ? \"Following\" : \"Follow\"}\n                </button>\n                <button\n                  type=\"button\"\n                  className=\"btn btn-ghost\"\n                  onClick={() => {\n                    setLastAction(\"Message sent to Maya\");\n                    close(true);\n                  }}\n                >\n                  Message\n                </button>\n              </div>\n\n              <div className=\"sep\" role=\"separator\" />\n\n              <div\n                role=\"menu\"\n                aria-label=\"Account actions\"\n                onKeyDown={onMenuKeyDown}\n                className=\"menu\"\n              >\n                {ITEMS.map((item, i) => (\n                  <button\n                    key={item.id}\n                    ref={(el) => {\n                      itemRefs.current[i] = el;\n                    }}\n                    type=\"button\"\n                    role=\"menuitem\"\n                    tabIndex={activeIndex === i ? 0 : -1}\n                    className={item.danger ? \"menu-item danger\" : \"menu-item\"}\n                    onClick={() => onSelect(item)}\n                    onFocus={() => setActiveIndex(i)}\n                  >\n                    <span>{item.label}</span>\n                    {item.hint && <kbd>{item.hint}</kbd>}\n                  </button>\n                ))}\n              </div>\n            </div>\n          )}\n        </div>\n      </Row>\n\n      <Column fillWidth maxWidth={40} gap=\"16\" paddingY=\"24\">\n        <Heading as=\"h2\" variant=\"display-strong-xs\">\n          Welcome back, Maya\n        </Heading>\n        <Text variant=\"body-default-l\" onBackground=\"neutral-weak\">\n          Hover, click or focus the avatar in the top right to open your profile card. Use the arrow\n          keys to move through the menu and Escape to close it.\n        </Text>\n        <Line />\n        <Row gap=\"8\" vertical=\"center\">\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n            Last action:\n          </Text>\n          <span aria-live=\"polite\" role=\"status\">\n            <Text variant=\"label-strong-s\">{lastAction}</Text>\n          </span>\n        </Row>\n      </Column>\n\n      <style>{`\n        .profile-root { position: relative; display: inline-block; }\n        .avatar-trigger {\n          position: relative; display: inline-flex; padding: 0; border: 2px solid transparent;\n          background: none; border-radius: 999px; cursor: pointer;\n          transition: border-color .15s ease, transform .15s ease;\n        }\n        .avatar-trigger:hover { transform: translateY(-1px); }\n        .avatar-trigger:focus-visible, .btn:focus-visible, .menu-item:focus-visible {\n          outline: 2px solid var(--brand-solid-strong, #4f6bff); outline-offset: 2px;\n        }\n        .avatar-trigger[aria-expanded=\"true\"] { border-color: var(--brand-solid-strong, #4f6bff); }\n        .avatar-initials {\n          display: inline-flex; align-items: center; justify-content: center;\n          width: 44px; height: 44px; border-radius: 999px; font-weight: 600; font-size: 15px;\n          letter-spacing: .02em; color: #fff; background: linear-gradient(135deg, #5b6cff, #b05bff);\n          font-family: var(--font-label);\n        }\n        .avatar-large { width: 56px; height: 56px; font-size: 18px; flex: none; }\n        .avatar-status {\n          position: absolute; right: 0; bottom: 0; width: 12px; height: 12px; border-radius: 999px;\n          background: #2fb36d; border: 2px solid var(--page-background, #fff);\n        }\n        .profile-panel {\n          position: absolute; top: calc(100% + 10px); right: 0; z-index: 50;\n          width: min(360px, calc(100vw - 32px)); padding: 20px; border-radius: 16px;\n          background: var(--surface-background, #fff); color: var(--neutral-on-background-strong, inherit);\n          border: 1px solid var(--neutral-alpha-medium, rgba(128,128,128,.3));\n          box-shadow: 0 16px 40px rgba(0,0,0,.18);\n          font-family: var(--font-body);\n          animation: panel-in .14s ease-out;\n        }\n        .profile-panel::before {\n          content: \"\"; position: absolute; top: -14px; left: 0; right: 0; height: 14px;\n        }\n        @keyframes panel-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }\n        @media (prefers-reduced-motion: reduce) {\n          .profile-panel { animation: none; } .avatar-trigger { transition: none; }\n        }\n        .panel-head { display: flex; gap: 14px; align-items: center; }\n        .panel-id { min-width: 0; }\n        .name { margin: 0; font-size: 17px; font-weight: 650; }\n        .muted { margin: 2px 0 0; font-size: 13px; opacity: .7; }\n        .bio { margin: 14px 0 6px; font-size: 14px; line-height: 1.5; }\n        .loc { display: flex; align-items: center; gap: 6px; margin: 0; }\n        .dot { width: 8px; height: 8px; border-radius: 999px; background: #2fb36d; display: inline-block; }\n        .stats {\n          display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 16px 0; padding: 0;\n        }\n        .stat {\n          display: flex; flex-direction: column-reverse; align-items: center; padding: 10px 4px;\n          border-radius: 12px; background: var(--neutral-alpha-weak, rgba(128,128,128,.1));\n        }\n        .stat dd { margin: 0; font-size: 18px; font-weight: 650; }\n        .stat dt { font-size: 12px; opacity: .7; }\n        .actions { display: flex; gap: 8px; }\n        .btn {\n          flex: 1; min-height: 40px; padding: 0 14px; border-radius: 10px; font: inherit;\n          font-size: 14px; font-weight: 600; cursor: pointer;\n          border: 1px solid var(--neutral-alpha-medium, rgba(128,128,128,.35));\n        }\n        .btn-primary { background: var(--brand-solid-strong, #4f6bff); color: #fff; border-color: transparent; }\n        .btn-ghost { background: transparent; color: inherit; }\n        .btn:hover { filter: brightness(1.08); }\n        .sep { height: 1px; margin: 16px 0 8px; background: var(--neutral-alpha-medium, rgba(128,128,128,.3)); }\n        .menu { display: flex; flex-direction: column; gap: 2px; }\n        .menu-item {\n          display: flex; justify-content: space-between; align-items: center; width: 100%;\n          min-height: 40px; padding: 0 10px; border: 0; border-radius: 8px; background: transparent;\n          color: inherit; font: inherit; font-size: 14px; text-align: left; cursor: pointer;\n        }\n        .menu-item:hover, .menu-item:focus-visible { background: var(--neutral-alpha-weak, rgba(128,128,128,.14)); }\n        .menu-item.danger { color: #d64545; }\n        .menu-item kbd {\n          font-family: var(--font-code); font-size: 11px; opacity: .6; padding: 2px 6px;\n          border-radius: 6px; border: 1px solid var(--neutral-alpha-medium, rgba(128,128,128,.3));\n        }\n        @media (max-width: 480px) {\n          .profile-panel { position: fixed; top: 72px; left: 16px; right: 16px; width: auto; }\n        }\n      `}</style>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

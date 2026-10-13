@@ -1,0 +1,36 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 702,
+    "chars": 20926,
+    "bytes": 20934,
+    "tokens_o200k": 5236,
+    "tokens_claudeLegacy": 5336,
+    "tokens_exact": 7751
+  },
+  "raw": {
+    "lines": 631,
+    "chars": 20181,
+    "bytes": 20189,
+    "tokens_o200k": 5158,
+    "tokens_claudeLegacy": 5287,
+    "tokens_exact": 7604
+  },
+  "components": [
+    "BarChart",
+    "Column",
+    "CountFx",
+    "Grid",
+    "Heading",
+    "Icon",
+    "IconName",
+    "LineChart",
+    "Row",
+    "SegmentedControl",
+    "StatusIndicator",
+    "Tag",
+    "Text",
+    "VisuallyHidden"
+  ]
+}

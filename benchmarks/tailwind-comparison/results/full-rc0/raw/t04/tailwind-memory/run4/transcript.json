@@ -1,0 +1,220 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Chat UI — message list with avatars, streaming indicator, input bar with emoji picker, command palette hint.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011A65XgGkB9Naxdq5xE49S1",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011ZzLprbuRDvkdmTWYyDAYX",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011A65XgGkB9Naxdq5xE49S1",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011ZzLprbuRDvkdmTWYyDAYX",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01KunpSf3qCg3iGtE9UVyPs5",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017hXB1mTAtxiYmcqPcJ6roP",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01513ZwSw3KJXiS7Vm8bmvRH",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KunpSf3qCg3iGtE9UVyPs5",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017hXB1mTAtxiYmcqPcJ6roP",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01513ZwSw3KJXiS7Vm8bmvRH",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01V8y4QnvyxuEw9mZhdqL7KC",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JFeKjjb76Db2ALex9S3FHa",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016dKwSD5VtwUpXXi1Ywz68F",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01V8y4QnvyxuEw9mZhdqL7KC",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JFeKjjb76Db2ALex9S3FHa",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016dKwSD5VtwUpXXi1Ywz68F",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Confirmed it's a bare Tailwind v4 setup with no custom theme. Now I'll build the chat page with a header, scrollable message log, simulated streaming replies, an emoji popover, and a ⌘K command palette with proper focus/escape handling.\n\n",
+          "signature": "CAQSogoKEQgSGAI4AUIJbmFycmF0aW9uEgza+MJO+BO6Xo9ULEQaDLiikMR6E5Xh3wh1fCIwqS2IL/0qAxgUaQBREhGtyH3h+iwbWD2y2gQFlgxJFUnJGCmw3rAjISn191RR7u73Kr4JrqyCuQIcOKt9SPUqh2HcxnBof/0QBWlo5/0El9I5whK+tE4nkWT0CnOPi0tmtOMZUlpVbz3pA4BzcXWFJFUcMJvMcgwqYTW+GMC8MEmX6t0foBNYYRpJ4cBOG+bTSwhdOcCmUEN/m6EBpmJBxJfNR/as/M9VgBqkPOSgthDxOxYPxSSnEaymGyIky5YibnJUcBN4bBT8DGhz55xT1lmk6Ggo+kri4GAu2esuP27egdvaeeM9/0LSY3Wc1PXtXKMHxm4uEkjJktDYwdy3ltJHbXcVHs3RQ44L8UU98Ayk3/wVHMbhpy79i21lUNetBnZOHq118PgvYeON6ElxJhPspO8+9po5rrsemrkgRTwl8q9JcUd/OGD4NUWk7OmPhOrvwOpxRbEb7dAQoVxGNGacii/ijpv9dkEZPCFxL+qB4h3mq5KhaXjkf6KjyenkplLVFtwY9mLW6uJggNbx8RzGSnk8m0La+7jl5dvyvq0swfBT/GT1T6PT8am2H6ttHSd3BAxKrPtZWpRgcewXy/hw/RlkWBDszlL5H5Noey8To//JveV0tR3ERqlC971NybCjoTbS/HDBFK/LSqXMu1QuKm3K7P99OW9c+H0rSk08egdUtOlPWxZi3+kJhglGxJ9azcoVhpQv/S7/hIm348ESVnIo3DS1X1zblw6P2d16UBX1A3I4aYmCJWlJ+d5/tSEExgjjeuAHhZhMEZ3BoJ7s1laXb8lt0uZg6BmdQLmvK59iuf31kfcMj8+66KFJMMXkcPgOOA16jACiqB48I1nNBiwLNRETcbOW7abhO1CUGZtL5FAi9qHlw4PJRb7dt6f+GkTyMdukzjTIK1jtrOZvnW3eBp+TwrryYjymCc0Sw4KFVzB5rj0m2qNEe+ezKh5KN4vtCDj+M3r/U8WfHCtjn1we6cn8eB+YZ4oyiE0yU5sGETEp0HjYr+IyyDBHyjydmNUjLHf5Bz2cDuEXrz3p7D1+QCa3v0J+ebCl7693q5RT+S+cy7YSnZvqZWdnSK5/z72B5QA51Gzm32zYzq8wtFYajjQeNQovl+UVhB2rDVE6GksWm2WCpjZXXLO6Qfl5t4kzfYxcltIetXJBRdTg52Q/cUV7tZM9f5SkTx8IBXr3Dygr9QvwTeytu90fNuCRvH+ufg/yiumBC4Pil8jU0shQJd6U/ap0GhYKiFhv5MG6Hb2+kD2MJjvxzaM9YeqAJo/Tj452+bYCwteINC1I+D9jzG6RFJepIpPJrtVsDUbO3bnf4GwyWIK4pPLnSNinrh6siJSaJTqvI9DPGSPHd652A23cywL/vg4bCJeaqrFhipv2uA+5mU0X4EjaVdn6dADDHDGCJGefLb0uIF7RGs9tOHwK7eY4mMqHBksGaIA+S8uR5N4oJgZgrcpS7WKoirnM2eC88Xwk7kF+3bcv0yI7gaKR1YKAV5Vz2fTZNetItgcQsIkTikjNBBh/96vKTlp9xKw/5jcTGE4ZA8L6COpCyNRbsfW/IiJvRcSWIX8VtUkbt19LwvJU5/QQlRXi5m6Lok2adzhtdFhz1aB1qFk6cb9OGK+xzftCSgTpp8RrxS5UCNqu74KZ+VaGDTwWQM1EY7pzynJ0P+twFesYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012HQcAKXZKaGY4JKHtvjqWJ",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012HQcAKXZKaGY4JKHtvjqWJ",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport {\n  useCallback,\n  useEffect,\n  useId,\n  useMemo,\n  useRef,\n  useState,\n  type FormEvent,\n  type KeyboardEvent as ReactKeyboardEvent,\n} from \"react\";\nimport {\n  ArrowUp,\n  Command,\n  CornerDownLeft,\n  Hash,\n  MoonStar,\n  Paperclip,\n  Search,\n  Smile,\n  Sparkles,\n  Trash2,\n  Users,\n} from \"lucide-react\";\n\ntype Author = {\n  id: string;\n  name: string;\n  initials: string;\n  color: string;\n  role?: string;\n};\n\ntype Message = {\n  id: string;\n  authorId: string;\n  text: string;\n  time: string;\n  reactions?: { emoji: string; count: number }[];\n};\n\nconst AUTHORS: Record<string, Author> = {\n  me: { id: \"me\", name: \"You\", initials: \"YO\", color: \"bg-indigo-600\" },\n  maya: { id: \"maya\", name: \"Maya Okafor\", initials: \"MO\", color: \"bg-emerald-600\", role: \"Design\" },\n  dev: { id: \"dev\", name: \"Devon Park\", initials: \"DP\", color: \"bg-amber-600\", role: \"Engineering\" },\n  sage: { id: \"sage\", name: \"Sage\", initials: \"SA\", color: \"bg-fuchsia-600\", role: \"Assistant\" },\n};\n\nconst INITIAL_MESSAGES: Message[] = [\n  {\n    id: \"m1\",\n    authorId: \"maya\",\n    text: \"Morning! I pushed the new onboarding illustrations to the shared folder. Could someone sanity-check the dark-mode variants?\",\n    time: \"9:02 AM\",\n    reactions: [{ emoji: \"🎨\", count: 2 }],\n  },\n  {\n    id: \"m2\",\n    authorId: \"dev\",\n    text: \"On it. The checkout banner still has the old contrast ratio, so I'll fix that in the same PR.\",\n    time: \"9:05 AM\",\n  },\n  {\n    id: \"m3\",\n    authorId: \"me\",\n    text: \"Thanks both. Can we land everything before Thursday's release cut?\",\n    time: \"9:06 AM\",\n  },\n  {\n    id: \"m4\",\n    authorId: \"sage\",\n    text: \"Based on the open tickets, that looks feasible. Three items are still in review and none are blocked. I'd suggest freezing the illustration assets by Wednesday noon to leave time for QA.\",\n    time: \"9:07 AM\",\n    reactions: [\n      { emoji: \"👍\", count: 3 },\n      { emoji: \"🚀\", count: 1 },\n    ],\n  },\n  {\n    id: \"m5\",\n    authorId: \"maya\",\n    text: \"Wednesday noon works for me. I'll post a changelog in the thread once the export is final.\",\n    time: \"9:10 AM\",\n  },\n];\n\nconst STREAM_REPLY =\n  \"Here's a quick summary of where things stand: illustrations are final pending dark-mode review, the checkout contrast fix is in progress, and QA has Wednesday afternoon reserved. I'll flag anything that slips past noon.\";\n\nconst EMOJIS = [\n  \"😀\", \"😂\", \"🙂\", \"😍\", \"🤔\", \"😅\", \"😎\", \"🥳\",\n  \"👍\", \"👏\", \"🙌\", \"🙏\", \"💪\", \"🎉\", \"🚀\", \"🔥\",\n  \"✅\", \"👀\", \"💡\", \"❤️\", \"📌\", \"🎨\", \"☕\", \"🐛\",\n];\n\nconst EMOJI_LABELS: Record<string, string> = {\n  \"😀\": \"grinning face\", \"😂\": \"laughing with tears\", \"🙂\": \"slightly smiling\", \"😍\": \"heart eyes\",\n  \"🤔\": \"thinking\", \"😅\": \"relieved sweat\", \"😎\": \"sunglasses\", \"🥳\": \"party face\",\n  \"👍\": \"thumbs up\", \"👏\": \"clapping\", \"🙌\": \"raised hands\", \"🙏\": \"folded hands\",\n  \"💪\": \"flexed bicep\", \"🎉\": \"party popper\", \"🚀\": \"rocket\", \"🔥\": \"fire\",\n  \"✅\": \"check mark\", \"👀\": \"eyes\", \"💡\": \"light bulb\", \"❤️\": \"red heart\",\n  \"📌\": \"pushpin\", \"🎨\": \"artist palette\", \"☕\": \"coffee\", \"🐛\": \"bug\",\n};\n\ntype PaletteCommand = {\n  id: string;\n  label: string;\n  hint: string;\n  icon: React.ReactNode;\n  run: \"clear\" | \"summarize\" | \"focus\" | \"emoji\";\n};\n\nconst COMMANDS: PaletteCommand[] = [\n  { id: \"summarize\", label: \"Summarize this thread\", hint: \"Ask Sage\", icon: <Sparkles className=\"size-4\" aria-hidden=\"true\" />, run: \"summarize\" },\n  { id: \"emoji\", label: \"Open emoji picker\", hint: \"Insert\", icon: <Smile className=\"size-4\" aria-hidden=\"true\" />, run: \"emoji\" },\n  { id: \"focus\", label: \"Jump to message input\", hint: \"Navigate\", icon: <CornerDownLeft className=\"size-4\" aria-hidden=\"true\" />, run: \"focus\" },\n  { id: \"clear\", label: \"Clear conversation\", hint: \"Destructive\", icon: <Trash2 className=\"size-4\" aria-hidden=\"true\" />, run: \"clear\" },\n];\n\nfunction Avatar({ author, size = \"md\" }: { author: Author; size?: \"sm\" | \"md\" }) {\n  const dim = size === \"sm\" ? \"size-8 text-[11px]\" : \"size-9 text-xs\";\n  return (\n    <span\n      aria-hidden=\"true\"\n      className={`${dim} ${author.color} inline-flex shrink-0 select-none items-center justify-center rounded-full font-semibold text-white`}\n    >\n      {author.id === \"sage\" ? <Sparkles className=\"size-4\" /> : author.initials}\n    </span>\n  );\n}\n\nfunction TypingDots() {\n  return (\n    <span className=\"inline-flex items-center gap-1\" aria-hidden=\"true\">\n      {[0, 1, 2].map((i) => (\n        <span\n          key={i}\n          className=\"size-1.5 animate-bounce rounded-full bg-slate-400 motion-reduce:animate-none\"\n          style={{ animationDelay: `${i * 150}ms` }}\n        />\n      ))}\n    </span>\n  );\n}\n\nexport default function Page() {\n  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);\n  const [draft, setDraft] = useState(\"\");\n  const [streamText, setStreamText] = useState<string | null>(null);\n  const [emojiOpen, setEmojiOpen] = useState(false);\n  const [paletteOpen, setPaletteOpen] = useState(false);\n  const [query, setQuery] = useState(\"\");\n  const [activeIdx, setActiveIdx] = useState(0);\n  const [announce, setAnnounce] = useState(\"\");\n\n  const inputRef = useRef<HTMLTextAreaElement>(null);\n  const paletteInputRef = useRef<HTMLInputElement>(null);\n  const logEndRef = useRef<HTMLDivElement>(null);\n  const emojiWrapRef = useRef<HTMLDivElement>(null);\n  const emojiBtnRef = useRef<HTMLButtonElement>(null);\n  const paletteTriggerRef = useRef<HTMLButtonElement>(null);\n  const streamTimer = useRef<ReturnType<typeof setInterval> | null>(null);\n  const idCounter = useRef(100);\n\n  const paletteTitleId = useId();\n  const listboxId = useId();\n  const emojiPopoverId = useId();\n\n  const isStreaming = streamText !== null;\n\n  const stopStream = useCallback(() => {\n    if (streamTimer.current) {\n      clearInterval(streamTimer.current);\n      streamTimer.current = null;\n    }\n  }, []);\n\n  useEffect(() => stopStream, [stopStream]);\n\n  const nextId = () => {\n    idCounter.current += 1;\n    return `m${idCounter.current}`;\n  };\n\n  const startStream = useCallback(() => {\n    stopStream();\n    const words = STREAM_REPLY.split(\" \");\n    let i = 0;\n    setStreamText(\"\");\n    setAnnounce(\"Sage is typing a reply\");\n    streamTimer.current = setInterval(() => {\n      i += 1;\n      if (i >= words.length) {\n        stopStream();\n        setStreamText(null);\n        setMessages((prev) => [\n          ...prev,\n          { id: `m${++idCounter.current}`, authorId: \"sage\", text: STREAM_REPLY, time: \"9:14 AM\" },\n        ]);\n        setAnnounce(\"Sage replied\");\n        return;\n      }\n      setStreamText(words.slice(0, i).join(\" \"));\n    }, 90);\n  }, [stopStream]);\n\n  const stopGenerating = () => {\n    stopStream();\n    setStreamText((current) => {\n      if (current && current.length > 0) {\n        const text = current;\n        setMessages((prev) => [\n          ...prev,\n          { id: `m${++idCounter.current}`, authorId: \"sage\", text: `${text}…`, time: \"9:14 AM\" },\n        ]);\n      }\n      return null;\n    });\n    setAnnounce(\"Generation stopped\");\n  };\n\n  // Keep the log scrolled to the newest content.\n  useEffect(() => {\n    logEndRef.current?.scrollIntoView({ block: \"end\" });\n  }, [messages, streamText]);\n\n  // Auto-resize the textarea.\n  useEffect(() => {\n    const el = inputRef.current;\n    if (!el) return;\n    el.style.height = \"auto\";\n    el.style.height = `${Math.min(el.scrollHeight, 140)}px`;\n  }, [draft]);\n\n  const send = () => {\n    const text = draft.trim();\n    if (!text || isStreaming) return;\n    setMessages((prev) => [...prev, { id: nextId(), authorId: \"me\", text, time: \"9:13 AM\" }]);\n    setDraft(\"\");\n    setEmojiOpen(false);\n    startStream();\n  };\n\n  const onSubmit = (e: FormEvent) => {\n    e.preventDefault();\n    send();\n  };\n\n  const onInputKeyDown = (e: ReactKeyboardEvent<HTMLTextAreaElement>) => {\n    if (e.key === \"Enter\" && !e.shiftKey && !e.nativeEvent.isComposing) {\n      e.preventDefault();\n      send();\n    }\n  };\n\n  const insertEmoji = (emoji: string) => {\n    const el = inputRef.current;\n    const start = el?.selectionStart ?? draft.length;\n    const end = el?.selectionEnd ?? draft.length;\n    const next = draft.slice(0, start) + emoji + draft.slice(end);\n    setDraft(next);\n    requestAnimationFrame(() => {\n      if (!el) return;\n      el.focus();\n      const pos = start + emoji.length;\n      el.setSelectionRange(pos, pos);\n    });\n  };\n\n  // Global shortcut: Cmd/Ctrl+K toggles the palette.\n  useEffect(() => {\n    const onKey = (e: globalThis.KeyboardEvent) => {\n      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === \"k\") {\n        e.preventDefault();\n        setPaletteOpen((o) => !o);\n      }\n    };\n    window.addEventListener(\"keydown\", onKey);\n    return () => window.removeEventListener(\"keydown\", onKey);\n  }, []);\n\n  // Emoji popover: close on outside click / Escape.\n  useEffect(() => {\n    if (!emojiOpen) return;\n    const onDown = (e: MouseEvent) => {\n      const t = e.target as Node;\n      if (emojiWrapRef.current?.contains(t) || emojiBtnRef.current?.contains(t)) return;\n      setEmojiOpen(false);\n    };\n    const onKey = (e: globalThis.KeyboardEvent) => {\n      if (e.key === \"Escape\") {\n        setEmojiOpen(false);\n        emojiBtnRef.current?.focus();\n      }\n    };\n    document.addEventListener(\"mousedown\", onDown);\n    document.addEventListener(\"keydown\", onKey);\n    return () => {\n      document.removeEventListener(\"mousedown\", onDown);\n      document.removeEventListener(\"keydown\", onKey);\n    };\n  }, [emojiOpen]);\n\n  // Palette: focus input on open, reset state on close.\n  useEffect(() => {\n    if (paletteOpen) {\n      setQuery(\"\");\n      setActiveIdx(0);\n      requestAnimationFrame(() => paletteInputRef.current?.focus());\n    }\n  }, [paletteOpen]);\n\n  const closePalette = useCallback(() => {\n    setPaletteOpen(false);\n    requestAnimationFrame(() => paletteTriggerRef.current?.focus());\n  }, []);\n\n  const filtered = useMemo(() => {\n    const q = query.trim().toLowerCase();\n    return q ? COMMANDS.filter((c) => c.label.toLowerCase().includes(q)) : COMMANDS;\n  }, [query]);\n\n  const runCommand = (cmd: PaletteCommand) => {\n    setPaletteOpen(false);\n    switch (cmd.run) {\n      case \"clear\":\n        stopStream();\n        setStreamText(null);\n        setMessages([]);\n        setAnnounce(\"Conversation cleared\");\n        requestAnimationFrame(() => inputRef.current?.focus());\n        break;\n      case \"summarize\":\n        if (!isStreaming) {\n          setMessages((prev) => [\n            ...prev,\n            { id: nextId(), authorId: \"me\", text: \"/summarize Give me a summary of this thread.\", time: \"9:13 AM\" },\n          ]);\n          startStream();\n        }\n        requestAnimationFrame(() => inputRef.current?.focus());\n        break;\n      case \"emoji\":\n        setEmojiOpen(true);\n        requestAnimationFrame(() => emojiBtnRef.current?.focus());\n        break;\n      case \"focus\":\n        requestAnimationFrame(() => inputRef.current?.focus());\n        break;\n    }\n  };\n\n  const onPaletteKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {\n    if (e.key === \"Escape\") {\n      e.preventDefault();\n      closePalette();\n    } else if (e.key === \"ArrowDown\") {\n      e.preventDefault();\n      if (filtered.length) setActiveIdx((i) => (i + 1) % filtered.length);\n    } else if (e.key === \"ArrowUp\") {\n      e.preventDefault();\n      if (filtered.length) setActiveIdx((i) => (i - 1 + filtered.length) % filtered.length);\n    } else if (e.key === \"Enter\") {\n      e.preventDefault();\n      const cmd = filtered[activeIdx];\n      if (cmd) runCommand(cmd);\n    } else if (e.key === \"Tab\") {\n      // Keep focus inside the dialog: the search input is its only tab stop.\n      e.preventDefault();\n    }\n  };\n\n  return (\n    <div className=\"flex h-dvh w-full items-stretch justify-center bg-slate-100 text-slate-900 sm:p-4 lg:p-6\">\n      <main className=\"flex h-full w-full max-w-4xl flex-col overflow-hidden bg-white shadow-xl ring-1 ring-slate-200 sm:rounded-2xl\">\n        {/* Header */}\n        <header className=\"flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-6\">\n          <div className=\"flex min-w-0 items-center gap-3\">\n            <span className=\"inline-flex size-9 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-700\">\n              <Hash className=\"size-5\" aria-hidden=\"true\" />\n            </span>\n            <div className=\"min-w-0\">\n              <h1 className=\"truncate text-base font-semibold leading-tight\">release-thursday</h1>\n              <p className=\"flex items-center gap-1.5 truncate text-xs text-slate-500\">\n                <Users className=\"size-3.5 shrink-0\" aria-hidden=\"true\" />\n                4 members · Design sync and release prep\n              </p>\n            </div>\n          </div>\n          <button\n            ref={paletteTriggerRef}\n            type=\"button\"\n            onClick={() => setPaletteOpen(true)}\n            aria-haspopup=\"dialog\"\n            aria-keyshortcuts=\"Control+K Meta+K\"\n            className=\"inline-flex shrink-0 items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1.5 text-sm text-slate-600 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          >\n            <Search className=\"size-4\" aria-hidden=\"true\" />\n            <span className=\"hidden sm:inline\">Commands</span>\n            <span className=\"sr-only sm:hidden\">Open command palette</span>\n            <kbd className=\"hidden items-center gap-0.5 rounded border border-slate-300 bg-white px-1.5 py-0.5 font-sans text-[11px] font-medium text-slate-500 sm:inline-flex\">\n              <Command className=\"size-3\" aria-hidden=\"true\" />K\n            </kbd>\n          </button>\n        </header>\n\n        {/* Message log */}\n        <div className=\"relative min-h-0 flex-1\">\n          <div\n            role=\"log\"\n            aria-label=\"Conversation\"\n            aria-relevant=\"additions\"\n            tabIndex={0}\n            className=\"h-full overflow-y-auto px-4 py-5 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600 sm:px-6\"\n          >\n            <div className=\"mb-5 flex items-center gap-3 text-xs text-slate-400\" aria-hidden=\"true\">\n              <span className=\"h-px flex-1 bg-slate-200\" />\n              Today\n              <span className=\"h-px flex-1 bg-slate-200\" />\n            </div>\n\n            {messages.length === 0 && !isStreaming && (\n              <div className=\"flex flex-col items-center gap-2 py-16 text-center text-slate-500\">\n                <MoonStar className=\"size-8 text-slate-300\" aria-hidden=\"true\" />\n                <p className=\"text-sm font-medium text-slate-700\">Nothing here yet</p>\n                <p className=\"max-w-xs text-sm\">\n                  Say hello to the team, or press <kbd className=\"rounded border border-slate-300 px-1 font-sans text-xs\">Ctrl K</kbd> to see what you can do.\n                </p>\n              </div>\n            )}\n\n            <ul className=\"flex flex-col gap-5\">\n              {messages.map((m, idx) => {\n                const author = AUTHORS[m.authorId];\n                const mine = author.id === \"me\";\n                const prev = messages[idx - 1];\n                const grouped = prev?.authorId === m.authorId;\n                return (\n                  <li\n                    key={m.id}\n                    className={`flex items-end gap-3 ${mine ? \"flex-row-reverse\" : \"\"} ${grouped ? \"-mt-3\" : \"\"}`}\n                  >\n                    <div className={grouped ? \"invisible\" : \"\"}>\n                      <Avatar author={author} />\n                    </div>\n                    <div className={`flex min-w-0 max-w-[85%] flex-col sm:max-w-[75%] ${mine ? \"items-end\" : \"items-start\"}`}>\n                      {!grouped && (\n                        <p className=\"mb-1 flex items-baseline gap-2 text-xs text-slate-500\">\n                          <span className=\"font-semibold text-slate-800\">{author.name}</span>\n                          {author.role && <span>{author.role}</span>}\n                          <time>{m.time}</time>\n                        </p>\n                      )}\n                      <p\n                        className={`whitespace-pre-wrap break-words rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${\n                          mine\n                            ? \"rounded-br-md bg-indigo-600 text-white\"\n                            : \"rounded-bl-md bg-slate-100 text-slate-800\"\n                        }`}\n                      >\n                        {m.text}\n                      </p>\n                      {m.reactions && (\n                        <ul className=\"mt-1 flex gap-1\" aria-label=\"Reactions\">\n                          {m.reactions.map((r) => (\n                            <li\n                              key={r.emoji}\n                              className=\"inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2 py-0.5 text-xs text-slate-600\"\n                            >\n                              <span aria-hidden=\"true\">{r.emoji}</span>\n                              <span>{r.count}</span>\n                              <span className=\"sr-only\">{r.count === 1 ? \"reaction\" : \"reactions\"}</span>\n                            </li>\n                          ))}\n                        </ul>\n                      )}\n                    </div>\n                  </li>\n                );\n              })}\n\n              {isStreaming && (\n                <li className=\"flex items-end gap-3\" aria-label=\"Sage is typing\">\n                  <Avatar author={AUTHORS.sage} />\n                  <div className=\"flex min-w-0 max-w-[85%] flex-col items-start sm:max-w-[75%]\">\n                    <p className=\"mb-1 flex items-baseline gap-2 text-xs text-slate-500\">\n                      <span className=\"font-semibold text-slate-800\">Sage</span>\n                      <span>Assistant</span>\n                      <span className=\"text-fuchsia-600\">typing…</span>\n                    </p>\n                    <div className=\"rounded-2xl rounded-bl-md bg-slate-100 px-3.5 py-2 text-sm leading-relaxed text-slate-800\">\n                      {streamText ? (\n                        <span aria-hidden=\"true\">\n                          {streamText}\n                          <span className=\"ml-0.5 inline-block h-4 w-0.5 translate-y-0.5 animate-pulse bg-slate-500 motion-reduce:animate-none\" />\n                        </span>\n                      ) : (\n                        <TypingDots />\n                      )}\n                    </div>\n                  </div>\n                </li>\n              )}\n            </ul>\n            <div ref={logEndRef} />\n          </div>\n        </div>\n\n        {/* Live region for status changes */}\n        <p role=\"status\" aria-live=\"polite\" className=\"sr-only\">\n          {announce}\n        </p>\n\n        {/* Input bar */}\n        <div className=\"border-t border-slate-200 bg-white px-3 pb-3 pt-3 sm:px-6 sm:pb-4\">\n          <form onSubmit={onSubmit} className=\"relative\">\n            {emojiOpen && (\n              <div\n                ref={emojiWrapRef}\n                id={emojiPopoverId}\n                role=\"dialog\"\n                aria-label=\"Emoji picker\"\n                className=\"absolute bottom-full left-0 z-10 mb-2 w-[min(18rem,calc(100vw-2rem))] rounded-xl border border-slate-200 bg-white p-2 shadow-lg\"\n              >\n                <ul className=\"grid grid-cols-8 gap-0.5\">\n                  {EMOJIS.map((emoji) => (\n                    <li key={emoji}>\n                      <button\n                        type=\"button\"\n                        onClick={() => insertEmoji(emoji)}\n                        aria-label={EMOJI_LABELS[emoji] ?? emoji}\n                        className=\"flex size-8 items-center justify-center rounded-md text-lg transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n                      >\n                        <span aria-hidden=\"true\">{emoji}</span>\n                      </button>\n                    </li>\n                  ))}\n                </ul>\n              </div>\n            )}\n\n            <div className=\"flex items-end gap-1.5 rounded-2xl border border-slate-300 bg-white p-1.5 focus-within:border-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600/30\">\n              <button\n                type=\"button\"\n                aria-label=\"Attach a file (not available in this demo)\"\n                disabled\n                className=\"inline-flex size-9 shrink-0 items-center justify-center rounded-xl text-slate-400 disabled:cursor-not-allowed\"\n              >\n                <Paperclip className=\"size-5\" aria-hidden=\"true\" />\n              </button>\n              <button\n                ref={emojiBtnRef}\n                type=\"button\"\n                onClick={() => setEmojiOpen((o) => !o)}\n                aria-label=\"Emoji picker\"\n                aria-haspopup=\"dialog\"\n                aria-expanded={emojiOpen}\n                aria-controls={emojiOpen ? emojiPopoverId : undefined}\n                className=\"inline-flex size-9 shrink-0 items-center justify-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n              >\n                <Smile className=\"size-5\" aria-hidden=\"true\" />\n              </button>\n\n              <label htmlFor=\"chat-input\" className=\"sr-only\">\n                Message #release-thursday\n              </label>\n              <textarea\n                id=\"chat-input\"\n                ref={inputRef}\n                rows={1}\n                value={draft}\n                onChange={(e) => setDraft(e.target.value)}\n                onKeyDown={onInputKeyDown}\n                placeholder=\"Message #release-thursday\"\n                className=\"max-h-36 min-h-9 flex-1 resize-none bg-transparent px-1 py-2 text-sm leading-5 text-slate-900 placeholder:text-slate-400 focus:outline-none\"\n              />\n\n              {isStreaming ? (\n                <button\n                  type=\"button\"\n                  onClick={stopGenerating}\n                  className=\"inline-flex h-9 shrink-0 items-center gap-1.5 rounded-xl bg-slate-800 px-3 text-sm font-medium text-white transition hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-800\"\n                >\n                  <span aria-hidden=\"true\" className=\"size-2.5 rounded-sm bg-white\" />\n                  Stop\n                </button>\n              ) : (\n                <button\n                  type=\"submit\"\n                  disabled={draft.trim().length === 0}\n                  aria-label=\"Send message\"\n                  className=\"inline-flex size-9 shrink-0 items-center justify-center rounded-xl bg-indigo-600 text-white transition hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:bg-slate-200 disabled:text-slate-400\"\n                >\n                  <ArrowUp className=\"size-5\" aria-hidden=\"true\" />\n                </button>\n              )}\n            </div>\n          </form>\n\n          <p className=\"mt-2 hidden items-center gap-3 px-1 text-xs text-slate-500 sm:flex\">\n            <span>\n              <kbd className=\"rounded border border-slate-300 bg-slate-50 px-1 font-sans\">Enter</kbd> to send\n            </span>\n            <span>\n              <kbd className=\"rounded border border-slate-300 bg-slate-50 px-1 font-sans\">Shift</kbd>\n              {\" + \"}\n              <kbd className=\"rounded border border-slate-300 bg-slate-50 px-1 font-sans\">Enter</kbd> for a new line\n            </span>\n            <span className=\"ml-auto\">\n              <kbd className=\"rounded border border-slate-300 bg-slate-50 px-1 font-sans\">Ctrl</kbd>\n              {\" / \"}\n              <kbd className=\"rounded border border-slate-300 bg-slate-50 px-1 font-sans\">⌘</kbd>\n              {\" + \"}\n              <kbd className=\"rounded border border-slate-300 bg-slate-50 px-1 font-sans\">K</kbd> for commands\n            </span>\n          </p>\n        </div>\n      </main>\n\n      {/* Command palette */}\n      {paletteOpen && (\n        <div\n          className=\"fixed inset-0 z-50 flex items-start justify-center bg-slate-900/40 px-4 pt-[12vh]\"\n          onMouseDown={(e) => {\n            if (e.target === e.currentTarget) closePalette();\n          }}\n        >\n          <div\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-labelledby={paletteTitleId}\n            onKeyDown={onPaletteKeyDown}\n            className=\"w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-slate-200\"\n          >\n            <h2 id={paletteTitleId} className=\"sr-only\">\n              Command palette\n            </h2>\n            <div className=\"flex items-center gap-2 border-b border-slate-200 px-4\">\n              <Search className=\"size-4 shrink-0 text-slate-400\" aria-hidden=\"true\" />\n              <input\n                ref={paletteInputRef}\n                type=\"text\"\n                role=\"combobox\"\n                aria-expanded=\"true\"\n                aria-controls={listboxId}\n                aria-activedescendant={filtered[activeIdx] ? `${listboxId}-${filtered[activeIdx].id}` : undefined}\n                aria-autocomplete=\"list\"\n                aria-label=\"Search commands\"\n                value={query}\n                onChange={(e) => {\n                  setQuery(e.target.value);\n                  setActiveIdx(0);\n                }}\n                placeholder=\"Type a command…\"\n                className=\"h-12 w-full bg-transparent text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none\"\n              />\n              <kbd className=\"rounded border border-slate-300 px-1.5 py-0.5 font-sans text-[11px] text-slate-500\">Esc</kbd>\n            </div>\n            <ul id={listboxId} role=\"listbox\" aria-label=\"Commands\" className=\"max-h-72 overflow-y-auto p-2\">\n              {filtered.length === 0 && (\n                <li role=\"presentation\" className=\"px-3 py-6 text-center text-sm text-slate-500\">\n                  No commands match “{query}”.\n                </li>\n              )}\n              {filtered.map((cmd, i) => (\n                <li\n                  key={cmd.id}\n                  id={`${listboxId}-${cmd.id}`}\n                  role=\"option\"\n                  aria-selected={i === activeIdx}\n                  onMouseMove={() => setActiveIdx(i)}\n                  onClick={() => runCommand(cmd)}\n                  className={`flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2.5 text-sm ${\n                    i === activeIdx ? \"bg-indigo-50 text-indigo-900\" : \"text-slate-700\"\n                  }`}\n                >\n                  <span className={i === activeIdx ? \"text-indigo-600\" : \"text-slate-400\"}>{cmd.icon}</span>\n                  <span className=\"flex-1\">{cmd.label}</span>\n                  <span className=\"text-xs text-slate-400\">{cmd.hint}</span>\n                </li>\n              ))}\n            </ul>\n          </div>\n        </div>\n      )}\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

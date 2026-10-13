@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Changelog/timeline page — versioned entries on a timeline, tags per release, copyable code snippets.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012yH7qCYmiDnNeJBintDZVB",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AXnzq4oNepkMwFZpqcmijK",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012yH7qCYmiDnNeJBintDZVB",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AXnzq4oNepkMwFZpqcmijK",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01XGempDduXw9iMbfx3RUS7H",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RYZ4XUTz3s1TnJbnkK5WZf",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FLc47SUP8sJgbsxMhejoKU",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XGempDduXw9iMbfx3RUS7H",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RYZ4XUTz3s1TnJbnkK5WZf",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FLc47SUP8sJgbsxMhejoKU",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01XuFKiyrrVypsAMhcGWWgaG",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011ftPm3kQkK32cvSxjkchzX",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WUo1JUbxbLrnPaYJRRqXuY",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XuFKiyrrVypsAMhcGWWgaG",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011ftPm3kQkK32cvSxjkchzX",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WUo1JUbxbLrnPaYJRRqXuY",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Plain Tailwind v4 with no theme customizations, so I'll build everything with default utilities.\n\n```tsx\n\"use client\";\n\nimport { useMemo, useRef, useState } from \"react\";\nimport {\n  Check,\n  Copy,\n  Bug,\n  Sparkles,\n  ShieldAlert,\n  AlertTriangle,\n  Zap,\n  Rss,\n  X,\n} from \"lucide-react\";\nimport type { ComponentType } from \"react\";\n\ntype Tag = \"feature\" | \"improvement\" | \"fix\" | \"security\" | \"breaking\";\n\ninterface Snippet {\n  label: string;\n  language: string;\n  code: string;\n}\n\ninterface Release {\n  version: string;\n  date: string;\n  title: string;\n  summary: string;\n  tags: Tag[];\n  changes: string[];\n  snippet?: Snippet;\n}\n\nconst TAG_META: Record<\n  Tag,\n  {\n    label: string;\n    icon: ComponentType<{ className?: string; \"aria-hidden\"?: boolean }>;\n    badge: string;\n    active: string;\n  }\n> = {\n  feature: {\n    label: \"Feature\",\n    icon: Sparkles,\n    badge: \"bg-indigo-50 text-indigo-700 ring-indigo-200\",\n    active: \"bg-indigo-600 text-white ring-indigo-600\",\n  },\n  improvement: {\n    label: \"Improvement\",\n    icon: Zap,\n    badge: \"bg-sky-50 text-sky-700 ring-sky-200\",\n    active: \"bg-sky-600 text-white ring-sky-600\",\n  },\n  fix: {\n    label: \"Fix\",\n    icon: Bug,\n    badge: \"bg-emerald-50 text-emerald-700 ring-emerald-200\",\n    active: \"bg-emerald-600 text-white ring-emerald-600\",\n  },\n  security: {\n    label: \"Security\",\n    icon: ShieldAlert,\n    badge: \"bg-amber-50 text-amber-800 ring-amber-200\",\n    active: \"bg-amber-600 text-white ring-amber-600\",\n  },\n  breaking: {\n    label: \"Breaking\",\n    icon: AlertTriangle,\n    badge: \"bg-rose-50 text-rose-700 ring-rose-200\",\n    active: \"bg-rose-600 text-white ring-rose-600\",\n  },\n};\n\nconst ALL_TAGS: Tag[] = [\"feature\", \"improvement\", \"fix\", \"security\", \"breaking\"];\n\nconst RELEASES: Release[] = [\n  {\n    version: \"3.2.0\",\n    date: \"2025-06-17\",\n    title: \"Streaming exports and scoped API tokens\",\n    summary:\n      \"Large exports no longer block your workspace. Export jobs now stream to disk, and tokens can be limited to a single project.\",\n    tags: [\"feature\", \"improvement\"],\n    changes: [\n      \"Streaming CSV and NDJSON exports handle datasets beyond 5 million rows without timing out.\",\n      \"API tokens can be scoped to individual projects with read-only or read-write access.\",\n      \"The audit log now records the token name alongside the actor for every API request.\",\n      \"Dashboard filters remember their last-used state per browser.\",\n    ],\n    snippet: {\n      label: \"Create a scoped token\",\n      language: \"bash\",\n      code: `curl -X POST https://api.example.com/v3/tokens \\\\\n  -H \"Authorization: Bearer $ADMIN_TOKEN\" \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{\n    \"name\": \"ci-readonly\",\n    \"project\": \"prj_8f21c\",\n    \"access\": \"read\"\n  }'`,\n    },\n  },\n  {\n    version: \"3.1.2\",\n    date: \"2025-05-29\",\n    title: \"Webhook retry and timezone fixes\",\n    summary:\n      \"A patch release focused on reliability for webhook consumers and scheduled reports.\",\n    tags: [\"fix\"],\n    changes: [\n      \"Webhook deliveries now retry with exponential backoff for up to 24 hours.\",\n      \"Scheduled reports respect the workspace timezone across daylight saving changes.\",\n      \"Fixed a crash when importing files with a byte-order mark.\",\n    ],\n  },\n  {\n    version: \"3.1.0\",\n    date: \"2025-05-06\",\n    title: \"Typed client and faster search\",\n    summary:\n      \"The official TypeScript client ships with generated types, and workspace search is about three times faster.\",\n    tags: [\"feature\", \"improvement\"],\n    changes: [\n      \"New @example/client package with fully generated request and response types.\",\n      \"Search indexes are now built incrementally, cutting median query time from 240ms to 80ms.\",\n      \"Keyboard shortcut Cmd/Ctrl + K opens the command palette from anywhere.\",\n    ],\n    snippet: {\n      label: \"Install and initialise the client\",\n      language: \"ts\",\n      code: `import { createClient } from \"@example/client\";\n\nconst client = createClient({\n  token: process.env.EXAMPLE_TOKEN!,\n  retries: 3,\n});\n\nconst { data } = await client.projects.list({ limit: 20 });`,\n    },\n  },\n  {\n    version: \"3.0.1\",\n    date: \"2025-04-14\",\n    title: \"Session hardening\",\n    summary:\n      \"Security update that tightens session handling. We recommend all self-hosted installs upgrade.\",\n    tags: [\"security\", \"fix\"],\n    changes: [\n      \"Session cookies are now rotated on privilege changes.\",\n      \"Rate limits applied to password reset endpoints.\",\n      \"Resolved an open redirect in the SSO callback (CVE-2025-31842).\",\n    ],\n  },\n  {\n    version: \"3.0.0\",\n    date: \"2025-03-25\",\n    title: \"Version 3: new permissions model\",\n    summary:\n      \"Roles are replaced by granular permissions. Review the migration guide before upgrading existing workspaces.\",\n    tags: [\"breaking\", \"feature\"],\n    changes: [\n      \"The legacy `role` field is removed from the members API in favour of `permissions[]`.\",\n      \"Node 18 is no longer supported; Node 20 or newer is required.\",\n      \"Custom roles can be composed from over 40 permissions.\",\n      \"Automatic migration converts existing roles on first sign-in.\",\n    ],\n    snippet: {\n      label: \"Migrate member roles\",\n      language: \"bash\",\n      code: `npx @example/cli migrate permissions --workspace acme --dry-run\nnpx @example/cli migrate permissions --workspace acme`,\n    },\n  },\n  {\n    version: \"2.9.4\",\n    date: \"2025-02-18\",\n    title: \"Accessibility and performance polish\",\n    summary: \"Smaller improvements gathered from community feedback.\",\n    tags: [\"improvement\", \"fix\"],\n    changes: [\n      \"All dialogs now trap focus and restore it on close.\",\n      \"Table views virtualise rows, improving scroll performance on large lists.\",\n      \"Fixed incorrect contrast on disabled buttons in dark mode.\",\n    ],\n  },\n];\n\nfunction formatDate(iso: string): string {\n  const [y, m, d] = iso.split(\"-\").map(Number);\n  return new Intl.DateTimeFormat(\"en-US\", {\n    year: \"numeric\",\n    month: \"long\",\n    day: \"numeric\",\n    timeZone: \"UTC\",\n  }).format(new Date(Date.UTC(y, m - 1, d)));\n}\n\nfunction TagBadge({ tag }: { tag: Tag }) {\n  const meta = TAG_META[tag];\n  const Icon = meta.icon;\n  return (\n    <li\n      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${meta.badge}`}\n    >\n      <Icon className=\"size-3\" aria-hidden />\n      {meta.label}\n    </li>\n  );\n}\n\nfunction CodeSnippet({ snippet, id }: { snippet: Snippet; id: string }) {\n  const [copied, setCopied] = useState(false);\n  const [failed, setFailed] = useState(false);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const handleCopy = async () => {\n    if (timer.current) clearTimeout(timer.current);\n    try {\n      await navigator.clipboard.writeText(snippet.code);\n      setCopied(true);\n      setFailed(false);\n    } catch {\n      setCopied(false);\n      setFailed(true);\n    }\n    timer.current = setTimeout(() => {\n      setCopied(false);\n      setFailed(false);\n    }, 2000);\n  };\n\n  return (\n    <figure className=\"mt-5 overflow-hidden rounded-xl border border-slate-800 bg-slate-900 shadow-sm\">\n      <figcaption className=\"flex items-center justify-between gap-3 border-b border-slate-800 bg-slate-950/60 px-4 py-2\">\n        <span className=\"min-w-0 truncate text-xs font-medium text-slate-300\">\n          {snippet.label}\n          <span className=\"ml-2 rounded bg-slate-800 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-slate-400\">\n            {snippet.language}\n          </span>\n        </span>\n        <button\n          type=\"button\"\n          onClick={handleCopy}\n          aria-describedby={`${id}-status`}\n          className=\"inline-flex shrink-0 items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-slate-200 transition-colors hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400\"\n        >\n          {copied ? (\n            <Check className=\"size-3.5 text-emerald-400\" aria-hidden />\n          ) : (\n            <Copy className=\"size-3.5\" aria-hidden />\n          )}\n          <span>{copied ? \"Copied\" : failed ? \"Copy failed\" : \"Copy\"}</span>\n          <span className=\"sr-only\"> {snippet.label} code</span>\n        </button>\n        <span id={`${id}-status`} role=\"status\" className=\"sr-only\">\n          {copied ? \"Code copied to clipboard\" : failed ? \"Could not copy code\" : \"\"}\n        </span>\n      </figcaption>\n      <pre\n        tabIndex={0}\n        className=\"overflow-x-auto p-4 text-[13px] leading-relaxed text-slate-100 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-400\"\n      >\n        <code className=\"font-mono\">{snippet.code}</code>\n      </pre>\n    </figure>\n  );\n}\n\nexport default function Page() {\n  const [activeTags, setActiveTags] = useState<Tag[]>([]);\n\n  const toggleTag = (tag: Tag) =>\n    setActiveTags((prev) =>\n      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag],\n    );\n\n  const visible = useMemo(\n    () =>\n      activeTags.length === 0\n        ? RELEASES\n        : RELEASES.filter((r) => r.tags.some((t) => activeTags.includes(t))),\n    [activeTags],\n  );\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <a\n        href=\"#releases\"\n        className=\"sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:shadow-lg\"\n      >\n        Skip to releases\n      </a>\n\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16\">\n          <p className=\"text-sm font-semibold uppercase tracking-wider text-indigo-600\">\n            Northwind API\n          </p>\n          <h1 className=\"mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl\">\n            Changelog\n          </h1>\n          <p className=\"mt-3 max-w-xl text-base leading-relaxed text-slate-600\">\n            New features, improvements and fixes for every release. Current stable version is{\" \"}\n            <span className=\"font-mono font-medium text-slate-900\">{RELEASES[0].version}</span>.\n          </p>\n          <div className=\"mt-5 inline-flex items-center gap-2 text-sm text-slate-500\">\n            <Rss className=\"size-4\" aria-hidden />\n            <span>Releases ship roughly every three weeks.</span>\n          </div>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14\">\n        <section aria-labelledby=\"filter-heading\" className=\"mb-10\">\n          <div className=\"flex flex-wrap items-center justify-between gap-2\">\n            <h2 id=\"filter-heading\" className=\"text-sm font-semibold text-slate-700\">\n              Filter by tag\n            </h2>\n            {activeTags.length > 0 && (\n              <button\n                type=\"button\"\n                onClick={() => setActiveTags([])}\n                className=\"inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-200/60 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n              >\n                <X className=\"size-3.5\" aria-hidden />\n                Clear filters\n              </button>\n            )}\n          </div>\n          <ul className=\"mt-3 flex flex-wrap gap-2\">\n            {ALL_TAGS.map((tag) => {\n              const meta = TAG_META[tag];\n              const Icon = meta.icon;\n              const pressed = activeTags.includes(tag);\n              return (\n                <li key={tag}>\n                  <button\n                    type=\"button\"\n                    aria-pressed={pressed}\n                    onClick={() => toggleTag(tag)}\n                    className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium ring-1 ring-inset transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${\n                      pressed\n                        ? meta.active\n                        : \"bg-white text-slate-700 ring-slate-300 hover:bg-slate-100\"\n                    }`}\n                  >\n                    <Icon className=\"size-3.5\" aria-hidden />\n                    {meta.label}\n                  </button>\n                </li>\n              );\n            })}\n          </ul>\n          <p role=\"status\" className=\"mt-3 text-sm text-slate-500\">\n            Showing {visible.length} of {RELEASES.length} releases\n          </p>\n        </section>\n\n        <div id=\"releases\" className=\"scroll-mt-6\">\n          {visible.length === 0 ? (\n            <div className=\"rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center\">\n              <p className=\"font-medium text-slate-900\">No releases match these tags.</p>\n              <button\n                type=\"button\"\n                onClick={() => setActiveTags([])}\n                className=\"mt-3 rounded-md text-sm font-medium text-indigo-600 underline underline-offset-2 hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n              >\n                Clear filters\n              </button>\n            </div>\n          ) : (\n            <ol className=\"relative\">\n              {visible.map((release, index) => {\n                const headingId = `release-${release.version.replace(/\\./g, \"-\")}`;\n                const isLast = index === visible.length - 1;\n                return (\n                  <li key={release.version} className=\"relative pb-10 pl-8 last:pb-0 sm:pl-10\">\n                    {!isLast && (\n                      <span\n                        aria-hidden\n                        className=\"absolute left-[7px] top-4 h-full w-px bg-slate-200 sm:left-[9px]\"\n                      />\n                    )}\n                    <span\n                      aria-hidden\n                      className={`absolute left-0 top-1.5 size-4 rounded-full border-2 sm:size-5 ${\n                        index === 0\n                          ? \"border-indigo-600 bg-indigo-600 ring-4 ring-indigo-100\"\n                          : \"border-slate-300 bg-white\"\n                      }`}\n                    />\n                    <article\n                      aria-labelledby={headingId}\n                      className=\"rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6\"\n                    >\n                      <div className=\"flex flex-wrap items-center gap-x-3 gap-y-2\">\n                        <span className=\"rounded-md bg-slate-900 px-2 py-0.5 font-mono text-sm font-semibold text-white\">\n                          v{release.version}\n                        </span>\n                        <time\n                          dateTime={release.date}\n                          className=\"text-sm text-slate-500\"\n                        >\n                          {formatDate(release.date)}\n                        </time>\n                        {index === 0 && activeTags.length === 0 && (\n                          <span className=\"rounded-full bg-indigo-600 px-2 py-0.5 text-xs font-semibold text-white\">\n                            Latest\n                          </span>\n                        )}\n                      </div>\n\n                      <h2\n                        id={headingId}\n                        className=\"mt-3 text-xl font-semibold tracking-tight text-slate-900\"\n                      >\n                        {release.title}\n                      </h2>\n                      <p className=\"mt-2 leading-relaxed text-slate-600\">{release.summary}</p>\n\n                      <ul\n                        aria-label={`Tags for version ${release.version}`}\n                        className=\"mt-4 flex flex-wrap gap-2\"\n                      >\n                        {release.tags.map((tag) => (\n                          <TagBadge key={tag} tag={tag} />\n                        ))}\n                      </ul>\n\n                      <ul className=\"mt-5 space-y-2.5 text-[15px] leading-relaxed text-slate-700\">\n                        {release.changes.map((change) => (\n                          <li key={change} className=\"flex gap-3\">\n                            <span\n                              aria-hidden\n                              className=\"mt-2.5 size-1.5 shrink-0 rounded-full bg-slate-400\"\n                            />\n                            <span>{change}</span>\n                          </li>\n                        ))}\n                      </ul>\n\n                      {release.snippet && (\n                        <CodeSnippet snippet={release.snippet} id={`${headingId}-snippet`} />\n                      )}\n                    </article>\n                  </li>\n                );\n              })}\n            </ol>\n          )}\n        </div>\n      </main>\n\n      <footer className=\"border-t border-slate-200 bg-white\">\n        <div className=\"mx-auto max-w-3xl px-4 py-8 text-sm text-slate-500 sm:px-6\">\n          Looking for older releases? Versions before 2.9 are archived in the migration guide.\n        </div>\n      </footer>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

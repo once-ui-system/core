@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(285,17): error TS2322: Type '(value: string) => void' is not assignable to type 'ToggleEventHandler<HTMLDivElement>'.\n  Types of parameters 'value' and 'event' are incompatible.\n    Type 'ToggleEvent<HTMLDivElement>' is not assignable to type 'string'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3066
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 4 issue(s)\n  [api.renamed] SegmentedControl takes value in 2.x; selected is the 1.x name\n  [api.renamed] SegmentedControl takes onChange in 2.x; onToggle is the 1.x name\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: User profile popover — avatar trigger, a user menu or hover card with stats and actions.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UMUwUhLueT8qccTWySAkPW",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01K8p6AmcwzxKcbyYqcL9uEU",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UMUwUhLueT8qccTWySAkPW",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01K8p6AmcwzxKcbyYqcL9uEU",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01TsKUvDKBmETcy9wr9z5fpW",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01974cxyEQudUg4Mx7vd3KfL",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019imNdheVXZoLFpbGcmpDyp",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TsKUvDKBmETcy9wr9z5fpW",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01974cxyEQudUg4Mx7vd3KfL",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019imNdheVXZoLFpbGcmpDyp",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_019umLLbNAFGkU9wxmKCCkZz",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Qsd5JPbk6motPHW4Z6YJ6T",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MEpf4xMEnBQ5MaxtEDgzzm",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AFbQrBvXL5nEZerwgktuwN",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019umLLbNAFGkU9wxmKCCkZz",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Qsd5JPbk6motPHW4Z6YJ6T",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MEpf4xMEnBQ5MaxtEDgzzm",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AFbQrBvXL5nEZerwgktuwN",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build a custom popover using Once UI layout primitives, handling open/close state, outside-click, Escape key, and focus manually—sticking to components and props I'm confident exist, with plain inline styles elsewhere.\n\n",
+          "signature": "CAQSuwcKEQgSGAI4AUIJbmFycmF0aW9uEgymj/cWXhwFPidW1ccaDIelLvsE0exVgWkDryIw9ukHFAKAmTdjHgC+KgJSfnHfRe7o1WRR9Sd0nqpQhLf4fgZJKfy4SxQIwtzLxm7nKtcGc2bEB0DPAqvavE5VJMHtrNhNNy/UvxXI/WkzdXSDK4JG2fqCvdiUr7Gyc8wwzw+vHfkm1lqeaQyy/t13R7xGV/C9VJLo5BI/U8t2Rte8bBiU6FszDaX9qMN2PP7QMVa+qkWYZgXWPDkpM8k3cdz2KSJIw86c6T/Zr3lfSN+KvbMgDtQVNxc3SvON74neH/Po6mx3JzrJAorm8yQZGKYlJcqs2Wo3SJ1hayHXUZFUdwePHGWfWGPuHi+lY8qV4qRHvgQZ856sNeznP932UyWw5I0ipNmr2znlSCPqowrUUPQAyDeahglD3bEv9446m5trJeMLU5CZ1j7WkCfNGAcM/8jA0ETlvB1EzjNCRU8GW/FUFkjkxBJ0hUZEdXStzTI6pRx2fII8g+U/np189Y9AF2Vg5Au1YXXn/6lJ2uF4OyrWvVGzSYaPcrXJDOPxsJ55cAU7Dxnocnx68wK/PIJZfMD3OJzENTfiq5XB2Qm4bwQ9PhXFaHikvfZpFOHAlbngwqTQxftouiLK4gkTLO7pBL0exSc1VHjDIpOWG1MAkl4H7o+ZPJIfcSod6mh/InCcu3M6ixqRkfQlPuyApSiiSo+ko7/MkYxuJ3H6dzZGv2bdXLGjuSVhx5Vb7xroxwg/QEpjhl1zLcmNuEDDmNiCVKZ1+Ksdc7nbtb7yNccnYJMyyY2PXItuiZ6oWb0ByuW2ndlO6oJvtqIX9B63+Sl+FINy8hD6VhyHgHgT3xpC/o4HEDvwV8JWiF6t+G0TKZvb1GuoEjrsWFK/eVYk4SyzLEVkzK0srvjRbehlYWi0GV/d+QUU531lDeV2bXnru9p+rtFZMnItslY5vnDz0KK35nedWiHelby9NH+2rnZdy3ZhNypaqTFRbBoQuWifpzy3ypY1Li/HKrEm8FZiLpx9n6/hUuJlOlRuzip6Ira4h8ZUqd/vR/QO0cYAVdD6B8/2uy4XWQMOvVdyyoPPUg2rZAHfruhmVF8FL/q4OZl6qnxFjTR53UIOKCRUPIAa1mnJFcbqS/FvvCS+CqBWExoeE/HLNBlZOB+1HLgLxySZ6qKVJYYKYJjrUwdlYgPirRqhdUrGmTUR2aruQlzEC2PEgLUCx7KYWKkAlITlVAQOphTzMUHs8J95GAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NYQhfJwdyJCyo6t2yXweim",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NYQhfJwdyJCyo6t2yXweim",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The Once UI package isn't installed in `node_modules`, so I'll stay conservative with prop types.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { KeyboardEvent as ReactKeyboardEvent } from \"react\";\nimport { Avatar, Button, Column, Flex, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype Stat = { label: string; value: string };\ntype MenuItem = { id: string; label: string; hint?: string; danger?: boolean };\n\nconst USER = {\n  name: \"Maya Okonkwo\",\n  handle: \"@mayaok\",\n  role: \"Staff Product Designer\",\n  bio: \"Designing calm, fast tools for distributed teams. Currently shipping the Atlas design system.\",\n  initials: \"MO\",\n};\n\nconst STATS: Stat[] = [\n  { label: \"Projects\", value: \"48\" },\n  { label: \"Followers\", value: \"12.4k\" },\n  { label: \"Following\", value: \"312\" },\n];\n\nconst MENU: MenuItem[] = [\n  { id: \"profile\", label: \"View profile\", hint: \"G P\" },\n  { id: \"settings\", label: \"Account settings\", hint: \"G S\" },\n  { id: \"billing\", label: \"Billing & plans\" },\n  { id: \"signout\", label: \"Sign out\", danger: true },\n];\n\nfunction InitialsBadge({ size }: { size: number }) {\n  return (\n    <span\n      aria-hidden=\"true\"\n      style={{\n        width: size,\n        height: size,\n        borderRadius: \"50%\",\n        display: \"inline-flex\",\n        alignItems: \"center\",\n        justifyContent: \"center\",\n        fontWeight: 600,\n        fontSize: size * 0.38,\n        letterSpacing: 0.5,\n        color: \"#fff\",\n        background: \"linear-gradient(135deg, #6d5efc 0%, #e0567a 100%)\",\n        flexShrink: 0,\n      }}\n    >\n      {USER.initials}\n    </span>\n  );\n}\n\nexport default function Page() {\n  const [open, setOpen] = useState(false);\n  const [status, setStatus] = useState(\"\");\n  const [following, setFollowing] = useState(false);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const panelRef = useRef<HTMLDivElement>(null);\n  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);\n  const panelId = useId();\n\n  const close = useCallback((returnFocus: boolean) => {\n    setOpen(false);\n    if (returnFocus) triggerRef.current?.focus();\n  }, []);\n\n  const clearTimer = () => {\n    if (hoverTimer.current) {\n      clearTimeout(hoverTimer.current);\n      hoverTimer.current = null;\n    }\n  };\n\n  useEffect(() => {\n    return () => {\n      if (hoverTimer.current) clearTimeout(hoverTimer.current);\n    };\n  }, []);\n\n  // Outside click + Escape\n  useEffect(() => {\n    if (!open) return;\n    const onPointer = (e: PointerEvent) => {\n      const t = e.target as Node;\n      if (panelRef.current?.contains(t) || triggerRef.current?.contains(t)) return;\n      setOpen(false);\n    };\n    const onKey = (e: KeyboardEvent) => {\n      if (e.key === \"Escape\") close(true);\n    };\n    document.addEventListener(\"pointerdown\", onPointer);\n    document.addEventListener(\"keydown\", onKey);\n    return () => {\n      document.removeEventListener(\"pointerdown\", onPointer);\n      document.removeEventListener(\"keydown\", onKey);\n    };\n  }, [open, close]);\n\n  // Move focus into the panel when opened\n  useEffect(() => {\n    if (!open) return;\n    const first = panelRef.current?.querySelector<HTMLElement>(\"[data-autofocus]\");\n    first?.focus();\n  }, [open]);\n\n  const onPanelKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {\n    if (e.key === \"Tab\") {\n      const nodes = panelRef.current?.querySelectorAll<HTMLElement>(\"button:not([disabled])\");\n      if (!nodes || nodes.length === 0) return;\n      const list = Array.from(nodes);\n      const first = list[0];\n      const last = list[list.length - 1];\n      const active = document.activeElement;\n      if (e.shiftKey && active === first) {\n        e.preventDefault();\n        last.focus();\n      } else if (!e.shiftKey && active === last) {\n        e.preventDefault();\n        first.focus();\n      }\n      return;\n    }\n    if (e.key === \"ArrowDown\" || e.key === \"ArrowUp\") {\n      const items = Array.from(\n        panelRef.current?.querySelectorAll<HTMLElement>(\"[role='menuitem']\") ?? [],\n      );\n      if (items.length === 0) return;\n      const idx = items.indexOf(document.activeElement as HTMLElement);\n      if (idx === -1) return;\n      e.preventDefault();\n      const next =\n        e.key === \"ArrowDown\" ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length;\n      items[next].focus();\n    }\n  };\n\n  const onMenuAction = (item: MenuItem) => {\n    setStatus(item.id === \"signout\" ? \"You have been signed out (demo).\" : `${item.label} selected.`);\n    close(true);\n  };\n\n  return (\n    <Column fillWidth minHeight=\"100vh\" horizontal=\"center\">\n      <style>{`\n        .pp-trigger { all: unset; box-sizing: border-box; cursor: pointer; border-radius: 999px; padding: 3px; display: inline-flex; align-items: center; gap: 8px; transition: background .15s ease; }\n        .pp-trigger:hover { background: var(--neutral-alpha-weak); }\n        .pp-trigger:focus-visible, .pp-item:focus-visible, .pp-follow:focus-visible { outline: 2px solid var(--brand-solid-strong, #6d5efc); outline-offset: 2px; }\n        .pp-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(340px, calc(100vw - 32px)); z-index: 50; background: var(--page-background, #fff); border: 1px solid var(--neutral-alpha-medium); border-radius: 16px; box-shadow: 0 18px 48px rgba(0,0,0,.22); overflow: hidden; animation: pp-in .14s ease-out; }\n        @keyframes pp-in { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }\n        @media (prefers-reduced-motion: reduce) { .pp-panel { animation: none; } .pp-trigger { transition: none; } }\n        .pp-item { all: unset; box-sizing: border-box; display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; color: var(--neutral-on-background-strong); }\n        .pp-item:hover, .pp-item:focus-visible { background: var(--neutral-alpha-weak); }\n        .pp-item[data-danger=\"true\"] { color: var(--danger-on-background-strong, #d6336c); }\n        .pp-follow { all: unset; box-sizing: border-box; cursor: pointer; padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: center; flex: 1; border: 1px solid var(--neutral-alpha-strong); color: var(--neutral-on-background-strong); }\n        .pp-follow[aria-pressed=\"false\"] { background: var(--neutral-solid-strong, #111); color: var(--neutral-on-solid-strong, #fff); border-color: transparent; }\n        .pp-follow:hover { opacity: .9; }\n        .pp-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n      `}</style>\n\n      <Row\n        as=\"header\"\n        fillWidth\n        horizontal=\"space-between\"\n        vertical=\"center\"\n        paddingX=\"16\"\n        paddingY=\"12\"\n        borderBottom=\"neutral-alpha-weak\"\n        style={{ maxWidth: 1100 }}\n      >\n        <Heading as=\"h1\" variant=\"heading-strong-m\">\n          Atlas Studio\n        </Heading>\n\n        <div\n          style={{ position: \"relative\" }}\n          onMouseEnter={() => {\n            clearTimer();\n            hoverTimer.current = setTimeout(() => setOpen(true), 250);\n          }}\n          onMouseLeave={() => {\n            clearTimer();\n            hoverTimer.current = setTimeout(() => setOpen(false), 200);\n          }}\n        >\n          <button\n            ref={triggerRef}\n            type=\"button\"\n            className=\"pp-trigger\"\n            aria-haspopup=\"dialog\"\n            aria-expanded={open}\n            aria-controls={open ? panelId : undefined}\n            aria-label={`Account menu for ${USER.name}`}\n            onClick={() => {\n              clearTimer();\n              setOpen((o) => !o);\n            }}\n          >\n            <InitialsBadge size={40} />\n          </button>\n\n          {open && (\n            <div\n              ref={panelRef}\n              id={panelId}\n              role=\"dialog\"\n              aria-label={`${USER.name} profile`}\n              className=\"pp-panel\"\n              onKeyDown={onPanelKeyDown}\n            >\n              <Column padding=\"16\" gap=\"12\">\n                <Row gap=\"12\" vertical=\"center\">\n                  <InitialsBadge size={56} />\n                  <Column gap=\"2\" style={{ minWidth: 0 }}>\n                    <Text variant=\"heading-strong-s\" onBackground=\"neutral-strong\">\n                      {USER.name}\n                    </Text>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                      {USER.handle} · {USER.role}\n                    </Text>\n                  </Column>\n                </Row>\n\n                <Text variant=\"body-default-s\" onBackground=\"neutral-medium\">\n                  {USER.bio}\n                </Text>\n\n                <Row\n                  as=\"dl\"\n                  fillWidth\n                  gap=\"8\"\n                  style={{ margin: 0 }}\n                >\n                  {STATS.map((s) => (\n                    <Column\n                      key={s.label}\n                      flex={1}\n                      horizontal=\"center\"\n                      paddingY=\"8\"\n                      radius=\"m\"\n                      background=\"neutral-alpha-weak\"\n                    >\n                      <dd style={{ margin: 0, fontWeight: 700, fontSize: 18 }}>{s.value}</dd>\n                      <dt style={{ fontSize: 12, opacity: 0.7 }}>{s.label}</dt>\n                    </Column>\n                  ))}\n                </Row>\n\n                <Row gap=\"8\">\n                  <button\n                    type=\"button\"\n                    className=\"pp-follow\"\n                    data-autofocus\n                    aria-pressed={following}\n                    onClick={() => {\n                      setFollowing((f) => !f);\n                      setStatus(following ? `Unfollowed ${USER.name}.` : `Following ${USER.name}.`);\n                    }}\n                  >\n                    {following ? \"Following\" : \"Follow\"}\n                  </button>\n                </Row>\n              </Column>\n\n              <div role=\"separator\" style={{ height: 1, background: \"var(--neutral-alpha-weak)\" }} />\n\n              <div role=\"menu\" aria-label=\"Account actions\" style={{ padding: 8 }}>\n                {MENU.map((item) => (\n                  <button\n                    key={item.id}\n                    type=\"button\"\n                    role=\"menuitem\"\n                    className=\"pp-item\"\n                    data-danger={item.danger ? \"true\" : \"false\"}\n                    onClick={() => onMenuAction(item)}\n                  >\n                    <span>{item.label}</span>\n                    {item.hint && (\n                      <span style={{ fontSize: 12, opacity: 0.55, fontFamily: \"var(--font-code)\" }}>\n                        {item.hint}\n                      </span>\n                    )}\n                  </button>\n                ))}\n              </div>\n            </div>\n          )}\n        </div>\n      </Row>\n\n      <Column\n        as=\"main\"\n        fillWidth\n        paddingX=\"16\"\n        paddingY=\"48\"\n        gap=\"16\"\n        horizontal=\"center\"\n        style={{ maxWidth: 720 }}\n      >\n        <Heading as=\"h2\" variant=\"display-strong-xs\" align=\"center\">\n          Welcome back, Maya\n        </Heading>\n        <Text variant=\"body-default-l\" onBackground=\"neutral-weak\" align=\"center\">\n          Hover or click the avatar in the top-right corner to open your profile card. Use the arrow\n          keys to move through actions and Escape to close.\n        </Text>\n        <Flex gap=\"12\" wrap horizontal=\"center\">\n          <Button\n            variant=\"secondary\"\n            size=\"m\"\n            onClick={() => {\n              setOpen(true);\n            }}\n          >\n            Open profile card\n          </Button>\n        </Flex>\n        <div role=\"status\" aria-live=\"polite\" style={{ minHeight: 24, fontSize: 14, opacity: 0.8 }}>\n          {status}\n        </div>\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(165,9): error TS2322: Type '\"space-between\"' is not assignable to type '\"center\" | \"end\" | \"start\" | \"stretch\" | \"between\" | \"around\" | \"even\" | undefined'.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { KeyboardEvent as ReactKeyboardEvent } from \"react\";\nimport { Button, Column, Flex, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype Stat = { label: string; value: string };\ntype MenuItem = { id: string; label: string; hint?: string; danger?: boolean };\n\nconst USER = {\n  name: \"Maya Okonkwo\",\n  handle: \"@mayaok\",\n  role: \"Staff Product Designer\",\n  bio: \"Designing calm, fast tools for distributed teams. Currently shipping the Atlas design system.\",\n  initials: \"MO\",\n};\n\nconst STATS: Stat[] = [\n  { label: \"Projects\", value: \"48\" },\n  { label: \"Followers\", value: \"12.4k\" },\n  { label: \"Following\", value: \"312\" },\n];\n\nconst MENU: MenuItem[] = [\n  { id: \"profile\", label: \"View profile\", hint: \"G P\" },\n  { id: \"settings\", label: \"Account settings\", hint: \"G S\" },\n  { id: \"billing\", label: \"Billing & plans\" },\n  { id: \"signout\", label: \"Sign out\", danger: true },\n];\n\nfunction InitialsBadge({ size }: { size: number }) {\n  return (\n    <span\n      aria-hidden=\"true\"\n      style={{\n        width: size,\n        height: size,\n        borderRadius: \"50%\",\n        display: \"inline-flex\",\n        alignItems: \"center\",\n        justifyContent: \"center\",\n        fontWeight: 600,\n        fontSize: size * 0.38,\n        letterSpacing: 0.5,\n        color: \"#fff\",\n        background: \"linear-gradient(135deg, #6d5efc 0%, #e0567a 100%)\",\n        flexShrink: 0,\n      }}\n    >\n      {USER.initials}\n    </span>\n  );\n}\n\nexport default function Page() {\n  const [open, setOpen] = useState(false);\n  const [status, setStatus] = useState(\"\");\n  const [following, setFollowing] = useState(false);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const panelRef = useRef<HTMLDivElement>(null);\n  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);\n  const panelId = useId();\n\n  const close = useCallback((returnFocus: boolean) => {\n    setOpen(false);\n    if (returnFocus) triggerRef.current?.focus();\n  }, []);\n\n  const clearTimer = () => {\n    if (hoverTimer.current) {\n      clearTimeout(hoverTimer.current);\n      hoverTimer.current = null;\n    }\n  };\n\n  useEffect(() => {\n    return () => {\n      if (hoverTimer.current) clearTimeout(hoverTimer.current);\n    };\n  }, []);\n\n  // Outside click + Escape\n  useEffect(() => {\n    if (!open) return;\n    const onPointer = (e: PointerEvent) => {\n      const t = e.target as Node;\n      if (panelRef.current?.contains(t) || triggerRef.current?.contains(t)) return;\n      setOpen(false);\n    };\n    const onKey = (e: KeyboardEvent) => {\n      if (e.key === \"Escape\") close(true);\n    };\n    document.addEventListener(\"pointerdown\", onPointer);\n    document.addEventListener(\"keydown\", onKey);\n    return () => {\n      document.removeEventListener(\"pointerdown\", onPointer);\n      document.removeEventListener(\"keydown\", onKey);\n    };\n  }, [open, close]);\n\n  // Move focus into the panel when opened\n  useEffect(() => {\n    if (!open) return;\n    const first = panelRef.current?.querySelector<HTMLElement>(\"[data-autofocus]\");\n    first?.focus();\n  }, [open]);\n\n  const onPanelKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {\n    if (e.key === \"Tab\") {\n      const nodes = panelRef.current?.querySelectorAll<HTMLElement>(\"button:not([disabled])\");\n      if (!nodes || nodes.length === 0) return;\n      const list = Array.from(nodes);\n      const first = list[0];\n      const last = list[list.length - 1];\n      const active = document.activeElement;\n      if (e.shiftKey && active === first) {\n        e.preventDefault();\n        last.focus();\n      } else if (!e.shiftKey && active === last) {\n        e.preventDefault();\n        first.focus();\n      }\n      return;\n    }\n    if (e.key === \"ArrowDown\" || e.key === \"ArrowUp\") {\n      const items = Array.from(\n        panelRef.current?.querySelectorAll<HTMLElement>(\"[role='menuitem']\") ?? [],\n      );\n      if (items.length === 0) return;\n      const idx = items.indexOf(document.activeElement as HTMLElement);\n      if (idx === -1) return;\n      e.preventDefault();\n      const next =\n        e.key === \"ArrowDown\" ? (idx + 1) % items.length : (idx - 1 + items.length) % items.length;\n      items[next].focus();\n    }\n  };\n\n  const onMenuAction = (item: MenuItem) => {\n    setStatus(item.id === \"signout\" ? \"You have been signed out (demo).\" : `${item.label} selected.`);\n    close(true);\n  };\n\n  return (\n    <Column fillWidth minHeight=\"100vh\" horizontal=\"center\">\n      <style>{`\n        .pp-trigger { all: unset; box-sizing: border-box; cursor: pointer; border-radius: 999px; padding: 3px; display: inline-flex; align-items: center; gap: 8px; transition: background .15s ease; }\n        .pp-trigger:hover { background: var(--neutral-alpha-weak); }\n        .pp-trigger:focus-visible, .pp-item:focus-visible, .pp-follow:focus-visible { outline: 2px solid var(--brand-solid-strong, #6d5efc); outline-offset: 2px; }\n        .pp-panel { position: absolute; top: calc(100% + 10px); right: 0; width: min(340px, calc(100vw - 32px)); z-index: 50; background: var(--page-background, #fff); border: 1px solid var(--neutral-alpha-medium); border-radius: 16px; box-shadow: 0 18px 48px rgba(0,0,0,.22); overflow: hidden; animation: pp-in .14s ease-out; }\n        @keyframes pp-in { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }\n        @media (prefers-reduced-motion: reduce) { .pp-panel { animation: none; } .pp-trigger { transition: none; } }\n        .pp-item { all: unset; box-sizing: border-box; display: flex; width: 100%; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-size: 14px; color: var(--neutral-on-background-strong); }\n        .pp-item:hover, .pp-item:focus-visible { background: var(--neutral-alpha-weak); }\n        .pp-item[data-danger=\"true\"] { color: var(--danger-on-background-strong, #d6336c); }\n        .pp-follow { all: unset; box-sizing: border-box; cursor: pointer; padding: 8px 14px; border-radius: 8px; font-size: 14px; font-weight: 600; text-align: center; flex: 1; border: 1px solid var(--neutral-alpha-strong); color: var(--neutral-on-background-strong); }\n        .pp-follow[aria-pressed=\"false\"] { background: var(--neutral-solid-strong, #111); color: var(--neutral-on-solid-strong, #fff); border-color: transparent; }\n        .pp-follow:hover { opacity: .9; }\n      `}</style>\n\n      <Row\n        as=\"header\"\n        fillWidth\n        horizontal=\"between\"\n        vertical=\"center\"\n        paddingX=\"16\"\n        paddingY=\"12\"\n        borderBottom=\"neutral-alpha-weak\"\n        style={{ maxWidth: 1100 }}\n      >\n        <Heading as=\"h1\" variant=\"heading-strong-m\">\n          Atlas Studio\n        </Heading>\n\n        <div\n          style={{ position: \"relative\" }}\n          onMouseEnter={() => {\n            clearTimer();\n            hoverTimer.current = setTimeout(() => setOpen(true), 250);\n          }}\n          onMouseLeave={() => {\n            clearTimer();\n            hoverTimer.current = setTimeout(() => setOpen(false), 200);\n          }}\n        >\n          <button\n            ref={triggerRef}\n            type=\"button\"\n            className=\"pp-trigger\"\n            aria-haspopup=\"dialog\"\n            aria-expanded={open}\n            aria-controls={open ? panelId : undefined}\n            aria-label={`Account menu for ${USER.name}`}\n            onClick={() => {\n              clearTimer();\n              setOpen((o) => !o);\n            }}\n          >\n            <InitialsBadge size={40} />\n          </button>\n\n          {open && (\n            <div\n              ref={panelRef}\n              id={panelId}\n              role=\"dialog\"\n              aria-label={`${USER.name} profile`}\n              className=\"pp-panel\"\n              onKeyDown={onPanelKeyDown}\n            >\n              <Column padding=\"16\" gap=\"12\">\n                <Row gap=\"12\" vertical=\"center\">\n                  <InitialsBadge size={56} />\n                  <Column gap=\"2\" style={{ minWidth: 0 }}>\n                    <Text variant=\"heading-strong-s\" onBackground=\"neutral-strong\">\n                      {USER.name}\n                    </Text>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                      {USER.handle} · {USER.role}\n                    </Text>\n                  </Column>\n                </Row>\n\n                <Text variant=\"body-default-s\" onBackground=\"neutral-medium\">\n                  {USER.bio}\n                </Text>\n\n                <div style={{ display: \"flex\", gap: 8, margin: 0 }}>\n                  {STATS.map((s) => (\n                    <div\n                      key={s.label}\n                      style={{\n                        flex: 1,\n                        display: \"flex\",\n                        flexDirection: \"column-reverse\",\n                        alignItems: \"center\",\n                        padding: \"8px 4px\",\n                        borderRadius: 10,\n                        background: \"var(--neutral-alpha-weak)\",\n                      }}\n                    >\n                      <span style={{ fontSize: 12, opacity: 0.7 }}>{s.label}</span>\n                      <strong style={{ fontSize: 18 }}>{s.value}</strong>\n                    </div>\n                  ))}\n                </div>\n\n                <Row gap=\"8\">\n                  <button\n                    type=\"button\"\n                    className=\"pp-follow\"\n                    data-autofocus\n                    aria-pressed={following}\n                    onClick={() => {\n                      setFollowing((f) => !f);\n                      setStatus(following ? `Unfollowed ${USER.name}.` : `Following ${USER.name}.`);\n                    }}\n                  >\n                    {following ? \"Following\" : \"Follow\"}\n                  </button>\n                </Row>\n              </Column>\n\n              <div role=\"separator\" style={{ height: 1, background: \"var(--neutral-alpha-weak)\" }} />\n\n              <div role=\"menu\" aria-label=\"Account actions\" style={{ padding: 8 }}>\n                {MENU.map((item) => (\n                  <button\n                    key={item.id}\n                    type=\"button\"\n                    role=\"menuitem\"\n                    className=\"pp-item\"\n                    data-danger={item.danger ? \"true\" : \"false\"}\n                    onClick={() => onMenuAction(item)}\n                  >\n                    <span>{item.label}</span>\n                    {item.hint && (\n                      <span style={{ fontSize: 12, opacity: 0.55, fontFamily: \"var(--font-code)\" }}>\n                        {item.hint}\n                      </span>\n                    )}\n                  </button>\n                ))}\n              </div>\n            </div>\n          )}\n        </div>\n      </Row>\n\n      <Column\n        as=\"main\"\n        fillWidth\n        paddingX=\"16\"\n        paddingY=\"48\"\n        gap=\"16\"\n        horizontal=\"center\"\n        style={{ maxWidth: 720 }}\n      >\n        <Heading as=\"h2\" variant=\"display-strong-xs\" align=\"center\">\n          Welcome back, Maya\n        </Heading>\n        <Text variant=\"body-default-l\" onBackground=\"neutral-weak\" align=\"center\">\n          Hover or click the avatar in the top-right corner to open your profile card. Use the arrow\n          keys to move through actions and Escape to close.\n        </Text>\n        <Flex gap=\"12\" wrap horizontal=\"center\">\n          <Button\n            variant=\"secondary\"\n            size=\"m\"\n            onClick={() => {\n              setOpen(true);\n            }}\n          >\n            Open profile card\n          </Button>\n        </Flex>\n        <div role=\"status\" aria-live=\"polite\" style={{ minHeight: 24, fontSize: 14, opacity: 0.8 }}>\n          {status}\n        </div>\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

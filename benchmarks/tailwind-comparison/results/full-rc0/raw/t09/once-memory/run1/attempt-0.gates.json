@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(195,19): error TS2322: Type '{ buttons: { value: StatusFilter; label: string; }[]; selected: StatusFilter; onToggle: (value: ToggleEvent<HTMLDivElement>) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'selected' does not exist on type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\napp/page.tsx(197,31): error TS2352: Conversion of type 'ToggleEvent<HTMLDivElement>' to type 'StatusFilter' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2455
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 5 issue(s)\n  [api.renamed] SegmentedControl takes value in 2.x; selected is the 1.x name\n  [api.renamed] SegmentedControl takes onChange in 2.x; onToggle is the 1.x name\n  [color.tokens] Use semantic color tokens, not hex/rgb\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(349,17): error TS2322: Type 'RevenuePoint[]' is not assignable to type 'DataPoint[]'.\n  Type 'RevenuePoint' is not assignable to type 'DataPoint'.\n    Index signature for type 'string' is missing in type 'RevenuePoint'.\napp/page.tsx(382,17): error TS2322: Type 'ChannelPoint[]' is not assignable to type 'DataPoint[]'.\n  Type 'ChannelPoint' is not assignable to type 'DataPoint'.\n    Index signature for type 'string' is missing in type 'ChannelPoint'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3297
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

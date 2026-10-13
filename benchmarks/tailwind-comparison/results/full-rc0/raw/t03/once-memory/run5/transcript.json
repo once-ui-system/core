@@ -1,0 +1,302 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Pricing page — three tiers, highlighted middle tier, feature comparison table, FAQ accordion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the existing project files to see how the layout and providers are set up."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014NPAjoVYuMLWMjTrpHz85x",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01U1cJeKUWhi6ypFpXhYw5H9",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014NPAjoVYuMLWMjTrpHz85x",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01U1cJeKUWhi6ypFpXhYw5H9",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01LB54vxjApBHRjsrAywv1bV",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BeABZ5yY1ZZ7tMPsnQ7iZo",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01635ksftD5XLoLtLoL6CNko",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01L7ACL5bQwZbe2juzstHJYq",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LB54vxjApBHRjsrAywv1bV",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BeABZ5yY1ZZ7tMPsnQ7iZo",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01635ksftD5XLoLtLoL6CNko",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01L7ACL5bQwZbe2juzstHJYq",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Jpa934jepNornXbm9T4UPr",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Tv6tdyLTgP45kCEn8rN3q1",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HK3en9J8gb4zw4KBr3Y7bj",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DYQM4v2YcVEmuwAANWUVQS",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Jpa934jepNornXbm9T4UPr",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Tv6tdyLTgP45kCEn8rN3q1",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HK3en9J8gb4zw4KBr3Y7bj",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DYQM4v2YcVEmuwAANWUVQS",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check whether the Once UI package is installed locally, to verify its prop APIs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0189Qa6njoXBzUNtuG5KXjLC",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01R5xGTgKeNx9TDDAZBZfyo3",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0189Qa6njoXBzUNtuG5KXjLC",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01R5xGTgKeNx9TDDAZBZfyo3",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll stick to known Once UI components (Flex, Column, Row, Heading, Button, etc.) plus native semantic HTML for the table and accordion, since the full package isn't available locally. I'm planning a billing toggle, highlighted middle pricing tier, accessible comparison table, single-open FAQ accordion, and a responsive CSS grid layout using Once UI tokens.\n\n",
+          "signature": "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"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UyG1SoTkDjPnx5c9tnGW2M",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UyG1SoTkDjPnx5c9tnGW2M",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useState } from \"react\";\nimport { Column, Row, Heading, Text, Button, Badge, Icon } from \"@once-ui-system/core\";\n\ntype Billing = \"monthly\" | \"annual\";\n\ninterface Tier {\n  id: string;\n  name: string;\n  tagline: string;\n  monthly: number;\n  annual: number; // per month, billed annually\n  cta: string;\n  highlighted: boolean;\n  features: string[];\n}\n\nconst TIERS: Tier[] = [\n  {\n    id: \"starter\",\n    name: \"Starter\",\n    tagline: \"For solo builders shipping their first product.\",\n    monthly: 12,\n    annual: 9,\n    cta: \"Start free trial\",\n    highlighted: false,\n    features: [\n      \"Up to 3 projects\",\n      \"5,000 monthly events\",\n      \"7-day data retention\",\n      \"Community support\",\n    ],\n  },\n  {\n    id: \"growth\",\n    name: \"Growth\",\n    tagline: \"For small teams that need to move fast together.\",\n    monthly: 39,\n    annual: 31,\n    cta: \"Start free trial\",\n    highlighted: true,\n    features: [\n      \"Unlimited projects\",\n      \"250,000 monthly events\",\n      \"90-day data retention\",\n      \"Custom dashboards & alerts\",\n      \"Priority email support\",\n    ],\n  },\n  {\n    id: \"scale\",\n    name: \"Scale\",\n    tagline: \"For organizations with security and compliance needs.\",\n    monthly: 129,\n    annual: 105,\n    cta: \"Talk to sales\",\n    highlighted: false,\n    features: [\n      \"Unlimited projects\",\n      \"5M monthly events\",\n      \"1-year data retention\",\n      \"SSO / SAML & audit logs\",\n      \"Dedicated success manager\",\n    ],\n  },\n];\n\ntype Cell = boolean | string;\n\ninterface CompareRow {\n  feature: string;\n  values: [Cell, Cell, Cell];\n}\n\ninterface CompareGroup {\n  group: string;\n  rows: CompareRow[];\n}\n\nconst COMPARISON: CompareGroup[] = [\n  {\n    group: \"Usage\",\n    rows: [\n      { feature: \"Projects\", values: [\"3\", \"Unlimited\", \"Unlimited\"] },\n      { feature: \"Monthly events\", values: [\"5,000\", \"250,000\", \"5,000,000\"] },\n      { feature: \"Team members\", values: [\"1\", \"10\", \"Unlimited\"] },\n      { feature: \"Data retention\", values: [\"7 days\", \"90 days\", \"1 year\"] },\n    ],\n  },\n  {\n    group: \"Analytics\",\n    rows: [\n      { feature: \"Custom dashboards\", values: [false, true, true] },\n      { feature: \"Scheduled reports\", values: [false, true, true] },\n      { feature: \"Anomaly alerts\", values: [false, true, true] },\n      { feature: \"SQL query editor\", values: [false, false, true] },\n    ],\n  },\n  {\n    group: \"Security & support\",\n    rows: [\n      { feature: \"Two-factor authentication\", values: [true, true, true] },\n      { feature: \"SSO / SAML\", values: [false, false, true] },\n      { feature: \"Audit logs\", values: [false, false, true] },\n      { feature: \"Support\", values: [\"Community\", \"Priority email\", \"Dedicated manager\"] },\n      { feature: \"Uptime SLA\", values: [false, \"99.9%\", \"99.99%\"] },\n    ],\n  },\n];\n\ninterface Faq {\n  q: string;\n  a: string;\n}\n\nconst FAQS: Faq[] = [\n  {\n    q: \"Can I try Growth before paying?\",\n    a: \"Yes. Every paid plan includes a 14-day free trial with full access to its features. You don't need a credit card to start, and we'll remind you three days before the trial ends.\",\n  },\n  {\n    q: \"What happens if I go over my monthly event limit?\",\n    a: \"We never drop your data. If you pass your limit, we keep collecting events and send you an email so you can upgrade. Overage is billed at $0.40 per additional 10,000 events on Growth and Scale.\",\n  },\n  {\n    q: \"Can I switch plans or cancel at any time?\",\n    a: \"Absolutely. Upgrades take effect immediately and are prorated. Downgrades and cancellations apply at the end of your current billing period, and you can export all of your data before you leave.\",\n  },\n  {\n    q: \"How does annual billing work?\",\n    a: \"Annual plans are billed once per year at a discount of roughly 20% compared to paying monthly. If you cancel within the first 30 days, we'll refund the full amount.\",\n  },\n  {\n    q: \"Do you offer discounts for nonprofits or students?\",\n    a: \"We do. Verified nonprofits, open-source maintainers and students get 50% off any plan. Contact our team with proof of status and we'll apply the discount within one business day.\",\n  },\n];\n\nconst styles = `\n.pricing-wrap { width: 100%; max-width: 72rem; margin: 0 auto; padding: 4rem 1.25rem 5rem; box-sizing: border-box; }\n.pricing-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; align-items: stretch; }\n@media (min-width: 52rem) { .pricing-grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }\n.pricing-card {\n  position: relative; display: flex; flex-direction: column; gap: 1.5rem; padding: 2rem 1.75rem;\n  border-radius: 1.25rem; border: 1px solid var(--neutral-alpha-medium);\n  background: var(--surface-background, transparent); box-sizing: border-box;\n}\n.pricing-card[data-highlighted=\"true\"] {\n  border: 2px solid var(--brand-solid-strong, var(--brand-on-background-strong));\n  background: var(--brand-alpha-weak, var(--neutral-alpha-weak));\n  box-shadow: 0 1.5rem 3rem -1.5rem var(--brand-alpha-strong, rgba(0,0,0,0.3));\n}\n@media (min-width: 52rem) { .pricing-card[data-highlighted=\"true\"] { transform: translateY(-0.75rem); padding-block: 2.5rem; } }\n.pricing-popular {\n  position: absolute; top: 0; left: 50%; transform: translate(-50%, -50%);\n  white-space: nowrap; padding: 0.25rem 0.875rem; border-radius: 999px; font-size: 0.8125rem; font-weight: 600;\n  background: var(--brand-solid-strong, var(--brand-on-background-strong)); color: var(--brand-on-solid-strong, #fff);\n}\n.pricing-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.75rem; }\n.pricing-list li { display: flex; gap: 0.625rem; align-items: flex-start; }\n.pricing-list svg, .pricing-check { flex-shrink: 0; margin-top: 0.15rem; }\n\n.billing-toggle {\n  display: inline-flex; padding: 0.25rem; gap: 0.25rem; border-radius: 999px;\n  border: 1px solid var(--neutral-alpha-medium); background: var(--neutral-alpha-weak);\n}\n.billing-toggle button {\n  appearance: none; border: 0; cursor: pointer; font: inherit; font-size: 0.9375rem; font-weight: 500;\n  padding: 0.5rem 1.125rem; border-radius: 999px; background: transparent; color: var(--neutral-on-background-weak);\n  min-height: 2.5rem;\n}\n.billing-toggle button[aria-pressed=\"true\"] {\n  background: var(--brand-solid-strong, var(--neutral-solid-strong)); color: var(--brand-on-solid-strong, var(--neutral-on-solid-strong));\n}\n.billing-toggle button:focus-visible, .faq-trigger:focus-visible {\n  outline: 2px solid var(--brand-solid-strong, currentColor); outline-offset: 2px;\n}\n\n.compare-scroll { width: 100%; overflow-x: auto; border: 1px solid var(--neutral-alpha-medium); border-radius: 1rem; }\n.compare-table { width: 100%; min-width: 40rem; border-collapse: collapse; font-size: 0.9375rem; }\n.compare-table caption { text-align: left; padding: 1rem 1.25rem; font-weight: 600; }\n.compare-table th, .compare-table td { padding: 0.875rem 1.25rem; text-align: center; border-top: 1px solid var(--neutral-alpha-medium); }\n.compare-table thead th { border-top: 0; font-weight: 600; }\n.compare-table th[scope=\"row\"] { text-align: left; font-weight: 400; }\n.compare-table thead th:first-child { text-align: left; }\n.compare-table .group-row th { text-align: left; background: var(--neutral-alpha-weak); font-size: 0.8125rem; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }\n.compare-table .hl { background: var(--brand-alpha-weak, var(--neutral-alpha-weak)); }\n.compare-table .group-row th.hl { background: var(--brand-alpha-weak, var(--neutral-alpha-weak)); }\n\n.faq-list { display: flex; flex-direction: column; border: 1px solid var(--neutral-alpha-medium); border-radius: 1rem; overflow: hidden; }\n.faq-item + .faq-item { border-top: 1px solid var(--neutral-alpha-medium); }\n.faq-heading { margin: 0; }\n.faq-trigger {\n  appearance: none; width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 1rem;\n  padding: 1.125rem 1.25rem; background: transparent; border: 0; cursor: pointer; text-align: left;\n  font: inherit; font-size: 1.0625rem; font-weight: 600; color: inherit; min-height: 3rem;\n}\n.faq-trigger:hover { background: var(--neutral-alpha-weak); }\n.faq-chevron { flex-shrink: 0; transition: transform 0.2s ease; }\n.faq-trigger[aria-expanded=\"true\"] .faq-chevron { transform: rotate(180deg); }\n.faq-panel { padding: 0 1.25rem 1.25rem; }\n@media (prefers-reduced-motion: reduce) { .faq-chevron { transition: none; } }\n.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }\n`;\n\nfunction CheckIcon() {\n  return (\n    <svg\n      className=\"pricing-check\"\n      width=\"18\"\n      height=\"18\"\n      viewBox=\"0 0 24 24\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      strokeWidth=\"2.5\"\n      strokeLinecap=\"round\"\n      strokeLinejoin=\"round\"\n      aria-hidden=\"true\"\n      focusable=\"false\"\n    >\n      <polyline points=\"20 6 9 17 4 12\" />\n    </svg>\n  );\n}\n\nfunction ChevronIcon() {\n  return (\n    <svg\n      className=\"faq-chevron\"\n      width=\"20\"\n      height=\"20\"\n      viewBox=\"0 0 24 24\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      strokeWidth=\"2\"\n      strokeLinecap=\"round\"\n      strokeLinejoin=\"round\"\n      aria-hidden=\"true\"\n      focusable=\"false\"\n    >\n      <polyline points=\"6 9 12 15 18 9\" />\n    </svg>\n  );\n}\n\nfunction CompareCell({ value }: { value: Cell }) {\n  if (value === true) {\n    return (\n      <>\n        <CheckIcon />\n        <span className=\"sr-only\">Included</span>\n      </>\n    );\n  }\n  if (value === false) {\n    return (\n      <>\n        <span aria-hidden=\"true\">—</span>\n        <span className=\"sr-only\">Not included</span>\n      </>\n    );\n  }\n  return <>{value}</>;\n}\n\nexport default function PricingPage() {\n  const [billing, setBilling] = useState<Billing>(\"annual\");\n  const [openFaq, setOpenFaq] = useState<number | null>(0);\n  const baseId = useId();\n\n  return (\n    <main className=\"pricing-wrap\">\n      <style>{styles}</style>\n\n      {/* Header */}\n      <Column as=\"header\" horizontal=\"center\" gap=\"16\" align=\"center\" paddingBottom=\"40\">\n        <Badge\n          textVariant=\"label-default-s\"\n          onBackground=\"brand-strong\"\n          background=\"brand-alpha-weak\"\n          paddingX=\"12\"\n          paddingY=\"4\"\n        >\n          Pricing\n        </Badge>\n        <Heading as=\"h1\" variant=\"display-strong-m\" wrap=\"balance\">\n          Simple pricing that scales with you\n        </Heading>\n        <Text variant=\"body-default-l\" onBackground=\"neutral-weak\" wrap=\"balance\" style={{ maxWidth: \"38rem\" }}>\n          Start with a 14-day free trial on any plan. No credit card required, and you can change or cancel whenever\n          you like.\n        </Text>\n\n        <div className=\"billing-toggle\" role=\"group\" aria-label=\"Billing period\" style={{ marginTop: \"0.75rem\" }}>\n          <button type=\"button\" aria-pressed={billing === \"monthly\"} onClick={() => setBilling(\"monthly\")}>\n            Monthly\n          </button>\n          <button type=\"button\" aria-pressed={billing === \"annual\"} onClick={() => setBilling(\"annual\")}>\n            Annual <span style={{ fontSize: \"0.8125rem\", opacity: 0.85 }}>(save 20%)</span>\n          </button>\n        </div>\n      </Column>\n\n      {/* Tiers */}\n      <section aria-labelledby={`${baseId}-plans`}>\n        <h2 id={`${baseId}-plans`} className=\"sr-only\">\n          Plans\n        </h2>\n        <div className=\"pricing-grid\">\n          {TIERS.map((tier) => {\n            const price = billing === \"annual\" ? tier.annual : tier.monthly;\n            const nameId = `${baseId}-tier-${tier.id}`;\n            return (\n              <article\n                key={tier.id}\n                className=\"pricing-card\"\n                data-highlighted={tier.highlighted}\n                aria-labelledby={nameId}\n              >\n                {tier.highlighted && <span className=\"pricing-popular\">Most popular</span>}\n                <Column gap=\"8\">\n                  <Heading as=\"h3\" id={nameId} variant=\"heading-strong-xl\">\n                    {tier.name}\n                  </Heading>\n                  <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                    {tier.tagline}\n                  </Text>\n                </Column>\n\n                <Column gap=\"4\">\n                  <Row vertical=\"end\" gap=\"8\">\n                    <Text variant=\"display-strong-l\" as=\"span\">\n                      ${price}\n                    </Text>\n                    <Text variant=\"body-default-m\" onBackground=\"neutral-weak\" as=\"span\">\n                      / month\n                    </Text>\n                  </Row>\n                  <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" aria-live=\"polite\">\n                    {billing === \"annual\"\n                      ? `Billed annually ($${tier.annual * 12}/year)`\n                      : \"Billed monthly\"}\n                  </Text>\n                </Column>\n\n                <Button\n                  fillWidth\n                  size=\"l\"\n                  variant={tier.highlighted ? \"primary\" : \"secondary\"}\n                  aria-label={`${tier.cta} — ${tier.name} plan`}\n                >\n                  {tier.cta}\n                </Button>\n\n                <ul className=\"pricing-list\" aria-label={`${tier.name} plan features`}>\n                  {tier.features.map((feature) => (\n                    <li key={feature}>\n                      <CheckIcon />\n                      <Text variant=\"body-default-m\" as=\"span\">\n                        {feature}\n                      </Text>\n                    </li>\n                  ))}\n                </ul>\n              </article>\n            );\n          })}\n        </div>\n      </section>\n\n      {/* Comparison table */}\n      <section aria-labelledby={`${baseId}-compare`} style={{ marginTop: \"5rem\" }}>\n        <Column gap=\"8\" paddingBottom=\"24\">\n          <Heading as=\"h2\" id={`${baseId}-compare`} variant=\"heading-strong-xl\">\n            Compare plans\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Everything included in each plan, side by side.\n          </Text>\n        </Column>\n\n        <div className=\"compare-scroll\" role=\"region\" aria-label=\"Plan comparison table\" tabIndex={0}>\n          <table className=\"compare-table\">\n            <caption className=\"sr-only\">Feature comparison across Starter, Growth and Scale plans</caption>\n            <thead>\n              <tr>\n                <th scope=\"col\">Features</th>\n                {TIERS.map((tier) => (\n                  <th key={tier.id} scope=\"col\" className={tier.highlighted ? \"hl\" : undefined}>\n                    {tier.name}\n                  </th>\n                ))}\n              </tr>\n            </thead>\n            {COMPARISON.map((group) => (\n              <tbody key={group.group}>\n                <tr className=\"group-row\">\n                  <th scope=\"colgroup\" colSpan={4}>\n                    {group.group}\n                  </th>\n                </tr>\n                {group.rows.map((row) => (\n                  <tr key={row.feature}>\n                    <th scope=\"row\">{row.feature}</th>\n                    {row.values.map((value, i) => (\n                      <td key={TIERS[i].id} className={TIERS[i].highlighted ? \"hl\" : undefined}>\n                        <CompareCell value={value} />\n                      </td>\n                    ))}\n                  </tr>\n                ))}\n              </tbody>\n            ))}\n          </table>\n        </div>\n      </section>\n\n      {/* FAQ */}\n      <section aria-labelledby={`${baseId}-faq`} style={{ marginTop: \"5rem\", maxWidth: \"48rem\", marginInline: \"auto\" }}>\n        <Column gap=\"8\" paddingBottom=\"24\" horizontal=\"center\" align=\"center\">\n          <Heading as=\"h2\" id={`${baseId}-faq`} variant=\"heading-strong-xl\">\n            Frequently asked questions\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Can't find what you're looking for? Email support@example.com and we'll get back to you within a day.\n          </Text>\n        </Column>\n\n        <div className=\"faq-list\">\n          {FAQS.map((faq, index) => {\n            const open = openFaq === index;\n            const triggerId = `${baseId}-faq-trigger-${index}`;\n            const panelId = `${baseId}-faq-panel-${index}`;\n            return (\n              <div key={faq.q} className=\"faq-item\">\n                <h3 className=\"faq-heading\">\n                  <button\n                    type=\"button\"\n                    id={triggerId}\n                    className=\"faq-trigger\"\n                    aria-expanded={open}\n                    aria-controls={panelId}\n                    onClick={() => setOpenFaq(open ? null : index)}\n                  >\n                    <span>{faq.q}</span>\n                    <ChevronIcon />\n                  </button>\n                </h3>\n                <div id={panelId} role=\"region\" aria-labelledby={triggerId} hidden={!open} className=\"faq-panel\">\n                  <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                    {faq.a}\n                  </Text>\n                </div>\n              </div>\n            );\n          })}\n        </div>\n      </section>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

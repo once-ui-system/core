@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(336,17): error TS2322: Type 'string' is not assignable to type 'IconName'.\napp/page.tsx(508,25): error TS2322: Type 'string' is not assignable to type 'IconName'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3159
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 8 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n  [layout.defaults] minWidth={0} beside fillWidth — fillWidth already sets min-width: 0, omit minWidth\n  [border.default] border=\"neutral-alpha-weak\" restates the default border — write bare border, and name a colour only to deviate\n  [Card.interactive] Card without href/onClick — use Column + surface recipe for static panels\n  [Icon.names] Unknown icon name in icon: \"dollar\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"chart\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"arrowUp\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

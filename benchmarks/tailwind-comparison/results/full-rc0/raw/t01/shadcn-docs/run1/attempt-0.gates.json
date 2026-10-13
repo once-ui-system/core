@@ -1,0 +1,60 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 13136
+    },
+    "build": {
+      "ok": true,
+      "ms": 42188
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1087,
+          "height": 2221,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1087,
+          "height": 1838,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1087,
+          "height": 1245,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 7,
+        "serious_or_critical": 2,
+        "ids": [
+          "aria-valid-attr-value:critical:1",
+          "color-contrast:serious:6"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "none"
+        },
+        "desktop": {
+          "action": "none"
+        }
+      }
+    }
+  }
+}

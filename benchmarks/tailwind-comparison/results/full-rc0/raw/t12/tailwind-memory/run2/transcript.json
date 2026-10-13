@@ -1,0 +1,232 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Feedback widget — floating trigger, dialog with rating chips, textarea, toast on submit.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019urvjBqx5KZo5jdJD6sEiX",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0114BsqjyspdrxUoL5RMhXML",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019urvjBqx5KZo5jdJD6sEiX",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0114BsqjyspdrxUoL5RMhXML",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_015upCDrTTfabvNsHhaYjqHN",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01G3awp6sLmdANJH6Ae4Scm3",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ujba1cX2q1XvXZNeKkP75y",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015upCDrTTfabvNsHhaYjqHN",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01G3awp6sLmdANJH6Ae4Scm3",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Ujba1cX2q1XvXZNeKkP75y",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_012CdMW3AsUprdTGM28Hiyb3",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HWqm8TSzrx1CJFYCn8pBTs",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FJgjUY4w7R2p94Dr4P7Cj1",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012CdMW3AsUprdTGM28Hiyb3",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HWqm8TSzrx1CJFYCn8pBTs",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FJgjUY4w7R2p94Dr4P7Cj1",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll use the native `<dialog>` element with `showModal()` for focus trapping and Escape handling, and a live region for the toast.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { FormEvent } from \"react\";\nimport {\n  AlertCircle,\n  CheckCircle2,\n  Frown,\n  Meh,\n  MessageSquare,\n  Smile,\n  SmilingFace,\n  X,\n} from \"lucide-react\";\n\ntype Rating = {\n  value: number;\n  label: string;\n  Icon: typeof Smile;\n};\n\nconst RATINGS: Rating[] = [\n  { value: 1, label: \"Frustrating\", Icon: Frown },\n  { value: 2, label: \"Confusing\", Icon: Meh },\n  { value: 3, label: \"Okay\", Icon: Meh },\n  { value: 4, label: \"Good\", Icon: Smile },\n  { value: 5, label: \"Delightful\", Icon: SmilingFace },\n];\n\nconst MAX_LENGTH = 500;\n\nconst RECENT_RELEASES = [\n  {\n    version: \"2.14\",\n    title: \"Faster project switching\",\n    body: \"Jump between workspaces with Cmd+K. Recent projects now load in under 200 ms.\",\n    date: \"Mar 4\",\n  },\n  {\n    version: \"2.13\",\n    title: \"Shared dashboards\",\n    body: \"Invite teammates to view live dashboards with read-only links and expiry dates.\",\n    date: \"Feb 18\",\n  },\n  {\n    version: \"2.12\",\n    title: \"CSV export improvements\",\n    body: \"Exports now keep your column order and support up to 250,000 rows.\",\n    date: \"Jan 30\",\n  },\n];\n\nexport default function Page() {\n  const dialogRef = useRef<HTMLDialogElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const textareaRef = useRef<HTMLTextAreaElement>(null);\n  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const [rating, setRating] = useState<number | null>(null);\n  const [message, setMessage] = useState(\"\");\n  const [error, setError] = useState<string | null>(null);\n  const [toast, setToast] = useState<string | null>(null);\n\n  const ids = useId();\n  const titleId = `${ids}-title`;\n  const descId = `${ids}-desc`;\n  const ratingLabelId = `${ids}-rating`;\n  const messageId = `${ids}-message`;\n  const errorId = `${ids}-error`;\n  const countId = `${ids}-count`;\n\n  const openDialog = () => {\n    dialogRef.current?.showModal();\n  };\n\n  const closeDialog = useCallback(() => {\n    dialogRef.current?.close();\n  }, []);\n\n  // Return focus to the trigger once the dialog closes (Esc, backdrop, button).\n  useEffect(() => {\n    const dialog = dialogRef.current;\n    if (!dialog) return;\n    const onClose = () => {\n      triggerRef.current?.focus();\n    };\n    dialog.addEventListener(\"close\", onClose);\n    return () => dialog.removeEventListener(\"close\", onClose);\n  }, []);\n\n  useEffect(() => {\n    return () => {\n      if (toastTimer.current) clearTimeout(toastTimer.current);\n    };\n  }, []);\n\n  const showToast = (text: string) => {\n    setToast(text);\n    if (toastTimer.current) clearTimeout(toastTimer.current);\n    toastTimer.current = setTimeout(() => setToast(null), 5000);\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (rating === null) {\n      setError(\"Please choose a rating before sending.\");\n      return;\n    }\n    setError(null);\n    const chosen = RATINGS.find((r) => r.value === rating);\n    closeDialog();\n    showToast(\n      `Thanks! Your \"${chosen?.label ?? \"\"}\" feedback was sent to the team.`,\n    );\n    setRating(null);\n    setMessage(\"\");\n  };\n\n  const handleBackdropClick = (event: React.MouseEvent<HTMLDialogElement>) => {\n    // Clicks on the <dialog> element itself (not its content) hit the backdrop.\n    if (event.target === event.currentTarget) closeDialog();\n  };\n\n  const handleRatingKeyDown = (\n    event: React.KeyboardEvent<HTMLDivElement>,\n  ) => {\n    const keys = [\"ArrowRight\", \"ArrowDown\", \"ArrowLeft\", \"ArrowUp\"];\n    if (!keys.includes(event.key)) return;\n    event.preventDefault();\n    const forward = event.key === \"ArrowRight\" || event.key === \"ArrowDown\";\n    const current = rating ?? (forward ? 0 : 6);\n    const next = forward\n      ? current >= 5\n        ? 1\n        : current + 1\n      : current <= 1\n        ? 5\n        : current - 1;\n    setRating(next);\n    setError(null);\n    const buttons =\n      event.currentTarget.querySelectorAll<HTMLButtonElement>(\"[role=radio]\");\n    buttons[next - 1]?.focus();\n  };\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6\">\n          <div className=\"flex items-center gap-2 font-semibold\">\n            <span\n              aria-hidden=\"true\"\n              className=\"grid size-8 place-items-center rounded-lg bg-indigo-600 text-sm font-bold text-white\"\n            >\n              F\n            </span>\n            Fieldnote\n          </div>\n          <nav aria-label=\"Primary\" className=\"hidden gap-6 text-sm text-slate-600 sm:flex\">\n            <a className=\"rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\" href=\"#releases\">\n              Releases\n            </a>\n            <a className=\"rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\" href=\"#releases\">\n              Docs\n            </a>\n            <a className=\"rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\" href=\"#releases\">\n              Support\n            </a>\n          </nav>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-16\">\n        <section className=\"max-w-2xl\">\n          <p className=\"text-sm font-medium text-indigo-700\">Product updates</p>\n          <h1 className=\"mt-2 text-3xl font-bold tracking-tight text-balance sm:text-4xl\">\n            What&apos;s new in Fieldnote\n          </h1>\n          <p className=\"mt-4 text-base leading-relaxed text-slate-600\">\n            We ship improvements every two weeks. Tried something recently?\n            Tell us how it went using the feedback button in the corner — every\n            message is read by the product team.\n          </p>\n        </section>\n\n        <section\n          id=\"releases\"\n          aria-labelledby=\"releases-heading\"\n          className=\"mt-12\"\n        >\n          <h2 id=\"releases-heading\" className=\"text-lg font-semibold\">\n            Recent releases\n          </h2>\n          <ul className=\"mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3\">\n            {RECENT_RELEASES.map((release) => (\n              <li\n                key={release.version}\n                className=\"rounded-xl border border-slate-200 bg-white p-5 shadow-sm\"\n              >\n                <div className=\"flex items-center justify-between text-xs text-slate-500\">\n                  <span className=\"rounded-full bg-indigo-50 px-2 py-0.5 font-medium text-indigo-700\">\n                    v{release.version}\n                  </span>\n                  <time>{release.date}</time>\n                </div>\n                <h3 className=\"mt-3 font-semibold\">{release.title}</h3>\n                <p className=\"mt-1 text-sm leading-relaxed text-slate-600\">\n                  {release.body}\n                </p>\n              </li>\n            ))}\n          </ul>\n        </section>\n      </main>\n\n      {/* Floating trigger */}\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        onClick={openDialog}\n        className=\"fixed right-4 bottom-4 z-30 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/30 transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:right-6 sm:bottom-6\"\n      >\n        <MessageSquare className=\"size-5\" aria-hidden=\"true\" />\n        Feedback\n      </button>\n\n      {/* Dialog */}\n      <dialog\n        ref={dialogRef}\n        aria-labelledby={titleId}\n        aria-describedby={descId}\n        onClick={handleBackdropClick}\n        className=\"m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl bg-white p-0 text-slate-900 shadow-2xl backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm\"\n      >\n        <form onSubmit={handleSubmit} noValidate className=\"p-5 sm:p-6\">\n          <div className=\"flex items-start justify-between gap-4\">\n            <div>\n              <h2 id={titleId} className=\"text-lg font-semibold\">\n                Send feedback\n              </h2>\n              <p id={descId} className=\"mt-1 text-sm text-slate-600\">\n                How is Fieldnote working for you?\n              </p>\n            </div>\n            <button\n              type=\"button\"\n              onClick={closeDialog}\n              aria-label=\"Close feedback dialog\"\n              className=\"-m-1 rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            >\n              <X className=\"size-5\" aria-hidden=\"true\" />\n            </button>\n          </div>\n\n          <div className=\"mt-5\">\n            <span\n              id={ratingLabelId}\n              className=\"text-sm font-medium text-slate-800\"\n            >\n              Your rating\n            </span>\n            <div\n              role=\"radiogroup\"\n              aria-labelledby={ratingLabelId}\n              aria-required=\"true\"\n              aria-describedby={error ? errorId : undefined}\n              onKeyDown={handleRatingKeyDown}\n              className=\"mt-2 grid grid-cols-5 gap-2\"\n            >\n              {RATINGS.map(({ value, label, Icon }) => {\n                const selected = rating === value;\n                return (\n                  <button\n                    key={value}\n                    type=\"button\"\n                    role=\"radio\"\n                    aria-checked={selected}\n                    aria-label={`${value} – ${label}`}\n                    tabIndex={\n                      selected || (rating === null && value === 1) ? 0 : -1\n                    }\n                    onClick={() => {\n                      setRating(value);\n                      setError(null);\n                    }}\n                    className={`flex flex-col items-center gap-1 rounded-xl border px-1 py-2.5 text-xs font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${\n                      selected\n                        ? \"border-indigo-600 bg-indigo-600 text-white\"\n                        : \"border-slate-300 bg-white text-slate-700 hover:border-indigo-400 hover:bg-indigo-50\"\n                    }`}\n                  >\n                    <Icon className=\"size-5\" aria-hidden=\"true\" />\n                    <span aria-hidden=\"true\">{value}</span>\n                  </button>\n                );\n              })}\n            </div>\n            <p\n              className=\"mt-2 h-5 text-sm text-slate-600\"\n              aria-live=\"polite\"\n            >\n              {rating !== null\n                ? RATINGS.find((r) => r.value === rating)?.label\n                : \"\"}\n            </p>\n            {error && (\n              <p\n                id={errorId}\n                role=\"alert\"\n                className=\"mt-1 flex items-center gap-1.5 text-sm text-red-700\"\n              >\n                <AlertCircle className=\"size-4 shrink-0\" aria-hidden=\"true\" />\n                {error}\n              </p>\n            )}\n          </div>\n\n          <div className=\"mt-4\">\n            <label\n              htmlFor={messageId}\n              className=\"text-sm font-medium text-slate-800\"\n            >\n              Anything you&apos;d like to add?{\" \"}\n              <span className=\"font-normal text-slate-500\">(optional)</span>\n            </label>\n            <textarea\n              id={messageId}\n              ref={textareaRef}\n              value={message}\n              maxLength={MAX_LENGTH}\n              rows={4}\n              onChange={(e) => setMessage(e.target.value)}\n              aria-describedby={countId}\n              placeholder=\"e.g. The new project switcher is great, but I can't find archived boards.\"\n              className=\"mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:border-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            />\n            <p\n              id={countId}\n              className=\"mt-1 text-right text-xs text-slate-500\"\n            >\n              {message.length}/{MAX_LENGTH}\n            </p>\n          </div>\n\n          <div className=\"mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\">\n            <button\n              type=\"button\"\n              onClick={closeDialog}\n              className=\"rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n            >\n              Cancel\n            </button>\n            <button\n              type=\"submit\"\n              className=\"rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n            >\n              Send feedback\n            </button>\n          </div>\n        </form>\n      </dialog>\n\n      {/* Toast live region (always mounted so announcements are reliable) */}\n      <div\n        role=\"status\"\n        aria-live=\"polite\"\n        className=\"pointer-events-none fixed inset-x-4 bottom-20 z-40 flex justify-center sm:inset-x-auto sm:right-6 sm:bottom-24\"\n      >\n        {toast && (\n          <div className=\"pointer-events-auto flex max-w-sm items-start gap-3 rounded-xl bg-slate-900 px-4 py-3 text-sm text-white shadow-xl\">\n            <CheckCircle2\n              className=\"mt-0.5 size-5 shrink-0 text-emerald-400\"\n              aria-hidden=\"true\"\n            />\n            <p className=\"flex-1\">{toast}</p>\n            <button\n              type=\"button\"\n              onClick={() => setToast(null)}\n              aria-label=\"Dismiss notification\"\n              className=\"-m-1 rounded p-1 text-slate-300 hover:text-white focus-visible:outline-2 focus-visible:outline-white\"\n            >\n              <X className=\"size-4\" aria-hidden=\"true\" />\n            </button>\n          </div>\n        )}\n      </div>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(12,3): error TS2305: Module '\"lucide-react\"' has no exported member 'SmilingFace'.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check which icons the installed lucide-react actually exports before choosing a replacement."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0175tqKjnL9qU8xHnaW6XDRH",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/lucide-react/dist/esm/icons"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0175tqKjnL9qU8xHnaW6XDRH",
+          "content": "no such file or directory: project/node_modules/lucide-react/dist/esm/icons",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "No `node_modules` is available to inspect, so I'm swapping `SmilingFace` for `Laugh`, which has been in lucide-react for a long time. `Frown`, `Meh` and `Smile` were already imported and are long-standing exports.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { FormEvent } from \"react\";\nimport {\n  AlertCircle,\n  CheckCircle2,\n  Frown,\n  Laugh,\n  Meh,\n  MessageSquare,\n  Smile,\n  X,\n} from \"lucide-react\";\n\ntype Rating = {\n  value: number;\n  label: string;\n  Icon: typeof Smile;\n};\n\nconst RATINGS: Rating[] = [\n  { value: 1, label: \"Frustrating\", Icon: Frown },\n  { value: 2, label: \"Confusing\", Icon: Meh },\n  { value: 3, label: \"Okay\", Icon: Meh },\n  { value: 4, label: \"Good\", Icon: Smile },\n  { value: 5, label: \"Delightful\", Icon: Laugh },\n];\n\nconst MAX_LENGTH = 500;\n\nconst RECENT_RELEASES = [\n  {\n    version: \"2.14\",\n    title: \"Faster project switching\",\n    body: \"Jump between workspaces with Cmd+K. Recent projects now load in under 200 ms.\",\n    date: \"Mar 4\",\n  },\n  {\n    version: \"2.13\",\n    title: \"Shared dashboards\",\n    body: \"Invite teammates to view live dashboards with read-only links and expiry dates.\",\n    date: \"Feb 18\",\n  },\n  {\n    version: \"2.12\",\n    title: \"CSV export improvements\",\n    body: \"Exports now keep your column order and support up to 250,000 rows.\",\n    date: \"Jan 30\",\n  },\n];\n\nexport default function Page() {\n  const dialogRef = useRef<HTMLDialogElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const textareaRef = useRef<HTMLTextAreaElement>(null);\n  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const [rating, setRating] = useState<number | null>(null);\n  const [message, setMessage] = useState(\"\");\n  const [error, setError] = useState<string | null>(null);\n  const [toast, setToast] = useState<string | null>(null);\n\n  const ids = useId();\n  const titleId = `${ids}-title`;\n  const descId = `${ids}-desc`;\n  const ratingLabelId = `${ids}-rating`;\n  const messageId = `${ids}-message`;\n  const errorId = `${ids}-error`;\n  const countId = `${ids}-count`;\n\n  const openDialog = () => {\n    dialogRef.current?.showModal();\n  };\n\n  const closeDialog = useCallback(() => {\n    dialogRef.current?.close();\n  }, []);\n\n  // Return focus to the trigger once the dialog closes (Esc, backdrop, button).\n  useEffect(() => {\n    const dialog = dialogRef.current;\n    if (!dialog) return;\n    const onClose = () => {\n      triggerRef.current?.focus();\n    };\n    dialog.addEventListener(\"close\", onClose);\n    return () => dialog.removeEventListener(\"close\", onClose);\n  }, []);\n\n  useEffect(() => {\n    return () => {\n      if (toastTimer.current) clearTimeout(toastTimer.current);\n    };\n  }, []);\n\n  const showToast = (text: string) => {\n    setToast(text);\n    if (toastTimer.current) clearTimeout(toastTimer.current);\n    toastTimer.current = setTimeout(() => setToast(null), 5000);\n  };\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (rating === null) {\n      setError(\"Please choose a rating before sending.\");\n      return;\n    }\n    setError(null);\n    const chosen = RATINGS.find((r) => r.value === rating);\n    closeDialog();\n    showToast(\n      `Thanks! Your \"${chosen?.label ?? \"\"}\" feedback was sent to the team.`,\n    );\n    setRating(null);\n    setMessage(\"\");\n  };\n\n  const handleBackdropClick = (event: React.MouseEvent<HTMLDialogElement>) => {\n    // Clicks on the <dialog> element itself (not its content) hit the backdrop.\n    if (event.target === event.currentTarget) closeDialog();\n  };\n\n  const handleRatingKeyDown = (\n    event: React.KeyboardEvent<HTMLDivElement>,\n  ) => {\n    const keys = [\"ArrowRight\", \"ArrowDown\", \"ArrowLeft\", \"ArrowUp\"];\n    if (!keys.includes(event.key)) return;\n    event.preventDefault();\n    const forward = event.key === \"ArrowRight\" || event.key === \"ArrowDown\";\n    const current = rating ?? (forward ? 0 : 6);\n    const next = forward\n      ? current >= 5\n        ? 1\n        : current + 1\n      : current <= 1\n        ? 5\n        : current - 1;\n    setRating(next);\n    setError(null);\n    const buttons =\n      event.currentTarget.querySelectorAll<HTMLButtonElement>(\"[role=radio]\");\n    buttons[next - 1]?.focus();\n  };\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6\">\n          <div className=\"flex items-center gap-2 font-semibold\">\n            <span\n              aria-hidden=\"true\"\n              className=\"grid size-8 place-items-center rounded-lg bg-indigo-600 text-sm font-bold text-white\"\n            >\n              F\n            </span>\n            Fieldnote\n          </div>\n          <nav aria-label=\"Primary\" className=\"hidden gap-6 text-sm text-slate-600 sm:flex\">\n            <a className=\"rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\" href=\"#releases\">\n              Releases\n            </a>\n            <a className=\"rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\" href=\"#releases\">\n              Docs\n            </a>\n            <a className=\"rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\" href=\"#releases\">\n              Support\n            </a>\n          </nav>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-16\">\n        <section className=\"max-w-2xl\">\n          <p className=\"text-sm font-medium text-indigo-700\">Product updates</p>\n          <h1 className=\"mt-2 text-3xl font-bold tracking-tight text-balance sm:text-4xl\">\n            What&apos;s new in Fieldnote\n          </h1>\n          <p className=\"mt-4 text-base leading-relaxed text-slate-600\">\n            We ship improvements every two weeks. Tried something recently?\n            Tell us how it went using the feedback button in the corner — every\n            message is read by the product team.\n          </p>\n        </section>\n\n        <section\n          id=\"releases\"\n          aria-labelledby=\"releases-heading\"\n          className=\"mt-12\"\n        >\n          <h2 id=\"releases-heading\" className=\"text-lg font-semibold\">\n            Recent releases\n          </h2>\n          <ul className=\"mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3\">\n            {RECENT_RELEASES.map((release) => (\n              <li\n                key={release.version}\n                className=\"rounded-xl border border-slate-200 bg-white p-5 shadow-sm\"\n              >\n                <div className=\"flex items-center justify-between text-xs text-slate-500\">\n                  <span className=\"rounded-full bg-indigo-50 px-2 py-0.5 font-medium text-indigo-700\">\n                    v{release.version}\n                  </span>\n                  <span>{release.date}</span>\n                </div>\n                <h3 className=\"mt-3 font-semibold\">{release.title}</h3>\n                <p className=\"mt-1 text-sm leading-relaxed text-slate-600\">\n                  {release.body}\n                </p>\n              </li>\n            ))}\n          </ul>\n        </section>\n      </main>\n\n      {/* Floating trigger */}\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        onClick={openDialog}\n        className=\"fixed right-4 bottom-4 z-30 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-600/30 transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:right-6 sm:bottom-6\"\n      >\n        <MessageSquare className=\"size-5\" aria-hidden=\"true\" />\n        Feedback\n      </button>\n\n      {/* Dialog */}\n      <dialog\n        ref={dialogRef}\n        aria-labelledby={titleId}\n        aria-describedby={descId}\n        onClick={handleBackdropClick}\n        className=\"m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl bg-white p-0 text-slate-900 shadow-2xl backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm\"\n      >\n        <form onSubmit={handleSubmit} noValidate className=\"p-5 sm:p-6\">\n          <div className=\"flex items-start justify-between gap-4\">\n            <div>\n              <h2 id={titleId} className=\"text-lg font-semibold\">\n                Send feedback\n              </h2>\n              <p id={descId} className=\"mt-1 text-sm text-slate-600\">\n                How is Fieldnote working for you?\n              </p>\n            </div>\n            <button\n              type=\"button\"\n              onClick={closeDialog}\n              aria-label=\"Close feedback dialog\"\n              className=\"-m-1 rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            >\n              <X className=\"size-5\" aria-hidden=\"true\" />\n            </button>\n          </div>\n\n          <div className=\"mt-5\">\n            <span\n              id={ratingLabelId}\n              className=\"text-sm font-medium text-slate-800\"\n            >\n              Your rating\n            </span>\n            <div\n              role=\"radiogroup\"\n              aria-labelledby={ratingLabelId}\n              aria-required=\"true\"\n              aria-describedby={error ? errorId : undefined}\n              onKeyDown={handleRatingKeyDown}\n              className=\"mt-2 grid grid-cols-5 gap-2\"\n            >\n              {RATINGS.map(({ value, label, Icon }) => {\n                const selected = rating === value;\n                return (\n                  <button\n                    key={value}\n                    type=\"button\"\n                    role=\"radio\"\n                    aria-checked={selected}\n                    aria-label={`${value} – ${label}`}\n                    tabIndex={\n                      selected || (rating === null && value === 1) ? 0 : -1\n                    }\n                    onClick={() => {\n                      setRating(value);\n                      setError(null);\n                    }}\n                    className={`flex flex-col items-center gap-1 rounded-xl border px-1 py-2.5 text-xs font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${\n                      selected\n                        ? \"border-indigo-600 bg-indigo-600 text-white\"\n                        : \"border-slate-300 bg-white text-slate-700 hover:border-indigo-400 hover:bg-indigo-50\"\n                    }`}\n                  >\n                    <Icon className=\"size-5\" aria-hidden=\"true\" />\n                    <span aria-hidden=\"true\">{value}</span>\n                  </button>\n                );\n              })}\n            </div>\n            <p\n              className=\"mt-2 h-5 text-sm text-slate-600\"\n              aria-live=\"polite\"\n            >\n              {rating !== null\n                ? RATINGS.find((r) => r.value === rating)?.label\n                : \"\"}\n            </p>\n            {error && (\n              <p\n                id={errorId}\n                role=\"alert\"\n                className=\"mt-1 flex items-center gap-1.5 text-sm text-red-700\"\n              >\n                <AlertCircle className=\"size-4 shrink-0\" aria-hidden=\"true\" />\n                {error}\n              </p>\n            )}\n          </div>\n\n          <div className=\"mt-4\">\n            <label\n              htmlFor={messageId}\n              className=\"text-sm font-medium text-slate-800\"\n            >\n              Anything you&apos;d like to add?{\" \"}\n              <span className=\"font-normal text-slate-500\">(optional)</span>\n            </label>\n            <textarea\n              id={messageId}\n              ref={textareaRef}\n              value={message}\n              maxLength={MAX_LENGTH}\n              rows={4}\n              onChange={(e) => setMessage(e.target.value)}\n              aria-describedby={countId}\n              placeholder=\"e.g. The new project switcher is great, but I can't find archived boards.\"\n              className=\"mt-2 w-full resize-y rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus-visible:border-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            />\n            <p\n              id={countId}\n              className=\"mt-1 text-right text-xs text-slate-500\"\n            >\n              {message.length}/{MAX_LENGTH}\n            </p>\n          </div>\n\n          <div className=\"mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\">\n            <button\n              type=\"button\"\n              onClick={closeDialog}\n              className=\"rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n            >\n              Cancel\n            </button>\n            <button\n              type=\"submit\"\n              className=\"rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n            >\n              Send feedback\n            </button>\n          </div>\n        </form>\n      </dialog>\n\n      {/* Toast live region (always mounted so announcements are reliable) */}\n      <div\n        role=\"status\"\n        aria-live=\"polite\"\n        className=\"pointer-events-none fixed inset-x-4 bottom-20 z-40 flex justify-center sm:inset-x-auto sm:right-6 sm:bottom-24\"\n      >\n        {toast && (\n          <div className=\"pointer-events-auto flex max-w-sm items-start gap-3 rounded-xl bg-slate-900 px-4 py-3 text-sm text-white shadow-xl\">\n            <CheckCircle2\n              className=\"mt-0.5 size-5 shrink-0 text-emerald-400\"\n              aria-hidden=\"true\"\n            />\n            <p className=\"flex-1\">{toast}</p>\n            <button\n              type=\"button\"\n              onClick={() => setToast(null)}\n              aria-label=\"Dismiss notification\"\n              className=\"-m-1 rounded p-1 text-slate-300 hover:text-white focus-visible:outline-2 focus-visible:outline-white\"\n            >\n              <X className=\"size-4\" aria-hidden=\"true\" />\n            </button>\n          </div>\n        )}\n      </div>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

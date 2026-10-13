@@ -1,0 +1,5346 @@
+{
+  "generated": "2026-10-13T13:19:36.402Z",
+  "tokenizer": "proxy (see lib.mjs)",
+  "once_ui": {
+    "version": "2.1.0-rc.0",
+    "tarball_sha256": "13399e658234f5f2824994c1ed1724e041095b7c7fe544cc72342e86b460d1fd"
+  },
+  "shadcn_commit": "c2a67849be260701852b0977ba15eb5f3a0ce2a4",
+  "arms": {
+    "once-harness": {
+      "files": 240,
+      "docs_bytes": 1016313,
+      "docs_tokens_o200k": 284735,
+      "project_bytes": 3195,
+      "project_tokens_o200k": 885,
+      "list": [
+        {
+          "path": "docs/AGENTS.md",
+          "bytes": 2229,
+          "sha256": "1c533ad30cc8cd1b45d73eb2369ed1c772501f52f8096c40c633e04f9abd731b",
+          "o200k": 582,
+          "claudeLegacy": 690
+        },
+        {
+          "path": "docs/ai/catalog.json",
+          "bytes": 39843,
+          "sha256": "99d7ddc63869bae76d033ab5062dfcbfc45b7ca5144d24ff9cf4b01222164b3b",
+          "o200k": 9452,
+          "claudeLegacy": 9271
+        },
+        {
+          "path": "docs/ai/catalog.seed.json",
+          "bytes": 35695,
+          "sha256": "10010771ed514864cb1a584c83b08946e0ec131e5d8fe5fe0ff46d5cb00f217d",
+          "o200k": 9526,
+          "claudeLegacy": 9690
+        },
+        {
+          "path": "docs/ai/components/Accordion.json",
+          "bytes": 5174,
+          "sha256": "2646067109ab1f5e0fa7af2c03f3845ba6743ac8679330b93793bb650033f5d8",
+          "o200k": 1557,
+          "claudeLegacy": 1588
+        },
+        {
+          "path": "docs/ai/components/AccordionGroup.json",
+          "bytes": 4831,
+          "sha256": "a2f51d27feadbd0a7ebc8766fdbc51e7e128cccd4f415712ae16c12c77c3daee",
+          "o200k": 1452,
+          "claudeLegacy": 1473
+        },
+        {
+          "path": "docs/ai/components/AdapterProvider.json",
+          "bytes": 161,
+          "sha256": "1e6a927fa01d979b3b650a6c59e0727df265d272bdb54fb1aaf0a64a3e81febc",
+          "o200k": 47,
+          "claudeLegacy": 55
+        },
+        {
+          "path": "docs/ai/components/Animation.json",
+          "bytes": 5381,
+          "sha256": "3a5c6bbe3d2cd5b11e6858642c324a21bb8676fbf8dcfd57713fb88cca79a9fc",
+          "o200k": 1619,
+          "claudeLegacy": 1634
+        },
+        {
+          "path": "docs/ai/components/Arrow.json",
+          "bytes": 4828,
+          "sha256": "8076020d9a4d8ca974f6618487301eb9f38717519eae3a9acf3231ead031f5e8",
+          "o200k": 1454,
+          "claudeLegacy": 1468
+        },
+        {
+          "path": "docs/ai/components/AutoScroll.json",
+          "bytes": 4931,
+          "sha256": "99597bfc54c90aad57f15726af98e9e21d1e174a6dfd528d923ba8c268c23a67",
+          "o200k": 1483,
+          "claudeLegacy": 1501
+        },
+        {
+          "path": "docs/ai/components/Avatar.json",
+          "bytes": 4977,
+          "sha256": "26c08766024ecf5452f05a2440c6f429bebe293229633d758cca5f85114e2a57",
+          "o200k": 1504,
+          "claudeLegacy": 1519
+        },
+        {
+          "path": "docs/ai/components/AvatarGroup.json",
+          "bytes": 4836,
+          "sha256": "5bc47ed3a9ed560d75de05fddfee2b83e30bcfa0214e4797b8d03e9f587b1458",
+          "o200k": 1456,
+          "claudeLegacy": 1472
+        },
+        {
+          "path": "docs/ai/components/Background.json",
+          "bytes": 4900,
+          "sha256": "7f60a18917c87b6daebaf3357b224b19bd4469fca58a1d92ce63bcfcaaabcb73",
+          "o200k": 1475,
+          "claudeLegacy": 1494
+        },
+        {
+          "path": "docs/ai/components/Badge.json",
+          "bytes": 4905,
+          "sha256": "fe23c960251b02453a14e34f3daf8897dff5ff7d4e7cb0b0e71f1aa7d4f90d62",
+          "o200k": 1478,
+          "claudeLegacy": 1497
+        },
+        {
+          "path": "docs/ai/components/Banner.json",
+          "bytes": 4653,
+          "sha256": "c6d347730ad9c3b30b6dedd5b7e7a2545f3ce9aab776b472bb8f6cdf18c975d8",
+          "o200k": 1400,
+          "claudeLegacy": 1413
+        },
+        {
+          "path": "docs/ai/components/BarChart.json",
+          "bytes": 5719,
+          "sha256": "97fbd926f02848d32a910393af05af16c6f0a10423afca8284c89626531d603f",
+          "o200k": 1734,
+          "claudeLegacy": 1767
+        },
+        {
+          "path": "docs/ai/components/BlobFx.json",
+          "bytes": 4692,
+          "sha256": "029c2ba4a30bd669dc6268a63293c71307a8037c7ae6dace699bcc0eab986c61",
+          "o200k": 1416,
+          "claudeLegacy": 1429
+        },
+        {
+          "path": "docs/ai/components/BlockQuote.json",
+          "bytes": 5050,
+          "sha256": "f45ccc023193d20ab84b08f4e066d710ed72123d3fa829a66c290b9e64d0fd08",
+          "o200k": 1519,
+          "claudeLegacy": 1545
+        },
+        {
+          "path": "docs/ai/components/Book.json",
+          "bytes": 4778,
+          "sha256": "9f8360ee7f746967c3baf80a10936d49f294b01460ff5cc3a47bbbd348064acb",
+          "o200k": 1440,
+          "claudeLegacy": 1457
+        },
+        {
+          "path": "docs/ai/components/Breadcrumbs.json",
+          "bytes": 4819,
+          "sha256": "46caab617d5d171be4d8d46dc36b1536a730882202852a0ba968cf896b26e7f8",
+          "o200k": 1449,
+          "claudeLegacy": 1468
+        },
+        {
+          "path": "docs/ai/components/Button.json",
+          "bytes": 937,
+          "sha256": "da3be4670821341549c678de156eeec7c4dac87b0d11c7cd1dae45cc6f3a6e20",
+          "o200k": 291,
+          "claudeLegacy": 302
+        },
+        {
+          "path": "docs/ai/components/Card.json",
+          "bytes": 4848,
+          "sha256": "c021d1a62aec8b9274223d1235316617fc218b71658f6295ad125a3373550f96",
+          "o200k": 1458,
+          "claudeLegacy": 1477
+        },
+        {
+          "path": "docs/ai/components/Carousel.json",
+          "bytes": 5263,
+          "sha256": "ac0c678ea981091da1ecdcbe0424651991e4c3901bac27de662e8be0d7123dc3",
+          "o200k": 1573,
+          "claudeLegacy": 1586
+        },
+        {
+          "path": "docs/ai/components/CelebrationFx.json",
+          "bytes": 5043,
+          "sha256": "344ffd92062aab6552d3002813364807612ce0ac2937a2b7b0c16f0991c2f8eb",
+          "o200k": 1518,
+          "claudeLegacy": 1538
+        },
+        {
+          "path": "docs/ai/components/ChartHeader.json",
+          "bytes": 4958,
+          "sha256": "74bdf05de30b45b89252829007ed61885ca856e5877807a62513d553fe113e29",
+          "o200k": 1491,
+          "claudeLegacy": 1516
+        },
+        {
+          "path": "docs/ai/components/ChartStatus.json",
+          "bytes": 367,
+          "sha256": "9f151a833e3ff5f567fe2aae710d2c2fce008191ee9eb8ff39ceb394966d5b67",
+          "o200k": 99,
+          "claudeLegacy": 115
+        },
+        {
+          "path": "docs/ai/components/Checkbox.json",
+          "bytes": 299,
+          "sha256": "b5f8b4cad68a03bb0aba5e034ae980ba1be5e5be1ffeded760c7f728ffcc507e",
+          "o200k": 85,
+          "claudeLegacy": 93
+        },
+        {
+          "path": "docs/ai/components/Chip.json",
+          "bytes": 4957,
+          "sha256": "85d92ee2e5c62a92addb395547054623ccdfce2f5bbe6e89e85556fefb3c3be9",
+          "o200k": 1489,
+          "claudeLegacy": 1506
+        },
+        {
+          "path": "docs/ai/components/CodeBlock.json",
+          "bytes": 5380,
+          "sha256": "84b13a9bf0b280a23b10e05f47ae9ca388ebe54ff610ab8dd671887e7a8baa04",
+          "o200k": 1605,
+          "claudeLegacy": 1629
+        },
+        {
+          "path": "docs/ai/components/ColorInput.json",
+          "bytes": 243,
+          "sha256": "6a0fbe166e54145d44101b0f5c1ca980d85d37ed0d1dbac763f87d80ee829d65",
+          "o200k": 75,
+          "claudeLegacy": 82
+        },
+        {
+          "path": "docs/ai/components/Column.json",
+          "bytes": 4782,
+          "sha256": "40d65fce257fd55bd607de252c1ed01c1ddac13ea4b6bb7512849a52ea9af714",
+          "o200k": 1434,
+          "claudeLegacy": 1454
+        },
+        {
+          "path": "docs/ai/components/CompareImage.json",
+          "bytes": 4787,
+          "sha256": "df87ec3869bcdba6eeb8069c1ac247d912a1eb1b3ff9e2b8d733c1ff9514ab93",
+          "o200k": 1436,
+          "claudeLegacy": 1450
+        },
+        {
+          "path": "docs/ai/components/ContextMenu.json",
+          "bytes": 595,
+          "sha256": "ec1d2d7c7d7d8e776cf589b9117f79c8b6f5c9fe60b0634cf1f338f37d1aed5a",
+          "o200k": 177,
+          "claudeLegacy": 184
+        },
+        {
+          "path": "docs/ai/components/CountFx.json",
+          "bytes": 2657,
+          "sha256": "fcd11759b3569b7a330ff42f04cfb2fbfb302cb070e2ff93c14b54a4c0e15790",
+          "o200k": 820,
+          "claudeLegacy": 837
+        },
+        {
+          "path": "docs/ai/components/CountdownFx.json",
+          "bytes": 264,
+          "sha256": "021087957479732fe5f2916b93852088be4362362831912ff284833abbe11968",
+          "o200k": 94,
+          "claudeLegacy": 102
+        },
+        {
+          "path": "docs/ai/components/Cursor.json",
+          "bytes": 166,
+          "sha256": "17f7c5efc1877361ca3c0f79b1338e14c953c4e88dfa7c47875e22dc831ee6f5",
+          "o200k": 48,
+          "claudeLegacy": 60
+        },
+        {
+          "path": "docs/ai/components/CursorCard.json",
+          "bytes": 4816,
+          "sha256": "04f9ee185e1e4cbcf06bb6b9f4de7985b9b87a47a4bb1d4f176a26ca775f3c7a",
+          "o200k": 1445,
+          "claudeLegacy": 1463
+        },
+        {
+          "path": "docs/ai/components/DataTable.json",
+          "bytes": 5700,
+          "sha256": "415add5d11d8e67e0e01a7e8080f0dbeb08d80085d81414b0bd98a60e6a583dc",
+          "o200k": 1722,
+          "claudeLegacy": 1741
+        },
+        {
+          "path": "docs/ai/components/DataThemeProvider.json",
+          "bytes": 286,
+          "sha256": "d47ad267029ade59c5130649ad628ff164cdb48101f57a4c572cd77af29ed4e3",
+          "o200k": 89,
+          "claudeLegacy": 95
+        },
+        {
+          "path": "docs/ai/components/DataTooltip.json",
+          "bytes": 411,
+          "sha256": "d57be6359281604f64021d1af488dee1f7e5605cbefe9ba8ce7625e64f5b4efc",
+          "o200k": 123,
+          "claudeLegacy": 141
+        },
+        {
+          "path": "docs/ai/components/DateInput.json",
+          "bytes": 394,
+          "sha256": "d2e9ec38123ad882f04b23a00af87b6ef4d9f211a51ebd314c55847df5d3fc44",
+          "o200k": 127,
+          "claudeLegacy": 135
+        },
+        {
+          "path": "docs/ai/components/DatePicker.json",
+          "bytes": 5332,
+          "sha256": "3c21239c9649bb19f2af66f56bb2f66ed77592c8db7a979bd70d978ffd437e5e",
+          "o200k": 1611,
+          "claudeLegacy": 1626
+        },
+        {
+          "path": "docs/ai/components/DateRangeInput.json",
+          "bytes": 351,
+          "sha256": "ecdb1c4819dbd1dd07bd02b6417cefd38e452f1a88ced34e8774123446c748d5",
+          "o200k": 110,
+          "claudeLegacy": 118
+        },
+        {
+          "path": "docs/ai/components/DateRangePicker.json",
+          "bytes": 4863,
+          "sha256": "152e8ae375ec0473646e8f81233f81b8249884af4d21bcdf8171c6a210816ec9",
+          "o200k": 1470,
+          "claudeLegacy": 1485
+        },
+        {
+          "path": "docs/ai/components/Dialog.json",
+          "bytes": 5084,
+          "sha256": "d3fcc3a644b2e44504a8940c2b59ff008108f9935bb2b3c7fa26b843836e4983",
+          "o200k": 1531,
+          "claudeLegacy": 1549
+        },
+        {
+          "path": "docs/ai/components/DialogProvider.json",
+          "bytes": 120,
+          "sha256": "78879ab1a375c0d2fd5caceb663c12880fabfe3438d469a97cd3e7923055b6c0",
+          "o200k": 35,
+          "claudeLegacy": 43
+        },
+        {
+          "path": "docs/ai/components/Drawer.json",
+          "bytes": 5140,
+          "sha256": "2ccb837716979f0b96022f6c04469208bf65e3e9b48d5303161ef19775eddc2c",
+          "o200k": 1553,
+          "claudeLegacy": 1576
+        },
+        {
+          "path": "docs/ai/components/Dropdown.json",
+          "bytes": 4820,
+          "sha256": "01b52813c9cdcab4a152c3ac8487f0e94a3a7cf30dd5faa14d94359ad6cb00e8",
+          "o200k": 1448,
+          "claudeLegacy": 1464
+        },
+        {
+          "path": "docs/ai/components/DropdownWrapper.json",
+          "bytes": 904,
+          "sha256": "6bccb3484f9453cdf860d7f0f2da41f2cc7054c8975e80524fda1e06b7e4e809",
+          "o200k": 254,
+          "claudeLegacy": 266
+        },
+        {
+          "path": "docs/ai/components/Effect.json",
+          "bytes": 5186,
+          "sha256": "328b301753f91404863e8f8321932edb3a8855ea0ecb943818069445c7a8f010",
+          "o200k": 1545,
+          "claudeLegacy": 1577
+        },
+        {
+          "path": "docs/ai/components/EmojiPicker.json",
+          "bytes": 4867,
+          "sha256": "e4a14e65c004da4ef39feef481261524e381452633744c022e6a82e7d50eef09",
+          "o200k": 1465,
+          "claudeLegacy": 1483
+        },
+        {
+          "path": "docs/ai/components/EmojiPickerDropdown.json",
+          "bytes": 256,
+          "sha256": "311c9603455bbebbb4f8d49f33247b49478f6c549958d2b09cc802ec7a9f9820",
+          "o200k": 76,
+          "claudeLegacy": 85
+        },
+        {
+          "path": "docs/ai/components/Fade.json",
+          "bytes": 4958,
+          "sha256": "ea4b30fbebf01cacc5e0712c1a62a8de1cf9d85aa54fa980739ad78cbf5876f6",
+          "o200k": 1499,
+          "claudeLegacy": 1514
+        },
+        {
+          "path": "docs/ai/components/FadingLettersFx.json",
+          "bytes": 2452,
+          "sha256": "901f8ce462c6c6dba64b52dfea1c1809271b276cfee88b60bc12506d13e0f158",
+          "o200k": 754,
+          "claudeLegacy": 764
+        },
+        {
+          "path": "docs/ai/components/Feedback.json",
+          "bytes": 4989,
+          "sha256": "68fe091d48c46a9ea403b30201f598dd6ac9fedfa03b7c9c1cd96e4d8c1476ca",
+          "o200k": 1500,
+          "claudeLegacy": 1517
+        },
+        {
+          "path": "docs/ai/components/Flex.json",
+          "bytes": 4782,
+          "sha256": "e0eaf5d07a55e6d571caf5618a012c69dd8c4d3e305e02d3e635264f3c461be3",
+          "o200k": 1437,
+          "claudeLegacy": 1454
+        },
+        {
+          "path": "docs/ai/components/FlipFx.json",
+          "bytes": 4984,
+          "sha256": "f7c79292c5a03772544041e3a3cea1b4e6b2649b821363c22d64505ba097a39f",
+          "o200k": 1498,
+          "claudeLegacy": 1516
+        },
+        {
+          "path": "docs/ai/components/FocusTrap.json",
+          "bytes": 450,
+          "sha256": "f95df7c7168093fcb9cfb19b37ed598b13189dbe18c27bc91b1f68fdfd0ffb49",
+          "o200k": 129,
+          "claudeLegacy": 142
+        },
+        {
+          "path": "docs/ai/components/Form.json",
+          "bytes": 377,
+          "sha256": "6b4eb64b4bafb67217fd231e712bc64d32d3735a2ab55868689284d9431a9d80",
+          "o200k": 117,
+          "claudeLegacy": 127
+        },
+        {
+          "path": "docs/ai/components/GlitchFx.json",
+          "bytes": 4879,
+          "sha256": "09c8e39db1b2b082ca025570767c9714c9912d016c9eb918abf654dac588ef23",
+          "o200k": 1468,
+          "claudeLegacy": 1483
+        },
+        {
+          "path": "docs/ai/components/Grid.json",
+          "bytes": 4530,
+          "sha256": "5edb5b1707f4ba5f25c11876e90192c8513a67a124e079b8e862fb5f2c06fbb0",
+          "o200k": 1359,
+          "claudeLegacy": 1376
+        },
+        {
+          "path": "docs/ai/components/Heading.json",
+          "bytes": 2378,
+          "sha256": "8e62c88cb8ea59192ef323442a6599c1c83fa67575920052a5451686a930a107",
+          "o200k": 730,
+          "claudeLegacy": 740
+        },
+        {
+          "path": "docs/ai/components/HeadingLink.json",
+          "bytes": 4812,
+          "sha256": "5999978dd47502bdf4d0cd4d21a6505b107f589e5b326c4dce760c8bf84c95fa",
+          "o200k": 1462,
+          "claudeLegacy": 1481
+        },
+        {
+          "path": "docs/ai/components/HeadingNav.json",
+          "bytes": 4690,
+          "sha256": "ead93cee6522870a93f01a9a7b8abc77b0b0361932570cb16b635e39d9d37d6a",
+          "o200k": 1411,
+          "claudeLegacy": 1425
+        },
+        {
+          "path": "docs/ai/components/HoloFx.json",
+          "bytes": 5109,
+          "sha256": "5846ce4de4a10afec1d02cb11fa019fb4ef3681e9c05f3dc475ef5af819f7cd5",
+          "o200k": 1524,
+          "claudeLegacy": 1540
+        },
+        {
+          "path": "docs/ai/components/Hover.json",
+          "bytes": 4898,
+          "sha256": "0f11d96123e78efba2bce11bbfae8eb19896fc952014536ae11c5f7650a9abd8",
+          "o200k": 1474,
+          "claudeLegacy": 1488
+        },
+        {
+          "path": "docs/ai/components/HoverCard.json",
+          "bytes": 4662,
+          "sha256": "b67cf8ad4d048233407c55f6dc0c1697b7076f5d7d150ad66564691094828dce",
+          "o200k": 1401,
+          "claudeLegacy": 1413
+        },
+        {
+          "path": "docs/ai/components/Icon.json",
+          "bytes": 5003,
+          "sha256": "9dd582848189e99822b74f664d66d0a813c8e3c9b851b93c5591c90e3c206ebe",
+          "o200k": 1507,
+          "claudeLegacy": 1525
+        },
+        {
+          "path": "docs/ai/components/IconButton.json",
+          "bytes": 837,
+          "sha256": "0bd861f2110c084bc8fe374bf63115155fe20e0b3e086c0c1788fe8b6570462d",
+          "o200k": 262,
+          "claudeLegacy": 274
+        },
+        {
+          "path": "docs/ai/components/IconProvider.json",
+          "bytes": 183,
+          "sha256": "90128ccb8920721f356764c66a462f7b08f7641a57d79d8630ae72f662f2c071",
+          "o200k": 52,
+          "claudeLegacy": 61
+        },
+        {
+          "path": "docs/ai/components/InfiniteScroll.json",
+          "bytes": 4882,
+          "sha256": "4c0687efd0a2464fd43d32b53cc6d42404e2387701fe097751671f8858c161f0",
+          "o200k": 1471,
+          "claudeLegacy": 1485
+        },
+        {
+          "path": "docs/ai/components/InfoTip.json",
+          "bytes": 4755,
+          "sha256": "9a93aed55efb06cb2386aa55d5b440f107ae8319d993dea56ea46400539a2333",
+          "o200k": 1428,
+          "claudeLegacy": 1449
+        },
+        {
+          "path": "docs/ai/components/InlineCode.json",
+          "bytes": 4750,
+          "sha256": "e6e733e4bd85a8aa6c52561876e5f2ca198eaa1bc1ec3977848518126e8c3887",
+          "o200k": 1427,
+          "claudeLegacy": 1443
+        },
+        {
+          "path": "docs/ai/components/Input.json",
+          "bytes": 774,
+          "sha256": "ab0615ca1281080b7d1bb889538f77ead24cdf3038315f82bc8868969630787f",
+          "o200k": 235,
+          "claudeLegacy": 248
+        },
+        {
+          "path": "docs/ai/components/InteractiveDetails.json",
+          "bytes": 344,
+          "sha256": "c01f00f45949a1b4971f4772d5846930333d2b4d3c118ab78a31e9c33e801c8d",
+          "o200k": 103,
+          "claudeLegacy": 113
+        },
+        {
+          "path": "docs/ai/components/Kbar.json",
+          "bytes": 163,
+          "sha256": "d0d41ee7cf316967826b0922e8d1acb9cd52185bc46ab447ec949c027d06a43b",
+          "o200k": 56,
+          "claudeLegacy": 64
+        },
+        {
+          "path": "docs/ai/components/Kbd.json",
+          "bytes": 4763,
+          "sha256": "b7e238ced31a2ace317a56523d4d4a2b61050de31a1ed316329f2ff2a0b71e59",
+          "o200k": 1434,
+          "claudeLegacy": 1450
+        },
+        {
+          "path": "docs/ai/components/KeyTip.json",
+          "bytes": 4724,
+          "sha256": "32e6b41b7408fa14a0df82e9d36088b8e7d4da52bd19eb27b6961a4a807e94bd",
+          "o200k": 1421,
+          "claudeLegacy": 1436
+        },
+        {
+          "path": "docs/ai/components/LayoutProvider.json",
+          "bytes": 152,
+          "sha256": "5fa6ef53732d29bb0d78e91ba406349e0691db8aadd94eeb7d3c85c298fdb987",
+          "o200k": 46,
+          "claudeLegacy": 56
+        },
+        {
+          "path": "docs/ai/components/Legend.json",
+          "bytes": 469,
+          "sha256": "f663bd63303e1eeda3181b7870a843c22b9d39d9e0e173d796a7b6f93951e3ce",
+          "o200k": 143,
+          "claudeLegacy": 162
+        },
+        {
+          "path": "docs/ai/components/LetterFx.json",
+          "bytes": 376,
+          "sha256": "7a41eb51a3e8376a45303f8a91001db9ed5177cd7e50a153b82b98dcd21cda7f",
+          "o200k": 114,
+          "claudeLegacy": 121
+        },
+        {
+          "path": "docs/ai/components/Line.json",
+          "bytes": 4712,
+          "sha256": "d821ef85b8f951e0274c08777d85ae36b4a7bf63e842d101992b0d152b48f82b",
+          "o200k": 1417,
+          "claudeLegacy": 1433
+        },
+        {
+          "path": "docs/ai/components/LineBarChart.json",
+          "bytes": 5727,
+          "sha256": "9d1ce3bc82fa84e9bd0212474add572c04d70f3f8f781d0152f1c5342a5abfdb",
+          "o200k": 1736,
+          "claudeLegacy": 1769
+        },
+        {
+          "path": "docs/ai/components/LineChart.json",
+          "bytes": 5902,
+          "sha256": "9c20c51e2987182eb5feed410078ad18b69dd1eb76aa9cb286bf8c4356f38827",
+          "o200k": 1782,
+          "claudeLegacy": 1815
+        },
+        {
+          "path": "docs/ai/components/LinearGauge.json",
+          "bytes": 5013,
+          "sha256": "ccab9cb49d8c25c0e4307988e0b45d9983f690a3a5befa37c7835fbcda247eaa",
+          "o200k": 1511,
+          "claudeLegacy": 1527
+        },
+        {
+          "path": "docs/ai/components/LinearGradient.json",
+          "bytes": 311,
+          "sha256": "430128d5accbf91664bdffa14918b89b23630466a77a107cba040752427cba4b",
+          "o200k": 113,
+          "claudeLegacy": 118
+        },
+        {
+          "path": "docs/ai/components/List.json",
+          "bytes": 4802,
+          "sha256": "9c1d197de35516c7a701ffd5aefc22618506cdf11bf8212c55711d2274a7e4b2",
+          "o200k": 1448,
+          "claudeLegacy": 1466
+        },
+        {
+          "path": "docs/ai/components/ListItem.json",
+          "bytes": 2447,
+          "sha256": "700fcac80e881801a6f3634e056b21fabe6cde81e74a6d0d30f1ea7984ea723c",
+          "o200k": 751,
+          "claudeLegacy": 765
+        },
+        {
+          "path": "docs/ai/components/Logo.json",
+          "bytes": 326,
+          "sha256": "e851f976846814c0aee7190faa8132cd577e5e7ef4de34bbc29c19da65a25071",
+          "o200k": 106,
+          "claudeLegacy": 112
+        },
+        {
+          "path": "docs/ai/components/LogoCloud.json",
+          "bytes": 4574,
+          "sha256": "0e0cf743b3cceeca8a9045de5b77a7040c0b73be8b44828709302887b2fdd174",
+          "o200k": 1372,
+          "claudeLegacy": 1389
+        },
+        {
+          "path": "docs/ai/components/Mask.json",
+          "bytes": 4889,
+          "sha256": "59ba256dfb09e91eb646f3d15f37e11b08552eed8f225cf46f3789444f74fd64",
+          "o200k": 1475,
+          "claudeLegacy": 1491
+        },
+        {
+          "path": "docs/ai/components/MasonryGrid.json",
+          "bytes": 4955,
+          "sha256": "138e654dd1884522d50742ed89bde31f36d6fccad4a0d44948059703bfd7f3b4",
+          "o200k": 1495,
+          "claudeLegacy": 1516
+        },
+        {
+          "path": "docs/ai/components/MatrixFx.json",
+          "bytes": 5154,
+          "sha256": "8d7f043be44fceae8adf38cfb029b3f2242ad08ce37d1a048387bde9545b6c98",
+          "o200k": 1565,
+          "claudeLegacy": 1579
+        },
+        {
+          "path": "docs/ai/components/MdxBlockQuote.json",
+          "bytes": 400,
+          "sha256": "9309c7609dee9064d1c6a2072f677fc2e7b15426e4790882d1539d625260a8c4",
+          "o200k": 117,
+          "claudeLegacy": 127
+        },
+        {
+          "path": "docs/ai/components/MdxCodeBlock.json",
+          "bytes": 399,
+          "sha256": "9a801147da0df394e502b2895543708cc59b7e57efd50fcfb016a0562dd3f198",
+          "o200k": 117,
+          "claudeLegacy": 127
+        },
+        {
+          "path": "docs/ai/components/MdxHeading.json",
+          "bytes": 423,
+          "sha256": "3c79f3a2cc430c70c3223a4b368c02b2360d56f1c9c767468aaec6b11486c380",
+          "o200k": 126,
+          "claudeLegacy": 136
+        },
+        {
+          "path": "docs/ai/components/MdxHeadingAnchor.json",
+          "bytes": 145,
+          "sha256": "bad79c4ab1aa728c475c70ee6377d0cb81e47c5138edb2e5930b3574701418a0",
+          "o200k": 46,
+          "claudeLegacy": 56
+        },
+        {
+          "path": "docs/ai/components/MdxHr.json",
+          "bytes": 392,
+          "sha256": "56e21289064cda9cb94aa0fe9456ff283723417a5a0fda22c5c8a8e99e68712b",
+          "o200k": 116,
+          "claudeLegacy": 126
+        },
+        {
+          "path": "docs/ai/components/MdxImage.json",
+          "bytes": 395,
+          "sha256": "a3e1c7770a79d88d5362f1aa1711e2aad44fbc6729dfce95dd7715251617e332",
+          "o200k": 116,
+          "claudeLegacy": 126
+        },
+        {
+          "path": "docs/ai/components/MdxInlineCode.json",
+          "bytes": 400,
+          "sha256": "a6f92328fbdddaef4a8812a778d3037022f7757baf2ff36c360faa6fb1f1e466",
+          "o200k": 117,
+          "claudeLegacy": 127
+        },
+        {
+          "path": "docs/ai/components/MdxLink.json",
+          "bytes": 100,
+          "sha256": "3eeedc2bd368ed5f71723d596ac98c070e8f661b8ac22b83a1a34c3e84e7b487",
+          "o200k": 35,
+          "claudeLegacy": 43
+        },
+        {
+          "path": "docs/ai/components/MdxList.json",
+          "bytes": 421,
+          "sha256": "956e64d1d6504552e5bf655ba74e81982e53a34ecfe284e60ca85142c17b6533",
+          "o200k": 128,
+          "claudeLegacy": 138
+        },
+        {
+          "path": "docs/ai/components/MdxListItem.json",
+          "bytes": 398,
+          "sha256": "b0833d58b972c63f42863225ee9ca0faaa65d09226553a39d7f1a0ad647f94b8",
+          "o200k": 117,
+          "claudeLegacy": 126
+        },
+        {
+          "path": "docs/ai/components/MdxParagraph.json",
+          "bytes": 399,
+          "sha256": "ac9b936b5403e0e6c67bbd2ee86148ec8fc1da62643697be78193625d6c7ab81",
+          "o200k": 116,
+          "claudeLegacy": 126
+        },
+        {
+          "path": "docs/ai/components/MdxTable.json",
+          "bytes": 395,
+          "sha256": "f8b957ae54320f58b601e53e717a2ce7e40ac6a895ba97b3ef25d5a9dbebda16",
+          "o200k": 116,
+          "claudeLegacy": 126
+        },
+        {
+          "path": "docs/ai/components/Media.json",
+          "bytes": 5249,
+          "sha256": "ec570d1badb4e97a9df54b339729a3a9f4a66f75b75b4af6ace5a7900aadf059",
+          "o200k": 1580,
+          "claudeLegacy": 1595
+        },
+        {
+          "path": "docs/ai/components/MediaAudioPlayer.json",
+          "bytes": 4968,
+          "sha256": "cdffc5cec13d8a41ea97a9a04d13d8a2b708cc987d8e929c75544d8612faa37d",
+          "o200k": 1487,
+          "claudeLegacy": 1507
+        },
+        {
+          "path": "docs/ai/components/MediaUpload.json",
+          "bytes": 5380,
+          "sha256": "d477208b055b6583de920a762a8108876ad9e5ce8a276db81340e1b59023edd1",
+          "o200k": 1623,
+          "claudeLegacy": 1641
+        },
+        {
+          "path": "docs/ai/components/MediaVideoPlayer.json",
+          "bytes": 346,
+          "sha256": "c37134ea7f8e9798e115edf999e926fcfa738389cfe5a3d7997d4be2a525940c",
+          "o200k": 102,
+          "claudeLegacy": 112
+        },
+        {
+          "path": "docs/ai/components/MegaMenu.json",
+          "bytes": 4715,
+          "sha256": "dfac6f1a7e8e1090e433f925a331ed74e93f8111c25d90505ee7593dc4cf1481",
+          "o200k": 1420,
+          "claudeLegacy": 1434
+        },
+        {
+          "path": "docs/ai/components/Meta.json",
+          "bytes": 548,
+          "sha256": "472593549b286ebb59cb2abacd5c83bb2a4a8c8808dcb20c4ffc2bb24f0a26cb",
+          "o200k": 165,
+          "claudeLegacy": 177
+        },
+        {
+          "path": "docs/ai/components/MobileMegaMenu.json",
+          "bytes": 4723,
+          "sha256": "01adc1280918130673d57ae29ed7aad7d37bfdaef764e7577b82d750a9f1eaa8",
+          "o200k": 1422,
+          "claudeLegacy": 1438
+        },
+        {
+          "path": "docs/ai/components/Modal.json",
+          "bytes": 225,
+          "sha256": "80e6e446904e88be87da6e17316ab434784183f807b66b63039941a1c7561b88",
+          "o200k": 70,
+          "claudeLegacy": 84
+        },
+        {
+          "path": "docs/ai/components/NavGroup.json",
+          "bytes": 4854,
+          "sha256": "b5a79fddbceb851d69646cbd9b9d997638cc7e187939817ce5b46074c0e67992",
+          "o200k": 1461,
+          "claudeLegacy": 1478
+        },
+        {
+          "path": "docs/ai/components/NavIcon.json",
+          "bytes": 4769,
+          "sha256": "78f940228daf912e7f326ed0e5a45f037437c5a18cce339350b50d3a8c05048c",
+          "o200k": 1435,
+          "claudeLegacy": 1451
+        },
+        {
+          "path": "docs/ai/components/NavItem.json",
+          "bytes": 208,
+          "sha256": "841d65ee39e6ece4bdb87cf0035a9d0ebe25186c76a12429653dfd35b8458ebd",
+          "o200k": 66,
+          "claudeLegacy": 74
+        },
+        {
+          "path": "docs/ai/components/NextAdapterProvider.json",
+          "bytes": 163,
+          "sha256": "cfec9cb45496bcd0e5d6d9f86552c1c7a8bb225e68fd65425b430db6905d93d7",
+          "o200k": 48,
+          "claudeLegacy": 60
+        },
+        {
+          "path": "docs/ai/components/NumberInput.json",
+          "bytes": 259,
+          "sha256": "e684b1b348f2b69f5fe3a8564b5c6570715ee634a41874f70601c207f462eb12",
+          "o200k": 87,
+          "claudeLegacy": 93
+        },
+        {
+          "path": "docs/ai/components/OTPInput.json",
+          "bytes": 282,
+          "sha256": "d669c281279474b6de09a53dc0ffe1e0a9d99a483a42e93ab033e10e099a5505",
+          "o200k": 87,
+          "claudeLegacy": 94
+        },
+        {
+          "path": "docs/ai/components/OgCard.json",
+          "bytes": 5123,
+          "sha256": "6c6ec58fd1e23009efca059945449d2998e188febd6e1e7f232003fd968f3b55",
+          "o200k": 1548,
+          "claudeLegacy": 1562
+        },
+        {
+          "path": "docs/ai/components/OgRoutesProvider.json",
+          "bytes": 148,
+          "sha256": "6b185619fab2e039fde7eb6b397122053ce5758feb20bdfb866549d773cd7ab1",
+          "o200k": 45,
+          "claudeLegacy": 51
+        },
+        {
+          "path": "docs/ai/components/Option.json",
+          "bytes": 5066,
+          "sha256": "090d01c14a20ef3a2824de2b5453c6af74d949f623ee87b9f6168006824ea50e",
+          "o200k": 1522,
+          "claudeLegacy": 1551
+        },
+        {
+          "path": "docs/ai/components/Pagination.json",
+          "bytes": 5171,
+          "sha256": "9bbbd563db7f806152d1aaf4c8bce1f1338e27e0f0a0f8faeb2ce7d40bf31ea0",
+          "o200k": 1569,
+          "claudeLegacy": 1580
+        },
+        {
+          "path": "docs/ai/components/ParticleFx.json",
+          "bytes": 5100,
+          "sha256": "00c9b1ba14eccca6d29d68e003d00fd413da486ae8fa4cc3bc1a5da946b65624",
+          "o200k": 1541,
+          "claudeLegacy": 1556
+        },
+        {
+          "path": "docs/ai/components/PasswordInput.json",
+          "bytes": 98,
+          "sha256": "c83dac12bc27204de16cf9142d81cc4e80294892ed1c77812fd5ac2deb072771",
+          "o200k": 30,
+          "claudeLegacy": 34
+        },
+        {
+          "path": "docs/ai/components/PieChart.json",
+          "bytes": 5675,
+          "sha256": "b86145740b7b5795a792cb9495b62cfd77f96b259838c8cdf14f67effca764ae",
+          "o200k": 1723,
+          "claudeLegacy": 1752
+        },
+        {
+          "path": "docs/ai/components/ProgressBar.json",
+          "bytes": 4960,
+          "sha256": "a1ee1f5bbfd14e5981a13906242ab32a95163f3149d6f99c7624457ffde5d939",
+          "o200k": 1496,
+          "claudeLegacy": 1509
+        },
+        {
+          "path": "docs/ai/components/Pulse.json",
+          "bytes": 4851,
+          "sha256": "f234e4320f6537077e529e1ddac90c0ab3c21b0d52d544ca7998480fe1575f40",
+          "o200k": 1460,
+          "claudeLegacy": 1477
+        },
+        {
+          "path": "docs/ai/components/RadialGauge.json",
+          "bytes": 5159,
+          "sha256": "ebf86ac62348f3ab99f91fb2bcb3aab529688ca5773fb5dec4f0a6fb8ab183f5",
+          "o200k": 1567,
+          "claudeLegacy": 1586
+        },
+        {
+          "path": "docs/ai/components/RadialGradient.json",
+          "bytes": 342,
+          "sha256": "f93e37ee6cfe151a5d4d8449876ea06f10b35450e16ec1cba3f1aa9a27b2249e",
+          "o200k": 120,
+          "claudeLegacy": 124
+        },
+        {
+          "path": "docs/ai/components/RadioButton.json",
+          "bytes": 389,
+          "sha256": "ae5d5909fe9ce870617a9387f1d96340e4f771469baa32a7f02408f85332b752",
+          "o200k": 114,
+          "claudeLegacy": 121
+        },
+        {
+          "path": "docs/ai/components/RadioGroup.json",
+          "bytes": 4983,
+          "sha256": "92d204530ed6e95df5e9fed71b265f39b3d8ad79009b3696135929df62f83c75",
+          "o200k": 1494,
+          "claudeLegacy": 1511
+        },
+        {
+          "path": "docs/ai/components/RangeSlider.json",
+          "bytes": 5135,
+          "sha256": "87d05229bd47234a3bc9a07c5c80c4acb5cc33f5be6a3e8b3687fba30fa0b5e7",
+          "o200k": 1550,
+          "claudeLegacy": 1561
+        },
+        {
+          "path": "docs/ai/components/RevealFx.json",
+          "bytes": 4952,
+          "sha256": "511fb16066b3a84f481b1fb9383b3015366f2be86322ff2e71e2c9227330ed73",
+          "o200k": 1490,
+          "claudeLegacy": 1509
+        },
+        {
+          "path": "docs/ai/components/Row.json",
+          "bytes": 4773,
+          "sha256": "bb280da77e6022b122f4bfe8dfcb69c122fca976b94495d6e9ff8c1e02aabc7c",
+          "o200k": 1434,
+          "claudeLegacy": 1454
+        },
+        {
+          "path": "docs/ai/components/Schema.json",
+          "bytes": 447,
+          "sha256": "6516330328a3239848311e53f2d23e5502d66b4f572db43f1d909da00ce6a5ae",
+          "o200k": 139,
+          "claudeLegacy": 145
+        },
+        {
+          "path": "docs/ai/components/ScrollContainer.json",
+          "bytes": 5065,
+          "sha256": "1372ed79813e5b34d5ce5c389abaa6d1088787eb27b46c8e8f58014a4396e25d",
+          "o200k": 1519,
+          "claudeLegacy": 1536
+        },
+        {
+          "path": "docs/ai/components/ScrollLock.json",
+          "bytes": 166,
+          "sha256": "8ed650c78065b310a71067e9437ada2b42cc78e847421fd82d6e8eb97df3eab8",
+          "o200k": 48,
+          "claudeLegacy": 55
+        },
+        {
+          "path": "docs/ai/components/ScrollToTop.json",
+          "bytes": 4692,
+          "sha256": "e734c06a136788ef22f1a25ca0b647e75658dbc679c309163a9c66a322decb66",
+          "o200k": 1413,
+          "claudeLegacy": 1426
+        },
+        {
+          "path": "docs/ai/components/Scroller.json",
+          "bytes": 4881,
+          "sha256": "47f5f388b37dea6d2285b366ef74d0dddb945f0a2c29ff983170be7cdbd392aa",
+          "o200k": 1465,
+          "claudeLegacy": 1484
+        },
+        {
+          "path": "docs/ai/components/Scrubber.json",
+          "bytes": 5253,
+          "sha256": "f6c13c7dd0cdd0fecfe41afb86d5dc837a3b58fc0229cad8650b66c3279dfb85",
+          "o200k": 1581,
+          "claudeLegacy": 1600
+        },
+        {
+          "path": "docs/ai/components/SegmentedControl.json",
+          "bytes": 4975,
+          "sha256": "68a0f2e3afffe6ea08580238fd1d3138f5d3fc47ae7ed47d4fca9e95c1f73ebc",
+          "o200k": 1490,
+          "claudeLegacy": 1508
+        },
+        {
+          "path": "docs/ai/components/Select.json",
+          "bytes": 484,
+          "sha256": "2e9c562453636be1302cc740c8c4fadaec2a79d66c96807f091ea4a6a59db812",
+          "o200k": 142,
+          "claudeLegacy": 151
+        },
+        {
+          "path": "docs/ai/components/Setting.json",
+          "bytes": 4821,
+          "sha256": "6fcdad5a573ccb21fa5dccd6448eafbe72dbe36a777357ca288da4e09fd6ae31",
+          "o200k": 1448,
+          "claudeLegacy": 1473
+        },
+        {
+          "path": "docs/ai/components/SettingAxes.json",
+          "bytes": 4822,
+          "sha256": "06278d54fe4627408320d4b2770ca6161ba0742211b82dd9d4e6d45d98bda7d7",
+          "o200k": 1451,
+          "claudeLegacy": 1474
+        },
+        {
+          "path": "docs/ai/components/SettingGroup.json",
+          "bytes": 4846,
+          "sha256": "96bbfc894bee50b3eb1dea97f8c7bc2f9f538e95af6c0e88392547d989477293",
+          "o200k": 1454,
+          "claudeLegacy": 1483
+        },
+        {
+          "path": "docs/ai/components/ShineFx.json",
+          "bytes": 2561,
+          "sha256": "c33c66628e98ea582ace7ec1dfac00556d5c040e2dbde8faec33a088109f327d",
+          "o200k": 792,
+          "claudeLegacy": 802
+        },
+        {
+          "path": "docs/ai/components/Skeleton.json",
+          "bytes": 4854,
+          "sha256": "4e76b422abd1c3bcb1c4b8c46e8e576c08c2bf6590ff1140c5577b1078212903",
+          "o200k": 1470,
+          "claudeLegacy": 1486
+        },
+        {
+          "path": "docs/ai/components/Slider.json",
+          "bytes": 387,
+          "sha256": "65e550cca57514582328d5faccef173d56b6da0cbad0a4661a5d1d40081aca30",
+          "o200k": 126,
+          "claudeLegacy": 129
+        },
+        {
+          "path": "docs/ai/components/SmartLink.json",
+          "bytes": 370,
+          "sha256": "6638941f80b5b102125d965694ad5d1ecfe960ba7acc9275fb17383cef0d9aee",
+          "o200k": 115,
+          "claudeLegacy": 124
+        },
+        {
+          "path": "docs/ai/components/Spinner.json",
+          "bytes": 4783,
+          "sha256": "fe15b4a5c5275ea18b9c19767c91a1bcb1381a2b9e94acc7e3bf282ff9f5bc31",
+          "o200k": 1440,
+          "claudeLegacy": 1456
+        },
+        {
+          "path": "docs/ai/components/SplitView.json",
+          "bytes": 4919,
+          "sha256": "d6238a920866ba5f1bab307b7928d34de036a8dd88b3991a966e1b11c3727d3e",
+          "o200k": 1490,
+          "claudeLegacy": 1504
+        },
+        {
+          "path": "docs/ai/components/StatusIndicator.json",
+          "bytes": 5008,
+          "sha256": "eed832bd55b5a378f8eec1f6a8d1414e5b24dcfe20b73bd8e35993258d1a6da7",
+          "o200k": 1517,
+          "claudeLegacy": 1531
+        },
+        {
+          "path": "docs/ai/components/StyleOverlay.json",
+          "bytes": 4816,
+          "sha256": "0d267158ac2fd07520dc4a65c0c0706e09fc9d5d80ad17b97501fc4aee3b2690",
+          "o200k": 1445,
+          "claudeLegacy": 1465
+        },
+        {
+          "path": "docs/ai/components/StylePanel.json",
+          "bytes": 4896,
+          "sha256": "b6fc8916ff75f5e1280f1036713625ea2de85ceb30fc0481d487bb0a0086e9cd",
+          "o200k": 1470,
+          "claudeLegacy": 1485
+        },
+        {
+          "path": "docs/ai/components/Swatch.json",
+          "bytes": 198,
+          "sha256": "34fcbb5d41297e7f8ad6de3723c3c138ece3367694cb7714a03a47117273caf0",
+          "o200k": 66,
+          "claudeLegacy": 76
+        },
+        {
+          "path": "docs/ai/components/Swiper.json",
+          "bytes": 4940,
+          "sha256": "96d89042345269b907ee9b908c2dc5bd1e3707845f908405d0e0b5820af99924",
+          "o200k": 1485,
+          "claudeLegacy": 1499
+        },
+        {
+          "path": "docs/ai/components/Switch.json",
+          "bytes": 456,
+          "sha256": "69f60fc563fcd07863ef49f77174b17b0db9ef39a510646e70381fdd897b98d9",
+          "o200k": 132,
+          "claudeLegacy": 140
+        },
+        {
+          "path": "docs/ai/components/Tab.json",
+          "bytes": 192,
+          "sha256": "8ca22f89b222597143b09a513a2ba59782cd2298100befa0189e9bcd10247f33",
+          "o200k": 59,
+          "claudeLegacy": 67
+        },
+        {
+          "path": "docs/ai/components/TabList.json",
+          "bytes": 4687,
+          "sha256": "6b95ba49cb8dfe4339b9eecf94fd61d54e667ac0cff602fd09ebfadc93c8438b",
+          "o200k": 1410,
+          "claudeLegacy": 1425
+        },
+        {
+          "path": "docs/ai/components/TabPanel.json",
+          "bytes": 4746,
+          "sha256": "8e9ddbeefd97b25cdc6f45b66484fb9c31ca5bc6159128d8febba01209fc2ff5",
+          "o200k": 1427,
+          "claudeLegacy": 1443
+        },
+        {
+          "path": "docs/ai/components/Table.json",
+          "bytes": 5344,
+          "sha256": "739f26e15ae8430e1d85ea6c2c0296647ebb492ddc77dda712b0831380825061",
+          "o200k": 1610,
+          "claudeLegacy": 1619
+        },
+        {
+          "path": "docs/ai/components/Tabs.json",
+          "bytes": 4895,
+          "sha256": "efb6e4f77d95062e8219b413c5686cceec41df89d4631653c978954cbdbe3eb9",
+          "o200k": 1465,
+          "claudeLegacy": 1480
+        },
+        {
+          "path": "docs/ai/components/Tag.json",
+          "bytes": 4857,
+          "sha256": "235e4a1431a443c7bc6d079d2e4815851a0330b4ebec8f1937d43aaff0e16ed5",
+          "o200k": 1465,
+          "claudeLegacy": 1481
+        },
+        {
+          "path": "docs/ai/components/TagInput.json",
+          "bytes": 213,
+          "sha256": "bf553236cb018c71e3960314f8cd5e3c82218e17f26968b5f975ea8901131f33",
+          "o200k": 66,
+          "claudeLegacy": 73
+        },
+        {
+          "path": "docs/ai/components/Text.json",
+          "bytes": 2309,
+          "sha256": "442c9254a55e716870ffb8d807224318744e25602eb6afef06b948a7044ac02a",
+          "o200k": 710,
+          "claudeLegacy": 717
+        },
+        {
+          "path": "docs/ai/components/Textarea.json",
+          "bytes": 818,
+          "sha256": "17e7803e2086008dda3db9f091b6ba047403a62341ae1f94f917a18ee8516c25",
+          "o200k": 250,
+          "claudeLegacy": 261
+        },
+        {
+          "path": "docs/ai/components/ThemeInit.json",
+          "bytes": 152,
+          "sha256": "20c6c5752d39baac5ea465a8dba4ebac42ac2967780796e5ebd6ad822e7f834c",
+          "o200k": 47,
+          "claudeLegacy": 52
+        },
+        {
+          "path": "docs/ai/components/ThemeProvider.json",
+          "bytes": 766,
+          "sha256": "c945cb3dd1e9d43fe64406a3deb86889ef3c04db4089e5da604c61b24de95dc3",
+          "o200k": 224,
+          "claudeLegacy": 229
+        },
+        {
+          "path": "docs/ai/components/ThemeSwitcher.json",
+          "bytes": 4841,
+          "sha256": "c2b23c3621e42c380ed83de18db89d32d397c994c31585329cc6c05e74c0cfc6",
+          "o200k": 1456,
+          "claudeLegacy": 1473
+        },
+        {
+          "path": "docs/ai/components/TiltFx.json",
+          "bytes": 4770,
+          "sha256": "fd652f092b6b86fd060a8f6f078a96c009c949ee0cc47de8a27e1517de92648a",
+          "o200k": 1437,
+          "claudeLegacy": 1452
+        },
+        {
+          "path": "docs/ai/components/Timeline.json",
+          "bytes": 4766,
+          "sha256": "b8c32d7d90f4fac49f149229cc49afc6087787ed5c630669c39f22e1b7f10eeb",
+          "o200k": 1436,
+          "claudeLegacy": 1450
+        },
+        {
+          "path": "docs/ai/components/Toast.json",
+          "bytes": 324,
+          "sha256": "5d47227de4daa3a22dade6e38cd605b3763c984eda19f94c16812a5469a1ecd6",
+          "o200k": 102,
+          "claudeLegacy": 112
+        },
+        {
+          "path": "docs/ai/components/ToastProvider.json",
+          "bytes": 233,
+          "sha256": "6c93bee567121524bd9359e391699d5451d231c4ecce20a8996432e89b3e868d",
+          "o200k": 74,
+          "claudeLegacy": 86
+        },
+        {
+          "path": "docs/ai/components/Toaster.json",
+          "bytes": 408,
+          "sha256": "9e0e5fd8fa2ec9cd7aaaca13b9879658f72f66df73bfa0e43cb1f3fac55c80f0",
+          "o200k": 128,
+          "claudeLegacy": 143
+        },
+        {
+          "path": "docs/ai/components/ToggleButton.json",
+          "bytes": 815,
+          "sha256": "cba1bdd24fe5a21693be8dd564154fb8c2bf4942306aaba57719abae569c6cfb",
+          "o200k": 250,
+          "claudeLegacy": 261
+        },
+        {
+          "path": "docs/ai/components/Tooltip.json",
+          "bytes": 4809,
+          "sha256": "ba09d498023e545e954c8b898f85a4a51c6e378d9449ab14c18ac9716897cfa0",
+          "o200k": 1448,
+          "claudeLegacy": 1465
+        },
+        {
+          "path": "docs/ai/components/TypeFx.json",
+          "bytes": 352,
+          "sha256": "0a96f0a5badba37b7acdefdff48b397be22ba6dee696158c2b2a1f9a8474d8a0",
+          "o200k": 115,
+          "claudeLegacy": 119
+        },
+        {
+          "path": "docs/ai/components/User.json",
+          "bytes": 305,
+          "sha256": "18f2716d7d689b3ff4df7bca4e65f67874391154accfc88c6b141e3122f9cc07",
+          "o200k": 97,
+          "claudeLegacy": 107
+        },
+        {
+          "path": "docs/ai/components/UserMenu.json",
+          "bytes": 281,
+          "sha256": "f09ff75546e4cc052dc25e6a20886500680b73d5091aeabb481399e0e4d93acd",
+          "o200k": 82,
+          "claudeLegacy": 93
+        },
+        {
+          "path": "docs/ai/components/VisuallyHidden.json",
+          "bytes": 242,
+          "sha256": "e77c9385bd7804b2a08eaee1a3f0fac58c67ab052ffb61f256587d1cb2dfe0c0",
+          "o200k": 73,
+          "claudeLegacy": 81
+        },
+        {
+          "path": "docs/ai/components/WeatherFx.json",
+          "bytes": 5032,
+          "sha256": "a152256f90213b3cc21c39c86ab460406b811edae4e5254f93ccb0ca157b4f35",
+          "o200k": 1520,
+          "claudeLegacy": 1535
+        },
+        {
+          "path": "docs/ai/examples/app-shell.tsx",
+          "bytes": 4426,
+          "sha256": "a37da26cc78966a9a50785c821dd9ca735197a1912f9e7da7ac4d3de69780ac4",
+          "o200k": 1094,
+          "claudeLegacy": 1182
+        },
+        {
+          "path": "docs/ai/examples/auth.tsx",
+          "bytes": 2825,
+          "sha256": "98db2aab9798a61cd17338a0f684d63016872aee9787e06bb4bce9db96b1aade",
+          "o200k": 631,
+          "claudeLegacy": 647
+        },
+        {
+          "path": "docs/ai/examples/blocks/Background6.tsx",
+          "bytes": 1245,
+          "sha256": "97b74ba479fe187afb651340115e4d89ea0623d6552d6781c9f78900bb12f614",
+          "o200k": 309,
+          "claudeLegacy": 319
+        },
+        {
+          "path": "docs/ai/examples/blocks/Chat1.tsx",
+          "bytes": 2548,
+          "sha256": "2f5562b1756514848e68fec0cfef3ef563fdd6ae3887dfb041f45fc9968b9190",
+          "o200k": 620,
+          "claudeLegacy": 683
+        },
+        {
+          "path": "docs/ai/examples/blocks/Dashboard1.tsx",
+          "bytes": 18397,
+          "sha256": "0ef0652ceb0f4926eb6e23887896a49093b31396289d2a45c5d9319fc891b485",
+          "o200k": 4028,
+          "claudeLegacy": 4130
+        },
+        {
+          "path": "docs/ai/examples/blocks/Feed3.tsx",
+          "bytes": 6832,
+          "sha256": "25fba61f68f0e4d6f0ff6986337fb5a23143448241decf3527887f541c7b6e0a",
+          "o200k": 1354,
+          "claudeLegacy": 1440
+        },
+        {
+          "path": "docs/ai/examples/blocks/Footer1.tsx",
+          "bytes": 1282,
+          "sha256": "cf3be8fd5a77c6b140a2164de9703ae5a8c3d77f10e8ea7d34569c4d351836fb",
+          "o200k": 331,
+          "claudeLegacy": 346
+        },
+        {
+          "path": "docs/ai/examples/blocks/Footer2.tsx",
+          "bytes": 3433,
+          "sha256": "5553eec66c60e72e41d084f6c6c5dbfa3716c2217bc9539aaef47b6fe46e1a2a",
+          "o200k": 811,
+          "claudeLegacy": 846
+        },
+        {
+          "path": "docs/ai/examples/blocks/Footer3.tsx",
+          "bytes": 4226,
+          "sha256": "29a34f7be18f9b4294eaa9435f523f61fab62ad5b2ecbd00250641740c99cb23",
+          "o200k": 1039,
+          "claudeLegacy": 1103
+        },
+        {
+          "path": "docs/ai/examples/blocks/Footer4.tsx",
+          "bytes": 14608,
+          "sha256": "6249b9c91d43082c6a3b0bb75f86d4fd2bfb6776d95313946ad5099d63445459",
+          "o200k": 3056,
+          "claudeLegacy": 3163
+        },
+        {
+          "path": "docs/ai/examples/blocks/Header1.tsx",
+          "bytes": 10407,
+          "sha256": "7a9db6e546982eecfab0399db3e2b86a486d954eb1f4fa90081eff000ec2f873",
+          "o200k": 2145,
+          "claudeLegacy": 2175
+        },
+        {
+          "path": "docs/ai/examples/blocks/Header2.tsx",
+          "bytes": 3133,
+          "sha256": "618b1e9b259b764d85418ff30c95da99ff3e2c98ccd29065fdc1290a176e8f0c",
+          "o200k": 711,
+          "claudeLegacy": 739
+        },
+        {
+          "path": "docs/ai/examples/blocks/Header3.tsx",
+          "bytes": 6129,
+          "sha256": "338d738f46ce0d88c3272a385bf77720359ec9ac866f58730fa079c49aab161b",
+          "o200k": 1084,
+          "claudeLegacy": 1106
+        },
+        {
+          "path": "docs/ai/examples/blocks/Header4.tsx",
+          "bytes": 3507,
+          "sha256": "49fe674565a9985e5bf19c6f69d67cffd6727e17d4dfc125792782860df6812b",
+          "o200k": 774,
+          "claudeLegacy": 808
+        },
+        {
+          "path": "docs/ai/examples/blocks/Productivity1.tsx",
+          "bytes": 9485,
+          "sha256": "ca2971d23a66c0f8d2a667eba98b1c5810f8bca661715a1f9d7482c8150f1613",
+          "o200k": 2049,
+          "claudeLegacy": 2159
+        },
+        {
+          "path": "docs/ai/examples/blocks/Roadmap1.tsx",
+          "bytes": 4591,
+          "sha256": "465cb1c098fe365ca9a29e57d5fd1ee494a2caa213829f4ea31b6e0e25899dbd",
+          "o200k": 964,
+          "claudeLegacy": 1021
+        },
+        {
+          "path": "docs/ai/examples/blocks/Sidebar1.tsx",
+          "bytes": 3478,
+          "sha256": "54bca55c9fd9064479d4f67dde5703e1a69020d5c81cd2c2686b9797c5f867c4",
+          "o200k": 789,
+          "claudeLegacy": 814
+        },
+        {
+          "path": "docs/ai/examples/blocks/Sidebar2.tsx",
+          "bytes": 3816,
+          "sha256": "0759c8de845ea8396e8652ee6a8ad8ab9c1461685e7761b7bb17f85a8dc78ab4",
+          "o200k": 799,
+          "claudeLegacy": 828
+        },
+        {
+          "path": "docs/ai/examples/blocks/Sidebar4.tsx",
+          "bytes": 4070,
+          "sha256": "8c19f8fdfdd26dc77050ffaef907c3ef8c0d23168f0351af4e8c5da13de99c23",
+          "o200k": 833,
+          "claudeLegacy": 882
+        },
+        {
+          "path": "docs/ai/examples/blocks/Sidebar5.tsx",
+          "bytes": 4102,
+          "sha256": "39acd39d004b9ce601efc4606bf45a922ce2a9b4a74520bcbacc55e92f803195",
+          "o200k": 776,
+          "claudeLegacy": 824
+        },
+        {
+          "path": "docs/ai/examples/blocks/Streaming1.tsx",
+          "bytes": 12843,
+          "sha256": "75dbc7911839f628f46a0c4426542dce99fe3ff2c0fa9d58767858a39f735315",
+          "o200k": 2914,
+          "claudeLegacy": 3044
+        },
+        {
+          "path": "docs/ai/examples/blocks/Table1.tsx",
+          "bytes": 13291,
+          "sha256": "1b2658e2d70274d48c019ccef7a386eb3a9e3bb06bd0786d3ae485b0884c739e",
+          "o200k": 2814,
+          "claudeLegacy": 2962
+        },
+        {
+          "path": "docs/ai/examples/blocks/Waitlist1.tsx",
+          "bytes": 5872,
+          "sha256": "a49346c995de64f70a70b19794a01403f56a5bbd49d660aaa2b656458290a333",
+          "o200k": 1525,
+          "claudeLegacy": 1565
+        },
+        {
+          "path": "docs/ai/examples/blocks/content/chat1content.ts",
+          "bytes": 2181,
+          "sha256": "f353a67010bc294ac3e837f20109f5b45285469a1fed7f0b35f2cb5d64548b19",
+          "o200k": 610,
+          "claudeLegacy": 651
+        },
+        {
+          "path": "docs/ai/examples/blocks/content/resources.ts",
+          "bytes": 369,
+          "sha256": "a9c8d75943b153ee8fe40c096b8b3f5d8ae5f6edccc400394c9998fd8f385546",
+          "o200k": 114,
+          "claudeLegacy": 127
+        },
+        {
+          "path": "docs/ai/examples/blocks/content/roadmap1content.ts",
+          "bytes": 1518,
+          "sha256": "e72b8e513b79c6072a3d4eb0639ba93fd25943d5b4d1b668bd7807b341fd2941",
+          "o200k": 369,
+          "claudeLegacy": 389
+        },
+        {
+          "path": "docs/ai/examples/blocks/manifest.json",
+          "bytes": 8784,
+          "sha256": "c832798f6242aff5d9353bf80ef7076855692cd15a9ee903a762adbfe0692a8b",
+          "o200k": 2312,
+          "claudeLegacy": 2349
+        },
+        {
+          "path": "docs/ai/examples/dashboard.tsx",
+          "bytes": 5548,
+          "sha256": "b8cdaba50f6badc788df9070d8c3f4c13bec1b853061bb1d8c59e86a6f7f1680",
+          "o200k": 1375,
+          "claudeLegacy": 1434
+        },
+        {
+          "path": "docs/ai/examples/docs-page.tsx",
+          "bytes": 2658,
+          "sha256": "68ce0a12419a517bfc1cd2d72fab93e37f74bef8ed1f4a3810c9a23a88cae490",
+          "o200k": 674,
+          "claudeLegacy": 736
+        },
+        {
+          "path": "docs/ai/examples/editor.tsx",
+          "bytes": 4089,
+          "sha256": "ce7ddf73d763f9c98ccda50c81eda58f529d6c3e331c83a5a3f08e6384bee671",
+          "o200k": 985,
+          "claudeLegacy": 1031
+        },
+        {
+          "path": "docs/ai/examples/list-page.tsx",
+          "bytes": 4980,
+          "sha256": "63f0e906ea7a6c953625e65529c2f1e3fe8954c39174ee2b8fe79aed41db8f9e",
+          "o200k": 1226,
+          "claudeLegacy": 1290
+        },
+        {
+          "path": "docs/ai/examples/marketing-hero.tsx",
+          "bytes": 4761,
+          "sha256": "36452d53ceac01d24d6f3efd256e24b3ed892c2c89b4feadd9a80125997d961c",
+          "o200k": 1065,
+          "claudeLegacy": 1131
+        },
+        {
+          "path": "docs/ai/examples/pricing.tsx",
+          "bytes": 8344,
+          "sha256": "66478390b6df3ffe1ec8cb7e7ebd3cfff034639951277345a0d476421f383f16",
+          "o200k": 1746,
+          "claudeLegacy": 1817
+        },
+        {
+          "path": "docs/ai/examples/settings.tsx",
+          "bytes": 6237,
+          "sha256": "a7e2b377ea0f60953689bb44ce9b64408f0664eb68ee8e3ac090f4e46629ce18",
+          "o200k": 1332,
+          "claudeLegacy": 1381
+        },
+        {
+          "path": "docs/ai/gotchas.json",
+          "bytes": 10385,
+          "sha256": "064b8c31a5f2d6b5ef173567d9f4a5a7201774b56de8ca04cb1b0b9e66a2f788",
+          "o200k": 2627,
+          "claudeLegacy": 2730
+        },
+        {
+          "path": "docs/ai/layouts.md",
+          "bytes": 7268,
+          "sha256": "bfa28f36c41beec056fc5f4785638414a650ec76806cb7fcec1727ef0e9745d1",
+          "o200k": 1897,
+          "claudeLegacy": 2017
+        },
+        {
+          "path": "docs/ai/manifest.json",
+          "bytes": 3742,
+          "sha256": "28d6e4b73a502b78e64af18bbdc95a6e12da06a64ed3573211a06639e7ef2791",
+          "o200k": 1100,
+          "claudeLegacy": 1175
+        },
+        {
+          "path": "docs/ai/recipes.md",
+          "bytes": 7678,
+          "sha256": "e62408808101f56879fdf1c34758a23b83cac7b5c807f25e5f611a78e692fccd",
+          "o200k": 2007,
+          "claudeLegacy": 2180
+        },
+        {
+          "path": "docs/ai/rules.compact.md",
+          "bytes": 5978,
+          "sha256": "b351ebf13dcc7a4aec9c7e436a8ed01c370e775334e26ed1897e07e4ccfe2053",
+          "o200k": 1635,
+          "claudeLegacy": 1827
+        },
+        {
+          "path": "docs/ai/rules.md",
+          "bytes": 21534,
+          "sha256": "c9a44686ef96060fc85737d528f137dc92e973d24090d12ebc871f88a7945ffa",
+          "o200k": 5714,
+          "claudeLegacy": 6207
+        },
+        {
+          "path": "docs/ai/spec.json",
+          "bytes": 131151,
+          "sha256": "e23f942997bcfa8a045c23c132da1fa1e5a266afe33ebfa30cf91ce295cd7ab0",
+          "o200k": 39375,
+          "claudeLegacy": 40413
+        },
+        {
+          "path": "docs/ai/tasks/auth.json",
+          "bytes": 461,
+          "sha256": "b49bb6c8b0eeedd8da32828e3096d52d763e853861af3fc88fc22786e7f7f9b1",
+          "o200k": 135,
+          "claudeLegacy": 140
+        },
+        {
+          "path": "docs/ai/tasks/chat.json",
+          "bytes": 627,
+          "sha256": "4de1be847d31524a10ce1f828251456b2b58d3a2572617740bf5a8e2badf89d3",
+          "o200k": 186,
+          "claudeLegacy": 198
+        },
+        {
+          "path": "docs/ai/tasks/dashboard.json",
+          "bytes": 1108,
+          "sha256": "8339ccba24da3d361598d19fe1d148930957d892d1e08f35d328f97b739f2196",
+          "o200k": 307,
+          "claudeLegacy": 335
+        },
+        {
+          "path": "docs/ai/tasks/docs-page.json",
+          "bytes": 1093,
+          "sha256": "c9e0675b40eb7635f1fc49b33938feedf9542e2a62640052ac74584b2f5565f1",
+          "o200k": 282,
+          "claudeLegacy": 305
+        },
+        {
+          "path": "docs/ai/tasks/editor.json",
+          "bytes": 1044,
+          "sha256": "02957c78f00122ba9ecfda67ce82a9872230f66afac8ece5e5e44a071ae3fcdb",
+          "o200k": 277,
+          "claudeLegacy": 296
+        },
+        {
+          "path": "docs/ai/tasks/index.json",
+          "bytes": 751,
+          "sha256": "f95e7300f47b4e998412b511a8860af01671f4e5710ac352a4c7ffbed7fdb28e",
+          "o200k": 249,
+          "claudeLegacy": 261
+        },
+        {
+          "path": "docs/ai/tasks/list-page.json",
+          "bytes": 1302,
+          "sha256": "184605319c9474f73b50f634179652322b67d786cc598851be7f7d800acc51b7",
+          "o200k": 339,
+          "claudeLegacy": 354
+        },
+        {
+          "path": "docs/ai/tasks/marketing-hero.json",
+          "bytes": 902,
+          "sha256": "eceb1eebd401a7223a789f50862e7981bb85eb3b45042fd5c53485bd36d9e23d",
+          "o200k": 255,
+          "claudeLegacy": 273
+        },
+        {
+          "path": "docs/ai/tasks/pricing.json",
+          "bytes": 1004,
+          "sha256": "31ecc3d3c54a29d3f8b137405802435ff632677e6ad64346d9821e40a956ead3",
+          "o200k": 277,
+          "claudeLegacy": 298
+        },
+        {
+          "path": "docs/ai/tasks/roadmap.json",
+          "bytes": 460,
+          "sha256": "8f8c2bb92e00c8ac0216c0deddfc1e23923ed15bee22f6b573b03063539d482d",
+          "o200k": 131,
+          "claudeLegacy": 141
+        },
+        {
+          "path": "docs/ai/tasks/settings.json",
+          "bytes": 1717,
+          "sha256": "e788f8c707cf13f69a57ab40aeeb55b8256900921a2259273677245b6af98cd2",
+          "o200k": 439,
+          "claudeLegacy": 454
+        },
+        {
+          "path": "project/app/fonts.css",
+          "bytes": 295,
+          "sha256": "8d29bdc4ec7ab578971b0b5584a4b4e49e5e5030edb4132dad9926cad6708ed5",
+          "o200k": 83,
+          "claudeLegacy": 99
+        },
+        {
+          "path": "project/app/layout.tsx",
+          "bytes": 627,
+          "sha256": "d4c092fbbc5f9b77f7c7986f8422b2de63d909440c4c7b26edceb50acc438ec7",
+          "o200k": 150,
+          "claudeLegacy": 181
+        },
+        {
+          "path": "project/app/page.tsx",
+          "bytes": 126,
+          "sha256": "ed5f656116586aae4077c5831ce0fefab63b7d4e24f9c75a1a7507f08d228e9f",
+          "o200k": 25,
+          "claudeLegacy": 29
+        },
+        {
+          "path": "project/app/providers.tsx",
+          "bytes": 657,
+          "sha256": "4702e619f0f03dac5ba347fd0db3859f4e1437a5c7a1d8b5e93397e97e3c0df0",
+          "o200k": 141,
+          "claudeLegacy": 168
+        },
+        {
+          "path": "project/next.config.mjs",
+          "bytes": 197,
+          "sha256": "52f44086373c614805d5e44d853acf3e4a273e6dfb661cbc87f351cb177eed17",
+          "o200k": 49,
+          "claudeLegacy": 54
+        },
+        {
+          "path": "project/package.json",
+          "bytes": 573,
+          "sha256": "1e857f0d1c0b602a1a35473a01e3bfb7d854cdea5790ef0412129317c43913cd",
+          "o200k": 219,
+          "claudeLegacy": 233
+        },
+        {
+          "path": "project/tsconfig.json",
+          "bytes": 720,
+          "sha256": "2102a0c7b5f38ed883800e53456934071f6ea673d1e601bdb5f291482aac6e62",
+          "o200k": 218,
+          "claudeLegacy": 233
+        }
+      ]
+    },
+    "once-memory": {
+      "files": 7,
+      "docs_bytes": 0,
+      "docs_tokens_o200k": 0,
+      "project_bytes": 3195,
+      "project_tokens_o200k": 885,
+      "list": [
+        {
+          "path": "project/app/fonts.css",
+          "bytes": 295,
+          "sha256": "8d29bdc4ec7ab578971b0b5584a4b4e49e5e5030edb4132dad9926cad6708ed5",
+          "o200k": 83,
+          "claudeLegacy": 99
+        },
+        {
+          "path": "project/app/layout.tsx",
+          "bytes": 627,
+          "sha256": "d4c092fbbc5f9b77f7c7986f8422b2de63d909440c4c7b26edceb50acc438ec7",
+          "o200k": 150,
+          "claudeLegacy": 181
+        },
+        {
+          "path": "project/app/page.tsx",
+          "bytes": 126,
+          "sha256": "ed5f656116586aae4077c5831ce0fefab63b7d4e24f9c75a1a7507f08d228e9f",
+          "o200k": 25,
+          "claudeLegacy": 29
+        },
+        {
+          "path": "project/app/providers.tsx",
+          "bytes": 657,
+          "sha256": "4702e619f0f03dac5ba347fd0db3859f4e1437a5c7a1d8b5e93397e97e3c0df0",
+          "o200k": 141,
+          "claudeLegacy": 168
+        },
+        {
+          "path": "project/next.config.mjs",
+          "bytes": 197,
+          "sha256": "52f44086373c614805d5e44d853acf3e4a273e6dfb661cbc87f351cb177eed17",
+          "o200k": 49,
+          "claudeLegacy": 54
+        },
+        {
+          "path": "project/package.json",
+          "bytes": 573,
+          "sha256": "1e857f0d1c0b602a1a35473a01e3bfb7d854cdea5790ef0412129317c43913cd",
+          "o200k": 219,
+          "claudeLegacy": 233
+        },
+        {
+          "path": "project/tsconfig.json",
+          "bytes": 720,
+          "sha256": "2102a0c7b5f38ed883800e53456934071f6ea673d1e601bdb5f291482aac6e62",
+          "o200k": 218,
+          "claudeLegacy": 233
+        }
+      ]
+    },
+    "shadcn-docs": {
+      "files": 503,
+      "docs_bytes": 1267176,
+      "docs_tokens_o200k": 300331,
+      "project_bytes": 221907,
+      "project_tokens_o200k": 56531,
+      "list": [
+        {
+          "path": "docs/README.md",
+          "bytes": 1186,
+          "sha256": "9339cdba895618cd2ef37a04f003879e54b567a15b4fb6b5b3ecd93085d77738",
+          "o200k": 310,
+          "claudeLegacy": 344
+        },
+        {
+          "path": "docs/blocks/_registry.ts",
+          "bytes": 20564,
+          "sha256": "8a110b7f3e3d2ce1638f7b1e1091850841823a828666ecbf3d11b69d095d1e75",
+          "o200k": 4937,
+          "claudeLegacy": 5543
+        },
+        {
+          "path": "docs/blocks/dashboard-01/components/app-sidebar.tsx",
+          "bytes": 3490,
+          "sha256": "27cab8c2bb0b53c7de052470a66b5d1ec76b1bb68e6cd424c43ef7b563f482c5",
+          "o200k": 872,
+          "claudeLegacy": 926
+        },
+        {
+          "path": "docs/blocks/dashboard-01/components/chart-area-interactive.tsx",
+          "bytes": 10634,
+          "sha256": "5dc947b297d59c8c3aceed2c8cd908de8cb0fcb4c7572e63873e7b314e304678",
+          "o200k": 3327,
+          "claudeLegacy": 3211
+        },
+        {
+          "path": "docs/blocks/dashboard-01/components/data-table.tsx",
+          "bytes": 26947,
+          "sha256": "5249f582ba99db238638287528dfee12791ce97a70b5eb3a8f73152cf970ef8e",
+          "o200k": 5922,
+          "claudeLegacy": 6368
+        },
+        {
+          "path": "docs/blocks/dashboard-01/components/nav-documents.tsx",
+          "bytes": 2491,
+          "sha256": "1e2c50ef1bd2faf8abd8e95f75725e4101fe9a16bf7f37af84e92b21d533d356",
+          "o200k": 539,
+          "claudeLegacy": 585
+        },
+        {
+          "path": "docs/blocks/dashboard-01/components/nav-main.tsx",
+          "bytes": 1679,
+          "sha256": "59bd6784f293f2b7c7e9a6a7fac8dc7ad4548743fbe16015fa17b6c481a88d76",
+          "o200k": 371,
+          "claudeLegacy": 425
+        },
+        {
+          "path": "docs/blocks/dashboard-01/components/nav-secondary.tsx",
+          "bytes": 916,
+          "sha256": "65e5872e92d489f2aa41eeace7e24fe91aeab2fefacf618ab71d6b26ed86691f",
+          "o200k": 210,
+          "claudeLegacy": 246
+        },
+        {
+          "path": "docs/blocks/dashboard-01/components/nav-user.tsx",
+          "bytes": 3352,
+          "sha256": "075df103b7ee79c649c0fe5ef226ca1bc9890dbc65aad9976fdd5b3a962a2b95",
+          "o200k": 714,
+          "claudeLegacy": 767
+        },
+        {
+          "path": "docs/blocks/dashboard-01/components/section-cards.tsx",
+          "bytes": 3733,
+          "sha256": "7b0ebe0ce2770efc5b4d8a60687672de663b18bb138a0edd29f11e899969709a",
+          "o200k": 920,
+          "claudeLegacy": 983
+        },
+        {
+          "path": "docs/blocks/dashboard-01/components/site-header.tsx",
+          "bytes": 1188,
+          "sha256": "0f8fcba03df5ab71874390902cb6366a13c77c538a29ade755a013433be3b871",
+          "o200k": 284,
+          "claudeLegacy": 320
+        },
+        {
+          "path": "docs/blocks/dashboard-01/data.json",
+          "bytes": 12795,
+          "sha256": "a8dcfbe6d014ab33adb4be2ccc221313d0bbf5d1d69a06bc08527b66148e849a",
+          "o200k": 4043,
+          "claudeLegacy": 3970
+        },
+        {
+          "path": "docs/blocks/dashboard-01/page.tsx",
+          "bytes": 1206,
+          "sha256": "ac9c4acdea4be57d3b7015ce89258fb6c26dadedc5a5b2ff3fe0b25812d82ad6",
+          "o200k": 284,
+          "claudeLegacy": 327
+        },
+        {
+          "path": "docs/blocks/login-01/components/login-form.tsx",
+          "bytes": 2043,
+          "sha256": "8c81ef666d6cb5f4c688b72a564664dbae9add18ae723cd8512eed266df5e523",
+          "o200k": 421,
+          "claudeLegacy": 447
+        },
+        {
+          "path": "docs/blocks/login-01/page.tsx",
+          "bytes": 273,
+          "sha256": "618d8a5a184c223b8bffaf41ba518f560d770ea26507c3e572e457a8ba305841",
+          "o200k": 73,
+          "claudeLegacy": 86
+        },
+        {
+          "path": "docs/blocks/login-02/components/login-form.tsx",
+          "bytes": 2748,
+          "sha256": "f62c286a7f7e616d36898b60af20ba7f2b4a1bd0ad1446c9eeef8c75de8c2df5",
+          "o200k": 939,
+          "claudeLegacy": 898
+        },
+        {
+          "path": "docs/blocks/login-02/page.tsx",
+          "bytes": 1095,
+          "sha256": "e6c20bd0d1fed99620b7ef08fd638bef80c0417dad2319c5dc5f6fbd5a90f446",
+          "o200k": 269,
+          "claudeLegacy": 293
+        },
+        {
+          "path": "docs/blocks/login-03/components/login-form.tsx",
+          "bytes": 3933,
+          "sha256": "55198a442c868b833e9a970b8055c7180aa723dfb9ba0580b7bd79e2bd15ab17",
+          "o200k": 1231,
+          "claudeLegacy": 1183
+        },
+        {
+          "path": "docs/blocks/login-03/page.tsx",
+          "bytes": 665,
+          "sha256": "24a4eaa12b2fdc933357b81f532a17e021a9e4ac59e231db42abe78c70b622da",
+          "o200k": 165,
+          "claudeLegacy": 188
+        },
+        {
+          "path": "docs/blocks/login-04/components/login-form.tsx",
+          "bytes": 5999,
+          "sha256": "486d6c2fc5d010f527f1ffaa4f696bedf8a3531c0d0df01c0d9e7f82c241109a",
+          "o200k": 2222,
+          "claudeLegacy": 2081
+        },
+        {
+          "path": "docs/blocks/login-04/page.tsx",
+          "bytes": 302,
+          "sha256": "11298588963f38fc49ed12a063cc5ac860581c1e3e9f6069848df6be62bccbce",
+          "o200k": 82,
+          "claudeLegacy": 98
+        },
+        {
+          "path": "docs/blocks/login-05/components/login-form.tsx",
+          "bytes": 3364,
+          "sha256": "85fd54b98b6c828570a548ea26803a6a7f2ba723d6501b14b6b713ba50d5f598",
+          "o200k": 1170,
+          "claudeLegacy": 1124
+        },
+        {
+          "path": "docs/blocks/login-05/page.tsx",
+          "bytes": 300,
+          "sha256": "79fc510a5defddc6efe7facf200bafb467d16eddb283ffca7c54754c4ac0b996",
+          "o200k": 79,
+          "claudeLegacy": 93
+        },
+        {
+          "path": "docs/blocks/sidebar-01/components/app-sidebar.tsx",
+          "bytes": 3762,
+          "sha256": "3e4c442887b84140a2bf3e8e9a71f1d9d9565dbb21e8229c1e5db57d314e8e92",
+          "o200k": 838,
+          "claudeLegacy": 892
+        },
+        {
+          "path": "docs/blocks/sidebar-01/components/search-form.tsx",
+          "bytes": 801,
+          "sha256": "8d5e89f4aa4ce7fe6556470c10f0f8fd380cf5d9c4e77174fd2036bd1d48dcc4",
+          "o200k": 191,
+          "claudeLegacy": 214
+        },
+        {
+          "path": "docs/blocks/sidebar-01/components/version-switcher.tsx",
+          "bytes": 1986,
+          "sha256": "a48f34ebbfbd81e8088f6f7b0773c6384c407a0f38080eb3ed27d41e3d68b50b",
+          "o200k": 425,
+          "claudeLegacy": 471
+        },
+        {
+          "path": "docs/blocks/sidebar-01/page.tsx",
+          "bytes": 1711,
+          "sha256": "7bde36b941be708d4a094f8adeee787f7925b451d23bdcc3b6da0db31a7a0a02",
+          "o200k": 384,
+          "claudeLegacy": 461
+        },
+        {
+          "path": "docs/blocks/sidebar-02/components/app-sidebar.tsx",
+          "bytes": 4798,
+          "sha256": "002bb6f7fc81c05ee389230a342d0c80b4c6a7c5120439912bf2f5b4450e6e2e",
+          "o200k": 1039,
+          "claudeLegacy": 1105
+        },
+        {
+          "path": "docs/blocks/sidebar-02/components/search-form.tsx",
+          "bytes": 801,
+          "sha256": "8d5e89f4aa4ce7fe6556470c10f0f8fd380cf5d9c4e77174fd2036bd1d48dcc4",
+          "o200k": 191,
+          "claudeLegacy": 214
+        },
+        {
+          "path": "docs/blocks/sidebar-02/components/version-switcher.tsx",
+          "bytes": 1986,
+          "sha256": "a48f34ebbfbd81e8088f6f7b0773c6384c407a0f38080eb3ed27d41e3d68b50b",
+          "o200k": 425,
+          "claudeLegacy": 471
+        },
+        {
+          "path": "docs/blocks/sidebar-02/page.tsx",
+          "bytes": 1504,
+          "sha256": "4c58fef8ae5e5e27ada942516403bb719202ebc4ad4d44891f7c9ec05a40e67e",
+          "o200k": 329,
+          "claudeLegacy": 398
+        },
+        {
+          "path": "docs/blocks/sidebar-03/components/app-sidebar.tsx",
+          "bytes": 4604,
+          "sha256": "76bdb0bcbc2980e6ac966f1a5644cb57d89d1eb24d65bff671ed5b3132d7d671",
+          "o200k": 998,
+          "claudeLegacy": 1055
+        },
+        {
+          "path": "docs/blocks/sidebar-03/page.tsx",
+          "bytes": 1766,
+          "sha256": "798a3b7188e9757db8c14b73a7f42ebbc4ebc0d51435d59f0cda080d51cfcf6d",
+          "o200k": 387,
+          "claudeLegacy": 465
+        },
+        {
+          "path": "docs/blocks/sidebar-04/components/app-sidebar.tsx",
+          "bytes": 4639,
+          "sha256": "5844259ccb47661e244a7c3cc577077a46d561cc92363dcb000a1abb6ddf3316",
+          "o200k": 1014,
+          "claudeLegacy": 1068
+        },
+        {
+          "path": "docs/blocks/sidebar-04/page.tsx",
+          "bytes": 1815,
+          "sha256": "25a95c3a10ef7b5a5f608225834f8b4c12c5a04dbab71cf3c59dbf91c3fb7ac1",
+          "o200k": 410,
+          "claudeLegacy": 486
+        },
+        {
+          "path": "docs/blocks/sidebar-05/components/app-sidebar.tsx",
+          "bytes": 5398,
+          "sha256": "15a1a59d0965720d17acdf4e6fb264aee63931989904b7608a9ae86d8fa309d9",
+          "o200k": 1130,
+          "claudeLegacy": 1196
+        },
+        {
+          "path": "docs/blocks/sidebar-05/components/search-form.tsx",
+          "bytes": 801,
+          "sha256": "8d5e89f4aa4ce7fe6556470c10f0f8fd380cf5d9c4e77174fd2036bd1d48dcc4",
+          "o200k": 191,
+          "claudeLegacy": 214
+        },
+        {
+          "path": "docs/blocks/sidebar-05/page.tsx",
+          "bytes": 1711,
+          "sha256": "7bde36b941be708d4a094f8adeee787f7925b451d23bdcc3b6da0db31a7a0a02",
+          "o200k": 384,
+          "claudeLegacy": 461
+        },
+        {
+          "path": "docs/blocks/sidebar-06/components/app-sidebar.tsx",
+          "bytes": 3722,
+          "sha256": "4152ea2cd184b8527e3f7eebad04ad72509a7301e4021cae2576a89178482e01",
+          "o200k": 836,
+          "claudeLegacy": 878
+        },
+        {
+          "path": "docs/blocks/sidebar-06/components/nav-main.tsx",
+          "bytes": 1708,
+          "sha256": "9fa25450c1c3b8405369ed02c14a6573d9049ea1ad8111776b09df84682adab7",
+          "o200k": 383,
+          "claudeLegacy": 425
+        },
+        {
+          "path": "docs/blocks/sidebar-06/components/sidebar-opt-in-form.tsx",
+          "bytes": 985,
+          "sha256": "ab370e3cf7727c2b32cbdcadf0ac8452ab1ce8505c4e5fefb68958f5f798d9a7",
+          "o200k": 227,
+          "claudeLegacy": 247
+        },
+        {
+          "path": "docs/blocks/sidebar-06/page.tsx",
+          "bytes": 1711,
+          "sha256": "7bde36b941be708d4a094f8adeee787f7925b451d23bdcc3b6da0db31a7a0a02",
+          "o200k": 384,
+          "claudeLegacy": 461
+        },
+        {
+          "path": "docs/blocks/sidebar-07/components/app-sidebar.tsx",
+          "bytes": 3120,
+          "sha256": "ebac3e107b759f11b1edb3b83ebdcea15a3ff4e3b6f32a8be00442d1bb929d8b",
+          "o200k": 771,
+          "claudeLegacy": 817
+        },
+        {
+          "path": "docs/blocks/sidebar-07/components/nav-main.tsx",
+          "bytes": 1969,
+          "sha256": "87c9f9f17ea6eabc66546c13efc0f61093f0535aecedd1ed30de6cfaa87c4088",
+          "o200k": 424,
+          "claudeLegacy": 476
+        },
+        {
+          "path": "docs/blocks/sidebar-07/components/nav-projects.tsx",
+          "bytes": 2501,
+          "sha256": "f00094c071429e66e3737560c43827a1ac38eaf44ec40948dc9eba41aad39d94",
+          "o200k": 540,
+          "claudeLegacy": 583
+        },
+        {
+          "path": "docs/blocks/sidebar-07/components/nav-user.tsx",
+          "bytes": 3405,
+          "sha256": "f32c23a0c82fb132c9a6b93a0822900dabf4f8a273edb41451014865d6e6837a",
+          "o200k": 738,
+          "claudeLegacy": 784
+        },
+        {
+          "path": "docs/blocks/sidebar-07/components/team-switcher.tsx",
+          "bytes": 2952,
+          "sha256": "16b3d85d367910d3cc256c51bd9e199f2c094c62f676231ffbac4e6644132aed",
+          "o200k": 663,
+          "claudeLegacy": 717
+        },
+        {
+          "path": "docs/blocks/sidebar-07/page.tsx",
+          "bytes": 1941,
+          "sha256": "cd0d53aed673143a08c34b06c2de2f01eb21e6acea92babf29847f10bed32033",
+          "o200k": 427,
+          "claudeLegacy": 507
+        },
+        {
+          "path": "docs/blocks/sidebar-08/components/app-sidebar.tsx",
+          "bytes": 3707,
+          "sha256": "ba2d0900c0fcc740de63d450cc4b1c17130640378c4ba382d290441e80da29b9",
+          "o200k": 886,
+          "claudeLegacy": 938
+        },
+        {
+          "path": "docs/blocks/sidebar-08/components/nav-main.tsx",
+          "bytes": 2194,
+          "sha256": "387c6b39f12490cfb8daab62822e75ca66f7eacc019580b8aade2f509b3bfb50",
+          "o200k": 453,
+          "claudeLegacy": 509
+        },
+        {
+          "path": "docs/blocks/sidebar-08/components/nav-projects.tsx",
+          "bytes": 2408,
+          "sha256": "8162fb97932f80f1b2cc4ee970b8f8195968d0758a342c7a80aba488e6d784d7",
+          "o200k": 519,
+          "claudeLegacy": 561
+        },
+        {
+          "path": "docs/blocks/sidebar-08/components/nav-secondary.tsx",
+          "bytes": 917,
+          "sha256": "28a8f9ebeadc1588e219c841f9d44aec1ef8a2917f0c536a381400ebc207a401",
+          "o200k": 213,
+          "claudeLegacy": 245
+        },
+        {
+          "path": "docs/blocks/sidebar-08/components/nav-user.tsx",
+          "bytes": 3405,
+          "sha256": "f32c23a0c82fb132c9a6b93a0822900dabf4f8a273edb41451014865d6e6837a",
+          "o200k": 738,
+          "claudeLegacy": 784
+        },
+        {
+          "path": "docs/blocks/sidebar-08/page.tsx",
+          "bytes": 1848,
+          "sha256": "5a7f426d4643e0786fe4bf1078598af66dec0a534dfb2b0369dc1cac4cdcbb7f",
+          "o200k": 405,
+          "claudeLegacy": 480
+        },
+        {
+          "path": "docs/blocks/sidebar-09/components/app-sidebar.tsx",
+          "bytes": 8815,
+          "sha256": "01a969573fbc108eae7f827ef4904efc4de311b6edc026b6a1d74a58d3226367",
+          "o200k": 1973,
+          "claudeLegacy": 2172
+        },
+        {
+          "path": "docs/blocks/sidebar-09/components/nav-user.tsx",
+          "bytes": 3419,
+          "sha256": "457a636e0a884c62a6f4bc0d42c11bd490e44a6665641c8875936b4d9f8326bc",
+          "o200k": 746,
+          "claudeLegacy": 794
+        },
+        {
+          "path": "docs/blocks/sidebar-09/page.tsx",
+          "bytes": 1649,
+          "sha256": "8462dce0af78e3fba0e5db98e4405f124ba52534d252b705c54850b1b921c135",
+          "o200k": 359,
+          "claudeLegacy": 428
+        },
+        {
+          "path": "docs/blocks/sidebar-10/components/app-sidebar.tsx",
+          "bytes": 5473,
+          "sha256": "fc3dba10c0f343a457d838ca25083848b594f9f955a1ec962dcc08bb8933cfec",
+          "o200k": 1371,
+          "claudeLegacy": 1452
+        },
+        {
+          "path": "docs/blocks/sidebar-10/components/nav-actions.tsx",
+          "bytes": 3162,
+          "sha256": "0b41061e8868aad5c0ac4f65aed0a3ec1650fd79b588dad4649962b179eb9179",
+          "o200k": 761,
+          "claudeLegacy": 830
+        },
+        {
+          "path": "docs/blocks/sidebar-10/components/nav-favorites.tsx",
+          "bytes": 2713,
+          "sha256": "2ff8d508d19e0302cca593e6101a5020d80897753df4729593def88c4e0f1b25",
+          "o200k": 582,
+          "claudeLegacy": 629
+        },
+        {
+          "path": "docs/blocks/sidebar-10/components/nav-main.tsx",
+          "bytes": 674,
+          "sha256": "d1fa7ed679f3200602b89905b9e9c6d5e6b4c7e18daab204ae6d44f3249a8117",
+          "o200k": 170,
+          "claudeLegacy": 195
+        },
+        {
+          "path": "docs/blocks/sidebar-10/components/nav-secondary.tsx",
+          "bytes": 1030,
+          "sha256": "743a1e7644338be8151067a2e5cdfa8948efdccd67304b5ff8723537a77cd625",
+          "o200k": 239,
+          "claudeLegacy": 279
+        },
+        {
+          "path": "docs/blocks/sidebar-10/components/nav-workspaces.tsx",
+          "bytes": 2560,
+          "sha256": "6c082e97bf8c87ab911ad4a45a830a01014fd8f01ac9d9025481cd90999746a1",
+          "o200k": 511,
+          "claudeLegacy": 571
+        },
+        {
+          "path": "docs/blocks/sidebar-10/components/team-switcher.tsx",
+          "bytes": 2531,
+          "sha256": "ba48eaf2b8ad18c255670a280bcd69cccaedcb765d6768c1e2698b91d2e5d35a",
+          "o200k": 564,
+          "claudeLegacy": 609
+        },
+        {
+          "path": "docs/blocks/sidebar-10/page.tsx",
+          "bytes": 1529,
+          "sha256": "61a4f6d69e29c7286a3a3e5f399bd1173e37fd3d6f2327933cb3dd325fe25331",
+          "o200k": 346,
+          "claudeLegacy": 409
+        },
+        {
+          "path": "docs/blocks/sidebar-11/components/app-sidebar.tsx",
+          "bytes": 3388,
+          "sha256": "2feca2553305a66693b4b3937dcfe2fcaedc06fb1b97f82f8a2b4eb6eca44d40",
+          "o200k": 810,
+          "claudeLegacy": 927
+        },
+        {
+          "path": "docs/blocks/sidebar-11/page.tsx",
+          "bytes": 1914,
+          "sha256": "d6c3c1d688fde805139111dc8b77c1c6821c82527f5071d3ed9cb93327bd8ccf",
+          "o200k": 421,
+          "claudeLegacy": 509
+        },
+        {
+          "path": "docs/blocks/sidebar-12/components/app-sidebar.tsx",
+          "bytes": 1556,
+          "sha256": "d4bdb3bce8a10b21388841e4fdd4558ae115990988f6386031cddd9ac796621b",
+          "o200k": 378,
+          "claudeLegacy": 441
+        },
+        {
+          "path": "docs/blocks/sidebar-12/components/calendars.tsx",
+          "bytes": 2440,
+          "sha256": "dd490281d3cf55ab417679426694f4fb742ed6d4a6a029a9516119316d7c96d0",
+          "o200k": 475,
+          "claudeLegacy": 543
+        },
+        {
+          "path": "docs/blocks/sidebar-12/components/date-picker.tsx",
+          "bytes": 468,
+          "sha256": "c24880877e7fa89292790251b6a7ba9418064d8581c09233371b45315c635928",
+          "o200k": 119,
+          "claudeLegacy": 140
+        },
+        {
+          "path": "docs/blocks/sidebar-12/components/nav-user.tsx",
+          "bytes": 3407,
+          "sha256": "cd133a821395d4bdbef687251601cf7056499780c351422df61a5e42d69190aa",
+          "o200k": 738,
+          "claudeLegacy": 784
+        },
+        {
+          "path": "docs/blocks/sidebar-12/page.tsx",
+          "bytes": 1318,
+          "sha256": "03e373b3d98e34e8b0a7b199696124b6d8d1a31b82ffc1febe45a0f23afab61c",
+          "o200k": 306,
+          "claudeLegacy": 363
+        },
+        {
+          "path": "docs/blocks/sidebar-13/components/settings-dialog.tsx",
+          "bytes": 4030,
+          "sha256": "f05b2a244ccf39c02f9e63e6f6d402e029c1fdc590b69c7d2e1e93ce841574d6",
+          "o200k": 873,
+          "claudeLegacy": 988
+        },
+        {
+          "path": "docs/blocks/sidebar-13/page.tsx",
+          "bytes": 210,
+          "sha256": "976e2d0b2c5701cd98f2d0a16800f790d5a240124ae966fdda1d6b31ead2c49d",
+          "o200k": 47,
+          "claudeLegacy": 56
+        },
+        {
+          "path": "docs/blocks/sidebar-14/components/app-sidebar.tsx",
+          "bytes": 4119,
+          "sha256": "b43c10a55d2fe945b6bd307fde19bf735bd200756bfc928629095917b42c18da",
+          "o200k": 872,
+          "claudeLegacy": 917
+        },
+        {
+          "path": "docs/blocks/sidebar-14/page.tsx",
+          "bytes": 1559,
+          "sha256": "1f13906247d3c510c2d68b583d32d5538d29360e0d02a684528ce9418220637a",
+          "o200k": 354,
+          "claudeLegacy": 430
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/calendars.tsx",
+          "bytes": 2440,
+          "sha256": "bad1265fc398357d653f761c3861ca3d9d91e12e528595bdba008071b6f7a5e4",
+          "o200k": 475,
+          "claudeLegacy": 543
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/date-picker.tsx",
+          "bytes": 468,
+          "sha256": "c24880877e7fa89292790251b6a7ba9418064d8581c09233371b45315c635928",
+          "o200k": 119,
+          "claudeLegacy": 140
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/nav-favorites.tsx",
+          "bytes": 2713,
+          "sha256": "2ff8d508d19e0302cca593e6101a5020d80897753df4729593def88c4e0f1b25",
+          "o200k": 582,
+          "claudeLegacy": 629
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/nav-main.tsx",
+          "bytes": 674,
+          "sha256": "d1fa7ed679f3200602b89905b9e9c6d5e6b4c7e18daab204ae6d44f3249a8117",
+          "o200k": 170,
+          "claudeLegacy": 195
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/nav-secondary.tsx",
+          "bytes": 1030,
+          "sha256": "743a1e7644338be8151067a2e5cdfa8948efdccd67304b5ff8723537a77cd625",
+          "o200k": 239,
+          "claudeLegacy": 279
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/nav-user.tsx",
+          "bytes": 3407,
+          "sha256": "cd133a821395d4bdbef687251601cf7056499780c351422df61a5e42d69190aa",
+          "o200k": 738,
+          "claudeLegacy": 784
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/nav-workspaces.tsx",
+          "bytes": 2560,
+          "sha256": "6c082e97bf8c87ab911ad4a45a830a01014fd8f01ac9d9025481cd90999746a1",
+          "o200k": 511,
+          "claudeLegacy": 571
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/sidebar-left.tsx",
+          "bytes": 5476,
+          "sha256": "a8421ab6b5f3897162964464ba7d4b5f8ebd6d1594b6ee447342780a67543688",
+          "o200k": 1373,
+          "claudeLegacy": 1453
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/sidebar-right.tsx",
+          "bytes": 1635,
+          "sha256": "ec27ec407c82283b34d098207532c6d0daf4cc23265a5037168ad656e31b08e1",
+          "o200k": 402,
+          "claudeLegacy": 464
+        },
+        {
+          "path": "docs/blocks/sidebar-15/components/team-switcher.tsx",
+          "bytes": 2531,
+          "sha256": "ba48eaf2b8ad18c255670a280bcd69cccaedcb765d6768c1e2698b91d2e5d35a",
+          "o200k": 564,
+          "claudeLegacy": 609
+        },
+        {
+          "path": "docs/blocks/sidebar-15/page.tsx",
+          "bytes": 1497,
+          "sha256": "0919b1207d1f6209cdff2c12773ddfd91fca7cd68140c05fdd5540c9165d170c",
+          "o200k": 336,
+          "claudeLegacy": 401
+        },
+        {
+          "path": "docs/blocks/sidebar-16/components/app-sidebar.tsx",
+          "bytes": 3781,
+          "sha256": "b9ba02634618e99a519df88aacda82392d1b751b10467152602254e8729a4182",
+          "o200k": 909,
+          "claudeLegacy": 963
+        },
+        {
+          "path": "docs/blocks/sidebar-16/components/nav-main.tsx",
+          "bytes": 2194,
+          "sha256": "387c6b39f12490cfb8daab62822e75ca66f7eacc019580b8aade2f509b3bfb50",
+          "o200k": 453,
+          "claudeLegacy": 509
+        },
+        {
+          "path": "docs/blocks/sidebar-16/components/nav-projects.tsx",
+          "bytes": 2408,
+          "sha256": "8162fb97932f80f1b2cc4ee970b8f8195968d0758a342c7a80aba488e6d784d7",
+          "o200k": 519,
+          "claudeLegacy": 561
+        },
+        {
+          "path": "docs/blocks/sidebar-16/components/nav-secondary.tsx",
+          "bytes": 917,
+          "sha256": "28a8f9ebeadc1588e219c841f9d44aec1ef8a2917f0c536a381400ebc207a401",
+          "o200k": 213,
+          "claudeLegacy": 245
+        },
+        {
+          "path": "docs/blocks/sidebar-16/components/nav-user.tsx",
+          "bytes": 3405,
+          "sha256": "f32c23a0c82fb132c9a6b93a0822900dabf4f8a273edb41451014865d6e6837a",
+          "o200k": 738,
+          "claudeLegacy": 784
+        },
+        {
+          "path": "docs/blocks/sidebar-16/components/search-form.tsx",
+          "bytes": 648,
+          "sha256": "8b6ac0e2b1b7c567869d67bdc4effc4c9ab8b8648917622abece884a8226e427",
+          "o200k": 163,
+          "claudeLegacy": 180
+        },
+        {
+          "path": "docs/blocks/sidebar-16/components/site-header.tsx",
+          "bytes": 1441,
+          "sha256": "9756246c38dd40646fd6d644cc5479858ede04a4f1b9705dcf67eeb4a3a6758c",
+          "o200k": 320,
+          "claudeLegacy": 393
+        },
+        {
+          "path": "docs/blocks/sidebar-16/page.tsx",
+          "bytes": 1124,
+          "sha256": "336f9cfe7f2253f1e52126d9e12301252f3d02427798c8e6cbdab4a1ac1746f4",
+          "o200k": 270,
+          "claudeLegacy": 313
+        },
+        {
+          "path": "docs/blocks/signup-01/components/signup-form.tsx",
+          "bytes": 2425,
+          "sha256": "7db043fa56fe18527da55a8304e3b12e89ef25058608d2698150b1281189f3f0",
+          "o200k": 487,
+          "claudeLegacy": 513
+        },
+        {
+          "path": "docs/blocks/signup-01/page.tsx",
+          "bytes": 276,
+          "sha256": "e41a768cde14cc1828ddf0231a52d1d1de40a22d15c8063c0e0cfc3fe166b785",
+          "o200k": 73,
+          "claudeLegacy": 89
+        },
+        {
+          "path": "docs/blocks/signup-02/components/signup-form.tsx",
+          "bytes": 3121,
+          "sha256": "c539e010708f253642c1647af6f0137a00c9adeec48e95424ea4920344091259",
+          "o200k": 1021,
+          "claudeLegacy": 981
+        },
+        {
+          "path": "docs/blocks/signup-02/page.tsx",
+          "bytes": 1099,
+          "sha256": "9268f1e3cfc5245cf6a77061ed87bc982754860100f64ed9cd3bbd2b172bee01",
+          "o200k": 269,
+          "claudeLegacy": 297
+        },
+        {
+          "path": "docs/blocks/signup-03/components/signup-form.tsx",
+          "bytes": 2596,
+          "sha256": "1ab782386b69284998a7ecace4936ec594fbe47567637b0428be8d971d858562",
+          "o200k": 535,
+          "claudeLegacy": 562
+        },
+        {
+          "path": "docs/blocks/signup-03/page.tsx",
+          "bytes": 669,
+          "sha256": "a3b34bfa851b3ab294757b37c2e9d84c99722a2fe12deb48702c05026dcb15e6",
+          "o200k": 165,
+          "claudeLegacy": 192
+        },
+        {
+          "path": "docs/blocks/signup-04/components/signup-form.tsx",
+          "bytes": 6470,
+          "sha256": "b852e959d821d74f1519dca9b6493a3b2c120dd8f766031122ec9a9617a462e4",
+          "o200k": 2300,
+          "claudeLegacy": 2159
+        },
+        {
+          "path": "docs/blocks/signup-04/page.tsx",
+          "bytes": 306,
+          "sha256": "08c7a8ad7cba4aa76bfe1a88083bd96b377843c63f95cb8e491a075ceb9d9c31",
+          "o200k": 82,
+          "claudeLegacy": 102
+        },
+        {
+          "path": "docs/blocks/signup-05/components/signup-form.tsx",
+          "bytes": 3371,
+          "sha256": "c93f1f6119a7fb555b91c1cb2dcdc78159509beb3e2be76fca52088f9ee4de96",
+          "o200k": 1169,
+          "claudeLegacy": 1122
+        },
+        {
+          "path": "docs/blocks/signup-05/page.tsx",
+          "bytes": 304,
+          "sha256": "df080bc5f7bd37ada20fbc8c50067340ab899662544bef5074c9b63df2e2c0d0",
+          "o200k": 79,
+          "claudeLegacy": 97
+        },
+        {
+          "path": "docs/components/accordion.mdx",
+          "bytes": 3456,
+          "sha256": "c51b6d54974d976aacd18af66fb52c86bfb25cacd6545a75815409abf00f18cb",
+          "o200k": 907,
+          "claudeLegacy": 1110
+        },
+        {
+          "path": "docs/components/alert-dialog.mdx",
+          "bytes": 4225,
+          "sha256": "0cc730179e3d38d24455d7f151e844820f8b0c77ca0d7d6bf65fcbdf775ecbf8",
+          "o200k": 1043,
+          "claudeLegacy": 1174
+        },
+        {
+          "path": "docs/components/alert.mdx",
+          "bytes": 3330,
+          "sha256": "ae4cfba0225ebf0efff250e09b245c3f64897d2a718ec1d6cb4e6a3ecf84c93c",
+          "o200k": 870,
+          "claudeLegacy": 994
+        },
+        {
+          "path": "docs/components/aspect-ratio.mdx",
+          "bytes": 2346,
+          "sha256": "c79087ab69d481d43b45caa1c40ee334506e58ca7b7900a4e748463fb8f28bbd",
+          "o200k": 609,
+          "claudeLegacy": 708
+        },
+        {
+          "path": "docs/components/attachment.mdx",
+          "bytes": 10107,
+          "sha256": "6b0546dce6918fb2fc01ea31c254f65abbea9763d2b15292fa938a2b5eae9307",
+          "o200k": 2146,
+          "claudeLegacy": 2413
+        },
+        {
+          "path": "docs/components/avatar.mdx",
+          "bytes": 5257,
+          "sha256": "2e8e40a34ab23b99f7db39dd0b0b106595b54e5a2e15be2e0ccc98227890b162",
+          "o200k": 1308,
+          "claudeLegacy": 1536
+        },
+        {
+          "path": "docs/components/badge.mdx",
+          "bytes": 2567,
+          "sha256": "f8ba3f6d555c31dead6b9bde64582458042c32931e3a5df430019284b4e932a0",
+          "o200k": 618,
+          "claudeLegacy": 735
+        },
+        {
+          "path": "docs/components/breadcrumb.mdx",
+          "bytes": 4671,
+          "sha256": "59317fe97bd14c14127bb17b601ddd9363c26354fb4c4cc60ffd881d213b734c",
+          "o200k": 1089,
+          "claudeLegacy": 1331
+        },
+        {
+          "path": "docs/components/bubble.mdx",
+          "bytes": 10392,
+          "sha256": "b5db17c558ceab47a8029d502e8c346cf7dbf27d1f39676d1d828f2f89d8b8ca",
+          "o200k": 2314,
+          "claudeLegacy": 2598
+        },
+        {
+          "path": "docs/components/button-group.mdx",
+          "bytes": 5509,
+          "sha256": "ded96b272a4e1326d85f676a043701cb3fe71c5413e9c3989a618f3300feb63d",
+          "o200k": 1318,
+          "claudeLegacy": 1553
+        },
+        {
+          "path": "docs/components/button.mdx",
+          "bytes": 4146,
+          "sha256": "8166d1db85d27de5c0845e66d750124d73b7db12498857658e108cd9e3833591",
+          "o200k": 1013,
+          "claudeLegacy": 1201
+        },
+        {
+          "path": "docs/components/calendar.mdx",
+          "bytes": 9600,
+          "sha256": "e811833451770430fbf647f90374dd8ed4540c0621c4673871e8482d8f1f5d7e",
+          "o200k": 2452,
+          "claudeLegacy": 2840
+        },
+        {
+          "path": "docs/components/card.mdx",
+          "bytes": 7085,
+          "sha256": "f9634b46bec99c249578ed80d7623b572e324dbbc1cd7b704d2852b36a3338f0",
+          "o200k": 1896,
+          "claudeLegacy": 2160
+        },
+        {
+          "path": "docs/components/carousel.mdx",
+          "bytes": 7603,
+          "sha256": "e4c0d9c01aa3da5a9a0b8e58cae85eb4b908b37627bb505b15a5ed653f195131",
+          "o200k": 2026,
+          "claudeLegacy": 2404
+        },
+        {
+          "path": "docs/components/chart.mdx",
+          "bytes": 15950,
+          "sha256": "957f51fdb9a028843fa36f17e4f79e86cc6ecce8268bc2c5e2cfc1699b40cd43",
+          "o200k": 4284,
+          "claudeLegacy": 4827
+        },
+        {
+          "path": "docs/components/checkbox.mdx",
+          "bytes": 2796,
+          "sha256": "64f97f0bbbdac99cb57c2a1819b9f5e466d6cdda4b488c5dac673247ecfb0aa7",
+          "o200k": 696,
+          "claudeLegacy": 834
+        },
+        {
+          "path": "docs/components/collapsible.mdx",
+          "bytes": 2808,
+          "sha256": "f66bf626e250ba258dd9579152548228dd57668a12a634940b1f3c423e8ae104",
+          "o200k": 712,
+          "claudeLegacy": 831
+        },
+        {
+          "path": "docs/components/combobox.mdx",
+          "bytes": 7280,
+          "sha256": "0a30a3a9f49f0785fbd475059f8a74e222592e6cb5574d5a7f515ef8dcf10a43",
+          "o200k": 1856,
+          "claudeLegacy": 2036
+        },
+        {
+          "path": "docs/components/command.mdx",
+          "bytes": 3057,
+          "sha256": "de66427289288c462e3fee6a26f689f6a60e8b5b42ba20f224c8bb63a5f389c7",
+          "o200k": 785,
+          "claudeLegacy": 884
+        },
+        {
+          "path": "docs/components/context-menu.mdx",
+          "bytes": 3985,
+          "sha256": "b5172ff0602f545589476200b9f1b00d410258c9b0e79029a7ea0c9402bc81e0",
+          "o200k": 976,
+          "claudeLegacy": 1094
+        },
+        {
+          "path": "docs/components/data-table.mdx",
+          "bytes": 24316,
+          "sha256": "741cffe2e9e0cdf6d35ee61053734b174dbeffefcab54fea56faf66cef2b9e8c",
+          "o200k": 5774,
+          "claudeLegacy": 6537
+        },
+        {
+          "path": "docs/components/date-picker.mdx",
+          "bytes": 2988,
+          "sha256": "d9e8900691bd5cb0d736e7b262813021b6528a3afd833fc9866dda99e5b69858",
+          "o200k": 698,
+          "claudeLegacy": 853
+        },
+        {
+          "path": "docs/components/dialog.mdx",
+          "bytes": 2873,
+          "sha256": "aab92c0ec95496a662dec2d3a63b0a81357cf42ed23fe6566636b69db1dd4f78",
+          "o200k": 690,
+          "claudeLegacy": 812
+        },
+        {
+          "path": "docs/components/direction.mdx",
+          "bytes": 2028,
+          "sha256": "6dda6d89f1a139e2ff4395a9f9df1900b828947825b6007fb08af7bf5c59a8c1",
+          "o200k": 490,
+          "claudeLegacy": 579
+        },
+        {
+          "path": "docs/components/drawer.mdx",
+          "bytes": 2793,
+          "sha256": "a24224cf9edd5007941053b229deb4a7f68e64141a4cf05be4ab8c174239bb7b",
+          "o200k": 718,
+          "claudeLegacy": 861
+        },
+        {
+          "path": "docs/components/dropdown-menu.mdx",
+          "bytes": 4924,
+          "sha256": "6d4ab6b4882817815e91dd14af7d861911bd42dcec868c76ce3aac58716d9c55",
+          "o200k": 1176,
+          "claudeLegacy": 1365
+        },
+        {
+          "path": "docs/components/empty.mdx",
+          "bytes": 4627,
+          "sha256": "e8925231643484c8445d0304b3888794b5a3259a43d72509fb3428e3c1b9e001",
+          "o200k": 1214,
+          "claudeLegacy": 1378
+        },
+        {
+          "path": "docs/components/field.mdx",
+          "bytes": 11061,
+          "sha256": "f32a4f0c8c11e00851c9ee82898c0bac4727834356924edbfb4036890189a0e5",
+          "o200k": 2634,
+          "claudeLegacy": 2958
+        },
+        {
+          "path": "docs/components/hover-card.mdx",
+          "bytes": 2685,
+          "sha256": "3781d23900efdda151824805bfb50117718eb2cf07d19537c39e614d310d2420",
+          "o200k": 719,
+          "claudeLegacy": 841
+        },
+        {
+          "path": "docs/components/input-group.mdx",
+          "bytes": 7452,
+          "sha256": "d9478533d22a67ef2793bfe2a16f12bd9a4fd0a0f34757f0fbb35c5bf7797a20",
+          "o200k": 1863,
+          "claudeLegacy": 2142
+        },
+        {
+          "path": "docs/components/input-otp.mdx",
+          "bytes": 3652,
+          "sha256": "d9978cf0adde85337ec971e12301b9c6e16d9185ff5f4b1b1b5faa98be848f24",
+          "o200k": 1011,
+          "claudeLegacy": 1178
+        },
+        {
+          "path": "docs/components/input.mdx",
+          "bytes": 3783,
+          "sha256": "76b71c4e2cd0020231c5b506bf08edf5c89edb2084b86c8135bce3dfa614e41d",
+          "o200k": 995,
+          "claudeLegacy": 1171
+        },
+        {
+          "path": "docs/components/item.mdx",
+          "bytes": 5788,
+          "sha256": "e21c3b24b3cc88ce729e9d5a17a7823cdd9caf7a434b007b7d76168795bea787",
+          "o200k": 1487,
+          "claudeLegacy": 1708
+        },
+        {
+          "path": "docs/components/kbd.mdx",
+          "bytes": 2288,
+          "sha256": "b6fd253067990eb69bc597d4774e95983d4b7a1af9fc91ff59d71f69cf8d8f72",
+          "o200k": 634,
+          "claudeLegacy": 758
+        },
+        {
+          "path": "docs/components/label.mdx",
+          "bytes": 1986,
+          "sha256": "d665e1e8fb477248eddbb07db007cbe664726ec3844566edc13a0fdd178354c8",
+          "o200k": 522,
+          "claudeLegacy": 620
+        },
+        {
+          "path": "docs/components/marker.mdx",
+          "bytes": 7911,
+          "sha256": "1123100895d053617af6a26986b9becf57ec19af268b032e1832207ffca6e5a6",
+          "o200k": 1812,
+          "claudeLegacy": 2046
+        },
+        {
+          "path": "docs/components/menubar.mdx",
+          "bytes": 3887,
+          "sha256": "6f8d317f28b73985ad41dcd065b019e0f0d8cb8061880ae68ae3fd155dd4d1a7",
+          "o200k": 1024,
+          "claudeLegacy": 1147
+        },
+        {
+          "path": "docs/components/message-scroller.mdx",
+          "bytes": 24517,
+          "sha256": "2c1f12f19e762e2bc51f60bcf60d3439896ad0abc46cf33814d0208ebeb3cfa6",
+          "o200k": 5644,
+          "claudeLegacy": 6315
+        },
+        {
+          "path": "docs/components/message.mdx",
+          "bytes": 7286,
+          "sha256": "eb0d5fc843db9e58ddfab0c0b80caaa1d57eecc47515e791f7f01faea986401f",
+          "o200k": 1598,
+          "claudeLegacy": 1801
+        },
+        {
+          "path": "docs/components/native-select.mdx",
+          "bytes": 3971,
+          "sha256": "2c6b9633fbd5d852d5f2d5069f2c86b6ed3f0a41847d886c9eb937c24daa0526",
+          "o200k": 969,
+          "claudeLegacy": 1118
+        },
+        {
+          "path": "docs/components/navigation-menu.mdx",
+          "bytes": 3076,
+          "sha256": "2de0e07daab3155149c2c188e406394482367f207203446ce2213342e580bae0",
+          "o200k": 735,
+          "claudeLegacy": 853
+        },
+        {
+          "path": "docs/components/pagination.mdx",
+          "bytes": 4649,
+          "sha256": "beb857f63a9533f5c7a6e677f906ac0cee5838621ef1ad49670b84a443ecf0ca",
+          "o200k": 1118,
+          "claudeLegacy": 1271
+        },
+        {
+          "path": "docs/components/popover.mdx",
+          "bytes": 2373,
+          "sha256": "7d1b4cad598a0c85ed44b758fea507bbeceb0be121759bad124cc00052a147eb",
+          "o200k": 599,
+          "claudeLegacy": 734
+        },
+        {
+          "path": "docs/components/progress.mdx",
+          "bytes": 1779,
+          "sha256": "8aa4c3f937b069473e58a46c74e00a9447aede61e0f4f97e22eaa421ebea0f5e",
+          "o200k": 442,
+          "claudeLegacy": 539
+        },
+        {
+          "path": "docs/components/questionnaire.mdx",
+          "bytes": 9370,
+          "sha256": "88a5038baac3dde5511b10dbb5c9ad95c46db8679afc3f8a67d29441e1d3c5c8",
+          "o200k": 2211,
+          "claudeLegacy": 2492
+        },
+        {
+          "path": "docs/components/radio-group.mdx",
+          "bytes": 2964,
+          "sha256": "19bab15628d823809c5347c2496562bb1d6282fc7e2b2c394630a7df7255d8e8",
+          "o200k": 752,
+          "claudeLegacy": 903
+        },
+        {
+          "path": "docs/components/resizable.mdx",
+          "bytes": 3436,
+          "sha256": "7d8736345cb431498e85d1318f2f7e97d2b2508e8d9b7a7726c14830b5b2134d",
+          "o200k": 867,
+          "claudeLegacy": 1014
+        },
+        {
+          "path": "docs/components/scroll-area.mdx",
+          "bytes": 1955,
+          "sha256": "08f9ba357f5b08754fc79d8d459566d82f0ce54103bd2a8fe81546a598aed864",
+          "o200k": 503,
+          "claudeLegacy": 607
+        },
+        {
+          "path": "docs/components/select.mdx",
+          "bytes": 3412,
+          "sha256": "b6135c39c49688ce2de6b2c6d1c25856ecfcbf4da1e9096badebe45ef26332a6",
+          "o200k": 857,
+          "claudeLegacy": 990
+        },
+        {
+          "path": "docs/components/separator.mdx",
+          "bytes": 1838,
+          "sha256": "a1642886b0fd940d8b00b6263a9824ff99e11dcb1c11f3ff88801ae6b59d2368",
+          "o200k": 447,
+          "claudeLegacy": 552
+        },
+        {
+          "path": "docs/components/sheet.mdx",
+          "bytes": 2441,
+          "sha256": "ace9cb8de350243680807314a022cd346c10088e62967e62952c98802b6721a7",
+          "o200k": 622,
+          "claudeLegacy": 728
+        },
+        {
+          "path": "docs/components/sidebar.mdx",
+          "bytes": 18733,
+          "sha256": "88e3c6c5d4560e57e7fcec0e93f4db9907de8aeda170a5867e19ce2ad2467c55",
+          "o200k": 4721,
+          "claudeLegacy": 5447
+        },
+        {
+          "path": "docs/components/skeleton.mdx",
+          "bytes": 1483,
+          "sha256": "ce730f587e7ce548dfb2e93c8297654f180c4b1c2ad4c2e174556ea4cefcfc1d",
+          "o200k": 401,
+          "claudeLegacy": 478
+        },
+        {
+          "path": "docs/components/slider.mdx",
+          "bytes": 2052,
+          "sha256": "b92d1182e27775f209961785b97273d000bab42939941266bd8bcf3747e4526d",
+          "o200k": 519,
+          "claudeLegacy": 635
+        },
+        {
+          "path": "docs/components/sonner.mdx",
+          "bytes": 2189,
+          "sha256": "061c19d612c3552fd259abc34dd3ea1150e67c23d9c041e1e8c2208e8c304250",
+          "o200k": 597,
+          "claudeLegacy": 702
+        },
+        {
+          "path": "docs/components/spinner.mdx",
+          "bytes": 2486,
+          "sha256": "4c90c2a2c6fe74466ef2c7a0a7c5a6b0c8eac82bccca7dada056f2dc07b0f7d5",
+          "o200k": 627,
+          "claudeLegacy": 762
+        },
+        {
+          "path": "docs/components/switch.mdx",
+          "bytes": 2251,
+          "sha256": "455ca70e389bc6ebfc5477ebd6d85bfc8c3f4a99be3efd474401444cbacfe5ca",
+          "o200k": 563,
+          "claudeLegacy": 686
+        },
+        {
+          "path": "docs/components/table.mdx",
+          "bytes": 3048,
+          "sha256": "c096642d6adc189da4b388ac582badc6a9c7652935a55ed70575351b1600fc1c",
+          "o200k": 809,
+          "claudeLegacy": 927
+        },
+        {
+          "path": "docs/components/tabs.mdx",
+          "bytes": 2451,
+          "sha256": "22d27af832118ac0f7d5bf4ecc5d5f1fb5ac135e7ef7c0fd282e07086451426b",
+          "o200k": 639,
+          "claudeLegacy": 764
+        },
+        {
+          "path": "docs/components/textarea.mdx",
+          "bytes": 1997,
+          "sha256": "32615edb8af62d86211d363619c05e7591b8235c0214c9f29212c378816a21d7",
+          "o200k": 518,
+          "claudeLegacy": 620
+        },
+        {
+          "path": "docs/components/toast.mdx",
+          "bytes": 220,
+          "sha256": "a6cc876b55cb888a5ec8c16603bc0fef51b8eac76c1b42e300c4f99f38d73fa2",
+          "o200k": 50,
+          "claudeLegacy": 58
+        },
+        {
+          "path": "docs/components/toggle-group.mdx",
+          "bytes": 2831,
+          "sha256": "c9c794a3ec63428687000a05756d931cb134ea458d5bdddeceb7e9c0a1ace174",
+          "o200k": 723,
+          "claudeLegacy": 872
+        },
+        {
+          "path": "docs/components/toggle.mdx",
+          "bytes": 1802,
+          "sha256": "50579c41e4b3faae3c96469a2b1211b24db925496501d29fd98128dae7adbfc6",
+          "o200k": 468,
+          "claudeLegacy": 576
+        },
+        {
+          "path": "docs/components/tooltip.mdx",
+          "bytes": 2984,
+          "sha256": "152e5761ad4b6ace3bb192ded076f3f11cb376b8de3b04dc697258167c82a8ab",
+          "o200k": 752,
+          "claudeLegacy": 915
+        },
+        {
+          "path": "docs/components/typography.mdx",
+          "bytes": 1587,
+          "sha256": "004334b84613b6d9611cc2876e077c6a026b1f23703c3b385d49ff178b227f2c",
+          "o200k": 425,
+          "claudeLegacy": 513
+        },
+        {
+          "path": "docs/examples/_registry.ts",
+          "bytes": 58499,
+          "sha256": "9e0b39947c043246b10223af0dea4ddf4f65771f6b66657a8cced598630fa8d7",
+          "o200k": 14901,
+          "claudeLegacy": 16074
+        },
+        {
+          "path": "docs/examples/accordion-demo.tsx",
+          "bytes": 2213,
+          "sha256": "cd6f131e01e3e67921c4e1cead52e054051d6d15d423148e2b6a5e96242e82eb",
+          "o200k": 439,
+          "claudeLegacy": 496
+        },
+        {
+          "path": "docs/examples/alert-demo.tsx",
+          "bytes": 1170,
+          "sha256": "6db568ffab30eeeafc00c7d2e9768fbe2dd6c13ebbd5465bf11179584282965c",
+          "o200k": 272,
+          "claudeLegacy": 287
+        },
+        {
+          "path": "docs/examples/alert-destructive.tsx",
+          "bytes": 410,
+          "sha256": "ab874fc54a44c21048bd77a222ae28813473230a81139a7c4b34677905493dd7",
+          "o200k": 95,
+          "claudeLegacy": 107
+        },
+        {
+          "path": "docs/examples/alert-dialog-demo.tsx",
+          "bytes": 1062,
+          "sha256": "2c1db4029ab2e7bd3eb7352d0d6306fc46e39a9f85cac7e35160a4bc1f63dac7",
+          "o200k": 225,
+          "claudeLegacy": 237
+        },
+        {
+          "path": "docs/examples/aspect-ratio-demo.tsx",
+          "bytes": 494,
+          "sha256": "0b01f01fe3f724cdedb9a8e8edf9964bbea73a9083767cab81f62dca7449b061",
+          "o200k": 138,
+          "claudeLegacy": 156
+        },
+        {
+          "path": "docs/examples/avatar-demo.tsx",
+          "bytes": 1277,
+          "sha256": "5c9b87121d18a2f7af15255feae0bc1106e7ee6da5e680be973cd2856853dcbc",
+          "o200k": 315,
+          "claudeLegacy": 338
+        },
+        {
+          "path": "docs/examples/badge-demo.tsx",
+          "bytes": 1174,
+          "sha256": "78476ea7d79e40d498260d6767b9ab81a4f07cdb82602d944eab50c822f23cb6",
+          "o200k": 304,
+          "claudeLegacy": 336
+        },
+        {
+          "path": "docs/examples/badge-destructive.tsx",
+          "bytes": 152,
+          "sha256": "bf455c25cee929ad12582c8ac249f7f87d84d9db83035078fe7a898aeb4ac40f",
+          "o200k": 34,
+          "claudeLegacy": 46
+        },
+        {
+          "path": "docs/examples/badge-outline.tsx",
+          "bytes": 140,
+          "sha256": "ae4d0f42caeb800ab7d3317736914163384269a45b032e59591ae65418688cb0",
+          "o200k": 31,
+          "claudeLegacy": 41
+        },
+        {
+          "path": "docs/examples/badge-secondary.tsx",
+          "bytes": 146,
+          "sha256": "9a7d40f36187521d0eeb893f922b2f28b3b3d9b80e668ff4f13787d88610d1a6",
+          "o200k": 31,
+          "claudeLegacy": 41
+        },
+        {
+          "path": "docs/examples/breadcrumb-demo.tsx",
+          "bytes": 1593,
+          "sha256": "2f125cedb9e44284c79dd2a4b1ba7ed6d516c429ea3662ae5ba27088f22f798c",
+          "o200k": 326,
+          "claudeLegacy": 394
+        },
+        {
+          "path": "docs/examples/breadcrumb-dropdown.tsx",
+          "bytes": 1565,
+          "sha256": "ead5807d44f4dd1f5e31c67548994537450aa529b046e200ddc80bdec70dc8f7",
+          "o200k": 332,
+          "claudeLegacy": 403
+        },
+        {
+          "path": "docs/examples/breadcrumb-ellipsis.tsx",
+          "bytes": 966,
+          "sha256": "f164b9872ab3d45116c5798bf7e8d7decb6702e807cc7e1eec8b454124e555bd",
+          "o200k": 192,
+          "claudeLegacy": 260
+        },
+        {
+          "path": "docs/examples/breadcrumb-link.tsx",
+          "bytes": 833,
+          "sha256": "ffd40b1774fdfd4e7659c47bd41757b33a64f1dc78a263a11fe61742cca9bd9d",
+          "o200k": 167,
+          "claudeLegacy": 224
+        },
+        {
+          "path": "docs/examples/breadcrumb-responsive.tsx",
+          "bytes": 4339,
+          "sha256": "55c4f01ba38e55515e336f40506f4ffc6054214c5acb5bcb604e6b1309b77de6",
+          "o200k": 869,
+          "claudeLegacy": 1012
+        },
+        {
+          "path": "docs/examples/breadcrumb-separator.tsx",
+          "bytes": 980,
+          "sha256": "3f3b874d90cc806927a355c5d809376ffe0f5679669a0fab5b800562f80d8054",
+          "o200k": 198,
+          "claudeLegacy": 264
+        },
+        {
+          "path": "docs/examples/button-as-child.tsx",
+          "bytes": 212,
+          "sha256": "a9ee480ee4725e8750e35bdae21cd566d84bd951aeb3327bbd2e0790385f4b42",
+          "o200k": 52,
+          "claudeLegacy": 62
+        },
+        {
+          "path": "docs/examples/button-default.tsx",
+          "bytes": 126,
+          "sha256": "1deb7489075cfbac82ea93c4cfba4833678ec98230209d67e33008e56c982687",
+          "o200k": 27,
+          "claudeLegacy": 34
+        },
+        {
+          "path": "docs/examples/button-demo.tsx",
+          "bytes": 381,
+          "sha256": "6fa46736528c76b2e4d02aefff9cf953a3052ed497d3be510866a5f13c829af4",
+          "o200k": 94,
+          "claudeLegacy": 109
+        },
+        {
+          "path": "docs/examples/button-destructive.tsx",
+          "bytes": 157,
+          "sha256": "dfb6b028771929667a0c85bce512d8fa58346e1f92bf505082cd438fa98819cd",
+          "o200k": 33,
+          "claudeLegacy": 42
+        },
+        {
+          "path": "docs/examples/button-ghost.tsx",
+          "bytes": 139,
+          "sha256": "9971f4da8d3ef000850434c4464c32f4f86c539dd6a5cd2534db436fb206f9b9",
+          "o200k": 30,
+          "claudeLegacy": 37
+        },
+        {
+          "path": "docs/examples/button-group-demo.tsx",
+          "bytes": 3474,
+          "sha256": "76a59f01f44974b928cdc7b24726e39082e99ed53d6f50e4929aa75ac9038b5b",
+          "o200k": 684,
+          "claudeLegacy": 706
+        },
+        {
+          "path": "docs/examples/button-group-dropdown.tsx",
+          "bytes": 1976,
+          "sha256": "991e73182a0a232712eb688a977321cf8b6f09afe71c9a5ad5175740fe7eefe2",
+          "o200k": 407,
+          "claudeLegacy": 418
+        },
+        {
+          "path": "docs/examples/button-group-input-group.tsx",
+          "bytes": 1764,
+          "sha256": "6761efac34f4850c2b6900c8b5a6b636ddeb9eba31b48e3874c8b6cea5f274e7",
+          "o200k": 377,
+          "claudeLegacy": 427
+        },
+        {
+          "path": "docs/examples/button-group-input.tsx",
+          "bytes": 428,
+          "sha256": "cbce2a52736a90ece76b5e296812614fd246fefca80ba2d0dc2c304c0b3ceca9",
+          "o200k": 96,
+          "claudeLegacy": 117
+        },
+        {
+          "path": "docs/examples/button-group-nested.tsx",
+          "bytes": 974,
+          "sha256": "11032c971530479cce84b805aaf175f6271a4cd5b54622f482c4e5463bff9042",
+          "o200k": 234,
+          "claudeLegacy": 248
+        },
+        {
+          "path": "docs/examples/button-group-orientation.tsx",
+          "bytes": 522,
+          "sha256": "ee61ba17c8720b03fb0818a9984c67a4b146645676fd343f67d93929c8ce1912",
+          "o200k": 121,
+          "claudeLegacy": 138
+        },
+        {
+          "path": "docs/examples/button-group-popover.tsx",
+          "bytes": 1519,
+          "sha256": "09f5d3e12f6a2b412e35891e61396d6590df387cca7d1252f386db7bc2b7841f",
+          "o200k": 350,
+          "claudeLegacy": 389
+        },
+        {
+          "path": "docs/examples/button-group-select.tsx",
+          "bytes": 1427,
+          "sha256": "a171e099edd22b7b14ab18e51d0b891495d217825145ec7a0d87b15857dd5e64",
+          "o200k": 342,
+          "claudeLegacy": 385
+        },
+        {
+          "path": "docs/examples/button-group-separator.tsx",
+          "bytes": 422,
+          "sha256": "16b5d64fc4ce01b7e99a0b6de09289a7a14dc2cb63d81c71c2ed12fb7ba69e33",
+          "o200k": 96,
+          "claudeLegacy": 108
+        },
+        {
+          "path": "docs/examples/button-group-size.tsx",
+          "bytes": 1294,
+          "sha256": "9d139bcb5701b8b0c4c94ef76edb4b06f219ca9c1c269942e2ec744e67866630",
+          "o200k": 299,
+          "claudeLegacy": 311
+        },
+        {
+          "path": "docs/examples/button-group-split.tsx",
+          "bytes": 447,
+          "sha256": "04cdab5902efc0636c762e3b331fdc8c633ce44139ef3137e1d7351c0394f257",
+          "o200k": 102,
+          "claudeLegacy": 119
+        },
+        {
+          "path": "docs/examples/button-icon.tsx",
+          "bytes": 252,
+          "sha256": "b55e5cc67630cf9f3b25159c23e5d243fb31c5c3531c90294af879e855bf1588",
+          "o200k": 62,
+          "claudeLegacy": 72
+        },
+        {
+          "path": "docs/examples/button-link.tsx",
+          "bytes": 136,
+          "sha256": "75099bbd40a3397277f724959394d75957fd2f955ffc0d900d09b3783d1c79aa",
+          "o200k": 30,
+          "claudeLegacy": 37
+        },
+        {
+          "path": "docs/examples/button-loading.tsx",
+          "bytes": 253,
+          "sha256": "999b694b7bb947a9a87a877418e02e76ac02458fd070bb008a9c933e3afe43c7",
+          "o200k": 58,
+          "claudeLegacy": 69
+        },
+        {
+          "path": "docs/examples/button-outline.tsx",
+          "bytes": 145,
+          "sha256": "58961d70069826bff9225a85c5bca993c52c1ad7015c6dd9e67c9b934166be58",
+          "o200k": 30,
+          "claudeLegacy": 37
+        },
+        {
+          "path": "docs/examples/button-rounded.tsx",
+          "bytes": 315,
+          "sha256": "3b0fd2d68547cd44e246eda63676dea24539d8aed63d2254aa49424f56ac829c",
+          "o200k": 79,
+          "claudeLegacy": 90
+        },
+        {
+          "path": "docs/examples/button-secondary.tsx",
+          "bytes": 151,
+          "sha256": "8e16dd66a20b8593857579c79e366153d35c05c8a33e29ef7ff81d6d0aca1f14",
+          "o200k": 30,
+          "claudeLegacy": 37
+        },
+        {
+          "path": "docs/examples/button-size.tsx",
+          "bytes": 974,
+          "sha256": "f9e624446c3667ce217b899b1600ec22d5a25a013be7aa756d88c0957a337ef1",
+          "o200k": 239,
+          "claudeLegacy": 258
+        },
+        {
+          "path": "docs/examples/button-with-icon.tsx",
+          "bytes": 252,
+          "sha256": "0bd4ace73895d449e279caad1faba7dd74f0872c8a2887adf43cda04b43e78b2",
+          "o200k": 61,
+          "claudeLegacy": 71
+        },
+        {
+          "path": "docs/examples/calendar-demo.tsx",
+          "bytes": 394,
+          "sha256": "4e8d0aa6ef4ad7a5aeaa992a2f136da8d8759155f5fb76677267700bcde53adb",
+          "o200k": 92,
+          "claudeLegacy": 106
+        },
+        {
+          "path": "docs/examples/calendar-hijri.tsx",
+          "bytes": 8424,
+          "sha256": "39e2869efc830c0f3a7f43c4ab8252ccdd2eeed9247768672143a4b33de2320c",
+          "o200k": 1912,
+          "claudeLegacy": 2191
+        },
+        {
+          "path": "docs/examples/card-demo.tsx",
+          "bytes": 1811,
+          "sha256": "e271f84e0895f8686bec7b687f08cb40c1a26173db93c18e512ce2f7f89d1cef",
+          "o200k": 401,
+          "claudeLegacy": 419
+        },
+        {
+          "path": "docs/examples/card-with-form.tsx",
+          "bytes": 1841,
+          "sha256": "06e1c7fe735dbac95c2f6efea66c61a5487815e7e1217cbae328c25535f41f07",
+          "o200k": 421,
+          "claudeLegacy": 452
+        },
+        {
+          "path": "docs/examples/carousel-api.tsx",
+          "bytes": 1447,
+          "sha256": "c638bdef8fc7669c19693cf8b29e9862e908dacff226f723ed977b095d5ab1d9",
+          "o200k": 359,
+          "claudeLegacy": 412
+        },
+        {
+          "path": "docs/examples/carousel-demo.tsx",
+          "bytes": 860,
+          "sha256": "be9b6bc1b391d7c7e4beeaf7d3f476d5681fad45574e398384fdd0b44dfac25e",
+          "o200k": 196,
+          "claudeLegacy": 229
+        },
+        {
+          "path": "docs/examples/carousel-orientation.tsx",
+          "bytes": 998,
+          "sha256": "79e4a004ad2ab834fcb2c4bf707b468187350281c2b4f436626cae2d1a0436f8",
+          "o200k": 239,
+          "claudeLegacy": 269
+        },
+        {
+          "path": "docs/examples/carousel-plugin.tsx",
+          "bytes": 1141,
+          "sha256": "fe4607f1d0c37fde2abc1e5e89a312c4d666648fab7cb55d48241683b392b529",
+          "o200k": 264,
+          "claudeLegacy": 311
+        },
+        {
+          "path": "docs/examples/carousel-size.tsx",
+          "bytes": 956,
+          "sha256": "ada3cd1f12ed5427d0a587f5a0a6090361304caecdf34e60b8ea1e789212341d",
+          "o200k": 229,
+          "claudeLegacy": 261
+        },
+        {
+          "path": "docs/examples/carousel-spacing.tsx",
+          "bytes": 924,
+          "sha256": "7f230da6c59b60383f94844cb0d2ed42208a173e0ff0ffedd8e1b69d21c4faef",
+          "o200k": 223,
+          "claudeLegacy": 254
+        },
+        {
+          "path": "docs/examples/chart-bar-demo-axis.tsx",
+          "bytes": 1240,
+          "sha256": "6a1b1151b9e83424c266e273c7be07135d0c76174e46778558274ec00413eff8",
+          "o200k": 347,
+          "claudeLegacy": 359
+        },
+        {
+          "path": "docs/examples/chart-bar-demo-grid.tsx",
+          "bytes": 1046,
+          "sha256": "9e327694073a1fcba7acf8e2ba90ec99299c8f29143bb179f9562fa0c538e597",
+          "o200k": 299,
+          "claudeLegacy": 310
+        },
+        {
+          "path": "docs/examples/chart-bar-demo-legend.tsx",
+          "bytes": 1432,
+          "sha256": "7e89b63040408f52c00be66c1a1b4b955cdd6798fcaa454e241e1ac8523ae34f",
+          "o200k": 387,
+          "claudeLegacy": 407
+        },
+        {
+          "path": "docs/examples/chart-bar-demo-tooltip.tsx",
+          "bytes": 1338,
+          "sha256": "d8c8fbd55781bc6e1d982e80a603b54cb9181d3745a524081d603829fb567260",
+          "o200k": 367,
+          "claudeLegacy": 385
+        },
+        {
+          "path": "docs/examples/chart-bar-demo.tsx",
+          "bytes": 988,
+          "sha256": "374bbfd06795d56f1d99d4279f83a4feaab34a06ad67343a18137d2c394050f9",
+          "o200k": 287,
+          "claudeLegacy": 297
+        },
+        {
+          "path": "docs/examples/chart-tooltip-demo.tsx",
+          "bytes": 8109,
+          "sha256": "a40caf326908df7492231c595f22f016982c2effd233481461c5df070bb68b20",
+          "o200k": 2729,
+          "claudeLegacy": 2630
+        },
+        {
+          "path": "docs/examples/checkbox-demo.tsx",
+          "bytes": 1793,
+          "sha256": "3deeca9f2c3837161739e5cebb76c04e886fc0d6bc2376d10af5305d4f0efcc3",
+          "o200k": 451,
+          "claudeLegacy": 477
+        },
+        {
+          "path": "docs/examples/checkbox-disabled.tsx",
+          "bytes": 424,
+          "sha256": "bf024666a3b21aac3d24f91559137e4d681b5a006e28aa7b7281492208025c55",
+          "o200k": 99,
+          "claudeLegacy": 111
+        },
+        {
+          "path": "docs/examples/checkbox-with-text.tsx",
+          "bytes": 628,
+          "sha256": "bd3535dcf346fcc242f01eb0fcd571e8da92aa7638f5658c5077691899d4317a",
+          "o200k": 149,
+          "claudeLegacy": 164
+        },
+        {
+          "path": "docs/examples/collapsible-demo.tsx",
+          "bytes": 1349,
+          "sha256": "26b0c1fa839819a59467f060afb521978c335475de85489166a9dcd637a5650e",
+          "o200k": 356,
+          "claudeLegacy": 379
+        },
+        {
+          "path": "docs/examples/combobox-demo.tsx",
+          "bytes": 2326,
+          "sha256": "712be563078569755d6c39acdecb88c8dd5da67c140f62e40f6f76b408bceb3b",
+          "o200k": 536,
+          "claudeLegacy": 584
+        },
+        {
+          "path": "docs/examples/combobox-dropdown-menu.tsx",
+          "bytes": 3211,
+          "sha256": "5fd8604f73fc950aa3544aad2aa414a1b4b4388f09d22cd0385509eb0bab5146",
+          "o200k": 663,
+          "claudeLegacy": 710
+        },
+        {
+          "path": "docs/examples/combobox-popover.tsx",
+          "bytes": 2194,
+          "sha256": "a61a785f4042f94c45d08bf6febb8bb053db13636ae540c4c75379e52b2d2137",
+          "o200k": 495,
+          "claudeLegacy": 541
+        },
+        {
+          "path": "docs/examples/combobox-responsive.tsx",
+          "bytes": 2866,
+          "sha256": "1141bb0d7ab5df68b71b1287ea7f0cf710b33d6b436950adda37f3116fb09046",
+          "o200k": 709,
+          "claudeLegacy": 778
+        },
+        {
+          "path": "docs/examples/command-demo.tsx",
+          "bytes": 1554,
+          "sha256": "42de75f8267437422756b9099ec11597f67a46d68105364c45b0383a250c51a2",
+          "o200k": 341,
+          "claudeLegacy": 364
+        },
+        {
+          "path": "docs/examples/command-dialog.tsx",
+          "bytes": 2386,
+          "sha256": "7e5f4c0419b69f46db6f91b6c5328cc49b15bd7a24023fdf87fe8655cd5f5241",
+          "o200k": 541,
+          "claudeLegacy": 586
+        },
+        {
+          "path": "docs/examples/context-menu-demo.tsx",
+          "bytes": 2280,
+          "sha256": "b6d7d6430deecdc070a55a6658acd64b8ea69d1f53f87e520a18be133e57571f",
+          "o200k": 501,
+          "claudeLegacy": 461
+        },
+        {
+          "path": "docs/examples/data-table-demo.tsx",
+          "bytes": 9149,
+          "sha256": "8c85eadaf2dc40c82ee97645246727de6d747ad5918befd4b0366f2e6eb64bf6",
+          "o200k": 2065,
+          "claudeLegacy": 2210
+        },
+        {
+          "path": "docs/examples/date-picker-demo.tsx",
+          "bytes": 1067,
+          "sha256": "5f6a8803f5cda41624076e2a779a8fdad89eea7fa194701cde28b69a0cc02522",
+          "o200k": 254,
+          "claudeLegacy": 294
+        },
+        {
+          "path": "docs/examples/date-picker-with-presets.tsx",
+          "bytes": 1790,
+          "sha256": "3ec908a54b6fb4aa73c845d486619e89d3f5e4479e39b5c0c7b8a176b1908c44",
+          "o200k": 426,
+          "claudeLegacy": 477
+        },
+        {
+          "path": "docs/examples/date-picker-with-range.tsx",
+          "bytes": 1766,
+          "sha256": "fad4f96f99578bad23c44bfa274e2df207c0f4161740c440488cdabf842d2920",
+          "o200k": 421,
+          "claudeLegacy": 465
+        },
+        {
+          "path": "docs/examples/dialog-close-button.tsx",
+          "bytes": 1393,
+          "sha256": "07a7f26bfae9052aa4300d239c016b61087339f9e530164dc5b71e4c4ef24516",
+          "o200k": 310,
+          "claudeLegacy": 329
+        },
+        {
+          "path": "docs/examples/dialog-demo.tsx",
+          "bytes": 1543,
+          "sha256": "14c8fc3e1a295ec73ab618244607b7eb8c6e917694910728a8eade1e6c266376",
+          "o200k": 352,
+          "claudeLegacy": 373
+        },
+        {
+          "path": "docs/examples/drawer-demo.tsx",
+          "bytes": 3232,
+          "sha256": "14c32b536399a5085233af115bb24eac9e786808247053bba7f09f8412e8a750",
+          "o200k": 758,
+          "claudeLegacy": 805
+        },
+        {
+          "path": "docs/examples/drawer-dialog.tsx",
+          "bytes": 2568,
+          "sha256": "f24bd3b4e3137cf1decc8884fd7e191336f00ef5ee08561bca5642fb8ad0b029",
+          "o200k": 613,
+          "claudeLegacy": 683
+        },
+        {
+          "path": "docs/examples/dropdown-menu-checkboxes.tsx",
+          "bytes": 1603,
+          "sha256": "48d15c87f086c01253e7d1f296a924b7e2a5492b5e78f3e026f76f1c36e21616",
+          "o200k": 356,
+          "claudeLegacy": 382
+        },
+        {
+          "path": "docs/examples/dropdown-menu-demo.tsx",
+          "bytes": 2512,
+          "sha256": "b2e68ca529a2bd266e5cd09f0025e6a6822ccc38df8a6888c84474dc18c55865",
+          "o200k": 534,
+          "claudeLegacy": 534
+        },
+        {
+          "path": "docs/examples/dropdown-menu-dialog.tsx",
+          "bytes": 3844,
+          "sha256": "ec00a46c756385f3770867ef2dcd49de8f53cb29dc793d1ff7a4445152876704",
+          "o200k": 823,
+          "claudeLegacy": 872
+        },
+        {
+          "path": "docs/examples/dropdown-menu-radio-group.tsx",
+          "bytes": 1097,
+          "sha256": "c3cdedce0546a9c69c06d009ebafaa140087b08d854e23caba1e7cd43b330224",
+          "o200k": 246,
+          "claudeLegacy": 271
+        },
+        {
+          "path": "docs/examples/empty-avatar-group.tsx",
+          "bytes": 1583,
+          "sha256": "8424979e798d1e6cafd989cf441dcc731faecf709efb4f82201c9e0661c8ccb4",
+          "o200k": 361,
+          "claudeLegacy": 391
+        },
+        {
+          "path": "docs/examples/empty-avatar.tsx",
+          "bytes": 982,
+          "sha256": "eb8b54a3bbd5ff27ccc04b940cfc4efe23dadc2607d5541c538e2ff5a1269502",
+          "o200k": 221,
+          "claudeLegacy": 238
+        },
+        {
+          "path": "docs/examples/empty-background.tsx",
+          "bytes": 878,
+          "sha256": "8f362962cd09d8c3843e252e4c1b24e9607678233e110d6985acddc89141742b",
+          "o200k": 206,
+          "claudeLegacy": 232
+        },
+        {
+          "path": "docs/examples/empty-demo.tsx",
+          "bytes": 1108,
+          "sha256": "4e0ab19816fd67fc97e3d50c9b7c9bc8b3320173d6e6b348c219b93566e39e6e",
+          "o200k": 256,
+          "claudeLegacy": 274
+        },
+        {
+          "path": "docs/examples/empty-icon.tsx",
+          "bytes": 1643,
+          "sha256": "c1b48eee076fbf16f97c895685394df774c50a8cdbd23e42a974c9e597430965",
+          "o200k": 355,
+          "claudeLegacy": 375
+        },
+        {
+          "path": "docs/examples/empty-input-group.tsx",
+          "bytes": 1112,
+          "sha256": "32a75d2e9b1da89977348bc17cabb8d426bd41ce8a7613195360fc6e1b11b9ff",
+          "o200k": 262,
+          "claudeLegacy": 287
+        },
+        {
+          "path": "docs/examples/empty-outline.tsx",
+          "bytes": 772,
+          "sha256": "f5042a527798ddde4dda9e79d8af746158549d1bf61f63a73f67fc8dc4c6e98f",
+          "o200k": 174,
+          "claudeLegacy": 187
+        },
+        {
+          "path": "docs/examples/field-checkbox.tsx",
+          "bytes": 2607,
+          "sha256": "23949bc69679291dce24a5e5a36a5155f154d12bdd0767dfbb21fe6710cc061f",
+          "o200k": 564,
+          "claudeLegacy": 591
+        },
+        {
+          "path": "docs/examples/field-choice-card.tsx",
+          "bytes": 1657,
+          "sha256": "9fb0d8884568f852bcd205fd171c4fe2783fec18a87a60e63fc17e86053ad28f",
+          "o200k": 341,
+          "claudeLegacy": 358
+        },
+        {
+          "path": "docs/examples/field-demo.tsx",
+          "bytes": 5459,
+          "sha256": "88b2f7d154bbbe2f1585c89cc5fa42a7c4270797d609923914fd9dd595ab5ded",
+          "o200k": 1093,
+          "claudeLegacy": 1128
+        },
+        {
+          "path": "docs/examples/field-fieldset.tsx",
+          "bytes": 1117,
+          "sha256": "59111253d26837279029dbeb2e6f84cba379b3fc874daff83645a81ab98c66ea",
+          "o200k": 267,
+          "claudeLegacy": 282
+        },
+        {
+          "path": "docs/examples/field-group.tsx",
+          "bytes": 1773,
+          "sha256": "a9df2dfb0988f74d50f359aaed1bf4388a9846a4e427c91fb0fd99dcac785067",
+          "o200k": 365,
+          "claudeLegacy": 382
+        },
+        {
+          "path": "docs/examples/field-input.tsx",
+          "bytes": 940,
+          "sha256": "3710903455a6d478ae0e4ecbccb1d382d460c45a7e3d1da03ba2bc3838625aef",
+          "o200k": 207,
+          "claudeLegacy": 220
+        },
+        {
+          "path": "docs/examples/field-radio.tsx",
+          "bytes": 1328,
+          "sha256": "b5d2fe40d1e9d91bd2946dba80edeffbe3a19188ec90d892ccb33a567b65819e",
+          "o200k": 302,
+          "claudeLegacy": 320
+        },
+        {
+          "path": "docs/examples/field-responsive.tsx",
+          "bytes": 1943,
+          "sha256": "be957c97a8f1b4119a160aa1dad86f09df8a024b267502a0e72fc8b6a2179d9b",
+          "o200k": 385,
+          "claudeLegacy": 402
+        },
+        {
+          "path": "docs/examples/field-select.tsx",
+          "bytes": 1195,
+          "sha256": "04dcce46c49eaae4f62f1747daa2d71a489c22997ab2e13ebd470684650e4f17",
+          "o200k": 259,
+          "claudeLegacy": 273
+        },
+        {
+          "path": "docs/examples/field-slider.tsx",
+          "bytes": 864,
+          "sha256": "32221d3683f540709829bc61ec58d99438e09f20e744b2f1b0e918e87500cf60",
+          "o200k": 220,
+          "claudeLegacy": 236
+        },
+        {
+          "path": "docs/examples/field-switch.tsx",
+          "bytes": 667,
+          "sha256": "1f87d7c0ea7105c5e6154cb4532913c3e1e538b3fd31d4a761c9cab82a2f84b5",
+          "o200k": 152,
+          "claudeLegacy": 167
+        },
+        {
+          "path": "docs/examples/field-textarea.tsx",
+          "bytes": 716,
+          "sha256": "23d944468aa310a10351c4f261508adb75c4122823cb274153216a155acf9b07",
+          "o200k": 155,
+          "claudeLegacy": 166
+        },
+        {
+          "path": "docs/examples/form-formisch-array.tsx",
+          "bytes": 6178,
+          "sha256": "dded052ba7d85c40515adf740f70af782cab739b43b41051fe998e84bed92021",
+          "o200k": 1133,
+          "claudeLegacy": 1232
+        },
+        {
+          "path": "docs/examples/form-formisch-checkbox.tsx",
+          "bytes": 6341,
+          "sha256": "261a3796c4680b1b8422e171c52e0c9e36007778db36e9bec18562814b31feb9",
+          "o200k": 1165,
+          "claudeLegacy": 1276
+        },
+        {
+          "path": "docs/examples/form-formisch-complex.tsx",
+          "bytes": 10521,
+          "sha256": "9b59c4214944166d35430c32190811791a710210b73433705aca40c2d732de14",
+          "o200k": 1934,
+          "claudeLegacy": 2100
+        },
+        {
+          "path": "docs/examples/form-formisch-demo.tsx",
+          "bytes": 4908,
+          "sha256": "0b959a1b7e9bfc90cf3983e7055aff6fcdfb8dbcfd2d54dca7b8b8ee1355ec78",
+          "o200k": 1017,
+          "claudeLegacy": 1114
+        },
+        {
+          "path": "docs/examples/form-formisch-input.tsx",
+          "bytes": 3442,
+          "sha256": "4135f5b8daf90807d4f71b8f3815c2f67f22cee65a88980a867e74a44172e3f8",
+          "o200k": 761,
+          "claudeLegacy": 831
+        },
+        {
+          "path": "docs/examples/form-formisch-radiogroup.tsx",
+          "bytes": 4534,
+          "sha256": "3367710550bd3e60e00fc70993ca7432a74bad84ee6344d8af4b975028025804",
+          "o200k": 953,
+          "claudeLegacy": 1046
+        },
+        {
+          "path": "docs/examples/form-formisch-select.tsx",
+          "bytes": 4487,
+          "sha256": "1842e6321286710cada69cc07a70701650dc8cc850eb76d8ead884b55b240cb9",
+          "o200k": 963,
+          "claudeLegacy": 1047
+        },
+        {
+          "path": "docs/examples/form-formisch-switch.tsx",
+          "bytes": 3400,
+          "sha256": "be58ce6a68ed874cb05fda6bbe9a40d67330c12fdf2e864cd6207995fe81b3d1",
+          "o200k": 728,
+          "claudeLegacy": 801
+        },
+        {
+          "path": "docs/examples/form-formisch-textarea.tsx",
+          "bytes": 3327,
+          "sha256": "a7e068e668127106aa3eb0247ff869239ba48a5b17487228adb07faed0a48bec",
+          "o200k": 731,
+          "claudeLegacy": 800
+        },
+        {
+          "path": "docs/examples/form-next-complex-action.ts",
+          "bytes": 851,
+          "sha256": "65c59e436ee8e5268d591649133f14c13e33e7e682b234737edd8e767593cc74",
+          "o200k": 212,
+          "claudeLegacy": 226
+        },
+        {
+          "path": "docs/examples/form-next-complex-schema.ts",
+          "bytes": 1322,
+          "sha256": "3d1da4ab3d9fff2afb8d682cedfdafe6d5a2e8a8edc9ce064f9c600b9bf0a6c5",
+          "o200k": 348,
+          "claudeLegacy": 365
+        },
+        {
+          "path": "docs/examples/form-next-complex.tsx",
+          "bytes": 6735,
+          "sha256": "e2de06db934555d020c722cb1d61ae17f87eb2ea3f21f9e149e99cc9f445eff9",
+          "o200k": 1260,
+          "claudeLegacy": 1370
+        },
+        {
+          "path": "docs/examples/form-next-demo-action.ts",
+          "bytes": 666,
+          "sha256": "5b80f7e4d5f5075edfc368b76efb2abcbbeea9cec64573935f0ea164ca958fa8",
+          "o200k": 163,
+          "claudeLegacy": 180
+        },
+        {
+          "path": "docs/examples/form-next-demo-schema.ts",
+          "bytes": 519,
+          "sha256": "d969ec0c161ac8765e1581f45679367f7c02df73d632d6289cde6b0df3dd6ee2",
+          "o200k": 144,
+          "claudeLegacy": 148
+        },
+        {
+          "path": "docs/examples/form-next-demo.tsx",
+          "bytes": 4014,
+          "sha256": "134aa76b0c3b672da5b6f6c93d0ce51fd0368420b89ab7c9817c559369702dea",
+          "o200k": 833,
+          "claudeLegacy": 926
+        },
+        {
+          "path": "docs/examples/form-rhf-array.tsx",
+          "bytes": 5115,
+          "sha256": "360b6c290750a4babe13afd2f12c95519ea74b2fe8a5756a7e9ca8e94bd975af",
+          "o200k": 1035,
+          "claudeLegacy": 1138
+        },
+        {
+          "path": "docs/examples/form-rhf-checkbox.tsx",
+          "bytes": 6080,
+          "sha256": "c10e11a36d1bbd6cd20bb8f8e8f87ef565d23a7797e80ce33751c9722b148aa2",
+          "o200k": 1139,
+          "claudeLegacy": 1260
+        },
+        {
+          "path": "docs/examples/form-rhf-complex.tsx",
+          "bytes": 10437,
+          "sha256": "73f758d6ed1cd1f1e19e2340d871d502566bba09883b27d3e4fe67c1e8462dbe",
+          "o200k": 1920,
+          "claudeLegacy": 2086
+        },
+        {
+          "path": "docs/examples/form-rhf-demo.tsx",
+          "bytes": 4663,
+          "sha256": "16f8c4cfe91adec2a570aadee3cc269f20b1fc03c49fbd49122bc2cfcb9e747d",
+          "o200k": 968,
+          "claudeLegacy": 1062
+        },
+        {
+          "path": "docs/examples/form-rhf-input.tsx",
+          "bytes": 3284,
+          "sha256": "f8d4c5a06f7596d74b1026765d5269b59bd492fc81f48261e367090d6ba10386",
+          "o200k": 730,
+          "claudeLegacy": 800
+        },
+        {
+          "path": "docs/examples/form-rhf-password.tsx",
+          "bytes": 6799,
+          "sha256": "2a4b78836543a42f3f6f5368ffe1512dde3a1e0c7c9050428d5babe21b6d8a7f",
+          "o200k": 1441,
+          "claudeLegacy": 1555
+        },
+        {
+          "path": "docs/examples/form-rhf-radiogroup.tsx",
+          "bytes": 4467,
+          "sha256": "ead1698ec159bea6f10efef5257513beb038a42ad98264157217067171241e64",
+          "o200k": 933,
+          "claudeLegacy": 1032
+        },
+        {
+          "path": "docs/examples/form-rhf-select.tsx",
+          "bytes": 4441,
+          "sha256": "4bf9a006ed7fe0e774b45813c771f6caa11b00ea1101745d351e14bd15082d21",
+          "o200k": 953,
+          "claudeLegacy": 1039
+        },
+        {
+          "path": "docs/examples/form-rhf-switch.tsx",
+          "bytes": 3333,
+          "sha256": "2a1a284523ac2565ecb0c954bf185bef687aea1cccfbf4c818c64ddf6c95d889",
+          "o200k": 711,
+          "claudeLegacy": 791
+        },
+        {
+          "path": "docs/examples/form-rhf-textarea.tsx",
+          "bytes": 3202,
+          "sha256": "33ec26bd9748f1f201245dd63901a3433a3c877ca05f781d330a841c08300b03",
+          "o200k": 708,
+          "claudeLegacy": 779
+        },
+        {
+          "path": "docs/examples/form-tanstack-array.tsx",
+          "bytes": 6254,
+          "sha256": "522a59343d3e99408d0aa55d212a1a290bfa0d36635c99cf5a71fb59ce9a2eb8",
+          "o200k": 1112,
+          "claudeLegacy": 1228
+        },
+        {
+          "path": "docs/examples/form-tanstack-checkbox.tsx",
+          "bytes": 6840,
+          "sha256": "e067244876ecf4dd8e7be5661e5d96d0f5bd0d03f393996ff94409ca22977810",
+          "o200k": 1205,
+          "claudeLegacy": 1323
+        },
+        {
+          "path": "docs/examples/form-tanstack-complex.tsx",
+          "bytes": 10655,
+          "sha256": "c16732e8833c53c8235f19581b19eca3899b46039caa93cef7f2c98fdfad5b7d",
+          "o200k": 1855,
+          "claudeLegacy": 2013
+        },
+        {
+          "path": "docs/examples/form-tanstack-demo.tsx",
+          "bytes": 5205,
+          "sha256": "7433c301ddfc40716ba6e5c8fa19d56d8e54b532b2e8a610dd62b45706ea09fe",
+          "o200k": 1040,
+          "claudeLegacy": 1147
+        },
+        {
+          "path": "docs/examples/form-tanstack-input.tsx",
+          "bytes": 3671,
+          "sha256": "5d5f8c89affa9457041e57c16811878c98e3a1b08ad3f04c61212a1686add799",
+          "o200k": 780,
+          "claudeLegacy": 854
+        },
+        {
+          "path": "docs/examples/form-tanstack-radiogroup.tsx",
+          "bytes": 4603,
+          "sha256": "c5bbe9b02f3a40f215110074658004e8c8023d538d76bc23bdd565c18f401fa3",
+          "o200k": 931,
+          "claudeLegacy": 1021
+        },
+        {
+          "path": "docs/examples/form-tanstack-select.tsx",
+          "bytes": 4689,
+          "sha256": "ef5cb25e66bf4b4476a0da0e4c4716e06f959d1e43133853a449d4681be5af35",
+          "o200k": 965,
+          "claudeLegacy": 1047
+        },
+        {
+          "path": "docs/examples/form-tanstack-switch.tsx",
+          "bytes": 3492,
+          "sha256": "9e412c44d9cabd753c72003d3219b193f8535ca54b9982bd27cc235f478d28bf",
+          "o200k": 720,
+          "claudeLegacy": 796
+        },
+        {
+          "path": "docs/examples/form-tanstack-textarea.tsx",
+          "bytes": 3556,
+          "sha256": "d097c4fb61e8d3a6277a4935de77d0560f34dc1c08ebead3b61198089c734a70",
+          "o200k": 750,
+          "claudeLegacy": 824
+        },
+        {
+          "path": "docs/examples/hover-card-demo.tsx",
+          "bytes": 1120,
+          "sha256": "d18553a35cfba60d0f1fc1d68d249229efae60e1fe811afd43d9865e58e96b81",
+          "o200k": 267,
+          "claudeLegacy": 296
+        },
+        {
+          "path": "docs/examples/input-demo.tsx",
+          "bytes": 139,
+          "sha256": "1300f5f611964be10019921adfa238d851b20cf2d7049f58a101abc044c5bf21",
+          "o200k": 31,
+          "claudeLegacy": 38
+        },
+        {
+          "path": "docs/examples/input-disabled.tsx",
+          "bytes": 152,
+          "sha256": "df08b6f71bddb45418063029bb8ff5bee37d91e714d8484ec7a0117f29942da5",
+          "o200k": 32,
+          "claudeLegacy": 39
+        },
+        {
+          "path": "docs/examples/input-file.tsx",
+          "bytes": 309,
+          "sha256": "18b6460f71fa0f6261c3f6ebcd264db8e89a8042a506a10d361144cde74b8d5b",
+          "o200k": 80,
+          "claudeLegacy": 93
+        },
+        {
+          "path": "docs/examples/input-group-button-group.tsx",
+          "bytes": 777,
+          "sha256": "fcc3798e1c5d71231bebfdba8c298462775dba4c3659a41cf09485f0713f60b3",
+          "o200k": 192,
+          "claudeLegacy": 216
+        },
+        {
+          "path": "docs/examples/input-group-button.tsx",
+          "bytes": 2635,
+          "sha256": "5e297ce8edf2fa88f7f08e5a7fe8ad30609ae55aaf73f4615d6b6cb65b854efc",
+          "o200k": 608,
+          "claudeLegacy": 667
+        },
+        {
+          "path": "docs/examples/input-group-custom.tsx",
+          "bytes": 832,
+          "sha256": "f2f0862bc1d4b741bd75f0af128f16d5f62ef63759ac1d6f3853a86695fe6560",
+          "o200k": 195,
+          "claudeLegacy": 226
+        },
+        {
+          "path": "docs/examples/input-group-demo.tsx",
+          "bytes": 3185,
+          "sha256": "c769d3fa95e4974cfce5fe528b0ed2068e842c9f62d7823c8236c2475a8c9138",
+          "o200k": 705,
+          "claudeLegacy": 746
+        },
+        {
+          "path": "docs/examples/input-group-dropdown.tsx",
+          "bytes": 2022,
+          "sha256": "44a1c357b72af2368e55e2af309f419ab8d2229bc1358d11e4fa783e5984adec",
+          "o200k": 438,
+          "claudeLegacy": 452
+        },
+        {
+          "path": "docs/examples/input-group-icon.tsx",
+          "bytes": 1170,
+          "sha256": "7d29e226f7c81e13ff6b8bf15e4b166c46ba063a62535fb43fb94b72a9f89f42",
+          "o200k": 279,
+          "claudeLegacy": 296
+        },
+        {
+          "path": "docs/examples/input-group-label.tsx",
+          "bytes": 1388,
+          "sha256": "88c7728dd530fe0b12267b15a3502e24508fd6002c50e0be899ec13091766a77",
+          "o200k": 319,
+          "claudeLegacy": 355
+        },
+        {
+          "path": "docs/examples/input-group-spinner.tsx",
+          "bytes": 1420,
+          "sha256": "5f6240c1a67a8f4a69a99fa26b89c80f171f001593cca2904536852f77f738b7",
+          "o200k": 309,
+          "claudeLegacy": 339
+        },
+        {
+          "path": "docs/examples/input-group-text.tsx",
+          "bytes": 1439,
+          "sha256": "d9658ce96699508f0b08c653802962fb257caea5d21eb64b417fd1526feb7ed2",
+          "o200k": 341,
+          "claudeLegacy": 357
+        },
+        {
+          "path": "docs/examples/input-group-textarea.tsx",
+          "bytes": 1358,
+          "sha256": "884b8f4c990ea33f84739ae2367d9b38306c7d8b18a412a1b3a492372c45ee9f",
+          "o200k": 323,
+          "claudeLegacy": 343
+        },
+        {
+          "path": "docs/examples/input-group-tooltip.tsx",
+          "bytes": 2200,
+          "sha256": "ea8a0647253ed461f2bb305ad3317f73d0007202acc286ab50d12de2b1e64f6b",
+          "o200k": 456,
+          "claudeLegacy": 506
+        },
+        {
+          "path": "docs/examples/input-otp-controlled.tsx",
+          "bytes": 883,
+          "sha256": "cb4d2768f0953f70f67cc64e6d7540077847fb888512d8a93a67eec2a6e07237",
+          "o200k": 238,
+          "claudeLegacy": 256
+        },
+        {
+          "path": "docs/examples/input-otp-demo.tsx",
+          "bytes": 542,
+          "sha256": "2cf26293af98c41b4f76e07c0d529efc2f4ca98d65943cdfd4404e4c9dd02fbb",
+          "o200k": 156,
+          "claudeLegacy": 163
+        },
+        {
+          "path": "docs/examples/input-otp-pattern.tsx",
+          "bytes": 562,
+          "sha256": "5be66fcf58fd0af87801b6ff3964d1940aa7ce053e8129485f98a48529afb620",
+          "o200k": 163,
+          "claudeLegacy": 183
+        },
+        {
+          "path": "docs/examples/input-otp-separator.tsx",
+          "bytes": 651,
+          "sha256": "99b3d6d87ca9ca55803ffbc5fdf79b4cccbdc0c42ae06149031d03b8e60c3c28",
+          "o200k": 180,
+          "claudeLegacy": 190
+        },
+        {
+          "path": "docs/examples/input-with-button.tsx",
+          "bytes": 359,
+          "sha256": "614332d690ac9145d6c613bf1e7dc589f6a1fa59168fc98ea81b65f92db5cf99",
+          "o200k": 86,
+          "claudeLegacy": 99
+        },
+        {
+          "path": "docs/examples/input-with-label.tsx",
+          "bytes": 329,
+          "sha256": "29b233165e9b8911f37c62690b4a1eaed53c5a5df3dcadb22313649ee0a19d05",
+          "o200k": 85,
+          "claudeLegacy": 98
+        },
+        {
+          "path": "docs/examples/input-with-text.tsx",
+          "bytes": 413,
+          "sha256": "c3211508dffa8ad28154ac8f8aa4155f89379b7ec32d430fbc2f1ac4ea880077",
+          "o200k": 109,
+          "claudeLegacy": 123
+        },
+        {
+          "path": "docs/examples/item-avatar.tsx",
+          "bytes": 2343,
+          "sha256": "950934a0f2096a654f939b97876d95db43788af07f177e675eec1caeefc43c37",
+          "o200k": 527,
+          "claudeLegacy": 564
+        },
+        {
+          "path": "docs/examples/item-demo.tsx",
+          "bytes": 1144,
+          "sha256": "31caffd4fab205306b594bc43f234c2d38ae71d9486c68d03d8a6399720cea0c",
+          "o200k": 268,
+          "claudeLegacy": 289
+        },
+        {
+          "path": "docs/examples/item-dropdown.tsx",
+          "bytes": 2022,
+          "sha256": "849b10c2d6fffea01268643b9f5741cbb3fdb8356f274df2e5c09e5491fd220d",
+          "o200k": 486,
+          "claudeLegacy": 543
+        },
+        {
+          "path": "docs/examples/item-group.tsx",
+          "bytes": 1777,
+          "sha256": "359800d2d5e82c75dabe2edfa23979dd3cdeb0ceaf9e6e0dff747ba553f03226",
+          "o200k": 418,
+          "claudeLegacy": 471
+        },
+        {
+          "path": "docs/examples/item-header.tsx",
+          "bytes": 1670,
+          "sha256": "4fb4ec2936aa2f487ff20d7cc2550f01f2f7f8127d27c07285a43c8abab2f301",
+          "o200k": 442,
+          "claudeLegacy": 498
+        },
+        {
+          "path": "docs/examples/item-icon.tsx",
+          "bytes": 806,
+          "sha256": "8e7ae300755788c4ced3d3f8c8da712801c406dbe1624bb9f55cff0fffae585e",
+          "o200k": 186,
+          "claudeLegacy": 203
+        },
+        {
+          "path": "docs/examples/item-image.tsx",
+          "bytes": 1700,
+          "sha256": "1c46baab7d7c238e2b6a855fcf0c2b6cd69c1179d22e1ed93a33b6c704a0a10a",
+          "o200k": 389,
+          "claudeLegacy": 427
+        },
+        {
+          "path": "docs/examples/item-link.tsx",
+          "bytes": 1151,
+          "sha256": "690a0b81e91904236fbfbd3be03485e790b21a186bac05f886569da58f968e17",
+          "o200k": 259,
+          "claudeLegacy": 278
+        },
+        {
+          "path": "docs/examples/item-size.tsx",
+          "bytes": 1148,
+          "sha256": "4971f1f52d50ce34456f3b3ec0855c9f5016865c2cdf7492af6f2b0c71e19dda",
+          "o200k": 269,
+          "claudeLegacy": 290
+        },
+        {
+          "path": "docs/examples/item-variant.tsx",
+          "bytes": 1432,
+          "sha256": "e28369d90e5a994085fdafdae42397d1cc3815c095e31a813d5a1bf470fb6d4b",
+          "o200k": 307,
+          "claudeLegacy": 320
+        },
+        {
+          "path": "docs/examples/kbd-button.tsx",
+          "bytes": 425,
+          "sha256": "60ed46faa2fe71cd9bad4427b37bbcb35ebb95be5330b074f1637974fcd1a16e",
+          "o200k": 123,
+          "claudeLegacy": 132
+        },
+        {
+          "path": "docs/examples/kbd-demo.tsx",
+          "bytes": 402,
+          "sha256": "33b6f9b8e95d1dfd6c005ba19acd3c81e1825037012f6e815e161e51bba0ce64",
+          "o200k": 143,
+          "claudeLegacy": 157
+        },
+        {
+          "path": "docs/examples/kbd-group.tsx",
+          "bytes": 400,
+          "sha256": "938f0b2f7e6cb77f0195f29dfbe9ee5c95b208f606fda86aa63c915f12840fee",
+          "o200k": 115,
+          "claudeLegacy": 126
+        },
+        {
+          "path": "docs/examples/kbd-input-group.tsx",
+          "bytes": 601,
+          "sha256": "27cb95ed60b1c9d7b5b341ae495cfabb882efb17ea8fbac68b1916142cd52aab",
+          "o200k": 157,
+          "claudeLegacy": 179
+        },
+        {
+          "path": "docs/examples/kbd-tooltip.tsx",
+          "bytes": 1065,
+          "sha256": "a07dc51b6838d03c54a72d58c24bbf937ca53fb3d4dadb6093f79a6063e63780",
+          "o200k": 243,
+          "claudeLegacy": 280
+        },
+        {
+          "path": "docs/examples/label-demo.tsx",
+          "bytes": 339,
+          "sha256": "875d3bef675fb6fb09ee986cc48e5e12e559dfd315b4368ea66c2bbc7838cba0",
+          "o200k": 84,
+          "claudeLegacy": 95
+        },
+        {
+          "path": "docs/examples/menubar-demo.tsx",
+          "bytes": 3610,
+          "sha256": "ec8bd365266286614a214a1a7b247a877a800a9ffd0e95a8936f02113559e90f",
+          "o200k": 893,
+          "claudeLegacy": 921
+        },
+        {
+          "path": "docs/examples/mode-toggle.tsx",
+          "bytes": 1244,
+          "sha256": "f469d09a7b49c23946bc96b18c77c87640018e8f66b5d789f08741ecdf7e51e6",
+          "o200k": 318,
+          "claudeLegacy": 335
+        },
+        {
+          "path": "docs/examples/native-select-demo.tsx",
+          "bytes": 542,
+          "sha256": "6ae7222a22de81c3d8a15c06109421bb4321ba7a9bee333e33b227a28eb7e101",
+          "o200k": 120,
+          "claudeLegacy": 130
+        },
+        {
+          "path": "docs/examples/native-select-disabled.tsx",
+          "bytes": 543,
+          "sha256": "3c7ec073ddc3209fefea3e51e7cf2c8ac93ee8abdf04706bfd26a9ddb3a0964f",
+          "o200k": 118,
+          "claudeLegacy": 128
+        },
+        {
+          "path": "docs/examples/native-select-groups.tsx",
+          "bytes": 1349,
+          "sha256": "b391471b676c0fbebc1c36eeb090d6f5c0046506487719ca43408df09662d3b4",
+          "o200k": 279,
+          "claudeLegacy": 288
+        },
+        {
+          "path": "docs/examples/native-select-invalid.tsx",
+          "bytes": 551,
+          "sha256": "4e4b7be1b9352ab901b6f0b41b305ef471a4ab5c8abdca9815799d244cc80be7",
+          "o200k": 121,
+          "claudeLegacy": 133
+        },
+        {
+          "path": "docs/examples/navigation-menu-demo.tsx",
+          "bytes": 7859,
+          "sha256": "b2e43947689c628eebbe4c2670b309a2c5ca53920daf765f7390d101f6001509",
+          "o200k": 1609,
+          "claudeLegacy": 1657
+        },
+        {
+          "path": "docs/examples/pagination-demo.tsx",
+          "bytes": 941,
+          "sha256": "133d91b9f8773bbdf64e77ff7562b71b31ddb8fb1b3f0aa9ab985d76015aaa27",
+          "o200k": 189,
+          "claudeLegacy": 194
+        },
+        {
+          "path": "docs/examples/popover-demo.tsx",
+          "bytes": 1995,
+          "sha256": "e17607d73c7ea551834c43c2653bf2bd3055c054d234a425d1540d2ca6625a82",
+          "o200k": 463,
+          "claudeLegacy": 487
+        },
+        {
+          "path": "docs/examples/progress-demo.tsx",
+          "bytes": 385,
+          "sha256": "6d10a6c7cfaf4936fc9b1c488acd57bd83c3dc92d70fe614186e1fa54df8282f",
+          "o200k": 96,
+          "claudeLegacy": 108
+        },
+        {
+          "path": "docs/examples/radio-group-demo.tsx",
+          "bytes": 723,
+          "sha256": "604ad5bb01d9935d7646689a5b630a30d3f9a4d9474919d5ba520ac4d2168bf4",
+          "o200k": 195,
+          "claudeLegacy": 210
+        },
+        {
+          "path": "docs/examples/resizable-demo-with-handle.tsx",
+          "bytes": 1196,
+          "sha256": "1b994d11b69bed640bc530c8b54083b88d6b60ddf7e2f3369d6aefe36a1b3e02",
+          "o200k": 266,
+          "claudeLegacy": 305
+        },
+        {
+          "path": "docs/examples/resizable-demo.tsx",
+          "bytes": 1174,
+          "sha256": "fcb6b1200fe568ead20fed9e66d59ff37f17b3d74c6764db2af35c3c7900caac",
+          "o200k": 262,
+          "claudeLegacy": 301
+        },
+        {
+          "path": "docs/examples/resizable-handle.tsx",
+          "bytes": 786,
+          "sha256": "ab645135b4e6672a7cdbe1d7010fe78c2f284d7da07e7e3b61eb12533d7b8c0e",
+          "o200k": 186,
+          "claudeLegacy": 215
+        },
+        {
+          "path": "docs/examples/resizable-vertical.tsx",
+          "bytes": 766,
+          "sha256": "3d8689fb07924d76eb63177e23e8f0aa6a05a78a87df7bf1fc6b1acfc65939c1",
+          "o200k": 183,
+          "claudeLegacy": 211
+        },
+        {
+          "path": "docs/examples/scroll-area-demo.tsx",
+          "bytes": 683,
+          "sha256": "d1bbe51ca4498cabe9b73a83e7da920d986df6d2c8199c8337d96d61916cb9dd",
+          "o200k": 187,
+          "claudeLegacy": 213
+        },
+        {
+          "path": "docs/examples/scroll-area-horizontal-demo.tsx",
+          "bytes": 1614,
+          "sha256": "286aa5a49a7c922d4e4bf1d006585379e78b603d2da1d6a1fdf18200bf50fcf0",
+          "o200k": 423,
+          "claudeLegacy": 478
+        },
+        {
+          "path": "docs/examples/select-demo.tsx",
+          "bytes": 809,
+          "sha256": "3ecbd62693d5daabb47cae91d883f40fb3fc233ea76157e065e37af6148747fc",
+          "o200k": 199,
+          "claudeLegacy": 208
+        },
+        {
+          "path": "docs/examples/select-scrollable.tsx",
+          "bytes": 3075,
+          "sha256": "8c3a7454825719ebc25a33d94ad12424fe063c020130ccf27144fe0c50dcd772",
+          "o200k": 730,
+          "claudeLegacy": 746
+        },
+        {
+          "path": "docs/examples/separator-demo.tsx",
+          "bytes": 653,
+          "sha256": "facbad215dc5c533f8d75a0f5040ee853fac20a1a364271ac65b96491d69b06d",
+          "o200k": 168,
+          "claudeLegacy": 181
+        },
+        {
+          "path": "docs/examples/sheet-demo.tsx",
+          "bytes": 1419,
+          "sha256": "4483ef071a92a7a26532db3171b37cb62014c64505d5b49f110c6ee5b82d9aa2",
+          "o200k": 336,
+          "claudeLegacy": 363
+        },
+        {
+          "path": "docs/examples/sheet-side.tsx",
+          "bytes": 1883,
+          "sha256": "f9a63a25ac3fab1404bde4a71b27adb80720d2abe173eeb4fb285cd5220cfe10",
+          "o200k": 430,
+          "claudeLegacy": 462
+        },
+        {
+          "path": "docs/examples/skeleton-card.tsx",
+          "bytes": 371,
+          "sha256": "800660a9086377d6a800083967387f360df1d8415024c45b1be63332f8bdc228",
+          "o200k": 107,
+          "claudeLegacy": 117
+        },
+        {
+          "path": "docs/examples/skeleton-demo.tsx",
+          "bytes": 367,
+          "sha256": "fbfb449b2452e5e40bedf03b81937e217aa379a0f4713bb6f6ba29a9778f6a69",
+          "o200k": 103,
+          "claudeLegacy": 113
+        },
+        {
+          "path": "docs/examples/slider-demo.tsx",
+          "bytes": 367,
+          "sha256": "41ef170424dfb27fca8ada5078d8f3fc8f488b5a657dbd9fba0aa67265ae0ecf",
+          "o200k": 92,
+          "claudeLegacy": 105
+        },
+        {
+          "path": "docs/examples/sonner-demo.tsx",
+          "bytes": 477,
+          "sha256": "867949e727f27f717577ec2b2c86c01116b8f8e43c32a1d3d17da03d0109644b",
+          "o200k": 116,
+          "claudeLegacy": 126
+        },
+        {
+          "path": "docs/examples/sonner-types.tsx",
+          "bytes": 1446,
+          "sha256": "03bae98a16833d129456dd9c4765718b034f2edc08be28e945809f2961b09b18",
+          "o200k": 320,
+          "claudeLegacy": 332
+        },
+        {
+          "path": "docs/examples/spinner-badge.tsx",
+          "bytes": 467,
+          "sha256": "edfeaeda1d6c77778164802b0677e447fca96644a8fb9f3f5bce86944397139a",
+          "o200k": 113,
+          "claudeLegacy": 132
+        },
+        {
+          "path": "docs/examples/spinner-basic.tsx",
+          "bytes": 208,
+          "sha256": "e07c16f1146653d28a0859b917f8e8e814c07c4c30f6ab8b2ad9624ec890ba07",
+          "o200k": 49,
+          "claudeLegacy": 60
+        },
+        {
+          "path": "docs/examples/spinner-button.tsx",
+          "bytes": 530,
+          "sha256": "789a5aeb803301f4e34e5ed26005fdab6c81a00082d77981d4b1d484ebd4cb87",
+          "o200k": 119,
+          "claudeLegacy": 133
+        },
+        {
+          "path": "docs/examples/spinner-color.tsx",
+          "bytes": 425,
+          "sha256": "0d1e0174c334a1a83230d77f8239f8bc33ffc30a41e06c6c6610412fa68e06b6",
+          "o200k": 116,
+          "claudeLegacy": 129
+        },
+        {
+          "path": "docs/examples/spinner-custom.tsx",
+          "bytes": 443,
+          "sha256": "5957658a1d94b7f6064b7ab480529c08f2f2394bb1389e5956a5e5210ac7c0d0",
+          "o200k": 115,
+          "claudeLegacy": 131
+        },
+        {
+          "path": "docs/examples/spinner-demo.tsx",
+          "bytes": 655,
+          "sha256": "295ec54135b907969cf88dad0fc9c24eab62755940cd89935d1dabc07f71fae4",
+          "o200k": 168,
+          "claudeLegacy": 184
+        },
+        {
+          "path": "docs/examples/spinner-empty.tsx",
+          "bytes": 763,
+          "sha256": "46b833b98946557a69fc36b1ef7dfcd1bbe78ddfc1c5fc1191f409ff60372652",
+          "o200k": 172,
+          "claudeLegacy": 188
+        },
+        {
+          "path": "docs/examples/spinner-input-group.tsx",
+          "bytes": 962,
+          "sha256": "7e2c5a1dcab43aff8a912f2669a0795e4c309d57b16887100d21f6c5e0a13a8f",
+          "o200k": 222,
+          "claudeLegacy": 246
+        },
+        {
+          "path": "docs/examples/spinner-item.tsx",
+          "bytes": 942,
+          "sha256": "556e82edc6cd03c075d4b199d4fa974be85d4ad0849559c25d90878d32fced81",
+          "o200k": 226,
+          "claudeLegacy": 246
+        },
+        {
+          "path": "docs/examples/spinner-size.tsx",
+          "bytes": 313,
+          "sha256": "2e5f3b92307966eab13305356bb0e73b1edf11f15a30ba1f83588f08646e3218",
+          "o200k": 85,
+          "claudeLegacy": 93
+        },
+        {
+          "path": "docs/examples/switch-demo.tsx",
+          "bytes": 307,
+          "sha256": "8ee3adf286e5e24ded5c991ab71feb3e468896f0ff4de5416cc46aa662c049c1",
+          "o200k": 79,
+          "claudeLegacy": 91
+        },
+        {
+          "path": "docs/examples/table-demo.tsx",
+          "bytes": 2076,
+          "sha256": "39cac21c08f84db3fe108f42bf45e5cb71e44c8f51abce6dd07fdaf720030e21",
+          "o200k": 545,
+          "claudeLegacy": 567
+        },
+        {
+          "path": "docs/examples/tabs-demo.tsx",
+          "bytes": 2609,
+          "sha256": "1a66de1c395fa9b18391bac9583afda807cf7ef45a7c06a3c66c222decd6f90f",
+          "o200k": 578,
+          "claudeLegacy": 625
+        },
+        {
+          "path": "docs/examples/textarea-demo.tsx",
+          "bytes": 156,
+          "sha256": "f46fcc66b0fe1edfd2c2c747d88c772e38d61404d90602b52b6577a58a51dfc2",
+          "o200k": 33,
+          "claudeLegacy": 39
+        },
+        {
+          "path": "docs/examples/textarea-disabled.tsx",
+          "bytes": 169,
+          "sha256": "aa0da7735fb95762b5fcac59bec608bc0328c5938c03d8d96184a1f54cbf90e0",
+          "o200k": 34,
+          "claudeLegacy": 40
+        },
+        {
+          "path": "docs/examples/textarea-with-button.tsx",
+          "bytes": 309,
+          "sha256": "9b8716f6ff5e95d8f57b77b124fc0d5aa1765275d041aa923254cfca988144a6",
+          "o200k": 74,
+          "claudeLegacy": 84
+        },
+        {
+          "path": "docs/examples/textarea-with-label.tsx",
+          "bytes": 335,
+          "sha256": "bee216840c9080863019651a65763beefb2c3ac094ca56b84d84d6e58bafdcdf",
+          "o200k": 83,
+          "claudeLegacy": 92
+        },
+        {
+          "path": "docs/examples/textarea-with-text.tsx",
+          "bytes": 458,
+          "sha256": "13dc81c564455457ff2107b205bae11cfd166f3984ce37a60995bf0c4cef4f58",
+          "o200k": 115,
+          "claudeLegacy": 125
+        },
+        {
+          "path": "docs/examples/toggle-demo.tsx",
+          "bytes": 422,
+          "sha256": "425f8a8be0598121605cf851b4e93277a18f31b89643aac3c1f5126c4b926a6e",
+          "o200k": 111,
+          "claudeLegacy": 124
+        },
+        {
+          "path": "docs/examples/toggle-disabled.tsx",
+          "bytes": 254,
+          "sha256": "e7b93d679de9faf982aa05ccdf05d1775f120fd06cd4bd54bb6e582d792cfa84",
+          "o200k": 64,
+          "claudeLegacy": 75
+        },
+        {
+          "path": "docs/examples/toggle-group-demo.tsx",
+          "bytes": 671,
+          "sha256": "2688a3047ab20d8545512dcda8ac31762c068984615b6dcb361daeccb7d3b7b6",
+          "o200k": 178,
+          "claudeLegacy": 194
+        },
+        {
+          "path": "docs/examples/toggle-group-disabled.tsx",
+          "bytes": 662,
+          "sha256": "104e28b1a7fb2eac540868899ac7c1772466544823d4b3c39e67b4f56eeed5dc",
+          "o200k": 176,
+          "claudeLegacy": 192
+        },
+        {
+          "path": "docs/examples/toggle-group-lg.tsx",
+          "bytes": 663,
+          "sha256": "a186ffee662da7a22e28d170f360bc54fb7874a13bf65631acb4cc5540584ac6",
+          "o200k": 178,
+          "claudeLegacy": 194
+        },
+        {
+          "path": "docs/examples/toggle-group-outline.tsx",
+          "bytes": 671,
+          "sha256": "4669ca52e02868eb5abde0dcd6d2550f4e596440889096f069d265d4bf4ea5ae",
+          "o200k": 178,
+          "claudeLegacy": 194
+        },
+        {
+          "path": "docs/examples/toggle-group-single.tsx",
+          "bytes": 651,
+          "sha256": "87d7c42a370ccffe88a031f56e0e35149431b8a482749c85e71b7c856d1adbec",
+          "o200k": 174,
+          "claudeLegacy": 190
+        },
+        {
+          "path": "docs/examples/toggle-group-sm.tsx",
+          "bytes": 661,
+          "sha256": "0404125f09299f14ff898b4ecdcd40a953e2c7fe1a9c850107b2e43485f121c2",
+          "o200k": 178,
+          "claudeLegacy": 194
+        },
+        {
+          "path": "docs/examples/toggle-group-spacing.tsx",
+          "bytes": 1146,
+          "sha256": "10e770bc53bed4df464c86406eebe33850a676c9dc025625b3581385084c7ad4",
+          "o200k": 301,
+          "claudeLegacy": 320
+        },
+        {
+          "path": "docs/examples/toggle-lg.tsx",
+          "bytes": 223,
+          "sha256": "db57ae3ccb1f2c81e97fd5e090b6363c910fbc937436cf9a7b8826536a46bb6c",
+          "o200k": 56,
+          "claudeLegacy": 69
+        },
+        {
+          "path": "docs/examples/toggle-outline.tsx",
+          "bytes": 236,
+          "sha256": "6230eac904245609dcd1c61840578493a97730f1071ab9b8647923c5bcceae85",
+          "o200k": 56,
+          "claudeLegacy": 68
+        },
+        {
+          "path": "docs/examples/toggle-sm.tsx",
+          "bytes": 223,
+          "sha256": "0e10f968940d3c4952994a867d616e5868832c5be925d8fedd896eac47f852fa",
+          "o200k": 56,
+          "claudeLegacy": 68
+        },
+        {
+          "path": "docs/examples/toggle-with-text.tsx",
+          "bytes": 232,
+          "sha256": "7aeddbeb6c333abd3c8f507298edadfc51a83b0f2dc5288a7e760a4e4215ad36",
+          "o200k": 57,
+          "claudeLegacy": 68
+        },
+        {
+          "path": "docs/examples/tooltip-demo.tsx",
+          "bytes": 405,
+          "sha256": "1822c981511875cd947922e0faded32c945db10ff2583a9b5d3f0d5c5f6b2096",
+          "o200k": 94,
+          "claudeLegacy": 116
+        },
+        {
+          "path": "docs/examples/typography-blockquote.tsx",
+          "bytes": 289,
+          "sha256": "056eccb5289e5d50eabbef0b5a460d31db666121e8d935b599aef8ce6706a452",
+          "o200k": 75,
+          "claudeLegacy": 85
+        },
+        {
+          "path": "docs/examples/typography-demo.tsx",
+          "bytes": 5519,
+          "sha256": "d21557c45c1d228543b46eea38aaffc1adcf1b2e42de04b433db67fe5bc8496d",
+          "o200k": 1456,
+          "claudeLegacy": 1541
+        },
+        {
+          "path": "docs/examples/typography-h1.tsx",
+          "bytes": 212,
+          "sha256": "56c752829e3dd44ebbb2b01a66aee09751d8b3f0d4415b8d6c07b7c4adc28be3",
+          "o200k": 57,
+          "claudeLegacy": 62
+        },
+        {
+          "path": "docs/examples/typography-h2.tsx",
+          "bytes": 196,
+          "sha256": "411a3d1a56527c2d4707cc462ddedcb50643755cee50a3cc8f8ef87000e4a50d",
+          "o200k": 56,
+          "claudeLegacy": 63
+        },
+        {
+          "path": "docs/examples/typography-h3.tsx",
+          "bytes": 158,
+          "sha256": "9b08589f1de6fbe81e70d8fdd8c525b6872548d45b7fe5d8977073071050c3db",
+          "o200k": 44,
+          "claudeLegacy": 51
+        },
+        {
+          "path": "docs/examples/typography-h4.tsx",
+          "bytes": 173,
+          "sha256": "94d4ceb1c79df11538e95449ea985ef6871bc79bc3f518c30da9b5f5abb00bdd",
+          "o200k": 43,
+          "claudeLegacy": 50
+        },
+        {
+          "path": "docs/examples/typography-inline-code.tsx",
+          "bytes": 218,
+          "sha256": "7b91cb692554952bf5b9724374022124fb58193b76be519bd11ed38679f6b63f",
+          "o200k": 59,
+          "claudeLegacy": 69
+        },
+        {
+          "path": "docs/examples/typography-large.tsx",
+          "bytes": 125,
+          "sha256": "9c6e7b7d471a9e4352e4f634db43be9c4b2e652c9d80dc59cf6091163ca03bdd",
+          "o200k": 27,
+          "claudeLegacy": 33
+        },
+        {
+          "path": "docs/examples/typography-lead.tsx",
+          "bytes": 218,
+          "sha256": "1f26283c4d3995918549f577daa45e2ef645f4ebd1a771c2eab6e1dbc18c1c03",
+          "o200k": 48,
+          "claudeLegacy": 51
+        },
+        {
+          "path": "docs/examples/typography-list.tsx",
+          "bytes": 274,
+          "sha256": "fa69100335106cb34f8c5b9f21eb648add7e5c6dc69be0e19909b9393cbbc56d",
+          "o200k": 93,
+          "claudeLegacy": 95
+        },
+        {
+          "path": "docs/examples/typography-muted.tsx",
+          "bytes": 140,
+          "sha256": "b1b4ac7bd6e02757276a3e046008443ad0a8ec8a39cb12dca6342e37bc29b820",
+          "o200k": 33,
+          "claudeLegacy": 38
+        },
+        {
+          "path": "docs/examples/typography-p.tsx",
+          "bytes": 246,
+          "sha256": "a090b547001fa5716d66f2db096d4d99ca0e534ddeaf0ab384ca92e3388350de",
+          "o200k": 65,
+          "claudeLegacy": 67
+        },
+        {
+          "path": "docs/examples/typography-small.tsx",
+          "bytes": 139,
+          "sha256": "923305503d753a2c157a2b38c79a8a14734c9c3e1ad4f226fafc9190cc9712ef",
+          "o200k": 31,
+          "claudeLegacy": 36
+        },
+        {
+          "path": "docs/examples/typography-table.tsx",
+          "bytes": 1814,
+          "sha256": "652dc1793c41f525aeda3d0cd95a159c8d581e9eff6554c0001beb3ed3840229",
+          "o200k": 483,
+          "claudeLegacy": 521
+        },
+        {
+          "path": "docs/installation/next.mdx",
+          "bytes": 6314,
+          "sha256": "1b726a8bf2b230d10ac22db96f76b971e7265475ab32a5efb1e314c92e715f13",
+          "o200k": 1648,
+          "claudeLegacy": 1876
+        },
+        {
+          "path": "docs/llms.txt",
+          "bytes": 12260,
+          "sha256": "7abce6a2d2d3124d7140e9a684202e1e265d3b7727e2ca7e2bac15d5e214ec72",
+          "o200k": 2985,
+          "claudeLegacy": 3723
+        },
+        {
+          "path": "docs/skill/SKILL.md",
+          "bytes": 22792,
+          "sha256": "e12a86fbb478292c761e79cf0c4d1d2767fbb0f524aa9b1c7430784de4a6c99d",
+          "o200k": 5743,
+          "claudeLegacy": 6264
+        },
+        {
+          "path": "docs/skill/assets/showcase/color-pair.tsx",
+          "bytes": 3448,
+          "sha256": "6028f0b677912216822fdaf76ae6b8863c429916ed4a9626b73f4de4506f8ee4",
+          "o200k": 996,
+          "claudeLegacy": 1022
+        },
+        {
+          "path": "docs/skill/assets/showcase/preview-states.css",
+          "bytes": 425,
+          "sha256": "8d9e3cec24dd01b11c5ba12196d0376a131797d9ad247ea624e66eb8bbf61b0e",
+          "o200k": 109,
+          "claudeLegacy": 127
+        },
+        {
+          "path": "docs/skill/assets/showcase/state-matrix.tsx",
+          "bytes": 1682,
+          "sha256": "07794119fe05ff735358b3f8ca30a8297617ab64dfb3901dce4d89fe5f443458",
+          "o200k": 399,
+          "claudeLegacy": 437
+        },
+        {
+          "path": "docs/skill/cli.md",
+          "bytes": 17304,
+          "sha256": "a381e35bf36fe7bb851952c13707e01e82434fd7a4a4e53f6df26c6370838904",
+          "o200k": 3889,
+          "claudeLegacy": 4220
+        },
+        {
+          "path": "docs/skill/customization.md",
+          "bytes": 6279,
+          "sha256": "a19e81c78843df255e85755e52659268d793845add845b34ad8091f62bff3af9",
+          "o200k": 1568,
+          "claudeLegacy": 1746
+        },
+        {
+          "path": "docs/skill/design-system-page.md",
+          "bytes": 15790,
+          "sha256": "c541d661af159548744be3e27f79e7da710ab83f9afd448a4346f7ff1531d328",
+          "o200k": 3143,
+          "claudeLegacy": 3514
+        },
+        {
+          "path": "docs/skill/design-system.md",
+          "bytes": 21621,
+          "sha256": "9ed11e93e7e80e34c8795d5ba82e5420ca905e8e9949fef79cbe9239184fd06b",
+          "o200k": 4846,
+          "claudeLegacy": 5326
+        },
+        {
+          "path": "docs/skill/mcp.md",
+          "bytes": 3510,
+          "sha256": "8d696b4e45b7d0e337367248513bd9acebe8f3bcfd7b748c775e5a337c8f38c8",
+          "o200k": 889,
+          "claudeLegacy": 1026
+        },
+        {
+          "path": "docs/skill/registry.md",
+          "bytes": 8817,
+          "sha256": "4f239be36bd2b58e17047db1ca80ab7da00e15a8b73242e5e4d50d113c4caa05",
+          "o200k": 2151,
+          "claudeLegacy": 2370
+        },
+        {
+          "path": "docs/skill/rules/base-vs-radix.md",
+          "bytes": 6954,
+          "sha256": "2b2deb47d004285220c1fc6b38bb2edc2d0ccbcdafd031b0b189d5d8ed0d1ba8",
+          "o200k": 1850,
+          "claudeLegacy": 2165
+        },
+        {
+          "path": "docs/skill/rules/chat.md",
+          "bytes": 8018,
+          "sha256": "de29c12524a27578a59ecf8c95ea939278c1a3572a3706bfc99f6f92cb770b7b",
+          "o200k": 1949,
+          "claudeLegacy": 2176
+        },
+        {
+          "path": "docs/skill/rules/composition.md",
+          "bytes": 4892,
+          "sha256": "f282df828d83a91132a846ddb62eea149a7c7c94822e9ca88cfddf85af01aa41",
+          "o200k": 1225,
+          "claudeLegacy": 1414
+        },
+        {
+          "path": "docs/skill/rules/forms.md",
+          "bytes": 4857,
+          "sha256": "29593e14381e34626f8e0e9c15c59f3394b92a0623af6a6ec94585400123853c",
+          "o200k": 1231,
+          "claudeLegacy": 1389
+        },
+        {
+          "path": "docs/skill/rules/icons.md",
+          "bytes": 1958,
+          "sha256": "d4a58266648872d9ee07d0c2368843a1cb88b8253b7f528dd7bda9d68b6c2535",
+          "o200k": 523,
+          "claudeLegacy": 618
+        },
+        {
+          "path": "docs/skill/rules/styling.md",
+          "bytes": 4675,
+          "sha256": "f88fbd72dff862805b786dc7d7e4c74c83030fc278c5b97c993e4e665001798c",
+          "o200k": 1207,
+          "claudeLegacy": 1442
+        },
+        {
+          "path": "project/app/globals.css",
+          "bytes": 4219,
+          "sha256": "c7531f2a5d181e3c45c941b3e23928a65117611b653a1dd8ed4ca91530b17838",
+          "o200k": 1673,
+          "claudeLegacy": 1652
+        },
+        {
+          "path": "project/app/layout.tsx",
+          "bytes": 431,
+          "sha256": "b4e376d1c950cd14367f951f9044e7d837b6d0f0cbdef270f3692346dba392ed",
+          "o200k": 104,
+          "claudeLegacy": 119
+        },
+        {
+          "path": "project/app/page.tsx",
+          "bytes": 126,
+          "sha256": "ed5f656116586aae4077c5831ce0fefab63b7d4e24f9c75a1a7507f08d228e9f",
+          "o200k": 25,
+          "claudeLegacy": 29
+        },
+        {
+          "path": "project/components.json",
+          "bytes": 426,
+          "sha256": "14fa3cd5351177123b96afcb9b74fb38df977cc8bbf1defccfefaa4b69af3002",
+          "o200k": 135,
+          "claudeLegacy": 150
+        },
+        {
+          "path": "project/components/ui/accordion.tsx",
+          "bytes": 2047,
+          "sha256": "ced1e58a0cb6836ac3c2cceb48c8cd6def30b488d17da85d07cd16312d993228",
+          "o200k": 453,
+          "claudeLegacy": 582
+        },
+        {
+          "path": "project/components/ui/alert-dialog.tsx",
+          "bytes": 5439,
+          "sha256": "41b72a44c2e098b5590b05e1a61c9f6df3bb82790c73993e09f4b84da209e1b2",
+          "o200k": 1359,
+          "claudeLegacy": 1557
+        },
+        {
+          "path": "project/components/ui/alert.tsx",
+          "bytes": 1613,
+          "sha256": "afeb8ee000195794ccffbf82ab1860bf083e61d355cbe1385fc6ad73fdecfae8",
+          "o200k": 435,
+          "claudeLegacy": 495
+        },
+        {
+          "path": "project/components/ui/aspect-ratio.tsx",
+          "bytes": 274,
+          "sha256": "b1c157886236782cb92d8fbcd4749532aaf6d8aabefd6e157ca40358f902f407",
+          "o200k": 61,
+          "claudeLegacy": 81
+        },
+        {
+          "path": "project/components/ui/attachment.tsx",
+          "bytes": 6002,
+          "sha256": "2b21884b65f6ed328da38954519beb75b338842e78aac554ec8c620b89c2791c",
+          "o200k": 1546,
+          "claudeLegacy": 1727
+        },
+        {
+          "path": "project/components/ui/avatar.tsx",
+          "bytes": 2915,
+          "sha256": "d6b19fe40f7e7d5fd4ba8a4dc38632defa4df0e2a82adde6347773427148f882",
+          "o200k": 764,
+          "claudeLegacy": 860
+        },
+        {
+          "path": "project/components/ui/badge.tsx",
+          "bytes": 1775,
+          "sha256": "0311bb21a5dc8c1e3d70ffc35cccc375c90e2f08bb0f0dd943dad72c19ed45ff",
+          "o200k": 441,
+          "claudeLegacy": 528
+        },
+        {
+          "path": "project/components/ui/breadcrumb.tsx",
+          "bytes": 2349,
+          "sha256": "38b323cd1ab64e41cb19958ad6bc0282beeaabaf0cf400f076781bbcdc5228b0",
+          "o200k": 607,
+          "claudeLegacy": 691
+        },
+        {
+          "path": "project/components/ui/bubble.tsx",
+          "bytes": 4698,
+          "sha256": "64bcd36ae5bef0c96999bd816edad0faa269eb86e4e394c5895572977f81eacb",
+          "o200k": 1312,
+          "claudeLegacy": 1531
+        },
+        {
+          "path": "project/components/ui/button-group.tsx",
+          "bytes": 2202,
+          "sha256": "7c861671c7df17a0c83e87e61cbafb5d94d0549f4cd2e8b5fe59af3d25135394",
+          "o200k": 579,
+          "claudeLegacy": 665
+        },
+        {
+          "path": "project/components/ui/button.tsx",
+          "bytes": 2391,
+          "sha256": "557e27d5d3159c338da761c5aec138dcd32d313b5a55774ea8001c3f3bfc620c",
+          "o200k": 637,
+          "claudeLegacy": 747
+        },
+        {
+          "path": "project/components/ui/calendar.tsx",
+          "bytes": 7832,
+          "sha256": "fc19054a481a596b2528b4fa946d6a58bd3be18569c0c01ab9c51e9b07f0b4da",
+          "o200k": 1790,
+          "claudeLegacy": 2060
+        },
+        {
+          "path": "project/components/ui/card.tsx",
+          "bytes": 1986,
+          "sha256": "39480d5b63e46554f1cfcedaa91052c848bda5c45d7a5dda80fe91e7be604fb0",
+          "o200k": 532,
+          "claudeLegacy": 595
+        },
+        {
+          "path": "project/components/ui/carousel.tsx",
+          "bytes": 5556,
+          "sha256": "d547ded3a008fb2d5513790e2d315da82a27881288bde1ffc41c9f6d988a5885",
+          "o200k": 1425,
+          "claudeLegacy": 1565
+        },
+        {
+          "path": "project/components/ui/chart.tsx",
+          "bytes": 10553,
+          "sha256": "8e605dfdcfa9c96a3a837b87d419ade2a23bc3db412c0b08e44ab44c7078b6e0",
+          "o200k": 2426,
+          "claudeLegacy": 2591
+        },
+        {
+          "path": "project/components/ui/checkbox.tsx",
+          "bytes": 1213,
+          "sha256": "a7068fe7b1840081a0dfdb62a29a39bda24e3cff6752a8788249301a8a79e331",
+          "o200k": 275,
+          "claudeLegacy": 332
+        },
+        {
+          "path": "project/components/ui/collapsible.tsx",
+          "bytes": 795,
+          "sha256": "c6598e5584f4258b5d9fefadbc5ad6a66888ad58729f4b634a0bb2d9c513188b",
+          "o200k": 170,
+          "claudeLegacy": 204
+        },
+        {
+          "path": "project/components/ui/combobox.tsx",
+          "bytes": 9158,
+          "sha256": "39b3e7bb81996f23debf24747a70ec6d8aa4c29eb26a593a32e8e355dbfc8929",
+          "o200k": 2348,
+          "claudeLegacy": 2623
+        },
+        {
+          "path": "project/components/ui/command.tsx",
+          "bytes": 4818,
+          "sha256": "47f33e1a635a0236d4a0c6f905e0d03b37ca08a6c8dde6c1f4bc0249bc9e07e3",
+          "o200k": 1232,
+          "claudeLegacy": 1378
+        },
+        {
+          "path": "project/components/ui/context-menu.tsx",
+          "bytes": 8267,
+          "sha256": "339690813ad1178ccbca592892d93300a97db243cddb79f851b92287036052f0",
+          "o200k": 2050,
+          "claudeLegacy": 2321
+        },
+        {
+          "path": "project/components/ui/dialog.tsx",
+          "bytes": 4303,
+          "sha256": "0a85c31675f8269b3b1308fff0ab10d5cda1a090a550a1a74a8f7f439a92ea06",
+          "o200k": 1041,
+          "claudeLegacy": 1193
+        },
+        {
+          "path": "project/components/ui/direction.tsx",
+          "bytes": 506,
+          "sha256": "84ae2ad658207f0e0f367978e5508cd8027cd00c29c41d3d13db21a708c3d1e6",
+          "o200k": 104,
+          "claudeLegacy": 127
+        },
+        {
+          "path": "project/components/ui/drawer.tsx",
+          "bytes": 4254,
+          "sha256": "2190d08dca91983fd03eb15e52ac77f1ad0bb05c97ecf35191ecd7c1ef415654",
+          "o200k": 1088,
+          "claudeLegacy": 1324
+        },
+        {
+          "path": "project/components/ui/dropdown-menu.tsx",
+          "bytes": 8417,
+          "sha256": "c84b54bc6c8ae8f3ec5a8999000623b25776318739f2e91de3c70d85bb56e95a",
+          "o200k": 2071,
+          "claudeLegacy": 2409
+        },
+        {
+          "path": "project/components/ui/empty.tsx",
+          "bytes": 2395,
+          "sha256": "a506c7665171485de08aa790d8d05c56f00bbf2b85175026f26686feda4bb514",
+          "o200k": 626,
+          "claudeLegacy": 707
+        },
+        {
+          "path": "project/components/ui/field.tsx",
+          "bytes": 6159,
+          "sha256": "9d8bb9290eb9a9a523fb746c955d2538703be7f8990cedc30d6b26f587134ec5",
+          "o200k": 1648,
+          "claudeLegacy": 1816
+        },
+        {
+          "path": "project/components/ui/form.tsx",
+          "bytes": 3757,
+          "sha256": "606ed13af1f5df78e0c86b63c2b199e39d627576442547a48d2e3db0623b3f1f",
+          "o200k": 953,
+          "claudeLegacy": 1063
+        },
+        {
+          "path": "project/components/ui/hover-card.tsx",
+          "bytes": 1525,
+          "sha256": "d646141a4f5b9d6ed47cb6b1854a6afbfeacd0dbbc0520078077b2eeca116956",
+          "o200k": 378,
+          "claudeLegacy": 460
+        },
+        {
+          "path": "project/components/ui/input-group.tsx",
+          "bytes": 5065,
+          "sha256": "3c7efabfb047063451f51f04a59a80a9018109b2e9035104c61bbfc557c2eddc",
+          "o200k": 1399,
+          "claudeLegacy": 1598
+        },
+        {
+          "path": "project/components/ui/input-otp.tsx",
+          "bytes": 2253,
+          "sha256": "5c630a1e1cc82746cf1a1619f212a694f9fae47e8632d344bc296acfe6e3dff0",
+          "o200k": 580,
+          "claudeLegacy": 657
+        },
+        {
+          "path": "project/components/ui/input.tsx",
+          "bytes": 961,
+          "sha256": "7bfd0eff6c53a38c99184394a09f55e7a86c725de12d6a300fa46b3765114091",
+          "o200k": 223,
+          "claudeLegacy": 283
+        },
+        {
+          "path": "project/components/ui/item.tsx",
+          "bytes": 4486,
+          "sha256": "941e53f7bd61a92281bc339b921bb464788e8a2f38fdd917ff45561e959d15a7",
+          "o200k": 1165,
+          "claudeLegacy": 1313
+        },
+        {
+          "path": "project/components/ui/kbd.tsx",
+          "bytes": 862,
+          "sha256": "6088c3a5432338b1719c17e9b5d0e1fa74fd1f66060f248fc88909d33a82cd13",
+          "o200k": 233,
+          "claudeLegacy": 277
+        },
+        {
+          "path": "project/components/ui/label.tsx",
+          "bytes": 605,
+          "sha256": "db5dfcd98a78c5b7c3c01e0bb7726a3adbf0470f4d552e777ccf4751b51e6a56",
+          "o200k": 142,
+          "claudeLegacy": 172
+        },
+        {
+          "path": "project/components/ui/marker.tsx",
+          "bytes": 1863,
+          "sha256": "3496e9fb2b45c675514d80f9144a6d502901bcb34ea89fd9b7cb3a18aa430fb5",
+          "o200k": 500,
+          "claudeLegacy": 569
+        },
+        {
+          "path": "project/components/ui/menubar.tsx",
+          "bytes": 8388,
+          "sha256": "73480e5733036568e7feb6952d1e1ac9fedd0686b9ac6f64239a655c5c9c5a2b",
+          "o200k": 2165,
+          "claudeLegacy": 2425
+        },
+        {
+          "path": "project/components/ui/message-scroller.tsx",
+          "bytes": 4022,
+          "sha256": "5cc5f5b874f473f70b08de8d134a825db46058b85071cab14f35f5746b89fb11",
+          "o200k": 946,
+          "claudeLegacy": 1114
+        },
+        {
+          "path": "project/components/ui/message.tsx",
+          "bytes": 2231,
+          "sha256": "4bd0da2b253cf1eddd3b26e58a904efc990c523903af89667f69ef83521b3eae",
+          "o200k": 584,
+          "claudeLegacy": 664
+        },
+        {
+          "path": "project/components/ui/native-select.tsx",
+          "bytes": 1994,
+          "sha256": "5977b78b71c1871a09c5daa263597fd7f1eb90576bf49a5fbf0a3e86279848ae",
+          "o200k": 501,
+          "claudeLegacy": 580
+        },
+        {
+          "path": "project/components/ui/navigation-menu.tsx",
+          "bytes": 6657,
+          "sha256": "5c56bda25883e9c0f7e43f52f4037d3aff02478c38800db416eac44ede44748b",
+          "o200k": 1577,
+          "claudeLegacy": 1852
+        },
+        {
+          "path": "project/components/ui/pagination.tsx",
+          "bytes": 2717,
+          "sha256": "c41cdc3801e8509b6f5d0346e0494c4dd5f233358a02f020e1b098c3dc9196ec",
+          "o200k": 691,
+          "claudeLegacy": 759
+        },
+        {
+          "path": "project/components/ui/popover.tsx",
+          "bytes": 2356,
+          "sha256": "5c20c50041dd3a0f689ca77054b10796802de07737ca6591873d01f73325f307",
+          "o200k": 597,
+          "claudeLegacy": 701
+        },
+        {
+          "path": "project/components/ui/progress.tsx",
+          "bytes": 734,
+          "sha256": "1f6eb12292b38dd1601319ff7d6fc7dfefb8b988813962d688b3a9782000980a",
+          "o200k": 174,
+          "claudeLegacy": 198
+        },
+        {
+          "path": "project/components/ui/radio-group.tsx",
+          "bytes": 1459,
+          "sha256": "f495c56ce09167fbdd3d463b3544cbc91874e5028cc6f8fbf165300dbb342a24",
+          "o200k": 348,
+          "claudeLegacy": 408
+        },
+        {
+          "path": "project/components/ui/resizable.tsx",
+          "bytes": 1814,
+          "sha256": "2de0b3a71b18e27a54a3564fcc66eb5c12c6ee25fd6a8436c9903e705b0cef28",
+          "o200k": 442,
+          "claudeLegacy": 511
+        },
+        {
+          "path": "project/components/ui/scroll-area.tsx",
+          "bytes": 1638,
+          "sha256": "55264573642c8d9182c15434638a3007b6e03e9b929bf05fbb6db8b55d5fcd36",
+          "o200k": 372,
+          "claudeLegacy": 422
+        },
+        {
+          "path": "project/components/ui/select.tsx",
+          "bytes": 6352,
+          "sha256": "a25676a80cb8ea9b90a1daad062dbbd84cafba68d72dd868f390c3bf487e230c",
+          "o200k": 1568,
+          "claudeLegacy": 1810
+        },
+        {
+          "path": "project/components/ui/separator.tsx",
+          "bytes": 693,
+          "sha256": "f9ec8dde26a5c3f2af1c48a0c588c164e350567cddc5c4070cf5ba780e984f26",
+          "o200k": 159,
+          "claudeLegacy": 182
+        },
+        {
+          "path": "project/components/ui/sheet.tsx",
+          "bytes": 4187,
+          "sha256": "1431af1f2a0f4cd2623cf888241715fa312db1bc54af038d4518b0130b136993",
+          "o200k": 1037,
+          "claudeLegacy": 1202
+        },
+        {
+          "path": "project/components/ui/sidebar.tsx",
+          "bytes": 21641,
+          "sha256": "2d58178651ea6a2a730d01adc3e933424a91597ba45e5aa029ca191c323d6666",
+          "o200k": 5529,
+          "claudeLegacy": 6250
+        },
+        {
+          "path": "project/components/ui/skeleton.tsx",
+          "bytes": 276,
+          "sha256": "ba48dd5be5a6a1378bd4e011028654b5bf419f1e7d20ee4b9f8330c1264e7239",
+          "o200k": 72,
+          "claudeLegacy": 82
+        },
+        {
+          "path": "project/components/ui/slider.tsx",
+          "bytes": 1990,
+          "sha256": "9ff8523ba99a37b3ed9ec1e55969926e8c92d44e158bdddf04f0e409e43a4d72",
+          "o200k": 466,
+          "claudeLegacy": 524
+        },
+        {
+          "path": "project/components/ui/sonner.tsx",
+          "bytes": 1034,
+          "sha256": "13ccc9b0fe4248e622f83a1d3b2f0566b72b5e04162d7d0c8db8945ecc71b55f",
+          "o200k": 272,
+          "claudeLegacy": 297
+        },
+        {
+          "path": "project/components/ui/spinner.tsx",
+          "bytes": 330,
+          "sha256": "d07526a2f821962529e09e3b8dd55123eec0c753cced3983f8e1cbafcec7a737",
+          "o200k": 87,
+          "claudeLegacy": 101
+        },
+        {
+          "path": "project/components/ui/switch.tsx",
+          "bytes": 1407,
+          "sha256": "62bd507d11a7abe5d0fc0b0bb805c794dcff5f75cff8c63e7dd58aec763d9cf5",
+          "o200k": 356,
+          "claudeLegacy": 414
+        },
+        {
+          "path": "project/components/ui/table.tsx",
+          "bytes": 2477,
+          "sha256": "84be8055e88e5aebcc3f0d14ec68a03129b0eb65c7619e18866fe74a3a8b81e1",
+          "o200k": 662,
+          "claudeLegacy": 742
+        },
+        {
+          "path": "project/components/ui/tabs.tsx",
+          "bytes": 3781,
+          "sha256": "bc6b1c115fcc9d63d8f14cecd4fcb43cd0b8b201a5d295419296fe9e0ba1623f",
+          "o200k": 913,
+          "claudeLegacy": 1085
+        },
+        {
+          "path": "project/components/ui/textarea.tsx",
+          "bytes": 758,
+          "sha256": "7c7122fc969c62228c691388aa1fe8b1eafe787ac25305a7a768f77d87d3c567",
+          "o200k": 176,
+          "claudeLegacy": 222
+        },
+        {
+          "path": "project/components/ui/toggle-group.tsx",
+          "bytes": 2308,
+          "sha256": "f9d2c8102caef32186085a6e60fac79af27e9566f429b3fac85ccbb8f02383c6",
+          "o200k": 556,
+          "claudeLegacy": 637
+        },
+        {
+          "path": "project/components/ui/toggle.tsx",
+          "bytes": 1564,
+          "sha256": "05a7ea1345d08b6d61b78b95407ec67af9ede7cd090ecdf7736ddde5363a534d",
+          "o200k": 394,
+          "claudeLegacy": 473
+        },
+        {
+          "path": "project/components/ui/tooltip.tsx",
+          "bytes": 1829,
+          "sha256": "345bc589a285ece3622bf18f4c842107836cf6fc8a9055b0a604db0cf6c83551",
+          "o200k": 440,
+          "claudeLegacy": 532
+        },
+        {
+          "path": "project/hooks/use-mobile.ts",
+          "bytes": 565,
+          "sha256": "ad0936f84f1df79d3697bfbff9c18f8ad58431c1cbaf2359c6a853b0fcc9f28b",
+          "o200k": 145,
+          "claudeLegacy": 168
+        },
+        {
+          "path": "project/lib/utils.ts",
+          "bytes": 166,
+          "sha256": "7c8c3dfc0cdd370d44932828eb067ef771c8fe7996693221d5d4b90af6d54f2d",
+          "o200k": 45,
+          "claudeLegacy": 52
+        },
+        {
+          "path": "project/next.config.mjs",
+          "bytes": 197,
+          "sha256": "52f44086373c614805d5e44d853acf3e4a273e6dfb661cbc87f351cb177eed17",
+          "o200k": 49,
+          "claudeLegacy": 54
+        },
+        {
+          "path": "project/package.json",
+          "bytes": 1045,
+          "sha256": "f636b969bd32753540524bf5f120177eadbf4ebf4388feadc3af15e30c2e408f",
+          "o200k": 440,
+          "claudeLegacy": 464
+        },
+        {
+          "path": "project/postcss.config.mjs",
+          "bytes": 81,
+          "sha256": "141ef24ca27a99d08962210fdf20212d3435fdcfa21b46cd88b44d22f751dfae",
+          "o200k": 20,
+          "claudeLegacy": 25
+        },
+        {
+          "path": "project/tsconfig.json",
+          "bytes": 720,
+          "sha256": "2102a0c7b5f38ed883800e53456934071f6ea673d1e601bdb5f291482aac6e62",
+          "o200k": 218,
+          "claudeLegacy": 233
+        }
+      ]
+    },
+    "tailwind-memory": {
+      "files": 7,
+      "docs_bytes": 0,
+      "docs_tokens_o200k": 0,
+      "project_bytes": 1990,
+      "project_tokens_o200k": 598,
+      "list": [
+        {
+          "path": "project/app/globals.css",
+          "bytes": 23,
+          "sha256": "42070e0b45bb201b2b838a52aaaa6e965f964e0b542d97f1fe517fe59c4b75a8",
+          "o200k": 7,
+          "claudeLegacy": 8
+        },
+        {
+          "path": "project/app/layout.tsx",
+          "bytes": 320,
+          "sha256": "6815f33e534db430f4462a047cdcd0ea4d572438f54e915ab8037fe570e880f3",
+          "o200k": 77,
+          "claudeLegacy": 89
+        },
+        {
+          "path": "project/app/page.tsx",
+          "bytes": 126,
+          "sha256": "ed5f656116586aae4077c5831ce0fefab63b7d4e24f9c75a1a7507f08d228e9f",
+          "o200k": 25,
+          "claudeLegacy": 29
+        },
+        {
+          "path": "project/next.config.mjs",
+          "bytes": 197,
+          "sha256": "52f44086373c614805d5e44d853acf3e4a273e6dfb661cbc87f351cb177eed17",
+          "o200k": 49,
+          "claudeLegacy": 54
+        },
+        {
+          "path": "project/package.json",
+          "bytes": 523,
+          "sha256": "0d2604be5134732d78b117b294d85593954a20d25355666629c177473b190b4f",
+          "o200k": 202,
+          "claudeLegacy": 214
+        },
+        {
+          "path": "project/postcss.config.mjs",
+          "bytes": 81,
+          "sha256": "141ef24ca27a99d08962210fdf20212d3435fdcfa21b46cd88b44d22f751dfae",
+          "o200k": 20,
+          "claudeLegacy": 25
+        },
+        {
+          "path": "project/tsconfig.json",
+          "bytes": 720,
+          "sha256": "2102a0c7b5f38ed883800e53456934071f6ea673d1e601bdb5f291482aac6e62",
+          "o200k": 218,
+          "claudeLegacy": 233
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: E-commerce product card grid — image, price, tag, hover actions, skeleton loading state.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the existing project files so the page fits the setup."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012CabqkyZ8HzPvhpRjaFGna",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WsBTjjGeYWvKmQffCBEKUY",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012CabqkyZ8HzPvhpRjaFGna",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WsBTjjGeYWvKmQffCBEKUY",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_018KkQrEHXgpBhFq6PLEFKNr",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XPfTCJPpuDn1tyUssQyBE3",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015i5BM28CXBHNVfDVX7wnbp",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018KkQrEHXgpBhFq6PLEFKNr",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XPfTCJPpuDn1tyUssQyBE3",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015i5BM28CXBHNVfDVX7wnbp",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01MKdzebDeUAJWhgWQmD8RKi",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ene58XT7XGL5yhXz4NgB84",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013uD8D3LMEwVvRKtYot5pxB",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MKdzebDeUAJWhgWQmD8RKi",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Ene58XT7XGL5yhXz4NgB84",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013uD8D3LMEwVvRKtYot5pxB",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The layout and styles are plain, so I'll write the page with no external images, using inline SVG art for the product visuals.\n\n```tsx\n\"use client\";\n\nimport { useEffect, useMemo, useState } from \"react\";\nimport {\n  Heart,\n  ShoppingBag,\n  Eye,\n  Star,\n  Check,\n  RotateCcw,\n  SlidersHorizontal,\n} from \"lucide-react\";\n\ntype Tag = \"New\" | \"Sale\" | \"Bestseller\" | \"Low stock\";\n\ntype Product = {\n  id: string;\n  name: string;\n  category: string;\n  price: number;\n  compareAt?: number;\n  rating: number;\n  reviews: number;\n  tag?: Tag;\n  hue: number;\n  shape: \"mug\" | \"bottle\" | \"lamp\" | \"bag\" | \"chair\" | \"plant\" | \"watch\" | \"speaker\";\n};\n\nconst PRODUCTS: Product[] = [\n  { id: \"p1\", name: \"Stoneware Pour-Over Set\", category: \"Kitchen\", price: 48, rating: 4.8, reviews: 312, tag: \"Bestseller\", hue: 28, shape: \"mug\" },\n  { id: \"p2\", name: \"Insulated Steel Bottle 750ml\", category: \"Outdoor\", price: 29, compareAt: 38, rating: 4.6, reviews: 189, tag: \"Sale\", hue: 200, shape: \"bottle\" },\n  { id: \"p3\", name: \"Arc Desk Lamp\", category: \"Lighting\", price: 86, rating: 4.7, reviews: 94, tag: \"New\", hue: 45, shape: \"lamp\" },\n  { id: \"p4\", name: \"Waxed Canvas Weekender\", category: \"Bags\", price: 129, rating: 4.9, reviews: 228, hue: 95, shape: \"bag\" },\n  { id: \"p5\", name: \"Oak & Cane Lounge Chair\", category: \"Furniture\", price: 340, compareAt: 420, rating: 4.5, reviews: 61, tag: \"Sale\", hue: 20, shape: \"chair\" },\n  { id: \"p6\", name: \"Trailing Pothos in Clay Pot\", category: \"Plants\", price: 24, rating: 4.4, reviews: 143, tag: \"Low stock\", hue: 140, shape: \"plant\" },\n  { id: \"p7\", name: \"Field Automatic Watch 38mm\", category: \"Accessories\", price: 215, rating: 4.8, reviews: 407, tag: \"New\", hue: 250, shape: \"watch\" },\n  { id: \"p8\", name: \"Bookshelf Bluetooth Speaker\", category: \"Audio\", price: 119, rating: 4.7, reviews: 266, hue: 330, shape: \"speaker\" },\n];\n\nconst TAG_STYLES: Record<Tag, string> = {\n  New: \"bg-emerald-600 text-white\",\n  Sale: \"bg-rose-600 text-white\",\n  Bestseller: \"bg-amber-500 text-neutral-950\",\n  \"Low stock\": \"bg-neutral-900 text-white\",\n};\n\nconst currency = new Intl.NumberFormat(\"en-US\", {\n  style: \"currency\",\n  currency: \"USD\",\n  minimumFractionDigits: 0,\n});\n\ntype SortKey = \"featured\" | \"price-asc\" | \"price-desc\" | \"rating\";\n\nfunction ProductArt({ shape, hue }: { shape: Product[\"shape\"]; hue: number }) {\n  const main = `hsl(${hue} 45% 38%)`;\n  const light = `hsl(${hue} 50% 62%)`;\n  const dark = `hsl(${hue} 40% 24%)`;\n  return (\n    <svg\n      viewBox=\"0 0 200 200\"\n      className=\"h-full w-full\"\n      aria-hidden=\"true\"\n      focusable=\"false\"\n    >\n      <defs>\n        <linearGradient id={`bg-${shape}-${hue}`} x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">\n          <stop offset=\"0\" stopColor={`hsl(${hue} 55% 94%)`} />\n          <stop offset=\"1\" stopColor={`hsl(${hue} 45% 84%)`} />\n        </linearGradient>\n      </defs>\n      <rect width=\"200\" height=\"200\" fill={`url(#bg-${shape}-${hue})`} />\n      <ellipse cx=\"100\" cy=\"172\" rx=\"58\" ry=\"7\" fill=\"rgb(0 0 0 / 0.12)\" />\n      {shape === \"mug\" && (\n        <g>\n          <rect x=\"62\" y=\"70\" width=\"64\" height=\"80\" rx=\"10\" fill={main} />\n          <path d=\"M126 88h10a14 14 0 0 1 0 36h-10\" fill=\"none\" stroke={main} strokeWidth=\"9\" />\n          <rect x=\"62\" y=\"70\" width=\"64\" height=\"12\" rx=\"6\" fill={light} />\n          <rect x=\"72\" y=\"100\" width=\"44\" height=\"6\" rx=\"3\" fill={dark} opacity=\"0.35\" />\n        </g>\n      )}\n      {shape === \"bottle\" && (\n        <g>\n          <rect x=\"88\" y=\"34\" width=\"24\" height=\"16\" rx=\"4\" fill={dark} />\n          <rect x=\"80\" y=\"48\" width=\"40\" height=\"112\" rx=\"16\" fill={main} />\n          <rect x=\"88\" y=\"62\" width=\"6\" height=\"80\" rx=\"3\" fill={light} opacity=\"0.7\" />\n          <rect x=\"80\" y=\"110\" width=\"40\" height=\"14\" fill={dark} opacity=\"0.3\" />\n        </g>\n      )}\n      {shape === \"lamp\" && (\n        <g>\n          <rect x=\"68\" y=\"154\" width=\"64\" height=\"8\" rx=\"4\" fill={dark} />\n          <path d=\"M100 154V84l36-30\" fill=\"none\" stroke={main} strokeWidth=\"7\" strokeLinecap=\"round\" strokeLinejoin=\"round\" />\n          <path d=\"M122 46l30 22-8 12-34-20z\" fill={light} />\n          <circle cx=\"100\" cy=\"84\" r=\"6\" fill={dark} />\n        </g>\n      )}\n      {shape === \"bag\" && (\n        <g>\n          <path d=\"M78 76a22 22 0 0 1 44 0\" fill=\"none\" stroke={dark} strokeWidth=\"7\" />\n          <path d=\"M52 78h96l8 80H44z\" fill={main} />\n          <rect x=\"52\" y=\"78\" width=\"96\" height=\"22\" fill={light} opacity=\"0.55\" />\n          <rect x=\"90\" y=\"104\" width=\"20\" height=\"14\" rx=\"3\" fill={dark} />\n        </g>\n      )}\n      {shape === \"chair\" && (\n        <g>\n          <rect x=\"62\" y=\"48\" width=\"12\" height=\"108\" rx=\"4\" fill={dark} />\n          <rect x=\"62\" y=\"48\" width=\"70\" height=\"56\" rx=\"8\" fill={light} />\n          <rect x=\"62\" y=\"104\" width=\"86\" height=\"14\" rx=\"6\" fill={main} />\n          <rect x=\"136\" y=\"118\" width=\"10\" height=\"40\" rx=\"4\" fill={dark} />\n          <rect x=\"66\" y=\"118\" width=\"10\" height=\"40\" rx=\"4\" fill={dark} />\n        </g>\n      )}\n      {shape === \"plant\" && (\n        <g>\n          <path d=\"M100 118C80 96 70 78 74 54c22 8 32 30 26 64z\" fill={light} />\n          <path d=\"M100 118c4-30 18-50 44-56 2 26-12 48-44 56z\" fill={main} />\n          <path d=\"M100 118c-16-10-34-12-48-4 10 14 28 18 48 4z\" fill={dark} opacity=\"0.7\" />\n          <path d=\"M66 118h68l-8 44H74z\" fill=\"hsl(18 55% 48%)\" />\n          <rect x=\"62\" y=\"112\" width=\"76\" height=\"10\" rx=\"4\" fill=\"hsl(18 55% 56%)\" />\n        </g>\n      )}\n      {shape === \"watch\" && (\n        <g>\n          <rect x=\"84\" y=\"28\" width=\"32\" height=\"48\" rx=\"8\" fill={dark} />\n          <rect x=\"84\" y=\"124\" width=\"32\" height=\"48\" rx=\"8\" fill={dark} />\n          <circle cx=\"100\" cy=\"100\" r=\"40\" fill={main} />\n          <circle cx=\"100\" cy=\"100\" r=\"33\" fill=\"hsl(0 0% 97%)\" />\n          <path d=\"M100 100V78M100 100l15 9\" stroke={dark} strokeWidth=\"4\" strokeLinecap=\"round\" />\n          <circle cx=\"100\" cy=\"100\" r=\"3.5\" fill={dark} />\n        </g>\n      )}\n      {shape === \"speaker\" && (\n        <g>\n          <rect x=\"52\" y=\"52\" width=\"96\" height=\"108\" rx=\"14\" fill={main} />\n          <circle cx=\"100\" cy=\"92\" r=\"24\" fill={dark} />\n          <circle cx=\"100\" cy=\"92\" r=\"10\" fill={light} />\n          <circle cx=\"100\" cy=\"134\" r=\"11\" fill={dark} />\n          <circle cx=\"100\" cy=\"134\" r=\"4\" fill={light} />\n        </g>\n      )}\n    </svg>\n  );\n}\n\nfunction Stars({ rating }: { rating: number }) {\n  return (\n    <span className=\"flex items-center gap-0.5\" aria-hidden=\"true\">\n      {[1, 2, 3, 4, 5].map((n) => (\n        <Star\n          key={n}\n          className={`size-3.5 ${\n            n <= Math.round(rating)\n              ? \"fill-amber-400 text-amber-400\"\n              : \"fill-neutral-200 text-neutral-200\"\n          }`}\n        />\n      ))}\n    </span>\n  );\n}\n\nfunction SkeletonCard() {\n  return (\n    <li\n      className=\"flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white\"\n      aria-hidden=\"true\"\n    >\n      <div className=\"aspect-square animate-pulse bg-neutral-200\" />\n      <div className=\"flex flex-col gap-3 p-4\">\n        <div className=\"h-3 w-1/3 animate-pulse rounded bg-neutral-200\" />\n        <div className=\"h-4 w-4/5 animate-pulse rounded bg-neutral-200\" />\n        <div className=\"h-3 w-1/2 animate-pulse rounded bg-neutral-200\" />\n        <div className=\"h-5 w-1/4 animate-pulse rounded bg-neutral-200\" />\n      </div>\n    </li>\n  );\n}\n\nfunction ProductCard({\n  product,\n  wished,\n  inCart,\n  onToggleWish,\n  onAdd,\n  onQuickView,\n}: {\n  product: Product;\n  wished: boolean;\n  inCart: boolean;\n  onToggleWish: () => void;\n  onAdd: () => void;\n  onQuickView: () => void;\n}) {\n  const discount = product.compareAt\n    ? Math.round((1 - product.price / product.compareAt) * 100)\n    : 0;\n\n  return (\n    <li className=\"group relative flex flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm transition-shadow duration-300 focus-within:shadow-lg hover:shadow-lg\">\n      <div className=\"relative aspect-square overflow-hidden bg-neutral-100\">\n        <div className=\"h-full w-full transition-transform duration-500 ease-out group-hover:scale-105 group-focus-within:scale-105 motion-reduce:transition-none\">\n          <ProductArt shape={product.shape} hue={product.hue} />\n        </div>\n\n        {product.tag && (\n          <span\n            className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-xs font-semibold shadow-sm ${TAG_STYLES[product.tag]}`}\n          >\n            {product.tag}\n            {product.tag === \"Sale\" && discount > 0 ? ` −${discount}%` : \"\"}\n          </span>\n        )}\n\n        <button\n          type=\"button\"\n          onClick={onToggleWish}\n          aria-pressed={wished}\n          aria-label={`${wished ? \"Remove from\" : \"Add to\"} wishlist: ${product.name}`}\n          className=\"absolute right-3 top-3 grid size-9 place-items-center rounded-full bg-white/90 text-neutral-700 shadow-sm backdrop-blur transition hover:bg-white hover:text-rose-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n        >\n          <Heart\n            className={`size-4.5 ${wished ? \"fill-rose-600 text-rose-600\" : \"\"}`}\n            aria-hidden=\"true\"\n          />\n        </button>\n\n        <div className=\"absolute inset-x-3 bottom-3 flex translate-y-2 gap-2 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100 motion-reduce:transition-none max-md:translate-y-0 max-md:opacity-100\">\n          <button\n            type=\"button\"\n            onClick={onAdd}\n            className=\"flex h-10 flex-1 items-center justify-center gap-2 rounded-xl bg-neutral-900 px-3 text-sm font-medium text-white shadow-md transition hover:bg-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          >\n            {inCart ? (\n              <Check className=\"size-4\" aria-hidden=\"true\" />\n            ) : (\n              <ShoppingBag className=\"size-4\" aria-hidden=\"true\" />\n            )}\n            {inCart ? \"Added\" : \"Add to cart\"}\n            <span className=\"sr-only\">: {product.name}</span>\n          </button>\n          <button\n            type=\"button\"\n            onClick={onQuickView}\n            aria-label={`Quick view: ${product.name}`}\n            className=\"grid size-10 place-items-center rounded-xl bg-white text-neutral-800 shadow-md transition hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          >\n            <Eye className=\"size-4\" aria-hidden=\"true\" />\n          </button>\n        </div>\n      </div>\n\n      <div className=\"flex flex-1 flex-col gap-1.5 p-4\">\n        <p className=\"text-xs font-medium uppercase tracking-wide text-neutral-500\">\n          {product.category}\n        </p>\n        <h3 className=\"text-sm font-semibold leading-snug text-neutral-900 sm:text-base\">\n          {product.name}\n        </h3>\n        <div className=\"flex items-center gap-2 text-xs text-neutral-600\">\n          <Stars rating={product.rating} />\n          <span>\n            <span className=\"sr-only\">Rated </span>\n            {product.rating.toFixed(1)}\n            <span className=\"sr-only\"> out of 5,</span> ({product.reviews}\n            <span className=\"sr-only\"> reviews</span>)\n          </span>\n        </div>\n        <p className=\"mt-auto flex items-baseline gap-2 pt-2\">\n          <span className=\"text-lg font-bold text-neutral-900\">\n            <span className=\"sr-only\">Price: </span>\n            {currency.format(product.price)}\n          </span>\n          {product.compareAt && (\n            <span className=\"text-sm text-neutral-500 line-through\">\n              <span className=\"sr-only\">Was </span>\n              {currency.format(product.compareAt)}\n            </span>\n          )}\n        </p>\n      </div>\n    </li>\n  );\n}\n\nexport default function Page() {\n  const [loading, setLoading] = useState(true);\n  const [sort, setSort] = useState<SortKey>(\"featured\");\n  const [wishlist, setWishlist] = useState<Set<string>>(new Set());\n  const [cart, setCart] = useState<Set<string>>(new Set());\n  const [status, setStatus] = useState(\"\");\n\n  useEffect(() => {\n    const t = setTimeout(() => setLoading(false), 1800);\n    return () => clearTimeout(t);\n  }, []);\n\n  const products = useMemo(() => {\n    const list = [...PRODUCTS];\n    switch (sort) {\n      case \"price-asc\":\n        return list.sort((a, b) => a.price - b.price);\n      case \"price-desc\":\n        return list.sort((a, b) => b.price - a.price);\n      case \"rating\":\n        return list.sort((a, b) => b.rating - a.rating);\n      default:\n        return list;\n    }\n  }, [sort]);\n\n  const toggle = (\n    set: Set<string>,\n    setter: (s: Set<string>) => void,\n    id: string,\n  ) => {\n    const next = new Set(set);\n    if (next.has(id)) next.delete(id);\n    else next.add(id);\n    setter(next);\n    return next.has(id);\n  };\n\n  const handleWish = (p: Product) => {\n    const on = toggle(wishlist, setWishlist, p.id);\n    setStatus(`${p.name} ${on ? \"added to\" : \"removed from\"} wishlist`);\n  };\n\n  const handleAdd = (p: Product) => {\n    if (!cart.has(p.id)) {\n      const next = new Set(cart);\n      next.add(p.id);\n      setCart(next);\n    }\n    setStatus(`${p.name} added to cart`);\n  };\n\n  const handleQuickView = (p: Product) => {\n    setStatus(`Quick view opened for ${p.name}`);\n  };\n\n  const reload = () => {\n    setLoading(true);\n    setStatus(\"\");\n    setTimeout(() => setLoading(false), 1800);\n  };\n\n  return (\n    <div className=\"min-h-screen bg-neutral-50 text-neutral-900\">\n      <header className=\"border-b border-neutral-200 bg-white\">\n        <div className=\"mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8\">\n          <span className=\"text-lg font-bold tracking-tight\">Hearth &amp; Field</span>\n          <div\n            className=\"flex items-center gap-4 text-sm\"\n            aria-label=\"Account summary\"\n          >\n            <span className=\"flex items-center gap-1.5\">\n              <Heart className=\"size-4\" aria-hidden=\"true\" />\n              <span className=\"sr-only\">Wishlist items:</span>\n              {wishlist.size}\n            </span>\n            <span className=\"flex items-center gap-1.5\">\n              <ShoppingBag className=\"size-4\" aria-hidden=\"true\" />\n              <span className=\"sr-only\">Cart items:</span>\n              {cart.size}\n            </span>\n          </div>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12\">\n        <div className=\"mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between\">\n          <div>\n            <h1 className=\"text-2xl font-bold tracking-tight sm:text-3xl\">\n              Home &amp; everyday goods\n            </h1>\n            <p className=\"mt-1 text-sm text-neutral-600\">\n              {loading\n                ? \"Loading products…\"\n                : `${products.length} products, free shipping over $75`}\n            </p>\n          </div>\n\n          <div className=\"flex items-center gap-2\">\n            <label\n              htmlFor=\"sort\"\n              className=\"flex items-center gap-1.5 text-sm font-medium text-neutral-700\"\n            >\n              <SlidersHorizontal className=\"size-4\" aria-hidden=\"true\" />\n              Sort\n            </label>\n            <select\n              id=\"sort\"\n              value={sort}\n              onChange={(e) => setSort(e.target.value as SortKey)}\n              disabled={loading}\n              className=\"h-10 rounded-lg border border-neutral-300 bg-white px-3 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50\"\n            >\n              <option value=\"featured\">Featured</option>\n              <option value=\"price-asc\">Price: low to high</option>\n              <option value=\"price-desc\">Price: high to low</option>\n              <option value=\"rating\">Top rated</option>\n            </select>\n            <button\n              type=\"button\"\n              onClick={reload}\n              disabled={loading}\n              className=\"flex h-10 items-center gap-1.5 rounded-lg border border-neutral-300 bg-white px-3 text-sm font-medium transition hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50\"\n            >\n              <RotateCcw className=\"size-4\" aria-hidden=\"true\" />\n              <span className=\"max-sm:sr-only\">Reload</span>\n            </button>\n          </div>\n        </div>\n\n        <ul\n          className=\"grid grid-cols-1 gap-4 min-[480px]:grid-cols-2 sm:gap-6 lg:grid-cols-3 xl:grid-cols-4\"\n          aria-busy={loading}\n          aria-label=\"Products\"\n        >\n          {loading\n            ? Array.from({ length: 8 }, (_, i) => <SkeletonCard key={i} />)\n            : products.map((p) => (\n                <ProductCard\n                  key={p.id}\n                  product={p}\n                  wished={wishlist.has(p.id)}\n                  inCart={cart.has(p.id)}\n                  onToggleWish={() => handleWish(p)}\n                  onAdd={() => handleAdd(p)}\n                  onQuickView={() => handleQuickView(p)}\n                />\n              ))}\n        </ul>\n      </main>\n\n      <div role=\"status\" aria-live=\"polite\" className=\"sr-only\">\n        {status}\n      </div>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

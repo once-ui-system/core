@@ -1,0 +1,31 @@
+{
+  "attempt": 1,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 799,
+    "chars": 28126,
+    "bytes": 28141,
+    "tokens_o200k": 5657,
+    "tokens_claudeLegacy": 5942,
+    "tokens_exact": 9136
+  },
+  "raw": {
+    "lines": 746,
+    "chars": 27282,
+    "bytes": 27297,
+    "tokens_o200k": 5607,
+    "tokens_claudeLegacy": 5927,
+    "tokens_exact": 9044
+  },
+  "components": [
+    "Avatar",
+    "Button",
+    "Column",
+    "Flex",
+    "Heading",
+    "Input",
+    "Row",
+    "Text",
+    "Textarea"
+  ]
+}

@@ -1,0 +1,220 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: E-commerce product card grid — image, price, tag, hover actions, skeleton loading state.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AU7Qa5e27thYcFpbLDJ1cg",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QjgYhcnYRwDVVbRH7ns9BT",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AU7Qa5e27thYcFpbLDJ1cg",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QjgYhcnYRwDVVbRH7ns9BT",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01HnxJhV1q5y938YZ3BAuuJn",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019MBiyVvXV4an6dviYXh3x3",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UHXHjWzfvfsJW22notEz1A",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HnxJhV1q5y938YZ3BAuuJn",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019MBiyVvXV4an6dviYXh3x3",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UHXHjWzfvfsJW22notEz1A",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Scwyruxs8tAUWreb5H9wxv",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AVU5mbEM1jBjzifZSaKSMd",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017gQi4r3VAupDHwEScMHExQ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Scwyruxs8tAUWreb5H9wxv",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AVU5mbEM1jBjzifZSaKSMd",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017gQi4r3VAupDHwEScMHExQ",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build the page using CSS gradients and lucide icons for product visuals instead of network images, including a replayable skeleton loading state and hover/focus/touch-revealed action buttons (wishlist, quick view, add to cart).\n\n",
+          "signature": "CAQSlggKEQgSGAI4AUIJbmFycmF0aW9uEgzmDO3LtGR8F4LhqtgaDNj8sxyv/Os41p9nzSIwlutbZKNfzwl3qxOGscOmYHb8xJ6VI4pRXkbuaWFYXIGrBVemcq6PKZmY9S8k/FGjKrIHZ4yXZJ7PQQW8oy+07qOgXHQB1htNFTMp4AcwDV9QNUu4KccC13DTBRs+popIf+nwKYqdfn6rQcI1+5AEdqL2Z/oht1zaULAZS4NiKwAS12Tr4noDOiU1Hbp5sBxZOVq0jOijv1ltNdQcgjxQNBWRGTnUlUKqOFGG3X3TjQ4p4hwa5AtYbKdPSCSiLZgCxJkvCV7dFZ7MLbb/vbyeVMCIPSsjpLzJ8jP3Lj/fqeSjL4Ouj42wOH5wG1k6eiGrVe1BGjxoQEXs3AGkP4Wp6c5RD8euIKyTiXMA+mM9T5urwG1l+jV2rFOvtHFGeSpYaq0XcVNEMw9/lcB1L7PxNI+ouZlWXs71Uv6sbCuEU7fakndGFXv3WKuY2SkPNlYMj77rF1CUM1LWx9AzLS0dOVW6iKRH/UEtsq2LZuKkh8/xtlVvzHnkaGv8LsHX3uGNG/rXKH7DDpJyAEmKF2W2SL+Jka1NU/usKFoJSGUdmlAYMH9BFtBpF6IbvDlrccwxtXun1bl9O02uY6LA48iagb3PSLwIyNLPg1if7zluIF4GU+LwPhN8v0s5zlFL0LuaV0uvVlvjRVQAW53R6jpWQrLvrwQJoDs8ar7fdCSmzmitpeopTeqIjUhcuVaxgZ1/rPzhxc0Suo0h6Sw1DGTWFxH6Bm9DgaEBp4tj0h4RsVtjggVlqNn7uAnOh7f7x3dWDdzwcAurN4k0WTqDYo5aCneDK9SZ928Qqey+7mmVxRTPWgmMuW1YZ/Eo70y7gKzcjMoGbc6WUDtgXvQRJAvxTrSqFJhDyCAmHB6kmY4SlXu4dwO11NGNiCW9jiIf2tZ5XSJTIj72isoRXqJfz35tXBt5Ocy8x1gePslHbv0CptuvV7xgNtXykDT3Yy3V/QD16XVCuCeafLKGIGUY46ypQ9OLhKjs+TPIyxdv3vUeJb8ktajyb1JTcCFp8BO9x5mhZzjfDt1ys5koOTBX+5J+Eg5R/+tS3+/g3JMSEgUKuwlpoZjcRWPh47hyqVFhmOhaJRTzJRjcKA2P2gU9oFQJF28prnlNSTU/b+3otfTvSQn2KQlQ145bel/UFcQxHXTX/rVKE6v+bNbpnEC5IxU66mPJFFN42xM2KP7RXGGE/Kjw/wdB1sUB0NNezVK1duGQnjanHC7kX1AU/rjLWsb4Wkc+zXUQK9H4T2F+dzKpsCje3AqouN3Xy+UyN+8U/cj1uKwxnsK1TbMzkrVDrDNZbMBaST7TiECBjellBS6DbhKykvnQBRgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017fu2bvXN9guUg6W23AitMz",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017fu2bvXN9guUg6W23AitMz",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useRef, useState } from \"react\";\nimport type { ComponentType } from \"react\";\nimport {\n  Armchair,\n  Check,\n  Eye,\n  Headphones,\n  Heart,\n  Lamp,\n  RefreshCw,\n  Backpack,\n  ShoppingBag,\n  Star,\n  Watch,\n  Coffee,\n  Footprints,\n  Camera,\n  Sofa,\n  Speaker,\n} from \"lucide-react\";\n\ntype IconType = ComponentType<{ className?: string; \"aria-hidden\"?: boolean | \"true\" | \"false\" }>;\n\ntype Tag = \"New\" | \"Sale\" | \"Bestseller\" | \"Low stock\" | \"Eco\";\n\ninterface Product {\n  id: string;\n  name: string;\n  category: string;\n  price: number;\n  compareAt?: number;\n  rating: number;\n  reviews: number;\n  tag?: Tag;\n  icon: IconType;\n  gradient: string;\n  iconColor: string;\n}\n\nconst PRODUCTS: Product[] = [\n  {\n    id: \"p1\",\n    name: \"Aurora Wireless Headphones\",\n    category: \"Audio\",\n    price: 189,\n    compareAt: 249,\n    rating: 4.7,\n    reviews: 1284,\n    tag: \"Sale\",\n    icon: Headphones,\n    gradient: \"from-indigo-200 via-violet-100 to-sky-100\",\n    iconColor: \"text-indigo-700\",\n  },\n  {\n    id: \"p2\",\n    name: \"Meridian Automatic Watch\",\n    category: \"Accessories\",\n    price: 342,\n    rating: 4.9,\n    reviews: 403,\n    tag: \"New\",\n    icon: Watch,\n    gradient: \"from-amber-200 via-orange-100 to-yellow-50\",\n    iconColor: \"text-amber-800\",\n  },\n  {\n    id: \"p3\",\n    name: \"Trailhead 28L Daypack\",\n    category: \"Bags\",\n    price: 94,\n    rating: 4.6,\n    reviews: 962,\n    tag: \"Bestseller\",\n    icon: Backpack,\n    gradient: \"from-emerald-200 via-teal-100 to-lime-50\",\n    iconColor: \"text-emerald-800\",\n  },\n  {\n    id: \"p4\",\n    name: \"Nordic Lounge Chair\",\n    category: \"Furniture\",\n    price: 520,\n    compareAt: 640,\n    rating: 4.5,\n    reviews: 211,\n    tag: \"Sale\",\n    icon: Armchair,\n    gradient: \"from-rose-200 via-orange-100 to-amber-50\",\n    iconColor: \"text-rose-800\",\n  },\n  {\n    id: \"p5\",\n    name: \"Halo Brass Desk Lamp\",\n    category: \"Lighting\",\n    price: 78,\n    rating: 4.4,\n    reviews: 318,\n    tag: \"Low stock\",\n    icon: Lamp,\n    gradient: \"from-yellow-200 via-amber-100 to-stone-50\",\n    iconColor: \"text-yellow-800\",\n  },\n  {\n    id: \"p6\",\n    name: \"Pour-Over Ceramic Set\",\n    category: \"Kitchen\",\n    price: 56,\n    rating: 4.8,\n    reviews: 745,\n    tag: \"Eco\",\n    icon: Coffee,\n    gradient: \"from-stone-300 via-stone-100 to-orange-50\",\n    iconColor: \"text-stone-700\",\n  },\n  {\n    id: \"p7\",\n    name: \"Stride Knit Runners\",\n    category: \"Footwear\",\n    price: 128,\n    rating: 4.3,\n    reviews: 1530,\n    icon: Footprints,\n    gradient: \"from-sky-200 via-cyan-100 to-blue-50\",\n    iconColor: \"text-sky-800\",\n  },\n  {\n    id: \"p8\",\n    name: \"Lumen Mirrorless Camera\",\n    category: \"Photography\",\n    price: 1199,\n    rating: 4.8,\n    reviews: 187,\n    tag: \"New\",\n    icon: Camera,\n    gradient: \"from-slate-300 via-zinc-100 to-slate-50\",\n    iconColor: \"text-slate-800\",\n  },\n  {\n    id: \"p9\",\n    name: \"Cloud Modular Sofa\",\n    category: \"Furniture\",\n    price: 1450,\n    compareAt: 1790,\n    rating: 4.6,\n    reviews: 96,\n    tag: \"Sale\",\n    icon: Sofa,\n    gradient: \"from-fuchsia-200 via-pink-100 to-rose-50\",\n    iconColor: \"text-fuchsia-800\",\n  },\n  {\n    id: \"p10\",\n    name: \"Pebble Bluetooth Speaker\",\n    category: \"Audio\",\n    price: 69,\n    rating: 4.5,\n    reviews: 2210,\n    tag: \"Bestseller\",\n    icon: Speaker,\n    gradient: \"from-teal-200 via-cyan-100 to-emerald-50\",\n    iconColor: \"text-teal-800\",\n  },\n];\n\nconst TAG_STYLES: Record<Tag, string> = {\n  New: \"bg-indigo-600 text-white\",\n  Sale: \"bg-rose-600 text-white\",\n  Bestseller: \"bg-amber-400 text-amber-950\",\n  \"Low stock\": \"bg-white text-orange-700 ring-1 ring-orange-300\",\n  Eco: \"bg-emerald-600 text-white\",\n};\n\nconst currency = new Intl.NumberFormat(\"en-US\", {\n  style: \"currency\",\n  currency: \"USD\",\n  maximumFractionDigits: 0,\n});\n\nfunction Rating({ value, reviews }: { value: number; reviews: number }) {\n  return (\n    <div\n      className=\"flex items-center gap-1 text-xs text-slate-600\"\n      role=\"img\"\n      aria-label={`Rated ${value} out of 5 from ${reviews.toLocaleString(\"en-US\")} reviews`}\n    >\n      <Star className=\"size-3.5 fill-amber-400 text-amber-400\" aria-hidden=\"true\" />\n      <span className=\"font-medium text-slate-800\" aria-hidden=\"true\">\n        {value.toFixed(1)}\n      </span>\n      <span aria-hidden=\"true\">({reviews.toLocaleString(\"en-US\")})</span>\n    </div>\n  );\n}\n\ninterface CardProps {\n  product: Product;\n  wished: boolean;\n  inCart: boolean;\n  onToggleWish: (id: string) => void;\n  onAddToCart: (id: string) => void;\n  onQuickView: (id: string) => void;\n}\n\nfunction ProductCard({ product, wished, inCart, onToggleWish, onAddToCart, onQuickView }: CardProps) {\n  const Icon = product.icon;\n  const discount =\n    product.compareAt !== undefined\n      ? Math.round(((product.compareAt - product.price) / product.compareAt) * 100)\n      : null;\n\n  const circleBtn =\n    \"grid size-10 place-items-center rounded-full bg-white/95 text-slate-800 shadow-md ring-1 ring-black/5 transition hover:bg-white hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:scale-95 motion-reduce:transition-none\";\n\n  return (\n    <li className=\"group relative flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl focus-within:shadow-xl motion-reduce:transition-none motion-reduce:hover:translate-y-0\">\n      <div className={`relative aspect-[4/5] overflow-hidden bg-gradient-to-br ${product.gradient}`}>\n        <div\n          className=\"absolute -right-10 -top-10 size-40 rounded-full bg-white/40 blur-2xl\"\n          aria-hidden=\"true\"\n        />\n        <div\n          className=\"absolute -bottom-12 -left-8 size-44 rounded-full bg-white/30 blur-2xl\"\n          aria-hidden=\"true\"\n        />\n        <div className=\"absolute inset-0 grid place-items-center\" role=\"img\" aria-label={`${product.name} product illustration`}>\n          <div className=\"grid size-28 place-items-center rounded-3xl bg-white/50 shadow-inner ring-1 ring-white/70 backdrop-blur-sm transition duration-300 group-hover:scale-105 sm:size-32 motion-reduce:transition-none motion-reduce:group-hover:scale-100\">\n            <Icon className={`size-14 sm:size-16 ${product.iconColor}`} aria-hidden=\"true\" />\n          </div>\n        </div>\n\n        {product.tag && (\n          <span\n            className={`absolute left-3 top-3 rounded-full px-2.5 py-1 text-xs font-semibold tracking-wide ${TAG_STYLES[product.tag]}`}\n          >\n            {product.tag}\n          </span>\n        )}\n\n        <div className=\"absolute right-3 top-3 flex flex-col gap-2 transition duration-200 [@media(hover:hover)]:translate-x-2 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:translate-x-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-focus-within:translate-x-0 [@media(hover:hover)]:group-focus-within:opacity-100 motion-reduce:transition-none\">\n          <button\n            type=\"button\"\n            className={circleBtn}\n            aria-pressed={wished}\n            aria-label={wished ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}\n            onClick={() => onToggleWish(product.id)}\n          >\n            <Heart\n              className={`size-5 ${wished ? \"fill-rose-500 text-rose-500\" : \"\"}`}\n              aria-hidden=\"true\"\n            />\n          </button>\n          <button\n            type=\"button\"\n            className={circleBtn}\n            aria-label={`Quick view ${product.name}`}\n            onClick={() => onQuickView(product.id)}\n          >\n            <Eye className=\"size-5\" aria-hidden=\"true\" />\n          </button>\n        </div>\n\n        <div className=\"absolute inset-x-3 bottom-3 transition duration-200 [@media(hover:hover)]:translate-y-3 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:translate-y-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:group-focus-within:translate-y-0 [@media(hover:hover)]:group-focus-within:opacity-100 motion-reduce:transition-none\">\n          <button\n            type=\"button\"\n            onClick={() => onAddToCart(product.id)}\n            aria-label={inCart ? `${product.name} added to cart` : `Add ${product.name} to cart`}\n            className={`flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold shadow-lg transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 active:scale-[0.98] motion-reduce:transition-none ${\n              inCart\n                ? \"bg-emerald-600 text-white hover:bg-emerald-700\"\n                : \"bg-slate-900 text-white hover:bg-slate-800\"\n            }`}\n          >\n            {inCart ? (\n              <>\n                <Check className=\"size-4\" aria-hidden=\"true\" />\n                Added\n              </>\n            ) : (\n              <>\n                <ShoppingBag className=\"size-4\" aria-hidden=\"true\" />\n                Add to cart\n              </>\n            )}\n          </button>\n        </div>\n      </div>\n\n      <div className=\"flex flex-1 flex-col gap-2 p-4\">\n        <p className=\"text-xs font-medium uppercase tracking-wider text-slate-500\">{product.category}</p>\n        <h3 className=\"text-base font-semibold leading-snug text-slate-900\">{product.name}</h3>\n        <Rating value={product.rating} reviews={product.reviews} />\n        <div className=\"mt-auto flex flex-wrap items-baseline gap-x-2 pt-1\">\n          <span className=\"text-lg font-bold text-slate-900\">{currency.format(product.price)}</span>\n          {product.compareAt !== undefined && (\n            <>\n              <s className=\"text-sm text-slate-500\">\n                <span className=\"sr-only\">Original price </span>\n                {currency.format(product.compareAt)}\n              </s>\n              <span className=\"text-xs font-semibold text-rose-700\">Save {discount}%</span>\n            </>\n          )}\n        </div>\n      </div>\n    </li>\n  );\n}\n\nfunction SkeletonCard() {\n  return (\n    <li\n      className=\"flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm\"\n      aria-hidden=\"true\"\n    >\n      <div className=\"aspect-[4/5] animate-pulse bg-slate-200\" />\n      <div className=\"flex flex-col gap-3 p-4\">\n        <div className=\"h-3 w-20 animate-pulse rounded bg-slate-200\" />\n        <div className=\"h-4 w-11/12 animate-pulse rounded bg-slate-200\" />\n        <div className=\"h-3 w-24 animate-pulse rounded bg-slate-200\" />\n        <div className=\"mt-2 h-5 w-16 animate-pulse rounded bg-slate-200\" />\n      </div>\n    </li>\n  );\n}\n\nexport default function Page() {\n  const [loading, setLoading] = useState(true);\n  const [wished, setWished] = useState<ReadonlySet<string>>(new Set());\n  const [cart, setCart] = useState<ReadonlySet<string>>(new Set());\n  const [status, setStatus] = useState(\"\");\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const startLoading = useCallback(() => {\n    if (timer.current) clearTimeout(timer.current);\n    setLoading(true);\n    timer.current = setTimeout(() => setLoading(false), 1800);\n  }, []);\n\n  useEffect(() => {\n    startLoading();\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, [startLoading]);\n\n  const byId = (id: string) => PRODUCTS.find((p) => p.id === id);\n\n  const toggleWish = useCallback((id: string) => {\n    const name = PRODUCTS.find((p) => p.id === id)?.name ?? \"Item\";\n    setWished((prev) => {\n      const next = new Set(prev);\n      if (next.has(id)) {\n        next.delete(id);\n        setStatus(`${name} removed from wishlist.`);\n      } else {\n        next.add(id);\n        setStatus(`${name} added to wishlist.`);\n      }\n      return next;\n    });\n  }, []);\n\n  const addToCart = useCallback((id: string) => {\n    const name = PRODUCTS.find((p) => p.id === id)?.name ?? \"Item\";\n    setCart((prev) => {\n      if (prev.has(id)) return prev;\n      const next = new Set(prev);\n      next.add(id);\n      return next;\n    });\n    setStatus(`${name} added to cart.`);\n  }, []);\n\n  const quickView = useCallback((id: string) => {\n    const name = PRODUCTS.find((p) => p.id === id)?.name ?? \"Item\";\n    setStatus(`Quick view opened for ${name}.`);\n  }, []);\n\n  void byId;\n\n  return (\n    <main className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <div className=\"mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14\">\n        <header className=\"mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between\">\n          <div>\n            <p className=\"text-sm font-semibold uppercase tracking-widest text-indigo-700\">Spring collection</p>\n            <h1 className=\"mt-1 text-3xl font-bold tracking-tight sm:text-4xl\">Home &amp; carry essentials</h1>\n            <p className=\"mt-2 max-w-xl text-slate-600\">\n              Considered pieces for your desk, your commute and your living room, with free returns for 30 days.\n            </p>\n          </div>\n          <div className=\"flex items-center gap-3\">\n            <div className=\"flex items-center gap-1.5 rounded-full bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm ring-1 ring-slate-200\">\n              <ShoppingBag className=\"size-4\" aria-hidden=\"true\" />\n              <span>\n                Cart: {cart.size}\n                <span className=\"sr-only\"> {cart.size === 1 ? \"item\" : \"items\"}</span>\n              </span>\n            </div>\n            <button\n              type=\"button\"\n              onClick={startLoading}\n              disabled={loading}\n              className=\"inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-800 shadow-sm ring-1 ring-slate-200 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-60\"\n            >\n              <RefreshCw className={`size-4 ${loading ? \"animate-spin motion-reduce:animate-none\" : \"\"}`} aria-hidden=\"true\" />\n              {loading ? \"Loading…\" : \"Reload products\"}\n            </button>\n          </div>\n        </header>\n\n        <section aria-labelledby=\"products-heading\" aria-busy={loading}>\n          <h2 id=\"products-heading\" className=\"sr-only\">\n            Products\n          </h2>\n          <ul className=\"grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5\">\n            {loading\n              ? Array.from({ length: 10 }, (_, i) => <SkeletonCard key={i} />)\n              : PRODUCTS.map((p) => (\n                  <ProductCard\n                    key={p.id}\n                    product={p}\n                    wished={wished.has(p.id)}\n                    inCart={cart.has(p.id)}\n                    onToggleWish={toggleWish}\n                    onAddToCart={addToCart}\n                    onQuickView={quickView}\n                  />\n                ))}\n          </ul>\n        </section>\n\n        <div role=\"status\" aria-live=\"polite\" className=\"sr-only\">\n          {loading ? \"Loading products.\" : status}\n        </div>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}
