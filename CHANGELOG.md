@@ -532,6 +532,11 @@ Each keeps working until 3.0.
 
 ### Internal
 
+- **The AI spec builds on Windows.** The generator compared TypeScript's
+  forward-slash file names with a backslash `src` path, so on Windows no file
+  counted as the package's own and `pnpm build` (and so `npm publish`) wrote
+  an `ai/spec.json` with no `types`, which silenced the validator's checks that
+  read them.
 - **CI on every pull request.** GitHub Actions builds, typechecks and tests
   the package on each pull request and push to `main`, builds the docs app
   against it (which prerenders every component page on the server), and runs

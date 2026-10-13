@@ -182,6 +182,22 @@ function normalize(p) {
   return p.replace(/\\/g, "/");
 }
 
+/**
+ * Is a source file one of the package's own? TypeScript names files with
+ * forward slashes on every platform; `SRC` comes from `path.join`, which uses
+ * backslashes on Windows, and a drive letter can come back in either case.
+ * Compared as they were, no file was "own" on Windows, so a build there wrote
+ * a spec with no `types` — and the validator's checks that read them went
+ * quiet.
+ */
+function isOwnSource(fileName, src = SRC, platform = process.platform) {
+  const file = normalize(fileName);
+  const root = `${normalize(src).replace(/\/$/, "")}/`;
+  return platform === "win32"
+    ? file.toLowerCase().startsWith(root.toLowerCase())
+    : file.startsWith(root);
+}
+
 /** Strip quotes from string literal default values */
 function cleanDefault(text) {
   // A multi-line object default kept its source newlines and indentation,
@@ -222,7 +238,7 @@ function collectTypeAliases(ts, program, checker, seedBlob, components) {
   /** Every type alias and interface declared in src, by name. */
   const declared = new Map();
   for (const file of program.getSourceFiles()) {
-    const own = !file.isDeclarationFile && normalize(file.fileName).startsWith(SRC);
+    const own = !file.isDeclarationFile && isOwnSource(file.fileName);
     // A vendored type is indexed too, but only a string union of it is ever
     // emitted — `Placement` comes from floating-ui and its twelve values are
     // exactly what a caller needs; React's object types are not.
@@ -1055,7 +1071,11 @@ function copyDir(src, dest) {
   }
 }
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+if (require.main === module) {
+  main().catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
+}
+
+module.exports = { isOwnSource };
