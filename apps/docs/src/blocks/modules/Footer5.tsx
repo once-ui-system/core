@@ -120,8 +120,10 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
         >
           <Row fillWidth horizontal="between" vertical="center" wrap gap="24">
             <Row gap="12" vertical="center">
-              <Logo href="#" dark icon="/trademarks/icon-dark.svg" />
-              <Logo href="#" light icon="/trademarks/icon-light.svg" />
+              <Logo
+                href="#"
+                icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+              />
             </Row>
             <Row gap="8">
               {social.map((item) => (

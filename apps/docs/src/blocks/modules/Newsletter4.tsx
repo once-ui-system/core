@@ -37,8 +37,10 @@ export const Newsletter4: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         />
       </Mask>
       <Column maxWidth="xs" gap="20" padding="xl" horizontal="center" align="center">
-        <Logo dark icon="/trademarks/icon-dark.svg" size="xl" />
-        <Logo light icon="/trademarks/icon-light.svg" size="xl" />
+        <Logo
+          icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+          size="xl"
+        />
         <Heading variant="display-strong-xs" marginTop="16">
           Stay updated and enjoy 10% off
         </Heading>

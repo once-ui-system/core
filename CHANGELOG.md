@@ -216,6 +216,13 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 
 ### Changed
 
+- **A themed logo is one `Logo`.** The agent rules, a gotcha and the
+  validator's `Logo.themes` rule now teach `<Logo wordmark={{ light, dark }}>`
+  (and `icon`, the same way) instead of a `dark` and a `light` copy, and the
+  examples and docs blocks use it. Two copies doubled the elements, left two
+  places to keep in sync and put a hidden link in every focus order; About4
+  and About5 even drew both logos in the light theme. `dark` and `light` stay
+  for a logo meant for one theme only.
 - **The OG handlers only reach public addresses, and connect to the address
   they checked.** Every redirect is checked again; fetch reads HTML only and
   the proxy passes raster images only (SVG is opt-in); size and time limits

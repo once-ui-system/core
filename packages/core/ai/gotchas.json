@@ -121,6 +121,10 @@
     "rule": "Never write props equal to defaults or implied by another prop on the element: position=\"relative\", direction on Row/Column, variant=\"primary\" on Button, fillWidth beside maxWidth (maxWidth already fills the width), minWidth={0} beside fillWidth (fillWidth already sets min-width: 0).",
     "components": ["Row", "Column", "Grid", "Button"]
   },
+  "Logo.themes": {
+    "rule": "A logo that changes with the theme is one Logo with a source per theme: <Logo wordmark={{ light: \"/logo-light.svg\", dark: \"/logo-dark.svg\" }} /> (icon takes the same pair). Do not render two Logos with dark and light: twice the elements, two places to keep in sync, and a hidden link in the focus order. Keep dark or light for a logo that should only appear in one theme.",
+    "components": ["Logo"]
+  },
   "border.default": {
     "rule": "Bare border (and borderTop, borderBottom, borderX, …) draws the default border: --default-border, neutral-alpha-weak unless the app sets it in its custom CSS. Do not write border=\"neutral-alpha-weak\" to get it, which pins the colour; name a colour only to deviate, e.g. border=\"neutral-alpha-medium\" or border=\"brand-alpha-medium\".",
     "components": ["Row", "Column", "Card"]

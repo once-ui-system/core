@@ -99,8 +99,11 @@ const Footer = () => {
           s={{ direction: "column", horizontal: "start" }}
         >
           <Row paddingRight="8">
-            <Logo size="s" href="/" dark icon="/trademarks/icon-dark.svg" />
-            <Logo size="s" href="/" light icon="/trademarks/icon-light.svg" />
+            <Logo
+              size="s"
+              href="/"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            />
           </Row>
           <Row wrap fillWidth gap="4">
             Built with curiosity by{" "}

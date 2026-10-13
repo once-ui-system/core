@@ -29,8 +29,10 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
       {...flex}
     >
       <Row gap="24">
-        <Logo href="#" dark icon="/trademarks/icon-dark.svg" />
-        <Logo href="#" light icon="/trademarks/icon-light.svg" />
+        <Logo
+          href="#"
+          icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+        />
         <Row gap="8">
           <ToggleButton label="All products" />
           <ToggleButton label="Trending" />

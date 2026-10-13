@@ -191,16 +191,25 @@ export const About4 = () => {
 
           <Grid columns={4} s={{ columns: 2 }} fillWidth background="page">
             <Row fill center borderRight borderBottom minHeight={4}>
-              <Logo icon="/trademarks/icon-dark.svg" />
-              <Logo light icon="/trademarks/icon-light.svg" />
+              <Logo
+                icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+              />
             </Row>
             <Row fill center borderRight borderBottom minHeight={4}>
-              <Logo wordmark="/trademarks/icon-dark.svg" />
-              <Logo light wordmark="/trademarks/icon-light.svg" />
+              <Logo
+                wordmark={{
+                  light: "/trademarks/icon-light.svg",
+                  dark: "/trademarks/icon-dark.svg",
+                }}
+              />
             </Row>
             <Row fill center borderRight borderBottom minHeight={4}>
-              <Logo wordmark="/trademarks/icon-dark.svg" />
-              <Logo light wordmark="/trademarks/icon-light.svg" />
+              <Logo
+                wordmark={{
+                  light: "/trademarks/icon-light.svg",
+                  dark: "/trademarks/icon-dark.svg",
+                }}
+              />
             </Row>
             <Row fill borderBottom minHeight={4}>
               <Card href="#" fill center textVariant="label-strong-s" border="transparent">

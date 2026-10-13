@@ -265,8 +265,14 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
           hide
           s={{ hide: false }}
         />
-        <Logo dark wordmark="/trademarks/wordmark-dark.svg" size="s" href="/" />
-        <Logo light wordmark="/trademarks/wordmark-light.svg" size="s" href="/" />
+        <Logo
+          wordmark={{
+            light: "/trademarks/wordmark-light.svg",
+            dark: "/trademarks/wordmark-dark.svg",
+          }}
+          size="s"
+          href="/"
+        />
       </Row>
       {authenticated ? (
         <Row fillWidth vertical="center" horizontal="between" gap="16">

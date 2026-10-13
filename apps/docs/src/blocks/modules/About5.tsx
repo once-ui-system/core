@@ -187,8 +187,7 @@ export const About5 = () => {
                 borderBottom={index < 2 ? "neutral-alpha-weak" : undefined}
                 minHeight={4}
               >
-                <Logo wordmark={partner.dark} />
-                <Logo light wordmark={partner.light} />
+                <Logo wordmark={{ light: partner.light, dark: partner.dark }} />
               </Row>
             ))}
           </Grid>

@@ -318,8 +318,10 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             horizontal="between"
             vertical="center"
           >
-            <Logo href="/" dark icon="/trademarks/icon-dark.svg" />
-            <Logo href="/" light icon="/trademarks/icon-light.svg" />
+            <Logo
+              href="/"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            />
             <Row gap="8">
               {social.map((item, index) => (
                 <IconButton

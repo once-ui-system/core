@@ -87,15 +87,11 @@ export const Waitlist1 = () => {
           >
             <Logo
               size="s"
-              dark
-              icon="/trademarks/icon-dark.svg"
-              wordmark="/trademarks/wordmark-dark.svg"
-            />
-            <Logo
-              size="s"
-              light
-              icon="/trademarks/icon-light.svg"
-              wordmark="/trademarks/wordmark-light.svg"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+              wordmark={{
+                light: "/trademarks/wordmark-light.svg",
+                dark: "/trademarks/wordmark-dark.svg",
+              }}
             />
             <Line vert marginX="16" height="20" background="brand-alpha-medium" />
             <Text paddingX="4">Arriving soon</Text>

@@ -253,6 +253,24 @@ describe("border.default", () => {
   });
 });
 
+describe("Logo.themes", () => {
+  it("flags a logo drawn once per theme", () => {
+    expect(
+      rules(`<Row>
+  <Logo dark wordmark="/logo-dark.svg" href="/" />
+  <Logo light wordmark="/logo-light.svg" href="/" />
+</Row>`),
+    ).toContain("Logo.themes");
+  });
+
+  it("accepts one Logo with a source per theme, or a logo shown in one theme only", () => {
+    expect(
+      rules(`<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} href="/" />`),
+    ).not.toContain("Logo.themes");
+    expect(rules(`<Logo dark icon="/mark-dark.svg" />`)).not.toContain("Logo.themes");
+  });
+});
+
 describe("zIndex.scope", () => {
   it("flags a zIndex with nothing positioned to stack against", () => {
     expect(rules(`<Column zIndex={2} gap="16" />`)).toContain("zIndex.scope");

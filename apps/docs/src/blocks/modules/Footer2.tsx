@@ -4,8 +4,10 @@ export const Footer2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
   return (
     <Column gap="40" fillWidth paddingY="l" paddingX="24" {...flex}>
       <Row fillWidth gap="12" textVariant="label-default-m" vertical="center">
-        <Logo href="#" dark icon="/trademarks/icon-dark.svg" />
-        <Logo href="#" light icon="/trademarks/icon-light.svg" />
+        <Logo
+          href="#"
+          icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+        />
         <Button
           data-border="rounded"
           size="s"

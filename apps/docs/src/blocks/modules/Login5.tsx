@@ -57,8 +57,10 @@ export const Login5 = () => {
         shadow="l"
       >
         <Column horizontal="center" gap="12">
-          <Logo dark icon="/trademarks/icon-dark.svg" size="l" />
-          <Logo light icon="/trademarks/icon-light.svg" size="l" />
+          <Logo
+            icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            size="l"
+          />
           <Heading variant="display-strong-xs" align="center" marginTop="8">
             {step === "email" ? "Sign in with a magic link" : "Check your inbox"}
           </Heading>

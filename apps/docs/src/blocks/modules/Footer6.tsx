@@ -72,8 +72,7 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
           <Grid columns="4" m={{ columns: 2 }} maxWidth={48}>
             {trademarks.map((mark) => (
               <Row key={mark.id} center padding="24">
-                <Logo wordmark={mark.dark} dark />
-                <Logo wordmark={mark.light} light />
+                <Logo wordmark={{ light: mark.light, dark: mark.dark }} />
               </Row>
             ))}
           </Grid>
@@ -105,8 +104,10 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
           gap="24"
         >
           <Row gap="12" vertical="center">
-            <Logo href="#" dark icon="/trademarks/icon-dark.svg" />
-            <Logo href="#" light icon="/trademarks/icon-light.svg" />
+            <Logo
+              href="#"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            />
           </Row>
           <Row gap="16" wrap>
             {links.map((link) => (

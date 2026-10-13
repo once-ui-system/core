@@ -103,8 +103,10 @@ TRANSLOG:
       </Row>
       <Column fill center>
         <Column center gap="16" padding="32" maxWidth={32}>
-          <Logo dark icon="/trademarks/icon-dark.svg" size="l" />
-          <Logo light icon="/trademarks/icon-light.svg" size="l" />
+          <Logo
+            icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            size="l"
+          />
           <Heading variant="display-strong-xs" align="center">
             Welcome to Once UI
           </Heading>

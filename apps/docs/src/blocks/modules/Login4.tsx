@@ -66,8 +66,13 @@ export const Login4 = () => {
               />
               <Column gap="20" padding="8" fillWidth>
                 <RevealFx delay={600} horizontal="start">
-                  <Logo dark size="s" wordmark="/trademarks/wordmark-dark.svg" />
-                  <Logo light size="s" wordmark="/trademarks/wordmark-light.svg" />
+                  <Logo
+                    size="s"
+                    wordmark={{
+                      light: "/trademarks/wordmark-light.svg",
+                      dark: "/trademarks/wordmark-dark.svg",
+                    }}
+                  />
                 </RevealFx>
                 <RevealFx horizontal="start">
                   <Heading
@@ -85,8 +90,10 @@ export const Login4 = () => {
 
         <Row flex="1" maxWidth="xs">
           <Column gap="12" paddingX="xl" paddingY="40" center fill>
-            <Logo dark icon="/trademarks/icon-dark.svg" size="l" />
-            <Logo light icon="/trademarks/icon-light.svg" size="l" />
+            <Logo
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+              size="l"
+            />
             <Heading variant="display-default-xs" align="center" marginTop="20">
               {isSignup ? "Create your account" : "Sign in to Once UI"}
             </Heading>

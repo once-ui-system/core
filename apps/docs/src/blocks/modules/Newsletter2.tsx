@@ -6,8 +6,10 @@ export const Newsletter2: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
       <Row borderRight="neutral-medium" flex={1} />
       <Column maxWidth="s" minWidth={24} flex={3} horizontal="center">
         <Column padding="32" fillWidth horizontal="center" gap="12">
-          <Logo size="l" dark icon="/trademarks/icon-dark.svg" />
-          <Logo size="l" light icon="/trademarks/icon-light.svg" />
+          <Logo
+            size="l"
+            icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+          />
           <Heading marginTop="12" align="center" variant="heading-strong-l">
             The product brief, once a month
           </Heading>

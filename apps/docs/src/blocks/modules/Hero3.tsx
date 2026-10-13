@@ -56,19 +56,37 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             </Button>
           </Row>
           <Row paddingY="24" maxWidth={40}>
-            <AutoScroll dark marginTop="xl" opacity={50}>
-              <Logo wordmark="/trademarks/wordmark-dark.svg" />
-              <Logo wordmark="/trademarks/wordmark-dark.svg" />
-              <Logo wordmark="/trademarks/wordmark-dark.svg" />
-              <Logo wordmark="/trademarks/wordmark-dark.svg" />
-              <Logo wordmark="/trademarks/wordmark-dark.svg" />
-            </AutoScroll>
-            <AutoScroll light marginTop="xl" opacity={50}>
-              <Logo wordmark="/trademarks/wordmark-light.svg" />
-              <Logo wordmark="/trademarks/wordmark-light.svg" />
-              <Logo wordmark="/trademarks/wordmark-light.svg" />
-              <Logo wordmark="/trademarks/wordmark-light.svg" />
-              <Logo wordmark="/trademarks/wordmark-light.svg" />
+            <AutoScroll marginTop="xl" opacity={50}>
+              <Logo
+                wordmark={{
+                  light: "/trademarks/wordmark-light.svg",
+                  dark: "/trademarks/wordmark-dark.svg",
+                }}
+              />
+              <Logo
+                wordmark={{
+                  light: "/trademarks/wordmark-light.svg",
+                  dark: "/trademarks/wordmark-dark.svg",
+                }}
+              />
+              <Logo
+                wordmark={{
+                  light: "/trademarks/wordmark-light.svg",
+                  dark: "/trademarks/wordmark-dark.svg",
+                }}
+              />
+              <Logo
+                wordmark={{
+                  light: "/trademarks/wordmark-light.svg",
+                  dark: "/trademarks/wordmark-dark.svg",
+                }}
+              />
+              <Logo
+                wordmark={{
+                  light: "/trademarks/wordmark-light.svg",
+                  dark: "/trademarks/wordmark-dark.svg",
+                }}
+              />
             </AutoScroll>
             <Fade
               position="absolute"

@@ -913,6 +913,19 @@ function validate(source, spec, iconNames, options = {}) {
     );
   }
 
+  // A logo that changes with the theme is one Logo with a source per theme.
+  // Two Logos, one `dark` and one `light`, double the elements, leave two
+  // places to keep in sync, and put a hidden link in every focus order.
+  const logos = tags.filter((t) => t.name === "Logo");
+  const logoIn = (prop) =>
+    logos.some((t) => hasProp(t.attrs, prop) && /(?:^|\s)(icon|wordmark)=/.test(ownProps(t.attrs)));
+  if (logoIn("dark") && logoIn("light")) {
+    add(
+      "Logo.themes",
+      'a Logo drawn twice, once with `dark` and once with `light` — draw it once with a source per theme: <Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} /> (icon takes the same pair)',
+    );
+  }
+
   // A zIndex only means something against something positioned in the same
   // stacking group: the element itself (a sticky header), or a sibling of it
   // or of one of its ancestors (the absolute layer it sits over — layout

@@ -27,13 +27,22 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
       />
       <Row as="header" fillWidth paddingX="l" height="64" vertical="center">
         <Row s={{ hide: true }}>
-          <Logo dark wordmark="/trademarks/wordmark-dark.svg" size="s" href="/" />
-          <Logo light wordmark="/trademarks/wordmark-light.svg" size="s" href="/" />
+          <Logo
+            wordmark={{
+              light: "/trademarks/wordmark-light.svg",
+              dark: "/trademarks/wordmark-dark.svg",
+            }}
+            size="s"
+            href="/"
+          />
         </Row>
         <Row hide s={{ hide: false }} gap="4" vertical="center" fillWidth>
           <NavIcon />
-          <Logo dark icon="/trademarks/icon-dark.svg" size="s" href="/" />
-          <Logo light icon="/trademarks/icon-light.svg" size="s" href="/" />
+          <Logo
+            icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            size="s"
+            href="/"
+          />
         </Row>
         <Row fillWidth vertical="center" horizontal="end">
           <Row s={{ hide: true }} fillWidth gap="24" paddingX="64" vertical="center">

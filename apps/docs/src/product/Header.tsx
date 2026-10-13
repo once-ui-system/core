@@ -210,14 +210,7 @@ export function Header() {
             </Animation>
             <Row vertical="end" gap="8">
               <Logo
-                dark
-                wordmark="/trademarks/type-dark.svg"
-                size="s"
-                href="/"
-              />
-              <Logo
-                light
-                wordmark="/trademarks/type-light.svg"
+                wordmark={{ light: "/trademarks/type-light.svg", dark: "/trademarks/type-dark.svg" }}
                 size="s"
                 href="/"
               />

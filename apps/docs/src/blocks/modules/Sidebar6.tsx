@@ -102,8 +102,12 @@ export function Sidebar6() {
   return (
     <Column maxWidth={16} fillHeight padding="2" gap="8" background="surface" radius="l" border>
       <Row paddingX="24" paddingY="16">
-        <Logo dark wordmark="/trademarks/wordmark-dark.svg" />
-        <Logo light wordmark="/trademarks/wordmark-light.svg" />
+        <Logo
+          wordmark={{
+            light: "/trademarks/wordmark-light.svg",
+            dark: "/trademarks/wordmark-dark.svg",
+          }}
+        />
       </Row>
       <Column fill gap="4" paddingX="16" overflowY="auto">
         {nav.map((item) => {

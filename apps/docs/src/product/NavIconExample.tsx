@@ -5,49 +5,56 @@ import React, { useState } from "react";
 
 export function NavIconToggle() {
   const [isActive, setIsActive] = useState(false);
-  
+
   const handleClick = () => {
     setIsActive(!isActive);
   };
 
   return (
     <Column fillWidth>
-      <Flex 
-        paddingX="20" 
-        paddingY="8" 
+      <Flex
+        paddingX="20"
+        paddingY="8"
         background="surface"
         border="surface"
-        radius="l" 
-        horizontal="between" 
+        radius="l"
+        horizontal="between"
         vertical="center"
         fillWidth
       >
-        <Flex dark><Logo icon="/trademarks/icon-dark.svg"/></Flex>
-        <Flex light><Logo icon="/trademarks/icon-light.svg"/></Flex>
-        <NavIcon 
-          active={isActive} 
-          onClick={handleClick} 
+        <Logo icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }} />
+        <NavIcon
+          active={isActive}
+          onClick={handleClick}
           aria-label="Toggle navigation menu"
           aria-expanded={isActive}
           aria-controls="demo-nav"
         />
       </Flex>
-      
+
       {isActive && (
-        <Column 
+        <Column
           id="demo-nav"
-          padding="16" 
-          background="surface" 
+          padding="16"
+          background="surface"
           border="surface"
-          radius="l" 
+          radius="l"
           marginTop="8"
           fillWidth
           gap="8"
         >
-          <ToggleButton fillWidth horizontal="start" size="l">Home</ToggleButton>
-          <ToggleButton fillWidth horizontal="start" size="l">Products</ToggleButton>
-          <ToggleButton fillWidth horizontal="start" size="l">About</ToggleButton>
-          <ToggleButton fillWidth horizontal="start" size="l">Contact</ToggleButton>
+          <ToggleButton fillWidth horizontal="start" size="l">
+            Home
+          </ToggleButton>
+          <ToggleButton fillWidth horizontal="start" size="l">
+            Products
+          </ToggleButton>
+          <ToggleButton fillWidth horizontal="start" size="l">
+            About
+          </ToggleButton>
+          <ToggleButton fillWidth horizontal="start" size="l">
+            Contact
+          </ToggleButton>
         </Column>
       )}
     </Column>
@@ -65,14 +72,14 @@ export function NavIconStates() {
 
 export function CustomNavIcon() {
   const [isActive, setIsActive] = useState(false);
-  
+
   const handleClick = () => {
     setIsActive(!isActive);
   };
 
   return (
-    <NavIcon 
-      active={isActive} 
+    <NavIcon
+      active={isActive}
       onClick={handleClick}
       width="48"
       height="48"
