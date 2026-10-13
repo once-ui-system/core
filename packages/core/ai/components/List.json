@@ -14,6 +14,7 @@
  ],
  "props": {
   "as": "\"ul\" | \"ol\" = ul",
+  "start": "number",
   "children": "React.ReactNode",
   "className": "string",
   "style": "React.CSSProperties"

@@ -18,6 +18,10 @@ and its checklist are in [ROADMAP.md](ROADMAP.md).
 
 ### Added
 
+- **`List` takes `start`**, the first item's number on a numbered list
+  (`<List as="ol" start={4}>`). It goes to the `ol` element's own `start`
+  attribute and is ignored on `ul`; before, a numbered list could only count
+  from 1.
 - **`Tabs`, `TabList`, `Tab` and `TabPanel`.** Horizontal or vertical tabs
   matched by `value`, with `tablist`/`tab`/`tabpanel` roles, `aria-selected`,
   and `aria-controls` and `aria-labelledby` when the panel is mounted. Arrow
