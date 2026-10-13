@@ -1,16 +1,25 @@
-import { CSSProperties, forwardRef } from "react";
 import classNames from "clsx";
+import { CSSProperties, forwardRef } from "react";
 
 import {
-  GridProps,
-  SpacingProps,
-  SizeProps,
-  StyleProps,
   CommonProps,
   DisplayProps,
   GridBreakpointProps,
+  GridProps,
+  SizeProps,
+  SpacingProps,
+  StyleProps,
 } from "../interfaces";
-import { SpacingToken, ColorScheme, ColorWeight } from "../types";
+import { ColorScheme, ColorWeight } from "../types";
+import {
+  BELOW_HEADER,
+  offsetClasses,
+  scrollsOn,
+  sizeValue,
+  spacingClasses,
+  themeAttributes,
+  translateTransform,
+} from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerGridProps
@@ -27,12 +36,49 @@ interface ServerGridProps
   xs?: GridBreakpointProps;
 }
 
+/**
+ * Every class one breakpoint object resolves to.
+ *
+ * `Grid` used to send any breakpoint prop to the client component, which needs
+ * a `LayoutProvider` and lays the grid out only after an effect. The classes
+ * were already there — `.m-columns-2` and its siblings are generated for every
+ * breakpoint, and `ClientGrid` relied on them itself — so a breakpoint object
+ * whose values all have one renders here now, under the same rule `Flex` uses.
+ * This writes the same families `ServerFlex` does for its breakpoints, `xl`
+ * included, plus the grid's own `columns` and `rows`.
+ */
+function breakpointClasses(
+  breakpoint: string,
+  props: GridBreakpointProps | undefined,
+): (string | false | undefined)[] {
+  if (!props) return [];
+  return [
+    ...spacingClasses(breakpoint, props),
+    props.position && `${breakpoint}-position-${props.position}`,
+    props.hide === true && `${breakpoint}-grid-hide`,
+    props.hide === false && `${breakpoint}-grid-show`,
+    props.columns && `${breakpoint}-columns-${props.columns}`,
+    props.rows && `${breakpoint}-rows-${props.rows}`,
+    props.overflow && `${breakpoint}-overflow-${props.overflow}`,
+    props.overflowX && `${breakpoint}-overflow-x-${props.overflowX}`,
+    props.overflowY && `${breakpoint}-overflow-y-${props.overflowY}`,
+    props.scrollbar && `${breakpoint}-scrollbar-${props.scrollbar}`,
+    ...offsetClasses(breakpoint, props),
+    props.pointerEvents && `${breakpoint}-pointer-events-${props.pointerEvents}`,
+    props.opacity !== undefined && `${breakpoint}-opacity-${props.opacity}`,
+    props.zIndex !== undefined && `${breakpoint}-z-index-${props.zIndex}`,
+    props.transition && `${breakpoint}-transition-${props.transition}`,
+  ];
+}
+
 const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
   (
     {
       as: Component = "div",
       inline,
       columns,
+      rows,
+      minColumnWidth,
       gap,
       position = "relative",
       xl,
@@ -111,6 +157,14 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       cursor,
       zIndex,
       shadow,
+      userSelect,
+      blendMode,
+      blur,
+      backdropBlur,
+      theme,
+      themeBorder,
+      themeSolid,
+      themeSurface,
       className,
       style,
       children,
@@ -150,55 +204,10 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       return `${scheme}-${type}-${weight}`;
     };
 
-    const parseDimension = (
-      value: number | SpacingToken | string | undefined,
-      type: "width" | "height",
-    ): string | undefined => {
-      if (value === undefined) return undefined;
-      if (typeof value === "number") return `${value}rem`;
-      if (typeof value === "string") {
-        // Check for CSS unit values - pass through directly
-        if (
-          value.endsWith("%") ||
-          value.endsWith("vh") ||
-          value.endsWith("dvh") ||
-          value.endsWith("vw") ||
-          value.startsWith("calc(")
-        ) {
-          return value;
-        }
-        // Static spacing tokens
-        if (
-          [
-            "0",
-            "1",
-            "2",
-            "4",
-            "8",
-            "12",
-            "16",
-            "20",
-            "24",
-            "32",
-            "40",
-            "48",
-            "56",
-            "64",
-            "80",
-            "104",
-            "128",
-            "160",
-          ].includes(value)
-        ) {
-          return `var(--static-space-${value})`;
-        }
-        // Responsive tokens
-        if (["xs", "s", "m", "l", "xl"].includes(value)) {
-          return `var(--responsive-${type}-${value})`;
-        }
-      }
-      return undefined;
-    };
+    // Auto-fit: one class, with the width as a custom property beside it, so
+    // any rem or CSS length works without a class per size and the grid stays
+    // a server component.
+    const minColumnWidthValue = sizeValue(minColumnWidth, "width");
 
     let classes = classNames(
       position && `position-${position}`,
@@ -209,15 +218,21 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       fitHeight && "fit-height",
       fill && "fill",
       (fillWidth || maxWidth) && "fill-width",
-      maxWidth && ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) && `max-width-${maxWidth}`,
+      maxWidth &&
+        ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) &&
+        `max-width-${maxWidth}`,
       (fillHeight || maxHeight) && "fill-height",
-      columns && `columns-${columns}`,
+      height === BELOW_HEADER && "height-below-header",
+      minHeight === BELOW_HEADER && "min-height-below-header",
+      maxHeight === BELOW_HEADER && "max-height-below-header",
+      minColumnWidthValue ? "columns-auto-fit" : columns && `columns-${columns}`,
+      // Taken out of the props here, so it never reaches the DOM as a `rows`
+      // attribute, which is where it used to end up.
+      rows && `rows-${rows}`,
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
-      ((overflow && overflow !== "hidden") ||
-        (overflowX && overflowX !== "hidden") ||
-        (overflowY && overflowY !== "hidden")) &&
+      (scrollsOn(overflow) || scrollsOn(overflowX) || scrollsOn(overflowY)) &&
         `scrollbar-${scrollbar}`,
       typeof padding !== "number" && padding && `p-${padding}`,
       typeof paddingLeft !== "number" && paddingLeft && `pl-${paddingLeft}`,
@@ -313,6 +328,10 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       zIndex && `z-index-${zIndex}`,
       textType && `font-${textType}`,
       typeof cursor === "string" && `cursor-${cursor}`,
+      userSelect && `user-select-${userSelect}`,
+      blendMode && `blend-mode-${blendMode}`,
+      typeof blur === "string" && `blur-${blur}`,
+      typeof backdropBlur === "string" && `backdrop-blur-${backdropBlur}`,
       dark && "dark-grid",
       light && "light-grid",
       className,
@@ -321,53 +340,12 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
     classes +=
       " " +
       classNames(
-        cascadedL?.position && `l-position-${cascadedL.position}`,
-        cascadedM?.position && `m-position-${cascadedM.position}`,
-        cascadedS?.position && `s-position-${cascadedS.position}`,
-        cascadedXs?.position && `xs-position-${cascadedXs.position}`,
-        cascadedL?.hide === true && "l-grid-hide",
-        cascadedL?.hide === false && "l-grid-show",
-        cascadedM?.hide === true && "m-grid-hide",
-        cascadedM?.hide === false && "m-grid-show",
-        cascadedS?.hide === true && "s-grid-hide",
-        cascadedS?.hide === false && "s-grid-show",
-        cascadedXs?.hide === true && "xs-grid-hide",
-        cascadedXs?.hide === false && "xs-grid-show",
-        cascadedL?.columns && `l-columns-${cascadedL.columns}`,
-        cascadedM?.columns && `m-columns-${cascadedM.columns}`,
-        cascadedS?.columns && `s-columns-${cascadedS.columns}`,
-        cascadedXs?.columns && `xs-columns-${cascadedXs.columns}`,
-        cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
-        cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
-        cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
-        cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
-        cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
-        cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
-        cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
-        cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
-        cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
-        cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
-        cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
-        cascadedXs?.overflowY && `xs-overflow-y-${cascadedXs.overflowY}`,
-        cascadedL?.top && `l-top-${cascadedL.top}`,
-        cascadedM?.top && `m-top-${cascadedM.top}`,
-        cascadedS?.top && `s-top-${cascadedS.top}`,
-        cascadedXs?.top && `xs-top-${cascadedXs.top}`,
-        cascadedL?.right && `l-right-${cascadedL.right}`,
-        cascadedM?.right && `m-right-${cascadedM.right}`,
-        cascadedS?.right && `s-right-${cascadedS.right}`,
-        cascadedXs?.right && `xs-right-${cascadedXs.right}`,
-        cascadedL?.bottom && `l-bottom-${cascadedL.bottom}`,
-        cascadedM?.bottom && `m-bottom-${cascadedM.bottom}`,
-        cascadedS?.bottom && `s-bottom-${cascadedS.bottom}`,
-        cascadedXs?.bottom && `xs-bottom-${cascadedXs.bottom}`,
-        cascadedL?.left && `l-left-${cascadedL.left}`,
-        cascadedM?.left && `m-left-${cascadedM.left}`,
-        cascadedS?.left && `s-left-${cascadedS.left}`,
-        cascadedXs?.left && `xs-left-${cascadedXs.left}`,
+        ...breakpointClasses("xl", cascadedXl),
+        ...breakpointClasses("l", cascadedL),
+        ...breakpointClasses("m", cascadedM),
+        ...breakpointClasses("s", cascadedS),
+        ...breakpointClasses("xs", cascadedXs),
       );
-  
-
 
     const parsePosition = (value: number | string | undefined): string | undefined => {
       if (value === undefined) return undefined;
@@ -386,20 +364,18 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       return undefined;
     };
 
-    const translateXValue = parsePosition(translateX);
-    const translateYValue = parsePosition(translateY);
-    const transform =
-      translateXValue || translateYValue
-        ? `translate(${translateXValue || "0"}, ${translateYValue || "0"})`
-        : undefined;
+    // A spacing token as well as a number or a CSS unit, as on ServerFlex.
+    const transform = translateTransform(translateX, translateY);
 
     const combinedStyle: CSSProperties = {
-      maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) ? undefined : parseDimension(maxWidth, "width"),
-      minWidth: parseDimension(minWidth, "width"),
-      minHeight: parseDimension(minHeight, "height"),
-      maxHeight: parseDimension(maxHeight, "height"),
-      width: parseDimension(width, "width"),
-      height: parseDimension(height, "height"),
+      maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
+        ? undefined
+        : sizeValue(maxWidth, "width"),
+      minWidth: sizeValue(minWidth, "width"),
+      minHeight: sizeValue(minHeight, "height"),
+      maxHeight: sizeValue(maxHeight, "height"),
+      width: sizeValue(width, "width"),
+      height: sizeValue(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
       // Hide default cursor when using custom cursor
@@ -426,11 +402,24 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       bottom: parsePosition(bottom),
       left: parsePosition(left),
       transform,
+      // A size is a class; a number is rem, and has no class to reach for.
+      filter: typeof blur === "number" ? `blur(${blur}rem)` : undefined,
+      ...(typeof backdropBlur === "number" && {
+        WebkitBackdropFilter: `blur(${backdropBlur}rem)`,
+        backdropFilter: `blur(${backdropBlur}rem)`,
+      }),
+      ...(minColumnWidthValue && { "--grid-min-column-width": minColumnWidthValue }),
       ...style,
     };
 
     return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...rest}>
+      <Component
+        ref={ref}
+        className={classes}
+        style={combinedStyle}
+        {...rest}
+        {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
+      >
         {children}
       </Component>
     );
@@ -439,5 +428,5 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
 
 ServerGrid.displayName = "ServerGrid";
 
-export { ServerGrid };
 export type { GridProps };
+export { ServerGrid };

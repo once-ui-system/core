@@ -1,0 +1,120 @@
+---
+title: "KeyTip"
+summary: "A keyboard shortcut drawn as keycaps for the reader's platform: ⌘ on a Mac, Ctrl elsewhere."
+updatedAt: "2026-10-10"
+docs: "once-ui/components/keyTip.mdx"
+github: "components/KeyTip.tsx"
+navLabel: "KeyTip"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`KeyTip` draws a shortcut as [`Kbd`](/components/kbd) keycaps, optionally after the
+action it performs. It takes the same string [`useHotkeys`](/hooks/useHotkeys)
+registers, so one constant drives both and the hint cannot drift from the binding.
+`mod` shows as ⌘ on macOS and iOS and as Ctrl everywhere else.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" horizontal="center">
+      <KeyTip label="Search" keys="mod+k" />
+      <KeyTip label="Redo" keys="mod+shift+z" />
+      <KeyTip label="Go to inbox" keys="g i" />
+      <KeyTip label="Next" keys={["j", "down"]} />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`const SEARCH = "mod+k";
+
+useHotkeys(SEARCH, () => setOpen(true));
+
+<KeyTip label="Search" keys={SEARCH} />
+<KeyTip label="Redo" keys="mod+shift+z" />
+<KeyTip label="Go to inbox" keys="g i" />
+<KeyTip label="Next" keys={["j", "down"]} />`,
+      language: "tsx",
+      label: "KeyTip"
+    }
+  ]}
+/>
+
+A space separates the steps of a sequence, drawn with "then"; an array lists
+alternatives, drawn with "or". The full syntax is on the
+[`useHotkeys`](/hooks/useHotkeys) page.
+
+## In a tooltip
+
+A hover that names the action and its keys teaches the shortcut. Pass a KeyTip as a
+tooltip's label:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="8">
+      <IconButton icon="arrowLeft" variant="secondary" tooltip={<KeyTip label="Undo" keys="mod+z" />} aria-label="Undo" />
+      <IconButton icon="arrowRight" variant="secondary" tooltip={<KeyTip label="Redo" keys="mod+shift+z" />} aria-label="Redo" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<IconButton
+  icon="arrowLeft"
+  tooltip={<KeyTip label="Undo" keys="mod+z" />}
+  aria-label="Undo"
+/>`,
+      language: "tsx",
+      label: "Tooltip"
+    }
+  ]}
+/>
+
+## In a sentence
+
+KeyTip is inline, so it sits in a line of text.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Text variant="body-default-m">
+      Press <KeyTip keys="shift+?" /> to see every shortcut.
+    </Text>
+  }
+  codes={[
+    {
+      code:
+`<Text>
+  Press <KeyTip keys="shift+?" /> to see every shortcut.
+</Text>`,
+      language: "tsx",
+      label: "Inline"
+    }
+  ]}
+/>
+
+## Screen readers
+
+Symbols such as ⌘ and ⇧ are read inconsistently, or not at all. The keycaps are
+hidden from assistive technology, and a screen reader hears the combination spelled
+out instead: "Undo, Command+Z" on a Mac, "Undo, Control+Z" elsewhere.
+
+The page renders Ctrl on the server, where the platform is unknown, and switches to
+⌘ right after it hydrates on Apple platforms, without a hydration warning.
+
+## API reference
+
+<PropsTable
+  component="KeyTip"
+  describe={{
+    keys: "The shortcut, in useHotkeys syntax. An array lists alternatives.",
+    label: "The action, shown before the keys.",
+  }}
+/>

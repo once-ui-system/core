@@ -11,7 +11,7 @@
   "fx": "string = 50%",
   "fy": "string = 50%",
   "stops": "GradientStop[]",
-  "variant": "ChartVariant = useDataTheme().variant"
+  "variant": "ChartVariant"
  },
  "mixinsRef": []
 }

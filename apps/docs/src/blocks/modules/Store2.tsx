@@ -47,7 +47,7 @@ export const Store2 = () => {
 
   return (
     <Column fillWidth horizontal="center" paddingX="l" paddingY="xl">
-      <Row maxWidth="l" fillWidth gap="xl" m={{ direction: "column" }}>
+      <Row maxWidth="l" gap="xl" m={{ direction: "column" }}>
         <Column fillWidth gap="12">
           <Column fillWidth radius="xl" overflow="hidden" border>
             <Media
@@ -57,7 +57,7 @@ export const Store2 = () => {
               sizes="(max-width: 768px) 100vw, 560px"
             />
           </Column>
-          <Scroller direction="row" fillWidth gap="8">
+          <Scroller fillWidth gap="8">
             <Row fitWidth gap="8">
               {product.images.map((image, index) => (
                 <Row
@@ -85,9 +85,7 @@ export const Store2 = () => {
         <Column fillWidth gap="24" paddingTop="8">
           <Column gap="8">
             <Row gap="8" vertical="center">
-              <Tag size="s" scheme="neutral">
-                New arrival
-              </Tag>
+              <Tag size="s">New arrival</Tag>
               <Tag size="s" scheme="success">
                 In stock
               </Tag>

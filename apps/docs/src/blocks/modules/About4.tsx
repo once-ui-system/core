@@ -114,7 +114,7 @@ export const About4 = () => {
                 sizes="(max-width: 768px) 100vw, 640px"
                 src="/images/creators/lorant.jpg"
               />
-              <Mask position="absolute" fill x={50} y={0} radius={50}>
+              <Mask position="absolute" fill x={50} y={0}>
                 <MatrixFx
                   flicker
                   fps={24}
@@ -191,16 +191,25 @@ export const About4 = () => {
 
           <Grid columns={4} s={{ columns: 2 }} fillWidth background="page">
             <Row fill center borderRight borderBottom minHeight={4}>
-              <Logo icon="/trademarks/icon-dark.svg" size="m" />
-              <Logo light icon="/trademarks/icon-light.svg" size="m" />
+              <Logo
+                icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+              />
             </Row>
             <Row fill center borderRight borderBottom minHeight={4}>
-              <Logo wordmark="/trademarks/icon-dark.svg" size="m" />
-              <Logo light wordmark="/trademarks/icon-light.svg" size="m" />
+              <Logo
+                wordmark={{
+                  light: "/trademarks/icon-light.svg",
+                  dark: "/trademarks/icon-dark.svg",
+                }}
+              />
             </Row>
             <Row fill center borderRight borderBottom minHeight={4}>
-              <Logo wordmark="/trademarks/icon-dark.svg" size="m" />
-              <Logo light wordmark="/trademarks/icon-light.svg" size="m" />
+              <Logo
+                wordmark={{
+                  light: "/trademarks/icon-light.svg",
+                  dark: "/trademarks/icon-dark.svg",
+                }}
+              />
             </Row>
             <Row fill borderBottom minHeight={4}>
               <Card href="#" fill center textVariant="label-strong-s" border="transparent">

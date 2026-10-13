@@ -1,24 +1,24 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import {
-  startOfYear,
-  endOfYear,
-  startOfMonth,
   endOfMonth,
-  startOfWeek,
   endOfWeek,
-  subYears,
+  endOfYear,
+  isSameDay,
+  startOfMonth,
+  startOfWeek,
+  startOfYear,
   subMonths,
   subWeeks,
-  isSameDay,
+  subYears,
 } from "date-fns";
+import React, { useEffect, useState } from "react";
 import { Column } from "../../components/Column";
-import { Text } from "../../components/Text";
-import { Row } from "../../components/Row";
 import { DateRange, DateRangePicker } from "../../components/DateRangePicker";
 import { DropdownWrapper } from "../../components/DropdownWrapper";
 import { IconButton } from "../../components/IconButton";
+import { Row } from "../../components/Row";
+import { Text } from "../../components/Text";
 import { ToggleButton } from "../../components/ToggleButton";
 import { DateConfig, PresetsConfig } from "./interfaces";
 
@@ -41,9 +41,9 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
   presets = { display: true, granularity: "week" },
   ...flex
 }) => {
-  if (!title && !description && !dateRange && !date) {
-    return null;
-  }
+  // Hooks first, the empty check after them: returning before a hook drops the
+  // hook state whenever the header goes empty, including the cleanup of the
+  // Escape listener below, which then stays on `document`.
   const [dateRangeOpen, setDateRangeOpen] = useState(false);
   const [selectedPreset, setSelectedPreset] = useState<string | null>(null);
 
@@ -178,7 +178,7 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
             trigger={
               <IconButton
                 icon="calendar"
-              aria-label="Choose a date range"
+                aria-label="Choose a date range"
                 onClick={() => setDateRangeOpen(!dateRangeOpen)}
                 variant="secondary"
                 size="m"
@@ -192,7 +192,7 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
                     padding="4"
                     gap="2"
                     minWidth={8}
-                    border="neutral-alpha-weak"
+                    border
                     radius="m"
                     overflowX="scroll"
                   >

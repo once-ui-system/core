@@ -1,9 +1,9 @@
 "use client";
 
-import { ReactNode, forwardRef } from "react";
-import { Row } from "./Row";
+import { forwardRef, ReactNode } from "react";
+import { ColorScheme, CondensedTShirtSizes, TShirtSizes } from "../types";
 import styles from "./Pulse.module.scss";
-import { CondensedTShirtSizes, ColorScheme, TShirtSizes } from "../types";
+import { Row } from "./Row";
 
 interface PulseProps extends React.ComponentProps<typeof Row> {
   scheme?: ColorScheme;
@@ -15,9 +15,21 @@ interface PulseProps extends React.ComponentProps<typeof Row> {
 }
 
 const Pulse = forwardRef<HTMLDivElement, PulseProps>(
-  ({ children, className, style, size = "m", pulseSize, scheme = "brand", ...flex }: PulseProps, ref) => {
+  (
+    { children, className, style, size = "m", pulseSize, scheme = "brand", ...flex }: PulseProps,
+    ref,
+  ) => {
     return (
-      <Row ref={ref} minWidth={size === "s" ? "16" : size === "m" ? "24" : "32"} minHeight={size === "s" ? "16" : size === "m" ? "24" : "32"} center data-solid="color" className={className} style={style} {...flex}>
+      <Row
+        ref={ref}
+        minWidth={size === "s" ? "16" : size === "m" ? "24" : "32"}
+        minHeight={size === "s" ? "16" : size === "m" ? "24" : "32"}
+        center
+        data-solid="color"
+        className={className}
+        style={style}
+        {...flex}
+      >
         <Row position="absolute" className={styles.position}>
           <Row
             solid={`${scheme}-medium`}
@@ -40,4 +52,5 @@ const Pulse = forwardRef<HTMLDivElement, PulseProps>(
 );
 
 Pulse.displayName = "Pulse";
+
 export { Pulse };

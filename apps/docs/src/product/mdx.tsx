@@ -1,320 +1,283 @@
-import { MDXRemote } from "next-mdx-remote/rsc";
-import type { MDXRemoteProps } from "next-mdx-remote/rsc";
-type MDXComponents = React.ComponentProps<typeof MDXRemote>["components"];
-import React, { Children, isValidElement, ReactNode } from "react";
-import remarkGfm from "remark-gfm";
-
-// ─── Core components (explicit imports to avoid Turbopack frozen module proxy) ───
-import { Accordion, AccordionGroup, Banner, Animation, Arrow, AutoScroll, Avatar, HeadingNav, AvatarGroup, Badge, Background, BlobFx, BlockQuote, Book, Effect, InfoTip, Scrubber, Setting, SettingAxes, SettingGroup, Button, Card, Carousel, CelebrationFx, Checkbox, Chip, ClientFlex, ClientGrid, ColorInput, Column, CompareImage, ContextMenu, CountFx, CountdownFx, Cursor, CursorCard, DateInput, DatePicker, DateRangeInput, DateRangePicker, Dialog, Dropdown, DropdownWrapper, ElementType, EmojiPicker, EmojiPickerDropdown, Fade, FadingLettersFx, Feedback, Flex, FlipFx, FocusTrap, Form, GlitchFx, Grid, Heading, HoloFx, Hover, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, InteractiveDetails, Kbd, LetterFx, Line, List, ListItem, Logo, LogoCloud, Mask, MasonryGrid, MatrixFx, Media, Modal, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, ParticleFx, PasswordInput, ProgressBar, Pulse, RadioButton, RevealFx, Row, ScrollContainer, ScrollLock, ScrollToTop, Scroller, SegmentedControl, Select, ShineFx, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, StyleOverlay, StylePanel, Swiper, Switch, Table, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, TiltFx, Timeline, Toast, Toaster, ToggleButton, Tooltip, TypeFx, User, UserMenu, WeatherFx } from "@once-ui-system/core";
-import { MediaUpload } from "@once-ui-system/core/media";
-import type { MediaProps, TextProps } from "@once-ui-system/core";
-
-// Modules (CodeBlock, HeadingLink, charts, etc.)
-import { HeadingLink, Kbar, MegaMenu, MobileMegaMenu } from "@once-ui-system/core";
-import { BarChart, LineChart, PieChart, LineBarChart, RadialGauge, LinearGauge, ChartHeader } from "@once-ui-system/core/data";
+// Core components, modules and charts as explicit named imports: Turbopack's
+// frozen module proxy rejects a namespace import here.
+import {
+  Accordion,
+  AccordionGroup,
+  Animation,
+  Arrow,
+  AutoScroll,
+  Avatar,
+  AvatarGroup,
+  Background,
+  Badge,
+  Banner,
+  BlobFx,
+  BlockQuote,
+  Book,
+  Breadcrumbs,
+  Button,
+  Card,
+  Carousel,
+  CelebrationFx,
+  Checkbox,
+  Chip,
+  ClientFlex,
+  ClientGrid,
+  ColorInput,
+  Column,
+  CompareImage,
+  ContextMenu,
+  CountdownFx,
+  CountFx,
+  Cursor,
+  CursorCard,
+  DataTable,
+  DateInput,
+  DatePicker,
+  DateRangeInput,
+  DateRangePicker,
+  Dialog,
+  Drawer,
+  Dropdown,
+  DropdownWrapper,
+  Effect,
+  ElementType,
+  EmojiPicker,
+  EmojiPickerDropdown,
+  Fade,
+  FadingLettersFx,
+  Feedback,
+  Flex,
+  FlipFx,
+  FocusTrap,
+  Form,
+  GlitchFx,
+  Grid,
+  Heading,
+  HeadingLink,
+  HeadingNav,
+  HoloFx,
+  Hover,
+  HoverCard,
+  Icon,
+  IconButton,
+  InfiniteScroll,
+  InfoTip,
+  InlineCode,
+  Input,
+  InteractiveDetails,
+  Kbar,
+  Kbd,
+  KeyTip,
+  LetterFx,
+  Line,
+  List,
+  ListItem,
+  Logo,
+  LogoCloud,
+  Mask,
+  MasonryGrid,
+  MatrixFx,
+  Media,
+  MegaMenu,
+  MobileMegaMenu,
+  Modal,
+  NavGroup,
+  NavIcon,
+  NavItem,
+  NumberInput,
+  OgCard,
+  Option,
+  OTPInput,
+  Pagination,
+  ParticleFx,
+  PasswordInput,
+  ProgressBar,
+  Pulse,
+  RadioButton,
+  RadioGroup,
+  RangeSlider,
+  RevealFx,
+  Row,
+  ScrollContainer,
+  Scroller,
+  ScrollLock,
+  ScrollToTop,
+  Scrubber,
+  SegmentedControl,
+  Select,
+  Setting,
+  SettingAxes,
+  SettingGroup,
+  ShineFx,
+  Skeleton,
+  Slider,
+  SmartLink,
+  Spinner,
+  SplitView,
+  StatusIndicator,
+  StyleOverlay,
+  StylePanel,
+  Swiper,
+  Switch,
+  Tab,
+  TabList,
+  Table,
+  TabPanel,
+  Tabs,
+  Tag,
+  TagInput,
+  Text,
+  Textarea,
+  ThemeInit,
+  ThemeSwitcher,
+  TiltFx,
+  Timeline,
+  Toast,
+  Toaster,
+  ToggleButton,
+  Tooltip,
+  TypeFx,
+  User,
+  UserMenu,
+  VisuallyHidden,
+  WeatherFx,
+} from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
+import {
+  BarChart,
+  ChartHeader,
+  LinearGauge,
+  LineBarChart,
+  LineChart,
+  PieChart,
+  RadialGauge,
+} from "@once-ui-system/core/data";
+import { createMdxComponents } from "@once-ui-system/core/mdx";
+import { MediaUpload } from "@once-ui-system/core/media";
+import type { MDXRemoteProps } from "next-mdx-remote/rsc";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import remarkGfm from "remark-gfm";
 
 // ─── Product components (explicit imports, skip `Modal` which conflicts with core) ───
 import {
-  PropsTable,
-  ClientOption,
-  ColorSchemeGrid,
-  SemanticColorSections,
   AdditionalTokens,
-  Cta,
-  Products,
-  PageList,
   AnimationNavIconExample,
-  CountFxExample,
-  ScrollCountExample,
-  CountFxDecimalExample,
-  CelebrationFxExample,
-  MatrixFxExample,
-  WeatherFxExample,
-  LineChartStreamingExample,
-  InfiniteScrollExample,
-  ProgressBarExample,
-  ToastExample,
-  TypeFxCustomExample,
-  ModalExample,
-  ModalWithBackdrop,
-  BasicDialog,
-  DialogWithFooter,
-  StackedDialogs,
-  DialogFlush,
-  CustomizedDialog,
-  DialogCloseOnClickaway,
+  BasicChipExample,
   BasicDatePickerExample,
-  DateTimePickerExample,
-  DateRangePickerExample,
-  DateRangePickerPresetsExample,
   BasicDateRangeInputExample,
-  CustomLabelDateRangeInputExample,
-  DateRangeInputExamples,
-  ValidationInputExample,
-  CharacterCountExample,
-  SearchInput,
-  ColorInputExample,
-  ColorInputAlphaExample,
-  DateInputExample,
-  DateTimeInputExample,
-  NumberInputExample,
-  OTPInputExample,
-  PasswordInputExample,
-  TagInputExample,
-  ValidationTextareaExample,
-  TextareaCharacterCountExample,
-  ScrubberSeekExample,
-  ScrubberTracksExample,
-  SettingBasicExample,
-  SettingGroupExample,
-  SettingAxesExample,
-  BasicSwitch,
-  SwitchWithFeedback,
-  SwitchWithLoading,
-  ReversedSwitch,
-  ClientSwitch,
-  SubscriptionRadioGroup,
-  BasicRawDropdown,
-  IconsRawDropdown,
-  DescriptionRawDropdown,
-  CustomStyledRawDropdown,
+  BasicDialog,
   BasicDropdown,
-  DropdownWithIcons,
-  CustomPositionDropdown,
-  SearchableDropdown,
   BasicEmojiPickerDropdown,
-  IconButtonEmojiPickerDropdown,
-  CustomColumnsEmojiPickerDropdown,
-  PlacementEmojiPickerDropdown,
-  CustomBackgroundEmojiPickerDropdown,
+  BasicRawDropdown,
+  BasicSwitch,
+  CelebrationFxExample,
+  CharacterCountExample,
+  ChipWithIconsExample,
+  ClientOption,
+  ClientSwitch,
+  ColorInputAlphaExample,
+  ColorInputExample,
+  ColorSchemeGrid,
   ControlledEmojiPickerDropdown,
-  NavIconToggle,
-  NavIconStates,
-  CustomNavIcon,
-  SliderBasicExample,
-  SliderLabelExample,
-  SliderShowValueExample,
-  SliderStepExample,
-  SliderMinMaxExample,
-  SliderDisabledExample,
-  RadialGaugeSpeedDemo,
   CountdownFxBasic,
-  CountdownFxFormats,
   CountdownFxEffects,
+  CountdownFxFormats,
   CountdownFxLaunch,
   CountdownFxOnComplete,
-  IndeterminateCheckboxExample,
-  BasicChipExample,
-  InteractiveChipExample,
-  ChipWithIconsExample,
-  RemovableChipsExample,
+  CountFxDecimalExample,
+  CountFxExample,
+  Cta,
+  CustomBackgroundEmojiPickerDropdown,
+  CustomColumnsEmojiPickerDropdown,
+  CustomizedDialog,
+  CustomLabelDateRangeInputExample,
+  CustomNavIcon,
+  CustomPositionDropdown,
   CustomRemovableChipExample,
-  InteractiveDetailsExample,
+  CustomStyledRawDropdown,
+  DataTableExample,
+  DataTableSelectionExample,
+  DataTableServerExample,
+  DateInputExample,
+  DateRangeInputExamples,
+  DateRangePickerExample,
+  DateRangePickerPresetsExample,
+  DateTimeInputExample,
+  DateTimePickerExample,
+  DescriptionRawDropdown,
+  DialogCloseOnClickaway,
+  DialogFlush,
+  DialogWithFooter,
+  DrawerExample,
+  DrawerNavigationExample,
+  DrawerSidesExample,
+  DropdownWithIcons,
   FormControlsExample,
+  IconButtonEmojiPickerDropdown,
+  IconsRawDropdown,
+  IndeterminateCheckboxExample,
+  InfiniteScrollExample,
+  InteractiveChipExample,
+  InteractiveDetailsExample,
+  LineChartStreamingExample,
+  MatrixFxExample,
+  ModalExample,
+  ModalWithBackdrop,
+  NavIconStates,
+  NavIconToggle,
+  NumberInputExample,
+  OTPInputExample,
+  PageList,
+  PaginationControlledExample,
+  PasswordInputExample,
+  PlacementEmojiPickerDropdown,
+  Products,
+  ProgressBarExample,
+  PropsTable,
+  RadialGaugeSpeedDemo,
+  RadioGroupControlledExample,
+  RangeSliderPriceExample,
+  RemovableChipsExample,
+  ReversedSwitch,
+  ScrollCountExample,
+  ScrubberSeekExample,
+  ScrubberTracksExample,
+  SearchableDropdown,
+  SearchInput,
+  SemanticColorSections,
+  SettingAxesExample,
+  SettingBasicExample,
+  SettingGroupExample,
+  SliderBasicExample,
+  SliderDisabledExample,
+  SliderLabelExample,
+  SliderMinMaxExample,
+  SliderShowValueExample,
+  SliderStepExample,
+  StackedDialogs,
+  SubscriptionRadioGroup,
+  SwitchWithFeedback,
+  SwitchWithLoading,
+  TagInputExample,
+  TextareaCharacterCountExample,
+  ToastExample,
   TooltipExample,
+  TypeFxCustomExample,
+  UseHotkeysExample,
+  ValidationInputExample,
+  ValidationTextareaExample,
+  WeatherFxExample,
 } from "@/product";
 
-// ─── Custom MDX element overrides ───
-
-type CustomLinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  href: string;
-  children: ReactNode;
-};
-
-function CustomLink({ href, children, ...props }: CustomLinkProps) {
-  return (
-    <SmartLink href={href} {...props} style={{ textDecoration: "underline" }}>
-      {children}
-    </SmartLink>
-  );
-}
-
-function createImage({ alt, src, ...props }: MediaProps & { src: string }) {
-  if (!src) {
-    console.error("Media requires a valid 'src' property.");
-    return null;
-  }
-
-  return (
-    <Media
-      marginTop="8"
-      marginBottom="16"
-      enlarge
-      radius="m"
-      aspectRatio="16 / 9"
-      border="neutral-alpha-medium"
-      sizes="(max-width: 960px) 100vw, 960px"
-      alt={alt}
-      src={src}
-      {...props}
-    />
-  );
-}
-
-/**
- * A heading is not always a string: `## Why not \`overflow: hidden\`` reaches
- * this as an array of a string and an `<InlineCode>` element. Flatten it before
- * slugifying, or the first heading with any inline markup takes the build down
- * with "toLowerCase is not a function".
- */
-function nodeToText(node: React.ReactNode): string {
-  if (node == null || typeof node === "boolean") return "";
-  if (typeof node === "string" || typeof node === "number") return String(node);
-  if (Array.isArray(node)) return node.map(nodeToText).join("");
-  if (React.isValidElement(node)) {
-    return nodeToText((node.props as { children?: React.ReactNode }).children);
-  }
-  return "";
-}
-
-function slugify(node: React.ReactNode): string {
-  return nodeToText(node)
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/&/g, "-and-")
-    .replace(/[^\w\-]+/g, "")
-    .replace(/\-\-+/g, "-");
-}
-
-function createHeading(as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6") {
-  const CustomHeading = ({
-    children,
-    ...props
-  }: Omit<React.ComponentProps<typeof HeadingLink>, "as" | "id">) => {
-    const slug = slugify(children);
-    return (
-      <HeadingLink
-        marginTop="24"
-        marginBottom="12"
-        as={as}
-        id={slug}
-        {...props}
-      >
-        {children}
-      </HeadingLink>
-    );
-  };
-
-  CustomHeading.displayName = `${as}`;
-  return CustomHeading;
-}
-
-function createParagraph({ children }: TextProps) {
-  return (
-    <Text
-      style={{ lineHeight: "175%" }}
-      variant="body-default-m"
-      onBackground="neutral-strong"
-      marginTop="8"
-      marginBottom="12"
-    >
-      {children}
-    </Text>
-  );
-}
-
-function createInlineCode({ children }: { children: ReactNode }) {
-  return <InlineCode onBackground="neutral-strong">{children}</InlineCode>;
-}
-
-function createBlockQuote({ children }: { children: ReactNode }) {
-  return (
-    <BlockQuote marginTop="8" marginBottom="12">
-      {children}
-    </BlockQuote>
-  );
-}
-
-function createList({ children }: { children: ReactNode }) {
-  return <List>{children}</List>;
-}
-
-function createListItem({ children }: { children: ReactNode }) {
-  return (
-    <ListItem marginTop="4" marginBottom="8" style={{ lineHeight: "175%" }}>
-      {children}
-    </ListItem>
-  );
-}
-
-function createCodeBlock(props: any) {
-  if (
-    props.children &&
-    props.children.props &&
-    props.children.props.className
-  ) {
-    const { className, children } = props.children.props;
-    const language = className.replace("language-", "");
-    const label = language.charAt(0).toUpperCase() + language.slice(1);
-
-    return (
-      <CodeBlock
-        marginTop="8"
-        marginBottom="16"
-        codes={[{ code: children, language, label }]}
-        copyButton={true}
-      />
-    );
-  }
-  return <pre {...props} />;
-}
-
-function createHr() {
-  return <Line />;
-}
-
-/**
- * A GFM table rendered through the design system's `Table`. MDX hands us the
- * `thead` / `tbody` / `tr` / `th` / `td` elements; the cells are lifted out
- * into `data`, so a markdown table in a doc looks like every other table in it.
- */
-function cellsOf(row: ReactNode): ReactNode[] {
-  if (!isValidElement<{ children?: ReactNode }>(row)) return [];
-  return Children.toArray(row.props.children)
-    .filter(isValidElement)
-    .map((cell) => (cell as React.ReactElement<{ children?: ReactNode }>).props.children);
-}
-
-function rowsOf(section: ReactNode): ReactNode[] {
-  if (!isValidElement<{ children?: ReactNode }>(section)) return [];
-  return Children.toArray(section.props.children).filter(isValidElement);
-}
-
-function createTable({ children }: { children?: ReactNode }) {
-  const sections = Children.toArray(children).filter(isValidElement) as React.ReactElement<{
-    children?: ReactNode;
-  }>[];
-  const head = sections.find((s) => s.type === "thead");
-  const bodies = sections.filter((s) => s.type === "tbody");
-  const headers = cellsOf(rowsOf(head)[0]).map((content, index) => ({
-    content,
-    key: `col-${index}`,
-  }));
-  const rows = bodies.flatMap((body) => rowsOf(body).map(cellsOf));
-  return <Table marginY="16" data={{ headers, rows }} />;
-}
-
-const mdxComponents = {
-  // ─── MDX element overrides ───
-  p: createParagraph,
-  h1: createHeading("h1"),
-  h2: createHeading("h2"),
-  h3: createHeading("h3"),
-  h4: createHeading("h4"),
-  h5: createHeading("h5"),
-  h6: createHeading("h6"),
-  img: createImage,
-  a: CustomLink,
-  code: createInlineCode,
-  pre: createCodeBlock,
-  blockquote: createBlockQuote,
-  ul: createList,
-  ol: createList,
-  li: createListItem,
-  hr: createHr,
-  table: createTable,
-
+// Markdown renders through the core map from `@once-ui-system/core/mdx`:
+// headings with ids and copy-link anchors (HeadingNav reads them), links
+// through SmartLink, images through Media, fenced code through CodeBlock and
+// GFM tables through Table. What the docs add is the set of tags their pages
+// use by name: nearly every component, for the live previews, and the docs'
+// own examples. Some are in the core map already; listing them again is
+// harmless and keeps this the one place to look.
+const mdxComponents = createMdxComponents({
   // ─── Core layout ───
   Flex,
   Row,
@@ -333,7 +296,9 @@ const mdxComponents = {
   Logo,
   LogoCloud,
   Kbd,
+  KeyTip,
   Icon,
+  VisuallyHidden,
 
   // ─── Core media ───
   Media,
@@ -408,6 +373,11 @@ const mdxComponents = {
   EmojiPickerDropdown,
 
   // ─── Core navigation ───
+  Breadcrumbs,
+  Tabs,
+  TabList,
+  Tab,
+  TabPanel,
   NavGroup,
   NavIcon,
   NavItem,
@@ -423,6 +393,7 @@ const mdxComponents = {
 
   // ─── Core overlay ───
   Dialog,
+  Drawer,
   Modal,
   Toast,
   Toaster,
@@ -502,6 +473,10 @@ const mdxComponents = {
   DialogFlush,
   CustomizedDialog,
   DialogCloseOnClickaway,
+  DrawerExample,
+  DrawerSidesExample,
+  DrawerNavigationExample,
+  UseHotkeysExample,
   BasicDatePickerExample,
   DateTimePickerExample,
   DateRangePickerExample,
@@ -571,7 +546,19 @@ const mdxComponents = {
   InteractiveDetailsExample,
   FormControlsExample,
   TooltipExample,
-};
+  DataTable,
+  RadioGroup,
+  RangeSlider,
+  Pagination,
+  PaginationControlledExample,
+  DataTableExample,
+  DataTableSelectionExample,
+  DataTableServerExample,
+  RadioGroupControlledExample,
+  RangeSliderPriceExample,
+});
+
+type MDXComponents = React.ComponentProps<typeof MDXRemote>["components"];
 
 type CustomMDXProps = Omit<MDXRemoteProps, "components"> & {
   components?: Partial<MDXComponents>;

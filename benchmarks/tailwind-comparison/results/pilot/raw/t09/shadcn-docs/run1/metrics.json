@@ -1,0 +1,67 @@
+{
+  "attempt": 0,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 797,
+    "chars": 24169,
+    "bytes": 24175,
+    "tokens_o200k": 6022,
+    "tokens_claudeLegacy": 6386
+  },
+  "raw": {
+    "lines": 525,
+    "chars": 22964,
+    "bytes": 22970,
+    "tokens_o200k": 5717,
+    "tokens_claudeLegacy": 6089
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Calendar",
+    "Card",
+    "CardContent",
+    "CardDescription",
+    "CardHeader",
+    "CardTitle",
+    "Input",
+    "Label",
+    "Popover",
+    "PopoverContent",
+    "PopoverTrigger",
+    "Select",
+    "SelectContent",
+    "SelectItem",
+    "SelectTrigger",
+    "SelectValue",
+    "Table",
+    "TableBody",
+    "TableCell",
+    "TableHead",
+    "TableHeader",
+    "TableRow",
+    "ToggleGroup",
+    "ToggleGroupItem"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/calendar.tsx",
+      "components/ui/card.tsx",
+      "components/ui/input.tsx",
+      "components/ui/label.tsx",
+      "components/ui/popover.tsx",
+      "components/ui/select.tsx",
+      "components/ui/table.tsx",
+      "components/ui/toggle-group.tsx",
+      "components/ui/toggle.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 919,
+    "chars": 30879,
+    "bytes": 30879,
+    "tokens_o200k": 7590,
+    "tokens_claudeLegacy": 8793
+  }
+}

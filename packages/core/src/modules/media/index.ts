@@ -1,2 +1,2 @@
-export { MediaUpload } from "./MediaUpload";
 export type { MediaUploadProps } from "./MediaUpload";
+export { MediaUpload } from "./MediaUpload";

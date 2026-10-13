@@ -120,7 +120,6 @@ function PostCard({ post }: { post: FeedPost }) {
                   slide: (
                     <Media
                       key={imageUrl}
-                      fillWidth
                       src={imageUrl}
                       sizes="(max-width: 768px) 100vw, 800px"
                       priority={index === 0}
@@ -130,7 +129,7 @@ function PostCard({ post }: { post: FeedPost }) {
               />
             )}
             {post.attachment.type === "youtube" && post.attachment.url && (
-              <Media radius="l" border fillWidth aspectRatio="16/9" src={post.attachment.url} />
+              <Media radius="l" border aspectRatio="16/9" src={post.attachment.url} />
             )}
             {post.attachment.type === "link" && post.attachment.url && (
               <Row fillWidth horizontal="center">
@@ -179,7 +178,7 @@ function PostCard({ post }: { post: FeedPost }) {
 export const Feed4 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" padding="16" gap="16" {...flex}>
-      <Column maxWidth="s" fillWidth gap="16">
+      <Column maxWidth="s" gap="16">
         {posts.map((post) => (
           <PostCard key={post.id} post={post} />
         ))}

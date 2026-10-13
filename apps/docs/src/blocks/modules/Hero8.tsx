@@ -13,7 +13,7 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
       {...flex}
     >
       <Background
-        data-solid="inverse"
+        themeSolid="inverse"
         position="absolute"
         top="0"
         left="0"
@@ -30,7 +30,7 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             href="#"
           >
             <Row vertical="center" gap="8">
-              <Tag data-border="rounded" size="s" scheme="brand">
+              <Tag themeBorder="rounded" size="s" scheme="brand">
                 Blog
               </Tag>
               <Row textVariant="code-default-s" gap="8" vertical="center">
@@ -62,7 +62,7 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
           paddingRight="48"
           gap="24"
           zIndex={1}
-          data-solid="inverse"
+          themeSolid="inverse"
           pointerEvents="none"
         >
           <Row
@@ -92,8 +92,7 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
           borderTop
           borderX
           className="glow"
-          data-solid="inverse"
-          fillWidth
+          themeSolid="inverse"
           overflow="hidden"
           background="page"
         >
@@ -101,7 +100,6 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             src="/images/og/home.jpg"
             sizes="(max-width: 1024px) 100vw, 1024px"
             alt="Hero"
-            fillWidth
             aspectRatio="16/9"
           />
         </Row>

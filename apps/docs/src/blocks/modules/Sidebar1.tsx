@@ -38,9 +38,7 @@ export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
             <Row padding="4" vertical="center" gap="12" textVariant="label-default-s">
               <Icon name="pages" onBackground="neutral-weak" size="xs" />
               Reports
-              <Tag scheme="neutral" size="s">
-                New
-              </Tag>
+              <Tag size="s">New</Tag>
             </Row>
           </ToggleButton>
         </Column>

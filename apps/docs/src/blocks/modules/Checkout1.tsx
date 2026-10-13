@@ -68,8 +68,7 @@ export const Checkout1 = () => {
                   top="0"
                   height="24"
                   width="24"
-                  vertical="center"
-                  horizontal="center"
+                  center
                   textVariant="body-default-xs"
                   background="neutral-weak"
                   onBackground="neutral-strong"
@@ -134,7 +133,7 @@ export const Checkout1 = () => {
         </Column>
 
         <Column fillWidth gap="24" paddingX="xl" paddingY="l">
-          <Button size="m" fillWidth prefixIcon="apple" label="Pay" />
+          <Button fillWidth prefixIcon="apple" label="Pay" />
           <Row vertical="center" gap="16" paddingY="16">
             <Line key="line-4" />
             <Text wrap="nowrap" variant="body-default-s" onBackground="neutral-weak" align="center">
@@ -221,7 +220,7 @@ export const Checkout1 = () => {
               onSelect={() => {}}
             />
           </Column>
-          <Button size="m" fillWidth label="Pay" />
+          <Button fillWidth label="Pay" />
         </Column>
       </Row>
     </Column>

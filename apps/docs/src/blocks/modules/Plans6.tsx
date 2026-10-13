@@ -91,7 +91,7 @@ function TierCard({ tier }: { tier: Tier }) {
           position="absolute"
           top="0"
           right="0"
-          data-solid="inverse"
+          themeSolid="inverse"
           translateX="30%"
           translateY="-30%"
         />
@@ -105,7 +105,7 @@ function TierCard({ tier }: { tier: Tier }) {
             {tier.name}
           </Text>
           {tier.featured && (
-            <Tag size="s" scheme="brand" data-border="rounded">
+            <Tag size="s" scheme="brand" themeBorder="rounded">
               Most popular
             </Tag>
           )}
@@ -171,7 +171,7 @@ function CustomTierCard({ tier }: { tier: CustomTier }) {
 export const Plans6 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="64" {...flex}>
-      <Column fillWidth gap="16" maxWidth={48}>
+      <Column gap="16" maxWidth={48}>
         <Heading as="h2" variant="display-strong-m">
           Simple pricing for every stage
         </Heading>

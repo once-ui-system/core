@@ -1,18 +1,18 @@
 ﻿"use client";
 
 import React, {
-  useState,
-  useRef,
-  useEffect,
-  ReactNode,
   forwardRef,
-  useImperativeHandle,
+  ReactNode,
   useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
 import { createPortal } from "react-dom";
 import type { Placement } from "../types";
-import { Flex } from "./Flex";
 import styles from "./CursorCard.module.scss";
+import { Flex } from "./Flex";
 
 export interface CursorCardProps extends React.ComponentProps<typeof Flex> {
   trigger?: ReactNode;
@@ -23,10 +23,7 @@ export interface CursorCardProps extends React.ComponentProps<typeof Flex> {
 }
 
 const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
-  (
-    { trigger, overlay, placement = "bottom-left", className, style, ...flex },
-    ref,
-  ) => {
+  ({ trigger, overlay, placement = "bottom-left", className, style, ...flex }, ref) => {
     const [isHovering, setIsHovering] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isTouchDevice, setIsTouchDevice] = useState(false);

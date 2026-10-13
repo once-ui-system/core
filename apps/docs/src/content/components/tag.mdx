@@ -1,7 +1,7 @@
 ---
 title: "Tag"
 summary: "Tag displays a compact label with optional icons, used to annotate content with status, metadata, or category information."
-updatedAt: "2025-05-11"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/tag.mdx"
 github: "components/Tag.tsx"
 navLabel: "Tag"
@@ -10,6 +10,13 @@ navIcon: "components"
 
 `Tag` is a flexible label component that supports color variants, sizes, and optional icons on either side. Useful for tokens, filters, statuses, and tags.
 
+<Feedback
+  marginTop="16"
+  marginBottom="24"
+  title="Badge, Tag or Chip"
+  description={<><SmartLink href="/components/badge">Badge</SmartLink> announces something, usually as a link: the "New" line above a hero. <SmartLink href="/components/tag">Tag</SmartLink> is a static label for a status, category or piece of metadata. <SmartLink href="/form-controls/chip">Chip</SmartLink> is interactive: a choice that can be selected or removed, in filters and in <InlineCode>TagInput</InlineCode>. 3.0 plans to consolidate them.</>}
+/>
+
 <CodeBlock
   marginTop="16"
   marginBottom="24"
@@ -17,7 +24,7 @@ navIcon: "components"
     <Row gap="12">
       <Tag scheme="brand" label="New" />
       <Tag scheme="success" label="Passed" prefixIcon="check" />
-      <Tag scheme="danger" label="Error" suffixIcon="x" />
+      <Tag scheme="danger" label="Error" suffixIcon="close" />
     </Row>
   }
   codes={[
@@ -25,7 +32,7 @@ navIcon: "components"
       code:
 `<Tag scheme="brand" label="New" />
 <Tag scheme="success" label="Passed" prefixIcon="check" />
-<Tag scheme="danger" label="Error" suffixIcon="x" />`,
+<Tag scheme="danger" label="Error" suffixIcon="close" />`,
       language: "tsx",
       label: "Tag"
     }

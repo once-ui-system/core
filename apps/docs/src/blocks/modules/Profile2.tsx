@@ -55,7 +55,7 @@ const recentPosts = [
 export const Profile2 = () => {
   return (
     <Column fillWidth horizontal="center" padding="16" gap="32">
-      <Column fillWidth maxWidth="m" gap="24">
+      <Column maxWidth="m" gap="24">
         <Row fillWidth gap="16" vertical="center" wrap>
           <Avatar
             src="/images/creators/lorant.jpg"
@@ -157,7 +157,7 @@ export const Profile2 = () => {
                   maxWidth={8}
                 />
                 <Column fill gap="8" vertical="center">
-                  <Heading as="h3" variant="heading-strong-s" wrap="balance">
+                  <Heading as="h3" variant="heading-strong-s">
                     {post.title}
                   </Heading>
                   <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">

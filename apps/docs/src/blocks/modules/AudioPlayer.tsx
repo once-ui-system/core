@@ -172,7 +172,6 @@ export const AudioPlayer: React.FC<
             height="40"
             vertical="end"
             horizontal="between"
-            position="relative"
           >
             {/* Border bars */}
             {barHeights.map((height, index) => (

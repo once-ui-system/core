@@ -1,7 +1,12 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import { iconLibrary as defaultIcons, type IconComponent, type IconLibrary, type IconName } from "../icons";
+import {
+  iconLibrary as defaultIcons,
+  type IconComponent,
+  type IconLibrary,
+  type IconName,
+} from "../icons";
 
 export const IconContext = createContext<{
   icons: IconLibrary;

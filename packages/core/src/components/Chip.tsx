@@ -1,13 +1,13 @@
 "use client";
 
-import React, { ReactNode, MouseEventHandler, forwardRef } from "react";
 import classNames from "clsx";
-import { Text } from "./Text";
+import React, { forwardRef, MouseEventHandler, ReactNode } from "react";
+import { IconName } from "../icons";
+import styles from "./Chip.module.scss";
+import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton, IconButtonProps } from "./IconButton";
-import { Flex } from "./Flex";
-import styles from "./Chip.module.scss";
-import { IconName } from "../icons";
+import { Text } from "./Text";
 
 interface ChipProps extends React.ComponentProps<typeof Flex> {
   label: string;
@@ -21,7 +21,34 @@ interface ChipProps extends React.ComponentProps<typeof Flex> {
   className?: string;
 }
 
-const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
+type RestProps = Omit<
+  ChipProps,
+  | "label"
+  | "selected"
+  | "prefixIcon"
+  | "onRemove"
+  | "onClick"
+  | "children"
+  | "iconButtonProps"
+  | "className"
+>;
+
+/**
+ * With a remove button, the props that describe the chip's own control
+ * (`aria-*`, `tabIndex`) go to that control, and the rest to the box around
+ * it and the remove button.
+ */
+const splitControlProps = (props: RestProps) => {
+  const control: Record<string, unknown> = {};
+  const box: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(props)) {
+    if (key.startsWith("aria-") || key === "tabIndex") control[key] = value;
+    else box[key] = value;
+  }
+  return { control: control as Partial<RestProps>, box: box as Partial<RestProps> };
+};
+
+const Chip = forwardRef<HTMLDivElement, ChipProps>(
   (
     {
       label,
@@ -31,6 +58,7 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
       onClick,
       children,
       iconButtonProps = {},
+      className,
       ...rest
     },
     ref,
@@ -62,6 +90,59 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
       }
     };
 
+    const chipClassName = classNames(
+      styles.chip,
+      {
+        [styles.selected]: selected,
+        [styles.unselected]: !selected,
+      },
+      className,
+    );
+
+    const content = (
+      <>
+        {prefixIcon && <Icon name={prefixIcon} size="s" />}
+        <Flex paddingX="8" paddingY="2">
+          <Text variant="body-default-s">{label || children}</Text>
+        </Flex>
+      </>
+    );
+
+    if (!onRemove) {
+      return (
+        <Flex
+          ref={ref}
+          fit
+          vertical="center"
+          radius="full"
+          paddingX="8"
+          paddingY="4"
+          role="button"
+          tabIndex={0}
+          onClick={onClick}
+          onKeyDown={handleKeyDown}
+          aria-pressed={selected}
+          cursor="interactive"
+          transition="micro-medium"
+          className={chipClassName}
+          {...rest}
+        >
+          {content}
+        </Flex>
+      );
+    }
+
+    // With a remove button the chip is two controls side by side: its own
+    // toggle and the button that removes it. The remove button used to sit
+    // inside the chip's role="button", and assistive tech flattens a control
+    // nested in another one away (axe: "nested-interactive"); Enter on it also
+    // reached the chip's key handler, which clicked the chip instead.
+    //
+    // The box keeps the chip's look, and a pointer click anywhere on it apart
+    // from the remove button is still the chip's click. Keyboard focus lands
+    // on the toggle inside, and the chip's styles draw it on the whole box.
+    const { control, box } = splitControlProps(rest);
+
     return (
       <Flex
         ref={ref}
@@ -70,31 +151,29 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
         radius="full"
         paddingX="8"
         paddingY="4"
-        role="button"
-        tabIndex={0}
         onClick={onClick}
-        onKeyDown={handleKeyDown}
-        aria-pressed={selected}
         cursor="interactive"
         transition="micro-medium"
-        className={classNames(styles.chip, {
-          [styles.selected]: selected,
-          [styles.unselected]: !selected,
-        })}
-        {...rest}
+        className={chipClassName}
+        {...box}
       >
-        {prefixIcon && <Icon name={prefixIcon} size="s" />}
-        <Flex paddingX="8" paddingY="2">
-          <Text variant="body-default-s">{label || children}</Text>
+        <Flex
+          role="button"
+          tabIndex={0}
+          onKeyDown={handleKeyDown}
+          aria-pressed={selected}
+          vertical="center"
+          className={styles.action}
+          {...control}
+        >
+          {content}
         </Flex>
-        {onRemove && (
-          <IconButton
-            style={{
-              color: "inherit",
-            }}
-            {...combinedIconButtonProps}
-          />
-        )}
+        <IconButton
+          style={{
+            color: "inherit",
+          }}
+          {...combinedIconButtonProps}
+        />
       </Flex>
     );
   },
@@ -102,4 +181,5 @@ const Chip: React.FC<ChipProps> = forwardRef<HTMLDivElement, ChipProps>(
 
 Chip.displayName = "Chip";
 
+export type { ChipProps };
 export { Chip };

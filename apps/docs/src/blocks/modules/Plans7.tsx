@@ -79,7 +79,6 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
       border={tier.featured ? "brand-alpha-strong" : "neutral-alpha-weak"}
       background={tier.featured ? "brand-alpha-weak" : "transparent"}
       overflow="hidden"
-      position="relative"
     >
       {tier.featured && (
         <>
@@ -87,18 +86,17 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
             position="absolute"
             top="0"
             right="0"
-            data-solid="inverse"
+            themeSolid="inverse"
             translateX="30%"
             translateY="-30%"
           />
-          <Mask position="absolute" fill left="0" top="0" x={100} y={0} radius={50}>
+          <Mask position="absolute" fill left="0" top="0" x={100} y={0}>
             <MatrixFx
-              data-solid="color"
+              themeSolid="color"
               pointerEvents="none"
               position="absolute"
               fill
               colors={["brand-solid-strong"]}
-              spacing={3}
               size={1.5}
               flicker
               bulge={{
@@ -111,10 +109,10 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
           </Mask>
           <Tag
             position="absolute"
-            top="0"
-            left="l"
-            translateY="-50%"
-            data-border="rounded"
+            top="16"
+            right="16"
+            zIndex={1}
+            themeBorder="rounded"
             scheme="brand"
           >
             Best value
@@ -179,17 +177,17 @@ export const Plans7 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
-      <Column fillWidth maxWidth={48} gap="12" horizontal="center" align="center">
-        <Tag size="s" scheme="brand" data-border="rounded">
+      <Column maxWidth={48} gap="12" horizontal="center" align="center">
+        <Tag size="s" scheme="brand" themeBorder="rounded">
           Pricing
         </Tag>
-        <Heading as="h2" variant="display-strong-m" align="center" wrap="balance">
+        <Heading as="h2" variant="display-strong-m" align="center">
           Plans that grow with your product
         </Heading>
         <Text variant="body-default-l" onBackground="neutral-weak" align="center" wrap="balance">
           Switch billing anytime. Save 20% when you pay annually.
         </Text>
-        <Row gap="12" vertical="center" wrap horizontal="center">
+        <Row gap="12" wrap center>
           <SegmentedControl
             buttons={[
               { label: "Monthly", value: "monthly" },
@@ -199,7 +197,7 @@ export const Plans7 = (flex: React.ComponentProps<typeof Column>) => {
             onChange={(value) => setBilling(value as BillingPeriod)}
           />
           {billing === "annual" && (
-            <Tag size="s" scheme="success" data-border="rounded">
+            <Tag size="s" scheme="success" themeBorder="rounded">
               Save 20%
             </Tag>
           )}

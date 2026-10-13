@@ -1,0 +1,6 @@
+{
+ "name": "MdxLink",
+ "group": "mdx",
+ "importFrom": "@once-ui-system/core/mdx",
+ "mixinsRef": []
+}

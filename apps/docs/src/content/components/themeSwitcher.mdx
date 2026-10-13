@@ -1,7 +1,7 @@
 ---
 title: "ThemeSwitcher"
 summary: "ThemeSwitcher is a compact toggle group for switching between light, dark, and system themes using icon buttons. It can collapse to the active theme and reveal the rest on hover."
-updatedAt: "2026-09-15"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/themeSwitcher.mdx"
 github: "components/ThemeSwitcher.tsx"
 navLabel: "Theme Switcher"
@@ -109,12 +109,41 @@ Pass any valid `Row` props to control spacing, padding, layout, etc.
   ]}
 />
 
+## Localisation
+
+Each option is an icon button named "System theme", "Dark theme" and "Light
+theme". `labels` translates those names; whatever you leave out stays English.
+Inside a [StylePanel](/components/stylePanel#localisation), its
+`labels.themeSwitcher` reaches the Theme row's switcher.
+
+```tsx
+<ThemeSwitcher labels={{ system: t("theme.system"), dark: t("theme.dark"), light: t("theme.light") }} />
+```
+
+## Owning the state
+
+By default the switcher sets the theme through `ThemeProvider`, which applies it
+to the page and stores it. Pass `value` to own it instead: the switcher shows
+your theme as active, reports a choice through `onChange`, and changes nothing
+itself. That is what an editor previewing someone else's theme needs. Without
+`value`, `onChange` is still called, after the theme has been set.
+
+```tsx
+<ThemeSwitcher value={draft.theme} onChange={(theme) => setDraft({ ...draft, theme })} />
+```
+
+A [StylePanel](/components/stylePanel#owning-the-state) with `value` and
+`onChange` does this for its Theme row.
+
 ## API reference
 
 <PropsTable
   content={[
     ["collapsed", "boolean"],
     ["direction", "row | column"],
+    ["labels", "{ system?: string; dark?: string; light?: string }", "-", "The options' accessible names, to translate them."],
+    ["value", "system | dark | light", "-", "The active theme, when you own the state. The switcher then sets nothing."],
+    ["onChange", "(theme) => void", "-", "Called with the chosen theme."],
     ["ref", "HTMLDivElement"],
     ["className"],
     ["style"],

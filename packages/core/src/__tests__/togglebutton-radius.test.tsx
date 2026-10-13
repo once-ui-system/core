@@ -22,15 +22,23 @@ describe("ToggleButton radius", () => {
   });
 
   it("takes a radius of its own", () => {
-    const c = cls(<ToggleButton size="l" radius="m">Row</ToggleButton>);
+    const c = cls(
+      <ToggleButton size="l" radius="m">
+        Row
+      </ToggleButton>,
+    );
     expect(c).toContain("radius-m");
     expect(c).not.toMatch(/\bradius-l\b/);
   });
 
   it("scopes that radius to corners", () => {
-    expect(cls(<ToggleButton size="l" radius="m" corners="top">Row</ToggleButton>)).toContain(
-      "radius-m-top",
-    );
+    expect(
+      cls(
+        <ToggleButton size="l" radius="m" corners="top">
+          Row
+        </ToggleButton>,
+      ),
+    ).toContain("radius-m-top");
   });
 
   it("accepts none from either prop", () => {

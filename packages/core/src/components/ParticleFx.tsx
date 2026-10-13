@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { ColorValue, SpacingToken } from "../types";
-import { DisplayProps } from "../interfaces";
-import { Flex } from "./Flex";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { DisplayProps } from "../interfaces";
+import { ColorValue, SpacingToken } from "../types";
+import { Flex } from "./Flex";
 
 interface ParticleFxProps extends React.ComponentProps<typeof Flex> {
   density?: number;
@@ -192,7 +192,18 @@ const ParticleFx = React.forwardRef<HTMLDivElement, ParticleFxProps>(
       }
 
       return () => cleanup();
-    }, [color, size, speed, interactive, intensity, opacity, density, mode, shouldAnimate, isInViewport]);
+    }, [
+      color,
+      size,
+      speed,
+      interactive,
+      intensity,
+      opacity,
+      density,
+      mode,
+      shouldAnimate,
+      isInViewport,
+    ]);
 
     return (
       <Flex
@@ -218,4 +229,4 @@ ParticleFx.displayName = "ParticleFx";
  */
 const Particle = ParticleFx;
 
-export { ParticleFx, Particle };
+export { Particle, ParticleFx };

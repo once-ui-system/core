@@ -1,12 +1,13 @@
 import {
-  Row,
+  AvatarGroup,
+  Button,
+  Card,
+  Column,
   Icon,
   IconButton,
-  Button,
+  Line,
+  Row,
   Text,
-  AvatarGroup,
-  Column,
-  Card,
 } from "@once-ui-system/core";
 import { Sidebar2 } from "./Sidebar2";
 
@@ -145,7 +146,7 @@ const issues = [
 export const Productivity1 = () => {
   return (
     <Row fillWidth paddingX="8" gap="m">
-      <Sidebar2 position="sticky"/>
+      <Sidebar2 position="sticky" />
       <Column fillWidth>
         <Row
           as="header"
@@ -156,10 +157,8 @@ export const Productivity1 = () => {
           vertical="center"
           horizontal="between"
         >
-          <Row fillWidth>
-            <Text variant="body-strong-m" onBackground="neutral-strong">
-              Platform Squad
-            </Text>
+          <Row fillWidth textVariant="body-strong-m" onBackground="neutral-strong">
+            Platform Squad
           </Row>
           <Row gap="12" vertical="center" horizontal="end" fillWidth zIndex={1}>
             <IconButton
@@ -177,40 +176,15 @@ export const Productivity1 = () => {
                 tooltipPosition="bottom"
                 icon="bell"
               />
-              <Row
-                position="absolute"
-                style={{
-                  top: "0.15rem",
-                  right: "0.15rem",
-                }}
-              >
-                <Row
-                  style={{ borderColor: "var(--page-background)" }}
-                  height="12"
-                  width="12"
-                  solid="brand-strong"
-                  radius="full"
-                />
+              <Row position="absolute" top={0.15} right={0.15}>
+                <Row height="12" width="12" solid="brand-strong" radius="full" />
               </Row>
             </Row>
-            <div
-              style={{
-                width: "1px",
-                margin: "0 var(--static-space-8)",
-                height: "1.5rem",
-                backgroundColor: "var(--neutral-border-medium",
-              }}
-            ></div>
+            <Line vert height="24" marginX="8" background="neutral-alpha-medium" />
             <Button size="s" variant="secondary" label="New project" prefixIcon="plus" />
           </Row>
         </Row>
-        <Row
-          fillWidth
-          paddingBottom="12"
-          paddingRight="8"
-          paddingLeft="16"
-          horizontal="between"
-        >
+        <Row fillWidth paddingBottom="12" paddingRight="8" paddingLeft="16" horizontal="between">
           <AvatarGroup
             avatars={[
               { src: "/images/avatars/01.png", size: "s" },
@@ -222,14 +196,9 @@ export const Productivity1 = () => {
             ]}
             reverse
           />
-          <Row gap="8" s={{hide: true}}>
+          <Row gap="8" s={{ hide: true }}>
             <Button variant="tertiary" size="s" label="Filter" prefixIcon="trend" />
-            <Button
-              variant="tertiary"
-              size="s"
-              label="Display"
-              prefixIcon="adjustments"
-            />
+            <Button variant="tertiary" size="s" label="Display" prefixIcon="adjustments" />
           </Row>
         </Row>
         <Row fillWidth gap="8" overflowX="auto">

@@ -38,12 +38,15 @@ const NOT_A_TYPE = new Set([
   "ReactNode",
   "Record",
   "Ref",
+  // `formatValue = String` on RangeSlider
+  "String",
   "RefObject",
   "ComponentProps",
   "File",
   // literal values that happen to be capitalised
   "ANIMATION_DURATION",
   "An",
+  "Audio",
   "DD",
   "Drag",
   "End",
@@ -51,6 +54,9 @@ const NOT_A_TYPE = new Set([
   "Loading",
   "MM",
   "MMM",
+  // RangeSlider's default `thumbLabels`
+  "Maximum",
+  "Minimum",
   "No",
   "SS",
   "Search",

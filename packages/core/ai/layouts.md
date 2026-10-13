@@ -17,13 +17,25 @@ whole document, so the header and sidebar slide away and the nav has to be
 scrolled back to.
 
 ```tsx
+// The drawer is open for the path it was opened on: a link in it closes it.
+const [menuPath, setMenuPath] = useState<string | null>(null);
+const menuOpen = menuPath === pathname;
+
 <Column fill horizontal="center" flex={1}>
-  <Header />                                       {/* 56px tall */}
+  <Row height="56" fillWidth vertical="center" paddingX="16" gap="8">  {/* 56px: --header-height */}
+    <Row hide s={{ hide: false }}>
+      <IconButton icon="moreHorizontal" variant="tertiary" tooltip="Menu"
+        aria-expanded={menuOpen} onClick={() => setMenuPath(pathname)} />
+    </Row>
+    {/* logo, search, account */}
+  </Row>
   <Row fill paddingX="8">
-    <Sidebar s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56" />
+    <Column s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56">
+      <Nav nav={nav} pathname={pathname} />
+    </Column>
     <Row fill horizontal="center" topRadius="l" overflow="hidden">
       <Row
-        height="calc(100dvh - var(--static-space-56))"
+        height="below-header"
         overflowY="auto"
         topRadius="l"
         horizontal="center"
@@ -35,21 +47,38 @@ scrolled back to.
       </Row>
     </Row>
   </Row>
+  <Drawer open={menuOpen} onClose={() => setMenuPath(null)} side="left" size="s" title="Menu" flush>
+    <Column paddingTop="64" paddingBottom="16">
+      <Nav nav={nav} pathname={pathname} />
+    </Column>
+  </Drawer>
 </Column>
 ```
 
 What each part is doing:
 
-- **The pane scrolls, not the page.** `height: calc(100dvh - <header>)` plus
-  `overflowY="auto"` is what keeps the header and sidebar in place. `dvh`, not
-  `vh` — on mobile `vh` ignores the browser chrome and the pane runs off-screen.
-- **`position="sticky" top="56"`** on the sidebar, matching the header height.
-  `fitHeight` so it does not stretch and fight the sticky.
+- **The pane scrolls, not the page.** `height="below-header"` plus
+  `overflowY="auto"` is what keeps the header and sidebar in place. It is
+  `calc(100dvh - var(--header-height))`, written once as a utility class:
+  `dvh`, not `vh` — on mobile `vh` ignores the browser chrome and the pane runs
+  off-screen. Never restate the header height in a `calc()` of your own.
+- **`--header-height`** is 56px (`var(--static-space-56)`) by default, the
+  header this recipe uses. A shell with a different header sets it once on
+  `:root`; `height`, `minHeight` and `maxHeight` all take `"below-header"`,
+  and a mobile menu hanging from the header takes `maxHeight="below-header"`.
+- **`position="sticky" top="56"`** on the sidebar, matching the header height
+  (`top="calc(var(--header-height))"` follows a non-default one). `fitHeight`
+  so it does not stretch and fight the sticky.
 - **`topRadius="l"` + `background="surface"`** is what makes the content read as
   a panel sitting on the page rather than the page itself. The radius is on the
   top only, since the bottom is off-screen.
 - **`s={{ hide: true }}`** rather than a media query. The mobile nav is a
-  separate surface, not this one reflowed.
+  separate surface, not this one reflowed: a **`Drawer`** from the left,
+  holding the same `Nav`, opened by a header button that only shows at `s`
+  (`hide s={{ hide: false }}`). Drawer brings the focus trap, scroll lock,
+  Escape and focus return a hand-made overlay misses; `flush` keeps its
+  `title` for screen readers only. Tie it to the path it was opened on, as
+  above, and following a link closes it without an effect.
 - **`maxWidth="xl"`** inside the pane. A dashboard is wider than a document;
   `"m"` is for reading.
 
@@ -107,7 +136,8 @@ const current = selectNavHref(pathname, nav.flatMap((i) =>
 ## 3. Editor shell
 
 Two panes and a timeline — the shape of a video editor, a page builder, a
-diff view.
+diff view. `ai/examples/editor.tsx` (task bundle `editor`) is the whole page
+around it: toolbar, layer list, canvas and a working timeline.
 
 ```tsx
 <Column fill>
@@ -148,6 +178,7 @@ diff view.
   browser chrome shows or hides.
 - A sticky sidebar without `fitHeight` — it stretches to the row and the sticky
   never engages.
+- A mobile menu built from an absolute `Column` and a `zIndex`. Use `Drawer`.
 - `pathname === href` or `startsWith` for nav selection. Use `selectNavHref`.
 - Icons on both a NavGroup and its children — two columns of icons, no hierarchy.
 - `overflow` on the SplitView instead of on its panels — the divider stops

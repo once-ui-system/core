@@ -6,7 +6,7 @@ import {
   IconButton,
   Logo,
   Mask,
-  Particle,
+  ParticleFx,
   Row,
   SmartLink,
   Tag,
@@ -147,7 +147,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 position="absolute"
                 bottom="0"
                 left="0"
-                data-solid="color"
+                themeSolid="color"
                 gradient={{
                   display: true,
                   x: 50,
@@ -199,7 +199,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               border="neutral-alpha-medium"
             >
               <Mask fill position="absolute" x={50} y={50} radius={25}>
-                <Particle
+                <ParticleFx
                   style={{ transform: "scale(1.1)" }}
                   opacity={70}
                   position="absolute"
@@ -208,9 +208,6 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                   fill
                   interactive
                   speed={1.5}
-                  density={100}
-                  size="2"
-                  intensity={20}
                   mode="attract"
                 />
               </Mask>
@@ -220,8 +217,6 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 variant="display-strong-m"
                 words={["Ship your product.", "Build a presence.", "Launch seamlessly."]}
                 speed={80}
-                hold={2000}
-                trigger="instant"
               />
               <Button data-border="rounded" id="hero-cta-button" href="#" arrowIcon>
                 Start now
@@ -275,7 +270,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 position="absolute"
                 bottom="0"
                 left="0"
-                data-solid="color"
+                themeSolid="color"
                 gradient={{
                   display: true,
                   x: 50,
@@ -323,8 +318,10 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             horizontal="between"
             vertical="center"
           >
-            <Logo href="/" dark icon="/trademarks/icon-dark.svg" size="m" />
-            <Logo href="/" light icon="/trademarks/icon-light.svg" size="m" />
+            <Logo
+              href="/"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            />
             <Row gap="8">
               {social.map((item, index) => (
                 <IconButton
@@ -453,7 +450,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               position="absolute"
               bottom="0"
               left="0"
-              data-solid="color"
+              themeSolid="color"
               gradient={{
                 display: true,
                 x: 0,

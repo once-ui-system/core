@@ -1,12 +1,12 @@
 "use client";
 
+import classNames from "clsx";
 import React, { forwardRef, useState } from "react";
-import { Input } from "./Input";
+import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { IconButton } from "./IconButton";
-import { Column } from "./Column";
+import { Input } from "./Input";
 import styles from "./NumberInput.module.scss";
-import classNames from "clsx";
 
 interface NumberInputProps
   extends Omit<React.ComponentProps<typeof Input>, "type" | "value" | "onChange"> {
@@ -18,13 +18,38 @@ interface NumberInputProps
   padStart?: number;
 }
 
+const format = (value: number | undefined, padStart?: number) =>
+  value === undefined ? "" : padStart ? value.toString().padStart(padStart, "0") : value.toString();
+
+/** Whether the text in the field already reads as `value`: "1." and "1.50" are 1 and 1.5. */
+const shows = (text: string, value: number | undefined) =>
+  value === undefined ? text === "" : parseFloat(text) === value;
+
 const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
   ({ value, onChange, min, max, step = 1, padStart, ...props }, ref) => {
-    const [localValue, setLocalValue] = useState<string>(
-      padStart && value !== undefined
-        ? value.toString().padStart(padStart, "0")
-        : (value?.toString() ?? ""),
-    );
+    const [localValue, setLocalValue] = useState<string>(() => format(value, padStart));
+
+    /**
+     * Follow `value` after mount. The text used to be seeded from it once and
+     * never again, so a value changed from outside (an undo, a reset, a drag
+     * elsewhere that edits the same number) left the field showing the old
+     * one, and apps remounted it with a `key` to catch up.
+     *
+     * Only a CHANGE of the prop is followed, and only when the text does not
+     * already read as the new value. That is what keeps typing intact: the
+     * echo of the user's own keystroke ("1." reports 1, the parent passes 1
+     * back) matches the text and leaves it alone, and a partial entry that
+     * reports nothing ("-", "") never changes the prop at all. Adjusted
+     * during render rather than in an effect, so the field never paints the
+     * stale text first.
+     */
+    const [followed, setFollowed] = useState(value);
+    if (!Object.is(value, followed)) {
+      setFollowed(value);
+      if (!shows(localValue, value)) {
+        setLocalValue(format(value, padStart));
+      }
+    }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
@@ -37,10 +62,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     };
 
     const updateValue = (newValue: number) => {
-      const formattedValue = padStart
-        ? newValue.toString().padStart(padStart, "0")
-        : newValue.toString();
-      setLocalValue(formattedValue);
+      setLocalValue(format(newValue, padStart));
       onChange?.(newValue);
     };
 
@@ -124,4 +146,5 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 );
 
 NumberInput.displayName = "NumberInput";
+
 export { NumberInput };

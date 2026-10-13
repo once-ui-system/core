@@ -4,7 +4,7 @@
  "props": {
   "children": "!ReactNode",
   "dropdown": "!ReactNode",
-  "placement": "Placement = bottom-end",
+  "placement": "Placement = bottom-start",
   "fillWidth": "boolean = false",
   "minWidth": "number = 12",
   "maxWidth": "number",
@@ -16,7 +16,8 @@
   "open": "boolean",
   "onOpenChange": "(open: boolean) => void",
   "selectedOption": "string",
-  "disabled": "boolean = false"
+  "disabled": "boolean = false",
+  "contents": "boolean = false"
  },
  "mixinsRef": []
 }

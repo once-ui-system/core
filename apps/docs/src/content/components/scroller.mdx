@@ -1,7 +1,7 @@
 ---
 title: "Scroller"
 summary: "A component for creating scrollable content areas with navigation buttons."
-updatedAt: "2026-06-30"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/scroller.mdx"
 github: "components/Scroller.tsx"
 navLabel: "Scroller"
@@ -11,6 +11,13 @@ navTagVariant: "success"
 ---
 
 The `Scroller` component creates a scrollable container with automatic navigation buttons that appear when content overflows. It's perfect for horizontal or vertical scrolling of content like cards, images, or any elements that might not fit in the available space.
+
+<Feedback
+  marginTop="16"
+  marginBottom="24"
+  title="Five components scroll a row"
+  description={<>Pick by the job. <SmartLink href="/components/carousel">Carousel</SmartLink> shows one image or slide at a time, with line or thumbnail indicators and autoplay. <SmartLink href="/components/swiper">Swiper</SmartLink> is a touch-first gallery on native scroll snapping. <SmartLink href="/components/scrollContainer">ScrollContainer</SmartLink> moves a run of cards or tiles, with drag, wrap-around, markers and proximity scaling. <SmartLink href="/components/scroller">Scroller</SmartLink> scrolls overflowing chips, tabs or cards behind arrow buttons and edge fades. <SmartLink href="/components/autoScroll">AutoScroll</SmartLink> is a marquee that moves on its own. 3.0 plans to consolidate them.</>}
+/>
 
 <CodeBlock
   marginTop="16"
@@ -135,6 +142,7 @@ You can customize the color of the fade effect that appears behind the scroll bu
     fadeColor: "Colour of the fade at each end. Match the surface behind it.",
     onItemClick: "Called with the index of the item clicked.",
     radius: "Corner roundness of the strip.",
+    labels: "The scroll buttons' accessible names, { previous, next }, for a translated interface. Omitted fields stay English.",
   }}
   content={[
     ["children"],
@@ -147,6 +155,6 @@ You can customize the color of the fade effect that appears behind the scroll bu
 
 The Scroller component includes the following accessibility features:
 
-- Scroll buttons have appropriate aria-labels
+- Scroll buttons are named "Scroll Previous" and "Scroll Next"; `labels` translates them
 - Keyboard navigation support for the scroll buttons
 - Preserves keyboard navigation and click events of child elements

@@ -7,14 +7,15 @@
  "props": {
   "style": "React.CSSProperties",
   "className": "string",
-  "checked": "!boolean",
+  "checked": "boolean",
+  "defaultChecked": "boolean = false",
   "loading": "boolean = false",
   "name": "string",
   "value": "string",
   "disabled": "boolean",
   "reverse": "boolean = false",
   "ariaLabel": "string = Toggle switch",
-  "onToggle": "!() => void"
+  "onToggle": "(checked: boolean) => void"
  },
  "mixinsRef": []
 }

@@ -36,7 +36,7 @@ export const Contact3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
 
   return (
     <Row fillWidth gap="xl" m={{ direction: "column" }} {...flex}>
-      <Column fill minWidth={28} gap="24">
+      <Column fill minWidth={28} m={{ minWidth: 0 }} gap="24">
         <Column gap="8">
           <Heading variant="display-strong-s">Contact support</Heading>
           <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
@@ -94,7 +94,7 @@ export const Contact3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
             Average response time
           </Text>
           <Row vertical="center" gap="4" textVariant="display-strong-xs">
-            <CountFx value={2} speed={1000} effect="smooth" easing="ease-out" />
+            <CountFx value={2} effect="smooth" />
             <Text variant="display-strong-xs">h</Text>
           </Row>
         </Column>

@@ -1,0 +1,26 @@
+{
+  "id": "docs-page",
+  "title": "Docs or blog article",
+  "description": "An MDX article: breadcrumb trail, title and summary, Markdown rendered through the /mdx component map, and an on-page heading nav",
+  "components": [
+    "Column",
+    "Row",
+    "Heading",
+    "Text",
+    "Breadcrumbs",
+    "HeadingNav",
+    "MdxHeading",
+    "Feedback",
+    "CodeBlock"
+  ],
+  "recipes": [],
+  "example": "examples/docs-page.tsx",
+  "gotchas": ["LayoutProvider.next", "layout.shorthands", "layout.defaults"],
+  "quality": {
+    "mdx": "mdxComponents, or createMdxComponents({...}) to replace an element or register a tag, from @once-ui-system/core/mdx — never a hand-written element map",
+    "trail": "Breadcrumbs above the title; the last item has no href and is the current page",
+    "width": "Article column maxWidth=\"m\"; the heading nav beside it hides at m",
+    "anchors": "The map gives headings ids and copy-link anchors that HeadingNav reads; they toast on copy, so render inside ToastProvider",
+    "code": "Fenced code renders through CodeBlock, so the app installs prismjs"
+  }
+}

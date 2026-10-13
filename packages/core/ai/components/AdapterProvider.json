@@ -1,0 +1,9 @@
+{
+ "name": "AdapterProvider",
+ "group": "contexts",
+ "props": {
+  "adapters": "!Partial<OnceUIAdapters>",
+  "children": "!React.ReactNode"
+ },
+ "mixinsRef": []
+}

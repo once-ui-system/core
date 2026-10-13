@@ -51,7 +51,7 @@ export const Features1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
       <Grid fillWidth gap="4" columns="3" m={{ columns: 2 }} s={{ columns: 1 }}>
         <BlobFx position="absolute" right="0" bottom="0" />
         {features.map((feature, index) => (
-          <Animation key={index} zoomOut={1.02} fade={1} triggerType="hover" duration={300}>
+          <Animation key={index} zoomOut={1.02} fade={1} triggerType="hover">
             <Column background="surface" radius="s" padding="40" border fillWidth gap="8">
               <Icon
                 padding="8"

@@ -69,6 +69,19 @@ function categorizeEmoji(emoji) {
 }
 
 async function generateEmojiData() {
+  // The categorised data is committed and the build uses it as it is. This
+  // ran on every build and fetched gemoji's moving `master`, so two builds
+  // minutes apart could ship different emoji, and `npm publish` (whose
+  // `prepack` builds) could publish a set no test had seen. Refreshing is a
+  // deliberate step now: `pnpm refresh-emoji-data`, reviewed like any change.
+  const committed = path.join(__dirname, "../src/data/emoji-data.json");
+  if (!process.argv.includes("--refresh") && fs.existsSync(committed)) {
+    console.log(
+      "Using the committed src/data/emoji-data.json (refresh with `pnpm refresh-emoji-data`).",
+    );
+    return;
+  }
+
   try {
     console.log("Fetching emoji data...");
     const rawEmojiData = await fetchEmojiData();

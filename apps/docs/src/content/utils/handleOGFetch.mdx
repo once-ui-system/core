@@ -1,25 +1,28 @@
 ---
 title: "handleOGFetch"
 summary: "Server-side utility for fetching and parsing Open Graph metadata from URLs."
-updatedAt: "2026-07-24"
+updatedAt: "2026-10-10"
 docs: "once-ui/utils/handleOGFetch.mdx"
 github: "server/og-utils.ts"
 navLabel: "handleOGFetch"
 navIcon: "code"
 ---
 
-The `handleOGFetch` function is a server-side utility that fetches and parses Open Graph metadata from any URL. It's designed to be used in Next.js API routes to extract title, description, image, and favicon information from web pages.
+The `handleOGFetch` function is a server-side utility that fetches and parses Open Graph metadata from any URL. It takes a standard `Request` and returns a `Response`, so it works in any server that speaks the Fetch API, and extracts title, description, image, and favicon information from web pages.
+
+<Feedback marginTop="16" marginBottom="24" description="In a Next.js app, use createOgFetchRoute from @once-ui-system/core/next: a two-line route file built on this function. See OG route handlers."/>
 
 ## Features
 
-- Fetches HTML content from URLs with configurable timeout
-- Extracts Open Graph metadata (title, description, image)
+- Fetches HTML pages only, up to a byte limit, within a timeout
+- Extracts Open Graph metadata (title, description, image, favicon)
 - Falls back to standard HTML meta tags if OG tags aren't available
+- Returns `image` and `faviconUrl` as absolute URLs, resolved against the page
 - Decodes HTML entities in text content
 - Supports custom user agents
-- Validates URLs to block SSRF (private IPs, localhost, non-HTTPS)
-- Optional domain allowlist via `allowedDomains`
-- Requires Node.js runtime (uses DNS resolution for hostname validation)
+- Only requests public addresses: private, loopback, link-local and metadata addresses are refused in every encoding, every redirect is checked again, and the connection goes to the address that was checked
+- Domain allowlist and blocklist, plus an `isAllowed` hook for your own checks
+- Requires Node.js runtime (resolves and checks hostnames)
 
 ## Basic usage
 
@@ -133,7 +136,15 @@ The function returns a JSON response with the following structure:
     ["options.timeout", "number", "5000"],
     ["options.userAgent", "string", "'Mozilla/5.0 (compatible; OG-Fetcher/1.0)'"],
     ["options.decodeEntities", "boolean", "true"],
-    ["options.allowedDomains", "string[]", "—", "When set, only these domains (and their subdomains) are permitted."]
+    ["options.favicon", "boolean", "true", "Include faviconUrl; false leaves it out so OgCard uses its own favicon source."],
+    ["options.maxBytes", "number", "1 MiB", "HTML read, after decompression; a longer page is parsed from what was read."],
+    ["options.maxRedirects", "number", "3", "Redirects followed, each checked like the first URL."],
+    ["options.allowedDomains", "string[]", "—", "When set, only these domains (and their subdomains) are permitted."],
+    ["options.blockedDomains", "string[]", "—", "These domains (and their subdomains) are refused."],
+    ["options.isAllowed", "(url: URL) => boolean | Promise<boolean>", "—", "Called for every URL and redirect target after the built-in checks; return false to refuse."],
+    ["options.allowHttp", "boolean", "false", "Also fetch plain http: URLs."],
+    ["options.cacheControl", "string", "'public, max-age=3600'", "Cache-Control on successful responses."],
+    ["options.sameOrigin", "boolean", "false", "Refuse requests whose Origin or Referer names another host."]
   ]}
 />
 
@@ -141,8 +152,12 @@ The function returns a JSON response with the following structure:
 
 The function returns appropriate error responses:
 
-- **400**: Missing URL parameter or URL failed validation (blocked domain, private IP, etc.)
-- **500**: Failed to fetch or parse the URL
+- **400**: Missing URL parameter or URL failed validation (blocked domain, private IP, etc.). A hostname that does not resolve is refused the same way, so the route cannot tell a caller which internal names exist.
+- **403**: Cross-origin caller, with `sameOrigin`
+- **415**: The URL is not an HTML page
+- **502**: The upstream failed (error status, too many redirects)
+- **504**: The upstream did not answer within `timeout`
+- **500**: Not running on the Node.js runtime
 
 <CodeBlock
   marginTop="16"
@@ -153,8 +168,7 @@ The function returns appropriate error responses:
     {
       code:
 `{
-  "error": "Failed to fetch Open Graph data",
-  "message": "HTTP 404: Not Found"
+  "error": "Failed to fetch Open Graph data"
 }`,
       language: "json",
       label: "Error response"

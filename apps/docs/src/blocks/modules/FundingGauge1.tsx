@@ -20,7 +20,6 @@ export const FundingGauge1 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column
-      fillWidth
       maxWidth={48}
       horizontal="center"
       padding="l"
@@ -70,7 +69,7 @@ export const FundingGauge1 = (flex: React.ComponentProps<typeof Column>) => {
 
       <Column fillWidth gap="16">
         <Column fillWidth gap="16">
-          <Row fillWidth minHeight="32" position="relative">
+          <Row fillWidth minHeight="32">
             {milestones.map((milestone) => {
               const position = (milestone.target / MAX_FUNDING) * 100;
 

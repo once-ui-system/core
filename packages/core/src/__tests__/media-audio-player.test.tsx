@@ -43,7 +43,9 @@ describe("MediaAudioPlayer", () => {
   });
 
   it("forwards loop and autoplay to the element", () => {
-    const { container } = render(<MediaAudioPlayer src="/a.mp3" loop autoplay />, { wrapper: wrap });
+    const { container } = render(<MediaAudioPlayer src="/a.mp3" loop autoplay />, {
+      wrapper: wrap,
+    });
     const audio = container.querySelector("audio");
     expect(audio).toHaveAttribute("loop");
     expect(audio?.autoplay).toBe(true);

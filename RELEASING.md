@@ -77,28 +77,48 @@ no second package, and there does not need to be: `npm install` resolves the
 `latest` tag, and a prerelease version does not satisfy a stable semver range —
 not `^1.8.2`, not `^2.0.0`, not even `*`. Someone has to ask for it by name.
 
+| Kind | Version | dist-tag | Published from |
+| --- | --- | --- | --- |
+| A major's previews | `2.0.0-alpha.N` | `alpha` | `main`, with each alpha's PR merged |
+| A minor's release candidates | `2.1.0-rc.N` | `next` | the release branch, before the release PR merges |
+
+A release candidate is the release PR's tree, published so the apps and early
+adopters can build against it before the PR merges. Its commit sets the version
+and `publishConfig.tag`, and moves `[Unreleased]` under the RC's heading; it is
+tagged `v2.1.0-rc.N` so the published tarball can always be traced to a commit.
+
 ```bash
-# from packages/core, with the release PR merged and the tree clean
+# from packages/core, on the commit being published, with the tree clean
 pnpm build && pnpm typecheck && pnpm test
-npm publish            # publishConfig.tag pins this to `alpha`
+npm pack --dry-run     # the files allowlist, the version, nothing unexpected
+npm publish            # publishConfig.tag pins this to `next` (or `alpha`)
+git tag v2.1.0-rc.0 && git push origin v2.1.0-rc.0
 ```
 
 `packages/core/package.json` carries `publishConfig.tag`, so a bare
 `npm publish` cannot set `latest` by accident — which it otherwise would,
 whatever the version string says. **Do not pass `--tag latest` to a prerelease**,
-and when 2.0.0 final is ready, remove `publishConfig.tag` in the same PR that
-sets the version.
+and when the final version is ready, remove `publishConfig.tag` in the same
+commit that sets it.
+
+An app trying a candidate pins it by name (`"@once-ui-system/core":
+"^2.1.0-rc.0"`), and that range also accepts `2.1.0` once it is out, so the
+app needs no second bump on release day.
 
 Verify the tag landed where you meant it:
 
 ```bash
 npm view @once-ui-system/core dist-tags
-# latest: 1.8.4   alpha: 2.0.0-alpha.0
+# latest: 2.0.0   next: 2.1.0-rc.0
 ```
 
-If it goes to `latest` by mistake, `npm dist-tag add @once-ui-system/core@1.8.4
+If it goes to `latest` by mistake, `npm dist-tag add @once-ui-system/core@2.0.0
 latest` restores it immediately — the bad version stays published but stops
 being what anyone installs.
+
+The build uses the committed emoji data (`src/data/emoji-data.json`) and
+fetches nothing, so what `prepack` builds is what the tests ran against.
+`pnpm refresh-emoji-data` updates it, as a reviewed change of its own.
 
 ### What ships
 

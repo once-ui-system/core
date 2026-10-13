@@ -1,9 +1,9 @@
-import { Background, HoloFx, Particle, Row } from "@once-ui-system/core";
+import { Background, HoloFx, ParticleFx, Row } from "@once-ui-system/core";
 
 export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
     <Row fill position="absolute" top="0" left="0" horizontal="center" vertical="end" {...flex}>
-      <Particle
+      <ParticleFx
         opacity={70}
         position="absolute"
         top="0"
@@ -13,9 +13,8 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         speed={1}
         color="brand-on-background-strong"
         size="1"
-        density={100}
       />
-      <Particle
+      <ParticleFx
         opacity={70}
         position="absolute"
         top="0"
@@ -24,7 +23,6 @@ export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         interactive
         speed={0.5}
         color="brand-on-background-strong"
-        size="2"
         density={40}
       />
       <Background

@@ -81,7 +81,7 @@ export const Sidebar8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
 
   return (
     <Column fillHeight maxWidth={18} background="surface" border radius="l" {...flex}>
-      <Row fillWidth paddingX="16" paddingY="16" vertical="center" gap="12">
+      <Row fillWidth padding="16" vertical="center" gap="12">
         <Avatar size="s" src="/images/creators/lorant.jpg" />
         <Column fillWidth gap="2">
           <Text variant="label-strong-s" truncate>
@@ -141,7 +141,7 @@ export const Sidebar8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
         )}
       </Column>
       <Line background="neutral-alpha-weak" />
-      <Row fillWidth paddingX="16" paddingY="16" vertical="center" horizontal="between">
+      <Row fillWidth padding="16" vertical="center" horizontal="between">
         <Row gap="8" vertical="center" textVariant="label-default-s" onBackground="neutral-weak">
           <Icon name="bolt" size="xs" />
           8/10 projects used

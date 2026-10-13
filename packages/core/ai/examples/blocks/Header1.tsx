@@ -1,5 +1,6 @@
 "use client";
 
+import type { KbarItem, MenuGroup } from "@once-ui-system/core";
 import {
   Button,
   Column,
@@ -17,9 +18,9 @@ import {
   ToggleButton,
   UserMenu,
 } from "@once-ui-system/core";
-import type { KbarItem, MenuGroup } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 
 interface HeaderProps extends React.ComponentProps<typeof Row> {
   authenticated?: boolean;
@@ -34,7 +35,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     {
       id: "dashboard",
       name: "Dashboard",
-      icon: "refresh",
+      icon: "home",
       shortcut: [],
       section: "Navigation",
       keywords: "dashboard home",
@@ -43,7 +44,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     {
       id: "analytics",
       name: "Analytics",
-      icon: "refresh",
+      icon: "barChart",
       shortcut: [],
       section: "Navigation",
       keywords: "analytics metrics",
@@ -52,7 +53,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     {
       id: "security",
       name: "Security",
-      icon: "refresh",
+      icon: "security",
       shortcut: [],
       section: "Navigation",
       keywords: "security privacy",
@@ -61,7 +62,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     {
       id: "settings",
       name: "Settings",
-      icon: "refresh",
+      icon: "settings",
       shortcut: [],
       section: "Navigation",
       keywords: "settings preferences",
@@ -81,13 +82,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Analytics",
               href: "#",
-              icon: "refresh",
+              icon: "barChart",
               description: "Get insights into your data",
             },
             {
               label: "Security",
               href: "#",
-              icon: "refresh",
+              icon: "security",
               description: "Protect your assets",
             },
           ],
@@ -98,13 +99,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Dashboard",
               href: "#",
-              icon: "refresh",
+              icon: "home",
               description: "Monitor your metrics",
             },
             {
               label: "Settings",
               href: "#",
-              icon: "refresh",
+              icon: "settings",
               description: "Configure your preferences",
             },
           ],
@@ -122,13 +123,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Enterprise",
               href: "#",
-              icon: "refresh",
+              icon: "organization",
               description: "Solutions for large organizations",
             },
             {
               label: "Startups",
               href: "#",
-              icon: "refresh",
+              icon: "bolt",
               description: "Perfect for growing companies",
             },
           ],
@@ -139,13 +140,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Developers",
               href: "#",
-              icon: "refresh",
+              icon: "code",
               description: "Tools and APIs",
             },
             {
               label: "Design teams",
               href: "#",
-              icon: "refresh",
+              icon: "eyeDropper",
               description: "Creative solutions",
             },
           ],
@@ -163,13 +164,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Guides",
               href: "#",
-              icon: "refresh",
+              icon: "book",
               description: "Learn how to use our platform",
             },
             {
               label: "API reference",
               href: "#",
-              icon: "refresh",
+              icon: "file",
               description: "Technical documentation",
             },
           ],
@@ -180,13 +181,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Help center",
               href: "#",
-              icon: "refresh",
+              icon: "help",
               description: "Get your questions answered",
             },
             {
               label: "Community",
               href: "#",
-              icon: "refresh",
+              icon: "chat",
               description: "Connect with other users",
             },
           ],
@@ -204,13 +205,13 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Our story",
               href: "#",
-              icon: "refresh",
+              icon: "time",
               description: "Learn about our journey",
             },
             {
               label: "Careers",
               href: "#",
-              icon: "refresh",
+              icon: "person",
               description: "Join our team",
             },
           ],
@@ -221,23 +222,23 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
             {
               label: "Blog",
               href: "#",
-              icon: "refresh",
+              icon: "document",
               description: "Latest updates and news",
             },
             {
               label: "Contact",
               href: "#",
-              icon: "refresh",
+              icon: "mail",
               description: "Get in touch with us",
             },
           ],
         },
       ],
     },
-  ]
+  ];
 
   const [isActive, setIsActive] = useState(false);
-  
+
   const handleClick = () => {
     setIsActive(!isActive);
   };
@@ -245,7 +246,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
   return (
     <Row
       as="header"
-      borderBottom="neutral-medium"
+      borderBottom
       fillWidth
       paddingX="m"
       minHeight="56"
@@ -258,23 +259,40 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
     >
       <Row gap="4" vertical="center" maxWidth={10}>
         <NavIcon
-          active={isActive} 
-          onClick={handleClick} 
+          active={isActive}
+          onClick={handleClick}
           aria-label="Toggle navigation menu"
           aria-expanded={isActive}
           hide
-          s={{hide: false}} />
-        <Logo dark wordmark="/trademarks/wordmark-dark.svg" size="s" href="/" />
-        <Logo light wordmark="/trademarks/wordmark-light.svg" size="s" href="/" />
+          s={{ hide: false }}
+        />
+        <Logo
+          wordmark={{
+            light: "/trademarks/wordmark-light.svg",
+            dark: "/trademarks/wordmark-dark.svg",
+          }}
+          size="s"
+          href="/"
+        />
       </Row>
       {authenticated ? (
         <Row fillWidth vertical="center" horizontal="between" gap="16">
           <Row fillWidth horizontal="center">
-            <Kbar m={{hide: true}} data-border="rounded" radius="full" background="neutral-alpha-weak"
+            <Kbar
+              m={{ hide: true }}
+              data-border="rounded"
+              radius="full"
+              background="neutral-alpha-weak"
               items={kbar}
             >
               <Button size="s" variant="tertiary" weight="default">
-                <Row vertical="center" gap="16" onBackground="neutral-medium" style={{ marginLeft: "-0.5rem" }} paddingRight="8">
+                <Row
+                  vertical="center"
+                  gap="16"
+                  onBackground="neutral-medium"
+                  style={{ marginLeft: "-0.5rem" }}
+                  paddingRight="8"
+                >
                   <Row
                     background="neutral-alpha-medium"
                     paddingX="8"
@@ -292,9 +310,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
           </Row>
           <Row vertical="center" gap="16" horizontal="end" maxWidth={10}>
             <SmartLink prefixIcon="book" href="#">
-              <Text variant="label-default-s">
-                Docs
-              </Text>
+              <Text variant="label-default-s">Docs</Text>
             </SmartLink>
             <UserMenu
               placement="bottom-end"
@@ -304,10 +320,22 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
               }}
               dropdown={
                 <Column padding="4" gap="2" minWidth={10}>
-                  <Option prefix={<Icon onBackground="neutral-weak" size="s" name="person" />} label="Profile" value="profile" />
-                  <Option prefix={<Icon onBackground="neutral-weak" size="s" name="settings" />} label="Settings" value="settings" />
+                  <Option
+                    prefix={<Icon onBackground="neutral-weak" size="s" name="person" />}
+                    label="Profile"
+                    value="profile"
+                  />
+                  <Option
+                    prefix={<Icon onBackground="neutral-weak" size="s" name="settings" />}
+                    label="Settings"
+                    value="settings"
+                  />
                   <Line marginY="2" />
-                  <Option prefix={<Icon onBackground="neutral-weak" size="s" name="logout" />} label="Log out" value="logout" />
+                  <Option
+                    prefix={<Icon onBackground="neutral-weak" size="s" name="logout" />}
+                    label="Log out"
+                    value="logout"
+                  />
                 </Column>
               }
             />
@@ -316,16 +344,14 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
       ) : (
         <Row fillWidth vertical="center" horizontal="end">
           <Row
-            s={{hide: true}}
+            s={{ hide: true }}
             textVariant="label-default-s"
             fillWidth
             gap="16"
             paddingX="l"
             vertical="center"
           >
-            <MegaMenu
-              menuGroups={nav}
-            />
+            <MegaMenu menuGroups={nav} />
           </Row>
           <Row fitWidth vertical="center" gap="8">
             <Button size="s" variant="secondary" label="Log in" href="#" />
@@ -341,19 +367,31 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
           padding="8"
           fillWidth
           overflowY="auto"
-          style={{ maxHeight: "calc(100vh - var(--static-space-56))" }}
+          maxHeight="below-header"
         >
           {authenticated ? (
-            <Column
-              padding="8"
-              background="surface"
-              border="surface"
-              radius="l-4"
-              gap="4"
-            >
-              <ToggleButton fillWidth size="l" horizontal="start" selected={true} label="Dashboard" />
-              <ToggleButton fillWidth size="l" horizontal="start" selected={pathname === "/apps"} label="Apps" />
-              <ToggleButton fillWidth size="l" horizontal="start" selected={pathname === "/resources"} label="Resources" />
+            <Column padding="8" background="surface" border="surface" radius="l-4" gap="4">
+              <ToggleButton
+                fillWidth
+                size="l"
+                horizontal="start"
+                selected={true}
+                label="Dashboard"
+              />
+              <ToggleButton
+                fillWidth
+                size="l"
+                horizontal="start"
+                selected={pathname === "/apps"}
+                label="Apps"
+              />
+              <ToggleButton
+                fillWidth
+                size="l"
+                horizontal="start"
+                selected={pathname === "/resources"}
+                label="Resources"
+              />
             </Column>
           ) : (
             <MobileMegaMenu

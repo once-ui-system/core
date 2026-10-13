@@ -41,14 +41,12 @@ export const Contact4 = (flex: React.ComponentProps<typeof Row>) => {
 
   return (
     <Row fillWidth gap="xl" m={{ direction: "column" }} {...flex}>
-      <Column fill minWidth={28} gap="24">
+      <Column fill minWidth={28} m={{ minWidth: 0 }} gap="24">
         <Column gap="8">
           <Tag scheme="brand" size="s">
             Sales
           </Tag>
-          <Heading variant="display-strong-s" wrap="balance">
-            Talk to the team building Once UI
-          </Heading>
+          <Heading variant="display-strong-s">Talk to the team building Once UI</Heading>
           <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
             Whether you're scoping a frontend system or evaluating Pro for your org, we'll connect
             you with the right person.
@@ -69,7 +67,7 @@ export const Contact4 = (flex: React.ComponentProps<typeof Row>) => {
               wrap
             >
               <Row gap="16" vertical="center">
-                <Avatar src={member.avatar} size="m" />
+                <Avatar src={member.avatar} />
                 <Column gap="2">
                   <Text variant="label-strong-s">{member.name}</Text>
                   <Text variant="body-default-s" onBackground="neutral-weak">

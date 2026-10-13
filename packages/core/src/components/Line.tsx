@@ -1,5 +1,3 @@
-"use client";
-
 import React, { forwardRef } from "react";
 import { Flex } from "./Flex";
 
@@ -28,4 +26,5 @@ const Line = forwardRef<HTMLDivElement, LineProps>(({ vert, className, style, ..
 });
 
 Line.displayName = "Line";
+
 export { Line };

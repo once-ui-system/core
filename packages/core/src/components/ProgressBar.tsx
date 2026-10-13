@@ -1,13 +1,11 @@
-"use client";
-
-import React, { forwardRef } from "react";
 import classNames from "clsx";
+import React, { forwardRef } from "react";
+import { StyleProps } from "../interfaces";
 import { Column } from "./Column";
 import { CountFx } from "./CountFx";
 import { Flex } from "./Flex";
 import { Row } from "./Row";
 import { Text } from "./Text";
-import { StyleProps } from "../interfaces";
 
 interface ProgressBarProps extends React.ComponentProps<typeof Flex> {
   value: number;
@@ -41,7 +39,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
     const bar = (
       <Flex
         background="neutral-medium"
-        border="neutral-alpha-weak"
+        border
         fillWidth
         radius="full"
         overflow="hidden"
@@ -103,4 +101,5 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
 );
 
 ProgressBar.displayName = "ProgressBar";
+
 export { ProgressBar };

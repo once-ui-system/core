@@ -1,3 +1,5 @@
+import { buildOgRouteUrl, DEFAULT_OG_ROUTES, type OgRoutes } from "../../utils/ogRoutes";
+
 /**
  * The metadata object `Meta.generate` returns.
  *
@@ -54,6 +56,12 @@ export interface MetaProps {
   noindex?: boolean;
   nofollow?: boolean;
   alternates?: Alternate[];
+  /**
+   * Where the app serves its Open Graph routes. Only `generate` is read here:
+   * with no `image`, the social image is `${generate}?title=…`. Default
+   * `/api/og/generate`. The same object can be passed to `OgRoutesProvider`.
+   */
+  ogRoutes?: Partial<OgRoutes>;
 }
 
 export function generateMetadata({
@@ -70,6 +78,7 @@ export function generateMetadata({
   noindex,
   nofollow,
   alternates,
+  ogRoutes,
 }: MetaProps): GeneratedMetadata {
   const normalizedBaseURL = baseURL.endsWith("/") ? baseURL.slice(0, -1) : baseURL;
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
@@ -78,7 +87,7 @@ export function generateMetadata({
     ? image.startsWith("http")
       ? image
       : `${image.startsWith("/") ? "" : "/"}${image}`
-    : `/api/og/generate?title=${encodeURIComponent(title)}`;
+    : buildOgRouteUrl(ogRoutes?.generate || DEFAULT_OG_ROUTES.generate, { title });
 
   const url = canonical || `${normalizedBaseURL}${normalizedPath}`;
 

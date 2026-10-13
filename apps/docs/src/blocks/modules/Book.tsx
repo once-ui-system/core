@@ -44,11 +44,11 @@ export const Book: React.FC<BookProps> = ({ children, src, alt, sizes, href, ...
                 fillHeight
                 width="8"
                 background="overlay"
-                style={{ filter: "blur(0.125rem)" }}
+                blur={0.125}
               />
             </Row>
             <Row
-              data-theme="dark"
+              theme="dark"
               rightRadius="s"
               borderY="neutral-medium"
               borderRight="neutral-medium"

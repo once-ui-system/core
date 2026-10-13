@@ -1,0 +1,80 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 4,
+      "input_total": 215582,
+      "input_uncached": 8,
+      "cache_creation": 22871,
+      "cache_read": 192703,
+      "visible_output_tokens_o200k": 1899,
+      "visible_output_tokens_claudeLegacy": 2040,
+      "thinking_blocks": 2,
+      "input_net_of_overhead": 1306
+    },
+    {
+      "attempt": 1,
+      "calls": 2,
+      "input_total": 117036,
+      "input_uncached": 6,
+      "cache_creation": 1328,
+      "cache_read": 115702,
+      "visible_output_tokens_o200k": 167,
+      "visible_output_tokens_claudeLegacy": 195,
+      "thinking_blocks": 2,
+      "input_net_of_overhead": 9898
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t06/once-memory/run3/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Bash",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": false,
+    "violations": [
+      "disallowed tool: Bash"
+    ]
+  },
+  "arm": "B"
+}

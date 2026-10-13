@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { formatDate } from "./utils/formatDate";
 import { Column } from "../../components/Column";
-import { Text } from "../../components/Text";
-import { Row } from "../../components/Row";
 import { CountFx } from "../../components/CountFx";
-import { Swatch } from "./Swatch";
+import { Row } from "../../components/Row";
+import { Text } from "../../components/Text";
 import { ChartVariant, DateConfig } from "./interfaces";
+import { Swatch } from "./Swatch";
+import { formatDate } from "./utils/formatDate";
 
 interface DataTooltipProps {
   active?: boolean;
@@ -60,7 +60,9 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
         {payload.map((entry: Record<string, any>, index: number) => (
           <Row key={index} horizontal="between" fillWidth gap="16">
             <Row vertical="center" gap="8">
-              {showSwatches && <Swatch color={entry.stroke || entry.color} size="s" variant={variant} />}
+              {showSwatches && (
+                <Swatch color={entry.stroke || entry.color} size="s" variant={variant} />
+              )}
               <Text onBackground="neutral-weak" variant="label-default-s">
                 {DataTooltip && index === 0 ? DataTooltip : entry.name}
               </Text>
@@ -79,5 +81,5 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
   );
 };
 
-export { DataTooltip };
 export type { DataTooltipProps };
+export { DataTooltip };

@@ -1,7 +1,7 @@
 ---
 title: "DropdownWrapper"
 summary: "The DropdownWrapper component provides a floating container that appears when triggered, allowing for custom dropdown menus and selectors."
-updatedAt: "2026-07-27"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/dropdownWrapper.mdx"
 github: "components/DropdownWrapper.tsx"
 navLabel: "DropdownWrapper"
@@ -232,6 +232,14 @@ first enabled option; a selected option that is disabled is skipped.
 
 A panel that leads with something other than its list — a searchable `Select`
 and its query field — opens on that instead.
+
+## Button triggers
+
+A `Button` or `IconButton` passed as the `trigger` renders a real
+`<button type="button">` with `aria-haspopup` and `aria-expanded`, so the
+dropdown opens from the keyboard as well as the mouse. There is no need to add
+`type="button"` or an empty `onClick` to make it one. A disabled trigger does not
+open the dropdown.
 
 ## API reference
 

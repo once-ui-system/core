@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import type { ColorScheme, SpacingToken } from "../types";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Row } from "./Row";
 import { Text } from "./Text";
-import type { ColorScheme, SpacingToken } from "../types";
 
 /**
  * A block on a track, positioned by time rather than by layout. Times are in
@@ -111,6 +111,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
       formatTime = defaultFormatTime,
       step,
       ariaLabel = "Seek",
+      "aria-label": nativeAriaLabel,
       ...flex
     },
     ref,
@@ -212,7 +213,9 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
           // the range. Blocks stay pointer-driven, which is what they are.
           role="slider"
           tabIndex={0}
-          aria-label={ariaLabel}
+          // The slider is what gets named, not the outer column the rest of
+          // the props land on. Native aria-label wins over ariaLabel.
+          aria-label={nativeAriaLabel ?? ariaLabel}
           aria-valuemin={0}
           aria-valuemax={duration}
           aria-valuenow={value}
@@ -301,7 +304,11 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                       if (event.button !== 0) return;
                       onSelect?.(block.id);
                       if (movable) {
-                        begin(event, { kind: "block", trackId: track.id, blockId: block.id, mode: "move" }, block);
+                        begin(
+                          event,
+                          { kind: "block", trackId: track.id, blockId: block.id, mode: "move" },
+                          block,
+                        );
                       } else {
                         event.stopPropagation();
                         onChange(timeAt(event.clientX));
@@ -335,7 +342,16 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                           transition="micro-medium"
                           onPointerDown={(event: React.PointerEvent) => {
                             onSelect?.(block.id);
-                            begin(event, { kind: "block", trackId: track.id, blockId: block.id, mode: "start" }, block);
+                            begin(
+                              event,
+                              {
+                                kind: "block",
+                                trackId: track.id,
+                                blockId: block.id,
+                                mode: "start",
+                              },
+                              block,
+                            );
                           }}
                         />
                         <Row
@@ -349,7 +365,11 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                           transition="micro-medium"
                           onPointerDown={(event: React.PointerEvent) => {
                             onSelect?.(block.id);
-                            begin(event, { kind: "block", trackId: track.id, blockId: block.id, mode: "end" }, block);
+                            begin(
+                              event,
+                              { kind: "block", trackId: track.id, blockId: block.id, mode: "end" },
+                              block,
+                            );
                           }}
                         />
                       </>
@@ -374,7 +394,12 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
         </Column>
 
         {showTime && (
-          <Row fillWidth horizontal="between" textVariant="label-default-s" onBackground="neutral-weak">
+          <Row
+            fillWidth
+            horizontal="between"
+            textVariant="label-default-s"
+            onBackground="neutral-weak"
+          >
             <Text family="code">{formatTime(value)}</Text>
             <Text family="code">{formatTime(duration)}</Text>
           </Row>
@@ -386,5 +411,5 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
 
 Scrubber.displayName = "Scrubber";
 
+export type { ScrubberBlock, ScrubberProps, ScrubberTrack };
 export { Scrubber };
-export type { ScrubberProps, ScrubberBlock, ScrubberTrack };

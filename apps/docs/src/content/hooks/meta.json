@@ -5,11 +5,11 @@
     "useDebounce": 1,
     "useOgData": 2,
     "useArrowNavigation": 3,
-    "useResponsiveClasses": 4,
-    "useHeadingLinks": 5,
-    "useStreamingData": 6,
-    "useStreamingViewport": 7,
-    "useInViewport": 8,
-    "useReducedMotion": 9
+    "useHeadingLinks": 4,
+    "useStreamingData": 5,
+    "useStreamingViewport": 6,
+    "useInViewport": 7,
+    "useReducedMotion": 8,
+    "useHotkeys": 9
   }
 }

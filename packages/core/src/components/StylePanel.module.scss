@@ -125,8 +125,31 @@
     background: var(--neutral-solid-medium);
     border-color: var(--neutral-alpha-strong);
 }
+
+/* A host's own colour: the seed paints it inline. Without one it is an empty
+   well with a plus, an invitation rather than a colour. */
+.custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-color: var(--neutral-alpha-strong);
+}
+
+.empty {
+    background: var(--static-transparent);
+    border-style: dashed;
+}
+
 /* Dividers belong to the group rather than to each row: a host that hides or
    reorders rows would otherwise leave a border on the last one. */
 .group > .row:not(:last-child) {
     border-bottom: 1px solid var(--neutral-alpha-medium);
+}
+
+/* A swatch strip never runs wider than its row. Beside a label it shrinks as
+   a flex item; stacked under one it is sized across the line instead, where
+   its fit-content width would be all of its swatches, clipped by the group
+   rather than scrolled. */
+.strip {
+    max-width: 100%;
 }

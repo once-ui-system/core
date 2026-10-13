@@ -1,12 +1,12 @@
 "use client";
 
 import React, {
-  useState,
-  useEffect,
-  useRef,
-  useLayoutEffect,
-  useCallback,
   forwardRef,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
 } from "react";
 import { Flex } from "./Flex";
 
@@ -147,4 +147,5 @@ const FlipFx = forwardRef<HTMLDivElement, FlipFxProps>((props, ref) => {
 });
 
 FlipFx.displayName = "FlipFx";
+
 export { FlipFx };

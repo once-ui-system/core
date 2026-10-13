@@ -34,7 +34,7 @@ export const Checkout2 = () => {
 
   return (
     <Column fillWidth horizontal="center" paddingX="l" paddingY="xl">
-      <Row maxWidth="l" fillWidth gap="xl" m={{ direction: "column-reverse" }}>
+      <Row maxWidth="l" gap="xl" m={{ direction: "column-reverse" }}>
         <Column fillWidth flex={3} gap="32">
           <Row fillWidth gap="8" vertical="center">
             {steps.map((item, index) => (
@@ -97,7 +97,7 @@ export const Checkout2 = () => {
                 value="United States"
                 onSelect={() => {}}
               />
-              <Button fillWidth size="m" onClick={() => setStep(1)}>
+              <Button fillWidth onClick={() => setStep(1)}>
                 Continue to payment
               </Button>
             </Column>
@@ -195,7 +195,7 @@ export const Checkout2 = () => {
           <Column fillWidth gap="12">
             {cartItems.map((item) => (
               <Row key={item.name} fillWidth gap="12" vertical="center">
-                <Row position="relative" minWidth={5} minHeight={5}>
+                <Row minWidth={5} minHeight={5}>
                   <Media
                     src={item.image}
                     alt={item.name}

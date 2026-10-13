@@ -11,7 +11,6 @@ export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
   return (
     <Row
       maxWidth={56}
-      fillWidth
       border="brand-alpha-weak"
       radius="l"
       paddingX="16"
@@ -24,7 +23,7 @@ export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
       {...flex}
     >
       <Row gap="12" vertical="center" wrap>
-        <Pulse size="s" scheme="brand" />
+        <Pulse size="s" />
         <Text variant="label-default-s" onBackground="brand-medium">
           Live
         </Text>

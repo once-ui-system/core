@@ -27,9 +27,9 @@ const tiles = {
         <AutoScroll>
           <Logo wordmark={"/trademarks/wordmark-light.svg"} />
           <Line vert />
-          <Logo wordmark={"/trademarks/agent-light.svg"} />
+          <Logo wordmark={"/trademarks/wordmark-light.svg"} />
           <Line vert />
-          <Logo wordmark={"/trademarks/convert-light.svg"} />
+          <Logo wordmark={"/trademarks/wordmark-light.svg"} />
           <Line vert />
         </AutoScroll>
       ),
@@ -168,8 +168,8 @@ export const Bento2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
                 </Column>
                 <Row fillWidth height={20} paddingLeft="m">
                   <Row
-                    data-theme="light"
-                    data-solid="contrast"
+                    theme="light"
+                    themeSolid="contrast"
                     background="page"
                     fill
                     center

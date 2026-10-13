@@ -120,7 +120,7 @@ export function DialogFlush() {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         flush
-        hideClose
+        showClose={false}
         maxWidth={32}
         title=""
         description=""

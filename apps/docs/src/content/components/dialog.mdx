@@ -1,7 +1,7 @@
 ---
 title: "Dialog"
 summary: "The Dialog component provides a modal window that overlays the page content for focused user interactions and important information."
-updatedAt: "2026-07-27"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/dialog.mdx"
 github: "components/Dialog.tsx"
 navLabel: "Dialog"
@@ -240,7 +240,7 @@ return (
 
 ## Flush
 
-Remove the header and use full-bleed media with `flush`. Use `hideClose` to remove the close button and `maxWidth` to control the size.
+Remove the header and use full-bleed media with `flush`. Use `showClose={false}` to remove the close button and `maxWidth` to control the size.
 
 <CodeBlock
   marginTop="16"
@@ -262,7 +262,7 @@ return (
         open={isOpen}
         onClose={() => setIsOpen(false)}
         flush
-        hideClose
+        showClose={false}
         maxWidth={32}
         title=""
         description=""
@@ -353,7 +353,8 @@ The Dialog component follows accessibility best practices:
     stack: "Marks this as a dialog opened on top of another one.",
     base: "Marks the dialog underneath a stack, which then ignores Escape and click-away while the one above it is open.",
     flush: "Drop the padding and the top radius, for content that should meet the edges.",
-    hideClose: "Remove the close button, when only an action should dismiss it.",
+    showClose: "Show the close button. Turn it off when only an action should dismiss the dialog.",
+    hideClose: "Deprecated: use showClose={false}. Still works through 2.x; showClose wins when both are set.",
     closeOnClickaway: "Close on a click outside.",
     onHeightChange: "Called when the body resizes — useful for animating a stack.",
     minHeight: "Lower bound on the body height, in rem.",

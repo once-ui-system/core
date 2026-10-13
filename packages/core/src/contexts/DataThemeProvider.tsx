@@ -1,9 +1,9 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { ChartMode, ChartVariant } from "../modules/data/interfaces";
 
-interface ChartOptions {
+export interface ChartOptions {
   variant: ChartVariant;
   mode: ChartMode;
   height: number;
@@ -17,11 +17,18 @@ interface ChartOptions {
   };
 }
 
+/**
+ * The `dataStyle` section of `once-ui.config`, exactly as the file writes it:
+ * `<DataThemeProvider {...dataStyle}>`, and `<ThemeInit dataStyle={dataStyle} />`
+ * so the chart mode is on `<html>` before the first paint.
+ */
+export type OnceUIDataStyleConfig = Partial<ChartOptions>;
+
 interface DataThemeState extends ChartOptions {
   setChartOptions: (options: Partial<ChartOptions>) => void;
 }
 
-interface DataThemeProviderProps extends Partial<ChartOptions> {
+export interface DataThemeProviderProps extends OnceUIDataStyleConfig {
   children: ReactNode;
 }
 

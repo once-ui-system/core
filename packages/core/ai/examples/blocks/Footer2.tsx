@@ -1,19 +1,13 @@
-import {
-  Button,
-  Column,
-  Icon,
-  Logo,
-  Row,
-  SmartLink,
-  Text,
-} from "@once-ui-system/core";
+import { Button, Column, Icon, Logo, Row, SmartLink, Text } from "@once-ui-system/core";
 
 export const Footer2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
     <Column gap="40" fillWidth paddingY="l" paddingX="24" {...flex}>
       <Row fillWidth gap="12" textVariant="label-default-m" vertical="center">
-        <Logo href="#" dark icon="/trademarks/icon-dark.svg" size="m" />
-        <Logo href="#" light icon="/trademarks/icon-light.svg" size="m" />
+        <Logo
+          href="#"
+          icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+        />
         <Button
           data-border="rounded"
           size="s"
@@ -57,7 +51,16 @@ export const Footer2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
           </Row>
           <Row vertical="center" gap="8">
             <SmartLink href="#">Join</SmartLink>
-            <Row textVariant="body-default-xs" onBackground="brand-weak" background="brand-alpha-weak" border="brand-alpha-medium" radius="s" padding="1" paddingX="8" center>
+            <Row
+              textVariant="body-default-xs"
+              onBackground="brand-weak"
+              background="brand-alpha-weak"
+              border="brand-alpha-medium"
+              radius="s"
+              padding="1"
+              paddingX="8"
+              center
+            >
               Hiring!
             </Row>
           </Row>
@@ -79,7 +82,7 @@ export const Footer2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
             <SmartLink href="#">Contribution Guide</SmartLink>
           </Row>
         </Column>
-        <Column data-border="rounded" gap="12" textVariant="label-default-m">
+        <Column themeBorder="rounded" gap="12" textVariant="label-default-m">
           <Row paddingX="4" marginBottom="8">
             Social
           </Row>
@@ -89,7 +92,8 @@ export const Footer2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         </Column>
       </Row>
       <Row fillWidth textVariant="label-default-s" gap="12">
-        {new Date().getFullYear()} <Text>•</Text> Once UI <Text onBackground="neutral-weak">// All rights reserved</Text>
+        {new Date().getFullYear()} <Text>•</Text> Once UI{" "}
+        <Text onBackground="neutral-weak">{"// All rights reserved"}</Text>
       </Row>
     </Column>
   );

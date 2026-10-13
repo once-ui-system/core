@@ -1,0 +1,31 @@
+{
+  "attempt": 0,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 202,
+    "chars": 6273,
+    "bytes": 6273,
+    "tokens_o200k": 1336,
+    "tokens_claudeLegacy": 1400
+  },
+  "raw": {
+    "lines": 182,
+    "chars": 5979,
+    "bytes": 5979,
+    "tokens_o200k": 1304,
+    "tokens_claudeLegacy": 1376
+  },
+  "components": [
+    "Button",
+    "Column",
+    "Dialog",
+    "Heading",
+    "Input",
+    "Line",
+    "OTPInput",
+    "PasswordInput",
+    "Row",
+    "SmartLink",
+    "Text"
+  ]
+}

@@ -3,7 +3,7 @@ title: "Installation"
 docs: "once-ui/quick-start.mdx"
 github: "packages/core/src/quick-start.mdx"
 navLabel: "Quick start"
-updatedAt: "2026-06-02"
+updatedAt: "2026-10-10"
 summary: "Once UI is the open-source design system for the AI-native era. Deploy fully functional apps in minutes or build custom solutions with less code and token usage."
 navIcon: "rocket"
 ---
@@ -38,48 +38,33 @@ Or add Once UI to an existing project:
 
 Upgrading an app from 1.8? Follow the [migration guide](https://github.com/once-ui-system/core/blob/main/MIGRATING.md): a codemod does most of it, and it lists what is left in the order that keeps your app building.
 
-## Required dependencies
+## Dependencies
 
-The following dependencies are installed with Once UI Core:
+Installed with Once UI Core, nothing to do:
 
-<Table
-  marginBottom="32"
-  data={{
-    headers: [
-      { content: "Package", key: "package" },
-      { content: "Version", key: "version" },
-      { content: "Purpose", key: "purpose" },
-    ],
-    rows: [
-      ["next", ">=15.5", "Next.js framework"],
-      ["react", ">=18", "React library"],
-      ["react-dom", ">=18", "React DOM library"],
-      ["sass", "^1.77.6", "CSS preprocessor for styling"],
-      ["@floating-ui/react-dom", "^2.1.8", "Positioning for dropdowns"],
-      ["classnames", "^2.5.1", "Utility for conditional CSS classes"],
-      ["compressorjs", ">=1.2.0", "Image compression in MediaUpload"],
-      ["date-fns", "^4.1.0", "Date utility library"],
-      ["prismjs", ">=1.27.0", "Code syntax highlighting in CodeBlock"],
-      ["react-icons", "^5.6.0", "Icon library"],
-      ["recharts", ">=3.0.0", "Data visualization components"],
-    ]
-  }}
-/>
+| Package | Version | Purpose |
+| --- | --- | --- |
+| `@floating-ui/react-dom` | `^2.1.9` | Positioning for dropdowns, tooltips and popovers |
+| `clsx` | `^2.1.1` | Conditional class names |
+| `date-fns` | `^4.4.0` | Date pickers and inputs |
+
+Your app provides these. Components ship their styles as precompiled CSS modules, which Next.js, Vite and other bundlers handle with no setup; `sass` is optional (from 2.1):
+
+| Package | Version | Purpose |
+| --- | --- | --- |
+| `react` | `>=18` | React |
+| `react-dom` | `>=18` | React DOM |
+| `sass` | `^1.77.6` | Optional: only if your own code uses Sass |
 
 ## Optional dependencies
 
-The following dependencies are only needed if you use specific features:
+Install these only for the features that need them. Each module named here comes from its own subpath, not the package root:
 
-<Table
-  marginBottom="32"
-  data={{
-    headers: [
-      { content: "Package", key: "package" },
-      { content: "Version", key: "version" },
-      { content: "Used for", key: "usedFor" },
-    ],
-    rows: [
-      ["sharp", "^0.33.4", "Image optimization in Next.js"],
-    ]
-  }}
-/>
+| Package | Version | Used for |
+| --- | --- | --- |
+| `next` | `>=15.5` | Next.js apps: `LayoutProvider` from `@once-ui-system/core/next` routes links and images through `next/link` and `next/image` |
+| `recharts` | `^3.10.1` | Charts and gauges from `@once-ui-system/core/data` |
+| `prismjs` | `^1.30.0` | `CodeBlock` from `@once-ui-system/core/code` |
+| `compressorjs` | `^1.3.0` | `MediaUpload` from `@once-ui-system/core/media` |
+
+Icons ship inlined, so no icon library is required. To use more icons, register any React icon components — react-icons, lucide or your own SVGs — through [`IconProvider`](/contexts/iconProvider).

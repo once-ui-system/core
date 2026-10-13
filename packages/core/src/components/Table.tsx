@@ -1,19 +1,19 @@
 "use client";
 
-import { Flex } from "./Flex";
-import { Row } from "./Row";
+import classNames from "clsx";
+import { ReactNode, useMemo, useState } from "react";
 import { Column } from "./Column";
+import { Flex } from "./Flex";
 import { Icon } from "./Icon";
-import { Text } from "./Text";
 import { IconButton } from "./IconButton";
 import { Input } from "./Input";
-import { Spinner } from "./Spinner";
+import { Pagination } from "./Pagination";
+import { Row } from "./Row";
 import { Select } from "./Select";
-import { Button } from "./Button";
 import { ShineFx } from "./ShineFx";
-import { useState, useMemo, ReactNode } from "react";
+import { Spinner } from "./Spinner";
 import styles from "./Table.module.scss";
-import classNames from "clsx";
+import { Text } from "./Text";
 
 type TableHeader = {
   content: ReactNode;
@@ -66,8 +66,8 @@ function extractText(node: ReactNode): string {
   return "";
 }
 
-function Table({ 
-  data, 
+function Table({
+  data,
   onRowClick,
   searchable = false,
   searchPlaceholder = "Search...",
@@ -85,7 +85,7 @@ function Table({
   defaultPageSize = 10,
   pageSizeOptions = [5, 10, 20, 50],
   loadingState,
-  ...flex 
+  ...flex
 }: TableProps) {
   const [sortConfig, setSortConfig] = useState<{
     key: string;
@@ -97,7 +97,7 @@ function Table({
 
   const handleSort = (key: string, sortable?: boolean) => {
     if (!sortable) return;
-    
+
     let direction: "asc" | "desc" = "asc";
     if (sortConfig && sortConfig.key === key) {
       direction = sortConfig.direction === "asc" ? "desc" : "asc";
@@ -107,35 +107,35 @@ function Table({
 
   const filteredRows = useMemo(() => {
     if (!searchable || !searchQuery.trim()) return data.rows;
-    
+
     const query = searchQuery.toLowerCase();
-    return data.rows.filter(row => 
-      row.some(cell => extractText(cell).toLowerCase().includes(query))
+    return data.rows.filter((row) =>
+      row.some((cell) => extractText(cell).toLowerCase().includes(query)),
     );
   }, [data.rows, searchQuery, searchable]);
 
   const sortedRows = useMemo(() => {
     if (!sortConfig) return filteredRows;
 
-    const headerIndex = data.headers.findIndex(h => h.key === sortConfig.key);
+    const headerIndex = data.headers.findIndex((h) => h.key === sortConfig.key);
     if (headerIndex === -1) return filteredRows;
 
     return [...filteredRows].sort((a, b) => {
       const aValue = extractText(a[headerIndex]);
       const bValue = extractText(b[headerIndex]);
-      
-      const comparison = aValue.localeCompare(bValue, undefined, { 
-        numeric: true, 
-        sensitivity: "base" 
+
+      const comparison = aValue.localeCompare(bValue, undefined, {
+        numeric: true,
+        sensitivity: "base",
       });
-      
+
       return sortConfig.direction === "asc" ? comparison : -comparison;
     });
   }, [filteredRows, sortConfig, data.headers]);
 
   const paginatedRows = useMemo(() => {
     if (!paginated) return sortedRows;
-    
+
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     return sortedRows.slice(start, end);
@@ -148,16 +148,13 @@ function Table({
     setPage(1);
   }, [searchQuery, sortConfig]);
 
-  const tableClasses = classNames(
-    styles.table,
-    {
-      [styles.striped]: striped,
-      [styles.hoverable]: hoverable,
-      [styles.compact]: compact,
-      [styles.clickable]: !!onRowClick,
-      [styles.stickyHeader]: stickyHeader,
-    }
-  );
+  const tableClasses = classNames(styles.table, {
+    [styles.striped]: striped,
+    [styles.hoverable]: hoverable,
+    [styles.compact]: compact,
+    [styles.clickable]: !!onRowClick,
+    [styles.stickyHeader]: stickyHeader,
+  });
 
   const getAlignClass = (align: TableHeader["align"], prefix: "th" | "td") => {
     const key = align || "left";
@@ -170,14 +167,45 @@ function Table({
   };
 
   const renderHeader = (header: TableHeader, index: number) => {
-    const isActive = sortConfig?.key === header.key;
-    const thClasses = classNames(
-      styles.th,
-      getAlignClass(header.align, "th"),
-      {
-        [styles.thSortable]: header.sortable,
-        [styles.thActive]: isActive,
-      }
+    // A header without a key (untyped MDX tables omit it) is never the
+    // sorted one, even before anything is sorted.
+    const isActive = sortConfig !== null && sortConfig.key === header.key;
+    const thClasses = classNames(styles.th, getAlignClass(header.align, "th"), {
+      [styles.thSortable]: header.sortable,
+      [styles.thActive]: isActive,
+    });
+
+    const content = (
+      <Row
+        gap="8"
+        vertical="center"
+        horizontal={
+          header.align === "center" ? "center" : header.align === "right" ? "end" : "start"
+        }
+      >
+        <Text
+          variant="label-strong-s"
+          onBackground={isActive ? "neutral-strong" : "neutral-medium"}
+        >
+          {header.content}
+        </Text>
+        {header.sortable && (
+          <Icon
+            name={
+              isActive
+                ? sortConfig.direction === "asc"
+                  ? "chevronUp"
+                  : "chevronDown"
+                : "chevronUp"
+            }
+            size="xs"
+            onBackground={isActive ? "neutral-strong" : "neutral-weak"}
+            style={{
+              transform: !isActive ? "rotate(90deg)" : undefined,
+            }}
+          />
+        )}
+      </Row>
     );
 
     return (
@@ -185,35 +213,32 @@ function Table({
         key={header.key}
         className={thClasses}
         style={{ width: header.width }}
+        // Only the sorted column says so: ARIA wants aria-sort on one header
+        // at a time, and an unsorted column is the default.
+        aria-sort={
+          isActive ? (sortConfig.direction === "asc" ? "ascending" : "descending") : undefined
+        }
         onClick={() => handleSort(header.key, header.sortable)}
       >
-        <Row gap="8" vertical="center" horizontal={header.align === "center" ? "center" : header.align === "right" ? "end" : "start"}>
-          <Text variant="label-strong-s" onBackground={isActive ? "neutral-strong" : "neutral-medium"}>
-            {header.content}
-          </Text>
-          {header.sortable && (
-            <Icon
-              name={isActive 
-                ? sortConfig.direction === "asc" ? "chevronUp" : "chevronDown"
-                : "chevronUp"
-              }
-              size="xs"
-              onBackground={isActive ? "neutral-strong" : "neutral-weak"}
-              style={{
-                transform: !isActive ? "rotate(90deg)" : undefined,
-              }}
-            />
-          )}
-        </Row>
+        {header.sortable ? (
+          // A real button gives the column a tab stop, a role and Enter/Space.
+          // Its click bubbles to the cell, so the whole cell, padding
+          // included, stays the pointer target it always was.
+          <button
+            type="button"
+            className={classNames("reset-button-styles", "focus-ring", styles.thButton)}
+          >
+            {content}
+          </button>
+        ) : (
+          content
+        )}
       </th>
     );
   };
 
   const renderRow = (row: ReactNode[], originalIndex: number, displayIndex: number) => {
-    const rowClasses = classNames(
-      styles.row,
-      rowClassName?.(originalIndex)
-    );
+    const rowClasses = classNames(styles.row, rowClassName?.(originalIndex));
 
     return (
       <tr
@@ -226,7 +251,7 @@ function Table({
           const tdClasses = classNames(
             styles.td,
             getAlignClass(header?.align, "td"),
-            cellClassName?.(originalIndex, cellIndex)
+            cellClassName?.(originalIndex, cellIndex),
           );
 
           return (
@@ -236,7 +261,7 @@ function Table({
           );
         })}
         {actions && actions.length > 0 && (
-          <td 
+          <td
             className={classNames(styles.td, styles.tdActions)}
             style={{ width: `${actions.length * 32}px`, minWidth: `${actions.length * 32}px` }}
           >
@@ -264,17 +289,12 @@ function Table({
 
   const renderEmptyState = () => (
     <tr>
-      <td 
-        colSpan={data.headers.length + (actions?.length ? 1 : 0)} 
-        className={styles.empty}
-      >
+      <td colSpan={data.headers.length + (actions?.length ? 1 : 0)} className={styles.empty}>
         {emptyState || (
           <Column center padding="xl" gap="m">
             <Icon name="inbox" size="l" onBackground="neutral-weak" />
             <Column center gap="4">
-              <Text variant="heading-strong-s">
-                No data available
-              </Text>
+              <Text variant="heading-strong-s">No data available</Text>
               <Text variant="body-default-s" onBackground="neutral-weak">
                 {searchQuery ? "Try adjusting your search" : "There are no items to display"}
               </Text>
@@ -287,15 +307,10 @@ function Table({
 
   const renderLoadingState = () => (
     <tr>
-      <td 
-        colSpan={data.headers.length + (actions?.length ? 1 : 0)} 
-        className={styles.loading}
-      >
+      <td colSpan={data.headers.length + (actions?.length ? 1 : 0)} className={styles.loading}>
         {loadingState || (
           <Column center padding="xl" gap="m">
-            <ShineFx variant="label-default-s">
-              Loading data...
-            </ShineFx>
+            <ShineFx variant="label-default-s">Loading data...</ShineFx>
           </Column>
         )}
       </td>
@@ -315,7 +330,9 @@ function Table({
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
           />
           {sortedRows.length !== data.rows.length && (
-            <Text onBackground="neutral-weak">{sortedRows.length} of {data.rows.length}</Text>
+            <Text onBackground="neutral-weak">
+              {sortedRows.length} of {data.rows.length}
+            </Text>
           )}
         </Row>
       )}
@@ -345,16 +362,14 @@ function Table({
             </tr>
           </thead>
           <tbody className={styles.tbody}>
-            {loading ? (
-              renderLoadingState()
-            ) : sortedRows.length === 0 ? (
-              renderEmptyState()
-            ) : (
-              paginatedRows.map((row, index) => {
-                const originalIndex = data.rows.indexOf(row);
-                return renderRow(row, originalIndex, index);
-              })
-            )}
+            {loading
+              ? renderLoadingState()
+              : sortedRows.length === 0
+                ? renderEmptyState()
+                : paginatedRows.map((row, index) => {
+                    const originalIndex = data.rows.indexOf(row);
+                    return renderRow(row, originalIndex, index);
+                  })}
           </tbody>
         </table>
       </Flex>
@@ -373,9 +388,9 @@ function Table({
                   setPageSize(Number(value));
                   setPage(1);
                 }}
-                options={pageSizeOptions.map(size => ({
+                options={pageSizeOptions.map((size) => ({
                   label: String(size),
-                  value: String(size)
+                  value: String(size),
                 }))}
               />
             </Row>
@@ -385,65 +400,13 @@ function Table({
           </Row>
 
           {totalPages > 1 && (
-            <Row gap="4" vertical="center">
-              <IconButton
-                size="s"
-                variant="secondary"
-                icon="chevronDoubleLeft"
-              aria-label="First page"
-                onClick={() => setPage(1)}
-                disabled={currentPage === 1}
-              />
-              <IconButton
-                size="s"
-                variant="secondary"
-                icon="chevronLeft"
-              aria-label="Previous page"
-                onClick={() => setPage(currentPage - 1)}
-                disabled={currentPage === 1}
-              />
-              
-              {Array.from({ length: Math.min(3, totalPages) }, (_, i) => {
-                let pageNum;
-                if (totalPages <= 5) {
-                  pageNum = i + 1;
-                } else if (currentPage <= 3) {
-                  pageNum = i + 1;
-                } else if (currentPage >= totalPages - 2) {
-                  pageNum = totalPages - 4 + i;
-                } else {
-                  pageNum = currentPage - 2 + i;
-                }
-                
-                return (
-                  <Button
-                    key={pageNum}
-                    size="s"
-                    variant={pageNum === currentPage ? "primary" : "tertiary"}
-                    onClick={() => setPage(pageNum)}
-                  >
-                    {pageNum}
-                  </Button>
-                );
-              })}
-
-              <IconButton
-                size="s"
-                variant="secondary"
-                icon="chevronRight"
-              aria-label="Next page"
-                onClick={() => setPage(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              />
-              <IconButton
-                icon="chevronDoubleRight"
-              aria-label="Last page"
-                size="s"
-                variant="secondary"
-                onClick={() => setPage(totalPages)}
-                disabled={currentPage === totalPages}
-              />
-            </Row>
+            <Pagination
+              page={currentPage}
+              total={totalPages}
+              onChange={setPage}
+              size="s"
+              showFirstLast
+            />
           )}
         </Row>
       )}
@@ -453,7 +416,7 @@ function Table({
         <Row horizontal="end" vertical="center" paddingX="s">
           <Row gap="4" vertical="center">
             <Text variant="body-default-s" onBackground="neutral-weak">
-              Sorted by {data.headers.find(h => h.key === sortConfig.key)?.content}
+              Sorted by {data.headers.find((h) => h.key === sortConfig.key)?.content}
             </Text>
             <IconButton
               icon="close"
@@ -470,5 +433,6 @@ function Table({
 }
 
 Table.displayName = "Table";
+
+export type { TableAction, TableHeader, TableProps };
 export { Table };
-export type { TableProps, TableHeader, TableAction };

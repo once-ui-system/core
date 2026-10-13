@@ -33,11 +33,8 @@ const members: Member[] = [
   { name: "Kathrina Voss", avatar: "/images/avatars/08.png", role: "Creative Director" },
 ];
 
-const logos = [
-  "/trademarks/wordmark-light.svg",
-  "/trademarks/agent-light.svg",
-  "/trademarks/convert-light.svg",
-];
+// Placeholder logos: swap in real ones.
+const logos = Array.from({ length: 3 }, () => "/trademarks/wordmark-light.svg");
 
 export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
   const [open, setOpen] = useState(false);
@@ -48,16 +45,16 @@ export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="32" {...flex}>
       <Column horizontal="center" align="center" gap="16" maxWidth={32}>
-        <Tag size="s" scheme="brand" data-border="rounded">
+        <Tag size="s" scheme="brand" themeBorder="rounded">
           Social proof
         </Tag>
-        <Heading as="h2" variant="display-strong-s" align="center" wrap="balance">
+        <Heading as="h2" variant="display-strong-s" align="center">
           Loved by 2,400+ builders shipping real products
         </Heading>
       </Column>
 
-      <Row horizontal="center" gap="12" vertical="center" wrap>
-        <AvatarGroup size="m" avatars={preview.map((member) => ({ src: member.avatar }))} />
+      <Row center gap="12" wrap>
+        <AvatarGroup avatars={preview.map((member) => ({ src: member.avatar }))} />
         {remaining > 0 && (
           <>
             <Button

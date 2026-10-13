@@ -6,8 +6,9 @@
  ],
  "props": {
   "checked": "boolean",
+  "defaultChecked": "boolean = false",
   "indeterminate": "boolean = false",
-  "onToggle": "() => void",
+  "onToggle": "(checked: boolean) => void",
   "hoverable": "boolean = true"
  },
  "mixinsRef": []

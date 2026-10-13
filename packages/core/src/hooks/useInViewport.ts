@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, RefObject } from "react";
+import { RefObject, useEffect, useState } from "react";
 
 export function useInViewport(
   ref: RefObject<HTMLElement | null>,

@@ -1,7 +1,7 @@
 ---
 title: "Structure"
 summary: "How a page is composed: two layout primitives, spacing that comes from gaps, and props instead of CSS."
-updatedAt: "2026-09-14"
+updatedAt: "2026-10-10"
 docs: "once-ui/basics/structure.mdx"
 navLabel: "Structure"
 navIcon: "lightbulb"
@@ -81,6 +81,57 @@ centred column that caps the reading width, and the sections inside it:
 `maxWidth` caps the line length, `horizontal="center"` centres that cap in the
 viewport, and the gaps do the rest. Sections sit far apart (`"80"`–`"160"`),
 content inside them sits close (`"24"`–`"40"`).
+
+## The app shell
+
+A dashboard scrolls a pane, not the page, so the header and sidebar stay put.
+The pane is "the viewport below the header" tall, and that is a value of its
+own: `height="below-header"`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Column fill>
+    <Row as="header" height="56" fillWidth>...</Row>
+    <Row fill>
+        <Column position="sticky" top="56" fitHeight>...</Column>
+        <Column fill height="below-header" overflowY="auto">
+            ...
+        </Column>
+    </Row>
+</Column>`,
+      language: "tsx",
+      label: "App shell"
+    }
+  ]}
+/>
+
+`"below-header"` is `calc(100dvh - var(--header-height))`, and `height`,
+`minHeight` and `maxHeight` all take it — `maxHeight="below-header"` caps a
+mobile menu or a dropdown that hangs from the header. `--header-height` is a
+token, 56px by default (the header above), so most shells never set it. One
+with a different header sets it once, and every pane follows:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`:root {
+    --header-height: 4rem;
+}`,
+      language: "css",
+      label: "A taller header"
+    }
+  ]}
+/>
+
+It is read where it is used, so it can also be set on a subtree. A sticky
+offset that should follow it is `top="calc(var(--header-height))"`.
 
 ## Space comes from gaps
 

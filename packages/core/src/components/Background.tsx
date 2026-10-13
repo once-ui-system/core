@@ -1,12 +1,12 @@
 "use client";
 
-import React, { forwardRef, useEffect, useRef } from "react";
-import { Flex } from "./Flex";
-import { Mask, MaskProps } from "./Mask";
-import styles from "./Background.module.scss";
 import classNames from "clsx";
+import React, { forwardRef, useEffect, useRef } from "react";
 import { DisplayProps } from "../interfaces";
 import { ColorValue, SpacingToken } from "../types";
+import styles from "./Background.module.scss";
+import { Flex } from "./Flex";
+import { Mask, MaskProps } from "./Mask";
 
 function setRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
   if (typeof ref === "function") {
@@ -132,30 +132,31 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
             }
           />
         )}
-        {lines.display && (() => {
-          const angle = lines.angle ?? -45;
-          const angleRad = (angle * Math.PI) / 180;
-          // Adjust spacing to maintain uniform perpendicular distance
-          // For diagonal lines, multiply by the secant of the angle
-          const adjustmentFactor = 1 / Math.cos(angleRad);
-          const baseSpacing = lines.size ?? "8";
-          
-          return (
-            <Flex
-              position="absolute"
-              top="0"
-              left="0"
-              fill
-              pointerEvents="none"
-              className={styles.lines}
-              opacity={lines.opacity}
-              style={
-                {
-                  "--lines-angle": `${angle}deg`,
-                  "--lines-color": `var(--${lines.color ?? "brand-on-background-weak"})`,
-                  "--lines-thickness": `${lines.thickness ?? 1}px`,
-                  "--lines-spacing": `calc(var(--static-space-${baseSpacing}) * ${adjustmentFactor})`,
-                  background: `
+        {lines.display &&
+          (() => {
+            const angle = lines.angle ?? -45;
+            const angleRad = (angle * Math.PI) / 180;
+            // Adjust spacing to maintain uniform perpendicular distance
+            // For diagonal lines, multiply by the secant of the angle
+            const adjustmentFactor = 1 / Math.cos(angleRad);
+            const baseSpacing = lines.size ?? "8";
+
+            return (
+              <Flex
+                position="absolute"
+                top="0"
+                left="0"
+                fill
+                pointerEvents="none"
+                className={styles.lines}
+                opacity={lines.opacity}
+                style={
+                  {
+                    "--lines-angle": `${angle}deg`,
+                    "--lines-color": `var(--${lines.color ?? "brand-on-background-weak"})`,
+                    "--lines-thickness": `${lines.thickness ?? 1}px`,
+                    "--lines-spacing": `calc(var(--static-space-${baseSpacing}) * ${adjustmentFactor})`,
+                    background: `
                   repeating-linear-gradient(
                     var(--lines-angle),
                     var(--static-transparent),
@@ -164,11 +165,11 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
                     var(--lines-color) var(--lines-spacing)
                   )
                 `,
-                } as React.CSSProperties
-              }
-            />
-          );
-        })()}
+                  } as React.CSSProperties
+                }
+              />
+            );
+          })()}
         {grid.display && (
           <Flex
             position="absolute"
@@ -217,4 +218,5 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
 );
 
 Background.displayName = "Background";
+
 export { Background };

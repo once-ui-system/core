@@ -5,7 +5,6 @@ import {
   Checkbox,
   Column,
   Fade,
-  Flex,
   Heading,
   IconButton,
   Input,
@@ -24,8 +23,8 @@ export const Login4 = () => {
   const [isSignup, setIsSignup] = useState(false);
 
   return (
-    <Flex padding="24" fill center>
-      <Flex
+    <Row padding="24" fill center>
+      <Row
         maxWidth="l"
         background="surface"
         radius="l-4"
@@ -35,9 +34,9 @@ export const Login4 = () => {
         border
         horizontal="center"
       >
-        <Flex flex="1" m={{ hide: true }}>
+        <Row flex="1" m={{ hide: true }}>
           <Media src="/images/global/auth-cover-01.jpg" radius="l" sizes="640px" border />
-          <Flex fill position="absolute" top="0" left="0">
+          <Row fill position="absolute" top="0" left="0">
             <Column gap="32" vertical="between" padding="32" fill>
               <Row
                 paddingY="8"
@@ -67,13 +66,17 @@ export const Login4 = () => {
               />
               <Column gap="20" padding="8" fillWidth>
                 <RevealFx delay={600} horizontal="start">
-                  <Logo dark size="s" wordmark="/trademarks/wordmark-dark.svg" />
-                  <Logo light size="s" wordmark="/trademarks/wordmark-light.svg" />
+                  <Logo
+                    size="s"
+                    wordmark={{
+                      light: "/trademarks/wordmark-light.svg",
+                      dark: "/trademarks/wordmark-dark.svg",
+                    }}
+                  />
                 </RevealFx>
                 <RevealFx horizontal="start">
                   <Heading
                     variant="display-default-xs"
-                    wrap="balance"
                     marginLeft="4"
                     onBackground="neutral-strong"
                   >
@@ -82,17 +85,19 @@ export const Login4 = () => {
                 </RevealFx>
               </Column>
             </Column>
-          </Flex>
-        </Flex>
+          </Row>
+        </Row>
 
-        <Flex flex="1" maxWidth="xs">
+        <Row flex="1" maxWidth="xs">
           <Column gap="12" paddingX="xl" paddingY="40" center fill>
-            <Logo dark icon="/trademarks/icon-dark.svg" size="l" />
-            <Logo light icon="/trademarks/icon-light.svg" size="l" />
-            <Heading variant="display-default-xs" wrap="balance" align="center" marginTop="20">
+            <Logo
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+              size="l"
+            />
+            <Heading variant="display-default-xs" align="center" marginTop="20">
               {isSignup ? "Create your account" : "Sign in to Once UI"}
             </Heading>
-            <Flex textVariant="body-default-s" onBackground="neutral-medium">
+            <Row textVariant="body-default-s" onBackground="neutral-medium">
               {isSignup ? (
                 <>
                   <Text marginRight="4">Already have an account?</Text>
@@ -108,7 +113,7 @@ export const Login4 = () => {
                   </SmartLink>
                 </>
               )}
-            </Flex>
+            </Row>
 
             <Column fillWidth gap="-1">
               <Button
@@ -140,11 +145,11 @@ export const Login4 = () => {
               />
             </Column>
 
-            <Flex paddingY="24" gap="24" vertical="center" fillWidth>
+            <Row paddingY="24" gap="24" vertical="center" fillWidth>
               <Line background="neutral-alpha-strong" />
               <Text onBackground="neutral-weak">/</Text>
               <Line background="neutral-alpha-strong" />
-            </Flex>
+            </Row>
 
             <Column fillWidth gap="-1">
               <Input corners="top" placeholder="Email" id="email" name="email" />
@@ -188,8 +193,8 @@ export const Login4 = () => {
               <SmartLink href="#">Privacy Policy</SmartLink>.
             </Text>
           </Column>
-        </Flex>
-      </Flex>
-    </Flex>
+        </Row>
+      </Row>
+    </Row>
   );
 };

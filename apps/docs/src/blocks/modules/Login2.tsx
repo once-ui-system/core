@@ -7,7 +7,7 @@ import {
   Input,
   Line,
   Logo,
-  Particle,
+  ParticleFx,
   PasswordInput,
   Row,
   SmartLink,
@@ -17,8 +17,7 @@ export const Login2 = () => {
   return (
     <Row fill padding="8">
       <Row fill radius="xl" overflow="hidden">
-        <Particle
-          opacity={100}
+        <ParticleFx
           position="absolute"
           top="0"
           left="0"
@@ -65,8 +64,11 @@ export const Login2 = () => {
         </HoloFx>
         <Column fill center padding="16">
           <Column center gap="16" padding="40" maxWidth={32} radius="xl" background="surface">
-            <Logo href="/" size="l" dark icon="/trademarks/icon-dark.svg" />
-            <Logo href="/" size="l" light icon="/trademarks/icon-light.svg" />
+            <Logo
+              href="/"
+              size="l"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            />
             <Heading marginTop="24" variant="display-strong-xs" align="center">
               Welcome to Once UI
             </Heading>

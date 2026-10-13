@@ -1,6 +1,9 @@
 {
  "name": "ShineFx",
  "group": "components",
+ "extends": [
+  "Text"
+ ],
  "mixins": [
   "CommonProps",
   "DisplayProps",
@@ -33,6 +36,7 @@
    "inline": "boolean",
    "hide": "boolean",
    "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "userSelect": "UserSelect",
    "position": "CSSProperties[\"position\"]",
    "overflow": "CSSProperties[\"overflow\"]",
    "overflowX": "CSSProperties[\"overflowX\"]",

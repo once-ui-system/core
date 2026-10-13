@@ -1,19 +1,29 @@
 "use client";
 
-import React, { ReactNode, forwardRef } from "react";
-import { ElementType } from "./ElementType";
 import classNames from "clsx";
-
-import { Spinner } from "./Spinner";
-import { Icon } from "./Icon";
-import { Arrow } from "./Arrow";
-import { Flex } from "./Flex";
-import styles from "./Button.module.scss";
+import React, { forwardRef, ReactNode } from "react";
 import { IconName } from "../icons";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
+import { Arrow } from "./Arrow";
+import styles from "./Button.module.scss";
+import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext";
+import { ElementType } from "./ElementType";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { Spinner } from "./Spinner";
 
 interface ButtonCommonProps {
-  variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link";
+  variant?:
+    | "primary"
+    | "secondary"
+    | "tertiary"
+    | "quaternary"
+    | "subtle"
+    | "danger"
+    | "success"
+    | "warning"
+    | "ghost"
+    | "link";
   size?: TShirtSizes;
   corners?:
     | "none"
@@ -74,12 +84,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
   ) => {
     const iconSize = size === "l" || size === "xl" ? "s" : size === "m" ? "s" : "xs";
     const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
+    const trigger = useDropdownTrigger();
 
     return (
       <ElementType
         id={id}
         href={href}
         ref={ref}
+        {...dropdownTriggerProps(trigger, href, props.onClick)}
         disabled={disabled}
         data-disabled={disabled ? true : undefined}
         data-border={rounded ? "rounded" : undefined}
@@ -125,7 +137,14 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
             }}
             trigger={"#" + id}
             scale={size === "s" ? 0.8 : size === "m" ? 0.9 : 1}
-            color={variant === "primary" || variant === "danger" || variant === "success" || variant === "warning" ? "onSolid" : "onBackground"}
+            color={
+              variant === "primary" ||
+              variant === "danger" ||
+              variant === "success" ||
+              variant === "warning"
+                ? "onSolid"
+                : "onBackground"
+            }
           />
         )}
         {suffixIcon && <Icon name={suffixIcon} size={iconSize} onBackground={color} />}
@@ -135,4 +154,5 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
 );
 
 Button.displayName = "Button";
+
 export { Button };

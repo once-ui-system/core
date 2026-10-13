@@ -30,7 +30,8 @@ describe("DateInput time picker", () => {
       <DateInput id="when" timePicker value={new Date(2026, 7, 15, 21, 31)} onChange={onChange} />,
       { wrapper: wrap },
     );
-    await user.click(screen.getByRole("textbox"));
+    // The field is a combobox that opens the picker (it was a "textbox").
+    await user.click(screen.getByRole("combobox"));
     return onChange;
   };
 

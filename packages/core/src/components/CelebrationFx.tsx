@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { Flex } from "./Flex";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { Flex } from "./Flex";
 
 type CelebrationType = "confetti" | "fireworks";
 
@@ -211,10 +211,13 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
 
         // Check if we should still be emitting new particles
         const shouldEmit =
-          trigger === "hover" ? isHoveredRef.current : 
-          trigger === "manual" ? active : 
-          trigger === "click" ? clickPositionRef.current !== null :
-          isEmittingRef.current;
+          trigger === "hover"
+            ? isHoveredRef.current
+            : trigger === "manual"
+              ? active
+              : trigger === "click"
+                ? clickPositionRef.current !== null
+                : isEmittingRef.current;
 
         // Check duration limit
         if (duration && isEmittingRef.current && trigger !== "manual") {
@@ -311,12 +314,12 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
               }
             });
           });
-          
+
           // Clean up dead fireworks (only when not emitting)
           if (!shouldEmit) {
             particlesRef.current = (particlesRef.current as Firework[]).filter((firework) => {
               // Keep if any particles are still alive
-              return firework.particles.some(p => p.life < p.maxLife);
+              return firework.particles.some((p) => p.life < p.maxLife);
             });
           }
         }
@@ -356,18 +359,24 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
         const rect = containerRef.current.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        
+
         if (type === "confetti") {
           // For confetti, add burst of particles from click position
-          const shapes: ("rectangle" | "circle" | "triangle")[] = ["rectangle", "circle", "triangle"];
+          const shapes: ("rectangle" | "circle" | "triangle")[] = [
+            "rectangle",
+            "circle",
+            "triangle",
+          ];
           const canvas = canvasRef.current;
           if (!canvas) return;
-          
+
           const parsedColors = colors.map((color) => {
-            const computedColor = getComputedStyle(containerRef.current!).getPropertyValue(`--${color}`);
+            const computedColor = getComputedStyle(containerRef.current!).getPropertyValue(
+              `--${color}`,
+            );
             return computedColor || color;
           });
-          
+
           for (let i = 0; i < intensity; i++) {
             const angle = (Math.PI * 2 * i) / intensity;
             const velocity = 2 + Math.random() * 3;
@@ -425,4 +434,5 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
 );
 
 CelebrationFx.displayName = "CelebrationFx";
+
 export { CelebrationFx };

@@ -1,0 +1,36 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 2,
+      "input_total": 112948,
+      "input_uncached": 4,
+      "cache_creation": 28572,
+      "cache_read": 84372,
+      "visible_output_tokens_o200k": 6838,
+      "visible_output_tokens_claudeLegacy": 7446,
+      "thinking_blocks": 1,
+      "input_net_of_overhead": 5810
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t09/tailwind-memory/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "D"
+}

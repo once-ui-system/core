@@ -101,7 +101,7 @@ export const Careers3 = () => {
 
   return (
     <Column fillWidth horizontal="center" borderY marginTop="8">
-      <Column fillWidth maxWidth="l" borderX>
+      <Column maxWidth="l" borderX>
         <Background
           position="absolute"
           fill
@@ -125,7 +125,7 @@ export const Careers3 = () => {
         >
           <Row gap="8" vertical="center">
             <Badge arrow={false} effect={false} gap="8" paddingLeft="12">
-              <Pulse size="s" scheme="brand" />
+              <Pulse size="s" />
               <Text onBackground="brand-weak">We're hiring</Text>
             </Badge>
           </Row>
@@ -140,10 +140,19 @@ export const Careers3 = () => {
         </Row>
 
         <Row fillWidth s={{ direction: "column" }}>
-          <Column fill minWidth={24} padding="l" gap="24" background="page" overflow="hidden">
-            <BlobFx position="absolute" top="0" left="0" translateY="50%" />
+          <Column
+            fillWidth
+            flex={1}
+            minWidth={24}
+            s={{ minWidth: 0 }}
+            padding="l"
+            gap="24"
+            background="page"
+            overflow="hidden"
+          >
+            <BlobFx position="absolute" top="0" left="0" translateY="50%" s={{ hide: true }} />
             <Column gap="12">
-              <Heading as="h2" variant="display-strong-s" wrap="balance">
+              <Heading as="h2" variant="display-strong-s">
                 Build the future of design systems
               </Heading>
               <Text variant="body-default-m" onBackground="neutral-medium" wrap="balance">
@@ -194,7 +203,7 @@ export const Careers3 = () => {
 
           <Line vert background="neutral-alpha-weak" s={{ hide: true }} />
 
-          <Column fill minWidth={24} padding="l" gap="16">
+          <Column fillWidth flex={1} minWidth={24} s={{ minWidth: 0 }} padding="l" gap="16">
             <Column gap="8">
               <Heading as="h3" variant="heading-strong-m">
                 Open positions
@@ -249,8 +258,8 @@ export const Careers3 = () => {
                         )}
                       </Row>
                       <Row gap="8" wrap>
-                        <Tag scheme="neutral" size="s" label={role.department} />
-                        <Tag scheme="neutral" size="s" label={role.type} />
+                        <Tag size="s" label={role.department} />
+                        <Tag size="s" label={role.type} />
                       </Row>
                     </Column>
                     <Row
@@ -289,7 +298,7 @@ export const Careers3 = () => {
                   border="neutral-alpha-medium"
                   horizontal="center"
                 >
-                  <Icon name="search" size="m" onBackground="neutral-weak" />
+                  <Icon name="search" onBackground="neutral-weak" />
                   <Heading variant="heading-strong-s">No roles in this department</Heading>
                   <Text variant="body-default-s" onBackground="neutral-medium" align="center">
                     Try another filter or check back soon for new openings.

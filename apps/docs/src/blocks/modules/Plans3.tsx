@@ -2,7 +2,6 @@ import {
   Background,
   Button,
   Column,
-  Flex,
   Heading,
   Icon,
   Row,
@@ -136,11 +135,11 @@ export const Plans3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
   return (
     <Scroller maxWidth="m">
       <Row gap="-1" {...flex}>
-        <Flex fillWidth paddingTop="40" minWidth={20}>
+        <Row fillWidth paddingTop="40" minWidth={20}>
           <PlanCard id="free" plan={plans.free} leftRadius="l" />
-        </Flex>
+        </Row>
         <Column fillWidth minWidth={20}>
-          <Flex
+          <Row
             paddingX="16"
             minHeight="40"
             gap="8"
@@ -153,12 +152,12 @@ export const Plans3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
             textVariant="label-default-m"
           >
             🔥 Most popular 🔥
-          </Flex>
+          </Row>
           <PlanCard id="pro" plan={plans.pro} zIndex={1} />
         </Column>
-        <Flex fillWidth paddingTop="40" minWidth={20}>
+        <Row fillWidth paddingTop="40" minWidth={20}>
           <PlanCard id="team" plan={plans.team} rightRadius="l" />
-        </Flex>
+        </Row>
       </Row>
     </Scroller>
   );

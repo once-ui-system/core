@@ -1,11 +1,11 @@
 "use client";
 
-import { forwardRef } from "react";
-import { ServerGrid } from "./ServerGrid";
-import { Cursor } from "./Cursor";
-import { GridProps, StyleProps, DisplayProps, GridBreakpointProps } from "../interfaces";
-import { useRef, useEffect, useCallback, CSSProperties, useState } from "react";
+import { CSSProperties, forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { useLayout } from "../contexts/LayoutProvider";
+import { DisplayProps, GridBreakpointProps, GridProps, StyleProps } from "../interfaces";
+import { breakpointStyle } from "../utils/layoutClasses";
+import { Cursor } from "./Cursor";
+import { ServerGrid } from "./ServerGrid";
 
 interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
   cursor?: StyleProps["cursor"];
@@ -22,7 +22,6 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
     const elementRef = useRef<HTMLDivElement>(null);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const { currentBreakpoint } = useLayout();
-
 
     // Combine refs
     const combinedRef = (node: HTMLDivElement) => {
@@ -83,17 +82,14 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
         });
       }
 
-      // Apply new responsive styles if we have them for current breakpoint
+      // Apply new responsive styles if we have them for current breakpoint:
+      // everything a class cannot hold, through the helper ClientFlex uses,
+      // so a breakpoint `width` or numeric spacing applies here as it does
+      // there. A token spacing or offset is a class, from ServerGrid.
       if (currentResponsiveProps) {
-        if (currentResponsiveProps.style) {
-          Object.entries(currentResponsiveProps.style).forEach(([key, value]) => {
-            (element.style as any)[key] = value;
-            appliedResponsiveStyles.current.add(key);
-          });
-        }
-        if (currentResponsiveProps.aspectRatio) {
-          element.style.aspectRatio = currentResponsiveProps.aspectRatio;
-          appliedResponsiveStyles.current.add("aspect-ratio");
+        for (const [property, value] of breakpointStyle(currentResponsiveProps)) {
+          (element.style as any)[property] = value;
+          appliedResponsiveStyles.current.add(property);
         }
       }
     }, [xl, l, m, s, xs, props.style, currentBreakpoint]);
@@ -152,4 +148,5 @@ const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
 );
 
 ClientGrid.displayName = "ClientGrid";
+
 export { ClientGrid };

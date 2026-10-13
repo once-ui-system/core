@@ -7,15 +7,17 @@ Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For an
 | Write | Never write |
 |-------|-------------|
 | `<Column gap="16">` | `<Flex direction="column">` |
-| `<Row gap="16">` | `<Flex direction="row">` |
+| `<Row gap="16">` | `<Flex direction="row">`, or `<Flex>` with no direction |
 | `fill` | `fillWidth fillHeight` |
 | `fit` | `fitWidth fitHeight` |
 | `center` | `horizontal="center" vertical="center"` |
 | `maxWidth="l"` | `fillWidth maxWidth="l"` |
 | `fillWidth` | `fillWidth minWidth={0}` |
 | `border` | `border="neutral-alpha-weak"` |
+| `<Logo wordmark={{ light, dark }} />` | a `<Logo dark>` and a `<Logo light>` |
 
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
+- Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
 - Section gaps: `"104"` between sections, `"24"`–`"40"` inside. Never `"48"` between major sections.
 - Responsive: breakpoint props `xl l m s xs` — never media queries for layout
@@ -30,7 +32,7 @@ Static panel recipe (pricing tiers, stats, settings sections):
 
 - Bare `border` (and `borderTop`, `borderBottom`, …) = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
-- Colors: `{scheme}-{weight}` or `{scheme}-alpha-{weight}`. Never hex/rgb.
+- Colors: `{scheme}-{weight}` or `{scheme}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
 
 ## Typography
@@ -53,7 +55,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 
 ## Motion
 
-- `RevealFx delay` (and `ShineFx speed`) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x
+- `RevealFx delay` (and `ShineFx`/`CountFx`/`TypeFx speed`) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx` is a multiplier
 - `RevealFx translateY`: number = rem; prefer `"8"`–`"16"` tokens
 - Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
 - Animate all siblings in a set or none — never one lone animated card
@@ -69,21 +71,33 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Scroll fade | `Fade` as edge strip, not wrapper |
 | Icons | `IconName` from spec only |
 | Logos grid | `LogoCloud` with `columns` set |
+| Tabs | `Tabs` > `TabList` > `Tab`, `TabPanel` (`orientation="vertical"` for a settings nav) |
+| Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
+| Page trail | `Breadcrumbs items={[...]}` |
+| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"` |
+| Screen-reader text, skip link | `VisuallyHidden` |
+| MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 
 ## Imports
 
-Most things come from the package root. Three modules do not, because their
-dependencies are optional peers:
+Most things come from the package root. These do not — the manifest's
+`imports` lists every entry point with its exports, and each slice, catalog
+entry and `spec.json` `functions` entry says `importFrom` when it is not the root:
 
 | Import | From |
 |--------|------|
 | charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
+| `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
+| `MediaAudioPlayer`, `MediaVideoPlayer` | `@once-ui-system/core/components/<Name>` |
+| `LayoutProvider` in a **Next.js** app; `createOgFetchRoute`, `createOgProxyRoute` | `@once-ui-system/core/next` |
+| `defineConfig`, `OnceUIConfig` in `once-ui.config` | `@once-ui-system/core/config` (also on the root) |
 
-Naming one of these from the root does not resolve. `IconName` is a real union,
-so an unregistered icon name is a type error, not a blank space — take names
-from `spec.json`.
+Naming one of these from the root does not resolve — except `defineConfig`,
+which is on both, and `LayoutProvider`, which resolves and then silently
+renders links and images as plain `<a>` and `<img>` in a Next.js app. `IconName` is a real union, so an unregistered icon
+name is a type error, not a blank space — take names from `iconNames` in `catalog.json`.
 
 ## Defaults — omit these
 

@@ -86,8 +86,10 @@ export const Newsletter1: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         }}
       />
       <Column horizontal="center" maxWidth="xs" gap="12">
-        <Logo size="l" dark icon="/trademarks/icon-dark.svg" />
-        <Logo size="l" light icon="/trademarks/icon-light.svg" />
+        <Logo
+          size="l"
+          icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+        />
         <Heading marginTop="12" variant="display-strong-xs">
           Building the future together
         </Heading>
@@ -104,7 +106,7 @@ export const Newsletter1: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         <Row maxWidth={20}>
           <Input placeholder="Email" id="newsletter-email" type="email" required />
         </Row>
-        <Button id="newsletter-button" size="m" arrowIcon>
+        <Button id="newsletter-button" arrowIcon>
           Sign up
         </Button>
       </Row>

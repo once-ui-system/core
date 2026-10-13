@@ -25,12 +25,12 @@ const stats = [
   { label: "Countries reached", value: 64, suffix: "" },
 ];
 
-const partners = [
-  { dark: "/trademarks/brevo-dark.svg", light: "/trademarks/brevo-light.svg" },
-  { dark: "/trademarks/microsoft-dark.svg", light: "/trademarks/microsoft-light.svg" },
-  { dark: "/trademarks/nasa-dark.svg", light: "/trademarks/nasa-light.svg" },
-  { dark: "/trademarks/logmein-dark.svg", light: "/trademarks/logmein-light.svg" },
-];
+// Placeholder partners: swap in real logos.
+const partners = Array.from({ length: 4 }, (_, index) => ({
+  id: `partner-${index}`,
+  dark: "/trademarks/wordmark-dark.svg",
+  light: "/trademarks/wordmark-light.svg",
+}));
 
 const swag = [
   {
@@ -146,9 +146,7 @@ export const About5 = () => {
               <Text variant="code-default-s" onBackground="brand-weak">
                 Community
               </Text>
-              <Heading variant="display-strong-s" wrap="balance">
-                Powering creative minds.
-              </Heading>
+              <Heading variant="display-strong-s">Powering creative minds.</Heading>
               <Text variant="body-default-m" onBackground="neutral-weak" wrap="balance">
                 Used by professionals working at companies that value craft, curiosity, and
                 independent creation.
@@ -181,7 +179,7 @@ export const About5 = () => {
           <Grid columns="4" m={{ columns: 2 }} fillWidth background="page" borderBottom>
             {partners.map((partner, index) => (
               <Row
-                key={partner.dark}
+                key={partner.id}
                 fill
                 center
                 padding="24"
@@ -189,8 +187,7 @@ export const About5 = () => {
                 borderBottom={index < 2 ? "neutral-alpha-weak" : undefined}
                 minHeight={4}
               >
-                <Logo wordmark={partner.dark} />
-                <Logo light wordmark={partner.light} />
+                <Logo wordmark={{ light: partner.light, dark: partner.dark }} />
               </Row>
             ))}
           </Grid>

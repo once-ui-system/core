@@ -1,11 +1,11 @@
-import { Background, Mask, Particle, Row } from "@once-ui-system/core";
+import { Background, Mask, ParticleFx, Row } from "@once-ui-system/core";
 
 export const Background6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
     <Row position="absolute" fill overflow="hidden" {...flex}>
       <Background
         fill
-        data-solid="color"
+        themeSolid="color"
         gradient={{
           display: true,
           x: 50,
@@ -33,16 +33,7 @@ export const Background6: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         }}
       />
       <Mask position="absolute" top="0" left="0" x={50} y={50} radius={100}>
-        <Particle
-          opacity={70}
-          fill
-          interactive
-          speed={1}
-          size="2"
-          density={100}
-          intensity={40}
-          pointerEvents="none"
-        />
+        <ParticleFx opacity={70} fill interactive speed={1} intensity={40} pointerEvents="none" />
       </Mask>
     </Row>
   );

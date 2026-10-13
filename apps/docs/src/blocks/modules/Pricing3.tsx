@@ -10,7 +10,7 @@ export const Pricing3 = (flex: React.ComponentProps<typeof Column>) => {
         <Tag scheme="brand" size="s">
           Services
         </Tag>
-        <Heading as="h1" align="center" variant="display-strong-m" wrap="balance">
+        <Heading as="h1" align="center" variant="display-strong-m">
           Ship a complete frontend system
         </Heading>
         <Text align="center" onBackground="neutral-medium" variant="body-default-l" wrap="balance">
@@ -23,7 +23,6 @@ export const Pricing3 = (flex: React.ComponentProps<typeof Column>) => {
 
       <Row
         maxWidth="l"
-        fillWidth
         padding="24"
         radius="l"
         border

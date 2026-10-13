@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode, forwardRef, SyntheticEvent } from "react";
+import React, { forwardRef, ReactNode, SyntheticEvent } from "react";
 import { Column } from "./Column";
 import { Row } from "./Row";
 
@@ -16,7 +16,7 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
   ({ selectedOption, className, children, onEscape, onSelect, disabled = false, ...flex }, ref) => {
     const handleSelect = (event: SyntheticEvent<HTMLDivElement>) => {
       if (disabled) return;
-      
+
       // Only handle clicks on elements that have a data-value attribute
       const target = event.target as HTMLElement;
       const value =
@@ -37,7 +37,10 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         background="surface"
         className={disabled ? "cursor-not-allowed" : undefined}
         style={{ opacity: disabled ? 0.6 : undefined }}
-        aria-disabled={disabled}
+        // Only when it is: "false" is the default, and on a panel with no
+        // role of its own (DropdownWrapper's is "none") the attribute would
+        // still expose it, as an element the listbox around it cannot own.
+        aria-disabled={disabled || undefined}
         {...flex}
       >
         <Column flex={1} overflowY="auto" gap="2">
@@ -50,5 +53,5 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
 
 Dropdown.displayName = "Dropdown";
 
-export { Dropdown };
 export type { DropdownProps };
+export { Dropdown };

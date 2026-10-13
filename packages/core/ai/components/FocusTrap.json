@@ -1,0 +1,17 @@
+{
+ "name": "FocusTrap",
+ "group": "components",
+ "props": {
+  "children": "!ReactNode",
+  "active": "!boolean",
+  "onEscape": "() => void",
+  "containerRef": "RefObject<HTMLDivElement | null>",
+  "className": "string",
+  "style": "React.CSSProperties",
+  "initialFocusRef": "RefObject<HTMLElement | null>",
+  "returnFocusRef": "RefObject<HTMLElement | null>",
+  "restoreFocus": "boolean = true",
+  "autoFocus": "boolean = true"
+ },
+ "mixinsRef": []
+}

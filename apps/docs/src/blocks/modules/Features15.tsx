@@ -3,7 +3,7 @@ import { BlobFx, Column, CountFx, HoloFx, Media, Row, Text, TiltFx } from "@once
 export const Features15 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth padding="1" radius="xl" overflow="hidden" {...flex}>
-      <BlobFx position="absolute" bottom="0" left="0" data-solid="inverse" translateY="40%" />
+      <BlobFx position="absolute" bottom="0" left="0" themeSolid="inverse" translateY="40%" />
       <Column fillWidth background="page" radius="xl" overflow="hidden" padding="l" gap="24">
         <BlobFx
           position="absolute"
@@ -12,7 +12,7 @@ export const Features15 = (flex: React.ComponentProps<typeof Column>) => {
           translateX="-50%"
           width="60%"
           translateY="-60%"
-          data-solid="inverse"
+          themeSolid="inverse"
         />
 
         <Row gap="20" fillWidth vertical="center">

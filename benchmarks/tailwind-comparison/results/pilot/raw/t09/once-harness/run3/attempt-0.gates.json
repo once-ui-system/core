@@ -1,0 +1,16 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(205,17): error TS2322: Type 'RangeValue' is not assignable to type 'DateRange'.\n  Property 'startDate' is optional in type 'RangeValue' but required in type 'DateRange'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2260
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth"
+  }
+}

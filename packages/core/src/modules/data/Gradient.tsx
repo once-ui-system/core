@@ -88,9 +88,12 @@ export const LinearGradient: React.FC<LinearGradientProps> = ({
   x2 = "0",
   y2 = "1",
   stops,
-  variant = useDataTheme().variant,
+  variant,
 }) => {
-  const gradientStops = stops || getStopsByVariant(variant as ChartVariant);
+  // Read the theme on every render: as a default parameter the hook ran only
+  // when `variant` was omitted.
+  const theme = useDataTheme();
+  const gradientStops = stops || getStopsByVariant(variant ?? theme.variant);
   return (
     <linearGradient id={id} x1={x1} y1={y1} x2={x2} y2={y2}>
       {gradientStops.map((stop, index) => (
@@ -109,9 +112,10 @@ export const RadialGradient: React.FC<RadialGradientProps> = ({
   fx = "50%",
   fy = "50%",
   stops,
-  variant = useDataTheme().variant,
+  variant,
 }) => {
-  const gradientStops = stops || getStopsByVariant(variant as ChartVariant, true);
+  const theme = useDataTheme();
+  const gradientStops = stops || getStopsByVariant(variant ?? theme.variant, true);
   return (
     <radialGradient id={id} cx={cx} cy={cy} r={r} fx={fx} fy={fy}>
       {gradientStops.map((stop, index) => (

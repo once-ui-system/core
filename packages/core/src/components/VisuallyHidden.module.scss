@@ -1,0 +1,37 @@
+/*
+ * Available to a screen reader, absent from the page.
+ *
+ * The clip form rather than `display: none` or `visibility: hidden`, which
+ * remove the content from the accessibility tree as well. `clip-path` is the
+ * current property and `clip` the fallback; together they survive a
+ * transformed or `overflow: hidden` ancestor, which a hero or a card often is.
+ */
+.hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
+/*
+ * A skip link: hidden until it, or something inside it, takes keyboard focus,
+ * then shown where it sits. It stays absolutely positioned, so revealing it
+ * draws over the page instead of pushing the layout down.
+ */
+.focusable:focus,
+.focusable:focus-within {
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  white-space: normal;
+  clip: auto;
+  clip-path: none;
+  z-index: 10;
+}

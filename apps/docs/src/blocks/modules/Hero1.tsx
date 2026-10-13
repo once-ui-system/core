@@ -36,12 +36,7 @@ export const Hero1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
           <Heading variant="display-strong-l" marginTop="12">
             The flexible SaaS template that speaks your brand language
           </Heading>
-          <Heading
-            wrap="balance"
-            onBackground="neutral-medium"
-            variant="body-default-l"
-            marginBottom="16"
-          >
+          <Heading onBackground="neutral-medium" variant="body-default-l" marginBottom="16">
             A clean foundation to tell your story, convert users, and scale without limits. Launch a
             fully functional business with Once UI — not just a shiny site
           </Heading>

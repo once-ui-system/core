@@ -37,3 +37,25 @@
         cursor: not-allowed;
     }
 }
+
+// A removable chip takes focus on its own control, beside the remove button,
+// rather than on the box. The box still looks focused, as it did when it was
+// the control: the same background, and the browser's own focus ring around
+// the whole chip. Rules of their own, so a browser without `:has()` drops only
+// these and keeps the ring on the control itself.
+.chip.selected:has(> .action:focus) {
+    background: var(--brand-alpha-medium);
+}
+
+.chip.unselected:has(> .action:focus) {
+    background: var(--neutral-alpha-medium);
+}
+
+.chip:has(> .action:focus-visible) {
+    outline: 1px auto;
+    outline: -webkit-focus-ring-color auto 1px;
+
+    > .action {
+        outline: none;
+    }
+}

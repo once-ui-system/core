@@ -87,7 +87,7 @@ export const MediaPost1 = ({ user, media, content, aspectRatio = "16/9" }: Media
           )
         )}
       </Column>
-      <Row fillWidth horizontal="between" paddingX="24" paddingTop="16" data-border="rounded">
+      <Row fillWidth horizontal="between" paddingX="24" paddingTop="16" themeBorder="rounded">
         <Row gap="2">
           <Button variant="tertiary" size="s" onClick={toggleReaction}>
             <CountFx
@@ -118,7 +118,7 @@ export const MediaPost1 = ({ user, media, content, aspectRatio = "16/9" }: Media
             <Icon size="s" name="refresh" />
           </Button>
         </Row>
-        <IconButton icon="send" size="m" variant="tertiary" />
+        <IconButton icon="send" variant="tertiary" />
       </Row>
       <Comments padding="24" gap="16" showTitle={false} limit={1} />
     </Column>

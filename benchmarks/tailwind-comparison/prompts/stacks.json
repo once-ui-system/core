@@ -1,0 +1,7 @@
+{
+  "$comment": "The only text that differs between arms. One sentence each.",
+  "A": "Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; its agent documentation is in the `docs/` folder, which you can read (start with `docs/AGENTS.md`).",
+  "B": "Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.",
+  "C": "Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).",
+  "D": "Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know."
+}

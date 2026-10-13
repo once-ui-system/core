@@ -3,7 +3,7 @@ title: "AI Coding (MCP)"
 docs: "once-ui/ai-coding"
 github: "packages/core/src/components/ai-coding.mdx"
 navLabel: "AI coding"
-updatedAt: "2026-07-05"
+updatedAt: "2026-10-11"
 summary: "Once UI is an agent-first design system with a codegen harness: compact rules, component catalog, task bundles, and gold examples."
 image: "/images/cover.jpg"
 navIcon: "code"
@@ -19,20 +19,21 @@ For **writing UI code**, use the harness — not full doc pages. It keeps contex
 
 | Artifact | URL | When to load |
 |----------|-----|--------------|
-| Manifest | [/ai/manifest.json](/ai/manifest.json) | Entry point — lists all harness files |
+| Manifest | [/ai/manifest.json](/ai/manifest.json) | Entry point — lists all harness files, and in `imports` every entry point (`/data`, `/code`, `/media`, `/mdx`, `/next`, `/config`) with its exports |
 | Compact rules | [/ai/rules.compact.md](/ai/rules.compact.md) | Always, before any UI task (~2KB) |
 | Component catalog | [/ai/catalog.json](/ai/catalog.json) | Pick components by purpose/tag |
 | Task bundle | [/ai/tasks/index.json](/ai/tasks/index.json) | Match user intent → `tasks/pricing.json`, etc. |
-| Component slice | [/ai/components/Grid.json](/ai/components/Grid.json) | On demand — one file per component |
+| Component slice | [/ai/components/Grid.json](/ai/components/Grid.json) | On demand — one file per component, with `importFrom` when it is not on the package root |
+| Spec | [/ai/spec.json](/ai/spec.json) | Every prop and type; `functions` lists the hooks and helpers (`useHotkeys`, `defineConfig`, `createMdxComponents`, the OG route handlers) with their signatures |
 | Gold example | [/ai/examples/*.tsx](/ai/examples/marketing-hero.tsx) | Mimic structure for the task type |
 | Pro blocks | [/ai/examples/blocks/manifest.json](/ai/examples/blocks/manifest.json) | Production-quality composition references |
-| Gotchas | [/ai/gotchas.json](/ai/gotchas.json) | When using Background, Card, RevealFx, Fade |
+| Gotchas | [/ai/gotchas.json](/ai/gotchas.json) | When using Background, Card, RevealFx, Fade, and for the behaviour fixed in 2.1 (Toast, NumberInput, Select, ContextMenu) |
 
 **npm imports** (version-pinned):
 
 ```bash
 npm install @once-ui-system/core
-npx once-ui-init-agent   # writes AGENTS.md + Cursor rule in your app (one-time)
+npx once-ui-init-agent   # writes AGENTS.md, CLAUDE.md and a Cursor rule in your app (one-time)
 ```
 
 ```tsx
@@ -52,7 +53,7 @@ Machine-readable discovery: `onceUi` field in `@once-ui-system/core` `package.js
 3. Fetch component slices listed in the task bundle
 4. Read the gold example for structure; for production fidelity, read matching **Pro blocks** from `examples/blocks/manifest.json`
 5. Generate code
-6. Validate: `pnpm validate-ai-code path/to/file.tsx`
+6. Validate: `npx once-ui-validate-ai-code path/to/file.tsx` (in a Next.js app it also checks that `LayoutProvider` comes from `@once-ui-system/core/next`)
 
 ## MCP Server (exploratory docs)
 

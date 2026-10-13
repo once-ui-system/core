@@ -1,0 +1,9 @@
+{
+ "name": "MdxHeadingAnchor",
+ "group": "mdx",
+ "importFrom": "@once-ui-system/core/mdx",
+ "extends": [
+  "HeadingAnchor"
+ ],
+ "mixinsRef": []
+}

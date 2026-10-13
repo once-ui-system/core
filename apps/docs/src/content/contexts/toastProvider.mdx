@@ -1,7 +1,7 @@
 ---
 title: "ToastProvider"
 summary: "ToastProvider enables global toast notifications via context and renders them with the Toaster component."
-updatedAt: "2026-06-30"
+updatedAt: "2026-10-11"
 docs: "once-ui/contexts/toastProvider.mdx"
 github: "contexts/ToastProvider.tsx"
 navLabel: "Toast"
@@ -135,6 +135,32 @@ label: "useToast"
 ]}
 />
 
+## Duration and removing a toast
+
+`addToast` returns the new toast's id. Pass it to `removeToast` to take the toast down before it times out, such as a "Saving…" toast once the save is done. Each toast stays up for its `duration` in milliseconds: 6000 by default, and `Infinity` keeps it up until it is closed. The countdown pauses while the toast is hovered or has focus, and resumes with the time that was left.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const { addToast, removeToast } = useToast();
+
+async function save() {
+  const saving = addToast({ variant: "info", message: "Saving…", duration: Infinity });
+  await saveDocument();
+  removeToast(saving);
+  addToast({ variant: "success", message: "Saved" });
+}`,
+      language: "tsx",
+      label: "Save with progress",
+    },
+  ]}
+/>
+
+`addToast` and `removeToast` keep the same identity for the provider's lifetime, so an effect can list them as dependencies without running again each time a toast appears. There is no need to hold them in a ref.
+
 ## Toaster
 
 The `ToastProvider` automatically renders a `<Toaster />` under the hood, passing it the current list of toasts and a `removeToast` handler.
@@ -148,7 +174,7 @@ The `ToastProvider` automatically renders a `<Toaster />` under the hood, passin
     ["toasts", "Toast[]"],
     [
       "addToast",
-      "(toast: { message: ReactNode; variant: 'success' | 'danger' | 'warning' | 'info'; action?: ReactNode }) => void",
+      "(toast: { message: ReactNode; variant: 'success' | 'danger' | 'warning' | 'info'; action?: ReactNode; duration?: number }) => string",
     ],
     ["removeToast", "(id: string) => void"],
   ]}
@@ -162,6 +188,7 @@ The `ToastProvider` automatically renders a `<Toaster />` under the hood, passin
     ["variant", ["success", "danger", "warning", "info"]],
     ["message", "ReactNode"],
     ["action", "ReactNode"],
+    ["duration", "number", "6000", "Milliseconds before it closes. Infinity keeps it up until it is closed."],
   ]}
 />
 

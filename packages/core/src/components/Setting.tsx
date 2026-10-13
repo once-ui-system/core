@@ -123,7 +123,7 @@ const SettingGroup: React.FC<SettingGroupProps> = ({
     // one inside the first. An alpha border sits on whatever is behind it,
     // which is what a group nested in a panel needs.
     background="surface"
-    border="neutral-alpha-weak"
+    border
     overflow="hidden"
     {...flex}
   >
@@ -146,7 +146,7 @@ const SettingGroup: React.FC<SettingGroupProps> = ({
       )}
     </Row>
     {open && children && (
-      <Column fillWidth gap="8" padding="8" borderTop="neutral-alpha-weak">
+      <Column fillWidth gap="8" padding="8" borderTop>
         {children}
       </Column>
     )}
@@ -197,5 +197,5 @@ const SettingAxes: React.FC<SettingAxesProps> = ({
 
 SettingAxes.displayName = "SettingAxes";
 
-export { Setting, SettingAxes, SettingGroup };
 export type { SettingAxesProps, SettingGroupProps, SettingProps };
+export { Setting, SettingAxes, SettingGroup };

@@ -1,8 +1,8 @@
 "use client";
 
-import { Row } from "./Row";
+import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./AutoScroll.module.scss";
-import React, { forwardRef, useState, useRef, useEffect, useMemo } from "react";
+import { Row } from "./Row";
 
 interface AutoScrollProps extends React.ComponentProps<typeof Row> {
   children: React.ReactNode;
@@ -256,4 +256,5 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
 );
 
 AutoScroll.displayName = "AutoScroll";
+
 export { AutoScroll };

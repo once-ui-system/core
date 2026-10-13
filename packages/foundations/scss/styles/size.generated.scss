@@ -55,3 +55,15 @@
 .min-height-0 {
   min-height: 0;
 }
+
+.height-below-header {
+  height: calc(100dvh - var(--header-height));
+}
+
+.min-height-below-header {
+  min-height: calc(100dvh - var(--header-height));
+}
+
+.max-height-below-header {
+  max-height: calc(100dvh - var(--header-height));
+}

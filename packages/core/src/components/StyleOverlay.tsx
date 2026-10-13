@@ -1,12 +1,12 @@
 "use client";
 
 import { forwardRef, useState } from "react";
-import { IconButton } from "./IconButton";
-import { StylePanel } from "./StylePanel";
-import { Flex } from "./Flex";
-import { Background } from "./Background";
-import styles from "./StyleOverlay.module.scss";
 import { DisplayProps } from "../interfaces";
+import { Background } from "./Background";
+import { Flex } from "./Flex";
+import { IconButton } from "./IconButton";
+import styles from "./StyleOverlay.module.scss";
+import { StylePanel } from "./StylePanel";
 
 interface StyleOverlayProps extends React.ComponentProps<typeof Flex> {
   iconButtonProps?: Partial<React.ComponentProps<typeof IconButton>>;
@@ -61,7 +61,7 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
               variant="secondary"
               onClick={togglePanel}
               icon="close"
-          aria-label="Close style panel"
+              aria-label="Close style panel"
               {...iconButtonProps}
             />
           </Flex>
@@ -72,4 +72,5 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
 );
 
 StyleOverlay.displayName = "StyleOverlay";
+
 export { StyleOverlay };

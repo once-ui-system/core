@@ -71,7 +71,7 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                   <Column maxWidth={20} fitHeight tabIndex={-1}>
                     <Row fillWidth>
                       <Media src="/images/backgrounds/1.jpg" sizes="320px" aspectRatio="2/1" />
-                      <Row position="absolute" right="12" top="12" data-border="rounded" gap="8">
+                      <Row position="absolute" right="12" top="12" themeBorder="rounded" gap="8">
                         <IconButton icon="personRemove" tooltip="Remove" tooltipPosition="bottom" />
                         <IconButton icon="settings" tooltip="Settings" tooltipPosition="bottom" />
                       </Row>

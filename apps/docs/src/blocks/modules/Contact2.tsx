@@ -38,7 +38,7 @@ const contacts = [
 export const Contact2 = () => {
   return (
     <Row fillWidth fitHeight horizontal="center">
-      <Column fillWidth horizontal="center" maxWidth="m">
+      <Column horizontal="center" maxWidth="m">
         <Row
           fillWidth
           horizontal="center"

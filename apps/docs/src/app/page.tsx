@@ -85,7 +85,7 @@ export default function Home() {
 
           {/* Two ways in: an agent writes the code, or you do */}
           <Grid maxWidth={56} columns="2" s={{columns: 1}} gap="8">
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="/ai-coding">
+            <Card fillWidth radius="l" border padding="24" background="overlay" href="/ai-coding">
               <Column fillWidth gap="12">
                 <Text variant="heading-strong-xs">Build with an agent</Text>
                 <Text onBackground="neutral-weak" variant="body-default-s">
@@ -95,7 +95,7 @@ export default function Home() {
                 </Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="/quick-start">
+            <Card fillWidth radius="l" border padding="24" background="overlay" href="/quick-start">
               <Column fillWidth gap="12">
                 <Text variant="heading-strong-xs">Build by hand</Text>
                 <Text onBackground="neutral-weak" variant="body-default-s">
@@ -119,73 +119,73 @@ export default function Home() {
               </Text>
             </Column>
             <Grid fillWidth columns="3" m={{columns: 2}} s={{columns: 1}} gap="8">
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/flex">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/flex">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Column</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Stack things vertically</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/flex">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/flex">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Row</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Stack things horizontally</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/grid">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/grid">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Grid</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Responsive columns</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/text">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/text">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Text</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Body copy and labels</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/heading">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/heading">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Heading</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Page and section titles</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/button">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/button">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Button</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Primary actions</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/form-controls/input">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/form-controls/input">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Input</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Text entry and forms</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/card">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/card">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Card</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Grouped, clickable blocks</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/media">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/media">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Media</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Images and video</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/icon">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/icon">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Icon</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">The built-in icon set</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/dialog">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/dialog">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Dialog</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Modals and sheets</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="16" background="overlay" href="/components/table">
+            <Card fillWidth radius="l" border padding="16" background="overlay" href="/components/table">
               <Column fillWidth gap="4">
                 <Text variant="label-strong-s">Table</Text>
                 <Text onBackground="neutral-weak" variant="body-default-xs">Tabular data</Text>
@@ -201,19 +201,19 @@ export default function Home() {
 
           {/* Templates and products */}
           <Grid maxWidth={56} columns="3" s={{columns: 1}} gap="8">
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="/about">
+            <Card fillWidth radius="l" border padding="24" background="overlay" href="/about">
               <Column fillWidth gap="16">
                 <Text variant="heading-strong-xs">About Once UI</Text>
                 <Text onBackground="neutral-weak" variant="body-default-s">Comprehensive design system and component library for your next project</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="https://once-ui.com/products/magic-portfolio">
+            <Card fillWidth radius="l" border padding="24" background="overlay" href="https://once-ui.com/products/magic-portfolio">
               <Column fillWidth gap="16">
                 <Text variant="heading-strong-xs">Magic Portfolio</Text>
                 <Text onBackground="neutral-weak" variant="body-default-s">Free portfolio template that feels genuinely unique and professional</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border="neutral-alpha-weak" padding="24" background="overlay" href="https://once-ui.com/products">
+            <Card fillWidth radius="l" border padding="24" background="overlay" href="https://once-ui.com/products">
               <Column fillWidth gap="16">
                 <Text variant="heading-strong-xs">Premium app templates</Text>
                 <Text onBackground="neutral-weak" variant="body-default-s">Ready-to-deploy templates: store, landing page, founder site, and more</Text>

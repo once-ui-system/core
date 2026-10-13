@@ -1,8 +1,8 @@
 {
  "name": "@once-ui-system/core",
- "version": "2.0.0",
- "generated": "2026-09-25",
- "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed.",
+ "version": "2.1.0-rc.0",
+ "generated": "2026-10-13",
+ "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
   "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\"",
@@ -46,6 +46,7 @@
    "inline": "boolean",
    "hide": "boolean",
    "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "userSelect": "UserSelect",
    "position": "CSSProperties[\"position\"]",
    "overflow": "CSSProperties[\"overflow\"]",
    "overflowX": "CSSProperties[\"overflowX\"]",
@@ -67,15 +68,16 @@
   },
   "GridProps": {
    "columns": "GridSize",
+   "minColumnWidth": "number | SpacingToken | CSSUnit",
    "rows": "GridSize"
   },
   "SizeProps": {
    "width": "number | SpacingToken | CSSUnit",
-   "height": "number | SpacingToken | CSSUnit",
+   "height": "number | SpacingToken | CSSUnit | \"below-header\"",
    "maxWidth": "number | SpacingToken | CSSUnit",
    "minWidth": "number | SpacingToken | CSSUnit",
-   "minHeight": "number | SpacingToken | CSSUnit",
-   "maxHeight": "number | SpacingToken | CSSUnit",
+   "minHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "maxHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
    "fit": "boolean",
    "fitWidth": "boolean",
    "fitHeight": "boolean",
@@ -133,6 +135,13 @@
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "blendMode": "BlendMode",
+   "blur": "BlurSize | number",
+   "backdropBlur": "BlurSize | number",
+   "theme": "\"light\" | \"dark\"",
+   "themeBorder": "BorderStyle",
+   "themeSolid": "SolidType",
+   "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   },
   "TextProps": {
@@ -251,11 +260,42 @@
    "title": "!React.ReactNode",
    "content": "!React.ReactNode"
   },
+  "AdapterImageProps": {
+   "src": "!string",
+   "alt": "!string",
+   "fill": "boolean",
+   "priority": "boolean",
+   "unoptimized": "boolean",
+   "width": "number",
+   "height": "number"
+  },
+  "AdapterLinkProps": {
+   "href": "!string",
+   "children": "React.ReactNode"
+  },
+  "Alternate": {
+   "href": "!string",
+   "hrefLang": "!string"
+  },
   "AnimationState": [
    "entering",
    "visible",
    "exiting"
   ],
+  "ArrowNavigationOptions": {
+   "layout": "!NavigationLayout",
+   "itemCount": "!number",
+   "columns": "number",
+   "containerRef": "RefObject<HTMLElement | HTMLDivElement | null>",
+   "onSelect": "(index: number) => void",
+   "onFocusChange": "(index: number) => void",
+   "wrap": "boolean",
+   "initialFocusedIndex": "number",
+   "itemSelector": "string",
+   "autoFocus": "boolean",
+   "disabled": "boolean",
+   "disableHighlighting": "boolean"
+  },
   "AvatarProps": "Avatar props",
   "BarWidth": [
    "number",
@@ -314,6 +354,32 @@
    "overlay",
    "transparent"
   ],
+  "BlendMode": [
+   "color",
+   "normal",
+   "screen",
+   "overlay",
+   "multiply",
+   "darken",
+   "lighten",
+   "color-dodge",
+   "color-burn",
+   "hard-light",
+   "soft-light",
+   "difference",
+   "exclusion",
+   "hue",
+   "saturation",
+   "luminosity",
+   "plus-lighter"
+  ],
+  "BlurSize": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs"
+  ],
   "BodyLineHeight": [
    "90",
    "100",
@@ -330,8 +396,14 @@
   "BorderStyle": [
    "rounded",
    "playful",
-   "conservative"
+   "conservative",
+   "sharp"
   ],
+  "BreadcrumbItem": {
+   "label": "!ReactNode",
+   "href": "string",
+   "prefixIcon": "IconName"
+  },
   "Breakpoint": [
    "xl",
    "l",
@@ -346,6 +418,7 @@
    "s",
    "xs"
   ],
+  "Breakpoints": "Record<BreakpointKey, number>",
   "BulgeConfig": {
    "type": "\"ripple\" | \"wave\"",
    "duration": "number",
@@ -362,13 +435,13 @@
    "radius": "RadiusSize",
    "fillWidth": "boolean",
    "label": "ReactNode",
-   "variant": "\"ghost\" | \"outline\" | \"subtle\"",
+   "disabled": "boolean",
    "size": "TShirtSizes",
    "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
-   "rounded": "boolean",
+   "variant": "\"ghost\" | \"outline\" | \"subtle\"",
    "weight": "\"default\" | \"strong\"",
    "truncate": "boolean",
-   "disabled": "boolean",
+   "rounded": "boolean",
    "prefixIcon": "IconName",
    "suffixIcon": "IconName",
    "href": "string"
@@ -386,6 +459,13 @@
    "divergent",
    "sequential"
   ],
+  "ChartOptions": {
+   "variant": "!ChartVariant",
+   "mode": "!ChartMode",
+   "height": "!number",
+   "axis": "!{ stroke: string; }",
+   "tick": "!{ fill: string; fontSize: number; line: boolean; }"
+  },
   "ChartVariant": [
    "flat",
    "outline",
@@ -398,6 +478,11 @@
    "highlight": "string",
    "prefixIcon": "IconName",
    "startLineNumber": "number"
+  },
+  "ColorInputLabels": {
+   "remove": "string",
+   "adjustOpacity": "string",
+   "opacity": "string"
   },
   "Colors": [
    "neutral-weak",
@@ -536,6 +621,42 @@
    "[key: string]": "string | number | Date | undefined",
    "label": "string"
   },
+  "DataStyle": [
+   "categorical",
+   "divergent",
+   "sequential"
+  ],
+  "DataTableColumn": {
+   "key": "!string",
+   "header": "!ReactNode",
+   "cell": "(row: T, index: number) => ReactNode",
+   "sortable": "boolean",
+   "sort": "(a: T, b: T) => number",
+   "align": "\"left\" | \"center\" | \"right\"",
+   "width": "string"
+  },
+  "DataTableLabels": {
+   "selectAll": "!string",
+   "selectRow": "!string",
+   "pagination": "!string",
+   "previous": "!string",
+   "next": "!string",
+   "first": "!string",
+   "last": "!string",
+   "perPage": "!string"
+  },
+  "DataTableSort": {
+   "key": "!string",
+   "direction": "!\"asc\" | \"desc\""
+  },
+  "DataThemeState": {
+   "setChartOptions": "!(options: Partial<ChartOptions>) => void",
+   "variant": "!ChartVariant",
+   "mode": "!ChartMode",
+   "height": "!number",
+   "axis": "!{ stroke: string; }",
+   "tick": "!{ fill: string; fontSize: number; line: boolean; }"
+  },
   "DateConfig": {
    "start": "Date",
    "end": "Date",
@@ -551,11 +672,20 @@
    "startDate": "!Date | undefined",
    "endDate": "!Date | undefined"
   },
+  "DeviceFontSize": [
+   "16",
+   "13",
+   "14",
+   "15",
+   "17",
+   "18"
+  ],
   "DisplayProps": {
    "as": "ElementType",
    "inline": "boolean",
    "hide": "boolean",
    "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "userSelect": "UserSelect",
    "position": "CSSProperties[\"position\"]",
    "overflow": "CSSProperties[\"overflow\"]",
    "overflowX": "CSSProperties[\"overflowX\"]",
@@ -666,11 +796,11 @@
   "FlexValue": [
    "0",
    "1",
+   "8",
    "10",
    "2",
    "3",
    "4",
-   "8",
    "12",
    "5",
    "6",
@@ -682,6 +812,16 @@
    "number",
    "Partial<Record<Breakpoint, number>>"
   ],
+  "GeneratedMetadata": {
+   "metadataBase": "!URL",
+   "title": "!string",
+   "description": "!string",
+   "openGraph": "!{ title: string; description: string; type: \"website\" | \"article\"; publishedTime?: string; url: string; images: { url: string; alt: string }[]; }",
+   "twitter": "!{ card: \"summary_large_image\"; title: string; description: string; images: string[]; }",
+   "authors": "{ name: string; url?: string }[]",
+   "robots": "string",
+   "alternates": "{ canonical: string; languages: Record<string, string>; }"
+  },
   "GradientProps": {
    "display": "boolean",
    "opacity": "DisplayProps[\"opacity\"]",
@@ -770,11 +910,11 @@
   "GridProps": "Grid props",
   "GridSize": [
    "1",
+   "8",
    "10",
    "2",
    "3",
    "4",
-   "8",
    "12",
    "5",
    "6",
@@ -783,6 +923,11 @@
    "11"
   ],
   "IconButtonProps": "IconButton props",
+  "IconComponent": [
+   "ComponentClass<SVGProps<SVGSVGElement>, any>",
+   "FunctionComponent<SVGProps<SVGSVGElement>>"
+  ],
+  "IconLibrary": "Record<IconName, IconComponent>",
   "IconName": [
    "symbol",
    "security",
@@ -795,6 +940,16 @@
    "info",
    "danger",
    "warning",
+   "code",
+   "link",
+   "search",
+   "time",
+   "video",
+   "image",
+   "enter",
+   "send",
+   "checkbox",
+   "document",
    "adjustments",
    "arrowLeft",
    "arrowRight",
@@ -810,7 +965,6 @@
    "cart",
    "chat",
    "check",
-   "checkbox",
    "chevronDoubleLeft",
    "chevronDoubleRight",
    "chevronDown",
@@ -820,13 +974,10 @@
    "chevronsLeftRight",
    "clipboard",
    "close",
-   "code",
    "computer",
    "dislike",
-   "document",
    "download",
    "edit",
-   "enter",
    "eye",
    "eyeDropper",
    "eyeOff",
@@ -839,11 +990,9 @@
    "globe",
    "heart",
    "home",
-   "image",
    "inbox",
    "like",
    "linearGauge",
-   "link",
    "lock",
    "logout",
    "mail",
@@ -863,8 +1012,6 @@
    "refresh",
    "return",
    "screen",
-   "search",
-   "send",
    "settings",
    "smiley",
    "sparkle",
@@ -872,17 +1019,19 @@
    "starFill",
    "store",
    "tag",
-   "time",
    "trash",
    "trend",
    "trendDown",
    "trendUp",
    "upload",
-   "video",
    "volume",
    "volumeOff",
    "wordmark",
    "world"
+  ],
+  "InteractiveCursor": [
+   "default",
+   "pointer"
   ],
   "KbarItem": {
    "id": "!string",
@@ -895,6 +1044,14 @@
    "icon": "IconName",
    "description": "ReactNode",
    "placeholder": "string"
+  },
+  "LayoutContextType": {
+   "currentBreakpoint": "!BreakpointKey",
+   "width": "!number",
+   "breakpoints": "!Breakpoints",
+   "isBreakpoint": "!(key: BreakpointKey) => boolean",
+   "maxWidth": "!(key: BreakpointKey) => boolean",
+   "minWidth": "!(key: BreakpointKey) => boolean"
   },
   "LegendConfig": {
    "display": "boolean",
@@ -922,6 +1079,17 @@
    "columns": "number",
    "hide": "boolean"
   },
+  "MdxComponents": {
+   "[key: string]": "ElementType"
+  },
+  "MdxHeadingTag": [
+   "h1",
+   "h2",
+   "h3",
+   "h4",
+   "h5",
+   "h6"
+  ],
   "MenuGroup": {
    "id": "!string",
    "label": "!ReactNode",
@@ -942,6 +1110,11 @@
    "title": "ReactNode",
    "links": "!MenuLink[]"
   },
+  "MotionCapability": {
+   "prefersReducedMotion": "!boolean",
+   "isLowEnd": "!boolean",
+   "shouldAnimate": "!boolean"
+  },
   "NavigationLayout": [
    "grid",
    "row",
@@ -950,8 +1123,14 @@
   "NeutralColor": [
    "sand",
    "gray",
-   "slate"
+   "slate",
+   "rose",
+   "mint",
+   "dusk"
   ],
+  "NumericKeys": {
+   "[key: number]": "Extract<keyof T, string>"
+  },
   "OgData": {
    "title": "!string",
    "description": "!string",
@@ -959,11 +1138,100 @@
    "url": "!string",
    "faviconUrl": "string"
   },
+  "OgFetchRouteOptions": {
+   "timeout": "number",
+   "decodeEntities": "boolean",
+   "favicon": "boolean",
+   "maxBytes": "number",
+   "cacheControl": "string",
+   "userAgent": "string",
+   "maxRedirects": "number",
+   "sameOrigin": "boolean",
+   "allowedDomains": "string[]",
+   "blockedDomains": "string[]",
+   "allowHttp": "boolean",
+   "isAllowed": "(url: URL) => boolean | Promise<boolean>"
+  },
+  "OgProxyRouteOptions": {
+   "timeout": "number",
+   "maxBytes": "number",
+   "cacheMaxAge": "number",
+   "cacheControl": "string",
+   "allowedContentTypes": "readonly string[]",
+   "userAgent": "string",
+   "maxRedirects": "number",
+   "sameOrigin": "boolean",
+   "allowedDomains": "string[]",
+   "blockedDomains": "string[]",
+   "allowHttp": "boolean",
+   "isAllowed": "(url: URL) => boolean | Promise<boolean>"
+  },
+  "OgRouteHandlers": {
+   "GET": "!(request: Request) => Promise<Response>"
+  },
+  "OgRoutes": {
+   "fetch": "!string",
+   "proxy": "!string",
+   "generate": "!string"
+  },
   "OgServiceConfig": {
    "proxyImageUrl": "(url: string) => string",
    "proxyFaviconUrl": "(url: string) => string",
    "fetchOgUrl": "string",
    "proxyOgUrl": "string"
+  },
+  "OnceUIAdapters": {
+   "Link": "!React.ComponentType<AdapterLinkProps & React.RefAttributes<HTMLAnchorElement>>",
+   "Image": "!React.ComponentType<AdapterImageProps>",
+   "usePathname": "!() => string",
+   "useNavigate": "!() => (href: string) => void"
+  },
+  "OnceUIConfig": {
+   "[key: string]": "unknown",
+   "baseURL": "string",
+   "fonts": "OnceUIFonts",
+   "style": "OnceUIStyleConfig",
+   "dataStyle": "OnceUIDataStyleConfig"
+  },
+  "OnceUIDataStyleConfig": {
+   "variant": "ChartVariant",
+   "mode": "ChartMode",
+   "height": "number",
+   "axis": "{ stroke: string; }",
+   "tick": "{ fill: string; fontSize: number; line: boolean; }"
+  },
+  "OnceUIFont": {
+   "variable": "!string",
+   "className": "string",
+   "style": "{ fontFamily: string; fontWeight?: number | string; fontStyle?: string }"
+  },
+  "OnceUIFonts": {
+   "[key: string]": "OnceUIFont | OnceUIFont[] | undefined",
+   "heading": "OnceUIFont",
+   "body": "OnceUIFont",
+   "label": "OnceUIFont",
+   "code": "OnceUIFont"
+  },
+  "OnceUIStyleConfig": {
+   "theme": "Theme",
+   "neutral": "NeutralColor | \"custom\"",
+   "brand": "Schemes | \"custom\"",
+   "accent": "Schemes | \"custom\"",
+   "solid": "SolidType",
+   "solidStyle": "SolidStyle",
+   "border": "BorderStyle",
+   "surface": "SurfaceStyle",
+   "transition": "TransitionStyle",
+   "scaling": "ScalingSize",
+   "bodySize": "BodySize",
+   "bodyLineHeight": "BodyLineHeight",
+   "desktopSize": "DeviceFontSize",
+   "tabletSize": "DeviceFontSize",
+   "mobileSize": "DeviceFontSize",
+   "cursorInteractive": "InteractiveCursor",
+   "brandSeed": "string",
+   "accentSeed": "string",
+   "neutralSeed": "string"
   },
   "Opacity": [
    "0",
@@ -979,6 +1247,13 @@
    "100"
   ],
   "OptionProps": "Option props",
+  "PaginationLabels": {
+   "previous": "!string",
+   "next": "!string",
+   "first": "!string",
+   "last": "!string",
+   "perPage": "!string"
+  },
   "Placement": [
    "top",
    "right",
@@ -996,6 +1271,13 @@
   "PresetsConfig": {
    "display": "!boolean",
    "granularity": "!\"year\" | \"month\" | \"week\""
+  },
+  "RadioGroupOption": {
+   "value": "!string",
+   "label": "!ReactNode",
+   "description": "ReactNode",
+   "disabled": "boolean",
+   "iconButtonProps": "IconButtonProps"
   },
   "RadiusNest": [
    "4",
@@ -1042,6 +1324,10 @@
    "bottom-center",
    "bottom-between"
   ],
+  "ScrollerLabels": {
+   "previous": "string",
+   "next": "string"
+  },
   "ScrubberBlock": {
    "id": "!string",
    "start": "!number",
@@ -1110,9 +1396,132 @@
    "104",
    "128"
   ],
+  "StreamingOptions": {
+   "initialData": "!T[]",
+   "windowSize": "!number",
+   "intervalMs": "!number",
+   "stepMs": "number",
+   "xKey": "!Extract<keyof T, string>",
+   "numericKeys": "!NumericKeys<T>",
+   "getNextTarget": "!(ctx: { lastPoint: T; nextX: number }) => StreamingTarget<T>"
+  },
+  "StreamingResult": {
+   "data": "!T[]",
+   "running": "!boolean",
+   "setRunning": "!React.Dispatch<React.SetStateAction<boolean>>",
+   "reset": "!() => void"
+  },
+  "StreamingViewportOptions": {
+   "initialData": "!T[]",
+   "windowSize": "!number",
+   "intervalMs": "!number",
+   "stepMs": "number",
+   "xKey": "!Extract<keyof T, string>",
+   "numericKeys": "!NumericKeys<T>",
+   "getNextTarget": "!(ctx: { lastPoint: T; nextX: number }) => StreamingTarget<T>"
+  },
+  "StreamingViewportResult": {
+   "data": "!T[]",
+   "xDomain": "![number, number]",
+   "running": "!boolean",
+   "setRunning": "!React.Dispatch<React.SetStateAction<boolean>>",
+   "reset": "!() => void"
+  },
+  "StyleOptions": {
+   "theme": "!Theme",
+   "neutral": "!NeutralColor | \"custom\"",
+   "brand": "!Schemes | \"custom\"",
+   "accent": "!Schemes | \"custom\"",
+   "solid": "!SolidType",
+   "solidStyle": "!SolidStyle",
+   "border": "!BorderStyle",
+   "surface": "!SurfaceStyle",
+   "transition": "!TransitionStyle",
+   "scaling": "!ScalingSize",
+   "bodySize": "!BodySize",
+   "bodyLineHeight": "!BodyLineHeight",
+   "desktopSize": "DeviceFontSize",
+   "tabletSize": "DeviceFontSize",
+   "mobileSize": "DeviceFontSize",
+   "cursorInteractive": "InteractiveCursor"
+  },
+  "StylePanelContextValue": {
+   "value": "!StylePanelValue",
+   "set": "!(patch: Partial<StylePanelValue>) => void",
+   "mounted": "!boolean",
+   "controlled": "!boolean"
+  },
+  "StylePanelCustomLabels": {
+   "swatch": "(row: StylePanelSchemeRow) => string",
+   "picker": "(row: StylePanelSchemeRow) => string",
+   "description": "(seed: string, row: StylePanelSchemeRow) => ReactNode",
+   "remove": "string"
+  },
+  "StylePanelGroupLabels": {
+   "page": "StylePanelHeading",
+   "color": "StylePanelHeading",
+   "solidStyle": "StylePanelHeading",
+   "bodyText": "StylePanelHeading",
+   "advanced": "StylePanelHeading"
+  },
+  "StylePanelHeading": {
+   "title": "ReactNode",
+   "description": "ReactNode"
+  },
+  "StylePanelLabels": {
+   "groups": "StylePanelGroupLabels",
+   "rows": "StylePanelRowLabels",
+   "options": "StylePanelOptionLabels",
+   "names": "StylePanelNameLabels",
+   "swatches": "StylePanelSwatchLabels",
+   "themeSwitcher": "ThemeSwitcherLabels",
+   "scroller": "ScrollerLabels",
+   "custom": "StylePanelCustomLabels"
+  },
+  "StylePanelNameLabels": {
+   "shapes": "Partial<Record<BorderStyle, string>>",
+   "schemes": "Partial<Record<Schemes, string>>",
+   "neutrals": "Partial<Record<NeutralColor, string>>"
+  },
+  "StylePanelOptionLabels": {
+   "solid": "Partial<Record<SolidType, ReactNode>>",
+   "effect": "Partial<Record<SolidStyle, ReactNode>>",
+   "surface": "Partial<Record<SurfaceStyle, ReactNode>>",
+   "transition": "Partial<Record<TransitionStyle, ReactNode>>",
+   "dataStyle": "Partial<Record<ChartMode, ReactNode>>",
+   "scaling": "(value: ScalingSize) => ReactNode",
+   "bodySize": "(value: BodySize) => ReactNode",
+   "bodyLineHeight": "(value: BodyLineHeight) => ReactNode"
+  },
   "StylePanelRootProps": {
    "value": "StylePanelValue",
-   "onChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void"
+   "onChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
+   "labels": "StylePanelLabels",
+   "stacked": "boolean"
+  },
+  "StylePanelRowLabels": {
+   "theme": "ReactNode",
+   "shape": "ReactNode",
+   "brand": "ReactNode",
+   "accent": "ReactNode",
+   "neutral": "ReactNode",
+   "solid": "ReactNode",
+   "effect": "ReactNode",
+   "surface": "ReactNode",
+   "scaling": "ReactNode",
+   "transition": "ReactNode",
+   "dataStyle": "ReactNode",
+   "bodySize": "ReactNode",
+   "bodyLineHeight": "ReactNode"
+  },
+  "StylePanelSchemeRow": [
+   "brand",
+   "accent"
+  ],
+  "StylePanelSwatchLabels": {
+   "shape": "(name: string) => string",
+   "scheme": "(name: string, row: StylePanelSchemeRow) => string",
+   "neutral": "(name: string) => string"
   },
   "StylePanelValue": {
    "theme": "Theme",
@@ -1127,7 +1536,9 @@
    "transition": "TransitionStyle",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
-   "chartMode": "ChartMode"
+   "chartMode": "ChartMode",
+   "brandSeed": "string",
+   "accentSeed": "string"
   },
   "StylePanelVisibility": {
    "page": "{ section?: boolean; theme?: boolean; shape?: boolean }",
@@ -1135,6 +1546,16 @@
    "solidStyle": "{ section?: boolean; solid?: boolean; effect?: boolean }",
    "bodyText": "{ section?: boolean; size?: boolean; lineHeight?: boolean }",
    "advanced": "{ section?: boolean; surface?: boolean; scaling?: boolean; dataStyle?: boolean; transition?: boolean; }"
+  },
+  "StylePersistence": [
+   "none",
+   "local",
+   "StylePersistenceAdapter"
+  ],
+  "StylePersistenceAdapter": {
+   "get": "(key: string) => string | null",
+   "set": "!(key: string, value: string) => void | Promise<void>",
+   "remove": "(key: string) => void | Promise<void>"
   },
   "StyleProps": {
    "textVariant": "TextVariant",
@@ -1162,7 +1583,33 @@
    "bottomRightRadius": "RadiusSize",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode"
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "blendMode": "BlendMode",
+   "blur": "BlurSize | number",
+   "backdropBlur": "BlurSize | number",
+   "theme": "\"light\" | \"dark\"",
+   "themeBorder": "BorderStyle",
+   "themeSolid": "SolidType",
+   "themeSurface": "SurfaceStyle"
+  },
+  "StyleProviderState": {
+   "theme": "!Theme",
+   "neutral": "!NeutralColor | \"custom\"",
+   "brand": "!Schemes | \"custom\"",
+   "accent": "!Schemes | \"custom\"",
+   "solid": "!SolidType",
+   "solidStyle": "!SolidStyle",
+   "border": "!BorderStyle",
+   "surface": "!SurfaceStyle",
+   "transition": "!TransitionStyle",
+   "scaling": "!ScalingSize",
+   "bodySize": "!BodySize",
+   "bodyLineHeight": "!BodyLineHeight",
+   "desktopSize": "DeviceFontSize",
+   "tabletSize": "DeviceFontSize",
+   "mobileSize": "DeviceFontSize",
+   "cursorInteractive": "InteractiveCursor",
+   "setStyle": "!(style: Partial<StyleOptions>) => void"
   },
   "SurfaceStyle": [
    "filled",
@@ -1197,8 +1644,8 @@
   ],
   "TextType": [
    "label",
-   "code",
    "body",
+   "code",
    "heading",
    "display"
   ],
@@ -1223,26 +1670,6 @@
    "label-normal-l",
    "label-normal-m",
    "label-normal-s",
-   "code-default-xl",
-   "code-default-xs",
-   "code-default-l",
-   "code-default-m",
-   "code-default-s",
-   "code-medium-xl",
-   "code-medium-xs",
-   "code-medium-l",
-   "code-medium-m",
-   "code-medium-s",
-   "code-strong-xl",
-   "code-strong-xs",
-   "code-strong-l",
-   "code-strong-m",
-   "code-strong-s",
-   "code-normal-xl",
-   "code-normal-xs",
-   "code-normal-l",
-   "code-normal-m",
-   "code-normal-s",
    "body-default-xl",
    "body-default-xs",
    "body-default-l",
@@ -1263,6 +1690,26 @@
    "body-normal-l",
    "body-normal-m",
    "body-normal-s",
+   "code-default-xl",
+   "code-default-xs",
+   "code-default-l",
+   "code-default-m",
+   "code-default-s",
+   "code-medium-xl",
+   "code-medium-xs",
+   "code-medium-l",
+   "code-medium-m",
+   "code-medium-s",
+   "code-strong-xl",
+   "code-strong-xs",
+   "code-strong-l",
+   "code-strong-m",
+   "code-strong-s",
+   "code-normal-xl",
+   "code-normal-xs",
+   "code-normal-l",
+   "code-normal-m",
+   "code-normal-s",
    "heading-default-xl",
    "heading-default-xs",
    "heading-default-l",
@@ -1315,6 +1762,33 @@
    "light",
    "system"
   ],
+  "ThemeInitAttributeConfig": {
+   "theme": "!string",
+   "brand": "!string",
+   "accent": "!string",
+   "neutral": "!string",
+   "solid": "!string",
+   "solid-style": "!string",
+   "border": "!string",
+   "surface": "!string",
+   "transition": "!string",
+   "scaling": "!string",
+   "viz-style": "!string"
+  },
+  "ThemeInitConfig": [
+   "OnceUIStyleConfig",
+   "ThemeInitAttributeConfig"
+  ],
+  "ThemeProviderState": {
+   "theme": "!Theme",
+   "resolvedTheme": "!\"light\" | \"dark\"",
+   "setTheme": "!(theme: Theme) => void"
+  },
+  "ThemeSwitcherLabels": {
+   "system": "string",
+   "dark": "string",
+   "light": "string"
+  },
   "ThumbnailItem": {
    "scaling": "number",
    "height": "SpacingToken | number",
@@ -1326,6 +1800,11 @@
    "state": "\"default\" | \"active\" | \"success\" | \"danger\"",
    "marker": "React.ReactNode",
    "children": "React.ReactNode"
+  },
+  "ToastContextProps": {
+   "toasts": "!Toast[]",
+   "addToast": "!(toast: Omit<Toast, \"id\">) => string",
+   "removeToast": "!(id: string) => void"
   },
   "ToastPosition": [
    "top",
@@ -1339,8 +1818,8 @@
   ],
   "TriggerType": [
    "manual",
-   "click",
-   "hover"
+   "hover",
+   "click"
   ],
   "TShirtSizes": [
    "xl",
@@ -1348,6 +1827,19 @@
    "m",
    "s",
    "xs"
+  ],
+  "UseHotkeysOptions": {
+   "enabled": "boolean",
+   "allowWhileTyping": "boolean",
+   "target": "RefObject<HTMLElement | null>",
+   "preventDefault": "boolean",
+   "sequenceTimeout": "number"
+  },
+  "UserSelect": [
+   "auto",
+   "none",
+   "text",
+   "all"
   ],
   "WeatherType": [
    "rain",
@@ -1538,6 +2030,30 @@
     "style": "React.CSSProperties"
    }
   },
+  "Background": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "gradient": "GradientProps = {}",
+    "dots": "DotsProps = {}",
+    "grid": "GridProps = {}",
+    "lines": "LinesProps = {}",
+    "mask": "MaskProps",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "children": "React.ReactNode"
+   }
+  },
   "Badge": {
    "group": "components",
    "extends": [
@@ -1563,6 +2079,21 @@
     "id": "string"
    }
   },
+  "Banner": {
+   "group": "components",
+   "extends": [
+    "Row",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ]
+  },
   "BlobFx": {
    "group": "components",
    "extends": [
@@ -1581,22 +2112,7 @@
     "seed": "number = 0"
    }
   },
-  "Banner": {
-   "group": "components",
-   "extends": [
-    "Row",
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ]
-  },
-  "Background": {
+  "BlockQuote": {
    "group": "components",
    "extends": [
     "Flex"
@@ -1610,14 +2126,15 @@
     "StyleProps"
    ],
    "props": {
-    "gradient": "GradientProps = {}",
-    "dots": "DotsProps = {}",
-    "grid": "GridProps = {}",
-    "lines": "LinesProps = {}",
-    "mask": "MaskProps",
-    "className": "string",
+    "children": "!React.ReactNode",
+    "preline": "React.ReactNode",
+    "subline": "React.ReactNode",
+    "separator": "\"top\" | \"bottom\" | \"both\" | \"none\" = both",
+    "author": "{ name?: React.ReactNode; avatar?: string; }",
+    "link": "{ href: string; label: string }",
     "style": "React.CSSProperties",
-    "children": "React.ReactNode"
+    "className": "string",
+    "align": "\"center\" | \"left\" | \"right\" = center"
    }
   },
   "Book": {
@@ -1641,7 +2158,7 @@
     "children": "React.ReactNode"
    }
   },
-  "BlockQuote": {
+  "Breadcrumbs": {
    "group": "components",
    "extends": [
     "Flex"
@@ -1655,15 +2172,10 @@
     "StyleProps"
    ],
    "props": {
-    "children": "!React.ReactNode",
-    "preline": "React.ReactNode",
-    "subline": "React.ReactNode",
-    "separator": "\"top\" | \"bottom\" | \"both\" | \"none\" = both",
-    "author": "{ name?: React.ReactNode, avatar?: string, }",
-    "link": "{ href: string, label: string }",
-    "style": "React.CSSProperties",
-    "className": "string",
-    "align": "\"center\" | \"left\" | \"right\" = center"
+    "items": "!BreadcrumbItem[]",
+    "separator": "ReactNode = <Icon name=\"chevronRight\" size=\"xs\" />",
+    "maxItems": "number",
+    "aria-label": "string"
    }
   },
   "Button": {
@@ -1690,7 +2202,7 @@
     "color": "`${ColorScheme}-${ColorWeight}`"
    }
   },
-  "MatrixFx": {
+  "Card": {
    "group": "components",
    "extends": [
     "Flex"
@@ -1704,79 +2216,13 @@
     "StyleProps"
    ],
    "props": {
-    "speed": "number = 1",
-    "colors": "string[] = [\"brand-solid-medium\"]",
-    "size": "number = 3",
-    "spacing": "number = 3",
-    "revealFrom": "\"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = center",
-    "trigger": "\"hover\" | \"instant\" | \"mount\" | \"click\" | \"manual\" = instant",
-    "active": "boolean = false",
-    "flicker": "boolean = false",
-    "bulge": "BulgeConfig",
-    "fps": "number = 60",
-    "reducedMotion": "boolean | \"auto\" = auto",
-    "children": "React.ReactNode"
-   }
-  },
-  "NavGroup": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "label": "!ReactNode",
-    "icon": "IconName",
-    "children": "!ReactNode",
-    "open": "boolean",
-    "onToggle": "() => void",
-    "defaultOpen": "boolean = false",
-    "selected": "boolean = false"
-   }
-  },
-  "NavItem": {
-   "group": "components",
-   "extends": [
-    "ToggleButton"
-   ],
-   "props": {
-    "label": "!ReactNode",
-    "icon": "IconName",
-    "badge": "number",
-    "indicator": "boolean"
-   }
-  },
-  "WeatherFx": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "type": "WeatherType = rain",
-    "speed": "number = 1",
-    "colors": "string[] = [\"brand-solid-medium\"]",
-    "intensity": "number = 50",
-    "angle": "number = 0",
-    "duration": "number",
-    "trigger": "\"mount\" | \"hover\" | \"click\" | \"manual\" = mount",
-    "active": "boolean = false",
-    "reducedMotion": "boolean | \"auto\" = auto",
-    "children": "React.ReactNode"
+    "children": "React.ReactNode",
+    "href": "string",
+    "onClick": "() => void",
+    "fillHeight": "boolean",
+    "selected": "boolean",
+    "style": "React.CSSProperties",
+    "className": "string"
    }
   },
   "Carousel": {
@@ -1807,7 +2253,7 @@
     "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; } = { auto: false, interval: 3000, controls: true }"
    }
   },
-  "Swiper": {
+  "CelebrationFx": {
    "group": "components",
    "extends": [
     "Flex"
@@ -1821,115 +2267,16 @@
     "StyleProps"
    ],
    "props": {
-    "items": "!SwiperItem[] = []",
-    "controls": "boolean | \"contained\" = true",
-    "priority": "boolean = false",
-    "stretch": "boolean = false",
-    "aspectRatio": "string = 16 / 9",
-    "sizes": "string | number",
-    "unoptimized": "boolean = false",
-    "indicator": "boolean = true"
-   }
-  },
-  "Card": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "children": "React.ReactNode",
-    "href": "string",
-    "onClick": "() => void",
-    "fillHeight": "boolean",
-    "selected": "boolean",
-    "style": "React.CSSProperties",
-    "className": "string"
-   }
-  },
-  "CursorCard": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "trigger": "ReactNode",
-    "overlay": "ReactNode",
-    "placement": "Placement = bottom-left",
-    "className": "string",
-    "style": "React.CSSProperties"
-   }
-  },
-  "Cursor": {
-   "group": "components",
-   "props": {
-    "cursor": "!React.ReactNode",
-    "elementRef": "!React.RefObject<HTMLElement | null>"
-   }
-  },
-  "CountFx": {
-   "group": "components",
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "SpacingProps",
-    "TextProps"
-   ],
-   "props": {
-    "value": "!number",
-    "speed": "number = 1000",
-    "easing": "\"linear\" | \"ease-out\" | \"ease-in-out\" = ease-out",
-    "format": "(value: number) => string",
-    "separator": "string",
-    "decimals": "number",
-    "effect": "\"simple\" | \"wheel\" | \"smooth\" = simple",
+    "type": "CelebrationType = confetti",
+    "speed": "number = 1",
+    "colors": "string[] = [\"brand-solid-medium\", \"accent-solid-medium\"]",
+    "intensity": "number = 50",
+    "duration": "number",
+    "trigger": "\"mount\" | \"hover\" | \"manual\" | \"click\" = mount",
+    "active": "boolean = true",
+    "reducedMotion": "boolean | \"auto\" = auto",
     "children": "React.ReactNode"
    }
-  },
-  "CountdownFx": {
-   "group": "components",
-   "props": {
-    "targetDate": "!Date | string",
-    "format": "\"HH:MM:SS\" | \"DD:HH:MM:SS\" | \"MM:SS\" = HH:MM:SS",
-    "effect": "CountFxProps['effect'] = wheel",
-    "onComplete": "() => void"
-   }
-  },
-  "Column": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "children": "React.ReactNode"
-   },
-   "preset": {
-    "direction": "column"
-   },
-   "preferOver": "Flex with direction=\"column\""
   },
   "Checkbox": {
    "group": "components",
@@ -1938,8 +2285,9 @@
    ],
    "props": {
     "checked": "boolean",
+    "defaultChecked": "boolean = false",
     "indeterminate": "boolean = false",
-    "onToggle": "() => void",
+    "onToggle": "(checked: boolean) => void",
     "hoverable": "boolean = true"
    }
   },
@@ -1976,8 +2324,30 @@
    "props": {
     "value": "!string",
     "onChange": "!(value: string) => void",
-    "supportAlpha": "boolean = false"
+    "supportAlpha": "boolean = false",
+    "labels": "ColorInputLabels"
    }
+  },
+  "Column": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "React.ReactNode"
+   },
+   "preset": {
+    "direction": "column"
+   },
+   "preferOver": "Flex with direction=\"column\""
   },
   "CompareImage": {
    "group": "components",
@@ -2004,7 +2374,7 @@
    "props": {
     "children": "!ReactNode",
     "dropdown": "!ReactNode",
-    "placement": "Placement = bottom-end",
+    "placement": "Placement = bottom-start",
     "fillWidth": "boolean = false",
     "minWidth": "number = 12",
     "maxWidth": "number",
@@ -2016,7 +2386,113 @@
     "open": "boolean",
     "onOpenChange": "(open: boolean) => void",
     "selectedOption": "string",
-    "disabled": "boolean = false"
+    "disabled": "boolean = false",
+    "contents": "boolean = false"
+   }
+  },
+  "CountdownFx": {
+   "group": "components",
+   "props": {
+    "targetDate": "!Date | string",
+    "format": "\"HH:MM:SS\" | \"DD:HH:MM:SS\" | \"MM:SS\" = HH:MM:SS",
+    "effect": "CountFxProps[\"effect\"] = wheel",
+    "onComplete": "() => void"
+   }
+  },
+  "CountFx": {
+   "group": "components",
+   "extends": [
+    "Text"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "SpacingProps",
+    "TextProps"
+   ],
+   "props": {
+    "value": "!number",
+    "speed": "number = 1000",
+    "easing": "\"linear\" | \"ease-out\" | \"ease-in-out\" = ease-out",
+    "format": "(value: number) => string",
+    "separator": "string",
+    "decimals": "number",
+    "effect": "\"simple\" | \"wheel\" | \"smooth\" = simple",
+    "children": "React.ReactNode"
+   }
+  },
+  "Cursor": {
+   "group": "components",
+   "props": {
+    "cursor": "!React.ReactNode",
+    "elementRef": "!React.RefObject<HTMLElement | null>"
+   }
+  },
+  "CursorCard": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "trigger": "ReactNode",
+    "overlay": "ReactNode",
+    "placement": "Placement = bottom-left",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "DataTable": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "columns": "!DataTableColumn<T>[]",
+    "rows": "!T[]",
+    "getRowId": "(row: T, index: number) => string",
+    "sort": "DataTableSort | null",
+    "defaultSort": "DataTableSort | null = null",
+    "onSortChange": "(sort: DataTableSort | null) => void",
+    "selectable": "boolean = false",
+    "selected": "string[]",
+    "defaultSelected": "string[]",
+    "onSelectionChange": "(selected: string[]) => void",
+    "getRowLabel": "(row: T) => string",
+    "paginated": "boolean = false",
+    "page": "number",
+    "defaultPage": "number = 1",
+    "onPageChange": "(page: number) => void",
+    "perPage": "number",
+    "defaultPerPage": "number = 10",
+    "perPageOptions": "number[]",
+    "onPerPageChange": "(perPage: number) => void",
+    "count": "number",
+    "total": "number",
+    "loading": "boolean = false",
+    "emptyState": "ReactNode",
+    "stickyHeader": "boolean = false",
+    "striped": "boolean = false",
+    "hoverable": "boolean = true",
+    "compact": "boolean = false",
+    "labels": "Partial<DataTableLabels>",
+    "aria-label": "string",
+    "aria-labelledby": "string"
    }
   },
   "DateInput": {
@@ -2109,7 +2585,8 @@
     "minDate": "Date",
     "maxDate": "Date",
     "dual": "boolean",
-    "size": "CondensedTShirtSizes = m"
+    "size": "CondensedTShirtSizes = m",
+    "autoFocus": "boolean"
    }
   },
   "DialogProvider": {
@@ -2141,10 +2618,40 @@
     "base": "boolean",
     "stack": "boolean",
     "flush": "boolean = false",
+    "showClose": "boolean = !hideClose",
     "hideClose": "boolean = false",
     "onHeightChange": "(height: number) => void",
     "minHeight": "number",
     "closeOnClickaway": "boolean = true"
+   }
+  },
+  "Drawer": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "open": "!boolean",
+    "onClose": "!() => void",
+    "side": "\"left\" | \"right\" | \"top\" | \"bottom\" = right",
+    "size": "\"s\" | \"m\" | \"l\" | \"full\" = m",
+    "title": "ReactNode",
+    "description": "ReactNode",
+    "footer": "ReactNode",
+    "showClose": "boolean = true",
+    "closeOnClickaway": "boolean = true",
+    "flush": "boolean = false",
+    "initialFocusRef": "RefObject<HTMLElement | null>",
+    "returnFocusRef": "RefObject<HTMLElement | null>",
+    "children": "ReactNode"
    }
   },
   "Dropdown": {
@@ -2194,6 +2701,32 @@
     "disableTriggerClick": "boolean = false",
     "onFocusCapture": "React.FocusEventHandler<HTMLDivElement>",
     "onBlurCapture": "React.FocusEventHandler<HTMLDivElement>"
+   }
+  },
+  "Effect": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "type": "EffectType = none",
+    "colors": "string[]",
+    "speed": "number",
+    "reducedMotion": "boolean | \"auto\"",
+    "blob": "Omit<React.ComponentProps<typeof BlobFx>, \"children\">",
+    "matrix": "Omit<React.ComponentProps<typeof MatrixFx>, \"children\">",
+    "weather": "Omit<React.ComponentProps<typeof WeatherFx>, \"children\">",
+    "particle": "Omit<React.ComponentProps<typeof ParticleFx>, \"children\">",
+    "celebration": "Omit<React.ComponentProps<typeof CelebrationFx>, \"children\">",
+    "children": "React.ReactNode"
    }
   },
   "EmojiPicker": {
@@ -2250,6 +2783,23 @@
     "pattern": "{ display?: boolean; size?: SpacingToken; } = { display: false, size: \"4\", }",
     "style": "React.CSSProperties",
     "children": "ReactNode"
+   }
+  },
+  "FadingLettersFx": {
+   "group": "components",
+   "extends": [
+    "Text"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "SpacingProps",
+    "TextProps"
+   ],
+   "props": {
+    "text": "!string",
+    "animationState": "!AnimationState",
+    "messageIdx": "number = 0"
    }
   },
   "Feedback": {
@@ -2320,6 +2870,21 @@
     "back": "!React.ReactNode",
     "className": "string",
     "style": "React.CSSProperties"
+   }
+  },
+  "FocusTrap": {
+   "group": "components",
+   "props": {
+    "children": "!ReactNode",
+    "active": "!boolean",
+    "onEscape": "() => void",
+    "containerRef": "RefObject<HTMLDivElement | null>",
+    "className": "string",
+    "style": "React.CSSProperties",
+    "initialFocusRef": "RefObject<HTMLElement | null>",
+    "returnFocusRef": "RefObject<HTMLElement | null>",
+    "restoreFocus": "boolean = true",
+    "autoFocus": "boolean = true"
    }
   },
   "Form": {
@@ -2487,7 +3052,8 @@
     "style": "React.CSSProperties",
     "href": "string",
     "children": "ReactNode",
-    "color": "`${ColorScheme}-${ColorWeight}`"
+    "color": "`${ColorScheme}-${ColorWeight}`",
+    "ariaLabel": "string"
    }
   },
   "InfiniteScroll": {
@@ -2511,6 +3077,24 @@
     "loading": "boolean = false",
     "threshold": "number = 200",
     "className": "string"
+   }
+  },
+  "InfoTip": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "React.ReactNode",
+    "size": "React.ComponentProps<typeof Icon>[\"size\"] = xs"
    }
   },
   "InlineCode": {
@@ -2565,7 +3149,9 @@
     "iconButtonProps": "IconButtonProps",
     "onClick": "!() => void",
     "className": "string",
-    "id": "string"
+    "id": "string",
+    "labelId": "string",
+    "descriptionId": "string"
    }
   },
   "Kbd": {
@@ -2586,6 +3172,24 @@
     "children": "ReactNode",
     "className": "string",
     "style": "React.CSSProperties"
+   }
+  },
+  "KeyTip": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "keys": "!string | readonly string[]",
+    "label": "ReactNode"
    }
   },
   "LetterFx": {
@@ -2633,6 +3237,7 @@
    ],
    "props": {
     "as": "\"ul\" | \"ol\" = ul",
+    "start": "number",
     "children": "React.ReactNode",
     "className": "string",
     "style": "React.CSSProperties"
@@ -2640,6 +3245,9 @@
   },
   "ListItem": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -2736,6 +3344,34 @@
     "xs": "MasonryBreakpointProps"
    }
   },
+  "MatrixFx": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "speed": "number = 1",
+    "colors": "string[] = [\"brand-solid-medium\"]",
+    "size": "number = 3",
+    "spacing": "number = 3",
+    "revealFrom": "\"center\" | \"top\" | \"bottom\" | \"left\" | \"right\" = center",
+    "trigger": "\"hover\" | \"instant\" | \"mount\" | \"click\" | \"manual\" = instant",
+    "active": "boolean = false",
+    "flicker": "boolean = false",
+    "bulge": "BulgeConfig",
+    "fps": "number = 60",
+    "reducedMotion": "boolean | \"auto\" = auto",
+    "children": "React.ReactNode"
+   }
+  },
   "Media": {
    "group": "components",
    "extends": [
@@ -2752,7 +3388,7 @@
    "props": {
     "aspectRatio": "string = original",
     "height": "number",
-    "alt": "string = ",
+    "alt": "string = \"\"",
     "loading": "boolean = false",
     "objectFit": "CSSProperties[\"objectFit\"] = cover",
     "enlarge": "boolean = false",
@@ -2781,6 +3417,29 @@
     "onClose": "!() => void"
    }
   },
+  "NavGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "!ReactNode",
+    "icon": "IconName",
+    "children": "!ReactNode",
+    "open": "boolean",
+    "onToggle": "() => void",
+    "defaultOpen": "boolean = false",
+    "selected": "boolean = false"
+   }
+  },
   "NavIcon": {
    "group": "components",
    "extends": [
@@ -2799,6 +3458,18 @@
     "style": "React.CSSProperties",
     "onClick": "() => void",
     "active": "boolean"
+   }
+  },
+  "NavItem": {
+   "group": "components",
+   "extends": [
+    "ToggleButton"
+   ],
+   "props": {
+    "label": "!ReactNode",
+    "icon": "IconName",
+    "badge": "number",
+    "indicator": "boolean"
    }
   },
   "NumberInput": {
@@ -2883,6 +3554,38 @@
     "errorMessage": "React.ReactNode",
     "disabled": "boolean = false",
     "autoFocus": "boolean = false"
+   }
+  },
+  "Pagination": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "page": "number",
+    "defaultPage": "number = 1",
+    "onChange": "(page: number) => void",
+    "total": "number",
+    "count": "number",
+    "perPage": "number",
+    "defaultPerPage": "number = 10",
+    "perPageOptions": "number[]",
+    "onPerPageChange": "(perPage: number) => void",
+    "siblings": "number = 1",
+    "boundaries": "number = 1",
+    "showFirstLast": "boolean = false",
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "disabled": "boolean = false",
+    "labels": "Partial<PaginationLabels>",
+    "aria-label": "string"
    }
   },
   "ParticleFx": {
@@ -2974,11 +3677,67 @@
     "style": "React.CSSProperties",
     "className": "string",
     "checked": "boolean",
+    "defaultChecked": "boolean = false",
     "name": "string",
     "value": "string",
     "disabled": "boolean",
-    "onToggle": "() => void",
+    "onToggle": "(checked: boolean) => void",
     "hoverable": "boolean = true"
+   }
+  },
+  "RadioGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "options": "RadioGroupOption[]",
+    "value": "string",
+    "defaultValue": "string",
+    "onChange": "(value: string) => void",
+    "name": "string",
+    "label": "ReactNode",
+    "description": "ReactNode",
+    "disabled": "boolean = false",
+    "orientation": "\"horizontal\" | \"vertical\" = vertical",
+    "children": "ReactNode"
+   }
+  },
+  "RangeSlider": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "value": "[number, number]",
+    "defaultValue": "[number, number]",
+    "onChange": "(value: [number, number]) => void",
+    "min": "number = 0",
+    "max": "number = 100",
+    "step": "number = 1",
+    "minDistance": "number = 0",
+    "label": "string",
+    "showValue": "boolean = false",
+    "formatValue": "(value: number) => string = String",
+    "thumbLabels": "[string, string] = [\"Minimum\", \"Maximum\"]",
+    "name": "string | [string, string]",
+    "disabled": "boolean = false"
    }
   },
   "RevealFx": {
@@ -3026,27 +3785,6 @@
    },
    "preferOver": "Flex with direction=\"row\""
   },
-  "Scroller": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "children": "React.ReactNode",
-    "direction": "\"row\" | \"column\" = row",
-    "fadeColor": "BaseColor = transparent",
-    "onItemClick": "(index: number) => void",
-    "radius": "RadiusSize"
-   }
-  },
   "ScrollContainer": {
    "group": "components",
    "extends": [
@@ -3074,6 +3812,35 @@
     "onActiveChange": "(index: number) => void"
    }
   },
+  "Scroller": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "React.ReactNode",
+    "direction": "\"row\" | \"column\" = row",
+    "fadeColor": "BaseColor = transparent",
+    "onItemClick": "(index: number) => void",
+    "radius": "RadiusSize",
+    "labels": "ScrollerLabels"
+   }
+  },
+  "ScrollLock": {
+   "group": "components",
+   "props": {
+    "enabled": "!boolean",
+    "allowScrollInElement": "RefObject<HTMLElement | null>"
+   }
+  },
   "ScrollToTop": {
    "group": "components",
    "extends": [
@@ -3089,6 +3856,35 @@
    ],
    "props": {
     "offset": "number = 300"
+   }
+  },
+  "Scrubber": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "duration": "!number",
+    "value": "!number",
+    "onChange": "!(time: number) => void",
+    "tracks": "ScrubberTrack[] = []",
+    "selected": "string | null = null",
+    "onSelect": "(blockId: string | null) => void",
+    "onBlockChange": "(trackId: string, blockId: string, next: { start: number; end: number }) => void",
+    "onGestureStart": "() => void",
+    "onBlockContextMenu": "(event: React.MouseEvent, trackId: string, blockId: string) => void",
+    "showTime": "boolean = true",
+    "formatTime": "(time: number) => string = defaultFormatTime",
+    "step": "number",
+    "ariaLabel": "string = Seek"
    }
   },
   "SegmentedControl": {
@@ -3124,7 +3920,7 @@
    ],
    "props": {
     "options": "!SelectOptionType[]",
-    "value": "string | string[] = ",
+    "value": "string | string[] = \"\"",
     "emptyState": "ReactNode = No results",
     "onSelect": "(value: string | string[]) => void",
     "placement": "Placement",
@@ -3135,8 +3931,74 @@
     "multiple": "boolean = false"
    }
   },
+  "Setting": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "React.ReactNode",
+    "description": "React.ReactNode",
+    "info": "React.ReactNode",
+    "controlWidth": "number = 14",
+    "children": "React.ReactNode"
+   }
+  },
+  "SettingAxes": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "React.ReactNode",
+    "info": "React.ReactNode",
+    "axes": "!{ label: React.ReactNode; control: React.ReactNode }[]",
+    "axisWidth": "number = 13"
+   }
+  },
+  "SettingGroup": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "React.ReactNode",
+    "description": "React.ReactNode",
+    "info": "React.ReactNode",
+    "control": "React.ReactNode",
+    "open": "boolean",
+    "children": "React.ReactNode"
+   }
+  },
   "ShineFx": {
    "group": "components",
+   "extends": [
+    "Text"
+   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -3176,8 +4038,9 @@
   "Slider": {
    "group": "components",
    "props": {
-    "value": "!number",
-    "onChange": "!(value: number) => void",
+    "value": "number",
+    "defaultValue": "number",
+    "onChange": "(value: number) => void",
     "min": "number = 0",
     "max": "number = 100",
     "step": "number = 1",
@@ -3268,26 +4131,6 @@
     "style": "React.CSSProperties"
    }
   },
-  "StylePanel": {
-   "group": "components",
-   "extends": [
-    "Column",
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "visibility": "StylePanelVisibility",
-    "value": "StylePanelRootProps[\"value\"]",
-    "onChange": "StylePanelRootProps[\"onChange\"]"
-   }
-  },
   "StyleOverlay": {
    "group": "components",
    "extends": [
@@ -3307,6 +4150,53 @@
     "zIndex": "DisplayProps[\"zIndex\"] = 2"
    }
   },
+  "StylePanel": {
+   "group": "components",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "visibility": "StylePanelVisibility",
+    "value": "StylePanelRootProps[\"value\"]",
+    "onChange": "StylePanelRootProps[\"onChange\"]",
+    "labels": "StylePanelLabels",
+    "customColors": "boolean",
+    "stacked": "boolean"
+   }
+  },
+  "Swiper": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!SwiperItem[] = []",
+    "controls": "boolean | \"contained\" = true",
+    "priority": "boolean = false",
+    "stretch": "boolean = false",
+    "aspectRatio": "string = 16 / 9",
+    "sizes": "string | number",
+    "unoptimized": "boolean = false",
+    "indicator": "boolean = true"
+   }
+  },
   "Switch": {
    "group": "components",
    "extends": [
@@ -3315,14 +4205,15 @@
    "props": {
     "style": "React.CSSProperties",
     "className": "string",
-    "checked": "!boolean",
+    "checked": "boolean",
+    "defaultChecked": "boolean = false",
     "loading": "boolean = false",
     "name": "string",
     "value": "string",
     "disabled": "boolean",
     "reverse": "boolean = false",
     "ariaLabel": "string = Toggle switch",
-    "onToggle": "!() => void"
+    "onToggle": "(checked: boolean) => void"
    }
   },
   "Table": {
@@ -3358,6 +4249,75 @@
     "loadingState": "ReactNode"
    }
   },
+  "Tab": {
+   "group": "components",
+   "extends": [
+    "ToggleButton"
+   ],
+   "props": {
+    "value": "!string",
+    "children": "ReactNode",
+    "disabled": "boolean = false"
+   }
+  },
+  "TabList": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "ReactNode"
+   }
+  },
+  "TabPanel": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "value": "!string",
+    "keepMounted": "boolean = false",
+    "children": "ReactNode"
+   }
+  },
+  "Tabs": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "value": "string",
+    "defaultValue": "string",
+    "onChange": "(value: string) => void",
+    "orientation": "\"horizontal\" | \"vertical\" = horizontal",
+    "activation": "\"automatic\" | \"manual\" = automatic",
+    "children": "ReactNode"
+   }
+  },
   "Tag": {
    "group": "components",
    "extends": [
@@ -3374,7 +4334,7 @@
    "props": {
     "scheme": "ColorScheme | \"gradient\" = neutral",
     "size": "CondensedTShirtSizes = m",
-    "label": "string = ",
+    "label": "string = \"\"",
     "prefixIcon": "IconName",
     "suffixIcon": "IconName",
     "children": "ReactNode"
@@ -3386,8 +4346,9 @@
     "Input"
    ],
    "props": {
-    "value": "!string[]",
-    "onChange": "!(value: string[]) => void"
+    "value": "string[]",
+    "defaultValue": "readonly string[]",
+    "onChange": "(value: string[]) => void"
    }
   },
   "Text": {
@@ -3421,6 +4382,35 @@
     "validate": "(value: ReactNode) => ReactNode | null",
     "disabled": "boolean = false",
     "span": "number"
+   }
+  },
+  "ThemeInit": {
+   "group": "components",
+   "props": {
+    "config": "!ThemeInitConfig",
+    "dataStyle": "{ mode?: ChartMode }"
+   }
+  },
+  "ThemeSwitcher": {
+   "group": "components",
+   "extends": [
+    "Row",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "value": "Theme",
+    "onChange": "(theme: Theme) => void",
+    "collapsed": "boolean",
+    "direction": "\"row\" | \"column\" = row",
+    "labels": "ThemeSwitcherLabels"
    }
   },
   "TiltFx": {
@@ -3469,13 +4459,14 @@
     "showIcon": "boolean = true",
     "onClose": "() => void",
     "action": "React.ReactNode",
-    "children": "!React.ReactNode"
+    "children": "!React.ReactNode",
+    "duration": "number = 6000"
    }
   },
   "Toaster": {
    "group": "components",
    "props": {
-    "toasts": "!{ id: string; variant: \"success\" | \"danger\" | \"warning\" | \"info\"; message: React.ReactNode; action?: React.ReactNode; }[]",
+    "toasts": "!{ id: string; variant: \"success\" | \"danger\" | \"warning\" | \"info\"; message: React.ReactNode; action?: React.ReactNode; duration?: number; }[]",
     "removeToast": "!(id: string) => void",
     "xl": "ToastPosition",
     "l": "ToastPosition",
@@ -3542,25 +4533,6 @@
     "children": "React.ReactNode"
    }
   },
-  "ThemeSwitcher": {
-   "group": "components",
-   "extends": [
-    "Row",
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "collapsed": "boolean",
-    "direction": "\"row\" | \"column\" = row"
-   }
-  },
   "User": {
    "group": "components",
    "props": {
@@ -3588,7 +4560,17 @@
     "style": "React.CSSProperties"
    }
   },
-  "CelebrationFx": {
+  "VisuallyHidden": {
+   "group": "components",
+   "props": {
+    "children": "ReactNode",
+    "as": "React.ElementType = span",
+    "focusable": "boolean = false",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "WeatherFx": {
    "group": "components",
    "extends": [
     "Flex"
@@ -3602,19 +4584,20 @@
     "StyleProps"
    ],
    "props": {
-    "type": "CelebrationType = confetti",
+    "type": "WeatherType = rain",
     "speed": "number = 1",
-    "colors": "string[] = [\"brand-solid-medium\", \"accent-solid-medium\"]",
+    "colors": "string[] = [\"brand-solid-medium\"]",
     "intensity": "number = 50",
+    "angle": "number = 0",
     "duration": "number",
-    "trigger": "\"mount\" | \"hover\" | \"manual\" | \"click\" = mount",
-    "active": "boolean = true",
+    "trigger": "\"mount\" | \"hover\" | \"click\" | \"manual\" = mount",
+    "active": "boolean = false",
     "reducedMotion": "boolean | \"auto\" = auto",
     "children": "React.ReactNode"
    }
   },
-  "Effect": {
-   "group": "components",
+  "HeadingNav": {
+   "group": "modules",
    "extends": [
     "Flex"
    ],
@@ -3627,140 +4610,7 @@
     "StyleProps"
    ],
    "props": {
-    "type": "EffectType = none",
-    "colors": "string[]",
-    "speed": "number",
-    "reducedMotion": "boolean | \"auto\"",
-    "blob": "Omit<React.ComponentProps<typeof BlobFx>, \"children\">",
-    "matrix": "Omit<React.ComponentProps<typeof MatrixFx>, \"children\">",
-    "weather": "Omit<React.ComponentProps<typeof WeatherFx>, \"children\">",
-    "particle": "Omit<React.ComponentProps<typeof ParticleFx>, \"children\">",
-    "celebration": "Omit<React.ComponentProps<typeof CelebrationFx>, \"children\">",
-    "children": "React.ReactNode"
-   }
-  },
-  "InfoTip": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "children": "React.ReactNode",
-    "size": "React.ComponentProps<typeof Icon>[\"size\"] = xs"
-   }
-  },
-  "Scrubber": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "duration": "!number",
-    "value": "!number",
-    "onChange": "!(time: number) => void",
-    "tracks": "ScrubberTrack[] = []",
-    "selected": "string | null = null",
-    "onSelect": "(blockId: string | null) => void",
-    "onBlockChange": "(trackId: string, blockId: string, next: { start: number; end: number }) => void",
-    "onGestureStart": "() => void",
-    "onBlockContextMenu": "(event: React.MouseEvent, trackId: string, blockId: string) => void",
-    "showTime": "boolean = true",
-    "formatTime": "(time: number) => string = defaultFormatTime",
-    "step": "number",
-    "ariaLabel": "string = Seek"
-   }
-  },
-  "Setting": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "label": "React.ReactNode",
-    "description": "React.ReactNode",
-    "info": "React.ReactNode",
-    "controlWidth": "number = 14",
-    "children": "React.ReactNode"
-   }
-  },
-  "SettingAxes": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "label": "React.ReactNode",
-    "info": "React.ReactNode",
-    "axes": "!{ label: React.ReactNode; control: React.ReactNode }[]",
-    "axisWidth": "number = 13"
-   }
-  },
-  "SettingGroup": {
-   "group": "components",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "label": "React.ReactNode",
-    "description": "React.ReactNode",
-    "info": "React.ReactNode",
-    "control": "React.ReactNode",
-    "open": "boolean",
-    "children": "React.ReactNode"
-   }
-  },
-  "FadingLettersFx": {
-   "group": "components",
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "SpacingProps",
-    "TextProps"
-   ],
-   "props": {
-    "text": "!string",
-    "animationState": "!AnimationState",
-    "messageIdx": "number = 0"
+    "header": "boolean = true"
    }
   },
   "Kbar": {
@@ -3769,24 +4619,6 @@
     "items": "!KbarItem[]",
     "children": "!React.ReactNode",
     "inputSize": "TShirtSizes"
-   }
-  },
-  "MobileMegaMenu": {
-   "group": "modules",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "menuGroups": "!MenuGroup[]",
-    "onClose": "() => void"
    }
   },
   "MegaMenu": {
@@ -3807,7 +4639,7 @@
     "className": "string"
    }
   },
-  "HeadingNav": {
+  "MobileMegaMenu": {
    "group": "modules",
    "extends": [
     "Flex"
@@ -3821,7 +4653,8 @@
     "StyleProps"
    ],
    "props": {
-    "header": "boolean = true"
+    "menuGroups": "!MenuGroup[]",
+    "onClose": "() => void"
    }
   },
   "HeadingLink": {
@@ -3844,6 +4677,27 @@
     "style": "React.CSSProperties"
    }
   },
+  "Meta": {
+   "group": "modules",
+   "call": "Meta.generate(props)",
+   "returns": "GeneratedMetadata",
+   "props": {
+    "title": "!string",
+    "description": "!string",
+    "baseURL": "!string",
+    "path": "string = \"\"",
+    "type": "\"website\" | \"article\" = website",
+    "image": "string",
+    "publishedTime": "string",
+    "author": "{ name: string; url?: string; }",
+    "canonical": "string",
+    "robots": "string",
+    "noindex": "boolean",
+    "nofollow": "boolean",
+    "alternates": "Alternate[]",
+    "ogRoutes": "Partial<OgRoutes>"
+   }
+  },
   "Schema": {
    "group": "modules",
    "props": {
@@ -3857,41 +4711,6 @@
     "image": "string",
     "sameAs": "string[] = []",
     "author": "{ name: string; url?: string; image?: string; }"
-   }
-  },
-  "LineChart": {
-   "group": "data",
-   "importFrom": "@once-ui-system/core/data",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "ChartProps",
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "curve": "curveType = natural",
-    "reverseY": "boolean = false",
-    "reverseX": "boolean = false",
-    "animation": "boolean = true",
-    "animationBegin": "number",
-    "animationDuration": "number",
-    "animationEasing": "unknown",
-    "xAxisType": "\"number\" | \"category\"",
-    "xDomain": "[number, number]",
-    "data-viz-style": "string",
-    "legend": "LegendConfig = {}",
-    "error": "boolean = false",
-    "tooltip": "boolean = true",
-    "grid": "\"x\" | \"y\" | \"both\" | \"none\" = both",
-    "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
-    "loading": "boolean = false",
-    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
    }
   },
   "BarChart": {
@@ -3914,7 +4733,7 @@
     "hover": "boolean = false",
     "reverseY": "boolean = false",
     "reverseX": "boolean = false",
-    "data-viz-style": "string",
+    "data-viz-style": "DataStyle | (string & {})",
     "legend": "LegendConfig = {}",
     "error": "boolean = false",
     "tooltip": "boolean = true",
@@ -3922,116 +4741,6 @@
     "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
     "loading": "boolean = false",
     "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
-   }
-  },
-  "PieChart": {
-   "group": "data",
-   "importFrom": "@once-ui-system/core/data",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "ChartProps",
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "data-viz-style": "string",
-    "ring": "{ inner: number; outer: number } = { inner: 0, outer: 80 }",
-    "dataKey": "string = value",
-    "nameKey": "string = name",
-    "origo": "{ x: number; y: number } = { x: 50, y: 50 }",
-    "legend": "LegendConfig = {}",
-    "error": "boolean = false",
-    "tooltip": "boolean = true",
-    "loading": "boolean = false",
-    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
-   }
-  },
-  "LineBarChart": {
-   "group": "data",
-   "importFrom": "@once-ui-system/core/data",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "ChartProps",
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "barWidth": "BarWidth = l",
-    "curve": "curveType = natural",
-    "reverseY": "boolean = false",
-    "reverseX": "boolean = false",
-    "data-viz-style": "string",
-    "legend": "LegendConfig = {}",
-    "error": "boolean = false",
-    "tooltip": "boolean = true",
-    "grid": "\"x\" | \"y\" | \"both\" | \"none\" = y",
-    "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
-    "loading": "boolean = false",
-    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
-   }
-  },
-  "RadialGauge": {
-   "group": "data",
-   "importFrom": "@once-ui-system/core/data",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "width": "number = 300",
-    "height": "number = 300",
-    "line": "{ count?: number; width?: number; length?: number; }",
-    "unit": "React.ReactNode",
-    "value": "number = 7",
-    "angle": "{ start: number; sweep: number; } = { start: 0, sweep: 360, }",
-    "direction": "'cw' | 'ccw' = cw",
-    "edgePad": "number = 0",
-    "children": "React.ReactNode",
-    "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
-    "color": "ColorValue = contrast"
-   }
-  },
-  "LinearGauge": {
-   "group": "data",
-   "importFrom": "@once-ui-system/core/data",
-   "extends": [
-    "Flex"
-   ],
-   "mixins": [
-    "CommonProps",
-    "DisplayProps",
-    "FlexProps",
-    "SizeProps",
-    "SpacingProps",
-    "StyleProps"
-   ],
-   "props": {
-    "width": "number = 400",
-    "height": "number = 80",
-    "line": "{ count?: number; width?: number; length?: number; }",
-    "value": "number = 50",
-    "labels": "\"none\" | \"percentage\" | string[] = none",
-    "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
-    "color": "ColorValue = contrast"
    }
   },
   "ChartHeader": {
@@ -4069,35 +4778,6 @@
     "errorState": "React.ReactNode = An error occurred while fetching data"
    }
   },
-  "LinearGradient": {
-   "group": "data",
-   "importFrom": "@once-ui-system/core/data",
-   "props": {
-    "id": "!string",
-    "color": "!string",
-    "x1": "string = 0",
-    "y1": "string = 0",
-    "x2": "string = 0",
-    "y2": "string = 1",
-    "stops": "GradientStop[]",
-    "variant": "ChartVariant = useDataTheme().variant"
-   }
-  },
-  "RadialGradient": {
-   "group": "data",
-   "importFrom": "@once-ui-system/core/data",
-   "props": {
-    "id": "!string",
-    "color": "!string",
-    "cx": "string = 50%",
-    "cy": "string = 50%",
-    "r": "string = 50%",
-    "fx": "string = 50%",
-    "fy": "string = 50%",
-    "stops": "GradientStop[]",
-    "variant": "ChartVariant = useDataTheme().variant"
-   }
-  },
   "DataTooltip": {
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
@@ -4112,6 +4792,35 @@
     "variant": "ChartVariant = gradient"
    }
   },
+  "LinearGradient": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "id": "!string",
+    "color": "!string",
+    "x1": "string = 0",
+    "y1": "string = 0",
+    "x2": "string = 0",
+    "y2": "string = 1",
+    "stops": "GradientStop[]",
+    "variant": "ChartVariant"
+   }
+  },
+  "RadialGradient": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "props": {
+    "id": "!string",
+    "color": "!string",
+    "cx": "string = 50%",
+    "cy": "string = 50%",
+    "r": "string = 50%",
+    "fx": "string = 50%",
+    "fy": "string = 50%",
+    "stops": "GradientStop[]",
+    "variant": "ChartVariant"
+   }
+  },
   "Legend": {
    "group": "data",
    "importFrom": "@once-ui-system/core/data",
@@ -4122,7 +4831,152 @@
     "reverseY": "boolean",
     "direction": "\"row\" | \"column\"",
     "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\" = top-left",
-    "variant": "ChartVariant = useDataTheme().variant"
+    "variant": "ChartVariant"
+   }
+  },
+  "LinearGauge": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "width": "number = 400",
+    "height": "number = 80",
+    "line": "{ count?: number; width?: number; length?: number; }",
+    "value": "number = 50",
+    "labels": "\"none\" | \"percentage\" | string[] = none",
+    "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
+    "color": "ColorValue = contrast"
+   }
+  },
+  "LineBarChart": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "ChartProps",
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "barWidth": "BarWidth = l",
+    "curve": "curveType = natural",
+    "reverseY": "boolean = false",
+    "reverseX": "boolean = false",
+    "data-viz-style": "DataStyle | (string & {})",
+    "legend": "LegendConfig = {}",
+    "error": "boolean = false",
+    "tooltip": "boolean = true",
+    "grid": "\"x\" | \"y\" | \"both\" | \"none\" = y",
+    "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+    "loading": "boolean = false",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+   }
+  },
+  "LineChart": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "ChartProps",
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "curve": "curveType = natural",
+    "reverseY": "boolean = false",
+    "reverseX": "boolean = false",
+    "animation": "boolean = true",
+    "animationBegin": "number",
+    "animationDuration": "number",
+    "animationEasing": "unknown",
+    "xAxisType": "\"number\" | \"category\"",
+    "xDomain": "[number, number]",
+    "data-viz-style": "DataStyle | (string & {})",
+    "legend": "LegendConfig = {}",
+    "error": "boolean = false",
+    "tooltip": "boolean = true",
+    "grid": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+    "axis": "\"x\" | \"y\" | \"both\" | \"none\" = both",
+    "loading": "boolean = false",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+   }
+  },
+  "PieChart": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "ChartProps",
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "data-viz-style": "DataStyle | (string & {})",
+    "ring": "{ inner: number; outer: number } = { inner: 0, outer: 80 }",
+    "dataKey": "string = value",
+    "nameKey": "string = name",
+    "origo": "{ x: number; y: number } = { x: 50, y: 50 }",
+    "legend": "LegendConfig = {}",
+    "error": "boolean = false",
+    "tooltip": "boolean = true",
+    "loading": "boolean = false",
+    "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
+   }
+  },
+  "RadialGauge": {
+   "group": "data",
+   "importFrom": "@once-ui-system/core/data",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "width": "number = 300",
+    "height": "number = 300",
+    "line": "{ count?: number; width?: number; length?: number; }",
+    "unit": "React.ReactNode",
+    "value": "number = 7",
+    "angle": "{ start: number; sweep: number; } = { start: 0, sweep: 360, }",
+    "direction": "\"cw\" | \"ccw\" = cw",
+    "edgePad": "number = 0",
+    "children": "React.ReactNode",
+    "hue": "\"success\" | \"neutral\" | \"danger\" | [number, number]",
+    "color": "ColorValue = contrast"
    }
   },
   "Swatch": {
@@ -4131,7 +4985,7 @@
    "props": {
     "color": "!string",
     "size": "\"s\" | \"m\" = m",
-    "variant": "ChartVariant = useDataTheme().variant"
+    "variant": "ChartVariant"
    }
   },
   "CodeBlock": {
@@ -4203,6 +5057,461 @@
     "loading": "boolean = false",
     "accept": "string = image/*"
    }
+  },
+  "MediaAudioPlayer": {
+   "group": "components",
+   "importFrom": "@once-ui-system/core/components/MediaAudioPlayer",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "src": "!string",
+    "autoplay": "boolean = false",
+    "loop": "boolean = false",
+    "label": "string = Audio player",
+    "onTimeUpdate": "(currentTime: number) => void",
+    "onPlayingChange": "(playing: boolean) => void"
+   }
+  },
+  "MediaVideoPlayer": {
+   "group": "components",
+   "importFrom": "@once-ui-system/core/components/MediaVideoPlayer",
+   "props": {
+    "src": "!string",
+    "autoplay": "boolean = false",
+    "loop": "boolean = false",
+    "muted": "boolean = true",
+    "objectFit": "CSSProperties[\"objectFit\"] = cover",
+    "className": "string"
+   }
+  },
+  "AdapterProvider": {
+   "group": "contexts",
+   "props": {
+    "adapters": "!Partial<OnceUIAdapters>",
+    "children": "!React.ReactNode"
+   }
+  },
+  "DataThemeProvider": {
+   "group": "contexts",
+   "props": {
+    "children": "!ReactNode",
+    "variant": "ChartVariant",
+    "mode": "ChartMode",
+    "height": "number",
+    "axis": "{ stroke: string; }",
+    "tick": "{ fill: string; fontSize: number; line: boolean; }"
+   }
+  },
+  "IconProvider": {
+   "group": "contexts",
+   "props": {
+    "icons": "Partial<IconLibrary> | Record<string, IconComponent>",
+    "children": "!React.ReactNode"
+   }
+  },
+  "LayoutProvider": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "props": {
+    "children": "!ReactNode"
+   }
+  },
+  "OgRoutesProvider": {
+   "group": "contexts",
+   "props": {
+    "routes": "!Partial<OgRoutes>",
+    "children": "!ReactNode"
+   }
+  },
+  "ThemeProvider": {
+   "group": "contexts",
+   "props": {
+    "theme": "Theme = system",
+    "neutral": "NeutralColor | \"custom\"",
+    "brand": "Schemes | \"custom\"",
+    "accent": "Schemes | \"custom\"",
+    "solid": "SolidType",
+    "solidStyle": "SolidStyle",
+    "border": "BorderStyle",
+    "surface": "SurfaceStyle",
+    "transition": "TransitionStyle",
+    "scaling": "ScalingSize",
+    "bodySize": "BodySize",
+    "bodyLineHeight": "BodyLineHeight",
+    "desktopSize": "DeviceFontSize",
+    "tabletSize": "DeviceFontSize",
+    "mobileSize": "DeviceFontSize",
+    "cursorInteractive": "InteractiveCursor",
+    "brandSeed": "string",
+    "accentSeed": "string",
+    "neutralSeed": "string",
+    "children": "!React.ReactNode",
+    "persistence": "StylePersistence = local"
+   }
+  },
+  "ToastProvider": {
+   "group": "contexts",
+   "props": {
+    "children": "!ReactNode",
+    "xl": "ToastPosition",
+    "l": "ToastPosition",
+    "m": "ToastPosition",
+    "s": "ToastPosition",
+    "xs": "ToastPosition"
+   }
+  },
+  "MdxBlockQuote": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxCodeBlock": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxHeading": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "as": "!MdxHeadingTag",
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxHr": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxImage": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxInlineCode": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxLink": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx"
+  },
+  "MdxList": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "as": "\"ul\" | \"ol\"",
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxListItem": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxParagraph": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxTable": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "props": {
+    "margin": "SpacingToken | number",
+    "marginLeft": "SpacingToken | number",
+    "marginRight": "SpacingToken | number",
+    "marginTop": "SpacingToken | number",
+    "marginBottom": "SpacingToken | number",
+    "marginX": "SpacingToken | number",
+    "marginY": "SpacingToken | number"
+   }
+  },
+  "MdxHeadingAnchor": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "extends": [
+    "HeadingAnchor"
+   ]
+  },
+  "NextAdapterProvider": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "props": {
+    "children": "!React.ReactNode"
+   }
+  }
+ },
+ "functions": {
+  "useStylePanel": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => StylePanelContextValue"
+  },
+  "useArrowNavigation": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(options: ArrowNavigationOptions) => { focusedIndex: number; setFocusedIndex: Dispatch<SetStateAction<number>>; handleKeyDown: (e: KeyboardEvent<HTMLElement>) => void; applyHighlightedState: () => void; }"
+  },
+  "useDebounce": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "<T>(value: T, delay: number) => T"
+  },
+  "useOgData": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(url: string | null, customFetchUrl?: string, customProxyUrl?: string) => { ogData: Partial<OgData> | null; loading: boolean; }",
+   "doc": "Fetches a page's Open Graph data through the app's OG fetch route and routes a cross-origin `image` and `faviconUrl` through its proxy route."
+  },
+  "useOgImage": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(url: string | null, customFetchUrl?: string, customProxyUrl?: string) => { ogImage: string | null; loading: boolean; }"
+  },
+  "useHeadingLinks": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "() => { id: string; text: string; level: number; }[]"
+  },
+  "useHotkeys": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(keys: string | readonly string[], callback: (event: KeyboardEvent, hotkey: string) => void, options?: UseHotkeysOptions) => void",
+   "doc": "Call `callback` when a key combination is pressed."
+  },
+  "useInViewport": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(ref: RefObject<HTMLElement | null>, options?: IntersectionObserverInit) => boolean"
+  },
+  "useReducedMotion": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(override?: boolean | \"auto\") => MotionCapability"
+  },
+  "useStreamingData": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "<T extends Record<string, any>>(options: StreamingOptions<T>) => StreamingResult<T>"
+  },
+  "useStreamingViewport": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "<T extends Record<string, any>>(options: StreamingViewportOptions<T>) => StreamingViewportResult<T>"
+  },
+  "defaultAdapters": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "OnceUIAdapters"
+  },
+  "resetAdapterWarning": {
+   "group": "contexts",
+   "kind": "function",
+   "signature": "() => void",
+   "doc": "Exported for tests; resets the once-per-session latch."
+  },
+  "useAdapters": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => OnceUIAdapters"
+  },
+  "warnIfFrameworkUnadapted": {
+   "group": "contexts",
+   "kind": "function",
+   "signature": "(adapters: OnceUIAdapters) => void"
+  },
+  "useDataTheme": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => DataThemeState"
+  },
+  "defaultChartOptions": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "ChartOptions"
+  },
+  "useIcons": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => { icons: IconLibrary; }"
+  },
+  "DEFAULT_BREAKPOINTS": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "{ readonly xs: 480; readonly s: 768; readonly m: 1024; readonly l: 1440; readonly xl: number; }"
+  },
+  "useLayout": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => LayoutContextType"
+  },
+  "useOgRoutes": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => Readonly<OgRoutes>",
+   "doc": "The Open Graph routes in effect: the nearest `OgRoutesProvider`'s, or the defaults."
+  },
+  "useTheme": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => ThemeProviderState"
+  },
+  "useStyle": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => StyleProviderState"
+  },
+  "defaultStyleOptions": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "StyleOptions"
+  },
+  "useToast": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => ToastContextProps"
+  },
+  "createMdxComponents": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "kind": "function",
+   "signature": "(overrides?: Partial<MdxComponents>) => MdxComponents",
+   "doc": "The default map with `overrides` applied: replace an element (`h2`, `a`, `hr`…), register an app's own components, or map a tag back to plain HTML (`{ hr: \"hr\" }`)."
+  },
+  "mdxComponents": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "kind": "value",
+   "type": "MdxComponents",
+   "doc": "The default map: Markdown elements rendered with Once UI, and the common Once UI components available as tags."
+  },
+  "slugify": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "kind": "function",
+   "signature": "(text: string) => string",
+   "doc": "The fragment id for a heading's text: \"Get started & deploy\" becomes \"get-started-and-deploy\"."
+  },
+  "textOf": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "kind": "function",
+   "signature": "(node: ReactNode) => string",
+   "doc": "The text a reader sees in a React node, flattened."
+  },
+  "nextAdapters": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "OnceUIAdapters"
+  },
+  "createOgFetchRoute": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(options?: OgFetchRouteOptions) => OgRouteHandlers",
+   "doc": "`GET /api/og/fetch?url=…` → `{ url, title, description, image, faviconUrl? }` as JSON, read from the page's Open Graph and meta tags."
+  },
+  "createOgProxyRoute": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(options?: OgProxyRouteOptions) => OgRouteHandlers",
+   "doc": "`GET /api/og/proxy?url=…` → the image bytes, served from your origin."
+  },
+  "DEFAULT_OG_IMAGE_TYPES": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "readonly string[]",
+   "doc": "Raster image types the proxy passes through by default."
+  },
+  "defineConfig": {
+   "group": "config",
+   "importFrom": "@once-ui-system/core/config",
+   "kind": "function",
+   "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
+   "doc": "Type an app's `once-ui.config`."
   }
  },
  "shorthands": {

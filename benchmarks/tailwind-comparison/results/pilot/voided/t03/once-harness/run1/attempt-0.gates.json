@@ -1,0 +1,16 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(178,14): error TS2741: Property 'onChange' is missing in type '{ value: Billing; onToggle: (value: ToggleEvent<HTMLDivElement>) => void; buttons: { value: string; label: string; }[]; }' but required in type 'Omit<SegmentedControlProps, \"ref\">'.\napp/page.tsx(180,47): error TS2352: Conversion of type 'ToggleEvent<HTMLDivElement>' to type 'Billing' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2252
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth"
+  }
+}

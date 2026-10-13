@@ -1,4 +1,16 @@
-import { Row, Logo, IconButton, UserMenu, Column, Icon, Option, Line, SmartLink, Text, ToggleButton } from "@once-ui-system/core"
+import {
+  Column,
+  Icon,
+  IconButton,
+  Line,
+  Logo,
+  Option,
+  Row,
+  SmartLink,
+  Text,
+  ToggleButton,
+  UserMenu,
+} from "@once-ui-system/core";
 
 interface HeaderProps extends React.ComponentProps<typeof Row> {
   cartCount?: number;
@@ -17,13 +29,15 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
       {...flex}
     >
       <Row gap="24">
-        <Logo href="#" dark icon="/trademarks/icon-dark.svg" />
-        <Logo href="#" light icon="/trademarks/icon-light.svg" />
+        <Logo
+          href="#"
+          icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+        />
         <Row gap="8">
-          <ToggleButton label="All products"/>
-          <ToggleButton label="Trending"/>
-          <ToggleButton label="New"/>
-          <ToggleButton label="On sale"/>
+          <ToggleButton label="All products" />
+          <ToggleButton label="Trending" />
+          <ToggleButton label="New" />
+          <ToggleButton label="On sale" />
         </Row>
       </Row>
       <Row gap="24" paddingY="2" vertical="center">
@@ -47,10 +61,8 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
               minWidth="20"
               height="20"
               border="neutral-weak"
-              style={{
-                top: "-0.125rem",
-                right: "-0.5rem",
-              }}
+              top={-0.125}
+              right={-0.5}
             >
               {cartCount}
             </Row>
@@ -65,38 +77,26 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
                 key="cart-option"
                 label="Cart"
                 value="cart"
-                prefix={
-                  <Icon
-                    size="xs"
-                    onBackground="neutral-weak"
-                    name="cart"
-                  />
-                }
+                prefix={<Icon size="xs" onBackground="neutral-weak" name="cart" />}
               />
               <Line key="line-1" marginY="2" />
               <Option
                 key="order-history-option"
                 label="Order history"
                 value="orders"
-                prefix={
-                  <Icon size="xs" onBackground="neutral-weak" name="payment" />
-                }
+                prefix={<Icon size="xs" onBackground="neutral-weak" name="payment" />}
               />
               <Option
                 key="returned-orders-option"
                 label="Returned orders"
                 value="returns"
-                prefix={
-                  <Icon size="xs" onBackground="neutral-weak" name="return" />
-                }
+                prefix={<Icon size="xs" onBackground="neutral-weak" name="return" />}
               />
               <Line key="line-2" marginY="2" />
               <Option
                 key="settings-option"
                 label="Settings"
-                prefix={
-                  <Icon size="xs" onBackground="neutral-weak" name="settings" />
-                }
+                prefix={<Icon size="xs" onBackground="neutral-weak" name="settings" />}
                 value="settings"
               />
               <Option
@@ -113,10 +113,10 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
                   </Text>
                 </SmartLink>
               </Row>
-            </Column>
+            </Column>,
           ]}
         />
       </Row>
-    </Row>   
-  )
-}
+    </Row>
+  );
+};

@@ -23,5 +23,5 @@ const PieChart: React.FC<PieChartProps> = (props) => (
 
 PieChart.displayName = "PieChart";
 
-export { PieChart };
 export type { PieChartProps };
+export { PieChart };

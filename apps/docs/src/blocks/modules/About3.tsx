@@ -9,7 +9,7 @@ import {
   Line,
   Mask,
   Media,
-  Particle,
+  ParticleFx,
   Row,
   Text,
 } from "@once-ui-system/core";
@@ -79,7 +79,7 @@ export const About3 = () => {
           </Heading>
         </Column>
         <Row fillWidth overflow="hidden" radius="xl-8" padding="16" marginTop="56">
-          <Particle
+          <ParticleFx
             opacity={70}
             position="absolute"
             top="0"
@@ -87,8 +87,6 @@ export const About3 = () => {
             fill
             interactive
             speed={4}
-            size="2"
-            density={100}
             intensity={40}
             pointerEvents="none"
           />

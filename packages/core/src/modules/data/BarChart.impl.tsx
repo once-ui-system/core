@@ -1,27 +1,33 @@
 "use client";
 
-import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { formatDate } from "./utils/formatDate";
-import { getRechartsComponents } from "./rechartsLoader";
-import { Column } from "../../components/Column";
-import { Row } from "../../components/Row";
-import { DateRange } from "../../components/DateRangePicker";
-import { getDistributedColor } from "./utils/colorDistribution";
-import { ChartProps, ChartVariant, BarWidth } from "./interfaces";
-import { LinearGradient } from "./Gradient";
-import { DataTooltip } from "./DataTooltip";
-import { Legend } from "./Legend";
-import { ChartStatus } from "./ChartStatus";
-import { ChartHeader } from "./ChartHeader";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { RadiusSize } from "@/types";
+import { Column } from "../../components/Column";
+import { DateRange } from "../../components/DateRangePicker";
+import { Row } from "../../components/Row";
+import { useDataTheme } from "../../contexts/DataThemeProvider";
+import type { DataStyle } from "../../contexts/ThemeProvider";
+import { ChartHeader } from "./ChartHeader";
+import { ChartStatus } from "./ChartStatus";
+import { DataTooltip } from "./DataTooltip";
+import { LinearGradient } from "./Gradient";
+import { BarWidth, ChartProps, ChartVariant } from "./interfaces";
+import { Legend } from "./Legend";
+import { getRechartsComponents } from "./rechartsLoader";
+import { getDistributedColor } from "./utils/colorDistribution";
+import { formatDate } from "./utils/formatDate";
 
 export interface BarChartProps extends ChartProps {
   barWidth?: BarWidth;
   hover?: boolean;
   reverseY?: boolean;
   reverseX?: boolean;
-  "data-viz-style"?: string;
+  /**
+   * This chart's colour mode, overriding DataThemeProvider's `mode`. Typed as
+   * `DataStyle`; any other string still compiles, for 2.0 callers, and draws
+   * categorical.
+   */
+  "data-viz-style"?: DataStyle | (string & {});
 }
 
 const BarChart: React.FC<BarChartProps> = ({
@@ -146,7 +152,9 @@ const BarChart: React.FC<BarChartProps> = ({
         legend.position === "top-center" ||
         legend.position === "top-left" ||
         legend.position === "top-right"
-          ? reverseX ? 32 : 0
+          ? reverseX
+            ? 32
+            : 0
           : undefined,
       bottom:
         legend.position === "bottom-center" ||
@@ -217,7 +225,15 @@ const BarChart: React.FC<BarChartProps> = ({
         presets={date?.presets}
       />
       {/* The plot takes the height the header leaves: `height` sizes the card once. */}
-      <Row fillWidth flex={1} borderTop={(title || description || date?.selector) ? (border || "neutral-alpha-weak") : undefined} topRadius={flex.radius as RadiusSize || "l"} overflow="hidden">
+      <Row
+        fillWidth
+        flex={1}
+        borderTop={
+          title || description || date?.selector ? border || "neutral-alpha-weak" : undefined
+        }
+        topRadius={(flex.radius as RadiusSize) || "l"}
+        overflow="hidden"
+      >
         <ChartStatus
           loading={loading}
           empty={!filteredData || filteredData.length === 0}
@@ -225,91 +241,117 @@ const BarChart: React.FC<BarChartProps> = ({
           error={error}
           errorState={errorState}
         />
-        {!loading && !error && filteredData && filteredData.length > 0 && rc && (() => {
-          const { ResponsiveContainer, BarChart: RBarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend: RLegend } = rc;
-          return (
-            <ResponsiveContainer width="100%" height="100%">
-              <RBarChart
-                data={filteredData}
-                margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
-                barGap={4}
-              >
-                <CartesianGrid vertical={grid === "x" || grid === "both"} horizontal={grid === "y" || grid === "both"} stroke="var(--neutral-alpha-weak)" />
-                {legend.display && (
-                  <RLegend
-                    content={legendContent}
-                    wrapperStyle={legendWrapperStyle}
+        {!loading &&
+          !error &&
+          filteredData &&
+          filteredData.length > 0 &&
+          rc &&
+          (() => {
+            const {
+              ResponsiveContainer,
+              BarChart: RBarChart,
+              Bar,
+              XAxis,
+              YAxis,
+              CartesianGrid,
+              Tooltip,
+              Legend: RLegend,
+            } = rc;
+            return (
+              <ResponsiveContainer width="100%" height="100%">
+                <RBarChart
+                  data={filteredData}
+                  margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
+                  barGap={4}
+                >
+                  <CartesianGrid
+                    vertical={grid === "x" || grid === "both"}
+                    horizontal={grid === "y" || grid === "both"}
+                    stroke="var(--neutral-alpha-weak)"
                   />
-                )}
-                <XAxis
-                  dataKey={xAxisKey}
-                  axisLine={false}
-                  tickLine={tickLine}
-                  orientation={reverseX ? "top" : "bottom"}
-                  tick={
-                    axis === "x" || axis === "both"
-                      ? { fill: tickFill, fontSize: tickFontSize }
-                      : false
-                  }
-                  tickFormatter={(value: any) => {
-                    const dataPoint = data.find((item) => item[xAxisKey] === value);
-                    return formatDate(value, date, dataPoint);
-                  }}
-                  hide={!(axis === "x" || axis === "both")}
-                />
-                {(axis === "y" || axis === "both") && (
-                  <YAxis
-                    allowDataOverflow
-                    width={64}
-                    padding={{ top: 40 }}
-                    orientation={reverseY ? "right" : "left"}
+                  {legend.display && (
+                    <RLegend content={legendContent} wrapperStyle={legendWrapperStyle} />
+                  )}
+                  <XAxis
+                    dataKey={xAxisKey}
+                    axisLine={false}
                     tickLine={tickLine}
-                    tick={{ fill: tickFill, fontSize: tickFontSize }}
-                    axisLine={{ stroke: axisLineStroke }}
+                    orientation={reverseX ? "top" : "bottom"}
+                    tick={
+                      axis === "x" || axis === "both"
+                        ? { fill: tickFill, fontSize: tickFontSize }
+                        : false
+                    }
+                    tickFormatter={(value: any) => {
+                      const dataPoint = data.find((item) => item[xAxisKey] === value);
+                      return formatDate(value, date, dataPoint);
+                    }}
+                    hide={!(axis === "x" || axis === "both")}
                   />
-                )}
-                {tooltip && (
-                  <Tooltip
-                    cursor={{ fill: hover ? "var(--neutral-alpha-weak)" : "var(--static-transparent)" }}
-                    content={(props: any) => (
-                      <DataTooltip {...props} date={date} variant={variant as ChartVariant} />
-                    )}
-                  />
-                )}
-                <defs>
-                  {barColors.map((color, index) => (
-                    <LinearGradient
-                      key={`gradient-${chartId}-${index}`}
-                      id={`barGradient${chartId}${index}`}
-                      color={color}
-                      variant={variant as ChartVariant}
+                  {(axis === "y" || axis === "both") && (
+                    <YAxis
+                      allowDataOverflow
+                      width={64}
+                      padding={{ top: 40 }}
+                      orientation={reverseY ? "right" : "left"}
+                      tickLine={tickLine}
+                      tick={{ fill: tickFill, fontSize: tickFontSize }}
+                      axisLine={{ stroke: axisLineStroke }}
+                    />
+                  )}
+                  {tooltip && (
+                    <Tooltip
+                      cursor={{
+                        fill: hover ? "var(--neutral-alpha-weak)" : "var(--static-transparent)",
+                      }}
+                      content={(props: any) => (
+                        <DataTooltip {...props} date={date} variant={variant as ChartVariant} />
+                      )}
+                    />
+                  )}
+                  <defs>
+                    {barColors.map((color, index) => (
+                      <LinearGradient
+                        key={`gradient-${chartId}-${index}`}
+                        id={`barGradient${chartId}${index}`}
+                        color={color}
+                        variant={variant as ChartVariant}
+                      />
+                    ))}
+                  </defs>
+                  {autoSeries.map((series, index) => (
+                    <Bar
+                      key={series.key}
+                      dataKey={series.key}
+                      name={series.key}
+                      fill={`url(#barGradient${chartId}${index})`}
+                      stroke={barColors[index]}
+                      strokeWidth={1}
+                      transform="translate(0, -1)"
+                      barSize={
+                        barWidth === "fill"
+                          ? "100%"
+                          : barWidth === "xs"
+                            ? 12
+                            : barWidth === "s"
+                              ? 16
+                              : barWidth === "m"
+                                ? 24
+                                : barWidth === "l"
+                                  ? 40
+                                  : barWidth === "xl"
+                                    ? 64
+                                    : barWidth
+                      }
+                      radius={
+                        barWidth === "fill" || barWidth === "xl" ? [10, 10, 10, 10] : [6, 6, 6, 6]
+                      }
                     />
                   ))}
-                </defs>
-                {autoSeries.map((series, index) => (
-                  <Bar
-                    key={series.key}
-                    dataKey={series.key}
-                    name={series.key}
-                    fill={`url(#barGradient${chartId}${index})`}
-                    stroke={barColors[index]}
-                    strokeWidth={1}
-                    transform="translate(0, -1)"
-                    barSize={
-                      barWidth === "fill" ? "100%" :
-                      barWidth === "xs" ? 12 :
-                      barWidth === "s" ? 16 :
-                      barWidth === "m" ? 24 :
-                      barWidth === "l" ? 40 :
-                      barWidth === "xl" ? 64 : barWidth
-                    }
-                    radius={barWidth === "fill" || barWidth === "xl" ? [10, 10, 10, 10] : [6, 6, 6, 6]}
-                  />
-                ))}
-              </RBarChart>
-            </ResponsiveContainer>
-          );
-        })()}
+                </RBarChart>
+              </ResponsiveContainer>
+            );
+          })()}
       </Row>
     </Column>
   );

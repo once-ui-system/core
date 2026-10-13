@@ -1,7 +1,5 @@
-"use client";
-
-import React, { forwardRef } from "react";
 import classNames from "clsx";
+import React, { forwardRef } from "react";
 import styles from "./List.module.scss";
 import { Text } from "./Text";
 
@@ -18,6 +16,7 @@ const ListItem = forwardRef<HTMLLIElement, ListItemProps>(
     return (
       <Text
         as="li"
+        ref={ref}
         paddingY="0"
         paddingRight="0"
         paddingLeft="8"
@@ -32,4 +31,5 @@ const ListItem = forwardRef<HTMLLIElement, ListItemProps>(
 );
 
 ListItem.displayName = "ListItem";
+
 export { ListItem };

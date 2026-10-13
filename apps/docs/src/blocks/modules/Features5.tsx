@@ -39,9 +39,7 @@ export const Features5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
         <Grid fillWidth gap="8" columns="4" m={{ columns: 2 }} s={{ columns: 1 }}>
           {features.map((item, index) => (
             <Column
-              style={{
-                backdropFilter: "blur(1rem)",
-              }}
+              backdropBlur={1}
               key={index}
               background="overlay"
               radius="l"

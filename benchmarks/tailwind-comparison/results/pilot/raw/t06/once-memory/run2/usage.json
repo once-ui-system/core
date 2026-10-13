@@ -1,0 +1,83 @@
+{
+  "model": [
+    "claude-sonnet-5-5"
+  ],
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 4,
+      "input_total": 216834,
+      "input_uncached": 8,
+      "cache_creation": 23659,
+      "cache_read": 193167,
+      "visible_output_tokens_o200k": 2148,
+      "visible_output_tokens_claudeLegacy": 2322,
+      "thinking_blocks": 2,
+      "input_net_of_overhead": 2558
+    },
+    {
+      "attempt": 1,
+      "calls": 2,
+      "input_total": 120806,
+      "input_uncached": 6,
+      "cache_creation": 3534,
+      "cache_read": 117266,
+      "visible_output_tokens_o200k": 2004,
+      "visible_output_tokens_claudeLegacy": 2139,
+      "thinking_blocks": 1,
+      "input_net_of_overhead": 13668
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "Glob",
+      "path": "."
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/layout.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/providers.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/app/page.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "Read",
+      "path": "project/package.json"
+    },
+    {
+      "attempt": 0,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t06/once-memory/run2/attempt-0.tsx"
+    },
+    {
+      "attempt": 0,
+      "name": "SubagentHandback",
+      "path": null
+    },
+    {
+      "attempt": 1,
+      "name": "Write",
+      "path": "../../../results/pilot/raw/t06/once-memory/run2/attempt-1.tsx"
+    },
+    {
+      "attempt": 1,
+      "name": "SubagentHandback",
+      "path": null
+    }
+  ],
+  "audit": {
+    "ok": true,
+    "violations": []
+  },
+  "arm": "B"
+}

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useRef, forwardRef, useEffect } from "react";
+import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Input } from "./Input";
-import { Text } from "./Text";
 import styles from "./OTPInput.module.scss";
+import { Text } from "./Text";
 
 interface OTPInputProps extends React.HTMLAttributes<HTMLDivElement> {
   length?: number;
@@ -32,6 +32,13 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
   ) => {
     const [values, setValues] = useState<string[]>(Array(length).fill(""));
     const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
+    // The fields' ids were `otp-0`…`otp-N`, the same in every OTPInput on a
+    // page, so a label or script that found a field by id got the first one.
+    const idPrefix = useId();
+    // The message is rendered here, once for every field, so each field is
+    // described by it; Input marks them invalid from `error`.
+    const errorId = `${idPrefix}otp-error`;
+    const showsErrorMessage = error && Boolean(errorMessage);
 
     useEffect(() => {
       if (autoFocus && inputsRef.current[0]) {
@@ -101,12 +108,14 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
               ref={(el) => {
                 inputsRef.current[index] = el;
               }}
-              id={`otp-${index}`}
+              id={`${idPrefix}otp-${index}`}
               type="text"
               placeholder=" "
               inputMode="numeric"
               maxLength={1}
+              disabled={disabled}
               error={error}
+              aria-describedby={showsErrorMessage ? errorId : undefined}
               value={values[index]}
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
@@ -116,8 +125,8 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
             />
           ))}
         </Flex>
-        {error && errorMessage && (
-          <Flex paddingX="8">
+        {showsErrorMessage && (
+          <Flex paddingX="8" id={errorId}>
             <Text variant="body-default-s" onBackground="danger-weak">
               {errorMessage}
             </Text>
@@ -130,5 +139,5 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
 
 OTPInput.displayName = "OTPInput";
 
-export { OTPInput };
 export type { OTPInputProps };
+export { OTPInput };

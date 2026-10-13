@@ -1,17 +1,17 @@
 "use client";
 
 import React, {
-  useState,
-  useRef,
-  useEffect,
-  ReactNode,
   forwardRef,
-  useImperativeHandle,
+  ReactNode,
   useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from "react";
 import { Flex } from "./Flex";
-import { Row } from "./Row";
 import styles from "./Hover.module.scss";
+import { Row } from "./Row";
 
 export interface HoverProps extends React.ComponentProps<typeof Flex> {
   trigger: ReactNode;
@@ -41,7 +41,7 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
     const [isFocused, setIsFocused] = useState(false);
     const [mounted, setMounted] = useState(false);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
-    
+
     const wrapperRef = useRef<HTMLDivElement>(null);
     const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -50,14 +50,12 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
 
     useEffect(() => {
       setMounted(true);
-      setIsTouchDevice(
-        "ontouchstart" in window || navigator.maxTouchPoints > 0
-      );
+      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
     }, []);
 
     const showOverlay = useCallback(() => {
       if (disabled) return;
-      
+
       // Clear any pending hide timeout
       if (hideTimeoutRef.current) {
         clearTimeout(hideTimeoutRef.current);
@@ -122,14 +120,14 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
     // Determine if overlay should show based on touch mode
     const shouldShowOverlay = (() => {
       if (!mounted || disabled) return false;
-      
+
       // If on touch device, handle based on touch prop
       if (isTouchDevice) {
-        if (touch === 'disable') return false;
-        if (touch === 'display') return true;
+        if (touch === "disable") return false;
+        if (touch === "display") return true;
         // touch === 'enable', fall through to normal hover logic
       }
-      
+
       return isHovered || isFocused;
     })();
 
@@ -165,4 +163,5 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
 );
 
 Hover.displayName = "Hover";
+
 export { Hover };

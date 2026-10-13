@@ -1,24 +1,23 @@
 "use client";
 
+import classNames from "clsx";
 import React, {
-  useState,
-  useEffect,
   forwardRef,
+  ReactNode,
   TextareaHTMLAttributes,
   useCallback,
-  ReactNode,
+  useEffect,
+  useState,
 } from "react";
-import classNames from "clsx";
-import { Column } from "./Column";
-import { Row } from "./Row";
-import { Text } from "./Text";
-import styles from "./Input.module.scss";
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
+import { Column } from "./Column";
 import { useFieldSize } from "./FormContext";
+import styles from "./Input.module.scss";
+import { Row } from "./Row";
+import { Text } from "./Text";
 
-interface TextareaProps
-  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix"> {
+interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix"> {
   id: string;
   label?: string;
   placeholder?: string;
@@ -185,7 +184,6 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const displayError = validationError || errorMessage;
 
-
     const textareaClassNames = classNames(
       styles.input,
       styles.textarea,
@@ -282,14 +280,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 <Text
                   variant="label-default-s"
                   onBackground={
-                    props.maxLength - String(props.value || '').length <= 5
+                    props.maxLength - String(props.value || "").length <= 5
                       ? "danger-weak"
-                      : props.maxLength - String(props.value || '').length <= 10
+                      : props.maxLength - String(props.value || "").length <= 10
                         ? "warning-weak"
-                          : "neutral-weak"
+                        : "neutral-weak"
                   }
                 >
-                  {props.maxLength - String(props.value || '').length}
+                  {props.maxLength - String(props.value || "").length}
                 </Text>
               </Row>
             )}
@@ -301,12 +299,22 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           )}
         </Row>
         {displayError && errorMessage !== false && (
-          <Row paddingX="16" id={`${id}-error`} textVariant="body-default-s" onBackground="danger-weak">
+          <Row
+            paddingX="16"
+            id={`${id}-error`}
+            textVariant="body-default-s"
+            onBackground="danger-weak"
+          >
             {displayError}
           </Row>
         )}
         {description && (
-          <Row paddingX="16" id={`${id}-description`} textVariant="body-default-s" onBackground="neutral-weak">
+          <Row
+            paddingX="16"
+            id={`${id}-description`}
+            textVariant="body-default-s"
+            onBackground="neutral-weak"
+          >
             {description}
           </Row>
         )}
@@ -317,5 +325,5 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
 Textarea.displayName = "Textarea";
 
-export { Textarea };
 export type { TextareaProps };
+export { Textarea };

@@ -1,0 +1,15 @@
+"use client";
+
+import { createContext } from "react";
+
+/**
+ * The role an Option takes in the list it is rendered in. Internal: not
+ * exported from the package.
+ *
+ * An Option is a `listbox` option everywhere but in a ContextMenu, which is a
+ * `menu`: there its items are `menuitem`s, and `aria-selected` (which a menu
+ * item cannot carry) is left off. In a list of plain links, MobileMegaMenu's,
+ * it takes no role at all: an `option` outside a listbox is invalid, and a
+ * link should read as a link.
+ */
+export const OptionRoleContext = createContext<"option" | "menuitem" | "none">("option");

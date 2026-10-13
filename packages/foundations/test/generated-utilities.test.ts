@@ -7,6 +7,8 @@ import {
   BREAKPOINTS_CASCADE,
   ALIGN_ALIGNMENTS,
   FONT_TYPES,
+  GRID_COLUMNS,
+  GRID_ROWS,
   RADIUS_CORNERS,
   RADIUS_SIZES,
   SCHEMES,
@@ -268,6 +270,43 @@ describe("generated utilities", () => {
     expect(xs.slice(0, xs.indexOf("}"))).not.toContain("letter-spacing");
     const heading = css.slice(css.indexOf(".font-heading.font-xl"));
     expect(heading.slice(0, heading.indexOf("}"))).not.toContain("letter-spacing");
+  });
+
+  /**
+   * `overflow="clip"` and `"visible"` type-check on every layout primitive and
+   * had no class, so the prop reached the DOM as a class name with no rule.
+   */
+  it("carries every overflow value on every axis, at every breakpoint", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/display.generated.scss"), "utf8");
+    const missing: string[] = [];
+    for (const bp of ["", ...BREAKPOINTS.map((b) => `${b.key}-`)]) {
+      for (const axis of ["overflow", "overflow-x", "overflow-y"]) {
+        for (const value of ["auto", "scroll", "hidden", "clip", "visible"]) {
+          if (!css.includes(`.${bp}${axis}-${value} {`)) missing.push(`.${bp}${axis}-${value}`);
+        }
+      }
+    }
+    expect(missing).toEqual([]);
+  });
+
+  /**
+   * `Grid rows` was typed and documented and had no class, so the prop reached
+   * the DOM as a `rows` attribute. Rows mirror columns: the same twelve steps,
+   * at the base and at every breakpoint.
+   */
+  it("carries every row count that columns has, at every breakpoint", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/grid.generated.scss"), "utf8");
+    expect(GRID_ROWS).toEqual(GRID_COLUMNS);
+    const missing: string[] = [];
+    for (const bp of ["", ...BREAKPOINTS.map((b) => `${b.key}-`)]) {
+      for (const n of GRID_ROWS) {
+        if (!css.includes(`.${bp}rows-${n} {\n`)) missing.push(`.${bp}rows-${n}`);
+      }
+    }
+    expect(missing).toEqual([]);
+    expect(css).toContain(".rows-4 {\n  grid-template-rows: repeat(4, 1fr);");
+    // Base rules first, so a breakpoint row count overrides the base one.
+    expect(css.indexOf(".rows-12 {")).toBeLessThan(css.indexOf("@media"));
   });
 
   it("writes a bare 0 for offsets and a token for spacing", () => {

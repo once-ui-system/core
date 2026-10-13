@@ -102,8 +102,12 @@ export function Sidebar6() {
   return (
     <Column maxWidth={16} fillHeight padding="2" gap="8" background="surface" radius="l" border>
       <Row paddingX="24" paddingY="16">
-        <Logo dark wordmark="/trademarks/wordmark-dark.svg" />
-        <Logo light wordmark="/trademarks/wordmark-light.svg" />
+        <Logo
+          wordmark={{
+            light: "/trademarks/wordmark-light.svg",
+            dark: "/trademarks/wordmark-dark.svg",
+          }}
+        />
       </Row>
       <Column fill gap="4" paddingX="16" overflowY="auto">
         {nav.map((item) => {
@@ -210,7 +214,7 @@ export function Sidebar6() {
             fillWidth
             style={{ minHeight: "var(--static-space-56)" }}
           >
-            <Row fillWidth gap="12" vertical="center" style={{ left: "-0.5rem" }}>
+            <Row fillWidth gap="12" vertical="center" left={-0.5}>
               <Avatar src="/images/creators/lorant.jpg" />
               <Column fillWidth gap="2">
                 <Text variant="label-default-m">Lorant</Text>

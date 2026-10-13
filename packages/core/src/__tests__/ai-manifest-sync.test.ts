@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import manifest from "../../ai/manifest.json";
 import catalog from "../../ai/catalog.json";
+import manifest from "../../ai/manifest.json";
 import pkg from "../../package.json";
 
 /**

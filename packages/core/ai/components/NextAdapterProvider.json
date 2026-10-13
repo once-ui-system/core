@@ -1,0 +1,9 @@
+{
+ "name": "NextAdapterProvider",
+ "group": "next",
+ "importFrom": "@once-ui-system/core/next",
+ "props": {
+  "children": "!React.ReactNode"
+ },
+ "mixinsRef": []
+}

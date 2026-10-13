@@ -38,7 +38,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
             border="brand-alpha-medium"
             paddingY="8"
             href="#"
-            data-border="rounded"
+            themeBorder="rounded"
           >
             <Row vertical="center">
               <Tag scheme="brand">v1.7</Tag>
@@ -53,7 +53,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
               </Row>
             </Row>
           </Badge>
-          <Heading variant="display-default-xl" marginTop="8" wrap="balance">
+          <Heading variant="display-default-xl" marginTop="8">
             Write 70% less code with human-readable, machine-writable syntax
             <Text onBackground="brand-medium">.</Text>
           </Heading>
@@ -64,7 +64,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
           </Text>
           <Row
             gap="16"
-            data-border="rounded"
+            themeBorder="rounded"
             vertical="center"
             paddingTop="16"
             paddingLeft="8"
@@ -75,7 +75,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
             </Button>
             <Row center padding="2" overflow="hidden" radius="l-4">
               <Background
-                data-solid="color"
+                themeSolid="color"
                 fill
                 position="absolute"
                 gradient={{
@@ -95,7 +95,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
         </Column>
 
         <CompareImage
-          data-solid="inverse"
+          themeSolid="inverse"
           border="brand-alpha-medium"
           radius="xl"
           overflow="hidden"
@@ -152,7 +152,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                             data-scaling="110"
                             radius="l"
                             background="overlay"
-                            style={{ backdropFilter: "blur(0.125rem)" }}
+                            backdropBlur={0.125}
                           >
                             <Card
                               fillWidth
@@ -169,7 +169,6 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                               <Media
                                 border
                                 sizes="400px"
-                                fillWidth
                                 aspectRatio="16 / 9"
                                 radius="l"
                                 alt="Product preview"

@@ -1,5 +1,5 @@
-import { social } from "@/resources";
 import { Column, Grid, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
+import { social } from "@/resources";
 
 // The product set mirrors the once-ui.com footer. Seven templates became
 // surfaces of Stack and Supa Social became Orbit Core; their old product URLs
@@ -58,20 +58,19 @@ const navigation = [
 
 const Footer = () => {
   return (
-    <Column fillWidth horizontal="center" paddingTop="80" paddingBottom="16" borderTop="neutral-alpha-medium">
+    <Column
+      fillWidth
+      horizontal="center"
+      paddingTop="80"
+      paddingBottom="16"
+      borderTop="neutral-alpha-medium"
+    >
       <Column maxWidth="xl" paddingX="l" horizontal="center" gap="48">
-        <Grid
-          fillWidth
-          columns={5}
-          m={{columns: 3}}
-          s={{columns: 2}}
-          gap="32">
+        <Grid fillWidth columns={5} m={{ columns: 3 }} s={{ columns: 2 }} gap="32">
           {navigation.map((section) => (
             <Column key={section.title} gap="24" paddingY="8">
-              <Text variant="label-default-s">
-                {section.title}
-              </Text>
-              <Row fillWidth s={{direction: "column"}} gap="24">
+              <Text variant="label-default-s">{section.title}</Text>
+              <Row fillWidth s={{ direction: "column" }} gap="24">
                 <Column fillWidth key={`${section.title}-${section.title}`} gap="16">
                   {section.items.map((item: any) => (
                     <SmartLink key={`${item.label}-${item.href}`} href={item.href} unstyled>
@@ -90,29 +89,42 @@ const Footer = () => {
             </Column>
           ))}
         </Grid>
-        <Row fillWidth inline gap="8" vertical="center" textVariant="label-default-s" onBackground="neutral-weak" s={{direction: "column", horizontal: "start"}}>
+        <Row
+          fillWidth
+          inline
+          gap="8"
+          vertical="center"
+          textVariant="label-default-s"
+          onBackground="neutral-weak"
+          s={{ direction: "column", horizontal: "start" }}
+        >
           <Row paddingRight="8">
-            <Logo size="s" href="/" dark icon="/trademarks/icon-dark.svg" />
-            <Logo size="s" href="/" light icon="/trademarks/icon-light.svg" />
+            <Logo
+              size="s"
+              href="/"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            />
           </Row>
           <Row wrap fillWidth gap="4">
             Built with curiosity by{" "}
             <SmartLink href="https://lorant.one" unstyled>
               Lorant One
-            </SmartLink> and the{" "}
+            </SmartLink>{" "}
+            and the{" "}
             <SmartLink href="https://designengineers.club" unstyled>
               Design Engineers Club
             </SmartLink>
           </Row>
           <Row gap="8">
-            {social.map((item, index) => (
+            {social.map((item) => (
               <IconButton
                 data-border="rounded"
                 icon={item.icon}
                 variant="tertiary"
                 size="l"
-                key={index}
+                key={item.link}
                 href={item.link}
+                aria-label={item.name}
               />
             ))}
           </Row>

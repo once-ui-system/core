@@ -69,7 +69,7 @@ export const Productivity2 = () => {
   const completedCount = Object.values(checked).filter(Boolean).length;
 
   return (
-    <Column fillWidth paddingX="8" paddingY="12" gap="24" maxWidth="xl" horizontal="center">
+    <Column paddingX="8" paddingY="12" gap="24" maxWidth="xl" horizontal="center">
       <Row as="header" fillWidth paddingX="16" horizontal="between" vertical="center" wrap gap="16">
         <Column gap="4">
           <Text variant="body-strong-m">Focus mode</Text>

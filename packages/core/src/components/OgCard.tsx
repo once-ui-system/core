@@ -1,14 +1,14 @@
 "use client";
 
+import { useMemo } from "react";
+import { useOgData } from "../hooks/useFetchOg";
 import { CondensedTShirtSizes } from "../types";
+import { Card } from "./Card";
 import { Column } from "./Column";
 import { Media } from "./Media";
-import { Text } from "./Text";
 import { Row } from "./Row";
-import { Card } from "./Card";
 import { Skeleton } from "./Skeleton";
-import { useOgData } from "../hooks/useFetchOg";
-import { useMemo } from "react";
+import { Text } from "./Text";
 
 export interface OgServiceConfig {
   proxyImageUrl?: (url: string) => string;
@@ -91,6 +91,7 @@ const OgCard = ({
   favicon,
   image,
   cardUrl,
+  xs,
   ...card
 }: OgCardProps) => {
   const { ogData: fetchedOgData, loading: fetching } = useOgData(
@@ -150,28 +151,44 @@ const OgCard = ({
     return null;
   }
 
+  const isRow = direction === "row" || direction === "row-reverse";
+
   return (
     <Card
       href={resolvedUrl || undefined}
       direction={direction}
       fillWidth
-      vertical={direction === "row" || direction === "row-reverse" ? "center" : undefined}
+      vertical={isRow ? "center" : undefined}
       gap="4"
       radius="l"
       background="surface"
       border="neutral-alpha-medium"
+      // A row card stacks on phones. Beside a 16rem image there is no room left
+      // for the text on a 375px screen, so the title wraps a word per line and
+      // the domain runs off the card. `horizontal: "stretch"` undoes the
+      // row's centred cross axis, which the breakpoint class would otherwise
+      // keep. A consumer's own `xs` still wins.
+      xs={
+        isRow
+          ? {
+              direction: direction === "row" ? "column" : "column-reverse",
+              horizontal: "stretch",
+              ...xs,
+            }
+          : xs
+      }
       {...card}
     >
       {resolvedImage !== null && (proxiedImageUrl || loading) && (
         <Media
-          minWidth={direction === "row" || direction === "row-reverse" ? 16 : undefined}
-          maxWidth={direction === "row" || direction === "row-reverse" ? 24 : undefined}
+          minWidth={isRow ? 16 : undefined}
+          maxWidth={isRow ? 24 : undefined}
           loading={loading}
           radius="l"
           sizes={sizes}
           unoptimized={unoptimized}
           aspectRatio="16/9"
-          border="neutral-alpha-weak"
+          border
           src={proxiedImageUrl}
         />
       )}
@@ -193,13 +210,14 @@ const OgCard = ({
               maxWidth="16"
               fillWidth={false}
               radius="xs"
-              border="neutral-alpha-weak"
+              border
             />
+            {/* Truncated: a domain has no break points, so a long one would run past the card. */}
             {resolvedUrl &&
               (loading ? (
                 <Skeleton shape="line" width="25%" size="xs" />
               ) : (
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text variant="label-default-s" onBackground="neutral-weak" truncate>
                   {formatDisplayUrl(resolvedUrl)}
                 </Text>
               ))}
@@ -251,4 +269,5 @@ const OgCard = ({
 };
 
 OgCard.displayName = "OgCard";
+
 export { OgCard };

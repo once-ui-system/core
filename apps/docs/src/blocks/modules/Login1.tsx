@@ -16,7 +16,7 @@ export const Login1 = () => {
   return (
     <Row fill>
       <Row m={{ hide: true }} fill maxWidth={48} padding="8">
-        <Row fill radius="l" overflow="hidden" background="page" data-theme="dark">
+        <Row fill radius="l" overflow="hidden" background="page" theme="dark">
           <Row fill position="absolute">
             <Background3 />
           </Row>
@@ -90,7 +90,6 @@ TRANSLOG:
             pattern={{ display: true, size: "2" }}
             position="absolute"
             top="0"
-            to="bottom"
             topRadius="l"
             height={32}
             fillWidth
@@ -103,9 +102,11 @@ TRANSLOG:
         </Row>
       </Row>
       <Column fill center>
-        <Column fillWidth center gap="16" padding="32" maxWidth={32}>
-          <Logo dark icon="/trademarks/icon-dark.svg" size="l" />
-          <Logo light icon="/trademarks/icon-light.svg" size="l" />
+        <Column center gap="16" padding="32" maxWidth={32}>
+          <Logo
+            icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            size="l"
+          />
           <Heading variant="display-strong-xs" align="center">
             Welcome to Once UI
           </Heading>

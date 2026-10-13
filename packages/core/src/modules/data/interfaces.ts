@@ -1,6 +1,7 @@
-import type { Flex } from "../../components/Flex";
 import type { DateRange } from "../../components/DateRangePicker";
+import type { Flex } from "../../components/Flex";
 import type { ColorValue, TShirtSizes } from "../../types";
+
 /**
  * Recharts' own CurveType, inlined.
  *
@@ -89,13 +90,13 @@ interface ChartProps extends Omit<React.ComponentProps<typeof Flex>, "title" | "
 }
 
 export type {
-  DataPoint,
-  SeriesConfig,
-  DateConfig,
-  PresetsConfig,
+  BarWidth,
+  ChartMode,
   ChartProps,
   ChartVariant,
-  BarWidth,
   curveType,
-  ChartMode,
+  DataPoint,
+  DateConfig,
+  PresetsConfig,
+  SeriesConfig,
 };

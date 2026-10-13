@@ -240,9 +240,21 @@ export const SELECTION_GROUPS = [
 
 /* ------------------------------------------------------------- display --- */
 
-/** Overflow utilities, repeated at every breakpoint. */
+/**
+ * Overflow utilities, repeated at every breakpoint.
+ *
+ * `clip` and `visible` type-check on every `overflow` prop (they are
+ * `CSSProperties["overflow"]`) and had no class, so they reached the DOM as a
+ * class name with nothing behind it. They are placed so that, like the rest of
+ * the list, a shorthand never beats a longhand set beside it: the two new
+ * shorthands sit before every `-x`/`-y` rule, the four new longhands after
+ * every shorthand. The existing rules keep their relative order, so nothing
+ * that already collides resolves differently.
+ */
 export const OVERFLOW_RULES = [
   { suffix: "overflow-auto", prop: "overflow", value: "auto" },
+  { suffix: "overflow-clip", prop: "overflow", value: "clip" },
+  { suffix: "overflow-visible", prop: "overflow", value: "visible" },
   { suffix: "overflow-x-scroll", prop: "overflow-x", value: "scroll" },
   { suffix: "overflow-x-auto", prop: "overflow-x", value: "auto" },
   { suffix: "overflow-y-auto", prop: "overflow-y", value: "auto" },
@@ -251,6 +263,10 @@ export const OVERFLOW_RULES = [
   { suffix: "overflow-scroll", prop: "overflow", value: "scroll" },
   { suffix: "overflow-x-hidden", prop: "overflow-x", value: "hidden" },
   { suffix: "overflow-y-hidden", prop: "overflow-y", value: "hidden" },
+  { suffix: "overflow-x-clip", prop: "overflow-x", value: "clip" },
+  { suffix: "overflow-x-visible", prop: "overflow-x", value: "visible" },
+  { suffix: "overflow-y-clip", prop: "overflow-y", value: "clip" },
+  { suffix: "overflow-y-visible", prop: "overflow-y", value: "visible" },
 ];
 
 /**
@@ -314,12 +330,74 @@ export const CURSORS = [
 export const cursorValue = (name) =>
   name === "interactive" ? "var(--cursor-interactive)" : name;
 
+/**
+ * Enumerable effect properties, as classes, so a layout primitive can take
+ * them as props and stay a server component. Before these, the only way to
+ * write any of them was a `style` object, which is what moves `Flex` to the
+ * client. Base only: none of them is a layout decision that changes per
+ * breakpoint, and five copies would be most of their weight.
+ *
+ * `transform` is deliberately absent: it is what animations drive, frame by
+ * frame, so it stays in `style`.
+ */
+
+/** `user-select`. Safari still needs the prefix, so both are written. */
+export const USER_SELECT = ["none", "text", "all", "auto"];
+
+/** Every `mix-blend-mode` keyword, plus `plus-lighter` for additive glows. */
+export const BLEND_MODES = [
+  "normal", "multiply", "screen", "overlay", "darken", "lighten",
+  "color-dodge", "color-burn", "hard-light", "soft-light", "difference",
+  "exclusion", "hue", "saturation", "color", "luminosity", "plus-lighter",
+];
+
+/**
+ * The blur scale, on the static spacing steps rather than a token family of
+ * its own: the t-shirt sizes match `radius` and `shadow`, and the radii they
+ * resolve to are the ones the apps reached for by hand — 0.25rem behind a
+ * popover, 1rem for a translucent surface (what `data-surface="translucent"`
+ * uses), 3rem for an ambient glow.
+ */
+export const BLUR_SIZES = [
+  { size: "xs", space: "4" },
+  { size: "s", space: "8" },
+  { size: "m", space: "16" },
+  { size: "l", space: "32" },
+  { size: "xl", space: "48" },
+];
+
 /* ---------------------------------------------------------------- grid --- */
 
 /** A twelve-column grid; `columns-1` is a single `1fr` rather than a repeat. */
 export const GRID_COLUMNS = Array.from({ length: 12 }, (_, i) => String(i + 1));
 
 export const gridTemplate = (n) => (n === "1" ? "1fr" : `repeat(${n}, 1fr)`);
+
+/**
+ * Equal rows, on the same twelve steps and the same template as the columns.
+ *
+ * `Grid rows` was typed, documented ("how many equal rows") and in every
+ * breakpoint object, and had no class: the prop fell through to the DOM as a
+ * `rows` attribute and the grid's rows followed the content regardless.
+ */
+export const GRID_ROWS = GRID_COLUMNS;
+
+/**
+ * "As many columns as fit, each at least this wide" — the one grid the apps
+ * kept writing by hand as `repeat(auto-fit, minmax(13rem, 1fr))`.
+ *
+ * The width is a custom property rather than a class per size, since any rem
+ * or CSS length is valid; `Grid minColumnWidth` sets it inline on the same
+ * element. `min(…, 100%)` keeps a single column from overflowing a container
+ * narrower than the minimum. `auto-fit` rather than `auto-fill`: with fewer
+ * items than tracks, the items stretch to fill the row instead of leaving
+ * empty tracks at its end.
+ */
+export const GRID_AUTO_FIT = {
+  selector: ".columns-auto-fit",
+  property: "--grid-min-column-width",
+  template: "repeat(auto-fit, minmax(min(var(--grid-min-column-width), 100%), 1fr))",
+};
 
 /* ------------------------------------------------- colour, shadow, size --- */
 
@@ -344,6 +422,19 @@ export const SIZE_RULES = [
   { selector: ".fit-height", decls: ["height: fit-content;"] },
   { selector: ".fit", decls: ["width: fit-content;", "height: fit-content;"] },
 ];
+
+/**
+ * "The viewport below the app header", for the scrolling pane of an app shell
+ * and the panels that hang from its header. The apps wrote
+ * `calc(100dvh - var(--static-space-56))` by hand, 25 times across five apps,
+ * with the header height restated in each. `--header-height` is a token
+ * (tokens/layout.scss); these read it where they are applied, so an app sets
+ * it once. `dvh`, not `vh`: on mobile `vh` ignores the browser chrome and the
+ * pane runs off-screen.
+ */
+export const BELOW_HEADER_PROPERTIES = ["height", "min-height", "max-height"];
+
+export const belowHeaderValue = "calc(100dvh - var(--header-height))";
 
 /* ---------------------------------------------------------- typography --- */
 

@@ -42,10 +42,10 @@ export const Hero5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         items={slides.map(({ src, title, subtitle, cta, href }) => ({
           slide: (
             <Row fill>
-              <Media sizes="100vw" src={src} alt={title} />
+              <Media src={src} alt={title} />
               <Row position="absolute" fill padding="xl" horizontal="center" vertical="end">
                 <Fade position="absolute" bottom="0" to="top" fillWidth height={12} />
-                <Row data-border="rounded" position="absolute" top="20" right="20" zIndex={1} fit>
+                <Row themeBorder="rounded" position="absolute" top="20" right="20" zIndex={1} fit>
                   <Button size="s" href={href} prefixIcon="cart" weight="default">
                     {cta}
                   </Button>

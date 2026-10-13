@@ -1,28 +1,22 @@
 "use client";
 
-import React, {
-  ReactNode,
-  RefObject,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import ReactDOM from "react-dom";
 import classNames from "clsx";
-import { SpacingToken } from "../../types";
-import styles from "./CodeBlock.module.scss";
+import React, { ReactNode, RefObject, useEffect, useRef, useState } from "react";
+import ReactDOM from "react-dom";
+import { Button } from "../../components/Button";
+import { Column } from "../../components/Column";
+import { Fade } from "../../components/Fade";
 import { Flex } from "../../components/Flex";
 import { IconButton } from "../../components/IconButton";
-import { Scroller } from "../../components/Scroller";
 import { Row } from "../../components/Row";
+import { Scroller } from "../../components/Scroller";
 import { StyleOverlay } from "../../components/StyleOverlay";
-import { ToggleButton } from "../../components/ToggleButton";
-import { Column } from "../../components/Column";
 import { Text } from "../../components/Text";
-import { Button } from "../../components/Button";
-import { Fade } from "../../components/Fade";
-import { escapeHtml } from "../../utils/safe-html";
+import { ToggleButton } from "../../components/ToggleButton";
 import type { IconName } from "../../icons";
+import { SpacingToken } from "../../types";
+import { escapeHtml } from "../../utils/safe-html";
+import styles from "./CodeBlock.module.scss";
 
 let Prism: any;
 
@@ -172,12 +166,7 @@ const languageDependencies: Record<string, string[]> = {
 };
 
 // Track loaded languages to avoid re-loading
-const loadedLanguages = new Set<string>([
-  "markup",
-  "css",
-  "clike",
-  "javascript",
-]);
+const loadedLanguages = new Set<string>(["markup", "css", "clike", "javascript"]);
 
 // Language names that intentionally have no grammar — render as plain text
 // without attempting (and warn-failing) a Prism component import.
@@ -272,14 +261,10 @@ const loadPrismDependencies = async (...langs: string[]): Promise<boolean> => {
     ]);
 
     // Filter out empty/invalid languages and remove duplicates
-    const validLangs = [
-      ...new Set(langs.filter((lang) => lang && lang.trim())),
-    ];
+    const validLangs = [...new Set(langs.filter((lang) => lang && lang.trim()))];
 
     // Load each language with its dependencies
-    const results = await Promise.all(
-      validLangs.map((lang) => loadLanguageWithDependencies(lang)),
-    );
+    const results = await Promise.all(validLangs.map((lang) => loadLanguageWithDependencies(lang)));
 
     const successCount = results.filter(Boolean).length;
 
@@ -354,9 +339,7 @@ const parseDiff = (diffContent: string, startLineNumber?: number) => {
   return parsedLines;
 };
 
-const isInformationalLine = (
-  type: "file-header" | "hunk" | "added" | "deleted" | "context",
-) => {
+const isInformationalLine = (type: "file-header" | "hunk" | "added" | "deleted" | "context") => {
   return ["hunk", "file-header"].includes(type);
 };
 
@@ -370,9 +353,7 @@ const renderDiff = (
 ) => {
   const parsedLines = parseDiff(diffContent, startLineNumber);
 
-  const codeLines = parsedLines.filter(
-    (line) => !isInformationalLine(line.type),
-  );
+  const codeLines = parsedLines.filter((line) => !isInformationalLine(line.type));
 
   // Apply syntax highlighting to code lines
   let highlightedLines: string[] = [];
@@ -410,16 +391,9 @@ const renderDiff = (
         if (isInformationalLine(line.type)) {
           if (prism.languages.diff) {
             try {
-              content = prism.highlight(
-                line.content,
-                prism.languages.diff,
-                "diff",
-              );
+              content = prism.highlight(line.content, prism.languages.diff, "diff");
             } catch (error) {
-              console.warn(
-                `Failed to highlight diff line: ${line.content}`,
-                error,
-              );
+              console.warn(`Failed to highlight diff line: ${line.content}`, error);
               content = escapeHtml(line.content);
             }
           } else {
@@ -437,10 +411,7 @@ const renderDiff = (
             <div className="diff-line-number">
               {(line.type === "deleted" || line.type === "context") &&
                 line.oldLineNumber !== undefined && (
-                  <Text
-                    variant="code-default-s"
-                    style={{ transform: "scale(0.9)" }}
-                  >
+                  <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>
                     {line.oldLineNumber}
                   </Text>
                 )}
@@ -448,10 +419,7 @@ const renderDiff = (
             <div className="diff-line-number">
               {(line.type === "added" || line.type === "context") &&
                 line.newLineNumber !== undefined && (
-                  <Text
-                    variant="code-default-s"
-                    style={{ transform: "scale(0.9)" }}
-                  >
+                  <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>
                     {line.newLineNumber}
                   </Text>
                 )}
@@ -496,6 +464,10 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   background?: React.ComponentProps<typeof Flex>["background"];
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
+  /**
+   * @deprecated Set `highlight` on each entry of `codes` instead, so every tab
+   * marks its own lines. This one still applies to an entry that sets none.
+   */
   highlight?: string;
   maxLines?: number;
   isCollapsible?: boolean;
@@ -541,9 +513,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const { code, language, startLineNumber } = codeInstance;
 
   const highlight =
-    codeInstance.highlight !== undefined
-      ? codeInstance.highlight
-      : deprecatedHighlight;
+    codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
 
   useEffect(() => {
     const loadDependencies = async () => {
@@ -639,11 +609,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               ) {
                 const textContent = codeContent.textContent || "";
                 try {
-                  codeContent.innerHTML = Prism.highlight(
-                    textContent,
-                    Prism.languages[lang],
-                    lang,
-                  );
+                  codeContent.innerHTML = Prism.highlight(textContent, Prism.languages[lang], lang);
                 } catch (error) {
                   console.warn("Failed to re-highlight line:", error);
                   codeContent.textContent = textContent;
@@ -682,9 +648,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   };
 
   const handleContent = (selectedLabel: string) => {
-    const index = codes.findIndex(
-      (instance) => instance.label === selectedLabel,
-    );
+    const index = codes.findIndex((instance) => instance.label === selectedLabel);
     if (index !== -1) {
       setSelectedInstance(index);
     }
@@ -708,7 +672,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     <Column
       ref={inPortal ? undefined : codeBlockRef}
       background={background ?? "surface"}
-      border="neutral-alpha-weak"
+      border
       overflow="hidden"
       vertical="center"
       fillWidth
@@ -747,14 +711,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         >
           {codes.length > 1 ? (
             <Scroller paddingX="8">
-              <Row
-                data-scaling="90"
-                fitWidth
-                fillHeight
-                vertical="center"
-                paddingY="4"
-                gap="2"
-              >
+              <Row data-scaling="90" fitWidth fillHeight vertical="center" paddingY="4" gap="2">
                 {codes.map((instance, index) => (
                   <ToggleButton
                     key={index}
@@ -768,11 +725,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     }}
                   >
                     <Text
-                      onBackground={
-                        selectedInstance === index
-                          ? "neutral-strong"
-                          : "neutral-weak"
-                      }
+                      onBackground={selectedInstance === index ? "neutral-strong" : "neutral-weak"}
                     >
                       {instance.label}
                     </Text>
@@ -793,7 +746,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           {!compact && (
             <Row paddingY="4" paddingX="8" gap="2" position="static">
               {reloadButton && (
-                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                <Flex
+                  fit
+                  radius="s"
+                  background={background}
+                  style={{ backgroundColor: styleBackgroundColor }}
+                >
                   <IconButton
                     size="m"
                     tooltip="Reload"
@@ -806,7 +764,12 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 </Flex>
               )}
               {fullscreenButton && (
-                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                <Flex
+                  fit
+                  radius="s"
+                  background={background}
+                  style={{ backgroundColor: styleBackgroundColor }}
+                >
                   <IconButton
                     size="m"
                     color="neutral-weak"
@@ -820,18 +783,28 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               )}
               {styleButton && (
                 <StyleOverlay>
-                  <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                  <Flex
+                    fit
+                    radius="s"
+                    background={background}
+                    style={{ backgroundColor: styleBackgroundColor }}
+                  >
                     <IconButton
                       variant="tertiary"
                       icon="sparkle"
-              aria-label="Explain this code"
+                      aria-label="Explain this code"
                       color="neutral-weak"
                     />
                   </Flex>
                 </StyleOverlay>
               )}
               {copyButton && (
-                <Flex fit radius="s" background={background} style={{ backgroundColor: styleBackgroundColor }}>
+                <Flex
+                  fit
+                  radius="s"
+                  background={background}
+                  style={{ backgroundColor: styleBackgroundColor }}
+                >
                   <IconButton
                     size="m"
                     tooltip="Copy"
@@ -848,27 +821,19 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
         </Row>
       )}
       {preview && (
-        <Row
-          key={refreshKey}
-          paddingX="4"
-          paddingBottom="4"
-          paddingTop={compact ? "4" : "0"}
-          fill
-        >
+        <Row key={refreshKey} paddingX="4" paddingBottom="4" paddingTop={compact ? "4" : "0"} fill>
           <Row
             fill
             background="overlay"
             radius="l"
-            border="neutral-alpha-weak"
+            border
             padding={previewPadding}
             tabIndex={-1}
             horizontal="center"
             overflowY="auto"
           >
             {Array.isArray(preview)
-              ? preview.map((item, index) => (
-                  <React.Fragment key={index}>{item}</React.Fragment>
-                ))
+              ? preview.map((item, index) => <React.Fragment key={index}>{item}</React.Fragment>)
               : preview}
           </Row>
         </Row>
@@ -888,8 +853,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
           }}
         >
           {((lines) => {
-            const isCollapsed =
-              isCollapsible && maxLines > 0 && lines > maxLines && !isExpanded;
+            const isCollapsed = isCollapsible && maxLines > 0 && lines > maxLines && !isExpanded;
             const collapsedMaxHeight = `calc(1.75em * ${maxLines} + 1rem)`;
 
             return (
@@ -897,9 +861,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 fillWidth
                 position="relative"
                 style={
-                  isCollapsed
-                    ? { maxHeight: collapsedMaxHeight, overflow: "hidden" }
-                    : undefined
+                  isCollapsed ? { maxHeight: collapsedMaxHeight, overflow: "hidden" } : undefined
                 }
               >
                 <Row overflowX="auto" fillWidth tabIndex={-1}>
@@ -941,10 +903,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       <code
                         tabIndex={-1}
                         ref={codeRef}
-                        className={classNames(
-                          styles.code,
-                          `language-${language}`,
-                        )}
+                        className={classNames(styles.code, `language-${language}`)}
                       >
                         {typeof code === "string" ? code : code.content}
                       </code>
@@ -997,9 +956,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 )}
               </Column>
             );
-          })(
-            (typeof code === "string" ? code : code.content).split("\n").length,
-          )}
+          })((typeof code === "string" ? code : code.content).split("\n").length)}
           {compact && copyButton && (
             <Flex
               position="absolute"

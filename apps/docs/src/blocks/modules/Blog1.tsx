@@ -88,7 +88,7 @@ export const Blog1 = () => {
   ];
 
   return (
-    <Column fillWidth gap="24" maxWidth="s">
+    <Column gap="24" maxWidth="s">
       <Heading variant="display-strong-xs" marginLeft="16">
         Deep Space
       </Heading>
@@ -127,7 +127,7 @@ export const Blog1 = () => {
               {posts[0].tag}
             </Text>
           )}
-          <Heading as="h2" variant="heading-strong-l" wrap="balance">
+          <Heading as="h2" variant="heading-strong-l">
             {posts[0].title}
           </Heading>
           <Row gap="12" vertical="center">
@@ -166,7 +166,7 @@ export const Blog1 = () => {
                 {post.tag}
               </Text>
             )}
-            <Heading as="h2" variant="heading-strong-l" wrap="balance">
+            <Heading as="h2" variant="heading-strong-l">
               {post.title}
             </Heading>
             <Row gap="12" vertical="center">
@@ -194,7 +194,7 @@ export const Blog1 = () => {
                   {post.tag}
                 </Text>
               )}
-              <Heading as="h2" variant="heading-strong-l" wrap="balance">
+              <Heading as="h2" variant="heading-strong-l">
                 {post.title}
               </Heading>
               <Row gap="12" vertical="center">
@@ -207,16 +207,16 @@ export const Blog1 = () => {
           </Card>
         ))}
       </Grid>
-      <Row data-border="rounded" fillWidth center gap="8" paddingBottom="l">
+      <Row themeBorder="rounded" fillWidth center gap="8" paddingBottom="l">
         <IconButton size="s" icon="chevronLeft" variant="ghost" disabled />
         <Row gap="8" paddingX="8">
-          <IconButton size="m">
+          <IconButton>
             <Text variant="label-strong-s">1</Text>
           </IconButton>
-          <IconButton variant="secondary" size="m">
+          <IconButton variant="secondary">
             <Text variant="label-default-s">2</Text>
           </IconButton>
-          <IconButton variant="secondary" size="m">
+          <IconButton variant="secondary">
             <Text variant="label-default-s">3</Text>
           </IconButton>
         </Row>

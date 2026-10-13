@@ -1,0 +1,16 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(168,17): error TS2820: Type '\"solid-2\"' is not assignable to type '\"solid\" | \"dashed\" | undefined'. Did you mean '\"solid\"'?",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2679
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 4 issue(s)\n  [layout.shorthands] Use center instead of horizontal=\"center\" vertical=\"center\"\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}"
+  }
+}

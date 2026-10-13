@@ -102,17 +102,15 @@ describe("Switch", () => {
   it("fires onToggle from pointer and keyboard", async () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
-    renderWithProviders(
-      <Switch checked={false} onToggle={onToggle} ariaLabel="Enable feature" />,
-    );
+    renderWithProviders(<Switch checked={false} onToggle={onToggle} ariaLabel="Enable feature" />);
 
     const control = screen.getByRole("switch", { name: /enable feature/i });
     await user.click(control);
     expect(onToggle).toHaveBeenCalledTimes(1);
 
-    // The keydown handler lives on the inner focusable element, not the
-    // role="switch" wrapper (flagged for the a11y audit) — reach it via Tab.
-    await user.tab();
+    // The role="switch" element is the one that takes focus and handles keys,
+    // so the click above already left focus on it.
+    expect(control).toHaveFocus();
     await user.keyboard("{Enter}");
     expect(onToggle).toHaveBeenCalledTimes(2);
   });
@@ -130,9 +128,7 @@ describe("Switch", () => {
   it("does not fire onToggle when disabled", async () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
-    renderWithProviders(
-      <Switch checked={false} onToggle={onToggle} disabled ariaLabel="Locked" />,
-    );
+    renderWithProviders(<Switch checked={false} onToggle={onToggle} disabled ariaLabel="Locked" />);
 
     await user.click(screen.getByRole("switch", { name: /locked/i }));
     expect(onToggle).not.toHaveBeenCalled();

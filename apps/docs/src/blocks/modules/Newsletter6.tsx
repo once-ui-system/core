@@ -31,7 +31,7 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
       paddingY="xl"
       {...flex}
     >
-      <BlobFx position="absolute" top="0" translateY="50%" data-solid="inverse" />
+      <BlobFx position="absolute" top="0" translateY="50%" themeSolid="inverse" />
       <Background
         position="absolute"
         top="0"
@@ -48,14 +48,14 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
 
       <Column maxWidth={36} gap="24" horizontal="center" zIndex={1}>
         <Row vertical="center" gap="8">
-          <Pulse size="s" scheme="brand" />
+          <Pulse size="s" />
           <Text variant="code-default-s" onBackground="brand-medium">
             Community updates
           </Text>
         </Row>
 
         <Column gap="12" horizontal="center">
-          <Heading variant="display-strong-s" align="center" wrap="balance">
+          <Heading variant="display-strong-s" align="center">
             Follow the build in public
           </Heading>
           <Text variant="body-default-l" onBackground="neutral-weak" align="center" wrap="balance">
@@ -64,7 +64,7 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
           </Text>
         </Column>
 
-        <Row gap="16" vertical="center" wrap horizontal="center">
+        <Row gap="16" wrap center>
           <AvatarGroup
             size="s"
             reverse
@@ -101,7 +101,7 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
             You're on the list — welcome aboard
           </Row>
         ) : (
-          <Row maxWidth={24} fillWidth>
+          <Row maxWidth={24}>
             <Input
               id="community-email"
               placeholder="Email address"

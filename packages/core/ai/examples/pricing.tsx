@@ -1,10 +1,5 @@
 "use client";
 
-/**
- * Gold example: pricing
- * Target: three tiers, highlighted middle, comparison table, split FAQ, ambient CTA
- */
-import { useEffect, useRef, useState } from "react";
 import {
   Background,
   BlobFx,
@@ -23,6 +18,11 @@ import {
   Text,
   useInViewport,
 } from "@once-ui-system/core";
+/**
+ * Gold example: pricing
+ * Target: three tiers, highlighted middle, comparison table, split FAQ, ambient CTA
+ */
+import { useEffect, useRef, useState } from "react";
 
 type Billing = "monthly" | "yearly";
 
@@ -79,7 +79,14 @@ export function PricingExample() {
           left="0"
           fill
           pointerEvents="none"
-          gradient={{ display: true, colorStart: "page-background", x: 0, y: 50, width: 150, height: 300 }}
+          gradient={{
+            display: true,
+            colorStart: "page-background",
+            x: 0,
+            y: 50,
+            width: 150,
+            height: 300,
+          }}
         />
         <Column zIndex={1} center gap="24" padding="48" maxWidth={48}>
           <Text variant="label-default-s" onBackground="brand-medium">
@@ -96,7 +103,13 @@ export function PricingExample() {
 
       <Column fillWidth horizontal="center">
         <Column maxWidth="l" gap="40">
-          <Row fillWidth horizontal="between" vertical="end" gap="24" s={{ direction: "column", horizontal: "start" }}>
+          <Row
+            fillWidth
+            horizontal="between"
+            vertical="end"
+            gap="24"
+            s={{ direction: "column", horizontal: "start" }}
+          >
             <Heading as="h2" variant="display-strong-xs">
               Three plans, one decision
             </Heading>
@@ -112,7 +125,13 @@ export function PricingExample() {
 
           <Grid ref={tiersRef} columns="3" gap="24" s={{ columns: 1 }}>
             {tiers.map((tier, index) => (
-              <RevealFx key={tier.name} fill revealed={tiersSeen} translateY="8" delay={index * 100}>
+              <RevealFx
+                key={tier.name}
+                fill
+                revealed={tiersSeen}
+                translateY="8"
+                delay={index * 100}
+              >
                 <Column
                   fill
                   background="surface"
@@ -153,8 +172,18 @@ export function PricingExample() {
                     {tier.price ? (
                       <Row vertical="end" gap="2">
                         <Text variant="display-strong-s">$</Text>
-                        <CountFx variant="display-strong-s" value={tier.price[billing]} effect="wheel" speed={400} />
-                        <Text variant="label-default-s" onBackground="neutral-weak" paddingBottom="4" paddingLeft="4">
+                        <CountFx
+                          variant="display-strong-s"
+                          value={tier.price[billing]}
+                          effect="wheel"
+                          speed={400}
+                        />
+                        <Text
+                          variant="label-default-s"
+                          onBackground="neutral-weak"
+                          paddingBottom="4"
+                          paddingLeft="4"
+                        >
                           / mo
                         </Text>
                       </Row>
@@ -169,7 +198,11 @@ export function PricingExample() {
                         </Row>
                       ))}
                     </Column>
-                    <Button fillWidth variant={tier.highlighted ? "primary" : "secondary"} arrowIcon={tier.highlighted}>
+                    <Button
+                      fillWidth
+                      variant={tier.highlighted ? "primary" : "secondary"}
+                      arrowIcon={tier.highlighted}
+                    >
                       {tier.cta}
                     </Button>
                   </Column>
@@ -180,7 +213,13 @@ export function PricingExample() {
         </Column>
       </Column>
 
-      <Column fillWidth horizontal="center" background="neutral-alpha-weak" paddingY="80" paddingX="24">
+      <Column
+        fillWidth
+        horizontal="center"
+        background="neutral-alpha-weak"
+        paddingY="80"
+        paddingX="24"
+      >
         <Column maxWidth="l" gap="40">
           <Heading as="h2" variant="display-strong-xs">
             Every feature, side by side

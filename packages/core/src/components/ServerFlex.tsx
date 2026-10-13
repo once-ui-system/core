@@ -2,15 +2,24 @@ import classNames from "clsx";
 import { CSSProperties, forwardRef } from "react";
 
 import {
-  FlexBreakpointProps,
   CommonProps,
   DisplayProps,
+  FlexBreakpointProps,
   FlexProps,
   SizeProps,
   SpacingProps,
   StyleProps,
 } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import {
+  BELOW_HEADER,
+  offsetClasses,
+  scrollsOn,
+  sizeValue,
+  spacingClasses,
+  themeAttributes,
+  translateTransform,
+} from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 interface ServerFlexProps
@@ -25,52 +34,6 @@ interface ServerFlexProps
   m?: FlexBreakpointProps;
   s?: FlexBreakpointProps;
   xs?: FlexBreakpointProps;
-}
-
-/**
- * Spacing prop to utility prefix. The class matrix behind these is generated
- * from `@once-ui-system/foundations`' spec, which emits every prefix at every
- * token for every breakpoint.
- */
-const SPACING_PREFIX = {
-  padding: "p",
-  paddingLeft: "pl",
-  paddingRight: "pr",
-  paddingTop: "pt",
-  paddingBottom: "pb",
-  paddingX: "px",
-  paddingY: "py",
-  margin: "m",
-  marginLeft: "ml",
-  marginRight: "mr",
-  marginTop: "mt",
-  marginBottom: "mb",
-  marginX: "mx",
-  marginY: "my",
-  gap: "g",
-} as const;
-
-/**
- * Breakpoint spacing, as classes.
- *
- * Nothing emitted these before, so a token in a breakpoint prop — `s={{ gap: "4" }}`,
- * which is what the docs and every example teach — resolved to nothing at all:
- * no class was written, and ClientFlex's inline path guards on
- * `typeof value === "number"`, so the string fell through both. Numbers worked,
- * tokens did not, and neither said so.
- *
- * Numbers still go to the inline path, since `gap: 0.25` is a rem value with no
- * class behind it; `Flex` keeps those on the client component.
- */
-function spacingClasses(
-  breakpoint: string,
-  props: Record<string, unknown> | undefined,
-): (string | false)[] {
-  if (!props) return [];
-  return Object.entries(SPACING_PREFIX).map(([prop, prefix]) => {
-    const value = props[prop];
-    return typeof value === "string" && value !== "" && `${breakpoint}-${prefix}-${value}`;
-  });
 }
 
 const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
@@ -164,6 +127,14 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       zIndex,
       shadow,
       cursor,
+      userSelect,
+      blendMode,
+      blur,
+      backdropBlur,
+      theme,
+      themeBorder,
+      themeSolid,
+      themeSurface,
       className,
       style,
       children,
@@ -347,9 +318,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       overflow && `overflow-${overflow}`,
       overflowX && `overflow-x-${overflowX}`,
       overflowY && `overflow-y-${overflowY}`,
-      ((overflow && overflow !== "hidden") ||
-        (overflowX && overflowX !== "hidden") ||
-        (overflowY && overflowY !== "hidden")) &&
+      (scrollsOn(overflow) || scrollsOn(overflowX) || scrollsOn(overflowY)) &&
         `scrollbar-${scrollbar}`,
       flex && `flex-${flex}`,
       horizontal &&
@@ -370,12 +339,21 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       fill && "min-height-0",
       fill && "min-width-0",
       (fillWidth || maxWidth) && "fill-width",
-      maxWidth && ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) && `max-width-${maxWidth}`,
+      maxWidth &&
+        ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) &&
+        `max-width-${maxWidth}`,
       (fillHeight || maxHeight) && "fill-height",
+      height === BELOW_HEADER && "height-below-header",
+      minHeight === BELOW_HEADER && "min-height-below-header",
+      maxHeight === BELOW_HEADER && "max-height-below-header",
       shadow && `shadow-${shadow}`,
       zIndex !== undefined && `z-index-${zIndex}`,
       textType && `font-${textType}`,
       typeof cursor === "string" && `cursor-${cursor}`,
+      userSelect && `user-select-${userSelect}`,
+      blendMode && `blend-mode-${blendMode}`,
+      typeof blur === "string" && `blur-${blur}`,
+      typeof backdropBlur === "string" && `backdrop-blur-${backdropBlur}`,
       dark && "dark-flex",
       light && "light-flex",
       colorClass,
@@ -391,14 +369,21 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         ...spacingClasses("m", cascadedM),
         ...spacingClasses("s", cascadedS),
         ...spacingClasses("xs", cascadedXs),
+        // Offsets cascade with the rest. Only a static step is a class
+        // (`.m-top-16`); a rem number or a CSS unit is inline, on ClientFlex.
+        ...offsetClasses("xl", cascadedXl),
+        ...offsetClasses("l", cascadedL),
+        ...offsetClasses("m", cascadedM),
+        ...offsetClasses("s", cascadedS),
+        ...offsetClasses("xs", cascadedXs),
         cascadedXl?.position && `xl-position-${cascadedXl.position}`,
-          cascadedL?.position && `l-position-${cascadedL.position}`,
+        cascadedL?.position && `l-position-${cascadedL.position}`,
         cascadedM?.position && `m-position-${cascadedM.position}`,
         cascadedS?.position && `s-position-${cascadedS.position}`,
         cascadedXs?.position && `xs-position-${cascadedXs.position}`,
         cascadedXl?.hide === true && "xl-flex-hide",
-          cascadedXl?.hide === false && "xl-flex-show",
-          cascadedL?.hide === true && "l-flex-hide",
+        cascadedXl?.hide === false && "xl-flex-show",
+        cascadedL?.hide === true && "l-flex-hide",
         cascadedL?.hide === false && "l-flex-show",
         cascadedM?.hide === true && "m-flex-hide",
         cascadedM?.hide === false && "m-flex-show",
@@ -407,7 +392,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedXs?.hide === true && "xs-flex-hide",
         cascadedXs?.hide === false && "xs-flex-show",
         xl?.direction && `xl-flex-${xl.direction}`,
-          l?.direction && `l-flex-${l.direction}`,
+        l?.direction && `l-flex-${l.direction}`,
         m?.direction && `m-flex-${m.direction}`,
         s?.direction && `s-flex-${s.direction}`,
         xs?.direction && `xs-flex-${xs.direction}`,
@@ -459,15 +444,20 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
           cascadedXs?.direction === undefined
             ? `xs-align-${cascadedXs.vertical}`
             : `xs-justify-${cascadedXs.vertical}`),
-        // Additional class-based properties
+        // Additional class-based properties. `xl` leads, as it does for spacing:
+        // without it an `xl={{ overflow }}` reached every narrower step and
+        // missed its own.
+        cascadedXl?.overflow && `xl-overflow-${cascadedXl.overflow}`,
         cascadedL?.overflow && `l-overflow-${cascadedL.overflow}`,
         cascadedM?.overflow && `m-overflow-${cascadedM.overflow}`,
         cascadedS?.overflow && `s-overflow-${cascadedS.overflow}`,
         cascadedXs?.overflow && `xs-overflow-${cascadedXs.overflow}`,
+        cascadedXl?.overflowX && `xl-overflow-x-${cascadedXl.overflowX}`,
         cascadedL?.overflowX && `l-overflow-x-${cascadedL.overflowX}`,
         cascadedM?.overflowX && `m-overflow-x-${cascadedM.overflowX}`,
         cascadedS?.overflowX && `s-overflow-x-${cascadedS.overflowX}`,
         cascadedXs?.overflowX && `xs-overflow-x-${cascadedXs.overflowX}`,
+        cascadedXl?.overflowY && `xl-overflow-y-${cascadedXl.overflowY}`,
         cascadedL?.overflowY && `l-overflow-y-${cascadedL.overflowY}`,
         cascadedM?.overflowY && `m-overflow-y-${cascadedM.overflowY}`,
         cascadedS?.overflowY && `s-overflow-y-${cascadedS.overflowY}`,
@@ -505,58 +495,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedS?.transition && `s-transition-${cascadedS.transition}`,
         cascadedXs?.transition && `xs-transition-${cascadedXs.transition}`,
       );
-  
-
-
-    const parseDimension = (
-      value: number | SpacingToken | string | undefined,
-      type: "width" | "height",
-    ): string | undefined => {
-      if (value === undefined) return undefined;
-      if (typeof value === "number") return `${value}rem`;
-      if (typeof value === "string") {
-        // Check for CSS unit values - pass through directly
-        if (
-          value.endsWith("%") ||
-          value.endsWith("vh") ||
-          value.endsWith("dvh") ||
-          value.endsWith("vw") ||
-          value.startsWith("calc(")
-        ) {
-          return value;
-        }
-        // Static spacing tokens
-        if (
-          [
-            "0",
-            "1",
-            "2",
-            "4",
-            "8",
-            "12",
-            "16",
-            "20",
-            "24",
-            "32",
-            "40",
-            "48",
-            "56",
-            "64",
-            "80",
-            "104",
-            "128",
-            "160",
-          ].includes(value)
-        ) {
-          return `var(--static-space-${value})`;
-        }
-        // Responsive tokens
-        if (["xs", "s", "m", "l", "xl"].includes(value)) {
-          return `var(--responsive-${type}-${value})`;
-        }
-      }
-      return undefined;
-    };
 
     const parsePosition = (
       value: number | SpacingToken | string | undefined,
@@ -578,20 +516,19 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       return undefined;
     };
 
-    const translateXValue = parsePosition(translateX);
-    const translateYValue = parsePosition(translateY);
-    const transform =
-      translateXValue || translateYValue
-        ? `translate(${translateXValue || "0"}, ${translateYValue || "0"})`
-        : undefined;
+    // A spacing token as well as a number or a CSS unit: `translateY="16"`
+    // used to write no transform at all.
+    const transform = translateTransform(translateX, translateY);
 
     const combinedStyle: CSSProperties = {
-      maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string) ? undefined : parseDimension(maxWidth, "width"),
-      minWidth: parseDimension(minWidth, "width"),
-      minHeight: parseDimension(minHeight, "height"),
-      maxHeight: parseDimension(maxHeight, "height"),
-      width: parseDimension(width, "width"),
-      height: parseDimension(height, "height"),
+      maxWidth: ["xs", "s", "m", "l", "xl"].includes(maxWidth as string)
+        ? undefined
+        : sizeValue(maxWidth, "width"),
+      minWidth: sizeValue(minWidth, "width"),
+      minHeight: sizeValue(minHeight, "height"),
+      maxHeight: sizeValue(maxHeight, "height"),
+      width: sizeValue(width, "width"),
+      height: sizeValue(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
       cursor: typeof cursor === "string" ? cursor : undefined,
@@ -617,11 +554,23 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       bottom: parsePosition(bottom),
       left: parsePosition(left),
       transform,
+      // A size is a class; a number is rem, and has no class to reach for.
+      filter: typeof blur === "number" ? `blur(${blur}rem)` : undefined,
+      ...(typeof backdropBlur === "number" && {
+        WebkitBackdropFilter: `blur(${backdropBlur}rem)`,
+        backdropFilter: `blur(${backdropBlur}rem)`,
+      }),
       ...style,
     };
 
     return (
-      <Component ref={ref} className={classes} style={combinedStyle} {...rest}>
+      <Component
+        ref={ref}
+        className={classes}
+        style={combinedStyle}
+        {...rest}
+        {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
+      >
         {children}
       </Component>
     );
@@ -629,4 +578,5 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
 );
 
 ServerFlex.displayName = "ServerFlex";
+
 export { ServerFlex };

@@ -347,7 +347,7 @@ export default function PricingPage() {
           fillWidth
           maxWidth="l"
           radius="xl"
-          border="neutral-alpha-weak"
+          border
           overflow="hidden"
           padding="64"
           center

@@ -1,7 +1,7 @@
 ---
 title: "InteractiveDetails"
 summary: "A utility component for displaying labels and descriptions for interactive form elements."
-updatedAt: "2025-05-09"
+updatedAt: "2026-10-11"
 docs: "once-ui/form-controls/interactiveDetails.mdx"
 github: "components/InteractiveDetails.tsx"
 navLabel: "InteractiveDetails"
@@ -94,6 +94,32 @@ Add a help tooltip to provide additional information about the form control.
   ]}
 />
 
+## Naming the control
+
+A control beside `InteractiveDetails` should be named by its label alone, and described by its description. `Checkbox`, `Switch` and `RadioButton` already do this; for a control of your own, note that `id` covers the whole block, help button included, and point the control at the two texts instead: `labelId` goes on the label text and `descriptionId` on the description.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Row gap="12" vertical="center">
+  <input type="checkbox" id="updates" aria-labelledby="updates-label" aria-describedby="updates-description" />
+  <InteractiveDetails
+    labelId="updates-label"
+    descriptionId="updates-description"
+    label="Product updates"
+    description="Release notes, once a month"
+    onClick={toggle}
+  />
+</Row>`,
+      language: "tsx",
+      label: "labelId and descriptionId"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -105,7 +131,9 @@ Add a help tooltip to provide additional information about the form control.
     disabled: "Dim it and block the click.",
     iconButtonProps: "Passed through to the info control.",
     onClick: "Called when the text is clicked, so the label activates the control it belongs to.",
-    id: "Element id, for wiring to a control.",
+    id: "Element id on the whole block.",
+    labelId: "Id on the label text alone, for the control's aria-labelledby.",
+    descriptionId: "Id on the description text, for the control's aria-describedby.",
   }}
   content={[
     ["className"]

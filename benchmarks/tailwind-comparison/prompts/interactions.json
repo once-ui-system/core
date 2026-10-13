@@ -1,0 +1,96 @@
+{
+  "$comment": "One scripted interaction per task, identical for every arm, fixed before the full run (approved 2026-10-11, METHODOLOGY.md §11). The gate takes an extra screenshot after it, at desktop and phone width, for the blinded rater. Targets are found by accessible role and name (or, as a fallback, plain semantic HTML), never by stack-specific classes; the first match wins. A missing target is recorded (interaction.found = false), not a gate failure; the rater is told the interaction was not available. Interaction-time console errors are recorded, not gated (the pre-registered render gate covers the initial state).",
+  "tasks": {
+    "1": {
+      "action": "none",
+      "describe": "No interaction: the dashboard is a static view."
+    },
+    "2": {
+      "action": "none",
+      "describe": "No interaction: the settings form is visible on load."
+    },
+    "3": {
+      "action": "click",
+      "target": {
+        "role": "button",
+        "name": "\\?\\s*$"
+      },
+      "describe": "Opens the first FAQ question (the first button whose name ends with a question mark)."
+    },
+    "4": {
+      "action": "click",
+      "target": {
+        "role": "button",
+        "name": "emoji"
+      },
+      "describe": "Opens the emoji picker (the first button whose name contains \"emoji\")."
+    },
+    "5": {
+      "action": "none",
+      "describe": "No interaction: the hero is a static view."
+    },
+    "6": {
+      "action": "click",
+      "target": {
+        "role": "button",
+        "name": "^\\s*(sign\\s*in|log\\s*in|login)\\b"
+      },
+      "describe": "Opens the login (the first button named \"Sign in\", \"Log in\" or \"Login\"). If the form is already on the page, this submits it empty."
+    },
+    "7": {
+      "action": "hover",
+      "target": {
+        "role": "img"
+      },
+      "fallback": {
+        "role": "article"
+      },
+      "describe": "Hovers the first product (its first image, or the first article if no element has the img role)."
+    },
+    "8": {
+      "action": "click",
+      "target": {
+        "role": "checkbox"
+      },
+      "fallback": {
+        "role": "button",
+        "name": "complete|done|mark"
+      },
+      "describe": "Completes the first step (the first checkbox, or the first button whose name contains complete, done or mark)."
+    },
+    "9": {
+      "action": "click",
+      "target": {
+        "role": "columnheader"
+      },
+      "fallback": {
+        "selector": "thead th button, thead th"
+      },
+      "describe": "Sorts by the first column (the first column header, or the first button in a table header cell)."
+    },
+    "10": {
+      "action": "click",
+      "target": {
+        "role": "button",
+        "name": "profile|account|user|menu|avatar|open"
+      },
+      "describe": "Opens the profile popover (the first button whose name contains profile, account, user, menu, avatar or open)."
+    },
+    "11": {
+      "action": "click",
+      "target": {
+        "role": "button",
+        "name": "copy"
+      },
+      "describe": "Copies the first code snippet (the first button whose name contains \"copy\")."
+    },
+    "12": {
+      "action": "click",
+      "target": {
+        "role": "button",
+        "name": "feedback"
+      },
+      "describe": "Opens the feedback widget (the first button whose name contains \"feedback\")."
+    }
+  }
+}

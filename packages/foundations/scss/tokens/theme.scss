@@ -26,7 +26,7 @@
     --backdrop-filter:       none;
     --surface-border:        var(--static-transparent);
     --surface-background:    var(--neutral-background-medium);
-    --default-border:        var(--neutral-border-weak);
+    --default-border:        var(--neutral-alpha-weak);
 }
 
 [data-cursor-interactive="pointer"] {
@@ -183,6 +183,14 @@
     --brand-alpha-strong:           var(--function-brand-600-50);
     --brand-alpha-medium:           var(--function-brand-600-30);
     --brand-alpha-weak:             var(--function-brand-600-15);
+
+    /* The brand colour at solid strength, whatever data-solid says: what
+       --brand-solid-* is under data-solid="color". Under "contrast" the
+       solids turn neutral; effects and illustrations that need the hue
+       read these instead. */
+    --brand-color-strong:           var(--function-brand-500);
+    --brand-color-medium:           var(--function-brand-400);
+    --brand-color-weak:             var(--function-brand-300);
 
     /* accent */
     --accent-background-strong:     var(--function-accent-300);
@@ -384,7 +392,12 @@
     --brand-alpha-strong:           var(--function-brand-600-50);
     --brand-alpha-medium:           var(--function-brand-600-30);
     --brand-alpha-weak:             var(--function-brand-600-15);
-    
+
+    /* See the dark block: the brand solids as data-solid="color" has them. */
+    --brand-color-strong:           var(--function-brand-600);
+    --brand-color-medium:           var(--function-brand-500);
+    --brand-color-weak:             var(--function-brand-400);
+
     /* accent */
     --accent-background-strong:     var(--function-accent-800);
     --accent-background-medium:     var(--function-accent-1000);

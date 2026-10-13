@@ -2,12 +2,12 @@
 
 import type React from "react";
 import { forwardRef } from "react";
+import styles from "./Book.module.scss";
 import { Column } from "./Column";
 import { ElementType } from "./ElementType";
 import { Flex } from "./Flex";
 import { Media } from "./Media";
 import { Row } from "./Row";
-import styles from "./Book.module.scss";
 
 interface BookProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
   /** Cover artwork. Omit to render a blank cover you can fill with children. */
@@ -114,5 +114,5 @@ const Book = forwardRef<HTMLDivElement, BookProps>(
 
 Book.displayName = "Book";
 
-export { Book };
 export type { BookProps };
+export { Book };

@@ -1,11 +1,26 @@
-import { Avatar, Background, Button, Column, IconButton, Logo, Mask, ParticleFx, Row, SmartLink, Tag, Text, TypeFx } from "@once-ui-system/core";
 import type { IconName } from "@once-ui-system/core";
+import {
+  Avatar,
+  Background,
+  Button,
+  Column,
+  IconButton,
+  Logo,
+  Mask,
+  ParticleFx,
+  Row,
+  SmartLink,
+  Tag,
+  Text,
+  TypeFx,
+} from "@once-ui-system/core";
 
 const social: { icon: IconName; label: string; href: string }[] = [
   {
     icon: "link",
     label: "Discord",
-    href: "https://discord.com/invite/5EyAQ4eNdS" },
+    href: "https://discord.com/invite/5EyAQ4eNdS",
+  },
   {
     icon: "link",
     label: "GitHub",
@@ -26,23 +41,21 @@ const navigation = [
       { label: "Once UI Core", href: "#" },
       { label: "Magic Portfolio", href: "#" },
       { label: "Magic Docs", href: "#" },
-      { label: "Magic Bio", href: "#" },
       { label: "Once UI Figma", href: "#" },
     ],
   },
   {
     title: "Pro",
     items: [
-      { label: "Supa Social", href: "#", tag: "New" },
-      { label: "Magic Studio", href: "#", tag: "New" },
+      { label: "Orbit Core", href: "#", tag: "New" },
+      { label: "Stack", href: "#", tag: "New" },
       { label: "Supabase Starter", href: "#" },
       { label: "Magic Convert", href: "#" },
       { label: "Magic Spotlight", href: "#" },
       { label: "Magic Journal", href: "#", tag: "New" },
       { label: "Magic Store", href: "#" },
-      { label: "Magic Agent", href: "#" },
       { label: "Once UI Blocks", href: "#" },
-    ]
+    ],
   },
   {
     title: "Learn",
@@ -73,45 +86,70 @@ const navigation = [
       { label: "Terms of Use", href: "#" },
       { label: "Privacy Policy", href: "#" },
       { label: "License Agreement", href: "#" },
-    ]
+    ],
   },
 ];
 
 export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" {...flex}>
-
       <Row fillWidth borderY="neutral-alpha-medium">
         <Background
           lines={{
             display: true,
             color: "neutral-alpha-weak",
             angle: -45,
-            size: "4"
+            size: "4",
           }}
           borderRight="neutral-alpha-medium"
           width={12}
           minWidth={12}
-          m={{hide: true}}/>
+          m={{ hide: true }}
+        />
         <Row fillWidth horizontal="center">
-          <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth={4} l={{hide: true}}/>
-          <Column maxWidth="xl" height="m" center paddingX="l" gap="24" s={{direction: "column"}} borderLeft="neutral-alpha-medium" borderRight="neutral-alpha-medium" overflow="hidden">
+          <Row
+            flex={1}
+            border="neutral-alpha-medium"
+            radius="full"
+            minWidth={4}
+            l={{ hide: true }}
+          />
+          <Column
+            maxWidth="xl"
+            height="m"
+            center
+            paddingX="l"
+            gap="24"
+            borderLeft="neutral-alpha-medium"
+            borderRight="neutral-alpha-medium"
+            overflow="hidden"
+          >
             <Background
               position="absolute"
+              top="0"
+              left="0"
               fill
               lines={{
                 display: true,
                 color: "neutral-alpha-weak",
                 angle: -45,
-                size: "4"
-              }}/>
-            <Row overflow="hidden" position="absolute" minWidth={80} minHeight={28} radius="full" border="neutral-alpha-medium">
+                size: "4",
+              }}
+            />
+            <Row
+              overflow="hidden"
+              position="absolute"
+              minWidth={80}
+              minHeight={28}
+              radius="full"
+              border="neutral-alpha-medium"
+            >
               <Background
                 fill
                 position="absolute"
                 bottom="0"
                 left="0"
-                data-solid="color"
+                themeSolid="color"
                 gradient={{
                   display: true,
                   x: 50,
@@ -127,7 +165,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 position="absolute"
                 bottom="0"
                 left="0"
-                style={{filter: "blur(1rem)", transform: "scale(1.1)"}}
+                blur={1}
+                style={{ transform: "scale(1.1)" }}
                 gradient={{
                   display: true,
                   x: 50,
@@ -137,17 +176,43 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                   colorStart: "brand-on-background-strong",
                 }}
               />
-              </Row>
-              <Row overflow="hidden" position="absolute" minWidth={58} minHeight={28} radius="full" border="neutral-alpha-medium"/>
-              <Row overflow="hidden" position="absolute" minWidth={42} minHeight={28} radius="full" border="neutral-alpha-medium"/>
-              <Row overflow="hidden" position="absolute" minWidth={28} minHeight={28} radius="full" border="neutral-alpha-medium">
-              <Mask fill
-                position="absolute"
-                x={50}
-                y={50}
-                radius={25}
-                >
-                <ParticleFx style={{transform: "scale(1.1)"}} opacity={70} position="absolute" top="0" left="0" fill interactive speed={1.5} density={100} size="2" intensity={20} mode="attract"/>
+            </Row>
+            <Row
+              overflow="hidden"
+              position="absolute"
+              minWidth={58}
+              minHeight={28}
+              radius="full"
+              border="neutral-alpha-medium"
+            />
+            <Row
+              overflow="hidden"
+              position="absolute"
+              minWidth={42}
+              minHeight={28}
+              radius="full"
+              border="neutral-alpha-medium"
+            />
+            <Row
+              overflow="hidden"
+              position="absolute"
+              minWidth={28}
+              minHeight={28}
+              radius="full"
+              border="neutral-alpha-medium"
+            >
+              <Mask fill position="absolute" x={50} y={50} radius={25}>
+                <ParticleFx
+                  style={{ transform: "scale(1.1)" }}
+                  opacity={70}
+                  position="absolute"
+                  top="0"
+                  left="0"
+                  fill
+                  interactive
+                  speed={1.5}
+                  mode="attract"
+                />
               </Mask>
             </Row>
             <Column horizontal="center" gap="20">
@@ -155,27 +220,32 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 variant="display-strong-m"
                 words={["Ship your product.", "Build a presence.", "Launch seamlessly."]}
                 speed={80}
-                hold={2000}
-                trigger="instant"
               />
               <Button data-border="rounded" id="hero-cta-button" href="#" arrowIcon>
                 Start now
               </Button>
             </Column>
           </Column>
-          <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth={4} l={{hide: true}}/>
+          <Row
+            flex={1}
+            border="neutral-alpha-medium"
+            radius="full"
+            minWidth={4}
+            l={{ hide: true }}
+          />
         </Row>
         <Background
           lines={{
             display: true,
             color: "neutral-alpha-weak",
             angle: -45,
-            size: "4"
+            size: "4",
           }}
           borderLeft="neutral-alpha-medium"
-          width={12} 
+          width={12}
           minWidth={12}
-          m={{hide: true}}/>
+          m={{ hide: true }}
+        />
       </Row>
 
       <Row fillWidth horizontal="center">
@@ -185,25 +255,25 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
             border="neutral-alpha-medium"
             bottomRightRadius="full"
             topLeftRadius="full"
-            width={12} 
+            width={12}
             minWidth={12}
-            m={{hide: true}}/>
-          <Column flex={1}
+            m={{ hide: true }}
+          />
+          <Column
+            flex={1}
             bottomLeftRadius="full"
             topRightRadius="full"
             overflow="hidden"
             border="neutral-alpha-medium"
-            l={{hide: true}}>
-            <Row
-              flex={1}
-              minWidth={4}
-              overflow="hidden">
+            l={{ hide: true }}
+          >
+            <Row flex={1} minWidth={4} overflow="hidden">
               <Background
                 fill
                 position="absolute"
                 bottom="0"
                 left="0"
-                data-solid="color"
+                themeSolid="color"
                 gradient={{
                   display: true,
                   x: 50,
@@ -219,7 +289,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 position="absolute"
                 bottom="0"
                 left="0"
-                style={{filter: "blur(1rem)", transform: "scale(1.1)"}}
+                blur={1}
+                style={{ transform: "scale(1.1)" }}
                 gradient={{
                   display: true,
                   x: 50,
@@ -235,18 +306,26 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                 display: true,
                 color: "neutral-alpha-weak",
                 angle: -45,
-                size: "4"
+                size: "4",
               }}
               flex={1}
-              minWidth={4}/>
+              minWidth={4}
+            />
           </Column>
         </Row>
-        <Column 
-          maxWidth="xl"
-          borderX="neutral-alpha-medium">
-          <Row paddingX="xl" paddingTop="xl" paddingBottom="40" fillWidth horizontal="between" vertical="center">
-            <Logo href="/" dark icon="/trademarks/icon-dark.svg" size="m"/>
-            <Logo href="/" light icon="/trademarks/icon-light.svg" size="m"/>
+        <Column maxWidth="xl" borderX="neutral-alpha-medium">
+          <Row
+            paddingX="xl"
+            paddingTop="xl"
+            paddingBottom="40"
+            fillWidth
+            horizontal="between"
+            vertical="center"
+          >
+            <Logo
+              href="/"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            />
             <Row gap="8">
               {social.map((item, index) => (
                 <IconButton
@@ -260,13 +339,7 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               ))}
             </Row>
           </Row>
-          <Row
-            paddingX="xl" 
-            paddingBottom="xl" 
-            fillWidth 
-            wrap 
-            gap="32" 
-            horizontal="between">
+          <Row paddingX="xl" paddingBottom="xl" fillWidth wrap gap="32" horizontal="between">
             {navigation.map((section) => (
               <Column key={section.title} maxWidth={12} gap="32" paddingY="8">
                 <Text wrap="balance" variant="heading-strong-s">
@@ -279,18 +352,28 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
                   { key: "legal", label: "Legal" },
                   { key: "items", label: undefined },
                 ].map(({ key, label }) => {
-                  const arr = (section as any)[key] as Array<any> | undefined;
+                  const arr = (section as Record<string, unknown>)[key] as
+                    | Array<{ label: string; href: string; tag?: string }>
+                    | undefined;
                   if (!arr || arr.length === 0) return null;
                   return (
                     <Column key={`${section.title}-${key}`} gap="8">
                       {label && (
-                        <Text variant="label-default-s" onBackground="neutral-weak" marginBottom="8">
+                        <Text
+                          variant="label-default-s"
+                          onBackground="neutral-weak"
+                          marginBottom="8"
+                        >
                           {label}
                         </Text>
                       )}
-                      {arr.map((item: any) => (
+                      {arr.map((item) => (
                         <SmartLink key={`${item.label}-${item.href}`} href={item.href} unstyled>
-                          <Text wrap="balance" variant="body-default-s" onBackground="neutral-strong">
+                          <Text
+                            wrap="balance"
+                            variant="body-default-s"
+                            onBackground="neutral-strong"
+                          >
                             {item.label}
                           </Text>
                           {item.tag && (
@@ -313,24 +396,26 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               display: true,
               color: "neutral-alpha-weak",
               angle: -45,
-              size: "4"
+              size: "4",
             }}
             flex={1}
             border="neutral-alpha-medium"
             bottomRadius="full"
             topLeftRadius="full"
             minWidth={4}
-            l={{hide: true}}/>
+            l={{ hide: true }}
+          />
           <Background
             fillWidth
             border="neutral-alpha-medium"
             leftRadius="full"
-            width={12} 
+            width={12}
             minWidth={12}
-            m={{hide: true}}/>
+            m={{ hide: true }}
+          />
         </Row>
       </Row>
-      
+
       <Row fillWidth borderTop="neutral-alpha-medium" horizontal="center">
         <Row flex={1}>
           <Background
@@ -338,29 +423,38 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               display: true,
               color: "neutral-alpha-weak",
               angle: -45,
-              size: "4"
+              size: "4",
             }}
             borderRight="neutral-alpha-medium"
-            width={12} 
+            width={12}
             minWidth={12}
-            m={{hide: true}}/>
-          <Row fillWidth overflow="hidden" minWidth={4} l={{hide: true}}/>
+            m={{ hide: true }}
+          />
+          <Row fillWidth overflow="hidden" minWidth={4} l={{ hide: true }} />
         </Row>
-        <Row gap="8" paddingY="24" center maxWidth="xl" textVariant="label-default-s" onBackground="neutral-medium" borderX="neutral-alpha-medium">
+        <Row
+          gap="8"
+          paddingY="24"
+          center
+          maxWidth="xl"
+          textVariant="label-default-s"
+          onBackground="neutral-medium"
+          borderX="neutral-alpha-medium"
+        >
           Built with curiosity by{" "}
           <SmartLink href="#" unstyled>
-            <Avatar size="xs" src="/images/creators/lorant.jpg"/>
+            <Avatar size="xs" src="/images/creators/lorant.jpg" />
             Lorant One
           </SmartLink>
         </Row>
         <Row flex={1}>
-          <Row fillWidth overflow="hidden" minWidth={4} l={{hide: true}}>
+          <Row fillWidth overflow="hidden" minWidth={4} l={{ hide: true }}>
             <Background
               fill
               position="absolute"
               bottom="0"
               left="0"
-              data-solid="color"
+              themeSolid="color"
               gradient={{
                 display: true,
                 x: 0,
@@ -376,7 +470,8 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               position="absolute"
               bottom="0"
               left="0"
-              style={{filter: "blur(1rem)", transform: "scale(1.1)"}}
+              blur={1}
+              style={{ transform: "scale(1.1)" }}
               gradient={{
                 display: true,
                 x: 0,
@@ -392,14 +487,15 @@ export const Footer4 = (flex: React.ComponentProps<typeof Column>) => {
               display: true,
               color: "neutral-alpha-weak",
               angle: -45,
-              size: "4"
+              size: "4",
             }}
             bottomLeftRadius="full"
             borderLeft="neutral-alpha-medium"
             borderBottom="neutral-alpha-medium"
-            width={12} 
+            width={12}
             minWidth={12}
-            m={{hide: true}}/>
+            m={{ hide: true }}
+          />
         </Row>
       </Row>
     </Column>

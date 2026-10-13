@@ -1,0 +1,105 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "[375px] HTTP 404 /terms\n[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[375px] HTTP 404 /privacy\n[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[375px] HTTP 404 /forgot\n[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[375px] HTTP 404 /signup\n[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[768px] HTTP 404 /terms\n[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[768px] HTTP 404 /privacy\n[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[768px] HTTP 404 /forgot\n[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[768px] HTTP 404 /signup\n[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[1440px] HTTP 404 /terms\n[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[1440px] HTTP 404 /privacy\n[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[1440px] HTTP 404 /forgot\n[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[1440px] HTTP 404 /signup\n[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2322
+    },
+    "build": {
+      "ok": true,
+      "ms": 7652
+    },
+    "render": {
+      "ok": false,
+      "viewports": {
+        "phone": {
+          "text": 175,
+          "height": 812,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": [
+            "HTTP 404 /terms",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "HTTP 404 /privacy",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "HTTP 404 /forgot",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "HTTP 404 /signup",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+          ]
+        },
+        "tablet": {
+          "text": 175,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": [
+            "HTTP 404 /terms",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "HTTP 404 /privacy",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "HTTP 404 /forgot",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "HTTP 404 /signup",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+          ]
+        },
+        "desktop": {
+          "text": 175,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": [
+            "HTTP 404 /terms",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "HTTP 404 /privacy",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "HTTP 404 /forgot",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+            "HTTP 404 /signup",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+          ]
+        }
+      },
+      "errors": [
+        "[375px] HTTP 404 /terms",
+        "[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[375px] HTTP 404 /privacy",
+        "[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[375px] HTTP 404 /forgot",
+        "[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[375px] HTTP 404 /signup",
+        "[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[768px] HTTP 404 /terms",
+        "[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[768px] HTTP 404 /privacy",
+        "[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[768px] HTTP 404 /forgot",
+        "[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[768px] HTTP 404 /signup",
+        "[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[1440px] HTTP 404 /terms",
+        "[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[1440px] HTTP 404 /privacy",
+        "[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[1440px] HTTP 404 /forgot",
+        "[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[1440px] HTTP 404 /signup",
+        "[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      }
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth"
+  }
+}

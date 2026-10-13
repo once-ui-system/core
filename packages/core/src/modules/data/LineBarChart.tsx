@@ -23,5 +23,5 @@ const LineBarChart: React.FC<LineBarChartProps> = (props) => (
 
 LineBarChart.displayName = "LineBarChart";
 
-export { LineBarChart };
 export type { LineBarChartProps };
+export { LineBarChart };

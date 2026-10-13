@@ -9,12 +9,12 @@ import {
   Text,
 } from "@once-ui-system/core";
 
-const trademarks = [
-  { light: "/trademarks/brevo-light.svg", dark: "/trademarks/brevo-dark.svg" },
-  { light: "/trademarks/microsoft-light.svg", dark: "/trademarks/microsoft-dark.svg" },
-  { light: "/trademarks/nasa-light.svg", dark: "/trademarks/nasa-dark.svg" },
-  { light: "/trademarks/logmein-light.svg", dark: "/trademarks/logmein-dark.svg" },
-];
+// Placeholder trademarks: swap in real logos.
+const trademarks = Array.from({ length: 4 }, (_, index) => ({
+  id: `trademark-${index}`,
+  light: "/trademarks/wordmark-light.svg",
+  dark: "/trademarks/wordmark-dark.svg",
+}));
 
 const social = [
   { icon: "discord" as const, href: "https://discord.com/invite/5EyAQ4eNdS" },
@@ -50,7 +50,6 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
         />
         <Column
           maxWidth="xl"
-          fillWidth
           paddingX="xl"
           paddingY="48"
           gap="24"
@@ -70,11 +69,10 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
               Used by professionals working at leading companies worldwide.
             </Text>
           </Column>
-          <Grid columns="4" m={{ columns: 2 }} fillWidth maxWidth={48}>
+          <Grid columns="4" m={{ columns: 2 }} maxWidth={48}>
             {trademarks.map((mark) => (
-              <Row key={mark.light} center padding="24">
-                <Logo wordmark={mark.dark} dark />
-                <Logo wordmark={mark.light} light />
+              <Row key={mark.id} center padding="24">
+                <Logo wordmark={{ light: mark.light, dark: mark.dark }} />
               </Row>
             ))}
           </Grid>
@@ -97,7 +95,6 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
         <Row flex={1} m={{ hide: true }} borderRight="neutral-alpha-medium" />
         <Row
           maxWidth="xl"
-          fillWidth
           borderX="neutral-alpha-medium"
           paddingX="xl"
           paddingY="24"
@@ -107,8 +104,10 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
           gap="24"
         >
           <Row gap="12" vertical="center">
-            <Logo href="#" dark icon="/trademarks/icon-dark.svg" size="m" />
-            <Logo href="#" light icon="/trademarks/icon-light.svg" size="m" />
+            <Logo
+              href="#"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            />
           </Row>
           <Row gap="16" wrap>
             {links.map((link) => (

@@ -2,8 +2,8 @@
 
 import React from "react";
 import { Row } from "../../components/Row";
-import { RadiusSize, SpacingToken } from "../../types";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
+import { RadiusSize, SpacingToken } from "../../types";
 import { ChartVariant } from "./interfaces";
 
 export interface SwatchProps {
@@ -12,11 +12,12 @@ export interface SwatchProps {
   variant?: ChartVariant;
 }
 
-export const Swatch: React.FC<SwatchProps> = ({
-  color,
-  size = "m",
-  variant = useDataTheme().variant,
-}) => {
+export const Swatch: React.FC<SwatchProps> = ({ color, size = "m", variant: variantProp }) => {
+  // Read the theme on every render: as a default parameter the hook ran only
+  // when `variant` was omitted.
+  const theme = useDataTheme();
+  const variant = variantProp ?? theme.variant;
+
   const sizeMap: Record<
     string,
     { minWidth: SpacingToken; minHeight: SpacingToken; radius: RadiusSize }

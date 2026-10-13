@@ -10,10 +10,7 @@ export interface MissingDependencyProps {
   packageName: string;
 }
 
-export const MissingDependency: React.FC<MissingDependencyProps> = ({
-  component,
-  packageName,
-}) => (
+export const MissingDependency: React.FC<MissingDependencyProps> = ({ component, packageName }) => (
   <Column
     fillWidth
     minHeight="160"
@@ -30,7 +27,8 @@ export const MissingDependency: React.FC<MissingDependencyProps> = ({
         {`<${component} />`} requires {`"${packageName}"`}
       </Text>
       <Text variant="body-default-xs" onBackground="neutral-weak">
-        Install it with: <Text as="code" variant="code-default-xs">{`npm install ${packageName}`}</Text>
+        Install it with:{" "}
+        <Text as="code" variant="code-default-xs">{`npm install ${packageName}`}</Text>
       </Text>
     </Column>
   </Column>

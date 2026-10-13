@@ -44,7 +44,7 @@ export const Testimonial2: React.FC<Testimonial> = ({
     overflow="hidden"
     radius="xl"
     background="overlay"
-    border="neutral-alpha-weak"
+    border
     m={{ direction: "column" }}
     {...rest}
   >
@@ -90,10 +90,9 @@ export const Testimonial2: React.FC<Testimonial> = ({
               sizes="(max-width: 1024px) 90vw, 960px"
               src={src}
               alt={alt}
-              border="neutral-alpha-weak"
+              border
               topLeftRadius="xl"
-              fillWidth
-              fillHeight
+              fill
             />
           </Background>
         </Row>

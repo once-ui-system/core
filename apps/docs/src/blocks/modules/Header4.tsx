@@ -1,9 +1,12 @@
+"use client";
+
 import {
   Column,
   Icon,
   IconButton,
   Line,
   Logo,
+  NavIcon,
   Option,
   Row,
   SmartLink,
@@ -11,12 +14,15 @@ import {
   ToggleButton,
   UserMenu,
 } from "@once-ui-system/core";
+import { useState } from "react";
 
 interface HeaderProps extends React.ComponentProps<typeof Row> {
   cartCount?: number;
 }
 
 export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
+  const [isActive, setIsActive] = useState(false);
+
   return (
     <Row
       as="header"
@@ -28,10 +34,20 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
       horizontal="between"
       {...flex}
     >
-      <Row gap="24">
-        <Logo href="#" dark icon="/trademarks/icon-dark.svg" />
-        <Logo href="#" light icon="/trademarks/icon-light.svg" />
-        <Row gap="8">
+      <Row gap="24" vertical="center">
+        <NavIcon
+          active={isActive}
+          onClick={() => setIsActive(!isActive)}
+          aria-label="Toggle navigation menu"
+          aria-expanded={isActive}
+          hide
+          s={{ hide: false }}
+        />
+        <Logo
+          href="#"
+          icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+        />
+        <Row gap="8" s={{ hide: true }}>
           <ToggleButton label="All products" />
           <ToggleButton label="Trending" />
           <ToggleButton label="New" />
@@ -51,8 +67,7 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
             <Row
               data-scaling="90"
               position="absolute"
-              vertical="center"
-              horizontal="center"
+              center
               textVariant="body-default-xs"
               solid="brand-strong"
               onSolid="brand-strong"
@@ -60,10 +75,8 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
               minWidth="20"
               height="20"
               border="neutral-weak"
-              style={{
-                top: "-0.125rem",
-                right: "-0.5rem",
-              }}
+              top={-0.125}
+              right={-0.5}
             >
               {cartCount}
             </Row>
@@ -118,6 +131,16 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
           ]}
         />
       </Row>
+      {isActive && (
+        <Column top="100%" left="0" position="absolute" zIndex={2} padding="8" fillWidth>
+          <Column padding="8" background="surface" border="surface" radius="l-4" gap="4">
+            <ToggleButton fillWidth size="l" horizontal="start" label="All products" />
+            <ToggleButton fillWidth size="l" horizontal="start" label="Trending" />
+            <ToggleButton fillWidth size="l" horizontal="start" label="New" />
+            <ToggleButton fillWidth size="l" horizontal="start" label="On sale" />
+          </Column>
+        </Column>
+      )}
     </Row>
   );
 };

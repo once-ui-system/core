@@ -32,7 +32,6 @@ export const Features8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           <Column fillWidth border="neutral-alpha-medium" radius="l-4" padding="4" key={index}>
             <Media
               radius="l"
-              fillWidth
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 720px"
               aspectRatio="1/1"
               alt={tile.image}

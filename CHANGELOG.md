@@ -13,6 +13,550 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.1.0-rc.0] — 2026-10-13
+
+2.1 is a minor release: additive only, nothing removed or renamed. The plan
+and its checklist are in [ROADMAP.md](ROADMAP.md).
+
+### Added
+
+- **`List` takes `start`**, the first item's number on a numbered list
+  (`<List as="ol" start={4}>`). It goes to the `ol` element's own `start`
+  attribute and is ignored on `ul`; before, a numbered list could only count
+  from 1.
+- **`Tabs`, `TabList`, `Tab` and `TabPanel`.** Horizontal or vertical tabs
+  matched by `value`, with `tablist`/`tab`/`tabpanel` roles, `aria-selected`,
+  and `aria-controls` and `aria-labelledby` when the panel is mounted. Arrow
+  keys and Home/End move focus, with one tab in the Tab order. Activation is
+  `automatic` or `manual`, controlled or uncontrolled; `keepMounted` keeps
+  hidden panels alive.
+- **`Drawer`.** A modal sheet from any edge (`side`, `size`) on Dialog's
+  pieces: portal, scroll lock, focus trap and an inert page behind. Escape,
+  an overlay click or the close button call `onClose`; focus goes in on open
+  and back on close. `flush` keeps the title for screen readers only.
+- **`VisuallyHidden`.** Content for screen readers only; `focusable` makes
+  it a skip link that appears on focus.
+- **`Breadcrumbs`.** A `nav` landmark with an ordered list, `aria-current`
+  on the last item, separators hidden from assistive tech, links through the
+  adapter, and `maxItems` collapsing the middle behind a button.
+- **`RadioGroup`.** One choice from a set of radios as a single field: a
+  `radiogroup` named by `label` (or `aria-label`) and described by
+  `description`. Controlled with `value`/`onChange(value)` or uncontrolled
+  with `defaultValue`; `name` submits the selected value. Only the selected
+  radio is in the Tab order; the arrow keys move focus and selection, wrapping
+  and skipping disabled radios. Takes `options`, or `RadioButton` children in
+  any layout, plus `disabled` and `orientation`.
+- **`RangeSlider`.** Two thumbs selecting a `[start, end]` range. Each thumb
+  is a `slider` named "Minimum" and "Maximum" (`thumbLabels`) and bounded by
+  the other, so they never cross; `minDistance` keeps them apart.
+  `formatValue` drives the readout and `aria-valuetext`. Arrows, Page Up/Down,
+  Home/End and pointer drag move a thumb; `name` submits both values.
+  Controlled or uncontrolled.
+- **`Slider` works uncontrolled.** `defaultValue` starts it (falling back to
+  `min`); `value` and `onChange` are optional.
+- **`onToggle` receives the new state.** `Checkbox`, `RadioButton` and
+  `Switch` call `onToggle(checked)`, so a setter can go straight in;
+  callbacks that take no argument still compile.
+- **Uncontrolled `Switch` and `TagInput`.** Leave out `checked` or `value` and
+  the component keeps its own state, starting from `defaultChecked` or
+  `defaultValue`. `Checkbox` and `RadioButton` take `defaultChecked` too.
+- **`Dialog` takes `showClose`**, the name `Drawer` uses.
+- **Refs in the types** of `Checkbox`, `RadioButton`, `Switch`, `Dialog`,
+  `Skeleton` and `InteractiveDetails`; `ChipProps` is exported and `Chip`'s
+  ref typed.
+- **`Pagination`.** Previous/next, `boundaries` and `siblings` pages, an
+  ellipsis for each run left out, and optional first/last buttons
+  (`showFirstLast`). A `nav` landmark of real buttons with
+  `aria-current="page"` and a fixed item count, so it never changes width.
+  `page`/`onChange` or `defaultPage`; `total` pages, or `count` plus
+  `perPage`; an optional per-page select (`perPageOptions`); `labels`
+  translates it. `Table` draws its page buttons with it.
+- **`DataTable`.** Typed rows from column definitions (`key`, `header`,
+  `cell`, `sortable`, `sort`, `align`, `width`): sortable header buttons with
+  `aria-sort`, a checkbox selection column with a mixed-state select-all,
+  client-side or server-side (`count`/`total`) pagination through
+  `Pagination`, an `emptyState` slot, and skeleton rows with `aria-busy` while
+  `loading`. Sorting, selection and page each work controlled or
+  uncontrolled.
+- **`useHotkeys` and `KeyTip`.** `useHotkeys("mod+k", fn)` takes combos,
+  alternatives and sequences with exact modifiers, skips text fields,
+  selects and contenteditable unless `allowWhileTyping`, and is safe on the
+  server. `KeyTip` draws a combo as `Kbd` keycaps: ⌘ on Apple platforms,
+  Ctrl elsewhere, spelled out for screen readers.
+- **`@once-ui-system/core/mdx`: one component map for MDX content.**
+  `mdxComponents` and `createMdxComponents(overrides)` render Markdown
+  through Once UI for `next-mdx-remote` (RSC included) and `@next/mdx`:
+  headings get an id and a keyboard-reachable link to themselves, links go
+  through `SmartLink`, images through `Media`, fenced code through
+  `CodeBlock`, GFM tables through `Table`, and the common components are
+  available as tags. Each override is typed against the props MDX passes, so
+  a map needs no casts. A subpath of its own, because it renders code through
+  `/code`.
+- **Ready-made OG route handlers with SSRF protection.**
+  `@once-ui-system/core/next` exports `createOgFetchRoute()` and
+  `createOgProxyRoute()`, each returning `{ GET }`, so
+  `app/api/og/fetch/route.ts` and `app/api/og/proxy/route.ts` are two lines.
+  They answer exactly what `OgCard` and `useOgData` request.
+- **OG route paths are configurable.** `OgRoutesProvider` tells `OgCard` and
+  `useOgData` where the routes live; `Meta.generate` takes `ogRoutes`. The
+  default paths are unchanged.
+- **New options on `handleOGFetch` and `handleOGProxy`:** `blockedDomains`,
+  `isAllowed`, `allowHttp`, `maxBytes`, `maxRedirects`, `cacheControl`,
+  `sameOrigin`, `allowedContentTypes`, `favicon`, and
+  `DEFAULT_OG_IMAGE_TYPES`.
+- **`defineConfig`: the config reaches the providers as written.** It checks
+  values and misspelt keys in `style`, `dataStyle` and `fonts` and keeps
+  literal types, so the sections spread straight into `ThemeProvider`,
+  `DataThemeProvider` and `ThemeInit` with no casts or renamed keys. Also on
+  the dependency-free `@once-ui-system/core/config` entry. The 2.0
+  `ThemeInit` shape still compiles. New types: `OnceUIConfig` and its
+  sections.
+- **A seed colour for custom schemes, with no flash.** `brandSeed`,
+  `accentSeed` and `neutralSeed` generate the whole scheme; `ThemeInit`
+  renders it on the server and `ThemeProvider` follows changes on the client.
+  `customSchemeProperties()` exposes the same values. The rendered rule is
+  scoped to `html:root`, so it wins over a static palette an app sets on
+  `:root`.
+- **`StylePanel` speaks your language.** `labels` translates every string the
+  panel shows or announces: group titles, row labels, option names, and the
+  swatches' accessible names, built by functions so a translation can order
+  its words. It reaches composed parts through `StylePanel.Root`, and a row's
+  own `label` still wins. `ThemeSwitcher`, `ColorInput` and `Scroller` take
+  `labels` for their built-in names too, so the panel's scroll buttons are
+  translated with the rest of it.
+- **`StylePanel` fits a narrow sidebar.** `stacked` puts each row's label above
+  its control, and the option rows take the whole row and drop a button size. A row's own layout
+  props still win, including on a row with a custom colour. Where swatches or
+  options still overflow, the chosen one is scrolled into view, clear of the
+  scroll buttons.
+- **A custom colour on `StylePanel`'s Brand and Accent rows.** `customColors`
+  (or `custom` on `StylePanel.Brand` and `StylePanel.Accent`) adds a swatch
+  for a colour of your own and a field to pick it, reported as `brandSeed` or
+  `accentSeed` through `onChange`. Controlled mode only; render the seed with
+  `ThemeInit` and `ThemeProvider` for a first paint in that colour.
+- **`ThemeSwitcher` can be controlled.** With `value`, it shows that theme and
+  reports a choice through `onChange` without setting or storing it.
+- **Root font size per device and the interactive cursor.** `desktopSize`,
+  `tabletSize`, `mobileSize` and `cursorInteractive` set the attributes
+  `tokens.css` always styled. No defaults, so output is unchanged unless set.
+- **`--brand-color-strong`, `--brand-color-medium` and `--brand-color-weak`:**
+  the brand hue under every solid style. `--brand-solid-*` follows the solid
+  style and is neutral under `solid="contrast"`; these tokens are for
+  anything that must stay brand-coloured, like illustrations and effects.
+- **`Grid` fits as many columns as there is room for.** `minColumnWidth`
+  takes the same values as `minWidth` and renders on the server, replacing
+  hand-written `repeat(auto-fit, minmax(…))` styles.
+- **Effects without a `style` object.** `userSelect`, `blendMode`, `blur` and
+  `backdropBlur` are classes, so `Flex` and `Grid` stay server components.
+  `transform` stays in `style` by design.
+- **An app-shell header height.** The `--header-height` token (56px by
+  default) and `height`, `minHeight` or `maxHeight="below-header"` replace
+  hand-written `calc(100dvh - …)`.
+- **Typed theme props for a subtree.** `theme`, `themeBorder`, `themeSolid`
+  and `themeSurface` on `Flex` and `Grid` write the matching `data-*`
+  attributes, checked against ThemeProvider's values.
+- **`addToast` returns the toast's id**, for `removeToast(id)`, and each
+  toast takes a `duration` (6000 ms by default; `Infinity` keeps it until
+  closed). The countdown pauses while the toast is hovered or focused.
+- **`ContextMenu`'s `contents` prop:** the wrapper adds no box
+  (`display: contents`), so positioned and grid or flex children keep their
+  own layout.
+- **`once-ui-validate-ai-code` checks the Next.js adapter.** In a Next.js
+  app, `LayoutProvider` from the package root renders links and images as
+  plain `<a>` and `<img>`; the new `LayoutProvider.next` rule flags it and
+  `--fix` moves the import to `@once-ui-system/core/next`.
+- **`once-ui-init-agent` writes `CLAUDE.md`** alongside `AGENTS.md` and the
+  Cursor rule, and points Next.js apps at `/next`.
+- **Harness:** slices for `ThemeInit`, `Meta`, `FocusTrap`, `ScrollLock`,
+  `MediaAudioPlayer` and `MediaVideoPlayer`; `list-page` and `editor` task
+  bundles.
+- **The harness knows 2.1's entry points.** `spec.json` lists hooks,
+  functions and constants (`useHotkeys`, `defineConfig`, `mdxComponents`,
+  `createMdxComponents`, `createOgFetchRoute`, `createOgProxyRoute`…) under
+  `functions`, each with its signature and `importFrom`; `manifest.json`'s
+  `imports` lists every entry point with its peer, exports and types. The
+  `Mdx*` elements and `/next`'s `LayoutProvider` have slices.
+- **Harness:** a `docs-page` task bundle; vertical `Tabs` in the settings
+  example; a `Drawer` for mobile nav in the app-shell recipe; "fixed in 2.1"
+  gotchas for Toast, NumberInput, Select, Button triggers and ContextMenu.
+- **The harness costs an agent less to read.** `catalog.json`, which every
+  agent loads first, now carries `iconNames`, and the rules point there. An
+  agent used to open all of `spec.json` (about 37k tokens) to find an icon
+  name: in a benchmark pilot that was most of what it read. `spec.json`
+  keeps the same list.
+- **The harness knows the providers.** `ThemeProvider`, `DataThemeProvider`,
+  `ToastProvider`, `IconProvider`, `AdapterProvider` and `OgRoutesProvider`
+  have slices and catalog entries, and `useToast`, `useTheme`, `useStyle`,
+  `useDataTheme`, `useLayout`, `useIcons` and `useOgRoutes` are in `functions`.
+- **The validator catches more of what the rules forbid.** `as IconName`
+  casts (`Icon.cast`); a `Flex` with no direction, which is a `Row`; raw
+  `data-theme`/`data-solid`/`data-border` where a typed prop exists
+  (`theme.typedProps`); and hex paint in inline SVG (`color.svgPaint`).
+  `--fix` now applies the `Flex` → `Row`/`Column` rename it reports, where
+  the rewrite is safe, and writes typed theme props.
+- **The agent example blocks are current and correct.** They had drifted
+  from their docs copies, and carried bugs an agent would copy: Waitlist1's
+  email check rejected any address containing an "s", Productivity1's
+  divider never painted, Header1's 20 menu items all used the placeholder
+  icon, Dashboard1 cast 12 icon names, Roadmap1's status dots had no colour,
+  and 19 `any` types. Every block in `ai/examples/blocks` is in the manifest.
+- **The validator names a 2.x prop for its 1.x one.** `api.renamed` reports
+  `isOpen`, `isChecked`, SegmentedControl's `selected`/`onToggle`, Tag's
+  `variant` and the other names 2.0 renamed (the codemod's table, minus names
+  2.x reuses). TypeScript reports them as a missing prop or, for `onToggle`, a
+  `ToggleEvent` mismatch, without mentioning the rename.
+- **`Text` and `Heading` take a ref**, typed to the element `as` renders
+  (`HTMLLIElement` for `as="li"`); they stay generic over `as`. `ListItem`,
+  `ShineFx` and `TypeFx` pass theirs on, which they dropped.
+- **`DateRangePicker` takes `autoFocus`**, which focuses its first
+  calendar's start day.
+- **`IconButton` takes `ariaLabel`**, like the other components that take
+  one; a native `aria-label` wins over it.
+- **`InteractiveDetails` takes `labelId` and `descriptionId`**: ids on the
+  label text and the description text alone, so a control can be named by
+  its label without its description or help button.
+
+### Changed
+
+- **A themed logo is one `Logo`.** The agent rules, a gotcha and the
+  validator's `Logo.themes` rule now teach `<Logo wordmark={{ light, dark }}>`
+  (and `icon`, the same way) instead of a `dark` and a `light` copy, and the
+  examples and docs blocks use it. Two copies doubled the elements, left two
+  places to keep in sync and put a hidden link in every focus order; About4
+  and About5 even drew both logos in the light theme. `dark` and `light` stay
+  for a logo meant for one theme only.
+- **The OG handlers only reach public addresses, and connect to the address
+  they checked.** Every redirect is checked again; fetch reads HTML only and
+  the proxy passes raster images only (SVG is opt-in); size and time limits
+  apply; status codes are specific (400, 413, 415, 502, 504); `image` and
+  `faviconUrl` come back as absolute URLs; `http://` is refused unless
+  `allowHttp` is set.
+- **Sass is no longer needed to use Once UI.** Component styles ship
+  precompiled: `dist/` carries a `.module.css` beside every `.module.scss`,
+  and components import the CSS. Any bundler that handles CSS modules works
+  with no setup: Next.js (webpack and Turbopack), Vite, Remotion without
+  `@remotion/enable-scss`, Storybook. The CSS is what your Sass produced
+  before, so pages render the same and your imports don't change. `sass`
+  stays an optional peer; uninstall it if nothing else uses it. Generated
+  class names may change (Turbopack drops `-scss-module` from the prefix);
+  they were never stable. This updates the 2.0.0 note "A bundler is
+  required": a bundler still is, Sass is not.
+- **Twelve components render as server components:** `Line`, `Banner`,
+  `List`, `ListItem`, `InlineCode`, `Skeleton`, `ProgressBar`, `Timeline`,
+  `Badge`, `Tag`, `Avatar` and `User` (and `BlockQuote`, above). Imports are
+  unchanged.
+- **`sideEffects`:** bundlers can drop unused components; stylesheets are
+  kept. The tarball no longer carries a `dist/package.json`, which hid the
+  field from everything in `dist`.
+- **`sharp` is no longer an optional peer.** No source file imports it, and
+  Next.js installs it itself.
+- **`@once-ui-system/core/next`'s index is no longer a client module.** The
+  adapters keep `"use client"` in their own file; imports don't change.
+- **`Select`'s field has role `combobox`** (it was a `textbox`), and options
+  no longer take DOM focus. Tests that find the field by role `textbox`
+  should look for `combobox`.
+- **`DateInput`'s and `DateRangeInput`'s fields have role `combobox`** (it
+  was `textbox`), and focusing them with Tab no longer opens the picker;
+  click, Enter, Space or ArrowDown does. `DateRangeInput`'s fields are named
+  by `startLabel` and `endLabel`.
+- **`ContextMenu`'s `placement` default is declared as `"bottom-start"`**,
+  where the menu always opened; the declared `"bottom-end"` was never
+  applied.
+- **A `DatePicker` given `currentMonth`, `currentYear` and `onMonthChange`
+  keeps that month** when `value` changes, and its grid is named after the
+  month shown ("January 2026") instead of "Calendar".
+- **`Table`'s page buttons are `Pagination`:** first/previous/next/last and
+  ellipsis ranges replace the three-button window, which never showed the
+  current page near the end. Its props, page-size select and "x / y" text
+  are unchanged.
+- **`Slider`'s `defaultValue` is typed `number`.** It was inherited from the
+  input's attributes (`string | number | readonly string[]`) and did nothing;
+  it now sets the starting value, so it takes what `value` takes.
+- **Non-danger toasts are polite `status` regions**, not assertive alerts.
+- **A `multiple` `Select` stays open while you pick.**
+- **`NeutralColor` accepts rose, mint and dusk, and `BorderStyle` accepts
+  sharp.** The CSS already shipped all four. Code that checks one of these
+  values against a narrower `as const` list (`list.includes(value)`) needs
+  the new member or a wider list type.
+- **Charts type `data-viz-style` as `DataStyle | (string & {})`** instead of
+  `string`: autocomplete without narrowing.
+
+### Deprecated
+
+Each keeps working until 3.0.
+
+- **`Dialog`'s `hideClose`:** use `showClose={false}`.
+- **`BaseBreakpointProps`:** use `FlexBreakpointProps`, `GridBreakpointProps`
+  or `TextBreakpointProps`.
+- **`CodeBlock`'s root `highlight`:** set it on each `codes` entry.
+- **`Modal`: prefer `Dialog`** (a note, not a deprecation: Dialog has no
+  `backdrop` slot or full-height sheet yet). The docs of the overlapping
+  scrollers, Badge/Tag/Chip and Tooltip/HoverCard/InfoTip say which to use
+  for what.
+
+### Fixed
+
+- **The default border is `neutral-alpha-weak`.** A bare `border` (and
+  `borderTop`, `borderX`, …) draws `--default-border`, which an app sets in
+  its custom CSS. 2.0 set its default to `neutral-weak` by accident; it is
+  now the translucent `neutral-alpha-weak`, the border the design language
+  uses most. An app that sets `--default-border` itself sees no
+  change. To keep 2.0's solid border, set
+  `--default-border: var(--neutral-border-weak)`. The validator's
+  `border.default` rule, the gotcha and the agent rules name
+  `neutral-alpha-weak` as the default.
+- **Components that drew `neutral-alpha-weak` borders draw the default
+  border**, so they follow an app's `--default-border`: `CodeBlock`,
+  `InfoTip`, `Kbar`, `MegaMenu`, `OgCard`, `ProgressBar`, `Setting`/
+  `SettingGroup`, `SplitView`, `ThemeSwitcher` and `ChartHeader`. With the
+  default token nothing changes; an app that sets the token to another
+  colour sees these borders take it too.
+- **A controlled `StylePanel` changed the page's theme.** With `value` and
+  `onChange`, the Theme row still set the theme through `ThemeProvider` and
+  stored it, and ignored `value.theme`. It now shows `value.theme` (unset
+  reads as `"system"`) and reports a choice as `{ theme }`, like every other
+  row.
+- **`StylePanel` swatches respond to Enter and Space**, not only to a click.
+- **A `className` on a `StylePanel` row replaced the row's own**, which took
+  its divider with it. The two are joined now.
+- **`SegmentedControl` when its options overflow.** The selected option is
+  scrolled into view at mount and on every change, instead of starting under
+  the Next button; only the strip scrolls, never the page. The border goes
+  round all the options rather than stopping at the edge of the strip. And
+  `role="tablist"` (with `aria-label` and the other naming props) is on the
+  row of tabs, not on the `Scroller` around it, which also holds the scroll
+  buttons that a tablist may not own.
+- **`Scroller` and `SegmentedControl` forward their refs.** Both took a `ref`
+  and dropped it.
+- **`DatePicker`'s arrow keys start from a day focused as the grid appears.**
+  A day that took focus after the grid reached the page but before its
+  focus tracking attached, such as a quick Tab as the picker opens, was not
+  recorded, so ArrowDown went to the 7th rather than a week after that day.
+- **Focus traps skip what Tab cannot reach.** `Drawer`, `Modal`, `Dialog`
+  and the other focus traps counted elements under `display: none` and
+  disabled controls. A logo drawn once per theme, with the other theme's
+  copy hidden, became the trap's first element, so focus went nowhere on
+  open and Tab did not wrap.
+- **Escape closes the top layer only.** `Kbar` opened from a `Drawer`,
+  `Dialog` or `Modal` closed both on one Escape. The palette now handles
+  its Escape first and marks it handled; `FocusTrap`, `Dialog` and `Modal`,
+  like `Drawer` already, leave an Escape something inside has handled.
+- **`validate-ai-code` checks every file it is given**, not only the first:
+  `validate-ai-code a.tsx b.tsx` silently skipped `b.tsx`.
+- **A single `Select` shows each option's `prefix`.** It overwrote the
+  prefix with the check-mark slot a multiple Select uses, so a swatch or icon
+  set on an option never showed; a multiple Select now shows it after the
+  check mark.
+- **`OgCard`'s favicon loads through the OG proxy, like its image.** It
+  loaded straight from the host the page named: from the visitor's browser
+  with a plain `<img>`, and not at all through `next/image` unless that host
+  was in `remotePatterns`.
+- **`MobileMegaMenu`'s links are links.** Its sections drew each link with
+  `Option`, a listbox option, so they rendered as `<a role="option">` with no
+  listbox around them: invalid ARIA, and not links to assistive tech.
+- **`SplitView`'s handle shows.** It filled the width of a gutter whose own
+  padding left it zero wide, so only the handle's 2px border drew and its
+  fill never did, not even while dragging. It is a 4px pill now, in both
+  orientations.
+- **The 2.0 codemod moves inline `type` imports.** `import { type ChartMode,
+  DataThemeProvider } from "@once-ui-system/core"` kept `ChartMode` on the
+  root, where it no longer resolves; it now moves to `/data` like the other
+  forms.
+- **`Switch` is one named, focusable control.** `role="switch"` sat on a
+  wrapper that couldn't take focus, so focus landed on an unnamed element,
+  and the `ariaLabel` default ("Toggle switch") overrode the visible label.
+  The focused thumb is now the switch, named by its label; `aria-label` or
+  `ariaLabel` name it only when there is no label.
+- **`Checkbox` and `RadioButton` expose one control.** The hidden input that
+  submits the value was a second, unlabelled control for assistive tech; it
+  is hidden from it now, and the visible control is named by its label alone
+  (not its description and help button). `Checkbox` now submits its `name`
+  and `value` with a form, which it never did.
+- **`Modal` traps and restores focus.** Focus moves into it on open, Tab and
+  Shift+Tab cycle inside it, and focus returns to the opener on close. It is
+  labelled by its title and forwards its ref to the dialog element.
+- **`Kbar` is a dialog with a combobox and a listbox.** Focus stays in the
+  search while the arrow keys move the active option, results are grouped by
+  section, and focus returns to the opener on close. Spaces can be typed in
+  the search again; its scroll lock swallowed them.
+- **`Table`'s sortable headers are buttons with `aria-sort`.** They were
+  clickable `<th>` cells, unreachable by keyboard; the header content is now
+  a button (reachable by Tab, operable with Enter and Space), and the sorted
+  column announces its direction.
+- **`InfoTip` is reachable by keyboard, and hover content closes on Escape.**
+  The icon is a named tab stop whose tip opens on focus and describes it;
+  `HoverCard` and every hover tooltip close on Escape without moving the
+  pointer (WCAG 1.4.13).
+- **`SegmentedControl` no longer points `aria-controls` at panels that don't
+  exist.** A value you pass still applies.
+- **`IconButton` is never named after its icon key** (or "[object Object]"
+  for a tooltip that isn't a string). Its name comes from `aria-label`, then
+  `ariaLabel`, then a string `tooltip`; an unnamed one warns in development.
+- **A native `aria-label` reaches the element it names** on `Spinner`,
+  `Scrubber` and `Switch`, instead of an outer wrapper. `StatusIndicator` is
+  `role="img"`, so its label is announced at all.
+- **`Slider`'s `label` names it.** It was plain text, so a Slider with only a
+  label had no accessible name; an explicit `aria-label` still wins.
+- **A disabled `OTPInput` disables its fields**, which stayed focusable and
+  editable to assistive tech.
+- **`Chip` keeps its own styling when given a `className`.**
+- **`ColorInput` and `DateRangePicker` forward their refs.**
+- **Charts call their hooks on every render.** An empty `ChartHeader`
+  returned before its hooks, so a header that went empty and came back lost
+  its state and left its Escape listener on `document`. `Legend`, `Swatch`,
+  `LinearGradient` and `RadialGradient` read the data theme in a default
+  parameter. Rendered output is unchanged.
+
+- **A toast no longer re-runs consumer effects.** `useToast()` returns
+  stable callbacks, so an effect that depends on `addToast` runs once.
+- **`NumberInput` follows its `value` prop** after mount, without rewriting
+  what the user is typing ("-", "1.", "05").
+- **`Select` closes on pick and stays closed.** Focus returning to the field
+  no longer reopens it.
+- **A `Button` or `IconButton` trigger is reachable by keyboard.** As a
+  `DropdownWrapper` trigger it renders a real button with `aria-haspopup` and
+  `aria-expanded`, and the wrapper no longer nests a `role="button"` around
+  it. A disabled trigger no longer opens its dropdown.
+- **`ContextMenu` is a real menu.** `menu` and `menuitem` roles; arrow keys
+  skip disabled items and wrap; Home and End; Escape closes it and returns
+  focus; near the right or bottom edge it opens towards the screen.
+- **A responsive `Grid` renders on the server.** Any breakpoint prop used to
+  switch it to the client and require a `LayoutProvider`, and breakpoint
+  spacing on Grid did nothing.
+- **`Chip`'s remove button sits beside the chip's control, not inside it.**
+  It was nested in the chip's `role="button"`, and Enter on it clicked the
+  chip. A removable chip is now a box holding both, with the same look;
+  `aria-*` props name the chip's control. `ref` is typed and `ChipProps` is
+  exported.
+- **`TagInput` names each remove button after its tag** ("Remove tag
+  react"), and its field no longer claims a listbox popup (`aria-haspopup`,
+  `aria-expanded`).
+- **`OTPInput`'s field ids are unique per instance**, and its error state is
+  announced: each field is invalid and described by the message.
+- **`Input` is invalid when given `error`**, not only `errorMessage`. It
+  points `aria-describedby` at its message only when the message renders, and
+  keeps the caller's own.
+- **`ColorInput` follows its `value` prop** after mount.
+- **`NavIcon` is a button:** named "Menu" unless given `aria-label`, pressed
+  with Enter and Space, with `aria-expanded` following `active`.
+- **`HeadingLink`'s link is reachable by keyboard and works without a
+  `ToastProvider`.** It is a real link to the section, shared with the `/mdx`
+  headings, and copies the URL (with a toast when there is a provider).
+- **Links run their `onClick`.** `Button`, `IconButton`, `ToggleButton`,
+  `SmartLink` and `Option` with an `href` dropped it, and `MobileMegaMenu`'s
+  links never closed the menu. If a component gets an `href` and an
+  `onClick` meant only for when there is no `href`, pass `onClick` only in
+  that case: it now runs on the link too.
+- **`Media`'s `figcaption` is inside its `figure`.** Layout is unchanged.
+- **`BlockQuote` can hold paragraphs** (its content was a `span`), and it
+  renders as a server component.
+- **An uncontrolled `Checkbox` or `RadioButton` with an `onToggle` changes on
+  screen**, and `defaultChecked` is honoured; both were ignored.
+- **Docs: icons that rendered nothing.** The docs' icon library is
+  type-checked, so an unregistered name fails to compile; the names the
+  blocks and pages used are registered or corrected, and Footer3's social
+  buttons link again.
+- **Docs: proxied OG images on Next 16** (`images.localPatterns`), and the
+  docs render their pages through `createMdxComponents`.
+- **`Select` is an ARIA combobox.** The field is `role="combobox"` and keeps
+  focus; it controls one named listbox and points at the active option with
+  `aria-activedescendant`. Arrow keys, Home and End move the active option
+  and skip disabled ones; Tab closes the list and moves on instead of being
+  trapped. A searchable Select's query field is a combobox with
+  `aria-autocomplete="list"`. No more `role="button"` wrappers or nested
+  listboxes.
+- **`DropdownWrapper` lists are one listbox.** The panel no longer nests a
+  second one, and a `Button` or `IconButton` trigger is never wrapped in
+  `role="button"`, on the server either.
+- **`ContextMenu` applies `fillWidth` and `placement`.** `fillWidth` fills
+  the width of the region that opens the menu; `placement` is measured from
+  the pointer and flips at the screen edges.
+- **`DatePicker`'s calendar is a real grid:** rows of gridcells under named
+  column headers, one Tab stop, and arrow keys that start from the selected
+  day and stay in their own calendar. Its month and year triggers are no
+  longer nested in another control.
+- **A `dual` `DateRangePicker` shows two consecutive months**, including for
+  a range inside one month, and marks the range's ends in whichever calendar
+  shows them.
+- **`DateInput` and `DateRangeInput` are comboboxes that open a dialog.**
+  The field is no longer nested in `role="button"` wrappers: it has
+  `aria-haspopup="dialog"`, `aria-expanded` and `aria-controls`, and the
+  picker is a dialog named after the field. Click, Enter, Space or ArrowDown
+  opens it with focus on the selected day; Escape or a pick returns focus to
+  the field. `DateRangeInput` forwards its ref.
+- **`DatePicker` no longer takes focus by itself.** It focused its selected
+  day on mount and on month changes; now only `autoFocus` (as `DateInput`
+  uses it) moves focus in.
+- **A `dual` `DateRangePicker`'s month and year lists move both
+  calendars.**
+- **`DropdownWrapper` lists are named after their trigger** ("Sort by"),
+  not "Dropdown options".
+- **`Grid inline` renders an inline grid.** `.display-inline-grid` had no
+  rule, so the grid stayed a block.
+- **`translateX`/`translateY` read spacing tokens** on `Flex`, `Grid`,
+  `Text` and `Heading`: `translateY="16"` wrote no transform. A number is
+  still rem and a CSS unit is written as given.
+- **A responsive `Grid` applies a breakpoint `width`, size or numeric
+  spacing**, as `Flex` does; a t-shirt `maxWidth` in a breakpoint object now
+  applies on both.
+- **`Grid`'s `rows` sets the rows.** It had no class and reached the DOM as
+  a `rows` attribute; it is now a class at the base and every breakpoint,
+  like `columns`, and renders on the server.
+- **`Text` and `Heading` apply their display props.** `pointerEvents`,
+  `overflow`, `position`, `zIndex`, `gap`, offsets and
+  `translateX`/`translateY` reached the DOM as attributes; they are classes or
+  inline values now, as on `Flex`. `inline`, `hide`, `dark` and `light` no
+  longer leak, and `opacity={0}` and `zIndex={0}` apply.
+- **The `72` spacing step works as a size.** `width="72"` and the other size
+  props (`minColumnWidth` and `MasonryGrid`'s `gap` included) rendered
+  nothing; every size reads one list of the scale now.
+- **`Flex` breakpoint offsets.** `m={{ top: "16" }}` writes `.m-top-16`; a rem
+  or CSS-unit offset at a breakpoint is applied inline on `Flex` and `Grid`
+  (on the client, under the `LayoutProvider` every app already has).
+- **`overflow="clip"` and `"visible"` apply.** They type-checked but had no
+  class behind them. An `xl` overflow on `Flex` now applies at `xl` widths.
+- **The validator's icon check runs.** It read a field the spec never wrote;
+  it now reads `spec.iconNames`, checks only props typed `IconName`, and
+  accepts names an app registers.
+- **Validator false positives** on a `Flex` that changes direction at a
+  breakpoint, multiplier `speed` props, `Card` with spread props, and
+  file-wide `position` and `zIndex` matches.
+- **`catalog.json` purposes** read "X component" for every entry; each has a
+  written purpose again, and a missing one fails the build's tests.
+- **`once-ui-init-agent` appends to an existing `AGENTS.md`** without
+  `--force`.
+- **The docs' `ThemeInit` example set the chart mode from the chart variant**,
+  which matched no style; `dataStyle` now passes `mode`.
+- **Docs:** stylesheet imports, the dependency list, breakpoints,
+  `LayoutProvider` from `/next`, and broken links.
+
+### Internal
+
+- **CI on every pull request.** GitHub Actions builds, typechecks and tests
+  the package on each pull request and push to `main`, builds the docs app
+  against it (which prerenders every component page on the server), and runs
+  `check:package` as an advisory step.
+- **A lint no-regression gate.** `pnpm lint:gate` fails when Biome reports
+  more errors than `lint-baseline.json` records. The count only goes down:
+  `--update` records a lower number and refuses a higher one. It stands at
+  153, from 519 before 2.1: a mechanical format and import-order sweep
+  (no behaviour change) took it to 173.
+- **Accessibility assertions in tests.** `src/test/axe.ts` runs axe on a
+  rendered tree; every component added or changed in 2.1 is tested with it.
+- **The docs blocks use 2.x syntax and fit a phone.** 138 blocks drop
+  props that restate defaults and use `fill`, `center`, `Row`/`Column` and
+  typed theme props, with no visible change; ten overflowed or overlapped at
+  390px (Contact3/4, Cookie1/2, Careers3, Hero3, Hero12, Plans7, Header4 and
+  the blocks built on it, Table1 and Dashboard1). Ten logos that did not
+  exist (About5, Bento1, Bento2, Footer6, Testimonial8) show the Once UI
+  wordmark as a placeholder, and the AudioPlayer demo plays a one-minute
+  loop instead of a missing file.
+- **The build no longer downloads emoji data.** It used the committed
+  `src/data/emoji-data.json` only when gemoji's moving `master` could not be
+  fetched, so two builds minutes apart could differ, and `npm publish`
+  (whose `prepack` builds) could ship a set no test had seen. The committed
+  file is used as it is; `pnpm refresh-emoji-data` refetches it on purpose.
+
 ## [2.0.0] — 2026-09-25
 
 Once UI 2.0 is on `latest`:

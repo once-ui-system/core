@@ -1,0 +1,124 @@
+---
+title: "useHotkeys"
+summary: "Keyboard shortcuts that stay out of the way while the user is typing."
+updatedAt: "2026-10-10"
+docs: "once-ui/hooks/useHotkeys.mdx"
+github: "hooks/useHotkeys.ts"
+navLabel: "useHotkeys"
+navIcon: "code"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`useHotkeys` calls a function when a key combination is pressed. It skips keys typed
+into a text field, textarea, select or editable region by default, so a shortcut on
+`c` or `space` does not fire while someone is writing a word with a c in it. It
+listens on the window, or on one element, and stops when the component unmounts.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<UseHotkeysExample />}
+  codes={[
+    {
+      code:
+`import { useHotkeys } from "@once-ui-system/core";
+
+useHotkeys("c", () => setCount((value) => value + 1));
+useHotkeys(["j", "down"], (event, hotkey) => setLast(hotkey));
+useHotkeys("g i", () => router.push("/inbox"));`,
+      language: "tsx",
+      label: "useHotkeys"
+    }
+  ]}
+/>
+
+The callback receives the `KeyboardEvent` and the hotkey string that matched. It
+need not be memoised: the listener is bound once per set of keys and options, and
+always calls the latest callback.
+
+## Syntax
+
+The same string drives [`KeyTip`](/components/keyTip), which draws it as keycaps, so
+one constant can register a shortcut and show it.
+
+| Write | Means |
+| --- | --- |
+| `mod+k` | ⌘K on macOS and iOS, Ctrl+K elsewhere |
+| `mod+shift+z` | Modifiers joined with `+`: `mod`, `meta` (or `cmd`), `ctrl`, `alt` (or `option`), `shift` |
+| `?` | A character. Characters that need Shift on most layouts match with or without it |
+| `escape`, `enter`, `space`, `tab`, `backspace`, `delete` | Named keys. `esc` and `return` work too |
+| `up`, `down`, `left`, `right` | Arrow keys (`arrowup` and so on also work) |
+| `home`, `end`, `pageup`, `pagedown`, `f1`–`f12` | More named keys. The plus key is `plus` |
+| `g i` | A sequence: G, then I within a second |
+| `["j", "down"]` | Alternatives: either one |
+
+Modifiers match exactly: `mod+z` does not fire on `mod+shift+z`, and `z` does not fire
+on `mod+z`. Letters match by the character typed, and fall back to the physical key
+when Option or a non-Latin layout changes the character (⌥K types "˚").
+
+## While typing
+
+Keys pressed in an `input` that takes text, a `textarea`, a `select`, a
+`contenteditable` region or an element with the `textbox`, `searchbox` or `combobox`
+role are ignored. Checkboxes, radios, sliders and buttons still trigger shortcuts.
+Set `allowWhileTyping` for combinations that never type a character, such as
+`mod+s` or `escape`:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`useHotkeys("mod+s", save, { allowWhileTyping: true });`,
+      language: "tsx",
+      label: "allowWhileTyping"
+    }
+  ]}
+/>
+
+## Scope
+
+By default the hook listens on the window. Pass `target` to listen on one element,
+so the keys work only while focus is inside it: a timeline's arrow keys, say, which
+should not move the playhead while focus is in the inspector beside it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const timeline = useRef<HTMLDivElement>(null);
+
+useHotkeys("left", stepBack, { target: timeline });
+useHotkeys("right", stepForward, { target: timeline });
+
+<Column ref={timeline} tabIndex={0}>…</Column>`,
+      language: "tsx",
+      label: "target"
+    }
+  ]}
+/>
+
+Turn a set of shortcuts off with `enabled: false`, while a dialog that uses the same
+keys is open, for instance.
+
+## Options
+
+<PropsTable
+  label="Option"
+  content={[
+    ["enabled", "boolean", "true", "Listen at all."],
+    ["allowWhileTyping", "boolean", "false", "Fire while focus is in a text field, textarea, select or editable region."],
+    ["target", "RefObject<HTMLElement>", "window", "Listen on this element instead of the window."],
+    ["preventDefault", "boolean", "true", "Cancel the browser's own action for a matched key, such as saving the page on mod+s."],
+    ["sequenceTimeout", "number", "1000", "How long, in milliseconds, a sequence such as g i waits for its next key."],
+  ]}
+/>
+
+The hook binds nothing until the component mounts, so it is safe in a component that
+renders on the server. Keys pressed while an input method is composing text are
+ignored, and so is a modifier pressed on its own.

@@ -28,7 +28,7 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         height={32}
       />
       <Background
-        data-solid="inverse"
+        themeSolid="inverse"
         position="absolute"
         top="0"
         left="0"
@@ -50,15 +50,10 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               Just ship it
               <br /> with Once UI
             </Heading>
-            <Heading
-              wrap="balance"
-              onBackground="neutral-weak"
-              variant="heading-default-xl"
-              marginBottom="32"
-            >
+            <Heading onBackground="neutral-weak" variant="heading-default-xl" marginBottom="32">
               The design engine for builders
             </Heading>
-            <Row gap="8" data-border="rounded">
+            <Row gap="8" themeBorder="rounded">
               <Button href="#">Ship your app</Button>
               <Button href="#" variant="secondary">
                 Request a demo

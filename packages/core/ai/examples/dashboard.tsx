@@ -1,10 +1,5 @@
 "use client";
 
-/**
- * Gold example: dashboard
- * Target: KPI stat row, chart placeholders, recent activity table
- */
-import { useEffect, useRef, useState } from "react";
 import {
   Button,
   Column,
@@ -22,6 +17,11 @@ import {
   Text,
   useInViewport,
 } from "@once-ui-system/core";
+/**
+ * Gold example: dashboard
+ * Target: KPI stat row, chart placeholders, recent activity table
+ */
+import { useEffect, useRef, useState } from "react";
 
 const stats = [
   { label: "Revenue", value: 128400, prefix: "$", change: "+12.4%", up: true },
@@ -38,9 +38,30 @@ const activity = {
     { content: "Time", key: "time" },
   ],
   rows: [
-    ["Plan upgraded to Pro", "jane@acme.co", <Tag size="s" scheme="success">Completed</Tag>, "2m ago"],
-    ["New signup", "alex@studio.io", <Tag size="s" scheme="brand">New</Tag>, "14m ago"],
-    ["Payment failed", "ops@build.dev", <Tag size="s" scheme="danger">Action</Tag>, "1h ago"],
+    [
+      "Plan upgraded to Pro",
+      "jane@acme.co",
+      <Tag size="s" scheme="success">
+        Completed
+      </Tag>,
+      "2m ago",
+    ],
+    [
+      "New signup",
+      "alex@studio.io",
+      <Tag size="s" scheme="brand">
+        New
+      </Tag>,
+      "14m ago",
+    ],
+    [
+      "Payment failed",
+      "ops@build.dev",
+      <Tag size="s" scheme="danger">
+        Action
+      </Tag>,
+      "1h ago",
+    ],
   ],
 };
 
@@ -56,7 +77,13 @@ export function DashboardExample() {
   return (
     <Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24" gap="40">
       <Column maxWidth="l" gap="40">
-        <Row fillWidth horizontal="between" vertical="end" gap="24" s={{ direction: "column", horizontal: "start" }}>
+        <Row
+          fillWidth
+          horizontal="between"
+          vertical="end"
+          gap="24"
+          s={{ direction: "column", horizontal: "start" }}
+        >
           <Column gap="8">
             <Text variant="label-default-s" onBackground="brand-medium">
               Analytics
@@ -87,20 +114,19 @@ export function DashboardExample() {
                   <StatusIndicator color={stat.up ? "green" : "orange"} />
                 </Row>
                 <Row vertical="end" gap="4">
-                  {stat.prefix && (
-                    <Text variant="display-strong-xs">{stat.prefix}</Text>
-                  )}
+                  {stat.prefix && <Text variant="display-strong-xs">{stat.prefix}</Text>}
                   <CountFx
                     variant="display-strong-xs"
                     value={seen ? stat.value : 0}
                     speed={1200}
                     separator=","
                   />
-                  {stat.suffix && (
-                    <Text variant="display-strong-xs">{stat.suffix}</Text>
-                  )}
+                  {stat.suffix && <Text variant="display-strong-xs">{stat.suffix}</Text>}
                 </Row>
-                <Text variant="label-default-s" onBackground={stat.up ? "success-medium" : "warning-medium"}>
+                <Text
+                  variant="label-default-s"
+                  onBackground={stat.up ? "success-medium" : "warning-medium"}
+                >
                   {stat.change}
                 </Text>
               </Column>

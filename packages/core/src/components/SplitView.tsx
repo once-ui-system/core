@@ -2,11 +2,11 @@
 
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { type BreakpointKey, useLayout } from "../contexts/LayoutProvider";
 import { Card } from "./Card";
 import { Column } from "./Column";
 import { Row } from "./Row";
 import { SegmentedControl } from "./SegmentedControl";
-import { useLayout, type BreakpointKey } from "../contexts/LayoutProvider";
 
 interface SplitViewProps extends React.ComponentProps<typeof Row> {
   leftPanel: ReactNode;
@@ -42,7 +42,11 @@ interface SplitViewProps extends React.ComponentProps<typeof Row> {
 function useResizeHandle(
   containerRef: React.RefObject<HTMLDivElement | null>,
   direction: "row" | "column",
-  { defaultSplit, minSplit, maxSplit }: { defaultSplit: number; minSplit: number; maxSplit: number },
+  {
+    defaultSplit,
+    minSplit,
+    maxSplit,
+  }: { defaultSplit: number; minSplit: number; maxSplit: number },
 ) {
   const [splitRatio, setSplitRatio] = useState(defaultSplit);
   const [isDragging, setIsDragging] = useState(false);
@@ -191,16 +195,14 @@ function SplitView({
           touchAction: "none",
         }}
       >
-        <Row
-          fillWidth={isHorizontal}
-          fillHeight={!isHorizontal}
-          height={isHorizontal ? 8 : undefined}
-          width={!isHorizontal ? 8 : undefined}
-        >
+        {/* A pill 4px thick. It used to fill the gutter's width, which the
+            gutter's own padding leaves at zero, so only the card's border
+            showed and the fill never did — not even while dragging. */}
+        <Row width={isHorizontal ? "4" : 8} height={isHorizontal ? 8 : "4"}>
           <Card
             fill
             background={isDragging ? "neutral-strong" : "neutral-weak"}
-            border="neutral-alpha-weak"
+            border
             radius="full"
             style={{
               cursor: isHorizontal ? "col-resize" : "row-resize",
@@ -226,5 +228,5 @@ function SplitView({
 
 SplitView.displayName = "SplitView";
 
-export { SplitView };
 export type { SplitViewProps };
+export { SplitView };

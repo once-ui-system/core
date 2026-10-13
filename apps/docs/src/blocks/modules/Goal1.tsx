@@ -17,10 +17,9 @@ export const Goal1 = (flex: React.ComponentProps<typeof Column>) => {
   const progress = 62;
 
   return (
-    <Column maxWidth={24} fillWidth radius="l" border overflow="hidden" {...flex}>
+    <Column maxWidth={24} radius="l" border overflow="hidden" {...flex}>
       <Column
         fillWidth
-        position="relative"
         horizontal="center"
         gap="4"
         paddingTop="32"

@@ -1,0 +1,69 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "[375px] HTTP 404 /signup\n[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[768px] HTTP 404 /signup\n[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)\n[1440px] HTTP 404 /signup\n[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2273
+    },
+    "build": {
+      "ok": true,
+      "ms": 8699
+    },
+    "render": {
+      "ok": false,
+      "viewports": {
+        "phone": {
+          "text": 150,
+          "height": 812,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": [
+            "HTTP 404 /signup",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+          ]
+        },
+        "tablet": {
+          "text": 150,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": [
+            "HTTP 404 /signup",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+          ]
+        },
+        "desktop": {
+          "text": 150,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": [
+            "HTTP 404 /signup",
+            "console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+          ]
+        }
+      },
+      "errors": [
+        "[375px] HTTP 404 /signup",
+        "[375px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[768px] HTTP 404 /signup",
+        "[768px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "[1440px] HTTP 404 /signup",
+        "[1440px] console.error: Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      }
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth"
+  }
+}

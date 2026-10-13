@@ -103,7 +103,7 @@ export const Streaming3 = () => {
     <Column fillWidth>
       <Header3 position="sticky" top="0" background="page" />
 
-      <Column fillWidth paddingX="l" paddingY="24" gap="32" maxWidth="xl" horizontal="center">
+      <Column paddingX="l" paddingY="24" gap="32" maxWidth="xl" horizontal="center">
         <Column fillWidth radius="l" overflow="hidden" border>
           <Media
             aspectRatio="21/9"
@@ -127,7 +127,7 @@ export const Streaming3 = () => {
               <Tag size="s" scheme="brand">
                 Now playing
               </Tag>
-              <Heading variant="display-default-xs" onSolid="neutral-strong" wrap="balance">
+              <Heading variant="display-default-xs" onSolid="neutral-strong">
                 {nowPlaying.episode}
               </Heading>
               <Text variant="body-default-s" onSolid="neutral-weak">
@@ -138,7 +138,6 @@ export const Streaming3 = () => {
               <IconButton icon="backward" variant="secondary" size="l" tooltip="Back 15s" />
               <IconButton
                 icon={playing ? "pause" : "play"}
-                variant="primary"
                 size="l"
                 tooltip={playing ? "Pause" : "Play"}
                 onClick={() => setPlaying((value) => !value)}
@@ -222,9 +221,7 @@ export const Streaming3 = () => {
                   <Column gap="4" fillWidth>
                     <Row gap="8" vertical="center">
                       <Text variant="label-default-s">{show.title}</Text>
-                      <Tag size="s" scheme="neutral">
-                        {show.tag}
-                      </Tag>
+                      <Tag size="s">{show.tag}</Tag>
                     </Row>
                     <Text variant="label-default-xs" onBackground="neutral-weak">
                       {show.host} · {show.episodes} episodes
@@ -249,7 +246,7 @@ export const Streaming3 = () => {
         gap="16"
         zIndex={2}
       >
-        <Row fillWidth maxWidth="xl" horizontal="center" gap="16" paddingX="l" vertical="center">
+        <Row maxWidth="xl" center gap="16" paddingX="l">
           <Media
             aspectRatio="1/1"
             src={nowPlaying.image}
@@ -258,19 +255,17 @@ export const Streaming3 = () => {
             radius="s"
             style={{ width: "3rem" }}
           />
-          <Column fillWidth gap="4" minWidth={0}>
+          <Column fillWidth gap="4">
             <Text variant="label-default-s">{nowPlaying.episode}</Text>
             <ProgressBar showLabel={false} value={nowPlaying.progress} />
           </Column>
           <Row gap="4" vertical="center">
             <IconButton
               icon={playing ? "pause" : "play"}
-              variant="primary"
-              size="m"
               tooltip={playing ? "Pause" : "Play"}
               onClick={() => setPlaying((value) => !value)}
             />
-            <IconButton icon="document" variant="tertiary" size="m" tooltip="Queue" />
+            <IconButton icon="document" variant="tertiary" tooltip="Queue" />
           </Row>
         </Row>
       </Row>

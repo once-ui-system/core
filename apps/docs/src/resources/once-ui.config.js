@@ -1,31 +1,36 @@
-const baseURL = "https://docs.once-ui.com";
+// @ts-check
+import { defineConfig } from "@once-ui-system/core/config";
 
-const style = {
-  theme: "system", // dark | light
-  neutral: "gray", // sand | gray | slate
-  brand: "emerald", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
-  accent: "orange", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
-  solid: "contrast", // color | contrast
-  solidStyle: "flat", // flat | plastic
-  border: "conservative", // rounded | playful | conservative
-  surface: "filled", // filled | translucent
-  transition: "all", // all | micro | macro
-  scaling: "100"
-};
-
-const dataStyle = {
-  variant: "gradient", // flat | gradient | outline
-  mode: "categorical", // categorical | divergent | sequential
-  height: 24, // default chart height
-  axis: {
-    stroke: "var(--neutral-alpha-weak)",
+// Typed by defineConfig, so `style` and `dataStyle` go to ThemeInit and the
+// providers as written: no casts, no renamed keys.
+const { baseURL, style, dataStyle } = defineConfig({
+  baseURL: "https://docs.once-ui.com",
+  style: {
+    theme: "system", // dark | light
+    neutral: "gray", // sand | gray | slate | rose | mint | dusk
+    brand: "emerald", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+    accent: "orange", // blue | indigo | violet | magenta | pink | red | orange | yellow | moss | green | emerald | aqua | cyan
+    solid: "contrast", // color | contrast
+    solidStyle: "flat", // flat | plastic
+    border: "conservative", // rounded | playful | conservative | sharp
+    surface: "filled", // filled | translucent
+    transition: "all", // all | micro | macro
+    scaling: "100",
   },
-  tick: {
-    fill: "var(--neutral-on-background-weak)",
-    fontSize: 11,
-    line: false
+  dataStyle: {
+    variant: "gradient", // flat | gradient | outline
+    mode: "categorical", // categorical | divergent | sequential
+    height: 24, // default chart height
+    axis: {
+      stroke: "var(--neutral-alpha-weak)",
+    },
+    tick: {
+      fill: "var(--neutral-on-background-weak)",
+      fontSize: 11,
+      line: false,
+    },
   },
-};
+});
 
 const layout = {
   // units are set in REM
@@ -50,9 +55,11 @@ const layout = {
   },
 };
 
+/**
+ * Links are automatically displayed. Register new icons in icons.ts.
+ * @type {{ name: string; icon: import("@once-ui-system/core").IconName; link: string }[]}
+ */
 const social = [
-  // Links are automatically displayed.
-  // Import new icons in /icons.ts
   {
     name: "GitHub",
     icon: "github",
@@ -74,9 +81,10 @@ const schema = {
   logo: "",
   type: "Organization",
   name: "Once UI",
-  description: "Once UI is the open-source design system for the AI-native era. We equip design engineers, founders and creatives with pre-styled, out-of-the-box solutions to ship amazing products consistently.",
+  description:
+    "Once UI is the open-source design system for the AI-native era. We equip design engineers, founders and creatives with pre-styled, out-of-the-box solutions to ship amazing products consistently.",
   email: "support@once-ui.com",
-  locale: "en_US"
+  locale: "en_US",
 };
 
 const meta = {
@@ -84,8 +92,8 @@ const meta = {
     title: "The open-source design system for the AI-native web",
     description: schema.description,
     path: "/",
-    image: "/api/og/generate?title=The open-source design system for the AI-native web"
+    image: "/api/og/generate?title=The open-source design system for the AI-native web",
   },
 };
 
-export { dataStyle, style, layout, baseURL, social, schema, meta };
+export { baseURL, dataStyle, layout, meta, schema, social, style };

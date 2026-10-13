@@ -1,0 +1,23 @@
+{
+ "name": "Meta",
+ "group": "modules",
+ "call": "Meta.generate(props)",
+ "returns": "GeneratedMetadata",
+ "props": {
+  "title": "!string",
+  "description": "!string",
+  "baseURL": "!string",
+  "path": "string = \"\"",
+  "type": "\"website\" | \"article\" = website",
+  "image": "string",
+  "publishedTime": "string",
+  "author": "{ name: string; url?: string; }",
+  "canonical": "string",
+  "robots": "string",
+  "noindex": "boolean",
+  "nofollow": "boolean",
+  "alternates": "Alternate[]",
+  "ogRoutes": "Partial<OgRoutes>"
+ },
+ "mixinsRef": []
+}

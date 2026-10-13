@@ -49,7 +49,7 @@ export const Features6: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
       >
         <Background
           fill
-          data-solid="color"
+          themeSolid="color"
           horizontal="center"
           paddingY="xl"
           mask={{
@@ -66,7 +66,7 @@ export const Features6: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
       </Column>
       <Column overflow="hidden" gap="40" {...flex}>
         <Row fillWidth s={{ direction: "column-reverse" }} gap="12" vertical="center">
-          <Media radius="l" fillWidth src={section.image} alt="Once UI for Next.js" />
+          <Media radius="l" src={section.image} alt="Once UI for Next.js" />
           <Column fillWidth>
             <Column fillWidth paddingY="24" paddingX="48" gap="12">
               <Text onBackground="brand-weak" variant="label-strong-m">
@@ -91,14 +91,7 @@ export const Features6: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         </Row>
         <Grid fillWidth columns={4} m={{ columns: 2 }} gap="8" paddingBottom="24">
           {features.map((feature, index) => (
-            <Animation
-              key={index}
-              zoomOut={1.05}
-              fade={1}
-              triggerType="hover"
-              duration={300}
-              easing="spring"
-            >
+            <Animation key={index} zoomOut={1.05} fade={1} triggerType="hover" easing="spring">
               <Column fillWidth gap="12" padding="32" border="brand-alpha-weak" radius="s">
                 <Row
                   position="absolute"

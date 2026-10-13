@@ -1,0 +1,27 @@
+{
+  "attempt": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 623,
+    "chars": 18493,
+    "bytes": 18501,
+    "tokens_o200k": 4337,
+    "tokens_claudeLegacy": 4527
+  },
+  "raw": {
+    "lines": 382,
+    "chars": 16571,
+    "bytes": 16579,
+    "tokens_o200k": 4074,
+    "tokens_claudeLegacy": 4294
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Column",
+    "Heading",
+    "Input",
+    "Row",
+    "Text"
+  ]
+}

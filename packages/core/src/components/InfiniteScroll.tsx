@@ -61,7 +61,7 @@ function InfiniteScroll<T>({
         root: null,
         rootMargin: `0px 0px ${threshold}px 0px`,
         threshold: 0,
-      }
+      },
     );
 
     if (sentinelRef.current) {
@@ -92,4 +92,5 @@ function InfiniteScroll<T>({
 }
 
 InfiniteScroll.displayName = "InfiniteScroll";
+
 export { InfiniteScroll };

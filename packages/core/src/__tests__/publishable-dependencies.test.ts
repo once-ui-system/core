@@ -31,7 +31,9 @@ describe("publishable dependencies", () => {
   it("declares no pre-release runtime dependencies", () => {
     // A stable release must not pin consumers to an alpha/beta/rc of anything.
     const prerelease = Object.entries(pkg.dependencies ?? {})
-      .filter(([, range]) => typeof range === "string" && /-(alpha|beta|rc|next|canary)/.test(range))
+      .filter(
+        ([, range]) => typeof range === "string" && /-(alpha|beta|rc|next|canary)/.test(range),
+      )
       .map(([name, range]) => `${name}@${range}`);
 
     expect(prerelease).toEqual([]);

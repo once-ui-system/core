@@ -3,11 +3,12 @@ import {
   Background,
   Column,
   Fade,
-  Flex,
-  Particle,
+  type Flex,
+  ParticleFx,
   SmartLink,
   Text,
   User,
+  Row,
 } from "@once-ui-system/core";
 import type { ReactNode } from "react";
 
@@ -37,7 +38,7 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
         radius="xl"
         overflow="hidden"
       >
-        <Particle
+        <ParticleFx
           opacity={70}
           position="absolute"
           top="0"
@@ -45,8 +46,6 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
           fill
           interactive
           speed={4}
-          size="2"
-          density={100}
           intensity={40}
           pointerEvents="none"
         />
@@ -86,18 +85,12 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
             minWidth={20}
             fillWidth
           >
-            <Flex padding="32" fillWidth>
+            <Row padding="32" fillWidth>
               <Text wrap="balance" variant="heading-default-xs">
                 {testimonial.content}
               </Text>
-            </Flex>
-            <Flex
-              borderTop
-              fillWidth
-              paddingY="24"
-              paddingX="32"
-              style={{ filter: "grayscale(1)" }}
-            >
+            </Row>
+            <Row borderTop fillWidth paddingY="24" paddingX="32" style={{ filter: "grayscale(1)" }}>
               {(testimonial.role || testimonial.company) && (
                 <User
                   avatarProps={{ src: testimonial.avatar }}
@@ -114,7 +107,7 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
                   }
                 />
               )}
-            </Flex>
+            </Row>
           </Column>
         ))}
       </AutoScroll>
@@ -130,18 +123,12 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
             minWidth={20}
             fillWidth
           >
-            <Flex padding="32" fillWidth>
+            <Row padding="32" fillWidth>
               <Text wrap="balance" variant="heading-default-xs">
                 {testimonial.content}
               </Text>
-            </Flex>
-            <Flex
-              borderTop
-              fillWidth
-              paddingY="24"
-              paddingX="32"
-              style={{ filter: "grayscale(1)" }}
-            >
+            </Row>
+            <Row borderTop fillWidth paddingY="24" paddingX="32" style={{ filter: "grayscale(1)" }}>
               {(testimonial.role || testimonial.company) && (
                 <User
                   avatarProps={{ src: testimonial.avatar }}
@@ -158,7 +145,7 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
                   }
                 />
               )}
-            </Flex>
+            </Row>
           </Column>
         ))}
       </AutoScroll>

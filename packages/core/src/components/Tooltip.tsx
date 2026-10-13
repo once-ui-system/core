@@ -1,9 +1,8 @@
-import React, { forwardRef, ReactNode } from "react";
 import classNames from "clsx";
-
+import React, { forwardRef, ReactNode } from "react";
+import { IconName } from "../icons";
 import { Icon } from "./Icon";
 import { Row } from "./Row";
-import { IconName } from "../icons";
 import styles from "./Tooltip.module.scss";
 
 interface TooltipProps extends React.ComponentProps<typeof Row> {
@@ -34,11 +33,12 @@ const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
         radius="s"
         border="neutral-medium"
         role="tooltip"
-        className={classNames(styles.fadeIn, className)}
+        className={classNames(styles.tooltip, styles.fadeIn, className)}
         {...flex}
       >
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}
         <Row
+          className={styles.label}
           paddingX="2"
           vertical="center"
           textVariant="body-default-xs"

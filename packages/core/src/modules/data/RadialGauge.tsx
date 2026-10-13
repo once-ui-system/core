@@ -4,10 +4,10 @@ import React, { useEffect, useState } from "react";
 import { Column } from "../../components/Column";
 import { CountFx } from "../../components/CountFx";
 import { Text } from "../../components/Text";
-import styles from "./Gauge.module.css";
 import { ColorValue } from "../../types";
+import styles from "./Gauge.module.css";
 
-export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Column>, 'direction'> {
+export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Column>, "direction"> {
   width?: number;
   height?: number;
   line?: {
@@ -21,8 +21,8 @@ export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Colum
     start: number;
     sweep: number;
   };
-  direction?: 'cw' | 'ccw';// default 'cw' (arc rotation direction)
-  edgePad?: number;        // default 0, number of ticks to trim at both ends
+  direction?: "cw" | "ccw"; // default 'cw' (arc rotation direction)
+  edgePad?: number; // default 0, number of ticks to trim at both ends
   children?: React.ReactNode;
   hue?: "success" | "neutral" | "danger" | [number, number];
   color?: ColorValue;
@@ -50,7 +50,7 @@ export const RadialGauge = ({
     start: 0,
     sweep: 360,
   },
-  direction = 'cw',
+  direction = "cw",
   edgePad = 0,
   unit,
   children,
@@ -59,18 +59,18 @@ export const RadialGauge = ({
   ...flex
 }: RadialGaugeProps) => {
   const pad = 4;
-  
+
   // Destructure line with individual defaults
   const lineCount = line?.count ?? 48;
   const lineWidth = line?.width ?? 3;
   const lineLength = line?.length ?? 40;
-  
+
   // For semicircles (sweepAngle ~180), use width or height as the diameter
   // For full circles, use the smaller dimension
   let radius: number;
   let cx: number;
   let cy: number;
-  
+
   if (angle.sweep <= 180) {
     // Semicircle: span the full width, center horizontally
     radius = width / 2 - pad;
@@ -82,7 +82,7 @@ export const RadialGauge = ({
     cx = width / 2;
     cy = height / 2;
   }
-  
+
   const ticks = Math.max(0, lineCount - edgePad * 2);
 
   // Animate active tick count so ticks light up one by one when the value changes
@@ -108,7 +108,7 @@ export const RadialGauge = ({
       window.clearInterval(interval);
     };
   }, [value, ticks, activeLines]);
-  const dir = direction === 'cw' ? 1 : -1;
+  const dir = direction === "cw" ? 1 : -1;
 
   // Transform user angles to intuitive system: 0°=left, 90°=top, 180°=right
   // SVG rotation: 0°=up, 90°=right, so user's angle - 90 maps correctly
@@ -142,11 +142,14 @@ export const RadialGauge = ({
             transformOrigin: `${cx}px ${cy}px`,
             strokeWidth: lineWidth,
             opacity: isActive ? 1 : 0.7,
-            stroke: isActive && hasHue
-              ? `hsl(${finalHue}, 100%, 50%)`
-              : isActive && color ? `var(--data-${color})` : 'var(--neutral-alpha-medium)',
+            stroke:
+              isActive && hasHue
+                ? `hsl(${finalHue}, 100%, 50%)`
+                : isActive && color
+                  ? `var(--data-${color})`
+                  : "var(--neutral-alpha-medium)",
           }}
-        />
+        />,
       );
     }
     return lines;
@@ -154,7 +157,13 @@ export const RadialGauge = ({
 
   return (
     <Column center radius="full">
-      <svg width="100%" height="100%" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMinYMid meet" className={styles.svg}>
+      <svg
+        width="100%"
+        height="100%"
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="xMinYMid meet"
+        className={styles.svg}
+      >
         <defs>
           <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="var(--brand-solid-strong)" />
@@ -166,8 +175,21 @@ export const RadialGauge = ({
 
       <Column fill position="absolute" horizontal="center" vertical="center" gap="2" {...flex}>
         {children || (
-          <CountFx as="div" variant="display-strong-m" style={{ fontFamily: "var(--font-code)", display: "flex" }} value={value} speed={5000}>
-            <Text onBackground="neutral-weak" variant="label-default-xl" marginLeft="4" marginTop="4">{unit}</Text>
+          <CountFx
+            as="div"
+            variant="display-strong-m"
+            style={{ fontFamily: "var(--font-code)", display: "flex" }}
+            value={value}
+            speed={5000}
+          >
+            <Text
+              onBackground="neutral-weak"
+              variant="label-default-xl"
+              marginLeft="4"
+              marginTop="4"
+            >
+              {unit}
+            </Text>
           </CountFx>
         )}
       </Column>

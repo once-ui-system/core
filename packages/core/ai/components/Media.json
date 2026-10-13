@@ -15,7 +15,7 @@
  "props": {
   "aspectRatio": "string = original",
   "height": "number",
-  "alt": "string = ",
+  "alt": "string = \"\"",
   "loading": "boolean = false",
   "objectFit": "CSSProperties[\"objectFit\"] = cover",
   "enlarge": "boolean = false",
@@ -53,6 +53,7 @@
    "inline": "boolean",
    "hide": "boolean",
    "pointerEvents": "\"none\" | \"all\" | \"auto\"",
+   "userSelect": "UserSelect",
    "position": "CSSProperties[\"position\"]",
    "overflow": "CSSProperties[\"overflow\"]",
    "overflowX": "CSSProperties[\"overflowX\"]",
@@ -74,11 +75,11 @@
   },
   "SizeProps": {
    "width": "number | SpacingToken | CSSUnit",
-   "height": "number | SpacingToken | CSSUnit",
+   "height": "number | SpacingToken | CSSUnit | \"below-header\"",
    "maxWidth": "number | SpacingToken | CSSUnit",
    "minWidth": "number | SpacingToken | CSSUnit",
-   "minHeight": "number | SpacingToken | CSSUnit",
-   "maxHeight": "number | SpacingToken | CSSUnit",
+   "minHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "maxHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
    "fit": "boolean",
    "fitWidth": "boolean",
    "fitHeight": "boolean",
@@ -136,6 +137,13 @@
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
    "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "blendMode": "BlendMode",
+   "blur": "BlurSize | number",
+   "backdropBlur": "BlurSize | number",
+   "theme": "\"light\" | \"dark\"",
+   "themeBorder": "BorderStyle",
+   "themeSolid": "SolidType",
+   "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
  }

@@ -60,7 +60,7 @@ export function Products() {
             href={template.href}
             fillWidth
             radius="l"
-            border="neutral-alpha-weak"
+            border
             direction="column"
             paddingX="4"
           >
@@ -70,7 +70,7 @@ export function Products() {
               <Text variant="label-default-s">Once UI</Text>
             </Row>
             <Media
-              border="neutral-alpha-weak"
+              border
               src={template.image} 
               aspectRatio="16/9" 
               radius="l" 

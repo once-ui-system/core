@@ -72,10 +72,9 @@ describe("Scrubber", () => {
   });
 
   it("positions a block by time, not by layout", () => {
-    render(
-      <Scrubber duration={10000} value={0} onChange={() => {}} tracks={tracks} />,
-      { wrapper: wrap },
-    );
+    render(<Scrubber duration={10000} value={0} onChange={() => {}} tracks={tracks} />, {
+      wrapper: wrap,
+    });
     const block = screen.getByText("Zoom").parentElement as HTMLElement;
     expect(block.style.left).toBe("20%");
     expect(block.style.width).toBe("20%");

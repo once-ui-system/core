@@ -65,7 +65,7 @@ export const Productivity3 = () => {
   const totalBlocks = Object.values(schedule).flat().length;
 
   return (
-    <Column fillWidth paddingX="8" paddingY="12" gap="24" maxWidth="xl" horizontal="center">
+    <Column paddingX="8" paddingY="12" gap="24" maxWidth="xl" horizontal="center">
       <Row as="header" fillWidth paddingX="16" horizontal="between" vertical="center" wrap gap="16">
         <Column gap="4">
           <Text variant="body-strong-m">Weekly planner</Text>
@@ -80,9 +80,7 @@ export const Productivity3 = () => {
             tooltip="Previous week"
             icon="chevronLeft"
           />
-          <Tag size="s" scheme="neutral">
-            Jul 21 – 27
-          </Tag>
+          <Tag size="s">Jul 21 – 27</Tag>
           <IconButton
             data-border="rounded"
             variant="ghost"
@@ -146,7 +144,7 @@ export const Productivity3 = () => {
         <Column fillWidth padding="16" gap="8">
           {blocks.length === 0 ? (
             <Column fillWidth center paddingY="32" gap="8">
-              <Icon name="calendar" size="m" onBackground="neutral-weak" />
+              <Icon name="calendar" onBackground="neutral-weak" />
               <Text variant="body-default-s" onBackground="neutral-weak">
                 No blocks scheduled — enjoy the free time
               </Text>

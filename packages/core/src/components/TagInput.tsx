@@ -1,26 +1,32 @@
 "use client";
 
-import {
-  useState,
-  KeyboardEventHandler,
-  ChangeEventHandler,
-  FocusEventHandler,
-  forwardRef,
-} from "react";
-
-import { Flex } from "./Flex";
+import { ChangeEventHandler, forwardRef, KeyboardEventHandler, useState } from "react";
 import { Chip } from "./Chip";
+import { Flex } from "./Flex";
 import { Input, InputProps } from "./Input";
 
-interface TagInputProps extends Omit<InputProps, "onChange" | "value"> {
-  value: string[];
-  onChange: (value: string[]) => void;
+interface TagInputProps extends Omit<InputProps, "onChange" | "value" | "defaultValue"> {
+  /** The tags, controlled. Leave it out to let TagInput keep its own list,
+   *  starting from `defaultValue`. */
+  value?: string[];
+  /** The starting tags of an uncontrolled TagInput (no `value`). */
+  defaultValue?: readonly string[];
+  /** Receives the whole new list after an add or a remove. */
+  onChange?: (value: string[]) => void;
 }
 
 const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
-  ({ value, onChange, label, placeholder, ...inputProps }, ref) => {
+  ({ value: controlledValue, defaultValue, onChange, label, placeholder, ...inputProps }, ref) => {
     const [inputValue, setInputValue] = useState("");
-    const [isFocused, setIsFocused] = useState(false);
+    const [uncontrolledValue, setUncontrolledValue] = useState<string[]>(() => [
+      ...(defaultValue ?? []),
+    ]);
+    const value = controlledValue ?? uncontrolledValue;
+
+    const commit = (next: string[]) => {
+      if (controlledValue === undefined) setUncontrolledValue(next);
+      onChange?.(next);
+    };
 
     const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
       setInputValue(e.target.value);
@@ -30,23 +36,14 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
       if (e.key === "Enter" || e.key === ",") {
         e.preventDefault();
         if (inputValue.trim()) {
-          onChange([...value, inputValue.trim()]);
+          commit([...value, inputValue.trim()]);
           setInputValue("");
         }
       }
     };
 
     const handleRemoveTag = (index: number) => {
-      const newValue = value.filter((_, i) => i !== index);
-      onChange(newValue);
-    };
-
-    const handleFocus: FocusEventHandler<HTMLInputElement> = () => {
-      setIsFocused(true);
-    };
-
-    const handleBlur: FocusEventHandler<HTMLInputElement> = (e) => {
-      setIsFocused(false);
+      commit(value.filter((_, i) => i !== index));
     };
 
     return (
@@ -57,10 +54,9 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
         value={inputValue}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        aria-haspopup="listbox"
-        aria-expanded={isFocused}
+        // No `aria-haspopup` or `aria-expanded`: they promised a listbox
+        // that never existed, and a plain text field may not carry
+        // `aria-expanded` at all.
         {...inputProps}
       >
         {value.length > 0 && (
@@ -78,7 +74,10 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
                 key={index}
                 label={tag}
                 onRemove={() => handleRemoveTag(index)}
-                aria-label={`Remove tag ${tag}`}
+                // The name goes on the button that removes the tag. On the
+                // Chip it named the chip itself, and every remove button was
+                // just "Remove".
+                iconButtonProps={{ "aria-label": `Remove tag ${tag}` }}
               />
             ))}
           </Flex>
@@ -90,5 +89,5 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
 
 TagInput.displayName = "TagInput";
 
-export { TagInput };
 export type { TagInputProps };
+export { TagInput };

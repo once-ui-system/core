@@ -1,4 +1,4 @@
-import { Background, Particle, Row } from "@once-ui-system/core";
+import { Background, ParticleFx, Row } from "@once-ui-system/core";
 
 export const Background4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -58,7 +58,7 @@ export const Background4: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
             radius: 25,
           }}
         >
-          <Particle
+          <ParticleFx
             style={{ transform: "scale(1.1)" }}
             opacity={70}
             position="absolute"
@@ -67,7 +67,6 @@ export const Background4: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
             fill
             interactive
             speed={4}
-            density={100}
             size="1"
             intensity={50}
           />

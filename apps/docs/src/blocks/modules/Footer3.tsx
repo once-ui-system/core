@@ -1,14 +1,4 @@
-import {
-  Column,
-  Grid,
-  IconButton,
-  type IconName,
-  Logo,
-  Row,
-  SmartLink,
-  Tag,
-  Text,
-} from "@once-ui-system/core";
+import { Column, Grid, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
 import { social } from "@/resources";
 
 const navigation = [
@@ -105,8 +95,11 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
           s={{ direction: "column", horizontal: "start" }}
         >
           <Row paddingRight="8">
-            <Logo size="s" href="/" dark icon="/trademarks/icon-dark.svg" />
-            <Logo size="s" href="/" light icon="/trademarks/icon-light.svg" />
+            <Logo
+              size="s"
+              href="/"
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+            />
           </Row>
           <Row wrap fillWidth gap="4">
             Built with curiosity by{" "}
@@ -122,11 +115,11 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
             {social.map((item, index) => (
               <IconButton
                 data-border="rounded"
-                icon={item.icon as IconName}
+                icon={item.icon}
                 variant="tertiary"
                 size="l"
                 key={index}
-                href={item.href}
+                href={item.link}
               />
             ))}
           </Row>

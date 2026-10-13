@@ -98,7 +98,7 @@ export default async function Docs({
             )}
           </Column>
           {doc.metadata.image && (
-            <Media marginY="24" border="neutral-alpha-weak" enlarge src={doc.metadata.image} alt={"Thumbnail of " + doc.metadata.title} aspectRatio="16 / 9" radius="m" sizes={768} priority />
+            <Media marginY="24" border enlarge src={doc.metadata.image} alt={"Thumbnail of " + doc.metadata.title} aspectRatio="16 / 9" radius="m" sizes={768} priority />
           )}
           <Column as="article" maxWidth={layout.content.width}>
             <CustomMDX source={doc.content} />

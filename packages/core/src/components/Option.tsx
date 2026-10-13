@@ -1,12 +1,13 @@
 "use client";
 
 import classNames from "clsx";
-import { Text } from "./Text";
-import { ElementType } from "./ElementType";
+import React, { forwardRef, KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
 import { Column } from "./Column";
-import { Row } from "./Row";
+import { ElementType } from "./ElementType";
 import styles from "./Option.module.scss";
-import React, { forwardRef, KeyboardEvent, useRef, useEffect, useState } from "react";
+import { OptionRoleContext } from "./OptionRoleContext";
+import { Row } from "./Row";
+import { Text } from "./Text";
 
 export interface OptionProps extends Omit<React.ComponentProps<typeof Row>, "onClick" | "prefix"> {
   label?: React.ReactNode;
@@ -42,6 +43,12 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
       onClick,
       onLinkClick,
       children,
+      // These describe the option, so they go on the role="option" element
+      // rather than the surface inside it: `aria-activedescendant` has to
+      // point at the option, and a combobox marks its active option selected
+      // without giving it the chosen-value look that `selected` draws.
+      id,
+      "aria-selected": ariaSelected,
       ...flex
     },
     ref,
@@ -50,6 +57,8 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
     const [isHighlightedByClass, setIsHighlightedByClass] = useState(false);
     // Use a more generic type that works with ElementType
     const elementRef = useRef<HTMLElement>(null);
+    // "menuitem" inside a ContextMenu, "option" everywhere else.
+    const role = useContext(OptionRoleContext);
 
     // Check for highlighted class applied by ArrowNavigation
     useEffect(() => {
@@ -63,13 +72,14 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           ) {
             if (mutation.target instanceof HTMLElement) {
               const element = mutation.target;
-              const hasHighlighted = element.classList.contains("highlighted") ||
+              const hasHighlighted =
+                element.classList.contains("highlighted") ||
                 element.getAttribute("data-highlighted") === "true";
-              
+
               // If highlighted class was just added but element is being hovered, remove it immediately
-              if (hasHighlighted && element.matches(':hover')) {
-                element.classList.remove('highlighted');
-                element.removeAttribute('data-highlighted');
+              if (hasHighlighted && element.matches(":hover")) {
+                element.classList.remove("highlighted");
+                element.removeAttribute("data-highlighted");
                 setIsHighlightedByClass(false);
               } else {
                 setIsHighlightedByClass(hasHighlighted);
@@ -85,13 +95,14 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
       });
 
       // Initial check
-      const hasHighlighted = elementRef.current.classList.contains("highlighted") ||
+      const hasHighlighted =
+        elementRef.current.classList.contains("highlighted") ||
         elementRef.current.getAttribute("data-highlighted") === "true";
-      
+
       // Check if element is being hovered on initial check too
-      if (hasHighlighted && elementRef.current.matches(':hover')) {
-        elementRef.current.classList.remove('highlighted');
-        elementRef.current.removeAttribute('data-highlighted');
+      if (hasHighlighted && elementRef.current.matches(":hover")) {
+        elementRef.current.classList.remove("highlighted");
+        elementRef.current.removeAttribute("data-highlighted");
         setIsHighlightedByClass(false);
       } else {
         setIsHighlightedByClass(hasHighlighted);
@@ -104,11 +115,11 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
     const handleMouseEnter = () => {
       if (!disabled) {
         // Remove highlighted class from ALL options (including self) to let CSS :hover take over
-        if (elementRef.current?.parentElement) {
-          const allOptions = elementRef.current.parentElement.querySelectorAll('[role="option"]');
+        if (role !== "none" && elementRef.current?.parentElement) {
+          const allOptions = elementRef.current.parentElement.querySelectorAll(`[role="${role}"]`);
           allOptions.forEach((option) => {
-            option.classList.remove('highlighted');
-            option.removeAttribute('data-highlighted');
+            option.classList.remove("highlighted");
+            option.removeAttribute("data-highlighted");
           });
         }
       }
@@ -116,6 +127,7 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
 
     return (
       <ElementType
+        id={id}
         tabIndex={tabIndex}
         ref={(el) => {
           // Forward the ref
@@ -135,8 +147,12 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         onMouseEnter={handleMouseEnter}
         data-value={value}
         role="option"
-        aria-selected={selected}
+        aria-selected={ariaSelected ?? selected}
         aria-disabled={disabled}
+        // In a menu: a menu item, which cannot carry aria-selected.
+        {...(role === "menuitem" && { role, "aria-selected": undefined })}
+        // In a list of links: the element's own role, a link or a button.
+        {...(role === "none" && { role: undefined, "aria-selected": undefined })}
         onKeyDown={(e: KeyboardEvent<HTMLElement>) => {
           if ((e.key === "Enter" || e.key === " ") && !disabled) {
             e.preventDefault();
@@ -168,19 +184,11 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         >
           {prefix && <Row className={styles.prefix}>{prefix}</Row>}
           <Column fillWidth align="left">
-            <Text
-              onBackground="neutral-strong"
-              variant="label-default-s"
-              truncate
-            >
+            <Text onBackground="neutral-strong" variant="label-default-s" truncate>
               {label || children}
             </Text>
             {description && (
-              <Text
-                variant="body-default-xs"
-                onBackground="neutral-weak"
-                truncate
-              >
+              <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
                 {description}
               </Text>
             )}
@@ -193,4 +201,5 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
 );
 
 Option.displayName = "Option";
+
 export { Option };

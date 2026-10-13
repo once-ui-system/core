@@ -1,16 +1,36 @@
 "use client";
-import React, { useRef, forwardRef, useState, useCallback } from "react";
-import { Flex } from "./Flex";
-import { Input, InputProps } from "./Input";
-import { IconButton } from "./IconButton";
-import { Icon } from "./Icon";
-import { DropdownWrapper } from "./DropdownWrapper";
-import { Slider } from "./Slider";
+import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
+import { mergeLabels } from "../internal/labels";
 import { Column } from "./Column";
+import { DropdownWrapper } from "./DropdownWrapper";
+import { Flex } from "./Flex";
+import { Icon } from "./Icon";
+import { IconButton } from "./IconButton";
+import { Input, InputProps } from "./Input";
+import { Slider } from "./Slider";
+
+/** The field's own controls. Omitted fields keep the English default. */
+interface ColorInputLabels {
+  /** The clear button's name and tooltip. Defaults to `"Remove"`. */
+  remove?: string;
+  /** The opacity button's name and tooltip, with `supportAlpha`. Defaults to `"Adjust opacity"`. */
+  adjustOpacity?: string;
+  /** The opacity slider's label, with `supportAlpha`. Defaults to `"Opacity"`. */
+  opacity?: string;
+}
+
+const DEFAULT_LABELS: Required<ColorInputLabels> = {
+  remove: "Remove",
+  adjustOpacity: "Adjust opacity",
+  opacity: "Opacity",
+};
+
 interface ColorInputProps extends Omit<InputProps, "onChange" | "value"> {
   value: string;
   onChange: (value: string) => void;
   supportAlpha?: boolean;
+  /** The clear and opacity controls' text, for a translated interface. */
+  labels?: ColorInputLabels;
 }
 const hexToRgba = (hex: string, alpha: number): string => {
   if (!hex) return "";
@@ -29,16 +49,36 @@ const rgbaToHex = (rgba: string): { hex: string; alpha: number } => {
   const hex = `#${r.toString(16).padStart(2, "0")}${g.toString(16).padStart(2, "0")}${b.toString(16).padStart(2, "0")}`;
   return { hex, alpha: Math.round(a) };
 };
+/** The hex colour and the opacity (0–100) a `value` holds. */
+const parseValue = (value: string): { hex: string; alpha: number } =>
+  value.startsWith("rgba") ? rgbaToHex(value) : { hex: value, alpha: 100 };
 const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
-  ({ label, id, value, onChange, supportAlpha = false, ...props }, ref) => {
+  ({ label, id, value, onChange, supportAlpha = false, labels, ...props }, ref) => {
+    const text = mergeLabels(DEFAULT_LABELS, labels);
     const colorInputRef = useRef<HTMLInputElement>(null);
+    // The input needs its own ref to open the picker from the swatch; this
+    // hands the same element to the caller's ref.
+    useImperativeHandle(ref, () => colorInputRef.current as HTMLInputElement);
     const [isAlphaDropdownOpen, setIsAlphaDropdownOpen] = useState(false);
-    const isRgba = value.startsWith("rgba");
-    const { hex: currentHex, alpha: currentAlpha } = isRgba
-      ? rgbaToHex(value)
-      : { hex: value, alpha: 100 };
-    const [hexValue, setHexValue] = useState(currentHex);
-    const [alpha, setAlpha] = useState(currentAlpha);
+    const [hexValue, setHexValue] = useState(() => parseValue(value).hex);
+    const [alpha, setAlpha] = useState(() => parseValue(value).alpha);
+
+    /**
+     * Follow `value` after mount. It used to seed the state once and never
+     * again, so a colour changed from outside (a reset, a value loaded later,
+     * an undo) left the field showing the old one, as NumberInput did.
+     * Only a CHANGE of the prop is followed, so the echo of the user's own
+     * pick sets what the field already shows, and a parent that never passes
+     * the pick back keeps it. Adjusted during render rather than in an
+     * effect, so the field never paints the stale colour first.
+     */
+    const [followed, setFollowed] = useState(value);
+    if (value !== followed) {
+      setFollowed(value);
+      const next = parseValue(value);
+      setHexValue(next.hex);
+      setAlpha(next.alpha);
+    }
     const handleHexClick = () => {
       if (colorInputRef.current) {
         colorInputRef.current.click();
@@ -111,9 +151,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
               opacity={hexValue ? 100 : 0}
               transition="micro-medium"
               style={{
-                backgroundColor: supportAlpha
-                  ? hexToRgba(hexValue, alpha)
-                  : hexValue,
+                backgroundColor: supportAlpha ? hexToRgba(hexValue, alpha) : hexValue,
                 transform: hexValue ? "scale(1)" : "scale(0)",
               }}
             />{" "}
@@ -155,7 +193,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                     trigger={
                       <IconButton
                         variant="secondary"
-                        tooltip="Adjust opacity"
+                        tooltip={text.adjustOpacity}
                         tooltipPosition="left"
                         icon="opacity"
                       />
@@ -169,7 +207,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                           min={0}
                           max={100}
                           step={1}
-                          label="Opacity"
+                          label={text.opacity}
                           showValue
                         />{" "}
                       </Column>
@@ -179,7 +217,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                 <IconButton
                   onClick={handleReset}
                   variant="secondary"
-                  tooltip="Remove"
+                  tooltip={text.remove}
                   tooltipPosition={supportAlpha ? "bottom" : "left"}
                   icon="close"
                 />{" "}
@@ -193,5 +231,6 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
   },
 );
 ColorInput.displayName = "ColorInput";
+
+export type { ColorInputLabels, ColorInputProps };
 export { ColorInput };
-export type { ColorInputProps };

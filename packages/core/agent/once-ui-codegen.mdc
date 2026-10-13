@@ -15,6 +15,11 @@ Before generating or editing Once UI UI code in this project:
 5. Read the task's gold example; for production layouts, read matching Pro blocks from `ai/examples/blocks/manifest.json`
 6. Validate output: `npx once-ui-validate-ai-code path/to/file.tsx`
 
+## Next.js apps
+
+Import `LayoutProvider` from `@once-ui-system/core/next`, not the package root. The root export
+renders `SmartLink`, `Button href`, `Media` and the rest as plain `<a>` and `<img>`, with no error.
+
 ## Do not
 
 - Use full documentation MDX pages for codegen (too large; use the harness)

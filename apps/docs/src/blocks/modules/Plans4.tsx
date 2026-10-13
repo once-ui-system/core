@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Column, Flex, Heading, Icon, Row, Text } from "@once-ui-system/core";
+import { Button, Column, Heading, Icon, Row, Text } from "@once-ui-system/core";
 import type React from "react";
 
 const plans = {
@@ -90,7 +90,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
           ))}
         </Column>
       </Column>
-      <Flex fillWidth padding="24">
+      <Row fillWidth padding="24">
         <Button
           id={`${id}-button-4`}
           href={plan.href}
@@ -100,7 +100,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
         >
           Get started
         </Button>
-      </Flex>
+      </Row>
     </Column>
   );
 };

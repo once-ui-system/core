@@ -1,0 +1,114 @@
+---
+title: "VisuallyHidden"
+summary: "Content for screen readers only, and skip links that appear when a keyboard user tabs to them."
+updatedAt: "2026-10-10"
+docs: "once-ui/components/visuallyHidden.mdx"
+github: "components/VisuallyHidden.tsx"
+navLabel: "VisuallyHidden"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`VisuallyHidden` keeps its content in the accessibility tree and takes it off the
+screen. Use it for the words a sighted user gets from context and a screen reader
+user does not: the name of an icon-only control, the text of a status region, what
+a symbol such as ⌘ stands for.
+
+It uses the clip pattern rather than `display: none` or `visibility: hidden`, which
+hide the content from screen readers as well. The content stays absolutely
+positioned and clipped to nothing, which also holds inside a transformed or
+`overflow: hidden` parent.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" vertical="center">
+      <Button variant="secondary" size="m">
+        <Icon name="search" size="s" />
+        <VisuallyHidden>Search the docs</VisuallyHidden>
+      </Button>
+      <Text variant="body-default-s" onBackground="neutral-weak">
+        A screen reader announces this button as "Search the docs".
+      </Text>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Button variant="secondary">
+  <Icon name="search" size="s" />
+  <VisuallyHidden>Search the docs</VisuallyHidden>
+</Button>`,
+      language: "tsx",
+      label: "Label"
+    }
+  ]}
+/>
+
+## Status regions
+
+A live region announces changes without moving focus. The visible interface often
+already shows the result (a list that filters, a badge that updates), so the
+announcement itself can be hidden. Render the region once and change its text; a
+region that mounts with its message is often not announced.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<VisuallyHidden as="div" role="status">
+  {results.length} results
+</VisuallyHidden>`,
+      language: "tsx",
+      label: "Status"
+    }
+  ]}
+/>
+
+## Skip links
+
+With `focusable`, the content appears while it, or anything inside it, has keyboard
+focus, and hides again when focus moves on. Put it first in the page, so the first
+Tab offers a way past the header and navigation. It stays absolutely positioned when
+revealed, so it draws over the page instead of pushing the layout down.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<VisuallyHidden focusable>
+  <Button href="#main" size="s">Skip to content</Button>
+</VisuallyHidden>
+<Header />
+<Column as="main" id="main" tabIndex={-1}>
+  {children}
+</Column>`,
+      language: "tsx",
+      label: "Skip link"
+    }
+  ]}
+/>
+
+<Feedback
+  marginTop="16"
+  marginBottom="24"
+  description="VisuallyHidden has no hooks and no client directive, so it renders in a server component."
+/>
+
+## API reference
+
+<PropsTable
+  component="VisuallyHidden"
+  describe={{
+    children: "What a screen reader announces and a sighted user does not see.",
+    as: "The element to render. A span sits inside a line of text; use div for a block, such as a live region.",
+    focusable: "Show the content while it, or anything inside it, has keyboard focus. For skip links.",
+  }}
+/>

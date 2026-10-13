@@ -5,7 +5,7 @@
  "props": {
   "color": "!string",
   "size": "\"s\" | \"m\" = m",
-  "variant": "ChartVariant = useDataTheme().variant"
+  "variant": "ChartVariant"
  },
  "mixinsRef": []
 }

@@ -1,10 +1,10 @@
 "use client";
 
+import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { Flex } from "./Flex";
 import styles from "./Card.module.scss";
 import { ElementType } from "./ElementType";
-import classNames from "clsx";
+import { Flex } from "./Flex";
 
 interface CardProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
@@ -58,12 +58,10 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           interactive && `radius-${flex.radius ?? "l"}`,
         )}
         href={href}
-        // A link card runs its handler through `onLinkClick`, since
-        // ElementType does not pass `onClick` to an anchor. The surface
-        // below must not carry it too: a click on the content would bubble
-        // to this element and run it twice, which undoes a toggle.
+        // ElementType runs `onClick` on a link as well as on a button. The
+        // surface below must not carry it too: a click on the content would
+        // bubble to this element and run it twice, which undoes a toggle.
         onClick={onClick}
-        onLinkClick={href ? onClick : undefined}
         role={onClick ? "button" : href ? "link" : "none"}
         // `aria-selected` only means anything inside a listbox or grid, which
         // a Card knows nothing about. A clickable card that can be on or off
@@ -86,7 +84,7 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
           cursor={interactive ? "interactive" : undefined}
           align="left"
           className={classNames(styles.card, selected && styles.selected, className)}
-          style={{...style}}
+          style={{ ...style }}
           {...flex}
         >
           {children}
@@ -97,4 +95,5 @@ const Card = forwardRef<HTMLDivElement, CardProps>(
 );
 
 Card.displayName = "Card";
+
 export { Card };

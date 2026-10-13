@@ -1,7 +1,7 @@
 ---
 title: "StylePanel"
 summary: "StylePanel provides a live theming interface that allows users to customize global design tokens such as theme, shape, color, and visual density."
-updatedAt: "2025-05-11"
+updatedAt: "2026-10-11"
 docs: "once-ui/components/stylePanel.mdx"
 github: "components/StylePanel.tsx"
 navLabel: "StylePanel"
@@ -81,13 +81,15 @@ Only `DataStyle` needs a `DataThemeProvider` in the tree, so a panel without
 it has no such requirement.
 
 Every row takes a `label`, and every group a `title` and `description`. Pass a
-node to replace the default, or `false` to drop it — which is how you localise
-the panel:
+node to replace the default, or `false` to drop it:
 
 ```tsx
-<StylePanel.Brand label={t("style.brand")} />
+<StylePanel.Brand label="Primary" />
 <StylePanel.Color title={false} description={false} />
 ```
+
+To translate the panel, pass `labels` to the root instead — see
+[Localisation](#localisation). A prop on a row or group still wins over it.
 
 To keep the default arrangement and hide parts of it, use `visibility`.
 Omitted keys stay visible; `section: false` hides a whole group.
@@ -98,6 +100,41 @@ Omitted keys stay visible; `section: false` hides a whole group.
 
 `bodyText` is the exception: it is opt-in, so pass `{ bodyText: { section: true } }`
 to show it.
+
+## Narrow panels
+
+Each row puts its label beside its control, which suits a page or a settings
+screen. In a sidebar there is no room for both, so the colour strips scroll
+after a few swatches. `stacked` puts every label above its control instead:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column maxWidth={20} fillWidth>
+      <StylePanel stacked />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column maxWidth={20} fillWidth>
+  <StylePanel stacked />
+</Column>`,
+      language: "tsx",
+      label: "Stacked"
+    }
+  ]}
+/>
+
+It is a prop rather than automatic because the panel cannot know it is narrow
+before it has been laid out: a container query would need size containment,
+which stops the panel taking its width from its content. Every row, including
+one with a [custom colour](#custom-colour), still takes the layout props of a
+`Flex` (`direction`, `horizontal`, `vertical`, `gap`), which win over
+`stacked`. Stacked, the option rows take the whole row and drop a button
+size, so that they fit a sidebar; whatever still overflows scrolls, and the chosen swatch or
+option is scrolled into view.
 
 ## Owning the state
 
@@ -119,9 +156,185 @@ means:
 `changed` holds only the keys this interaction touched, which is what you want
 to send to a server; `next` is the whole state.
 
+That includes the Theme row: it shows `value.theme`, reading an unset theme as
+`"system"`, and reports a choice as `{ theme }` without switching the page.
+
 To keep the panel bound to `ThemeProvider` but change where choices are
 stored, set `persistence` on the provider instead — see
 [ThemeProvider](/contexts/themeProvider).
+
+## Localisation
+
+`labels` translates every string the panel shows or announces: the group
+headings, the row labels, the segmented options, the swatches' accessible
+names and the theme switcher's. Pass it to `StylePanel` or `StylePanel.Root`,
+and every group and row inside reads it, including the ones you compose
+yourself. Every field at every depth is optional, and whatever you leave out
+keeps its English default, so you can translate one section at a time.
+
+```tsx
+"use client";
+
+import { StylePanel, type StylePanelLabels, type StylePanelValue } from "@once-ui-system/core";
+import { useTranslations } from "next-intl";
+import { useMemo, useState } from "react";
+
+export function SiteStylePanel({ saved, save }: {
+  saved: StylePanelValue;
+  save: (changed: Partial<StylePanelValue>) => void;
+}) {
+  const t = useTranslations("stylePanel");
+  const [draft, setDraft] = useState(saved);
+
+  const labels = useMemo<StylePanelLabels>(
+    () => ({
+      groups: {
+        page: { title: t("page.title"), description: t("page.description") },
+        color: { title: t("color.title"), description: t("color.description") },
+      },
+      rows: { theme: t("rows.theme"), brand: t("rows.brand"), accent: t("rows.accent") },
+      options: {
+        solid: { color: t("solid.color"), inverse: t("solid.inverse"), contrast: t("solid.contrast") },
+        scaling: (value) => `${value} %`,
+      },
+      names: { schemes: { blue: t("schemes.blue"), red: t("schemes.red") } },
+      swatches: {
+        // A function, so the translation decides the word order.
+        scheme: (name, row) => t("swatch.scheme", { name, row: t(`rows.${row}`) }),
+      },
+      themeSwitcher: { system: t("theme.system"), dark: t("theme.dark"), light: t("theme.light") },
+    }),
+    [t],
+  );
+
+  return (
+    <StylePanel
+      labels={labels}
+      value={draft}
+      onChange={(next, changed) => {
+        setDraft(next);
+        save(changed);
+      }}
+    />
+  );
+}
+```
+
+| Key | Covers |
+| --- | --- |
+| `groups` | Each group's `title` and `description`, keyed like `visibility`: `page`, `color`, `solidStyle`, `bodyText`, `advanced`. |
+| `rows` | Each row's label, keyed by its part name: `theme`, `shape`, `brand`, `accent`, `neutral`, `solid`, `effect`, `surface`, `scaling`, `transition`, `dataStyle`, `bodySize`, `bodyLineHeight`. |
+| `options` | The segmented options, by row and value (`solid.inverse`, `transition.micro`, `dataStyle.sequential`), and a formatter for each numeric row: `scaling`, `bodySize`, `bodyLineHeight`. |
+| `names` | Display names for `shapes`, `schemes` and `neutrals`. They default to the key (`"blue"`), and the swatches' names are built from them. |
+| `swatches` | The swatches' accessible names, as functions of that display name: `shape`, `scheme` (which also gets the row, `"brand"` or `"accent"`) and `neutral`. The defaults read `Corner style: sharp`, `Brand colour: blue` and `Neutral colour: gray`. |
+| `themeSwitcher` | "System theme", "Dark theme" and "Light theme". [ThemeSwitcher](/components/themeSwitcher) takes the same object as its own `labels`. |
+| `scroller` | The scroll buttons of the colour strips and option rows: "Scroll Previous" and "Scroll Next". [Scroller](/components/scroller) takes the same object as its own `labels`. |
+| `custom` | The custom colour's swatch, field and hint — see [Custom colour](#custom-colour). |
+
+A row's `label` and a group's `title` and `description` still win over
+`labels`, so one composed row can say something else:
+`<StylePanel.Brand label={t("rows.siteColour")} />`.
+
+## Custom colour
+
+`customColors` ends the Brand and Accent swatches with one more: a colour of
+your own, such as a site's brand colour. It is painted with the current seed,
+and shows a plus while there is none. Choosing it reports
+`{ brand: "custom", brandSeed }` — the seed already in `value`, or `#5a93fc`
+if there is none — and while it is chosen a colour field under the swatches
+edits the seed. Every colour picked there comes through `onChange`, in both
+`next` and `changed`.
+
+```tsx
+const [draft, setDraft] = useState<StylePanelValue>({
+  brand: "custom",
+  brandSeed: site.brandColor,
+});
+
+<StylePanel
+  customColors
+  value={draft}
+  onChange={(next, changed) => {
+    setDraft(next); // { ...draft, brand: "custom", brandSeed: "#c2410c" }
+    saveSiteStyle(changed);
+  }}
+  labels={{
+    custom: {
+      // Shown under the field and read with it.
+      description: () => t("custom.hint"), // "Buttons and links use this colour."
+    },
+  }}
+/>
+```
+
+For one row only, compose the panel and set `custom` on that row:
+`<StylePanel.Brand custom />`.
+
+It is for the controlled mode. Bound to `ThemeProvider`, whose `setStyle`
+takes no seed, the panel would have nowhere to keep one, so the custom swatch
+does not render there and the rows look as they always have.
+
+Choosing a named scheme afterwards keeps the seed in the value, so the custom
+swatch goes on showing it and one click brings it back; the seed only takes
+effect while the row is `"custom"`. The field's clear button is not reported:
+the panel keeps the last colour rather than leave the scheme with nothing to
+point at. The field shows a hex seed; a seed in another format (`rgb()`,
+`oklch()`) still paints the swatch but leaves the field empty until a colour is
+picked.
+
+| `labels.custom` | Default |
+| --- | --- |
+| `swatch(row)` | The swatch's accessible name: `Brand colour: custom` (`Accent colour: custom`). |
+| `picker(row)` | The field's label: `Custom brand colour` (`Custom accent colour`). |
+| `description(seed, row)` | None. Text under the field, wired to its `aria-describedby`. |
+| `remove` | The field's clear button: `Remove`. |
+
+### Rendering the colour
+
+The panel never generates CSS. It reports the seed, and your app renders the
+scheme from it with the same pure function Once UI uses everywhere. On the
+published site, give the seed to `ThemeInit`: it generates the scheme on the
+server and renders it into a `<style>` beside its script, so the page paints
+in the site's colour from the first frame, with no flash. `ThemeProvider`
+takes the same seed and applies it on the client.
+
+```tsx
+// app/[site]/layout.tsx: a server component
+const { site } = await params;
+const { brandSeed } = await getSiteStyle(site);
+
+<html suppressHydrationWarning>
+  <head>
+    <ThemeInit config={{ brand: "custom", brandSeed }} />
+  </head>
+  <body>
+    <ThemeProvider brand="custom" brandSeed={brandSeed}>
+      {children}
+    </ThemeProvider>
+  </body>
+</html>
+```
+
+In the editor, where the colour changes as it is picked, write the same
+properties yourself with `customSchemeProperties`:
+
+```tsx
+import { customSchemeProperties } from "@once-ui-system/core/utils";
+
+useEffect(() => {
+  const root = document.documentElement;
+  const properties = customSchemeProperties({ brand: draft.brandSeed, accent: draft.accentSeed });
+  for (const [property, value] of Object.entries(properties)) root.style.setProperty(property, value);
+  if (draft.brand) root.setAttribute("data-brand", draft.brand);
+  if (draft.accent) root.setAttribute("data-accent", draft.accent);
+  return () => {
+    for (const property of Object.keys(properties)) root.style.removeProperty(property);
+  };
+}, [draft.brand, draft.accent, draft.brandSeed, draft.accentSeed]);
+```
+
+See [Custom schemes](/basics/color#custom-schemes) for how a scheme is
+generated from one colour.
 
 ## API reference
 
@@ -131,6 +344,9 @@ stored, set `persistence` on the provider instead — see
     visibility: "Which sections and rows to show.",
     value: "Take ownership of the state. The panel then writes nothing to the providers or to storage.",
     onChange: "Called with the whole state and just the keys that changed — the latter being what you send to a server.",
+    labels: "Every string the panel shows or announces, over the English defaults. Groups and rows read it; their own props still win.",
+    customColors: "End the Brand and Accent swatches with a custom colour, reported as brandSeed and accentSeed. Controlled mode only.",
+    stacked: "Put each row's label above its control, for a narrow sidebar.",
   }}
   content={[
     ["className"],

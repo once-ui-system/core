@@ -16,7 +16,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 ## Layout primitives
 
-1. Use `Row` and `Column` for layout. `Flex` with `direction` is only for dynamic direction.
+1. Use `Row` and `Column` for layout. `Flex` with `direction` is only for dynamic direction. A `Flex` with no direction at all is a `Row` (`Flex` defaults to row).
 
 ```tsx
 // Good
@@ -46,7 +46,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
    - `variant="primary"`, `size="m"` on `Button`
    - `fillWidth` beside `maxWidth` — `maxWidth` already fills the width up to the cap
    - `minWidth={0}` beside `fillWidth` — `fillWidth` already sets `min-width: 0`
-   - a colour on `border` (or `borderTop`, `borderBottom`, `borderX`, …) that only restates the default — bare `border` draws the default border; name a colour only to deviate from it
+   - a colour on `border` (or `borderTop`, `borderBottom`, `borderX`, …) that only restates the default — bare `border` draws the default border, `--default-border` (`neutral-alpha-weak` unless the app sets it in its custom CSS); name a colour only to deviate from it
 
 ```tsx
 // Good
@@ -77,6 +77,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 7. Colors are semantic tokens, never hex/rgb: `{scheme}-{weight}` or `{scheme}-alpha-{weight}` where scheme = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`.
    - `background` also accepts `surface | overlay | page | transparent`
    - `onBackground` colors text/icons on a background
+   - Inline SVG paint too: `fill="currentColor"` (colour the wrapper with `onBackground`) or a token, `stroke="var(--brand-solid-strong)"` — never `fill="#15D9EF"`
 
 8. Standard surface recipe: `background="surface"` (or `"overlay"` over imagery) + `border` + `radius="l"`. Bare `border` is the default border; name a colour (`border="neutral-alpha-medium"`, `border="brand-alpha-medium"`) only when the surface should differ from it.
 
@@ -114,6 +115,12 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
     - Links → `SmartLink` / `Button href`, not `a`
     - Status dot → `StatusIndicator`; progress → `ProgressBar`; loading → `Spinner` / `Skeleton`
     - Labels/metadata → `Tag`, `Chip`, `Badge`, `Kbd`, `InlineCode`
+    - Tabs → `Tabs` > `TabList` > `Tab` with a `TabPanel` per value (`orientation="vertical"` for a settings nav). `SegmentedControl` picks a value; it is not a tab set
+    - Mobile nav, filters, a side sheet → `Drawer` (`side`, `size`); it brings the focus trap, scroll lock and Escape a hand-made overlay misses
+    - Where-am-I trail → `Breadcrumbs items={[{ label, href }, ...]}`; the last item is the current page
+    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `KeyTip keys="mod+k"`
+    - Text for screen readers only, skip links → `VisuallyHidden` (`focusable` for a skip link)
+    - Markdown/MDX content → `mdxComponents` or `createMdxComponents({...})` from `/mdx` (rule 30), never a hand-written element map
 
 13. Use the distinctive features when the design calls for them — they exist and are cheap:
     - `Dialog` supports `stack` (stacked dialogs) and `base` props
@@ -123,7 +130,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 14. Buttons: `variant` = `primary | secondary | tertiary | quaternary | subtle | danger | success | warning | ghost | link` (the slice is authoritative; `primary` is the default); pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
 
-14b. Icon names must come from `iconNames` in spec.json. In 2.0 `IconName` is a real union, so an unregistered name is a type error rather than a blank space — do not guess a plausible one, and never reach for `as IconName` to silence the check. If no registered icon fits, omit the icon. The registry is 99 icons; brand marks (github, discord, google) are deliberately not among them, so an app registers its own.
+14b. Icon names must come from `iconNames` in catalog.json (spec.json carries the same list). In 2.0 `IconName` is a real union, so an unregistered name is a type error rather than a blank space — do not guess a plausible one, and never reach for `as IconName` to silence the check. If no registered icon fits, omit the icon. The registry is 99 icons; brand marks (github, discord, google) are deliberately not among them, so an app registers its own.
 
 14c. Components with a text prop render it — never pass the same text as both prop and children, it renders twice:
 
@@ -151,7 +158,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
     `maxWidth` conventions: primary page containers `"xl"`–`"m"` (marketing/landing toward `"xl"`/`"l"`, app and docs content `"m"`). `"s"` is only for narrow reading content (about, legal); `"xs"` for special surfaces (drawers, popovers).
 
-16. Data attributes for one-off theme overrides: `data-border="rounded"`, `data-brand="emerald"`, `data-solid="contrast"` — not custom CSS.
+16. One-off theme overrides on a subtree, not custom CSS. On `Flex`/`Row`/`Column`/`Grid`, and on every component built on them whose slice lists the typed props (`Background`, `Tag`, `Badge`, `RevealFx`, `BlobFx`, …), use the typed props: `theme="dark"`, `themeBorder="rounded"`, `themeSolid="contrast"`, `themeSurface="translucent"` (they write `data-theme`, `data-border`, `data-solid`, `data-surface`). Attributes without a prop stay raw: `data-brand="emerald"`, and `data-border="rounded"` on `Button` and `IconButton`, which have no typed prop. `theme="dark"` makes a subtree dark; the `dark` boolean only shows an element in a dark theme.
 
 ## Scale and hierarchy (marketing/landing pages)
 
@@ -234,9 +241,10 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 
 ## Effect units
 
-24. `RevealFx`: `delay` is in **milliseconds** — stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). `ShineFx.speed` is milliseconds for the same reason. `translateY` as a number is in **rem** — use `translateY={1}` or a token like `"16"` (1rem); `16` means 16rem.
+24. `RevealFx`: `delay` is in **milliseconds** — stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). The same holds for every timing prop measured in milliseconds: `RevealFx` `speed`, `ShineFx` `speed`, `CountFx` `speed`, `TypeFx` `speed` and `delay`, `Animation`/`HoverCard` `delay` and `duration`, `Hover` `delay` and `hideDelay`, `Skeleton` `delay`. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx` and `Effect` is a **multiplier** instead — `1` is normal, `0.5` half speed. `translateY` as a number is in **rem** — use `translateY={1}` or a token like `"16"` (1rem); `16` means 16rem.
 
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
+   A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo dark>` beside a `<Logo light>`. Keep `dark` or `light` for a logo that should only appear in one theme.
 
 26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
 
@@ -277,11 +285,75 @@ specifier into every consumer's module graph:
 | charts, gauges, chart chrome | `@once-ui-system/core/data` | `recharts` |
 | `CodeBlock` | `@once-ui-system/core/code` | `prismjs` |
 | `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
+| `mdxComponents`, `createMdxComponents`, the `Mdx*` elements | `@once-ui-system/core/mdx` | `prismjs` (for fenced code) |
 
-Naming one of these from the root does not resolve. Each component slice in
-`ai/components/` carries the specifier to import it from.
+Naming one of these from the root does not resolve. `MediaAudioPlayer` and
+`MediaVideoPlayer` are not on the root either: they live on the
+`./components/*` subpath (`@once-ui-system/core/components/MediaAudioPlayer`).
+Each component slice in `ai/components/`, each catalog entry, and each hook or
+function in `spec.json`'s `functions` carries the specifier to import it from
+when it is not the root; `ai/manifest.json`'s `imports` lists every entry
+point with its exports.
+
+```tsx
+// MDX through Once UI: headings with anchors, SmartLink, Media, CodeBlock, Table
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { createMdxComponents, MdxHeading } from "@once-ui-system/core/mdx";
+
+const components = createMdxComponents({
+  h2: (props) => <MdxHeading as="h2" marginTop="64" {...props} />, // typed against MDX's props
+  Pricing, // an app component, used as <Pricing /> in the content
+});
+<MDXRemote source={source} components={components} />
+```
+
+30b. In a **Next.js** app, `LayoutProvider` comes from
+`@once-ui-system/core/next`:
+
+```tsx
+import { LayoutProvider } from "@once-ui-system/core/next";
+```
+
+The root export resolves and renders, which is what makes it easy to miss: it
+installs the plain DOM adapters, so `SmartLink`, `Button`/`Card`/`ToggleButton`
+with an `href`, `Media`, `Logo`, `MegaMenu` and `Kbar` render a plain `<a>` and
+`<img>` — no client-side navigation, no `next/image`, and no error. The
+validator flags it (`LayoutProvider.next`) and `--fix` moves the import. An app
+that composes `NextAdapterProvider` itself is already covered.
+
+The same entry has the route handlers `OgCard` and `useOgData` call. Each
+returns `{ GET }`, checks every address and redirect is public, and answers at
+the paths the client defaults to:
+
+```ts
+// app/api/og/fetch/route.ts
+import { createOgFetchRoute } from "@once-ui-system/core/next";
+export const { GET } = createOgFetchRoute();
+
+// app/api/og/proxy/route.ts
+import { createOgProxyRoute } from "@once-ui-system/core/next";
+export const { GET } = createOgProxyRoute();
+```
+
+Do not hand-write these routes with `handleOGFetch` and a `fetch` of your own.
+
+30c. Type `once-ui.config` with `defineConfig` from
+`@once-ui-system/core/config` (the dependency-free entry; the root exports it
+too). It rejects a misspelt key or value in `style`, `dataStyle` and `fonts`
+and keeps the literal types, so the sections spread into the providers with no
+casts:
+
+```tsx
+// once-ui.config.ts
+import { defineConfig } from "@once-ui-system/core/config";
+export const { style, dataStyle } = defineConfig({ style: { brand: "cyan", theme: "system" }, dataStyle: { mode: "categorical" } });
+
+// layout.tsx
+<ThemeInit config={style} dataStyle={dataStyle} />
+<ThemeProvider {...style}><DataThemeProvider {...dataStyle}>...</DataThemeProvider></ThemeProvider>
+```
 
 31. `IconName` is a real union, not `string`. An unregistered name is a type
 error now, where it used to render a blank space with a console warning — so
-take icon names from `spec.json`'s `iconNames` rather than guessing a plausible
+take icon names from `catalog.json`'s `iconNames` rather than guessing a plausible
 one. An app registers its own by augmenting `IconLibraryOverrides`.

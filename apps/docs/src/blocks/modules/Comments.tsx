@@ -169,7 +169,7 @@ export function Comments({ limit, showTitle = true, ...flex }: CommentsProps) {
 
         <Row gap="4" fillWidth>
           <Row padding="4" fitHeight marginTop="8">
-            <Avatar src="/images/creators/lorant.jpg" size="m" />
+            <Avatar src="/images/creators/lorant.jpg" />
           </Row>
 
           <Column gap="8" fillWidth>
@@ -194,8 +194,8 @@ export function Comments({ limit, showTitle = true, ...flex }: CommentsProps) {
                   <EmojiPickerDropdown
                     onSelect={(emoji) => setComment(comment + emoji)}
                     trigger={
-                      <Row fillWidth data-border="rounded">
-                        <IconButton icon="smiley" size="m" variant="tertiary" />
+                      <Row fillWidth themeBorder="rounded">
+                        <IconButton icon="smiley" variant="tertiary" />
                       </Row>
                     }
                   />
@@ -203,7 +203,6 @@ export function Comments({ limit, showTitle = true, ...flex }: CommentsProps) {
                     <IconButton
                       icon="send"
                       loading={isSubmitting}
-                      size="m"
                       onClick={handleSubmitComment}
                       disabled={!comment || isSubmitting}
                     />

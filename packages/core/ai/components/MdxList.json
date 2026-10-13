@@ -1,0 +1,16 @@
+{
+ "name": "MdxList",
+ "group": "mdx",
+ "importFrom": "@once-ui-system/core/mdx",
+ "props": {
+  "as": "\"ul\" | \"ol\"",
+  "margin": "SpacingToken | number",
+  "marginLeft": "SpacingToken | number",
+  "marginRight": "SpacingToken | number",
+  "marginTop": "SpacingToken | number",
+  "marginBottom": "SpacingToken | number",
+  "marginX": "SpacingToken | number",
+  "marginY": "SpacingToken | number"
+ },
+ "mixinsRef": []
+}

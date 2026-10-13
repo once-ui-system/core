@@ -9,6 +9,7 @@ import {
   SmartLink,
   Text,
   TiltFx,
+  Row,
 } from "@once-ui-system/core";
 import { clsx } from "clsx";
 import Image from "next/image";
@@ -31,7 +32,7 @@ export function DesignEngineersClub1({ children, ...flex }: DesignEngineersClub1
           alt="Design Engineers Club Discord cover"
           src="/images/club/background.jpg"
         />
-        <Flex fillWidth aspectRatio="16 / 9" position="absolute" zIndex={1}>
+        <Row fillWidth aspectRatio="16 / 9" position="absolute" zIndex={1}>
           <Image
             className={clsx(styles.rock, styles.rock1)}
             fill
@@ -60,7 +61,7 @@ export function DesignEngineersClub1({ children, ...flex }: DesignEngineersClub1
             src={"/images/club/layer-4.png"}
             alt="Design Engineers Club cover anime style overlay"
           />
-        </Flex>
+        </Row>
         <Column
           zIndex={3}
           radius="xl"
@@ -80,19 +81,19 @@ export function DesignEngineersClub1({ children, ...flex }: DesignEngineersClub1
             children
           ) : (
             <Column fill gap="40" vertical="center">
-              <Flex gap="m" vertical="center">
+              <Row gap="m" vertical="center">
                 <Icon name="discord" />
                 <Text variant="label-default-s">/</Text>
                 <Text variant="label-default-s">Once UI</Text>
-              </Flex>
-              <Flex gap="8" fillWidth direction="column">
+              </Row>
+              <Column gap="8" fillWidth>
                 <Heading as="h2" variant="display-strong-xs">
                   Design Engineers Club
                 </Heading>
                 <Text onBackground="neutral-medium" variant="heading-default-xs" wrap="balance">
                   It's time. The revolution begins.
                 </Text>
-              </Flex>
+              </Column>
               <Flex gap="16" s={{ direction: "column" }} vertical="center">
                 <Button
                   size="s"
@@ -111,9 +112,9 @@ export function DesignEngineersClub1({ children, ...flex }: DesignEngineersClub1
                     pointerEvents: "all",
                   }}
                 >
-                  <Flex textVariant="code-default-s" paddingY="12">
+                  <Row textVariant="code-default-s" paddingY="12">
                     <LetterFx>Send an invite</LetterFx>
-                  </Flex>
+                  </Row>
                 </SmartLink>
               </Flex>
             </Column>

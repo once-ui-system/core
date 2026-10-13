@@ -5,6 +5,7 @@ export const Cookie2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
     <Column
       padding="20"
       maxWidth={28}
+      fitWidth
       background="surface"
       border="neutral-medium"
       radius="l"
@@ -13,7 +14,7 @@ export const Cookie2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
     >
       <Row fillWidth horizontal="between" vertical="center">
         <Text variant="heading-strong-xs">Cookie preferences</Text>
-        <IconButton icon="close" size="m" variant="tertiary" tooltip="Close" />
+        <IconButton icon="close" variant="tertiary" tooltip="Close" />
       </Row>
       <Text variant="body-default-s" onBackground="neutral-weak" marginBottom="12" wrap="balance">
         This site uses tracking technologies. You may opt in or opt out of the use of these

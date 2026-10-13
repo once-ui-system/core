@@ -46,7 +46,7 @@ function DashboardPreviewPanel() {
         </Button>
       </Row>
 
-      <Scroller fadeColor="transparent">
+      <Scroller>
         <Row fitWidth flex={1}>
           {stats.map((stat, index) => (
             <Card
@@ -131,7 +131,7 @@ function DashboardPreviewPanel() {
         <Column flex={1} radius="l" border="neutral-medium" overflow="hidden" minWidth={16}>
           <Background
             position="absolute"
-            data-solid="color"
+            themeSolid="color"
             top="0"
             left="0"
             gradient={{

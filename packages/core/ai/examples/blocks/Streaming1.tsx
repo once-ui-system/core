@@ -1,43 +1,65 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { Column, Media, ProgressBar, Row, Scroller, Heading, Fade, Text, Button, Carousel, IconButton, Flex } from "@once-ui-system/core";
+import { autoUpdate, offset, useFloating } from "@floating-ui/react-dom";
+import {
+  Button,
+  Carousel,
+  Column,
+  Fade,
+  Heading,
+  IconButton,
+  Media,
+  ProgressBar,
+  Row,
+  Scroller,
+  Text,
+} from "@once-ui-system/core";
+import React, { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Footer2 } from "./Footer2";
 import { Header3 } from "./Header3";
-import { useFloating, offset, autoUpdate } from "@floating-ui/react-dom";
-import { createPortal } from "react-dom";
 
-const MediaList = ({ image, progress, title, description, categories }: { image: string, progress: number, title: string, description: string, categories?: string[] }) => {
+const MediaList = ({
+  image,
+  progress,
+  title,
+  description,
+  categories,
+}: {
+  image: string;
+  progress: number;
+  title: string;
+  description: string;
+  categories?: string[];
+}) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [hasPosition, setHasPosition] = useState(false);
   const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
   const referenceRef = useRef<HTMLDivElement>(null);
-  
+
   useEffect(() => {
-    if (typeof document !== 'undefined') {
+    if (typeof document !== "undefined") {
       setPortalContainer(document.body);
     }
   }, []);
-  
+
   const { x, y, strategy, refs, update } = useFloating({
     middleware: [
-      offset(({rects}) => {
-        return (
-          -rects.reference.height / 2 - rects.floating.height / 2
-        );
+      offset(({ rects }) => {
+        return -rects.reference.height / 2 - rects.floating.height / 2;
       }),
     ],
-    whileElementsMounted: autoUpdate
+    whileElementsMounted: autoUpdate,
   });
-  
+
   // Ensure reference is set as soon as the element is available
   useEffect(() => {
     if (referenceRef.current) {
       refs.setReference(referenceRef.current);
     }
   }, [refs]);
-  
+
   useEffect(() => {
     let raf = 0;
     if (isHovered && referenceRef.current) {
@@ -63,12 +85,14 @@ const MediaList = ({ image, progress, title, description, categories }: { image:
     } else {
       setIsVisible(false);
     }
-    return () => { if (raf) cancelAnimationFrame(raf); };
+    return () => {
+      if (raf) cancelAnimationFrame(raf);
+    };
   }, [isHovered, hasPosition, x, y]);
 
   return (
     <Column
-      minWidth={24} 
+      minWidth={24}
       gap="24"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -76,8 +100,9 @@ const MediaList = ({ image, progress, title, description, categories }: { image:
     >
       <Media aspectRatio="16/9" src={image} alt={title} sizes="400px" radius="l" />
       {progress > 0 && <ProgressBar showLabel={false} value={progress} paddingX="l" />}
-      
-      {(portalContainer && (isHovered || isVisible)) && (
+
+      {portalContainer &&
+        (isHovered || isVisible) &&
         createPortal(
           <Column
             maxWidth={28}
@@ -107,35 +132,54 @@ const MediaList = ({ image, progress, title, description, categories }: { image:
             {progress > 0 && <ProgressBar showLabel={false} value={progress} paddingX="l" />}
             <Column fillWidth paddingX="16" paddingBottom="20" paddingTop="8" gap="8">
               <Row fillWidth horizontal="between" paddingBottom="12">
-                <Row gap="8" data-border="rounded">
+                <Row gap="8" themeBorder="rounded">
                   <IconButton size="l" icon="play" />
                   <IconButton size="l" icon="plus" variant="secondary" />
                 </Row>
-                <Row gap="8" data-border="rounded">
+                <Row gap="8" themeBorder="rounded">
                   <IconButton size="l" icon="like" variant="secondary" />
-                  <IconButton size="l" icon="dislike" variant="secondary" /> 
+                  <IconButton size="l" icon="dislike" variant="secondary" />
                 </Row>
               </Row>
-              <Heading as="h3" variant="heading-strong-l">{title}</Heading>
-              <Text variant="body-default-m" onBackground="neutral-weak">{description}</Text>
+              <Heading as="h3" variant="heading-strong-l">
+                {title}
+              </Heading>
+              <Text variant="body-default-m" onBackground="neutral-weak">
+                {description}
+              </Text>
               <Row paddingTop="12" gap="16" vertical="center">
-                {categories && categories.map((category, index) => (
+                {categories?.map((category, index) => (
                   <React.Fragment key={index}>
-                    <Text variant="label-default-s" onBackground="neutral-medium">{category}</Text>
-                    {index < categories.length - 1 && <Flex height={0.4} width={0.4} radius="full" background="neutral-strong"/>}
+                    <Text variant="label-default-s" onBackground="neutral-medium">
+                      {category}
+                    </Text>
+                    {index < categories.length - 1 && (
+                      <Row height={0.4} width={0.4} radius="full" background="neutral-strong" />
+                    )}
                   </React.Fragment>
                 ))}
               </Row>
             </Column>
           </Column>,
-          portalContainer
-        )
-      )}
+          portalContainer,
+        )}
     </Column>
-  )
-}
+  );
+};
 
-const FeedSection = ({ title, items }: { title: string, items: Array<{ image: string, progress: number, title: string, description: string, categories?: string[] }> }) => {
+const FeedSection = ({
+  title,
+  items,
+}: {
+  title: string;
+  items: Array<{
+    image: string;
+    progress: number;
+    title: string;
+    description: string;
+    categories?: string[];
+  }>;
+}) => {
   return (
     <Column fillWidth padding="l">
       <Column fillWidth gap="24">
@@ -148,12 +192,13 @@ const FeedSection = ({ title, items }: { title: string, items: Array<{ image: st
           <Row fitWidth gap="24">
             {items.map((item, index) => (
               <MediaList
-                key={index} 
-                image={item.image} 
+                key={index}
+                image={item.image}
                 progress={item.progress}
                 title={item.title}
                 description={item.description}
-                categories={item.categories} />
+                categories={item.categories}
+              />
             ))}
           </Row>
         </Scroller>
@@ -167,125 +212,128 @@ export const Streaming1: React.FC = () => {
     {
       image: "/images/movies/01.jpg",
       title: "The Incredible Adventures of Selene Yu",
-      description: "The incredible adventures of Selene Yu follows the story of a young woman who discovers she has the ability to turn back time",
-      categories: ["Sci-Fi", "Adventure", "Drama"]
+      description:
+        "The incredible adventures of Selene Yu follows the story of a young woman who discovers she has the ability to turn back time",
+      categories: ["Sci-Fi", "Adventure", "Drama"],
     },
     {
       image: "/images/movies/02.jpg",
       title: "Awakening",
-      description: "Matt finds himself in a disturbing place when he wakes up in this Emmy award winning movie",
-      categories: ["Thriller", "Mystery", "Drama"]
+      description:
+        "Matt finds himself in a disturbing place when he wakes up in this Emmy award winning movie",
+      categories: ["Thriller", "Mystery", "Drama"],
     },
     {
       image: "/images/movies/03.jpg",
       title: "Family Reunion",
-      description: "An intense thriller that will keep you on the edge of your seat when the holiday for a family reunion turns into a nightmare",
-      categories: ["Horror", "Thriller", "Mystery"]
-    }
+      description:
+        "An intense thriller that will keep you on the edge of your seat when the holiday for a family reunion turns into a nightmare",
+      categories: ["Horror", "Thriller", "Mystery"],
+    },
   ];
 
   const feed = [
     {
-      title: "Continue Watching", 
+      title: "Continue Watching",
       items: [
-        { 
-          image: "/images/movies/02.jpg", 
-          progress: 45, 
-          title: "Design System", 
+        {
+          image: "/images/movies/02.jpg",
+          progress: 45,
+          title: "Design System",
           description: "A comprehensive UI kit for modern web applications",
-          categories: ["Dark", "Mystic", "Space"]
+          categories: ["Dark", "Mystic", "Space"],
         },
-        { 
-          image: "/images/movies/03.jpg", 
-          progress: 72, 
-          title: "Component Library", 
+        {
+          image: "/images/movies/03.jpg",
+          progress: 72,
+          title: "Component Library",
           description: "Reusable components for faster development",
-          categories: ["Humor", "Thriller", "Drama"] 
+          categories: ["Humor", "Thriller", "Drama"],
         },
-        { 
-          image: "/images/movies/04.jpg", 
-          progress: 30, 
-          title: "Animation Framework", 
+        {
+          image: "/images/movies/04.jpg",
+          progress: 30,
+          title: "Animation Framework",
           description: "Smooth transitions and interactive elements",
-          categories: ["Documentary", "Media", "Real Events"] 
+          categories: ["Documentary", "Media", "Real Events"],
         },
-        { 
-          image: "/images/movies/01.jpg", 
-          progress: 88, 
-          title: "Responsive Layouts", 
+        {
+          image: "/images/movies/01.jpg",
+          progress: 88,
+          title: "Responsive Layouts",
           description: "Adaptive designs for all screen sizes",
-          categories: ["Horror", "Thriller", "Drama"]
+          categories: ["Horror", "Thriller", "Drama"],
         },
-        { 
-          image: "/images/movies/05.jpg", 
-          progress: 15, 
-          title: "Accessibility Tools", 
+        {
+          image: "/images/movies/05.jpg",
+          progress: 15,
+          title: "Accessibility Tools",
           description: "Creating inclusive user experiences",
-          categories: ["Documentary", "Tech", "Real Events"] 
+          categories: ["Documentary", "Tech", "Real Events"],
         },
-        { 
-          image: "/images/movies/06.jpg", 
-          progress: 60, 
-          title: "Theme Builder", 
+        {
+          image: "/images/movies/06.jpg",
+          progress: 60,
+          title: "Theme Builder",
           description: "Customize your application's look and feel",
-          categories: ["Parody", "Humor", "Gossip"] 
-        }
-      ]
+          categories: ["Parody", "Humor", "Gossip"],
+        },
+      ],
     },
     {
-      title: "Popular", 
+      title: "Popular",
       items: [
-        { 
-          image: "/images/movies/07.jpg", 
-          progress: 0, 
-          title: "Design System", 
+        {
+          image: "/images/movies/07.jpg",
+          progress: 0,
+          title: "Design System",
           description: "A comprehensive UI kit for modern web applications",
-          categories: ["Dark", "Mystic", "Space"] 
+          categories: ["Dark", "Mystic", "Space"],
         },
-        { 
-          image: "/images/movies/03.jpg", 
-          progress: 0, 
-          title: "Component Library", 
+        {
+          image: "/images/movies/03.jpg",
+          progress: 0,
+          title: "Component Library",
           description: "Reusable components for faster development",
-          categories: ["Documentary", "Tech", "Real Events"] 
+          categories: ["Documentary", "Tech", "Real Events"],
         },
-        { 
-          image: "/images/movies/08.jpg", 
-          progress: 0, 
-          title: "Animation Framework", 
+        {
+          image: "/images/movies/08.jpg",
+          progress: 0,
+          title: "Animation Framework",
           description: "Smooth transitions and interactive elements",
-          categories: ["Horror", "Thriller", "Drama"]
+          categories: ["Horror", "Thriller", "Drama"],
         },
-        { 
-          image: "/images/movies/02.jpg", 
-          progress: 0, 
-          title: "Responsive Layouts", 
+        {
+          image: "/images/movies/02.jpg",
+          progress: 0,
+          title: "Responsive Layouts",
           description: "Adaptive designs for all screen sizes",
-          categories: ["Documentary", "Tech", "Real Events"] 
+          categories: ["Documentary", "Tech", "Real Events"],
         },
-        { 
-          image: "/images/movies/05.jpg", 
-          progress: 0, 
-          title: "Accessibility Tools", 
+        {
+          image: "/images/movies/05.jpg",
+          progress: 0,
+          title: "Accessibility Tools",
           description: "Creating inclusive user experiences",
-          categories: ["Thriller", "Drama", "Cyberpunk"] 
+          categories: ["Thriller", "Drama", "Cyberpunk"],
         },
-        { 
-          image: "/images/movies/06.jpg", 
-          progress: 0, 
-          title: "Theme Builder", 
+        {
+          image: "/images/movies/06.jpg",
+          progress: 0,
+          title: "Theme Builder",
           description: "Customize your application's look and feel",
-          categories: ["Mind-Bending", "Offbeat", "Animation"] 
-        }
-      ]
-    }
-  ]
+          categories: ["Mind-Bending", "Offbeat", "Animation"],
+        },
+      ],
+    },
+  ];
 
   return (
     <Column fillWidth>
       <Header3 position="sticky" top="0" />
-      <Column fillWidth style={{marginTop: "calc(-1 * var(--static-space-64))"}}>
-        <Row fillWidth style={{height: "80vh"}} paddingBottom="xl">
+      <Column fillWidth style={{ marginTop: "calc(-1 * var(--static-space-64))" }}>
+        <Row fillWidth height="80vh" paddingBottom="xl">
           <Carousel
             stretch
             border="transparent"
@@ -294,8 +342,9 @@ export const Streaming1: React.FC = () => {
             pointerEvents="none"
             controls={false}
             indicator={false}
-            play={{auto: true, interval: 10000, controls: false, progress: false}}
-            items={featured.map(item => ({ slide: item.image, alt: item.title }))} />
+            play={{ auto: true, interval: 10000, controls: false, progress: false }}
+            items={featured.map((item) => ({ slide: item.image, alt: item.title }))}
+          />
           <Fade
             fillWidth
             position="absolute"
@@ -314,8 +363,8 @@ export const Streaming1: React.FC = () => {
             translateY="48"
             controls={false}
             indicator={false}
-            play={{auto: true, interval: 10000, controls: false, progress: false}}
-            items={featured.map(item => ({
+            play={{ auto: true, interval: 10000, controls: false, progress: false }}
+            items={featured.map((item) => ({
               slide: (
                 <Column fillHeight maxWidth={48} vertical="end" padding="xl" gap="l">
                   <Heading variant="display-strong-m" onSolid="neutral-strong">
@@ -324,7 +373,7 @@ export const Streaming1: React.FC = () => {
                   <Text variant="heading-default-xl" onSolid="neutral-weak" wrap="balance">
                     {item.description}
                   </Text>
-                  <Row gap="8" pointerEvents="all" s={{direction: "column"}}>
+                  <Row gap="8" pointerEvents="all" s={{ direction: "column" }}>
                     <Button size="l" prefixIcon="play">
                       Start watching
                     </Button>
@@ -333,21 +382,17 @@ export const Streaming1: React.FC = () => {
                     </Button>
                   </Row>
                 </Column>
-              )
+              ),
             }))}
           />
         </Row>
-        
+
         {feed.map((section, index) => (
-          <FeedSection 
-            key={index}
-            title={section.title}
-            items={section.items}
-          />
+          <FeedSection key={index} title={section.title} items={section.items} />
         ))}
 
-        <Footer2 paddingX="xl"/>
+        <Footer2 paddingX="xl" />
       </Column>
     </Column>
-  )
-}
+  );
+};

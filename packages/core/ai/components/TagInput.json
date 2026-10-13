@@ -5,8 +5,9 @@
   "Input"
  ],
  "props": {
-  "value": "!string[]",
-  "onChange": "!(value: string[]) => void"
+  "value": "string[]",
+  "defaultValue": "readonly string[]",
+  "onChange": "(value: string[]) => void"
  },
  "mixinsRef": []
 }

@@ -1,0 +1,13 @@
+{
+ "name": "ToastProvider",
+ "group": "contexts",
+ "props": {
+  "children": "!ReactNode",
+  "xl": "ToastPosition",
+  "l": "ToastPosition",
+  "m": "ToastPosition",
+  "s": "ToastPosition",
+  "xs": "ToastPosition"
+ },
+ "mixinsRef": []
+}

@@ -73,7 +73,7 @@ export const Streaming2 = () => {
     <Column fillWidth>
       <Header3 position="sticky" top="0" />
 
-      <Column fillWidth paddingX="l" paddingY="24" gap="24" maxWidth="xl" horizontal="center">
+      <Column paddingX="l" paddingY="24" gap="24" maxWidth="xl" horizontal="center">
         <Row
           fillWidth
           padding="12"
@@ -129,7 +129,7 @@ export const Streaming2 = () => {
                   </Text>
                 </Column>
                 <Row gap="8" pointerEvents="all">
-                  <IconButton icon="play" variant="primary" size="l" tooltip="Play" />
+                  <IconButton icon="play" size="l" tooltip="Play" />
                   <IconButton icon="plus" variant="secondary" size="l" tooltip="Add to list" />
                 </Row>
               </Row>

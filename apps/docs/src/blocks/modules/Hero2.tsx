@@ -14,7 +14,7 @@ export const Hero2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
   return (
     <Column fillWidth fitHeight horizontal="center" align="center">
       <Background
-        data-solid="color"
+        themeSolid="color"
         position="absolute"
         gradient={{
           display: true,
@@ -50,12 +50,7 @@ export const Hero2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
           <Heading variant="display-strong-l" marginTop="12">
             Let us fight your CSS battles
           </Heading>
-          <Heading
-            wrap="balance"
-            onBackground="neutral-medium"
-            variant="body-default-xl"
-            marginBottom="16"
-          >
+          <Heading onBackground="neutral-medium" variant="body-default-xl" marginBottom="16">
             Once UI provides out-of-the-box solutions for advanced UI challenges
           </Heading>
           <Button id="hero-cta-2" href="#" arrowIcon>
@@ -66,7 +61,6 @@ export const Hero2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
           src="/images/blocks/dashboard-desktop.jpg"
           border
           aspectRatio="16 / 9"
-          fillWidth
           priority
           radius="xl"
           sizes="(max-width: 1024px) 100vw, 1024px"

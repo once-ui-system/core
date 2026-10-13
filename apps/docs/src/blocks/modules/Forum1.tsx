@@ -145,7 +145,6 @@ export const Forum1 = () => {
             items={items}
             loading={loading}
             loadMore={loadMore}
-            threshold={200}
             renderItem={(post, index) => (
               <Card
                 key={index}

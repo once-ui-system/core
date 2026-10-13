@@ -19,7 +19,7 @@ export function AgentGeneration({ text, active = false }: AgentGenerationProps) 
       radius="m"
       paddingX="12"
       paddingY="8"
-      border="neutral-alpha-weak"
+      border
     >
       <Text variant="body-default-s" onBackground="neutral-strong">
         {text}

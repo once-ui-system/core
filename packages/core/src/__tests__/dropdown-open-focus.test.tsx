@@ -79,12 +79,12 @@ describe("where an arrow-navigable list opens", () => {
     );
 
     const selected = () =>
-      Array.from(container.querySelectorAll('[role="option"][aria-selected="true"]')).map(
-        (el) => el.getAttribute("data-value"),
+      Array.from(container.querySelectorAll('[role="option"][aria-selected="true"]')).map((el) =>
+        el.getAttribute("data-value"),
       );
     const highlighted = () =>
-      Array.from(container.querySelectorAll('[role="option"][data-highlighted="true"]')).map(
-        (el) => el.getAttribute("data-value"),
+      Array.from(container.querySelectorAll('[role="option"][data-highlighted="true"]')).map((el) =>
+        el.getAttribute("data-value"),
       );
 
     expect(selected()).toEqual(["b"]);

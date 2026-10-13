@@ -38,7 +38,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
         <Mask fill position="absolute" top="0" left="0" x={50} y={70} radius={100}>
           <MatrixFx
             fill
-            data-solid="inverse"
+            themeSolid="inverse"
             opacity={60}
             colors={["brand-solid-medium", "static-transparent"]}
             fps={24}
@@ -67,7 +67,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           hide
           s={{ hide: false }}
           position="absolute"
-          data-solid="inverse"
+          themeSolid="inverse"
           top="0"
           left="0"
           gradient={{

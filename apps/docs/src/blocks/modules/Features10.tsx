@@ -23,7 +23,7 @@ export const Features10: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
   return (
     <Column fillWidth {...flex}>
       <Background
-        data-solid="color"
+        themeSolid="color"
         position="absolute"
         left="0"
         top="0"
@@ -38,19 +38,12 @@ export const Features10: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
           </Heading>
           <Grid fillWidth columns={2} m={{ columns: 2 }} gap="32">
             {features.map((feature, index) => (
-              <Column
-                fillWidth
-                gap="12"
-                paddingX="20"
-                paddingBottom="20"
-                paddingTop="20"
-                key={index}
-              >
+              <Column fillWidth gap="12" padding="20" key={index}>
                 <Row
                   position="absolute"
                   top="20"
                   left="8"
-                  style={{ transform: "translateX(-100%)" }}
+                  translateX="-100%"
                   onBackground="brand-weak"
                   textVariant="code-default-m"
                   opacity={70}

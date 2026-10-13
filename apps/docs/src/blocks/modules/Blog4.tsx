@@ -127,7 +127,7 @@ function ResourceCard({
 export const Blog4 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" paddingY="24" gap="56" {...flex}>
-      <Column fillWidth maxWidth="l" gap="40" paddingX="16">
+      <Column maxWidth="l" gap="40" paddingX="16">
         <Row fillWidth horizontal="between" vertical="center" paddingX="8">
           <Heading variant="heading-strong-xl">Blog</Heading>
           <Row gap="8">
@@ -145,7 +145,7 @@ export const Blog4 = (flex: React.ComponentProps<typeof Column>) => {
         </Row>
 
         <Card href="#" radius="l" border="transparent" background="transparent" fillWidth>
-          <Row fillWidth aspectRatio="16/7" radius="l" overflow="hidden" position="relative">
+          <Row fillWidth aspectRatio="16/7" radius="l" overflow="hidden">
             <Media
               stretch
               sizes="1024px"
@@ -163,7 +163,7 @@ export const Blog4 = (flex: React.ComponentProps<typeof Column>) => {
               <Tag scheme="brand" size="s">
                 {featured.tag}
               </Tag>
-              <Heading as="h2" variant="display-strong-xs" wrap="balance">
+              <Heading as="h2" variant="display-strong-xs">
                 {featured.title}
               </Heading>
               <Text variant="body-default-m" onBackground="neutral-weak" wrap="balance">
@@ -211,14 +211,12 @@ export const Blog4 = (flex: React.ComponentProps<typeof Column>) => {
                 />
                 <Column gap="8" paddingX="8">
                   <Row gap="8" vertical="center">
-                    <Tag scheme="neutral" size="s">
-                      {post.tag}
-                    </Tag>
+                    <Tag size="s">{post.tag}</Tag>
                     <Text variant="label-default-s" onBackground="neutral-weak">
                       {post.publishedAt}
                     </Text>
                   </Row>
-                  <Heading as="h3" variant="heading-strong-m" wrap="balance">
+                  <Heading as="h3" variant="heading-strong-m">
                     {post.title}
                   </Heading>
                   <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">

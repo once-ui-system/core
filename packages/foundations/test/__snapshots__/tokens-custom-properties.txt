@@ -27,6 +27,9 @@
 --brand-border-medium
 --brand-border-strong
 --brand-border-weak
+--brand-color-medium
+--brand-color-strong
+--brand-color-weak
 --brand-on-background-medium
 --brand-on-background-strong
 --brand-on-background-weak
@@ -234,6 +237,7 @@
 --function-warning-700
 --function-warning-800
 --function-warning-900
+--header-height
 --info-alpha-medium
 --info-alpha-strong
 --info-alpha-weak

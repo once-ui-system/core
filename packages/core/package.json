@@ -1,8 +1,9 @@
 {
   "name": "@once-ui-system/core",
-  "version": "2.0.0",
+  "version": "2.1.0-rc.0",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "tag": "next"
   },
   "files": [
     "dist",
@@ -51,6 +52,10 @@
     "once-ui-init-agent": "./scripts/init-agent.js",
     "once-ui-validate-ai-code": "./scripts/validate-ai-code.js"
   },
+  "sideEffects": [
+    "*.css",
+    "*.scss"
+  ],
   "main": "dist/index.js",
   "exports": {
     ".": {
@@ -100,6 +105,11 @@
       "import": "./dist/utils/index.js",
       "require": "./dist/utils/index.js"
     },
+    "./config": {
+      "types": "./dist/config.d.ts",
+      "import": "./dist/config.js",
+      "require": "./dist/config.js"
+    },
     "./hooks": {
       "types": "./dist/hooks/index.d.ts",
       "import": "./dist/hooks/index.js",
@@ -143,16 +153,23 @@
       "import": "./dist/modules/media/index.js",
       "require": "./dist/modules/media/index.js"
     },
+    "./mdx": {
+      "types": "./dist/modules/mdx/index.d.ts",
+      "import": "./dist/modules/mdx/index.js",
+      "require": "./dist/modules/mdx/index.js"
+    },
     "./package.json": "./package.json"
   },
   "scripts": {
-    "build": "pnpm clean && pnpm sync-foundations && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css",
+    "build": "pnpm clean && pnpm sync-foundations && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css && pnpm build:css-modules",
     "sync-foundations": "node scripts/sync-foundations.js scss",
     "build:css": "node scripts/sync-foundations.js css",
+    "build:css-modules": "node scripts/compile-css-modules.js",
     "copy-files": "node scripts/copy-files.js",
     "clean": "rimraf dist",
     "prepare": "pnpm build",
     "lint": "biome check .",
+    "lint:gate": "node scripts/lint-gate.mjs",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "test": "vitest run",
@@ -162,6 +179,7 @@
     "dev": "tsc --watch --preserveWatchOutput",
     "prepack": "pnpm build",
     "generate-emoji-data": "node scripts/generate-emoji-data.js",
+    "refresh-emoji-data": "node scripts/generate-emoji-data.js --refresh",
     "generate-ai-spec": "node scripts/generate-ai-spec.js",
     "init-agent": "node scripts/init-agent.js",
     "validate-ai-code": "node scripts/validate-ai-code.js",
@@ -173,23 +191,19 @@
     "date-fns": "^4.4.0"
   },
   "peerDependencies": {
+    "compressorjs": "^1.3.0",
     "next": ">=15.5",
+    "prismjs": "^1.30.0",
     "react": ">=18",
     "react-dom": ">=18",
-    "sass": "^1.77.6",
-    "sharp": "^0.33.4 || ^0.34 || ^0.35",
     "recharts": "^3.10.1",
-    "prismjs": "^1.30.0",
-    "compressorjs": "^1.3.0"
+    "sass": "^1.77.6"
   },
   "peerDependenciesMeta": {
     "next": {
       "optional": true
     },
     "sass": {
-      "optional": true
-    },
-    "sharp": {
       "optional": true
     },
     "recharts": {
@@ -213,6 +227,7 @@
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "@vitest/ui": "^4.1.10",
+    "axe-core": "^4.10.3",
     "jsdom": "^30.0.0",
     "publint": "^0.3.23",
     "react-icons": "^5.7.0",

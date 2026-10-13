@@ -1,167 +1,156 @@
 {
   "Background.gradient.width": {
     "rule": "Quarter-percent units: 400 = 100% of container. Soft glows use width 100–200, not 500.",
-    "components": [
-      "Background"
-    ]
+    "components": ["Background"]
   },
   "Background.gradient.x": {
     "rule": "x/y are percent positions of the container (50/50 = center).",
-    "components": [
-      "Background"
-    ]
+    "components": ["Background"]
   },
   "Background.absolute": {
     "rule": "Every absolute decorative layer needs top=\"0\" left=\"0\" or it offsets by parent padding.",
-    "components": [
-      "Background",
-      "MatrixFx",
-      "BlobFx"
-    ]
+    "components": ["Background", "MatrixFx", "BlobFx"]
   },
   "Card.interactive": {
     "rule": "Card is for interactive surfaces only (href or onClick). Static panels use Column + background=\"surface\" border radius=\"l\".",
-    "components": [
-      "Card"
-    ]
+    "components": ["Card"]
   },
   "Fade.edge": {
     "rule": "Fade is an edge overlay strip on scroll containers, not a content wrapper.",
-    "components": [
-      "Fade"
-    ]
+    "components": ["Fade"]
   },
   "RevealFx.delay": {
-    "rule": "delay is in milliseconds — stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 2.0 reads 0.1 as a tenth of a millisecond, i.e. no stagger).",
+    "rule": "Timing props on RevealFx (delay, speed), ShineFx (speed), CountFx (speed), TypeFx (speed, delay), Animation and HoverCard (delay, duration), Hover (delay, hideDelay) and Skeleton (delay) are milliseconds — stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 2.0 reads 0.1 as a tenth of a millisecond, i.e. no stagger). speed on MatrixFx, WeatherFx, ParticleFx, CelebrationFx and Effect is a multiplier, where 0.5 is half speed.",
     "components": [
       "RevealFx",
-      "ShineFx"
+      "ShineFx",
+      "CountFx",
+      "TypeFx",
+      "Animation",
+      "HoverCard",
+      "Hover",
+      "Skeleton"
     ]
   },
   "RevealFx.translateY": {
     "rule": "translateY as a number is in rem. Use translateY={1} or token \"16\" (1rem); 16 means 16rem.",
-    "components": [
-      "RevealFx"
-    ]
+    "components": ["RevealFx"]
   },
   "LogoCloud.columns": {
     "rule": "LogoCloud extends Grid — always set columns and responsive overrides or logos stack in one column.",
-    "components": [
-      "LogoCloud"
-    ]
+    "components": ["LogoCloud"]
   },
   "StatusIndicator.color": {
     "rule": "StatusIndicator uses color=\"green\" | \"red\" | \"orange\" | \"gray\" etc. — not variant or semantic scheme names.",
-    "components": [
-      "StatusIndicator"
-    ]
+    "components": ["StatusIndicator"]
   },
   "Icon.names": {
-    "rule": "Icon names must come from iconNames in spec.json, which is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.",
-    "components": [
-      "Icon",
-      "Button",
-      "IconButton"
-    ]
+    "rule": "Icon names must come from iconNames in catalog.json (spec.json has the same list), and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.",
+    "components": ["Icon", "Button", "IconButton"]
+  },
+  "Icon.cast": {
+    "rule": "Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.",
+    "components": ["Icon", "IconButton", "Button"]
+  },
+  "LayoutProvider.next": {
+    "rule": "In a Next.js app, import LayoutProvider from \"@once-ui-system/core/next\", not the package root. The root export installs the plain DOM adapters, so SmartLink, Button/Card/ToggleButton with href, Media, Logo, MegaMenu and Kbar render a plain <a> and <img>: no client-side navigation, no next/image, and no error to say so. An app that composes NextAdapterProvider (or AdapterProvider with nextAdapters) itself is already covered.",
+    "components": ["LayoutProvider", "SmartLink", "Media", "Button", "Card"]
+  },
+  "Toast.stable": {
+    "rule": "Fixed in 2.1: useToast()'s addToast and removeToast keep one identity for the provider's lifetime, so list addToast in an effect's dependencies like any stable callback. Do not hold it in a ref, or leave it out of the deps, to stop the effect re-running when a toast appears. addToast returns the toast's id for removeToast(id); duration is in milliseconds (default 6000, Infinity until closed).",
+    "components": ["Toast", "Toaster"]
+  },
+  "NumberInput.value": {
+    "rule": "Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onChange; do not remount it with a key to push a new value in.",
+    "components": ["NumberInput"]
+  },
+  "Select.closed": {
+    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onSelect; do not build a local picker from DropdownWrapper and Options to get this.",
+    "components": ["Select"]
+  },
+  "Button.trigger": {
+    "rule": "Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type=\"button\"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type=\"button\" or a no-op onClick, or wrap it in a focusable Row, to make it one.",
+    "components": ["Button", "IconButton", "DropdownWrapper"]
+  },
+  "ContextMenu.contents": {
+    "rule": "Fixed in 2.1: ContextMenu is a real menu (menu and menuitem roles, arrow keys, Home/End, Escape returns focus) that opens at the pointer and stays on screen. Its wrapper is a box; set contents to render none (display: contents), so an absolutely positioned or grid/flex child keeps its own layout. Use ContextMenu with contents instead of a hand-made right-click menu.",
+    "components": ["ContextMenu"]
   },
   "Badge.duplicate": {
     "rule": "Do not pass the same text as both title prop and children — it renders twice.",
-    "components": [
-      "Badge"
-    ]
-  },
-  "Tag.duplicate": {
-    "rule": "Do not pass the same text as both label prop and children — it renders twice.",
-    "components": [
-      "Tag"
-    ]
+    "components": ["Badge"]
   },
   "Timeline.notScrubber": {
     "rule": "Timeline lays a sequence of steps down the page. For a video or audio editor's timeline — a playhead over stacked tracks of movable, trimmable blocks — use Scrubber. Do not build one out of Flex and absolute positioning.",
-    "components": [
-      "Timeline",
-      "Scrubber"
-    ]
+    "components": ["Timeline", "Scrubber"]
   },
   "color.tokens": {
     "rule": "Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.",
-    "components": [
-      "Column",
-      "Row",
-      "Text",
-      "Button"
-    ]
+    "components": ["Column", "Row", "Text", "Button"]
+  },
+  "color.svgPaint": {
+    "rule": "Inline SVG paint is not a hex or rgb literal either: write fill or stroke as currentColor and set the colour with onBackground on the wrapper, or name a token as var(--brand-solid-strong). A literal never follows the theme.",
+    "components": ["Icon", "Row", "Column"]
   },
   "color.background-weak": {
     "rule": "*-background-weak is nearly the page color — invisible as accent. Use alpha tokens (brand-alpha-medium) for glows.",
-    "components": [
-      "Background"
-    ]
+    "components": ["Background"]
   },
-  "layout.shorthands": {
-    "rule": "Use fill not fillWidth fillHeight; center not horizontal=\"center\" vertical=\"center\"; Row/Column not Flex direction=.",
+  "api.renamed": {
+    "rule": "Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.",
     "components": [
-      "Row",
-      "Column",
-      "Flex",
-      "Grid"
-    ]
-  },
-  "layout.defaults": {
-    "rule": "Never write props equal to defaults or implied by another prop on the element: position=\"relative\", direction on Row/Column, variant=\"primary\" on Button, fillWidth beside maxWidth (maxWidth already fills the width), minWidth={0} beside fillWidth (fillWidth already sets min-width: 0).",
-    "components": [
-      "Row",
-      "Column",
-      "Grid",
+      "SegmentedControl",
+      "Dialog",
+      "Checkbox",
+      "Switch",
+      "Tag",
+      "Input",
+      "Select",
       "Button"
     ]
   },
+  "layout.shorthands": {
+    "rule": "Use fill not fillWidth fillHeight; center not horizontal=\"center\" vertical=\"center\"; Row/Column not Flex direction=, and Row for a Flex with no direction (Flex defaults to row). Flex is for a direction that changes at a breakpoint.",
+    "components": ["Row", "Column", "Flex", "Grid"]
+  },
+  "theme.typedProps": {
+    "rule": "Theme a subtree with the typed props theme, themeBorder, themeSolid and themeSurface — on Flex, Row, Column, Grid and every component built on them (Background, Tag, Badge, the effects) — not raw data-theme, data-border, data-solid or data-surface. Keep the raw attribute only where no prop exists: data-border=\"rounded\" on Button and IconButton, data-brand anywhere.",
+    "components": ["Row", "Column", "Flex", "Grid", "Background"]
+  },
+  "layout.defaults": {
+    "rule": "Never write props equal to defaults or implied by another prop on the element: position=\"relative\", direction on Row/Column, variant=\"primary\" on Button, fillWidth beside maxWidth (maxWidth already fills the width), minWidth={0} beside fillWidth (fillWidth already sets min-width: 0).",
+    "components": ["Row", "Column", "Grid", "Button"]
+  },
+  "Logo.themes": {
+    "rule": "A logo that changes with the theme is one Logo with a source per theme: <Logo wordmark={{ light: \"/logo-light.svg\", dark: \"/logo-dark.svg\" }} /> (icon takes the same pair). Do not render two Logos with dark and light: twice the elements, two places to keep in sync, and a hidden link in the focus order. Keep dark or light for a logo that should only appear in one theme.",
+    "components": ["Logo"]
+  },
   "border.default": {
-    "rule": "Bare border (and borderTop, borderBottom, borderX, …) draws the default border. Do not write border=\"neutral-alpha-weak\" to get it; name a colour only to deviate, e.g. border=\"brand-alpha-medium\".",
-    "components": [
-      "Row",
-      "Column",
-      "Card"
-    ]
+    "rule": "Bare border (and borderTop, borderBottom, borderX, …) draws the default border: --default-border, neutral-alpha-weak unless the app sets it in its custom CSS. Do not write border=\"neutral-alpha-weak\" to get it, which pins the colour; name a colour only to deviate, e.g. border=\"neutral-alpha-medium\" or border=\"brand-alpha-medium\".",
+    "components": ["Row", "Column", "Card"]
   },
   "zIndex.scope": {
     "rule": "zIndex is for an isolated stacking group: an absolute decorative layer and its content sibling (zIndex={1}), or a sticky header over its pane. Never on a lone element, never a page-wide ladder of 3 / 5 / 9 — restructure the tree instead.",
-    "components": [
-      "Row",
-      "Column",
-      "Background"
-    ]
+    "components": ["Row", "Column", "Background"]
   },
   "section.gaps": {
     "rule": "Gap between page sections: 80–160 (typical 104). Inside sections: 24–40.",
-    "components": [
-      "Column"
-    ]
+    "components": ["Column"]
   },
   "heading.scale": {
     "rule": "Hero = display-strong-l/xl; section titles = display-strong-xs/s — never heading-* for section titles.",
-    "components": [
-      "Heading"
-    ]
+    "components": ["Heading"]
   },
   "animation.budget": {
     "rule": "Entry animation budget: hero + at most 1–2 key moments. Animate coherent blocks all-or-none within a sibling set.",
-    "components": [
-      "RevealFx",
-      "CountFx"
-    ]
+    "components": ["RevealFx", "CountFx"]
   },
   "CountFx.trigger": {
     "rule": "CountFx has no trigger prop — drive value from useInViewport latch instead.",
-    "components": [
-      "CountFx"
-    ]
+    "components": ["CountFx"]
   },
   "overflow.hero": {
     "rule": "overflow=\"hidden\" on full-bleed sections clips glows into hard bands — only use when parent has radius.",
-    "components": [
-      "Column",
-      "Background"
-    ]
+    "components": ["Column", "Background"]
   }
 }

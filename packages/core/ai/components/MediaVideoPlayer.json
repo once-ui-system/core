@@ -1,0 +1,14 @@
+{
+ "name": "MediaVideoPlayer",
+ "group": "components",
+ "importFrom": "@once-ui-system/core/components/MediaVideoPlayer",
+ "props": {
+  "src": "!string",
+  "autoplay": "boolean = false",
+  "loop": "boolean = false",
+  "muted": "boolean = true",
+  "objectFit": "CSSProperties[\"objectFit\"] = cover",
+  "className": "string"
+ },
+ "mixinsRef": []
+}

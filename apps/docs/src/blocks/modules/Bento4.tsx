@@ -93,7 +93,7 @@ export const Bento4 = (flex: React.ComponentProps<typeof Column>) => {
     <Column fillWidth horizontal="center" gap="48" {...flex}>
       <Row fillWidth horizontal="between" vertical="end" wrap gap="24" paddingX="l">
         <Column gap="12" maxWidth={56}>
-          <Heading as="h2" variant="display-strong-m" wrap="balance">
+          <Heading as="h2" variant="display-strong-m">
             Sites built with Once UI
           </Heading>
           <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
@@ -106,7 +106,7 @@ export const Bento4 = (flex: React.ComponentProps<typeof Column>) => {
         </Button>
       </Row>
 
-      <MasonryGrid fillWidth columns={4} gap="8" paddingX="l" l={{ columns: 2 }} s={{ columns: 1 }}>
+      <MasonryGrid fillWidth columns={4} paddingX="l" l={{ columns: 2 }} s={{ columns: 1 }}>
         {columns.map((columnItems, columnIndex) => {
           const { aspectRatios, flex: flexValues } = COLUMN_LAYOUT[columnIndex];
           return (

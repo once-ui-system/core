@@ -1,4 +1,4 @@
-import React, { ReactNode, forwardRef } from "react";
+import React, { forwardRef, ReactNode } from "react";
 
 import { Flex } from "./Flex";
 import { Text } from "./Text";
@@ -40,5 +40,5 @@ const Kbd = forwardRef<HTMLDivElement, KbdProps>(
 
 Kbd.displayName = "Kbd";
 
-export { Kbd };
 export type { KbdProps };
+export { Kbd };

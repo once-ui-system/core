@@ -1,18 +1,22 @@
 "use client";
 
-import type React from "react";
-import { useState, useRef, useEffect, forwardRef, type ReactNode, useId } from "react"
 import classNames from "clsx";
+import type React from "react";
+import { forwardRef, type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
+import type { Placement } from "../types";
+import { Column } from "./Column";
+import {
+  DropdownComboboxContext,
+  DropdownTriggerContext,
+  useDropdownCombobox,
+} from "./DropdownTriggerContext";
 import { DropdownWrapper, type DropdownWrapperProps } from "./DropdownWrapper";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Input, type InputProps } from "./Input";
-import { Option, type OptionProps } from "./Option";
-import { Column } from "./Column";
-import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationContext";
-import type { Placement } from "../types";
 import inputStyles from "./Input.module.scss";
+import { Option, type OptionProps } from "./Option";
 
 type SelectOptionType = Omit<OptionProps, "selected">;
 
@@ -31,31 +35,77 @@ interface SelectProps
   multiple?: boolean;
 }
 
-// Inner component that uses the arrow navigation context
-const SearchInput: React.FC<{
-  searchInputId: string;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
-  setIsDropdownOpen: (open: boolean) => void;
-  handleClearSearch: (e: React.MouseEvent) => void;
-  handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
-  selectRef: React.RefObject<HTMLDivElement | null>;
-}> = ({
-  searchInputId,
-  searchQuery,
-  setSearchQuery,
-  setIsDropdownOpen,
-  handleClearSearch,
-  handleBlur,
-  selectRef,
-}) => {
-  const { handleKeyDown: navKeyDown } = useArrowNavigationContext();
+/**
+ * The field: a combobox, which keeps focus while its list is open and points
+ * at the active option with `aria-activedescendant`.
+ *
+ * Its own component because it has to render inside DropdownWrapper's trigger
+ * to report that option to the panel, which keeps it scrolled into view. It
+ * also hides the trigger context from what it contains, so a Button in its
+ * prefix or suffix stays a plain control instead of announcing the list too.
+ */
+const SelectField = forwardRef<HTMLInputElement, InputProps & { activeIndex: number }>(
+  ({ activeIndex, ...props }, ref) => {
+    useDropdownCombobox(activeIndex);
+    return (
+      <DropdownTriggerContext.Provider value={null}>
+        <Input ref={ref} {...props} />
+      </DropdownTriggerContext.Provider>
+    );
+  },
+);
 
-  return (
+SelectField.displayName = "SelectField";
+
+/**
+ * The query field of a searchable Select, at the top of the open panel. It is
+ * a combobox of its own over the same listbox: typing filters it, and the
+ * list keys move the active option while focus stays here, so the query can
+ * be refined at any point.
+ */
+const SearchInput = forwardRef<
+  HTMLInputElement,
+  {
+    id: string;
+    searchQuery: string;
+    onQueryChange: (query: string) => void;
+    onOpen: () => void;
+    onClear: (e: React.MouseEvent) => void;
+    onEscape: () => void;
+    onListKey: (e: React.KeyboardEvent<HTMLInputElement>) => boolean;
+    handleBlur: (e: React.FocusEvent<HTMLInputElement>) => void;
+    selectRef: React.RefObject<HTMLDivElement | null>;
+    listboxId: string;
+    activeOptionId?: string;
+  }
+>(
+  (
+    {
+      id,
+      searchQuery,
+      onQueryChange,
+      onOpen,
+      onClear,
+      onEscape,
+      onListKey,
+      handleBlur,
+      selectRef,
+      listboxId,
+      activeOptionId,
+    },
+    ref,
+  ) => (
     <Input
+      ref={ref}
       data-scaling="90"
-      id={`select-search-${searchInputId}`}
+      id={id}
       placeholder="Search"
+      aria-label="Search"
+      role="combobox"
+      aria-autocomplete="list"
+      aria-expanded
+      aria-controls={listboxId}
+      aria-activedescendant={activeOptionId}
       size="s"
       suffix={
         searchQuery ? (
@@ -65,53 +115,43 @@ const SearchInput: React.FC<{
             icon="close"
             variant="ghost"
             size="s"
-            onClick={handleClearSearch}
+            onClick={onClear}
           />
         ) : undefined
       }
       prefix={<Icon name="search" size="xs" />}
       value={searchQuery}
-      onChange={(e) => setSearchQuery(e.target.value)}
+      onChange={(e) => onQueryChange(e.target.value)}
       onClick={(e) => {
         e.stopPropagation();
         e.preventDefault();
-        setIsDropdownOpen(true);
+        onOpen();
       }}
       onFocus={(e) => {
         e.stopPropagation();
-        setIsDropdownOpen(true);
+        onOpen();
       }}
       onKeyDown={(e) => {
-        // Handle arrow keys and Enter for navigation
-        if (["ArrowDown", "ArrowUp", "Enter", "Home", "End"].includes(e.key)) {
-          navKeyDown(e as any);
-          return;
-        }
-        
+        if (onListKey(e)) return;
+
         if (e.key === "Escape") {
           e.preventDefault();
           e.stopPropagation();
-          setIsDropdownOpen(false);
-          setSearchQuery("");
-          const mainInput = selectRef.current?.querySelector(
-            "input:not([id^='select-search'])",
-          );
-          if (mainInput instanceof HTMLInputElement) {
-            mainInput.focus();
-          }
+          onEscape();
         }
       }}
       onBlur={(e) => {
         const relatedTarget = e.relatedTarget as Node;
-        const isClickInDropdown =
-          selectRef.current && selectRef.current.contains(relatedTarget);
+        const isClickInDropdown = selectRef.current && selectRef.current.contains(relatedTarget);
         if (!isClickInDropdown) {
           handleBlur(e);
         }
       }}
     />
-  );
-};
+  ),
+);
+
+SearchInput.displayName = "SearchInput";
 
 const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
@@ -133,7 +173,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     },
     ref,
   ) => {
-
     /**
      * Focus for the whole control, not the trigger.
      *
@@ -155,18 +194,76 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     }, [value]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const searchInputId = useId();
+    const baseId = useId();
+    const listboxId = `${baseId}-listbox`;
+    const optionIdPrefix = `${baseId}-option-`;
     const [searchQuery, setSearchQuery] = useState("");
+    /**
+     * The option the list keys have moved to, as an index into the filtered
+     * options; null until they move, which means "where the list opens" (see
+     * `openIndex`). Reset on every open and every change to the query.
+     */
+    const [activeIndex, setActiveIndex] = useState<number | null>(null);
     const selectRef = useRef<HTMLDivElement | null>(null);
-    const clearButtonRef = useRef<HTMLButtonElement>(null);
+    const fieldRef = useRef<HTMLInputElement>(null);
+    const searchRef = useRef<HTMLInputElement>(null);
 
-    // Track if we should skip the next focus event
-    const skipNextFocusRef = useRef(false);
-    // Track if we just selected an option to prevent reopening
-    const justSelectedRef = useRef(false);
+    /**
+     * Set while focus is on its way back to the trigger from a dropdown that
+     * just closed.
+     *
+     * Closing hands focus back to the field (DropdownWrapper and FocusTrap
+     * both restore it), and the field opens on focus, so every pick, Escape
+     * and outside click reopened the list it had just closed. This replaced
+     * a `justSelectedRef` that was written on every pick and never read.
+     *
+     * The flag is consumed by that returning focus. If focus goes elsewhere
+     * instead, the next key or pointer press anywhere clears it, so a later
+     * Tab or click into the field still opens it. Those listeners exist only
+     * while the flag is set, and they are added after the press that closed
+     * the list has passed the document, so that press cannot clear it.
+     */
+    const returningFocusRef = useRef(false);
+    const stopExpectingFocusRef = useRef<(() => void) | null>(null);
+    const isOpenRef = useRef(isDropdownOpen);
+    isOpenRef.current = isDropdownOpen;
+
+    const expectReturningFocus = useCallback(() => {
+      stopExpectingFocusRef.current?.();
+      returningFocusRef.current = true;
+      const stop = () => {
+        returningFocusRef.current = false;
+        stopExpectingFocusRef.current = null;
+        document.removeEventListener("keydown", stop, true);
+        document.removeEventListener("pointerdown", stop, true);
+      };
+      document.addEventListener("keydown", stop, true);
+      document.addEventListener("pointerdown", stop, true);
+      stopExpectingFocusRef.current = stop;
+    }, []);
+
+    useEffect(() => () => stopExpectingFocusRef.current?.(), []);
+
+    /** Every open and close goes through here, so no close path can miss the flag. */
+    const setOpen = useCallback(
+      (open: boolean) => {
+        if (!open && isOpenRef.current) {
+          expectReturningFocus();
+        }
+        if (open !== isOpenRef.current) {
+          setActiveIndex(null);
+        }
+        setIsDropdownOpen(open);
+      },
+      [expectReturningFocus],
+    );
 
     const handleFocus = () => {
-      // Allow reopening the dropdown even after selection
-      setIsDropdownOpen(true);
+      if (returningFocusRef.current) {
+        stopExpectingFocusRef.current?.();
+        return;
+      }
+      setOpen(true);
     };
 
     const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -177,7 +274,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
           event.relatedTarget && (event.relatedTarget as Element).closest("[data-dropdown]");
 
         if (!isMovingToDropdown) {
-          setIsDropdownOpen(false);
+          setOpen(false);
         }
       }
     };
@@ -222,19 +319,21 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       } else {
         setInternalValue(value);
         onSelect?.(value);
-        setIsDropdownOpen(false);
+        setOpen(false);
       }
-      justSelectedRef.current = true;
+    };
+
+    const handleQueryChange = (query: string) => {
+      setSearchQuery(query);
+      setActiveIndex(null);
     };
 
     const handleClearSearch = (e: React.MouseEvent) => {
       e.preventDefault();
       e.stopPropagation();
-      setSearchQuery("");
-      const input = selectRef.current?.querySelector("input");
-      if (input) {
-        input.focus();
-      }
+      handleQueryChange("");
+      // Back to the query field the button sits in, to type the next query.
+      searchRef.current?.focus();
     };
 
     const currentValue = value !== undefined ? value : internalValue;
@@ -257,22 +356,14 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     useEffect(() => {
       if (isDropdownOpen) {
-        // Reset skip flag when dropdown opens
-        skipNextFocusRef.current = false;
-
         // If searchable is true, focus the search input
         if (searchable) {
           setTimeout(() => {
-            const searchInput = selectRef.current?.querySelector(
-              `#select-search-${searchInputId}`,
-            ) as HTMLInputElement;
-            if (searchInput) {
-              searchInput.focus();
-            }
+            searchRef.current?.focus();
           }, 0);
         }
       }
-    }, [isDropdownOpen, searchable, searchInputId]);
+    }, [isDropdownOpen, searchable]);
 
     // Filter options based on search query
     const filteredOptions = options.filter((option) =>
@@ -281,110 +372,244 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         : true,
     );
 
+    const isSelected = (option: SelectOptionType) =>
+      multiple
+        ? Array.isArray(currentValue) && currentValue.includes(option.value)
+        : option.value === currentValue;
+
+    /**
+     * What leads an option: the check mark a multiple Select adds (or a
+     * spacer the mark's width, once something is checked), then the option's
+     * own prefix. The option's prefix used to be overwritten in both modes,
+     * so a swatch or icon set on an option never showed.
+     */
+    const optionPrefix = (option: SelectOptionType) => {
+      const mark = !multiple ? undefined : isSelected(option) ? (
+        <Icon name="check" size="xs" onBackground="neutral-weak" />
+      ) : Array.isArray(currentValue) && currentValue.length > 0 ? (
+        <Flex minWidth="20" />
+      ) : undefined;
+      if (!mark || !option.prefix) return mark ?? option.prefix;
+      return (
+        <Flex gap="8" vertical="center">
+          {mark}
+          {option.prefix}
+        </Flex>
+      );
+    };
+
+    /**
+     * Where the list opens: on the option it is already showing, else on its
+     * first enabled one — the rule DropdownWrapper applies to every list.
+     */
+    const openIndex = () => {
+      const selected = filteredOptions.findIndex(
+        (option) => !option.disabled && isSelected(option),
+      );
+      return selected >= 0 ? selected : filteredOptions.findIndex((option) => !option.disabled);
+    };
+
+    const currentActive = !isDropdownOpen
+      ? -1
+      : activeIndex !== null && activeIndex < filteredOptions.length
+        ? activeIndex
+        : openIndex();
+    const optionId = (index: number) => `${optionIdPrefix}${index}`;
+    const activeOptionId = currentActive >= 0 ? optionId(currentActive) : undefined;
+
+    /** The next enabled option from `from`, `step` at a time, wrapping round. */
+    const nextEnabled = (from: number, step: 1 | -1) => {
+      const count = filteredOptions.length;
+      for (let n = 1; n <= count; n++) {
+        const index = (((from + step * n) % count) + count) % count;
+        if (!filteredOptions[index].disabled) return index;
+      }
+      return from;
+    };
+
+    const pick = (index: number) => {
+      const option = filteredOptions[index];
+      if (!option || option.disabled) return;
+      option.onClick?.(option.value);
+      handleSelect(option.value);
+    };
+
+    /**
+     * The keys both fields share: they open the list, move its active option
+     * and pick it, while focus stays in the field. Returns whether the key
+     * was one of them.
+     */
+    const handleListKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      const { key } = event;
+      if (key !== "ArrowDown" && key !== "ArrowUp" && key !== "Home" && key !== "End") {
+        if (key !== "Enter") return false;
+        event.preventDefault();
+        if (!isDropdownOpen) setOpen(true);
+        else if (currentActive >= 0) pick(currentActive);
+        return true;
+      }
+
+      event.preventDefault();
+      if (!isDropdownOpen) {
+        setOpen(true);
+        return true;
+      }
+      if (filteredOptions.length === 0) return true;
+      if (key === "Home") setActiveIndex(nextEnabled(-1, 1));
+      else if (key === "End") setActiveIndex(nextEnabled(filteredOptions.length, -1));
+      else setActiveIndex(nextEnabled(currentActive, key === "ArrowDown" ? 1 : -1));
+      return true;
+    };
+
+    const handleFieldKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+      rest.onKeyDown?.(event);
+      if (handleListKey(event)) return;
+
+      if (event.key === " ") {
+        // The field is read-only: Space opens it, then picks, as Enter does.
+        event.preventDefault();
+        if (!isDropdownOpen) setOpen(true);
+        else if (currentActive >= 0) pick(currentActive);
+      } else if (event.key === "Escape" && isDropdownOpen) {
+        event.preventDefault();
+        // Closes this list only, not a dialog it sits in.
+        event.stopPropagation();
+        setOpen(false);
+      }
+    };
+
+    /** The listbox's name: the field's own. */
+    const listboxLabel = rest["aria-label"] || rest.label || rest.placeholder || "Options";
+
     return (
-      <DropdownWrapper
-        fillWidth={fillWidth}
-        minWidth={minWidth}
-        maxWidth={maxWidth}
-        ref={(node) => {
-          selectRef.current = node;
-          if (typeof ref === "function") ref(node);
-          else if (ref) ref.current = node;
-        }}
-        onFocusCapture={() => setIsFocused(true)}
-        open={isDropdownOpen}
-        onOpenChange={setIsDropdownOpen}
-        placement={placement}
-        closeAfterClick={false}
-        disableTriggerClick={true}
-        style={{
-          ...style,
-        }}
-        trigger={
-          <Input
-            {...rest}
-            style={{
-              textOverflow: "ellipsis",
-              ...style,
-            }}
-            cursor="interactive"
-            value={getDisplayText()}
-            onFocus={handleFocus}
-            readOnly
-            // `{ className }` in the object put the literal string "className"
-            // on the element when the prop was truthy and dropped the caller's
-            // class entirely. It is a value, not a condition.
-            className={classNames("fill-width", className, isFocused && inputStyles.focused)}
-            aria-haspopup="listbox"
-            aria-expanded={isDropdownOpen}
-          />
-        }
-        dropdown={
-          <Column fillWidth padding="4" data-dropdown="true">
-            <ArrowNavigation
-              layout="column"
-              itemCount={filteredOptions.length}
-              onSelect={(index) => {
-                if (index >= 0 && index < filteredOptions.length) {
-                  handleSelect(filteredOptions[index].value);
-                }
+      // Tells the wrapper its trigger is a combobox: no `role="button"` around
+      // the field, and focus stays in it (see DropdownComboboxContext).
+      <DropdownComboboxContext.Provider value={true}>
+        <DropdownWrapper
+          fillWidth={fillWidth}
+          minWidth={minWidth}
+          maxWidth={maxWidth}
+          ref={(node) => {
+            selectRef.current = node;
+            if (typeof ref === "function") ref(node);
+            else if (ref) ref.current = node;
+          }}
+          onFocusCapture={() => setIsFocused(true)}
+          open={isDropdownOpen}
+          onOpenChange={setOpen}
+          placement={placement}
+          closeAfterClick={false}
+          disableTriggerClick={true}
+          style={{
+            ...style,
+          }}
+          trigger={
+            <SelectField
+              {...rest}
+              ref={fieldRef}
+              activeIndex={currentActive}
+              style={{
+                textOverflow: "ellipsis",
+                ...style,
               }}
-              onEscape={() => setIsDropdownOpen(false)}
-              autoFocus={!searchable}
-              disabled={false}
-            >
+              cursor="interactive"
+              value={getDisplayText()}
+              onFocus={handleFocus}
+              // Focus alone cannot reopen a field that already has it: after a
+              // pick, focus is back on the field with the list closed, and a
+              // click there fires no focus event.
+              onClick={(event: React.MouseEvent<HTMLInputElement>) => {
+                rest.onClick?.(event);
+                setOpen(true);
+              }}
+              onKeyDown={handleFieldKeyDown}
+              readOnly
+              // `{ className }` in the object put the literal string "className"
+              // on the element when the prop was truthy and dropped the caller's
+              // class entirely. It is a value, not a condition.
+              className={classNames("fill-width", className, isFocused && inputStyles.focused)}
+              role="combobox"
+              aria-haspopup="listbox"
+              aria-expanded={isDropdownOpen}
+              aria-controls={isDropdownOpen ? listboxId : undefined}
+              aria-activedescendant={activeOptionId}
+            />
+          }
+          dropdown={
+            <Column fillWidth padding="4" data-dropdown="true">
               {searchable && (
                 <SearchInput
-                  searchInputId={searchInputId}
+                  ref={searchRef}
+                  id={`select-search-${searchInputId}`}
                   searchQuery={searchQuery}
-                  setSearchQuery={setSearchQuery}
-                  setIsDropdownOpen={setIsDropdownOpen}
-                  handleClearSearch={handleClearSearch}
+                  onQueryChange={handleQueryChange}
+                  onOpen={() => setOpen(true)}
+                  onClear={handleClearSearch}
+                  onEscape={() => {
+                    setOpen(false);
+                    handleQueryChange("");
+                    fieldRef.current?.focus();
+                  }}
+                  onListKey={handleListKey}
                   handleBlur={handleBlur}
                   selectRef={selectRef}
+                  listboxId={listboxId}
+                  activeOptionId={activeOptionId}
                 />
               )}
-            
-              <Column fillWidth paddingTop="4" gap="2">
+
+              <Column
+                id={listboxId}
+                role="listbox"
+                aria-label={listboxLabel}
+                aria-multiselectable={multiple || undefined}
+                fillWidth
+                paddingTop="4"
+                gap="2"
+                // The highlight follows the pointer, as it did when the options
+                // took focus, so the active option is the one under it.
+                onMouseOver={(event: React.MouseEvent<HTMLDivElement>) => {
+                  const option = (event.target as Element).closest('[role="option"]');
+                  if (!option?.id.startsWith(optionIdPrefix)) return;
+                  const index = Number(option.id.slice(optionIdPrefix.length));
+                  if (index !== currentActive && !filteredOptions[index]?.disabled) {
+                    setActiveIndex(index);
+                  }
+                }}
+              >
                 {filteredOptions.map((option, index) => (
                   <Option
                     key={option.value}
                     {...option}
+                    id={optionId(index)}
+                    // handleSelect closes a single Select. A multiple one stays
+                    // open to pick more, as it already did from the keyboard;
+                    // a click used to close it too, and only looked open
+                    // because the returning focus reopened it at once.
                     onClick={() => {
                       option.onClick?.(option.value);
                       handleSelect(option.value);
-                      setIsDropdownOpen(false);
                     }}
-                    selected={
-                      multiple
-                        ? Array.isArray(currentValue) && currentValue.includes(option.value)
-                        : option.value === currentValue
-                    }
+                    selected={isSelected(option)}
+                    highlighted={index === currentActive}
                     tabIndex={-1}
-                    prefix={
-                      multiple ? (
-                        Array.isArray(currentValue) && currentValue.includes(option.value) ? (
-                          <Icon name="check" size="xs" onBackground="neutral-weak" />
-                        ) : Array.isArray(currentValue) && currentValue.length > 0 ? (
-                          <Flex minWidth="20" />
-                        ) : undefined
-                      ) : undefined
-                    }
+                    prefix={optionPrefix(option)}
                   />
                 ))}
-                {searchQuery && filteredOptions.length === 0 && (
-                  <Flex fillWidth center paddingX="16" paddingY="32">
-                    {emptyState}
-                  </Flex>
-                )}
               </Column>
-            </ArrowNavigation>
-          </Column>
-        }
-      />
+              {searchQuery && filteredOptions.length === 0 && (
+                <Flex fillWidth center paddingX="16" paddingY="32">
+                  {emptyState}
+                </Flex>
+              )}
+            </Column>
+          }
+        />
+      </DropdownComboboxContext.Provider>
     );
   },
 );
 
 Select.displayName = "Select";
+
 export { Select };

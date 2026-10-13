@@ -1,0 +1,167 @@
+---
+title: "Drawer"
+summary: "A panel that slides in from any edge over the page: mobile navigation, filters, a detail view beside a list."
+updatedAt: "2026-10-10"
+docs: "once-ui/components/drawer.mdx"
+github: "components/Drawer.tsx"
+navLabel: "Drawer"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`Drawer` is a modal dialog that slides in from an edge of the viewport. It is built
+on the same pieces as [`Dialog`](/components/dialog): it renders into a portal on the
+body, makes the rest of the page inert, locks page scroll, keeps Tab inside with
+[`FocusTrap`](/components/focusTrap), and gives focus back to whatever opened it
+when it closes. Escape, a click on the overlay and the close button all ask it to
+close through `onClose`; the drawer never closes itself.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DrawerExample />}
+  codes={[
+    {
+      code:
+`const [open, setOpen] = useState(false);
+
+<Button onClick={() => setOpen(true)}>Open drawer</Button>
+<Drawer
+  open={open}
+  onClose={() => setOpen(false)}
+  title="Filters"
+  description="Narrow the list of projects."
+  footer={
+    <>
+      <Button variant="secondary" onClick={() => setOpen(false)}>Cancel</Button>
+      <Button onClick={() => setOpen(false)}>Apply</Button>
+    </>
+  }
+>
+  <Column gap="16" paddingTop="8">
+    <Input id="owner" label="Owner" />
+    <Input id="tag" label="Tag" />
+  </Column>
+</Drawer>`,
+      language: "tsx",
+      label: "Drawer"
+    }
+  ]}
+/>
+
+The title is the dialog's accessible name and the description its description.
+Without a title, pass `aria-label` so a screen reader can announce what opened.
+The content scrolls between the header and the footer.
+
+## Side and size
+
+`side` picks the edge: `left`, `right` (the default), `top` or `bottom`. `size` is
+the drawer's extent from that edge: the width of a left or right drawer, and the
+maximum height of a top or bottom one, which is otherwise as tall as its content.
+
+| `size` | Extent |
+| --- | --- |
+| `s` | 20rem |
+| `m` | 28rem (default) |
+| `l` | 40rem |
+| `full` | The whole viewport, less the inset |
+
+The drawer floats a small step in from the edge, as `Dialog` does on small screens,
+and never grows past the viewport.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DrawerSidesExample />}
+  codes={[
+    {
+      code:
+`<Drawer open={open} onClose={close} side="bottom" size="s" title="From the bottom">
+  …
+</Drawer>`,
+      language: "tsx",
+      label: "Side"
+    }
+  ]}
+/>
+
+## Navigation
+
+A mobile navigation is a `left` drawer. `flush` drops the header and the padding,
+so a list reaches the edges, and floats the close button in the corner. The title
+still names the dialog, for screen readers only. This replaces the hand-made
+`Animation` and fixed-`Column` menus behind a `NavIcon`, which had no dialog role,
+no focus trap and no Escape.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DrawerNavigationExample />}
+  codes={[
+    {
+      code:
+`<Drawer open={open} onClose={close} side="left" size="s" title="Navigation" flush>
+  <Column padding="8" paddingTop="64" gap="2">
+    <NavItem href="/projects" icon="folder" label="Projects" selected />
+    <NavItem href="/inbox" icon="inbox" label="Inbox" badge={3} />
+    <NavItem href="/settings" icon="settings" label="Settings" />
+  </Column>
+</Drawer>`,
+      language: "tsx",
+      label: "Navigation"
+    }
+  ]}
+/>
+
+Close it when the route changes, as the menus it replaces did:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const pathname = usePathname();
+useEffect(() => setOpen(false), [pathname]);`,
+      language: "tsx",
+      label: "Route change"
+    }
+  ]}
+/>
+
+## Focus
+
+On open, focus moves to the first focusable element (the close button, unless
+`showClose` is off), or to `initialFocusRef`. On close it returns to the element
+that had it before, or to `returnFocusRef`, and it is returned even if the drawer
+unmounts while open. While the drawer slides out it is inert itself, so a quick Tab
+cannot land back inside it.
+
+A dropdown or picker inside the drawer that handles Escape itself (and calls
+`preventDefault`, as Once UI's do) closes on its own without closing the drawer.
+
+Set `closeOnClickaway={false}` for a drawer that holds unsaved input, so a stray
+click on the overlay does not throw it away.
+
+## API reference
+
+<PropsTable
+  component="Drawer"
+  describe={{
+    open: "Whether the drawer is open.",
+    onClose: "Called on Escape, an overlay click and the close button.",
+    side: "The edge the drawer slides in from.",
+    size: "The width of a left or right drawer; the maximum height of a top or bottom one.",
+    title: "The heading and the dialog's accessible name.",
+    description: "A line under the title, announced as the dialog's description.",
+    footer: "Actions pinned below the scrolling content.",
+    showClose: "Show the close button.",
+    closeOnClickaway: "Close when the overlay is clicked.",
+    flush: "No header and no padding; the title is kept for screen readers.",
+    initialFocusRef: "The element to focus on open, instead of the first focusable one.",
+    returnFocusRef: "The element to focus on close, instead of the one that opened the drawer.",
+    children: "The drawer's content. It scrolls.",
+  }}
+/>

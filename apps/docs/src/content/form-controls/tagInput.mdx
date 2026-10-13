@@ -1,7 +1,7 @@
 ---
 title: "TagInput"
 summary: "Collect a list of values as removable chips inside a single field."
-updatedAt: "2026-09-14"
+updatedAt: "2026-10-11"
 docs: "once-ui/form-controls/tagInput.mdx"
 github: "components/TagInput.tsx"
 navLabel: "TagInput"
@@ -33,12 +33,35 @@ that can be removed on its own, and typing a new one appends to the array.
   ]}
 />
 
+## Uncontrolled
+
+Leave out `value` and the input keeps its own list, starting from `defaultValue`. `onChange` still receives every new array.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<TagInput id="topics" label="Topics" defaultValue={["Design", "Code"]} />}
+  codes={[
+    {
+      code:
+`<TagInput
+    id="topics"
+    label="Topics"
+    defaultValue={["Design", "Code"]}
+/>`,
+      language: "tsx",
+      label: "Uncontrolled"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="TagInput"
   describe={{
-    value: "The tags, as an array of strings. Required — this input has no uncontrolled mode.",
+    value: "The tags, as an array of strings, controlled. Leave it out and the input keeps its own list.",
+    defaultValue: "The starting tags when `value` is left out.",
     onChange: "Receives the whole new array, after an add or a remove.",
   }}
 />

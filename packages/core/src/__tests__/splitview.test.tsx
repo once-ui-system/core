@@ -26,6 +26,17 @@ describe("SplitView", () => {
     expect(screen.getByRole("separator", { name: "Resize panels" })).toBeInTheDocument();
   });
 
+  it("draws its handle 4px thick, not the width of a gutter that has none", () => {
+    // The gutter's padding leaves its content box zero wide, so a handle that
+    // filled it showed only its border. jsdom lays nothing out: check the
+    // handle's own size instead.
+    render(<SplitView {...panels} />, { wrapper: wrap });
+    const handle = screen.getByRole("separator").firstElementChild as HTMLElement;
+    expect(handle.style.width).toBe("var(--static-space-4)");
+    expect(handle.style.height).toBe("8rem");
+    expect(handle).not.toHaveClass("fill-width");
+  });
+
   it("honours defaultSplit, minSplit and maxSplit", () => {
     // These three props were accepted and then ignored: the hook hardcoded
     // 0.3 / 0.2 / 0.8 regardless of what was passed.
@@ -62,9 +73,12 @@ describe("SplitView", () => {
 
   it("collapses to tabs below the breakpoint, showing one panel at a time", async () => {
     const user = userEvent.setup();
-    render(<SplitView {...panels} collapseBelow="l" labels={{ left: "Editor", right: "Preview" }} />, {
-      wrapper: wrap,
-    });
+    render(
+      <SplitView {...panels} collapseBelow="l" labels={{ left: "Editor", right: "Preview" }} />,
+      {
+        wrapper: wrap,
+      },
+    );
     // No draggable divider on a phone — that is the point of the collapse.
     expect(screen.queryByRole("separator")).toBeNull();
     expect(screen.getByText("Left content")).toBeInTheDocument();

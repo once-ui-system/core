@@ -18,9 +18,7 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
       <Column paddingX="l" fillWidth horizontal="center" gap="m">
         <Column maxWidth="s" horizontal="center" align="center">
           <RevealFx paddingTop="24" translateY="4" fillWidth horizontal="center" paddingBottom="16">
-            <Heading wrap="balance" variant="display-strong-l">
-              Design an independent future
-            </Heading>
+            <Heading variant="display-strong-l">Design an independent future</Heading>
           </RevealFx>
           <RevealFx translateY="8" delay={200} fillWidth horizontal="center" paddingBottom="40">
             <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
@@ -32,12 +30,11 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               By the creator of Once UI
             </Text>
             <Column
-              fillWidth
               radius="l"
               horizontal="center"
               align="center"
               maxWidth={20}
-              data-border="rounded"
+              themeBorder="rounded"
             >
               <Input
                 placeholder="Email"
@@ -60,7 +57,6 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             <Row vertical="center" gap="16" paddingTop="24">
               <AvatarGroup
                 reverse
-                size="m"
                 avatars={[
                   { src: "/images/creators/light.jpg" },
                   { src: "/images/creators/osmy.jpg" },

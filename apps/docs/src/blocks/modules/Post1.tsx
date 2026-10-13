@@ -78,7 +78,7 @@ export const Post1 = () => {
         <SmartLink href="#">{post.tag}</SmartLink>
       </Row>
       <Column maxWidth="s" gap="24" horizontal="center" align="center">
-        <Heading as="h2" variant="display-strong-s" wrap="balance">
+        <Heading as="h2" variant="display-strong-s">
           {post.title}
         </Heading>
         <Row gap="12" vertical="center">
@@ -193,7 +193,7 @@ export const Post1 = () => {
                       {post.tag}
                     </Text>
                   )}
-                  <Heading as="h2" variant="heading-strong-s" wrap="balance">
+                  <Heading as="h2" variant="heading-strong-s">
                     {post.title}
                   </Heading>
                   <Row gap="12" vertical="center">

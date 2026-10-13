@@ -37,12 +37,11 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         paddingX="16"
         paddingY="8"
         gap="12"
-        vertical="center"
-        horizontal="center"
+        center
         borderBottom
         background="brand-alpha-weak"
       >
-        <Pulse size="s" scheme="brand" />
+        <Pulse size="s" />
         <Text variant="label-default-s" onBackground="brand-medium">
           Pro blocks now install via CLI
         </Text>
@@ -55,12 +54,18 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         <Row gap="12" vertical="center">
           <NavIcon hide s={{ hide: false }} />
           <Row hide s={{ hide: false }} gap="4" vertical="center">
-            <Logo dark icon="/trademarks/icon-dark.svg" size="s" href="#" />
-            <Logo light icon="/trademarks/icon-light.svg" size="s" href="#" />
+            <Logo
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+              size="s"
+              href="#"
+            />
           </Row>
           <Row s={{ hide: true }} gap="8" vertical="center">
-            <Logo dark icon="/trademarks/icon-dark.svg" size="s" href="#" />
-            <Logo light icon="/trademarks/icon-light.svg" size="s" href="#" />
+            <Logo
+              icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
+              size="s"
+              href="#"
+            />
             <Line vert height="20" background="neutral-alpha-weak" />
             <Text variant="label-strong-s" wrap="nowrap">
               Once UI
@@ -68,7 +73,7 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
           </Row>
         </Row>
 
-        <Row s={{ hide: true }} gap="4" vertical="center" fillWidth horizontal="center">
+        <Row s={{ hide: true }} gap="4" fillWidth center>
           {nav.map((item) => (
             <ToggleButton
               key={item.label}

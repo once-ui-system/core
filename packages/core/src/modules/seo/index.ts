@@ -1,4 +1,4 @@
-export { Meta, generateMetadata } from "./Meta";
 export type { Alternate, MetaProps } from "./Meta";
-export { Schema } from "./Schema";
+export { generateMetadata, Meta } from "./Meta";
 export type { SchemaProps } from "./Schema";
+export { Schema } from "./Schema";

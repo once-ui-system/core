@@ -13,10 +13,7 @@ type StreamingViewportOptions<T extends Record<string, any>> = {
   stepMs?: number;
   xKey: Extract<keyof T, string>;
   numericKeys: NumericKeys<T>;
-  getNextTarget: (ctx: {
-    lastPoint: T;
-    nextX: number;
-  }) => StreamingTarget<T>;
+  getNextTarget: (ctx: { lastPoint: T; nextX: number }) => StreamingTarget<T>;
 };
 
 type StreamingViewportResult<T> = {
@@ -109,7 +106,7 @@ export function useStreamingViewport<T extends Record<string, any>>(
           if (!prevData || prevData.length === 0) return prev;
 
           let currentData = prevData.slice();
-          
+
           // Ensure we have exactly windowSize + 1 points.
           if (currentData.length < windowSize + 1) {
             const last = currentData[currentData.length - 1];

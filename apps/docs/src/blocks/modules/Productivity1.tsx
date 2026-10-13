@@ -177,13 +177,7 @@ export const Productivity1 = () => {
                 tooltipPosition="bottom"
                 icon="bell"
               />
-              <Row
-                position="absolute"
-                style={{
-                  top: "0.15rem",
-                  right: "0.15rem",
-                }}
-              >
+              <Row position="absolute" top={0.15} right={0.15}>
                 <Row
                   style={{ borderColor: "var(--page-background)" }}
                   height="12"

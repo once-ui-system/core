@@ -1,0 +1,162 @@
+---
+title: "Pagination"
+summary: "Page through a long list: previous and next, the pages around the current one, and an ellipsis for the rest."
+updatedAt: "2026-10-11"
+docs: "once-ui/components/pagination.mdx"
+github: "components/Pagination.tsx"
+navLabel: "Pagination"
+navIcon: "components"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`Pagination` draws the controls for a list split into pages: previous and next
+buttons, the first and last pages, the pages around the current one, and an
+ellipsis for each run left out. It is a `nav` landmark named "Pagination" holding a
+list of buttons, and the current page carries `aria-current="page"`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<Pagination total={12} defaultPage={5} />}
+  codes={[
+    {
+      code:
+`<Pagination total={12} defaultPage={5} />`,
+      language: "tsx",
+      label: "Pagination"
+    }
+  ]}
+/>
+
+Pass the number of pages as `total`, or the number of items as `count` with
+`perPage`, and Pagination works the page count out. An empty list is page 1 of 1.
+
+## Long ranges
+
+The control keeps the same number of items wherever the current page is, so it does
+not change width as the reader pages through. `boundaries` sets how many pages are
+always drawn at each end, and `siblings` how many on each side of the current page.
+Both default to 1. An ellipsis never stands for a single page: that page is drawn
+instead.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" horizontal="center">
+      <Pagination total={40} defaultPage={20} siblings={2} aria-label="Two siblings" />
+      <Pagination total={40} defaultPage={20} boundaries={2} siblings={0} aria-label="Two boundaries" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Pagination total={40} defaultPage={20} siblings={2} />
+<Pagination total={40} defaultPage={20} boundaries={2} siblings={0} />`,
+      language: "tsx",
+      label: "Long ranges"
+    }
+  ]}
+/>
+
+## First and last
+
+`showFirstLast` adds buttons that jump to either end, for very long ranges where the
+boundary pages are not enough.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<Pagination total={120} defaultPage={60} showFirstLast size="s" />}
+  codes={[
+    {
+      code:
+`<Pagination total={120} defaultPage={60} showFirstLast size="s" />`,
+      language: "tsx",
+      label: "First and last"
+    }
+  ]}
+/>
+
+## Controlled, with a page size
+
+Pass `page` and `onChange` when the host owns the page, as it does when the page
+comes from the URL or a server request. `perPageOptions` adds a page-size select in
+front of the pages; pair `perPage` with `onPerPageChange` to own that too. When the
+size changes, the page moves so the first item on screen stays on screen, and
+`onChange` reports the move.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<PaginationControlledExample />}
+  codes={[
+    {
+      code:
+`const [page, setPage] = useState(1);
+const [perPage, setPerPage] = useState(20);
+
+<Pagination
+  page={page}
+  onChange={setPage}
+  count={248}
+  perPage={perPage}
+  perPageOptions={[10, 20, 50]}
+  onPerPageChange={setPerPage}
+  size="s"
+/>`,
+      language: "tsx",
+      label: "Controlled"
+    }
+  ]}
+/>
+
+## Accessibility
+
+- The landmark is named "Pagination". Give each one its own `aria-label` when a page
+  has more than one, and to translate it. `labels` translates the arrow buttons and
+  the per-page label.
+- Every control is a real button, reached with Tab. When an arrow reaches the first
+  or last page and disables itself, focus moves to the current page instead of
+  dropping to the document.
+- `disabled` turns every control off, such as while the next page loads.
+- `Table` draws its page buttons with Pagination when it is `paginated`.
+
+## API reference
+
+<PropsTable
+  component="Pagination"
+  describe={{
+    page: "The current page, from 1, when the host owns it. Pair with onChange.",
+    defaultPage: "The page shown first when Pagination owns the state.",
+    onChange: "Called with the new page; not for the page already shown.",
+    total: "How many pages there are.",
+    count: "How many items there are. With perPage, gives the page count.",
+    perPage: "Items per page, when the host owns it.",
+    defaultPerPage: "Items per page when Pagination owns it.",
+    perPageOptions: "Page sizes to offer in a select. Without it there is no select.",
+    onPerPageChange: "Called with the new page size.",
+    siblings: "Pages drawn on each side of the current page.",
+    boundaries: "Pages always drawn at each end.",
+    showFirstLast: "Add first-page and last-page buttons.",
+    size: "The buttons' size.",
+    disabled: "Disable every control.",
+    labels: "The arrow buttons' names and the per-page label, to translate them.",
+    "aria-label": "The landmark's name.",
+  }}
+/>
+
+### PaginationLabels
+
+<PropsTable
+  label="Field"
+  content={[
+    ["previous", "string", "\"Previous page\"", "The previous-page button's name."],
+    ["next", "string", "\"Next page\"", "The next-page button's name."],
+    ["first", "string", "\"First page\"", "The first-page button's name."],
+    ["last", "string", "\"Last page\"", "The last-page button's name."],
+    ["perPage", "string", "\"Per page\"", "The per-page select's label."],
+  ]}
+/>
