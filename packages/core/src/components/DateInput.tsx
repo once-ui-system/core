@@ -1,6 +1,7 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
+import { fieldLocale } from "../utils/calendarLocale";
 import { DatePicker } from "./DatePicker";
 import { DropdownComboboxContext } from "./DropdownTriggerContext";
 import { DropdownWrapper } from "./DropdownWrapper";
@@ -18,9 +19,15 @@ interface DateInputProps extends Omit<React.ComponentProps<typeof Input>, "onCha
   timePicker?: boolean;
   minDate?: Date;
   maxDate?: Date;
+  /**
+   * The locale the field's date and the calendar's month and weekday names
+   * are in, as a BCP 47 tag such as "de" or "pt-BR". Without it (or with a
+   * tag the platform does not accept) they are in US English, as before.
+   */
+  locale?: string;
 }
 
-const formatDate = (date: Date, timePicker: boolean) => {
+const formatDate = (date: Date, timePicker: boolean, locale?: string) => {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "short",
@@ -32,7 +39,7 @@ const formatDate = (date: Date, timePicker: boolean) => {
     }),
   };
 
-  return date.toLocaleString("en-US", options);
+  return date.toLocaleString(fieldLocale(locale), options);
 };
 
 /**
@@ -62,6 +69,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
       timePicker = false,
       minDate,
       maxDate,
+      locale,
       onClick,
       onKeyDown,
       ...rest
@@ -69,25 +77,27 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
     ref,
   ) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [inputValue, setInputValue] = useState(value ? formatDate(value, timePicker) : "");
+    const [inputValue, setInputValue] = useState(
+      value ? formatDate(value, timePicker, locale) : "",
+    );
     const fieldRef = useRef<HTMLInputElement>(null);
     const dialogId = `${useId()}-dialog`;
 
     useEffect(() => {
       if (value) {
-        setInputValue(formatDate(value, timePicker));
+        setInputValue(formatDate(value, timePicker, locale));
       }
-    }, [value, timePicker]);
+    }, [value, timePicker, locale]);
 
     const handleDateChange = useCallback(
       (date: Date) => {
-        setInputValue(formatDate(date, timePicker));
+        setInputValue(formatDate(date, timePicker, locale));
         onChange?.(date);
         if (!timePicker) {
           setIsOpen(false);
         }
       },
-      [onChange, timePicker],
+      [onChange, timePicker, locale],
     );
 
     /**
@@ -182,6 +192,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
               maxDate={maxDate}
               autoFocus={true}
               open={isOpen}
+              locale={locale}
             />
           }
           fillWidth={false}

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
+import { fieldLocale } from "../utils/calendarLocale";
 import { DateRange, DateRangePicker } from "./DateRangePicker";
 import { DropdownComboboxContext } from "./DropdownTriggerContext";
 import { DropdownWrapper } from "./DropdownWrapper";
@@ -18,6 +19,12 @@ interface DateRangeInputProps
   minHeight?: number;
   className?: string;
   style?: React.CSSProperties;
+  /**
+   * The locale the fields' dates and the calendar's month and weekday names
+   * are in, as a BCP 47 tag such as "de" or "pt-BR". Without it (or with a
+   * tag the platform does not accept) they are in US English, as before.
+   */
+  locale?: string;
 }
 
 interface LocalizedDateRange {
@@ -25,15 +32,15 @@ interface LocalizedDateRange {
   endDate: string | null;
 }
 
-const formatDateRange = (range: DateRange): LocalizedDateRange => {
+const formatDateRange = (range: DateRange, locale?: string): LocalizedDateRange => {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "short",
     day: "numeric",
   };
   return {
-    startDate: range.startDate?.toLocaleDateString("en-US", options) || null,
-    endDate: range.endDate?.toLocaleDateString("en-US", options) || null,
+    startDate: range.startDate?.toLocaleDateString(fieldLocale(locale), options) || null,
+    endDate: range.endDate?.toLocaleDateString(fieldLocale(locale), options) || null,
   };
 };
 
@@ -55,6 +62,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
       minHeight,
       className,
       style,
+      locale,
       onClick,
       onKeyDown,
       ...rest
@@ -63,7 +71,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
   ) => {
     const [isOpen, setIsOpen] = useState(false);
     const [inputValue, setInputValue] = useState(
-      value ? formatDateRange(value) : { startDate: "", endDate: "" },
+      value ? formatDateRange(value, locale) : { startDate: "", endDate: "" },
     );
     const dialogId = `${useId()}-dialog`;
     /** The field that opened the picker, which gets focus back when it closes. */
@@ -71,19 +79,19 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
 
     useEffect(() => {
       if (value) {
-        setInputValue(formatDateRange(value));
+        setInputValue(formatDateRange(value, locale));
       }
-    }, [value]);
+    }, [value, locale]);
 
     const handleDateChange = useCallback(
       (range: DateRange) => {
-        setInputValue(formatDateRange(range));
+        setInputValue(formatDateRange(range, locale));
         onChange?.(range);
         if (range.endDate != undefined) {
           setIsOpen(false);
         }
       },
-      [onChange],
+      [onChange, locale],
     );
 
     /** Opens on a click, Enter, Space or ArrowDown, not on focus: see DateInput. */
@@ -171,7 +179,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
         aria-label={rest["aria-label"] || `${startLabel} – ${endLabel}`}
         onKeyDown={handleDialogKeyDown}
       >
-        <DateRangePicker value={value} onChange={handleDateChange} autoFocus />
+        <DateRangePicker value={value} onChange={handleDateChange} autoFocus locale={locale} />
       </Flex>
     );
 

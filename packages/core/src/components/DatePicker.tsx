@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { CondensedTShirtSizes } from "../types";
+import { getCalendarNames } from "../utils/calendarLocale";
 import {
   clearLastOpenedDropdown,
   getLastOpenedDropdown,
@@ -56,6 +57,12 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
    */
   autoFocus?: boolean;
   open?: boolean;
+  /**
+   * The locale month and weekday names are shown in, as a BCP 47 tag such as
+   * "de" or "pt-BR". Without it (or with a tag the platform does not accept)
+   * the names are in English, as before.
+   */
+  locale?: string;
 }
 
 /** The days the grid's keys move through: this month's, that can be picked. */
@@ -112,6 +119,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       onHover,
       autoFocus = false,
       open,
+      locale,
       ...rest
     },
     ref,
@@ -286,34 +294,16 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const focusIsInside = () =>
       typeof document !== "undefined" && !!rootRef.current?.contains(document.activeElement);
 
-    const monthNames = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    const dayNames = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-    /** What the column headers are called: "Mo" is what fits, not what to read out. */
-    const dayLabels = [
-      "Sunday",
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-    ];
+    const {
+      months: monthNames,
+      weekdays: dayNames,
+      /** What the column headers are called: "Mo" is what fits, not what to read out. */
+      weekdayLabels: dayLabels,
+      monthYear,
+    } = getCalendarNames(locale);
     const cellSize = size === "s" ? "32" : size === "m" ? "40" : "48";
     /** The grid's name: the month it shows, which tells two calendars side by side apart. */
-    const gridLabel = `${monthNames[currentMonth]} ${currentYear}`;
+    const gridLabel = monthYear(currentMonth, currentYear);
 
     const handleTimeToggle = (show: boolean) => {
       setIsTransitioning(false);
@@ -713,7 +703,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           <Row role="row">
             {dayNames.map((day, index) => (
               <Row
-                key={day}
+                key={dayLabels[index]}
                 role="columnheader"
                 aria-label={dayLabels[index]}
                 width={cellSize}
@@ -757,7 +747,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           {isTimeSelector ? (
             <Column horizontal="center" fillWidth gap="8">
               <Text variant={`label-default-${size}`} onBackground="neutral-strong">
-                {monthNames[currentMonth]} {currentYear}
+                {gridLabel}
               </Text>
               <Row
                 paddingX="2"

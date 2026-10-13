@@ -51,6 +51,30 @@ The DatePicker component provides an interactive calendar interface for selectin
   ]}
 />
 
+## Localization
+
+Pass `locale`, a BCP 47 tag such as `"de"` or `"pt-BR"`, to show month and weekday names in that language. The names come from the browser's `Intl` API, so no locale data is bundled. Without `locale` the names are in English.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <LocalizedDatePickerExample />
+  }
+  codes={[
+    {
+      code:
+`<DatePicker
+    value={selectedDate}
+    onChange={setSelectedDate}
+    locale="de"
+/>`,
+      language: "tsx",
+      label: "Localization"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -58,6 +82,7 @@ The DatePicker component provides an interactive calendar interface for selectin
   describe={{
     currentMonth: "Current month",
     currentYear: "Current year",
+    locale: "Locale for month and weekday names, such as \"de\". English when left out.",
   }}
   content={[
     ["className"],
