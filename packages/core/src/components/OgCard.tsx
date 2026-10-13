@@ -91,6 +91,7 @@ const OgCard = ({
   favicon,
   image,
   cardUrl,
+  xs,
   ...card
 }: OgCardProps) => {
   const { ogData: fetchedOgData, loading: fetching } = useOgData(
@@ -150,22 +151,38 @@ const OgCard = ({
     return null;
   }
 
+  const isRow = direction === "row" || direction === "row-reverse";
+
   return (
     <Card
       href={resolvedUrl || undefined}
       direction={direction}
       fillWidth
-      vertical={direction === "row" || direction === "row-reverse" ? "center" : undefined}
+      vertical={isRow ? "center" : undefined}
       gap="4"
       radius="l"
       background="surface"
       border="neutral-alpha-medium"
+      // A row card stacks on phones. Beside a 16rem image there is no room left
+      // for the text on a 375px screen, so the title wraps a word per line and
+      // the domain runs off the card. `horizontal: "stretch"` undoes the
+      // row's centred cross axis, which the breakpoint class would otherwise
+      // keep. A consumer's own `xs` still wins.
+      xs={
+        isRow
+          ? {
+              direction: direction === "row" ? "column" : "column-reverse",
+              horizontal: "stretch",
+              ...xs,
+            }
+          : xs
+      }
       {...card}
     >
       {resolvedImage !== null && (proxiedImageUrl || loading) && (
         <Media
-          minWidth={direction === "row" || direction === "row-reverse" ? 16 : undefined}
-          maxWidth={direction === "row" || direction === "row-reverse" ? 24 : undefined}
+          minWidth={isRow ? 16 : undefined}
+          maxWidth={isRow ? 24 : undefined}
           loading={loading}
           radius="l"
           sizes={sizes}
@@ -195,11 +212,12 @@ const OgCard = ({
               radius="xs"
               border
             />
+            {/* Truncated: a domain has no break points, so a long one would run past the card. */}
             {resolvedUrl &&
               (loading ? (
                 <Skeleton shape="line" width="25%" size="xs" />
               ) : (
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text variant="label-default-s" onBackground="neutral-weak" truncate>
                   {formatDisplayUrl(resolvedUrl)}
                 </Text>
               ))}
