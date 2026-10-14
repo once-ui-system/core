@@ -137,7 +137,7 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] `DataTable`: column definitions, selection, pagination, empty state.
 - [x] Precompiled CSS so `sass` becomes optional (verified in Next 15, Next 16, Vite and Remotion).
 - [ ] Proposal: an `fx` package for the effects, one `speed` convention.
-- [ ] The CLI (#160) published alongside as `@once-ui-system/cli` (command `once-ui`): rename the package, then publish once its server side (studio#100) is live.
+- [ ] The CLI (#160) published alongside as `@once-ui-system/cli` (command `once-ui`): renamed, and merged into the release branch on 14 Oct with its server side (studio#100) live on once-ui.com. Publish it right after core 2.1.0, since the apps `create` makes depend on `^2.1.0`.
 
 ### W12 · Downstream (release day and the week after)
 - [ ] Studio, Stack, Shorty and Frametic to 2.1; Kinetic from 1.8 to 2.1 (24 renamed props).
