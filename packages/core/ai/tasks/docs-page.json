@@ -15,7 +15,14 @@
   ],
   "recipes": [],
   "example": "examples/docs-page.tsx",
-  "gotchas": ["LayoutProvider.next", "layout.shorthands", "layout.defaults"],
+  "gotchas": [
+    "LayoutProvider.next",
+    "layout.shorthands",
+    "layout.defaults",
+    "layout.responsiveProps",
+    "spacing.tokens",
+    "layout.noSpanOrType"
+  ],
   "quality": {
     "mdx": "mdxComponents, or createMdxComponents({...}) to replace an element or register a tag, from @once-ui-system/core/mdx — never a hand-written element map",
     "trail": "Breadcrumbs above the title; the last item has no href and is the current page",

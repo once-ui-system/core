@@ -91,7 +91,7 @@ export function buildAgentSkillsIndex() {
       {
         name: "once-ui-catalog",
         type: "documentation",
-        description: "Once UI component catalog with purpose, tags, and pairing hints",
+        description: "Once UI component catalog: each component's purpose and import path",
         url: absolute(agentDiscoveryPaths.aiCatalog),
         digest: { sha256: getFileDigest("ai/catalog.json") },
       },

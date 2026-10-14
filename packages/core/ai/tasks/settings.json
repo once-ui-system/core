@@ -38,7 +38,12 @@
     "color.tokens",
     "layout.defaults",
     "Select.closed",
-    "NumberInput.value"
+    "NumberInput.value",
+    "layout.responsiveProps",
+    "spacing.tokens",
+    "layout.noSpanOrType",
+    "Column.form",
+    "Checkbox.checked"
   ],
   "quality": {
     "sectionNav": "Tabs orientation=\"vertical\" with s={{ direction: \"column\" }} (and the TabList s={{ direction: \"row\" }}), one TabPanel per section, keepMounted on a form panel. Sections that are routes use NavItem href instead",

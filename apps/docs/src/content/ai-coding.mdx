@@ -15,16 +15,19 @@ Once UI is an agent-first design system that empowers indie creators to build hi
 
 ## Agent harness (recommended for codegen)
 
-For **writing UI code**, use the harness — not full doc pages. It keeps context under ~10KB per task.
+For **writing UI code**, use the harness — not full doc pages. Bootstrap plus one task bundle is about 45–50KB, read in two or three steps.
 
 | Artifact | URL | When to load |
 |----------|-----|--------------|
 | Manifest | [/ai/manifest.json](/ai/manifest.json) | Entry point — lists all harness files, and in `imports` every entry point (`/data`, `/code`, `/media`, `/mdx`, `/next`, `/config`) with its exports |
-| Compact rules | [/ai/rules.compact.md](/ai/rules.compact.md) | Always, before any UI task (~2KB) |
-| Component catalog | [/ai/catalog.json](/ai/catalog.json) | Pick components by purpose/tag |
-| Task bundle | [/ai/tasks/index.json](/ai/tasks/index.json) | Match user intent → `tasks/pricing.json`, etc. |
-| Component slice | [/ai/components/Grid.json](/ai/components/Grid.json) | On demand — one file per component, with `importFrom` when it is not on the package root |
-| Spec | [/ai/spec.json](/ai/spec.json) | Every prop and type; `functions` lists the hooks and helpers (`useHotkeys`, `defineConfig`, `createMdxComponents`, the OG route handlers) with their signatures |
+| Compact rules | [/ai/rules.compact.md](/ai/rules.compact.md) | Always, before any UI task (~7KB) |
+| Component catalog | [/ai/catalog.json](/ai/catalog.json) | Pick components by purpose; also lists the icon names |
+| Task index | [/ai/tasks/index.json](/ai/tasks/index.json) | Match user intent → a task id (`pricing`, `dashboard`…) |
+| Task bundle | [/ai/bundles/pricing.json](/ai/bundles/pricing.json) | One file per task: the task, every component slice it names, their types, mixins and gotchas |
+| Component slice | [/ai/components/Grid.json](/ai/components/Grid.json) | Only for a component the bundle doesn't have — one file per component, with its types and `importFrom` when it is not on the package root |
+| Tokens | [/ai/tokens.json](/ai/tokens.json) | Design tokens, mixins and layout shorthands |
+| Functions | [/ai/functions.json](/ai/functions.json) | The hooks and helpers (`useHotkeys`, `defineConfig`, `createMdxComponents`, the OG route handlers) with their signatures and types |
+| Spec | [/ai/spec.json](/ai/spec.json) | Everything above in one 131KB file, for tooling. Agents don't need it |
 | Gold example | [/ai/examples/*.tsx](/ai/examples/marketing-hero.tsx) | Mimic structure for the task type |
 | Pro blocks | [/ai/examples/blocks/manifest.json](/ai/examples/blocks/manifest.json) | Production-quality composition references |
 | Gotchas | [/ai/gotchas.json](/ai/gotchas.json) | When using Background, Card, RevealFx, Fade, and for the behaviour fixed in 2.1 (Toast, NumberInput, Select, ContextMenu) |
@@ -40,17 +43,16 @@ npx once-ui-init-agent   # writes AGENTS.md, CLAUDE.md and a Cursor rule in your
 // Conceptual — read in your agent environment
 // @once-ui-system/core/ai/manifest.json
 // @once-ui-system/core/ai/rules.compact.md
-// @once-ui-system/core/ai/tasks/pricing.json
-// @once-ui-system/core/ai/components/Grid.json
+// @once-ui-system/core/ai/bundles/pricing.json
 ```
 
 Machine-readable discovery: `onceUi` field in `@once-ui-system/core` `package.json`.
 
 **Workflow:**
 
-1. Load `rules.compact.md`
-2. Resolve intent → pick a file from `tasks/index.json` (e.g. `tasks/pricing.json`)
-3. Fetch component slices listed in the task bundle
+1. Load `rules.compact.md` and `catalog.json`
+2. Resolve intent → pick a task from `tasks/index.json` and read its bundle (e.g. `bundles/pricing.json`). Read everything you need in one step: an agent re-sends every file it has read on each later turn
+3. Fetch a component slice only for a component the bundle doesn't have
 4. Read the gold example for structure; for production fidelity, read matching **Pro blocks** from `examples/blocks/manifest.json`
 5. Generate code
 6. Validate: `npx once-ui-validate-ai-code path/to/file.tsx` (in a Next.js app it also checks that `LayoutProvider` comes from `@once-ui-system/core/next`)

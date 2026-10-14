@@ -1,6 +1,8 @@
 # Once UI — compact codegen rules
 
-Load with task bundle from `@once-ui-system/core/ai/tasks/{intent}.json`. For an app shell, a sidebar nav or an editor, read `ai/layouts.md` first — those are the shapes that are hard to get right from props alone. For production-quality composition, read matching Pro blocks from `examples/blocks/manifest.json`. Fetch component slices on demand.
+Load with the task's bundle, `@once-ui-system/core/ai/bundles/{intent}.json`: one file with the task, every component slice it names, their types and its gotchas. For an app shell, a sidebar nav or an editor, read `ai/layouts.md` first — those are the shapes that are hard to get right from props alone. For production-quality composition, read matching Pro blocks from `examples/blocks/manifest.json`. Fetch a slice from `components/` only for a component the bundle does not have.
+
+Read everything you need in one step, before writing: every file you read is sent again on every later turn, so a dozen small reads cost far more than one or two large ones. Never open `spec.json` — it is the full machine spec for tooling, and the bundles, slices, `tokens.json` and `functions.json` already hold everything in it.
 
 ## Layout
 
@@ -69,7 +71,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Status dot | `StatusIndicator` |
 | Loading | `Spinner` / `Skeleton` |
 | Scroll fade | `Fade` as edge strip, not wrapper |
-| Icons | `IconName` from spec only |
+| Icons | `IconName`, from `iconNames` in `catalog.json` only |
 | Logos grid | `LogoCloud` with `columns` set |
 | Tabs | `Tabs` > `TabList` > `Tab`, `TabPanel` (`orientation="vertical"` for a settings nav) |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
@@ -82,7 +84,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 
 Most things come from the package root. These do not — the manifest's
 `imports` lists every entry point with its exports, and each slice, catalog
-entry and `spec.json` `functions` entry says `importFrom` when it is not the root:
+entry and `functions.json` entry says `importFrom` when it is not the root:
 
 | Import | From |
 |--------|------|
@@ -98,6 +100,18 @@ Naming one of these from the root does not resolve — except `defineConfig`,
 which is on both, and `LayoutProvider`, which resolves and then silently
 renders links and images as plain `<a>` and `<img>` in a Next.js app. `IconName` is a real union, so an unregistered icon
 name is a type error, not a blank space — take names from `iconNames` in `catalog.json`.
+
+## Types — the common type errors
+
+Every type a prop names is defined in the slice's (or bundle's) `types`.
+
+- Responsive `xl`/`l`/`m`/`s`/`xs` props exist only on `Flex`, `Row`, `Column` and `Grid`. To change a `Button`, `Text` or anything else at a breakpoint, wrap it in one of those.
+- `vertical`/`horizontal` take `start | center | end | between | around | even | stretch` — no `baseline`.
+- Spacing (`gap`, `padding`, …) takes the tokens in `tokens.json`: `"4"`, `"8"`, `"12"`, `"16"`, `"20"`, `"24"`, `"32"`, `"40"`… — there is no `"6"` or `"10"`.
+- `Row`, `Column` and `Grid` have no `span` or `type`. A clickable row is a `Button` or a native `<button>`; a child spanning grid columns uses `style={{ gridColumn: "span 2" }}`.
+- A form is a native `<form onSubmit={…}>` around a `Column`. `Column as="form"` types `onSubmit` for a `div`.
+- `Checkbox`, `Switch` and `RadioButton` take `checked` + `onToggle(checked)` — `isChecked` was 1.x.
+- Don't wrap primary content (headlines, prices, KPIs, CTAs) in `RevealFx`: it stays blurred until the reveal ends. Use it on secondary sections, with `speed="fast"`.
 
 ## Defaults — omit these
 

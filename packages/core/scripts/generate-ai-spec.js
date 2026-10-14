@@ -956,25 +956,25 @@ function emitArtifacts(spec, version, entryTypes) {
     );
   }
 
+  // The catalog is half of the bootstrap every agent loads, so it says only
+  // what picking a component needs: its purpose, where it is imported from
+  // when that is not the root, and the one-line warnings. Tags, pairings and
+  // `extends` used to ride here too and made it 40 KB, read in full on every
+  // benchmark run; they live in the slices now, read only for the components
+  // an agent actually uses.
   const catalog = { version, generated: spec.generated, components: {} };
   for (const [name, entry] of Object.entries(spec.components)) {
     const meta = seed[name] || {};
     catalog.components[name] = {
-      group: entry.group,
+      purpose: meta.purpose || `${name} component`,
       // A component that does not come from the package root says where it
       // does come from, since naming it from the root does not resolve.
       ...(entry.importFrom ? { importFrom: entry.importFrom } : {}),
-      extends: entry.extends,
-      purpose: meta.purpose || `${name} component`,
-      tags: meta.tags || [entry.group],
       ...(meta.avoid ? { avoid: meta.avoid } : {}),
       ...(meta.preferOver ? { preferOver: meta.preferOver } : {}),
-      ...(meta.pairsWith ? { pairsWith: meta.pairsWith } : {}),
     };
   }
-  // One component per line. The catalog is half of the bootstrap every agent
-  // loads, and spreading each tag and pairing over its own line cost a
-  // quarter of its size in whitespace; one line each still diffs per component.
+  // One component per line, so the catalog still diffs per component.
   const entries = Object.entries(catalog.components).map(
     ([name, entry]) => `  ${JSON.stringify(name)}: ${JSON.stringify(entry)}`,
   );
@@ -987,14 +987,41 @@ function emitArtifacts(spec, version, entryTypes) {
     `{\n "version": ${JSON.stringify(catalog.version)},\n "generated": ${JSON.stringify(catalog.generated)},\n "iconNames": ${JSON.stringify(spec.iconNames)},\n "components": {\n${entries.join(",\n")}\n }\n}`,
   );
 
+  // A slice names types (`!AccordionItem[]`, `DataPoint[]`) that were defined
+  // only in spec.json, so an agent that met one opened the 131 KB spec to look
+  // it up: 50 of 60 runs in the 2.1.0-rc.0 benchmark, and almost half of all it
+  // read. Each slice now carries every type it reaches, nested ones included.
+  const typesFor = (value) => {
+    const found = new Set();
+    let frontier = [value];
+    while (frontier.length) {
+      const next = [];
+      for (const item of frontier) {
+        for (const [word] of JSON.stringify(item ?? null).matchAll(/[A-Za-z_][A-Za-z0-9_]*/g)) {
+          if (!Object.hasOwn(spec.types, word) || found.has(word)) continue;
+          found.add(word);
+          next.push(spec.types[word]);
+        }
+      }
+      frontier = next;
+    }
+    return Object.fromEntries([...found].sort().map((name) => [name, spec.types[name]]));
+  };
+
   const componentsDir = path.join(OUT_DIR, "components");
   fs.mkdirSync(componentsDir, { recursive: true });
+  const slices = {};
   for (const [name, entry] of Object.entries(spec.components)) {
+    const meta = seed[name] || {};
     const slice = {
       name,
       ...entry,
+      ...(meta.tags ? { tags: meta.tags } : {}),
+      ...(meta.pairsWith ? { pairsWith: meta.pairsWith } : {}),
+      ...(meta.avoid ? { avoid: meta.avoid } : {}),
+      ...(meta.preferOver ? { preferOver: meta.preferOver } : {}),
       mixinsRef: entry.mixins || [],
-      tokensRef: Object.keys(entry.mixins || []).length ? "see spec.json mixins" : undefined,
+      tokensRef: Object.keys(entry.mixins || []).length ? "see tokens.json" : undefined,
     };
     if (slice.mixins) {
       slice.resolvedMixins = {};
@@ -1002,7 +1029,66 @@ function emitArtifacts(spec, version, entryTypes) {
         if (spec.mixins[mixin]) slice.resolvedMixins[mixin] = spec.mixins[mixin];
       }
     }
+    const types = typesFor([entry.props, entry.returns]);
+    if (Object.keys(types).length) slice.types = types;
+    slices[name] = slice;
     fs.writeFileSync(path.join(componentsDir, `${name}.json`), JSON.stringify(slice, null, 1));
+  }
+
+  // What the slices point at instead of spec.json: the design tokens, mixins
+  // and shorthands, and the hooks and functions with the types they name.
+  fs.writeFileSync(
+    path.join(OUT_DIR, "tokens.json"),
+    JSON.stringify(
+      { tokens: spec.tokens, mixins: spec.mixins, shorthands: spec.shorthands },
+      null,
+      1,
+    ),
+  );
+  fs.writeFileSync(
+    path.join(OUT_DIR, "functions.json"),
+    JSON.stringify({ functions: spec.functions, types: typesFor(spec.functions) }, null, 1),
+  );
+
+  // One file per task: the hand-written bundle in tasks/ with every slice,
+  // type, mixin and gotcha it names folded in. An agent loop re-sends all it
+  // has read on every call, so one read of the bundle costs far less than the
+  // dozen slice reads it replaces (11 calls and 13 slices a run in the
+  // benchmark). Mixins and types are shared by many slices, so they are
+  // listed once at the top instead of once per component.
+  const bundlesDir = path.join(OUT_DIR, "bundles");
+  fs.rmSync(bundlesDir, { recursive: true, force: true });
+  fs.mkdirSync(bundlesDir, { recursive: true });
+  const gotchas = JSON.parse(fs.readFileSync(path.join(OUT_DIR, "gotchas.json"), "utf8"));
+  const taskIndex = JSON.parse(fs.readFileSync(path.join(OUT_DIR, "tasks/index.json"), "utf8"));
+  for (const { id, file } of taskIndex.tasks) {
+    const task = JSON.parse(fs.readFileSync(path.join(OUT_DIR, file), "utf8"));
+    const components = {};
+    const mixins = {};
+    const types = {};
+    for (const name of task.components) {
+      const slice = slices[name];
+      if (!slice) continue;
+      const { name: _name, mixinsRef, tokensRef, resolvedMixins, types: own, ...rest } = slice;
+      components[name] = rest;
+      Object.assign(mixins, resolvedMixins);
+      Object.assign(types, own);
+    }
+    Object.assign(types, typesFor(mixins));
+    const bundle = {
+      ...task,
+      components,
+      gotchas: Object.fromEntries(
+        (task.gotchas ?? []).filter((g) => gotchas[g]).map((g) => [g, gotchas[g].rule]),
+      ),
+      mixins,
+      types: Object.fromEntries(
+        Object.keys(types)
+          .sort()
+          .map((name) => [name, types[name]]),
+      ),
+    };
+    fs.writeFileSync(path.join(bundlesDir, `${id}.json`), JSON.stringify(bundle));
   }
 
   // Which specifier each export comes from. The rules say it in prose; this
@@ -1033,8 +1119,11 @@ function emitArtifacts(spec, version, entryTypes) {
     generated: spec.generated,
     imports,
     files: {
-      spec: "spec.json",
+      spec: "spec.json (the full machine spec, for tooling; agents read bundles and slices)",
       catalog: "catalog.json",
+      tokens: "tokens.json",
+      functions: "functions.json",
+      bundles: "bundles/",
       rules: "rules.compact.md",
       rulesFull: "rules.md",
       recipes: "recipes.md",
@@ -1047,6 +1136,9 @@ function emitArtifacts(spec, version, entryTypes) {
     },
     bootstrap: ["rules.compact.md", "catalog.json"],
     resolve: "tasks/index.json",
+    // The task's bundle has the task plus every slice, type and gotcha it
+    // names, so one read replaces the task file and its slices.
+    bundle: "bundles/{id}.json",
   };
   fs.writeFileSync(path.join(OUT_DIR, "manifest.json"), JSON.stringify(manifest, null, 1));
 

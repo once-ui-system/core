@@ -33,7 +33,12 @@
     "CountFx.trigger",
     "RevealFx.delay",
     "layout.shorthands",
-    "LogoCloud.columns"
+    "LogoCloud.columns",
+    "layout.responsiveProps",
+    "spacing.tokens",
+    "layout.noSpanOrType",
+    "RevealFx.primaryContent",
+    "layout.noBaseline"
   ],
   "quality": {
     "statCard": "Column surface recipe — not Card",

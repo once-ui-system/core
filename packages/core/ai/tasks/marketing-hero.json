@@ -28,7 +28,11 @@
     "section.gaps",
     "heading.scale",
     "animation.budget",
-    "overflow.hero"
+    "overflow.hero",
+    "layout.responsiveProps",
+    "spacing.tokens",
+    "layout.noSpanOrType",
+    "RevealFx.primaryContent"
   ],
   "quality": {
     "sectionGap": "104",

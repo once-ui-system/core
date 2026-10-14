@@ -16,7 +16,15 @@
   "recipes": [],
   "layout": "layouts.md#3-editor-shell",
   "example": "examples/editor.tsx",
-  "gotchas": ["Timeline.notScrubber", "layout.shorthands", "zIndex.scope", "Icon.names"],
+  "gotchas": [
+    "Timeline.notScrubber",
+    "layout.shorthands",
+    "zIndex.scope",
+    "Icon.names",
+    "layout.responsiveProps",
+    "spacing.tokens",
+    "layout.noSpanOrType"
+  ],
   "quality": {
     "height": "The shell takes the viewport (height=\"100dvh\", never 100vh) and each pane scrolls on its own",
     "panes": "overflowY=\"auto\" on each SplitView panel, never on the SplitView; set labels so the tabs it collapses into below collapseBelow are named",

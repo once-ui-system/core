@@ -15,7 +15,7 @@ Workspaces:
 ### Environment / setup notes
 - Node: the repo requires **Node >=22.12.0** (`engines` in the root and docs `package.json`). A `preinstall` hook (`scripts/check-node.mjs`) stops an older Node with an explanation: Sass loads chokidar 5, which is ESM-only, through `require()`, and that works only from 22.12.0.
 - `pnpm install` builds `packages/foundations` and `packages/core` through their `prepare` scripts, so `dist/` and the generated `ai/` artifacts are ready after install. If the apps ever fail to resolve `@once-ui-system/core`, rebuild it with `pnpm --filter @once-ui-system/core build`.
-- The build regenerates `packages/core/ai/{spec,catalog,manifest}.json`, `ai/components/` and `src/data/emoji-data.json`. During a release cycle they are regenerated once on the merged tree, so don't commit the copies a local build leaves behind (`git checkout -- packages/core/ai packages/core/src/data` before committing).
+- The build regenerates `packages/core/ai/{spec,catalog,manifest,tokens,functions}.json`, `ai/components/`, `ai/bundles/` and `src/data/emoji-data.json`. During a release cycle they are regenerated once on the merged tree, so don't commit the copies a local build leaves behind (`git checkout -- packages/core/ai packages/core/src/data` before committing).
 - To live-iterate on the library while running an app, run `pnpm --filter @once-ui-system/core dev` (tsc watch) alongside the app.
 
 ### Running the apps
@@ -53,7 +53,7 @@ The dev app has `--port 3001` baked into its `dev` script, so `turbo dev` runs b
 - Tests: `pnpm --filter @once-ui-system/core test` (Vitest + jsdom, axe helper in `src/test/axe.ts`). Baseline (2026-10-10): **54 files / 505 tests** pass at the 2.1 cycle's base commit (`f7a2897`, after the mechanical Biome sweep); the agent-harness workstream (W4) brings it to **58 files / 578 tests**. A failing test is a real regression. The one exception seen so far is load: with the CPU saturated, a few timer-driven jsdom tests (`codeblock-collapse`, `datepicker-dropdowns`) can time out, and pass on their own. The CSS API-surface suite snapshots token/class *names*: an intentional rename requires `pnpm --filter @once-ui-system/core exec vitest run -u` and review of the snapshot diff. The repo-level `pnpm test` also runs the 2.0 codemod's tests (`scripts/codemod-2.0.test.mjs`).
 - Package checks: `pnpm --filter @once-ui-system/core check:package` (publint + arethetypeswrong, advisory). Known-failing baseline (2026-08-12): dist is ESM syntax in `.js` files without `"type": "module"` and uses extensionless imports, so plain Node cannot load the package (bundler-only); fixing the module format is a 2.0 build decision (see `rfcs/2026-08-once-ui-2-architecture.md` §6) — don't "fix" it ad hoc.
 - Typecheck: `pnpm --filter @once-ui-system/core typecheck` — **0 errors** on `main` since 1.8.0 (the ~235 pre-existing errors were fixed by PR #115). A non-zero result is now a real regression.
-- Lint: all three packages run Biome 2.5.6 (`pnpm lint` = `biome check .`) with configs on the matching 2.5.6 schema, git-ignore integration on (build output like `dist`/`.next` is excluded), and generated artifacts (`ai/catalog.json`, `ai/manifest.json`, `ai/spec.json`, `ai/components/`, `src/data/emoji-data.json`) excluded from checks. ESLint was removed (Next 16 dropped `next lint`; the leftover configs/deps were dead).
+- Lint: all three packages run Biome 2.5.6 (`pnpm lint` = `biome check .`) with configs on the matching 2.5.6 schema, git-ignore integration on (build output like `dist`/`.next` is excluded), and generated artifacts (`ai/catalog.json`, `ai/manifest.json`, `ai/spec.json`, `ai/tokens.json`, `ai/functions.json`, `ai/components/`, `ai/bundles/`, `src/data/emoji-data.json`) excluded from checks. ESLint was removed (Next 16 dropped `next lint`; the leftover configs/deps were dead).
   - Known error inventory (2026-10-10, `biome check .` per package; do not "fix" as part of env setup): `packages/core` **171** errors (519 → 173 after the mechanical format/import sweep that opened the 2.1 cycle, then 2 fewer with the W4 validator rewrite; what is left are real lint findings, largest `noArrayIndexKey` and `useExhaustiveDependencies`), `apps/dev` 47, `apps/docs` 278 (the blocks surface added most of them), `packages/foundations` 5. Burn-down is parked for 2.2 (`ROADMAP.md` §4); don't introduce NEW diagnostics — format touched files with `npx biome check --write --linter-enabled=false <files>`.
 
 ### Once UI codegen harness
@@ -62,14 +62,14 @@ Before generating or editing Once UI UI code in `packages/core` or `apps/*`:
 
 1. Read `packages/core/ai/manifest.json` (or `@once-ui-system/core/ai/manifest.json` from npm)
 2. Load bootstrap: `rules.compact.md` + `catalog.json`
-3. Match intent via `ai/tasks/index.json` - fetch task bundle + component slices
+3. Match intent via `ai/tasks/index.json` - read the task's bundle `ai/bundles/{id}.json` (task + slices + types + gotchas in one file); fetch other slices from `ai/components/` only if needed, and never `spec.json`
 4. Validate: `pnpm --filter @once-ui-system/core validate-ai-code path/to/file.tsx` (`--fix` applies the mechanical fixes; `--next`/`--no-next` override Next.js detection)
 
 Consumer apps: run `npx once-ui-init-agent` once after install to scaffold project `AGENTS.md`, `CLAUDE.md` and `.cursor/rules/once-ui-codegen.mdc`. In a Next.js app, `LayoutProvider` comes from `@once-ui-system/core/next`.
 
-Harness sources vs. generated files: `ai/rules*.md`, `layouts.md`, `recipes.md`, `gotchas.json`, `tasks/`, `examples/` and `catalog.seed.json` (the catalog's purposes, tags and pairings — every component in the spec needs an entry, or `ai-catalog.test.ts` fails) are written by hand. `spec.json`, `catalog.json`, `manifest.json` and `components/` come from `scripts/generate-ai-spec.js`.
+Harness sources vs. generated files: `ai/rules*.md`, `layouts.md`, `recipes.md`, `gotchas.json`, `tasks/`, `examples/` and `catalog.seed.json` (the catalog's purposes, tags and pairings — every component in the spec needs an entry, or `ai-catalog.test.ts` fails) are written by hand. `spec.json`, `catalog.json`, `manifest.json`, `tokens.json`, `functions.json`, `components/` and `bundles/` come from `scripts/generate-ai-spec.js`.
 
-Do not use full MDX doc pages for codegen — use the harness (~6–10KB per task). Guide: https://docs.once-ui.com/ai-coding
+Do not use full MDX doc pages for codegen — use the harness (bootstrap about 30KB, plus one 14–23KB bundle per task). Guide: https://docs.once-ui.com/ai-coding
 
 ## Social distribution (daily cloud agent)
 
