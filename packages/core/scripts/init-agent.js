@@ -26,7 +26,7 @@ Before generating Once UI code, load the harness from your installed package (no
 
 1. Read \`node_modules/@once-ui-system/core/ai/manifest.json\`
 2. Load bootstrap: \`ai/rules.compact.md\` + \`ai/catalog.json\`
-3. Match intent via \`ai/tasks/index.json\` → fetch task bundle + component slices
+3. Match intent via \`ai/tasks/index.json\` → read the task's bundle, \`ai/bundles/{id}.json\` (slices, types and gotchas in one file); read everything in one step, and never \`ai/spec.json\`
 4. Validate: \`npx once-ui-validate-ai-code path/to/file.tsx\`
 
 In a Next.js app, import \`LayoutProvider\` from \`@once-ui-system/core/next\`, not the package root —

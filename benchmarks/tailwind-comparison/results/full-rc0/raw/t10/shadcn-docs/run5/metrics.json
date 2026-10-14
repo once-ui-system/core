@@ -1,0 +1,47 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 356,
+    "chars": 13546,
+    "bytes": 13550,
+    "tokens_o200k": 2921,
+    "tokens_claudeLegacy": 3185,
+    "tokens_exact": 4653
+  },
+  "raw": {
+    "lines": 358,
+    "chars": 13618,
+    "bytes": 13622,
+    "tokens_o200k": 2933,
+    "tokens_claudeLegacy": 3216,
+    "tokens_exact": 4692
+  },
+  "components": [
+    "Avatar",
+    "AvatarBadge",
+    "AvatarFallback",
+    "Badge",
+    "Button",
+    "Popover",
+    "PopoverContent",
+    "PopoverTrigger",
+    "Separator"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/avatar.tsx",
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/popover.tsx",
+      "components/ui/separator.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 312,
+    "chars": 10338,
+    "bytes": 10338,
+    "tokens_o200k": 2646,
+    "tokens_claudeLegacy": 3062,
+    "tokens_exact": 4535
+  }
+}

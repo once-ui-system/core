@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(275,31): error TS2322: Type '{ children: Element[]; gap: \"12\"; span: number; wrap: true; }' is not assignable to type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'span' does not exist on type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2953
+    }
+  },
+  "validate_ai_code": {
+    "exit": 0,
+    "output": "✓ app/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

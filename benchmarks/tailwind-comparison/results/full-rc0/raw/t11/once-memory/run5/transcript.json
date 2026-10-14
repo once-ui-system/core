@@ -1,0 +1,267 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Changelog/timeline page — versioned entries on a timeline, tags per release, copyable code snippets.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the project's existing files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013dtzdURPu2A3xYN41CjBwQ",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0151tmSpno39BQ5j1TEzNniW",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013dtzdURPu2A3xYN41CjBwQ",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0151tmSpno39BQ5j1TEzNniW",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01A2U6qKjMSYNydKoeUvRmEy",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HTEv7uZNVtccQjmUvL751J",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0112ruEveiSkzyfZX9EZyS8V",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01A2U6qKjMSYNydKoeUvRmEy",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HTEv7uZNVtccQjmUvL751J",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0112ruEveiSkzyfZX9EZyS8V",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01UsxjA11CY3G72jVAtZ3dM2",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PnrG98g3RPxTjPDUwWJsW8",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01G7L5wM7rdptmeRiUHZegty",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012nd8HFzDXDGD3pkgJPWwds",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PkbeHArVhnpx3cCUutN1XF",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UsxjA11CY3G72jVAtZ3dM2",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PnrG98g3RPxTjPDUwWJsW8",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01G7L5wM7rdptmeRiUHZegty",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012nd8HFzDXDGD3pkgJPWwds",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PkbeHArVhnpx3cCUutN1XF",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since I can't browse the vendor package, I'll build the timeline with trusted Once UI components (Flex, Column, Row, Text, Heading, Tag, Button, Line, Badge) plus an inline `<style>` for custom CSS, and use a plain `<button>`/`<pre>` for the copy-code feature to avoid prop-type issues.\n\n",
+          "signature": "CAQS0wcKEQgSGAI4AUIJbmFycmF0aW9uEgxC8d103+4uruyYyaUaDOVJzlmFNvZWdQmr9iIwjtJVZUqVEKsmZJYQawYjYJO6gF/Rjw8uB/f41AUXYaqAYzGYOVUSO82byjkRQy4YKu8GBojcnb3PI7bVYczXebJ7lJQQNBJ0DWk1EGBgbsq/xwq3E9sEprdXUYUYDWoEh8S4S65cdNSg3Iaz0eo961yqY/LwoRXaqPcYhA2/XrTcNC1GLVnmOwKOphv1jesCxfLo7Aqp8nDThItnpICdqg/F1BF4j4suRfJgkKqEB4KTcbRLZZboOOXc6zpRCOHcFXcoI18bGN04s9jATUlmrwNaTUdeLx0ydRjkPfPoH6Lr2hkyoUYMDgNjpeReYUS7jem8l4F6pSxmwIN+3uVZDaWeUoC4d8W1TJCUIrk9C1HG119qV5gjAeUJa6sjTApdl+Fh34uKP+x2rxL51Kgdb9iI7MsQYiIqttIktSujc+wFRgUqcA6wv6tMzHgw+HYEPDVaUnMCMVvRcgoyvYwVYkbMAsEe1lgwjAUJMQ+4/OyQp6ZUqUSDehJcu7WdMkZY3KUs8gdmoaHK3Ch9FYxh5Wn2PkFgD9UGwLPXf6UqMd8Zd45Cv93jWbyMd/+HG2dW/c5o0DdQ7MHfnl+67QtgCZmk2issifhKun4ffFiLNupRUtLgvXBHWCGY2KaaJYkaNWIUhCossq5eQilBek5yqfqtQ5TzBYvhpyEKGvK94dBH+UTtI39GNxKy1eNQLsEoWgbsn0LHaoFKeBrz01u/t4AUZH5pzDo+cG4RFHlNnkRjWkBW2Qam7nDmo9cpGjMQ8+ypLY2m6wlAgSVlgG/ZcALhy4IPlNshJAYBp5BjmD12V/ipJwXPLWPptUA+cp0yjpt8t9Mdi5p0W6zArsJyuROsMCoJ4n8l1AwnG6ySVKwxI9qI37c6vUUYKQd2FcsDkrxAcvlkhz1E258QEDCj7N3N4E8CUt8k/p3Yydsjgll24OTJKcD4ekI/7GRqGsI/c9WpcgQ8DQIl36aGXzL9bKxOWcAxJ36yn1iHTmYsY247m8kvza8O7iNk3FOgOr7z8cJKrV04KUy7fYi1icHjdD6eactcKCmOlFMDLmdSZPaZsK9nIW+c8JffWxIKaKO3HIq5PU3+yyv3iEK4x3ZphUSPngdOrYC1qIa4LpTqpdtxozpomw1+4ovF8e59VhjI2BdPK/SbfXHn/p2Ooq697J8LC5fkSAM2f/echDaprZHq7DQl0PKoxIaFhpi2lSBfQQ3UztFvTS9nUFghFJE1//3AGAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Qwmzujxpm8B5WFPaf6wCh9",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Qwmzujxpm8B5WFPaf6wCh9",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Not installed locally, so I'll rely on well-known APIs only and keep Once UI prop usage conservative.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useMemo, useRef, useState } from \"react\";\nimport { Column, Row, Flex, Heading, Text, Tag } from \"@once-ui-system/core\";\n\ntype TagKind = \"feature\" | \"fix\" | \"breaking\" | \"perf\" | \"security\" | \"docs\";\n\ntype Snippet = {\n  label: string;\n  language: string;\n  code: string;\n};\n\ntype Release = {\n  version: string;\n  date: string; // ISO\n  title: string;\n  summary: string;\n  tags: TagKind[];\n  changes: string[];\n  snippet?: Snippet;\n};\n\nconst TAG_META: Record<TagKind, { label: string; variant: \"brand\" | \"success\" | \"danger\" | \"warning\" | \"info\" | \"neutral\" }> = {\n  feature: { label: \"Feature\", variant: \"brand\" },\n  fix: { label: \"Fix\", variant: \"success\" },\n  breaking: { label: \"Breaking\", variant: \"danger\" },\n  perf: { label: \"Performance\", variant: \"warning\" },\n  security: { label: \"Security\", variant: \"info\" },\n  docs: { label: \"Docs\", variant: \"neutral\" },\n};\n\nconst RELEASES: Release[] = [\n  {\n    version: \"3.0.0\",\n    date: \"2025-06-10\",\n    title: \"Streaming pipelines and a new config format\",\n    summary:\n      \"Pipelines can now stream partial results to subscribers as each stage completes. The configuration file moved to a typed, single-export format.\",\n    tags: [\"feature\", \"breaking\"],\n    changes: [\n      \"Added pipeline.stream() for incremental delivery of stage output.\",\n      \"Replaced pulse.config.json with a typed pulse.config.ts default export.\",\n      \"Removed the deprecated onComplete callback; use the returned promise instead.\",\n      \"Node.js 18 is no longer supported. Minimum version is Node.js 20.\",\n    ],\n    snippet: {\n      label: \"Migrate your config\",\n      language: \"ts\",\n      code: `// pulse.config.ts\nimport { defineConfig } from \"@pulse/core\";\n\nexport default defineConfig({\n  concurrency: 8,\n  retries: { attempts: 3, backoffMs: 250 },\n  stages: [\"ingest\", \"transform\", \"publish\"],\n});`,\n    },\n  },\n  {\n    version: \"2.8.0\",\n    date: \"2025-04-22\",\n    title: \"Faster cold starts\",\n    summary:\n      \"Lazy-loaded stage runners cut cold start time by roughly 40% on typical workloads, and the scheduler now batches idle wakeups.\",\n    tags: [\"perf\", \"feature\"],\n    changes: [\n      \"Stage runners load on first use instead of at boot.\",\n      \"Scheduler coalesces timers that fire within the same 5 ms window.\",\n      \"Added --trace flag to the CLI to print per-stage timing.\",\n    ],\n    snippet: {\n      label: \"Try the trace flag\",\n      language: \"bash\",\n      code: `npx pulse run ./pipelines/daily.ts --trace`,\n    },\n  },\n  {\n    version: \"2.7.3\",\n    date: \"2025-03-18\",\n    title: \"Security patch for webhook signatures\",\n    summary:\n      \"Webhook signature verification now uses constant-time comparison. All users of the webhook trigger should upgrade.\",\n    tags: [\"security\", \"fix\"],\n    changes: [\n      \"Use constant-time comparison when verifying HMAC signatures.\",\n      \"Reject webhook payloads with timestamps older than five minutes.\",\n      \"Fixed a race that could deliver the same event twice after a retry.\",\n    ],\n    snippet: {\n      label: \"Upgrade\",\n      language: \"bash\",\n      code: `npm install @pulse/core@2.7.3`,\n    },\n  },\n  {\n    version: \"2.7.0\",\n    date: \"2025-02-04\",\n    title: \"Retry policies per stage\",\n    summary:\n      \"Each stage can now declare its own retry policy, overriding the pipeline default.\",\n    tags: [\"feature\"],\n    changes: [\n      \"New retries option on stage definitions.\",\n      \"Exponential backoff with optional jitter.\",\n      \"Failed attempts are now included in run history with their error messages.\",\n    ],\n    snippet: {\n      label: \"Per-stage retries\",\n      language: \"ts\",\n      code: `stage(\"publish\", publishFn, {\n  retries: { attempts: 5, backoffMs: 500, jitter: true },\n});`,\n    },\n  },\n  {\n    version: \"2.6.2\",\n    date: \"2025-01-15\",\n    title: \"Stability fixes\",\n    summary: \"A round of fixes for edge cases reported after the 2.6 release.\",\n    tags: [\"fix\"],\n    changes: [\n      \"Fixed memory growth in long-running watchers.\",\n      \"CLI no longer exits with code 0 when a stage throws during shutdown.\",\n      \"Corrected the type of RunResult.durationMs from string to number.\",\n    ],\n  },\n  {\n    version: \"2.6.0\",\n    date: \"2024-12-02\",\n    title: \"Documentation overhaul\",\n    summary:\n      \"A rewritten guide, a searchable API reference and runnable examples for every public function.\",\n    tags: [\"docs\", \"feature\"],\n    changes: [\n      \"New getting-started guide that takes about ten minutes.\",\n      \"Every API entry now includes a runnable example.\",\n      \"Added a troubleshooting section covering the most common errors.\",\n    ],\n  },\n];\n\nconst FILTERS: Array<\"all\" | TagKind> = [\"all\", \"feature\", \"fix\", \"breaking\", \"perf\", \"security\", \"docs\"];\n\nfunction formatDate(iso: string): string {\n  const d = new Date(`${iso}T00:00:00Z`);\n  return d.toLocaleDateString(\"en-US\", { year: \"numeric\", month: \"long\", day: \"numeric\", timeZone: \"UTC\" });\n}\n\nfunction CodeSnippet({ snippet, id }: { snippet: Snippet; id: string }) {\n  const [copied, setCopied] = useState(false);\n  const [failed, setFailed] = useState(false);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(() => {\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, []);\n\n  const onCopy = useCallback(async () => {\n    let ok = false;\n    try {\n      await navigator.clipboard.writeText(snippet.code);\n      ok = true;\n    } catch {\n      try {\n        const ta = document.createElement(\"textarea\");\n        ta.value = snippet.code;\n        ta.setAttribute(\"readonly\", \"\");\n        ta.style.position = \"fixed\";\n        ta.style.opacity = \"0\";\n        document.body.appendChild(ta);\n        ta.select();\n        ok = document.execCommand(\"copy\");\n        document.body.removeChild(ta);\n      } catch {\n        ok = false;\n      }\n    }\n    setCopied(ok);\n    setFailed(!ok);\n    if (timer.current) clearTimeout(timer.current);\n    timer.current = setTimeout(() => {\n      setCopied(false);\n      setFailed(false);\n    }, 2000);\n  }, [snippet.code]);\n\n  return (\n    <div className=\"cl-snippet\">\n      <div className=\"cl-snippet-head\">\n        <span className=\"cl-snippet-label\" id={`${id}-label`}>\n          {snippet.label}\n          <span className=\"cl-lang\">{snippet.language}</span>\n        </span>\n        <button type=\"button\" className=\"cl-copy\" onClick={onCopy} aria-describedby={`${id}-label`}>\n          {copied ? \"Copied\" : failed ? \"Copy failed\" : \"Copy\"}\n          <span className=\"cl-sr\">{copied ? \" to clipboard\" : failed ? \", select the text manually\" : \" code\"}</span>\n        </button>\n      </div>\n      <pre className=\"cl-pre\" tabIndex={0} aria-labelledby={`${id}-label`}>\n        <code>{snippet.code}</code>\n      </pre>\n      <span className=\"cl-sr\" role=\"status\" aria-live=\"polite\">\n        {copied ? \"Code copied to clipboard\" : failed ? \"Copy failed\" : \"\"}\n      </span>\n    </div>\n  );\n}\n\nexport default function Page() {\n  const [filter, setFilter] = useState<\"all\" | TagKind>(\"all\");\n\n  const visible = useMemo(\n    () => (filter === \"all\" ? RELEASES : RELEASES.filter((r) => r.tags.includes(filter))),\n    [filter],\n  );\n\n  return (\n    <Column fillWidth horizontal=\"center\" paddingX=\"m\" paddingY=\"xl\">\n      <style>{`\n        .cl-wrap { width: 100%; max-width: 52rem; }\n        .cl-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }\n        .cl-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }\n        .cl-filter {\n          font: inherit; font-size: 0.875rem; cursor: pointer;\n          padding: 0.375rem 0.875rem; border-radius: 999px;\n          border: 1px solid var(--neutral-alpha-medium); background: transparent; color: var(--neutral-on-background-strong);\n          min-height: 2.25rem;\n        }\n        .cl-filter:hover { background: var(--neutral-alpha-weak); }\n        .cl-filter[aria-pressed=\"true\"] { background: var(--brand-solid-strong); border-color: var(--brand-solid-strong); color: var(--brand-on-solid-strong); }\n        .cl-filter:focus-visible, .cl-copy:focus-visible, .cl-pre:focus-visible { outline: 2px solid var(--brand-solid-strong); outline-offset: 2px; }\n        .cl-list { list-style: none; margin: 0; padding: 0; position: relative; }\n        .cl-item { position: relative; padding-left: 2rem; padding-bottom: 2.5rem; }\n        .cl-item:last-child { padding-bottom: 0; }\n        .cl-item::before {\n          content: \"\"; position: absolute; left: 0.4375rem; top: 1.25rem; bottom: -0.25rem; width: 2px;\n          background: var(--neutral-alpha-medium);\n        }\n        .cl-item:last-child::before { display: none; }\n        .cl-dot {\n          position: absolute; left: 0; top: 0.3rem; width: 1rem; height: 1rem; border-radius: 50%;\n          background: var(--page-background, #fff); border: 3px solid var(--brand-solid-strong);\n          box-sizing: border-box;\n        }\n        .cl-card {\n          border: 1px solid var(--neutral-alpha-medium); border-radius: 0.75rem;\n          background: var(--surface-background); padding: 1.25rem; min-width: 0;\n        }\n        .cl-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem; }\n        .cl-version { font-family: var(--font-code); font-weight: 700; font-size: 1.125rem; color: var(--neutral-on-background-strong); }\n        .cl-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; margin: 0.75rem 0 0; padding: 0; list-style: none; }\n        .cl-changes { margin: 0.75rem 0 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.375rem; color: var(--neutral-on-background-medium); line-height: 1.5; }\n        .cl-snippet { margin-top: 1rem; border: 1px solid var(--neutral-alpha-medium); border-radius: 0.5rem; overflow: hidden; background: var(--neutral-alpha-weak); }\n        .cl-snippet-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.375rem 0.5rem 0.375rem 0.75rem; border-bottom: 1px solid var(--neutral-alpha-medium); }\n        .cl-snippet-label { font-size: 0.8125rem; color: var(--neutral-on-background-medium); display: flex; align-items: center; gap: 0.5rem; min-width: 0; }\n        .cl-lang { font-family: var(--font-code); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.0625rem 0.375rem; border-radius: 0.25rem; background: var(--neutral-alpha-medium); }\n        .cl-copy {\n          font: inherit; font-size: 0.8125rem; cursor: pointer; flex-shrink: 0;\n          min-height: 2rem; padding: 0.25rem 0.75rem; border-radius: 0.375rem;\n          border: 1px solid var(--neutral-alpha-medium); background: var(--surface-background); color: var(--neutral-on-background-strong);\n        }\n        .cl-copy:hover { background: var(--neutral-alpha-weak); }\n        .cl-pre { margin: 0; padding: 0.875rem 1rem; overflow-x: auto; font-family: var(--font-code); font-size: 0.8125rem; line-height: 1.6; color: var(--neutral-on-background-strong); tab-size: 2; }\n        .cl-empty { padding: 2rem 1rem; text-align: center; border: 1px dashed var(--neutral-alpha-medium); border-radius: 0.75rem; }\n        @media (min-width: 40rem) {\n          .cl-item { padding-left: 2.75rem; }\n          .cl-item::before { left: 0.4375rem; }\n          .cl-card { padding: 1.5rem; }\n        }\n      `}</style>\n\n      <div className=\"cl-wrap\">\n        <Column as=\"header\" gap=\"12\" paddingBottom=\"32\">\n          <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n            Pulse · Release notes\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-s\">\n            Changelog\n          </Heading>\n          <Text variant=\"body-default-l\" onBackground=\"neutral-weak\">\n            Every release of Pulse, newest first. Filter by type to find what changed and how to adopt it.\n          </Text>\n        </Column>\n\n        <Column as=\"section\" gap=\"8\" paddingBottom=\"32\" aria-labelledby=\"cl-filter-heading\">\n          <Text as=\"h2\" id=\"cl-filter-heading\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n            Filter by tag\n          </Text>\n          <ul className=\"cl-filters\">\n            {FILTERS.map((f) => (\n              <li key={f}>\n                <button\n                  type=\"button\"\n                  className=\"cl-filter\"\n                  aria-pressed={filter === f}\n                  onClick={() => setFilter(f)}\n                >\n                  {f === \"all\" ? \"All releases\" : TAG_META[f].label}\n                </button>\n              </li>\n            ))}\n          </ul>\n          <span className=\"cl-sr\" role=\"status\" aria-live=\"polite\">\n            Showing {visible.length} {visible.length === 1 ? \"release\" : \"releases\"}\n          </span>\n        </Column>\n\n        {visible.length === 0 ? (\n          <div className=\"cl-empty\">\n            <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n              No releases match this filter.\n            </Text>\n          </div>\n        ) : (\n          <ol className=\"cl-list\" aria-label=\"Releases\">\n            {visible.map((r) => {\n              const id = `rel-${r.version.replace(/\\./g, \"-\")}`;\n              return (\n                <li key={r.version} className=\"cl-item\">\n                  <span className=\"cl-dot\" aria-hidden=\"true\" />\n                  <article className=\"cl-card\" aria-labelledby={`${id}-title`}>\n                    <div className=\"cl-meta\">\n                      <span className=\"cl-version\">v{r.version}</span>\n                      <time dateTime={r.date}>\n                        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                          {formatDate(r.date)}\n                        </Text>\n                      </time>\n                    </div>\n                    <Heading as=\"h2\" variant=\"heading-strong-l\" id={`${id}-title`} marginTop=\"8\">\n                      {r.title}\n                    </Heading>\n                    <Text as=\"p\" variant=\"body-default-m\" onBackground=\"neutral-medium\" marginTop=\"8\">\n                      {r.summary}\n                    </Text>\n                    <ul className=\"cl-tags\" aria-label={`Tags for version ${r.version}`}>\n                      {r.tags.map((t) => (\n                        <li key={t}>\n                          <Tag variant={TAG_META[t].variant} size=\"m\">\n                            {TAG_META[t].label}\n                          </Tag>\n                        </li>\n                      ))}\n                    </ul>\n                    <ul className=\"cl-changes\">\n                      {r.changes.map((c) => (\n                        <li key={c}>{c}</li>\n                      ))}\n                    </ul>\n                    {r.snippet ? <CodeSnippet snippet={r.snippet} id={`${id}-snip`} /> : null}\n                  </article>\n                </li>\n              );\n            })}\n          </ol>\n        )}\n      </div>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(342,32): error TS2322: Type '{ children: string; variant: \"neutral\" | \"brand\" | \"info\" | \"danger\" | \"warning\" | \"success\"; size: \"m\"; }' is not assignable to type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Once UI's `Tag` has no `variant` prop (it takes `size` and `prefixIcon`-style props), so I'll stop passing `variant` and render a plain styled `<span>` for the tags instead. That removes the dependency on the unknown `TagProps` shape.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useMemo, useRef, useState } from \"react\";\nimport { Column, Heading, Text } from \"@once-ui-system/core\";\n\ntype TagKind = \"feature\" | \"fix\" | \"breaking\" | \"perf\" | \"security\" | \"docs\";\n\ntype Snippet = {\n  label: string;\n  language: string;\n  code: string;\n};\n\ntype Release = {\n  version: string;\n  date: string; // ISO\n  title: string;\n  summary: string;\n  tags: TagKind[];\n  changes: string[];\n  snippet?: Snippet;\n};\n\nconst TAG_META: Record<TagKind, { label: string; className: string }> = {\n  feature: { label: \"Feature\", className: \"cl-tag-brand\" },\n  fix: { label: \"Fix\", className: \"cl-tag-success\" },\n  breaking: { label: \"Breaking\", className: \"cl-tag-danger\" },\n  perf: { label: \"Performance\", className: \"cl-tag-warning\" },\n  security: { label: \"Security\", className: \"cl-tag-info\" },\n  docs: { label: \"Docs\", className: \"cl-tag-neutral\" },\n};\n\nconst RELEASES: Release[] = [\n  {\n    version: \"3.0.0\",\n    date: \"2025-06-10\",\n    title: \"Streaming pipelines and a new config format\",\n    summary:\n      \"Pipelines can now stream partial results to subscribers as each stage completes. The configuration file moved to a typed, single-export format.\",\n    tags: [\"feature\", \"breaking\"],\n    changes: [\n      \"Added pipeline.stream() for incremental delivery of stage output.\",\n      \"Replaced pulse.config.json with a typed pulse.config.ts default export.\",\n      \"Removed the deprecated onComplete callback; use the returned promise instead.\",\n      \"Node.js 18 is no longer supported. Minimum version is Node.js 20.\",\n    ],\n    snippet: {\n      label: \"Migrate your config\",\n      language: \"ts\",\n      code: `// pulse.config.ts\nimport { defineConfig } from \"@pulse/core\";\n\nexport default defineConfig({\n  concurrency: 8,\n  retries: { attempts: 3, backoffMs: 250 },\n  stages: [\"ingest\", \"transform\", \"publish\"],\n});`,\n    },\n  },\n  {\n    version: \"2.8.0\",\n    date: \"2025-04-22\",\n    title: \"Faster cold starts\",\n    summary:\n      \"Lazy-loaded stage runners cut cold start time by roughly 40% on typical workloads, and the scheduler now batches idle wakeups.\",\n    tags: [\"perf\", \"feature\"],\n    changes: [\n      \"Stage runners load on first use instead of at boot.\",\n      \"Scheduler coalesces timers that fire within the same 5 ms window.\",\n      \"Added --trace flag to the CLI to print per-stage timing.\",\n    ],\n    snippet: {\n      label: \"Try the trace flag\",\n      language: \"bash\",\n      code: `npx pulse run ./pipelines/daily.ts --trace`,\n    },\n  },\n  {\n    version: \"2.7.3\",\n    date: \"2025-03-18\",\n    title: \"Security patch for webhook signatures\",\n    summary:\n      \"Webhook signature verification now uses constant-time comparison. All users of the webhook trigger should upgrade.\",\n    tags: [\"security\", \"fix\"],\n    changes: [\n      \"Use constant-time comparison when verifying HMAC signatures.\",\n      \"Reject webhook payloads with timestamps older than five minutes.\",\n      \"Fixed a race that could deliver the same event twice after a retry.\",\n    ],\n    snippet: {\n      label: \"Upgrade\",\n      language: \"bash\",\n      code: `npm install @pulse/core@2.7.3`,\n    },\n  },\n  {\n    version: \"2.7.0\",\n    date: \"2025-02-04\",\n    title: \"Retry policies per stage\",\n    summary:\n      \"Each stage can now declare its own retry policy, overriding the pipeline default.\",\n    tags: [\"feature\"],\n    changes: [\n      \"New retries option on stage definitions.\",\n      \"Exponential backoff with optional jitter.\",\n      \"Failed attempts are now included in run history with their error messages.\",\n    ],\n    snippet: {\n      label: \"Per-stage retries\",\n      language: \"ts\",\n      code: `stage(\"publish\", publishFn, {\n  retries: { attempts: 5, backoffMs: 500, jitter: true },\n});`,\n    },\n  },\n  {\n    version: \"2.6.2\",\n    date: \"2025-01-15\",\n    title: \"Stability fixes\",\n    summary: \"A round of fixes for edge cases reported after the 2.6 release.\",\n    tags: [\"fix\"],\n    changes: [\n      \"Fixed memory growth in long-running watchers.\",\n      \"CLI no longer exits with code 0 when a stage throws during shutdown.\",\n      \"Corrected the type of RunResult.durationMs from string to number.\",\n    ],\n  },\n  {\n    version: \"2.6.0\",\n    date: \"2024-12-02\",\n    title: \"Documentation overhaul\",\n    summary:\n      \"A rewritten guide, a searchable API reference and runnable examples for every public function.\",\n    tags: [\"docs\", \"feature\"],\n    changes: [\n      \"New getting-started guide that takes about ten minutes.\",\n      \"Every API entry now includes a runnable example.\",\n      \"Added a troubleshooting section covering the most common errors.\",\n    ],\n  },\n];\n\nconst FILTERS: Array<\"all\" | TagKind> = [\"all\", \"feature\", \"fix\", \"breaking\", \"perf\", \"security\", \"docs\"];\n\nfunction formatDate(iso: string): string {\n  const d = new Date(`${iso}T00:00:00Z`);\n  return d.toLocaleDateString(\"en-US\", { year: \"numeric\", month: \"long\", day: \"numeric\", timeZone: \"UTC\" });\n}\n\nfunction CodeSnippet({ snippet, id }: { snippet: Snippet; id: string }) {\n  const [copied, setCopied] = useState(false);\n  const [failed, setFailed] = useState(false);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(() => {\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, []);\n\n  const onCopy = useCallback(async () => {\n    let ok = false;\n    try {\n      await navigator.clipboard.writeText(snippet.code);\n      ok = true;\n    } catch {\n      try {\n        const ta = document.createElement(\"textarea\");\n        ta.value = snippet.code;\n        ta.setAttribute(\"readonly\", \"\");\n        ta.style.position = \"fixed\";\n        ta.style.opacity = \"0\";\n        document.body.appendChild(ta);\n        ta.select();\n        ok = document.execCommand(\"copy\");\n        document.body.removeChild(ta);\n      } catch {\n        ok = false;\n      }\n    }\n    setCopied(ok);\n    setFailed(!ok);\n    if (timer.current) clearTimeout(timer.current);\n    timer.current = setTimeout(() => {\n      setCopied(false);\n      setFailed(false);\n    }, 2000);\n  }, [snippet.code]);\n\n  return (\n    <div className=\"cl-snippet\">\n      <div className=\"cl-snippet-head\">\n        <span className=\"cl-snippet-label\" id={`${id}-label`}>\n          {snippet.label}\n          <span className=\"cl-lang\">{snippet.language}</span>\n        </span>\n        <button type=\"button\" className=\"cl-copy\" onClick={onCopy} aria-describedby={`${id}-label`}>\n          {copied ? \"Copied\" : failed ? \"Copy failed\" : \"Copy\"}\n          <span className=\"cl-sr\">{copied ? \" to clipboard\" : failed ? \", select the text manually\" : \" code\"}</span>\n        </button>\n      </div>\n      <pre className=\"cl-pre\" tabIndex={0} aria-labelledby={`${id}-label`}>\n        <code>{snippet.code}</code>\n      </pre>\n      <span className=\"cl-sr\" role=\"status\" aria-live=\"polite\">\n        {copied ? \"Code copied to clipboard\" : failed ? \"Copy failed\" : \"\"}\n      </span>\n    </div>\n  );\n}\n\nexport default function Page() {\n  const [filter, setFilter] = useState<\"all\" | TagKind>(\"all\");\n\n  const visible = useMemo(\n    () => (filter === \"all\" ? RELEASES : RELEASES.filter((r) => r.tags.includes(filter))),\n    [filter],\n  );\n\n  return (\n    <Column fillWidth horizontal=\"center\" paddingX=\"m\" paddingY=\"xl\">\n      <style>{`\n        .cl-wrap { width: 100%; max-width: 52rem; }\n        .cl-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }\n        .cl-filters { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0; padding: 0; list-style: none; }\n        .cl-filter {\n          font: inherit; font-size: 0.875rem; cursor: pointer;\n          padding: 0.375rem 0.875rem; border-radius: 999px;\n          border: 1px solid var(--neutral-alpha-medium); background: transparent; color: var(--neutral-on-background-strong);\n          min-height: 2.25rem;\n        }\n        .cl-filter:hover { background: var(--neutral-alpha-weak); }\n        .cl-filter[aria-pressed=\"true\"] { background: var(--brand-solid-strong); border-color: var(--brand-solid-strong); color: var(--brand-on-solid-strong); }\n        .cl-filter:focus-visible, .cl-copy:focus-visible, .cl-pre:focus-visible { outline: 2px solid var(--brand-solid-strong); outline-offset: 2px; }\n        .cl-list { list-style: none; margin: 0; padding: 0; position: relative; }\n        .cl-item { position: relative; padding-left: 2rem; padding-bottom: 2.5rem; }\n        .cl-item:last-child { padding-bottom: 0; }\n        .cl-item::before {\n          content: \"\"; position: absolute; left: 0.4375rem; top: 1.25rem; bottom: -0.25rem; width: 2px;\n          background: var(--neutral-alpha-medium);\n        }\n        .cl-item:last-child::before { display: none; }\n        .cl-dot {\n          position: absolute; left: 0; top: 0.3rem; width: 1rem; height: 1rem; border-radius: 50%;\n          background: var(--page-background, #fff); border: 3px solid var(--brand-solid-strong);\n          box-sizing: border-box;\n        }\n        .cl-card {\n          border: 1px solid var(--neutral-alpha-medium); border-radius: 0.75rem;\n          background: var(--surface-background); padding: 1.25rem; min-width: 0;\n        }\n        .cl-meta { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.5rem 1rem; }\n        .cl-version { font-family: var(--font-code); font-weight: 700; font-size: 1.125rem; color: var(--neutral-on-background-strong); }\n        .cl-tags { display: flex; flex-wrap: wrap; gap: 0.375rem; margin: 0.75rem 0 0; padding: 0; list-style: none; }\n        .cl-tag {\n          display: inline-block; font-size: 0.75rem; font-weight: 600; line-height: 1;\n          padding: 0.3125rem 0.625rem; border-radius: 999px; border: 1px solid transparent;\n        }\n        .cl-tag-brand { background: var(--brand-alpha-weak); color: var(--brand-on-background-strong); border-color: var(--brand-alpha-medium); }\n        .cl-tag-success { background: var(--success-alpha-weak); color: var(--success-on-background-strong); border-color: var(--success-alpha-medium); }\n        .cl-tag-danger { background: var(--danger-alpha-weak); color: var(--danger-on-background-strong); border-color: var(--danger-alpha-medium); }\n        .cl-tag-warning { background: var(--warning-alpha-weak); color: var(--warning-on-background-strong); border-color: var(--warning-alpha-medium); }\n        .cl-tag-info { background: var(--info-alpha-weak, var(--brand-alpha-weak)); color: var(--info-on-background-strong, var(--brand-on-background-strong)); border-color: var(--info-alpha-medium, var(--brand-alpha-medium)); }\n        .cl-tag-neutral { background: var(--neutral-alpha-weak); color: var(--neutral-on-background-strong); border-color: var(--neutral-alpha-medium); }\n        .cl-changes { margin: 0.75rem 0 0; padding-left: 1.25rem; display: flex; flex-direction: column; gap: 0.375rem; color: var(--neutral-on-background-medium); line-height: 1.5; }\n        .cl-snippet { margin-top: 1rem; border: 1px solid var(--neutral-alpha-medium); border-radius: 0.5rem; overflow: hidden; background: var(--neutral-alpha-weak); }\n        .cl-snippet-head { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; padding: 0.375rem 0.5rem 0.375rem 0.75rem; border-bottom: 1px solid var(--neutral-alpha-medium); }\n        .cl-snippet-label { font-size: 0.8125rem; color: var(--neutral-on-background-medium); display: flex; align-items: center; gap: 0.5rem; min-width: 0; }\n        .cl-lang { font-family: var(--font-code); font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.0625rem 0.375rem; border-radius: 0.25rem; background: var(--neutral-alpha-medium); }\n        .cl-copy {\n          font: inherit; font-size: 0.8125rem; cursor: pointer; flex-shrink: 0;\n          min-height: 2rem; padding: 0.25rem 0.75rem; border-radius: 0.375rem;\n          border: 1px solid var(--neutral-alpha-medium); background: var(--surface-background); color: var(--neutral-on-background-strong);\n        }\n        .cl-copy:hover { background: var(--neutral-alpha-weak); }\n        .cl-pre { margin: 0; padding: 0.875rem 1rem; overflow-x: auto; font-family: var(--font-code); font-size: 0.8125rem; line-height: 1.6; color: var(--neutral-on-background-strong); tab-size: 2; }\n        .cl-empty { padding: 2rem 1rem; text-align: center; border: 1px dashed var(--neutral-alpha-medium); border-radius: 0.75rem; }\n        @media (min-width: 40rem) {\n          .cl-item { padding-left: 2.75rem; }\n          .cl-card { padding: 1.5rem; }\n        }\n      `}</style>\n\n      <div className=\"cl-wrap\">\n        <Column as=\"header\" gap=\"12\" paddingBottom=\"32\">\n          <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n            Pulse · Release notes\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-s\">\n            Changelog\n          </Heading>\n          <Text variant=\"body-default-l\" onBackground=\"neutral-weak\">\n            Every release of Pulse, newest first. Filter by type to find what changed and how to adopt it.\n          </Text>\n        </Column>\n\n        <Column as=\"section\" gap=\"8\" paddingBottom=\"32\" aria-labelledby=\"cl-filter-heading\">\n          <Text as=\"h2\" id=\"cl-filter-heading\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n            Filter by tag\n          </Text>\n          <ul className=\"cl-filters\">\n            {FILTERS.map((f) => (\n              <li key={f}>\n                <button\n                  type=\"button\"\n                  className=\"cl-filter\"\n                  aria-pressed={filter === f}\n                  onClick={() => setFilter(f)}\n                >\n                  {f === \"all\" ? \"All releases\" : TAG_META[f].label}\n                </button>\n              </li>\n            ))}\n          </ul>\n          <span className=\"cl-sr\" role=\"status\" aria-live=\"polite\">\n            Showing {visible.length} {visible.length === 1 ? \"release\" : \"releases\"}\n          </span>\n        </Column>\n\n        {visible.length === 0 ? (\n          <div className=\"cl-empty\">\n            <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n              No releases match this filter.\n            </Text>\n          </div>\n        ) : (\n          <ol className=\"cl-list\" aria-label=\"Releases\">\n            {visible.map((r) => {\n              const id = `rel-${r.version.replace(/\\./g, \"-\")}`;\n              return (\n                <li key={r.version} className=\"cl-item\">\n                  <span className=\"cl-dot\" aria-hidden=\"true\" />\n                  <article className=\"cl-card\" aria-labelledby={`${id}-title`}>\n                    <div className=\"cl-meta\">\n                      <span className=\"cl-version\">v{r.version}</span>\n                      <time dateTime={r.date}>\n                        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                          {formatDate(r.date)}\n                        </Text>\n                      </time>\n                    </div>\n                    <Heading as=\"h2\" variant=\"heading-strong-l\" id={`${id}-title`} marginTop=\"8\">\n                      {r.title}\n                    </Heading>\n                    <Text as=\"p\" variant=\"body-default-m\" onBackground=\"neutral-medium\" marginTop=\"8\">\n                      {r.summary}\n                    </Text>\n                    <ul className=\"cl-tags\" aria-label={`Tags for version ${r.version}`}>\n                      {r.tags.map((t) => (\n                        <li key={t}>\n                          <span className={`cl-tag ${TAG_META[t].className}`}>{TAG_META[t].label}</span>\n                        </li>\n                      ))}\n                    </ul>\n                    <ul className=\"cl-changes\">\n                      {r.changes.map((c) => (\n                        <li key={c}>{c}</li>\n                      ))}\n                    </ul>\n                    {r.snippet ? <CodeSnippet snippet={r.snippet} id={`${id}-snip`} /> : null}\n                  </article>\n                </li>\n              );\n            })}\n          </ol>\n        )}\n      </div>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

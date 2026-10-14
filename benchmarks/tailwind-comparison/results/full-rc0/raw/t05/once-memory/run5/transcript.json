@@ -1,0 +1,302 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Marketing hero — headline with text effect, CTA pair, social proof logos, background effect.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by exploring the project to see what exists."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FxWhv8SRKqPK5s4GzZ681F",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JTqm9NWGWYPviZAg1Vi2z5",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FxWhv8SRKqPK5s4GzZ681F",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JTqm9NWGWYPviZAg1Vi2z5",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01PaVVEx3vDvAqMKtXvagCx8",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LP1SA2FUfK1Joukqui4GXt",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0191F9nRH2MEPsmPNaJUEdu7",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011k2LuCK2G7MCg9WWSf5n62",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PaVVEx3vDvAqMKtXvagCx8",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LP1SA2FUfK1Joukqui4GXt",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0191F9nRH2MEPsmPNaJUEdu7",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011k2LuCK2G7MCg9WWSf5n62",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01JGzKB971Pqn3HjNURdifui",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NMpuQ25E6Tis7B3c1ugjML",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FbXB8DN7yoNF3p1L3zYdDL",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012gSHXY8rnovd4yMBSAybCb",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JGzKB971Pqn3HjNURdifui",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NMpuQ25E6Tis7B3c1ugjML",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FbXB8DN7yoNF3p1L3zYdDL",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012gSHXY8rnovd4yMBSAybCb",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I can't read the package docs, so I'll check whether the package is installed locally and look at its types."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01W6VzBt8nXiHwnTCZAasWap",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LQjxpjP9j4naVP7sS1dCDu",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01W6VzBt8nXiHwnTCZAasWap",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LQjxpjP9j4naVP7sS1dCDu",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since that package isn't available, I'll stick to familiar Once UI components (Flex, Column, Row, Heading, Text, Button, Background, Line, Tag, RevealFx) and implement the text effect and logos with plain JSX/CSS to keep things reliable.\n\n",
+          "signature": "CAQSqgcKEQgSGAI4AUIJbmFycmF0aW9uEgyrf1JspKpmjSGm0j4aDC0F72u0kRobDC8RVSIwdhyisJtMj3Xsflg8oyR0xwHiy4kR9yDn0upo+VNdDxLukjiaKijhfNyFTNwGJAMjKsYGKjNCs1z/amhsCIeSFTjaG2GNG8DGRqGHAJlpP4tu6fqd3gr6VdEyABIykzkSDZNjce68RBSowi8IPpOQmpfkrQ01wHh6O+MSbpFP54GMxrKmXuRHZ8BDRnEg9lBlKOoE8PUTmiqhXkT2i1jY9A2MZiIyRrmb6DXU3LuCxE7FAzNvO02Miw0/qobXThjPYbUzlnAdAShbi6NKsgVFfM/S+jotBzrGTdO/+oQajP6SgyzN6Frl8UsXLoXjtz+fUl3/WHH34mVVRkz08e9nncqPAPA75LmeloZR90s4iVYy1MFVk14Klej99akf4cEfLuN2ZEkBWuPw5PX5ma8T5yw9iS/hdPdzdxP64lznbiMh2MMUva2bWIu1eQgavLCxIKnN7wWDQTfclGwnW2zXUqytS6X2HWne8hCkqOWGb1yb0Q6bsF0BMVmkz8R5fYlHhnRkKyQ7TnCSbvT28tTbLqWkTpPop1P+XBHvBnXqD4PqoFlFc3w1v14nLR0m/u1L8h/M4A9fM0DM15bltfBDQbewrb3oggVX0SAf/kPgkqzXM2OeHQ6bl0oyGT72DeErYwzl/K3RdrmSLYZ7pHqr4Yj30ocaWS6/VxTgqt0d2TNlfr9demjMzO3DwEzDGtiB2BLnYaNbpBE41QFiBW7JprSvxgbtkiha6X65R7gNMPd7pq5rM5qv7qvcrMfvDEZ6b/7x7WvqvuWtgBcuN2KY4dWuArHZQT4adChJ/VwuDtUH5XobncKPm9rp0DWsyJeMowcELFOB0AXKqEX8SxYLZihdzLpIpCUHDWciBd7cAjMmSHifqmpBe4Kkl1NwrNB/US1efiDuxuYJPFyzcc756Fn5lhrRuYU0+g1cahvb6xsldfThUYzPwpjZHKzENbbdkMZKGINl2N71UpMdESAiywNcwBTIhfA/Snjm2EF5rztogH17Q/TghF6gzAVpVU/s04MBSICIfxbum0nYMY8jRdDIcRqeINVPfIdKOXcYQ4fJsfF5pGO3axWFaL7IWL08mxx+kGwM0grmvq7YaYfA5nXjKOtLtJzlycRGBVq+87V5at8UE/1XRxntGJoKjd0QCd+knldTrZM1/CQle7cMT0UOVgJ/kMC6nRgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PbzTKcfubA7uQQVHcxBzaR",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PbzTKcfubA7uQQVHcxBzaR",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport React from \"react\";\nimport {\n  Background,\n  Button,\n  Column,\n  Heading,\n  Row,\n  Text,\n} from \"@once-ui-system/core\";\n\ntype Brand = {\n  name: string;\n  icon: React.ReactNode;\n};\n\nconst brands: Brand[] = [\n  {\n    name: \"Northwind Labs\",\n    icon: (\n      <svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" aria-hidden=\"true\" focusable=\"false\">\n        <path d=\"M12 2 2 20h20L12 2Zm0 7 5.5 9h-11L12 9Z\" fill=\"currentColor\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Lumen Health\",\n    icon: (\n      <svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" aria-hidden=\"true\" focusable=\"false\">\n        <circle cx=\"12\" cy=\"12\" r=\"9\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2.5\" />\n        <circle cx=\"12\" cy=\"12\" r=\"3.5\" fill=\"currentColor\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Packhorse\",\n    icon: (\n      <svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" aria-hidden=\"true\" focusable=\"false\">\n        <rect x=\"3\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\" fill=\"currentColor\" />\n        <rect x=\"13\" y=\"3\" width=\"8\" height=\"8\" rx=\"2\" fill=\"currentColor\" opacity=\"0.6\" />\n        <rect x=\"3\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\" fill=\"currentColor\" opacity=\"0.6\" />\n        <rect x=\"13\" y=\"13\" width=\"8\" height=\"8\" rx=\"2\" fill=\"currentColor\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Harbor & Co\",\n    icon: (\n      <svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" aria-hidden=\"true\" focusable=\"false\">\n        <path\n          d=\"M3 14c3 0 3-4 6-4s3 4 6 4 3-4 6-4M3 20c3 0 3-4 6-4s3 4 6 4 3-4 6-4M3 8c3 0 3-4 6-4s3 4 6 4 3-4 6-4\"\n          fill=\"none\"\n          stroke=\"currentColor\"\n          strokeWidth=\"2\"\n          strokeLinecap=\"round\"\n        />\n      </svg>\n    ),\n  },\n  {\n    name: \"Switchyard\",\n    icon: (\n      <svg viewBox=\"0 0 24 24\" width=\"24\" height=\"24\" aria-hidden=\"true\" focusable=\"false\">\n        <path d=\"M4 4h6v6H4zM14 14h6v6h-6zM10 7h4a3 3 0 0 1 3 3v4\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\" />\n      </svg>\n    ),\n  },\n];\n\nconst css = `\n.hero-gradient-text {\n  background-image: linear-gradient(\n    100deg,\n    var(--brand-on-background-strong, #6d7cff) 0%,\n    var(--accent-on-background-strong, #c06bff) 35%,\n    var(--brand-on-background-strong, #6d7cff) 70%,\n    var(--accent-on-background-strong, #c06bff) 100%\n  );\n  background-size: 250% 100%;\n  -webkit-background-clip: text;\n  background-clip: text;\n  -webkit-text-fill-color: transparent;\n  color: transparent;\n  animation: hero-shimmer 6s linear infinite;\n  display: inline-block;\n}\n\n@keyframes hero-shimmer {\n  from { background-position: 0% 50%; }\n  to { background-position: 250% 50%; }\n}\n\n@keyframes hero-fade-up {\n  from { opacity: 0; transform: translateY(14px); }\n  to { opacity: 1; transform: translateY(0); }\n}\n\n.hero-reveal {\n  opacity: 0;\n  animation: hero-fade-up 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) forwards;\n}\n.hero-reveal-1 { animation-delay: 0.05s; }\n.hero-reveal-2 { animation-delay: 0.15s; }\n.hero-reveal-3 { animation-delay: 0.25s; }\n.hero-reveal-4 { animation-delay: 0.35s; }\n.hero-reveal-5 { animation-delay: 0.5s; }\n\n.hero-brand-list {\n  list-style: none;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  flex-wrap: wrap;\n  justify-content: center;\n  gap: 20px 40px;\n}\n.hero-brand {\n  display: inline-flex;\n  align-items: center;\n  gap: 10px;\n  color: var(--neutral-on-background-weak, #8a8a8a);\n  font-weight: 600;\n  font-size: 1rem;\n  letter-spacing: -0.01em;\n  opacity: 0.85;\n  transition: opacity 0.2s ease, color 0.2s ease;\n}\n.hero-brand:hover { opacity: 1; color: var(--neutral-on-background-strong, #fff); }\n\n.hero-badge {\n  display: inline-flex;\n  align-items: center;\n  gap: 8px;\n  padding: 6px 14px;\n  border-radius: 999px;\n  border: 1px solid var(--neutral-alpha-medium, rgba(128,128,128,0.3));\n  background: var(--neutral-alpha-weak, rgba(128,128,128,0.08));\n  font-size: 0.8125rem;\n  color: var(--neutral-on-background-strong, inherit);\n}\n.hero-badge-dot {\n  width: 8px;\n  height: 8px;\n  border-radius: 50%;\n  background: var(--success-solid-strong, #3ecf8e);\n  box-shadow: 0 0 0 3px rgba(62, 207, 142, 0.25);\n}\n\n.hero-glow {\n  position: absolute;\n  left: 50%;\n  top: -10%;\n  width: min(900px, 140vw);\n  height: 520px;\n  transform: translateX(-50%);\n  background: radial-gradient(\n    ellipse at center,\n    color-mix(in srgb, var(--brand-solid-strong, #6d7cff) 35%, transparent) 0%,\n    transparent 65%\n  );\n  filter: blur(40px);\n  pointer-events: none;\n  animation: hero-glow-pulse 9s ease-in-out infinite alternate;\n}\n@keyframes hero-glow-pulse {\n  from { opacity: 0.6; transform: translateX(-50%) scale(1); }\n  to { opacity: 1; transform: translateX(-50%) scale(1.08); }\n}\n\n.hero-grid {\n  position: absolute;\n  inset: 0;\n  background-image:\n    linear-gradient(var(--neutral-alpha-weak, rgba(128,128,128,0.12)) 1px, transparent 1px),\n    linear-gradient(90deg, var(--neutral-alpha-weak, rgba(128,128,128,0.12)) 1px, transparent 1px);\n  background-size: 56px 56px;\n  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);\n  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);\n  pointer-events: none;\n}\n\n.hero-headline {\n  font-size: clamp(2.5rem, 7vw + 0.5rem, 5rem);\n  line-height: 1.05;\n  letter-spacing: -0.03em;\n  text-wrap: balance;\n  margin: 0;\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .hero-gradient-text, .hero-glow { animation: none; }\n  .hero-reveal { animation: none; opacity: 1; }\n}\n`;\n\nexport default function Page() {\n  return (\n    <Column as=\"main\" fillWidth minHeight=\"100vh\" horizontal=\"center\" style={{ position: \"relative\", overflow: \"hidden\" }}>\n      <style>{css}</style>\n\n      {/* Background effects */}\n      <div aria-hidden=\"true\" style={{ position: \"absolute\", inset: 0, zIndex: 0, pointerEvents: \"none\" }}>\n        <Background\n          fill\n          position=\"absolute\"\n          gradient={{\n            display: true,\n            opacity: 60,\n            x: 50,\n            y: 0,\n            width: 100,\n            height: 70,\n            tilt: 0,\n            colorStart: \"brand-background-strong\",\n            colorEnd: \"static-transparent\",\n          }}\n          dots={{ display: true, opacity: 30, size: \"24\" }}\n        />\n        <div className=\"hero-grid\" />\n        <div className=\"hero-glow\" />\n      </div>\n\n      <Column\n        fillWidth\n        horizontal=\"center\"\n        paddingX=\"l\"\n        paddingTop=\"80\"\n        paddingBottom=\"64\"\n        gap=\"48\"\n        style={{ position: \"relative\", zIndex: 1, maxWidth: \"72rem\" }}\n      >\n        <Column horizontal=\"center\" align=\"center\" gap=\"24\" style={{ maxWidth: \"52rem\" }}>\n          <div className=\"hero-reveal hero-reveal-1\">\n            <span className=\"hero-badge\">\n              <span className=\"hero-badge-dot\" aria-hidden=\"true\" />\n              Now with real-time deploy previews\n            </span>\n          </div>\n\n          <h1 className=\"hero-reveal hero-reveal-2 hero-headline\">\n            <Heading as=\"span\" variant=\"display-strong-l\" style={{ font: \"inherit\", letterSpacing: \"inherit\" }}>\n              Ship product updates{\" \"}\n              <span className=\"hero-gradient-text\">ten times faster</span>\n            </Heading>\n          </h1>\n\n          <div className=\"hero-reveal hero-reveal-3\">\n            <Text\n              as=\"p\"\n              variant=\"body-default-l\"\n              onBackground=\"neutral-weak\"\n              style={{ maxWidth: \"40rem\", margin: 0, textWrap: \"balance\" }}\n            >\n              Meridian turns pull requests into production-ready releases with automated\n              reviews, instant previews and one-click rollbacks, so your team spends less\n              time waiting and more time building.\n            </Text>\n          </div>\n\n          <div className=\"hero-reveal hero-reveal-4\">\n            <Row gap=\"12\" horizontal=\"center\" wrap>\n              <Button href=\"#get-started\" variant=\"primary\" size=\"l\" arrowIcon>\n                Start free trial\n              </Button>\n              <Button href=\"#demo\" variant=\"secondary\" size=\"l\">\n                Book a demo\n              </Button>\n            </Row>\n          </div>\n\n          <div className=\"hero-reveal hero-reveal-4\">\n            <Text as=\"p\" variant=\"body-default-s\" onBackground=\"neutral-weak\" style={{ margin: 0 }}>\n              No credit card required · 14-day trial · Cancel anytime\n            </Text>\n          </div>\n        </Column>\n\n        <Column\n          as=\"section\"\n          aria-labelledby=\"social-proof-heading\"\n          fillWidth\n          horizontal=\"center\"\n          gap=\"24\"\n          className=\"hero-reveal hero-reveal-5\"\n        >\n          <Text\n            as=\"h2\"\n            id=\"social-proof-heading\"\n            variant=\"label-default-s\"\n            onBackground=\"neutral-weak\"\n            align=\"center\"\n            style={{ margin: 0, textTransform: \"uppercase\", letterSpacing: \"0.08em\" }}\n          >\n            Trusted by 4,000+ engineering teams worldwide\n          </Text>\n          <ul className=\"hero-brand-list\" aria-label=\"Customer companies\">\n            {brands.map((brand) => (\n              <li key={brand.name} className=\"hero-brand\">\n                {brand.icon}\n                <span>{brand.name}</span>\n              </li>\n            ))}\n          </ul>\n        </Column>\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

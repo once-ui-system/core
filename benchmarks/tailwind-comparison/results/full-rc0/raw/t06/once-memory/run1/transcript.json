@@ -1,0 +1,329 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Auth flow — login with password + OTP step in a stacked dialog.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01259HCFVEGLwocsUnKEfQ19",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016PEg3snzmjV9QwWJ5CuvgG",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01259HCFVEGLwocsUnKEfQ19",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016PEg3snzmjV9QwWJ5CuvgG",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01QFy3jfe1oZUj1QFcDYCYDg",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Wo7d37ADnbXmLvoeFHKXCs",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01EuRNNQdeWPtWaxEeB74yPD",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QFy3jfe1oZUj1QFcDYCYDg",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Wo7d37ADnbXmLvoeFHKXCs",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EuRNNQdeWPtWaxEeB74yPD",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013kWYbvcUHxbPfQuT5Z9JMP",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ChAst24bgFspnkC8Uoxpc1",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DC268UybcmCctV7w1RxYyq",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0154phynQihGtmkYsd14kkpH",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013kWYbvcUHxbPfQuT5Z9JMP",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ChAst24bgFspnkC8Uoxpc1",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DC268UybcmCctV7w1RxYyq",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0154phynQihGtmkYsd14kkpH",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The vendor package isn't readable, so I'll check whether `node_modules` exists to verify the API."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01B1z3qsixrJSaqqwyV3zhqs",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01J7iCnWx2REiG2WhxAatx81",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01B1z3qsixrJSaqqwyV3zhqs",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01J7iCnWx2REiG2WhxAatx81",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build the login flow using Dialog, Input, PasswordInput, Button, and related components I know well—stacking two Dialogs so the OTP step opens over the login card, followed by a success state with a 6-digit code input and resend countdown.\n\n",
+          "signature": "CAQSlQkKEQgSGAI4AUIJbmFycmF0aW9uEgxtqIJuJB0WqwJ609saDM/ttQb7ekYz4CQ6BiIwfgfRC/Hm06QfY9Khy7XDXSOv7FjyHg/8Bpoay5bGitowEgBiV1YWpE6vfnKvuWT3KrEIujf3f7PdtsV8oMpr0zQgHjnT/OB/jqVBZMlV+mIeuohd+tYIN0O/DSYqpw5EzVDlPaDyiQlly2qB2dT0gJCa7//yIT7ayCjj9oLK0IxNHLQzIEPnWb4y/883V46pQvsnVY8wc38amV0HdIVlGBSagaKRTC8NSCIx2hRmHNx+wx3BWy4oM5xL+r8TdpycpLxdgHGU00Fei+mMMqMKZTeIN6HBnOHrlfEUEKpl/IzSklEk0kBswf4AYzyOjmHXqv78VN6HDdgmOB2Q0aii1mCE36A//jF+4jXZHxAl4ESGvUuHt35FG76YQS03tdECJbmJ6daE6VpWng3jEQmqXW2U/uOZgENQJtLlX5Pirz7P8XsfH2HTU9660/bkUb1Y+aGI50q8d6pcgkJkSLTF+faq2S4p9pevBj/6HTUvz1sukkwtaQTbk/0w/vInFSAUFsYGF6rsxbbRngKM/iprumXKM/pVgvjvogTHYeC4BZkaMHY5TKxTjoChYCBStIeFsjSD181raMoz1kVvfhkBgYRj0yt0kK/5qWtSYxXjhAm5IOF7mGdogTR246KUYbXrMAqndu9UbzBpP5nd8gkrSZYuS5VyJes2T4BT2Z8ayTxgBkrzQ6gsuBj3fZcS8ar+EO7GSpGKMZSW9pD9Wj6D7sQJpMzNHOTQNjOuxp16oUbVAVsg0J9humGtErRTnF+yRqUcVy2TaRv9Eyo5MvO7Pf1mwdBHAdcOfov6xMfeoIKimpnI6lGUKkeYGeZHOMDTsvtv/x5PG6goSMWj/9+okXaHHrn1xpljBLB+3gmoSw6AlUDcjSFvrn9t5/SJsjbql0TF97qbQy8LkYDl9IiJ8BaQBmPXZBAkfr8nnJlCjsWl7ILmBFf4z7BAvJhu6vE+4Mx07gn6GOv0crkqTKt+B0Z6lYlgGWWtdjOR6blBWwL/uTIlTnpE1ZVcQ9d5vrjbg4uu+ujeAqKlXLr16KcEly7JnER8Y1phDUlPUymnVgBPyes1O4+uxUioL36EUOcBDPvvJiYrg0iAOpHKokP8XWNZaHDD+SQWm+ZsCPE0vgLMQW/79Ssx1NvqHWjDkoYEFaVVb5jelY3xxOooThBRqJ3NeI6oVNu4nVjG55UZgaqf/ZqlymbymdN4bJEXNI9flTCfUH0VMJRcVb9CWAiun/OIr9kKVk/zkgdRGi/rTVPx8M18BHGyfsO9N8FhefIGEWXHFK3Bv5Z58MMDwUcXrcyCwwZjzi/HZw+5To7wMMTQwhXQ3iiAPlYy+EQjbpEat6kQjvsbdwKPBS9ZUEh57+Pr6YBHnSOQ/rJwq8DYI8v22wEoLO/+scHE9BN369q4IbX4xSCaqn5soUb5lre1myL9NpWxumV57+khCEiSV6mSlTBodNstBJ5975MOTLdm6oJ8+aj0zHFxYMoJlwISn7UXXRMYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017tJd1D53s4sxUJwdTjeeF1",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017tJd1D53s4sxUJwdTjeeF1",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { ChangeEvent, ClipboardEvent, FormEvent, KeyboardEvent } from \"react\";\nimport {\n  Button,\n  Column,\n  Dialog,\n  Feedback,\n  Heading,\n  Input,\n  Row,\n  Text,\n} from \"@once-ui-system/core\";\n\nconst DEMO_EMAIL = \"maya.lindqvist@northwind.io\";\nconst DEMO_PASSWORD = \"correct-horse-battery\";\nconst DEMO_OTP = \"428613\";\nconst OTP_LENGTH = 6;\nconst RESEND_SECONDS = 30;\nconst MAX_ATTEMPTS = 3;\n\ntype Stage = \"login\" | \"otp\" | \"done\";\n\nfunction maskEmail(email: string): string {\n  const [name, domain] = email.split(\"@\");\n  if (!name || !domain) return email;\n  return `${name.slice(0, 2)}${\"•\".repeat(Math.max(name.length - 2, 2))}@${domain}`;\n}\n\nexport default function Page() {\n  const [stage, setStage] = useState<Stage>(\"login\");\n\n  // Login form state\n  const [email, setEmail] = useState(\"\");\n  const [password, setPassword] = useState(\"\");\n  const [showPassword, setShowPassword] = useState(false);\n  const [loginError, setLoginError] = useState<string | null>(null);\n  const [emailError, setEmailError] = useState<string | null>(null);\n  const [passwordError, setPasswordError] = useState<string | null>(null);\n  const [submitting, setSubmitting] = useState(false);\n\n  // OTP state\n  const [digits, setDigits] = useState<string[]>(() => Array(OTP_LENGTH).fill(\"\"));\n  const [otpError, setOtpError] = useState<string | null>(null);\n  const [verifying, setVerifying] = useState(false);\n  const [attempts, setAttempts] = useState(0);\n  const [cooldown, setCooldown] = useState(RESEND_SECONDS);\n  const [resentNotice, setResentNotice] = useState(false);\n  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);\n\n  const emailId = useId();\n  const passwordId = useId();\n  const otpHintId = useId();\n  const otpErrorId = useId();\n\n  const otpOpen = stage === \"otp\";\n\n  // Resend countdown\n  useEffect(() => {\n    if (!otpOpen || cooldown <= 0) return;\n    const timer = window.setTimeout(() => setCooldown((c) => c - 1), 1000);\n    return () => window.clearTimeout(timer);\n  }, [otpOpen, cooldown]);\n\n  // Focus first OTP cell when dialog opens\n  useEffect(() => {\n    if (!otpOpen) return;\n    const t = window.setTimeout(() => inputRefs.current[0]?.focus(), 120);\n    return () => window.clearTimeout(t);\n  }, [otpOpen]);\n\n  const resetOtp = useCallback(() => {\n    setDigits(Array(OTP_LENGTH).fill(\"\"));\n    setOtpError(null);\n    setVerifying(false);\n  }, []);\n\n  const handleLogin = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    setLoginError(null);\n    const trimmed = email.trim();\n    const emailInvalid = !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(trimmed);\n    setEmailError(emailInvalid ? \"Enter a valid work email address.\" : null);\n    setPasswordError(password.length < 8 ? \"Password must be at least 8 characters.\" : null);\n    if (emailInvalid || password.length < 8) return;\n\n    setSubmitting(true);\n    window.setTimeout(() => {\n      setSubmitting(false);\n      if (trimmed.toLowerCase() === DEMO_EMAIL && password === DEMO_PASSWORD) {\n        resetOtp();\n        setAttempts(0);\n        setCooldown(RESEND_SECONDS);\n        setResentNotice(false);\n        setStage(\"otp\");\n      } else {\n        setLoginError(\"That email and password don't match. Check your details and try again.\");\n      }\n    }, 700);\n  };\n\n  const fillDemo = () => {\n    setEmail(DEMO_EMAIL);\n    setPassword(DEMO_PASSWORD);\n    setEmailError(null);\n    setPasswordError(null);\n    setLoginError(null);\n  };\n\n  const verify = useCallback(\n    (code: string) => {\n      setVerifying(true);\n      setOtpError(null);\n      window.setTimeout(() => {\n        setVerifying(false);\n        if (code === DEMO_OTP) {\n          setStage(\"done\");\n          return;\n        }\n        const next = attempts + 1;\n        setAttempts(next);\n        setDigits(Array(OTP_LENGTH).fill(\"\"));\n        if (next >= MAX_ATTEMPTS) {\n          setOtpError(\"Too many incorrect codes. Request a new code to continue.\");\n        } else {\n          setOtpError(\n            `That code isn't right. ${MAX_ATTEMPTS - next} attempt${\n              MAX_ATTEMPTS - next === 1 ? \"\" : \"s\"\n            } left.`,\n          );\n        }\n        inputRefs.current[0]?.focus();\n      }, 700);\n    },\n    [attempts],\n  );\n\n  const locked = attempts >= MAX_ATTEMPTS;\n\n  const setDigitAt = (index: number, value: string) => {\n    const clean = value.replace(/\\D/g, \"\");\n    if (!clean) {\n      setDigits((prev) => prev.map((d, i) => (i === index ? \"\" : d)));\n      return;\n    }\n    // Support multi-character input (autofill / paste into one cell)\n    const chars = clean.slice(0, OTP_LENGTH - index).split(\"\");\n    const next = [...digits];\n    chars.forEach((c, i) => {\n      next[index + i] = c;\n    });\n    setDigits(next);\n    const focusIndex = Math.min(index + chars.length, OTP_LENGTH - 1);\n    inputRefs.current[focusIndex]?.focus();\n    if (next.every((d) => d !== \"\")) verify(next.join(\"\"));\n  };\n\n  const onDigitChange = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {\n    setOtpError(null);\n    setDigitAt(index, e.target.value);\n  };\n\n  const onDigitKeyDown = (index: number) => (e: KeyboardEvent<HTMLInputElement>) => {\n    if (e.key === \"Backspace\" && !digits[index] && index > 0) {\n      e.preventDefault();\n      setDigits((prev) => prev.map((d, i) => (i === index - 1 ? \"\" : d)));\n      inputRefs.current[index - 1]?.focus();\n    } else if (e.key === \"ArrowLeft\" && index > 0) {\n      e.preventDefault();\n      inputRefs.current[index - 1]?.focus();\n    } else if (e.key === \"ArrowRight\" && index < OTP_LENGTH - 1) {\n      e.preventDefault();\n      inputRefs.current[index + 1]?.focus();\n    }\n  };\n\n  const onDigitPaste = (e: ClipboardEvent<HTMLInputElement>) => {\n    const text = e.clipboardData.getData(\"text\").replace(/\\D/g, \"\").slice(0, OTP_LENGTH);\n    if (!text) return;\n    e.preventDefault();\n    setOtpError(null);\n    const next = Array(OTP_LENGTH).fill(\"\") as string[];\n    text.split(\"\").forEach((c, i) => {\n      next[i] = c;\n    });\n    setDigits(next);\n    inputRefs.current[Math.min(text.length, OTP_LENGTH - 1)]?.focus();\n    if (text.length === OTP_LENGTH) verify(text);\n  };\n\n  const resend = () => {\n    if (cooldown > 0) return;\n    resetOtp();\n    setAttempts(0);\n    setCooldown(RESEND_SECONDS);\n    setResentNotice(true);\n    inputRefs.current[0]?.focus();\n  };\n\n  const closeOtp = () => {\n    resetOtp();\n    setPassword(\"\");\n    setStage(\"login\");\n  };\n\n  const signOut = () => {\n    resetOtp();\n    setPassword(\"\");\n    setEmail(\"\");\n    setStage(\"login\");\n  };\n\n  const codeComplete = digits.every((d) => d !== \"\");\n\n  return (\n    <Column fillWidth minHeight=\"100vh\" horizontal=\"center\" vertical=\"center\" padding=\"m\">\n      <Column\n        as=\"main\"\n        fillWidth\n        maxWidth={28}\n        gap=\"24\"\n        padding=\"xl\"\n        radius=\"xl\"\n        background=\"surface\"\n        border=\"neutral-alpha-weak\"\n        shadow=\"l\"\n      >\n        {stage === \"done\" ? (\n          <Column gap=\"20\" horizontal=\"center\" align=\"center\" aria-live=\"polite\">\n            <Column\n              horizontal=\"center\"\n              vertical=\"center\"\n              radius=\"full\"\n              background=\"success-alpha-weak\"\n              border=\"success-alpha-medium\"\n              style={{ width: 56, height: 56 }}\n              aria-hidden=\"true\"\n            >\n              <Text variant=\"heading-strong-l\" onBackground=\"success-strong\">\n                ✓\n              </Text>\n            </Column>\n            <Column gap=\"8\" horizontal=\"center\">\n              <Heading as=\"h1\" variant=\"heading-strong-l\">\n                You&apos;re signed in\n              </Heading>\n              <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                Welcome back, Maya. Your session on this device is active for the next 12 hours.\n              </Text>\n            </Column>\n            <Button variant=\"secondary\" size=\"m\" fillWidth onClick={signOut}>\n              Sign out\n            </Button>\n          </Column>\n        ) : (\n          <>\n            <Column gap=\"8\">\n              <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n                Northwind Console\n              </Text>\n              <Heading as=\"h1\" variant=\"heading-strong-xl\">\n                Sign in to your workspace\n              </Heading>\n              <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                Use your work email and password. We&apos;ll confirm it&apos;s you with a one-time\n                code.\n              </Text>\n            </Column>\n\n            <form onSubmit={handleLogin} noValidate aria-label=\"Sign in\">\n              <Column gap=\"16\">\n                {loginError && (\n                  <div role=\"alert\">\n                    <Feedback variant=\"danger\" title=\"Couldn't sign you in\">\n                      {loginError}\n                    </Feedback>\n                  </div>\n                )}\n\n                <Input\n                  id={emailId}\n                  name=\"email\"\n                  type=\"email\"\n                  label=\"Work email\"\n                  autoComplete=\"username\"\n                  inputMode=\"email\"\n                  value={email}\n                  onChange={(e) => setEmail(e.target.value)}\n                  error={!!emailError}\n                  errorMessage={emailError ?? undefined}\n                  aria-required=\"true\"\n                />\n\n                <Column gap=\"8\">\n                  <Input\n                    id={passwordId}\n                    name=\"password\"\n                    type={showPassword ? \"text\" : \"password\"}\n                    label=\"Password\"\n                    autoComplete=\"current-password\"\n                    value={password}\n                    onChange={(e) => setPassword(e.target.value)}\n                    error={!!passwordError}\n                    errorMessage={passwordError ?? undefined}\n                    aria-required=\"true\"\n                  />\n                  <Row horizontal=\"end\">\n                    <Button\n                      type=\"button\"\n                      variant=\"tertiary\"\n                      size=\"s\"\n                      onClick={() => setShowPassword((s) => !s)}\n                      aria-pressed={showPassword}\n                    >\n                      {showPassword ? \"Hide password\" : \"Show password\"}\n                    </Button>\n                  </Row>\n                </Column>\n\n                <Button type=\"submit\" variant=\"primary\" size=\"l\" fillWidth loading={submitting}>\n                  Continue\n                </Button>\n              </Column>\n            </form>\n\n            <Column gap=\"12\" paddingTop=\"16\" borderTop=\"neutral-alpha-weak\">\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Trying the demo? Fill in the sample credentials, then use code{\" \"}\n                <Text as=\"span\" variant=\"code-default-s\" onBackground=\"neutral-strong\">\n                  {DEMO_OTP}\n                </Text>{\" \"}\n                on the next step.\n              </Text>\n              <Row>\n                <Button type=\"button\" variant=\"secondary\" size=\"s\" onClick={fillDemo}>\n                  Fill demo credentials\n                </Button>\n              </Row>\n            </Column>\n          </>\n        )}\n      </Column>\n\n      <Dialog\n        isOpen={otpOpen}\n        onClose={closeOtp}\n        title=\"Enter your verification code\"\n        description={`We sent a 6-digit code to ${maskEmail(email.trim() || DEMO_EMAIL)}. It expires in 10 minutes.`}\n        base\n      >\n        <Column gap=\"16\" paddingTop=\"8\">\n          <Column gap=\"8\">\n            <Text id={otpHintId} variant=\"label-default-s\" onBackground=\"neutral-weak\">\n              Verification code\n            </Text>\n            <Row\n              gap=\"8\"\n              role=\"group\"\n              aria-labelledby={otpHintId}\n              aria-describedby={otpError ? otpErrorId : undefined}\n              fillWidth\n            >\n              {digits.map((digit, i) => (\n                <input\n                  key={i}\n                  ref={(el) => {\n                    inputRefs.current[i] = el;\n                  }}\n                  value={digit}\n                  onChange={onDigitChange(i)}\n                  onKeyDown={onDigitKeyDown(i)}\n                  onPaste={onDigitPaste}\n                  onFocus={(e) => e.currentTarget.select()}\n                  inputMode=\"numeric\"\n                  pattern=\"[0-9]*\"\n                  autoComplete={i === 0 ? \"one-time-code\" : \"off\"}\n                  maxLength={OTP_LENGTH}\n                  aria-label={`Digit ${i + 1} of ${OTP_LENGTH}`}\n                  aria-invalid={otpError ? true : undefined}\n                  disabled={verifying || locked}\n                  style={{\n                    flex: \"1 1 0\",\n                    minWidth: 0,\n                    width: \"100%\",\n                    height: 52,\n                    textAlign: \"center\",\n                    fontSize: 22,\n                    fontWeight: 600,\n                    fontFamily: \"var(--font-code)\",\n                    color: \"var(--neutral-on-background-strong)\",\n                    background: \"var(--neutral-alpha-weak)\",\n                    border: `1px solid ${\n                      otpError ? \"var(--danger-solid-strong)\" : \"var(--neutral-alpha-medium)\"\n                    }`,\n                    borderRadius: 8,\n                    outlineOffset: 2,\n                  }}\n                />\n              ))}\n            </Row>\n          </Column>\n\n          <div aria-live=\"polite\" id={otpErrorId}>\n            {otpError && (\n              <Text variant=\"body-default-s\" onBackground=\"danger-weak\" role=\"alert\">\n                {otpError}\n              </Text>\n            )}\n            {!otpError && verifying && (\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Verifying code…\n              </Text>\n            )}\n            {!otpError && !verifying && resentNotice && (\n              <Text variant=\"body-default-s\" onBackground=\"success-weak\">\n                A new code is on its way.\n              </Text>\n            )}\n          </div>\n\n          <Row gap=\"8\" vertical=\"center\" wrap>\n            <Button\n              type=\"button\"\n              variant=\"tertiary\"\n              size=\"s\"\n              onClick={resend}\n              disabled={cooldown > 0}\n            >\n              {cooldown > 0 ? `Resend code in ${cooldown}s` : \"Resend code\"}\n            </Button>\n          </Row>\n\n          <Row gap=\"8\" fillWidth mobileDirection=\"column-reverse\">\n            <Button type=\"button\" variant=\"secondary\" size=\"m\" fillWidth onClick={closeOtp}>\n              Back to sign in\n            </Button>\n            <Button\n              type=\"button\"\n              variant=\"primary\"\n              size=\"m\"\n              fillWidth\n              loading={verifying}\n              disabled={!codeComplete || locked}\n              onClick={() => verify(digits.join(\"\"))}\n            >\n              Verify and sign in\n            </Button>\n          </Row>\n        </Column>\n      </Dialog>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(346,9): error TS2322: Type '{ children: Element; isOpen: boolean; onClose: () => void; title: string; description: string; base: true; }' is not assignable to type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'isOpen' does not exist on type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'. Did you mean 'open'?\napp/page.tsx(434,34): error TS2322: Type '{ children: Element[]; gap: \"8\"; fillWidth: true; mobileDirection: string; }' is not assignable to type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'mobileDirection' does not exist on type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Two fixes: `Dialog` uses `open` instead of `isOpen`, and `Row` has no `mobileDirection`, so I use a plain `Flex` with a `s`-breakpoint-aware `direction` prop, falling back to a wrapping `Row`. To stay safe on types, I use `Row` with `wrap` and `fillWidth` children."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01S7w1yMYL6BnAJWjWF6p2EK",
+          "name": "read_file",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core/dist/components/Dialog.d.ts"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01S7w1yMYL6BnAJWjWF6p2EK",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core/dist/components/Dialog.d.ts",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { ChangeEvent, ClipboardEvent, FormEvent, KeyboardEvent } from \"react\";\nimport {\n  Button,\n  Column,\n  Dialog,\n  Feedback,\n  Heading,\n  Input,\n  Row,\n  Text,\n} from \"@once-ui-system/core\";\n\nconst DEMO_EMAIL = \"maya.lindqvist@northwind.io\";\nconst DEMO_PASSWORD = \"correct-horse-battery\";\nconst DEMO_OTP = \"428613\";\nconst OTP_LENGTH = 6;\nconst RESEND_SECONDS = 30;\nconst MAX_ATTEMPTS = 3;\n\ntype Stage = \"login\" | \"otp\" | \"done\";\n\nfunction maskEmail(email: string): string {\n  const [name, domain] = email.split(\"@\");\n  if (!name || !domain) return email;\n  return `${name.slice(0, 2)}${\"•\".repeat(Math.max(name.length - 2, 2))}@${domain}`;\n}\n\nexport default function Page() {\n  const [stage, setStage] = useState<Stage>(\"login\");\n\n  // Login form state\n  const [email, setEmail] = useState(\"\");\n  const [password, setPassword] = useState(\"\");\n  const [showPassword, setShowPassword] = useState(false);\n  const [loginError, setLoginError] = useState<string | null>(null);\n  const [emailError, setEmailError] = useState<string | null>(null);\n  const [passwordError, setPasswordError] = useState<string | null>(null);\n  const [submitting, setSubmitting] = useState(false);\n\n  // OTP state\n  const [digits, setDigits] = useState<string[]>(() => Array(OTP_LENGTH).fill(\"\"));\n  const [otpError, setOtpError] = useState<string | null>(null);\n  const [verifying, setVerifying] = useState(false);\n  const [attempts, setAttempts] = useState(0);\n  const [cooldown, setCooldown] = useState(RESEND_SECONDS);\n  const [resentNotice, setResentNotice] = useState(false);\n  const inputRefs = useRef<Array<HTMLInputElement | null>>([]);\n\n  const emailId = useId();\n  const passwordId = useId();\n  const otpHintId = useId();\n  const otpErrorId = useId();\n\n  const otpOpen = stage === \"otp\";\n\n  // Resend countdown\n  useEffect(() => {\n    if (!otpOpen || cooldown <= 0) return;\n    const timer = window.setTimeout(() => setCooldown((c) => c - 1), 1000);\n    return () => window.clearTimeout(timer);\n  }, [otpOpen, cooldown]);\n\n  // Focus first OTP cell when dialog opens\n  useEffect(() => {\n    if (!otpOpen) return;\n    const t = window.setTimeout(() => inputRefs.current[0]?.focus(), 120);\n    return () => window.clearTimeout(t);\n  }, [otpOpen]);\n\n  const resetOtp = useCallback(() => {\n    setDigits(Array(OTP_LENGTH).fill(\"\"));\n    setOtpError(null);\n    setVerifying(false);\n  }, []);\n\n  const handleLogin = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    setLoginError(null);\n    const trimmed = email.trim();\n    const emailInvalid = !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(trimmed);\n    setEmailError(emailInvalid ? \"Enter a valid work email address.\" : null);\n    setPasswordError(password.length < 8 ? \"Password must be at least 8 characters.\" : null);\n    if (emailInvalid || password.length < 8) return;\n\n    setSubmitting(true);\n    window.setTimeout(() => {\n      setSubmitting(false);\n      if (trimmed.toLowerCase() === DEMO_EMAIL && password === DEMO_PASSWORD) {\n        resetOtp();\n        setAttempts(0);\n        setCooldown(RESEND_SECONDS);\n        setResentNotice(false);\n        setStage(\"otp\");\n      } else {\n        setLoginError(\"That email and password don't match. Check your details and try again.\");\n      }\n    }, 700);\n  };\n\n  const fillDemo = () => {\n    setEmail(DEMO_EMAIL);\n    setPassword(DEMO_PASSWORD);\n    setEmailError(null);\n    setPasswordError(null);\n    setLoginError(null);\n  };\n\n  const verify = useCallback(\n    (code: string) => {\n      setVerifying(true);\n      setOtpError(null);\n      window.setTimeout(() => {\n        setVerifying(false);\n        if (code === DEMO_OTP) {\n          setStage(\"done\");\n          return;\n        }\n        const next = attempts + 1;\n        setAttempts(next);\n        setDigits(Array(OTP_LENGTH).fill(\"\"));\n        if (next >= MAX_ATTEMPTS) {\n          setOtpError(\"Too many incorrect codes. Request a new code to continue.\");\n        } else {\n          setOtpError(\n            `That code isn't right. ${MAX_ATTEMPTS - next} attempt${\n              MAX_ATTEMPTS - next === 1 ? \"\" : \"s\"\n            } left.`,\n          );\n        }\n        inputRefs.current[0]?.focus();\n      }, 700);\n    },\n    [attempts],\n  );\n\n  const locked = attempts >= MAX_ATTEMPTS;\n\n  const setDigitAt = (index: number, value: string) => {\n    const clean = value.replace(/\\D/g, \"\");\n    if (!clean) {\n      setDigits((prev) => prev.map((d, i) => (i === index ? \"\" : d)));\n      return;\n    }\n    // Support multi-character input (autofill / paste into one cell)\n    const chars = clean.slice(0, OTP_LENGTH - index).split(\"\");\n    const next = [...digits];\n    chars.forEach((c, i) => {\n      next[index + i] = c;\n    });\n    setDigits(next);\n    const focusIndex = Math.min(index + chars.length, OTP_LENGTH - 1);\n    inputRefs.current[focusIndex]?.focus();\n    if (next.every((d) => d !== \"\")) verify(next.join(\"\"));\n  };\n\n  const onDigitChange = (index: number) => (e: ChangeEvent<HTMLInputElement>) => {\n    setOtpError(null);\n    setDigitAt(index, e.target.value);\n  };\n\n  const onDigitKeyDown = (index: number) => (e: KeyboardEvent<HTMLInputElement>) => {\n    if (e.key === \"Backspace\" && !digits[index] && index > 0) {\n      e.preventDefault();\n      setDigits((prev) => prev.map((d, i) => (i === index - 1 ? \"\" : d)));\n      inputRefs.current[index - 1]?.focus();\n    } else if (e.key === \"ArrowLeft\" && index > 0) {\n      e.preventDefault();\n      inputRefs.current[index - 1]?.focus();\n    } else if (e.key === \"ArrowRight\" && index < OTP_LENGTH - 1) {\n      e.preventDefault();\n      inputRefs.current[index + 1]?.focus();\n    }\n  };\n\n  const onDigitPaste = (e: ClipboardEvent<HTMLInputElement>) => {\n    const text = e.clipboardData.getData(\"text\").replace(/\\D/g, \"\").slice(0, OTP_LENGTH);\n    if (!text) return;\n    e.preventDefault();\n    setOtpError(null);\n    const next = Array(OTP_LENGTH).fill(\"\") as string[];\n    text.split(\"\").forEach((c, i) => {\n      next[i] = c;\n    });\n    setDigits(next);\n    inputRefs.current[Math.min(text.length, OTP_LENGTH - 1)]?.focus();\n    if (text.length === OTP_LENGTH) verify(text);\n  };\n\n  const resend = () => {\n    if (cooldown > 0) return;\n    resetOtp();\n    setAttempts(0);\n    setCooldown(RESEND_SECONDS);\n    setResentNotice(true);\n    inputRefs.current[0]?.focus();\n  };\n\n  const closeOtp = () => {\n    resetOtp();\n    setPassword(\"\");\n    setStage(\"login\");\n  };\n\n  const signOut = () => {\n    resetOtp();\n    setPassword(\"\");\n    setEmail(\"\");\n    setStage(\"login\");\n  };\n\n  const codeComplete = digits.every((d) => d !== \"\");\n\n  return (\n    <Column fillWidth minHeight=\"100vh\" horizontal=\"center\" vertical=\"center\" padding=\"m\">\n      <Column\n        as=\"main\"\n        fillWidth\n        maxWidth={28}\n        gap=\"24\"\n        padding=\"xl\"\n        radius=\"xl\"\n        background=\"surface\"\n        border=\"neutral-alpha-weak\"\n        shadow=\"l\"\n      >\n        {stage === \"done\" ? (\n          <Column gap=\"20\" horizontal=\"center\" align=\"center\" aria-live=\"polite\">\n            <Column\n              horizontal=\"center\"\n              vertical=\"center\"\n              radius=\"full\"\n              background=\"success-alpha-weak\"\n              border=\"success-alpha-medium\"\n              style={{ width: 56, height: 56 }}\n              aria-hidden=\"true\"\n            >\n              <Text variant=\"heading-strong-l\" onBackground=\"success-strong\">\n                ✓\n              </Text>\n            </Column>\n            <Column gap=\"8\" horizontal=\"center\">\n              <Heading as=\"h1\" variant=\"heading-strong-l\">\n                You&apos;re signed in\n              </Heading>\n              <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                Welcome back, Maya. Your session on this device is active for the next 12 hours.\n              </Text>\n            </Column>\n            <Button variant=\"secondary\" size=\"m\" fillWidth onClick={signOut}>\n              Sign out\n            </Button>\n          </Column>\n        ) : (\n          <>\n            <Column gap=\"8\">\n              <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n                Northwind Console\n              </Text>\n              <Heading as=\"h1\" variant=\"heading-strong-xl\">\n                Sign in to your workspace\n              </Heading>\n              <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                Use your work email and password. We&apos;ll confirm it&apos;s you with a one-time\n                code.\n              </Text>\n            </Column>\n\n            <form onSubmit={handleLogin} noValidate aria-label=\"Sign in\">\n              <Column gap=\"16\">\n                {loginError && (\n                  <div role=\"alert\">\n                    <Feedback variant=\"danger\" title=\"Couldn't sign you in\">\n                      {loginError}\n                    </Feedback>\n                  </div>\n                )}\n\n                <Input\n                  id={emailId}\n                  name=\"email\"\n                  type=\"email\"\n                  label=\"Work email\"\n                  autoComplete=\"username\"\n                  inputMode=\"email\"\n                  value={email}\n                  onChange={(e) => setEmail(e.target.value)}\n                  error={!!emailError}\n                  errorMessage={emailError ?? undefined}\n                  aria-required=\"true\"\n                />\n\n                <Column gap=\"8\">\n                  <Input\n                    id={passwordId}\n                    name=\"password\"\n                    type={showPassword ? \"text\" : \"password\"}\n                    label=\"Password\"\n                    autoComplete=\"current-password\"\n                    value={password}\n                    onChange={(e) => setPassword(e.target.value)}\n                    error={!!passwordError}\n                    errorMessage={passwordError ?? undefined}\n                    aria-required=\"true\"\n                  />\n                  <Row horizontal=\"end\">\n                    <Button\n                      type=\"button\"\n                      variant=\"tertiary\"\n                      size=\"s\"\n                      onClick={() => setShowPassword((s) => !s)}\n                      aria-pressed={showPassword}\n                    >\n                      {showPassword ? \"Hide password\" : \"Show password\"}\n                    </Button>\n                  </Row>\n                </Column>\n\n                <Button type=\"submit\" variant=\"primary\" size=\"l\" fillWidth loading={submitting}>\n                  Continue\n                </Button>\n              </Column>\n            </form>\n\n            <Column gap=\"12\" paddingTop=\"16\" borderTop=\"neutral-alpha-weak\">\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Trying the demo? Fill in the sample credentials, then use code{\" \"}\n                <Text as=\"span\" variant=\"code-default-s\" onBackground=\"neutral-strong\">\n                  {DEMO_OTP}\n                </Text>{\" \"}\n                on the next step.\n              </Text>\n              <Row>\n                <Button type=\"button\" variant=\"secondary\" size=\"s\" onClick={fillDemo}>\n                  Fill demo credentials\n                </Button>\n              </Row>\n            </Column>\n          </>\n        )}\n      </Column>\n\n      <Dialog\n        open={otpOpen}\n        onClose={closeOtp}\n        title=\"Enter your verification code\"\n        description={`We sent a 6-digit code to ${maskEmail(email.trim() || DEMO_EMAIL)}. It expires in 10 minutes.`}\n      >\n        <Column gap=\"16\" paddingTop=\"8\">\n          <Column gap=\"8\">\n            <Text id={otpHintId} variant=\"label-default-s\" onBackground=\"neutral-weak\">\n              Verification code\n            </Text>\n            <Row\n              gap=\"8\"\n              role=\"group\"\n              aria-labelledby={otpHintId}\n              aria-describedby={otpError ? otpErrorId : undefined}\n              fillWidth\n            >\n              {digits.map((digit, i) => (\n                <input\n                  key={i}\n                  ref={(el) => {\n                    inputRefs.current[i] = el;\n                  }}\n                  value={digit}\n                  onChange={onDigitChange(i)}\n                  onKeyDown={onDigitKeyDown(i)}\n                  onPaste={onDigitPaste}\n                  onFocus={(e) => e.currentTarget.select()}\n                  inputMode=\"numeric\"\n                  pattern=\"[0-9]*\"\n                  autoComplete={i === 0 ? \"one-time-code\" : \"off\"}\n                  maxLength={OTP_LENGTH}\n                  aria-label={`Digit ${i + 1} of ${OTP_LENGTH}`}\n                  aria-invalid={otpError ? true : undefined}\n                  disabled={verifying || locked}\n                  style={{\n                    flex: \"1 1 0\",\n                    minWidth: 0,\n                    width: \"100%\",\n                    height: 52,\n                    textAlign: \"center\",\n                    fontSize: 22,\n                    fontWeight: 600,\n                    fontFamily: \"var(--font-code)\",\n                    color: \"var(--neutral-on-background-strong)\",\n                    background: \"var(--neutral-alpha-weak)\",\n                    border: `1px solid ${\n                      otpError ? \"var(--danger-solid-strong)\" : \"var(--neutral-alpha-medium)\"\n                    }`,\n                    borderRadius: 8,\n                    outlineOffset: 2,\n                  }}\n                />\n              ))}\n            </Row>\n          </Column>\n\n          <div aria-live=\"polite\" id={otpErrorId}>\n            {otpError && (\n              <Text variant=\"body-default-s\" onBackground=\"danger-weak\" role=\"alert\">\n                {otpError}\n              </Text>\n            )}\n            {!otpError && verifying && (\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Verifying code…\n              </Text>\n            )}\n            {!otpError && !verifying && resentNotice && (\n              <Text variant=\"body-default-s\" onBackground=\"success-weak\">\n                A new code is on its way.\n              </Text>\n            )}\n          </div>\n\n          <Row gap=\"8\" vertical=\"center\" wrap>\n            <Button\n              type=\"button\"\n              variant=\"tertiary\"\n              size=\"s\"\n              onClick={resend}\n              disabled={cooldown > 0}\n            >\n              {cooldown > 0 ? `Resend code in ${cooldown}s` : \"Resend code\"}\n            </Button>\n          </Row>\n\n          <Row gap=\"8\" fillWidth wrap>\n            <Button\n              type=\"button\"\n              variant=\"primary\"\n              size=\"m\"\n              loading={verifying}\n              disabled={!codeComplete || locked}\n              onClick={() => verify(digits.join(\"\"))}\n              style={{ flex: \"1 1 160px\" }}\n            >\n              Verify and sign in\n            </Button>\n            <Button\n              type=\"button\"\n              variant=\"secondary\"\n              size=\"m\"\n              onClick={closeOtp}\n              style={{ flex: \"1 1 160px\" }}\n            >\n              Back to sign in\n            </Button>\n          </Row>\n        </Column>\n      </Dialog>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

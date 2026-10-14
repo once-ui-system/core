@@ -3,7 +3,6 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import Anthropic from "@anthropic-ai/sdk";
 import { countTokens as legacyClaudeCount } from "@anthropic-ai/tokenizer";
 import { getEncoding } from "js-tiktoken";
 
@@ -13,14 +12,6 @@ export const RESULTS = path.join(ROOT, "results");
 export const config = JSON.parse(fs.readFileSync(path.join(ROOT, "config.json"), "utf8"));
 export const tasks = JSON.parse(fs.readFileSync(path.join(ROOT, "prompts/tasks.json"), "utf8")).tasks;
 const stacks = JSON.parse(fs.readFileSync(path.join(ROOT, "prompts/stacks.json"), "utf8"));
-
-// An API key that isn't scoped to one workspace must name the workspace on every
-// request: ANTHROPIC_WORKSPACE_ID is sent as the `anthropic-workspace-id` header.
-// A single-workspace key needs neither.
-export function createClient() {
-  const workspace = process.env.ANTHROPIC_WORKSPACE_ID;
-  return new Anthropic(workspace ? { defaultHeaders: { "anthropic-workspace-id": workspace } } : {});
-}
 
 export function listFiles(dir, base = dir) {
   if (!fs.existsSync(dir)) return [];

@@ -1,0 +1,496 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: E-commerce product card grid — image, price, tag, hover actions, skeleton loading state.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and exploring the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013pjhpGv85kUBRQsSF3a4jf",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KvByZ7NZMB4Tye1TXxBPqx",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013pjhpGv85kUBRQsSF3a4jf",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KvByZ7NZMB4Tye1TXxBPqx",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013sM43uivF67zzMpch35CwR",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019TvGNF3hJRJq6GhsHJNeMw",
+          "name": "list_dir",
+          "input": {
+            "path": "docs/skill"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013sM43uivF67zzMpch35CwR",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019TvGNF3hJRJq6GhsHJNeMw",
+          "content": "SKILL.md\nassets/\ncli.md\ncustomization.md\ndesign-system-page.md\ndesign-system.md\nmcp.md\nregistry.md\nrules/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01GWFCqcrtTEB9L8AetwyqBE",
+          "name": "read_file",
+          "input": {
+            "path": "docs/skill/SKILL.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GeXcQ4ndssMauigPpEQnZ3",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015XLc9fQFZUegzK4RMps4g2",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014sYifkPZBpt8vuxFdE4xRS",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GWFCqcrtTEB9L8AetwyqBE",
+          "content": "---\nname: shadcn\ndescription: Manages shadcn components and projects — adding, searching, fixing, debugging, styling, and composing UI, including chat interfaces. Provides project context, component docs, and usage examples. Applies when working with shadcn/ui, component registries, presets, --preset codes, or any project with a components.json file. Also triggers for \"shadcn init\", \"create an app with --preset\", \"switch to --preset\", and for building a design system or applying a DESIGN.md or brand spec to shadcn/ui.\nuser-invocable: false\nallowed-tools: Bash(npx shadcn@latest *), Bash(pnpm dlx shadcn@latest *), Bash(bunx --bun shadcn@latest *)\n---\n\n# shadcn/ui\n\nA framework for building ui, components and design systems. Components are added as source code to the user's project via the CLI.\n\n> **IMPORTANT:** Run all CLI commands using the project's package runner: `npx shadcn@latest`, `pnpm dlx shadcn@latest`, or `bunx --bun shadcn@latest` — based on the project's `packageManager`. Examples below use `npx shadcn@latest` but substitute the correct runner for the project.\n\n## Current Project Context\n\n```json\n{\n  \"framework\": \"next-app\",\n  \"config\": {\n    \"$schema\": \"https://ui.shadcn.com/schema.json\",\n    \"style\": \"new-york\",\n    \"rsc\": true,\n    \"tsx\": true,\n    \"tailwind\": {\n      \"config\": \"\",\n      \"css\": \"app/globals.css\",\n      \"baseColor\": \"neutral\",\n      \"cssVariables\": true,\n      \"prefix\": \"\"\n    },\n    \"aliases\": {\n      \"components\": \"@/components\",\n      \"utils\": \"@/lib/utils\",\n      \"ui\": \"@/components/ui\",\n      \"lib\": \"@/lib\",\n      \"hooks\": \"@/hooks\"\n    },\n    \"iconLibrary\": \"lucide\"\n  },\n  \"base\": \"radix\",\n  \"installed\": [\n    \"accordion\",\n    \"alert\",\n    \"alert-dialog\",\n    \"aspect-ratio\",\n    \"attachment\",\n    \"avatar\",\n    \"badge\",\n    \"breadcrumb\",\n    \"bubble\",\n    \"button\",\n    \"button-group\",\n    \"calendar\",\n    \"card\",\n    \"carousel\",\n    \"chart\",\n    \"checkbox\",\n    \"collapsible\",\n    \"combobox\",\n    \"command\",\n    \"context-menu\",\n    \"dialog\",\n    \"direction\",\n    \"drawer\",\n    \"dropdown-menu\",\n    \"empty\",\n    \"field\",\n    \"form\",\n    \"hover-card\",\n    \"input\",\n    \"input-group\",\n    \"input-otp\",\n    \"item\",\n    \"kbd\",\n    \"label\",\n    \"marker\",\n    \"menubar\",\n    \"message\",\n    \"message-scroller\",\n    \"native-select\",\n    \"navigation-menu\",\n    \"pagination\",\n    \"popover\",\n    \"progress\",\n    \"radio-group\",\n    \"resizable\",\n    \"scroll-area\",\n    \"select\",\n    \"separator\",\n    \"sheet\",\n    \"sidebar\",\n    \"skeleton\",\n    \"slider\",\n    \"sonner\",\n    \"spinner\",\n    \"switch\",\n    \"table\",\n    \"tabs\",\n    \"textarea\",\n    \"toggle\",\n    \"toggle-group\",\n    \"tooltip\"\n  ]\n}\n```\n\nThe JSON above contains the project config and installed components. Use `npx shadcn@latest docs <component>` to get documentation and example URLs for any component.\n\n## Principles\n\n1. **Use existing components first.** Use `npx shadcn@latest search` to check registries before writing custom UI. Check community registries too.\n2. **Compose, don't reinvent.** Settings page = Tabs + Card + form controls. Dashboard = Sidebar + Card + Chart + Table.\n3. **Use built-in variants before custom styles.** `variant=\"outline\"`, `size=\"sm\"`, etc.\n4. **Use semantic colors.** `bg-primary`, `text-muted-foreground` — never raw values like `bg-blue-500`.\n\n## Critical Rules\n\nThese rules are **always enforced**. Each links to a file with Incorrect/Correct code pairs.\n\n### Styling & Tailwind → [styling.md](./rules/styling.md)\n\n- **`className` for layout, not styling.** Never override component colors or typography.\n- **No `space-x-*` or `space-y-*`.** Use `flex` with `gap-*`. For vertical stacks, `flex flex-col gap-*`.\n- **Use `size-*` when width and height are equal.** `size-10` not `w-10 h-10`.\n- **Use `truncate` shorthand.** Not `overflow-hidden text-ellipsis whitespace-nowrap`.\n- **No manual `dark:` color overrides.** Use semantic tokens (`bg-background`, `text-muted-foreground`).\n- **Use `cn()` for conditional classes.** Don't write manual template literal ternaries.\n- **No manual `z-index` on overlay components.** Dialog, Sheet, Popover, etc. handle their own stacking.\n\n### Forms & Inputs → [forms.md](./rules/forms.md)\n\n- **Forms use `FieldGroup` + `Field`.** Never use raw `div` with `space-y-*` or `grid gap-*` for form layout.\n- **`InputGroup` uses `InputGroupInput`/`InputGroupTextarea`.** Never raw `Input`/`Textarea` inside `InputGroup`.\n- **Buttons inside inputs use `InputGroup` + `InputGroupAddon`.**\n- **Option sets (2–7 choices) use `ToggleGroup`.** Don't loop `Button` with manual active state.\n- **`FieldSet` + `FieldLegend` for grouping related checkboxes/radios.** Don't use a `div` with a heading.\n- **Field validation uses `data-invalid` + `aria-invalid`.** `data-invalid` on `Field`, `aria-invalid` on the control. For disabled: `data-disabled` on `Field`, `disabled` on the control.\n\n### Component Structure → [composition.md](./rules/composition.md)\n\n- **Items always inside their Group.** `SelectItem` → `SelectGroup`. `DropdownMenuItem` → `DropdownMenuGroup`. `CommandItem` → `CommandGroup`.\n- **Use `asChild` (radix) or `render` (base) for custom triggers.** Check `base` field from `npx shadcn@latest info`. → [base-vs-radix.md](./rules/base-vs-radix.md)\n- **Dialog, Sheet, and Drawer always need a Title.** `DialogTitle`, `SheetTitle`, `DrawerTitle` required for accessibility. Use `className=\"sr-only\"` if visually hidden.\n- **Use full Card composition.** `CardHeader`/`CardTitle`/`CardDescription`/`CardContent`/`CardFooter`. Don't dump everything in `CardContent`.\n- **Button has no `isPending`/`isLoading`.** Compose with `Spinner` + `data-icon` + `disabled`.\n- **`TabsTrigger` must be inside `TabsList`.** Never render triggers directly in `Tabs`.\n- **`Avatar` always needs `AvatarFallback`.** For when the image fails to load.\n\n### Use Components, Not Custom Markup → [composition.md](./rules/composition.md)\n\n- **Use existing components before custom markup.** Check if a component exists before writing a styled `div`.\n- **Callouts use `Alert`.** Don't build custom styled divs.\n- **Empty states use `Empty`.** Don't build custom empty state markup.\n- **Toast follows the project base.** Use `toast` from the `toast` component for\n  Base UI projects. Use `toast()` from `sonner` for Radix and React Aria\n  projects.\n- **Use `Separator`** instead of `<hr>` or `<div className=\"border-t\">`.\n- **Use `Skeleton`** for loading placeholders. No custom `animate-pulse` divs.\n- **Use `Badge`** instead of custom styled spans.\n\n### Icons → [icons.md](./rules/icons.md)\n\n- **Icons in `Button` use `data-icon`.** `data-icon=\"inline-start\"` or `data-icon=\"inline-end\"` on the icon.\n- **No sizing classes on icons inside components.** Components handle icon sizing via CSS. No `size-4` or `w-4 h-4`.\n- **Pass icons as objects, not string keys.** `icon={CheckIcon}`, not a string lookup.\n\n### Chat & Messaging → [chat.md](./rules/chat.md)\n\n- **Chat UI composes the chat primitives.** Conversations use `MessageScroller`, rows use `Message`, surfaces use `Bubble`. Never hand-rolled bubble `div`s or a raw scroll container.\n- **`MessageScroller` owns scroll behavior.** Streaming follow, anchoring, and jump-to-latest (`MessageScrollerButton`) are built in. Don't write a `useStickToBottom`/`ResizeObserver` hook.\n- **Attachments use `Attachment`; system notes and dividers use `Marker`.** Not `Item` cards or `Separator` + a label.\n\n### CLI\n\n- **Never decode preset codes or build preset URLs manually.** Use `npx shadcn@latest preset decode <code>`, `preset url <code>`, or `preset open <code>`. For project-aware preset detection, use `npx shadcn@latest preset resolve`.\n- **Apply preset codes directly with the CLI.** Use `npx shadcn@latest apply <code>` for existing projects, or `npx shadcn@latest init --preset <code>` when initializing.\n\n## Key Patterns\n\nThese are the most common patterns that differentiate correct shadcn/ui code. For edge cases, see the linked rule files above.\n\n```tsx\n// Form layout: FieldGroup + Field, not div + Label.\n<FieldGroup>\n  <Field>\n    <FieldLabel htmlFor=\"email\">Email</FieldLabel>\n    <Input id=\"email\" />\n  </Field>\n</FieldGroup>\n\n// Validation: data-invalid on Field, aria-invalid on the control.\n<Field data-invalid>\n  <FieldLabel>Email</FieldLabel>\n  <Input aria-invalid />\n  <FieldDescription>Invalid email.</FieldDescription>\n</Field>\n\n// Icons in buttons: data-icon, no sizing classes.\n<Button>\n  <SearchIcon data-icon=\"inline-start\" />\n  Search\n</Button>\n\n// Spacing: gap-*, not space-y-*.\n<div className=\"flex flex-col gap-4\">  // correct\n<div className=\"space-y-4\">           // wrong\n\n// Equal dimensions: size-*, not w-* h-*.\n<Avatar className=\"size-10\">   // correct\n<Avatar className=\"w-10 h-10\"> // wrong\n\n// Status colors: Badge variants or semantic tokens, not raw colors.\n<Badge variant=\"secondary\">+20.1%</Badge>    // correct\n<span className=\"text-emerald-600\">+20.1%</span> // wrong\n```\n\n## Component Selection\n\n| Need                       | Use                                                                                                 |\n| -------------------------- | --------------------------------------------------------------------------------------------------- |\n| Button/action              | `Button` with appropriate variant                                                                   |\n| Form inputs                | `Input`, `Select`, `Combobox`, `Switch`, `Checkbox`, `RadioGroup`, `Textarea`, `InputOTP`, `Slider` |\n| Toggle between 2–5 options | `ToggleGroup` + `ToggleGroupItem`                                                                   |\n| Data display               | `Table`, `Card`, `Badge`, `Avatar`                                                                  |\n| Navigation                 | `Sidebar`, `NavigationMenu`, `Breadcrumb`, `Tabs`, `Pagination`                                     |\n| Overlays                   | `Dialog` (modal), `Sheet` (side panel), `Drawer` (bottom sheet), `AlertDialog` (confirmation)       |\n| Feedback                   | `toast` (Base UI), `sonner` (Radix/Aria), `Alert`, `Progress`, `Skeleton`, `Spinner`                 |\n| Command palette            | `Command` inside `Dialog`                                                                           |\n| Charts                     | `Chart` (wraps Recharts)                                                                            |\n| Layout                     | `Card`, `Separator`, `Resizable`, `ScrollArea`, `Accordion`, `Collapsible`                          |\n| Empty states               | `Empty`                                                                                             |\n| Menus                      | `DropdownMenu`, `ContextMenu`, `Menubar`                                                            |\n| Tooltips/info              | `Tooltip`, `HoverCard`, `Popover`                                                                   |\n| Chat / conversation UI     | `MessageScroller`, `Message`, `Bubble`, `Attachment`, `Marker`                                      |\n\n## Key Fields\n\nThe injected project context contains these key fields:\n\n- **`aliases`** → use the actual alias prefix for imports (e.g. `@/`, `~/`), never hardcode.\n- **`isRSC`** → when `true`, components using `useState`, `useEffect`, event handlers, or browser APIs need `\"use client\"` at the top of the file. Always reference this field when advising on the directive.\n- **`tailwindVersion`** → `\"v4\"` uses `@theme inline` blocks; `\"v3\"` uses `tailwind.config.js`.\n- **`tailwindCssFile`** → the global CSS file where custom CSS variables are defined. Always edit this file, never create a new one.\n- **`style`** → component visual treatment (e.g. `nova`, `vega`).\n- **`base`** → primitive library (`radix` or `base`). Affects component APIs and available props.\n- **`iconLibrary`** → determines icon imports. Use `lucide-react` for `lucide`, `@tabler/icons-react` for `tabler`, etc. Never assume `lucide-react`.\n- **`resolvedPaths`** → exact file-system destinations for components, utils, hooks, etc.\n- **`framework`** → routing and file conventions (e.g. Next.js App Router vs Vite SPA).\n- **`packageManager`** → use this for any non-shadcn dependency installs (e.g. `pnpm add date-fns` vs `npm install date-fns`).\n- **`preset`** → resolved preset code and values for the current project. Use `npx shadcn@latest preset resolve --json` when you only need preset information.\n\nSee [cli.md — `info` command](./cli.md) for the full field reference.\n\n## Component Docs, Examples, and Usage\n\nRun `npx shadcn@latest docs <component>` to get the URLs for a component's documentation, examples, and API reference. Fetch these URLs to get the actual content.\n\n```bash\nnpx shadcn@latest docs button dialog select\n```\n\n**When creating, fixing, debugging, or using a component, always run `npx shadcn@latest docs` and fetch the URLs first.** This ensures you're working with the correct API and usage patterns rather than guessing.\n\n## Workflow\n\n1. **Get project context** — already injected above. Run `npx shadcn@latest info` again if you need to refresh.\n2. **Check installed components first** — before running `add`, always check the `components` list from project context or list the `resolvedPaths.ui` directory. Don't import components that haven't been added, and don't re-add ones already installed.\n3. **Find components** — `npx shadcn@latest search`.\n4. **Get docs and examples** — run `npx shadcn@latest docs <component>` to get URLs, then fetch them. Use `npx shadcn@latest view` to browse registry items you haven't installed. To preview changes to installed components, use `npx shadcn@latest add --diff`.\n5. **Install or update** — `npx shadcn@latest add`. When updating existing components, use `--dry-run` and `--diff` to preview changes first (see [Updating Components](#updating-components) below).\n6. **Fix imports in third-party components** — After adding components from community registries (e.g. `@bundui`, `@magicui`), check the added non-UI files for hardcoded import paths like `@/components/ui/...`. These won't match the project's actual aliases. Use `npx shadcn@latest info` to get the correct `ui` alias (e.g. `@workspace/ui/components`) and rewrite the imports accordingly. The CLI rewrites imports for its own UI files, but third-party registry components may use default paths that don't match the project.\n7. **Review added components** — After adding a component or block from any registry, **always read the added files and verify they are correct**. Check for missing sub-components (e.g. `SelectItem` without `SelectGroup`), missing imports, incorrect composition, or violations of the [Critical Rules](#critical-rules). Also replace any icon imports with the project's `iconLibrary` from the project context (e.g. if the registry item uses `lucide-react` but the project uses `hugeicons`, swap the imports and icon names accordingly). Fix all issues before moving on.\n8. **Registry must be explicit** — When the user asks to add a block or component, **do not guess the registry**. If no registry is specified (e.g. user says \"add a login block\" without specifying `@shadcn`, `@tailark`, `owner/repo`, etc.), ask which registry to use. Never default to a registry on behalf of the user.\n9. **Switching presets** — Ask the user first: **overwrite**, **partial**, **merge**, or **skip**?\n   - **Inspect current preset**: `npx shadcn@latest preset resolve`. Use `--json` when you need structured values.\n   - **Inspect incoming preset**: `npx shadcn@latest preset decode <code>`. Use `preset url <code>` or `preset open <code>` to share or open the preset builder.\n   - **Overwrite**: `npx shadcn@latest apply <code>`. Overwrites detected components, fonts, and CSS variables.\n   - **Partial**: `npx shadcn@latest apply <code> --only theme,font`. Updates only the selected preset parts without reinstalling UI components. Supported values are `theme` and `font`; comma-separated combinations are allowed. `icon` is intentionally not supported, because icon changes may require full component reinstall and transforms.\n   - **Merge**: `npx shadcn@latest init --preset <code> --force --no-reinstall`, then run `npx shadcn@latest info` to list installed components, then for each installed component use `--dry-run` and `--diff` to [smart merge](#updating-components) it individually.\n   - **Skip**: `npx shadcn@latest init --preset <code> --force --no-reinstall`. Only updates config and CSS, leaves components as-is.\n   - **Important**: Always run preset commands inside the user's project directory. `apply` only works in an existing project with a `components.json` file. The CLI automatically preserves the current base (`base` vs `radix`) from `components.json`. If you must use a scratch/temp directory (e.g. for `--dry-run` comparisons), pass `--base <current-base>` explicitly — preset codes do not encode the base.\n\n## Design Systems from DESIGN.md\n\nWhen the user asks for a design system from a `DESIGN.md` (or a brand spec), with or without a preset, follow [design-system.md](./design-system.md) end to end:\n\n1. `init --preset <code> --template <vite|next> --name <app> --no-monorepo -y`. Without a preset code, pick the closest style and pass `--base base --preset <style>`. Then `add --all -y`.\n2. Read the DESIGN.md frontmatter, Do's and Don'ts, and Known Gaps before editing.\n3. Map its tokens onto the shadcn variables in `tailwindCssFile`. Pin the radius scale, shadows, fonts and `type-*` utilities.\n4. Restyle components by editing their `cva` variants. Change control heights together.\n5. Build the design system page per [design-system-page.md](./design-system-page.md): contrast-checked color roles, type specimens, pinned state matrices, edge cases, do/don't pairs, recipes. Check coverage with `scripts/showcase-coverage.mjs`.\n6. Verify in a browser: typecheck, no console errors, loads at the top, no horizontal overflow, dark mode.\n\n## Updating Components\n\nWhen the user asks to update a component from upstream while keeping their local changes, use `--dry-run` and `--diff` to intelligently merge. **NEVER fetch raw files from GitHub manually — always use the CLI.**\n\n1. Run `npx shadcn@latest add <component> --dry-run` to see all files that would be affected.\n2. For each file, run `npx shadcn@latest add <component> --diff <file>` to see what changed upstream vs local.\n3. Decide per file based on the diff:\n   - No local changes → safe to overwrite.\n   - Has local changes → read the local file, analyze the diff, and apply upstream updates while preserving local modifications.\n   - User says \"just update everything\" → use `--overwrite`, but confirm first.\n4. **Never use `--overwrite` without the user's explicit approval.**\n\n## Quick Reference\n\n```bash\n# Create a new project.\nnpx shadcn@latest init --name my-app --preset base-nova\nnpx shadcn@latest init --name my-app --preset a2r6bw --template vite\n\n# Create a design system app (then follow design-system.md).\nnpx shadcn@latest init --name my-ds --preset b0 --template vite --no-monorepo -y\nnpx shadcn@latest init --name my-ds --base base --preset maia --template vite --no-monorepo -y\nnpx shadcn@latest add --all -y\n\n# Create a monorepo project.\nnpx shadcn@latest init --name my-app --preset base-nova --monorepo\nnpx shadcn@latest init --name my-app --preset base-nova --template next --monorepo\n\n# Initialize existing project.\nnpx shadcn@latest init --preset base-nova\nnpx shadcn@latest init --defaults  # shortcut: --template=next --preset=nova (base style implied)\n\n# Apply a preset to an existing project.\nnpx shadcn@latest apply a2r6bw\nnpx shadcn@latest apply a2r6bw --only theme\nnpx shadcn@latest apply a2r6bw --only font\nnpx shadcn@latest apply a2r6bw --only theme,font\n\n# Inspect preset codes and project preset state.\nnpx shadcn@latest preset decode a2r6bw\nnpx shadcn@latest preset url a2r6bw\nnpx shadcn@latest preset open a2r6bw\nnpx shadcn@latest preset resolve\nnpx shadcn@latest preset resolve --json\n\n# Add components.\nnpx shadcn@latest add button card dialog\nnpx shadcn@latest add @magicui/shimmer-button\nnpx shadcn@latest add owner/repo/item\nnpx shadcn@latest add --all\n\n# Preview changes before adding/updating.\nnpx shadcn@latest add button --dry-run\nnpx shadcn@latest add button --diff button.tsx\nnpx shadcn@latest add @acme/form --view button.tsx\nnpx shadcn@latest add owner/repo/item --dry-run\n\n# Search registries.\nnpx shadcn@latest search @shadcn -q \"sidebar\"\nnpx shadcn@latest search @tailark -q \"stats\"\nnpx shadcn@latest search owner/repo -q \"login\"\nnpx shadcn@latest search                          # all configured registries\nnpx shadcn@latest search @shadcn -q \"menu\" -t ui  # filter by item type\n\n# Get component docs and example URLs.\nnpx shadcn@latest docs button dialog select\n\n# View registry item details (for items not yet installed).\nnpx shadcn@latest view @shadcn/button\nnpx shadcn@latest view owner/repo/item\n```\n\n**Named presets:** `nova`, `vega`, `maia`, `lyra`, `mira`, `luma`\n**Templates:** `next`, `vite`, `start`, `react-router`, `astro` (all support `--monorepo`) and `laravel` (not supported for monorepo)\n**Preset codes:** Version-prefixed base62 strings (e.g. `a2r6bw` or `b0`), from [ui.shadcn.com](https://ui.shadcn.com).\n\n## Detailed References\n\n- [rules/forms.md](./rules/forms.md) — FieldGroup, Field, InputGroup, ToggleGroup, FieldSet, validation states\n- [rules/composition.md](./rules/composition.md) — Groups, overlays, Card, Tabs, Avatar, Alert, Empty, Toast, Separator, Skeleton, Badge, Button loading\n- [rules/chat.md](./rules/chat.md) — MessageScroller, Message, Bubble, Attachment, Marker; streaming, anchoring, jump-to-latest\n- [rules/icons.md](./rules/icons.md) — data-icon, icon sizing, passing icons as objects\n- [rules/styling.md](./rules/styling.md) — Semantic colors, variants, className, spacing, size, truncate, dark mode, cn(), z-index\n- [rules/base-vs-radix.md](./rules/base-vs-radix.md) — asChild vs render, Select, ToggleGroup, Slider, Accordion\n- [cli.md](./cli.md) — Commands, flags, presets, templates\n- [registry.md](./registry.md) — Authoring source registries, `include`, item definitions, dependencies, GitHub registry rules\n- [customization.md](./customization.md) — Theming, CSS variables, extending components\n- [design-system.md](./design-system.md): DESIGN.md (with or without a preset) to a themed app: style picking, token mapping, radius, fonts, type scale, control heights, showcase traps, verification\n- [design-system-page.md](./design-system-page.md): What goes on a design system page and how: foundations, component tiers, pinned state matrices, contrast pairs, edge cases, do/don't, recipes\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GeXcQ4ndssMauigPpEQnZ3",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015XLc9fQFZUegzK4RMps4g2",
+          "content": "{\n  \"name\": \"bench-arm-shadcn\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@base-ui/react\": \"1.9.0\",\n    \"@shadcn/react\": \"0.3.1\",\n    \"class-variance-authority\": \"0.7.1\",\n    \"clsx\": \"2.1.1\",\n    \"cmdk\": \"1.1.1\",\n    \"date-fns\": \"4.4.0\",\n    \"embla-carousel-react\": \"8.6.0\",\n    \"input-otp\": \"1.5.0\",\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"next-themes\": \"0.4.6\",\n    \"radix-ui\": \"1.7.0\",\n    \"react\": \"19.2.8\",\n    \"react-day-picker\": \"10.0.2\",\n    \"react-dom\": \"19.2.8\",\n    \"react-hook-form\": \"7.89.0\",\n    \"react-resizable-panels\": \"4.14.4\",\n    \"recharts\": \"3.10.1\",\n    \"sonner\": \"2.0.8\",\n    \"tailwind-merge\": \"3.7.0\",\n    \"vaul\": \"1.1.2\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"tw-animate-css\": \"1.4.0\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014sYifkPZBpt8vuxFdE4xRS",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the existing page, layout, and the key components I'll use."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AmQKye2No59QLgJiAm2b3y",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Fmg8os2M49hZpTzzE7fgCc",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01YSeatZqYuJHYkk2r5Ce7JH",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AZsYD3sjQ1hJhh4qcqynM9",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QwmpW3mfTo8ehPGio1MyL6",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011r1p5mrxB3j6DgCvoeHmbF",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/skeleton.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01U8Wv5R2ynm2uGyqkAdxzcP",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SXEJqQYLqmQaa7YPoMsGpU",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/tooltip.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AmQKye2No59QLgJiAm2b3y",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Fmg8os2M49hZpTzzE7fgCc",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01YSeatZqYuJHYkk2r5Ce7JH",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AZsYD3sjQ1hJhh4qcqynM9",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QwmpW3mfTo8ehPGio1MyL6",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011r1p5mrxB3j6DgCvoeHmbF",
+          "content": "import { cn } from \"@/lib/utils\"\n\nfunction Skeleton({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"skeleton\"\n      className={cn(\"animate-pulse rounded-md bg-accent\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Skeleton }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01U8Wv5R2ynm2uGyqkAdxzcP",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\n\nimport { toggleVariants } from \"@/components/ui/toggle\"\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n})\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs\",\n        className\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  )\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &\n  VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext)\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10\",\n        \"data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  )\n}\n\nexport { ToggleGroup, ToggleGroupItem }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SXEJqQYLqmQaa7YPoMsGpU",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Tooltip as TooltipPrimitive } from \"radix-ui\"\n\nfunction TooltipProvider({\n  delayDuration = 0,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {\n  return (\n    <TooltipPrimitive.Provider\n      data-slot=\"tooltip-provider\"\n      delayDuration={delayDuration}\n      {...props}\n    />\n  )\n}\n\nfunction Tooltip({\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Root>) {\n  return <TooltipPrimitive.Root data-slot=\"tooltip\" {...props} />\n}\n\nfunction TooltipTrigger({\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {\n  return <TooltipPrimitive.Trigger data-slot=\"tooltip-trigger\" {...props} />\n}\n\nfunction TooltipContent({\n  className,\n  sideOffset = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Content>) {\n  return (\n    <TooltipPrimitive.Portal>\n      <TooltipPrimitive.Content\n        data-slot=\"tooltip-content\"\n        sideOffset={sideOffset}\n        className={cn(\n          \"z-50 w-fit origin-(--radix-tooltip-content-transform-origin) animate-in rounded-md bg-foreground px-3 py-1.5 text-xs text-balance text-background fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        <TooltipPrimitive.Arrow className=\"z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground\" />\n      </TooltipPrimitive.Content>\n    </TooltipPrimitive.Portal>\n  )\n}\n\nexport { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the globals and the Radix ToggleGroup API plus the rules on styling/composition."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TZnphaXyK32EBUgXdeT5Rt",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NTQXo1smfefZaiiXJGoFdy",
+          "name": "read_file",
+          "input": {
+            "path": "docs/skill/rules/styling.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HDXFdmJ2wCQWGKhzVotcRZ",
+          "name": "read_file",
+          "input": {
+            "path": "docs/skill/rules/icons.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DRYvDZyBjaiYfUDXQ8rNTt",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TZnphaXyK32EBUgXdeT5Rt",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NTQXo1smfefZaiiXJGoFdy",
+          "content": "# Styling & Customization\n\nSee [customization.md](../customization.md) for theming, CSS variables, and adding custom colors.\n\n## Contents\n\n- Semantic colors\n- Built-in variants first\n- className for layout only\n- No space-x-* / space-y-*\n- Prefer size-* over w-* h-* when equal\n- Prefer truncate shorthand\n- No manual dark: color overrides\n- Use cn() for conditional classes\n- No manual z-index on overlay components\n- Use shimmer / scroll-fade utilities, not custom animations\n\n---\n\n## Semantic colors\n\n**Incorrect:**\n\n```tsx\n<div className=\"bg-blue-500 text-white\">\n  <p className=\"text-gray-600\">Secondary text</p>\n</div>\n```\n\n**Correct:**\n\n```tsx\n<div className=\"bg-primary text-primary-foreground\">\n  <p className=\"text-muted-foreground\">Secondary text</p>\n</div>\n```\n\n---\n\n## No raw color values for status/state indicators\n\nFor positive, negative, or status indicators, use Badge variants, semantic tokens like `text-destructive`, or define custom CSS variables — don't reach for raw Tailwind colors.\n\n**Incorrect:**\n\n```tsx\n<span className=\"text-emerald-600\">+20.1%</span>\n<span className=\"text-green-500\">Active</span>\n<span className=\"text-red-600\">-3.2%</span>\n```\n\n**Correct:**\n\n```tsx\n<Badge variant=\"secondary\">+20.1%</Badge>\n<Badge>Active</Badge>\n<span className=\"text-destructive\">-3.2%</span>\n```\n\nIf you need a success/positive color that doesn't exist as a semantic token, use a Badge variant or ask the user about adding a custom CSS variable to the theme (see [customization.md](../customization.md)).\n\n---\n\n## Built-in variants first\n\n**Incorrect:**\n\n```tsx\n<Button className=\"border border-input bg-transparent hover:bg-accent\">\n  Click me\n</Button>\n```\n\n**Correct:**\n\n```tsx\n<Button variant=\"outline\">Click me</Button>\n```\n\n---\n\n## className for layout only\n\nUse `className` for layout (e.g. `max-w-md`, `mx-auto`, `mt-4`), **not** for overriding component colors or typography. To change colors, use semantic tokens, built-in variants, or CSS variables.\n\n**Incorrect:**\n\n```tsx\n<Card className=\"bg-blue-100 text-blue-900 font-bold\">\n  <CardContent>Dashboard</CardContent>\n</Card>\n```\n\n**Correct:**\n\n```tsx\n<Card className=\"max-w-md mx-auto\">\n  <CardContent>Dashboard</CardContent>\n</Card>\n```\n\nTo customize a component's appearance, prefer these approaches in order:\n1. **Built-in variants** — `variant=\"outline\"`, `variant=\"destructive\"`, etc.\n2. **Semantic color tokens** — `bg-primary`, `text-muted-foreground`.\n3. **CSS variables** — define custom colors in the global CSS file (see [customization.md](../customization.md)).\n\n---\n\n## No space-x-* / space-y-*\n\nUse `gap-*` instead. `space-y-4` → `flex flex-col gap-4`. `space-x-2` → `flex gap-2`.\n\n```tsx\n<div className=\"flex flex-col gap-4\">\n  <Input />\n  <Input />\n  <Button>Submit</Button>\n</div>\n```\n\n---\n\n## Prefer size-* over w-* h-* when equal\n\n`size-10` not `w-10 h-10`. Applies to icons, avatars, skeletons, etc.\n\n---\n\n## Prefer truncate shorthand\n\n`truncate` not `overflow-hidden text-ellipsis whitespace-nowrap`.\n\n---\n\n## No manual dark: color overrides\n\nUse semantic tokens — they handle light/dark via CSS variables. `bg-background text-foreground` not `bg-white dark:bg-gray-950`.\n\n---\n\n## Use cn() for conditional classes\n\nUse the `cn()` utility from the project for conditional or merged class names. Don't write manual ternaries in className strings.\n\n**Incorrect:**\n\n```tsx\n<div className={`flex items-center ${isActive ? \"bg-primary text-primary-foreground\" : \"bg-muted\"}`}>\n```\n\n**Correct:**\n\n```tsx\nimport { cn } from \"cn\"\n\n<div className={cn(\"flex items-center\", isActive ? \"bg-primary text-primary-foreground\" : \"bg-muted\")}>\n```\n\n---\n\n## No manual z-index on overlay components\n\n`Dialog`, `Sheet`, `Drawer`, `AlertDialog`, `DropdownMenu`, `Popover`, `Tooltip`, `HoverCard` handle their own stacking. Never add `z-50` or `z-[999]`.\n\n---\n\n## Use shimmer / scroll-fade utilities, not custom animations\n\nFor a live \"thinking…\" or loading-text shimmer, apply the `shimmer` utility. Don't author a custom `@keyframes` or a `bg-clip-text` gradient sweep.\n\nFor scroll-aware edge fading on a scroll container, use `scroll-fade` (and the axis variants `scroll-fade-x` / `scroll-fade-b`). Don't hand-roll mask gradients. The chat components already apply these internally: `Attachment` shimmers its title during upload, and `MessageScrollerViewport` fades its edges.\n\n**Incorrect:**\n\n```tsx\n<span className=\"animate-pulse bg-gradient-to-r from-muted-foreground/40 via-foreground/70 to-muted-foreground/40 bg-clip-text text-transparent [animation:shimmer_1.6s_infinite]\">\n  Thinking…\n</span>\n```\n\n**Correct:**\n\n```tsx\n<span className=\"shimmer\">Thinking…</span>\n```\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HDXFdmJ2wCQWGKhzVotcRZ",
+          "content": "# Icons\n\n**Always use the project's configured `iconLibrary` for imports.** Check the `iconLibrary` field from project context: `lucide` → `lucide-react`, `tabler` → `@tabler/icons-react`, etc. Never assume `lucide-react`.\n\n---\n\n## Icons in Button use data-icon attribute\n\nAdd `data-icon=\"inline-start\"` (prefix) or `data-icon=\"inline-end\"` (suffix) to the icon. No sizing classes on the icon.\n\n**Incorrect:**\n\n```tsx\n<Button>\n  <SearchIcon className=\"mr-2 size-4\" />\n  Search\n</Button>\n```\n\n**Correct:**\n\n```tsx\n<Button>\n  <SearchIcon data-icon=\"inline-start\"/>\n  Search\n</Button>\n\n<Button>\n  Next\n  <ArrowRightIcon data-icon=\"inline-end\"/>\n</Button>\n```\n\n---\n\n## No sizing classes on icons inside components\n\nComponents handle icon sizing via CSS. Don't add `size-4`, `w-4 h-4`, or other sizing classes to icons inside `Button`, `DropdownMenuItem`, `Alert`, `Sidebar*`, or other shadcn components. Unless the user explicitly asks for custom icon sizes.\n\n**Incorrect:**\n\n```tsx\n<Button>\n  <SearchIcon className=\"size-4\" data-icon=\"inline-start\" />\n  Search\n</Button>\n\n<DropdownMenuItem>\n  <SettingsIcon className=\"mr-2 size-4\" />\n  Settings\n</DropdownMenuItem>\n```\n\n**Correct:**\n\n```tsx\n<Button>\n  <SearchIcon data-icon=\"inline-start\" />\n  Search\n</Button>\n\n<DropdownMenuItem>\n  <SettingsIcon />\n  Settings\n</DropdownMenuItem>\n```\n\n---\n\n## Pass icons as component objects, not string keys\n\nUse `icon={CheckIcon}`, not a string key to a lookup map.\n\n**Incorrect:**\n\n```tsx\nconst iconMap = {\n  check: CheckIcon,\n  alert: AlertIcon,\n}\n\nfunction StatusBadge({ icon }: { icon: string }) {\n  const Icon = iconMap[icon]\n  return <Icon />\n}\n\n<StatusBadge icon=\"check\" />\n```\n\n**Correct:**\n\n```tsx\n// Import from the project's configured iconLibrary (e.g. lucide-react, @tabler/icons-react).\nimport { CheckIcon } from \"lucide-react\"\n\nfunction StatusBadge({ icon: Icon }: { icon: React.ComponentType }) {\n  return <Icon />\n}\n\n<StatusBadge icon={CheckIcon} />\n```\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DRYvDZyBjaiYfUDXQ8rNTt",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Toggle as TogglePrimitive } from \"radix-ui\"\n\nconst toggleVariants = cva(\n  \"inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline:\n          \"border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground\",\n      },\n      size: {\n        default: \"h-9 min-w-9 px-2\",\n        sm: \"h-8 min-w-8 px-1.5\",\n        lg: \"h-10 min-w-10 px-2.5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Toggle({\n  className,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof TogglePrimitive.Root> &\n  VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive.Root\n      data-slot=\"toggle\"\n      className={cn(toggleVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Toggle, toggleVariants }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I've sketched out the design: a header with filters/sort/loading toggle, product cards with inline SVG art, badges, pricing, ratings, and hover-revealed actions, plus a matching skeleton grid and toast notifications for cart/wishlist. Next, I'll quickly check the native-select API.\n\n",
+          "signature": "CAQSvgsKEQgSGAI4AUIJbmFycmF0aW9uEgweSrW1Xe8oCaoQFRMaDC8WNr5bAdELP9fYgCIwwPg1/qdpd/a7EVCmaj0PoM+3IVths09wj0HkrkmuTUoh899+kswL7GdO693I3ezdKtoKuB7KGFLNnp6quisdBesYh2DvQ8pNMb1rmOEmoSYjiPWsMTJWALb69EoSJFcJ/Xc723Dk6BKaeNeOhlEOtOyGm+JYyWDRic3yxL4Q4tUXY2dwlqeaski+z1WbxcLeWtWliHY+A0JFiZYgJ48M4fnOoQMeXnXCrR7ZjdN4OZpxvvJuqNXymj+tKH5ufxMmb1gL9RW6ZkFBKqJr2dUCtnCK6gnjii55jHJbs7O/PsXlY8htArUYCdvwma3b3twWu0emVXnipjD/4hhqzYCr6Z1cv7Onq8Vi0AgO7GK6NQeyE5fWJVvOgns6Z5zg77K34rzCbAEBfxjVGVmYk+xsbDQ7KRPppRCEkbITakwRPXI5qSOXfVS2xBmzQXtsA1n5SZCUMcln9QtNn/igG9TEbmvO+VilEhlhJvUj6VjMLIbI36TiGV/tJlZ59C45N5441eNi0AhTn50R/9n7oTsXSwFHu2SEhQJE70C2opfjrkmjRnMRoWhrtKDApT7kMZCfL+R0FaDjgGlAJszz6t2cr3DBpI46/zVoH0a4VNomNa8og5YbA05mdukw4eCGeqn8Qq/MKtaaooijoABUhVfbzAdFDabnyouUnio9QikTS1JUoU5CGudokNwxL4HeDEKqzW+4zzGVFoGj9jj09OkGaD/febsKqIsH9hJTJHwID7ANm6CmTslpCw9sRBwPm8n9sQfokKHUGjHmL+i8Fx2j/mOnH6SI94upyDDXNWCR+029W3vw724zjU+ongC6+YlEOCgFvwDlus52c/L08E6dHAQJZmAj1S6mvZJvwJuirMiME9z5YBaebk/JZHDq6Du1vuUZijw2haf2JjZ/rrFp0i2fbzyTgu+vVkiegeJjeM/W8+WkKBFqC8CwyMbA6aSuY7A/t8VsG61FRdlTOSpYoDaQQe8NoSyKyl8gMeWnYpXOe2vFJHwQfAExiXqG4X+heph4I9PY0vi1zwf9oKo/dE0usktSO/XeaChZCm6fL8GFzlI3mQqZsXHcmGljV3MDiu7EHcsPQUZobqBt8aqzFrxrqNeK3FskBSqnaRCdOACphLMWijB9Aw/kXAUOFZGxFAw8Fq1ZB0S+XaJpY/pEfWcWDuZW2Fkni5s21r5Bo9bCho8e9oHF9bpeDiI4gwKh9nzVQDSVV7//X1CjZ9lEbKy2ZqalgeAHvDSlfiSIru8rbPW0M+fbmFdqga4m/DjjoybrZgSvBVGJXFB4yZZdX8QkQHDWqgaY9xNgVHPcXrzO+FVODllbkf+rlTU1RGunNcMc3m+8bnnwj051WKRwi8r+E7XQofk65wHSWD042goO1FrZ+mgCoGNqbiNZrBZOL0m28HnDppW0DVOU2eXZdfWW3zFO8yMiBbNPY8rd4NLQCQdDkhZBYWZNE9JHxXrMY/FcJ1pRzul4fflrF21yfIEygPVukrstL20GvgPrzJBxdM/yD4uOvAUQooX6RE16u/92UyWAxyWX1u2ijv68SBS/Id9ESwHD8AZJov7r4gEaOAGZ7/NGvH1V2Dx17VEa0MK5HZjUhJuG54wsfAC79JWkdNGEDv5e8zgtCIlYwZd6JJ6rZ2Ky4M9u0mvfA28ObkBNdxsW6Hk4WYY2gXNdvnmmKdkPBYhvQ0jFu3XnpKfo7c86F1OhAX/yQa+eQ5CiF43NM7h0LieiH2jlv23DeqH45l1ZxVaxX7uPR7kIxAqiZfi3uvM2sFlGRFGSYpYjAMklR92ltXpfwrylylUJnfy2ESiLN8fZ6rGFIpQml4XSva7fh8aRCAVp6k/8iwyrzFUvk1jsF9PVuK/YUaOvYhViXjlzegmzwuSE3L4YAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014Rdetf78aZFajyy46cvFx4",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/native-select.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WH3xjrMaJuEi4rijmmDf5J",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/aspect-ratio.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014Rdetf78aZFajyy46cvFx4",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { ChevronDownIcon } from \"lucide-react\"\n\nfunction NativeSelect({\n  className,\n  size = \"default\",\n  ...props\n}: Omit<React.ComponentProps<\"select\">, \"size\"> & { size?: \"sm\" | \"default\" }) {\n  return (\n    <div\n      className=\"group/native-select relative w-fit has-[select:disabled]:opacity-50\"\n      data-slot=\"native-select-wrapper\"\n    >\n      <select\n        data-slot=\"native-select\"\n        data-size={size}\n        className={cn(\n          \"h-9 w-full min-w-0 appearance-none rounded-md border border-input bg-transparent px-3 py-2 pr-9 text-sm shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed data-[size=sm]:h-8 data-[size=sm]:py-1 dark:bg-input/30 dark:hover:bg-input/50\",\n          \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n          \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n          className\n        )}\n        {...props}\n      />\n      <ChevronDownIcon\n        className=\"pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2 text-muted-foreground opacity-50 select-none\"\n        aria-hidden=\"true\"\n        data-slot=\"native-select-icon\"\n      />\n    </div>\n  )\n}\n\nfunction NativeSelectOption({\n  className,\n  ...props\n}: React.ComponentProps<\"option\">) {\n  return (\n    <option\n      data-slot=\"native-select-option\"\n      className={cn(\"bg-[Canvas] text-[CanvasText]\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction NativeSelectOptGroup({\n  className,\n  ...props\n}: React.ComponentProps<\"optgroup\">) {\n  return (\n    <optgroup\n      data-slot=\"native-select-optgroup\"\n      className={cn(\"bg-[Canvas] text-[CanvasText]\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { NativeSelect, NativeSelectOptGroup, NativeSelectOption }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WH3xjrMaJuEi4rijmmDf5J",
+          "content": "\"use client\"\n\nimport { AspectRatio as AspectRatioPrimitive } from \"radix-ui\"\n\nfunction AspectRatio({\n  ...props\n}: React.ComponentProps<typeof AspectRatioPrimitive.Root>) {\n  return <AspectRatioPrimitive.Root data-slot=\"aspect-ratio\" {...props} />\n}\n\nexport { AspectRatio }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01BZKwEgtF7WTYYGGGciYhLc",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/sonner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BZKwEgtF7WTYYGGGciYhLc",
+          "content": "\"use client\"\n\nimport {\n  CircleCheckIcon,\n  InfoIcon,\n  Loader2Icon,\n  OctagonXIcon,\n  TriangleAlertIcon,\n} from \"lucide-react\"\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: <CircleCheckIcon className=\"size-4\" />,\n        info: <InfoIcon className=\"size-4\" />,\n        warning: <TriangleAlertIcon className=\"size-4\" />,\n        error: <OctagonXIcon className=\"size-4\" />,\n        loading: <Loader2Icon className=\"size-4 animate-spin\" />,\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Now I'll write the page.\n\n```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport {\n  EyeIcon,\n  HeartIcon,\n  RefreshCwIcon,\n  ShoppingBagIcon,\n  StarIcon,\n} from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Card,\n  CardContent,\n  CardFooter,\n  CardHeader,\n} from \"@/components/ui/card\";\nimport {\n  NativeSelect,\n  NativeSelectOption,\n} from \"@/components/ui/native-select\";\nimport { Skeleton } from \"@/components/ui/skeleton\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";\nimport {\n  Tooltip,\n  TooltipContent,\n  TooltipProvider,\n  TooltipTrigger,\n} from \"@/components/ui/tooltip\";\nimport { cn } from \"@/lib/utils\";\n\ntype Category = \"Bags\" | \"Footwear\" | \"Home\" | \"Accessories\";\ntype Shape = \"tote\" | \"sneaker\" | \"mug\" | \"lamp\" | \"watch\" | \"bottle\" | \"pouch\" | \"chair\";\ntype Tag = \"New\" | \"Bestseller\" | \"Sale\" | \"Low stock\" | \"Eco\";\n\ninterface Product {\n  id: string;\n  name: string;\n  category: Category;\n  price: number;\n  compareAt?: number;\n  rating: number;\n  reviews: number;\n  tag?: Tag;\n  color: string;\n  shape: Shape;\n  hue: number;\n}\n\nconst PRODUCTS: Product[] = [\n  { id: \"p1\", name: \"Harbor Canvas Tote\", category: \"Bags\", price: 64, rating: 4.8, reviews: 312, tag: \"Bestseller\", color: \"Natural oat\", shape: \"tote\", hue: 75 },\n  { id: \"p2\", name: \"Stride Low Leather Sneaker\", category: \"Footwear\", price: 128, compareAt: 160, rating: 4.6, reviews: 187, tag: \"Sale\", color: \"Chalk white\", shape: \"sneaker\", hue: 250 },\n  { id: \"p3\", name: \"Kiln Stoneware Mug\", category: \"Home\", price: 24, rating: 4.9, reviews: 540, tag: \"Bestseller\", color: \"Moss glaze\", shape: \"mug\", hue: 150 },\n  { id: \"p4\", name: \"Arc Desk Lamp\", category: \"Home\", price: 89, rating: 4.5, reviews: 96, tag: \"New\", color: \"Matte graphite\", shape: \"lamp\", hue: 40 },\n  { id: \"p5\", name: \"Meridian Field Watch\", category: \"Accessories\", price: 215, rating: 4.7, reviews: 142, tag: \"Low stock\", color: \"Brushed steel\", shape: \"watch\", hue: 220 },\n  { id: \"p6\", name: \"Trail Insulated Bottle 750ml\", category: \"Accessories\", price: 36, rating: 4.8, reviews: 421, tag: \"Eco\", color: \"Sage green\", shape: \"bottle\", hue: 170 },\n  { id: \"p7\", name: \"Fold Zip Travel Pouch\", category: \"Bags\", price: 28, compareAt: 35, rating: 4.4, reviews: 73, tag: \"Sale\", color: \"Terracotta\", shape: \"pouch\", hue: 30 },\n  { id: \"p8\", name: \"Nook Oak Lounge Chair\", category: \"Home\", price: 340, rating: 4.9, reviews: 58, tag: \"New\", color: \"Natural oak\", shape: \"chair\", hue: 60 },\n  { id: \"p9\", name: \"Cove Slip-On Canvas Shoe\", category: \"Footwear\", price: 58, rating: 4.3, reviews: 209, color: \"Indigo\", shape: \"sneaker\", hue: 265 },\n  { id: \"p10\", name: \"Pioneer Weekender Duffel\", category: \"Bags\", price: 149, rating: 4.7, reviews: 164, tag: \"Eco\", color: \"Olive waxed\", shape: \"tote\", hue: 110 },\n  { id: \"p11\", name: \"Dune Ceramic Table Lamp\", category: \"Home\", price: 72, compareAt: 96, rating: 4.6, reviews: 81, tag: \"Sale\", color: \"Sand\", shape: \"lamp\", hue: 55 },\n  { id: \"p12\", name: \"Tide Sport Watch\", category: \"Accessories\", price: 159, rating: 4.5, reviews: 118, color: \"Midnight\", shape: \"watch\", hue: 235 },\n];\n\nconst CATEGORIES: ReadonlyArray<\"All\" | Category> = [\n  \"All\",\n  \"Bags\",\n  \"Footwear\",\n  \"Home\",\n  \"Accessories\",\n];\n\ntype SortKey = \"featured\" | \"price-asc\" | \"price-desc\" | \"rating\";\n\nconst currency = new Intl.NumberFormat(\"en-US\", {\n  style: \"currency\",\n  currency: \"USD\",\n  minimumFractionDigits: 0,\n  maximumFractionDigits: 2,\n});\n\nfunction ProductIllustration({ shape, hue }: { shape: Shape; hue: number }) {\n  const bg = `oklch(0.94 0.035 ${hue})`;\n  const bgDeep = `oklch(0.88 0.06 ${hue})`;\n  const main = `oklch(0.55 0.09 ${hue})`;\n  const light = `oklch(0.75 0.08 ${hue})`;\n  const dark = `oklch(0.32 0.05 ${hue})`;\n  const gradId = `g-${shape}-${hue}`;\n\n  return (\n    <svg\n      viewBox=\"0 0 200 200\"\n      className=\"size-full\"\n      role=\"presentation\"\n      aria-hidden=\"true\"\n      preserveAspectRatio=\"xMidYMid slice\"\n    >\n      <defs>\n        <linearGradient id={gradId} x1=\"0\" y1=\"0\" x2=\"1\" y2=\"1\">\n          <stop offset=\"0\" stopColor={bg} />\n          <stop offset=\"1\" stopColor={bgDeep} />\n        </linearGradient>\n      </defs>\n      <rect width=\"200\" height=\"200\" fill={`url(#${gradId})`} />\n      <ellipse cx=\"100\" cy=\"162\" rx=\"52\" ry=\"7\" fill={dark} opacity=\"0.14\" />\n      {shape === \"tote\" && (\n        <g>\n          <path d=\"M72 78c0-30 56-30 56 0\" fill=\"none\" stroke={dark} strokeWidth=\"5\" strokeLinecap=\"round\" />\n          <path d=\"M54 78h92l8 80H46z\" fill={main} />\n          <path d=\"M54 78h92l2 18H52z\" fill={light} opacity=\"0.6\" />\n          <rect x=\"84\" y=\"112\" width=\"32\" height=\"22\" rx=\"3\" fill={dark} opacity=\"0.25\" />\n        </g>\n      )}\n      {shape === \"sneaker\" && (\n        <g>\n          <path d=\"M34 128c0-8 4-12 10-14l22-6 14-22 16 10 18 6c18 4 34 10 36 22v8H34z\" fill={main} />\n          <path d=\"M34 128h122v14a6 6 0 0 1-6 6H40a6 6 0 0 1-6-6z\" fill={dark} opacity=\"0.85\" />\n          <path d=\"M82 94l8 8M94 98l8 8M106 102l8 8\" stroke={bg} strokeWidth=\"3\" strokeLinecap=\"round\" />\n          <path d=\"M44 114l22-6\" stroke={light} strokeWidth=\"4\" strokeLinecap=\"round\" />\n        </g>\n      )}\n      {shape === \"mug\" && (\n        <g>\n          <path d=\"M142 90h10a14 14 0 0 1 0 28h-10\" fill=\"none\" stroke={main} strokeWidth=\"8\" strokeLinecap=\"round\" />\n          <path d=\"M58 78h86v52a22 22 0 0 1-22 22H80a22 22 0 0 1-22-22z\" fill={main} />\n          <ellipse cx=\"101\" cy=\"78\" rx=\"43\" ry=\"7\" fill={dark} opacity=\"0.55\" />\n          <path d=\"M70 100c4 20 4 34 0 44\" stroke={light} strokeWidth=\"5\" strokeLinecap=\"round\" fill=\"none\" opacity=\"0.7\" />\n        </g>\n      )}\n      {shape === \"lamp\" && (\n        <g>\n          <ellipse cx=\"100\" cy=\"154\" rx=\"30\" ry=\"6\" fill={dark} />\n          <path d=\"M100 154V96l36-38\" fill=\"none\" stroke={dark} strokeWidth=\"6\" strokeLinecap=\"round\" strokeLinejoin=\"round\" />\n          <path d=\"M118 44l36 22-14 22z\" fill={main} />\n          <circle cx=\"146\" cy=\"82\" r=\"5\" fill={light} />\n        </g>\n      )}\n      {shape === \"watch\" && (\n        <g>\n          <rect x=\"82\" y=\"30\" width=\"36\" height=\"140\" rx=\"10\" fill={dark} opacity=\"0.8\" />\n          <circle cx=\"100\" cy=\"100\" r=\"40\" fill={main} />\n          <circle cx=\"100\" cy=\"100\" r=\"33\" fill={bg} />\n          <path d=\"M100 100V76M100 100l16 8\" stroke={dark} strokeWidth=\"4\" strokeLinecap=\"round\" />\n          <circle cx=\"100\" cy=\"100\" r=\"3.5\" fill={dark} />\n          <path d=\"M100 70v4M100 126v4M70 100h4M126 100h4\" stroke={main} strokeWidth=\"3\" strokeLinecap=\"round\" />\n        </g>\n      )}\n      {shape === \"bottle\" && (\n        <g>\n          <rect x=\"88\" y=\"34\" width=\"24\" height=\"16\" rx=\"4\" fill={dark} />\n          <path d=\"M90 50h20v10c14 8 18 18 18 30v58a10 10 0 0 1-10 10H82a10 10 0 0 1-10-10V90c0-12 4-22 18-30z\" fill={main} />\n          <rect x=\"72\" y=\"104\" width=\"56\" height=\"26\" fill={light} opacity=\"0.55\" />\n          <path d=\"M84 78v62\" stroke={bg} strokeWidth=\"4\" strokeLinecap=\"round\" opacity=\"0.5\" />\n        </g>\n      )}\n      {shape === \"pouch\" && (\n        <g>\n          <path d=\"M48 76h104l6 74a8 8 0 0 1-8 9H50a8 8 0 0 1-8-9z\" fill={main} />\n          <rect x=\"46\" y=\"68\" width=\"108\" height=\"16\" rx=\"6\" fill={light} />\n          <path d=\"M60 76h80\" stroke={dark} strokeWidth=\"2.5\" strokeDasharray=\"5 4\" opacity=\"0.55\" />\n          <path d=\"M100 76v-6l10-8\" stroke={dark} strokeWidth=\"4\" strokeLinecap=\"round\" fill=\"none\" />\n        </g>\n      )}\n      {shape === \"chair\" && (\n        <g>\n          <path d=\"M62 52h66l10 66H58z\" fill={main} />\n          <path d=\"M52 112h96l-6 22H58z\" fill={light} />\n          <path d=\"M60 134l-10 28M140 134l10 28M80 134l-4 28M120 134l4 28\" stroke={dark} strokeWidth=\"6\" strokeLinecap=\"round\" />\n        </g>\n      )}\n    </svg>\n  );\n}\n\nfunction Rating({ value, reviews }: { value: number; reviews: number }) {\n  return (\n    <p className=\"flex items-center gap-1 text-xs text-muted-foreground\">\n      <StarIcon className=\"size-3.5 fill-current text-foreground\" aria-hidden=\"true\" />\n      <span className=\"font-medium text-foreground\">{value.toFixed(1)}</span>\n      <span aria-hidden=\"true\">({reviews})</span>\n      <span className=\"sr-only\">out of 5 stars, {reviews} reviews</span>\n    </p>\n  );\n}\n\ninterface ProductCardProps {\n  product: Product;\n  wishlisted: boolean;\n  onToggleWishlist: (product: Product) => void;\n  onAddToCart: (product: Product) => void;\n  onQuickView: (product: Product) => void;\n}\n\nfunction ProductCard({\n  product,\n  wishlisted,\n  onToggleWishlist,\n  onAddToCart,\n  onQuickView,\n}: ProductCardProps) {\n  const discount = product.compareAt\n    ? Math.round((1 - product.price / product.compareAt) * 100)\n    : 0;\n\n  return (\n    <Card\n      className=\"group/card gap-0 overflow-hidden py-0 transition-shadow focus-within:shadow-md hover:shadow-md\"\n      aria-label={product.name}\n    >\n      <CardHeader className=\"relative block p-0\">\n        <div className=\"relative aspect-square w-full overflow-hidden\">\n          <div className=\"size-full transition-transform duration-500 ease-out group-focus-within/card:scale-105 group-hover/card:scale-105 motion-reduce:transition-none motion-reduce:group-hover/card:scale-100 motion-reduce:group-focus-within/card:scale-100\">\n            <ProductIllustration shape={product.shape} hue={product.hue} />\n          </div>\n\n          {product.tag && (\n            <Badge\n              variant={product.tag === \"Sale\" ? \"destructive\" : \"secondary\"}\n              className=\"absolute top-3 left-3\"\n            >\n              {product.tag}\n              {product.tag === \"Sale\" && discount > 0 ? ` −${discount}%` : null}\n            </Badge>\n          )}\n\n          <Button\n            type=\"button\"\n            variant=\"secondary\"\n            size=\"icon-sm\"\n            className=\"absolute top-3 right-3 rounded-full shadow-sm\"\n            aria-pressed={wishlisted}\n            aria-label={\n              wishlisted\n                ? `Remove ${product.name} from wishlist`\n                : `Add ${product.name} to wishlist`\n            }\n            onClick={() => onToggleWishlist(product)}\n          >\n            <HeartIcon className={cn(wishlisted && \"fill-current text-destructive\")} />\n          </Button>\n\n          <div\n            className={cn(\n              \"absolute inset-x-3 bottom-3 flex items-center gap-2 transition-all duration-200\",\n              \"[@media(hover:hover)]:translate-y-2 [@media(hover:hover)]:opacity-0\",\n              \"[@media(hover:hover)]:group-hover/card:translate-y-0 [@media(hover:hover)]:group-hover/card:opacity-100\",\n              \"[@media(hover:hover)]:group-focus-within/card:translate-y-0 [@media(hover:hover)]:group-focus-within/card:opacity-100\",\n              \"motion-reduce:transition-none\"\n            )}\n          >\n            <Button\n              type=\"button\"\n              size=\"sm\"\n              className=\"flex-1 shadow-sm\"\n              onClick={() => onAddToCart(product)}\n            >\n              <ShoppingBagIcon data-icon=\"inline-start\" />\n              Add to cart\n              <span className=\"sr-only\">: {product.name}</span>\n            </Button>\n            <TooltipProvider>\n              <Tooltip>\n                <TooltipTrigger asChild>\n                  <Button\n                    type=\"button\"\n                    variant=\"secondary\"\n                    size=\"icon-sm\"\n                    className=\"shadow-sm\"\n                    aria-label={`Quick view ${product.name}`}\n                    onClick={() => onQuickView(product)}\n                  >\n                    <EyeIcon />\n                  </Button>\n                </TooltipTrigger>\n                <TooltipContent>Quick view</TooltipContent>\n              </Tooltip>\n            </TooltipProvider>\n          </div>\n        </div>\n      </CardHeader>\n\n      <CardContent className=\"flex flex-col gap-1.5 px-4 pt-4\">\n        <p className=\"text-xs text-muted-foreground\">\n          {product.category} · {product.color}\n        </p>\n        <h3 className=\"line-clamp-2 min-h-10 text-sm leading-5 font-semibold text-balance\">\n          {product.name}\n        </h3>\n        <Rating value={product.rating} reviews={product.reviews} />\n      </CardContent>\n\n      <CardFooter className=\"items-baseline gap-2 px-4 pt-2 pb-4\">\n        <p className=\"text-base font-semibold tabular-nums\">\n          <span className=\"sr-only\">Price: </span>\n          {currency.format(product.price)}\n        </p>\n        {product.compareAt && (\n          <p className=\"text-sm text-muted-foreground tabular-nums line-through\">\n            <span className=\"sr-only\">Was </span>\n            {currency.format(product.compareAt)}\n          </p>\n        )}\n      </CardFooter>\n    </Card>\n  );\n}\n\nfunction ProductCardSkeleton() {\n  return (\n    <Card className=\"gap-0 overflow-hidden py-0\" aria-hidden=\"true\">\n      <Skeleton className=\"aspect-square w-full rounded-none\" />\n      <CardContent className=\"flex flex-col gap-2 px-4 pt-4\">\n        <Skeleton className=\"h-3 w-1/3\" />\n        <Skeleton className=\"h-4 w-4/5\" />\n        <Skeleton className=\"h-4 w-3/5\" />\n        <Skeleton className=\"mt-1 h-3 w-1/4\" />\n      </CardContent>\n      <CardFooter className=\"px-4 pt-3 pb-4\">\n        <Skeleton className=\"h-5 w-16\" />\n      </CardFooter>\n    </Card>\n  );\n}\n\nexport default function Page() {\n  const [loading, setLoading] = React.useState(true);\n  const [category, setCategory] = React.useState<\"All\" | Category>(\"All\");\n  const [sort, setSort] = React.useState<SortKey>(\"featured\");\n  const [wishlist, setWishlist] = React.useState<ReadonlySet<string>>(\n    () => new Set<string>()\n  );\n  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const startLoading = React.useCallback((duration: number) => {\n    if (timerRef.current) clearTimeout(timerRef.current);\n    setLoading(true);\n    timerRef.current = setTimeout(() => setLoading(false), duration);\n  }, []);\n\n  React.useEffect(() => {\n    startLoading(1600);\n    return () => {\n      if (timerRef.current) clearTimeout(timerRef.current);\n    };\n  }, [startLoading]);\n\n  const visible = React.useMemo(() => {\n    const filtered =\n      category === \"All\"\n        ? [...PRODUCTS]\n        : PRODUCTS.filter((p) => p.category === category);\n    switch (sort) {\n      case \"price-asc\":\n        return filtered.sort((a, b) => a.price - b.price);\n      case \"price-desc\":\n        return filtered.sort((a, b) => b.price - a.price);\n      case \"rating\":\n        return filtered.sort((a, b) => b.rating - a.rating);\n      default:\n        return filtered;\n    }\n  }, [category, sort]);\n\n  const handleToggleWishlist = React.useCallback((product: Product) => {\n    setWishlist((prev) => {\n      const next = new Set(prev);\n      if (next.has(product.id)) {\n        next.delete(product.id);\n        toast(`Removed from wishlist`, { description: product.name });\n      } else {\n        next.add(product.id);\n        toast.success(`Saved to wishlist`, { description: product.name });\n      }\n      return next;\n    });\n  }, []);\n\n  const handleAddToCart = React.useCallback((product: Product) => {\n    toast.success(\"Added to cart\", {\n      description: `${product.name} · ${currency.format(product.price)}`,\n    });\n  }, []);\n\n  const handleQuickView = React.useCallback((product: Product) => {\n    toast.info(product.name, {\n      description: `${product.color} · ${product.rating.toFixed(1)} stars from ${product.reviews} reviews`,\n    });\n  }, []);\n\n  return (\n    <main className=\"mx-auto flex w-full max-w-7xl flex-col gap-8 px-4 py-8 sm:px-6 sm:py-12 lg:px-8\">\n      <header className=\"flex flex-col gap-6\">\n        <div className=\"flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between\">\n          <div className=\"flex flex-col gap-2\">\n            <p className=\"text-sm font-medium text-muted-foreground\">\n              Spring collection\n            </p>\n            <h1 className=\"text-3xl font-semibold tracking-tight text-balance sm:text-4xl\">\n              Everyday objects, made to last\n            </h1>\n            <p className=\"max-w-xl text-sm text-muted-foreground sm:text-base\">\n              Bags, shoes, and home pieces built from durable materials and\n              designed to age well. Free returns within 30 days.\n            </p>\n          </div>\n          <Button\n            type=\"button\"\n            variant=\"outline\"\n            size=\"sm\"\n            className=\"self-start sm:self-auto\"\n            disabled={loading}\n            onClick={() => startLoading(1800)}\n          >\n            <RefreshCwIcon\n              data-icon=\"inline-start\"\n              className={cn(loading && \"animate-spin motion-reduce:animate-none\")}\n            />\n            {loading ? \"Loading…\" : \"Reload products\"}\n          </Button>\n        </div>\n\n        <div className=\"flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between\">\n          <div className=\"-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0\">\n            <ToggleGroup\n              type=\"single\"\n              variant=\"outline\"\n              size=\"sm\"\n              value={category}\n              onValueChange={(value) => {\n                if (value) setCategory(value as \"All\" | Category);\n              }}\n              aria-label=\"Filter by category\"\n            >\n              {CATEGORIES.map((c) => (\n                <ToggleGroupItem key={c} value={c}>\n                  {c}\n                </ToggleGroupItem>\n              ))}\n            </ToggleGroup>\n          </div>\n\n          <div className=\"flex items-center gap-3\">\n            <p\n              className=\"text-sm text-muted-foreground tabular-nums\"\n              role=\"status\"\n              aria-live=\"polite\"\n            >\n              {loading\n                ? \"Loading products…\"\n                : `${visible.length} ${visible.length === 1 ? \"product\" : \"products\"}`}\n            </p>\n            <label htmlFor=\"sort\" className=\"sr-only\">\n              Sort products\n            </label>\n            <NativeSelect\n              id=\"sort\"\n              size=\"sm\"\n              value={sort}\n              onChange={(e) => setSort(e.target.value as SortKey)}\n            >\n              <NativeSelectOption value=\"featured\">Featured</NativeSelectOption>\n              <NativeSelectOption value=\"price-asc\">Price: low to high</NativeSelectOption>\n              <NativeSelectOption value=\"price-desc\">Price: high to low</NativeSelectOption>\n              <NativeSelectOption value=\"rating\">Top rated</NativeSelectOption>\n            </NativeSelect>\n          </div>\n        </div>\n      </header>\n\n      <section aria-label=\"Products\" aria-busy={loading}>\n        {loading ? (\n          <ul className=\"grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4\">\n            {Array.from({ length: 8 }, (_, i) => (\n              <li key={i}>\n                <ProductCardSkeleton />\n              </li>\n            ))}\n          </ul>\n        ) : (\n          <ul className=\"grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4\">\n            {visible.map((product) => (\n              <li key={product.id}>\n                <ProductCard\n                  product={product}\n                  wishlisted={wishlist.has(product.id)}\n                  onToggleWishlist={handleToggleWishlist}\n                  onAddToCart={handleAddToCart}\n                  onQuickView={handleQuickView}\n                />\n              </li>\n            ))}\n          </ul>\n        )}\n      </section>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

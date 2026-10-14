@@ -1,0 +1,25 @@
+{
+  "arm": "D",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2734
+    },
+    "build": {
+      "ok": true,
+      "ms": 9994
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "errors": [
+        "server did not start:\n"
+      ],
+      "axe": null,
+      "interaction": {}
+    }
+  }
+}

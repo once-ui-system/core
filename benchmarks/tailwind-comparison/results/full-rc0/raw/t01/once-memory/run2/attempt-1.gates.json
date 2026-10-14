@@ -1,0 +1,67 @@
+{
+  "arm": "B",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3256
+    },
+    "build": {
+      "ok": true,
+      "ms": 10180
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1140,
+          "height": 2189,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1140,
+          "height": 2194,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1140,
+          "height": 1185,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 6,
+        "serious_or_critical": 1,
+        "ids": [
+          "role-img-alt:serious:6"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "none"
+        },
+        "desktop": {
+          "action": "none"
+        }
+      }
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 15 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n  [layout.defaults] minWidth={0} beside fillWidth — fillWidth already sets min-width: 0, omit minWidth\n  [border.default] border=\"neutral-alpha-weak\" restates the default border — write bare border, and name a colour only to deviate\n  [Card.interactive] Card without href/onClick — use Column + surface recipe for static panels\n  [Icon.names] Unknown icon name in icon: \"revenue\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"users\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"conversion\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"bounce\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"upgrade\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"order\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"review\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"report\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"invite\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [Icon.names] Unknown icon name in icon: \"cancel\" — use a name from iconNames in spec.json, or register it by augmenting IconLibraryOverrides\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

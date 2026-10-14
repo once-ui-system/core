@@ -10,7 +10,8 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { WORK, config, createClient } from "./lib.mjs";
+import Anthropic from "@anthropic-ai/sdk";
+import { WORK, config } from "./lib.mjs";
 
 const arg = (k, d) => {
   const i = process.argv.indexOf(`--${k}`);
@@ -24,7 +25,7 @@ if (!process.env.ANTHROPIC_API_KEY) {
   console.error("ANTHROPIC_API_KEY is not set.");
   process.exit(2);
 }
-const client = createClient();
+const client = new Anthropic(process.env.ANTHROPIC_WORKSPACE_ID ? { defaultHeaders: { "anthropic-workspace-id": process.env.ANTHROPIC_WORKSPACE_ID } } : {});
 const done = fs.existsSync(outPath) ? JSON.parse(fs.readFileSync(outPath, "utf8")) : [];
 const IMAGES = ["phone", "tablet", "desktop", "phone-interaction", "desktop-interaction"];
 

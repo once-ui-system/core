@@ -1,0 +1,39 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 536,
+    "chars": 17417,
+    "bytes": 17421,
+    "tokens_o200k": 3649,
+    "tokens_claudeLegacy": 3771,
+    "tokens_exact": 5744
+  },
+  "raw": {
+    "lines": 452,
+    "chars": 16345,
+    "bytes": 16349,
+    "tokens_o200k": 3542,
+    "tokens_claudeLegacy": 3711,
+    "tokens_exact": 5584
+  },
+  "components": [
+    "AccordionGroup",
+    "Background",
+    "BlobFx",
+    "Button",
+    "Column",
+    "CountFx",
+    "Grid",
+    "Heading",
+    "Icon",
+    "MatrixFx",
+    "RevealFx",
+    "Row",
+    "SegmentedControl",
+    "Table",
+    "Tag",
+    "Text",
+    "VisuallyHidden"
+  ]
+}

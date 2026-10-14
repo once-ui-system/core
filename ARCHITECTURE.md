@@ -42,7 +42,7 @@ All source lives under `packages/core/src/`. The build produces `dist/` with JS 
 | `src/__tests__/`    | Unit and integration tests (Vitest + jsdom); `src/test/` holds the setup and the axe helper.                                                                                                 |
 | `src/icons.ts`      | The icon registry and the `IconName` union, built from the inlined SVG data in `src/icons/`.                                                                                                 |
 | `src/index.ts`      | Public API barrel — everything exported from here is available to consumers.                                                                                                                 |
-| `ai/`               | AI codegen harness — manifest, rules, catalog, task bundles, component slices, gotchas, examples. `spec.json`, `catalog.json`, `manifest.json` and `components/` are generated from the source and `catalog.seed.json`. |
+| `ai/`               | AI codegen harness — manifest, rules, catalog, task bundles, component slices, gotchas, examples. `spec.json`, `catalog.json`, `manifest.json`, `tokens.json`, `functions.json`, `components/` and `bundles/` are generated from the source, `catalog.seed.json`, `tasks/` and `gotchas.json`. |
 | `scripts/`          | Build helpers — emoji data and AI spec generation, file copying — plus the two published CLIs: `validate-ai-code.js` and `init-agent.js`.                                                    |
 | `dist/`             | Build output (JS, CSS, types). Generated, not committed.                                                                                                                                     |
 

@@ -1,0 +1,222 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Changelog/timeline page — versioned entries on a timeline, tags per release, copyable code snippets.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the project to see how it's set up."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Jx4azWaoEQXAAcac1b7QmM",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FAgzDewdTtMKZia9BxjVYH",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Jx4azWaoEQXAAcac1b7QmM",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FAgzDewdTtMKZia9BxjVYH",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01RDxH7nvc1uRtahEb7x74NF",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015K56tReaKiWuQf8WRgPP4C",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GtXKES7GqXbgVdKRwiZzmk",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RDxH7nvc1uRtahEb7x74NF",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015K56tReaKiWuQf8WRgPP4C",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GtXKES7GqXbgVdKRwiZzmk",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01QbHMpWsCfNeCfbXUKd8AAm",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013xinjTzvSP99676Qo6SxLq",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KoAabSfm45UDASLwDJ1gJW",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011CzqHoAETsjeAtvZDMYweR",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WiucL1Nten9GD3iThGq65w",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QbHMpWsCfNeCfbXUKd8AAm",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013xinjTzvSP99676Qo6SxLq",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KoAabSfm45UDASLwDJ1gJW",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011CzqHoAETsjeAtvZDMYweR",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WiucL1Nten9GD3iThGq65w",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The package isn't installed locally, so I'll stick to Once UI components and props I'm confident about (Flex, Column, Row, Heading, Text, Tag, Button, Line, Background-free). I'll use plain elements for the semantic list and the copy button, so the types stay safe.\n\nI'll use Once UI layout primitives with conservative props, native `<ol>`, `<button>`, and `<pre>` for semantics, and CSS variables from the Once UI tokens for styling.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useMemo, useRef, useState } from \"react\";\nimport { Column, Flex, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype TagKind = \"feature\" | \"fix\" | \"breaking\" | \"perf\" | \"security\" | \"docs\";\n\ninterface Snippet {\n  label: string;\n  language: string;\n  code: string;\n}\n\ninterface Release {\n  version: string;\n  date: string;\n  iso: string;\n  title: string;\n  summary: string;\n  tags: TagKind[];\n  changes: string[];\n  snippet?: Snippet;\n}\n\nconst TAG_META: Record<TagKind, { label: string; color: string }> = {\n  feature: { label: \"Feature\", color: \"var(--brand-on-background-strong)\" },\n  fix: { label: \"Fix\", color: \"var(--success-on-background-strong)\" },\n  breaking: { label: \"Breaking\", color: \"var(--danger-on-background-strong)\" },\n  perf: { label: \"Performance\", color: \"var(--accent-on-background-strong)\" },\n  security: { label: \"Security\", color: \"var(--warning-on-background-strong)\" },\n  docs: { label: \"Docs\", color: \"var(--neutral-on-background-strong)\" },\n};\n\nconst RELEASES: Release[] = [\n  {\n    version: \"3.0.0\",\n    date: \"March 18, 2025\",\n    iso: \"2025-03-18\",\n    title: \"Streaming pipelines and a new config format\",\n    summary:\n      \"Pipelines can now stream partial results to clients as stages complete. The configuration file moves to a typed TypeScript format, and the legacy YAML loader has been removed.\",\n    tags: [\"feature\", \"breaking\"],\n    changes: [\n      \"Added `stream()` to the pipeline runner for incremental results.\",\n      \"Replaced `harbor.yaml` with `harbor.config.ts` and a typed `defineConfig` helper.\",\n      \"Removed the deprecated YAML loader and the `--legacy-config` flag.\",\n      \"Minimum supported Node.js version is now 20.11.\",\n    ],\n    snippet: {\n      label: \"harbor.config.ts\",\n      language: \"typescript\",\n      code: `import { defineConfig } from \"@harbor/core\";\n\nexport default defineConfig({\n  pipeline: {\n    concurrency: 8,\n    stream: true,\n  },\n  retries: { attempts: 3, backoffMs: 250 },\n});`,\n    },\n  },\n  {\n    version: \"2.8.0\",\n    date: \"January 29, 2025\",\n    iso: \"2025-01-29\",\n    title: \"Faster cold starts\",\n    summary:\n      \"Module graph caching and lazy plugin loading cut cold start time on large workspaces by roughly half.\",\n    tags: [\"perf\", \"feature\"],\n    changes: [\n      \"Persistent module graph cache stored in `.harbor/cache`.\",\n      \"Plugins are now loaded on first use instead of at startup.\",\n      \"New `harbor doctor` command reports slow plugins and cache hit rate.\",\n    ],\n    snippet: {\n      label: \"Terminal\",\n      language: \"bash\",\n      code: `npm install @harbor/core@2.8.0\nnpx harbor doctor --verbose`,\n    },\n  },\n  {\n    version: \"2.7.3\",\n    date: \"December 11, 2024\",\n    iso: \"2024-12-11\",\n    title: \"Security patch for artifact uploads\",\n    summary:\n      \"Fixes a path traversal issue in artifact uploads when filenames contained encoded separators. All users on 2.x should upgrade.\",\n    tags: [\"security\", \"fix\"],\n    changes: [\n      \"Normalize and validate artifact paths before writing to disk.\",\n      \"Reject filenames containing encoded path separators.\",\n      \"Fixed a race condition when two uploads shared the same temporary directory.\",\n    ],\n    snippet: {\n      label: \"Terminal\",\n      language: \"bash\",\n      code: `npm install @harbor/core@2.7.3 --save-exact`,\n    },\n  },\n  {\n    version: \"2.7.0\",\n    date: \"November 4, 2024\",\n    iso: \"2024-11-04\",\n    title: \"Workspace filters and watch mode\",\n    summary:\n      \"Target a subset of packages with filters, and rerun only what changed with the new watch mode.\",\n    tags: [\"feature\", \"docs\"],\n    changes: [\n      \"Added `--filter` with glob and dependency-graph selectors.\",\n      \"Added `harbor watch` with debounced, incremental reruns.\",\n      \"Rewrote the getting started guide with a monorepo walkthrough.\",\n    ],\n    snippet: {\n      label: \"Terminal\",\n      language: \"bash\",\n      code: `harbor run build --filter \"./packages/ui...\"\nharbor watch test --filter \"@acme/api\"`,\n    },\n  },\n  {\n    version: \"2.6.2\",\n    date: \"September 19, 2024\",\n    iso: \"2024-09-19\",\n    title: \"Stability fixes\",\n    summary: \"A round of fixes for Windows path handling and noisy log output.\",\n    tags: [\"fix\"],\n    changes: [\n      \"Fixed drive letter casing mismatches on Windows.\",\n      \"Silenced duplicate warnings when multiple reporters are enabled.\",\n      \"Corrected exit codes when a stage is cancelled by the user.\",\n    ],\n  },\n];\n\nconst FILTERS: Array<{ id: \"all\" | TagKind; label: string }> = [\n  { id: \"all\", label: \"All\" },\n  { id: \"feature\", label: \"Features\" },\n  { id: \"fix\", label: \"Fixes\" },\n  { id: \"breaking\", label: \"Breaking\" },\n  { id: \"perf\", label: \"Performance\" },\n  { id: \"security\", label: \"Security\" },\n  { id: \"docs\", label: \"Docs\" },\n];\n\nconst styles = `\n.cl-wrap { width: 100%; max-width: 860px; margin: 0 auto; padding: 48px 20px 96px; box-sizing: border-box; }\n.cl-skip { position: absolute; left: -9999px; top: 8px; z-index: 10; padding: 8px 12px; border-radius: 8px;\n  background: var(--surface-background); color: var(--neutral-on-background-strong); border: 1px solid var(--neutral-alpha-medium); }\n.cl-skip:focus { left: 8px; }\n.cl-filters { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }\n.cl-chip { font: inherit; font-size: 14px; cursor: pointer; padding: 6px 14px; border-radius: 999px;\n  border: 1px solid var(--neutral-alpha-medium); background: var(--surface-background);\n  color: var(--neutral-on-background-strong); min-height: 36px; transition: background .15s, border-color .15s; }\n.cl-chip:hover { background: var(--neutral-alpha-weak); }\n.cl-chip[aria-pressed=\"true\"] { background: var(--brand-solid-strong); color: var(--brand-on-solid-strong);\n  border-color: var(--brand-solid-strong); }\n.cl-chip:focus-visible, .cl-copy:focus-visible, .cl-skip:focus-visible, .cl-anchor:focus-visible {\n  outline: 2px solid var(--brand-solid-strong); outline-offset: 2px; }\n.cl-list { list-style: none; margin: 0; padding: 0; position: relative; }\n.cl-list::before { content: \"\"; position: absolute; top: 8px; bottom: 8px; left: 7px; width: 2px;\n  background: var(--neutral-alpha-medium); }\n.cl-item { position: relative; padding: 0 0 40px 40px; }\n.cl-item:last-child { padding-bottom: 0; }\n.cl-dot { position: absolute; left: 0; top: 6px; width: 16px; height: 16px; border-radius: 50%;\n  background: var(--page-background); border: 3px solid var(--brand-solid-strong); box-sizing: border-box; }\n.cl-item[data-latest=\"true\"] .cl-dot { background: var(--brand-solid-strong); }\n.cl-card { border: 1px solid var(--neutral-alpha-medium); border-radius: 16px; padding: 20px;\n  background: var(--surface-background); }\n.cl-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-bottom: 8px; }\n.cl-version { font-family: var(--font-code); font-size: 14px; font-weight: 600; padding: 2px 10px;\n  border-radius: 8px; background: var(--neutral-alpha-weak); color: var(--neutral-on-background-strong); }\n.cl-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 12px 0 0; padding: 0; list-style: none; }\n.cl-tag { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;\n  padding: 3px 10px; border-radius: 999px; border: 1px solid var(--neutral-alpha-medium);\n  color: var(--neutral-on-background-strong); background: var(--page-background); }\n.cl-tag i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }\n.cl-changes { margin: 16px 0 0; padding-left: 20px; color: var(--neutral-on-background-medium); line-height: 1.6; }\n.cl-changes li + li { margin-top: 6px; }\n.cl-changes code { font-family: var(--font-code); font-size: 0.9em; padding: 1px 6px; border-radius: 6px;\n  background: var(--neutral-alpha-weak); color: var(--neutral-on-background-strong); }\n.cl-code { margin-top: 16px; border: 1px solid var(--neutral-alpha-medium); border-radius: 12px; overflow: hidden;\n  background: var(--page-background); }\n.cl-code-head { display: flex; align-items: center; justify-content: space-between; gap: 12px;\n  padding: 6px 8px 6px 14px; border-bottom: 1px solid var(--neutral-alpha-medium); background: var(--neutral-alpha-weak); }\n.cl-code-label { font-family: var(--font-code); font-size: 12px; color: var(--neutral-on-background-medium); }\n.cl-copy { font: inherit; font-size: 13px; cursor: pointer; min-height: 32px; padding: 4px 12px; border-radius: 8px;\n  border: 1px solid var(--neutral-alpha-medium); background: var(--surface-background);\n  color: var(--neutral-on-background-strong); }\n.cl-copy:hover { background: var(--neutral-alpha-weak); }\n.cl-pre { margin: 0; padding: 14px; overflow-x: auto; font-family: var(--font-code); font-size: 13px; line-height: 1.6;\n  color: var(--neutral-on-background-strong); tab-size: 2; }\n.cl-pre:focus-visible { outline: 2px solid var(--brand-solid-strong); outline-offset: -2px; }\n.cl-anchor { color: inherit; text-decoration: none; }\n.cl-anchor:hover { text-decoration: underline; }\n.cl-empty { padding: 32px; text-align: center; border: 1px dashed var(--neutral-alpha-medium); border-radius: 16px;\n  color: var(--neutral-on-background-medium); }\n.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden;\n  clip: rect(0,0,0,0); white-space: nowrap; border: 0; }\n@media (min-width: 720px) {\n  .cl-wrap { padding: 72px 32px 120px; }\n  .cl-card { padding: 28px; }\n  .cl-list::before { left: 8px; }\n  .cl-item { padding-left: 56px; padding-bottom: 48px; }\n  .cl-dot { width: 18px; height: 18px; top: 8px; }\n  .cl-list::before { left: 8px; }\n}\n@media (prefers-reduced-motion: reduce) {\n  .cl-chip { transition: none; }\n}\n`;\n\n/** Render a string, turning `backtick` segments into <code>. */\nfunction renderInline(text: string) {\n  return text.split(/(`[^`]+`)/g).map((part, i) =>\n    part.startsWith(\"`\") && part.endsWith(\"`\") && part.length > 1 ? (\n      <code key={i}>{part.slice(1, -1)}</code>\n    ) : (\n      <span key={i}>{part}</span>\n    ),\n  );\n}\n\nfunction CodeSnippet({ snippet, id }: { snippet: Snippet; id: string }) {\n  const [copied, setCopied] = useState(false);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(() => {\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, []);\n\n  const onCopy = useCallback(async () => {\n    let ok = false;\n    try {\n      await navigator.clipboard.writeText(snippet.code);\n      ok = true;\n    } catch {\n      try {\n        const ta = document.createElement(\"textarea\");\n        ta.value = snippet.code;\n        ta.setAttribute(\"readonly\", \"\");\n        ta.style.position = \"fixed\";\n        ta.style.opacity = \"0\";\n        document.body.appendChild(ta);\n        ta.select();\n        ok = document.execCommand(\"copy\");\n        document.body.removeChild(ta);\n      } catch {\n        ok = false;\n      }\n    }\n    setCopied(ok);\n    if (timer.current) clearTimeout(timer.current);\n    timer.current = setTimeout(() => setCopied(false), 2000);\n  }, [snippet.code]);\n\n  return (\n    <div className=\"cl-code\">\n      <div className=\"cl-code-head\">\n        <span className=\"cl-code-label\" id={`${id}-label`}>\n          {snippet.label}\n        </span>\n        <button\n          type=\"button\"\n          className=\"cl-copy\"\n          onClick={onCopy}\n          aria-describedby={`${id}-label`}\n        >\n          {copied ? \"Copied!\" : \"Copy\"}\n          <span className=\"sr-only\"> {snippet.label} snippet to clipboard</span>\n        </button>\n      </div>\n      <pre className=\"cl-pre\" tabIndex={0} aria-labelledby={`${id}-label`}>\n        <code className={`language-${snippet.language}`}>{snippet.code}</code>\n      </pre>\n      <span className=\"sr-only\" role=\"status\" aria-live=\"polite\">\n        {copied ? \"Copied to clipboard\" : \"\"}\n      </span>\n    </div>\n  );\n}\n\nexport default function ChangelogPage() {\n  const [filter, setFilter] = useState<\"all\" | TagKind>(\"all\");\n\n  const visible = useMemo(\n    () => (filter === \"all\" ? RELEASES : RELEASES.filter((r) => r.tags.includes(filter))),\n    [filter],\n  );\n\n  return (\n    <Flex fillWidth horizontal=\"center\">\n      <style>{styles}</style>\n      <a className=\"cl-skip\" href=\"#releases\">\n        Skip to releases\n      </a>\n      <main className=\"cl-wrap\">\n        <Column gap=\"16\" as=\"header\" marginBottom=\"32\">\n          <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n            Harbor · Release notes\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-m\" wrap=\"balance\">\n            Changelog\n          </Heading>\n          <Text variant=\"body-default-l\" onBackground=\"neutral-weak\" wrap=\"balance\">\n            Every release of Harbor, newest first. Filter by type to find what changed, and copy\n            upgrade commands or config straight from each entry.\n          </Text>\n        </Column>\n\n        <Column gap=\"12\" marginBottom=\"40\" as=\"section\" aria-labelledby=\"filter-heading\">\n          <h2 id=\"filter-heading\" className=\"sr-only\">\n            Filter releases by tag\n          </h2>\n          <ul className=\"cl-filters\">\n            {FILTERS.map((f) => (\n              <li key={f.id}>\n                <button\n                  type=\"button\"\n                  className=\"cl-chip\"\n                  aria-pressed={filter === f.id}\n                  onClick={() => setFilter(f.id)}\n                >\n                  {f.label}\n                </button>\n              </li>\n            ))}\n          </ul>\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" aria-live=\"polite\">\n            Showing {visible.length} of {RELEASES.length} releases\n          </Text>\n        </Column>\n\n        <section id=\"releases\" aria-label=\"Releases\">\n          {visible.length === 0 ? (\n            <div className=\"cl-empty\">No releases match this filter.</div>\n          ) : (\n            <ol className=\"cl-list\">\n              {visible.map((release) => {\n                const id = `v${release.version.replace(/\\./g, \"-\")}`;\n                const isLatest = release.version === RELEASES[0].version;\n                return (\n                  <li key={release.version} className=\"cl-item\" data-latest={isLatest}>\n                    <span className=\"cl-dot\" aria-hidden=\"true\" />\n                    <article className=\"cl-card\" aria-labelledby={`${id}-title`}>\n                      <div className=\"cl-meta\">\n                        <span className=\"cl-version\">v{release.version}</span>\n                        <time dateTime={release.iso}>\n                          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                            {release.date}\n                          </Text>\n                        </time>\n                        {isLatest && (\n                          <Text variant=\"label-strong-s\" onBackground=\"brand-strong\">\n                            Latest\n                          </Text>\n                        )}\n                      </div>\n                      <Heading as=\"h2\" variant=\"heading-strong-l\" id={`${id}-title`}>\n                        <a className=\"cl-anchor\" href={`#${id}-title`}>\n                          {release.title}\n                        </a>\n                      </Heading>\n                      <Row marginTop=\"8\">\n                        <Text variant=\"body-default-m\" onBackground=\"neutral-medium\">\n                          {release.summary}\n                        </Text>\n                      </Row>\n\n                      <ul className=\"cl-tags\" aria-label={`Tags for version ${release.version}`}>\n                        {release.tags.map((t) => (\n                          <li key={t} className=\"cl-tag\">\n                            <i aria-hidden=\"true\" style={{ background: TAG_META[t].color }} />\n                            {TAG_META[t].label}\n                          </li>\n                        ))}\n                      </ul>\n\n                      <ul className=\"cl-changes\">\n                        {release.changes.map((c) => (\n                          <li key={c}>{renderInline(c)}</li>\n                        ))}\n                      </ul>\n\n                      {release.snippet && <CodeSnippet snippet={release.snippet} id={id} />}\n                    </article>\n                  </li>\n                );\n              })}\n            </ol>\n          )}\n        </section>\n      </main>\n    </Flex>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,302 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Marketing hero — headline with text effect, CTA pair, social proof logos, background effect.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by exploring the project structure to see what's already in place."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01X8dAWDn47za36Qz4BX4vQo",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017KfyAMW7nBT77ejxptgJeV",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01X8dAWDn47za36Qz4BX4vQo",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017KfyAMW7nBT77ejxptgJeV",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01SVtoE8L8eoZ4m7ChKrdqHN",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Mcnw3a4Rq72i4CgmtebqQH",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018B7QgFnpSCDiw6enjGU4pd",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RKMoUk7wRUqwVeLCEQeyXz",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SVtoE8L8eoZ4m7ChKrdqHN",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Mcnw3a4Rq72i4CgmtebqQH",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018B7QgFnpSCDiw6enjGU4pd",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RKMoUk7wRUqwVeLCEQeyXz",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01BXR7kMSxAaj5L7H4sUUSiw",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UkXgQrmMXEwJbDSe2vA4M4",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CdLD43f8m8TVXESzoAtmiW",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01B1drpYEnrntJKwGr2rMwFv",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BXR7kMSxAaj5L7H4sUUSiw",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UkXgQrmMXEwJbDSe2vA4M4",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CdLD43f8m8TVXESzoAtmiW",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01B1drpYEnrntJKwGr2rMwFv",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The package is a tarball, so I'll check whether it was extracted anywhere I can read types from."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Q59qynkmu3kMxm1hxPunNi",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018MyjcVAjQ5tJMBP5oSyDTy",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Q59qynkmu3kMxm1hxPunNi",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018MyjcVAjQ5tJMBP5oSyDTy",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since I can't inspect the library directly, I'll stick to well-known Once UI components and build the page with a CSS gradient-text headline, a decorative animated background (respecting reduced-motion), inline SVG logos for social proof, and solid accessibility basics like a single h1 and labeled regions.\n\n",
+          "signature": "CAQSywsKEQgSGAI4AUIJbmFycmF0aW9uEgz0L+ASIkBJrlYMP58aDPNi/pPdnofNbY5zcyIwN1XGpW8a8dXkuxB3WPvdEE6td+Cv44+izeJPDFme15chaTW4hcxPN19NZhrrpVCIKucKc8nIjqYSOl8L6FCMEwDliPv0gpy4mcTN+YtjBdThYoLmVBTApiMb702xeDObgnrG1P8/lh0l8AyLxoOysNAJvOE09xq4RvuC/T7oA6im4rKbbpalHnVBhcj+IASNOeTGWp27tkGLLyUjD257xhgQp67XOGaHyrU/Jp/EHLw3G5xiID6/rWJ/sGMhn3RqfmX0wSBAjWFnE/UmbhvG4FUteVgSSpXsuJv/AZyN8MkPp2FIVS11db7E0T/Wak89anH4SiFBuOiFLxYMly+26Nxw4TY9oxHUyaS8Mv0x2ef8pl4sdwaH6wY459dFUaSbDdosinjjyxlWnq4jeRZeR6KFRXZfhqE8FX54Ayh3K7/bQNwq5UoF90/sZPCIMtUrXvcRtuc+Xz0IM1LCCa5pdu+HVub/DpMC5S6N9a9c7hNI/e7JNfrIMkD/G+LF7FYJLBE+ekyeMusd+ownimjZTVFmtNEJA1hWMBT3VuWpXcyLMWOnwrFAzIuJ+hgM4yV0158IGZSX2vu4XtjANKOdxwx+zdubE5hNI8crnZgSDvBqJUttj6HZNZicEKq/mBP8A7Fj2frltp5QkTzfxEaHWO5ReD36rbmfsmMVrwz4ySqb7EDCHSEZn6VtLDgUHJqydlQ9/vjuZ8lqV+iDpcmRn9MNkqDFMz9aDpP5Ae+BaEiveAW9ZwHewaH/3hIpf0QFfWovNED4qKsQSrQE82SPzEMvZfF94xMpzU/zjLdgisStDjiqhGnX524bElqZkI2iN89fUU9DpBPRGVZ4w2/UJDjEq8R5t27WriU5pWwvUcd2qzExGy+UMKQ3kxEUSADtRuWVUMfzIZlCyl+BDM0D7wFXEJ4wowuRk3zr14TwpUWy0ZVYmQNvPhiq+ErlAQFqUrGSIXvjrRW2TDCPNQMWfLGSTN7rgrB7ejudGL/8Dip/lp0Q/O7QAzIqK5/ZX1MPDozVrU5qDRt5+cqX89RuJv//ey8XSga9QjE2qztGLRzCVPtDPwOYwvx5zPvFeboPIQvWuhHcRqQtIoUrdqX51UQstgn9gF45ZRkpRbZe59ZADUe9UIpnClOtS5HC82vdSHn4wvGBJueIAK44Gleem6DEnxvs/E66n/CK0yWq6PRprP7yMUdC73B3XAjZhdisiNClEm/pLqK82KC66cpzLy1tA/XwBTNLhblu1Nxo9hyNWQ0pBxBahwD0dMK75ID7IGO8MhMixinJPsTKiNm4DGbcg+r82oTDrPLyEdvMxx4SDUAcPmg2hYNpesySr2x9VE+pe5ZuUzVtfoYBxHz+cqHstz1+T4nylpA635MDuM4tU4v1J/Fahed6c5GgYNQpzPFJ33izHaxiIjotBs6XnCkth5Chgqzx9cCTPAoJVvQBKC7pT5+LpeWeB+D40NhyB2MwTAQ39qxZ7Of6hngE8MDEhEkyIbGFGRhDa+1HRAw11CkevR2uwdFWcj3TUTfsdDa6itfpX948Si/w4lwGl60w0hzxnn4iPZsclSCvJ9+9sFg7Y8nc94OEEZjTvhTxzcWjilS2x1QdOlX9uZOqduU9ubx59qCAZ5g4VJpSK9uVxjd653y5wq8h0fUbSjFV8ScdIlAo0Fuh5/CXW/R4ndkOqX2MUUG+wDMkSasLTRbZg5acnAVSyJEapaxKDDTPunoi1pfNDCelVXaODB3Wy1xYMM0KberXiiWlOphqlWq9avBodiSQyjXTQBZU6E/fgXCEpdg4vU1cNxlN1Lt7O9iqVpPCdgRc5WBDchsyZvdkS2Kk9nIFi4WtRf1PZSCCnaXEedimbV0hTkk1S86JqenReT4XcUrAGKf2FWXhhapGwR+8aokAGQP4GAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PLA8eGbKLE765jV6ukok6u",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PLA8eGbKLE765jV6ukok6u",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport type { CSSProperties, ReactNode } from \"react\";\nimport { Badge, Button, Column, Flex, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype Logo = { name: string; mark: ReactNode };\n\nconst iconProps = {\n  width: 28,\n  height: 28,\n  viewBox: \"0 0 28 28\",\n  fill: \"none\",\n  stroke: \"currentColor\",\n  strokeWidth: 2,\n  strokeLinecap: \"round\" as const,\n  strokeLinejoin: \"round\" as const,\n  \"aria-hidden\": true,\n  focusable: false,\n};\n\nconst logos: Logo[] = [\n  {\n    name: \"Northwind\",\n    mark: (\n      <svg {...iconProps}>\n        <path d=\"M4 22 14 5l10 17\" />\n        <path d=\"M9 22l5-8 5 8\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Lumenly\",\n    mark: (\n      <svg {...iconProps}>\n        <circle cx=\"14\" cy=\"14\" r=\"5\" />\n        <path d=\"M14 3v3M14 22v3M3 14h3M22 14h3M6.2 6.2l2.1 2.1M19.7 19.7l2.1 2.1M6.2 21.8l2.1-2.1M19.7 8.3l2.1-2.1\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Stackbridge\",\n    mark: (\n      <svg {...iconProps}>\n        <rect x=\"5\" y=\"5\" width=\"18\" height=\"6\" rx=\"2\" />\n        <rect x=\"5\" y=\"17\" width=\"18\" height=\"6\" rx=\"2\" />\n        <path d=\"M14 11v6\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Overtone\",\n    mark: (\n      <svg {...iconProps}>\n        <path d=\"M3 14c3-8 5-8 7 0s4 8 7 0 4-8 8 0\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Casca\",\n    mark: (\n      <svg {...iconProps}>\n        <path d=\"M22 8a9 9 0 1 0 0 12\" />\n        <circle cx=\"14\" cy=\"14\" r=\"2\" />\n      </svg>\n    ),\n  },\n];\n\nconst css = `\n.hero-root { position: relative; isolation: isolate; overflow: hidden; }\n\n.hero-bg { position: absolute; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; }\n.hero-grid {\n  position: absolute; inset: 0;\n  background-image:\n    linear-gradient(to right, color-mix(in srgb, currentColor 9%, transparent) 1px, transparent 1px),\n    linear-gradient(to bottom, color-mix(in srgb, currentColor 9%, transparent) 1px, transparent 1px);\n  background-size: 56px 56px;\n  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 100%);\n  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 100%);\n}\n.hero-orb {\n  position: absolute; border-radius: 50%; filter: blur(80px); opacity: .5;\n  will-change: transform;\n}\n.hero-orb-a {\n  width: min(540px, 80vw); height: min(540px, 80vw); top: -12%; left: -8%;\n  background: radial-gradient(circle at 30% 30%, #6366f1, transparent 70%);\n  animation: hero-float-a 18s ease-in-out infinite alternate;\n}\n.hero-orb-b {\n  width: min(480px, 70vw); height: min(480px, 70vw); top: 0%; right: -10%;\n  background: radial-gradient(circle at 60% 40%, #ec4899, transparent 70%);\n  animation: hero-float-b 22s ease-in-out infinite alternate;\n}\n.hero-orb-c {\n  width: min(420px, 60vw); height: min(420px, 60vw); bottom: -20%; left: 35%;\n  background: radial-gradient(circle at 50% 50%, #22d3ee, transparent 70%);\n  opacity: .35;\n  animation: hero-float-a 26s ease-in-out infinite alternate-reverse;\n}\n@keyframes hero-float-a { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(60px,40px,0) scale(1.12); } }\n@keyframes hero-float-b { from { transform: translate3d(0,0,0) scale(1.05); } to { transform: translate3d(-70px,50px,0) scale(.92); } }\n\n.hero-fade-bottom {\n  position: absolute; left: 0; right: 0; bottom: 0; height: 160px;\n  background: linear-gradient(to bottom, transparent, var(--page-background, transparent));\n}\n\n.hero-gradient-text {\n  background-image: linear-gradient(100deg, #818cf8 0%, #f472b6 35%, #22d3ee 65%, #818cf8 100%);\n  background-size: 250% 100%;\n  -webkit-background-clip: text;\n  background-clip: text;\n  -webkit-text-fill-color: transparent;\n  color: transparent;\n  animation: hero-shine 8s linear infinite;\n  display: inline-block;\n  padding-bottom: .08em;\n}\n@keyframes hero-shine { from { background-position: 0% 50%; } to { background-position: 250% 50%; } }\n\n.hero-underline {\n  position: relative; display: inline-block;\n}\n.hero-underline::after {\n  content: \"\"; position: absolute; left: 0; right: 0; bottom: -.06em; height: .09em; border-radius: 99px;\n  background: linear-gradient(90deg, #818cf8, #f472b6, #22d3ee);\n  transform-origin: left center;\n  animation: hero-draw 1.1s .5s cubic-bezier(.2,.8,.2,1) both;\n}\n@keyframes hero-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }\n\n.hero-rise { animation: hero-rise .8s cubic-bezier(.2,.8,.2,1) both; }\n.hero-rise-1 { animation-delay: .05s; }\n.hero-rise-2 { animation-delay: .18s; }\n.hero-rise-3 { animation-delay: .3s; }\n.hero-rise-4 { animation-delay: .45s; }\n@keyframes hero-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }\n\n.hero-logos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 20px 40px; }\n.hero-logo { display: inline-flex; align-items: center; gap: 10px; opacity: .65; transition: opacity .2s ease; }\n.hero-logo:hover { opacity: 1; }\n.hero-logo span { font-weight: 700; font-size: 1.125rem; letter-spacing: -0.02em; }\n\n.hero-avatars { display: flex; }\n.hero-avatar {\n  width: 32px; height: 32px; border-radius: 50%; margin-left: -10px;\n  border: 2px solid var(--page-background, #000);\n  display: inline-flex; align-items: center; justify-content: center;\n  font-size: 11px; font-weight: 700; color: #fff;\n}\n.hero-avatar:first-child { margin-left: 0; }\n\n@media (max-width: 640px) {\n  .hero-grid { background-size: 40px 40px; }\n  .hero-logos { gap: 16px 28px; }\n}\n\n@media (prefers-reduced-motion: reduce) {\n  .hero-orb, .hero-gradient-text, .hero-underline::after, .hero-rise { animation: none !important; }\n  .hero-rise { opacity: 1; transform: none; }\n}\n`;\n\nconst avatars: { initials: string; color: string }[] = [\n  { initials: \"AK\", color: \"#6366f1\" },\n  { initials: \"MR\", color: \"#ec4899\" },\n  { initials: \"JT\", color: \"#0ea5e9\" },\n  { initials: \"SL\", color: \"#10b981\" },\n];\n\nconst rootStyle: CSSProperties = { minHeight: \"100vh\" };\n\nexport default function Page() {\n  return (\n    <Column as=\"main\" fillWidth style={rootStyle}>\n      <style>{css}</style>\n\n      <section className=\"hero-root\" aria-labelledby=\"hero-title\" style={{ width: \"100%\" }}>\n        {/* Decorative background effect */}\n        <div className=\"hero-bg\" aria-hidden=\"true\">\n          <div className=\"hero-orb hero-orb-a\" />\n          <div className=\"hero-orb hero-orb-b\" />\n          <div className=\"hero-orb hero-orb-c\" />\n          <div className=\"hero-grid\" />\n          <div className=\"hero-fade-bottom\" />\n        </div>\n\n        <Column\n          fillWidth\n          horizontal=\"center\"\n          paddingX=\"l\"\n          paddingTop=\"xl\"\n          paddingBottom=\"xl\"\n          gap=\"xl\"\n          style={{ maxWidth: 1120, margin: \"0 auto\", paddingTop: \"clamp(48px, 10vw, 112px)\" }}\n        >\n          <Column horizontal=\"center\" gap=\"24\" style={{ textAlign: \"center\", maxWidth: 820 }}>\n            <div className=\"hero-rise hero-rise-1\">\n              <Badge\n                arrow={false}\n                title=\"New: Pipelines 2.0 is now generally available\"\n                paddingY=\"4\"\n                paddingX=\"12\"\n              />\n            </div>\n\n            <div className=\"hero-rise hero-rise-2\">\n              <Heading\n                as=\"h1\"\n                id=\"hero-title\"\n                variant=\"display-strong-xl\"\n                wrap=\"balance\"\n                style={{\n                  fontSize: \"clamp(2.5rem, 7.5vw, 5rem)\",\n                  lineHeight: 1.04,\n                  letterSpacing: \"-0.035em\",\n                }}\n              >\n                Ship product updates{\" \"}\n                <span className=\"hero-underline\">\n                  <span className=\"hero-gradient-text\">10x faster</span>\n                </span>{\" \"}\n                without breaking things\n              </Heading>\n            </div>\n\n            <div className=\"hero-rise hero-rise-3\">\n              <Text\n                as=\"p\"\n                variant=\"body-default-xl\"\n                onBackground=\"neutral-weak\"\n                wrap=\"balance\"\n                style={{ maxWidth: 620, margin: \"0 auto\", fontSize: \"clamp(1rem, 2.4vw, 1.25rem)\" }}\n              >\n                Meridian turns your release process into a calm, automated pipeline. Preview every change,\n                roll out to the right audience, and roll back in one click.\n              </Text>\n            </div>\n\n            <div className=\"hero-rise hero-rise-4\">\n              <Column gap=\"16\" horizontal=\"center\">\n                <Row gap=\"12\" wrap horizontal=\"center\" vertical=\"center\">\n                  <Button href=\"#start\" variant=\"primary\" size=\"l\" arrowIcon>\n                    Start free trial\n                  </Button>\n                  <Button href=\"#demo\" variant=\"secondary\" size=\"l\" prefixIcon=\"play\">\n                    Watch 2-min demo\n                  </Button>\n                </Row>\n                <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                  No credit card required · 14-day trial · Cancel anytime\n                </Text>\n              </Column>\n            </div>\n          </Column>\n\n          {/* Social proof */}\n          <Column\n            as=\"section\"\n            aria-labelledby=\"proof-title\"\n            horizontal=\"center\"\n            gap=\"24\"\n            fillWidth\n            paddingTop=\"l\"\n          >\n            <Flex gap=\"12\" vertical=\"center\" horizontal=\"center\" wrap>\n              <div className=\"hero-avatars\" aria-hidden=\"true\">\n                {avatars.map((a) => (\n                  <span key={a.initials} className=\"hero-avatar\" style={{ background: a.color }}>\n                    {a.initials}\n                  </span>\n                ))}\n              </div>\n              <Text id=\"proof-title\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n                Trusted by 4,200+ product teams, including\n              </Text>\n            </Flex>\n\n            <ul className=\"hero-logos\" aria-label=\"Customer companies\">\n              {logos.map((logo) => (\n                <li key={logo.name} className=\"hero-logo\">\n                  {logo.mark}\n                  <span>{logo.name}</span>\n                </li>\n              ))}\n            </ul>\n          </Column>\n        </Column>\n      </section>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

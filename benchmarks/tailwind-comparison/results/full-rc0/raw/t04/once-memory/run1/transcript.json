@@ -1,0 +1,254 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Chat UI — message list with avatars, streaming indicator, input bar with emoji picker, command palette hint.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the project's existing files to see how the providers and layout are set up."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01U7pJ1aRoaEBVyqtBxxf8JD",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RNNjYj8nmkFMJAXNQ2zM4d",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01U7pJ1aRoaEBVyqtBxxf8JD",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RNNjYj8nmkFMJAXNQ2zM4d",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01VQg93dBKwgYz6mRwo9fKvf",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FYbb8D86JRU2ezYKfzP1Xw",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015wuFfGrWDcDsAXT6BpzkGY",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VQg93dBKwgYz6mRwo9fKvf",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FYbb8D86JRU2ezYKfzP1Xw",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015wuFfGrWDcDsAXT6BpzkGY",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01USLQeoZxFRN4uWufrHdb5i",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NxnEBmNN2oNk3J88KjADz5",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017e7W2SHd16YpMuvuk7BRRC",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012g6wqK4MfBoLgnZzRp1kZX",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017fYMMowbJ5Ubx58AaCygRv",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01USLQeoZxFRN4uWufrHdb5i",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NxnEBmNN2oNk3J88KjADz5",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017e7W2SHd16YpMuvuk7BRRC",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012g6wqK4MfBoLgnZzRp1kZX",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017fYMMowbJ5Ubx58AaCygRv",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build the chat UI with trusted Once UI components (Flex, Column, Row, Text, Heading, Avatar, IconButton, Button, Kbd, Badge, Line, Tag), including a header, scrollable message log with reactions, a streaming typing indicator, an input bar with emoji popover, and a ⌘K command palette—using inline styles only for the dot animation.\n\n",
+          "signature": "CAQSxAoKEQgSGAI4AUIJbmFycmF0aW9uEgyN4NV7QBClH2grrH0aDF12AESLGS1q/KjV0CIw0VMuRCVoQztSQlppctbdXmepZS/jlXhJV6vMXyHCSla8H/KRukU2URbgf4gfPL37KuAJIgbqYljJ8MrTwJoc0s82peOb5+8Xwx96mw1pa9fQbSIiZ5CH3owMRqS+Idyyj8DEYpkAUzmEs9uPnr/euJ7LZsTqN8CbVd8mEL4IL2D1dYPvQ55jYuBURnzphkoCsaqvp01VxuaEfvjL9gtV7o9LSSpLCXYS3bQFUIKeaIqapcEgbtehM5Iyw3neNVfVxZnCCqpwFMYQwiMilEogpUcZjTg2fsaekg1Llm6GITT4C2xGacP/uBSv68CoH7gPIjlc+zUH//Uo3F6Unx8jvdpnmOmtrqNPSLe4YB+8q6fXp3JcHgEVMOwb4GsO74ScSPRFYtdHj8IlQIvm7Zsn9Aw3RccpmsjZP8ErlBeHG/f5tpGU8nxiTu5WRdqcj2la2THh+ZHhGwBXuOfJMz8Dt1WSl7Uj2Ujw2xwciGqIKUpCPs6lTFX5EJZa5rHj32quXVQ7Gan/C2aUyvVVpOFm21pxXOpzzEAqoD7AywS56Rf0unBLNjmc3/ZGHtx/gMlNONLRwXHmygaPglTcGemXLtvFnBgoD3D7YkKXYDedPqmmks7Mfae7kCtRun7dVjy+qjdQmq2JdXCXnEfTd1gVEj/Led5zuY8Gq0xmcShbicQv5spqwsaB0WZVktSE8zUh5LaN2CtlSw85KiE7G2i3SfWRVX+Lua6q8hYAjgkaHBZzzBPk19mDVTZDMrpEJYERbYZQqMmYMs0Rte1sk05HN5RHHQs8/uyN5Ze0Eq8OLRRzU9aftO1z/q021O/UC9UOVtUoEAtjZHrwnjv6Efkve9gNUZ0x5vMDeVSVgXDK3QuOmd7tZ/Vwa7/OHk9rwnHgsZyYxtYCQSiLMzz/FCdnM6WVYHbr+cCdPZSH4849a64oJE6w8Cm5H3laCpDFMa3HVnF2oiWA1SzcbJj1Q+dqOWZxCpgZuGjtf03EUtkqOJ9zXFhK55teb31WpWpaUi+t9K/M1RyMJDgRAgrortW77MHXqN+6mv6KmHxEnGvzi5jA5q+egym58I6Duu9a15G66pT8WObAU6Qds2eqnmFZqOO2S0rC7V7LxQv9kbMP7LPMXXYvgHszyOeQZgZ5D9J46MNVN8DM+0LnUjfdGERCI3eZIaZVTQBNfYv/CvoBwSx7KiCGH8CE/t3d40P//4C2Qgc1vZ/pHyz7+aIpIu4wlYUe29eREI9y62m7YvpxUSVhxQ5v4JpL5WtQOw9DNXTDElIgu23jCCqwcsiwRnB4gZZxbURvBUVxlgRe0mIQ03GtBLKRdFo0M57Pr/CRz0/8xda5L/2O2qAq0JaaJhXKgFRAea7BaSyUoMiZh9S1Ml7YESJ7RZdK8Q+MoV+K3CtLesGA4UghbdtekY3Z0GR5xiu33DHlI+0otQAoDSqc7/f6016Ok6q5u3roZQQS4Df+IAfxEBh8gVxx9duXH0gersxwmizHkvdlXJh3M8w4AGEVP0w+2eJy4wo5wqMugAQqKv2WEcO31HZtUyxvchcw03iH+DQ6hsF964QDBD7vS63WaUlfPmUrBQvcshV6yy41a9DG6a5TQ4yQpXm3t6nEijGsS9w/ySpZdP358yXsOCE9v1KV+IEk38B5lVimaGzVfW/SE/pyY6PznI5jHwIps0bjFCoRF//Q94q+xQ4IBv+p/ijYgQut/7pl17JrtTHoEZE2GAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016ME7Smg8e9cHjL92Mjh3Jr",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016ME7Smg8e9cHjL92Mjh3Jr",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The package isn't installed in the workspace, so I'll rely on well-known Once UI APIs only and use native elements for the interactive parts to keep the types safe.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useMemo, useRef, useState } from \"react\";\nimport type { FormEvent, KeyboardEvent } from \"react\";\nimport { Avatar, Column, Flex, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype Author = {\n  id: string;\n  name: string;\n  role: string;\n  initials: string;\n  hue: number;\n};\n\ntype Message = {\n  id: string;\n  authorId: string;\n  time: string;\n  text: string;\n  reactions?: { emoji: string; count: number }[];\n};\n\nconst AUTHORS: Record<string, Author> = {\n  me: { id: \"me\", name: \"You\", role: \"Product designer\", initials: \"YO\", hue: 210 },\n  maya: { id: \"maya\", name: \"Maya Okafor\", role: \"Engineering lead\", initials: \"MO\", hue: 340 },\n  jonas: { id: \"jonas\", name: \"Jonas Lindqvist\", role: \"Backend engineer\", initials: \"JL\", hue: 150 },\n  aria: { id: \"aria\", name: \"Aria\", role: \"AI assistant\", initials: \"AI\", hue: 270 },\n};\n\nconst INITIAL_MESSAGES: Message[] = [\n  {\n    id: \"m1\",\n    authorId: \"maya\",\n    time: \"09:12\",\n    text: \"Morning all! The checkout redesign is on staging now. Could someone give the address form a once-over before standup?\",\n    reactions: [\n      { emoji: \"👀\", count: 2 },\n      { emoji: \"🚀\", count: 3 },\n    ],\n  },\n  {\n    id: \"m2\",\n    authorId: \"jonas\",\n    time: \"09:14\",\n    text: \"On it. I noticed the postcode validation rejects UK formats with a space, so I'm pushing a fix to the regex in a few minutes.\",\n  },\n  {\n    id: \"m3\",\n    authorId: \"me\",\n    time: \"09:16\",\n    text: \"Thanks Jonas. I'll check the spacing on mobile and update the Figma file with the final error states.\",\n    reactions: [{ emoji: \"👍\", count: 1 }],\n  },\n  {\n    id: \"m4\",\n    authorId: \"aria\",\n    time: \"09:18\",\n    text: \"Summary so far: 1 open bug (postcode validation), 1 design follow-up (mobile spacing). Both are tagged for today's release candidate.\",\n  },\n  {\n    id: \"m5\",\n    authorId: \"maya\",\n    time: \"09:21\",\n    text: \"Perfect. Aria, can you draft the release notes once those two are merged?\",\n  },\n];\n\nconst STREAM_REPLY =\n  \"Absolutely. Here's a first draft: Checkout now supports saved addresses, clearer inline errors and a faster mobile layout. UK postcodes with spaces are now accepted. I'll refresh the draft when both fixes are merged.\";\n\nconst EMOJIS = [\n  \"😀\", \"😂\", \"😍\", \"🥳\", \"😎\", \"🤔\", \"😅\", \"🙌\",\n  \"👍\", \"👏\", \"🙏\", \"💪\", \"🔥\", \"✨\", \"🎉\", \"🚀\",\n  \"❤️\", \"💡\", \"✅\", \"👀\", \"☕\", \"🐛\", \"📌\", \"🎯\",\n];\n\nconst COMMANDS = [\n  { id: \"c1\", label: \"Summarize this thread\", hint: \"/summarize\" },\n  { id: \"c2\", label: \"Draft release notes\", hint: \"/release\" },\n  { id: \"c3\", label: \"Assign a follow-up\", hint: \"/assign\" },\n  { id: \"c4\", label: \"Search messages\", hint: \"/search\" },\n  { id: \"c5\", label: \"Clear conversation\", hint: \"/clear\" },\n];\n\nconst STYLES = `\n.chat-root { height: 100dvh; display: flex; flex-direction: column; max-width: 960px; margin: 0 auto; width: 100%; }\n.chat-scroll { flex: 1; overflow-y: auto; padding: 16px; scroll-behavior: smooth; }\n.chat-msg { display: flex; gap: 12px; margin-bottom: 18px; max-width: 100%; }\n.chat-msg.mine { flex-direction: row-reverse; }\n.chat-bubble { padding: 10px 14px; border-radius: 16px; line-height: 1.5; font-size: 15px; word-break: break-word; border: 1px solid var(--neutral-alpha-medium); background: var(--surface-background); color: var(--neutral-on-background-strong); }\n.chat-msg.mine .chat-bubble { background: var(--brand-solid-medium); color: var(--brand-on-solid-strong); border-color: transparent; }\n.chat-body { display: flex; flex-direction: column; gap: 4px; min-width: 0; max-width: min(560px, 85%); }\n.chat-msg.mine .chat-body { align-items: flex-end; }\n.chat-meta { display: flex; gap: 8px; align-items: baseline; font-size: 12px; color: var(--neutral-on-background-weak); }\n.chat-meta strong { color: var(--neutral-on-background-strong); font-size: 13px; }\n.chat-reactions { display: flex; gap: 6px; flex-wrap: wrap; }\n.chat-chip { font: inherit; font-size: 13px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--neutral-alpha-medium); background: transparent; color: var(--neutral-on-background-strong); cursor: pointer; }\n.chat-chip:hover { background: var(--neutral-alpha-weak); }\n.chat-dots { display: inline-flex; gap: 4px; align-items: center; height: 14px; }\n.chat-dots span { width: 6px; height: 6px; border-radius: 50%; background: var(--neutral-on-background-weak); animation: chat-bounce 1.2s infinite ease-in-out; }\n.chat-dots span:nth-child(2) { animation-delay: 0.15s; }\n.chat-dots span:nth-child(3) { animation-delay: 0.3s; }\n@keyframes chat-bounce { 0%, 60%, 100% { transform: translateY(0); opacity: 0.4; } 30% { transform: translateY(-4px); opacity: 1; } }\n.chat-caret { display: inline-block; width: 2px; height: 1em; background: currentColor; margin-left: 2px; vertical-align: text-bottom; animation: chat-blink 1s steps(2) infinite; }\n@keyframes chat-blink { 50% { opacity: 0; } }\n@media (prefers-reduced-motion: reduce) {\n  .chat-dots span, .chat-caret { animation: none; }\n  .chat-scroll { scroll-behavior: auto; }\n}\n.chat-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--neutral-alpha-medium); }\n.chat-btn { font: inherit; display: inline-flex; align-items: center; justify-content: center; gap: 8px; border-radius: 10px; border: 1px solid var(--neutral-alpha-medium); background: var(--surface-background); color: var(--neutral-on-background-strong); cursor: pointer; padding: 0 12px; height: 40px; min-width: 40px; }\n.chat-btn:hover { background: var(--neutral-alpha-weak); }\n.chat-btn:focus-visible, .chat-chip:focus-visible, .chat-input:focus-visible, .chat-cmd-item:focus-visible, .chat-emoji:focus-visible { outline: 2px solid var(--brand-solid-strong); outline-offset: 2px; }\n.chat-btn.primary { background: var(--brand-solid-medium); color: var(--brand-on-solid-strong); border-color: transparent; }\n.chat-btn.primary:disabled { opacity: 0.5; cursor: not-allowed; }\n.chat-kbd { font-family: var(--font-code); font-size: 12px; padding: 2px 6px; border-radius: 6px; border: 1px solid var(--neutral-alpha-medium); background: var(--neutral-alpha-weak); color: var(--neutral-on-background-weak); }\n.chat-composer { padding: 12px 16px 16px; border-top: 1px solid var(--neutral-alpha-medium); position: relative; }\n.chat-form { display: flex; gap: 8px; align-items: flex-end; }\n.chat-input { flex: 1; font: inherit; font-size: 15px; resize: none; min-height: 40px; max-height: 140px; padding: 9px 12px; border-radius: 12px; border: 1px solid var(--neutral-alpha-strong); background: var(--surface-background); color: var(--neutral-on-background-strong); line-height: 1.4; }\n.chat-hint { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-top: 8px; font-size: 12px; color: var(--neutral-on-background-weak); }\n.chat-popover { position: absolute; bottom: calc(100% - 4px); left: 16px; right: 16px; max-width: 340px; padding: 10px; border-radius: 14px; border: 1px solid var(--neutral-alpha-medium); background: var(--surface-background); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25); display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; z-index: 5; }\n.chat-emoji { font: inherit; font-size: 20px; height: 36px; border: none; background: transparent; border-radius: 8px; cursor: pointer; }\n.chat-emoji:hover { background: var(--neutral-alpha-weak); }\n.chat-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); display: flex; align-items: flex-start; justify-content: center; padding: 12vh 16px 16px; z-index: 50; }\n.chat-palette { width: 100%; max-width: 520px; border-radius: 16px; border: 1px solid var(--neutral-alpha-medium); background: var(--surface-background); overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.35); }\n.chat-palette input { width: 100%; font: inherit; font-size: 16px; padding: 14px 16px; border: none; border-bottom: 1px solid var(--neutral-alpha-medium); background: transparent; color: var(--neutral-on-background-strong); }\n.chat-palette input:focus-visible { outline: 2px solid var(--brand-solid-strong); outline-offset: -2px; }\n.chat-cmd-item { font: inherit; width: 100%; display: flex; justify-content: space-between; gap: 12px; align-items: center; padding: 10px 16px; border: none; background: transparent; color: var(--neutral-on-background-strong); cursor: pointer; text-align: left; }\n.chat-cmd-item:hover { background: var(--neutral-alpha-weak); }\n.chat-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n.chat-hide-sm { display: none; }\n@media (min-width: 640px) { .chat-hide-sm { display: inline; } .chat-scroll { padding: 24px; } }\n`;\n\nfunction MessageAvatar({ author }: { author: Author }) {\n  return (\n    <Avatar\n      size=\"m\"\n      value={author.initials}\n      style={{ flexShrink: 0 }}\n      aria-hidden=\"true\"\n    />\n  );\n}\n\nexport default function Page() {\n  const [messages, setMessages] = useState<Message[]>(INITIAL_MESSAGES);\n  const [draft, setDraft] = useState(\"\");\n  const [emojiOpen, setEmojiOpen] = useState(false);\n  const [paletteOpen, setPaletteOpen] = useState(false);\n  const [query, setQuery] = useState(\"\");\n  const [streaming, setStreaming] = useState(false);\n  const [streamText, setStreamText] = useState(\"\");\n  const [announce, setAnnounce] = useState(\"\");\n\n  const scrollRef = useRef<HTMLDivElement>(null);\n  const inputRef = useRef<HTMLTextAreaElement>(null);\n  const paletteInputRef = useRef<HTMLInputElement>(null);\n  const timersRef = useRef<number[]>([]);\n  const idCounter = useRef(100);\n  const paletteTitleId = useId();\n  const emojiPanelId = useId();\n\n  const clearTimers = useCallback(() => {\n    timersRef.current.forEach((t) => window.clearTimeout(t));\n    timersRef.current = [];\n  }, []);\n\n  useEffect(() => clearTimers, [clearTimers]);\n\n  // Auto-scroll on new content\n  useEffect(() => {\n    const el = scrollRef.current;\n    if (el) el.scrollTop = el.scrollHeight;\n  }, [messages, streamText, streaming]);\n\n  // Global shortcut for the command palette\n  useEffect(() => {\n    const onKey = (e: globalThis.KeyboardEvent) => {\n      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === \"k\") {\n        e.preventDefault();\n        setPaletteOpen((o) => !o);\n      } else if (e.key === \"Escape\") {\n        setPaletteOpen(false);\n        setEmojiOpen(false);\n      }\n    };\n    window.addEventListener(\"keydown\", onKey);\n    return () => window.removeEventListener(\"keydown\", onKey);\n  }, []);\n\n  useEffect(() => {\n    if (paletteOpen) {\n      setQuery(\"\");\n      paletteInputRef.current?.focus();\n    }\n  }, [paletteOpen]);\n\n  const nextId = () => `m${++idCounter.current}`;\n\n  const startStream = useCallback(() => {\n    setStreaming(true);\n    setStreamText(\"\");\n    const words = STREAM_REPLY.split(\" \");\n    let i = 0;\n    const tick = () => {\n      i += 1;\n      setStreamText(words.slice(0, i).join(\" \"));\n      if (i < words.length) {\n        timersRef.current.push(window.setTimeout(tick, 70));\n      } else {\n        timersRef.current.push(\n          window.setTimeout(() => {\n            const now = new Date();\n            const time = now.toLocaleTimeString([], { hour: \"2-digit\", minute: \"2-digit\", hour12: false });\n            setMessages((prev) => [\n              ...prev,\n              { id: `m${++idCounter.current}`, authorId: \"aria\", time, text: STREAM_REPLY },\n            ]);\n            setStreaming(false);\n            setStreamText(\"\");\n            setAnnounce(\"Aria replied.\");\n          }, 200),\n        );\n      }\n    };\n    // Initial \"thinking\" phase with dots only\n    timersRef.current.push(window.setTimeout(tick, 1400));\n  }, []);\n\n  const send = useCallback(\n    (text: string) => {\n      const trimmed = text.trim();\n      if (!trimmed || streaming) return;\n      const now = new Date();\n      const time = now.toLocaleTimeString([], { hour: \"2-digit\", minute: \"2-digit\", hour12: false });\n      setMessages((prev) => [...prev, { id: nextId(), authorId: \"me\", time, text: trimmed }]);\n      setDraft(\"\");\n      setEmojiOpen(false);\n      setAnnounce(\"Message sent. Aria is typing.\");\n      startStream();\n    },\n    [streaming, startStream],\n  );\n\n  const onSubmit = (e: FormEvent) => {\n    e.preventDefault();\n    send(draft);\n  };\n\n  const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {\n    if (e.key === \"Enter\" && !e.shiftKey) {\n      e.preventDefault();\n      send(draft);\n    }\n  };\n\n  const addEmoji = (emoji: string) => {\n    setDraft((d) => d + emoji);\n    inputRef.current?.focus();\n  };\n\n  const runCommand = (hint: string) => {\n    setPaletteOpen(false);\n    if (hint === \"/clear\") {\n      clearTimers();\n      setStreaming(false);\n      setStreamText(\"\");\n      setMessages([]);\n      setAnnounce(\"Conversation cleared.\");\n    } else {\n      setDraft(`${hint} `);\n    }\n    window.setTimeout(() => inputRef.current?.focus(), 0);\n  };\n\n  const filtered = useMemo(\n    () =>\n      COMMANDS.filter((c) =>\n        `${c.label} ${c.hint}`.toLowerCase().includes(query.trim().toLowerCase()),\n      ),\n    [query],\n  );\n\n  return (\n    <Flex fillWidth horizontal=\"center\" background=\"page\">\n      <style>{STYLES}</style>\n      <main className=\"chat-root\" aria-label=\"Team chat\">\n        <header className=\"chat-header\">\n          <Row gap=\"12\" vertical=\"center\" style={{ minWidth: 0 }}>\n            <Column gap=\"2\" style={{ minWidth: 0 }}>\n              <Heading as=\"h1\" variant=\"heading-strong-m\">\n                # checkout-redesign\n              </Heading>\n              <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n                4 members · 3 online\n              </Text>\n            </Column>\n          </Row>\n          <Row gap=\"12\" vertical=\"center\">\n            <Row gap=\"0\" aria-hidden=\"true\" className=\"chat-hide-sm\">\n              <Avatar size=\"s\" value=\"MO\" />\n              <Avatar size=\"s\" value=\"JL\" style={{ marginLeft: -8 }} />\n              <Avatar size=\"s\" value=\"AI\" style={{ marginLeft: -8 }} />\n            </Row>\n            <button\n              type=\"button\"\n              className=\"chat-btn\"\n              onClick={() => setPaletteOpen(true)}\n              aria-haspopup=\"dialog\"\n              aria-label=\"Open command palette\"\n            >\n              <span aria-hidden=\"true\">⌘</span>\n              <span className=\"chat-hide-sm\">Commands</span>\n              <span className=\"chat-kbd chat-hide-sm\" aria-hidden=\"true\">⌘K</span>\n            </button>\n          </Row>\n        </header>\n\n        <div\n          ref={scrollRef}\n          className=\"chat-scroll\"\n          role=\"log\"\n          aria-live=\"off\"\n          aria-label=\"Message history\"\n          tabIndex={0}\n        >\n          {messages.length === 0 && !streaming && (\n            <Column fillWidth horizontal=\"center\" paddingY=\"48\" gap=\"8\">\n              <Text variant=\"heading-strong-s\">No messages yet</Text>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Say hello, or press Ctrl/⌘ + K to try a command.\n              </Text>\n            </Column>\n          )}\n\n          {messages.map((m) => {\n            const author = AUTHORS[m.authorId];\n            const mine = m.authorId === \"me\";\n            return (\n              <article key={m.id} className={`chat-msg${mine ? \" mine\" : \"\"}`}>\n                <MessageAvatar author={author} />\n                <div className=\"chat-body\">\n                  <div className=\"chat-meta\">\n                    <strong>{author.name}</strong>\n                    <span>{author.role}</span>\n                    <time>{m.time}</time>\n                  </div>\n                  <div className=\"chat-bubble\">{m.text}</div>\n                  {m.reactions && (\n                    <div className=\"chat-reactions\">\n                      {m.reactions.map((r) => (\n                        <button\n                          key={r.emoji}\n                          type=\"button\"\n                          className=\"chat-chip\"\n                          aria-label={`${r.count} reactions: ${r.emoji}`}\n                        >\n                          <span aria-hidden=\"true\">{r.emoji}</span> {r.count}\n                        </button>\n                      ))}\n                    </div>\n                  )}\n                </div>\n              </article>\n            );\n          })}\n\n          {streaming && (\n            <article className=\"chat-msg\" aria-busy=\"true\">\n              <MessageAvatar author={AUTHORS.aria} />\n              <div className=\"chat-body\">\n                <div className=\"chat-meta\">\n                  <strong>Aria</strong>\n                  <span>{streamText ? \"writing…\" : \"thinking…\"}</span>\n                </div>\n                <div className=\"chat-bubble\">\n                  {streamText ? (\n                    <>\n                      {streamText}\n                      <span className=\"chat-caret\" aria-hidden=\"true\" />\n                    </>\n                  ) : (\n                    <span className=\"chat-dots\" aria-hidden=\"true\">\n                      <span />\n                      <span />\n                      <span />\n                    </span>\n                  )}\n                </div>\n              </div>\n            </article>\n          )}\n        </div>\n\n        <div className=\"chat-sr\" role=\"status\" aria-live=\"polite\">\n          {announce}\n        </div>\n\n        <div className=\"chat-composer\">\n          {emojiOpen && (\n            <div\n              id={emojiPanelId}\n              className=\"chat-popover\"\n              role=\"group\"\n              aria-label=\"Emoji picker\"\n            >\n              {EMOJIS.map((e) => (\n                <button\n                  key={e}\n                  type=\"button\"\n                  className=\"chat-emoji\"\n                  onClick={() => addEmoji(e)}\n                  aria-label={`Insert ${e}`}\n                >\n                  {e}\n                </button>\n              ))}\n            </div>\n          )}\n\n          <form className=\"chat-form\" onSubmit={onSubmit}>\n            <button\n              type=\"button\"\n              className=\"chat-btn\"\n              onClick={() => setEmojiOpen((o) => !o)}\n              aria-expanded={emojiOpen}\n              aria-controls={emojiOpen ? emojiPanelId : undefined}\n              aria-label=\"Toggle emoji picker\"\n            >\n              <span aria-hidden=\"true\">😊</span>\n            </button>\n            <label htmlFor=\"chat-message\" className=\"chat-sr\">\n              Message\n            </label>\n            <textarea\n              id=\"chat-message\"\n              ref={inputRef}\n              className=\"chat-input\"\n              rows={1}\n              placeholder=\"Message #checkout-redesign\"\n              value={draft}\n              onChange={(e) => setDraft(e.target.value)}\n              onKeyDown={onKeyDown}\n            />\n            <button\n              type=\"submit\"\n              className=\"chat-btn primary\"\n              disabled={!draft.trim() || streaming}\n              aria-label=\"Send message\"\n            >\n              <span aria-hidden=\"true\">➤</span>\n              <span className=\"chat-hide-sm\">Send</span>\n            </button>\n          </form>\n\n          <div className=\"chat-hint\">\n            <span className=\"chat-kbd\">Enter</span> to send\n            <span aria-hidden=\"true\">·</span>\n            <span className=\"chat-kbd\">Shift</span>+<span className=\"chat-kbd\">Enter</span> for new line\n            <span aria-hidden=\"true\">·</span>\n            <span className=\"chat-kbd\">⌘K</span> / <span className=\"chat-kbd\">Ctrl K</span> for commands\n          </div>\n        </div>\n      </main>\n\n      {paletteOpen && (\n        <div\n          className=\"chat-overlay\"\n          onMouseDown={(e) => {\n            if (e.target === e.currentTarget) setPaletteOpen(false);\n          }}\n        >\n          <div\n            className=\"chat-palette\"\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-labelledby={paletteTitleId}\n          >\n            <h2 id={paletteTitleId} className=\"chat-sr\">\n              Command palette\n            </h2>\n            <input\n              ref={paletteInputRef}\n              type=\"text\"\n              placeholder=\"Type a command…\"\n              aria-label=\"Search commands\"\n              value={query}\n              onChange={(e) => setQuery(e.target.value)}\n              onKeyDown={(e) => {\n                if (e.key === \"Enter\" && filtered[0]) runCommand(filtered[0].hint);\n              }}\n            />\n            <div role=\"list\">\n              {filtered.length === 0 && (\n                <Text as=\"p\" variant=\"body-default-s\" onBackground=\"neutral-weak\" style={{ padding: 16 }}>\n                  No matching commands.\n                </Text>\n              )}\n              {filtered.map((c) => (\n                <div role=\"listitem\" key={c.id}>\n                  <button type=\"button\" className=\"chat-cmd-item\" onClick={() => runCommand(c.hint)}>\n                    <span>{c.label}</span>\n                    <span className=\"chat-kbd\">{c.hint}</span>\n                  </button>\n                </div>\n              ))}\n            </div>\n          </div>\n        </div>\n      )}\n    </Flex>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: User profile popover — avatar trigger, a user menu or hover card with stats and actions.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012s6fq6bJxwSAKA1w6HfC5Z",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018tnKT5fziidaFbyRtwc87u",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012s6fq6bJxwSAKA1w6HfC5Z",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018tnKT5fziidaFbyRtwc87u",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01AzZgSonxZ18emPV5Z95bpw",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015LX54puoeCSQ3ej84gxvy4",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019A1quUorLFYdDjCzEbgT8G",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AzZgSonxZ18emPV5Z95bpw",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015LX54puoeCSQ3ej84gxvy4",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019A1quUorLFYdDjCzEbgT8G",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0126sEmfWURPvytj3vt1d5z4",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VU6t86YwANgwvoXAW8oyid",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018Nf8VSGg7PnUM3qTZvqbiZ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014geB5tjBx5rZGqyBkm2X8Q",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0126sEmfWURPvytj3vt1d5z4",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VU6t86YwANgwvoXAW8oyid",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018Nf8VSGg7PnUM3qTZvqbiZ",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014geB5tjBx5rZGqyBkm2X8Q",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build a custom popover using Once UI layout primitives with a native button trigger for accessibility, adding keyboard/hover/outside-click handling, ARIA attributes, and content like stats, follow toggle, and initials-based avatar (no network images).\n\n",
+          "signature": "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"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ML1ddbSbjKW5eXkF5X6gGM",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ML1ddbSbjKW5eXkF5X6gGM",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { KeyboardEvent as ReactKeyboardEvent } from \"react\";\nimport { Column, Flex, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype Stat = { label: string; value: string };\ntype MenuAction = { id: string; label: string; hint?: string; danger?: boolean; glyph: string };\n\nconst USER = {\n  name: \"Maya Okonkwo\",\n  handle: \"@mayaokonkwo\",\n  initials: \"MO\",\n  role: \"Staff Product Designer\",\n  location: \"Lisbon, Portugal\",\n  bio: \"Designing calm interfaces for complex tools. Currently shaping the Atlas design system.\",\n  status: \"Available for reviews\",\n};\n\nconst STATS: Stat[] = [\n  { label: \"Projects\", value: \"48\" },\n  { label: \"Followers\", value: \"12.4k\" },\n  { label: \"Following\", value: \"389\" },\n];\n\nconst ACTIONS: MenuAction[] = [\n  { id: \"profile\", label: \"View profile\", hint: \"G P\", glyph: \"◉\" },\n  { id: \"settings\", label: \"Account settings\", hint: \"G S\", glyph: \"⚙\" },\n  { id: \"billing\", label: \"Billing & plans\", glyph: \"▤\" },\n  { id: \"help\", label: \"Help center\", glyph: \"?\" },\n  { id: \"signout\", label: \"Sign out\", danger: true, glyph: \"⏻\" },\n];\n\nconst CSS = `\n.pp-root { position: relative; display: inline-flex; }\n.pp-trigger {\n  all: unset; box-sizing: border-box; cursor: pointer; border-radius: 9999px;\n  display: inline-flex; align-items: center; gap: 10px; padding: 4px 12px 4px 4px;\n  border: 1px solid var(--neutral-alpha-medium); background: var(--surface-background);\n  color: var(--neutral-on-background-strong); transition: background .15s, border-color .15s;\n}\n.pp-trigger:hover { background: var(--neutral-alpha-weak); }\n.pp-trigger:focus-visible, .pp-item:focus-visible, .pp-follow:focus-visible, .pp-close:focus-visible {\n  outline: 2px solid var(--brand-solid-strong); outline-offset: 2px;\n}\n.pp-avatar {\n  width: 36px; height: 36px; border-radius: 9999px; display: inline-flex; align-items: center;\n  justify-content: center; font-weight: 600; font-size: 14px; letter-spacing: .02em; flex-shrink: 0;\n  background: linear-gradient(135deg, var(--brand-solid-strong), var(--accent-solid-strong));\n  color: #fff; position: relative;\n}\n.pp-avatar.lg { width: 56px; height: 56px; font-size: 20px; }\n.pp-dot {\n  position: absolute; right: 0; bottom: 0; width: 10px; height: 10px; border-radius: 9999px;\n  background: var(--success-solid-strong); border: 2px solid var(--surface-background);\n}\n.pp-avatar.lg .pp-dot { width: 14px; height: 14px; }\n.pp-name-short { font-size: 14px; font-weight: 500; }\n.pp-caret { font-size: 10px; opacity: .7; transition: transform .15s; }\n.pp-caret.open { transform: rotate(180deg); }\n.pp-panel {\n  position: absolute; top: calc(100% + 10px); right: 0; z-index: 50;\n  width: min(360px, calc(100vw - 32px)); box-sizing: border-box;\n  background: var(--surface-background); border: 1px solid var(--neutral-alpha-medium);\n  border-radius: 16px; box-shadow: 0 16px 48px rgba(0,0,0,.25); overflow: hidden;\n  animation: pp-in .14s ease-out;\n}\n@keyframes pp-in { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }\n@media (prefers-reduced-motion: reduce) { .pp-panel { animation: none; } .pp-caret { transition: none; } }\n.pp-stats { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--neutral-alpha-weak); border-bottom: 1px solid var(--neutral-alpha-weak); }\n.pp-stat { padding: 12px 8px; text-align: center; }\n.pp-stat + .pp-stat { border-left: 1px solid var(--neutral-alpha-weak); }\n.pp-follow {\n  all: unset; box-sizing: border-box; cursor: pointer; text-align: center; padding: 8px 14px; border-radius: 10px;\n  font-size: 14px; font-weight: 500; flex: 1; border: 1px solid var(--neutral-alpha-medium);\n  color: var(--neutral-on-background-strong); background: transparent;\n}\n.pp-follow:hover { background: var(--neutral-alpha-weak); }\n.pp-follow.primary { background: var(--brand-solid-strong); border-color: transparent; color: var(--brand-on-solid-strong); }\n.pp-follow.primary:hover { filter: brightness(1.08); background: var(--brand-solid-strong); }\n.pp-item {\n  all: unset; box-sizing: border-box; cursor: pointer; width: 100%; display: flex; align-items: center; gap: 12px;\n  padding: 10px 12px; border-radius: 8px; font-size: 14px; color: var(--neutral-on-background-strong);\n}\n.pp-item:hover, .pp-item:focus-visible { background: var(--neutral-alpha-weak); }\n.pp-item.danger { color: var(--danger-on-background-strong); }\n.pp-glyph { width: 20px; text-align: center; opacity: .75; flex-shrink: 0; }\n.pp-hint { margin-left: auto; font-size: 12px; opacity: .55; font-family: var(--font-code); }\n.pp-close {\n  all: unset; cursor: pointer; position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 8px;\n  display: inline-flex; align-items: center; justify-content: center; opacity: .7;\n}\n.pp-close:hover { background: var(--neutral-alpha-weak); opacity: 1; }\n.pp-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }\n`;\n\nexport default function Page() {\n  const [open, setOpen] = useState(false);\n  const [following, setFollowing] = useState(false);\n  const [message, setMessage] = useState(\"\");\n  const rootRef = useRef<HTMLDivElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const panelRef = useRef<HTMLDivElement>(null);\n  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);\n  const panelId = useId();\n  const titleId = useId();\n\n  const clearTimer = () => {\n    if (closeTimer.current) {\n      clearTimeout(closeTimer.current);\n      closeTimer.current = null;\n    }\n  };\n\n  const close = useCallback((returnFocus: boolean) => {\n    setOpen(false);\n    if (returnFocus) triggerRef.current?.focus();\n  }, []);\n\n  useEffect(() => () => clearTimer(), []);\n\n  useEffect(() => {\n    if (!open) return;\n    const onPointerDown = (e: PointerEvent) => {\n      if (rootRef.current && !rootRef.current.contains(e.target as Node)) setOpen(false);\n    };\n    const onKey = (e: KeyboardEvent) => {\n      if (e.key === \"Escape\") close(true);\n    };\n    document.addEventListener(\"pointerdown\", onPointerDown);\n    document.addEventListener(\"keydown\", onKey);\n    return () => {\n      document.removeEventListener(\"pointerdown\", onPointerDown);\n      document.removeEventListener(\"keydown\", onKey);\n    };\n  }, [open, close]);\n\n  const onHoverEnter = (e: React.PointerEvent) => {\n    if (e.pointerType !== \"mouse\") return;\n    clearTimer();\n    setOpen(true);\n  };\n  const onHoverLeave = (e: React.PointerEvent) => {\n    if (e.pointerType !== \"mouse\") return;\n    clearTimer();\n    closeTimer.current = setTimeout(() => setOpen(false), 180);\n  };\n\n  const getItems = () =>\n    Array.from(panelRef.current?.querySelectorAll<HTMLButtonElement>(\"[data-menu-item]\") ?? []);\n\n  const onTriggerKey = (e: ReactKeyboardEvent<HTMLButtonElement>) => {\n    if (e.key === \"ArrowDown\" && !open) {\n      e.preventDefault();\n      setOpen(true);\n      requestAnimationFrame(() => getItems()[0]?.focus());\n    }\n  };\n\n  const onPanelKey = (e: ReactKeyboardEvent<HTMLDivElement>) => {\n    const items = getItems();\n    if (items.length === 0) return;\n    const idx = items.findIndex((el) => el === document.activeElement);\n    let next = -1;\n    if (e.key === \"ArrowDown\") next = idx < 0 ? 0 : (idx + 1) % items.length;\n    else if (e.key === \"ArrowUp\") next = idx <= 0 ? items.length - 1 : idx - 1;\n    else if (e.key === \"Home\") next = 0;\n    else if (e.key === \"End\") next = items.length - 1;\n    if (next >= 0) {\n      e.preventDefault();\n      items[next]?.focus();\n    }\n  };\n\n  const onAction = (a: MenuAction) => {\n    setMessage(a.id === \"signout\" ? \"You have been signed out (demo).\" : `${a.label} selected.`);\n    close(true);\n  };\n\n  const toggleFollow = () => {\n    const next = !following;\n    setFollowing(next);\n    setMessage(next ? `You are now following ${USER.name}.` : `You unfollowed ${USER.name}.`);\n  };\n\n  return (\n    <Flex fillWidth horizontal=\"center\" paddingX=\"m\" paddingY=\"xl\" minHeight=\"100vh\">\n      <style>{CSS}</style>\n      <Column fillWidth maxWidth={64} gap=\"32\">\n        <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"16\" wrap>\n          <Column gap=\"4\">\n            <Heading as=\"h1\" variant=\"heading-strong-l\">\n              Atlas Studio\n            </Heading>\n            <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n              Workspace overview\n            </Text>\n          </Column>\n\n          <div\n            className=\"pp-root\"\n            ref={rootRef}\n            onPointerEnter={onHoverEnter}\n            onPointerLeave={onHoverLeave}\n          >\n            <button\n              ref={triggerRef}\n              type=\"button\"\n              className=\"pp-trigger\"\n              aria-haspopup=\"dialog\"\n              aria-expanded={open}\n              aria-controls={panelId}\n              aria-label={`Account menu for ${USER.name}`}\n              onClick={() => {\n                clearTimer();\n                setOpen((o) => !o);\n              }}\n              onKeyDown={onTriggerKey}\n            >\n              <span className=\"pp-avatar\" aria-hidden=\"true\">\n                {USER.initials}\n                <span className=\"pp-dot\" />\n              </span>\n              <span className=\"pp-name-short\" aria-hidden=\"true\">\n                Maya\n              </span>\n              <span className={`pp-caret${open ? \" open\" : \"\"}`} aria-hidden=\"true\">\n                ▼\n              </span>\n            </button>\n\n            {open && (\n              <div\n                ref={panelRef}\n                id={panelId}\n                role=\"dialog\"\n                aria-labelledby={titleId}\n                className=\"pp-panel\"\n                onKeyDown={onPanelKey}\n              >\n                <button\n                  type=\"button\"\n                  className=\"pp-close\"\n                  aria-label=\"Close profile menu\"\n                  onClick={() => close(true)}\n                >\n                  ✕\n                </button>\n\n                <Column padding=\"16\" gap=\"12\">\n                  <Row gap=\"12\" vertical=\"center\">\n                    <span className=\"pp-avatar lg\" aria-hidden=\"true\">\n                      {USER.initials}\n                      <span className=\"pp-dot\" />\n                    </span>\n                    <Column gap=\"2\" style={{ minWidth: 0 }}>\n                      <Heading as=\"h2\" id={titleId} variant=\"heading-strong-m\">\n                        {USER.name}\n                      </Heading>\n                      <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                        {USER.handle} · {USER.role}\n                      </Text>\n                    </Column>\n                  </Row>\n                  <Text variant=\"body-default-s\" onBackground=\"neutral-medium\">\n                    {USER.bio}\n                  </Text>\n                  <Row gap=\"8\" vertical=\"center\">\n                    <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n                      📍 {USER.location}\n                    </Text>\n                    <Text variant=\"body-default-xs\" onBackground=\"success-medium\">\n                      ● {USER.status}\n                    </Text>\n                  </Row>\n                </Column>\n\n                <div className=\"pp-stats\" role=\"list\" aria-label=\"Profile statistics\">\n                  {STATS.map((s) => (\n                    <div className=\"pp-stat\" role=\"listitem\" key={s.label}>\n                      <Text as=\"div\" variant=\"heading-strong-s\">\n                        {s.value}\n                      </Text>\n                      <Text as=\"div\" variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n                        {s.label}\n                      </Text>\n                    </div>\n                  ))}\n                </div>\n\n                <Row padding=\"12\" gap=\"8\">\n                  <button\n                    type=\"button\"\n                    className={`pp-follow${following ? \"\" : \" primary\"}`}\n                    aria-pressed={following}\n                    onClick={toggleFollow}\n                  >\n                    {following ? \"Following\" : \"Follow\"}\n                  </button>\n                  <button\n                    type=\"button\"\n                    className=\"pp-follow\"\n                    onClick={() => setMessage(`Message composer opened for ${USER.name}.`)}\n                  >\n                    Message\n                  </button>\n                </Row>\n\n                <div role=\"menu\" aria-label=\"Account actions\" style={{ padding: \"0 8px 8px\" }}>\n                  {ACTIONS.map((a) => (\n                    <button\n                      key={a.id}\n                      type=\"button\"\n                      role=\"menuitem\"\n                      data-menu-item\n                      className={`pp-item${a.danger ? \" danger\" : \"\"}`}\n                      onClick={() => onAction(a)}\n                    >\n                      <span className=\"pp-glyph\" aria-hidden=\"true\">\n                        {a.glyph}\n                      </span>\n                      <span>{a.label}</span>\n                      {a.hint && (\n                        <span className=\"pp-hint\" aria-hidden=\"true\">\n                          {a.hint}\n                        </span>\n                      )}\n                    </button>\n                  ))}\n                </div>\n              </div>\n            )}\n          </div>\n        </Row>\n\n        <Column\n          fillWidth\n          padding=\"24\"\n          gap=\"12\"\n          radius=\"l\"\n          border=\"neutral-alpha-medium\"\n          background=\"surface\"\n        >\n          <Heading as=\"h2\" variant=\"heading-strong-m\">\n            Welcome back, Maya\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-medium\">\n            Hover over, tap, or focus the avatar in the top corner to open your profile card. Use the arrow\n            keys to move through the actions and Escape to close it.\n          </Text>\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n            3 design reviews are waiting for you today, and the Atlas v2.4 release is scheduled for Thursday.\n          </Text>\n        </Column>\n\n        <div className=\"pp-sr\" role=\"status\" aria-live=\"polite\">\n          {message}\n        </div>\n        {message && (\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" aria-hidden=\"true\">\n            {message}\n          </Text>\n        )}\n      </Column>\n    </Flex>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

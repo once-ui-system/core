@@ -1,0 +1,418 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Feedback widget — floating trigger, dialog with rating chips, textarea, toast on submit.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and checking the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01EFwm6WoXKy4KpRDzPp4cKG",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AjsGi3N1Rh9koQw54GKgD8",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EFwm6WoXKy4KpRDzPp4cKG",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AjsGi3N1Rh9koQw54GKgD8",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01TbfPcoLzBytDt7sKFaV2HY",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DBb3JLpaKF2c4xQjF7cLaH",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/dialog.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012fzgnrBarttCYTZgz9cekm",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/toggle-group.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TbfPcoLzBytDt7sKFaV2HY",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DBb3JLpaKF2c4xQjF7cLaH",
+          "content": "---\ntitle: Dialog\ndescription: A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.\nfeatured: true\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/dialog\n  api: https://www.radix-ui.com/docs/primitives/components/dialog#api-reference\n---\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"dialog-demo\"\n  description=\"A dialog for editing profile details.\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add dialog\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"dialog\"\n  title=\"components/ui/dialog.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogHeader,\n  DialogTitle,\n  DialogTrigger,\n} from \"@/components/ui/dialog\"\n```\n\n```tsx showLineNumbers\n<Dialog>\n  <DialogTrigger>Open</DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Are you absolutely sure?</DialogTitle>\n      <DialogDescription>\n        This action cannot be undone. This will permanently delete your account\n        and remove your data from our servers.\n      </DialogDescription>\n    </DialogHeader>\n  </DialogContent>\n</Dialog>\n```\n\n## Composition\n\nUse the following composition to build a `Dialog`:\n\n```text\nDialog\n├── DialogTrigger\n└── DialogContent\n    ├── DialogHeader\n    │   ├── DialogTitle\n    │   └── DialogDescription\n    └── DialogFooter\n```\n\n## Custom Close Button\n\nReplace the default close control with your own button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-close-button\" />\n\n## No Close Button\n\nUse `showCloseButton={false}` to hide the close button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-no-close-button\" />\n\n## Sticky Footer\n\nKeep actions visible while the content scrolls.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-sticky-footer\" />\n\n## Scrollable Content\n\nLong content can scroll while the header stays in view.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-scrollable-content\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-rtl\" direction=\"rtl\" />\n\n## API Reference\n\nSee the [Radix UI](https://www.radix-ui.com/docs/primitives/components/dialog#api-reference) documentation for more information.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012fzgnrBarttCYTZgz9cekm",
+          "content": "---\ntitle: Toggle Group\ndescription: A set of two-state buttons that can be toggled on or off.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/toggle-group\n  api: https://www.radix-ui.com/docs/primitives/components/toggle-group#api-reference\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add toggle-group\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"toggle-group\"\n  title=\"components/ui/toggle-group.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\"\n```\n\n```tsx\n<ToggleGroup type=\"single\">\n  <ToggleGroupItem value=\"a\">A</ToggleGroupItem>\n  <ToggleGroupItem value=\"b\">B</ToggleGroupItem>\n  <ToggleGroupItem value=\"c\">C</ToggleGroupItem>\n</ToggleGroup>\n```\n\n## Composition\n\nUse the following composition to build a `ToggleGroup`:\n\n```text\nToggleGroup\n├── ToggleGroupItem\n└── ToggleGroupItem\n```\n\n## Outline\n\nUse `variant=\"outline\"` for an outline style.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-outline\" />\n\n## Size\n\nUse the `size` prop to change the size of the toggle group.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-sizes\" />\n\n## Spacing\n\nUse `spacing` to add spacing between toggle group items.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-spacing\" />\n\n## Vertical\n\nUse `orientation=\"vertical\"` for vertical toggle groups.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-vertical\" />\n\n## Disabled\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-disabled\" />\n\n## Custom\n\nA custom toggle group example.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"toggle-group-font-weight-selector\"\n  previewClassName=\"*:data-[slot=field]:max-w-xs\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"toggle-group-rtl\"\n  direction=\"rtl\"\n/>\n\n## API Reference\n\nSee the [Radix Toggle Group](https://www.radix-ui.com/docs/primitives/components/toggle-group#api-reference) documentation.\n\n## Changelog\n\n### 2026-05-17 Default Spacing\n\nChanged the default `spacing` from `0` to `2` so toggle groups render with space between items by default. Use `spacing={0}` for connected items.\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the installed components and the layout."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UGbq3HZKPdoqvFJ63q83KL",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FgjCHpJcstSZTqc6e1MRo8",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UGbq3HZKPdoqvFJ63q83KL",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FgjCHpJcstSZTqc6e1MRo8",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_018GX2YBkZDmYcAfRJB96gd1",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/dialog.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018yCuYjGWhGCF2nirZ6MJJw",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018NtbAPi4kqEWFgsNC3xupM",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LxqSjYi9xRWrkBy5ANMzZN",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XMehvcFhhAWR1Tg1nzXepX",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/field.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UjzKGi3P64w44jHTaaNA1W",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/textarea.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018GX2YBkZDmYcAfRJB96gd1",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { XIcon } from \"lucide-react\"\nimport { Dialog as DialogPrimitive } from \"radix-ui\"\n\nimport { Button } from \"@/components/ui/button\"\n\nfunction Dialog({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Root>) {\n  return <DialogPrimitive.Root data-slot=\"dialog\" {...props} />\n}\n\nfunction DialogTrigger({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {\n  return <DialogPrimitive.Trigger data-slot=\"dialog-trigger\" {...props} />\n}\n\nfunction DialogPortal({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Portal>) {\n  return <DialogPrimitive.Portal data-slot=\"dialog-portal\" {...props} />\n}\n\nfunction DialogClose({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Close>) {\n  return <DialogPrimitive.Close data-slot=\"dialog-close\" {...props} />\n}\n\nfunction DialogOverlay({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {\n  return (\n    <DialogPrimitive.Overlay\n      data-slot=\"dialog-overlay\"\n      className={cn(\n        \"fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DialogContent({\n  className,\n  children,\n  showCloseButton = true,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Content> & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <DialogPortal data-slot=\"dialog-portal\">\n      <DialogOverlay />\n      <DialogPrimitive.Content\n        data-slot=\"dialog-content\"\n        className={cn(\n          \"fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-6 shadow-lg duration-200 outline-none data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 sm:max-w-lg\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        {showCloseButton && (\n          <DialogPrimitive.Close\n            data-slot=\"dialog-close\"\n            className=\"absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\"\n          >\n            <XIcon />\n            <span className=\"sr-only\">Close</span>\n          </DialogPrimitive.Close>\n        )}\n      </DialogPrimitive.Content>\n    </DialogPortal>\n  )\n}\n\nfunction DialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"dialog-header\"\n      className={cn(\"flex flex-col gap-2 text-center sm:text-left\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogFooter({\n  className,\n  showCloseButton = false,\n  children,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <div\n      data-slot=\"dialog-footer\"\n      className={cn(\n        \"flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      {showCloseButton && (\n        <DialogPrimitive.Close asChild>\n          <Button variant=\"outline\">Close</Button>\n        </DialogPrimitive.Close>\n      )}\n    </div>\n  )\n}\n\nfunction DialogTitle({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Title>) {\n  return (\n    <DialogPrimitive.Title\n      data-slot=\"dialog-title\"\n      className={cn(\"text-lg leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogDescription({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Description>) {\n  return (\n    <DialogPrimitive.Description\n      data-slot=\"dialog-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Dialog,\n  DialogClose,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogOverlay,\n  DialogPortal,\n  DialogTitle,\n  DialogTrigger,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018yCuYjGWhGCF2nirZ6MJJw",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\n\nimport { toggleVariants } from \"@/components/ui/toggle\"\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n})\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs\",\n        className\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  )\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &\n  VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext)\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10\",\n        \"data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  )\n}\n\nexport { ToggleGroup, ToggleGroupItem }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018NtbAPi4kqEWFgsNC3xupM",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LxqSjYi9xRWrkBy5ANMzZN",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XMehvcFhhAWR1Tg1nzXepX",
+          "content": "\"use client\"\n\nimport { useMemo } from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nimport { Label } from \"@/components/ui/label\"\nimport { Separator } from \"@/components/ui/separator\"\n\nfunction FieldSet({ className, ...props }: React.ComponentProps<\"fieldset\">) {\n  return (\n    <fieldset\n      data-slot=\"field-set\"\n      className={cn(\n        \"flex flex-col gap-6\",\n        \"has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldLegend({\n  className,\n  variant = \"legend\",\n  ...props\n}: React.ComponentProps<\"legend\"> & { variant?: \"legend\" | \"label\" }) {\n  return (\n    <legend\n      data-slot=\"field-legend\"\n      data-variant={variant}\n      className={cn(\n        \"mb-3 font-medium\",\n        \"data-[variant=legend]:text-base\",\n        \"data-[variant=label]:text-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-group\"\n      className={cn(\n        \"group/field-group @container/field-group flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 [&>[data-slot=field-group]]:gap-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst fieldVariants = cva(\n  \"group/field flex w-full gap-3 data-[invalid=true]:text-destructive\",\n  {\n    variants: {\n      orientation: {\n        vertical: [\"flex-col [&>*]:w-full [&>.sr-only]:w-auto\"],\n        horizontal: [\n          \"flex-row items-center\",\n          \"[&>[data-slot=field-label]]:flex-auto\",\n          \"has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px\",\n        ],\n        responsive: [\n          \"flex-col @md/field-group:flex-row @md/field-group:items-center [&>*]:w-full @md/field-group:[&>*]:w-auto [&>.sr-only]:w-auto\",\n          \"@md/field-group:[&>[data-slot=field-label]]:flex-auto\",\n          \"@md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px\",\n        ],\n      },\n    },\n    defaultVariants: {\n      orientation: \"vertical\",\n    },\n  }\n)\n\nfunction Field({\n  className,\n  orientation = \"vertical\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof fieldVariants>) {\n  return (\n    <div\n      role=\"group\"\n      data-slot=\"field\"\n      data-orientation={orientation}\n      className={cn(fieldVariants({ orientation }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction FieldContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-content\"\n      className={cn(\n        \"group/field-content flex flex-1 flex-col gap-1.5 leading-snug\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldLabel({\n  className,\n  ...props\n}: React.ComponentProps<typeof Label>) {\n  return (\n    <Label\n      data-slot=\"field-label\"\n      className={cn(\n        \"group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50\",\n        \"has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4\",\n        \"has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5 dark:has-data-[state=checked]:bg-primary/10\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-label\"\n      className={cn(\n        \"flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"field-description\"\n      className={cn(\n        \"text-sm leading-normal font-normal text-muted-foreground group-has-[[data-orientation=horizontal]]/field:text-balance\",\n        \"last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5\",\n        \"[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldSeparator({\n  children,\n  className,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  children?: React.ReactNode\n}) {\n  return (\n    <div\n      data-slot=\"field-separator\"\n      data-content={!!children}\n      className={cn(\n        \"relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2\",\n        className\n      )}\n      {...props}\n    >\n      <Separator className=\"absolute inset-0 top-1/2\" />\n      {children && (\n        <span\n          className=\"relative mx-auto block w-fit bg-background px-2 text-muted-foreground\"\n          data-slot=\"field-separator-content\"\n        >\n          {children}\n        </span>\n      )}\n    </div>\n  )\n}\n\nfunction FieldError({\n  className,\n  children,\n  errors,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  errors?: Array<{ message?: string } | undefined>\n}) {\n  const content = useMemo(() => {\n    if (children) {\n      return children\n    }\n\n    if (!errors?.length) {\n      return null\n    }\n\n    const uniqueErrors = [\n      ...new Map(errors.map((error) => [error?.message, error])).values(),\n    ]\n\n    if (uniqueErrors?.length == 1) {\n      return uniqueErrors[0]?.message\n    }\n\n    return (\n      <ul className=\"ml-4 flex list-disc flex-col gap-1\">\n        {uniqueErrors.map(\n          (error, index) =>\n            error?.message && <li key={index}>{error.message}</li>\n        )}\n      </ul>\n    )\n  }, [children, errors])\n\n  if (!content) {\n    return null\n  }\n\n  return (\n    <div\n      role=\"alert\"\n      data-slot=\"field-error\"\n      className={cn(\"text-sm font-normal text-destructive\", className)}\n      {...props}\n    >\n      {content}\n    </div>\n  )\n}\n\nexport {\n  Field,\n  FieldLabel,\n  FieldDescription,\n  FieldError,\n  FieldGroup,\n  FieldLegend,\n  FieldSeparator,\n  FieldSet,\n  FieldContent,\n  FieldTitle,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UjzKGi3P64w44jHTaaNA1W",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Textarea({ className, ...props }: React.ComponentProps<\"textarea\">) {\n  return (\n    <textarea\n      data-slot=\"textarea\"\n      className={cn(\n        \"flex field-sizing-content min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Textarea }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The ToggleGroup's `spacing` is a number here, and I'll use a radio group semantic with `type=\"single\"`. I'll check the button and the toggle variants, and how sonner is used."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Gx6buG2B936dnZHtRYpmZ8",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CNDzyQCtNNb7fDAdUEuirW",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01YKYYxFSZqGA5uzUj9sTm7A",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/sonner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Gx6buG2B936dnZHtRYpmZ8",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CNDzyQCtNNb7fDAdUEuirW",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Toggle as TogglePrimitive } from \"radix-ui\"\n\nconst toggleVariants = cva(\n  \"inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline:\n          \"border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground\",\n      },\n      size: {\n        default: \"h-9 min-w-9 px-2\",\n        sm: \"h-8 min-w-8 px-1.5\",\n        lg: \"h-10 min-w-10 px-2.5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Toggle({\n  className,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof TogglePrimitive.Root> &\n  VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive.Root\n      data-slot=\"toggle\"\n      className={cn(toggleVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Toggle, toggleVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01YKYYxFSZqGA5uzUj9sTm7A",
+          "content": "\"use client\"\n\nimport {\n  CircleCheckIcon,\n  InfoIcon,\n  Loader2Icon,\n  OctagonXIcon,\n  TriangleAlertIcon,\n} from \"lucide-react\"\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: <CircleCheckIcon className=\"size-4\" />,\n        info: <InfoIcon className=\"size-4\" />,\n        warning: <TriangleAlertIcon className=\"size-4\" />,\n        error: <OctagonXIcon className=\"size-4\" />,\n        loading: <Loader2Icon className=\"size-4 animate-spin\" />,\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build a mock \"Ledgerly\" settings page as context for the feedback widget, using a ToggleGroup for rating chips and a textarea with character counter and submit validation, loading spinner, and toast on success.\n\n",
+          "signature": "CAQS7QgKEQgSGAI4AUIJbmFycmF0aW9uEgx4r69RhAA0vYNSnrkaDAAFHeZThNdOqsqw+yIw4o92pdaVCj1ZHddskoiWzcpFRSWuy1DKW+SG0BYAfnvzpcvd01nrNepgCfUtGx89KokIJY9CUAo0oJCtE/chKEcwzOZ8YsfSRW6aiCtBCWBUkO1n/KCUkWy68vufBQkD33pRhisNeMgaRbiB5NBRVVpVV2qbGwiOSSoOXdWZhq9IWQfvHnBztmMkrhkRaJYSA/VEs0XpcOmlljaX4ztJgLdh0l7f59XT1ZnWB6G8Kr8VXKV1m1QMSdxq9OBMign/DlhUae4rKMmYnlAfLSloMQhIxuq5piJFQJKAgqQlEyvNv8QxoLzoHZjwfZtHxG+vsaK26pPlt0O3AKQfzC7cxd5Y1yKmCOXGUp48zNB+TN0NDua3hi2/a2ZjlT61p+2zWac6eHCMyeFMMkJaLkcJHGoFtqkmqaDp7owul0cdy9gmKHrHqqqlT+B9n1EeeKW+6LNps9NAhP78rVkkjwNvhsHKMgg8Hi0Zo7eSwVkcZs3rkeH89/fyJVmO6bq3ocpRk2xYwkleLORXqEVI3qXyFk3K8FYjMRaq+CZ/cgJm3YeNUpOL8Yro+Kpjp4W09+vMrdQJq3xbzO5hnFvt/9+XMV7095lnSHlgN1f/S3rA951hhvIWSiU9NCOavm3RT2tuCPfs0sCSsMackkkXyWOgAOpfQfjIjB9h/fIeohwCXvLVCrv+kv0TMPAqc63Nx4juAOAvxNMpaOCCWkTGw5m6crzURh5fSS6eZCp7c9L5Se432riHtfW3ZRzoe9MkXq8fBWHiXhYAeKX6jTLgh7dlxJQx5RNOVRQkMysG4eYC+hwbvkEul/6YCU6IGfa0yfn1sb/04KHRlT9kGqEoNesw2HguPs6PJ29oa0C1LSW1tVrg8HW6Eiabsu2Oz7YzvXFqx8fBt0Av1tLdzOdsABWhPsJJ7AIui2M+1w/DWzwT1kQx3rwRUTA6gwiO+d0dW9ieVX9DbLHKr2h2t7dAgTWbkXNuSOzElrxdVh9snQvUk+oLjlD8Wqd953lEviScU75PKqnGVwtCHdgI3KZ5m3K0sFOPt2tIl7hSUEH+DPxG106GEGSzdgvd4N170gtX+hILfMuHtXgFYa5vDrUjJc2LxWi8T/hLjiPJJuhDp/7S7qhRUsvPr751lnhnMSzffXZXGKhE8+0dfTp88Y+1p8ww5TE6gRlKE2OizZhhuTyKVWFz+0xR9R8s2Sjy9RjcZIcQDSUdxDqDtBxOkoX2+aHIN9Na8lWxSJ+KHSpTl6K/3F3LjUfHDU6WG0NTfap7Z80O+K9lSYhPkE0FRwHM0/lz+ymj0R1O2HSMuvOlvBJH2Kq/yg8Hi4bXvAVewFrx0M3JcJUJj+LBjCZDLQRSdMR8/KCW89cFrp2b79agf4Ci/2IhdjuIjtvHzRHwZYYl87PzoAf4kndbe7W9rgEDewK+e3+gS1eL35I8gElYVRgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01YLTvXDSkGeEsVQnBm8rzHH",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/spinner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Cge53hAidh2ydLDzzjY119",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0144AE5aji693ZrUM3c3whXx",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01YLTvXDSkGeEsVQnBm8rzHH",
+          "content": "import { cn } from \"@/lib/utils\"\nimport { Loader2Icon } from \"lucide-react\"\n\nfunction Spinner({ className, ...props }: React.ComponentProps<\"svg\">) {\n  return (\n    <Loader2Icon\n      role=\"status\"\n      aria-label=\"Loading\"\n      className={cn(\"size-4 animate-spin\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Spinner }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Cge53hAidh2ydLDzzjY119",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0144AE5aji693ZrUM3c3whXx",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useState } from \"react\";\nimport type { FormEvent } from \"react\";\nimport { toast } from \"sonner\";\nimport {\n  AlertCircleIcon,\n  AngryIcon,\n  CheckCircle2Icon,\n  FrownIcon,\n  MehIcon,\n  MessageSquareHeartIcon,\n  SmileIcon,\n  SendIcon,\n  LaughIcon,\n  TrendingUpIcon,\n  ReceiptTextIcon,\n  UsersIcon,\n  ClockIcon,\n} from \"lucide-react\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\";\nimport {\n  Dialog,\n  DialogClose,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogTitle,\n  DialogTrigger,\n} from \"@/components/ui/dialog\";\nimport { Label } from \"@/components/ui/label\";\nimport { Spinner } from \"@/components/ui/spinner\";\nimport { Textarea } from \"@/components/ui/textarea\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";\n\ntype Rating = {\n  value: string;\n  label: string;\n  icon: typeof SmileIcon;\n};\n\nconst RATINGS: Rating[] = [\n  { value: \"1\", label: \"Very unhappy\", icon: AngryIcon },\n  { value: \"2\", label: \"Unhappy\", icon: FrownIcon },\n  { value: \"3\", label: \"Neutral\", icon: MehIcon },\n  { value: \"4\", label: \"Happy\", icon: SmileIcon },\n  { value: \"5\", label: \"Delighted\", icon: LaughIcon },\n];\n\nconst MAX_LENGTH = 500;\n\nconst STATS = [\n  {\n    label: \"Outstanding invoices\",\n    value: \"$18,420\",\n    note: \"7 invoices across 5 clients\",\n    icon: ReceiptTextIcon,\n  },\n  {\n    label: \"Collected this month\",\n    value: \"$42,915\",\n    note: \"+12.4% vs. last month\",\n    icon: TrendingUpIcon,\n  },\n  {\n    label: \"Active clients\",\n    value: \"38\",\n    note: \"3 new since Monday\",\n    icon: UsersIcon,\n  },\n  {\n    label: \"Avg. days to payment\",\n    value: \"11.2\",\n    note: \"Down from 14.6 days\",\n    icon: ClockIcon,\n  },\n];\n\nconst RECENT = [\n  { client: \"Northwind Studio\", invoice: \"INV-2041\", amount: \"$3,200.00\", status: \"Paid\" },\n  { client: \"Harbor & Pine\", invoice: \"INV-2040\", amount: \"$1,480.00\", status: \"Pending\" },\n  { client: \"Alder Labs\", invoice: \"INV-2039\", amount: \"$6,750.00\", status: \"Paid\" },\n  { client: \"Kestrel Coffee Co.\", invoice: \"INV-2038\", amount: \"$920.00\", status: \"Overdue\" },\n];\n\nfunction FeedbackWidget() {\n  const [open, setOpen] = useState(false);\n  const [rating, setRating] = useState(\"\");\n  const [message, setMessage] = useState(\"\");\n  const [error, setError] = useState<string | null>(null);\n  const [submitting, setSubmitting] = useState(false);\n\n  const ratingLabelId = useId();\n  const ratingErrorId = useId();\n  const messageId = useId();\n  const counterId = useId();\n\n  const selected = RATINGS.find((r) => r.value === rating);\n\n  function reset() {\n    setRating(\"\");\n    setMessage(\"\");\n    setError(null);\n    setSubmitting(false);\n  }\n\n  function handleOpenChange(next: boolean) {\n    if (submitting) return;\n    setOpen(next);\n    if (!next) reset();\n  }\n\n  async function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    if (submitting) return;\n\n    if (!selected) {\n      setError(\"Please choose a rating before sending.\");\n      return;\n    }\n\n    setError(null);\n    setSubmitting(true);\n    // Simulate a network round-trip.\n    await new Promise((resolve) => setTimeout(resolve, 900));\n\n    toast.success(\"Thanks for your feedback!\", {\n      description: `You rated your experience “${selected.label}”. Our team reads every message.`,\n    });\n    setSubmitting(false);\n    setOpen(false);\n    reset();\n  }\n\n  return (\n    <Dialog open={open} onOpenChange={handleOpenChange}>\n      <DialogTrigger asChild>\n        <Button\n          size=\"lg\"\n          className=\"fixed right-4 bottom-4 z-40 h-12 rounded-full px-5 shadow-lg sm:right-6 sm:bottom-6\"\n        >\n          <MessageSquareHeartIcon aria-hidden=\"true\" />\n          <span>Feedback</span>\n        </Button>\n      </DialogTrigger>\n\n      <DialogContent className=\"max-h-[calc(100dvh-2rem)] overflow-y-auto\">\n        <form onSubmit={handleSubmit} noValidate className=\"grid gap-5\">\n          <DialogHeader>\n            <DialogTitle>Share your feedback</DialogTitle>\n            <DialogDescription>\n              Tell us how Ledgerly is working for you. It takes less than a\n              minute.\n            </DialogDescription>\n          </DialogHeader>\n\n          <div className=\"grid gap-2\">\n            <Label id={ratingLabelId}>How was your experience?</Label>\n            <ToggleGroup\n              type=\"single\"\n              variant=\"outline\"\n              spacing={2}\n              value={rating}\n              onValueChange={(value) => {\n                setRating(value);\n                if (value) setError(null);\n              }}\n              aria-labelledby={ratingLabelId}\n              aria-describedby={error ? ratingErrorId : undefined}\n              aria-invalid={error ? true : undefined}\n              className=\"grid w-full grid-cols-5 gap-2\"\n            >\n              {RATINGS.map(({ value, label, icon: Icon }) => (\n                <ToggleGroupItem\n                  key={value}\n                  value={value}\n                  aria-label={label}\n                  title={label}\n                  className=\"h-12 w-full data-[state=on]:border-primary data-[state=on]:bg-primary data-[state=on]:text-primary-foreground\"\n                >\n                  <Icon className=\"size-5\" aria-hidden=\"true\" />\n                </ToggleGroupItem>\n              ))}\n            </ToggleGroup>\n            <p\n              className=\"min-h-5 text-sm text-muted-foreground\"\n              aria-live=\"polite\"\n            >\n              {selected ? selected.label : \"Select one of the five faces.\"}\n            </p>\n            {error ? (\n              <p\n                id={ratingErrorId}\n                role=\"alert\"\n                className=\"flex items-center gap-1.5 text-sm text-destructive\"\n              >\n                <AlertCircleIcon className=\"size-4\" aria-hidden=\"true\" />\n                {error}\n              </p>\n            ) : null}\n          </div>\n\n          <div className=\"grid gap-2\">\n            <div className=\"flex items-baseline justify-between gap-2\">\n              <Label htmlFor={messageId}>\n                Anything we should know?{\" \"}\n                <span className=\"font-normal text-muted-foreground\">\n                  (optional)\n                </span>\n              </Label>\n              <span\n                id={counterId}\n                className=\"text-xs text-muted-foreground tabular-nums\"\n              >\n                {message.length}/{MAX_LENGTH}\n              </span>\n            </div>\n            <Textarea\n              id={messageId}\n              value={message}\n              maxLength={MAX_LENGTH}\n              onChange={(e) => setMessage(e.target.value)}\n              aria-describedby={counterId}\n              placeholder=\"e.g. I'd love to schedule recurring invoices for retainer clients.\"\n              className=\"min-h-28 resize-none\"\n            />\n          </div>\n\n          <DialogFooter>\n            <DialogClose asChild>\n              <Button type=\"button\" variant=\"outline\" disabled={submitting}>\n                Cancel\n              </Button>\n            </DialogClose>\n            <Button type=\"submit\" disabled={submitting}>\n              {submitting ? (\n                <>\n                  <Spinner aria-hidden=\"true\" />\n                  Sending…\n                </>\n              ) : (\n                <>\n                  <SendIcon aria-hidden=\"true\" />\n                  Send feedback\n                </>\n              )}\n            </Button>\n          </DialogFooter>\n        </form>\n      </DialogContent>\n    </Dialog>\n  );\n}\n\nfunction statusVariant(status: string) {\n  if (status === \"Paid\") return \"secondary\" as const;\n  if (status === \"Overdue\") return \"destructive\" as const;\n  return \"outline\" as const;\n}\n\nexport default function Page() {\n  return (\n    <div className=\"min-h-dvh bg-muted/30\">\n      <main className=\"mx-auto flex w-full max-w-5xl flex-col gap-8 px-4 py-8 pb-28 sm:px-6 sm:py-12\">\n        <header className=\"flex flex-col gap-2\">\n          <p className=\"text-sm font-medium text-muted-foreground\">\n            Ledgerly · Overview\n          </p>\n          <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">\n            Good morning, Priya\n          </h1>\n          <p className=\"max-w-prose text-muted-foreground\">\n            Here is where your billing stands today. Spotted something\n            confusing or missing? Use the feedback button in the corner and let\n            us know.\n          </p>\n        </header>\n\n        <section\n          aria-label=\"Key figures\"\n          className=\"grid gap-4 sm:grid-cols-2 lg:grid-cols-4\"\n        >\n          {STATS.map(({ label, value, note, icon: Icon }) => (\n            <Card key={label} className=\"gap-3 py-5\">\n              <CardHeader className=\"gap-1\">\n                <div className=\"flex items-center justify-between gap-2\">\n                  <CardDescription>{label}</CardDescription>\n                  <Icon\n                    className=\"size-4 text-muted-foreground\"\n                    aria-hidden=\"true\"\n                  />\n                </div>\n                <CardTitle className=\"text-2xl tabular-nums\">{value}</CardTitle>\n              </CardHeader>\n              <CardContent>\n                <p className=\"text-xs text-muted-foreground\">{note}</p>\n              </CardContent>\n            </Card>\n          ))}\n        </section>\n\n        <section aria-labelledby=\"recent-heading\">\n          <Card>\n            <CardHeader>\n              <CardTitle id=\"recent-heading\">Recent invoices</CardTitle>\n              <CardDescription>\n                The four most recently issued invoices.\n              </CardDescription>\n            </CardHeader>\n            <CardContent>\n              <ul className=\"divide-y\">\n                {RECENT.map((item) => (\n                  <li\n                    key={item.invoice}\n                    className=\"flex flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3 first:pt-0 last:pb-0\"\n                  >\n                    <div className=\"min-w-0\">\n                      <p className=\"truncate font-medium\">{item.client}</p>\n                      <p className=\"text-sm text-muted-foreground\">\n                        {item.invoice}\n                      </p>\n                    </div>\n                    <div className=\"flex items-center gap-3\">\n                      <span className=\"text-sm font-medium tabular-nums\">\n                        {item.amount}\n                      </span>\n                      <Badge variant={statusVariant(item.status)}>\n                        {item.status === \"Paid\" ? (\n                          <CheckCircle2Icon aria-hidden=\"true\" />\n                        ) : null}\n                        {item.status}\n                      </Badge>\n                    </div>\n                  </li>\n                ))}\n              </ul>\n            </CardContent>\n          </Card>\n        </section>\n      </main>\n\n      <FeedbackWidget />\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

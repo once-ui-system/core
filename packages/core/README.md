@@ -37,14 +37,15 @@ npm install @once-ui-system/core
 
 ## AI codegen harness
 
-This package includes an agent-first harness under `ai/` for generating Once UI code with minimal context (~6–10KB per task).
+This package includes an agent-first harness under `ai/` for generating Once UI code with minimal context: about 28KB of bootstrap plus one bundle per task.
 
 | Resource | Path |
 |----------|------|
 | Entry point | `@once-ui-system/core/ai/manifest.json` |
 | Compact rules | `@once-ui-system/core/ai/rules.compact.md` |
 | Component catalog | `@once-ui-system/core/ai/catalog.json` |
-| Task bundles | `@once-ui-system/core/ai/tasks/index.json` |
+| Task index | `@once-ui-system/core/ai/tasks/index.json` |
+| Task bundles (task + slices + types) | `@once-ui-system/core/ai/bundles/{id}.json` |
 
 **One-time setup in your app** (writes project `AGENTS.md`, `CLAUDE.md` and a Cursor rule):
 

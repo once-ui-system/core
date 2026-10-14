@@ -1,0 +1,46 @@
+{
+  "attempt": 1,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 447,
+    "chars": 17077,
+    "bytes": 17078,
+    "tokens_o200k": 3561,
+    "tokens_claudeLegacy": 3819,
+    "tokens_exact": 5616
+  },
+  "raw": {
+    "lines": 452,
+    "chars": 17230,
+    "bytes": 17231,
+    "tokens_o200k": 3578,
+    "tokens_claudeLegacy": 3848,
+    "tokens_exact": 5648
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Card",
+    "CardContent",
+    "CardDescription",
+    "CardFooter",
+    "CardHeader",
+    "CardTitle",
+    "Progress"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/card.tsx",
+      "components/ui/progress.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 219,
+    "chars": 7085,
+    "bytes": 7085,
+    "tokens_o200k": 1832,
+    "tokens_claudeLegacy": 2114,
+    "tokens_exact": 3016
+  }
+}

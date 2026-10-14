@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Marketing hero — headline with text effect, CTA pair, social proof logos, background effect.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files to match conventions."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JojekMYpXLFsAwdGrmeeoJ",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FyFsaUU14fjt2uPakuS5d2",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JojekMYpXLFsAwdGrmeeoJ",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FyFsaUU14fjt2uPakuS5d2",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013C85B3vVfuNp8M4gs5KGQF",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013MqudUmvXuN8D423DLCLmg",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RjZrieJpXVCXtr1zWxYPre",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013C85B3vVfuNp8M4gs5KGQF",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013MqudUmvXuN8D423DLCLmg",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RjZrieJpXVCXtr1zWxYPre",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01GxQyU5XzLWMtYLpSHd78FR",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GSKjgVroCRtLq7eTvd3AVi",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01U2gt7NU4fXyJAHoDUVeNxG",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GxQyU5XzLWMtYLpSHd78FR",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GSKjgVroCRtLq7eTvd3AVi",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01U2gt7NU4fXyJAHoDUVeNxG",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I can't edit globals.css, so keyframes will go in an inline `<style>` tag, and I'll honor reduced motion.\n\n```tsx\n\"use client\";\n\nimport { useState } from \"react\";\nimport type { ComponentType, SVGProps } from \"react\";\nimport {\n  ArrowRight,\n  Play,\n  Sparkles,\n  Star,\n  Check,\n  Hexagon,\n  Triangle,\n  Circle,\n  Square,\n  Diamond,\n  Pentagon,\n} from \"lucide-react\";\n\ntype IconType = ComponentType<SVGProps<SVGSVGElement> & { size?: number | string }>;\n\ninterface Logo {\n  name: string;\n  Icon: IconType;\n}\n\nconst LOGOS: Logo[] = [\n  { name: \"Northwind\", Icon: Hexagon },\n  { name: \"Lumina\", Icon: Triangle },\n  { name: \"Orbital\", Icon: Circle },\n  { name: \"Brightside\", Icon: Square },\n  { name: \"Kestrel\", Icon: Diamond },\n  { name: \"Foundry\", Icon: Pentagon },\n];\n\nconst HIGHLIGHTS = [\"14-day free trial\", \"No credit card required\", \"SOC 2 Type II\"];\n\nconst AVATAR_STYLES = [\n  \"from-indigo-400 to-violet-500\",\n  \"from-sky-400 to-indigo-500\",\n  \"from-fuchsia-400 to-pink-500\",\n  \"from-emerald-400 to-teal-500\",\n];\nconst AVATAR_INITIALS = [\"MR\", \"JK\", \"AL\", \"TS\"];\n\nexport default function Page() {\n  const [playing, setPlaying] = useState(false);\n\n  return (\n    <main className=\"relative min-h-screen overflow-hidden bg-slate-950 text-slate-100\">\n      <style>{`\n        @keyframes hero-shimmer {\n          0% { background-position: 0% 50%; }\n          100% { background-position: 200% 50%; }\n        }\n        @keyframes hero-float {\n          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n          50% { transform: translate3d(0, -24px, 0) scale(1.06); }\n        }\n        @keyframes hero-marquee {\n          from { transform: translateX(0); }\n          to { transform: translateX(-50%); }\n        }\n        .hero-text-effect {\n          background-image: linear-gradient(90deg, #818cf8, #c084fc, #f472b6, #38bdf8, #818cf8);\n          background-size: 200% 100%;\n          animation: hero-shimmer 6s linear infinite;\n        }\n        .hero-orb { animation: hero-float 12s ease-in-out infinite; }\n        .hero-orb-slow { animation: hero-float 18s ease-in-out infinite reverse; }\n        .hero-marquee-track { animation: hero-marquee 32s linear infinite; }\n        .hero-marquee:hover .hero-marquee-track { animation-play-state: paused; }\n        @media (prefers-reduced-motion: reduce) {\n          .hero-text-effect, .hero-orb, .hero-orb-slow, .hero-marquee-track {\n            animation: none !important;\n          }\n        }\n      `}</style>\n\n      {/* Background effect */}\n      <div aria-hidden=\"true\" className=\"pointer-events-none absolute inset-0\">\n        <div\n          className=\"absolute inset-0 opacity-[0.35]\"\n          style={{\n            backgroundImage:\n              \"linear-gradient(to right, rgba(148,163,184,0.12) 1px, transparent 1px), linear-gradient(to bottom, rgba(148,163,184,0.12) 1px, transparent 1px)\",\n            backgroundSize: \"56px 56px\",\n            maskImage: \"radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 75%)\",\n            WebkitMaskImage:\n              \"radial-gradient(ellipse 70% 60% at 50% 30%, black 30%, transparent 75%)\",\n          }}\n        />\n        <div className=\"hero-orb absolute -top-40 left-1/2 h-[28rem] w-[28rem] -translate-x-[85%] rounded-full bg-indigo-600/30 blur-3xl sm:h-[36rem] sm:w-[36rem]\" />\n        <div className=\"hero-orb-slow absolute -top-24 left-1/2 h-[26rem] w-[26rem] -translate-x-[5%] rounded-full bg-fuchsia-600/25 blur-3xl sm:h-[32rem] sm:w-[32rem]\" />\n        <div className=\"absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950 to-transparent\" />\n      </div>\n\n      <div className=\"relative mx-auto flex min-h-screen max-w-6xl flex-col px-5 sm:px-8\">\n        {/* Nav */}\n        <header className=\"flex items-center justify-between py-6\">\n          <a\n            href=\"#top\"\n            className=\"flex items-center gap-2 rounded-md text-base font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-400\"\n          >\n            <span className=\"flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-500 to-fuchsia-500\">\n              <Sparkles className=\"h-4 w-4 text-white\" aria-hidden=\"true\" />\n            </span>\n            Prismly\n          </a>\n          <nav aria-label=\"Primary\" className=\"hidden items-center gap-8 text-sm text-slate-300 md:flex\">\n            {[\"Product\", \"Pricing\", \"Customers\", \"Docs\"].map((item) => (\n              <a\n                key={item}\n                href={`#${item.toLowerCase()}`}\n                className=\"rounded transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-400\"\n              >\n                {item}\n              </a>\n            ))}\n          </nav>\n          <a\n            href=\"#signin\"\n            className=\"rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-slate-200 transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400\"\n          >\n            Sign in\n          </a>\n        </header>\n\n        {/* Hero */}\n        <section\n          id=\"top\"\n          aria-labelledby=\"hero-heading\"\n          className=\"flex flex-1 flex-col items-center justify-center py-14 text-center sm:py-20\"\n        >\n          <a\n            href=\"#changelog\"\n            className=\"group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-slate-200 backdrop-blur transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 sm:text-sm\"\n          >\n            <span className=\"rounded-full bg-indigo-500/20 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-indigo-200\">\n              New\n            </span>\n            Forecasting 2.0 is now live\n            <ArrowRight\n              className=\"h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5\"\n              aria-hidden=\"true\"\n            />\n          </a>\n\n          <h1\n            id=\"hero-heading\"\n            className=\"mt-8 max-w-4xl text-4xl font-semibold leading-[1.08] tracking-tight text-balance sm:text-6xl lg:text-7xl\"\n          >\n            Turn scattered data into{\" \"}\n            <span className=\"hero-text-effect bg-clip-text text-transparent\">\n              decisions your team trusts\n            </span>\n          </h1>\n\n          <p className=\"mt-6 max-w-2xl text-base leading-relaxed text-slate-300 text-pretty sm:text-lg\">\n            Prismly connects your warehouse, CRM and billing tools into one live workspace, so\n            finance, product and sales stop arguing about whose numbers are right and start\n            shipping.\n          </p>\n\n          {/* CTA pair */}\n          <div className=\"mt-10 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center\">\n            <a\n              href=\"#start\"\n              className=\"group inline-flex items-center justify-center gap-2 rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-slate-900 shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:text-base\"\n            >\n              Start free trial\n              <ArrowRight\n                className=\"h-4 w-4 transition-transform group-hover:translate-x-0.5\"\n                aria-hidden=\"true\"\n              />\n            </a>\n            <button\n              type=\"button\"\n              onClick={() => setPlaying((p) => !p)}\n              aria-pressed={playing}\n              className=\"inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400 sm:text-base\"\n            >\n              <Play className=\"h-4 w-4\" aria-hidden=\"true\" fill=\"currentColor\" />\n              {playing ? \"Playing demo…\" : \"Watch 2-min demo\"}\n            </button>\n          </div>\n          <p className=\"sr-only\" role=\"status\" aria-live=\"polite\">\n            {playing ? \"Product demo is playing\" : \"\"}\n          </p>\n\n          <ul className=\"mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-400\">\n            {HIGHLIGHTS.map((item) => (\n              <li key={item} className=\"flex items-center gap-1.5\">\n                <Check className=\"h-4 w-4 text-emerald-400\" aria-hidden=\"true\" />\n                {item}\n              </li>\n            ))}\n          </ul>\n        </section>\n\n        {/* Social proof */}\n        <section aria-labelledby=\"proof-heading\" className=\"pb-14 sm:pb-20\">\n          <div className=\"flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-5\">\n            <div className=\"flex -space-x-2\" aria-hidden=\"true\">\n              {AVATAR_STYLES.map((style, i) => (\n                <span\n                  key={style}\n                  className={`flex h-9 w-9 items-center justify-center rounded-full border-2 border-slate-950 bg-gradient-to-br ${style} text-[11px] font-semibold text-white`}\n                >\n                  {AVATAR_INITIALS[i]}\n                </span>\n              ))}\n            </div>\n            <div className=\"flex flex-col items-center gap-1 sm:items-start\">\n              <div className=\"flex items-center gap-1\">\n                <span className=\"flex\" aria-hidden=\"true\">\n                  {[0, 1, 2, 3, 4].map((n) => (\n                    <Star key={n} className=\"h-4 w-4 text-amber-400\" fill=\"currentColor\" />\n                  ))}\n                </span>\n                <span className=\"text-sm font-medium text-slate-200\">4.9 / 5</span>\n                <span className=\"sr-only\">average rating out of 5 stars</span>\n              </div>\n              <p id=\"proof-heading\" className=\"text-sm text-slate-400\">\n                Trusted by 2,400+ data teams at fast-growing companies\n              </p>\n            </div>\n          </div>\n\n          <div\n            className=\"hero-marquee relative mt-8 overflow-hidden\"\n            style={{\n              maskImage: \"linear-gradient(to right, transparent, black 15%, black 85%, transparent)\",\n              WebkitMaskImage:\n                \"linear-gradient(to right, transparent, black 15%, black 85%, transparent)\",\n            }}\n          >\n            <ul className=\"hero-marquee-track flex w-max items-center gap-12 py-2 sm:gap-16\">\n              {[...LOGOS, ...LOGOS].map(({ name, Icon }, i) => {\n                const duplicate = i >= LOGOS.length;\n                return (\n                  <li\n                    key={`${name}-${i}`}\n                    aria-hidden={duplicate ? true : undefined}\n                    className=\"flex items-center gap-2 text-slate-500 transition-colors hover:text-slate-200\"\n                  >\n                    <Icon className=\"h-6 w-6\" aria-hidden=\"true\" />\n                    <span className=\"text-lg font-semibold tracking-tight\">{name}</span>\n                  </li>\n                );\n              })}\n            </ul>\n          </div>\n        </section>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

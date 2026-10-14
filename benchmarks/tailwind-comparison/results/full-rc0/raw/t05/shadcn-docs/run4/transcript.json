@@ -1,0 +1,237 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Marketing hero — headline with text effect, CTA pair, social proof logos, background effect.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the docs and the project's existing files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015HBfcxX1a3Mpbc1yhbnded",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013xZRXRbznxHJQEQ6FHvjsW",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013TJhPTuzkw6Pikm69eS1Bz",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015HBfcxX1a3Mpbc1yhbnded",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013xZRXRbznxHJQEQ6FHvjsW",
+          "content": "docs/\nproject/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013TJhPTuzkw6Pikm69eS1Bz",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01H8GF2w1qgsnyEbEETxBpeB",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01R494qHyNXFnWkorQWHtTvc",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018KF7SoLnZhCw224Nau7YSt",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01H8GF2w1qgsnyEbEETxBpeB",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01R494qHyNXFnWkorQWHtTvc",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018KF7SoLnZhCw224Nau7YSt",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01LfAnNZjzCK8PY2pB3CmDTN",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GvD8Y53syck2f7bLNRG12Q",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XsbTwpANMBqEPV92rgVqsd",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LfAnNZjzCK8PY2pB3CmDTN",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GvD8Y53syck2f7bLNRG12Q",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XsbTwpANMBqEPV92rgVqsd",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll implement this using inline keyframes within a `<style>` tag in `app/page.tsx`, featuring an animated gradient on the headline plus a background with grid lines, aurora blobs, and a pointer-following spotlight, with a `prefers-reduced-motion` fallback included.\n\n",
+          "signature": "CAQSywcKEQgSGAI4AUIJbmFycmF0aW9uEgzAjAFtQiGv9L+HZicaDJh6QbGQPmH3HqYiVSIwNSmIMxQeO2Tq8g2D0Sq1xFvlKrr5Opowdy+oVALSaYqoXuZIzvO6YPC6v3k+79JJKucGZcKrktOA0kYTS6N06cFmCibB1mqogcJSma5IaYmJ26whHh0JR1sjI3qPIJODnyCWxM4Vyxcg2tYmhw+OVcldEkZqJSyY+05chnsK62K5Q4sWoAzqlo8kU1luvr38mRQBHG6ydYyJ5ADdjsNyBl94gxJX4/fZAyodnhwvc9/QtpNOA2rv0bcoEx0BxFiwo1Enxy4sHrAOSe2HrLmfRzy+OPEzXcQLugH0A4spIZd6FVJMZaUvJI6v84AiCu+e41D/L290fKfd0pKaCoCo53X9rW7PwJW0jw8xa9Eyj0ykbkUNn/d3gLRz3Md5T+YBPCWaXHgxfnfo/6JBRfsnywSZNnnnh15K0fJT4nb/6yvHcThr1kgjgi8xwY5q6kwlQq1+gCKlJ1hFniwjgAWb0LqoEr011sKvtZDmHbQH+2kAxDFOXQGgvBr+VJvnKIp7VtBuXCloLLUKafdOHRceYiXeClMrvcQ0nUgmku2bEqzxTPwe2wqlcRi8Pf6B53eOPaJoB9UEeYE1TfDhVYAVNpgUAdG1PSyhtmYK71wLTdi8RfhSmHNaW7YYhvGKsmCDfjXpHBDJmq5rGIiKDHtue0FMyVbSd792ACfcnNaQhMTWkW1kq1Zc1y5iC/Aox9jiSfdYR1/nVjIjneOcgl2PZIO/Un1WCHjuJZw1Vrw1sXPZMSWWAO4XlrnO31AjM5E9S8D97V1mF4lHZcBuw8MY55/gzybYu4kDt/IFtWJ1vgVGuE0OFDTBHMa76obmrdFxeLkni/DfaFOdiv0wWRDMtn9Xpqq4L30YcPHw+xTXAwjDQV+MxRsOP8A1a3sWHtk1ziRJw7Z72nYYJavWfH9k/5MkgmhPCYNXxYs03dK661suWs9E0yq4WLwLsm/d4PbRbqLSjMjxRAMtYlGV8T4LFPMryArJDABzWroW+o2b5a+7VEMNoncXcdtpPkuWbh8KMJZGvrH9e6VsrJid3ROIimeXjfNBa0ApFG2eV13+1vsd7aXeKHfEr/MG1YzIw+1Z4y8u6oRtr4eUPmWUbMwtWuzTceQ7UcHDkK/+vG/45MHzkTQd1fS5uzq9eXsEUmhCbq9HstoTAO33MTsC7qnLG06Zvss1y7rvKEVPOEEGTzYzud4M/7ibQ7L021fPHlcs6LV/lbqAZ/7ZPxgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Au9CCNyq7iL3JHuqot1Num",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/avatar.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Au9CCNyq7iL3JHuqot1Num",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Avatar as AvatarPrimitive } from \"radix-ui\"\n\nfunction Avatar({\n  className,\n  size = \"default\",\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Root> & {\n  size?: \"default\" | \"sm\" | \"lg\"\n}) {\n  return (\n    <AvatarPrimitive.Root\n      data-slot=\"avatar\"\n      data-size={size}\n      className={cn(\n        \"group/avatar relative flex size-8 shrink-0 overflow-hidden rounded-full select-none data-[size=lg]:size-10 data-[size=sm]:size-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarImage({\n  className,\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Image>) {\n  return (\n    <AvatarPrimitive.Image\n      data-slot=\"avatar-image\"\n      className={cn(\"aspect-square size-full\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarFallback({\n  className,\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {\n  return (\n    <AvatarPrimitive.Fallback\n      data-slot=\"avatar-fallback\"\n      className={cn(\n        \"flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarBadge({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"avatar-badge\"\n      className={cn(\n        \"absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-background select-none\",\n        \"group-data-[size=sm]/avatar:size-2 group-data-[size=sm]/avatar:[&>svg]:hidden\",\n        \"group-data-[size=default]/avatar:size-2.5 group-data-[size=default]/avatar:[&>svg]:size-2\",\n        \"group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"avatar-group\"\n      className={cn(\n        \"group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarGroupCount({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"avatar-group-count\"\n      className={cn(\n        \"relative flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-muted-foreground ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Avatar,\n  AvatarImage,\n  AvatarFallback,\n  AvatarBadge,\n  AvatarGroup,\n  AvatarGroupCount,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The Avatar components are there if I need them. The page itself is below.\n\n```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport {\n  ArrowRight,\n  Boxes,\n  Cloud,\n  Cpu,\n  Layers,\n  PlayCircle,\n  Radar,\n  Sparkles,\n  Star,\n  Triangle,\n  Zap,\n  type LucideIcon,\n} from \"lucide-react\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Avatar,\n  AvatarFallback,\n  AvatarGroup,\n} from \"@/components/ui/avatar\";\n\ntype Logo = { name: string; icon: LucideIcon };\n\nconst LOGOS: Logo[] = [\n  { name: \"Northwind\", icon: Radar },\n  { name: \"Lumenly\", icon: Sparkles },\n  { name: \"Vertex Labs\", icon: Triangle },\n  { name: \"Stackwise\", icon: Layers },\n  { name: \"Cloudform\", icon: Cloud },\n  { name: \"Quanta\", icon: Cpu },\n];\n\nconst PEOPLE = [\"AK\", \"JM\", \"SR\", \"TL\", \"PD\"];\n\nconst STYLES = `\n@keyframes hero-gradient-shift {\n  0% { background-position: 0% 50%; }\n  50% { background-position: 100% 50%; }\n  100% { background-position: 0% 50%; }\n}\n@keyframes hero-float-a {\n  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n  50% { transform: translate3d(40px, 30px, 0) scale(1.1); }\n}\n@keyframes hero-float-b {\n  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n  50% { transform: translate3d(-50px, 20px, 0) scale(1.15); }\n}\n@keyframes hero-rise {\n  from { opacity: 0; transform: translateY(16px); }\n  to { opacity: 1; transform: translateY(0); }\n}\n@keyframes hero-marquee {\n  from { transform: translateX(0); }\n  to { transform: translateX(-50%); }\n}\n.hero-text-effect {\n  background-image: linear-gradient(\n    100deg,\n    oklch(0.62 0.24 265),\n    oklch(0.68 0.23 305),\n    oklch(0.7 0.22 350),\n    oklch(0.72 0.19 45),\n    oklch(0.62 0.24 265)\n  );\n  background-size: 250% 100%;\n  -webkit-background-clip: text;\n  background-clip: text;\n  color: transparent;\n  animation: hero-gradient-shift 8s ease-in-out infinite;\n}\n.hero-blob-a { animation: hero-float-a 18s ease-in-out infinite; }\n.hero-blob-b { animation: hero-float-b 22s ease-in-out infinite; }\n.hero-rise { animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; }\n.hero-marquee-track { animation: hero-marquee 32s linear infinite; }\n.hero-marquee:hover .hero-marquee-track,\n.hero-marquee:focus-within .hero-marquee-track { animation-play-state: paused; }\n@media (prefers-reduced-motion: reduce) {\n  .hero-text-effect,\n  .hero-blob-a,\n  .hero-blob-b,\n  .hero-rise,\n  .hero-marquee-track { animation: none !important; }\n}\n`;\n\nfunction LogoItem({ logo }: { logo: Logo }) {\n  const Icon = logo.icon;\n  return (\n    <span className=\"flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground\">\n      <Icon className=\"size-5 shrink-0\" aria-hidden=\"true\" />\n      <span className=\"text-base font-semibold tracking-tight whitespace-nowrap\">\n        {logo.name}\n      </span>\n    </span>\n  );\n}\n\nexport default function Page() {\n  const heroRef = React.useRef<HTMLElement>(null);\n\n  const handlePointerMove = React.useCallback(\n    (event: React.PointerEvent<HTMLElement>) => {\n      const el = heroRef.current;\n      if (!el) return;\n      const rect = el.getBoundingClientRect();\n      el.style.setProperty(\"--mx\", `${event.clientX - rect.left}px`);\n      el.style.setProperty(\"--my\", `${event.clientY - rect.top}px`);\n    },\n    [],\n  );\n\n  return (\n    <main className=\"min-h-screen bg-background text-foreground\">\n      <style>{STYLES}</style>\n\n      <section\n        ref={heroRef}\n        onPointerMove={handlePointerMove}\n        aria-labelledby=\"hero-heading\"\n        className=\"relative isolate flex min-h-screen flex-col justify-center overflow-hidden px-4 py-20 sm:px-6 sm:py-28 lg:px-8\"\n        style={\n          {\n            \"--mx\": \"50%\",\n            \"--my\": \"30%\",\n          } as React.CSSProperties\n        }\n      >\n        {/* Background effects */}\n        <div aria-hidden=\"true\" className=\"pointer-events-none absolute inset-0 -z-10\">\n          {/* Grid */}\n          <div\n            className=\"absolute inset-0 opacity-[0.5] dark:opacity-[0.35]\"\n            style={{\n              backgroundImage:\n                \"linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)\",\n              backgroundSize: \"44px 44px\",\n              maskImage:\n                \"radial-gradient(ellipse 70% 60% at 50% 35%, black 30%, transparent 100%)\",\n              WebkitMaskImage:\n                \"radial-gradient(ellipse 70% 60% at 50% 35%, black 30%, transparent 100%)\",\n            }}\n          />\n          {/* Aurora blobs */}\n          <div className=\"hero-blob-a absolute -top-24 left-[8%] h-72 w-72 rounded-full bg-[oklch(0.7_0.2_265)] opacity-30 blur-3xl sm:h-96 sm:w-96 dark:opacity-25\" />\n          <div className=\"hero-blob-b absolute top-10 right-[6%] h-72 w-72 rounded-full bg-[oklch(0.75_0.2_330)] opacity-30 blur-3xl sm:h-[28rem] sm:w-[28rem] dark:opacity-20\" />\n          <div className=\"hero-blob-a absolute bottom-0 left-1/3 h-60 w-60 rounded-full bg-[oklch(0.8_0.15_70)] opacity-25 blur-3xl dark:opacity-15\" />\n          {/* Pointer spotlight */}\n          <div\n            className=\"absolute inset-0 opacity-70 dark:opacity-50\"\n            style={{\n              background:\n                \"radial-gradient(420px circle at var(--mx) var(--my), oklch(0.7 0.2 285 / 0.18), transparent 70%)\",\n            }}\n          />\n          {/* Bottom fade */}\n          <div className=\"absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent\" />\n        </div>\n\n        <div className=\"mx-auto flex w-full max-w-5xl flex-col items-center text-center\">\n          <div className=\"hero-rise\" style={{ animationDelay: \"0ms\" }}>\n            <Badge\n              variant=\"outline\"\n              className=\"gap-2 bg-background/60 px-3 py-1 text-sm backdrop-blur\"\n              asChild\n            >\n              <a href=\"#changelog\">\n                <Sparkles aria-hidden=\"true\" className=\"text-foreground\" />\n                <span>Introducing Beacon 2.0 — now with live replays</span>\n                <ArrowRight aria-hidden=\"true\" />\n              </a>\n            </Badge>\n          </div>\n\n          <h1\n            id=\"hero-heading\"\n            className=\"hero-rise mt-6 max-w-4xl text-4xl leading-[1.08] font-bold tracking-tight text-balance sm:text-6xl lg:text-7xl\"\n            style={{ animationDelay: \"80ms\" }}\n          >\n            Ship product decisions{\" \"}\n            <span className=\"hero-text-effect\">10x faster</span> with\n            analytics your whole team understands\n          </h1>\n\n          <p\n            className=\"hero-rise mt-6 max-w-2xl text-base leading-relaxed text-pretty text-muted-foreground sm:text-lg\"\n            style={{ animationDelay: \"160ms\" }}\n          >\n            Beacon turns raw events into clear answers. Track funnels, watch\n            session replays and spot drop-offs in minutes, with no SQL, no\n            tracking plan spreadsheets and no waiting on the data team.\n          </p>\n\n          <div\n            className=\"hero-rise mt-9 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center\"\n            style={{ animationDelay: \"240ms\" }}\n          >\n            <Button size=\"lg\" className=\"h-11 px-7 text-base\" asChild>\n              <a href=\"#signup\">\n                Start free trial\n                <ArrowRight aria-hidden=\"true\" />\n              </a>\n            </Button>\n            <Button\n              size=\"lg\"\n              variant=\"outline\"\n              className=\"h-11 bg-background/60 px-7 text-base backdrop-blur\"\n              asChild\n            >\n              <a href=\"#demo\">\n                <PlayCircle aria-hidden=\"true\" />\n                Watch 2-min demo\n              </a>\n            </Button>\n          </div>\n\n          <p\n            className=\"hero-rise mt-4 flex items-center gap-2 text-sm text-muted-foreground\"\n            style={{ animationDelay: \"300ms\" }}\n          >\n            <Zap className=\"size-4\" aria-hidden=\"true\" />\n            14-day trial · No credit card required · Set up in 5 minutes\n          </p>\n\n          {/* Rating */}\n          <div\n            className=\"hero-rise mt-12 flex flex-col items-center gap-3 sm:flex-row sm:gap-4\"\n            style={{ animationDelay: \"360ms\" }}\n          >\n            <AvatarGroup>\n              {PEOPLE.map((initials) => (\n                <Avatar key={initials}>\n                  <AvatarFallback className=\"text-xs font-medium\">\n                    {initials}\n                  </AvatarFallback>\n                </Avatar>\n              ))}\n            </AvatarGroup>\n            <div className=\"flex flex-col items-center gap-1 sm:items-start\">\n              <div\n                className=\"flex items-center gap-0.5\"\n                role=\"img\"\n                aria-label=\"Rated 4.9 out of 5 stars\"\n              >\n                {Array.from({ length: 5 }).map((_, i) => (\n                  <Star\n                    key={i}\n                    aria-hidden=\"true\"\n                    className=\"size-4 fill-amber-400 text-amber-400\"\n                  />\n                ))}\n              </div>\n              <p className=\"text-sm text-muted-foreground\">\n                <span className=\"font-semibold text-foreground\">4.9/5</span>{\" \"}\n                from 2,300+ product teams\n              </p>\n            </div>\n          </div>\n\n          {/* Logos */}\n          <div\n            className=\"hero-rise mt-14 w-full\"\n            style={{ animationDelay: \"420ms\" }}\n          >\n            <p className=\"flex items-center justify-center gap-2 text-xs font-medium tracking-widest text-muted-foreground uppercase\">\n              <Boxes className=\"size-4\" aria-hidden=\"true\" />\n              Trusted by teams at fast-growing companies\n            </p>\n\n            {/* Static list for small screens' assistive tech and reduced motion */}\n            <div\n              className=\"hero-marquee relative mt-6 overflow-hidden\"\n              style={{\n                maskImage:\n                  \"linear-gradient(to right, transparent, black 12%, black 88%, transparent)\",\n                WebkitMaskImage:\n                  \"linear-gradient(to right, transparent, black 12%, black 88%, transparent)\",\n              }}\n            >\n              <ul\n                aria-label=\"Companies that use Beacon\"\n                className=\"hero-marquee-track flex w-max items-center gap-12 pr-12\"\n              >\n                {LOGOS.map((logo) => (\n                  <li key={logo.name}>\n                    <LogoItem logo={logo} />\n                  </li>\n                ))}\n                {LOGOS.map((logo) => (\n                  <li key={`${logo.name}-dup`} aria-hidden=\"true\">\n                    <LogoItem logo={logo} />\n                  </li>\n                ))}\n              </ul>\n            </div>\n          </div>\n        </div>\n      </section>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 360,
+    "chars": 11146,
+    "bytes": 11151,
+    "tokens_o200k": 2319,
+    "tokens_claudeLegacy": 2420,
+    "tokens_exact": 3635
+  },
+  "raw": {
+    "lines": 292,
+    "chars": 10427,
+    "bytes": 10432,
+    "tokens_o200k": 2233,
+    "tokens_claudeLegacy": 2349,
+    "tokens_exact": 3473
+  },
+  "components": [
+    "Avatar",
+    "Button",
+    "Column",
+    "DropdownWrapper",
+    "Grid",
+    "Heading",
+    "Icon",
+    "IconButton",
+    "IconName",
+    "Line",
+    "Option",
+    "ProgressBar",
+    "Row",
+    "SmartLink",
+    "Tag",
+    "Text"
+  ]
+}

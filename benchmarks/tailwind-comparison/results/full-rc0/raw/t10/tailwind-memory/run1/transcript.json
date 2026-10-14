@@ -1,0 +1,203 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: User profile popover — avatar trigger, a user menu or hover card with stats and actions.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013nZSNntXcM5wAaXnDUXzP1",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ef686t7AwkndV6Vx8Xovbr",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013nZSNntXcM5wAaXnDUXzP1",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Ef686t7AwkndV6Vx8Xovbr",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01UGYbULs42U8mCSKT9zofvW",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VAPJAyNWd37ztPeDq6XB9Q",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UGYbULs42U8mCSKT9zofvW",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VAPJAyNWd37ztPeDq6XB9Q",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01MvnubgVX9zrW7F67Gjoqnp",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014q7QoPDbPtbZgCqDcPep3o",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DhQEcLpRzo3xGoRoF6SWFu",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MvnubgVX9zrW7F67Gjoqnp",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014q7QoPDbPtbZgCqDcPep3o",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DhQEcLpRzo3xGoRoF6SWFu",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build a header with an avatar trigger that opens a popover containing the profile, stats, and follow/message actions plus a menu, supporting Escape/outside-click closing, focus return, and arrow-key navigation within the menu.\n\n",
+          "signature": "CAQSkQcKEQgSGAI4AUIJbmFycmF0aW9uEgw8c0nYPLlFKfVOZHoaDHL9skZvOEJN1POyRyIwP2A552syKI+6eCRzsEF5pwokWxifkR5Mg1lxwdobJPMnrHTsxiGYHUkwHbeavhZXKq0G5zipBpNXeaVUZv9L6gWSbH7Dj38O9jRH6J2BEkACPjU+L5x7kdYl68wk3w2T5zrwKncQuCErv4/8k2q0LcbSX9gtm4CaZau/iptWq+JGSd0ZmvibyYAbj4JP7OgxD0VPZQOETxe4OqOvRGqmXMu8cRnfk/lTALG6jPRNSeKKhwTfGITMEbFJx+QLtsN4q4GmFhETT6b6632W6YbgZCXzj+QY/kfPDLlFWn/PiTAUz1YN5KnfHZFQm/79iQMBpVdufH0f1Z/I/ml/NOI6y+TdkjwBInoQhHuDj3Cnf28Pf10psuXjIPCOYhYBT3nNJXjZAhe6E6qNg4Kt9RP6gQxGgYaNlhwWAEBRotsrQNdgC5C8vKg5trIKgXV8gwKhKJL5RkPO+p7dy457OEPHWg+dpJTYoNIOsp4KPg0bjkzLdCKkptczdNnYc+948S0SJrdGxb6FN/YnCH9Zt07kcBp/dZXbZd/E+dIkrMS2sUL2wP1xG0PY5OolWnFbwMrNP3CKSxL3T6oIA/ObRXOfDbigoCGtrREppY+V/rlkM2PD4Kg874yu9CcJjeWfCr0DdJwtstiELq62uoLPMa/V4O3LweUKebHUujMKdx6BP5ioYBF/8vAwizOkxLttRX2EA2VlxOG62tL5oqGAhys5PRD/JeMs15tzv+uCT9ie8kFhipfAW7XgRSE5PihfVhHxlzIVYQP61dsJm6CEBaptSc8B5x6BheB+gfMtfRAI8Gnj8PiEVIG+3RvUCUAS7DbMOI07qZBhAAjsEHnUEv/fSxuASQ3J0MQaERB4OyebW/+wIMcsEzWdNAmXLQPKOb/DTsonglfATzixsM9yqNdAc0uYJtVgJdAxGR+LQDtTcVCzqn7j9U8KVDcBPD/4Ne/QN6eyCIQflIVJXaE72lsScd4pKPFfDAw/mA7W4hmLxWvb5C6VjXpBIMKfXhIArFiTrz1exL/XQxOyTQT2/rlwMiStAJuMb7VsrZfpNO0LFa+CX7VF94gThGpnd3mu4ktyN39ituaAs4NlTnB110iIfOSCjkx3Ln3hPx9CFaUI+R71gVTi5v+4lRdP7D1s+1M1GAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Wy74wUHTFznAMikNTgAvwu",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Wy74wUHTFznAMikNTgAvwu",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { KeyboardEvent as ReactKeyboardEvent } from \"react\";\nimport {\n  Bell,\n  BookOpen,\n  Check,\n  ChevronDown,\n  CreditCard,\n  LifeBuoy,\n  LogOut,\n  MapPin,\n  MessageSquare,\n  Settings,\n  Sparkles,\n  UserCircle,\n  UserPlus,\n  Link as LinkIcon,\n} from \"lucide-react\";\nimport type { LucideIcon } from \"lucide-react\";\n\ntype MenuItem = {\n  label: string;\n  hint?: string;\n  icon: LucideIcon;\n  danger?: boolean;\n};\n\nconst user = {\n  name: \"Priya Raman\",\n  handle: \"@priya.raman\",\n  initials: \"PR\",\n  role: \"Staff Product Designer\",\n  location: \"Lisbon, Portugal\",\n  bio: \"Designing calm interfaces for complex tools. Currently shaping the Atlas design system.\",\n  plan: \"Pro plan\",\n  stats: [\n    { label: \"Projects\", value: \"48\" },\n    { label: \"Followers\", value: \"12.4k\" },\n    { label: \"Following\", value: \"312\" },\n  ],\n};\n\nconst menuItems: MenuItem[] = [\n  { label: \"View profile\", icon: UserCircle },\n  { label: \"Account settings\", hint: \"G S\", icon: Settings },\n  { label: \"Billing & plans\", icon: CreditCard },\n  { label: \"Documentation\", icon: BookOpen },\n  { label: \"Help & support\", icon: LifeBuoy },\n  { label: \"Sign out\", icon: LogOut, danger: true },\n];\n\nconst activity = [\n  { title: \"Published “Atlas tokens v2.3”\", time: \"2h ago\" },\n  { title: \"Commented on “Onboarding revamp”\", time: \"Yesterday\" },\n  { title: \"Joined the Design Ops team\", time: \"3 days ago\" },\n];\n\nexport default function Page() {\n  const [open, setOpen] = useState(false);\n  const [following, setFollowing] = useState(false);\n  const [copied, setCopied] = useState(false);\n  const [status, setStatus] = useState(\"\");\n\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const panelRef = useRef<HTMLDivElement>(null);\n  const wrapperRef = useRef<HTMLDivElement>(null);\n  const menuRef = useRef<HTMLDivElement>(null);\n\n  const panelId = useId();\n  const titleId = useId();\n\n  const close = useCallback((returnFocus: boolean) => {\n    setOpen(false);\n    if (returnFocus) triggerRef.current?.focus();\n  }, []);\n\n  // Outside click + Escape\n  useEffect(() => {\n    if (!open) return;\n\n    const onPointerDown = (e: PointerEvent) => {\n      const target = e.target as Node | null;\n      if (target && wrapperRef.current && !wrapperRef.current.contains(target)) {\n        close(false);\n      }\n    };\n    const onKeyDown = (e: KeyboardEvent) => {\n      if (e.key === \"Escape\") {\n        e.preventDefault();\n        close(true);\n      }\n    };\n\n    document.addEventListener(\"pointerdown\", onPointerDown);\n    document.addEventListener(\"keydown\", onKeyDown);\n    return () => {\n      document.removeEventListener(\"pointerdown\", onPointerDown);\n      document.removeEventListener(\"keydown\", onKeyDown);\n    };\n  }, [open, close]);\n\n  // Move focus into the panel when it opens\n  useEffect(() => {\n    if (open) panelRef.current?.focus();\n  }, [open]);\n\n  // Close if focus leaves the popover via Tab\n  const onBlurCapture = (e: React.FocusEvent<HTMLDivElement>) => {\n    const next = e.relatedTarget as Node | null;\n    if (open && next && wrapperRef.current && !wrapperRef.current.contains(next)) {\n      setOpen(false);\n    }\n  };\n\n  const onMenuKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {\n    const items = Array.from(\n      menuRef.current?.querySelectorAll<HTMLButtonElement>('[role=\"menuitem\"]') ?? [],\n    );\n    if (items.length === 0) return;\n    const index = items.findIndex((el) => el === document.activeElement);\n    let nextIndex: number | null = null;\n    switch (e.key) {\n      case \"ArrowDown\":\n        nextIndex = index < 0 ? 0 : (index + 1) % items.length;\n        break;\n      case \"ArrowUp\":\n        nextIndex = index < 0 ? items.length - 1 : (index - 1 + items.length) % items.length;\n        break;\n      case \"Home\":\n        nextIndex = 0;\n        break;\n      case \"End\":\n        nextIndex = items.length - 1;\n        break;\n    }\n    if (nextIndex !== null) {\n      e.preventDefault();\n      items[nextIndex]?.focus();\n    }\n  };\n\n  const onTriggerKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>) => {\n    if (e.key === \"ArrowDown\" && !open) {\n      e.preventDefault();\n      setOpen(true);\n    }\n  };\n\n  const copyLink = async () => {\n    try {\n      await navigator.clipboard.writeText(`https://example.com/${user.handle.slice(1)}`);\n    } catch {\n      // Clipboard may be unavailable; still show feedback.\n    }\n    setCopied(true);\n    setStatus(\"Profile link copied to clipboard\");\n    window.setTimeout(() => setCopied(false), 1800);\n  };\n\n  const toggleFollow = () => {\n    const next = !following;\n    setFollowing(next);\n    setStatus(next ? `You are now following ${user.name}` : `You unfollowed ${user.name}`);\n  };\n\n  const onMenuAction = (label: string) => {\n    setStatus(`${label} selected`);\n    close(true);\n  };\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <header className=\"sticky top-0 z-20 border-b border-slate-200 bg-white/90 backdrop-blur\">\n        <div className=\"mx-auto flex h-16 max-w-5xl items-center justify-between gap-3 px-4 sm:px-6\">\n          <div className=\"flex items-center gap-2.5\">\n            <span\n              aria-hidden=\"true\"\n              className=\"grid size-8 place-items-center rounded-lg bg-indigo-600 text-white\"\n            >\n              <Sparkles className=\"size-4\" />\n            </span>\n            <span className=\"text-base font-semibold tracking-tight\">Atlas Studio</span>\n          </div>\n\n          <div className=\"flex items-center gap-2 sm:gap-3\">\n            <button\n              type=\"button\"\n              className=\"relative grid size-10 place-items-center rounded-full text-slate-600 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n              aria-label=\"Notifications, 3 unread\"\n            >\n              <Bell className=\"size-5\" aria-hidden=\"true\" />\n              <span\n                aria-hidden=\"true\"\n                className=\"absolute right-2 top-2 size-2 rounded-full bg-rose-500 ring-2 ring-white\"\n              />\n            </button>\n\n            <div ref={wrapperRef} className=\"relative\" onBlurCapture={onBlurCapture}>\n              <button\n                ref={triggerRef}\n                type=\"button\"\n                onClick={() => setOpen((v) => !v)}\n                onKeyDown={onTriggerKeyDown}\n                aria-expanded={open}\n                aria-controls={open ? panelId : undefined}\n                aria-haspopup=\"dialog\"\n                aria-label={`Account menu for ${user.name}`}\n                className=\"group flex items-center gap-2 rounded-full p-1 pr-2 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 aria-expanded:bg-slate-100\"\n              >\n                <Avatar size=\"sm\" />\n                <ChevronDown\n                  aria-hidden=\"true\"\n                  className={`hidden size-4 text-slate-500 transition-transform sm:block ${\n                    open ? \"rotate-180\" : \"\"\n                  }`}\n                />\n              </button>\n\n              {open && (\n                <div\n                  ref={panelRef}\n                  id={panelId}\n                  role=\"dialog\"\n                  aria-labelledby={titleId}\n                  tabIndex={-1}\n                  className=\"fixed inset-x-3 top-[4.5rem] z-30 max-h-[calc(100dvh-5.5rem)] origin-top-right overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-900/10 outline-none sm:absolute sm:inset-x-auto sm:right-0 sm:top-full sm:mt-2 sm:w-96\"\n                >\n                  <div className=\"p-5\">\n                    <div className=\"flex items-start gap-4\">\n                      <Avatar size=\"lg\" />\n                      <div className=\"min-w-0 flex-1\">\n                        <h2 id={titleId} className=\"truncate text-base font-semibold leading-tight\">\n                          {user.name}\n                        </h2>\n                        <p className=\"truncate text-sm text-slate-500\">{user.handle}</p>\n                        <p className=\"mt-1 truncate text-sm text-slate-700\">{user.role}</p>\n                      </div>\n                      <span className=\"shrink-0 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-medium text-indigo-700 ring-1 ring-inset ring-indigo-200\">\n                        {user.plan}\n                      </span>\n                    </div>\n\n                    <p className=\"mt-4 text-sm leading-relaxed text-slate-600\">{user.bio}</p>\n                    <p className=\"mt-2 flex items-center gap-1.5 text-xs text-slate-500\">\n                      <MapPin className=\"size-3.5\" aria-hidden=\"true\" />\n                      {user.location}\n                    </p>\n\n                    <dl className=\"mt-4 grid grid-cols-3 divide-x divide-slate-200 rounded-xl border border-slate-200 bg-slate-50\">\n                      {user.stats.map((s) => (\n                        <div key={s.label} className=\"px-2 py-3 text-center\">\n                          <dd className=\"text-lg font-semibold tabular-nums leading-none\">\n                            {s.value}\n                          </dd>\n                          <dt className=\"mt-1 text-xs text-slate-500\">{s.label}</dt>\n                        </div>\n                      ))}\n                    </dl>\n\n                    <div className=\"mt-4 flex gap-2\">\n                      <button\n                        type=\"button\"\n                        onClick={toggleFollow}\n                        aria-pressed={following}\n                        className={`flex h-10 flex-1 items-center justify-center gap-2 rounded-lg px-3 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${\n                          following\n                            ? \"bg-slate-100 text-slate-800 hover:bg-slate-200\"\n                            : \"bg-indigo-600 text-white hover:bg-indigo-700\"\n                        }`}\n                      >\n                        {following ? (\n                          <Check className=\"size-4\" aria-hidden=\"true\" />\n                        ) : (\n                          <UserPlus className=\"size-4\" aria-hidden=\"true\" />\n                        )}\n                        {following ? \"Following\" : \"Follow\"}\n                      </button>\n                      <button\n                        type=\"button\"\n                        onClick={() => setStatus(`Message composer opened for ${user.name}`)}\n                        className=\"flex h-10 flex-1 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-3 text-sm font-medium text-slate-800 transition hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n                      >\n                        <MessageSquare className=\"size-4\" aria-hidden=\"true\" />\n                        Message\n                      </button>\n                      <button\n                        type=\"button\"\n                        onClick={copyLink}\n                        aria-label={copied ? \"Link copied\" : \"Copy profile link\"}\n                        className=\"grid size-10 shrink-0 place-items-center rounded-lg border border-slate-300 bg-white text-slate-700 transition hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n                      >\n                        {copied ? (\n                          <Check className=\"size-4 text-emerald-600\" aria-hidden=\"true\" />\n                        ) : (\n                          <LinkIcon className=\"size-4\" aria-hidden=\"true\" />\n                        )}\n                      </button>\n                    </div>\n                  </div>\n\n                  <div\n                    ref={menuRef}\n                    role=\"menu\"\n                    aria-label=\"Account\"\n                    onKeyDown={onMenuKeyDown}\n                    className=\"border-t border-slate-200 p-2\"\n                  >\n                    {menuItems.map((item) => {\n                      const Icon = item.icon;\n                      return (\n                        <button\n                          key={item.label}\n                          type=\"button\"\n                          role=\"menuitem\"\n                          onClick={() => onMenuAction(item.label)}\n                          className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600 ${\n                            item.danger\n                              ? \"text-rose-700 hover:bg-rose-50\"\n                              : \"text-slate-700 hover:bg-slate-100\"\n                          }`}\n                        >\n                          <Icon className=\"size-4 shrink-0\" aria-hidden=\"true\" />\n                          <span className=\"flex-1\">{item.label}</span>\n                          {item.hint && (\n                            <span className=\"text-xs tracking-widest text-slate-400\">\n                              {item.hint}\n                            </span>\n                          )}\n                        </button>\n                      );\n                    })}\n                  </div>\n                </div>\n              )}\n            </div>\n          </div>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-14\">\n        <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">Team overview</h1>\n        <p className=\"mt-2 max-w-xl text-sm text-slate-600 sm:text-base\">\n          Select your avatar in the top-right corner to open your profile card with stats, quick\n          actions and account shortcuts. Use the arrow keys to move through the menu and Escape to\n          close it.\n        </p>\n\n        <section aria-labelledby=\"activity-heading\" className=\"mt-8\">\n          <h2 id=\"activity-heading\" className=\"text-sm font-semibold uppercase tracking-wide text-slate-500\">\n            Recent activity\n          </h2>\n          <ul className=\"mt-3 divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white\">\n            {activity.map((a) => (\n              <li\n                key={a.title}\n                className=\"flex flex-col gap-0.5 px-4 py-3 sm:flex-row sm:items-center sm:justify-between\"\n              >\n                <span className=\"text-sm text-slate-800\">{a.title}</span>\n                <span className=\"text-xs text-slate-500\">{a.time}</span>\n              </li>\n            ))}\n          </ul>\n        </section>\n      </main>\n\n      <div role=\"status\" aria-live=\"polite\" className=\"sr-only\">\n        {status}\n      </div>\n    </div>\n  );\n}\n\nfunction Avatar({ size }: { size: \"sm\" | \"lg\" }) {\n  const dims = size === \"sm\" ? \"size-9 text-sm\" : \"size-14 text-lg\";\n  return (\n    <span\n      aria-hidden=\"true\"\n      className={`relative grid shrink-0 place-items-center rounded-full bg-gradient-to-br from-indigo-500 to-fuchsia-500 font-semibold text-white ${dims}`}\n    >\n      {user.initials}\n      <span\n        className={`absolute bottom-0 right-0 rounded-full bg-emerald-500 ring-2 ring-white ${\n          size === \"sm\" ? \"size-2.5\" : \"size-3.5\"\n        }`}\n      />\n    </span>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

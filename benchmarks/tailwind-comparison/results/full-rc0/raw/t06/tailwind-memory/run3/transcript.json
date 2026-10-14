@@ -1,0 +1,220 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Auth flow — login with password + OTP step in a stacked dialog.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012kySdXMd5SekyZTf9VhMbD",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01EPeK144ZtM2iDV6aMrk1Pn",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012kySdXMd5SekyZTf9VhMbD",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EPeK144ZtM2iDV6aMrk1Pn",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_014tC7tHTX3VgGEdDGrJ7iYq",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CaqAchAFZ59HkzaMZUQbyw",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UvM9PQscXJpyBTZcFbt5in",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014tC7tHTX3VgGEdDGrJ7iYq",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CaqAchAFZ59HkzaMZUQbyw",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UvM9PQscXJpyBTZcFbt5in",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01X8FM4UTDtVGQy3dR63boK7",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011gE2GieHvTGrC1cLDMZtzg",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Tvq3NWNvnyk6PrY9UTapfs",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01X8FM4UTDtVGQy3dR63boK7",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011gE2GieHvTGrC1cLDMZtzg",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Tvq3NWNvnyk6PrY9UTapfs",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build a landing page with a \"Sign in\" button that opens a native `<dialog>` login, stacking a second modal for OTP verification after password success—using demo credentials, auto-advance OTP input with paste/backspace support, resend countdown, and proper focus management.\n\n",
+          "signature": "CAQSkwoKEQgSGAI4AUIJbmFycmF0aW9uEgwqIPXK3wR+6imo1vEaDJfm+aWlyi/c9dzSLSIwDsJz/2dM7CWcp6vuSTWyJ1J68/zFS/NRa8t6SVJpybnxPnCgeWgiaHVTKi9mMragKq8J0AArDkARCBn3v2G4Ve6o9KmZRqIgcZr8Qtc/7Qjkh8degLioGblxwOTpt/Jd74SUPt7h0wkvgnCSkvPCad3sIL7z034+xVZXcdh1Vy6mJZN1TQ97hwVmg76Qik0e5YXdi344pm1bpTt84D8KZy3hD8KuO3rfNECwH5WqRf36NZkkZYBuOpsG5XMjH097ysk0C6BoeBIUUNGMqQJ4TlObKF6UlPguyfycFTZvOZnTC97/+4JkW58wUWW/CyYIDnnl5xxGx5xFh7NkC3ww6SKEUlaABiLkn7qNfR2DgbvANIGH8Bn+Vky/VawftMUOMA5n0A8Q78LZJ65zq8IYbu+m74Eg0mUDpRy7xoi4Dj+nPBCBhMP9buDI9Iho31jJTwxfG0WJDKt/k8JQhKIekf+Hgf6BCQZTOZ4i2wbYfQaORcWKaNkpQBJOOybNcuJCQFKj3GHciWDO4Arb5mOAMdrdvZbLoJJ8q/dPMc3IRZt30MkIBt/4i8pmxoJsIoiwWSfOjqxJNbla9BDkYg7poxqvBhIZLXmzHXMC6R9txnirZtWno9hyh8uk006N8fNbUDsS6CYO9QKw6qAf/2GipYRnTN++ICUwSA5xgdvkmjbMUBB1fDu/RvL0cyBkcge18mCpJxJBtR18dBvgcWpm95reSuxn0STlGexyYK7T0eceAepcqP7K67bLAYvOofmyhUf3jidgOx3cWGHw3RrZwvVERfudUuy+xTTU2yWhC2gO4DQ+QIDx2kkyGmPbiKvNyDh30WvTBAdL2Js92ZglAmu6EPcOUapBfqyrmvDpI5DVTbq7Sdo+CGykK4aLhZO50jJ+xPdXjOPIZiklV0DsyYmXgBFtST3fHQLB1jPrWFF6wvXTwnHBFZG+FI2zDRvEJemndF0p2gNu3IxnCfK2/kdBop+nIPTuseu/xALkm+l0X6eYX7OCkhnG9wQtYq4zRJLKydLRh3mh5ixYHHhRpUj/ik0Fb4DR6LgpdTyvCJ3LvWVte0alrR3ijeXRuTpHgZsFIZW4L4pf7pUK3zIEFQIFQzS6IQVmEPI+LvO66q8LPVTzMJHEt8+uvWCZmi0mwn/1hLDoytCsm3jDWFjjcLcEk+hZYKKCRZbZ5bGlA2Y3ctNlEnKnzQbnga6TjPR2simj8pyrpSGShszASzEnXAVvsEo70iJ+Mp5Ct/Y8ce8lVcH8fEkwew877zvAlcX/r7HpvdRS7frsMv1fpRVMzaVmb+vFn8s0LsFy7f8igDascmML5YwxBOyypi+tc2USAl+pX98pQCQTbIIqoVZCX+YBThvQhuBVhZZprdQYgsb+cPHWBrLMzSFPl6NmWHSm4iT8JOKrN+ECHS1QFZ8B/KxeZnjgtoj4QRpN8mZVosvhTB8pcyI9SAmF9R2kVUnjMK2vANJv/A6L2FYhX2X7tAdXYSKZnNxGoGaV2hfLNm/fsDYDrr6dLkkgyX9Cl875+Y2E9Omcdha1KFu1lNvpyJ+YDLVMXAd6FYs3S4zo6oXeAI1tXKX8kaOKY9ojyExzwqNfE4cUkoa62UdHu3CfXAy0XoB16vn7GWF+gk0aA5tmSCFcTMYxyWZJfmvwewhjxWgYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UQ8MiZyu3t32uf4NTwNgdM",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UQ8MiZyu3t32uf4NTwNgdM",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport {\n  useCallback,\n  useEffect,\n  useId,\n  useRef,\n  useState,\n  type ClipboardEvent,\n  type FormEvent,\n  type KeyboardEvent,\n} from \"react\";\nimport {\n  AlertCircle,\n  ArrowLeft,\n  CheckCircle2,\n  Eye,\n  EyeOff,\n  Loader2,\n  Lock,\n  Mail,\n  ShieldCheck,\n  X,\n  Waves,\n  BarChart3,\n  Users,\n  Bell,\n} from \"lucide-react\";\n\nconst DEMO_EMAIL = \"maya.okafor@harborlane.io\";\nconst DEMO_PASSWORD = \"Harbor-2025!\";\nconst DEMO_OTP = \"428913\";\nconst OTP_LENGTH = 6;\nconst RESEND_SECONDS = 30;\n\ntype Stage = \"closed\" | \"login\" | \"otp\" | \"success\";\n\nconst features = [\n  {\n    icon: BarChart3,\n    title: \"Live shipment analytics\",\n    body: \"Track dwell time, port congestion and carrier performance across 140 trade lanes in one view.\",\n  },\n  {\n    icon: Users,\n    title: \"Shared workspaces\",\n    body: \"Brokers, warehouses and finance teams work from the same source of truth with role-based access.\",\n  },\n  {\n    icon: Bell,\n    title: \"Exception alerts\",\n    body: \"Get notified within minutes when a container is held, rerouted or misses a milestone.\",\n  },\n];\n\nconst stats = [\n  { value: \"2,400+\", label: \"Logistics teams\" },\n  { value: \"38M\", label: \"Containers tracked\" },\n  { value: \"99.98%\", label: \"Uptime, last 12 months\" },\n];\n\nfunction maskEmail(email: string): string {\n  const [name, domain] = email.split(\"@\");\n  if (!name || !domain) return email;\n  return `${name.slice(0, 2)}${\"•\".repeat(Math.max(name.length - 2, 2))}@${domain}`;\n}\n\nexport default function Page() {\n  const [stage, setStage] = useState<Stage>(\"closed\");\n\n  const loginRef = useRef<HTMLDialogElement>(null);\n  const otpRef = useRef<HTMLDialogElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n\n  // Login form state\n  const [email, setEmail] = useState(\"\");\n  const [password, setPassword] = useState(\"\");\n  const [showPassword, setShowPassword] = useState(false);\n  const [loginError, setLoginError] = useState(\"\");\n  const [loginLoading, setLoginLoading] = useState(false);\n\n  // OTP state\n  const [digits, setDigits] = useState<string[]>(Array(OTP_LENGTH).fill(\"\"));\n  const [otpError, setOtpError] = useState(\"\");\n  const [otpLoading, setOtpLoading] = useState(false);\n  const [resendIn, setResendIn] = useState(RESEND_SECONDS);\n  const otpInputs = useRef<Array<HTMLInputElement | null>>([]);\n\n  const emailId = useId();\n  const passwordId = useId();\n  const loginErrorId = useId();\n  const otpErrorId = useId();\n  const otpHintId = useId();\n\n  const timers = useRef<number[]>([]);\n  const schedule = useCallback((fn: () => void, ms: number) => {\n    const id = window.setTimeout(fn, ms);\n    timers.current.push(id);\n  }, []);\n\n  useEffect(() => {\n    const pending = timers.current;\n    return () => {\n      pending.forEach((id) => window.clearTimeout(id));\n    };\n  }, []);\n\n  // Sync <dialog> elements with stage\n  useEffect(() => {\n    const login = loginRef.current;\n    const otp = otpRef.current;\n    if (!login || !otp) return;\n\n    const loginShouldBeOpen = stage === \"login\" || stage === \"otp\";\n    const otpShouldBeOpen = stage === \"otp\" || stage === \"success\";\n\n    if (loginShouldBeOpen && !login.open) login.showModal();\n    if (!loginShouldBeOpen && login.open) login.close();\n    if (otpShouldBeOpen && !otp.open) otp.showModal();\n    if (!otpShouldBeOpen && otp.open) otp.close();\n  }, [stage]);\n\n  // Resend countdown\n  useEffect(() => {\n    if (stage !== \"otp\" || resendIn <= 0) return;\n    const id = window.setTimeout(() => setResendIn((s) => s - 1), 1000);\n    return () => window.clearTimeout(id);\n  }, [stage, resendIn]);\n\n  const resetAll = useCallback(() => {\n    setStage(\"closed\");\n    setPassword(\"\");\n    setShowPassword(false);\n    setLoginError(\"\");\n    setLoginLoading(false);\n    setDigits(Array(OTP_LENGTH).fill(\"\"));\n    setOtpError(\"\");\n    setOtpLoading(false);\n    setResendIn(RESEND_SECONDS);\n    window.setTimeout(() => triggerRef.current?.focus(), 0);\n  }, []);\n\n  const openLogin = () => {\n    setLoginError(\"\");\n    setStage(\"login\");\n  };\n\n  const handleLoginSubmit = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    if (loginLoading) return;\n    const trimmed = email.trim();\n    if (!trimmed || !/^\\S+@\\S+\\.\\S+$/.test(trimmed)) {\n      setLoginError(\"Enter a valid work email address.\");\n      return;\n    }\n    if (!password) {\n      setLoginError(\"Enter your password.\");\n      return;\n    }\n    setLoginError(\"\");\n    setLoginLoading(true);\n    schedule(() => {\n      setLoginLoading(false);\n      if (trimmed.toLowerCase() === DEMO_EMAIL && password === DEMO_PASSWORD) {\n        setDigits(Array(OTP_LENGTH).fill(\"\"));\n        setOtpError(\"\");\n        setResendIn(RESEND_SECONDS);\n        setStage(\"otp\");\n      } else {\n        setLoginError(\"That email and password combination doesn't match our records.\");\n      }\n    }, 900);\n  };\n\n  const submitOtp = (code: string) => {\n    if (otpLoading) return;\n    setOtpLoading(true);\n    setOtpError(\"\");\n    schedule(() => {\n      setOtpLoading(false);\n      if (code === DEMO_OTP) {\n        setStage(\"success\");\n      } else {\n        setOtpError(\"That code is incorrect or has expired. Check the digits and try again.\");\n        setDigits(Array(OTP_LENGTH).fill(\"\"));\n        otpInputs.current[0]?.focus();\n      }\n    }, 800);\n  };\n\n  const setDigitAt = (index: number, value: string) => {\n    const clean = value.replace(/\\D/g, \"\");\n    if (!clean) {\n      setDigits((prev) => prev.map((d, i) => (i === index ? \"\" : d)));\n      return;\n    }\n    // Handle multi-char input (autofill / paste into one box)\n    const chars = clean.slice(0, OTP_LENGTH - index).split(\"\");\n    const next = [...digits];\n    chars.forEach((c, i) => {\n      next[index + i] = c;\n    });\n    setDigits(next);\n    setOtpError(\"\");\n    const focusIndex = Math.min(index + chars.length, OTP_LENGTH - 1);\n    otpInputs.current[focusIndex]?.focus();\n    if (next.every((d) => d !== \"\")) submitOtp(next.join(\"\"));\n  };\n\n  const handleOtpKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {\n    if (e.key === \"Backspace\" && !digits[index] && index > 0) {\n      e.preventDefault();\n      setDigits((prev) => prev.map((d, i) => (i === index - 1 ? \"\" : d)));\n      otpInputs.current[index - 1]?.focus();\n    } else if (e.key === \"ArrowLeft\" && index > 0) {\n      e.preventDefault();\n      otpInputs.current[index - 1]?.focus();\n    } else if (e.key === \"ArrowRight\" && index < OTP_LENGTH - 1) {\n      e.preventDefault();\n      otpInputs.current[index + 1]?.focus();\n    }\n  };\n\n  const handleOtpPaste = (e: ClipboardEvent<HTMLInputElement>) => {\n    const text = e.clipboardData.getData(\"text\").replace(/\\D/g, \"\").slice(0, OTP_LENGTH);\n    if (!text) return;\n    e.preventDefault();\n    const next = Array(OTP_LENGTH)\n      .fill(\"\")\n      .map((_, i) => text[i] ?? \"\");\n    setDigits(next);\n    setOtpError(\"\");\n    otpInputs.current[Math.min(text.length, OTP_LENGTH - 1)]?.focus();\n    if (text.length === OTP_LENGTH) submitOtp(text);\n  };\n\n  const handleOtpFormSubmit = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    const code = digits.join(\"\");\n    if (code.length < OTP_LENGTH) {\n      setOtpError(\"Enter all 6 digits of your verification code.\");\n      const firstEmpty = digits.findIndex((d) => d === \"\");\n      otpInputs.current[firstEmpty === -1 ? 0 : firstEmpty]?.focus();\n      return;\n    }\n    submitOtp(code);\n  };\n\n  const resendCode = () => {\n    if (resendIn > 0) return;\n    setResendIn(RESEND_SECONDS);\n    setDigits(Array(OTP_LENGTH).fill(\"\"));\n    setOtpError(\"\");\n    otpInputs.current[0]?.focus();\n  };\n\n  const backToLogin = () => {\n    setDigits(Array(OTP_LENGTH).fill(\"\"));\n    setOtpError(\"\");\n    setStage(\"login\");\n  };\n\n  // Focus management when dialogs open\n  useEffect(() => {\n    if (stage === \"otp\") {\n      const id = window.setTimeout(() => otpInputs.current[0]?.focus(), 30);\n      return () => window.clearTimeout(id);\n    }\n  }, [stage]);\n\n  const dialogBase =\n    \"m-auto w-[calc(100%-2rem)] max-w-md rounded-2xl border border-slate-200 bg-white p-0 text-slate-900 shadow-2xl backdrop:bg-slate-950/50 backdrop:backdrop-blur-sm open:animate-[dialog-in_180ms_ease-out] motion-reduce:open:animate-none\";\n\n  const inputBase =\n    \"block w-full rounded-lg border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 shadow-sm transition focus:border-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-600/30 disabled:cursor-not-allowed disabled:bg-slate-50\";\n\n  const primaryBtn =\n    \"inline-flex w-full items-center justify-center gap-2 rounded-lg bg-teal-700 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700 disabled:cursor-not-allowed disabled:opacity-70\";\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <style>{`\n        @keyframes dialog-in {\n          from { opacity: 0; transform: translateY(12px) scale(0.97); }\n          to { opacity: 1; transform: translateY(0) scale(1); }\n        }\n        dialog[data-stacked=\"under\"] { transform: translateY(-14px) scale(0.96); filter: brightness(0.92); transition: transform 200ms ease, filter 200ms ease; }\n        @media (prefers-reduced-motion: reduce) {\n          dialog[data-stacked=\"under\"] { transition: none; }\n        }\n      `}</style>\n\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6\">\n          <a\n            href=\"#top\"\n            className=\"flex items-center gap-2 rounded-md font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700\"\n          >\n            <span className=\"grid h-8 w-8 place-items-center rounded-lg bg-teal-700 text-white\">\n              <Waves className=\"h-5 w-5\" aria-hidden=\"true\" />\n            </span>\n            Harborlane\n          </a>\n          <nav aria-label=\"Primary\" className=\"hidden items-center gap-6 text-sm text-slate-600 md:flex\">\n            <a className=\"rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-teal-700\" href=\"#features\">\n              Features\n            </a>\n            <a className=\"rounded hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-teal-700\" href=\"#trust\">\n              Customers\n            </a>\n          </nav>\n          <button\n            ref={triggerRef}\n            type=\"button\"\n            onClick={openLogin}\n            className=\"rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900\"\n          >\n            Sign in\n          </button>\n        </div>\n      </header>\n\n      <main id=\"top\">\n        <section className=\"mx-auto max-w-6xl px-4 py-14 sm:px-6 sm:py-20 lg:py-24\">\n          <div className=\"max-w-2xl\">\n            <p className=\"mb-4 inline-flex items-center gap-2 rounded-full bg-teal-50 px-3 py-1 text-xs font-semibold text-teal-800 ring-1 ring-teal-200\">\n              <ShieldCheck className=\"h-3.5 w-3.5\" aria-hidden=\"true\" />\n              SOC 2 Type II certified\n            </p>\n            <h1 className=\"text-3xl font-bold tracking-tight text-balance sm:text-5xl\">\n              Know where every container is before your customer asks.\n            </h1>\n            <p className=\"mt-5 text-base text-slate-600 sm:text-lg\">\n              Harborlane gives freight forwarders and importers a single control tower for ocean,\n              rail and drayage shipments, with alerts that arrive while there is still time to act.\n            </p>\n            <div className=\"mt-8 flex flex-col gap-3 sm:flex-row\">\n              <button\n                type=\"button\"\n                onClick={openLogin}\n                className=\"inline-flex items-center justify-center gap-2 rounded-lg bg-teal-700 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700\"\n              >\n                <Lock className=\"h-4 w-4\" aria-hidden=\"true\" />\n                Sign in to your workspace\n              </button>\n              <a\n                href=\"#features\"\n                className=\"inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700\"\n              >\n                See how it works\n              </a>\n            </div>\n          </div>\n\n          <dl id=\"trust\" className=\"mt-14 grid grid-cols-1 gap-4 sm:grid-cols-3\">\n            {stats.map((s) => (\n              <div key={s.label} className=\"rounded-xl border border-slate-200 bg-white p-5\">\n                <dt className=\"text-sm text-slate-500\">{s.label}</dt>\n                <dd className=\"mt-1 text-2xl font-bold tracking-tight\">{s.value}</dd>\n              </div>\n            ))}\n          </dl>\n        </section>\n\n        <section id=\"features\" className=\"border-t border-slate-200 bg-white\">\n          <div className=\"mx-auto max-w-6xl px-4 py-14 sm:px-6\">\n            <h2 className=\"text-2xl font-bold tracking-tight\">Built for the people who keep freight moving</h2>\n            <ul className=\"mt-8 grid gap-6 md:grid-cols-3\">\n              {features.map(({ icon: Icon, title, body }) => (\n                <li key={title} className=\"rounded-xl border border-slate-200 p-6\">\n                  <span className=\"grid h-10 w-10 place-items-center rounded-lg bg-teal-50 text-teal-700\">\n                    <Icon className=\"h-5 w-5\" aria-hidden=\"true\" />\n                  </span>\n                  <h3 className=\"mt-4 font-semibold\">{title}</h3>\n                  <p className=\"mt-2 text-sm leading-relaxed text-slate-600\">{body}</p>\n                </li>\n              ))}\n            </ul>\n          </div>\n        </section>\n      </main>\n\n      <footer className=\"border-t border-slate-200 py-8 text-center text-sm text-slate-500\">\n        © 2025 Harborlane Logistics, Inc. All rights reserved.\n      </footer>\n\n      {/* Login dialog (bottom of stack) */}\n      <dialog\n        ref={loginRef}\n        aria-labelledby=\"login-title\"\n        aria-describedby=\"login-desc\"\n        data-stacked={stage === \"otp\" || stage === \"success\" ? \"under\" : undefined}\n        className={dialogBase}\n        onCancel={(e) => {\n          e.preventDefault();\n          if (stage === \"login\") resetAll();\n        }}\n        onClose={() => {\n          if (stage === \"login\") resetAll();\n        }}\n        onClick={(e) => {\n          if (e.target === e.currentTarget && stage === \"login\") resetAll();\n        }}\n      >\n        <div className=\"p-6 sm:p-8\">\n          <div className=\"flex items-start justify-between gap-4\">\n            <div>\n              <h2 id=\"login-title\" className=\"text-xl font-bold tracking-tight\">\n                Welcome back\n              </h2>\n              <p id=\"login-desc\" className=\"mt-1 text-sm text-slate-600\">\n                Sign in to your Harborlane workspace.\n              </p>\n            </div>\n            <button\n              type=\"button\"\n              onClick={resetAll}\n              aria-label=\"Close sign in dialog\"\n              className=\"-mr-2 -mt-2 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-teal-700\"\n            >\n              <X className=\"h-5 w-5\" aria-hidden=\"true\" />\n            </button>\n          </div>\n\n          <form onSubmit={handleLoginSubmit} noValidate className=\"mt-6 space-y-4\">\n            <div>\n              <label htmlFor={emailId} className=\"mb-1.5 block text-sm font-medium\">\n                Work email\n              </label>\n              <div className=\"relative\">\n                <Mail\n                  className=\"pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400\"\n                  aria-hidden=\"true\"\n                />\n                <input\n                  id={emailId}\n                  type=\"email\"\n                  name=\"email\"\n                  autoComplete=\"username\"\n                  inputMode=\"email\"\n                  placeholder=\"you@company.com\"\n                  value={email}\n                  onChange={(e) => setEmail(e.target.value)}\n                  disabled={loginLoading}\n                  aria-invalid={loginError ? true : undefined}\n                  aria-describedby={loginError ? loginErrorId : undefined}\n                  className={`${inputBase} pl-9`}\n                />\n              </div>\n            </div>\n\n            <div>\n              <div className=\"mb-1.5 flex items-center justify-between\">\n                <label htmlFor={passwordId} className=\"block text-sm font-medium\">\n                  Password\n                </label>\n                <a\n                  href=\"#forgot\"\n                  onClick={(e) => e.preventDefault()}\n                  className=\"rounded text-xs font-medium text-teal-700 hover:underline focus-visible:outline-2 focus-visible:outline-teal-700\"\n                >\n                  Forgot password?\n                </a>\n              </div>\n              <div className=\"relative\">\n                <Lock\n                  className=\"pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400\"\n                  aria-hidden=\"true\"\n                />\n                <input\n                  id={passwordId}\n                  type={showPassword ? \"text\" : \"password\"}\n                  name=\"password\"\n                  autoComplete=\"current-password\"\n                  placeholder=\"Enter your password\"\n                  value={password}\n                  onChange={(e) => setPassword(e.target.value)}\n                  disabled={loginLoading}\n                  aria-invalid={loginError ? true : undefined}\n                  aria-describedby={loginError ? loginErrorId : undefined}\n                  className={`${inputBase} px-9`}\n                />\n                <button\n                  type=\"button\"\n                  onClick={() => setShowPassword((v) => !v)}\n                  aria-label={showPassword ? \"Hide password\" : \"Show password\"}\n                  aria-pressed={showPassword}\n                  className=\"absolute right-1.5 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-slate-500 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-teal-700\"\n                >\n                  {showPassword ? (\n                    <EyeOff className=\"h-4 w-4\" aria-hidden=\"true\" />\n                  ) : (\n                    <Eye className=\"h-4 w-4\" aria-hidden=\"true\" />\n                  )}\n                </button>\n              </div>\n            </div>\n\n            <div id={loginErrorId} role=\"alert\" aria-live=\"assertive\">\n              {loginError && (\n                <p className=\"flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800 ring-1 ring-red-200\">\n                  <AlertCircle className=\"mt-0.5 h-4 w-4 shrink-0\" aria-hidden=\"true\" />\n                  {loginError}\n                </p>\n              )}\n            </div>\n\n            <button type=\"submit\" disabled={loginLoading} className={primaryBtn}>\n              {loginLoading ? (\n                <>\n                  <Loader2 className=\"h-4 w-4 animate-spin motion-reduce:animate-none\" aria-hidden=\"true\" />\n                  Checking credentials…\n                </>\n              ) : (\n                \"Continue\"\n              )}\n            </button>\n          </form>\n\n          <div className=\"mt-6 rounded-lg bg-slate-50 p-3 text-xs text-slate-600 ring-1 ring-slate-200\">\n            <p className=\"font-semibold text-slate-700\">Demo credentials</p>\n            <p className=\"mt-1\">\n              Email: <code className=\"font-mono text-slate-900\">{DEMO_EMAIL}</code>\n            </p>\n            <p>\n              Password: <code className=\"font-mono text-slate-900\">{DEMO_PASSWORD}</code>\n            </p>\n          </div>\n        </div>\n      </dialog>\n\n      {/* OTP dialog (top of stack) */}\n      <dialog\n        ref={otpRef}\n        aria-labelledby=\"otp-title\"\n        aria-describedby={otpHintId}\n        className={dialogBase}\n        onCancel={(e) => {\n          e.preventDefault();\n          if (stage === \"otp\") backToLogin();\n          else if (stage === \"success\") resetAll();\n        }}\n      >\n        {stage === \"success\" ? (\n          <div className=\"p-6 text-center sm:p-8\">\n            <span className=\"mx-auto grid h-14 w-14 place-items-center rounded-full bg-emerald-100 text-emerald-700\">\n              <CheckCircle2 className=\"h-8 w-8\" aria-hidden=\"true\" />\n            </span>\n            <h2 id=\"otp-title\" className=\"mt-4 text-xl font-bold tracking-tight\">\n              You&apos;re signed in\n            </h2>\n            <p id={otpHintId} role=\"status\" className=\"mt-2 text-sm text-slate-600\">\n              Welcome back, Maya. Your session on this device is secured and will stay active for 12 hours.\n            </p>\n            <button\n              type=\"button\"\n              onClick={resetAll}\n              autoFocus\n              className={`${primaryBtn} mt-6`}\n            >\n              Go to dashboard\n            </button>\n          </div>\n        ) : (\n          <div className=\"p-6 sm:p-8\">\n            <div className=\"flex items-start justify-between gap-4\">\n              <div className=\"flex items-start gap-3\">\n                <span className=\"grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-teal-50 text-teal-700\">\n                  <ShieldCheck className=\"h-5 w-5\" aria-hidden=\"true\" />\n                </span>\n                <div>\n                  <h2 id=\"otp-title\" className=\"text-xl font-bold tracking-tight\">\n                    Two-step verification\n                  </h2>\n                  <p id={otpHintId} className=\"mt-1 text-sm text-slate-600\">\n                    We sent a 6-digit code to <span className=\"font-medium text-slate-900\">{maskEmail(email.trim() || DEMO_EMAIL)}</span>.\n                    It expires in 10 minutes.\n                  </p>\n                </div>\n              </div>\n              <button\n                type=\"button\"\n                onClick={backToLogin}\n                aria-label=\"Close verification and go back\"\n                className=\"-mr-2 -mt-2 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-teal-700\"\n              >\n                <X className=\"h-5 w-5\" aria-hidden=\"true\" />\n              </button>\n            </div>\n\n            <form onSubmit={handleOtpFormSubmit} noValidate className=\"mt-6\">\n              <fieldset disabled={otpLoading} className=\"min-w-0\">\n                <legend className=\"mb-2 text-sm font-medium\">Verification code</legend>\n                <div className=\"flex justify-between gap-2\" role=\"group\" aria-label=\"6-digit verification code\">\n                  {digits.map((d, i) => (\n                    <input\n                      key={i}\n                      ref={(el) => {\n                        otpInputs.current[i] = el;\n                      }}\n                      type=\"text\"\n                      inputMode=\"numeric\"\n                      pattern=\"[0-9]*\"\n                      autoComplete={i === 0 ? \"one-time-code\" : \"off\"}\n                      maxLength={OTP_LENGTH}\n                      value={d}\n                      aria-label={`Digit ${i + 1} of ${OTP_LENGTH}`}\n                      aria-invalid={otpError ? true : undefined}\n                      aria-describedby={otpError ? otpErrorId : undefined}\n                      onChange={(e) => setDigitAt(i, e.target.value)}\n                      onKeyDown={(e) => handleOtpKeyDown(i, e)}\n                      onPaste={handleOtpPaste}\n                      onFocus={(e) => e.currentTarget.select()}\n                      className={`h-12 w-full min-w-0 rounded-lg border bg-white text-center text-lg font-semibold text-slate-900 shadow-sm transition focus:outline-none focus:ring-2 disabled:bg-slate-50 sm:h-14 sm:text-xl ${\n                        otpError\n                          ? \"border-red-400 focus:border-red-500 focus:ring-red-500/30\"\n                          : \"border-slate-300 focus:border-teal-600 focus:ring-teal-600/30\"\n                      }`}\n                    />\n                  ))}\n                </div>\n              </fieldset>\n\n              <div id={otpErrorId} role=\"alert\" aria-live=\"assertive\" className=\"mt-3\">\n                {otpError && (\n                  <p className=\"flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800 ring-1 ring-red-200\">\n                    <AlertCircle className=\"mt-0.5 h-4 w-4 shrink-0\" aria-hidden=\"true\" />\n                    {otpError}\n                  </p>\n                )}\n              </div>\n\n              <button type=\"submit\" disabled={otpLoading} className={`${primaryBtn} mt-4`}>\n                {otpLoading ? (\n                  <>\n                    <Loader2 className=\"h-4 w-4 animate-spin motion-reduce:animate-none\" aria-hidden=\"true\" />\n                    Verifying…\n                  </>\n                ) : (\n                  \"Verify and sign in\"\n                )}\n              </button>\n            </form>\n\n            <div className=\"mt-5 flex flex-wrap items-center justify-between gap-3 text-sm\">\n              <button\n                type=\"button\"\n                onClick={backToLogin}\n                className=\"inline-flex items-center gap-1.5 rounded font-medium text-slate-600 hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-teal-700\"\n              >\n                <ArrowLeft className=\"h-4 w-4\" aria-hidden=\"true\" />\n                Back to password\n              </button>\n              <button\n                type=\"button\"\n                onClick={resendCode}\n                disabled={resendIn > 0}\n                className=\"rounded font-medium text-teal-700 hover:underline focus-visible:outline-2 focus-visible:outline-teal-700 disabled:cursor-not-allowed disabled:text-slate-400 disabled:no-underline\"\n              >\n                {resendIn > 0 ? `Resend code in ${resendIn}s` : \"Resend code\"}\n              </button>\n            </div>\n\n            <p className=\"mt-5 rounded-lg bg-slate-50 p-3 text-xs text-slate-600 ring-1 ring-slate-200\">\n              Demo code: <code className=\"font-mono font-semibold text-slate-900\">{DEMO_OTP}</code>\n            </p>\n          </div>\n        )}\n      </dialog>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

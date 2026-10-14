@@ -9,5 +9,12 @@
     "manifest": "examples/blocks/manifest.json",
     "primary": ["Roadmap1"]
   },
-  "gotchas": ["Card.interactive", "layout.shorthands", "heading.scale"]
+  "gotchas": [
+    "Card.interactive",
+    "layout.shorthands",
+    "heading.scale",
+    "layout.responsiveProps",
+    "spacing.tokens",
+    "layout.noSpanOrType"
+  ]
 }

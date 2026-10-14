@@ -1,0 +1,56 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 512,
+    "chars": 15040,
+    "bytes": 15040,
+    "tokens_o200k": 3827,
+    "tokens_claudeLegacy": 4013,
+    "tokens_exact": 5967
+  },
+  "raw": {
+    "lines": 507,
+    "chars": 16003,
+    "bytes": 16003,
+    "tokens_o200k": 3880,
+    "tokens_claudeLegacy": 4100,
+    "tokens_exact": 6143
+  },
+  "components": [
+    "Avatar",
+    "AvatarFallback",
+    "Badge",
+    "Card",
+    "CardAction",
+    "CardContent",
+    "CardDescription",
+    "CardHeader",
+    "CardTitle",
+    "ChartConfig",
+    "ChartContainer",
+    "ChartLegend",
+    "ChartLegendContent",
+    "ChartTooltip",
+    "ChartTooltipContent",
+    "Tabs",
+    "TabsList",
+    "TabsTrigger"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/avatar.tsx",
+      "components/ui/badge.tsx",
+      "components/ui/card.tsx",
+      "components/ui/chart.tsx",
+      "components/ui/tabs.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 657,
+    "chars": 21217,
+    "bytes": 21217,
+    "tokens_o200k": 5111,
+    "tokens_claudeLegacy": 5709,
+    "tokens_exact": 8691
+  }
+}

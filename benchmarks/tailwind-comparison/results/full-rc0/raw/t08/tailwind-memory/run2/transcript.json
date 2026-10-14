@@ -1,0 +1,220 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Onboarding checklist — progress bar, step list with status indicators, celebratory completion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files to match conventions."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HKhLiU6Y3QYG4JHcQMa2BA",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01K6qPzsDyttBNY1JBme8Zc3",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HKhLiU6Y3QYG4JHcQMa2BA",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01K6qPzsDyttBNY1JBme8Zc3",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01RhCbUid3AjQqkYEwvrvKE5",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Y8vRbjqGpsdBgFvEZfk2NN",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Syq4dSt2v5D1LfHk1mcbFq",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RhCbUid3AjQqkYEwvrvKE5",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Y8vRbjqGpsdBgFvEZfk2NN",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Syq4dSt2v5D1LfHk1mcbFq",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01L1FRhbjs34XPKkv2YfhfW8",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VoUdnqbwdYL9XubnRsxXg8",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016b2hvGw5w2ttp5aL2ULJWP",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01L1FRhbjs34XPKkv2YfhfW8",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VoUdnqbwdYL9XubnRsxXg8",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016b2hvGw5w2ttp5aL2ULJWP",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since globals only import Tailwind, I'll style everything inline with utility classes and add a `<style>` block for confetti keyframes. I'll build steps with complete/current/upcoming states, a progressbar with aria-live status, a reduced-motion-aware confetti celebration at 100%, and a reset button.\n\n",
+          "signature": "CAQS5ggKEQgSGAI4AUIJbmFycmF0aW9uEgyegWNIYvVhvkv83FEaDIs0MfoWjrN0vmy+wiIwp7aR5dgAnvOcmzgQ8CH+laYd9R9H5zsDdLLkKJ2h/lIK1iNftfRPq8QVq+NI3i2GKoIIwPnWLjYiXCBxJYqJBaJBmn2bg+IdQ9jVuGz6cgKq89TGaS/J4wfXxO7SIwU4oH082qJHVzbi8F/PXHZC5w5+VgAD+xTQc8gxtYtszz1i6mn3x7GjdO+ocKTa7XaHbdBH0aGnHTjbZRaDOqBVBZIlsD0vlayVD3VMtCQQ7zDB/KcHKQCWDTtTIBwFUqo9znwxm8aaJEs5EkXNK+6ZqqeT/e0Kx2Zk+RflVCFTXSpM+k8f4bWkqpIbu1WH4LV2ilalUYw80J/+Mtm0y8wVjODr5/csYF7a5EHJ6v5vwIKT5MVTinLKwIsF9aCr3WdH9Xflye6hkG2Kzpnawzu8zLE00WfsjQg2tuhrSS6FusfKimwDNKENnX6yMzrI3bFOCEiH2+DBY92HrpRdbM7w7GDX6IqT/1Wr+VZQGP7GEcYWmc9WPvBax3eIXnPiIemKyLKzNhSmegpdRiv0CRaHc4o77unpbMLjNzYpOBiX2HPjL+x8aNPQRhHOljKywcC+B4HXm9jNQ6MAOq0peJDdXFVA/pvMZbST7qxYPrc/Dv/QA2DiJ+j4WCjE3YNusS9C+NnQ+Hhn6hGcRjm5mwg7RVv0Ys3+xYUyYEmTpSdE7Zzu1tKZ2HIqV5zA+MDw56n52zkN3Ua12gxIt3y3WRQdnjGWHsEkYGz/emhsPNbD7R8wBGGdmpEbp6FQG80d2s5OkYB2Xn3W3wiytm6uVr/dibxBtB2xNbcO2YL2N71h10Vm7N5UIRGYCmtHaTe66TEqyn1mtv/Ho/tcBkm3Qr6bAazGu6mYnGT6mfzSwhc1qZ7d50vBWA9eYTddsuNuTFiIV6qTN29qYYroWWhw18h3vzf15OBNNa6KbYcb5iQBWOaKAjkFF9vrgZeT2pebWfsckZj6zTvYKUuYfh5C5e5fLceCEza79Tg9UGWV0ZIshMQKd0+5NEehf8zuX6IZ8jiACAagcos2qwnvbdA+obEnsQt5vrJhxTeHdUfTRSobicVJF0e2gL88JkYQeq8iZKIVxnOeT8gDN51P9bl7KO5HVhqJI9ukNOoZSn6Ua2VOn+UYrZ5yX/SSY5HzHV3JRjdzZ7xu4vFcdIOGb1Ww+g3tbOA9c76RPOFnyfEbfxK3BiZDmvXBIvjV3J4+3PK33u95sMgNYuIsWBI23hPhxDhexD3bqO9hyRDGheLMF1/gQL62a4q3lt3OQZd0q8vO8FXWzjssXzHx9+ANEow7uihZvmc2H3dhgOXcaZtSZppvcH8oMz8RgbmranjK/UkBADhVfZDlCg1zxNISkK+e6d+AFmFvLU2Fclw6dVWSBZVzCT5WFU9u+5FRXv2D81JRF3pKZuDp5w8TW5z5V5US2W3DzTHHs2y+GAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018QiRK2y87pvxUgE68NJdcE",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018QiRK2y87pvxUgE68NJdcE",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useMemo, useState } from \"react\";\nimport {\n  Check,\n  ChevronDown,\n  Clock,\n  FolderPlus,\n  Link2,\n  PartyPopper,\n  RotateCcw,\n  Rocket,\n  Sparkles,\n  UserPlus,\n  Palette,\n  Bell,\n} from \"lucide-react\";\nimport type { LucideIcon } from \"lucide-react\";\n\ntype Step = {\n  id: string;\n  title: string;\n  summary: string;\n  detail: string;\n  action: string;\n  minutes: number;\n  icon: LucideIcon;\n};\n\nconst STEPS: Step[] = [\n  {\n    id: \"profile\",\n    title: \"Complete your profile\",\n    summary: \"Add your name, role and a photo.\",\n    detail:\n      \"Teammates see your name and role next to comments and assignments. A clear profile makes handoffs between Design, Engineering and Support much smoother.\",\n    action: \"Edit profile\",\n    minutes: 2,\n    icon: Sparkles,\n  },\n  {\n    id: \"workspace\",\n    title: \"Create your first project\",\n    summary: \"Set up a project for the Q3 website relaunch.\",\n    detail:\n      \"Projects hold your tasks, files and discussions in one place. Start from the Product Launch template to get a ready-made board with sprint columns and a release checklist.\",\n    action: \"Create project\",\n    minutes: 3,\n    icon: FolderPlus,\n  },\n  {\n    id: \"invite\",\n    title: \"Invite your teammates\",\n    summary: \"Bring in at least two people to collaborate.\",\n    detail:\n      \"Invite colleagues by email or share a join link. New members can be assigned a Viewer, Editor or Admin role, and you can change it at any time from workspace settings.\",\n    action: \"Send invites\",\n    minutes: 2,\n    icon: UserPlus,\n  },\n  {\n    id: \"integrations\",\n    title: \"Connect Slack and GitHub\",\n    summary: \"Get updates where your team already works.\",\n    detail:\n      \"Link Slack to receive task updates in a channel, and GitHub to attach pull requests to tasks automatically. Both connections can be removed whenever you like.\",\n    action: \"Connect apps\",\n    minutes: 4,\n    icon: Link2,\n  },\n  {\n    id: \"notifications\",\n    title: \"Tune your notifications\",\n    summary: \"Choose what's worth interrupting you for.\",\n    detail:\n      \"Pick between instant alerts, a daily digest or a weekly summary. Mentions and assignments always come through, so nothing important gets lost.\",\n    action: \"Open preferences\",\n    minutes: 1,\n    icon: Bell,\n  },\n  {\n    id: \"theme\",\n    title: \"Personalise your workspace\",\n    summary: \"Pick an accent colour and a density.\",\n    detail:\n      \"Choose a light or dark appearance, an accent colour for your workspace and a compact or comfortable layout. These preferences sync across all of your devices.\",\n    action: \"Customise\",\n    minutes: 1,\n    icon: Palette,\n  },\n];\n\nconst CONFETTI_COLORS = [\n  \"bg-indigo-500\",\n  \"bg-emerald-500\",\n  \"bg-amber-400\",\n  \"bg-rose-500\",\n  \"bg-sky-500\",\n  \"bg-fuchsia-500\",\n];\n\nconst CONFETTI = Array.from({ length: 28 }, (_, i) => ({\n  left: `${(i * 37) % 100}%`,\n  delay: `${((i * 53) % 90) / 100}s`,\n  duration: `${2.2 + ((i * 17) % 14) / 10}s`,\n  color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],\n  size: 6 + (i % 3) * 3,\n  rotate: (i * 47) % 360,\n}));\n\nexport default function Page() {\n  const [done, setDone] = useState<ReadonlySet<string>>(new Set());\n  const [openId, setOpenId] = useState<string | null>(STEPS[0].id);\n  const baseId = useId();\n\n  const total = STEPS.length;\n  const completed = done.size;\n  const percent = Math.round((completed / total) * 100);\n  const allDone = completed === total;\n  const currentId = STEPS.find((s) => !done.has(s.id))?.id ?? null;\n\n  const remainingMinutes = useMemo(\n    () =>\n      STEPS.filter((s) => !done.has(s.id)).reduce((sum, s) => sum + s.minutes, 0),\n    [done],\n  );\n\n  function toggleDone(id: string) {\n    const next = new Set(done);\n    const wasDone = next.has(id);\n    if (wasDone) {\n      next.delete(id);\n      setDone(next);\n      setOpenId(id);\n      return;\n    }\n    next.add(id);\n    setDone(next);\n    const following = STEPS.find((s) => !next.has(s.id));\n    setOpenId(following ? following.id : null);\n  }\n\n  function reset() {\n    setDone(new Set());\n    setOpenId(STEPS[0].id);\n  }\n\n  return (\n    <main className=\"min-h-screen bg-gradient-to-b from-slate-50 to-indigo-50/60 px-4 py-8 text-slate-900 sm:px-6 sm:py-14\">\n      <style>{`\n        @keyframes confetti-fall {\n          0% { transform: translateY(-20px) rotate(0deg); opacity: 0; }\n          10% { opacity: 1; }\n          100% { transform: translateY(260px) rotate(540deg); opacity: 0; }\n        }\n        @keyframes pop-in {\n          0% { transform: scale(0.6); opacity: 0; }\n          70% { transform: scale(1.08); opacity: 1; }\n          100% { transform: scale(1); }\n        }\n        .confetti-piece { animation: confetti-fall var(--dur) ease-in var(--delay) both; }\n        .pop-in { animation: pop-in 0.5s ease-out both; }\n        @media (prefers-reduced-motion: reduce) {\n          .confetti-piece { display: none; }\n          .pop-in { animation: none; }\n        }\n      `}</style>\n\n      <div className=\"mx-auto w-full max-w-2xl\">\n        <header className=\"mb-6 sm:mb-8\">\n          <p className=\"text-sm font-medium text-indigo-600\">Welcome to Tidewave</p>\n          <h1 className=\"mt-1 text-2xl font-semibold tracking-tight sm:text-3xl\">\n            Let&apos;s get your workspace ready\n          </h1>\n          <p className=\"mt-2 text-sm text-slate-600 sm:text-base\">\n            Finish these {total} quick steps to set up your team. You can come back\n            to any of them later.\n          </p>\n        </header>\n\n        <section\n          aria-labelledby={`${baseId}-progress-label`}\n          className=\"relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6\"\n        >\n          <div className=\"flex items-baseline justify-between gap-4\">\n            <h2\n              id={`${baseId}-progress-label`}\n              className=\"text-sm font-semibold text-slate-900\"\n            >\n              Your progress\n            </h2>\n            <p className=\"text-sm tabular-nums text-slate-600\">\n              <span className=\"font-semibold text-slate-900\">{completed}</span> of{\" \"}\n              {total} complete\n            </p>\n          </div>\n\n          <div\n            role=\"progressbar\"\n            aria-labelledby={`${baseId}-progress-label`}\n            aria-valuemin={0}\n            aria-valuemax={100}\n            aria-valuenow={percent}\n            aria-valuetext={`${completed} of ${total} steps complete, ${percent} percent`}\n            className=\"mt-3 h-3 w-full overflow-hidden rounded-full bg-slate-100\"\n          >\n            <div\n              className={`h-full rounded-full transition-[width] duration-500 ease-out motion-reduce:transition-none ${\n                allDone\n                  ? \"bg-emerald-500\"\n                  : \"bg-gradient-to-r from-indigo-500 to-violet-500\"\n              }`}\n              style={{ width: `${percent}%` }}\n            />\n          </div>\n\n          <div className=\"mt-3 flex items-center justify-between text-xs text-slate-500\">\n            <span className=\"tabular-nums\">{percent}%</span>\n            {!allDone && (\n              <span className=\"inline-flex items-center gap-1\">\n                <Clock className=\"size-3.5\" aria-hidden=\"true\" />\n                About {remainingMinutes} min left\n              </span>\n            )}\n          </div>\n\n          <p className=\"sr-only\" role=\"status\" aria-live=\"polite\">\n            {allDone\n              ? \"All steps complete. Your workspace is ready.\"\n              : `${completed} of ${total} steps complete.`}\n          </p>\n        </section>\n\n        {allDone && (\n          <section\n            aria-labelledby={`${baseId}-celebrate`}\n            className=\"relative mt-5 overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6 text-center shadow-sm sm:p-8\"\n          >\n            <div aria-hidden=\"true\" className=\"pointer-events-none absolute inset-0\">\n              {CONFETTI.map((c, i) => (\n                <span\n                  key={i}\n                  className={`confetti-piece absolute top-0 block rounded-sm ${c.color}`}\n                  style={\n                    {\n                      left: c.left,\n                      width: c.size,\n                      height: c.size * 1.6,\n                      rotate: `${c.rotate}deg`,\n                      \"--delay\": c.delay,\n                      \"--dur\": c.duration,\n                    } as React.CSSProperties\n                  }\n                />\n              ))}\n            </div>\n\n            <div className=\"pop-in relative mx-auto flex size-14 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/30\">\n              <PartyPopper className=\"size-7\" aria-hidden=\"true\" />\n            </div>\n            <h2\n              id={`${baseId}-celebrate`}\n              className=\"relative mt-4 text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl\"\n            >\n              You&apos;re all set — nice work!\n            </h2>\n            <p className=\"relative mx-auto mt-2 max-w-md text-sm text-slate-600 sm:text-base\">\n              Your workspace is ready and your team is on board. Head to your\n              dashboard to start planning your first sprint.\n            </p>\n            <div className=\"relative mt-5 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center\">\n              <button\n                type=\"button\"\n                className=\"inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600\"\n              >\n                <Rocket className=\"size-4\" aria-hidden=\"true\" />\n                Go to dashboard\n              </button>\n              <button\n                type=\"button\"\n                onClick={reset}\n                className=\"inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n              >\n                <RotateCcw className=\"size-4\" aria-hidden=\"true\" />\n                Restart checklist\n              </button>\n            </div>\n          </section>\n        )}\n\n        <ol className=\"mt-5 space-y-3\" aria-label=\"Onboarding steps\">\n          {STEPS.map((step, index) => {\n            const isDone = done.has(step.id);\n            const isCurrent = step.id === currentId;\n            const isOpen = openId === step.id;\n            const Icon = step.icon;\n            const panelId = `${baseId}-panel-${step.id}`;\n            const buttonId = `${baseId}-button-${step.id}`;\n            const statusLabel = isDone\n              ? \"Completed\"\n              : isCurrent\n                ? \"Up next\"\n                : \"Not started\";\n\n            return (\n              <li\n                key={step.id}\n                className={`rounded-xl border bg-white transition-colors ${\n                  isCurrent\n                    ? \"border-indigo-300 shadow-sm ring-1 ring-indigo-100\"\n                    : isDone\n                      ? \"border-emerald-200\"\n                      : \"border-slate-200\"\n                }`}\n              >\n                <h3>\n                  <button\n                    type=\"button\"\n                    id={buttonId}\n                    aria-expanded={isOpen}\n                    aria-controls={panelId}\n                    onClick={() => setOpenId(isOpen ? null : step.id)}\n                    className=\"flex w-full items-center gap-3 rounded-xl p-4 text-left focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600 sm:gap-4\"\n                  >\n                    <span\n                      aria-hidden=\"true\"\n                      className={`flex size-9 shrink-0 items-center justify-center rounded-full border-2 text-sm font-semibold transition-colors ${\n                        isDone\n                          ? \"border-emerald-500 bg-emerald-500 text-white\"\n                          : isCurrent\n                            ? \"border-indigo-500 bg-indigo-50 text-indigo-700\"\n                            : \"border-slate-300 bg-white text-slate-400\"\n                      }`}\n                    >\n                      {isDone ? <Check className=\"size-5\" strokeWidth={3} /> : index + 1}\n                    </span>\n\n                    <span className=\"min-w-0 flex-1\">\n                      <span\n                        className={`block text-sm font-semibold sm:text-base ${\n                          isDone ? \"text-slate-500 line-through decoration-slate-300\" : \"text-slate-900\"\n                        }`}\n                      >\n                        {step.title}\n                      </span>\n                      <span className=\"mt-0.5 block text-xs text-slate-500 sm:text-sm\">\n                        {step.summary}\n                      </span>\n                    </span>\n\n                    <span\n                      className={`hidden shrink-0 rounded-full px-2.5 py-1 text-xs font-medium sm:inline-block ${\n                        isDone\n                          ? \"bg-emerald-50 text-emerald-700\"\n                          : isCurrent\n                            ? \"bg-indigo-50 text-indigo-700\"\n                            : \"bg-slate-100 text-slate-600\"\n                      }`}\n                    >\n                      {statusLabel}\n                    </span>\n                    <span className=\"sr-only sm:hidden\">{statusLabel}</span>\n\n                    <ChevronDown\n                      aria-hidden=\"true\"\n                      className={`size-5 shrink-0 text-slate-400 transition-transform motion-reduce:transition-none ${\n                        isOpen ? \"rotate-180\" : \"\"\n                      }`}\n                    />\n                  </button>\n                </h3>\n\n                {isOpen && (\n                  <div\n                    id={panelId}\n                    role=\"region\"\n                    aria-labelledby={buttonId}\n                    className=\"border-t border-slate-100 px-4 pb-4 pt-3 sm:pl-[4.25rem]\"\n                  >\n                    <div className=\"flex items-start gap-2 text-sm text-slate-600\">\n                      <Icon\n                        className=\"mt-0.5 size-4 shrink-0 text-slate-400\"\n                        aria-hidden=\"true\"\n                      />\n                      <p>{step.detail}</p>\n                    </div>\n                    <div className=\"mt-4 flex flex-col gap-2 sm:flex-row sm:items-center\">\n                      {isDone ? (\n                        <button\n                          type=\"button\"\n                          onClick={() => toggleDone(step.id)}\n                          className=\"inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n                        >\n                          <RotateCcw className=\"size-4\" aria-hidden=\"true\" />\n                          Mark as not done\n                        </button>\n                      ) : (\n                        <button\n                          type=\"button\"\n                          onClick={() => toggleDone(step.id)}\n                          className=\"inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n                        >\n                          <Check className=\"size-4\" aria-hidden=\"true\" />\n                          {step.action} &amp; mark done\n                        </button>\n                      )}\n                      <span className=\"inline-flex items-center gap-1 text-xs text-slate-500\">\n                        <Clock className=\"size-3.5\" aria-hidden=\"true\" />\n                        Takes about {step.minutes} min\n                      </span>\n                    </div>\n                  </div>\n                )}\n              </li>\n            );\n          })}\n        </ol>\n\n        {!allDone && completed > 0 && (\n          <div className=\"mt-5 text-center\">\n            <button\n              type=\"button\"\n              onClick={reset}\n              className=\"inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-slate-500 underline-offset-2 hover:text-slate-700 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n            >\n              <RotateCcw className=\"size-3.5\" aria-hidden=\"true\" />\n              Reset progress\n            </button>\n          </div>\n        )}\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

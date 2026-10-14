@@ -1,0 +1,12 @@
+{
+  "arm": "D",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(155,9): error TS2578: Unused '@ts-expect-error' directive.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2737
+    }
+  }
+}

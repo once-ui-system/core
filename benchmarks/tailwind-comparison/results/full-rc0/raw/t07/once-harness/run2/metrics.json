@@ -1,0 +1,34 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 736,
+    "chars": 20651,
+    "bytes": 20656,
+    "tokens_o200k": 5898,
+    "tokens_claudeLegacy": 5951,
+    "tokens_exact": 8529
+  },
+  "raw": {
+    "lines": 648,
+    "chars": 21029,
+    "bytes": 21034,
+    "tokens_o200k": 5881,
+    "tokens_claudeLegacy": 5988,
+    "tokens_exact": 8659
+  },
+  "components": [
+    "Button",
+    "Column",
+    "Grid",
+    "Heading",
+    "IconButton",
+    "Row",
+    "SegmentedControl",
+    "Select",
+    "Skeleton",
+    "Tag",
+    "Text",
+    "VisuallyHidden"
+  ]
+}

@@ -1,0 +1,313 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Marketing hero — headline with text effect, CTA pair, social proof logos, background effect.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017Uqz7TMvHs7M9wWyeED5zS",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XZDCrwLXmdkwqCUEy2Q9qY",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017Uqz7TMvHs7M9wWyeED5zS",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XZDCrwLXmdkwqCUEy2Q9qY",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_011htdsLGFqXBXFo3YVjL7S1",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0196boYTcMjVratwq7RZa1Aj",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Y9yaLGHBVKxGQJjpTrS3hK",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011htdsLGFqXBXFo3YVjL7S1",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0196boYTcMjVratwq7RZa1Aj",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Y9yaLGHBVKxGQJjpTrS3hK",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01TpSRUwedS2ZFZmbwJCjDuB",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Y5MgdiLMysbEzjfZSfeefW",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UCXzFSpXCMz9EK1SLnhdAR",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TpSRUwedS2ZFZmbwJCjDuB",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Y5MgdiLMysbEzjfZSfeefW",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UCXzFSpXCMz9EK1SLnhdAR",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since I can only edit app/page.tsx, I'll keep animations in an inline style tag and build a server component with a dark gradient-blob background, animated gradient headline text (respecting reduced motion), CTA buttons with focus rings, and inline SVG logos for social proof.\n\n",
+          "signature": "CAQSgwoKEQgSGAI4AUIJbmFycmF0aW9uEgy81kMXRKtAZEL7d8gaDELo4TEDe9SglzKliCIw6PeXDo70ID3B1sDCI+Y/FXaMD9SwOt5T7pCw3sXa/pYA+xGgNdNseJ0dmBP5qE8+Kp8J8fBBTLvjPdJrEbJhrb+sIv4Vz8/zK+WAH0z0C+O3ueTWSMzjlmgbhlA7eE4FECj0M1LbDNgrLtSUudf1xxCi2R0YqBqHYTO67A+JwJu5Bhp2LP68+toJ207nYcbuTueE9H4FI7EUv04cizWoh2cIqQ+AbT2Bjrxw1ynIfBo+ynj/8XTC3RbQvDKrfQFzBso7kHmO07xSChb4Uu7/tzMKtWK2GvhdJ8hPToQTLAXKJpgu9ylsUbOEj8hdDG6A16jM4bctjVy8z7ohsdw8ggX/T7+Lvx7bZt2W+PRxIE4PzFPsHLyDR685YfbanUdgvsXnbjEzF1MzKzGDWESL01zxqDmLWHEgGbWd2WmMK9NfVsUZTP/8bDDi3XhdkMYVrAsMftbPSrWPtLmRAd70nPV2XUeR4IbxJ5MMOVgr/5nphI52hf+WbU2p9U/bZDnEWfBl8f6gOcqi6zA+tn5m577SKJli9Yoo90h7ojFzMt4sEfJk+89o8dHEojeFO+3zioMixS5NH+ZJh3ztwLyokK9hdE9vTj6EGN/HSkzZSVvJ3i7CrAVeDhIc4lojFKE3KQgJgxCz0r+MTPKehqMLnxxrIf+l9FcFm6FcMYfmnwI8QXFopO6df04XZ4fy9JxeplpdmhpofpFRqt4yeCySi/R1iWg8QKMb5WeVk4UCeujj4siDJwH3zUbEqhzYoKRpFKOCRsxJnJhulqYxZI6CWOYij88fRtCjLU8M1YCtQI0W1cqDUgRcDHIUxoJw0SKrLMDC9t/tgD1Nz/IsHW8dsuVjgUbRG0F1B1jBQgYalUyeJYQbtejKHmG8TVUVJbyQ5GlGh+s0ErrASq+d+Zk/Jed19PXuAr2/2GVxAJgIHgR4HvRztcF2EsEG3Y78moOAktgtLvLOmIxycUz7RI0Wnd6w8uyHoJRIthb8Ibv37cFjGy+sO9edT3rvFC341cODiooUdZaB5oe8BrRH4SMsD2EweQOCqRHO4RWs/bLbQOhgvErCWFt5O+C15V1aXLD0B512HsTRUmCFj+3Ae0j52AX8LV8zhLFeABPo/TIA571FDBcSSnIKyw+J6YLTfNoVCwyrZObBs2iVsSxPm1UbqsQWS/6D8/b2zpq+DcyjaR5+ZbMxAAJvja1KeWgDFwGZfxq5XwzG2JeapxIJ18mCCBcvx+h9Rl3HY3iS6FceKTc6tTrIwaJprd+7IGxVEUiBbuDJNhXebJT0uhpMNq0oBHST9CJ+40FVsDyDOSAWopGkm/CK6w6eQ20BH4vPrAoMnshcPEvLSIfUCJwVBPxN6QF+ZEDatzoQa31NVKxnyUafGSMpwDOlFPWLWFUyJUpMl/bmY0C1jHedYq9ok+JfvOTLcTMxZun/Dq4oXUS6HTUaSBVBqP/xjn1vjRgkloyyRM2FcLpWYMyp9iXqMvsBmT6uI60hVymgpxR+IG/xx2HwN06m/lOrfotUxCC7HhrorzkAIutEi+031VQxV3hQoetU3qZE3eSeYZ/Llp+chue/CdW5pVjsj4hNYLPuEpBRiEsGxznw+JzxWA9daRsY8k+1T6Yn5YKHNAu4j+QCSKeCqhgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LEC7FCRAAt2MiWiqkcaaHH",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LEC7FCRAAt2MiWiqkcaaHH",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\nimport type { ReactNode } from \"react\";\nimport { ArrowRight, PlayCircle, Sparkles, Star, Check } from \"lucide-react\";\n\ntype Logo = {\n  name: string;\n  mark: ReactNode;\n};\n\nconst LOGOS: Logo[] = [\n  {\n    name: \"Northwind Labs\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"h-6 w-6\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n        <path d=\"M3 19 9 5l4 9 3-6 5 11\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Quillpay\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"h-6 w-6\" aria-hidden=\"true\" fill=\"currentColor\">\n        <circle cx=\"12\" cy=\"12\" r=\"9\" opacity=\"0.25\" />\n        <circle cx=\"12\" cy=\"12\" r=\"4.5\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Helio\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"h-6 w-6\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\">\n        <circle cx=\"12\" cy=\"12\" r=\"4\" />\n        <path d=\"M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Brightloop\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"h-6 w-6\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2.2\">\n        <path d=\"M12 3a9 9 0 1 0 9 9\" strokeLinecap=\"round\" />\n        <path d=\"M12 8a4 4 0 1 0 4 4\" strokeLinecap=\"round\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Monarch\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"h-6 w-6\" aria-hidden=\"true\" fill=\"currentColor\">\n        <path d=\"M12 3 21 9v6l-9 6-9-6V9z\" opacity=\"0.3\" />\n        <path d=\"M12 8 17 11.5v3L12 18l-5-3.5v-3z\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Fernhill\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"h-6 w-6\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n        <path d=\"M12 21V9\" />\n        <path d=\"M12 13c-4 0-6-2-6-6 4 0 6 2 6 6Z\" />\n        <path d=\"M12 16c4 0 6-2 6-6-4 0-6 2-6 6Z\" />\n      </svg>\n    ),\n  },\n];\n\nconst HIGHLIGHTS = [\"No credit card required\", \"14-day free trial\", \"SOC 2 Type II\"];\n\nconst AVATARS = [\n  { initials: \"AK\", className: \"from-indigo-400 to-violet-500\" },\n  { initials: \"MR\", className: \"from-sky-400 to-indigo-500\" },\n  { initials: \"JT\", className: \"from-fuchsia-400 to-pink-500\" },\n  { initials: \"LS\", className: \"from-emerald-400 to-teal-500\" },\n];\n\nconst STYLES = `\n@keyframes hero-drift-a {\n  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n  50% { transform: translate3d(6%, 8%, 0) scale(1.12); }\n}\n@keyframes hero-drift-b {\n  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n  50% { transform: translate3d(-8%, -6%, 0) scale(1.08); }\n}\n@keyframes hero-shimmer {\n  0% { background-position: 0% 50%; }\n  100% { background-position: 200% 50%; }\n}\n@keyframes hero-rise {\n  from { opacity: 0; transform: translate3d(0, 14px, 0); }\n  to { opacity: 1; transform: translate3d(0, 0, 0); }\n}\n.hero-blob-a { animation: hero-drift-a 18s ease-in-out infinite; }\n.hero-blob-b { animation: hero-drift-b 22s ease-in-out infinite; }\n.hero-gradient-text {\n  background-image: linear-gradient(90deg, #a5b4fc, #e879f9, #38bdf8, #a5b4fc);\n  background-size: 200% 100%;\n  -webkit-background-clip: text;\n  background-clip: text;\n  color: transparent;\n  -webkit-text-fill-color: transparent;\n  animation: hero-shimmer 8s linear infinite;\n}\n.hero-rise { opacity: 0; animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }\n.hero-grid {\n  background-image:\n    linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),\n    linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);\n  background-size: 56px 56px;\n  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);\n  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);\n}\n@media (prefers-reduced-motion: reduce) {\n  .hero-blob-a, .hero-blob-b, .hero-gradient-text { animation: none; }\n  .hero-rise { animation: none; opacity: 1; }\n}\n`;\n\nexport default function Page() {\n  return (\n    <main className=\"relative min-h-screen overflow-hidden bg-slate-950 text-slate-100\">\n      <style>{STYLES}</style>\n\n      {/* Background effect */}\n      <div aria-hidden=\"true\" className=\"pointer-events-none absolute inset-0\">\n        <div className=\"hero-grid absolute inset-0\" />\n        <div className=\"hero-blob-a absolute -left-[10%] -top-[15%] h-[32rem] w-[32rem] rounded-full bg-indigo-600/30 blur-3xl sm:h-[40rem] sm:w-[40rem]\" />\n        <div className=\"hero-blob-b absolute -right-[10%] top-[5%] h-[28rem] w-[28rem] rounded-full bg-fuchsia-600/25 blur-3xl sm:h-[36rem] sm:w-[36rem]\" />\n        <div className=\"absolute bottom-0 left-1/2 h-64 w-[60rem] max-w-full -translate-x-1/2 rounded-full bg-sky-500/10 blur-3xl\" />\n        <div className=\"absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgb(2_6_23)_100%)]\" />\n      </div>\n\n      <div className=\"relative mx-auto flex min-h-screen max-w-6xl flex-col px-5 sm:px-8\">\n        {/* Nav */}\n        <header className=\"flex items-center justify-between py-6\">\n          <a\n            href=\"#\"\n            className=\"flex items-center gap-2 rounded-md text-base font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-300\"\n          >\n            <span className=\"flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-400 to-fuchsia-500 text-slate-950\">\n              <Sparkles className=\"h-4 w-4\" aria-hidden=\"true\" />\n            </span>\n            Lumen\n          </a>\n          <nav aria-label=\"Primary\" className=\"hidden items-center gap-8 text-sm text-slate-300 md:flex\">\n            {[\"Product\", \"Pricing\", \"Customers\", \"Docs\"].map((item) => (\n              <a\n                key={item}\n                href=\"#\"\n                className=\"rounded-md transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-300\"\n              >\n                {item}\n              </a>\n            ))}\n          </nav>\n          <a\n            href=\"#\"\n            className=\"rounded-full border border-white/15 px-4 py-1.5 text-sm font-medium text-slate-100 transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-300\"\n          >\n            Sign in\n          </a>\n        </header>\n\n        {/* Hero */}\n        <section\n          aria-labelledby=\"hero-heading\"\n          className=\"flex flex-1 flex-col items-center justify-center py-16 text-center sm:py-24\"\n        >\n          <a\n            href=\"#\"\n            className=\"hero-rise group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-slate-200 backdrop-blur transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-300 sm:text-sm\"\n          >\n            <span className=\"rounded-full bg-indigo-400/20 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider text-indigo-200\">\n              New\n            </span>\n            Lumen Insights 2.0 is here\n            <ArrowRight className=\"h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5\" aria-hidden=\"true\" />\n          </a>\n\n          <h1\n            id=\"hero-heading\"\n            className=\"hero-rise mt-8 max-w-4xl text-balance text-4xl font-semibold leading-[1.08] tracking-tight [animation-delay:80ms] sm:text-6xl lg:text-7xl\"\n          >\n            Turn scattered data into{\" \"}\n            <span className=\"hero-gradient-text\">decisions your team trusts</span>\n          </h1>\n\n          <p className=\"hero-rise mt-6 max-w-2xl text-pretty text-base leading-relaxed text-slate-300 [animation-delay:160ms] sm:text-lg\">\n            Lumen connects your warehouse, billing and product analytics into one live workspace, so\n            every team answers questions in seconds instead of waiting days for a dashboard.\n          </p>\n\n          <div className=\"hero-rise mt-10 flex w-full flex-col items-stretch justify-center gap-3 [animation-delay:240ms] sm:w-auto sm:flex-row sm:items-center\">\n            <a\n              href=\"#\"\n              className=\"group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:text-base\"\n            >\n              Start free trial\n              <ArrowRight className=\"h-4 w-4 transition-transform group-hover:translate-x-0.5\" aria-hidden=\"true\" />\n            </a>\n            <a\n              href=\"#\"\n              className=\"inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-300 sm:text-base\"\n            >\n              <PlayCircle className=\"h-4 w-4\" aria-hidden=\"true\" />\n              Watch 2-min demo\n            </a>\n          </div>\n\n          <ul className=\"hero-rise mt-6 flex flex-col items-center gap-x-6 gap-y-2 text-sm text-slate-400 [animation-delay:320ms] sm:flex-row\">\n            {HIGHLIGHTS.map((item) => (\n              <li key={item} className=\"flex items-center gap-1.5\">\n                <Check className=\"h-4 w-4 text-emerald-400\" aria-hidden=\"true\" />\n                {item}\n              </li>\n            ))}\n          </ul>\n\n          {/* Social proof */}\n          <div className=\"hero-rise mt-16 w-full [animation-delay:400ms] sm:mt-20\">\n            <div className=\"flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4\">\n              <div className=\"flex -space-x-2\" aria-hidden=\"true\">\n                {AVATARS.map((a) => (\n                  <span\n                    key={a.initials}\n                    className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-950 bg-gradient-to-br ${a.className} text-[0.65rem] font-bold text-slate-950`}\n                  >\n                    {a.initials}\n                  </span>\n                ))}\n              </div>\n              <div className=\"flex items-center gap-2 text-sm text-slate-300\">\n                <span className=\"flex\" role=\"img\" aria-label=\"Rated 4.9 out of 5 stars\">\n                  {Array.from({ length: 5 }, (_, i) => (\n                    <Star key={i} className=\"h-4 w-4 fill-amber-400 text-amber-400\" aria-hidden=\"true\" />\n                  ))}\n                </span>\n                <span>\n                  <strong className=\"font-semibold text-white\">4.9/5</strong> from 2,400+ reviews\n                </span>\n              </div>\n            </div>\n\n            <p className=\"mt-8 text-xs font-medium uppercase tracking-[0.2em] text-slate-500\">\n              Trusted by data teams at fast-growing companies\n            </p>\n            <ul className=\"mx-auto mt-6 grid max-w-4xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-6\">\n              {LOGOS.map((logo) => (\n                <li\n                  key={logo.name}\n                  className=\"flex items-center justify-center gap-2 text-slate-400 transition-colors hover:text-slate-200\"\n                >\n                  {logo.mark}\n                  <span className=\"text-base font-semibold tracking-tight\">{logo.name}</span>\n                </li>\n              ))}\n            </ul>\n          </div>\n        </section>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the render check. Output (truncated to 4,000 characters):\n\n```\nserver did not start:\n\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The error output is empty, so I'm checking the config files for something that could stop the server from starting."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DtTj9yzJdJUGNbiQjwZZUo",
+          "name": "read_file",
+          "input": {
+            "path": "project/postcss.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Vku24ExhX8hpDBqiGwe5ae",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DtTj9yzJdJUGNbiQjwZZUo",
+          "content": "const config = {\n  plugins: [\"@tailwindcss/postcss\"],\n};\n\nexport default config;\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Vku24ExhX8hpDBqiGwe5ae",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I suspect the lucide-react icon imports and `<style>` tag are breaking the build, so I'll replace the icons with inline SVGs, convert the CSS to static styles, and swap Tailwind's arbitrary-value classes for inline style props.\n\n",
+          "signature": "CAQSuwsKEQgSGAI4AUIJbmFycmF0aW9uEgzEsVEYhRI6oydDpIsaDP+F9I6cheJDovJoLiIwvQ6LmHZynqOj6h12VRNjeXMxRlkIZdPOJgQn6FzPp+8kfZejJbxk5OSHl5ppfXxTKtcKb5NbP/VN3IPzE/cI4FE9XFVNpyuR+8IJ4Kl7nStRHnO1aymKjqKmtcgiS+qKQbXzAA+4tJq4B7PdJ2VRdiQbewFBYP9VjMkzEKN25k5kuVa7RXOCF/oNqfZNj3b3yu3KKhJEBknuxXAk10ApTIHrS2sU2Ac1XUCxozqearvRat5gXqD3QCBD3H3Vz9f6Bk+rQ8RIGk4rn4UcsKDofCSDH5COwck0ccB54MhUpK1mPNVtfijAtkn8A3ro1SoCSWpdXVSU6TaTjBbNnpNK5UaCSjagykcA1p2CfJKq2iORoOMYB1h1ysMVidAsHGQehBEo0x5qthB5KcqKU2Fi8Dff02XxNHpEEF/HpWv6HDSJpJZ0Lyx118T1oAUbRQYef7vkNASxRqcZadI6ey7/yLJWbjQ9woGSyimor6uN4+9gukOnKOkxe053QTIfn6gQHV6RsQFL365pNFgix29/fREKWKPIjAgJscSjzJFfsUsURpPt5nUgFz2MuQELPJ68uVwE/celkTb7vMSppm1TzhF4aJCgQUy6H7hFDjZq2TfkXf8AzO9deo1k90EVXrPUM9+ALQ7mzlDHw+dvMdwjILcyZ29fdNjGiENziJA+zcQxH+Neovdp408W/p4VxEZrG2UYY2IrnM6f7P9XCnPtQcLBi5YpdtxsmUZZ6VVn8ru+vSYfOmf9MWCUiYb0kBDo2XKpblDku7jGEXIg43m/iHjtfeHRe3sNUKjkYr/DqKLwdMk+zo5noNZoroZKkBWHdXQYGwu2/Np1z8DMOn/sKfvZ9hsmw8HD7tfIY60/4rjOOyIx0mXHeVR9wZulO2Ofwq1DYwVXANqF4zerw/50+F05dU8GWScX4sgeMhIsTfbRIoUmtJdzh6DSBQgbzWDtqGkMAeHdn3NWnxAB2VnmSbPdbqgYVTYII02IZ5PaRJnFh1kIT3TcA39259grKoy2KZXZVe2v0ADTId7Lfq7HDJA9oV1tyZ8wBAxmqJwgJfJ4ApCZYf3ijE+u6WKXA9anG0flU22ti/dikNfpCAvzqUUGnmpqTT8QohxTIgz59bnp3Nv8wCUB0pBRtdmp7ylt3iGDYY/Bvzu8AWqFti4kuZB/a+a+pZjOYDIRQZFt4TwFXRE5xx5JGBg4uClAkOWpBdqjykmLzszS3BXcuz1M9Kl/ae0Rd680EL2JTAROMQ/AYCS5e9PMv0nsOQ89mGEFLFdILxgUoOIcjbF+j/2DGz9a2rfA6eLsh1mZRXHT5Mi4gBFBxjgXU7OzWVtmlFSgU613cGlpoHz5eZgGkIjv9H4/2WDkMV9wLziTWwkovVO5y3neJ93mdA6wzDGWW5dTPQhtotoS/RUjej7PxeszbGuYjI1kRH/ocM3h23PkfOiwKGRws9FoKHcKJDxsir/Ko9GB0dgm0CpVMZ8s/YFj3cEkLXZvfls7uWzrps8H/axI8BUbqfFFXftkchBo0StFVvsukh+n5GpOqOI+9O8Dxcebcaa8vy0vbtujSkNEhIfSatRCFmiHddmk3i6Lh6vZArQd6+rKfFDywOmzBBOZMxc6ssv/76WvV2xehivo7Fem1yyhhBfRpTg8fy4mgUUU2UtPNO6NtfPEQYgCbjQvjG/pW+oNpwl4d2kb76saaxtjIEj/k6bGkUeVauK46Qc2fXo2F6olMoP3swE0iLWmj7dYUzjk7PgWkcQpGlMG80Z70s+2/S3IKOVWidhNzD21/ZRwfoGW9LQZ+Hv7pHD79/tOhEWMFtAtJaSKCSH3CU+YvD0003UBelo5BSRKmlMjOhv29SdyCHC5USt7J7cXimKy4B33vB0YNUUYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CaSKrb5CdoFMH7LUbteMEp",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CaSKrb5CdoFMH7LUbteMEp",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\nimport type { CSSProperties, ReactNode } from \"react\";\n\ntype Logo = {\n  name: string;\n  mark: ReactNode;\n};\n\nconst svgBase = {\n  viewBox: \"0 0 24 24\",\n  width: 24,\n  height: 24,\n  \"aria-hidden\": true,\n  focusable: false,\n} as const;\n\nfunction ArrowRightIcon({ className }: { className?: string }) {\n  return (\n    <svg {...svgBase} className={className} width={16} height={16} fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n      <path d=\"M5 12h14\" />\n      <path d=\"m12 5 7 7-7 7\" />\n    </svg>\n  );\n}\n\nfunction PlayIcon({ className }: { className?: string }) {\n  return (\n    <svg {...svgBase} className={className} width={16} height={16} fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n      <circle cx=\"12\" cy=\"12\" r=\"10\" />\n      <path d=\"m10 8 6 4-6 4z\" />\n    </svg>\n  );\n}\n\nfunction SparklesIcon({ className }: { className?: string }) {\n  return (\n    <svg {...svgBase} className={className} width={16} height={16} fill=\"currentColor\">\n      <path d=\"M12 2l1.9 5.6L19.5 9.5l-5.6 1.9L12 17l-1.9-5.6L4.5 9.5l5.6-1.9z\" />\n      <path d=\"M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9z\" />\n    </svg>\n  );\n}\n\nfunction StarIcon({ className }: { className?: string }) {\n  return (\n    <svg {...svgBase} className={className} width={16} height={16} fill=\"currentColor\">\n      <path d=\"m12 2 3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z\" />\n    </svg>\n  );\n}\n\nfunction CheckIcon({ className }: { className?: string }) {\n  return (\n    <svg {...svgBase} className={className} width={16} height={16} fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2.5\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n      <path d=\"M20 6 9 17l-5-5\" />\n    </svg>\n  );\n}\n\nconst LOGOS: Logo[] = [\n  {\n    name: \"Northwind Labs\",\n    mark: (\n      <svg {...svgBase} className=\"h-6 w-6\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n        <path d=\"M3 19 9 5l4 9 3-6 5 11\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Quillpay\",\n    mark: (\n      <svg {...svgBase} className=\"h-6 w-6\" fill=\"currentColor\">\n        <circle cx=\"12\" cy=\"12\" r=\"9\" opacity=\"0.25\" />\n        <circle cx=\"12\" cy=\"12\" r=\"4.5\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Helio\",\n    mark: (\n      <svg {...svgBase} className=\"h-6 w-6\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\">\n        <circle cx=\"12\" cy=\"12\" r=\"4\" />\n        <path d=\"M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Brightloop\",\n    mark: (\n      <svg {...svgBase} className=\"h-6 w-6\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2.2\" strokeLinecap=\"round\">\n        <path d=\"M12 3a9 9 0 1 0 9 9\" />\n        <path d=\"M12 8a4 4 0 1 0 4 4\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Monarch\",\n    mark: (\n      <svg {...svgBase} className=\"h-6 w-6\" fill=\"currentColor\">\n        <path d=\"M12 3 21 9v6l-9 6-9-6V9z\" opacity=\"0.3\" />\n        <path d=\"M12 8 17 11.5v3L12 18l-5-3.5v-3z\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Fernhill\",\n    mark: (\n      <svg {...svgBase} className=\"h-6 w-6\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n        <path d=\"M12 21V9\" />\n        <path d=\"M12 13c-4 0-6-2-6-6 4 0 6 2 6 6Z\" />\n        <path d=\"M12 16c4 0 6-2 6-6-4 0-6 2-6 6Z\" />\n      </svg>\n    ),\n  },\n];\n\nconst HIGHLIGHTS = [\"No credit card required\", \"14-day free trial\", \"SOC 2 Type II\"];\n\nconst NAV_ITEMS = [\"Product\", \"Pricing\", \"Customers\", \"Docs\"];\n\nconst AVATARS = [\n  { initials: \"AK\", className: \"from-indigo-400 to-violet-500\" },\n  { initials: \"MR\", className: \"from-sky-400 to-indigo-500\" },\n  { initials: \"JT\", className: \"from-fuchsia-400 to-pink-500\" },\n  { initials: \"LS\", className: \"from-emerald-400 to-teal-500\" },\n];\n\nconst STYLES = `\n@keyframes hero-drift-a {\n  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n  50% { transform: translate3d(6%, 8%, 0) scale(1.12); }\n}\n@keyframes hero-drift-b {\n  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n  50% { transform: translate3d(-8%, -6%, 0) scale(1.08); }\n}\n@keyframes hero-shimmer {\n  0% { background-position: 0% 50%; }\n  100% { background-position: 200% 50%; }\n}\n@keyframes hero-rise {\n  from { opacity: 0; transform: translate3d(0, 14px, 0); }\n  to { opacity: 1; transform: translate3d(0, 0, 0); }\n}\n.hero-blob-a { animation: hero-drift-a 18s ease-in-out infinite; }\n.hero-blob-b { animation: hero-drift-b 22s ease-in-out infinite; }\n.hero-gradient-text {\n  background-image: linear-gradient(90deg, #a5b4fc, #e879f9, #38bdf8, #a5b4fc);\n  background-size: 200% 100%;\n  -webkit-background-clip: text;\n  background-clip: text;\n  color: transparent;\n  -webkit-text-fill-color: transparent;\n  animation: hero-shimmer 8s linear infinite;\n}\n.hero-rise { opacity: 0; animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }\n.hero-grid {\n  background-image:\n    linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),\n    linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);\n  background-size: 56px 56px;\n  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);\n  mask-image: radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%);\n}\n.hero-vignette {\n  background: radial-gradient(ellipse at center, transparent 40%, #020617 100%);\n}\n@media (prefers-reduced-motion: reduce) {\n  .hero-blob-a, .hero-blob-b, .hero-gradient-text { animation: none; }\n  .hero-rise { animation: none; opacity: 1; }\n}\n`;\n\nfunction delay(ms: number): CSSProperties {\n  return { animationDelay: `${ms}ms` };\n}\n\nexport default function Page() {\n  return (\n    <main className=\"relative min-h-screen overflow-hidden bg-slate-950 text-slate-100\">\n      <style dangerouslySetInnerHTML={{ __html: STYLES }} />\n\n      {/* Background effect */}\n      <div aria-hidden=\"true\" className=\"pointer-events-none absolute inset-0\">\n        <div className=\"hero-grid absolute inset-0\" />\n        <div className=\"hero-blob-a absolute -left-[10%] -top-[15%] h-[32rem] w-[32rem] rounded-full bg-indigo-600/30 blur-3xl sm:h-[40rem] sm:w-[40rem]\" />\n        <div className=\"hero-blob-b absolute -right-[10%] top-[5%] h-[28rem] w-[28rem] rounded-full bg-fuchsia-600/25 blur-3xl sm:h-[36rem] sm:w-[36rem]\" />\n        <div className=\"absolute bottom-0 left-1/2 h-64 w-[60rem] max-w-full -translate-x-1/2 rounded-full bg-sky-500/10 blur-3xl\" />\n        <div className=\"hero-vignette absolute inset-0\" />\n      </div>\n\n      <div className=\"relative mx-auto flex min-h-screen max-w-6xl flex-col px-5 sm:px-8\">\n        {/* Nav */}\n        <header className=\"flex items-center justify-between py-6\">\n          <a\n            href=\"#\"\n            className=\"flex items-center gap-2 rounded-md text-base font-semibold tracking-tight focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-300\"\n          >\n            <span className=\"flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-400 to-fuchsia-500 text-slate-950\">\n              <SparklesIcon className=\"h-4 w-4\" />\n            </span>\n            Lumen\n          </a>\n          <nav aria-label=\"Primary\" className=\"hidden items-center gap-8 text-sm text-slate-300 md:flex\">\n            {NAV_ITEMS.map((item) => (\n              <a\n                key={item}\n                href=\"#\"\n                className=\"rounded-md transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-300\"\n              >\n                {item}\n              </a>\n            ))}\n          </nav>\n          <a\n            href=\"#\"\n            className=\"rounded-full border border-white/15 px-4 py-1.5 text-sm font-medium text-slate-100 transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-300\"\n          >\n            Sign in\n          </a>\n        </header>\n\n        {/* Hero */}\n        <section\n          aria-labelledby=\"hero-heading\"\n          className=\"flex flex-1 flex-col items-center justify-center py-16 text-center sm:py-24\"\n        >\n          <a\n            href=\"#\"\n            className=\"hero-rise group inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3.5 py-1.5 text-xs font-medium text-slate-200 backdrop-blur transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-300 sm:text-sm\"\n          >\n            <span className=\"rounded-full bg-indigo-400/20 px-2 py-0.5 text-[0.65rem] font-semibold uppercase tracking-wider text-indigo-200\">\n              New\n            </span>\n            Lumen Insights 2.0 is here\n            <ArrowRightIcon className=\"h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5\" />\n          </a>\n\n          <h1\n            id=\"hero-heading\"\n            style={delay(80)}\n            className=\"hero-rise mt-8 max-w-4xl text-4xl font-semibold leading-tight tracking-tight sm:text-6xl lg:text-7xl\"\n          >\n            Turn scattered data into{\" \"}\n            <span className=\"hero-gradient-text\">decisions your team trusts</span>\n          </h1>\n\n          <p\n            style={delay(160)}\n            className=\"hero-rise mt-6 max-w-2xl text-base leading-relaxed text-slate-300 sm:text-lg\"\n          >\n            Lumen connects your warehouse, billing and product analytics into one live workspace, so\n            every team answers questions in seconds instead of waiting days for a dashboard.\n          </p>\n\n          <div\n            style={delay(240)}\n            className=\"hero-rise mt-10 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center\"\n          >\n            <a\n              href=\"#\"\n              className=\"group inline-flex items-center justify-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 shadow-lg shadow-indigo-500/20 transition hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white sm:text-base\"\n            >\n              Start free trial\n              <ArrowRightIcon className=\"h-4 w-4 transition-transform group-hover:translate-x-0.5\" />\n            </a>\n            <a\n              href=\"#\"\n              className=\"inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-300 sm:text-base\"\n            >\n              <PlayIcon className=\"h-4 w-4\" />\n              Watch 2-min demo\n            </a>\n          </div>\n\n          <ul\n            style={delay(320)}\n            className=\"hero-rise mt-6 flex flex-col items-center gap-x-6 gap-y-2 text-sm text-slate-400 sm:flex-row\"\n          >\n            {HIGHLIGHTS.map((item) => (\n              <li key={item} className=\"flex items-center gap-1.5\">\n                <CheckIcon className=\"h-4 w-4 text-emerald-400\" />\n                {item}\n              </li>\n            ))}\n          </ul>\n\n          {/* Social proof */}\n          <div style={delay(400)} className=\"hero-rise mt-16 w-full sm:mt-20\">\n            <div className=\"flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4\">\n              <div className=\"flex -space-x-2\" aria-hidden=\"true\">\n                {AVATARS.map((a) => (\n                  <span\n                    key={a.initials}\n                    className={`flex h-8 w-8 items-center justify-center rounded-full border-2 border-slate-950 bg-gradient-to-br ${a.className} text-[0.65rem] font-bold text-slate-950`}\n                  >\n                    {a.initials}\n                  </span>\n                ))}\n              </div>\n              <div className=\"flex items-center gap-2 text-sm text-slate-300\">\n                <span className=\"flex\" role=\"img\" aria-label=\"Rated 4.9 out of 5 stars\">\n                  {[0, 1, 2, 3, 4].map((i) => (\n                    <StarIcon key={i} className=\"h-4 w-4 text-amber-400\" />\n                  ))}\n                </span>\n                <span>\n                  <strong className=\"font-semibold text-white\">4.9/5</strong> from 2,400+ reviews\n                </span>\n              </div>\n            </div>\n\n            <p className=\"mt-8 text-xs font-medium uppercase tracking-widest text-slate-500\">\n              Trusted by data teams at fast-growing companies\n            </p>\n            <ul className=\"mx-auto mt-6 grid max-w-4xl grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-6\">\n              {LOGOS.map((logo) => (\n                <li\n                  key={logo.name}\n                  className=\"flex items-center justify-center gap-2 text-slate-400 transition-colors hover:text-slate-200\"\n                >\n                  {logo.mark}\n                  <span className=\"text-sm font-semibold tracking-tight\">{logo.name}</span>\n                </li>\n              ))}\n            </ul>\n          </div>\n        </section>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

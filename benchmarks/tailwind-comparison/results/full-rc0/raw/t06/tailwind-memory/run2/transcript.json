@@ -1,0 +1,220 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Auth flow — login with password + OTP step in a stacked dialog.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files to match conventions."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01EwNviaXYzvA5gRH4CcS5z1",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BEuuHau1R6EChnsaZaUnmw",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EwNviaXYzvA5gRH4CcS5z1",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BEuuHau1R6EChnsaZaUnmw",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01DX6YyUGqruCp4M3AXgXHWR",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01E9mmwCCcnYcvDm4GfUQMVB",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011tPWHm29zUb5p9dAXxCEyL",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DX6YyUGqruCp4M3AXgXHWR",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01E9mmwCCcnYcvDm4GfUQMVB",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011tPWHm29zUb5p9dAXxCEyL",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_019BbsRraZjrz5RfHzWmfKsm",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CN6EAUXpLzatTy1FWjq8t6",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0117CAtT3d2ugKfTPwAgrGvq",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019BbsRraZjrz5RfHzWmfKsm",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CN6EAUXpLzatTy1FWjq8t6",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0117CAtT3d2ugKfTPwAgrGvq",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build a page with a background app shell and stacked login/OTP dialogs using native `<dialog>` with `showModal()` for focus trapping and stacking, plus a 6-box OTP input with paste, auto-advance, and backspace support, resend countdown, and error states.",
+          "signature": "CAQSygkKEQgSGAI4AUIJbmFycmF0aW9uEgzlmlzUC1JyPADzy6kaDGHi6y5TlxwcGmtutyIwfB3J3HzIhgZ49Cxcvlo1g5CMTtOI3zJa1FtliyyKSPJEm9VU0eZUMZ7CBAk4SsE6KuYIH8GEh73yG+Agp5BGVMqlbez2U49dVDMwzvTAapqBDsAeK+rloOswSJGMzZziP8tquBUvUGa/DTtG53giLI5usRTjDM+7pkByN15JzeiRGa6OVZ4kOQQn4Xf1ycCcd82YDLN/k01oohbwkLYQ1irTBodoz4WdzCn2XwdjBsW3Amlw53QRSwGsPqMAXtejHM5pkdbLgpm0cVmkfH04sFtviPJz07n68hKlsPxMflxLmjz5aGEp3NeHiTEl65DsVnHdBGlrrNDZxcPLG2w2PPzd+F1hrwxvJGYxfcWkNCVFV+Q0VmjYCcUSzh91Hph2oJFyjGDaXtj1cVz9fr0gkT2VPKXSkDNsbrDSH/E+VPHLjxQ784/1VnOHHynH/l6TyeTWKe0GifZrTD8uwwEqZN2qAR5NMnBBRKluOMxGQ7TjkkB0J0PQ7nYWAqEnwvJ89a5YJvg4NcmEntJvwOS+zRg5wSodk6xmvULc6O5B/HkfFrmZ/a6a78DSLP93Hq8roT5+kTpipBRmZr7ZhFN4D19kbluAZahdcw2xc/TIX7FSGFUL3H4F1P2HrYC3BmtnoGmkZIKoi/6IqjepzptTzHKrQ+0uGLCcK2c8JW+NZQwM+Cj1H57Mij3mFy0LR2F2jAeqowdpXowQ9sGk8qk6HB2K04fagGMFNkI0hYod9HiU44kAh3B9YVhRnlzlPJ4RhjZEAl+ySpC/pW58QfiNzwBgqtFaD8JfdI143bvtG+xlKBG2OCg1GYjktOISvrhBsXDVrYsQqRNfhIe0/2WXPLNJwiwcnoSy60bOcKWMMHrjCfTPifo9OgpM5Y43gfX+Nid8+h5jDZ3z5axLtNaq592S+HmA4W2ds6IVW4uOqRo7aFajY3QPUNYIBrHr1KVXb2LbRvgLiOTF64vvFQV1icDsw6m4XPyLx0Aew3eNlinr7IobplB3OoHOIOtnejCb95Z2JMu/uyBTpf9uaiy3cmBoMOX6Dq2cVD2K5LVUTfuEwyg/vUhm7v/HoaFQOOWaXMIB09pYpROYIiUdgRYjsuPssdpEUwl49SWYMRn13K5bqs4AKKhEzuTnMGabdyeuNkicTHjKaqustAU37x67JghjBY+fiKp9hmD8CBxcfj6bOKCUZnjBhHHWBwmz1FS3/HgtmPGwFar7174PM2WS/Rt73IQfnUgW93WKMgFG860yDT17uMQkg4FbLFl9Z1C/fYONDkfZRukPfjlQypo/tl2QfS0IQAXsLg+qsMSAaJJhiOF0kpx/uMai/0ibKe5bayERcFsYOkldyCnytxW4wcMEa4pbyzcWIN718dRpCPzUgElwW7TWRxUGvv+gIPix3oYJC2LTMl9BDIHwqGm5WR6KaCsxhzKADtdBOnhwBRmUoYiPU7DBiY+mKQjSrdMrUjkHm8znhMDLL27tK/8sGkYX4If9Z1h28Ass5Zmg3CNQgBlAMSU3ZgoPfEfTWyRmuIKx+DbRRjFUa9CTet/b2ln+6x0Cq7KdGxgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WCNnQ8EA9pLFXVfd1fiZsh",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WCNnQ8EA9pLFXVfd1fiZsh",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport {\n  useCallback,\n  useEffect,\n  useId,\n  useRef,\n  useState,\n  type ChangeEvent,\n  type ClipboardEvent,\n  type FormEvent,\n  type KeyboardEvent,\n  type SyntheticEvent,\n} from \"react\";\nimport {\n  AlertCircle,\n  ArrowLeft,\n  BarChart3,\n  Bell,\n  CheckCircle2,\n  Eye,\n  EyeOff,\n  KeyRound,\n  Loader2,\n  LogOut,\n  Mail,\n  ShieldCheck,\n  Users,\n  Wallet,\n  X,\n} from \"lucide-react\";\n\n/* ----------------------------- placeholder data ---------------------------- */\n\nconst DEMO_EMAIL = \"amara.okafor@northwind.example\";\nconst DEMO_PASSWORD = \"Harbor-Lantern-42\";\nconst DEMO_OTP = \"482916\";\nconst OTP_LENGTH = 6;\nconst RESEND_SECONDS = 30;\n\nconst STATS = [\n  { label: \"Monthly revenue\", value: \"$48,920\", delta: \"+12.4%\", icon: Wallet },\n  { label: \"Active customers\", value: \"2,318\", delta: \"+4.1%\", icon: Users },\n  { label: \"Conversion rate\", value: \"3.62%\", delta: \"+0.3%\", icon: BarChart3 },\n];\n\nconst ACTIVITY = [\n  { who: \"Priya Raman\", what: \"upgraded to the Team plan\", when: \"4 min ago\" },\n  { who: \"Lukas Weber\", what: \"paid invoice #INV-2048\", when: \"22 min ago\" },\n  { who: \"Sofia Alvarez\", what: \"opened a support ticket\", when: \"1 hr ago\" },\n  { who: \"Daniel Kim\", what: \"invited 3 teammates\", when: \"3 hr ago\" },\n];\n\ntype Step = \"closed\" | \"password\" | \"otp\" | \"done\";\n\nfunction maskEmail(email: string): string {\n  const [name, domain] = email.split(\"@\");\n  if (!name || !domain) return email;\n  return `${name.slice(0, 2)}${\"•\".repeat(Math.max(name.length - 2, 2))}@${domain}`;\n}\n\nconst wait = (ms: number) =>\n  new Promise<void>((resolve) => setTimeout(resolve, ms));\n\n/* ---------------------------------- page ----------------------------------- */\n\nexport default function Page() {\n  const [step, setStep] = useState<Step>(\"closed\");\n\n  // password step\n  const [email, setEmail] = useState(DEMO_EMAIL);\n  const [password, setPassword] = useState(\"\");\n  const [showPassword, setShowPassword] = useState(false);\n  const [passwordError, setPasswordError] = useState<string | null>(null);\n  const [passwordLoading, setPasswordLoading] = useState(false);\n\n  // otp step\n  const [digits, setDigits] = useState<string[]>(\n    Array.from({ length: OTP_LENGTH }, () => \"\"),\n  );\n  const [otpError, setOtpError] = useState<string | null>(null);\n  const [otpLoading, setOtpLoading] = useState(false);\n  const [resendIn, setResendIn] = useState(RESEND_SECONDS);\n  const [resentNotice, setResentNotice] = useState(false);\n\n  const passwordDialogRef = useRef<HTMLDialogElement>(null);\n  const otpDialogRef = useRef<HTMLDialogElement>(null);\n  const otpRefs = useRef<Array<HTMLInputElement | null>>([]);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const emailRef = useRef<HTMLInputElement>(null);\n\n  const ids = {\n    passwordTitle: useId(),\n    passwordDesc: useId(),\n    otpTitle: useId(),\n    otpDesc: useId(),\n    emailField: useId(),\n    passwordField: useId(),\n    passwordErr: useId(),\n    otpErr: useId(),\n  };\n\n  /* Sync the native dialogs with the step state. Opening the OTP dialog after\n     the password dialog puts it above in the top layer => a real stacked dialog. */\n  useEffect(() => {\n    const pw = passwordDialogRef.current;\n    const otp = otpDialogRef.current;\n    if (!pw || !otp) return;\n\n    const wantPassword = step === \"password\" || step === \"otp\";\n    const wantOtp = step === \"otp\";\n\n    if (wantPassword && !pw.open) pw.showModal();\n    if (!wantPassword && pw.open) pw.close();\n\n    if (wantOtp && !otp.open) {\n      otp.showModal();\n      otpRefs.current[0]?.focus();\n    }\n    if (!wantOtp && otp.open) otp.close();\n  }, [step]);\n\n  // Return focus to the trigger when the whole flow closes.\n  const previousStep = useRef<Step>(\"closed\");\n  useEffect(() => {\n    if (previousStep.current !== \"closed\" && step === \"closed\") {\n      triggerRef.current?.focus();\n    }\n    previousStep.current = step;\n  }, [step]);\n\n  // Resend countdown\n  useEffect(() => {\n    if (step !== \"otp\" || resendIn <= 0) return;\n    const id = window.setTimeout(() => setResendIn((s) => s - 1), 1000);\n    return () => window.clearTimeout(id);\n  }, [step, resendIn]);\n\n  const openFlow = () => {\n    setPassword(\"\");\n    setPasswordError(null);\n    setShowPassword(false);\n    setStep(\"password\");\n  };\n\n  const closeAll = useCallback(() => {\n    setStep(\"closed\");\n    setPasswordLoading(false);\n    setOtpLoading(false);\n  }, []);\n\n  const resetOtp = () => {\n    setDigits(Array.from({ length: OTP_LENGTH }, () => \"\"));\n    setOtpError(null);\n    setResentNotice(false);\n  };\n\n  /* ------------------------------ password step ----------------------------- */\n\n  const onPasswordSubmit = async (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    if (passwordLoading) return;\n\n    if (!email.trim() || !/^\\S+@\\S+\\.\\S+$/.test(email.trim())) {\n      setPasswordError(\"Enter a valid work email address.\");\n      emailRef.current?.focus();\n      return;\n    }\n    if (password.length === 0) {\n      setPasswordError(\"Enter your password to continue.\");\n      return;\n    }\n\n    setPasswordError(null);\n    setPasswordLoading(true);\n    await wait(900);\n    setPasswordLoading(false);\n\n    if (password !== DEMO_PASSWORD) {\n      setPasswordError(\"That email and password combination doesn't match.\");\n      return;\n    }\n\n    resetOtp();\n    setResendIn(RESEND_SECONDS);\n    setStep(\"otp\");\n  };\n\n  /* -------------------------------- otp step -------------------------------- */\n\n  const focusDigit = (i: number) => {\n    const el = otpRefs.current[Math.max(0, Math.min(OTP_LENGTH - 1, i))];\n    el?.focus();\n    el?.select();\n  };\n\n  const verify = async (code: string) => {\n    setOtpLoading(true);\n    setOtpError(null);\n    await wait(900);\n    setOtpLoading(false);\n    if (code === DEMO_OTP) {\n      setStep(\"done\");\n    } else {\n      setOtpError(\"That code is incorrect or has expired. Try again.\");\n      setDigits(Array.from({ length: OTP_LENGTH }, () => \"\"));\n      requestAnimationFrame(() => focusDigit(0));\n    }\n  };\n\n  const onDigitChange = (i: number, e: ChangeEvent<HTMLInputElement>) => {\n    const raw = e.target.value.replace(/\\D/g, \"\");\n    if (!raw) {\n      setDigits((d) => d.map((v, idx) => (idx === i ? \"\" : v)));\n      return;\n    }\n    // Handles typing and autofill (multiple chars) alike.\n    const next = [...digits];\n    raw\n      .slice(0, OTP_LENGTH - i)\n      .split(\"\")\n      .forEach((ch, k) => {\n        next[i + k] = ch;\n      });\n    setDigits(next);\n    setOtpError(null);\n    const lastFilled = Math.min(i + raw.length, OTP_LENGTH - 1);\n    focusDigit(lastFilled);\n    if (next.every(Boolean)) void verify(next.join(\"\"));\n  };\n\n  const onDigitKeyDown = (i: number, e: KeyboardEvent<HTMLInputElement>) => {\n    if (e.key === \"Backspace\" && !digits[i] && i > 0) {\n      e.preventDefault();\n      setDigits((d) => d.map((v, idx) => (idx === i - 1 ? \"\" : v)));\n      focusDigit(i - 1);\n    } else if (e.key === \"ArrowLeft\") {\n      e.preventDefault();\n      focusDigit(i - 1);\n    } else if (e.key === \"ArrowRight\") {\n      e.preventDefault();\n      focusDigit(i + 1);\n    }\n  };\n\n  const onDigitPaste = (e: ClipboardEvent<HTMLInputElement>) => {\n    const pasted = e.clipboardData.getData(\"text\").replace(/\\D/g, \"\");\n    if (!pasted) return;\n    e.preventDefault();\n    const next = Array.from({ length: OTP_LENGTH }, (_, k) => pasted[k] ?? \"\");\n    setDigits(next);\n    setOtpError(null);\n    focusDigit(Math.min(pasted.length, OTP_LENGTH - 1));\n    if (next.every(Boolean)) void verify(next.join(\"\"));\n  };\n\n  const onOtpSubmit = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    if (otpLoading) return;\n    const code = digits.join(\"\");\n    if (code.length < OTP_LENGTH) {\n      setOtpError(`Enter all ${OTP_LENGTH} digits of your code.`);\n      focusDigit(digits.findIndex((d) => !d));\n      return;\n    }\n    void verify(code);\n  };\n\n  const onResend = () => {\n    if (resendIn > 0) return;\n    setResendIn(RESEND_SECONDS);\n    setResentNotice(true);\n    setDigits(Array.from({ length: OTP_LENGTH }, () => \"\"));\n    setOtpError(null);\n    focusDigit(0);\n  };\n\n  const backToPassword = () => {\n    resetOtp();\n    setStep(\"password\");\n  };\n\n  /* Native dialog \"cancel\" (Esc): keep React state authoritative. The top-most\n     dialog handles it; Esc on OTP returns to password, Esc on password closes. */\n  const onOtpCancel = (e: SyntheticEvent<HTMLDialogElement>) => {\n    e.preventDefault();\n    backToPassword();\n  };\n  const onPasswordCancel = (e: SyntheticEvent<HTMLDialogElement>) => {\n    e.preventDefault();\n    if (step === \"otp\") return;\n    closeAll();\n  };\n\n  const stacked = step === \"otp\";\n\n  /* --------------------------------- render --------------------------------- */\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      {/* Backdrop styling for native dialogs (kept local to this page). */}\n      <style>{`\n        dialog.auth-dialog::backdrop { background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(2px); }\n        dialog.auth-dialog-top::backdrop { background: rgba(15, 23, 42, 0.35); backdrop-filter: none; }\n        @keyframes auth-pop { from { opacity: 0; transform: translateY(12px) scale(0.97); } to { opacity: 1; transform: none; } }\n        dialog.auth-dialog[open] > .auth-panel { animation: auth-pop 180ms ease-out; }\n        @media (prefers-reduced-motion: reduce) {\n          dialog.auth-dialog[open] > .auth-panel { animation: none; }\n          .auth-recede { transition: none !important; }\n        }\n      `}</style>\n\n      {/* ------------------------------ app shell ------------------------------ */}\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6\">\n          <div className=\"flex items-center gap-2.5\">\n            <span\n              aria-hidden=\"true\"\n              className=\"flex size-9 items-center justify-center rounded-lg bg-indigo-600 text-white\"\n            >\n              <BarChart3 className=\"size-5\" />\n            </span>\n            <span className=\"text-lg font-semibold tracking-tight\">\n              Northwind Ledger\n            </span>\n          </div>\n\n          {step === \"done\" ? (\n            <div className=\"flex items-center gap-3\">\n              <button\n                type=\"button\"\n                aria-label=\"Notifications\"\n                className=\"rounded-full p-2 text-slate-500 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n              >\n                <Bell className=\"size-5\" aria-hidden=\"true\" />\n              </button>\n              <button\n                type=\"button\"\n                onClick={closeAll}\n                className=\"inline-flex items-center gap-2 rounded-lg border border-slate-300 px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n              >\n                <LogOut className=\"size-4\" aria-hidden=\"true\" />\n                Sign out\n              </button>\n            </div>\n          ) : (\n            <button\n              ref={triggerRef}\n              type=\"button\"\n              onClick={openFlow}\n              className=\"rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n            >\n              Sign in\n            </button>\n          )}\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14\">\n        {step === \"done\" ? (\n          <section aria-labelledby=\"dash-title\">\n            <div\n              role=\"status\"\n              className=\"mb-8 flex items-start gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4 text-emerald-900\"\n            >\n              <CheckCircle2\n                className=\"mt-0.5 size-5 shrink-0 text-emerald-600\"\n                aria-hidden=\"true\"\n              />\n              <p className=\"text-sm\">\n                Signed in as <strong>{email}</strong>. Two-step verification\n                completed.\n              </p>\n            </div>\n\n            <h1\n              id=\"dash-title\"\n              className=\"text-2xl font-semibold tracking-tight sm:text-3xl\"\n            >\n              Welcome back, Amara\n            </h1>\n            <p className=\"mt-1 text-slate-600\">\n              Here&apos;s how Northwind is doing this month.\n            </p>\n\n            <ul className=\"mt-8 grid gap-4 sm:grid-cols-3\">\n              {STATS.map(({ label, value, delta, icon: Icon }) => (\n                <li\n                  key={label}\n                  className=\"rounded-xl border border-slate-200 bg-white p-5 shadow-sm\"\n                >\n                  <div className=\"flex items-center justify-between text-slate-500\">\n                    <span className=\"text-sm\">{label}</span>\n                    <Icon className=\"size-5\" aria-hidden=\"true\" />\n                  </div>\n                  <p className=\"mt-3 text-3xl font-semibold tracking-tight\">\n                    {value}\n                  </p>\n                  <p className=\"mt-1 text-sm font-medium text-emerald-600\">\n                    {delta} vs last month\n                  </p>\n                </li>\n              ))}\n            </ul>\n\n            <div className=\"mt-8 rounded-xl border border-slate-200 bg-white shadow-sm\">\n              <h2 className=\"border-b border-slate-200 px-5 py-4 text-base font-semibold\">\n                Recent activity\n              </h2>\n              <ul className=\"divide-y divide-slate-100\">\n                {ACTIVITY.map((a) => (\n                  <li\n                    key={a.who}\n                    className=\"flex flex-col gap-0.5 px-5 py-3.5 sm:flex-row sm:items-center sm:justify-between\"\n                  >\n                    <p className=\"text-sm\">\n                      <span className=\"font-medium\">{a.who}</span>{\" \"}\n                      <span className=\"text-slate-600\">{a.what}</span>\n                    </p>\n                    <p className=\"text-xs text-slate-500\">{a.when}</p>\n                  </li>\n                ))}\n              </ul>\n            </div>\n          </section>\n        ) : (\n          <section\n            aria-labelledby=\"hero-title\"\n            className=\"mx-auto max-w-2xl py-8 text-center sm:py-16\"\n          >\n            <span\n              aria-hidden=\"true\"\n              className=\"mx-auto flex size-14 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-600\"\n            >\n              <ShieldCheck className=\"size-7\" />\n            </span>\n            <h1\n              id=\"hero-title\"\n              className=\"mt-6 text-3xl font-semibold tracking-tight text-balance sm:text-4xl\"\n            >\n              Your books, secured with two-step verification\n            </h1>\n            <p className=\"mt-4 text-base text-slate-600 text-pretty sm:text-lg\">\n              Sign in with your password, then confirm with a one-time code to\n              reach your invoices, payouts and reports.\n            </p>\n            <button\n              type=\"button\"\n              onClick={openFlow}\n              className=\"mt-8 inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-6 py-3 text-base font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n            >\n              <KeyRound className=\"size-5\" aria-hidden=\"true\" />\n              Sign in to your workspace\n            </button>\n\n            <div className=\"mx-auto mt-10 max-w-md rounded-xl border border-dashed border-slate-300 bg-white p-4 text-left text-sm text-slate-600\">\n              <p className=\"font-medium text-slate-800\">Demo credentials</p>\n              <dl className=\"mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1\">\n                <dt className=\"text-slate-500\">Password</dt>\n                <dd className=\"font-mono break-all\">{DEMO_PASSWORD}</dd>\n                <dt className=\"text-slate-500\">Code</dt>\n                <dd className=\"font-mono\">{DEMO_OTP}</dd>\n              </dl>\n            </div>\n          </section>\n        )}\n      </main>\n\n      {/* --------------------------- dialog 1: password --------------------------- */}\n      <dialog\n        ref={passwordDialogRef}\n        aria-labelledby={ids.passwordTitle}\n        aria-describedby={ids.passwordDesc}\n        onCancel={onPasswordCancel}\n        onClose={() => {\n          if (step === \"password\") closeAll();\n        }}\n        onClick={(e) => {\n          if (e.target === e.currentTarget && step === \"password\") closeAll();\n        }}\n        className=\"auth-dialog m-auto w-[calc(100%-2rem)] max-w-md bg-transparent p-0 text-slate-900 backdrop:bg-transparent\"\n      >\n        <div\n          className={`auth-panel auth-recede rounded-2xl bg-white p-6 shadow-2xl ring-1 ring-slate-900/5 transition-all duration-200 sm:p-8 ${\n            stacked ? \"scale-[0.94] opacity-60\" : \"\"\n          }`}\n          {...(stacked ? { inert: true } : {})}\n        >\n          <div className=\"flex items-start justify-between gap-4\">\n            <div className=\"flex items-center gap-3\">\n              <span\n                aria-hidden=\"true\"\n                className=\"flex size-10 items-center justify-center rounded-xl bg-indigo-100 text-indigo-600\"\n              >\n                <KeyRound className=\"size-5\" />\n              </span>\n              <div>\n                <h2\n                  id={ids.passwordTitle}\n                  className=\"text-xl font-semibold tracking-tight\"\n                >\n                  Sign in\n                </h2>\n                <p\n                  id={ids.passwordDesc}\n                  className=\"text-sm text-slate-600\"\n                >\n                  Step 1 of 2 · Enter your credentials\n                </p>\n              </div>\n            </div>\n            <button\n              type=\"button\"\n              onClick={closeAll}\n              aria-label=\"Close sign in dialog\"\n              className=\"-m-1 rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            >\n              <X className=\"size-5\" aria-hidden=\"true\" />\n            </button>\n          </div>\n\n          <form onSubmit={onPasswordSubmit} noValidate className=\"mt-6 space-y-4\">\n            <div>\n              <label\n                htmlFor={ids.emailField}\n                className=\"block text-sm font-medium text-slate-700\"\n              >\n                Work email\n              </label>\n              <div className=\"relative mt-1.5\">\n                <Mail\n                  className=\"pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400\"\n                  aria-hidden=\"true\"\n                />\n                <input\n                  ref={emailRef}\n                  id={ids.emailField}\n                  type=\"email\"\n                  autoComplete=\"username\"\n                  value={email}\n                  onChange={(e) => setEmail(e.target.value)}\n                  aria-invalid={passwordError ? true : undefined}\n                  aria-describedby={passwordError ? ids.passwordErr : undefined}\n                  className=\"block w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-2 focus:outline-indigo-600/30 aria-invalid:border-red-500 sm:text-sm\"\n                />\n              </div>\n            </div>\n\n            <div>\n              <label\n                htmlFor={ids.passwordField}\n                className=\"block text-sm font-medium text-slate-700\"\n              >\n                Password\n              </label>\n              <div className=\"relative mt-1.5\">\n                <input\n                  id={ids.passwordField}\n                  type={showPassword ? \"text\" : \"password\"}\n                  autoComplete=\"current-password\"\n                  autoFocus\n                  value={password}\n                  onChange={(e) => setPassword(e.target.value)}\n                  aria-invalid={passwordError ? true : undefined}\n                  aria-describedby={passwordError ? ids.passwordErr : undefined}\n                  placeholder=\"Enter your password\"\n                  className=\"block w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-3 pr-11 text-base text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-2 focus:outline-indigo-600/30 aria-invalid:border-red-500 sm:text-sm\"\n                />\n                <button\n                  type=\"button\"\n                  onClick={() => setShowPassword((s) => !s)}\n                  aria-label={showPassword ? \"Hide password\" : \"Show password\"}\n                  aria-pressed={showPassword}\n                  className=\"absolute right-1.5 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-slate-500 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n                >\n                  {showPassword ? (\n                    <EyeOff className=\"size-4\" aria-hidden=\"true\" />\n                  ) : (\n                    <Eye className=\"size-4\" aria-hidden=\"true\" />\n                  )}\n                </button>\n              </div>\n            </div>\n\n            <div aria-live=\"polite\">\n              {passwordError && (\n                <p\n                  id={ids.passwordErr}\n                  className=\"flex items-start gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700\"\n                >\n                  <AlertCircle\n                    className=\"mt-0.5 size-4 shrink-0\"\n                    aria-hidden=\"true\"\n                  />\n                  {passwordError}\n                </p>\n              )}\n            </div>\n\n            <button\n              type=\"submit\"\n              disabled={passwordLoading}\n              className=\"flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-70\"\n            >\n              {passwordLoading ? (\n                <>\n                  <Loader2 className=\"size-4 animate-spin\" aria-hidden=\"true\" />\n                  Checking…\n                </>\n              ) : (\n                \"Continue\"\n              )}\n            </button>\n          </form>\n\n          <p className=\"mt-5 text-center text-xs text-slate-500\">\n            Forgot your password? Contact your workspace admin.\n          </p>\n        </div>\n      </dialog>\n\n      {/* ------------------------------ dialog 2: OTP ----------------------------- */}\n      <dialog\n        ref={otpDialogRef}\n        aria-labelledby={ids.otpTitle}\n        aria-describedby={ids.otpDesc}\n        onCancel={onOtpCancel}\n        className=\"auth-dialog auth-dialog-top m-auto w-[calc(100%-2rem)] max-w-sm bg-transparent p-0 text-slate-900 backdrop:bg-transparent\"\n      >\n        <div className=\"auth-panel rounded-2xl bg-white p-6 shadow-2xl ring-1 ring-slate-900/5 sm:p-8\">\n          <div className=\"flex items-start justify-between gap-4\">\n            <button\n              type=\"button\"\n              onClick={backToPassword}\n              className=\"-ml-1 inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            >\n              <ArrowLeft className=\"size-4\" aria-hidden=\"true\" />\n              Back\n            </button>\n            <button\n              type=\"button\"\n              onClick={closeAll}\n              aria-label=\"Close verification dialog\"\n              className=\"-m-1 rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            >\n              <X className=\"size-5\" aria-hidden=\"true\" />\n            </button>\n          </div>\n\n          <div className=\"mt-3 text-center\">\n            <span\n              aria-hidden=\"true\"\n              className=\"mx-auto flex size-12 items-center justify-center rounded-full bg-indigo-100 text-indigo-600\"\n            >\n              <ShieldCheck className=\"size-6\" />\n            </span>\n            <h2\n              id={ids.otpTitle}\n              className=\"mt-4 text-xl font-semibold tracking-tight\"\n            >\n              Verify it&apos;s you\n            </h2>\n            <p id={ids.otpDesc} className=\"mt-1 text-sm text-slate-600\">\n              Step 2 of 2 · We sent a {OTP_LENGTH}-digit code to{\" \"}\n              <span className=\"font-medium text-slate-800\">\n                {maskEmail(email)}\n              </span>\n              .\n            </p>\n          </div>\n\n          <form onSubmit={onOtpSubmit} noValidate className=\"mt-6\">\n            <fieldset disabled={otpLoading} className=\"min-w-0\">\n              <legend className=\"sr-only\">\n                {OTP_LENGTH}-digit verification code\n              </legend>\n              <div className=\"flex justify-center gap-2 sm:gap-2.5\">\n                {digits.map((d, i) => (\n                  <input\n                    key={i}\n                    ref={(el) => {\n                      otpRefs.current[i] = el;\n                    }}\n                    type=\"text\"\n                    inputMode=\"numeric\"\n                    pattern=\"[0-9]*\"\n                    autoComplete={i === 0 ? \"one-time-code\" : \"off\"}\n                    maxLength={OTP_LENGTH}\n                    value={d}\n                    aria-label={`Digit ${i + 1} of ${OTP_LENGTH}`}\n                    aria-invalid={otpError ? true : undefined}\n                    aria-describedby={otpError ? ids.otpErr : undefined}\n                    onChange={(e) => onDigitChange(i, e)}\n                    onKeyDown={(e) => onDigitKeyDown(i, e)}\n                    onPaste={onDigitPaste}\n                    onFocus={(e) => e.currentTarget.select()}\n                    className=\"size-11 rounded-lg border border-slate-300 bg-white text-center text-xl font-semibold text-slate-900 focus:border-indigo-600 focus:outline-2 focus:outline-indigo-600/30 aria-invalid:border-red-500 disabled:opacity-60 sm:size-12\"\n                  />\n                ))}\n              </div>\n            </fieldset>\n\n            <div aria-live=\"polite\" className=\"mt-4 min-h-6 text-center\">\n              {otpError && (\n                <p\n                  id={ids.otpErr}\n                  className=\"inline-flex items-start gap-2 text-sm text-red-700\"\n                >\n                  <AlertCircle\n                    className=\"mt-0.5 size-4 shrink-0\"\n                    aria-hidden=\"true\"\n                  />\n                  {otpError}\n                </p>\n              )}\n              {!otpError && resentNotice && (\n                <p className=\"text-sm text-emerald-700\">\n                  A new code is on its way.\n                </p>\n              )}\n            </div>\n\n            <button\n              type=\"submit\"\n              disabled={otpLoading}\n              className=\"mt-2 flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:opacity-70\"\n            >\n              {otpLoading ? (\n                <>\n                  <Loader2 className=\"size-4 animate-spin\" aria-hidden=\"true\" />\n                  Verifying…\n                </>\n              ) : (\n                \"Verify and sign in\"\n              )}\n            </button>\n          </form>\n\n          <p className=\"mt-5 text-center text-sm text-slate-600\">\n            Didn&apos;t get it?{\" \"}\n            {resendIn > 0 ? (\n              <span className=\"tabular-nums text-slate-500\">\n                Resend in {resendIn}s\n              </span>\n            ) : (\n              <button\n                type=\"button\"\n                onClick={onResend}\n                className=\"rounded font-semibold text-indigo-600 underline-offset-2 hover:underline focus-visible:outline-2 focus-visible:outline-indigo-600\"\n              >\n                Resend code\n              </button>\n            )}\n          </p>\n        </div>\n      </dialog>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

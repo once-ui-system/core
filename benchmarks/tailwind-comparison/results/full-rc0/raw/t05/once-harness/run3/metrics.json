@@ -1,0 +1,35 @@
+{
+  "attempt": 2,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 194,
+    "chars": 5776,
+    "bytes": 5776,
+    "tokens_o200k": 1282,
+    "tokens_claudeLegacy": 1354,
+    "tokens_exact": 2008
+  },
+  "raw": {
+    "lines": 180,
+    "chars": 5872,
+    "bytes": 5872,
+    "tokens_o200k": 1331,
+    "tokens_claudeLegacy": 1420,
+    "tokens_exact": 2097
+  },
+  "components": [
+    "Background",
+    "Badge",
+    "Button",
+    "Column",
+    "Heading",
+    "Icon",
+    "IconName",
+    "LetterFx",
+    "Line",
+    "RevealFx",
+    "Row",
+    "Text",
+    "VisuallyHidden"
+  ]
+}

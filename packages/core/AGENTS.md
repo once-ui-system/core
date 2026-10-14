@@ -17,9 +17,9 @@ node_modules/@once-ui-system/core/ai/manifest.json
 ## Bootstrap workflow
 
 1. Read `ai/manifest.json`
-2. Load bootstrap files: `ai/rules.compact.md` + `ai/catalog.json` (~6KB)
-3. Match intent via `ai/tasks/index.json` → e.g. `ai/tasks/pricing.json`
-4. Fetch component slices listed in the task bundle (`ai/components/*.json`)
+2. Load bootstrap files: `ai/rules.compact.md` + `ai/catalog.json` (about 30KB together)
+3. Match intent via `ai/tasks/index.json`, then read that task's bundle, e.g. `ai/bundles/pricing.json`: the task with every component slice, type and gotcha it names, in one file
+4. Fetch a slice from `ai/components/*.json` only for a component the bundle does not have. Read what you need in one step; never open `spec.json` (it is for tooling)
 5. Read the gold example referenced by the task; for production fidelity, read Pro blocks from `ai/examples/blocks/manifest.json`
 6. Validate generated code: `npx once-ui-validate-ai-code path/to/file.tsx`
 

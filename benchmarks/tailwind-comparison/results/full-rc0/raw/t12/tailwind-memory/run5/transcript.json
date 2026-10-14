@@ -1,0 +1,220 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Feedback widget — floating trigger, dialog with rating chips, textarea, toast on submit.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GrFVv5xx89Knrz9wmtWwte",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Rco4hkM2qcyurF3AQFPNu9",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GrFVv5xx89Knrz9wmtWwte",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Rco4hkM2qcyurF3AQFPNu9",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_015mbkMqJ5rm1qiMt6syFprD",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DqqGtBChJkXcu3RjWWi8db",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HHvUxViobenL4nthckH15W",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015mbkMqJ5rm1qiMt6syFprD",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DqqGtBChJkXcu3RjWWi8db",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HHvUxViobenL4nthckH15W",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01QvdAsFJ9cDhyHPaEgj7n7c",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UebffdGrwFQeur3Pznucpf",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ULo31eXEWFebYQe6WWHUhy",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QvdAsFJ9cDhyHPaEgj7n7c",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UebffdGrwFQeur3Pznucpf",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ULo31eXEWFebYQe6WWHUhy",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build the page using a native `<dialog>` for built-in focus trapping, Escape handling, and top-layer rendering, with rating chips as a radio group, a textarea with character counter and validation, and a toast for submission feedback that auto-dismisses or can be closed manually, returning focus to the trigger on close.\n\n",
+          "signature": "CAQSpAoKEQgSGAI4AUIJbmFycmF0aW9uEgxefCq3TYPQUcszwSUaDEXhCm7xRbDd2iNUASIwbXqWQ8giiLhLykm3jnc3W1vU1qICnS8qSvie3CTQ10iO1wJFcKrHeKa1Do6Oal48KsAJX/IRkE0zYtZt386ibiaU+OspFg6eSQeQvsR1JlfKeTZebGXY+obMXW3GgVJdOI9WDVnxVi5MdyQroeuiLkUIHk5WbwBHsqP6mpsO3eWCFjLfjV+jWAWJCKCMCVnAYwjaZRfaDiit5Fq1WchtAH46xgHzoPI9wtM3HSM2p8HYVnItT1o00Ad6S1eliNabjAH6/s8Ss2grfYZ/yV7wEZpi6CFmtJscljIjnywLNUIiWB3UWYG8VLiGTcOrs8Rw7JdtZK9KAi0FoFH4tDl2I0cGCyvIiPA5y977FGLs2fuf+JPwaXV5rt4Xp5TSaGSu+IIEt9Kv57t7iR7xOb7i+t0mKXVRuT/nI8Lb38g0vwt7Y9bjYM8K080W3a7S9zo0eGLtk6PKctIXau5Q5Pli6U5wLRcwFRkXXcHQssXOUxIubTdbPzMTfEAB3hPmBDs0sJ5OH2o90VgSTgBzy5+9xGlYR4E8p8+YkmntpW0wJW3z3h3eGSt40f7qKVbihX9Hep9vWNbTT/5AVnodsAvhM+EKtMZw2a8HXI5AGcar0F+hBGgbocA8VhhPwzdrSd5YXZ4OtgQZoooZYZ49Ln12+r4gbLffpDNPJIcoL/Y4bjUcdCZ7eOLnUryhlHGo1wkmlXwFlwvNyxAnDQQ2wDiFhV2XMI4YrYOEcA7UAjM+o6BqkLsYjw1xkvoTd6YcOqaAWyra6UE2hfpzTT7wP/SBD1T2fByFJLTJCi0voptvLzxJ1wisbmtbnyIfLQkz4Tyo5u88nlgD2Br1h/yLM7dgXdzbQ5irSuOmdoe0mhuRVv7QXOMLiCOlc/OvVZ/CtXqIFzCUkOgCcXeheoCevNYnJS0ceoUE/YVMHIRlwFOLD2sOOh17/ZDt1076LMaskd6Fu2e9V9U2B0t+KAWevdzgAU0bKVwZmlI8xgyjtjSkMUPeJyvMjMT7XO/dMrz35eTGZKZ7L+PrN6X1gMQgW6TdFgj1hhy7RXJci/8f1nmFxQUu4KN8zl34fEs+GEKLvGYL3nEuNiQ1XVuvq94cbRtBgmlWWHXEd1d3TtuVDjw6FJ+48C09KXkuEgh3hx+oMUlz5F0ok9e52y6rNhNON5LgzJNw7RhIc+SOWm3EI28OzBRCXwixyNGgxaVQN+9qRzXw2EFBjElfDmzz8z0MmlpMwe2ZZ42P2Aw4Ec5uvlRsesqhXJWoYKJuJRVteTmg8qzpjMIAWw4hw/9UItblmyw+cbGStXh7xSiLzY2rMlsn1IE3ua7qc45dr7rn3kkH7p03BTcsrBiYbv7ktOf3ikm1xeLMSNIjezumILRDsvoLfsw2xwpFnyE7XPqOOGZqNZeS6LwvRo9sUH5Aijn/BQsn4jkcsDntkbh6rsQr3iN/fbGH8tNZDcSa0mTtzEbgH2ytF61//84tWCfw99DgO2YhV+p80cngCjgT4snXHS6O7KdRA8ODdfH/NCd8kmQQ3qbOX5+3dspIHCl1XrNesL9U94SHOmgQjLvYuqdRgFuxTtue+IgLYGTR5GxSDddU3BwtVcYQSKialxjcPHkXRr3vhX1TeK9/YGuZ80641TpiykWqSVgcx0E1wFJ7pP+iI9LEymyvXvQIFMdIZ2v9q6dALTV4yxgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XPxQyszB1eTKdc7nHcHT3j",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XPxQyszB1eTKdc7nHcHT3j",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { FormEvent } from \"react\";\nimport {\n  BarChart3,\n  Bell,\n  CheckCircle2,\n  FileText,\n  FolderKanban,\n  Loader2,\n  MessageSquareHeart,\n  Search,\n  Settings,\n  Users,\n  X,\n} from \"lucide-react\";\n\ntype Rating = {\n  value: number;\n  label: string;\n  emoji: string;\n};\n\nconst RATINGS: Rating[] = [\n  { value: 1, label: \"Frustrating\", emoji: \"😣\" },\n  { value: 2, label: \"Poor\", emoji: \"🙁\" },\n  { value: 3, label: \"Okay\", emoji: \"😐\" },\n  { value: 4, label: \"Good\", emoji: \"🙂\" },\n  { value: 5, label: \"Excellent\", emoji: \"🤩\" },\n];\n\nconst MAX_COMMENT = 500;\n\nconst NAV_ITEMS = [\n  { label: \"Projects\", icon: FolderKanban, active: true },\n  { label: \"Documents\", icon: FileText, active: false },\n  { label: \"Team\", icon: Users, active: false },\n  { label: \"Reports\", icon: BarChart3, active: false },\n  { label: \"Settings\", icon: Settings, active: false },\n];\n\nconst PROJECTS = [\n  {\n    name: \"Harbor Street Renovation\",\n    status: \"On track\",\n    due: \"Mar 28\",\n    progress: 72,\n    tone: \"bg-emerald-100 text-emerald-800\",\n  },\n  {\n    name: \"Q2 Field Survey\",\n    status: \"Needs review\",\n    due: \"Apr 04\",\n    progress: 48,\n    tone: \"bg-amber-100 text-amber-800\",\n  },\n  {\n    name: \"Riverside Permit Package\",\n    status: \"On track\",\n    due: \"Apr 16\",\n    progress: 31,\n    tone: \"bg-emerald-100 text-emerald-800\",\n  },\n  {\n    name: \"Westgate Soil Report\",\n    status: \"Blocked\",\n    due: \"Apr 22\",\n    progress: 15,\n    tone: \"bg-rose-100 text-rose-800\",\n  },\n];\n\nconst STATS = [\n  { label: \"Active projects\", value: \"12\" },\n  { label: \"Notes this week\", value: \"248\" },\n  { label: \"Open reviews\", value: \"7\" },\n];\n\ntype ToastState = { id: number; message: string } | null;\n\nexport default function Page() {\n  const dialogRef = useRef<HTMLDialogElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const textareaRef = useRef<HTMLTextAreaElement>(null);\n\n  const [rating, setRating] = useState<number | null>(null);\n  const [comment, setComment] = useState(\"\");\n  const [ratingError, setRatingError] = useState(false);\n  const [submitting, setSubmitting] = useState(false);\n  const [toast, setToast] = useState<ToastState>(null);\n\n  const ids = {\n    title: useId(),\n    desc: useId(),\n    ratingLabel: useId(),\n    ratingError: useId(),\n    comment: useId(),\n    counter: useId(),\n  };\n\n  const openDialog = useCallback(() => {\n    const dialog = dialogRef.current;\n    if (dialog && !dialog.open) dialog.showModal();\n  }, []);\n\n  const closeDialog = useCallback(() => {\n    const dialog = dialogRef.current;\n    if (dialog?.open) dialog.close();\n  }, []);\n\n  // Auto-dismiss toast.\n  useEffect(() => {\n    if (!toast) return;\n    const timer = window.setTimeout(() => setToast(null), 5000);\n    return () => window.clearTimeout(timer);\n  }, [toast]);\n\n  // Clean up any pending submit timer on unmount.\n  const submitTimer = useRef<number | null>(null);\n  useEffect(() => {\n    return () => {\n      if (submitTimer.current !== null) window.clearTimeout(submitTimer.current);\n    };\n  }, []);\n\n  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    if (submitting) return;\n    if (rating === null) {\n      setRatingError(true);\n      return;\n    }\n    setSubmitting(true);\n    // Simulated network request.\n    submitTimer.current = window.setTimeout(() => {\n      const chosen = RATINGS.find((r) => r.value === rating);\n      setSubmitting(false);\n      setRating(null);\n      setComment(\"\");\n      setRatingError(false);\n      closeDialog();\n      setToast({\n        id: Date.now(),\n        message: `Thanks! Your \"${chosen?.label ?? \"feedback\"}\" rating was sent to the Fieldnotes team.`,\n      });\n    }, 900);\n  };\n\n  const handleDialogClick = (event: React.MouseEvent<HTMLDialogElement>) => {\n    // Clicking the backdrop (the dialog element itself) closes it.\n    if (event.target === event.currentTarget && !submitting) closeDialog();\n  };\n\n  const remaining = MAX_COMMENT - comment.length;\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      {/* Top bar */}\n      <header className=\"sticky top-0 z-10 border-b border-slate-200 bg-white/90 backdrop-blur\">\n        <div className=\"mx-auto flex h-16 max-w-6xl items-center gap-3 px-4 sm:px-6\">\n          <div className=\"flex items-center gap-2 font-semibold tracking-tight\">\n            <span\n              aria-hidden=\"true\"\n              className=\"grid size-8 place-items-center rounded-lg bg-indigo-600 text-sm font-bold text-white\"\n            >\n              F\n            </span>\n            <span className=\"text-lg\">Fieldnotes</span>\n          </div>\n          <div className=\"relative ml-auto hidden w-full max-w-xs sm:block\">\n            <Search\n              aria-hidden=\"true\"\n              className=\"pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400\"\n            />\n            <label htmlFor=\"search\" className=\"sr-only\">\n              Search projects\n            </label>\n            <input\n              id=\"search\"\n              type=\"search\"\n              placeholder=\"Search projects\"\n              className=\"w-full rounded-lg border border-slate-200 bg-slate-50 py-2 pl-9 pr-3 text-sm placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200\"\n            />\n          </div>\n          <button\n            type=\"button\"\n            aria-label=\"Notifications\"\n            className=\"ml-auto rounded-lg p-2 text-slate-600 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:ml-0\"\n          >\n            <Bell aria-hidden=\"true\" className=\"size-5\" />\n          </button>\n          <div\n            aria-hidden=\"true\"\n            className=\"grid size-8 place-items-center rounded-full bg-slate-200 text-xs font-semibold text-slate-700\"\n          >\n            MR\n          </div>\n        </div>\n      </header>\n\n      <div className=\"mx-auto flex max-w-6xl gap-6 px-4 py-6 sm:px-6 sm:py-8\">\n        {/* Sidebar */}\n        <nav aria-label=\"Primary\" className=\"hidden w-52 shrink-0 md:block\">\n          <ul className=\"space-y-1\">\n            {NAV_ITEMS.map(({ label, icon: Icon, active }) => (\n              <li key={label}>\n                <a\n                  href=\"#\"\n                  aria-current={active ? \"page\" : undefined}\n                  className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${\n                    active\n                      ? \"bg-indigo-50 text-indigo-700\"\n                      : \"text-slate-600 hover:bg-slate-100\"\n                  }`}\n                >\n                  <Icon aria-hidden=\"true\" className=\"size-4\" />\n                  {label}\n                </a>\n              </li>\n            ))}\n          </ul>\n        </nav>\n\n        {/* Main */}\n        <main className=\"min-w-0 flex-1 pb-24\">\n          <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">\n            Projects\n          </h1>\n          <p className=\"mt-1 text-slate-600\">\n            Good morning, Maya. Four projects need your attention this week.\n          </p>\n\n          <dl className=\"mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4\">\n            {STATS.map((stat) => (\n              <div\n                key={stat.label}\n                className=\"rounded-xl border border-slate-200 bg-white p-4\"\n              >\n                <dt className=\"text-sm text-slate-600\">{stat.label}</dt>\n                <dd className=\"mt-1 text-2xl font-semibold\">{stat.value}</dd>\n              </div>\n            ))}\n          </dl>\n\n          <section aria-labelledby=\"recent-heading\" className=\"mt-8\">\n            <h2 id=\"recent-heading\" className=\"text-lg font-semibold\">\n              Recent projects\n            </h2>\n            <ul className=\"mt-3 divide-y divide-slate-200 overflow-hidden rounded-xl border border-slate-200 bg-white\">\n              {PROJECTS.map((project) => (\n                <li\n                  key={project.name}\n                  className=\"flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:gap-6\"\n                >\n                  <div className=\"min-w-0 flex-1\">\n                    <p className=\"truncate font-medium\">{project.name}</p>\n                    <p className=\"text-sm text-slate-600\">Due {project.due}</p>\n                  </div>\n                  <div className=\"flex items-center gap-3 sm:w-64\">\n                    <div\n                      role=\"progressbar\"\n                      aria-label={`${project.name} progress`}\n                      aria-valuemin={0}\n                      aria-valuemax={100}\n                      aria-valuenow={project.progress}\n                      className=\"h-2 flex-1 overflow-hidden rounded-full bg-slate-200\"\n                    >\n                      <div\n                        className=\"h-full rounded-full bg-indigo-600\"\n                        style={{ width: `${project.progress}%` }}\n                      />\n                    </div>\n                    <span className=\"w-9 text-right text-sm tabular-nums text-slate-600\">\n                      {project.progress}%\n                    </span>\n                  </div>\n                  <span\n                    className={`w-fit rounded-full px-2.5 py-1 text-xs font-medium ${project.tone}`}\n                  >\n                    {project.status}\n                  </span>\n                </li>\n              ))}\n            </ul>\n          </section>\n        </main>\n      </div>\n\n      {/* Floating trigger */}\n      <button\n        ref={triggerRef}\n        type=\"button\"\n        onClick={openDialog}\n        className=\"fixed bottom-4 right-4 z-20 inline-flex items-center gap-2 rounded-full bg-indigo-600 px-4 py-3 text-sm font-semibold text-white shadow-lg shadow-indigo-900/20 transition hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:bottom-6 sm:right-6\"\n      >\n        <MessageSquareHeart aria-hidden=\"true\" className=\"size-5\" />\n        <span>Feedback</span>\n      </button>\n\n      {/* Dialog */}\n      <dialog\n        ref={dialogRef}\n        aria-labelledby={ids.title}\n        aria-describedby={ids.desc}\n        onClick={handleDialogClick}\n        onCancel={(e) => {\n          if (submitting) e.preventDefault();\n        }}\n        onClose={() => {\n          setRatingError(false);\n        }}\n        className=\"m-auto w-[calc(100%-2rem)] max-w-lg rounded-2xl border border-slate-200 bg-white p-0 text-slate-900 shadow-2xl backdrop:bg-slate-900/50 backdrop:backdrop-blur-sm\"\n      >\n        <form onSubmit={handleSubmit} noValidate className=\"p-5 sm:p-6\">\n          <div className=\"flex items-start justify-between gap-4\">\n            <div>\n              <h2 id={ids.title} className=\"text-xl font-semibold tracking-tight\">\n                Share your feedback\n              </h2>\n              <p id={ids.desc} className=\"mt-1 text-sm text-slate-600\">\n                Tell us how Fieldnotes is working for you. It takes under a\n                minute.\n              </p>\n            </div>\n            <button\n              type=\"button\"\n              onClick={closeDialog}\n              disabled={submitting}\n              aria-label=\"Close feedback dialog\"\n              className=\"-mr-2 -mt-1 rounded-lg p-2 text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-2 focus-visible:outline-indigo-600 disabled:opacity-50\"\n            >\n              <X aria-hidden=\"true\" className=\"size-5\" />\n            </button>\n          </div>\n\n          <fieldset className=\"mt-5 min-w-0\">\n            <legend\n              id={ids.ratingLabel}\n              className=\"text-sm font-medium text-slate-800\"\n            >\n              How would you rate your experience?\n            </legend>\n            <div className=\"mt-2 grid grid-cols-5 gap-2\">\n              {RATINGS.map((r) => {\n                const checked = rating === r.value;\n                return (\n                  <label\n                    key={r.value}\n                    className={`relative flex cursor-pointer flex-col items-center gap-1 rounded-xl border px-1 py-3 text-center transition has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-indigo-600 ${\n                      checked\n                        ? \"border-indigo-600 bg-indigo-50 text-indigo-800 ring-1 ring-indigo-600\"\n                        : \"border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50\"\n                    }`}\n                  >\n                    <input\n                      type=\"radio\"\n                      name=\"rating\"\n                      value={r.value}\n                      checked={checked}\n                      onChange={() => {\n                        setRating(r.value);\n                        setRatingError(false);\n                      }}\n                      aria-describedby={ratingError ? ids.ratingError : undefined}\n                      className=\"sr-only\"\n                    />\n                    <span aria-hidden=\"true\" className=\"text-2xl leading-none\">\n                      {r.emoji}\n                    </span>\n                    <span className=\"text-[11px] font-medium leading-tight sm:text-xs\">\n                      <span aria-hidden=\"true\">{r.value}</span>\n                      <span className=\"sr-only\">\n                        {r.value} of 5,{\" \"}\n                      </span>\n                      <span className=\"hidden sm:inline\"> · </span>\n                      <span className=\"hidden sm:inline\">{r.label}</span>\n                      <span className=\"sr-only sm:hidden\">{r.label}</span>\n                    </span>\n                  </label>\n                );\n              })}\n            </div>\n            <p\n              id={ids.ratingError}\n              role={ratingError ? \"alert\" : undefined}\n              className={`mt-2 text-sm text-rose-700 ${ratingError ? \"\" : \"hidden\"}`}\n            >\n              Please choose a rating before sending.\n            </p>\n          </fieldset>\n\n          <div className=\"mt-5\">\n            <label\n              htmlFor={ids.comment}\n              className=\"text-sm font-medium text-slate-800\"\n            >\n              Anything you&apos;d like to add?{\" \"}\n              <span className=\"font-normal text-slate-500\">(optional)</span>\n            </label>\n            <textarea\n              ref={textareaRef}\n              id={ids.comment}\n              value={comment}\n              maxLength={MAX_COMMENT}\n              onChange={(e) => setComment(e.target.value)}\n              rows={4}\n              aria-describedby={ids.counter}\n              placeholder=\"e.g. Offline sync dropped a few of my site notes yesterday.\"\n              className=\"mt-2 block w-full resize-y rounded-xl border border-slate-300 bg-white px-3 py-2.5 text-sm placeholder:text-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200\"\n            />\n            <p\n              id={ids.counter}\n              className={`mt-1 text-right text-xs tabular-nums ${\n                remaining < 50 ? \"text-amber-700\" : \"text-slate-600\"\n              }`}\n            >\n              {remaining} characters left\n            </p>\n          </div>\n\n          <div className=\"mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\">\n            <button\n              type=\"button\"\n              onClick={closeDialog}\n              disabled={submitting}\n              className=\"rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-50\"\n            >\n              Cancel\n            </button>\n            <button\n              type=\"submit\"\n              disabled={submitting}\n              aria-busy={submitting}\n              className=\"inline-flex items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-400\"\n            >\n              {submitting ? (\n                <>\n                  <Loader2 aria-hidden=\"true\" className=\"size-4 animate-spin\" />\n                  Sending…\n                </>\n              ) : (\n                \"Send feedback\"\n              )}\n            </button>\n          </div>\n        </form>\n      </dialog>\n\n      {/* Toast live region (always mounted so announcements are reliable) */}\n      <div\n        role=\"status\"\n        aria-live=\"polite\"\n        className=\"pointer-events-none fixed inset-x-4 bottom-20 z-30 flex justify-center sm:inset-x-auto sm:bottom-24 sm:right-6 sm:justify-end\"\n      >\n        {toast && (\n          <div\n            key={toast.id}\n            className=\"pointer-events-auto flex w-full max-w-sm items-start gap-3 rounded-xl border border-emerald-200 bg-white p-4 shadow-xl\"\n          >\n            <CheckCircle2\n              aria-hidden=\"true\"\n              className=\"mt-0.5 size-5 shrink-0 text-emerald-600\"\n            />\n            <p className=\"flex-1 text-sm text-slate-800\">{toast.message}</p>\n            <button\n              type=\"button\"\n              onClick={() => setToast(null)}\n              aria-label=\"Dismiss notification\"\n              className=\"-mr-1 -mt-1 rounded-md p-1 text-slate-500 hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n            >\n              <X aria-hidden=\"true\" className=\"size-4\" />\n            </button>\n          </div>\n        )}\n      </div>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

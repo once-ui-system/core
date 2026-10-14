@@ -13,6 +13,9 @@
       "!ai/manifest.json",
       "!ai/spec.json",
       "!ai/components",
+      "!ai/bundles",
+      "!ai/tokens.json",
+      "!ai/functions.json",
       "!src/data/emoji-data.json"
     ]
   },

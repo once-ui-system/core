@@ -1,0 +1,302 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Analytics dashboard — KPI stat cards (trend indicators), a line chart, a bar chart, recent-activity list.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the project to see what exists."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01E4x2Au8XkiadkcerKEBjZE",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DidyWFC5bGaVcoDtxfy1Sx",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01E4x2Au8XkiadkcerKEBjZE",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DidyWFC5bGaVcoDtxfy1Sx",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Fhm3YbL8iMayvTdGcqvDj9",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013UoNn6yAvztkFTCoNbDP6S",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NGPQ6v6FncUuMhnbPbNYBn",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Fhm3YbL8iMayvTdGcqvDj9",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013UoNn6yAvztkFTCoNbDP6S",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NGPQ6v6FncUuMhnbPbNYBn",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01UKqqHMJCvGBiJATWgQUTxq",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GSkmw3XEVVGNqUxapWrSFP",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LDF9rwH9eMBhGDtm3wu4ku",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015RS873SXP3QkBwUxwq9nZS",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Y5KFoRAUa1hsu6EoXCPRvH",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UKqqHMJCvGBiJATWgQUTxq",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GSkmw3XEVVGNqUxapWrSFP",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LDF9rwH9eMBhGDtm3wu4ku",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015RS873SXP3QkBwUxwq9nZS",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Y5KFoRAUa1hsu6EoXCPRvH",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check whether the Once UI package is installed so I can verify the component APIs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015QNDZx7EerrpHtoLM1DDh1",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01YJuUZdBitdZvehyfdk4965",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015QNDZx7EerrpHtoLM1DDh1",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01YJuUZdBitdZvehyfdk4965",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since it's not installed, I'll stick to well-known Once UI components (Flex, Column, Row, Grid, Text, Heading, Icon, Badge, Avatar, Line, Tag) with widely-used props, using inline SVG for charts and CSS variables for theme-consistent colors.",
+          "signature": "CAQS8gcKEQgSGAI4AUIJbmFycmF0aW9uEgyP3YzNd5Ovk1g/XVgaDEx4GUkSOz91p9TmLCIwtPkhCGFOplwyeISUNWN66nELnpiElw/ZgojWg096fnKUxqqyIpmHq/gvoAhfWtR1Ko4HtD5c6dnT0HJHVBIQxFrXPlYlzFkZArU6Mil2RKHkCLNeFY6ruEvfePcssm6BlZcC70nVRSWig62rA590axgEaH9cz89UZtUOEn1eu9AlOrndu6Jfib54KddHYsCFNQ9Qz/TU3CQztdnQ3Acn7R6py2ZjLDDD2QnjBrXkLWPac4wkQfjwlVT8CzIe5i7P+w9ixBUbn9kGLKM9zin0lhrKCO+RcAsDTnDcUPDTHPdl0D5QtwXttDw+6HVnJ5L4qaBPhM16SvAyoG2lYRbFbxlWdoVpGX5Bwqt9BVuTwthi+6O5SRMGmVb5DnnILn15iU3W0Ja+/+ZnKdVilmibKNnLXfaYf2d9u0S2VJlCGj4HEYWtCREU/ad97+Rz4+mx7aaOkOJGPCpNhi/gE9ZXihErG/JEcg27ltNETp3XRBhSvuKXT4eyBf1KsLe0r2ZlX6Em/10oHEkhct0Y7uaD1qODfH9/sD25v192hq3QSrtgpeFw6i9YLfeFl3jxYuS2PcpgVcQ0LV9iC6PRJmF5jU/YpJHvnGU7vQcT0yE+FL6gujmELS6glTOw06z9xc4R5Y+fpKYXl5dp08FhWYW3tyVtViOg2DKedpAyykBnYFJUlLnJk7QS5VldwAHyWisnWvnDzvbELhQrwLWGjP9Es4j7NTPhqkWAFx6fr//YOfaUZ1NoY6Eu+Tn9IQ4CRS5ztrgEEAFEEwYhNMcdSFpJcDZgCG+HKZrVWmN4traP15BcgIdcd5B6qUBillEBfhnq3d1UvR6gWIKAqKf1rtmi+A+YX2pEz0SvjNaNmRYlsjGAN/GYYB+lj5IoFI0VztxEDVzZmnCUHqP5ud/2RE35uQRyUqSat30o2WivzMNEXNW8IdS8fxjkezfJ6vrQIuLXL1X++yTFoV+zvby6tFSB00mPTtMX3BCqVOliZEe0Avj7xpPcsWvaOgRd1bsDEvIUUPYOixxHhPgQx3mOl8RpYoo3aCJgKzkxZvMUHL/xffDNmZcGijiud1t5E/r13j+9RTxhfx2YdXQWL8xoDaEQZGHeO+1eG1GRQWMEoyt4THnvI3pxO9iMcu9YUF5zFGSOuHJ+GJ9/1taJ9oJMAGA0qvc5d7nChqpaJyuViK1j5Je+wda1GNtYfMyUASFM/yaSllUpHGbHkO9Bh5+WskhQL5Yxlsu3pnf/fOiePppVYeCHVu9pJXCytqIZbcvjI8c8thgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0143y5Ki8mtaPAhvWdpBs49a",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0143y5Ki8mtaPAhvWdpBs49a",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useState } from \"react\";\nimport { Avatar, Column, Grid, Heading, Row, Text } from \"@once-ui-system/core\";\n\ntype Trend = \"up\" | \"down\";\n\ninterface Kpi {\n  id: string;\n  label: string;\n  value: string;\n  delta: string;\n  trend: Trend;\n  /** Whether an upward trend is good (false for e.g. bounce rate). */\n  upIsGood: boolean;\n  note: string;\n}\n\nconst KPIS: Kpi[] = [\n  { id: \"rev\", label: \"Monthly revenue\", value: \"$48,920\", delta: \"12.4%\", trend: \"up\", upIsGood: true, note: \"vs. previous 30 days\" },\n  { id: \"users\", label: \"Active users\", value: \"18,342\", delta: \"6.8%\", trend: \"up\", upIsGood: true, note: \"vs. previous 30 days\" },\n  { id: \"conv\", label: \"Conversion rate\", value: \"3.62%\", delta: \"0.4%\", trend: \"down\", upIsGood: true, note: \"vs. previous 30 days\" },\n  { id: \"bounce\", label: \"Bounce rate\", value: \"38.1%\", delta: \"2.1%\", trend: \"down\", upIsGood: false, note: \"vs. previous 30 days\" },\n];\n\nconst MONTHS = [\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"];\nconst VISITORS = [12400, 13250, 12980, 14600, 15900, 15200, 16800, 17450, 17100, 18900, 19800, 21300];\nconst SIGNUPS = [820, 910, 880, 1040, 1180, 1120, 1260, 1330, 1290, 1480, 1560, 1710];\n\ninterface Channel {\n  name: string;\n  value: number;\n}\n\nconst CHANNELS: Channel[] = [\n  { name: \"Organic\", value: 8420 },\n  { name: \"Direct\", value: 5130 },\n  { name: \"Referral\", value: 3260 },\n  { name: \"Social\", value: 2480 },\n  { name: \"Email\", value: 1910 },\n  { name: \"Paid\", value: 1540 },\n];\n\ninterface Activity {\n  id: string;\n  name: string;\n  action: string;\n  target: string;\n  time: string;\n}\n\nconst ACTIVITY: Activity[] = [\n  { id: \"a1\", name: \"Maya Chen\", action: \"upgraded to\", target: \"Business plan\", time: \"4 min ago\" },\n  { id: \"a2\", name: \"Daniel Okafor\", action: \"exported report\", target: \"Q3 Revenue Summary\", time: \"22 min ago\" },\n  { id: \"a3\", name: \"Sofia Alvarez\", action: \"invited 3 teammates to\", target: \"Growth workspace\", time: \"1 hr ago\" },\n  { id: \"a4\", name: \"Liam Novak\", action: \"canceled subscription\", target: \"Starter plan\", time: \"2 hr ago\" },\n  { id: \"a5\", name: \"Priya Raman\", action: \"created dashboard\", target: \"Campaign Performance\", time: \"3 hr ago\" },\n  { id: \"a6\", name: \"Tomás Rivera\", action: \"connected integration\", target: \"Stripe\", time: \"5 hr ago\" },\n];\n\nconst SERIES_COLORS = {\n  visitors: \"var(--brand-solid-strong, #4f6bed)\",\n  signups: \"var(--accent-solid-strong, #e8833a)\",\n  bars: \"var(--brand-solid-strong, #4f6bed)\",\n  grid: \"var(--neutral-alpha-medium, rgba(128,128,128,0.25))\",\n  axis: \"var(--neutral-on-background-weak, #888)\",\n};\n\nconst fmt = new Intl.NumberFormat(\"en-US\");\n\nfunction compact(n: number): string {\n  return n >= 1000 ? `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}k` : String(n);\n}\n\nfunction niceMax(max: number): number {\n  const pow = Math.pow(10, Math.floor(Math.log10(max)));\n  const n = max / pow;\n  const step = n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10;\n  return step * pow;\n}\n\nfunction Card({\n  children,\n  label,\n  as,\n}: {\n  children: React.ReactNode;\n  label?: string;\n  as?: \"section\" | \"div\";\n}) {\n  return (\n    <Column\n      as={as ?? \"div\"}\n      aria-label={label}\n      background=\"surface\"\n      border=\"neutral-alpha-weak\"\n      radius=\"l\"\n      padding=\"l\"\n      gap=\"16\"\n      fillWidth\n    >\n      {children}\n    </Column>\n  );\n}\n\nfunction TrendBadge({ kpi }: { kpi: Kpi }) {\n  const good = kpi.trend === \"up\" ? kpi.upIsGood : !kpi.upIsGood;\n  const color = good ? \"#1f9d55\" : \"#d64545\";\n  const bg = good ? \"rgba(31,157,85,0.14)\" : \"rgba(214,69,69,0.14)\";\n  const word = kpi.trend === \"up\" ? \"Up\" : \"Down\";\n  return (\n    <span\n      style={{\n        display: \"inline-flex\",\n        alignItems: \"center\",\n        gap: 4,\n        padding: \"2px 8px\",\n        borderRadius: 999,\n        background: bg,\n        color,\n        fontSize: 13,\n        fontWeight: 600,\n        whiteSpace: \"nowrap\",\n      }}\n    >\n      <svg width=\"12\" height=\"12\" viewBox=\"0 0 12 12\" aria-hidden=\"true\" focusable=\"false\">\n        <path\n          d={kpi.trend === \"up\" ? \"M6 2 L10.5 8.5 H1.5 Z\" : \"M6 10 L10.5 3.5 H1.5 Z\"}\n          fill=\"currentColor\"\n        />\n      </svg>\n      <span style={{ position: \"absolute\", width: 1, height: 1, overflow: \"hidden\", clip: \"rect(0 0 0 0)\" }}>\n        {word} {good ? \"(favorable)\" : \"(unfavorable)\"}\n      </span>\n      {kpi.delta}\n    </span>\n  );\n}\n\nfunction KpiCard({ kpi }: { kpi: Kpi }) {\n  return (\n    <Column\n      as=\"li\"\n      background=\"surface\"\n      border=\"neutral-alpha-weak\"\n      radius=\"l\"\n      padding=\"l\"\n      gap=\"8\"\n      fillWidth\n      style={{ listStyle: \"none\" }}\n    >\n      <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n        {kpi.label}\n      </Text>\n      <Row horizontal=\"between\" vertical=\"center\" gap=\"12\" wrap>\n        <Heading as=\"p\" variant=\"display-strong-xs\">\n          {kpi.value}\n        </Heading>\n        <TrendBadge kpi={kpi} />\n      </Row>\n      <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n        {kpi.note}\n      </Text>\n    </Column>\n  );\n}\n\nfunction LineChart() {\n  const uid = useId();\n  const [active, setActive] = useState<number | null>(null);\n  const W = 640;\n  const H = 280;\n  const m = { top: 16, right: 16, bottom: 28, left: 44 };\n  const iw = W - m.left - m.right;\n  const ih = H - m.top - m.bottom;\n  const yMax = niceMax(Math.max(...VISITORS));\n  const x = (i: number) => m.left + (i / (MONTHS.length - 1)) * iw;\n  const y = (v: number) => m.top + ih - (v / yMax) * ih;\n  const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => t * yMax);\n  const path = (data: number[], scale: number) =>\n    data.map((v, i) => `${i === 0 ? \"M\" : \"L\"}${x(i).toFixed(1)} ${y(v * scale).toFixed(1)}`).join(\" \");\n  // Signups are ~1/12 of visitors; scale them to share the axis, with a note in the legend.\n  const SCALE = 10;\n  const titleId = `${uid}-title`;\n  const descId = `${uid}-desc`;\n\n  return (\n    <Column gap=\"12\" fillWidth>\n      <Row gap=\"16\" wrap vertical=\"center\">\n        <LegendItem color={SERIES_COLORS.visitors} label=\"Visitors\" />\n        <LegendItem color={SERIES_COLORS.signups} label={`Signups (×${SCALE} scale)`} dashed />\n      </Row>\n      <div style={{ width: \"100%\", position: \"relative\" }}>\n        <svg\n          viewBox={`0 0 ${W} ${H}`}\n          role=\"img\"\n          aria-labelledby={`${titleId} ${descId}`}\n          style={{ width: \"100%\", height: \"auto\", display: \"block\", overflow: \"visible\" }}\n        >\n          <title id={titleId}>Visitors and signups by month</title>\n          <desc id={descId}>\n            Line chart. Visitors grew from {fmt.format(VISITORS[0])} in January to{\" \"}\n            {fmt.format(VISITORS[VISITORS.length - 1])} in December. Signups grew from{\" \"}\n            {fmt.format(SIGNUPS[0])} to {fmt.format(SIGNUPS[SIGNUPS.length - 1])}.\n          </desc>\n          {ticks.map((t) => (\n            <g key={t}>\n              <line x1={m.left} x2={W - m.right} y1={y(t)} y2={y(t)} stroke={SERIES_COLORS.grid} strokeWidth=\"1\" />\n              <text x={m.left - 8} y={y(t) + 4} textAnchor=\"end\" fontSize=\"11\" fill={SERIES_COLORS.axis}>\n                {compact(t)}\n              </text>\n            </g>\n          ))}\n          {MONTHS.map((mo, i) => (\n            <text key={mo} x={x(i)} y={H - 8} textAnchor=\"middle\" fontSize=\"11\" fill={SERIES_COLORS.axis}>\n              {mo}\n            </text>\n          ))}\n          <path d={path(VISITORS, 1)} fill=\"none\" stroke={SERIES_COLORS.visitors} strokeWidth=\"2.5\" strokeLinejoin=\"round\" strokeLinecap=\"round\" />\n          <path\n            d={path(SIGNUPS, SCALE)}\n            fill=\"none\"\n            stroke={SERIES_COLORS.signups}\n            strokeWidth=\"2.5\"\n            strokeDasharray=\"6 4\"\n            strokeLinejoin=\"round\"\n            strokeLinecap=\"round\"\n          />\n          {active !== null && (\n            <line x1={x(active)} x2={x(active)} y1={m.top} y2={m.top + ih} stroke={SERIES_COLORS.axis} strokeDasharray=\"3 3\" />\n          )}\n          {MONTHS.map((mo, i) => (\n            <g key={`pt-${mo}`}>\n              <circle cx={x(i)} cy={y(VISITORS[i])} r={active === i ? 5 : 3} fill={SERIES_COLORS.visitors} />\n              <circle cx={x(i)} cy={y(SIGNUPS[i] * SCALE)} r={active === i ? 5 : 3} fill={SERIES_COLORS.signups} />\n            </g>\n          ))}\n          {MONTHS.map((mo, i) => (\n            <rect\n              key={`hit-${mo}`}\n              x={x(i) - iw / (MONTHS.length - 1) / 2}\n              y={m.top}\n              width={iw / (MONTHS.length - 1)}\n              height={ih}\n              fill=\"transparent\"\n              onMouseEnter={() => setActive(i)}\n              onMouseLeave={() => setActive(null)}\n            />\n          ))}\n        </svg>\n      </div>\n      <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" aria-live=\"polite\">\n        {active !== null\n          ? `${MONTHS[active]}: ${fmt.format(VISITORS[active])} visitors, ${fmt.format(SIGNUPS[active])} signups`\n          : \"Hover over the chart for monthly detail.\"}\n      </Text>\n      <details>\n        <summary style={{ cursor: \"pointer\", fontSize: 13 }}>View data table</summary>\n        <div style={{ overflowX: \"auto\", marginTop: 8 }}>\n          <table style={{ borderCollapse: \"collapse\", width: \"100%\", fontSize: 13 }}>\n            <caption style={{ position: \"absolute\", width: 1, height: 1, overflow: \"hidden\", clip: \"rect(0 0 0 0)\" }}>\n              Monthly visitors and signups\n            </caption>\n            <thead>\n              <tr>\n                <th scope=\"col\" style={{ textAlign: \"left\", padding: \"4px 8px\" }}>Month</th>\n                <th scope=\"col\" style={{ textAlign: \"right\", padding: \"4px 8px\" }}>Visitors</th>\n                <th scope=\"col\" style={{ textAlign: \"right\", padding: \"4px 8px\" }}>Signups</th>\n              </tr>\n            </thead>\n            <tbody>\n              {MONTHS.map((mo, i) => (\n                <tr key={mo}>\n                  <th scope=\"row\" style={{ textAlign: \"left\", padding: \"4px 8px\", fontWeight: 500 }}>{mo}</th>\n                  <td style={{ textAlign: \"right\", padding: \"4px 8px\" }}>{fmt.format(VISITORS[i])}</td>\n                  <td style={{ textAlign: \"right\", padding: \"4px 8px\" }}>{fmt.format(SIGNUPS[i])}</td>\n                </tr>\n              ))}\n            </tbody>\n          </table>\n        </div>\n      </details>\n    </Column>\n  );\n}\n\nfunction LegendItem({ color, label, dashed }: { color: string; label: string; dashed?: boolean }) {\n  return (\n    <Row gap=\"8\" vertical=\"center\">\n      <svg width=\"24\" height=\"8\" aria-hidden=\"true\" focusable=\"false\">\n        <line x1=\"0\" x2=\"24\" y1=\"4\" y2=\"4\" stroke={color} strokeWidth=\"3\" strokeDasharray={dashed ? \"6 4\" : undefined} />\n      </svg>\n      <Text variant=\"label-default-s\">{label}</Text>\n    </Row>\n  );\n}\n\nfunction BarChart() {\n  const uid = useId();\n  const [active, setActive] = useState<number | null>(null);\n  const W = 640;\n  const H = 280;\n  const m = { top: 16, right: 16, bottom: 28, left: 44 };\n  const iw = W - m.left - m.right;\n  const ih = H - m.top - m.bottom;\n  const yMax = niceMax(Math.max(...CHANNELS.map((c) => c.value)));\n  const band = iw / CHANNELS.length;\n  const bw = Math.min(56, band * 0.6);\n  const y = (v: number) => m.top + ih - (v / yMax) * ih;\n  const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => t * yMax);\n  const total = CHANNELS.reduce((s, c) => s + c.value, 0);\n  const titleId = `${uid}-title`;\n  const descId = `${uid}-desc`;\n\n  return (\n    <Column gap=\"12\" fillWidth>\n      <svg\n        viewBox={`0 0 ${W} ${H}`}\n        role=\"img\"\n        aria-labelledby={`${titleId} ${descId}`}\n        style={{ width: \"100%\", height: \"auto\", display: \"block\" }}\n      >\n        <title id={titleId}>Sessions by acquisition channel</title>\n        <desc id={descId}>\n          Bar chart. {CHANNELS.map((c) => `${c.name}: ${fmt.format(c.value)}`).join(\"; \")}.\n        </desc>\n        {ticks.map((t) => (\n          <g key={t}>\n            <line x1={m.left} x2={W - m.right} y1={y(t)} y2={y(t)} stroke={SERIES_COLORS.grid} strokeWidth=\"1\" />\n            <text x={m.left - 8} y={y(t) + 4} textAnchor=\"end\" fontSize=\"11\" fill={SERIES_COLORS.axis}>\n              {compact(t)}\n            </text>\n          </g>\n        ))}\n        {CHANNELS.map((c, i) => {\n          const cx = m.left + band * i + band / 2;\n          const top = y(c.value);\n          return (\n            <g key={c.name}>\n              <rect\n                x={cx - bw / 2}\n                y={top}\n                width={bw}\n                height={m.top + ih - top}\n                rx=\"4\"\n                fill={SERIES_COLORS.bars}\n                opacity={active === null || active === i ? 1 : 0.45}\n                onMouseEnter={() => setActive(i)}\n                onMouseLeave={() => setActive(null)}\n              />\n              <text x={cx} y={H - 8} textAnchor=\"middle\" fontSize=\"11\" fill={SERIES_COLORS.axis}>\n                {c.name}\n              </text>\n            </g>\n          );\n        })}\n      </svg>\n      <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" aria-live=\"polite\">\n        {active !== null\n          ? `${CHANNELS[active].name}: ${fmt.format(CHANNELS[active].value)} sessions (${((CHANNELS[active].value / total) * 100).toFixed(1)}%)`\n          : `${fmt.format(total)} sessions in total. Hover a bar for its share.`}\n      </Text>\n      <details>\n        <summary style={{ cursor: \"pointer\", fontSize: 13 }}>View data table</summary>\n        <div style={{ overflowX: \"auto\", marginTop: 8 }}>\n          <table style={{ borderCollapse: \"collapse\", width: \"100%\", fontSize: 13 }}>\n            <caption style={{ position: \"absolute\", width: 1, height: 1, overflow: \"hidden\", clip: \"rect(0 0 0 0)\" }}>\n              Sessions by channel\n            </caption>\n            <thead>\n              <tr>\n                <th scope=\"col\" style={{ textAlign: \"left\", padding: \"4px 8px\" }}>Channel</th>\n                <th scope=\"col\" style={{ textAlign: \"right\", padding: \"4px 8px\" }}>Sessions</th>\n                <th scope=\"col\" style={{ textAlign: \"right\", padding: \"4px 8px\" }}>Share</th>\n              </tr>\n            </thead>\n            <tbody>\n              {CHANNELS.map((c) => (\n                <tr key={c.name}>\n                  <th scope=\"row\" style={{ textAlign: \"left\", padding: \"4px 8px\", fontWeight: 500 }}>{c.name}</th>\n                  <td style={{ textAlign: \"right\", padding: \"4px 8px\" }}>{fmt.format(c.value)}</td>\n                  <td style={{ textAlign: \"right\", padding: \"4px 8px\" }}>{((c.value / total) * 100).toFixed(1)}%</td>\n                </tr>\n              ))}\n            </tbody>\n          </table>\n        </div>\n      </details>\n    </Column>\n  );\n}\n\nexport default function Page() {\n  return (\n    <Column as=\"main\" fillWidth horizontal=\"center\" paddingX=\"m\" paddingY=\"l\">\n      <Column fillWidth gap=\"24\" style={{ maxWidth: 1200 }}>\n        <Column gap=\"4\" as=\"header\">\n          <Heading as=\"h1\" variant=\"heading-strong-xl\">\n            Analytics overview\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Performance for the last 12 months, updated today at 09:15 UTC.\n          </Text>\n        </Column>\n\n        <section aria-labelledby=\"kpi-heading\">\n          <h2\n            id=\"kpi-heading\"\n            style={{ position: \"absolute\", width: 1, height: 1, overflow: \"hidden\", clip: \"rect(0 0 0 0)\" }}\n          >\n            Key metrics\n          </h2>\n          <ul\n            style={{\n              listStyle: \"none\",\n              margin: 0,\n              padding: 0,\n              display: \"grid\",\n              gap: 16,\n              gridTemplateColumns: \"repeat(auto-fit, minmax(220px, 1fr))\",\n            }}\n          >\n            {KPIS.map((k) => (\n              <KpiCard key={k.id} kpi={k} />\n            ))}\n          </ul>\n        </section>\n\n        <div\n          style={{\n            display: \"grid\",\n            gap: 16,\n            gridTemplateColumns: \"repeat(auto-fit, minmax(min(100%, 420px), 1fr))\",\n          }}\n        >\n          <Card as=\"section\" label=\"Traffic trend\">\n            <Heading as=\"h2\" variant=\"heading-strong-m\">\n              Traffic and signups\n            </Heading>\n            <LineChart />\n          </Card>\n          <Card as=\"section\" label=\"Acquisition channels\">\n            <Heading as=\"h2\" variant=\"heading-strong-m\">\n              Sessions by channel\n            </Heading>\n            <BarChart />\n          </Card>\n        </div>\n\n        <Card as=\"section\" label=\"Recent activity\">\n          <Heading as=\"h2\" variant=\"heading-strong-m\">\n            Recent activity\n          </Heading>\n          <ul style={{ listStyle: \"none\", margin: 0, padding: 0, display: \"flex\", flexDirection: \"column\" }}>\n            {ACTIVITY.map((a, i) => (\n              <li\n                key={a.id}\n                style={{\n                  display: \"flex\",\n                  alignItems: \"center\",\n                  gap: 12,\n                  padding: \"12px 0\",\n                  borderTop: i === 0 ? \"none\" : \"1px solid var(--neutral-alpha-weak, rgba(128,128,128,0.2))\",\n                }}\n              >\n                <Avatar size=\"m\" value={a.name.split(\" \").map((p) => p[0]).join(\"\")} />\n                <div style={{ flex: 1, minWidth: 0 }}>\n                  <Text variant=\"body-default-m\" as=\"p\">\n                    <strong>{a.name}</strong> {a.action} <strong>{a.target}</strong>\n                  </Text>\n                </div>\n                <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\" style={{ whiteSpace: \"nowrap\" }}>\n                  {a.time}\n                </Text>\n              </li>\n            ))}\n          </ul>\n        </Card>\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

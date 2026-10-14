@@ -1,0 +1,71 @@
+{
+  "arm": "B",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3333
+    },
+    "build": {
+      "ok": true,
+      "ms": 9255
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 193,
+          "height": 3634,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 193,
+          "height": 1970,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 193,
+          "height": 939,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 1,
+        "serious_or_critical": 0,
+        "ids": [
+          "heading-order:moderate:1"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "hover",
+          "found": false,
+          "errors": []
+        },
+        "desktop": {
+          "action": "hover",
+          "found": true,
+          "errors": []
+        }
+      }
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 7 issue(s)\n  [layout.shorthands] Use fill instead of fillWidth + fillHeight\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n  [layout.defaults] variant=\"primary\" is the Button default — omit it\n  [color.tokens] Use semantic color tokens, not hex/rgb\n  [color.svgPaint] Literal colour in inline SVG: <rect stroke=\"rgba(17,24,39,0.78)\"> (and 14 more) — paint with currentColor (set the colour with onBackground on the wrapper) or a token, var(--brand-solid-strong)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

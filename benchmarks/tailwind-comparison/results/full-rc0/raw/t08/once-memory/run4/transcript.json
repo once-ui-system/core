@@ -1,0 +1,267 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Onboarding checklist — progress bar, step list with status indicators, celebratory completion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by inspecting the project's existing files to see how Once UI is set up."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018yRLVeGvzkAZQJjU61LDT7",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QwdnoTf6hZ2U6vTphtfRyY",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018yRLVeGvzkAZQJjU61LDT7",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QwdnoTf6hZ2U6vTphtfRyY",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01JmRP4oiPWEpGRRQz6pjv7H",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01P3V4C3WMyib9AC9hgxKhAa",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SMhgivGfS2Ps3iiUTp8EWx",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JmRP4oiPWEpGRRQz6pjv7H",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01P3V4C3WMyib9AC9hgxKhAa",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SMhgivGfS2Ps3iiUTp8EWx",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01AbbETHBxCp9wBFX5uYt5oo",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01M1om39vVjXgdk46hsfy533",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Xmvt2wK8vG4LVMNCRZYQqk",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019WQibipSeUd6ap4GsKg1V5",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QVVUAYa1n5zzAf67Qez5DD",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AbbETHBxCp9wBFX5uYt5oo",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01M1om39vVjXgdk46hsfy533",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Xmvt2wK8vG4LVMNCRZYQqk",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019WQibipSeUd6ap4GsKg1V5",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QVVUAYa1n5zzAf67Qez5DD",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build this using core Once UI components with conservative props, including a custom accessible progress bar, toggle buttons for steps, expandable details, a live region for progress updates, and a CSS-based confetti effect that respects reduced-motion preferences.\n\n",
+          "signature": "CAQS4gkKEQgSGAI4AUIJbmFycmF0aW9uEgyKgyl1xNeAyI9pSRgaDGaXWQFeIOi7nvZFFSIwBWcVLXPMAtxdZ0zDnF6To3vEdZ7k+Cuu6pb43038nSqOzX7nr8B2SyA/qW/RWRDSKv4IhZSKeCoI9LbqSPp7/KOgagfS2LDuGeVBZMC8jTfqUS13rIabGFZ9RyBU5bu5XDTssnfVzoZIrPJViX+6GEPToHi0my7CmqiP2mSWLZ6O0lQDQPnQL8tnHjIpFVHGWRTypxhMxagr+FzNL7tP1K9GwzKIixTAMO5X9IhoumSxZbDgfc2O+oU+lUeN60AUmNfYH07q8QmZgj+zQE8ILi3iB87fFf/oVUWgw4kKK4htyO6ePcdKADSYmly0HQgHQXKHq7gUP8GefCImcsKWHFmXtWfFywjX1yMeg1n+SHQ4DxsXWRBxosNAP2cPLQKXgwBuNsH5LJbSHLWIa2Sb732fJl1AEUI65udARTk0FULDWvnjy+U1YoIXUTHfdUziv8bX5tUGg/MwuYK72Lz9W3MtDGcJ2W+QLjapJHvDXdT6C8NLEuYiTa3iPk57uzxHkVaWKJ0YU5Xy7xo/8bmquwfSzTNwzbSR70F0guiuPuoyJWoIIwM17yGyz4DubA5kkjYhku9599EG6hxCGdwbbKkK2qkg7gXIjHCFgk8UW7v0pxlnvHOMIizuZ23PFoh1157KgUeAT2fCQpNDr97EBrBk/7AY3UutQW9ZSj05jKR5wbXcZQZgvwc0GBJWUDvrXCp8i8GR5SazmMKpJkgTlZeMr2odeXAhUzdGtRlsiHt3j+lsUOcQaDVy2gm61TR5f8tCtHxtyD2UEMFE5XU2QdTh7+hmnZ0bsZYXu3LMfpeg/oykUVmw1sDtuAh+Toxh2HUulRUy+4SI40Lid/hBRbibCfv6MkzptkQK9w0XV4/z54BL1+PKduWbzWNA5+u9Xrn6XWdrKDodHnK1pNOXmNRCmImZvlvcokGBQ43dKEDb6/xK8eAvcJoheMuqDtlmFLy44MQ6LrJPKKKSo9DK3yZFDTFx1N5PtX1/yVPbLBaTfKRDxXdqEGJQ49oYGVU46YD7PBaAW9KRjM4WiGCmwzaGsJqtsbRBg0mWaRY4uXG1eqoZeOrSYQM/c+h7gdGx67HsEYaTfZedaukKUBMz/E1I/2CRtdy07epOLTdvfFJY0OqBUx5ryXrlgHxpqEZ+1ERDET3j1vgRzYvy3U1bkJaY3zAdz0bxoq4lyi7r2k0SG/wjYabVlQcrFYUZLCJGNUqYoeKtzo6ogD0eYS3laf/++c5s71gkaHkT0VVx6XqrYeQk6bCHEic2XNgB2jg8cWBhcUZXb9l1OLDVDc+z1LaSJyxwDD82TOMbcJ0dpho02DepDgr+SWFtduHRXN1qLGSOZSN6N1Pwrr5axOeCUIOQCXQV3YAz3e9S8+9pKmBvbI18C64darIc1JBBgfRm2L9TbZlzlOPfuttfFtoy2jjBs/h5xdEUfoFiHEuGKJVZE+Ox+l9vWD+lZ0QWqsyErvqta8OAC4Yp9FWvqFXERKiUoFwjcZKi9n155U1MTVDZFjFVOmOALwoy7eQtBVjKkP9acKDnrAa+7mb2tuRPTEEItn35sLYMjhdQdrQdJSuTxfHPUMij/uD2r/4dAN2sdRgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014Pav9ZE12sco9o8AqTP9nh",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014Pav9ZE12sco9o8AqTP9nh",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useMemo, useState } from \"react\";\nimport { Button, Column, Flex, Heading, Icon, Row, Text } from \"@once-ui-system/core\";\n\ntype Step = {\n  id: string;\n  title: string;\n  description: string;\n  detail: string;\n  minutes: number;\n  actionLabel: string;\n};\n\nconst STEPS: Step[] = [\n  {\n    id: \"profile\",\n    title: \"Complete your profile\",\n    description: \"Add your name, role and a photo so teammates recognise you.\",\n    detail:\n      \"Head to Settings → Profile and fill in your display name and job title. Profiles with a photo get 3× more replies on shared boards.\",\n    minutes: 2,\n    actionLabel: \"Edit profile\",\n  },\n  {\n    id: \"workspace\",\n    title: \"Create your first workspace\",\n    description: \"Workspaces keep projects, files and conversations in one place.\",\n    detail:\n      \"Pick a name like “Product Design” or “Q3 Launch”. You can rename it later and archive it when the work is done.\",\n    minutes: 3,\n    actionLabel: \"Create workspace\",\n  },\n  {\n    id: \"invite\",\n    title: \"Invite two teammates\",\n    description: \"Collaboration is better together — send invites by email or link.\",\n    detail:\n      \"Paste email addresses separated by commas, or copy the invite link. New members join with Editor access by default.\",\n    minutes: 2,\n    actionLabel: \"Send invites\",\n  },\n  {\n    id: \"integration\",\n    title: \"Connect an integration\",\n    description: \"Sync Slack, GitHub or Google Drive to bring your tools along.\",\n    detail:\n      \"Open Integrations and authorise one service. We only request read access until you choose to enable two-way sync.\",\n    minutes: 4,\n    actionLabel: \"Browse integrations\",\n  },\n  {\n    id: \"notifications\",\n    title: \"Set notification preferences\",\n    description: \"Choose what reaches your inbox and what stays in the app.\",\n    detail:\n      \"We recommend a daily digest for activity and instant alerts for @mentions. Quiet hours can be configured too.\",\n    minutes: 1,\n    actionLabel: \"Open preferences\",\n  },\n];\n\nconst CONFETTI_COLORS = [\n  \"var(--brand-solid-strong)\",\n  \"var(--accent-solid-strong)\",\n  \"var(--success-solid-strong)\",\n  \"var(--warning-solid-strong)\",\n  \"var(--danger-solid-strong)\",\n];\n\nconst CONFETTI = Array.from({ length: 28 }, (_, i) => ({\n  left: `${(i * 37) % 100}%`,\n  delay: `${((i * 13) % 10) / 10}s`,\n  duration: `${2.2 + ((i * 7) % 10) / 8}s`,\n  color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],\n  size: 6 + (i % 4) * 2,\n  rotate: (i * 47) % 360,\n}));\n\nconst STYLES = `\n@keyframes ob-fall {\n  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }\n  100% { transform: translateY(340px) rotate(540deg); opacity: 0; }\n}\n@keyframes ob-pop {\n  0% { transform: scale(0.6); opacity: 0; }\n  60% { transform: scale(1.12); opacity: 1; }\n  100% { transform: scale(1); }\n}\n.ob-confetti { position: absolute; top: 0; border-radius: 2px; animation-name: ob-fall; animation-timing-function: ease-in; animation-fill-mode: forwards; pointer-events: none; }\n.ob-pop { animation: ob-pop 0.5s ease-out both; }\n.ob-fill { transition: width 0.5s ease; }\n.ob-step-btn { cursor: pointer; background: transparent; border: 0; padding: 0; font: inherit; color: inherit; text-align: left; width: 100%; border-radius: 12px; }\n.ob-step-btn:focus-visible, .ob-check:focus-visible { outline: 2px solid var(--brand-solid-strong); outline-offset: 2px; }\n.ob-check { cursor: pointer; background: transparent; border: 0; padding: 0; border-radius: 999px; display: inline-flex; flex-shrink: 0; }\n@media (prefers-reduced-motion: reduce) {\n  .ob-confetti, .ob-pop { animation: none; }\n  .ob-confetti { display: none; }\n  .ob-fill { transition: none; }\n}\n`;\n\nfunction StatusIndicator({ done, current }: { done: boolean; current: boolean }) {\n  if (done) {\n    return (\n      <Flex\n        center\n        radius=\"full\"\n        background=\"success-strong\"\n        style={{ width: 32, height: 32, flexShrink: 0 }}\n        aria-hidden=\"true\"\n      >\n        <Icon name=\"check\" size=\"s\" onBackground=\"neutral-strong\" />\n      </Flex>\n    );\n  }\n  return (\n    <Flex\n      center\n      radius=\"full\"\n      border={current ? \"brand-strong\" : \"neutral-medium\"}\n      background={current ? \"brand-alpha-weak\" : \"transparent\"}\n      style={{ width: 32, height: 32, flexShrink: 0, borderWidth: 2, borderStyle: \"solid\" }}\n      aria-hidden=\"true\"\n    >\n      <Flex\n        radius=\"full\"\n        background={current ? \"brand-solid-strong\" : \"neutral-alpha-medium\"}\n        style={{ width: 10, height: 10 }}\n      />\n    </Flex>\n  );\n}\n\nexport default function Page() {\n  const [completed, setCompleted] = useState<Record<string, boolean>>({ profile: true });\n  const [expanded, setExpanded] = useState<string | null>(\"workspace\");\n  const [announcement, setAnnouncement] = useState(\"\");\n\n  const doneCount = useMemo(() => STEPS.filter((s) => completed[s.id]).length, [completed]);\n  const total = STEPS.length;\n  const percent = Math.round((doneCount / total) * 100);\n  const allDone = doneCount === total;\n  const currentId = STEPS.find((s) => !completed[s.id])?.id ?? null;\n  const remainingMinutes = STEPS.filter((s) => !completed[s.id]).reduce((n, s) => n + s.minutes, 0);\n\n  const toggle = (step: Step) => {\n    const next = !completed[step.id];\n    const nextDone = doneCount + (next ? 1 : -1);\n    setCompleted((prev) => ({ ...prev, [step.id]: next }));\n    setAnnouncement(\n      nextDone === total\n        ? \"All steps complete. Onboarding finished!\"\n        : `${step.title} marked ${next ? \"complete\" : \"incomplete\"}. ${nextDone} of ${total} steps done.`,\n    );\n    if (next) {\n      const upcoming = STEPS.find((s) => s.id !== step.id && !completed[s.id]);\n      setExpanded(upcoming ? upcoming.id : null);\n    }\n  };\n\n  const reset = () => {\n    setCompleted({});\n    setExpanded(STEPS[0].id);\n    setAnnouncement(\"Checklist reset. 0 of 5 steps done.\");\n  };\n\n  return (\n    <Column fillWidth horizontal=\"center\" paddingX=\"m\" paddingY=\"xl\" gap=\"l\">\n      <style>{STYLES}</style>\n\n      <Column as=\"main\" fillWidth maxWidth={40} gap=\"l\">\n        <Column gap=\"8\" as=\"header\">\n          <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n            Welcome to Northwind\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-s\" wrap=\"balance\">\n            Get set up in under 15 minutes\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Finish these five steps to unlock your workspace. Your progress is saved as you go.\n          </Text>\n        </Column>\n\n        <Column\n          background=\"surface\"\n          border=\"neutral-alpha-medium\"\n          radius=\"l\"\n          padding=\"l\"\n          gap=\"12\"\n          style={{ position: \"relative\", overflow: \"hidden\" }}\n        >\n          <Row horizontal=\"between\" vertical=\"end\" gap=\"8\" wrap>\n            <Column gap=\"4\">\n              <Text id=\"ob-progress-label\" variant=\"label-strong-m\" onBackground=\"neutral-strong\">\n                Your progress\n              </Text>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                {allDone\n                  ? \"Everything is done\"\n                  : `About ${remainingMinutes} min remaining`}\n              </Text>\n            </Column>\n            <Text variant=\"heading-strong-l\" onBackground=\"neutral-strong\">\n              {doneCount} / {total}\n            </Text>\n          </Row>\n\n          <div\n            role=\"progressbar\"\n            aria-labelledby=\"ob-progress-label\"\n            aria-valuemin={0}\n            aria-valuemax={100}\n            aria-valuenow={percent}\n            aria-valuetext={`${doneCount} of ${total} steps complete`}\n            style={{\n              height: 10,\n              width: \"100%\",\n              borderRadius: 999,\n              background: \"var(--neutral-alpha-medium)\",\n              overflow: \"hidden\",\n            }}\n          >\n            <div\n              className=\"ob-fill\"\n              style={{\n                height: \"100%\",\n                width: `${percent}%`,\n                borderRadius: 999,\n                background: allDone ? \"var(--success-solid-strong)\" : \"var(--brand-solid-strong)\",\n              }}\n            />\n          </div>\n        </Column>\n\n        {allDone && (\n          <Column\n            className=\"ob-pop\"\n            background=\"success-alpha-weak\"\n            border=\"success-alpha-medium\"\n            radius=\"l\"\n            padding=\"xl\"\n            gap=\"12\"\n            horizontal=\"center\"\n            style={{ position: \"relative\", overflow: \"hidden\", textAlign: \"center\" }}\n          >\n            <div aria-hidden=\"true\" style={{ position: \"absolute\", inset: 0, overflow: \"hidden\" }}>\n              {CONFETTI.map((c, i) => (\n                <span\n                  key={i}\n                  className=\"ob-confetti\"\n                  style={{\n                    left: c.left,\n                    width: c.size,\n                    height: c.size * 1.6,\n                    background: c.color,\n                    animationDelay: c.delay,\n                    animationDuration: c.duration,\n                    rotate: `${c.rotate}deg`,\n                  }}\n                />\n              ))}\n            </div>\n            <Flex\n              center\n              radius=\"full\"\n              background=\"success-strong\"\n              style={{ width: 56, height: 56, position: \"relative\" }}\n              aria-hidden=\"true\"\n            >\n              <Icon name=\"check\" size=\"l\" onBackground=\"neutral-strong\" />\n            </Flex>\n            <Heading as=\"h2\" variant=\"heading-strong-xl\" style={{ position: \"relative\" }}>\n              You&apos;re all set — nice work!\n            </Heading>\n            <Text\n              variant=\"body-default-m\"\n              onBackground=\"neutral-weak\"\n              wrap=\"balance\"\n              style={{ position: \"relative\" }}\n            >\n              Your workspace is ready, your team is invited and your tools are connected. Time to\n              start building something great.\n            </Text>\n            <Row gap=\"8\" wrap horizontal=\"center\" style={{ position: \"relative\" }}>\n              <Button variant=\"primary\" size=\"m\" href=\"#\" onClick={(e) => e.preventDefault()}>\n                Go to dashboard\n              </Button>\n              <Button variant=\"tertiary\" size=\"m\" onClick={reset}>\n                Reset checklist\n              </Button>\n            </Row>\n          </Column>\n        )}\n\n        <Column as=\"section\" aria-labelledby=\"ob-steps-heading\" gap=\"12\">\n          <Heading as=\"h2\" id=\"ob-steps-heading\" variant=\"heading-strong-m\">\n            Setup steps\n          </Heading>\n\n          <Column as=\"ol\" gap=\"8\" margin=\"0\" padding=\"0\" style={{ listStyle: \"none\" }}>\n            {STEPS.map((step, index) => {\n              const done = !!completed[step.id];\n              const current = step.id === currentId;\n              const open = expanded === step.id;\n              const panelId = `ob-panel-${step.id}`;\n              return (\n                <li key={step.id}>\n                  <Column\n                    background={current ? \"surface\" : \"transparent\"}\n                    border={current ? \"brand-alpha-medium\" : \"neutral-alpha-weak\"}\n                    radius=\"l\"\n                    padding=\"12\"\n                    gap=\"12\"\n                  >\n                    <Row gap=\"12\" vertical=\"center\">\n                      <button\n                        type=\"button\"\n                        className=\"ob-check\"\n                        role=\"checkbox\"\n                        aria-checked={done}\n                        aria-label={`Mark “${step.title}” as ${done ? \"incomplete\" : \"complete\"}`}\n                        onClick={() => toggle(step)}\n                      >\n                        <StatusIndicator done={done} current={current} />\n                      </button>\n\n                      <button\n                        type=\"button\"\n                        className=\"ob-step-btn\"\n                        aria-expanded={open}\n                        aria-controls={panelId}\n                        onClick={() => setExpanded(open ? null : step.id)}\n                      >\n                        <Row gap=\"12\" vertical=\"center\" horizontal=\"between\">\n                          <Column gap=\"2\" flex={1} minWidth={0}>\n                            <Text variant=\"label-default-xs\" onBackground=\"neutral-weak\">\n                              Step {index + 1} · {step.minutes} min\n                              {done ? \" · Completed\" : current ? \" · Up next\" : \"\"}\n                            </Text>\n                            <Text\n                              variant=\"heading-strong-s\"\n                              onBackground={done ? \"neutral-weak\" : \"neutral-strong\"}\n                              style={done ? { textDecoration: \"line-through\" } : undefined}\n                            >\n                              {step.title}\n                            </Text>\n                          </Column>\n                          <Icon\n                            name={open ? \"chevronUp\" : \"chevronDown\"}\n                            size=\"s\"\n                            onBackground=\"neutral-weak\"\n                          />\n                        </Row>\n                      </button>\n                    </Row>\n\n                    {open && (\n                      <Column\n                        id={panelId}\n                        role=\"region\"\n                        aria-label={`${step.title} details`}\n                        gap=\"12\"\n                        paddingLeft=\"48\"\n                      >\n                        <Text variant=\"body-default-m\" onBackground=\"neutral-strong\">\n                          {step.description}\n                        </Text>\n                        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                          {step.detail}\n                        </Text>\n                        <Row gap=\"8\" wrap>\n                          <Button\n                            variant={done ? \"secondary\" : \"primary\"}\n                            size=\"s\"\n                            onClick={() => toggle(step)}\n                          >\n                            {done ? \"Mark as not done\" : \"Mark as done\"}\n                          </Button>\n                          <Button variant=\"tertiary\" size=\"s\" onClick={() => undefined}>\n                            {step.actionLabel}\n                          </Button>\n                        </Row>\n                      </Column>\n                    )}\n                  </Column>\n                </li>\n              );\n            })}\n          </Column>\n        </Column>\n\n        {!allDone && doneCount > 0 && (\n          <Row horizontal=\"center\">\n            <Button variant=\"tertiary\" size=\"s\" onClick={reset}>\n              Reset checklist\n            </Button>\n          </Row>\n        )}\n      </Column>\n\n      <div\n        role=\"status\"\n        aria-live=\"polite\"\n        style={{\n          position: \"absolute\",\n          width: 1,\n          height: 1,\n          overflow: \"hidden\",\n          clip: \"rect(0 0 0 0)\",\n          whiteSpace: \"nowrap\",\n        }}\n      >\n        {announcement}\n      </div>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(128,9): error TS2322: Type '\"neutral-alpha-medium\" | \"brand-solid-strong\"' is not assignable to type '\"page\" | Colors | \"surface\" | \"overlay\" | \"transparent\" | undefined'.\n  Type '\"brand-solid-strong\"' is not assignable to type '\"page\" | Colors | \"surface\" | \"overlay\" | \"transparent\" | undefined'. Did you mean '\"brand-strong\"'?\napp/page.tsx(286,69): error TS7006: Parameter 'e' implicitly has an 'any' type.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useMemo, useState } from \"react\";\nimport type { MouseEvent } from \"react\";\nimport { Button, Column, Flex, Heading, Icon, Row, Text } from \"@once-ui-system/core\";\n\ntype Step = {\n  id: string;\n  title: string;\n  description: string;\n  detail: string;\n  minutes: number;\n  actionLabel: string;\n};\n\nconst STEPS: Step[] = [\n  {\n    id: \"profile\",\n    title: \"Complete your profile\",\n    description: \"Add your name, role and a photo so teammates recognise you.\",\n    detail:\n      \"Head to Settings → Profile and fill in your display name and job title. Profiles with a photo get 3× more replies on shared boards.\",\n    minutes: 2,\n    actionLabel: \"Edit profile\",\n  },\n  {\n    id: \"workspace\",\n    title: \"Create your first workspace\",\n    description: \"Workspaces keep projects, files and conversations in one place.\",\n    detail:\n      \"Pick a name like “Product Design” or “Q3 Launch”. You can rename it later and archive it when the work is done.\",\n    minutes: 3,\n    actionLabel: \"Create workspace\",\n  },\n  {\n    id: \"invite\",\n    title: \"Invite two teammates\",\n    description: \"Collaboration is better together — send invites by email or link.\",\n    detail:\n      \"Paste email addresses separated by commas, or copy the invite link. New members join with Editor access by default.\",\n    minutes: 2,\n    actionLabel: \"Send invites\",\n  },\n  {\n    id: \"integration\",\n    title: \"Connect an integration\",\n    description: \"Sync Slack, GitHub or Google Drive to bring your tools along.\",\n    detail:\n      \"Open Integrations and authorise one service. We only request read access until you choose to enable two-way sync.\",\n    minutes: 4,\n    actionLabel: \"Browse integrations\",\n  },\n  {\n    id: \"notifications\",\n    title: \"Set notification preferences\",\n    description: \"Choose what reaches your inbox and what stays in the app.\",\n    detail:\n      \"We recommend a daily digest for activity and instant alerts for @mentions. Quiet hours can be configured too.\",\n    minutes: 1,\n    actionLabel: \"Open preferences\",\n  },\n];\n\nconst CONFETTI_COLORS = [\n  \"var(--brand-solid-strong)\",\n  \"var(--accent-solid-strong)\",\n  \"var(--success-solid-strong)\",\n  \"var(--warning-solid-strong)\",\n  \"var(--danger-solid-strong)\",\n];\n\nconst CONFETTI = Array.from({ length: 28 }, (_, i) => ({\n  left: `${(i * 37) % 100}%`,\n  delay: `${((i * 13) % 10) / 10}s`,\n  duration: `${2.2 + ((i * 7) % 10) / 8}s`,\n  color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],\n  size: 6 + (i % 4) * 2,\n  rotate: (i * 47) % 360,\n}));\n\nconst STYLES = `\n@keyframes ob-fall {\n  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }\n  100% { transform: translateY(340px) rotate(540deg); opacity: 0; }\n}\n@keyframes ob-pop {\n  0% { transform: scale(0.6); opacity: 0; }\n  60% { transform: scale(1.12); opacity: 1; }\n  100% { transform: scale(1); }\n}\n.ob-confetti { position: absolute; top: 0; border-radius: 2px; animation-name: ob-fall; animation-timing-function: ease-in; animation-fill-mode: forwards; pointer-events: none; }\n.ob-pop { animation: ob-pop 0.5s ease-out both; }\n.ob-fill { transition: width 0.5s ease; }\n.ob-step-btn { cursor: pointer; background: transparent; border: 0; padding: 0; font: inherit; color: inherit; text-align: left; width: 100%; border-radius: 12px; }\n.ob-step-btn:focus-visible, .ob-check:focus-visible { outline: 2px solid var(--brand-solid-strong); outline-offset: 2px; }\n.ob-check { cursor: pointer; background: transparent; border: 0; padding: 0; border-radius: 999px; display: inline-flex; flex-shrink: 0; }\n@media (prefers-reduced-motion: reduce) {\n  .ob-confetti, .ob-pop { animation: none; }\n  .ob-confetti { display: none; }\n  .ob-fill { transition: none; }\n}\n`;\n\nfunction StatusIndicator({ done, current }: { done: boolean; current: boolean }) {\n  if (done) {\n    return (\n      <Flex\n        center\n        radius=\"full\"\n        background=\"success-strong\"\n        style={{ width: 32, height: 32, flexShrink: 0 }}\n        aria-hidden=\"true\"\n      >\n        <Icon name=\"check\" size=\"s\" onBackground=\"neutral-strong\" />\n      </Flex>\n    );\n  }\n  return (\n    <div\n      aria-hidden=\"true\"\n      style={{\n        width: 32,\n        height: 32,\n        flexShrink: 0,\n        borderRadius: 999,\n        display: \"flex\",\n        alignItems: \"center\",\n        justifyContent: \"center\",\n        border: `2px solid ${current ? \"var(--brand-solid-strong)\" : \"var(--neutral-alpha-strong)\"}`,\n        background: current ? \"var(--brand-alpha-weak)\" : \"transparent\",\n      }}\n    >\n      <span\n        style={{\n          width: 10,\n          height: 10,\n          borderRadius: 999,\n          display: \"block\",\n          background: current ? \"var(--brand-solid-strong)\" : \"var(--neutral-alpha-medium)\",\n        }}\n      />\n    </div>\n  );\n}\n\nexport default function Page() {\n  const [completed, setCompleted] = useState<Record<string, boolean>>({ profile: true });\n  const [expanded, setExpanded] = useState<string | null>(\"workspace\");\n  const [announcement, setAnnouncement] = useState(\"\");\n\n  const doneCount = useMemo(() => STEPS.filter((s) => completed[s.id]).length, [completed]);\n  const total = STEPS.length;\n  const percent = Math.round((doneCount / total) * 100);\n  const allDone = doneCount === total;\n  const currentId = STEPS.find((s) => !completed[s.id])?.id ?? null;\n  const remainingMinutes = STEPS.filter((s) => !completed[s.id]).reduce((n, s) => n + s.minutes, 0);\n\n  const toggle = (step: Step) => {\n    const next = !completed[step.id];\n    const nextDone = doneCount + (next ? 1 : -1);\n    setCompleted((prev) => ({ ...prev, [step.id]: next }));\n    setAnnouncement(\n      nextDone === total\n        ? \"All steps complete. Onboarding finished!\"\n        : `${step.title} marked ${next ? \"complete\" : \"incomplete\"}. ${nextDone} of ${total} steps done.`,\n    );\n    if (next) {\n      const upcoming = STEPS.find((s) => s.id !== step.id && !completed[s.id]);\n      setExpanded(upcoming ? upcoming.id : null);\n    }\n  };\n\n  const reset = () => {\n    setCompleted({});\n    setExpanded(STEPS[0].id);\n    setAnnouncement(\"Checklist reset. 0 of 5 steps done.\");\n  };\n\n  return (\n    <Column fillWidth horizontal=\"center\" paddingX=\"m\" paddingY=\"xl\" gap=\"l\">\n      <style>{STYLES}</style>\n\n      <Column as=\"main\" fillWidth maxWidth={40} gap=\"l\">\n        <Column gap=\"8\" as=\"header\">\n          <Text variant=\"label-default-s\" onBackground=\"brand-weak\">\n            Welcome to Northwind\n          </Text>\n          <Heading as=\"h1\" variant=\"display-strong-s\" wrap=\"balance\">\n            Get set up in under 15 minutes\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Finish these five steps to unlock your workspace. Your progress is saved as you go.\n          </Text>\n        </Column>\n\n        <Column\n          background=\"surface\"\n          border=\"neutral-alpha-medium\"\n          radius=\"l\"\n          padding=\"l\"\n          gap=\"12\"\n          style={{ position: \"relative\", overflow: \"hidden\" }}\n        >\n          <Row horizontal=\"between\" vertical=\"end\" gap=\"8\" wrap>\n            <Column gap=\"4\">\n              <Text id=\"ob-progress-label\" variant=\"label-strong-m\" onBackground=\"neutral-strong\">\n                Your progress\n              </Text>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                {allDone ? \"Everything is done\" : `About ${remainingMinutes} min remaining`}\n              </Text>\n            </Column>\n            <Text variant=\"heading-strong-l\" onBackground=\"neutral-strong\">\n              {doneCount} / {total}\n            </Text>\n          </Row>\n\n          <div\n            role=\"progressbar\"\n            aria-labelledby=\"ob-progress-label\"\n            aria-valuemin={0}\n            aria-valuemax={100}\n            aria-valuenow={percent}\n            aria-valuetext={`${doneCount} of ${total} steps complete`}\n            style={{\n              height: 10,\n              width: \"100%\",\n              borderRadius: 999,\n              background: \"var(--neutral-alpha-medium)\",\n              overflow: \"hidden\",\n            }}\n          >\n            <div\n              className=\"ob-fill\"\n              style={{\n                height: \"100%\",\n                width: `${percent}%`,\n                borderRadius: 999,\n                background: allDone ? \"var(--success-solid-strong)\" : \"var(--brand-solid-strong)\",\n              }}\n            />\n          </div>\n        </Column>\n\n        {allDone && (\n          <Column\n            className=\"ob-pop\"\n            background=\"success-alpha-weak\"\n            border=\"success-alpha-medium\"\n            radius=\"l\"\n            padding=\"xl\"\n            gap=\"12\"\n            horizontal=\"center\"\n            style={{ position: \"relative\", overflow: \"hidden\", textAlign: \"center\" }}\n          >\n            <div aria-hidden=\"true\" style={{ position: \"absolute\", inset: 0, overflow: \"hidden\" }}>\n              {CONFETTI.map((c, i) => (\n                <span\n                  key={i}\n                  className=\"ob-confetti\"\n                  style={{\n                    left: c.left,\n                    width: c.size,\n                    height: c.size * 1.6,\n                    background: c.color,\n                    animationDelay: c.delay,\n                    animationDuration: c.duration,\n                    rotate: `${c.rotate}deg`,\n                  }}\n                />\n              ))}\n            </div>\n            <Flex\n              center\n              radius=\"full\"\n              background=\"success-strong\"\n              style={{ width: 56, height: 56, position: \"relative\" }}\n              aria-hidden=\"true\"\n            >\n              <Icon name=\"check\" size=\"l\" onBackground=\"neutral-strong\" />\n            </Flex>\n            <Heading as=\"h2\" variant=\"heading-strong-xl\" style={{ position: \"relative\" }}>\n              You&apos;re all set — nice work!\n            </Heading>\n            <Text\n              variant=\"body-default-m\"\n              onBackground=\"neutral-weak\"\n              wrap=\"balance\"\n              style={{ position: \"relative\" }}\n            >\n              Your workspace is ready, your team is invited and your tools are connected. Time to\n              start building something great.\n            </Text>\n            <Row gap=\"8\" wrap horizontal=\"center\" style={{ position: \"relative\" }}>\n              <Button\n                variant=\"primary\"\n                size=\"m\"\n                onClick={(e: MouseEvent<HTMLElement>) => e.preventDefault()}\n              >\n                Go to dashboard\n              </Button>\n              <Button variant=\"tertiary\" size=\"m\" onClick={reset}>\n                Reset checklist\n              </Button>\n            </Row>\n          </Column>\n        )}\n\n        <Column as=\"section\" aria-labelledby=\"ob-steps-heading\" gap=\"12\">\n          <Heading as=\"h2\" id=\"ob-steps-heading\" variant=\"heading-strong-m\">\n            Setup steps\n          </Heading>\n\n          <Column as=\"ol\" gap=\"8\" margin=\"0\" padding=\"0\" style={{ listStyle: \"none\" }}>\n            {STEPS.map((step, index) => {\n              const done = !!completed[step.id];\n              const current = step.id === currentId;\n              const open = expanded === step.id;\n              const panelId = `ob-panel-${step.id}`;\n              return (\n                <li key={step.id}>\n                  <Column\n                    background={current ? \"surface\" : \"transparent\"}\n                    border={current ? \"brand-alpha-medium\" : \"neutral-alpha-weak\"}\n                    radius=\"l\"\n                    padding=\"12\"\n                    gap=\"12\"\n                  >\n                    <Row gap=\"12\" vertical=\"center\">\n                      <button\n                        type=\"button\"\n                        className=\"ob-check\"\n                        role=\"checkbox\"\n                        aria-checked={done}\n                        aria-label={`Mark “${step.title}” as ${done ? \"incomplete\" : \"complete\"}`}\n                        onClick={() => toggle(step)}\n                      >\n                        <StatusIndicator done={done} current={current} />\n                      </button>\n\n                      <button\n                        type=\"button\"\n                        className=\"ob-step-btn\"\n                        aria-expanded={open}\n                        aria-controls={panelId}\n                        onClick={() => setExpanded(open ? null : step.id)}\n                      >\n                        <Row gap=\"12\" vertical=\"center\" horizontal=\"between\">\n                          <Column gap=\"2\" flex={1} minWidth={0}>\n                            <Text variant=\"label-default-xs\" onBackground=\"neutral-weak\">\n                              Step {index + 1} · {step.minutes} min\n                              {done ? \" · Completed\" : current ? \" · Up next\" : \"\"}\n                            </Text>\n                            <Text\n                              variant=\"heading-strong-s\"\n                              onBackground={done ? \"neutral-weak\" : \"neutral-strong\"}\n                              style={done ? { textDecoration: \"line-through\" } : undefined}\n                            >\n                              {step.title}\n                            </Text>\n                          </Column>\n                          <Icon\n                            name={open ? \"chevronUp\" : \"chevronDown\"}\n                            size=\"s\"\n                            onBackground=\"neutral-weak\"\n                          />\n                        </Row>\n                      </button>\n                    </Row>\n\n                    {open && (\n                      <Column\n                        id={panelId}\n                        role=\"region\"\n                        aria-label={`${step.title} details`}\n                        gap=\"12\"\n                        paddingLeft=\"48\"\n                      >\n                        <Text variant=\"body-default-m\" onBackground=\"neutral-strong\">\n                          {step.description}\n                        </Text>\n                        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                          {step.detail}\n                        </Text>\n                        <Row gap=\"8\" wrap>\n                          <Button\n                            variant={done ? \"secondary\" : \"primary\"}\n                            size=\"s\"\n                            onClick={() => toggle(step)}\n                          >\n                            {done ? \"Mark as not done\" : \"Mark as done\"}\n                          </Button>\n                          <Button variant=\"tertiary\" size=\"s\" onClick={() => undefined}>\n                            {step.actionLabel}\n                          </Button>\n                        </Row>\n                      </Column>\n                    )}\n                  </Column>\n                </li>\n              );\n            })}\n          </Column>\n        </Column>\n\n        {!allDone && doneCount > 0 && (\n          <Row horizontal=\"center\">\n            <Button variant=\"tertiary\" size=\"s\" onClick={reset}>\n              Reset checklist\n            </Button>\n          </Row>\n        )}\n      </Column>\n\n      <div\n        role=\"status\"\n        aria-live=\"polite\"\n        style={{\n          position: \"absolute\",\n          width: 1,\n          height: 1,\n          overflow: \"hidden\",\n          clip: \"rect(0 0 0 0)\",\n          whiteSpace: \"nowrap\",\n        }}\n      >\n        {announcement}\n      </div>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

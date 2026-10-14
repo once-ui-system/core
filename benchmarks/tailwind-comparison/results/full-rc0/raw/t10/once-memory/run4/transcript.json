@@ -1,0 +1,237 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: User profile popover — avatar trigger, a user menu or hover card with stats and actions.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the project's existing files first to understand the setup."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LZxt8396a9MK15ScxuTeXj",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016Gzq4XaxfWPkHL8vgyGyr4",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LZxt8396a9MK15ScxuTeXj",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016Gzq4XaxfWPkHL8vgyGyr4",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01DdWsyiJFForK11o49TZu5H",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017BJ75w7nJWtzxQmfzZe4Yz",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015JskKjYcJdXg79zuJvhVmz",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DdWsyiJFForK11o49TZu5H",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017BJ75w7nJWtzxQmfzZe4Yz",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015JskKjYcJdXg79zuJvhVmz",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01HUBFt9EZNC4RcNjeTJicdB",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ExZUtsnHjSEHTppN6mRdNZ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016yDoAqRSzNryutwWFt52Xw",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JnnBDRQS2pMj7wQHYJgoXC",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HUBFt9EZNC4RcNjeTJicdB",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ExZUtsnHjSEHTppN6mRdNZ",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016yDoAqRSzNryutwWFt52Xw",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JnnBDRQS2pMj7wQHYJgoXC",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build a custom popover using Once UI layout primitives with plain React for interactivity, featuring an accessible avatar trigger (opens on click/hover, closes on Escape/outside click) and a panel with profile header, actions, stats, and menu items, all set within a mock nav/content page.\n\n",
+          "signature": "CAQStAoKEQgSGAI4AUIJbmFycmF0aW9uEgwMV5081xaZ1O2jMz8aDM1P2HCqXXjyYiEryyIwWxyTS4idvoZHp02FaQnRYlSVXgqkqJzU/AaVG779c1s/GLMEhg+UvTqWCkaDj3SHKtAJxPVJGKq0hBZ0SF1wM7/VL+VSdhiym9GxLgUgZZhJIYm7cjQ4xwe/MIg8ywSfGd84rVY/UKs3BrjGaByvsiAbqIjYRQ8cVRwthoAWDdnuF/4SQ7vVIC0pxLft3a4nTwMeDQ3Mp9JVaJixVSqZX1C6P04dHHSt5mlRnlpiMqb1ObpBmez60ejdYcheHhKPfYccdkyujoYEN7oQVPkmplF2s60MyCz6IFw0h9Xi1/LP4xar6hrqaOyQh6M2i2WewWKGVj/FlJIe67gIpbmqtyOiA2bD6QpvmDSWIS14vNXZXZITCu7W3k73Pd73MznI3zCIrLC4z5WtcNkGiq9A64pOcuEXbLrGuQrgIDjLf668cLQrS9LfgBKJ4Ip5Gf9M8UOXF3xwnYeC+mG7fT2P8wjPQmXg4l2FqiC7LeiqKpXwQ8TTOjd5bk/gaK2wl7pg0ShZbTYN36ZZcHiy5snCowcIFiWCLF+prno+exS0YCOUkT3D/KfZEbD/kyRiPywDqa4KjGqI4IWVSC6LkOA3dp8ar3CspslNUbwM/9RWf1qJRJgk0cyQY43+yFskNEgqzLv3Y0ydBTb01ZWhBm480j5Spc4H5JPyB+bk6VGgv3vBgI58trXXEoFkqrsi88Uet5/QJ/Jdl0SSer+LGj+SG0/dUt/xm3JDMnz5yRYvTextvvoSTfBl3itNVUXdl+WQ6gdrJksE6fKB5HIjQMM97uNWAPjSf0FKyC/Y8bpkgIctysLHQxcr/VwpA7x7u4sdhq378AQLWHWhdXpnvOsvXr+uJSMqinrZr2kzlQ6rbJ9pusf9WI7RKOvRca6fouWsfuWy9FEeo5t3/tjF6h3ty/9e6hC2e4TiMe6sQvUuspIHXgc93jRdGvqVWT9TA/VFOFgZkI9bFENw+dU6Wq/+CzP11xvesw69a25lan9oLc5v9tNmk+EQBhow5SSRiMyKlYHswRjNcMyQwOz7XfTfy3xtgErMff2445TqCjtAj07aBmvxC4wjJCVgxC9Ck+rSVPTLKfPSb9UEwZvQfN5Ytdh7cNU8BV0RyPPNyuo2bGgtrJA7Im4Rq9wdTRTQdIRTTyyECXr6JJuYwp7/jVQwkWonBGuDc99QIv8UE3DcgzXwSLoUTDxVR7RXnJHVI+PH8CtO+DAd6GKxGBF9CDsuGrNUkr9KDj7RTrikgvfZzw5WVW4W7Rrr7GLpLMZEi8S51zwSFvi/dTsoCNba9yfH97qHkrc9bnN17L6SmgLcCO3/wE3U6HHwtgoWz9IhbMCZ5svWkoFykwAowkt0J8m1++v0PJPFkXBUfgzZXld5gtmlUBITYomvSe7Dt/UQ4X6Sg/W/g4C+J21sV0n1KtRihy7FmSf1ocD77/Uh6MwjBfoTNHTdFeQ1fLqozY+GSE3Fo93MavVHimczy+W+VBSxVovb33KffyJQp4T7A2vRIcTV/Lt2q5M7VSdlwxBjuQ7I7JBZ12ZLmHxLNAjFe/+SULCkWWn0fhIVYFYryWvt37JNcdqT9Smqs/Xj5wJnDX6yteKiGVwyV9YgteoEQb4Q9Xsvg6PzQ9pXz6q8d8TmeAq6eTOGto8OGMu30hhqzzLjIvQKIoytbP5DS+p6IlJmEK0mTOZa6C3QZgA6AY7RY8azdwAYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GoZp1pB6sGKTijEvE1xaHi",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GoZp1pB6sGKTijEvE1xaHi",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The Once UI package isn't installed in the project folder, so I can't inspect its types. I'll rely on well-known props and use native elements for the interactive parts, with inline styles using Once UI CSS tokens.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { CSSProperties, KeyboardEvent as ReactKeyboardEvent, ReactNode } from \"react\";\nimport { Column, Row, Text, Heading } from \"@once-ui-system/core\";\n\ntype MenuItem = {\n  id: string;\n  label: string;\n  hint?: string;\n  icon: ReactNode;\n  danger?: boolean;\n};\n\ntype Stat = { label: string; value: string };\n\nconst USER = {\n  name: \"Marisol Vandenberg\",\n  handle: \"@marisol.v\",\n  role: \"Senior Product Designer\",\n  location: \"Rotterdam, Netherlands\",\n  bio: \"Designing calm interfaces for complex logistics software. Currently shipping the fleet dashboard redesign.\",\n  initials: \"MV\",\n};\n\nconst STATS: Stat[] = [\n  { label: \"Projects\", value: \"48\" },\n  { label: \"Followers\", value: \"12.4k\" },\n  { label: \"Following\", value: \"386\" },\n];\n\nconst iconProps = {\n  width: 18,\n  height: 18,\n  viewBox: \"0 0 24 24\",\n  fill: \"none\",\n  stroke: \"currentColor\",\n  strokeWidth: 1.8,\n  strokeLinecap: \"round\" as const,\n  strokeLinejoin: \"round\" as const,\n  \"aria-hidden\": true,\n  focusable: false,\n};\n\nconst ProfileIcon = (\n  <svg {...iconProps}>\n    <circle cx=\"12\" cy=\"8\" r=\"4\" />\n    <path d=\"M4 21c0-4 3.6-7 8-7s8 3 8 7\" />\n  </svg>\n);\nconst SettingsIcon = (\n  <svg {...iconProps}>\n    <circle cx=\"12\" cy=\"12\" r=\"3\" />\n    <path d=\"M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z\" />\n  </svg>\n);\nconst BillingIcon = (\n  <svg {...iconProps}>\n    <rect x=\"2\" y=\"5\" width=\"20\" height=\"14\" rx=\"2\" />\n    <path d=\"M2 10h20\" />\n  </svg>\n);\nconst TeamIcon = (\n  <svg {...iconProps}>\n    <circle cx=\"9\" cy=\"8\" r=\"3.5\" />\n    <path d=\"M2.5 20c0-3.5 3-6 6.5-6s6.5 2.5 6.5 6\" />\n    <path d=\"M16 4.5a3.5 3.5 0 0 1 0 7\" />\n    <path d=\"M18 14.3c2 .7 3.5 2.6 3.5 5.7\" />\n  </svg>\n);\nconst HelpIcon = (\n  <svg {...iconProps}>\n    <circle cx=\"12\" cy=\"12\" r=\"9\" />\n    <path d=\"M9.5 9a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .9-1 1.7\" />\n    <path d=\"M12 17h.01\" />\n  </svg>\n);\nconst SignOutIcon = (\n  <svg {...iconProps}>\n    <path d=\"M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4\" />\n    <path d=\"M16 17l5-5-5-5\" />\n    <path d=\"M21 12H9\" />\n  </svg>\n);\nconst MapPinIcon = (\n  <svg {...iconProps} width={14} height={14}>\n    <path d=\"M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11z\" />\n    <circle cx=\"12\" cy=\"10\" r=\"2.5\" />\n  </svg>\n);\n\nconst MENU_ITEMS: MenuItem[] = [\n  { id: \"profile\", label: \"View profile\", hint: \"G P\", icon: ProfileIcon },\n  { id: \"team\", label: \"Switch workspace\", hint: \"G W\", icon: TeamIcon },\n  { id: \"settings\", label: \"Account settings\", hint: \"G S\", icon: SettingsIcon },\n  { id: \"billing\", label: \"Billing & plans\", icon: BillingIcon },\n  { id: \"help\", label: \"Help center\", icon: HelpIcon },\n];\n\nconst styles = {\n  trigger: {\n    display: \"inline-flex\",\n    alignItems: \"center\",\n    justifyContent: \"center\",\n    gap: 8,\n    padding: 3,\n    borderRadius: 999,\n    border: \"1px solid var(--neutral-alpha-medium)\",\n    background: \"var(--surface-background)\",\n    color: \"var(--neutral-on-background-strong)\",\n    cursor: \"pointer\",\n    font: \"inherit\",\n  } satisfies CSSProperties,\n  avatar: {\n    width: 40,\n    height: 40,\n    borderRadius: \"50%\",\n    display: \"inline-flex\",\n    alignItems: \"center\",\n    justifyContent: \"center\",\n    fontSize: 14,\n    fontWeight: 600,\n    letterSpacing: 0.5,\n    color: \"#fff\",\n    background: \"linear-gradient(135deg, #6d5efc 0%, #e0549a 100%)\",\n    flexShrink: 0,\n    position: \"relative\",\n  } satisfies CSSProperties,\n  panel: {\n    position: \"absolute\",\n    top: \"calc(100% + 10px)\",\n    right: 0,\n    width: \"min(360px, calc(100vw - 32px))\",\n    zIndex: 20,\n    borderRadius: 16,\n    border: \"1px solid var(--neutral-alpha-medium)\",\n    background: \"var(--surface-background)\",\n    boxShadow: \"0 18px 48px rgba(0, 0, 0, 0.22)\",\n    overflow: \"hidden\",\n    color: \"var(--neutral-on-background-strong)\",\n  } satisfies CSSProperties,\n  divider: {\n    height: 1,\n    background: \"var(--neutral-alpha-weak)\",\n    border: 0,\n    margin: 0,\n  } satisfies CSSProperties,\n  menuItem: {\n    display: \"flex\",\n    alignItems: \"center\",\n    gap: 12,\n    width: \"100%\",\n    padding: \"10px 12px\",\n    borderRadius: 10,\n    border: 0,\n    background: \"transparent\",\n    color: \"inherit\",\n    font: \"inherit\",\n    fontSize: 14,\n    textAlign: \"left\",\n    cursor: \"pointer\",\n    minHeight: 44,\n  } satisfies CSSProperties,\n  primaryBtn: {\n    flex: 1,\n    minHeight: 44,\n    padding: \"0 14px\",\n    borderRadius: 10,\n    border: \"1px solid transparent\",\n    background: \"var(--brand-solid-strong, #6d5efc)\",\n    color: \"#fff\",\n    font: \"inherit\",\n    fontSize: 14,\n    fontWeight: 600,\n    cursor: \"pointer\",\n  } satisfies CSSProperties,\n  secondaryBtn: {\n    flex: 1,\n    minHeight: 44,\n    padding: \"0 14px\",\n    borderRadius: 10,\n    border: \"1px solid var(--neutral-alpha-medium)\",\n    background: \"transparent\",\n    color: \"inherit\",\n    font: \"inherit\",\n    fontSize: 14,\n    fontWeight: 600,\n    cursor: \"pointer\",\n  } satisfies CSSProperties,\n};\n\nexport default function Page() {\n  const [open, setOpen] = useState(false);\n  const [following, setFollowing] = useState(false);\n  const [status, setStatus] = useState(\"\");\n  const [activeIndex, setActiveIndex] = useState(-1);\n\n  const rootRef = useRef<HTMLDivElement>(null);\n  const triggerRef = useRef<HTMLButtonElement>(null);\n  const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);\n  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const panelId = useId();\n  const titleId = useId();\n\n  const allItems: MenuItem[] = [\n    ...MENU_ITEMS,\n    { id: \"signout\", label: \"Sign out\", icon: SignOutIcon, danger: true },\n  ];\n\n  const clearTimer = useCallback(() => {\n    if (closeTimer.current) {\n      clearTimeout(closeTimer.current);\n      closeTimer.current = null;\n    }\n  }, []);\n\n  const close = useCallback(\n    (returnFocus: boolean) => {\n      clearTimer();\n      setOpen(false);\n      setActiveIndex(-1);\n      if (returnFocus) triggerRef.current?.focus();\n    },\n    [clearTimer],\n  );\n\n  // Outside click / touch dismissal.\n  useEffect(() => {\n    if (!open) return;\n    const onPointerDown = (e: PointerEvent) => {\n      if (rootRef.current && !rootRef.current.contains(e.target as Node)) {\n        close(false);\n      }\n    };\n    document.addEventListener(\"pointerdown\", onPointerDown);\n    return () => document.removeEventListener(\"pointerdown\", onPointerDown);\n  }, [open, close]);\n\n  // Move DOM focus with the roving index.\n  useEffect(() => {\n    if (open && activeIndex >= 0) itemRefs.current[activeIndex]?.focus();\n  }, [open, activeIndex]);\n\n  useEffect(() => clearTimer, [clearTimer]);\n\n  const onRootKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {\n    if (e.key === \"Escape\" && open) {\n      e.stopPropagation();\n      close(true);\n      return;\n    }\n    if (!open) return;\n    const last = allItems.length - 1;\n    if (e.key === \"ArrowDown\") {\n      e.preventDefault();\n      setActiveIndex((i) => (i >= last ? 0 : i + 1));\n    } else if (e.key === \"ArrowUp\") {\n      e.preventDefault();\n      setActiveIndex((i) => (i <= 0 ? last : i - 1));\n    } else if (e.key === \"Home\") {\n      e.preventDefault();\n      setActiveIndex(0);\n    } else if (e.key === \"End\") {\n      e.preventDefault();\n      setActiveIndex(last);\n    }\n  };\n\n  const onTriggerKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>) => {\n    if (e.key === \"ArrowDown\" && !open) {\n      e.preventDefault();\n      setOpen(true);\n      setActiveIndex(0);\n    }\n  };\n\n  const onBlurCapture = () => {\n    // Close when focus leaves the whole widget.\n    requestAnimationFrame(() => {\n      const root = rootRef.current;\n      if (root && !root.contains(document.activeElement) && open) {\n        close(false);\n      }\n    });\n  };\n\n  const onMouseEnter = () => {\n    if (typeof window !== \"undefined\" && window.matchMedia(\"(hover: hover)\").matches) {\n      clearTimer();\n      setOpen(true);\n    }\n  };\n\n  const onMouseLeave = () => {\n    if (typeof window !== \"undefined\" && window.matchMedia(\"(hover: hover)\").matches) {\n      clearTimer();\n      closeTimer.current = setTimeout(() => {\n        const root = rootRef.current;\n        // Don't close on hover-out while keyboard focus is inside.\n        if (root && root.contains(document.activeElement) && activeIndex >= 0) return;\n        setOpen(false);\n        setActiveIndex(-1);\n      }, 180);\n    }\n  };\n\n  const onSelect = (item: MenuItem) => {\n    setStatus(\n      item.id === \"signout\"\n        ? \"You have been signed out (demo).\"\n        : `Navigating to “${item.label}” (demo).`,\n    );\n    close(true);\n  };\n\n  const toggleFollow = () => {\n    const next = !following;\n    setFollowing(next);\n    setStatus(next ? `You are now following ${USER.name}.` : `You unfollowed ${USER.name}.`);\n  };\n\n  return (\n    <Column fillWidth minHeight=\"100vh\" background=\"page\">\n      <style>{`\n        .pp-trigger:focus-visible,\n        .pp-item:focus-visible,\n        .pp-btn:focus-visible {\n          outline: 2px solid var(--brand-solid-strong, #6d5efc);\n          outline-offset: 2px;\n        }\n        .pp-item:hover { background: var(--neutral-alpha-weak); }\n        .pp-item:focus-visible { background: var(--neutral-alpha-weak); }\n        .pp-item[data-danger=\"true\"] { color: var(--danger-on-background-strong, #d6336c); }\n        .pp-btn:hover { filter: brightness(1.08); }\n        .pp-trigger:hover { border-color: var(--neutral-alpha-strong); }\n        .pp-panel { animation: pp-pop 140ms ease-out; transform-origin: top right; }\n        @keyframes pp-pop {\n          from { opacity: 0; transform: translateY(-4px) scale(0.98); }\n          to { opacity: 1; transform: none; }\n        }\n        @media (prefers-reduced-motion: reduce) {\n          .pp-panel { animation: none; }\n        }\n        .pp-card {\n          border: 1px solid var(--neutral-alpha-weak);\n          border-radius: 16px;\n          background: var(--surface-background);\n          padding: 20px;\n        }\n        .pp-grid {\n          display: grid;\n          gap: 16px;\n          grid-template-columns: 1fr;\n        }\n        @media (min-width: 720px) {\n          .pp-grid { grid-template-columns: repeat(3, 1fr); }\n        }\n        .pp-sr {\n          position: absolute;\n          width: 1px;\n          height: 1px;\n          overflow: hidden;\n          clip: rect(0 0 0 0);\n          white-space: nowrap;\n        }\n      `}</style>\n\n      <header\n        style={{\n          display: \"flex\",\n          alignItems: \"center\",\n          justifyContent: \"space-between\",\n          gap: 16,\n          padding: \"12px 16px\",\n          borderBottom: \"1px solid var(--neutral-alpha-weak)\",\n          background: \"var(--surface-background)\",\n        }}\n      >\n        <Row vertical=\"center\" gap=\"12\">\n          <span\n            aria-hidden=\"true\"\n            style={{\n              width: 28,\n              height: 28,\n              borderRadius: 8,\n              background: \"linear-gradient(135deg, #6d5efc, #e0549a)\",\n              display: \"inline-block\",\n            }}\n          />\n          <Text variant=\"label-default-m\" onBackground=\"neutral-strong\">\n            Haulage Studio\n          </Text>\n        </Row>\n\n        <div\n          ref={rootRef}\n          style={{ position: \"relative\" }}\n          onKeyDown={onRootKeyDown}\n          onBlurCapture={onBlurCapture}\n          onMouseEnter={onMouseEnter}\n          onMouseLeave={onMouseLeave}\n        >\n          <button\n            ref={triggerRef}\n            type=\"button\"\n            className=\"pp-trigger\"\n            style={styles.trigger}\n            aria-haspopup=\"dialog\"\n            aria-expanded={open}\n            aria-controls={open ? panelId : undefined}\n            aria-label={`Account menu for ${USER.name}`}\n            onClick={() => {\n              clearTimer();\n              setOpen((o) => !o);\n              setActiveIndex(-1);\n            }}\n            onKeyDown={onTriggerKeyDown}\n          >\n            <span style={styles.avatar} aria-hidden=\"true\">\n              {USER.initials}\n              <span\n                style={{\n                  position: \"absolute\",\n                  right: 0,\n                  bottom: 0,\n                  width: 11,\n                  height: 11,\n                  borderRadius: \"50%\",\n                  background: \"#22c55e\",\n                  border: \"2px solid var(--surface-background)\",\n                }}\n              />\n            </span>\n          </button>\n\n          {open && (\n            <div\n              id={panelId}\n              role=\"dialog\"\n              aria-labelledby={titleId}\n              className=\"pp-panel\"\n              style={styles.panel}\n            >\n              <div style={{ padding: 16, display: \"flex\", gap: 14, alignItems: \"center\" }}>\n                <span style={{ ...styles.avatar, width: 56, height: 56, fontSize: 18 }} aria-hidden=\"true\">\n                  {USER.initials}\n                </span>\n                <div style={{ minWidth: 0 }}>\n                  <Heading as=\"h2\" variant=\"heading-strong-m\" id={titleId}>\n                    {USER.name}\n                  </Heading>\n                  <Text as=\"p\" variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                    {USER.handle} · {USER.role}\n                  </Text>\n                </div>\n              </div>\n\n              <div style={{ padding: \"0 16px 12px\" }}>\n                <Text as=\"p\" variant=\"body-default-s\" onBackground=\"neutral-medium\">\n                  {USER.bio}\n                </Text>\n                <div\n                  style={{\n                    display: \"flex\",\n                    alignItems: \"center\",\n                    gap: 6,\n                    marginTop: 8,\n                    color: \"var(--neutral-on-background-weak)\",\n                    fontSize: 13,\n                  }}\n                >\n                  {MapPinIcon}\n                  <span>{USER.location}</span>\n                </div>\n              </div>\n\n              <dl\n                style={{\n                  display: \"grid\",\n                  gridTemplateColumns: \"repeat(3, 1fr)\",\n                  margin: 0,\n                  padding: \"12px 8px\",\n                  borderTop: \"1px solid var(--neutral-alpha-weak)\",\n                  borderBottom: \"1px solid var(--neutral-alpha-weak)\",\n                  textAlign: \"center\",\n                }}\n              >\n                {STATS.map((s) => (\n                  <div key={s.label} style={{ display: \"flex\", flexDirection: \"column-reverse\", gap: 2 }}>\n                    <dt style={{ fontSize: 12, color: \"var(--neutral-on-background-weak)\" }}>{s.label}</dt>\n                    <dd style={{ margin: 0, fontSize: 18, fontWeight: 700 }}>{s.value}</dd>\n                  </div>\n                ))}\n              </dl>\n\n              <div style={{ display: \"flex\", gap: 8, padding: 12 }}>\n                <button\n                  type=\"button\"\n                  className=\"pp-btn\"\n                  style={following ? styles.secondaryBtn : styles.primaryBtn}\n                  aria-pressed={following}\n                  onClick={toggleFollow}\n                >\n                  {following ? \"Following\" : \"Follow\"}\n                </button>\n                <button\n                  type=\"button\"\n                  className=\"pp-btn\"\n                  style={styles.secondaryBtn}\n                  onClick={() => setStatus(`Message draft to ${USER.name} opened (demo).`)}\n                >\n                  Message\n                </button>\n              </div>\n\n              <hr style={styles.divider} />\n\n              <div role=\"menu\" aria-label=\"Account\" style={{ padding: 6 }}>\n                {allItems.map((item, i) => (\n                  <div key={item.id}>\n                    {item.id === \"signout\" && <hr style={{ ...styles.divider, margin: \"6px 0\" }} />}\n                    <button\n                      ref={(el) => {\n                        itemRefs.current[i] = el;\n                      }}\n                      type=\"button\"\n                      role=\"menuitem\"\n                      className=\"pp-item\"\n                      data-danger={item.danger ? \"true\" : \"false\"}\n                      tabIndex={activeIndex === i ? 0 : -1}\n                      style={styles.menuItem}\n                      onClick={() => onSelect(item)}\n                      onFocus={() => setActiveIndex(i)}\n                    >\n                      {item.icon}\n                      <span style={{ flex: 1 }}>{item.label}</span>\n                      {item.hint && (\n                        <span style={{ fontSize: 12, color: \"var(--neutral-on-background-weak)\" }}>\n                          {item.hint}\n                        </span>\n                      )}\n                    </button>\n                  </div>\n                ))}\n              </div>\n            </div>\n          )}\n        </div>\n      </header>\n\n      <main style={{ width: \"100%\", maxWidth: 960, margin: \"0 auto\", padding: \"32px 16px 64px\" }}>\n        <Column gap=\"8\" paddingBottom=\"24\">\n          <Heading as=\"h1\" variant=\"display-strong-xs\">\n            Fleet overview\n          </Heading>\n          <Text as=\"p\" variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Hover, click, or press the arrow-down key on the avatar in the top right to open the profile card.\n          </Text>\n        </Column>\n\n        <div className=\"pp-grid\">\n          {[\n            { t: \"Active routes\", v: \"128\", d: \"14 more than last week\" },\n            { t: \"On-time delivery\", v: \"96.4%\", d: \"Up 1.2 points this month\" },\n            { t: \"Open incidents\", v: \"3\", d: \"2 awaiting driver confirmation\" },\n          ].map((c) => (\n            <section key={c.t} className=\"pp-card\" aria-label={c.t}>\n              <Text as=\"p\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n                {c.t}\n              </Text>\n              <Heading as=\"h2\" variant=\"display-strong-s\">\n                {c.v}\n              </Heading>\n              <Text as=\"p\" variant=\"body-default-s\" onBackground=\"neutral-medium\">\n                {c.d}\n              </Text>\n            </section>\n          ))}\n        </div>\n\n        <p role=\"status\" aria-live=\"polite\" style={{ marginTop: 24, minHeight: 24, fontSize: 14 }}>\n          {status}\n        </p>\n      </main>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

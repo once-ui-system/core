@@ -1,0 +1,219 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Changelog/timeline page — versioned entries on a timeline, tags per release, copyable code snippets.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MSwFxihTUkGoTUnqrbonBv",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Q7Rtqsm2YnETSbJgHjoywW",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MSwFxihTUkGoTUnqrbonBv",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Q7Rtqsm2YnETSbJgHjoywW",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01UZKi8Pqp1T4pYZHKMKf8bT",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012Wb6pWeyzsgUFhRP14ogFM",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01EvymbMkhFZxhkQdhXUt8xd",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UZKi8Pqp1T4pYZHKMKf8bT",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012Wb6pWeyzsgUFhRP14ogFM",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EvymbMkhFZxhkQdhXUt8xd",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_019XsSZtMY6Kjq2spTZVN2eX",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MoeJ5s6WeETakP5qQpjHEs",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018UoXjt6npKXAQ1oKNDSNUW",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019XsSZtMY6Kjq2spTZVN2eX",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MoeJ5s6WeETakP5qQpjHEs",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018UoXjt6npKXAQ1oKNDSNUW",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The layout is minimal and sets no theme, so I'll build a self-contained page with a light/dark-aware design using Tailwind's default media-based dark variant."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GP9ZZKnniqNfdVprSDD27u",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GP9ZZKnniqNfdVprSDD27u",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useMemo, useRef, useState, useEffect, useCallback } from \"react\";\nimport {\n  Check,\n  Copy,\n  Sparkles,\n  Bug,\n  ShieldAlert,\n  AlertTriangle,\n  Zap,\n  Rocket,\n  Search,\n  type LucideIcon,\n} from \"lucide-react\";\n\ntype Tag = \"feature\" | \"fix\" | \"security\" | \"breaking\" | \"performance\";\n\ntype Snippet = {\n  label: string;\n  language: string;\n  code: string;\n};\n\ntype Release = {\n  version: string;\n  date: string; // ISO date\n  title: string;\n  summary: string;\n  tags: Tag[];\n  changes: string[];\n  snippet?: Snippet;\n  latest?: boolean;\n};\n\nconst TAG_META: Record<\n  Tag,\n  { label: string; icon: LucideIcon; classes: string; dot: string }\n> = {\n  feature: {\n    label: \"Feature\",\n    icon: Sparkles,\n    classes:\n      \"bg-indigo-50 text-indigo-800 ring-indigo-600/20 dark:bg-indigo-500/10 dark:text-indigo-300 dark:ring-indigo-400/30\",\n    dot: \"bg-indigo-500\",\n  },\n  fix: {\n    label: \"Fix\",\n    icon: Bug,\n    classes:\n      \"bg-emerald-50 text-emerald-800 ring-emerald-600/20 dark:bg-emerald-500/10 dark:text-emerald-300 dark:ring-emerald-400/30\",\n    dot: \"bg-emerald-500\",\n  },\n  security: {\n    label: \"Security\",\n    icon: ShieldAlert,\n    classes:\n      \"bg-rose-50 text-rose-800 ring-rose-600/20 dark:bg-rose-500/10 dark:text-rose-300 dark:ring-rose-400/30\",\n    dot: \"bg-rose-500\",\n  },\n  breaking: {\n    label: \"Breaking\",\n    icon: AlertTriangle,\n    classes:\n      \"bg-amber-50 text-amber-900 ring-amber-600/30 dark:bg-amber-500/10 dark:text-amber-300 dark:ring-amber-400/30\",\n    dot: \"bg-amber-500\",\n  },\n  performance: {\n    label: \"Performance\",\n    icon: Zap,\n    classes:\n      \"bg-sky-50 text-sky-800 ring-sky-600/20 dark:bg-sky-500/10 dark:text-sky-300 dark:ring-sky-400/30\",\n    dot: \"bg-sky-500\",\n  },\n};\n\nconst ALL_TAGS = Object.keys(TAG_META) as Tag[];\n\nconst RELEASES: Release[] = [\n  {\n    version: \"3.2.0\",\n    date: \"2025-06-10\",\n    title: \"Streaming exports and workspace webhooks\",\n    summary:\n      \"Large exports no longer block the dashboard, and workspaces can now push events to your own services as they happen.\",\n    tags: [\"feature\", \"performance\"],\n    latest: true,\n    changes: [\n      \"Exports stream to disk in chunks, so a 2 GB audit log now finishes without hitting the 60-second request limit.\",\n      \"New workspace webhooks with signed payloads, automatic retries and a delivery log kept for 14 days.\",\n      \"The activity feed loads 40% faster on workspaces with more than 10,000 events.\",\n    ],\n    snippet: {\n      label: \"Verify a webhook signature\",\n      language: \"ts\",\n      code: `import { createHmac, timingSafeEqual } from \"node:crypto\";\n\nexport function verifySignature(\n  body: string,\n  header: string,\n  secret: string,\n): boolean {\n  const expected = createHmac(\"sha256\", secret).update(body).digest(\"hex\");\n  const a = Buffer.from(expected);\n  const b = Buffer.from(header.replace(\"sha256=\", \"\"));\n  return a.length === b.length && timingSafeEqual(a, b);\n}`,\n    },\n  },\n  {\n    version: \"3.1.2\",\n    date: \"2025-05-27\",\n    title: \"Patch: session expiry and CSV encoding\",\n    summary:\n      \"A small round of fixes for issues reported by customers over the past two weeks.\",\n    tags: [\"fix\", \"security\"],\n    changes: [\n      \"Sessions are now invalidated on every device after a password reset (CVE-2025-31184).\",\n      \"CSV exports encode non-ASCII characters as UTF-8 with a byte-order mark so Excel opens them correctly.\",\n      \"Fixed a crash in the date picker when the locale uses a non-Gregorian calendar.\",\n    ],\n  },\n  {\n    version: \"3.1.0\",\n    date: \"2025-05-06\",\n    title: \"Saved views and keyboard shortcuts\",\n    summary:\n      \"Pin the filters you use every day and move around the app without touching the mouse.\",\n    tags: [\"feature\"],\n    changes: [\n      \"Saved views remember filters, sort order and visible columns, and can be shared with your team.\",\n      \"Press ? anywhere to open the shortcut sheet; G then D jumps to the dashboard.\",\n      \"Tables now support multi-column sorting with Shift + click.\",\n    ],\n    snippet: {\n      label: \"Create a saved view with the CLI\",\n      language: \"bash\",\n      code: `northbeam views create \\\\\n  --name \"Failed payments this week\" \\\\\n  --filter \"status=failed\" \\\\\n  --filter \"created>=-7d\" \\\\\n  --sort \"-created\" \\\\\n  --share team`,\n    },\n  },\n  {\n    version: \"3.0.0\",\n    date: \"2025-04-01\",\n    title: \"Northbeam 3: new API and a faster core\",\n    summary:\n      \"Our biggest release this year. The v3 API replaces cursor tokens with opaque page handles and drops several deprecated endpoints.\",\n    tags: [\"breaking\", \"feature\", \"performance\"],\n    changes: [\n      \"The /v1 REST endpoints are removed. Migrate to /v3 before upgrading the SDK.\",\n      \"Pagination now uses `page.next` handles instead of numeric offsets.\",\n      \"Rewritten query engine cuts median p95 latency from 480 ms to 190 ms.\",\n      \"Node 18 is no longer supported; the SDK requires Node 20 or newer.\",\n    ],\n    snippet: {\n      label: \"Migrate pagination\",\n      language: \"ts\",\n      code: `// Before (v2)\nconst page = await client.events.list({ offset: 100, limit: 50 });\n\n// After (v3)\nlet page = await client.events.list({ limit: 50 });\nwhile (page.next) {\n  for (const event of page.items) handle(event);\n  page = await client.events.list({ handle: page.next });\n}`,\n    },\n  },\n  {\n    version: \"2.9.4\",\n    date: \"2025-02-18\",\n    title: \"Patch: rate limit headers and SSO redirects\",\n    summary: \"Stability fixes ahead of the 3.0 release.\",\n    tags: [\"fix\"],\n    changes: [\n      \"Rate limit responses now include an accurate Retry-After header.\",\n      \"SSO sign-in no longer loops when the return URL contains an encoded hash.\",\n      \"Webhook test events display the correct timestamp in the workspace time zone.\",\n    ],\n  },\n  {\n    version: \"2.9.0\",\n    date: \"2025-01-14\",\n    title: \"Role-based access control\",\n    summary:\n      \"Custom roles let you grant exactly the access each teammate needs, nothing more.\",\n    tags: [\"feature\", \"security\"],\n    changes: [\n      \"Create custom roles with per-resource read, write and admin permissions.\",\n      \"Audit log entries now record the role used for each action.\",\n      \"API keys can be scoped to a single role instead of inheriting the creator's access.\",\n    ],\n    snippet: {\n      label: \"Define a custom role\",\n      language: \"json\",\n      code: `{\n  \"name\": \"billing-analyst\",\n  \"permissions\": [\n    { \"resource\": \"invoices\", \"access\": \"read\" },\n    { \"resource\": \"reports\", \"access\": \"write\" }\n  ]\n}`,\n    },\n  },\n];\n\nconst dateFormatter = new Intl.DateTimeFormat(\"en-US\", {\n  year: \"numeric\",\n  month: \"long\",\n  day: \"numeric\",\n  timeZone: \"UTC\",\n});\n\nfunction formatDate(iso: string): string {\n  return dateFormatter.format(new Date(`${iso}T00:00:00Z`));\n}\n\nfunction TagBadge({ tag }: { tag: Tag }) {\n  const meta = TAG_META[tag];\n  const Icon = meta.icon;\n  return (\n    <span\n      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${meta.classes}`}\n    >\n      <Icon className=\"size-3\" aria-hidden=\"true\" />\n      {meta.label}\n    </span>\n  );\n}\n\nfunction CodeSnippet({ snippet, id }: { snippet: Snippet; id: string }) {\n  const [copied, setCopied] = useState(false);\n  const [failed, setFailed] = useState(false);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  useEffect(() => {\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, []);\n\n  const handleCopy = useCallback(async () => {\n    let ok = false;\n    try {\n      await navigator.clipboard.writeText(snippet.code);\n      ok = true;\n    } catch {\n      // Fallback for insecure contexts or denied permissions.\n      try {\n        const area = document.createElement(\"textarea\");\n        area.value = snippet.code;\n        area.setAttribute(\"readonly\", \"\");\n        area.style.position = \"fixed\";\n        area.style.opacity = \"0\";\n        document.body.appendChild(area);\n        area.select();\n        ok = document.execCommand(\"copy\");\n        document.body.removeChild(area);\n      } catch {\n        ok = false;\n      }\n    }\n    setCopied(ok);\n    setFailed(!ok);\n    if (timer.current) clearTimeout(timer.current);\n    timer.current = setTimeout(() => {\n      setCopied(false);\n      setFailed(false);\n    }, 2000);\n  }, [snippet.code]);\n\n  return (\n    <figure className=\"mt-5 overflow-hidden rounded-xl border border-slate-200 bg-slate-950 dark:border-slate-700\">\n      <figcaption className=\"flex items-center justify-between gap-3 border-b border-slate-800 bg-slate-900 px-4 py-2\">\n        <span className=\"min-w-0 truncate text-xs font-medium text-slate-300\">\n          {snippet.label}\n          <span className=\"ml-2 rounded bg-slate-800 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-slate-400\">\n            {snippet.language}\n          </span>\n        </span>\n        <button\n          type=\"button\"\n          onClick={handleCopy}\n          aria-describedby={`${id}-status`}\n          className=\"inline-flex shrink-0 items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400\"\n        >\n          {copied ? (\n            <Check className=\"size-3.5 text-emerald-400\" aria-hidden=\"true\" />\n          ) : (\n            <Copy className=\"size-3.5\" aria-hidden=\"true\" />\n          )}\n          <span>{copied ? \"Copied\" : failed ? \"Copy failed\" : \"Copy\"}</span>\n          <span className=\"sr-only\"> {snippet.label} to clipboard</span>\n        </button>\n        <span id={`${id}-status`} role=\"status\" aria-live=\"polite\" className=\"sr-only\">\n          {copied ? \"Code copied to clipboard\" : failed ? \"Could not copy code\" : \"\"}\n        </span>\n      </figcaption>\n      <pre\n        tabIndex={0}\n        aria-label={`${snippet.label} code`}\n        className=\"overflow-x-auto p-4 text-[13px] leading-relaxed text-slate-100 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-400\"\n      >\n        <code className=\"font-mono\">{snippet.code}</code>\n      </pre>\n    </figure>\n  );\n}\n\nexport default function Page() {\n  const [active, setActive] = useState<Tag | \"all\">(\"all\");\n  const [query, setQuery] = useState(\"\");\n\n  const visible = useMemo(() => {\n    const q = query.trim().toLowerCase();\n    return RELEASES.filter((r) => {\n      if (active !== \"all\" && !r.tags.includes(active)) return false;\n      if (!q) return true;\n      const haystack = [r.version, r.title, r.summary, ...r.changes]\n        .join(\" \")\n        .toLowerCase();\n      return haystack.includes(q);\n    });\n  }, [active, query]);\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100\">\n      <a\n        href=\"#releases\"\n        className=\"sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-slate-900 focus:shadow-lg\"\n      >\n        Skip to releases\n      </a>\n\n      <header className=\"border-b border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900\">\n        <div className=\"mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16\">\n          <p className=\"inline-flex items-center gap-2 text-sm font-medium text-indigo-600 dark:text-indigo-400\">\n            <Rocket className=\"size-4\" aria-hidden=\"true\" />\n            Northbeam\n          </p>\n          <h1 className=\"mt-3 text-3xl font-semibold tracking-tight text-balance sm:text-4xl\">\n            Changelog\n          </h1>\n          <p className=\"mt-3 max-w-xl text-base text-slate-600 text-pretty dark:text-slate-400\">\n            New features, fixes and breaking changes for the Northbeam platform\n            and SDK. Every release is listed newest first.\n          </p>\n\n          <div className=\"mt-8 flex flex-col gap-4\">\n            <div className=\"relative\">\n              <label htmlFor=\"changelog-search\" className=\"sr-only\">\n                Search releases\n              </label>\n              <Search\n                className=\"pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-400\"\n                aria-hidden=\"true\"\n              />\n              <input\n                id=\"changelog-search\"\n                type=\"search\"\n                value={query}\n                onChange={(e) => setQuery(e.target.value)}\n                placeholder=\"Search versions and changes\"\n                className=\"w-full rounded-lg border border-slate-300 bg-white py-2.5 pl-9 pr-3 text-sm text-slate-900 placeholder:text-slate-500 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-indigo-500 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100 dark:placeholder:text-slate-400\"\n              />\n            </div>\n\n            <div role=\"group\" aria-label=\"Filter by tag\" className=\"flex flex-wrap gap-2\">\n              {([\"all\", ...ALL_TAGS] as const).map((t) => {\n                const selected = active === t;\n                return (\n                  <button\n                    key={t}\n                    type=\"button\"\n                    aria-pressed={selected}\n                    onClick={() => setActive(t)}\n                    className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ${\n                      selected\n                        ? \"bg-slate-900 text-white dark:bg-white dark:text-slate-900\"\n                        : \"bg-slate-100 text-slate-700 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700\"\n                    }`}\n                  >\n                    {t === \"all\" ? \"All\" : TAG_META[t].label}\n                  </button>\n                );\n              })}\n            </div>\n          </div>\n        </div>\n      </header>\n\n      <main id=\"releases\" className=\"mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14\">\n        <p role=\"status\" aria-live=\"polite\" className=\"mb-8 text-sm text-slate-600 dark:text-slate-400\">\n          Showing {visible.length} of {RELEASES.length} releases\n        </p>\n\n        {visible.length === 0 ? (\n          <div className=\"rounded-xl border border-dashed border-slate-300 p-10 text-center dark:border-slate-700\">\n            <p className=\"font-medium\">No releases match your filters.</p>\n            <button\n              type=\"button\"\n              onClick={() => {\n                setActive(\"all\");\n                setQuery(\"\");\n              }}\n              className=\"mt-3 text-sm font-medium text-indigo-600 underline underline-offset-4 hover:text-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 dark:text-indigo-400\"\n            >\n              Clear filters\n            </button>\n          </div>\n        ) : (\n          <ol className=\"relative\">\n            {/* Vertical timeline line */}\n            <span\n              aria-hidden=\"true\"\n              className=\"absolute bottom-0 left-[7px] top-2 w-px bg-slate-300 dark:bg-slate-700 sm:left-[calc(9rem+7px)]\"\n            />\n            {visible.map((release) => {\n              const id = `release-${release.version.replace(/\\./g, \"-\")}`;\n              return (\n                <li key={release.version} className=\"relative pb-12 last:pb-0\">\n                  <article\n                    aria-labelledby={`${id}-title`}\n                    className=\"grid gap-3 pl-8 sm:grid-cols-[9rem_1fr] sm:gap-0 sm:pl-0\"\n                  >\n                    {/* Marker */}\n                    <span\n                      aria-hidden=\"true\"\n                      className={`absolute left-0 top-1.5 size-4 rounded-full border-4 border-slate-50 dark:border-slate-950 sm:left-[9rem] ${\n                        release.latest\n                          ? \"bg-indigo-500 ring-2 ring-indigo-500/40\"\n                          : \"bg-slate-400 dark:bg-slate-500\"\n                      }`}\n                    />\n\n                    <div className=\"sm:pr-8 sm:pt-0.5 sm:text-right\">\n                      <p className=\"font-mono text-lg font-semibold\">\n                        <span className=\"sr-only\">Version </span>v{release.version}\n                      </p>\n                      <time\n                        dateTime={release.date}\n                        className=\"text-sm text-slate-600 dark:text-slate-400\"\n                      >\n                        {formatDate(release.date)}\n                      </time>\n                    </div>\n\n                    <div className=\"min-w-0 sm:pl-8\">\n                      <div className=\"flex flex-wrap items-center gap-2\">\n                        {release.latest && (\n                          <span className=\"rounded-full bg-indigo-600 px-2.5 py-0.5 text-xs font-semibold text-white\">\n                            Latest\n                          </span>\n                        )}\n                        <h2\n                          id={`${id}-title`}\n                          className=\"text-xl font-semibold tracking-tight text-balance\"\n                        >\n                          {release.title}\n                        </h2>\n                      </div>\n\n                      <ul className=\"mt-3 flex flex-wrap gap-2\" aria-label=\"Tags\">\n                        {release.tags.map((tag) => (\n                          <li key={tag}>\n                            <TagBadge tag={tag} />\n                          </li>\n                        ))}\n                      </ul>\n\n                      <p className=\"mt-4 text-slate-700 text-pretty dark:text-slate-300\">\n                        {release.summary}\n                      </p>\n\n                      <ul className=\"mt-4 space-y-2.5\">\n                        {release.changes.map((change) => (\n                          <li\n                            key={change}\n                            className=\"flex gap-3 text-[15px] leading-relaxed text-slate-700 dark:text-slate-300\"\n                          >\n                            <span\n                              aria-hidden=\"true\"\n                              className={`mt-2 size-1.5 shrink-0 rounded-full ${TAG_META[release.tags[0]].dot}`}\n                            />\n                            <span>{change}</span>\n                          </li>\n                        ))}\n                      </ul>\n\n                      {release.snippet && (\n                        <CodeSnippet snippet={release.snippet} id={id} />\n                      )}\n                    </div>\n                  </article>\n                </li>\n              );\n            })}\n          </ol>\n        )}\n      </main>\n\n      <footer className=\"border-t border-slate-200 py-8 text-center text-sm text-slate-600 dark:border-slate-800 dark:text-slate-400\">\n        Northbeam &middot; Questions about an upgrade? Email support@northbeam.example\n      </footer>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

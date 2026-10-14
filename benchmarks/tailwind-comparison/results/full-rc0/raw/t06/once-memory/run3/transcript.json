@@ -1,0 +1,315 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Auth flow — login with password + OTP step in a stacked dialog.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XkHsef9vNEEjwV1dv64Ckm",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QWiCiYkYKeGTwSm9CjNNUC",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XkHsef9vNEEjwV1dv64Ckm",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QWiCiYkYKeGTwSm9CjNNUC",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_019g5vKJTDBL3QfCsZUdi4YW",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015HnsFoCBHYjVi8CduT2yFC",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SxZPeqt8RMBfFv4aspsBgf",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019g5vKJTDBL3QfCsZUdi4YW",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015HnsFoCBHYjVi8CduT2yFC",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SxZPeqt8RMBfFv4aspsBgf",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013w54VzSpp5wPEKgdckKsGD",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JhQ2NnqBWGuHWGx6B3Jpcc",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BY9UFgrVVhD8oZpzw4VUTR",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LkidwS7yU4ByhXX26qyAeK",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KFw2yEr3XZ1GkCFQ6DhX95",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013w54VzSpp5wPEKgdckKsGD",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JhQ2NnqBWGuHWGx6B3Jpcc",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BY9UFgrVVhD8oZpzw4VUTR",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LkidwS7yU4ByhXX26qyAeK",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KFw2yEr3XZ1GkCFQ6DhX95",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check whether the package is installed so I can verify the component APIs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015TGTgvooiHyywqKM4gv6Sp",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UmzfVSjHcat6D6dfzRQ3AL",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015TGTgvooiHyywqKM4gv6Sp",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UmzfVSjHcat6D6dfzRQ3AL",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since I can't inspect the package directly, I'll build the login flow using known-safe Once UI 2.x components (Flex, Column, Heading, Input, Button, Dialog, etc.), with a login card for email/password and a Dialog-based OTP step using custom native inputs for the six digit cells, resend countdown, and validation states.\n\n",
+          "signature": "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"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DPz1P25G7wwBuq27ruZdvx",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DPz1P25G7wwBuq27ruZdvx",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "No further files to check. Writing the page now.\n\n```tsx\n\"use client\";\n\nimport React, { useCallback, useEffect, useRef, useState } from \"react\";\nimport {\n  Button,\n  Column,\n  Dialog,\n  Heading,\n  Input,\n  PasswordInput,\n  Row,\n  Text,\n} from \"@once-ui-system/core\";\n\nconst OTP_LENGTH = 6;\nconst RESEND_SECONDS = 30;\nconst DEMO_EMAIL = \"maya.okafor@northwind.example\";\nconst DEMO_PASSWORD = \"correct-horse-battery\";\nconst DEMO_CODE = \"424242\";\n\ntype Stage = \"credentials\" | \"otp\" | \"done\";\n\nconst emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nfunction maskEmail(email: string): string {\n  const [name, domain] = email.split(\"@\");\n  if (!name || !domain) return email;\n  return `${name.slice(0, 2)}${\"•\".repeat(Math.max(name.length - 2, 2))}@${domain}`;\n}\n\nexport default function Page() {\n  const [stage, setStage] = useState<Stage>(\"credentials\");\n  const [email, setEmail] = useState<string>(DEMO_EMAIL);\n  const [password, setPassword] = useState<string>(\"\");\n  const [emailError, setEmailError] = useState<string>(\"\");\n  const [passwordError, setPasswordError] = useState<string>(\"\");\n  const [submitting, setSubmitting] = useState<boolean>(false);\n\n  const [digits, setDigits] = useState<string[]>(() => Array(OTP_LENGTH).fill(\"\"));\n  const [otpError, setOtpError] = useState<string>(\"\");\n  const [verifying, setVerifying] = useState<boolean>(false);\n  const [countdown, setCountdown] = useState<number>(0);\n  const [resentNotice, setResentNotice] = useState<boolean>(false);\n\n  const cellRefs = useRef<Array<HTMLInputElement | null>>([]);\n  const timers = useRef<number[]>([]);\n\n  const schedule = useCallback((fn: () => void, ms: number) => {\n    const id = window.setTimeout(fn, ms);\n    timers.current.push(id);\n  }, []);\n\n  useEffect(() => {\n    const pending = timers.current;\n    return () => {\n      pending.forEach((id) => window.clearTimeout(id));\n    };\n  }, []);\n\n  useEffect(() => {\n    if (countdown <= 0) return;\n    const id = window.setTimeout(() => setCountdown((c) => c - 1), 1000);\n    return () => window.clearTimeout(id);\n  }, [countdown]);\n\n  const resetOtp = useCallback(() => {\n    setDigits(Array(OTP_LENGTH).fill(\"\"));\n    setOtpError(\"\");\n    setResentNotice(false);\n  }, []);\n\n  const handleCredentials = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    let valid = true;\n    if (!emailPattern.test(email.trim())) {\n      setEmailError(\"Enter a valid work email address.\");\n      valid = false;\n    } else {\n      setEmailError(\"\");\n    }\n    if (password.length < 8) {\n      setPasswordError(\"Password must be at least 8 characters.\");\n      valid = false;\n    } else {\n      setPasswordError(\"\");\n    }\n    if (!valid) return;\n\n    setSubmitting(true);\n    schedule(() => {\n      setSubmitting(false);\n      if (password !== DEMO_PASSWORD) {\n        setPasswordError(\"That password doesn't match our records. Try the demo password shown below.\");\n        return;\n      }\n      resetOtp();\n      setCountdown(RESEND_SECONDS);\n      setStage(\"otp\");\n    }, 700);\n  };\n\n  useEffect(() => {\n    if (stage === \"otp\") {\n      const id = window.setTimeout(() => cellRefs.current[0]?.focus(), 150);\n      return () => window.clearTimeout(id);\n    }\n  }, [stage]);\n\n  const verify = useCallback(\n    (code: string) => {\n      setVerifying(true);\n      setOtpError(\"\");\n      schedule(() => {\n        setVerifying(false);\n        if (code === DEMO_CODE) {\n          setStage(\"done\");\n        } else {\n          setOtpError(\"That code is incorrect or has expired. Check the code and try again.\");\n          setDigits(Array(OTP_LENGTH).fill(\"\"));\n          cellRefs.current[0]?.focus();\n        }\n      }, 700);\n    },\n    [schedule],\n  );\n\n  const updateDigits = (next: string[]) => {\n    setDigits(next);\n    setOtpError(\"\");\n    const code = next.join(\"\");\n    if (code.length === OTP_LENGTH && next.every((d) => d !== \"\")) {\n      verify(code);\n    }\n  };\n\n  const handleCellChange = (index: number, raw: string) => {\n    const cleaned = raw.replace(/\\D/g, \"\");\n    if (!cleaned) {\n      const next = [...digits];\n      next[index] = \"\";\n      setDigits(next);\n      return;\n    }\n    const next = [...digits];\n    let cursor = index;\n    for (const ch of cleaned) {\n      if (cursor >= OTP_LENGTH) break;\n      next[cursor] = ch;\n      cursor += 1;\n    }\n    cellRefs.current[Math.min(cursor, OTP_LENGTH - 1)]?.focus();\n    updateDigits(next);\n  };\n\n  const handleCellKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === \"Backspace\" && !digits[index] && index > 0) {\n      event.preventDefault();\n      const next = [...digits];\n      next[index - 1] = \"\";\n      setDigits(next);\n      cellRefs.current[index - 1]?.focus();\n    } else if (event.key === \"ArrowLeft\" && index > 0) {\n      event.preventDefault();\n      cellRefs.current[index - 1]?.focus();\n    } else if (event.key === \"ArrowRight\" && index < OTP_LENGTH - 1) {\n      event.preventDefault();\n      cellRefs.current[index + 1]?.focus();\n    }\n  };\n\n  const handleResend = () => {\n    if (countdown > 0) return;\n    resetOtp();\n    setResentNotice(true);\n    setCountdown(RESEND_SECONDS);\n    cellRefs.current[0]?.focus();\n  };\n\n  const closeDialog = () => {\n    if (verifying) return;\n    setStage(\"credentials\");\n    resetOtp();\n  };\n\n  const signOut = () => {\n    setStage(\"credentials\");\n    setPassword(\"\");\n    resetOtp();\n  };\n\n  const otpComplete = digits.every((d) => d !== \"\");\n\n  return (\n    <Column\n      as=\"main\"\n      fillWidth\n      horizontal=\"center\"\n      vertical=\"center\"\n      padding=\"l\"\n      minHeight=\"100vh\"\n      gap=\"24\"\n    >\n      <Column\n        fillWidth\n        maxWidth={28}\n        background=\"surface\"\n        border=\"neutral-alpha-weak\"\n        radius=\"l\"\n        padding=\"32\"\n        gap=\"24\"\n        shadow=\"l\"\n      >\n        {stage === \"done\" ? (\n          <Column gap=\"16\" horizontal=\"center\" aria-live=\"polite\">\n            <Heading as=\"h1\" variant=\"heading-strong-l\" align=\"center\">\n              You&apos;re signed in\n            </Heading>\n            <Text variant=\"body-default-m\" onBackground=\"neutral-weak\" align=\"center\">\n              Welcome back, Maya. Your session on this device is verified and will stay active for 12 hours.\n            </Text>\n            <Button variant=\"secondary\" size=\"m\" onClick={signOut} fillWidth>\n              Sign out\n            </Button>\n          </Column>\n        ) : (\n          <form onSubmit={handleCredentials} noValidate aria-label=\"Sign in\">\n            <Column gap=\"24\" fillWidth>\n              <Column gap=\"8\">\n                <Heading as=\"h1\" variant=\"heading-strong-l\">\n                  Sign in to Northwind\n                </Heading>\n                <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                  Use your work account. We&apos;ll ask for a one-time code on the next step.\n                </Text>\n              </Column>\n\n              <Column gap=\"16\">\n                <Input\n                  id=\"login-email\"\n                  name=\"email\"\n                  type=\"email\"\n                  label=\"Work email\"\n                  autoComplete=\"username\"\n                  value={email}\n                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}\n                  error={Boolean(emailError)}\n                  errorMessage={emailError}\n                />\n                <PasswordInput\n                  id=\"login-password\"\n                  name=\"password\"\n                  label=\"Password\"\n                  autoComplete=\"current-password\"\n                  value={password}\n                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}\n                  error={Boolean(passwordError)}\n                  errorMessage={passwordError}\n                />\n              </Column>\n\n              <Button type=\"submit\" variant=\"primary\" size=\"l\" fillWidth loading={submitting}>\n                Continue\n              </Button>\n\n              <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\" align=\"center\">\n                Demo credentials: password <code>{DEMO_PASSWORD}</code>, then code{\" \"}\n                <code>{DEMO_CODE}</code>.\n              </Text>\n            </Column>\n          </form>\n        )}\n      </Column>\n\n      <Dialog\n        isOpen={stage === \"otp\"}\n        onClose={closeDialog}\n        title=\"Verify it's you\"\n        description={`Enter the 6-digit code we sent to ${maskEmail(email)}.`}\n        footer={\n          <Row fillWidth gap=\"8\" horizontal=\"between\" vertical=\"center\" wrap>\n            <Button\n              variant=\"tertiary\"\n              size=\"m\"\n              onClick={handleResend}\n              disabled={countdown > 0 || verifying}\n            >\n              {countdown > 0 ? `Resend code in ${countdown}s` : \"Resend code\"}\n            </Button>\n            <Button\n              variant=\"primary\"\n              size=\"m\"\n              onClick={() => verify(digits.join(\"\"))}\n              disabled={!otpComplete}\n              loading={verifying}\n            >\n              Verify\n            </Button>\n          </Row>\n        }\n      >\n        <Column gap=\"16\" fillWidth>\n          <div role=\"group\" aria-label=\"One-time code\" style={{ display: \"flex\", gap: 8, justifyContent: \"center\" }}>\n            {digits.map((digit, index) => (\n              <input\n                key={index}\n                ref={(node) => {\n                  cellRefs.current[index] = node;\n                }}\n                value={digit}\n                onChange={(e) => handleCellChange(index, e.target.value)}\n                onKeyDown={(e) => handleCellKeyDown(index, e)}\n                onFocus={(e) => e.currentTarget.select()}\n                inputMode=\"numeric\"\n                pattern=\"[0-9]*\"\n                autoComplete={index === 0 ? \"one-time-code\" : \"off\"}\n                maxLength={OTP_LENGTH}\n                aria-label={`Digit ${index + 1} of ${OTP_LENGTH}`}\n                aria-invalid={otpError ? true : undefined}\n                aria-describedby={otpError ? \"otp-error\" : undefined}\n                disabled={verifying}\n                style={{\n                  width: \"min(3rem, 13vw)\",\n                  height: \"3.5rem\",\n                  textAlign: \"center\",\n                  fontSize: \"1.5rem\",\n                  fontFamily: \"var(--font-code)\",\n                  color: \"var(--neutral-on-background-strong)\",\n                  background: \"var(--neutral-alpha-weak)\",\n                  border: `1px solid ${\n                    otpError ? \"var(--danger-solid-strong)\" : \"var(--neutral-alpha-medium)\"\n                  }`,\n                  borderRadius: \"var(--radius-m)\",\n                  outlineOffset: 2,\n                }}\n              />\n            ))}\n          </div>\n\n          <div aria-live=\"polite\" style={{ minHeight: \"1.5rem\" }}>\n            {otpError ? (\n              <Text id=\"otp-error\" variant=\"body-default-s\" onBackground=\"danger-weak\" align=\"center\" role=\"alert\">\n                {otpError}\n              </Text>\n            ) : resentNotice ? (\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" align=\"center\">\n                A new code is on its way.\n              </Text>\n            ) : null}\n          </div>\n        </Column>\n      </Dialog>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(275,9): error TS2322: Type '{ children: Element; isOpen: boolean; onClose: () => void; title: string; description: string; footer: Element; }' is not assignable to type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'isOpen' does not exist on type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'. Did you mean 'open'?\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport React, { useCallback, useEffect, useRef, useState } from \"react\";\nimport {\n  Button,\n  Column,\n  Dialog,\n  Heading,\n  Input,\n  PasswordInput,\n  Row,\n  Text,\n} from \"@once-ui-system/core\";\n\nconst OTP_LENGTH = 6;\nconst RESEND_SECONDS = 30;\nconst DEMO_EMAIL = \"maya.okafor@northwind.example\";\nconst DEMO_PASSWORD = \"correct-horse-battery\";\nconst DEMO_CODE = \"424242\";\n\ntype Stage = \"credentials\" | \"otp\" | \"done\";\n\nconst emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nfunction maskEmail(email: string): string {\n  const [name, domain] = email.split(\"@\");\n  if (!name || !domain) return email;\n  return `${name.slice(0, 2)}${\"•\".repeat(Math.max(name.length - 2, 2))}@${domain}`;\n}\n\nexport default function Page() {\n  const [stage, setStage] = useState<Stage>(\"credentials\");\n  const [email, setEmail] = useState<string>(DEMO_EMAIL);\n  const [password, setPassword] = useState<string>(\"\");\n  const [emailError, setEmailError] = useState<string>(\"\");\n  const [passwordError, setPasswordError] = useState<string>(\"\");\n  const [submitting, setSubmitting] = useState<boolean>(false);\n\n  const [digits, setDigits] = useState<string[]>(() => Array(OTP_LENGTH).fill(\"\"));\n  const [otpError, setOtpError] = useState<string>(\"\");\n  const [verifying, setVerifying] = useState<boolean>(false);\n  const [countdown, setCountdown] = useState<number>(0);\n  const [resentNotice, setResentNotice] = useState<boolean>(false);\n\n  const cellRefs = useRef<Array<HTMLInputElement | null>>([]);\n  const timers = useRef<number[]>([]);\n\n  const schedule = useCallback((fn: () => void, ms: number) => {\n    const id = window.setTimeout(fn, ms);\n    timers.current.push(id);\n  }, []);\n\n  useEffect(() => {\n    const pending = timers.current;\n    return () => {\n      pending.forEach((id) => window.clearTimeout(id));\n    };\n  }, []);\n\n  useEffect(() => {\n    if (countdown <= 0) return;\n    const id = window.setTimeout(() => setCountdown((c) => c - 1), 1000);\n    return () => window.clearTimeout(id);\n  }, [countdown]);\n\n  const resetOtp = useCallback(() => {\n    setDigits(Array(OTP_LENGTH).fill(\"\"));\n    setOtpError(\"\");\n    setResentNotice(false);\n  }, []);\n\n  const handleCredentials = (event: React.FormEvent<HTMLFormElement>) => {\n    event.preventDefault();\n    let valid = true;\n    if (!emailPattern.test(email.trim())) {\n      setEmailError(\"Enter a valid work email address.\");\n      valid = false;\n    } else {\n      setEmailError(\"\");\n    }\n    if (password.length < 8) {\n      setPasswordError(\"Password must be at least 8 characters.\");\n      valid = false;\n    } else {\n      setPasswordError(\"\");\n    }\n    if (!valid) return;\n\n    setSubmitting(true);\n    schedule(() => {\n      setSubmitting(false);\n      if (password !== DEMO_PASSWORD) {\n        setPasswordError(\"That password doesn't match our records. Try the demo password shown below.\");\n        return;\n      }\n      resetOtp();\n      setCountdown(RESEND_SECONDS);\n      setStage(\"otp\");\n    }, 700);\n  };\n\n  useEffect(() => {\n    if (stage === \"otp\") {\n      const id = window.setTimeout(() => cellRefs.current[0]?.focus(), 150);\n      return () => window.clearTimeout(id);\n    }\n  }, [stage]);\n\n  const verify = useCallback(\n    (code: string) => {\n      setVerifying(true);\n      setOtpError(\"\");\n      schedule(() => {\n        setVerifying(false);\n        if (code === DEMO_CODE) {\n          setStage(\"done\");\n        } else {\n          setOtpError(\"That code is incorrect or has expired. Check the code and try again.\");\n          setDigits(Array(OTP_LENGTH).fill(\"\"));\n          cellRefs.current[0]?.focus();\n        }\n      }, 700);\n    },\n    [schedule],\n  );\n\n  const updateDigits = (next: string[]) => {\n    setDigits(next);\n    setOtpError(\"\");\n    const code = next.join(\"\");\n    if (code.length === OTP_LENGTH && next.every((d) => d !== \"\")) {\n      verify(code);\n    }\n  };\n\n  const handleCellChange = (index: number, raw: string) => {\n    const cleaned = raw.replace(/\\D/g, \"\");\n    if (!cleaned) {\n      const next = [...digits];\n      next[index] = \"\";\n      setDigits(next);\n      return;\n    }\n    const next = [...digits];\n    let cursor = index;\n    for (const ch of cleaned) {\n      if (cursor >= OTP_LENGTH) break;\n      next[cursor] = ch;\n      cursor += 1;\n    }\n    cellRefs.current[Math.min(cursor, OTP_LENGTH - 1)]?.focus();\n    updateDigits(next);\n  };\n\n  const handleCellKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {\n    if (event.key === \"Backspace\" && !digits[index] && index > 0) {\n      event.preventDefault();\n      const next = [...digits];\n      next[index - 1] = \"\";\n      setDigits(next);\n      cellRefs.current[index - 1]?.focus();\n    } else if (event.key === \"ArrowLeft\" && index > 0) {\n      event.preventDefault();\n      cellRefs.current[index - 1]?.focus();\n    } else if (event.key === \"ArrowRight\" && index < OTP_LENGTH - 1) {\n      event.preventDefault();\n      cellRefs.current[index + 1]?.focus();\n    }\n  };\n\n  const handleResend = () => {\n    if (countdown > 0) return;\n    resetOtp();\n    setResentNotice(true);\n    setCountdown(RESEND_SECONDS);\n    cellRefs.current[0]?.focus();\n  };\n\n  const closeDialog = () => {\n    if (verifying) return;\n    setStage(\"credentials\");\n    resetOtp();\n  };\n\n  const signOut = () => {\n    setStage(\"credentials\");\n    setPassword(\"\");\n    resetOtp();\n  };\n\n  const otpComplete = digits.every((d) => d !== \"\");\n\n  return (\n    <Column\n      as=\"main\"\n      fillWidth\n      horizontal=\"center\"\n      vertical=\"center\"\n      padding=\"l\"\n      minHeight=\"100vh\"\n      gap=\"24\"\n    >\n      <Column\n        fillWidth\n        maxWidth={28}\n        background=\"surface\"\n        border=\"neutral-alpha-weak\"\n        radius=\"l\"\n        padding=\"32\"\n        gap=\"24\"\n        shadow=\"l\"\n      >\n        {stage === \"done\" ? (\n          <Column gap=\"16\" horizontal=\"center\" aria-live=\"polite\">\n            <Heading as=\"h1\" variant=\"heading-strong-l\" align=\"center\">\n              You&apos;re signed in\n            </Heading>\n            <Text variant=\"body-default-m\" onBackground=\"neutral-weak\" align=\"center\">\n              Welcome back, Maya. Your session on this device is verified and will stay active for 12 hours.\n            </Text>\n            <Button variant=\"secondary\" size=\"m\" onClick={signOut} fillWidth>\n              Sign out\n            </Button>\n          </Column>\n        ) : (\n          <form onSubmit={handleCredentials} noValidate aria-label=\"Sign in\">\n            <Column gap=\"24\" fillWidth>\n              <Column gap=\"8\">\n                <Heading as=\"h1\" variant=\"heading-strong-l\">\n                  Sign in to Northwind\n                </Heading>\n                <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                  Use your work account. We&apos;ll ask for a one-time code on the next step.\n                </Text>\n              </Column>\n\n              <Column gap=\"16\">\n                <Input\n                  id=\"login-email\"\n                  name=\"email\"\n                  type=\"email\"\n                  label=\"Work email\"\n                  autoComplete=\"username\"\n                  value={email}\n                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}\n                  error={Boolean(emailError)}\n                  errorMessage={emailError}\n                />\n                <PasswordInput\n                  id=\"login-password\"\n                  name=\"password\"\n                  label=\"Password\"\n                  autoComplete=\"current-password\"\n                  value={password}\n                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}\n                  error={Boolean(passwordError)}\n                  errorMessage={passwordError}\n                />\n              </Column>\n\n              <Button type=\"submit\" variant=\"primary\" size=\"l\" fillWidth loading={submitting}>\n                Continue\n              </Button>\n\n              <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\" align=\"center\">\n                Demo credentials: password <code>{DEMO_PASSWORD}</code>, then code{\" \"}\n                <code>{DEMO_CODE}</code>.\n              </Text>\n            </Column>\n          </form>\n        )}\n      </Column>\n\n      <Dialog\n        open={stage === \"otp\"}\n        onClose={closeDialog}\n        title=\"Verify it's you\"\n        description={`Enter the 6-digit code we sent to ${maskEmail(email)}.`}\n        footer={\n          <Row fillWidth gap=\"8\" horizontal=\"between\" vertical=\"center\" wrap>\n            <Button\n              variant=\"tertiary\"\n              size=\"m\"\n              onClick={handleResend}\n              disabled={countdown > 0 || verifying}\n            >\n              {countdown > 0 ? `Resend code in ${countdown}s` : \"Resend code\"}\n            </Button>\n            <Button\n              variant=\"primary\"\n              size=\"m\"\n              onClick={() => verify(digits.join(\"\"))}\n              disabled={!otpComplete}\n              loading={verifying}\n            >\n              Verify\n            </Button>\n          </Row>\n        }\n      >\n        <Column gap=\"16\" fillWidth>\n          <div role=\"group\" aria-label=\"One-time code\" style={{ display: \"flex\", gap: 8, justifyContent: \"center\" }}>\n            {digits.map((digit, index) => (\n              <input\n                key={index}\n                ref={(node) => {\n                  cellRefs.current[index] = node;\n                }}\n                value={digit}\n                onChange={(e) => handleCellChange(index, e.target.value)}\n                onKeyDown={(e) => handleCellKeyDown(index, e)}\n                onFocus={(e) => e.currentTarget.select()}\n                inputMode=\"numeric\"\n                pattern=\"[0-9]*\"\n                autoComplete={index === 0 ? \"one-time-code\" : \"off\"}\n                maxLength={OTP_LENGTH}\n                aria-label={`Digit ${index + 1} of ${OTP_LENGTH}`}\n                aria-invalid={otpError ? true : undefined}\n                aria-describedby={otpError ? \"otp-error\" : undefined}\n                disabled={verifying}\n                style={{\n                  width: \"min(3rem, 13vw)\",\n                  height: \"3.5rem\",\n                  textAlign: \"center\",\n                  fontSize: \"1.5rem\",\n                  fontFamily: \"var(--font-code)\",\n                  color: \"var(--neutral-on-background-strong)\",\n                  background: \"var(--neutral-alpha-weak)\",\n                  border: `1px solid ${\n                    otpError ? \"var(--danger-solid-strong)\" : \"var(--neutral-alpha-medium)\"\n                  }`,\n                  borderRadius: \"var(--radius-m)\",\n                  outlineOffset: 2,\n                }}\n              />\n            ))}\n          </div>\n\n          <div aria-live=\"polite\" style={{ minHeight: \"1.5rem\" }}>\n            {otpError ? (\n              <Text id=\"otp-error\" variant=\"body-default-s\" onBackground=\"danger-weak\" align=\"center\" role=\"alert\">\n                {otpError}\n              </Text>\n            ) : resentNotice ? (\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" align=\"center\">\n                A new code is on its way.\n              </Text>\n            ) : null}\n          </div>\n        </Column>\n      </Dialog>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

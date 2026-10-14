@@ -152,5 +152,33 @@
   "overflow.hero": {
     "rule": "overflow=\"hidden\" on full-bleed sections clips glows into hard bands — only use when parent has radius.",
     "components": ["Column", "Background"]
+  },
+  "layout.responsiveProps": {
+    "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}).",
+    "components": ["Flex", "Row", "Column", "Grid", "Button", "Text"]
+  },
+  "layout.noBaseline": {
+    "rule": "vertical and horizontal take start, center, end, between, around, even or stretch. There is no baseline; for baseline-aligned text use style={{ alignItems: \"baseline\" }}.",
+    "components": ["Flex", "Row", "Column"]
+  },
+  "spacing.tokens": {
+    "rule": "gap, padding and margin take spacing tokens (\"0\", \"1\", \"2\", \"4\", \"8\", \"12\", \"16\", \"20\", \"24\", \"32\", \"40\", \"48\", \"56\", \"64\", \"72\", \"80\", \"104\", \"128\", \"160\", or xs–xl). \"6\" and \"10\" are not tokens and are type errors.",
+    "components": ["Flex", "Row", "Column", "Grid"]
+  },
+  "layout.noSpanOrType": {
+    "rule": "Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: \"span 2\" }}.",
+    "components": ["Row", "Column", "Grid"]
+  },
+  "Column.form": {
+    "rule": "Wrap a Column in a native <form onSubmit={handleSubmit}>. Column as=\"form\" keeps the div event types, so a FormEvent<HTMLFormElement> handler (and noValidate) is a type error.",
+    "components": ["Column", "Input", "Button"]
+  },
+  "Checkbox.checked": {
+    "rule": "Checkbox, Switch and RadioButton take checked (or defaultChecked) and onToggle(checked: boolean). isChecked and isIndeterminate were 1.x; the 2.x props are checked and indeterminate.",
+    "components": ["Checkbox", "Switch", "RadioButton"]
+  },
+  "RevealFx.primaryContent": {
+    "rule": "Never wrap primary content (headlines, prices, KPIs, CTAs) in RevealFx: it stays blurred and unreadable until the reveal ends. Reveal secondary sections only, with speed=\"fast\".",
+    "components": ["RevealFx"]
   }
 }
