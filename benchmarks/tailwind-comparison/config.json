@@ -42,7 +42,10 @@
   "screenshot": {
     "type": "jpeg",
     "quality": 70,
-    "max_height": 6000
+    "max_height": 6000,
+    "settle_min_ms": 1500,
+    "settle_max_ms": 5000,
+    "$comment": "Before each full-page screenshot the gate waits settle_min_ms, then until no finite CSS animation or transition has run for two checks 250 ms apart, up to settle_max_ms. Added 2026-10-14 for the 2.1.0 run (METHODOLOGY.md \u00a711): rc.0 screenshotted RevealFx pages mid-blur."
   },
   "arms": {
     "A": {

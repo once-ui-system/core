@@ -13,7 +13,7 @@ import path from "node:path";
 import * as prettier from "prettier";
 import ts from "typescript";
 import Anthropic from "@anthropic-ai/sdk";
-import { ROOT, armById, config, listFiles, proxyTokens } from "./lib.mjs";
+import { ROOT, armById, attemptFiles, config, listFiles, proxyTokens } from "./lib.mjs";
 
 const arg = (k, d) => {
   const i = process.argv.indexOf(`--${k}`);
@@ -98,10 +98,18 @@ if (import.meta.url === `file://${process.argv[1]}`) {
     const run = JSON.parse(fs.readFileSync(path.join(dir, "run.json"), "utf8"));
     if (run.status !== "accepted") continue;
     const { letter, scaffold } = armById(path.basename(path.dirname(dir)));
-    const raw = fs.readFileSync(path.join(dir, `attempt-${run.accepted_attempt}.tsx`), "utf8");
-    const norm = await normalise(raw);
+    // A multi-file app is measured as all its files together, each normalised
+    // on its own (CSS files are counted raw: they are not TypeScript).
+    const files = attemptFiles(dir, run.accepted_attempt);
+    const raw = Object.values(files).join("\n");
+    const norm = (
+      await Promise.all(
+        Object.entries(files).map(([f, src]) => (/\.tsx?$/.test(f) ? normalise(src, path.basename(f)) : src)),
+      )
+    ).join("\n");
     const out = {
       attempt: run.accepted_attempt,
+      files: Object.keys(files).length,
       tokenizer: "proxy",
       normalised: sizes(norm),
       raw: sizes(raw),
