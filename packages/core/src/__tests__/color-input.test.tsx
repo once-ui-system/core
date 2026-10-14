@@ -10,8 +10,8 @@ import { expectNoAxeViolations } from "../test/axe";
 /**
  * ColorInput wraps a native colour field. It reports a hex string, or an
  * `rgba()` string with `supportAlpha` (keeping the opacity it was given), shows
- * the chosen colour as text and as a swatch that reopens the picker, and has a
- * button that clears the colour.
+ * the chosen colour as hex text (with its opacity below 100%) and as a swatch
+ * that reopens the picker, and has a button that clears the colour.
  */
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -69,6 +69,18 @@ describe("ColorInput", () => {
 
     fireEvent.change(field(), { target: { value: "#ff0000" } });
     expect(onChange).toHaveBeenCalledWith("rgba(255, 0, 0, 0.5)");
+  });
+
+  it("with supportAlpha, shows hex and the opacity below 100%, hex alone at 100%", () => {
+    const { unmount } = render(<ControlledColor supportAlpha initial="rgba(49, 23, 77, 0.77)" />, {
+      wrapper,
+    });
+    expect(screen.getByText("#31174d 77%")).toBeInTheDocument();
+    expect(screen.queryByText(/rgba/)).toBeNull();
+    unmount();
+
+    render(<ControlledColor supportAlpha initial="rgba(49, 23, 77, 1)" />, { wrapper });
+    expect(screen.getByText("#31174d")).toBeInTheDocument();
   });
 
   it("clears the colour with the remove button", () => {
