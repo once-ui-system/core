@@ -13,6 +13,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **`ColorInput` with `supportAlpha` shows the colour as hex**, with the
+  opacity after it below 100% (`#31174d 77%`), instead of an `rgba()` string
+  that came out as `rgba(49, 23, 77, 0, 77)` for any opacity below 100%. The
+  value it reports through `onChange` is unchanged. Thanks to @JExcellence
+  (#140).
+
 ## [2.1.0-rc.0] — 2026-10-13
 
 2.1 is a minor release: additive only, nothing removed or renamed. The plan
