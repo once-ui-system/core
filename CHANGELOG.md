@@ -40,6 +40,12 @@ item (see `ROADMAP.md`, Week 4).
   value it reports through `onChange` is unchanged. Thanks to @JExcellence
   (#140).
 
+### Added
+
+- **`Schema` takes `as="aboutPage"` and `as="creativeWork"`**, which emit
+  schema.org `AboutPage` and `CreativeWork`, for about pages and portfolio
+  work. Thanks @timtorres (#162).
+
 ## [2.1.0-rc.0] — 2026-10-13
 
 2.1 is a minor release: additive only, nothing removed or renamed. The plan
