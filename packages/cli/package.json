@@ -1,0 +1,55 @@
+{
+  "name": "@once-ui-system/cli",
+  "version": "0.1.0",
+  "description": "The Once UI command line: scaffold apps from Stack surfaces and add blocks to a project.",
+  "keywords": [
+    "once-ui",
+    "cli",
+    "scaffold",
+    "nextjs",
+    "design system"
+  ],
+  "author": "Once UI",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/once-ui-system/core.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/once-ui-system/core/issues"
+  },
+  "homepage": "https://docs.once-ui.com",
+  "type": "module",
+  "bin": {
+    "once-ui": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.build.json",
+    "clean": "rimraf dist",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "tar": "^7.5.22"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.6",
+    "@types/node": "26.1.2",
+    "rimraf": "^6.1.3",
+    "typescript": "6.0.3",
+    "vitest": "^4.1.10"
+  }
+}
