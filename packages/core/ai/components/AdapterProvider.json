@@ -5,5 +5,32 @@
   "adapters": "!Partial<OnceUIAdapters>",
   "children": "!React.ReactNode"
  },
- "mixinsRef": []
+ "tags": [
+  "provider"
+ ],
+ "pairsWith": [
+  "LayoutProvider"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "AdapterImageProps": {
+   "src": "!string",
+   "alt": "!string",
+   "fill": "boolean",
+   "priority": "boolean",
+   "unoptimized": "boolean",
+   "width": "number",
+   "height": "number"
+  },
+  "AdapterLinkProps": {
+   "href": "!string",
+   "children": "React.ReactNode"
+  },
+  "OnceUIAdapters": {
+   "Link": "!React.ComponentType<AdapterLinkProps & React.RefAttributes<HTMLAnchorElement>>",
+   "Image": "!React.ComponentType<AdapterImageProps>",
+   "usePathname": "!() => string",
+   "useNavigate": "!() => (href: string) => void"
+  }
+ }
 }

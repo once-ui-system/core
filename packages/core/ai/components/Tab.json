@@ -9,5 +9,14 @@
   "children": "ReactNode",
   "disabled": "boolean = false"
  },
+ "tags": [
+  "navigation",
+  "tabs"
+ ],
+ "pairsWith": [
+  "Tabs",
+  "TabList",
+  "TabPanel"
+ ],
  "mixinsRef": []
 }

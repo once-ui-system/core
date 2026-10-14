@@ -22,6 +22,16 @@
   "onDateRangeChange": "(range: DateRange) => void",
   "presets": "PresetsConfig = { display: true, granularity: \"week\" }"
  },
+ "tags": [
+  "data",
+  "chart",
+  "dashboard"
+ ],
+ "pairsWith": [
+  "LineChart",
+  "BarChart",
+  "DateRangePicker"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -30,7 +40,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",
@@ -134,6 +144,27 @@
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
+  }
+ },
+ "types": {
+  "DateConfig": {
+   "start": "Date",
+   "end": "Date",
+   "max": "Date",
+   "min": "Date",
+   "dual": "boolean",
+   "format": "string",
+   "presets": "PresetsConfig",
+   "selector": "boolean",
+   "onChange": "(range: DateRange) => void"
+  },
+  "DateRange": {
+   "startDate": "!Date | undefined",
+   "endDate": "!Date | undefined"
+  },
+  "PresetsConfig": {
+   "display": "!boolean",
+   "granularity": "!\"year\" | \"month\" | \"week\""
   }
  }
 }

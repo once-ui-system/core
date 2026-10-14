@@ -12,5 +12,16 @@
   "labelId": "string",
   "descriptionId": "string"
  },
- "mixinsRef": []
+ "tags": [
+  "form"
+ ],
+ "pairsWith": [
+  "Checkbox",
+  "RadioButton",
+  "Switch"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "IconButtonProps": "IconButton props"
+ }
 }

@@ -10,13 +10,22 @@
  "props": {
   "wrap": "CSSProperties[\"textWrap\"] = balance"
  },
+ "tags": [
+  "typography",
+  "basics"
+ ],
+ "pairsWith": [
+  "Text",
+  "Column",
+  "RevealFx"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
   "SpacingProps",
   "TextProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

@@ -2511,7 +2511,8 @@
     "style": "React.CSSProperties",
     "timePicker": "boolean = false",
     "minDate": "Date",
-    "maxDate": "Date"
+    "maxDate": "Date",
+    "locale": "string"
    }
   },
   "DatePicker": {
@@ -2547,7 +2548,8 @@
     "range": "{ startDate?: Date; endDate?: Date; }",
     "onHover": "(date: Date | null) => void",
     "autoFocus": "boolean = false",
-    "open": "boolean"
+    "open": "boolean",
+    "locale": "string"
    }
   },
   "DateRangeInput": {
@@ -2563,7 +2565,8 @@
     "onChange": "(range: DateRange) => void",
     "minHeight": "number",
     "className": "string",
-    "style": "React.CSSProperties"
+    "style": "React.CSSProperties",
+    "locale": "string"
    }
   },
   "DateRangePicker": {
@@ -2586,7 +2589,8 @@
     "maxDate": "Date",
     "dual": "boolean",
     "size": "CondensedTShirtSizes = m",
-    "autoFocus": "boolean"
+    "autoFocus": "boolean",
+    "locale": "string"
    }
   },
   "DialogProvider": {

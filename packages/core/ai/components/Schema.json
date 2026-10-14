@@ -13,5 +13,11 @@
   "sameAs": "string[] = []",
   "author": "{ name: string; url?: string; image?: string; }"
  },
+ "tags": [
+  "seo"
+ ],
+ "pairsWith": [
+  "Meta"
+ ],
  "mixinsRef": []
 }

@@ -12,7 +12,22 @@
   "onChange": "(range: DateRange) => void",
   "minHeight": "number",
   "className": "string",
-  "style": "React.CSSProperties"
+  "style": "React.CSSProperties",
+  "locale": "string"
  },
- "mixinsRef": []
+ "tags": [
+  "form",
+  "dashboard"
+ ],
+ "pairsWith": [
+  "DateRangePicker",
+  "Form"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "DateRange": {
+   "startDate": "!Date | undefined",
+   "endDate": "!Date | undefined"
+  }
+ }
 }

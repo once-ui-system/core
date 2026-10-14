@@ -10,5 +10,12 @@
   "objectFit": "CSSProperties[\"objectFit\"] = cover",
   "className": "string"
  },
+ "tags": [
+  "media"
+ ],
+ "pairsWith": [
+  "Media",
+  "Column"
+ ],
  "mixinsRef": []
 }

@@ -5,5 +5,14 @@
  "props": {
   "children": "!ReactNode"
  },
+ "tags": [
+  "provider",
+  "next"
+ ],
+ "pairsWith": [
+  "ThemeProvider",
+  "ToastProvider",
+  "ThemeInit"
+ ],
  "mixinsRef": []
 }

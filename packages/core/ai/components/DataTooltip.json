@@ -12,5 +12,40 @@
   "showSwatches": "boolean = true",
   "variant": "ChartVariant = gradient"
  },
- "mixinsRef": []
+ "tags": [
+  "data",
+  "chart"
+ ],
+ "pairsWith": [
+  "LineChart",
+  "BarChart",
+  "Swatch"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "ChartVariant": [
+   "flat",
+   "outline",
+   "gradient"
+  ],
+  "DateConfig": {
+   "start": "Date",
+   "end": "Date",
+   "max": "Date",
+   "min": "Date",
+   "dual": "boolean",
+   "format": "string",
+   "presets": "PresetsConfig",
+   "selector": "boolean",
+   "onChange": "(range: DateRange) => void"
+  },
+  "DateRange": {
+   "startDate": "!Date | undefined",
+   "endDate": "!Date | undefined"
+  },
+  "PresetsConfig": {
+   "display": "!boolean",
+   "granularity": "!\"year\" | \"month\" | \"week\""
+  }
+ }
 }

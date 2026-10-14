@@ -15,13 +15,21 @@
   "animationState": "!AnimationState",
   "messageIdx": "number = 0"
  },
+ "tags": [
+  "effect",
+  "motion"
+ ],
+ "pairsWith": [
+  "Heading",
+  "Text"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
   "SpacingProps",
   "TextProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",
@@ -77,5 +85,12 @@
    "family": "TextType",
    "truncate": "boolean"
   }
+ },
+ "types": {
+  "AnimationState": [
+   "entering",
+   "visible",
+   "exiting"
+  ]
  }
 }

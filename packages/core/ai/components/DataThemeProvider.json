@@ -9,5 +9,26 @@
   "axis": "{ stroke: string; }",
   "tick": "{ fill: string; fontSize: number; line: boolean; }"
  },
- "mixinsRef": []
+ "tags": [
+  "provider",
+  "data"
+ ],
+ "pairsWith": [
+  "ThemeProvider",
+  "LineChart",
+  "BarChart"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "ChartMode": [
+   "categorical",
+   "divergent",
+   "sequential"
+  ],
+  "ChartVariant": [
+   "flat",
+   "outline",
+   "gradient"
+  ]
+ }
 }

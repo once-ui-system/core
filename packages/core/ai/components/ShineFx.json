@@ -18,13 +18,21 @@
   "reducedMotion": "boolean | \"auto\" = auto",
   "children": "React.ReactNode"
  },
+ "tags": [
+  "effect",
+  "marketing"
+ ],
+ "pairsWith": [
+  "Heading",
+  "Text"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
   "SpacingProps",
   "TextProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

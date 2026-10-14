@@ -11,5 +11,13 @@
   "loop": "boolean = true",
   "children": "React.ReactNode"
  },
+ "tags": [
+  "effect",
+  "marketing"
+ ],
+ "pairsWith": [
+  "Heading",
+  "Text"
+ ],
  "mixinsRef": []
 }

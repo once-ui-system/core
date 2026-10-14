@@ -17,5 +17,32 @@
   "fillWidth": "boolean = true",
   "multiple": "boolean = false"
  },
- "mixinsRef": []
+ "tags": [
+  "form",
+  "dashboard"
+ ],
+ "pairsWith": [
+  "Input",
+  "Form",
+  "Column"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "OptionProps": "Option props",
+  "Placement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-start",
+   "top-end",
+   "right-start",
+   "right-end",
+   "bottom-start",
+   "bottom-end",
+   "left-start",
+   "left-end"
+  ],
+  "SelectOptionType": "Omit<OptionProps, \"selected\">"
+ }
 }

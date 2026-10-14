@@ -11,5 +11,35 @@
   "style": "React.CSSProperties",
   "children": "React.ReactNode"
  },
- "mixinsRef": []
+ "tags": [
+  "form",
+  "layout"
+ ],
+ "pairsWith": [
+  "Input",
+  "Select",
+  "Textarea",
+  "Button"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "Breakpoint": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs"
+  ],
+  "FormColumns": [
+   "number",
+   "Partial<Record<Breakpoint, number>>"
+  ],
+  "TShirtSizes": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs"
+  ]
+ }
 }

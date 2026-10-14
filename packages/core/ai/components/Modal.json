@@ -8,5 +8,12 @@
   "open": "!boolean",
   "onClose": "!() => void"
  },
+ "tags": [
+  "overlay"
+ ],
+ "pairsWith": [
+  "Column"
+ ],
+ "avoid": "Ordinary dialogs and confirmations — use Dialog",
  "mixinsRef": []
 }

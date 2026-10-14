@@ -13,6 +13,15 @@
   "SpacingProps",
   "StyleProps"
  ],
+ "tags": [
+  "overlay",
+  "profile"
+ ],
+ "pairsWith": [
+  "Avatar",
+  "User",
+  "Column"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -21,7 +30,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

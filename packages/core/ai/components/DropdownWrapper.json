@@ -26,5 +26,34 @@
   "onFocusCapture": "React.FocusEventHandler<HTMLDivElement>",
   "onBlurCapture": "React.FocusEventHandler<HTMLDivElement>"
  },
- "mixinsRef": []
+ "tags": [
+  "overlay"
+ ],
+ "pairsWith": [
+  "Option",
+  "Button",
+  "Column"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "NavigationLayout": [
+   "grid",
+   "row",
+   "column"
+  ],
+  "Placement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-start",
+   "top-end",
+   "right-start",
+   "right-end",
+   "bottom-start",
+   "bottom-end",
+   "left-start",
+   "left-end"
+  ]
+ }
 }

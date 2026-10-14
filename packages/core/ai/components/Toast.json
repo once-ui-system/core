@@ -10,5 +10,13 @@
   "children": "!React.ReactNode",
   "duration": "number = 6000"
  },
+ "tags": [
+  "feedback"
+ ],
+ "pairsWith": [
+  "Toaster",
+  "useToast"
+ ],
+ "avoid": "Rendering it directly — call addToast from useToast",
  "mixinsRef": []
 }

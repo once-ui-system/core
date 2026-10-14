@@ -7,13 +7,22 @@
   "SpacingProps",
   "TextProps"
  ],
+ "tags": [
+  "typography",
+  "basics"
+ ],
+ "pairsWith": [
+  "Heading",
+  "Column",
+  "Row"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
   "SpacingProps",
   "TextProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

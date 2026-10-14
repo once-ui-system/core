@@ -15,13 +15,20 @@
   "className": "string",
   "style": "React.CSSProperties"
  },
+ "tags": [
+  "content",
+  "typography"
+ ],
+ "pairsWith": [
+  "List"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
   "SpacingProps",
   "TextProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

@@ -10,5 +10,19 @@
   "s": "ToastPosition",
   "xs": "ToastPosition"
  },
- "mixinsRef": []
+ "tags": [
+  "feedback",
+  "provider"
+ ],
+ "pairsWith": [
+  "Toast",
+  "useToast"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "ToastPosition": [
+   "top",
+   "bottom"
+  ]
+ }
 }

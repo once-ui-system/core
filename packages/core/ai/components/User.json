@@ -11,5 +11,18 @@
   "avatarProps": "AvatarProps = {}",
   "className": "string"
  },
- "mixinsRef": []
+ "tags": [
+  "profile",
+  "chat"
+ ],
+ "pairsWith": [
+  "Avatar",
+  "Row",
+  "Text"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "AvatarProps": "Avatar props",
+  "TagProps": "Tag props"
+ }
 }

@@ -12,5 +12,26 @@
   "light": "boolean",
   "brand": "{ copy?: boolean; url?: string }"
  },
- "mixinsRef": []
+ "tags": [
+  "media",
+  "navigation"
+ ],
+ "pairsWith": [
+  "SmartLink",
+  "Row"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "LogoSource": [
+   "string",
+   "{ light: string; dark: string; }"
+  ],
+  "TShirtSizes": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs"
+  ]
+ }
 }

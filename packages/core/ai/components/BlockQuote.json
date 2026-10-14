@@ -23,6 +23,15 @@
   "className": "string",
   "align": "\"center\" | \"left\" | \"right\" = center"
  },
+ "tags": [
+  "typography",
+  "marketing"
+ ],
+ "pairsWith": [
+  "Avatar",
+  "Column"
+ ],
+ "avoid": "Sizing it above the section titles (display-strong-xs/s) around it",
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -31,7 +40,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

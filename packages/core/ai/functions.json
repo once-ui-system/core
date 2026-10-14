@@ -1,0 +1,676 @@
+{
+ "functions": {
+  "useStylePanel": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => StylePanelContextValue"
+  },
+  "useArrowNavigation": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(options: ArrowNavigationOptions) => { focusedIndex: number; setFocusedIndex: Dispatch<SetStateAction<number>>; handleKeyDown: (e: KeyboardEvent<HTMLElement>) => void; applyHighlightedState: () => void; }"
+  },
+  "useDebounce": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "<T>(value: T, delay: number) => T"
+  },
+  "useOgData": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(url: string | null, customFetchUrl?: string, customProxyUrl?: string) => { ogData: Partial<OgData> | null; loading: boolean; }",
+   "doc": "Fetches a page's Open Graph data through the app's OG fetch route and routes a cross-origin `image` and `faviconUrl` through its proxy route."
+  },
+  "useOgImage": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(url: string | null, customFetchUrl?: string, customProxyUrl?: string) => { ogImage: string | null; loading: boolean; }"
+  },
+  "useHeadingLinks": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "() => { id: string; text: string; level: number; }[]"
+  },
+  "useHotkeys": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(keys: string | readonly string[], callback: (event: KeyboardEvent, hotkey: string) => void, options?: UseHotkeysOptions) => void",
+   "doc": "Call `callback` when a key combination is pressed."
+  },
+  "useInViewport": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(ref: RefObject<HTMLElement | null>, options?: IntersectionObserverInit) => boolean"
+  },
+  "useReducedMotion": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "(override?: boolean | \"auto\") => MotionCapability"
+  },
+  "useStreamingData": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "<T extends Record<string, any>>(options: StreamingOptions<T>) => StreamingResult<T>"
+  },
+  "useStreamingViewport": {
+   "group": "hooks",
+   "kind": "hook",
+   "signature": "<T extends Record<string, any>>(options: StreamingViewportOptions<T>) => StreamingViewportResult<T>"
+  },
+  "defaultAdapters": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "OnceUIAdapters"
+  },
+  "resetAdapterWarning": {
+   "group": "contexts",
+   "kind": "function",
+   "signature": "() => void",
+   "doc": "Exported for tests; resets the once-per-session latch."
+  },
+  "useAdapters": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => OnceUIAdapters"
+  },
+  "warnIfFrameworkUnadapted": {
+   "group": "contexts",
+   "kind": "function",
+   "signature": "(adapters: OnceUIAdapters) => void"
+  },
+  "useDataTheme": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => DataThemeState"
+  },
+  "defaultChartOptions": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "ChartOptions"
+  },
+  "useIcons": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => { icons: IconLibrary; }"
+  },
+  "DEFAULT_BREAKPOINTS": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "{ readonly xs: 480; readonly s: 768; readonly m: 1024; readonly l: 1440; readonly xl: number; }"
+  },
+  "useLayout": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => LayoutContextType"
+  },
+  "useOgRoutes": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => Readonly<OgRoutes>",
+   "doc": "The Open Graph routes in effect: the nearest `OgRoutesProvider`'s, or the defaults."
+  },
+  "useTheme": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => ThemeProviderState"
+  },
+  "useStyle": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => StyleProviderState"
+  },
+  "defaultStyleOptions": {
+   "group": "contexts",
+   "kind": "value",
+   "type": "StyleOptions"
+  },
+  "useToast": {
+   "group": "contexts",
+   "kind": "hook",
+   "signature": "() => ToastContextProps"
+  },
+  "createMdxComponents": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "kind": "function",
+   "signature": "(overrides?: Partial<MdxComponents>) => MdxComponents",
+   "doc": "The default map with `overrides` applied: replace an element (`h2`, `a`, `hr`…), register an app's own components, or map a tag back to plain HTML (`{ hr: \"hr\" }`)."
+  },
+  "mdxComponents": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "kind": "value",
+   "type": "MdxComponents",
+   "doc": "The default map: Markdown elements rendered with Once UI, and the common Once UI components available as tags."
+  },
+  "slugify": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "kind": "function",
+   "signature": "(text: string) => string",
+   "doc": "The fragment id for a heading's text: \"Get started & deploy\" becomes \"get-started-and-deploy\"."
+  },
+  "textOf": {
+   "group": "mdx",
+   "importFrom": "@once-ui-system/core/mdx",
+   "kind": "function",
+   "signature": "(node: ReactNode) => string",
+   "doc": "The text a reader sees in a React node, flattened."
+  },
+  "nextAdapters": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "OnceUIAdapters"
+  },
+  "createOgFetchRoute": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(options?: OgFetchRouteOptions) => OgRouteHandlers",
+   "doc": "`GET /api/og/fetch?url=…` → `{ url, title, description, image, faviconUrl? }` as JSON, read from the page's Open Graph and meta tags."
+  },
+  "createOgProxyRoute": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "function",
+   "signature": "(options?: OgProxyRouteOptions) => OgRouteHandlers",
+   "doc": "`GET /api/og/proxy?url=…` → the image bytes, served from your origin."
+  },
+  "DEFAULT_OG_IMAGE_TYPES": {
+   "group": "next",
+   "importFrom": "@once-ui-system/core/next",
+   "kind": "value",
+   "type": "readonly string[]",
+   "doc": "Raster image types the proxy passes through by default."
+  },
+  "defineConfig": {
+   "group": "config",
+   "importFrom": "@once-ui-system/core/config",
+   "kind": "function",
+   "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
+   "doc": "Type an app's `once-ui.config`."
+  }
+ },
+ "types": {
+  "AdapterImageProps": {
+   "src": "!string",
+   "alt": "!string",
+   "fill": "boolean",
+   "priority": "boolean",
+   "unoptimized": "boolean",
+   "width": "number",
+   "height": "number"
+  },
+  "AdapterLinkProps": {
+   "href": "!string",
+   "children": "React.ReactNode"
+  },
+  "ArrowNavigationOptions": {
+   "layout": "!NavigationLayout",
+   "itemCount": "!number",
+   "columns": "number",
+   "containerRef": "RefObject<HTMLElement | HTMLDivElement | null>",
+   "onSelect": "(index: number) => void",
+   "onFocusChange": "(index: number) => void",
+   "wrap": "boolean",
+   "initialFocusedIndex": "number",
+   "itemSelector": "string",
+   "autoFocus": "boolean",
+   "disabled": "boolean",
+   "disableHighlighting": "boolean"
+  },
+  "BodyLineHeight": [
+   "90",
+   "100",
+   "110",
+   "120"
+  ],
+  "BodySize": [
+   "90",
+   "95",
+   "100",
+   "105",
+   "110"
+  ],
+  "BorderStyle": [
+   "rounded",
+   "playful",
+   "conservative",
+   "sharp"
+  ],
+  "BreakpointKey": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs"
+  ],
+  "Breakpoints": "Record<BreakpointKey, number>",
+  "ChartMode": [
+   "categorical",
+   "divergent",
+   "sequential"
+  ],
+  "ChartOptions": {
+   "variant": "!ChartVariant",
+   "mode": "!ChartMode",
+   "height": "!number",
+   "axis": "!{ stroke: string; }",
+   "tick": "!{ fill: string; fontSize: number; line: boolean; }"
+  },
+  "ChartVariant": [
+   "flat",
+   "outline",
+   "gradient"
+  ],
+  "DataThemeState": {
+   "setChartOptions": "!(options: Partial<ChartOptions>) => void",
+   "variant": "!ChartVariant",
+   "mode": "!ChartMode",
+   "height": "!number",
+   "axis": "!{ stroke: string; }",
+   "tick": "!{ fill: string; fontSize: number; line: boolean; }"
+  },
+  "DeviceFontSize": [
+   "16",
+   "13",
+   "14",
+   "15",
+   "17",
+   "18"
+  ],
+  "IconComponent": [
+   "ComponentClass<SVGProps<SVGSVGElement>, any>",
+   "FunctionComponent<SVGProps<SVGSVGElement>>"
+  ],
+  "IconLibrary": "Record<IconName, IconComponent>",
+  "IconName": [
+   "symbol",
+   "security",
+   "opacity",
+   "dark",
+   "light",
+   "copy",
+   "help",
+   "filter",
+   "info",
+   "danger",
+   "warning",
+   "code",
+   "link",
+   "search",
+   "time",
+   "video",
+   "image",
+   "enter",
+   "send",
+   "checkbox",
+   "document",
+   "adjustments",
+   "arrowLeft",
+   "arrowRight",
+   "arrowUpRight",
+   "ball",
+   "banknotes",
+   "barChart",
+   "bell",
+   "bolt",
+   "book",
+   "bookmark",
+   "calendar",
+   "cart",
+   "chat",
+   "check",
+   "chevronDoubleLeft",
+   "chevronDoubleRight",
+   "chevronDown",
+   "chevronLeft",
+   "chevronRight",
+   "chevronUp",
+   "chevronsLeftRight",
+   "clipboard",
+   "close",
+   "computer",
+   "dislike",
+   "download",
+   "edit",
+   "eye",
+   "eyeDropper",
+   "eyeOff",
+   "file",
+   "flag",
+   "folder",
+   "food",
+   "forward",
+   "gift",
+   "globe",
+   "heart",
+   "home",
+   "inbox",
+   "like",
+   "linearGauge",
+   "lock",
+   "logout",
+   "mail",
+   "maximize",
+   "minimize",
+   "minus",
+   "moreHorizontal",
+   "organization",
+   "pause",
+   "paw",
+   "payment",
+   "person",
+   "personRemove",
+   "play",
+   "plus",
+   "radialGauge",
+   "refresh",
+   "return",
+   "screen",
+   "settings",
+   "smiley",
+   "sparkle",
+   "star",
+   "starFill",
+   "store",
+   "tag",
+   "trash",
+   "trend",
+   "trendDown",
+   "trendUp",
+   "upload",
+   "volume",
+   "volumeOff",
+   "wordmark",
+   "world"
+  ],
+  "InteractiveCursor": [
+   "default",
+   "pointer"
+  ],
+  "LayoutContextType": {
+   "currentBreakpoint": "!BreakpointKey",
+   "width": "!number",
+   "breakpoints": "!Breakpoints",
+   "isBreakpoint": "!(key: BreakpointKey) => boolean",
+   "maxWidth": "!(key: BreakpointKey) => boolean",
+   "minWidth": "!(key: BreakpointKey) => boolean"
+  },
+  "MdxComponents": {
+   "[key: string]": "ElementType"
+  },
+  "MotionCapability": {
+   "prefersReducedMotion": "!boolean",
+   "isLowEnd": "!boolean",
+   "shouldAnimate": "!boolean"
+  },
+  "NavigationLayout": [
+   "grid",
+   "row",
+   "column"
+  ],
+  "NeutralColor": [
+   "sand",
+   "gray",
+   "slate",
+   "rose",
+   "mint",
+   "dusk"
+  ],
+  "NumericKeys": {
+   "[key: number]": "Extract<keyof T, string>"
+  },
+  "OgData": {
+   "title": "!string",
+   "description": "!string",
+   "image": "!string",
+   "url": "!string",
+   "faviconUrl": "string"
+  },
+  "OgFetchRouteOptions": {
+   "timeout": "number",
+   "decodeEntities": "boolean",
+   "favicon": "boolean",
+   "maxBytes": "number",
+   "cacheControl": "string",
+   "userAgent": "string",
+   "maxRedirects": "number",
+   "sameOrigin": "boolean",
+   "allowedDomains": "string[]",
+   "blockedDomains": "string[]",
+   "allowHttp": "boolean",
+   "isAllowed": "(url: URL) => boolean | Promise<boolean>"
+  },
+  "OgProxyRouteOptions": {
+   "timeout": "number",
+   "maxBytes": "number",
+   "cacheMaxAge": "number",
+   "cacheControl": "string",
+   "allowedContentTypes": "readonly string[]",
+   "userAgent": "string",
+   "maxRedirects": "number",
+   "sameOrigin": "boolean",
+   "allowedDomains": "string[]",
+   "blockedDomains": "string[]",
+   "allowHttp": "boolean",
+   "isAllowed": "(url: URL) => boolean | Promise<boolean>"
+  },
+  "OgRouteHandlers": {
+   "GET": "!(request: Request) => Promise<Response>"
+  },
+  "OgRoutes": {
+   "fetch": "!string",
+   "proxy": "!string",
+   "generate": "!string"
+  },
+  "OnceUIAdapters": {
+   "Link": "!React.ComponentType<AdapterLinkProps & React.RefAttributes<HTMLAnchorElement>>",
+   "Image": "!React.ComponentType<AdapterImageProps>",
+   "usePathname": "!() => string",
+   "useNavigate": "!() => (href: string) => void"
+  },
+  "OnceUIConfig": {
+   "[key: string]": "unknown",
+   "baseURL": "string",
+   "fonts": "OnceUIFonts",
+   "style": "OnceUIStyleConfig",
+   "dataStyle": "OnceUIDataStyleConfig"
+  },
+  "OnceUIDataStyleConfig": {
+   "variant": "ChartVariant",
+   "mode": "ChartMode",
+   "height": "number",
+   "axis": "{ stroke: string; }",
+   "tick": "{ fill: string; fontSize: number; line: boolean; }"
+  },
+  "OnceUIFont": {
+   "variable": "!string",
+   "className": "string",
+   "style": "{ fontFamily: string; fontWeight?: number | string; fontStyle?: string }"
+  },
+  "OnceUIFonts": {
+   "[key: string]": "OnceUIFont | OnceUIFont[] | undefined",
+   "heading": "OnceUIFont",
+   "body": "OnceUIFont",
+   "label": "OnceUIFont",
+   "code": "OnceUIFont"
+  },
+  "OnceUIStyleConfig": {
+   "theme": "Theme",
+   "neutral": "NeutralColor | \"custom\"",
+   "brand": "Schemes | \"custom\"",
+   "accent": "Schemes | \"custom\"",
+   "solid": "SolidType",
+   "solidStyle": "SolidStyle",
+   "border": "BorderStyle",
+   "surface": "SurfaceStyle",
+   "transition": "TransitionStyle",
+   "scaling": "ScalingSize",
+   "bodySize": "BodySize",
+   "bodyLineHeight": "BodyLineHeight",
+   "desktopSize": "DeviceFontSize",
+   "tabletSize": "DeviceFontSize",
+   "mobileSize": "DeviceFontSize",
+   "cursorInteractive": "InteractiveCursor",
+   "brandSeed": "string",
+   "accentSeed": "string",
+   "neutralSeed": "string"
+  },
+  "ScalingSize": [
+   "90",
+   "95",
+   "100",
+   "105",
+   "110"
+  ],
+  "Schemes": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan"
+  ],
+  "SolidStyle": [
+   "flat",
+   "plastic"
+  ],
+  "SolidType": [
+   "color",
+   "contrast",
+   "inverse"
+  ],
+  "StreamingOptions": {
+   "initialData": "!T[]",
+   "windowSize": "!number",
+   "intervalMs": "!number",
+   "stepMs": "number",
+   "xKey": "!Extract<keyof T, string>",
+   "numericKeys": "!NumericKeys<T>",
+   "getNextTarget": "!(ctx: { lastPoint: T; nextX: number }) => StreamingTarget<T>"
+  },
+  "StreamingResult": {
+   "data": "!T[]",
+   "running": "!boolean",
+   "setRunning": "!React.Dispatch<React.SetStateAction<boolean>>",
+   "reset": "!() => void"
+  },
+  "StreamingViewportOptions": {
+   "initialData": "!T[]",
+   "windowSize": "!number",
+   "intervalMs": "!number",
+   "stepMs": "number",
+   "xKey": "!Extract<keyof T, string>",
+   "numericKeys": "!NumericKeys<T>",
+   "getNextTarget": "!(ctx: { lastPoint: T; nextX: number }) => StreamingTarget<T>"
+  },
+  "StreamingViewportResult": {
+   "data": "!T[]",
+   "xDomain": "![number, number]",
+   "running": "!boolean",
+   "setRunning": "!React.Dispatch<React.SetStateAction<boolean>>",
+   "reset": "!() => void"
+  },
+  "StyleOptions": {
+   "theme": "!Theme",
+   "neutral": "!NeutralColor | \"custom\"",
+   "brand": "!Schemes | \"custom\"",
+   "accent": "!Schemes | \"custom\"",
+   "solid": "!SolidType",
+   "solidStyle": "!SolidStyle",
+   "border": "!BorderStyle",
+   "surface": "!SurfaceStyle",
+   "transition": "!TransitionStyle",
+   "scaling": "!ScalingSize",
+   "bodySize": "!BodySize",
+   "bodyLineHeight": "!BodyLineHeight",
+   "desktopSize": "DeviceFontSize",
+   "tabletSize": "DeviceFontSize",
+   "mobileSize": "DeviceFontSize",
+   "cursorInteractive": "InteractiveCursor"
+  },
+  "StylePanelContextValue": {
+   "value": "!StylePanelValue",
+   "set": "!(patch: Partial<StylePanelValue>) => void",
+   "mounted": "!boolean",
+   "controlled": "!boolean"
+  },
+  "StylePanelValue": {
+   "theme": "Theme",
+   "border": "BorderStyle",
+   "brand": "Schemes | \"custom\"",
+   "accent": "Schemes | \"custom\"",
+   "neutral": "NeutralColor | \"custom\"",
+   "solid": "SolidType",
+   "solidStyle": "SolidStyle",
+   "surface": "SurfaceStyle",
+   "scaling": "ScalingSize",
+   "transition": "TransitionStyle",
+   "bodySize": "BodySize",
+   "bodyLineHeight": "BodyLineHeight",
+   "chartMode": "ChartMode",
+   "brandSeed": "string",
+   "accentSeed": "string"
+  },
+  "StyleProviderState": {
+   "theme": "!Theme",
+   "neutral": "!NeutralColor | \"custom\"",
+   "brand": "!Schemes | \"custom\"",
+   "accent": "!Schemes | \"custom\"",
+   "solid": "!SolidType",
+   "solidStyle": "!SolidStyle",
+   "border": "!BorderStyle",
+   "surface": "!SurfaceStyle",
+   "transition": "!TransitionStyle",
+   "scaling": "!ScalingSize",
+   "bodySize": "!BodySize",
+   "bodyLineHeight": "!BodyLineHeight",
+   "desktopSize": "DeviceFontSize",
+   "tabletSize": "DeviceFontSize",
+   "mobileSize": "DeviceFontSize",
+   "cursorInteractive": "InteractiveCursor",
+   "setStyle": "!(style: Partial<StyleOptions>) => void"
+  },
+  "SurfaceStyle": [
+   "filled",
+   "translucent"
+  ],
+  "Theme": [
+   "dark",
+   "light",
+   "system"
+  ],
+  "ThemeProviderState": {
+   "theme": "!Theme",
+   "resolvedTheme": "!\"light\" | \"dark\"",
+   "setTheme": "!(theme: Theme) => void"
+  },
+  "ToastContextProps": {
+   "toasts": "!Toast[]",
+   "addToast": "!(toast: Omit<Toast, \"id\">) => string",
+   "removeToast": "!(id: string) => void"
+  },
+  "TransitionStyle": [
+   "none",
+   "all",
+   "micro",
+   "macro"
+  ],
+  "UseHotkeysOptions": {
+   "enabled": "boolean",
+   "allowWhileTyping": "boolean",
+   "target": "RefObject<HTMLElement | null>",
+   "preventDefault": "boolean",
+   "sequenceTimeout": "number"
+  }
+ }
+}

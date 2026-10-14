@@ -11,5 +11,40 @@
   "marginX": "SpacingToken | number",
   "marginY": "SpacingToken | number"
  },
- "mixinsRef": []
+ "tags": [
+  "mdx",
+  "docs"
+ ],
+ "pairsWith": [
+  "MdxInlineCode"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "SpacingToken": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs",
+   "0",
+   "32",
+   "1",
+   "2",
+   "4",
+   "64",
+   "160",
+   "8",
+   "12",
+   "16",
+   "20",
+   "24",
+   "40",
+   "48",
+   "56",
+   "72",
+   "80",
+   "104",
+   "128"
+  ]
+ }
 }

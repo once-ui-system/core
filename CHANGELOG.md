@@ -13,6 +13,19 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **`Schema` takes `as="aboutPage"` and `as="creativeWork"`**, which emit
+  schema.org `AboutPage` and `CreativeWork`, for about pages and portfolio
+  work. Thanks @timtorres (#162).
+- **Localized month and weekday names in the date components.** `DatePicker`,
+  `DateRangePicker`, `DateInput` and `DateRangeInput` take `locale`, a BCP 47
+  tag such as `"de"` or `"pt-BR"`. The month menu, the calendar heading, the
+  grid's accessible name and the weekday headers use the platform's `Intl`
+  names for it (month names start with a capital), and the two input fields
+  write their dates in it. Without `locale`, or with a tag `Intl` does not
+  accept, everything stays in English as before. Weeks still start on Sunday.
+
 ### Changed
 
 - **The harness costs an agent about a third less to read.** In the
@@ -39,22 +52,6 @@ item (see `ROADMAP.md`, Week 4).
   that came out as `rgba(49, 23, 77, 0, 77)` for any opacity below 100%. The
   value it reports through `onChange` is unchanged. Thanks to @JExcellence
   (#140).
-
-### Added
-
-- **`Schema` takes `as="aboutPage"` and `as="creativeWork"`**, which emit
-  schema.org `AboutPage` and `CreativeWork`, for about pages and portfolio
-  work. Thanks @timtorres (#162).
-
-### Added
-
-- **Localized month and weekday names in the date components.** `DatePicker`,
-  `DateRangePicker`, `DateInput` and `DateRangeInput` take `locale`, a BCP 47
-  tag such as `"de"` or `"pt-BR"`. The month menu, the calendar heading, the
-  grid's accessible name and the weekday headers use the platform's `Intl`
-  names for it (month names start with a capital), and the two input fields
-  write their dates in it. Without `locale`, or with a tag `Intl` does not
-  accept, everything stays in English as before. Weeks still start on Sunday.
 
 ## [2.1.0-rc.0] — 2026-10-13
 

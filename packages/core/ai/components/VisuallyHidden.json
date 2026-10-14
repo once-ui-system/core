@@ -8,5 +8,12 @@
   "className": "string",
   "style": "React.CSSProperties"
  },
+ "tags": [
+  "accessibility"
+ ],
+ "pairsWith": [
+  "Button",
+  "SmartLink"
+ ],
  "mixinsRef": []
 }

@@ -15,7 +15,15 @@
   "style": "React.CSSProperties",
   "timePicker": "boolean = false",
   "minDate": "Date",
-  "maxDate": "Date"
+  "maxDate": "Date",
+  "locale": "string"
  },
+ "tags": [
+  "form"
+ ],
+ "pairsWith": [
+  "DatePicker",
+  "Form"
+ ],
  "mixinsRef": []
 }

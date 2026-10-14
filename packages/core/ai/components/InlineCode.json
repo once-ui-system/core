@@ -17,6 +17,14 @@
   "className": "string",
   "style": "React.CSSProperties"
  },
+ "tags": [
+  "typography",
+  "docs"
+ ],
+ "pairsWith": [
+  "Text",
+  "CodeBlock"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -25,7 +33,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",
