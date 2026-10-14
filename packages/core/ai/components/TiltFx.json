@@ -17,6 +17,15 @@
   "intensity": "number = 1",
   "reducedMotion": "boolean | \"auto\" = auto"
  },
+ "tags": [
+  "effect",
+  "marketing"
+ ],
+ "pairsWith": [
+  "Card",
+  "Media",
+  "Column"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -25,7 +34,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

@@ -14,5 +14,13 @@
   "className": "string",
   "style": "React.CSSProperties"
  },
+ "tags": [
+  "form",
+  "settings"
+ ],
+ "pairsWith": [
+  "Row",
+  "Setting"
+ ],
  "mixinsRef": []
 }

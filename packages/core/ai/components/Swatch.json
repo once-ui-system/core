@@ -7,5 +7,20 @@
   "size": "\"s\" | \"m\" = m",
   "variant": "ChartVariant"
  },
- "mixinsRef": []
+ "tags": [
+  "data",
+  "chart"
+ ],
+ "pairsWith": [
+  "Legend",
+  "DataTooltip"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "ChartVariant": [
+   "flat",
+   "outline",
+   "gradient"
+  ]
+ }
 }

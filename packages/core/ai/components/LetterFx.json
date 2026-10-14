@@ -10,5 +10,13 @@
   "className": "string",
   "style": "React.CSSProperties"
  },
+ "tags": [
+  "effect",
+  "marketing"
+ ],
+ "pairsWith": [
+  "Heading",
+  "Column"
+ ],
  "mixinsRef": []
 }

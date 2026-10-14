@@ -5,5 +5,12 @@
  "extends": [
   "HeadingAnchor"
  ],
+ "tags": [
+  "mdx",
+  "docs"
+ ],
+ "pairsWith": [
+  "MdxHeading"
+ ],
  "mixinsRef": []
 }

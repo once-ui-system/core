@@ -19,5 +19,29 @@
   "disabled": "boolean = false",
   "contents": "boolean = false"
  },
- "mixinsRef": []
+ "tags": [
+  "overlay",
+  "action"
+ ],
+ "pairsWith": [
+  "Option",
+  "Column"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "Placement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-start",
+   "top-end",
+   "right-start",
+   "right-end",
+   "bottom-start",
+   "bottom-end",
+   "left-start",
+   "left-end"
+  ]
+ }
 }

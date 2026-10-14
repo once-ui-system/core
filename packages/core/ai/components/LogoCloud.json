@@ -19,6 +19,14 @@
   "limit": "number = 6",
   "rotationInterval": "number = ANIMATION_DURATION"
  },
+ "tags": [
+  "marketing",
+  "social-proof"
+ ],
+ "pairsWith": [
+  "Grid",
+  "Logo"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -27,7 +35,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",
@@ -129,5 +137,8 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
+ },
+ "types": {
+  "LogoProps": "Logo props"
  }
 }

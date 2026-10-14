@@ -19,6 +19,15 @@
   "style": "React.CSSProperties",
   "className": "string"
  },
+ "tags": [
+  "feedback",
+  "ecommerce"
+ ],
+ "pairsWith": [
+  "Grid",
+  "Media",
+  "Column"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -27,7 +36,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

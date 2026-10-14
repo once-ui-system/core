@@ -9,5 +9,14 @@
   "disabled": "boolean = false",
   "autoFocus": "boolean = false"
  },
+ "tags": [
+  "form",
+  "auth"
+ ],
+ "pairsWith": [
+  "Dialog",
+  "Column",
+  "Button"
+ ],
  "mixinsRef": []
 }

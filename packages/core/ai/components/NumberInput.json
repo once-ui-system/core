@@ -12,5 +12,13 @@
   "step": "number = 1",
   "padStart": "number"
  },
+ "tags": [
+  "form",
+  "settings"
+ ],
+ "pairsWith": [
+  "Input",
+  "Setting"
+ ],
  "mixinsRef": []
 }

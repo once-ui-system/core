@@ -23,10 +23,16 @@ export interface DateRangePickerProps extends Omit<React.ComponentProps<typeof F
    * that has just been opened, as DateRangeInput's is.
    */
   autoFocus?: boolean;
+  /**
+   * The locale month and weekday names are shown in, as a BCP 47 tag such as
+   * "de" or "pt-BR". Without it (or with a tag the platform does not accept)
+   * the names are in English, as before.
+   */
+  locale?: string;
 }
 
 const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
-  ({ value, onChange, minDate, maxDate, size = "m", dual, autoFocus, ...rest }, ref) => {
+  ({ value, onChange, minDate, maxDate, size = "m", dual, autoFocus, locale, ...rest }, ref) => {
     const [internalValue, setInternalValue] = useState<DateRange>({
       startDate: value?.startDate || undefined,
       endDate: value?.endDate || undefined,
@@ -122,6 +128,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
           onMonthChange={handleMonthChange}
           onHover={setHoveredDate}
           autoFocus={autoFocus}
+          locale={locale}
         />
         {dual && (
           <DatePicker
@@ -136,6 +143,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
             currentYear={getSecondMonth().getFullYear()}
             onMonthChange={handleMonthChange}
             onHover={setHoveredDate}
+            locale={locale}
           />
         )}
       </Flex>

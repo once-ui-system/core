@@ -18,6 +18,14 @@
   "onClick": "() => void",
   "active": "boolean"
  },
+ "tags": [
+  "navigation",
+  "action"
+ ],
+ "pairsWith": [
+  "MobileMegaMenu",
+  "Row"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -26,7 +34,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

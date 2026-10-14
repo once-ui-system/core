@@ -5,5 +5,142 @@
   "config": "!ThemeInitConfig",
   "dataStyle": "{ mode?: ChartMode }"
  },
- "mixinsRef": []
+ "tags": [
+  "theme",
+  "provider"
+ ],
+ "pairsWith": [
+  "ThemeSwitcher"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "BodyLineHeight": [
+   "90",
+   "100",
+   "110",
+   "120"
+  ],
+  "BodySize": [
+   "90",
+   "95",
+   "100",
+   "105",
+   "110"
+  ],
+  "BorderStyle": [
+   "rounded",
+   "playful",
+   "conservative",
+   "sharp"
+  ],
+  "ChartMode": [
+   "categorical",
+   "divergent",
+   "sequential"
+  ],
+  "DeviceFontSize": [
+   "16",
+   "13",
+   "14",
+   "15",
+   "17",
+   "18"
+  ],
+  "InteractiveCursor": [
+   "default",
+   "pointer"
+  ],
+  "NeutralColor": [
+   "sand",
+   "gray",
+   "slate",
+   "rose",
+   "mint",
+   "dusk"
+  ],
+  "OnceUIStyleConfig": {
+   "theme": "Theme",
+   "neutral": "NeutralColor | \"custom\"",
+   "brand": "Schemes | \"custom\"",
+   "accent": "Schemes | \"custom\"",
+   "solid": "SolidType",
+   "solidStyle": "SolidStyle",
+   "border": "BorderStyle",
+   "surface": "SurfaceStyle",
+   "transition": "TransitionStyle",
+   "scaling": "ScalingSize",
+   "bodySize": "BodySize",
+   "bodyLineHeight": "BodyLineHeight",
+   "desktopSize": "DeviceFontSize",
+   "tabletSize": "DeviceFontSize",
+   "mobileSize": "DeviceFontSize",
+   "cursorInteractive": "InteractiveCursor",
+   "brandSeed": "string",
+   "accentSeed": "string",
+   "neutralSeed": "string"
+  },
+  "ScalingSize": [
+   "90",
+   "95",
+   "100",
+   "105",
+   "110"
+  ],
+  "Schemes": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan"
+  ],
+  "SolidStyle": [
+   "flat",
+   "plastic"
+  ],
+  "SolidType": [
+   "color",
+   "contrast",
+   "inverse"
+  ],
+  "SurfaceStyle": [
+   "filled",
+   "translucent"
+  ],
+  "Theme": [
+   "dark",
+   "light",
+   "system"
+  ],
+  "ThemeInitAttributeConfig": {
+   "theme": "!string",
+   "brand": "!string",
+   "accent": "!string",
+   "neutral": "!string",
+   "solid": "!string",
+   "solid-style": "!string",
+   "border": "!string",
+   "surface": "!string",
+   "transition": "!string",
+   "scaling": "!string",
+   "viz-style": "!string"
+  },
+  "ThemeInitConfig": [
+   "OnceUIStyleConfig",
+   "ThemeInitAttributeConfig"
+  ],
+  "TransitionStyle": [
+   "none",
+   "all",
+   "micro",
+   "macro"
+  ]
+ }
 }

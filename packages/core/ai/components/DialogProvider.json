@@ -4,5 +4,12 @@
  "props": {
   "children": "!React.ReactNode"
  },
+ "tags": [
+  "overlay",
+  "provider"
+ ],
+ "pairsWith": [
+  "Dialog"
+ ],
  "mixinsRef": []
 }

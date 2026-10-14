@@ -17,5 +17,14 @@
   "ariaLabel": "string = Toggle switch",
   "onToggle": "(checked: boolean) => void"
  },
+ "tags": [
+  "form",
+  "settings"
+ ],
+ "pairsWith": [
+  "Setting",
+  "Row",
+  "Column"
+ ],
  "mixinsRef": []
 }

@@ -13,5 +13,13 @@
   "restoreFocus": "boolean = true",
   "autoFocus": "boolean = true"
  },
+ "tags": [
+  "utility",
+  "overlay",
+  "a11y"
+ ],
+ "pairsWith": [
+  "ScrollLock"
+ ],
  "mixinsRef": []
 }

@@ -5,5 +5,20 @@
   "routes": "!Partial<OgRoutes>",
   "children": "!ReactNode"
  },
- "mixinsRef": []
+ "tags": [
+  "provider",
+  "og"
+ ],
+ "pairsWith": [
+  "OgCard",
+  "LayoutProvider"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "OgRoutes": {
+   "fetch": "!string",
+   "proxy": "!string",
+   "generate": "!string"
+  }
+ }
 }

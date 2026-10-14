@@ -30,6 +30,15 @@
   "labels": "Partial<PaginationLabels>",
   "aria-label": "string"
  },
+ "tags": [
+  "navigation",
+  "data"
+ ],
+ "pairsWith": [
+  "Table",
+  "DataTable",
+  "Row"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -38,7 +47,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",
@@ -142,6 +151,15 @@
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
+  }
+ },
+ "types": {
+  "PaginationLabels": {
+   "previous": "!string",
+   "next": "!string",
+   "first": "!string",
+   "last": "!string",
+   "perPage": "!string"
   }
  }
 }

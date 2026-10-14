@@ -10,5 +10,20 @@
   "supportAlpha": "boolean = false",
   "labels": "ColorInputLabels"
  },
- "mixinsRef": []
+ "tags": [
+  "form",
+  "settings"
+ ],
+ "pairsWith": [
+  "Input",
+  "Setting"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "ColorInputLabels": {
+   "remove": "string",
+   "adjustOpacity": "string",
+   "opacity": "string"
+  }
+ }
 }

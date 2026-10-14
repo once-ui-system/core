@@ -19,5 +19,33 @@
   "alternates": "Alternate[]",
   "ogRoutes": "Partial<OgRoutes>"
  },
- "mixinsRef": []
+ "tags": [
+  "seo",
+  "next"
+ ],
+ "pairsWith": [
+  "Schema"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "Alternate": {
+   "href": "!string",
+   "hrefLang": "!string"
+  },
+  "GeneratedMetadata": {
+   "metadataBase": "!URL",
+   "title": "!string",
+   "description": "!string",
+   "openGraph": "!{ title: string; description: string; type: \"website\" | \"article\"; publishedTime?: string; url: string; images: { url: string; alt: string }[]; }",
+   "twitter": "!{ card: \"summary_large_image\"; title: string; description: string; images: string[]; }",
+   "authors": "{ name: string; url?: string }[]",
+   "robots": "string",
+   "alternates": "{ canonical: string; languages: Record<string, string>; }"
+  },
+  "OgRoutes": {
+   "fetch": "!string",
+   "proxy": "!string",
+   "generate": "!string"
+  }
+ }
 }

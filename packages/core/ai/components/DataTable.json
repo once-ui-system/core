@@ -44,6 +44,15 @@
   "aria-label": "string",
   "aria-labelledby": "string"
  },
+ "tags": [
+  "data",
+  "dashboard"
+ ],
+ "pairsWith": [
+  "Pagination",
+  "Tag",
+  "Button"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -52,7 +61,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",
@@ -156,6 +165,31 @@
    "themeSolid": "SolidType",
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
+  }
+ },
+ "types": {
+  "DataTableColumn": {
+   "key": "!string",
+   "header": "!ReactNode",
+   "cell": "(row: T, index: number) => ReactNode",
+   "sortable": "boolean",
+   "sort": "(a: T, b: T) => number",
+   "align": "\"left\" | \"center\" | \"right\"",
+   "width": "string"
+  },
+  "DataTableLabels": {
+   "selectAll": "!string",
+   "selectRow": "!string",
+   "pagination": "!string",
+   "previous": "!string",
+   "next": "!string",
+   "first": "!string",
+   "last": "!string",
+   "perPage": "!string"
+  },
+  "DataTableSort": {
+   "key": "!string",
+   "direction": "!\"asc\" | \"desc\""
   }
  }
 }

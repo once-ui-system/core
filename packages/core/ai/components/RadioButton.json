@@ -15,5 +15,13 @@
   "onToggle": "(checked: boolean) => void",
   "hoverable": "boolean = true"
  },
+ "tags": [
+  "form",
+  "settings"
+ ],
+ "pairsWith": [
+  "Column",
+  "Form"
+ ],
  "mixinsRef": []
 }

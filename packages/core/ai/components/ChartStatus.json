@@ -9,5 +9,15 @@
   "emptyState": "React.ReactNode = No data available for the selected period",
   "errorState": "React.ReactNode = An error occurred while fetching data"
  },
+ "tags": [
+  "data",
+  "chart",
+  "feedback"
+ ],
+ "pairsWith": [
+  "LineChart",
+  "BarChart",
+  "PieChart"
+ ],
  "mixinsRef": []
 }

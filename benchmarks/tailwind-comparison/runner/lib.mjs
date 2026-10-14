@@ -10,7 +10,28 @@ export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "
 export const WORK = path.join(ROOT, "work");
 export const RESULTS = path.join(ROOT, "results");
 export const config = JSON.parse(fs.readFileSync(path.join(ROOT, "config.json"), "utf8"));
-export const tasks = JSON.parse(fs.readFileSync(path.join(ROOT, "prompts/tasks.json"), "utf8")).tasks;
+// BENCH_TASKS picks another task set (the v2 app-scale tasks); every script
+// that reads tasks honours it, so one run uses one set throughout.
+export const TASKS_FILE = path.resolve(ROOT, process.env.BENCH_TASKS ?? "prompts/tasks.json");
+const taskSet = JSON.parse(fs.readFileSync(TASKS_FILE, "utf8"));
+export const tasks = taskSet.tasks;
+// A task set may fix its own generation budgets (v2: larger apps, larger
+// budgets); they apply to every task in the set and are recorded with it.
+if (taskSet.generation) Object.assign(config.generation, taskSet.generation);
+// Scripted interactions are keyed by task id, so they belong to their task
+// set: the 12 single-page tasks keep prompts/interactions.json, another set
+// carries its own under `interactions` (none if it has none).
+export const interactions = process.env.BENCH_TASKS
+  ? (taskSet.interactions ?? {})
+  : JSON.parse(fs.readFileSync(path.join(ROOT, "prompts/interactions.json"), "utf8")).tasks;
+export const taskById = (id) => tasks.find((t) => t.id === id);
+// A multi-file task's reply is several files; a single-file task's is app/page.tsx.
+export const isMulti = (task) => task?.output === "multi";
+export const routesOf = (task) => task?.routes ?? ["/"];
+// "/" keeps the single-page names (screenshot-desktop.jpg); other routes add a
+// slug (screenshot-settings-billing-desktop.jpg).
+export const routeSlug = (route) => route.replace(/^\/+|\/+$/g, "").replace(/[^\w-]+/g, "-");
+export const shotName = (route, vp) => `screenshot-${routeSlug(route) ? `${routeSlug(route)}-` : ""}${vp}.jpg`;
 const stacks = JSON.parse(fs.readFileSync(path.join(ROOT, "prompts/stacks.json"), "utf8"));
 
 export function listFiles(dir, base = dir) {
@@ -39,19 +60,20 @@ export function proxyTokens(text) {
 }
 
 export function buildPrompt(armLetter, taskId) {
-  const task = tasks.find((t) => t.id === taskId);
+  const task = taskById(taskId);
   const user = fs
-    .readFileSync(path.join(ROOT, "prompts/user.md"), "utf8")
+    .readFileSync(path.join(ROOT, isMulti(task) ? "prompts/user-multi.md" : "prompts/user.md"), "utf8")
     .replace("{{STACK}}", stacks[armLetter])
-    .replace("{{TASK}}", task.prompt);
+    .replace("{{TASK}}", task.prompt)
+    .replace("{{ROUTES}}", routesOf(task).map((r) => `\`${r}\``).join(", "));
   const system = fs.readFileSync(path.join(ROOT, "prompts/system.md"), "utf8").trim();
   return { system, user };
 }
 
-export function buildRepairPrompt(gate, output) {
+export function buildRepairPrompt(gate, output, multi = false) {
   const clipped = output.length > 4000 ? `${output.slice(0, 4000)}\n…[truncated]` : output;
   return fs
-    .readFileSync(path.join(ROOT, "prompts/repair.md"), "utf8")
+    .readFileSync(path.join(ROOT, multi ? "prompts/repair-multi.md" : "prompts/repair.md"), "utf8")
     .replace("{{GATE}}", gate)
     .replace("{{OUTPUT}}", clipped);
 }
@@ -60,6 +82,35 @@ export function buildRepairPrompt(gate, output) {
 export function extractCode(reply) {
   const blocks = [...reply.matchAll(/```(?:tsx|ts|jsx|typescript)?[^\n]*\n([\s\S]*?)```/g)];
   return blocks.length ? `${blocks.at(-1)[1].trimEnd()}\n` : null;
+}
+
+// Multi-file replies: every fenced block whose info string names a path,
+// ```tsx app/settings/page.tsx. A later block for the same path replaces an
+// earlier one. Paths must stay inside app/, components/ or lib/; anything else
+// (an absolute path, `..`, another folder) is reported, not written.
+const FILE_PATH = /^(?:app|components|lib)\/[\w@()[\].\/-]+\.(?:tsx|ts|css)$/;
+export function extractFiles(reply) {
+  const files = {};
+  const rejected = [];
+  for (const m of reply.matchAll(/```[\w-]*[ \t]+(?:(?:title|file)=)?["']?([^\s"'`]+)["']?[^\n]*\n([\s\S]*?)```/g)) {
+    const p = path.posix.normalize(m[1].replace(/^\.\//, ""));
+    if (!FILE_PATH.test(p) || p.split("/").includes("..")) rejected.push(m[1]);
+    else files[p] = `${m[2].trimEnd()}\n`;
+  }
+  return { files: Object.keys(files).length ? files : null, rejected };
+}
+
+// The code of one attempt as {path: source}: attempt-N.files/ for a
+// multi-file task, attempt-N.tsx (as app/page.tsx) for a single page.
+export function attemptFiles(runDir, attempt) {
+  const manifest = path.join(runDir, `attempt-${attempt}.files.json`);
+  if (fs.existsSync(manifest)) {
+    const { files } = JSON.parse(fs.readFileSync(manifest, "utf8"));
+    return Object.fromEntries(
+      files.map((f) => [f, fs.readFileSync(path.join(runDir, `attempt-${attempt}.files`, f), "utf8")]),
+    );
+  }
+  return { "app/page.tsx": fs.readFileSync(path.join(runDir, `attempt-${attempt}.tsx`), "utf8") };
 }
 
 export const armByLetter = (l) => ({ letter: l, ...config.arms[l] });

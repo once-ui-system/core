@@ -5,5 +5,12 @@
  "props": {
   "children": "!React.ReactNode"
  },
+ "tags": [
+  "provider",
+  "next"
+ ],
+ "pairsWith": [
+  "LayoutProvider"
+ ],
  "mixinsRef": []
 }

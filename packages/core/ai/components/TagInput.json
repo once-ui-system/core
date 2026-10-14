@@ -9,5 +9,12 @@
   "defaultValue": "readonly string[]",
   "onChange": "(value: string[]) => void"
  },
+ "tags": [
+  "form"
+ ],
+ "pairsWith": [
+  "Input",
+  "Chip"
+ ],
  "mixinsRef": []
 }

@@ -26,6 +26,13 @@ export function DateTimePickerExample() {
   return <DatePicker value={dateTime} onChange={handleDateTimeChange} timePicker />;
 }
 
+// DatePicker with month and weekday names in another locale
+export function LocalizedDatePickerExample() {
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+
+  return <DatePicker value={selectedDate} onChange={setSelectedDate} locale="de" />;
+}
+
 // DateRangePicker example
 export function DateRangePickerExample() {
   const [dateRange, setDateRange] = useState<DateRange>({

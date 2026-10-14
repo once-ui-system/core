@@ -33,6 +33,16 @@
   "loading": "boolean = false",
   "border": "Colors | \"surface\" | \"transparent\" | boolean = neutral-alpha-weak"
  },
+ "tags": [
+  "data",
+  "chart",
+  "dashboard"
+ ],
+ "pairsWith": [
+  "ChartHeader",
+  "Column",
+  "BarChart"
+ ],
  "mixinsRef": [
   "ChartProps",
   "CommonProps",
@@ -42,7 +52,7 @@
   "SpacingProps",
   "StyleProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "ChartProps": {
    "title": "React.ReactNode",
@@ -163,5 +173,78 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
+ },
+ "types": {
+  "Colors": [
+   "neutral-weak",
+   "neutral-medium",
+   "neutral-strong",
+   "brand-weak",
+   "brand-medium",
+   "brand-strong",
+   "accent-weak",
+   "accent-medium",
+   "accent-strong",
+   "info-weak",
+   "info-medium",
+   "info-strong",
+   "danger-weak",
+   "danger-medium",
+   "danger-strong",
+   "warning-weak",
+   "warning-medium",
+   "warning-strong",
+   "success-weak",
+   "success-medium",
+   "success-strong",
+   "neutral-alpha-weak",
+   "neutral-alpha-medium",
+   "neutral-alpha-strong",
+   "brand-alpha-weak",
+   "brand-alpha-medium",
+   "brand-alpha-strong",
+   "accent-alpha-weak",
+   "accent-alpha-medium",
+   "accent-alpha-strong",
+   "info-alpha-weak",
+   "info-alpha-medium",
+   "info-alpha-strong",
+   "danger-alpha-weak",
+   "danger-alpha-medium",
+   "danger-alpha-strong",
+   "warning-alpha-weak",
+   "warning-alpha-medium",
+   "warning-alpha-strong",
+   "success-alpha-weak",
+   "success-alpha-medium",
+   "success-alpha-strong"
+  ],
+  "DataStyle": [
+   "categorical",
+   "divergent",
+   "sequential"
+  ],
+  "LegendConfig": {
+   "display": "boolean",
+   "direction": "\"row\" | \"column\"",
+   "position": "\"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\" | \"top-center\" | \"bottom-center\""
+  },
+  "curveType": [
+   "step",
+   "linear",
+   "basis",
+   "basisClosed",
+   "basisOpen",
+   "bumpX",
+   "bumpY",
+   "bump",
+   "linearClosed",
+   "natural",
+   "monotoneX",
+   "monotoneY",
+   "monotone",
+   "stepBefore",
+   "stepAfter"
+  ]
  }
 }

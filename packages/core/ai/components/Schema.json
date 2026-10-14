@@ -2,7 +2,7 @@
  "name": "Schema",
  "group": "modules",
  "props": {
-  "as": "!\"website\" | \"article\" | \"blogPosting\" | \"techArticle\" | \"webPage\" | \"organization\"",
+  "as": "!\"website\" | \"aboutPage\" | \"article\" | \"blogPosting\" | \"creativeWork\" | \"techArticle\" | \"webPage\" | \"organization\"",
   "title": "!string",
   "description": "!string",
   "baseURL": "!string",
@@ -13,5 +13,11 @@
   "sameAs": "string[] = []",
   "author": "{ name: string; url?: string; image?: string; }"
  },
+ "tags": [
+  "seo"
+ ],
+ "pairsWith": [
+  "Meta"
+ ],
  "mixinsRef": []
 }

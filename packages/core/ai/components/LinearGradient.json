@@ -12,5 +12,25 @@
   "stops": "GradientStop[]",
   "variant": "ChartVariant"
  },
- "mixinsRef": []
+ "tags": [
+  "data",
+  "chart"
+ ],
+ "pairsWith": [
+  "LineChart",
+  "BarChart"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "ChartVariant": [
+   "flat",
+   "outline",
+   "gradient"
+  ],
+  "GradientStop": {
+   "offset": "!string",
+   "opacity": "!number",
+   "variant": "ChartVariant"
+  }
+ }
 }

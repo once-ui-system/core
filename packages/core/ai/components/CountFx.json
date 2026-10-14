@@ -20,13 +20,22 @@
   "effect": "\"simple\" | \"wheel\" | \"smooth\" = simple",
   "children": "React.ReactNode"
  },
+ "tags": [
+  "effect",
+  "data",
+  "marketing"
+ ],
+ "pairsWith": [
+  "Text",
+  "Row"
+ ],
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
   "SpacingProps",
   "TextProps"
  ],
- "tokensRef": "see spec.json mixins",
+ "tokensRef": "see tokens.json",
  "resolvedMixins": {
   "CommonProps": {
    "onBackground": "Colors",

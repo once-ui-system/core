@@ -1,6 +1,6 @@
 {
  "version": "2.1.0-rc.0",
- "generated": "2026-10-13",
+ "generated": "2026-10-14",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -145,8 +145,11 @@
   }
  },
  "files": {
-  "spec": "spec.json",
+  "spec": "spec.json (the full machine spec, for tooling; agents read bundles and slices)",
   "catalog": "catalog.json",
+  "tokens": "tokens.json",
+  "functions": "functions.json",
+  "bundles": "bundles/",
   "rules": "rules.compact.md",
   "rulesFull": "rules.md",
   "recipes": "recipes.md",
@@ -161,5 +164,6 @@
   "rules.compact.md",
   "catalog.json"
  ],
- "resolve": "tasks/index.json"
+ "resolve": "tasks/index.json",
+ "bundle": "bundles/{id}.json"
 }

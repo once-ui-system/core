@@ -2,7 +2,15 @@ import React from "react";
 import { safeScriptJson } from "../../utils/safe-html";
 
 export interface SchemaProps {
-  as: "website" | "article" | "blogPosting" | "techArticle" | "webPage" | "organization";
+  as:
+    | "website"
+    | "aboutPage"
+    | "article"
+    | "blogPosting"
+    | "creativeWork"
+    | "techArticle"
+    | "webPage"
+    | "organization";
   title: string;
   description: string;
   baseURL: string;
@@ -20,8 +28,10 @@ export interface SchemaProps {
 
 const schemaTypeMap = {
   website: "WebSite",
+  aboutPage: "AboutPage",
   article: "Article",
   blogPosting: "BlogPosting",
+  creativeWork: "CreativeWork",
   techArticle: "TechArticle",
   webPage: "WebPage",
   organization: "Organization",

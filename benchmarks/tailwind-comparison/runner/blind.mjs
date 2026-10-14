@@ -10,7 +10,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { ROOT, WORK, armById, config, listFiles, rng, tasks } from "./lib.mjs";
+import { ROOT, WORK, armById, config, interactions, isMulti, listFiles, rng, routeSlug, routesOf, taskById } from "./lib.mjs";
 
 const arg = (k, d) => {
   const i = process.argv.indexOf(`--${k}`);
@@ -19,7 +19,6 @@ const arg = (k, d) => {
 const resultsDir = path.resolve(arg("results", "results/pilot"));
 const name = path.basename(resultsDir);
 const keyPath = path.join(WORK, `blind-key-${name}.json`);
-const INTERACTIONS = JSON.parse(fs.readFileSync(path.join(ROOT, "prompts/interactions.json"), "utf8")).tasks;
 
 if (process.argv.includes("--unseal")) {
   const key = JSON.parse(fs.readFileSync(keyPath, "utf8"));
@@ -47,20 +46,30 @@ order.forEach((d, i) => {
   const state = JSON.parse(fs.readFileSync(path.join(resultsDir, "raw", d, "run.json"), "utf8"));
   const src = path.join(resultsDir, "raw", d, `attempt-${state.accepted_attempt}`);
   fs.mkdirSync(path.join(blindDir, id), { recursive: true });
-  for (const vp of config.viewports) {
-    fs.copyFileSync(path.join(src, `screenshot-${vp.name}.jpg`), path.join(blindDir, id, `${vp.name}.jpg`));
-  }
   const task = Number(t.slice(1));
-  const taskText = tasks.find((x) => x.id === task).prompt;
+  const taskDef = taskById(task);
+  const taskText = taskDef.prompt;
+  // Every route of a multi-file app, in the task's order; images.json fixes the
+  // order the rater sees them in.
+  const images = [];
+  for (const route of routesOf(taskDef)) {
+    const slug = routeSlug(route);
+    for (const vp of config.viewports) {
+      const name = slug ? `${slug}-${vp.name}` : vp.name;
+      fs.copyFileSync(path.join(src, `screenshot-${name}.jpg`), path.join(blindDir, id, `${name}.jpg`));
+      images.push({ name, label: isMulti(taskDef) ? `${route} at ${vp.name} (${vp.width} px)` : vp.name });
+    }
+  }
   fs.writeFileSync(path.join(blindDir, id, "task.txt"), taskText);
   // Interaction screenshots (prompts/interactions.json), when the gate took them.
   const gates = JSON.parse(fs.readFileSync(path.join(resultsDir, "raw", d, `attempt-${state.accepted_attempt}.gates.json`), "utf8"));
-  const spec = INTERACTIONS[String(task)];
+  const spec = interactions[String(task)];
   const shots = [];
-  for (const vp of ["phone", "desktop"]) {
+  for (const vp of spec?.viewports ?? ["phone", "desktop"]) {
     const f = path.join(src, `screenshot-${vp}-interaction.jpg`);
     if (fs.existsSync(f)) {
       fs.copyFileSync(f, path.join(blindDir, id, `${vp}-interaction.jpg`));
+      images.push({ name: `${vp}-interaction`, label: `${vp}-interaction` });
       shots.push(vp);
     }
   }
@@ -71,9 +80,12 @@ order.forEach((d, i) => {
       ? `There are also ${shots.length} screenshots (${shots.join(" and ")}) of the visible window after one scripted interaction: ${spec.describe}`
       : `A scripted interaction was attempted but the page had no matching control: ${spec.describe}`;
   }
+  fs.writeFileSync(path.join(blindDir, id, "images.json"), JSON.stringify(images, null, 2));
   const prompt = fs
-    .readFileSync(path.join(ROOT, "prompts/rater.md"), "utf8")
+    .readFileSync(path.join(ROOT, isMulti(taskDef) ? "prompts/rater-multi.md" : "prompts/rater.md"), "utf8")
     .replace("{{TASK}}", taskText)
+    .replace("{{ROUTES}}", routesOf(taskDef).map((r) => `\`${r}\``).join(", "))
+    .replace("{{CHECKLIST}}", (taskDef.checklist ?? []).map((c) => `- ${c}`).join("\n"))
     .replace("{{INTERACTION}}", interaction)
     .replace("{{ID}}", id);
   fs.writeFileSync(path.join(blindDir, id, "prompt.md"), prompt);

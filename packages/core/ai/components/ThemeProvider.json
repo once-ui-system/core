@@ -24,5 +24,111 @@
   "children": "!React.ReactNode",
   "persistence": "StylePersistence = local"
  },
- "mixinsRef": []
+ "tags": [
+  "provider",
+  "theme"
+ ],
+ "pairsWith": [
+  "ThemeInit",
+  "LayoutProvider",
+  "StylePanel"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "BodyLineHeight": [
+   "90",
+   "100",
+   "110",
+   "120"
+  ],
+  "BodySize": [
+   "90",
+   "95",
+   "100",
+   "105",
+   "110"
+  ],
+  "BorderStyle": [
+   "rounded",
+   "playful",
+   "conservative",
+   "sharp"
+  ],
+  "DeviceFontSize": [
+   "16",
+   "13",
+   "14",
+   "15",
+   "17",
+   "18"
+  ],
+  "InteractiveCursor": [
+   "default",
+   "pointer"
+  ],
+  "NeutralColor": [
+   "sand",
+   "gray",
+   "slate",
+   "rose",
+   "mint",
+   "dusk"
+  ],
+  "ScalingSize": [
+   "90",
+   "95",
+   "100",
+   "105",
+   "110"
+  ],
+  "Schemes": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan"
+  ],
+  "SolidStyle": [
+   "flat",
+   "plastic"
+  ],
+  "SolidType": [
+   "color",
+   "contrast",
+   "inverse"
+  ],
+  "StylePersistence": [
+   "none",
+   "local",
+   "StylePersistenceAdapter"
+  ],
+  "StylePersistenceAdapter": {
+   "get": "(key: string) => string | null",
+   "set": "!(key: string, value: string) => void | Promise<void>",
+   "remove": "(key: string) => void | Promise<void>"
+  },
+  "SurfaceStyle": [
+   "filled",
+   "translucent"
+  ],
+  "Theme": [
+   "dark",
+   "light",
+   "system"
+  ],
+  "TransitionStyle": [
+   "none",
+   "all",
+   "micro",
+   "macro"
+  ]
+ }
 }

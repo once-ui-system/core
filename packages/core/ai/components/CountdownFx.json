@@ -7,5 +7,16 @@
   "effect": "CountFxProps[\"effect\"] = wheel",
   "onComplete": "() => void"
  },
- "mixinsRef": []
+ "tags": [
+  "effect",
+  "marketing"
+ ],
+ "pairsWith": [
+  "Heading",
+  "Row"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "CountFxProps": "CountFx props"
+ }
 }

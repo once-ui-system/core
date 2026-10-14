@@ -5,5 +5,11 @@
   "cursor": "!React.ReactNode",
   "elementRef": "!React.RefObject<HTMLElement | null>"
  },
+ "tags": [
+  "effect"
+ ],
+ "pairsWith": [
+  "CursorCard"
+ ],
  "mixinsRef": []
 }
